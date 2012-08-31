@@ -1,0 +1,58 @@
+  {
+           'server': {'ip address':'ip address-sample',
+           'name':'name-sample',
+           'type':'type-sample',
+           'label':'label-sample',
+           'keyword':'keyword-sample',
+           'uid':'uid-sample',
+           'start_time':'start_time-sample',
+           'stop_time':'stop_time', 'services': [
+                 {'name':'name-sample',
+                  'type':'type-sample',
+                  'version':'version-sample',
+                  'keyword':'keyword-sample',
+                  'start_time':'start_time-sample',
+                  'stop_time':'stop_time-sample',
+                  'status':'status-sample',
+                  },
+                  {'name':'name-sample-2',
+                  'type':'type-sample-2',
+                  'version':'version-sample-2',
+                  'keyword':'keyword-sample-2',
+                  'start_time':'start_time-sample-2',
+                  'stop_time':'stop_time-sample-2',
+                  'status':'status-sample-2',
+                  }
+              ]
+        }
+  }
+  
+  
+  
+  d = {'server': {'ip address':'ip address-sample',
+                           'name':'name-sample',
+                           'type':'type-sample',
+                           'label':'label-sample',
+                           'keyword':'keyword-sample',
+                           'uid':'uid-sample',
+                           'start_time':'start_time-sample',
+                           'stop_time':'', 'services': [
+                                 {'name':'name-sample',
+                                  'type':'type-sample',
+                                  'version':'version-sample',
+                                  'keyword':'keyword-sample',
+                                  'start_time':'start_time-sample',
+                                  'stop_time':'stop_time-sample',
+                                  'status':'status-sample',
+                                  },
+                                  {'name':'name-sample-2',
+                                  'type':'type-sample-2',
+                                  'version':'version-sample-2',
+                                  'keyword':'keyword-sample-2',
+                                  'start_time':'start_time-sample-2',
+                                  'stop_time':'stop_time-sample-2',
+                                  'status':'status-sample-2',
+                                  }
+                              ]
+                        }
+                  }
