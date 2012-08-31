@@ -13,8 +13,14 @@ import os
 import commands
 import random
 
+// hostname = localhost
+// port = 27017
+
 class fgInventory :
 
+    hostname = ""
+    port = ""
+    connection = ""
     data = {}
     
     '''To populate the dict data structure with relevant data'''
@@ -67,13 +73,16 @@ class fgInventory :
         with open(filename, 'r') as input:
             self.data = json.load(input)
     
-    def mongoConnectionOpen(self):
-        connection = Connection('localhost', 27017)
+    def connect (self,hostname,port):
+        self.connection = Connection(hostname, port)
         try:
             db = connection.fg_inventorydbase
             collection = db.inventory_collection
         except ConnectionFailure:
             print 'Cannot connect to the database'
+    
+    def disconnect()
+       self.connection.close()
     
     def write(self, filename):
         with open(filename, 'w') as output:
@@ -81,7 +90,6 @@ class fgInventory :
     
     
     def insertToDB(self):
-        connection = Connection('localhost', 27017)
         try:
             db = connection.fg_inventorydbase
             collection = db.inventory_collection
@@ -94,10 +102,8 @@ class fgInventory :
         #Test is to insert a sample string in MongoDB
         entry.insert(self.test)
         print entry.find_one()
-        connection.close()
     
     def getServerData(self, uid):
-        connection = Connection('localhost', 27017)
         try:
             db = connection.fg_inventorydbase
             collection = db.inventory_collection
@@ -109,11 +115,9 @@ class fgInventory :
         for each in entry.find({"uid":"vdkhadke-PC:127.0.0.1"}):
             t = each
             print t
-        connection.close()
     
     
     def addAttributeUid(self, uid, attributeName, value):
-        connection = Connection('localhost', 27017)
         try:
             db = connection.fg_inventorydbase
             collection = db.inventory_collection
@@ -125,11 +129,9 @@ class fgInventory :
         for each in entry.find({"uid":uid}):
             db.entry.update({'uid' : uid},{'$set' : {"attribute" : "attr" }})
         
-        connection.close()   
     
     
     def deleteUIDData(self, uid):
-        connection = Connection('localhost', 27017)
         try:
             db = connection.fg_inventorydbase
             collection = db.inventory_collection
@@ -140,11 +142,9 @@ class fgInventory :
         for each in entry.find({"uid":uid}):
             db.entry.remove()    
             print "Server deleted"
-        connection.close()
         
         
     def deleteServerData(self, servername):
-        connection = Connection('localhost', 27017)
         try:
             db = connection.fg_inventorydbase
             collection = db.inventory_collection
@@ -155,7 +155,6 @@ class fgInventory :
         for each in entry.find({'name':servername}):
             db.entry.remove()    
             print "Server deleted"
-        connection.close()
     
     
     '''Creating a random word generating method to populate the entries in the data structure'''
@@ -219,7 +218,6 @@ class fgInventory :
         print self.test
         
     def deleteServices(self, server):
-        connection = Connection('localhost', 27017)
         try:
             db = connection.fg_inventorydbase
             collection = db.inventory_collection
@@ -232,12 +230,11 @@ class fgInventory :
             print "*" * 10
             db.entry.update({},{ $unset : { 'start_time' : '14:30:25'}})
             #print "Server deleted"
-        connection.close()
         
             
 if __name__ == '__main__':
     
-    Instance = fgInventory()
+    Instance = fgInventory().connect(localhost,27017)
     '''
     Instance.load("foo.txt")
     Instance.write("foo1.txt")
@@ -251,4 +248,4 @@ if __name__ == '__main__':
     #Instance.insertServices("vdkhadke-PC")
     #Instance.insertToDB()
     Instance.deleteServices("vdkhadke-PC") 
-    
+    Instance.disconnect()
