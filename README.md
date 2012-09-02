@@ -1,3 +1,3 @@
 Documentation is at 
 
-http://futuregrid.github.com/nventory
+http://futuregrid.github.com/inventory
