@@ -1,4 +1,3 @@
-inventory
-=========
+Documentation is at 
 
-A simple inventory for clouds in support of cloud seeding and cloud-shifting
+http://futuregrid.github.com/nventory
