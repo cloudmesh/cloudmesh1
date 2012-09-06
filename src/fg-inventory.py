@@ -13,15 +13,14 @@ import os
 import commands
 import random
 
-// hostname = localhost
-// port = 27017
+hostname = 'localhost'
+port = 27017
 
 class fgInventory :
 
-    hostname = ""
-    port = ""
     connection = ""
     data = {}
+    db = ''
     
     '''To populate the dict data structure with relevant data'''
     
@@ -42,7 +41,8 @@ class fgInventory :
                 'keyword':'',
                 'uid':'',
                 'start_time':'',
-                'stop_time':'',
+                'stop_time':''
+    '''
                 'services':[
                              {'name':'',
                               'type':'',
@@ -52,6 +52,7 @@ class fgInventory :
                               'stop_time':'',
                               'status':'',
                             }]
+                            '''
             }
             
     test_services =  {
@@ -66,6 +67,7 @@ class fgInventory :
 
     def __init__ (self):
         self.data = {}
+        self.connect(hostname,port)
         
     '''When you use "with" statement, you dont need to open and close the file streams it by default takes care of that '''
         
@@ -73,93 +75,58 @@ class fgInventory :
         with open(filename, 'r') as input:
             self.data = json.load(input)
     
-    def connect (self,hostname,port):
+    def connect(self,hostname,port):
         self.connection = Connection(hostname, port)
         try:
-            db = connection.fg_inventorydbase
-            collection = db.inventory_collection
-        except ConnectionFailure:
+            self.db = self.connection.fg_inventorydbase
+            collection = (self.db).entry
+        except:
             print 'Cannot connect to the database'
     
-    def disconnect()
+    def disconnect():
        self.connection.close()
     
     def write(self, filename):
         with open(filename, 'w') as output:
             json.dump(self.data, output)
     
-    
     def insertToDB(self):
-        try:
-            db = connection.fg_inventorydbase
-            collection = db.inventory_collection
-        except ConnectionFailure:
-            print 'Cannot connect to the database'
-        
-        entry= db.entry
+        entry= self.db.entry
         #entry.insert(self.data)
-        
         #Test is to insert a sample string in MongoDB
         entry.insert(self.test)
         print entry.find_one()
-    
+        
     def getServerData(self, uid):
-        try:
-            db = connection.fg_inventorydbase
-            collection = db.inventory_collection
-        except ConnectionFailure:
-            print 'Cannot connect to the database'
-        entry = db.entry
+        entry = (self.db).entry
         
         #To get individual entries from mongodb
         for each in entry.find({"uid":"vdkhadke-PC:127.0.0.1"}):
             t = each
             print t
     
-    
     def addAttributeUid(self, uid, attributeName, value):
-        try:
-            db = connection.fg_inventorydbase
-            collection = db.inventory_collection
-        except ConnectionFailure:
-            print 'Cannot connect to the database'
-        
         entry = db.entry
         
-        for each in entry.find({"uid":uid}):
-            db.entry.update({'uid' : uid},{'$set' : {"attribute" : "attr" }})
-        
+        for each in entry.find():
+            db.entry.update({},{'$set' : {"attribute" : "attr" }})
     
+    
+    '''Error in this data only single uid per data'''
     
     def deleteUIDData(self, uid):
-        try:
-            db = connection.fg_inventorydbase
-            collection = db.inventory_collection
-        except ConnectionFailure:
-            print 'Cannot connect to the database'
-        
-        entry = db.entry
-        for each in entry.find({"uid":uid}):
-            db.entry.remove()    
-            print "Server deleted"
-        
+        entry = db.entry        
+        db.entry.remove({"uid" : uid})    
+        print "Server deleted"
+    
         
     def deleteServerData(self, servername):
-        try:
-            db = connection.fg_inventorydbase
-            collection = db.inventory_collection
-        except ConnectionFailure:
-            print 'Cannot connect to the database'
+        (self.db).entry.find()
+        self.db.entry.remove({'keyword':'szt7XF'})    
         
-        entry = db.entry
-        for each in entry.find({'name':servername}):
-            db.entry.remove()    
-            print "Server deleted"
-    
     
     '''Creating a random word generating method to populate the entries in the data structure'''
         
-    
     def insertData(self):
         
         '''
@@ -192,7 +159,7 @@ class fgInventory :
         self.test['type'] = self.get_random_word(6)
         self.test['label'] = self.get_random_word(6)
         self.test['keyword'] = self.get_random_word(6)
-        
+        '''
         name_list = ['eucalyptus', 'openstack', 'EC2']
         
         self.test['services'][0]['name'] = random.choice(name_list)
@@ -203,7 +170,7 @@ class fgInventory :
         self.test['services'][0]['stop_time'] = commands.getoutput(time)
         self.test['services'][0]['status'] = self.get_random_word(3)
         print self.test
-        
+        '''
     def insertServices(self, server):
         name_list = ['eucalyptus', 'openstack', 'EC2']
         self.test_services['name'] = random.choice(name_list)
@@ -218,34 +185,28 @@ class fgInventory :
         print self.test
         
     def deleteServices(self, server):
-        try:
-            db = connection.fg_inventorydbase
-            collection = db.inventory_collection
-        except ConnectionFailure:
-            print 'Cannot connect to the database'
         
-        entry = db.entry
         for each in entry.find({'name':server}):
             print each["services"] 
-            print "*" * 10
-            db.entry.update({},{ $unset : { 'start_time' : '14:30:25'}})
+            
+            entry.update({ '$unset' : { 'start_time' : '14:30:25'}})
             #print "Server deleted"
         
-            
 if __name__ == '__main__':
     
-    Instance = fgInventory().connect(localhost,27017)
+    Instance = fgInventory()
     '''
     Instance.load("foo.txt")
     Instance.write("foo1.txt")
     '''
+    Instance.insertData()
+    Instance.insertToDB()
     
-    #Instance.insertToDB()
     #Instance.getServerData("vdkhadke-PC:127.0.0.1")
     #Instance.deleteServerData("vdkhadke-PC")
     #Instance.deleteUIDData("vdkhadke-PC:127.0.0.1")
     #Instance.insertData()
     #Instance.insertServices("vdkhadke-PC")
     #Instance.insertToDB()
-    Instance.deleteServices("vdkhadke-PC") 
-    Instance.disconnect()
+    #Instance.deleteServices("vdkhadke-PC") 
+    #Instance.disconnect()
