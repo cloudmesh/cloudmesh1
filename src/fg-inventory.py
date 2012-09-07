@@ -25,7 +25,7 @@ class fgInventory :
     '''To populate the dict data structure with relevant data'''
     
     '''To generate random words to fill the test data structure'''
-    def get_random_word(self,wordLen):
+    def get_random_word(self, wordLen):
         word = ''
         for i in range(wordLen):
             word += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
@@ -55,7 +55,7 @@ class fgInventory :
                             '''
             }
             
-    test_services =  {
+    test_services = {
                       'name':'',
                       'type':'',
                       'version':'',
@@ -67,7 +67,7 @@ class fgInventory :
 
     def __init__ (self):
         self.data = {}
-        self.connect(hostname,port)
+        self.connect(hostname, port)
         
     '''When you use "with" statement, you dont need to open and close the file streams it by default takes care of that '''
         
@@ -75,7 +75,7 @@ class fgInventory :
         with open(filename, 'r') as input:
             self.data = json.load(input)
     
-    def connect(self,hostname,port):
+    def connect(self, hostname, port):
         self.connection = Connection(hostname, port)
         try:
             self.db = self.connection.fg_inventorydbase
@@ -91,7 +91,7 @@ class fgInventory :
             json.dump(self.data, output)
     
     def insertToDB(self):
-        entry= self.db.entry
+        entry = self.db.entry
         #entry.insert(self.data)
         #Test is to insert a sample string in MongoDB
         entry.insert(self.test)
@@ -109,7 +109,7 @@ class fgInventory :
         entry = db.entry
         
         for each in entry.find():
-            db.entry.update({},{'$set' : {"attribute" : "attr" }})
+            db.entry.update({}, {'$set' : {"attribute" : "attr" }})
     
     
     '''Error in this data only single uid per data'''
@@ -140,19 +140,19 @@ class fgInventory :
         So might want to check if or not to use it
 
         '''
-        get_ip =  " ifconfig lo | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' "
+        get_ip = " ifconfig lo | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' "
         self.test['ip_address'] = commands.getoutput(get_ip)
         get_server_name = "hostname"
-        self.test['name'] =  commands.getoutput(get_server_name)
+        self.test['name'] = commands.getoutput(get_server_name)
     
         '''Server UID is HostName - IP address'''
         self.test['uid'] = str(self.test['name']) + ':' + str(self.test['ip_address'])
         
         '''For now both start time and stop time are one and the same'''
         time = "date +\"%T\" "
-        self.test['start_time'] =  commands.getoutput(time)
+        self.test['start_time'] = commands.getoutput(time)
         
-        self.test['stop_time'] =  commands.getoutput(time)
+        self.test['stop_time'] = commands.getoutput(time)
         
         
         '''Populate the remaining fields with random entries for now'''
@@ -175,7 +175,7 @@ class fgInventory :
         name_list = ['eucalyptus', 'openstack', 'EC2']
         self.test_services['name'] = random.choice(name_list)
         self.test_services['type'] = self.get_random_word(3)
-        self.test_services['version'] = random.randint(1,9)
+        self.test_services['version'] = random.randint(1, 9)
         self.test_services['keyword'] = self.get_random_word(3)
         self.test_services['start_time'] = commands.getoutput("date +\"%T\" ")
         self.test_services['stop_time'] = commands.getoutput("date +\"%T\" ")
