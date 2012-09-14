@@ -97,6 +97,18 @@ class Inventory:
            return 
         return
 
+    def delete(self)
+        '''Deletes the current inventory'''
+        return
+    
+    def remove (self, kind, name)
+        '''removes the object with the type kind and name from the inventory'''
+        return
+
+    def update (self, kind, name, date)
+        '''updates the information of the object with the specified data'''
+        return
+
 now =  datetime.now()
 
 connect('test1')
