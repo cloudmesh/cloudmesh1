@@ -198,7 +198,7 @@ if __name__ == '__main__':
     '''
     Instance.load("foo.txt")
     Instance.write("foo1.txt")
-    '''
+    ''',
     Instance.insertData()
     Instance.insertToDB()
     
