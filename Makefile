@@ -1,3 +1,6 @@
+PATHNAME=$(shell pwd)
+BASENAME=$(shell basename $(PATHNAME))
+
 ######################################################################
 # GIT INTERFACES
 ######################################################################
@@ -12,6 +15,10 @@ pull:
 gregor:
 	git config --global user.name "Gregor von Laszewski"
 	git config --global user.email laszewski@gmail.com
+
+git-ssh:
+	git remote set-url origin git@github.com:futuregrid/$(BASENAME).git
+
 
 ######################################################################
 # INSTALLATION
