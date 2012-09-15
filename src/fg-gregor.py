@@ -1,6 +1,6 @@
 from mongoengine import *                           # To define a schema for a
 from datetime import datetime
-
+import pprint
 
 
 class FabricServer(Document):              
@@ -80,32 +80,30 @@ class Inventory:
         return
 
     def dump (self, kind, object):
+        print '# ------------------'
         if kind == 'server':
            #print each server
-            print '# ------------------'
-            print server.ip_address 
-            print server.name
-            print server.kind
-            print server.label
-            print server.keyword
-            print server.time_start
-            print server.time_stop
-            print server.time_update
-            return
+            attributes = vars(FabricServer())['_data'].keys()
+            values = vars(object)['_data']
+            pprint.pprint(values)
         elif kind == 'services':
            #print each service
-           return 
+            attributes = vars(FabricService())['_data'].keys()
+            values = vars(object)['_data']
+            pprint.pprint(values)
+        else:
+            error ('wrong kind')
         return
 
-    def delete(self)
+    def delete(self):
         '''Deletes the current inventory'''
         return
     
-    def remove (self, kind, name)
+    def remove (self, kind, name):
         '''removes the object with the type kind and name from the inventory'''
         return
 
-    def update (self, kind, name, date)
+    def update (self, kind, name, date):
         '''updates the information of the object with the specified data'''
         return
 
