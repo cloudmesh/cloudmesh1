@@ -79,21 +79,20 @@ class Inventory:
         '''updates the time of the last update to now'''
         return
 
-    def dump (self, kind, object):
+    def dump (self, object):
         print '# ------------------'
-        if kind == 'server':
+        classname = object.__class__.__name__
+        values = vars(object)['_data']
+        if classname  == 'FabricServer':
            #print each server
             attributes = vars(FabricServer())['_data'].keys()
-            values = vars(object)['_data']
-            pprint.pprint(values)
-        elif kind == 'services':
+        elif classname == 'FabricServices':
            #print each service
             attributes = vars(FabricService())['_data'].keys()
-            values = vars(object)['_data']
-            pprint.pprint(values)
         else:
-            error ('wrong kind')
-        return
+            error ('wrong kind: ' + classname)
+            return
+        pprint.pprint(values)
 
     def delete(self):
         '''Deletes the current inventory'''
@@ -119,13 +118,13 @@ server.save()
 inventory  = Inventory('test1')
 
 for server in FabricServer.objects:
-    inventory.dump ('server',server)
+    inventory.dump (server)
 
 
 server =  inventory.get('server','Hallo2')
 
 print '##############################'
-inventory.dump ('server',server)
+inventory.dump (server)
 
 
 
