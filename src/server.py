@@ -1,7 +1,6 @@
 '''
 '''
 import json
-import pymongo
 from pymongo import Connection
 import commands
 import random
@@ -61,9 +60,7 @@ class server(object):
         self.connection.close()
         print "Connection is closed."
     
-    """Clear this with Gregor, right now assuming only
-     attribute would be uid"""
-    
+
     def read_JSON(self, attribute, value):
         server_attribute = 'server' + '.' + attribute
         cursor = self.collection.find({server_attribute: value})
@@ -169,10 +166,13 @@ class server(object):
 
 if __name__ == "__main__":
     myserver = server()
-    myserver.read_JSON("name" , 'YgbYD6')
+    
+    myserver.read_JSON("ame" , 'YgbYD6')
     myserver.delete_server('YgbYD6:127.0.0.1')
     
+
+    
     '''
-    #yserver.update_server('YgbYD6:127.0.0.1', 'name' , 'viplav')
+    #myserver.update_server('YgbYD6:127.0.0.1', 'name' , 'viplav')
     #myserver.disconnectmdb()
     '''
