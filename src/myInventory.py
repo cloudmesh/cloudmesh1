@@ -4,60 +4,43 @@ import random
 import datetime
 import pprint
 from pymongo import Connection
-import uuid
+
 
 
 class Server(object):
     def __init__(self):
-        '''
-        uniq_ID = ''
         ip_address=''
         name=''
-        kind=''
         label=''
         keyword=''
         time_start=''
         time_stop=''
         time_update=''
         services=''
-        '''
-        self.uniq_ID = uuid.uuid4()
-        self.ip_address = commands.getoutput(" ifconfig lo | grep 'inet addr' \
-        | cut -d: -f2 | awk '{print $1}' ")
-        self.name = commands.getoutput("hostname")
         
+    def insertData(self):
+        #Insert server data in the object created
+        
+        servernamelist = ['india','sierra','alamo', 'foxtrot']
+        self.ip_address = commands.getoutput(" ifconfig wlan0 | grep 'inet addr' \
+        | cut -d: -f2 | awk '{print $1}' ")
+        
+        #self.name = commands.getoutput("hostname")
+        self.name = random.choice(servernamelist)
         #For now both start time and stop time are one and the same
         self.time_start = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
         self.time_stop = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
         self.time_update = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
         #Populate the remaining fields with random entries
-        self.type = get_random_word(6)
+        self.type = 'Server'
         self.label = get_random_word(6)
         self.keyword = get_random_word(6)
-        
-    def insertData(self):
-        '''Insert server data in the object created
-        """
-        self.ip_address = commands.getoutput(" ifconfig lo | grep 'inet addr'\
-         | cut -d: -f2 | awk '{print $1}' ")
-        self.name = commands.getoutput("hostname")'
-        self.uniq_ID = uuid.uuid4()
-        
-        self.time_start = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
-        self.time_stop = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
-        self.time_update = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
-        #Populate the remaining fields with random entries for now
-        self.type = self.get_random_word(6)
-        self.label = self.get_random_word(6)
-        self.keyword = self.get_random_word(6)
-        """  
-        '''
+       
 
     def dumpServer(self):
         '''Print the current data in server object'''
         print self.ip_address
         print self.name
-        #print self.kind
         print self.label
         print self.keyword
         print self.time_start
@@ -69,62 +52,42 @@ class Server(object):
 class Services(object):
     def __init__(self):
         '''Initialize all the class fields'''
-        """
-        uniq_ID = ''
+        
         ip_address ='' 
         name = ''
-        kind = ''
         label = ''
+        type = ''
         version = ''
         keyword = ''
         time_start = ''
         time_stop = ''
         time_update = ''
-        """
-        name_list = ['eucalyptus', 'openstack', 'EC2']
-        #initialize the server unique ID to zero, the service will be assigned 
-        # to server later on.
-        self.server_uniq_ID = 0
-        self.uniq_ID = uuid.uuid4()
-        self.ip_address = commands.getoutput(" ifconfig lo | grep 'inet addr' \
-        | cut -d: -f2 | awk '{print $1}' ")
+        server_name = ''
         
-        self.name = random.choice(name_list)
-        self.type = get_random_word(3)
-        self.version = random.randint(1, 9)
-        self.keyword = get_random_word(3)
-        self.time_start = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
-        self.time_stop = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
-        self.time_update = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
-        self.type = get_random_word(6)
-        self.label = get_random_word(6)
-        self.keyword = get_random_word(6)
-    
-    @classmethod
+        
     def insertServiceData(self):
 
         '''Insert the services data in the object created'''
-        """
-        name_list = ['eucalyptus', 'openstack', 'EC2']
-        self.ip_address = commands.getoutput(" ifconfig lo | grep 'inet addr' \
+        name_list = ['Euca', 'OS', 'Euca2', 'HPC']
+        self.ip_address = commands.getoutput(" ifconfig eth0 | grep 'inet addr' \
         | cut -d: -f2 | awk '{print $1}' ")
         self.name = random.choice(name_list)
-        self.type = self.get_random_word(3)
+        self.type = get_random_word(3)
         self.version = random.randint(1, 9)
-        self.uniq_ID = uuid.uuid4()
-        self.keyword = self.get_random_word(3)
+        #self.uniq_ID = uuid.uuid4()
+        self.keyword = get_random_word(3)
+        self.type = 'Service'
         self.time_start = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
         self.time_stop = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
         self.time_update = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
-        self.status = self.get_random_word(3)
-        self.type = self.get_random_word(6)
-        self.label = self.get_random_word(6)
-        self.keyword = self.get_random_word(6)
-        """
+        self.status = get_random_word(3)
+        self.label = get_random_word(6)
+        self.keyword = get_random_word(6)
+        
         '''Look about the services'''
         #self.test['services'].append(self.test_services)
     
-class myInventory:
+class myInventory():
     '''
     Class that handles all the operations on the inventory with server\
      and services objects;
@@ -139,35 +102,39 @@ class myInventory:
     
     connection = ''
     db = ""
-    
+
+
     def __init__(self):
         hostname = "localhost"
         port = 27017
         
-        self.connect( port, hostname )
         # Connect to the database and initialize the required parameters.
-        
-    def add(self, kind, **KWdata):
+        #self.connect( port, hostname )
+       
+    def add(self, obj, **KWdata):
         '''add the data to the kind object specified, data right
          now is a dummy variable'''
         #Parameters\
             # **KWdata if kind is services, first field is uuid of the server'''
-         
-        if(kind == 'Server'):
+        if(obj.__class__.__name__ == 'Server'):
             self.Serverlist.append(Server())
             self.Serverlist[(len(self.Serverlist) - 1)].insertData()
+            if 'name' in KWdata:
+                self.Serverlist[(len(self.Serverlist) - 1)].name = KWdata['name']
             Serverdict = self.Serverlist[len(self.Serverlist)-1].__dict__
             pprint.pprint(Serverdict)
-            print self.Serverlist
-            #create and add server object
             
-        elif(kind == 'Service'):
-            #create and add service object, bind the service object to one of the\
-            #servers by setting its Server_uniq_ID to the servers uniq_ID
-            #data is a list with first element being the uuid of the server
+            
+        elif(obj.__class__.__name__ == 'Services'):
+            #create and add service object
+            #data is a list with first element being the name of server
             self.Serviceslist.append(Services())
-            self.Serviceslist[(len(self.Serviceslist) - 1)].insertData()
-            self.Serviceslist[(len(self.Serviceslist) - 1)].server_uniq_ID = KWdata[0]
+            self.Serviceslist[(len(self.Serviceslist) - 1)].insertServiceData()
+            if 'name' in KWdata:
+                self.Serviceslist[(len(self.Serviceslist) - 1)].server_name = KWdata['name']
+            if 'service_name' in KWdata:
+                self.Serviceslist[(len(self.Serviceslist) - 1)].name = KWdata['service_name']
+                
             Servicesdict = self.Serviceslist[len(self.Serviceslist)-1].__dict__
             pprint.pprint(Servicesdict)
 
@@ -183,7 +150,7 @@ class myInventory:
             for j in self.Serviceslist: 
                 if j.uniq_ID == uid:
                     self.Serviceslist.remove(j)
-        
+                    
     def connect(self, port, hostname):
         '''Initialization method to connect to the database'''
         self.connection = Connection(hostname, port)
@@ -195,7 +162,7 @@ class myInventory:
         print "Connected Successfully"
 
     def disconnect(self):
-        '''Disconnect from the mongodb database'''
+        '''Disconnect from the Mongodb database'''
         self.connection.close()
 
     def modify(self, kind, **fieldnames):
@@ -221,24 +188,47 @@ class myInventory:
         elif kind == 'Services':
             pass
 
-    def move(self, serviceuID, serveruID):
+    def startNewService(self, servicefrom, serviceto, number):
         '''To move a service from one server to another server, just change \
         the server_Uniq_id field in services to the new server'''
+        i = 0
         for k in self.Serviceslist:
-            if k.uniq_ID == serviceuID:
-                k.server_uniq_ID = serveruID
+            if i < number: 
+                if k.name == servicefrom:
+                    k.name == serviceto
+                    i = i+1
+       
+    def dump(self):
+        '''dump the contents of object array to summarize the current services\
+        and the servers'''
         
-    def dumpDB(self):
-        '''dump the contents of object array to database'''
+        server_services_dict = {'india':[], 'sierra':[] , 'foxtrot':[]}#, 'alamo':[]}
+        servers = []
         
+        for each in self.Serviceslist:
+            server_services_dict[each.server_name].append(each.name)
+
+        services = ['Euca', 'OS', 'Euca2', 'HPC']
+        
+        print('\tEuca\t OS\t HPC\t Euca2\t')
+        
+        for every in server_services_dict:
+            print every+'\t',
+            for service in services:
+                print str(server_services_dict[every].count(service)) +'\t',
+            print 
+
 #******************** Test method for putting in random data for now***********
 def get_random_word(wordLen):
     '''To generate random words to fill the test data structure'''
     word = ''
     for _ in range(wordLen):
-        word += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv\
-        wxyz0123456789')
+        word += random.choice('abcdefghijklmnopqrstuvwxyz')
     return word
  
+
 if __name__ == "__main__":
-    pass
+    
+    serverobj = Server()
+    serviceobj = Services()
+    serverobj.insertData()
