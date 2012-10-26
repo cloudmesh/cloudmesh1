@@ -1,12 +1,13 @@
+#! /usr/bin/env python
+
 
 import os
 import cmd2
 from cmd2 import options, make_option
-
-
+import argparse
+import re
 
 from myInventory import Server, Services, myInventory
-
 
 inventory = myInventory()
 serverobj = Server()
@@ -14,11 +15,12 @@ serviceobj = Services()
 class Console(cmd2.Cmd):
 
     '''instantiate myInventory class'''
-   
+    setcommands = {'server':'', 'service':''}
+    
     def __init__(self):
         cmd2.Cmd.__init__(self)
-    prompt = "fg_inventory>"
-    ## defaults to None
+        
+    prompt = "fg_inventory> "
     
     ## Command definitions ##
     def do_hist(self, args):
@@ -47,7 +49,6 @@ class Console(cmd2.Cmd):
         self._hist    = []      ## No history yet
         self._locals  = {}      ## Initialize execution namespace for user
         self._globals = {}
-
     def postloop(self):
         """Take care of any unfinished business.
            Despite the claims in the Cmd documentaion, Cmd.postloop() is not a stub.
@@ -78,69 +79,203 @@ class Console(cmd2.Cmd):
         except Exception, e:
             print e.__class__, ":", e
             
-    @options([
-    make_option('-p', '--prefix',action="store_const",help="Server name"),
-    make_option('-r', '--range', action="store_const",
-                help="Give the range of servers to create"),
-    ])
-    def do_list(self, arg, opts):# = None):
-        #print arg.parse_args()
-        if(opts.prefix):
-            arg = ''.join(arg)
-            print arg
-            
-        if(opts.range):
-            print "in here"
-            print arg
-        '''List the data '''
-        
-    @options([
-    make_option('-p', '--prefix',action="store_true",help=" server name"),\
-    #, dest = "kall"),
-    make_option('-r', '--range', type="int",action = "store",
-                help=" give the range of servers to create"),
-    ])
-    def do_add_server(self, args, opts ):
-        '''Add a server with given name in the inventory.'''
-        
-        if (opts.range):
-            print args
-            if(args > 0):
-                for i in range(args):
-                    myInventory.add(inventory,serverobj)
-                    
-        args = ''.join(args)
-        if(opts.prefix):
-            print args
-            #print options.kall
-            myInventory.add(inventory,serverobj, name = args)
-        return
+    def get_prefix(self, string, value ):
+        '''Returns the IP prefix in format as e.g. i1.iu.edu'''   
+        stri = str(value)
+        a = re.sub('#', stri ,string)
+        return a
     
-    @options([
-    make_option('-p', '--prefix',action="store_true",help="Service name"),
-    make_option('-r', '--range', type="string",
-                help="Give the range of servers to create"),
-    make_option('-s', '--server', type = "string", help="Server name for binding the service" )
-    ])
-    def do_add_services(self, args, opts=None ):
-        '''Add a server with given name in the inventory.'''
-        #print 'Adds a server with given arguments'
+    def do_assign(self, args):
+        '''Set the required field values in order to ease the pain of \
+        not specifying them again right now using a delimiter ':' \
+        to separate the two.
+        '''
+        parser = argparse.ArgumentParser()
+        parser.add_argument("position", help='positional parameter can have\
+         values server or services e.g assign server:india')
+        args = parser.parse_args(args.split())
+        temp =  args.position.split(':')
+        if temp[0].lower() not in ['server', 'service']:
+            print 'invalid operator to assign'
+            print 'Can only accept server, service operator'
+            return
+        self.setcommands[temp[0]] = temp[1]
+        #print self.setcommands
         
-        args = ''.join(args)
-        if(opts.prefix):
-            myInventory.add(inventory,serviceobj, name = args)
-            #inventory.test()
+    def do_unassign(self, args):
+        '''Set the required field values in order to ease the pain of \
+        not specifying them again right now using a delimiter ':' \
+        to separate the two.
+        '''
+        parser = argparse.ArgumentParser()
+        parser.add_argument("position")
+        args = parser.parse_args(args.split())
+        print args.position
+        temp=args.position
+        if temp.lower() not in ['server', 'service']:
+            print 'invalid operator to unassign'
+            print 'Can only accept server, service operator'
+            return
+        self.setcommands[temp] = ''
+        print self.setcommands
+    
+    def do_printassign(self, args):
+        '''Shows which fields are currently assigned'''
+        print self.setcommands
+
+    #Helper Method to find all the assigned values to reduce typing
+    def isassigned(self, tocheck):
+        '''Returns true or false depending on whether the given parameter \
+        is set or not'''
+        for tocheck,value in self.setcommands.iteritems():
+            if value != '':
+                return True
+            return False
+                            
+    def do_add_server(self, args):
+        '''Add a server with given name in the inventory.'''
+        parser = argparse.ArgumentParser()
+        
+        parser.add_argument('-r','--range', action="store", default=False, type = self.parseNumList, dest = "range")
+        parser.add_argument('-p','--prefix', action="store", dest = "prefix")
+        parser.add_argument('-s','--set', action = "store", dest = "set")
+        args = parser.parse_args(args.split())
+        if (args.range):
+            print args.range
+            for i in args.range:
+                if(args.prefix == None):
+                    print "Error No prefix specified"
+                else:
+                    myInventory.add(inventory,serverobj, name = args.prefix, \
+                                    ip_address = self.get_prefix(args.prefix, i))
+        
+        '''           
+        if(args.prefix):
+            print args.prefix
+            myInventory.add(inventory,serverobj, name = args.prefix)
+        '''
+                    
+    def do_add_services(self, args, opts=None ):
+        '''Add a service to a given server name in the inventory.'''
+        parser = argparse.ArgumentParser()
+        
+        parser.add_argument('-r','--range', action="store", default=False \
+                            ,type = self.parseNumList, dest = "range",  \
+                             help="set a range of services to start")
+        
+        parser.add_argument('-p','--prefix', action="store", \
+        default="i#.iu.edu", dest = "prefix", help="Server name for binding the service")
+        
+        parser.add_argument('-n','--name', action = "store", dest = "servername" ,\
+                            help="Set the server name to given option")
+        
+        parser.add_argument('-s', '--sname',action="store", dest = "servicename",\
+                             help="Service name")
+        args = parser.parse_args(args.split())
+        if (args.range):
+            print args.range
+            for _ in args.range:    
+                if(args.prefix == None) or (args.servicename == None) :
+                    print "Error No prefix and/or servicename specified"
+                else:
+                    myInventory.add(inventory,serviceobj, name = args.prefix, service_name = args.servicename)
+                    
+        if(args.prefix)  and (args.servicename) and (args.range ==None):
+            myInventory.add(inventory,serviceobj, name = args.prefix, service_name = args.servicename)
+
+    def parseNumList(self,string):
+        '''Method for enumerating the numbers specified in the range interval'''
+        m = re.match(r'(\d+)(?:-(\d+))?$', string)
+        # ^ (or use .split('-'). anyway you like.)
+        if not m:
+            raise argparse.ArgumentTypeError("'" + string + "' is not a range of number. Expected forms like '0-5' or '2'.")
+        start = m.group(1)
+        end = m.group(2) or start
+        return list(range(int(start,10), int(end,10)+1)) 
+    
+    def do_add(self , args):
+        '''Instead of having add_server and add_services, combine them into a single add method'''
+        parser = argparse.ArgumentParser()
+        #positional argument immediately after add
+        parser.add_argument("firstargument")
+        parser.add_argument('-n','--name', action="store", dest = "name")
+        parser.add_argument('-r','--range', action="store", default=False, \
+                            type = self.parseNumList, dest = "range")
+        parser.add_argument('-s','--servicename', action="store", dest = "servicename")
+        parser.add_argument('-p','--prefix', action="store", default="i#.iu.edu", dest = "prefix")
+        args = parser.parse_args(args.split())
+        print args.firstargument
+        
+        if (args.firstargument.lower() == "server"):
+            #print 'in server'
+            if (args.range):
+                for i in args.range:
+                    if((args.name == None) and (self.setcommands['server'] != '')):
+                        myInventory.add(inventory,serverobj, name = self.setcommands['server'], \
+                                        prefix = self.get_prefix(args.prefix, i))
+                    else:
+                        myInventory.add(inventory,serverobj, name = args.name, \
+                                        prefix = self.get_prefix(args.prefix, i))
+            elif (self.isassigned('server')):
+                myInventory.add(inventory,serverobj, name = self.setcommands['server'], \
+                                       prefix = self.get_prefix(args.prefix, 1))
+                #setting the prefix to 1 by default
+                return
             
-        if(opts.range):
-            print "process range print inventory"
-        if(opts.server):
-            print "the servers name is"
-        return
-   
+        elif (args.firstargument.lower() == "service"):
+            #print 'services called'  
+            if (args.range):
+                #print args.range
+                for i in args.range:    
+                    if (args.servicename == None) and (args.name == None):
+                        if (not self.isassigned('server')) and (not self.isassigned('service')):
+                            print "Error No server and/or servicename specified"
+                            return
+                        else: #assuming that server and servicename are assigned
+                            myInventory.add(inventory,serviceobj, name = self.setcommands['server'], \
+                                            service_name = self.setcommands['service'],\
+                                            prefix = self.get_prefix(args.prefix, i))
+                            
+                    elif(args.servicename != None) and (args.name != None):
+                        myInventory.add(inventory,serviceobj, name = args.name,\
+                                         service_name = args.servicename,prefix = self.get_prefix(args.prefix, i))
+                    
+                    elif((args.name) and self.isassigned('service')):
+                        myInventory.add(inventory,serviceobj, name = args.name, \
+                                        service_name = self.setcommands['service'],\
+                                        prefix = self.get_prefix(args.prefix, i))
+                    
+                    if((args.servicename) and self.isassigned('server')):
+                        myInventory.add(inventory,serviceobj, name = self.setcommands['server'], \
+                                        service_name = args.servicename ,prefix = self.get_prefix(args.prefix, i))
+                    
+                    else:
+                        myInventory.add(inventory,serviceobj, name = self.setcommands['server'], \
+                                        service_name = self.setcommands['service'],prefix = self.get_prefix(args.prefix, i))
+                        
+            elif ((args.name)  and (args.servicename)):
+                myInventory.add(inventory,serviceobj, name = args.name, service_name = args.servicename,\
+                                prefix = self.get_prefix(args.prefix, i))
+        
+        else:
+            print "invalid argument only options are : server, service"
+            return
+        
+
+    def do_list(self,args):
+        '''List the contents of the inventory'''
+        parser = argparse.ArgumentParser()
+        parser.add_argument('type')
+        args = parser.parse_args(args.split())
+        if args.type.lower() == 'server':
+            myInventory.list(inventory,serverobj)
+        if args.type.lower() == 'service':
+            myInventory.list(inventory,serviceobj)
+            
     def do_summary(self,args):
         '''Print the summary of available services'''
         inventory.dump()
 
 if __name__ == '__main__':
         console = Console()
-        console.cmdloop() 
+        console.cmdloop()

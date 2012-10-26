@@ -1,11 +1,9 @@
-
+#!/usr/bin/env python
 import commands
 import random
 import datetime
 import pprint
 from pymongo import Connection
-
-
 
 class Server(object):
     def __init__(self):
@@ -16,16 +14,16 @@ class Server(object):
         time_start=''
         time_stop=''
         time_update=''
+        prefix = ''
         services=''
         
     def insertData(self):
         #Insert server data in the object created
         
         servernamelist = ['india','sierra','alamo', 'foxtrot']
-        self.ip_address = commands.getoutput(" ifconfig wlan0 | grep 'inet addr' \
+        self.ip_address = commands.getoutput(" ifconfig eth0 | grep 'inet addr' \
         | cut -d: -f2 | awk '{print $1}' ")
         
-        #self.name = commands.getoutput("hostname")
         self.name = random.choice(servernamelist)
         #For now both start time and stop time are one and the same
         self.time_start = datetime.datetime.now().strftime("%D-%H:%M:%S.%f")
@@ -36,7 +34,6 @@ class Server(object):
         self.label = get_random_word(6)
         self.keyword = get_random_word(6)
        
-
     def dumpServer(self):
         '''Print the current data in server object'''
         print self.ip_address
@@ -46,7 +43,6 @@ class Server(object):
         print self.time_start
         print self.time_stop
         print self.time_update
-        #print self.services
         return
     
 class Services(object):
@@ -63,13 +59,13 @@ class Services(object):
         time_stop = ''
         time_update = ''
         server_name = ''
-        
-        
+        prefix = ''
+         
     def insertServiceData(self):
 
         '''Insert the services data in the object created'''
         name_list = ['Euca', 'OS', 'Euca2', 'HPC']
-        self.ip_address = commands.getoutput(" ifconfig eth0 | grep 'inet addr' \
+        self.ip_address = commands.getoutput(" ifconfig eth0 | grep 'inet addr'\
         | cut -d: -f2 | awk '{print $1}' ")
         self.name = random.choice(name_list)
         self.type = get_random_word(3)
@@ -96,13 +92,15 @@ class myInventory():
     Serviceslist = []
     Serverlist = []
     
-    #Create a dict for dumping the contents of the list
-    Serverdict = {}
-    Servicesdict = {}
+    #Create a dummy dict structure for dumping the contents of the list
+    
+    tempdict = {}
+    
+    Serverdictlist = []
+    Servicesdictlist = []
     
     connection = ''
     db = ""
-
 
     def __init__(self):
         hostname = "localhost"
@@ -112,17 +110,21 @@ class myInventory():
         #self.connect( port, hostname )
        
     def add(self, obj, **KWdata):
-        '''add the data to the kind object specified, data right
-         now is a dummy variable'''
-        #Parameters\
-            # **KWdata if kind is services, first field is uuid of the server'''
+        '''add the data to the kind of object specified
+        Parameters\
+            KWdata: name -> specifying the name of the server
+            KWdata: service_name -> specifying the name of the server and the name of the service
+            
+            '''
         if(obj.__class__.__name__ == 'Server'):
             self.Serverlist.append(Server())
             self.Serverlist[(len(self.Serverlist) - 1)].insertData()
             if 'name' in KWdata:
                 self.Serverlist[(len(self.Serverlist) - 1)].name = KWdata['name']
-            Serverdict = self.Serverlist[len(self.Serverlist)-1].__dict__
-            pprint.pprint(Serverdict)
+            if 'prefix' in KWdata:
+                self.Serverlist[(len(self.Serverlist) - 1)].ip_address = KWdata['prefix']
+            pprint.pprint( self.Serverlist[len(self.Serverlist)-1].__dict__)
+            self.Serverdictlist.append(self.Serverlist[len(self.Serverlist)-1].__dict__)
             
             
         elif(obj.__class__.__name__ == 'Services'):
@@ -134,10 +136,12 @@ class myInventory():
                 self.Serviceslist[(len(self.Serviceslist) - 1)].server_name = KWdata['name']
             if 'service_name' in KWdata:
                 self.Serviceslist[(len(self.Serviceslist) - 1)].name = KWdata['service_name']
+            if 'prefix' in KWdata:
+                self.Serviceslist[(len(self.Serviceslist) - 1)].ip_address = KWdata['prefix']
                 
-            Servicesdict = self.Serviceslist[len(self.Serviceslist)-1].__dict__
-            pprint.pprint(Servicesdict)
-
+            pprint.pprint(self.Serviceslist[(len(self.Serviceslist)-1)].__dict__)
+            self.Servicesdictlist.append(self.Serviceslist[(len(self.Serviceslist)-1)].__dict__)
+            
     def delete(self, kind, uid):
         '''Delete the kind object with specified data unique ID'''
         if(kind == 'Server'):
@@ -180,14 +184,19 @@ class myInventory():
         elif kind == 'Services':
             pass
         
-    def list(self, kind):
+    def list(self,obj):
         '''List the given kind of objects'''
-        if kind == 'Server':
-            pass
+        print "In list"
+        if obj.__class__.__name__ == 'Server':
+            for i in self.Serverdictlist:
+                pprint.pprint(i)
         
-        elif kind == 'Services':
-            pass
-
+        elif obj.__class__.__name__ == 'Services':
+            for i in self.Servicesdictlist:
+                pprint.pprint(i)
+    
+    
+    # Not implemented correctly
     def startNewService(self, servicefrom, serviceto, number):
         '''To move a service from one server to another server, just change \
         the server_Uniq_id field in services to the new server'''
@@ -197,13 +206,12 @@ class myInventory():
                 if k.name == servicefrom:
                     k.name == serviceto
                     i = i+1
-       
+
     def dump(self):
         '''dump the contents of object array to summarize the current services\
         and the servers'''
         
-        server_services_dict = {'india':[], 'sierra':[] , 'foxtrot':[]}#, 'alamo':[]}
-        servers = []
+        server_services_dict = {'india':[], 'sierra':[] }#, 'foxtrot':[], 'alamo':[]}
         
         for each in self.Serviceslist:
             server_services_dict[each.server_name].append(each.name)
@@ -219,6 +227,7 @@ class myInventory():
             print 
 
 #******************** Test method for putting in random data for now***********
+
 def get_random_word(wordLen):
     '''To generate random words to fill the test data structure'''
     word = ''
@@ -226,9 +235,16 @@ def get_random_word(wordLen):
         word += random.choice('abcdefghijklmnopqrstuvwxyz')
     return word
  
-
 if __name__ == "__main__":
-    
     serverobj = Server()
     serviceobj = Services()
     serverobj.insertData()
+    #serverobj1 = [Server() for i in range(10)]
+    #serverobj1[1].insertData()
+    inventory = myInventory()
+    inventory.add(serverobj, name = 'india')
+    inventory.add(serverobj, name = 'india')
+    inventory.add(serverobj, name = 'india')
+    inventory.add(serviceobj, name = 'sierra')
+    #inventory.list(serverobj)
+    inventory.list(serviceobj)
