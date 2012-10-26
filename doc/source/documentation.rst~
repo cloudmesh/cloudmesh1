@@ -1,0 +1,13 @@
+list of commands
+======================
+assign
+assign server:servername
+assign service:servicename
+add 
+add server
+add service
+list
+list server
+list service
+
+

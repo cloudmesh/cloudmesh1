@@ -12,7 +12,6 @@ Cloud Inventory
    :maxdepth: 2
 
  intro
- assign
 
 .. Indices and tables
 .. ==================
@@ -20,5 +19,4 @@ Cloud Inventory
 .. * :ref:`genindex`
 .. * :ref:`modindex`
 .. * :ref:`search`
-
 

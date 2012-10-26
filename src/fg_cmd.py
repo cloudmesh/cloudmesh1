@@ -13,7 +13,8 @@ inventory = myInventory()
 serverobj = Server()
 serviceobj = Services()
 class Console(cmd2.Cmd):
-
+    
+    placeholder = '%' 
     '''instantiate myInventory class'''
     setcommands = {'server':'', 'service':''}
     
@@ -82,7 +83,7 @@ class Console(cmd2.Cmd):
     def get_prefix(self, string, value ):
         '''Returns the IP prefix in format as e.g. i1.iu.edu'''   
         stri = str(value)
-        a = re.sub('#', stri ,string)
+        a = re.sub(self.placeholder, stri ,string)
         return a
     
     def do_assign(self, args):
@@ -202,7 +203,7 @@ class Console(cmd2.Cmd):
         parser.add_argument('-r','--range', action="store", default=False, \
                             type = self.parseNumList, dest = "range")
         parser.add_argument('-s','--servicename', action="store", dest = "servicename")
-        parser.add_argument('-p','--prefix', action="store", default="i#.iu.edu", dest = "prefix")
+        parser.add_argument('-p','--prefix', action="store", default="i"+self.placeholder+".iu.edu", dest = "prefix")
         args = parser.parse_args(args.split())
         print args.firstargument
         
@@ -255,7 +256,7 @@ class Console(cmd2.Cmd):
                         
             elif ((args.name)  and (args.servicename)):
                 myInventory.add(inventory,serviceobj, name = args.name, service_name = args.servicename,\
-                                prefix = self.get_prefix(args.prefix, i))
+                                prefix = self.get_prefix(args.prefix, 1))
         
         else:
             print "invalid argument only options are : server, service"

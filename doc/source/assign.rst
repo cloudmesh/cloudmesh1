@@ -1,0 +1,41 @@
+
+assign - assigns a default parameter 
+------
+
+Ussage
+++++++++++
+
+assign type:name
+
+assign server:servername
+
+assign service:servicename
+
+Description
+++++++++++
+
+The assign command defines a defualt parameter for parameters defined by other commands. Presently we are suporting the assignment of default parameters for servers and serivices. First we have to specify the type whic in our case is either service or server. Than we specify the name that is used whenever we would normally define a parameter defining a server or service
+
+List of Parameters
+++++++++++
+
+type
+     the type of the ...
+
+name
+     the name of the ...
+
+
+Example
+++++++++++
+
+The following example does .... ::
+
+  fg-inventory> 
+  > assign server:myserver
+  > add server -r 1-3 -p i#.iu.edu
+
+Tis will ... ::
+
+  ...
+
