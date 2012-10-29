@@ -21,7 +21,7 @@ class Console(cmd2.Cmd):
     def __init__(self):
         cmd2.Cmd.__init__(self)
         
-    prompt = "fg_inventory> "
+    prompt = "fg-inventory> "
     
     ## Command definitions ##
     def do_hist(self, args):
@@ -150,42 +150,8 @@ class Console(cmd2.Cmd):
                 else:
                     myInventory.add(inventory,serverobj, name = args.prefix, \
                                     ip_address = self.get_prefix(args.prefix, i))
-        
-        '''           
-        if(args.prefix):
-            print args.prefix
-            myInventory.add(inventory,serverobj, name = args.prefix)
-        '''
-                    
-    def do_add_services(self, args, opts=None ):
-        '''Add a service to a given server name in the inventory.'''
-        parser = argparse.ArgumentParser()
-        
-        parser.add_argument('-r','--range', action="store", default=False \
-                            ,type = self.parseNumList, dest = "range",  \
-                             help="set a range of services to start")
-        
-        parser.add_argument('-p','--prefix', action="store", \
-        default="i#.iu.edu", dest = "prefix", help="Server name for binding the service")
-        
-        parser.add_argument('-n','--name', action = "store", dest = "servername" ,\
-                            help="Set the server name to given option")
-        
-        parser.add_argument('-s', '--sname',action="store", dest = "servicename",\
-                             help="Service name")
-        args = parser.parse_args(args.split())
-        if (args.range):
-            print args.range
-            for _ in args.range:    
-                if(args.prefix == None) or (args.servicename == None) :
-                    print "Error No prefix and/or servicename specified"
-                else:
-                    myInventory.add(inventory,serviceobj, name = args.prefix,\
-                                     service_name = args.servicename)
-                    
-        if(args.prefix)  and (args.servicename) and (args.range ==None):
-            myInventory.add(inventory,serviceobj, name = args.prefix, \
-                            service_name = args.servicename)
+                        
+    
 
     def parseNumList(self,string):
         '''Method for enumerating the numbers specified in the range interval'''
