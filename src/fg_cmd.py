@@ -16,7 +16,7 @@ class Console(cmd2.Cmd):
     
     placeholder = '%' 
     '''instantiate myInventory class'''
-    setcommands = {'server':'', 'service':''}
+    setcommands = {'server':'', 'service':'','prefix':'prefix'}
     
     def __init__(self):
         cmd2.Cmd.__init__(self)
@@ -96,7 +96,7 @@ class Console(cmd2.Cmd):
          values server or services e.g assign server:india')
         args = parser.parse_args(args.split())
         temp =  args.position.split(':')
-        if temp[0].lower() not in ['server', 'service']:
+        if temp[0].lower() not in ['server', 'service', 'prefix']:
             print 'invalid operator to assign'
             print 'Can only accept server, service operator'
             return
@@ -113,7 +113,7 @@ class Console(cmd2.Cmd):
         args = parser.parse_args(args.split())
         print args.position
         temp=args.position
-        if temp.lower() not in ['server', 'service']:
+        if temp.lower() not in ['server', 'service', 'prefix']:
             print 'invalid operator to unassign'
             print 'Can only accept server, service operator'
             return
@@ -137,7 +137,8 @@ class Console(cmd2.Cmd):
         '''Add a server with given name in the inventory.'''
         parser = argparse.ArgumentParser()
         
-        parser.add_argument('-r','--range', action="store", default=False, type = self.parseNumList, dest = "range")
+        parser.add_argument('-r','--range', action="store", default=False,\
+                             type = self.parseNumList, dest = "range")
         parser.add_argument('-p','--prefix', action="store", dest = "prefix")
         parser.add_argument('-s','--set', action = "store", dest = "set")
         args = parser.parse_args(args.split())
@@ -179,17 +180,20 @@ class Console(cmd2.Cmd):
                 if(args.prefix == None) or (args.servicename == None) :
                     print "Error No prefix and/or servicename specified"
                 else:
-                    myInventory.add(inventory,serviceobj, name = args.prefix, service_name = args.servicename)
+                    myInventory.add(inventory,serviceobj, name = args.prefix,\
+                                     service_name = args.servicename)
                     
         if(args.prefix)  and (args.servicename) and (args.range ==None):
-            myInventory.add(inventory,serviceobj, name = args.prefix, service_name = args.servicename)
+            myInventory.add(inventory,serviceobj, name = args.prefix, \
+                            service_name = args.servicename)
 
     def parseNumList(self,string):
         '''Method for enumerating the numbers specified in the range interval'''
         m = re.match(r'(\d+)(?:-(\d+))?$', string)
         # ^ (or use .split('-'). anyway you like.)
         if not m:
-            raise argparse.ArgumentTypeError("'" + string + "' is not a range of number. Expected forms like '0-5' or '2'.")
+            raise argparse.ArgumentTypeError("'" + string + \
+                "' is not a range of number. Expected forms like '0-5' or '2'.")
         start = m.group(1)
         end = m.group(2) or start
         return list(range(int(start,10), int(end,10)+1)) 
@@ -203,7 +207,9 @@ class Console(cmd2.Cmd):
         parser.add_argument('-r','--range', action="store", default=False, \
                             type = self.parseNumList, dest = "range")
         parser.add_argument('-s','--servicename', action="store", dest = "servicename")
-        parser.add_argument('-p','--prefix', action="store", default="i"+self.placeholder+".iu.edu", dest = "prefix")
+        parser.add_argument('-p','--prefix', action="store", \
+                            default="i"+self.placeholder+".iu.edu",\
+                            dest = "prefix")
         args = parser.parse_args(args.split())
         print args.firstargument
         
@@ -220,6 +226,9 @@ class Console(cmd2.Cmd):
             elif (self.isassigned('server')):
                 myInventory.add(inventory,serverobj, name = self.setcommands['server'], \
                                        prefix = self.get_prefix(args.prefix, 1))
+            elif ((args.name) and (args.prefix)):
+                myInventory.add(inventory,serverobj, name = args.name,\
+                                 prefix = self.get_prefix(args.prefix, 1) )
                 #setting the prefix to 1 by default
                 return
             
@@ -239,7 +248,8 @@ class Console(cmd2.Cmd):
                             
                     elif(args.servicename != None) and (args.name != None):
                         myInventory.add(inventory,serviceobj, name = args.name,\
-                                         service_name = args.servicename,prefix = self.get_prefix(args.prefix, i))
+                                         service_name = args.servicename,\
+                                         prefix = self.get_prefix(args.prefix, i))
                     
                     elif((args.name) and self.isassigned('service')):
                         myInventory.add(inventory,serviceobj, name = args.name, \
@@ -248,14 +258,17 @@ class Console(cmd2.Cmd):
                     
                     if((args.servicename) and self.isassigned('server')):
                         myInventory.add(inventory,serviceobj, name = self.setcommands['server'], \
-                                        service_name = args.servicename ,prefix = self.get_prefix(args.prefix, i))
+                                        service_name = args.servicename ,\
+                                        prefix = self.get_prefix(args.prefix, i))
                     
                     else:
                         myInventory.add(inventory,serviceobj, name = self.setcommands['server'], \
-                                        service_name = self.setcommands['service'],prefix = self.get_prefix(args.prefix, i))
+                                        service_name = self.setcommands['service'],\
+                                        prefix = self.get_prefix(args.prefix, i))
                         
             elif ((args.name)  and (args.servicename)):
-                myInventory.add(inventory,serviceobj, name = args.name, service_name = args.servicename,\
+                myInventory.add(inventory,serviceobj, name = args.name, \
+                                service_name = args.servicename,\
                                 prefix = self.get_prefix(args.prefix, 1))
         
         else:
