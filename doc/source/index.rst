@@ -9,10 +9,13 @@ Cloud Inventory
   * Source: https://github.com/futuregrid/inventory
 
 .. toctree::
-   :maxdepth: 2
-
- intro
- assign
+	:maxdepth: 2
+	
+	assign
+	add
+	unassign
+	list
+	support
 
 .. Indices and tables
 .. ==================

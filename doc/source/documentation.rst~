@@ -1,8 +1,8 @@
-list of commands
+COMMANDS
 ======================
+
+
 assign
-assign server:servername
-assign service:servicename
 add 
 add server
 add service

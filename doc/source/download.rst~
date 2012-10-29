@@ -7,5 +7,5 @@ The code can be downloaded from
 
 The release version can be installed via::
 
-    pip install futuregrid-virtual-cluster
+    pip install futuregrid-virtual-cluser
 
