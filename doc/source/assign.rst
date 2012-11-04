@@ -1,10 +1,10 @@
-
 assign 
 ------
+
 - assigns a default parameter 
 
 Usage
-++++++++++
+"""""""""
 ::
 
 	assign type:name
@@ -12,12 +12,12 @@ Usage
 	assign service:servicename
 	assign prefix: prefixname
 Description
-++++++++++
+"""""""""""
 
-The assign command defines a defualt parameter for parameters defined by other commands. Presently we are suporting the assignment of default parameters for servers,services and prefix.
+The assign command defines a default parameter for parameters defined by other commands. Presently we are suporting the assignment of default parameters for servers,services and prefix.
 
 List of Parameters
-++++++++++
+""""""""""""""""""
 
 type
      the type of the parameter to be stored as a default in case no command line parameter is specified.
@@ -27,7 +27,7 @@ name
 
 
 Example
-++++++++++
+"""""""
 
 The following example adds a server into the inventory with range from 1-3 and prefix as specified using the assigned value for the field server ::
 

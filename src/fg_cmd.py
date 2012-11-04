@@ -101,7 +101,7 @@ class Console(cmd2.Cmd):
             print 'Can only accept server, service operator'
             return
         self.setcommands[temp[0]] = temp[1]
-        #print self.setcommands
+        print self.setcommands
         
     def do_unassign(self, args):
         '''Set the required field values in order to ease the pain of \
@@ -111,7 +111,7 @@ class Console(cmd2.Cmd):
         parser = argparse.ArgumentParser()
         parser.add_argument("position")
         args = parser.parse_args(args.split())
-        print args.position
+        #print args.position
         temp=args.position
         if temp.lower() not in ['server', 'service', 'prefix']:
             print 'invalid operator to unassign'
@@ -120,9 +120,6 @@ class Console(cmd2.Cmd):
         self.setcommands[temp] = ''
         print self.setcommands
     
-    def do_printassign(self, args):
-        '''Shows which fields are currently assigned'''
-        print self.setcommands
 
     #Helper Method to find all the assigned values to reduce typing
     def isassigned(self, tocheck):
@@ -151,8 +148,6 @@ class Console(cmd2.Cmd):
                     myInventory.add(inventory,serverobj, name = args.prefix, \
                                     ip_address = self.get_prefix(args.prefix, i))
                         
-    
-
     def parseNumList(self,string):
         '''Method for enumerating the numbers specified in the range interval'''
         m = re.match(r'(\d+)(?:-(\d+))?$', string)

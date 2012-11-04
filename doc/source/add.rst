@@ -1,5 +1,5 @@
-add  : 
-------
+add
+---
 - adds an entity into the inventory
 
 Usage
