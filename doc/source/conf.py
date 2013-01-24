@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Cloud Metrics documentation build configuration file, created by
+# Cloud Inventory documentation build configuration file, created by
 # sphinx-quickstart on Tue Apr 10 10:11:26 2012.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -17,7 +17,7 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('.'))
-#sys.path.insert(0, os.path.abspath('../../futuregrid/virtual/cluster'))
+#sys.path.insert(0, os.path.abspath('../../futuregrid/inventory'))
 
 # -- General configuration -----------------------------------------------------
 
@@ -48,8 +48,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'FutureGrid Cloud Code'
-copyright = u'2012, Gregor von Laszewski, Fugang Wang, Hyungro Lee, Javier Diaz'
+project = u'FutureGrid Inventory Code'
+copyright = u'2012, Gregor von Laszewski, Viplav Khadke'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -173,7 +173,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'CloudMetricsdoc'
+htmlhelp_basename = 'CloudInventorydoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -192,7 +192,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'CloudMetrics.tex', u'Cloud Metrics Documentation',
+  ('index', 'CloudInventory.tex', u'Cloud Inventory Documentation',
    u'Gregor von Laszewski, Fugang Wang, Hyungro Lee, Javier Diaz', 'manual'),
 ]
 
@@ -222,8 +222,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'cloudmetrics', u'Cloud Metrics Documentation',
-     [u'Gregor von Laszewski, Fugang Wang, Hyungro Lee, Javier Diaz'], 1)
+    ('index', 'cloudmetrics', u'Cloud Inventory Documentation',
+     [u'Gregor von Laszewski, Viplav Khadke'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -236,10 +236,10 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'CloudMetrics',
-   u'Cloud Metrics Documentation',
-   u'Gregor von Laszewski, Fugang Wang, Hyungro Lee, Javier Diaz',
-   'CloudMetrics',
+  ('index', 'CloudInventory',
+   u'Cloud Inventory Documentation',
+   u'Gregor von Laszewski, Viplav Khadke',
+   'CloudInventory',
    'One line description of project.',
    'Miscellaneous'),
 ]
@@ -257,10 +257,10 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u'Cloud Metrics'
-epub_author = u'Gregor von Laszewski, Fugang Wang, Hyungro Lee, Javier Diaz'
-epub_publisher = u'Gregor von Laszewski, Fugang Wang, Hyungro Lee, Javier Diaz'
-epub_copyright = u'2012, Gregor von Laszewski, Fugang Wang, Hyungro Lee, Javier Diaz'
+epub_title = u'Cloud Inventory'
+epub_author = u'Gregor von Laszewski, Viplav Khadke'
+epub_publisher = u'Gregor von Laszewski, Viplav Khadke'
+epub_copyright = u'2012, Gregor von Laszewski, Viplav Khadke'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.
