@@ -1,3 +1,7 @@
+*.cer
+*.pem
+*.cert
+
 *.py[cod]
 
 # C extensions
