@@ -11,6 +11,7 @@ except:
     print "========================================="
     sys.exit()
 from fabric.api import *
+from sh import stty
 from sh import ssh
 from sh import fgrep
 from sh import sleep
@@ -18,9 +19,12 @@ from multiprocessing import Pool
 from progress.bar import Bar
 #import re,datetime
 from datetime import datetime
+import console
+
+with_menu = True
 
 prefix = "gregor"
-maxparallel=10
+maxparallel=5
 
 #env.user=["gvonlasz"]
 #env.hosts=["localhost"]
@@ -31,16 +35,52 @@ maxparallel=10
 #           "delta.futuregrid.org",
 #           "bravo.futuregrid.org"]
 
+terminal_height, terminal_width = os.popen('stty size', 'r').read().split()
+
+def _line(name):
+    n = len(name)
+    print "==", name, (int(terminal_width)-n-4) * "="
+
+def indent(numSpaces,s):
+    return "\n".join((numSpaces * " ") + i for i in s.splitlines())
+
+result_cache = ""
+instances_cache = ""
+
+
+def refresh_images():
+    global instances_cache
+    try: 
+        instances_cache = fgrep(nova("list"), prefix)
+    except:
+        instances_cache = ""
+    
+def menu():
+    global instances_cache
+    if with_menu:
+        result_cache = nova("keypair-list")
+        refresh_images()
+        os.system('clear')
+        _line("Key")
+        print indent(8,result_cache)
+        _line("VMs")
+        print indent(8,instances_cache)
+        _line("Commands")
+        print "reindex - par:n - start:i - delete:i - fix - clean - kill - killwait"
+
 def key():
     """adds your public ~/.ssh/id_rsa.pub to the keypairs"""
     keyadd("gvonlasz")
+    menu()
+
 
 def test(index):
     name = generate_name(index)
     result = fgrep(nova.show(name),"network")
 
     (start,label,ips,rest) = result.replace(" ","").split("|")
-    print ips
+    print
+    ips
     try:
         (private_ip, public_ip) = ips.split(",")
     except:
@@ -104,6 +144,9 @@ def generate_name(index):
     name = "%s-%s" % (prefix, number)
     return (name)
 
+def start(index):
+    boot(index)
+    
 def boot(index):
     """create a vm with the label prefix-index"""
     #nova boot --flavor 1 --image 9bab7ce7-7523-4d37-831f-c18fbc5cb543 --key_name mykey myinstance
@@ -121,25 +164,23 @@ def boot(index):
         print tmp
     except:
         print "Failure to launch %s" % name
+    menu()
 
-def cluster(number):
+def seq(number):
     """creates number of virtual machines in sequential order"""
-    vm(number)
-
-    
-def vm(number):
-    """Creates a number of vms with the labels prefix-0 to prefix-<number-1>""" 
     for index in range(0,int(number)):
         boot(index)
+    menu()
+    
 
-
-def pcluster(number):
+def par(number):
     """Creates a number of vms with the labels prefix-0 to prefix-<number-1>""" 
         
     pool = Pool(processes=maxparallel)
     list = range(0,int(number))
     result = pool.map(boot, list)
     status()
+    menu()
 
 def created():
     """show all the instances with prefix-*"""
@@ -184,7 +225,9 @@ def show():
     except:
         print "Found 0 instances to show"
 
-    
+
+
+
 def kill():
     """kills all the instances with prefix prefix-*"""
     try:
@@ -204,10 +247,12 @@ def kill():
 
     except:
         print "Found 0 instances to kill"
-
+    menu()
+        
 def killwait():
     kill()
     wait()
+    menu()
 
 def _count(instances):
     total = len(instances.split('\n'))-1 
@@ -236,6 +281,8 @@ def wait():
 def _del(id):
     nova("delete", "%s" % id)
 
+def delete(id):
+    _del(id)
 
 def reindex():
     """updates the names of all active images"""
@@ -246,11 +293,15 @@ def reindex():
             line = line.replace(" ","")
             (a, id, name, status, network, rest) = line.split("|")
             newname = generate_name(index)
-            
-            nova.rename(id, newname)
+            if (name != newname):
+                nova.rename(id, newname)
+                print "Renameing %s -> %s" % (name, newname)
+            else:
+                print "Skipping %s " % name
             index = index + 1
     except:
         print "Found 0 instances with status error to kill"
+    menu()
 
 def limits():
     print nova("absolute-limits")
@@ -271,6 +322,7 @@ def clean():
                 print "Keeping %s" % name
     except:
         print "Found 0 instances with status error to kill"
+    menu()
 
 def fix():
     """kills all the instances with prefix-* and in error state"""
@@ -292,6 +344,7 @@ def fix():
                 print "Keeping %s" % name
     except:
         print "Found 0 instances with status error to kill"
+    menu()
 
 def images():
     """List the images"""
@@ -338,7 +391,8 @@ def _status(instances):
     except:
         print "0 instances found"
 
-
+def r():
+    menu()
 
 def flavor():
     """lists the flavors"""
@@ -350,6 +404,7 @@ def jtest():
 def rc():
     local("cat ~/openstack/novarc")
 
-    
+#print "... refreshing"
+#menu()    
     
     
