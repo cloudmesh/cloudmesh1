@@ -11,6 +11,9 @@ except:
     print "========================================="
     sys.exit()
 from fabric.api import *
+from sh import sed
+from sh import tail
+from sh import head
 from sh import stty
 from sh import ssh
 from sh import fgrep
@@ -44,7 +47,7 @@ def _line(name):
 def indent(numSpaces,s):
     return "\n".join((numSpaces * " ") + i for i in s.splitlines())
 
-result_cache = ""
+key_cache = []
 instances_cache = ""
 
 
@@ -54,15 +57,26 @@ def refresh_images():
         instances_cache = fgrep(nova("list"), prefix)
     except:
         instances_cache = ""
-    
+
+def get_keynames():
+    global key_cache
+    key_cache = []
+    result = fgrep(tail(nova("keypair-list"), "-n", "+4"),"-v","+")
+    for line in result:
+        (front, name, signature, back) = line.split("|")
+        key_cache.append(name)
+
+
 def menu():
     global instances_cache
+    global key_cache
     if with_menu:
-        result_cache = nova("keypair-list")
         refresh_images()
+        get_keynames()
         os.system('clear')
         _line("Key")
-        print indent(8,result_cache)
+        print ",".join(key_cache)
+        #print indent(8,result_cache)
         _line("VMs")
         print indent(8,instances_cache)
         _line("Commands")
