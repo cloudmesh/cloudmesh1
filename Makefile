@@ -8,7 +8,8 @@ all:
 # NOVA CLIENT
 ######################################################################
 nova:
-	pip install --upgrade -e git+https://github.com/openstack/python-novaclient.git#egg=python-novaclient
+	#pip install --upgrade -e git+https://github.com/openstack/python-novaclient.git#egg=python-novaclient
+	pip install --upgrade -e git://github.com/openstack/python-novaclient.git#egg=python-novaclient
 
 ######################################################################
 # GIT INTERFACES
