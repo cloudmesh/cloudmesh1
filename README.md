@@ -4,8 +4,9 @@ http://futuregrid.github.com/cm
 
 However currently look at the source
 
-module load git
-module load python
+  module load git
+
+  module load python
 
 virtualenv TEST
 
