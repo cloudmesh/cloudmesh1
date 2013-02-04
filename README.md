@@ -4,9 +4,11 @@ http://futuregrid.github.com/cm
 
 However currently look at the source
 
-  module load git
+In case you like to execute this on india please do:
 
-  module load python
+module load git
+
+module load python
 
 virtualenv TEST
 
