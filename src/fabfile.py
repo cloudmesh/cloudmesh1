@@ -503,7 +503,7 @@ def _jtest():
 # OTHER
 ######################################################################
 
-def install():
-    os.system("pip install --upgrade -e git+https://github.com/openstack/python-novaclient.git#egg=python-novaclient")
-    os.system("cp cm %s" % os.environ['VIRTUAL_ENV'])
+#def install():
+#    os.system("pip install --upgrade -e git+https://github.com/openstack/python-novaclient.git#egg=python-novaclient")
+#    os.system("cp cm %s" % os.environ['VIRTUAL_ENV'])
 

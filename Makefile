@@ -1,6 +1,15 @@
 PATHNAME=$(shell pwd)
 BASENAME=$(shell basename $(PATHNAME))
 
+all:
+	make -f Makefile force
+
+######################################################################
+# NOVA CLIENT
+######################################################################
+nova:
+	pip install --upgrade -e git+https://github.com/openstack/python-novaclient.git#egg=python-novaclient
+
 ######################################################################
 # GIT INTERFACES
 ######################################################################
@@ -33,15 +42,15 @@ pip:
 
 force:
 	make -f Makefile pip
-	sudo pip install -U dist/*.tar.gz
+	pip install -U dist/*.tar.gz
 
 install:
-	sudo pip install dist/*.tar.gz
+	pip install dist/*.tar.gz
 
 test:
 	make -f Makefile clean	
 	make -f Makefile distall
-	sudo pip install --upgrade dist/*.tar.gz
+	pip install --upgrade dist/*.tar.gz
 	fg-cluster
 	fg-local
 
@@ -59,9 +68,9 @@ upload:
 ######################################################################
 
 qc-install:
-	sudo pip install pep8
-	sudo pip install pylint
-	sudo pip install pyflakes
+	pip install pep8
+	pip install pylint
+	pip install pyflakes
 
 qc:
 	pep8 ./futuregrid/virtual/cluster/
@@ -77,7 +86,7 @@ clean:
 	find . -name "*~" -exec rm {} \;  
 	find . -name "*.pyc" -exec rm {} \;  
 	rm -rf build dist *.egg-info *~ #*
-	cd doc; make clean
+#	cd doc; make clean
 
 ######################################################################
 # pypi
