@@ -78,7 +78,7 @@ setup(
              "console",
              ],
 
-    scripts=['bin/cm', 'bin/cm']
+#    scripts=['bin/cm', 'bin/cm']
 
     )
 

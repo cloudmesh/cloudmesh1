@@ -45,6 +45,7 @@ force:
 	make -f Makefile nova
 	make -f Makefile pip
 	pip install -U dist/*.tar.gz
+	cp bin/cm ~/TEST/bin/cm
 
 install:
 	pip install dist/*.tar.gz
