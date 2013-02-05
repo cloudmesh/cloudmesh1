@@ -2,30 +2,23 @@ Documentation will be at
 
 http://futuregrid.github.com/cm
 
-However currently look at the source
+A video about its use can be found at 
 
-In case you like to execute this on india please do:
+* http://www.youtube.com/watch?v=CAaFvT76dMk
 
-module load git
+In case you like to execute this on india.futuregrid.org please, get
+an account and motivate a very good project. Once you have access you
+can do the following:
 
-module load python
-
-virtualenv TEST
-
-source TEST/bin/activate
-
-mkdir test
-
-git clone git@github.com:futuregrid/cm.git
-
-cd cm
-
-make
-
-chmod a+x ~/TEST/bin/cm 
-
-cd src
-
-source ~/.futuregrid/openstack/novarc 
-
-cm r
+    module load git
+    module load python
+    virtualenv TEST
+    source TEST/bin/activate
+    mkdir test
+    git clone git@github.com:futuregrid/cm.git
+    cd cm
+    make
+    chmod a+x ~/TEST/bin/cm 
+    cd src
+    source ~/.futuregrid/openstack/novarc 
+    cm r
