@@ -1,3 +1,6 @@
+DISPLAY_HTML = True
+with_menu = True
+
 import sys
 import os
 import webbrowser
@@ -13,6 +16,7 @@ except:
     print "========================================="
     sys.exit()
 from fabric.api import *
+from sh import uname
 from sh import sed
 from sh import tail
 from sh import head
@@ -22,14 +26,13 @@ from sh import fgrep
 from sh import sleep
 from multiprocessing import Pool
 from progress.bar import Bar
-#import re,datetime
 from datetime import datetime
 import console
 
 prefix = os.environ['OS_USERNAME']
 image_name = "common/precise-server-cloudimg-amd64.img.manifest.xml"
 
-with_menu = True
+
 
 maxparallel=5
 
@@ -49,15 +52,16 @@ maxparallel=5
 
 terminal_height, terminal_width = os.popen('stty size', 'r').read().split()
 
-DISPLAY_HTML = True
-
 def _line(name):
     n = len(name)
     print "==", name, (int(terminal_width)-n-4) * "="
 
-
 def _indent(numSpaces,s):
     return "\n".join((numSpaces * " ") + i for i in s.splitlines())
+
+######################################################################
+# HTML related methods
+######################################################################
 
 def table_header(header,span):
     global table
@@ -67,7 +71,6 @@ def table_start(header,span):
     global table
     table += "<table border=\"1\">\n"
     table_header (header, span)
-
 
 def table_end():
     global table
@@ -85,7 +88,6 @@ def table_two_col_row(data, cols):
     table += "<tr>"
     table += "<td> %s </td><td colspan=%d> %s </td>" % (data[0], cols - 1, data[1])
     table += "</tr>\n"
-
 
 def table_row_one(data, span):
     global table
@@ -274,14 +276,25 @@ def html():
     table_header("Help", 4)
     table_two_col_row(["Commands", "%s" % commands] ,rows)
 
-
     table_end()    
     page_end()
-    f = open("cm.html", 'w')
+    
+    try:
+        os.mkdir("/tmp/%s" % prefix)
+    except:
+        None
+    filename = "/tmp/%s/cm.html" % prefix
+    f = open(filename, 'w+')
     print >> f, table
     f.close()
-    #webbrowser.open('cm.html')
-    os.system ("open cm.html")
+    if uname().strip() == "Darwin":
+        #os.system("osascript -e \'tell application \"Safari\" to open location \"file://%s\"\' -e \'tell application \"Safari\" to set bounds of front window to {60, 30, 00, 600}\'" % filename)
+        os.system("osascript -e \'tell application \"Safari\" to open location \"file://%s\"\'" % filename)
+    else:
+        print "OS not yet tested"
+        os.system("firefox file://%s" % filename)
+
+
     os.system ("echo")
     #print table
     
@@ -316,6 +329,7 @@ def menu():
             print _indent(8," TESTING: test:i")
             print _indent(8," STATUS: status - ls - list - flavor - created - limits - rc")
             _line("")
+    _status(instances_cache)
 
 ######################################################################
 # Key related methods
@@ -418,14 +432,13 @@ def boot(index):
     try:
         number = str(index).zfill(3);
         name = "%s-%s" % (prefix, number)
-        print name
         print "Launching VM %s" % name
         tmp = nova("boot",
              "--flavor=1",
              "--image=%s" % image_name,
              "--key_name","%s" % prefix,
              "%s" % name)
-        print tmp
+        #print tmp
     except Exception, e:
         print e
         print "Failure to launch %s" % name
