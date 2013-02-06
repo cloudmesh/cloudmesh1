@@ -1,9 +1,14 @@
 DISPLAY_HTML = True
 with_menu = True
 
+import json
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+
 import sys
 import os
 import webbrowser
+
 
 try:
     from sh import nova
@@ -33,6 +38,7 @@ prefix = os.environ['OS_USERNAME']
 image_name = "common/precise-server-cloudimg-amd64.img.manifest.xml"
 
 
+bar = None
 
 maxparallel=5
 
@@ -213,17 +219,33 @@ def page_end():
 # Menu related methods
 ######################################################################
 
+status_summary = ""
 table = ""
 key_cache = []
 instances_cache = ""
+servers = {}
 
-def _refresh_images():
+def _refresh_servers():
     global instances_cache
-    try: 
+    global servers
+    try:
+        servers = {}
         instances_cache = fgrep(nova("list"), prefix)
+        for line in instances_cache:
+            (a, id, name, status, ip, b) = line.split("|")
+            id = id.strip()
+            servers[id] = {
+                'id': id,
+                'cloud' : "india".strip(),
+                'name': name.strip(), 
+                'status' : status.strip(),
+                'ip' : ip.strip()
+                }
     except:
         instances_cache = ""
+    #print json.dumps (servers, indent=4)
 
+        
 def _get_keynames():
     global key_cache
     key_cache = []
@@ -234,55 +256,60 @@ def _get_keynames():
 
 
 def html():
+    global status_summary
     global instances_cache
     global key_cache
     global table
+    global servers
 
     page_start()
     rows = 5
     table_start("CM - Cloud Mesh",rows)
-    bar = Bar('Processing', max=3)
+    bar = Bar('Processing', max=10)
     bar.next()
-    _refresh_images()
+    _refresh_servers()
     bar.next()
     _get_keynames()
     bar.next()
-    bar.finish()
 
+    table_two_col_row(["Last Refresh", "%s" % str(datetime.now())], rows)
     table_two_col_row(["Keynames", "%s" % ",".join(key_cache)],rows)
     table_two_col_row(["Theard pool size", "%s" % maxparallel],rows)
     table_two_col_row(["Image",  "%s" % image_name],rows)
+    bar.next()
+    _status()
+    bar.next()
+    table_two_col_row(["Summary",  "%s" % str(status_summary)],rows)
 
-    table_header("Virtual Machines", 5)
-    table += "<tr><td><b><i>Cloud</i></b></td><td><b><i>ID</i></b></td><td><b><i>Name</i></b></td><td><b><i>Status</i></b></td><td><b><i>IPs</i></b></td><tr>"
+    bar.next()
+    table_header("%s Virtual Machines" % len(servers), 5)
+    table += "<tr><td><b><i>Cloud</i></b></td><td><b><i>ID</i></b></td><td><b><i>Name</i></b></td><td><b><i>Status</i></b></td><td><b><i>IPs</i></b></td><tr>\n"
 
     cloudname = "india"
 
-    if ('|' in instances_cache):
-        tmp = "%s" % instances_cache
-        tmp = tmp[1:-2]
-        tmp = tmp.replace("|\n|","</td></tr>\n<tr><td>%s</td><td>" % cloudname)
-        tmp = "<tr><td>%s</td><td> %s </td></tr>\n" % (cloudname, tmp)
-        tmp = tmp.replace("|","</td><td>")
-        table += tmp
-    else:
-        table_two_col_row(["india",  "%s" % "none"],rows)
-        
+    for index in servers:
+        server = servers[index]
+        table += ("<tr><td>%(cloud)s</td><td>%(id)s</td><td>%(name)s</td><td>%(status)s</td><td>%(ip)s</td></tr>\n" % server)
+
+    bar.next()
     commands = """<b><i>STARTING:</i></b> start:i - reindex - par:n - fix
     <b><i>DELETING:</i></b> delete:i - clean - kill - killwait
     <b><i>TESTING:</i></b> test:i
     <b><i>STATUS:</i></b> status - ls - list - flavor - created - limits - rc"""
 
+    bar.next()
     table_header("Help", 4)
     table_two_col_row(["Commands", "%s" % commands] ,rows)
 
     table_end()    
     page_end()
+    bar.next()
     
     try:
         os.mkdir("/tmp/%s" % prefix)
     except:
         None
+    bar.next()
     filename = "/tmp/%s/cm.html" % prefix
     f = open(filename, 'w+')
     print >> f, table
@@ -293,10 +320,8 @@ def html():
     else:
         print "OS not yet tested"
         os.system("firefox file://%s" % filename)
-
-
-    os.system ("echo")
-    #print table
+    bar.next()
+    bar.finish()
     
 def menu():
     if DISPLAY_HTML:
@@ -308,7 +333,7 @@ def menu():
             _line("cm - The FutureGrid Cloud Mesh Platform")
             bar = Bar('Processing', max=3)
             bar.next()
-            _refresh_images()
+            _refresh_servers()
             bar.next()
             _get_keynames()
             bar.next()
@@ -329,7 +354,9 @@ def menu():
             print _indent(8," TESTING: test:i")
             print _indent(8," STATUS: status - ls - list - flavor - created - limits - rc")
             _line("")
-    _status(instances_cache)
+
+    _status()
+
 
 ######################################################################
 # Key related methods
@@ -426,7 +453,7 @@ def start(index):
     '''starts a virtual machine with the given index. Same as boot'''
     boot(index)
     menu()
-    
+
 def boot(index):
     '''starts a virtual machine with the given index'''
     try:
@@ -438,7 +465,7 @@ def boot(index):
              "--image=%s" % image_name,
              "--key_name","%s" % prefix,
              "%s" % name)
-        #print tmp
+        print tmp
     except Exception, e:
         print e
         print "Failure to launch %s" % name
@@ -457,7 +484,7 @@ def par(number):
     pool = Pool(processes=maxparallel)
     list = range(0,int(number))
     result = pool.map(boot, list)
-    status()
+    _status()
     menu()
 
 def reindex():
@@ -555,22 +582,29 @@ def show():
 
 def kill():
     """kills all the instances with prefix prefix-*"""
+    global servers
+    global bar
     try:
         list = []
         names = []
-        instances = fgrep(nova("list"), prefix)
-        for line in instances:
-            columns = line.split("|")
-            id = columns[1].strip()
-            name = columns[2].strip()
-            print "Found %s to kill" % name
-            list.append(id)
-            names.append(name)
-        print "Starting parallel Delete of: ", names
-        pool = Pool(processes=maxparallel)
-        result = pool.map(_del, list)
-
+        _refresh_servers()
+        if len(servers) == 0:
+            print "Found 0 instances to kill"
+        else:
+            for index in servers:
+                server = servers[index]
+                print "Found %(name)s to kill" % server
+                list.append(index)
+                names.append(server['name'])
+            bar = Bar('Deleting', max=len(servers)+3)
+            bar.next()
+            pool = Pool(processes=maxparallel)
+            bar.next()
+            result = pool.map(_del_server, list)
+            bar.next()
+            bar.finish()
     except:
+        #print e
         print "Found 0 instances to kill"
     menu()
         
@@ -584,26 +618,37 @@ def _count(instances):
     return total
 
 
-def _del(id):
+def _del_server(id):
+    global bar
+    bar.next()
     nova("delete", "%s" % id)
 
+
 def delete(id):
-    _del(id)
+    _del_server(id)
 
 def clean():
     """kills all the instances with prefix prefix-* and in error state"""
+    global servers
+    global bar
     try:
-        instances = fgrep(nova("list"), prefix)
-        for line in instances:
-            columns = line.split("|")
-            id = columns[1].strip()
-            name = columns[2].strip()
-            status = columns[3].strip()
-            if status == "ERROR":
-                print "Killing %s" % name
-                nova("delete", "%s" % id)
-            else:
-                print "Keeping %s" % name
+        _refresh_servers()
+        if len(servers) == 0:
+            print "Found 0 instances to kill"
+        else:
+            for index in servers:
+                server = servers[index]
+                if server['status'] == "ERROR":
+                    list.append(index)
+                    names.append(server['name'])
+            print "Starting parallel Delete"
+            bar = Bar('Deleting', max=len(servers)+3)
+            bar.next()
+            pool = Pool(processes=maxparallel)
+            bar.next()
+            result = pool.map(_del_server, list)
+            bar.next()
+            bar.finish()
     except:
         print "Found 0 instances with status error to kill"
     menu()
@@ -621,7 +666,7 @@ def wait():
         bar = Bar('Processing', max=total)
         old = total
         while True:
-            #_status(instances)
+            #_status()
             current = _count(instances)
             if old != current:
                 bar.next()
@@ -681,28 +726,25 @@ def list():
         print "Found 0 instances"
     menu()
     
-def status():
+def _status():
     """prints a very small status message of the form
     -A----A--A----A--A---A-----A---A----A--A----------------"""
-    try:
-        instances = fgrep(nova("list"), prefix)    
-        _status(instances)
-    except:
-        print "Found 0 instances with status error to kill"
-
-def _status(instances):
-    """prints a very small status message of the form
-    -A----A--A----A--A---A-----A---A----A--A----------------"""
+    global servers
+    global status_summary
     statuslist = []
+    hist={}
     try:
-        for line in instances:
-            columns = line.split("|")
-            status = columns[3].strip()
+        for index in servers:
+            server = servers[index]
+            status = server['status']
+            hist[status] = hist.get(status, 0) + 1
             statuschar = status.split()[0][0]
             statuslist.append(statuschar)
         result = ''.join(statuslist)
         result = result.replace("E","-")
-        print "%d instances:" % len(result), result
+        status_summary = "Total=%d " % len(servers)
+        for status in hist:
+            status_summary += "%s=%s " % (str(status), str(hist[status]))
     except:
         print "0 instances found"
 
@@ -712,6 +754,7 @@ def _status(instances):
 
 def r():
     '''refresh'''
+    #_refresh_servers()
     menu()
 
 def _jtest():
