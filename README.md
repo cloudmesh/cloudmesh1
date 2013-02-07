@@ -23,6 +23,7 @@ can do the following:
     virtualenv TEST
     source TEST/bin/activate
     mkdir test
+    cd test
     git clone git@github.com:futuregrid/cm.git
     cd cm
     make
