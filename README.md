@@ -26,8 +26,6 @@ can do the following:
     git clone git@github.com:futuregrid/cm.git
     cd cm
     make
-    chmod a+x ~/TEST/bin/cm 
-    cd src
     source ~/.futuregrid/openstack/novarc 
     cm r
 
