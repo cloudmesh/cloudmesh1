@@ -45,7 +45,9 @@ force:
 	make -f Makefile nova
 	make -f Makefile pip
 	pip install -U dist/*.tar.gz
-	cp bin/cm ~/TEST/bin/cm
+	cp bin/cm $(VIRTUAL_ENV)/bin/cm
+	chmod a+x $(VIRTUAL_ENV)/bin/cm
+
 
 install:
 	pip install dist/*.tar.gz
