@@ -1,7 +1,13 @@
 #import os
 #os.system('/bin/bash --rcfile ./act.sh')
 
-DISPLAY_HTML = True
+from blessings import Terminal
+term = Terminal()
+
+import texttable
+import html2text
+
+DISPLAY_HTML = False
 with_menu = True
 
 import json
@@ -65,6 +71,10 @@ def _line(name):
     n = len(name)
     print "==", name, (int(terminal_width)-n-4) * "="
 
+def _tline(name):
+    n = len(name)
+    return "%s== %s %s%s\n" % (term.white + term.on_blue , name, (int(terminal_width)-n-4) * "=", term.normal)
+
 def _indent(numSpaces,s):
     return "\n".join((numSpaces * " ") + i for i in s.splitlines())
 
@@ -74,181 +84,205 @@ def _indent(numSpaces,s):
 
 def table_header(header,span):
     global table
-    table += "<tr><th colspan=\"%s\">%s</th><tr>\n" % (span, header)
-
+    if DISPLAY_HTML:
+        table += "<tr><th colspan=\"%s\">%s</th><tr>\n" % (span, header)
+    else:
+        table += "\n"
+        table += _tline(header)
+        
 def table_start(header,span):
     global table
-    table += "<table border=\"1\">\n"
+    if DISPLAY_HTML:
+        table += "<table border=\"1\">\n"
     table_header (header, span)
 
 def table_end():
     global table
-    table += "</table >\n"
+    if DISPLAY_HTML:
+        table += "</table >\n"
 
 def table_row(data):
     global table
-    table += "<tr>"
-    for cell in data:
-        table += "<td> %s </td>" % str(cell)
-    table += "</tr>\n"
-
+    if DISPLAY_HTML:
+        table += "<tr>"
+        for cell in data:
+            table += "<td> %s </td>" % str(cell)
+        table += "</tr>\n"
+    else:
+        for cell in data:
+            table += "%s " % str(cell)
+        table += "\n"
+                    
 def table_two_col_row(data, cols):
     global table
-    table += "<tr>"
-    table += "<td> %s </td><td colspan=%d> %s </td>" % (data[0], cols - 1, data[1])
-    table += "</tr>\n"
-
+    if DISPLAY_HTML:
+        table += "<tr>"
+        table += "<td> %s </td><td colspan=%d> %s </td>" % (data[0], cols - 1, data[1])
+        table += "</tr>\n"
+    else: 
+        table += "%20s: %s" % (data[0], data[1])
+        table += "\n"
+        
 def table_row_one(data, span):
     global table
-    table += "<tr>"
-    table += "<td colspan=\"%s\"> %s </td>" % (span, str(data))
-    table += "</tr>\n"
-
+    if DISPLAY_HTML:
+        table += "<tr>"
+        table += "<td colspan=\"%s\"> %s </td>" % (span, str(data))
+        table += "</tr>\n"
+    else:
+        table += "%s" % (str(data))
+        table += "\n"
+        
 def page_start():
     global table
-    table = "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n"
-    table += "<html>\n"
-    table += "<head>\n"
-    table += "<title>CM - Cloud Mesh</title>\n"
-    table += """
-             <style type="text/css">
- 
-        .button {
-	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	box-shadow:inset 0px 1px 0px 0px #ffffff;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
-	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
-	background-color:#ededed;
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-	border:1px solid #dcdcdc;
-	display:inline-block;
-	color:#777777;
-	font-family:arial;
-	font-size:15px;
-	font-weight:bold;
-	padding:6px 24px;
-	text-decoration:none;
-	text-shadow:1px 1px 0px #ffffff;
-}.button:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
-	background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
-	background-color:#dfdfdf;
-}.button:active {
-	position:relative;
-	top:1px;
-}
+    if DISPLAY_HTML:
+        table = "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n"
+        table += "<html>\n"
+        table += "<head>\n"
+        table += "<title>CM - Cloud Mesh</title>\n"
+        table += """
+                 <style type="text/css">
 
-             table a:link {
-	color: #666;
-	font-weight: bold;
-	text-decoration:none;
-}
-table a:visited {
-	color: #999999;
-	font-weight:bold;
-	text-decoration:none;
-}
-table a:active,
-table a:hover {
-	color: #bd5a35;
-	text-decoration:underline;
-}
-table {
-	font-family:Arial, Helvetica, sans-serif;
-	color:#666;
-	font-size:12px;
-	text-shadow: 1px 1px 0px #fff;
-	background:#eaebec;
-	margin:20px;
-	border:#ccc 1px solid;
+                .button {
+                -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+                -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+                box-shadow:inset 0px 1px 0px 0px #ffffff;
+                background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+                background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+                background-color:#ededed;
+                -moz-border-radius:6px;
+                -webkit-border-radius:6px;
+                border-radius:6px;
+                border:1px solid #dcdcdc;
+                display:inline-block;
+                color:#777777;
+                font-family:arial;
+                font-size:15px;
+                font-weight:bold;
+                padding:6px 24px;
+                text-decoration:none;
+                text-shadow:1px 1px 0px #ffffff;
+        }.button:hover {
+                background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+                background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+                background-color:#dfdfdf;
+        }.button:active {
+                position:relative;
+                top:1px;
+        }
 
-	-moz-border-radius:3px;
-	-webkit-border-radius:3px;
-	border-radius:3px;
+                     table a:link {
+                color: #666;
+                font-weight: bold;
+                text-decoration:none;
+        }
+        table a:visited {
+                color: #999999;
+                font-weight:bold;
+                text-decoration:none;
+        }
+        table a:active,
+        table a:hover {
+                color: #bd5a35;
+                text-decoration:underline;
+        }
+        table {
+                font-family:Arial, Helvetica, sans-serif;
+                color:#666;
+                font-size:12px;
+                text-shadow: 1px 1px 0px #fff;
+                background:#eaebec;
+                margin:20px;
+                border:#ccc 1px solid;
 
-	-moz-box-shadow: 0 1px 2px #d1d1d1;
-	-webkit-box-shadow: 0 1px 2px #d1d1d1;
-	box-shadow: 0 1px 2px #d1d1d1;
-}
-table th {
-	padding:11px 14px 11px 14px;
-	border-top:1px solid #fafafa;
-	border-bottom:1px solid #e0e0e0;
+                -moz-border-radius:3px;
+                -webkit-border-radius:3px;
+                border-radius:3px;
 
-	background: #ededed;
-	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
-	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
-}
-table th:first-child {
-	text-align: left;
-	padding-left:10px;
-}
-table tr:first-child th:first-child {
-	-moz-border-radius-topleft:3px;
-	-webkit-border-top-left-radius:3px;
-	border-top-left-radius:3px;
-}
-table tr:first-child th:last-child {
-	-moz-border-radius-topright:3px;
-	-webkit-border-top-right-radius:3px;
-	border-top-right-radius:3px;
-}
-table tr {
-	text-align: left;
-	padding-left:10px;
-}
-table td:first-child {
-	text-align: left;
-	padding-left:10px;
-	border-left: 0;
-}
-table td {
-	padding:9px;
-	border-top: 1px solid #ffffff;
-	border-bottom:1px solid #e0e0e0;
-	border-left: 1px solid #e0e0e0;
+                -moz-box-shadow: 0 1px 2px #d1d1d1;
+                -webkit-box-shadow: 0 1px 2px #d1d1d1;
+                box-shadow: 0 1px 2px #d1d1d1;
+        }
+        table th {
+                padding:11px 14px 11px 14px;
+                border-top:1px solid #fafafa;
+                border-bottom:1px solid #e0e0e0;
 
-	background: #fafafa;
-	background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
-	background: -moz-linear-gradient(top,  #fbfbfb,  #fafafa);
-}
-table tr.even td {
-	background: #f6f6f6;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
-	background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);
-}
-table tr:last-child td {
-	border-bottom:0;
-}
-table tr:last-child td:first-child {
-	-moz-border-radius-bottomleft:3px;
-	-webkit-border-bottom-left-radius:3px;
-	border-bottom-left-radius:3px;
-}
-table tr:last-child td:last-child {
-	-moz-border-radius-bottomright:3px;
-	-webkit-border-bottom-right-radius:3px;
-	border-bottom-right-radius:3px;
-}
-table tr:hover td {
-	background: #f2f2f2;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
-	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
-}
-             </style>
-    """
-    table += "</head>\n"
+                background: #ededed;
+                background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
+                background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
+        }
+        table th:first-child {
+                text-align: left;
+                padding-left:10px;
+        }
+        table tr:first-child th:first-child {
+                -moz-border-radius-topleft:3px;
+                -webkit-border-top-left-radius:3px;
+                border-top-left-radius:3px;
+        }
+        table tr:first-child th:last-child {
+                -moz-border-radius-topright:3px;
+                -webkit-border-top-right-radius:3px;
+                border-top-right-radius:3px;
+        }
+        table tr {
+                text-align: left;
+                padding-left:10px;
+        }
+        table td:first-child {
+                text-align: left;
+                padding-left:10px;
+                border-left: 0;
+        }
+        table td {
+                padding:9px;
+                border-top: 1px solid #ffffff;
+                border-bottom:1px solid #e0e0e0;
+                border-left: 1px solid #e0e0e0;
+
+                background: #fafafa;
+                background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
+                background: -moz-linear-gradient(top,  #fbfbfb,  #fafafa);
+        }
+        table tr.even td {
+                background: #f6f6f6;
+                background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
+                background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);
+        }
+        table tr:last-child td {
+                border-bottom:0;
+        }
+        table tr:last-child td:first-child {
+                -moz-border-radius-bottomleft:3px;
+                -webkit-border-bottom-left-radius:3px;
+                border-bottom-left-radius:3px;
+        }
+        table tr:last-child td:last-child {
+                -moz-border-radius-bottomright:3px;
+                -webkit-border-bottom-right-radius:3px;
+                border-bottom-right-radius:3px;
+        }
+        table tr:hover td {
+                background: #f2f2f2;
+                background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
+                background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
+        }
+                     </style>
+        """
+        table += "</head>\n"
 
 def page_end():
     global table
-    table += "<address>Gregor von Laszewski, 2013, FutureGrid Cloud Mesh.</address>\n"
-    table += "</body>\n</html>\n"
-    
+    if DISPLAY_HTML:
+        table += "<address>Gregor von Laszewski, 2013, FutureGrid Cloud Mesh.</address>\n"
+        table += "</body>\n</html>\n"
+    else:
+        table_header("Author", 4)
+        table += "Gregor von Laszewski, 2013, FutureGrid Cloud Mesh.\n"
+        
 ######################################################################
 # Menu related methods
 ######################################################################
@@ -286,10 +320,10 @@ def _get_keynames():
     result = fgrep(tail(nova("keypair-list"), "-n", "+4"),"-v","+")
     for line in result:
         (front, name, signature, back) = line.split("|")
-        key_cache.append(name)
+        key_cache.append(name.strip())
 
 
-def html():
+def menu():
     global status_summary
     global instances_cache
     global key_cache
@@ -317,23 +351,57 @@ def html():
 
     bar.next()
     table_header("%s Virtual Machines" % len(servers), 5)
-    table += "<tr><td><b><i>Cloud</i></b></td><td><b><i>ID</i></b></td><td><b><i>Name</i></b></td><td><b><i>Status</i></b></td><td><b><i>IPs</i></b></td><tr>\n"
 
     cloudname = "india"
+    if DISPLAY_HTML:
+        table += "<tr><td><b><i>Cloud</i></b></td><td><b><i>ID</i></b></td><td><b><i>Name</i></b></td><td><b><i>Status</i></b></td><td><b><i>IPs</i></b></td><tr>\n"
 
-    for index in servers:
-        server = servers[index]
-        table += ("<tr><td>%(cloud)s</td><td>%(id)s</td><td>%(name)s</td><td>%(status)s</td><td>%(ip)s</td></tr>\n" % server)
+        for index in servers:
+            server = servers[index]
+            table += ("<tr><td>%(cloud)s</td><td>%(id)s</td><td>%(name)s</td><td>%(status)s</td><td>%(ip)s</td></tr>\n" % server)
+    else:
+        tab = texttable.Texttable()
+
+
+        if len(servers) == 0:
+            None
+        else:
+            x = [[]] # The empty row will have the header
+        
+            for index in servers:
+                server = servers[index]
+                x.append(["%(cloud)s" % server,
+                          "%(id)s" % server,
+                          "%(name)s" % server,
+                          "%(status)s" % server,
+                          "%(ip)s" % server])
+
+            tab.add_rows(x)
+            tab.set_cols_align(['r','r','r','r','r'])
+            tab.header(['Cloud', 'ID', 'Name', 'Status','IPs'])
+            tab.set_cols_width([7, 36, 16, 8, 36])
+            table += tab.draw()
+            table += "\n"
 
     bar.next()
-    commands = """<b><i>STARTING:</i></b> start:i - reindex - par:n - fix
-    <b><i>DELETING:</i></b> delete:i - clean - kill - killwait
-    <b><i>TESTING:</i></b> test:i
-    <b><i>STATUS:</i></b> status - ls - list - flavor - created - limits - rc"""
+    commands = """
+        <b><i>STARTING:</i></b> start:i - reindex - par:n - fix  <b><i>TESTING:</i></b> test:i
+        <b><i>DELETING:</i></b> delete:i - clean - kill - killwait
+        <b><i>STATUS:</i></b> status - ls - list - flavor - created - limits - rc"""
 
+    if not DISPLAY_HTML:
+        commands = commands.replace("<b>",term.bold)
+        commands = commands.replace("</b>",term.normal)
+        commands = commands.replace("<i>",term.italic)
+        commands = commands.replace("</i>",term.normal)
+        #commands = commands.replace("\n","")
+    
     bar.next()
     table_header("Help", 4)
-    table_two_col_row(["Commands", "%s" % commands] ,rows)
+    if DISPLAY_HTML:
+        table_two_col_row(["Commands", "%s" % commands] ,rows)
+    else:
+        table_row(["%s" % commands])
 
     table_end()    
     page_end()
@@ -344,54 +412,30 @@ def html():
     except:
         None
     bar.next()
-    filename = "/tmp/%s/cm.html" % prefix
-    f = open(filename, 'w+')
-    print >> f, table
-    f.close()
-    if uname().strip() == "Darwin":
+
+    # DISPLAY THE PAGE
+
+    
+
+    if DISPLAY_HTML:
+        filename = "/tmp/%s/cm.html" % prefix
+        f = open(filename, 'w+')
+        print >> f, table
+        f.close()
+
+        if uname().strip() == "Darwin":
         #os.system("osascript -e \'tell application \"Safari\" to open location \"file://%s\"\' -e \'tell application \"Safari\" to set bounds of front window to {60, 30, 00, 600}\'" % filename)
-#        os.system("osascript -e \'tell application \"Safari\" to open location \"file://%s\"\'" % filename)
-        None
+            os.system("osascript -e \'tell application \"Safari\" to open location \"file://%s\"\'" % filename)
+            None
+        else:
+            print "OS not yet tested"
+            os.system("firefox file://%s" % filename)
     else:
-        print "OS not yet tested"
-        os.system("firefox file://%s" % filename)
+        os.system("clear")
+        print table
     bar.next()
     bar.finish()
     
-def menu():
-    if DISPLAY_HTML:
-        html()
-    else:
-        global instances_cache
-        global key_cache
-        if with_menu:
-            _line("cm - The FutureGrid Cloud Mesh Platform")
-            bar = Bar('Processing', max=3)
-            bar.next()
-            _refresh_servers()
-            bar.next()
-            _get_keynames()
-            bar.next()
-            bar.finish()
-            os.system('clear')
-            _line("cm - The FutureGrid Cloud Mesh Platform")
-            _line("Key")
-            print ",".join(key_cache)
-            #print _indent(8,result_cache)
-            _line("VMs")
-            print _indent(8,instances_cache)
-            _line("Settings")
-            print _indent(8,"Theard pool size = %s" % maxparallel)
-            print _indent(8,"Image = %s" % image_name)
-            _line("Commands")
-            print _indent(8," STARTING: start:i - reindex - par:n - fix")
-            print _indent(8," DELETING: delete:i - clean - kill - killwait")
-            print _indent(8," TESTING: test:i")
-            print _indent(8," STATUS: status - ls - list - flavor - created - limits - rc")
-            _line("")
-
-    _status()
-
 
 ######################################################################
 # Key related methods
