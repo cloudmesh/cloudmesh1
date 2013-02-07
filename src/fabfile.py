@@ -4,7 +4,7 @@
 from blessings import Terminal
 term = Terminal()
 
-import texttable
+from prettytable import *
 import html2text
 
 DISPLAY_HTML = False
@@ -360,27 +360,24 @@ def menu():
             server = servers[index]
             table += ("<tr><td>%(cloud)s</td><td>%(id)s</td><td>%(name)s</td><td>%(status)s</td><td>%(ip)s</td></tr>\n" % server)
     else:
-        tab = texttable.Texttable()
-
+        tab = PrettyTable(['Cloud', 'ID', 'Name', 'Status','IPs'])
 
         if len(servers) == 0:
             None
         else:
-            x = [[]] # The empty row will have the header
-        
             for index in servers:
                 server = servers[index]
-                x.append(["%(cloud)s" % server,
+
+                tab.add_row(["%(cloud)s" % server,
                           "%(id)s" % server,
-                          "%(name)s" % server,
+                          "%(name)s" % server, 
                           "%(status)s" % server,
                           "%(ip)s" % server])
 
-            tab.add_rows(x)
-            tab.set_cols_align(['r','r','r','r','r'])
-            tab.header(['Cloud', 'ID', 'Name', 'Status','IPs'])
-            tab.set_cols_width([7, 36, 16, 8, 36])
-            table += tab.draw()
+            table += tab.get_string()
+            table = table.replace("ACTIVE", "%s%s%s" %(term.green, 'ACTIVE', term.black))
+            table = table.replace("ERROR", "%s%s%s" %(term.red, 'ERROR', term.black))
+            table = table.replace("BUILD", "%s%s%s" %(term.blue, 'BUILD', term.black))
             table += "\n"
 
     bar.next()
