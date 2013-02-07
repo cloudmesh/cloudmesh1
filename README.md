@@ -2,6 +2,10 @@ Documentation will in future (but nt yet) be at
 
 * http://futuregrid.github.com/cm
 
+Screenshots can be found here:
+
+* http://cloudmesh.blogspot.com/2013/02/cm-has-now-html-table.html
+
 A video about its use can be found at 
 
 * http://www.youtube.com/watch?v=CAaFvT76dMk
