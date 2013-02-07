@@ -29,6 +29,7 @@ can do the following:
     cd cm
     make
     source ~/.futuregrid/openstack/novarc 
+    cd src
     cm r
 
 FutureGrid
