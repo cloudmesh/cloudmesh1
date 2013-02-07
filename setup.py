@@ -72,6 +72,7 @@ setup(
     install_requires = [
              'setuptools',
              'pip',
+             'blessings',
              'fabric',
              'progress',
              'sh',
