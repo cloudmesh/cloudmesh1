@@ -20,10 +20,11 @@ can do the following:
 
     module load git
     module load python
+    
+    mkdir dev
+    cd dev
     virtualenv TEST
     source TEST/bin/activate
-    mkdir test
-    cd test
     git clone git@github.com:futuregrid/cm.git
     cd cm
     make
