@@ -1,3 +1,6 @@
+#import os
+#os.system('/bin/bash --rcfile ./act.sh')
+
 DISPLAY_HTML = True
 with_menu = True
 
@@ -40,7 +43,7 @@ image_name = "common/precise-server-cloudimg-amd64.img.manifest.xml"
 
 bar = None
 
-maxparallel=5
+maxparallel=7
 
 #env.user=prefix
 #env.hosts=["localhost"]
@@ -109,6 +112,37 @@ def page_start():
     table += "<title>CM - Cloud Mesh</title>\n"
     table += """
              <style type="text/css">
+ 
+        .button {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+	background-color:#ededed;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	color:#777777;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ffffff;
+}.button:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+	background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+	background-color:#dfdfdf;
+}.button:active {
+	position:relative;
+	top:1px;
+}
+
              table a:link {
 	color: #666;
 	font-weight: bold;
@@ -274,7 +308,7 @@ def html():
 
     table_two_col_row(["Last Refresh", "%s" % str(datetime.now())], rows)
     table_two_col_row(["Keynames", "%s" % ",".join(key_cache)],rows)
-    table_two_col_row(["Theard pool size", "%s" % maxparallel],rows)
+    table_two_col_row(["Thread pool size", "%s" % maxparallel],rows)
     table_two_col_row(["Image",  "%s" % image_name],rows)
     bar.next()
     _status()
@@ -316,7 +350,8 @@ def html():
     f.close()
     if uname().strip() == "Darwin":
         #os.system("osascript -e \'tell application \"Safari\" to open location \"file://%s\"\' -e \'tell application \"Safari\" to set bounds of front window to {60, 30, 00, 600}\'" % filename)
-        os.system("osascript -e \'tell application \"Safari\" to open location \"file://%s\"\'" % filename)
+#        os.system("osascript -e \'tell application \"Safari\" to open location \"file://%s\"\'" % filename)
+        None
     else:
         print "OS not yet tested"
         os.system("firefox file://%s" % filename)
@@ -772,3 +807,12 @@ def _jtest():
 #    os.system("pip install --upgrade -e git+https://github.com/openstack/python-novaclient.git#egg=python-novaclient")
 #    os.system("cp cm %s" % os.environ['VIRTUAL_ENV'])
 
+
+def iconson():
+    local("defaults write com.apple.finder CreateDesktop -bool true")
+    local("killall Finder")
+
+def iconsoff():
+    local("defaults write com.apple.finder CreateDesktop -bool false")
+    local("killall Finder")
+    
