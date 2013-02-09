@@ -7,7 +7,8 @@ term = Terminal()
 from prettytable import *
 import html2text
 
-DISPLAY_HTML = False
+
+
 with_menu = True
 
 import json
@@ -42,6 +43,28 @@ from multiprocessing import Pool
 from progress.bar import Bar
 from datetime import datetime
 import console
+
+# ======================================================================
+# set the debug value
+# ======================================================================
+# usage cm --set debug r
+try:
+    env.debug
+except:
+    env.debug = False
+
+# ======================================================================
+# set the output format value
+# ======================================================================
+# usage cm --set ascii r
+
+html = True
+try:
+    env.ascii
+    DISPLAY_HTML = False
+except:
+    DISPLAY_HTML = True
+
 
 prefix = os.environ['OS_USERNAME']
 image_name = "common/precise-server-cloudimg-amd64.img.manifest.xml"
@@ -293,6 +316,7 @@ key_cache = []
 instances_cache = ""
 servers = {}
 
+    
 def _refresh_servers():
     global instances_cache
     global servers
@@ -311,7 +335,11 @@ def _refresh_servers():
                 }
     except:
         instances_cache = ""
-    #print json.dumps (servers, indent=4)
+
+
+def servers():
+    _refresh_servers()
+    print json.dumps (servers, indent=4)
 
         
 def _get_keynames():
@@ -412,7 +440,6 @@ def menu():
 
     # DISPLAY THE PAGE
 
-    
 
     if DISPLAY_HTML:
         filename = "/tmp/%s/cm.html" % prefix
@@ -421,9 +448,7 @@ def menu():
         f.close()
 
         if uname().strip() == "Darwin":
-        #os.system("osascript -e \'tell application \"Safari\" to open location \"file://%s\"\' -e \'tell application \"Safari\" to set bounds of front window to {60, 30, 00, 600}\'" % filename)
             os.system("osascript -e \'tell application \"Safari\" to open location \"file://%s\"\'" % filename)
-            None
         else:
             print "OS not yet tested"
             os.system("firefox file://%s" % filename)
@@ -432,6 +457,9 @@ def menu():
         print table
     bar.next()
     bar.finish()
+
+    if env.debug:
+        print servers
     
 
 ######################################################################

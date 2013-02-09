@@ -7,7 +7,7 @@ In future you will be able ta add multipl eclouds.
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.2.0'
+version = '0.3.1'
 
 # due to a bug we are not including VERION.py yet
 # execfile('VERSION.py)
@@ -72,6 +72,7 @@ setup(
     install_requires = [
              'setuptools',
              'pip',
+             'paramiko',
              'fabric',
              'progress',
              'sh',
