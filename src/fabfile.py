@@ -5,7 +5,6 @@ from blessings import Terminal
 term = Terminal()
 
 from prettytable import *
-import html2text
 
 
 

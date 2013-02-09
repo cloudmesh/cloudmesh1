@@ -73,6 +73,7 @@ setup(
              'setuptools',
              'pip',
              'paramiko',
+             'blessings',
              'fabric',
              'progress',
              'sh',
