@@ -1,7 +1,8 @@
 Cloud Mesh
 ==========
 
-A project to interface easily with multiple clouds from the commandline and a command shell
+A project to interface easily with multiple clouds from the
+commandline and a command shell.
 
 
 Commands
