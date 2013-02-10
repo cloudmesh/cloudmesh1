@@ -111,7 +111,7 @@ sphinx:
 
 gh-pages:
 	git checkout gh-pages
-	make
+	make pages
 
 ######################################################################
 # TAGGING
@@ -126,3 +126,33 @@ tag:
 	git add .
 	git commit -m "adding version $(TAG)"
 	git push
+
+
+######################################################################
+# ONLY RUN ON GH-PAGES
+######################################################################
+
+PROJECT=`basename $(PWD)`
+DIR=/tmp/$(PROJECT)
+DOC=$(DIR)/doc
+
+pages: ghphtml ghpgit
+        echo done
+
+ghphtml:
+        cd /tmp
+        rm -rf $(DIR)
+        cd /tmp; git clone git://github.com/futuregrid/$(PROJECT).git
+        cd $(DOC); ls; make html
+        rm -fr _static
+        rm -fr _source
+        rm -fr *.html
+        cp -r $(DOC)/build/html/* .
+
+ghpgit:
+        git add . _sources _static   
+        git commit -a -m "updating the github pages"
+        git push
+        git checkout master
+
+
