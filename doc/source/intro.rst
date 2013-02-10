@@ -1,9 +1,12 @@
 Cloud Mesh
+==========
 
-A project to interface easily with multiple clouds from the commandline and a command shell
+A project to interface easily with multiple clouds from the
+commandline and a command shell.
 
 
 Commands
+========
 
 cm manage initialize --user<name> --password <password>
 
@@ -32,12 +35,12 @@ cm project --deactivate
 
    * deactivates any charge of a project
 
- cm env
+cm env
 
    * prints the environment and its variables currently associated
      with cm
 
- cm resource --list
+cm resource --list
 
    * lists the resources available for the user
    
