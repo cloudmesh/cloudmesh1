@@ -96,6 +96,7 @@ clean:
 	find . -name "*.pyc" -exec rm {} \;  
 	rm -rf build dist *.egg-info *~ #*
 	cd doc; make clean
+	rm -rf *.egg-info
 
 
 #############################################################################
