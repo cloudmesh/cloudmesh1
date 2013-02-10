@@ -137,22 +137,22 @@ DIR=/tmp/$(PROJECT)
 DOC=$(DIR)/doc
 
 pages: ghphtml ghpgit
-        echo done
+	echo done
 
 ghphtml:
-        cd /tmp
-        rm -rf $(DIR)
-        cd /tmp; git clone git://github.com/futuregrid/$(PROJECT).git
-        cd $(DOC); ls; make html
-        rm -fr _static
-        rm -fr _source
-        rm -fr *.html
-        cp -r $(DOC)/build/html/* .
+	cd /tmp
+	rm -rf $(DIR)
+	cd /tmp; git clone git://github.com/futuregrid/$(PROJECT).git
+	cd $(DOC); ls; make html
+	rm -fr _static
+	rm -fr _source
+	rm -fr *.html
+	cp -r $(DOC)/build/html/* .
 
 ghpgit:
-        git add . _sources _static   
-        git commit -a -m "updating the github pages"
-        git push
-        git checkout master
+	git add . _sources _static   
+	git commit -a -m "updating the github pages"
+	git push
+	git checkout master
 
 
