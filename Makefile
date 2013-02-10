@@ -110,6 +110,9 @@ sphinx:
 ###############################################################################
 
 gh-pages:
+	git add .
+	git commit -m "adding documentation"
+	git push
 	git checkout gh-pages
 	make pages
 
