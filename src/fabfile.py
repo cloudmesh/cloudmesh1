@@ -1,12 +1,12 @@
-#import os
-#os.system('/bin/bash --rcfile ./act.sh')
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# import os
+# os.system('/bin/bash --rcfile ./act.sh')
 
 from blessings import Terminal
 term = Terminal()
 
 from prettytable import *
-
-
 
 with_menu = True
 
@@ -18,16 +18,15 @@ import sys
 import os
 import webbrowser
 
-
 try:
     from sh import nova
 except:
-    print "========================================="
-    print "Please add the folloing in your shell,"
-    print "then restart your command"
-    print "========================================="
-    print "source ~/ENV/bin/activate; source ~/openstack/novarc"
-    print "========================================="
+    print '========================================='
+    print 'Please add the folloing in your shell,'
+    print 'then restart your command'
+    print '========================================='
+    print 'source ~/ENV/bin/activate; source ~/openstack/novarc'
+    print '========================================='
     sys.exit()
 from fabric.api import *
 from sh import uname
@@ -47,6 +46,7 @@ import console
 # set the debug value
 # ======================================================================
 # usage cm --set debug r
+
 try:
     env.debug
 except:
@@ -64,105 +64,116 @@ try:
 except:
     DISPLAY_HTML = True
 
-
 prefix = os.environ['OS_USERNAME']
-image_name = "common/precise-server-cloudimg-amd64.img.manifest.xml"
-
+image_name = 'common/precise-server-cloudimg-amd64.img.manifest.xml'
 
 bar = None
 
-maxparallel=7
+maxparallel = 7
 
-#env.user=prefix
-#env.hosts=["localhost"]
-#env.hosts=["india.futuregrid.org",
+# env.user=prefix
+# env.hosts=["localhost"]
+# env.hosts=["india.futuregrid.org",
 #           "sierra.futuregrid.org",
 #           "alamos.futuregrid.org",
 #           "hotel.futuregrid.org",
 #           "delta.futuregrid.org",
 #           "bravo.futuregrid.org"]
 
-
 ######################################################################
 # Terminal related methods
 ######################################################################
 
-terminal_height, terminal_width = os.popen('stty size', 'r').read().split()
+(terminal_height, terminal_width) = os.popen(
+    'stty size', 'r').read().split()
+
 
 def _line(name):
     n = len(name)
-    print "==", name, (int(terminal_width)-n-4) * "="
+    print '==', name, (int(terminal_width) - n - 4) * '='
+
 
 def _tline(name):
     n = len(name)
-    return "%s== %s %s%s\n" % (term.white + term.on_blue , name, (int(terminal_width)-n-4) * "=", term.normal)
+    return '%s== %s %s%s\n' % (term.white + term.on_blue, name,
+                               (int(terminal_width) - n - 4) * '=',
+                               term.normal)
 
-def _indent(numSpaces,s):
-    return "\n".join((numSpaces * " ") + i for i in s.splitlines())
+
+def _indent(numSpaces, s):
+    return '\n'.join(numSpaces * ' ' + i for i in s.splitlines())
+
 
 ######################################################################
 # HTML related methods
 ######################################################################
 
-def table_header(header,span):
+def table_header(header, span):
     global table
     if DISPLAY_HTML:
-        table += "<tr><th colspan=\"%s\">%s</th><tr>\n" % (span, header)
+        table += '<tr><th colspan="%s">%s</th><tr>\n' % (span, header)
     else:
-        table += "\n"
+        table += '\n'
         table += _tline(header)
-        
-def table_start(header,span):
+
+
+def table_start(header, span):
     global table
     if DISPLAY_HTML:
-        table += "<table border=\"1\">\n"
-    table_header (header, span)
+        table += '<table border="1">\n'
+    table_header(header, span)
+
 
 def table_end():
     global table
     if DISPLAY_HTML:
-        table += "</table >\n"
+        table += '</table >\n'
+
 
 def table_row(data):
     global table
     if DISPLAY_HTML:
-        table += "<tr>"
+        table += '<tr>'
         for cell in data:
-            table += "<td> %s </td>" % str(cell)
-        table += "</tr>\n"
+            table += '<td> %s </td>' % str(cell)
+        table += '</tr>\n'
     else:
         for cell in data:
-            table += "%s " % str(cell)
-        table += "\n"
-                    
+            table += '%s ' % str(cell)
+        table += '\n'
+
+
 def table_two_col_row(data, cols):
     global table
     if DISPLAY_HTML:
-        table += "<tr>"
-        table += "<td> %s </td><td colspan=%d> %s </td>" % (data[0], cols - 1, data[1])
-        table += "</tr>\n"
-    else: 
-        table += "%20s: %s" % (data[0], data[1])
-        table += "\n"
-        
+        table += '<tr>'
+        table += '<td> %s </td><td colspan=%d> %s </td>' % (data[0], cols - 1, data[1])
+        table += '</tr>\n'
+    else:
+        table += '%20s: %s' % (data[0], data[1])
+        table += '\n'
+
+
 def table_row_one(data, span):
     global table
     if DISPLAY_HTML:
-        table += "<tr>"
-        table += "<td colspan=\"%s\"> %s </td>" % (span, str(data))
-        table += "</tr>\n"
+        table += '<tr>'
+        table += '<td colspan="%s"> %s </td>' % (span, str(data))
+        table += '</tr>\n'
     else:
-        table += "%s" % (str(data))
-        table += "\n"
-        
+        table += '%s' % str(data)
+        table += '\n'
+
+
 def page_start():
     global table
     if DISPLAY_HTML:
-        table = "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n"
-        table += "<html>\n"
-        table += "<head>\n"
-        table += "<title>CM - Cloud Mesh</title>\n"
-        table += """
+        table = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">\n'
+        table += '<html>\n'
+        table += '<head>\n'
+        table += '<title>CM - Cloud Mesh</title>\n'
+        table += \
+            """
                  <style type="text/css">
 
                 .button {
@@ -290,63 +301,75 @@ def page_start():
         table tr:hover td {
                 background: #f2f2f2;
                 background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
-                background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
+                background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);
         }
                      </style>
         """
-        table += "</head>\n"
+        table += '</head>\n'
+
 
 def page_end():
     global table
     if DISPLAY_HTML:
-        table += "<address>Gregor von Laszewski, 2013, FutureGrid Cloud Mesh.</address>\n"
-        table += "</body>\n</html>\n"
+        table += \
+            '<address>Gregor von Laszewski, 2013, FutureGrid Cloud Mesh.</address>\n'
+        table += '''</body>
+</html>
+'''
     else:
-        table_header("Author", 4)
-        table += "Gregor von Laszewski, 2013, FutureGrid Cloud Mesh.\n"
-        
+        table_header('Author', 4)
+        table += 'Gregor von Laszewski, 2013, FutureGrid Cloud Mesh.\n'
+
+
 ######################################################################
 # Menu related methods
 ######################################################################
 
-status_summary = ""
-table = ""
+status_summary = ''
+table = ''
 key_cache = []
-instances_cache = ""
+instances_cache = ''
 servers = {}
 
-    
+
 def _refresh_servers():
     global instances_cache
     global servers
     try:
         servers = {}
-        instances_cache = fgrep(nova("list"), prefix)
+        instances_cache = fgrep(nova('list'), prefix)
         for line in instances_cache:
-            (a, id, name, status, ip, b) = line.split("|")
+            (
+                a,
+                id,
+                name,
+                status,
+                ip,
+                b,
+            ) = line.split('|')
             id = id.strip()
             servers[id] = {
                 'id': id,
-                'cloud' : "india".strip(),
-                'name': name.strip(), 
-                'status' : status.strip(),
-                'ip' : ip.strip()
-                }
+                'cloud': 'india'.strip(),
+                'name': name.strip(),
+                'status': status.strip(),
+                'ip': ip.strip(),
+             }
     except:
-        instances_cache = ""
+        instances_cache = ''
 
 
 def servers():
     _refresh_servers()
-    print json.dumps (servers, indent=4)
+    print json.dumps(servers, indent=4)
 
-        
+
 def _get_keynames():
     global key_cache
     key_cache = []
-    result = fgrep(tail(nova("keypair-list"), "-n", "+4"),"-v","+")
+    result = fgrep(tail(nova('keypair-list'), '-n', '+4'), '-v', '+')
     for line in result:
-        (front, name, signature, back) = line.split("|")
+        (front, name, signature, back) = line.split('|')
         key_cache.append(name.strip())
 
 
@@ -359,7 +382,7 @@ def menu():
 
     page_start()
     rows = 5
-    table_start("CM - Cloud Mesh",rows)
+    table_start('CM - Cloud Mesh', rows)
     bar = Bar('Processing', max=10)
     bar.next()
     _refresh_servers()
@@ -367,27 +390,31 @@ def menu():
     _get_keynames()
     bar.next()
 
-    table_two_col_row(["Last Refresh", "%s" % str(datetime.now())], rows)
-    table_two_col_row(["Keynames", "%s" % ",".join(key_cache)],rows)
-    table_two_col_row(["Thread pool size", "%s" % maxparallel],rows)
-    table_two_col_row(["Image",  "%s" % image_name],rows)
+    table_two_col_row(['Last Refresh', '%s' % str(datetime.now())],
+                      rows)
+    table_two_col_row(['Keynames', '%s' % ','.join(key_cache)], rows)
+    table_two_col_row(['Thread pool size', '%s' % maxparallel], rows)
+    table_two_col_row(['Image', '%s' % image_name], rows)
     bar.next()
     _status()
     bar.next()
-    table_two_col_row(["Summary",  "%s" % str(status_summary)],rows)
+    table_two_col_row(['Summary', '%s' % str(status_summary)], rows)
 
     bar.next()
-    table_header("%s Virtual Machines" % len(servers), 5)
+    table_header('%s Virtual Machines' % len(servers), 5)
 
-    cloudname = "india"
+    cloudname = 'india'
     if DISPLAY_HTML:
-        table += "<tr><td><b><i>Cloud</i></b></td><td><b><i>ID</i></b></td><td><b><i>Name</i></b></td><td><b><i>Status</i></b></td><td><b><i>IPs</i></b></td><tr>\n"
+        table += \
+            '<tr><td><b><i>Cloud</i></b></td><td><b><i>ID</i></b></td><td><b><i>Name</i></b></td><td><b><i>Status</i></b></td><td><b><i>IPs</i></b></td><tr>\n'
 
         for index in servers:
             server = servers[index]
-            table += ("<tr><td>%(cloud)s</td><td>%(id)s</td><td>%(name)s</td><td>%(status)s</td><td>%(ip)s</td></tr>\n" % server)
+            table += \
+                '<tr><td>%(cloud)s</td><td>%(id)s</td><td>%(name)s</td><td>%(status)s</td><td>%(ip)s</td></tr>\n' \
+                % server
     else:
-        tab = PrettyTable(['Cloud', 'ID', 'Name', 'Status','IPs'])
+        tab = PrettyTable(['Cloud', 'ID', 'Name', 'Status', 'IPs'])
 
         if len(servers) == 0:
             None
@@ -395,71 +422,73 @@ def menu():
             for index in servers:
                 server = servers[index]
 
-                tab.add_row(["%(cloud)s" % server,
-                          "%(id)s" % server,
-                          "%(name)s" % server, 
-                          "%(status)s" % server,
-                          "%(ip)s" % server])
+                tab.add_row(['%(cloud)s' % server, '%(id)s' % server,
+                            '%(name)s' % server, '%(status)s' % server,
+                            '%(ip)s' % server])
 
             table += tab.get_string()
-            table = table.replace("ACTIVE", "%s%s%s" %(term.green, 'ACTIVE', term.black))
-            table = table.replace("ERROR", "%s%s%s" %(term.red, 'ERROR', term.black))
-            table = table.replace("BUILD", "%s%s%s" %(term.blue, 'BUILD', term.black))
-            table += "\n"
+            table = table.replace('ACTIVE', '%s%s%s' % (term.green,
+                                  'ACTIVE', term.black))
+            table = table.replace('ERROR', '%s%s%s' % (term.red, 'ERROR', term.black))
+            table = table.replace('BUILD', '%s%s%s' % (term.blue,
+                                  'BUILD', term.black))
+            table += '\n'
 
     bar.next()
-    commands = """
+    commands = \
+        """
         <b><i>STARTING:</i></b> start:i - reindex - par:n - fix  <b><i>TESTING:</i></b> test:i
         <b><i>DELETING:</i></b> delete:i - clean - kill - killwait
         <b><i>STATUS:</i></b> status - ls - list - flavor - created - limits - rc"""
 
     if not DISPLAY_HTML:
-        commands = commands.replace("<b>",term.bold)
-        commands = commands.replace("</b>",term.normal)
-        commands = commands.replace("<i>",term.italic)
-        commands = commands.replace("</i>",term.normal)
-        #commands = commands.replace("\n","")
-    
-    bar.next()
-    table_header("Help", 4)
-    if DISPLAY_HTML:
-        table_two_col_row(["Commands", "%s" % commands] ,rows)
-    else:
-        table_row(["%s" % commands])
+        commands = commands.replace('<b>', term.bold)
+        commands = commands.replace('</b>', term.normal)
+        commands = commands.replace('<i>', term.italic)
+        commands = commands.replace('</i>', term.normal)
 
-    table_end()    
+        # commands = commands.replace("\n","")
+
+    bar.next()
+    table_header('Help', 4)
+    if DISPLAY_HTML:
+        table_two_col_row(['Commands', '%s' % commands], rows)
+    else:
+        table_row(['%s' % commands])
+
+    table_end()
     page_end()
     bar.next()
-    
+
     try:
-        os.mkdir("/tmp/%s" % prefix)
+        os.mkdir('/tmp/%s' % prefix)
     except:
         None
     bar.next()
 
     # DISPLAY THE PAGE
 
-
     if DISPLAY_HTML:
-        filename = "/tmp/%s/cm.html" % prefix
+        filename = '/tmp/%s/cm.html' % prefix
         f = open(filename, 'w+')
         print >> f, table
         f.close()
 
-        if uname().strip() == "Darwin":
-            os.system("osascript -e \'tell application \"Safari\" to open location \"file://%s\"\'" % filename)
+        if uname().strip() == 'Darwin':
+            os.system('osascript -e \'tell application "Safari" to open location "file://%s"\''
+                       % filename)
         else:
-            print "OS not yet tested"
-            os.system("firefox file://%s" % filename)
+            print 'OS not yet tested'
+            os.system('firefox file://%s' % filename)
     else:
-        os.system("clear")
+        os.system('clear')
         print table
     bar.next()
     bar.finish()
 
     if env.debug:
         print servers
-    
+
 
 ######################################################################
 # Key related methods
@@ -467,224 +496,262 @@ def menu():
 
 def key():
     """adds your public ~/.ssh/id_rsa.pub to the keypairs"""
-    keyadd("gvonlasz")
+
+    keyadd('gvonlasz')
     menu()
+
 
 def keyadd(name):
     bar = Bar('Processing', max=5)
     try:
         bar.next()
-        nova("keypair-add", "--pub-key", "~/.ssh/id_rsa.pub", "%s" % name)
+        nova('keypair-add', '--pub-key', '~/.ssh/id_rsa.pub', '%s'
+             % name)
     except:
-        #print "Key add error on %s" % name
+
+        # print "Key add error on %s" % name
+
         bar.next()
         try:
             bar.next()
-            #print "Tryig to delete key"
-            result = nova("keypair-delete", "%s" % name)
-            #print result
-            #print "Tryig to add key"
+
+            # print "Tryig to delete key"
+
+            result = nova('keypair-delete', '%s' % name)
+
+            # print result
+            # print "Tryig to add key"
+
             bar.next()
-            results = nova ("keypair-add", "--pub-key", "~/.ssh/id_rsa.pub", "%s" % name)
-            #print result
+            results = nova('keypair-add', '--pub-key',
+                           '~/.ssh/id_rsa.pub', '%s' % name)
         except:
-            print "\nKey deletion error on %s\n" % name
+
+            # print result
+
+            print '''
+Key deletion error on %s
+''' % name
     bar.next()
     bar.finish()
-    result =  nova("keypair-list")
+    result = nova('keypair-list')
     print result
-    
+
+
 def keylist():
     """list my key"""
-    nova("keypair-list")
+
+    nova('keypair-list')
+
 
 def keydelete(name):
     """delets the named key"""
-    nova("keypair-delete", "%s" % name)
-    
+
+    nova('keypair-delete', '%s' % name)
+
 
 ######################################################################
 # Test an image by running some commands on it
 ######################################################################
 
-
 def test(index):
     name = generate_name(index)
-    result = fgrep(nova.show(name),"network")
+    result = fgrep(nova.show(name), 'network')
 
-    (start,label,ips,rest) = result.replace(" ","").split("|")
+    (start, label, ips, rest) = result.replace(' ', '').split('|')
     print
     ips
     try:
-        (private_ip, public_ip) = ips.split(",")
+        (private_ip, public_ip) = ips.split(',')
     except:
-        print "public IP is not yet assigned"
+        print 'public IP is not yet assigned'
         sys.exit()
     print public_ip
-    rsh = ssh.bake("%s@%s" % ("ubuntu",str(public_ip)))
-    remote = rsh.bake("-o StrictHostKeyChecking no")
-    test1 = remote("uname").replace("\n","")
-    print "<%s>" % test1
-    print remote("uname -a")
-    print remote("hostname")
-    print remote("pwd")
-    
-#def activate():
+    rsh = ssh.bake('%s@%s' % ('ubuntu', str(public_ip)))
+    remote = rsh.bake('-o StrictHostKeyChecking no')
+    test1 = remote('uname').replace('\n', '')
+    print '<%s>' % test1
+    print remote('uname -a')
+    print remote('hostname')
+    print remote('pwd')
+
+
+# def activate():
 #    local("source ~/ENV/bin/activate")
 
 def bwait(index):
     """create a vm with the label prefix-index"""
-    """NOT YET IMPLEMENYTED"""
+
     try:
         name = generate_name(index)
-        tmp = nova("show", name)
+        tmp = nova('show', name)
         print tmp
     except:
-        print "Failure to launch %s" % name
+        print 'Failure to launch %s' % name
+
 
 ######################################################################
 # VM CREATION
 ######################################################################
-        
+
 def generate_name(index):
     '''generates the name of the VM based on the index'''
-    number = str(index).zfill(3);
-    name = "%s-%s" % (prefix, number)
-    return (name)
+
+    number = str(index).zfill(3)
+    name = '%s-%s' % (prefix, number)
+    return name
+
 
 def start(index):
     '''starts a virtual machine with the given index. Same as boot'''
+
     boot(index)
     menu()
 
+
 def boot(index):
     '''starts a virtual machine with the given index'''
+
     try:
-        number = str(index).zfill(3);
-        name = "%s-%s" % (prefix, number)
-        print "Launching VM %s" % name
-        tmp = nova("boot",
-             "--flavor=1",
-             "--image=%s" % image_name,
-             "--key_name","%s" % prefix,
-             "%s" % name)
+        number = str(index).zfill(3)
+        name = '%s-%s' % (prefix, number)
+        print 'Launching VM %s' % name
+        tmp = nova(
+            'boot',
+            '--flavor=1',
+            '--image=%s' % image_name,
+            '--key_name',
+            '%s' % prefix,
+            '%s' % name,
+            )
         print tmp
     except Exception, e:
         print e
-        print "Failure to launch %s" % name
+        print 'Failure to launch %s' % name
 
 
 def seq(number):
     """creates number of virtual machines in sequential order"""
-    for index in range(0,int(number)):
+
+    for index in range(0, int(number)):
         boot(index)
     menu()
-    
+
 
 def par(number):
-    """Creates a number of vms with the labels prefix-0 to prefix-<number-1>. It uses a threadpool""" 
-        
+    """Creates a number of vms with the labels prefix-0 to prefix-<number-1>. It uses a threadpool"""
+
     pool = Pool(processes=maxparallel)
-    list = range(0,int(number))
+    list = range(0, int(number))
     result = pool.map(boot, list)
     _status()
     menu()
 
+
 def reindex():
     """updates the names of all active images"""
+
     try:
-        instances = fgrep(nova("list","--status", "active"), prefix)
+        instances = fgrep(nova('list', '--status', 'active'), prefix)
         index = 0
         for line in instances:
-            line = line.replace(" ","")
-            (a, id, name, status, network, rest) = line.split("|")
+            line = line.replace(' ', '')
+            (
+                a,
+                id,
+                name,
+                status,
+                network,
+                rest,
+                ) = line.split('|')
             newname = generate_name(index)
-            if (name != newname):
+            if name != newname:
                 nova.rename(id, newname)
-                print "Renameing %s -> %s" % (name, newname)
+                print 'Renameing %s -> %s' % (name, newname)
             else:
-                print "Skipping %s " % name
+                print 'Skipping %s ' % name
             index = index + 1
     except:
-        print "Found 0 instances with status error to kill"
+        print 'Found 0 instances with status error to kill'
     menu()
+
 
 def fix():
     """kills all the instances with prefix-* and in error state"""
+
     try:
-        instances = fgrep(nova("list"), prefix)
+        instances = fgrep(nova('list'), prefix)
         print instances
         for line in instances:
-            columns = line.split("|")
+            columns = line.split('|')
             id = columns[1].strip()
             name = columns[2].strip()
             number = name.split('-')[1]
             status = columns[3].strip()
-            if status == "ERROR":
-                print "Killing %s" % name
-                nova("delete", "%s" % id)
-                print "Restarting %s" % number
+            if status == 'ERROR':
+                print 'Killing %s' % name
+                nova('delete', '%s' % id)
+                print 'Restarting %s' % number
                 boot(number)
             else:
-                print "Keeping %s" % name
+                print 'Keeping %s' % name
     except:
-        print "Found 0 instances with status error to kill"
+        print 'Found 0 instances with status error to kill'
     menu()
 
 
 ######################################################################
 # STATUS OF VMS
-######################################################################    
+######################################################################
+
 def created():
     """shows when a VM was created*"""
 
     t_now = datetime.now()
     try:
-        instances = fgrep(nova("list"),"|")
+        instances = fgrep(nova('list'), '|')
         print instances
         for line in instances:
-            columns = line.split("|")
+            columns = line.split('|')
             id = columns[1].strip()
             name = columns[2].strip()
-            if id != "ID":
-                line = fgrep(nova("show", id),"created")
-                line = line.replace ("\n", "")
-                line = line.replace (" ", "")
-                fields = line.split("|")
+            if id != 'ID':
+                line = fgrep(nova('show', id), 'created')
+                line = line.replace('\n', '')
+                line = line.replace(' ', '')
+                fields = line.split('|')
                 value = fields[2]
-                value = value.replace("T"," ")
-                value = value.replace("Z","")
-                t_a = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+                value = value.replace('T', ' ')
+                value = value.replace('Z', '')
+                t_a = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
                 delta = t_now - t_a
-                print name, "=", delta
+                print name, '=', delta
     except:
-        print "Found 0 instances to show"
-
-def _gt(s):
-    d=datetime.datetime(*map(int, re.split('[^\d]', s)[:-1]))
-    return d
+        print 'Found 0 instances to show'
 
 
 def show():
     """show all the instances with prefix-*"""
+
     try:
-        instances = fgrep(nova("list"), prefix)
+        instances = fgrep(nova('list'), prefix)
         for line in instances:
-            columns = line.split("|")
+            columns = line.split('|')
             id = columns[1].strip()
             name = columns[2].strip()
-            print "Found %s to show" % name
-            print nova("show", "%s" % id)
+            print 'Found %s to show' % name
+            print nova('show', '%s' % id)
     except:
-        print "Found 0 instances to show"
+        print 'Found 0 instances to show'
+
 
 ######################################################################
 # VM DELETION
 ######################################################################
 
-
 def kill():
     """kills all the instances with prefix prefix-*"""
+
     global servers
     global bar
     try:
@@ -692,14 +759,14 @@ def kill():
         names = []
         _refresh_servers()
         if len(servers) == 0:
-            print "Found 0 instances to kill"
+            print 'Found 0 instances to kill'
         else:
             for index in servers:
                 server = servers[index]
-                print "Found %(name)s to kill" % server
+                print 'Found %(name)s to kill' % server
                 list.append(index)
                 names.append(server['name'])
-            bar = Bar('Deleting', max=len(servers)+3)
+            bar = Bar('Deleting', max=len(servers) + 3)
             bar.next()
             pool = Pool(processes=maxparallel)
             bar.next()
@@ -707,45 +774,51 @@ def kill():
             bar.next()
             bar.finish()
     except:
-        #print e
-        print "Found 0 instances to kill"
+
+        # print e
+
+        print 'Found 0 instances to kill'
     menu()
-        
+
+
 def killwait():
     kill()
     wait()
     menu()
 
+
 def _count(instances):
-    total = len(instances.split('\n'))-1 
+    total = len(instances.split('\n')) - 1
     return total
 
 
 def _del_server(id):
     global bar
     bar.next()
-    nova("delete", "%s" % id)
+    nova('delete', '%s' % id)
 
 
 def delete(id):
     _del_server(id)
 
+
 def clean():
     """kills all the instances with prefix prefix-* and in error state"""
+
     global servers
     global bar
     try:
         _refresh_servers()
         if len(servers) == 0:
-            print "Found 0 instances to kill"
+            print 'Found 0 instances to kill'
         else:
             for index in servers:
                 server = servers[index]
-                if server['status'] == "ERROR":
+                if server['status'] == 'ERROR':
                     list.append(index)
                     names.append(server['name'])
-            print "Starting parallel Delete"
-            bar = Bar('Deleting', max=len(servers)+3)
+            print 'Starting parallel Delete'
+            bar = Bar('Deleting', max=len(servers) + 3)
             bar.next()
             pool = Pool(processes=maxparallel)
             bar.next()
@@ -753,23 +826,27 @@ def clean():
             bar.next()
             bar.finish()
     except:
-        print "Found 0 instances with status error to kill"
+        print 'Found 0 instances with status error to kill'
     menu()
 
 
 ######################################################################
 # waiting for public ip assignment
-######################################################################    
+######################################################################
+
 def wait():
     """not yet implemented"""
+
     try:
-        instances = fgrep(nova("list"), prefix)
+        instances = fgrep(nova('list'), prefix)
         total = _count(instances)
         exit
         bar = Bar('Processing', max=total)
         old = total
         while True:
-            #_status()
+
+            # _status()
+
             current = _count(instances)
             if old != current:
                 bar.next()
@@ -777,65 +854,77 @@ def wait():
                 bar.finish()
                 break
             sleep(2)
-            instances = fgrep(nova("list"), prefix)
+            instances = fgrep(nova('list'), prefix)
     except:
-        print "done"
+        print 'done'
+
 
 ######################################################################
 # INFORMATION SERVICES
 ######################################################################
 
 def limits():
-    print nova("absolute-limits")
+    print nova('absolute-limits')
+
 
 def rc():
-    local("cat ~/openstack/novarc")
+    local('cat ~/openstack/novarc')
+
 
 def flavor():
     """lists the flavors"""
-    local("nova flavor-list")
+
+    local('nova flavor-list')
 
 
 def images():
     """List the images"""
-    local("nova image-list")
+
+    local('nova image-list')
+
 
 def s(index):
     '''prints the summary status of instance with the index'''
+
     name = generate_name(index)
     try:
-        instances = fgrep(nova("list"), name)
+        instances = fgrep(nova('list'), name)
         print instances
     except:
-        print "Found 0 instances"
+        print 'Found 0 instances'
     menu()
-    
+
 
 def ls():
     """Lists just my list - wn images"""
+
     try:
-        instances = fgrep(nova("list"), prefix)
+        instances = fgrep(nova('list'), prefix)
         print instances
     except:
-        print "Found 0 instances"
+        print 'Found 0 instances'
     menu()
+
 
 def list():
     """Lists just my own images"""
+
     try:
-        instances = nova("list")
+        instances = nova('list')
         print instances
     except:
-        print "Found 0 instances"
+        print 'Found 0 instances'
     menu()
-    
+
+
 def _status():
     """prints a very small status message of the form
     -A----A--A----A--A---A-----A---A----A--A----------------"""
+
     global servers
     global status_summary
     statuslist = []
-    hist={}
+    hist = {}
     try:
         for index in servers:
             server = servers[index]
@@ -844,12 +933,14 @@ def _status():
             statuschar = status.split()[0][0]
             statuslist.append(statuschar)
         result = ''.join(statuslist)
-        result = result.replace("E","-")
-        status_summary = "Total=%d " % len(servers)
+        result = result.replace('E', '-')
+        status_summary = 'Total=%d ' % len(servers)
         for status in hist:
-            status_summary += "%s=%s " % (str(status), str(hist[status]))
+            status_summary += '%s=%s ' % (str(status),
+                    str(hist[status]))
     except:
-        print "0 instances found"
+        print '0 instances found'
+
 
 ######################################################################
 # OTHER
@@ -857,30 +948,34 @@ def _status():
 
 def r():
     '''refresh'''
-    #_refresh_servers()
+
+    # _refresh_servers()
+
     menu()
 
+
 def _jtest():
-    local("curl http://149.165.146.50:5000 | python -mjson.tool")
+    local('curl http://149.165.146.50:5000 | python -mjson.tool')
 
 
-#print "... refreshing"
-#menu()    
+# print "... refreshing"
+# menu()
 
 ######################################################################
 # OTHER
 ######################################################################
 
-#def install():
+# def install():
 #    os.system("pip install --upgrade -e git+https://github.com/openstack/python-novaclient.git#egg=python-novaclient")
 #    os.system("cp cm %s" % os.environ['VIRTUAL_ENV'])
 
-
 def iconson():
-    local("defaults write com.apple.finder CreateDesktop -bool true")
-    local("killall Finder")
+    local('defaults write com.apple.finder CreateDesktop -bool true')
+    local('killall Finder')
+
 
 def iconsoff():
-    local("defaults write com.apple.finder CreateDesktop -bool false")
-    local("killall Finder")
-    
+    local('defaults write com.apple.finder CreateDesktop -bool false')
+    local('killall Finder')
+
+
