@@ -7,7 +7,9 @@ In future you will be able ta add multipl eclouds.
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.3.1'
+filename = "VERSION.txt"
+version = float(cat(filename).replace("v",""))
+
 
 # due to a bug we are not including VERION.py yet
 # execfile('VERSION.py)

@@ -1,6 +1,8 @@
 PATHNAME=$(shell pwd)
 BASENAME=$(shell basename $(PATHNAME))
 
+TAG=`cat VERSION.txt`
+
 all:
 	make -f Makefile force
 
@@ -67,6 +69,9 @@ upload:
 #	python setup.py register
 	python setup.py sdist upload
 
+pip-register:
+	python setup.py register
+
 ######################################################################
 # QC
 ######################################################################
@@ -92,16 +97,6 @@ clean:
 	rm -rf build dist *.egg-info *~ #*
 #	cd doc; make clean
 
-######################################################################
-# pypi
-######################################################################
-
-pip-register:
-	python setup.py register
-
-upload:
-	make -f Makefile pip
-	python setup.py sdist upload
 
 #############################################################################
 # SPHINX DOC
@@ -117,3 +112,17 @@ sphinx:
 gh-pages:
 	git checkout gh-pages
 	make
+
+######################################################################
+# TAGGING
+######################################################################
+
+
+tag:
+	make clean
+	python bin/util/next_tag.py
+	git tag $(TAG)
+	echo $(TAG) > VERSION.txt
+	git add .
+	git commit -m "adding version $(TAG)"
+	git push
