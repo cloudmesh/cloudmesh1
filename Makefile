@@ -1,4 +1,4 @@
-ATHNAME=$(shell pwd)
+PATHNAME=$(shell pwd)
 BASENAME=$(shell basename $(PATHNAME))
 
 TAG=`cat VERSION.txt`
@@ -6,7 +6,7 @@ TAG=`cat VERSION.txt`
 all:
 	make -f Makefile force
 
-######################################################################
+#####################################################################
 # NOVA CLIENT
 ######################################################################
 nova:
@@ -95,7 +95,7 @@ clean:
 	find . -name "*~" -exec rm {} \;  
 	find . -name "*.pyc" -exec rm {} \;  
 	rm -rf build dist *.egg-info *~ #*
-#	cd doc; make clean
+	cd doc; make clean
 
 
 #############################################################################
