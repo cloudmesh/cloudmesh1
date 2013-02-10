@@ -1,4 +1,4 @@
-PATHNAME=$(shell pwd)
+ATHNAME=$(shell pwd)
 BASENAME=$(shell basename $(PATHNAME))
 
 TAG=`cat VERSION.txt`
