@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 import sys, os
 
 filename = "VERSION.txt"
-version = float(cat(filename).replace("v",""))
+version = open(filename).read()
 
 
 # due to a bug we are not including VERION.py yet
