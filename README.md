@@ -1,3 +1,11 @@
+Python Package requirements
+---------------------------
+* fabric
+* sh
+* multiprocessing
+* progress
+* webbrowser
+
 Documentation will in future (but nt yet) be at 
 
 * http://futuregrid.github.com/cm
