@@ -5,6 +5,7 @@ Python Package requirements
 * multiprocessing
 * progress
 * webbrowser
+* docopt
 
 Documentation will in future (but nt yet) be at 
 
