@@ -52,11 +52,12 @@ can do the following:
     cm r
 
 FutureGrid
+----------
 
 This project is part of FutureGrid and can be used currently on the 
 OpenStack cloud of FutureGrid. To apply for an account, please 
 go to https://portal.futuregrid.org 
 
-However you laso need to apply for a project in case you like to use FG resources.
-If you have your own OpenStack cloud you naturally do not need to pply for a FG account.
+However you also need to apply for a project in case you like to use FG resources.
+If you have your own OpenStack cloud you naturally do not need to apply for a FG account.
 
