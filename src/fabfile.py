@@ -28,6 +28,16 @@ except:
     print 'source ~/ENV/bin/activate; source ~/openstack/novarc'
     print '========================================='
     sys.exit()
+
+try:
+    from sh import fgmetric
+except:
+    print '========================================='
+    print 'cm metric command disabled'
+    print 'fgmetric should be installed' 
+    print '========================================='
+    pass
+
 from fabric.api import *
 from sh import uname
 from sh import sed
@@ -940,6 +950,19 @@ def _status():
                     str(hist[status]))
     except:
         print '0 instances found'
+
+######################################################################
+# Statistics by FG Metric 
+######################################################################
+def metric(ownerid):
+    """Get usage data from FG Metrics"""
+
+    try:
+        stats = fgmetric('-u', ownerid)
+        print stats
+    except:
+        print 'None usage data'
+    menu()
 
 
 ######################################################################
