@@ -667,7 +667,7 @@ def reindex():
             newname = generate_name(index)
             if name != newname:
                 nova.rename(id, newname)
-                print 'Renameing %s -> %s' % (name, newname)
+                print 'Renaming %s -> %s' % (name, newname)
             else:
                 print 'Skipping %s ' % name
             index = index + 1
