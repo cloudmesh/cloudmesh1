@@ -7,6 +7,16 @@ Python Package requirements
 * webbrowser
 * docopt
 
+Tools requirements
+------------------
+* python-novaclient
+* euca2ools
+
+Configuration requirements
+--------------------------
+* novarc
+* nova keypair
+
 Documentation will in future (but nt yet) be at 
 
 * http://futuregrid.github.com/cm
