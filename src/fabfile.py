@@ -32,10 +32,9 @@ except:
 try:
     from sh import fgmetric
 except:
-    print '========================================='
-    print 'cm metric command disabled'
-    print 'fgmetric should be installed' 
-    print '========================================='
+    print '======================================================'
+    print 'fgmetric should be installed to use \'cm metric\' command' 
+    print '======================================================'
     pass
 
 from fabric.api import *
