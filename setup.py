@@ -7,12 +7,23 @@ In future you will be able ta add multipl eclouds.
 from setuptools import setup, find_packages
 import sys, os
 
-filename = "VERSION.txt"
-version = open(filename).read()
+
+def fpath(name):
+    return os.path.join(os.path.dirname(__file__), name)
 
 
-# due to a bug we are not including VERION.py yet
-# execfile('VERSION.py)
+def read(fname):
+    return open(fpath(fname)).read()
+
+def desc():
+    info = read('README.rst')
+    try:
+        return info + '\n\n' + read('CHANGES.txt')
+    except IOError:
+        return info
+
+version = read("VERSION.txt")
+
 
 classifiers = """\
 Intended Audience :: Developers
@@ -41,13 +52,12 @@ if sys.version_info < (2, 7):
 
 doclines = __doc__.split("\n")
 
-
 setup(
     name='flask_cm',
     version=version,
     description = doclines[0],
     classifiers = filter(None, classifiers.split("\n")),
-    long_description = "\n".join(doclines[2:]),
+    long_description = desc(),
     keywords='Cloud FutureGrid Flask farmework',
     maintainer='Gregor von Laszewski',
     maintainer_email="laszewski@gmail.com",
@@ -59,11 +69,7 @@ setup(
     packages = find_packages(exclude=['ez_setup', 'examples', 'tests']),
     
     #include_package_data=True,
-    #zip_safe=True,
-    #install_requires=[
-    #    # -*- Extra requirements: -*-
-    #],
-
+    zip_safe=False,
     
 #    entry_points={
 #        'console_scripts': [
@@ -72,18 +78,20 @@ setup(
 #             ]},
 
     install_requires = [
-             'setuptools',
-             'pip',
-             'paramiko',
-             'blessings',
-             'fabric',
-             'progress',
-             'sh',
-             "console",
-             ],
+        'Flask>=0.7',
+        'Flask-WTF>=0.6'
+        'setuptools',
+        'pip',
+        'paramiko',
+        'blessings',
+        'fabric',
+        'progress',
+        'sh',
+        "console",
+        ],
 
 #    scripts=['bin/cm', 'bin/cm']
 
     )
 
-    #http://pypi.python.org/pypi/progress/1.0.2
+# pycrypto
