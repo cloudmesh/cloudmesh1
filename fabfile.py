@@ -103,6 +103,23 @@ def changes():
     change = change.replace("\n\n","\n")
     print change
 
+def dist():
+    clean()
+    local("python setup.py sdist")
+
+def force():
+    dist()
+    local("pip install -U dist/*.tar.gz")
+
+def pypi():
+    force()
+    #	python setup.py register
+    local("python setup.py sdist upload")
+
+
+
 def install():
     """install Flask Frozen-Flask Flask-FlatPages"""
     local("pip install Flask Frozen-Flask Flask-FlatPages")
+    local("pip install --upgrade -e git://github.com/openstack/python-novaclient.git#egg=python-novaclient")
+
