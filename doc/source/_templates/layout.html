@@ -1,0 +1,60 @@
+{% extends "basic/layout.html" %}
+
+{% block rootrellink %}
+        <li><a href="{{ pathto('index') }}">Home</a>|&nbsp;</li>
+        <li><a href="{{ pathto('intro') }}">Documentation </a>|&nbsp;</li>
+        <li><a href="https://github.com/futuregrid/flask_cm">Download</a>|&nbsp;</li>
+        <li><a href="{{ pathto('support') }}">Support</a>|&nbsp;</li>
+        <li><a href="http://futuregrid.github.com/doc/">Dev</a>|&nbsp;</li>
+        <li><a href="https://portal.futuregrid.org/">FutureGrid Home</a>|&nbsp;</li>
+{% endblock %}
+
+
+{% block relbar1 %}
+
+<div style="background-image:url('_static/header_bg.png');background-color: black; text-align: left; padding: 10px 10px 15px 35px">
+<table>
+  <tr>
+    <td>
+      <a href="{{ pathto('index') }}"><img src="{{pathto("_static/fg-logo-grid-glow.png", 1) }}" border="0" alt="FutureGrid {{ project }}"/></a>
+    </td>
+    <td>
+      <font size="5" color="white"><b><i>FutureGrid</i></b></font><br><br>
+      <font size="10" color="white" face="Comic Sans MS"><b><i>{{ project }}</i></b></font>
+    </td>
+  </tr>
+</table>
+
+</div>
+{{ super() }}
+{% endblock %}
+
+
+{# put the sidebar before the body #}
+{% block sidebar1 %}{{ sidebar() }}{% endblock %}
+{% block sidebar2 %}{% endblock %}
+
+{%- block document%}
+<body style="background-image:url('_static/header_bg.png');background-color: grey;">
+</body>
+{{ super() }}
+{% endblock %}
+
+{%- block extrahead %}
+{{ super() }}
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-11111']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+{% endblock %}

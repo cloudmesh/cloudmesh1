@@ -1,0 +1,43 @@
+PREVIOUS CHANGES 
+================
+
+
+* experiments with date picker: http://www.eyecon.ro/bootstrap-datepicker/
+
+DEVELOPMENT IMPROVEMENTS
+------------------------
+
+* untaged several version and rolled back to 0.7.0
+
+* replaced the Makefile with a fab file
+
+* adding the flat file example
+
+* deprecated: improved makefile
+
+* deprecated: added automatic version tagging from makefile
+
+STYLE IMPROVEMENTS
+------------------
+
+* added activations for pages
+
+* added mark down
+
+* added a "pages" folder in which we can store a number of pages in md
+  that show up automatically
+
+FUNCTIONALITY IMPROVEMENTS
+--------------------------
+
+* removed millisecond from time display
+
+* integrated a table view
+
+* storing data in persitant data dir
+
+* added example on how to rener more than one cloud
+
+* moved the Metric and Manage pages for now into md pages
+
+* added placeholders for action icons

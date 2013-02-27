@@ -1,0 +1,3 @@
+#! /bin/sh
+fab -f  ../../cm/src/fabfile.py $@
+#
