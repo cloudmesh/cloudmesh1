@@ -90,6 +90,7 @@ setup(
         'progress',
         'sh',
         "console",
+        "pymongo"
         ],
 
 #    scripts=['bin/cm', 'bin/cm']
