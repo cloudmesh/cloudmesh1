@@ -62,6 +62,8 @@ class cloud_mesh:
                                       password=password  )
 
                 tmp = os_cloud.refresh('vms')
+                #tmp = os_cloud.refresh('flavor')
+                #tmp = os_cloud.refresh('images')
 
                 print tmp
 
