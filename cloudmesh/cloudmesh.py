@@ -55,17 +55,11 @@ class cloudmesh:
                 project=credential['OS_TENANT_NAME']
                 authurl=credential['OS_AUTH_URL']
 
-                print username
-                print password
-                print project
-                print authurl
-
-
-                print ">>>>>>", username
-        
-
-
-                os_cloud = os_client (cloudname, authurl=authurl, project=project, username=username, password=password  )
+                os_cloud = os_client (cloudname, 
+                                      authurl=authurl, 
+                                      project=project, 
+                                      username=username, 
+                                      password=password  )
 
                 tmp = os_cloud.refresh('vms')
 

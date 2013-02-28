@@ -45,6 +45,7 @@ if __name__ == '__main__':
 
     default_path = '.futuregrid/novarc'
     arguments = docopt(__doc__, version='1.0.0rc2')
+    home = os.environ['HOME']
 
     is_config = arguments['config'] != None
 
@@ -65,7 +66,6 @@ if __name__ == '__main__':
         
         if name=='?':
             if file == None:
-                home = os.environ['HOME']
                 arguments['--out'] = "%s/%s" % (home,default_path)
             print "Please select from the following:"
             print "0 - Cancel"
@@ -87,6 +87,8 @@ if __name__ == '__main__':
             name = choices[input-1]
 
         output = arguments['--out']     
+        print arguments
+        print name
         if name != None:
             try:
                 result = config.rc(name)
@@ -98,18 +100,21 @@ if __name__ == '__main__':
             
                 sys.exit(1)
                 
-            if output == None:
+            if arguments ["-"]:
                 print result
             else:
-                out = open (output, "w+" )
+
+                if output == None:
+                    arguments['--out'] = "%s/%s" % (home,default_path)
+                    output = arguments['--out']
+                print ">>>", output
+                out = open (output, "w" )
                 out.write(result)
                 out.close()
-
-        if arguments["-"]:
-            filename = arguments['--out']
-            os.system ("cat " + filename)
+                os.system ("cat " + str(output))
 
 
-        out.close()
+
+
     
 

@@ -4,7 +4,7 @@ from flask_flatpages import FlatPages
 #import cloud_mesh as fg
 from cloudmesh import cloud_mesh
 from datetime import datetime
-from sh import cm 
+#from sh import cm 
 
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
