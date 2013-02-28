@@ -10,7 +10,7 @@ import os
 from cm_config import cm_config
 from openstack.cm_compute import openstack as os_client
 
-class cloud_mesh:
+class cloudmesh:
     
     clouds = {}
     keys = []
@@ -165,7 +165,7 @@ class cloud_mesh:
 
 if __name__=="__main__":
 
-    c = cloud_mesh()
+    c = cloudmesh()
 
     c.config()
     
