@@ -71,3 +71,9 @@ if __name__ == "__main__":
     outfile = "%s/%s" %( os.environ['HOME'], ".futuregrid/junk.yaml")
     print config.write(outfile)
     os.system("cat " + outfile)
+    print "================="
+    configuration = config.get('azure')
+
+    print configuration['username']
+    
+
