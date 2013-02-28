@@ -16,7 +16,7 @@ def read(fname):
     return open(fpath(fname)).read()
 
 def desc():
-    info = read('README.rst')
+    info = read('README.md')
     try:
         return info + '\n\n' + read('CHANGES.txt')
     except IOError:
@@ -78,10 +78,12 @@ setup(
 #             ]},
 
     install_requires = [
-        'Flask>=0.7',
-        'Flask-WTF>=0.6'
         'setuptools',
         'pip',
+        'docopt',
+        'pyyaml',
+        'Flask>=0.7',
+        'Flask-WTF>=0.6'
         'paramiko',
         'blessings',
         'fabric',
