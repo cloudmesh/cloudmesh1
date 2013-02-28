@@ -129,3 +129,10 @@ def installmongodb():
     local('brew update')
     local('brew install mongodb')
 
+def installmongodb_ubuntu():
+    local('sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10')
+    local('sudo sh -c "echo \'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen\' > /etc/apt/sources.list.d/10gen.list"')
+    local('sudo apt-get update')
+    local('sudo apt-get install mongodb-10gen')
+
+
