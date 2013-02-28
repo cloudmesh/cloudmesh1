@@ -123,3 +123,9 @@ def install():
     local("pip install Flask Frozen-Flask Flask-FlatPages")
     local("pip install --upgrade -e git://github.com/openstack/python-novaclient.git#egg=python-novaclient")
 
+
+def installmongodb():
+    local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
+    local('brew update')
+    local('brew install mongodb')
+
