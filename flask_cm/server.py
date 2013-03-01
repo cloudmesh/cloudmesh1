@@ -1,8 +1,9 @@
+import os
 # cloud mesh
 from flask import Flask, render_template
 from flask_flatpages import FlatPages
 #import cloud_mesh as fg
-from cloudmesh import cloud_mesh
+from cloudmesh import cloudmesh
 from datetime import datetime
 #from sh import cm 
 
@@ -18,9 +19,10 @@ app.config.from_object(__name__)
 pages = FlatPages(app)
 
 #clouds = fg.cloud_mesh()
-clouds = cloud_mesh.cloud_mesh()
+clouds = cloudmesh.cloudmesh()
 clouds.load()
-clouds.refresh()
+# AttributeError: cloudmesh instance has no attribute 'refresh'
+#clouds.refresh()
 
 def make_active(name):
   active = {'home' : "", 
@@ -44,7 +46,8 @@ def index():
 def refresh(cloud=None, server=None):
   print "-> refresh", cloud, server
   global clouds
-  clouds.refresh()
+  #AttributeError: cloudmesh instance has no attribute 'refresh'
+  #clouds.refresh()
   clouds.save()
   return table()
 
@@ -141,4 +144,5 @@ def page(path):
                            version=version)
 
 if __name__ == '__main__':
-  app.run(debug=True)
+  #app.run(debug=True)
+  app.run(host=os.environ["FG_HOSTING_IP"] or "127.0.0.1", debug=True)
