@@ -5,6 +5,7 @@ import os
 import commands
 from sh import azure as _azure
 import getpass
+from sh import fgrep as _fgrep
 import pprint
 import re
 
@@ -18,31 +19,31 @@ DBFILEPATH='database.db'
 regex = re.compile("\x1b\[(?:\d{1,2}m?)?", re.UNICODE)
 
 
-vm_start = azure.bake("vm","start")
-vm_restart = azure.bake("vm","restart")
-vm_shutdown = azure.bake("vm","shutdown")
-vm_list = azure.bake("vm","list")
-vm_create = azure.bake("vm","create")
-vm_show = azure.bake("vm","show")
-vm_delete = azure.bake("vm","delete")
+vm_start = _azure.bake("vm","start")
+vm_restart = _azure.bake("vm","restart")
+vm_shutdown = _azure.bake("vm","shutdown")
+vm_list = _azure.bake("vm","list")
+vm_create = _azure.bake("vm","create")
+vm_show = _azure.bake("vm","show")
+vm_delete = _azure.bake("vm","delete")
 
-account = azure.bake("account")
+account = _azure.bake("account")
 
 
 class cm_azure:
-
-
+    images = {}
+    servers = {}
+    cloud = None
+    
     filename = "%(home)s/%(location)s" % {
         "home" : os.environ['HOME'], 
         "location" : ".futuregrid/cloudmesh.cfg"
         }
 
-    servers = {},
-
     credentials = {
-        'username' : None,
-        'password' : None,
-        'settings' : None
+        'username' : 'ppnewaskar',
+        'password' : 'Shweta22',
+        'settings' : {'image' : 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-12_04_1-LTS-amd64-server-20121218-en-us-30GB'}
         }
 
     image = None
@@ -77,9 +78,9 @@ class cm_azure:
         config.set('azure', 'password', value)
         config.set('azure', 'username', value)
 
-        config.set('azure','username') = self.credentials['username']
-        config.set('azure','password') = self.credentials['password']
-        config.set('azure','publishsettings_file_path') = self.credentials['settings'] 
+        #config.set('azure','username') = self.credentials['username']
+        #config.set('azure','password') = self.credentials['password']
+        #config.set('azure','publishsettings_file_path') = self.credentials['settings'] 
 
         config.write(cfgFile)
         cfgFile.close()
@@ -132,9 +133,8 @@ class cm_azure:
         # for each vm in list get info and uddoate
         return
 
-    ######################
 
-    def _vm_name(self,index)
+    def _vm_name(self,index):
         number = str(index).zfill(3)
         name = '%s-%s' % (self.credentials['username'], number)
         return name
@@ -159,7 +159,7 @@ class cm_azure:
         print 'Please select Image'    ;
 
         # what is arg1, arg2?
-        for (arg1, arg2) in images.items()
+        for (arg1, arg2) in images.items() :
             print arg1 + "\t" + arg2[0] +"\t" +arg2[1] + "\t" +arg2[2]
 
         while 1 :
@@ -172,28 +172,32 @@ class cm_azure:
         return var
 
 
-    def create(self, index, image=None, name)
-
-        if(image != None):
-            """Creates a number of vms with the labels prefix-0 to prefix-<number-1>. It uses a threadpool"""
-            pool = _Pool(processes=maxparallel)
-            list = range(0, int(index))
-            result = pool.map(_boot, list)
-
-            print result
-
-    def _boot(self, index, name):
-
+    def _boot(self, index):
         #cmd = 'azure vm create %(vmname)s %(image)s %(username)s --ssh --location "East US" %(password)s' % vm
         #print cmd
-        result = _vm_create("%s" % vm_name(index),
-                           "%s" % name
-                           "%(username)s" % self.credentials,
+        result = vm_create("%s" % self._vm_name(index),
+                           "%(image)s" % self.credentials['settings'],
+                           "%(username)s"% self.credentials,
                            "--ssh",
                            "--location",
                            "East US",
                            "%(password)s" % self.credentials)
+                        
+        print result
         return result
+    
+    
+    def create(self, index, name, image=None) :
+
+        
+        """Creates a number of vms with the labels prefix-0 to prefix-<number-1>. It uses a threadpool"""
+        pool = _Pool(processes=maxparallel)
+        list = range(0, int(index))
+        result = pool.map(self._boot,list)
+        print result
+
+    
+    
 
 
 
@@ -203,36 +207,41 @@ class cm_azure:
 
         imageNamePrefix = 'azure_img'
         imageNameCounter =0;
-
+        cleanLines =[]
         counter = 0;
         images={};
-
-        lines = lines[2:-1]  # is this right or just [2:]
-
+        for line in lines :
+            if 'data' in line :
+                cleanLines.append(line)
+            
+        lines = cleanLines[2:]  # is this right or just [2:]
+        
         for line in lines :
             counter = counter+1
             l=[];
-            #(name, id, os) = line.split()
-            #l.append(name)
-            #l.append(id)
-            #l.append(os)
-
-            l.append(line.split()[1])
-            l.append(line.split()[2])
-            l.append(line.split()[3])
-
+            
+            (data, name,category,os) = line.split()
+            l.append(name)
+            l.append(category)
+            l.append(os)
             # this is not correct as image name is in sttructure, but this is a label you define
-
             images[imageNamePrefix+str(counter)]=l
+        self.images = images
 
         return images
+    
+
 
     def _getVmDict(self, name):
-        Lines = fgrep(vm_show(name).splitlines().strip(),'data')
+        Lines = _fgrep(vm_show(name),'data')
 
+        print Lines
         vm={};
 
         for line in Lines :
+            #Reomve Color information from the text
+            line = regex.sub("", line)
+            # Split Data and make ready to make a dict
             line = line.replace(':','"')
             splits = line.split('"')
             vm[str(splits[1].strip())]=str(splits[2].strip())
@@ -241,39 +250,65 @@ class cm_azure:
 
 
 
-    def strange_save(self):
+    def servers_save(self):
         
         #THis needs to call 
 
         # self.list or something and the code needs to be outside the function
         
         lines = vm_list().splitlines()
-
+        cleanLines = []
         #skip counter number of lines
+        
         azure={};
         vms={}
-        counter =2
-        # allines = allines [2:-1]
-        for line in allLines :
+        for line in lines :
             if 'data' in line:
-                #not needed make sure you have in all lines only the lines that need to be parsed
-                # see above [2:-1] you may have to use [2:-2] dependent if new line is added, find out what the right thing is ...
-
-                if not counter :
                     cleanLines.append(regex.sub("",line))
-                else :
-                    counter = counter -1
-
+                    
+        
+        cleanLines = cleanLines[2:]
         for line in cleanLines :
-            splits = line.split();
+            (data,vmID,vmName,status) = line.split();
             # (arg1, arg2) = line.split();
             # vms[arg1] = _getVMDict(arg2)
-            vms[splits[1]]=_getVmDict(splits[2])
+            vms[vmID]=self._getVmDict(vmName)
+        self.servers = vms
+        return vms
 
     def save(self):
-    
+        
+        azure = {}
         azure['name']='azure';
-        azure['servers'] = servers;
-        pickle.dump( azure, open( self.DBFILEPATH, "wb" ) )
-        azure = pickle.load( open( self.DBFILEPATH, "rb" ) )
-        json.dumps(azure, indent=4)
+        azure['servers'] = self.servers_save();
+        azure['images'] = self._buildAzureImageDict();
+        pickle.dump( azure, open( DBFILEPATH, "wb" ) )
+        azure = pickle.load( open( DBFILEPATH, "rb" ) )
+        
+        print azure
+        #json.dumps(azure, indent=4)
+    
+   
+if  __name__ =='__main__':
+    
+    cloud = cm_azure()
+    cloud._buildAzureImageDict()
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
