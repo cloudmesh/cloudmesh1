@@ -1,21 +1,32 @@
+#! /usr/bin/env python
+
+from datetime import datetime
 from fabric.api import *
 import ConfigParser
 import pickle
 import os 
+import sys
+import json
+
 import commands
-from sh import azure as _azure
 import getpass
+
+from sh import azure as _azure
 from sh import fgrep as _fgrep
 import pprint
-import re
 
 
 from multiprocessing import Pool as _Pool
+
 global vmName, vmImage, vmPassword,maxparallel;
+
 maxparallel = 5
 CONFIGPATH='config.cfg'
 DBFILEPATH='database.db'
 
+######################################################################
+# Baked sh azure functions to make azure client easier to use
+######################################################################
 vm_start = _azure.bake("--json","vm","start")
 vm_restart = _azure.bake("--json","vm","restart")
 vm_shutdown = _azure.bake("--json","vm","shutdown")
@@ -23,32 +34,38 @@ vm_list = _azure.bake("--json","vm","list")
 vm_create = _azure.bake("--json","vm","create")
 vm_show = _azure.bake("--json","vm","show")
 vm_delete = _azure.bake("--json","vm","delete")
+vm_image_list = _azure.bake("--json","vm","image", "list")
 
 account = _azure.bake("account")
 
+######################################################################
+# azure class
+######################################################################
 
 class cm_azure:
     images = {}
     servers = {}
     cloud = None
-    
+    label = ""
+    flavors = {}
+
     filename = "%(home)s/%(location)s" % {
         "home" : os.environ['HOME'], 
         "location" : ".futuregrid/cloudmesh.cfg"
         }
 
+    ######################################################################
+    # hack to hard code credentials DELETE
+    ######################################################################
+    """
     credentials = {
-        'username' : 'ppnewaskar',
-        'password' : 'Shweta22',
         'settings' : {'image' : 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-12_04_1-LTS-amd64-server-20121218-en-us-30GB'}
         }
+    """
 
-    image = None
-
-
-    #vmName=name;
-    #vmImage = config.get('azure','image');
-
+    ######################################################################
+    # initialize
+    ######################################################################
 
     def __init__(self):
         self.servers = {}
@@ -63,11 +80,13 @@ class cm_azure:
         config.read(filename)
         self.credentials['username'] = config.get('azure','username');
         self.credentials['password'] = config.get('azure','password');
-        self.credentials['settings'] = config.get('azure','publishsettings_file_path');
-
-        # reads
+        self.credentials['settings'] = config.get('azure',
+                                                  'publishsettings_file_path');
         return
 
+    ######################################################################
+    # unnecessary as handleded in cm_config
+    ######################################################################
     def config_write():
 
         cfgFile = open(CONFIGPATH,'w')
@@ -82,13 +101,82 @@ class cm_azure:
         config.write(cfgFile)
         cfgFile.close()
 
+    ######################################################################
+    # get methods
+    ######################################################################
 
     def get(self):
         """returns the dict with all the sms"""
         return self.servers
 
-    def __str__(self):
-        return json.dumps (self.servers, indent=4)
+    ######################################################################
+    # print methods
+    ######################################################################
+
+    def __str__ (self):
+        """
+        print everything but the credentials that is known about this
+        cloud in json format.
+        """
+        information = {
+            'label': self.label,
+            'flavors': self.flavors,
+            'vms': self.servers,
+            'images' : self.images}
+        return json.dumps(information, indent=4)
+
+
+    ######################################################################
+    # refresh 
+    ######################################################################
+    
+    def refresh(self, type=None):
+
+        time_stamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
+        selection = ""
+        if type:
+            selection = type.lower()[0]
+            all = selection == 'a'
+        else:
+            all = True
+        
+        if selection == 'i' or all:
+            list = json.loads(str(vm_image_list()))
+            for image in list:
+                id = image['Name']
+                self.images[id] = image
+                self.images[id]['cm_refresh'] = time_stamp
+
+            
+        """
+        if selection == 'f' or all:
+            list = self.cloud.flavors.list()
+            for information in list:
+                # clean not neaded info
+                del information.manager
+                del information._info
+                del information._loaded
+                #del information.links
+                flavor = information.__dict__
+                self.flavors[information.name] = flavor
+                self.flavors[information.name]['cm_refresh'] = time_stamp
+
+        if selection == 'v' or selection == None or all:
+            list = self.cloud.servers.list(detailed=True)
+            
+            for information in list:
+                vm = information.__dict__
+                del information.manager
+                del information._info
+                del information._loaded
+                #del information.links
+                self.servers[information.id] = vm
+                self.servers[information.id]['cm_refresh'] = time_stamp
+         """
+
+    ######################################################################
+    # manage vms 
+    ######################################################################
 
     def start(self,name):
         """starts a vm with the given name"""
@@ -124,49 +212,6 @@ class cm_azure:
             # add result to internal cache
             print result
 
-    def refresh(self):
-        """refreshes the status of all VMs by calling a list command and storing the result"""
-        #call list and update
-        # for each vm in list get info and uddoate
-        return
-
-
-    def _vm_name(self,index):
-        number = str(index).zfill(3)
-        name = '%s-%s' % (self.credentials['username'], number)
-        return name
-
-
-    def activate(self):
-
-        result = account('clear')
-        print result
-
-        errmsg = 'No account information found' 
-        cmd = 'azure account import \'%(settings)\'' % credentials;
-
-        text =  commands.getstatusoutput(cmd)
-        if not errmsg in text[1] :
-            print 'Activated'
-        else :
-            print 'There was an error while activation'
-
-    def _selectImage() :
-        images = _buildAzureImageDict()
-        print 'Please select Image'    ;
-
-        # what is arg1, arg2?
-        for (arg1, arg2) in images.items() :
-            print arg1 + "\t" + arg2[0] +"\t" +arg2[1] + "\t" +arg2[2]
-
-        while 1 :
-            var = raw_input("Image : ")
-            if images.has_key(var) :
-                print images[var][0]
-                return images[var][0]
-            else :
-                print "Incorrect Image name"
-        return var
 
 
     def _boot(self, index):
@@ -193,9 +238,50 @@ class cm_azure:
         result = pool.map(self._boot,list)
         print result
 
-    
-    
 
+    def _vm_name(self,index):
+        number = str(index).zfill(3)
+        name = '%s-%s' % (self.credentials['username'], number)
+        return name
+
+    ######################################################################
+    # activate azure
+    ######################################################################
+
+    def activate(self):
+
+        result = account('clear')
+        print result
+
+        errmsg = 'No account information found' 
+        cmd = 'azure account import \'%(settings)\'' % credentials;
+
+        text =  commands.getstatusoutput(cmd)
+        if not errmsg in text[1] :
+            print 'Activated'
+        else :
+            print 'There was an error while activation'
+
+    ######################################################################
+    # functions we want to rewrite/replace
+    ######################################################################
+
+    def _selectImage() :
+        images = _buildAzureImageDict()
+        print 'Please select Image'    ;
+
+        # what is arg1, arg2?
+        for (arg1, arg2) in images.items() :
+            print arg1 + "\t" + arg2[0] +"\t" +arg2[1] + "\t" +arg2[2]
+
+        while 1 :
+            var = raw_input("Image : ")
+            if images.has_key(var) :
+                print images[var][0]
+                return images[var][0]
+            else :
+                print "Incorrect Image name"
+        return var
 
 
 
@@ -208,7 +294,7 @@ class cm_azure:
 
         for key in vms :
             image = image[key]
-            self.images[image['Name'] = image
+            self.images[image['Name']] = image
             #see other attributes in openstack refersh class
         return
     
@@ -241,9 +327,9 @@ class cm_azure:
 if  __name__ =='__main__':
     
     cloud = cm_azure()
-    cloud._buildAzureImageDict()
+    cloud.refresh("images")
     
-        
+    print cloud
         
         
         

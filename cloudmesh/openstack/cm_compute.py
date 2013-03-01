@@ -69,7 +69,7 @@ class openstack:
         including reading the credentials and a refresh needs to be
         called to obtain again data.
         """
-        type = "openstack"
+        self.type = "openstack"
         self.flavors = {}
         self.images = {}
         self.servers = {}
