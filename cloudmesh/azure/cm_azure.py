@@ -16,16 +16,13 @@ maxparallel = 5
 CONFIGPATH='config.cfg'
 DBFILEPATH='database.db'
 
-regex = re.compile("\x1b\[(?:\d{1,2}m?)?", re.UNICODE)
-
-
-vm_start = _azure.bake("vm","start")
-vm_restart = _azure.bake("vm","restart")
-vm_shutdown = _azure.bake("vm","shutdown")
-vm_list = _azure.bake("vm","list")
-vm_create = _azure.bake("vm","create")
-vm_show = _azure.bake("vm","show")
-vm_delete = _azure.bake("vm","delete")
+vm_start = _azure.bake("--json","vm","start")
+vm_restart = _azure.bake("--json","vm","restart")
+vm_shutdown = _azure.bake("--json","vm","shutdown")
+vm_list = _azure.bake("--json","vm","list")
+vm_create = _azure.bake("--json","vm","create")
+vm_show = _azure.bake("--json","vm","show")
+vm_delete = _azure.bake("--json","vm","delete")
 
 account = _azure.bake("account")
 
@@ -202,79 +199,31 @@ class cm_azure:
 
 
 
-    def _buildAzureImageDict(self) :
-        lines = _azure('vm','image','list').splitlines()
+    def _copy_image_list_to_dict(self) :
+        """
+        method not needes as so simple, instead work on refresh from
+        openstack
+        """
+        images = vm_list()
 
-        imageNamePrefix = 'azure_img'
-        imageNameCounter =0;
-        cleanLines =[]
-        counter = 0;
-        images={};
-        for line in lines :
-            if 'data' in line :
-                cleanLines.append(line)
-            
-        lines = cleanLines[2:]  # is this right or just [2:]
-        
-        for line in lines :
-            counter = counter+1
-            l=[];
-            
-            (data, name,category,os) = line.split()
-            l.append(name)
-            l.append(category)
-            l.append(os)
-            # this is not correct as image name is in sttructure, but this is a label you define
-            images[imageNamePrefix+str(counter)]=l
-        self.images = images
-
-        return images
+        for key in vms :
+            image = image[key]
+            self.images[image['Name'] = image
+            #see other attributes in openstack refersh class
+        return
     
-
-
-    def _getVmDict(self, name):
-        Lines = _fgrep(vm_show(name),'data')
-
-        print Lines
-        vm={};
-
-        for line in Lines :
-            #Reomve Color information from the text
-            line = regex.sub("", line)
-            # Split Data and make ready to make a dict
-            line = line.replace(':','"')
-            splits = line.split('"')
-            vm[str(splits[1].strip())]=str(splits[2].strip())
-        allItems = vm.items();
-        return vm;
 
 
 
     def servers_save(self):
-        
-        #THis needs to call 
-
-        # self.list or something and the code needs to be outside the function
-        
-        lines = vm_list().splitlines()
-        cleanLines = []
-        #skip counter number of lines
-        
+        # this is still wrong but beats the complex parsing function
+        vms = vm_list()
         azure={};
-        vms={}
-        for line in lines :
-            if 'data' in line:
-                    cleanLines.append(regex.sub("",line))
-                    
         
-        cleanLines = cleanLines[2:]
-        for line in cleanLines :
-            (data,vmID,vmName,status) = line.split();
-            # (arg1, arg2) = line.split();
-            # vms[arg1] = _getVMDict(arg2)
-            vms[vmID]=self._getVmDict(vmName)
-        self.servers = vms
-        return vms
+        for key in vms :
+            azure[key]=vm_show(vmName)
+        self.servers = azure
+        return azure
 
     def save(self):
         
