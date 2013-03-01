@@ -46,12 +46,12 @@ class cloudmesh:
             args["user"] = args["user"] or self.user
             #self.metrics = fgmetric('-u', ownerid)
             self._set_metric_api_vars(args)
-            print args
+            #print args
             stats = self.metric_api._set_dict_vars()
             metrics = self.metric_api.get_stats()
             stats["stats"] = metrics
             self.metrics = stats
-            print self.metrics
+            #print self.metrics
         except:
             print sys.exc_info()
             pass
