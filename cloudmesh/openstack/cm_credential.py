@@ -29,6 +29,21 @@ class credentials:
         "url": "OS_AUTH_URL"
         }
 
+    def type (self, name):
+        if name == 'openstack':
+            self.variables = {
+                "project": "OS_TENANT_NAME", 
+                "username": "OS_USERNAME", 
+                "password":"OS_PASSWORD",
+                "url": "OS_AUTH_URL"
+                }
+        if name == 'eucalyptus':
+            self.variables = { 
+                "accesskey"  : "EC2_ACCESS_KEY", 
+                "secretkey" : "EC2_SECRET_KEY"
+            }
+
+
     def __init__(self, label, filename=None): 
         if filename != None:
             self.filename = filename
@@ -37,7 +52,7 @@ class credentials:
         return
 
     def _get_rc_variable (self, variable):
-        (attribute, value) = fgrep(self.variables[variable], self.filename).replace("\n","").split("=")
+        (attribute, value) = fgrep("export " + self.variables[variable], self.filename).replace("\n","").split("=")
         return value
 
     def _load(self):
