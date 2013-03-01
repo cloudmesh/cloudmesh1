@@ -47,6 +47,10 @@ if __name__ == '__main__':
     arguments = docopt(__doc__, version='1.0.0rc2')
     home = os.environ['HOME']
 
+
+    ######################################################################
+    # This secion deals with handeling "cm config" related commands
+    ######################################################################
     is_config = arguments['config'] != None
 
     if is_config:
@@ -110,6 +114,9 @@ if __name__ == '__main__':
                 out.close()
                 os.system ("cat " + str(output))
 
+    ######################################################################
+    # END "cm config" related commands
+    ######################################################################
 
 
 
