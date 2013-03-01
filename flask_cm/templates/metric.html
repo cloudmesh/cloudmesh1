@@ -1,65 +1,25 @@
 {% extends "cm-layout.html" %}
 {% from "_helper.html" import image_button %}g
 <script>
-  $( "#dp1" ).datepicker();
 </script>
 {% block content %}
 
-<form class="well">
 
- <h1> Create a report </h2>
-
- <input type="text" class="span2" value="02-16-2012" id="dp1" >
-          
- <fieldset>
-   <legend>Select the time period</legend>
-     <table>
-
-     <tr> <td>From </td><td> <input type="text" id="id_date_from"></td></tr>
-     <tr> <td>To</td><td> <input type="text" id="id_date_to"></td></tr>
-     </table>
-  </fieldset>
-  <p />
-  <p />
-
- <fieldset>
-   <legend>Select Machine for the report</legend>
-
-   <p> 
-  
+<table>
    <tr>
-	   <th colspan="1"> Start date, End date, portal id, vm count, runtime </th><br>
+	   <th colspan="1"> Start date</th>
+	   <th>End date</th>
+	   <th>portal id</th>
+	   <th>vm count</th>
+	   <th>runtime</th><br>
    </tr>
 	   <tr>
-
-	     <td colspan="1"> {{metrics['start_date'] +" - "+ metrics['end_date'], 
-		     metrics["ownerid"], 
-		     metrics["stats"]["All"]["count"]["Total"], 
-		     metrics["stats"]["All"]["runtime"]["Total"]}}</td>
+		   <td colspan="1"> {{metrics['start_date']}}</td>
+		   <td> {{ metrics['end_date'] }}</td>
+		   <td> {{ metrics["ownerid"] }} </td>
+		   <td> {{ metrics["stats"]["All"]["count"]["Total"] }} </td>
+		   <td> {{ metrics["stats"]["All"]["runtime"]["Total"]}} </td>
      </tr>
-  
-  
-
-   </p>
-
- </fieldset>
- <button type="submit" class="btn">Submit</button>
-</form>
-
-  
-</table>
-
-
-
-
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap-datepicker.js"></script>
-    <script>
-      $(function(){
-        $('#dp1').datepicker({
-           format: 'mm-dd-yyyy'
-        });
-     });
-</script>
+ </table> 
 
 {% endblock %}

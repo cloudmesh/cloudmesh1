@@ -1,6 +1,6 @@
 import os
 # cloud mesh
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_flatpages import FlatPages
 #import cloud_mesh as fg
 from cloudmesh import cloudmesh
@@ -128,16 +128,16 @@ def table():
                            version=version)
 
 #@app.route('/metric/<s_date>/<e_date>/<user>/<cloud>/<host>/<period>/<metric>')
-@app.route('/metric/<s_date>/<e_date>/<user>')
-def metric(s_date=None, e_date=None, user=None, cloud=None, host=None, period=None, metric=None):
+@app.route('/metric', methods=['POST','GET'])
+def metric():
     global clouds
-    args = {"s_date":s_date,
-            "e_date":e_date,
-            "user":user,
-            "cloud":cloud,
-            "host":host,
-            "period":period,
-            "metric":metric}
+    args = {"s_date":request.args.get('s_date',''),
+            "e_date":request.args.get('e_date',''),
+            "user":request.args.get('user',''),
+            "cloud":request.args.get('cloud',''),
+            "host":request.args.get('host',''),
+            "period":request.args.get('period',''),
+            "metric":request.args.get('metric','')}
 
     return render_template('metric.html', 
                            clouds=clouds.get(),
