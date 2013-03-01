@@ -6,6 +6,7 @@ from flask_flatpages import FlatPages
 from cloudmesh import cloudmesh
 from datetime import datetime
 #from sh import cm 
+from sh import fgmetric
 
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
@@ -18,6 +19,13 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 pages = FlatPages(app)
 
+# lee212 (hyungro) commented March 1st, 2013
+# Personally, I prefer to use class variables instead of using global variables.
+# Example of using class in Flask: https://github.com/futuregrid/cloud-metrics/blob/master/fgws/FGWSApps.py
+#
+# Opinion from stackoverflow: Using global variables in a function other than the one that created them
+# http://stackoverflow.com/questions/423379/using-global-variables-in-a-function-other-than-the-one-that-created-them
+#
 #clouds = fg.cloud_mesh()
 clouds = cloudmesh.cloudmesh()
 clouds.load()
@@ -72,6 +80,7 @@ def start_vm(cloud=None, server=None):
     r = cm("--set", "quiet", "start:1", _tty_in=True)
   return table()
 
+'''
 #gregorss test 
 @app.route('/cm/metric/<startdate>/<enddate>/<host>')
 def list_metric(cloud=None, server=None):
@@ -83,7 +92,8 @@ def list_metric(cloud=None, server=None):
                            version=version,
                            endate=enddate)
     #return table()
-  
+'''
+
 @app.route('/save/')
 def save():
   print "Saving the cloud status"
@@ -106,32 +116,35 @@ def table():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     # note thet call to sierra is fake it just goes to india and sets cloudname to sierra.
-
     #clouds.dump()
-
-    keys = clouds.get_keys()
-
+    #keys = clouds.get_keys()
     return render_template('table.html', 
                            updated = time_now,
-                           keys=",".join(clouds.get_keys()),
+                           keys="",##",".join(clouds.get_keys()),
                            clouds=clouds.get(),
                            image='myimage',
                            pages=pages,
                            active=active,
                            version=version)
 
-@app.route('/metric/')
-def metric():
+#@app.route('/metric/<s_date>/<e_date>/<user>/<cloud>/<host>/<period>/<metric>')
+@app.route('/metric/<s_date>/<e_date>/<user>')
+def metric(s_date=None, e_date=None, user=None, cloud=None, host=None, period=None, metric=None):
     global clouds
-
-    active=make_active('metric')
+    args = {"s_date":s_date,
+            "e_date":e_date,
+            "user":user,
+            "cloud":cloud,
+            "host":host,
+            "period":period,
+            "metric":metric}
 
     return render_template('metric.html', 
                            clouds=clouds.get(),
+                           metrics=clouds.get_metrics(args),
                            pages=pages,
-                           active=active,
+                           active=make_active('metric'),
                            version=version)
-
 
 @app.route('/<path:path>/')
 def page(path):
