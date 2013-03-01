@@ -50,6 +50,11 @@ class cloudmesh:
         except:
             pass
 
+    def clear(self):
+        self.clouds = {}
+        self.keys = []
+        self.user = "gvonlasz"
+
     ######################################################################
     # some metric methods
     ######################################################################
@@ -82,11 +87,6 @@ class cloudmesh:
         self.metric_api.set_cloud(args["cloud"])
         self.metric_api.set_hostname(args["host"])
         self.metric_api.set_period(args["period"])
-
-    def clear(self):
-        self.clouds = {}
-        self.keys = []
-        self.user = "gvonlasz"
 
     ######################################################################
     # the configuration method that must be called to get the cloud info
