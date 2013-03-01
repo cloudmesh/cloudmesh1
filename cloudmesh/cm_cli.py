@@ -86,8 +86,7 @@ if __name__ == '__main__':
             name = choices[input-1]
 
         output = arguments['--out']     
-        print arguments
-        print name
+
         if name != None:
             try:
                 result = config.rc(name)
@@ -106,7 +105,6 @@ if __name__ == '__main__':
                 if output == None:
                     arguments['--out'] = "%s/%s" % (home,default_path)
                     output = arguments['--out']
-                print ">>>", output
                 out = open (output, "w" )
                 out.write(result)
                 out.close()
