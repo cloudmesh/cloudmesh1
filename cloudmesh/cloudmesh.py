@@ -11,20 +11,47 @@ from cm_config import cm_config
 from openstack.cm_compute import openstack as os_client
 
 class cloudmesh:
+
+    ######################################################################
+    # global variables that define the information managed by this class
+    ######################################################################
+
+    datastore = "data/clouds.txt"
     
+    # dict that holds vms, flavors, images for al iaas
     clouds = {}
-    keys = []
+    
+    # array with keys from the user
+    keys = []    
+
+    ######################################################################
+    # variables that we can most likely eliminate
+    ######################################################################
+
+    # user needs to come from credential ...
     user = "gvonlasz"
 
-    filename = "data/clouds.txt"
-
-    def get(self):
-        return self.clouds
+    ######################################################################
+    # initialization methods
+    ######################################################################
 
     def __init__(self):
         self.clear()
 
+    def clear(self):
+        self.clouds = {}
+        self.keys = []
+        self.user = "gvonlasz"
+
+    ######################################################################
+    # the configuration method that must be called to get the cloud info
+    ######################################################################
+
     def config(self):
+        """
+        reads the cloudmesh yaml file that defines which clouds build
+        the cloudmesh
+        """
         configuration = cm_config()
         for name in configuration.keys():
             credential = configuration.get(name)
@@ -34,10 +61,37 @@ class cloudmesh:
             
         return
 
-    def clear(self):
-        self.clouds = {}
-        self.keys = []
-        self.user = "gvonlasz"
+    ######################################################################
+    # importnat get methods
+    ######################################################################
+
+    def get(self):
+        """returns the dict that contains all the information"""
+        return self.clouds
+
+    ######################################################################
+    # important print methods
+    ######################################################################
+    # includes sanitizing to remove the credentials
+    ######################################################################
+
+    def __str__(self):
+        tmp = self._sanitize()
+        print tmp
+
+    def _sanitize(self):
+        #copy the self.cloud
+        #delete the attributes called credential for all clouds
+        print "TODO: not yet omplemented"
+        return self.clouds
+
+    def dump(self):
+        tmp = self._sanitize()
+        print json.dumps(tmp, indent=4)
+
+    ######################################################################
+    # the refresh method that gets upto date information for cloudmesh
+    ######################################################################
 
     def refresh_servers(self, cloudname):
         print "Refershing cloudname %s" % cloudname
@@ -100,7 +154,10 @@ class cloudmesh:
 
     def update(self, name, type):
         servers = self.refresh_servers(name)
-        self.clouds[name].update({ 'name' : name, 'cm_type' : type, "servers" : servers })
+        self.clouds[name].update({ 'name' : name, 
+                                   'cm_type' : type, 
+                                   "servers" : servers })
+        return
 
     def add(self, name, type):
         try:
@@ -133,31 +190,83 @@ class cloudmesh:
 
     """
 
-    def __str__(self):
-        tmp = self._sanitize()
-        print tmp
 
-    def _sanitize(self):
-        #copy the self.cloud
-        #delete the attributes called credential for all clouds
-        return self.clouds
-
-    def dump(self):
-        tmp = self._sanitize()
-        print json.dumps(tmp, indent=4)
+    ######################################################################
+    # saves and reads the dict to and from a file
+    ######################################################################
 
     def save(self):
         tmp = self._sanitize()
-        file = open(self.filename, 'wb')
+        file = open(self.datastore, 'wb')
         #pickle.dump(self.keys, file)
         pickle.dump(tmp, file)
         file.close()
 
     def load(self):
-        file = open(self.filename, 'rb')
+        file = open(self.datastore, 'rb')
         #self.keys = pickle.load(file)
         self.clouds = pickle.load(file)
         file.close()
+
+    ######################################################################
+    # TODO: convenient +, += functions to add dicts with cm_type 
+    ######################################################################
+
+    def __add__(self,other):
+        """
+        type based add function c = cloudmesh(...); b = c + other
+        other can be a dict that contains information about the object
+        and it will be nicely inserted into the overall cloudmesh dict
+        the type will be identified via a cm_type attribute in the
+        dict Nn attribute cm_cloud identifies in which cloud the
+        element is stored.
+        """
+        if other.cm_type == "image":
+            print "TODO: not implemented yet"
+            return
+        elif other.cm_type == "vm":
+            print "TODO: not implemented yet"
+            return
+        elif other.cm_type == "flavor":
+            print "TODO: not implemented yet"
+            return
+        elif other.cm_type == "cloudmesh":
+            print "TODO: not implemented yet"
+            return
+        else:
+            print "Error: %s type does not exist", cm_type
+            print "Error: Ignoring add"
+            return
+
+    def __iadd__(self,other):
+        """
+        type based add function c = cloudmesh(...); c += other other
+        can be a dict that contains information about the object and
+        it will be nicely inserted into the overall cloudmesh dict the
+        type will be identified via a cm_type attribute in the dict.
+        Nn attribute cm_cloud identifies in which cloud the element is
+        stored.
+        """
+        if other.cm_type == "image":
+            print "TODO: not implemented yet"
+            return
+        elif other.cm_type == "vm":
+            print "TODO: not implemented yet"
+            return
+        elif other.cm_type == "flavor":
+            print "TODO: not implemented yet"
+            return
+        elif other.cm_type == "cloudmesh":
+            print "TODO: not implemented yet"
+            return
+        else:
+            print "Error: %s type does not exist", cm_type
+            print "Error: Ignoring add"
+            return
+
+##########################################################################
+# MAIN METHOD FOR TESTING
+##########################################################################
 
 if __name__=="__main__":
 
