@@ -1,9 +1,56 @@
 {% extends "cm-layout.html" %}
-{% from "_helper.html" import image_button %}g
-<script>
-</script>
+{% from "_helper.html" import image_button %}
 {% block content %}
-
+<script src="static/js/jquery.js"></script>
+<script src="static/js/bootstrap-datepicker.js"></script>
+<script>
+    $(function(){
+    window.prettyPrint && prettyPrint();
+    var startDate = new Date(2012,1,01);
+    var endDate = new Date(2012,12,31);
+    $('#dp4').datepicker()
+    .on('changeDate', function(ev){
+    if (ev.date.valueOf() > endDate.valueOf()){
+    $('#alert').show().find('strong').text('The start date can not be greater then the end date');
+    } else {
+    $('#alert').hide();
+    startDate = new Date(ev.date);
+    $('#startDate').text($('#dp4').data('date'));
+    }
+    $('#dp4').datepicker('hide');
+    });
+    $('#dp5').datepicker()
+    .on('changeDate', function(ev){
+    if (ev.date.valueOf() < startDate.valueOf()){
+			    $('#alert').show().find('strong').text('The end date can not be less then the start date');
+			    } else {
+			    $('#alert').hide();
+			    endDate = new Date(ev.date);
+			    $('#endDate').text($('#dp5').data('date'));
+			    }
+			    $('#dp5').datepicker('hide');
+		    });
+	    })
+</script>
+ <div class="well">
+   <div class="alert alert-error" id="alert">
+     <strong>Set date!</strong>
+       </div>
+   <table class="table">
+     <thead>
+       <tr>
+	 <th>Start date<a href="#" class="btn small" id="dp4" data-date-format="yyyy-mm-dd" data-date="2012-01-01">Change</a></th>
+	 <th>End date<a href="#" class="btn small" id="dp5" data-date-format="yyyy-mm-dd" data-date="2012-12-31">Change</a></th>
+	 </tr>
+       </thead>
+     <tbody>
+       <tr>
+	 <td id="startDate">2012-01-01</td>
+	 <td id="endDate">2012-12-31</td>
+	 </tr>
+       </tbody>
+     </table>
+          </div>
 
 <table>
    <tr>
