@@ -25,15 +25,20 @@
  <fieldset>
    <legend>Select Machine for the report</legend>
 
-   <p>
-     {% for name, cloud in clouds.iteritems() %}
+   <p> 
   
-     <tr> 
-       <th colspan="1"> <input name="{{name }}" type="checkbox"> {{ name }} </th> 
+   <tr>
+	   <th colspan="1"> Start date, End date, portal id, vm count, runtime </th><br>
+   </tr>
+	   <tr>
+
+	     <td colspan="1"> {{metrics['start_date'] +" - "+ metrics['end_date'], 
+		     metrics["ownerid"], 
+		     metrics["stats"]["All"]["count"]["Total"], 
+		     metrics["stats"]["All"]["runtime"]["Total"]}}</td>
      </tr>
   
   
-     {% endfor %}
 
    </p>
 

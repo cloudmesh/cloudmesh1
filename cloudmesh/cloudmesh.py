@@ -9,6 +9,14 @@ import os
 #import shelve
 from cm_config import cm_config
 from openstack.cm_compute import openstack as os_client
+try:
+    #from sh import fgmetric
+    from fgmetric.FGMetricsAPI import FGMetricsAPI
+except:
+    print "---------------------"
+    print "fgmetric not imported"
+    print "---------------------"
+    pass
 
 class cloudmesh:
 
@@ -37,6 +45,43 @@ class cloudmesh:
 
     def __init__(self):
         self.clear()
+        try:
+            self.metric_api = FGMetricsAPI()
+        except:
+            pass
+
+    ######################################################################
+    # some metric methods
+    ######################################################################
+
+    def get_metrics(self, args):
+        """Get usage data from FG Metrics"""
+
+        if not self.metric_api:
+            return
+
+        try:
+            args["user"] = args["user"] or self.user
+            #self.metrics = fgmetric('-u', ownerid)
+            self._set_metric_api_vars(args)
+            #print args
+            stats = self.metric_api._set_dict_vars()
+            metrics = self.metric_api.get_stats()
+            stats["stats"] = metrics
+            self.metrics = stats
+            #print self.metrics
+        except:
+            print sys.exc_info()
+            pass
+        return self.metrics
+
+    def _set_metric_api_vars(self, args):
+        self.metric_api.set_date(args["s_date"], args["e_date"])
+        self.metric_api.set_metric("count runtime")#args["metric"])
+        self.metric_api.set_user(args["user"])
+        self.metric_api.set_cloud(args["cloud"])
+        self.metric_api.set_hostname(args["host"])
+        self.metric_api.set_period(args["period"])
 
     def clear(self):
         self.clouds = {}
