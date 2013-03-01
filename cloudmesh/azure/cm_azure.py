@@ -139,15 +139,30 @@ class cm_azure:
             all = selection == 'a'
         else:
             all = True
-        
-        if selection == 'i' or all:
-            list = json.loads(str(vm_image_list()))
-            for image in list:
-                id = image['Name']
-                self.images[id] = image
-                self.images[id]['cm_refresh'] = time_stamp
 
+        if all:
+            self.refresh('images')
+            self.refresh('vms')
+            return
+
+        key = ""
+        list_function = vm_list
+        if selection == 'i' :
+            key = 'Name'
+            list_function = vm_image_list
+            store = self.images
+        elif selection == 'v' :
+            key = 'VMName'
+            list_function = vm_list
+            store = self.servers
             
+        list = json.loads(str(list_function()))
+        for object in list:
+            id = object[key]
+            store[id] = object
+            store[id]['cm_refresh'] = time_stamp
+
+
         """
         if selection == 'f' or all:
             list = self.cloud.flavors.list()
@@ -160,19 +175,8 @@ class cm_azure:
                 flavor = information.__dict__
                 self.flavors[information.name] = flavor
                 self.flavors[information.name]['cm_refresh'] = time_stamp
+        """
 
-        if selection == 'v' or selection == None or all:
-            list = self.cloud.servers.list(detailed=True)
-            
-            for information in list:
-                vm = information.__dict__
-                del information.manager
-                del information._info
-                del information._loaded
-                #del information.links
-                self.servers[information.id] = vm
-                self.servers[information.id]['cm_refresh'] = time_stamp
-         """
 
     ######################################################################
     # manage vms 
@@ -327,7 +331,9 @@ class cm_azure:
 if  __name__ =='__main__':
     
     cloud = cm_azure()
-    cloud.refresh("images")
+    cloud.refresh("all")
+    #cloud.refresh("vms")
+    #cloud.refresh("images")
     
     print cloud
         
