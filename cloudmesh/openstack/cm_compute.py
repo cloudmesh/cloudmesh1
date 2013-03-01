@@ -42,6 +42,9 @@ class openstack:
     def credentials(self, cred):
         self.credential = cred
 
+    ######################################################################
+    # initialize
+    ######################################################################
     def __init__(self,
                  label,
                  authurl=None,
@@ -76,24 +79,6 @@ class openstack:
         self.credential = None
         self.cloud = None
         self.user_id = None
-    
-    def find_user_id(self):
-        """
-        this method returns the user id and stores it for later use.
-        """
-        # As i do not know how to do this properly, we just create a
-        # VM and than get the userid from there
-        
-        sample_flavor = self.cloud.flavors.find(name="m1.tiny")
-        sample_image = self.cloud.images.find(
-            id="6d2bca76-8fff-4d57-9f29-50378539b4fa")
-        sample_vm = self.cloud.servers.create(
-            "%s-id" % self.credential["OS_USERNAME"],
-            flavor=sample_flavor,
-            image=sample_image)
-        self.user_id = sample_vm.user_id
-        sample_vm.delete()
-        return self.user_id
 
     def connect(self):
         """
@@ -140,6 +125,33 @@ class openstack:
                                "--os-auth-url",    self.credential.url, 
                                "--os-tenant-name", self.credential.project)
         """
+
+    ######################################################################
+    # find userid 
+    ######################################################################
+
+    def find_user_id(self):
+        """
+        this method returns the user id and stores it for later use.
+        """
+        # As i do not know how to do this properly, we just create a
+        # VM and than get the userid from there
+        
+        sample_flavor = self.cloud.flavors.find(name="m1.tiny")
+        sample_image = self.cloud.images.find(
+            id="6d2bca76-8fff-4d57-9f29-50378539b4fa")
+        sample_vm = self.cloud.servers.create(
+            "%s-id" % self.credential["OS_USERNAME"],
+            flavor=sample_flavor,
+            image=sample_image)
+        self.user_id = sample_vm.user_id
+        sample_vm.delete()
+        return self.user_id
+
+
+    ######################################################################
+    # print
+    ######################################################################
         
     def __str__ (self):
         """
@@ -153,8 +165,16 @@ class openstack:
             'images' : self.images}
         return json.dumps(information, indent=4)
 
+    ######################################################################
+    # get methods
+    ######################################################################
+
     def type():
         return self.type
+
+    ######################################################################
+    # refresh
+    ######################################################################
 
     def refresh(self, type=None):
 
@@ -201,10 +221,17 @@ class openstack:
                 self.servers[information.id] = vm
                 self.servers[information.id]['cm_refresh'] = time_stamp
 
+    ######################################################################
+    # GREGOR GOT TILL HERE
+    ######################################################################
+
     #
-    #   GREGOR GOT TILL HERE
+    #   
     #
 
+    ######################################################################
+    # TODO
+    ######################################################################
 
     """
     create images
@@ -217,6 +244,10 @@ class openstack:
 
     look into sort of images, flavors, vms
     """
+
+    ######################################################################
+    # VM MANAGEMENT
+    ######################################################################
 
     def vm_show_all(self, prefix):
         """show all the instances with prefix-*"""
@@ -300,6 +331,9 @@ class openstack:
     def vm_del_all(self,id):
         None
 
+##########################################################################
+# MAIN FOR TESTING
+##########################################################################
 
 if __name__=="__main__":
 

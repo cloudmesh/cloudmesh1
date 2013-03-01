@@ -41,8 +41,8 @@ class eucalyptus:
 
         self.credentials.type('eucalyptus')
 
-        self.access_key = credentials._get_rc_variable ("accesskey")
-        self.secret_key = credentials._get_rc_variable ("secretkey")
+        self.access_key = self.credentials._get_rc_variable ("accesskey")
+        self.secret_key = self.credentials._get_rc_variable ("secretkey")
 
         print self.access_key
         print self.secret_key
@@ -66,7 +66,7 @@ class eucalyptus:
         self.credential = cred
     """
 
-    def __init__(self, label,project=None)
+    def __init__(self, label,project=None):
         """
         initializes the openstack cloud from a defould novaRC file
         locates at ~/.futuregrid.org/openstack. However if the
@@ -112,13 +112,18 @@ class eucalyptus:
 
 
         Driver = get_driver(Provider.EUCALYPTUS)
+        
+        path = os.environ['HOME'] + "/" + self.credentials.location.replace("/eucarc", "")
+
+        os.environ['CA_CERTS_PATH'] = path
+
         self.cloud = Driver(self.accesskey, 
                             self.secretkey,
                             secure=False, 
-                            host="149.165.146.50", # this is not quite right but will do for now 
+                            host="149.165.146.135", # this is not quite right but will do for now 
                             port=8773, # this is not quite right but will do for now 
-                            path="/services/Cloud") # this is not quite right but will do for now 
-      
+                            path="/services/Eucalyotus") # this is not quite right but will do for now 
+    
 
         
     def __str__ (self):
@@ -177,6 +182,8 @@ if __name__ == "__main__":
 
 
   cloud = eucalyptus("india-eucalyptus")
+
+
   """
   if flavor_test or table_test:
       cloud.refresh('flavors')
