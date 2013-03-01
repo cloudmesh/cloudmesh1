@@ -12,11 +12,19 @@ from openstack.cm_compute import openstack as os_client
 try:
     #from sh import fgmetric
     from fgmetric.FGMetricsAPI import FGMetricsAPI
+    # OR
+    #from sh import fgmetric
 except:
     print "---------------------"
     print "fgmetric not imported"
     print "---------------------"
     pass
+try:
+    from bson import json_util
+except:
+    print "--------------------------------"
+    print "Please run 'pip install pymongo'"
+    print "--------------------------------"
 
 class cloudmesh:
 
@@ -59,6 +67,23 @@ class cloudmesh:
     # some metric methods
     ######################################################################
 
+    def get_metrics_cli(self, args):
+        """ Get usage data from FG Metric CLI"""
+        """ This is replica with get_metrics but using CLI instead of API """
+        """
+            Args:
+                args (dict): parameters for CLI with option
+            Return:
+                (dict): output of fgmetric in a dict type
+            Raise:
+                n/a
+        """
+        try:
+            res = fgmetric(args) # args should be list-lized before send it out as a parameter
+            return json.loads(res, object_hook=json_util.object_hook)
+        except:
+            pass
+
     def get_metrics(self, args):
         """Get usage data from FG Metrics"""
 
@@ -67,7 +92,6 @@ class cloudmesh:
 
         try:
             args["user"] = args["user"] or self.user
-            #self.metrics = fgmetric('-u', ownerid)
             self._set_metric_api_vars(args)
             #print args
             stats = self.metric_api._set_dict_vars()
