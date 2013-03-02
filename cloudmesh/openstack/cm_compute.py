@@ -353,12 +353,28 @@ class openstack:
             vm = self.cloud.servers.update(id, new)
         return
 
+    def reindex(self, prefixold, prefix, index_format):
+        all = self.find('user_id')
+        counter = 1
+        for id  in all:
+            old = self.servers[id]['name']
+            new = prefix + index_format % counter
+            print "Rename %s -> %s, %s" % (old, new, self.servers[id]['key_name'])
+            if old != new:
+                vm = self.cloud.servers.update(id, new)
+            counter += 1
+
+
+
     def reindex(self, prefix, index_format):
         all = self.find('user_id')
         counter = 1
-        for id  in self.servers:
+        for id  in all:
+            old = self.servers[id]['name']
             new = prefix + index_format % counter
-            vm = self.cloud.servers.update(id, new)
+            print "Rename %s -> %s, %s" % (old, new, self.servers[id]['key_name'])
+            #if old != new:
+            #    vm = self.cloud.servers.update(id, new)
             counter += 1
         
 
@@ -471,10 +487,10 @@ if __name__=="__main__":
 
     print ids
 
-    #cloud.vms_delete(ids)
+    cloud.vms_delete(ids)
     
-    #print cloud.vms_delete_user(refresh=False)
+    print cloud.vms_delete_user()
 
-    cloud.rename("gvonlasz-0001","gregor")
+    #cloud.rename("gvonlasz-0001","gregor")
 
-    cloud.reindex("gregor", "%03d")
+    cloud.reindex("deleteme-", "%03d")
