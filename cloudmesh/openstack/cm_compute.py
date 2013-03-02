@@ -5,7 +5,7 @@
 #
 
 import sys
-sys.path.insert(0, '..') 
+sys.path.insert(0, '../..') 
 
 from datetime import datetime
 import pprint 
@@ -86,9 +86,6 @@ class openstack:
         e.g. initializes the needed components to conduct subsequent
         queries.
         """
-
-        print ">>>>>>", self.credential['OS_TENANT_NAME'],
-
         self.cloud = client.Client(
             self.credential['OS_USERNAME'], 
             self.credential['OS_PASSWORD'],
@@ -111,6 +108,7 @@ class openstack:
             config = cm_config()
             self.credential = config.get(label)
             print self.credential
+            self.user_id = self.credential['OS_USER_ID']
             #self.credential = credentials(label)
         else:
             self.credential = {}
@@ -136,17 +134,19 @@ class openstack:
         """
         # As i do not know how to do this properly, we just create a
         # VM and than get the userid from there
-        
-        sample_flavor = self.cloud.flavors.find(name="m1.tiny")
-        sample_image = self.cloud.images.find(
-            id="6d2bca76-8fff-4d57-9f29-50378539b4fa")
-        sample_vm = self.cloud.servers.create(
-            "%s-id" % self.credential["OS_USERNAME"],
-            flavor=sample_flavor,
-            image=sample_image)
-        self.user_id = sample_vm.user_id
-        sample_vm.delete()
+        if self.user_id == None:
+            sample_flavor = self.cloud.flavors.find(name="m1.tiny")
+            sample_image = self.cloud.images.find(
+                id="6d2bca76-8fff-4d57-9f29-50378539b4fa")
+            sample_vm = self.cloud.servers.create(
+                "%s-id" % self.credential["OS_USERNAME"],
+                flavor=sample_flavor,
+                image=sample_image)
+            self.user_id = sample_vm.user_id
+            sample_vm.delete()
         return self.user_id
+ 
+
 
 
     ######################################################################
@@ -190,9 +190,9 @@ class openstack:
             list = self.cloud.images.list(detailed=True)
             for information in list:
                 image = information.__dict__
-                del information.manager
-                del information._info
-                del information._loaded
+                del image.manager
+                del image._info
+                del image._loaded
                 #del information.links
                 self.images[information.id] = image
                 self.images[information.id]['cm_refresh'] = time_stamp
@@ -200,44 +200,174 @@ class openstack:
         if selection == 'f' or all:
             list = self.cloud.flavors.list()
             for information in list:
-                # clean not neaded info
-                del information.manager
-                del information._info
-                del information._loaded
-                #del information.links
                 flavor = information.__dict__
+                # clean not neaded info
+                del flavor.manager
+                del flavor._info
+                del flavor._loaded
+                #del information.links
                 self.flavors[information.name] = flavor
                 self.flavors[information.name]['cm_refresh'] = time_stamp
 
         if selection == 'v' or selection == None or all:
             list = self.cloud.servers.list(detailed=True)
-            
+
             for information in list:
                 vm = information.__dict__
-                del information.manager
-                del information._info
-                del information._loaded
+                pp.pprint(vm)
+                delay = vm['id']
+                del vm['manager']
+                del vm['_info']
+                del vm['_loaded']
                 #del information.links
+
                 self.servers[information.id] = vm
                 self.servers[information.id]['cm_refresh'] = time_stamp
 
+
     ######################################################################
-    # GREGOR GOT TILL HERE
+    # create a vm
     ######################################################################
 
-    #
-    #   
-    #
+    def vm_create(self,name,flavor_name,image_id):
+        """
+        create a vm
+        """
+        
+        vm_flavor = self.cloud.flavors.find(name=flavor_name)
+        vm_image = self.cloud.images.find(id=image_id)
+        vm = self.cloud.servers.create(name,
+                                       flavor=vm_flavor,
+                                       image=vm_image
+                                       )
+        delay =  vm.user_id #trick to hopefully get all fields
+        data = vm.__dict__
+        del data['manager']
+        #data['cm_name'] = name
+        #data['cm_flavor'] = flavor_name
+        #data['cm_image'] = image_id
+        return { str(data['id']) :  data }
+
+    ######################################################################
+    # delete vm(s)
+    ######################################################################
+
+    def vm_delete(self,id):
+        """
+        delete a single vm and returns the id
+        """
+
+        vm = self.cloud.servers.delete(id)
+        # return just the id or None if its deleted
+        return vm
+
+
+    def vms_delete(self,ids):
+        """
+        delete many vms by id. ids is an array
+        """
+        for id  in ids:
+            print "Deleting %s" % self.servers[id]['name']
+            vm = self.vm_delete(id)
+
+        return ids
+
+    ######################################################################
+    # list user images
+    ######################################################################
+
+    def vms_user(self, refresh=False):
+        """
+        find my vms
+        """
+        user_id = self.find_user_id()
+
+        time_stamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
+        if refresh:
+            self.refresh("images")
+
+        result = {}
+        for (key, vm)  in self.servers.items():
+            if vm['user_id'] == self.user_id:
+                result[key] = vm
+
+        return result 
+
+    ######################################################################
+    # list project vms
+    ######################################################################
+
+    def vms_project(self, refresh=False):
+        """
+        find my vms
+        """
+        user_id = self.find_user_id()
+
+        time_stamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
+        if refresh:
+            self.refresh("images")
+
+        result = {}
+        for (key, vm)  in self.servers.items():
+            result[key] = vm
+
+        return result 
+
+    ######################################################################
+    # delete images from a user
+    ######################################################################
+
+    def vms_delete_user(self):
+        """
+        find my vms and delete them
+        """
+
+        ids = cloud.find('user_id')
+        cloud.vms_delete(ids)
+
+        return
+
+    ######################################################################
+    # find
+    ######################################################################
+
+    def find(self, key, value=None):
+        ids = []
+        if key == 'user_id' and value == None:
+            value = self.user_id
+        for (id, vm)  in self.servers.items():
+            if vm[str(key)] == value:
+                ids.append(str(vm['id']))
+
+        return ids
+
+    ######################################################################
+    # rename
+    ######################################################################
+
+    def rename(self, old, new, id=None):
+        all = self.find('name', old)
+        print all
+        if len(all) > 0:
+            id = all[0]
+            vm = self.cloud.servers.update(id, new)
+        return
+
+    def reindex(self, prefix, index_format):
+        all = self.find('user_id')
+        counter = 1
+        for id  in self.servers:
+            new = prefix + index_format % counter
+            vm = self.cloud.servers.update(id, new)
+            counter += 1
+        
 
     ######################################################################
     # TODO
     ######################################################################
 
     """
-    create images
-    delete images
-    select images baesed on user
-    delete all images that belong to me
+    refresh just a specific VM
     delete all images that follow a regualr expression in name
     reindex images
     rename images
@@ -249,87 +379,6 @@ class openstack:
     # VM MANAGEMENT
     ######################################################################
 
-    def vm_show_all(self, prefix):
-        """show all the instances with prefix-*"""
-
-        try:
-            # instances = fgrep(self._nova('list'), prefix)
-            # find only te once i do
-            # ERROR
-            servers = self.nova.servers.list(detailed=True)
-            for server in servers:
-                attributes = server.__dict__
-                id = attributes.name
-                id = attributes.id
-                print 'Found %s to show' % name
-                print _vm_show(id)
-        except:
-            print 'Found 0 instances to show'
-
-
-    def _vm_show(self, name):
-        print "vm show"
-        try:
-            server = {}
-            now = str(datetime.now())
-            out = self._nova("show", name).split("\n")
-
-            out = out[3:-2]
-            
-            for line in out:
-                (a, attribute, value, b)  = line.split("|")
-                attribute = attribute.strip()
-                value = value.strip()
-                server[attribute] = str(value)
-
-            server['cm_refresh'] = now.strip()
-
-            try:
-                id = server['id']
-                for attribute in server:
-                    id = server['id']
-                    self.servers[id][attribute] = server[attribute]
-            except:
-                id = server['id']
-                self.servers[id] = server
-        except Exception, e:
-            print e
-
-        return server
-
-    def vm_list(self):
-        print "List Vms"
-        try:
-            servers = {}
-            now = str(datetime.now())
-            instances = fgrep(nova("list"), self.user)
-            for line in instances:
-                (a, id, name, status, ip, b) = line.split("|")
-                id = id.strip()
-                servers[id] = {
-                    'id': id,
-                    'cloud' : cloudname.strip(),
-                    'name': name.strip(), 
-                    'status' : status.strip(),
-                    'ip' : ip.strip(),
-                    'refresh' : now.strip()
-                    }
-
-        except Exception, e:
-            print e
-
-        return servers
-
-    def vm_del(self, id):
-        r = False
-        try:
-            r = nova("delete", id)
-        except Exception, e:
-            print e
-        return r
-
-    def vm_del_all(self,id):
-        None
 
 ##########################################################################
 # MAIN FOR TESTING
@@ -341,7 +390,7 @@ if __name__=="__main__":
     flavor_test = False
     table_test = False
     image_test = False
-    vm_test = False
+    vm_test = True
     cloud_test = False
 
     if credential_test:
@@ -381,5 +430,51 @@ if __name__=="__main__":
         cloud.refresh()
         print cloud
 
+    """
+    print cloud.find_user_id()
+    
+    name ="%s-%04d" % (cloud.credential["OS_USERNAME"], 1)
+    out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
+
+    pp.pprint(out)
+    print json.dumps(out, indent=4)
+    
+    key = out.keys()[0]
+    id = out[key]["id"]
+
+    print ">>>", id
+
+    vm = cloud.vm_delete(id)
+    print vm
+
+
+    list = cloud.vms_user()
+    print json.dumps(list, indent=4)
 
     print cloud.find_user_id()
+
+    list = cloud.vms_delete_user()
+    print list
+    """
+    """
+    for i in range (1,3):
+        name ="%s-%04d" % (cloud.credential["OS_USERNAME"], i)
+        out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
+        pp.pprint(out)
+    """
+
+    """
+    print cloud.find('name', name)
+    """
+
+    ids = cloud.find('user_id')
+
+    print ids
+
+    #cloud.vms_delete(ids)
+    
+    #print cloud.vms_delete_user(refresh=False)
+
+    cloud.rename("gvonlasz-0001","gregor")
+
+    cloud.reindex("gregor", "%03d")
