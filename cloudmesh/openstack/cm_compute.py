@@ -25,14 +25,15 @@ from novaclient.v1_1 import client
 
 class openstack:
 
-    type = "openstack"
-    flavors = {}
-    images = {}
-    servers = {}
-    credential = None
-    cloud = None
-    label = None
-    user_id = None
+    type = "openstack"   # global var
+    flavors = {}         # global var
+    images = {}          # global var
+    servers = {}         # global var
+    credential = None    # global var
+    label = None         # global var
+
+    cloud = None         # internal var
+    user_id = None       # internal var
     
     _nova = nova
 
@@ -129,27 +130,22 @@ class openstack:
     ######################################################################
 
     def intro(self,what):
-        
+        """ usde to find some methods form novaclient"""
         import inspect
 
         print 70 * "="
-        print str(what)
-        print 70 * "="
-        pp.pprint(inspect.getmembers(what, predicate=inspect.ismethod))
+        print "class ", what.__class__.__name__, ":"
+        list = inspect.getmembers(what, predicate=inspect.ismethod)
+        for element in list:
+            print "    ", element[0]
         try:
             pp.pprint(what.__dict__)
         except:
             return
 
-    def find_user_id(self):
-        """
-        this method returns the user id and stores it for later use.
-        """
-        # As i do not know how to do this properly, we just create a
-        # VM and than get the userid from there
+    def novaclient_dump(self):
 
-
-
+        # playing around to discover methods
         self.intro(self.cloud)
         self.intro(self.cloud.services)
         self.intro(self.cloud.servers)
@@ -194,9 +190,15 @@ class openstack:
 
         now = datetime.now()
 
-        #print self.cloud.usage.list(now, now)
-        print self.cloud.usage.get(self.user_id, now, now)
-        sys.exit()
+
+    def find_user_id(self):
+        """
+        this method returns the user id and stores it for later use.
+        """
+        # As i do not know how to do this properly, we just create a
+        # VM and than get the userid from there
+
+
 
         self.cloud.ensure_service_catalog_present(self.cloud)
         catalog = self.cloud.client.service_catalog.catalog
@@ -560,13 +562,16 @@ if __name__=="__main__":
 
     cloud = openstack("india-openstack")
 
+    cloud.novaclient_dump()
+
+    sys.exit()
     #print json.dumps(cloud.usage("2000-01-01", "2013-12-31"), indent=4)
     #print json.dumps(cloud.usage("2000-01-01", "2013-12-31",format=None), indent=4)
 
-    print json.dumps(cloud.limits(format='dict'), indent=4)
-    print json.dumps(cloud.limits(format='array'), indent=4)
+    #print json.dumps(cloud.limits(format='dict'), indent=4)
+    #print json.dumps(cloud.limits(format='array'), indent=4)
 
-    sys.exit()
+
     if flavor_test or table_test:
         cloud.refresh('flavors')
         print json.dumps(cloud.flavors, indent=4)
@@ -597,9 +602,10 @@ if __name__=="__main__":
         print cloud
 
 
+
     print cloud.find_user_id()
 
-    sys.exit()
+
     """    
     name ="%s-%04d" % (cloud.credential["OS_USERNAME"], 1)
     out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
