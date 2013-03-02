@@ -128,12 +128,84 @@ class openstack:
     # find userid 
     ######################################################################
 
+    def intro(self,what):
+        
+        import inspect
+
+        print 70 * "="
+        print str(what)
+        print 70 * "="
+        pp.pprint(inspect.getmembers(what, predicate=inspect.ismethod))
+        try:
+            pp.pprint(what.__dict__)
+        except:
+            return
+
     def find_user_id(self):
         """
         this method returns the user id and stores it for later use.
         """
         # As i do not know how to do this properly, we just create a
         # VM and than get the userid from there
+
+
+
+        self.intro(self.cloud)
+        self.intro(self.cloud.services)
+        self.intro(self.cloud.servers)
+        self.intro(self.cloud.client)
+
+
+        self.intro(self.cloud.agents)
+        self.intro(self.cloud.aggregates)
+        self.intro(self.cloud.availability_zones)
+        self.intro(self.cloud.certs)
+        self.intro(self.cloud.client)
+        self.intro(self.cloud.cloudpipe)
+        self.intro(self.cloud.coverage)
+        self.intro(self.cloud.dns_domains)
+        self.intro(self.cloud.dns_entries)
+        self.intro(self.cloud.fixed_ips)
+        self.intro(self.cloud.flavor_access)
+        self.intro(self.cloud.flavors)
+        self.intro(self.cloud.floating_ip_pools)
+        self.intro(self.cloud.floating_ips)
+        self.intro(self.cloud.floating_ips_bulk)
+        self.intro(self.cloud.fping)
+        self.intro(self.cloud.hosts)
+        self.intro(self.cloud.hypervisors)
+        self.intro(self.cloud.images)
+        self.intro(self.cloud.keypairs)
+        self.intro(self.cloud.limits)
+        self.intro(self.cloud.networks)
+        self.intro(self.cloud.os_cache)
+        self.intro(self.cloud.project_id)
+        self.intro(self.cloud.quota_classes)
+        self.intro(self.cloud.quotas)
+        self.intro(self.cloud.security_group_rules)
+        self.intro(self.cloud.security_groups)
+        self.intro(self.cloud.servers)
+        self.intro(self.cloud.services)
+        self.intro(self.cloud.usage)
+        self.intro(self.cloud.virtual_interfaces)
+        self.intro(self.cloud.volume_snapshots)
+        self.intro(self.cloud.volume_types)
+        self.intro(self.cloud.volumes)
+
+        now = datetime.now()
+
+        #print self.cloud.usage.list(now, now)
+        print self.cloud.usage.get(self.user_id, now, now)
+        sys.exit()
+
+        self.cloud.ensure_service_catalog_present(self.cloud)
+        catalog = self.cloud.client.service_catalog.catalog
+        pp.pprint(catalog['access']['user'], "User Credentials")
+        pp.pprint(catalog['access']['token'], "Token")        
+
+        print(result)
+
+        sys.exit()
         if self.user_id == None:
             sample_flavor = self.cloud.flavors.find(name="m1.tiny")
             sample_image = self.cloud.images.find(
@@ -145,9 +217,6 @@ class openstack:
             self.user_id = sample_vm.user_id
             sample_vm.delete()
         return self.user_id
- 
-
-
 
     ######################################################################
     # print
@@ -385,16 +454,91 @@ class openstack:
     """
     refresh just a specific VM
     delete all images that follow a regualr expression in name
-    reindex images
-    rename images
-
     look into sort of images, flavors, vms
     """
 
     ######################################################################
-    # VM MANAGEMENT
+    # EXTRA
     ######################################################################
 
+    def table_col_to_dict(self,body):
+        result = {}
+        for element in body:
+            key = element[0]
+            value = element [1]
+            result[key] = value
+        return result
+
+    def table_matrix(self,text, format=None):
+        lines = text.splitlines()
+        headline = lines[0].split("|")
+        headline = headline[1:-1]
+        for i in range(0,len(headline)):
+            headline[i] = str(headline[i]).strip()
+
+        lines = lines [1:]
+        
+        body = []
+
+        for l in lines:
+            line = l.split("|")
+            line = line[1:-1]
+            entry = {}
+            for i in range(0,len(line)):
+                line[i] = str(line[i]).strip()
+                if format == "dict":
+                    key = headline[i]
+                    entry[key] = line[i]
+            if format == "dict":
+                body.append(entry)
+            else:
+                body.append(line)
+        if format == 'dict':
+            return body
+        else:
+            return (headline, body)
+
+
+    ######################################################################
+    # CLI call of ussage 
+    ######################################################################
+    def usage(self, start, end, format='dict'):
+        """ returns the usage information of the tennant"""
+
+        result = fgrep(nova("usage", "--start", start, "--end", end), "|")
+        (headline, matrix) = self.table_matrix(result)
+        headline.append("Start")
+        headline.append("End")
+        matrix[0].append(start)
+        matrix[0].append(end)
+        
+        if format == 'dict':
+            result = {}
+            for i in range(0,len(headline)):
+                result[headline[i]] = matrix[0][i]
+            return result
+        else:
+            return (headline, matrix[0])
+        
+    ######################################################################
+    # CLI call of absolute-limits 
+    ######################################################################
+    def limits(self, format='dict'):
+        """ returns the usage information of the tennant"""
+
+        result = fgrep(nova("absolute-limits"),"|")
+        (headline, matrix) = self.table_matrix(result, format=None)
+        if format == 'dict':
+            result = self.table_col_to_dict(matrix)
+            return result
+        else:
+            head = []
+            body = []
+            for element in matrix:
+                head.append(element[0])
+                body.append(element[1])
+            return (head, body)
+        
 
 ##########################################################################
 # MAIN FOR TESTING
@@ -406,17 +550,23 @@ if __name__=="__main__":
     flavor_test = False
     table_test = False
     image_test = False
-    vm_test = True
+    vm_test = False
     cloud_test = False
 
     if credential_test:
         credential = cm_config('india-openstack')
-        print credential
+        #print credential
 
 
     cloud = openstack("india-openstack")
 
+    #print json.dumps(cloud.usage("2000-01-01", "2013-12-31"), indent=4)
+    #print json.dumps(cloud.usage("2000-01-01", "2013-12-31",format=None), indent=4)
 
+    print json.dumps(cloud.limits(format='dict'), indent=4)
+    print json.dumps(cloud.limits(format='array'), indent=4)
+
+    sys.exit()
     if flavor_test or table_test:
         cloud.refresh('flavors')
         print json.dumps(cloud.flavors, indent=4)
@@ -446,9 +596,11 @@ if __name__=="__main__":
         cloud.refresh()
         print cloud
 
-    """
+
     print cloud.find_user_id()
-    
+
+    sys.exit()
+    """    
     name ="%s-%04d" % (cloud.credential["OS_USERNAME"], 1)
     out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
 
