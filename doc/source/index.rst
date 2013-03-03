@@ -10,7 +10,7 @@ Contents:
    instalation
    intro
    cm
-
+   doc
 
 Indices and tables
 ==================
