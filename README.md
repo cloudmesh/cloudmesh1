@@ -1,3 +1,7 @@
+Docmentation will in future be here, but there is not much there yet.
+
+* http://futuregrid.github.com/flask_cm/
+
 Package requirements
 --------------------
 * fabric
