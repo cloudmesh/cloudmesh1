@@ -1,12 +1,13 @@
-Documentation for  cloudmesh
-============================
+cloudmesh
+=========
 
 Contents:
-   intro
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
+   instalation
+   intro
 
 
 Indices and tables
