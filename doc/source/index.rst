@@ -6,8 +6,10 @@ Contents:
 .. toctree::
    :maxdepth: 3
 
+   contact
    instalation
    intro
+   cm
 
 
 Indices and tables
