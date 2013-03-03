@@ -94,7 +94,7 @@
       {%- if hasdoc('copyright') %}
         {% trans path=pathto('copyright'), copyright=copyright|e %}&copy; <a href="{{ path }}"> Created as part of FutureGird</a> {{ copyright }}.{% endtrans %}<br/>
       {%- else %}
-        {% trans copyright=copyright|e %}&copy; Copyright {{ copyright }}{% endtrans %}<br/>
+        {% trans copyright=copyright|e %}&copy; Created as part of FutureGrid {{ copyright }}{% endtrans %}<br/>
       {%- endif %}
     {%- endif %}
     {%- if last_updated %}
