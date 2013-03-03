@@ -60,6 +60,7 @@ def clean():
     local("find . -name \"*~\" -exec rm {} \\;")
     local("find . -name \"*.pyc\" -exec rm {} \\;")  
     local("rm -rf build dist *.egg-info") 
+    local("rm -rf doc/build ") 
 
 def git():
     """upload the changes to git"""
