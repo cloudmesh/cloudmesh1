@@ -4,6 +4,7 @@
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
 #
 
+import iso8601
 import sys
 sys.path.insert(0, '../..') 
 
@@ -142,6 +143,7 @@ class openstack:
             pp.pprint(what.__dict__)
         except:
             return
+
 
     def novaclient_dump(self):
 
@@ -504,8 +506,32 @@ class openstack:
     ######################################################################
     # CLI call of ussage 
     ######################################################################
+
+    def parse_isotime(self, timestr):
+        """Parse time from ISO 8601 format"""
+        try:
+            return iso8601.parse_date(timestr)
+        except iso8601.ParseError as e:
+            raise ValueError(e.message)
+        except TypeError as e:
+            raise ValueError(e.message)
+
     def usage(self, start, end, format='dict'):
         """ returns the usage information of the tennant"""
+
+        #print 70 * "-"
+        #print self.cloud.certs.__dict__.get()
+        #print 70 * "-"
+
+        tenantid = "member" # not sure how to get that
+        iso_start = self.parse_isotime(start)
+        iso_end =   self.parse_isotime(end)
+        print ">>>>>", iso_start, iso_end
+        info = self.cloud.usage.get(tenantid, iso_start, iso_end)
+               
+        
+        #print info.__dict__
+        sys.exit()
 
         result = fgrep(nova("usage", "--start", start, "--end", end), "|")
         (headline, matrix) = self.table_matrix(result)
@@ -525,22 +551,23 @@ class openstack:
     ######################################################################
     # CLI call of absolute-limits 
     ######################################################################
-    def limits(self, format='dict'):
+    def limits(self):
         """ returns the usage information of the tennant"""
 
-        result = fgrep(nova("absolute-limits"),"|")
-        (headline, matrix) = self.table_matrix(result, format=None)
-        if format == 'dict':
-            result = self.table_col_to_dict(matrix)
-            return result
-        else:
-            head = []
-            body = []
-            for element in matrix:
-                head.append(element[0])
-                body.append(element[1])
-            return (head, body)
+        list = []
+
+        info = self.cloud.limits.get()
+        del info.manager
+        rates = info.__dict__['_info']['rate']
         
+        for rate in rates:
+            limit_set = rate['limit']
+            print limit_set
+            for limit in limit_set:
+                list.append(limit) 
+
+        return list
+
 
 ##########################################################################
 # MAIN FOR TESTING
@@ -563,6 +590,12 @@ if __name__=="__main__":
     cloud = openstack("india-openstack")
 
     cloud.novaclient_dump()
+
+    print json.dumps(cloud.usage("2000-01-01T00:00:00", "2013-12-31T00:00:00"), indent=4)
+
+    #print json.dumps(cloud.limits(), indent=4)
+
+
 
     sys.exit()
     #print json.dumps(cloud.usage("2000-01-01", "2013-12-31"), indent=4)
