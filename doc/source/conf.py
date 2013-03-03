@@ -99,7 +99,7 @@ html_translator_class = 'bootstrap.HTMLTranslator'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-  'page_toc_position': 'sidebar-left',
+  'page_toc_position': 'sidebar-right',
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
