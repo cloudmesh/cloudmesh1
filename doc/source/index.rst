@@ -4,14 +4,18 @@ cloudmesh
 Contents:
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: -1
+   :numbered:
 
    contact
    instalation
    intro
+   cmcli
    cm
    doc
 
+
+   
 Indices and tables
 ==================
 

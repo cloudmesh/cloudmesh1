@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from fabric.api import *
+from random import randint
 import ConfigParser
 import pickle
 import os 
@@ -17,12 +18,12 @@ import pprint
 
 
 from multiprocessing import Pool as _Pool
+from cloudmesh.cm_config import cm_config
+global maxparallel;
 
-global vmName, vmImage, vmPassword,maxparallel;
 
 maxparallel = 5
-CONFIGPATH='config.cfg'
-DBFILEPATH='database.db'
+
 
 ######################################################################
 # Baked sh azure functions to make azure client easier to use
@@ -48,58 +49,58 @@ class cm_azure:
     cloud = None
     label = ""
     flavors = {}
-
+    credentials = {}
+    type = "azure"   # global var
+    
     filename = "%(home)s/%(location)s" % {
         "home" : os.environ['HOME'], 
-        "location" : ".futuregrid/cloudmesh.cfg"
+        "location" : ".futuregrid/cloudmesh.yaml"
         }
 
-    ######################################################################
-    # hack to hard code credentials DELETE
-    ######################################################################
-    """
-    credentials = {
-        'settings' : {'image' : 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-12_04_1-LTS-amd64-server-20121218-en-us-30GB'}
-        }
-    """
+    
 
     ######################################################################
     # initialize
     ######################################################################
 
-    def __init__(self):
-        self.servers = {}
+    def __init__(self,
+                 username=None,
+                 password=None,
+                 publish_settings_file_path=None,
+                 default_image_name=None):
+        """
+        initializes the openstack cloud from a defould novaRC file
+        locates at ~/.futuregrid.org/openstack. However if the
+        parameters are provided it will instead use them
+        """
+
+        self.clear()
+        self.config (username,
+                password,
+                publish_settings_file_path,
+                default_image_name)
+        
+
+    def config (self,username=None,
+                password=None,
+                publish_settings_file_path=None,
+                default_image_name=None):
+
+        if username == None:
+            config = cm_config()
+            configuration = config.get('azure')
+            self.credentials['username'] = configuration['username']
+            self.credentials['password'] = configuration['password']
+            self.credentials['settings']= {'publishsettings_file_path' : configuration['publishsettings_file_path'],
+                                            'defaultimage' : configuration['defaultimage']}
+        else :
+            self.credentials['username'] = username
+            self.credentials['password'] = password
+            self.credentials['settings']= {'publishsettings_file_path' : publish_settings_file_path,
+                                            'defaultimage' : default_image_name}
         return
 
-    def config(self, filename=None):
-
-        if filename == None:
-            filename = self.filename 
-
-        config = ConfigParser.ConfigParser()
-        config.read(filename)
-        self.credentials['username'] = config.get('azure','username');
-        self.credentials['password'] = config.get('azure','password');
-        self.credentials['settings'] = config.get('azure',
-                                                  'publishsettings_file_path');
-        return
-
-    ######################################################################
-    # unnecessary as handleded in cm_config
-    ######################################################################
-    def config_write():
-
-        cfgFile = open(CONFIGPATH,'w')
-
-        config.set('azure', 'password', value)
-        config.set('azure', 'username', value)
-
-        #config.set('azure','username') = self.credentials['username']
-        #config.set('azure','password') = self.credentials['password']
-        #config.set('azure','publishsettings_file_path') = self.credentials['settings'] 
-
-        config.write(cfgFile)
-        cfgFile.close()
+    
 
     ######################################################################
     # get methods
@@ -125,6 +126,8 @@ class cm_azure:
             'images' : self.images}
         return json.dumps(information, indent=4)
 
+    def type():
+        return self.type
 
     ######################################################################
     # refresh 
@@ -143,6 +146,7 @@ class cm_azure:
         if all:
             self.refresh('images')
             self.refresh('vms')
+            self.refresh('flavors')
             return
 
         key = ""
@@ -155,27 +159,39 @@ class cm_azure:
             key = 'VMName'
             list_function = vm_list
             store = self.servers
+        
+        if selection != 'f' :
+            list = json.loads(str(list_function()))
+            for object in list:
+                id = object[key]
+                store[id] = object
+                store[id]['cm_refresh'] = time_stamp
+
+
+       
+        if selection == 'f' :
+            self.flavors['ExtraSmall'] = {'CPU_Cores': 'Shared', 'Memory':'768 MB',
+                                        'Disk_Space_for_Web_&_Worker_Roles':'19,480 MB',
+                                        'Disk Spacein a VM Role':'20 GB','Bandwidth' :'5 Mbps',
+                                        'cm_refresh': time_stamp}
             
-        list = json.loads(str(list_function()))
-        for object in list:
-            id = object[key]
-            store[id] = object
-            store[id]['cm_refresh'] = time_stamp
-
-
-        """
-        if selection == 'f' or all:
-            list = self.cloud.flavors.list()
-            for information in list:
-                # clean not neaded info
-                del information.manager
-                del information._info
-                del information._loaded
-                #del information.links
-                flavor = information.__dict__
-                self.flavors[information.name] = flavor
-                self.flavors[information.name]['cm_refresh'] = time_stamp
-        """
+            self.flavors['Small'] = {'CPU_Cores': '1', 'Memory':'1.75 GB',
+                                        'Disk_Space_for_Web_&_Worker_Roles':'229,400 MB',
+                                        'Disk Spacein a VM Role':'165 GB','Bandwidth' :'100 Mbps',
+                                        'cm_refresh': time_stamp}
+            self.flavors['Medium'] = {'CPU_Cores': '2', 'Memory':'3.5 GB',
+                                        'Disk_Space_for_Web_&_Worker_Roles':'500,760 MB',
+                                        'Disk Spacein a VM Role':'340 GB','Bandwidth' :'200 Mbps',
+                                        'cm_refresh': time_stamp}
+            self.flavors['Large'] = {'CPU_Cores': '4', 'Memory':'7 GB',
+                                        'Disk_Space_for_Web_&_Worker_Roles':'1,023,000 MB',
+                                        'Disk Spacein a VM Role':'850 GB','Bandwidth' :'400 Mbps',
+                                        'cm_refresh': time_stamp}
+            self.flavors['ExtraLarge'] = {'CPU_Cores': '8', 'Memory':'14 GB',
+                                        'Disk_Space_for_Web_&_Worker_Roles':'2,087,960 MB',
+                                        'Disk Spacein a VM Role':'1890 GB','Bandwidth' :'800 Mbps',
+                                        'cm_refresh': time_stamp}
+        
 
 
     ######################################################################
@@ -211,37 +227,54 @@ class cm_azure:
             # add result to internal cache
             print result
 
-    def delete(self,name):
-            result = vm_delete()
+    def vm_delete(self,name):
+            result = vm_delete(name)
             # add result to internal cache
-            print result
+            return result
 
+    def vms_delete(self,names):
+           
+        for name  in names:
+            print "Deleting %s" % name
+            result = vm_delete(name)
+            # add result to internal cache
+        return names
 
+    def vms_find(self):
+        ids = []
+        for (id, vm)  in self.servers.items():
+                ids.append(id)
 
-    def _boot(self, index):
+        return ids
+    
+    def vm_create(self,name=None,image_name=None, flavor_name=None):
         #cmd = 'azure vm create %(vmname)s %(image)s %(username)s --ssh --location "East US" %(password)s' % vm
         #print cmd
-        result = vm_create("%s" % self._vm_name(index),
-                           "%(image)s" % self.credentials['settings'],
-                           "%(username)s"% self.credentials,
-                           "--ssh",
-                           "--location",
-                           "East US",
-                           "%(password)s" % self.credentials)
-                        
-        print result
+        
+        
+        if flavor_name== None :
+            result = vm_create("%s" % self._vm_name(randint(0,1000)) if name == None else name,
+                               "%(defaultimage)s" % self.credentials['settings'] if image_name == None else image_name,
+                               "%(username)s"% self.credentials,
+                               "--ssh",
+                               "--location",
+                               "East US",
+                               "%(password)s" % self.credentials,
+                               )
+        else :
+            result = vm_create("%s" % self._vm_name(randint(0,1000)) if name == None else name,
+                               "%(defaultimage)s" % self.credentials['settings'] if image_name == None else image_name,
+                               "%(username)s"% self.credentials,
+                               "--ssh",
+                               "--location",
+                               "East US",
+                               "%(password)s" % self.credentials,
+                               "-z",
+                               flavor_name
+                               )
+                            
         return result
     
-    
-    def create(self, index, name, image=None) :
-
-        
-        """Creates a number of vms with the labels prefix-0 to prefix-<number-1>. It uses a threadpool"""
-        pool = _Pool(processes=maxparallel)
-        list = range(0, int(index))
-        result = pool.map(self._boot,list)
-        print result
-
 
     def _vm_name(self,index):
         number = str(index).zfill(3)
@@ -258,7 +291,7 @@ class cm_azure:
         print result
 
         errmsg = 'No account information found' 
-        cmd = 'azure account import \'%(settings)\'' % credentials;
+        cmd = 'azure account import \'%(publishsettings_file_path)s\'' % self.credentials['settings'];
 
         text =  commands.getstatusoutput(cmd)
         if not errmsg in text[1] :
@@ -303,39 +336,30 @@ class cm_azure:
         return
     
 
+    def clear(self):
+        """
+        clears the data of this azure instance, a new connection
+        including reading the credentials and a refresh needs to be
+        called to obtain again data.
+        """
+        self.type = "azure"
+        self.flavors = {}
+        self.images = {}
+        self.servers = {}
+        self.credential = {}
+        self.cloud = None
 
 
-    def servers_save(self):
-        # this is still wrong but beats the complex parsing function
-        vms = vm_list()
-        azure={};
-        
-        for key in vms :
-            azure[key]=vm_show(vmName)
-        self.servers = azure
-        return azure
-
-    def save(self):
-        
-        azure = {}
-        azure['name']='azure';
-        azure['servers'] = self.servers_save();
-        azure['images'] = self._buildAzureImageDict();
-        pickle.dump( azure, open( DBFILEPATH, "wb" ) )
-        azure = pickle.load( open( DBFILEPATH, "rb" ) )
-        
-        print azure
-        #json.dumps(azure, indent=4)
-    
-   
 if  __name__ =='__main__':
     
     cloud = cm_azure()
     cloud.refresh("all")
+    print cloud.vms_find();
     #cloud.refresh("vms")
     #cloud.refresh("images")
-    
-    print cloud
+    #print cloud.vm_create('ppnewaskar-228','b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-12_04_1-LTS-amd64-server-20121218-en-us-30GB',
+    #'large')
+    #print cloud
         
         
         

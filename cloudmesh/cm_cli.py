@@ -1,5 +1,7 @@
 #! /usr/bin/env python
-"""Command to generate rc files from our cloudmesh configuration files.
+"""cm config
+------------
+Command to generate rc files from our cloudmesh configuration files.
 
 Usage:
   cm config [-f FILE] [-o OUT] NAME [-]
@@ -30,10 +32,14 @@ Arguments:
 
 Options:
   -h --help            show this help message and exit
+
   -v --version         show version and exit
+
   -f NAME --file=NAME  the Name of the cloud to be specified, if ? a selection is presented
+
   -o OUT --out=OUT     writes the result in the specifide file
-  -                    if data is written to a file it is also put out to stdout
+
+  -                    this option is a - at the end of the command. If data is written to a file it is also put out to stdout
     
 """
 from docopt import docopt

@@ -100,6 +100,8 @@ html_translator_class = 'bootstrap.HTMLTranslator'
 # documentation.
 html_theme_options = {
   'page_toc_position': 'sidebar-right',
+  # 'globaltoc_depth': -1,
+  #'navbar_fixed_top': "true",
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
