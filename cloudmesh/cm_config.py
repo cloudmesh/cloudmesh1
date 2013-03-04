@@ -101,4 +101,9 @@ if __name__ == "__main__":
 
   print configuration['username']
   
+  print "================="
 
+  configuration = config.get('india-eucalyptus')
+  print configuration
+
+  print configuration['host']
