@@ -170,27 +170,47 @@ class cm_azure:
 
        
         if selection == 'f' :
-            self.flavors['ExtraSmall'] = {'CPU_Cores': 'Shared', 'Memory':'768 MB',
-                                        'Disk_Space_for_Web_&_Worker_Roles':'19,480 MB',
-                                        'Disk Spacein a VM Role':'20 GB','Bandwidth' :'5 Mbps',
-                                        'cm_refresh': time_stamp}
-            
-            self.flavors['Small'] = {'CPU_Cores': '1', 'Memory':'1.75 GB',
-                                        'Disk_Space_for_Web_&_Worker_Roles':'229,400 MB',
-                                        'Disk Spacein a VM Role':'165 GB','Bandwidth' :'100 Mbps',
-                                        'cm_refresh': time_stamp}
-            self.flavors['Medium'] = {'CPU_Cores': '2', 'Memory':'3.5 GB',
-                                        'Disk_Space_for_Web_&_Worker_Roles':'500,760 MB',
-                                        'Disk Spacein a VM Role':'340 GB','Bandwidth' :'200 Mbps',
-                                        'cm_refresh': time_stamp}
-            self.flavors['Large'] = {'CPU_Cores': '4', 'Memory':'7 GB',
-                                        'Disk_Space_for_Web_&_Worker_Roles':'1,023,000 MB',
-                                        'Disk Spacein a VM Role':'850 GB','Bandwidth' :'400 Mbps',
-                                        'cm_refresh': time_stamp}
-            self.flavors['ExtraLarge'] = {'CPU_Cores': '8', 'Memory':'14 GB',
-                                        'Disk_Space_for_Web_&_Worker_Roles':'2,087,960 MB',
-                                        'Disk Spacein a VM Role':'1890 GB','Bandwidth' :'800 Mbps',
-                                        'cm_refresh': time_stamp}
+            # TODO: move to YAML fileas "flavors : { ...} under azure, copy from there and deal only with timestamp here
+            # once in local dict at config time , no reason to reread this portion of yaml file
+            self.flavors = {
+                'ExtraSmall' : {
+                    'CPU_Cores': 'Shared',
+                    'Memory':'768 MB',
+                    'Disk_Space_for_Web_&_Worker_Roles':'19,480 MB',
+                    'Disk Spacein a VM Role':'20 GB',
+                    'Bandwidth' :'5 Mbps',
+                    'cm_refresh': time_stamp
+                },
+                'Small' : {
+                    'CPU_Cores': '1',
+                    'Memory':'1.75 GB',
+                    'Disk_Space_for_Web_&_Worker_Roles':'229,400 MB',
+                    'Disk Spacein a VM Role':'165 GB',
+                    'Bandwidth' :'100 Mbps',
+                    'cm_refresh': time_stamp
+                },
+                'Medium' : {
+                    'CPU_Cores': '2',
+                    'Memory':'3.5 GB',
+                    'Disk_Space_for_Web_&_Worker_Roles':'500,760 MB',
+                    'Disk Spacein a VM Role':'340 GB','Bandwidth' :'200 Mbps',
+                    'cm_refresh': time_stamp
+                },
+                'Large' : {
+                    'CPU_Cores': '4',
+                    'Memory':'7 GB',
+                    'Disk_Space_for_Web_&_Worker_Roles':'1,023,000 MB',
+                    'Disk Spacein a VM Role':'850 GB',
+                    'Bandwidth' :'400 Mbps',
+                    'cm_refresh': time_stamp
+                },
+                'ExtraLarge' : {
+                    'CPU_Cores': '8', 'Memory':'14 GB',
+                    'Disk_Space_for_Web_&_Worker_Roles':'2,087,960 MB',
+                    'Disk Spacein a VM Role':'1890 GB','Bandwidth' :'800 Mbps',
+                    'cm_refresh': time_stamp
+                }
+            }
         
 
 
@@ -250,7 +270,10 @@ class cm_azure:
     def vm_create(self,name=None,image_name=None, flavor_name=None):
         #cmd = 'azure vm create %(vmname)s %(image)s %(username)s --ssh --location "East US" %(password)s' % vm
         #print cmd
-        
+
+        #
+        # there may also be parameter to start up multiple vms find out and integrate with np=None, if None than np=1
+        #
         
         if flavor_name== None :
             result = vm_create("%s" % self._vm_name(randint(0,1000)) if name == None else name,
@@ -304,6 +327,7 @@ class cm_azure:
     ######################################################################
 
     def _selectImage() :
+        # I AHVE NO IDEA WHAT THIS IS DUE TO NON INFORMATIVE VARIABLE NAMEING
         images = _buildAzureImageDict()
         print 'Please select Image'    ;
 
