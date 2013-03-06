@@ -16,6 +16,15 @@ documentation in your local directory, do::
 ..
 
 
+to create a single html page you can say ::
+
+   cd doc
+   make singlehtml
+   open a browser on build/singlehtml/index.html
+
+..
+
+
 if this works view the result by opening a web browser on the file
 build/html/index.html. On OSX this can easily be done with::
 

@@ -5,7 +5,7 @@ Virtualenv
 ----------
 
 Download virtualenv
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
 
 This step is only needed if virtualenv is not installed. To
 test this say::
@@ -30,7 +30,7 @@ following command::
     $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
  
 Install virtualenv
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
         
 After you downloaded virtualenv, you can install it by following
 command::
@@ -38,7 +38,7 @@ command::
     $ python virtualenv.py --system-site-packages ENV
           
 Activate virtualenv
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
 
 After installation of virtualenv, you can activate virtualenv by
 following command::
@@ -46,7 +46,7 @@ following command::
     $ source ENV/bin/activate
     
 Modify your rc file (optional):
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Go to your home directory, log in your .bashrc,
 .bash_profile, or .bash_login file and add::
