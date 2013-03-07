@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 pages = FlatPages(app)
 
-# lee212 (hyungro) commented March 1st, 2013
+# @hroelee (hyungro) commented March 1st, 2013
 # Personally, I prefer to use class variables instead of using global variables.
 # Example of using class in Flask: https://github.com/futuregrid/cloud-metrics/blob/master/fgws/FGWSApps.py
 #
@@ -128,7 +128,7 @@ def table():
                            version=version)
 
 #@app.route('/metric/<s_date>/<e_date>/<user>/<cloud>/<host>/<period>/<metric>')
-@app.route('/metric', methods=['POST','GET'])
+@app.route('/metric/main', methods=['POST','GET'])
 def metric():
     global clouds
     args = {"s_date":request.args.get('s_date',''),

@@ -1,8 +1,8 @@
 {% extends "cm-layout.html" %}
 {% from "_helper.html" import image_button %}
 {% block content %}
-<script src="static/js/jquery.js"></script>
-<script src="static/js/bootstrap-datepicker.js"></script>
+<script src="/static/js/jquery.js"></script>
+<script src="/static/js/bootstrap-datepicker.js"></script>
 <script>
     $(function(){
     window.prettyPrint && prettyPrint();
@@ -16,6 +16,7 @@
     $('#alert').hide();
     startDate = new Date(ev.date);
     $('#startDate').text($('#dp4').data('date'));
+    $('#s_date').val($('#dp4').data('date')+'T00:00:00'); 
     }
     $('#dp4').datepicker('hide');
     });
@@ -27,31 +28,41 @@
 			    $('#alert').hide();
 			    endDate = new Date(ev.date);
 			    $('#endDate').text($('#dp5').data('date'));
+    				$('#e_date').val($('#dp5').data('date')+'T23:59:59'); 
 			    }
 			    $('#dp5').datepicker('hide');
 		    });
 	    })
-</script>
+    </script>
+    <form id="frmDate" method="get">
+	    <input name="s_date" id="s_date" value="2012-01-01T00:00:00" type="hidden">
+	    <input name="e_date" id="e_date" value="2012-12-31T23:59:59" type="hidden">
+	    <input name="user" value="" type="hidden">
  <div class="well">
-   <div class="alert alert-error" id="alert">
-     <strong>Set date!</strong>
-       </div>
    <table class="table">
      <thead>
        <tr>
 	 <th>Start date<a href="#" class="btn small" id="dp4" data-date-format="yyyy-mm-dd" data-date="2012-01-01">Change</a></th>
-	 <th>End date<a href="#" class="btn small" id="dp5" data-date-format="yyyy-mm-dd" data-date="2012-12-31">Change</a></th>
+	 <th>End date<a href="#" class="btn small" id="dp5" data-date-format="yyyy-mm-dd" data-date="2012-12-31">Change</a>
+	 </th>
 	 </tr>
        </thead>
      <tbody>
        <tr>
 	 <td id="startDate">2012-01-01</td>
 	 <td id="endDate">2012-12-31</td>
-	 </tr>
+ </tr>
+ <tr>
+	 <td colspan="2">
+
+	  <input class="btn" type="submit" value="Submit">
+	 </td>
+ </tr>
        </tbody>
      </table>
+     * Still in development. Some errors may occur.
           </div>
-</script>
+  </form>
 <table>
    <tr>
 	   <th colspan="1"> Start date</th>
