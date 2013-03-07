@@ -37,7 +37,6 @@
     <form id="frmDate" method="get">
 	    <input name="s_date" id="s_date" value="2012-01-01T00:00:00" type="hidden">
 	    <input name="e_date" id="e_date" value="2012-12-31T23:59:59" type="hidden">
-	    <input name="user" value="" type="hidden">
  <div class="well">
    <table class="table">
      <thead>
@@ -52,16 +51,43 @@
 	 <td id="startDate">2012-01-01</td>
 	 <td id="endDate">2012-12-31</td>
  </tr>
+ </table>
+ <table class="table">
+	 <thead>
+		 <tr>
+			 <th>
+				 User Name
+			 </th>
+			 <th>
+				 Cloud Service
+			 </th>
+		 </tr>
+	 </thead>
+	 <tbody>
+ <tr>
+	 <td>
+		 <select name="user" multiple="multiple">
+			 <option value="fuwang">Fugang Wang</option>
+			 <option value="gvonlasz" selected="selected">Gregor Laszewski</option>
+			 <option value="hrlee">Hyungro Lee</option>
+			 <option>Other users</option>
+		 </select>
+	 </td>
+	 <td>
+		 <select name="cloud" multiple="multiple">
+			 <option value="openstack" selected="selected">OpenStack</option>
+			 <option value="eucalyptus" selected="selected">Eucalyptus</option>
+			 <option value="nimbus" selected="selected">Nimbus</option>
+		 </select>
+	 </td>
+ </tr>
  <tr>
 	 <td colspan="2">
-
 	  <input class="btn" type="submit" value="Submit">
 	 </td>
  </tr>
        </tbody>
      </table>
-     * Still in development. Some errors may occur.<br>
-     * 2013 year data may not be available in this level of development.
           </div>
   </form>
 <table>
