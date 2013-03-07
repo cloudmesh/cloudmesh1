@@ -75,16 +75,31 @@
 	   <th>disks</th>
 	   <br>
    </tr>
+   {% if "All" in metrics["stats"] %}
 	   <tr>
 		   <td colspan="1"> {{metrics['start_date']}}</td>
 		   <td> {{ metrics['end_date'] }}</td>
 		   <td> {{ metrics["ownerid"] }} </td>
 		   <td> {{ metrics["stats"]["All"]["count"]["Total"] }} </td>
 		   <td> {{ metrics["stats"]["All"]["runtime"]["Total"]}} </td>
+		   <td> {{ metrics["stats"]["All"]["cores"]["Total"]}} </td>
+		   <td> {{ metrics["stats"]["All"]["mem"]["Total"]}} </td>
+		   <td> {{ metrics["stats"]["All"]["disks"]["Total"]}} </td>
 		   <td></td>
+	   </tr>
+	   {% else %}
+	   <tr>
+		   <td colspan="1"> {{metrics['start_date']}}</td>
+		   <td> {{ metrics['end_date'] }}</td>
+		   <td> {{ metrics["ownerid"] }} </td>
+		   <td> {{ metrics["stats"]["instance.cloudPlatformIdRef"]["count"]["Total"] }} </td>
+		   <td> {{ metrics["stats"]["instance.cloudPlatformIdRef"]["runtime"]["Total"]}} </td>
+		   <td> {{ metrics["stats"]["instance.cloudPlatformIdRef"]["cores"]["Total"]}} </td>
+		   <td> {{ metrics["stats"]["instance.cloudPlatformIdRef"]["mem"]["Total"]}} </td>
+		   <td> {{ metrics["stats"]["instance.cloudPlatformIdRef"]["disks"]["Total"]}} </td>
 		   <td></td>
-		   <td></td>
-     </tr>
+	   </tr>
+	   {% endif %}
  </table> 
 
 {% endblock %}

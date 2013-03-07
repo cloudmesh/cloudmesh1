@@ -106,7 +106,7 @@ class cloudmesh:
 
     def _set_metric_api_vars(self, args):
         self.metric_api.set_date(args["s_date"], args["e_date"])
-        self.metric_api.set_metric("count runtime")#args["metric"])
+        self.metric_api.set_metric("count runtime cores mem disks")#args["metric"])
         self.metric_api.set_user(args["user"])
         self.metric_api.set_cloud(args["cloud"])
         self.metric_api.set_hostname(args["host"])
