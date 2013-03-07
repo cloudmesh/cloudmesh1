@@ -31,6 +31,8 @@ clouds = cloudmesh.cloudmesh()
 clouds.load()
 # AttributeError: cloudmesh instance has no attribute 'refresh'
 #clouds.refresh()
+# TEST CASE
+clouds.refresh_servers("openstack")
 
 def make_active(name):
   active = {'home' : "", 

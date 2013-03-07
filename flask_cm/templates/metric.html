@@ -69,7 +69,11 @@
 	   <th>End date</th>
 	   <th>portal id</th>
 	   <th>vm count</th>
-	   <th>runtime</th><br>
+	   <th>runtime</th>
+	   <th>cores</th>
+	   <th>mem</th>
+	   <th>disks</th>
+	   <br>
    </tr>
 	   <tr>
 		   <td colspan="1"> {{metrics['start_date']}}</td>
@@ -77,6 +81,9 @@
 		   <td> {{ metrics["ownerid"] }} </td>
 		   <td> {{ metrics["stats"]["All"]["count"]["Total"] }} </td>
 		   <td> {{ metrics["stats"]["All"]["runtime"]["Total"]}} </td>
+		   <td></td>
+		   <td></td>
+		   <td></td>
      </tr>
  </table> 
 
