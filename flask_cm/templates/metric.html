@@ -60,7 +60,8 @@
  </tr>
        </tbody>
      </table>
-     * Still in development. Some errors may occur.
+     * Still in development. Some errors may occur.<br>
+     * 2013 year data may not be available in this level of development.
           </div>
   </form>
 <table>
@@ -87,7 +88,7 @@
 		   <td> {{ metrics["stats"]["All"]["disks"]["Total"]}} </td>
 		   <td></td>
 	   </tr>
-	   {% else %}
+	   {% elif "instance.cloudPlatformIdRef" in metrics["stats"] %}
 	   <tr>
 		   <td colspan="1"> {{metrics['start_date']}}</td>
 		   <td> {{ metrics['end_date'] }}</td>
