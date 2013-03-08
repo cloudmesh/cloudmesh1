@@ -1,5 +1,5 @@
 import sys
-#sys.path.insert(0, '..') 
+sys.path.insert(0, '..') 
 from datetime import datetime
 import pprint 
 pp = pprint.PrettyPrinter(indent=4)
@@ -14,10 +14,31 @@ import libcloud.security
 import time
 from sh import fgrep
 
-from cm_table import table as cm_table
+from openstack.cm_table import table as cm_table
 from cm_config import cm_config
 
 class eucalyptus:
+    """
+    requires a cloudmesh yaml file with the following structure:
+
+    default: sierra-openstack
+
+    cloudmesh:
+
+        india-eucalyptus:
+            BASEDIR: ~/.futuregrid/india/eucalyptus
+            host: 127.127.127.127
+            port: 8773
+            fg-82:
+                EC2_PRIVATE_KEY: euca2-user-05.....-pk.pem
+                EC2_CERT: euca2-user-0429....-cert.pem
+                EUCALYPTUS_CERT: cloud-cert.pem
+                EC2_ACCOUNT_NUMBER: '709......'
+                EC2_ACCESS_KEY: 'GF78F0E7......'
+                EC2_SECRET_KEY: 'yf07e87fe.......'
+                EC2_USER_ID: '09876....'
+
+    """
 
     type = "eucalyptus"
     sizes = {}
@@ -36,14 +57,17 @@ class eucalyptus:
         return self.servers
 
    
-    def __init__(self,EC2accessKey=None,EC2secretKey=None):
+    def __init__(self, label,
+                 project=None,
+                 accessKey=None,
+                 secretKey=None):
         """
         initializes the openstack cloud from a defould novaRC file
         locates at ~/.futuregrid.org/openstack. However if the
         parameters are provided it will instead use them
         """
         self.clear()
-        self.config(EC2accessKey,EC2secretKey)
+        self.config(label,project,accessKey,secretKey)
         self.connect()
 
     def clear(self):
@@ -63,25 +87,43 @@ class eucalyptus:
     def connect(self):
                 
         Driver = get_driver(Provider.EUCALYPTUS)
-        self.cloud = Driver(self.credentials['EC2accessKey'], self.credentials['EC2secretKey'],host="149.165.146.135", secure=False, port=8773,path="/services/Eucalyptus")
+        self.cloud = Driver(self.credentials['accessKey'], 
+                            self.credentials['secretKey'],
+                            host="149.165.146.135", 
+                            secure=False, port=8773,
+                            path="/services/Eucalyptus")
       
 
-    def config(self,EC2accessKey=None,EC2secretKey=None):
+    def config(self,label=None,project=None,accessKey=None,secretKey=None):
         """
         reads in the configuration file if specified, and does some
         internal configuration.
         """ 
-        
-        if EC2accessKey == None:
+        if label == None and accessKey == None:
+            label = 'india-eucalyptus'
+            project = 'fg-82'
+
+        if accessKey == None:
+            self.label = label
+
             config = cm_config()
-            configuration = config.get('india-eucalyptus')
-            #print (configuration['fg-82']['EC2_ACCESS_KEY'])
-            self.credentials['EC2accessKey']=configuration['fg-82']['EC2_ACCESS_KEY']
-            self.credentials['EC2secretKey']=configuration['fg-82']['EC2_SECRET_KEY']
+            configuration = config.get(label)
+            
+            pp.pprint(configuration)
+
+            basedir = configuration['BASEDIR'] = configuration['BASEDIR'].replace('~',os.environ['HOME'])
+            configuration[project]['EC2_PRIVATE_KEY']  = "%s/%s" % (basedir, configuration[project]['EC2_PRIVATE_KEY'] )
+            configuration[project]['EUCALYPTUS_CERT']  = "%s/%s" % (basedir, configuration[project]['EUCALYPTUS_CERT'] )
+
+            pp.pprint(configuration)
+
+
+            self.credentials['accessKey']=configuration[project]['EC2_ACCESS_KEY']
+            self.credentials['secretKey']=configuration[project]['EC2_SECRET_KEY']
 
         else:
-            self.credentials['EC2accessKey']=EC2accessKey
-            self.credentials['EC2_SECRET_KEY']=EC2secretKey
+            self.credentials['accessKey']=accessKey
+            self.credentials['secretkey']=secretKey
    
         
     def __str__ (self):
@@ -157,16 +199,15 @@ if __name__ == "__main__":
   nodes_test = False
   cloud_test = True
 
-  cloud = eucalyptus()
+  cloud = eucalyptus('india-eucalyptus', 'fg-82')
+
   if image_test:
       cloud.refresh('images')
-      print "hey shweta"
       print json.dumps(cloud.images, indent=4)
 #-      pp.pprint (cloud.images)
   
   if nodes_test:
       cloud.refresh('nodes')
-       
       print json.dumps(cloud.nodes, indent=4)
      
   if sizes_test:
