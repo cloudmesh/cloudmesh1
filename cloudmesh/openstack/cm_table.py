@@ -1,23 +1,29 @@
 
 class table:
-
-    content = ""
+    '''
+    format = HTML | ASCII | "%20s"
+    type is not used and wil be in future removed
+    columns = number of columns
+    structure is an array of rows
+    header = True the firts row is a headline
+    '''
+    _content = ""
 
     def __init__(self):
-        self.content = ""
+        self._content = ""
         return
 
     def __str__(self):
-        return self.content
+        return self._content
 
     def create(self, structure, columns, format=None, type=None, header=True):
-        self.content = self._begin(format)
+        self._content = self._begin(format)
 
         # Create header
         line = ""
         for col in columns:
             line += str(self._cell(str(col), format))
-        self.content += self._row(line, format)
+        self._content += self._row(line, format)
 
         # Create Rows
         for element in structure.items():
@@ -25,8 +31,8 @@ class table:
             line = ""
             for col in columns:
                 line += self._cell(str(attributes[col]), format)
-            self.content += self._row(line, format)
-        self.content += self._end(format)
+            self._content += self._row(line, format)
+        self._content += self._end(format)
 
     def _begin(self, format=None):
         if format == 'HTML':

@@ -10,7 +10,7 @@ Usage:
 
 This program generates form a YAML file containing the login
 information for a cloud an rc file that can be used to later source
-it. 
+it.
 
 Example:
   we assume the yaml file has an entry india-openstack
@@ -39,4 +39,3 @@ Options:
   -o OUT --out=OUT     writes the result in the specifide file
 
   -                    this option is a - at the end of the command. If data is written to a file it is also put out to stdout
-    

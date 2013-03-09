@@ -46,7 +46,7 @@ html:  manpages
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
-dirhtml:
+dirhtml: manpages
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/dirhtml."
@@ -108,12 +108,12 @@ latexpdf: manpages
 	$(MAKE) -C $(BUILDDIR)/latex all-pdf
 	@echo "pdflatex finished; the PDF files are in $(BUILDDIR)/latex."
 
-text:
+text: manpages
 	$(SPHINXBUILD) -b text $(ALLSPHINXOPTS) $(BUILDDIR)/text
 	@echo
 	@echo "Build finished. The text files are in $(BUILDDIR)/text."
 
-man:
+man: manpages
 	$(SPHINXBUILD) -b man $(ALLSPHINXOPTS) $(BUILDDIR)/man
 	@echo
 	@echo "Build finished. The manual pages are in $(BUILDDIR)/man."
@@ -153,6 +153,7 @@ doctest:
 	      "results in $(BUILDDIR)/doctest/output.txt."
 
 manpages:
+	sphinx-apidoc -H "Modules and Classes" -o source/modules ../cloudmesh
 	python ../cloudmesh/cm_cli.py --help > source/cmcli.rst
 
 all: html singlehtml 

@@ -17,13 +17,12 @@
 
 
 cloudmesh
-=========
+======================================================================
 
 .. sidebar:: Table of contents
 
   .. toctree::
      :maxdepth: -1
-     :numbered:
 
      workflow
      contact
@@ -32,13 +31,17 @@ cloudmesh
      cmcli
      cm
      doc
+     modules/modules
+
 
 
    
 Indices and tables
-==================
+======================================================================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+:ref:`genindex`
+:ref:`modindex`
+:ref:`search`
 
+Modules
+======================================================================
