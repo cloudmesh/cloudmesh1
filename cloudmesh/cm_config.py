@@ -2,6 +2,7 @@ import yaml
 import os
 import json
 
+
 class cm_config:
 
     ######################################################################
@@ -16,7 +17,7 @@ class cm_config:
     # initialization methods
     ######################################################################
 
-    def __init__ (self, filename=None):
+    def __init__(self, filename=None):
         if filename == None:
             home = os.environ['HOME']
             self.filename = "%s/%s" % (home, self.default_path)
@@ -48,11 +49,9 @@ class cm_config:
     def __str__(self):
         return json.dumps(self.data, indent=4)
 
-
     ######################################################################
     # get methods
     ######################################################################
-
     def default(self):
         return self.data['default']
 
@@ -78,32 +77,32 @@ class cm_config:
 ##########################################################################
 
 if __name__ == "__main__":
-  config = cm_config()
+    config = cm_config()
 
-  print config
+    print config
 
-  print "================="
-  print config.get('india-openstack')
-  print "================="
-  print config.get()
-  print "================="
-  print config.keys()
-  print "================="
-  print config.rc('india-openstack')
-  print "================="
-  print config.default()
-  print "================="
-  outfile = "%s/%s" %( os.environ['HOME'], ".futuregrid/junk.yaml")
-  print config.write(outfile)
-  os.system("cat " + outfile)
-  print "================="
-  configuration = config.get('azure')
+    print "================="
+    print config.get('india-openstack')
+    print "================="
+    print config.get()
+    print "================="
+    print config.keys()
+    print "================="
+    print config.rc('india-openstack')
+    print "================="
+    print config.default()
+    print "================="
+    outfile = "%s/%s" % (os.environ['HOME'], ".futuregrid/junk.yaml")
+    print config.write(outfile)
+    os.system("cat " + outfile)
+    print "================="
+    configuration = config.get('azure')
 
-  print configuration['username']
-  
-  print "================="
+    print configuration['username']
 
-  configuration = config.get('india-eucalyptus')
-  print configuration
+    print "================="
 
-  print configuration['host']
+    configuration = config.get('india-eucalyptus')
+    print configuration
+
+    print configuration['host']

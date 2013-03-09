@@ -19,18 +19,19 @@
 cloudmesh
 =========
 
-Contents:
+.. sidebar:: Table of contents
 
-.. toctree::
-   :maxdepth: -1
-   :numbered:
+  .. toctree::
+     :maxdepth: -1
+     :numbered:
 
-   contact
-   instalation
-   intro
-   cmcli
-   cm
-   doc
+     workflow
+     contact
+     instalation
+     intro
+     cmcli
+     cm
+     doc
 
 
    

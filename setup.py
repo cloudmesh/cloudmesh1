@@ -5,7 +5,8 @@ In future you will be able ta add multipl eclouds.
 """
 
 from setuptools import setup, find_packages
-import sys, os
+import sys
+import os
 
 
 def fpath(name):
@@ -14,6 +15,7 @@ def fpath(name):
 
 def read(fname):
     return open(fpath(fname)).read()
+
 
 def desc():
     info = read('README.md')
@@ -45,8 +47,9 @@ Topic :: System :: Distributed Computing
 
 if sys.version_info < (2, 7):
     _setup = setup
+
     def setup(**kwargs):
-        if kwargs.has_key("classifiers"):
+        if "classifiers" in kwargs:
             del kwargs["classifiers"]
         _setup(**kwargs)
 
@@ -55,9 +58,9 @@ doclines = __doc__.split("\n")
 setup(
     name='flask_cm',
     version=version,
-    description = doclines[0],
-    classifiers = filter(None, classifiers.split("\n")),
-    long_description = desc(),
+    description=doclines[0],
+    classifiers=filter(None, classifiers.split("\n")),
+    long_description=desc(),
     keywords='Cloud FutureGrid Flask farmework',
     maintainer='Gregor von Laszewski',
     maintainer_email="laszewski@gmail.com",
@@ -65,19 +68,19 @@ setup(
     author_email='laszewski@gmail.com',
     url='https://github.com/futuregrid/flask_cm',
     license='Apache 2.0',
-    package_dir = {'': '.'},
-    packages = find_packages(exclude=['ez_setup', 'examples', 'tests']),
-    
-    #include_package_data=True,
+    package_dir={'': '.'},
+    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+
+    # include_package_data=True,
     zip_safe=False,
-    
+
 #    entry_points={
 #        'console_scripts': [
 #                'cm = fgvirtualcluster.FGCluster:commandline_parser',
 #                'fg-csh = fgvirtualcluster.FGShell:main',
 #             ]},
 
-    install_requires = [
+    install_requires=[
         'setuptools',
         'pip',
         'docopt',
@@ -90,11 +93,12 @@ setup(
         'progress',
         'sh',
         "console",
-        "pymongo"
-        ],
+        "pymongo",
+        "sphinxcontrib-blockdiag",
+    ],
 
 #    scripts=['bin/cm', 'bin/cm']
 
-    )
+)
 
 # pycrypto

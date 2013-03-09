@@ -3,17 +3,17 @@ from sh import fgrep
 from sh import nova
 from sh import tail
 from datetime import datetime
-import json 
+import json
 import sys
 import os
-#import shelve
+# import shelve
 from cm_config import cm_config
 from openstack.cm_compute import openstack as os_client
 try:
-    #from sh import fgmetric
+    # from sh import fgmetric
     from fgmetric.FGMetricsAPI import FGMetricsAPI
     # OR
-    #from sh import fgmetric
+    # from sh import fgmetric
 except:
     print "---------------------"
     print "fgmetric not imported"
@@ -26,6 +26,7 @@ except:
     print "Please run 'pip install pymongo'"
     print "--------------------------------"
 
+
 class cloudmesh:
 
     ######################################################################
@@ -33,12 +34,12 @@ class cloudmesh:
     ######################################################################
 
     datastore = "data/clouds.txt"
-    
+
     # dict that holds vms, flavors, images for al iaas
     clouds = {}
-    
+
     # array with keys from the user
-    keys = []    
+    keys = []
 
     ######################################################################
     # variables that we can most likely eliminate
@@ -79,7 +80,8 @@ class cloudmesh:
                 n/a
         """
         try:
-            res = fgmetric(args) # args should be list-lized before send it out as a parameter
+            res = fgmetric(
+                args)  # args should be list-lized before send it out as a parameter
             return json.loads(res, object_hook=json_util.object_hook)
         except:
             pass
@@ -93,12 +95,12 @@ class cloudmesh:
         try:
             args["user"] = args["user"] or self.user
             self._set_metric_api_vars(args)
-            #print args
+            # print args
             stats = self.metric_api._set_dict_vars()
             metrics = self.metric_api.get_stats()
             stats["stats"] = metrics
             self.metrics = stats
-            #print self.metrics
+            # print self.metrics
         except:
             print sys.exc_info()
             pass
@@ -106,7 +108,8 @@ class cloudmesh:
 
     def _set_metric_api_vars(self, args):
         self.metric_api.set_date(args["s_date"], args["e_date"])
-        self.metric_api.set_metric("count runtime cores mem disks")#args["metric"])
+        self.metric_api.set_metric(
+            "count runtime cores mem disks")  # args["metric"])
         self.metric_api.set_user(args["user"])
         self.metric_api.set_cloud(args["cloud"])
         self.metric_api.set_hostname(args["host"])
@@ -125,9 +128,9 @@ class cloudmesh:
         for name in configuration.keys():
             credential = configuration.get(name)
             type = credential['cm_type']
-            self.clouds[name] = {'cm_type': type, 'credential' : credential}
+            self.clouds[name] = {'cm_type': type, 'credential': credential}
             self.update(name, type)
-            
+
         return
 
     ######################################################################
@@ -149,8 +152,8 @@ class cloudmesh:
         print tmp
 
     def _sanitize(self):
-        #copy the self.cloud
-        #delete the attributes called credential for all clouds
+        # copy the self.cloud
+        # delete the attributes called credential for all clouds
         print "TODO: not yet omplemented"
         return self.clouds
 
@@ -173,20 +176,20 @@ class cloudmesh:
 
                 credential = self.clouds[cloudname]['credential']
 
-                username=credential['OS_USERNAME']
-                password=credential['OS_PASSWORD']
-                project=credential['OS_TENANT_NAME']
-                authurl=credential['OS_AUTH_URL']
+                username = credential['OS_USERNAME']
+                password = credential['OS_PASSWORD']
+                project = credential['OS_TENANT_NAME']
+                authurl = credential['OS_AUTH_URL']
 
-                os_cloud = os_client (cloudname, 
-                                      authurl=authurl, 
-                                      project=project, 
-                                      username=username, 
-                                      password=password  )
+                os_cloud = os_client(cloudname,
+                                     authurl=authurl,
+                                     project=project,
+                                     username=username,
+                                     password=password)
 
                 tmp = os_cloud.refresh('vms')
-                #tmp = os_cloud.refresh('flavor')
-                #tmp = os_cloud.refresh('images')
+                # tmp = os_cloud.refresh('flavor')
+                # tmp = os_cloud.refresh('images')
 
                 print tmp
 
@@ -201,20 +204,18 @@ class cloudmesh:
                     servers[id] = {
                         'id': id,
                         'cloud' : cloudname.strip(),
-                        'name': name.strip(), 
+                        'name': name.strip(),
                         'status' : status.strip(),
                         'ip' : ip.strip(),
                         'refresh' : now.strip()
                         }
                 """
             elif type == 'eucalyptus':
-                #put the code for azure here
+                # put the code for azure here
                 return
             elif type == 'azure':
-                #put the code for azure here
+                # put the code for azure here
                 return
-
-
 
         except Exception, e:
             print e
@@ -223,9 +224,9 @@ class cloudmesh:
 
     def update(self, name, type):
         servers = self.refresh_servers(name)
-        self.clouds[name].update({ 'name' : name, 
-                                   'cm_type' : type, 
-                                   "servers" : servers })
+        self.clouds[name].update({'name': name,
+                                  'cm_type': type,
+                                  "servers": servers})
         return
 
     def add(self, name, type):
@@ -234,7 +235,7 @@ class cloudmesh:
             print "Error: Cloud %s already exists" % name
         except:
             self.update(name, type)
-            
+
     """
     def get_keys(self):
         return self.keys
@@ -259,23 +260,21 @@ class cloudmesh:
 
     """
 
-
     ######################################################################
     # saves and reads the dict to and from a file
     ######################################################################
-
     def save(self):
         tmp = self._sanitize()
         file = open(self.datastore, 'wb')
-        #pickle.dump(self.keys, file)
+        # pickle.dump(self.keys, file)
         pickle.dump(tmp, file)
         file.close()
 
     def load(self):
         file = open(self.datastore, 'rb')
-        #self.keys = pickle.load(file)
+        # self.keys = pickle.load(file)
         self.clouds = pickle.load(file)
-        ''' above returns: 
+        ''' above returns:
         [u'gvonlasz']
          So, call pickle again to get more:
             {'india': {'name': 'india',
@@ -291,10 +290,10 @@ class cloudmesh:
         file.close()
 
     ######################################################################
-    # TODO: convenient +, += functions to add dicts with cm_type 
+    # TODO: convenient +, += functions to add dicts with cm_type
     ######################################################################
 
-    def __add__(self,other):
+    def __add__(self, other):
         """
         type based add function c = cloudmesh(...); b = c + other
         other can be a dict that contains information about the object
@@ -320,7 +319,7 @@ class cloudmesh:
             print "Error: Ignoring add"
             return
 
-    def __iadd__(self,other):
+    def __iadd__(self, other):
         """
         type based add function c = cloudmesh(...); c += other other
         can be a dict that contains information about the object and
@@ -350,18 +349,18 @@ class cloudmesh:
 # MAIN METHOD FOR TESTING
 ##########################################################################
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
     c = cloudmesh()
 
     c.config()
-    
+
     c.dump()
 
     """
     c = cloud_mesh()
 
-    c.refresh() 
+    c.refresh()
     c.add('india', 'openstack')
     c.add('sierra', 'openstack')
     c.refresh_keys()
@@ -379,7 +378,7 @@ if __name__=="__main__":
     """
     india_os = {
         "OS_TENANT_NAME" : '',
-        "OS_USERNAME" : '', 
+        "OS_USERNAME" : '',
         "OS_PASSWORD" : '',
         "OS_AUTH_URL" : '',
         }

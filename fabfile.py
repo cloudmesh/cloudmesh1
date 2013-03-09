@@ -9,7 +9,8 @@ import os
 filename = "VERSION.txt"
 version = open(filename).read()
 
-SERVER="server"
+SERVER = "server"
+
 
 def _next_version(version):
     numbers = version.split(".")
@@ -17,8 +18,9 @@ def _next_version(version):
     newversion = ".".join(numbers)
     return newversion
 
+
 def _write_version(version):
-    file = open (filename, 'w')
+    file = open(filename, 'w')
     print >> file, version
     file.close()
 
@@ -36,7 +38,7 @@ def cm():
 all: server view
 
 server:
-	python server.py 
+	python server.py
 
 view:
 	sleep 3
@@ -45,22 +47,26 @@ view:
     file.close()
     os.system("make -j -f Makefile~ all")
 
+
 def deltag(tag):
-    local("git tag -d %s" % tag) 
+    local("git tag -d %s" % tag)
     local("git push origin :refs/tags/%s" % tag)
+
 
 def view():
     """run the browser"""
     local("sleep 1")
     local("open http://localhost:5000/table")
 
+
 def clean():
     """clean the directory"""
-    local("find . -name \"#*\" -exec rm {} \\;")  
+    local("find . -name \"#*\" -exec rm {} \\;")
     local("find . -name \"*~\" -exec rm {} \\;")
-    local("find . -name \"*.pyc\" -exec rm {} \\;")  
-    local("rm -rf build dist *.egg-info") 
-    local("rm -rf doc/build ") 
+    local("find . -name \"*.pyc\" -exec rm {} \\;")
+    local("rm -rf build dist *.egg-info")
+    local("rm -rf doc/build ")
+
 
 def git():
     """upload the changes to git"""
@@ -68,6 +74,7 @@ def git():
     _git("add", ".")
     os.system("git commit")
     _git("push")
+
 
 def tag():
     """introduce a new tag and upload it to git. run fab changes first and
@@ -82,35 +89,38 @@ def tag():
     _git("push")
     changes()
 
+
 def changes():
     """look at the changes in github since the last taged version"""
     gitversion = _git("describe", "--abbrev=0", "--tags").strip()
     tags = _git("tag").split("\n")
     tags = tags[:-1]
 
-        #versions = {'old' : tags[-2], 'new' : tags[-1]}
-    versions = {'previous' : tags[-1], 
-                'head' : 'HEAD', 
-                'next' : _next_version(tags[-1])}
+    versions = {'previous': tags[-1],
+                'head': 'HEAD',
+                'next': _next_version(tags[-1])}
 
     print versions
     headline = "CHANGES %(previous)s -> %(next)s" % versions
     print headline
     print len(headline) * "="
     print
-    change = _git("log", 
-                 "%(previous)s...%(head)s" % versions, 
-                 "--no-merges", "--format=* %B")
-    change = change.replace("\n\n","\n")
+    change = _git("log",
+                  "%(previous)s...%(head)s" % versions,
+                  "--no-merges", "--format=* %B")
+    change = change.replace("\n\n", "\n")
     print change
+
 
 def dist():
     clean()
     local("python setup.py sdist")
 
+
 def force():
     dist()
     local("pip install -U dist/*.tar.gz")
+
 
 def pypi():
     force()
@@ -118,11 +128,11 @@ def pypi():
     local("python setup.py sdist upload")
 
 
-
 def install():
     """install Flask Frozen-Flask Flask-FlatPages"""
     local("pip install Flask Frozen-Flask Flask-FlatPages")
-    local("pip install --upgrade -e git://github.com/openstack/python-novaclient.git#egg=python-novaclient")
+    local(
+        "pip install --upgrade -e git://github.com/openstack/python-novaclient.git#egg=python-novaclient")
 
 
 def installmongodb():
@@ -130,10 +140,10 @@ def installmongodb():
     local('brew update')
     local('brew install mongodb')
 
+
 def installmongodb_ubuntu():
     local('sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10')
-    local('sudo sh -c "echo \'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen\' > /etc/apt/sources.list.d/10gen.list"')
+    local(
+        'sudo sh -c "echo \'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen\' > /etc/apt/sources.list.d/10gen.list"')
     local('sudo apt-get update')
     local('sudo apt-get install mongodb-10gen')
-
-

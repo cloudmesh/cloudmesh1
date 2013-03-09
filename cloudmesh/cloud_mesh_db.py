@@ -8,7 +8,3 @@ class cloudmesch_db:
 
     def refresh():
         return
-
-
-
-

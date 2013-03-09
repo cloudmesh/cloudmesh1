@@ -11,7 +11,7 @@ Usage:
 
 This program generates form a YAML file containing the login
 information for a cloud an rc file that can be used to later source
-it. 
+it.
 
 Example:
   we assume the yaml file has an entry india-openstack
@@ -40,10 +40,10 @@ Options:
   -o OUT --out=OUT     writes the result in the specifide file
 
   -                    this option is a - at the end of the command. If data is written to a file it is also put out to stdout
-    
+
 """
 from docopt import docopt
-from  cm_config import cm_config
+from cm_config import cm_config
 import sys
 import os
 
@@ -52,7 +52,6 @@ if __name__ == '__main__':
     default_path = '.futuregrid/novarc'
     arguments = docopt(__doc__, version='1.0.0rc2')
     home = os.environ['HOME']
-
 
     ######################################################################
     # This secion deals with handeling "cm config" related commands
@@ -68,14 +67,14 @@ if __name__ == '__main__':
             sys.exit(1)
 
         name = arguments['NAME']
-        if name=='list':
+        if name == 'list':
             for name in config.keys():
                 print name, "(%s)" % config.data['cloudmesh'][name]['cm_type']
             sys.exit(0)
-        
-        if name=='?':
+
+        if name == '?':
             if file == None:
-                arguments['--out'] = "%s/%s" % (home,default_path)
+                arguments['--out'] = "%s/%s" % (home, default_path)
             print "Please select from the following:"
             print "0 - Cancel"
             selected = False
@@ -86,16 +85,16 @@ if __name__ == '__main__':
                     print counter, "-" "%20s" % name, "(%s)" % config.data['cloudmesh'][name]['cm_type']
                     choices.append(name)
                     counter += 1
-                print "Please select:" 
+                print "Please select:"
                 input = int(sys.stdin.readline())
                 if input == 0:
                     print "Selection terminated"
                     sys.exit(0)
-                selected = ( input > 0 ) and ( input < counter )
+                selected = (input > 0) and (input < counter)
             print "Selected: ", input
             name = choices[input-1]
 
-        output = arguments['--out']     
+        output = arguments['--out']
 
         if name != None:
             try:
@@ -105,26 +104,21 @@ if __name__ == '__main__':
                 print "Try instead"
                 for name in config.keys():
                     print "    ", name
-            
+
                 sys.exit(1)
-                
-            if arguments ["-"]:
+
+            if arguments["-"]:
                 print result
             else:
 
                 if output == None:
-                    arguments['--out'] = "%s/%s" % (home,default_path)
+                    arguments['--out'] = "%s/%s" % (home, default_path)
                     output = arguments['--out']
-                out = open (output, "w" )
+                out = open(output, "w")
                 out.write(result)
                 out.close()
-                os.system ("cat " + str(output))
+                os.system("cat " + str(output))
 
     ######################################################################
     # END "cm config" related commands
     ######################################################################
-
-
-
-    
-

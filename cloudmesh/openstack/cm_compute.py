@@ -6,10 +6,10 @@
 
 import iso8601
 import sys
-sys.path.insert(0, '../..') 
+sys.path.insert(0, '../..')
 
 from datetime import datetime
-import pprint 
+import pprint
 pp = pprint.PrettyPrinter(indent=4)
 import json
 import os
@@ -18,11 +18,12 @@ from sh import fgrep
 import novaclient
 from sh import nova
 
-#from cm_credential import credentials
+# from cm_credential import credentials
 from cloudmesh.openstack.cm_table import table as cm_table
 from cloudmesh.cm_config import cm_config
 
 from novaclient.v1_1 import client
+
 
 class openstack:
 
@@ -35,7 +36,7 @@ class openstack:
 
     cloud = None         # internal var
     user_id = None       # internal var
-    
+
     _nova = nova
 
     def vms(self):
@@ -61,10 +62,10 @@ class openstack:
 
         self.clear()
         self.label = label
-        self.config(label, 
-                    authurl=authurl, 
-                    project=project, 
-                    username=username, 
+        self.config(label,
+                    authurl=authurl,
+                    project=project,
+                    username=username,
                     password=password)
         self.connect()
 
@@ -89,29 +90,28 @@ class openstack:
         queries.
         """
         self.cloud = client.Client(
-            self.credential['OS_USERNAME'], 
+            self.credential['OS_USERNAME'],
             self.credential['OS_PASSWORD'],
             self.credential['OS_TENANT_NAME'],
             self.credential['OS_AUTH_URL']
-            )
+        )
 
-
-    def config (self, label,
-                authurl=None,
-                project=None,
-                username=None,
-                password=None):
+    def config(self, label,
+               authurl=None,
+               project=None,
+               username=None,
+               password=None):
         """
         reads in the configuration file if specified, and does some
         internal configuration.
         """
-        self.label= label 
+        self.label = label
         if username == None:
             config = cm_config()
             self.credential = config.get(label)
             print self.credential
             self.user_id = self.credential['OS_USER_ID']
-            #self.credential = credentials(label)
+            # self.credential = credentials(label)
         else:
             self.credential = {}
             self.credential['OS_USERNAME'] = username
@@ -122,15 +122,15 @@ class openstack:
         """
         self._nova = nova.bake("--os-username",    self.credential.username,
                                "--os-password",    self.credential.password,
-                               "--os-auth-url",    self.credential.url, 
+                               "--os-auth-url",    self.credential.url,
                                "--os-tenant-name", self.credential.project)
         """
 
     ######################################################################
-    # find userid 
+    # find userid
     ######################################################################
 
-    def intro(self,what):
+    def intro(self, what):
         """ usde to find some methods form novaclient"""
         import inspect
 
@@ -144,7 +144,6 @@ class openstack:
         except:
             return
 
-
     def novaclient_dump(self):
 
         # playing around to discover methods
@@ -152,7 +151,6 @@ class openstack:
         self.intro(self.cloud.services)
         self.intro(self.cloud.servers)
         self.intro(self.cloud.client)
-
 
         self.intro(self.cloud.agents)
         self.intro(self.cloud.aggregates)
@@ -192,7 +190,6 @@ class openstack:
 
         now = datetime.now()
 
-
     def find_user_id(self):
         """
         this method returns the user id and stores it for later use.
@@ -200,12 +197,10 @@ class openstack:
         # As i do not know how to do this properly, we just create a
         # VM and than get the userid from there
 
-
-
         self.cloud.ensure_service_catalog_present(self.cloud)
         catalog = self.cloud.client.service_catalog.catalog
         pp.pprint(catalog['access']['user'], "User Credentials")
-        pp.pprint(catalog['access']['token'], "Token")        
+        pp.pprint(catalog['access']['token'], "Token")
 
         print(result)
 
@@ -225,8 +220,8 @@ class openstack:
     ######################################################################
     # print
     ######################################################################
-        
-    def __str__ (self):
+
+    def __str__(self):
         """
         print everything but the credentials that is known about this
         cloud in json format.
@@ -235,7 +230,7 @@ class openstack:
             'label': self.label,
             'flavors': self.flavors,
             'vms': self.servers,
-            'images' : self.images}
+            'images': self.images}
         return json.dumps(information, indent=4)
 
     ######################################################################
@@ -258,7 +253,7 @@ class openstack:
             all = selection == 'a'
         else:
             all = True
-        
+
         if selection == 'i' or all:
             list = self.cloud.images.list(detailed=True)
             for information in list:
@@ -266,10 +261,10 @@ class openstack:
                 del image.manager
                 del image._info
                 del image._loaded
-                #del information.links
+                # del information.links
                 self.images[information.id] = image
                 self.images[information.id]['cm_refresh'] = time_stamp
-                
+
         if selection == 'f' or all:
             list = self.cloud.flavors.list()
             for information in list:
@@ -278,7 +273,7 @@ class openstack:
                 del flavor.manager
                 del flavor._info
                 del flavor._loaded
-                #del information.links
+                # del information.links
                 self.flavors[information.name] = flavor
                 self.flavors[information.name]['cm_refresh'] = time_stamp
 
@@ -292,40 +287,38 @@ class openstack:
                 del vm['manager']
                 del vm['_info']
                 del vm['_loaded']
-                #del information.links
+                # del information.links
 
                 self.servers[information.id] = vm
                 self.servers[information.id]['cm_refresh'] = time_stamp
 
-
     ######################################################################
     # create a vm
     ######################################################################
-
-    def vm_create(self,name,flavor_name,image_id):
+    def vm_create(self, name, flavor_name, image_id):
         """
         create a vm
         """
-        
+
         vm_flavor = self.cloud.flavors.find(name=flavor_name)
         vm_image = self.cloud.images.find(id=image_id)
         vm = self.cloud.servers.create(name,
                                        flavor=vm_flavor,
                                        image=vm_image
                                        )
-        delay =  vm.user_id #trick to hopefully get all fields
+        delay = vm.user_id  # trick to hopefully get all fields
         data = vm.__dict__
         del data['manager']
-        #data['cm_name'] = name
-        #data['cm_flavor'] = flavor_name
-        #data['cm_image'] = image_id
-        return { str(data['id']) :  data }
+        # data['cm_name'] = name
+        # data['cm_flavor'] = flavor_name
+        # data['cm_image'] = image_id
+        return {str(data['id']):  data}
 
     ######################################################################
     # delete vm(s)
     ######################################################################
 
-    def vm_delete(self,id):
+    def vm_delete(self, id):
         """
         delete a single vm and returns the id
         """
@@ -334,12 +327,11 @@ class openstack:
         # return just the id or None if its deleted
         return vm
 
-
-    def vms_delete(self,ids):
+    def vms_delete(self, ids):
         """
         delete many vms by id. ids is an array
         """
-        for id  in ids:
+        for id in ids:
             print "Deleting %s" % self.servers[id]['name']
             vm = self.vm_delete(id)
 
@@ -360,11 +352,11 @@ class openstack:
             self.refresh("images")
 
         result = {}
-        for (key, vm)  in self.servers.items():
+        for (key, vm) in self.servers.items():
             if vm['user_id'] == self.user_id:
                 result[key] = vm
 
-        return result 
+        return result
 
     ######################################################################
     # list project vms
@@ -381,10 +373,10 @@ class openstack:
             self.refresh("images")
 
         result = {}
-        for (key, vm)  in self.servers.items():
+        for (key, vm) in self.servers.items():
             result[key] = vm
 
-        return result 
+        return result
 
     ######################################################################
     # delete images from a user
@@ -408,7 +400,7 @@ class openstack:
         ids = []
         if key == 'user_id' and value == None:
             value = self.user_id
-        for (id, vm)  in self.servers.items():
+        for (id, vm) in self.servers.items():
             if vm[str(key)] == value:
                 ids.append(str(vm['id']))
 
@@ -429,7 +421,7 @@ class openstack:
     def reindex(self, prefixold, prefix, index_format):
         all = self.find('user_id')
         counter = 1
-        for id  in all:
+        for id in all:
             old = self.servers[id]['name']
             new = prefix + index_format % counter
             print "Rename %s -> %s, %s" % (old, new, self.servers[id]['key_name'])
@@ -437,24 +429,20 @@ class openstack:
                 vm = self.cloud.servers.update(id, new)
             counter += 1
 
-
-
     def reindex(self, prefix, index_format):
         all = self.find('user_id')
         counter = 1
-        for id  in all:
+        for id in all:
             old = self.servers[id]['name']
             new = prefix + index_format % counter
             print "Rename %s -> %s, %s" % (old, new, self.servers[id]['key_name'])
-            #if old != new:
+            # if old != new:
             #    vm = self.cloud.servers.update(id, new)
             counter += 1
-        
 
     ######################################################################
     # TODO
     ######################################################################
-
     """
     refresh just a specific VM
     delete all images that follow a regualr expression in name
@@ -465,30 +453,30 @@ class openstack:
     # EXTRA
     ######################################################################
 
-    def table_col_to_dict(self,body):
+    def table_col_to_dict(self, body):
         result = {}
         for element in body:
             key = element[0]
-            value = element [1]
+            value = element[1]
             result[key] = value
         return result
 
-    def table_matrix(self,text, format=None):
+    def table_matrix(self, text, format=None):
         lines = text.splitlines()
         headline = lines[0].split("|")
         headline = headline[1:-1]
-        for i in range(0,len(headline)):
+        for i in range(0, len(headline)):
             headline[i] = str(headline[i]).strip()
 
-        lines = lines [1:]
-        
+        lines = lines[1:]
+
         body = []
 
         for l in lines:
             line = l.split("|")
             line = line[1:-1]
             entry = {}
-            for i in range(0,len(line)):
+            for i in range(0, len(line)):
                 line[i] = str(line[i]).strip()
                 if format == "dict":
                     key = headline[i]
@@ -502,11 +490,9 @@ class openstack:
         else:
             return (headline, body)
 
-
     ######################################################################
-    # CLI call of ussage 
+    # CLI call of ussage
     ######################################################################
-
     def parse_isotime(self, timestr):
         """Parse time from ISO 8601 format"""
         try:
@@ -519,18 +505,17 @@ class openstack:
     def usage(self, start, end, format='dict'):
         """ returns the usage information of the tennant"""
 
-        #print 70 * "-"
-        #print self.cloud.certs.__dict__.get()
-        #print 70 * "-"
+        # print 70 * "-"
+        # print self.cloud.certs.__dict__.get()
+        # print 70 * "-"
 
-        tenantid = "member" # not sure how to get that
+        tenantid = "member"  # not sure how to get that
         iso_start = self.parse_isotime(start)
-        iso_end =   self.parse_isotime(end)
+        iso_end = self.parse_isotime(end)
         print ">>>>>", iso_start, iso_end
         info = self.cloud.usage.get(tenantid, iso_start, iso_end)
-               
-        
-        #print info.__dict__
+
+        # print info.__dict__
         sys.exit()
 
         result = fgrep(nova("usage", "--start", start, "--end", end), "|")
@@ -539,17 +524,17 @@ class openstack:
         headline.append("End")
         matrix[0].append(start)
         matrix[0].append(end)
-        
+
         if format == 'dict':
             result = {}
-            for i in range(0,len(headline)):
+            for i in range(0, len(headline)):
                 result[headline[i]] = matrix[0][i]
             return result
         else:
             return (headline, matrix[0])
-        
+
     ######################################################################
-    # CLI call of absolute-limits 
+    # CLI call of absolute-limits
     ######################################################################
     def limits(self):
         """ returns the usage information of the tennant"""
@@ -559,12 +544,12 @@ class openstack:
         info = self.cloud.limits.get()
         del info.manager
         rates = info.__dict__['_info']['rate']
-        
+
         for rate in rates:
             limit_set = rate['limit']
             print limit_set
             for limit in limit_set:
-                list.append(limit) 
+                list.append(limit)
 
         return list
 
@@ -573,7 +558,7 @@ class openstack:
 # MAIN FOR TESTING
 ##########################################################################
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
     credential_test = False
     flavor_test = False
@@ -584,8 +569,7 @@ if __name__=="__main__":
 
     if credential_test:
         credential = cm_config('india-openstack')
-        #print credential
-
+        # print credential
 
     cloud = openstack("india-openstack")
 
@@ -593,17 +577,15 @@ if __name__=="__main__":
 
     print json.dumps(cloud.usage("2000-01-01T00:00:00", "2013-12-31T00:00:00"), indent=4)
 
-    #print json.dumps(cloud.limits(), indent=4)
-
-
+    # print json.dumps(cloud.limits(), indent=4)
 
     sys.exit()
-    #print json.dumps(cloud.usage("2000-01-01", "2013-12-31"), indent=4)
-    #print json.dumps(cloud.usage("2000-01-01", "2013-12-31",format=None), indent=4)
+    # print json.dumps(cloud.usage("2000-01-01", "2013-12-31"), indent=4)
+    # print json.dumps(cloud.usage("2000-01-01", "2013-12-31",format=None),
+    # indent=4)
 
-    #print json.dumps(cloud.limits(format='dict'), indent=4)
-    #print json.dumps(cloud.limits(format='array'), indent=4)
-
+    # print json.dumps(cloud.limits(format='dict'), indent=4)
+    # print json.dumps(cloud.limits(format='array'), indent=4)
 
     if flavor_test or table_test:
         cloud.refresh('flavors')
@@ -612,7 +594,7 @@ if __name__=="__main__":
     if table_test:
         table = cm_table()
         columns = ["id", "name", "ram", "vcpus"]
-    
+
         table.create(cloud.flavors, columns, header=True)
         print table
 
@@ -625,7 +607,7 @@ if __name__=="__main__":
     if image_test:
         cloud.refresh('images')
         print json.dumps(cloud.images, indent=4)
-    
+
     if vm_test:
         cloud.refresh('vms')
         print json.dumps(cloud.images, indent=4)
@@ -634,18 +616,15 @@ if __name__=="__main__":
         cloud.refresh()
         print cloud
 
-
-
     print cloud.find_user_id()
 
-
-    """    
+    """
     name ="%s-%04d" % (cloud.credential["OS_USERNAME"], 1)
     out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
 
     pp.pprint(out)
     print json.dumps(out, indent=4)
-    
+
     key = out.keys()[0]
     id = out[key]["id"]
 
@@ -679,9 +658,9 @@ if __name__=="__main__":
     print ids
 
     cloud.vms_delete(ids)
-    
+
     print cloud.vms_delete_user()
 
-    #cloud.rename("gvonlasz-0001","gregor")
+    # cloud.rename("gvonlasz-0001","gregor")
 
     cloud.reindex("deleteme-", "%03d")
