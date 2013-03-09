@@ -244,6 +244,20 @@ class openstack:
     # refresh
     ######################################################################
 
+    """
+        def _get_image_dict():
+                return _self.cloud.images.list(detailed=True)
+
+        def _update_image_dict(image):
+                del image.manager
+                del image._info
+                del image._loaded
+                # del information.links
+                return (image.id, image)
+
+    """
+    
+    
     def refresh(self, type=None):
 
         time_stamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
@@ -255,8 +269,10 @@ class openstack:
             all = True
 
         if selection == 'i' or all:
+            # list = _get_image_dict()
             list = self.cloud.images.list(detailed=True)
             for information in list:
+                # (id, image) = _update_image_dict(information)
                 image = information.__dict__
                 del image.manager
                 del image._info
@@ -266,8 +282,10 @@ class openstack:
                 self.images[information.id]['cm_refresh'] = time_stamp
 
         if selection == 'f' or all:
+            # list = _get_floavors_list()
             list = self.cloud.flavors.list()
             for information in list:
+                #flavor = _update_flavors_dict(information)
                 flavor = information.__dict__
                 # clean not neaded info
                 del flavor.manager
@@ -278,11 +296,13 @@ class openstack:
                 self.flavors[information.name]['cm_refresh'] = time_stamp
 
         if selection == 'v' or selection == None or all:
+            #list = _get_servers_list()
             list = self.cloud.servers.list(detailed=True)
 
             for information in list:
+                # vm = _update_servers_dict(information)
                 vm = information.__dict__
-                pp.pprint(vm)
+                #pp.pprint(vm)
                 delay = vm['id']
                 del vm['manager']
                 del vm['_info']
@@ -461,7 +481,7 @@ class openstack:
             result[key] = value
         return result
 
-    def table_matrix(self, text, format=None):
+    Def Table_matrix(self, text, format=None):
         lines = text.splitlines()
         headline = lines[0].split("|")
         headline = headline[1:-1]
