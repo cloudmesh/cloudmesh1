@@ -188,6 +188,76 @@ class eucalyptus:
                 self.sizes[information.id]['cm_refresh'] = time_stamp
 
 
+    def getNodebyID(self,nodeid):        
+        nodes = self.cloud.list_nodes()      
+        for node in nodes :
+            if node.id == nodeid :
+                return node   
+ 
+    def vm_delete(self,node):
+        result = destroy_node(self, node)
+            # add result to internal cache
+        print ("vm Deleted")
+        return result
+    
+    def restart(self,node):
+        """restarts a vm with the given name"""
+        result = reboot_node(self, node)
+        # add result to internal cache
+        print result
+      
+
+    def vm_create(self, name, flavor_name, image_id):
+        """
+        create a vm
+        """
+        flavours = self.cloud.list_sizes()
+        vm_flavour= flavours[0]
+        for flavour in flavours :
+            if flavour.id == 'm1.small' :
+                vm_flavour= flavour
+
+        images = self.cloud.list_images()
+        vm_image = images[0]
+        for image in images :
+            if image.id == 'ami-000000b4' :
+                vm_image = image
+
+        if (name== None):
+            vm_name=self._generate_vmname(randint(0,1000))
+        else:
+            vm_name=name;
+     
+        self.vm = self.cloud.create_node(name=vm_name, image=vm_image, size=vm_flavour);
+        
+        while 1 :
+            time.sleep(15)
+            updatedNode = self.getNodebyID(self.vm.id)
+            if updatedNode.state == 3 :
+                print "pending " + updatedNode.id
+            if updatedNode.state == 0 :
+                print("successful creation of vm")
+                time.sleep(60)
+                break;
+            if updatedNode.state == 4 :
+                print(node.id, "Has Errored out");
+                nodes.remove(vm)
+                break;
+
+        data = self.vm.__dict__
+        del data['driver']
+        pp.pprint(data)
+        return {}
+
+
+    def _generate_vmname(self,index):
+        number = str(index).zfill(3)
+        name = '%s-%s' % (self.credentials['username'], number)
+        return name
+
+
+
+
                 
 if __name__ == "__main__":
 
