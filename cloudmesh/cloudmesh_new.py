@@ -1,40 +1,3 @@
-"""
-
-dict cloudmesh = {
-
-  "india-opensatck" : {....},
-  "sierrao-openstck": {...},
-}
-
-init:
-
-conf = read yaml
-
-for cloud in conf['cloudmesh']
-
-   if type = euca
-      create uca lcude
-      cloud[name] = eucalyptus(name)
-   .....
-
-
-cloud = {"india-openstack" : cloud}
-
-
-refresh ("india-opensatck")
-
-
-refresh(name)
-   cloud[name].refresh()
-
-   if name = "all"
-      ....
-
-
-
-"""
-
-
 import pickle
 from sh import fgrep
 from sh import nova
@@ -45,7 +8,12 @@ import sys
 import os
 # import shelve
 from cm_config import cm_config
-from openstack.cm_compute import openstack as os_client
+
+#Error Cannot Import Openstack
+from openstack.cm_compute import openstack
+
+from eucalyptus.eucalyptus_new import eucalyptus
+from azure.cm_azure import cm_azure as azure 
 try:
     # from sh import fgmetric
     from fgmetric.FGMetricsAPI import FGMetricsAPI
@@ -74,7 +42,7 @@ class cloudmesh:
 
     # dict that holds vms, flavors, images for al iaas
     clouds = {}
-
+    
     # array with keys from the user
     keys = []
 
@@ -91,6 +59,8 @@ class cloudmesh:
 
     def __init__(self):
         self.clear()
+        #Read Yaml File to find all the cloud configurations present
+        self.config();
         try:
             self.metric_api = FGMetricsAPI()
         except:
@@ -156,18 +126,19 @@ class cloudmesh:
     # the configuration method that must be called to get the cloud info
     ######################################################################
 
+    #Updated the config method. Now It reads the config correctly.  
     def config(self):
         """
         reads the cloudmesh yaml file that defines which clouds build
         the cloudmesh
         """
         configuration = cm_config()
-        for name in configuration.keys():
+        all_keys = configuration.keys()
+        for name in all_keys :
             credential = configuration.get(name)
             type = credential['cm_type']
             self.clouds[name] = {'cm_type': type, 'credential': credential}
-            self.update(name, type)
-
+            #self.update(name, type)
         return
 
     ######################################################################
@@ -191,7 +162,9 @@ class cloudmesh:
     def _sanitize(self):
         # copy the self.cloud
         # delete the attributes called credential for all clouds
-        print "TODO: not yet omplemented"
+        all_keys =  self.clouds.keys()
+        for cloud in all_keys:
+            self.clouds[cloud]['credential'] = {}
         return self.clouds
 
     def dump(self):
@@ -200,64 +173,60 @@ class cloudmesh:
 
     ######################################################################
     # the refresh method that gets upto date information for cloudmesh
+    # If cloudname is provided only that cloud will be refreshed 
+    # else all the clouds will be refreshed
     ######################################################################
 
-    def refresh_servers(self, cloudname):
+    def refresh(self, cloudname=None):
         print "Refershing cloudname %s" % cloudname
-        servers = {}
-        try:
+        servers = {}        
+        cloud =None;
+        
+        if(cloudname == None):
+            all_clouds = self.clouds.keys()
+            for cloud_name in all_clouds :
+                try:
+                    type = self.clouds[cloud_name]['cm_type']
 
-            type = self.clouds[cloudname]['cm_type']
+                    if type == 'openstack':
+                        cloud = openstack(cloud_name)
+                        
+                    elif type == 'eucalyptus':
+                        # Where do i find the project name ? Is there a defaul one ? 
+                        cloud = eucalyptus(cloud_name, 'fg-82')
+                        
+                    elif type == 'azure':
+                        cloud = azure.cm_azure()
+                       
+                    cloud.refresh()
+                    self.clouds[cloud_name]['flavors'] = cloud.flavors
+                    self.clouds[cloud_name]['images'] = cloud.images
+                    self.clouds[cloud_name]['servers'] = cloud.servers
+                
+                except Exception, e:
+                    print e
+        else:
+            try:
+                type = self.clouds[cloudname]['cm_type']
 
-            if type == 'openstack':
-
-                credential = self.clouds[cloudname]['credential']
-
-                username = credential['OS_USERNAME']
-                password = credential['OS_PASSWORD']
-                project = credential['OS_TENANT_NAME']
-                authurl = credential['OS_AUTH_URL']
-
-                os_cloud = os_client(cloudname,
-                                     authurl=authurl,
-                                     project=project,
-                                     username=username,
-                                     password=password)
-
-                tmp = os_cloud.refresh('vms')
-                # tmp = os_cloud.refresh('flavor')
-                # tmp = os_cloud.refresh('images')
-
-                print tmp
-
-                return os_cloud.vms()
-
-                """
-                now = str(datetime.now())
-                instances = fgrep(nova("list"), self.user)
-                for line in instances:
-                    (a, id, name, status, ip, b) = line.split("|")
-                    id = id.strip()
-                    servers[id] = {
-                        'id': id,
-                        'cloud' : cloudname.strip(),
-                        'name': name.strip(),
-                        'status' : status.strip(),
-                        'ip' : ip.strip(),
-                        'refresh' : now.strip()
-                        }
-                """
-            elif type == 'eucalyptus':
-                # put the code for azure here
-                return
-            elif type == 'azure':
-                # put the code for azure here
-                return
-
-        except Exception, e:
-            print e
-
-        return servers
+                if type == 'openstack':
+                    cloud = openstack(cloud_name)
+                    
+                elif type == 'eucalyptus':
+                    # Where do i find the project name ? Is there a defaul one ? 
+                    cloud = eucalyptus(cloud_name, 'fg-82')
+                    
+                elif type == 'azure':
+                    cloud = azure.cm_azure()
+                   
+                cloud.refresh()
+                self.clouds[cloudname]['flavors'] = cloud.flavors
+                self.clouds[cloudname]['images'] = cloud.images
+                self.clouds[cloudname]['servers'] = cloud.servers
+                
+            except Exception, e:
+                    print e
+        
 
     def update(self, name, type):
         servers = self.refresh_servers(name)
@@ -389,12 +358,13 @@ class cloudmesh:
 if __name__ == "__main__":
 
     c = cloudmesh()
-
+    print c.clouds
+    """
     c.config()
 
     c.dump()
 
-    """
+
     c = cloud_mesh()
 
     c.refresh()
