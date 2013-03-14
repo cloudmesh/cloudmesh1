@@ -242,8 +242,28 @@ class cloudmesh:
                 
                 except Exception, e:
                     print e
+        else:
+            try:
+                type = self.clouds[cloudname]['cm_type']
 
-        return servers
+                if type == 'openstack':
+                    cloud = openstack(cloud_name)
+                    
+                elif type == 'eucalyptus':
+                    # Where do i find the project name ? Is there a defaul one ? 
+                    cloud = eucalyptus(cloud_name, 'fg-82')
+                    
+                elif type == 'azure':
+                    cloud = azure.cm_azure()
+                   
+                cloud.refresh()
+                self.clouds[cloudname]['flavors'] = cloud.flavors
+                self.clouds[cloudname]['images'] = cloud.images
+                self.clouds[cloudname]['servers'] = cloud.servers
+                
+            except Exception, e:
+                    print e
+        
 
     def update(self, name, type):
         servers = self.refresh_servers(name)
