@@ -95,6 +95,7 @@ setup(
         "console",
         "pymongo",
         "sphinxcontrib-blockdiag",
+        "python-novaclient"
     ],
 
 #    scripts=['bin/cm', 'bin/cm']
