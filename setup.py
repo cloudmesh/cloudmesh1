@@ -8,6 +8,29 @@ from setuptools import setup, find_packages
 import sys
 import os
 
+requires=[
+    'setuptools',
+    'pip',
+    'docopt',
+    'pyyaml',
+    'Flask',
+    'Flask-WTF'
+    'paramiko',
+    'blessings',
+    'fabric',
+    'progress',
+    'sh',
+    "console",
+    "pymongo",
+    "sphinxcontrib-blockdiag",
+    "python-novaclient"
+],
+
+for package in requires:
+    try:
+        import package
+    except ImportError:
+        install_requires.append(package)
 
 def fpath(name):
     return os.path.join(os.path.dirname(__file__), name)
@@ -80,23 +103,8 @@ setup(
 #                'fg-csh = fgvirtualcluster.FGShell:main',
 #             ]},
 
-    install_requires=[
-        'setuptools',
-        'pip',
-        'docopt',
-        'pyyaml',
-        'Flask>=0.7',
-        'Flask-WTF>=0.6'
-        'paramiko',
-        'blessings',
-        'fabric',
-        'progress',
-        'sh',
-        "console",
-        "pymongo",
-        "sphinxcontrib-blockdiag",
-        "python-novaclient"
-    ],
+    install_requires=install_requires
+
 
 #    scripts=['bin/cm', 'bin/cm']
 
