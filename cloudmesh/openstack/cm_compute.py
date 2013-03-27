@@ -584,9 +584,9 @@ if __name__ == "__main__":
     flavor_test = False
     table_test = False
     image_test = False
-    vm_test = False
+    vm_test = True
     cloud_test = False
-    cloud_usage = False
+    usage_test = False
 
     if credential_test:
         credential = cm_config('india-openstack')
@@ -638,7 +638,7 @@ if __name__ == "__main__":
         cloud.refresh()
         print cloud
 
-    print cloud.find_user_id()
+        #print cloud.find_user_id()
 
     """
     name ="%s-%04d" % (cloud.credential["OS_USERNAME"], 1)
@@ -675,11 +675,11 @@ if __name__ == "__main__":
     print cloud.find('name', name)
     """
 
-    ids = cloud.find('user_id')
+    #ids = cloud.find('user_id')
 
-    print ids
+    #print ids
 
-    cloud.vms_delete(ids)
+    #cloud.vms_delete(ids)
 
     #print cloud.vms_delete_user()
 
