@@ -481,7 +481,7 @@ class openstack:
             result[key] = value
         return result
 
-    Def Table_matrix(self, text, format=None):
+    def Table_matrix(self, text, format=None):
         lines = text.splitlines()
         headline = lines[0].split("|")
         headline = headline[1:-1]
@@ -586,6 +586,7 @@ if __name__ == "__main__":
     image_test = False
     vm_test = False
     cloud_test = False
+    cloud_usage = False
 
     if credential_test:
         credential = cm_config('india-openstack')
@@ -593,19 +594,20 @@ if __name__ == "__main__":
 
     cloud = openstack("india-openstack")
 
+
     cloud.novaclient_dump()
 
-    print json.dumps(cloud.usage("2000-01-01T00:00:00", "2013-12-31T00:00:00"), indent=4)
+    if usage_test:
+        #print json.dumps(cloud.usage("2000-01-01T00:00:00", "2013-12-31T00:00:00"), indent=4)
 
-    # print json.dumps(cloud.limits(), indent=4)
+        print json.dumps(cloud.limits(), indent=4)
 
-    sys.exit()
-    # print json.dumps(cloud.usage("2000-01-01", "2013-12-31"), indent=4)
-    # print json.dumps(cloud.usage("2000-01-01", "2013-12-31",format=None),
-    # indent=4)
+                 
+        # print json.dumps(cloud.usage("2000-01-01", "2013-12-31"), indent=4)
+        # print json.dumps(cloud.usage("2000-01-01", "2013-12-31",format=None), indent=4)
 
-    # print json.dumps(cloud.limits(format='dict'), indent=4)
-    # print json.dumps(cloud.limits(format='array'), indent=4)
+        # print json.dumps(cloud.limits(format='dict'), indent=4)
+        # print json.dumps(cloud.limits(format='array'), indent=4)
 
     if flavor_test or table_test:
         cloud.refresh('flavors')
@@ -679,8 +681,8 @@ if __name__ == "__main__":
 
     cloud.vms_delete(ids)
 
-    print cloud.vms_delete_user()
+    #print cloud.vms_delete_user()
 
     # cloud.rename("gvonlasz-0001","gregor")
 
-    cloud.reindex("deleteme-", "%03d")
+    #cloud.reindex("deleteme-", "%03d")
