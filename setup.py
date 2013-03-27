@@ -8,6 +8,10 @@ from setuptools import setup, find_packages
 import sys
 import os
 
+######################################################################
+# REQUIREMENTS
+######################################################################
+
 requires=[
     'setuptools',
     'pip',
@@ -49,6 +53,9 @@ def desc():
 
 version = read("VERSION.txt")
 
+######################################################################
+# CLASSIFIER
+######################################################################
 
 classifiers = """\
 Intended Audience :: Developers
@@ -75,6 +82,11 @@ if sys.version_info < (2, 7):
         if "classifiers" in kwargs:
             del kwargs["classifiers"]
         _setup(**kwargs)
+
+
+######################################################################
+# SETUP
+######################################################################
 
 doclines = __doc__.split("\n")
 
