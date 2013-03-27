@@ -101,4 +101,6 @@ setup(
 
 )
 
+#pip install -e git+https://github.com/openstack/python-novaclient.git#egg=python-novaclient
+
 # pycrypto
