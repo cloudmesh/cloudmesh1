@@ -42,7 +42,7 @@ class BaseCloud:
         assert False, "Not implemented"
     def _get_flavors_dict(self):
         assert False, "Not implemented"
-    def _update_flafors_dict(self,information):        
+    def _update_flavors_dict(self,information):        
         assert False, "Not implemented"
     def _get_servers_dict(self):
         assert False, "Not implemented"
@@ -290,27 +290,29 @@ class openstack(BaseCloud):
     # refresh
     ######################################################################
 
-    def _get_image_dict(self):
+    def _get_images_dict(self):
         return self.cloud.images.list(detailed=True)
 
-    def _update_image_dict(self,information):
-        flavor = information.__dict__
-        del image.manager
-        del image._info
-        del image._loaded
+    def _update_images_dict(self,information):
+        image = information.__dict__
+        id =  image['id']
+        # clean not neaded info
+        del image['manager']
+        del image['_info']
+        del image['_loaded']
         # del information.links
-        id = information.id
-        return (image.id, image)
-    
+        return (id, image)
+
     def _get_flavors_dict(self):
         return self.cloud.flavors.list()
 
-    def _update_flafors_dict(self,information):
+    def _update_flavors_dict(self,information):
         flavor = information.__dict__
+        pp.pprint(flavor)
         # clean not neaded info
-        del flavor.manager
-        del flavor._info
-        del flavor._loaded
+        del flavor['manager']
+        del flavor['_info']
+        del flavor['_loaded']
         # del information.links
         id = information.name
         return (id, flavor)
@@ -320,13 +322,15 @@ class openstack(BaseCloud):
 
     def _update_servers_dict(self,information):
         vm = information.__dict__
+        #pp.pprint (vm)
         #pp.pprint(vm)
         delay = vm['id']
         del vm['manager']
         del vm['_info']
         del vm['_loaded']
         # del information.links
-        id = information.id
+        id = vm['id']
+        print id
         return (id, vm)
 
     @donotchange
@@ -339,26 +343,33 @@ class openstack(BaseCloud):
 
         list_function = self._get_servers_dict
         update_function = self._update_servers_dict
+        d = self.servers
         if selection == 'a':
             self.refresh("images")
             self.refersh("flavors")
-            self.refresh("vms")
+            self.refresh("servers")
             return
         elif selection == 'i':
             list_function = self._get_images_dict
             update_function = self._update_images_dict
+            d = self.images
         elif selection == 'f':
             list_function = self._get_flavors_dict
-            update_function = self._update_flavor_dict
+            update_function = self._update_flavors_dict
+            d = self.flavors
         elif selection == 's':
             list_function = self._get_servers_dict
             update_function = self._update_servers_dict
+            d = self.servers
+        else:
+            print "refresh type not supported"
+            assert false
 
         list = list_function()
         for information in list:
-            (id, image) = update_function(information)
-            self.images[id] = image
-            self.images[id]['cm_refresh'] = time_stamp
+            (id, element) = update_function(information)
+            d[id] = element
+            d[id]['cm_refresh'] = time_stamp
 
     ######################################################################
     # create a vm
@@ -667,9 +678,6 @@ if __name__ == "__main__":
     # print json.dumps(cloud.limits(format='dict'), indent=4)
     # print json.dumps(cloud.limits(format='array'), indent=4)
 
-    if flavor_test or table_test:
-        cloud.refresh('flavors')
-        print json.dumps(cloud.flavors, indent=4)
 
     if table_test:
         table = cm_table()
@@ -688,9 +696,6 @@ if __name__ == "__main__":
         cloud.refresh('images')
         print json.dumps(cloud.images, indent=4)
 
-    if vm_test:
-        cloud.refresh('vms')
-        print json.dumps(cloud.images, indent=4)
 
     if cloud_test:
         cloud.refresh()
