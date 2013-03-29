@@ -23,7 +23,10 @@ class Test_openstack:
     def tearDown(self):
         pass
 
-    def test_images(self):
+    def test_00_check_label(self):
+        assert self.cloud.label == "india-openstack"
+
+    def test_01_images(self):
         self.cloud.refresh('images')
         print json.dumps(self.cloud.flavors, indent=4)
         # pp.pprint(self.cloud.images)
@@ -34,10 +37,32 @@ class Test_openstack:
         # we shoudl start our own vm and than probe for it for now > 0 will do
         assert self.cloud.images > 0
 
-    def test_check_label(self):
-        assert self.cloud.label == "india-openstack"
+    def test_02_flavor(self):
+        self.cloud.refresh('flavors')
+        print json.dumps(self.cloud.flavors, indent=4)
 
-    def test_start__delete_vm(self):        
+        # doing a simple test as tiny is usually 512
+        assert self.cloud.flavors['m1.tiny']['ram'] == 512
+
+    def test_03_vms(self):
+        self.cloud.refresh('servers')
+        print json.dumps(self.cloud.servers, indent=4)
+        # we assume that there are always images running
+        assert len(self.cloud.servers) > 0
+
+    def test_04_refresh(self):
+        self.cloud.refresh()
+        pp.pprint(self.cloud)
+
+        assert self.cloud.images > 0
+
+    def test_05_usage(self):
+        result = self.cloud.usage("2000-01-01T00:00:00", "2013-12-31T00:00:00")
+        print json.dumps(result, indent=4)
+        assert ['Instances'] > 0 
+
+
+    def test_06_start_delete_vm(self):        
         name ="%s-%04d" % (self.cloud.credential["OS_USERNAME"], 1)
         out = self.cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
 
@@ -52,23 +77,13 @@ class Test_openstack:
         print vm
 
 
-    def test_flavor(self):
-        self.cloud.refresh('flavors')
-        print json.dumps(self.cloud.flavors, indent=4)
-
-        # doing a simple test as tiny is usually 512
-        assert self.cloud.flavors['m1.tiny']['ram'] == 512
-
-    def test_vms(self):
-        self.cloud.refresh('servers')
-        print json.dumps(self.cloud.servers, indent=4)
-        # we assume that there are always images running
-        assert len(self.cloud.servers) > 0
+    def test_user_vms(self):
+        list = self.cloud.vms_user()
+        print json.dumps(list, indent=4)
 
 
 
-    def test_refresh(self):
-        self.cloud.refresh()
-        pp.pprint(self.cloud)
 
-        assert self.cloud.images > 0
+
+
+

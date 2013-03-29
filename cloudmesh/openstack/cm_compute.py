@@ -1,4 +1,4 @@
-#! /usr/bin/env pytho
+#! /usr/bin/env python
 
 #
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
@@ -242,14 +242,14 @@ class openstack(BaseCloud):
         # As i do not know how to do this properly, we just create a
         # VM and than get the userid from there
 
-        self.cloud.ensure_service_catalog_present(self.cloud)
-        catalog = self.cloud.client.service_catalog.catalog
-        pp.pprint(catalog['access']['user'], "User Credentials")
-        pp.pprint(catalog['access']['token'], "Token")
+        #self.cloud.ensure_service_catalog_present(self.cloud)
+        #catalog = self.cloud.client.service_catalog.catalog
+        #pp.pprint(catalog['access']['user'], "User Credentials")
+        #pp.pprint(catalog['access']['token'], "Token")
 
-        print(result)
+        #print(result)
 
-        sys.exit()
+        #sys.exit()
         if self.user_id == None:
             sample_flavor = self.cloud.flavors.find(name="m1.tiny")
             sample_image = self.cloud.images.find(
@@ -550,7 +550,7 @@ class openstack(BaseCloud):
         return result
 
     @donotchange
-    def Table_matrix(self, text, format=None):
+    def table_matrix(self, text, format=None):
         lines = text.splitlines()
         headline = lines[0].split("|")
         headline = headline[1:-1]
@@ -601,16 +601,19 @@ class openstack(BaseCloud):
         # print self.cloud.certs.__dict__.get()
         # print 70 * "-"
 
-        tenantid = "member"  # not sure how to get that
+        #tenantid = "member"  # not sure how to get that
         iso_start = self.parse_isotime(start)
         iso_end = self.parse_isotime(end)
-        print ">>>>>", iso_start, iso_end
-        info = self.cloud.usage.get(tenantid, iso_start, iso_end)
+        #print ">>>>>", iso_start, iso_end
+        #info = self.cloud.usage.get(tenantid, iso_start, iso_end)
 
         # print info.__dict__
-        sys.exit()
+        #sys.exit()
 
-        result = fgrep(nova("usage", "--start", start, "--end", end), "|")
+        (start,rest) = start.split("T") # ignore time for now
+        (end,rest) = end.split("T") # ignore time for now
+        result = fgrep(self._nova("usage", "--start", start, "--end", end), "|")
+        
         (headline, matrix) = self.table_matrix(result)
         headline.append("Start")
         headline.append("End")
@@ -663,7 +666,7 @@ if __name__ == "__main__":
 
     #cloud.novaclient_dump()
 
-    #print json.dumps(cloud.usage("2000-01-01T00:00:00", "2013-12-31T00:00:00"), indent=4)
+
 
     # print json.dumps(cloud.limits(), indent=4)
 
@@ -695,8 +698,6 @@ if __name__ == "__main__":
     """
 
 
-    list = cloud.vms_user()
-    print json.dumps(list, indent=4)
 
     print cloud.find_user_id()
 
