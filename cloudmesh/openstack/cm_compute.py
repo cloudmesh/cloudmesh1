@@ -154,7 +154,6 @@ class openstack(BaseCloud):
         if username == None:
             config = cm_config()
             self.credential = config.get(label)
-            print self.credential
             self.user_id = self.credential['OS_USER_ID']
             # self.credential = credentials(label)
         else:
@@ -250,16 +249,20 @@ class openstack(BaseCloud):
         #print(result)
 
         #sys.exit()
-        if self.user_id == None:
-            sample_flavor = self.cloud.flavors.find(name="m1.tiny")
-            sample_image = self.cloud.images.find(
-                id="6d2bca76-8fff-4d57-9f29-50378539b4fa")
-            sample_vm = self.cloud.servers.create(
-                "%s-id" % self.credential["OS_USERNAME"],
-                flavor=sample_flavor,
-                image=sample_image)
-            self.user_id = sample_vm.user_id
-            sample_vm.delete()
+
+        try:
+            self.user_id = self.credential['OS_USER_ID'] 
+        except:
+            if self.user_id == None:
+                sample_flavor = self.cloud.flavors.find(name="m1.tiny")
+                sample_image = self.cloud.images.find(
+                    id="6d2bca76-8fff-4d57-9f29-50378539b4fa")
+                sample_vm = self.cloud.servers.create(
+                    "%s-id" % self.credential["OS_USERNAME"],
+                    flavor=sample_flavor,
+                    image=sample_image)
+                self.credential['OS_USER_ID'] = self.user_id = sample_vm.user_id
+                sample_vm.delete()
         return self.user_id
 
     ######################################################################
@@ -309,7 +312,6 @@ class openstack(BaseCloud):
 
     def _update_flavors_dict(self,information):
         flavor = information.__dict__
-        pp.pprint(flavor)
         # clean not neaded info
         del flavor['manager']
         del flavor['_info']
@@ -331,7 +333,6 @@ class openstack(BaseCloud):
         del vm['_loaded']
         # del information.links
         id = vm['id']
-        print id
         return (id, vm)
 
     @donotchange
@@ -470,8 +471,9 @@ class openstack(BaseCloud):
         find my vms and delete them
         """
 
-        ids = cloud.find('user_id')
-        cloud.vms_delete(ids)
+        user_id = self.find_user_id()
+        vms = self.find('user_id', user_id)
+        self.vms_delete(vms)
 
         return
 
@@ -655,42 +657,17 @@ class openstack(BaseCloud):
 
 if __name__ == "__main__":
 
-    credential_test = False
-    flavor_test = False
-    table_test = False
-    image_test = False
-    vm_test = False
-    cloud_test = True
-
     cloud = openstack("india-openstack")
 
     #cloud.novaclient_dump()
 
-
-
     # print json.dumps(cloud.limits(), indent=4)
 
-
-    # print json.dumps(cloud.usage("2000-01-01", "2013-12-31"), indent=4)
-    # print json.dumps(cloud.usage("2000-01-01", "2013-12-31",format=None),
-    # indent=4)
-
-    # print json.dumps(cloud.limits(format='dict'), indent=4)
-    # print json.dumps(cloud.limits(format='array'), indent=4)
-
-
-
-    #print cloud.find_user_id()
-
     """
-
-
-
     print cloud.find_user_id()
 
-    list = cloud.vms_delete_user()
-    print list
     """
+
     """
     for i in range (1,3):
         name ="%s-%04d" % (cloud.credential["OS_USERNAME"], i)

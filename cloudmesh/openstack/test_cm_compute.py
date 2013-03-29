@@ -88,6 +88,7 @@ class Test_openstack:
 
         assert table != None
 
+    """
     def test_07_start_delete_vm(self):        
         name ="%s-%04d" % (self.cloud.credential["OS_USERNAME"], 1)
         out = self.cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
@@ -101,13 +102,19 @@ class Test_openstack:
 
         vm = self.cloud.vm_delete(id)
         print vm
+    """
 
-
-    def test_user_vms(self):
+    def test_08_user_vms(self):
         list = self.cloud.vms_user()
         print json.dumps(list, indent=4)
 
-
+    def test_09_delete_all_user_vms(self):
+        self.cloud.refresh()
+        list = self.cloud.vms_delete_user()
+        self.cloud.refresh()
+        user_id = self.cloud.find_user_id()
+        vms = self.cloud.find('user_id', user_id)
+        assert vms == []
 
 
 
