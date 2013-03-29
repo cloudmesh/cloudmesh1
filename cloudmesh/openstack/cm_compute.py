@@ -679,13 +679,5 @@ if __name__ == "__main__":
     print cloud.find('name', name)
     """
 
-    ids = cloud.find('user_id')
-
-    print ids
-
-    cloud.vms_delete(ids)
-
-    print cloud.vms_delete_user()
-
     # cloud.rename("gvonlasz-0001","gregor")
 
