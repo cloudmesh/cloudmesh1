@@ -24,44 +24,8 @@ from cloudmesh.cm_config import cm_config
 
 from novaclient.v1_1 import client
 
-def donotchange(fn):
-    return fn
 
-class BaseCloud:
-    def clear(self):
-        assert False, "Not implemented"
-    def connect(self):
-        assert False, "Not implemented"
-    def config (self, dict):
-        assert False, "Not implemented"
-    def find_user_id(self):
-        assert False, "Not implemented"
-    def _get_image_dict(self):
-        assert False, "Not implemented"
-    def _update_image_dict(self,information):
-        assert False, "Not implemented"
-    def _get_flavors_dict(self):
-        assert False, "Not implemented"
-    def _update_flafors_dict(self,information):        
-        assert False, "Not implemented"
-    def _get_servers_dict(self):
-        assert False, "Not implemented"
-    def _update_servers_dict(self,information):
-        assert False, "Not implemented"
-    def vm_create(self, name, flavor_name, image_id):
-        assert False, "Not implemented"
-    def vm_delete(self, id):
-        assert False, "Not implemented"
-    def vms_project(self, refresh=False):
-        assert False, "Not implemented"
-    def rename(self, old, new, id=None):
-        assert False, "Not implemented"
-    def usage(self, start, end, format='dict'):
-        assert False, "Not implemented"
-    def limits(self):        
-        assert False, "Not implemented"
-    
-class openstack(BaseCloud):
+class openstack:
 
     type = "openstack"   # global var
     flavors = {}         # global var
@@ -75,18 +39,15 @@ class openstack(BaseCloud):
 
     _nova = nova
 
-    @donotchange
     def vms(self):
         return self.servers
 
-    @donotchange
     def credentials(self, cred):
         self.credential = cred
 
     ######################################################################
     # initialize
     ######################################################################
-    # possibly make connext seperate
     def __init__(self,
                  label,
                  authurl=None,
@@ -115,10 +76,6 @@ class openstack(BaseCloud):
         called to obtain again data.
         """
         self.type = "openstack"
-        self._clear()
-
-    @donotchange
-    def _clear(self):
         self.flavors = {}
         self.images = {}
         self.servers = {}
@@ -139,7 +96,6 @@ class openstack(BaseCloud):
             self.credential['OS_AUTH_URL']
         )
 
-    #config should have dict as parameter
     def config(self, label,
                authurl=None,
                project=None,
@@ -265,7 +221,6 @@ class openstack(BaseCloud):
     # print
     ######################################################################
 
-    @donotchange
     def __str__(self):
         """
         print everything but the credentials that is known about this
@@ -282,7 +237,6 @@ class openstack(BaseCloud):
     # get methods
     ######################################################################
 
-    @donotchange
     def type():
         return self.type
 
@@ -290,75 +244,73 @@ class openstack(BaseCloud):
     # refresh
     ######################################################################
 
-    def _get_image_dict(self):
-        return self.cloud.images.list(detailed=True)
+    """
+        def _get_image_dict():
+                return _self.cloud.images.list(detailed=True)
 
-    def _update_image_dict(self,information):
-        flavor = information.__dict__
-        del image.manager
-        del image._info
-        del image._loaded
-        # del information.links
-        id = information.id
-        return (image.id, image)
+        def _update_image_dict(image):
+                del image.manager
+                del image._info
+                del image._loaded
+                # del information.links
+                return (image.id, image)
+
+    """
     
-    def _get_flavors_dict(self):
-        return self.cloud.flavors.list()
-
-    def _update_flafors_dict(self,information):
-        flavor = information.__dict__
-        # clean not neaded info
-        del flavor.manager
-        del flavor._info
-        del flavor._loaded
-        # del information.links
-        id = information.name
-        return (id, flavor)
-
-    def _get_servers_dict(self):
-        return self.cloud.servers.list(detailed=True)
-
-    def _update_servers_dict(self,information):
-        vm = information.__dict__
-        #pp.pprint(vm)
-        delay = vm['id']
-        del vm['manager']
-        del vm['_info']
-        del vm['_loaded']
-        # del information.links
-        id = information.id
-        return (id, vm)
-
-    @donotchange
+    
     def refresh(self, type=None):
 
         time_stamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
         selection = ""
         if type:
             selection = type.lower()[0]
+            all = selection == 'a'
+        else:
+            all = True
 
-        list_function = self._get_servers_dict
-        update_function = self._update_servers_dict
-        if selection == 'a':
-            self.refresh("images")
-            self.refersh("flavors")
-            self.refresh("vms")
-            return
-        elif selection == 'i':
-            list_function = self._get_images_dict
-            update_function = self._update_images_dict
-        elif selection == 'f':
-            list_function = self._get_flavors_dict
-            update_function = self._update_flavor_dict
-        elif selection == 's':
-            list_function = self._get_servers_dict
-            update_function = self._update_servers_dict
+        if selection == 'i' or all:
+            # list = _get_image_dict()
+            list = self.cloud.images.list(detailed=True)
+            for information in list:
+                # (id, image) = _update_image_dict(information)
+                image = information.__dict__
+                del image.manager
+                del image._info
+                del image._loaded
+                # del information.links
+                self.images[information.id] = image
+                self.images[information.id]['cm_refresh'] = time_stamp
 
-        list = list_function()
-        for information in list:
-            (id, image) = update_function(information)
-            self.images[id] = image
-            self.images[id]['cm_refresh'] = time_stamp
+        if selection == 'f' or all:
+            # list = _get_floavors_list()
+            list = self.cloud.flavors.list()
+            for information in list:
+                #flavor = _update_flavors_dict(information)
+                flavor = information.__dict__
+                # clean not neaded info
+                del flavor.manager
+                del flavor._info
+                del flavor._loaded
+                # del information.links
+                self.flavors[information.name] = flavor
+                self.flavors[information.name]['cm_refresh'] = time_stamp
+
+        if selection == 'v' or selection == None or all:
+            #list = _get_servers_list()
+            list = self.cloud.servers.list(detailed=True)
+
+            for information in list:
+                # vm = _update_servers_dict(information)
+                vm = information.__dict__
+                #pp.pprint(vm)
+                delay = vm['id']
+                del vm['manager']
+                del vm['_info']
+                del vm['_loaded']
+                # del information.links
+
+                self.servers[information.id] = vm
+                self.servers[information.id]['cm_refresh'] = time_stamp
 
     ######################################################################
     # create a vm
@@ -395,7 +347,6 @@ class openstack(BaseCloud):
         # return just the id or None if its deleted
         return vm
 
-    @donotchange
     def vms_delete(self, ids):
         """
         delete many vms by id. ids is an array
@@ -410,7 +361,6 @@ class openstack(BaseCloud):
     # list user images
     ######################################################################
 
-    @donotchange
     def vms_user(self, refresh=False):
         """
         find my vms
@@ -452,7 +402,6 @@ class openstack(BaseCloud):
     # delete images from a user
     ######################################################################
 
-    @donotchange
     def vms_delete_user(self):
         """
         find my vms and delete them
@@ -467,7 +416,6 @@ class openstack(BaseCloud):
     # find
     ######################################################################
 
-    @donotchange
     def find(self, key, value=None):
         ids = []
         if key == 'user_id' and value == None:
@@ -490,7 +438,6 @@ class openstack(BaseCloud):
             vm = self.cloud.servers.update(id, new)
         return
 
-    @donotchange
     def reindex(self, prefixold, prefix, index_format):
         all = self.find('user_id')
         counter = 1
@@ -502,7 +449,6 @@ class openstack(BaseCloud):
                 vm = self.cloud.servers.update(id, new)
             counter += 1
 
-    @donotchange
     def reindex(self, prefix, index_format):
         all = self.find('user_id')
         counter = 1
@@ -526,9 +472,7 @@ class openstack(BaseCloud):
     ######################################################################
     # EXTRA
     ######################################################################
-    # will be moved into one class
 
-    @donotchange
     def table_col_to_dict(self, body):
         result = {}
         for element in body:
@@ -537,7 +481,6 @@ class openstack(BaseCloud):
             result[key] = value
         return result
 
-    @donotchange
     def Table_matrix(self, text, format=None):
         lines = text.splitlines()
         headline = lines[0].split("|")
@@ -570,9 +513,6 @@ class openstack(BaseCloud):
     ######################################################################
     # CLI call of ussage
     ######################################################################
-
-    # will be moved into utils
-    @donotchange
     def parse_isotime(self, timestr):
         """Parse time from ISO 8601 format"""
         try:
@@ -644,8 +584,9 @@ if __name__ == "__main__":
     flavor_test = False
     table_test = False
     image_test = False
-    vm_test = False
-    cloud_test = True
+    vm_test = True
+    cloud_test = False
+    usage_test = False
 
     if credential_test:
         credential = cm_config('india-openstack')
@@ -653,19 +594,20 @@ if __name__ == "__main__":
 
     cloud = openstack("india-openstack")
 
-    #cloud.novaclient_dump()
 
-    #print json.dumps(cloud.usage("2000-01-01T00:00:00", "2013-12-31T00:00:00"), indent=4)
+    cloud.novaclient_dump()
 
-    # print json.dumps(cloud.limits(), indent=4)
+    if usage_test:
+        #print json.dumps(cloud.usage("2000-01-01T00:00:00", "2013-12-31T00:00:00"), indent=4)
 
+        print json.dumps(cloud.limits(), indent=4)
 
-    # print json.dumps(cloud.usage("2000-01-01", "2013-12-31"), indent=4)
-    # print json.dumps(cloud.usage("2000-01-01", "2013-12-31",format=None),
-    # indent=4)
+                 
+        # print json.dumps(cloud.usage("2000-01-01", "2013-12-31"), indent=4)
+        # print json.dumps(cloud.usage("2000-01-01", "2013-12-31",format=None), indent=4)
 
-    # print json.dumps(cloud.limits(format='dict'), indent=4)
-    # print json.dumps(cloud.limits(format='array'), indent=4)
+        # print json.dumps(cloud.limits(format='dict'), indent=4)
+        # print json.dumps(cloud.limits(format='array'), indent=4)
 
     if flavor_test or table_test:
         cloud.refresh('flavors')
@@ -696,15 +638,20 @@ if __name__ == "__main__":
         cloud.refresh()
         print cloud
 
-    #print cloud.find_user_id()
+        #print cloud.find_user_id()
 
-    """
+
+    
+    
+
+
     name ="%s-%04d" % (cloud.credential["OS_USERNAME"], 1)
-    out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
 
+    out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
     pp.pprint(out)
     print json.dumps(out, indent=4)
 
+    """
     key = out.keys()[0]
     id = out[key]["id"]
 
@@ -733,14 +680,14 @@ if __name__ == "__main__":
     print cloud.find('name', name)
     """
 
-    ids = cloud.find('user_id')
+    #ids = cloud.find('user_id')
 
-    print ids
+    #print ids
 
-    cloud.vms_delete(ids)
+    #cloud.vms_delete(ids)
 
-    print cloud.vms_delete_user()
+    #print cloud.vms_delete_user()
 
     # cloud.rename("gvonlasz-0001","gregor")
 
-    cloud.reindex("deleteme-", "%03d")
+    #cloud.reindex("deleteme-", "%03d")
