@@ -108,16 +108,17 @@ class openstack(BaseCloud):
                     password=password)
         self.connect()
 
+    @donotchange
     def clear(self):
         """
         clears the data of this openstack instance, a new connection
         including reading the credentials and a refresh needs to be
         called to obtain again data.
         """
+        #Todo: we may just use the name of the class instead as the type
         self.type = "openstack"
         self._clear()
 
-    @donotchange
     def _clear(self):
         self.flavors = {}
         self.images = {}
@@ -361,9 +362,9 @@ class openstack(BaseCloud):
             list_function = self._get_servers_dict
             update_function = self._update_servers_dict
             d = self.servers
-        else:
+        elif type != None:
             print "refresh type not supported"
-            assert false
+            assert False
 
         list = list_function()
         for information in list:
@@ -692,14 +693,6 @@ if __name__ == "__main__":
         table.create(cloud.flavors, columns, format='%12s', header=True)
         print table
 
-    if image_test:
-        cloud.refresh('images')
-        print json.dumps(cloud.images, indent=4)
-
-
-    if cloud_test:
-        cloud.refresh()
-        print cloud
 
     #print cloud.find_user_id()
 

@@ -50,6 +50,8 @@ class Test_openstack:
         # we assume that there are always images running
         assert len(self.cloud.servers) > 0
 
+    def test_refresh(self):
+        self.cloud.refresh()
+        pp.pprint(self.cloud)
 
-    def test_c(self):
-        assert 'c' == 'c'
+        assert self.cloud.images > 0
