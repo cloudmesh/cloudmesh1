@@ -659,10 +659,6 @@ if __name__ == "__main__":
     vm_test = False
     cloud_test = True
 
-    if credential_test:
-        credential = cm_config('india-openstack')
-        # print credential
-
     cloud = openstack("india-openstack")
 
     #cloud.novaclient_dump()
@@ -697,19 +693,6 @@ if __name__ == "__main__":
     #print cloud.find_user_id()
 
     """
-    name ="%s-%04d" % (cloud.credential["OS_USERNAME"], 1)
-    out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
-
-    pp.pprint(out)
-    print json.dumps(out, indent=4)
-
-    key = out.keys()[0]
-    id = out[key]["id"]
-
-    print ">>>", id
-
-    vm = cloud.vm_delete(id)
-    print vm
 
 
     list = cloud.vms_user()
