@@ -7,7 +7,8 @@ or
 nosetests -v
 
 """
-
+import sys
+from cloudmesh.openstack.cm_table import table as cm_table
 from cloudmesh.cm_config import cm_config
 from cloudmesh.openstack.cm_compute import openstack
 import json
@@ -22,9 +23,11 @@ class Test_openstack:
 
     def tearDown(self):
         pass
-
     def test_00_check_label(self):
         assert self.cloud.label == "india-openstack"
+
+    def test_00_limit(self):
+        print >> sys.stderr, json.dumps(self.cloud.limits(), indent=4)
 
     def test_01_images(self):
         self.cloud.refresh('images')
@@ -56,13 +59,36 @@ class Test_openstack:
 
         assert self.cloud.images > 0
 
+    """
     def test_05_usage(self):
         result = self.cloud.usage("2000-01-01T00:00:00", "2013-12-31T00:00:00")
         print json.dumps(result, indent=4)
         assert ['Instances'] > 0 
+    """
+        
+    def test_06_table(self):
+        self.test_02_flavor()
+        table = cm_table()
+        columns = ["id", "name", "ram", "vcpus"]
 
+        table.create(self.cloud.flavors, columns, header=True)
+        print table
 
-    def test_06_start_delete_vm(self):        
+        table = cm_table()
+        columns = ["id", "name", "ram", "vcpus"]
+
+        table.create(self.cloud.flavors, columns, format='HTML', header=True)
+        print table
+
+        table = cm_table()
+        columns = ["id", "name", "ram", "vcpus"]
+
+        table.create(self.cloud.flavors, columns, format='%12s', header=True)
+        print table
+
+        assert table != None
+
+    def test_07_start_delete_vm(self):        
         name ="%s-%04d" % (self.cloud.credential["OS_USERNAME"], 1)
         out = self.cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
 

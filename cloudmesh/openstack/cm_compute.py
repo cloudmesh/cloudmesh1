@@ -679,19 +679,6 @@ if __name__ == "__main__":
     # print json.dumps(cloud.limits(format='array'), indent=4)
 
 
-    if table_test:
-        table = cm_table()
-        columns = ["id", "name", "ram", "vcpus"]
-
-        table.create(cloud.flavors, columns, header=True)
-        print table
-
-        table.create(cloud.flavors, columns, format='HTML', header=True)
-        print table
-
-        table.create(cloud.flavors, columns, format='%12s', header=True)
-        print table
-
 
     #print cloud.find_user_id()
 
@@ -725,4 +712,3 @@ if __name__ == "__main__":
 
     # cloud.rename("gvonlasz-0001","gregor")
 
-    cloud.reindex("deleteme-", "%03d")
