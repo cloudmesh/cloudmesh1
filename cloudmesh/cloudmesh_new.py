@@ -134,10 +134,13 @@ class cloudmesh:
         """
         configuration = cm_config()
         all_keys = configuration.keys()
+        all_keys = all_keys[2:]
         for name in all_keys :
-            credential = configuration.get(name)
-            type = credential['cm_type']
-            self.clouds[name] = {'cm_type': type, 'credential': credential}
+            if str(name) != 'username' and str(name) != 'default':
+                credential = configuration.get(name)
+                print name
+                type = credential['cm_type']
+                self.clouds[name] = {'cm_type': type, 'credential': credential}
             #self.update(name, type)
         return
 
