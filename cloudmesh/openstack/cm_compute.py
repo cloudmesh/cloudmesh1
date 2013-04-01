@@ -171,11 +171,11 @@ class openstack(BaseCloud):
         """
 
     ######################################################################
-    # find userid
+    # TESTS
     ######################################################################
 
     def intro(self, what):
-        """ usde to find some methods form novaclient"""
+        """ used to find some methods form novaclient"""
         import inspect
 
         print 70 * "="
@@ -233,6 +233,10 @@ class openstack(BaseCloud):
         self.intro(self.cloud.volumes)
 
         now = datetime.now()
+
+    ######################################################################
+    # FIND USER ID
+    ######################################################################
 
     def find_user_id(self):
         """
