@@ -35,13 +35,6 @@ class cloudmesh:
     keys = []
 
     ######################################################################
-    # variables that we can most likely eliminate
-    ######################################################################
-
-    # user needs to come from credential ...
-    user = "gvonlasz"
-
-    ######################################################################
     # initialization methods
     ######################################################################
 
@@ -53,7 +46,6 @@ class cloudmesh:
     def clear(self):
         self.clouds = {}
         self.keys = []
-        self.user = "gvonlasz"
 
     ######################################################################
     # the configuration method that must be called to get the cloud info
@@ -109,26 +101,10 @@ class cloudmesh:
     ######################################################################
 
     def __str__(self):
-        """
-        tmp = self._sanitize()
-        print tmp
-        """
-
-    """
-    def _sanitize(self):
-        # copy the self.cloud
-        # delete the attributes called credential for all clouds
-
-        all_keys =  self.clouds.keys()
-        for cloud in all_keys:
-            self.clouds[cloud]['credential'] = {}
-
-        return self.clouds
-    """
-
+        return str(self.clouds)
+    
     def dump(self):
-        """tmp = self._sanitize()"""
-        print json.dumps(tmp, indent=4)
+        print json.dumps(self.clouds, indent=4)
 
     ######################################################################
     # the refresh method that gets upto date information for cloudmesh
