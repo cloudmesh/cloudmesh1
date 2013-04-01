@@ -28,12 +28,8 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 pages = FlatPages(app)
 
-# @hroelee (hyungro) commented March 1st, 2013
-# Personally, I prefer to use class variables instead of using global variables.
-# Example of using class in Flask: https://github.com/futuregrid/cloud-metrics/blob/master/fgws/FGWSApps.py
-#
-# Opinion from stackoverflow: Using global variables in a function other than the one that created them
-# http://stackoverflow.com/questions/423379/using-global-variables-in-a-function-other-than-the-one-that-created-them
+# TODO: think about using a class
+
 #
 #clouds = fg.cloud_mesh()
 clouds = cloudmesh()
