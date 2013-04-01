@@ -11,12 +11,13 @@ import os
 # but instead including it in setup.py we need to change the code
 # here, so do not use the version increment
 #
-filename = "VERSION.txt"
-version = open(filename).read()
+
+#filename = "VERSION.txt"
+#version = open(filename).read()
 
 SERVER = "server"
 
-
+"""
 def _next_version(version):
     numbers = version.split(".")
     numbers[-1] = str(int(numbers[-1]) + 1)
@@ -28,7 +29,7 @@ def _write_version(version):
     file = open(filename, 'w')
     print >> file, version
     file.close()
-
+"""
 
 def _cleantest():
     """wipe out the database and rerun the test. not recommended."""
@@ -81,6 +82,7 @@ def git():
     _git("push")
 
 
+'''
 def tag():
     """introduce a new tag and upload it to git. run fab changes first and
        add that to CHANGES.txt"""
@@ -93,7 +95,7 @@ def tag():
     _git("commit", "-m", "adding version %s" % new_version)
     _git("push")
     changes()
-
+'''
 
 def changes():
     """look at the changes in github since the last taged version"""
