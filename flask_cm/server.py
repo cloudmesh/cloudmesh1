@@ -12,7 +12,7 @@ from flask_flatpages import FlatPages
 from cloudmesh.cloudmesh import cloudmesh
 from datetime import datetime
 #from sh import cm 
-from sh import fgmetric
+#from sh import fgmetric
 
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
@@ -37,13 +37,14 @@ clouds = cloudmesh()
 # AttributeError: cloudmesh instance has no attribute 'refresh'
 #clouds.refresh()
 # TEST CASE
-clouds.refresh("openstack")
+
 
 def make_active(name):
   active = {'home' : "", 
             'table' : "", 
             'contact' : "", 
-            "metric" : ""}
+            'metric' : "",
+            'profile': ""}
   active[name] = 'active'
   return active
 
@@ -121,16 +122,38 @@ def table():
 
     active=make_active('table')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-
+    clouds.refresh("sierra-openstack")
+    
+    print 'this hi' + str(clouds.clouds)
     # note thet call to sierra is fake it just goes to india and sets cloudname to sierra.
     #clouds.dump()
     #keys = clouds.get_keys()
     return render_template('table.html', 
                            updated = time_now,
                            keys="",##",".join(clouds.get_keys()),
-                           clouds=clouds.get(),
+                           clouds=clouds.clouds,
                            image='myimage',
                            pages=pages,
+                           active=active,
+                           version=version)
+                        
+@app.route('/profile/')
+def profile():
+    global clouds
+
+    active=make_active('profile')
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+ 
+    persolalinfo = {'name':'abc', 'data1': 'pqr'}
+    
+    cloudinfo = {'openstak-india': {'type':'openstack', 'host':'india.futuregrid.org' ,
+    'username':'shweta'}}
+    
+    return render_template('profile.html', 
+                           updated = time_now,
+                           keys="",##",".join(clouds.get_keys()),
+                           cloudinfo = cloudinfo,
+                           persolalinfo = persolalinfo,
                            active=active,
                            version=version)
 
@@ -162,6 +185,7 @@ def page(path):
                            pages=pages, 
                            active=active, 
                            version=version)
+                        
 
 if __name__ == '__main__':
   app.run(debug=True)

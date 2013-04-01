@@ -154,7 +154,7 @@ class openstack(BaseCloud):
         if username == None:
             config = cm_config()
             self.credential = config.get(label)
-            self.user_id = self.credential['OS_USER_ID']
+            #self.user_id = self.credential['OS_USER_ID']
             # self.credential = credentials(label)
         else:
             self.credential = {}
@@ -282,7 +282,7 @@ class openstack(BaseCloud):
         information = {
             'label': self.label,
             'flavors': self.flavors,
-            'vms': self.servers,
+            'servers': self.servers,
             'images': self.images}
         return json.dumps(information, indent=4)
 
@@ -662,6 +662,9 @@ class openstack(BaseCloud):
 if __name__ == "__main__":
 
     cloud = openstack("india-openstack")
+    
+    cloud.refresh()
+    print cloud    
 
     #cloud.novaclient_dump()
 
