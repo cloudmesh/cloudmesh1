@@ -9,12 +9,15 @@ import os
 # import shelve
 from cm_config import cm_config
 from openstack.cm_compute import openstack as os_client
+
 try:
     # from sh import fgmetric
     from fgmetric.FGMetricsAPI import FGMetricsAPI
     # OR
     # from sh import fgmetric
 except:
+    # TODO THIS IS NOT HOW WE DO IT, SETUP CONTAINS ALL REQUEMENTS
+    # FIX SETUP
     print "---------------------"
     print "fgmetric not imported"
     print "---------------------"
@@ -22,11 +25,15 @@ except:
 try:
     from bson import json_util
 except:
+    # TODO THIS IS NOT HOW WE DO IT, SETUP CONTAINS ALL REQUEMENTS
+    # FIX SETUP
     print "--------------------------------"
     print "Please run 'pip install pymongo'"
     print "--------------------------------"
 
+    #
 
+# WHY ARE WE NOT MORE CLEANLY SEPARATING METRIC FROM THIS?
 class cloudmesh:
 
     ######################################################################

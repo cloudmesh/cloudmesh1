@@ -1,10 +1,15 @@
+import sys
+sys.path.insert(0, '..')
+sys.path.insert(0, '../..')
+
+print sys.path
 
 import os
 # cloud mesh
 from flask import Flask, render_template, request
 from flask_flatpages import FlatPages
 #import cloud_mesh as fg
-from cloudmesh import cloudmesh
+from cloudmesh.cloudmesh import cloudmesh
 from datetime import datetime
 #from sh import cm 
 from sh import fgmetric
