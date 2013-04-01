@@ -18,6 +18,7 @@ requires=[
     'docopt',
     'pyyaml',
     'Flask',
+    'Flask-FlatPages',
     'Flask-WTF'
     'paramiko',
     'blessings',

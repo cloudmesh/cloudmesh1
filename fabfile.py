@@ -38,11 +38,11 @@ def cm():
 all: server view
 
 server:
-	python server.py
+	python flask_cm/server.py
 
 view:
 	sleep 3
-	open http://localhost:5000/metric
+	open http://127.0.0.1:5000
 """
     file.close()
     os.system("make -j -f Makefile~ all")
