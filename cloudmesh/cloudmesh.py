@@ -84,15 +84,15 @@ class cloudmesh:
                     self.clouds[cloud_name] = {'cm_type': cloud_type, 'credential': credential}
                     print "BBBB"
                     try:
-                        self.update(cloud_name, cloud_type)
                         self.clouds[cloud_name] = {'cm_type': cloud_type, 'credential': credential}
+                        self.update(cloud_name, cloud_type)
                     except:
                         print "ERROR: can not connect to", cloud_name
                     print "CCCC"
 
                     
-            except Exception, e:
-              print "ERROR: Not a cloud:", cloud_name , e
+            except Exception:
+              print "ERROR: Not a cloud:", cloud_name
         return
 
     ######################################################################
@@ -138,56 +138,37 @@ class cloudmesh:
         servers = {}        
         cloud =None;
         
-        if(cloud_name == None):
+        if (cloud_name == None):
             all_clouds = self.clouds.keys()
-            for cloud_name in all_clouds :
-                try:
-                    type = self.clouds[cloud_name]['cm_type']
-
-                    if type == 'openstack':
-                        cloud = openstack(cloud_name)
-                        
-                    elif type == 'eucalyptus':
-                        # Where do i find the project name ? Is there a defaul one ? 
-                        cloud = eucalyptus(cloud_name, 'fg-82')
-                        
-                    elif type == 'azure':
-                        cloud = azure.cm_azure()
-                       
-                    cloud.refresh()
-                    self.clouds[cloud_name]['flavors'] = cloud.flavors
-                    self.clouds[cloud_name]['images'] = cloud.images
-                    self.clouds[cloud_name]['servers'] = cloud.servers
-                
-                except Exception, e:
-                    print e
         else:
+            all_clouds = [cloud_name]
+
+        print "CLOUDS", all_clouds
+
+        for cloud_name in all_clouds :
+            print "REFRESHING", cloud_name
             try:
                 type = self.clouds[cloud_name]['cm_type']
-
                 if type == 'openstack':
                     cloud = openstack(cloud_name)
-                    
                 elif type == 'eucalyptus':
-                    # Where do i find the project name ? Is there a defaul one ? 
-		    # this is obvious;ly wrong as the tennent comes from profile
-		    # TODO EUCALYPTUS DOES NOT YET WORK
-
-                    cloud = eucalyptus(cloud_name, 'fg-82')
-                    
+                    cloud = eucalyptus(cloud_name)
                 elif type == 'azure':
-                    cloud = azure.cm_azure()
-                   
+                    cloud = azure(cloud_name)
                 cloud.refresh()
+                cloud[cloud_name].update({'name': name,
+                                          'cm_type': type,
+                                          "servers": servers})
                 self.clouds[cloud_name]['flavors'] = cloud.flavors
-                self.clouds[cloud_name]['images'] = cloud.images
                 self.clouds[cloud_name]['servers'] = cloud.servers
+                self.clouds[cloud_name]['images'] = cloud.images
                 
             except Exception, e:
-                    print e
-        return cloud
+                print e
 
-    def update(self, name, type):
+        return self.clouds
+
+    def update (self, name, type):
         servers = self.refresh(name)
         self.clouds[name].update({'name': name,
                                   'cm_type': type,

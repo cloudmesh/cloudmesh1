@@ -185,3 +185,5 @@ def page(path):
                            version=version)
                         
 
+if __name__ == "__main__":
+    app.run()
