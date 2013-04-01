@@ -61,29 +61,14 @@ class cloudmesh:
         pp.pprint (configuration)
 
         for cloud_name in configuration.keys():
-            print "--------------------"
-
             try:
                 credential = configuration.get(key=cloud_name)
                 cloud_type = credential['cm_type']
 
-                print credential
-                print ">>>>>>>", cloud_name, cloud_type
-
-                if cloud_type in ['openstack','eucalyptus']:
-                    print "AAAAA"
-                    self.clouds[cloud_name] = {'cm_type': cloud_type, 'credential': credential}
-                    print "BBBB"
-                    try:
-                        self.clouds[cloud_name] = {'cm_type': cloud_type, 'credential': credential}
-                        #self.refresh(cloud_name)
-                    except Exception, e:
-                        print "ERROR: can not connect to", cloud_name, e
-                    print "CCCC"
-
-                    
-            except Exception:
-              print "ERROR: Not a cloud:", cloud_name
+                if cloud_type in ['openstack','eucalyptus','azure']:
+                    self.clouds[cloud_name] = {'name': cloud_name, 'cm_type': cloud_type, 'credential': credential}
+            except: #ignore
+                pass
         return
 
     ######################################################################
@@ -96,8 +81,6 @@ class cloudmesh:
 
     ######################################################################
     # important print methods
-    ######################################################################
-    # includes sanitizing to remove the credentials
     ######################################################################
 
     def __str__(self):
