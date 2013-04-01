@@ -18,8 +18,11 @@ DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
 
-filename = "VERSION.txt"
-version = open(filename).read()
+"""
+import pkg_resources
+version = pkg_resources.get_distribution("flask_cm").version
+"""
+version = "0.7.2"
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -34,7 +37,7 @@ pages = FlatPages(app)
 #
 #clouds = fg.cloud_mesh()
 clouds = cloudmesh()
-clouds.load()
+# clouds.load()
 # AttributeError: cloudmesh instance has no attribute 'refresh'
 #clouds.refresh()
 # TEST CASE
@@ -165,5 +168,5 @@ def page(path):
                            version=version)
 
 if __name__ == '__main__':
-  #app.run(debug=True)
-  app.run(host=os.environ["FG_HOSTING_IP"] or "127.0.0.1", debug=True)
+  app.run(debug=True)
+  #  app.run(host=os.environ["FG_HOSTING_IP"] or "127.0.0.1", debug=True)
