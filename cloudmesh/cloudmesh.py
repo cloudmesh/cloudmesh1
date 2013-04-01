@@ -6,6 +6,9 @@ from datetime import datetime
 import json
 import sys
 import os
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+
 # import shelve
 from cm_config import cm_config
 #from openstack.cm_compute import openstack as os_client
@@ -140,14 +143,16 @@ class cloudmesh:
         the cloudmesh
         """
         configuration = cm_config()
+        pp.pprint (configuration)
         for name in configuration.keys():
             try:
                 credential = configuration.get(name)
-                type = credential['cm_type']
+                print credential
+                cloud_type = credential['cm_type']
 
-                if type in ['openstack','eucalyptus']:
-                    self.clouds[name] = {'cm_type': type, 'credential': credential}
-                    self.update(name, type)
+                if cloud_type in ['openstack','eucalyptus']:
+                    self.clouds[name] = {'cm_type': cloud_type, 'credential': credential}
+                    self.update(name, cloud_type)
             except:
               print "Not a cloud:", name 
         return
