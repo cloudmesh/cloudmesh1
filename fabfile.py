@@ -1,6 +1,8 @@
 from fabric.api import *
 from sh import git as _git
 import os
+import webbrowser
+import platform
 
 #
 # VERSION MANAGEMENT
@@ -48,8 +50,9 @@ server:
 
 view:
 	sleep 3
-	open http://127.0.0.1:5000
+	open http://127.0.0.1:5000/table
 """
+    #webbrowser.open("http://127.0.0.1:5000")
     file.close()
     os.system("make -j -f Makefile~ all")
 

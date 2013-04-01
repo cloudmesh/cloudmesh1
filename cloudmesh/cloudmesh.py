@@ -149,12 +149,12 @@ class cloudmesh:
                 credential = configuration.get(name)
                 print credential
                 cloud_type = credential['cm_type']
-
+                print cloud_type
                 if cloud_type in ['openstack','eucalyptus']:
                     self.clouds[name] = {'cm_type': cloud_type, 'credential': credential}
                     self.update(name, cloud_type)
-            except:
-              print "Not a cloud:", name 
+            except Exception, e:
+              print "ERROR: Not a cloud:", name , e
         return
 
     ######################################################################
@@ -195,12 +195,12 @@ class cloudmesh:
     # else all the clouds will be refreshed
     ######################################################################
 
-    def refresh(self, cloudname=None):
-        print "Refershing cloudname %s" % cloudname
+    def refresh(self, cloud_name=None):
+        print "Refershing cloud %s" % cloud_name
         servers = {}        
         cloud =None;
         
-        if(cloudname == None):
+        if(cloud_name == None):
             all_clouds = self.clouds.keys()
             for cloud_name in all_clouds :
                 try:
@@ -225,7 +225,7 @@ class cloudmesh:
                     print e
         else:
             try:
-                type = self.clouds[cloudname]['cm_type']
+                type = self.clouds[cloud_name]['cm_type']
 
                 if type == 'openstack':
                     cloud = openstack(cloud_name)
@@ -241,16 +241,16 @@ class cloudmesh:
                     cloud = azure.cm_azure()
                    
                 cloud.refresh()
-                self.clouds[cloudname]['flavors'] = cloud.flavors
-                self.clouds[cloudname]['images'] = cloud.images
-                self.clouds[cloudname]['servers'] = cloud.servers
+                self.clouds[cloud_name]['flavors'] = cloud.flavors
+                self.clouds[cloud_name]['images'] = cloud.images
+                self.clouds[cloud_name]['servers'] = cloud.servers
                 
             except Exception, e:
                     print e
         
 
     def update(self, name, type):
-        servers = self.refresh_servers(name)
+        servers = self.refresh(name)
         self.clouds[name].update({'name': name,
                                   'cm_type': type,
                                   "servers": servers})
@@ -279,10 +279,10 @@ class cloudmesh:
     def refresh(self):
         keys = self.refresh_keys()
         for cloud in keys:
-            self.refresh_servers(cloud)
+            self.refresh(cloud)
 
         # p = Pool(4)
-        # update = self.refresh_servers
+        # update = self.refresh
         # output = p.map(update, keys)
 
     """
