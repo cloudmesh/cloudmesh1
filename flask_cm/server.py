@@ -1,6 +1,6 @@
 import sys
-sys.path.insert(0, '..')
-sys.path.insert(0, '../..')
+sys.path.insert(0, './')
+sys.path.insert(0, '../')
 
 print sys.path
 
@@ -33,7 +33,7 @@ pages = FlatPages(app)
 # http://stackoverflow.com/questions/423379/using-global-variables-in-a-function-other-than-the-one-that-created-them
 #
 #clouds = fg.cloud_mesh()
-clouds = cloudmesh.cloudmesh()
+clouds = cloudmesh()
 clouds.load()
 # AttributeError: cloudmesh instance has no attribute 'refresh'
 #clouds.refresh()
