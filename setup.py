@@ -8,6 +8,9 @@ from setuptools import setup, find_packages
 import sys
 import os
 
+version = 0.7.2
+
+
 ######################################################################
 # REQUIREMENTS
 ######################################################################
@@ -52,7 +55,7 @@ def desc():
     except IOError:
         return info
 
-version = read("VERSION.txt")
+
 
 ######################################################################
 # CLASSIFIER

@@ -6,6 +6,11 @@ import os
 # VERSION MANAGEMENT
 #
 
+#
+# we are no longer doing version management with the VERSION.txt file,
+# but instead including it in setup.py we need to change the code
+# here, so do not use the version increment
+#
 filename = "VERSION.txt"
 version = open(filename).read()
 
