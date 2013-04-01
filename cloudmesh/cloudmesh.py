@@ -19,30 +19,7 @@ from openstack.cm_compute import openstack
 from eucalyptus.eucalyptus_new import eucalyptus
 from azure.cm_azure import cm_azure as azure 
 
-try:
-    # from sh import fgmetric
-    from fgmetric.FGMetricsAPI import FGMetricsAPI
-    # OR
-    # from sh import fgmetric
-except:
-    # TODO THIS IS NOT HOW WE DO IT, SETUP CONTAINS ALL REQUEMENTS
-    # FIX SETUP
-    print "---------------------"
-    print "fgmetric not imported"
-    print "---------------------"
-    pass
-try:
-    from bson import json_util
-except:
-    # TODO THIS IS NOT HOW WE DO IT, SETUP CONTAINS ALL REQUEMENTS
-    # FIX SETUP
-    print "--------------------------------"
-    print "Please run 'pip install pymongo'"
-    print "--------------------------------"
 
-    #
-
-# WHY ARE WE NOT MORE CLEANLY SEPARATING METRIC FROM THIS?
 class cloudmesh:
 
     ######################################################################
@@ -72,66 +49,11 @@ class cloudmesh:
         self.clear()
         #Read Yaml File to find all the cloud configurations present
         self.config();
-        try:
-            self.metric_api = FGMetricsAPI()
-        except:
-            pass
 
     def clear(self):
         self.clouds = {}
         self.keys = []
         self.user = "gvonlasz"
-
-    ######################################################################
-    # some metric methods
-    ######################################################################
-
-    def get_metrics_cli(self, args):
-        """ Get usage data from FG Metric CLI"""
-        """ This is replica with get_metrics but using CLI instead of API """
-        """
-            Args:
-                args (dict): parameters for CLI with option
-            Return:
-                (dict): output of fgmetric in a dict type
-            Raise:
-                n/a
-        """
-        try:
-            res = fgmetric(
-                args)  # args should be list-lized before send it out as a parameter
-            return json.loads(res, object_hook=json_util.object_hook)
-        except:
-            pass
-
-    def get_metrics(self, args):
-        """Get usage data from FG Metrics"""
-
-        if not self.metric_api:
-            return
-
-        try:
-            args["user"] = args["user"] or self.user
-            self._set_metric_api_vars(args)
-            # print args
-            stats = self.metric_api._set_dict_vars()
-            metrics = self.metric_api.get_stats()
-            stats["stats"] = metrics
-            self.metrics = stats
-            # print self.metrics
-        except:
-            print sys.exc_info()
-            pass
-        return self.metrics
-
-    def _set_metric_api_vars(self, args):
-        self.metric_api.set_date(args["s_date"], args["e_date"])
-        self.metric_api.set_metric(
-            "count runtime cores mem disks")  # args["metric"])
-        self.metric_api.set_user(args["user"])
-        self.metric_api.set_cloud(args["cloud"])
-        self.metric_api.set_hostname(args["host"])
-        self.metric_api.set_period(args["period"])
 
     ######################################################################
     # the configuration method that must be called to get the cloud info
@@ -142,19 +64,35 @@ class cloudmesh:
         reads the cloudmesh yaml file that defines which clouds build
         the cloudmesh
         """
+
         configuration = cm_config()
         pp.pprint (configuration)
-        for name in configuration.keys():
+
+        for cloud_name in configuration.keys():
+            print "--------------------"
+
             try:
-                credential = configuration.get(name)
-                print credential
+                credential = configuration.get(key=cloud_name)
                 cloud_type = credential['cm_type']
-                print cloud_type
+
+                print credential
+
+                print ">>>>>>>", cloud_name, cloud_type
+
                 if cloud_type in ['openstack','eucalyptus']:
-                    self.clouds[name] = {'cm_type': cloud_type, 'credential': credential}
-                    self.update(name, cloud_type)
+                    print "AAAAA"
+                    self.clouds[cloud_name] = {'cm_type': cloud_type, 'credential': credential}
+                    print "BBBB"
+                    try:
+                        self.update(cloud_name, cloud_type)
+                        self.clouds[cloud_name] = {'cm_type': cloud_type, 'credential': credential}
+                    except:
+                        print "ERROR: can not connect to", cloud_name
+                    print "CCCC"
+
+                    
             except Exception, e:
-              print "ERROR: Not a cloud:", name , e
+              print "ERROR: Not a cloud:", cloud_name , e
         return
 
     ######################################################################
@@ -247,7 +185,7 @@ class cloudmesh:
                 
             except Exception, e:
                     print e
-        
+        return cloud
 
     def update(self, name, type):
         servers = self.refresh(name)

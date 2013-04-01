@@ -2,17 +2,14 @@ import sys
 sys.path.insert(0, './')
 sys.path.insert(0, '../')
 
-print sys.path
-
 import os
-# cloud mesh
+
 from flask import Flask, render_template, request
 from flask_flatpages import FlatPages
-#import cloud_mesh as fg
+
 from cloudmesh.cloudmesh import cloudmesh
 from datetime import datetime
-#from sh import cm 
-#from sh import fgmetric
+
 
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
@@ -24,9 +21,6 @@ version = pkg_resources.get_distribution("flask_cm").version
 """
 version = "0.7.2"
 
-app = Flask(__name__)
-app.config.from_object(__name__)
-pages = FlatPages(app)
 
 # TODO: think about using a class
 
@@ -37,6 +31,10 @@ clouds = cloudmesh()
 # AttributeError: cloudmesh instance has no attribute 'refresh'
 #clouds.refresh()
 # TEST CASE
+
+app = Flask(__name__)
+app.config.from_object(__name__)
+pages = FlatPages(app)
 
 
 def make_active(name):
@@ -122,7 +120,7 @@ def table():
 
     active=make_active('table')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    clouds.refresh("sierra-openstack")
+    #clouds.refresh("sierra-openstack")
     
     print 'this hi' + str(clouds.clouds)
     # note thet call to sierra is fake it just goes to india and sets cloudname to sierra.
@@ -187,6 +185,3 @@ def page(path):
                            version=version)
                         
 
-if __name__ == '__main__':
-  app.run(debug=True)
-  #  app.run(host=os.environ["FG_HOSTING_IP"] or "127.0.0.1", debug=True)
