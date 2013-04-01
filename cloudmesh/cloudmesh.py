@@ -76,7 +76,6 @@ class cloudmesh:
                 cloud_type = credential['cm_type']
 
                 print credential
-
                 print ">>>>>>>", cloud_name, cloud_type
 
                 if cloud_type in ['openstack','eucalyptus']:
@@ -85,9 +84,9 @@ class cloudmesh:
                     print "BBBB"
                     try:
                         self.clouds[cloud_name] = {'cm_type': cloud_type, 'credential': credential}
-                        self.update(cloud_name, cloud_type)
-                    except:
-                        print "ERROR: can not connect to", cloud_name
+                        #self.refresh(cloud_name)
+                    except Exception, e:
+                        print "ERROR: can not connect to", cloud_name, e
                     print "CCCC"
 
                     
@@ -110,9 +109,12 @@ class cloudmesh:
     ######################################################################
 
     def __str__(self):
+        """
         tmp = self._sanitize()
         print tmp
+        """
 
+    """
     def _sanitize(self):
         # copy the self.cloud
         # delete the attributes called credential for all clouds
@@ -122,9 +124,10 @@ class cloudmesh:
             self.clouds[cloud]['credential'] = {}
 
         return self.clouds
+    """
 
     def dump(self):
-        tmp = self._sanitize()
+        """tmp = self._sanitize()"""
         print json.dumps(tmp, indent=4)
 
     ######################################################################
@@ -155,10 +158,9 @@ class cloudmesh:
                     cloud = eucalyptus(cloud_name)
                 elif type == 'azure':
                     cloud = azure(cloud_name)
-                cloud.refresh()
-                cloud[cloud_name].update({'name': name,
-                                          'cm_type': type,
-                                          "servers": servers})
+                #cloud.refresh()
+                cloud[cloud_name].update({'name': cloud_name,
+                                          'cm_type': type})
                 self.clouds[cloud_name]['flavors'] = cloud.flavors
                 self.clouds[cloud_name]['servers'] = cloud.servers
                 self.clouds[cloud_name]['images'] = cloud.images
@@ -166,21 +168,12 @@ class cloudmesh:
             except Exception, e:
                 print e
 
-        return self.clouds
-
-    def update (self, name, type):
-        servers = self.refresh(name)
-        self.clouds[name].update({'name': name,
-                                  'cm_type': type,
-                                  "servers": servers})
-        return
-
     def add(self, name, type):
         try:
             self.clouds[name]
             print "Error: Cloud %s already exists" % name
         except:
-            self.update(name, type)
+            self.refresh(name, type)
 
     """
     def get_keys(self):
