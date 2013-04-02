@@ -131,6 +131,15 @@ class cloudmesh:
     # else all the clouds will be refreshed
     ######################################################################
 
+    def cloud_provider (type):
+        provider = None
+        if type == 'openstack':
+            provider = openstack
+        elif type == 'eucalyptus':
+            provider = eucalyptus
+        elif type == 'azure':
+            provider = azure
+        return provider
 
     def refresh(self, cloud_name=["all"], type=["all"]):
         """
@@ -174,13 +183,12 @@ class cloudmesh:
             print "REFRESHING", cloud_name
             try:
                 type = self.clouds[cloud_name]['cm_type']
-                if type == 'openstack':
-                    cloud = openstack(cloud_name)
-                elif type == 'eucalyptus':
-                    cloud = eucalyptus(cloud_name)
-                elif type == 'azure':
-                    cloud = azure(cloud_name)
+                provider = cloud_provider(type)
+
+                cloud = provider(cloud_name)
                 #cloud.refresh()
+
+
                 cloud[cloud_name].update({'name': cloud_name,
                                           'cm_type': type})
                 self.clouds[cloud_name]['flavors'] = cloud.flavors
