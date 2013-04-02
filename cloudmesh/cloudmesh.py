@@ -141,7 +141,7 @@ class cloudmesh:
             provider = azure
         return provider
 
-    def refresh(self, cloud_name=["all"], type=["all"]):
+    def refresh(self, names=["all"], types=["all"]):
         """
         This method obtians information about servers, images, and
         flavours that build the cloudmesh. The information is held
@@ -167,38 +167,29 @@ class cloudmesh:
            refresh the given types for the given clouds
         
         """
-        """
-        print "Refershing cloud %s" % cloud_name
-        servers = {}        
-        cloud =None;
-        
-        if (cloud_name == None):
-            all_clouds = self.clouds.keys()
-        else:
-            all_clouds = [cloud_name]
 
-        print "CLOUDS", all_clouds
+        if types == ['all'] or type == None:
+            types = ['server','flavor','images']
 
-        for cloud_name in all_clouds :
-            print "REFRESHING", cloud_name
-            try:
-                type = self.clouds[cloud_name]['cm_type']
-                provider = cloud_provider(type)
+        if names == ['all'] or names == None:
+            names = self.clouds.keys()
 
-                cloud = provider(cloud_name)
-                #cloud.refresh()
-
-
+        # at one point use a threadpool.
+        try:
+            for name in names:
+                cloud_type = self.clouds[cloud_name]['cm_type']
+                provider = cloud_provider(cloud_type)
+                cloud = provider(name)
                 cloud[cloud_name].update({'name': cloud_name,
                                           'cm_type': type})
-                self.clouds[cloud_name]['flavors'] = cloud.flavors
-                self.clouds[cloud_name]['servers'] = cloud.servers
-                self.clouds[cloud_name]['images'] = cloud.images
-                
+
+                print "Refresh cloud", name
+                for type in types:
+                    print "    Refresh ", type
+                    self.clouds[cloud_name][type] = cloud.get(type)
+
             except Exception, e:
                 print e
-        """
-        pass
         
     def add(self, name, type):
         try:

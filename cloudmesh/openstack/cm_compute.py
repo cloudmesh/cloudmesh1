@@ -36,6 +36,21 @@ class BaseCloud:
         assert False, "Not implemented"
     def find_user_id(self):
         assert False, "Not implemented"
+
+    def get(self,type="server"):
+        selection = type.lower()[0]
+        list_function = self._get_servers_dict
+        d = {}
+        if selection == 'i':
+            d = self.images
+        elif selection == 'f':
+            d = self.flavors
+        elif selection == 's':
+            d = self.servers
+        elif type != None:
+            print "refresh type not supported"
+            assert False
+        
     def _get_image_dict(self):
         assert False, "Not implemented"
     def _update_image_dict(self,information):
