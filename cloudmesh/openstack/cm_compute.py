@@ -123,6 +123,46 @@ class BaseCloud:
     def credentials(self, cred):
         self.credential = cred
 
+    ######################################################################
+    # set credentials
+    ######################################################################
+
+    def refresh(self, type=None):
+
+        time_stamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
+        selection = ""
+        if type:
+            selection = type.lower()[0]
+
+        list_function = self._get_servers_dict
+        update_function = self._update_servers_dict
+        d = self.servers
+        if selection == 'a':
+            self.refresh("images")
+            self.refersh("flavors")
+            self.refresh("servers")
+            return
+        elif selection == 'i':
+            list_function = self._get_images_dict
+            update_function = self._update_images_dict
+            d = self.images
+        elif selection == 'f':
+            list_function = self._get_flavors_dict
+            update_function = self._update_flavors_dict
+            d = self.flavors
+        elif selection == 's':
+            list_function = self._get_servers_dict
+            update_function = self._update_servers_dict
+            d = self.servers
+        elif type != None:
+            print "refresh type not supported"
+            assert False
+
+        list = list_function()
+        for information in list:
+            (id, element) = update_function(information)
+            d[id] = element
+            d[id]['cm_refresh'] = time_stamp
 
     
 class openstack(BaseCloud):
@@ -168,7 +208,6 @@ class openstack(BaseCloud):
                     password=password)
         self.connect()
 
-    @donotchange
     def clear(self):
         """
         clears the data of this openstack instance, a new connection
@@ -366,43 +405,6 @@ class openstack(BaseCloud):
         id = vm['id']
         return (id, vm)
 
-    @donotchange
-    def refresh(self, type=None):
-
-        time_stamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
-        selection = ""
-        if type:
-            selection = type.lower()[0]
-
-        list_function = self._get_servers_dict
-        update_function = self._update_servers_dict
-        d = self.servers
-        if selection == 'a':
-            self.refresh("images")
-            self.refersh("flavors")
-            self.refresh("servers")
-            return
-        elif selection == 'i':
-            list_function = self._get_images_dict
-            update_function = self._update_images_dict
-            d = self.images
-        elif selection == 'f':
-            list_function = self._get_flavors_dict
-            update_function = self._update_flavors_dict
-            d = self.flavors
-        elif selection == 's':
-            list_function = self._get_servers_dict
-            update_function = self._update_servers_dict
-            d = self.servers
-        elif type != None:
-            print "refresh type not supported"
-            assert False
-
-        list = list_function()
-        for information in list:
-            (id, element) = update_function(information)
-            d[id] = element
-            d[id]['cm_refresh'] = time_stamp
 
     ######################################################################
     # create a vm
