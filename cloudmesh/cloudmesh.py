@@ -131,7 +131,7 @@ class cloudmesh:
     # else all the clouds will be refreshed
     ######################################################################
 
-    def cloud_provider (type):
+    def cloud_provider (self, type):
         provider = None
         if type == 'openstack':
             provider = openstack
@@ -177,19 +177,18 @@ class cloudmesh:
         # at one point use a threadpool.
         try:
             for name in names:
-                cloud_type = self.clouds[cloud_name]['cm_type']
-                provider = cloud_provider(cloud_type)
+                cloud_type = self.clouds[name]['cm_type']
+                provider = self.cloud_provider(cloud_type)
                 cloud = provider(name)
-                cloud[cloud_name].update({'name': cloud_name,
-                                          'cm_type': type})
-
+                cloud[name].update({'name': name, 'cm_type': type})
                 print "Refresh cloud", name
                 for type in types:
                     print "    Refresh ", type
-                    self.clouds[cloud_name][type] = cloud.get(type)
+                    cloud[name].refresh(name=name,type=type)
+                    self.clouds[name][type] = cloud.get(type)
 
-            except Exception, e:
-                print e
+        except Exception, e:
+            print e
         
     def add(self, name, type):
         try:

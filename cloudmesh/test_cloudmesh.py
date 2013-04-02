@@ -34,6 +34,9 @@ class Test_cloudmesh:
          
     def test_03_str(self):
         print self.c.dump()
-         
+
+    def test_03_refresh_all(self):
+        print self.c.refresh()
+
 
     
