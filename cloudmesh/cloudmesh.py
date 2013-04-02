@@ -187,6 +187,7 @@ class cloudmesh:
                     print "    Refresh ", type
                     cloud.refresh(type=type)
                     self.clouds[name][type] = cloud.get(type)
+                    #maye be need to use dict update ...
                     self.clouds[name].update({'name': name, 'cm_type': type})
         except Exception, e:
             print e

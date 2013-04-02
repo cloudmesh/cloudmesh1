@@ -28,8 +28,22 @@ def donotchange(fn):
     return fn
 
 class BaseCloud:
-    def clear(self):
-        assert False, "Not implemented"
+
+    flavors = {}         # global var
+    images = {}          # global var
+    servers = {}         # global var
+    credential = None    # global var
+    label = None         # global var
+
+    def _clear(self):
+        self.flavors = {}         # global var
+        self.images = {}          # global var
+        self.servers = {}         # global var
+        self.credential = None    # global var
+        self.label = None         # global var
+        self.type = None
+
+ 
     def connect(self):
         assert False, "Not implemented"
     def config (self, dict):
@@ -85,7 +99,10 @@ class openstack(BaseCloud):
     credential = None    # global var
     label = None         # global var
 
-    cloud = None         # internal var
+    # cm_type = "openstack"
+    # name = "undefined"
+    
+    cloud = None         # internal var for the cloud client in openstack
     user_id = None       # internal var
 
     _nova = nova
@@ -131,17 +148,9 @@ class openstack(BaseCloud):
         called to obtain again data.
         """
         #Todo: we may just use the name of the class instead as the type
-        self.type = "openstack"
         self._clear()
-
-    def _clear(self):
-        self.flavors = {}
-        self.images = {}
-        self.servers = {}
-        self.credential = None
-        self.cloud = None
-        self.user_id = None
-
+        self.type = "openstack"
+        
     def connect(self):
         """
         establishes a connection to the OpenStack cloud,
