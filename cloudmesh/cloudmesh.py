@@ -167,26 +167,27 @@ class cloudmesh:
            refresh the given types for the given clouds
         
         """
-
+        print ">>>>ENTER REFRESH 1"
         if types == ['all'] or type == None:
             types = ['server','flavor','images']
 
         if names == ['all'] or names == None:
             names = self.clouds.keys()
-
+            
+        print ">>>> REFRESH 2", types, names
         # at one point use a threadpool.
         try:
             for name in names:
                 cloud_type = self.clouds[name]['cm_type']
                 provider = self.cloud_provider(cloud_type)
+                print ">>>> REFRESH 3", types, provider
                 cloud = provider(name)
-                cloud[name].update({'name': name, 'cm_type': type})
                 print "Refresh cloud", name
                 for type in types:
                     print "    Refresh ", type
-                    cloud[name].refresh(name=name,type=type)
+                    cloud.refresh(type=type)
                     self.clouds[name][type] = cloud.get(type)
-
+                    self.clouds[name].update({'name': name, 'cm_type': type})
         except Exception, e:
             print e
         
