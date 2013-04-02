@@ -29,11 +29,13 @@ def donotchange(fn):
 
 class BaseCloud:
 
+    """
     flavors = {}         # global var
     images = {}          # global var
     servers = {}         # global var
     credential = None    # global var
     label = None         # global var
+    """
 
     def _clear(self):
         self.flavors = {}         # global var
@@ -537,6 +539,8 @@ class openstack(BaseCloud):
             vm = self.cloud.servers.update(id, new)
         return
 
+    ##### TODO: BUG WHY ARE TGERE TWO REINDEX FUNCTIONS?
+    
     @donotchange
     def reindex(self, prefixold, prefix, index_format):
         all = self.find('user_id')
