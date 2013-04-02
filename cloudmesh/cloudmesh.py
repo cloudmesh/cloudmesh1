@@ -122,7 +122,8 @@ class cloudmesh:
         In all cases None can be used as an alternative to ["all"]
         
         """
-        pass
+        result = {}
+        return result
 
     ######################################################################
     # the refresh method that gets upto date information for cloudmesh
