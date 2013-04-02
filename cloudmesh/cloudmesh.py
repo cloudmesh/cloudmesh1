@@ -91,6 +91,39 @@ class cloudmesh:
     def dump(self):
         print json.dumps(self.clouds, indent=4)
 
+
+    ######################################################################
+    # find 
+    ######################################################################        
+    #
+    # returns dicts of a particular type
+    #
+    ######################################################################    
+
+    def find (cloud=["all"], type="servers", project=["all"]):
+        """
+        Returns a dict with matching elements
+
+        cloud = specifies an array of cloud names that are defined in
+        our configuration and returns matching elements in a dict. The
+        first level in the dict is the cloud, the second level are the
+        elements. If all is specified we serach in all clouds
+
+        type = "servers", "images", "flavors"
+
+        The type specifies the kind of element that we look for
+        (we only look for the first character e.g. s, i, f)
+
+        project = an array of projects we search for. This only
+        applies for servers for now. Till we have introduced the
+        profile that restricts available images and flavors for a
+        project.
+
+        In all cases None can be used as an alternative to ["all"]
+        
+        """
+        pass
+
     ######################################################################
     # the refresh method that gets upto date information for cloudmesh
     # If cloudname is provided only that cloud will be refreshed 
@@ -98,15 +131,32 @@ class cloudmesh:
     ######################################################################
 
 
-    def refresh(self, cloud_name=None, type=None):
+    def refresh(self, cloud_name=["all"], type=["all"]):
         """
+        This method obtians information about servers, images, and
+        flavours that build the cloudmesh. The information is held
+        internally after a refresh. Than the find method can be used
+        to query form this information. To pull new information into
+        this data structure a new refresh needs to be called.
+
+        Usage is defined through arrays that are passed along.
+
+        type = "servers", "images", "flavours"
+
+        The type specifies the kind of element that we look for
+        (we only look for the first character e.g. s, i, f)
+
+        In all cases None can be used as an alternative to ["all"]
+        
         if cloud name  == None and type = none update everything
 
-        if cloud name !=None and type = none update everything in that cloud
+        if cloud name !=None and type = none update everything in the
+        specified clouds
 
         if cloud name != None and type != none
-           refresh that type for the cloud
-
+           refresh the given types for the given clouds
+        
+        """
         """
         print "Refershing cloud %s" % cloud_name
         servers = {}        
@@ -139,7 +189,8 @@ class cloudmesh:
             except Exception, e:
                 print e
         """
-
+        pass
+        
     def add(self, name, type):
         try:
             self.clouds[name]
