@@ -89,6 +89,32 @@ class BaseCloud:
         assert False, "Not implemented"
     def limits(self):        
         assert False, "Not implemented"
+
+    ######################################################################
+    # print
+    ######################################################################
+
+    def __str__(self):
+        """
+        print everything but the credentials that is known about this
+        cloud in json format.
+        """
+        information = {
+            'label': self.label,
+            'flavors': self.flavors,
+            'servers': self.servers,
+            'images': self.images}
+        return json.dumps(information, indent=4)
+
+    ######################################################################
+    # get methods
+    ######################################################################
+
+    def type():
+        return self.type
+
+
+
     
 class openstack(BaseCloud):
 
@@ -292,31 +318,6 @@ class openstack(BaseCloud):
                 self.credential['OS_USER_ID'] = self.user_id = sample_vm.user_id
                 sample_vm.delete()
         return self.user_id
-
-    ######################################################################
-    # print
-    ######################################################################
-
-    @donotchange
-    def __str__(self):
-        """
-        print everything but the credentials that is known about this
-        cloud in json format.
-        """
-        information = {
-            'label': self.label,
-            'flavors': self.flavors,
-            'servers': self.servers,
-            'images': self.images}
-        return json.dumps(information, indent=4)
-
-    ######################################################################
-    # get methods
-    ######################################################################
-
-    @donotchange
-    def type():
-        return self.type
 
     ######################################################################
     # refresh
