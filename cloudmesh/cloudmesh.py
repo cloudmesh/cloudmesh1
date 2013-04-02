@@ -66,7 +66,9 @@ class cloudmesh:
                 cloud_type = credential['cm_type']
 
                 if cloud_type in ['openstack','eucalyptus','azure']:
-                    self.clouds[cloud_name] = {'name': cloud_name, 'cm_type': cloud_type, 'credential': credential}
+                    self.clouds[cloud_name] = {'name': cloud_name,
+                                               'cm_type': cloud_type,
+                                               'credential': credential}
             except: #ignore
                 pass
         return
@@ -95,7 +97,17 @@ class cloudmesh:
     # else all the clouds will be refreshed
     ######################################################################
 
-    def refresh(self, cloud_name=None):
+
+    def refresh(self, cloud_name=None, type=None):
+        """
+        if cloud name  == None and type = none update everything
+
+        if cloud name !=None and type = none update everything in that cloud
+
+        if cloud name != None and type != none
+           refresh that type for the cloud
+
+        """
         print "Refershing cloud %s" % cloud_name
         servers = {}        
         cloud =None;
@@ -126,6 +138,7 @@ class cloudmesh:
                 
             except Exception, e:
                 print e
+        """
 
     def add(self, name, type):
         try:
