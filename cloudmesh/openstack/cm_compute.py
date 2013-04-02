@@ -113,6 +113,15 @@ class BaseCloud:
     def type():
         return self.type
 
+    def vms(self):
+        return self.servers
+
+    ######################################################################
+    # set credentials
+    ######################################################################
+
+    def credentials(self, cred):
+        self.credential = cred
 
 
     
@@ -133,13 +142,6 @@ class openstack(BaseCloud):
 
     _nova = nova
 
-    @donotchange
-    def vms(self):
-        return self.servers
-
-    @donotchange
-    def credentials(self, cred):
-        self.credential = cred
 
     ######################################################################
     # initialize
