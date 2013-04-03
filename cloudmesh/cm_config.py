@@ -53,7 +53,10 @@ class cm_config:
     # get methods
     ######################################################################
     def default(self):
-        return self.data['default']
+        return self.data['cloudmesh']['default']
+
+    def active(self):
+        return self.data['cloudmesh']['active']
 
     def get(self, key=None):
         if key == None:

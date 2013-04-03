@@ -24,19 +24,24 @@ class Test_cloudmesh:
         self.c = cloudmesh()
         
     def tearDown(self):
-        print self.c.clouds
+        pass
+        #print self.c.clouds
 
-    def test_01_config(self):
-        self.c.refresh("india-openstack")
+        #def test_01_config(self):
+        #self.c.refresh("india-openstack")
          
-    def test_02_str(self):
-        print self.c
+        #def test_02_str(self):
+        #print self.c
          
-    def test_03_str(self):
-        print self.c.dump()
+    #    def test_03_str(self):
+    #    print self.c.dump()
 
-    def test_03_refresh_all(self):
-        print self.c.refresh()
+    #   def test_03_refresh_all(self):
+    #    print self.c.refresh()
+
+    def test_03_info(self):
+        self.c.refresh()
+        self.c.info()
 
 
     

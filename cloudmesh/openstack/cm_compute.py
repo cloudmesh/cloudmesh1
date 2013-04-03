@@ -45,6 +45,12 @@ class BaseCloud:
         self.label = None         # global var
         self.type = None
 
+    def info(self):
+        print "Label:", self.label
+        print "Type:", self.type
+        print "Flavors:", len(self.flavors)
+        print "Servers:", len(self.servers)
+        print "Images:", len(self.images)
  
     def connect(self):
         assert False, "Not implemented"
@@ -66,7 +72,8 @@ class BaseCloud:
         elif type != None:
             print "refresh type not supported"
             assert False
-        
+        return d
+    
     def _get_image_dict(self):
         assert False, "Not implemented"
     def _update_image_dict(self,information):
@@ -141,7 +148,7 @@ class BaseCloud:
         d = self.servers
         if selection == 'a':
             self.refresh("images")
-            self.refersh("flavors")
+            self.refresh("flavors")
             self.refresh("servers")
             return
         elif selection == 'i':

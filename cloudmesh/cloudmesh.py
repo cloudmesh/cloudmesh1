@@ -58,9 +58,11 @@ class cloudmesh:
         """
 
         configuration = cm_config()
-        pp.pprint (configuration)
+        #pp.pprint (configuration)
 
-        for cloud_name in configuration.keys():
+        print "active", configuration.active()
+
+        for cloud_name in configuration.active():
             try:
                 credential = configuration.get(key=cloud_name)
                 cloud_type = credential['cm_type']
@@ -141,6 +143,27 @@ class cloudmesh:
             provider = azure
         return provider
 
+    def info(self):
+        print 70 * "="
+        print "CLOUD MESH INFO"
+        print 70 * "="
+        try:
+            for name in self.clouds.keys():
+                cloud_type = self.clouds[name]['cm_type']
+                provider = self.cloud_provider(cloud_type)
+                cloud = provider(name)
+                print
+                print "Info", name
+                print 70 * "-"
+                cloud.refresh("all")
+                cloud.info()
+                
+        except Exception, e:
+            print e
+        
+
+
+
     def refresh(self, names=["all"], types=["all"]):
         """
         This method obtians information about servers, images, and
@@ -151,7 +174,7 @@ class cloudmesh:
 
         Usage is defined through arrays that are passed along.
 
-        type = "servers", "images", "flavours"
+        type = "servers", "images", "flavors"
 
         The type specifies the kind of element that we look for
         (we only look for the first character e.g. s, i, f)
@@ -167,28 +190,26 @@ class cloudmesh:
            refresh the given types for the given clouds
         
         """
-        print ">>>>ENTER REFRESH 1"
         if types == ['all'] or type == None:
-            types = ['server','flavor','images']
+            types = ['servers','flavors','images']
 
         if names == ['all'] or names == None:
             names = self.clouds.keys()
             
-        print ">>>> REFRESH 2", types, names
         # at one point use a threadpool.
         try:
             for name in names:
                 cloud_type = self.clouds[name]['cm_type']
                 provider = self.cloud_provider(cloud_type)
-                print ">>>> REFRESH 3", types, provider
                 cloud = provider(name)
                 print "Refresh cloud", name
                 for type in types:
                     print "    Refresh ", type
                     cloud.refresh(type=type)
+                    result = cloud.get(type)
                     self.clouds[name][type] = cloud.get(type)
                     #maye be need to use dict update ...
-                    self.clouds[name].update({'name': name, 'cm_type': type})
+                    self.clouds[name].update({'name': name, 'cm_type': cloud_type})
         except Exception, e:
             print e
         
