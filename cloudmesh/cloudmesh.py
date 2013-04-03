@@ -248,7 +248,7 @@ class cloudmesh:
     # saves and reads the dict to and from a file
     ######################################################################
     def save(self):
-        tmp = self._sanitize()
+        #tmp = self._sanitize()
         file = open(self.datastore, 'wb')
         # pickle.dump(self.keys, file)
         pickle.dump(tmp, file)
@@ -272,6 +272,34 @@ class cloudmesh:
         '''
         self.clouds = pickle.load(file)
         file.close()
+
+    ######################################################################
+    # TODO: convenient +, += functions to add dicts with cm_type
+    ######################################################################
+
+    def delete(self, cloud_name, server_id):
+        try:
+            cloud_type = self.clouds[cloud_name]['cm_type']
+            provider = self.cloud_provider(cloud_type)
+            cloud = provider(cloud_name)
+            cloud.vm_delete(server_id) 
+        except:
+            print "Error: could not delete", cloud_name, server_id
+
+    def create(self, cloud_name, prefix, index, image_id):
+        try:
+            cloud_type = self.clouds[cloud_name]['cm_type']
+            provider = self.cloud_provider(cloud_type)
+            cloud = provider(cloud_name)
+            if cloud_name == "india-openstack":
+                flavor_name = "m1.tiny"  # this is a dummy and must be retrieved from flask
+                image_id = "6d2bca76-8fff-4d57-9f29-50378539b4fa"
+                name = prefix + "-" + index
+                cloud.vm_create(name, flavor_name, image_id)
+                # this is a dummy and must be retrieved from flask
+        except:
+            print "Error: could not delete", cloud_name, prefix, index, image_id
+
 
     ######################################################################
     # TODO: convenient +, += functions to add dicts with cm_type

@@ -63,7 +63,7 @@ def refresh(cloud=None, server=None):
   global clouds
   #AttributeError: cloudmesh instance has no attribute 'refresh'
   #clouds.refresh()
-  clouds.save()
+  clouds.refresh()
   return table()
 
 @app.route('/cm/kill/')
@@ -76,15 +76,18 @@ def kill_vms():
 @app.route('/cm/delete/<cloud>/<server>/')
 def delete_vm(cloud=None, server=None):
   print "-> delete", cloud, server
-  if (cloud == 'india'):
-    r = cm("--set", "quiet", "delete:1", _tty_in=True)
+  #if (cloud == 'india'):
+  #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
+  clouds.delete(cloud, server)
   return table()
 
 @app.route('/cm/start/<cloud>/')
 def start_vm(cloud=None, server=None):
+  print "*********** STARTVM", cloud
   print "-> start", cloud, server
-  if (cloud == 'india'):
-    r = cm("--set", "quiet", "start:1", _tty_in=True)
+  #if (cloud == 'india'):
+  #  r = cm("--set", "quiet", "start:1", _tty_in=True)
+  clouds.create(cloud,"gvonlasz","001","dummy")
   return table()
 
 '''
@@ -123,7 +126,6 @@ def table():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     #clouds.refresh("sierra-openstack")
     
-    print 'this hi' + str(clouds.clouds)
     # note thet call to sierra is fake it just goes to india and sets cloudname to sierra.
     #clouds.dump()
     #keys = clouds.get_keys()
