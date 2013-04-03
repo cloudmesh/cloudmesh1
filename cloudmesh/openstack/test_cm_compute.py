@@ -7,6 +7,7 @@ or
 nosetests -v
 
 """
+import time
 import sys
 from cloudmesh.openstack.cm_table import table as cm_table
 from cloudmesh.cm_config import cm_config
@@ -15,6 +16,11 @@ import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
+def HEADING(txt):
+    print
+    print "#", 70 * '#'
+    print "#", txt
+    print "#", 70 * '#'
 
 class Test_openstack:
 
@@ -24,12 +30,15 @@ class Test_openstack:
     def tearDown(self):
         pass
     def test_00_check_label(self):
+        HEADING("INFO OPENSTACK LABEL")
         assert self.cloud.label == "india-openstack"
 
     def test_00_limit(self):
+        HEADING("INFO OPENSTACK LIMIT")
         print >> sys.stderr, json.dumps(self.cloud.limits(), indent=4)
 
     def test_01_images(self):
+        HEADING("INFO OPENSTACK IMAGES")
         self.cloud.refresh('images')
         print json.dumps(self.cloud.flavors, indent=4)
         # pp.pprint(self.cloud.images)
@@ -41,6 +50,7 @@ class Test_openstack:
         assert self.cloud.images > 0
 
     def test_02_flavor(self):
+        HEADING("INFO OPENSTACK FLAVORS")
         self.cloud.refresh('flavors')
         print json.dumps(self.cloud.flavors, indent=4)
 
@@ -48,12 +58,14 @@ class Test_openstack:
         assert self.cloud.flavors['m1.tiny']['ram'] == 512
 
     def test_03_vms(self):
+        HEADING("INFO OPENSTACK VMS")
         self.cloud.refresh('servers')
         print json.dumps(self.cloud.servers, indent=4)
         # we assume that there are always images running
         assert len(self.cloud.servers) > 0
 
     def test_04_refresh(self):
+        HEADING("INFO OPENSTACK REFRESH")
         self.cloud.refresh()
         pp.pprint(self.cloud)
 
@@ -67,6 +79,7 @@ class Test_openstack:
     """
         
     def test_06_table(self):
+        HEADING("INFO OPENSTACK TABLES")
         self.test_02_flavor()
         table = cm_table()
         columns = ["id", "name", "ram", "vcpus"]
@@ -105,16 +118,25 @@ class Test_openstack:
     """
 
     def test_08_user_vms(self):
+        HEADING("INFO OPENSTACK LIST VMS FROM USER")
         list = self.cloud.vms_user()
         print json.dumps(list, indent=4)
 
     def test_09_delete_all_user_vms(self):
+        HEADING("INFO OPENSTACK DELETE VMS FROM USER")
         self.cloud.refresh()
         list = self.cloud.vms_delete_user()
         self.cloud.refresh()
         user_id = self.cloud.find_user_id()
         vms = self.cloud.find('user_id', user_id)
         assert vms == []
+
+    def test_10_info(self):
+        HEADING("INFO OPENSTACK TEST")
+        self.cloud.refresh()
+        time.sleep(3)
+        self.cloud.info()
+        self.cloud.info()
 
 
 

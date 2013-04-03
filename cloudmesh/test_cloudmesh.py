@@ -27,17 +27,17 @@ class Test_cloudmesh:
         pass
         #print self.c.clouds
 
-        #def test_01_config(self):
-        #self.c.refresh("india-openstack")
-         
-        #def test_02_str(self):
-        #print self.c
-         
-    #    def test_03_str(self):
-    #    print self.c.dump()
+    def test_01_refresh(self):
+        self.c.refresh("india-openstack")
 
-    #   def test_03_refresh_all(self):
-    #    print self.c.refresh()
+    def test_03_refresh_all(self):
+        print self.c.refresh()
+         
+    def test_02_str(self):
+        print self.c
+         
+    def test_03_str(self):
+        print self.c.dump()
 
     def test_03_info(self):
         self.c.refresh()

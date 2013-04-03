@@ -27,6 +27,7 @@ version = "0.7.2"
 #
 #clouds = fg.cloud_mesh()
 clouds = cloudmesh()
+clouds.refresh()
 # clouds.load()
 # AttributeError: cloudmesh instance has no attribute 'refresh'
 #clouds.refresh()

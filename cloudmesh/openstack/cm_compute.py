@@ -146,7 +146,7 @@ class BaseCloud:
         list_function = self._get_servers_dict
         update_function = self._update_servers_dict
         d = self.servers
-        if selection == 'a':
+        if selection == 'a' or type == None:
             self.refresh("images")
             self.refresh("flavors")
             self.refresh("servers")
@@ -168,6 +168,7 @@ class BaseCloud:
             assert False
 
         list = list_function()
+
         for information in list:
             (id, element) = update_function(information)
             d[id] = element
