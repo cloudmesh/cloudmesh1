@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 import sys
 import os
 
-version = 0.7.2
+version = "0.7.2"
 
 
 ######################################################################
@@ -22,7 +22,7 @@ requires=[
     'pyyaml',
     'Flask',
     'Flask-FlatPages',
-    'Flask-WTF'
+    'Flask-WTF',
     'paramiko',
     'blessings',
     'fabric',
@@ -33,6 +33,8 @@ requires=[
     "sphinxcontrib-blockdiag",
     "python-novaclient"
 ],
+
+install_requires = []
 
 for package in requires:
     try:
