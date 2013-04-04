@@ -31,7 +31,8 @@ requires=[
     "console",
     "pymongo",
     "sphinxcontrib-blockdiag",
-    "python-novaclient"
+    "python-novaclient",
+    "apache-libcloud"
 ],
 
 install_requires = []
