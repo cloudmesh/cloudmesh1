@@ -3,7 +3,7 @@ sys.path.insert(0, './')
 sys.path.insert(0, '../')
 
 import os
-
+import time
 from flask import Flask, render_template, request
 from flask_flatpages import FlatPages
 
@@ -61,8 +61,6 @@ def index():
 def refresh(cloud=None, server=None):
   print "-> refresh", cloud, server
   global clouds
-  #AttributeError: cloudmesh instance has no attribute 'refresh'
-  #clouds.refresh()
   clouds.refresh()
   return table()
 
@@ -79,6 +77,8 @@ def delete_vm(cloud=None, server=None):
   #if (cloud == 'india'):
   #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
   clouds.delete(cloud, server)
+  time.sleep( 5 )
+  global clouds
   clouds.refresh()
   return table()
 
