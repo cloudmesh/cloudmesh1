@@ -79,6 +79,7 @@ def delete_vm(cloud=None, server=None):
   #if (cloud == 'india'):
   #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
   clouds.delete(cloud, server)
+  clouds.refresh()
   return table()
 
 @app.route('/cm/start/<cloud>/')
