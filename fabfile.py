@@ -3,6 +3,15 @@ from sh import git as _git
 import os
 import webbrowser
 import platform
+import sys
+
+#
+# SETTING THE BROWSER BASED ON PLATFORM
+#
+browser = "firefox"
+
+if sys.platform == 'darwin':
+    browser = "open"
 
 #
 # VERSION MANAGEMENT
@@ -50,8 +59,8 @@ server:
 
 view:
 	sleep 3
-	 google-chrome http://127.0.0.1:5000
-"""
+	 %s http://127.0.0.1:5000
+""" % browser
     #webbrowser.open("http://127.0.0.1:5000")
     file.close()
     os.system("make -j -f Makefile~ all")
@@ -65,7 +74,7 @@ def deltag(tag):
 def view():
     """run the browser"""
     local("sleep 1")
-    local("open http://localhost:5000/table")
+    local("%s http://localhost:5000/table" % browser)
 
 
 def clean():
