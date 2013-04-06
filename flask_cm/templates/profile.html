@@ -23,23 +23,5 @@
 
 <h1>My Profile</h1>
 
-{% for infoname, infovalue in persolalinfo.iteritems() %}
-
-{{infoname}} : {{infovalue}}
-<br>
-  
-  {% endfor %}
-
-
-{% for cloudname in cloudinfo.iteritems() %}
-
-<h1>{{cloudname}} </h1>
-	{% for attributedname, attributeValue in cloudinfo['cloudname'].iteritems() %}
-
-{{attributedname}} : {{attributeValue}}
-
-<br>
-
-{% endfor %}
 
 {% endblock %}
