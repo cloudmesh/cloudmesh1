@@ -9,6 +9,9 @@ from flask_flatpages import FlatPages
 
 from cloudmesh.cloudmesh import cloudmesh
 from datetime import datetime
+from cloudmesh.cm_config import cm_config
+from datetime import datetime
+import yaml
 
 
 DEBUG = True
@@ -142,7 +145,9 @@ def table():
 @app.route('/profile/')
 def profile():
     global clouds
-
+    config = cm_config();
+    dict_t=config.get();
+    makeCloudDict(dict_t);
     active=make_active('profile')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
  
@@ -154,10 +159,49 @@ def profile():
     return render_template('profile.html', 
                            updated = time_now,
                            keys="",##",".join(clouds.get_keys()),
-                           cloudinfo = cloudinfo,
+                           cloudinfo = makeCloudDict(dict_t),
                            persolalinfo = persolalinfo,
                            active=active,
                            version=version)
+
+def makeCloudDict(dict_t):
+  cloudDict = {};
+	cloudSubDict={};
+	cloudSubsubDict={};
+	for key, value in dict_t.iteritems():
+		if "india-openstack" in key:
+			
+			for innerKey, innerValue in value.iteritems():
+				innerKey=innerKey.replace("OS_","")
+				innerKey=innerKey.replace("cm_","")
+				cloudSubDict[innerKey.upper()]=innerValue;
+			cloudDict[key.upper()]=cloudSubDict;
+			cloudSubDict={};
+			print (cloudDict);
+		if "india-eucalyptus" in key:
+			for innerKey, innerValue in value.iteritems():
+				if "fg" in innerKey:
+					for innermostKey, innermostValue in innerValue.iteritems():
+						innermostKey=innermostKey.replace("EC2_","")
+						cloudSubsubDict[innermostKey.upper()]=innermostValue;
+					cloudDict[innerKey.upper()]=cloudSubsubDict;
+					cloudSubsubDict={};
+				else:
+					innerKey=innerKey.replace("EC2_","")		
+					cloudSubDict[innerKey.upper()]=innerValue;
+			cloudDict[key.upper()]=cloudSubDict;
+			cloudSubDict={};
+
+		if "azure" in key:
+			cloudSubDict={};
+			for innerKey, innerValue in value.iteritems():
+				cloudSubDict[innerKey.upper()]=innerValue;
+			cloudDict[key.upper()]=cloudSubDict;
+			cloudSubDict={};
+	#print (cloudDict);	
+
+	return cloudDict
+
 
 #@app.route('/metric/<s_date>/<e_date>/<user>/<cloud>/<host>/<period>/<metric>')
 @app.route('/metric/main', methods=['POST','GET'])
