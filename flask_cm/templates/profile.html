@@ -20,18 +20,42 @@
     'username':'shweta'} }
 
 -->
+<script>
+function showHide(element) { 
+     var field = document.getElementsByClassName(element); 
+for(var i=0; i<field.length; i++) {
 
-<h1>My Profile</h1>
+    if (element) { 
+          if (field[i].style.display == 'none') { 
+                field[i].style.display = 'block'; 
+          } else { 
+                field[i].style.display = 'none'; 
+          } 
+     } 
+}
+}
+
+
+</script>
+<h1>My Profile</h1> 
+<button onClick="showHide('password');">Show and Hide Password</button>
 {% for key,value in cloudinfo.iteritems()  %}
-<h4> {{ key }} </h4> 
-                           {% for innerKey,innerValue in value.iteritems()  %}
-		{{ innerKey }} : {{ innerValue }} </br>
+<table> <tr> <th>  <h4>{{ key }}</h4>  </th></tr>
+<tr><td>
+	{% for innerKey,innerValue in value.iteritems()  %}
+
+		{% if "PASSWORD" in innerKey or "SECRET" in innerKey or "PRIVATE" in innerKey or "PUBLISHSETTINGS" in innerKey %}
+		<div class="password" style="display: none;"><b> {{ innerKey }} </b> : {{ innerValue }} </div> 
+		{% else %}
+		<b>{{ innerKey }}</b> : {{ innerValue }} </br>
+		{% endif %}
+		
 
 
 
 	{% endfor %}
-	</br>
-
+</td></tr>
+</table>
 {% endfor %}
 
 
