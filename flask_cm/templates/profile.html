@@ -22,7 +22,8 @@
 -->
 <script>
 function showHide(element) { 
-     var field = document.getElementsByClassName(element); 
+     var field = document.getElementsByClassName(element);
+
 for(var i=0; i<field.length; i++) {
 
     if (element) { 
@@ -35,29 +36,39 @@ for(var i=0; i<field.length; i++) {
 }
 }
 
-
 </script>
 <h1>My Profile</h1> 
-<button onClick="showHide('password');">Show and Hide Password</button>
+<button onClick="showHide('password');">Toggle Password Display</button>
+<table>
 {% for key,value in cloudinfo.iteritems()  %}
-<table> <tr> <th>  <h4>{{ key }}</h4>  </th></tr>
-<tr><td>
-	{% for innerKey,innerValue in value.iteritems()  %}
 
-		{% if "PASSWORD" in innerKey or "SECRET" in innerKey or "PRIVATE" in innerKey or "PUBLISHSETTINGS" in innerKey %}
-		<div class="password" style="display: none;"><b> {{ innerKey }} </b> : {{ innerValue }} </div> 
+
+  <tr> <th> <input type="checkbox" name="{{ key }}" value="{{ key }}" >
+  <b> {{ key }}</b>  </th></tr>
+
+  <!--  
+  <tr> <th> <b> {{ key }}</b>  </th></tr>
+  -->
+  
+    {% for innerKey,innerValue in value.iteritems()  %}
+    <tr>
+                <td>
+  		  <b>{{ innerKey }}</b>
+		</td>
+		<td>
+		{% if innerKey in ["PASSWORD", "SECRET","PRIVATE", "SECRET_KEY", "ACCESS_KEY"] %}
+		<div class="password" style="display: none;"> {{ innerValue }} </div> 
 		{% else %}
-		<b>{{ innerKey }}</b> : {{ innerValue }} </br>
+		{{ innerValue }}
 		{% endif %}
-		
+		</td>
+      </tr>
 
 
 
 	{% endfor %}
-</td></tr>
-</table>
 {% endfor %}
-
+</table>
 
 
 {% endblock %}
