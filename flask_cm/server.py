@@ -165,7 +165,7 @@ def profile():
                            version=version)
 
 def makeCloudDict(dict_t):
-  cloudDict = {};
+        cloudDict = {};
 	cloudSubDict={};
 	cloudSubsubDict={};
 	for key, value in dict_t.iteritems():
