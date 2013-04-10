@@ -50,6 +50,8 @@ def make_active(name):
     active = {'home': "",
               'table': "",
               'contact': "",
+              'flavors': "",
+              'images': "",
               'metric': "",
               'profile': ""}
     active[name] = 'active'
@@ -187,11 +189,55 @@ def table():
 
 
 ######################################################################
+# ROUTE: FLAVOR
+######################################################################
+@app.route('/flavors/<cloud>/')
+@app.route('/flavors/')
+def display_flavors(cloud=None):
+    # for debugging
+    cloud = 'india-openstack'
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
+    active = make_active('flavors')
+
+    if cloud == None:
+        pass
+    else:
+        return render_template('flavor.html',
+                               updated=time_now,
+                               clouds=clouds.clouds,
+                               active=active,
+                               version=version)
+
+
+######################################################################
+# ROUTE: IMAGES
+######################################################################
+@app.route('/images/<cloud>/')
+@app.route('/images/')
+def display_images(cloud=None):
+    # for debugging
+    cloud = 'india-openstack'
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
+    active = make_active('images')
+
+    if cloud == None:
+        pass
+    else:
+        return render_template('images.html',
+                               updated=time_now,
+                               clouds=clouds.clouds,
+                               active=active,
+                               version=version)
+    pass
+
+
+######################################################################
 # ROUTE: PROFILE
 ######################################################################
 @app.route('/profile/')
 def profile():
     global clouds
+    # bug the global var of the ditc should be used
     config = cm_config()
     dict_t = config.get()
     makeCloudDict(dict_t)
@@ -199,7 +245,10 @@ def profile():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     persolalinfo = {'name': 'abc', 'data1': 'pqr'}
+    # bug: I guess this is left over from my example
 
+    # bug: the name of the clouds should be retrived from config. I guess this is left over from my example
+    
     cloudinfo = {
         'openstak-india': {'type': 'openstack', 'host': 'india.futuregrid.org',
                            'username': 'shweta'}}
@@ -218,6 +267,8 @@ def makeCloudDict(dict_t):
     cloudSubDict = {}
     cloudSubsubDict = {}
     for key, value in dict_t.iteritems():
+        # Bug: this should be changed based on a test of type
+        
         if "india-openstack" in key:
 
             for innerKey, innerValue in value.iteritems():

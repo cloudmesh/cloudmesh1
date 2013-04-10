@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}g
+{% block content %}
+
+<table>
+  <tr>
+    <th> Cloud </th>
+    <th> Info </th>
+  </tr>
+  
+  {% for name, cloud in clouds.iteritems() %}
+  
+  <tr> 
+    <th colspan="3"> {{ name }} </th> 
+  </tr>
+  
+  {% for id, flavor in cloud['flavors'].iteritems() %}
+  
+  <tr>
+    <td> <input type="radio" name="{{ name }}-{{ key }}" value="{{ name }}-{{ key }}" </td>
+    <td> {{ flavor.name }} </td>
+    <td> TBD </td>
+  </tr>
+  
+  {% endfor %}
+  
+  {% endfor %}
+  
+</table>
+
+{% endblock %}
