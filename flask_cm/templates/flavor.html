@@ -5,21 +5,29 @@
 <table>
   <tr>
     <th> Default </th>
-    <th> Flavor </th>
-    <th> Info </th>
+    <th> Id </th>
+    <th> Name </th>
+    <th> RAM </th>
+    <th> Disk </th>
+    <th> VCPUs </th>
+    <th> Cost  </th>
   </tr>
   
   {% for name, cloud in clouds.iteritems() %}
   
   <tr> 
-    <th colspan="3"> {{ name }} </th> 
+    <th colspan="6"> {{ name }} </th> 
   </tr>
   
   {% for id, flavor in cloud['flavors'].iteritems() %}
   
   <tr>
     <td> <input type="radio" name="{{ name }}-{{ key }}" value="{{ name }}-{{ key }}" </td>
+    <td> {{ flavor.id }} </td>
     <td> {{ flavor.name }} </td>
+    <td> {{ flavor.ram }} </td>
+    <td> {{ flavor.disk }} </td>
+    <td> {{ flavor.vcpus }} </td>
     <td> TBD </td>
   </tr>
   
