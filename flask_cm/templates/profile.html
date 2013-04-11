@@ -40,12 +40,13 @@ for(var i=0; i<field.length; i++) {
 
 </script>
 <h1>My Profile</h1>
-<button onClick="showHide('password');">Toggle Password Display</button>
+<button onClick="showHide('password');">Toggle Password
+Display</button>
 <table>
 {% for key,value in cloudinfo.iteritems() %}
 
 
-  <tr> <th> <input type="checkbox" name="{{ key }}" value="{{ key }}" >
+  <tr> <th> <input type="checkbox" name=selected_cloud value="{{ key }}" >
   <b> {{ key }}</b> </th></tr>
 
   <!--
@@ -72,6 +73,5 @@ for(var i=0; i<field.length; i++) {
 {% endfor %}
 {% endfor %}
 </table>
-
 
 {% endblock %}

@@ -232,34 +232,81 @@ def display_images(cloud=None):
 
 
 ######################################################################
+# ROUTE: TEST 
+######################################################################
+
+
+def set_default_cloud(name, cloud_names):
+    global default_cloud
+    default_cloud = name
+    selected = {}
+    for name in cloud_names:
+        selected[name] = ""
+    selected[default_cloud] = 'checked = ""'
+    return selected
+        
+default_cloud = "india-openstack"
+
+
+@app.route('/gregor', methods=['GET','POST'])
+def gregor():
+    global default_cloud
+    #    default_cloud = "india-openstack"
+
+    cloud_names = ["india-openstack", "sierra-openstack"]
+    selected = set_default_cloud(default_cloud, cloud_names)
+    
+    if request.method == 'POST':
+        default_cloud= request.form['selected_cloud']
+    print default_cloud
+
+    selected = set_default_cloud(default_cloud, cloud_names)
+
+    return '''
+            <form action="" method="post">
+              <input type = "radio"
+                 name = "selected_cloud"
+                 id = "india-openstack"
+                 value = "india-openstack"
+                 %(india-openstack)s />
+              <label>india-openstack</label>                 
+              <input type = "radio"
+                 name = "selected_cloud"
+                 id = "sierra-openstack"
+                 value = "sierra-openstack"
+                 %(sierra-openstack)s/>
+               <label>sierra-openstack</label>
+              <input type=submit value=Update>
+           </form>''' %selected
+
+######################################################################
 # ROUTE: PROFILE
 ######################################################################
 @app.route('/profile/')
 def profile():
-    global clouds
-    # bug the global var of the ditc should be used
-    config = cm_config()
-    dict_t = config.get()
-    makeCloudDict(dict_t)
-    active = make_active('profile')
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+        # bug the global var of the ditc should be used
+        config = cm_config()
+        dict_t = config.get()
+        makeCloudDict(dict_t)
+        active = make_active('profile')
+        time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    persolalinfo = {'name': 'abc', 'data1': 'pqr'}
-    # bug: I guess this is left over from my example
+        persolalinfo = {'name': 'abc', 'data1': 'pqr'}
+        # bug: I guess this is left over from my example
 
-    # bug: the name of the clouds should be retrived from config. I guess this is left over from my example
-    
-    cloudinfo = {
-        'openstak-india': {'type': 'openstack', 'host': 'india.futuregrid.org',
-                           'username': 'shweta'}}
+        # bug: the name of the clouds should be retrived from config. I guess this is left over from my example
 
-    return render_template('profile.html',
-                           updated=time_now,
-                           keys="",  # ",".join(clouds.get_keys()),
-                           cloudinfo=makeCloudDict(dict_t),
-                           persolalinfo=persolalinfo,
-                           active=active,
-                           version=version)
+        cloudinfo = {
+            'openstak-india': {'type': 'openstack', 'host': 'india.futuregrid.org',
+                               'username': 'shweta'}}
+
+        return render_template('profile.html',
+                               updated=time_now,
+                               keys="",  # ",".join(clouds.get_keys()),
+                               cloudinfo=makeCloudDict(dict_t),
+                               persolalinfo=persolalinfo,
+                               active=active,
+                               version=version)
 
 
 def makeCloudDict(dict_t):
