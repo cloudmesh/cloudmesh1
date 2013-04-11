@@ -24,6 +24,7 @@
   {% for id, image in cloud['images'].iteritems() %}
   
   <tr>
+
     <td> <input type="radio" name="{{ name }}-{{ id }}" value="{{ name }}-{{ id }}" </td>
     <td> {{ image.name }} </td>
     <td> {{ image.status }} </td>
