@@ -2,6 +2,9 @@
 {% from "_helper.html" import image_button %}g
 {% block content %}
 
+Choose the default flavor </br>
+
+<form action="" method="POST">
 <table>
   <tr>
     <th> Default </th>
@@ -22,7 +25,7 @@
   {% for id, flavor in cloud['flavors'].iteritems() %}
   
   <tr>
-    <td> <input type="radio" name="{{ name }}-{{ key }}" value="{{ name }}-{{ key }}" </td>
+    <td> <input type="radio" name="selected_flavor" value="{{ flavor.name }}" id="{{ flavor.name }}"  {{ selected[flavor.name] }}></td>
     <td> {{ flavor.id }} </td>
     <td> {{ flavor.name }} </td>
     <td> {{ flavor.ram }} </td>
@@ -36,5 +39,6 @@
   {% endfor %}
   
 </table>
-
+<input type=submit value="Update">
+</form>
 {% endblock %}
