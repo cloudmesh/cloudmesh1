@@ -244,13 +244,44 @@ def display_flavors(cloud=None):
 ######################################################################
 # ROUTE: IMAGES
 ######################################################################
-@app.route('/images/<cloud>/')
-@app.route('/images/')
+
+def set_default_image(name, image_names):
+    global default_image;
+    default_image = name
+    selected = {}
+    for name in image_names:
+        selected[name] = ""
+    selected[default_image] = 'checked'
+    print default_image;
+    return selected
+        
+default_image = "6bd5db84-c1d3-4fb2-b2e4-e85a20aaec6d"
+
+def buildImageNamesArray(clouds):
+     image_names=[]
+     for name, cloud in clouds.iteritems():
+	for id, image in cloud['images'].iteritems():
+		image_names.append(id);
+     return image_names;
+
+
+#@app.route('/images/<cloud>/')
+@app.route('/images/', methods=['GET','POST'])
 def display_images(cloud=None):
     # for debugging
     cloud = 'india-openstack'
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('images')
+
+    image_names=buildImageNamesArray(clouds.clouds);
+    default_image=image_names[0];
+    selected = set_default_image(default_image, image_names)
+
+    if request.method == 'POST':
+        default_image= request.form['selected-image'] 
+    print default_image
+
+    selected = set_default_image(default_image, image_names)
 
     if cloud == None:
         pass
@@ -259,8 +290,8 @@ def display_images(cloud=None):
                                updated=time_now,
                                clouds=clouds.clouds,
                                active=active,
-                               version=version)
-    pass
+                               version=version,selected=selected)
+    
 
 
 ######################################################################
