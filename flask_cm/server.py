@@ -252,8 +252,13 @@ default_cloud = "india-openstack"
 def gregor():
     global default_cloud
     #    default_cloud = "india-openstack"
-
-    cloud_names = ["india-openstack", "sierra-openstack"]
+    #added by shweta
+    config_active = cm_config()
+    dict_t = config_active.get('active')
+    cloud_names = dict_t;
+    print cloud_names;
+    #end of additon by shweta
+    #cloud_names = ["india-openstack", "sierra-openstack"] code written by Gregor commented by shweta 
     selected = set_default_cloud(default_cloud, cloud_names)
     
     if request.method == 'POST':
