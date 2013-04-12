@@ -2,6 +2,10 @@
 {% from "_helper.html" import image_button %}g
 {% block content %}
 
+
+Choose the default image </br>
+
+<form action="" method="POST">
 <table>
   <tr>
     <th> Default </th>
@@ -25,7 +29,7 @@
   
   <tr>
 
-    <td> <input type="radio" name="selected-image" value="{{ name }}-{{ id }}"></td>
+    <td> <input type="radio" name="selected-image" value="{{ id }}" id="{{ id }}"  {{ selected[id] }} /></td>
     <td> {{ image.name }} </td>
     <td> {{ image.status }} </td>
     <td> {{ image.updated }} </td>
@@ -41,5 +45,6 @@
   {% endfor %}
   
 </table>
-
+<input type=submit value="Update">
+</form>
 {% endblock %}
