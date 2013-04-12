@@ -203,11 +203,11 @@ def set_default_flavor(name, flavor_names):
 default_flavor = "m1.small"
 
 def buildFlavorNamesArray(clouds):
-     flavor_names=[]
-     for name, cloud in clouds.iteritems():
-    for id, flavor in cloud['flavors'].iteritems():
-		flavor_names.append(flavor['name']);
-     return flavor_names;
+    flavor_names=[]
+    for name, cloud in clouds.iteritems():
+        for id, flavor in cloud['flavors'].iteritems():
+            flavor_names.append(flavor['name']);
+    return flavor_names;
 
 
 
