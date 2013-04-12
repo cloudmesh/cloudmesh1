@@ -191,13 +191,44 @@ def table():
 ######################################################################
 # ROUTE: FLAVOR
 ######################################################################
-@app.route('/flavors/<cloud>/')
-@app.route('/flavors/')
+def set_default_flavor(name, flavor_names):
+    global default_flavor;
+    default_flavor = name
+    selected = {}
+    for name in flavor_names:
+        selected[name] = ""
+    selected[default_flavor] = 'checked'
+    return selected
+        
+default_flavor = "m1.small"
+
+def buildFlavorNamesArray(clouds):
+     flavor_names=[]
+     for name, cloud in clouds.iteritems():
+    for id, flavor in cloud['flavors'].iteritems():
+		flavor_names.append(flavor['name']);
+     return flavor_names;
+
+
+
+#@app.route('/flavors/<cloud>/' )
+@app.route('/flavors/', methods=['GET','POST'])
 def display_flavors(cloud=None):
+
+    flavor_names=buildFlavorNamesArray(clouds.clouds);
     # for debugging
     cloud = 'india-openstack'
+    default_flavor=flavor_names[0];
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('flavors')
+    selected = set_default_flavor(default_flavor, flavor_names)
+
+    if request.method == 'POST':
+        default_flavor= request.form['selected_flavor'] 
+    print default_flavor
+
+    selected = set_default_flavor(default_flavor, flavor_names)
+      
 
     if cloud == None:
         pass
@@ -206,7 +237,8 @@ def display_flavors(cloud=None):
                                updated=time_now,
                                clouds=clouds.clouds,
                                active=active,
-                               version=version)
+                               version=version,selected=selected)
+
 
 
 ######################################################################
