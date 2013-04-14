@@ -53,7 +53,8 @@ def make_active(name):
               'flavors': "",
               'images': "",
               'metric': "",
-              'profile': ""}
+              'profile': "",
+              'vm_info': ""}
     active[name] = 'active'
     return active
 
@@ -189,6 +190,44 @@ def table():
 
 
 ######################################################################
+# ROUTE: VM INFO
+######################################################################
+
+
+@app.route('/cm/info/<cloud>/<server>/')
+def vm_info(cloud=None,server=None):
+    global clouds
+
+    active = make_active('vm_info')
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    return render_template('vm_info.html',
+                           updated=time_now,
+                           keys="", 
+                           server=clouds.clouds[cloud]['servers'][server],
+                           id = server,
+                           cloudname = cloud, 
+                           active=active,
+                           version=version,
+                           table_fun=maketablefromdict )
+                        
+def maketablefromdict(the_dict):
+    return_str = ''
+    if isinstance(the_dict, dict):
+        for name,value in the_dict.iteritems() :
+            return_str =return_str +'<tr><td>'+name.title() +'</td><td>'+str(maketablefromdict(value))+'</td></tr>'
+        return_str = '<table>' + return_str + '</table>'
+        return return_str
+    elif type(the_dict) is list: 
+        for element in the_dict:
+            for name,value in element.iteritems() :
+                return_str =return_str +'<tr><td>'+name.title()+'</td><td>'+str(maketablefromdict(value))+'</td></tr>'
+        return_str = '<table>' + return_str + '</table>'
+        return return_str
+    else:
+        return the_dict
+
+######################################################################
 # ROUTE: FLAVOR
 ######################################################################
 def set_default_flavor(name, flavor_names):
@@ -205,7 +244,7 @@ default_flavor = "m1.small"
 def buildFlavorNamesArray(clouds):
      flavor_names=[]
      for name, cloud in clouds.iteritems():
-    for id, flavor in cloud['flavors'].iteritems():
+    	for id, flavor in cloud['flavors'].iteritems():
 		flavor_names.append(flavor['name']);
      return flavor_names;
 
