@@ -14,6 +14,15 @@ from datetime import datetime
 import yaml
 
 
+#### setting up reading path for the use of yaml################
+default_path = '.futuregrid/cloudmesh.yaml'
+home = os.environ['HOME']
+filename = "%s/%s" % (home, default_path)
+
+#### end of setting up reading path for the use of yaml################
+
+
+
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
@@ -258,7 +267,13 @@ def display_flavors(cloud=None):
     flavor_names=buildFlavorNamesArray(clouds.clouds);
     # for debugging
     cloud = 'india-openstack'
-    default_flavor=flavor_names[0];
+
+    ############reading from yaml file ############
+    config_flavor = cm_config()
+    configurations= config_flavor.get(cloud)   # name of default cloud will come here
+    default_flavor=configurations['default_flavor']
+     ############  end of reading from yaml file ############
+
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('flavors')
     selected = set_default_flavor(default_flavor, flavor_names)
@@ -266,6 +281,18 @@ def display_flavors(cloud=None):
     if request.method == 'POST':
         default_flavor= request.form['selected_flavor'] 
     print default_flavor
+
+     ############ writing in yaml file ############
+
+    yamlFile= config_flavor.get();
+    yamlFile['india-openstack']['default_flavor']=default_flavor;
+    testDict={}
+    testDict['cloudmesh']=yamlFile;
+    f = open(filename, "w")
+    yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+    f.close()
+
+ ############ end of writing in yaml file ############
 
     selected = set_default_flavor(default_flavor, flavor_names)
       
@@ -295,7 +322,7 @@ def set_default_image(name, image_names):
     print default_image;
     return selected
         
-default_image = "6bd5db84-c1d3-4fb2-b2e4-e85a20aaec6d"
+default_image = "ktanaka/ubuntu1204-ramdisk.manifest.xml"
 
 def buildImageNamesArray(clouds):
      image_names=[]
@@ -314,12 +341,31 @@ def display_images(cloud=None):
     active = make_active('images')
 
     image_names=buildImageNamesArray(clouds.clouds);
-    default_image=image_names[0];
+
+    ############reading from yaml file ############
+    config_image = cm_config()
+    configurations= config_image.get(cloud)   # name of default cloud will come here
+    default_image=configurations['default_image']
+     ############  end of reading from yaml file ############
+
+   # default_image=image_names[0];
     selected = set_default_image(default_image, image_names)
 
     if request.method == 'POST':
         default_image= request.form['selected-image'] 
     print default_image
+
+############ writing in yaml file ############
+
+    yamlFile= config_image.get();
+    yamlFile['india-openstack']['default_image']=default_image;
+    testDict={}
+    testDict['cloudmesh']=yamlFile;
+    f = open(filename, "w")
+    yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+    f.close()
+
+ ############ end of writing in yaml file ############
 
     selected = set_default_image(default_image, image_names)
 
