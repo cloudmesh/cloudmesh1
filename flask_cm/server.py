@@ -63,7 +63,8 @@ def make_active(name):
               'images': "",
               'metric': "",
               'profile': "",
-              'vm_info': ""}
+              'vm_info': "",
+              'projects': ""}
     active[name] = 'active'
     return active
 
@@ -197,6 +198,24 @@ def table():
                            active=active,
                            version=version)
 
+
+
+######################################################################
+# ROUTE: PROJECTS
+######################################################################
+
+@app.route('/projects/')
+def project():
+    global projects;
+    active = make_active('projects')
+    config = cm_config()
+    dict_t = config.get()
+    makeCloudDict(dict_t) #from the profile function
+  
+    return render_template('projects.html',
+                               clouds=projects,
+                               active=active,
+                               version=version)
 
 ######################################################################
 # ROUTE: VM INFO
@@ -466,6 +485,12 @@ def makeCloudDict(dict_t):
     cloudDict = {}
     cloudSubDict = {}
     cloudSubsubDict = {}
+############# the below variables are used to display projects.html Here projects dict contains all the projects################
+    project_content={}
+    global projects;
+    projects={};
+
+########### end of variables for display of projects.html###########################
     for key, value in dict_t.iteritems():
         # Bug: this should be changed based on a test of type
         
@@ -482,10 +507,14 @@ def makeCloudDict(dict_t):
             for innerKey, innerValue in value.iteritems():
                 if "fg" in innerKey:
                     for innermostKey, innermostValue in innerValue.iteritems():
+			project_content[innermostKey]=innermostValue
                         innermostKey = innermostKey.replace("EC2_", "")
                         cloudSubsubDict[innermostKey.upper()] = innermostValue
                     cloudDict[innerKey.upper()] = cloudSubsubDict
                     cloudSubsubDict = {}
+		    projects[innerKey]=project_content;
+                    project_content={};
+
                 else:
                     innerKey = innerKey.replace("EC2_", "")
                     cloudSubDict[innerKey.upper()] = innerValue
