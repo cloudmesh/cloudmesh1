@@ -213,7 +213,7 @@ def project():
     makeCloudDict(dict_t) #from the profile function
   
     return render_template('projects.html',
-                               clouds=projects,
+                               projects=projects,
                                active=active,
                                version=version)
 
