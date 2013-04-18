@@ -59,7 +59,7 @@ server:
 
 view:
 	sleep 3
-	 %s http://127.0.0.1:5000/gregor
+	 %s http://127.0.0.1:5000
 """ % browser
     #webbrowser.open("http://127.0.0.1:5000")
     file.close()

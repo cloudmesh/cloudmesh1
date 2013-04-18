@@ -28,16 +28,9 @@ Choose the default image </br>
   {% for id, image in cloud['images'].iteritems() %}
   
   <tr>
-<<<<<<< HEAD
-    <td> <input type="radio" name="{{ name }}-{{ id }}" value="{{ name }}-{{ id }}" </td>
-=======
 
-<<<<<<< HEAD
-    <td> <input type="radio" name="selected-image" value="{{ id }}" id="{{ id }}"  {{ selected[id] }} /></td>
->>>>>>> 04f5e186bc25eb20a4c84f257384e581d571a4e5
-=======
     <td> <input type="radio" name="selected-image" value="{{ id }}" id="{{ id }}"  {{ selected[id] }} onclick="document.forms['image'].submit()" /></td>
->>>>>>> 82f8c63b2c152b61fc58516eacb824f366a1a3dd
+
     <td> {{ image.name }} </td>
     <td> {{ image.status }} </td>
     <td> {{ image.updated }} </td>
