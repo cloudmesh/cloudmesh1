@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}g
+{% block content %}
+
+<h1> Projects </h1>
+
+
+{% for projectname,projectDetails  in projects.iteritems() %}
+
+<table>
+<tr> <th colspan=2> <input type="checkbox" name=selected_project value="{{ projectname }}" >
+<b> {{ projectname }}</b> </th></tr>
+{% for key,value  in projectDetails.iteritems() %}
+
+<tr>
+<td> {{ key }} </td>
+<td> {{  value }} </td>
+</tr>
+
+{% endfor %}
+</table>
+
+{% endfor %}
+ {{ clouds }}
+{% endblock %}
