@@ -203,19 +203,72 @@ def table():
 ######################################################################
 # ROUTE: PROJECTS
 ######################################################################
+def set_default_project(name, project_names):
+    global default_project;
+    default_project = name
+    selected = {}
+    for name in project_names:
+        selected[name] = ""
+    selected[default_project] = 'checked'
+    print selected
+    return selected
 
-@app.route('/projects/')
-def project():
-    global projects;
+def buildProjectNamesArray(projects):
+     project_names=[]
+     for project_name, info in projects.iteritems():
+	project_names.append(project_name);
+     return project_names;
+
+
+
+
+@app.route('/projects/', methods=['GET','POST'])
+def display_project(cloud=None):
+    global projects,default_project;
     active = make_active('projects')
     config = cm_config()
     dict_t = config.get()
     makeCloudDict(dict_t) #from the profile function
-  
-    return render_template('projects.html',
+    project_names=buildProjectNamesArray(projects)
+    
+    cloud = 'india-openstack'
+
+    ############reading from yaml file ############
+    config_project = cm_config()
+    configurations= config_project.get(cloud)   # name of default cloud will come here
+    default_project=configurations['default_project']
+     ############  end of reading from yaml file ############
+   
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
+    active = make_active('projects')
+    selected = set_default_project(default_project, project_names)
+
+    if request.method == 'POST':
+        default_project= request.form['selected_project'] 
+        print "default_project is: "+default_project
+
+     ############ writing in yaml file ############
+
+    yamlFile= config_project.get();
+    yamlFile['india-openstack']['default_project']=default_project;
+    testDict={}
+    testDict['cloudmesh']=yamlFile;
+    f = open(filename, "w")
+    yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+    f.close()
+
+ ############ end of writing in yaml file ############
+
+    selected = set_default_project(default_project, project_names)
+      
+
+    if cloud == None:
+        pass
+    else:
+        return render_template('projects.html',
                                projects=projects,
                                active=active,
-                               version=version)
+                               version=version,selected=selected)
 
 ######################################################################
 # ROUTE: VM INFO
