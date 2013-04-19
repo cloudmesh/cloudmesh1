@@ -4,11 +4,11 @@
 
 <h1> Projects </h1>
 
-
+<form name="projects" action="" method="POST">
 {% for projectname,projectDetails  in projects.iteritems() %}
 
 <table>
-<tr> <th colspan=2> <input type="checkbox" name=selected_project value="{{ projectname }}" >
+<tr> <th colspan=2> <input type="radio" name=selected_project value="{{ projectname }}" id="{{ projectname }}" {{ selected[projectname] }} onclick="document.forms['projects'].submit()" >
 <b> {{ projectname }}</b> </th></tr>
 {% for key,value  in projectDetails.iteritems() %}
 
@@ -21,5 +21,7 @@
 </table>
 
 {% endfor %}
+
+</form>
  {{ clouds }}
 {% endblock %}
