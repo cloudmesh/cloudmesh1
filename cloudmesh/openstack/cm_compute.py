@@ -695,6 +695,34 @@ class openstack(BaseCloud):
 
         return list
 
+    ######################################################################
+    # Upload Key Pair
+    ######################################################################
+    def upload_key_pair(self,path,name):
+        """ Uploads key pair """
+        
+        try:
+            path = os.path.expanduser(path)
+            keyFile = open(path,"r");
+            publickey = keyFile.read();
+            self.cloud.keypairs.create(name,publickey)
+        except Exception, e:
+            return e
+            
+        return 'Key added successfully'
+
+    ######################################################################
+    # Delete Key Pair
+    ######################################################################
+    def delete_key_pair(self,name):
+        """ delets key pair """
+        
+        try:
+            self.cloud.keypairs.delete(name)
+        except Exception, e:
+            return e
+            
+        return 'Key deleted successfully'
 
 ##########################################################################
 # MAIN FOR TESTING
@@ -702,11 +730,17 @@ class openstack(BaseCloud):
 
 if __name__ == "__main__":
 
+    """
     cloud = openstack("india-openstack")
     
     name ="%s-%04d" % (cloud.credential["OS_USERNAME"], 1)
     out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
     pp.pprint(out)  
+    
+    """
+
+    cloud = openstack("india-openstack")
+    print cloud.uploadKeyPair('/home/pushkar/.ssh/id_rsa.pub1','PushkarKey')
 
     #cloud.novaclient_dump()
 
