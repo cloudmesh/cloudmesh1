@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}g
+{% block content %}
+
+<style>
+
+</style>
+
+<h1>Update Openstack Default key</h1>
+
+<form action ="" method = "POST">
+
+<table>
+<tr><td>Key File Path : </td><td><input name = "keyFilePath" type="text" value = "{{path}}" /></td></tr>
+<tr><td>Key Name : </td><td><input name = "keyname" type="text" value = "{{keyname}}"/></td> </tr>
+<tr><td colspan = "2" ><input type="submit" value="Update"></td></tr>
+</table>
+		
+{% if showMessage %}
+
+{{message}}
+
+{% endif %}
+
+</form>
+{% endblock %}
