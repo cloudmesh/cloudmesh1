@@ -419,17 +419,25 @@ class openstack(BaseCloud):
     ######################################################################
     # create a vm
     ######################################################################
-    def vm_create(self, name, flavor_name, image_id):
+    def vm_create(self, name, flavor_name, image_id,key_name = None):
         """
         create a vm
         """
 
         vm_flavor = self.cloud.flavors.find(name=flavor_name)
         vm_image = self.cloud.images.find(id=image_id)
-        vm = self.cloud.servers.create(name,
-                                       flavor=vm_flavor,
-                                       image=vm_image
-                                       )
+        
+        if key_name == None :
+            vm = self.cloud.servers.create(name,
+                                           flavor=vm_flavor,
+                                           image=vm_image,
+                                           )
+        else :
+            vm = self.cloud.servers.create(name,
+                                           flavor=vm_flavor,
+                                           image=vm_image,
+                                           key_name = key_name
+                                           )
         delay = vm.user_id  # trick to hopefully get all fields
         data = vm.__dict__
         del data['manager']
@@ -707,9 +715,9 @@ class openstack(BaseCloud):
             publickey = keyFile.read();
             self.cloud.keypairs.create(name,publickey)
         except Exception, e:
-            return e
+            return 1, e
             
-        return 'Key added successfully'
+        return (0 ,'Key added successfully')
 
     ######################################################################
     # Delete Key Pair
@@ -720,9 +728,9 @@ class openstack(BaseCloud):
         try:
             self.cloud.keypairs.delete(name)
         except Exception, e:
-            return e
+            return (1, e)
             
-        return 'Key deleted successfully'
+        return (0 , 'Key deleted successfully')
 
 ##########################################################################
 # MAIN FOR TESTING
