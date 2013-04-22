@@ -58,6 +58,9 @@ class cm_config:
     def active(self):
         return self.data['cloudmesh']['active']
 
+    def projects(self, status):
+        return self.data['cloudmesh']['projects'][status]
+        
     def get(self, key=None):
         if key == None:
             return self.data['cloudmesh']
@@ -84,6 +87,10 @@ if __name__ == "__main__":
 
     print config
 
+    print "================="
+    print config.projects('active')
+    print config.projects('completed')
+    
     print "================="
     print config.get('india-openstack')
     print "================="

@@ -4,6 +4,7 @@
 Command to generate rc files from our cloudmesh configuration files.
 
 Usage:
+  cm-rc config projects (list|?)
   cm-rc config [-f FILE] [-o OUT] NAME [-]
   cm-rc config dump [--format=(yaml|dict)]
   cm-rc config list
@@ -80,6 +81,8 @@ if __name__ == '__main__':
 
     if is_config:
 
+        print arguments
+
         file = arguments['--file']
         try:
             config = cm_config(file)
@@ -96,7 +99,39 @@ if __name__ == '__main__':
 
         name = arguments['NAME']
 
-        
+
+        if arguments['projects'] and arguments['list']:
+
+            projects = config.data['cloudmesh']['projects']
+            print yaml.dump(projects, default_flow_style=False, indent=4)
+            sys.exit(0)
+
+        if arguments['projects'] and arguments['?']:
+
+            projects = config.data['cloudmesh']['projects']['active']
+
+            print "Please select from the following:"
+            print "0 - Cancel"
+            selected = False
+            choices = []
+            while not selected:
+                counter = 1
+                for name in projects:
+                    print counter, "-" "%20s" % name 
+                    choices.append(name)
+                    counter += 1
+                print "Please select:"
+                input = int(sys.stdin.readline())
+                if input == 0:
+                    print "Selection terminated"
+                    sys.exit(0)
+                selected = (input > 0) and (input < counter)
+            print "Selected: ", input
+            name = choices[input-1]
+            print name
+
+            sys.exit(0)
+
         if arguments['list'] or name == 'list':
             for name in config.keys():
                 if 'cm_type' in config.data['cloudmesh'][name]:
