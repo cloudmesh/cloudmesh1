@@ -11,7 +11,10 @@ from cloudmesh.cloudmesh import cloudmesh
 from datetime import datetime
 from cloudmesh.cm_config import cm_config
 from datetime import datetime
-from sh import xterm
+try:
+    from sh import xterm
+except:
+    print "xterm not suppported"
 import yaml
 
 
