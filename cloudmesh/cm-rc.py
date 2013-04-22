@@ -1,13 +1,14 @@
 #! /usr/bin/env python
-"""cm config
+"""cm-rc config
 ------------
 Command to generate rc files from our cloudmesh configuration files.
 
 Usage:
-  cm config [-f FILE] [-o OUT] NAME [-]
-  cm config list
-  cm --version
-  cm --help
+  cm-rc config [-f FILE] [-o OUT] NAME [-]
+  cm-rc config dump [--format=(yaml|dict)]
+  cm-rc config list
+  cm-rc --version
+  cm-rc --help
 
 This program generates form a YAML file containing the login
 information for a cloud an rc file that can be used to later source
@@ -16,13 +17,13 @@ it.
 Example:
   we assume the yaml file has an entry india-openstack
 
-    cm config -o novarc india-openstack
+    cm-rc config -o novarc india-openstack
     source novarc
 
   This will create a novarc file and than you can source it.
 
 
-     cm config ? -
+     cm-rc config ? -
 
    Presents a selction of cloud choices and writes the choice into a
    file called ~/.futuregrid/novarc
@@ -39,19 +40,38 @@ Options:
 
   -o OUT --out=OUT     writes the result in the specifide file
 
+  -d  --debug          debug
+
   -                    this option is a - at the end of the command. If data is written to a file it is also put out to stdout
 
 """
+import yaml
 from docopt import docopt
 from cm_config import cm_config
 import sys
 import os
 
+debug = False
+
+def DEBUG(label, var):
+    if debug:
+        print 70 * "-"
+        print label 
+        print 70 * " "
+        print str(var)
+        print 70 * "-"
+
 if __name__ == '__main__':
 
     default_path = '.futuregrid/novarc'
-    arguments = docopt(__doc__, version='1.0.0rc2')
+    arguments = docopt(__doc__, version='1.0.1')
+
+    DEBUG("arguments", arguments)
+    
     home = os.environ['HOME']
+
+    DEBUG("home", home)
+    
 
     ######################################################################
     # This secion deals with handeling "cm config" related commands
@@ -59,17 +79,37 @@ if __name__ == '__main__':
     is_config = arguments['config'] != None
 
     if is_config:
+
+        print arguments
+
         file = arguments['--file']
         try:
             config = cm_config(file)
+            DEBUG("config", config)
         except:
             print "%s: Configureation file '%s' not found" % ("CM ERROR", file)
             sys.exit(1)
 
         name = arguments['NAME']
-        if name == 'list':
+
+        print name
+        
+        if arguments['list']:
             for name in config.keys():
-                print name, "(%s)" % config.data['cloudmesh'][name]['cm_type']
+                if 'cm_type' in config.data['cloudmesh'][name]:
+                    print name, "(%s)" % config.data['cloudmesh'][name]['cm_type']
+            sys.exit(0)
+
+        if arguments['dump']:
+            print arguments
+            format = arguments['--format']
+            print format
+            if format == 'yaml':
+                print ">>>>>YAML"
+                
+                print yaml.dump(config)
+            elif format == 'dict' or format ==None:
+                print config
             sys.exit(0)
 
         if name == '?':
@@ -82,9 +122,10 @@ if __name__ == '__main__':
             while not selected:
                 counter = 1
                 for name in config.keys():
-                    print counter, "-" "%20s" % name, "(%s)" % config.data['cloudmesh'][name]['cm_type']
-                    choices.append(name)
-                    counter += 1
+                    if 'cm_type' in config.data['cloudmesh'][name]:
+                        print counter, "-" "%20s" % name, "(%s)" % config.data['cloudmesh'][name]['cm_type']
+                        choices.append(name)
+                        counter += 1
                 print "Please select:"
                 input = int(sys.stdin.readline())
                 if input == 0:
@@ -103,7 +144,8 @@ if __name__ == '__main__':
                 print "%s: The cloud '%s' can not befound" % ("CM ERROR", name)
                 print "Try instead"
                 for name in config.keys():
-                    print "    ", name
+                    if 'cm_type' in config.data['cloudmesh'][name]:
+                        print "    ", name
 
                 sys.exit(1)
 
