@@ -11,6 +11,7 @@ from cloudmesh.cloudmesh import cloudmesh
 from datetime import datetime
 from cloudmesh.cm_config import cm_config
 from datetime import datetime
+from sh import xterm
 import yaml
 
 
@@ -64,7 +65,8 @@ def make_active(name):
               'metric': "",
               'profile': "",
               'vm_info': "",
-              'projects': ""}
+              'projects': "",
+              'updatekeypair':""}
     active[name] = 'active'
     return active
 
@@ -129,10 +131,10 @@ def delete_vm(cloud=None, server=None):
 @app.route('/cm/start/<cloud>/')
 def start_vm(cloud=None, server=None):
     print "*********** STARTVM", cloud
-    print "-> start", cloud, server
+    print "-> start", cloud
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
-    clouds.create(cloud, "gvonlasz", "001", "dummy")
+    clouds.create(cloud, "pnewaska", "001", "dummy")
     return table()
 
 '''
@@ -216,7 +218,7 @@ def set_default_project(name, project_names):
 def buildProjectNamesArray(projects):
      project_names=[]
      for project_name, info in projects.iteritems():
-	project_names.append(project_name);
+        project_names.append(project_name);
      return project_names;
 
 
@@ -270,6 +272,37 @@ def display_project(cloud=None):
                                active=active,
                                version=version,selected=selected)
 
+######################################################################
+# ROUTE: VM Login
+######################################################################
+
+
+@app.route('/cm/login/<cloud>/<server>/')
+def vm_login(cloud=None,server=None):
+    global clouds
+
+    active = make_active('vm_login')
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    server=clouds.clouds[cloud]['servers'][server]
+     
+    if len(server['addresses']['vlan102']) < 2:  
+        mesage = 'Cannot Login Now, Public IP not assigned'
+        
+    else :
+        message = 'Logged in Successfully'
+        ip = server['addresses']['vlan102'][1]['addr']   
+        xterm('-e','ssh', 'ubuntu@'+ip)
+        
+    return render_template('table.html',
+                               updated=time_now,
+                               keys="",  # ",".join(clouds.get_keys()),
+                               clouds=clouds.clouds,
+                               image='myimage',
+                               pages=pages,
+                               active=active,
+                               loginmessage = message, 
+                               version=version)
 ######################################################################
 # ROUTE: VM INFO
 ######################################################################
@@ -397,11 +430,11 @@ def set_default_image(name, image_names):
 default_image = "ktanaka/ubuntu1204-ramdisk.manifest.xml"
 
 def buildImageNamesArray(clouds):
-     image_names=[]
-     for name, cloud in clouds.iteritems():
-	for id, image in cloud['images'].iteritems():
-		image_names.append(id);
-     return image_names;
+    image_names=[]
+    for name, cloud in clouds.iteritems():
+        for id, image in cloud['images'].iteritems():
+            image_names.append(id);
+    return image_names;
 
 
 #@app.route('/images/<cloud>/')
@@ -561,12 +594,12 @@ def makeCloudDict(dict_t):
             for innerKey, innerValue in value.iteritems():
                 if "fg" in innerKey:
                     for innermostKey, innermostValue in innerValue.iteritems():
-			project_content[innermostKey]=innermostValue
+                        project_content[innermostKey]=innermostValue
                         innermostKey = innermostKey.replace("EC2_", "")
                         cloudSubsubDict[innermostKey.upper()] = innermostValue
                     cloudDict[innerKey.upper()] = cloudSubsubDict
                     cloudSubsubDict = {}
-		    projects[innerKey]=project_content;
+                    projects[innerKey]=project_content;
                     project_content={};
 
                 else:
@@ -623,7 +656,61 @@ def page(path):
                            pages=pages,
                            active=active,
                            version=version)
-
+                        
+@app.route('/updatekeypair/<cloud>/',methods=['GET','POST'])
+def update_key_pair(cloud):
+    
+    active = make_active('table')
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    showmsg = False
+    filePath = ''
+    keyname = ''
+    Message = ''
+    config = cm_config()
+    yamlFile= config.get()    
+    
+    #check if this is for openstack
+    try :
+        if yamlFile[cloud]['cm_type'] in 'openstack':
+            if yamlFile[cloud].has_key('keypair') :
+                filePath = yamlFile[cloud]['keypair']['keypath']
+                keyname = yamlFile[cloud]['keypair']['keyname']
+        else :
+             return "Invalid Page"
+            
+    except Exception ,e : 
+        return "Invalid Page " + str(e)
+    
+    if request.method == 'POST':
+        showmsg = True
+        filePath = request.form['keyFilePath']
+        keyname = request.form['keyname']
+        (stat,Message) = clouds.add_key_pair(cloud,filePath,keyname)
+        if stat == 0 : 
+            yamlFile[cloud]['keypair'] = {'keypath' : filePath,
+                                      'keyname' : keyname}
+            testDict={}
+            testDict['cloudmesh']=yamlFile;
+            f = open(filename, "w")
+            yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+            f.close()
+        else :
+            filePath = ''
+            keyname = ''
+            if yamlFile[cloud].has_key('keypair') :
+                filePath = yamlFile[cloud]['keypair']['keypath']
+                keyname = yamlFile[cloud]['keypair']['keyname']
+        
+                                    
+        
+        
+    return render_template('upload_openstack_key.html',
+                           showMessage=showmsg,
+                           message = Message,
+                           active=active,
+                           path = filePath,
+                           keyname = keyname,
+                           cloud_name = cloud)
 
 if __name__ == "__main__":
     app.run()
