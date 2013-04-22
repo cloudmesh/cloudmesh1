@@ -714,7 +714,7 @@ class openstack(BaseCloud):
     ######################################################################
     # Delete Key Pair
     ######################################################################
-    def delete_key_pair(self,name):
+    def delete_key(self,name):
         """ delets key pair """
         
         try:
@@ -740,7 +740,7 @@ if __name__ == "__main__":
     """
 
     cloud = openstack("india-openstack")
-    print cloud.uploadKeyPair('/home/pushkar/.ssh/id_rsa.pub1','PushkarKey')
+    print cloud.upload_key_pair('~/.ssh/id_rsa.pub','PushkarKey')
 
     #cloud.novaclient_dump()
 
