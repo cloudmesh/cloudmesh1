@@ -84,8 +84,14 @@ if __name__ == '__main__':
         try:
             config = cm_config(file)
             DEBUG("config", config)
+        except IOError:
+            print "%s: Configuration file '%s' not found" % ("CM ERROR", file)
+            sys.exit(1)
+        except yaml.scanner.ScannerError as yamlerror:
+            print "%s: YAML error: %s, in configuration file '%s'" % ("CM ERROR", yamlerror, file)
+            sys.exit(1)
         except:
-            print "%s: Configureation file '%s' not found" % ("CM ERROR", file)
+            print "Unexpected error:", sys.exc_info()[0]
             sys.exit(1)
 
         name = arguments['NAME']
