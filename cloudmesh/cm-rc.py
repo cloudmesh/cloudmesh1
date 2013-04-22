@@ -80,8 +80,6 @@ if __name__ == '__main__':
 
     if is_config:
 
-        print arguments
-
         file = arguments['--file']
         try:
             config = cm_config(file)
@@ -92,18 +90,15 @@ if __name__ == '__main__':
 
         name = arguments['NAME']
 
-        print name
         
-        if arguments['list']:
+        if arguments['list'] or name == 'list':
             for name in config.keys():
                 if 'cm_type' in config.data['cloudmesh'][name]:
                     print name, "(%s)" % config.data['cloudmesh'][name]['cm_type']
             sys.exit(0)
 
-        if arguments['dump']:
-            print arguments
+        if arguments['dump'] or name =='dump':
             format = arguments['--format']
-            print format
             if format == 'yaml':
                 print yaml.dump(config, default_flow_style=False, indent=4)
             elif format == 'dict' or format ==None:
