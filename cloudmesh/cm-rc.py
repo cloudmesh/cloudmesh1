@@ -105,9 +105,7 @@ if __name__ == '__main__':
             format = arguments['--format']
             print format
             if format == 'yaml':
-                print ">>>>>YAML"
-                
-                print yaml.dump(config)
+                print yaml.dump(config, default_flow_style=False, indent=4)
             elif format == 'dict' or format ==None:
                 print config
             sys.exit(0)
