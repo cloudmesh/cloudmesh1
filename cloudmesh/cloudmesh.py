@@ -286,19 +286,41 @@ class cloudmesh:
         except:
             print "Error: could not delete", cloud_name, server_id
 
-    def create(self, cloud_name, prefix, index, image_id):
+
+    def add_key_pair(self,cloud_name,path,name):
         try:
             cloud_type = self.clouds[cloud_name]['cm_type']
+            provider = self.cloud_provider(cloud_type)
+            cloud = provider(cloud_name)
+            return cloud.upload_key_pair(path,name) 
+        except:
+            print "Error: could not update keypair", cloud_name
+
+    def create(self, cloud_name, prefix, index, image_id):
+        keyname = ''
+        try:
+            cloud_type = self.clouds[cloud_name]['cm_type']
+            
+            if cloud_type in "openstack":
+                config = cm_config()
+                yamlFile= config.get()
+                if yamlFile[cloud_name]['cm_type'] in 'openstack':
+                    if yamlFile[cloud_name].has_key('keypair') :
+                        keyname = yamlFile[cloud_name]['keypair']['keyname']
+
             provider = self.cloud_provider(cloud_type)
             cloud = provider(cloud_name)
             if cloud_name == "india-openstack":
                 flavor_name = "m1.tiny"  # this is a dummy and must be retrieved from flask
                 image_id = "6d2bca76-8fff-4d57-9f29-50378539b4fa"
                 name = prefix + "-" + index
-                cloud.vm_create(name, flavor_name, image_id)
+                if (len(keyname) > 0) :
+                    cloud.vm_create(name, flavor_name, image_id,keyname )
+                else :
+                    cloud.vm_create(name, flavor_name, image_id)
                 # this is a dummy and must be retrieved from flask
-        except:
-            print "Error: could not delete", cloud_name, prefix, index, image_id
+        except Exception , e:
+            print "Error: could not create", cloud_name, prefix, index, image_id, e
 
 
     ######################################################################
