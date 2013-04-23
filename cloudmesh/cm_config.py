@@ -77,8 +77,7 @@ class cm_config:
         result = self.get(name)
         lines = ""
         for (attribute, value) in result.iteritems():
-            lines += "export %s=%s" % (attribute, value)
-            lines += "\n"
+            lines += self.export_line(attribute, value)
         return lines
 
     def rc_euca(self, name, project):
