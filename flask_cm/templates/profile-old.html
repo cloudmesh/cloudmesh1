@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}g
+{% block content %}
+
+
+<!--('profile.html',
+updated = time_now,
+keys="",##",".join(clouds.get_keys()),
+cloudinfo = cloudinfo,
+persolalinfo = persolalinfo,
+active=active,
+version=version)
+
+persolalinfo = {'name':'abc', 'data1': 'pqr'}
+cloudinfo = {'openstak-india': {'type':'openstack', 'host':'india.futuregrid.org' ,
+'username':'shweta'},
+
+'openstak-seaira': {'type':'openstack', 'host':'india.futuregrid.org' ,
+'username':'shweta'} }
+
+-->
+<script>
+function showHide(element) {
+     var field = document.getElementsByClassName(element);
+     var fieldStar = document.getElementsByClassName('star');
+for(var i=0; i<field.length; i++) {
+
+    if (element) {
+          if (field[i].style.display == 'none') {
+                field[i].style.display = 'block';
+		fieldStar[i].style.display = 'none';
+          } else {
+                field[i].style.display = 'none';
+		fieldStar[i].style.display = 'block';
+		
+          }
+     }
+}
+}
+
+</script>
+<h1>My Profile</h1>
+<button onClick="showHide('password');">Toggle Password
+Display</button>
+<table>
+{% for key,value in cloudinfo.iteritems() %}
+
+
+  <tr> <th> <input type="checkbox" name=selected_cloud value="{{ key }}" >
+  <b> {{ key }}</b> </th></tr>
+
+  <!--
+<tr> <th> <b> {{ key }}</b> </th></tr>
+-->
+  
+    {% for innerKey,innerValue in value.iteritems() %}
+    <tr>
+                <td>
+   <b>{{ innerKey }}</b>
+</td>
+<td>
+{% if innerKey in ["PASSWORD", "SECRET","PRIVATE", "SECRET_KEY", "ACCESS_KEY"] %}
+<div class="password" style="display: none;"> {{ innerValue }} </div>
+<div class="star"> *********** </div>
+{% else %}
+{{ innerValue }}
+{% endif %}
+</td>
+      </tr>
+
+
+
+{% endfor %}
+{% endfor %}
+</table>
+
+{% endblock %}

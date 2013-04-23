@@ -108,7 +108,6 @@ if __name__ == "__main__":
     print "================="
     print config.projects('active')
     print config.projects('completed')
-    
     print "================="
     print config.get('india-openstack')
     print "================="
