@@ -92,7 +92,7 @@ if __name__ == '__main__':
         except IOError:
             print "%s: Configuration file '%s' not found" % ("CM ERROR", file)
             sys.exit(1)
-        except yaml.scanner.ScannerError as yamlerror:
+        except (yaml.scanner.ScannerError, yaml.parser.ParserError) as yamlerror:
             print "%s: YAML error: %s, in configuration file '%s'" % ("CM ERROR", yamlerror, file)
             sys.exit(1)
         except:
