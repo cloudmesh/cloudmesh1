@@ -49,6 +49,9 @@ class cm_config:
     def __str__(self):
         return json.dumps(self.data, indent=4)
 
+    def export_line(self, attribute, value):
+        return "export %s=%s\n" % (attribute, value)
+
     ######################################################################
     # get methods
     ######################################################################
@@ -76,6 +79,21 @@ class cm_config:
         for (attribute, value) in result.iteritems():
             lines += "export %s=%s" % (attribute, value)
             lines += "\n"
+        return lines
+
+    def rc_euca(self, name, project):
+        result = self.get(name)
+        eucakeydir = 'EUCA_KEY_DIR'
+        lines = self.export_line(eucakeydir, result[eucakeydir])
+
+        for (attribute, value) in result.iteritems():
+            if attribute != eucakeydir:
+                if type(value) is dict:
+                    if attribute == project:
+                        for (pattribute, pvalue) in value.iteritems():
+                            lines += self.export_line(pattribute, pvalue)
+                else:    
+                    lines += self.export_line(attribute, value)
         return lines
 
 ##########################################################################
