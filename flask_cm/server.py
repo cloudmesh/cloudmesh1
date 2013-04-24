@@ -42,6 +42,7 @@ clouds = cloudmesh()
 clouds.refresh()
 
 
+
 # clouds.load()
 # AttributeError: cloudmesh instance has no attribute 'refresh'
 # clouds.refresh()
@@ -95,7 +96,6 @@ def index():
 @app.route('/cm/refresh/<cloud>/')
 def refresh(cloud=None, server=None):
     print "-> refresh", cloud, server
-    global clouds
     clouds.refresh()
     return table()
 
@@ -136,7 +136,8 @@ def start_vm(cloud=None, server=None):
     print "-> start", cloud
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
-    clouds.create(cloud, "pnewaska", "001", "dummy")
+    user = "gregor"
+    clouds.create(cloud, user, "001", "dummy")
     return table()
 
 '''
@@ -161,7 +162,6 @@ def list_metric(cloud=None, server=None):
 @app.route('/save/')
 def save():
     print "Saving the cloud status"
-    global clouds
     clouds.save()
     return table()
 
@@ -173,7 +173,6 @@ def save():
 @app.route('/load/')
 def load():
     print "Loading the cloud status"
-    global clouds
     clouds.load()
     return table()
 
@@ -184,7 +183,6 @@ def load():
 
 @app.route('/table/')
 def table():
-    global clouds
 
     active = make_active('table')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")

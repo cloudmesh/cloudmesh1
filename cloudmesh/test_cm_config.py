@@ -27,8 +27,11 @@ def HEADING(txt):
 
 class Test_cloudmesh:
 
+
+    file = "credentials-example.yaml"
+
     def setup(self):
-        self.config = cm_config("credentials-example.yaml")
+        self.config = cm_config()
 
     def tearDown(self):
         pass

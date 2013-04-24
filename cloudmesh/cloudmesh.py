@@ -34,6 +34,8 @@ class cloudmesh:
     # array with keys from the user
     keys = []
 
+    configuration = {}
+    
     ######################################################################
     # initialization methods
     ######################################################################
@@ -41,7 +43,7 @@ class cloudmesh:
     def __init__(self):
         self.clear()
         #Read Yaml File to find all the cloud configurations present
-        self.config();
+        self.config()
 
     def clear(self):
         self.clouds = {}
@@ -57,15 +59,20 @@ class cloudmesh:
         the cloudmesh
         """
 
-        configuration = cm_config()
+        print "CONFIG"
+        self.configuration = cm_config()
+
+
         #pp.pprint (configuration)
 
-        print "active", configuration.active()
 
-        for cloud_name in configuration.active():
+        active_clouds = self.configuration.active()
+        print active_clouds
+        
+        for cloud_name in active_clouds:
             try:
-                credential = configuration.get(key=cloud_name)
-                cloud_type = credential['cm_type']
+                credential = self.configuration.get(cloud_name)
+                cloud_type = self.configuration.get()['clouds'][cloud_name]['cm_type']
 
                 if cloud_type in ['openstack','eucalyptus','azure']:
                     self.clouds[cloud_name] = {'name': cloud_name,
@@ -73,6 +80,7 @@ class cloudmesh:
                                                'credential': credential}
             except: #ignore
                 pass
+
         return
 
     ######################################################################
