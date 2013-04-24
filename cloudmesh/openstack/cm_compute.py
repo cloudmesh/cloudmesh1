@@ -7,7 +7,7 @@
 import iso8601
 import sys
 sys.path.insert(0, '../..')
-
+ 
 from datetime import datetime
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
@@ -197,12 +197,12 @@ class openstack(BaseCloud):
     # initialize
     ######################################################################
     # possibly make connext seperate
-    def __init__(self,
-                 label,
+    def __init__(self, label,
                  authurl=None,
                  project=None,
                  username=None,
-                 password=None):
+                 password=None,
+                 cacert=None):
         """
         initializes the openstack cloud from a defould novaRC file
         locates at ~/.futuregrid.org/openstack. However if the
@@ -211,11 +211,7 @@ class openstack(BaseCloud):
 
         self.clear()
         self.label = label
-        self.config(label,
-                    authurl=authurl,
-                    project=project,
-                    username=username,
-                    password=password)
+        self.config(label)
         self.connect()
 
     def clear(self):
@@ -234,27 +230,40 @@ class openstack(BaseCloud):
         e.g. initializes the needed components to conduct subsequent
         queries.
         """
+        """
+           def __init__(self, username, api_key, project_id, auth_url=None,
+                  insecure=False, timeout=None, proxy_tenant_id=None,
+                  proxy_token=None, region_name=None,
+                  endpoint_type='publicURL', extensions=None,
+                  service_type='compute', service_name=None,
+                  volume_service_name=None, timings=False,
+                  bypass_url=None, os_cache=False, no_cache=True,
+                  http_log_debug=False, auth_system='keystone',
+                  auth_plugin=None,
+                  cacert=None):
+        """       
         self.cloud = client.Client(
             self.credential['OS_USERNAME'],
             self.credential['OS_PASSWORD'],
             self.credential['OS_TENANT_NAME'],
-            self.credential['OS_AUTH_URL']
+            self.credential['OS_AUTH_URL'],
+            cacert=self.credential['OS_CACERT']
         )
 
+    # BIG BUG, MUST BE DICT
     #config should have dict as parameter
-    def config(self, label,
-               authurl=None,
-               project=None,
-               username=None,
-               password=None):
+    def config(self, label, dict=None):
         """
         reads in the configuration file if specified, and does some
         internal configuration.
         """
         self.label = label
-        if username == None:
+        if dict == None:
             config = cm_config()
-            self.credential = config.get(label)
+            self.credential = config.get(label,expand=True)
+
+            print self.credential
+            
             #self.user_id = self.credential['OS_USER_ID']
             # self.credential = credentials(label)
         else:
@@ -264,6 +273,7 @@ class openstack(BaseCloud):
             self.credential['OS_AUTH_URL'] = authurl
             self.credential['label'] = label
             self.credential['OS_TENANT_NAME'] = project
+            self.credential['OS_CACERT'] = cacert
         """
         self._nova = nova.bake("--os-username",    self.credential.username,
                                "--os-password",    self.credential.password,

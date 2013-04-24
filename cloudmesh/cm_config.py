@@ -1,6 +1,15 @@
+import sys
+sys.path.insert(0, '..')
 import yaml
 import os
 import json
+from string import Template
+
+def path_expand(text):
+    """ returns a string with expanded variavble """
+    template = Template(text)
+    result = template.substitute(os.environ)
+    return result
 
 
 class cm_config:
@@ -16,6 +25,8 @@ class cm_config:
     ######################################################################
     # initialization methods
     ######################################################################
+
+
 
     def __init__(self, filename=None):
         if filename == None:
@@ -61,11 +72,17 @@ class cm_config:
     def projects(self, status):
         return self.data['cloudmesh']['projects'][status]
         
-    def get(self, key=None):
+    def get(self, key=None, expand=False):
         if key == None:
             return self.data['cloudmesh']
         else:
-            return self.data['cloudmesh'][key]
+            if expand:
+                d = self.data['cloudmesh'][key]['credentials']
+                for key in d:
+                    d[key] = path_expand(d[key])
+                return d
+            else:
+                return self.data['cloudmesh'][key]['credentials']
 
     def keys(self):
         return self.data['cloudmesh'].keys()
