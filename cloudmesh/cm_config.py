@@ -81,6 +81,11 @@ class cm_config:
     def cloud(self, cloudname):
         return self.data['cloudmesh']['clouds'][cloudname]
         
+    def cloud_default(self, cloudname, defname):
+        cloud = self.cloud(cloudname)
+        defaults = cloud['default'] if 'default' in cloud else []
+        return defaults[defname] if defname in defaults else None
+
     def get(self, key=None, expand=False):
         if key == None:
             return self.data['cloudmesh']
@@ -106,7 +111,7 @@ class cm_config:
         return lines
 
     def rc_euca(self, name, project):
-        result = self.get(name)
+        result = self.cloud(name)
         eucakeydir = 'EUCA_KEY_DIR'
         lines = self.export_line(eucakeydir, result[eucakeydir])
 

@@ -90,10 +90,18 @@ class Test_cloudmesh:
         assert isinstance(clouds, dict)
         assert 'india-openstack' in clouds
 
-    def test_cloud_cloudname(self):
+    def test_cloud(self):
         HEADING("CLOUD")
         india_cloud = self.config.cloud('india-openstack')
         assert isinstance(india_cloud, dict)
         assert 'cm_host' in india_cloud
         assert india_cloud['cm_host'] == 'india.futuregrid.org'
 
+    def test_cloud_default(self):
+        assert self.config.cloud_default('india-openstack', 'flavor') == 'm1.small'
+        assert self.config.cloud_default('india-openstack', 'not defined') is None
+
+    def test_project_default(self):
+        HEADING("PROJECT")
+        project = self.config.projects('default')
+        assert project == 'fg-82'
