@@ -84,3 +84,16 @@ class Test_cloudmesh:
         result = self.config.get('grizzly-openstack', expand=True)
 	assert result["OS_VERSION"] == 'grizzly'
 
+    def test_clouds(self):
+        HEADING("CLOUD")
+        clouds = self.config.clouds()
+        assert isinstance(clouds, dict)
+        assert 'india-openstack' in clouds
+
+    def test_cloud_cloudname(self):
+        HEADING("CLOUD")
+        india_cloud = self.config.cloud('india-openstack')
+        assert isinstance(india_cloud, dict)
+        assert 'cm_host' in india_cloud
+        assert india_cloud['cm_host'] == 'india.futuregrid.org'
+

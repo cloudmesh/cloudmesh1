@@ -74,21 +74,29 @@ class cm_config:
 
     def projects(self, status):
         return self.data['cloudmesh']['projects'][status]
+
+    def clouds(self):
+        return self.data['cloudmesh']['clouds']
+
+    def cloud(self, cloudname):
+        return self.data['cloudmesh']['clouds'][cloudname]
         
     def get(self, key=None, expand=False):
         if key == None:
             return self.data['cloudmesh']
         else:
             if expand:
-                d = self.data['cloudmesh'][key]['credentials']
+                d = self.cloud(key)['credentials']
                 for key in d:
                     d[key] = path_expand(d[key])
                 return d
             else:
-                return self.data['cloudmesh'][key]['credentials']
+                return self.cloud(key)['credentials']
 
+    # This method may not be exactly what I think it is, but based on usage it
+    # appears as if it is supposed to get the keys of the clouds
     def keys(self):
-        return self.data['cloudmesh'].keys()
+        return self.clouds().keys()
 
     def rc(self, name):
         result = self.get(name)
