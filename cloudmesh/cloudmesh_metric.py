@@ -124,6 +124,18 @@ class cloudmesh:
             pass
         return self.metrics
 
+    def get_realtime_metrics(self, args):
+        """ get real-time usage data from FG Metrics"""
+
+        # IN DEVELOPMENT
+        if not self.metric_api:
+            return
+
+        try:
+            print 1#
+        except:
+            pass
+
     def _set_metric_api_vars(self, args):
         self.metric_api.set_date(args["s_date"], args["e_date"])
         self.metric_api.set_metric(
