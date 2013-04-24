@@ -1,4 +1,5 @@
 from fabric.api import *
+from fabric.contrib.console import confirm
 from sh import git as _git
 import os
 import webbrowser
@@ -65,6 +66,13 @@ view:
     file.close()
     os.system("make -j -f Makefile~ all")
 
+def metric():
+    """run server with metric """
+    with settings(warn_only=True):
+        local("%s http://127.0.0.1:5001/metric/main" % browser)
+        result = local('python flask_cm/server_metric.py', capture=True)
+    if result.failed and not confirm("Tests failed. Continue anyway?"):
+        abort("Aborting at user request.")
 
 def deltag(tag):
     local("git tag -d %s" % tag)

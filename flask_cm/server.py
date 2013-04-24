@@ -122,7 +122,6 @@ def delete_vm(cloud=None, server=None):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
     clouds.delete(cloud, server)
     time.sleep(5)
-    global clouds
     clouds.refresh()
     return table()
 
