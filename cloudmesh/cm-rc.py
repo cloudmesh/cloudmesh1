@@ -5,7 +5,7 @@ Command to generate rc files from our cloudmesh configuration files.
 
 Usage:
   cm-rc config projects (list|?)
-  cm-rc config [-f FILE] [-o OUT] NAME [-]
+  cm-rc config [-f FILE] [-o OUT] [-p PROJECT] NAME [-]
   cm-rc config dump [--format=(yaml|dict)]
   cm-rc config list
   cm-rc --version
@@ -40,6 +40,8 @@ Options:
   -f NAME --file=NAME  the Name of the cloud to be specified, if ? a selection is presented
 
   -o OUT --out=OUT     writes the result in the specifide file
+
+  -p PROJECT --project=PROJECT   selects a project (e.g. for eucalyptus which has project-specific environments)
 
   -d  --debug          debug
 
@@ -90,7 +92,7 @@ if __name__ == '__main__':
         except IOError:
             print "%s: Configuration file '%s' not found" % ("CM ERROR", file)
             sys.exit(1)
-        except yaml.scanner.ScannerError as yamlerror:
+        except (yaml.scanner.ScannerError, yaml.parser.ParserError) as yamlerror:
             print "%s: YAML error: %s, in configuration file '%s'" % ("CM ERROR", yamlerror, file)
             sys.exit(1)
         except:
@@ -172,10 +174,22 @@ if __name__ == '__main__':
         output = arguments['--out']
 
         if name != None:
+            if config.get(name)['cm_type'] == 'eucalyptus':
+                if arguments['--project']:
+                    project = arguments['--project']
+                    if not project in config.get(name):
+                        print "No such project %s defined in cloud %s." % (project, name)
+                        sys.exit(1)
+                else:
+                    project = config.get('projects')['default']
+                rc_func = lambda name: config.rc_euca(name, project)
+            else:
+                rc_func = config.rc
+
             try:
-                result = config.rc(name)
+                result = rc_func(name)
             except:
-                print "%s: The cloud '%s' can not befound" % ("CM ERROR", name)
+                print "%s: The cloud '%s' can not be found" % ("CM ERROR", name)
                 print "Try instead"
                 for name in config.keys():
                     if 'cm_type' in config.data['cloudmesh'][name]:
