@@ -26,9 +26,8 @@ def HEADING(txt):
 class Test_cloudmesh:
 
     def setup(self):
-        #        self.config = cm_config()
         self.config = cm_config("credentials-example.yaml")
-        
+
     def tearDown(self):
         pass
 
@@ -37,40 +36,51 @@ class Test_cloudmesh:
 
     def test02_active(self):
         HEADING("LIST ACTIVE PROJECTS")
-        print self.config.projects('active')
-        assert self.config.projects('active') == ['fg-82', 'fg-101']
+        result = self.config.projects('active')
+        assert result == ['fg-82', 'fg-101']
         
     def test03_completed(self):
         HEADING("LIST COMPLETED PROJECTS")
-        print self.config.projects('completed')
-        assert self.config.projects('completed') == ['fg-81', 'fg-102']
+        result = self.config.projects('completed')		
+        assert result == ['fg-81', 'fg-102']
 
     def test04_active(self):
-        print self.config.projects('default')
-        assert self.config.projects('default') == 'fg-82'
+	HEADING("LIST ACTIVE PROJECTS")
+        result = self.config.projects('default')
+        assert result == 'fg-82'
 
     def test05_india(self):
+	HEADING("LIST India")
         result = self.config.get('india-openstack')
-        #print result
         assert result["OS_VERSION"] == "essex"
 
-    def test07_get(self):
-        print self.config.get()
-
-    def test08_keys(self):
+    def test06_keys_india_openstack(self):
+	HEADING("KEY india-openstack")
         keys = self.config.keys()
-        print keys
         assert 'india-openstack' in keys
 
-    def test09_rc(self):
-        print self.config.rc('india-openstack')
+    def test07_keys_india_eucalyptus(self):
+	HEADING("KEY india-eucalyptus")
+	keys = self.config.keys()
+        assert 'india-eucalyptus' in keys
 
-    def test10_default(self):
-        print self.config.default()
+    def test08_keys_grizzly_openstack(self):
+	HEADING("KEY grizzly-openstack")
+	keys = self.config.keys()
+        assert 'grizzly-openstack' in keys
+
+    def test09_keys_india_eucalyptus(self):
+	HEADING("KEY azure")
+	keys = self.config.keys()
+        assert 'azure' in keys
+
+    def test10_grizzly(self):
+	HEADING("LIST GRIZZLY")
+        result = self.config.get('grizzly-openstack')
+	assert result["OS_VERSION"] == 'grizzly'
 
     def test11_grizzly(self):
-        print self.config.get('grizzly-openstack')
-
-    def test11_grizzly(self):
-        print self.config.get('grizzly-openstack', expand=True)
+	HEADING("LIST GRIZZLY EXPANDED")
+        result = self.config.get('grizzly-openstack', expand=True)
+	assert result["OS_VERSION"] == 'grizzly'
 
