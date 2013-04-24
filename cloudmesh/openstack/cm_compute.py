@@ -75,17 +75,29 @@ class BaseCloud:
         return d
     
     def _get_image_dict(self):
+        print "BOOOH"
         assert False, "Not implemented"
+
     def _update_image_dict(self,information):
+        print "BOOOH"
         assert False, "Not implemented"
+
     def _get_flavors_dict(self):
+        print "BOOOH"
         assert False, "Not implemented"
+
     def _update_flavors_dict(self,information):        
+        print "BOOOH"
         assert False, "Not implemented"
+
     def _get_servers_dict(self):
+        print "BOOOH"
         assert False, "Not implemented"
+
     def _update_servers_dict(self,information):
+        print "BOOOH"
         assert False, "Not implemented"
+
     def vm_create(self, name, flavor_name, image_id):
         assert False, "Not implemented"
     def vm_delete(self, id):
@@ -128,7 +140,6 @@ class BaseCloud:
         return self.servers
 
     def status(self, vm_id):
-        print "GETTING STATUS", vm_id
         return self.servers[vm_id]['status']
 
 
@@ -144,7 +155,6 @@ class BaseCloud:
     ######################################################################
 
     def refresh(self, type=None):
-
         time_stamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
         selection = ""
         if type:
@@ -176,10 +186,20 @@ class BaseCloud:
 
         list = list_function()
 
-        for information in list:
-            (id, element) = update_function(information)
-            d[id] = element
-            d[id]['cm_refresh'] = time_stamp
+        if len(list)  == 0:
+           if selection == 'i':
+               self.images = {}
+           elif selection == 'f':
+               self.flavors = {}
+           elif selection == 's':
+               self.servers = {}
+
+        else:
+            
+            for information in list:
+                (id, element) = update_function(information)
+                d[id] = element
+                d[id]['cm_refresh'] = time_stamp
 
     
 class openstack(BaseCloud):
@@ -419,6 +439,7 @@ class openstack(BaseCloud):
 
     def _get_servers_dict(self):
         return self.cloud.servers.list(detailed=True)
+
 
     def _update_servers_dict(self,information):
         vm = information.__dict__

@@ -135,16 +135,16 @@ class Test_openstack:
 
         
         self.cloud.refresh()
+
         user_id = self.cloud.find_user_id()
         vm_ids = self.cloud.find('user_id', user_id)
 
         servers = self.cloud.servers
         print servers
 
-        print ">>>> STATUS", self.cloud.status(vm_ids[0])
-        
         list = self.cloud.vms_delete_user()
 
+        self.cloud = openstack(self.cloud_label)
         self.cloud.refresh()
         self.cloud.info()
         
@@ -155,16 +155,12 @@ class Test_openstack:
         self.cloud.refresh()
 
         while len(vm_ids) > 0:
-            print self.cloud.find('user_id', user_id)
-            print ">>>> STATUS", self.cloud.status(vm_ids[0])
+            vm_ids = self.cloud.find('user_id', user_id)
             self.cloud.refresh("servers")
             self.cloud.info()
             time.sleep(1)
         
         print "vms",  vm_ids
-
-
-        
         assert vm_ids == []
 
     def test_10_info(self):
