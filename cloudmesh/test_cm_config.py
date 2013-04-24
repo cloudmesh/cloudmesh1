@@ -16,12 +16,14 @@ import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
+header = False
 
 def HEADING(txt):
-    print
-    print "#", 70 * '#'
-    print "#", txt
-    print "#", 70 * '#'
+    if header:
+        print
+        print "#", 70 * '#'
+        print "#", txt
+        print "#", 70 * '#'
 
 class Test_cloudmesh:
 
