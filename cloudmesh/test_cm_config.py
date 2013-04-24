@@ -103,6 +103,7 @@ class Test_cloudmesh:
         assert india_cloud['cm_host'] == 'india.futuregrid.org'
 
     def test14_cloud_default(self):
+        HEADING("CLOUD")
         assert self.config.cloud_default('india-openstack', 'flavor') == 'm1.small'
         assert self.config.cloud_default('india-openstack', 'not defined') is None
 
