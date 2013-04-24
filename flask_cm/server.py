@@ -41,7 +41,7 @@ version = "0.7.2"
 clouds = cloudmesh()
 clouds.refresh()
 
-
+prefix = clouds.prefix()
 
 # clouds.load()
 # AttributeError: cloudmesh instance has no attribute 'refresh'
@@ -136,8 +136,12 @@ def start_vm(cloud=None, server=None):
     print "-> start", cloud
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
-    user = "gregor"
-    clouds.create(cloud, user, "001", "dummy")
+
+    d = clouds.default(cloud)
+    vm_flavor = d['flavor']
+    vm_image = d['image']
+    
+    clouds.create(cloud, prefix, "001", vm_image, vm_flavor, "KEYMISSING")
     return table()
 
 '''

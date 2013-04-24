@@ -95,6 +95,15 @@ class cloudmesh:
         active_clouds = self.configuration.active()
         return active_clouds
 
+    def prefix(self):
+        return self.configuration.prefix()
+
+    def profile(self):
+        return self.configuration.profile()
+
+    def default(self,cloudname):
+        return self.configuration.default(cloudname)
+
     ######################################################################
     # important print methods
     ######################################################################
@@ -308,7 +317,19 @@ class cloudmesh:
         except:
             print "Error: could not update keypair", cloud_name
 
-    def create(self, cloud_name, prefix, index, image_id):
+    def create(self, cloud_name, prefix, index, image_id, flavor_name, key):
+        # bug key has to be defined as parameter when calling this
+
+        name = prefix + "-" + index
+        
+        cloud_type = self.clouds[cloud_name]['cm_type']
+        print cloud_type
+        provider = self.cloud_provider(cloud_type)
+
+        cloud = provider(cloud_name)
+        cloud.vm_create(name, flavor_name, image_id)
+
+        """
         keyname = ''
         try:
             cloud_type = self.clouds[cloud_name]['cm_type']
@@ -333,7 +354,7 @@ class cloudmesh:
                 # this is a dummy and must be retrieved from flask
         except Exception , e:
             print "Error: could not create", cloud_name, prefix, index, image_id, e
-
+        """
 
     ######################################################################
     # TODO: convenient +, += functions to add dicts with cm_type

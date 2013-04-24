@@ -72,6 +72,15 @@ class cm_config:
     def active(self):
         return self.data['cloudmesh']['active']
 
+    def prefix(self):
+        return self.data['cloudmesh']['prefix']
+
+    def profile(self):
+        return self.data['cloudmesh']['profile']
+
+    def default(self,cloudname):
+        return self.data['cloudmesh']['clouds'][cloudname]['default']
+
     def projects(self, status):
         return self.data['cloudmesh']['projects'][status]
 
