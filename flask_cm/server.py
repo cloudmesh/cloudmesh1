@@ -184,6 +184,8 @@ def load():
 @app.route('/table/')
 def table():
 
+    active_clouds = clouds.active()
+
     active = make_active('table')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # clouds.refresh("sierra-openstack")
@@ -195,6 +197,7 @@ def table():
                            updated=time_now,
                            keys="",  # ",".join(clouds.get_keys()),
                            clouds=clouds.clouds,
+                           order=active_clouds,
                            image='myimage',
                            pages=pages,
                            active=active,

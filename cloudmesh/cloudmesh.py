@@ -91,6 +91,10 @@ class cloudmesh:
         """returns the dict that contains all the information"""
         return self.clouds
 
+    def active(self):
+        active_clouds = self.configuration.active()
+        return active_clouds
+
     ######################################################################
     # important print methods
     ######################################################################

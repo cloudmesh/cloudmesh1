@@ -27,8 +27,8 @@
     <th> ip </th>
   </tr>
   
-  {% for name, cloud in clouds.iteritems() %}
-  
+  {% for name in order %}
+
   <tr> 
     <th colspan="1"> {{ name }} </th> 
     <th colspan="6">
@@ -44,6 +44,7 @@
       <input type="checkbox" name="STOPPED" value="select"> STOPPED
       <input type="checkbox" name="ERROR" value="select"> ERROR
       <input type="checkbox" name="SHUTOFF" value="select"> SHUTOFF
+      <input type="checkbox" name="ME" value="select"> ME
     </th>
     <th colspan="1">
       {{ image_button ("right", "016_bin", "/cm/delete/" + name + "/") }}
@@ -51,7 +52,7 @@
     
   </tr>
   
-  {% for id, server in cloud['servers'].iteritems() %}
+  {% for id, server in clouds[name]['servers'].iteritems() %}
   
   <tr>
     <td> {{ server.name }} </td>
