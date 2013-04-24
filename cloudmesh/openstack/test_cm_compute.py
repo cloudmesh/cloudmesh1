@@ -60,6 +60,12 @@ class Test_openstack:
         # doing a simple test as tiny is usually 512
         assert self.cloud.flavors['m1.tiny']['ram'] == 512
 
+    def test_04_start_vm(self):
+        HEADING("04 START VM")
+        result = self.cloud.vm_create("gregor-test-001","m1.tiny","e503bcb4-28c8-4f9f-8303-d99b9bffd568")
+        print result
+        assert len(result.keys()) > 0
+        
     def test_04_vms(self):
         HEADING("04 INFO OPENSTACK VMS")
         self.cloud.refresh('servers')
@@ -83,7 +89,7 @@ class Test_openstack:
         
     def test_06_table(self):
         HEADING("06 INFO OPENSTACK TABLES")
-        self.test_02_flavor()
+        self.test_03_flavor()
         table = cm_table()
         columns = ["id", "name", "ram", "vcpus"]
 
@@ -102,7 +108,7 @@ class Test_openstack:
         table.create(self.cloud.flavors, columns, format='%12s', header=True)
         print table
 
-        assert table != N
+        assert table != None
     """
     def test_07_start_delete_vm(self):        
         name ="%s-%04d" % (self.cloud.credential["OS_USERNAME"], 1)
@@ -120,30 +126,46 @@ class Test_openstack:
     """
 
     def test_08_user_vms(self):
-        HEADING("08 INFO OPENSTACK LIST VMS FROM USER")
-        list = self.cloud.vms_user()
+        HEADING("08 INFO LIST VMS FROM USER")
+        list = self.cloud.vms_user(refresh=True)
         print json.dumps(list, indent=4)
 
     def test_09_delete_all_user_vms(self):
         HEADING("09 INFO OPENSTACK DELETE VMS FROM USER")
-        self.cloud.refresh()
-        list = self.cloud.vms_delete_user()
-        print ">>>>> vms", list
+
+        
         self.cloud.refresh()
         user_id = self.cloud.find_user_id()
-        print ">>>>> userid", user_id
+        vm_ids = self.cloud.find('user_id', user_id)
+
+        servers = self.cloud.servers
+        print servers
+
+        print ">>>> STATUS", self.cloud.status(vm_ids[0])
+        
+        list = self.cloud.vms_delete_user()
+
+        self.cloud.refresh()
+        self.cloud.info()
+        
+        vm_ids = self.cloud.find('user_id', user_id)
+        self.cloud.info()
+        
+        time.sleep(2)
+        self.cloud.refresh()
+
+        while len(vm_ids) > 0:
+            print self.cloud.find('user_id', user_id)
+            print ">>>> STATUS", self.cloud.status(vm_ids[0])
+            self.cloud.refresh("servers")
+            self.cloud.info()
+            time.sleep(1)
+        
+        print "vms",  vm_ids
 
 
-        # start a vm
-
-        print self.cloud["images"]
-
-        print "UUUUUUUUUUUUUUUU"
-
-        vms = self.cloud.find('user_id', user_id)
-        print self.cloud
-        print vms
-        assert vms == []
+        
+        assert vm_ids == []
 
     def test_10_info(self):
         HEADING("10 INFO OPENSTACK TEST")
@@ -152,8 +174,4 @@ class Test_openstack:
         self.cloud.info()
         self.cloud.info()
 
-
-    def test_11_start_vm(self):
-        print "hello"
-        sys.exit()
 

@@ -98,6 +98,8 @@ class BaseCloud:
         assert False, "Not implemented"
     def limits(self):        
         assert False, "Not implemented"
+    def status(self, vm_id):
+        assert False, "Not implemented"
 
     ######################################################################
     # print
@@ -124,6 +126,11 @@ class BaseCloud:
 
     def vms(self):
         return self.servers
+
+    def status(self, vm_id):
+        print "GETTING STATUS", vm_id
+        return self.servers[vm_id]['status']
+
 
     ######################################################################
     # set credentials
@@ -493,9 +500,10 @@ class openstack(BaseCloud):
 
         time_stamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
         if refresh:
-            self.refresh("images")
+            self.refresh("servers")
 
         result = {}
+        
         for (key, vm) in self.servers.items():
             if vm['user_id'] == self.user_id:
                 result[key] = vm
