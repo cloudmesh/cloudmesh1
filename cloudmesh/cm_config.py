@@ -74,21 +74,34 @@ class cm_config:
 
     def projects(self, status):
         return self.data['cloudmesh']['projects'][status]
+
+    def clouds(self):
+        return self.data['cloudmesh']['clouds']
+
+    def cloud(self, cloudname):
+        return self.data['cloudmesh']['clouds'][cloudname]
         
+    def cloud_default(self, cloudname, defname):
+        cloud = self.cloud(cloudname)
+        defaults = cloud['default'] if 'default' in cloud else []
+        return defaults[defname] if defname in defaults else None
+
     def get(self, key=None, expand=False):
         if key == None:
             return self.data['cloudmesh']
         else:
             if expand:
-                d = self.data['cloudmesh'][key]['credentials']
+                d = self.cloud(key)['credentials']
                 for key in d:
                     d[key] = path_expand(d[key])
                 return d
             else:
-                return self.data['cloudmesh'][key]['credentials']
+                return self.cloud(key)['credentials']
 
+    # This method may not be exactly what I think it is, but based on usage it
+    # appears as if it is supposed to get the keys of the clouds
     def keys(self):
-        return self.data['cloudmesh'].keys()
+        return self.clouds().keys()
 
     def rc(self, name):
         result = self.get(name)
@@ -98,7 +111,7 @@ class cm_config:
         return lines
 
     def rc_euca(self, name, project):
-        result = self.get(name)
+        result = self.cloud(name)
         eucakeydir = 'EUCA_KEY_DIR'
         lines = self.export_line(eucakeydir, result[eucakeydir])
 

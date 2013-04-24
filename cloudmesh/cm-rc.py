@@ -174,19 +174,16 @@ if __name__ == '__main__':
         output = arguments['--out']
 
         if name != None:
-            if config.get(name)['cm_type'] == 'eucalyptus':
+            if config.cloud(name)['cm_type'] == 'eucalyptus':
                 if arguments['--project']:
                     project = arguments['--project']
-                    if not project in config.get(name):
+                    if not project in config.cloud(name):
                         print "No such project %s defined in cloud %s." % (project, name)
                         sys.exit(1)
                 else:
-                    if 'default_project' in config.get(name):
-                        project = config.get(name)['default_project']
-                    elif 'default' in config.get('projects'):
-                        project = config.get('projects')['default']
-                    else:
-                        print "No project specified and no default project defined."
+                    project = config.cloud_default(name, 'project') or config.projects('default')
+                    if not project in config.cloud(name):
+                        print "Default project %s not defined in cloud %s." % (project, name)
                         sys.exit(1)
                 rc_func = lambda name: config.rc_euca(name, project)
             else:
