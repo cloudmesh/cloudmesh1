@@ -1,3 +1,24 @@
+CHANGES
+=======
+
+
+a) introduced a "cloud:" attribute in yaml so its easier to manage and
+extract the clouds without checking the type
+
+b) worked on a nasty bug in the refresh method of openstack, and it
+now refreshes even after you deleted all vms.
+
+c) changed the logic for the credentials and in addition to the clod:
+we have also a credentials: under each cloud
+
+d) added a new parameter to the get function in cm_config that if set
+to expand=True it will replace the $ vars with those defined in the
+os.environ, so this is cool as it allows us to use $ vars now also in
+the yaml file
+
+
+
+
 PREVIOUS CHANGES 
 ================
 
