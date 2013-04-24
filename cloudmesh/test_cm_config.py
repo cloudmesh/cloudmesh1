@@ -17,10 +17,17 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 
+def HEADING(txt):
+    print
+    print "#", 70 * '#'
+    print "#", txt
+    print "#", 70 * '#'
+
 class Test_cloudmesh:
 
     def setup(self):
-        self.config = cm_config()
+        #        self.config = cm_config()
+        self.config = cm_config("credentials-example.yaml")
         
     def tearDown(self):
         pass
@@ -29,27 +36,36 @@ class Test_cloudmesh:
         print self.config
 
     def test02_active(self):
+        HEADING("LIST ACTIVE PROJECTS")
         print self.config.projects('active')
-
-    def test03_active(self):
+        assert self.config.projects('active') == ['fg-82', 'fg-101']
+        
+    def test03_completed(self):
+        HEADING("LIST COMPLETED PROJECTS")
         print self.config.projects('completed')
+        assert self.config.projects('completed') == ['fg-81', 'fg-102']
 
     def test04_active(self):
         print self.config.projects('default')
+        assert self.config.projects('default') == 'fg-82'
 
     def test05_india(self):
-        print self.config.get('india-openstack')
+        result = self.config.get('india-openstack')
+        #print result
+        assert result["OS_VERSION"] == "essex"
 
     def test07_get(self):
         print self.config.get()
 
     def test08_keys(self):
-        print self.config.keys()
+        keys = self.config.keys()
+        print keys
+        assert 'india-openstack' in keys
 
     def test09_rc(self):
         print self.config.rc('india-openstack')
 
-    def test10_rc(self):
+    def test10_default(self):
         print self.config.default()
 
     def test11_grizzly(self):

@@ -24,14 +24,16 @@ def HEADING(txt):
 
 class Test_openstack:
 
+    cloud_label = "grizzly-openstack"
+
     def setup(self):
-        self.cloud = openstack("india-openstack")
+        self.cloud = openstack(self.cloud_label)
 
     def tearDown(self):
         pass
     def test_00_check_label(self):
         HEADING("INFO OPENSTACK LABEL")
-        assert self.cloud.label == "india-openstack"
+        assert self.cloud.label == self.cloud_label
 
     def test_00_limit(self):
         HEADING("INFO OPENSTACK LIMIT")
@@ -126,9 +128,21 @@ class Test_openstack:
         HEADING("INFO OPENSTACK DELETE VMS FROM USER")
         self.cloud.refresh()
         list = self.cloud.vms_delete_user()
+        print ">>>>> vms", list
         self.cloud.refresh()
         user_id = self.cloud.find_user_id()
+        print ">>>>> userid", user_id
+
+
+        # start a vm
+
+        print self.cloud["images"]
+
+        print "UUUUUUUUUUUUUUUU"
+
         vms = self.cloud.find('user_id', user_id)
+        print self.cloud
+        print vms
         assert vms == []
 
     def test_10_info(self):
