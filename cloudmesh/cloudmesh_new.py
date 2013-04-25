@@ -1,3 +1,11 @@
+# WILL BE DEPRECATED
+# 
+# SEEMS NO ONE USING THIS FILE
+#
+# EXPIRATION: 30days after from April 25, 2013
+#
+# Hyungro Lee (hroe.lee@gmail.com)
+
 import pickle
 from sh import fgrep
 from sh import nova
