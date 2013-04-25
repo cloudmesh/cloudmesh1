@@ -575,7 +575,9 @@ def profile():
                                cloudinfo=makeCloudDict(dict_t),
                                person=person,
                                address=address,
+                               active_clouds=clouds.active(),
                                active=active,
+                               config=dict_t,
                                version=version)
 
 

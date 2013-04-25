@@ -5,22 +5,29 @@
 <h2>Profile</h2>
 
 <table>
-<tr><td>Firstname</td><td>{{ person.firstname }}</td></tr>
-<tr><td>Lastname</td><td>{{ person.lastname }}</td></tr>
-<tr><td>Phone</td><td>{{ person.phone }}</td></tr>
-<tr><td>e-mail</td><td>{{ person['e-mail'] }}</td></tr>
-<tr><td>Address</td><td>{{ address|replace("\n", "<br />")|safe }} </td></tr>
+<tr><td colspan="3"><b> Contact </b></td> </tr>  
+<tr><td>Firstname</td><td>{{ person.firstname }}</td><td></td></tr>
+<tr><td>Lastname</td><td>{{ person.lastname }}</td><td></td></tr>
+<tr><td>Phone</td><td>{{ person.phone }}</td><td></td></tr>
+<tr><td>e-mail</td><td>{{ person['e-mail'] }}</td><td></td></tr>
+<tr><td>Address</td><td>{{ address|replace("\n", "<br />")|safe }} </td><td></td></tr>
+<tr><td colspan="2"><b> Prefix </b></td> <td></td></tr>  
+<tr><td>Prefix</td><td>{{ config.prefix }}</td><td>edit</td></tr>
+<tr><td colspan="2"><b> Projects </b></td> <td></td></tr>  
+<tr><td>Default</td><td>{{ config.projects.default }}</td><td>edit</td></tr>
+<tr><td>Projects</td><td>{{ config.projects.active }}</td><td></td></tr>
+<tr><td>Completed</td><td>{{ config.projects.completed }}</td><td></td></tr>    
+<tr><td colspan="2"><b> Clouds </b></td> <td></td></tr>
+<tr><td>Default</td><td>{{ config.default }}</td><td>edit</td></tr>
+<tr><td>Active</td><td>{{ active_clouds }}</td><td>edit</td></tr>
+<tr><td>Available</td><td>{{ config.clouds.keys() }}</td><td></td></tr>
+<tr><td colspan="2"><b> Keys </b></td> <td></td></tr>
+<tr><td>Default</td><td>{{ config['keys']['keylist'][config['keys']['default']] }}</td><td>edit</td></tr>
+<tr><td>List</td><td>{{ config['keys']['keylist']}}</td><td>add</td></tr>
 </table>
 
-ersolalinfo=persolalinfo,'lastname': 'von Laszewski', 'phone': '812
-856 1311', 'e-mail': 'laszewski@gmail.com', 'firstname': 'Gregor',
-'address': ['Indiana University,', 'Bloomington, IN 47408']}
 
-
-   Put here the deafult values for each cloud in a nice table ....
-
-
-    <h2>Change Profile</h2>
+<h2>Change Profile</h2>
     <ul>
       <li><a href="/projects">Select Default Project</a></li>
       <li><a href="/images">Select Default Images</a></li>
