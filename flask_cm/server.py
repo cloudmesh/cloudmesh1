@@ -571,7 +571,9 @@ def profile():
         address = '\n'.join(str(x) for x in person['address']) 
         return render_template('profile.html',
                                updated=time_now,
+                               # keys are also in dict_t, so we may not need that
                                keys="",  # ",".join(clouds.get_keys()),
+                               # NOT SURE WHY YOU NEED cloudinfo as most of the stuff is in dict_t
                                cloudinfo=makeCloudDict(dict_t),
                                person=person,
                                address=address,
@@ -583,8 +585,8 @@ def profile():
 
 def makeCloudDict(dict_t):
     cloudDict = {}
-    cloudSubDict = {}
-    cloudSubsubDict = {}
+    cloudSubDict = {} # WHAT IS THIS?
+    cloudSubsubDict = {} # WHAT IS THIS?
 ############# the below variables are used to display projects.html Here projects dict contains all the projects################
     project_content={}
     global projects;
@@ -592,7 +594,8 @@ def makeCloudDict(dict_t):
 
 ########### end of variables for display of projects.html###########################
     for key, value in dict_t.iteritems():
-        # Bug: this should be changed based on a test of type
+        # BIG Bug: this should be changed based on a test of type and not the name of the cloud
+        # IS THIS STILL WORKING WITH THE clouds: ?
         
         if "india-openstack" in key:
 
