@@ -10,14 +10,14 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 # import shelve
-from cm_config import cm_config
+from cloudmesh.cm_config import cm_config
 #from openstack.cm_compute import openstack as os_client
 
 #Error Cannot Import Openstack
-from openstack.cm_compute import openstack
+from cloudmesh.openstack.cm_compute import openstack
 
-from eucalyptus.eucalyptus_new import eucalyptus
-from azure.cm_azure import cm_azure as azure 
+from cloudmesh.eucalyptus.eucalyptus_new import eucalyptus
+from cloudmesh.azure.cm_azure import cm_azure as azure 
 
 try:
     # from sh import fgmetric
