@@ -1,3 +1,10 @@
+#################
+# SEEMS NO ONE USING THIS FILE. CAN WE MOVE THIS TO DEPRECATED FOLDER?
+# EXPIRATION DATE: 30 days after, this file will be moved to deprecated unless
+# there is any claim.
+#
+# Hyungro Lee (hroe.lee@gmail)
+#################
 import os
 # cloud mesh
 from flask import Flask, render_template, request
