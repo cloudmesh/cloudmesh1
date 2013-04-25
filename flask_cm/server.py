@@ -360,10 +360,8 @@ def set_default_flavor(name, flavor_names):
     selected[default_flavor] = 'checked'
     return selected
         
-default_flavor = "m1.small"
 
 def buildFlavorNamesArray(clouds):
-
     flavor_names=[]
     for name, cloud in clouds.iteritems():
         for id, flavor in cloud['flavors'].iteritems():
@@ -375,38 +373,50 @@ def buildFlavorNamesArray(clouds):
 #@app.route('/flavors/<cloud>/' )
 @app.route('/flavors/', methods=['GET','POST'])
 def display_flavors(cloud=None):
-
+    radioSelected={}
     flavor_names=buildFlavorNamesArray(clouds.clouds);
     # for debugging
     cloud = 'india-openstack'
 
-    ############reading from yaml file ############
+ ############reading from yaml file ############
     config_flavor = cm_config()
-    configurations= config_flavor.get(cloud)   # name of default cloud will come here
-    default_flavor=configurations['default_flavor']
+    activeClouds=config_flavor.active()
+    for cloud in activeClouds:
+    if 'openstack' in cloud:
+    		configurations= config_flavor.cloud(cloud)   # name of default cloud will come here
+    		default_flavor=configurations['default']['flavor']
+    		selected=set_default_flavor(default_flavor, flavor_names)
+		radioSelected[cloud]=selected
+		print radioSelected
+		selected={};
      ############  end of reading from yaml file ############
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('flavors')
-    selected = set_default_flavor(default_flavor, flavor_names)
+    #selected = set_default_flavor(default_flavor, flavor_names)
 
     if request.method == 'POST':
-        default_flavor= request.form['selected_flavor'] 
-    print default_flavor
+	radioSelected={}
+        for cloud in activeClouds:
+		if 'openstack' in cloud:
+			
+        		default_flavor= request.form[cloud] 
+			print default_flavor
 
-     ############ writing in yaml file ############
-
-    yamlFile= config_flavor.get();
-    yamlFile['india-openstack']['default_flavor']=default_flavor;
-    testDict={}
-    testDict['cloudmesh']=yamlFile;
-    f = open(filename, "w")
-    yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    f.close()
-
- ############ end of writing in yaml file ############
-
-    selected = set_default_flavor(default_flavor, flavor_names)
+			############ writing in yaml file ############
+    			yamlFile= config_flavor.get();
+		        yamlFile['clouds'][cloud]['default']['flavor']=default_flavor;
+    		        testDict={}
+     			testDict['cloudmesh']=yamlFile;
+    			f = open(filename, "w")
+    			yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+    			f.close()
+			############ end of writing in yaml file ############
+			selected = set_default_flavor(default_flavor, flavor_names)
+			radioSelected[cloud]=selected
+			print radioSelected
+			selected={};
+    
       
 
     if cloud == None:
@@ -416,7 +426,7 @@ def display_flavors(cloud=None):
                                updated=time_now,
                                clouds=clouds.clouds,
                                active=active,
-                               version=version,selected=selected)
+                               version=version,radioSelected=radioSelected)
 
 
 
