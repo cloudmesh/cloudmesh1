@@ -551,14 +551,16 @@ def gregor():
 @app.route('/profile/')
 def profile():
         # bug the global var of the ditc should be used
+        active = make_active('profile')
+        
         config = cm_config()
         dict_t = config.get()
+        person = dict_t['profile']
+        print person
         makeCloudDict(dict_t)
-        active = make_active('profile')
-        time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-        persolalinfo = {'name': 'abc', 'data1': 'pqr'}
-        # bug: I guess this is left over from my example
+
+        time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
         # bug: the name of the clouds should be retrived from config. I guess this is left over from my example
 
@@ -566,11 +568,13 @@ def profile():
             'openstak-india': {'type': 'openstack', 'host': 'india.futuregrid.org',
                                'username': 'shweta'}}
 
+        address = '\n'.join(str(x) for x in person['address']) 
         return render_template('profile.html',
                                updated=time_now,
                                keys="",  # ",".join(clouds.get_keys()),
                                cloudinfo=makeCloudDict(dict_t),
-                               persolalinfo=persolalinfo,
+                               person=person,
+                               address=address,
                                active=active,
                                version=version)
 

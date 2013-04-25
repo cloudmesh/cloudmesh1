@@ -2,7 +2,20 @@
 
 {% block content %}
 
-   <h2>Profile</h2>
+<h2>Profile</h2>
+
+<table>
+<tr><td>Firstname</td><td>{{ person.firstname }}</td></tr>
+<tr><td>Lastname</td><td>{{ person.lastname }}</td></tr>
+<tr><td>Phone</td><td>{{ person.phone }}</td></tr>
+<tr><td>e-mail</td><td>{{ person['e-mail'] }}</td></tr>
+<tr><td>Address</td><td>{{ address|replace("\n", "<br />")|safe }} </td></tr>
+</table>
+
+ersolalinfo=persolalinfo,'lastname': 'von Laszewski', 'phone': '812
+856 1311', 'e-mail': 'laszewski@gmail.com', 'firstname': 'Gregor',
+'address': ['Indiana University,', 'Bloomington, IN 47408']}
+
 
    Put here the deafult values for each cloud in a nice table ....
 
