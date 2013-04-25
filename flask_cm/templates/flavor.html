@@ -25,7 +25,7 @@ Choose the default flavor </br>
   {% for id, flavor in cloud['flavors'].iteritems() %}
   
   <tr>
-    <td> <input type="radio" name="selected_flavor" value="{{ flavor.name }}" id="{{ flavor.name }}"  {{ selected[flavor.name] }}  onclick="document.forms['flavor'].submit()"> </td>
+    <td> <input type="radio" name="{{ name }}" value="{{ flavor.name }}" id="{{ flavor.name }}"  {{ radioSelected[name][flavor.name] }}  onclick="document.forms['flavor'].submit()"> </td>
     <td> {{ flavor.id }} </td>
     <td> {{ flavor.name }} </td>
     <td> {{ flavor.ram }} </td>
