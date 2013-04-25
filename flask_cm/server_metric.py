@@ -7,7 +7,7 @@ import os
 from flask import Flask, render_template, request
 from flask_flatpages import FlatPages
 #import cloud_mesh as fg
-from cloudmesh.cloudmesh_metric import cloudmesh
+from cloudmesh.plugins.metrics import cloudmesh
 from datetime import datetime
 #from sh import cm 
 #from sh import fgmetric
