@@ -4,9 +4,9 @@ sys.path.insert(0, '../')
 
 import os
 import time
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,redirect
 from flask_flatpages import FlatPages
-
+import base64,struct,hashlib
 from cloudmesh.cloudmesh import cloudmesh
 from datetime import datetime
 from cloudmesh.cm_config import cm_config
@@ -239,17 +239,14 @@ def display_project(cloud=None):
     dict_t = config.get()
     makeCloudDict(dict_t) #from the profile function
     project_names=buildProjectNamesArray(projects)
-    
-
-
-	############reading from yaml file ############
+    ############reading from yaml file ############
     config_project = cm_config()
     activeClouds=config_project.active()
     for cloud in activeClouds:
-	if 'openstack' in cloud:
-    		configurations= config_project.cloud(cloud)   # name of default cloud will come here
-    		default_project=configurations['default']['project']
-    		selected=set_default_project(default_project, project_names)
+        if 'openstack' in cloud:
+            configurations= config_project.cloud(cloud)   # name of default cloud will come here
+            default_project=configurations['default']['project']
+            selected=set_default_project(default_project, project_names)
      ############  end of reading from yaml file ############
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
@@ -257,23 +254,21 @@ def display_project(cloud=None):
     
 
     if request.method == 'POST':
-	radioSelected={}
+        radioSelected={}
         for cloud in activeClouds:
-		if 'openstack' in cloud:
-			
-        		default_project= request.form['selected_project'] 
-			print default_project
-
-			############ writing in yaml file ############
-    			yamlFile= config_project.get();
-		        yamlFile['clouds'][cloud]['default']['project']=default_project;
-    		        testDict={}
-     			testDict['cloudmesh']=yamlFile;
-    			f = open(filename, "w")
-    			yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    			f.close()
-			############ end of writing in yaml file ############
-			selected = set_default_project(default_project, project_names)
+            if 'openstack' in cloud:
+                default_project= request.form['selected_project'] 
+                print default_project
+                ############ writing in yaml file ############
+                yamlFile= config_project.get();
+                yamlFile['clouds'][cloud]['default']['project']=default_project;
+                testDict={}
+                testDict['cloudmesh']=yamlFile;
+                f = open(filename, "w")
+                yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+                f.close()
+                ############ end of writing in yaml file ############
+                selected = set_default_project(default_project, project_names)
 
 
     if cloud == None:
@@ -626,42 +621,37 @@ def makeCloudDict(dict_t):
         # BIG Bug: this should be changed based on a test of type and not the name of the cloud
         # IS THIS STILL WORKING WITH THE clouds: ?...it works now-shweta
         
-    if "clouds" in key:
-		for cloudKey, cloudValue in value.iteritems():
-
-        		if "india-openstack" in cloudKey:
-
-            			for innerKey, innerValue in cloudValue.iteritems():
-                			innerKey = innerKey.replace("OS_", "")
-                			innerKey = innerKey.replace("cm_", "")
-                			cloudSubDict[innerKey.upper()] = innerValue
-            			cloudDict[key.upper()] = cloudSubDict
-            			cloudSubDict = {}
-            			#print (cloudDict)
-        		if "india-eucalyptus" in cloudKey:
-            			for innerKey, innerValue in cloudValue.iteritems():
-                			if "fg" in innerKey:
-                    				for innermostKey, innermostValue in innerValue.iteritems():
-                        				project_content[innermostKey]=innermostValue
-                        				innermostKey = innermostKey.replace("EC2_", "")
-                        				cloudSubsubDict[innermostKey.upper()] = innermostValue
-                    				cloudDict[innerKey.upper()] = cloudSubsubDict
-                    				cloudSubsubDict = {}
-                    				projects[innerKey]=project_content;
-                    				project_content={};
-
-                			else:
-                    				innerKey = innerKey.replace("EC2_", "")
-                    				cloudSubDict[innerKey.upper()] = innerValue
-            				cloudDict[key.upper()] = cloudSubDict
-            				cloudSubDict = {}
-
-        		if "azure" in cloudKey:
-            			cloudSubDict = {}
-            			for innerKey, innerValue in value.iteritems():
-                			cloudSubDict[innerKey.upper()] = innerValue
-            			cloudDict[key.upper()] = cloudSubDict
-            			cloudSubDict = {}
+        if "clouds" in key:
+            for cloudKey, cloudValue in value.iteritems():
+                if "india-openstack" in cloudKey:
+                    for innerKey, innerValue in cloudValue.iteritems():
+                        innerKey = innerKey.replace("OS_", "")
+                        innerKey = innerKey.replace("cm_", "")
+                        cloudSubDict[innerKey.upper()] = innerValue
+                    cloudDict[key.upper()] = cloudSubDict
+                    cloudSubDict = {}
+                if "india-eucalyptus" in cloudKey:
+                    for innerKey, innerValue in cloudValue.iteritems():
+                        if "fg" in innerKey:
+                            for innermostKey, innermostValue in innerValue.iteritems():
+                                project_content[innermostKey]=innermostValue
+                                innermostKey = innermostKey.replace("EC2_", "")
+                                cloudSubsubDict[innermostKey.upper()] = innermostValue
+                            cloudDict[innerKey.upper()] = cloudSubsubDict
+                            cloudSubsubDict = {}
+                            projects[innerKey]=project_content;
+                            project_content={};
+                        else:
+                            innerKey = innerKey.replace("EC2_", "")
+                            cloudSubDict[innerKey.upper()] = innerValue
+                        cloudDict[key.upper()] = cloudSubDict
+                        cloudSubDict = {}
+                if "azure" in cloudKey:
+                    cloudSubDict = {}
+                    for innerKey, innerValue in value.iteritems():
+                        cloudSubDict[innerKey.upper()] = innerValue
+                    cloudDict[key.upper()] = cloudSubDict
+                    cloudSubDict = {}
     # print (cloudDict);
 
     return cloudDict

@@ -22,8 +22,10 @@
 <tr><td>Active</td><td>{{ active_clouds }}</td><td>edit</td></tr>
 <tr><td>Available</td><td>{{ config.clouds.keys() }}</td><td></td></tr>
 <tr><td colspan="2"><b> Keys </b></td> <td></td></tr>
+{% if config.has_key('keys') and config['keys']['keylist'].has_key(config['keys']['default']) %}
 <tr><td>Default</td><td>{{ config['keys']['keylist'][config['keys']['default']] }}</td><td>edit</td></tr>
 <tr><td>List</td><td>{{ config['keys']['keylist']}}</td><td>add</td></tr>
+{% endif %}
 </table>
 
 
