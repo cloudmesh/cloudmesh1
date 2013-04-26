@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}g
+{% block content %}
+
+<style>
+
+</style>
+
+<h1>Manage Keys</h1>
+
+<form action="" name = "selectKeyForm" method=post enctype=multipart/form-data >
+<table>
+{% if haskeys %}
+<tr><th>Select</th>
+   <th>Key Name</th>
+   <th>Key Type</th>
+   <th>Path/Fingerprint</th>
+   <th></th>
+</tr>
+	{% for name, key in keylist.iteritems() %}
+		{% set (type,sep,value) = key.partition(" ") %}
+		{% if name == defaultkey %}
+			{% set checked = 'checked' %}
+		{% else %}
+			{% set checked = '' %}
+		{% endif %}
+		<tr>
+			<td> <input type="radio" name="selectkeys" value="{{name}}" {{checked}}  
+				  onclick="document.forms['selectKeyForm'].submit()"> 
+				    </td>
+			<td>{{name}}</td>
+			<td>{{type}}</td>
+			<td>{{fun_fprint(value,type)}}</td>
+			<td><a href="delete/{{name}}/">del</a></td>
+		</tr>
+	{% endfor %}
+
+{% else %}
+	There are no keys present, please add one.
+{% endif %}
+
+</table>
+</form>
+<form action="" method=post enctype=multipart/form-data name = "addkeysform">
+
+<!--http://www.html5rocks.com/en/tutorials/file/dndfiles/-->
+
+<table>
+<tr><td>Key File or Path : </td><td><textarea name = "keyorpath" rows="2" cols="30"></textarea></td></tr>
+<tr><td>Type : </td><td><input type="radio" name="type" value="String">Key String<br>
+<input type="radio" name="type" value="File">File Path</td></tr>
+<tr><td>Key Name : </td><td><input name = "keyname" type="text" /></td> </tr>
+<tr><td colspan = "2" ><input type="submit" name = "addkey" value="Add"></td></tr>
+</table>
+		
+
+
+{{show}}
+
+
+
+</form>
+{% endblock %}
