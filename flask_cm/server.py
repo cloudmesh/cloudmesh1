@@ -225,20 +225,20 @@ def set_default_project(name, project_names):
 
 def buildProjectNamesArray(projects):
      project_names=[]
-     for project_name, info in projects.iteritems():
+     for project_name in projects:
         project_names.append(project_name);
      return project_names;
 
 @app.route('/projects/', methods=['GET','POST'])
 def display_project(cloud=None):
-    global projects,default_project;
-    active = make_active('projects')
-    config = cm_config()
-    dict_t = config.get()
-    makeCloudDict(dict_t) #from the profile function
-    project_names=buildProjectNamesArray(projects)
+    global default_project;
+    #from the profile function
+
     ############reading from yaml file ############
     config_project = cm_config()
+    activeProjects=config_project.projects('active')
+    print activeProjects
+    project_names=buildProjectNamesArray(activeProjects)
     activeClouds=config_project.active()
     for cloud in activeClouds:
         if 'openstack' in cloud:
@@ -270,10 +270,9 @@ def display_project(cloud=None):
         pass
     else:
         return render_template('projects.html',
-                               projects=projects,
+                               projects=activeProjects,
                                active=active,
                                version=version,selected=selected)
-
 
 ######################################################################
 # ROUTE: VM Login
