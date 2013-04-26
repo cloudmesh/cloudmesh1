@@ -378,44 +378,44 @@ def display_flavors(cloud=None):
     # for debugging
     cloud = 'india-openstack'
 
- ############reading from yaml file ############
+    ############reading from yaml file ############
     config_flavor = cm_config()
     activeClouds=config_flavor.active()
     for cloud in activeClouds:
-    if 'openstack' in cloud:
-    		configurations= config_flavor.cloud(cloud)   # name of default cloud will come here
-    		default_flavor=configurations['default']['flavor']
-    		selected=set_default_flavor(default_flavor, flavor_names)
-		radioSelected[cloud]=selected
-		print radioSelected
-		selected={};
-     ############  end of reading from yaml file ############
+        if 'openstack' in cloud:
+            configurations= config_flavor.cloud(cloud)   # name of default cloud will come here
+            default_flavor=configurations['default']['flavor']
+            selected=set_default_flavor(default_flavor, flavor_names)
+            radioSelected[cloud]=selected
+            print radioSelected
+            selected={};
+    ############  end of reading from yaml file ############
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('flavors')
     #selected = set_default_flavor(default_flavor, flavor_names)
 
     if request.method == 'POST':
-	radioSelected={}
+        radioSelected={}
         for cloud in activeClouds:
-		if 'openstack' in cloud:
-			
-        		default_flavor= request.form[cloud] 
-			print default_flavor
-
-			############ writing in yaml file ############
-    			yamlFile= config_flavor.get();
-		        yamlFile['clouds'][cloud]['default']['flavor']=default_flavor;
-    		        testDict={}
-     			testDict['cloudmesh']=yamlFile;
-    			f = open(filename, "w")
-    			yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    			f.close()
-			############ end of writing in yaml file ############
-			selected = set_default_flavor(default_flavor, flavor_names)
-			radioSelected[cloud]=selected
-			print radioSelected
-			selected={};
+            if 'openstack' in cloud:
+                
+                default_flavor= request.form[cloud] 
+                print default_flavor
+                
+                ############ writing in yaml file ############
+                yamlFile= config_flavor.get();
+                yamlFile['clouds'][cloud]['default']['flavor']=default_flavor;
+                testDict={}
+                testDict['cloudmesh']=yamlFile;
+                f = open(filename, "w")
+                yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+                f.close()
+                ############ end of writing in yaml file ############
+                selected = set_default_flavor(default_flavor, flavor_names)
+                radioSelected[cloud]=selected
+                print radioSelected
+                selected={};
     
       
 
@@ -470,13 +470,13 @@ def display_images(cloud=None):
     config_image = cm_config()
     activeClouds=config_image.active()
     for cloud in activeClouds:
-	if 'openstack' in cloud:
-    		configurations= config_image.cloud(cloud)   
-    		default_image=configurations['default']['image']
-    		selected=set_default_image(default_image, image_names)
-		radioSelected[cloud]=selected
-		#print radioSelected #this dict will contain which image in whch cloud is checked
-		selected={};
+        if 'openstack' in cloud:
+                configurations= config_image.cloud(cloud)   
+                default_image=configurations['default']['image']
+                selected=set_default_image(default_image, image_names)
+                radioSelected[cloud]=selected
+                #print radioSelected #this dict will contain which image in whch cloud is checked
+                selected={};
 
      ############  end of reading from yaml file ############
 
@@ -484,26 +484,26 @@ def display_images(cloud=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('images')
     if request.method == 'POST':
-	radioSelected={}
+        radioSelected={}
         for cloud in activeClouds:
-		if 'openstack' in cloud:
-			
-        		default_image= request.form[cloud] 
-			print default_image
+                if 'openstack' in cloud:
+                        
+                        default_image= request.form[cloud] 
+                        print default_image
 
-			############ writing in yaml file ############
-    			yamlFile= config_image.get();
-		        yamlFile['clouds'][cloud]['default']['image']=default_image;
-    		        testDict={}
-     			testDict['cloudmesh']=yamlFile;
-    			f = open(filename, "w")
-    			yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    			f.close()
-			############ end of writing in yaml file ############
-			selected = set_default_image(default_image, image_names)
-			radioSelected[cloud]=selected
-			print radioSelected
-			selected={};
+                        ############ writing in yaml file ############
+                        yamlFile= config_image.get();
+                        yamlFile['clouds'][cloud]['default']['image']=default_image;
+                        testDict={}
+                        testDict['cloudmesh']=yamlFile;
+                        f = open(filename, "w")
+                        yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+                        f.close()
+                        ############ end of writing in yaml file ############
+                        selected = set_default_image(default_image, image_names)
+                        radioSelected[cloud]=selected
+                        print radioSelected
+                        selected={};
 
     if cloud == None:
         pass
