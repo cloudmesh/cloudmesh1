@@ -457,6 +457,7 @@ def buildImageNamesArray(clouds):
 #@app.route('/images/<cloud>/')
 @app.route('/images/', methods=['GET','POST'])
 def display_images(cloud=None):
+    radioSelected={}
     # for debugging
     cloud = 'india-openstack'
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
@@ -465,31 +466,44 @@ def display_images(cloud=None):
     image_names=buildImageNamesArray(clouds.clouds);
 
     ############reading from yaml file ############
+
     config_image = cm_config()
-    configurations= config_image.get(cloud)   # name of default cloud will come here
-    default_image=configurations['default_image']
+    activeClouds=config_image.active()
+    for cloud in activeClouds:
+	if 'openstack' in cloud:
+    		configurations= config_image.cloud(cloud)   
+    		default_image=configurations['default']['image']
+    		selected=set_default_image(default_image, image_names)
+		radioSelected[cloud]=selected
+		#print radioSelected #this dict will contain which image in whch cloud is checked
+		selected={};
+
      ############  end of reading from yaml file ############
 
-   # default_image=image_names[0];
-    selected = set_default_image(default_image, image_names)
 
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
+    active = make_active('images')
     if request.method == 'POST':
-        default_image= request.form['selected-image'] 
-    print default_image
+	radioSelected={}
+        for cloud in activeClouds:
+		if 'openstack' in cloud:
+			
+        		default_image= request.form[cloud] 
+			print default_image
 
-############ writing in yaml file ############
-
-    yamlFile= config_image.get();
-    yamlFile['india-openstack']['default_image']=default_image;
-    testDict={}
-    testDict['cloudmesh']=yamlFile;
-    f = open(filename, "w")
-    yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    f.close()
-
- ############ end of writing in yaml file ############
-
-    selected = set_default_image(default_image, image_names)
+			############ writing in yaml file ############
+    			yamlFile= config_image.get();
+		        yamlFile['clouds'][cloud]['default']['image']=default_image;
+    		        testDict={}
+     			testDict['cloudmesh']=yamlFile;
+    			f = open(filename, "w")
+    			yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+    			f.close()
+			############ end of writing in yaml file ############
+			selected = set_default_image(default_image, image_names)
+			radioSelected[cloud]=selected
+			print radioSelected
+			selected={};
 
     if cloud == None:
         pass
@@ -498,9 +512,8 @@ def display_images(cloud=None):
                                updated=time_now,
                                clouds=clouds.clouds,
                                active=active,
-                               version=version,selected=selected)
+                               version=version,radioSelected=radioSelected)
     
-
 
 ######################################################################
 # ROUTE: TEST 
