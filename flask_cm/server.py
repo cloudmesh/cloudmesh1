@@ -262,11 +262,12 @@ def display_project(cloud=None):
                 ############ writing in yaml file ############
                 yamlFile= config_project.get();
                 yamlFile['clouds'][cloud]['default']['project']=default_project;
-                testDict={}
-                testDict['cloudmesh']=yamlFile;
-                f = open(filename, "w")
-                yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-                f.close()
+		write_yaml(filename,yamlFile)
+                #testDict={}
+                #testDict['cloudmesh']=yamlFile;
+                #f = open(filename, "w")
+                #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+                #f.close()
                 ############ end of writing in yaml file ############
                 selected = set_default_project(default_project, project_names)
 
@@ -407,11 +408,12 @@ def display_flavors(cloud=None):
                 ############ writing in yaml file ############
                 yamlFile= config_flavor.get();
                 yamlFile['clouds'][cloud]['default']['flavor']=default_flavor;
-                testDict={}
-                testDict['cloudmesh']=yamlFile;
-                f = open(filename, "w")
-                yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-                f.close()
+		write_yaml(filename,yamlFile)
+                #testDict={}
+                #testDict['cloudmesh']=yamlFile;
+                #f = open(filename, "w")
+                #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+                #f.close()
                 ############ end of writing in yaml file ############
                 selected = set_default_flavor(default_flavor, flavor_names)
                 radioSelected[cloud]=selected
@@ -495,11 +497,12 @@ def display_images(cloud=None):
                         ############ writing in yaml file ############
                         yamlFile= config_image.get();
                         yamlFile['clouds'][cloud]['default']['image']=default_image;
-                        testDict={}
-                        testDict['cloudmesh']=yamlFile;
-                        f = open(filename, "w")
-                        yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-                        f.close()
+			write_yaml(filename, yamlFile)
+                        #testDict={}
+                        #testDict['cloudmesh']=yamlFile;
+                        #f = open(filename, "w")
+                        #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+                        #f.close()
                         ############ end of writing in yaml file ############
                         selected = set_default_image(default_image, image_names)
                         radioSelected[cloud]=selected
@@ -725,13 +728,13 @@ def managekeys():
         type  = request.form.get('type','None')
         keyname = request.form['keyname']
         fileorpath = request.form['keyorpath']
-        if type == "File" :
+        if type.lower() == "file" :
             fileorpath = os.path.expanduser(fileorpath)
         if keyname is "" or type is 'None' or fileorpath is "":
             error = True
             msg = "Invalid Data. Please Renter Data" 
         elif not validateKey(type ,fileorpath): 
-            if type == "File":
+            if type.lower() == "file":
                 msg = "Invalid file path or Invalid key file" 
             else:
                 msg = "Invalid key string"
@@ -747,20 +750,22 @@ def managekeys():
                 keylist = yamlFile['keys']['keylist']
                 defaultkey = yamlFile['keys']['default']
                 haskeys = True
-            testDict={}
-            testDict['cloudmesh']=yamlFile;
-            f = open(filename, "w")
-            yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-            f.close()
+	    write_yaml(filename, yamlFile)
+            #testDict={}
+            #testDict['cloudmesh']=yamlFile;
+            #f = open(filename, "w")
+            #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+            #f.close()
             msg = 'Key added successfully'
     elif request.method == 'POST' :
             yamlFile['keys']['default'] = request.form['selectkeys']
             defaultkey = yamlFile['keys']['default']
-            testDict={}
-            testDict['cloudmesh']=yamlFile;
-            f = open(filename, "w")
-            yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-            f.close()
+	    write_yaml(filename, yamlFile)
+            #testDict={}
+            #testDict['cloudmesh']=yamlFile;
+            #f = open(filename, "w")
+            #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+            #f.close()
     return render_template('keys.html',
                            haskeys=haskeys,
                            active=active,
@@ -769,9 +774,16 @@ def managekeys():
                            fun_fprint = lineToFingerprint,
                            show = msg)
                         
+def write_yaml(filename, content_dict):
+	d = {}
+	d['cloudmesh']=content_dict;
+	print "WRITE YAML", d
+	f = open(filename, "w")
+	yaml.safe_dump(d, f, default_flow_style=False, indent=4)
+	f.close()
 
 def validateKey(type,file):
-    if type == "File":
+    if type.lower() == "file":
         try :
             f = open(file, "r")
             string = f.read()
@@ -794,7 +806,7 @@ def validateKey(type,file):
         return False
 
 def lineToFingerprint(line,type):
-    if type == "File":
+    if type.lower() == "file":
         return line
     type, key_string, comment = line.split()
     key = base64.decodestring(key_string)
@@ -814,11 +826,12 @@ def deletekey(name):
         del keylist[name]
         if defaultkey == name:
             keydict['default'] = ''
-    testDict={}
-    testDict['cloudmesh']=yamlFile;
-    f = open(filename, "w")
-    yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    f.close()
+    write_yaml(filename, yamlFile)
+    #testDict={}
+    #testDict['cloudmesh']=yamlFile;
+    #f = open(filename, "w")
+    #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+    #f.close()
     return redirect("/keys/")
 
 if __name__ == "__main__":

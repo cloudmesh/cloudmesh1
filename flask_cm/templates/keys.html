@@ -6,7 +6,7 @@
 
 </style>
 
-<h1>Manage Keys</h1>
+<h1>Select Key</h1>
 
 <form action="" name = "selectKeyForm" method=post enctype=multipart/form-data >
 <table>
@@ -31,7 +31,8 @@
 			<td>{{name}}</td>
 			<td>{{type}}</td>
 			<td>{{fun_fprint(value,type)}}</td>
-			<td><a href="delete/{{name}}/">del</a></td>
+			<td><a href="delete/{{name}}/">del</a> {{ image_button ("right", "016_bin", "delete/" + name + "/") }}
+			</td>
 		</tr>
 	{% endfor %}
 
@@ -39,13 +40,17 @@
 	There are no keys present, please add one.
 {% endif %}
 
+
 </table>
 </form>
 <form action="" method=post enctype=multipart/form-data name = "addkeysform">
 
 <!--http://www.html5rocks.com/en/tutorials/file/dndfiles/-->
 
+<h1>Add Key</h1>
+
 <table>
+<tr><th>Attribute</th><th>Value</th></tr>
 <tr><td>Key File or Path : </td><td><textarea name = "keyorpath" rows="2" cols="30"></textarea></td></tr>
 <tr><td>Type : </td><td><input type="radio" name="type" value="String">Key String<br>
 <input type="radio" name="type" value="File">File Path</td></tr>
