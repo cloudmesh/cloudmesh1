@@ -769,7 +769,6 @@ def managekeys():
                            fun_fprint = lineToFingerprint,
                            show = msg)
                         
-<<<<<<< HEAD
 
 def validateKey(type,file):
     if type == "File":
@@ -822,55 +821,5 @@ def deletekey(name):
     f.close()
     return redirect("/keys/")
 
-def validateKey(type,file):
-    if type == "File":
-        try :
-            f = open(file, "r")
-            string = f.read()
-        except :
-            return False
-    else :
-        string = file
-    
-    try :
-        openssh_pubkey = string
-        type, key_string, comment = openssh_pubkey.split()
-        data = base64.decodestring(key_string)
-        int_len = 4
-        str_len = struct.unpack('>I', data[:int_len])[0] # this should return 7
-        print data
-        if data[int_len:int_len+str_len] == type:
-            return True
-    except Exception, e:
-        print e
-        return False
-
-def lineToFingerprint(line,type):
-    if type == "File":
-        return line
-    type, key_string, comment = line.split()
-    key = base64.decodestring(key_string)
-    fp_plain = hashlib.md5(key).hexdigest()
-    return ':'.join(a+b for a,b in zip(fp_plain[::2], fp_plain[1::2]))
-
-@app.route('/keys/delete/<name>/',methods=['GET','POST'])
-def deletekey(name):
-    config = cm_config()
-    yamlFile= config.get()
-    keydict = yamlFile['keys']
-    defaultkey = keydict['default']
-    keylist = keydict['keylist']
-    if len(keylist) ==1 :
-        del yamlFile['keys']
-    else :
-        del keylist[name]
-        if defaultkey == name:
-            keydict['default'] = ''
-    testDict={}
-    testDict['cloudmesh']=yamlFile;
-    f = open(filename, "w")
-    yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    f.close()
-    return redirect("/keys/")
 if __name__ == "__main__":
     app.run()
