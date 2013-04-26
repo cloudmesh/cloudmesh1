@@ -240,36 +240,41 @@ def display_project(cloud=None):
     makeCloudDict(dict_t) #from the profile function
     project_names=buildProjectNamesArray(projects)
     
-    cloud = 'india-openstack'
 
-    ############reading from yaml file ############
+
+	############reading from yaml file ############
     config_project = cm_config()
-    configurations= config_project.get(cloud)   # name of default cloud will come here
-    default_project=configurations['default_project']
+    activeClouds=config_project.active()
+    for cloud in activeClouds:
+	if 'openstack' in cloud:
+    		configurations= config_project.cloud(cloud)   # name of default cloud will come here
+    		default_project=configurations['default']['project']
+    		selected=set_default_project(default_project, project_names)
      ############  end of reading from yaml file ############
-   
+
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('projects')
-    selected = set_default_project(default_project, project_names)
+    
 
     if request.method == 'POST':
-        default_project= request.form['selected_project'] 
-        print "default_project is: "+default_project
+	radioSelected={}
+        for cloud in activeClouds:
+		if 'openstack' in cloud:
+			
+        		default_project= request.form['selected_project'] 
+			print default_project
 
-     ############ writing in yaml file ############
+			############ writing in yaml file ############
+    			yamlFile= config_project.get();
+		        yamlFile['clouds'][cloud]['default']['project']=default_project;
+    		        testDict={}
+     			testDict['cloudmesh']=yamlFile;
+    			f = open(filename, "w")
+    			yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+    			f.close()
+			############ end of writing in yaml file ############
+			selected = set_default_project(default_project, project_names)
 
-    yamlFile= config_project.get();
-    yamlFile['india-openstack']['default_project']=default_project;
-    testDict={}
-    testDict['cloudmesh']=yamlFile;
-    f = open(filename, "w")
-    yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    f.close()
-
- ############ end of writing in yaml file ############
-
-    selected = set_default_project(default_project, project_names)
-      
 
     if cloud == None:
         pass
@@ -278,6 +283,7 @@ def display_project(cloud=None):
                                projects=projects,
                                active=active,
                                version=version,selected=selected)
+
 
 ######################################################################
 # ROUTE: VM Login
