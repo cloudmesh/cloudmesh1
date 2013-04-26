@@ -697,7 +697,11 @@ def page(path):
                            pages=pages,
                            active=active,
                            version=version)
-                        
+
+######################################################################
+# ROUTE: KEYS
+######################################################################
+
 @app.route('/keys/',methods=['GET','POST'])
 def managekeys():
     active = make_active('table')
