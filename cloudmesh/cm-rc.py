@@ -7,6 +7,7 @@ Usage:
   cm-rc config projects (list|?)
   cm-rc config [-f FILE] [-o OUT] [-p PROJECT] NAME [-]
   cm-rc config dump [--format=(yaml|dict)]
+  cm-rc config init [-o OUT]
   cm-rc config list
   cm-rc --version
   cm-rc --help
@@ -132,6 +133,11 @@ if __name__ == '__main__':
             name = choices[input-1]
             print name
 
+            sys.exit(0)
+
+        if arguments['init'] or name == 'init':
+            output = arguments['--out']
+            print "NOT IMPLEMENTED: Initialize (create) the YAML file as %s" % (output if output is not None else "default")
             sys.exit(0)
 
         if arguments['list'] or name == 'list':
