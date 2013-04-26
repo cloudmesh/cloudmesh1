@@ -2,11 +2,16 @@
 image_button("041_charts", "/table/")
 #}
 
+
 {% macro image_button(align, type, actionpath) %}
       <input align={{ align }} type="image" 
 	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}" 
 	     onclick="document.location.href='{{ actionpath }}';"
 	     width="16" height="16">
+
+      {{url_for('static', filename='img/icons/png/glyphicons_' + type
+      + '.png') }}
+      {{ actionpath }}
 
 {% endmacro %}
 

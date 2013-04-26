@@ -21,7 +21,7 @@ import yaml
 # setting up reading path for the use of yaml
 ######################################################################
 
-with_write = False
+with_write = True
 
 ######################################################################
 # setting up reading path for the use of yaml
@@ -243,7 +243,10 @@ def display_project(cloud=None):
     for cloud in activeClouds:
         if 'openstack' in cloud:
             configurations= config_project.cloud(cloud)   # name of default cloud will come here
-            default_project=configurations['default']['project']
+
+	    print configurations
+	    
+            default_project=configurations['projects']['default']
             selected=set_default_project(default_project, project_names)
      ############  end of reading from yaml file ############
 
@@ -687,6 +690,8 @@ def page(path):
 
 @app.route('/keys/',methods=['GET','POST'])
 def managekeys():
+    print ">>>>> KEY"
+    
     active = make_active('profile')
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -715,13 +720,9 @@ def managekeys():
        keylist = keydict['keylist']
        """
        keydict = config.userkeys()
-       defaultkey = config.userkeys('default')
+       defaultkey = config.userkeys()['default']
        keylist = config.userkeys()['keylist']
 
-    print "KKKK", keydict,
-    print "LLLL", defaultkey
-    print "MMMM", keylist
-    
     if request.method == 'POST' and request.form.has_key('keyname'):
         type  = request.form.get('type','None')
         keyname = request.form['keyname']
@@ -758,55 +759,15 @@ def managekeys():
                            haskeys=haskeys,
                            active=active,
                            keylist = keylist,
-                           defaultkey =defaultkey ,
+                           defaultkey =defaultkey,
                            fun_fprint = lineToFingerprint,
                            show = msg)
                         
-def write_yaml(filename, content_dict):
-    if with_write:
-        d = {}
-	d['cloudmesh']=content_dict;
-	print "WRITE YAML", d
-	f = open(filename, "w")
-	yaml.safe_dump(d, f, default_flow_style=False, indent=4)
-	f.close()
 
-def validateKey(type,file):
-    if type.lower() == "file":
-        try :
-            f = open(file, "r")
-            string = f.read()
-        except :
-            return False
-    else :
-        string = file
-    
-    try :
-        openssh_pubkey = string
-        type, key_string, comment = openssh_pubkey.split()
-        data = base64.decodestring(key_string)
-        int_len = 4
-        str_len = struct.unpack('>I', data[:int_len])[0] # this should return 7
-        print data
-        if data[int_len:int_len+str_len] == type:
-            return True
-    except Exception, e:
-        print e
-        return False
-
-def lineToFingerprint(line,type):
-    if type.lower() == "file":
-        return line
-    print 
-    print "LINE", line
-    print
-    key_string, comment = line.split()
-    key = base64.decodestring(key_string)
-    fp_plain = hashlib.md5(key).hexdigest()
-    return ':'.join(a+b for a,b in zip(fp_plain[::2], fp_plain[1::2]))
-
-@app.route('/keys/delete/<name>/',methods=['GET','POST'])
+@app.route('/keys/delete/<name>/')
 def deletekey(name):
+    active = make_active('profile')
+    print ">>>>> DELT", name
     config = cm_config()
     yamlFile= config.get()
     keydict = yamlFile['keys']
@@ -819,12 +780,48 @@ def deletekey(name):
         if defaultkey == name:
             keydict['default'] = ''
     write_yaml(filename, yamlFile)
-    #testDict={}
-    #testDict['cloudmesh']=yamlFile;
-    #f = open(filename, "w")
-    #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    #f.close()
     return redirect("/keys/")
 
+def validateKey(type,file):
+    if type.lower() == "file":
+        try :
+            keystring = open(file, "r").read()
+        except :
+            return False
+    else :
+        keystring = file
+    
+    try :
+        type, key_string, comment = keystring.split()
+        data = base64.decodestring(key_string)
+        int_len = 4
+        str_len = struct.unpack('>I', data[:int_len])[0] # this should return 7
+
+        if data[int_len:int_len+str_len] == type:
+            return True
+    except Exception, e:
+        print e
+        return False
+
+
+
+def lineToFingerprint(line,type):
+    if type.lower() == "file":
+        return line
+    key_string, comment = line.split()
+    key = base64.decodestring(key_string)
+    fp_plain = hashlib.md5(key).hexdigest()
+    return ':'.join(a+b for a,b in zip(fp_plain[::2], fp_plain[1::2]))
+
+def write_yaml(filename, content_dict):
+    if with_write:
+        d = {}
+	d['cloudmesh']=content_dict;
+	print "WRITE YAML", d
+	f = open(filename, "w")
+	yaml.safe_dump(d, f, default_flow_style=False, indent=4)
+	f.close()
+
+    
 if __name__ == "__main__":
     app.run()

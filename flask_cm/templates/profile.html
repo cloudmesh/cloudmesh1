@@ -30,7 +30,7 @@
 <tr><td></td><td>Available</td><td>{{ config.clouds.keys() }}</td><td></td></tr>
 <tr><td>{{ image_button ("right", "030_pencil", "/keys/") }}</td><td colspan="2"><b> Keys </b></td> <td> </td></tr>
 {% if config.has_key('keys') and config['keys']['keylist'].has_key(config['keys']['default']) %}
-<tr><td></td><td>Default</td><td>{{ config['keys']['keylist'][config['keys']['default']] }}</td><td></td></tr>
+<tr><td></td><td>Default</td><td> {{config['keys']['default']}} {{ config['keys']['keylist'][config['keys']['default']] }}</td><td></td></tr>
 <tr><td></td><td>List</td><td>{{ config['keys']['keylist']}}</td><td></td></tr>
 {% endif %}
 </table>

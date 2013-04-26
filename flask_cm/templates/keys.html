@@ -8,6 +8,8 @@
 
 <h1>Select Key</h1>
 
+{{ defaultkey }}
+
 <form action="" name = "selectKeyForm" method=post enctype=multipart/form-data >
 <table>
 {% if haskeys %}
@@ -31,7 +33,9 @@
 			<td>{{name}}</td>
 			<td>{{type}}</td>
 			<td>{{fun_fprint(value,type)}}</td>
-			<td><a href="delete/{{name}}/">del</a> {{ image_button ("right", "016_bin", "delete/" + name + "/") }}
+			<td><a href="delete/{{name}}/">del</a>
+			  {{ name }}
+			  {{ image_button ("none", "016_bin", "/keys/delete/" + name + "/") }}
 			</td>
 		</tr>
 	{% endfor %}

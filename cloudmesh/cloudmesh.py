@@ -17,8 +17,10 @@ from cm_config import cm_config
 from openstack.cm_compute import openstack
 
 from eucalyptus.eucalyptus_new import eucalyptus
-from azure.cm_azure import cm_azure as azure 
-
+try:
+    from azure.cm_azure import cm_azure as azure 
+except:
+    print "AZURE NOT ENABLED"
 
 class cloudmesh:
 
