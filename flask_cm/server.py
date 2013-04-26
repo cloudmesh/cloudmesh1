@@ -704,7 +704,7 @@ def page(path):
 
 @app.route('/keys/',methods=['GET','POST'])
 def managekeys():
-    active = make_active('table')
+    active = make_active('profile')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     config = cm_config()
     yamlFile= config.get()    

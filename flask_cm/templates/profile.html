@@ -1,6 +1,13 @@
 {% extends "layout.html" %}
-
+{% from "_helper.html" import image_button %}g
 {% block content %}
+
+
+<h2>Other Profile Data</h2>
+    <ul>
+      <li><a href="/images">Select Default Images</a></li>
+      <li><a href="/flavors">Select Default Flavors</a></li>
+    </ul>
 
 <h2>Profile</h2>
 
@@ -11,33 +18,22 @@
 <tr><td>Phone</td><td>{{ person.phone }}</td><td></td></tr>
 <tr><td>e-mail</td><td>{{ person['e-mail'] }}</td><td></td></tr>
 <tr><td>Address</td><td>{{ address|replace("\n", "<br />")|safe }} </td><td></td></tr>
-<tr><td colspan="2"><b> Prefix </b></td> <td></td></tr>  
-<tr><td>Prefix</td><td>{{ config.prefix }}</td><td>edit</td></tr>
-<tr><td colspan="2"><b> Projects </b></td> <td></td></tr>  
-<tr><td>Default</td><td>{{ config.projects.default }}</td><td>edit</td></tr>
+<tr><td colspan="2"><b> Prefix </b></td> <td>{{ image_button ("right", "030_pencil", "/prefix/") }}</td></tr>  
+<tr><td>Prefix</td><td>{{ config.prefix }}</td><td></td></tr>
+<tr><td colspan="2"><b> Projects </b></td> <td>{{ image_button ("right", "030_pencil", "/projects/") }}</td></tr>  
+<tr><td>Default</td><td>{{ config.projects.default }}</td><td></td></tr>
 <tr><td>Projects</td><td>{{ config.projects.active }}</td><td></td></tr>
 <tr><td>Completed</td><td>{{ config.projects.completed }}</td><td></td></tr>    
 <tr><td colspan="2"><b> Clouds </b></td> <td></td></tr>
 <tr><td>Default</td><td>{{ config.default }}</td><td>edit</td></tr>
 <tr><td>Active</td><td>{{ active_clouds }}</td><td>edit</td></tr>
 <tr><td>Available</td><td>{{ config.clouds.keys() }}</td><td></td></tr>
-<tr><td colspan="2"><b> Keys </b></td> <td></td></tr>
+<tr><td colspan="2"><b> Keys </b></td> <td>{{ image_button ("right", "030_pencil", "/keys/") }} </td></tr>
 {% if config.has_key('keys') and config['keys']['keylist'].has_key(config['keys']['default']) %}
-<tr><td>Default</td><td>{{ config['keys']['keylist'][config['keys']['default']] }}</td><td>edit</td></tr>
-<tr><td>List</td><td>{{ config['keys']['keylist']}}</td><td>add</td></tr>
+<tr><td>Default</td><td>{{ config['keys']['keylist'][config['keys']['default']] }}</td><td></td></tr>
+<tr><td>List</td><td>{{ config['keys']['keylist']}}</td><td></td></tr>
 {% endif %}
 </table>
 
-
-<h2>Change Profile</h2>
-    <ul>
-      <li><a href="/projects">Select Default Project</a></li>
-      <li><a href="/images">Select Default Images</a></li>
-      <li><a href="/flavors">Select Default Flavors</a></li>
-      <li><a href="/contact">Contact</a></li>
-      <li><a href="/keys">Manage Keys</a></li>
-
-
-    </ul>
 
 {% endblock content %}
