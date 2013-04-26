@@ -137,7 +137,8 @@ if __name__ == '__main__':
 
         if arguments['init'] or name == 'init':
             output = arguments['--out']
-            print "NOT IMPLEMENTED: Initialize (create) the YAML file as %s" % (output if output is not None else "default")
+            config.initialize(os.getenv('USER'))
+            config.write(output)
             sys.exit(0)
 
         if arguments['list'] or name == 'list':

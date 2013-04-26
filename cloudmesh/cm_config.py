@@ -28,8 +28,6 @@ class cm_config:
     # initialization methods
     ######################################################################
 
-
-
     def __init__(self, filename=None):
         if filename == None:
             home = os.environ['HOME']
@@ -38,6 +36,89 @@ class cm_config:
             self.filename = filename
         self.read(self.filename)
         return
+
+    def _initialize_user(self, username):
+        """ Loads user data, including profile, projects, and credentials """
+        # Eventually this comes from LDAP
+        cm = self.data['cloudmesh']
+        cm['prefix'] = username
+
+        cm['profile'] = {
+            'firstname': 'Gregor',
+            'lastname': 'von Laszewski',
+            'phone': '812 ...',
+            'e-mail': 'laszewski@gmail.com',
+            'address': ['Indiana University', 'Bloomington, IN 47408']
+            }
+
+        cm['keys'] = {
+            'default': 'name 1',
+            'keylist': {
+                'name 1': 'file $HOME/.ssh/id_rsa.pub',
+                'name 2': 'file $HOME/.ssh/id_rsa2.pub',
+                'bla': 'key ssh-rsa AAAAB3.....zzzz keyname'
+                }
+            }
+
+        cm['projects'] = {
+            'active': ['fg-82', 'fg-101'],
+            'completed': ['fg-81', 'fg-102'],
+            'default': 'fg-82'
+            }
+
+        cm['active'] = ['sierra-openstack', 'india-openstack']
+
+        cm['default'] = 'india-openstack'
+
+
+    def _initialize_clouds(self):
+        """ Creates cloud credentials for the user """
+        cm = self.data['cloudmesh']
+        cm['clouds'] = {
+            'india-openstack': {
+                'cm_label': 'ios',
+                'cm_host': 'india.futuregrid.org',
+                'cm_type': 'openstack',
+                'credentials': {
+                    'OS_AUTH_URL': 'url',
+                    'OS_PASSWORD': 'password',
+                    'OS_TENANT_NAME': 'member',
+                    'OS_USERNAME': 'username',
+                    'OS_VERSION': 'essex',
+                    'OS_CACERT': '$HOME/.futuregrid/india/openstack/cacert.pem'
+                    },
+                'default': {
+                    'flavor': 'm1.tiny',
+                    'image': 'ktanaka/ubuntu1204-ramdisk.manifest.xml ',
+                    'project': 'fg-181'
+                    }
+                },
+            'grizzly-openstack': {
+                'cm_label': 'ios',
+                'cm_host': 'abc.futuregrid.org',
+                'cm_type': 'openstack',
+                'credentials': {
+                    'OS_AUTH_URL': 'url',
+                    'OS_PASSWORD': 'password',
+                    'OS_TENANT_NAME': 'member',
+                    'OS_USERNAME': 'username',
+                    'OS_VERSION': 'grizzly',
+                    'OS_CACERT': '$HOME/.futuregrid/india/openstack/cacert.pem'
+                    },
+                'default': {
+                    'flavor': 'm1.tiny',
+                    'image': 'ktanaka/ubuntu1204-ramdisk.manifest.xml ',
+                    'project': 'fg-181'
+                    }
+                }
+            }
+
+
+    def initialize(self, username):
+        """ Creates or resets the data for a user """
+        self.data = { 'cloudmesh': {} }
+        self._initialize_user(username)
+        self._initialize_clouds()
 
     ######################################################################
     # read and write methods
@@ -50,10 +131,8 @@ class cm_config:
             self.data = yaml.safe_load(f)
             f.close()
 
-    def write(self, filename):
-        """ BUG DOES NOT WORK"""
-        f = open(filename, "w")
-        #yaml.dump(self.data, f, default_flow_style=False, indent=4)
+    def write(self, filename=None):
+        f = open(filename or self.filename, "w")
         pyaml.dump(self.data, f, vspacing=[2, 1, 1])
         f.close()
 
