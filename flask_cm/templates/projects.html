@@ -5,23 +5,17 @@
 <h1> Projects </h1>
 
 <form name="projects" action="" method="POST">
-{% for projectname,projectDetails  in projects.iteritems() %}
-
 <table>
-<tr> <th colspan=2> <input type="radio" name="selected_project" value="{{ projectname }}" id="{{ projectname }}" {{ selected[projectname] }} onclick="document.forms['projects'].submit()" >
-<b> {{ projectname }}</b> </th></tr>
-{% for key,value  in projectDetails.iteritems() %}
+{% for projectname in projects %}
 
-<tr>
-<td> {{ key }} </td>
-<td> {{  value }} </td>
-</tr>
+
+<tr> <th> <input type="radio" name="selected_project" value="{{ projectname }}" id="{{ projectname }}" {{ selected[projectname] }} onclick="document.forms['projects'].submit()" >
+<b> {{ projectname }}</b> </th></tr>
+
+
 
 {% endfor %}
 </table>
-
-{% endfor %}
-
 </form>
- {{ clouds }}
+ 
 {% endblock %}
