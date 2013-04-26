@@ -11,7 +11,6 @@ import sys
 #sys.path.insert(0, '..')
 
 from cm_config import cm_config
-from sh import cat
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
@@ -28,10 +27,14 @@ def HEADING(txt):
 class Test_cloudmesh:
 
 
-    file = "credentials-example.yaml"
+    filename = "credentials-example.yaml"
+    #filename = None
 
     def setup(self):
-        self.config = cm_config()
+        if self.filename == None:
+            self.config = cm_config()
+        else:
+            self.config = cm_config(self.filename)
 
     def tearDown(self):
         pass
@@ -104,7 +107,7 @@ class Test_cloudmesh:
 
     def test14_cloud_default(self):
         HEADING("CLOUD")
-        assert self.config.cloud_default('india-openstack', 'flavor') == 'm1.small'
+        assert self.config.cloud_default('india-openstack', 'flavor') == 'm1.tiny'
         assert self.config.cloud_default('india-openstack', 'not defined') is None
 
     def test15_project_default(self):
@@ -117,4 +120,15 @@ class Test_cloudmesh:
         name = "/tmp/test.txt"
         print self.config
         self.config.write(name)
-        cat(name)
+        open(name,"rb").read()
+
+    def test17_key(self):
+        HEADING("KEY")
+        keys = self.config.userkeys()
+
+        #print "DEFAULT>", self.config.userkeys('default')
+        #print "TEST>", self.config.userkeys('test')
+
+        print keys, keys['default'], keys['keylist'][keys['default']]
+        assert ('default' in keys) and (keys['default'] in keys['keylist'])
+

@@ -18,14 +18,17 @@ except:
 import yaml
 
 
-#### setting up reading path for the use of yaml################
+######################################################################
+# setting up reading path for the use of yaml
+######################################################################
+
 default_path = '.futuregrid/cloudmesh.yaml'
 home = os.environ['HOME']
 filename = "%s/%s" % (home, default_path)
 
-#### end of setting up reading path for the use of yaml################
-
-
+######################################################################
+# global vars
+######################################################################
 
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
@@ -43,14 +46,10 @@ clouds.refresh()
 
 prefix = clouds.prefix()
 
-# clouds.load()
-# AttributeError: cloudmesh instance has no attribute 'refresh'
-# clouds.refresh()
-# TEST CASE
-
 ######################################################################
 # STARTING THE FLASK APP
 ######################################################################
+
 app = Flask(__name__)
 app.config.from_object(__name__)
 pages = FlatPages(app)
@@ -192,10 +191,7 @@ def table():
 
     active = make_active('table')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    # clouds.refresh("sierra-openstack")
 
-    # note thet call to sierra is fake it just goes to india and sets cloudname to sierra.
-    # clouds.dump()
     # keys = clouds.get_keys()
     return render_template('table.html',
                            updated=time_now,
@@ -227,9 +223,6 @@ def buildProjectNamesArray(projects):
      for project_name, info in projects.iteritems():
         project_names.append(project_name);
      return project_names;
-
-
-
 
 @app.route('/projects/', methods=['GET','POST'])
 def display_project(cloud=None):
@@ -319,7 +312,6 @@ def vm_login(cloud=None,server=None):
 
 @app.route('/cm/info/<cloud>/<server>/')
 def vm_info(cloud=None,server=None):
-    global clouds
 
     active = make_active('vm_info')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -354,7 +346,7 @@ def maketablefromdict(the_dict):
 # ROUTE: FLAVOR
 ######################################################################
 def set_default_flavor(name, flavor_names):
-    global default_flavor;
+    global default_flavor
     default_flavor = name
     selected = {}
     for name in flavor_names:
@@ -438,7 +430,7 @@ def display_flavors(cloud=None):
 ######################################################################
 
 def set_default_image(name, image_names):
-    global default_image;
+    global default_image
     default_image = name
     selected = {}
     for name in image_names:
@@ -614,12 +606,12 @@ def makeCloudDict(dict_t):
     cloudDict = {}
     cloudSubDict = {} # WHAT IS THIS?
     cloudSubsubDict = {} # WHAT IS THIS?
-############# the below variables are used to display projects.html Here projects dict contains all the projects################
+    ############# the below variables are used to display projects.html Here projects dict contains all the projects################
     project_content={}
     global projects;
     projects={};
 
-########### end of variables for display of projects.html###########################
+    ########### end of variables for display of projects.html###########################
     for key, value in dict_t.iteritems():
         # BIG Bug: this should be changed based on a test of type and not the name of the cloud
         # IS THIS STILL WORKING WITH THE clouds: ?...it works now-shweta
@@ -704,8 +696,10 @@ def page(path):
 
 @app.route('/keys/',methods=['GET','POST'])
 def managekeys():
-    active = make_active('profile')
+    #active = make_active('profile')
+
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
     config = cm_config()
     yamlFile= config.get()    
     haskeys = False

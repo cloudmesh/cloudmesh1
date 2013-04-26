@@ -81,6 +81,19 @@ class cm_config:
     def profile(self):
         return self.data['cloudmesh']['profile']
 
+    def userkeys(self, attribute=None, expand=True):
+        if attribute == None:
+            return self.data['cloudmesh']['keys']
+        else:
+            if attribute == 'default':
+                name = self.data['cloudmesh']['keys']['default']
+                value = self.data['cloudmesh']['keys']['keylist'][name]
+            else:
+                value = self.data['cloudmesh']['keys']['keylist'][attribute]
+            if expand:
+                value = path_expand(value)
+            return value
+
     def default(self,cloudname):
         return self.data['cloudmesh']['clouds'][cloudname]['default']
 
@@ -97,6 +110,7 @@ class cm_config:
         cloud = self.cloud(cloudname)
         defaults = cloud['default'] if 'default' in cloud else []
         return defaults[defname] if defname in defaults else None
+
 
     def get(self, key=None, expand=False):
         if key == None:
