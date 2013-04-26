@@ -775,12 +775,12 @@ def managekeys():
                            show = msg)
                         
 def write_yaml(filename, content_dict):
-	d = {}
-	d['cloudmesh']=content_dict;
-	print "WRITE YAML", d
-	f = open(filename, "w")
-	yaml.safe_dump(d, f, default_flow_style=False, indent=4)
-	f.close()
+    d = {}
+    d['cloudmesh']=content_dict;
+    print "WRITE YAML", d
+    f = open(filename, "w")
+    yaml.safe_dump(d, f, default_flow_style=False, indent=4)
+    f.close()
 
 def validateKey(type,file):
     if type.lower() == "file":
