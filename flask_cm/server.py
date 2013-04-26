@@ -618,41 +618,44 @@ def makeCloudDict(dict_t):
 ########### end of variables for display of projects.html###########################
     for key, value in dict_t.iteritems():
         # BIG Bug: this should be changed based on a test of type and not the name of the cloud
-        # IS THIS STILL WORKING WITH THE clouds: ?
+        # IS THIS STILL WORKING WITH THE clouds: ?...it works now-shweta
         
-        if "india-openstack" in key:
+    if "clouds" in key:
+		for cloudKey, cloudValue in value.iteritems():
 
-            for innerKey, innerValue in value.iteritems():
-                innerKey = innerKey.replace("OS_", "")
-                innerKey = innerKey.replace("cm_", "")
-                cloudSubDict[innerKey.upper()] = innerValue
-            cloudDict[key.upper()] = cloudSubDict
-            cloudSubDict = {}
-            print (cloudDict)
-        if "india-eucalyptus" in key:
-            for innerKey, innerValue in value.iteritems():
-                if "fg" in innerKey:
-                    for innermostKey, innermostValue in innerValue.iteritems():
-                        project_content[innermostKey]=innermostValue
-                        innermostKey = innermostKey.replace("EC2_", "")
-                        cloudSubsubDict[innermostKey.upper()] = innermostValue
-                    cloudDict[innerKey.upper()] = cloudSubsubDict
-                    cloudSubsubDict = {}
-                    projects[innerKey]=project_content;
-                    project_content={};
+        		if "india-openstack" in cloudKey:
 
-                else:
-                    innerKey = innerKey.replace("EC2_", "")
-                    cloudSubDict[innerKey.upper()] = innerValue
-            cloudDict[key.upper()] = cloudSubDict
-            cloudSubDict = {}
+            			for innerKey, innerValue in cloudValue.iteritems():
+                			innerKey = innerKey.replace("OS_", "")
+                			innerKey = innerKey.replace("cm_", "")
+                			cloudSubDict[innerKey.upper()] = innerValue
+            			cloudDict[key.upper()] = cloudSubDict
+            			cloudSubDict = {}
+            			#print (cloudDict)
+        		if "india-eucalyptus" in cloudKey:
+            			for innerKey, innerValue in cloudValue.iteritems():
+                			if "fg" in innerKey:
+                    				for innermostKey, innermostValue in innerValue.iteritems():
+                        				project_content[innermostKey]=innermostValue
+                        				innermostKey = innermostKey.replace("EC2_", "")
+                        				cloudSubsubDict[innermostKey.upper()] = innermostValue
+                    				cloudDict[innerKey.upper()] = cloudSubsubDict
+                    				cloudSubsubDict = {}
+                    				projects[innerKey]=project_content;
+                    				project_content={};
 
-        if "azure" in key:
-            cloudSubDict = {}
-            for innerKey, innerValue in value.iteritems():
-                cloudSubDict[innerKey.upper()] = innerValue
-            cloudDict[key.upper()] = cloudSubDict
-            cloudSubDict = {}
+                			else:
+                    				innerKey = innerKey.replace("EC2_", "")
+                    				cloudSubDict[innerKey.upper()] = innerValue
+            				cloudDict[key.upper()] = cloudSubDict
+            				cloudSubDict = {}
+
+        		if "azure" in cloudKey:
+            			cloudSubDict = {}
+            			for innerKey, innerValue in value.iteritems():
+                			cloudSubDict[innerKey.upper()] = innerValue
+            			cloudDict[key.upper()] = cloudSubDict
+            			cloudSubDict = {}
     # print (cloudDict);
 
     return cloudDict
