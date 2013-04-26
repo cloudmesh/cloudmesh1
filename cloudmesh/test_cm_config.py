@@ -7,11 +7,11 @@ or
 nosetests -v
 
 """
-#import sys
+import sys
 #sys.path.insert(0, '..')
 
 from cm_config import cm_config
-
+from sh import cat
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
@@ -111,3 +111,10 @@ class Test_cloudmesh:
         HEADING("PROJECT")
         project = self.config.projects('default')
         assert project == 'fg-82'
+
+    def test16_write(self):
+        HEADING("WRITE")
+        name = "/tmp/test.txt"
+        print self.config
+        self.config.write(name)
+        cat(name)

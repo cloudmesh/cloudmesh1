@@ -1,9 +1,11 @@
 import sys
 sys.path.insert(0, '..')
 import yaml
+import pyaml
 import os
 import json
 from string import Template
+
 
 def path_expand(text):
     """ returns a string with expanded variavble """
@@ -50,7 +52,8 @@ class cm_config:
     def write(self, filename):
         """ BUG DOES NOT WORK"""
         f = open(filename, "w")
-        yaml.dump(self.data, f, default_flow_style=False, indent=4)
+        #yaml.dump(self.data, f, default_flow_style=False, indent=4)
+        pyaml.dump(self.data, f, vspacing=[2, 1, 1])
         f.close()
 
     ######################################################################

@@ -19,7 +19,7 @@ requires=[
     'setuptools',
     'pip',
     'docopt',
-    'pyyaml',
+    'pyaml', #'pyyaml',
     'Flask',
     'Flask-FlatPages',
     'Flask-WTF',
