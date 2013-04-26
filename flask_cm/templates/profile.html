@@ -2,6 +2,14 @@
 {% from "_helper.html" import image_button %}g
 {% block content %}
 
+<script type="text/javascript" charset="utf-8">
+
+$(function() {
+        
+  $('.edit').editable('/profile');
+
+});
+</script>
 
 <h2>Other Profile Data</h2>
     <ul>
@@ -35,5 +43,7 @@
 {% endif %}
 </table>
 
+Testing Inline editing
+<div class="edit" id="div_1">Dolor</div>
 
 {% endblock content %}

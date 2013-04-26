@@ -45,9 +45,10 @@ class cm_config:
 
     def read(self, filename):
         self.filename = filename
-        f = open(self.filename, "r")
-        self.data = yaml.safe_load(f)
-        f.close()
+        if os.path.exists(filename):
+            f = open(self.filename, "r")
+            self.data = yaml.safe_load(f)
+            f.close()
 
     def write(self, filename):
         """ BUG DOES NOT WORK"""
