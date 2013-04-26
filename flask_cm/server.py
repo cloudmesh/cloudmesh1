@@ -244,16 +244,14 @@ def display_project(cloud=None):
         if 'openstack' in cloud:
             configurations= config_project.cloud(cloud)   # name of default cloud will come here
 
-	    print configurations
-	    
-            default_project=configurations['projects']['default']
+            print configurations
+            default_project=configurations['default']['project']
             selected=set_default_project(default_project, project_names)
      ############  end of reading from yaml file ############
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('projects')
     
-
     if request.method == 'POST':
         radioSelected={}
         for cloud in activeClouds:
@@ -263,7 +261,7 @@ def display_project(cloud=None):
                 ############ writing in yaml file ############
                 yamlFile= config_project.get();
                 yamlFile['clouds'][cloud]['default']['project']=default_project;
-		write_yaml(filename,yamlFile)
+                write_yaml(filename,yamlFile)
                 ############ end of writing in yaml file ############
                 selected = set_default_project(default_project, project_names)
 
@@ -403,7 +401,7 @@ def display_flavors(cloud=None):
                 ############ writing in yaml file ############
                 yamlFile= config_flavor.get();
                 yamlFile['clouds'][cloud]['default']['flavor']=default_flavor;
-		write_yaml(filename,yamlFile)
+                write_yaml(filename,yamlFile)
                 ############ end of writing in yaml file ############
                 selected = set_default_flavor(default_flavor, flavor_names)
                 radioSelected[cloud]=selected
@@ -487,7 +485,7 @@ def display_images(cloud=None):
                         ############ writing in yaml file ############
                         yamlFile= config_image.get();
                         yamlFile['clouds'][cloud]['default']['image']=default_image;
-			write_yaml(filename, yamlFile)
+                        write_yaml(filename, yamlFile)
 
                         ############ end of writing in yaml file ############
                         selected = set_default_image(default_image, image_names)
@@ -749,12 +747,12 @@ def managekeys():
                 keylist = yamlFile['keys']['keylist']
                 defaultkey = yamlFile['keys']['default']
                 haskeys = True
-	    write_yaml(filename, yamlFile)
+            write_yaml(filename, yamlFile)
             msg = 'Key added successfully'
     elif request.method == 'POST' :
             yamlFile['keys']['default'] = request.form['selectkeys']
             defaultkey = yamlFile['keys']['default']
-	    write_yaml(filename, yamlFile)
+            write_yaml(filename, yamlFile)
     return render_template('keys.html',
                            haskeys=haskeys,
                            active=active,
@@ -816,11 +814,11 @@ def lineToFingerprint(line,type):
 def write_yaml(filename, content_dict):
     if with_write:
         d = {}
-	d['cloudmesh']=content_dict;
-	print "WRITE YAML", d
-	f = open(filename, "w")
-	yaml.safe_dump(d, f, default_flow_style=False, indent=4)
-	f.close()
+        d['cloudmesh']=content_dict;
+        print "WRITE YAML", d
+        f = open(filename, "w")
+        yaml.safe_dump(d, f, default_flow_style=False, indent=4)
+        f.close()
 
     
 if __name__ == "__main__":
