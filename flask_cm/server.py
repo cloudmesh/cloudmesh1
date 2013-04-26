@@ -709,9 +709,18 @@ def managekeys():
     """
     if(yamlFile.has_key('keys')):
        haskeys = True 
+       """
        keydict = yamlFile['keys']
        defaultkey = keydict['default']
        keylist = keydict['keylist']
+       """
+       keydict = config.userkeys()
+       defaultkey = config.userkeys('default')
+       keylist = config.userkeys()['keylist']
+
+    print "KKKK", keydict,
+    print "LLLL", defaultkey
+    print "MMMM", keylist
     
     if request.method == 'POST' and request.form.has_key('keyname'):
         type  = request.form.get('type','None')
@@ -788,7 +797,10 @@ def validateKey(type,file):
 def lineToFingerprint(line,type):
     if type.lower() == "file":
         return line
-    type, key_string, comment = line.split()
+    print 
+    print "LINE", line
+    print
+    key_string, comment = line.split()
     key = base64.decodestring(key_string)
     fp_plain = hashlib.md5(key).hexdigest()
     return ':'.join(a+b for a,b in zip(fp_plain[::2], fp_plain[1::2]))
