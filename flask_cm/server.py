@@ -4,9 +4,10 @@ sys.path.insert(0, '../')
 
 import os
 import time
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,redirect
 from flask_flatpages import FlatPages
-
+import base64,hashlib
+import struct
 from cloudmesh.cloudmesh import cloudmesh
 from datetime import datetime
 from cloudmesh.cm_config import cm_config
@@ -382,13 +383,13 @@ def display_flavors(cloud=None):
     config_flavor = cm_config()
     activeClouds=config_flavor.active()
     for cloud in activeClouds:
-    if 'openstack' in cloud:
-    		configurations= config_flavor.cloud(cloud)   # name of default cloud will come here
-    		default_flavor=configurations['default']['flavor']
-    		selected=set_default_flavor(default_flavor, flavor_names)
-		radioSelected[cloud]=selected
-		print radioSelected
-		selected={};
+        if 'openstack' in cloud:
+            configurations= config_flavor.cloud(cloud)   # name of default cloud will come here
+            default_flavor=configurations['default']['flavor']
+            selected=set_default_flavor(default_flavor, flavor_names)
+            radioSelected[cloud]=selected
+            print radioSelected
+            selected={};
      ############  end of reading from yaml file ############
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
@@ -396,26 +397,24 @@ def display_flavors(cloud=None):
     #selected = set_default_flavor(default_flavor, flavor_names)
 
     if request.method == 'POST':
-	radioSelected={}
+        radioSelected={}
         for cloud in activeClouds:
-		if 'openstack' in cloud:
-			
-        		default_flavor= request.form[cloud] 
-			print default_flavor
-
-			############ writing in yaml file ############
-    			yamlFile= config_flavor.get();
-		        yamlFile['clouds'][cloud]['default']['flavor']=default_flavor;
-    		        testDict={}
-     			testDict['cloudmesh']=yamlFile;
-    			f = open(filename, "w")
-    			yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    			f.close()
-			############ end of writing in yaml file ############
-			selected = set_default_flavor(default_flavor, flavor_names)
-			radioSelected[cloud]=selected
-			print radioSelected
-			selected={};
+            if 'openstack' in cloud:
+                default_flavor= request.form[cloud] 
+                print default_flavor
+                ############ writing in yaml file ############
+                yamlFile= config_flavor.get();
+                yamlFile['clouds'][cloud]['default']['flavor']=default_flavor;
+                testDict={}
+                testDict['cloudmesh']=yamlFile;
+                f = open(filename, "w")
+                yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+                f.close()
+                ############ end of writing in yaml file ############
+                selected = set_default_flavor(default_flavor, flavor_names)
+                radioSelected[cloud]=selected
+                print radioSelected
+                selected={};
     
       
 
@@ -683,60 +682,130 @@ def page(path):
                            active=active,
                            version=version)
                         
-@app.route('/updatekeypair/<cloud>/',methods=['GET','POST'])
-def update_key_pair(cloud):
-    
+@app.route('/keys/',methods=['GET','POST'])
+def managekeys():
     active = make_active('table')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    showmsg = False
-    filePath = ''
-    keyname = ''
-    Message = ''
     config = cm_config()
     yamlFile= config.get()    
+    haskeys = False
+    keydict = {}
+    keylist = {}
+    defaultkey = ''
+    msg = ''
+    error = False
+    """
+    keys:
+      default: name 1 
+      keylist:
+         name 1: file $HOME/.ssh/id_rsa.pub
+         name 2: file $HOME/.ssh/id_rsa2.pub
+         bla: key ssh-rsa AAAAB3.....zzzz keyname
+    """
+    if(yamlFile.has_key('keys')):
+       haskeys = True 
+       keydict = yamlFile['keys']
+       defaultkey = keydict['default']
+       keylist = keydict['keylist']
     
-    #check if this is for openstack
-    try :
-        if yamlFile[cloud]['cm_type'] in 'openstack':
-            if yamlFile[cloud].has_key('keypair') :
-                filePath = yamlFile[cloud]['keypair']['keypath']
-                keyname = yamlFile[cloud]['keypair']['keyname']
-        else :
-             return "Invalid Page"
-            
-    except Exception ,e : 
-        return "Invalid Page " + str(e)
-    
-    if request.method == 'POST':
-        showmsg = True
-        filePath = request.form['keyFilePath']
+    if request.method == 'POST' and request.form.has_key('keyname'):
+        type  = request.form.get('type','None')
         keyname = request.form['keyname']
-        (stat,Message) = clouds.add_key_pair(cloud,filePath,keyname)
-        if stat == 0 : 
-            yamlFile[cloud]['keypair'] = {'keypath' : filePath,
-                                      'keyname' : keyname}
+        fileorpath = request.form['keyorpath']
+        if type == "File" :
+            fileorpath = os.path.expanduser(fileorpath)
+        if keyname is "" or type is 'None' or fileorpath is "":
+            error = True
+            msg = "Invalid Data. Please Renter Data" 
+        elif not validateKey(type ,fileorpath): 
+            if type == "File":
+                msg = "Invalid file path or Invalid key file" 
+            else:
+                msg = "Invalid key string"
+        elif ' ' in  keyname:
+            msg = "Invalid key name, cannot contain spaces"
+        elif haskeys and keydict['keylist'].has_key(keyname):
+            msg = "Key name already exists"
+        else :
+            if haskeys :
+                keydict['keylist'][keyname] = type + " " + fileorpath
+            else :
+                yamlFile['keys'] = {'default':keyname ,'keylist':{keyname:type + " " + fileorpath}}
+                keylist = yamlFile['keys']['keylist']
+                defaultkey = yamlFile['keys']['default']
+                haskeys = True
             testDict={}
             testDict['cloudmesh']=yamlFile;
             f = open(filename, "w")
             yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
             f.close()
-        else :
-            filePath = ''
-            keyname = ''
-            if yamlFile[cloud].has_key('keypair') :
-                filePath = yamlFile[cloud]['keypair']['keypath']
-                keyname = yamlFile[cloud]['keypair']['keyname']
-        
-                                    
-        
-        
-    return render_template('upload_openstack_key.html',
-                           showMessage=showmsg,
-                           message = Message,
+            msg = 'Key added successfully'
+    elif request.method == 'POST' :
+            yamlFile['keys']['default'] = request.form['selectkeys']
+            defaultkey = yamlFile['keys']['default']
+            testDict={}
+            testDict['cloudmesh']=yamlFile;
+            f = open(filename, "w")
+            yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+            f.close()
+    return render_template('keys.html',
+                           haskeys=haskeys,
                            active=active,
-                           path = filePath,
-                           keyname = keyname,
-                           cloud_name = cloud)
+                           keylist = keylist,
+                           defaultkey =defaultkey ,
+                           fun_fprint = lineToFingerprint,
+                           show = msg)
+                        
 
+def validateKey(type,file):
+    if type == "File":
+        try :
+            f = open(file, "r")
+            string = f.read()
+        except :
+            return False
+    else :
+        string = file
+    
+    try :
+        openssh_pubkey = string
+        type, key_string, comment = openssh_pubkey.split()
+        data = base64.decodestring(key_string)
+        int_len = 4
+        str_len = struct.unpack('>I', data[:int_len])[0] # this should return 7
+        print data
+        if data[int_len:int_len+str_len] == type:
+            return True
+    except Exception, e:
+        print e
+        return False
+
+def lineToFingerprint(line,type):
+    if type == "File":
+        return line
+    type, key_string, comment = line.split()
+    key = base64.decodestring(key_string)
+    fp_plain = hashlib.md5(key).hexdigest()
+    return ':'.join(a+b for a,b in zip(fp_plain[::2], fp_plain[1::2]))
+
+@app.route('/keys/delete/<name>/',methods=['GET','POST'])
+def deletekey(name):
+    config = cm_config()
+    yamlFile= config.get()
+    keydict = yamlFile['keys']
+    defaultkey = keydict['default']
+    keylist = keydict['keylist']
+    if len(keylist) ==1 :
+        del yamlFile['keys']
+    else :
+        del keylist[name]
+        if defaultkey == name:
+            keydict['default'] = ''
+    testDict={}
+    testDict['cloudmesh']=yamlFile;
+    f = open(filename, "w")
+    yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+    f.close()
+    return redirect("/keys/")
 if __name__ == "__main__":
     app.run()
