@@ -8,7 +8,7 @@
 {% for projectname,projectDetails  in projects.iteritems() %}
 
 <table>
-<tr> <th colspan=2> <input type="radio" name=selected_project value="{{ projectname }}" id="{{ projectname }}" {{ selected[projectname] }} onclick="document.forms['projects'].submit()" >
+<tr> <th colspan=2> <input type="radio" name="selected_project" value="{{ projectname }}" id="{{ projectname }}" {{ selected[projectname] }} onclick="document.forms['projects'].submit()" >
 <b> {{ projectname }}</b> </th></tr>
 {% for key,value  in projectDetails.iteritems() %}
 

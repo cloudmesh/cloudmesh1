@@ -4,10 +4,9 @@ sys.path.insert(0, '../')
 
 import os
 import time
-from flask import Flask, render_template, request,redirect
+from flask import Flask, render_template, request
 from flask_flatpages import FlatPages
-import base64,hashlib
-import struct
+
 from cloudmesh.cloudmesh import cloudmesh
 from datetime import datetime
 from cloudmesh.cm_config import cm_config
@@ -241,36 +240,41 @@ def display_project(cloud=None):
     makeCloudDict(dict_t) #from the profile function
     project_names=buildProjectNamesArray(projects)
     
-    cloud = 'india-openstack'
 
-    ############reading from yaml file ############
+
+	############reading from yaml file ############
     config_project = cm_config()
-    configurations= config_project.get(cloud)   # name of default cloud will come here
-    default_project=configurations['default_project']
+    activeClouds=config_project.active()
+    for cloud in activeClouds:
+	if 'openstack' in cloud:
+    		configurations= config_project.cloud(cloud)   # name of default cloud will come here
+    		default_project=configurations['default']['project']
+    		selected=set_default_project(default_project, project_names)
      ############  end of reading from yaml file ############
-   
+
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('projects')
-    selected = set_default_project(default_project, project_names)
+    
 
     if request.method == 'POST':
-        default_project= request.form['selected_project'] 
-        print "default_project is: "+default_project
+	radioSelected={}
+        for cloud in activeClouds:
+		if 'openstack' in cloud:
+			
+        		default_project= request.form['selected_project'] 
+			print default_project
 
-     ############ writing in yaml file ############
+			############ writing in yaml file ############
+    			yamlFile= config_project.get();
+		        yamlFile['clouds'][cloud]['default']['project']=default_project;
+    		        testDict={}
+     			testDict['cloudmesh']=yamlFile;
+    			f = open(filename, "w")
+    			yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+    			f.close()
+			############ end of writing in yaml file ############
+			selected = set_default_project(default_project, project_names)
 
-    yamlFile= config_project.get();
-    yamlFile['india-openstack']['default_project']=default_project;
-    testDict={}
-    testDict['cloudmesh']=yamlFile;
-    f = open(filename, "w")
-    yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    f.close()
-
- ############ end of writing in yaml file ############
-
-    selected = set_default_project(default_project, project_names)
-      
 
     if cloud == None:
         pass
@@ -279,6 +283,7 @@ def display_project(cloud=None):
                                projects=projects,
                                active=active,
                                version=version,selected=selected)
+
 
 ######################################################################
 # ROUTE: VM Login
@@ -379,7 +384,7 @@ def display_flavors(cloud=None):
     # for debugging
     cloud = 'india-openstack'
 
- ############reading from yaml file ############
+    ############reading from yaml file ############
     config_flavor = cm_config()
     activeClouds=config_flavor.active()
     for cloud in activeClouds:
@@ -390,7 +395,7 @@ def display_flavors(cloud=None):
             radioSelected[cloud]=selected
             print radioSelected
             selected={};
-     ############  end of reading from yaml file ############
+    ############  end of reading from yaml file ############
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('flavors')
@@ -400,8 +405,10 @@ def display_flavors(cloud=None):
         radioSelected={}
         for cloud in activeClouds:
             if 'openstack' in cloud:
+                
                 default_flavor= request.form[cloud] 
                 print default_flavor
+                
                 ############ writing in yaml file ############
                 yamlFile= config_flavor.get();
                 yamlFile['clouds'][cloud]['default']['flavor']=default_flavor;
@@ -456,6 +463,7 @@ def buildImageNamesArray(clouds):
 #@app.route('/images/<cloud>/')
 @app.route('/images/', methods=['GET','POST'])
 def display_images(cloud=None):
+    radioSelected={}
     # for debugging
     cloud = 'india-openstack'
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
@@ -464,31 +472,44 @@ def display_images(cloud=None):
     image_names=buildImageNamesArray(clouds.clouds);
 
     ############reading from yaml file ############
+
     config_image = cm_config()
-    configurations= config_image.get(cloud)   # name of default cloud will come here
-    default_image=configurations['default_image']
+    activeClouds=config_image.active()
+    for cloud in activeClouds:
+        if 'openstack' in cloud:
+                configurations= config_image.cloud(cloud)   
+                default_image=configurations['default']['image']
+                selected=set_default_image(default_image, image_names)
+                radioSelected[cloud]=selected
+                #print radioSelected #this dict will contain which image in whch cloud is checked
+                selected={};
+
      ############  end of reading from yaml file ############
 
-   # default_image=image_names[0];
-    selected = set_default_image(default_image, image_names)
 
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
+    active = make_active('images')
     if request.method == 'POST':
-        default_image= request.form['selected-image'] 
-    print default_image
+        radioSelected={}
+        for cloud in activeClouds:
+                if 'openstack' in cloud:
+                        
+                        default_image= request.form[cloud] 
+                        print default_image
 
-############ writing in yaml file ############
-
-    yamlFile= config_image.get();
-    yamlFile['india-openstack']['default_image']=default_image;
-    testDict={}
-    testDict['cloudmesh']=yamlFile;
-    f = open(filename, "w")
-    yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-    f.close()
-
- ############ end of writing in yaml file ############
-
-    selected = set_default_image(default_image, image_names)
+                        ############ writing in yaml file ############
+                        yamlFile= config_image.get();
+                        yamlFile['clouds'][cloud]['default']['image']=default_image;
+                        testDict={}
+                        testDict['cloudmesh']=yamlFile;
+                        f = open(filename, "w")
+                        yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
+                        f.close()
+                        ############ end of writing in yaml file ############
+                        selected = set_default_image(default_image, image_names)
+                        radioSelected[cloud]=selected
+                        print radioSelected
+                        selected={};
 
     if cloud == None:
         pass
@@ -497,9 +518,8 @@ def display_images(cloud=None):
                                updated=time_now,
                                clouds=clouds.clouds,
                                active=active,
-                               version=version,selected=selected)
+                               version=version,radioSelected=radioSelected)
     
-
 
 ######################################################################
 # ROUTE: TEST 
@@ -604,41 +624,44 @@ def makeCloudDict(dict_t):
 ########### end of variables for display of projects.html###########################
     for key, value in dict_t.iteritems():
         # BIG Bug: this should be changed based on a test of type and not the name of the cloud
-        # IS THIS STILL WORKING WITH THE clouds: ?
+        # IS THIS STILL WORKING WITH THE clouds: ?...it works now-shweta
         
-        if "india-openstack" in key:
+    if "clouds" in key:
+		for cloudKey, cloudValue in value.iteritems():
 
-            for innerKey, innerValue in value.iteritems():
-                innerKey = innerKey.replace("OS_", "")
-                innerKey = innerKey.replace("cm_", "")
-                cloudSubDict[innerKey.upper()] = innerValue
-            cloudDict[key.upper()] = cloudSubDict
-            cloudSubDict = {}
-            print (cloudDict)
-        if "india-eucalyptus" in key:
-            for innerKey, innerValue in value.iteritems():
-                if "fg" in innerKey:
-                    for innermostKey, innermostValue in innerValue.iteritems():
-                        project_content[innermostKey]=innermostValue
-                        innermostKey = innermostKey.replace("EC2_", "")
-                        cloudSubsubDict[innermostKey.upper()] = innermostValue
-                    cloudDict[innerKey.upper()] = cloudSubsubDict
-                    cloudSubsubDict = {}
-                    projects[innerKey]=project_content;
-                    project_content={};
+        		if "india-openstack" in cloudKey:
 
-                else:
-                    innerKey = innerKey.replace("EC2_", "")
-                    cloudSubDict[innerKey.upper()] = innerValue
-            cloudDict[key.upper()] = cloudSubDict
-            cloudSubDict = {}
+            			for innerKey, innerValue in cloudValue.iteritems():
+                			innerKey = innerKey.replace("OS_", "")
+                			innerKey = innerKey.replace("cm_", "")
+                			cloudSubDict[innerKey.upper()] = innerValue
+            			cloudDict[key.upper()] = cloudSubDict
+            			cloudSubDict = {}
+            			#print (cloudDict)
+        		if "india-eucalyptus" in cloudKey:
+            			for innerKey, innerValue in cloudValue.iteritems():
+                			if "fg" in innerKey:
+                    				for innermostKey, innermostValue in innerValue.iteritems():
+                        				project_content[innermostKey]=innermostValue
+                        				innermostKey = innermostKey.replace("EC2_", "")
+                        				cloudSubsubDict[innermostKey.upper()] = innermostValue
+                    				cloudDict[innerKey.upper()] = cloudSubsubDict
+                    				cloudSubsubDict = {}
+                    				projects[innerKey]=project_content;
+                    				project_content={};
 
-        if "azure" in key:
-            cloudSubDict = {}
-            for innerKey, innerValue in value.iteritems():
-                cloudSubDict[innerKey.upper()] = innerValue
-            cloudDict[key.upper()] = cloudSubDict
-            cloudSubDict = {}
+                			else:
+                    				innerKey = innerKey.replace("EC2_", "")
+                    				cloudSubDict[innerKey.upper()] = innerValue
+            				cloudDict[key.upper()] = cloudSubDict
+            				cloudSubDict = {}
+
+        		if "azure" in cloudKey:
+            			cloudSubDict = {}
+            			for innerKey, innerValue in value.iteritems():
+                			cloudSubDict[innerKey.upper()] = innerValue
+            			cloudDict[key.upper()] = cloudSubDict
+            			cloudSubDict = {}
     # print (cloudDict);
 
     return cloudDict
