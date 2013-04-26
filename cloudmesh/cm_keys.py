@@ -1,6 +1,6 @@
 class cm_keys:
 
-    def add(self, line)
+    def add(self, line, name=None)
         
 
     def names(self):
