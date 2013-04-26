@@ -17,6 +17,11 @@ except:
     print "xterm not suppported"
 import yaml
 
+######################################################################
+# setting up reading path for the use of yaml
+######################################################################
+
+with_write = False
 
 ######################################################################
 # setting up reading path for the use of yaml
@@ -256,11 +261,6 @@ def display_project(cloud=None):
                 yamlFile= config_project.get();
                 yamlFile['clouds'][cloud]['default']['project']=default_project;
 		write_yaml(filename,yamlFile)
-                #testDict={}
-                #testDict['cloudmesh']=yamlFile;
-                #f = open(filename, "w")
-                #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-                #f.close()
                 ############ end of writing in yaml file ############
                 selected = set_default_project(default_project, project_names)
 
@@ -401,11 +401,6 @@ def display_flavors(cloud=None):
                 yamlFile= config_flavor.get();
                 yamlFile['clouds'][cloud]['default']['flavor']=default_flavor;
 		write_yaml(filename,yamlFile)
-                #testDict={}
-                #testDict['cloudmesh']=yamlFile;
-                #f = open(filename, "w")
-                #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-                #f.close()
                 ############ end of writing in yaml file ############
                 selected = set_default_flavor(default_flavor, flavor_names)
                 radioSelected[cloud]=selected
@@ -490,11 +485,7 @@ def display_images(cloud=None):
                         yamlFile= config_image.get();
                         yamlFile['clouds'][cloud]['default']['image']=default_image;
 			write_yaml(filename, yamlFile)
-                        #testDict={}
-                        #testDict['cloudmesh']=yamlFile;
-                        #f = open(filename, "w")
-                        #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-                        #f.close()
+
                         ############ end of writing in yaml file ############
                         selected = set_default_image(default_image, image_names)
                         radioSelected[cloud]=selected
@@ -696,7 +687,7 @@ def page(path):
 
 @app.route('/keys/',methods=['GET','POST'])
 def managekeys():
-    #active = make_active('profile')
+    active = make_active('profile')
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     
@@ -749,21 +740,11 @@ def managekeys():
                 defaultkey = yamlFile['keys']['default']
                 haskeys = True
 	    write_yaml(filename, yamlFile)
-            #testDict={}
-            #testDict['cloudmesh']=yamlFile;
-            #f = open(filename, "w")
-            #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-            #f.close()
             msg = 'Key added successfully'
     elif request.method == 'POST' :
             yamlFile['keys']['default'] = request.form['selectkeys']
             defaultkey = yamlFile['keys']['default']
 	    write_yaml(filename, yamlFile)
-            #testDict={}
-            #testDict['cloudmesh']=yamlFile;
-            #f = open(filename, "w")
-            #yaml.safe_dump(testDict, f, default_flow_style=False, indent=4)
-            #f.close()
     return render_template('keys.html',
                            haskeys=haskeys,
                            active=active,
@@ -773,12 +754,13 @@ def managekeys():
                            show = msg)
                         
 def write_yaml(filename, content_dict):
-    d = {}
-    d['cloudmesh']=content_dict;
-    print "WRITE YAML", d
-    f = open(filename, "w")
-    yaml.safe_dump(d, f, default_flow_style=False, indent=4)
-    f.close()
+    if with_write:
+        d = {}
+	d['cloudmesh']=content_dict;
+	print "WRITE YAML", d
+	f = open(filename, "w")
+	yaml.safe_dump(d, f, default_flow_style=False, indent=4)
+	f.close()
 
 def validateKey(type,file):
     if type.lower() == "file":

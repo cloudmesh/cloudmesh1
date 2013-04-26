@@ -13,25 +13,25 @@
 
 <table>
 <tr><td colspan="3"><b> Contact </b></td> </tr>  
-<tr><td>Firstname</td><td>{{ person.firstname }}</td><td></td></tr>
-<tr><td>Lastname</td><td>{{ person.lastname }}</td><td></td></tr>
-<tr><td>Phone</td><td>{{ person.phone }}</td><td></td></tr>
-<tr><td>e-mail</td><td>{{ person['e-mail'] }}</td><td></td></tr>
-<tr><td>Address</td><td>{{ address|replace("\n", "<br />")|safe }} </td><td></td></tr>
-<tr><td colspan="2"><b> Prefix </b></td> <td>{{ image_button ("right", "030_pencil", "/prefix/") }}</td></tr>  
-<tr><td>Prefix</td><td>{{ config.prefix }}</td><td></td></tr>
-<tr><td colspan="2"><b> Projects </b></td> <td>{{ image_button ("right", "030_pencil", "/projects/") }}</td></tr>  
-<tr><td>Default</td><td>{{ config.projects.default }}</td><td></td></tr>
-<tr><td>Projects</td><td>{{ config.projects.active }}</td><td></td></tr>
-<tr><td>Completed</td><td>{{ config.projects.completed }}</td><td></td></tr>    
-<tr><td colspan="2"><b> Clouds </b></td> <td></td></tr>
-<tr><td>Default</td><td>{{ config.default }}</td><td>edit</td></tr>
-<tr><td>Active</td><td>{{ active_clouds }}</td><td>edit</td></tr>
-<tr><td>Available</td><td>{{ config.clouds.keys() }}</td><td></td></tr>
-<tr><td colspan="2"><b> Keys </b></td> <td>{{ image_button ("right", "030_pencil", "/keys/") }} </td></tr>
+<tr><td></td><td>Firstname</td><td>{{ person.firstname }}</td><td></td></tr>
+<tr><td></td><td>Lastname</td><td>{{ person.lastname }}</td><td></td></tr>
+<tr><td></td><td>Phone</td><td>{{ person.phone }}</td><td></td></tr>
+<tr><td></td><td>e-mail</td><td>{{ person['e-mail'] }}</td><td></td></tr>
+<tr><td></td><td>Address</td><td>{{ address|replace("\n", "<br />")|safe }} </td><td></td></tr>
+<tr><td>{{ image_button ("right", "030_pencil", "/prefix/") }}</td><td colspan="2"><b> Prefix </b></td> <td></td></tr>  
+<tr><td></td><td>Prefix</td><td>{{ config.prefix }}</td><td></td></tr>
+<tr><td>{{ image_button ("right", "030_pencil", "/projects/") }}</td><td colspan="2"><b> Projects </b></td> <td></td></tr>  
+<tr><td></td><td>Default</td><td>{{ config.projects.default }}</td><td></td></tr>
+<tr><td></td><td>Projects</td><td>{{ config.projects.active }}</td><td></td></tr>
+<tr><td></td><td>Completed</td><td>{{ config.projects.completed }}</td><td></td></tr>    
+<tr><td></td><td colspan="2"><b> Clouds </b></td> <td></td></tr>
+<tr><td></td><td>Default</td><td>{{ config.default }}</td><td>edit</td></tr>
+<tr><td></td><td>Active</td><td>{{ active_clouds }}</td><td>edit</td></tr>
+<tr><td></td><td>Available</td><td>{{ config.clouds.keys() }}</td><td></td></tr>
+<tr><td>{{ image_button ("right", "030_pencil", "/keys/") }}</td><td colspan="2"><b> Keys </b></td> <td> </td></tr>
 {% if config.has_key('keys') and config['keys']['keylist'].has_key(config['keys']['default']) %}
-<tr><td>Default</td><td>{{ config['keys']['keylist'][config['keys']['default']] }}</td><td></td></tr>
-<tr><td>List</td><td>{{ config['keys']['keylist']}}</td><td></td></tr>
+<tr><td></td><td>Default</td><td>{{ config['keys']['keylist'][config['keys']['default']] }}</td><td></td></tr>
+<tr><td></td><td>List</td><td>{{ config['keys']['keylist']}}</td><td></td></tr>
 {% endif %}
 </table>
 
