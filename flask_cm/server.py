@@ -232,7 +232,7 @@ def buildProjectNamesArray(projects):
 @app.route('/projects/', methods=['GET','POST'])
 def display_project(cloud=None):
     global default_project;
-    #from the profile function
+    
 
     ############reading from yaml file ############
     config_project = cm_config()
@@ -242,7 +242,7 @@ def display_project(cloud=None):
     activeClouds=config_project.active()
     for cloud in activeClouds:
         if 'openstack' in cloud:
-            configurations= config_project.cloud(cloud)   # name of default cloud will come here
+            configurations= config_project.cloud(cloud) 
 
             print configurations
             default_project=configurations['default']['project']
@@ -261,6 +261,7 @@ def display_project(cloud=None):
                 ############ writing in yaml file ############
                 yamlFile= config_project.get();
                 yamlFile['clouds'][cloud]['default']['project']=default_project;
+                yamlFile['projects']['default']=default_project
                 write_yaml(filename,yamlFile)
                 ############ end of writing in yaml file ############
                 selected = set_default_project(default_project, project_names)
