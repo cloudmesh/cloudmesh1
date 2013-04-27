@@ -917,7 +917,7 @@ def validateKey(type,file):
 def lineToFingerprint(line,type):
     if type.lower() == "file":
         return line
-    key_string, comment = line.split()
+    type,key_string, comment = line.split()
     key = base64.decodestring(key_string)
     fp_plain = hashlib.md5(key).hexdigest()
     return ':'.join(a+b for a,b in zip(fp_plain[::2], fp_plain[1::2]))
