@@ -13,7 +13,6 @@
 {% if haskeys %}
 <tr><th>Select</th>
    <th>Key Name</th>
-   <th>Key Type</th>
    <th>Path/Fingerprint</th>
    <th></th>
 </tr>
@@ -29,7 +28,6 @@
 				  onclick="document.forms['selectKeyForm'].submit()"> 
 				    </td>
 			<td>{{name}}</td>
-			<td>{{type}}</td>
 			<td>{{fun_fprint(value)}}</td>
 			<td><a href="delete/{{name}}/">
 			  <img
