@@ -91,8 +91,8 @@ class Test_cloudmesh:
 
     def test08_fingerprint(self):
         HEADING("FINGERPRINT")
-        print "LLL", self.keys.fingerprint("gregor")
-        print "LLL", self.keys.fingerprint("default") 
+        print self.keys.fingerprint("gregor")
+        print self.keys.fingerprint("default") 
 
 
     

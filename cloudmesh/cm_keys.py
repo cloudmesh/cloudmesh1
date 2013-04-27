@@ -62,14 +62,11 @@ class cm_keys:
     def __getitem__(self,name):
 
         key_type = self.type(name)
-        print "TYPE", key_type
         if key_type == "file":
             filename = self.config.data["cloudmesh"]["keys"]["keylist"][name]
-            print "FILENAME", filename
             value = self._get_key_from_file(filename)
         else:
             value = self._getvalue(name)
-        print "VALUE", value
         return value
             
     def __setitem__(self, name, value):
@@ -118,7 +115,5 @@ class cm_keys:
     
     def fingerprint(self, name):
         value = self.__getitem__(name)
-        print "XXXXXX", value
         t, keystring, comment = value.split()
-        print keystring
         return key_fingerprint(keystring)
