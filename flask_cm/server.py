@@ -694,6 +694,7 @@ def profile():
                                active_clouds=clouds.active(),
                                active=active,
                                config=dict_t,
+                               fun_print = lineToFingerprint,
                                version=version)
 
 
