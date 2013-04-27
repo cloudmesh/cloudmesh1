@@ -764,7 +764,6 @@ def managekeys():
 @app.route('/keys/delete/<name>/')
 def deletekey(name):
     active = make_active('profile')
-    print ">>>>> DELT", name
     config = cm_config()
     yamlFile= config.get()
     keydict = yamlFile['keys']

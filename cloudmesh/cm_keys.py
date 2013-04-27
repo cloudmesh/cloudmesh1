@@ -76,6 +76,22 @@ class cm_keys:
             key = name
         self.config.data["cloudmesh"]["keys"]["keylist"][key] = value
 
+    def del(self, name):
+        """ not tested"
+        if name == 'default':
+            key = self.config.data["cloudmesh"]["keys"]["default"]
+            newdefault
+        else:
+            key = name
+            
+        del self.config.data["cloudmesh"]["keys"]["keylist"][key]
+
+        if newdefault:
+            if len(self.config.data["cloudmesh"]["keys"]["keylist"]) > 0:
+                default = self.config.data["cloudmesh"]["keys"]["keylist"][0]
+        else:
+            default = None
+            
     def _path_expand(self,text):
         """ returns a string with expanded variavble """
         template = Template(text)
@@ -93,12 +109,6 @@ class cm_keys:
         """sets the default key"""
         return self.config.userkeys('default')
         
-    def addkey(self, line, name=None):
-        """adds a key with a given name. If no name can be derived from line a unique name is chosen automatically"""
-
-    def addkeyfile(self, filename):
-        """adds a key with a given name. If no name can be derived from line a unique name is chosen automatically"""
-
     def names(self):
         """returns all key names in an array"""
         return self.config.data["cloudmesh"]["keys"]["keylist"].keys()
