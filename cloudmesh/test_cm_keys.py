@@ -26,58 +26,72 @@ def HEADING(txt):
 
 class Test_cloudmesh:
 
-
-    filename = "credentials-example.yaml"
     #filename = None
+    #filename = "credentials-example-keys.yaml"
+    filename = "$HOME/.futuregrid/cloudmesh-new.yaml"
+
 
     def setup(self):
-        self.keys = cm_keys()
+        self.keys = cm_keys(self.filename)
 
     def tearDown(self):
         pass
 
+    def test00_file(self):
+        HEADING("00 FILE")
+        try:
+            self.keys = cm_keys("wrong file")
+        except:
+            pass
+            
+
     def test01_print(self):
-        #print self.keys
+        HEADING("01 PRINT")
+        print self.keys
         pass
     
-    def test01_names(self):
-        HEADING("NAMES")
+    def test02_names(self):
+        HEADING("02 NAMES")
         print self.keys.names()
         
-    def test02_default(self):
-        HEADING("DEFAULT")
+    def test03_default(self):
+        HEADING("03 DEFAULT")
         print self.keys.default()
 
-    def test03_getvalue(self):
-        HEADING("GET VALUE")
+    def test04_getvalue(self):
+        HEADING("04 GET VALUE")
         print self.keys._getvalue("gregor")
         print self.keys._getvalue("default")
         print self.keys._getvalue("keys")
 
-    def test03_set(self):
-        HEADING("SET DEFAULT")
+    def test05_set(self):
+        HEADING("05 SET DEFAULT")
         self.keys.setdefault("gregor")
         print self.keys.default()
 
-    def test04_get(self):
-        HEADING("GET GREGOR")
+    def test06_get(self):
+        HEADING("06 GET GREGOR")
         print self.keys["gregor"]
 
-    def test05_get(self):
-        HEADING("GET")
+    def test07_get(self):
+        HEADING("07 GET")
         print self.keys["default"]
         print self.keys["gregor"]
-        
+
     def test06_set(self):
-        HEADING("SET HELLO WORLD")
-        print self.keys["keys"]
-        
-        self.keys["default"] = "hello"
-        self.keys["gregor"] = "world"
+        HEADING("06 SET HELLO WORLD")
 
         print self.keys["keys"]
+
+        self.keys["gregor"] = "~/.ssh/id_rsa.pub"
+        self.keys["hello"] = "~/.ssh/id_rsa"
         
-        assert (self.keys._getvalue("default") == "hello") and (self.keys._getvalue("gregor") == "world")
+        print self.keys["keys"]
+
+        self.keys["default"] = "hello"
+        print self.keys["keys"]
+                
+        #assert (self.keys._getvalue("default") == "hello") and (self.keys._getvalue("gregor") == "world")
 
     def test07_type(self):
         HEADING("TYPE")
@@ -95,4 +109,4 @@ class Test_cloudmesh:
         print self.keys.fingerprint("default") 
 
 
-    
+
