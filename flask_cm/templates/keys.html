@@ -18,7 +18,7 @@
    <th></th>
 </tr>
 	{% for name, key in keylist.iteritems() %}
-		{% set (type,sep,value) = key.partition(" ") %}
+		{% set value = key %}
 		{% if name == defaultkey %}
 			{% set checked = 'checked' %}
 		{% else %}
@@ -30,7 +30,7 @@
 				    </td>
 			<td>{{name}}</td>
 			<td>{{type}}</td>
-			<td>{{fun_fprint(value,type)}}</td>
+			<td>{{fun_fprint(value)}}</td>
 			<td><a href="delete/{{name}}/">
 			  <img
 			  src="/static/img/icons/png/glyphicons_016_bin.png"
@@ -56,8 +56,6 @@
 <table>
 <tr><th>Attribute</th><th>Value</th></tr>
 <tr><td>Key File or Path : </td><td><textarea name = "keyorpath" rows="2" cols="30"></textarea></td></tr>
-<tr><td>Type : </td><td><input type="radio" name="type" value="String">Key String<br>
-<input type="radio" name="type" value="File">File Path</td></tr>
 <tr><td>Key Name : </td><td><input name = "keyname" type="text" /></td> </tr>
 <tr><td colspan = "2" ><input type="submit" name = "addkey" value="Add"></td></tr>
 </table>

@@ -48,6 +48,7 @@ version = "0.7.2"
 
 clouds = cloudmesh()
 clouds.refresh()
+clouds.refresh_user_id()
 
 prefix = clouds.prefix()
 
@@ -824,10 +825,14 @@ def managekeys():
        keylist = config.userkeys()['keylist']
 
     if request.method == 'POST' and request.form.has_key('keyname'):
-        type  = request.form.get('type','None')
         keyname = request.form['keyname']
         fileorpath = request.form['keyorpath']
-        if type.lower() == "file" :
+        if not 'ssh-rsa' in fileorpath:
+            type = 'file'
+        else : 
+            type = 'keystring'
+        
+        if type == "file" :
             fileorpath = os.path.expanduser(fileorpath)
         if keyname is "" or type is 'None' or fileorpath is "":
             error = True
@@ -843,9 +848,9 @@ def managekeys():
             msg = "Key name already exists"
         else :
             if haskeys :
-                keydict['keylist'][keyname] = type + " " + fileorpath
+                keydict['keylist'][keyname] = fileorpath
             else :
-                yamlFile['keys'] = {'default':keyname ,'keylist':{keyname:type + " " + fileorpath}}
+                yamlFile['keys'] = {'default':keyname ,'keylist':{keyname: fileorpath}}
                 keylist = yamlFile['keys']['keylist']
                 defaultkey = yamlFile['keys']['default']
                 haskeys = True
@@ -914,7 +919,11 @@ def validateKey(type,file):
 
 
 
-def lineToFingerprint(line,type):
+def lineToFingerprint(line,type=None):
+    if not 'ssh-rsa' in line:
+            type = 'file'
+    else : 
+            type = 'keystring'
     if type.lower() == "file":
         return line
     type,key_string, comment = line.split()

@@ -225,8 +225,6 @@ class cloudmesh:
                 cloud_type = self.clouds[name]['cm_type']
                 provider = self.cloud_provider(cloud_type)
                 cloud = provider(name)
-                if not self.clouds[name].has_key('user_id'):
-                    self.clouds[name]['user_id'] = cloud.find_user_id()
                 print "Refresh cloud", name
                 for type in types:
                     print "    Refresh ", type
@@ -238,7 +236,20 @@ class cloudmesh:
                 
         except Exception, e:
             print e
-        
+    
+    def refresh_user_id(self, names=["all"]):
+        if names == ['all'] or names == None:
+            names = self.clouds.keys()        
+        try:
+            for name in names:
+                cloud_type = self.clouds[name]['cm_type']
+                provider = self.cloud_provider(cloud_type)
+                cloud = provider(name)
+                if not self.clouds[name].has_key('user_id'):
+                    self.clouds[name]['user_id'] = cloud.find_user_id()
+        except Exception, e:
+            print e
+    
     def add(self, name, type):
         try:
             self.clouds[name]
