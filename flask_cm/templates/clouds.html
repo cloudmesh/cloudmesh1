@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}g
+{% block content %}
+
+<h1> Clouds </h1>
+
+<form name="clouds" action="" method="POST">
+<table>
+{% for cloud in clouds %}
+
+
+<tr> <th> <input type="checkbox" name="clouds" value="{{ cloud }}" id="{{ cloud }}" {{ selected[cloud] }} >
+<b> {{ cloud }}</b> </th>
+<th>
+
+<select name ="{{ cloud }}">
+  <option  value="None">None</option>
+{% for project in projects %}
+  <option  value="{{ project }}" {{ projectSelected[cloud][project] }}>{{ project }}</option>
+{% endfor %}
+</select>
+
+</th></tr>
+
+
+
+{% endfor %}
+</table>
+<input type='submit' value="SAVE">
+</form>
+ 
+{% endblock %}

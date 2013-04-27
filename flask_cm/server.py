@@ -74,7 +74,8 @@ def make_active(name):
               'profile': "",
               'vm_info': "",
               'projects': "",
-              'updatekeypair':""}
+              'updatekeypair':"",
+              'clouds':""}
     active[name] = 'active'
     return active
 
@@ -262,13 +263,13 @@ def table():
 ######################################################################
 # ROUTE: PROJECTS
 ######################################################################
-def set_default_project(name, project_names):
+def set_default_project(name, project_names, type):
     global default_project;
     default_project = name
     selected = {}
     for name in project_names:
         selected[name] = ""
-    selected[default_project] = 'checked'
+    selected[default_project] = type
     print selected
     return selected
 
@@ -281,7 +282,7 @@ def buildProjectNamesArray(projects):
 @app.route('/projects/', methods=['GET','POST'])
 def display_project(cloud=None):
     global default_project;
-    #from the profile function
+    
 
     ############reading from yaml file ############
     config_project = cm_config()
@@ -291,11 +292,11 @@ def display_project(cloud=None):
     activeClouds=config_project.active()
     for cloud in activeClouds:
         if 'openstack' in cloud:
-            configurations= config_project.cloud(cloud)   # name of default cloud will come here
+            configurations= config_project.cloud(cloud) 
 
             print configurations
             default_project=configurations['default']['project']
-            selected=set_default_project(default_project, project_names)
+            selected=set_default_project(default_project, project_names,'checked')
      ############  end of reading from yaml file ############
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
@@ -310,9 +311,10 @@ def display_project(cloud=None):
                 ############ writing in yaml file ############
                 yamlFile= config_project.get();
                 yamlFile['clouds'][cloud]['default']['project']=default_project;
+                yamlFile['projects']['default']=default_project
                 write_yaml(filename,yamlFile)
                 ############ end of writing in yaml file ############
-                selected = set_default_project(default_project, project_names)
+                selected = set_default_project(default_project, project_names,'checked')
 
 
     if cloud == None:
@@ -426,7 +428,7 @@ def display_flavors(cloud=None):
     activeClouds=config_flavor.active()
     for cloud in activeClouds:
         if 'openstack' in cloud:
-            configurations= config_flavor.cloud(cloud)   # name of default cloud will come here
+            configurations= config_flavor.cloud(cloud)   
             default_flavor=configurations['default']['flavor']
             selected=set_default_flavor(default_flavor, flavor_names)
             radioSelected[cloud]=selected
@@ -470,6 +472,64 @@ def display_flavors(cloud=None):
 
 
 ######################################################################
+# ROUTE: CLOUDS
+######################################################################
+
+def set_default_clouds(activeClouds, availableClouds):
+    selected = {}
+    for name in availableClouds:
+        selected[name] = ""
+        for activeCloud in activeClouds:
+            if name in activeCloud:
+                selected[name] = 'checked'
+    return selected
+
+
+@app.route('/clouds/', methods=['GET','POST'])
+def display_clouds():
+    projectSelected={}
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M") 
+    active = make_active('clouds')
+    config_cloud = cm_config()
+    activeClouds=config_cloud.active()
+    availableClouds=config_cloud.clouds()
+    activeProjects=config_cloud.projects('active')
+    selected=set_default_clouds(activeClouds, availableClouds)
+    project_names=buildProjectNamesArray(activeProjects)
+
+    for availableCloud in availableClouds:
+        projectSelected[availableCloud]=set_default_project("", project_names,'selected');
+        for cloud in activeClouds:
+            if 'openstack' in cloud:
+                configurations= config_cloud.cloud(cloud) 
+                default_project=configurations['default']['project']
+                projectSelected[cloud]=set_default_project(default_project, project_names,'selected')
+
+    if request.method == 'POST':
+        cloudNames = request.form.getlist("clouds")
+        yamlFile=config_cloud.get()
+        selected=set_default_clouds(cloudNames, availableClouds)
+        for cloudName in cloudNames:
+            projectName = request.form[cloudName]
+            yamlFile['clouds'][cloudName]['default']['project']=projectName;
+        yamlFile['active']=cloudNames
+        write_yaml(filename, yamlFile)
+        
+        for availableCloud in availableClouds:
+            projectSelected[availableCloud]=set_default_project("", project_names,'selected');
+            for cloudName in cloudNames:
+                if 'openstack' in cloudName:
+                    configurations= config_cloud.cloud(cloudName) 
+                    default_project=configurations['default']['project']
+                    projectSelected[cloudName]=set_default_project(default_project, project_names,'selected')
+    
+    return render_template('clouds.html',
+                               updated=time_now,
+                               clouds=availableClouds,
+                               active=active,
+                               version=version,projects=activeProjects,selected=selected,projectSelected=projectSelected)
+
+######################################################################
 # ROUTE: IMAGES
 ######################################################################
 
@@ -480,7 +540,7 @@ def set_default_image(name, image_names):
     for name in image_names:
         selected[name] = ""
     selected[default_image] = 'checked'
-    print default_image;
+   # print default_image;
     return selected
         
 default_image = "ktanaka/ubuntu1204-ramdisk.manifest.xml"
@@ -495,10 +555,8 @@ def buildImageNamesArray(clouds):
 
 #@app.route('/images/<cloud>/')
 @app.route('/images/', methods=['GET','POST'])
-def display_images(cloud=None):
+def display_images():
     radioSelected={}
-    # for debugging
-    cloud = 'india-openstack'
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('images')
 
@@ -519,16 +577,13 @@ def display_images(cloud=None):
 
      ############  end of reading from yaml file ############
 
-
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
-    active = make_active('images')
     if request.method == 'POST':
         radioSelected={}
         for cloud in activeClouds:
                 if 'openstack' in cloud:
                         
                         default_image= request.form[cloud] 
-                        print default_image
+                        #print default_image
 
                         ############ writing in yaml file ############
                         yamlFile= config_image.get();
@@ -538,13 +593,10 @@ def display_images(cloud=None):
                         ############ end of writing in yaml file ############
                         selected = set_default_image(default_image, image_names)
                         radioSelected[cloud]=selected
-                        print radioSelected
+                        #print radioSelected
                         selected={};
 
-    if cloud == None:
-        pass
-    else:
-        return render_template('images.html',
+    return render_template('images.html',
                                updated=time_now,
                                clouds=clouds.clouds,
                                active=active,
@@ -576,14 +628,14 @@ def gregor():
     config_active = cm_config()
     dict_t = config_active.get('active')
     cloud_names = dict_t;
-    print cloud_names;
+    #print cloud_names;
     #end of additon by shweta
     #cloud_names = ["india-openstack", "sierra-openstack"] code written by Gregor commented by shweta 
     selected = set_default_cloud(default_cloud, cloud_names)
     
     if request.method == 'POST':
         default_cloud= request.form['selected_cloud']
-    print default_cloud
+    #print default_cloud
 
     selected = set_default_cloud(default_cloud, cloud_names)
 
@@ -615,7 +667,7 @@ def profile():
         config = cm_config()
         dict_t = config.get()
         person = dict_t['profile']
-        print person
+        #print person
         makeCloudDict(dict_t)
 
 
@@ -813,7 +865,16 @@ def managekeys():
 @app.route('/keys/delete/<name>/')
 def deletekey(name):
     active = make_active('profile')
-    print ">>>>> DELT", name
+
+    """
+    keys = cm_keys()
+    defaultkey = keys["default"]
+    del keys.del(name)
+    write_yaml(filename, yamlFile)
+    return redirect("/keys/")
+
+    replaces code bellow, but does not include dealing if all keys have been deleted, this should be added to cm_keys
+    """
     config = cm_config()
     yamlFile= config.get()
     keydict = yamlFile['keys']
@@ -863,7 +924,7 @@ def write_yaml(filename, content_dict):
     if with_write:
         d = {}
         d['cloudmesh']=content_dict;
-        print "WRITE YAML", d
+        print "WRITE YAML"
         f = open(filename, "w")
         yaml.safe_dump(d, f, default_flow_style=False, indent=4)
         f.close()
