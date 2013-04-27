@@ -56,11 +56,11 @@ function killall(cloud) {
       {{ image_button ("none", "044_keys", "/updatekeypair/" + name + "/") }}
       &nbsp; &nbsp;
       <form name = "filter" action = "/cm/filter/{{name}}/" method="post">
-      <input type="checkbox" name="ACTIVE" value="select"> ACTIVE &nbsp;
-      <input type="checkbox" name="STOPPED" value="select"> STOPPED &nbsp;
-      <input type="checkbox" name="ERROR" value="select"> ERROR &nbsp;
-      <input type="checkbox" name="SHUTOFF" value="select"> SHUTOFF &nbsp;
-      <input type="checkbox" name="ME" value="select"> ME &nbsp;
+      <input type="checkbox" name="ACTIVE" value="select" {{v(['table',name,'ACTIVE'])}}> ACTIVE &nbsp;
+      <input type="checkbox" name="STOPPED" value="select" {{v(['table',name,'STOPPED'])}}> STOPPED &nbsp;
+      <input type="checkbox" name="ERROR" value="select" {{v(['table',name,'ERROR'])}}> ERROR &nbsp;
+      <input type="checkbox" name="SHUTOFF" value="select" {{v(['table',name,'SHUTOFF'])}}> SHUTOFF &nbsp;
+      <input type="checkbox" name="ME" value="select" {{v(['table',name,'ME'])}}> ME &nbsp;
       <input type="submit" value="Filter">
       </form>
     </th>

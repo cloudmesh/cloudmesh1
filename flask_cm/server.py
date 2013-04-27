@@ -23,6 +23,24 @@ import yaml
 
 with_write = True
 
+
+######################################################################
+# setting up view state and way to access viewstate
+######################################################################
+view_state  = {'table':{}}
+
+
+def v(names):
+    dict = view_state  
+    print view_state  
+    try:
+        for name in names:
+            dict = dict[name]
+        return dict
+    except :
+        return ""
+
+
 ######################################################################
 # setting up reading path for the use of yaml
 ######################################################################
@@ -77,6 +95,7 @@ def make_active(name):
               'projects': "",
               'updatekeypair':"",
               'clouds':""}
+    
     active[name] = 'active'
     return active
 
@@ -122,7 +141,20 @@ def filter(cloud):
         ERROR = 'ERROR'in request.form
         SHUTOFF = 'SHUTOFF'in request.form
         ME = 'ME'in request.form
+        view_state['table'][cloud] = {}
+        if ACTIVE:
+            view_state['table'][cloud]['ACTIVE'] = 'checked'
+        if STOPPED:
+            view_state['table'][cloud]['STOPPED'] = 'checked'
+        if ERROR:
+            view_state['table'][cloud]['ERROR'] = 'checked'
+        if SHUTOFF:
+            view_state['table'][cloud]['SHUTOFF'] = 'checked'
+        if ME:
+            view_state['table'][cloud]['ME'] = 'checked'
+        
         clouds.refresh(names = [cloud])
+        
         if(ACTIVE or STOPPED or ERROR or SHUTOFF):
             do_status_filter = True
         
@@ -241,7 +273,6 @@ def load():
 
 @app.route('/table/')
 def table():
-
     active_clouds = clouds.active()
 
     active = make_active('table')
@@ -257,6 +288,7 @@ def table():
                            pages=pages,
                            active=active,
                            version=version,
+                           v = v,
                            dir = dir)
 
 
