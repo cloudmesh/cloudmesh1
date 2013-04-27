@@ -764,6 +764,16 @@ def managekeys():
 @app.route('/keys/delete/<name>/')
 def deletekey(name):
     active = make_active('profile')
+
+    """
+    keys = cm_keys()
+    defaultkey = keys["default"]
+    del keys.del(name)
+    write_yaml(filename, yamlFile)
+    return redirect("/keys/")
+
+    replaces code bellow, but does not include dealing if all keys have been deleted, this should be added to cm_keys
+    """
     config = cm_config()
     yamlFile= config.get()
     keydict = yamlFile['keys']
