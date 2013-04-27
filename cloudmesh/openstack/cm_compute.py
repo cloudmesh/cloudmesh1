@@ -240,7 +240,8 @@ class openstack(BaseCloud):
         self.label = label
         self.config(label)
         self.connect()
-
+        
+        
     def clear(self):
         """
         clears the data of this openstack instance, a new connection

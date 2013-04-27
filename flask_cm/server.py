@@ -104,6 +104,40 @@ def refresh(cloud=None, server=None):
     return table()
 
 ######################################################################
+# ROUTE: Filter
+######################################################################
+
+
+@app.route('/cm/filter/<cloud>/',methods=['GET','POST'])
+def filter(cloud):
+    print "-> filter", cloud
+    filterIds = []
+    do_status_filter = False
+    if request.method == 'POST':
+        
+        ACTIVE = 'ACTIVE' in request.form
+        STOPPED = 'STOPPED'in request.form
+        ERROR = 'ERROR'in request.form
+        SHUTOFF = 'SHUTOFF'in request.form
+        ME = 'ME'in request.form
+        clouds.refresh(names = [cloud])
+        if(ACTIVE or STOPPED or ERROR or SHUTOFF):
+            do_status_filter = True
+        
+        if(ACTIVE or STOPPED or ERROR or SHUTOFF or ME) :
+            f_cloud = clouds.clouds[cloud]
+            for id, server in f_cloud['servers'].iteritems():
+                if do_status_filter and not server['status'] in request.form : 
+                    filterIds.append(id)
+                elif  (ME and not server['user_id'] == f_cloud['user_id'] ) :
+                    filterIds.append(id)
+            for id in filterIds :
+                del f_cloud['servers'][id]
+        
+    return redirect("/table/")
+
+
+######################################################################
 # ROUTE: KILL
 ######################################################################
 
@@ -128,6 +162,20 @@ def delete_vm(cloud=None, server=None):
     time.sleep(5)
     clouds.refresh()
     return table()
+
+######################################################################
+# ROUTE: DELETE GROUP
+######################################################################
+@app.route('/cm/delete/<cloud>/')
+def delete_vms(cloud=None):
+# donot do refresh before delete, this will cause all the vms to get deleted  
+    f_cloud = clouds.clouds[cloud]
+    for id, server in f_cloud['servers'].iteritems():   
+        print "-> delete", cloud, id
+        clouds.delete(cloud, id)
+    time.sleep(7)
+    f_cloud['servers'] = {}
+    return redirect("/table/")
 
 ######################################################################
 # ROUTE: START
@@ -206,7 +254,8 @@ def table():
                            image='myimage',
                            pages=pages,
                            active=active,
-                           version=version)
+                           version=version,
+                           dir = dir)
 
 
 

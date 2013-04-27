@@ -2,6 +2,18 @@
 {% from "_helper.html" import image_button %}g
 {% block content %}
 
+<script type="text/javascript">
+
+function killall(cloud) {
+	var answer = confirm("Delete all selected VMs in "+cloud+"?")
+	if (answer){
+		window.location = "/cm/delete/"+cloud+"/";
+	}
+}
+
+</script>
+
+
 <table>
   <tr>
     <th colspan="1"> Cloud Mesh </th>  
@@ -26,9 +38,9 @@
   </tr>
   
   {% for name in order %}
-
+  
   <tr> 
-    <th colspan="1"> {{ name }} </th> 
+    <th colspan="1"> {{ name }}</th> 
     <th colspan="6">
       {{ image_button ("none", "365_restart", "/cm/refresh/" + name + "/") }}
       &nbsp;
@@ -38,14 +50,20 @@
       &nbsp;     
       {{ image_button ("none", "044_keys", "/updatekeypair/" + name + "/") }}
       &nbsp; &nbsp;
+      <form name = "filter" action = "/cm/filter/{{name}}/" method="post">
       <input type="checkbox" name="ACTIVE" value="select"> ACTIVE &nbsp;
       <input type="checkbox" name="STOPPED" value="select"> STOPPED &nbsp;
       <input type="checkbox" name="ERROR" value="select"> ERROR &nbsp;
       <input type="checkbox" name="SHUTOFF" value="select"> SHUTOFF &nbsp;
       <input type="checkbox" name="ME" value="select"> ME &nbsp;
+      <input type="submit" value="Filter">
+      </form>
     </th>
     <th colspan="1">
-      {{ image_button ("right", "016_bin", "/cm/delete/" + name + "/") }}
+      <input align="right" type="image" 
+	     src="{{ url_for('static', filename='img/icons/png/glyphicons_016_bin.png') }}" 
+	     onclick="killall('{{ name }}');"
+	     width="16" height="16">
     </th>
     
   </tr>
