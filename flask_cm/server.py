@@ -462,6 +462,8 @@ def display_clouds():
         selected=set_default_clouds(cloudNames, availableClouds)
         for cloudName in cloudNames:
             projectName = request.form[cloudName]
+            if "None" in projectName:
+                projectName=yamlFile['projects']['default']
             yamlFile['clouds'][cloudName]['default']['project']=projectName;
         yamlFile['active']=cloudNames
         write_yaml(filename, yamlFile)
