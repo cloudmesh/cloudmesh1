@@ -320,16 +320,12 @@ def display_project(cloud=None):
     ############reading from yaml file ############
     config_project = cm_config()
     activeProjects=config_project.projects('active')
-    print activeProjects
     project_names=buildProjectNamesArray(activeProjects)
     activeClouds=config_project.active()
-    for cloud in activeClouds:
-        if 'openstack' in cloud:
-            configurations= config_project.cloud(cloud) 
-
-            print configurations
-            default_project=configurations['default']['project']
-            selected=set_default_project(default_project, project_names,'checked')
+    
+    configurations= config_project.get() 
+    default_project=configurations['projects']['default']
+    selected=set_default_project(default_project, project_names,'checked')
      ############  end of reading from yaml file ############
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
@@ -353,10 +349,7 @@ def display_project(cloud=None):
     if cloud == None:
         pass
     else:
-        return render_template('projects.html',
-                               projects=activeProjects,
-                               active=active,
-                               version=version,selected=selected)
+        return redirect("/profile/")
 
 ######################################################################
 # ROUTE: VM Login
@@ -700,12 +693,15 @@ def profile():
         active = make_active('profile')
         
         config = cm_config()
+        activeProjects=config.projects('active')
         dict_t = config.get()
         person = dict_t['profile']
         #print person
         makeCloudDict(dict_t)
-
-
+        activeProjects=config.projects('active')
+        project_names=buildProjectNamesArray(activeProjects)
+        default_project=dict_t['projects']['default']
+        selected=set_default_project(default_project, project_names,'checked')
         time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
         # bug: the name of the clouds should be retrived from config. I guess this is left over from my example
@@ -726,8 +722,13 @@ def profile():
                                active_clouds=clouds.active(),
                                active=active,
                                config=dict_t,
+<<<<<<< HEAD
                                fun_print = lineToFingerprint,
                                version=version)
+=======
+                               selected=selected,
+                               version=version,projects=activeProjects)
+>>>>>>> Pushkar-Shweta
 
 
 def makeCloudDict(dict_t):
