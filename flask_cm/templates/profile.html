@@ -41,7 +41,7 @@ $(function() {
 </form>
 </td>
 
-</td> <td></td></tr>  
+ <td></td></tr>  
 <tr><td></td><td>Default</td><td>{{ config.projects.default }}</td><td></td></tr>
 <tr><td></td><td>Projects</td><td>{{ config.projects.active }}</td><td></td></tr>
 <tr><td></td><td>Completed</td><td>{{ config.projects.completed }}</td><td></td></tr>    
@@ -59,7 +59,20 @@ $(function() {
 </td><td></td></tr>
 {% endif %}
 
-<tr><td>{{ image_button ("right", "030_pencil", "/security/") }}</td><td colspan="2"><b> SecurityGroups </b></td> <td> </td></tr>
+<tr><td>{{ image_button ("right", "030_pencil", "") }}</td><td>
+<b> SecurityGroups </b></td>
+
+<td>
+<form name="securityGroups" action="/security/" method="POST">
+
+{% for securityGroup in securityGroups %}
+ <input type="radio" name="selected_securityGroup" value="{{ securityGroup }}" id="{{ securityGroup }}" onclick="document.forms['securityGroups'].submit()" {{ selectedSecurity[securityGroup] }}/> {{ securityGroup }}
+{% endfor %}
+
+</form>
+</td>
+
+ <td> </td></tr>
 <tr><td></td><td>Default</td><td> {{config['security']['default']}}</td><td></td></tr>
 </table>
 

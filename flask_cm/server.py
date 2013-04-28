@@ -93,6 +93,7 @@ def make_active(name):
               'profile': "",
               'vm_info': "",
               'projects': "",
+              'security': "",
               'updatekeypair':"",
               'clouds':""}
     
@@ -313,7 +314,7 @@ def buildProjectNamesArray(projects):
      return project_names;
 
 @app.route('/projects/', methods=['GET','POST'])
-def display_project(cloud=None):
+def display_project():
     global default_project;
     
 
@@ -328,7 +329,6 @@ def display_project(cloud=None):
     selected=set_default_project(default_project, project_names,'checked')
      ############  end of reading from yaml file ############
 
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('projects')
     
     if request.method == 'POST':
@@ -346,10 +346,7 @@ def display_project(cloud=None):
                 selected = set_default_project(default_project, project_names,'checked')
 
 
-    if cloud == None:
-        pass
-    else:
-        return redirect("/profile/")
+    return redirect("/profile/")
 
 ######################################################################
 # ROUTE: VM Login
@@ -684,6 +681,46 @@ def gregor():
               <input type=submit value=Update>
            </form>''' %selected
 
+
+######################################################################
+# ROUTE: SECURITY
+######################################################################
+def set_default_security(name, secGroup_names):
+    print secGroup_names
+    default_secGroup = name
+    selectedSecurity = {}
+    for name in secGroup_names:
+        selectedSecurity[name] = ""
+    selectedSecurity[default_secGroup] = 'checked'
+    print selectedSecurity
+    return selectedSecurity
+
+@app.route('/security/', methods=['GET','POST'])
+def security():
+    
+     ############reading from yaml file ############
+    config_security = cm_config()
+    yamlFile=config_security.get()
+    securityGroupsList=(yamlFile['security']['security_groups']);
+    default_secGroup=yamlFile['security']['default']
+    securityGroups=securityGroupsList.keys();
+    selectedSecurity=set_default_security(default_secGroup, securityGroups)
+     ############  end of reading from yaml file ############
+    
+    active = make_active('security')
+    
+    if request.method == 'POST':
+        default_secGroup= request.form['selected_securityGroup'] 
+        
+        ############ writing in yaml file ############
+        yamlFile['security']['default']=default_secGroup;
+        write_yaml(filename,yamlFile)
+        ############ end of writing in yaml file ############
+        selectedSecurity=set_default_security(default_secGroup, securityGroups)
+    
+    
+    return redirect("/profile/")
+
 ######################################################################
 # ROUTE: PROFILE
 ######################################################################
@@ -698,10 +735,21 @@ def profile():
         person = dict_t['profile']
         #print person
         makeCloudDict(dict_t)
+        ###########projects radio button################
         activeProjects=config.projects('active')
         project_names=buildProjectNamesArray(activeProjects)
         default_project=dict_t['projects']['default']
         selected=set_default_project(default_project, project_names,'checked')
+        ########### end of projects radio button################
+        
+        ###########security radio button################
+        securityGroupsList=(dict_t['security']['security_groups']);
+        securityGroups=securityGroupsList.keys();
+        default_secGroup=dict_t['security']['default']
+        selectedSecurity=set_default_security(default_secGroup, securityGroups)
+        ###########end of security radio button################
+
+        
         time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
         # bug: the name of the clouds should be retrived from config. I guess this is left over from my example
@@ -724,7 +772,11 @@ def profile():
                                config=dict_t,
                                fun_print = lineToFingerprint,
                                selected=selected,
-                               version=version,projects=activeProjects)
+                               version=version,
+                               projects=activeProjects,
+                               securityGroups=securityGroups,
+                               selectedSecurity=selectedSecurity,
+                               )
 
 
 
