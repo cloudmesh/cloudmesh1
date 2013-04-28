@@ -722,13 +722,10 @@ def profile():
                                active_clouds=clouds.active(),
                                active=active,
                                config=dict_t,
-<<<<<<< HEAD
                                fun_print = lineToFingerprint,
-                               version=version)
-=======
                                selected=selected,
                                version=version,projects=activeProjects)
->>>>>>> Pushkar-Shweta
+
 
 
 def makeCloudDict(dict_t):
