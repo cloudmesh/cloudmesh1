@@ -28,11 +28,24 @@ $(function() {
 <tr><td></td><td>Address</td><td>{{ address|replace("\n", "<br />")|safe }} </td><td></td></tr>
 <tr><td>{{ image_button ("right", "030_pencil", "/prefix/") }}</td><td colspan="2"><b> Prefix </b></td> <td></td></tr>  
 <tr><td></td><td>Prefix</td><td>{{ config.prefix }}</td><td></td></tr>
-<tr><td>{{ image_button ("right", "030_pencil", "/projects/") }}</td><td colspan="2"><b> Projects </b></td> <td></td></tr>  
+<tr><td>{{ image_button ("right", "030_pencil", "/projects/") }}</td><td>
+
+<b> Projects </b></td>
+<td>
+<form name="projects" action="/projects/" method="POST">
+
+{% for projectname in projects %}
+ <input type="radio" name="selected_project" value="{{ projectname }}" id="{{ projectname }}" {{ selected[projectname] }} onclick="document.forms['projects'].submit()"/> {{ projectname }}
+{% endfor %}
+
+</form>
+</td>
+
+</td> <td></td></tr>  
 <tr><td></td><td>Default</td><td>{{ config.projects.default }}</td><td></td></tr>
 <tr><td></td><td>Projects</td><td>{{ config.projects.active }}</td><td></td></tr>
 <tr><td></td><td>Completed</td><td>{{ config.projects.completed }}</td><td></td></tr>    
-<tr><td></td><td colspan="2"><b> Clouds </b></td> <td></td></tr>
+<tr><td>{{ image_button ("right", "030_pencil", "/clouds/") }}</td><td colspan="2"><b> Clouds </b></td> <td></td></tr>
 <tr><td></td><td>Default</td><td>{{ config.default }}</td><td>edit</td></tr>
 <tr><td></td><td>Active</td><td>{{ active_clouds }}</td><td>edit</td></tr>
 <tr><td></td><td>Available</td><td>{{ config.clouds.keys() }}</td><td></td></tr>
