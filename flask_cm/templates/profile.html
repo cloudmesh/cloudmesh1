@@ -58,6 +58,9 @@ $(function() {
 	{% endfor %}
 </td><td></td></tr>
 {% endif %}
+
+<tr><td>{{ image_button ("right", "030_pencil", "/security/") }}</td><td colspan="2"><b> SecurityGroups </b></td> <td> </td></tr>
+<tr><td></td><td>Default</td><td> {{config['security']['default']}}</td><td></td></tr>
 </table>
 
 Testing Inline editing
