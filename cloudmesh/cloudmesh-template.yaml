@@ -1,0 +1,26 @@
+cloudmesh:
+    security:
+        rules:
+            ssh:
+               protocol: tcp
+               min_port: 22
+               max_port: 22
+               ip-address: 0.0.0.0/0
+            ping:
+               protocol: icmp
+               min_port: -1
+               max_port: -1
+               ip-address: 0.0.0.0/0
+            web:
+               protocol: tcp
+               min_port: 80
+               max_port: 80
+               ip-address: 0.0.0.0/0
+
+        security_groups:
+            secGroup1:
+            - ssh
+            - ping
+
+            secGroup2:
+            - web

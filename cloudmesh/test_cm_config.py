@@ -11,6 +11,8 @@ import sys
 #sys.path.insert(0, '..')
 
 from cm_config import cm_config
+from mock_user import mock_user
+from mock_cloud import mock_cloud
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
@@ -135,6 +137,8 @@ class Test_cloudmesh:
     def test18_initialize(self):
         HEADING("INITIALIZATION")
         username = 'misterbojangles'
+        self.config._userdata = mock_user
+        self.config._cloudcreds = mock_cloud
         self.config.initialize(username)
 
         assert 'cloudmesh' in self.config.data
@@ -148,6 +152,8 @@ class Test_cloudmesh:
         assert 'active' in cmdata
         assert 'default' in cmdata
         assert 'clouds' in cmdata
+        assert 'security' in cmdata
+        assert 'default' in cmdata['keys']
+        assert 'india-openstack' in cmdata['clouds']
+        assert 'grizzly-openstack' in cmdata['clouds']
         assert cmdata['prefix'] == username
-
-               
