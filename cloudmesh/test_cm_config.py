@@ -132,22 +132,3 @@ class Test_cloudmesh:
         print keys, keys['default'], keys['keylist'][keys['default']]
         assert ('default' in keys) and (keys['default'] in keys['keylist'])
 
-    def test18_initialize(self):
-        HEADING("INITIALIZATION")
-        username = 'misterbojangles'
-        self.config.initialize(username)
-
-        assert 'cloudmesh' in self.config.data
-        assert len(self.config.data.keys()) == 1
-
-        cmdata = self.config.data['cloudmesh']
-        assert 'prefix' in cmdata
-        assert 'profile' in cmdata
-        assert 'keys' in cmdata
-        assert 'projects' in cmdata
-        assert 'active' in cmdata
-        assert 'default' in cmdata
-        assert 'clouds' in cmdata
-        assert cmdata['prefix'] == username
-
-               
