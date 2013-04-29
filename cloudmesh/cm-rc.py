@@ -165,8 +165,8 @@ if __name__ == '__main__':
             while not selected:
                 counter = 1
                 for name in config.keys():
-                    if 'cm_type' in config.data['cloudmesh'][name]:
-                        print counter, "-" "%20s" % name, "(%s)" % config.data['cloudmesh'][name]['cm_type']
+                    if 'cm_type' in config.data['cloudmesh']['clouds'][name]:
+                        print counter, "-" "%20s" % name, "(%s)" % config.data['cloudmesh']['clouds'][name]['cm_type']
                         choices.append(name)
                         counter += 1
                 print "Please select:"
