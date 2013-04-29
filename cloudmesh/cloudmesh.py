@@ -332,18 +332,22 @@ class cloudmesh:
             return cloud.upload_key_pair(path,name) 
         except:
             print "Error: could not update keypair", cloud_name
+            
+            
+    
 
     def create(self, cloud_name, prefix, index, image_id, flavor_name, key):
         # bug key has to be defined as parameter when calling this
-
+        security_groups=[]
         name = prefix + "-" + index
-        
         cloud_type = self.clouds[cloud_name]['cm_type']
         print cloud_type
         provider = self.cloud_provider(cloud_type)
 
         cloud = provider(cloud_name)
-        cloud.vm_create(name, flavor_name, image_id)
+        security_group=cloud.checkSecurityGroups() 
+        security_groups.append(security_group)
+        cloud.vm_create(name, flavor_name, image_id , security_groups)
 
         """
         keyname = ''

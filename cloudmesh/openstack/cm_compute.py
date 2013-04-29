@@ -23,6 +23,8 @@ from cloudmesh.openstack.cm_table import table as cm_table
 from cloudmesh.cm_config import cm_config
 
 from novaclient.v1_1 import client
+from novaclient.v1_1 import security_groups
+from novaclient.v1_1 import security_group_rules
 
 def donotchange(fn):
     return fn
@@ -453,12 +455,67 @@ class openstack(BaseCloud):
         # del information.links
         id = vm['id']
         return (id, vm)
+    
+    
+    ######################################################################
+    # security Groups of VMS
+    ######################################################################
+    
+    def createSecurityGroup(self,default_security_group,description="no-description"):
+        protocol=""
+        ipaddress=""
+        max_port=""
+        min_port=""
+        default_security_group_id= self.cloud.security_groups.create(default_security_group,description)
+        default_security_group_id=default_security_group_id.id
+        
+        config_security = cm_config()
+        yamlFile=config_security.get();
+        ruleNames=yamlFile['security']['security_groups'][default_security_group]
+        for ruleName in ruleNames:
+            rules=yamlFile['security']['rules'][ruleName]
+            for key,value in rules.iteritems():
+                if 'protocol' in key:
+                    protocol=value
+                elif 'max_port' in key:
+                    max_port=value
+                elif 'min_port' in key:
+                    min_port=value
+                else:
+                    ip_address=value
+                    
+            self.cloud.security_group_rules.create(default_security_group_id, protocol, min_port,
+               max_port, ip_address)
+        return default_security_group
 
 
+        
+    def checkSecurityGroups(self):
+        config_security = cm_config()
+        names={}
+        
+        securityGroups= self.cloud.security_groups.list()
+        
+        for securityGroup in securityGroups:
+            
+             names[securityGroup.name]=securityGroup.id
+        
+        yamlFile=config_security.get();
+        default_security_group=yamlFile['security']['default']
+        #default_security_group_id=names[default_security_group]       
+        
+        if default_security_group in names:
+           return default_security_group
+            
+        else:
+           return self.createSecurityGroup(default_security_group)
+        
+       
+        
     ######################################################################
     # create a vm
     ######################################################################
-    def vm_create(self, name, flavor_name, image_id,key_name = None):
+    def vm_create(self, name, flavor_name, image_id,security_groups,key_name = None):
         """
         create a vm
         """
@@ -469,13 +526,13 @@ class openstack(BaseCloud):
         if key_name == None :
             vm = self.cloud.servers.create(name,
                                            flavor=vm_flavor,
-                                           image=vm_image,
+                                           image=vm_image,security_groups=security_groups
                                            )
         else :
             vm = self.cloud.servers.create(name,
                                            flavor=vm_flavor,
                                            image=vm_image,
-                                           key_name = key_name
+                                           key_name = key_name,security_groups=security_groups
                                            )
         delay = vm.user_id  # trick to hopefully get all fields
         data = vm.__dict__
@@ -789,6 +846,7 @@ if __name__ == "__main__":
 
     cloud = openstack("india-openstack")
     print cloud.upload_key_pair('~/.ssh/id_rsa.pub','PushkarKey')
+    print cloud.checkSecurityGroups()
 
     #cloud.novaclient_dump()
 
