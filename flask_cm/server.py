@@ -373,6 +373,7 @@ def vm_login(cloud=None,server=None):
     else :
         message = 'Logged in Successfully'
         ip = server['addresses'][server['addresses'].keys()[0]][1]['addr'] 
+        # THIS IS A BUG AND MUST BE SET PER VM, E.G. sometimesvm type probably decides that?
         print "ssh",'ubuntu@'+ip
         xterm('-e','ssh','ubuntu@'+ip)
         
