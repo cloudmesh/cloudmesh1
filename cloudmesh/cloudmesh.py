@@ -324,16 +324,24 @@ class cloudmesh:
             print "Error: could not delete", cloud_name, server_id
 
 
-    def add_key_pair(self,cloud_name,path,name):
+    def add_key_pair(self,cloud_name,key,name):
         try:
             cloud_type = self.clouds[cloud_name]['cm_type']
             provider = self.cloud_provider(cloud_type)
             cloud = provider(cloud_name)
-            return cloud.upload_key_pair(path,name) 
+            return cloud.upload_key_pair(key,name) 
         except:
             print "Error: could not update keypair", cloud_name
+    def del_key_pair(self,cloud_name,name):
+        try:
+            cloud_type = self.clouds[cloud_name]['cm_type']
+            provider = self.cloud_provider(cloud_type)
+            cloud = provider(cloud_name)
+            return cloud.delete_key(name) 
+        except:
+            print "Error: could not delete keypair", cloud_name
 
-    def create(self, cloud_name, prefix, index, image_id, flavor_name, key):
+    def create(self, cloud_name, prefix, index, image_id, flavor_name, key= None):
         # bug key has to be defined as parameter when calling this
 
         name = prefix + "-" + index
@@ -343,7 +351,7 @@ class cloudmesh:
         provider = self.cloud_provider(cloud_type)
 
         cloud = provider(cloud_name)
-        cloud.vm_create(name, flavor_name, image_id)
+        cloud.vm_create(name, flavor_name, image_id,key)
 
         """
         keyname = ''

@@ -746,13 +746,10 @@ class openstack(BaseCloud):
     ######################################################################
     # Upload Key Pair
     ######################################################################
-    def upload_key_pair(self,path,name):
+    def upload_key_pair(self,publickey,name):
         """ Uploads key pair """
         
         try:
-            path = os.path.expanduser(path)
-            keyFile = open(path,"r");
-            publickey = keyFile.read();
             self.cloud.keypairs.create(name,publickey)
         except Exception, e:
             return 1, e
@@ -771,6 +768,16 @@ class openstack(BaseCloud):
             return (1, e)
             
         return (0 , 'Key deleted successfully')
+    
+    ######################################################################
+    # List Security Group
+    ######################################################################
+    def sec_grp_list(self):
+        """ lists all security groups """
+        try:
+            return self.cloud.security_groups.list()
+        except Exception, e:
+            print e
 
 ##########################################################################
 # MAIN FOR TESTING
@@ -788,8 +795,10 @@ if __name__ == "__main__":
     """
 
     cloud = openstack("india-openstack")
-    print cloud.upload_key_pair('~/.ssh/id_rsa.pub','PushkarKey')
-
+    all_sc = cloud.sec_grp_list()
+    for sc in all_sc :
+        pp.pprint(sc)
+        print "\n"
     #cloud.novaclient_dump()
 
     # print json.dumps(cloud.limits(), indent=4)

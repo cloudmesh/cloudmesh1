@@ -222,12 +222,16 @@ def start_vm(cloud=None, server=None):
     print "-> start", cloud
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
-
+    key = None
+    config = cm_config()
+    dict_t = config.get()
+    if dict_t.has_key('keys'):
+        key = dict_t['keys']['default']
     d = clouds.default(cloud)
     vm_flavor = d['flavor']
     vm_image = d['image']
     
-    clouds.create(cloud, prefix, "001", vm_image, vm_flavor, "KEYMISSING")
+    clouds.create(cloud, prefix, "001", vm_image, vm_flavor, key)
     return table()
 
 '''
@@ -366,29 +370,23 @@ def display_project(cloud=None):
 @app.route('/cm/login/<cloud>/<server>/')
 def vm_login(cloud=None,server=None):
     global clouds
-
+    message = ''
     active = make_active('vm_login')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     
     server=clouds.clouds[cloud]['servers'][server]
      
-    if len(server['addresses']['vlan102']) < 2:  
+    if len(server['addresses'][server['addresses'].keys()[0]]) < 2:  
         mesage = 'Cannot Login Now, Public IP not assigned'
+        print message
         
     else :
         message = 'Logged in Successfully'
-        ip = server['addresses']['vlan102'][1]['addr']   
-        xterm('-e','ssh', 'ubuntu@'+ip)
+        ip = server['addresses'][server['addresses'].keys()[0]][1]['addr'] 
+        print "ssh",'ubuntu@'+ip
+        xterm('-e','ssh','ubuntu@'+ip)
         
-    return render_template('table.html',
-                               updated=time_now,
-                               keys="",  # ",".join(clouds.get_keys()),
-                               clouds=clouds.clouds,
-                               image='myimage',
-                               pages=pages,
-                               active=active,
-                               loginmessage = message, 
-                               version=version)
+    return redirect("/table/")
 ######################################################################
 # ROUTE: VM INFO
 ######################################################################
@@ -827,7 +825,7 @@ def managekeys():
     print ">>>>> KEY"
     
     active = make_active('profile')
-
+    active_clouds = clouds.active()
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     
     config = cm_config()
@@ -848,11 +846,6 @@ def managekeys():
     """
     if(yamlFile.has_key('keys')):
        haskeys = True 
-       """
-       keydict = yamlFile['keys']
-       defaultkey = keydict['default']
-       keylist = keydict['keylist']
-       """
        keydict = config.userkeys()
        defaultkey = config.userkeys()['default']
        keylist = config.userkeys()['keylist']
@@ -870,6 +863,7 @@ def managekeys():
         if keyname is "" or type is 'None' or fileorpath is "":
             error = True
             msg = "Invalid Data. Please Renter Data" 
+            
         elif not validateKey(type ,fileorpath): 
             if type.lower() == "file":
                 msg = "Invalid file path or Invalid key file" 
@@ -887,6 +881,9 @@ def managekeys():
                 keylist = yamlFile['keys']['keylist']
                 defaultkey = yamlFile['keys']['default']
                 haskeys = True
+            for clud in active_clouds:
+                (stat,msg) = clouds.add_key_pair(clud,getKey(fileorpath),keyname)
+                print msg
             write_yaml(filename, yamlFile)
             msg = 'Key added successfully'
     elif request.method == 'POST' :
@@ -906,15 +903,6 @@ def managekeys():
 def deletekey(name):
     active = make_active('profile')
 
-    """
-    keys = cm_keys()
-    defaultkey = keys["default"]
-    del keys.del(name)
-    write_yaml(filename, yamlFile)
-    return redirect("/keys/")
-
-    replaces code bellow, but does not include dealing if all keys have been deleted, this should be added to cm_keys
-    """
     config = cm_config()
     yamlFile= config.get()
     keydict = yamlFile['keys']
@@ -926,6 +914,10 @@ def deletekey(name):
         del keylist[name]
         if defaultkey == name:
             keydict['default'] = ''
+    active_clouds = clouds.active()    
+    for clud in active_clouds:
+                (stat,msg) = clouds.del_key_pair(clud,name)
+                print msg
     write_yaml(filename, yamlFile)
     return redirect("/keys/")
 
@@ -950,6 +942,17 @@ def validateKey(type,file):
         print e
         return False
 
+def getKey(fileorpath):
+    if not 'ssh-rsa' in fileorpath:
+        fileorpath = os.path.expanduser(fileorpath)
+        try :
+            keystring = open(file, "r").read()
+            return keystring
+        except :
+            return False
+    else : 
+        return fileorpath
+        
 
 
 def lineToFingerprint(line,type=None):
@@ -957,7 +960,7 @@ def lineToFingerprint(line,type=None):
             type = 'file'
     else : 
             type = 'keystring'
-    if type.lower() == "file":
+    if type == "file":
         return line
     type,key_string, comment = line.split()
     key = base64.decodestring(key_string)
