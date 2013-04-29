@@ -501,7 +501,10 @@ class openstack(BaseCloud):
              names[securityGroup.name]=securityGroup.id
         
         yamlFile=config_security.get();
-        default_security_group=yamlFile['security']['default']
+        if yamlFile.has_key('security'):
+            default_security_group=yamlFile['security']['default']
+        else :
+            return None
         #default_security_group_id=names[default_security_group]       
         
         if default_security_group in names:
@@ -515,11 +518,11 @@ class openstack(BaseCloud):
     ######################################################################
     # create a vm
     ######################################################################
-    def vm_create(self, name, flavor_name, image_id,security_groups,key_name = None):
+    def vm_create(self, name, flavor_name, image_id,security_groups = None,key_name = None):
         """
         create a vm
         """
-
+        print image_id
         vm_flavor = self.cloud.flavors.find(name=flavor_name)
         vm_image = self.cloud.images.find(id=image_id)
         
