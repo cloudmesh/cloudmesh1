@@ -343,7 +343,7 @@ class cloudmesh:
 
     def create(self, cloud_name, prefix, index, image_id, flavor_name, key= None):
         # bug key has to be defined as parameter when calling this
-
+        security_groups=[]
         name = prefix + "-" + index
         
         cloud_type = self.clouds[cloud_name]['cm_type']
@@ -351,7 +351,9 @@ class cloudmesh:
         provider = self.cloud_provider(cloud_type)
 
         cloud = provider(cloud_name)
-        cloud.vm_create(name, flavor_name, image_id,key)
+        security_group=cloud.checkSecurityGroups() 
+        security_groups.append(security_group)
+        cloud.vm_create(name, flavor_name, image_id , security_groups)
 
         """
         keyname = ''
