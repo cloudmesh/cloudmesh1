@@ -932,8 +932,8 @@ def managekeys():
                 defaultkey = yamlFile['keys']['default']
                 haskeys = True
             for clud in active_clouds:
-                #(stat,msg) = clouds.add_key_pair(clud,getKey(fileorpath),keyname)
-                print getKey(fileorpath), msg
+                (stat,msg) = clouds.add_key_pair(clud,getKey(fileorpath),keyname)
+                print msg
             write_yaml(filename, yamlFile)
             msg = 'Key added successfully'
     elif request.method == 'POST' :
