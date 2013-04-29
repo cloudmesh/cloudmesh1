@@ -375,7 +375,7 @@ def vm_login(cloud=None,server=None):
         ip = server['addresses'][server['addresses'].keys()[0]][1]['addr'] 
         # THIS IS A BUG AND MUST BE SET PER VM, E.G. sometimesvm type probably decides that?
         print "ssh",'ubuntu@'+ip
-        xterm('-e','ssh','ubuntu@'+ip)
+        xterm('-e','ssh','ubuntu@'+ip,_bg=True)
         
     return redirect("/table/")
 ######################################################################
@@ -997,10 +997,10 @@ def getKey(fileorpath):
     if not 'ssh-rsa' in fileorpath:
         fileorpath = os.path.expanduser(fileorpath)
         try :
-            keystring = open(file, "r").read()
+            keystring = open(fileorpath, "r").read()
             return keystring
-        except :
-            return False
+        except Exception, e :
+            print e
     else : 
         return fileorpath
         
