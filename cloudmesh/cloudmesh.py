@@ -341,8 +341,15 @@ class cloudmesh:
         except:
             print "Error: could not delete keypair", cloud_name
 
-    def create(self, cloud_name, prefix, index, image_id, flavor_name, key= None):
+
+        #
+        # POSSIBLE BUG AS create function was changed
+        #
+    def create(self, cloud_name, prefix, index, image_id, flavor_name, key= None, security_group=None):
         # bug key has to be defined as parameter when calling this
+
+        print ">>>>>>",  cloud_name, prefix, index, image_id, flavor_name, key
+        
         security_groups=[]
         name = prefix + "-" + index
         
@@ -351,12 +358,15 @@ class cloudmesh:
         provider = self.cloud_provider(cloud_type)
 
         cloud = provider(cloud_name)
-        security_group=cloud.checkSecurityGroups() 
+
+        if security_group == None:
+            security_group=cloud.checkSecurityGroups() 
+        
         if  not security_group == None:
             security_groups.append(security_group)
         else :
             security_groups = None
-        cloud.vm_create(name, flavor_name, image_id , security_groups,key)
+        cloud.vm_create(name, flavor_name, image_id , security_groups, key)
 
         """
         keyname = ''
