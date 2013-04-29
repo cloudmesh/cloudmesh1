@@ -374,7 +374,7 @@ def vm_login(cloud=None,server=None):
         message = 'Logged in Successfully'
         ip = server['addresses'][server['addresses'].keys()[0]][1]['addr'] 
         print "ssh",'ubuntu@'+ip
-        xterm('-e','ssh','ubuntu@'+ip)
+        xterm('-e','ssh','ubuntu@'+ip,_bg=True)
         
     return redirect("/table/")
 ######################################################################
@@ -932,8 +932,8 @@ def managekeys():
                 defaultkey = yamlFile['keys']['default']
                 haskeys = True
             for clud in active_clouds:
-                (stat,msg) = clouds.add_key_pair(clud,getKey(fileorpath),keyname)
-                print msg
+                #(stat,msg) = clouds.add_key_pair(clud,getKey(fileorpath),keyname)
+                print getKey(fileorpath), msg
             write_yaml(filename, yamlFile)
             msg = 'Key added successfully'
     elif request.method == 'POST' :
@@ -996,10 +996,10 @@ def getKey(fileorpath):
     if not 'ssh-rsa' in fileorpath:
         fileorpath = os.path.expanduser(fileorpath)
         try :
-            keystring = open(file, "r").read()
+            keystring = open(fileorpath, "r").read()
             return keystring
-        except :
-            return False
+        except Exception, e :
+            print e
     else : 
         return fileorpath
         
