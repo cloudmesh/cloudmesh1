@@ -157,4 +157,6 @@ class Test_cloudmesh:
         assert 'default' in cmdata['keys']
         assert 'india-openstack' in cmdata['clouds']
         assert 'grizzly-openstack' in cmdata['clouds']
+        assert 'credentials' in cmdata['clouds']['grizzly-openstack']
+        assert cmdata['clouds']['grizzly-openstack']['credentials']['OS_VERSION'] == 'grizzly'
         assert cmdata['prefix'] == username

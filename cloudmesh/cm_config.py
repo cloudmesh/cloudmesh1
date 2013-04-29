@@ -75,7 +75,7 @@ class cm_config:
         self.data['cloudmesh']['clouds'] = {}
         for cloud in cloudlist:
             cloudcreds = self._cloudcreds(username, cloud)
-            self.data['cloudmesh']['clouds'][cloud] = cloudcreds
+            self.data['cloudmesh']['clouds'][cloud] = cloudcreds.data
 
 
     def initialize(self, username):
