@@ -138,8 +138,8 @@ class Test_cloudmesh:
     def test18_initialize(self):
         HEADING("INITIALIZATION")
         username = 'misterbojangles'
-        self.config._userdata = mock_user
-        self.config._cloudcreds = mock_cloud
+        self.config.userdata_handler = mock_user
+        self.config.cloudcreds_handler = mock_cloud
         self.config.initialize(username)
 
         assert 'cloudmesh' in self.config.data
