@@ -38,7 +38,6 @@ class cm_config(object):
         self.read(self.filename)
         self._userdata_handler = None
         self._cloudcreds_handler = None
-        return
 
     @property
     def userdata_handler(self):
@@ -68,6 +67,7 @@ class cm_config(object):
         self.data['cloudmesh']['prefix'] = username
 
         self.data['cloudmesh']['profile'] = {
+            'username': username,
             'firstname': user.firstname,
             'lastname': user.lastname,
             'phone': user.phone,
@@ -92,11 +92,13 @@ class cm_config(object):
         self.data['cloudmesh']['default'] = user.defaultcloud
 
 
-    def _initialize_clouds(self, username, cloudlist):
+    def _initialize_clouds(self):
         """Creates cloud credentials for the user"""
         self.data['cloudmesh']['clouds'] = {}
+        cloudlist = self.active()
         for cloud in cloudlist:
-            cloudcreds = self.cloudcreds_handler(username, cloud)
+            cloudcreds = self.cloudcreds_handler(self.profile(), self.projects('default'), self.projects('active'), cloud)
+            cloudcreds.initialize_cloud_user()
             self.data['cloudmesh']['clouds'][cloud] = cloudcreds.data
 
 
@@ -106,7 +108,7 @@ class cm_config(object):
         with appropriate handler classes."""
         self.data = yaml.safe_load(open(self.yaml_template, "r"))
         self._initialize_user(username)
-        self._initialize_clouds(username, self.active())
+        self._initialize_clouds()
 
     ######################################################################
     # read and write methods

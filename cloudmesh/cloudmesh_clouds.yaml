@@ -1,4 +1,4 @@
-sierra-openstack-grizzly:
+grizzly-openstack:
     cm_label: ios
     cm_host: sierra.futuregrid.org
     cm_type: openstack
@@ -18,4 +18,24 @@ sierra-openstack-grizzly:
     default:
         flavor: m1.tiny
         image: ktanaka/ubuntu1204-ramdisk.manifest.xml 
-        project: fg-181
+
+india-openstack:
+    cm_label: ios
+    cm_host: india.futuregrid.org
+    cm_type: openstack
+    cm_admin:
+        OS_USERNAME: admin
+        OS_PASSWORD: secret
+        OS_TENANT_NAME: demo
+        OS_AUTH_URL: https://........
+        OS_CACERT: cacert.pem
+    credentials:
+        OS_AUTH_URL: https://.........
+        OS_PASSWORD: password
+        OS_TENANT_NAME: member
+        OS_USERNAME: username
+        OS_VERSION: grizzly
+        OS_CACERT: $HOME/.futuregrid/openstack/india/cacert.pem
+    default:
+        flavor: m1.tiny
+        image: ktanaka/ubuntu1204-ramdisk.manifest.xml 

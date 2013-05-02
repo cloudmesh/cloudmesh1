@@ -2,8 +2,8 @@ class mock_cloud:
     """ Provides a mock class for testing.  Represents the cloud
     credential data that will come from cloud API"""
 
-    def __init__(self, username, cloudname):
-        self._username = username
+    def __init__(self, profiledata, defaultproj, projectlist, cloudname):
+        self._username = profiledata['username']
         self._cloudname = cloudname
         self._data = None
 
@@ -17,7 +17,7 @@ class mock_cloud:
                     'OS_AUTH_URL': 'url',
                     'OS_PASSWORD': 'password',
                     'OS_TENANT_NAME': 'member',
-                    'OS_USERNAME': 'username',
+                    'OS_USERNAME': self._username,
                     'OS_VERSION': 'essex',
                     'OS_CACERT': '$HOME/.futuregrid/india/openstack/cacert.pem'
                     },
@@ -36,7 +36,7 @@ class mock_cloud:
                     'OS_AUTH_URL': 'url',
                     'OS_PASSWORD': 'password',
                     'OS_TENANT_NAME': 'member',
-                    'OS_USERNAME': 'username',
+                    'OS_USERNAME': self._username,
                     'OS_VERSION': 'grizzly',
                     'OS_CACERT': '$HOME/.futuregrid/india/openstack/cacert.pem'
                     },
@@ -47,6 +47,8 @@ class mock_cloud:
                     }
                 }
 
+    def initialize_cloud_user(self):
+        pass
 
     @property
     def cloudname(self):
