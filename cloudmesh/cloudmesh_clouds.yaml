@@ -1,0 +1,41 @@
+grizzly-openstack:
+    cm_label: ios
+    cm_host: sierra.futuregrid.org
+    cm_type: openstack
+    cm_admin:
+        OS_USERNAME: admin
+        OS_PASSWORD: secret
+        OS_TENANT_NAME: demo
+        OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:35357/v2.0
+        OS_CACERT: cacert.pem
+    credentials:
+        OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
+        OS_PASSWORD: password
+        OS_TENANT_NAME: member
+        OS_USERNAME: username
+        OS_VERSION: grizzly
+        OS_CACERT: $HOME/.futuregrid/openstack/sierra/cacert.pem
+    default:
+        flavor: m1.tiny
+        image: ktanaka/ubuntu1204-ramdisk.manifest.xml 
+
+india-openstack:
+    cm_label: ios
+    cm_host: india.futuregrid.org
+    cm_type: openstack
+    cm_admin:
+        OS_USERNAME: admin
+        OS_PASSWORD: secret
+        OS_TENANT_NAME: demo
+        OS_AUTH_URL: https://........
+        OS_CACERT: cacert.pem
+    credentials:
+        OS_AUTH_URL: https://.........
+        OS_PASSWORD: password
+        OS_TENANT_NAME: member
+        OS_USERNAME: username
+        OS_VERSION: grizzly
+        OS_CACERT: $HOME/.futuregrid/openstack/india/cacert.pem
+    default:
+        flavor: m1.tiny
+        image: ktanaka/ubuntu1204-ramdisk.manifest.xml 

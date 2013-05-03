@@ -14,7 +14,7 @@ def path_expand(text):
     return result
 
 
-class cm_config:
+class cm_config(object):
 
     ######################################################################
     # global variables
@@ -36,16 +36,38 @@ class cm_config:
         else:
             self.filename = filename
         self.read(self.filename)
-        self._userdata = None  # This will eventually be a class that knows how to get all the user/project data
-        self._cloudcreds = None  # This will eventually be a class that knows how to get all the cloud credential data
-        return
+        self._userdata_handler = None
+        self._cloudcreds_handler = None
 
+    @property
+    def userdata_handler(self):
+        """Plug-in class that knows how to get all the user/project data"""
+        return self._userdata_handler
+
+    @userdata_handler.setter
+    def userdata_handler(self, value):
+        self._userdata_handler = value
+
+    @property
+    def cloudcreds_handler(self):
+        """Plug-in class that knows how to get all the cloud credential data"""
+        return self._cloudcreds_handler
+
+    @cloudcreds_handler.setter
+    def cloudcreds_handler(self, value):
+        self._cloudcreds_handler = value
+
+
+    ######################################################################
+    # Methods to initialize (create) the config data
+    ######################################################################
     def _initialize_user(self, username):
-        """ Loads user data, including profile, projects, and credentials """
-        user = self._userdata(username)
+        """Loads user data, including profile, projects, and credentials"""
+        user = self.userdata_handler(username)
         self.data['cloudmesh']['prefix'] = username
 
         self.data['cloudmesh']['profile'] = {
+            'username': username,
             'firstname': user.firstname,
             'lastname': user.lastname,
             'phone': user.phone,
@@ -70,19 +92,23 @@ class cm_config:
         self.data['cloudmesh']['default'] = user.defaultcloud
 
 
-    def _initialize_clouds(self, username, cloudlist):
-        """ Creates cloud credentials for the user """
+    def _initialize_clouds(self):
+        """Creates cloud credentials for the user"""
         self.data['cloudmesh']['clouds'] = {}
+        cloudlist = self.active()
         for cloud in cloudlist:
-            cloudcreds = self._cloudcreds(username, cloud)
-            self.data['cloudmesh']['clouds'][cloud] = cloudcreds
+            cloudcreds = self.cloudcreds_handler(self.profile(), self.projects('default'), self.projects('active'), cloud)
+            cloudcreds.initialize_cloud_user()
+            self.data['cloudmesh']['clouds'][cloud] = cloudcreds.data
 
 
     def initialize(self, username):
-        """ Creates or resets the data for a user """
+        """Creates or resets the data for a user.  Note that the
+        userdata_handler and cloudcreds_handler properties must be set
+        with appropriate handler classes."""
         self.data = yaml.safe_load(open(self.yaml_template, "r"))
         self._initialize_user(username)
-        self._initialize_clouds(username, self.active())
+        self._initialize_clouds()
 
     ######################################################################
     # read and write methods

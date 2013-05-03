@@ -13,6 +13,8 @@ import sys
 from cm_config import cm_config
 from mock_user import mock_user
 from mock_cloud import mock_cloud
+from openstack_grizzly_cloud import openstack_grizzly_cloud
+import mock_keystone
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
@@ -138,8 +140,8 @@ class Test_cloudmesh:
     def test18_initialize(self):
         HEADING("INITIALIZATION")
         username = 'misterbojangles'
-        self.config._userdata = mock_user
-        self.config._cloudcreds = mock_cloud
+        self.config.userdata_handler = mock_user
+        self.config.cloudcreds_handler = mock_cloud
         self.config.initialize(username)
 
         assert 'cloudmesh' in self.config.data
@@ -148,6 +150,8 @@ class Test_cloudmesh:
         cmdata = self.config.data['cloudmesh']
         assert 'prefix' in cmdata
         assert 'profile' in cmdata
+        assert 'username' in cmdata['profile']
+        assert cmdata['profile']['username'] == username
         assert 'keys' in cmdata
         assert 'projects' in cmdata
         assert 'active' in cmdata
@@ -157,4 +161,18 @@ class Test_cloudmesh:
         assert 'default' in cmdata['keys']
         assert 'india-openstack' in cmdata['clouds']
         assert 'grizzly-openstack' in cmdata['clouds']
+        assert 'credentials' in cmdata['clouds']['grizzly-openstack']
+        assert cmdata['clouds']['grizzly-openstack']['credentials']['OS_VERSION'] == 'grizzly'
+        assert cmdata['clouds']['grizzly-openstack']['credentials']['OS_USERNAME'] == username
         assert cmdata['prefix'] == username
+
+    def test19_openstack_grizzly(self):
+        HEADING("INITIALIZATION")
+        username = 'misterbojangles'
+        self.config.userdata_handler = mock_user
+        self.config.cloudcreds_handler = openstack_grizzly_cloud
+        self.config.cloudcreds_handler._client = mock_keystone.Client
+        self.config.cloudcreds_handler._client.mockusername = username
+        self.config.cloudcreds_handler._client.mocktenants = self.config.data['cloudmesh']['active']
+        self.config.initialize(username)
+

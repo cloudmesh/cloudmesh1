@@ -2,15 +2,14 @@ class mock_cloud:
     """ Provides a mock class for testing.  Represents the cloud
     credential data that will come from cloud API"""
 
-    def __init__(self, username, cloudname):
-        self._username = username
+    def __init__(self, profiledata, defaultproj, projectlist, cloudname):
+        self._username = profiledata['username']
         self._cloudname = cloudname
         self._data = None
 
     def _load_data(self):
-        self._data = { cloudname: {} }
         if self.cloudname == 'india-openstack':
-            self._data[cloudname] = {
+            self._data = {
                 'cm_label': 'ios',
                 'cm_host': 'india.futuregrid.org',
                 'cm_type': 'openstack',
@@ -18,18 +17,18 @@ class mock_cloud:
                     'OS_AUTH_URL': 'url',
                     'OS_PASSWORD': 'password',
                     'OS_TENANT_NAME': 'member',
-                    'OS_USERNAME': 'username',
+                    'OS_USERNAME': self._username,
                     'OS_VERSION': 'essex',
                     'OS_CACERT': '$HOME/.futuregrid/india/openstack/cacert.pem'
                     },
                 'default': {
                     'flavor': 'm1.tiny',
-                    'image': 'ktanaka/ubuntu1204-ramdisk.manifest.xml ',
+                    'image': 'ktanaka/ubuntu1204-ramdisk.manifest.xml',
                     'project': 'fg-181'
                     }
                 }
         elif self.cloudname == 'grizzly-openstack':
-            self._data[cloudname] = {
+            self._data = {
                 'cm_label': 'ios',
                 'cm_host': 'abc.futuregrid.org',
                 'cm_type': 'openstack',
@@ -37,17 +36,19 @@ class mock_cloud:
                     'OS_AUTH_URL': 'url',
                     'OS_PASSWORD': 'password',
                     'OS_TENANT_NAME': 'member',
-                    'OS_USERNAME': 'username',
+                    'OS_USERNAME': self._username,
                     'OS_VERSION': 'grizzly',
                     'OS_CACERT': '$HOME/.futuregrid/india/openstack/cacert.pem'
                     },
                 'default': {
                     'flavor': 'm1.tiny',
-                    'image': 'ktanaka/ubuntu1204-ramdisk.manifest.xml ',
+                    'image': 'ktanaka/ubuntu1204-ramdisk.manifest.xml',
                     'project': 'fg-181'
                     }
                 }
 
+    def initialize_cloud_user(self):
+        pass
 
     @property
     def cloudname(self):
@@ -59,33 +60,6 @@ class mock_cloud:
             self._load_data()
         return self._data
 
-    @property
-    def firstname(self):
-        return self.data['profile']['firstname']
-
-    @property
-    def lastname(self):
-        return self.data['profile']['lastname']
-
-    @property
-    def phone(self):
-        return self.data['profile']['phone']
-
-    @property
-    def email(self):
-        return self.data['profile']['e-mail']
-
-    @property
-    def address(self):
-        return self.data['profile']['address']
-
-    @property
-    def keys(self):
-        return self.data['keys']
-
-    @property
-    def projects(self):
-        return self.data['projects']
 
 
 
