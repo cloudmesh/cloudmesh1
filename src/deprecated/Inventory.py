@@ -1,7 +1,7 @@
 '''
 Created on Aug 24, 2012
-
-@author: vdkhadke
+Improved May 2013 by Gregor
+@author: Gregor von Laszewski, laszewski@gmail.com, vdkhadke
 '''
 
 #! /usr/bin/python
@@ -13,26 +13,51 @@ import os
 import commands
 import random
 
-hostname = 'localhost'
-port = 27017
 
-class fgInventory :
+class Inventory :
+    '''To populate the dict data structure with relevant data'''
+
+    hostname = 'localhost'
+    port = 27017
 
     connection = ""
     data = {}
     db = ''
+
+    ######################################################################
+    # INITIALIZE
+    ######################################################################
     
-    '''To populate the dict data structure with relevant data'''
+    def __init__ (self, hostname='localhost', port=27017):
+        self.data = {}
+        self.hostname = hostname
+        self.port = port
+        self.connect(self.hostname, self.port)
+
+    ######################################################################
+    # CONNECT
+    ######################################################################
+
+    def connect(self, hostname, port):
+        '''connects to the database'''
+        self.connection = Connection(hostname, port)
+        try:
+            self.db = self.connection.fg_inventorydbase
+            collection = (self.db).entry
+        except:
+            print 'Cannot connect to the database'
+
+    ######################################################################
+    # DISCONNECT
+    ######################################################################
     
-    '''To generate random words to fill the test data structure'''
-    def get_random_word(self, wordLen):
-        word = ''
-        for i in range(wordLen):
-            word += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
-        return word
+    def disconnect(self):
+        '''disconnects from the database'''
+        self.connection.close()
     
     server = {}
     '''Removed the server field from dict structure, it is totally unnecessary since we include the contents in name,'''
+
     test = {        
                 'ip_address':'',
                 'name':'',
@@ -42,7 +67,7 @@ class fgInventory :
                 'uid':'',
                 'start_time':'',
                 'stop_time':''
-    '''
+                '''
                 'services':[
                              {'name':'',
                               'type':'',
@@ -52,7 +77,7 @@ class fgInventory :
                               'stop_time':'',
                               'status':'',
                             }]
-                            '''
+                '''
             }
             
     test_services = {
@@ -65,28 +90,18 @@ class fgInventory :
                       'status':'',
                       } 
 
-    def __init__ (self):
-        self.data = {}
-        self.connect(hostname, port)
         
-    '''When you use "with" statement, you dont need to open and close the file streams it by default takes care of that '''
+
         
     def load(self, filename):
+        '''loads the data from a file'''
+
+        '''When you use "with" statement, you dont need to open and close the file streams it by default takes care of that '''
         with open(filename, 'r') as input:
             self.data = json.load(input)
     
-    def connect(self, hostname, port):
-        self.connection = Connection(hostname, port)
-        try:
-            self.db = self.connection.fg_inventorydbase
-            collection = (self.db).entry
-        except:
-            print 'Cannot connect to the database'
-    
-    def disconnect():
-       self.connection.close()
-    
     def write(self, filename):
+        '''writes the database to a file'''
         with open(filename, 'w') as output:
             json.dump(self.data, output)
     
@@ -101,7 +116,7 @@ class fgInventory :
         entry = (self.db).entry
         
         #To get individual entries from mongodb
-        for each in entry.find({"uid":"vdkhadke-PC:127.0.0.1"}):
+        for each in entry.find({"uid":"PC:127.0.0.1"}):
             t = each
             print t
     
@@ -111,28 +126,31 @@ class fgInventory :
         for each in entry.find():
             db.entry.update({}, {'$set' : {"attribute" : "attr" }})
     
-    
-    '''Error in this data only single uid per data'''
-    
     def deleteUIDData(self, uid):
+        '''Error in this data only single uid per data'''
         entry = db.entry        
         db.entry.remove({"uid" : uid})    
         print "Server deleted"
     
+
+    ######################################################################
+    # DELETE SERVER DATA
+    ######################################################################
         
     def deleteServerData(self, servername):
         (self.db).entry.find()
         self.db.entry.remove({'keyword':'szt7XF'})    
-        
-    
-    '''Creating a random word generating method to populate the entries in the data structure'''
-        
+
+    ######################################################################
+    # INSERT DATA
+    ######################################################################
+
+
     def insertData(self):
-        
-        '''
-        To insert the dummy data into the dict data structure.
-       
-        To get the IP address, I am getting it by using the command
+        '''Creating a random word generating method to populate the
+        entries in the data structure.  To insert the dummy data into
+        the dict data structure. To get the IP address, I am getting
+        it by using the command
         
         " ifconfig lo | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' "
         
@@ -171,6 +189,11 @@ class fgInventory :
         self.test['services'][0]['status'] = self.get_random_word(3)
         print self.test
         '''
+
+    ######################################################################
+    # INSERT SERVICES
+    ######################################################################
+
     def insertServices(self, server):
         name_list = ['eucalyptus', 'openstack', 'EC2']
         self.test_services['name'] = random.choice(name_list)
@@ -183,7 +206,11 @@ class fgInventory :
         
         self.test['services'].append(self.test_services)
         print self.test
-        
+
+    ######################################################################
+    # DELETE SERVICES
+    ######################################################################
+
     def deleteServices(self, server):
         
         for each in entry.find({'name':server}):
@@ -191,10 +218,23 @@ class fgInventory :
             
             entry.update({ '$unset' : { 'start_time' : '14:30:25'}})
             #print "Server deleted"
-        
+
+    ######################################################################
+    # RANDOM WORD
+    ######################################################################
+
+
+    def get_random_word(self, wordLen):
+        '''Generates random words to fill the test data structure'''
+        word = ''
+        for i in range(wordLen):
+            word += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+        return word
+    
+
 if __name__ == '__main__':
     
-    Instance = fgInventory()
+    Instance = Inventory()
     '''
     Instance.load("foo.txt")
     Instance.write("foo1.txt")
@@ -202,11 +242,11 @@ if __name__ == '__main__':
     Instance.insertData()
     Instance.insertToDB()
     
-    #Instance.getServerData("vdkhadke-PC:127.0.0.1")
-    #Instance.deleteServerData("vdkhadke-PC")
-    #Instance.deleteUIDData("vdkhadke-PC:127.0.0.1")
+    #Instance.getServerData("PC:127.0.0.1")
+    #Instance.deleteServerData("PC")
+    #Instance.deleteUIDData("PC:127.0.0.1")
     #Instance.insertData()
-    #Instance.insertServices("vdkhadke-PC")
+    #Instance.insertServices("PC")
     #Instance.insertToDB()
-    #Instance.deleteServices("vdkhadke-PC") 
+    #Instance.deleteServices("PC") 
     #Instance.disconnect()

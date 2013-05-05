@@ -1,7 +1,7 @@
 Required data structure
 
 Server:
-		ip_address=''
+	ip_address=''
         name=''
         kind=''
         label=''
@@ -11,9 +11,8 @@ Server:
         time_update=''
 
 Services:
-		ip_address ='' 
+	ip_address ='' 
         name = ''
-        '''Why would I require kind attribute kinds are only 2, services and servers'''
         kind = ''
         version = ''
         label = ''

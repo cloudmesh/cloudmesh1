@@ -6,16 +6,31 @@ import pprint
 from pymongo import Connection
 
 class Server(object):
+
     def __init__(self):
-        ip_address=''
-        name=''
-        label=''
-        keyword=''
-        time_start=''
-        time_stop=''
-        time_update=''
-        prefix = ''
-        services=''
+        self.ip_address = None
+        self.name = None
+        self.label = None
+        self.keyword = None
+        self.time_start = None
+        self.time_stop = None
+        self.time_update = None
+        self.prefix  =  None
+        self.services = None
+
+    def __str__ (self):
+        '''Print server object'''
+        self.ip_address = None
+        self.name = None
+        self.label = None
+        self.keyword = None
+        self.time_start = None
+        self.time_stop = None
+        self.time_update = None
+        self.prefix  =  None
+        self.services = None
+        return
+
         
     def insertData(self):
         #Insert server data in the object created
@@ -34,16 +49,6 @@ class Server(object):
         self.label = get_random_word(6)
         self.keyword = get_random_word(6)
        
-    def dumpServer(self):
-        '''Print the current data in server object'''
-        print self.ip_address
-        print self.name
-        print self.label
-        print self.keyword
-        print self.time_start
-        print self.time_stop
-        print self.time_update
-        return
     
 class Services(object):
     def __init__(self):

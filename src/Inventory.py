@@ -1,0 +1,189 @@
+# pip install python-hostlist
+
+from hostlist import expand_hostlist
+import time
+import sys
+from mongoengine import *                           # To define a schema for a
+from datetime import datetime
+from pprint import pprint
+
+class FabricObject(Document):
+    meta = {
+         'allow_inheritance': True
+         }
+     
+    metadata = StringField()
+    name = StringField()
+    label = StringField()
+    status = StringField()
+    
+    date_start = DateTimeField()
+    date_stop = DateTimeField()
+    date_update = DateTimeField()
+
+    date_creation = DateTimeField(default=datetime.now())
+    date_modified = DateTimeField(default=datetime.now())
+
+    uptime = LongField(default=0)
+
+    def start(self):
+        if self.status == "start":
+            print "WARNING:", self.name, "is already started at", self.date_start
+        else:
+            self.status = "start"
+            self.date_start = datetime.now()
+            self.date_stop = None
+            self.save()
+            print "START:", self.name, self.date_start
+
+    def stop(self):
+        if self.status == "stop":
+            print "WARNING:", self.name, "is already stopped at", self.date_start
+        elif self.status == "start":
+            self.status = "stop"
+            self.date_stop = datetime.now()
+            print "STOP:", self.name, self.date_start
+            # calculate the time difference and add to uptime
+            delta =  self.date_stop - self.date_start
+            self.uptime = self.uptime + delta.seconds
+            self.date_start = None
+            self.save()
+        else:
+            print "WARNING:", self.name, "is not running to be stopped", self.date_start
+        
+    def save(self, *args, **kwargs):
+        if not self.date_creation:
+            self.date_creation = datetime.now()
+        self.date_modified = datetime.now()
+        return super(FabricObject, self).save(*args, **kwargs)
+
+
+
+class FabricService(FabricObject):              
+    ip_address = StringField()
+    kind = StringField(default="service")
+    
+class FabricServer(FabricObject):              
+    ip_address = StringField()
+    kind = StringField(default="server")
+
+    services = ListField(ReferenceField(FabricService))  # the uniqe names of the services hosted on this server
+
+def error(self,msg):
+    print msg
+
+class Inventory:
+
+    def __init__ (self,dbname):
+        self.db = connect (dbname)
+        return
+
+    def clean(self):
+        """removes all services and servers"""
+        for server in FabricServer.objects:
+            print server.delete()
+
+        for service in FabricService.objects:
+            print service.delete()
+
+    def create(self, type, nameregex):
+        #"india[9-11].futuregrid.org,india[01-02].futuregrid.org"
+        names = expand_hostlist(nameregex)
+        print names
+        for name in names:
+            if type == "server":
+                object = FabricServer(name=name)
+            elif type == "service":
+                object = FabricService(name=name)
+            else:
+                print "ERROR: type is not defined, creation of objects failed, type, nameregex"
+                return
+            object.save()
+
+    def save(self, object):
+        """saves either a server or service object."""
+        object.save()
+        
+    def pprint(self):
+        print "Servers"
+        print 70 * '-'
+        for server in FabricServer.objects:
+            pprint(server.__dict__)
+        print
+        print "Services"
+        print 70 * '-'
+        for service in FabricService.objects:
+            pprint(service.__dict__)
+
+        
+    def dump (self, object):
+        print '# ------------------'
+        classname = object.__class__.__name__
+        values = vars(object)['_data']
+        if classname  == 'FabricServer':
+           #print each server
+            attributes = vars(FabricServer())['_data'].keys()
+        elif classname == 'FabricServices':
+           #print each service
+            attributes = vars(FabricService())['_data'].keys()
+        else:
+            error ('wrong kind: ' + classname)
+            return
+        pprint.pprint(values)
+
+
+def main():
+
+
+    inventory = Inventory('test4')
+
+    inventory.clean()
+
+    now =  datetime.now()
+    service = FabricService(
+        name='Euca',
+        date_start=now,
+        date_update=now,
+        date_stop=now
+    )
+
+    inventory.save(service)
+    
+    server = FabricServer(
+        name='Hallo4',
+        date_start=now,
+        date_update=now,
+        date_stop=now,
+        services = [service]
+        )
+
+    inventory.save(server)
+
+
+
+    #    server.start()
+    #time.sleep(2)
+    #server.stop()
+    
+    inventory.pprint()    
+
+    inventory.create("server","india[9-11].futuregrid.org,india[01-02].futuregrid.org")
+        
+    inventory.pprint()    
+
+    """
+        inventory.update("server", "Hallo2")
+
+        server =  inventory.get('server','Hallo2')
+
+        print '##############################'
+
+        inventory.dump(server)
+    """
+        
+if __name__ == "__main__":
+    main()
+
+
+
+
