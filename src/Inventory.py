@@ -57,6 +57,10 @@ class FabricObject(Document):
         self.date_modified = datetime.now()
         return super(FabricObject, self).save(*args, **kwargs)
 
+    @property
+    def data(self):
+        return self.__dict__["_data"]
+
 
 
 class FabricService(FabricObject):              
@@ -80,10 +84,10 @@ class Inventory:
 
     def clean(self):
         """removes all services and servers"""
-        for server in FabricServer.objects:
+        for server in self.servers:
             print server.delete()
 
-        for service in FabricService.objects:
+        for service in self.services:
             print service.delete()
 
     def create(self, type, nameregex):
@@ -107,15 +111,64 @@ class Inventory:
     def pprint(self):
         print "Servers"
         print 70 * '-'
-        for server in FabricServer.objects:
+        for server in self.servers:
             pprint(server.__dict__)
         print
         print "Services"
         print 70 * '-'
-        for service in FabricService.objects:
+        for service in self.services:
             pprint(service.__dict__)
 
-        
+    @property
+    def servers(self):
+        return FabricServer.objects
+
+    @property
+    def services(self):
+        return FabricService.objects
+
+    def get_one (self, kind, name):
+
+        '''returns the data associated with the object of type kind
+        and the given name'''
+
+        if kind == 'server':
+            s = self.servers(name=name)
+            return s[0]
+        elif kind =='service':
+            s = self.services(name=name)
+            return s[0]
+        else:
+            error('wrong kind ' + kind)
+        return 
+
+    def get (self, kind, name):
+
+        '''returns the data associated with the object of type kind
+        and the given name'''
+
+        if kind == 'server':
+            s = self.servers(name=name)
+            return s
+        elif kind =='service':
+            s = self.services(name=name)
+            return s
+        else:
+            error('wrong kind ' + kind)
+        return 
+
+    def exists (self, kind, name):
+        '''returns tro if the object of type kind and the given name
+        exists'''
+        if kind == 'server':
+            return self.servers(name=name).count() > 0
+        elif kind =='service':
+            return self.services(name=name).count() > 0
+        else:
+            error('wrong kind ' + kind)
+        return
+    
+    """    
     def dump (self, object):
         print '# ------------------'
         classname = object.__class__.__name__
@@ -130,7 +183,7 @@ class Inventory:
             error ('wrong kind: ' + classname)
             return
         pprint.pprint(values)
-
+    """
 
 def main():
 
@@ -159,7 +212,7 @@ def main():
 
     inventory.save(server)
 
-
+        
 
     #    server.start()
     #time.sleep(2)
@@ -171,6 +224,21 @@ def main():
         
     inventory.pprint()    
 
+    print "################"
+    server = inventory.get_one("server", "india01.futuregrid.org")
+
+    print server.data
+
+    print "################"
+    
+    for server in inventory.servers:
+        print server.data
+
+    print "################"
+    print inventory.exists("server", "india01.futuregrid.org")
+
+
+                           
     """
         inventory.update("server", "Hallo2")
 
