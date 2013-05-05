@@ -19,6 +19,7 @@ requires=[
     'setuptools',
     'pip',
     'docopt',
+    'python-hostlist',
     'pyaml', 
     'pyyaml',
     'Flask',
