@@ -1,7 +1,7 @@
 Documentation
 ======================================================================
 
-The Documentation is located at 
+The documentation is located at 
 
 http://futuregrid.github.com/inventory
 
