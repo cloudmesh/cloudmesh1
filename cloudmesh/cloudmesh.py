@@ -366,7 +366,7 @@ class cloudmesh:
             security_groups.append(security_group)
         else :
             security_groups = None
-        cloud.vm_create(name, flavor_name, image_id , security_groups, key)
+        return cloud.vm_create(name, flavor_name, image_id , security_groups, key)
 
         """
         keyname = ''
