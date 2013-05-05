@@ -66,6 +66,7 @@ version = "0.7.2"
 
 clouds = cloudmesh()
 clouds.refresh()
+
 clouds.refresh_user_id()
 
 prefix = clouds.prefix()
@@ -131,11 +132,35 @@ def refresh(cloud=None, server=None):
 
 
 @app.route('/cm/filter/<cloud>/',methods=['GET','POST'])
-def filter(cloud):
+def filter(cloud=None):
     print "-> filter", cloud
     filterIds = []
     do_status_filter = False
-    if request.method == 'POST':
+    if cloud==None and view_state.has_key('table') :
+        allClouds = clouds.active()
+        for clud in allClouds:
+            do_status_filter_inner = False
+            filterIds = []
+            if view_state['table'].has_key(clud):
+                print 'filtering',clud
+                ACTIVE = view_state['table'][clud].has_key('ACTIVE')
+                STOPPED = view_state['table'][clud].has_key('STOPPED')
+                ERROR = view_state['table'][clud].has_key('ERROR')
+                SHUTOFF = view_state['table'][clud].has_key('SHUTOFF')
+                ME = view_state['table'][clud].has_key('ME')
+                if(ACTIVE or STOPPED or ERROR or SHUTOFF):
+                            do_status_filter_inner = True
+                if(ACTIVE or STOPPED or ERROR or SHUTOFF or ME) :
+                    f_cloud = clouds.clouds[clud]
+                    for id, server in f_cloud['servers'].iteritems():
+                        if do_status_filter_inner and not server['status'] in request.form : 
+                            filterIds.append(id)
+                        elif  (ME and not server['user_id'] == f_cloud['user_id'] ) :
+                            filterIds.append(id)
+                    for id in filterIds :
+                        del f_cloud['servers'][id]
+            
+    elif request.method == 'POST':
         
         ACTIVE = 'ACTIVE' in request.form
         STOPPED = 'STOPPED'in request.form
@@ -212,6 +237,25 @@ def delete_vms(cloud=None):
     f_cloud['servers'] = {}
     return redirect("/table/")
 
+
+######################################################################
+# ROUTE: ASSIGN PUBLIC IP
+######################################################################
+
+
+@app.route('/cm/assignpubip/<cloud>/<server>/')
+def assign_public_ip(cloud=None, server=None):
+    config = cm_config()
+    dict_t = config.get()
+    try :
+        if dict_t['clouds'][cloud]['cm_automatic_ip'] == False:
+            clouds.assign_public_ip(cloud,server)
+            clouds.refresh(names = [cloud])
+            return redirect("/table/")
+        else:
+            return "Manual public ip assignment is not allowed for "+cloud+" cloud"
+    except Exception, e:
+         return str(e) + "Manual public ip assignment is not allowed for "+cloud+" cloud"
 ######################################################################
 # ROUTE: START
 ######################################################################
@@ -282,7 +326,7 @@ def table():
 
     active = make_active('table')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-
+    filter()
     # keys = clouds.get_keys()
     return render_template('table.html',
                            updated=time_now,
