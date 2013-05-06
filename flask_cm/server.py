@@ -15,6 +15,8 @@ try:
     from sh import xterm
 except:
     print "xterm not suppported"
+    #TODO: THERE SHOULD BE A VARIABLE SET HERE SO THAT THE ARROW START UP BUTTON 
+    #      CAN RETURN MEANINGFULL MESSAGE IF NOT SUPPORTED
 import yaml
 
 ######################################################################
@@ -136,8 +138,10 @@ def filter(cloud=None):
     print "-> filter", cloud
     filterIds = []
     do_status_filter = False
+    # DOCUMENTATION ABOUT WHERE AND HOW view_state is managed is missing
     if cloud==None and view_state.has_key('table') :
         allClouds = clouds.active()
+        # VARIABLE NAME POOR CHOICE, CONFUSING
         for clud in allClouds:
             do_status_filter_inner = False
             filterIds = []
@@ -168,6 +172,7 @@ def filter(cloud=None):
         SHUTOFF = 'SHUTOFF'in request.form
         ME = 'ME'in request.form
         view_state['table'][cloud] = {}
+        #IF STATES WOULD BE IN A DICT, WE COULD NICELY ITTERATE OVER THEM
         if ACTIVE:
             view_state['table'][cloud]['ACTIVE'] = 'checked'
         if STOPPED:
@@ -260,7 +265,9 @@ def assign_public_ip(cloud=None, server=None):
 # ROUTE: START
 ######################################################################
 
-
+#
+# WHY NOT USE cm_keys as suggested?
+#
 @app.route('/cm/start/<cloud>/')
 def start_vm(cloud=None, server=None):
     print "*********** STARTVM", cloud
@@ -345,6 +352,10 @@ def table():
 ######################################################################
 # ROUTE: PROJECTS
 ######################################################################
+#
+# WHY NOT USE cm_projects as suggested, putting everything in one code becomes confusing and if separated 
+#  increases code maintainability and readability
+#
 def set_default_project(name, project_names, type):
     global default_project;
     default_project = name
@@ -822,8 +833,10 @@ def profile():
                                )
 
 
-
+# THERES IS NO EXPLANATION WHAT THIS FUNCTION IS OR WHAT IT DOES
+# USING HARDCODED CODES SUCH AS india-openstack contradicts our yaml file management!
 def makeCloudDict(dict_t):
+    
     cloudDict = {}
     cloudSubDict = {} # WHAT IS THIS?
     cloudSubsubDict = {} # WHAT IS THIS?
@@ -915,6 +928,12 @@ def page(path):
 # ROUTE: KEYS
 ######################################################################
 
+#
+# the key management does not belong in server.py but must be in a  separate class (as do other things in server ....)
+# server is done to render things not to implement logig that belongs to cloudmesh.
+# keymanagement and checking of keys is a function that should be in cloudmesh. To simplify that, we started a cm_keys code
+# 
+#
 @app.route('/keys/',methods=['GET','POST'])
 def managekeys():
     print ">>>>> KEY"

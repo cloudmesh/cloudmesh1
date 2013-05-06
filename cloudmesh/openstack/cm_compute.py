@@ -468,7 +468,16 @@ class openstack(BaseCloud):
     # security Groups of VMS
     ######################################################################
     
+    # GVL: review
+    # how does this look for azure and euca? Should there be a general framework for this in the BaseCloud class
+    # based on that analysis?
+    #
+    # comments of wht these things do and how they work are missing
+    #
     def createSecurityGroup(self,default_security_group,description="no-description"):
+        """
+        comment is missing
+        """
         protocol=""
         ipaddress=""
         max_port=""
@@ -496,8 +505,15 @@ class openstack(BaseCloud):
         return default_security_group
 
 
-        
+    # GVL: review
+    # how does this look for azure and euca? Should there be a general framework for this in the BaseCloud class
+    # based on that analysis?
+    #
+    # comments of wht these things do and how they work are missing
     def checkSecurityGroups(self):
+        """
+        TODO: comment is missing
+        """
         config_security = cm_config()
         names={}
         
@@ -519,11 +535,29 @@ class openstack(BaseCloud):
             
         else:
            return self.createSecurityGroup(default_security_group)
-        
+
+    # GVL: review
+    # how does this look for azure and euca? Should there be a general framework for this in the BaseCloud class
+    # based on that analysis?
+    #
+    # comments of wht these things do and how they work are missing
+    #
     def get_public_ip(self):
+        """
+        TODO: comment is missing
+        """
         return self.cloud.floating_ips.create()
     
+    # GVL: review
+    # how does this look for azure and euca? Should there be a general framework for this in the BaseCloud class
+    # based on that analysis?
+    #
+    # comments of wht these things do and how they work are missing
+    #
     def assign_public_ip(self,serverid,ip):
+        """
+        comment is missing
+        """
         self.cloud.servers.add_floating_ip(serverid,ip)
         
     ######################################################################
