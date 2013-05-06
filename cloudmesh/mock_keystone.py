@@ -30,6 +30,8 @@ class Client(object):
             self.tenants = tenants
         def list(self):
             return self.tenants
+        def create(self, tname):
+            pass
 
     def __init__(self, username, password, tenant_name, auth_url, cacert):
         self.user = Client.mock_object(name=self.mockusername)

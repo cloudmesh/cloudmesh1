@@ -7,7 +7,7 @@ Usage:
   cm-rc config projects (list|?)
   cm-rc config [-f FILE] [-o OUT] [-p PROJECT] NAME [-]
   cm-rc config dump [--format=(yaml|dict)]
-  cm-rc config init [-o OUT]
+  cm-rc config init [-o OUT] [-u USER]
   cm-rc config list
   cm-rc --version
   cm-rc --help
@@ -44,6 +44,8 @@ Options:
 
   -p PROJECT --project=PROJECT   selects a project (e.g. for eucalyptus which has project-specific environments)
 
+  -u USER --user=USER  the user (login) name
+
   -d  --debug          debug
 
   -                    this option is a - at the end of the command. If data is written to a file it is also put out to stdout
@@ -54,6 +56,9 @@ from docopt import docopt
 from cm_config import cm_config
 import sys
 import os
+from ldap_user import ldap_user
+from openstack_grizzly_cloud import openstack_grizzly_cloud
+import mock_keystone
 
 debug = False
 
@@ -137,7 +142,15 @@ if __name__ == '__main__':
 
         if arguments['init'] or name == 'init':
             output = arguments['--out']
-            config.initialize(os.getenv('USER'))
+            username = arguments['--user'] or os.getenv('USER')
+            config.userdata_handler = ldap_user
+            config.cloudcreds_handler = openstack_grizzly_cloud
+            ########### for testing #############################################################
+            # config.cloudcreds_handler._client = mock_keystone.Client
+            # config.cloudcreds_handler._client.mockusername = username
+            # config.cloudcreds_handler._client.mocktenants = config.data['cloudmesh']['active']
+            #####################################################################################
+            config.initialize(username)
             config.write(output)
             sys.exit(0)
 
