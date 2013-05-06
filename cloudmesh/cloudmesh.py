@@ -348,6 +348,9 @@ class cloudmesh:
             provider = self.cloud_provider(cloud_type)
             cloud = provider(cloud_name)
             cloud.assign_public_ip(vm_id, cloud.get_public_ip().ip)
+        # code review: GVL
+        # else:
+        #    print "BUG: assigning ip addresses from other clouds such as azure, and eucalyptus not implemented yet." 
             
         
     def create(self, cloud_name, prefix, index, image_id, flavor_name, key= None, security_group=None):
