@@ -237,7 +237,6 @@ class openstack(BaseCloud):
         locates at ~/.futuregrid.org/openstack. However if the
         parameters are provided it will instead use them
         """
-
         self.clear()
         self.label = label
         self.config(label)
@@ -272,6 +271,7 @@ class openstack(BaseCloud):
                   auth_plugin=None,
                   cacert=None):
         """       
+       
         self.cloud = client.Client(
             self.credential['OS_USERNAME'],
             self.credential['OS_PASSWORD'],
@@ -292,7 +292,7 @@ class openstack(BaseCloud):
             config = cm_config()
             self.credential = config.get(label,expand=True)
 
-            print self.credential
+            #print self.credential
             
             #self.user_id = self.credential['OS_USER_ID']
             # self.credential = credentials(label)
@@ -400,8 +400,15 @@ class openstack(BaseCloud):
         except:
             if self.user_id == None:
                 sample_flavor = self.cloud.flavors.find(name="m1.tiny")
-                sample_image = self.cloud.images.find(
+                
+                #hack needs to be fixed
+                if self.label in "grizzly-openstack" :
+                    sample_image = self.cloud.images.find(
+                    id="e503bcb4-28c8-4f9f-8303-d99b9bffd568") 
+                else :
+                    sample_image = self.cloud.images.find(
                     id="6d2bca76-8fff-4d57-9f29-50378539b4fa")
+                
                 sample_vm = self.cloud.servers.create(
                     "%s-id" % self.credential["OS_USERNAME"],
                     flavor=sample_flavor,
@@ -513,7 +520,11 @@ class openstack(BaseCloud):
         else:
            return self.createSecurityGroup(default_security_group)
         
-       
+    def get_public_ip(self):
+        return self.cloud.floating_ips.create()
+    
+    def assign_public_ip(self,serverid,ip):
+        self.cloud.servers.add_floating_ip(serverid,ip)
         
     ######################################################################
     # create a vm
@@ -854,15 +865,9 @@ if __name__ == "__main__":
     
     """
 
-    cloud = openstack("india-openstack")
-    all_sc = cloud.sec_grp_list()
-    for sc in all_sc :
-        pp.pprint(sc)
-        print "\n"
-    #cloud.novaclient_dump()
-
-    # print json.dumps(cloud.limits(), indent=4)
-
+    cloud = openstack("grizzly-openstack")
+    cloud.assign_public_ip('669edf65-4cef-461c-b3f9-680b48853138', cloud.get_public_ip().ip)
+    
     """
     print cloud.find_user_id()
 

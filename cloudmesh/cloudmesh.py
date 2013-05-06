@@ -341,13 +341,17 @@ class cloudmesh:
         except:
             print "Error: could not delete keypair", cloud_name
 
-
-        #
-        # POSSIBLE BUG AS create function was changed
-        #
+    def assign_public_ip(self,cloud_name,vm_id):
+        cloud_type = self.clouds[cloud_name]['cm_type']
+        # for now its only for openstack 
+        if cloud_type in "openstack" :
+            provider = self.cloud_provider(cloud_type)
+            cloud = provider(cloud_name)
+            cloud.assign_public_ip(vm_id, cloud.get_public_ip().ip)
+            
+        
     def create(self, cloud_name, prefix, index, image_id, flavor_name, key= None, security_group=None):
-        # bug key has to be defined as parameter when calling this
-
+        
         print ">>>>>>",  cloud_name, prefix, index, image_id, flavor_name, key
         
         security_groups=[]
@@ -366,7 +370,7 @@ class cloudmesh:
             security_groups.append(security_group)
         else :
             security_groups = None
-        cloud.vm_create(name, flavor_name, image_id , security_groups, key)
+        return cloud.vm_create(name, flavor_name, image_id , security_groups, key)
 
         """
         keyname = ''
