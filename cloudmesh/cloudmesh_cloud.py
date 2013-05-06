@@ -58,5 +58,5 @@ class cloudmesh_cloud:
         length = 12
         return ''.join([choice(chars) for _ in range(length)])
 
-    def initialize_cloud_user(self, create_user=False):
+    def initialize_cloud_user(self):
         raise Exception("Not implemented")
