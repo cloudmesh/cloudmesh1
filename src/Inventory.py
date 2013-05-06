@@ -184,6 +184,10 @@ class Inventory:
             return
         pprint.pprint(values)
     """
+    
+    def disconnect(self):
+        print "disconnect not yet implemented"
+        
 
 def main():
 
@@ -214,7 +218,7 @@ def main():
 
         
 
-    #    server.start()
+    #server.start()
     #time.sleep(2)
     #server.stop()
     
