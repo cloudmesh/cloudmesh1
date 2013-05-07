@@ -1,9 +1,11 @@
 import sys
 sys.path.insert(0, '..')
 import yaml
-import pyaml
+#import pyaml
 import os
 import json
+import collections
+
 from string import Template
 
 
@@ -23,7 +25,7 @@ class cm_config(object):
     default_path = '.futuregrid/cloudmesh.yaml'
     yaml_template = 'cloudmesh-template.yaml'
     filename = ""
-    data = {}
+    data = collections.OrderedDict()
 
     ######################################################################
     # initialization methods
@@ -64,6 +66,7 @@ class cm_config(object):
     def _initialize_user(self, username):
         """Loads user data, including profile, projects, and credentials"""
         user = self.userdata_handler(username)
+
         self.data['cloudmesh']['prefix'] = username
 
         self.data['cloudmesh']['profile'] = {
@@ -122,10 +125,23 @@ class cm_config(object):
             f.close()
 
     def write(self, filename=None):
+
+        #pyaml.dump(self.data, f, vspacing=[2, 1, 1])
+        text = yaml.dump(self.data, default_flow_style=False)
+        # avoiding to think about regexp ;-)
+        # shold be eplace all "\n  ." with "\\n  ." but not when . is -   
+        text = text.replace("\n  ", "\n\n  ")
+        text = text.replace("\n\n  -", "\n  -")
+        text = text.replace("\n\n    ", "\n    ")
+        text = text.replace("\n\n      ", "\n      ")
+        text = text.replace("\n\n        ", "\n        ")
+
         f = open(filename or self.filename, "w")
-        pyaml.dump(self.data, f, vspacing=[2, 1, 1])
+        f.write(text)
         f.close()
 
+
+        
     ######################################################################
     # print methods
     ######################################################################

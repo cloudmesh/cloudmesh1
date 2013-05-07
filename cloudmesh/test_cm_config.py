@@ -124,7 +124,7 @@ class Test_cloudmesh:
         name = "/tmp/test.txt"
         print self.config
         self.config.write(name)
-        open(name,"rb").read()
+        print open(name,"rb").read()
 
     def test17_key(self):
         HEADING("KEY")
@@ -175,4 +175,5 @@ class Test_cloudmesh:
         self.config.cloudcreds_handler._client.mockusername = username
         self.config.cloudcreds_handler._client.mocktenants = self.config.data['cloudmesh']['active']
         self.config.initialize(username)
+
 

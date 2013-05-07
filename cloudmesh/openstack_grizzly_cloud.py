@@ -1,7 +1,13 @@
+import sys
 import yaml
 from cloudmesh_cloud import cloudmesh_cloud
-from keystoneclient.v2_0 import client   # http://docs.openstack.org/developer/python-keystoneclient/
 
+try:
+    from keystoneclient.v2_0 import client
+except:
+    print "ERROR: keystoneclient is not installed"
+    print "       Please see http://docs.openstack.org/developer/python-keystoneclient/"
+    sys.exit(1)
 
 class openstack_grizzly_cloud(cloudmesh_cloud):
     _client = client.Client
