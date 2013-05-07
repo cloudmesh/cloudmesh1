@@ -26,8 +26,8 @@ class mock_user:
                 'completed': ['fg-81', 'fg-102'],
                 'default': 'fg-82'
                 },
-            'active': ['grizzly-openstack', 'india-openstack'],
-            'default': 'grizzly-openstack'
+            'active': ['sierra-openstack-grizzly', 'india-openstack'],
+            'default': 'sierra-openstack-grizzly'
             }
 
     @property

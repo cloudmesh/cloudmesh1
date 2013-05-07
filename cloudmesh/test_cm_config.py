@@ -77,9 +77,9 @@ class Test_cloudmesh:
         assert 'india-eucalyptus' in keys
 
     def test08_keys_grizzly_openstack(self):
-	HEADING("KEY grizzly-openstack")
+	HEADING("KEY sierra-openstack-grizzly")
 	keys = self.config.keys()
-        assert 'grizzly-openstack' in keys
+        assert 'sierra-openstack-grizzly' in keys
 
     def test09_keys_india_eucalyptus(self):
 	HEADING("KEY azure")
@@ -88,12 +88,12 @@ class Test_cloudmesh:
 
     def test10_grizzly(self):
 	HEADING("LIST GRIZZLY")
-        result = self.config.get('grizzly-openstack')
+        result = self.config.get('sierra-openstack-grizzly')
 	assert result["OS_VERSION"] == 'grizzly'
 
     def test11_grizzly(self):
 	HEADING("LIST GRIZZLY EXPANDED")
-        result = self.config.get('grizzly-openstack', expand=True)
+        result = self.config.get('sierra-openstack-grizzly', expand=True)
 	assert result["OS_VERSION"] == 'grizzly'
 
     def test12_clouds(self):
@@ -160,10 +160,10 @@ class Test_cloudmesh:
         assert 'security' in cmdata
         assert 'default' in cmdata['keys']
         assert 'india-openstack' in cmdata['clouds']
-        assert 'grizzly-openstack' in cmdata['clouds']
-        assert 'credentials' in cmdata['clouds']['grizzly-openstack']
-        assert cmdata['clouds']['grizzly-openstack']['credentials']['OS_VERSION'] == 'grizzly'
-        assert cmdata['clouds']['grizzly-openstack']['credentials']['OS_USERNAME'] == username
+        assert 'sierra-openstack-grizzly' in cmdata['clouds']
+        assert 'credentials' in cmdata['clouds']['sierra-openstack-grizzly']
+        assert cmdata['clouds']['sierra-openstack-grizzly']['credentials']['OS_VERSION'] == 'grizzly'
+        assert cmdata['clouds']['sierra-openstack-grizzly']['credentials']['OS_USERNAME'] == username
         assert cmdata['prefix'] == username
 
     def test19_openstack_grizzly(self):
@@ -175,5 +175,10 @@ class Test_cloudmesh:
         self.config.cloudcreds_handler._client.mockusername = username
         self.config.cloudcreds_handler._client.mocktenants = self.config.data['cloudmesh']['active']
         self.config.initialize(username)
+        cmdata = self.config.data['cloudmesh']
+        assert cmdata['clouds']['sierra-openstack-grizzly']['credentials']['OS_VERSION'] == 'grizzly'
+        assert cmdata['clouds']['sierra-openstack-grizzly']['credentials']['OS_USERNAME'] == username
+        assert 'OS_PASSWORD' in cmdata['clouds']['sierra-openstack-grizzly']['credentials']
+        assert 'project' in cmdata['clouds']['sierra-openstack-grizzly']['default']
 
 

@@ -567,6 +567,17 @@ class openstack(BaseCloud):
         """
         create a vm
         """
+        
+        if not key_name == None :
+            if not self.check_key_pairs(key_name):
+                config = cm_config()
+                dict_t = config.get()
+                key = dict_t['keys']['keylist'][key_name]
+                if not 'ssh-rsa' in key:
+                    key = open(key,"r").read()
+                self.upload_key_pair(key,key_name)
+                
+        
         print image_id
         vm_flavor = self.cloud.flavors.find(name=flavor_name)
         vm_image = self.cloud.images.find(id=image_id)
@@ -847,7 +858,17 @@ class openstack(BaseCloud):
                 list.append(limit)
 
         return list
-
+    
+    def check_key_pairs(self,key_name):
+        
+        allKeys = self.cloud.keypairs.list()
+        for key in allKeys:
+            if key.name in key_name:
+                return True
+        return False
+                
+        
+    
     ######################################################################
     # Upload Key Pair
     ######################################################################
@@ -900,8 +921,9 @@ if __name__ == "__main__":
     """
 
     cloud = openstack("grizzly-openstack")
-    cloud.assign_public_ip('669edf65-4cef-461c-b3f9-680b48853138', cloud.get_public_ip().ip)
-    
+    keys = cloud.list_key_pairs()
+    for key in keys:
+        print key.name
     """
     print cloud.find_user_id()
 

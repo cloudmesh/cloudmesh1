@@ -43,7 +43,7 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
         tenant = [t for t in self.keystone.tenants.list() if t.name == name]
         return tenant[0] if len(tenant) == 1 else None
 
-    def initialize_cloud_user(self, create_user=False):
+    def initialize_cloud_user(self):
         creds = self.credentials
         defaults = self.clouddefaults
         password = self.newpass()
@@ -53,18 +53,20 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
         defaults['project'] = self.defaultproject
 
         # Create user or reset password (we cannot retrieve existing password)
-        if create_user:
+        user = self.get_user_by_name(self.username)
+        if user is None:
             user = self.keystone.users.create(self.username, password, self.email)
         else:
-            user = self.get_user_by_name(self.username)
             self.keystone.users.update_password(user, password)
 
         # Create membership role for user in each tenant
         member_role = self.get_role_by_name('_member_')
         for tname in self.projects:
             tenant = self.get_tenant_by_name(tname)
+            if tenant is None:
+                tenant = self.keystone.tenants.create(tname)
             self.keystone.roles.add_user_role(user, member_role, tenant)
-            os_tenant = '%s_OS_TENANT_NAME' % tname.replace('-', '').upper()
+            os_tenant = '%s_OS_TENANT_NAME' % tname.upper()
             creds[os_tenant] = tname
-        creds['OS_TENANT_NAME'] = '$%s_OS_TENANT_NAME' % self.defaultproject.replace('-', '').upper()
+        creds['OS_TENANT_NAME'] = '$%s_OS_TENANT_NAME' % self.defaultproject.upper()
 

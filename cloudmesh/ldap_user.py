@@ -94,7 +94,7 @@ class ldap_user:
             for project in self.data['projects']:
                 (projectDN, projectAttrs) = project
                 projectCN = projectAttrs['cn'][0]
-                projects.append("%s-%s" % (projectCN[:2], projectCN[2:]))
+                projects.append("%s" % projectCN)
         return projects
 
     @property
