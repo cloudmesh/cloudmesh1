@@ -157,17 +157,32 @@ class cm_config(object):
     ######################################################################
     # get methods
     ######################################################################
+
+    @property
+    def vmname(self):
+        return "%s-%04d" % (self.data['cloudmesh']['prefix'], int(self.data['cloudmesh']['index']))
+
     def default(self):
         return self.data['cloudmesh']['default']
 
     def active(self):
         return self.data['cloudmesh']['active']
 
+    @property
     def prefix(self):
         return self.data['cloudmesh']['prefix']
 
+    @prefix.setter
+    def prefix(self, value):
+        self.data['cloudmesh']['prefix'] = value
+        
+    @property
     def index(self):
         return self.data['cloudmesh']['index']
+
+    @index.setter
+    def index(self, value):
+        self.data['cloudmesh']['index'] = value
 
     def profile(self):
         return self.data['cloudmesh']['profile']
@@ -217,6 +232,7 @@ class cm_config(object):
 
     # This method may not be exactly what I think it is, but based on usage it
     # appears as if it is supposed to get the keys of the clouds
+
     def keys(self):
         return self.clouds().keys()
 

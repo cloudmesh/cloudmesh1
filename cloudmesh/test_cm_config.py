@@ -181,4 +181,15 @@ class Test_cloudmesh:
         assert 'OS_PASSWORD' in cmdata['clouds']['sierra-openstack-grizzly']['credentials']
         assert 'project' in cmdata['clouds']['sierra-openstack-grizzly']['default']
 
+    def test20_set_index_and_prefix(self):
+        print
+        print "INDEX:", self.config.index
+        print "PREFIX:", self.config.prefix
+
+        self.config.prefix = "hallo"
+        self.config.index = "3"
+        
+        print "INDEX:", self.config.index
+        print "PREFIX:", self.config.prefix
+        print "NAME:", self.config.vmname
 
