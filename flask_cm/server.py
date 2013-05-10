@@ -788,7 +788,6 @@ def profile():
         dict_t = config.get()
         person = dict_t['profile']
         #print person
-        #makeCloudDict(dict_t)
         ###########projects radio button################
         activeProjects=config.projects('active')
         project_names=buildProjectNamesArray(activeProjects)
@@ -807,19 +806,12 @@ def profile():
         
         time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-        # bug: the name of the clouds should be retrived from config. I guess this is left over from my example
-        """
-        cloudinfo = {
-            'openstak-india': {'type': 'openstack', 'host': 'india.futuregrid.org',
-                               'username': 'shweta'}}
-        """
         address = '\n'.join(str(x) for x in person['address']) 
         return render_template('profile.html',
                                updated=time_now,
                                # keys are also in dict_t, so we may not need that
                                keys="",  # ",".join(clouds.get_keys()),
-                               # NOT SURE WHY YOU NEED cloudinfo as most of the stuff is in dict_t
-                               #cloudinfo=makeCloudDict(dict_t),
+
                                selectedClouds=selectedClouds,
                                person=person,
                                address=address,
@@ -834,59 +826,6 @@ def profile():
                                selectedSecurity=selectedSecurity,
                                )
 
-"""
-# THERES IS NO EXPLANATION WHAT THIS FUNCTION IS OR WHAT IT DOES
-# USING HARDCODED CODES SUCH AS india-openstack contradicts our yaml file management!
-def makeCloudDict(dict_t):
-    
-    cloudDict = {}
-    cloudSubDict = {} # WHAT IS THIS?
-    cloudSubsubDict = {} # WHAT IS THIS?
-    ############# the below variables are used to display projects.html Here projects dict contains all the projects################
-    project_content={}
-    global projects;
-    projects={};
-
-    ########### end of variables for display of projects.html###########################
-    for key, value in dict_t.iteritems():
-        # BIG Bug: this should be changed based on a test of type and not the name of the cloud
-        # IS THIS STILL WORKING WITH THE clouds: ?...it works now-shweta
-        
-        if "clouds" in key:
-            for cloudKey, cloudValue in value.iteritems():
-                if "india-openstack" in cloudKey:
-                    for innerKey, innerValue in cloudValue.iteritems():
-                        innerKey = innerKey.replace("OS_", "")
-                        innerKey = innerKey.replace("cm_", "")
-                        cloudSubDict[innerKey.upper()] = innerValue
-                    cloudDict[key.upper()] = cloudSubDict
-                    cloudSubDict = {}
-                if "india-eucalyptus" in cloudKey:
-                    for innerKey, innerValue in cloudValue.iteritems():
-                        if "fg" in innerKey:
-                            for innermostKey, innermostValue in innerValue.iteritems():
-                                project_content[innermostKey]=innermostValue
-                                innermostKey = innermostKey.replace("EC2_", "")
-                                cloudSubsubDict[innermostKey.upper()] = innermostValue
-                            cloudDict[innerKey.upper()] = cloudSubsubDict
-                            cloudSubsubDict = {}
-                            projects[innerKey]=project_content;
-                            project_content={};
-                        else:
-                            innerKey = innerKey.replace("EC2_", "")
-                            cloudSubDict[innerKey.upper()] = innerValue
-                        cloudDict[key.upper()] = cloudSubDict
-                        cloudSubDict = {}
-                if "azure" in cloudKey:
-                    cloudSubDict = {}
-                    for innerKey, innerValue in value.iteritems():
-                        cloudSubDict[innerKey.upper()] = innerValue
-                    cloudDict[key.upper()] = cloudSubDict
-                    cloudSubDict = {}
-    # print (cloudDict);
-
-    return cloudDict
-"""
 ######################################################################
 # ROUTE: METRIC
 ######################################################################
