@@ -68,6 +68,8 @@ class cm_config(object):
         user = self.userdata_handler(username)
 
         self.data['cloudmesh']['prefix'] = username
+        self.data['cloudmesh']['index'] = "001"
+        
 
         self.data['cloudmesh']['profile'] = {
             'username': username,
@@ -163,6 +165,9 @@ class cm_config(object):
 
     def prefix(self):
         return self.data['cloudmesh']['prefix']
+
+    def index(self):
+        return self.data['cloudmesh']['index']
 
     def profile(self):
         return self.data['cloudmesh']['profile']

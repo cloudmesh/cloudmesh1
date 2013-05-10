@@ -27,7 +27,18 @@ $(function() {
 <tr><td></td><td>e-mail</td><td>{{ person['e-mail'] }}</td><td></td></tr>
 <tr><td></td><td>Address</td><td>{{ address|replace("\n", "<br />")|safe }} </td><td></td></tr>
 <tr><td>{{ image_button ("right", "030_pencil", "/prefix/") }}</td><td colspan="2"><b> Prefix </b></td> <td></td></tr>  
-<tr><td></td><td>Prefix</td><td>{{ config.prefix }}</td><td></td></tr>
+
+<form name="editPrefix">
+<tr><td></td><td>Prefix</td><td>
+  <input type="text" name="prefix" value="{{ config.prefix }}">
+  </td><td></td></tr>
+</form>
+<form name="editIndex">  
+<tr><td></td><td>Index</td><td>
+  <input type="text" name="index" value="{{ config.index }}">
+  </td><td></td></tr>
+</form>
+
 <tr><td>{{ image_button ("right", "030_pencil", "/projects/") }}</td><td>
 
 <b> Projects </b></td>
@@ -85,8 +96,5 @@ $(function() {
 <tr><td></td><td>Default</td><td> {{config['security']['default']}}</td><td></td></tr>
 </table>
 
-
-Testing Inline editing
-<div class="edit" id="div_1">Dolor</div>
 
 {% endblock content %}
