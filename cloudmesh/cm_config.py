@@ -158,6 +158,8 @@ class cm_config(object):
     # get methods
     ######################################################################
 
+    def incr(self, value=1):
+        self.data['cloudmesh']['index'] = int(self.data['cloudmesh']['index'])) + int(value)
     @property
     def vmname(self):
         return "%s-%04d" % (self.data['cloudmesh']['prefix'], int(self.data['cloudmesh']['index']))
@@ -182,7 +184,7 @@ class cm_config(object):
 
     @index.setter
     def index(self, value):
-        self.data['cloudmesh']['index'] = value
+        self.data['cloudmesh']['index'] = int(value)
 
     def profile(self):
         return self.data['cloudmesh']['profile']
