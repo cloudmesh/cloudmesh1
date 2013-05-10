@@ -32,6 +32,7 @@ requires=[
     "pymongo",
     "sphinxcontrib-blockdiag",
     "python-novaclient",
+    "python-keystoneclient",
     "apache-libcloud"
 ],
 

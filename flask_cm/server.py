@@ -788,7 +788,7 @@ def profile():
         dict_t = config.get()
         person = dict_t['profile']
         #print person
-        makeCloudDict(dict_t)
+        #makeCloudDict(dict_t)
         ###########projects radio button################
         activeProjects=config.projects('active')
         project_names=buildProjectNamesArray(activeProjects)
@@ -803,22 +803,24 @@ def profile():
         selectedSecurity=set_default_security(default_secGroup, securityGroups)
         ###########end of security radio button################
 
+        selectedClouds = clouds.active()
         
         time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
         # bug: the name of the clouds should be retrived from config. I guess this is left over from my example
-
+        """
         cloudinfo = {
             'openstak-india': {'type': 'openstack', 'host': 'india.futuregrid.org',
                                'username': 'shweta'}}
-
+        """
         address = '\n'.join(str(x) for x in person['address']) 
         return render_template('profile.html',
                                updated=time_now,
                                # keys are also in dict_t, so we may not need that
                                keys="",  # ",".join(clouds.get_keys()),
                                # NOT SURE WHY YOU NEED cloudinfo as most of the stuff is in dict_t
-                               cloudinfo=makeCloudDict(dict_t),
+                               #cloudinfo=makeCloudDict(dict_t),
+                               selectedClouds=selectedClouds,
                                person=person,
                                address=address,
                                active_clouds=clouds.active(),
@@ -832,7 +834,7 @@ def profile():
                                selectedSecurity=selectedSecurity,
                                )
 
-
+"""
 # THERES IS NO EXPLANATION WHAT THIS FUNCTION IS OR WHAT IT DOES
 # USING HARDCODED CODES SUCH AS india-openstack contradicts our yaml file management!
 def makeCloudDict(dict_t):
@@ -884,7 +886,7 @@ def makeCloudDict(dict_t):
     # print (cloudDict);
 
     return cloudDict
-
+"""
 ######################################################################
 # ROUTE: METRIC
 ######################################################################

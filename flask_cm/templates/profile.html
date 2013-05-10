@@ -42,13 +42,22 @@ $(function() {
 </td>
 
  <td></td></tr>  
-<tr><td></td><td>Default</td><td>{{ config.projects.default }}</td><td></td></tr>
-<tr><td></td><td>Projects</td><td>{{ config.projects.active }}</td><td></td></tr>
-<tr><td></td><td>Completed</td><td>{{ config.projects.completed }}</td><td></td></tr>    
+<tr><td></td><td>Completed</td><td>{{ ', '.join(config.projects.completed) }}</td><td></td></tr>    
 <tr><td>{{ image_button ("right", "030_pencil", "/clouds/") }}</td><td colspan="2"><b> Clouds </b></td> <td></td></tr>
 <tr><td></td><td>Default</td><td>{{ config.default }}</td><td>edit</td></tr>
-<tr><td></td><td>Active</td><td>{{ active_clouds }}</td><td>edit</td></tr>
-<tr><td></td><td>Available</td><td>{{ config.clouds.keys() }}</td><td></td></tr>
+<tr><td></td><td>Active</td><td>{{ ', '.join(active_clouds) }}</td><td>edit</td></tr>
+
+<tr><td></td><td>Available</td><td>
+  {% for cloudname in config.clouds.keys() %}
+ <input type="checkbox"
+        name="selected_clouds"
+        value="{{ cloudname }}"
+        id="{{ cloudname }}"
+        onclick="document.forms['cloudGroups'].submit()"
+        {{ selectedClouds[cloudname] }}/> {{ cloudname}}
+{% endfor %}
+</td><td></td></tr>
+
 <tr><td>{{ image_button ("right", "030_pencil", "/keys/") }}</td><td colspan="2"><b> Keys </b></td> <td> </td></tr>
 {% if config.has_key('keys') and config['keys']['keylist'].has_key(config['keys']['default']) %}
 <tr><td></td><td>Default</td><td> {{config['keys']['default']}} : {{ fun_print(config['keys']['keylist'][config['keys']['default']]) }}</td><td></td></tr>
@@ -75,6 +84,7 @@ $(function() {
  <td> </td></tr>
 <tr><td></td><td>Default</td><td> {{config['security']['default']}}</td><td></td></tr>
 </table>
+
 
 Testing Inline editing
 <div class="edit" id="div_1">Dolor</div>
