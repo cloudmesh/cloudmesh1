@@ -159,7 +159,7 @@ class cm_config(object):
     ######################################################################
 
     def incr(self, value=1):
-        self.data['cloudmesh']['index'] = int(self.data['cloudmesh']['index'])) + int(value)
+        self.data['cloudmesh']['index'] = int(self.data['cloudmesh']['index']) + int(value)
     @property
     def vmname(self):
         return "%s-%04d" % (self.data['cloudmesh']['prefix'], int(self.data['cloudmesh']['index']))

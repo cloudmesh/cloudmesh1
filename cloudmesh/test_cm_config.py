@@ -193,3 +193,12 @@ class Test_cloudmesh:
         print "PREFIX:", self.config.prefix
         print "NAME:", self.config.vmname
 
+
+        self.config.incr()
+
+        
+        print "INDEX:", self.config.index
+        print "PREFIX:", self.config.prefix
+        print "NAME:", self.config.vmname
+
+        assert self.config.index == 4 and self.config.prefix == "hallo"
