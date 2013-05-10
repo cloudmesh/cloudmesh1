@@ -56,9 +56,10 @@ $(function() {
 <tr><td></td><td>Completed</td><td>{{ ', '.join(config.projects.completed) }}</td><td></td></tr>    
 <tr><td>{{ image_button ("right", "030_pencil", "/clouds/") }}</td><td colspan="2"><b> Clouds </b></td> <td></td></tr>
 <tr><td></td><td>Default</td><td>{{ config.default }}</td><td>edit</td></tr>
+
 <tr><td></td><td>Active</td><td>{{ ', '.join(active_clouds) }}</td><td>edit</td></tr>
 
-<tr><td></td><td>Available</td><td>
+<tr><td></td><td>Active (TBD) </td><td>
   {% for cloudname in config.clouds.keys() %}
  <input type="checkbox"
         name="selected_clouds"
@@ -68,6 +69,18 @@ $(function() {
         {{ selectedClouds[cloudname] }}/> {{ cloudname}}
 {% endfor %}
 </td><td></td></tr>
+
+<tr><td></td><td>Default (TBD) </td><td>
+  {% for cloudname in config.clouds.keys() %}
+ <input type="radio"
+        name="defaultClouds"
+        value="{{ cloudname }}"
+        id="{{ cloudname }}"
+        onclick="document.forms['defaultClouds'].submit()"
+        {{ defaultClouds[cloudname] }}/> {{ cloudname}}
+{% endfor %}
+</td><td></td></tr>
+
 
 <tr><td>{{ image_button ("right", "030_pencil", "/keys/") }}</td><td colspan="2"><b> Keys </b></td> <td> </td></tr>
 {% if config.has_key('keys') and config['keys']['keylist'].has_key(config['keys']['default']) %}

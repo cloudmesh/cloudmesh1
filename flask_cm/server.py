@@ -803,6 +803,7 @@ def profile():
         ###########end of security radio button################
 
         selectedClouds = clouds.active()
+        defaultClouds = {} # this is wrong, but i just make it so for the mockup, all is contained in cm_config
         
         time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
@@ -811,7 +812,7 @@ def profile():
                                updated=time_now,
                                # keys are also in dict_t, so we may not need that
                                keys="",  # ",".join(clouds.get_keys()),
-
+                               defaultClouds=defaultClouds,
                                selectedClouds=selectedClouds,
                                person=person,
                                address=address,
