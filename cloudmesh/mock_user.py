@@ -10,6 +10,8 @@ class mock_user:
         self._data = {
             'profile': {
                 'username': self._username,
+                'uid': '999',
+                'gid': '100',
                 'firstname': 'Gregor',
                 'lastname': 'von Laszewski',
                 'phone': '812 ...',
@@ -35,6 +37,14 @@ class mock_user:
         if self._data is None:
             self._load_data()
         return self._data
+
+    @property
+    def uid(self):
+        return self.data['profile']['uid']
+
+    @property
+    def gid(self):
+        return self.data['profile']['gid']
 
     @property
     def firstname(self):

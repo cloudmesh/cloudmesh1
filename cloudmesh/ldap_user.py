@@ -46,6 +46,14 @@ class ldap_user:
         return self._data
 
     @property
+    def uid(self):
+        return self.data['person']['uidNumber'][0] if 'uidNumber' in self.data['person'] else None
+
+    @property
+    def gid(self):
+        return self.data['person']['gidNumber'][0] if 'gidNumber' in self.data['person'] else None
+
+    @property
     def firstname(self):
         return self.data['person']['givenName'][0] if 'givenName' in self.data['person'] else None
 
@@ -111,6 +119,8 @@ class ldap_user:
 if __name__ == "__main__":
     luser = ldap_user('astreib')
     print "Username: %s" % luser.username
+    print "Uid: %s" % luser.uid
+    print "Gid: %s" % luser.gid
     print "First Name: %s" % luser.firstname
     print "Last Name: %s" % luser.lastname
     print "Keys: %s" % luser.keys

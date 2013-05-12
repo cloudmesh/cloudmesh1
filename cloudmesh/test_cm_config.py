@@ -16,6 +16,8 @@ from mock_cloud import mock_cloud
 from openstack_grizzly_cloud import openstack_grizzly_cloud
 import mock_keystone
 import json
+import os
+import warnings
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -121,10 +123,12 @@ class Test_cloudmesh:
 
     def test16_write(self):
         HEADING("WRITE")
-        name = "/tmp/test.txt"
+        warnings.filterwarnings('ignore', 'tempnam', RuntimeWarning)  # we open the file securely
+        name = os.tempnam()
         print self.config
         self.config.write(name)
         print open(name,"rb").read()
+        os.remove(name)
 
     def test17_key(self):
         HEADING("KEY")

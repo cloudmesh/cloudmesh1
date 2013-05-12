@@ -3,6 +3,7 @@ sys.path.insert(0, '..')
 import yaml
 #import pyaml
 import os
+import stat
 import json
 import collections
 
@@ -73,6 +74,8 @@ class cm_config(object):
 
         self.data['cloudmesh']['profile'] = {
             'username': username,
+            'uid': user.uid,
+            'gid': user.gid,
             'firstname': user.firstname,
             'lastname': user.lastname,
             'phone': user.phone,
@@ -138,10 +141,13 @@ class cm_config(object):
         text = text.replace("\n\n      ", "\n      ")
         text = text.replace("\n\n        ", "\n        ")
 
-        f = open(filename or self.filename, "w")
-        f.write(text)
-        f.close()
-
+        fpath = filename or self.filename
+        f = os.open(fpath, os.O_CREAT | os.O_EXCL | os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
+        os.write(f, text)
+        if os.geteuid() == 0:
+            os.fchown(f, int(self.profile()['uid'] or -1),
+                      int(self.profile()['gid'] or -1))
+        os.close(f)
 
         
     ######################################################################
