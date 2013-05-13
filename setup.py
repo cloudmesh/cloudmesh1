@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 import sys
 import os
 
-version = "0.7.2"
+version = "0.8.0"
 
 
 ######################################################################
@@ -33,6 +33,7 @@ requires=[
     "sphinxcontrib-blockdiag",
     "python-novaclient",
     "python-keystoneclient",
+    "python-ldap",
     "apache-libcloud"
 ],
 
@@ -117,11 +118,12 @@ setup(
     # include_package_data=True,
     zip_safe=False,
 
-#    entry_points={
-#        'console_scripts': [
-#                'cm = fgvirtualcluster.FGCluster:commandline_parser',
-#                'fg-csh = fgvirtualcluster.FGShell:main',
-#             ]},
+    entry_points={
+        'console_scripts': [
+            'fg-manage = cloudmesh.cm_rc:main'
+#            'cm = fgvirtualcluster.FGCluster:commandline_parser',
+#            'fg-csh = fgvirtualcluster.FGShell:main',
+            ]},
 
     install_requires=install_requires
 
