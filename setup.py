@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 import sys
 import os
 
-version = "0.8.0"
+version = "0.8"
 
 
 ######################################################################
@@ -19,7 +19,6 @@ requires=[
     'setuptools',
     'pip',
     'docopt',
-    #'pyaml', 
     'pyyaml',
     'Flask',
     'Flask-FlatPages',
@@ -121,16 +120,9 @@ setup(
 
     entry_points={
         'console_scripts': [
-<<<<<<< HEAD
                 'fg-manage = cloudmesh.cm-rc:main',
 #                'fg-csh = fgvirtualcluster.FGShell:main',
              ]},
-=======
-            'fg-manage = cloudmesh.cm_rc:main'
-#            'cm = fgvirtualcluster.FGCluster:commandline_parser',
-#            'fg-csh = fgvirtualcluster.FGShell:main',
-            ]},
->>>>>>> 8efeaf9b4c42fc13c3345f10632a4705586daf79
 
     install_requires=install_requires
 

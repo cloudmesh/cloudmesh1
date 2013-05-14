@@ -1,16 +1,16 @@
 #! /usr/bin/env python
-"""cm-rc config
+"""cm-manage config
 ------------
 Command to generate rc files from our cloudmesh configuration files.
 
 Usage:
-  cm-rc config projects (list|?)
-  cm-rc config [-f FILE] [-o OUT] [-p PROJECT] NAME [-]
-  cm-rc config dump [--format=(yaml|dict)]
-  cm-rc config init [-o OUT] [-u USER]
-  cm-rc config list
-  cm-rc --version
-  cm-rc --help
+  cm-manage config projects (list|?)
+  cm-manage config [-f FILE] [-o OUT] [-p PROJECT] NAME [-]
+  cm-manage config dump [--format=(yaml|dict)]
+  cm-manage config init [-o OUT] [-u USER]
+  cm-manage config list
+  cm-manage --version
+  cm-manage --help
 
 This program generates form a YAML file containing the login
 information for a cloud an rc file that can be used to later source
@@ -19,13 +19,13 @@ it.
 Example:
   we assume the yaml file has an entry india-openstack
 
-    cm-rc config -o novarc india-openstack
+    cm-manage config -o novarc india-openstack
     source novarc
 
   This will create a novarc file and than you can source it.
 
 
-     cm-rc config ? -
+     cm-manage config ? -
 
    Presents a selction of cloud choices and writes the choice into a
    file called ~/.futuregrid/novarc
