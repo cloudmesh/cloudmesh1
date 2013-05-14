@@ -22,13 +22,17 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
         if self._keystone is None:
             # Create/connect to keystone
             cm_admin = self.admin_data['cm_admin']
-            self._keystone = self._client(
-                username=cm_admin['OS_USERNAME'],
-                password=cm_admin['OS_PASSWORD'],
-                tenant_name=cm_admin['OS_TENANT_NAME'],
-                auth_url=cm_admin['OS_AUTH_URL'],
-                cacert=cm_admin['OS_CACERT']
-                )
+            try:
+                self._keystone = self._client(
+                    username=cm_admin['OS_USERNAME'],
+                    password=cm_admin['OS_PASSWORD'],
+                    tenant_name=cm_admin['OS_TENANT_NAME'],
+                    auth_url=cm_admin['OS_AUTH_URL'],
+                    cacert=cm_admin['OS_CACERT']
+                    )
+            except client.exceptions.AuthorizationFailure as authz_err:
+                print "%s\nHint: check configuration in %s" % (authz_err, self.CLOUD_DEFNS)
+                sys.exit(1)
         return self._keystone
 
     def get_user_by_name(self, name):

@@ -91,7 +91,7 @@ def main():
 
     if is_config:
 
-        print arguments
+        DEBUG('Arguments', arguments)
 
         file = arguments['--file']
         try:
@@ -153,7 +153,11 @@ def main():
             # config.cloudcreds_handler._client.mocktenants = config.data['cloudmesh']['active']
             #####################################################################################
             config.initialize(username)
-            config.write(output)
+            try:
+                config.write(output)
+            except OSError as oserr:
+                if oserr.errno == 17:
+                    print "'%s' exists, please rename or remove it and try again." % oserr.filename
             sys.exit(0)
 
         if arguments['list'] or name == 'list':
@@ -232,7 +236,6 @@ def main():
                 out = open(output, "w")
                 out.write(result)
                 out.close()
-                os.system("cat " + str(output))
 
     ######################################################################
     # END "cm config" related commands
