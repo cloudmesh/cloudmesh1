@@ -114,6 +114,7 @@ setup(
     license='Apache 2.0',
     package_dir={'': '.'},
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+    data_files=[('cloudmesh', ['cloudmesh/cloudmesh_template.yaml', 'cloudmesh/cloudmesh_clouds.yaml'])],
 
     # include_package_data=True,
     zip_safe=False,

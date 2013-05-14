@@ -22,9 +22,8 @@ class cm_config(object):
     ######################################################################
     # global variables
     ######################################################################
-
     default_path = '.futuregrid/cloudmesh.yaml'
-    yaml_template = 'cloudmesh-template.yaml'
+    yaml_template = '%s/cloudmesh_template.yaml' % os.path.dirname(__file__)
     filename = ""
     data = collections.OrderedDict()
 
