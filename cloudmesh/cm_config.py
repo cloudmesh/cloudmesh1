@@ -217,7 +217,7 @@ class cm_config(object):
         return self.data['cloudmesh']['clouds']
 
     def cloud(self, cloudname):
-        return self.data['cloudmesh']['clouds'][cloudname]
+        return self.data['cloudmesh']['clouds'][cloudname] if cloudname in self.data['cloudmesh']['clouds'] else None
         
     def cloud_default(self, cloudname, defname):
         cloud = self.cloud(cloudname)

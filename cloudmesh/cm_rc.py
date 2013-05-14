@@ -56,6 +56,7 @@ from docopt import docopt
 from cm_config import cm_config
 import sys
 import os
+import stat
 from ldap_user import ldap_user
 from openstack_grizzly_cloud import openstack_grizzly_cloud
 
@@ -200,42 +201,50 @@ def main():
         output = arguments['--out']
 
         if name != None:
-            if config.cloud(name)['cm_type'] == 'eucalyptus':
+            cloud = config.cloud(name)
+            if not cloud:
+                print "%s: The cloud '%s' is not defined." % ("CM ERROR", name)
+                print "Try instead:"
+                for keyname in config.keys():
+                    print "    ", keyname
+                sys.exit(1)
+
+            if cloud['cm_type'] == 'eucalyptus':
                 if arguments['--project']:
                     project = arguments['--project']
-                    if not project in config.cloud(name):
+                    if not project in cloud:
                         print "No such project %s defined in cloud %s." % (project, name)
                         sys.exit(1)
                 else:
                     project = config.cloud_default(name, 'project') or config.projects('default')
-                    if not project in config.cloud(name):
+                    if not project in cloud:
                         print "Default project %s not defined in cloud %s." % (project, name)
                         sys.exit(1)
                 rc_func = lambda name: config.rc_euca(name, project)
             else:
                 rc_func = config.rc
 
-            try:
-                result = rc_func(name)
-            except:
-                print "%s: The cloud '%s' can not be found" % ("CM ERROR", name)
-                print "Try instead"
-                for name in config.keys():
-                    if 'cm_type' in config.data['cloudmesh'][name]:
-                        print "    ", name
-
-                sys.exit(1)
+            result = rc_func(name)
 
             if arguments["-"]:
                 print result
             else:
-
                 if output == None:
                     arguments['--out'] = "%s/%s" % (home, default_path)
                     output = arguments['--out']
-                out = open(output, "w")
-                out.write(result)
-                out.close()
+                out = False
+                try:
+                    # First we try to open the file assuming it doesn't exist
+                    out = os.open(output, os.O_CREAT | os.O_EXCL | os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
+                except OSError as oserr:
+                    # If file exists, offer to replace it
+                    if oserr.errno == 17:
+                        delete = raw_input("'%s' exists; Overwrite it [N|y]? " % output)
+                        if delete.strip().lower() == 'y':
+                            out = os.open(output, os.O_TRUNC | os.O_WRONLY)
+                if out:
+                    os.write(out,result)
+                    os.close(out)
 
     ######################################################################
     # END "cm config" related commands
