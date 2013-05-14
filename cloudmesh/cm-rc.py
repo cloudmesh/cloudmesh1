@@ -70,7 +70,8 @@ def DEBUG(label, var):
         print str(var)
         print 70 * "-"
 
-if __name__ == '__main__':
+def main( .... ) 
+
 
     default_path = '.futuregrid/novarc'
     arguments = docopt(__doc__, version='1.0.1')
@@ -235,3 +236,7 @@ if __name__ == '__main__':
     ######################################################################
     # END "cm config" related commands
     ######################################################################
+
+if __name__ == '__main__':
+
+    main( ... )

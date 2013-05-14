@@ -19,7 +19,8 @@ requires=[
     'setuptools',
     'pip',
     'docopt',
-    'pyaml', #'pyyaml',
+    #'pyaml', 
+    'pyyaml',
     'Flask',
     'Flask-FlatPages',
     'Flask-WTF',
@@ -117,11 +118,11 @@ setup(
     # include_package_data=True,
     zip_safe=False,
 
-#    entry_points={
-#        'console_scripts': [
-#                'cm = fgvirtualcluster.FGCluster:commandline_parser',
+    entry_points={
+        'console_scripts': [
+                'fg-manage = cloudmesh.cm-rc:main',
 #                'fg-csh = fgvirtualcluster.FGShell:main',
-#             ]},
+             ]},
 
     install_requires=install_requires
 
