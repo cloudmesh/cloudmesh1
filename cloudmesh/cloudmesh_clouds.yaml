@@ -4,20 +4,20 @@ sierra-openstack-grizzly:
     cm_type: openstack
     cm_admin:
         OS_USERNAME: admin
-        OS_PASSWORD: secret
+        OS_PASSWORD: secret <--> change this
         OS_TENANT_NAME: demo
-        OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:35357/v2.0
+        OS_AUTH_URL: https://............... <--> change this
         OS_CACERT: cacert.pem
     credentials:
-        OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
+        OS_AUTH_URL: https://............... <--> change this
         OS_PASSWORD: password
         OS_TENANT_NAME: member
         OS_USERNAME: username
         OS_VERSION: grizzly
         OS_CACERT: /etc/futuregrid/openstack/sierra/cacert.pem
     default:
-        flavor: m1.tiny
-        image: ktanaka/ubuntu1204-ramdisk.manifest.xml 
+        flavor: m1.small
+        image: futuregrid/ubuntu-12.04
 
 india-openstack:
     cm_label: ios
