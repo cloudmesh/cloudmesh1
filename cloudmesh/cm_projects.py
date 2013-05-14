@@ -17,19 +17,32 @@ class cm_projects:
     @property
     def default(self):
         """returns the default project"""
-        
+        return self.data['cloudmesh']['projects']['default']
+
     @default.setter
     def default(self, name):
         """sets the default project"""
+        # check if name is in active projects
+        # if it is, set the new default project.
+        # if it is not through an exception and spit out a nice msg explaining that the default project needs to be set
+        self.data['cloudmesh']['projects']['default'] = name
 
     def add(self, name, status="active")
         """adds a project with given status"""
-
+        # add the name to the following array (make sure it is an array ;-)
+        # self.data['cloudmesh']['projects']['default'][status]
+        
     def names(self, status="active"):
         """returns all projects in an array with a specified status"""
-
+        self.data['cloudmesh']['projects']['default'][status]
+        
     def __str__(self):
         """returns the dict in a string representing the project"""
-
+        # untested
+        text = self.data['cloudmesh']['projects']
+        return text
+    
     def save(self):
         """writes the updated dict to the config yaml file"""
+        # saves back into the same file from which we read.
+        # uses the cm_config writer
