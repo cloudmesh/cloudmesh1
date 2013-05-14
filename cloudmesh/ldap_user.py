@@ -63,11 +63,11 @@ class ldap_user:
 
     @property
     def phone(self):
-        return self.data['person']['telephoneNumber'] if 'telephoneNumber' in self.data['person'] else None
+        return self.data['person']['telephoneNumber'][0] if 'telephoneNumber' in self.data['person'] else None
 
     @property
     def email(self):
-        return self.data['person']['mail'] if 'mail' in self.data['person'] else None
+        return self.data['person']['mail'][0] if 'mail' in self.data['person'] else None
 
     @property
     def address(self):

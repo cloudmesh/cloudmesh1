@@ -58,7 +58,9 @@ import sys
 import os
 from ldap_user import ldap_user
 from openstack_grizzly_cloud import openstack_grizzly_cloud
-import mock_keystone
+
+##### For testing
+# import mock_keystone
 
 debug = False
 
@@ -70,9 +72,8 @@ def DEBUG(label, var):
         print str(var)
         print 70 * "-"
 
-def main( .... ) 
 
-
+def main():
     default_path = '.futuregrid/novarc'
     arguments = docopt(__doc__, version='1.0.1')
 
@@ -238,5 +239,4 @@ def main( .... )
     ######################################################################
 
 if __name__ == '__main__':
-
-    main( ... )
+    main()
