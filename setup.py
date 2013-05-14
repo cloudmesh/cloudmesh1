@@ -120,7 +120,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-                'fg-manage = cloudmesh.cm-rc:main',
+                'fg-manage = cloudmesh.cm_rc:main',
 #                'fg-csh = fgvirtualcluster.FGShell:main',
              ]},
 
