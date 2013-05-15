@@ -83,10 +83,11 @@ class cm_config(object):
             }
 
         keys = { 'default': None, 'keylist': {} }
-        for key in user.keys.keys():
-            if keys['default'] is None:
-                keys['default'] = key
-            keys['keylist'][key] = user.keys[key]
+        if user.keys:
+            for key in user.keys.keys():
+                if keys['default'] is None:
+                    keys['default'] = key
+                keys['keylist'][key] = user.keys[key]
         self.data['cloudmesh']['keys'] = keys
 
         self.data['cloudmesh']['projects'] = {
