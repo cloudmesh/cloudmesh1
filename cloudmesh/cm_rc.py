@@ -163,8 +163,8 @@ def main():
 
         if arguments['list'] or name == 'list':
             for name in config.keys():
-                if 'cm_type' in config.data['cloudmesh'][name]:
-                    print name, "(%s)" % config.data['cloudmesh'][name]['cm_type']
+                if 'cm_type' in config.data['cloudmesh']['clouds'][name]:
+                    print name, "(%s)" % config.data['cloudmesh']['clouds'][name]['cm_type']
             sys.exit(0)
 
         if arguments['dump'] or name =='dump':
