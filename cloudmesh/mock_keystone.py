@@ -22,6 +22,8 @@ class Client(object):
             self.roles = roles
         def add_user_role(self, user, role, tenant):
             pass
+        def roles_for_user(self, user, tenant):
+            return []
         def list(self):
             return self.roles
 
