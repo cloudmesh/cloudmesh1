@@ -78,8 +78,9 @@ class ldap_user:
         keys = {}
         if 'sshPublicKey' in self.data['person']:
             for sshkey in self.data['person']['sshPublicKey']:
-                (keytype, key, nickname) = (sshkey.split(None, 2) + [''])[0:3]
-                keys[nickname] = "key %s" % sshkey
+                if sshkey.strip():
+                    (keytype, key, nickname) = (sshkey.strip().split(None, 2) + [''])[0:3]
+                    keys[nickname] = "key %s" % sshkey
             return keys
         else:
             return None
