@@ -247,7 +247,7 @@ class cm_config(object):
     def rc(self, name):
         result = self.get(name)
         lines = ""
-        for (attribute, value) in result.iteritems():
+        for (attribute, value) in iter(sorted(result.iteritems())):
             lines += self.export_line(attribute, value)
         return lines
 
