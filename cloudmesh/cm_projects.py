@@ -1,4 +1,15 @@
+from cm_config import cm_config
+from string import Template
+import os
+
 class cm_projects:
+
+    def _path_expand(self,text):
+        """ returns a string with expanded variavble """
+        template = Template(text)
+        result = template.substitute(os.environ)
+        result = os.path.expanduser(result)
+        return result
 
     def __init__(self, filename=None):
         """initializes based on cm_config and returns pointer to the keys dict."""
@@ -27,7 +38,7 @@ class cm_projects:
         # if it is not through an exception and spit out a nice msg explaining that the default project needs to be set
         self.data['cloudmesh']['projects']['default'] = name
 
-    def add(self, name, status="active")
+    def add(self, name, status="active"):
         """adds a project with given status"""
         # add the name to the following array (make sure it is an array ;-)
         # self.data['cloudmesh']['projects']['default'][status]
