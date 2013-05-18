@@ -9,6 +9,7 @@ Usage:
   cm-manage config dump [--format=(yaml|dict)]
   cm-manage config init [-o OUT] [-u USER]
   cm-manage config list
+  cm-manage config fetch [-u USER] [-r HOST] 
   cm-manage --version
   cm-manage --help
 
@@ -46,11 +47,14 @@ Options:
 
   -u USER --user=USER  the user (login) name
 
+  -r HOST --remote=HOST  the host machine on which the yaml file is located in the ~/.futuregrid directory [default: sierra.futuregrid.org]
+
   -d  --debug          debug
 
   -                    this option is a - at the end of the command. If data is written to a file it is also put out to stdout
 
 """
+import getpass
 import yaml
 from docopt import docopt
 from cm_config import cm_config
@@ -59,11 +63,12 @@ import os
 import stat
 from ldap_user import ldap_user
 from openstack_grizzly_cloud import openstack_grizzly_cloud
+from sh import scp
 
 ##### For testing
 # import mock_keystone
 
-debug = False
+debug = True
 
 def DEBUG(label, var):
     if debug:
@@ -73,6 +78,14 @@ def DEBUG(label, var):
         print str(var)
         print 70 * "-"
 
+#
+# http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input
+#
+def yn_choice(message, default='y'):
+    choices = 'Y/n' if default.lower() in ('y', 'yes') else 'y/N'
+    choice = raw_input("%s (%s) " % (message, choices))
+    values = ('y', 'yes', '') if default == 'y' else ('y', 'yes')
+    return True if choice.strip().lower() in values else False
 
 def main():
     default_path = '.futuregrid/novarc'
@@ -88,7 +101,10 @@ def main():
     ######################################################################
     # This secion deals with handeling "cm config" related commands
     ######################################################################
-    is_config = arguments['config'] != None
+    is_config =  arguments['config'] != None
+
+
+
 
     if is_config:
 
@@ -109,6 +125,39 @@ def main():
             sys.exit(1)
 
         name = arguments['NAME']
+        
+        if arguments['fetch'] or name == 'fetch':
+            
+            DEBUG('Arguments', arguments)
+
+
+            # get user
+            var = {}
+            var['user'] = arguments['--user']
+            var['host'] = arguments['--remote']
+            var['file'] = ".futuregrid/cloudmesh.yaml"
+            if var['user'] == None:
+                var['user'] = getpass.getuser()
+
+            from_location = "%(user)s@%(host)s:%(file)s" % var
+            to_location = os.path.expanduser("~/%(file)s" % var)
+
+
+            if os.path.isfile(to_location):
+                print "WARNING: The file %s exists" % to_location
+                if not yn_choice("Would you like to replace the file", default='y'):
+                    sys.exit(1)
+
+            print from_location
+            print to_location
+
+            print "Copy cloudmesh file from %s to %s" %  (from_location, to_location)
+
+            result = scp(from_location, to_location)
+
+            print result
+
+            sys.exit(0)
 
 
         if arguments['projects'] and arguments['list']:
