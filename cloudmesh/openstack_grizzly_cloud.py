@@ -56,12 +56,10 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
         creds['OS_PASSWORD'] = password
         defaults['project'] = self.defaultproject
 
-        # Create user or reset password (we cannot retrieve existing password)
+        # Create user if he does not exist
         user = self.get_user_by_name(self.username)
         if user is None:
             user = self.keystone.users.create(self.username, password, self.email)
-        else:
-            self.keystone.users.update_password(user, password)
 
         # Create membership role for user in each tenant
         member_role = self.get_role_by_name('_member_')
