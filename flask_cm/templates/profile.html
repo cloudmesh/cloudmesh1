@@ -28,7 +28,7 @@ $(function() {
 <tr><td></td><td>Address</td><td>
   {{ address | replace ("\n", "<br>") | safe}}
 </td><td></td></tr>
-<tr><td>{{ image_button ("right", "030_pencil", "/prefix/") }}</td><td colspan="2"><b> Prefix and Index </b></td> <td></td></tr>  
+<tr><td></td><td colspan="2"><b> Prefix and Index </b></td> <td></td></tr>
 
 <form name="editPrefix" action="/setPrefix" method="POST">
 <tr><td></td><td>Prefix</td>
@@ -52,7 +52,7 @@ $(function() {
 <td></td></tr>
 </form>
 
-<tr><td>{{ image_button ("right", "030_pencil", "/projects/") }}</td><td>
+<tr><td></td><td>
 
 <b> Projects </b></td>
 <td>
@@ -121,7 +121,6 @@ $(function() {
 </td>
 
  <td> </td></tr>
-<tr><td></td><td>Default</td><td> {{config['security']['default']}}</td><td></td></tr>
 </table>
 
 
