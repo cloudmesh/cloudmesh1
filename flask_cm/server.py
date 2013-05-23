@@ -50,7 +50,7 @@ def v(names):
 default_path = '.futuregrid/cloudmesh.yaml'
 home = os.environ['HOME']
 filename = "%s/%s" % (home, default_path)
-
+validKeyPrefix = ["ssh-rsa", "ssh-dss"]
 ######################################################################
 # global vars
 ######################################################################
@@ -946,10 +946,7 @@ def managekeys():
     if request.method == 'POST' and request.form.has_key('keyname'):
         keyname = request.form['keyname']
         fileorpath = request.form['keyorpath']
-        if not 'ssh-rsa' in fileorpath:
-            type = 'file'
-        else : 
-            type = 'keystring'
+        type = getKeyType(fileorpath)
         
         if type == "file" :
             fileorpath = os.path.expanduser(fileorpath)
@@ -1036,7 +1033,8 @@ def validateKey(type,file):
         return False
 
 def getKey(fileorpath):
-    if not 'ssh-rsa' in fileorpath:
+    type = getKeyType(fielorpath)
+    if type == "file":
         fileorpath = os.path.expanduser(fileorpath)
         try :
             keystring = open(fileorpath, "r").read()
@@ -1045,14 +1043,16 @@ def getKey(fileorpath):
             print e
     else : 
         return fileorpath
-        
 
-
+def getKeyType(keyStringOrFilepath):
+    keyType = "file"
+    for aprefix in validKeyPrefix:
+        if aprefix in keyStringOrFilepath:
+            keyType = "keystring"
+    return keyType
+    
 def lineToFingerprint(line,type=None):
-    if not 'ssh-rsa' in line:
-            type = 'file'
-    else : 
-            type = 'keystring'
+    type = getKeyType(line)
     if type == "file":
         return line
     type,key_string, comment = line.split()

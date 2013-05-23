@@ -573,7 +573,7 @@ class openstack(BaseCloud):
                 config = cm_config()
                 dict_t = config.get()
                 key = dict_t['keys']['keylist'][key_name]
-                if not 'ssh-rsa' in key:
+                if not 'ssh-rsa' in key and not 'ssh-dss' in key:
                     key = open(key,"r").read()
                 self.upload_key_pair(key,key_name)
                 
