@@ -252,16 +252,17 @@ def delete_vms(cloud=None):
 @app.route('/cm/assignpubip/<cloud>/<server>/')
 def assign_public_ip(cloud=None, server=None):
     config = cm_config()
-    dict_t = config.get()
+    configuration = config.get()
     try :
-        if dict_t['clouds'][cloud]['cm_automatic_ip'] == False:
+        if configuration['clouds'][cloud]['cm_automatic_ip'] == False:
             clouds.assign_public_ip(cloud,server)
             clouds.refresh(names = [cloud])
             return redirect("/table/")
         else:
-            return "Manual public ip assignment is not allowed for "+cloud+" cloud"
+            return "Manual public ip assignment is not allowed for %s cloud" % cloud
     except Exception, e:
-         return str(e) + "Manual public ip assignment is not allowed for "+cloud+" cloud"
+         return str(e) + "Manual public ip assignment is not allowed for %s cloud" % cloud
+     
 ######################################################################
 # ROUTE: START
 ######################################################################
@@ -277,9 +278,9 @@ def start_vm(cloud=None, server=None):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
     key = None
     config = cm_config()
-    dict_t = config.get()
-    if dict_t.has_key('keys'):
-        key = dict_t['keys']['default']
+    configuration = config.get()
+    if configuration.has_key('keys'):
+        key = configuration['keys']['default']
     d = clouds.default(cloud)
     vm_flavor = d['flavor']
     vm_image = d['image']
@@ -735,8 +736,9 @@ def gregor():
     #    default_cloud = "india-openstack"
     #added by shweta
     config_active = cm_config()
-    dict_t = config_active.get('active')
-    cloud_names = dict_t;
+    configuration = config_active.get('active')
+    cloud_names = configuration
+    ## THIS IS NATURALLY BOGUS AS IT ALREDAY EXISTS
     #print cloud_names;
     #end of additon by shweta
     #cloud_names = ["india-openstack", "sierra-openstack"] code written by Gregor commented by shweta 
@@ -815,22 +817,23 @@ def profile():
         
         config = cm_config()
         activeProjects=config.projects('active')
-        dict_t = config.get()
-        person = dict_t['profile']
+        configuration = config.get()
+        person = configuration['profile']
+        
         #print person
         ###########projects radio button################
         activeProjects=config.projects('active')
         project_names=buildProjectNamesArray(activeProjects)
-        default_project=dict_t['projects']['default']
+        default_project=configuration['projects']['default']
         selected=set_default_project(default_project, project_names,'checked')
         prefix=config.prefix
         index=config.index
         ########### end of projects radio button################
         
         ###########security radio button################
-        securityGroupsList=(dict_t['security']['security_groups']);
+        securityGroupsList=(configuration['security']['security_groups']);
         securityGroups=securityGroupsList.keys();
-        default_secGroup=dict_t['security']['default']
+        default_secGroup=configuration['security']['default']
         selectedSecurity=set_default_security(default_secGroup, securityGroups)
         ###########end of security radio button################
 
@@ -839,10 +842,10 @@ def profile():
         
         time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-        address = '\n'.join(str(x) for x in person['address']) 
+        address = '<br>'.join(str(x) for x in person['address']) 
         return render_template('profile.html',
                                updated=time_now,
-                               # keys are also in dict_t, so we may not need that
+                               # keys are also in configuration, so we may not need that
                                keys="",  # ",".join(clouds.get_keys()),
                                defaultClouds=defaultClouds,
                                selectedClouds=selectedClouds,
@@ -852,7 +855,7 @@ def profile():
                                index=index,
                                active_clouds=clouds.active(),
                                active=active,
-                               config=dict_t,
+                               config=configuration, # BUG this should be not config but configuration
                                fun_print = lineToFingerprint,
                                selected=selected,
                                version=version,
