@@ -96,9 +96,9 @@ class cloudmesh:
     def active(self):
         active_clouds = self.configuration.active()
         return active_clouds
-
+    
     def prefix(self):
-        return self.configuration.prefix()
+        return self.configuration.prefix
 
     def profile(self):
         return self.configuration.profile()
