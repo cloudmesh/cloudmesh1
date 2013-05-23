@@ -60,16 +60,15 @@ class cloudmesh:
         reads the cloudmesh yaml file that defines which clouds build
         the cloudmesh
         """
+        #print "CONFIG"
 
-        print "CONFIG"
         self.configuration = cm_config()
-
 
         #pp.pprint (configuration)
 
 
         active_clouds = self.configuration.active()
-        print active_clouds
+        #print active_clouds
         
         for cloud_name in active_clouds:
             try:
@@ -82,6 +81,8 @@ class cloudmesh:
                                                'credential': credential}
             except: #ignore
                 pass
+                #print "ERROR: could not initialize cloud %s" % cloud_name
+                #sys.exit(1)
 
         return
 
@@ -213,7 +214,7 @@ class cloudmesh:
            refresh the given types for the given clouds
         
         """
-        if types == ['all'] or type == None:
+        if types == ['all'] or types == None:
             types = ['servers','flavors','images']
 
         if names == ['all'] or names == None:
