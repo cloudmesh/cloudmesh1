@@ -101,6 +101,9 @@ class cloudmesh:
     def prefix(self):
         return self.configuration.prefix
 
+    def index(self):
+        return self.configuration.index
+
     def profile(self):
         return self.configuration.profile()
 

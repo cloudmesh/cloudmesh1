@@ -28,17 +28,28 @@ $(function() {
 <tr><td></td><td>Address</td><td>
   {{ address | replace ("\n", "<br>") | safe}}
 </td><td></td></tr>
-<tr><td>{{ image_button ("right", "030_pencil", "/prefix/") }}</td><td colspan="2"><b> Prefix </b></td> <td></td></tr>  
+<tr><td>{{ image_button ("right", "030_pencil", "/prefix/") }}</td><td colspan="2"><b> Prefix and Index </b></td> <td></td></tr>  
 
-<form name="editPrefix">
-<tr><td></td><td>Prefix</td><td>
-  <input type="text" name="prefix" value="{{ config.prefix }}">
-  </td><td></td></tr>
+<form name="editPrefix" action="/setPrefix" method="POST">
+<tr><td></td><td>Prefix</td>
+<td>
+  Current Prefix: <b>{{ prefix }}</b>
+  <br /> New Prefix:
+  <input type="text" name="prefix" value={{prefix}} style="width:120px">
+  <input type="submit" name="btnprefix" value="Change & Save">
+</td>
+<td></td></tr>
 </form>
-<form name="editIndex">  
-<tr><td></td><td>Index</td><td>
-  <input type="text" name="index" value="{{ config.index }}">
-  </td><td></td></tr>
+
+<form name="editIndex" action="/setIndex" method="POST">
+<tr><td></td><td>Index</td>
+<td>
+  Current Index: <b>{{ index }}</b>
+  <br /> New Index:
+  <input type="text" name="index" value={{index}} style="width:120px">
+  <input type="submit" name="btnindex" value="Change & Save">
+</td>
+<td></td></tr>
 </form>
 
 <tr><td>{{ image_button ("right", "030_pencil", "/projects/") }}</td><td>

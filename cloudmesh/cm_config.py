@@ -25,7 +25,12 @@ class cm_config(object):
     default_path = '.futuregrid/cloudmesh.yaml'
     yaml_template = '%s/cloudmesh_template.yaml' % os.path.dirname(__file__)
     filename = ""
-    data = collections.OrderedDict()
+    data = None
+    try:
+        data = collections.OrderedDict() #python 2.7 and above
+    except:
+        import ordereddict #for 2.6 and lower, install separate library first
+        data = ordereddict.OrderedDict()
 
     ######################################################################
     # initialization methods

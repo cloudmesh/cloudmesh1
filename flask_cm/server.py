@@ -72,6 +72,7 @@ clouds.refresh()
 clouds.refresh_user_id()
 
 prefix = clouds.prefix()
+index = clouds.index()
 
 ######################################################################
 # STARTING THE FLASK APP
@@ -371,6 +372,35 @@ def buildProjectNamesArray(projects):
      for project_name in projects:
         project_names.append(project_name);
      return project_names;
+
+@app.route('/setPrefix', methods=['GET','POST'])
+def setPrefix():
+    if request.method == 'POST':
+        config_prefix = cm_config()
+        yamlFile= config_prefix.get();
+        oldPrefix = yamlFile['prefix']
+        newPrefix = request.form['prefix']
+        print "I'm in setting"
+
+        if newPrefix != oldPrefix:
+            yamlFile['prefix'] = newPrefix
+            write_yaml(filename,yamlFile)
+
+    return redirect("/profile/")
+    
+@app.route('/setIndex', methods=['GET','POST'])
+def setIndex():
+    if request.method == 'POST':
+        config_prefix = cm_config()
+        yamlFile= config_prefix.get();
+        oldIndex = yamlFile['index']
+        newIndex = request.form['index']
+
+        if newIndex != oldIndex:
+            yamlFile['index'] = newIndex
+            write_yaml(filename,yamlFile)
+
+    return redirect("/profile/")
 
 @app.route('/projects/', methods=['GET','POST'])
 def display_project():
@@ -793,6 +823,8 @@ def profile():
         project_names=buildProjectNamesArray(activeProjects)
         default_project=dict_t['projects']['default']
         selected=set_default_project(default_project, project_names,'checked')
+        prefix=config.prefix
+        index=config.index
         ########### end of projects radio button################
         
         ###########security radio button################
@@ -816,6 +848,8 @@ def profile():
                                selectedClouds=selectedClouds,
                                person=person,
                                address=address,
+                               prefix=prefix,
+                               index=index,
                                active_clouds=clouds.active(),
                                active=active,
                                config=dict_t,
