@@ -25,7 +25,9 @@ $(function() {
 <tr><td></td><td>Lastname</td><td>{{ person.lastname }}</td><td></td></tr>
 <tr><td></td><td>Phone</td><td>{{ person.phone }}</td><td></td></tr>
 <tr><td></td><td>e-mail</td><td>{{ person['e-mail'] }}</td><td></td></tr>
-<tr><td></td><td>Address</td><td>{{ address|replace("\n", "<br />")|safe }} </td><td></td></tr>
+<tr><td></td><td>Address</td><td>
+  {{ address | replace ("\n", "<br>") | safe}}
+</td><td></td></tr>
 <tr><td>{{ image_button ("right", "030_pencil", "/prefix/") }}</td><td colspan="2"><b> Prefix </b></td> <td></td></tr>  
 
 <form name="editPrefix">
@@ -86,9 +88,11 @@ $(function() {
 {% if config.has_key('keys') and config['keys']['keylist'].has_key(config['keys']['default']) %}
 <tr><td></td><td>Default</td><td> {{config['keys']['default']}} : {{ fun_print(config['keys']['keylist'][config['keys']['default']]) }}</td><td></td></tr>
 <tr><td></td><td>List</td><td>
-	{% for name, key in config['keys']['keylist'].iteritems() %}
-	{{name}} : {{fun_print(key)}} <br/>
+        <table>
+        {% for name, key in config['keys']['keylist'].iteritems() %}
+        <tr><td>{{name}}</td> <td>{{fun_print(key)}}</td></tr>
 	{% endfor %}
+	</table>
 </td><td></td></tr>
 {% endif %}
 
