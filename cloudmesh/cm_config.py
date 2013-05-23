@@ -158,7 +158,11 @@ class cm_config(object):
         return json.dumps(self.data, indent=4)
 
     def export_line(self, attribute, value):
-        return "export %s=%s\n" % (attribute, value)
+        if isinstance(value, (list, tuple)):
+            avalue = ','.join(value)
+        else:
+            avalue = value
+        return 'export %s="%s"\n' % (attribute, avalue)
 
     ######################################################################
     # get methods

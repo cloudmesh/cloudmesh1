@@ -65,6 +65,7 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
 
         # Create membership role for user in each tenant
         member_role = self.get_role_by_name('_member_')
+        os_tenants = []
         for tname in self.projects:
             tenant = self.get_tenant_by_name(tname)
             if tenant is None:
@@ -72,7 +73,6 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
             user_roles = self.keystone.roles.roles_for_user(user, tenant)
             if not filter(lambda r: r.id == member_role.id, user_roles):
                 self.keystone.roles.add_user_role(user, member_role, tenant)
-            os_tenant = '%s_OS_TENANT_NAME' % tname.upper()
-            creds[os_tenant] = tname
-        creds['OS_TENANT_NAME'] = '$%s_OS_TENANT_NAME' % self.defaultproject.upper()
-
+            os_tenants.append(tname)
+        creds['FG_OS_TENANTS'] = os_tenants
+        creds['OS_TENANT_NAME'] = self.defaultproject
