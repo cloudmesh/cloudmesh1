@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+* PROPER SEARCH ON STATES: A proper serach function was added to the
+  openstack library allowing simple or searches and regular expression
+  searches based on any attribute a vm contains.
+
 * FIX OF THE PROFILE VIEW: fixed the profile component so the prefix
   and the index can be edited in the provile window. Fixed the general
   layout and removed not needed editing functions. Saves cahnges
