@@ -137,18 +137,19 @@ def refresh(cloud=None, server=None):
 def filter(cloud=None):
     print "-> filter", cloud
 
+    #
+    # BUG: when cloud is none
+    #
+
     if request.method == 'POST':
         for c in state_table:
             query_states = []
             for state in clouds.states(name):
                 state_name = "%s:%s" % (c,state)
-                print "CLOUD", c, state, state_name in request.form
                 state_table[name][state] = state_name in request.form
                 if state_table[name][state]:
                     query_states.append(state)
 
-	    print ">>>>>>>>>>>NAME", c, query_states
-	    
 	    clouds.state_filter(c, query_states)
         
     return redirect("/table/")
@@ -540,6 +541,9 @@ def set_default_clouds(activeClouds, availableClouds):
     return selected
 
 
+#
+# BUG: this is an inappropriate route name, it is something with projects ....
+#
 @app.route('/clouds/', methods=['GET','POST'])
 def display_clouds():
     projectSelected={}
@@ -580,11 +584,15 @@ def display_clouds():
                     default_project=configurations['default']['project']
                     projectSelected[cloudName]=set_default_project(default_project, project_names,'selected')
     
-    return render_template('clouds.html',
-                               updated=time_now,
-                               clouds=availableClouds,
-                               active=active,
-                               version=version,projects=activeProjects,selected=selected,projectSelected=projectSelected)
+    return render_template(
+        'clouds.html',
+        updated=time_now,
+        clouds=availableClouds,
+        active=active,
+        version=version,
+        projects=activeProjects,
+        selected=selected,
+        projectSelected=projectSelected)
 
 ######################################################################
 # ROUTE: IMAGES
@@ -676,43 +684,6 @@ def set_default_cloud(name, cloud_names):
         
 default_cloud = "india-openstack"
 
-
-@app.route('/gregor', methods=['GET','POST'])
-def gregor():
-    global default_cloud
-    #    default_cloud = "india-openstack"
-    #added by shweta
-    config_active = cm_config()
-    configuration = config_active.get('active')
-    cloud_names = configuration
-    ## THIS IS NATURALLY BOGUS AS IT ALREDAY EXISTS
-    #print cloud_names;
-    #end of additon by shweta
-    #cloud_names = ["india-openstack", "sierra-openstack"] code written by Gregor commented by shweta 
-    selected = set_default_cloud(default_cloud, cloud_names)
-    
-    if request.method == 'POST':
-        default_cloud= request.form['selected_cloud']
-    #print default_cloud
-
-    selected = set_default_cloud(default_cloud, cloud_names)
-
-    return '''
-            <form action="" method="post">
-              <input type = "radio"
-                 name = "selected_cloud"
-                 id = "india-openstack"
-                 value = "india-openstack"
-                 %(india-openstack)s />
-              <label>india-openstack</label>                 
-              <input type = "radio"
-                 name = "selected_cloud"
-                 id = "sierra-openstack"
-                 value = "sierra-openstack"
-                 %(sierra-openstack)s/>
-               <label>sierra-openstack</label>
-              <input type=submit value=Update>
-           </form>''' %selected
 
 
 ######################################################################
