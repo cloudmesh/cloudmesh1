@@ -63,7 +63,8 @@ class ldap_user:
 
     @property
     def phone(self):
-        return self.data['person']['telephoneNumber'][0] if 'telephoneNumber' in self.data['person'] else None
+        p = self.data['person']['telephoneNumber'][0] if 'telephoneNumber' in self.data['person'] else None
+        return p or 'TBD'
 
     @property
     def email(self):
@@ -71,7 +72,11 @@ class ldap_user:
 
     @property
     def address(self):
-        return self.data['person']['homePostalAddress'] if 'homePostalAddress' in self.data['person'] else None
+        ## This is currently not in LDAP; also needs to split address
+        ## lines into a list, not sure how ldap will represent this so
+        ## it is not yet done.
+        # return self.data['person']['homePostalAddress'] if 'homePostalAddress' in self.data['person'] else None
+        return ['TBD']
 
     @property
     def keys(self):
