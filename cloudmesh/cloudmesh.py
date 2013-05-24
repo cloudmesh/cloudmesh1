@@ -79,6 +79,9 @@ class cloudmesh:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cloud_type,
                                                'credential': credential}
+                #if cloud_type in ['openstack']:
+                #    self.clouds[cloud_name] = {'states': "HALLO"}
+
             except: #ignore
                 pass
                 #print "ERROR: could not initialize cloud %s" % cloud_name
@@ -109,6 +112,26 @@ class cloudmesh:
 
     def default(self,cloudname):
         return self.configuration.default(cloudname)
+
+    def states(self,cloudname):
+        cloud_type = self.clouds[cloudname]['cm_type']
+        if cloud_type in ['openstack']:
+            provider = self.cloud_provider(cloud_type)
+            cloud = provider(cloudname)
+            return cloud.states
+
+    def state_filter(self,cloudname, states):
+        cloud_type = self.clouds[cloudname]['cm_type']
+        if cloud_type in ['openstack']:
+            provider = self.cloud_provider(cloud_type)
+            cloud = provider(cloudname)
+            cloud.refresh()
+            cloud.display(states,None)
+            self.clouds[cloudname]['servers'] = cloud.servers
+
+    def all_filter(self):
+        for cloudname in self.active():
+            self.state_filter(cloudname, self.states(cloudname))
 
     ######################################################################
     # important print methods
@@ -226,6 +249,10 @@ class cloudmesh:
         # at one point use a threadpool.
         try:
             for name in names:
+                try:
+                    cloud_display = self.clouds[name]['cm_display']
+                except:
+                    cloud_display = False
                 cloud_type = self.clouds[name]['cm_type']
                 provider = self.cloud_provider(cloud_type)
                 cloud = provider(name)
@@ -236,7 +263,7 @@ class cloudmesh:
                     result = cloud.get(type)
                     self.clouds[name][type] = cloud.get(type)
                     #maye be need to use dict update ...
-                    self.clouds[name].update({'name': name, 'cm_type': cloud_type})
+                    self.clouds[name].update({'name': name, 'cm_type': cloud_type, 'cm_display' : cloud_display})
                 
         except Exception, e:
             print e

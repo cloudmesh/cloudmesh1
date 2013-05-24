@@ -1,6 +1,9 @@
 import sys
 sys.path.insert(0, './')
 sys.path.insert(0, '../')
+import json
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
 
 import os
 import time
@@ -27,23 +30,6 @@ with_write = True
 
 
 ######################################################################
-# setting up view state and way to access viewstate
-######################################################################
-view_state  = {'table':{}}
-
-
-def v(names):
-    dict = view_state  
-    print view_state  
-    try:
-        for name in names:
-            dict = dict[name]
-        return dict
-    except :
-        return ""
-
-
-######################################################################
 # setting up reading path for the use of yaml
 ######################################################################
 
@@ -67,7 +53,20 @@ version = "0.7.2"
 
 
 clouds = cloudmesh()
+
+# DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
+
+state_table = {}
+
+for name in clouds.active():
+	state_table[name] = {}
+	for state in clouds.states(name):
+		state_table[name][state] = True
+
+# refresh , misses the search for display
+                
 clouds.refresh()
+clouds.all_filter()
 
 clouds.refresh_user_id()
 
@@ -133,72 +132,24 @@ def refresh(cloud=None, server=None):
 # ROUTE: Filter
 ######################################################################
 
-
+    
 @app.route('/cm/filter/<cloud>/',methods=['GET','POST'])
 def filter(cloud=None):
     print "-> filter", cloud
-    filterIds = []
-    do_status_filter = False
-    # DOCUMENTATION ABOUT WHERE AND HOW view_state is managed is missing
-    if cloud==None and view_state.has_key('table') :
-        allClouds = clouds.active()
-        # VARIABLE NAME POOR CHOICE, CONFUSING
-        for clud in allClouds:
-            do_status_filter_inner = False
-            filterIds = []
-            if view_state['table'].has_key(clud):
-                print 'filtering',clud
-                ACTIVE = view_state['table'][clud].has_key('ACTIVE')
-                STOPPED = view_state['table'][clud].has_key('STOPPED')
-                ERROR = view_state['table'][clud].has_key('ERROR')
-                SHUTOFF = view_state['table'][clud].has_key('SHUTOFF')
-                ME = view_state['table'][clud].has_key('ME')
-                if(ACTIVE or STOPPED or ERROR or SHUTOFF):
-                            do_status_filter_inner = True
-                if(ACTIVE or STOPPED or ERROR or SHUTOFF or ME) :
-                    f_cloud = clouds.clouds[clud]
-                    for id, server in f_cloud['servers'].iteritems():
-                        if do_status_filter_inner and not server['status'] in request.form : 
-                            filterIds.append(id)
-                        elif  (ME and not server['user_id'] == f_cloud['user_id'] ) :
-                            filterIds.append(id)
-                    for id in filterIds :
-                        del f_cloud['servers'][id]
-            
-    elif request.method == 'POST':
-        
-        ACTIVE = 'ACTIVE' in request.form
-        STOPPED = 'STOPPED'in request.form
-        ERROR = 'ERROR'in request.form
-        SHUTOFF = 'SHUTOFF'in request.form
-        ME = 'ME'in request.form
-        view_state['table'][cloud] = {}
-        #IF STATES WOULD BE IN A DICT, WE COULD NICELY ITTERATE OVER THEM
-        if ACTIVE:
-            view_state['table'][cloud]['ACTIVE'] = 'checked'
-        if STOPPED:
-            view_state['table'][cloud]['STOPPED'] = 'checked'
-        if ERROR:
-            view_state['table'][cloud]['ERROR'] = 'checked'
-        if SHUTOFF:
-            view_state['table'][cloud]['SHUTOFF'] = 'checked'
-        if ME:
-            view_state['table'][cloud]['ME'] = 'checked'
-        
-        clouds.refresh(names = [cloud])
-        
-        if(ACTIVE or STOPPED or ERROR or SHUTOFF):
-            do_status_filter = True
-        
-        if(ACTIVE or STOPPED or ERROR or SHUTOFF or ME) :
-            f_cloud = clouds.clouds[cloud]
-            for id, server in f_cloud['servers'].iteritems():
-                if do_status_filter and not server['status'] in request.form : 
-                    filterIds.append(id)
-                elif  (ME and not server['user_id'] == f_cloud['user_id'] ) :
-                    filterIds.append(id)
-            for id in filterIds :
-                del f_cloud['servers'][id]
+
+    if request.method == 'POST':
+        for c in state_table:
+            query_states = []
+            for state in clouds.states(name):
+                state_name = "%s:%s" % (c,state)
+                print "CLOUD", c, state, state_name in request.form
+                state_table[name][state] = state_name in request.form
+                if state_table[name][state]:
+                    query_states.append(state)
+
+	    print ">>>>>>>>>>>NAME", c, query_states
+	    
+	    clouds.state_filter(c, query_states)
         
     return redirect("/table/")
 
@@ -331,25 +282,21 @@ def load():
 
 @app.route('/table/')
 def table():
-    active_clouds = clouds.active()
-
     active = make_active('table')
+
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    #print json.dumps(clouds.clouds, indent=4)
     filter()
-    # keys = clouds.get_keys()
     return render_template('table.html',
                            updated=time_now,
                            keys="",  # ",".join(clouds.get_keys()),
+			   cloudmesh=clouds,
                            clouds=clouds.clouds,
-                           order=active_clouds,
-                           image='myimage',
                            pages=pages,
                            active=active,
                            version=version,
-                           v = v,
-                           dir = dir)
-
-
+			   state_table=state_table)
 
 ######################################################################
 # ROUTE: PROJECTS

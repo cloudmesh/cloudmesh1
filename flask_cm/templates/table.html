@@ -43,7 +43,7 @@ function killall(cloud) {
     <th> ip </th>
   </tr>
   
-  {% for name in order %}
+  {% for name in cloudmesh.active() %}
   
   <tr> 
     <th colspan="1"> {{ name }}</th> 
@@ -56,13 +56,18 @@ function killall(cloud) {
       &nbsp;     
       {{ image_button ("none", "044_keys", "/updatekeypair/" + name + "/") }}
       &nbsp; &nbsp;
-      <form name = "filter" action = "/cm/filter/{{name}}/" method="post">
-      <input type="checkbox" name="ACTIVE" value="select" {{v(['table',name,'ACTIVE'])}}> ACTIVE &nbsp;
-      <input type="checkbox" name="STOPPED" value="select" {{v(['table',name,'STOPPED'])}}> STOPPED &nbsp;
-      <input type="checkbox" name="ERROR" value="select" {{v(['table',name,'ERROR'])}}> ERROR &nbsp;
-      <input type="checkbox" name="SHUTOFF" value="select" {{v(['table',name,'SHUTOFF'])}}> SHUTOFF &nbsp;
-      <input type="checkbox" name="ME" value="select" {{v(['table',name,'ME'])}}> ME &nbsp;
+      <form name = "filter-{{name}}" action = "/cm/filter/{{name}}/" method="post">
       <input type="submit" value="Filter">
+      {% for state in cloudmesh.states(name) %}
+            {% if state_table[name][state] %}
+               <input type="checkbox" name="{{ name }}:{{ state }}" value="select" checked > {{ state }} &nbsp;
+            {% else %}
+               <input type="checkbox" name="{{ name }}:{{ state }}" value="select" > {{ state }} &nbsp;
+            {% endif %}
+            
+      {% endfor %}
+
+
       </form>
     </th>
     <th colspan="1">
@@ -75,29 +80,31 @@ function killall(cloud) {
   </tr>
   
   {% for id, server in clouds[name]['servers'].iteritems() %}
-  
-  <tr>
-    <td> {{ server.name }} </td>
-    <td> {{ server.cloud }}
-      {{ image_button ("none", "368_collapse", "/cm/login/" + name + "/" + id + "/") }}
-    </td>
-    <td>
-      {{ image_button ("right", "195_circle_info", "/cm/info/" + name + "/" + id + "/") }}
-   </td>
-     <td>      
-	<a href="/cm/assignpubip/{{name}}/{{id}}/">  I.P. </a>
-    </td>
-   <td>
-      {{ image_button ("none", "041_charts", "/cm/stats/" + name + "/" + id + "/") }}
-    </td>
-    <td> {{ server.id }} </td>
-    <td> {{ server.status }} </td>
-    <td> {{ server.addresses }} </td>
-    <td>
-      {{ image_button ("right", "016_bin", "/cm/delete/" + name + "/" + id + "/") }}
-    </td>
-  </tr>
-  
+
+      {% if server['cm_display'] %}
+      <tr>
+	<td> {{ server.name }}  </td>
+	<td> {{ server.cloud }}
+	  {{ image_button ("none", "368_collapse", "/cm/login/" + name + "/" + id + "/") }}
+	</td>
+	<td>
+	  {{ image_button ("right", "195_circle_info", "/cm/info/" + name + "/" + id + "/") }}
+       </td>
+	 <td>      
+	    <a href="/cm/assignpubip/{{name}}/{{id}}/">  I.P. </a>
+	</td>
+       <td>
+	  {{ image_button ("none", "041_charts", "/cm/stats/" + name + "/" + id + "/") }}
+	</td>
+	<td> {{ server.id }} </td>
+	<td> {{ server.status }} </td>
+	<td> {{ server.addresses }} </td>
+	<td>
+	  {{ image_button ("right", "016_bin", "/cm/delete/" + name + "/" + id + "/") }}
+	</td>
+      </tr>
+      {% endif %}
+
   {% endfor %}
   
   {% endfor %}

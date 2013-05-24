@@ -905,21 +905,24 @@ class openstack(BaseCloud):
         except Exception, e:
             print e
 
-    states = ["BUILDING",
-              "ACTIVE",
-              "PAUSED",
-              "SUSPENDED",
-              "STOPPED",
-              "RESCUED",
-              "RESIZED",
-              "SOFT_DELETED",
-              "DELETED",
-              "ERROR"] 
+    states = [
+      "ACTIVE",
+      "ERROR",
+      "BUILDING",
+      "PAUSED",
+      "SUSPENDED",
+      "STOPPED",
+      "DELETED",
+      "RESCUED",
+      "RESIZED",
+      "SOFT_DELETED"
+      ]  
 
     def display (self, states, userid):
         """ simple or on states and check if userid. If userid is None
         all users will be marked. A new variable cm_display is
         introduced manageing if a VM should be printed or not"""
+
         for (id, vm) in self.servers.items():
             vm['cm_display'] = vm['status'] in states
             if userid != None:
