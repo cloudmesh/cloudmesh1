@@ -905,6 +905,36 @@ class openstack(BaseCloud):
         except Exception, e:
             print e
 
+    states = ["BUILDING",
+              "ACTIVE",
+              "PAUSED",
+              "SUSPENDED",
+              "STOPPED",
+              "RESCUED",
+              "RESIZED",
+              "SOFT_DELETED",
+              "DELETED",
+              "ERROR"] 
+
+    def display (self, states, userid):
+        """ simple or on states and check if userid. If userid is None
+        all users will be marked. A new variable cm_display is
+        introduced manageing if a VM should be printed or not"""
+        for (id, vm) in self.servers.items():
+            vm['cm_display'] = vm['status'] in states
+            if userid != None:
+                vm['cm_display'] = vm['cm_display'] and (vm['user_id'] == userid)
+
+    def display_regex (self, state_check, userid):
+
+        print state_check
+        for (id, vm) in self.servers.items():
+            vm['cm_display'] = eval(state_check)
+            #            vm['cm_display'] = vm['status'] in states
+            if userid != None:
+                vm['cm_display'] = vm['cm_display'] and (vm['user_id'] == userid)
+
+        
 ##########################################################################
 # MAIN FOR TESTING
 ##########################################################################
@@ -941,4 +971,6 @@ if __name__ == "__main__":
     """
 
     # cloud.rename("gvonlasz-0001","gregor")
+
+
 

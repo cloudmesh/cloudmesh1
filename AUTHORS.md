@@ -6,14 +6,18 @@ Please add your name here if you contributed
 - Gregor von Laszewski <laszewski@gmail.com>
 - Hyungro Lee
 - Fugang Wang
-- Pushkar ???
-- Shweta ???
+- Allan Streib
 
-Architect
-=========
+In addition we like to thank
 
-- Gregor von Laszewski <laszewski@gmail.com>
+- Pushkar Newaskar
+- Shweta Patil
 
+for their efforts.
+
+Contributions to this project can be viewed at 
+
+* https://github.com/futuregrid/flask_cm/contributors
 
 History
 =======

@@ -27,7 +27,13 @@ class Test_openstack:
     cloud_label = "grizzly-openstack"
 
     def setup(self):
-        self.cloud = openstack(self.cloud_label)
+
+        self.configuration = cm_config()
+        #pp.pprint (configuration)
+
+        self.name = self.configuration.active()[0]
+        self.cloud = openstack(self.name)
+        print "CLOUD:", self.name
 
     def tearDown(self):
         pass
@@ -168,6 +174,28 @@ class Test_openstack:
         self.cloud.refresh()
         time.sleep(3)
         self.cloud.info()
-        self.cloud.info()
 
+    def test_11_states(self):
+        HEADING("10 INFO OPENSTACK TEST")
+        self.cloud.refresh()
+        time.sleep(3)
+        print self.cloud.states
 
+        search_states = ('ACTIVE','PAUSED')
+
+        state = 'ACTIVE'
+        userid = None
+        
+        print state in search_states
+        
+        #self.cloud.display(search_states, userid)
+        
+        #print json.dumps(self.cloud.servers, indent=4)        
+
+        self.cloud.display_regex("vm['status'] in ['ACTIVE']", userid)
+
+        print json.dumps(self.cloud.servers, indent=4)        
+
+        #        self.cloud.display_regex("vm['status'] in ['ERROR']", userid)
+
+        #print json.dumps(self.cloud.servers, indent=4)        
