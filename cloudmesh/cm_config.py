@@ -137,17 +137,30 @@ class cm_config(object):
     def write(self, filename=None):
 
         #pyaml.dump(self.data, f, vspacing=[2, 1, 1])
-        text = yaml.dump(self.data, default_flow_style=False)
+        #text = yaml.dump(self.data, default_flow_style=False)
+        text = yaml.safe_dump(self.data, default_flow_style=False, indent=4)
         # avoiding to think about regexp ;-)
         # shold be eplace all "\n  ." with "\\n  ." but not when . is -   
+
         text = text.replace("\n  ", "\n\n  ")
         text = text.replace("\n\n  -", "\n  -")
         text = text.replace("\n\n    ", "\n    ")
         text = text.replace("\n\n      ", "\n      ")
         text = text.replace("\n\n        ", "\n        ")
 
+        print text
+
         fpath = filename or self.filename
-        f = os.open(fpath, os.O_CREAT | os.O_EXCL | os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
+        print fpath
+        
+        #f = os.open(fpath, os.O_CREAT)
+        #
+        # NOT SURE WHY WE NEED ALL THIS CHECK CHECK WITH ALLEN
+        #
+        #f = os.open(fpath, os.O_CREAT | os.O_EXCL | os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
+
+        f = os.open(fpath, os.O_CREAT | os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
+
         os.write(f, text)
         if os.geteuid() == 0:
             os.fchown(f, int(self.profile()['uid'] or -1),

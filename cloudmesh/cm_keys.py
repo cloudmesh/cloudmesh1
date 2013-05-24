@@ -69,6 +69,9 @@ class cm_keys:
         value = self.config.data["cloudmesh"]["keys"]["keylist"][key]
         return value
 
+    def get_default_key(self):
+        return self.config.data["cloudmesh"]["keys"]["default"]
+
     def __getitem__(self,name):
         value = self._getvalue(name)
         key_type = self.type(name)
@@ -130,10 +133,17 @@ class cm_keys:
         """returns the dict in a string representing the project"""
         return str(self.config)
 
-    def update(self):
+    def write(self):
         """writes the updated dict to the config"""
-    
+        self.config.write()
+        
     def fingerprint(self, name):
         value = self.__getitem__(name)
         t, keystring, comment = value.split()
         return key_fingerprint(keystring)
+
+    def defined(self, name):
+        return name in self.names()
+
+    def no_of_keys(self):
+        return len(self.names())

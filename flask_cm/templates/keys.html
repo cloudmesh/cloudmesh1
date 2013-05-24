@@ -10,14 +10,15 @@
 
 <form action="" name = "selectKeyForm" method=post enctype=multipart/form-data >
 <table>
-{% if haskeys %}
+{% if keys.no_of_keys() > 0 %}
 <tr><th>Select</th>
    <th>Key Name</th>
    <th>Path/Fingerprint</th>
    <th></th>
 </tr>
-	{% for name, key in keylist.iteritems() %}
-		{% set value = key %}
+        {% set defaultkey = keys.get_default_key() %}
+	{% for name in keys.names() %}
+		{% set value = keys[name] %}
 		{% if name == defaultkey %}
 			{% set checked = 'checked' %}
 		{% else %}
@@ -28,7 +29,7 @@
 				  onclick="document.forms['selectKeyForm'].submit()"> 
 				    </td>
 			<td>{{name}}</td>
-			<td>{{fun_fprint(value)}}</td>
+			<td>{{keys.fingerprint(name)}} </td>
 			<td><a href="delete/{{name}}/">
 			  <img
 			  src="/static/img/icons/png/glyphicons_016_bin.png"
@@ -46,8 +47,6 @@
 </table>
 </form>
 <form action="" method=post enctype=multipart/form-data name = "addkeysform">
-
-<!--http://www.html5rocks.com/en/tutorials/file/dndfiles/-->
 
 <h1>Add Key</h1>
 

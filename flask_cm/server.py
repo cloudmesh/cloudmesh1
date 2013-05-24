@@ -5,6 +5,8 @@ import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
+from cloudmesh.cm_keys import cm_keys
+
 import os
 import time
 from flask import Flask, render_template, request,redirect
@@ -230,6 +232,8 @@ def start_vm(cloud=None, server=None):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
     key = None
     config = cm_config()
+
+    
     configuration = config.get()
     if configuration.has_key('keys'):
         key = configuration['keys']['default']
@@ -840,7 +844,10 @@ def managekeys():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     
     config = cm_config()
+    keys = cm_keys()
+
     yamlFile= config.get()    
+    pp.pprint (yamlFile)
     haskeys = False
     keydict = {}
     keylist = {}
@@ -858,9 +865,13 @@ def managekeys():
     if(yamlFile.has_key('keys')):
        haskeys = True 
        keydict = config.userkeys()
-       defaultkey = config.userkeys()['default']
+       #defaultkey = config.userkeys()['default']
+       defaultkey = keys.default()
+       
        keylist = config.userkeys()['keylist']
-
+       print "LIST", keylist
+       print "DEFIED", keys.defined('fg-pro')
+       
     if request.method == 'POST' and request.form.has_key('keyname'):
         keyname = request.form['keyname']
         fileorpath = request.form['keyorpath']
@@ -879,11 +890,11 @@ def managekeys():
                 msg = "Invalid key string"
         elif ' ' in  keyname:
             msg = "Invalid key name, cannot contain spaces"
-        elif haskeys and keydict['keylist'].has_key(keyname):
+        elif haskeys and keys.defined(keyname):
             msg = "Key name already exists"
         else :
             if haskeys :
-                keydict['keylist'][keyname] = fileorpath
+                keys[keyname] = fileorpath
             else :
                 yamlFile['keys'] = {'default':keyname ,'keylist':{keyname: fileorpath}}
                 keylist = yamlFile['keys']['keylist']
@@ -894,17 +905,15 @@ def managekeys():
                 print msg
             write_yaml(filename, yamlFile)
             msg = 'Key added successfully'
+            
     elif request.method == 'POST' :
-            yamlFile['keys']['default'] = request.form['selectkeys']
-            defaultkey = yamlFile['keys']['default']
-            write_yaml(filename, yamlFile)
+            keys['default'] = request.form['selectkeys']
+            keys.write()
+
     return render_template('keys.html',
-                           haskeys=haskeys,
+                           keys=keys,
                            active=active,
-                           keylist = keylist,
-                           defaultkey =defaultkey,
-                           fun_fprint = lineToFingerprint,
-                           show = msg)
+                           show=msg)
                         
 
 @app.route('/keys/delete/<name>/')
