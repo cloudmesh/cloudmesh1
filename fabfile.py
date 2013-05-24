@@ -59,7 +59,7 @@ server:
 	python flask_cm/server.py
 
 view:
-	sleep 3
+	sleep 10
 	 %s http://127.0.0.1:5000/profile
 """ % browser
     #webbrowser.open("http://127.0.0.1:5000")
