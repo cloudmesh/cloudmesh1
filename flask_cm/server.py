@@ -75,6 +75,9 @@ clouds.refresh_user_id()
 prefix = clouds.prefix()
 index = clouds.index()
 
+config = cm_config()
+configuration = config.get()
+
 ######################################################################
 # STARTING THE FLASK APP
 ######################################################################
@@ -205,8 +208,6 @@ def delete_vms(cloud=None):
 
 @app.route('/cm/assignpubip/<cloud>/<server>/')
 def assign_public_ip(cloud=None, server=None):
-    config = cm_config()
-    configuration = config.get()
     try :
         if configuration['clouds'][cloud]['cm_automatic_ip'] == False:
             clouds.assign_public_ip(cloud,server)
@@ -231,10 +232,7 @@ def start_vm(cloud=None, server=None):
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
     key = None
-    config = cm_config()
 
-    
-    configuration = config.get()
     if configuration.has_key('keys'):
         key = configuration['keys']['default']
     d = clouds.default(cloud)
@@ -329,11 +327,7 @@ def buildProjectNamesArray(projects):
 @app.route('/setPrefix', methods=['GET','POST'])
 def setPrefix():
     if request.method == 'POST':
-        config = cm_config()
-        configuration = config.get();
-
-        newPrefix = request.form['prefix']
-        configuration['prefix'] = newPrefix
+        configuration['prefix'] = request.form['prefix']
         config.write()
 
     return redirect("/profile/")
@@ -341,14 +335,8 @@ def setPrefix():
 @app.route('/setIndex', methods=['GET','POST'])
 def setIndex():
     if request.method == 'POST':
-        config = cm_config()
-        configuration= config.get();
-        oldIndex = configuration['index']
-        newIndex = request.form['index']
-
-        if newIndex != oldIndex:
-            configuration['index'] = newIndex
-            write_yaml(filename,configuration)
+        configuration['index'] = request.form['index']
+        config.write()
 
     return redirect("/profile/")
 
@@ -358,7 +346,6 @@ def display_project():
     
     ############reading from yaml file ############
 
-    config = cm_config()
     activeProjects=config.projects('active')
     project_names=buildProjectNamesArray(activeProjects)
     activeClouds=config.active()
@@ -381,7 +368,7 @@ def display_project():
                 configuration= config.get();
                 configuration['clouds'][cloud]['default']['project']=default_project;
                 configuration['projects']['default']=default_project
-                write_yaml(filename,configuration)
+                config.write()
                 ############ end of writing in yaml file ############
                 selected = set_default_project(default_project, project_names,'checked')
 
@@ -482,11 +469,11 @@ def display_flavors(cloud=None):
     cloud = 'india-openstack'
 
     ############reading from yaml file ############
-    config_flavor = cm_config()
-    activeClouds=config_flavor.active()
+
+    activeClouds=config.active()
     for cloud in activeClouds:
         if 'openstack' in cloud:
-            configurations= config_flavor.cloud(cloud)   
+            configurations= config.cloud(cloud)   
             default_flavor=configurations['default']['flavor']
             selected=set_default_flavor(default_flavor, flavor_names)
             radioSelected[cloud]=selected
@@ -507,9 +494,9 @@ def display_flavors(cloud=None):
                 print default_flavor
                 
                 ############ writing in yaml file ############
-                configuration= config_flavor.get();
+                configuration= config.get();
                 configuration['clouds'][cloud]['default']['flavor']=default_flavor;
-                write_yaml(filename,configuration)
+                config.write()
                 ############ end of writing in yaml file ############
                 selected = set_default_flavor(default_flavor, flavor_names)
                 radioSelected[cloud]=selected
@@ -551,10 +538,10 @@ def display_clouds():
     projectSelected={}
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M") 
     active = make_active('clouds')
-    config_cloud = cm_config()
-    activeClouds=config_cloud.active()
-    availableClouds=config_cloud.clouds()
-    activeProjects=config_cloud.projects('active')
+
+    activeClouds=config.active()
+    availableClouds=config.clouds()
+    activeProjects=config.projects('active')
     selected=set_default_clouds(activeClouds, availableClouds)
     project_names=buildProjectNamesArray(activeProjects)
 
@@ -562,13 +549,13 @@ def display_clouds():
         projectSelected[availableCloud]=set_default_project("", project_names,'selected');
         for cloud in activeClouds:
             if 'openstack' in cloud:
-                configurations= config_cloud.cloud(cloud) 
+                configurations= config.cloud(cloud) 
                 default_project=configurations['default']['project']
                 projectSelected[cloud]=set_default_project(default_project, project_names,'selected')
 
     if request.method == 'POST':
         cloudNames = request.form.getlist("clouds")
-        configuration=config_cloud.get()
+        configuration=config.get()
         selected=set_default_clouds(cloudNames, availableClouds)
         for cloudName in cloudNames:
             projectName = request.form[cloudName]
@@ -576,13 +563,13 @@ def display_clouds():
                 projectName=configuration['projects']['default']
             configuration['clouds'][cloudName]['default']['project']=projectName;
         configuration['active']=cloudNames
-        write_yaml(filename, configuration)
+        config.write()
         
         for availableCloud in availableClouds:
             projectSelected[availableCloud]=set_default_project("", project_names,'selected');
             for cloudName in cloudNames:
                 if 'openstack' in cloudName:
-                    configurations= config_cloud.cloud(cloudName) 
+                    configurations= config.cloud(cloudName) 
                     default_project=configurations['default']['project']
                     projectSelected[cloudName]=set_default_project(default_project, project_names,'selected')
     
@@ -631,11 +618,10 @@ def display_images():
 
     ############reading from yaml file ############
 
-    config_image = cm_config()
-    activeClouds=config_image.active()
+    activeClouds=config.active()
     for cloud in activeClouds:
         if 'openstack' in cloud:
-                configurations= config_image.cloud(cloud)   
+                configurations= config.cloud(cloud)   
                 default_image=configurations['default']['image']
                 selected=set_default_image(default_image, image_names)
                 radioSelected[cloud]=selected
@@ -653,9 +639,9 @@ def display_images():
                         #print default_image
 
                         ############ writing in yaml file ############
-                        configuration= config_image.get();
+                        configuration= config.get();
                         configuration['clouds'][cloud]['default']['image']=default_image;
-                        write_yaml(filename, configuration)
+                        config.write()
 
                         ############ end of writing in yaml file ############
                         selected = set_default_image(default_image, image_names)
@@ -704,24 +690,19 @@ def set_default_security(name, secGroup_names):
 @app.route('/security/', methods=['GET','POST'])
 def security():
     
-     ############reading from yaml file ############
-    config = cm_config()
-    configuration=config.get()
+
     securityGroupsList=(configuration['security']['security_groups']);
     default_secGroup=configuration['security']['default']
     securityGroups=securityGroupsList.keys();
     selectedSecurity=set_default_security(default_secGroup, securityGroups)
-     ############  end of reading from yaml file ############
     
     active = make_active('security')
     
     if request.method == 'POST':
         default_secGroup= request.form['selected_securityGroup'] 
-        
-        ############ writing in yaml file ############
         configuration['security']['default']=default_secGroup;
-        write_yaml(filename,configuration)
-        ############ end of writing in yaml file ############
+        config.write()
+
         selectedSecurity=set_default_security(default_secGroup, securityGroups)
     
     
@@ -735,11 +716,9 @@ def profile():
         # bug the global var of the ditc should be used
         active = make_active('profile')
         
-        config = cm_config()
         keys = cm_keys()
         
         activeProjects=config.projects('active')
-        configuration = config.get()
         person = configuration['profile']
         
         #print person
@@ -895,15 +874,6 @@ def deletekey(name):
         print "Error: deleting the key %s" % name
     return redirect("/keys/")
 
-
-def write_yaml(filename, content_dict):
-    if with_write:
-        d = {}
-        d['cloudmesh']=content_dict;
-        print "WRITE YAML"
-        f = open(filename, "w")
-        yaml.safe_dump(d, f, default_flow_style=False, indent=4)
-        f.close()
 
     
 if __name__ == "__main__":
