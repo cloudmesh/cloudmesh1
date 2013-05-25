@@ -99,7 +99,7 @@ def make_active(name):
               'vm_info': "",
               'projects': "",
               'security': "",
-              'updatekeypair':"",
+              'keys': "",
               'clouds':""}
     
     active[name] = 'active'
@@ -839,19 +839,10 @@ def page(path):
 def managekeys():
     print ">>>>> KEY"
     
-    active = make_active('profile')
-    active_clouds = clouds.active()
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    active = make_active('keys')
     
-    config = cm_config()
     keys = cm_keys()
 
-    yamlFile= config.get()    
-    pp.pprint (yamlFile)
-    haskeys = False
-    keydict = {}
-    keylist = {}
-    defaultkey = ''
     msg = ''
     error = False
     """
@@ -862,49 +853,23 @@ def managekeys():
          name 2: file $HOME/.ssh/id_rsa2.pub
          bla: key ssh-rsa AAAAB3.....zzzz keyname
     """
-    if(yamlFile.has_key('keys')):
-       haskeys = True 
-       keydict = config.userkeys()
-       #defaultkey = config.userkeys()['default']
-       defaultkey = keys.default()
-       
-       keylist = config.userkeys()['keylist']
-       print "LIST", keylist
-       print "DEFIED", keys.defined('fg-pro')
-       
     if request.method == 'POST' and request.form.has_key('keyname'):
         keyname = request.form['keyname']
-        fileorpath = request.form['keyorpath']
-        type = getKeyType(fileorpath)
-        
-        if type == "file" :
-            fileorpath = os.path.expanduser(fileorpath)
-        if keyname is "" or type is 'None' or fileorpath is "":
-            error = True
-            msg = "Invalid Data. Please Renter Data" 
-            
-        elif not validateKey(type ,fileorpath): 
-            if type.lower() == "file":
-                msg = "Invalid file path or Invalid key file" 
-            else:
-                msg = "Invalid key string"
-        elif ' ' in  keyname:
-            msg = "Invalid key name, cannot contain spaces"
-        elif haskeys and keys.defined(keyname):
-            msg = "Key name already exists"
-        else :
-            if haskeys :
-                keys[keyname] = fileorpath
-            else :
-                yamlFile['keys'] = {'default':keyname ,'keylist':{keyname: fileorpath}}
-                keylist = yamlFile['keys']['keylist']
-                defaultkey = yamlFile['keys']['default']
-                haskeys = True
-            for clud in active_clouds:
-                (stat,msg) = clouds.add_key_pair(clud,getKey(fileorpath),keyname)
-                print msg
-            write_yaml(filename, yamlFile)
-            msg = 'Key added successfully'
+        fileorstring = request.form['keyorpath']
+
+        print keyname
+        print fileorstring
+
+        if keys.defined(keyname):
+            msg = "Key name already exists. Please delete the key '%s' before proceeding." % keyname           
+        else:
+            try:
+                keys.set(keyname, fileorstring, expand=True)
+                msg = 'Key %s added successfully' % keyname
+                keys.write()
+            except Exception, e:
+                keys.delete(keyname)
+                msg = e
             
     elif request.method == 'POST' :
             keys['default'] = request.form['selectkeys']
@@ -918,74 +883,17 @@ def managekeys():
 
 @app.route('/keys/delete/<name>/')
 def deletekey(name):
-    active = make_active('profile')
 
-    config = cm_config()
-    yamlFile= config.get()
-    keydict = yamlFile['keys']
-    defaultkey = keydict['default']
-    keylist = keydict['keylist']
-    if len(keylist) ==1 :
-        del yamlFile['keys']
-    else :
-        del keylist[name]
-        if defaultkey == name:
-            keydict['default'] = ''
-    active_clouds = clouds.active()    
-    for clud in active_clouds:
-                (stat,msg) = clouds.del_key_pair(clud,name)
-                print msg
-    write_yaml(filename, yamlFile)
+    active = make_active('keys')
+    keys = cm_keys()
+
+    try:
+        keys.delete(name)
+        keys.write()
+    except:
+        print "Error: deleting the key %s" % name
     return redirect("/keys/")
 
-def validateKey(type,file):
-    if type.lower() == "file":
-        try :
-            keystring = open(file, "r").read()
-        except :
-            return False
-    else :
-        keystring = file
-    
-    try :
-        type, key_string, comment = keystring.split()
-        data = base64.decodestring(key_string)
-        int_len = 4
-        str_len = struct.unpack('>I', data[:int_len])[0] # this should return 7
-
-        if data[int_len:int_len+str_len] == type:
-            return True
-    except Exception, e:
-        print e
-        return False
-
-def getKey(fileorpath):
-    type = getKeyType(fielorpath)
-    if type == "file":
-        fileorpath = os.path.expanduser(fileorpath)
-        try :
-            keystring = open(fileorpath, "r").read()
-            return keystring
-        except Exception, e :
-            print e
-    else : 
-        return fileorpath
-
-def getKeyType(keyStringOrFilepath):
-    keyType = "file"
-    for aprefix in validKeyPrefix:
-        if aprefix in keyStringOrFilepath:
-            keyType = "keystring"
-    return keyType
-    
-def lineToFingerprint(line,type=None):
-    type = getKeyType(line)
-    if type == "file":
-        return line
-    type,key_string, comment = line.split()
-    key = base64.decodestring(key_string)
-    fp_plain = hashlib.md5(key).hexdigest()
-    return ':'.join(a+b for a,b in zip(fp_plain[::2], fp_plain[1::2]))
 
 def write_yaml(filename, content_dict):
     if with_write:

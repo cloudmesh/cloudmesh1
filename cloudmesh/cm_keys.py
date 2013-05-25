@@ -88,11 +88,19 @@ class cm_keys:
         else:
             self.config.data["cloudmesh"]["keys"]["keylist"][name] = value
 
+    def set(self, name, value, expand=False):
+        self.__setitem__(name,value)
+        if expand:
+            expanded_value = self.__getitem__(name)
+            self.__setitem__(name,expanded_value)
+        print "EXPANDED", expanded_value
+        
     def delete(self, name):
         """ not tested"""
+        newdefault = False
         if name == 'default':
             key = self.config.data["cloudmesh"]["keys"]["default"]
-            newdefault
+            newdefault = True
         else:
             key = name
             

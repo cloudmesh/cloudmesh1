@@ -60,7 +60,7 @@ server:
 
 view:
 	sleep 10
-	 %s http://127.0.0.1:5000/profile
+	 %s http://127.0.0.1:5000/keys/
 """ % browser
     #webbrowser.open("http://127.0.0.1:5000")
     file.close()
