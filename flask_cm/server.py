@@ -829,18 +829,10 @@ def page(path):
 # ROUTE: KEYS
 ######################################################################
 
-#
-# the key management does not belong in server.py but must be in a  separate class (as do other things in server ....)
-# server is done to render things not to implement logig that belongs to cloudmesh.
-# keymanagement and checking of keys is a function that should be in cloudmesh. To simplify that, we started a cm_keys code
-# 
-#
 @app.route('/keys/',methods=['GET','POST'])
 def managekeys():
-    print ">>>>> KEY"
     
     active = make_active('keys')
-    
     keys = cm_keys()
 
     msg = ''
@@ -849,16 +841,13 @@ def managekeys():
     keys:
       default: name 1 
       keylist:
-         name 1: file $HOME/.ssh/id_rsa.pub
-         name 2: file $HOME/.ssh/id_rsa2.pub
+         name 1: $HOME/.ssh/id_rsa.pub # this is automatically replaced with the key
+         name 2: $HOME/.ssh/id_rsa2.pub # this is automatically replaced with the key
          bla: key ssh-rsa AAAAB3.....zzzz keyname
     """
     if request.method == 'POST' and request.form.has_key('keyname'):
         keyname = request.form['keyname']
         fileorstring = request.form['keyorpath']
-
-        print keyname
-        print fileorstring
 
         if keys.defined(keyname):
             msg = "Key name already exists. Please delete the key '%s' before proceeding." % keyname           
