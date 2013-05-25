@@ -38,7 +38,7 @@ with_write = True
 default_path = '.futuregrid/cloudmesh.yaml'
 home = os.environ['HOME']
 filename = "%s/%s" % (home, default_path)
-validKeyPrefix = ["ssh-rsa", "ssh-dss"]
+
 ######################################################################
 # global vars
 ######################################################################
@@ -329,29 +329,26 @@ def buildProjectNamesArray(projects):
 @app.route('/setPrefix', methods=['GET','POST'])
 def setPrefix():
     if request.method == 'POST':
-        config_prefix = cm_config()
-        yamlFile= config_prefix.get();
-        oldPrefix = yamlFile['prefix']
-        newPrefix = request.form['prefix']
-        print "I'm in setting"
+        config = cm_config()
+        configuration = config.get();
 
-        if newPrefix != oldPrefix:
-            yamlFile['prefix'] = newPrefix
-            write_yaml(filename,yamlFile)
+        newPrefix = request.form['prefix']
+        configuration['prefix'] = newPrefix
+        config.write()
 
     return redirect("/profile/")
     
 @app.route('/setIndex', methods=['GET','POST'])
 def setIndex():
     if request.method == 'POST':
-        config_prefix = cm_config()
-        yamlFile= config_prefix.get();
-        oldIndex = yamlFile['index']
+        config = cm_config()
+        configuration= config.get();
+        oldIndex = configuration['index']
         newIndex = request.form['index']
 
         if newIndex != oldIndex:
-            yamlFile['index'] = newIndex
-            write_yaml(filename,yamlFile)
+            configuration['index'] = newIndex
+            write_yaml(filename,configuration)
 
     return redirect("/profile/")
 
@@ -359,17 +356,18 @@ def setIndex():
 def display_project():
     global default_project;
     
-
     ############reading from yaml file ############
-    config_project = cm_config()
-    activeProjects=config_project.projects('active')
+
+    config = cm_config()
+    activeProjects=config.projects('active')
     project_names=buildProjectNamesArray(activeProjects)
-    activeClouds=config_project.active()
+    activeClouds=config.active()
     
-    configurations= config_project.get() 
+    configurations= config.get() 
     default_project=configurations['projects']['default']
     selected=set_default_project(default_project, project_names,'checked')
-     ############  end of reading from yaml file ############
+
+    ############  end of reading from yaml file ############
 
     active = make_active('projects')
     
@@ -380,10 +378,10 @@ def display_project():
                 default_project= request.form['selected_project'] 
                 print default_project
                 ############ writing in yaml file ############
-                yamlFile= config_project.get();
-                yamlFile['clouds'][cloud]['default']['project']=default_project;
-                yamlFile['projects']['default']=default_project
-                write_yaml(filename,yamlFile)
+                configuration= config.get();
+                configuration['clouds'][cloud]['default']['project']=default_project;
+                configuration['projects']['default']=default_project
+                write_yaml(filename,configuration)
                 ############ end of writing in yaml file ############
                 selected = set_default_project(default_project, project_names,'checked')
 
@@ -509,9 +507,9 @@ def display_flavors(cloud=None):
                 print default_flavor
                 
                 ############ writing in yaml file ############
-                yamlFile= config_flavor.get();
-                yamlFile['clouds'][cloud]['default']['flavor']=default_flavor;
-                write_yaml(filename,yamlFile)
+                configuration= config_flavor.get();
+                configuration['clouds'][cloud]['default']['flavor']=default_flavor;
+                write_yaml(filename,configuration)
                 ############ end of writing in yaml file ############
                 selected = set_default_flavor(default_flavor, flavor_names)
                 radioSelected[cloud]=selected
@@ -570,15 +568,15 @@ def display_clouds():
 
     if request.method == 'POST':
         cloudNames = request.form.getlist("clouds")
-        yamlFile=config_cloud.get()
+        configuration=config_cloud.get()
         selected=set_default_clouds(cloudNames, availableClouds)
         for cloudName in cloudNames:
             projectName = request.form[cloudName]
             if "None" in projectName:
-                projectName=yamlFile['projects']['default']
-            yamlFile['clouds'][cloudName]['default']['project']=projectName;
-        yamlFile['active']=cloudNames
-        write_yaml(filename, yamlFile)
+                projectName=configuration['projects']['default']
+            configuration['clouds'][cloudName]['default']['project']=projectName;
+        configuration['active']=cloudNames
+        write_yaml(filename, configuration)
         
         for availableCloud in availableClouds:
             projectSelected[availableCloud]=set_default_project("", project_names,'selected');
@@ -655,9 +653,9 @@ def display_images():
                         #print default_image
 
                         ############ writing in yaml file ############
-                        yamlFile= config_image.get();
-                        yamlFile['clouds'][cloud]['default']['image']=default_image;
-                        write_yaml(filename, yamlFile)
+                        configuration= config_image.get();
+                        configuration['clouds'][cloud]['default']['image']=default_image;
+                        write_yaml(filename, configuration)
 
                         ############ end of writing in yaml file ############
                         selected = set_default_image(default_image, image_names)
@@ -707,10 +705,10 @@ def set_default_security(name, secGroup_names):
 def security():
     
      ############reading from yaml file ############
-    config_security = cm_config()
-    yamlFile=config_security.get()
-    securityGroupsList=(yamlFile['security']['security_groups']);
-    default_secGroup=yamlFile['security']['default']
+    config = cm_config()
+    configuration=config.get()
+    securityGroupsList=(configuration['security']['security_groups']);
+    default_secGroup=configuration['security']['default']
     securityGroups=securityGroupsList.keys();
     selectedSecurity=set_default_security(default_secGroup, securityGroups)
      ############  end of reading from yaml file ############
@@ -721,8 +719,8 @@ def security():
         default_secGroup= request.form['selected_securityGroup'] 
         
         ############ writing in yaml file ############
-        yamlFile['security']['default']=default_secGroup;
-        write_yaml(filename,yamlFile)
+        configuration['security']['default']=default_secGroup;
+        write_yaml(filename,configuration)
         ############ end of writing in yaml file ############
         selectedSecurity=set_default_security(default_secGroup, securityGroups)
     
@@ -738,27 +736,40 @@ def profile():
         active = make_active('profile')
         
         config = cm_config()
+        keys = cm_keys()
+        
         activeProjects=config.projects('active')
         configuration = config.get()
         person = configuration['profile']
         
         #print person
-        ###########projects radio button################
+
+        #
+        # PROJECTS
+        #
         activeProjects=config.projects('active')
         project_names=buildProjectNamesArray(activeProjects)
         default_project=configuration['projects']['default']
         selected=set_default_project(default_project, project_names,'checked')
+
+        #
+        # VM NAME
+        #
+
         prefix=config.prefix
         index=config.index
-        ########### end of projects radio button################
-        
-        ###########security radio button################
+
+        #
+        # SECURITY GROUPS
+        #
         securityGroupsList=(configuration['security']['security_groups']);
         securityGroups=securityGroupsList.keys();
         default_secGroup=configuration['security']['default']
         selectedSecurity=set_default_security(default_secGroup, securityGroups)
-        ###########end of security radio button################
 
+        #
+        # ACTIVE CLOUDS
+        #
         selectedClouds = clouds.active()
         defaultClouds = {} # this is wrong, but i just make it so for the mockup, all is contained in cm_config
         
@@ -768,9 +779,10 @@ def profile():
         return render_template('profile.html',
                                updated=time_now,
                                # keys are also in configuration, so we may not need that
-                               keys="",  # ",".join(clouds.get_keys()),
+                               nkeys="",  # ",".join(clouds.get_keys()),
                                defaultClouds=defaultClouds,
                                selectedClouds=selectedClouds,
+                               keys=keys,
                                person=person,
                                address=address,
                                prefix=prefix,
@@ -778,7 +790,6 @@ def profile():
                                active_clouds=clouds.active(),
                                active=active,
                                config=configuration, # BUG this should be not config but configuration
-                               fun_print = lineToFingerprint,
                                selected=selected,
                                version=version,
                                projects=activeProjects,
@@ -850,6 +861,7 @@ def managekeys():
         fileorstring = request.form['keyorpath']
 
         if keys.defined(keyname):
+            
             msg = "Key name already exists. Please delete the key '%s' before proceeding." % keyname           
         else:
             try:

@@ -129,7 +129,7 @@ class cm_keys:
     def default(self):
         """sets the default key"""
         return self.config.userkeys('default')
-        
+
     def names(self):
         """returns all key names in an array"""
         return self.config.data["cloudmesh"]["keys"]["keylist"].keys()

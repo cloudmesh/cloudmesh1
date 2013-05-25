@@ -33,7 +33,7 @@ $(function() {
 <form name="editPrefix" action="/setPrefix" method="POST">
 <tr><td></td><td>Prefix</td>
 <td>
-  Current Prefix: <b>{{ prefix }}</b>
+  Current Prefix: <b>{{ config.prefix }}</b>
   <br /> New Prefix:
   <input type="text" name="prefix" value={{prefix}} style="width:120px">
   <input type="submit" name="btnprefix" value="Change & Save">
@@ -96,16 +96,24 @@ $(function() {
 
 
 <tr><td>{{ image_button ("right", "030_pencil", "/keys/") }}</td><td colspan="2"><b> Keys </b></td> <td> </td></tr>
-{% if config.has_key('keys') and config['keys']['keylist'].has_key(config['keys']['default']) %}
-<tr><td></td><td>Default</td><td> {{config['keys']['default']}} : {{ fun_print(config['keys']['keylist'][config['keys']['default']]) }}</td><td></td></tr>
 <tr><td></td><td>List</td><td>
         <table>
-        {% for name, key in config['keys']['keylist'].iteritems() %}
-        <tr><td>{{name}}</td> <td>{{fun_print(key)}}</td></tr>
+	<tr><th>Default</th><th>Name</th><th>Fingerprint</th></tr>
+        {% for name in keys.names() %}
+        <tr>
+	  <td>
+	    {%if name == keys.get_default_key() %}
+              <input type="radio"
+                     name="keyselect"
+                     value="dummy""
+	             id="dummy"
+	             checked="checked">
+	    {% endif %}
+	  </td>
+	  <td>{{name}}</td> <td>{{keys.fingerprint(name)}}</td></tr>
 	{% endfor %}
 	</table>
 </td><td></td></tr>
-{% endif %}
 
 <tr><td>{{ image_button ("right", "030_pencil", "") }}</td><td>
 <b> SecurityGroups </b></td>

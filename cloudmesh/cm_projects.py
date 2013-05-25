@@ -1,6 +1,7 @@
 from cm_config import cm_config
 from string import Template
 import os
+import json
 
 class cm_projects:
 
@@ -12,7 +13,7 @@ class cm_projects:
         return result
 
     def __init__(self, filename=None):
-        """initializes based on cm_config and returns pointer to the keys dict."""
+        """initializes based on cm_config and returns pointer to the projects dict."""
         # Check if the file exists
         if filename == None:
             self.config = cm_config()
@@ -21,39 +22,52 @@ class cm_projects:
             try:
                 with open(self.filename): pass
             except IOError:
-                print 'ERROR: cm_keys, file "%s" does not exist' % self.filename
+                print 'ERROR: cm_projects, file "%s" does not exist' % self.filename
                 sys.exit()
             self.config = cm_config(self.filename)
-
+        
     @property
     def default(self):
         """returns the default project"""
-        return self.data['cloudmesh']['projects']['default']
+        return self.config.data['cloudmesh']['projects']['default']
 
     @default.setter
     def default(self, name):
         """sets the default project"""
         # check if name is in active projects
         # if it is, set the new default project.
-        # if it is not through an exception and spit out a nice msg explaining that the default project needs to be set
-        self.data['cloudmesh']['projects']['default'] = name
+        # if it is not through an exception and spit out a nice msg
+        # explaining that the default project needs to be set
+        self.config.data['cloudmesh']['projects']['default'] = name
 
     def add(self, name, status="active"):
         """adds a project with given status"""
         # add the name to the following array (make sure it is an array ;-)
-        # self.data['cloudmesh']['projects']['default'][status]
+        if status != 'default':
+            self.config.data['cloudmesh']['projects'][status].append(name)
+
+    def delete(self, name):
+        """adds a project with given status"""
+        # add the name to the following array (make sure it is an array ;-)
+        self.config.data['cloudmesh']['projects']['active'].remove(name)
         
     def names(self, status="active"):
         """returns all projects in an array with a specified status"""
-        self.data['cloudmesh']['projects']['default'][status]
+        return self.config.data['cloudmesh']['projects'][status]
         
     def __str__(self):
         """returns the dict in a string representing the project"""
         # untested
-        text = self.data['cloudmesh']['projects']
-        return text
+        text = self.config.data['cloudmesh']['projects']
+        return str(text)
+
+    def dump(self):
+        """returns the dict in a string representing the project"""
+        # untested
+        return json.dumps(self.config.data['cloudmesh']['projects'], indent=4)
     
-    def save(self):
-        """writes the updated dict to the config yaml file"""
-        # saves back into the same file from which we read.
-        # uses the cm_config writer
+    def write(self):
+        """writes the updated dict to the config"""
+        self.config.write()
+
+
