@@ -57,9 +57,16 @@ $(function() {
 <b> Projects </b></td>
 <td>
 <form name="projects" action="/projects/" method="POST">
-
-{% for projectname in projects %}
- <input type="radio" name="selected_project" value="{{ projectname }}" id="{{ projectname }}" {{ selected[projectname] }} onclick="document.forms['projects'].submit()"/> {{ projectname }}
+{% for projectname in projects.names(status="active") %}
+ <input type="radio"
+        name="selected_project"
+        value="{{ projectname }}"
+        id="{{ projectname }}"
+        {% if projectname == projects.default %}
+          checked="checked"
+        {% endif %}
+        onclick="document.forms['projects'].submit()"/>
+        {{ projectname }}
 {% endfor %}
 
 </form>
@@ -70,7 +77,7 @@ $(function() {
 <tr><td>{{ image_button ("right", "030_pencil", "/clouds/") }}</td><td colspan="2"><b> Clouds </b></td> <td></td></tr>
 <tr><td></td><td>Default</td><td>{{ config.default }}</td><td>edit</td></tr>
 
-<tr><td></td><td>Active</td><td>{{ ', '.join(active_clouds) }}</td><td>edit</td></tr>
+<tr><td></td><td>Active</td><td>{{ ', '.join(clouds.active()) }}</td><td>edit</td></tr>
 
 <tr><td></td><td>Active (TBD) </td><td>
   {% for cloudname in config.clouds.keys() %}
@@ -122,7 +129,11 @@ $(function() {
 <form name="securityGroups" action="/security/" method="POST">
 
 {% for securityGroup in securityGroups %}
- <input type="radio" name="selected_securityGroup" value="{{ securityGroup }}" id="{{ securityGroup }}" onclick="document.forms['securityGroups'].submit()" {{ selectedSecurity[securityGroup] }}/> {{ securityGroup }}
+ <input type="radio"
+  name="selected_securityGroup"
+  value="{{ securityGroup }}"
+  id="{{ securityGroup }}"
+  onclick="document.forms['securityGroups'].submit()" {{ selectedSecurity[securityGroup] }}/> {{ securityGroup }}
 {% endfor %}
 
 </form>

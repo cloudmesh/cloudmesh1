@@ -6,6 +6,7 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh.cm_keys import cm_keys
+from cloudmesh.cm_projects import cm_projects
 
 import os
 import time
@@ -243,7 +244,7 @@ def start_vm(cloud=None, server=None):
     return table()
 
 '''
-#gregorss test
+#gregors test
 @app.route('/cm/metric/<startdate>/<enddate>/<host>')
 def list_metric(cloud=None, server=None):
     print "-> generate metric", startdate, endadte
@@ -286,10 +287,7 @@ def load():
 @app.route('/table/')
 def table():
     active = make_active('table')
-
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-
-    #print json.dumps(clouds.clouds, indent=4)
     filter()
     return render_template('table.html',
                            updated=time_now,
@@ -301,6 +299,34 @@ def table():
                            version=version,
 			   state_table=state_table)
 
+
+#######################################################################
+# PREFIX MANAGEMENT
+####################################################################### 
+ 
+@app.route('/setPrefix', methods=['GET','POST'])
+def setPrefix():
+    if request.method == 'POST':
+        configuration['prefix'] = request.form['prefix']
+        config.write()
+
+    return redirect("/profile/")
+
+#######################################################################
+# INDEX MANAGEMENT
+####################################################################### 
+    
+@app.route('/setIndex', methods=['GET','POST'])
+def setIndex():
+    if request.method == 'POST':
+        configuration['index'] = request.form['index']
+        config.write()
+
+    return redirect("/profile/")
+
+#######################################################################
+# PROJECT MANAGEMENT
+####################################################################### 
 ######################################################################
 # ROUTE: PROJECTS
 ######################################################################
@@ -324,22 +350,6 @@ def buildProjectNamesArray(projects):
         project_names.append(project_name);
      return project_names;
 
-@app.route('/setPrefix', methods=['GET','POST'])
-def setPrefix():
-    if request.method == 'POST':
-        configuration['prefix'] = request.form['prefix']
-        config.write()
-
-    return redirect("/profile/")
-    
-@app.route('/setIndex', methods=['GET','POST'])
-def setIndex():
-    if request.method == 'POST':
-        configuration['index'] = request.form['index']
-        config.write()
-
-    return redirect("/profile/")
-
 @app.route('/projects/', methods=['GET','POST'])
 def display_project():
     global default_project;
@@ -347,7 +357,9 @@ def display_project():
     ############reading from yaml file ############
 
     activeProjects=config.projects('active')
+    print "PPP", activeProjects
     project_names=buildProjectNamesArray(activeProjects)
+    print "PPP", project_names
     activeClouds=config.active()
     
     configurations= config.get() 
@@ -717,24 +729,9 @@ def profile():
         active = make_active('profile')
         
         keys = cm_keys()
+        projects = cm_projects()
         
-        activeProjects=config.projects('active')
         person = configuration['profile']
-        
-        #print person
-
-        #
-        # PROJECTS
-        #
-        activeProjects=config.projects('active')
-        project_names=buildProjectNamesArray(activeProjects)
-        default_project=configuration['projects']['default']
-        selected=set_default_project(default_project, project_names,'checked')
-
-        #
-        # VM NAME
-        #
-
         prefix=config.prefix
         index=config.index
 
@@ -762,16 +759,15 @@ def profile():
                                defaultClouds=defaultClouds,
                                selectedClouds=selectedClouds,
                                keys=keys,
+                               projects=projects,
                                person=person,
                                address=address,
                                prefix=prefix,
                                index=index,
-                               active_clouds=clouds.active(),
+                               clouds=clouds,
                                active=active,
                                config=configuration, # BUG this should be not config but configuration
-                               selected=selected,
                                version=version,
-                               projects=activeProjects,
                                securityGroups=securityGroups,
                                selectedSecurity=selectedSecurity,
                                )
