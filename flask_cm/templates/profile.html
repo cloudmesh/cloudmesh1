@@ -52,11 +52,12 @@ $(function() {
 <td></td></tr>
 </form>
 
+<form name="profile" action="/profile/" method="POST">
 <tr><td></td><td>
 
 <b> Projects </b></td>
 <td>
-<form name="projects" action="/profile/" method="POST">
+
 {% for projectname in projects.names(status="active") %}
  <input type="radio"
         name="selected_project"
@@ -65,28 +66,52 @@ $(function() {
         {% if projectname == projects.default %}
           checked="checked"
         {% endif %}
-        onclick="document.forms['projects'].submit()"/>
+        onclick="document.forms['profile'].submit()"/>
         {{ projectname }}
+{% endfor %}
+
+</td>
+
+ <td></td></tr>  
+<tr><td>{{ image_button ("right", "030_pencil", "") }}</td><td>
+<b> SecurityGroups </b></td>
+
+<td>
+
+{% for group in configuration['security']['security_groups'].keys() %}
+
+  <input type="radio"
+  name="selected_securityGroup"
+  value="{{ group }}"
+  id="{{ group }}"
+  onclick="document.forms['profile'].submit()"
+  {% if group ==  configuration['security']['default'] %}
+    checked="checked"
+  {% endif %}
+  /> {{ group }}
 {% endfor %}
 
 </form>
 </td>
 
- <td></td></tr>  
-<tr><td></td><td>Completed</td><td>{{ ', '.join(configuration.projects.completed) }}</td><td></td></tr>    
+ <td> </td></tr>
+
+
+
+ <tr><td></td><td>Completed</td><td>{{ ', '.join(configuration.projects.completed) }}</td><td></td></tr>    
 <tr><td>{{ image_button ("right", "030_pencil", "/clouds/") }}</td><td colspan="2"><b> Clouds </b></td> <td></td></tr>
 <tr><td></td><td>Default</td><td>{{ configuration.default }}</td><td>edit</td></tr>
 
 <tr><td></td><td>Active</td><td>{{ ', '.join(clouds.active()) }}</td><td>edit</td></tr>
 
-<tr><td></td><td>Active (TBD) </td><td>
+<tr><td></td><td>Active (TBD, WRONG) </td><td>
   {% for cloudname in configuration.clouds.keys() %}
  <input type="checkbox"
         name="selected_clouds"
         value="{{ cloudname }}"
         id="{{ cloudname }}"
         onclick="document.forms['cloudGroups'].submit()"
-        {{ selectedClouds[cloudname] }}/> {{ cloudname}}
+        {{ clouds.active()[cloudname] }}/> {{ cloudname}}
 {% endfor %}
 </td><td></td></tr>
 
@@ -122,24 +147,6 @@ $(function() {
 	</table>
 </td><td></td></tr>
 
-<tr><td>{{ image_button ("right", "030_pencil", "") }}</td><td>
-<b> SecurityGroups </b></td>
-
-<td>
-<form name="securityGroups" action="/security/" method="POST">
-
-{% for securityGroup in securityGroups %}
- <input type="radio"
-  name="selected_securityGroup"
-  value="{{ securityGroup }}"
-  id="{{ securityGroup }}"
-  onclick="document.forms['securityGroups'].submit()" {{ selectedSecurity[securityGroup] }}/> {{ securityGroup }}
-{% endfor %}
-
-</form>
-</td>
-
- <td> </td></tr>
 </table>
 
 

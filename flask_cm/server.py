@@ -639,40 +639,6 @@ default_cloud = "india-openstack"
 
 
 ######################################################################
-# ROUTE: SECURITY
-######################################################################
-def set_default_security(name, secGroup_names):
-    print secGroup_names
-    default_secGroup = name
-    selectedSecurity = {}
-    for name in secGroup_names:
-        selectedSecurity[name] = ""
-    selectedSecurity[default_secGroup] = 'checked'
-    print selectedSecurity
-    return selectedSecurity
-
-@app.route('/security/', methods=['GET','POST'])
-def security():
-    
-
-    securityGroupsList=(configuration['security']['security_groups']);
-    default_secGroup=configuration['security']['default']
-    securityGroups=securityGroupsList.keys();
-    selectedSecurity=set_default_security(default_secGroup, securityGroups)
-    
-    active = make_active('security')
-    
-    if request.method == 'POST':
-        default_secGroup= request.form['selected_securityGroup'] 
-        configuration['security']['default']=default_secGroup;
-        config.write()
-
-        selectedSecurity=set_default_security(default_secGroup, securityGroups)
-    
-    
-    return redirect("/profile/")
-
-######################################################################
 # ROUTE: PROFILE
 ######################################################################
 @app.route('/profile/', methods=['GET','POST'])
@@ -685,19 +651,11 @@ def profile():
         
     if request.method == 'POST':
         projects.default = request.form['selected_project']
-        print projects.default
-        projects.write()
+        configuration['security']['default']=request.form['selected_securityGroup']
+        config.write()
 
     keys = cm_keys()
     person = configuration['profile']
-    
-    #
-    # SECURITY GROUPS
-    #
-    securityGroupsList=(configuration['security']['security_groups']);
-    securityGroups=securityGroupsList.keys();
-    default_secGroup=configuration['security']['default']
-    selectedSecurity=set_default_security(default_secGroup, securityGroups)
     
     #
     # ACTIVE CLOUDS
@@ -720,8 +678,6 @@ def profile():
                            active=active,
                            configuration=configuration,
                            version=version,
-                           securityGroups=securityGroups,
-                           selectedSecurity=selectedSecurity,
         )
 
 ######################################################################
