@@ -89,7 +89,7 @@ function killall(cloud) {
 	</td>
 	<td> {{ server.id }} </td>
 	<td> {{ server.status }} </td>
-	<td> {{ server.addresses }} </td>
+	<td> {{ cloudmesh.address_string(server.addresses) }} </td>
 	<td>
 	  {{ image_button ("right", "016_bin", "/cm/delete/" + name + "/" + id + "/") }}
 	</td>

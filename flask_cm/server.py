@@ -186,8 +186,9 @@ def delete_vm(cloud=None, server=None):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
     clouds.delete(cloud, server)
     time.sleep(5)
-    clouds.refresh()
-    return table()
+    #    clouds.refresh()
+    return redirect("/table/")
+#    return table()
 
 ######################################################################
 # ROUTE: DELETE GROUP
@@ -243,7 +244,10 @@ def start_vm(cloud=None, server=None):
     vm_image = d['image']
 
     clouds.create(cloud, config.prefix, config.index, vm_image, vm_flavor, key)
-    config.index = int(config.index) + 1
+    config.incr()
+    config.write()
+    
+    print "NEW", config.prefix, config.index
     return table()
 
 '''
