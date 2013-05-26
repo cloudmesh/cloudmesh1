@@ -337,62 +337,7 @@ def setIndex():
 ######################################################################
 # ROUTE: PROJECTS
 ######################################################################
-#
-# WHY NOT USE cm_projects as suggested, putting everything in one code becomes confusing and if separated 
-#  increases code maintainability and readability
-#
-def set_default_project(name, project_names, type):
-    global default_project;
-    default_project = name
-    selected = {}
-    for name in project_names:
-        selected[name] = ""
-    selected[default_project] = type
-    print selected
-    return selected
 
-def buildProjectNamesArray(projects):
-     project_names=[]
-     for project_name in projects:
-        project_names.append(project_name);
-     return project_names;
-
-@app.route('/projects/', methods=['GET','POST'])
-def display_project():
-    global default_project;
-    
-    ############reading from yaml file ############
-
-    activeProjects=config.projects('active')
-    print "PPP", activeProjects
-    project_names=buildProjectNamesArray(activeProjects)
-    print "PPP", project_names
-    activeClouds=config.active()
-    
-    configurations= config.get() 
-    default_project=configurations['projects']['default']
-    selected=set_default_project(default_project, project_names,'checked')
-
-    ############  end of reading from yaml file ############
-
-    active = make_active('projects')
-    
-    if request.method == 'POST':
-        radioSelected={}
-        for cloud in activeClouds:
-            if 'openstack' in cloud:
-                default_project= request.form['selected_project'] 
-                print default_project
-                ############ writing in yaml file ############
-                configuration= config.get();
-                configuration['clouds'][cloud]['default']['project']=default_project;
-                configuration['projects']['default']=default_project
-                config.write()
-                ############ end of writing in yaml file ############
-                selected = set_default_project(default_project, project_names,'checked')
-
-
-    return redirect("/profile/")
 
 ######################################################################
 # ROUTE: VM Login
@@ -730,48 +675,54 @@ def security():
 ######################################################################
 # ROUTE: PROFILE
 ######################################################################
-@app.route('/profile/')
+@app.route('/profile/', methods=['GET','POST'])
 def profile():
-        # bug the global var of the ditc should be used
-        active = make_active('profile')
-        
-        keys = cm_keys()
-        projects = cm_projects()
-        
-        person = configuration['profile']
+    # bug the global var of the ditc should be used
 
-        #
-        # SECURITY GROUPS
-        #
-        securityGroupsList=(configuration['security']['security_groups']);
-        securityGroups=securityGroupsList.keys();
-        default_secGroup=configuration['security']['default']
-        selectedSecurity=set_default_security(default_secGroup, securityGroups)
+    active = make_active('profile')
 
-        #
-        # ACTIVE CLOUDS
-        #
-        selectedClouds = clouds.active()
-        defaultClouds = {} # this is wrong, but i just make it so for the mockup, all is contained in cm_config
+    projects = cm_projects()
         
-        time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    if request.method == 'POST':
+        projects.default = request.form['selected_project']
+        print projects.default
+        projects.write()
 
-        address = '<br>'.join(str(x) for x in person['address']) 
-        return render_template('profile.html',
-                               updated=time_now,
-                               defaultClouds=defaultClouds,
-                               selectedClouds=selectedClouds,
-                               keys=keys,
-                               projects=projects,
-                               person=person,
-                               address=address,
-                               clouds=clouds,
-                               active=active,
-                               configuration=configuration,
-                               version=version,
-                               securityGroups=securityGroups,
-                               selectedSecurity=selectedSecurity,
-                               )
+    keys = cm_keys()
+    person = configuration['profile']
+    
+    #
+    # SECURITY GROUPS
+    #
+    securityGroupsList=(configuration['security']['security_groups']);
+    securityGroups=securityGroupsList.keys();
+    default_secGroup=configuration['security']['default']
+    selectedSecurity=set_default_security(default_secGroup, securityGroups)
+    
+    #
+    # ACTIVE CLOUDS
+    #
+    selectedClouds = clouds.active()
+    defaultClouds = {} # this is wrong, but i just make it so for the mockup, all is contained in cm_config
+    
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    address = '<br>'.join(str(x) for x in person['address']) 
+    return render_template('profile.html',
+                           updated=time_now,
+                           defaultClouds=defaultClouds,
+                           selectedClouds=selectedClouds,
+                           keys=keys,
+                           projects=projects,
+                           person=person,
+                           address=address,
+                           clouds=clouds,
+                           active=active,
+                           configuration=configuration,
+                           version=version,
+                           securityGroups=securityGroups,
+                           selectedSecurity=selectedSecurity,
+        )
 
 ######################################################################
 # ROUTE: METRIC
