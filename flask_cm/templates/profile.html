@@ -33,9 +33,9 @@ $(function() {
 <form name="editPrefix" action="/setPrefix" method="POST">
 <tr><td></td><td>Prefix</td>
 <td>
-  Current Prefix: <b>{{ config.prefix }}</b>
+  Current Prefix: <b>{{ configuration.prefix }}</b>
   <br /> New Prefix:
-  <input type="text" name="prefix" value={{prefix}} style="width:120px">
+  <input type="text" name="prefix" value={{ configuration.prefix }} style="width:120px">
   <input type="submit" name="btnprefix" value="Change & Save">
 </td>
 <td></td></tr>
@@ -44,9 +44,9 @@ $(function() {
 <form name="editIndex" action="/setIndex" method="POST">
 <tr><td></td><td>Index</td>
 <td>
-  Current Index: <b>{{ index }}</b>
+  Current Index: <b>{{ configuration.index }}</b>
   <br /> New Index:
-  <input type="text" name="index" value={{index}} style="width:120px">
+  <input type="text" name="index" value={{ configuration.index }} style="width:120px">
   <input type="submit" name="btnindex" value="Change & Save">
 </td>
 <td></td></tr>
@@ -73,14 +73,14 @@ $(function() {
 </td>
 
  <td></td></tr>  
-<tr><td></td><td>Completed</td><td>{{ ', '.join(config.projects.completed) }}</td><td></td></tr>    
+<tr><td></td><td>Completed</td><td>{{ ', '.join(configuration.projects.completed) }}</td><td></td></tr>    
 <tr><td>{{ image_button ("right", "030_pencil", "/clouds/") }}</td><td colspan="2"><b> Clouds </b></td> <td></td></tr>
-<tr><td></td><td>Default</td><td>{{ config.default }}</td><td>edit</td></tr>
+<tr><td></td><td>Default</td><td>{{ configuration.default }}</td><td>edit</td></tr>
 
 <tr><td></td><td>Active</td><td>{{ ', '.join(clouds.active()) }}</td><td>edit</td></tr>
 
 <tr><td></td><td>Active (TBD) </td><td>
-  {% for cloudname in config.clouds.keys() %}
+  {% for cloudname in configuration.clouds.keys() %}
  <input type="checkbox"
         name="selected_clouds"
         value="{{ cloudname }}"
@@ -91,7 +91,7 @@ $(function() {
 </td><td></td></tr>
 
 <tr><td></td><td>Default (TBD) </td><td>
-  {% for cloudname in config.clouds.keys() %}
+  {% for cloudname in configuration.clouds.keys() %}
  <input type="radio"
         name="defaultClouds"
         value="{{ cloudname }}"

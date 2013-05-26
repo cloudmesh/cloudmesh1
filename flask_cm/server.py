@@ -26,7 +26,7 @@ except:
 import yaml
 
 ######################################################################
-# setting up reading path for the use of yaml
+# allowing the yaml file to be written back upon change
 ######################################################################
 
 with_write = True
@@ -66,18 +66,19 @@ for name in clouds.active():
 	for state in clouds.states(name):
 		state_table[name][state] = True
 
-# refresh , misses the search for display
+# refresh, misses the search for display
                 
 clouds.refresh()
 clouds.all_filter()
 
 clouds.refresh_user_id()
 
-prefix = clouds.prefix()
-index = clouds.index()
 
 config = cm_config()
 configuration = config.get()
+
+prefix = config.prefix
+index = config.index
 
 ######################################################################
 # STARTING THE FLASK APP
@@ -132,6 +133,7 @@ def index():
 def refresh(cloud=None, server=None):
     print "-> refresh", cloud, server
     clouds.refresh()
+    clouds.all_filter()
     return table()
 
 ######################################################################
@@ -239,8 +241,9 @@ def start_vm(cloud=None, server=None):
     d = clouds.default(cloud)
     vm_flavor = d['flavor']
     vm_image = d['image']
-    
-    clouds.create(cloud, prefix, "001", vm_image, vm_flavor, key)
+
+    clouds.create(cloud, config.prefix, config.index, vm_image, vm_flavor, key)
+    config.index = int(config.index) + 1
     return table()
 
 '''
@@ -732,8 +735,6 @@ def profile():
         projects = cm_projects()
         
         person = configuration['profile']
-        prefix=config.prefix
-        index=config.index
 
         #
         # SECURITY GROUPS
@@ -754,19 +755,15 @@ def profile():
         address = '<br>'.join(str(x) for x in person['address']) 
         return render_template('profile.html',
                                updated=time_now,
-                               # keys are also in configuration, so we may not need that
-                               nkeys="",  # ",".join(clouds.get_keys()),
                                defaultClouds=defaultClouds,
                                selectedClouds=selectedClouds,
                                keys=keys,
                                projects=projects,
                                person=person,
                                address=address,
-                               prefix=prefix,
-                               index=index,
                                clouds=clouds,
                                active=active,
-                               config=configuration, # BUG this should be not config but configuration
+                               configuration=configuration,
                                version=version,
                                securityGroups=securityGroups,
                                selectedSecurity=selectedSecurity,

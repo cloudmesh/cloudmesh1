@@ -17,7 +17,7 @@ function killall(cloud) {
 <table>
   <tr>
     <th colspan="1"> Cloud Mesh </th>  
-    <th colspan="7">
+    <th colspan="4">
       {{ image_button ("none", "365_restart", "/table/") }}
       &nbsp;
       {{ image_button ("none", "041_charts", "/table/") }}
@@ -34,11 +34,8 @@ function killall(cloud) {
   <tr> <td> Updated </td>  <td colspan=8> {{ updated }} </td></tr>
   <tr>
     <th> Name </th>
-    <th> Login </th>
-    <th> Info </th>
-    <th> Get Ip </th>
-    <th> Stats </th>
-    <th> IDs </th>
+    <th> Action </th>
+    <th> ID </th>
     <th> Status </th>
     <th> ip </th>
   </tr>
@@ -47,7 +44,7 @@ function killall(cloud) {
   
   <tr> 
     <th colspan="1"> {{ name }}</th> 
-    <th colspan="7">
+    <th colspan="4">
       {{ image_button ("none", "365_restart", "/cm/refresh/" + name + "/") }}
       &nbsp;
       {{ image_button ("none", "190_circle_plus", "/cm/start/" + name +"/") }}
@@ -86,14 +83,8 @@ function killall(cloud) {
 	<td> {{ server.name }}  </td>
 	<td> {{ server.cloud }}
 	  {{ image_button ("none", "368_collapse", "/cm/login/" + name + "/" + id + "/") }}
-	</td>
-	<td>
 	  {{ image_button ("right", "195_circle_info", "/cm/info/" + name + "/" + id + "/") }}
-       </td>
-	 <td>      
-	    <a href="/cm/assignpubip/{{name}}/{{id}}/">  I.P. </a>
-	</td>
-       <td>
+	  <a href="/cm/assignpubip/{{name}}/{{id}}/">  I.P. </a>
 	  {{ image_button ("none", "041_charts", "/cm/stats/" + name + "/" + id + "/") }}
 	</td>
 	<td> {{ server.id }} </td>
