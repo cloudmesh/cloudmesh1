@@ -624,6 +624,8 @@ def display_images():
 # ROUTE: TEST 
 ######################################################################
 
+##
+
 
 def set_default_cloud(name, cloud_names):
     global default_cloud

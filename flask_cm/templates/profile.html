@@ -52,12 +52,11 @@ $(function() {
 <td></td></tr>
 </form>
 
-<form name="profile" action="/profile/" method="POST">
 <tr><td></td><td>
 
 <b> Projects </b></td>
 <td>
-
+<form name="profile" action="/profile/" method="POST">
 {% for projectname in projects.names(status="active") %}
  <input type="radio"
         name="selected_project"
@@ -77,6 +76,7 @@ $(function() {
 <b> SecurityGroups </b></td>
 
 <td>
+<form name="securityGroups" action="/profile/" method="POST">
 
 {% for group in configuration['security']['security_groups'].keys() %}
 
