@@ -84,12 +84,16 @@ function killall(cloud) {
 	<td> {{ server.cloud }}
 	  {{ image_button ("none", "368_collapse", "/cm/login/" + name + "/" + id + "/") }}
 	  {{ image_button ("right", "195_circle_info", "/cm/info/" + name + "/" + id + "/") }}
-	  <a href="/cm/assignpubip/{{name}}/{{id}}/">  I.P. </a>
+	  <a href="/cm/assignpubip/{{name}}/{{id}}/">  IP </a>
 	  {{ image_button ("none", "041_charts", "/cm/stats/" + name + "/" + id + "/") }}
 	</td>
 	<td> {{ server.id }} </td>
-	<td> {{ server.status }} </td>
-	<td> {{ cloudmesh.address_string(server.addresses) }} </td>
+	<td  style="color:{{ cloudmesh.status_color(server.status) }};">
+	  {{ server.status }}
+	</td>
+	<td>
+	  {{ cloudmesh.address_string(server.addresses) }}
+	</td>
 	<td>
 	  {{ image_button ("right", "016_bin", "/cm/delete/" + name + "/" + id + "/") }}
 	</td>

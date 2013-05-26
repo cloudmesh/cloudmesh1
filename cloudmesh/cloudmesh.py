@@ -490,17 +490,10 @@ class cloudmesh:
             return
 
     def address_string(self,content):
-        """content is a dict of the form:
-
-        {u'private': [
-            {u'version': 4,
-             u'addr': u'10.35.23.30',
-             u'OS-EXT-IPS:type':
-             u'fixed'},
-            {u'version': 4,
-             u'addr': u'198.202.120.194',
-             u'OS-EXT-IPS:type':
-             u'floating'}]}
+        """content is a dict of the form {u'private': [{u'version':
+        4,u'addr': u'10.35.23.30',u'OS-EXT-IPS:type':u'fixed'},
+        {u'version': 4, u'addr': u'198.202.120.194',
+        u'OS-EXT-IPS:type': u'floating'}]}
 
         it will return
 
@@ -515,6 +508,16 @@ class cloudmesh:
         except:
             result = content
         return result
+
+    def status_color(self,status):
+        if status == 'ACTIVE':
+            return "green"
+        if status == 'BUILDING':
+            return "blue"
+        if status in ['ERROR']:
+            return "red"
+        return "black"
+
 
 ##########################################################################
 # MAIN METHOD FOR TESTING
