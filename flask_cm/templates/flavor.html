@@ -16,16 +16,26 @@ Choose the default flavor </br>
     <th> Cost  </th>
   </tr>
   
-  {% for name, cloud in clouds.iteritems() %}
+  {% for name in cloudmesh.active() %}
+  
   
   <tr> 
     <th colspan="6"> {{ name }} </th> 
   </tr>
-  
-  {% for id, flavor in cloud['flavors'].iteritems() %}
+
+  {% for id, flavor in clouds[name]['flavors'].iteritems() %}
   
   <tr>
-    <td> <input type="radio" name="{{ name }}" value="{{ flavor.name }}" id="{{ flavor.name }}"  {{ radioSelected[name][flavor.name] }}  onclick="document.forms['flavor'].submit()"> </td>
+    <td>
+      <input
+      type="radio"
+      name="{{ name }}"
+      value="{{ flavor.name }}"
+      id="{{ flavor.name }}"
+      {% if id == config.cloud(name)['default']['flavor']  %}
+        checked="checked"
+      {% endif %}
+      onclick="document.forms['flavor'].submit()"> </td>
     <td> {{ flavor.id }} </td>
     <td> {{ flavor.name }} </td>
     <td> {{ flavor.ram }} </td>

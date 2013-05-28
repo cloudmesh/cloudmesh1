@@ -376,78 +376,27 @@ def maketablefromdict(the_dict):
 ######################################################################
 # ROUTE: FLAVOR
 ######################################################################
-def set_default_flavor(name, flavor_names):
-    global default_flavor
-    default_flavor = name
-    selected = {}
-    for name in flavor_names:
-        selected[name] = ""
-    selected[default_flavor] = 'checked'
-    return selected
-        
-
-def buildFlavorNamesArray(clouds):
-    flavor_names=[]
-    for name, cloud in clouds.iteritems():
-        for id, flavor in cloud['flavors'].iteritems():
-            flavor_names.append(flavor['name']);
-    return flavor_names;
-
-
 
 #@app.route('/flavors/<cloud>/' )
 @app.route('/flavors/', methods=['GET','POST'])
 def display_flavors(cloud=None):
-    radioSelected={}
-    flavor_names=buildFlavorNamesArray(clouds.clouds);
-    # for debugging
-    cloud = 'india-openstack'
-
-    ############reading from yaml file ############
-
-    activeClouds=config.active()
-    for cloud in activeClouds:
-        if 'openstack' in cloud:
-            configurations= config.cloud(cloud)   
-            default_flavor=configurations['default']['flavor']
-            selected=set_default_flavor(default_flavor, flavor_names)
-            radioSelected[cloud]=selected
-            print radioSelected
-            selected={};
-    ############  end of reading from yaml file ############
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('flavors')
-    #selected = set_default_flavor(default_flavor, flavor_names)
 
     if request.method == 'POST':
-        radioSelected={}
-        for cloud in activeClouds:
-            if 'openstack' in cloud:
-                
-                default_flavor= request.form[cloud] 
-                print default_flavor
-                
-                ############ writing in yaml file ############
-                configuration= config.get();
-                configuration['clouds'][cloud]['default']['flavor']=default_flavor;
-                config.write()
-                ############ end of writing in yaml file ############
-                selected = set_default_flavor(default_flavor, flavor_names)
-                radioSelected[cloud]=selected
-                print radioSelected
-                selected={};
-    
-      
+        for cloud in config.active():
+            configuration['clouds'][cloud]['default']['flavor']=request.form[cloud] 
+            config.write()
 
-    if cloud == None:
-        pass
-    else:
-        return render_template('flavor.html',
-                               updated=time_now,
-                               clouds=clouds.clouds,
-                               active=active,
-                               version=version,radioSelected=radioSelected)
+    return render_template(
+        'flavor.html',
+        updated=time_now,
+        cloudmesh=clouds,
+        clouds=clouds.clouds,
+        config=config,
+        active=active,
+        version=version)
 
 
 
@@ -458,12 +407,10 @@ def display_flavors(cloud=None):
 #@app.route('/images/<cloud>/')
 @app.route('/images/', methods=['GET','POST'])
 def display_images():
-    radioSelected={}
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('images')
 
     if request.method == 'POST':
-        radioSelected={}
         for cloud in config.active():
             configuration['clouds'][cloud]['default']['image']=request.form[cloud] 
             config.write()
@@ -475,9 +422,7 @@ def display_images():
         clouds=clouds.clouds,
         cloudmesh=clouds,
         config=config,
-        version=version,
-        radioSelected=radioSelected)
-    
+        version=version)
 
 
 ######################################################################
