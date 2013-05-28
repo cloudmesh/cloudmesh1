@@ -486,8 +486,7 @@ def display_images():
 
     ############reading from yaml file ############
 
-    activeClouds=config.active()
-    for cloud in activeClouds:
+    for cloud in config.active():
         if 'openstack' in cloud:
                 configurations= config.cloud(cloud)   
                 default_image=configurations['default']['image']
@@ -500,7 +499,7 @@ def display_images():
 
     if request.method == 'POST':
         radioSelected={}
-        for cloud in activeClouds:
+        for cloud in config.active():
                 if 'openstack' in cloud:
                         
                         default_image= request.form[cloud] 
@@ -517,11 +516,14 @@ def display_images():
                         #print radioSelected
                         selected={};
 
-    return render_template('images.html',
-                               updated=time_now,
-                               clouds=clouds.clouds,
-                               active=active,
-                               version=version,radioSelected=radioSelected)
+    return render_template(
+        'images.html',
+        active=active,
+        updated=time_now,
+        clouds=clouds.clouds,
+        cloudmesh=clouds,
+        config=config,
+        version=version,radioSelected=radioSelected)
     
 
 
@@ -536,18 +538,24 @@ def profile():
     active = make_active('profile')
 
     projects = cm_projects()
-        
+    person = configuration['profile']
+    keys = cm_keys()
+
+    
     if request.method == 'POST':
         projects.default = request.form['field-selected-project']
         configuration['security']['default']=request.form['field-selected-securityGroup']
         config.index = request.form['field-index']
         config.prefix = request.form['field-prefix']
+        config.firstname = request.form['field-firstname']
+        config.lastname = request.form['field-lastname']
+        config.phone = request.form['field-phone']
+        config.email = request.form['field-email']
         config.default_cloud = request.form['field-default-cloud']
+
         #print request.form["field-cloud-activated-" + value]
         config.write()
 
-    keys = cm_keys()
-    person = configuration['profile']
     
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     

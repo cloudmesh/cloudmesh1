@@ -3,7 +3,7 @@
 {% block content %}
 
 
-Choose the default image </br>
+Choose the default image for the clouds </br>
 
 <form name="image" action="" method="POST">
 <table>
@@ -19,13 +19,13 @@ Choose the default image </br>
     <th> Cost </th>
   </tr>
   
-  {% for name, cloud in clouds.iteritems() %}
-  
+  {% for name in cloudmesh.active() %}
+
   <tr> 
     <th colspan="8"> {{ name }} </th> 
   </tr>
   
-  {% for id, image in cloud['images'].iteritems() %}
+  {% for id, image in clouds[name]['images'].iteritems() %}
   
   <tr>
 
@@ -42,7 +42,7 @@ Choose the default image </br>
   </tr>
   
   {% endfor %}
-  
+
   {% endfor %}
   
 </table>

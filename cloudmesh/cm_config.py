@@ -233,6 +233,46 @@ class cm_config(object):
     def index(self, value):
         self.data['cloudmesh']['index'] = int(value)
 
+    @property
+    def firstname(self):
+        return self.data['cloudmesh']['profile']['firstname']
+
+    @index.setter
+    def firstname(self, value):
+        self.data['cloudmesh']['profile']['firstname'] = str(value)
+
+    @property
+    def lastname(self):
+        return self.data['cloudmesh']['profile']['lastname']
+
+    @index.setter
+    def lastname(self, value):
+        self.data['cloudmesh']['profile']['lastname'] = str(value)
+
+    @property
+    def phone(self):
+        return self.data['cloudmesh']['profile']['phone']
+
+    @index.setter
+    def phone(self, value):
+        self.data['cloudmesh']['profile']['phone'] = str(value)
+
+    @property
+    def email(self):
+        return self.data['cloudmesh']['profile']['e-mail']
+
+    @index.setter
+    def email(self, value):
+        self.data['cloudmesh']['profile']['e-mail'] = str(value)
+    @property
+
+    def address(self):
+        return self.data['cloudmesh']['profile']['address']
+
+    @index.setter
+    def address(self, value):
+        self.data['cloudmesh']['profile']['address'] = str(value)
+
     def profile(self):
         return self.data['cloudmesh']['profile']
 

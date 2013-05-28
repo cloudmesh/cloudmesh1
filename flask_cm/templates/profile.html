@@ -22,13 +22,36 @@ $(function() {
 <table>
 <form name="profile" action="/profile/" method="POST">
 <tr><td colspan="3"><b> Contact </b></td> </tr>  
-<tr><td></td><td>Firstname</td><td>{{ person.firstname }}</td><td></td></tr>
-<tr><td></td><td>Lastname</td><td>{{ person.lastname }}</td><td></td></tr>
-<tr><td></td><td>Phone</td><td>{{ person.phone }}</td><td></td></tr>
-<tr><td></td><td>e-mail</td><td>{{ person['e-mail'] }}</td><td></td></tr>
+<tr><td></td><td>Firstname</td><td>
+  <input type="text"
+  name="field-firstname"
+  value="{{ person.firstname }}"
+  style="width:240px">
+</td><td></td></tr>
+<tr><td></td><td>Lastname</td><td>
+  <input type="text"
+  name="field-lastname"
+  value="{{ person.lastname }}"
+  style="width:240px">
+</td><td></td></tr>
+<tr><td></td><td>Phone</td><td>
+    <input type="text"
+  name="field-phone"
+  value="{{ person.phone }}"
+  style="width:240px">
+</td><td></td></tr>
+<tr><td></td><td>e-mail</td><td>
+    <input type="text"
+  name="field-email"
+  value="{{ person['e-mail'] }}"
+  style="width:240px">
+</td><td></td></tr>
 <tr><td></td><td>Address</td><td>
   {{ address | replace ("\n", "<br>") | safe}}
 </td><td></td></tr>
+
+<tr><td></td><td colspan="2"> <input type="submit" name="btnindex" value="Save"> </td> <td></td></tr>
+
 <tr><td></td><td colspan="2"><b> Prefix and Index </b></td> <td></td></tr>
 
 <tr>
