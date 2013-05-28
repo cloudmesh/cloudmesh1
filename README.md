@@ -34,5 +34,3 @@ examples
 
 * examples/bootstrap - two examples on how to use a more fancyful layout. one is in home.html, the other in fluid.html 
 
-Testing commit from Fugang
- 
