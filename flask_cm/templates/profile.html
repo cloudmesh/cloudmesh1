@@ -20,6 +20,7 @@ $(function() {
 <h2>Profile</h2>
 
 <table>
+<form name="profile" action="/profile/" method="POST">
 <tr><td colspan="3"><b> Contact </b></td> </tr>  
 <tr><td></td><td>Firstname</td><td>{{ person.firstname }}</td><td></td></tr>
 <tr><td></td><td>Lastname</td><td>{{ person.lastname }}</td><td></td></tr>
@@ -30,33 +31,29 @@ $(function() {
 </td><td></td></tr>
 <tr><td></td><td colspan="2"><b> Prefix and Index </b></td> <td></td></tr>
 
-<form name="editPrefix" action="/setPrefix" method="POST">
-<tr><td></td><td>Prefix</td>
-<td>
-  Current Prefix: <b>{{ configuration.prefix }}</b>
-  <br /> New Prefix:
-  <input type="text" name="prefix" value={{ configuration.prefix }} style="width:120px">
-  <input type="submit" name="btnprefix" value="Change & Save">
-</td>
-<td></td></tr>
-</form>
+<tr>
+  <td></td>
+  <td> VM Name </td>
+  <td>
+    <input type="text"
+    name="field-prefix"
+    value="{{ configuration.prefix }}"
+    style="width:120px">
+    -
+    <input type="text"
+    name="field-index"
+    value="{{ configuration.index }}"
+    style="width:120px">
+    <input type="submit" name="btnindex" value="Save">
+  </td>
+</tr>
 
-<form name="editIndex" action="/setIndex" method="POST">
-<tr><td></td><td>Index</td>
-<td>
-  Current Index: <b>{{ configuration.index }}</b>
-  <br /> New Index:
-  <input type="text" name="index" value={{ configuration.index }} style="width:120px">
-  <input type="submit" name="btnindex" value="Change & Save">
-</td>
-<td></td></tr>
-</form>
 
 <tr><td></td><td>
 
 <b> Projects </b></td>
 <td>
-<form name="profile" action="/profile/" method="POST">
+
 {% for projectname in projects.names(status="active") %}
  <input type="radio"
         name="selected_project"
@@ -71,12 +68,12 @@ $(function() {
 
 </td>
 
- <td></td></tr>  
+ <td></td></tr>
 <tr><td>{{ image_button ("right", "030_pencil", "") }}</td><td>
 <b> SecurityGroups </b></td>
 
 <td>
-<form name="securityGroups" action="/profile/" method="POST">
+
 
 {% for group in configuration['security']['security_groups'].keys() %}
 

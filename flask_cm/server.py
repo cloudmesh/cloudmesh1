@@ -131,7 +131,7 @@ def index():
 @app.route('/cm/refresh/')
 @app.route('/cm/refresh/<cloud>/')
 def refresh(cloud=None, server=None):
-    print "-> refresh", cloud, server
+    #print "-> refresh", cloud, server
     clouds.refresh()
     clouds.all_filter()
     return table()
@@ -143,7 +143,7 @@ def refresh(cloud=None, server=None):
     
 @app.route('/cm/filter/<cloud>/',methods=['GET','POST'])
 def filter(cloud=None):
-    print "-> filter", cloud
+    #print "-> filter", cloud
 
     #
     # BUG: when cloud is none
@@ -306,37 +306,6 @@ def table():
                            version=version,
 			   state_table=state_table)
 
-
-#######################################################################
-# PREFIX MANAGEMENT
-####################################################################### 
- 
-@app.route('/setPrefix', methods=['GET','POST'])
-def setPrefix():
-    if request.method == 'POST':
-        configuration['prefix'] = request.form['prefix']
-        config.write()
-
-    return redirect("/profile/")
-
-#######################################################################
-# INDEX MANAGEMENT
-####################################################################### 
-    
-@app.route('/setIndex', methods=['GET','POST'])
-def setIndex():
-    if request.method == 'POST':
-        configuration['index'] = request.form['index']
-        config.write()
-
-    return redirect("/profile/")
-
-#######################################################################
-# PROJECT MANAGEMENT
-####################################################################### 
-######################################################################
-# ROUTE: PROJECTS
-######################################################################
 
 
 ######################################################################
@@ -640,9 +609,34 @@ default_cloud = "india-openstack"
 
 
 
+#######################################################################
+# PREFIX MANAGEMENT
+####################################################################### 
+ 
+@app.route('/setPrefix', methods=['GET','POST'])
+def setPrefix():
+    if request.method == 'POST':
+        configuration['prefix'] = request.form['prefix']
+        config.write()
+
+    return redirect("/profile/")
+
+#######################################################################
+# INDEX MANAGEMENT
+####################################################################### 
+    
+@app.route('/setIndex', methods=['GET','POST'])
+def setIndex():
+    if request.method == 'POST':
+        configuration['index'] = request.form['index']
+        config.write()
+
+    return redirect("/profile/")
+
 ######################################################################
 # ROUTE: PROFILE
 ######################################################################
+
 @app.route('/profile/', methods=['GET','POST'])
 def profile():
     # bug the global var of the ditc should be used
@@ -654,6 +648,8 @@ def profile():
     if request.method == 'POST':
         projects.default = request.form['selected_project']
         configuration['security']['default']=request.form['selected_securityGroup']
+        config.index = request.form['field-index']
+        config.prefix = request.form['field-prefix']
         config.write()
 
     keys = cm_keys()
