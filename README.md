@@ -32,4 +32,7 @@ examples
 
 * examples/openid - a flask server that demonstrates how to limit openid authentication to only a list of known open ids (Heshan)
 
-* examples/bootstrap - two examples on how to use a more fancyful layout. one is in home.html, the other in fluid.html  
+* examples/bootstrap - two examples on how to use a more fancyful layout. one is in home.html, the other in fluid.html 
+
+Testing commit from Fugang
+ 
