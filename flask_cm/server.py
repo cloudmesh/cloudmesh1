@@ -239,15 +239,17 @@ def start_vm(cloud=None, server=None):
 
     if configuration.has_key('keys'):
         key = configuration['keys']['default']
-    d = clouds.default(cloud)
-    vm_flavor = d['flavor']
-    vm_image = d['image']
 
-    clouds.create(cloud, config.prefix, config.index, vm_image, vm_flavor, key)
-    config.incr()
-    config.write()
+    # THIS IS A BUG
+    #d = clouds.default(cloud)
+    #vm_flavor = d['flavor']
+    #vm_image = d['image']
+
+    #clouds.create(cloud, config.prefix, config.index, vm_image, vm_flavor, key)
+    #config.incr()
+    #config.write()
     
-    print "NEW", config.prefix, config.index
+    #print "NEW", config.prefix, config.index
     return table()
 
 '''
@@ -450,73 +452,6 @@ def display_flavors(cloud=None):
 
 
 ######################################################################
-# ROUTE: CLOUDS
-######################################################################
-
-def set_default_clouds(activeClouds, availableClouds):
-    selected = {}
-    for name in availableClouds:
-        selected[name] = ""
-        for activeCloud in activeClouds:
-            if name in activeCloud:
-                selected[name] = 'checked'
-    return selected
-
-
-#
-# BUG: this is an inappropriate route name, it is something with projects ....
-#
-@app.route('/clouds/', methods=['GET','POST'])
-def display_clouds():
-    projectSelected={}
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M") 
-    active = make_active('clouds')
-
-    activeClouds=config.active()
-    availableClouds=config.clouds()
-    activeProjects=config.projects('active')
-    selected=set_default_clouds(activeClouds, availableClouds)
-    project_names=buildProjectNamesArray(activeProjects)
-
-    for availableCloud in availableClouds:
-        projectSelected[availableCloud]=set_default_project("", project_names,'selected');
-        for cloud in activeClouds:
-            if 'openstack' in cloud:
-                configurations= config.cloud(cloud) 
-                default_project=configurations['default']['project']
-                projectSelected[cloud]=set_default_project(default_project, project_names,'selected')
-
-    if request.method == 'POST':
-        cloudNames = request.form.getlist("clouds")
-        configuration=config.get()
-        selected=set_default_clouds(cloudNames, availableClouds)
-        for cloudName in cloudNames:
-            projectName = request.form[cloudName]
-            if "None" in projectName:
-                projectName=configuration['projects']['default']
-            configuration['clouds'][cloudName]['default']['project']=projectName;
-        configuration['active']=cloudNames
-        config.write()
-        
-        for availableCloud in availableClouds:
-            projectSelected[availableCloud]=set_default_project("", project_names,'selected');
-            for cloudName in cloudNames:
-                if 'openstack' in cloudName:
-                    configurations= config.cloud(cloudName) 
-                    default_project=configurations['default']['project']
-                    projectSelected[cloudName]=set_default_project(default_project, project_names,'selected')
-    
-    return render_template(
-        'clouds.html',
-        updated=time_now,
-        clouds=availableClouds,
-        active=active,
-        version=version,
-        projects=activeProjects,
-        selected=selected,
-        projectSelected=projectSelected)
-
-######################################################################
 # ROUTE: IMAGES
 ######################################################################
 
@@ -589,49 +524,6 @@ def display_images():
                                version=version,radioSelected=radioSelected)
     
 
-######################################################################
-# ROUTE: TEST 
-######################################################################
-
-##
-
-
-def set_default_cloud(name, cloud_names):
-    global default_cloud
-    default_cloud = name
-    selected = {}
-    for name in cloud_names:
-        selected[name] = ""
-    selected[default_cloud] = 'checked = ""'
-    return selected
-        
-default_cloud = "india-openstack"
-
-
-
-#######################################################################
-# PREFIX MANAGEMENT
-####################################################################### 
- 
-@app.route('/setPrefix', methods=['GET','POST'])
-def setPrefix():
-    if request.method == 'POST':
-        configuration['prefix'] = request.form['prefix']
-        config.write()
-
-    return redirect("/profile/")
-
-#######################################################################
-# INDEX MANAGEMENT
-####################################################################### 
-    
-@app.route('/setIndex', methods=['GET','POST'])
-def setIndex():
-    if request.method == 'POST':
-        configuration['index'] = request.form['index']
-        config.write()
-
-    return redirect("/profile/")
 
 ######################################################################
 # ROUTE: PROFILE
@@ -646,28 +538,22 @@ def profile():
     projects = cm_projects()
         
     if request.method == 'POST':
-        projects.default = request.form['selected_project']
-        configuration['security']['default']=request.form['selected_securityGroup']
+        projects.default = request.form['field-selected-project']
+        configuration['security']['default']=request.form['field-selected-securityGroup']
         config.index = request.form['field-index']
         config.prefix = request.form['field-prefix']
+        config.default_cloud = request.form['field-default-cloud']
+        #print request.form["field-cloud-activated-" + value]
         config.write()
 
     keys = cm_keys()
     person = configuration['profile']
-    
-    #
-    # ACTIVE CLOUDS
-    #
-    selectedClouds = clouds.active()
-    defaultClouds = {} # this is wrong, but i just make it so for the mockup, all is contained in cm_config
     
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     
     address = '<br>'.join(str(x) for x in person['address']) 
     return render_template('profile.html',
                            updated=time_now,
-                           defaultClouds=defaultClouds,
-                           selectedClouds=selectedClouds,
                            keys=keys,
                            projects=projects,
                            person=person,

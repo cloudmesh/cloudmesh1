@@ -135,7 +135,7 @@ class cm_config(object):
             f.close()
 
     def write(self, filename=None):
-
+        print ">>>>", "hallo"
         #pyaml.dump(self.data, f, vspacing=[2, 1, 1])
         #text = yaml.dump(self.data, default_flow_style=False)
         content = ""
@@ -149,7 +149,7 @@ class cm_config(object):
         #text = text.replace("\n\n      ", "\n      ")
         #text = text.replace("\n\n        ", "\n        ")
 
-        print content
+        #print content
 
         fpath = filename or self.filename
         print fpath
@@ -203,8 +203,16 @@ class cm_config(object):
     def vmname(self):
         return "%s-%04d" % (self.data['cloudmesh']['prefix'], int(self.data['cloudmesh']['index']))
 
-    def default(self):
+    #
+    # warning we can not name a method default
+    #
+    @property
+    def default_cloud(self):
         return self.data['cloudmesh']['default']
+
+    @default_cloud.setter
+    def default_cloud(self, value):
+        self.data['cloudmesh']['default'] = str(value)
 
     def active(self):
         return self.data['cloudmesh']['active']
@@ -320,7 +328,7 @@ if __name__ == "__main__":
     print "================="
     print config.rc('india-openstack')
     print "================="
-    print config.default()
+    print config.default
     print "================="
     outfile = "%s/%s" % (os.environ['HOME'], ".futuregrid/junk.yaml")
     print config.write(outfile)

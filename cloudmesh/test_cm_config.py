@@ -206,3 +206,9 @@ class Test_cloudmesh:
         print "NAME:", self.config.vmname
 
         assert self.config.index == 4 and self.config.prefix == "hallo"
+
+    def test21_default(self):
+
+        self.config.default = "hallo"
+        print self.config.default
+        assert self.config.default == "hallo"

@@ -56,7 +56,7 @@ $(function() {
 
 {% for projectname in projects.names(status="active") %}
  <input type="radio"
-        name="selected_project"
+        name="field-selected-project"
         value="{{ projectname }}"
         id="{{ projectname }}"
         {% if projectname == projects.default %}
@@ -78,17 +78,17 @@ $(function() {
 {% for group in configuration['security']['security_groups'].keys() %}
 
   <input type="radio"
-  name="selected_securityGroup"
+  name="field-selected-securityGroup"
   value="{{ group }}"
   id="{{ group }}"
-  onclick="document.forms['profile'].submit()"
   {% if group ==  configuration['security']['default'] %}
     checked="checked"
   {% endif %}
+  onclick="document.forms['profile'].submit()"
   /> {{ group }}
 {% endfor %}
 
-</form>
+
 </td>
 
  <td> </td></tr>
@@ -97,32 +97,37 @@ $(function() {
 
  <tr><td></td><td>Completed</td><td>{{ ', '.join(configuration.projects.completed) }}</td><td></td></tr>    
 <tr><td>{{ image_button ("right", "030_pencil", "/clouds/") }}</td><td colspan="2"><b> Clouds </b></td> <td></td></tr>
-<tr><td></td><td>Default</td><td>{{ configuration.default }}</td><td>edit</td></tr>
 
-<tr><td></td><td>Active</td><td>{{ ', '.join(clouds.active()) }}</td><td>edit</td></tr>
-
-<tr><td></td><td>Active (TBD, WRONG) </td><td>
+<tr><td></td><td>Active </td><td>
   {% for cloudname in configuration.clouds.keys() %}
  <input type="checkbox"
-        name="selected_clouds"
+        name="field-cloud-activated-{{cloudname}}"
         value="{{ cloudname }}"
         id="{{ cloudname }}"
-        onclick="document.forms['cloudGroups'].submit()"
-        {{ clouds.active()[cloudname] }}/> {{ cloudname}}
+        {% if cloudname in clouds.active() %}
+          checked = "checked"
+        {% endif %}
+        onclick="document.forms['profile'].submit()"
+        /> {{ cloudname}}
 {% endfor %}
 </td><td></td></tr>
 
-<tr><td></td><td>Default (TBD) </td><td>
-  {% for cloudname in configuration.clouds.keys() %}
- <input type="radio"
-        name="defaultClouds"
-        value="{{ cloudname }}"
-        id="{{ cloudname }}"
-        onclick="document.forms['defaultClouds'].submit()"
-        {{ defaultClouds[cloudname] }}/> {{ cloudname}}
+
+<tr><td></td><td>Default </td><td>
+  {% for cloudname in clouds.active() %}
+ <input
+  type="radio"
+  name="field-default-cloud"
+  value="{{ cloudname }}"
+  id="{{ cloudname }}"
+  {% if cloudname == configuration.default %}
+    checked = "checked"
+  {% endif %}
+  onclick="document.forms['profile'].submit()"
+  /> {{ cloudname }}
 {% endfor %}
 </td><td></td></tr>
-
+</form>
 
 <tr><td>{{ image_button ("right", "030_pencil", "/keys/") }}</td><td colspan="2"><b> Keys </b></td> <td> </td></tr>
 <tr><td></td><td>List</td><td>
@@ -143,6 +148,7 @@ $(function() {
 	{% endfor %}
 	</table>
 </td><td></td></tr>
+
 
 </table>
 
