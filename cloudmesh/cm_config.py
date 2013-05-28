@@ -135,7 +135,6 @@ class cm_config(object):
             f.close()
 
     def write(self, filename=None):
-        print ">>>>", "hallo"
         #pyaml.dump(self.data, f, vspacing=[2, 1, 1])
         #text = yaml.dump(self.data, default_flow_style=False)
         content = ""
