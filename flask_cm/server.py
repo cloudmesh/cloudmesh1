@@ -455,26 +455,6 @@ def display_flavors(cloud=None):
 # ROUTE: IMAGES
 ######################################################################
 
-def set_default_image(name, image_names):
-    global default_image
-    default_image = name
-    selected = {}
-    for name in image_names:
-        selected[name] = ""
-    selected[default_image] = 'checked'
-   # print default_image;
-    return selected
-        
-default_image = "ktanaka/ubuntu1204-ramdisk.manifest.xml"
-
-def buildImageNamesArray(clouds):
-    image_names=[]
-    for name, cloud in clouds.iteritems():
-        for id, image in cloud['images'].iteritems():
-            image_names.append(id);
-    return image_names;
-
-
 #@app.route('/images/<cloud>/')
 @app.route('/images/', methods=['GET','POST'])
 def display_images():
@@ -482,39 +462,11 @@ def display_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
     active = make_active('images')
 
-    image_names=buildImageNamesArray(clouds.clouds);
-
-    ############reading from yaml file ############
-
-    for cloud in config.active():
-        if 'openstack' in cloud:
-                configurations= config.cloud(cloud)   
-                default_image=configurations['default']['image']
-                selected=set_default_image(default_image, image_names)
-                radioSelected[cloud]=selected
-                #print radioSelected #this dict will contain which image in whch cloud is checked
-                selected={};
-
-     ############  end of reading from yaml file ############
-
     if request.method == 'POST':
         radioSelected={}
         for cloud in config.active():
-                if 'openstack' in cloud:
-                        
-                        default_image= request.form[cloud] 
-                        #print default_image
-
-                        ############ writing in yaml file ############
-                        configuration= config.get();
-                        configuration['clouds'][cloud]['default']['image']=default_image;
-                        config.write()
-
-                        ############ end of writing in yaml file ############
-                        selected = set_default_image(default_image, image_names)
-                        radioSelected[cloud]=selected
-                        #print radioSelected
-                        selected={};
+            configuration['clouds'][cloud]['default']['image']=request.form[cloud] 
+            config.write()
 
     return render_template(
         'images.html',
@@ -523,7 +475,8 @@ def display_images():
         clouds=clouds.clouds,
         cloudmesh=clouds,
         config=config,
-        version=version,radioSelected=radioSelected)
+        version=version,
+        radioSelected=radioSelected)
     
 
 

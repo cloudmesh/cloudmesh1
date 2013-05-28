@@ -11,6 +11,7 @@ Choose the default image for the clouds </br>
     <th> Default </th>
     <th> Name </th>
     <th> Status </th>
+    <th> ID </th>
     <th> Updated </th>
     <th> Created </th>
     <th> State </th>
@@ -29,10 +30,21 @@ Choose the default image for the clouds </br>
   
   <tr>
 
-    <td> <input type="radio" name="{{ name }}" value="{{ id }}" id="{{ id }}"  {{ radioSelected[name][id] }} onclick="document.forms['image'].submit()" /></td>
+    <td>
+      <input
+      type="radio"
+      name="{{ name }}"
+      value="{{ id }}"
+      id="{{ id }}"
+      {% if id == config.cloud(name)['default']['image']  %}
+        checked="checked"
+      {% endif %}
+      onclick="document.forms['image'].submit()" />
+    </td>
 
     <td> {{ image.name }} </td>
     <td> {{ image.status }} </td>
+    <td> {{ id }} </td>
     <td> {{ image.updated }} </td>
     <td> {{ image.created }} </td>
     <td> {{ image.metadata.image_state }} </td>
