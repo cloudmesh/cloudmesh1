@@ -8,18 +8,18 @@ CHANGES
   entire code by properly using cm_config (resulting in the 570 lines
   of code removal).
 
-* PROPER SEARCH ON STATES: A proper serach function was added to the
-  openstack library allowing simple or searches and regular expression
-  searches based on any attribute a vm contains.
+    * PROPER SEARCH ON STATES: A proper serach function was added to
+      the openstack library allowing simple or searches and regular
+      expression searches based on any attribute a vm contains.
 
-* FIX OF THE PROFILE VIEW: fixed the profile component so the prefix
-  and the index can be edited in the provile window. Fixed the general
-  layout and removed not needed editing functions. Saves cahnges
-  directly into yaml file. Improved readability of the code by using
-  proper variable names.
+    * FIX OF THE PROFILE VIEW: fixed the profile component so the
+      prefix and the index can be edited in the provile window. Fixed
+      the general layout and removed not needed editing
+      functions. Saves cahnges directly into yaml file. Improved
+      readability of the code by using proper variable names.
 
-* FG-MANAGE SCRIPT: introduced the fg-manage command to create a novarc file for a cloud
-  from the yaml file
+* FG-MANAGE SCRIPT: introduced the fg-manage command to create a
+  novarc file for a cloud from the yaml file
 
 * FG_KEYS: added the key management script that will replace the code
   in the server in future.
