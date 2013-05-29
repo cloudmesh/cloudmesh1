@@ -1,6 +1,13 @@
 CHANGES
 =======
 
+* ELIMINATED ABOUT 570 LINES OF CODE: Eliminated about 570 lines of
+  unnecessary including wrong code. Made the table filter work by
+  completly reimplementing it. Enhanced the Profile view and completly
+  changed the way POST, GET responses are handled. Simplified the
+  entire code by properly using cm_config (resulting in the 570 lines
+  of code removal).
+
 * PROPER SEARCH ON STATES: A proper serach function was added to the
   openstack library allowing simple or searches and regular expression
   searches based on any attribute a vm contains.
