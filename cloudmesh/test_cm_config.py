@@ -21,7 +21,7 @@ import warnings
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
-header = False
+header = True
 
 def HEADING(txt):
     if header:
@@ -208,7 +208,12 @@ class Test_cloudmesh:
         assert self.config.index == 4 and self.config.prefix == "hallo"
 
     def test21_default(self):
-
+        HEADING("TEST 21 DEFAULT ")
         self.config.default = "hallo"
         print self.config.default
         assert self.config.default == "hallo"
+
+    def test22_filter(self):
+        HEADING("TEST 22 FILTER")
+        print self.config.get_filter('sierra-openstack-grizzly')
+

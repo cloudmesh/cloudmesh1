@@ -56,29 +56,34 @@ version = "0.7.2"
 
 
 clouds = cloudmesh()
-
-# DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
-
-state_table = {}
-
-for name in clouds.active():
-	state_table[name] = {}
-	for state in clouds.states(name):
-		state_table[name][state] = True
-
 # refresh, misses the search for display
                 
 clouds.refresh()
-clouds.all_filter()
-
 clouds.refresh_user_id()
-
-
 config = cm_config()
 configuration = config.get()
-
 prefix = config.prefix
 index = config.index
+
+# DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
+
+"""
+for name in clouds.active():
+
+        config.data['cloudmesh']['clouds']
+
+for name in clouds.active():
+    try:
+        a = config.data['cloudmesh']['clouds'][name]['default']['filter']['state']
+        print "- filter exist for cloud", name
+    except:
+        config.create_filter(name, clouds.states(name))
+        config.write()
+"""
+
+print config
+
+clouds.all_filter()
 
 ######################################################################
 # STARTING THE FLASK APP
@@ -148,19 +153,22 @@ def filter(cloud=None):
     #
     # BUG: when cloud is none
     #
-
+    name = cloud
     if request.method == 'POST':
-        for c in state_table:
-            query_states = []
-            for state in clouds.states(name):
-                state_name = "%s:%s" % (c,state)
-                state_table[name][state] = state_name in request.form
-                if state_table[name][state]:
-                    query_states.append(state)
+        query_states = []
+        state_table = {}
+        for state in clouds.states(name):
+            state_name = "%s:%s" % (name,state)
+            state_table[state] = state_name in request.form
+            if state_table[state]:
+                query_states.append(state)
+        config.set_filter(name, state_table, 'state')
 
-	    clouds.state_filter(c, query_states)
+        clouds.state_filter(name, query_states)
+
         
     return redirect("/table/")
+
 
 
 ######################################################################
@@ -305,8 +313,9 @@ def table():
                            clouds=clouds.clouds,
                            pages=pages,
                            active=active,
-                           version=version,
-			   state_table=state_table)
+                           config=config,
+                           version=version)
+
 
 
 

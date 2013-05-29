@@ -56,14 +56,13 @@ function killall(cloud) {
       <form name = "filter-{{name}}" action = "/cm/filter/{{name}}/" method="post">
       <input type="submit" value="Filter">
       {% for state in cloudmesh.states(name) %}
-            {% if state_table[name][state] %}
+            {% if config.data['cloudmesh']['clouds'][name]['default']['filter']['state'][state] %}
                <input type="checkbox" name="{{ name }}:{{ state }}" value="select" checked > {{ state }} &nbsp;
             {% else %}
                <input type="checkbox" name="{{ name }}:{{ state }}" value="select" > {{ state }} &nbsp;
             {% endif %}
             
       {% endfor %}
-
 
       </form>
     </th>

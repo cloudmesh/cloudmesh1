@@ -489,7 +489,7 @@ class cloudmesh:
             print "Error: Ignoring add"
             return
 
-    def address_string(self,content):
+    def address_string(self,content, labels=False):
         """content is a dict of the form {u'private': [{u'version':
         4,u'addr': u'10.35.23.30',u'OS-EXT-IPS:type':u'fixed'},
         {u'version': 4, u'addr': u'198.202.120.194',
@@ -502,11 +502,28 @@ class cloudmesh:
         try:
             result = ""
             for address in content['private']:
-                result = result + "%s=%s" % (address['OS-EXT-IPS:type'], address['addr'])
-                result = result + "; "
+                if labels:
+                    result = result + address['OS-EXT-IPS:type'] +"="
+                result = result + address['addr']
+                result = result + ", "
             result = result[:-2]
         except:
-            result = content
+            #### {u'vlan102': [{u'version': 4, u'addr': u'10.1.2.104'}, {u'version': 4, u'addr': u'149.165.158.34'}]} 
+            try:
+                position = 0
+                for address in content['vlan102']:
+                    if position == 0:
+                       type = "fixed"
+                    else:
+                       type = "floating"
+                    if labels:
+                        result = result + type
+                    result = result + address['addr']
+                    result = result + ", "
+                    position =+ 1
+                result = result[:-2]
+            except:
+                result = content
         return result
 
     def status_color(self,status):

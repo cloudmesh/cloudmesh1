@@ -346,6 +346,32 @@ class cm_config(object):
                     lines += self.export_line(attribute, value)
         return lines
 
+
+    def set_filter(self, cloudname, filter, type='state'):
+        #try:
+        #    test = self.data['cloudmesh']['clouds'][cloudname]['default']['filter']
+        #except:
+        #    self.data['cloudmesh']['clouds'][cloudname]['default']['filter'] = {}
+        self.data['cloudmesh']['clouds'][cloudname]['default']['filter'][type] = filter
+
+    def get_filter(self, cloudname, type='state'):
+        print "getting the filter for cloud", cloudname
+        #try:
+        #    result = self.data['cloudmesh']['clouds'][cloudname]['default']['filter'][type] 
+        #except:
+        #    self.set_filter(cloudname, {}, type)
+        result = self.data['cloudmesh']['clouds'][cloudname]['default']['filter'][type]
+        return result
+
+    def create_filter(self, cloudname, states):
+        self.data['cloudmesh']['clouds'][cloudname]['default']['filter'] = {}
+        state_flags = {}
+        for state in states:
+            state_flags[state] = True
+        self.set_filter(cloudname, state_flags, 'state')
+        self.set_filter(cloudname, {'me': True}, 'select')
+
+        
 ##########################################################################
 # MAIN METHOD FOR TESTING
 ##########################################################################
