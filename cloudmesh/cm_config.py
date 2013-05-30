@@ -139,41 +139,11 @@ class cm_config(object):
         #text = yaml.dump(self.data, default_flow_style=False)
         content = ""
         content = yaml.safe_dump(self.data, default_flow_style=False, indent=4)
-        # avoiding to think about regexp ;-)
-        # shold be eplace all "\n  ." with "\\n  ." but not when . is -   
-
-        #text = text.replace("\n  ", "\n\n  ")
-        #text = text.replace("\n\n  -", "\n  -")
-        #text = text.replace("\n\n    ", "\n    ")
-        #text = text.replace("\n\n      ", "\n      ")
-        #text = text.replace("\n\n        ", "\n        ")
-
-        #print content
 
         fpath = filename or self.filename
-        print fpath
-
-        f = open(fpath, "w")
-        print >>f, content
-        f.close()
-
-        os.chmod(fpath, stat.S_IRUSR | stat.S_IWUSR)
-
-        # THIS PEAE OF CODE DOES NOT RK IN CLOUDMESH ON OSX
-        
-        #f = os.open(fpath, os.O_CREAT)
-        #
-        # NOT SURE WHY WE NEED ALL THIS CHECK CHECK WITH ALLEN
-        #
-        #f = os.open(fpath, os.O_CREAT | os.O_EXCL | os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
-
-        #f = os.open(fpath, os.O_CREAT | os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
-
-        #os.write(f, content)
-        #if os.geteuid() == 0:
-        #    os.fchown(f, int(self.profile()['uid'] or -1),
-        #              int(self.profile()['gid'] or -1))
-        #os.close(f)
+        f = os.open(fpath, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
+        os.write(f, content)
+        os.close(f)
 
         
     ######################################################################
