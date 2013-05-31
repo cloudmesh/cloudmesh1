@@ -3,7 +3,7 @@ sierra-openstack-grizzly:
     cm_host: sierra.futuregrid.org
     cm_type: openstack
     cm_admin:
-        OS_USERNAME: admin
+        OS_USERNAME: %(username)s
         OS_PASSWORD: secret <--> change this
         OS_TENANT_NAME: demo
         OS_AUTH_URL: https://............... <--> change this

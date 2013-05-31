@@ -249,15 +249,15 @@ def start_vm(cloud=None, server=None):
         key = configuration['keys']['default']
 
     # THIS IS A BUG
-    #d = clouds.default(cloud)
-    #vm_flavor = d['flavor']
-    #vm_image = d['image']
+    vm_flavor = clouds.default(cloud)['flavor']
+    vm_image = clouds.default(cloud)['image']
 
-    #clouds.create(cloud, config.prefix, config.index, vm_image, vm_flavor, key)
-    #config.incr()
-    #config.write()
+    print "STARTING", config.prefix, config.index
+    clouds.create(cloud, config.prefix, config.index, vm_image, vm_flavor, key)
+    config.incr()
+    config.write()
     
-    #print "NEW", config.prefix, config.index
+    
     return table()
 
 '''
@@ -355,6 +355,9 @@ def vm_info(cloud=None,server=None):
 
     active = make_active('vm_info')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    clouds.clouds[cloud]['servers'][server]['cm_vm_id'] = server
+    clouds.clouds[cloud]['servers'][server]['cm_cloudname'] = cloud
     
     return render_template('vm_info.html',
                            updated=time_now,
@@ -364,19 +367,19 @@ def vm_info(cloud=None,server=None):
                            cloudname = cloud, 
                            active=active,
                            version=version,
-                           table_fun=maketablefromdict )
+                           table_printer=table_printer )
                         
-def maketablefromdict(the_dict):
+def table_printer(the_dict):
     return_str = ''
     if isinstance(the_dict, dict):
         for name,value in the_dict.iteritems() :
-            return_str =return_str +'<tr><td>'+name.title() +'</td><td>'+str(maketablefromdict(value))+'</td></tr>'
+            return_str =return_str +'<tr><td>'+name.title() +'</td><td>'+str(table_printer(value))+'</td></tr>'
         return_str = '<table>' + return_str + '</table>'
         return return_str
     elif type(the_dict) is list: 
         for element in the_dict:
             for name,value in element.iteritems() :
-                return_str =return_str +'<tr><td>'+name.title()+'</td><td>'+str(maketablefromdict(value))+'</td></tr>'
+                return_str =return_str +'<tr><td>'+name.title()+'</td><td>'+str(table_printer(value))+'</td></tr>'
         return_str = '<table>' + return_str + '</table>'
         return return_str
     else:

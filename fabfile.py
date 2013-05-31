@@ -60,7 +60,7 @@ server:
 
 view:
 	sleep 10
-	 %s http://127.0.0.1:5000/keys/
+	 %s http://127.0.0.1:5000/table/
 """ % browser
     #webbrowser.open("http://127.0.0.1:5000")
     file.close()

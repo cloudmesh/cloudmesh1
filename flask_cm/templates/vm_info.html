@@ -5,16 +5,12 @@
 
 <h3>VM Details</h3>
 
-VM ID: {{id}}<br/>
-Cloud Name: {{cloudname}}
-<br/><br/>
-
 <style>
 table{
 margin:0px
 }
 </style>
 
-{{table_fun(server) | safe}}
+{{table_printer(server) | safe}}
 
 {% endblock %}
