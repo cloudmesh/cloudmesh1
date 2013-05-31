@@ -74,5 +74,5 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
             if not filter(lambda r: r.id == member_role.id, user_roles):
                 self.keystone.roles.add_user_role(user, member_role, tenant)
             os_tenants.append(tname)
-        creds['FG_OS_TENANTS'] = os_tenants
+        creds['FG_OS_TENANTS'] = ','.join(os_tenants)
         creds['OS_TENANT_NAME'] = self.defaultproject
