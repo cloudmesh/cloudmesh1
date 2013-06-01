@@ -6,6 +6,7 @@
 
 import iso8601
 import sys
+import time
 sys.path.insert(0, '../..')
  
 from datetime import datetime
@@ -46,6 +47,7 @@ class BaseCloud:
         self.credential = None    # global var
         self.label = None         # global var
         self.type = None
+        self.user_id = None
 
     def info(self):
         print "Label:", self.label
@@ -60,6 +62,26 @@ class BaseCloud:
         assert False, "Not implemented"
     def find_user_id(self):
         assert False, "Not implemented"
+
+
+    def dump(self, type="server", with_manager=False):
+        selection = type.lower()[0]
+        if selection == 'i':
+            d = self.images.copy()
+        elif selection == 'f':
+            d = self.flavors.copy()
+        elif selection == 's':
+            d = self.servers.copy()
+        elif type != None:
+            print "refresh type not supported"
+            assert False
+        else:
+            d = {}
+            with_manager = True
+        if with_manager == False:
+            for element in d.keys():
+                del d[element]['manager']
+        return d
 
     def get(self,type="server"):
         selection = type.lower()[0]
@@ -77,30 +99,35 @@ class BaseCloud:
         return d
     
     def _get_image_dict(self):
-        print "BOOOH"
+        print "Not yet implemented"
         assert False, "Not implemented"
 
     def _update_image_dict(self,information):
-        print "BOOOH"
+        print "Not yet implemented"
         assert False, "Not implemented"
 
     def _get_flavors_dict(self):
-        print "BOOOH"
+        print "Not yet implemented"
         assert False, "Not implemented"
 
     def _update_flavors_dict(self,information):        
-        print "BOOOH"
+        print "Not yet implemented"
         assert False, "Not implemented"
 
     def _get_servers_dict(self):
-        print "BOOOH"
+        print "Not yet implemented"
         assert False, "Not implemented"
 
     def _update_servers_dict(self,information):
-        print "BOOOH"
+        print "Not yet implemented"
         assert False, "Not implemented"
 
-    def vm_create(self, name, flavor_name, image_id):
+    def vm_create(self, name=None,
+                  flavor_name=None,
+                  image_id=None,
+                  security_groups = None,
+                  key_name = None,
+                  meta=None):
         assert False, "Not implemented"
     def vm_delete(self, id):
         assert False, "Not implemented"
@@ -130,6 +157,8 @@ class BaseCloud:
             'servers': self.servers,
             'images': self.images}
         return json.dumps(information, indent=4)
+
+
 
     ######################################################################
     # get methods
@@ -379,7 +408,7 @@ class openstack(BaseCloud):
     # FIND USER ID
     ######################################################################
 
-    def find_user_id(self):
+    def find_user_id(self, force=False):
         """
         this method returns the user id and stores it for later use.
         """
@@ -395,26 +424,31 @@ class openstack(BaseCloud):
 
         #sys.exit()
 
-        try:
-            self.user_id = self.credential['OS_USER_ID'] 
-        except:
-            if self.user_id == None:
-                sample_flavor = self.cloud.flavors.find(name="m1.tiny")
-                
-                #hack needs to be fixed
-                if self.label in "grizzly-openstack" :
-                    sample_image = self.cloud.images.find(
-                    id="e503bcb4-28c8-4f9f-8303-d99b9bffd568") 
-                else :
-                    sample_image = self.cloud.images.find(
-                    id="6d2bca76-8fff-4d57-9f29-50378539b4fa")
-                
-                sample_vm = self.cloud.servers.create(
-                    "%s-id" % self.credential["OS_USERNAME"],
-                    flavor=sample_flavor,
-                    image=sample_image)
-                self.credential['OS_USER_ID'] = self.user_id = sample_vm.user_id
-                sample_vm.delete()
+
+
+        config = cm_config()
+
+        image = config.default(self.label)['image']
+        flavor = config.default(self.label)['flavor']
+        username = self.credential["OS_USERNAME"]
+        
+        #print self.label
+        #print image
+        #print flavor
+        #print username
+        
+        if not force:
+            try:
+                self.user_id = self.credential['OS_USER_ID']
+                return self.user_id
+            except:
+                self.user_id = None
+                print "OS_USER_ID not set"
+
+        sample_vm = self.vm_create("%s-id" % username)
+
+        self.user_id = self.credential['OS_USER_ID'] = sample_vm['user_id']
+        self.vm_delete(sample_vm['id'])
         return self.user_id
 
     ######################################################################
@@ -428,7 +462,7 @@ class openstack(BaseCloud):
         image = information.__dict__
         id =  image['id']
         # clean not neaded info
-        del image['manager']
+        #del image['manager']
         del image['_info']
         del image['_loaded']
         # del information.links
@@ -440,7 +474,7 @@ class openstack(BaseCloud):
     def _update_flavors_dict(self,information):
         flavor = information.__dict__
         # clean not neaded info
-        del flavor['manager']
+        #del flavor['manager']
         del flavor['_info']
         del flavor['_loaded']
         # del information.links
@@ -456,7 +490,7 @@ class openstack(BaseCloud):
         #pp.pprint (vm)
         #pp.pprint(vm)
         delay = vm['id']
-        del vm['manager']
+        #del vm['manager']
         del vm['_info']
         del vm['_loaded']
         # del information.links
@@ -561,9 +595,32 @@ class openstack(BaseCloud):
         self.cloud.servers.add_floating_ip(serverid,ip)
         
     ######################################################################
+    # set vm meta
+    ######################################################################
+    def vm_set_meta(self, serverid, meta):
+        print meta
+        is_set = 0
+        while not is_set:
+            try:
+                print "seraching for ", serverid, "to set", meta
+                result = self.cloud.servers.set_meta(serverid, meta)
+                is_set = 1
+            except Exception, e:
+                print e
+                time.sleep(3)
+                
+        print result
+
+    ######################################################################
     # create a vm
     ######################################################################
-    def vm_create(self, name, flavor_name, image_id,security_groups = None,key_name = None):
+    def vm_create(self,
+                  name=None,
+                  flavor_name=None,
+                  image_id=None,
+                  security_groups = None,
+                  key_name = None,
+                  meta=None):
         """
         create a vm
         """
@@ -577,21 +634,37 @@ class openstack(BaseCloud):
                     key = open(key,"r").read()
                 self.upload_key_pair(key,key_name)
                 
+
+        config = cm_config()
+
+        if flavor_name == None:
+            flavor_name = config.default(self.label)['flavor']
+
+        if image_id == None:
+            image_id = config.default(self.label)['image']
+
+        #print "CREATE>>>>>>>>>>>>>>>>"
+        #print image_id
+        #print flavor_name
         
-        print image_id
         vm_flavor = self.cloud.flavors.find(name=flavor_name)
         vm_image = self.cloud.images.find(id=image_id)
         
         if key_name == None :
             vm = self.cloud.servers.create(name,
                                            flavor=vm_flavor,
-                                           image=vm_image,security_groups=security_groups
+                                           image=vm_image,
+                                           security_groups=security_groups,
+                                           meta=meta
                                            )
         else :
+            # bug would passing None just work?
             vm = self.cloud.servers.create(name,
                                            flavor=vm_flavor,
                                            image=vm_image,
-                                           key_name = key_name,security_groups=security_groups
+                                           key_name = key_name,
+                                           security_groups=security_groups,
+                                           meta=meta
                                            )
         delay = vm.user_id  # trick to hopefully get all fields
         data = vm.__dict__
@@ -599,7 +672,9 @@ class openstack(BaseCloud):
         # data['cm_name'] = name
         # data['cm_flavor'] = flavor_name
         # data['cm_image'] = image_id
-        return {str(data['id']):  data}
+        #return {str(data['id']):  data}
+        #should probably just be
+        return data
 
     ######################################################################
     # delete vm(s)
@@ -936,6 +1011,7 @@ class openstack(BaseCloud):
             #            vm['cm_display'] = vm['status'] in states
             if userid != None:
                 vm['cm_display'] = vm['cm_display'] and (vm['user_id'] == userid)
+
 
         
 ##########################################################################

@@ -253,7 +253,9 @@ def start_vm(cloud=None, server=None):
     vm_image = clouds.default(cloud)['image']
 
     print "STARTING", config.prefix, config.index
-    clouds.create(cloud, config.prefix, config.index, vm_image, vm_flavor, key)
+    result = clouds.create(cloud, config.prefix, config.index, vm_image, vm_flavor, key)
+    print result
+    clouds.vm_set_meta(cloud, result['id'], {'hallo': 'gregor'})
     config.incr()
     config.write()
     

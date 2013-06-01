@@ -383,6 +383,18 @@ class cloudmesh:
         # else:
         #    print "BUG: assigning ip addresses from other clouds such as azure, and eucalyptus not implemented yet." 
             
+
+    def vm_set_meta(self, cloud_name, serverid, meta):
+
+        cloud_type = self.clouds[cloud_name]['cm_type']
+        provider = self.cloud_provider(cloud_type)
+
+        cloud = provider(cloud_name)
+
+        server = 'TODO' # must be the object to the server which is a class, how do i find this?
+        
+        cloud.vm_set_meta(server, meta)
+
         
     def create(self, cloud_name, prefix, index, image_id, flavor_name, key= None, security_group=None):
         

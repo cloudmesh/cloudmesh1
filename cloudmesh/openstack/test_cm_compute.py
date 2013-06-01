@@ -6,9 +6,20 @@ or
 
 nosetests -v
 
+individual tests can be run with
+
+nosetests -v  --nocapture test_cm_compute.py:Test.test_06
+
 """
-import time
 import sys
+sys.path.insert(0, '../..')
+
+from sh import head
+from sh import fgrep
+import string
+import os
+import time
+
 from cloudmesh.openstack.cm_table import table as cm_table
 from cloudmesh.cm_config import cm_config
 from cloudmesh.openstack.cm_compute import openstack
@@ -22,35 +33,37 @@ def HEADING(txt):
     print "#", txt
     print "#", 70 * '#'
 
-class Test_openstack:
+    
+class Test:
 
-    cloud_label = "grizzly-openstack"
+    #assuming first - is the prefered cloud
+    print  os.path.expandvars("$HOME/.futuregrid/cloudmesh.yaml")
+    cloud_label = head(fgrep("-", os.path.expandvars("$HOME/.futuregrid/cloudmesh.yaml")), "-n", "1")
+    cloud_label = cloud_label.replace(" - ","").strip()
 
     def setup(self):
-
         self.configuration = cm_config()
-        #pp.pprint (configuration)
-
         self.name = self.configuration.active()[0]
         self.cloud = openstack(self.name)
-        print "CLOUD:", self.name
 
     def tearDown(self):
         pass
-    def test_00_check_label(self):
+
+    def test_00(self):
         HEADING("00 INFO OPENSTACK LABEL")
         print self.cloud_label
         assert self.cloud.label == self.cloud_label
 
-    def test_01_limit(self):
+    def test_01(self):
         HEADING("01 INFO OPENSTACK LIMIT")
-        print >> sys.stderr, json.dumps(self.cloud.limits(), indent=4)
+        print json.dumps(self.cloud.limits(), indent=4)
 
-    def test_02_images(self):
+    def test_02(self):
         HEADING("02 INFO OPENSTACK IMAGES")
         self.cloud.refresh('images')
-        print json.dumps(self.cloud.images, indent=4)
-        # pp.pprint(self.cloud.images)
+        print json.dumps(self.cloud.dump('images'), indent=4)
+        #pp.pprint(self.cloud.dump('images', with_manager=True))
+        pp.pprint(self.cloud.images)
         # doing a simple test as tiny is usually 512
         #assert self.cloud.flavors['m1.tiny']['ram'] == 512
         print "Currently running vms:", len(self.cloud.images)
@@ -58,32 +71,34 @@ class Test_openstack:
         # we shoudl start our own vm and than probe for it for now > 0 will do
         assert self.cloud.images > 0
 
-    def test_03_flavor(self):
+    def test_03(self):
         HEADING("03 INFO OPENSTACK FLAVORS")
         self.cloud.refresh('flavors')
-        print json.dumps(self.cloud.flavors, indent=4)
+        print json.dumps(self.cloud.dump('flavors'), indent=4)
 
         # doing a simple test as tiny is usually 512
         assert self.cloud.flavors['m1.tiny']['ram'] == 512
 
-    def test_04_start_vm(self):
+    def test_04(self):
         HEADING("04 START VM")
-        result = self.cloud.vm_create("gregor-test-001","m1.tiny","e503bcb4-28c8-4f9f-8303-d99b9bffd568")
+        configuration = cm_config()
+        image = configuration.default(self.name)['image']
+        print "STARTING IMAGE", image
+        result = self.cloud.vm_create("gregor-test-001","m1.tiny",image)
         print result
         assert len(result.keys()) > 0
         
-    def test_04_vms(self):
-        HEADING("04 INFO OPENSTACK VMS")
+    def test_05(self):
+        HEADING("05 PRINT INFO OPENSTACK VMS")
         self.cloud.refresh('servers')
-        print json.dumps(self.cloud.servers, indent=4)
+        print json.dumps(self.cloud.dump('servers'), indent=4)
         # we assume that there are always images running
         assert len(self.cloud.servers) > 0
 
-    def test_05_refresh(self):
-        HEADING("05 INFO OPENSTACK REFRESH")
+    def test_06(self):
+        HEADING("06 INFO OPENSTACK REFRESH")
         self.cloud.refresh()
-        pp.pprint(self.cloud)
-
+        pp.pprint(self.cloud.get(self.name))
         assert self.cloud.images > 0
 
     """
@@ -93,9 +108,9 @@ class Test_openstack:
         assert ['Instances'] > 0 
     """
         
-    def test_06_table(self):
-        HEADING("06 INFO OPENSTACK TABLES")
-        self.test_03_flavor()
+    def test_07(self):
+        HEADING("07 INFO OPENSTACK TABLES")
+        self.test_03()
         table = cm_table()
         columns = ["id", "name", "ram", "vcpus"]
 
@@ -131,20 +146,23 @@ class Test_openstack:
         print vm
     """
 
-    def test_08_user_vms(self):
-        HEADING("08 INFO LIST VMS FROM USER")
-        list = self.cloud.vms_user(refresh=True)
-        print json.dumps(list, indent=4)
 
-    def test_09_delete_all_user_vms(self):
-        HEADING("09 INFO OPENSTACK DELETE VMS FROM USER")
-
+    def test_08(self):
+        HEADING("08 INFO OPENSTACK DELETE VMS FROM USER")
         
         self.cloud.refresh()
 
-        user_id = self.cloud.find_user_id()
+        user_id = self.cloud.find_user_id(force=True)
         vm_ids = self.cloud.find('user_id', user_id)
+        print "userid", user_id
+        config = cm_config()
+        config.data['cloudmesh']['clouds'][self.name]['credentials']['OS_USER_ID'] = user_id
+        config.write()
 
+
+        #
+        # delete all vms of the user
+        #
         servers = self.cloud.servers
         print servers
 
@@ -167,18 +185,45 @@ class Test_openstack:
             time.sleep(1)
         
         print "vms",  vm_ids
+
         assert vm_ids == []
 
-    def test_10_info(self):
-        HEADING("10 INFO OPENSTACK TEST")
+    def test_09(self):
+        HEADING("04 START 2 VMs")
+        configuration = cm_config()
+        image = configuration.default(self.name)['image']
+        print "STARTING IMAGE", image
+        result = self.cloud.vm_create("gregor-test-001","m1.tiny",image)
+        #print result
+        result = self.cloud.vm_create("gregor-test-002","m1.tiny",image)
+        #print result
         self.cloud.refresh()
-        time.sleep(3)
         self.cloud.info()
 
-    def test_11_states(self):
-        HEADING("10 INFO OPENSTACK TEST")
+        config = cm_config()
+        print "CONFIG"
+        user_id = config.data['cloudmesh']['clouds'][self.name]['credentials']['OS_USER_ID']
+        print user_id
+
+        vm_ids = self.cloud.find('user_id', user_id)
+        print vm_ids
+        
+        assert len(vm_ids) == 2
+
+
+    def test_10(self):
+        HEADING("10 INFO LIST VMS FROM USER")
+        list = self.cloud.vms_user(refresh=True)
+        pp.pprint(list)
+
+    def test_11(self):
+        HEADING("11 INFO OPENSTACK TEST")
         self.cloud.refresh()
-        time.sleep(3)
+        self.cloud.info()
+
+    def test_12(self):
+        HEADING("12 INFO OPENSTACK TEST")
+        self.cloud.refresh()
         print self.cloud.states
 
         search_states = ('ACTIVE','PAUSED')
@@ -194,7 +239,7 @@ class Test_openstack:
 
         self.cloud.display_regex("vm['status'] in ['ACTIVE']", userid)
 
-        print json.dumps(self.cloud.servers, indent=4)        
+        print json.dumps(self.cloud.dump('servers'), indent=4)        
 
         #        self.cloud.display_regex("vm['status'] in ['ERROR']", userid)
 
