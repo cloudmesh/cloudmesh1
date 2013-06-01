@@ -188,6 +188,7 @@ class Test:
 
         assert vm_ids == []
 
+
     def test_09(self):
         HEADING("04 START 2 VMs")
         configuration = cm_config()
@@ -244,3 +245,21 @@ class Test:
         #        self.cloud.display_regex("vm['status'] in ['ERROR']", userid)
 
         #print json.dumps(self.cloud.servers, indent=4)        
+
+    def clean(self):
+        HEADING("REMOVE ALL VMS")
+
+        self.cloud.info()
+        self.cloud.refresh()
+        
+        user_id = self.cloud.find_user_id()
+        vm_ids = self.cloud.find('user_id', user_id)
+        while len(vm_ids) > 0:
+            vm_ids = self.cloud.find('user_id', user_id)
+            self.cloud.refresh("servers")
+            self.cloud.info()
+            time.sleep(1)
+        
+        print "vms",  vm_ids
+
+        assert vm_ids == []

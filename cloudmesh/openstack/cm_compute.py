@@ -570,6 +570,7 @@ class openstack(BaseCloud):
         else:
            return self.createSecurityGroup(default_security_group)
 
+
     # GVL: review
     # how does this look for azure and euca? Should there be a general framework for this in the BaseCloud class
     # based on that analysis?
