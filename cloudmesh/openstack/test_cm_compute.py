@@ -249,10 +249,15 @@ class Test:
     def clean(self):
         HEADING("REMOVE ALL VMS")
 
-        self.cloud.info()
         self.cloud.refresh()
-        
+        self.cloud.info()
+
         user_id = self.cloud.find_user_id()
+        print "Cleaning", user_id
+        
+        list = self.cloud.vms_delete_user()
+        print "Cleaning", list
+        
         vm_ids = self.cloud.find('user_id', user_id)
         while len(vm_ids) > 0:
             vm_ids = self.cloud.find('user_id', user_id)
@@ -263,3 +268,19 @@ class Test:
         print "vms",  vm_ids
 
         assert vm_ids == []
+
+    def start(self):
+        HEADING("START A SINGLE DEFAULT VM")
+        image = self.configuration.default(self.name)['image']
+        flavor = self.configuration.default(self.name)['flavor']
+        self.configuration.prefix = "gvonlasz-test"
+        self.configuration.incr()
+        name = self.configuration.vmname
+        print "STARTING IMAGE", name, image, flavor
+        result = self.cloud.vm_create(name,flavor,image)
+        print result
+
+    def info(self):
+        HEADING("LIST VMS")
+        self.cloud.refresh()
+        self.cloud.info()
