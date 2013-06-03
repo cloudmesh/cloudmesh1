@@ -441,6 +441,7 @@ class openstack(BaseCloud):
         return self.user_id        
 
     def get_token(self):
+        """returns the authentikation token from keystone with a curl call"""
         param = '{"auth":{"passwordCredentials":{"username": "%(OS_USERNAME)s", "password":"%(OS_PASSWORD)s"}, "tenantName":"%(OS_TENANT_NAME)s"}}' % (self.credential)
         
         response = curl(
