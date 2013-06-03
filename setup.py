@@ -16,7 +16,7 @@ version = "0.8"
 ######################################################################
 
 requires=[
-    'setuptools',
+#    'setuptools',
     'pip',
     'docopt',
     'pyyaml',
@@ -32,9 +32,9 @@ requires=[
     "pymongo",
     "sphinxcontrib-blockdiag",
     "python-novaclient",
-    "python-keystoneclient",
+#    "python-keystoneclient",
     "python-ldap",
-    "apache-libcloud"
+#    "apache-libcloud"
 ],
 
 install_requires = []
