@@ -8,7 +8,9 @@ import iso8601
 import sys
 import time
 sys.path.insert(0, '../..')
- 
+
+from sh import curl
+
 from datetime import datetime
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
@@ -60,7 +62,7 @@ class BaseCloud:
         assert False, "Not implemented"
     def config (self, dict):
         assert False, "Not implemented"
-    def find_user_id(self):
+    def find_user_id(self, force=False):
         assert False, "Not implemented"
 
 
@@ -141,6 +143,18 @@ class BaseCloud:
         assert False, "Not implemented"
     def status(self, vm_id):
         assert False, "Not implemented"
+
+    def wait(self, vm_id, vm_status, seconds=2):
+        print 'refersh', vm_id
+        self.refresh()
+        
+        new_status = self.status(vm_id)
+        print new_status
+        while str(new_status) != str(vm_status):
+            time.sleep(seconds)
+            self.refresh()
+            new_status = self.status(vm_id)
+
 
     ######################################################################
     # print
@@ -412,31 +426,8 @@ class openstack(BaseCloud):
         """
         this method returns the user id and stores it for later use.
         """
-        # As i do not know how to do this properly, we just create a
-        # VM and than get the userid from there
-
-        #self.cloud.ensure_service_catalog_present(self.cloud)
-        #catalog = self.cloud.client.service_catalog.catalog
-        #pp.pprint(catalog['access']['user'], "User Credentials")
-        #pp.pprint(catalog['access']['token'], "Token")
-
-        #print(result)
-
-        #sys.exit()
-
-
-
         config = cm_config()
 
-        image = config.default(self.label)['image']
-        flavor = config.default(self.label)['flavor']
-        username = self.credential["OS_USERNAME"]
-        
-        #print self.label
-        #print image
-        #print flavor
-        #print username
-        
         if not force:
             try:
                 self.user_id = self.credential['OS_USER_ID']
@@ -445,12 +436,27 @@ class openstack(BaseCloud):
                 self.user_id = None
                 print "OS_USER_ID not set"
 
-        sample_vm = self.vm_create("%s-id" % username)
+        result = self.get_token()
+        self.user_id = result['access']['user']['id']
+        return self.user_id        
 
-        self.user_id = self.credential['OS_USER_ID'] = sample_vm['user_id']
-        self.vm_delete(sample_vm['id'])
-        return self.user_id
+    def get_token(self):
+        param = '{"auth":{"passwordCredentials":{"username": "%(OS_USERNAME)s", "password":"%(OS_PASSWORD)s"}, "tenantName":"%(OS_TENANT_NAME)s"}}' % (self.credential)
+        
+        response = curl(
+            "--cacert", self.credential['OS_CACERT'],
+            "-k",
+            "-X",
+            "POST", "%s/tokens" % self.credential['OS_AUTH_URL'],
+            "-d", param,
+            "-H", 'Content-type: application/json'
+            )
 
+        result = json.loads(str(response))
+        return result
+
+
+        
     ######################################################################
     # refresh
     ######################################################################
@@ -598,17 +604,25 @@ class openstack(BaseCloud):
     ######################################################################
     # set vm meta
     ######################################################################
-    def vm_set_meta(self, serverid, meta):
-        print meta
+    def vm_set_meta(self, vm_id, metadata):
+        print metadata
         is_set = 0
+
+        #serverid = self.servers[id]['manager']
+        
         while not is_set:
             try:
-                print "seraching for ", serverid, "to set", meta
-                result = self.cloud.servers.set_meta(serverid, meta)
+                print "set ",  vm_id, "to set", metadata
+
+                result = self.cloud.servers.set_meta(vm_id, metadata)
+                #body = {'metadata': metadata}
+                #print body
+                #result = self.cloud.servers._create("/servers/%s/metadata" % vm_id, body, "metadata")
+                print result
                 is_set = 1
             except Exception, e:
-                print e
-                time.sleep(3)
+                print "ERROR", e
+                time.sleep(2)
                 
         print result
 
