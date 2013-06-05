@@ -254,8 +254,8 @@ def start_vm(cloud=None, server=None):
 
     print "STARTING", config.prefix, config.index
     result = clouds.create(cloud, config.prefix, config.index, vm_image, vm_flavor, key)
-    print result
-    clouds.vm_set_meta(cloud, result['id'], {'hallo': 'gregor'})
+    #print ">>>>>>>>>>>>>>", result
+    clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     config.incr()
     config.write()
     

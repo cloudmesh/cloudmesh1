@@ -391,14 +391,14 @@ class cloudmesh:
 
         cloud = provider(cloud_name)
 
-        server = 'TODO' # must be the object to the server which is a class, how do i find this?
-        
-        cloud.vm_set_meta(server, meta)
+
+        cloud.wait(serverid,'ACTIVE')
+        cloud.set_meta(serverid, meta)
 
         
     def create(self, cloud_name, prefix, index, image_id, flavor_name, key= None, security_group=None):
         
-        print ">>>>>>",  cloud_name, prefix, index, image_id, flavor_name, key
+        #print ">>>>>>",  cloud_name, prefix, index, image_id, flavor_name, key
         
         security_groups=[]
         name = prefix + "-" + "%s" % str(index).zfill(4)
