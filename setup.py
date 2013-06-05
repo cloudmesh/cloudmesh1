@@ -34,7 +34,7 @@ requires=[
     "python-novaclient",
 #    "python-keystoneclient",
     "python-ldap",
-#    "apache-libcloud"
+    "apache-libcloud"
 ],
 
 install_requires = []

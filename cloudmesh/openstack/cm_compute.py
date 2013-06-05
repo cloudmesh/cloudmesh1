@@ -3,10 +3,17 @@
 #
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
 #
-
+from collections import OrderedDict
 import iso8601
 import sys
 import time
+import base64
+import urllib
+import httplib
+import json
+import os
+from urlparse import urlparse
+
 sys.path.insert(0, '../..')
 
 from sh import curl
@@ -14,8 +21,7 @@ from sh import curl
 from datetime import datetime
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
-import json
-import os
+
 
 from sh import fgrep
 import novaclient
@@ -50,6 +56,7 @@ class BaseCloud:
         self.label = None         # global var
         self.type = None
         self.user_id = None
+        self.auth_token = None
 
     def info(self):
         print "Label:", self.label
@@ -322,6 +329,8 @@ class openstack(BaseCloud):
             self.credential['OS_AUTH_URL'],
             cacert=self.credential['OS_CACERT']
         )
+        self.auth_token= self.get_token()
+
 
     # BIG BUG, MUST BE DICT
     #config should have dict as parameter
@@ -436,7 +445,7 @@ class openstack(BaseCloud):
                 self.user_id = None
                 print "OS_USER_ID not set"
 
-        result = self.get_token()
+        self.auth_token = result
         self.user_id = result['access']['user']['id']
         return self.user_id        
 
@@ -456,8 +465,87 @@ class openstack(BaseCloud):
         result = json.loads(str(response))
         return result
 
+    # http
 
+    def _get_compute_service(self):
+        print "LLLL", self.auth_token
+        for service in self.auth_token['access']['serviceCatalog']:
+            if service['type'] == 'compute':
+                break
+        return service
+
+    def _get_conf(self):
+        "what example %/servers"
+        compute_service = self._get_compute_service()
+        pp.pprint (compute_service)
+        conf = {}
+        conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
+        conf['token'] = str(self.auth_token['access']['token']['id'])
+        return conf
+
+    def _get (self, what):
+
+        conf = self._get_conf()
         
+        apiurlt = urlparse(conf['publicURL'])
+        url2 = apiurlt[1]
+
+        params2 = ""
+        headers2 = { "X-Auth-Token":conf['token'], "Content-type":"application/json" }
+        conn2 = httplib.HTTPConnection(url2)
+
+        #conn2.request("GET", "%s/servers" % apiurlt[2], params2, headers2)
+        conn2.request("GET", what % (apiurlt[2]), params2, headers2)
+
+        response2 = conn2.getresponse()
+        data2 = response2.read()
+        dd2 = json.loads(data2)
+
+        conn2.close()
+        return dd2
+    
+
+    def get_meta(self,id):
+        msg = "/servers/%s/metadata" % (id)
+        return self._get("%s" + msg)
+
+    def set_meta(self, id, metadata, replace=False):
+        conf = self._get_conf()
+        conf['serverid'] = id
+        if replace:
+            conf['set'] = "PUT"
+        else:
+            conf['set'] = "POST"
+
+        apiurlt = urlparse(conf['publicURL'])
+        url2 = apiurlt[1]
+
+        params2 = '{"metadata":' +  str(metadata).replace("'",'"') + '}'
+
+        headers2 = { "X-Auth-Token":conf['token'], "Accept":"application/json", "Content-type":"application/json" }
+
+        print "%%%%%%%%%%%%%%%%%%"
+        pp.pprint(conf)
+        print "%%%%%%%%%%%%%%%%%%"
+        print "PARAMS", params2
+        print "HEADERS", headers2
+        print "API2", apiurlt[2]
+        print "API1",apiurlt[1]
+        print "ACTIVITY", conf['set']
+        print "ID", conf['serverid']
+        print "####################"
+                
+        conn2 = httplib.HTTPConnection(url2)
+
+        conn2.request(conf['set'], "%s/servers/%s/metadata" % (apiurlt[2], conf['serverid']), params2, headers2)
+        
+        response2 = conn2.getresponse()
+        data2 = response2.read()
+        dd2 = json.loads(data2)
+
+        conn2.close()
+        return dd2
+
     ######################################################################
     # refresh
     ######################################################################
@@ -605,6 +693,8 @@ class openstack(BaseCloud):
     ######################################################################
     # set vm meta
     ######################################################################
+
+
     def vm_set_meta(self, vm_id, metadata):
         print metadata
         is_set = 0
@@ -933,6 +1023,10 @@ class openstack(BaseCloud):
     ######################################################################
     # CLI call of absolute-limits
     ######################################################################
+    #def limits(self):
+    #    conf = get_conf()
+    #    return _get(conf, "%s/limits")
+
     def limits(self):
         """ returns the usage information of the tennant"""
 

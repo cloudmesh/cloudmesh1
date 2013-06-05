@@ -246,6 +246,43 @@ class Test:
 
         #print json.dumps(self.cloud.servers, indent=4)        
 
+
+    def test_13(self):
+        HEADING("TEST META")
+        self.clean()
+        image = self.configuration.default(self.name)['image']
+        flavor = self.configuration.default(self.name)['flavor']
+        self.configuration.prefix = "gvonlasz-test"
+        self.configuration.incr()
+        name = self.configuration.vmname
+        print name
+        result = self.cloud.vm_create(name,flavor,image)
+        id = result['id']
+        print id
+        result = self.cloud.wait(id,'ACTIVE')
+        result = self.cloud.set_meta(id, {"owner": "gregor"})
+        print "RESULT", result
+        meta = self.cloud.get_meta(id)
+        print meta
+        
+        
+    def start(self):
+        HEADING("START A SINGLE DEFAULT VM")
+        image = self.configuration.default(self.name)['image']
+        flavor = self.configuration.default(self.name)['flavor']
+        self.configuration.prefix = "gvonlasz-test"
+        self.configuration.incr()
+        name = self.configuration.vmname
+        print "STARTING IMAGE", name, image, flavor
+        result = self.cloud.vm_create(name,flavor,image)
+        print result
+
+
+    def info(self):
+        HEADING("LIST VMS")
+        self.cloud.refresh()
+        self.cloud.info()
+
     def clean(self):
         HEADING("REMOVE ALL VMS")
 
@@ -269,18 +306,3 @@ class Test:
 
         assert vm_ids == []
 
-    def start(self):
-        HEADING("START A SINGLE DEFAULT VM")
-        image = self.configuration.default(self.name)['image']
-        flavor = self.configuration.default(self.name)['flavor']
-        self.configuration.prefix = "gvonlasz-test"
-        self.configuration.incr()
-        name = self.configuration.vmname
-        print "STARTING IMAGE", name, image, flavor
-        result = self.cloud.vm_create(name,flavor,image)
-        print result
-
-    def info(self):
-        HEADING("LIST VMS")
-        self.cloud.refresh()
-        self.cloud.info()
