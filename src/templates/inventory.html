@@ -30,7 +30,19 @@ function killall(cloud) {
   <tr> 
   <td> {{ server.data.name }} </td>
   <td> {{ server.data.status }} </td>
-  <td> {{ server.data.services }} </td>
+  <td>
+    <select>
+<!-- TODO: where are the services?
+    {% for service in server.data.services %}
+      <option value="{{ service }}">{{ service }}</option>
+    {% endfor %}
+-->
+      <option value="">Select...</option>
+      <option value="Eucalyptus">Eucalyptus</option>
+      <option value="Nimbus">Nimbus</option>
+      <option value="Openstack">Openstack</option>
+    </select>
+  </td>
   <td> {{ server.data.ip_address }} </td>
   </tr>
 
