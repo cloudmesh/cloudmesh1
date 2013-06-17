@@ -14,6 +14,8 @@ class FabricObject(Document):
      
     metadata = StringField()
     name = StringField()
+    kind = StringField()  # server, service
+    subkind = StringField() # server: provisionable, service: openstack, eucalyptus, hpc
     label = StringField()
     status = StringField()
     
@@ -61,6 +63,8 @@ class FabricObject(Document):
     def data(self):
         return self.__dict__["_data"]
 
+    def pprint(self):
+        pprint (self.__dict__)
 
 
 class FabricService(FabricObject):              
@@ -90,17 +94,18 @@ class Inventory:
         for service in self.services:
             print service.delete()
 
-    def create(self, type, nameregex):
+    def create(self, kind, subkind, nameregex):
         #"india[9-11].futuregrid.org,india[01-02].futuregrid.org"
         names = expand_hostlist(nameregex)
         print names
         for name in names:
-            if type == "server":
-                object = FabricServer(name=name)
-            elif type == "service":
-                object = FabricService(name=name)
+            if kind == "server":
+                object = FabricServer(name=name, kind=kind, subkind=subkind)
+            elif kind == "service":
+                object = FabricService(name=name, kind=kind, subkind=subkind)
+                print "creating", name, kind, subkind
             else:
-                print "ERROR: type is not defined, creation of objects failed, type, nameregex"
+                print "ERROR: kind is not defined, creation of objects failed, kind, nameregex"
                 return
             object.save()
 
@@ -143,8 +148,7 @@ class Inventory:
         return 
 
     def get (self, kind, name):
-
-        '''returns the data associated with the object of type kind
+        '''returns the data associated with the object of kind type
         and the given name'''
 
         if kind == 'server':
@@ -154,8 +158,37 @@ class Inventory:
             s = self.services(name=name)
             return s
         else:
-            error('wrong kind ' + kind)
+            error('wrong type ' + kind)
         return 
+
+    def set_service (self, name, server, subkind):
+        '''sets the service of a server'''
+        print "\n>",name
+        print "1>", server
+        print "2>", subkind
+        s = self.servers(name=server)[0]
+        try:
+            service = self.services(name=server)[0]
+            service.subkind = subkind
+        except:
+            now = datetime.now()
+            service = FabricService(
+                name=server,
+                subkind=subkind,
+                date_start=now,
+                date_update=now,
+                date_stop=now,
+                status="BUILD"
+                )
+        service.save()
+        if len(s.data['services']) > 0:
+            s.data['services'][0] = service
+        else:
+            s.data['services'].append(service)
+        self.save(s)
+        print "OOOO"
+        pprint(s.data)
+        pprint(s.data['services'][0].data)
 
     def exists (self, kind, name):
         '''returns tro if the object of type kind and the given name
@@ -168,7 +201,13 @@ class Inventory:
             error('wrong kind ' + kind)
         return
     
-    """    
+
+    
+    
+    def disconnect(self):
+        print "disconnect not yet implemented"
+
+"""    
     def dump (self, object):
         print '# ------------------'
         classname = object.__class__.__name__
@@ -182,12 +221,9 @@ class Inventory:
         else:
             error ('wrong kind: ' + classname)
             return
-        pprint.pprint(values)
-    """
-    
-    def disconnect(self):
-        print "disconnect not yet implemented"
-        
+        pprint(values)
+"""
+
 
 def main():
 

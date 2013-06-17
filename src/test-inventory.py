@@ -81,7 +81,7 @@ class Test_Inventory:
 
     def test05_create(self):
         HEADING("test05_create")
-        self.inventory.create("server","india[9-11].futuregrid.org,india[01-02].futuregrid.org")
+        self.inventory.create("server","provisinable", "india[9-11].futuregrid.org,india[01-02].futuregrid.org")
         print self.inventory.pprint()
         assert self.inventory.exists("server", "india01.futuregrid.org") 
 
@@ -101,3 +101,19 @@ class Test_Inventory:
     def test09_count(self):
         print self.inventory.servers.count(), self.inventory.services.count()
         assert (self.inventory.servers.count() == 6) and (self.inventory.services.count() == 2)
+
+    def test10_set(self):
+        self.inventory.clean()
+        self.inventory.create(
+            "server",
+            "provisinable",
+            "india[01-02].futuregrid.org")
+        print self.inventory.pprint()
+        print self.inventory.exists("server", "india01.futuregrid.org")
+            
+
+        self.inventory.set_service(
+            "os1",
+            "india01.futuregrid.org",
+            "openstack")
+        self.inventory.pprint()
