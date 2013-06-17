@@ -32,6 +32,7 @@ requires=[
     'sh',
     "console",
     "pymongo",
+    "mongoengine",
     "sphinxcontrib-blockdiag",
     "python-novaclient",
     "apache-libcloud"
@@ -54,7 +55,7 @@ def read(fname):
 
 
 def desc():
-    info = read('README.md')
+    info = read('README.rst')
     try:
         return info + '\n\n' + read('CHANGES.txt')
     except IOError:
