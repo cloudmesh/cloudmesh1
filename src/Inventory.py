@@ -89,7 +89,6 @@ class Inventory:
         if password:
             connectArgs['password'] = password
         
-        print connectArgs
         self.db = connect(dbname, **connectArgs)
         return
 
