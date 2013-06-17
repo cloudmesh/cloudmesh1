@@ -78,8 +78,19 @@ def error(self,msg):
 
 class Inventory:
 
-    def __init__ (self,dbname):
-        self.db = connect (dbname)
+    def __init__ (self, dbname, host=None, port=None, username=None, password=None):
+        connectArgs = {}
+        if host:
+            connectArgs['host'] = host
+        if port:
+            connectArgs['port'] = port
+        if username:
+            connectArgs['username'] = username
+        if password:
+            connectArgs['password'] = password
+        
+        print connectArgs
+        self.db = connect(dbname, **connectArgs)
         return
 
     def clean(self):
