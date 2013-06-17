@@ -61,6 +61,9 @@ inventory = Inventory("flasktest")
 inventory.clean()
 inventory.create("server","india[9-11].futuregrid.org,india[01-02].futuregrid.org")
 print inventory.pprint()
+
+#inventory.set_service("openstack","india[9-11].futuregrid.org,india[01-02].futuregrid.org")
+
         
 ######################################################################
 # STARTING THE FLASK APP
