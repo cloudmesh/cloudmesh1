@@ -1,0 +1,17 @@
+bin
+home
+stats
+charts
+pie_chart
+keys
+repeat
+cogwheels
+circle plus
+circle info
+table
+ban
+upload
+ok
+restart
+dashboard
+certificate

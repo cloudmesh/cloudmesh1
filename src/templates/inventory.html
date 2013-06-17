@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}g
+{% block content %}
+
+<script type="text/javascript">
+
+function killall(cloud) {
+	var answer = confirm("Delete all selected VMs in "+cloud+"?")
+	if (answer){
+		window.location = "/cm/delete/"+cloud+"/";
+	}
+}
+
+</script>
+
+
+<table>
+  <tr>
+    <th colspan="1"> Cloud Mesh - Inventory </th>  
+  <tr> <td> Updated </td>  <td colspan=8> {{ updated }} </td></tr>
+  <tr>
+    <th> Name </th>
+    <th> Status </th>
+    <th> Services </th>
+    <th> IP </th>
+  </tr>
+  
+  {% for server in inventory.servers() %}
+  
+  <tr> 
+  <td> {{ server.data.name }} </td>
+  <td> {{ server.data.status }} </td>
+  <td> {{ server.data.services }} </td>
+  <td> {{ server.data.ip_address }} </td>
+  </tr>
+
+  {% endfor %}
+  
+</table>
+
+{% endblock %}
