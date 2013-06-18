@@ -59,7 +59,7 @@ from Inventory import FabricServer
 
 inventory = Inventory("flasktest")
 inventory.clean()
-inventory.create("server","provisionable","india[9-11].futuregrid.org,india[01-02].futuregrid.org")
+inventory.create("server","dynamic","india[9-11].futuregrid.org,india[01-02].futuregrid.org")
 print inventory.pprint()
 
 inventory.create("service","openstack","india[9-11].futuregrid.org,india[01-02].futuregrid.org")
