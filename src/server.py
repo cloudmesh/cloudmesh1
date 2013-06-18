@@ -57,7 +57,8 @@ from Inventory import Inventory
 from Inventory import FabricService
 from Inventory import FabricServer
 
-inventory = Inventory("flasktest")
+# TODO: connection info in a config file
+inventory = Inventory('inventory_astreib', 'mongo.futuregrid.org', 27017, 'astreib', 'inventory_user1!')
 inventory.clean()
 
 # Simulate the Bravo cluster
