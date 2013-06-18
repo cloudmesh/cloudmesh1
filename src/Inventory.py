@@ -359,9 +359,20 @@ def main():
 
         inventory.dump(server)
     """
-        
+
+def ip_name_pair (nameregex, prefix, padding, start):
+     ips = expand_hostlist(nameregex)
+     i = start
+     names = []
+     for ip in ips:
+          names.append("{0}{1}".format(prefix,str(i).zfill(len(padding))))
+          i =+ 1
+     return (ips, names)
+
 if __name__ == "__main__":
-    main()
+     #main()
+
+    print ip_name_pair ("india[20-25]", "i-", "0000", 1)
 
 
 
