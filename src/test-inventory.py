@@ -1,6 +1,6 @@
 """ run with
 
-nosetests -v --nocapture
+nosetests -v --nocapture --nologcapture
 
 or
 
@@ -81,7 +81,7 @@ class Test_Inventory:
 
     def test05_create(self):
         HEADING("test05_create")
-        self.inventory.create("server","provisinable", "india[9-11].futuregrid.org,india[01-02].futuregrid.org")
+        self.inventory.create("server","dynamic", "india[9-11].futuregrid.org,india[01-02].futuregrid.org")
         print self.inventory.pprint()
         assert self.inventory.exists("server", "india01.futuregrid.org") 
 
@@ -99,21 +99,54 @@ class Test_Inventory:
         self.inventory.pprint()    
 
     def test09_count(self):
+        HEADING("test09_count")
         print self.inventory.servers.count(), self.inventory.services.count()
         assert (self.inventory.servers.count() == 6) and (self.inventory.services.count() == 2)
 
+
     def test10_set(self):
+        HEADING("test10_set")
         self.inventory.clean()
         self.inventory.create(
             "server",
-            "provisinable",
-            "india[01-02].futuregrid.org")
+            "dynamic",
+            "india01.futuregrid.org")
+        
         print self.inventory.pprint()
         print self.inventory.exists("server", "india01.futuregrid.org")
             
 
         self.inventory.set_service(
-            "os1",
+            "india01-opensatck",
             "india01.futuregrid.org",
             "openstack")
+
         self.inventory.pprint()
+
+    def test11_add(self):
+        HEADING("test11_add")
+        self.inventory.clean()
+        self.inventory.create(
+            "server",
+            "dynamic",
+            "india01.futuregrid.org")
+        
+        print self.inventory.pprint()
+        print self.inventory.exists("server", "india01.futuregrid.org")
+            
+
+        self.inventory.add_service(
+            "india01-opensatck",
+            "india01.futuregrid.org",
+            "openstack")
+
+        self.inventory.pprint()
+
+    def test12_logging(self):
+        self.test11_add()
+        HEADING("test12_logging")
+        s = self.inventory.get("server","india01.futuregrid.org")[0]
+        print s.data
+        s.stop()
+        s.start()
+        s.start()

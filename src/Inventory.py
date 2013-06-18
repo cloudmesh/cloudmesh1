@@ -1,11 +1,33 @@
 # pip install python-hostlist
 
+import logging
 from hostlist import expand_hostlist
 import time
 import sys
-from mongoengine import *                           # To define a schema for a
+from mongoengine import *                           
 from datetime import datetime
 from pprint import pprint
+
+######################################################################
+# SETTING UP A LOGGER
+######################################################################
+
+log = logging.getLogger('inventory')
+log.setLevel(logging.DEBUG)
+formatter = logging.Formatter('CM Inventory: [%(levelname)s] %(message)s')
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+log.addHandler(handler)
+
+######################################################################
+
+SERVICE_CHOICES = ('openstack',
+                   'eucalyptus',
+                   'hpc',
+                   'ganglia',
+                   'nagios')
+
+SERVER_CHOICES = ('dynamic','static')
 
 class FabricObject(Document):
     meta = {
@@ -30,34 +52,36 @@ class FabricObject(Document):
 
     def start(self):
         if self.status == "start":
-            print "WARNING:", self.name, "is already started at", self.date_start
+            log.warning("{0} is already started at {1}".format(self.name, self.date_start))
         else:
             self.status = "start"
             self.date_start = datetime.now()
             self.date_stop = None
-            self.save()
-            print "START:", self.name, self.date_start
+            self.save(cascade=True)
+            log.info("START: {0} {1}".format(self.name, self.date_start))
 
     def stop(self):
         if self.status == "stop":
-            print "WARNING:", self.name, "is already stopped at", self.date_start
+            log.warning("{0} is already started at {1}".format(self.name, self.date_start))
         elif self.status == "start":
             self.status = "stop"
             self.date_stop = datetime.now()
-            print "STOP:", self.name, self.date_start
+            log.info("STOP: {0} {1}".format(self.name, self.date_start))
             # calculate the time difference and add to uptime
             delta =  self.date_stop - self.date_start
             self.uptime = self.uptime + delta.seconds
             self.date_start = None
-            self.save()
+            self.save(cascade=True)
         else:
-            print "WARNING:", self.name, "is not running to be stopped", self.date_start
+            log.warning("{0} is not running to be stopped {1}".format(self.name, self.date_start))
+
         
     def save(self, *args, **kwargs):
         if not self.date_creation:
             self.date_creation = datetime.now()
         self.date_modified = datetime.now()
         return super(FabricObject, self).save(*args, **kwargs)
+        # do i need a return?
 
     @property
     def data(self):
@@ -70,19 +94,27 @@ class FabricObject(Document):
 class FabricService(FabricObject):              
     ip_address = StringField()
     kind = StringField(default="service")
+    subkind = StringField(choices=SERVICE_CHOICES)
     
 class FabricServer(FabricObject):              
     ip_address = StringField()
     kind = StringField(default="server")
-
-    services = ListField(ReferenceField(FabricService))  # the uniqe names of the services hosted on this server
-
-def error(self,msg):
-    print msg
+    subkind = StringField(choices=SERVER_CHOICES, default='static')
+    
+    services = ListField(ReferenceField(
+        FabricService,
+        reverse_delete_rule=CASCADE))
+    # the list of pointers to the services hosted on this server
 
 class Inventory:
 
-    def __init__ (self, dbname, host=None, port=None, username=None, password=None):
+    def __init__ (self,
+                  dbname,
+                  host=None,
+                  port=None,
+                  username=None,
+                  password=None):
+
         connectArgs = {}
         if host:
             connectArgs['host'] = host
@@ -107,22 +139,34 @@ class Inventory:
     def create(self, kind, subkind, nameregex):
         #"india[9-11].futuregrid.org,india[01-02].futuregrid.org"
         names = expand_hostlist(nameregex)
-        print names
         for name in names:
             if kind == "server":
-                object = FabricServer(name=name, kind=kind, subkind=subkind)
+                object = FabricServer(
+                    name=name,
+                    kind=kind,
+                    subkind=subkind)
             elif kind == "service":
-                object = FabricService(name=name, kind=kind, subkind=subkind)
-                print "creating", name, kind, subkind
+                object = FabricService(
+                    name=name,
+                    kind=kind,
+                    subkind=subkind)
+                log.info("creating {0} {1} {2}".format(name, kind, subkind))
             else:
-                print "ERROR: kind is not defined, creation of objects failed, kind, nameregex"
+                log.error("kind is not defined, creation of objects failed, kind, nameregex")
                 return
-            object.save()
+            object.save(cascade=True)
 
-    def save(self, object):
+    def save(self, object=None):
         """saves either a server or service object."""
-        object.save()
-        
+        if object != None:
+            object.save(cascade=True)
+        else:
+            for service in self.services:
+                self.save(service)
+            for server in self.servers:
+                self.save(server)
+
+            
     def pprint(self):
         print "Servers"
         print 70 * '-'
@@ -173,9 +217,6 @@ class Inventory:
 
     def set_service (self, name, server, subkind):
         '''sets the service of a server'''
-        print "\n>",name
-        print "1>", server
-        print "2>", subkind
         s = self.servers(name=server)[0]
         try:
             service = self.services(name=server)[0]
@@ -183,7 +224,7 @@ class Inventory:
         except:
             now = datetime.now()
             service = FabricService(
-                name=server,
+                name=name,
                 subkind=subkind,
                 date_start=now,
                 date_update=now,
@@ -191,14 +232,29 @@ class Inventory:
                 status="BUILD"
                 )
         service.save()
-        if len(s.data['services']) > 0:
-            s.data['services'][0] = service
-        else:
-            s.data['services'].append(service)
-        self.save(s)
-        print "OOOO"
-        pprint(s.data)
-        pprint(s.data['services'][0].data)
+        s.services = [service]
+        s.save()
+
+    def add_service (self, name, server, subkind):
+        '''sets the service of a server'''
+        s = self.servers(name=server)[0]
+        try:
+            service = self.services(name=server)[0]
+            service.subkind = subkind
+        except:
+            now = datetime.now()
+            service = FabricService(
+                name=name,
+                subkind=subkind,
+                date_start=now,
+                date_update=now,
+                date_stop=now,
+                status="BUILD"
+                )
+        service.save()
+        s.services.append(service)
+        s.save()
+
 
     def exists (self, kind, name):
         '''returns tro if the object of type kind and the given name
@@ -215,7 +271,7 @@ class Inventory:
     
     
     def disconnect(self):
-        print "disconnect not yet implemented"
+        log.warning("disconnect not yet implemented")
 
 """    
     def dump (self, object):
@@ -244,7 +300,7 @@ def main():
 
     now =  datetime.now()
     service = FabricService(
-        name='Euca',
+        name='india0',
         date_start=now,
         date_update=now,
         date_stop=now
@@ -253,7 +309,7 @@ def main():
     inventory.save(service)
     
     server = FabricServer(
-        name='Hallo4',
+        name='india0',
         date_start=now,
         date_update=now,
         date_stop=now,
@@ -261,14 +317,19 @@ def main():
         )
 
     inventory.save(server)
+    inventory.pprint()
 
-        
+    x = inventory.get('server', name='india0')[0]
+    x.pprint ()
+
+    print server.services[0].data
+
 
     #server.start()
     #time.sleep(2)
     #server.stop()
     
-    inventory.pprint()    
+
 
     inventory.create("server","india[9-11].futuregrid.org,india[01-02].futuregrid.org")
         
