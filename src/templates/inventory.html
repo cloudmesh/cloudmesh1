@@ -25,11 +25,11 @@ function killall(cloud) {
     <th> IP </th>
   </tr>
   
-  {% for server in inventory.servers() %}
+  {% for server in inventory.servers()|sort(attribute='name') %}
   
   <tr> 
-  <td> {{ server.data.name }} </td>
-  <td> {{ server.data.status }} </td>
+  <td> {{ server.name }} </td>
+  <td> {{ server.status }} </td>
   <td>
     <select>
       <option value="" 
@@ -37,8 +37,8 @@ function killall(cloud) {
           selected="selected"
         {% endif %}>Select...</option>
       {% for service in inventory.service_choices %}
-      <option value="{{ server.data.name }}-{{ service }}"
-        {% if server.data.services and server.data.services[0].kind == service %}
+      <option value="{{ server.name }}-{{ service }}"
+        {% if server.services and server.services[0].subkind == service %}
           selected="selected"
         {% endif %}>{{ service }}</option>
       {% endfor %}
