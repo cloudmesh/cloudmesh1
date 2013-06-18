@@ -273,6 +273,29 @@ class Inventory:
     def disconnect(self):
         log.warning("disconnect not yet implemented")
 
+
+    def ip_name_pair (self, nameregex, prefix, padding="0000", start=1):
+        ips = expand_hostlist(nameregex)
+        i = start
+        names = []
+        for ip in ips:
+            if padding == None:
+                 names.append("{0}".format(prefix))
+            elif len(padding) > 0:     
+                 names.append("{0}{1}".format(prefix,str(i).zfill(len(padding))))
+            else:
+                 names.append("{0}{1}".format(prefix,str(i)))
+            i +=  1 
+        return zip(names, ips)
+
+    def ip_name_dict (self, nameregex, prefix, padding="0000", start=1):
+        pairs = self.ip_name_pair (nameregex, prefix, padding, start)
+        return [{'name':b, 'ip':a} for b,a in pairs]
+
+    def ip_dict (self, nameregex, prefix, padding="0000", start=1):
+        pairs = self.ip_name_pair (nameregex, prefix, padding, start)
+        return dict(pairs)
+
 """    
     def dump (self, object):
         print '# ------------------'
@@ -360,19 +383,11 @@ def main():
         inventory.dump(server)
     """
 
-def ip_name_pair (nameregex, prefix, padding, start):
-     ips = expand_hostlist(nameregex)
-     i = start
-     names = []
-     for ip in ips:
-          names.append("{0}{1}".format(prefix,str(i).zfill(len(padding))))
-          i =+ 1
-     return (ips, names)
-
 if __name__ == "__main__":
      #main()
 
     print ip_name_pair ("india[20-25]", "i-", "0000", 1)
+
 
 
 
