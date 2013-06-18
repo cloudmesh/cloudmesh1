@@ -23,9 +23,9 @@ log.addHandler(handler)
 
 SERVICE_CHOICES = ('openstack',
                    'eucalyptus',
-                   'hpc',
-                   'ganglia',
-                   'nagios')
+                   'hpc')
+     #              'ganglia',
+     #              'nagios')
 
 SERVER_CHOICES = ('dynamic','static')
 
