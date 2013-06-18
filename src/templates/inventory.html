@@ -32,15 +32,16 @@ function killall(cloud) {
   <td> {{ server.data.status }} </td>
   <td>
     <select>
-<!-- TODO: where are the services?
-    {% for service in server.data.services %}
-      <option value="{{ service }}">{{ service }}</option>
-    {% endfor %}
--->
-      <option value="">Select...</option>
-      <option value="Eucalyptus">Eucalyptus</option>
-      <option value="Nimbus">Nimbus</option>
-      <option value="Openstack">Openstack</option>
+      <option value="" 
+        {% if not server.data.services %}
+          selected="selected"
+        {% endif %}>Select...</option>
+      {% for service in inventory.service_choices %}
+      <option value="{{ server.data.name }}-{{ service }}"
+        {% if server.data.services and server.data.services[0].kind == service %}
+          selected="selected"
+        {% endif %}>{{ service }}</option>
+      {% endfor %}
     </select>
   </td>
   <td> {{ server.data.ip_address }} </td>

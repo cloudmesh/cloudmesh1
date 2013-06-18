@@ -37,7 +37,7 @@ class FabricObject(Document):
     metadata = StringField()
     name = StringField()
     kind = StringField()  # server, service
-    subkind = StringField() # server: provisionable, service: openstack, eucalyptus, hpc
+    subkind = StringField() # server: dynamic, service: openstack, eucalyptus, hpc
     label = StringField()
     status = StringField()
     
@@ -186,6 +186,10 @@ class Inventory:
     def services(self):
         return FabricService.objects
 
+    @property
+    def service_choices(self):
+        return SERVICE_CHOICES
+    
     def get_one (self, kind, name):
 
         '''returns the data associated with the object of type kind
