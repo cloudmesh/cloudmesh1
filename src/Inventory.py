@@ -219,6 +219,15 @@ class Inventory:
             error('wrong type ' + kind)
         return 
 
+
+    def find (self, kind, name):
+        if kind == 'service':
+            s = self.services(name=name)[0]
+        elif kind == "server":
+            s = self.servers(name=name)[0]
+        return s
+    
+
     def set_service (self, name, server, subkind):
         '''sets the service of a server'''
         s = self.servers(name=server)[0]

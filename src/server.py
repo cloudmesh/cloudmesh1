@@ -67,10 +67,13 @@ for name in bravo:
     print name, ip
     inventory.create("server", "dynamic", name)
     inventory.add_service('%s-hpc' % name, name, 'hpc')
-
+    server = inventory.find("server", name)
+    server.ip_address = ip
+    server.save()
+    
 #print inventory.pprint()
 
-        
+
 ######################################################################
 # STARTING THE FLASK APP
 ######################################################################
