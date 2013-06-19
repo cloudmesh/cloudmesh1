@@ -69,6 +69,7 @@ for name in bravo:
     inventory.add_service('%s-hpc' % name, name, 'hpc')
     server = inventory.find("server", name)
     server.ip_address = ip
+    #server['ip_address'] = ip
     server.save()
     
 #print inventory.pprint()
@@ -130,12 +131,12 @@ def load():
     return display_inventory()
 
 ######################################################################
-# ROUTE: TABLE
+# ROUTE: INVENTORY TABLE
 ######################################################################
 
 
 @app.route('/inventory/')
-def table():
+def display_inventory():
     active = make_active('inventory')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     return render_template('inventory.html',
@@ -146,7 +147,28 @@ def table():
                            inventory=inventory)
 
 
-                        
+######################################################################
+# ROUTE: INVENTORY ACTIONS
+######################################################################
+
+@app.route('/inventory/set/<kind>/<name>/<attribute>/<value>')
+def set_attribute():
+    active = make_active('inventory')
+    s = inventory.get (kind, name)
+    s[attribute] = value
+    s.save()
+    return display_inventory()
+
+@app.route('/inventory/get/<kind>/<name>/<attribute>')
+def set_attribute():
+    active = make_active('inventory')
+    s = inventory.get (kind, name)
+    return s[attribute]
+
+##############################
+# Helpers
+##############################
+    
 def table_printer(the_dict):
     return_str = ''
     if isinstance(the_dict, dict):
