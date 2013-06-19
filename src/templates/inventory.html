@@ -16,9 +16,21 @@ function killall(cloud) {
 
 <table>
   <tr>
-    <th colspan="1"> Cloud Mesh - Inventory </th>  
-  <tr> <td> Updated </td>  <td colspan=8> {{ updated }} </td></tr>
+    <th colspan="5"> Cloud Mesh - Inventory </th>  
+  <tr> <td colspan=5> Updated {{ updated }}
+    <select>
+      <option value="">Bulk select...</option>
+      {% for choice in inventory.service_choices %}
+          <option value="bulk-{{ choice }}"">
+	    {{  choice }}
+	  </option>
+      {% endfor %}
+    </select>
+
+
+  </td></tr>
   <tr>
+    <th> </th>
     <th> Name </th>
     <th> Status </th>
     <th> Services </th>
@@ -27,7 +39,8 @@ function killall(cloud) {
   
   {% for server in inventory.servers()|sort(attribute='name') %}
   
-  <tr> 
+  <tr>
+  <td> <input name="checkbox" value="{{ server.name }}" type="checkbox"> </td>
   <td> {{ server.name }} </td>
   <td> {{ server.status }} </td>
   <td>
