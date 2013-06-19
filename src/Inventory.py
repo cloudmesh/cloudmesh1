@@ -4,6 +4,7 @@ import logging
 from hostlist import expand_hostlist
 import time
 import sys
+import random
 from mongoengine import *                           
 from datetime import datetime
 from pprint import pprint
@@ -108,6 +109,8 @@ class FabricServer(FabricObject):
         reverse_delete_rule=CASCADE))
     # the list of pointers to the services hosted on this server
 
+    load = ListField(DecimalField(min_value=0, max_value=1, precision=1, rounding='ROUND_HALF_DOWN'))
+
 class Inventory:
 
     def __init__ (self,
@@ -146,10 +149,13 @@ class Inventory:
         names = expand_hostlist(nameregex)
         for name in names:
             if kind == "server":
+                loadlist = map(lambda r: random.random(), range(0,9))
                 object = FabricServer(
                     name=name,
                     kind=kind,
-                    subkind=subkind)
+                    subkind=subkind,
+                    load=loadlist
+                )
             elif kind == "service":
                 object = FabricService(
                     name=name,

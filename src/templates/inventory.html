@@ -12,6 +12,13 @@ function change_service(server_name, service_name) {
     }
 }
 
+$(function() {
+        /** This code runs when everything has been loaded on the page */
+        /* Inline sparklines take their values from the contents of the tag */
+        $('.inlinesparkline').sparkline();
+});
+
+
 </script>
 
 
@@ -41,6 +48,7 @@ function change_service(server_name, service_name) {
     <th> Status </th>
     <th> Services </th>
     <th> IP </th>
+    <th> Load </th>
   </tr>
   
   {% for server in inventory.servers()|sort(attribute='name') %}
@@ -63,7 +71,8 @@ function change_service(server_name, service_name) {
       {% endfor %}
     </select>
   </td>
-  <td> {{ server.ip_address }} </td>
+  <td>{{ server.ip_address }}</td>
+  <td><span class="inlinesparkline">{{ server.load|join(', ') }}</span></td>
   </tr>
 
   {% endfor %}
