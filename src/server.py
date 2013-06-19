@@ -59,10 +59,16 @@ from Inventory import FabricServer
 
 inventory = Inventory("flasktest")
 inventory.clean()
-inventory.create("server","provisionable","india[9-11].futuregrid.org,india[01-02].futuregrid.org")
-print inventory.pprint()
 
-inventory.create("service","openstack","india[9-11].futuregrid.org,india[01-02].futuregrid.org")
+# Simulate the Bravo cluster
+bravo = inventory.ip_dict ("172.29.202.[11-26]", "b{0:03d}", 1)
+for name in bravo:
+    ip = bravo[name]
+    print name, ip
+    inventory.create("server", "dynamic", name)
+    inventory.add_service('%s-hpc' % name, name, 'hpc')
+
+#print inventory.pprint()
 
         
 ######################################################################
