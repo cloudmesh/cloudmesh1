@@ -4,11 +4,12 @@
 
 <script type="text/javascript">
 
-function killall(cloud) {
-	var answer = confirm("Delete all selected VMs in "+cloud+"?")
+function change_service(server,selection) {
+	var answer = confirm("Change the status of the " + server + " to " + selection + "?")
 	if (answer){
-		window.location = "/cm/delete/"+cloud+"/";
-	}
+             <!-- window.location = "/inventory/server/set/" + server +"/" + "????+"/"; -->
+             window.location = "/inventory/"; 
+         }
 }
 
 </script>
@@ -44,7 +45,7 @@ function killall(cloud) {
   <td> {{ server.name }} </td>
   <td> {{ server.status }} </td>
   <td>
-    <select>
+    <select  onchange="change_service('{{ server.name }}',this.options[this.selectedIndex].value)">
       <option value="" 
         {% if not server.data.services %}
           selected="selected"
