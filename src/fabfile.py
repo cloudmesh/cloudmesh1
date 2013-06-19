@@ -9,7 +9,7 @@ import sys
 #
 # SETTING THE BROWSER BASED ON PLATFORM
 #
-browser = "chrome"
+browser = "firefox"
 
 if sys.platform == 'darwin':
     browser = "open"
@@ -64,7 +64,7 @@ view:
 """ % browser
     #webbrowser.open("http://127.0.0.1:5000")
     file.close()
-    os.system("gmake -j -f Makefile~ all")
+    os.system("make -j -f Makefile~ all")
 
 def deltag(tag):
     local("git tag -d %s" % tag)
