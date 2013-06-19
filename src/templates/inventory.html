@@ -2,45 +2,13 @@
 {% from "_helper.html" import image_button %}g
 {% block content %}
 
-<script type="text/javascript">
-
-function change_service(server_name, service_name) {
-	var answer = confirm("Change the status of the " + server_name + " to " + service_name + "?")
-	if (answer) {
-        $.ajax("/inventory/set/service/" + server_name + "/" + service_name,
-                { complete: function () { window.location.reload(); } } );
-    }
-}
-
-$(function() {
-        /** This code runs when everything has been loaded on the page */
-        /* Inline sparklines take their values from the contents of the tag */
-        $('.inlinesparkline').sparkline();
-});
-
-
 </script>
-
 
 <table>
   <tr>
-    <th colspan="5"> Cloud Mesh - Inventory for {{ inventory.cluster }}</th>  
-  <tr> <td colspan=5> Updated {{ updated }}
-    <select>
-      <option value="">Bulk select...</option>
-      {% for choice in inventory.service_choices %}
-          <option value="bulk-{{ choice }}">
-	    {{  choice }}
-	  </option>
-      {% endfor %}
-    </select>
-  </td></tr>
-
+    <th colspan="5"> Cloud Mesh - Inventory for FutureGrid</th>  
   <tr>
-    <td></td>
-    <td></td>
-    <td>Groups</td>
-    <td colspan="3">{{ inventory.groups|join(', ') }}</td>
+    <td colspan=5> Updated {{ updated }}</td>
   </tr>
 
   <tr>
@@ -53,31 +21,18 @@ $(function() {
     <th> Load </th>
   </tr>
   
-  {% for server in inventory.servers()|sort(attribute='name') %}
+  {% for cluster in inventory.clusters()|sort(attribute='name') %}
   
   <tr>
-  <td> <input name="checkbox" value="{{ server.name }}" type="checkbox"> </td>
+  <td> <input name="checkbox" value="{{ cluster.name }}" type="checkbox"> </td>
   <td>
-    {{ image_button ("right", "195_circle_info", "/inventory/info/server/" +server.name + "/") }}
+    {{ image_button ("right", "195_circle_info", "/inventory/info/cluster/" + cluster.name + "/") }}
   </td>
-  <td> {{ server.name }} </td>
-  <td> {{ server.status }} </td>
-  <td>
-    <select  onchange="change_service('{{ server.name }}', this.options[this.selectedIndex].value)">
-      <option value="" 
-        {% if not server.data.services %}
-          selected="selected"
-        {% endif %}>Select...</option>
-      {% for service in inventory.service_choices %}
-      <option value="{{ service }}"
-        {% if server.services and server.services[0].subkind == service %}
-          selected="selected"
-        {% endif %}>{{ service }}</option>
-      {% endfor %}
-    </select>
-  </td>
-  <td>{{ server.ip_address }}</td>
-  <td><span class="inlinesparkline">{{ server.load|join(', ') }}</span></td>
+  <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} Cluster</a></td>
+  <td> {{ cluster.status }} </td>
+  <td> {{ cluster.service_choices|join(", ") }}</td>
+  <td>???</td>
+  <td>???</td>
   </tr>
 
   {% endfor %}

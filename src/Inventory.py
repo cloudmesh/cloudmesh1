@@ -111,10 +111,21 @@ class FabricServer(FabricObject):
 
     load = ListField(DecimalField(min_value=0, max_value=1, precision=1, rounding='ROUND_HALF_DOWN'))
 
+class FabricCluster(FabricObject):
+    management_node = ReferenceField(
+        FabricServer,
+        reverse_delete_rule=CASCADE
+    )
+    compute_nodes = ListField( ReferenceField(
+        FabricServer,
+        reverse_delete_rule=CASCADE
+    ) )
+    service_choices = ListField( StringField() )
+
+
 class Inventory:
 
     def __init__ (self,
-                  clustername,
                   dbname,
                   host=None,
                   port=None,
@@ -132,12 +143,13 @@ class Inventory:
             connectArgs['password'] = password
         
         self.db = connect(dbname, **connectArgs)
-        self.cluster = clustername
-        self.groups = [clustername]
         return
 
     def clean(self):
         """removes all services and servers"""
+        for cluster in self.clusters:
+            print cluster.delete()
+
         for server in self.servers:
             print server.delete()
 
@@ -162,6 +174,12 @@ class Inventory:
                     kind=kind,
                     subkind=subkind)
                 log.info("creating {0} {1} {2}".format(name, kind, subkind))
+            elif kind == "cluster":
+                object = FabricCluster(
+                    name=name,
+                    kind=kind,
+                    subkind=subkind)
+                log.info("creating {0} {1} {2}".format(name, kind, subkind))
             else:
                 log.error("kind is not defined, creation of objects failed, kind, nameregex")
                 return
@@ -179,6 +197,10 @@ class Inventory:
 
             
     def pprint(self):
+        print "Clusters"
+        print 70 * '-'
+        for service in self.clusters:
+            pprint(service.__dict__)
         print "Servers"
         print 70 * '-'
         for server in self.servers:
@@ -190,6 +212,10 @@ class Inventory:
             pprint(service.__dict__)
 
     @property
+    def clusters(self):
+        return FabricCluster.objects 
+
+    @property
     def servers(self):
         return FabricServer.objects
 
@@ -197,10 +223,6 @@ class Inventory:
     def services(self):
         return FabricService.objects
 
-    @property
-    def service_choices(self):
-        return SERVICE_CHOICES
-    
     def get_one (self, kind, name):
 
         '''returns the data associated with the object of type kind
@@ -226,6 +248,9 @@ class Inventory:
         elif kind =='service':
             s = self.services(name=name)
             return s
+        elif kind =='cluster':
+            s = self.clusters(name=name)
+            return s
         else:
             error('wrong type ' + kind)
         return 
@@ -236,6 +261,8 @@ class Inventory:
             s = self.services(name=name)[0]
         elif kind == "server":
             s = self.servers(name=name)[0]
+        elif kind == "cluster":
+            s = self.clusters(name=name)[0]
         return s
     
 
