@@ -57,8 +57,9 @@ from Inventory import Inventory
 from Inventory import FabricService
 from Inventory import FabricServer
 
+#inventory = Inventory('bravo', "flasktest")
 # TODO: connection info in a config file
-inventory = Inventory('bravo', 'inventory_astreib', 'mongo.futuregrid.org', 27017, 'astreib', 'inventory_user1!')
+inventory = Inventory('inventory_astreib', 'mongo.futuregrid.org', 27017, 'astreib', 'inventory_user1!')
 inventory.clean()
 
 # Simulate the Bravo cluster
@@ -72,7 +73,14 @@ for name in bravo:
     server.ip_address = ip
     #server['ip_address'] = ip
     server.save()
-    
+
+inventory.create("cluster", "dynamic", "bravo")
+bravo_cluster = inventory.find("cluster", "bravo")
+bravo_cluster.management_node = inventory.find("server", "b001")
+bravo_cluster.compute_nodes = filter(lambda s: s.name != "b001", inventory.servers())
+bravo_cluster.service_choices = ('hpc', 'openstack', 'eucalyptus')
+bravo_cluster.save()
+
 #print inventory.pprint()
 
 
@@ -146,6 +154,17 @@ def display_inventory():
                            active=active,
                            version=version,
                            inventory=inventory)
+
+@app.route('/inventory/cluster/<cluster>/')
+def display_cluster(cluster):
+    active = make_active('inventory')
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    return render_template('inventory_cluster.html',
+                           updated=time_now,
+                           pages=pages,
+                           active=active,
+                           version=version,
+                           cluster=inventory.find("cluster", cluster))
 
 
 ######################################################################
