@@ -38,11 +38,13 @@ $(function() {
 
   <tr>
     <td></td>
+    <td></td>
     <td>Groups</td>
     <td colspan="3">{{ inventory.groups|join(', ') }}</td>
   </tr>
 
   <tr>
+    <th> </th>
     <th> </th>
     <th> Name </th>
     <th> Status </th>
@@ -55,6 +57,9 @@ $(function() {
   
   <tr>
   <td> <input name="checkbox" value="{{ server.name }}" type="checkbox"> </td>
+  <td>
+    {{ image_button ("right", "195_circle_info", "/inventory/info/server/" +server.name + "/") }}
+  </td>
   <td> {{ server.name }} </td>
   <td> {{ server.status }} </td>
   <td>
