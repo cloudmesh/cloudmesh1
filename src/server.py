@@ -1,4 +1,8 @@
 import sys
+from ConfigParser import SafeConfigParser
+
+server_config = SafeConfigParser({'name': 'flasktest'}) #Default database name
+server_config.read("server.config")
 
 sys.path.insert(0, './')
 sys.path.insert(0, '../')
@@ -57,7 +61,15 @@ from Inventory import Inventory
 from Inventory import FabricService
 from Inventory import FabricServer
 
-inventory = Inventory("flasktest")
+inventory_db = server_config.get("mongo", "dbname")
+if server_config.has_option("mongo", "host"):
+    inventory = Inventory(inventory_db,
+                          server_config.get("mongo", "host"),
+                          server_config.getint("mongo", "port"),
+                          server_config.get("mongo", "user"),
+                          server_config.get("mongo", "pass"))
+else:
+    inventory = Inventory(inventory_db)
 inventory.clean()
 
 # Simulate the Bravo cluster
