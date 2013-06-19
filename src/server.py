@@ -57,7 +57,7 @@ from Inventory import Inventory
 from Inventory import FabricService
 from Inventory import FabricServer
 
-inventory = Inventory('bravo', "flasktest")
+inventory = Inventory("flasktest")
 inventory.clean()
 
 # Simulate the Bravo cluster
