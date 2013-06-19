@@ -151,6 +151,18 @@ def display_inventory():
 # ROUTE: INVENTORY ACTIONS
 ######################################################################
 
+@app.route('/inventory/info/server/<server>/')
+def server_info(server):
+    active = make_active('')
+    
+    server = inventory.find("server", name)
+    return render_template('info_server.html',
+                           server=server,
+                           pages=pages,
+                           active=active,
+                           version=version,
+                           inventory=inventory)
+
 @app.route('/inventory/set/service/<server>/<service>')
 def set_service(server, service):
     active = make_active('inventory')
