@@ -57,7 +57,7 @@ from Inventory import Inventory
 from Inventory import FabricService
 from Inventory import FabricServer
 
-inventory = Inventory("flasktest")
+inventory = Inventory('bravo', "flasktest")
 inventory.clean()
 
 # Simulate the Bravo cluster
@@ -151,6 +151,12 @@ def display_inventory():
 # ROUTE: INVENTORY ACTIONS
 ######################################################################
 
+@app.route('/inventory/set/service/<server>/<service>')
+def set_service(server, service):
+    active = make_active('inventory')
+    inventory.set_service('%s-%s' % (server, service), server, service)
+    return display_inventory()
+
 @app.route('/inventory/set/<kind>/<name>/<attribute>/<value>')
 def set_attribute():
     active = make_active('inventory')
@@ -160,7 +166,7 @@ def set_attribute():
     return display_inventory()
 
 @app.route('/inventory/get/<kind>/<name>/<attribute>')
-def set_attribute():
+def get_attribute():
     active = make_active('inventory')
     s = inventory.get (kind, name)
     return s[attribute]

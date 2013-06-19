@@ -4,12 +4,12 @@
 
 <script type="text/javascript">
 
-function change_service(server,selection) {
-	var answer = confirm("Change the status of the " + server + " to " + selection + "?")
-	if (answer){
-             <!-- window.location = "/inventory/server/set/" + server +"/" + "????+"/"; -->
-             window.location = "/inventory/"; 
-         }
+function change_service(server_name, service_name) {
+	var answer = confirm("Change the status of the " + server_name + " to " + service_name + "?")
+	if (answer) {
+        $.ajax("/inventory/set/service/" + server_name + "/" + service_name,
+                { complete: function () { window.location.reload(); } } );
+    }
 }
 
 </script>
@@ -17,19 +17,24 @@ function change_service(server,selection) {
 
 <table>
   <tr>
-    <th colspan="5"> Cloud Mesh - Inventory </th>  
+    <th colspan="5"> Cloud Mesh - Inventory for {{ inventory.cluster }}</th>  
   <tr> <td colspan=5> Updated {{ updated }}
     <select>
       <option value="">Bulk select...</option>
       {% for choice in inventory.service_choices %}
-          <option value="bulk-{{ choice }}"">
+          <option value="bulk-{{ choice }}">
 	    {{  choice }}
 	  </option>
       {% endfor %}
     </select>
-
-
   </td></tr>
+
+  <tr>
+    <td></td>
+    <td>Groups</td>
+    <td colspan="3">{{ inventory.groups|join(', ') }}</td>
+  </tr>
+
   <tr>
     <th> </th>
     <th> Name </th>
@@ -45,13 +50,13 @@ function change_service(server,selection) {
   <td> {{ server.name }} </td>
   <td> {{ server.status }} </td>
   <td>
-    <select  onchange="change_service('{{ server.name }}',this.options[this.selectedIndex].value)">
+    <select  onchange="change_service('{{ server.name }}', this.options[this.selectedIndex].value)">
       <option value="" 
         {% if not server.data.services %}
           selected="selected"
         {% endif %}>Select...</option>
       {% for service in inventory.service_choices %}
-      <option value="{{ server.name }}-{{ service }}"
+      <option value="{{ service }}"
         {% if server.services and server.services[0].subkind == service %}
           selected="selected"
         {% endif %}>{{ service }}</option>

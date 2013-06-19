@@ -37,6 +37,8 @@ class FabricObject(Document):
     metadata = StringField()
     name = StringField()
     kind = StringField()  # server, service
+    group = ListField(StringField())
+    cluster = StringField()
     subkind = StringField() # server: dynamic, service: openstack, eucalyptus, hpc
     label = StringField()
     status = StringField()
@@ -109,6 +111,7 @@ class FabricServer(FabricObject):
 class Inventory:
 
     def __init__ (self,
+                  clustername,
                   dbname,
                   host=None,
                   port=None,
@@ -126,6 +129,8 @@ class Inventory:
             connectArgs['password'] = password
         
         self.db = connect(dbname, **connectArgs)
+        self.cluster = clustername
+        self.groups = [clustername]
         return
 
     def clean(self):
@@ -228,11 +233,11 @@ class Inventory:
         return s
     
 
-    def set_service (self, name, server, subkind):
+    def set_service (self, name, server_name, subkind):
         '''sets the service of a server'''
-        s = self.servers(name=server)[0]
+        s = self.find('server', server_name)
         try:
-            service = self.services(name=server)[0]
+            service = self.find('service', server_name)
             service.subkind = subkind
         except:
             now = datetime.now()
