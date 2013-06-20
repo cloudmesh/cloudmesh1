@@ -7,8 +7,10 @@
 function change_service(server_name, service_name) {
 	var answer = confirm("Change the status of the " + server_name + " to " + service_name + "?")
 	if (answer) {
-        $.ajax("/inventory/set/service/" + server_name + "/" + service_name,
-                { complete: function () { window.location.reload(); } } );
+        $.ajax("/inventory/set/service/",
+                { type: 'POST',
+                  data: { server: server_name, service: service_name },
+                  complete: function () { window.location.reload(); } } );
     }
 }
 

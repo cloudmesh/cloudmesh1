@@ -263,15 +263,23 @@ def server_info(server):
                            inventory=inventory)
 
 
-@app.route('/inventory/set/service/<server>/<service>')
-def set_service(server, service):
+@app.route('/inventory/set/service/', methods=['POST'])
+def set_service():
+    server = request.form['server']
+    service = request.form['service']
+
     active = make_active('inventory')
     inventory.set_service('%s-%s' % (server, service), server, service)
     provisioner.provision([server], service)    
     return display_inventory()
 
-@app.route('/inventory/set/<kind>/<name>/<attribute>/<value>')
+@app.route('/inventory/set/attribute/', methods=['POST'])
 def set_attribute():
+    kind = request.form['kind']
+    name = request.form['name']
+    attribute = request.form['attribute']
+    value = request.form['value']
+
     active = make_active('inventory')
     s = inventory.get (kind, name)
     s[attribute] = value
