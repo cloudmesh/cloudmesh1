@@ -12,9 +12,9 @@ Cloudmesh
    :maxdepth: 2
   
    about
-   plan
-   design 
-   mock
-   cal   
+   plan/plan
+   plan/design 
+   plan/mock
+   plan/cal   
 
 
