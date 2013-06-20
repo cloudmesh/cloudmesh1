@@ -110,20 +110,5 @@ List of Commands
 
 A more detailed description of the various commands is available.
 
-.. toctree::
-	:maxdepth: 1
-	
-	assign
-	add
-	unassign
-	list
-	support
-
-.. Indices and tables
-.. ==================
-
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-.. * :ref:`search`
 
 
