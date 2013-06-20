@@ -27,8 +27,12 @@ import base64,struct,hashlib
 from datetime import datetime
 import yaml
 
-def table_printer(the_dict):
-    result = ''
+def table_printer(the_dict, header_info=None):
+    # header_info ["attribute", "value"]
+    if header_info != None or (header_info == "") :
+        result = '<tr><th>{0}</th><th>{1}</th></tr>'.format(header_info[0], header_info[1])
+    else:
+        result = ''
     if isinstance(the_dict, dict):
         for name,value in the_dict.iteritems() :
             result = result + \
