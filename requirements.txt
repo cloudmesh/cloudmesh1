@@ -12,10 +12,11 @@ fabric
 progress
 sh
 console
+python-ldap
 docopt
 python-hostlist
 pyaml
-Flask
+Flask>=0.7
 Flask-FlatPages
 Flask-WTF
 pymongo
