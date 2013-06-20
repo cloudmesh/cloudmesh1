@@ -76,9 +76,9 @@ inventory.clean()
 bravo = inventory.ip_dict ("172.29.202.[11-26]", "b{0:03d}", 1)
 for name in bravo:
     ip = bravo[name]
-    log.info("{0} {1}".format(name, ip))
+    log.info("create {0} {1}".format(name, ip))
     inventory.create("server", "dynamic", name)
-    inventory.add_service('%s-hpc' % name, name, 'hpc')
+    inventory.add_service('{0}-hpc'.format(name), name, 'hpc')
     server = inventory.find("server", name)
     server.ip_address = ip
     #server['ip_address'] = ip
