@@ -125,6 +125,30 @@ class FabricCluster(FabricObject):
     ) )
     service_choices = ListField( StringField() )
 
+class FabricImage(FabricObject):
+    """
+    osimage: '/path/to/centos0602v1-2013-06-11.squashfs'
+    os: 'centos6'
+    extension: 'squashfs'
+
+    partition_scheme: 'mbr'
+    method: 'put'
+    kernel: 'vmlinuz-2.6.32-279.19.1.el6.x86_64'
+
+    ramdisk: 'initramfs-2.6.32-279.19.1.el6.x86_64.img'
+    grub: 'grub'
+    rootpass: 'reset'
+    """
+    kind = StringField(default="image")
+    osimage = StringField()
+    os = StringField()
+    extension = StringField()
+    partition_scheme = StringField(default='mbr')
+    method = StringField(default='put')
+    kernel = StringField()
+    ramdisk = StringField()
+    grub = StringField(default='grub')
+    rootpass = StringField()
 
 class Inventory:
 
@@ -150,14 +174,11 @@ class Inventory:
 
     def clean(self):
         """removes all services and servers"""
-        for cluster in self.clusters:
-            cluster.delete()
-
-        for server in self.servers:
-            server.delete()
-
-        for service in self.services:
-            service.delete()
+        for kind in self.fabrictype("all").keys():
+            log.info("Deleting all {0}".format(kind)) 
+            data = self.fabrictype(kind)
+            for element in data:
+                element.delete()
 
     def create_cluster(self,clustername, nameregex, nameformat, startindex, managementnode, prefix):
         # "delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001
@@ -235,10 +256,18 @@ class Inventory:
         print 70 * '-'
         for service in self.services:
             pprint(service.__dict__)
+        print "Images"
+        print 70 * '-'
+        for image in self.images:
+            pprint(image.__dict__)
 
     @property
     def clusters(self):
         return FabricCluster.objects 
+
+    @property
+    def images(self):
+        return FabricImage.objects 
 
     @property
     def servers(self):
@@ -252,42 +281,35 @@ class Inventory:
 
         '''returns the data associated with the object of type kind
         and the given name'''
+        s = get(kind, name)
+        try:
+            return s[0]
+        except:
+            return None
 
-        if kind == 'server':
-            s = self.servers(name=name)
-            return s[0]
-        elif kind =='service':
-            s = self.services(name=name)
-            return s[0]
+    def fabrictype(self,kind):
+        types = {
+            'server': self.servers,
+            'service': self.services,
+            'cluster': self.clusters,
+            'image': self.images,
+            }
+        if kind == "all":
+            return types
+        if kind in types:
+            return types[kind]
         else:
-            error('wrong kind ' + kind)
-        return 
+            log.error("Type {0} is not supported".format(type))
+            return None
 
     def get (self, kind, name):
         '''returns the data associated with the object of kind type
         and the given name'''
-
-        if kind == 'server':
-            s = self.servers(name=name)
-            return s
-        elif kind =='service':
-            s = self.services(name=name)
-            return s
-        elif kind =='cluster':
-            s = self.clusters(name=name)
-            return s
-        else:
-            error('wrong type ' + kind)
-        return 
-
+        s = self.fabrictype(kind)(name=name)
+        return s
 
     def find (self, kind, name):
-        if kind == 'service':
-            s = self.services(name=name)[0]
-        elif kind == "server":
-            s = self.servers(name=name)[0]
-        elif kind == "cluster":
-            s = self.clusters(name=name)[0]
+        s = self.fabrictype(kind)(name=name)[0]
         return s
     
 
@@ -348,7 +370,8 @@ class Inventory:
     
     def disconnect(self):
         log.warning("disconnect not yet implemented")
-
+        
+    #static methods
 
     def ip_name_pair (self, nameregex, format_string, start=1):
         ips = expand_hostlist(nameregex)
