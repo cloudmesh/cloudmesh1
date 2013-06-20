@@ -1,6 +1,6 @@
 import sys
 from ConfigParser import SafeConfigParser
-
+from provisiner import *
 server_config = SafeConfigParser({'name': 'flasktest'}) #Default database name
 server_config.read("server.config")
 
@@ -76,7 +76,7 @@ inventory.clean()
 bravo = inventory.ip_dict ("172.29.202.[11-26]", "b{0:03d}", 1)
 for name in bravo:
     ip = bravo[name]
-    print name, ip
+    log.info("{0} {1}".format(name, ip))
     inventory.create("server", "dynamic", name)
     inventory.add_service('%s-hpc' % name, name, 'hpc')
     server = inventory.find("server", name)
@@ -92,6 +92,13 @@ bravo_cluster.service_choices = ('hpc', 'openstack', 'eucalyptus')
 bravo_cluster.save()
 
 #print inventory.pprint()
+
+######################################################################
+# PROVISINOR
+######################################################################
+provisionerImpl = ProvisionerSimulator
+
+provisioner = provisionerImpl()
 
 
 ######################################################################
@@ -197,6 +204,7 @@ def server_info(server):
 def set_service(server, service):
     active = make_active('inventory')
     inventory.set_service('%s-%s' % (server, service), server, service)
+    provisioner.provision([server], service)    
     return display_inventory()
 
 @app.route('/inventory/set/<kind>/<name>/<attribute>/<value>')

@@ -27,6 +27,10 @@ class BaremetalProvisinerABC:
         pass
 
 
+import multiprocessing
+import subprocess
+
+
 class ProvisionerSimulator(BaremetalProvisinerABC):
 
     def provision(self, hosts, image):

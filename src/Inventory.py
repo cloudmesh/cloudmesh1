@@ -148,13 +148,13 @@ class Inventory:
     def clean(self):
         """removes all services and servers"""
         for cluster in self.clusters:
-            print cluster.delete()
+            cluster.delete()
 
         for server in self.servers:
-            print server.delete()
+            server.delete()
 
         for service in self.services:
-            print service.delete()
+            service.delete()
 
     def create(self, kind, subkind, nameregex):
         #"india[9-11].futuregrid.org,india[01-02].futuregrid.org"
