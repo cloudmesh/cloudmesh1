@@ -12,9 +12,9 @@ sys.path.insert(0, '..')
 from datetime import datetime
 from pprint import pprint
 
-from Inventory import Inventory
-from Inventory import FabricService
-from Inventory import FabricServer
+from cloudmesh.inventory.resources import Inventory
+from cloudmesh.inventory.resources import FabricService
+from cloudmesh.inventory.resources import FabricServer
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)

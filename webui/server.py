@@ -1,10 +1,10 @@
 import sys
 from ConfigParser import SafeConfigParser
-from provisiner import *
+from cloudmesh.provisioner.provisioner import *
 server_config = SafeConfigParser({'name': 'flasktest'}) #Default database name
 server_config.read("server.config")
 
-from Inventory import FabricImage
+from cloudmesh.inventory.resources import FabricImage
 
 sys.path.insert(0, './')
 sys.path.insert(0, '../')
