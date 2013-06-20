@@ -159,6 +159,30 @@ class Inventory:
         for service in self.services:
             service.delete()
 
+    def create_cluster(self,clustername, nameregex, nameformat, startindex, managementnode, prefix):
+        # "delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001
+        # Simulate the Delta cluster
+        # Simulate the Delta cluster
+        delta = self.ip_dict (nameregex, nameformat, startindex)
+        for name in delta:
+            ip = delta[name]
+            log.info("create {0} {1}".format(name, ip))
+            self.create("server", "dynamic", name)
+            self.add_service('%s-openstack' % name, name, 'openstack')
+            server = self.find("server", name)
+            server.ip_address = ip
+            #server['ip_address'] = ip
+            server.save()
+
+        self.create("cluster", "dynamic", clustername)
+        delta_cluster = self.find("cluster", clustername)
+        delta_cluster.management_node = self.find("server", managementnode)
+        delta_cluster.compute_nodes = filter(lambda s: s.name[:1] == prefix and s.name != managementnode, self.servers())
+        delta_cluster.service_choices = ('hpc', 'openstack', 'eucalyptus')
+        delta_cluster.save()
+
+
+
     def create(self, kind, subkind, nameregex):
         #"india[9-11].futuregrid.org,india[01-02].futuregrid.org"
         names = expand_hostlist(nameregex)

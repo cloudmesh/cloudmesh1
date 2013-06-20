@@ -72,43 +72,12 @@ else:
     inventory = Inventory(inventory_db)
 inventory.clean()
 
-# Simulate the Bravo cluster
-bravo = inventory.ip_dict ("101.102.203.[11-26]", "b{0:03d}", 1)
-for name in bravo:
-    ip = bravo[name]
-    log.info("create {0} {1}".format(name, ip))
-    inventory.create("server", "dynamic", name)
-    inventory.add_service('{0}-hpc'.format(name), name, 'hpc')
-    server = inventory.find("server", name)
-    server.ip_address = ip
-    #server['ip_address'] = ip
-    server.save()
+inventory.create_cluster("brave", "101.102.203.[11-26]", "b{0:03d}", 1, "b001", "b")
+inventory.create_cluster("delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001", "d")
+inventory.create_cluster("gamma", "302.202.204.[1-16]", "g-{0:03d}", 1, "g-001", "g")
+inventory.create_cluster("india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
+inventory.create_cluster("sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
 
-inventory.create("cluster", "dynamic", "bravo")
-bravo_cluster = inventory.find("cluster", "bravo")
-bravo_cluster.management_node = inventory.find("server", "b001")
-bravo_cluster.compute_nodes = filter(lambda s: s.name[:1] == "b" and s.name != "b001", inventory.servers())
-bravo_cluster.service_choices = ('hpc', 'openstack', 'eucalyptus')
-bravo_cluster.save()
-
-# Simulate the Delta cluster
-delta = inventory.ip_dict ("102.202.204.[1-16]", "d-{0:03d}", 1)
-for name in delta:
-    ip = delta[name]
-    print name, ip
-    inventory.create("server", "dynamic", name)
-    inventory.add_service('%s-openstack' % name, name, 'openstack')
-    server = inventory.find("server", name)
-    server.ip_address = ip
-    #server['ip_address'] = ip
-    server.save()
-
-inventory.create("cluster", "dynamic", "delta")
-delta_cluster = inventory.find("cluster", "delta")
-delta_cluster.management_node = inventory.find("server", "d-001")
-delta_cluster.compute_nodes = filter(lambda s: s.name[:1] == "d" and s.name != "d-001", inventory.servers())
-delta_cluster.service_choices = ('hpc', 'openstack', 'eucalyptus')
-delta_cluster.save()
 
 
 #print inventory.pprint()
