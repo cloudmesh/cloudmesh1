@@ -1,0 +1,16 @@
+
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}g
+{% block content %}
+
+<h3>VM Details</h3>
+
+<style>
+table{
+margin:0px
+}
+</style>
+
+{{table_printer(server) | safe}}
+
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}g
+{% block content %}
+
+<script type="text/javascript">
+
+function killall(cloud) {
+	var answer = confirm("Delete all selected VMs in "+cloud+"?")
+	if (answer){
+		window.location = "/cm/delete/"+cloud+"/";
+	}
+}
+
+</script>
+
+
+<table>
+  <tr>
+    <th colspan="1"> Cloud Mesh </th>  
+    <th colspan="4">
+      {{ image_button ("none", "365_restart", "/table/") }}
+      &nbsp;
+      {{ image_button ("none", "041_charts", "/table/") }}
+      &nbsp;     
+      {{ image_button ("none", "044_keys", "/keys/" ) }}
+      &nbsp;     
+      {{ image_button ("none", "088_adress_book", "/profile/" ) }}
+
+    </th>
+    <th colspan="1">
+      {{ image_button ("right", "016_bin", "/cm/kill/") }}
+    </th>
+  </tr>
+  <tr> <td> Updated </td>  <td colspan=8> {{ updated }} </td></tr>
+  <tr>
+    <th> Name </th>
+    <th> Action </th>
+    <th> ID </th>
+    <th> Status </th>
+    <th> ip </th>
+  </tr>
+  
+  {% for name in cloudmesh.active() %}
+  
+  <tr> 
+    <th colspan="1"> {{ name }}</th> 
+    <th colspan="4">
+      {{ image_button ("none", "365_restart", "/cm/refresh/" + name + "/") }}
+      &nbsp;
+      {{ image_button ("none", "190_circle_plus", "/cm/start/" + name +"/") }}
+      &nbsp;
+      {{ image_button ("none", "041_charts", "/table/") }}
+      &nbsp;     
+      {{ image_button ("none", "044_keys", "/updatekeypair/" + name + "/") }}
+      &nbsp; &nbsp;
+      <form name = "filter-{{name}}" action = "/cm/filter/{{name}}/" method="post">
+      <input type="submit" value="Filter">
+      {% for state in cloudmesh.states(name) %}
+            {% if config.data['cloudmesh']['clouds'][name]['default']['filter']['state'][state] %}
+               <input type="checkbox" name="{{ name }}:{{ state }}" value="select" checked > {{ state }} &nbsp;
+            {% else %}
+               <input type="checkbox" name="{{ name }}:{{ state }}" value="select" > {{ state }} &nbsp;
+            {% endif %}
+            
+      {% endfor %}
+
+      </form>
+    </th>
+    <th colspan="1">
+      <input align="right" type="image" 
+	     src="{{ url_for('static', filename='img/icons/png/glyphicons_016_bin.png') }}" 
+	     onclick="killall('{{ name }}');"
+	     width="16" height="16">
+    </th>
+    
+  </tr>
+  
+  {% for id, server in clouds[name]['servers'].iteritems() %}
+
+      {% if server['cm_display'] %}
+      <tr>
+	<td> {{ server.name }}  </td>
+	<td> {{ server.cloud }}
+	  {{ image_button ("none", "368_collapse", "/cm/login/" + name + "/" + id + "/") }}
+	  {{ image_button ("right", "195_circle_info", "/cm/info/" + name + "/" + id + "/") }}
+	  <a href="/cm/assignpubip/{{name}}/{{id}}/">  IP </a>
+	  {{ image_button ("none", "041_charts", "/cm/stats/" + name + "/" + id + "/") }}
+	</td>
+	<td> {{ server.id }} </td>
+	<td  style="color:{{ cloudmesh.status_color(server.status) }};">
+	  {{ server.status }}
+	</td>
+	<td>
+	  {{ cloudmesh.address_string(server.addresses) }}
+	</td>
+	<td>
+	  {{ image_button ("right", "016_bin", "/cm/delete/" + name + "/" + id + "/") }}
+	</td>
+      </tr>
+      {% endif %}
+
+  {% endfor %}
+  
+  {% endfor %}
+  
+</table>
+
+{% endblock %}

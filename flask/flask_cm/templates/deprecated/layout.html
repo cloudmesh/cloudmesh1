@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cloud Mesh</title>
+    <strong><link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}"></strong>
+  </head>
+  <body class="container">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <header>
+      <div class="container">
+        <h1 class="logo">Cloud Mesh</h1>
+      </div>
+     </header>
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+</html>
