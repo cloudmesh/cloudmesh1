@@ -1,0 +1,22 @@
+Required data structure
+
+Server:
+	ip_address=''
+        name=''
+        kind=''
+        label=''
+        keyword=''
+        time_start=''
+        time_stop=''
+        time_update=''
+
+Services:
+	ip_address ='' 
+        name = ''
+        kind = ''
+        version = ''
+        label = ''
+        keyword = ''
+        time_start = ''
+        time_stop = ''
+        time_update = ''

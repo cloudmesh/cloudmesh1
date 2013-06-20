@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}g
+{% block content %}
+
+</script>
+
+<table>
+  <tr>
+    <th colspan="5"> Cloud Mesh - Inventory for FutureGrid</th>  
+  <tr>
+    <td colspan=5> Updated {{ updated }}</td>
+  </tr>
+
+  <tr>
+    <th> </th>
+    <th> </th>
+    <th> Name </th>
+    <th> Status </th>
+    <th> Services </th>
+    <th> IP </th>
+    <th> Load </th>
+  </tr>
+  
+  {% for cluster in inventory.clusters()|sort(attribute='name') %}
+  
+  <tr>
+  <td> <input name="checkbox" value="{{ cluster.name }}" type="checkbox"> </td>
+  <td>
+    {{ image_button ("right", "195_circle_info", "/inventory/cluster/" + cluster.name + "/") }}
+  </td>
+  <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} Cluster</a></td>
+  <td> {{ cluster.status }} </td>
+  <td> {{ cluster.service_choices|join(", ") }}</td>
+  <td>???</td>
+  <td>???</td>
+  </tr>
+
+  {% endfor %}
+  
+</table>
+
+{% endblock %}
