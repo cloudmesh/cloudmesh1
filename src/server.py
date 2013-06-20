@@ -27,6 +27,27 @@ import base64,struct,hashlib
 from datetime import datetime
 import yaml
 
+def table_printer(the_dict):
+    result = ''
+    if isinstance(the_dict, dict):
+        for name,value in the_dict.iteritems() :
+            result = result + \
+                '<tr><td>{0}</td><td>{1}</td></tr>'.format(name.title(),
+                                                           str(table_printer(value)))
+        result = '<table>' + result + '</table>'
+        return result
+    elif type(the_dict) is list: 
+        for element in the_dict:
+            for name,value in element.iteritems() :
+                result =result +\
+                    '<tr><td>{0}</td><td>{1}</td></tr>'.format(name.title(),
+                                                               str(table_printer(value)))
+        result = '<table>' + result + '</table>'
+        return result 
+    else:
+        return the_dict
+
+
 ######################################################################
 # allowing the yaml file to be written back upon change
 ######################################################################
@@ -81,6 +102,7 @@ inventory.create_cluster("brave", "101.102.203.[11-26]", "b{0:03d}", 1, "b001", 
 #inventory.create_cluster("sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
 
 centos = FabricImage(
+    name = "centos6",
     osimage = '/path/to/centos0602v1-2013-06-11.squashfs',
     os = 'centos6',
     extension = 'squashfs',
@@ -93,8 +115,9 @@ centos = FabricImage(
 ).save()
 
 redhat = FabricImage(
+    name = "ubuntu",
     osimage = '/BTsync/ubuntu1304/ubuntu1304v1-2013-06-11.squashfs',
-    os = 'centos6',
+    os = 'ubuntu',
     extension = 'squashfs',
     partition_scheme = 'mbr',
     method = 'btsync',
@@ -132,6 +155,7 @@ pages = FlatPages(app)
 def make_active(name):
     active = {'home': "",
               'inventory': "",
+              "images":"",
               'contact': "",
               'profile': ""}
     
@@ -199,6 +223,29 @@ def display_cluster(cluster):
                            cluster=inventory.find("cluster", cluster))
 
 
+
+@app.route('/inventory/images/<name>/')
+def display_image(name):
+    active = make_active('')
+    image= inventory.get ('image', name)[0]
+    return render_template('info_image.html',
+                           table_printer=table_printer,
+                           image=image.data,
+                           name=name,
+                           pages=pages,
+                           active=active,
+                           version=version,
+                           inventory=inventory)
+
+@app.route('/inventory/images/')
+def display_images():
+    active = make_active('images')
+    return render_template('images.html',
+                           pages=pages,
+                           active=active,
+                           version=version,
+                           inventory=inventory)
+
 ######################################################################
 # ROUTE: INVENTORY ACTIONS
 ######################################################################
@@ -214,6 +261,7 @@ def server_info(server):
                            active=active,
                            version=version,
                            inventory=inventory)
+
 
 @app.route('/inventory/set/service/<server>/<service>')
 def set_service(server, service):
@@ -240,22 +288,6 @@ def get_attribute():
 # Helpers
 ##############################
     
-def table_printer(the_dict):
-    return_str = ''
-    if isinstance(the_dict, dict):
-        for name,value in the_dict.iteritems() :
-            return_str =return_str +'<tr><td>'+name.title() +'</td><td>'+str(table_printer(value))+'</td></tr>'
-        return_str = '<table>' + return_str + '</table>'
-        return return_str
-    elif type(the_dict) is list: 
-        for element in the_dict:
-            for name,value in element.iteritems() :
-                return_str =return_str +'<tr><td>'+name.title()+'</td><td>'+str(table_printer(value))+'</td></tr>'
-        return_str = '<table>' + return_str + '</table>'
-        return return_str
-    else:
-        return the_dict
-
 
 
 
