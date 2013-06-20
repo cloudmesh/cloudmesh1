@@ -5,9 +5,23 @@ sphinx
 sphinx_bootstrap_theme
 sphinxcontrib-webmocks
 sphinxjp.shibukawa
+sphinxcontrib-blockdiag
 paramiko
 blessings
 fabric
 progress
 sh
 console
+docopt
+python-hostlist
+pyaml
+Flask
+Flask-FlatPages
+Flask-WTF
+pymongo
+mongoengine
+python-novaclient
+#pip install -e git+https://github.com/openstack/python-novaclient.git#egg=python-novaclient
+#pycrypto
+apache-libcloud
+
