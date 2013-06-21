@@ -85,6 +85,8 @@ clean:
 	cd doc; make clean
 	rm -rf *.egg-info
 
+uninstall:
+	yes | pip uninstall cloudmesh
 
 #############################################################################
 # SPHINX DOC

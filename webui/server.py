@@ -1,21 +1,24 @@
 import sys
+sys.path.insert(0, './')
+sys.path.insert(0, '../')
+
+
 from ConfigParser import SafeConfigParser
 from cloudmesh.provisioner.provisioner import *
+
 server_config = SafeConfigParser({'name': 'flasktest'}) #Default database name
 server_config.read("server.config")
 
 from cloudmesh.inventory.resources import FabricImage
 
-sys.path.insert(0, './')
-sys.path.insert(0, '../')
 
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
-from cloudmesh.cm_keys import cm_keys
-from cloudmesh.cm_projects import cm_projects
-from cloudmesh.cm_config import cm_config
+from cloudmesh.config.cm_keys import cm_keys
+from cloudmesh.config.cm_projects import cm_projects
+from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cloudmesh import cloudmesh
 
 import os
@@ -91,9 +94,9 @@ version = "0.1"
 # INVENTORY
 ######################################################################
 
-from Inventory import Inventory
-from Inventory import FabricService
-from Inventory import FabricServer
+from cloudmesh.inventory.resources import Inventory
+from cloudmesh.inventory.resources import FabricService
+from cloudmesh.inventory.resources import FabricServer
 
 inventory_db = server_config.get("mongo", "dbname")
 if server_config.has_option("mongo", "host"):
@@ -549,7 +552,7 @@ def vm_info(cloud=None,server=None):
 
 
 @app.route('/inventory/save/')
-def save():
+def inventory_save():
     print "Saving the inventory"
     return display_inventory()
 
@@ -559,7 +562,7 @@ def save():
 
 
 @app.route('/inventory/load/')
-def load():
+def inventory_load():
     print "Loading the inventory"
     return display_inventory()
 
@@ -594,6 +597,8 @@ def display_flavors(cloud=None):
 ######################################################################
 # ROUTE: IMAGES
 ######################################################################
+
+
 
 #@app.route('/images/<cloud>/')
 @app.route('/images/', methods=['GET','POST'])
@@ -678,6 +683,15 @@ def display_inventory():
                            version=version,
                            inventory=inventory)
 
+@app.route('/inventory/images/')
+def display_inventory_images():
+    active = make_active('images')
+    return render_template('images.html',
+                           pages=pages,
+                           active=active,
+                           version=version,
+                           inventory=inventory)
+
 @app.route('/inventory/cluster/<cluster>/')
 def display_cluster(cluster):
     active = make_active('inventory')
@@ -699,15 +713,6 @@ def display_image(name):
                            table_printer=table_printer,
                            image=image.data,
                            name=name,
-                           pages=pages,
-                           active=active,
-                           version=version,
-                           inventory=inventory)
-
-@app.route('/inventory/images/')
-def display_images():
-    active = make_active('images')
-    return render_template('images.html',
                            pages=pages,
                            active=active,
                            version=version,

@@ -1,22 +1,27 @@
+import sys
+sys.path.insert(0, '..')
+sys.path.insert(0, '.')
+
 import pickle
 from sh import fgrep
 from sh import nova
 from sh import tail
 from datetime import datetime
 import json
-import sys
+
 import os
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
-sys.path.insert(0, '../../..')
 
-from cloudmesh.util import HEADING
+
+from util import HEADING
 
 ######################################################################
 # SETTING UP A LOGGER
 ######################################################################
 
+import logging
 log = logging.getLogger('cloudmesh')
 log.setLevel(logging.DEBUG)
 formatter = logging.Formatter('CM cloudmesh: [%(levelname)s] %(message)s')
@@ -26,15 +31,15 @@ log.addHandler(handler)
 
 
 # import shelve
-from cm_config import cm_config
+from config.cm_config import cm_config
 #from openstack.cm_compute import openstack as os_client
 
 #Error Cannot Import Openstack
-from openstack.cm_compute import openstack
+from iaas.openstack.cm_compute import openstack
 
-from eucalyptus.eucalyptus_new import eucalyptus
+from iaas.eucalyptus.eucalyptus_new import eucalyptus
 try:
-    from azure.cm_azure import cm_azure as azure 
+    from iaas.azure.cm_azure import cm_azure as azure 
 except:
     log.warning("AZURE NOT ENABLED")
 
