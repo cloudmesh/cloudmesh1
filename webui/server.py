@@ -703,6 +703,22 @@ def display_cluster(cluster):
                            version=version,
                            cluster=inventory.find("cluster", cluster))
 
+@app.route('/inventory/cluster/table/<cluster>/')
+def display_cluster_table(cluster):
+    active = make_active('inventory')
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    parameters = {
+        "rows" : 10,
+        "columns" : 100,
+    }
+    return render_template('inventory_cluster_table.html',
+                           updated=time_now,
+                           pages=pages,
+                           active=active,
+                           version=version,
+                           parameters=parameters,
+                           cluster=inventory.find("cluster", cluster))
+
 
 
 @app.route('/inventory/images/<name>/')
