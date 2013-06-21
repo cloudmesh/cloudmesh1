@@ -7,3 +7,8 @@ def path_expand(text):
     result = template.substitute(os.environ)
     return result
 
+def HEADING(txt):
+    print
+    print "#", 70 * '#'
+    print "#", txt
+    print "#", 70 * '#'

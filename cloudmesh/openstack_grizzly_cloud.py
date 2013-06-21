@@ -1,6 +1,6 @@
 import sys
 import yaml
-from cloudmesh_cloud import cloudmesh_cloud
+from cloudmesh.cloudmesh_cloud import cloudmesh_cloud
 
 try:
     from keystoneclient.v2_0 import client

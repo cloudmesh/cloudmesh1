@@ -27,13 +27,9 @@ import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
-def HEADING(txt):
-    print
-    print "#", 70 * '#'
-    print "#", txt
-    print "#", 70 * '#'
+from cloudmesh.util import HEADING
 
-    
+
 class Test:
 
     #assuming first - is the prefered cloud

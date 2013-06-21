@@ -1,7 +1,6 @@
 import sys
-sys.path.insert(0, '..')
+sys.path.insert(0, '../..')
 import yaml
-#import pyaml
 import os
 import stat
 import json
@@ -9,12 +8,7 @@ import collections
 
 from string import Template
 
-
-def path_expand(text):
-    """ returns a string with expanded variavble """
-    template = Template(text)
-    result = template.substitute(os.environ)
-    return result
+from cloudmesh.util import path_expand
 
 
 class cm_config(object):
@@ -22,15 +16,11 @@ class cm_config(object):
     ######################################################################
     # global variables
     ######################################################################
+
     default_path = '.futuregrid/cloudmesh.yaml'
     yaml_template = '%s/cloudmesh_template.yaml' % os.path.dirname(__file__)
     filename = ""
-    data = None
-    try:
-        data = collections.OrderedDict() #python 2.7 and above
-    except:
-        import ordereddict #for 2.6 and lower, install separate library first
-        data = ordereddict.OrderedDict()
+    data = collections.OrderedDict()
 
     ######################################################################
     # initialization methods

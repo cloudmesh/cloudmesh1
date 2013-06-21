@@ -19,14 +19,7 @@ import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
-header = True
-
-def HEADING(txt):
-    if header:
-        print
-        print "#", 70 * '#'
-        print "#", txt
-        print "#", 70 * '#'
+from cloudmesh.util import HEADING
 
 class Test_Inventory:
 
