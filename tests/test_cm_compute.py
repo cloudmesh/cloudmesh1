@@ -12,7 +12,7 @@ nosetests -v  --nocapture test_cm_compute.py:Test.test_06
 
 """
 import sys
-sys.path.insert(0, '../..')
+sys.path.insert(0, '..')
 
 from sh import head
 from sh import fgrep
@@ -20,9 +20,10 @@ import string
 import os
 import time
 
-from cloudmesh.iaas.openstack.cm_table import table as cm_table
+
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.openstack.cm_compute import openstack
+from cloudmesh.iaas.openstack.cm_table import table as cm_table
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)

@@ -9,6 +9,22 @@ import os
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
+sys.path.insert(0, '../../..')
+
+from cloudmesh.util import HEADING
+
+######################################################################
+# SETTING UP A LOGGER
+######################################################################
+
+log = logging.getLogger('cloudmesh')
+log.setLevel(logging.DEBUG)
+formatter = logging.Formatter('CM cloudmesh: [%(levelname)s] %(message)s')
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+log.addHandler(handler)
+
+
 # import shelve
 from cm_config import cm_config
 #from openstack.cm_compute import openstack as os_client
@@ -20,7 +36,7 @@ from eucalyptus.eucalyptus_new import eucalyptus
 try:
     from azure.cm_azure import cm_azure as azure 
 except:
-    print "AZURE NOT ENABLED"
+    log.warning("AZURE NOT ENABLED")
 
 class cloudmesh:
 
@@ -194,22 +210,18 @@ class cloudmesh:
         return provider
 
     def info(self):
-        print 70 * "="
-        print "CLOUD MESH INFO"
-        print 70 * "="
+        HEADING("CLOUD MESH INFO")
         try:
             for name in self.clouds.keys():
                 cloud_type = self.clouds[name]['cm_type']
                 provider = self.cloud_provider(cloud_type)
                 cloud = provider(name)
-                print
-                print "Info", name
-                print 70 * "-"
+                HEADING ( "Info " + name)
                 cloud.refresh("all")
                 cloud.info()
                 
         except Exception, e:
-            print e
+            log.error(str(e))
         
 
 
@@ -256,9 +268,9 @@ class cloudmesh:
                 cloud_type = self.clouds[name]['cm_type']
                 provider = self.cloud_provider(cloud_type)
                 cloud = provider(name)
-                print "Refresh cloud", name
+                log.info("Refresh cloud {0}".format(name))
                 for type in types:
-                    print "    Refresh ", type
+                    log.info ("    Refresh {0}".format(type))
                     cloud.refresh(type=type)
                     result = cloud.get(type)
                     self.clouds[name][type] = cloud.get(type)
@@ -266,7 +278,7 @@ class cloudmesh:
                     self.clouds[name].update({'name': name, 'cm_type': cloud_type, 'cm_display' : cloud_display})
                 
         except Exception, e:
-            print e
+            log.error(str(e))
     
     def refresh_user_id(self, names=["all"]):
         if names == ['all'] or names == None:
@@ -279,12 +291,12 @@ class cloudmesh:
                 if not self.clouds[name].has_key('user_id'):
                     self.clouds[name]['user_id'] = cloud.find_user_id()
         except Exception, e:
-            print e
+            log.error(str(e))
     
     def add(self, name, type):
         try:
             self.clouds[name]
-            print "Error: Cloud %s already exists" % name
+            log.error("Cloud {0} already exists".format(name))
         except:
             self.refresh(name, type)
 
@@ -352,7 +364,7 @@ class cloudmesh:
             cloud = provider(cloud_name)
             cloud.vm_delete(server_id) 
         except:
-            print "Error: could not delete", cloud_name, server_id
+            log.error("could not delete {0} {1}".format(cloud_name, server_id))
 
 
     def add_key_pair(self,cloud_name,key,name):
@@ -362,7 +374,8 @@ class cloudmesh:
             cloud = provider(cloud_name)
             return cloud.upload_key_pair(key,name) 
         except:
-            print "Error: could not update keypair", cloud_name
+            log.error("could not update keypair {0}".format(cloud_name))
+
     def del_key_pair(self,cloud_name,name):
         try:
             cloud_type = self.clouds[cloud_name]['cm_type']
@@ -370,7 +383,8 @@ class cloudmesh:
             cloud = provider(cloud_name)
             return cloud.delete_key(name) 
         except:
-            print "Error: could not delete keypair", cloud_name
+                log.error("could not delete keypair {0}".format(cloud_name))
+
 
     def assign_public_ip(self,cloud_name,vm_id):
         cloud_type = self.clouds[cloud_name]['cm_type']
@@ -404,7 +418,7 @@ class cloudmesh:
         name = prefix + "-" + "%s" % str(index).zfill(4)
         
         cloud_type = self.clouds[cloud_name]['cm_type']
-        print cloud_type
+        log.info (cloud_type)
         provider = self.cloud_provider(cloud_type)
 
         cloud = provider(cloud_name)
@@ -442,7 +456,7 @@ class cloudmesh:
                     cloud.vm_create(name, flavor_name, image_id)
                 # this is a dummy and must be retrieved from flask
         except Exception , e:
-            print "Error: could not create", cloud_name, prefix, index, image_id, e
+            log.error("could not create {0} {1} {2} {3} {4}".format(cloud_name, prefix, index, image_id, e}
         """
 
     ######################################################################
@@ -459,20 +473,20 @@ class cloudmesh:
         element is stored.
         """
         if other.cm_type == "image":
-            print "TODO: not implemented yet"
+            log.error{"TODO: not implemented yet"}
             return
         elif other.cm_type == "vm":
-            print "TODO: not implemented yet"
+            log.error{"TODO: not implemented yet"}
             return
         elif other.cm_type == "flavor":
-            print "TODO: not implemented yet"
+            log.error{"TODO: not implemented yet"}
             return
         elif other.cm_type == "cloudmesh":
-            print "TODO: not implemented yet"
+            log.error{"TODO: not implemented yet"}
             return
         else:
-            print "Error: %s type does not exist", cm_type
-            print "Error: Ignoring add"
+            log.error("{0} type does not exist".format(cm_type))
+            log.error("Error: Ignoring add")
             return
 
     def __iadd__(self, other):
@@ -485,20 +499,20 @@ class cloudmesh:
         stored.
         """
         if other.cm_type == "image":
-            print "TODO: not implemented yet"
+            log.error{"TODO: not implemented yet"}
             return
         elif other.cm_type == "vm":
-            print "TODO: not implemented yet"
+            log.error{"TODO: not implemented yet"}
             return
         elif other.cm_type == "flavor":
-            print "TODO: not implemented yet"
+            log.error{"TODO: not implemented yet"}
             return
         elif other.cm_type == "cloudmesh":
-            print "TODO: not implemented yet"
+            log.error{"TODO: not implemented yet"}
             return
         else:
-            print "Error: %s type does not exist", cm_type
-            print "Error: Ignoring add"
+            log.error("%s type does not exist".format(cm_type))
+            log.error("Error: Ignoring add")
             return
 
     def address_string(self,content, labels=False):
