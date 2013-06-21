@@ -18,7 +18,7 @@ import pprint
 
 
 from multiprocessing import Pool as _Pool
-from cloudmesh.cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config
 global maxparallel;
 
 

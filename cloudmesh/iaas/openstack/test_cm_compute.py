@@ -20,9 +20,9 @@ import string
 import os
 import time
 
-from cloudmesh.openstack.cm_table import table as cm_table
-from cloudmesh.cm_config import cm_config
-from cloudmesh.openstack.cm_compute import openstack
+from cloudmesh.iaas.openstack.cm_table import table as cm_table
+from cloudmesh.config.cm_config import cm_config
+from cloudmesh.iaas.openstack.cm_compute import openstack
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)

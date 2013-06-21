@@ -7,6 +7,3 @@ def path_expand(text):
     result = template.substitute(os.environ)
     return result
 
-if __name__ == "__main__":
-
-    a = 1
