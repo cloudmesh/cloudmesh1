@@ -15,11 +15,11 @@ class AccountingBaseClass:
         print "not yet implemented"
         pass
 
-    def add_user(self, firstname, lastname, e-mail, phone):
+    def add_user(self, firstname, lastname, email, phone):
         print "not yet implemented"
         pass
 
-    def modify_user(self, userid, firstname, lastname, e-mail, phone):
+    def modify_user(self, userid, firstname, lastname, email, phone):
         print "not yet implemented"
         pass
 
@@ -37,7 +37,7 @@ class AccountingBaseClass:
 
 class GoldAccounting(AccountingBaseClass):
 
-    def project_usage (self, project)
+    def project_usage (self, project):
         statement = gstatement("-p", project)
         return statement
     # what does summarize do

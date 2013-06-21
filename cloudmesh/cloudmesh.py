@@ -473,16 +473,16 @@ class cloudmesh:
         element is stored.
         """
         if other.cm_type == "image":
-            log.error{"TODO: not implemented yet"}
+            log.error("TODO: not implemented yet")
             return
         elif other.cm_type == "vm":
-            log.error{"TODO: not implemented yet"}
+            log.error("TODO: not implemented yet")
             return
         elif other.cm_type == "flavor":
-            log.error{"TODO: not implemented yet"}
+            log.error("TODO: not implemented yet")
             return
         elif other.cm_type == "cloudmesh":
-            log.error{"TODO: not implemented yet"}
+            log.error("TODO: not implemented yet")
             return
         else:
             log.error("{0} type does not exist".format(cm_type))
@@ -499,16 +499,16 @@ class cloudmesh:
         stored.
         """
         if other.cm_type == "image":
-            log.error{"TODO: not implemented yet"}
+            log.error("TODO: not implemented yet")
             return
         elif other.cm_type == "vm":
-            log.error{"TODO: not implemented yet"}
+            log.error("TODO: not implemented yet")
             return
         elif other.cm_type == "flavor":
-            log.error{"TODO: not implemented yet"}
+            log.error("TODO: not implemented yet")
             return
         elif other.cm_type == "cloudmesh":
-            log.error{"TODO: not implemented yet"}
+            log.error("TODO: not implemented yet")
             return
         else:
             log.error("%s type does not exist".format(cm_type))
