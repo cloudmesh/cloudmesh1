@@ -66,7 +66,7 @@ class eucalyptus:
         self.credential = cred
     """
 
-    def __init__(self, label,project=None)
+    def __init__(self, label, project=None):
         """
         initializes the openstack cloud from a defould novaRC file
         locates at ~/.futuregrid.org/openstack. However if the
