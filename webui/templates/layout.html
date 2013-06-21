@@ -27,10 +27,7 @@
     <![endif]-->
 
     <!-- Placed at the top of the document so the certain onpage load functions work -->
-    <script src="/static/js/jquery.js"></script>
-<!-- Why are we loading jQuery twice?
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
--->
+    <script src="/static/js/jquery.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/jeditable.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/jquery.sparkline.min.js" type="text/javascript" charset="utf-8"></script>
 
@@ -84,6 +81,10 @@
 	      <li class="{{ active.images }}">
 	         <a href="/inventory/images/">Images</a>
 	      </li>
+	      <li class="{{ active.keys }}"> <a href="/keys/">Keys</a></li>
+              <li class="{{ active.table }}"> <a href="/table/">Table</a></li>
+              <li class="{{ active.metric }}"> <a href="/metric/main">Metric</a></li>
+	      <li class="{{ active.profile }}"><a href="/profile">Profile</a></li>
               <li class="nav-header">Pages</li>
 
                 {% for page in pages %}
