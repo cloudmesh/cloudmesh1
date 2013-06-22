@@ -1,6 +1,10 @@
+from os import listdir
+from os.path import isfile, join
+with_cloudmesh = False
 import sys
 sys.path.insert(0, './')
 sys.path.insert(0, '../')
+
 
 
 from ConfigParser import SafeConfigParser
@@ -110,10 +114,10 @@ else:
 inventory.clean()
 
 inventory.create_cluster("brave", "101.102.203.[11-26]", "b{0:03d}", 1, "b001", "b")
-inventory.create_cluster("delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001", "d")
-inventory.create_cluster("gamma", "302.202.204.[1-16]", "g-{0:03d}", 1, "g-001", "g")
-inventory.create_cluster("india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
-inventory.create_cluster("sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
+#inventory.create_cluster("delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001", "d")
+#inventory.create_cluster("gamma", "302.202.204.[1-16]", "g-{0:03d}", 1, "g-001", "g")
+#inventory.create_cluster("india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
+#inventory.create_cluster("sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
 
 centos = FabricImage(
     name = "centos6",
@@ -143,47 +147,47 @@ redhat = FabricImage(
 
 
 
-print inventory.pprint()
+    #print inventory.pprint()
 
 ######################################################################
 # CLOUDMESH
 ######################################################################
 
+if with_cloudmesh:
 
+    clouds = cloudmesh()
+    # refresh, misses the search for display
 
-clouds = cloudmesh()
-# refresh, misses the search for display
-                
-clouds.refresh()
-clouds.refresh_user_id()
-config = cm_config()
-configuration = config.get()
-prefix = config.prefix
-index = config.index
+    clouds.refresh()
+    clouds.refresh_user_id()
+    config = cm_config()
+    configuration = config.get()
+    prefix = config.prefix
+    index = config.index
 
-#clouds.load()
-#clouds.refresh("openstack")
-#clouds.clouds
+    #clouds.load()
+    #clouds.refresh("openstack")
+    #clouds.clouds
 
-# DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
+    # DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
 
-"""
-for name in clouds.active():
+    """
+    for name in clouds.active():
 
-        config.data['cloudmesh']['clouds']
+            config.data['cloudmesh']['clouds']
 
-for name in clouds.active():
-    try:
-        a = config.data['cloudmesh']['clouds'][name]['default']['filter']['state']
-        print "- filter exist for cloud", name
-    except:
-        config.create_filter(name, clouds.states(name))
-        config.write()
-"""
+    for name in clouds.active():
+        try:
+            a = config.data['cloudmesh']['clouds'][name]['default']['filter']['state']
+            print "- filter exist for cloud", name
+        except:
+            config.create_filter(name, clouds.states(name))
+            config.write()
+    """
 
-print config
+    print config
 
-clouds.all_filter()
+    clouds.all_filter()
 
 
 
@@ -202,28 +206,59 @@ provisioner = provisionerImpl()
 app = Flask(__name__)
 app.config.from_object(__name__)
 pages = FlatPages(app)
+pages_files = [ f.replace(".md","") for f in listdir("./pages") if isfile(join("./pages",f)) ]
+
+
+
+
+#pp.pprint (pages.__dict__['app'].__dict__)
 
 ######################################################################
 # ACTIVATE STRUCTURE
 ######################################################################
 
+
+list_of_sidebar_pages = {'home': {"url" : "/", "name" : "Home", "active" : ""},
+                         'inventory': {"url" : "/inventory", "name" : "Inventory", "active" : ""},
+                         'inventory_images': {"url" : "/inventory/images", "name" : "Inventory Images", "active" : ""},
+                         'table': {"url" : "/table", "name" : "VMs", "active" : ""},
+                         'images': {"url" : "/images", "name" : "Images", "active" : ""},
+                         'metric': {"url" : "/metric/main", "name" : "Metric", "active" : ""},
+                         'projects': {"url" : "/projects", "name" : "Projects", "active" : ""},
+                         'flavors': {"url" : "/flavors", "name" : "Flavors", "active" : ""},
+                         'profile': {"url" : "/profile", "name" : "Profile", "active" : ""},
+                         'keys': {"url" : "/keys", "name" : "Keys", "active" : ""},
+                         }
+
+list_of_flatpages = {}
+for page in pages_files:
+    list_of_flatpages[page] = {page: {"url": "/pages/" + page, "name": page.capitalize(), "active": ""}}
+
+    #pp.pprint (list_of_sidebar_pages)
+    #pp.pprint (list_of_flatpages)
+
+
+@app.context_processor
+def inject_sidebar():
+    return dict(sidebar_pages=list_of_sidebar_pages)
+
+@app.context_processor
+def inject_flatpages():
+    return dict(flat_pages=list_of_flatpages)
+
 def make_active(name):
-    active = {'home': "",
-              'inventory': "",
-              'table': "",
-              'contact': "",
-              'flavors': "",
-              'images': "",
-              'metric': "",
-              'profile': "",
-              'vm_info': "",
-              'projects': "",
-              'security': "",
-              'keys': "",
-              'clouds':""}
-    
-    active[name] = 'active'
-    return active
+    for page in list_of_sidebar_pages:
+        list_of_sidebar_pages[page]["active"] = ""
+    for page in list_of_flatpages:
+        list_of_flatpages[page]["active"] = ""
+    try:
+        list_of_sidebar_pages[name]["active"] = 'active'
+    except:
+        pass
+    try:
+        list_of_flatpages[name]["active"] = 'active'
+    except:
+        pass
 
 ######################################################################
 # ROUTE: KEYS
@@ -232,7 +267,7 @@ def make_active(name):
 @app.route('/keys/',methods=['GET','POST'])
 def managekeys():
     
-    active = make_active('keys')
+    make_active('keys')
     keys = cm_keys()
 
     msg = ''
@@ -267,14 +302,13 @@ def managekeys():
 
     return render_template('keys.html',
                            keys=keys,
-                           active=active,
                            show=msg)
                         
 
 @app.route('/keys/delete/<name>/')
 def deletekey(name):
 
-    active = make_active('keys')
+    make_active('keys')
     keys = cm_keys()
 
     try:
@@ -292,10 +326,9 @@ def deletekey(name):
 
 @app.route('/')
 def index():
-    active = make_active('home')
+    make_active('home')
     return render_template('index.html',
                            pages=pages,
-                           active=active,
                            version=version)
 
 
@@ -445,7 +478,6 @@ def list_metric(cloud=None, server=None):
     #r = fg-metric(startdate, enddate, host, _tty_in=True)
     return render_template('metric1.html',
                            startdate=startdate,
-                           active=active,
                            version=version,
                            endate=enddate)
     #return table()
@@ -480,7 +512,7 @@ def load():
 
 @app.route('/table/')
 def table():
-    active = make_active('table')
+    make_active('table')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     filter()
     return render_template('table.html',
@@ -489,7 +521,6 @@ def table():
 			   cloudmesh=clouds,
                            clouds=clouds.clouds,
                            pages=pages,
-                           active=active,
                            config=config,
                            version=version)
 
@@ -505,7 +536,7 @@ def table():
 def vm_login(cloud=None,server=None):
     global clouds
     message = ''
-    active = make_active('vm_login')
+    make_active('vm_login')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     
     server=clouds.clouds[cloud]['servers'][server]
@@ -530,7 +561,7 @@ def vm_login(cloud=None,server=None):
 @app.route('/cm/info/<cloud>/<server>/')
 def vm_info(cloud=None,server=None):
 
-    active = make_active('vm_info')
+    make_active('vm_info')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     clouds.clouds[cloud]['servers'][server]['cm_vm_id'] = server
@@ -542,7 +573,6 @@ def vm_info(cloud=None,server=None):
                            server=clouds.clouds[cloud]['servers'][server],
                            id = server,
                            cloudname = cloud, 
-                           active=active,
                            version=version,
                            table_printer=table_printer )
 
@@ -576,7 +606,7 @@ def inventory_load():
 def display_flavors(cloud=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
-    active = make_active('flavors')
+    make_active('flavors')
 
     if request.method == 'POST':
         for cloud in config.active():
@@ -589,7 +619,6 @@ def display_flavors(cloud=None):
         cloudmesh=clouds,
         clouds=clouds.clouds,
         config=config,
-        active=active,
         version=version)
 
 
@@ -604,7 +633,7 @@ def display_flavors(cloud=None):
 @app.route('/images/', methods=['GET','POST'])
 def display_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")    
-    active = make_active('images')
+    make_active('images')
 
     if request.method == 'POST':
         for cloud in config.active():
@@ -613,7 +642,6 @@ def display_images():
 
     return render_template(
         'images.html',
-        active=active,
         updated=time_now,
         clouds=clouds.clouds,
         cloudmesh=clouds,
@@ -629,7 +657,7 @@ def display_images():
 def profile():
     # bug the global var of the ditc should be used
 
-    active = make_active('profile')
+    make_active('profile')
 
     projects = cm_projects()
     person = configuration['profile']
@@ -661,7 +689,6 @@ def profile():
                            person=person,
                            address=address,
                            clouds=clouds,
-                           active=active,
                            configuration=configuration,
                            version=version,
         )
@@ -674,38 +701,35 @@ def profile():
 
 @app.route('/inventory/')
 def display_inventory():
-    active = make_active('inventory')
+    make_active('inventory')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     return render_template('inventory.html',
                            updated=time_now,
                            pages=pages,
-                           active=active,
                            version=version,
                            inventory=inventory)
 
 @app.route('/inventory/images/')
 def display_inventory_images():
-    active = make_active('images')
+    make_active('images')
     return render_template('images.html',
                            pages=pages,
-                           active=active,
                            version=version,
                            inventory=inventory)
 
 @app.route('/inventory/cluster/<cluster>/')
 def display_cluster(cluster):
-    active = make_active('inventory')
+    make_active('inventory')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     return render_template('inventory_cluster.html',
                            updated=time_now,
                            pages=pages,
-                           active=active,
                            version=version,
                            cluster=inventory.find("cluster", cluster))
 
 @app.route('/inventory/cluster/table/<cluster>/')
 def display_cluster_table(cluster):
-    active = make_active('inventory')
+    make_active('inventory')
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     parameters = {
         "rows" : 10,
@@ -714,7 +738,6 @@ def display_cluster_table(cluster):
     return render_template('inventory_cluster_table.html',
                            updated=time_now,
                            pages=pages,
-                           active=active,
                            version=version,
                            parameters=parameters,
                            cluster=inventory.find("cluster", cluster))
@@ -723,14 +746,13 @@ def display_cluster_table(cluster):
 
 @app.route('/inventory/images/<name>/')
 def display_image(name):
-    active = make_active('')
+    make_active('')
     image= inventory.get ('image', name)[0]
     return render_template('info_image.html',
                            table_printer=table_printer,
                            image=image.data,
                            name=name,
                            pages=pages,
-                           active=active,
                            version=version,
                            inventory=inventory)
 
@@ -740,13 +762,12 @@ def display_image(name):
 
 @app.route('/inventory/info/server/<server>/')
 def server_info(server):
-    active = make_active('')
+    make_active('')
     
     server = inventory.find("server", name)
     return render_template('info_server.html',
                            server=server,
                            pages=pages,
-                           active=active,
                            version=version,
                            inventory=inventory)
 
@@ -756,7 +777,7 @@ def set_service():
     server = request.form['server']
     service = request.form['service']
 
-    active = make_active('inventory')
+    make_active('inventory')
     inventory.set_service('%s-%s' % (server, service), server, service)
     provisioner.provision([server], service)    
     return display_inventory()
@@ -768,7 +789,7 @@ def set_attribute():
     attribute = request.form['attribute']
     value = request.form['value']
 
-    active = make_active('inventory')
+    make_active('inventory')
     s = inventory.get (kind, name)
     s[attribute] = value
     s.save()
@@ -776,7 +797,7 @@ def set_attribute():
 
 @app.route('/inventory/get/<kind>/<name>/<attribute>')
 def get_attribute():
-    active = make_active('inventory')
+    make_active('inventory')
     s = inventory.get (kind, name)
     return s[attribute]
 
@@ -795,12 +816,11 @@ def get_attribute():
 
 @app.route('/<path:path>/')
 def page(path):
-    active = make_active(str(path))
+    make_active(str(path))
     page = pages.get_or_404(path)
     return render_template('page.html',
                            page=page,
                            pages=pages,
-                           active=active,
                            version=version)
 
 ######################################################################
@@ -824,7 +844,6 @@ def metric():
                            clouds=clouds.get(),
                            metrics=clouds.get_metrics(args),
                            pages=pages,
-                           active=make_active('metric'),
                            version=version)
 
 

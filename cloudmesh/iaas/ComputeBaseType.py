@@ -31,11 +31,13 @@ class ComputeBaseType:
         print "Images:", len(self.images)
  
     def connect(self):
-        assert False, "Not implemented"
+        raise NotImplementedError()
+
     def config (self, dict):
-        assert False, "Not implemented"
+        raise NotImplementedError()
+
     def find_user_id(self, force=False):
-        assert False, "Not implemented"
+        raise NotImplementedError()
 
 
     def dump(self, type="server", with_manager=False):
@@ -73,28 +75,23 @@ class ComputeBaseType:
         return d
     
     def _get_image_dict(self):
-        print "Not yet implemented"
-        assert False, "Not implemented"
+        raise NotImplementedError()
 
     def _update_image_dict(self,information):
-        print "Not yet implemented"
-        assert False, "Not implemented"
+        raise NotImplementedError()
 
     def _get_flavors_dict(self):
-        print "Not yet implemented"
-        assert False, "Not implemented"
+        raise NotImplementedError()
 
-    def _update_flavors_dict(self,information):        
-        print "Not yet implemented"
-        assert False, "Not implemented"
+    def _update_flavors_dict(self,information):
+        raise NotImplementedError()
 
     def _get_servers_dict(self):
-        print "Not yet implemented"
-        assert False, "Not implemented"
+        raise NotImplementedError()
+
 
     def _update_servers_dict(self,information):
-        print "Not yet implemented"
-        assert False, "Not implemented"
+        raise NotImplementedError()
 
     def vm_create(self, name=None,
                   flavor_name=None,
@@ -102,19 +99,24 @@ class ComputeBaseType:
                   security_groups = None,
                   key_name = None,
                   meta=None):
-        assert False, "Not implemented"
+        raise NotImplementedError()
     def vm_delete(self, id):
-        assert False, "Not implemented"
+        raise NotImplementedError()
+
     def vms_project(self, refresh=False):
-        assert False, "Not implemented"
+        raise NotImplementedError()
+        
     def rename(self, old, new, id=None):
-        assert False, "Not implemented"
+        raise NotImplementedError()
+
     def usage(self, start, end, format='dict'):
-        assert False, "Not implemented"
-    def limits(self):        
-        assert False, "Not implemented"
+        raise NotImplementedError()
+        
+    def limits(self):
+        raise NotImplementedError()
+
     def status(self, vm_id):
-        assert False, "Not implemented"
+        raise NotImplementedError()
 
     def wait(self, vm_id, vm_status, seconds=2):
         print 'refersh', vm_id

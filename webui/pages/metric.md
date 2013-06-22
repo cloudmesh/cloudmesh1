@@ -1,4 +1,5 @@
 title: Metric
+name: metric
 date: 2013-02-04
 
 FutureGrid Cloud Metrics provides statistics for cloud utilization.

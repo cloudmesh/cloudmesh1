@@ -1,4 +1,5 @@
-title: ICRISP Hadoop Testbed Shopping Cart
+title: Hadoop
+name: hadoop
 date: 2013-02-20
 
 Please chose from the following templates to select which version of Haddop you like to easily install.

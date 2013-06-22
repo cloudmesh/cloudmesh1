@@ -56,12 +56,15 @@
             <p class="navbar-text pull-right">
               Logged in as <a href="#" class="navbar-link">Username</a>
             </p>
-            <ul class="nav">
-              <li class="{{ active.home }}"><a href="/">Home</a></li>
-              <li class="{{ active.about }}"><a href="/about">About</a></li>
-              <li class="{{ active.contact }}"><a href="/contact">Contact</a></li>
-	      <li class="{{ active.profile }}"><a href="/profile">Profile</a></li>
-            </ul>
+
+	    <ul class="nav">
+              <li class=""><a href="/">Home</a></li>
+              <li class=""><a href="/about">About</a></li>
+              <li class=""><a href="/contact">Contact</a></li>
+	      <li class=""><a href="/profile">Profile</a></li>
+	    </ul>
+
+
           </div><!--/.nav-collapse -->
         </div>
       </div>
@@ -72,24 +75,19 @@
         <div class="span3">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
+                 
+              <li class="nav-header">Cloud Mesh </li>
+	      {% for page in sidebar_pages %}
+	         <li class="{{sidebar_pages[page].active}}">
+	           <a href="{{sidebar_pages[page].url}}">
+	              {{sidebar_pages[page].name}}
+	      	   </a>
+	         </li>
+	      {% endfor %}
 
-              <li class="nav-header">Cloud Mesh</li>
-              <li class="{{ active.home }}"><a href="/">Home</a></li>
-              <li class="{{ active.inventory }}">
-	        <a href="/inventory/">Inventory</a>
-	      </li>
-	      <li class="{{ active.images }}">
-	         <a href="/inventory/images/">Images</a>
-	      </li>
-	      <li class="{{ active.keys }}"> <a href="/keys/">Keys</a></li>
-              <li class="{{ active.table }}"> <a href="/table/">Table</a></li>
-              <li class="{{ active.metric }}"> <a href="/metric/main">Metric</a></li>
-	      <li class="{{ active.profile }}"><a href="/profile">Profile</a></li>
-              <li class="nav-header">Pages</li>
-
+	      <li class="nav-header">Pages</li>
                 {% for page in pages %}
-
-                  <li class="{{ active[page.path] }}">
+                  <li class="{{ flat_pages[page.name]['active'] }}">
                     <a href="{{ "/" + page.path }}">{{ page.title }}</a>
                   </li>
 
@@ -98,6 +96,7 @@
                     <li>No Pages.</li>
                 {% endfor %}
 
+		    
               <li class="nav-header">External Links</li>
               <li><a href="https://github.com/futuregrid/flask_cm">Code</a></li>
               <li><a href="http://cloudmesh.blogspot.com">Blog</a></li>
