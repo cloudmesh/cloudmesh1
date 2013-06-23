@@ -2,7 +2,7 @@
 
 
 git filter-branch -f --commit-filter '
-        if [ "$GIT_COMMITTER_NAME" == "fugangwnag" ];
+        if [ "$GIT_COMMITTER_NAME" == "fugangwang" ];
         then
                 GIT_COMMITTER_NAME="Fugang Wang";
                 GIT_AUTHOR_NAME="Fugang Wang";
