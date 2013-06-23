@@ -123,11 +123,11 @@ $(function() {
 
 <tr><td></td><td>Active </td><td>
   {% for cloudname in configuration.clouds.keys() %}
- <input type="checkbox"
+  <input type="checkbox"
         name="field-cloud-activated-{{cloudname}}"
         value="{{ cloudname }}"
         id="{{ cloudname }}"
-        {% if cloudname in clouds.active() %}
+        {% if cloudname in config.active() %}
           checked = "checked"
         {% endif %}
         onclick="document.forms['profile'].submit()"
@@ -137,7 +137,8 @@ $(function() {
 
 
 <tr><td></td><td>Default </td><td>
-  {% for cloudname in clouds.active() %}
+
+  {% for cloudname in config.active() %}
  <input
   type="radio"
   name="field-default-cloud"

@@ -33,6 +33,7 @@ from flask.ext.autoindex import AutoIndex
 from modules.keys import keys_module
 from modules.inventory import inventory_module
 from modules.view_git import git_module
+from modules.profile import profile_module
 #from menu.server_keys import menu_module
 
 import base64,struct,hashlib
@@ -136,6 +137,11 @@ redhat = FabricImage(
 # CLOUDMESH
 ######################################################################
 
+config = cm_config()
+configuration = config.get()
+prefix = config.prefix
+index = config.index
+
 if with_cloudmesh:
 
     clouds = cloudmesh()
@@ -143,10 +149,6 @@ if with_cloudmesh:
 
     clouds.refresh()
     clouds.refresh_user_id()
-    config = cm_config()
-    configuration = config.get()
-    prefix = config.prefix
-    index = config.index
 
     #clouds.load()
     #clouds.refresh("openstack")
@@ -193,6 +195,7 @@ pages_files = [ f.replace(".md","") for f in listdir("./pages") if isfile(join("
 app.register_blueprint(keys_module, url_prefix='', )
 app.register_blueprint(inventory_module, url_prefix='', )
 app.register_blueprint(git_module, url_prefix='', )
+app.register_blueprint(profile_module, url_prefix='', )
 
 #app.register_blueprint(menu_module, url_prefix='/', )
 
@@ -475,7 +478,6 @@ def table():
 
 @app.route('/cm/login/<cloud>/<server>/')
 def vm_login(cloud=None,server=None):
-    global clouds
     message = ''
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     
@@ -564,48 +566,6 @@ def display_images():
         config=config,
         version=version)
 
-
-######################################################################
-# ROUTE: PROFILE
-######################################################################
-
-@app.route('/profile/', methods=['GET','POST'])
-def profile():
-    # bug the global var of the ditc should be used
-
-    projects = cm_projects()
-    person = configuration['profile']
-    keys = cm_keys()
-
-    
-    if request.method == 'POST':
-        projects.default = request.form['field-selected-project']
-        configuration['security']['default']=request.form['field-selected-securityGroup']
-        config.index = request.form['field-index']
-        config.prefix = request.form['field-prefix']
-        config.firstname = request.form['field-firstname']
-        config.lastname = request.form['field-lastname']
-        config.phone = request.form['field-phone']
-        config.email = request.form['field-email']
-        config.default_cloud = request.form['field-default-cloud']
-
-        #print request.form["field-cloud-activated-" + value]
-        config.write()
-
-    
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    
-    address = '<br>'.join(str(x) for x in person['address']) 
-    return render_template('profile.html',
-                           updated=time_now,
-                           keys=keys,
-                           projects=projects,
-                           person=person,
-                           address=address,
-                           clouds=clouds,
-                           configuration=configuration,
-                           version=version,
-        )
 
 
 ######################################################################
@@ -728,7 +688,6 @@ def page(path):
 
 @app.route('/metric/main', methods=['POST', 'GET'])
 def metric():
-    global clouds
     args = {"s_date": request.args.get('s_date', ''),
             "e_date": request.args.get('e_date', ''),
             "user": request.args.get('user', ''),
