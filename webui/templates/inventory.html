@@ -26,7 +26,8 @@
   <tr>
   <td> <input name="checkbox" value="{{ cluster.name }}" type="checkbox"> </td>
   <td>
-    {{ image_button ("right", "195_circle_info", "/inventory/cluster/" + cluster.name + "/") }}
+    {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
+    {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
   </td>
   <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} Cluster</a></td>
   <td> {{ cluster.status }} </td>
