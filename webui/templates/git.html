@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}g
+{% block content %}
+
+  <h2> Authors </h2>
+  <table>
+  <tr>
+  <th> Name </th>
+  <th> Commits </th>
+  </tr>
+  {{authors }}
+  {% for key in authors %}
+    <tr>
+      <td>{{ authors[key].name }}</td>
+      <td>{{ authors[key].commits }}</td>
+  </tr>
+
+  {% endfor %}
+  
+</table>
+
+{% endblock %}

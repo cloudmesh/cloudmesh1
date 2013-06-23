@@ -1,0 +1,11 @@
+git filter-branch --commit-filter '
+        if [ "$GIT_COMMITTER_NAME" = "Your Name Herecd" ];
+        then
+                GIT_COMMITTER_NAME="Gregor von Laszewski";
+                GIT_AUTHOR_NAME="Gregor von Laszewski";
+                GIT_COMMITTER_EMAIL="laszewski@gmail.com";
+                GIT_AUTHOR_EMAIL="laszewski@gmail.com";
+                git commit-tree "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
