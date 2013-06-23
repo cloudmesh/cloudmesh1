@@ -14,7 +14,7 @@ server_config = SafeConfigParser({'name': 'flasktest'}) #Default database name
 server_config.read("server.config")
 
 from cloudmesh.inventory.resources import FabricImage
-
+from cloudmesh.util import table_printer
 
 import json
 import pprint
@@ -30,8 +30,10 @@ import time
 from flask import Flask, render_template, request, redirect
 from flask_flatpages import FlatPages
 from flask.ext.autoindex import AutoIndex
-#from modules.server_keys import keys_api
-#from menu.server_keys import menu_api
+from modules.keys import keys_module
+from modules.inventory import inventory_module
+from modules.view_git import git_module
+#from menu.server_keys import menu_module
 
 import base64,struct,hashlib
 
@@ -45,29 +47,6 @@ except:
     #TODO: THERE SHOULD BE A VARIABLE SET HERE SO THAT THE ARROW START UP BUTTON 
     #      CAN RETURN MEANINGFULL MESSAGE IF NOT SUPPORTED
 
-def table_printer(the_dict, header_info=None):
-    # header_info ["attribute", "value"]
-    if header_info != None or (header_info == "") :
-        result = '<tr><th>{0}</th><th>{1}</th></tr>'.format(header_info[0], header_info[1])
-    else:
-        result = ''
-    if isinstance(the_dict, dict):
-        for name,value in the_dict.iteritems() :
-            result = result + \
-                '<tr><td>{0}</td><td>{1}</td></tr>'.format(name.title(),
-                                                           str(table_printer(value)))
-        result = '<table>' + result + '</table>'
-        return result
-    elif type(the_dict) is list: 
-        for element in the_dict:
-            for name,value in element.iteritems() :
-                result =result +\
-                    '<tr><td>{0}</td><td>{1}</td></tr>'.format(name.title(),
-                                                               str(table_printer(value)))
-        result = '<table>' + result + '</table>'
-        return result 
-    else:
-        return the_dict
 
 
 ######################################################################
@@ -211,8 +190,11 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 pages = FlatPages(app)
 pages_files = [ f.replace(".md","") for f in listdir("./pages") if isfile(join("./pages",f)) ]
-#app.register_blueprint(keys_api, url_prefix='/keys', )
-#app.register_blueprint(menu_api, url_prefix='/', )
+app.register_blueprint(keys_module, url_prefix='', )
+app.register_blueprint(inventory_module, url_prefix='', )
+app.register_blueprint(git_module, url_prefix='', )
+
+#app.register_blueprint(menu_module, url_prefix='/', )
 
 if debug:
     AutoIndex(app, browse_root=os.path.curdir)
@@ -248,63 +230,36 @@ def inject_sidebar():
     return dict(sidebar_pages=list_of_sidebar_pages)
 
 @app.context_processor
+def inject_pages():
+    return dict(pages=pages)
+
+@app.context_processor
 def inject_flatpages():
     return dict(flat_pages=list_of_flatpages)
 
+#
 
 ######################################################################
-# ROUTE: KEYS
+# ROUTE: sitemap
 ######################################################################
 
-@app.route('/keys/',methods=['GET','POST'])
-def managekeys():
-    keys = cm_keys()
-
-    msg = ''
-    error = False
-    """
-    keys:
-      default: name 1 
-      keylist:
-         name 1: $HOME/.ssh/id_rsa.pub # this is automatically replaced with the key
-         name 2: $HOME/.ssh/id_rsa2.pub # this is automatically replaced with the key
-         bla: key ssh-rsa AAAAB3.....zzzz keyname
-    """
-    if request.method == 'POST' and request.form.has_key('keyname'):
-        keyname = request.form['keyname']
-        fileorstring = request.form['keyorpath']
-
-        if keys.defined(keyname):
-            
-            msg = "Key name already exists. Please delete the key '%s' before proceeding." % keyname           
-        else:
-            try:
-                keys.set(keyname, fileorstring, expand=True)
-                msg = 'Key %s added successfully' % keyname
-                keys.write()
-            except Exception, e:
-                keys.delete(keyname)
-                msg = e
-            
-    elif request.method == 'POST' :
-            keys['default'] = request.form['selectkeys']
-            keys.write()
-
-    return render_template('keys.html',
-                           keys=keys,
-                           show=msg)
-                        
-
-@app.route('/keys/delete/<name>/')
-def deletekey(name):
-    keys = cm_keys()
-
-    try:
-        keys.delete(name)
-        keys.write()
-    except:
-        print "Error: deleting the key %s" % name
-    return redirect("/keys/")
+"""
+@app.route("/site-map/")
+def site_map():
+    links = []
+    for rule in app.url_map.iter_rules():
+        print"PPP>",  rule, rule.methods, rule.defaults, rule.endpoint, rule.arguments
+        # Filter out rules we can't navigate to in a browser
+        # and rules that require parameters
+        try:
+            if "GET" in rule.methods and len(rule.defaults) >= len(rule.arguments):
+                url = url_for(rule.endpoint)
+                links.append((url, rule.endpoint))
+                print "Rule added", url, links[url]
+        except:
+            print "Rule not activated"
+    # links is now a list of url, endpoint tuples
+"""
 
 
 
@@ -317,7 +272,6 @@ def deletekey(name):
 @app.route('/')
 def index():
     return render_template('index.html',
-                           pages=pages,
                            version=version)
 
 
@@ -508,7 +462,6 @@ def table():
                            keys="",  # ",".join(clouds.get_keys()),
 			   cloudmesh=clouds,
                            clouds=clouds.clouds,
-                           pages=pages,
                            config=config,
                            version=version)
 
@@ -561,27 +514,6 @@ def vm_info(cloud=None,server=None):
                            cloudname = cloud, 
                            version=version,
                            table_printer=table_printer )
-
-######################################################################
-# ROUTE: SAVE
-######################################################################
-
-
-@app.route('/inventory/save/')
-def inventory_save():
-    print "Saving the inventory"
-    return display_inventory()
-
-######################################################################
-# ROUTE: LOAD
-######################################################################
-
-
-@app.route('/inventory/load/')
-def inventory_load():
-    print "Loading the inventory"
-    return display_inventory()
-
 
 ######################################################################
 # ROUTE: FLAVOR
@@ -680,20 +612,18 @@ def profile():
 # ROUTE: INVENTORY TABLE
 ######################################################################
 
-
 @app.route('/inventory/')
 def display_inventory():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     return render_template('inventory.html',
                            updated=time_now,
-                           pages=pages,
                            version=version,
                            inventory=inventory)
+
 
 @app.route('/inventory/images/')
 def display_inventory_images():
     return render_template('images.html',
-                           pages=pages,
                            version=version,
                            inventory=inventory)
 
@@ -702,7 +632,6 @@ def display_cluster(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     return render_template('inventory_cluster.html',
                            updated=time_now,
-                           pages=pages,
                            version=version,
                            cluster=inventory.find("cluster", cluster))
 
@@ -715,7 +644,6 @@ def display_cluster_table(cluster):
     }
     return render_template('inventory_cluster_table.html',
                            updated=time_now,
-                           pages=pages,
                            version=version,
                            parameters=parameters,
                            cluster=inventory.find("cluster", cluster))
@@ -729,7 +657,6 @@ def display_image(name):
                            table_printer=table_printer,
                            image=image.data,
                            name=name,
-                           pages=pages,
                            version=version,
                            inventory=inventory)
 
@@ -743,7 +670,6 @@ def server_info(server):
     server = inventory.find("server", name)
     return render_template('info_server.html',
                            server=server,
-                           pages=pages,
                            version=version,
                            inventory=inventory)
 
@@ -792,7 +718,6 @@ def page(path):
     page = pages.get_or_404(path)
     return render_template('page.html',
                            page=page,
-                           pages=pages,
                            version=version)
 
 ######################################################################
@@ -815,7 +740,6 @@ def metric():
     return render_template('metric.html',
                            clouds=clouds.get(),
                            metrics=clouds.get_metrics(args),
-                           pages=pages,
                            version=version)
 
 

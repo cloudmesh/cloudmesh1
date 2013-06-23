@@ -12,6 +12,7 @@ fabric
 progress
 sh
 console
+envoy
 python-ldap
 docopt
 python-hostlist
