@@ -1,10 +1,7 @@
 # fugangwang <kevinwangfg@gmail.com>
 # git log --all --format='%aN <%cE>' |sort -u
 
-
-
-
-git filter-branch --commit-filter '
+git filter-branch --force --commit-filter '
         if [ "$GIT_COMMITTER_NAME" = "fugangwang" ];
         then
                 GIT_COMMITTER_NAME="Fugang Wang";
@@ -14,4 +11,4 @@ git filter-branch --commit-filter '
                 git commit-tree "$@";
         else
                 git commit-tree "$@";
-        fi' HEAD
+        fi' -- --all
