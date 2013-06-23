@@ -19,6 +19,8 @@ pyaml
 Flask>=0.7
 Flask-FlatPages
 Flask-WTF
+Flask-AutoIndex
+Flask-Silk
 pymongo
 mongoengine
 python-novaclient

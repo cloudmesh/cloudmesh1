@@ -2,27 +2,26 @@
 
 {% block content %}
 
-    <h2>List of pages</h2>
-    <ul>
-      <li><a href="/inventory/">Inventory</a></li>
-      <li><a href="/">Home</a></li>
-      <li><a href="/about">About</a></li>
-      <li><a href="/contact">Contact</a></li>
-      <li><a href="/profile">Profile</a></li>
+<h2>List of dynamic pages</h2>
 
-      <li><a href="/keys/">Keys</a></li>
-      <li><a href="/images">Images</a></li>
-      <li><a href="/flavors">Flavors</a></li>
-      <li><a href="/table/">Table</a></li>
+<ul>
+{% for page in sidebar_pages %}
+  <li>
+    <a href="{{sidebar_pages[page].url}}">{{sidebar_pages[page].name}}</a>
+  </li>
+{% endfor %}
+</ul>
+      
+<h2>List of static pages</h2>
 
-
-    {% for page in pages %}
-        <li>
-            <a href="{{ url_for("page", path=page.path) }}">{{ page.title }}</a>
-        </li>
-    {% else %}
-        <li>No stuff.</li>
-    {% endfor %}
-    </ul>
+<ul>
+  {% for page in pages %}
+    <li>
+      <a href="{{ url_for("page", path=page.path) }}">{{ page.title }}</a>
+    </li>
+  {% else %}
+    <li>No static pages found.</li>
+  {% endfor %}
+</ul>
 
 {% endblock content %}

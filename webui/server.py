@@ -1,3 +1,5 @@
+debug = False
+
 from os import listdir
 from os.path import isfile, join
 with_cloudmesh = False
@@ -29,6 +31,8 @@ import os
 import time
 from flask import Flask, render_template, request,redirect
 from flask_flatpages import FlatPages
+from flask.ext.autoindex import AutoIndex
+
 import base64,struct,hashlib
 
 from datetime import datetime
@@ -208,6 +212,8 @@ app.config.from_object(__name__)
 pages = FlatPages(app)
 pages_files = [ f.replace(".md","") for f in listdir("./pages") if isfile(join("./pages",f)) ]
 
+if debug:
+    AutoIndex(app, browse_root=os.path.curdir)
 
 
 
