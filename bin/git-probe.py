@@ -67,7 +67,7 @@ def git_stat(email):
            "fileschanged": sum[0],
            "inserted": sum[1],
            "deleted": sum[2],
-           "lineschanges": sum[1] + sum[2],
+           "lineschanged": sum[1] + sum[2],
            }
 
 print git_version()
@@ -86,6 +86,35 @@ print git_stat("laszewski@gmail.com")
 
 emails = set(git_emails("dict").values())
 
+stats ={}
+sum = {"fileschanged":0,"inserted":0,"deleted":0,"lineschanged":0}
 for email in emails:
-    print email
-    print git_stat(email)
+    print "Calculating stats for",  email
+    stats[email] = git_stat(email)
+    
+    sum["fileschanged"] += stats[email]["fileschanged"]
+    sum["inserted"] += stats[email]["inserted"]
+    sum["deleted"] += stats[email]["deleted"]
+    sum["lineschanged"] += stats[email]["lineschanged"]
+
+    
+
+print
+print stats
+print
+print sum
+
+for email in emails:
+    stats[email] = {'percentage': [
+        stats[email]["fileschanged"] / float(sum["fileschanged"]),
+        stats[email]["inserted"] / float(sum["inserted"]),
+        stats[email]["deleted"] / float(sum["deleted"]),
+        stats[email]["lineschanged"] / float(sum["lineschanged"] ),
+        ]
+    }
+
+pprint(stats)
+
+for email in emails:
+    p = stats[email]["percentage"]
+    print "{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%".format(email, p[0], p[1], p[2], p[3])
