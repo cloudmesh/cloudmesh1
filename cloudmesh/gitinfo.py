@@ -99,7 +99,7 @@ class GitInfo:
 
 gitinfo = GitInfo()
 
-print gitinfo.version()
+#print gitinfo.version()
     
 print gitinfo.authors()
 
