@@ -27,3 +27,4 @@ mongoengine
 python-novaclient
 apache-libcloud
 nose
+autopep8

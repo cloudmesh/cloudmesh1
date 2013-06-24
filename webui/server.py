@@ -190,6 +190,7 @@ provisioner = provisionerImpl()
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+app.debug = True
 pages = FlatPages(app)
 pages_files = [ f.replace(".md","") for f in listdir("./pages") if isfile(join("./pages",f)) ]
 app.register_blueprint(keys_module, url_prefix='', )
