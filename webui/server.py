@@ -72,11 +72,9 @@ DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
 
-"""
+
 import pkg_resources
-version = pkg_resources.get_distribution("flask_cm").version
-"""
-version = "0.1"
+version = pkg_resources.get_distribution("cloudmesh").version
 
 ######################################################################
 # INVENTORY
@@ -234,6 +232,10 @@ def inject_sidebar():
     return dict(sidebar_pages=list_of_sidebar_pages)
 
 @app.context_processor
+def inject_version():
+    return dict(version=version)
+
+@app.context_processor
 def inject_pages():
     return dict(pages=pages)
 
@@ -275,8 +277,7 @@ def site_map():
 
 @app.route('/')
 def index():
-    return render_template('index.html',
-                           version=version)
+    return render_template('index.html')
 
 
 
@@ -425,7 +426,6 @@ def list_metric(cloud=None, server=None):
     #r = fg-metric(startdate, enddate, host, _tty_in=True)
     return render_template('metric1.html',
                            startdate=startdate,
-                           version=version,
                            endate=enddate)
     #return table()
 '''
@@ -466,10 +466,7 @@ def table():
                            keys="",  # ",".join(clouds.get_keys()),
 			   cloudmesh=clouds,
                            clouds=clouds.clouds,
-                           config=config,
-                           version=version)
-
-
+                           config=config)
 
 
 ######################################################################
@@ -515,7 +512,6 @@ def vm_info(cloud=None,server=None):
                            server=clouds.clouds[cloud]['servers'][server],
                            id = server,
                            cloudname = cloud, 
-                           version=version,
                            table_printer=table_printer )
 
 ######################################################################
@@ -538,8 +534,7 @@ def display_flavors(cloud=None):
         updated=time_now,
         cloudmesh=clouds,
         clouds=clouds.clouds,
-        config=config,
-        version=version)
+        config=config)
 
 
 
@@ -564,8 +559,7 @@ def display_images():
         updated=time_now,
         clouds=clouds.clouds,
         cloudmesh=clouds,
-        config=config,
-        version=version)
+        config=config)
 
 
 
@@ -578,14 +572,12 @@ def display_inventory():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     return render_template('inventory.html',
                            updated=time_now,
-                           version=version,
                            inventory=inventory)
 
 
 @app.route('/inventory/images/')
 def display_inventory_images():
     return render_template('images.html',
-                           version=version,
                            inventory=inventory)
 
 @app.route('/inventory/cluster/<cluster>/')
@@ -593,7 +585,6 @@ def display_cluster(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     return render_template('inventory_cluster.html',
                            updated=time_now,
-                           version=version,
                            cluster=inventory.find("cluster", cluster))
 
 @app.route('/inventory/cluster/table/<cluster>/')
@@ -605,7 +596,6 @@ def display_cluster_table(cluster):
     }
     return render_template('inventory_cluster_table.html',
                            updated=time_now,
-                           version=version,
                            parameters=parameters,
                            cluster=inventory.find("cluster", cluster))
 
@@ -618,7 +608,6 @@ def display_image(name):
                            table_printer=table_printer,
                            image=image.data,
                            name=name,
-                           version=version,
                            inventory=inventory)
 
 ######################################################################
@@ -631,7 +620,6 @@ def server_info(server):
     server = inventory.find("server", name)
     return render_template('info_server.html',
                            server=server,
-                           version=version,
                            inventory=inventory)
 
 
@@ -678,8 +666,8 @@ def get_attribute():
 def page(path):
     page = pages.get_or_404(path)
     return render_template('page.html',
-                           page=page,
-                           version=version)
+                           page=page)
+
 
 ######################################################################
 # ROUTE: METRIC
@@ -699,8 +687,7 @@ def metric():
 
     return render_template('metric.html',
                            clouds=clouds.get(),
-                           metrics=clouds.get_metrics(args),
-                           version=version)
+                           metrics=clouds.get_metrics(args))
 
 
 
