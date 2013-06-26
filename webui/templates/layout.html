@@ -79,19 +79,21 @@
                  
               <li class="nav-header">Cloud Mesh </li>
 
-	      {% for page in sidebar_pages %}
-	      <li {% if request.path == sidebar_pages[page].url %}class="active"{% endif %}>
-	           <a href="{{sidebar_pages[page].url}}">
-	              {{sidebar_pages[page].name}}
+	      {% for page in g.sidebar_pages %}
+	      <li {% if request.path == page.url %}class="active"{% endif %}>
+	           <a href="{{ page.url }}">
+	              {{ page.name }}
 	      	   </a>
 	      </li>
 
 	      {% endfor %}
 
 	      <li class="nav-header">Pages</li>
-	      {% for page in pages %}
-	          <li {% if  flat_pages[page.name].url == "/pages" + request.path %}class="active"{% endif %}>
-	            <a href="{{ "/" + page.path }}">{{ page.title }}</a>
+	      {% for page in g.sidebar_flatpages %}
+	          <li {% if request.path == page.url %}class="active"{% endif %}>
+	            <a href="{{ page.url }}">
+	              {{ page.name }}
+	            </a>
 	      </li>
 	      {% else %}
 	         <li>No Pages.</li>

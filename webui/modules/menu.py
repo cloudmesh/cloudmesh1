@@ -1,52 +1,46 @@
 from flask import Blueprint
+from flask import g
+import flask
+from os import listdir
+from os.path import isfile, join
+from cloudmesh.util.logger import LOGGER
 
-menu_api = Blueprint('menu_api', __name__)
+log = LOGGER("module/menu")
+
+menu_module = Blueprint('menu_module', __name__)
+
+app_sidebar = [
+             ["Home", "/"],
+             ["Inventory", "/inventory/"],
+             ["Profile", "/profile/"],
+             ["- Keys", "/keys/"],
+             ["Inventory Images", "/inventory/images/"],
+             ["VMs", "/table/"],
+             ["Images", "/images/"],
+             ["Metric", "/metric/main/"],
+             ["Projects", "/projects/"],
+             ["Flavors", "/flavors/"],
+            ]
+
+sidebar_pages = []
+for page in app_sidebar:
+    sidebar_pages.append({'name' : page[0], 'url' : page[1]})
+
+# registering sidebar into the global g
+flask.Flask.app_ctx_globals_class.sidebar_pages = sidebar_pages
+
+log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.sidebar_pages)))
+
 
 ######################################################################
 # ACTIVATE STRUCTURE
 ######################################################################
 
+#@menu_module.context_processor
+#def inject_sidebar():
 
-list_of_sidebar_pages = {
-    'home': {"url" : "/", "name" : "Home", "active" : ""},
-    'inventory': {"url" : "/inventory", "name" : "Inventory", "active" : ""},
-    'inventory_images': {"url" : "/inventory/images", "name" : "Inventory Images", "active" : ""},
-    'table': {"url" : "/table", "name" : "VMs", "active" : ""},
-    'images': {"url" : "/images", "name" : "Images", "active" : ""},
-    'metric': {"url" : "/metric/main", "name" : "Metric", "active" : ""},
-    'projects': {"url" : "/projects", "name" : "Projects", "active" : ""},
-    'flavors': {"url" : "/flavors", "name" : "Flavors", "active" : ""},
-    'profile': {"url" : "/profile", "name" : "Profile", "active" : ""},
-    'keys': {"url" : "/keys", "name" : "Keys", "active" : ""},
-    }
+#    print "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
 
-list_of_flatpages = {}
-for page in pages_files:
-    list_of_flatpages[page] = {page: {"url": "/pages/" + page, "name": page.capitalize(), "active": ""}}
+    #    return dict(sidebar_pages=g.sidebar_pages)
 
-    #pp.pprint (list_of_sidebar_pages)
-    #pp.pprint (list_of_flatpages)
-
-
-@menu_app.context_processor
-def inject_sidebar():
-    return dict(sidebar_pages=list_of_sidebar_pages)
-
-@menu_app.context_processor
-def inject_flatpages():
-    return dict(flat_pages=list_of_flatpages)
-
-def make_active(name):
-    for page in list_of_sidebar_pages:
-        list_of_sidebar_pages[page]["active"] = ""
-    for page in list_of_flatpages:
-        list_of_flatpages[page]["active"] = ""
-    try:
-        list_of_sidebar_pages[name]["active"] = 'active'
-    except:
-        pass
-    try:
-        list_of_flatpages[name]["active"] = 'active'
-    except:
-        pass
 

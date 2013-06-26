@@ -1,6 +1,6 @@
+from flask_flatpages import FlatPages
 debug = False
 
-from os import listdir
 from os.path import isfile, join
 with_cloudmesh = False
 import sys
@@ -29,12 +29,13 @@ from cloudmesh.cloudmesh import cloudmesh
 import os
 import time
 from flask import Flask, render_template, request, redirect
-from flask_flatpages import FlatPages
 from flask.ext.autoindex import AutoIndex
+from modules.flatpages import flatpages_module
 from modules.keys import keys_module
 from modules.inventory import inventory_module
 from modules.view_git import git_module
 from modules.profile import profile_module
+from modules.menu import menu_module
 # from menu.server_keys import menu_module
 
 import base64
@@ -74,7 +75,6 @@ DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
 
-
 import pkg_resources
 version = pkg_resources.get_distribution("cloudmesh").version
 
@@ -99,14 +99,12 @@ inventory.clean()
 
 inventory.create_cluster(
     "brave", "101.102.203.[11-26]", "b{0:03d}", 1, "b001", "b")
-inventory.create_cluster(
-    "delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001", "d")
+#inventory.create_cluster(
+#    "delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001", "d")
 # inventory.create_cluster("gamma", "302.202.204.[1-16]", "g-{0:03d}", 1,
 # "g-001", "g")
-inventory.create_cluster(
-    "india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
-inventory.create_cluster(
-    "sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
+# inventory.create_cluster("india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
+# inventory.create_cluster("sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
 
 centos = FabricImage(
     name="centos6",
@@ -193,12 +191,19 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.debug = True
 pages = FlatPages(app)
-pages_files = [f.replace(".md", "")
-               for f in listdir("./pages") if isfile(join("./pages", f))]
 app.register_blueprint(keys_module, url_prefix='', )
 app.register_blueprint(inventory_module, url_prefix='', )
 app.register_blueprint(git_module, url_prefix='', )
 app.register_blueprint(profile_module, url_prefix='', )
+app.register_blueprint(menu_module, url_prefix='', )
+app.register_blueprint(flatpages_module, url_prefix='', )
+
+
+
+#@app.context_processor
+#def inject_pages():
+#    return dict(pages=pages)
+
 
 # app.register_blueprint(menu_module, url_prefix='/', )
 
@@ -206,72 +211,13 @@ if debug:
     AutoIndex(app, browse_root=os.path.curdir)
 
 # ============================================================
-# ACTIVATE STRUCTURE
+# VESRION
 # ============================================================
-
-
-list_of_sidebar_pages = {
-    'home': {
-        "url": "/",
-        "name": "Home"},
-    'inventory': {
-        "url": "/inventory/",
-        "name": "Inventory"},
-    'inventory_images': {
-        "url": "/inventory/images/",
-        "name": "Inventory Images"},
-    'table': {
-        "url": "/table/",
-        "name": "VMs"},
-    'images': {
-        "url": "/images/",
-        "name": "Images"},
-    'metric': {
-        "url": "/metric/main/",
-        "name": "Metric"},
-    'projects': {
-        "url": "/projects/",
-        "name": "Projects"},
-    'flavors': {
-        "url": "/flavors/",
-        "name": "Flavors"},
-    'profile': {
-        "url": "/profile/",
-        "name": "Profile"},
-    'keys': {
-        "url": "/keys/",
-        "name": "Keys"},
-}
-
-list_of_flatpages = {}
-for page in pages_files:
-    list_of_flatpages[page] = {
-        "url": "/pages/" + page + "/", "name": page.capitalize(), "active": ""}
-
-    # pp.pprint (list_of_sidebar_pages)
-    # pp.pprint (list_of_flatpages)
-
-
-@app.context_processor
-def inject_sidebar():
-    return dict(sidebar_pages=list_of_sidebar_pages)
-
 
 @app.context_processor
 def inject_version():
     return dict(version=version)
 
-
-@app.context_processor
-def inject_pages():
-    return dict(pages=pages)
-
-
-@app.context_processor
-def inject_flatpages():
-    return dict(flat_pages=list_of_flatpages)
-
-#
 
 # ============================================================
 # ROUTE: sitemap
@@ -671,16 +617,6 @@ def get_attribute():
     return s[attribute]
 
 
-# ============================================================
-# ROUTE: PAGES
-# ============================================================
-
-
-@app.route('/<path:path>/')
-def page(path):
-    page = pages.get_or_404(path)
-    return render_template('page.html', page=page)
-
 
 # ============================================================
 # ROUTE: METRIC
@@ -702,6 +638,15 @@ def metric():
                            clouds=clouds.get(),
                            metrics=clouds.get_metrics(args))
 
+# ============================================================
+# ROUTE: PAGES
+# ============================================================
+
+
+@app.route('/<path:path>/')
+def page(path):
+    page = pages.get_or_404(path)
+    return render_template('page.html', page=page)
 
 if __name__ == "__main__":
     app.run()
