@@ -16,18 +16,14 @@ pp = pprint.PrettyPrinter(indent=4)
 
 
 from util import HEADING
+from util.logger import LOGGER
 
 ######################################################################
 # SETTING UP A LOGGER
 ######################################################################
 
-import logging
-log = logging.getLogger('cloudmesh')
-log.setLevel(logging.DEBUG)
-formatter = logging.Formatter('CM cloudmesh: [%(levelname)s] %(message)s')
-handler = logging.StreamHandler()
-handler.setFormatter(formatter)
-log.addHandler(handler)
+
+log = LOGGER('cloudmesh')
 
 
 # import shelve

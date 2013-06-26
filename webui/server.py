@@ -14,7 +14,7 @@ server_config = SafeConfigParser({'name': 'flasktest'}) #Default database name
 server_config.read("server.config")
 
 from cloudmesh.inventory.resources import FabricImage
-from cloudmesh.util import table_printer
+from cloudmesh.util.util import table_printer
 
 import json
 import pprint

@@ -1,6 +1,6 @@
 # pip install python-hostlist
 
-import logging
+
 from hostlist import expand_hostlist
 import time
 import sys
@@ -8,17 +8,13 @@ import random
 from mongoengine import *                           
 from datetime import datetime
 from pprint import pprint
+from cloudmesh.util.logger import LOGGER
 
 ######################################################################
 # SETTING UP A LOGGER
 ######################################################################
 
-log = logging.getLogger('inventory')
-log.setLevel(logging.DEBUG)
-formatter = logging.Formatter('CM Inventory: [%(levelname)s] %(message)s')
-handler = logging.StreamHandler()
-handler.setFormatter(formatter)
-log.addHandler(handler)
+log = LOGGER('inventory')
 
 ######################################################################
 

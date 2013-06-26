@@ -1,17 +1,13 @@
 from abc import ABCMeta, abstractmethod  
 from multiprocessing import Pool
 import logging
+from cloudmesh.util.logger import LOGGER
 
 ######################################################################
 # SETTING UP A LOGGER
 ######################################################################
 
-log = logging.getLogger('provision')
-log.setLevel(logging.DEBUG)
-formatter = logging.Formatter('CM Provision: [%(levelname)s] %(message)s')
-handler = logging.StreamHandler()
-handler.setFormatter(formatter)
-log.addHandler(handler)
+log = LOGGER('provision')
 
 class BaremetalProvisinerABC:
     __metaclass__ = ABCMeta
