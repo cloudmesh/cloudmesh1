@@ -361,9 +361,6 @@ class Inventory:
             error('wrong kind ' + kind)
         return
     
-
-    
-    
     def disconnect(self):
         log.warning("disconnect not yet implemented")
         

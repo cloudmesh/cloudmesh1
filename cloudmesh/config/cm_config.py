@@ -8,7 +8,7 @@ import collections
 
 from string import Template
 
-from cloudmesh.util import path_expand
+from cloudmesh.util.util import path_expand
 
 
 class cm_config(object):

@@ -13,15 +13,12 @@ import os
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
-
-
-from util import HEADING
+from util.util import HEADING
 from util.logger import LOGGER
 
 ######################################################################
 # SETTING UP A LOGGER
 ######################################################################
-
 
 log = LOGGER('cloudmesh')
 

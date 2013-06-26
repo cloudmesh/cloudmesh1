@@ -17,8 +17,6 @@
     <th> Name </th>
     <th> Status </th>
     <th> Services </th>
-    <th> IP </th>
-    <th> Load </th>
   </tr>
   
   {% for cluster in inventory.clusters()|sort(attribute='name') %}
@@ -32,8 +30,6 @@
   <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} Cluster</a></td>
   <td> {{ cluster.status }} </td>
   <td> {{ cluster.service_choices|join(", ") }}</td>
-  <td>???</td>
-  <td>???</td>
   </tr>
 
   {% endfor %}
