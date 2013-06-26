@@ -96,10 +96,10 @@ else:
 inventory.clean()
 
 inventory.create_cluster("brave", "101.102.203.[11-26]", "b{0:03d}", 1, "b001", "b")
-#inventory.create_cluster("delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001", "d")
+inventory.create_cluster("delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001", "d")
 #inventory.create_cluster("gamma", "302.202.204.[1-16]", "g-{0:03d}", 1, "g-001", "g")
-#inventory.create_cluster("india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
-#inventory.create_cluster("sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
+inventory.create_cluster("india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
+inventory.create_cluster("sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
 
 centos = FabricImage(
     name = "centos6",
@@ -207,16 +207,16 @@ if debug:
 
 
 list_of_sidebar_pages = {
-    'home': {"url" : "/", "name" : "Home", "active" : ""},
-    'inventory': {"url" : "/inventory/", "name" : "Inventory", "active" : ""},
-    'inventory_images': {"url" : "/inventory/images/", "name" : "Inventory Images", "active" : ""},
-    'table': {"url" : "/table/", "name" : "VMs", "active" : ""},
-    'images': {"url" : "/images/", "name" : "Images", "active" : ""},
-    'metric': {"url" : "/metric/main/", "name" : "Metric", "active" : ""},
-    'projects': {"url" : "/projects/", "name" : "Projects", "active" : ""},
-    'flavors': {"url" : "/flavors/", "name" : "Flavors", "active" : ""},
-    'profile': {"url" : "/profile/", "name" : "Profile", "active" : ""},
-    'keys': {"url" : "/keys/", "name" : "Keys", "active" : ""},
+    'home': {"url" : "/", "name" : "Home"},
+    'inventory': {"url" : "/inventory/", "name" : "Inventory"},
+    'inventory_images': {"url" : "/inventory/images/", "name" : "Inventory Images"},
+    'table': {"url" : "/table/", "name" : "VMs"},
+    'images': {"url" : "/images/", "name" : "Images"},
+    'metric': {"url" : "/metric/main/", "name" : "Metric"},
+    'projects': {"url" : "/projects/", "name" : "Projects"},
+    'flavors': {"url" : "/flavors/", "name" : "Flavors"},
+    'profile': {"url" : "/profile/", "name" : "Profile"},
+    'keys': {"url" : "/keys/", "name" : "Keys"},
     }
 
 list_of_flatpages = {}
