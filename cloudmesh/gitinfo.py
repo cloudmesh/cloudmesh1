@@ -51,7 +51,7 @@ class GitInfo:
 
     def stat(self,email):
         sum= [0,0,0]
-        for line in git.log("--stat", '--author={0}'.format(email), _tty_in=True, _tty_out=False, _iter=True):
+        for line in git.log("--all", "--stat", '--author={0}'.format(email), _tty_in=True, _tty_out=False, _iter=True):
             line = line[:-1]
 
             if " files changed" in line:

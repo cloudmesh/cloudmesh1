@@ -1,4 +1,4 @@
-git log --stat --author $(git config --get user.email)  | awk -F',' '/files? changed/ {
+git log --all --stat --author $(git config --get user.email)  | awk -F',' '/files? changed/ {
     files += $1
     insertions += $2
     deletions += $3
