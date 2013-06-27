@@ -38,7 +38,7 @@ cloudmesh:
             cm_type: openstack
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
-                OS_CACERT: /Users/neu/.futuregrid/sierra-cacert.pem
+                OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
                 OS_PASSWORD: abcdefghCHANGEME
                 OS_TENANT_NAME: fg82
                 OS_USERNAME: portalname
