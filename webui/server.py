@@ -1,6 +1,7 @@
 from flask_flatpages import FlatPages
 debug = False
 
+
 from os.path import isfile, join
 with_cloudmesh = False
 import sys
@@ -21,10 +22,11 @@ import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
-from cloudmesh.config.cm_keys import cm_keys
-from cloudmesh.config.cm_projects import cm_projects
-from cloudmesh.config.cm_config import cm_config
-from cloudmesh.cloudmesh import cloudmesh
+if with_cloudmesh:
+    from cloudmesh.config.cm_keys import cm_keys
+    from cloudmesh.config.cm_projects import cm_projects
+    from cloudmesh.config.cm_config import cm_config
+    from cloudmesh.cloudmesh import cloudmesh
 
 import os
 import time
@@ -137,12 +139,13 @@ redhat = FabricImage(
 # ============================================================
 # CLOUDMESH
 # ============================================================
-config = cm_config()
-configuration = config.get()
-prefix = config.prefix
-index = config.index
 
 if with_cloudmesh:
+
+    config = cm_config()
+    configuration = config.get()
+    prefix = config.prefix
+    index = config.index
 
     clouds = cloudmesh()
     # refresh, misses the search for display
