@@ -10,18 +10,20 @@ nosetests -v
 import sys
 sys.path.insert(0, '..')
 
+from sh import grep
 from cloudmesh.config.cm_keys import cm_keys
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh.util.util import HEADING
+from cloudmesh.util.util import path_expand
 
 class Test_cloudmesh:
 
     #filename = None
     #filename = "credentials-example-keys.yaml"
-    filename = "$HOME/.futuregrid/cloudmesh-new.yaml"
+    filename = "$HOME/.futuregrid/cloudmesh.yaml"
 
 
     def setup(self):
@@ -46,6 +48,20 @@ class Test_cloudmesh:
     def test02_names(self):
         HEADING("02 NAMES")
         print self.keys.names()
+
+        names = []
+        lines = grep("ssh-", path_expand(self.filename))
+        for line in lines:
+            (name, rest) = line.strip().split(":")
+            if name not in self.keys.names():
+                print "Key", name, "not found"
+                assert false
+                return
+            else:
+                names.append(name)
+        print "keys found", names
+        assert len(names) == len(self.keys.names())
+
         
     def test03_default(self):
         HEADING("03 DEFAULT")
