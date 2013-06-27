@@ -18,6 +18,8 @@ $(function() {
         /** This code runs when everything has been loaded on the page */
         /* Inline sparklines take their values from the contents of the tag */
         $('.inlinesparkline').sparkline();
+
+
 });
 
 
@@ -28,8 +30,8 @@ $(function() {
 
 <table>
   <tr>
-    <th colspan="7"> Cloudmesh - Inventory for {{ cluster.name }}</th></tr>
-  <tr> <td colspan="7"> Updated {{ updated }}
+    <th colspan="cols"> Cloudmesh - Inventory for {{ cluster.name }}</th></tr>
+  <tr> <td colspan="cols"> Updated {{ updated }}
     <select>
       <option value="">Bulk select...</option>
       {% for choice in cluster.service_choices %}
@@ -40,24 +42,15 @@ $(function() {
     </select>
   </td></tr>
 
-  <tr>
-    <td></td>
-    <td></td>
-    <td>Groups</td>
-    <td colspan="4">{{ cluster.groups|join(', ') }}</td>
-  </tr>
-
-
-
 <tr>
 {% for server in cluster.compute_nodes|sort(attribute='name')  %}
 
-{% if loop.index %10 >0  %}	
-	
+{% if loop.index %10 != 0  %}	
+	{{loop.index}}
 	{% if server.status=="active" %}
-		<td style ="background:green"> {{ server.name }} </td>
+		<td style ="background:#336600; font:bold"> {{ server.name }}</td>
 	{% else %}
-		<td style ="background:red" > {{server.name}}</td>
+		<td style ="background:#580000; font:bold"> {{ server.name }}</td>
 	{% endif %}
 
 {% else %}
