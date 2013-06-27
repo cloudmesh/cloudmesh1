@@ -26,18 +26,11 @@ $(function() {
 {% set cols = parameters.col %}
 {% set rows = parameters.row %}
 
+{{ parameters }}
 <table>
   <tr>
-    <th colspan="7"> Cloudmesh - Inventory for {{ cluster.name }}</th></tr>
-  <tr> <td colspan="7"> Updated {{ updated }}
-    <select>
-      <option value="">Bulk select...</option>
-      {% for choice in cluster.service_choices %}
-          <option value="bulk-{{ choice }}">
-	    {{  choice }}
-	  </option>
-      {% endfor %}
-    </select>
+    <th colspan="{{ parameters.col }}"> Cloudmesh - Inventory for {{ cluster.name }}</th></tr>
+  <tr> <td colspan="{{ parameters.col }}"> Updated {{ updated }}
   </td></tr>
 
   <tr>

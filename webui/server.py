@@ -565,7 +565,6 @@ def display_cluster_table(cluster):
         "rows": 10,
         "n" : n
     }
-
     
     return render_template('inventory_cluster_table.html',
                            updated=time_now,
