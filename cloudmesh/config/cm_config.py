@@ -27,14 +27,17 @@ class cm_config(object):
     ######################################################################
 
     def __init__(self, filename=None):
+        print "FEILNAMEEEEEEEEEEE", filename
         if filename == None:
             home = os.environ['HOME']
             self.filename = "%s/%s" % (home, self.default_path)
+            print "PPPPP", self.filename, home
         else:
             self.filename = filename
         try:
             self.read(self.filename)
-        except:
+        except Exception, e:
+            print e
             error.log ("Can not find the file: {0}".format(self.filename))
             sys.exit()
         self._userdata_handler = None
