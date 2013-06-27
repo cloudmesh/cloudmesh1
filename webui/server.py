@@ -3,7 +3,7 @@ debug = False
 
 
 from os.path import isfile, join
-with_cloudmesh = False
+with_cloudmesh = True
 import sys
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
@@ -371,7 +371,7 @@ def start_vm(cloud=None, server=None):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
     key = None
 
-    if keys in configuration:
+    if configuration.has_key('keys'):
         key = configuration['keys']['default']
 
     # THIS IS A BUG
