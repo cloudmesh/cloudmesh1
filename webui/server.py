@@ -558,10 +558,15 @@ def display_cluster(cluster):
 @app.route('/inventory/cluster/table/<cluster>/')
 def display_cluster_table(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    cluster_obj=inventory.find("cluster", cluster)
+    n = len(cluster_obj['compute_nodes'])
     parameters = {
         "rows": 10,
-        "columns": 100,
+        "n" : n
     }
+
+    
     return render_template('inventory_cluster_table.html',
                            updated=time_now,
                            parameters=parameters,
