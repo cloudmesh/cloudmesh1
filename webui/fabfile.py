@@ -56,6 +56,7 @@ def cm():
 all: server view
 
 server:
+	cd ..; python setup.py install
 	python server.py
 
 view:
