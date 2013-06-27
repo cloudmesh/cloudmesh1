@@ -28,36 +28,30 @@ $(function() {
 {% set cols = parameters.col %}
 {% set rows = parameters.row %}
 
+
+HALLO
 {{ parameters }}
 <table>
   <tr>
-<<<<<<< HEAD
-    <th colspan="{{ parameters.col }}"> Cloudmesh - Inventory for {{ cluster.name }}</th></tr>
-  <tr> <td colspan="{{ parameters.col }}"> Updated {{ updated }}
-=======
-    <th colspan="cols"> Cloudmesh - Inventory for {{ cluster.name }}</th></tr>
-  <tr> <td colspan="cols"> Updated {{ updated }}
-    <select>
-      <option value="">Bulk select...</option>
-      {% for choice in cluster.service_choices %}
-          <option value="bulk-{{ choice }}">
-	    {{  choice }}
-	  </option>
-      {% endfor %}
-    </select>
->>>>>>> 12296addf3eea120d1f858fb71de79874d4662f7
-  </td></tr>
-
+    <th colspan="{{ parameters.columns }}"> Cloudmesh - Inventory for {{ cluster.name }}</th></tr>
+  <tr> <td colspan="{{ parameters.columns }}"> Updated {{ updated }}
 <tr>
 {% for server in cluster.compute_nodes|sort(attribute='name')  %}
 
 {% if loop.index %10 != 0  %}	
 	{{loop.index}}
+
 	{% if server.status=="active" %}
-		<td style ="background:#336600; font:bold"> {{ server.name }}</td>
+           {% set cellstyle="background:#336600; font:bold" %}
 	{% else %}
-		<td style ="background:#580000; font:bold"> {{ server.name }}</td>
-	{% endif %}
+           {% set cellstyle="background:#FFCC99; font:bold" %}
+  	{% endif %}
+        <td style="{{ cellstyle }}">
+	  
+	  <a href="/inventory/cluster/{{ cluster.name }}/{{ server.name }}"> 
+		  {{ server.name }}
+	</td>
+
 
 {% else %}
 	</tr>

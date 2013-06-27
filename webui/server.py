@@ -1,4 +1,4 @@
-vfrom flask_flatpages import FlatPages
+from flask_flatpages import FlatPages
 debug = False
 
 
@@ -549,6 +549,15 @@ def display_inventory_images():
     return render_template('images.html',
                            inventory=inventory)
 
+@app.route('/inventory/cluster/<cluster>/<name>')
+def display_named_resource(cluster,name):
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    return render_template('inventory_cluster_resource.html',
+                           updated=time_now,
+                           name=name,
+                           cluster=inventory.find("cluster", cluster))
+
+
 
 @app.route('/inventory/cluster/<cluster>/')
 def display_cluster(cluster):
@@ -565,7 +574,7 @@ def display_cluster_table(cluster):
     cluster_obj=inventory.find("cluster", cluster)
     n = len(cluster_obj['compute_nodes'])
     parameters = {
-        "rows": 10,
+        "columns": 10,
         "n" : n
     }
 
@@ -592,7 +601,7 @@ def display_image(name):
 @app.route('/inventory/info/server/<server>/')
 def server_info(server):
 
-    server = inventory.find("server", name)
+    server = inventory.find("server", server)
     return render_template('info_server.html',
                            server=server,
                            inventory=inventory)
