@@ -1,0 +1,110 @@
+cloudmesh:
+    active:
+    - sierra-openstack-grizzly
+    - india-openstack-essex
+    clouds:
+        india-openstack-essex:
+            cm_host: india.futuregrid.org
+            cm_label: ios
+            cm_type: openstack
+            credentials:
+                OS_AUTH_URL: http://149.165.146.50:5000/v2.0
+                OS_CACERT: None
+                OS_PASSWORD: abcdefghijklmnopqrstuvwxyz
+                OS_TENANT_NAME: member
+                OS_USERNAME: portalname
+                OS_USER_ID: 1234567890abcdefg
+                OS_VERSION: essex
+            default:
+                filter:
+                    select:
+                        me: true
+                    state:
+                        ACTIVE: true
+                        BUILDING: true
+                        DELETED: true
+                        ERROR: true
+                        PAUSED: true
+                        RESCUED: true
+                        RESIZED: true
+                        SOFT_DELETED: true
+                        STOPPED: true
+                        SUSPENDED: true
+                flavor: m1.tiny
+                image: 717d1dc8-3ed4-4758-9678-8f6421e1fbf2
+        sierra-openstack-grizzly:
+            cm_host: sierra.futuregrid.org
+            cm_label: ios
+            cm_type: openstack
+            credentials:
+                OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
+                OS_CACERT: /Users/neu/.futuregrid/sierra-cacert.pem
+                OS_PASSWORD: abcdefghCHANGEME
+                OS_TENANT_NAME: fg82
+                OS_USERNAME: portalname
+                OS_USER_ID: 1234567thisneedstobechanged
+                OS_VERSION: grizzly
+            default:
+                filter:
+                    select:
+                        me: true
+                    state:
+                        ACTIVE: true
+                        BUILDING: true
+                        DELETED: true
+                        ERROR: true
+                        PAUSED: true
+                        RESCUED: true
+                        RESIZED: true
+                        SOFT_DELETED: true
+                        STOPPED: true
+                        SUSPENDED: true
+                flavor: m1.tiny
+                image: 4199d988-0833-4497-a473-96fc456fac2f
+                project: fg2
+    default: sierra-openstack-grizzly
+    index: 116
+    keys:
+        default: mykey
+        keylist:
+            mykey: ssh-rsa AAAA.... put your key such as the one from ~/.ssh_id.pub here. yourname@youremail.edu
+    prefix: portalname
+    profile:
+        address:
+        - PTI
+        - here and there
+        e-mail: yourname@youremail.com
+        firstname: Albert
+        gid: '100'
+        lastname: Changeme
+        phone: 812 856 1234
+        username: gvonlasz
+    projects:
+        active:
+	- fg82
+        completed: []
+        default: fg82
+    security:
+        default: secGroup2
+        rules:
+            ping:
+                ip-address: 0.0.0.0/0
+                max_port: -1
+                min_port: -1
+                protocol: icmp
+            ssh:
+                ip-address: 0.0.0.0/0
+                max_port: 22
+                min_port: 22
+                protocol: tcp
+            web:
+                ip-address: 0.0.0.0/0
+                max_port: 80
+                min_port: 80
+                protocol: tcp
+        security_groups:
+            secGroup1:
+            - ssh
+            - ping
+            secGroup2:
+            - web
