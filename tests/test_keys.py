@@ -21,7 +21,7 @@ class Test_cloudmesh:
 
     #filename = None
     #filename = "credentials-example-keys.yaml"
-    filename = "$HOME/.futuregrid/cloudmesh-new.yaml"
+    filename = "$HOME/.futuregrid/cloudmesh.yaml"
 
 
     def setup(self):

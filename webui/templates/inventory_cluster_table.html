@@ -28,6 +28,7 @@ $(function() {
 {% set cols = parameters.col %}
 {% set rows = parameters.row %}
 
+
 GREGOR
 
 <table>
@@ -46,12 +47,20 @@ GREGOR
     {% for server in cluster.compute_nodes|sort(attribute='name')  %}
 
       {% if loop.index %10 != 0  %}	
+
 	{{loop.index}}
+
 	{% if server.status=="active" %}
-		<td style ="background:#336600; font:bold"> {{ server.name }}</td>
+           {% set cellstyle="background:#336600; font:bold" %}
 	{% else %}
-		<td style ="background:#580000; font:bold"> {{ server.name }}</td>
-	{% endif %}
+           {% set cellstyle="background:#FFCC99; font:bold" %}
+  	{% endif %}
+        <td style="{{ cellstyle }}">
+	  
+	  <a href="/inventory/cluster/{{ cluster.name }}/{{ server.name }}"> 
+		  {{ server.name }}
+	</td>
+
 
       {% else %}
   </tr>
