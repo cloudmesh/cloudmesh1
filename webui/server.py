@@ -98,7 +98,7 @@ else:
 inventory.clean()
 
 inventory.create_cluster(
-    "brave", "101.102.203.[11-26]", "b{0:03d}", 1, "b001", "b")
+    "bravo", "101.102.203.[11-26]", "b{0:03d}", 1, "b001", "b")
 #inventory.create_cluster(
 #    "delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001", "d")
 # inventory.create_cluster("gamma", "302.202.204.[1-16]", "g-{0:03d}", 1,
