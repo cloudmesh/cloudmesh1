@@ -381,7 +381,7 @@ def start_vm(cloud=None, server=None):
     print "STARTING", config.prefix, config.index
     result = clouds.create(
         cloud, config.prefix, config.index, vm_image, vm_flavor, key)
-    # print ">>>>>>>>>>>>>>", result
+    # print "PPPPPPPPPPPP", result
     clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     config.incr()
     config.write()
@@ -561,11 +561,13 @@ def display_cluster(cluster):
 @app.route('/inventory/cluster/table/<cluster>/')
 def display_cluster_table(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    cluster_obj=inventory.find("cluster", cluster)
+    n = len(cluster_obj['compute_nodes'])
     parameters = {
         "rows": 10,
-        "columns": 100,
+        "n" : n
     }
-    print inventory
     return render_template('inventory_cluster_table.html',
                            updated=time_now,
                            parameters=parameters,
