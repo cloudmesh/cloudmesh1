@@ -7,6 +7,7 @@ Cloudmesh
    :maxdepth: 2
   
    about
+   todo
 
    inventory/index.rst
    inventory/assign
