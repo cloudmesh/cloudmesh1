@@ -1,4 +1,4 @@
-vfrom flask_flatpages import FlatPages
+from flask_flatpages import FlatPages
 debug = False
 
 

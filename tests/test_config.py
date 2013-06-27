@@ -27,6 +27,7 @@ class Test_cloudmesh:
     filename = None
 
     def setup(self):
+        print "READING THE FILE", self.filename
         if self.filename == None:
             self.config = cm_config()
         else:
