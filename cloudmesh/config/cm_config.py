@@ -32,7 +32,11 @@ class cm_config(object):
             self.filename = "%s/%s" % (home, self.default_path)
         else:
             self.filename = filename
-        self.read(self.filename)
+        try:
+            self.read(self.filename)
+        except:
+            error.log ("Can not find the file: {0}".format(self.filename))
+            sys.exit()
         self._userdata_handler = None
         self._cloudcreds_handler = None
 
