@@ -28,24 +28,24 @@ $(function() {
 {% set cols = parameters.col %}
 {% set rows = parameters.row %}
 
+GREGOR
+
 <table>
   <tr>
-    <th colspan="cols"> Cloudmesh - Inventory for {{ cluster.name }}</th></tr>
-  <tr> <td colspan="cols"> Updated {{ updated }}
-    <select>
-      <option value="">Bulk select...</option>
-      {% for choice in cluster.service_choices %}
-          <option value="bulk-{{ choice }}">
-	    {{  choice }}
-	  </option>
-      {% endfor %}
-    </select>
-  </td></tr>
+    <th colspan="{{ parameters.row }}">  
+       Cloudmesh - Inventory for {{ cluster.name }}
+    </th>
+  </tr>
+  <tr>
+    <td  colspan="{{ parameters.row }}"> 
+      Updated {{ updated }}
+    </td>
+  </tr>
 
-<tr>
-{% for server in cluster.compute_nodes|sort(attribute='name')  %}
+  <tr>
+    {% for server in cluster.compute_nodes|sort(attribute='name')  %}
 
-{% if loop.index %10 != 0  %}	
+      {% if loop.index %10 != 0  %}	
 	{{loop.index}}
 	{% if server.status=="active" %}
 		<td style ="background:#336600; font:bold"> {{ server.name }}</td>
@@ -53,12 +53,12 @@ $(function() {
 		<td style ="background:#580000; font:bold"> {{ server.name }}</td>
 	{% endif %}
 
-{% else %}
-	</tr>
-	<tr>
-{% endif %}
-{% endfor %}
-</tr>
+      {% else %}
+  </tr>
+  <tr>
+  {% endif %}
+  {% endfor %}
+  </tr>
 
 
 </table>
