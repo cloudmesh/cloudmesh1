@@ -9,36 +9,37 @@ import collections
 from string import Template
 
 from cloudmesh.util.util import path_expand
+from cloudmesh.util.logger import LOGGER
 
+log = LOGGER("cm_config")
 
 class cm_config(object):
 
-    ######################################################################
+    # ----------------------------------------------------------------------
     # global variables
-    ######################################################################
+    # ----------------------------------------------------------------------
 
     default_path = '.futuregrid/cloudmesh.yaml'
     yaml_template = '%s/cloudmesh_template.yaml' % os.path.dirname(__file__)
     filename = ""
+
     data = collections.OrderedDict()
 
-    ######################################################################
+    # ----------------------------------------------------------------------
     # initialization methods
-    ######################################################################
+    # ----------------------------------------------------------------------
 
     def __init__(self, filename=None):
-        print "FEILNAMEEEEEEEEEEE", filename
         if filename == None:
             home = os.environ['HOME']
             self.filename = "%s/%s" % (home, self.default_path)
-            print "PPPPP", self.filename, home
         else:
             self.filename = filename
         try:
             self.read(self.filename)
         except Exception, e:
-            print e
-            error.log ("Can not find the file: {0}".format(self.filename))
+            log.error(str(e))
+            log.error("Can not find the file: {0}".format(self.filename))
             sys.exit()
         self._userdata_handler = None
         self._cloudcreds_handler = None
@@ -61,17 +62,15 @@ class cm_config(object):
     def cloudcreds_handler(self, value):
         self._cloudcreds_handler = value
 
-
-    ######################################################################
+    # ----------------------------------------------------------------------
     # Methods to initialize (create) the config data
-    ######################################################################
+    # ----------------------------------------------------------------------
     def _initialize_user(self, username):
         """Loads user data, including profile, projects, and credentials"""
         user = self.userdata_handler(username)
 
         self.data['cloudmesh']['prefix'] = username
         self.data['cloudmesh']['index'] = "001"
-        
 
         self.data['cloudmesh']['profile'] = {
             'username': username,
@@ -82,9 +81,9 @@ class cm_config(object):
             'phone': user.phone,
             'e-mail': user.email,
             'address': user.address
-            }
+        }
 
-        keys = { 'default': None, 'keylist': {} }
+        keys = {'default': None, 'keylist': {}}
         if user.keys:
             for key in user.keys.keys():
                 if keys['default'] is None:
@@ -96,21 +95,20 @@ class cm_config(object):
             'active': user.activeprojects,
             'completed': user.completedprojects,
             'default': user.defaultproject
-            }
-                
+        }
+
         self.data['cloudmesh']['active'] = user.activeclouds
         self.data['cloudmesh']['default'] = user.defaultcloud
-
 
     def _initialize_clouds(self):
         """Creates cloud credentials for the user"""
         self.data['cloudmesh']['clouds'] = {}
         cloudlist = self.active()
         for cloud in cloudlist:
-            cloudcreds = self.cloudcreds_handler(self.profile(), self.projects('default'), self.projects('active'), cloud)
+            cloudcreds = self.cloudcreds_handler(
+                self.profile(), self.projects('default'), self.projects('active'), cloud)
             cloudcreds.initialize_cloud_user()
             self.data['cloudmesh']['clouds'][cloud] = cloudcreds.data
-
 
     def initialize(self, username):
         """Creates or resets the data for a user.  Note that the
@@ -120,9 +118,9 @@ class cm_config(object):
         self._initialize_user(username)
         self._initialize_clouds()
 
-    ######################################################################
+    # ----------------------------------------------------------------------
     # read and write methods
-    ######################################################################
+    # ----------------------------------------------------------------------
 
     def read(self, filename):
         self.filename = filename
@@ -132,21 +130,20 @@ class cm_config(object):
             f.close()
 
     def write(self, filename=None):
-        #pyaml.dump(self.data, f, vspacing=[2, 1, 1])
-        #text = yaml.dump(self.data, default_flow_style=False)
+        # pyaml.dump(self.data, f, vspacing=[2, 1, 1])
+        # text = yaml.dump(self.data, default_flow_style=False)
         content = ""
         content = yaml.safe_dump(self.data, default_flow_style=False, indent=4)
 
         fpath = filename or self.filename
-        f = os.open(fpath, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
+        f = os.open(fpath, os.O_CREAT | os.O_TRUNC |
+                    os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
         os.write(f, content)
         os.close(f)
 
-        
-    ######################################################################
+    # ----------------------------------------------------------------------
     # print methods
-    ######################################################################
-
+    # ----------------------------------------------------------------------
     def __str__(self):
         return json.dumps(self.data, indent=4)
 
@@ -157,14 +154,15 @@ class cm_config(object):
             avalue = value
         return 'export %s="%s"\n' % (attribute, avalue)
 
-    ######################################################################
+    # ----------------------------------------------------------------------
     # get methods
-    ######################################################################
+    # ----------------------------------------------------------------------
 
     def incr(self, value=1):
-        self.data['cloudmesh']['index'] = int(self.data['cloudmesh']['index']) + int(value)
-        #self.write(self.filename)
-        
+        self.data['cloudmesh']['index'] = int(
+            self.data['cloudmesh']['index']) + int(value)
+        # self.write(self.filename)
+
     @property
     def vmname(self):
         return "%s-%04d" % (self.data['cloudmesh']['prefix'], int(self.data['cloudmesh']['index']))
@@ -190,7 +188,7 @@ class cm_config(object):
     @prefix.setter
     def prefix(self, value):
         self.data['cloudmesh']['prefix'] = value
-        
+
     @property
     def index(self):
         return self.data['cloudmesh']['index']
@@ -203,7 +201,7 @@ class cm_config(object):
     def firstname(self):
         return self.data['cloudmesh']['profile']['firstname']
 
-    @index.setter
+    @firstname.setter
     def firstname(self, value):
         self.data['cloudmesh']['profile']['firstname'] = str(value)
 
@@ -211,7 +209,7 @@ class cm_config(object):
     def lastname(self):
         return self.data['cloudmesh']['profile']['lastname']
 
-    @index.setter
+    @lastname.setter
     def lastname(self, value):
         self.data['cloudmesh']['profile']['lastname'] = str(value)
 
@@ -219,7 +217,7 @@ class cm_config(object):
     def phone(self):
         return self.data['cloudmesh']['profile']['phone']
 
-    @index.setter
+    @phone.setter
     def phone(self, value):
         self.data['cloudmesh']['profile']['phone'] = str(value)
 
@@ -227,15 +225,15 @@ class cm_config(object):
     def email(self):
         return self.data['cloudmesh']['profile']['e-mail']
 
-    @index.setter
+    @email.setter
     def email(self, value):
         self.data['cloudmesh']['profile']['e-mail'] = str(value)
-    @property
 
+    @property
     def address(self):
         return self.data['cloudmesh']['profile']['address']
 
-    @index.setter
+    @address.setter
     def address(self, value):
         self.data['cloudmesh']['profile']['address'] = str(value)
 
@@ -255,7 +253,7 @@ class cm_config(object):
                 value = path_expand(value)
             return value
 
-    def default(self,cloudname):
+    def default(self, cloudname):
         return self.data['cloudmesh']['clouds'][cloudname]['default']
 
     def projects(self, status):
@@ -266,12 +264,11 @@ class cm_config(object):
 
     def cloud(self, cloudname):
         return self.data['cloudmesh']['clouds'][cloudname] if cloudname in self.data['cloudmesh']['clouds'] else None
-        
+
     def cloud_default(self, cloudname, defname):
         cloud = self.cloud(cloudname)
         defaults = cloud['default'] if 'default' in cloud else []
         return defaults[defname] if defname in defaults else None
-
 
     def get(self, key=None, expand=False):
         if key == None:
@@ -309,25 +306,26 @@ class cm_config(object):
                     if attribute == project:
                         for (pattribute, pvalue) in value.iteritems():
                             lines += self.export_line(pattribute, pvalue)
-                else:    
+                else:
                     lines += self.export_line(attribute, value)
         return lines
 
-
     def set_filter(self, cloudname, filter, type='state'):
-        #try:
+        # try:
         #    test = self.data['cloudmesh']['clouds'][cloudname]['default']['filter']
-        #except:
-        #    self.data['cloudmesh']['clouds'][cloudname]['default']['filter'] = {}
-        self.data['cloudmesh']['clouds'][cloudname]['default']['filter'][type] = filter
+        # except:
+        # self.data['cloudmesh']['clouds'][cloudname]['default']['filter'] = {}
+        self.data['cloudmesh']['clouds'][cloudname][
+            'default']['filter'][type] = filter
 
     def get_filter(self, cloudname, type='state'):
         print "getting the filter for cloud", cloudname
-        #try:
-        #    result = self.data['cloudmesh']['clouds'][cloudname]['default']['filter'][type] 
-        #except:
+        # try:
+        #    result = self.data['cloudmesh']['clouds'][cloudname]['default']['filter'][type]
+        # except:
         #    self.set_filter(cloudname, {}, type)
-        result = self.data['cloudmesh']['clouds'][cloudname]['default']['filter'][type]
+        result = self.data['cloudmesh']['clouds'][
+            cloudname]['default']['filter'][type]
         return result
 
     def create_filter(self, cloudname, states):
@@ -338,10 +336,10 @@ class cm_config(object):
         self.set_filter(cloudname, state_flags, 'state')
         self.set_filter(cloudname, {'me': True}, 'select')
 
-        
-##########################################################################
+
+# ----------------------------------------------------------------------
 # MAIN METHOD FOR TESTING
-##########################################################################
+# ----------------------------------------------------------------------
 
 if __name__ == "__main__":
     config = cm_config()

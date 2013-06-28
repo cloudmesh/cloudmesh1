@@ -1,40 +1,43 @@
-from cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config
 import os
 from string import Template
 import base64
 import hashlib
 import sys
 
+
 def key_fingerprint(key_string):
     key = base64.decodestring(key_string)
     fp_plain = hashlib.md5(key).hexdigest()
-    return ':'.join(a+b for a,b in zip(fp_plain[::2], fp_plain[1::2]))
+    return ':'.join(a + b for a, b in zip(fp_plain[::2], fp_plain[1::2]))
 
-def key_validate(type,filename):
-    if type.lower() == "file":
-        try :
+
+def key_validate(keytype, filename):
+    if keytype.lower() == "file":
+        try:
             keystring = open(filename, "r").read()
-        except :
+        except:
             return False
-    else :
+    else:
         keystring = file
-    
-    try :
-        type, key_string, comment = keystring.split()
+
+    try:
+        keytype, key_string, comment = keystring.split()
         data = base64.decodestring(key_string)
         int_len = 4
-        str_len = struct.unpack('>I', data[:int_len])[0] # this should return 7
+        str_len = struct.unpack('>I', data[:int_len])[0]  # this should return 7
 
-        if data[int_len:int_len+str_len] == type:
+        if data[int_len:int_len + str_len] == keytype:
             return True
     except Exception, e:
         print e
         return False
 
+
 class cm_keys:
 
     filename = None
-    
+
     def __init__(self, filename=None):
         """initializes based on cm_config and returns pointer to the keys dict."""
         # Check if the file exists
@@ -43,7 +46,8 @@ class cm_keys:
         else:
             self.filename = self._path_expand(filename)
             try:
-                with open(self.filename): pass
+                with open(self.filename):
+                    pass
             except IOError:
                 print 'ERROR: cm_keys, file "%s" does not exist' % self.filename
                 sys.exit()
@@ -58,8 +62,8 @@ class cm_keys:
                 return "file"
         except:
             return "keys"
-        
-    def _getvalue (self,name):
+
+    def _getvalue(self, name):
         if name == 'keys':
             return self.config.data["cloudmesh"]["keys"]
         elif name == 'default':
@@ -72,15 +76,15 @@ class cm_keys:
     def get_default_key(self):
         return self.config.data["cloudmesh"]["keys"]["default"]
 
-    def __getitem__(self,name):
+    def __getitem__(self, name):
         value = self._getvalue(name)
         key_type = self.type(name)
-        
+
         if key_type == "file":
             value = self._get_key_from_file(value)
 
         return value
-            
+
     def __setitem__(self, name, value):
         if name == 'default':
             self.config.data["cloudmesh"]["keys"]["default"] = value
@@ -89,11 +93,14 @@ class cm_keys:
             self.config.data["cloudmesh"]["keys"]["keylist"][name] = value
 
     def set(self, name, value, expand=False):
-        self.__setitem__(name,value)
+        self.__setitem__(name, value)
         if expand:
             expanded_value = self.__getitem__(name)
-            self.__setitem__(name,expanded_value)
+            self.__setitem__(name, expanded_value)
         print "EXPANDED", expanded_value
+
+    def __delitem__ (self, name):
+        self.delete (name)
         
     def delete(self, name):
         """ not tested"""
@@ -103,16 +110,18 @@ class cm_keys:
             newdefault = True
         else:
             key = name
-            
+
         del self.config.data["cloudmesh"]["keys"]["keylist"][key]
 
+
+        ######### ERROR Defalut is not self?
         if newdefault:
             if len(self.config.data["cloudmesh"]["keys"]["keylist"]) > 0:
                 default = self.config.data["cloudmesh"]["keys"]["keylist"][0]
         else:
             default = None
-            
-    def _path_expand(self,text):
+
+    def _path_expand(self, text):
         """ returns a string with expanded variavble """
         template = Template(text)
         result = template.substitute(os.environ)
@@ -121,7 +130,7 @@ class cm_keys:
 
     def _get_key_from_file(self, filename):
         return open(self._path_expand(os.path.expanduser(filename)), "r").read()
-                
+
     def setdefault(self, name):
         """sets the default key"""
         self.config.data["cloudmesh"]["keys"]["default"] = name
@@ -144,7 +153,7 @@ class cm_keys:
     def write(self):
         """writes the updated dict to the config"""
         self.config.write()
-        
+
     def fingerprint(self, name):
         value = self.__getitem__(name)
         t, keystring, comment = value.split()
@@ -153,5 +162,8 @@ class cm_keys:
     def defined(self, name):
         return name in self.names()
 
+    def __len__(self):
+        return len(self.names())
+    
     def no_of_keys(self):
         return len(self.names())
