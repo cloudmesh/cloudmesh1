@@ -41,7 +41,9 @@ class Test:
     def setup(self):
         self.configuration = cm_config()
         self.name = self.configuration.active()[0]
+        print "ACTIVE CLOUD", self.name
         self.cloud = openstack(self.name)
+        print "LOADED CLOUD"
 
     def tearDown(self):
         pass
