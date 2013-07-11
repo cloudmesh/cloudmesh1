@@ -62,7 +62,7 @@ import sys
 import os
 import stat
 from ldap_user import ldap_user
-from openstack_grizzly_cloud import openstack_grizzly_cloud
+from cloudmesh.config.openstack_grizzly_cloud import openstack_grizzly_cloud
 from sh import scp
 
 ##### For testing
