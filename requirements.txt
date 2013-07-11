@@ -25,6 +25,7 @@ Flask-Silk
 pymongo
 mongoengine
 python-novaclient
+python-keystoneclient
 apache-libcloud
 nose
 autopep8
