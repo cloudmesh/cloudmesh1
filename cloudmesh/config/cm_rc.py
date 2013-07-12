@@ -9,6 +9,7 @@ Usage:
   cm-manage config dump [--format=(yaml|dict)]
   cm-manage config init [-o OUT] [-u USER]
   cm-manage config list
+  cm-manage config password
   cm-manage config fetch [-u USER] [-r HOST] 
   cm-manage --version
   cm-manage --help
@@ -62,11 +63,8 @@ import sys
 import os
 import stat
 from ldap_user import ldap_user
-from cloudmesh.config.openstack_grizzly_cloud import openstack_grizzly_cloud
 from sh import scp
-
-##### For testing
-# import mock_keystone
+from getpass import getpass
 
 debug = True
 
@@ -193,12 +191,6 @@ def main():
             output = arguments['--out']
             username = arguments['--user'] or os.getenv('USER')
             config.userdata_handler = ldap_user
-            config.cloudcreds_handler = openstack_grizzly_cloud
-            ########### for testing #############################################################
-            # config.cloudcreds_handler._client = mock_keystone.Client
-            # config.cloudcreds_handler._client.mockusername = username
-            # config.cloudcreds_handler._client.mocktenants = ['fg82','fg110','fg296']
-            #####################################################################################
             config.initialize(username)
             try:
                 config.write(output)
@@ -211,6 +203,25 @@ def main():
             for name in config.keys():
                 if 'cm_type' in config.data['cloudmesh']['clouds'][name]:
                     print name, "(%s)" % config.data['cloudmesh']['clouds'][name]['cm_type']
+            sys.exit(0)
+
+        if arguments['password'] or name == 'password':
+            profile = config.profile()
+            clouds = config.clouds()
+            oldpass = getpass("Current password: ")
+            
+            pass1 = getpass("New password: ")
+            pass2 = getpass("New password (again): ")
+
+            #TODO: some kind of password strength checking?
+            if pass1 == pass2:
+                for cloudname in clouds:
+                    clouddata = config.cloud(cloudname)
+                    # TODO: Actually update the password
+                    print "Changed password for user %s in %s on %s" % (profile['username'], clouddata['cm_type'], clouddata['cm_host'])
+            else:
+                print "New passwords did not match; password not changed."
+
             sys.exit(0)
 
         if arguments['dump'] or name =='dump':
