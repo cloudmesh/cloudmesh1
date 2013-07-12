@@ -103,9 +103,6 @@ def main():
     ######################################################################
     is_config =  arguments['config'] != None
 
-
-
-
     if is_config:
 
         DEBUG('Arguments', arguments)
@@ -200,7 +197,7 @@ def main():
             ########### for testing #############################################################
             # config.cloudcreds_handler._client = mock_keystone.Client
             # config.cloudcreds_handler._client.mockusername = username
-            # config.cloudcreds_handler._client.mocktenants = config.data['cloudmesh']['active']
+            # config.cloudcreds_handler._client.mocktenants = ['fg82','fg110','fg296']
             #####################################################################################
             config.initialize(username)
             try:

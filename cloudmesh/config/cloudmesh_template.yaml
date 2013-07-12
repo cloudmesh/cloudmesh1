@@ -1,3 +1,6 @@
+# This file defines the starting point for a new cloudmesh.yaml file
+# for a user Some of this should perhaps come from inventory?
+
 cloudmesh:
     security:
         rules:
