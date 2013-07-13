@@ -79,6 +79,7 @@ qc:
 
 
 clean:
+	rm -rf *.egg
 	find . -name "*~" -exec rm {} \;  
 	find . -name "*.pyc" -exec rm {} \;  
 	rm -rf build doc/build dist *.egg-info *~ #*
