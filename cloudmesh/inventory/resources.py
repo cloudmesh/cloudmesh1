@@ -285,7 +285,7 @@ class Inventory:
     def get_one(self, kind, name):
         '''returns the data associated with the object of type kind
         and the given name'''
-        s = get(kind, name)
+        s = self.get(kind, name)
         try:
             return s[0]
         except:
@@ -364,7 +364,7 @@ class Inventory:
         elif kind == 'service':
             return self.services(name=name).count() > 0
         else:
-            error('wrong kind ' + kind)
+            log.error('wrong kind ' + kind)
         return
 
     def disconnect(self):
@@ -473,4 +473,5 @@ def main():
 if __name__ == "__main__":
      # main()
 
-    print ip_name_pair("india[20-25]", "i-", "0000", 1)
+     #print ip_name_pair("india[20-25]", "i-", "0000", 1)
+     pass

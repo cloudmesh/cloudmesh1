@@ -122,9 +122,6 @@ class cm_azure:
             'images': self.images}
         return json.dumps(information, indent=4)
 
-    def type():
-        return self.type
-
     #
     # refresh
     #
@@ -323,9 +320,9 @@ class cm_azure:
     # functions we want to rewrite/replace
     #
 
-    def _selectImage():
-        # I AHVE NO IDEA WHAT THIS IS DUE TO NON INFORMATIVE VARIABLE NAMEING
-        images = _buildAzureImageDict()
+    def _selectImage(self):
+        # BUG: I AHVE NO IDEA WHAT THIS IS DUE TO NON INFORMATIVE VARIABLE NAMEING
+        images = self._buildAzureImageDict()
         print 'Please select Image'
 
         # what is arg1, arg2?
@@ -347,9 +344,9 @@ class cm_azure:
         openstack
         """
         images = vm_list()
-
-        for key in vms:
-            image = image[key]
+        # TODO: verify if this works
+        for key in images:
+            image = images[key]
             self.images[image['Name']] = image
             # see other attributes in openstack refersh class
         return

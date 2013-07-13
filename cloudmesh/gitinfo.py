@@ -14,7 +14,7 @@ class GitInfo:
         elif format_arg == 'dict':
             format_string = "%aN\t%cE"
         result = sort(git.log(
-            "--all", "--format=" + format_arg_string,
+            "--all", "--format=" + format_string,
             _tty_in=True, _tty_out=False, _piped=True), "-u")
 
         if format_arg is None:

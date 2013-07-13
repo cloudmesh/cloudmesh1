@@ -54,7 +54,7 @@ class eucalyptus:
     # user_id = None
 
     def vms(self):
-        return self.servers
+        return self.nodes
 
     """
     def credentials(self, cred):
@@ -132,8 +132,6 @@ class eucalyptus:
             'images': self.images}
         return json.dumps(information, indent=4)
 
-    def type():
-        return self.type
 
     def refresh(self, type=None):
 

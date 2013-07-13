@@ -1,6 +1,6 @@
 from datetime import datetime
 import time
-
+import json
 
 def donotchange(fn):
     return fn
@@ -117,9 +117,6 @@ class ComputeBaseType:
     def limits(self):
         raise NotImplementedError()
 
-    def status(self, vm_id):
-        raise NotImplementedError()
-
     def wait(self, vm_id, vm_status, seconds=2):
         print 'refersh', vm_id
         self.refresh()
@@ -149,11 +146,13 @@ class ComputeBaseType:
     #
     # get methods
     #
-    def type():
-        return self.type
+    # TODO BUG REMOVE THIS METHOD and replace with .type
+    #def type():
+    #    return self.type
 
     def vms(self):
         return self.servers
+
 
     def status(self, vm_id):
         return self.servers[vm_id]['status']

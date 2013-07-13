@@ -5,6 +5,8 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 import json
 import os
+import random
+
 
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
@@ -56,7 +58,7 @@ class eucalyptus:
     }
 
     def vms(self):
-        return self.servers
+        return self.nodes
 
     def __init__(self, label,
                  project=None,
@@ -141,8 +143,6 @@ class eucalyptus:
             'images': self.images}
         return json.dumps(information, indent=4)
 
-    def type():
-        return self.type
 
     def refresh(self, type=None):
 
@@ -194,14 +194,14 @@ class eucalyptus:
                 return node
 
     def vm_delete(self, node):
-        result = destroy_node(self, node)
+        result = self.destroy_node(self, node)
             # add result to internal cache
         print ("vm Deleted")
         return result
 
     def restart(self, node):
         """restarts a vm with the given name"""
-        result = reboot_node(self, node)
+        result = self.reboot_node(self, node)
         # add result to internal cache
         print result
 
@@ -239,7 +239,8 @@ class eucalyptus:
                 time.sleep(60)
                 break
             if updatedNode.state == 4:
-                print(node.id, "Has Errored out")
+                print(self.vm.id, "Has Errored out")
+                # TODO: BUG clearly wrong, as remove also does not exist for a dict if we change to self.
                 nodes.remove(vm)
                 break
 

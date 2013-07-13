@@ -133,6 +133,7 @@ class openstack(ComputeBaseType):
             # self.user_id = self.credential['OS_USER_ID']
             # self.credential = credentials(label)
         else:
+            # TODO: BUG: THIS PROBABLY CAN BE REMOVED AS PART OF THE CONFIG, cars do not exist or are self?
             self.credential = {}
             self.credential['OS_USERNAME'] = username
             self.credential['OS_PASSWORD'] = password
@@ -690,17 +691,6 @@ class openstack(ComputeBaseType):
                 vm = self.cloud.servers.update(id, new)
             counter += 1
 
-    @donotchange
-    def reindex(self, prefix, index_format):
-        all = self.find('user_id')
-        counter = 1
-        for id in all:
-            old = self.servers[id]['name']
-            new = prefix + index_format % counter
-            print "Rename %s -> %s, %s" % (old, new, self.servers[id]['key_name'])
-            # if old != new:
-            #    vm = self.cloud.servers.update(id, new)
-            counter += 1
 
     #
     # TODO

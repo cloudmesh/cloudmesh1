@@ -41,8 +41,8 @@ class eucalyptus:
 
         self.credentials.type('eucalyptus')
 
-        self.access_key = credentials._get_rc_variable("accesskey")
-        self.secret_key = credentials._get_rc_variable("secretkey")
+        self.access_key = self.credentials._get_rc_variable("accesskey")
+        self.secret_key = self.credentials._get_rc_variable("secretkey")
 
         print self.access_key
         print self.secret_key
@@ -54,7 +54,7 @@ class eucalyptus:
     # user_id = None
 
     def vms(self):
-        return self.servers
+        return self.nodes
 
     """
     def credentials(self, cred):
@@ -126,8 +126,6 @@ class eucalyptus:
             'images': self.images}
         return json.dumps(information, indent=4)
 
-    def type():
-        return self.type
 
     def refresh(self, type=None):
 

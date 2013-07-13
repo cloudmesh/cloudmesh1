@@ -13,15 +13,18 @@ def key_fingerprint(key_string):
 
 
 def key_validate(keytype, filename):
+    keystring = "undefined"
     if keytype.lower() == "file":
         try:
             keystring = open(filename, "r").read()
         except:
             return False
     else:
+        # TODO: BUG: what is file?
         keystring = file
 
     try:
+
         keytype, key_string, comment = keystring.split()
         data = base64.decodestring(key_string)
         int_len = 4

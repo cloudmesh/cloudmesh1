@@ -165,7 +165,7 @@ class cloudmesh:
     # returns dicts of a particular type
     #
     # ----------------------------------------------------------------------
-    def find(cloud=["all"], type="servers", project=["all"]):
+    def find(self, cloud=["all"], type="servers", project=["all"]):
         """
         Returns a dict with matching elements
 
@@ -323,12 +323,15 @@ class cloudmesh:
     # saves and reads the dict to and from a file
     # ----------------------------------------------------------------------
     def save(self):
+        log.error("save() not implemented")
+        """
         # tmp = self._sanitize()
         file = open(self.datastore, 'wb')
         # pickle.dump(self.keys, file)
         pickle.dump(tmp, file)
         file.close()
-
+        """
+        
     def load(self):
         file = open(self.datastore, 'rb')
         # self.keys = pickle.load(file)
@@ -477,7 +480,7 @@ class cloudmesh:
             log.error("TODO: not implemented yet")
             return
         else:
-            log.error("{0} type does not exist".format(cm_type))
+            log.error("{0} type does not exist".format(other.cm_type))
             log.error("Error: Ignoring add")
             return
 
@@ -503,7 +506,7 @@ class cloudmesh:
             log.error("TODO: not implemented yet")
             return
         else:
-            log.error("%s type does not exist".format(cm_type))
+            log.error("%s type does not exist".format(other.cm_type))
             log.error("Error: Ignoring add")
             return
 
