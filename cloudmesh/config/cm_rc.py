@@ -9,7 +9,8 @@ Usage:
   cm-manage config dump [--format=(yaml|dict)]
   cm-manage config init [-o OUT] [-u USER]
   cm-manage config list
-  cm-manage config fetch [-u USER] [-r HOST]
+  cm-manage config password
+  cm-manage config fetch [-u USER] [-r HOST] 
   cm-manage --version
   cm-manage --help
 
@@ -62,11 +63,9 @@ import sys
 import os
 import stat
 from ldap_user import ldap_user
-from cloudmesh.config.openstack_grizzly_cloud import openstack_grizzly_cloud
 from sh import scp
+from getpass import getpass
 
-# For testing
-# import mock_keystone
 
 debug = True
 
@@ -103,8 +102,9 @@ def main():
 
     #
     # This secion deals with handeling "cm config" related commands
-    #
-    is_config = arguments['config'] is not None
+
+    ######################################################################
+    is_config =  arguments['config'] != None
 
     if is_config:
 
@@ -193,12 +193,6 @@ def main():
             output = arguments['--out']
             username = arguments['--user'] or os.getenv('USER')
             config.userdata_handler = ldap_user
-            config.cloudcreds_handler = openstack_grizzly_cloud
-            # for testing #############################################################
-            # config.cloudcreds_handler._client = mock_keystone.Client
-            # config.cloudcreds_handler._client.mockusername = username
-            # config.cloudcreds_handler._client.mocktenants = config.data['cloudmesh']['active']
-            #
             config.initialize(username)
             try:
                 config.write(output)
@@ -213,7 +207,20 @@ def main():
                     print name, "(%s)" % config.data['cloudmesh']['clouds'][name]['cm_type']
             sys.exit(0)
 
-        if arguments['dump'] or name == 'dump':
+        if arguments['password'] or name == 'password':
+            oldpass = getpass("Current password: ")
+            newpass1 = getpass("New password: ")
+            newpass2 = getpass("New password (again): ")
+
+            #TODO: some kind of password strength checking?
+            if newpass1 == newpass2:
+                config.change_own_password(oldpass, newpass1)
+            else:
+                print "New passwords did not match; password not changed."
+
+            sys.exit(0)
+
+        if arguments['dump'] or name =='dump':
             format = arguments['--format']
             if format == 'yaml':
                 print yaml.dump(config, default_flow_style=False, indent=4)

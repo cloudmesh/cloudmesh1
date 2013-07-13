@@ -5,16 +5,14 @@ from random import choice
 
 
 class cloudmesh_cloud:
+    """Abstract class, provides credentials for various cloud platforms""" 
 
-    """Provides credentials for various cloud platforms"""
-    CLOUD_DEFNS = '%s/cloudmesh_clouds.yaml' % os.path.dirname(__file__)
-
-    def __init__(self, profiledata, defaultproj, projectlist, cloudname):
+    def __init__(self, profiledata, defaultproj, projectlist, cloudname, clouddata):
         self._profile = profiledata
         self._projectlist = projectlist
         self._defaultproj = defaultproj
         self._cloudname = cloudname
-        self._data = yaml.safe_load(open(self.CLOUD_DEFNS, "r"))[cloudname]
+        self._data = clouddata
 
     @property
     def username(self):
@@ -62,3 +60,6 @@ class cloudmesh_cloud:
 
     def initialize_cloud_user(self):
         raise Exception("Not implemented")
+
+    def change_password(self):
+        print "Changed password for user %s in %s." % (self.username, self.cloudname)

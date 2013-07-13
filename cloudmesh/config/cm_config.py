@@ -10,6 +10,11 @@ from string import Template
 
 from cloudmesh.util.util import path_expand
 from cloudmesh.util.logger import LOGGER
+from cloudmesh.config.cloudmesh_cloud_handler import cloudmesh_cloud_handler
+
+##### For testing
+# import mock_keystone
+
 
 log = LOGGER("cm_config")
 
@@ -22,6 +27,8 @@ class cm_config(object):
 
     default_path = '.futuregrid/cloudmesh.yaml'
     yaml_template = '%s/cloudmesh_template.yaml' % os.path.dirname(__file__)
+    clouddata_template = '%s/cloudmesh_clouds.yaml' % os.path.dirname(__file__)
+
     filename = ""
 
     data = collections.OrderedDict()
@@ -43,7 +50,8 @@ class cm_config(object):
             log.error("Can not find the file: {0}".format(self.filename))
             sys.exit()
         self._userdata_handler = None
-        self._cloudcreds_handler = None
+        self._clouddata = None
+
 
     @property
     def userdata_handler(self):
@@ -54,14 +62,12 @@ class cm_config(object):
     def userdata_handler(self, value):
         self._userdata_handler = value
 
-    @property
-    def cloudcreds_handler(self):
-        """Plug-in class that knows how to get all the cloud credential data"""
-        return self._cloudcreds_handler
 
-    @cloudcreds_handler.setter
-    def cloudcreds_handler(self, value):
-        self._cloudcreds_handler = value
+    @property
+    def clouddata(self):
+        if self._clouddata is None:
+            self._clouddata = yaml.safe_load(open(self.clouddata_template, "r"))
+        return self._clouddata
 
     # ----------------------------------------------------------------------
     # Methods to initialize (create) the config data
@@ -106,18 +112,30 @@ class cm_config(object):
         self.data['cloudmesh']['clouds'] = {}
         cloudlist = self.active()
         for cloud in cloudlist:
-            cloudcreds = self.cloudcreds_handler(
-                self.profile(), self.projects('default'), self.projects('active'), cloud)
+            cloudcreds_handler = cloudmesh_cloud_handler(cloud)
+            cloudcreds = cloudcreds_handler(self.profile(), self.projects('default'), self.projects('active'), cloud, self.clouddata[cloud])
+            ########### for testing #############################################################
+            # cloudcreds._client = mock_keystone.Client
+            # cloudcreds._client.mockusername = self.data['cloudmesh']['profile']['username']
+            # cloudcreds._client.mocktenants = ['fg82','fg110','fg296']
+            #####################################################################################
             cloudcreds.initialize_cloud_user()
             self.data['cloudmesh']['clouds'][cloud] = cloudcreds.data
 
     def initialize(self, username):
         """Creates or resets the data for a user.  Note that the
-        userdata_handler and cloudcreds_handler properties must be set
-        with appropriate handler classes."""
+        userdata_handler property must be set with appropriate handler class."""
         self.data = yaml.safe_load(open(self.yaml_template, "r"))
         self._initialize_user(username)
         self._initialize_clouds()
+
+    def change_own_password(self, oldpass, newpass):
+        cloudlist = self.active()
+        for cloud in cloudlist:
+            cloudcreds_handler = cloudmesh_cloud_handler(cloud)
+            cloudcreds = cloudcreds_handler(self.profile(), self.projects('default'), self.projects('active'), cloud, self.clouddata[cloud])
+            cloudcreds.change_password(oldpass, newpass)
+
 
     # ----------------------------------------------------------------------
     # read and write methods
