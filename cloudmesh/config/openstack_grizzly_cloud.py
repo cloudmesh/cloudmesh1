@@ -14,10 +14,10 @@ except:
 class openstack_grizzly_cloud(cloudmesh_cloud):
     _client = client.Client
 
-    def __init__(self, profiledata, defaultproj, projectlist, cloudname):
+    def __init__(self, profiledata, defaultproj, projectlist, cloudname, clouddata):
         self._credentials = None
         self._keystone = None
-        cloudmesh_cloud.__init__(self, profiledata, defaultproj, projectlist, cloudname)
+        cloudmesh_cloud.__init__(self, profiledata, defaultproj, projectlist, cloudname, clouddata)
 
     @property
     def keystone(self):

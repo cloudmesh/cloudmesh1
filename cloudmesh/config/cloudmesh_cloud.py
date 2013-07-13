@@ -4,15 +4,14 @@ import string
 from random import choice
 
 class cloudmesh_cloud:
-    """Provides credentials for various cloud platforms""" 
-    CLOUD_DEFNS = '%s/cloudmesh_clouds.yaml' % os.path.dirname(__file__)
+    """Abstract class, provides credentials for various cloud platforms""" 
 
-    def __init__(self, profiledata, defaultproj, projectlist, cloudname):
+    def __init__(self, profiledata, defaultproj, projectlist, cloudname, clouddata):
         self._profile = profiledata
         self._projectlist = projectlist
         self._defaultproj = defaultproj
         self._cloudname = cloudname
-        self._data = yaml.safe_load(open(self.CLOUD_DEFNS, "r"))[cloudname]
+        self._data = clouddata
 
     @property
     def username(self):

@@ -26,6 +26,8 @@ class cm_config(object):
 
     default_path = '.futuregrid/cloudmesh.yaml'
     yaml_template = '%s/cloudmesh_template.yaml' % os.path.dirname(__file__)
+    clouddata_template = '%s/cloudmesh_clouds.yaml' % os.path.dirname(__file__)
+
     filename = ""
 
     data = collections.OrderedDict()
@@ -47,6 +49,8 @@ class cm_config(object):
             log.error("Can not find the file: {0}".format(self.filename))
             sys.exit()
         self._userdata_handler = None
+        self._clouddata = None
+
 
     @property
     def userdata_handler(self):
@@ -56,6 +60,13 @@ class cm_config(object):
     @userdata_handler.setter
     def userdata_handler(self, value):
         self._userdata_handler = value
+
+
+    @property
+    def clouddata(self):
+        if self._clouddata is None:
+            self._clouddata = yaml.safe_load(open(self.clouddata_template, "r"))
+        return self._clouddata
 
     # ----------------------------------------------------------------------
     # Methods to initialize (create) the config data
@@ -101,7 +112,7 @@ class cm_config(object):
         cloudlist = self.active()
         for cloud in cloudlist:
             cloudcreds_handler = cloudmesh_cloud_handler(cloud)
-            cloudcreds = cloudcreds_handler(self.profile(), self.projects('default'), self.projects('active'), cloud)
+            cloudcreds = cloudcreds_handler(self.profile(), self.projects('default'), self.projects('active'), cloud, self.clouddata[cloud])
             ########### for testing #############################################################
             # cloudcreds._client = mock_keystone.Client
             # cloudcreds._client.mockusername = self.data['cloudmesh']['profile']['username']
