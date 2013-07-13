@@ -1,37 +1,50 @@
 class Client(object):
+
     """ Provides a mock class for testing.  Represents the keystone client. """
     mockusername = 'foo'
     mocktenants = ['foo']
 
     class mock_object(object):
+
         def __init__(self, **kwds):
             self.__dict__.update(kwds)
 
     class mock_users(object):
+
         def __init__(self, users):
             self.users = users
+
         def create(self, name, password, email):
             pass
+
         def update_password(self, user, password):
             pass
+
         def list(self):
             return self.users
 
     class mock_roles(object):
+
         def __init__(self, roles):
             self.roles = roles
+
         def add_user_role(self, user, role, tenant):
             pass
+
         def roles_for_user(self, user, tenant):
             return []
+
         def list(self):
             return self.roles
 
     class mock_tenants(object):
+
         def __init__(self, tenants):
             self.tenants = tenants
+
         def list(self):
             return self.tenants
+
         def create(self, tname):
             pass
 

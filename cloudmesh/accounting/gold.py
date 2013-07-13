@@ -3,11 +3,12 @@ from sh import gchproject
 from sh import gchuser
 #
 
+
 class AccountingBaseClass:
 
-    #all methods return some kind of id if possible or useful or the object
-    
-    def  add_project(self, name, description):
+    # all methods return some kind of id if possible or useful or the object
+
+    def add_project(self, name, description):
         print "not yet implemented"
         pass
 
@@ -23,44 +24,45 @@ class AccountingBaseClass:
         print "not yet implemented"
         pass
 
-    def add_user_to_project (self, project, userid):
+    def add_user_to_project(self, project, userid):
         print "not yet implemented"
         pass
 
-    def deactivate_user_from_project (self, project, userid):
+    def deactivate_user_from_project(self, project, userid):
         print "not yet implemented"
         pass
 
-    def activate_user_from_project (self, project, userid):
+    def activate_user_from_project(self, project, userid):
         print "not yet implemented"
         pass
+
 
 class GoldAccounting(AccountingBaseClass):
 
-    def project_usage (self, project):
+    def project_usage(self, project):
         statement = gstatement("-p", project)
         return statement
     # what does summarize do
-    # needs to return dict    
+    # needs to return dict
 
     def user_usage(self, userid):
         statement = gstatement("-u", userid)
         return statement
     # needs to return dict
-        
+
     def projects(self, userid):
         list = glusers("--show", "Projects", userid, "-l", "--quiet")
         return list
     # what does --raw do?
         # bug this should be returned as a list while removing \n and
         # putting it in a list instead of a string
-        
+
     def users(self):
-        list = glusers("--show Name","--quiet")
+        list = glusers("--show Name", "--quiet")
         return list
         # bug this should be returned as a list while removing \n and
         # putting it in a list instead of a string
-        
+
     def default_project(self, userid, project):
         # can be done with gchgsuser
         pass
@@ -69,15 +71,15 @@ class GoldAccounting(AccountingBaseClass):
                     firstname=None, lastname=None):
         # needs to check if common name is unique, if its not we may
         # want to add numbers
-        if firstname != None or lastname != None:
+        if firstname is not None or lastname is not None:
             gchguser("-n", "%s %s" % (firstname, lastname))
-        if email != None:
+        if email is not None:
             gchguser("-E", email)
-        if phone != None:
+        if phone is not None:
             gchguser("-F", phone)
 
-    def  add_project(self, name):
-        gmkproject("-d",description,"-p", name)
+    def add_project(self, name):
+        gmkproject("-d", description, "-p", name)
 
     def add_user_to_projects(self, project, userid):
         gchproject("-addUsers", username, project)
@@ -85,9 +87,8 @@ class GoldAccounting(AccountingBaseClass):
     def deactivate_project(self, name):
         gchproject("-I", name)
 
-    def deactivate_user_from_project (self, project, userid):
+    def deactivate_user_from_project(self, project, userid):
         gchproject("--deactUsers", userid)
 
-    def activate_user_from_project (self, project, userid):
+    def activate_user_from_project(self, project, userid):
         gchproject("--actUsers", userid)
-

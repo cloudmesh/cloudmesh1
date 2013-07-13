@@ -9,9 +9,11 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 pages = FlatPages(app)
 
+
 @app.route('/')
 def index():
     return render_template('index.html', pages=pages)
+
 
 @app.route('/<path:path>/')
 def page(path):
@@ -20,4 +22,3 @@ def page(path):
 
 if __name__ == '__main__':
     app.run(port=5000)
-

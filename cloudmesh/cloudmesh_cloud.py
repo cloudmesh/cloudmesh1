@@ -3,8 +3,10 @@ import yaml
 import string
 from random import choice
 
+
 class cloudmesh_cloud:
-    """Provides credentials for various cloud platforms""" 
+
+    """Provides credentials for various cloud platforms"""
     CLOUD_DEFNS = '%s/cloudmesh_clouds.yaml' % os.path.dirname(__file__)
 
     def __init__(self, profiledata, defaultproj, projectlist, cloudname):

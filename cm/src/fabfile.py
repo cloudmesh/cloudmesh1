@@ -33,7 +33,7 @@ try:
     from sh import fgmetric
 except:
     print '======================================================'
-    print 'fgmetric should be installed to use \'cm metric\' command' 
+    print 'fgmetric should be installed to use \'cm metric\' command'
     print '======================================================'
     pass
 
@@ -89,9 +89,9 @@ maxparallel = 7
 #           "delta.futuregrid.org",
 #           "bravo.futuregrid.org"]
 
-######################################################################
+#
 # Terminal related methods
-######################################################################
+#
 
 (terminal_height, terminal_width) = os.popen(
     'stty size', 'r').read().split()
@@ -113,9 +113,9 @@ def _indent(numSpaces, s):
     return '\n'.join(numSpaces * ' ' + i for i in s.splitlines())
 
 
-######################################################################
+#
 # HTML related methods
-######################################################################
+#
 
 def table_header(header, span):
     global table
@@ -156,7 +156,8 @@ def table_two_col_row(data, cols):
     global table
     if DISPLAY_HTML:
         table += '<tr>'
-        table += '<td> %s </td><td colspan=%d> %s </td>' % (data[0], cols - 1, data[1])
+        table += '<td> %s </td><td colspan=%d> %s </td>' % (
+            data[0], cols - 1, data[1])
         table += '</tr>\n'
     else:
         table += '%20s: %s' % (data[0], data[1])
@@ -330,9 +331,9 @@ def page_end():
         table += 'Gregor von Laszewski, 2013, FutureGrid Cloud Mesh.\n'
 
 
-######################################################################
+#
 # Menu related methods
-######################################################################
+#
 
 status_summary = ''
 table = ''
@@ -363,7 +364,7 @@ def _refresh_servers():
                 'name': name.strip(),
                 'status': status.strip(),
                 'ip': ip.strip(),
-             }
+            }
     except:
         instances_cache = ''
 
@@ -438,7 +439,8 @@ def menu():
             table += tab.get_string()
             table = table.replace('ACTIVE', '%s%s%s' % (term.green,
                                   'ACTIVE', term.black))
-            table = table.replace('ERROR', '%s%s%s' % (term.red, 'ERROR', term.black))
+            table = table.replace(
+                'ERROR', '%s%s%s' % (term.red, 'ERROR', term.black))
             table = table.replace('BUILD', '%s%s%s' % (term.blue,
                                   'BUILD', term.black))
             table += '\n'
@@ -485,7 +487,7 @@ def menu():
 
         if uname().strip() == 'Darwin':
             os.system('osascript -e \'tell application "Safari" to open location "file://%s"\''
-                       % filename)
+                      % filename)
         else:
             print 'OS not yet tested'
             os.system('firefox file://%s' % filename)
@@ -499,9 +501,9 @@ def menu():
         print servers
 
 
-######################################################################
+#
 # Key related methods
-######################################################################
+#
 
 def key():
     """adds your public ~/.ssh/id_rsa.pub to the keypairs"""
@@ -559,9 +561,9 @@ def keydelete(name):
     nova('keypair-delete', '%s' % name)
 
 
-######################################################################
+#
 # Test an image by running some commands on it
-######################################################################
+#
 
 def test(index):
     name = generate_name(index)
@@ -599,9 +601,9 @@ def bwait(index):
         print 'Failure to launch %s' % name
 
 
-######################################################################
+#
 # VM CREATION
-######################################################################
+#
 
 def generate_name(index):
     '''generates the name of the VM based on the index'''
@@ -632,7 +634,7 @@ def boot(index):
             '--key_name',
             '%s' % prefix,
             '%s' % name,
-            )
+        )
         print tmp
     except Exception, e:
         print e
@@ -672,7 +674,7 @@ def reindex():
                 status,
                 network,
                 rest,
-                ) = line.split('|')
+            ) = line.split('|')
             newname = generate_name(index)
             if name != newname:
                 nova.rename(id, newname)
@@ -709,9 +711,9 @@ def fix():
     menu()
 
 
-######################################################################
+#
 # STATUS OF VMS
-######################################################################
+#
 
 def created():
     """shows when a VM was created*"""
@@ -754,9 +756,9 @@ def show():
         print 'Found 0 instances to show'
 
 
-######################################################################
+#
 # VM DELETION
-######################################################################
+#
 
 def kill():
     """kills all the instances with prefix prefix-*"""
@@ -839,9 +841,9 @@ def clean():
     menu()
 
 
-######################################################################
+#
 # waiting for public ip assignment
-######################################################################
+#
 
 def wait():
     """not yet implemented"""
@@ -868,9 +870,9 @@ def wait():
         print 'done'
 
 
-######################################################################
+#
 # INFORMATION SERVICES
-######################################################################
+#
 
 def limits():
     print nova('absolute-limits')
@@ -946,13 +948,15 @@ def _status():
         status_summary = 'Total=%d ' % len(servers)
         for status in hist:
             status_summary += '%s=%s ' % (str(status),
-                    str(hist[status]))
+                                          str(hist[status]))
     except:
         print '0 instances found'
 
-######################################################################
-# Statistics by FG Metric 
-######################################################################
+#
+# Statistics by FG Metric
+#
+
+
 def metric(ownerid):
     """Get usage data from FG Metrics"""
 
@@ -964,9 +968,9 @@ def metric(ownerid):
     menu()
 
 
-######################################################################
+#
 # OTHER
-######################################################################
+#
 
 def r():
     '''refresh'''
@@ -983,12 +987,12 @@ def _jtest():
 # print "... refreshing"
 # menu()
 
-######################################################################
+#
 # OTHER
-######################################################################
+#
 
 # def install():
-#    os.system("pip install --upgrade -e git+https://github.com/openstack/python-novaclient.git#egg=python-novaclient")
+# os.system("pip install --upgrade -e git+https://github.com/openstack/python-novaclient.git#egg=python-novaclient")
 #    os.system("cp cm %s" % os.environ['VIRTUAL_ENV'])
 
 def iconson():
@@ -999,5 +1003,3 @@ def iconson():
 def iconsoff():
     local('defaults write com.apple.finder CreateDesktop -bool false')
     local('killall Finder')
-
-

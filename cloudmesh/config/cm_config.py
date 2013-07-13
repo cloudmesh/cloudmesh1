@@ -13,6 +13,7 @@ from cloudmesh.util.logger import LOGGER
 
 log = LOGGER("cm_config")
 
+
 class cm_config(object):
 
     # ----------------------------------------------------------------------
@@ -30,7 +31,7 @@ class cm_config(object):
     # ----------------------------------------------------------------------
 
     def __init__(self, filename=None):
-        if filename == None:
+        if filename is None:
             home = os.environ['HOME']
             self.filename = "%s/%s" % (home, self.default_path)
         else:
@@ -241,7 +242,7 @@ class cm_config(object):
         return self.data['cloudmesh']['profile']
 
     def userkeys(self, attribute=None, expand=True):
-        if attribute == None:
+        if attribute is None:
             return self.data['cloudmesh']['keys']
         else:
             if attribute == 'default':
@@ -271,7 +272,7 @@ class cm_config(object):
         return defaults[defname] if defname in defaults else None
 
     def get(self, key=None, expand=False):
-        if key == None:
+        if key is None:
             return self.data['cloudmesh']
         else:
             if expand:

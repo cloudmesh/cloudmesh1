@@ -1,5 +1,6 @@
 
 class table:
+
     '''
     format = HTML | ASCII | "%20s"
     type is not used and wil be in future removed
@@ -45,7 +46,7 @@ class table:
         return ""
 
     def _cell(self, value, format=None):
-        if format == None or format == 'ASCII':
+        if format is None or format == 'ASCII':
             return value + ' '
         if format.startswith('%'):
             field = format % value
@@ -55,7 +56,7 @@ class table:
         return ""
 
     def _row(self, value, format=None):
-        if format == None or format == 'ASCII' or format.startswith('%'):
+        if format is None or format == 'ASCII' or format.startswith('%'):
             return value + '\n'
         if format == 'HTML':
             return '    <tr>' + value + '</tr>\n'

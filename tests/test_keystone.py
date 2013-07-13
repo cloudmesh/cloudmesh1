@@ -23,6 +23,7 @@ pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh.util.util import HEADING
 
+
 class Test_cloudmesh_keystone:
 
     def test18_initialize(self):
@@ -50,10 +51,11 @@ class Test_cloudmesh_keystone:
         assert 'india-openstack' in cmdata['clouds']
         assert 'sierra-openstack-grizzly' in cmdata['clouds']
         assert 'credentials' in cmdata['clouds']['sierra-openstack-grizzly']
-        assert cmdata['clouds']['sierra-openstack-grizzly']['credentials']['OS_VERSION'] == 'grizzly'
-        assert cmdata['clouds']['sierra-openstack-grizzly']['credentials']['OS_USERNAME'] == username
+        assert cmdata['clouds']['sierra-openstack-grizzly'][
+            'credentials']['OS_VERSION'] == 'grizzly'
+        assert cmdata['clouds']['sierra-openstack-grizzly'][
+            'credentials']['OS_USERNAME'] == username
         assert cmdata['prefix'] == username
-
 
     def test19_openstack_grizzly(self):
         HEADING("INITIALIZATION")
@@ -62,10 +64,15 @@ class Test_cloudmesh_keystone:
         self.config.cloudcreds_handler = openstack_grizzly_cloud
         self.config.cloudcreds_handler._client = mock_keystone.Client
         self.config.cloudcreds_handler._client.mockusername = username
-        self.config.cloudcreds_handler._client.mocktenants = self.config.data['cloudmesh']['active']
+        self.config.cloudcreds_handler._client.mocktenants = self.config.data[
+            'cloudmesh']['active']
         self.config.initialize(username)
         cmdata = self.config.data['cloudmesh']
-        assert cmdata['clouds']['sierra-openstack-grizzly']['credentials']['OS_VERSION'] == 'grizzly'
-        assert cmdata['clouds']['sierra-openstack-grizzly']['credentials']['OS_USERNAME'] == username
-        assert 'OS_PASSWORD' in cmdata['clouds']['sierra-openstack-grizzly']['credentials']
-        assert 'project' in cmdata['clouds']['sierra-openstack-grizzly']['default']
+        assert cmdata['clouds']['sierra-openstack-grizzly'][
+            'credentials']['OS_VERSION'] == 'grizzly'
+        assert cmdata['clouds']['sierra-openstack-grizzly'][
+            'credentials']['OS_USERNAME'] == username
+        assert 'OS_PASSWORD' in cmdata['clouds'][
+            'sierra-openstack-grizzly']['credentials']
+        assert 'project' in cmdata['clouds'][
+            'sierra-openstack-grizzly']['default']

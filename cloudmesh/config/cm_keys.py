@@ -25,7 +25,8 @@ def key_validate(keytype, filename):
         keytype, key_string, comment = keystring.split()
         data = base64.decodestring(key_string)
         int_len = 4
-        str_len = struct.unpack('>I', data[:int_len])[0]  # this should return 7
+        str_len = struct.unpack('>I', data[:int_len])[
+            0]  # this should return 7
 
         if data[int_len:int_len + str_len] == keytype:
             return True
@@ -41,7 +42,7 @@ class cm_keys:
     def __init__(self, filename=None):
         """initializes based on cm_config and returns pointer to the keys dict."""
         # Check if the file exists
-        if filename == None:
+        if filename is None:
             self.config = cm_config()
         else:
             self.filename = self._path_expand(filename)
@@ -99,9 +100,9 @@ class cm_keys:
             self.__setitem__(name, expanded_value)
         print "EXPANDED", expanded_value
 
-    def __delitem__ (self, name):
-        self.delete (name)
-        
+    def __delitem__(self, name):
+        self.delete(name)
+
     def delete(self, name):
         """ not tested"""
         newdefault = False
@@ -113,8 +114,7 @@ class cm_keys:
 
         del self.config.data["cloudmesh"]["keys"]["keylist"][key]
 
-
-        ######### ERROR Defalut is not self?
+        # ERROR Defalut is not self?
         if newdefault:
             if len(self.config.data["cloudmesh"]["keys"]["keylist"]) > 0:
                 default = self.config.data["cloudmesh"]["keys"]["keylist"][0]
@@ -164,6 +164,6 @@ class cm_keys:
 
     def __len__(self):
         return len(self.names())
-    
+
     def no_of_keys(self):
         return len(self.names())

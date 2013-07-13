@@ -14,11 +14,10 @@ pages_files = [f.replace(".md", "")
 
 sidebar_flatpages = []
 for page in pages_files:
-    sidebar_flatpages.append({"url": "/" + page + "/", "name": page.capitalize()})
+    sidebar_flatpages.append(
+        {"url": "/" + page + "/", "name": page.capitalize()})
 
 flask.Flask.app_ctx_globals_class.sidebar_flatpages = sidebar_flatpages
 
-log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.sidebar_flatpages)))
-
-
-
+log.info(
+    "{0}".format(str(flask.Flask.app_ctx_globals_class.sidebar_flatpages)))

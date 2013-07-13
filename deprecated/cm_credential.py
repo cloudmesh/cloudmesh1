@@ -44,7 +44,7 @@ class credentials:
             }
 
     def __init__(self, label, filename=None):
-        if filename != None:
+        if filename is not None:
             self.filename = filename
         self._load()
         self.label = label

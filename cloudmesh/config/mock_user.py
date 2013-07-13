@@ -1,4 +1,5 @@
 class mock_user:
+
     """ Provides a mock class for testing. Represents the user/project
     data that will come from LDAP and/or Portal. """
 
@@ -17,20 +18,20 @@ class mock_user:
                 'phone': '812 ...',
                 'e-mail': 'laszewski@gmail.com',
                 'address': ['Indiana University', 'Bloomington, IN 47408']
-                },
+            },
             'keys': {
                 'name 1': 'file $HOME/.ssh/id_rsa.pub',
                 'name 2': 'file $HOME/.ssh/id_rsa2.pub',
                 'bla': 'key ssh-rsa AAAAB3.....zzzz keyname'
-                },
+            },
             'projects': {
                 'active': ['fg-82', 'fg-101'],
                 'completed': ['fg-81', 'fg-102'],
                 'default': 'fg-82'
-                },
+            },
             'active': ['sierra-openstack-grizzly', 'india-openstack'],
             'default': 'sierra-openstack-grizzly'
-            }
+        }
 
     @property
     def data(self):
@@ -93,22 +94,3 @@ class mock_user:
     @property
     def defaultproject(self):
         return self.data['projects']['default']
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

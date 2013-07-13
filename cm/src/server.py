@@ -1,7 +1,8 @@
 import cherrypy
 import os
 from sh import cat
-from sh import cm 
+from sh import cm
+
 
 class CloudMeshServer(object):
 
@@ -10,7 +11,7 @@ class CloudMeshServer(object):
         os.system("cm r")
         buttons = self.buttons()
         table = cat("/tmp/gvonlasz/cm.html")
-        return buttons + str (table)
+        return buttons + str(table)
 
     @cherrypy.expose
     def refresh(self):

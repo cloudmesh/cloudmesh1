@@ -1,4 +1,5 @@
 class mock_cloud:
+
     """ Provides a mock class for testing.  Represents the cloud
     credential data that will come from cloud API"""
 
@@ -20,13 +21,13 @@ class mock_cloud:
                     'OS_USERNAME': self._username,
                     'OS_VERSION': 'essex',
                     'OS_CACERT': '$HOME/.futuregrid/india/openstack/cacert.pem'
-                    },
+                },
                 'default': {
                     'flavor': 'm1.tiny',
                     'image': 'ktanaka/ubuntu1204-ramdisk.manifest.xml',
                     'project': 'fg-181'
-                    }
                 }
+            }
         elif self.cloudname == 'sierra-openstack-grizzly':
             self._data = {
                 'cm_label': 'ios',
@@ -39,13 +40,13 @@ class mock_cloud:
                     'OS_USERNAME': self._username,
                     'OS_VERSION': 'grizzly',
                     'OS_CACERT': '$HOME/.futuregrid/india/openstack/cacert.pem'
-                    },
+                },
                 'default': {
                     'flavor': 'm1.tiny',
                     'image': 'ktanaka/ubuntu1204-ramdisk.manifest.xml',
                     'project': 'fg-181'
-                    }
                 }
+            }
 
     def initialize_cloud_user(self):
         pass
@@ -59,29 +60,3 @@ class mock_cloud:
         if self._data is None:
             self._load_data()
         return self._data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

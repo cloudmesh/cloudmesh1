@@ -21,16 +21,17 @@ pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh.util.util import HEADING
 
+
 class Test_Inventory:
 
-    #filename = "$HOME/.futuregrid/cloudmesh-new.yaml"
+    # filename = "$HOME/.futuregrid/cloudmesh-new.yaml"
 
     def setup(self):
         self.inventory = Inventory("nosetest")
 
     def tearDown(self):
         pass
-        #self.inventory.disconnect()
+        # self.inventory.disconnect()
 
     def test00_disconnect(self):
         HEADING("00 DISCONNECT")
@@ -42,24 +43,24 @@ class Test_Inventory:
 
     def test02_add_Service(self):
         HEADING("test02_add_Service")
-        now =  datetime.now()
+        now = datetime.now()
         service = FabricService(
             name='Euca',
             date_start=now,
             date_update=now,
             date_stop=now
-            )
+        )
         self.inventory.save(service)
 
     def test03_add_Server(self):
         HEADING("test03_add_Server")
-        now =  datetime.now()
+        now = datetime.now()
         service = FabricService(
             name='OpenStack',
             date_start=now,
             date_update=now,
             date_stop=now
-            )
+        )
         self.inventory.save(service)
 
         server = FabricServer(
@@ -67,16 +68,17 @@ class Test_Inventory:
             date_start=now,
             date_update=now,
             date_stop=now,
-            services = [service]
-            )
+            services=[service]
+        )
 
         self.inventory.save(server)
 
     def test05_create(self):
         HEADING("test05_create")
-        self.inventory.create("server","dynamic", "india[9-11].futuregrid.org,india[01-02].futuregrid.org")
+        self.inventory.create(
+            "server", "dynamic", "india[9-11].futuregrid.org,india[01-02].futuregrid.org")
         print self.inventory.pprint()
-        assert self.inventory.exists("server", "india01.futuregrid.org") 
+        assert self.inventory.exists("server", "india01.futuregrid.org")
 
     def test06_loop_print(self):
         HEADING("test06_loop_print")
@@ -85,17 +87,18 @@ class Test_Inventory:
 
     def test07_exists(self):
         HEADING("test07_exists")
-        assert self.inventory.exists("server", "india01.futuregrid.org") == True
+        assert self.inventory.exists(
+            "server", "india01.futuregrid.org") is True
 
     def test08_print(self):
         HEADING("test08_print")
-        self.inventory.pprint()    
+        self.inventory.pprint()
 
     def test09_count(self):
         HEADING("test09_count")
         print self.inventory.servers.count(), self.inventory.services.count()
-        assert (self.inventory.servers.count() == 6) and (self.inventory.services.count() == 2)
-
+        assert (self.inventory.servers.count() == 6) and (
+            self.inventory.services.count() == 2)
 
     def test10_set(self):
         HEADING("test10_set")
@@ -104,10 +107,9 @@ class Test_Inventory:
             "server",
             "dynamic",
             "india01.futuregrid.org")
-        
+
         print self.inventory.pprint()
         print self.inventory.exists("server", "india01.futuregrid.org")
-            
 
         self.inventory.set_service(
             "india01-opensatck",
@@ -123,10 +125,9 @@ class Test_Inventory:
             "server",
             "dynamic",
             "india01.futuregrid.org")
-        
+
         print self.inventory.pprint()
         print self.inventory.exists("server", "india01.futuregrid.org")
-            
 
         self.inventory.add_service(
             "india01-opensatck",
@@ -138,7 +139,7 @@ class Test_Inventory:
     def test12_logging(self):
         self.test11_add()
         HEADING("test12_logging")
-        s = self.inventory.get("server","india01.futuregrid.org")[0]
+        s = self.inventory.get("server", "india01.futuregrid.org")[0]
         print s.data
         s.stop()
         s.start()

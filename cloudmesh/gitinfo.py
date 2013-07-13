@@ -2,13 +2,14 @@ from pprint import pprint
 from sh import git
 from sh import sort
 
+
 class GitInfo:
 
     def version(self):
         return str(git.describe("--tags"))[:-1]
 
     def emails(self, format_arg=None):
-        if format_arg == None:
+        if format_arg is None:
             format_string = "'%aN' <%cE>"
         elif format_arg == 'dict':
             format_string = "%aN\t%cE"
@@ -16,7 +17,7 @@ class GitInfo:
             "--all", "--format=" + format_arg_string,
             _tty_in=True, _tty_out=False, _piped=True), "-u")
 
-        if format_arg == None:
+        if format_arg is None:
             return result
         elif format_arg == "dict":
             list = result.replace("\n", "\t").split("\t")[:-1]
@@ -28,7 +29,7 @@ class GitInfo:
 
     def authors(self, format_arg=None):
         result = git.shortlog("-s", "-n", _tty_in=True, _tty_out=False)
-        if format_arg == None:
+        if format_arg is None:
             return result
         elif format_arg == "dict":
             list = result.replace("\n", "\t").split("\t")[:-1]
@@ -78,7 +79,7 @@ class GitInfo:
 
         stats = {}
         sums = {"fileschanged": 0, "inserted":
-               0, "deleted": 0, "lineschanged": 0}
+                0, "deleted": 0, "lineschanged": 0}
         for email in emails:
             print "Calculating stats for",  email
             stats[email] = gitinfo.stat(email)

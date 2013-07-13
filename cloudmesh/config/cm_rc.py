@@ -9,7 +9,7 @@ Usage:
   cm-manage config dump [--format=(yaml|dict)]
   cm-manage config init [-o OUT] [-u USER]
   cm-manage config list
-  cm-manage config fetch [-u USER] [-r HOST] 
+  cm-manage config fetch [-u USER] [-r HOST]
   cm-manage --version
   cm-manage --help
 
@@ -65,15 +65,16 @@ from ldap_user import ldap_user
 from cloudmesh.config.openstack_grizzly_cloud import openstack_grizzly_cloud
 from sh import scp
 
-##### For testing
+# For testing
 # import mock_keystone
 
 debug = True
 
+
 def DEBUG(label, var):
     if debug:
         print 70 * "-"
-        print label 
+        print label
         print 70 * " "
         print str(var)
         print 70 * "-"
@@ -81,30 +82,29 @@ def DEBUG(label, var):
 #
 # http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input
 #
+
+
 def yn_choice(message, default='y'):
     choices = 'Y/n' if default.lower() in ('y', 'yes') else 'y/N'
     choice = raw_input("%s (%s) " % (message, choices))
     values = ('y', 'yes', '') if default == 'y' else ('y', 'yes')
     return True if choice.strip().lower() in values else False
 
+
 def main():
     default_path = '.futuregrid/novarc'
     arguments = docopt(__doc__, version='0.8')
 
     DEBUG("arguments", arguments)
-    
+
     home = os.environ['HOME']
 
     DEBUG("home", home)
-    
 
-    ######################################################################
+    #
     # This secion deals with handeling "cm config" related commands
-    ######################################################################
-    is_config =  arguments['config'] != None
-
-
-
+    #
+    is_config = arguments['config'] is not None
 
     if is_config:
 
@@ -125,23 +125,21 @@ def main():
             sys.exit(1)
 
         name = arguments['NAME']
-        
-        if arguments['fetch'] or name == 'fetch':
-            
-            DEBUG('Arguments', arguments)
 
+        if arguments['fetch'] or name == 'fetch':
+
+            DEBUG('Arguments', arguments)
 
             # get user
             var = {}
             var['user'] = arguments['--user']
             var['host'] = arguments['--remote']
             var['file'] = ".futuregrid/cloudmesh.yaml"
-            if var['user'] == None:
+            if var['user'] is None:
                 var['user'] = getpass.getuser()
 
             from_location = "%(user)s@%(host)s:%(file)s" % var
             to_location = os.path.expanduser("~/%(file)s" % var)
-
 
             if os.path.isfile(to_location):
                 print "WARNING: The file %s exists" % to_location
@@ -151,14 +149,13 @@ def main():
             print from_location
             print to_location
 
-            print "Copy cloudmesh file from %s to %s" %  (from_location, to_location)
+            print "Copy cloudmesh file from %s to %s" % (from_location, to_location)
 
             result = scp(from_location, to_location)
 
             print result
 
             sys.exit(0)
-
 
         if arguments['projects'] and arguments['list']:
 
@@ -177,7 +174,7 @@ def main():
             while not selected:
                 counter = 1
                 for name in projects:
-                    print counter, "-" "%20s" % name 
+                    print counter, "-" "%20s" % name
                     choices.append(name)
                     counter += 1
                 print "Please select:"
@@ -187,7 +184,7 @@ def main():
                     sys.exit(0)
                 selected = (input > 0) and (input < counter)
             print "Selected: ", input
-            name = choices[input-1]
+            name = choices[input - 1]
             print name
 
             sys.exit(0)
@@ -197,11 +194,11 @@ def main():
             username = arguments['--user'] or os.getenv('USER')
             config.userdata_handler = ldap_user
             config.cloudcreds_handler = openstack_grizzly_cloud
-            ########### for testing #############################################################
+            # for testing #############################################################
             # config.cloudcreds_handler._client = mock_keystone.Client
             # config.cloudcreds_handler._client.mockusername = username
             # config.cloudcreds_handler._client.mocktenants = config.data['cloudmesh']['active']
-            #####################################################################################
+            #
             config.initialize(username)
             try:
                 config.write(output)
@@ -216,16 +213,16 @@ def main():
                     print name, "(%s)" % config.data['cloudmesh']['clouds'][name]['cm_type']
             sys.exit(0)
 
-        if arguments['dump'] or name =='dump':
+        if arguments['dump'] or name == 'dump':
             format = arguments['--format']
             if format == 'yaml':
                 print yaml.dump(config, default_flow_style=False, indent=4)
-            elif format == 'dict' or format ==None:
+            elif format == 'dict' or format is None:
                 print config
             sys.exit(0)
 
         if name == '?':
-            if file == None:
+            if file is None:
                 arguments['--out'] = "%s/%s" % (home, default_path)
             print "Please select from the following:"
             print "0 - Cancel"
@@ -245,11 +242,11 @@ def main():
                     sys.exit(0)
                 selected = (input > 0) and (input < counter)
             print "Selected: ", input
-            name = choices[input-1]
+            name = choices[input - 1]
 
         output = arguments['--out']
 
-        if name != None:
+        if name is not None:
             cloud = config.cloud(name)
             if not cloud:
                 print "%s: The cloud '%s' is not defined." % ("CM ERROR", name)
@@ -265,7 +262,8 @@ def main():
                         print "No such project %s defined in cloud %s." % (project, name)
                         sys.exit(1)
                 else:
-                    project = config.cloud_default(name, 'project') or config.projects('default')
+                    project = config.cloud_default(
+                        name, 'project') or config.projects('default')
                     if not project in cloud:
                         print "Default project %s not defined in cloud %s." % (project, name)
                         sys.exit(1)
@@ -278,26 +276,28 @@ def main():
             if arguments["-"]:
                 print result
             else:
-                if output == None:
+                if output is None:
                     arguments['--out'] = "%s/%s" % (home, default_path)
                     output = arguments['--out']
                 out = False
                 try:
                     # First we try to open the file assuming it doesn't exist
-                    out = os.open(output, os.O_CREAT | os.O_EXCL | os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
+                    out = os.open(
+                        output, os.O_CREAT | os.O_EXCL | os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
                 except OSError as oserr:
                     # If file exists, offer to replace it
                     if oserr.errno == 17:
-                        delete = raw_input("'%s' exists; Overwrite it [N|y]? " % output)
+                        delete = raw_input(
+                            "'%s' exists; Overwrite it [N|y]? " % output)
                         if delete.strip().lower() == 'y':
                             out = os.open(output, os.O_TRUNC | os.O_WRONLY)
                 if out:
-                    os.write(out,result)
+                    os.write(out, result)
                     os.close(out)
 
-    ######################################################################
+    #
     # END "cm config" related commands
-    ######################################################################
+    #
 
 if __name__ == '__main__':
     main()

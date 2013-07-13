@@ -24,8 +24,8 @@ if sys.platform == 'darwin':
 # here, so do not use the version increment
 #
 
-#filename = "VERSION.txt"
-#version = open(filename).read()
+# filename = "VERSION.txt"
+# version = open(filename).read()
 
 SERVER = "server"
 
@@ -43,6 +43,7 @@ def _write_version(version):
     file.close()
 """
 
+
 def _cleantest():
     """wipe out the database and rerun the test. not recommended."""
     local("python cloud_mesh.py")
@@ -56,16 +57,17 @@ def cm():
 all: server view
 
 server:
-	cd ..; python setup.py install
-	python server.py
+        cd ..; python setup.py install
+        python server.py
 
 view:
-	sleep 1
-	 %s http://127.0.0.1:5000/inventory/
+        sleep 1
+         %s http://127.0.0.1:5000/inventory/
 """ % browser
-    #webbrowser.open("http://127.0.0.1:5000")
+    # webbrowser.open("http://127.0.0.1:5000")
     file.close()
     os.system("make -j -f Makefile~ all")
+
 
 def deltag(tag):
     local("git tag -d %s" % tag)
@@ -110,6 +112,7 @@ def tag():
     changes()
 '''
 
+
 def changes():
     """look at the changes in github since the last taged version"""
     gitversion = _git("describe", "--abbrev=0", "--tags").strip()
@@ -144,7 +147,7 @@ def force():
 
 def pypi():
     force()
-    #	python setup.py register
+    #   python setup.py register
     local("python setup.py sdist upload")
 
 

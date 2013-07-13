@@ -106,9 +106,11 @@ inventory.create_cluster(
 inventory.create_cluster(
     "delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001", "d")
 inventory.create_cluster("gamma", "302.202.204.[1-16]", "g-{0:03d}", 1,
- "g-001", "g")
-inventory.create_cluster("india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
-inventory.create_cluster("sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
+                         "g-001", "g")
+inventory.create_cluster(
+    "india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
+inventory.create_cluster(
+    "sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
 
 
 centos = FabricImage(
@@ -205,20 +207,17 @@ app.register_blueprint(menu_module, url_prefix='', )
 app.register_blueprint(flatpages_module, url_prefix='', )
 
 
-
 #@app.context_processor
-#def inject_pages():
+# def inject_pages():
 #    return dict(pages=pages)
-
-
 # app.register_blueprint(menu_module, url_prefix='/', )
-
 if debug:
     AutoIndex(app, browse_root=os.path.curdir)
 
 # ============================================================
 # VESRION
 # ============================================================
+
 
 @app.context_processor
 def inject_version():
@@ -549,14 +548,14 @@ def display_inventory_images():
     return render_template('images.html',
                            inventory=inventory)
 
+
 @app.route('/inventory/cluster/<cluster>/<name>')
-def display_named_resource(cluster,name):
+def display_named_resource(cluster, name):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     return render_template('inventory_cluster_resource.html',
                            updated=time_now,
                            name=name,
                            cluster=inventory.find("cluster", cluster))
-
 
 
 @app.route('/inventory/cluster/<cluster>/')
@@ -571,11 +570,11 @@ def display_cluster(cluster):
 def display_cluster_table(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    cluster_obj=inventory.find("cluster", cluster)
+    cluster_obj = inventory.find("cluster", cluster)
     n = len(cluster_obj['compute_nodes'])
     parameters = {
         "columns": 10,
-        "n" : n
+        "n": n
     }
 
     return render_template('inventory_cluster_table.html',
@@ -636,13 +635,10 @@ def get_attribute():
     return s[attribute]
 
 
-
 # ============================================================
 # ROUTE: METRIC
 # ============================================================
 #@app.route('/metric/<s_date>/<e_date>/<user>/<cloud>/<host>/<period>/<metric>')
-
-
 @app.route('/metric/main', methods=['POST', 'GET'])
 def metric():
     args = {"s_date": request.args.get('s_date', ''),

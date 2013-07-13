@@ -3,9 +3,10 @@ from string import Template
 import os
 import json
 
+
 class cm_projects:
 
-    def _path_expand(self,text):
+    def _path_expand(self, text):
         """ returns a string with expanded variavble """
         template = Template(text)
         result = template.substitute(os.environ)
@@ -15,17 +16,18 @@ class cm_projects:
     def __init__(self, filename=None):
         """initializes based on cm_config and returns pointer to the projects dict."""
         # Check if the file exists
-        if filename == None:
+        if filename is None:
             self.config = cm_config()
         else:
             self.filename = self._path_expand(filename)
             try:
-                with open(self.filename): pass
+                with open(self.filename):
+                    pass
             except IOError:
                 print 'ERROR: cm_projects, file "%s" does not exist' % self.filename
                 sys.exit()
             self.config = cm_config(self.filename)
-        
+
     @property
     def default(self):
         """returns the default project"""
@@ -50,11 +52,11 @@ class cm_projects:
         """adds a project with given status"""
         # add the name to the following array (make sure it is an array ;-)
         self.config.data['cloudmesh']['projects']['active'].remove(name)
-        
+
     def names(self, status="active"):
         """returns all projects in an array with a specified status"""
         return self.config.data['cloudmesh']['projects'][status]
-        
+
     def __str__(self):
         """returns the dict in a string representing the project"""
         # untested
@@ -65,9 +67,7 @@ class cm_projects:
         """returns the dict in a string representing the project"""
         # untested
         return json.dumps(self.config.data['cloudmesh']['projects'], indent=4)
-    
+
     def write(self):
         """writes the updated dict to the config"""
         self.config.write()
-
-

@@ -4,11 +4,12 @@ from cloudmesh.config.cm_keys import cm_keys
 
 keys_module = Blueprint('keys_module', __name__)
 
-######################################################################
+#
 # ROUTE: KEYS
-######################################################################
+#
 
-@keys_module.route('/keys/',methods=['GET','POST'])
+
+@keys_module.route('/keys/', methods=['GET', 'POST'])
 def managekeys():
     keys = cm_keys()
 
@@ -16,7 +17,7 @@ def managekeys():
     error = False
     """
     keys:
-      default: name 1 
+      default: name 1
       keylist:
          name 1: $HOME/.ssh/id_rsa.pub # this is automatically replaced with the key
          name 2: $HOME/.ssh/id_rsa2.pub # this is automatically replaced with the key
@@ -27,8 +28,8 @@ def managekeys():
         fileorstring = request.form['keyorpath']
 
         if keys.defined(keyname):
-            
-            msg = "Key name already exists. Please delete the key '%s' before proceeding." % keyname           
+
+            msg = "Key name already exists. Please delete the key '%s' before proceeding." % keyname
         else:
             try:
                 keys.set(keyname, fileorstring, expand=True)
@@ -37,15 +38,15 @@ def managekeys():
             except Exception, e:
                 keys.delete(keyname)
                 msg = e
-            
-    elif request.method == 'POST' :
+
+    elif request.method == 'POST':
             keys['default'] = request.form['selectkeys']
             keys.write()
 
     return render_template('keys.html',
                            keys=keys,
                            show=msg)
-                        
+
 
 @keys_module.route('/keys/delete/<name>/')
 def deletekey(name):
@@ -57,4 +58,3 @@ def deletekey(name):
     except:
         print "Error: deleting the key %s" % name
     return redirect("/keys/")
-

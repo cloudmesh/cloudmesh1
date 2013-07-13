@@ -1,7 +1,7 @@
 import sys
-sys.path.insert(0, '..') 
+sys.path.insert(0, '..')
 from datetime import datetime
-import pprint 
+import pprint
 pp = pprint.PrettyPrinter(indent=4)
 import json
 import os
@@ -14,10 +14,12 @@ import libcloud.security
 import time
 from sh import fgrep
 
-#from openstack.cm_table import table as cm_table
+# from openstack.cm_table import table as cm_table
 from cloudmesh.config.cm_config import cm_config
 
+
 class eucalyptus:
+
     """
     requires a cloudmesh yaml file with the following structure:
 
@@ -49,14 +51,13 @@ class eucalyptus:
     credentials = {}
 
     filename = "%(home)s/%(location)s" % {
-        "home" : os.environ['HOME'], 
-        "location" : ".futuregrid/cloudmesh.yaml"
-        }
-   
+        "home": os.environ['HOME'],
+        "location": ".futuregrid/cloudmesh.yaml"
+    }
+
     def vms(self):
         return self.servers
 
-   
     def __init__(self, label,
                  project=None,
                  accessKey=None,
@@ -67,7 +68,7 @@ class eucalyptus:
         parameters are provided it will instead use them
         """
         self.clear()
-        self.config(label,project,accessKey,secretKey)
+        self.config(label, project, accessKey, secretKey)
         self.connect()
 
     def clear(self):
@@ -83,50 +84,52 @@ class eucalyptus:
         self.credentials = {}
         self.cloud = None
         self.user_id = None
-    
+
     def connect(self):
-                
+
         Driver = get_driver(Provider.EUCALYPTUS)
-        self.cloud = Driver(self.credentials['accessKey'], 
+        self.cloud = Driver(self.credentials['accessKey'],
                             self.credentials['secretKey'],
-                            host="149.165.146.135", 
+                            host="149.165.146.135",
                             secure=False, port=8773,
                             path="/services/Eucalyptus")
-      
 
-    def config(self,label=None,project=None,accessKey=None,secretKey=None):
+    def config(self, label=None, project=None, accessKey=None, secretKey=None):
         """
         reads in the configuration file if specified, and does some
         internal configuration.
-        """ 
-        if label == None and accessKey == None:
+        """
+        if label is None and accessKey is None:
             label = 'india-eucalyptus'
             project = 'fg-82'
 
-        if accessKey == None:
+        if accessKey is None:
             self.label = label
 
             config = cm_config()
             configuration = config.get(label)
-            
-            pp.pprint(configuration)
-
-            basedir = configuration['BASEDIR'] = configuration['BASEDIR'].replace('~',os.environ['HOME'])
-            configuration[project]['EC2_PRIVATE_KEY']  = "%s/%s" % (basedir, configuration[project]['EC2_PRIVATE_KEY'] )
-            configuration[project]['EUCALYPTUS_CERT']  = "%s/%s" % (basedir, configuration[project]['EUCALYPTUS_CERT'] )
 
             pp.pprint(configuration)
 
+            basedir = configuration['BASEDIR'] = configuration[
+                'BASEDIR'].replace('~', os.environ['HOME'])
+            configuration[project]['EC2_PRIVATE_KEY'] = "%s/%s" % (
+                basedir, configuration[project]['EC2_PRIVATE_KEY'])
+            configuration[project]['EUCALYPTUS_CERT'] = "%s/%s" % (
+                basedir, configuration[project]['EUCALYPTUS_CERT'])
 
-            self.credentials['accessKey']=configuration[project]['EC2_ACCESS_KEY']
-            self.credentials['secretKey']=configuration[project]['EC2_SECRET_KEY']
+            pp.pprint(configuration)
+
+            self.credentials['accessKey'] = configuration[
+                project]['EC2_ACCESS_KEY']
+            self.credentials['secretKey'] = configuration[
+                project]['EC2_SECRET_KEY']
 
         else:
-            self.credentials['accessKey']=accessKey
-            self.credentials['secretkey']=secretKey
-   
-        
-    def __str__ (self):
+            self.credentials['accessKey'] = accessKey
+            self.credentials['secretkey'] = secretKey
+
+    def __str__(self):
         """
         print everything but the credentials that is known about this
         cloud in json format.
@@ -135,7 +138,7 @@ class eucalyptus:
             'label': self.label,
             'sizes': self.sizes,
             'servers': self.nodes,
-            'images' : self.images}
+            'images': self.images}
         return json.dumps(information, indent=4)
 
     def type():
@@ -150,26 +153,24 @@ class eucalyptus:
             all = selection == 'a'
         else:
             all = True
-        
+
         if selection == 'i' or all:
 
             list = self.cloud.list_images()
 
-
             for information in list:
-                image=information.__dict__
+                image = information.__dict__
                 del information._uuid
                 del information.driver
                 self.images[information.id] = image
                 self.images[information.id]['cm_refresh'] = time_stamp
-                
+
         if selection == 'n' or all:
 
             list = self.cloud.list_nodes()
 
-
             for information in list:
-                node=information.__dict__
+                node = information.__dict__
                 del information._uuid
                 del information.driver
                 self.nodes[information.id] = node
@@ -178,112 +179,105 @@ class eucalyptus:
 
             list = self.cloud.list_sizes()
 
-
             for information in list:
-                size=information.__dict__
-                #del information.virtualizationtype
+                size = information.__dict__
+                # del information.virtualizationtype
                 del information.driver
                 del information._uuid
                 self.sizes[information.id] = size
                 self.sizes[information.id]['cm_refresh'] = time_stamp
 
+    def getNodebyID(self, nodeid):
+        nodes = self.cloud.list_nodes()
+        for node in nodes:
+            if node.id == nodeid:
+                return node
 
-    def getNodebyID(self,nodeid):        
-        nodes = self.cloud.list_nodes()      
-        for node in nodes :
-            if node.id == nodeid :
-                return node   
- 
-    def vm_delete(self,node):
+    def vm_delete(self, node):
         result = destroy_node(self, node)
             # add result to internal cache
         print ("vm Deleted")
         return result
-    
-    def restart(self,node):
+
+    def restart(self, node):
         """restarts a vm with the given name"""
         result = reboot_node(self, node)
         # add result to internal cache
         print result
-      
 
     def vm_create(self, name, flavor_name, image_id):
         """
         create a vm
         """
         flavours = self.cloud.list_sizes()
-        vm_flavour= flavours[0]
-        for flavour in flavours :
-            if flavour.id == 'm1.small' :
-                vm_flavour= flavour
+        vm_flavour = flavours[0]
+        for flavour in flavours:
+            if flavour.id == 'm1.small':
+                vm_flavour = flavour
 
         images = self.cloud.list_images()
         vm_image = images[0]
-        for image in images :
-            if image.id == 'ami-000000b4' :
+        for image in images:
+            if image.id == 'ami-000000b4':
                 vm_image = image
 
-        if (name== None):
-            vm_name=self._generate_vmname(randint(0,1000))
+        if (name is None):
+            vm_name = self._generate_vmname(randint(0, 1000))
         else:
-            vm_name=name;
-     
-        self.vm = self.cloud.create_node(name=vm_name, image=vm_image, size=vm_flavour);
-        
-        while 1 :
+            vm_name = name
+
+        self.vm = self.cloud.create_node(
+            name=vm_name, image=vm_image, size=vm_flavour)
+
+        while 1:
             time.sleep(15)
             updatedNode = self.getNodebyID(self.vm.id)
-            if updatedNode.state == 3 :
+            if updatedNode.state == 3:
                 print "pending " + updatedNode.id
-            if updatedNode.state == 0 :
+            if updatedNode.state == 0:
                 print("successful creation of vm")
                 time.sleep(60)
-                break;
-            if updatedNode.state == 4 :
-                print(node.id, "Has Errored out");
+                break
+            if updatedNode.state == 4:
+                print(node.id, "Has Errored out")
                 nodes.remove(vm)
-                break;
+                break
 
         data = self.vm.__dict__
         del data['driver']
         pp.pprint(data)
         return {}
 
-
-    def _generate_vmname(self,index):
+    def _generate_vmname(self, index):
         number = str(index).zfill(3)
         name = '%s-%s' % (self.credentials['username'], number)
         return name
 
 
-
-
-                
 if __name__ == "__main__":
 
+    credential_test = False
+    sizes_test = False
+    table_test = False
+    image_test = False
+    nodes_test = False
+    cloud_test = True
 
-  credential_test = False
-  sizes_test = False
-  table_test = False
-  image_test = False
-  nodes_test = False
-  cloud_test = True
+    cloud = eucalyptus('india-eucalyptus', 'fg-82')
 
-  cloud = eucalyptus('india-eucalyptus', 'fg-82')
-
-  if image_test:
-      cloud.refresh('images')
-      print json.dumps(cloud.images, indent=4)
+    if image_test:
+        cloud.refresh('images')
+        print json.dumps(cloud.images, indent=4)
 #-      pp.pprint (cloud.images)
-  
-  if nodes_test:
-      cloud.refresh('nodes')
-      print json.dumps(cloud.nodes, indent=4)
-     
-  if sizes_test:
-      cloud.refresh('sizes')
-      print json.dumps(cloud.sizes, indent=4)
 
-  if cloud_test:
-      cloud.refresh()
-      print cloud
+    if nodes_test:
+        cloud.refresh('nodes')
+        print json.dumps(cloud.nodes, indent=4)
+
+    if sizes_test:
+        cloud.refresh('sizes')
+        print json.dumps(cloud.sizes, indent=4)
+
+    if cloud_test:
+        cloud.refresh()
+        print cloud

@@ -33,7 +33,7 @@ def activate():
     settingsFilePath = config.get('azure', 'publishsettings_file_path')
     _azure('account', 'clear')
     errmsg = 'No account information found'
-    cmd = 'azure account import \'' + settingsFilePath+'\''
+    cmd = 'azure account import \'' + settingsFilePath + '\''
 
     text = commands.getstatusoutput(cmd)
     if not errmsg in text[1]:
@@ -164,7 +164,7 @@ def _buildAzureImageDict():
                 counter = counter - 1
 
     for line in cleanLines:
-        imageNameCounter = imageNameCounter+1
+        imageNameCounter = imageNameCounter + 1
         l = []
         #(name, id, os) = line.split()
         # l.append(name)
@@ -174,7 +174,7 @@ def _buildAzureImageDict():
         l.append(line.split()[1])
         l.append(line.split()[2])
         l.append(line.split()[3])
-        images[imageNamePrefix+str(imageNameCounter)] = l
+        images[imageNamePrefix + str(imageNameCounter)] = l
 
     return images
 

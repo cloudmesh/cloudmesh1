@@ -17,13 +17,13 @@ pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh.util.util import HEADING
 
+
 class Test_cloudmesh:
 
-    #filename = None
-    #filename = "credentials-example-keys.yaml"
-    #filename = "$HOME/.futuregrid/cloudmesh-new.yaml"
+    # filename = None
+    # filename = "credentials-example-keys.yaml"
+    # filename = "$HOME/.futuregrid/cloudmesh-new.yaml"
     filename = "$HOME/.futuregrid/cloudmesh.yaml"
-
 
     def setup(self):
         self.projects = cm_projects(self.filename)
@@ -37,7 +37,6 @@ class Test_cloudmesh:
             self.projects = cm_projects("wrong file")
         except:
             pass
-            
 
     def test01_print(self):
         HEADING("01 PRINT")
@@ -63,7 +62,6 @@ class Test_cloudmesh:
         HEADING("05 COMPLETED")
         print self.projects.names("completed")
         pass
-
 
     def test06_wrong_status(self):
         HEADING("06 WRONG STATUS")

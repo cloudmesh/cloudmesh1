@@ -1,6 +1,8 @@
 import ldap
 
+
 class ldap_user:
+
     """ Provides a class for getting the user/project
     data that will come from LDAP. """
 
@@ -29,11 +31,13 @@ class ldap_user:
         # Get profile and project data from LDAP
         self._data = {}
 
-        search_result_person = ldapconn.search_s(self.LDAP_PERSONBASE, ldap.SCOPE_SUBTREE, '(cn=%s)' % self.username)
-        self._data['person'] = search_result_person[0][1] if search_result_person is not None else None
+        search_result_person = ldapconn.search_s(
+            self.LDAP_PERSONBASE, ldap.SCOPE_SUBTREE, '(cn=%s)' % self.username)
+        self._data['person'] = search_result_person[0][
+            1] if search_result_person is not None else None
 
-        self._data['projects'] = ldapconn.search_s(self.LDAP_PROJECTBASE, ldap.SCOPE_SUBTREE, '(&(memberUid=%s)(cn=fg*))' % self.username, ['cn'])
-
+        self._data['projects'] = ldapconn.search_s(
+            self.LDAP_PROJECTBASE, ldap.SCOPE_SUBTREE, '(&(memberUid=%s)(cn=fg*))' % self.username, ['cn'])
 
     @property
     def username(self):
@@ -63,7 +67,8 @@ class ldap_user:
 
     @property
     def phone(self):
-        p = self.data['person']['telephoneNumber'][0] if 'telephoneNumber' in self.data['person'] else None
+        p = self.data['person']['telephoneNumber'][
+            0] if 'telephoneNumber' in self.data['person'] else None
         return p or 'TBD'
 
     @property
@@ -72,10 +77,11 @@ class ldap_user:
 
     @property
     def address(self):
-        ## This is currently not in LDAP; also needs to split address
-        ## lines into a list, not sure how ldap will represent this so
-        ## it is not yet done.
-        # return self.data['person']['homePostalAddress'] if 'homePostalAddress' in self.data['person'] else None
+        # This is currently not in LDAP; also needs to split address
+        # lines into a list, not sure how ldap will represent this so
+        # it is not yet done.
+        # return self.data['person']['homePostalAddress'] if
+        # 'homePostalAddress' in self.data['person'] else None
         return ['TBD']
 
     @property
@@ -84,7 +90,8 @@ class ldap_user:
         if 'sshPublicKey' in self.data['person']:
             for sshkey in self.data['person']['sshPublicKey']:
                 if sshkey.strip():
-                    (keytype, key, nickname) = (sshkey.strip().split(None, 2) + [''])[0:3]
+                    (keytype, key, nickname) = (
+                        sshkey.strip().split(None, 2) + [''])[0:3]
                     keys[nickname] = "key %s" % sshkey
             return keys
         else:

@@ -36,9 +36,11 @@ from novaclient.v1_1 import client
 from novaclient.v1_1 import security_groups
 from novaclient.v1_1 import security_group_rules
 
+
 def donotchange(fn):
     return fn
-    
+
+
 class openstack(ComputeBaseType):
 
     type = "openstack"   # global var
@@ -50,16 +52,15 @@ class openstack(ComputeBaseType):
 
     # cm_type = "openstack"
     # name = "undefined"
-    
+
     cloud = None         # internal var for the cloud client in openstack
     user_id = None       # internal var
 
     _nova = nova
 
-
-    ######################################################################
+    #
     # initialize
-    ######################################################################
+    #
     # possibly make connext seperate
     def __init__(self, label,
                  authurl=None,
@@ -76,18 +77,17 @@ class openstack(ComputeBaseType):
         self.label = label
         self.config(label)
         self.connect()
-        
-        
+
     def clear(self):
         """
         clears the data of this openstack instance, a new connection
         including reading the credentials and a refresh needs to be
         called to obtain again data.
         """
-        #Todo: we may just use the name of the class instead as the type
+        # Todo: we may just use the name of the class instead as the type
         self._clear()
         self.type = "openstack"
-        
+
     def connect(self):
         """
         establishes a connection to the OpenStack cloud,
@@ -105,8 +105,8 @@ class openstack(ComputeBaseType):
                   http_log_debug=False, auth_system='keystone',
                   auth_plugin=None,
                   cacert=None):
-        """       
-       
+        """
+
         self.cloud = client.Client(
             self.credential['OS_USERNAME'],
             self.credential['OS_PASSWORD'],
@@ -114,24 +114,23 @@ class openstack(ComputeBaseType):
             self.credential['OS_AUTH_URL'],
             cacert=self.credential['OS_CACERT']
         )
-        self.auth_token= self.get_token()
-
+        self.auth_token = self.get_token()
 
     # BIG BUG, MUST BE DICT
-    #config should have dict as parameter
+    # config should have dict as parameter
     def config(self, label, dict=None):
         """
         reads in the configuration file if specified, and does some
         internal configuration.
         """
         self.label = label
-        if dict == None:
+        if dict is None:
             config = cm_config()
-            self.credential = config.get(label,expand=True)
+            self.credential = config.get(label, expand=True)
 
-            #print self.credential
-            
-            #self.user_id = self.credential['OS_USER_ID']
+            # print self.credential
+
+            # self.user_id = self.credential['OS_USER_ID']
             # self.credential = credentials(label)
         else:
             self.credential = {}
@@ -148,9 +147,9 @@ class openstack(ComputeBaseType):
                                "--os-tenant-name", self.credential.project)
         """
 
-    ######################################################################
+    #
     # TESTS
-    ######################################################################
+    #
 
     def intro(self, what):
         """ used to find some methods form novaclient"""
@@ -212,9 +211,9 @@ class openstack(ComputeBaseType):
 
         now = datetime.now()
 
-    ######################################################################
+    #
     # FIND USER ID
-    ######################################################################
+    #
 
     def find_user_id(self, force=False):
         """
@@ -232,12 +231,13 @@ class openstack(ComputeBaseType):
 
         self.auth_token = result
         self.user_id = result['access']['user']['id']
-        return self.user_id        
+        return self.user_id
 
     def get_token(self):
         """returns the authentikation token from keystone with a curl call"""
-        param = '{"auth":{"passwordCredentials":{"username": "%(OS_USERNAME)s", "password":"%(OS_PASSWORD)s"}, "tenantName":"%(OS_TENANT_NAME)s"}}' % (self.credential)
-        
+        param = '{"auth":{"passwordCredentials":{"username": "%(OS_USERNAME)s", "password":"%(OS_PASSWORD)s"}, "tenantName":"%(OS_TENANT_NAME)s"}}' % (
+            self.credential)
+
         response = curl(
             "--cacert", self.credential['OS_CACERT'],
             "-k",
@@ -245,7 +245,7 @@ class openstack(ComputeBaseType):
             "POST", "%s/tokens" % self.credential['OS_AUTH_URL'],
             "-d", param,
             "-H", 'Content-type: application/json'
-            )
+        )
 
         result = json.loads(str(response))
         return result
@@ -262,24 +262,25 @@ class openstack(ComputeBaseType):
     def _get_conf(self):
         "what example %/servers"
         compute_service = self._get_compute_service()
-        pp.pprint (compute_service)
+        pp.pprint(compute_service)
         conf = {}
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
         conf['token'] = str(self.auth_token['access']['token']['id'])
         return conf
 
-    def _get (self, what):
+    def _get(self, what):
 
         conf = self._get_conf()
-        
+
         apiurlt = urlparse(conf['publicURL'])
         url2 = apiurlt[1]
 
         params2 = ""
-        headers2 = { "X-Auth-Token":conf['token'], "Content-type":"application/json" }
+        headers2 = {"X-Auth-Token": conf[
+            'token'], "Content-type": "application/json"}
         conn2 = httplib.HTTPConnection(url2)
 
-        #conn2.request("GET", "%s/servers" % apiurlt[2], params2, headers2)
+        # conn2.request("GET", "%s/servers" % apiurlt[2], params2, headers2)
         conn2.request("GET", what % (apiurlt[2]), params2, headers2)
 
         response2 = conn2.getresponse()
@@ -288,9 +289,8 @@ class openstack(ComputeBaseType):
 
         conn2.close()
         return dd2
-    
 
-    def get_meta(self,id):
+    def get_meta(self, id):
         msg = "/servers/%s/metadata" % (id)
         return self._get("%s" + msg)
 
@@ -305,9 +305,10 @@ class openstack(ComputeBaseType):
         apiurlt = urlparse(conf['publicURL'])
         url2 = apiurlt[1]
 
-        params2 = '{"metadata":' +  str(metadata).replace("'",'"') + '}'
+        params2 = '{"metadata":' + str(metadata).replace("'", '"') + '}'
 
-        headers2 = { "X-Auth-Token":conf['token'], "Accept":"application/json", "Content-type":"application/json" }
+        headers2 = {"X-Auth-Token": conf[
+            'token'], "Accept": "application/json", "Content-type": "application/json"}
 
         print "%%%%%%%%%%%%%%%%%%"
         pp.pprint(conf)
@@ -315,15 +316,16 @@ class openstack(ComputeBaseType):
         print "PARAMS", params2
         print "HEADERS", headers2
         print "API2", apiurlt[2]
-        print "API1",apiurlt[1]
+        print "API1", apiurlt[1]
         print "ACTIVITY", conf['set']
         print "ID", conf['serverid']
         print "####################"
-                
+
         conn2 = httplib.HTTPConnection(url2)
 
-        conn2.request(conf['set'], "%s/servers/%s/metadata" % (apiurlt[2], conf['serverid']), params2, headers2)
-        
+        conn2.request(conf['set'], "%s/servers/%s/metadata" %
+                      (apiurlt[2], conf['serverid']), params2, headers2)
+
         response2 = conn2.getresponse()
         data2 = response2.read()
         dd2 = json.loads(data2)
@@ -331,18 +333,18 @@ class openstack(ComputeBaseType):
         conn2.close()
         return dd2
 
-    ######################################################################
+    #
     # refresh
-    ######################################################################
+    #
 
     def _get_images_dict(self):
         return self.cloud.images.list(detailed=True)
 
-    def _update_images_dict(self,information):
+    def _update_images_dict(self, information):
         image = information.__dict__
-        id =  image['id']
+        id = image['id']
         # clean not neaded info
-        #del image['manager']
+        # del image['manager']
         del image['_info']
         del image['_loaded']
         # del information.links
@@ -351,10 +353,10 @@ class openstack(ComputeBaseType):
     def _get_flavors_dict(self):
         return self.cloud.flavors.list()
 
-    def _update_flavors_dict(self,information):
+    def _update_flavors_dict(self, information):
         flavor = information.__dict__
         # clean not neaded info
-        #del flavor['manager']
+        # del flavor['manager']
         del flavor['_info']
         del flavor['_loaded']
         # del information.links
@@ -364,60 +366,59 @@ class openstack(ComputeBaseType):
     def _get_servers_dict(self):
         return self.cloud.servers.list(detailed=True)
 
-
-    def _update_servers_dict(self,information):
+    def _update_servers_dict(self, information):
         vm = information.__dict__
-        #pp.pprint (vm)
-        #pp.pprint(vm)
+        # pp.pprint (vm)
+        # pp.pprint(vm)
         delay = vm['id']
-        #del vm['manager']
+        # del vm['manager']
         del vm['_info']
         del vm['_loaded']
         # del information.links
         id = vm['id']
         return (id, vm)
-    
-    
-    ######################################################################
+
+    #
     # security Groups of VMS
-    ######################################################################
-    
+    #
     # GVL: review
     # how does this look for azure and euca? Should there be a general framework for this in the BaseCloud class
     # based on that analysis?
     #
     # comments of wht these things do and how they work are missing
     #
-    def createSecurityGroup(self,default_security_group,description="no-description"):
+    def createSecurityGroup(self, default_security_group, description="no-description"):
         """
         comment is missing
         """
-        protocol=""
-        ipaddress=""
-        max_port=""
-        min_port=""
-        default_security_group_id= self.cloud.security_groups.create(default_security_group,description)
-        default_security_group_id=default_security_group_id.id
-        
-        config_security = cm_config()
-        yamlFile=config_security.get();
-        ruleNames=yamlFile['security']['security_groups'][default_security_group]
-        for ruleName in ruleNames:
-            rules=yamlFile['security']['rules'][ruleName]
-            for key,value in rules.iteritems():
-                if 'protocol' in key:
-                    protocol=value
-                elif 'max_port' in key:
-                    max_port=value
-                elif 'min_port' in key:
-                    min_port=value
-                else:
-                    ip_address=value
-                    
-            self.cloud.security_group_rules.create(default_security_group_id, protocol, min_port,
-               max_port, ip_address)
-        return default_security_group
+        protocol = ""
+        ipaddress = ""
+        max_port = ""
+        min_port = ""
+        default_security_group_id = self.cloud.security_groups.create(
+            default_security_group, description)
+        default_security_group_id = default_security_group_id.id
 
+        config_security = cm_config()
+        yamlFile = config_security.get()
+        ruleNames = yamlFile['security'][
+            'security_groups'][default_security_group]
+        for ruleName in ruleNames:
+            rules = yamlFile['security']['rules'][ruleName]
+            for key, value in rules.iteritems():
+                if 'protocol' in key:
+                    protocol = value
+                elif 'max_port' in key:
+                    max_port = value
+                elif 'min_port' in key:
+                    min_port = value
+                else:
+                    ip_address = value
+
+            self.cloud.security_group_rules.create(
+                default_security_group_id, protocol, min_port,
+                max_port, ip_address)
+        return default_security_group
 
     # GVL: review
     # how does this look for azure and euca? Should there be a general framework for this in the BaseCloud class
@@ -429,27 +430,26 @@ class openstack(ComputeBaseType):
         TODO: comment is missing
         """
         config_security = cm_config()
-        names={}
-        
-        securityGroups= self.cloud.security_groups.list()
-        
-        for securityGroup in securityGroups:
-            
-             names[securityGroup.name]=securityGroup.id
-        
-        yamlFile=config_security.get();
-        if yamlFile.has_key('security'):
-            default_security_group=yamlFile['security']['default']
-        else :
-            return None
-        #default_security_group_id=names[default_security_group]       
-        
-        if default_security_group in names:
-           return default_security_group
-            
-        else:
-           return self.createSecurityGroup(default_security_group)
+        names = {}
 
+        securityGroups = self.cloud.security_groups.list()
+
+        for securityGroup in securityGroups:
+
+            names[securityGroup.name] = securityGroup.id
+
+        yamlFile = config_security.get()
+        if yamlFile.has_key('security'):
+            default_security_group = yamlFile['security']['default']
+        else:
+            return None
+        # default_security_group_id=names[default_security_group]
+
+        if default_security_group in names:
+            return default_security_group
+
+        else:
+            return self.createSecurityGroup(default_security_group)
 
     # GVL: review
     # how does this look for azure and euca? Should there be a general framework for this in the BaseCloud class
@@ -462,98 +462,97 @@ class openstack(ComputeBaseType):
         TODO: comment is missing
         """
         return self.cloud.floating_ips.create()
-    
+
     # GVL: review
     # how does this look for azure and euca? Should there be a general framework for this in the BaseCloud class
     # based on that analysis?
     #
     # comments of wht these things do and how they work are missing
     #
-    def assign_public_ip(self,serverid,ip):
+    def assign_public_ip(self, serverid, ip):
         """
         comment is missing
         """
-        self.cloud.servers.add_floating_ip(serverid,ip)
-        
-    ######################################################################
-    # set vm meta
-    ######################################################################
+        self.cloud.servers.add_floating_ip(serverid, ip)
 
+    #
+    # set vm meta
+    #
 
     def vm_set_meta(self, vm_id, metadata):
         print metadata
         is_set = 0
 
-        #serverid = self.servers[id]['manager']
-        
+        # serverid = self.servers[id]['manager']
+
         while not is_set:
             try:
                 print "set ",  vm_id, "to set", metadata
 
                 result = self.cloud.servers.set_meta(vm_id, metadata)
-                #body = {'metadata': metadata}
-                #print body
-                #result = self.cloud.servers._create("/servers/%s/metadata" % vm_id, body, "metadata")
+                # body = {'metadata': metadata}
+                # print body
+                # result = self.cloud.servers._create("/servers/%s/metadata" %
+                # vm_id, body, "metadata")
                 print result
                 is_set = 1
             except Exception, e:
                 print "ERROR", e
                 time.sleep(2)
-                
+
         print result
 
-    ######################################################################
+    #
     # create a vm
-    ######################################################################
+    #
     def vm_create(self,
                   name=None,
                   flavor_name=None,
                   image_id=None,
-                  security_groups = None,
-                  key_name = None,
+                  security_groups=None,
+                  key_name=None,
                   meta=None):
         """
         create a vm
         """
-        
-        if not key_name == None :
+
+        if not key_name is None:
             if not self.check_key_pairs(key_name):
                 config = cm_config()
                 dict_t = config.get()
                 key = dict_t['keys']['keylist'][key_name]
                 if not 'ssh-rsa' in key and not 'ssh-dss' in key:
-                    key = open(key,"r").read()
-                self.upload_key_pair(key,key_name)
-                
+                    key = open(key, "r").read()
+                self.upload_key_pair(key, key_name)
 
         config = cm_config()
 
-        if flavor_name == None:
+        if flavor_name is None:
             flavor_name = config.default(self.label)['flavor']
 
-        if image_id == None:
+        if image_id is None:
             image_id = config.default(self.label)['image']
 
-        #print "CREATE>>>>>>>>>>>>>>>>"
-        #print image_id
-        #print flavor_name
-        
+        # print "CREATE>>>>>>>>>>>>>>>>"
+        # print image_id
+        # print flavor_name
+
         vm_flavor = self.cloud.flavors.find(name=flavor_name)
         vm_image = self.cloud.images.find(id=image_id)
-        
-        if key_name == None :
+
+        if key_name is None:
             vm = self.cloud.servers.create(name,
                                            flavor=vm_flavor,
                                            image=vm_image,
                                            security_groups=security_groups,
                                            meta=meta
                                            )
-        else :
+        else:
             # bug would passing None just work?
             vm = self.cloud.servers.create(name,
                                            flavor=vm_flavor,
                                            image=vm_image,
-                                           key_name = key_name,
+                                           key_name=key_name,
                                            security_groups=security_groups,
                                            meta=meta
                                            )
@@ -563,13 +562,13 @@ class openstack(ComputeBaseType):
         # data['cm_name'] = name
         # data['cm_flavor'] = flavor_name
         # data['cm_image'] = image_id
-        #return {str(data['id']):  data}
-        #should probably just be
+        # return {str(data['id']):  data}
+        # should probably just be
         return data
 
-    ######################################################################
+    #
     # delete vm(s)
-    ######################################################################
+    #
 
     def vm_delete(self, id):
         """
@@ -591,9 +590,9 @@ class openstack(ComputeBaseType):
 
         return ids
 
-    ######################################################################
+    #
     # list user images
-    ######################################################################
+    #
 
     @donotchange
     def vms_user(self, refresh=False):
@@ -607,16 +606,16 @@ class openstack(ComputeBaseType):
             self.refresh("servers")
 
         result = {}
-        
+
         for (key, vm) in self.servers.items():
             if vm['user_id'] == self.user_id:
                 result[key] = vm
 
         return result
 
-    ######################################################################
+    #
     # list project vms
-    ######################################################################
+    #
 
     def vms_project(self, refresh=False):
         """
@@ -634,9 +633,9 @@ class openstack(ComputeBaseType):
 
         return result
 
-    ######################################################################
+    #
     # delete images from a user
-    ######################################################################
+    #
 
     @donotchange
     def vms_delete_user(self):
@@ -650,14 +649,14 @@ class openstack(ComputeBaseType):
 
         return
 
-    ######################################################################
+    #
     # find
-    ######################################################################
+    #
 
     @donotchange
     def find(self, key, value=None):
         ids = []
-        if key == 'user_id' and value == None:
+        if key == 'user_id' and value is None:
             value = self.user_id
         for (id, vm) in self.servers.items():
             if vm[str(key)] == value:
@@ -665,9 +664,9 @@ class openstack(ComputeBaseType):
 
         return ids
 
-    ######################################################################
+    #
     # rename
-    ######################################################################
+    #
 
     def rename(self, old, new, id=None):
         all = self.find('name', old)
@@ -677,8 +676,8 @@ class openstack(ComputeBaseType):
             vm = self.cloud.servers.update(id, new)
         return
 
-    ##### TODO: BUG WHY ARE TGERE TWO REINDEX FUNCTIONS?
-    
+    # TODO: BUG WHY ARE TGERE TWO REINDEX FUNCTIONS?
+
     @donotchange
     def reindex(self, prefixold, prefix, index_format):
         all = self.find('user_id')
@@ -703,18 +702,18 @@ class openstack(ComputeBaseType):
             #    vm = self.cloud.servers.update(id, new)
             counter += 1
 
-    ######################################################################
+    #
     # TODO
-    ######################################################################
+    #
     """
     refresh just a specific VM
     delete all images that follow a regualr expression in name
     look into sort of images, flavors, vms
     """
 
-    ######################################################################
+    #
     # EXTRA
-    ######################################################################
+    #
     # will be moved into one class
 
     @donotchange
@@ -756,9 +755,9 @@ class openstack(ComputeBaseType):
         else:
             return (headline, body)
 
-    ######################################################################
+    #
     # CLI call of ussage
-    ######################################################################
+    #
 
     # will be moved into utils
     @donotchange
@@ -778,19 +777,20 @@ class openstack(ComputeBaseType):
         # print self.cloud.certs.__dict__.get()
         # print 70 * "-"
 
-        #tenantid = "member"  # not sure how to get that
+        # tenantid = "member"  # not sure how to get that
         iso_start = self.parse_isotime(start)
         iso_end = self.parse_isotime(end)
-        #print ">>>>>", iso_start, iso_end
-        #info = self.cloud.usage.get(tenantid, iso_start, iso_end)
+        # print ">>>>>", iso_start, iso_end
+        # info = self.cloud.usage.get(tenantid, iso_start, iso_end)
 
         # print info.__dict__
-        #sys.exit()
+        # sys.exit()
 
-        (start,rest) = start.split("T") # ignore time for now
-        (end,rest) = end.split("T") # ignore time for now
-        result = fgrep(self._nova("usage", "--start", start, "--end", end), "|")
-        
+        (start, rest) = start.split("T")  # ignore time for now
+        (end, rest) = end.split("T")  # ignore time for now
+        result = fgrep(
+            self._nova("usage", "--start", start, "--end", end), "|")
+
         (headline, matrix) = self.table_matrix(result)
         headline.append("Start")
         headline.append("End")
@@ -805,10 +805,10 @@ class openstack(ComputeBaseType):
         else:
             return (headline, matrix[0])
 
-    ######################################################################
+    #
     # CLI call of absolute-limits
-    ######################################################################
-    #def limits(self):
+    #
+    # def limits(self):
     #    conf = get_conf()
     #    return _get(conf, "%s/limits")
 
@@ -828,46 +828,44 @@ class openstack(ComputeBaseType):
                 list.append(limit)
 
         return list
-    
-    def check_key_pairs(self,key_name):
-        
+
+    def check_key_pairs(self, key_name):
+
         allKeys = self.cloud.keypairs.list()
         for key in allKeys:
             if key.name in key_name:
                 return True
         return False
-                
-        
-    
-    ######################################################################
+
+    #
     # Upload Key Pair
-    ######################################################################
-    def upload_key_pair(self,publickey,name):
+    #
+    def upload_key_pair(self, publickey, name):
         """ Uploads key pair """
-        
+
         try:
-            self.cloud.keypairs.create(name,publickey)
+            self.cloud.keypairs.create(name, publickey)
         except Exception, e:
             return 1, e
-            
-        return (0 ,'Key added successfully')
 
-    ######################################################################
+        return (0, 'Key added successfully')
+
+    #
     # Delete Key Pair
-    ######################################################################
-    def delete_key(self,name):
+    #
+    def delete_key(self, name):
         """ delets key pair """
-        
+
         try:
             self.cloud.keypairs.delete(name)
         except Exception, e:
             return (1, e)
-            
-        return (0 , 'Key deleted successfully')
-    
-    ######################################################################
+
+        return (0, 'Key deleted successfully')
+
+    #
     # List Security Group
-    ######################################################################
+    #
     def sec_grp_list(self):
         """ lists all security groups """
         try:
@@ -876,52 +874,52 @@ class openstack(ComputeBaseType):
             print e
 
     states = [
-      "ACTIVE",
-      "ERROR",
-      "BUILDING",
-      "PAUSED",
-      "SUSPENDED",
-      "STOPPED",
-      "DELETED",
-      "RESCUED",
-      "RESIZED",
-      "SOFT_DELETED"
-      ]  
+        "ACTIVE",
+        "ERROR",
+        "BUILDING",
+        "PAUSED",
+        "SUSPENDED",
+        "STOPPED",
+        "DELETED",
+        "RESCUED",
+        "RESIZED",
+        "SOFT_DELETED"
+    ]
 
-    def display (self, states, userid):
+    def display(self, states, userid):
         """ simple or on states and check if userid. If userid is None
         all users will be marked. A new variable cm_display is
         introduced manageing if a VM should be printed or not"""
 
         for (id, vm) in self.servers.items():
             vm['cm_display'] = vm['status'] in states
-            if userid != None:
-                vm['cm_display'] = vm['cm_display'] and (vm['user_id'] == userid)
+            if userid is not None:
+                vm['cm_display'] = vm['cm_display'] and (
+                    vm['user_id'] == userid)
 
-    def display_regex (self, state_check, userid):
+    def display_regex(self, state_check, userid):
 
         print state_check
         for (id, vm) in self.servers.items():
             vm['cm_display'] = eval(state_check)
             #            vm['cm_display'] = vm['status'] in states
-            if userid != None:
-                vm['cm_display'] = vm['cm_display'] and (vm['user_id'] == userid)
+            if userid is not None:
+                vm['cm_display'] = vm['cm_display'] and (
+                    vm['user_id'] == userid)
 
 
-        
-##########################################################################
+#
 # MAIN FOR TESTING
-##########################################################################
-
+#
 if __name__ == "__main__":
 
     """
     cloud = openstack("india-openstack")
-    
+
     name ="%s-%04d" % (cloud.credential["OS_USERNAME"], 1)
     out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
-    pp.pprint(out)  
-    
+    pp.pprint(out)
+
     """
 
     cloud = openstack("grizzly-openstack")
@@ -945,6 +943,3 @@ if __name__ == "__main__":
     """
 
     # cloud.rename("gvonlasz-0001","gregor")
-
-
-

@@ -25,16 +25,17 @@ log = LOGGER('cloudmesh')
 
 # import shelve
 from config.cm_config import cm_config
-#from openstack.cm_compute import openstack as os_client
+# from openstack.cm_compute import openstack as os_client
 
-#Error Cannot Import Openstack
+# Error Cannot Import Openstack
 from iaas.openstack.cm_compute import openstack
 
 from iaas.eucalyptus.eucalyptus_new import eucalyptus
 try:
-    from iaas.azure.cm_azure import cm_azure as azure 
+    from iaas.azure.cm_azure import cm_azure as azure
 except:
     log.warning("AZURE NOT ENABLED")
+
 
 class cloudmesh:
 
@@ -51,14 +52,14 @@ class cloudmesh:
     keys = []
 
     configuration = {}
-    
+
     # ----------------------------------------------------------------------
     # initialization methods
     # ----------------------------------------------------------------------
 
     def __init__(self):
         self.clear()
-        #Read Yaml File to find all the cloud configurations present
+        # Read Yaml File to find all the cloud configurations present
         self.config()
 
     def clear(self):
@@ -74,32 +75,32 @@ class cloudmesh:
         reads the cloudmesh yaml file that defines which clouds build
         the cloudmesh
         """
-        #print "CONFIG"
+        # print "CONFIG"
 
         self.configuration = cm_config()
 
-        #pp.pprint (configuration)
-
+        # pp.pprint (configuration)
 
         active_clouds = self.configuration.active()
-        #print active_clouds
-        
+        # print active_clouds
+
         for cloud_name in active_clouds:
             try:
                 credential = self.configuration.get(cloud_name)
-                cloud_type = self.configuration.get()['clouds'][cloud_name]['cm_type']
+                cloud_type = self.configuration.get()[
+                    'clouds'][cloud_name]['cm_type']
 
-                if cloud_type in ['openstack','eucalyptus','azure']:
+                if cloud_type in ['openstack', 'eucalyptus', 'azure']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cloud_type,
                                                'credential': credential}
-                #if cloud_type in ['openstack']:
+                # if cloud_type in ['openstack']:
                 #    self.clouds[cloud_name] = {'states': "HALLO"}
 
-            except: #ignore
+            except:  # ignore
                 pass
-                #print "ERROR: could not initialize cloud %s" % cloud_name
-                #sys.exit(1)
+                # print "ERROR: could not initialize cloud %s" % cloud_name
+                # sys.exit(1)
 
         return
 
@@ -114,7 +115,7 @@ class cloudmesh:
     def active(self):
         active_clouds = self.configuration.active()
         return active_clouds
-    
+
     def prefix(self):
         return self.configuration.prefix
 
@@ -124,23 +125,23 @@ class cloudmesh:
     def profile(self):
         return self.configuration.profile()
 
-    def default(self,cloudname):
+    def default(self, cloudname):
         return self.configuration.default(cloudname)
 
-    def states(self,cloudname):
+    def states(self, cloudname):
         cloud_type = self.clouds[cloudname]['cm_type']
         if cloud_type in ['openstack']:
             provider = self.cloud_provider(cloud_type)
             cloud = provider(cloudname)
             return cloud.states
 
-    def state_filter(self,cloudname, states):
+    def state_filter(self, cloudname, states):
         cloud_type = self.clouds[cloudname]['cm_type']
         if cloud_type in ['openstack']:
             provider = self.cloud_provider(cloud_type)
             cloud = provider(cloudname)
             cloud.refresh()
-            cloud.display(states,None)
+            cloud.display(states, None)
             self.clouds[cloudname]['servers'] = cloud.servers
 
     def all_filter(self):
@@ -153,20 +154,18 @@ class cloudmesh:
 
     def __str__(self):
         return str(self.clouds)
-    
+
     def dump(self):
         print json.dumps(self.clouds, indent=4)
 
-
     # ----------------------------------------------------------------------
-    # find 
-    # ----------------------------------------------------------------------        
+    # find
+    # ----------------------------------------------------------------------
     #
     # returns dicts of a particular type
     #
-    # ----------------------------------------------------------------------    
-
-    def find (cloud=["all"], type="servers", project=["all"]):
+    # ----------------------------------------------------------------------
+    def find(cloud=["all"], type="servers", project=["all"]):
         """
         Returns a dict with matching elements
 
@@ -186,18 +185,18 @@ class cloudmesh:
         project.
 
         In all cases None can be used as an alternative to ["all"]
-        
+
         """
         result = {}
         return result
 
     # ----------------------------------------------------------------------
     # the refresh method that gets upto date information for cloudmesh
-    # If cloudname is provided only that cloud will be refreshed 
+    # If cloudname is provided only that cloud will be refreshed
     # else all the clouds will be refreshed
     # ----------------------------------------------------------------------
 
-    def cloud_provider (self, type):
+    def cloud_provider(self, type):
         provider = None
         if type == 'openstack':
             provider = openstack
@@ -214,15 +213,12 @@ class cloudmesh:
                 cloud_type = self.clouds[name]['cm_type']
                 provider = self.cloud_provider(cloud_type)
                 cloud = provider(name)
-                HEADING ( "Info " + name)
+                HEADING("Info " + name)
                 cloud.refresh("all")
                 cloud.info()
-                
+
         except Exception, e:
             log.error(str(e))
-        
-
-
 
     def refresh(self, names=["all"], types=["all"]):
         """
@@ -240,22 +236,22 @@ class cloudmesh:
         (we only look for the first character e.g. s, i, f)
 
         In all cases None can be used as an alternative to ["all"]
-        
-        if cloud name  == None and type = none update everything
+
+        if cloud name  is None and type = none update everything
 
         if cloud name !=None and type = none update everything in the
         specified clouds
 
         if cloud name != None and type != none
            refresh the given types for the given clouds
-        
-        """
-        if types == ['all'] or types == None:
-            types = ['servers','flavors','images']
 
-        if names == ['all'] or names == None:
+        """
+        if types == ['all'] or types is None:
+            types = ['servers', 'flavors', 'images']
+
+        if names == ['all'] or names is None:
             names = self.clouds.keys()
-            
+
         # at one point use a threadpool.
         try:
             for name in names:
@@ -268,19 +264,20 @@ class cloudmesh:
                 cloud = provider(name)
                 log.info("Refresh cloud {0}".format(name))
                 for type in types:
-                    log.info ("    Refresh {0}".format(type))
+                    log.info("    Refresh {0}".format(type))
                     cloud.refresh(type=type)
                     result = cloud.get(type)
                     self.clouds[name][type] = cloud.get(type)
-                    #maye be need to use dict update ...
-                    self.clouds[name].update({'name': name, 'cm_type': cloud_type, 'cm_display' : cloud_display})
-                
+                    # maye be need to use dict update ...
+                    self.clouds[name].update(
+                        {'name': name, 'cm_type': cloud_type, 'cm_display': cloud_display})
+
         except Exception, e:
             log.error(str(e))
-    
+
     def refresh_user_id(self, names=["all"]):
-        if names == ['all'] or names == None:
-            names = self.clouds.keys()        
+        if names == ['all'] or names is None:
+            names = self.clouds.keys()
         try:
             for name in names:
                 cloud_type = self.clouds[name]['cm_type']
@@ -290,7 +287,7 @@ class cloudmesh:
                     self.clouds[name]['user_id'] = cloud.find_user_id()
         except Exception, e:
             log.error(str(e))
-    
+
     def add(self, name, type):
         try:
             self.clouds[name]
@@ -326,7 +323,7 @@ class cloudmesh:
     # saves and reads the dict to and from a file
     # ----------------------------------------------------------------------
     def save(self):
-        #tmp = self._sanitize()
+        # tmp = self._sanitize()
         file = open(self.datastore, 'wb')
         # pickle.dump(self.keys, file)
         pickle.dump(tmp, file)
@@ -360,41 +357,39 @@ class cloudmesh:
             cloud_type = self.clouds[cloud_name]['cm_type']
             provider = self.cloud_provider(cloud_type)
             cloud = provider(cloud_name)
-            cloud.vm_delete(server_id) 
+            cloud.vm_delete(server_id)
         except:
             log.error("could not delete {0} {1}".format(cloud_name, server_id))
 
-
-    def add_key_pair(self,cloud_name,key,name):
+    def add_key_pair(self, cloud_name, key, name):
         try:
             cloud_type = self.clouds[cloud_name]['cm_type']
             provider = self.cloud_provider(cloud_type)
             cloud = provider(cloud_name)
-            return cloud.upload_key_pair(key,name) 
+            return cloud.upload_key_pair(key, name)
         except:
             log.error("could not update keypair {0}".format(cloud_name))
 
-    def del_key_pair(self,cloud_name,name):
+    def del_key_pair(self, cloud_name, name):
         try:
             cloud_type = self.clouds[cloud_name]['cm_type']
             provider = self.cloud_provider(cloud_type)
             cloud = provider(cloud_name)
-            return cloud.delete_key(name) 
+            return cloud.delete_key(name)
         except:
-                log.error("could not delete keypair {0}".format(cloud_name))
+            log.error("could not delete keypair {0}".format(cloud_name))
 
-
-    def assign_public_ip(self,cloud_name,vm_id):
+    def assign_public_ip(self, cloud_name, vm_id):
         cloud_type = self.clouds[cloud_name]['cm_type']
-        # for now its only for openstack 
-        if cloud_type in "openstack" :
+        # for now its only for openstack
+        if cloud_type in "openstack":
             provider = self.cloud_provider(cloud_type)
             cloud = provider(cloud_name)
             cloud.assign_public_ip(vm_id, cloud.get_public_ip().ip)
         # code review: GVL
         # else:
-        #    print "BUG: assigning ip addresses from other clouds such as azure, and eucalyptus not implemented yet." 
-            
+        # print "BUG: assigning ip addresses from other clouds such as azure,
+        # and eucalyptus not implemented yet."
 
     def vm_set_meta(self, cloud_name, serverid, meta):
 
@@ -403,38 +398,37 @@ class cloudmesh:
 
         cloud = provider(cloud_name)
 
-
-        cloud.wait(serverid,'ACTIVE')
+        cloud.wait(serverid, 'ACTIVE')
         cloud.set_meta(serverid, meta)
 
-        
-    def create(self, cloud_name, prefix, index, image_id, flavor_name, key= None, security_group=None):
-        
-        #print ">>>>>>",  cloud_name, prefix, index, image_id, flavor_name, key
-        
-        security_groups=[]
+    def create(self, cloud_name, prefix, index, image_id, flavor_name, key=None, security_group=None):
+
+        # print ">>>>>>",  cloud_name, prefix, index, image_id, flavor_name,
+        # key
+
+        security_groups = []
         name = prefix + "-" + "%s" % str(index).zfill(4)
-        
+
         cloud_type = self.clouds[cloud_name]['cm_type']
-        log.info (cloud_type)
+        log.info(cloud_type)
         provider = self.cloud_provider(cloud_type)
 
         cloud = provider(cloud_name)
 
-        if security_group == None:
-            security_group=cloud.checkSecurityGroups() 
-        
-        if  not security_group == None:
+        if security_group is None:
+            security_group = cloud.checkSecurityGroups()
+
+        if not security_group is None:
             security_groups.append(security_group)
-        else :
+        else:
             security_groups = None
-        return cloud.vm_create(name, flavor_name, image_id , security_groups, key)
+        return cloud.vm_create(name, flavor_name, image_id, security_groups, key)
 
         """
         keyname = ''
         try:
             cloud_type = self.clouds[cloud_name]['cm_type']
-            
+
             if cloud_type in "openstack":
                 config = cm_config()
                 yamlFile= config.get()
@@ -513,8 +507,7 @@ class cloudmesh:
             log.error("Error: Ignoring add")
             return
 
-
-    def address_string(self,content, labels=False):
+    def address_string(self, content, labels=False):
         """content is a dict of the form {u'private': [{u'version':
         4,u'addr': u'10.35.23.30',u'OS-EXT-IPS:type':u'fixed'},
         {u'version': 4, u'addr': u'198.202.120.194',
@@ -528,31 +521,32 @@ class cloudmesh:
             result = ""
             for address in content['private']:
                 if labels:
-                    result = result + address['OS-EXT-IPS:type'] +"="
+                    result = result + address['OS-EXT-IPS:type'] + "="
                 result = result + address['addr']
                 result = result + ", "
             result = result[:-2]
         except:
-            ############ THIS SEEMS WRONG
-            {u'vlan102': [{u'version': 4, u'addr': u'10.1.2.104'}, {u'version': 4, u'addr': u'149.165.158.34'}]} 
+            # THIS SEEMS WRONG
+            {u'vlan102': [{u'version': 4, u'addr': u'10.1.2.104'}, {
+                u'version': 4, u'addr': u'149.165.158.34'}]}
             try:
                 position = 0
                 for address in content['vlan102']:
                     if position == 0:
-                       type = "fixed"
+                        type = "fixed"
                     else:
-                       type = "floating"
+                        type = "floating"
                     if labels:
                         result = result + type
                     result = result + address['addr']
                     result = result + ", "
-                    position =+ 1
+                    position = + 1
                 result = result[:-2]
             except:
                 result = content
         return result
 
-    def status_color(self,status):
+    def status_color(self, status):
         if status == 'ACTIVE':
             return "green"
         if status == 'BUILDING':

@@ -1,2 +1,2 @@
-import example 
+import example
 example.init_db()

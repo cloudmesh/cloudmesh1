@@ -11,13 +11,13 @@ pp = pprint.PrettyPrinter(indent=4)
 
 # import shelve
 from cloudmesh.config.cm_config import cm_config
-#from openstack.cm_compute import openstack as os_client
+# from openstack.cm_compute import openstack as os_client
 
-#Error Cannot Import Openstack
+# Error Cannot Import Openstack
 from cloudmesh.iaas.openstack.cm_compute import openstack
 
 from cloudmesh.iaas.eucalyptus.eucalyptus_new import eucalyptus
-from cloudmesh.iaas.azure.cm_azure import cm_azure as azure 
+from cloudmesh.iaas.azure.cm_azure import cm_azure as azure
 
 try:
     # from sh import fgmetric
@@ -43,11 +43,13 @@ except:
     #
 
 # WHY ARE WE NOT MORE CLEANLY SEPARATING METRIC FROM THIS?
+
+
 class cloudmesh:
 
-    ######################################################################
+    #
     # global variables that define the information managed by this class
-    ######################################################################
+    #
 
     datastore = "data/clouds.txt"
 
@@ -57,21 +59,21 @@ class cloudmesh:
     # array with keys from the user
     keys = []
 
-    ######################################################################
+    #
     # variables that we can most likely eliminate
-    ######################################################################
+    #
 
     # user needs to come from credential ...
     user = "gvonlasz"
 
-    ######################################################################
+    #
     # initialization methods
-    ######################################################################
+    #
 
     def __init__(self):
         self.clear()
-        #Read Yaml File to find all the cloud configurations present
-        self.config();
+        # Read Yaml File to find all the cloud configurations present
+        self.config()
         try:
             self.metric_api = FGMetricsAPI()
         except:
@@ -82,9 +84,9 @@ class cloudmesh:
         self.keys = []
         self.user = "gvonlasz"
 
-    ######################################################################
+    #
     # some metric methods
-    ######################################################################
+    #
 
     def get_metrics_cli(self, args):
         """ Get usage data from FG Metric CLI"""
@@ -132,7 +134,7 @@ class cloudmesh:
             return
 
         try:
-            print 1#
+            print 1
         except:
             pass
 
@@ -145,9 +147,9 @@ class cloudmesh:
         self.metric_api.set_hostname(args["host"])
         self.metric_api.set_period(args["period"])
 
-    ######################################################################
+    #
     # the configuration method that must be called to get the cloud info
-    ######################################################################
+    #
 
     def config(self):
         """
@@ -156,7 +158,7 @@ class cloudmesh:
         """
 
         configuration = cm_config()
-        pp.pprint (configuration)
+        pp.pprint(configuration)
 
         for cloud_name in configuration.keys():
             print "--------------------"
@@ -169,35 +171,36 @@ class cloudmesh:
 
                 print ">>>>>>>", cloud_name, cloud_type
 
-                if cloud_type in ['openstack','eucalyptus']:
+                if cloud_type in ['openstack', 'eucalyptus']:
                     print "AAAAA"
-                    self.clouds[cloud_name] = {'cm_type': cloud_type, 'credential': credential}
+                    self.clouds[cloud_name] = {
+                        'cm_type': cloud_type, 'credential': credential}
                     print "BBBB"
                     try:
                         self.update(cloud_name, cloud_type)
-                        self.clouds[cloud_name] = {'cm_type': cloud_type, 'credential': credential}
+                        self.clouds[cloud_name] = {
+                            'cm_type': cloud_type, 'credential': credential}
                     except:
                         print "ERROR: can not connect to", cloud_name
                     print "CCCC"
 
-                    
             except Exception, e:
-              print "ERROR: Not a cloud:", cloud_name , e
+                print "ERROR: Not a cloud:", cloud_name, e
         return
 
-    ######################################################################
+    #
     # importnat get methods
-    ######################################################################
+    #
 
     def get(self):
         """returns the dict that contains all the information"""
         return self.clouds
 
-    ######################################################################
+    #
     # important print methods
-    ######################################################################
+    #
     # includes sanitizing to remove the credentials
-    ######################################################################
+    #
 
     def __str__(self):
         tmp = self._sanitize()
@@ -207,7 +210,7 @@ class cloudmesh:
         # copy the self.cloud
         # delete the attributes called credential for all clouds
 
-        all_keys =  self.clouds.keys()
+        all_keys = self.clouds.keys()
         for cloud in all_keys:
             self.clouds[cloud]['credential'] = {}
 
@@ -217,38 +220,39 @@ class cloudmesh:
         tmp = self._sanitize()
         print json.dumps(tmp, indent=4)
 
-    ######################################################################
+    #
     # the refresh method that gets upto date information for cloudmesh
-    # If cloudname is provided only that cloud will be refreshed 
+    # If cloudname is provided only that cloud will be refreshed
     # else all the clouds will be refreshed
-    ######################################################################
+    #
 
     def refresh(self, cloud_name=None):
         print "Refershing cloud %s" % cloud_name
-        servers = {}        
-        cloud =None;
-        
-        if(cloud_name == None):
+        servers = {}
+        cloud = None
+
+        if(cloud_name is None):
             all_clouds = self.clouds.keys()
-            for cloud_name in all_clouds :
+            for cloud_name in all_clouds:
                 try:
                     type = self.clouds[cloud_name]['cm_type']
 
                     if type == 'openstack':
                         cloud = openstack(cloud_name)
-                        
+
                     elif type == 'eucalyptus':
-                        # Where do i find the project name ? Is there a defaul one ? 
+                        # Where do i find the project name ? Is there a defaul
+                        # one ?
                         cloud = eucalyptus(cloud_name, 'fg-82')
-                        
+
                     elif type == 'azure':
                         cloud = azure.cm_azure()
-                       
+
                     cloud.refresh()
                     self.clouds[cloud_name]['flavors'] = cloud.flavors
                     self.clouds[cloud_name]['images'] = cloud.images
                     self.clouds[cloud_name]['servers'] = cloud.servers
-                
+
                 except Exception, e:
                     print e
         else:
@@ -257,24 +261,24 @@ class cloudmesh:
 
                 if type == 'openstack':
                     cloud = openstack(cloud_name)
-                    
+
                 elif type == 'eucalyptus':
-                    # Where do i find the project name ? Is there a defaul one ? 
-		    # this is obvious;ly wrong as the tennent comes from profile
-		    # TODO EUCALYPTUS DOES NOT YET WORK
+                    # Where do i find the project name ? Is there a defaul one ?
+                    # this is obvious;ly wrong as the tennent comes from profile
+                    # TODO EUCALYPTUS DOES NOT YET WORK
 
                     cloud = eucalyptus(cloud_name, 'fg-82')
-                    
+
                 elif type == 'azure':
                     cloud = azure.cm_azure()
-                   
+
                 cloud.refresh()
                 self.clouds[cloud_name]['flavors'] = cloud.flavors
                 self.clouds[cloud_name]['images'] = cloud.images
                 self.clouds[cloud_name]['servers'] = cloud.servers
-                
+
             except Exception, e:
-                    print e
+                print e
         return cloud
 
     def update(self, name, type):
@@ -315,9 +319,9 @@ class cloudmesh:
 
     """
 
-    ######################################################################
+    #
     # saves and reads the dict to and from a file
-    ######################################################################
+    #
     def save(self):
         tmp = self._sanitize()
         file = open(self.datastore, 'wb')
@@ -344,9 +348,9 @@ class cloudmesh:
         self.clouds = pickle.load(file)
         file.close()
 
-    ######################################################################
+    #
     # TODO: convenient +, += functions to add dicts with cm_type
-    ######################################################################
+    #
 
     def __add__(self, other):
         """
@@ -400,9 +404,9 @@ class cloudmesh:
             print "Error: Ignoring add"
             return
 
-##########################################################################
+#
 # MAIN METHOD FOR TESTING
-##########################################################################
+#
 
 if __name__ == "__main__":
 

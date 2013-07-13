@@ -54,11 +54,12 @@ try:
 except:
     pass
 
+
 class FGGoldAccounting:
 
-    """ 
+    """
         futuregrid.flask.cm
-       
+
         Python GOLD Accounting Manager API based on command line tools. (DRAFT)
         SSSRMAP can be used (SSSRMAP is a XML based message format for Gold)
 
@@ -127,7 +128,7 @@ class FGGoldAccounting:
 
         """
         gmkproject()
-    
+
     def make_deposit(self):
         """Make deposit
 
@@ -161,7 +162,7 @@ class FGGoldAccounting:
         2  fgdiablo  -7619393        0  -7619393           0  -7619393
 
         """
-            
+
         gbalance()
 
     def obtain_jobquote(self):
@@ -333,7 +334,7 @@ class FGGoldAccounting:
             [--showHidden] [--showSpecial] [-l, --long] [-w, --wide] [--raw]
             [--debug] [-?, --help] [--man] [--quiet] [-V, --version] [[-u]
             *user_pattern*]
-        
+
         $ glsuser -A
         Name Active CommonName PhoneNumber EmailAddress DefaultProject Description
         ---- ------ ---------------- -------------- ---------------- -------------- -----------
@@ -367,13 +368,13 @@ class FGGoldAccounting:
 
     def get_machine(self):
         """Querying machine
-        
+
         To display machine information, use the command glsmachine:
 
         $ glsmachine [-A | -I] [—show
             attribute_name[,attribute_name...]...] [—showHidden] [—showSpecial] [—raw] [—debug] [-? |
             —help] [—man] [—quiet] [[-m] machine_pattern]
-                    
+
         $ glsmachine -I --show Name,Description
         Name Description
         ----- ------------------------
@@ -385,7 +386,7 @@ class FGGoldAccounting:
         """Modifying machine
 
         To modify a machine, use the command gchmachine:
-        
+
         $ gchmachine [-A | -I] [—arch architecture] [—opsys operating_system] [-d
             description] [—debug] [-? | —help] [—man] [—quiet] [-v | —verbose] {[-m] machine_name}
 
@@ -398,7 +399,7 @@ class FGGoldAccounting:
         """Deleting Machines
 
         To delete a machine, use the command grmmachine:
-        
+
         $ grmmachine [—debug] [-? | —help] [—man] [—quiet] [-v | —verbose] {[-m] machine_name}
 
         $ grmmachine colony
@@ -570,7 +571,7 @@ class FGGoldAccounting:
 
     def withdrawal(self):
         """Making Withdrawal
-        
+
         To issue a withdrawal, use the command gwithdraw:
 
         $ gwithdraw {-a account_id | -p project_name} [-i allocation_id] {[-z] amount} [-d
@@ -802,7 +803,6 @@ class FGGoldAccounting:
         PBS.1234.0 chemistry colony 0
         """
         glsjob()
-
 
     def set_job(self):
         """Modifying job

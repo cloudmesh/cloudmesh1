@@ -11,13 +11,15 @@ except:
     print "       Please see http://docs.openstack.org/developer/python-keystoneclient/"
     sys.exit(1)
 
+
 class openstack_grizzly_cloud(cloudmesh_cloud):
     _client = client.Client
 
     def __init__(self, profiledata, defaultproj, projectlist, cloudname):
         self._credentials = None
         self._keystone = None
-        cloudmesh_cloud.__init__(self, profiledata, defaultproj, projectlist, cloudname)
+        cloudmesh_cloud.__init__(
+            self, profiledata, defaultproj, projectlist, cloudname)
 
     @property
     def keystone(self):
@@ -31,7 +33,7 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
                     tenant_name=cm_admin['OS_TENANT_NAME'],
                     auth_url=cm_admin['OS_AUTH_URL'],
                     cacert=cm_admin['OS_CACERT']
-                    )
+                )
             except client.exceptions.AuthorizationFailure as authz_err:
                 print "%s\nHint: check configuration in %s" % (authz_err, self.CLOUD_DEFNS)
                 sys.exit(1)
@@ -61,7 +63,8 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
         # Create user or reset password (we cannot retrieve existing password)
         user = self.get_user_by_name(self.username)
         if user is None:
-            user = self.keystone.users.create(self.username, password, self.email)
+            user = self.keystone.users.create(
+                self.username, password, self.email)
         else:
             self.keystone.users.update_password(user, password)
 

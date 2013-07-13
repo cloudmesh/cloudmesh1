@@ -6,6 +6,18 @@ TAG=`cat VERSION.txt`
 all:
 	make -f Makefile force
 
+
+stats:
+	pep8 --statistics --filename *.py */*.py */*/*.py */*/*/*.py */*/*/*/*.py */*/*/*/*/*.py
+
+autopep8:
+	autopep8 -i */*.py
+	autopep8 -i */*/*.py
+	autopep8 -i */*/*/*.py
+	autopep8 -i */*/*/*/*.py
+	autopep8 -i */*/*/*/*/*.py
+	autopep8 -i */*/*/*/*/*/*.py
+
 ######################################################################
 # GIT INTERFACES
 ######################################################################

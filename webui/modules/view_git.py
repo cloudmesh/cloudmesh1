@@ -6,9 +6,11 @@ from sh import sort
 
 git_module = Blueprint('git_module', __name__)
 
+
 @git_module.route('/git/')
 def display_git_authors():
-    result = git("shortlog", "-s", "-n", _tty_in = True, _tty_out=False).split("\n")
+    result = git("shortlog", "-s", "-n",
+                 _tty_in=True, _tty_out=False).split("\n")
     authors = {}
     for line in result:
         print line
@@ -33,4 +35,3 @@ def display_git_authors():
     print authors
     """
     return render_template('git.html', authors=authors)
-                        

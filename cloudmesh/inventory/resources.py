@@ -5,18 +5,18 @@ from hostlist import expand_hostlist
 import time
 import sys
 import random
-from mongoengine import *                           
+from mongoengine import *
 from datetime import datetime
 from pprint import pprint
 from cloudmesh.util.logger import LOGGER
 
-######################################################################
+#
 # SETTING UP A LOGGER
-######################################################################
+#
 
 log = LOGGER('inventory')
 
-######################################################################
+#
 
 SERVICE_CHOICES = ('openstack',
                    'eucalyptus',
@@ -24,22 +24,25 @@ SERVICE_CHOICES = ('openstack',
      #              'ganglia',
      #              'nagios')
 
-SERVER_CHOICES = ('dynamic','static')
+SERVER_CHOICES = ('dynamic', 'static')
+
 
 class FabricObject(Document):
     meta = {
-         'allow_inheritance': True
-         }
-     
+        'allow_inheritance': True
+    }
+
     metadata = StringField()
     name = StringField()
     kind = StringField()  # server, service
     group = ListField(StringField())
     cluster = StringField()
-    subkind = StringField() # server: dynamic, service: openstack, eucalyptus, hpc
+    subkind = StringField()
+                          # server: dynamic, service: openstack, eucalyptus,
+                          # hpc
     label = StringField()
     status = StringField()
-    
+
     date_start = DateTimeField()
     date_stop = DateTimeField()
     date_update = DateTimeField()
@@ -51,7 +54,8 @@ class FabricObject(Document):
 
     def start(self):
         if self.status == "start":
-            log.warning("{0} is already started at {1}".format(self.name, self.date_start))
+            log.warning(
+                "{0} is already started at {1}".format(self.name, self.date_start))
         else:
             self.status = "start"
             self.date_start = datetime.now()
@@ -61,20 +65,21 @@ class FabricObject(Document):
 
     def stop(self):
         if self.status == "stop":
-            log.warning("{0} is already started at {1}".format(self.name, self.date_start))
+            log.warning(
+                "{0} is already started at {1}".format(self.name, self.date_start))
         elif self.status == "start":
             self.status = "stop"
             self.date_stop = datetime.now()
             log.info("STOP: {0} {1}".format(self.name, self.date_start))
             # calculate the time difference and add to uptime
-            delta =  self.date_stop - self.date_start
+            delta = self.date_stop - self.date_start
             self.uptime = self.uptime + delta.seconds
             self.date_start = None
             self.save(cascade=True)
         else:
-            log.warning("{0} is not running to be stopped {1}".format(self.name, self.date_start))
+            log.warning(
+                "{0} is not running to be stopped {1}".format(self.name, self.date_start))
 
-        
     def save(self, *args, **kwargs):
         if not self.date_creation:
             self.date_creation = datetime.now()
@@ -87,19 +92,20 @@ class FabricObject(Document):
         return self.__dict__["_data"]
 
     def pprint(self):
-        pprint (self.__dict__)
+        pprint(self.__dict__)
 
 
-class FabricService(FabricObject):              
+class FabricService(FabricObject):
     ip_address = StringField()
     kind = StringField(default="service")
     subkind = StringField(choices=SERVICE_CHOICES)
-    
-class FabricServer(FabricObject):              
+
+
+class FabricServer(FabricObject):
     ip_address = StringField()
     kind = StringField(default="server")
     subkind = StringField(choices=SERVER_CHOICES, default='static')
-    
+
     services = ListField(ReferenceField(
         FabricService,
         reverse_delete_rule=CASCADE))
@@ -108,20 +114,23 @@ class FabricServer(FabricObject):
     @property
     def load(self):
         ''' Simulated load on the server '''
-        return map(lambda r: random.random() * 10, range(0,9))
+        return map(lambda r: random.random() * 10, range(0, 9))
+
 
 class FabricCluster(FabricObject):
     management_node = ReferenceField(
         FabricServer,
         reverse_delete_rule=CASCADE
     )
-    compute_nodes = ListField( ReferenceField(
+    compute_nodes = ListField(ReferenceField(
         FabricServer,
         reverse_delete_rule=CASCADE
-    ) )
-    service_choices = ListField( StringField() )
+    ))
+    service_choices = ListField(StringField())
+
 
 class FabricImage(FabricObject):
+
     """
     osimage: '/path/to/centos0602v1-2013-06-11.squashfs'
     os: 'centos6'
@@ -146,14 +155,15 @@ class FabricImage(FabricObject):
     grub = StringField(default='grub')
     rootpass = StringField()
 
+
 class Inventory:
 
-    def __init__ (self,
-                  dbname,
-                  host=None,
-                  port=None,
-                  username=None,
-                  password=None):
+    def __init__(self,
+                 dbname,
+                 host=None,
+                 port=None,
+                 username=None,
+                 password=None):
 
         connectArgs = {}
         if host:
@@ -164,23 +174,23 @@ class Inventory:
             connectArgs['username'] = username
         if password:
             connectArgs['password'] = password
-        
+
         self.db = connect(dbname, **connectArgs)
         return
 
     def clean(self):
         """removes all services and servers"""
         for kind in self.fabrictype("all").keys():
-            log.info("Deleting all {0}".format(kind)) 
+            log.info("Deleting all {0}".format(kind))
             data = self.fabrictype(kind)
             for element in data:
                 element.delete()
 
-    def create_cluster(self,clustername, nameregex, nameformat, startindex, managementnode, prefix):
+    def create_cluster(self, clustername, nameregex, nameformat, startindex, managementnode, prefix):
         # "delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001
         # Simulate the Delta cluster
         # Simulate the Delta cluster
-        delta = self.ip_dict (nameregex, nameformat, startindex)
+        delta = self.ip_dict(nameregex, nameformat, startindex)
         for name in delta:
             ip = delta[name]
             log.info("create {0} {1}".format(name, ip))
@@ -188,17 +198,16 @@ class Inventory:
             self.add_service('%s-openstack' % name, name, 'openstack')
             server = self.find("server", name)
             server.ip_address = ip
-            #server['ip_address'] = ip
+            # server['ip_address'] = ip
             server.save()
 
         self.create("cluster", "dynamic", clustername)
         delta_cluster = self.find("cluster", clustername)
         delta_cluster.management_node = self.find("server", managementnode)
-        delta_cluster.compute_nodes = filter(lambda s: s.name[:1] == prefix and s.name != managementnode, self.servers())
+        delta_cluster.compute_nodes = filter(
+            lambda s: s.name[:1] == prefix and s.name != managementnode, self.servers())
         delta_cluster.service_choices = ('hpc', 'openstack', 'eucalyptus')
         delta_cluster.save()
-
-
 
     def create(self, kind, subkind, nameregex):
         #"india[9-11].futuregrid.org,india[01-02].futuregrid.org"
@@ -223,13 +232,14 @@ class Inventory:
                     subkind=subkind)
                 log.info("creating {0} {1} {2}".format(name, kind, subkind))
             else:
-                log.error("kind is not defined, creation of objects failed, kind, nameregex")
+                log.error(
+                    "kind is not defined, creation of objects failed, kind, nameregex")
                 return
             object.save(cascade=True)
 
     def save(self, object=None):
         """saves either a server or service object."""
-        if object != None:
+        if object is not None:
             object.save(cascade=True)
         else:
             for service in self.services:
@@ -237,7 +247,6 @@ class Inventory:
             for server in self.servers:
                 self.save(server)
 
-            
     def pprint(self):
         print "Clusters"
         print 70 * '-'
@@ -259,11 +268,11 @@ class Inventory:
 
     @property
     def clusters(self):
-        return FabricCluster.objects 
+        return FabricCluster.objects
 
     @property
     def images(self):
-        return FabricImage.objects 
+        return FabricImage.objects
 
     @property
     def servers(self):
@@ -273,8 +282,7 @@ class Inventory:
     def services(self):
         return FabricService.objects
 
-    def get_one (self, kind, name):
-
+    def get_one(self, kind, name):
         '''returns the data associated with the object of type kind
         and the given name'''
         s = get(kind, name)
@@ -283,13 +291,13 @@ class Inventory:
         except:
             return None
 
-    def fabrictype(self,kind):
+    def fabrictype(self, kind):
         types = {
             'server': self.servers,
             'service': self.services,
             'cluster': self.clusters,
             'image': self.images,
-            }
+        }
         if kind == "all":
             return types
         if kind in types:
@@ -298,18 +306,17 @@ class Inventory:
             log.error("Type {0} is not supported".format(type))
             return None
 
-    def get (self, kind, name):
+    def get(self, kind, name):
         '''returns the data associated with the object of kind type
         and the given name'''
         s = self.fabrictype(kind)(name=name)
         return s
 
-    def find (self, kind, name):
+    def find(self, kind, name):
         s = self.fabrictype(kind)(name=name)[0]
         return s
-    
 
-    def set_service (self, name, server_name, subkind):
+    def set_service(self, name, server_name, subkind):
         '''sets the service of a server'''
         s = self.find('server', server_name)
         try:
@@ -324,12 +331,12 @@ class Inventory:
                 date_update=now,
                 date_stop=now,
                 status="BUILD"
-                )
+            )
         service.save()
         s.services = [service]
         s.save()
 
-    def add_service (self, name, server, subkind):
+    def add_service(self, name, server, subkind):
         '''sets the service of a server'''
         s = self.servers(name=server)[0]
         try:
@@ -344,46 +351,45 @@ class Inventory:
                 date_update=now,
                 date_stop=now,
                 status="BUILD"
-                )
+            )
         service.save()
         s.services.append(service)
         s.save()
 
-
-    def exists (self, kind, name):
+    def exists(self, kind, name):
         '''returns tro if the object of type kind and the given name
         exists'''
         if kind == 'server':
             return self.servers(name=name).count() > 0
-        elif kind =='service':
+        elif kind == 'service':
             return self.services(name=name).count() > 0
         else:
             error('wrong kind ' + kind)
         return
-    
+
     def disconnect(self):
         log.warning("disconnect not yet implemented")
-        
-    #static methods
 
-    def ip_name_pair (self, nameregex, format_string, start=1):
+    # static methods
+
+    def ip_name_pair(self, nameregex, format_string, start=1):
         ips = expand_hostlist(nameregex)
         i = start
         names = []
         for ip in ips:
-             names.append(format_string.format(i))
-             i +=  1 
+            names.append(format_string.format(i))
+            i += 1
         return zip(names, ips)
 
-    def ip_name_dict (self, nameregex, format_string, start=1):
-        pairs = self.ip_name_pair (nameregex, format_string, start)
-        return [{'name':b, 'ip':a} for b,a in pairs]
+    def ip_name_dict(self, nameregex, format_string, start=1):
+        pairs = self.ip_name_pair(nameregex, format_string, start)
+        return [{'name': b, 'ip': a} for b, a in pairs]
 
-    def ip_dict (self, nameregex, format_string, start=1):
-        pairs = self.ip_name_pair (nameregex, format_string, start)
+    def ip_dict(self, nameregex, format_string, start=1):
+        pairs = self.ip_name_pair(nameregex, format_string, start)
         return dict(pairs)
 
-"""    
+"""
     def dump (self, object):
         print '# ------------------'
         classname = object.__class__.__name__
@@ -403,12 +409,11 @@ class Inventory:
 
 def main():
 
-
     inventory = Inventory('test4')
 
     inventory.clean()
 
-    now =  datetime.now()
+    now = datetime.now()
     service = FabricService(
         name='india0',
         date_start=now,
@@ -417,33 +422,30 @@ def main():
     )
 
     inventory.save(service)
-    
+
     server = FabricServer(
         name='india0',
         date_start=now,
         date_update=now,
         date_stop=now,
-        services = [service]
-        )
+        services=[service]
+    )
 
     inventory.save(server)
     inventory.pprint()
 
     x = inventory.get('server', name='india0')[0]
-    x.pprint ()
+    x.pprint()
 
     print server.services[0].data
 
+    # server.start()
+    # time.sleep(2)
+    # server.stop()
+    inventory.create(
+        "server", "india[9-11].futuregrid.org,india[01-02].futuregrid.org")
 
-    #server.start()
-    #time.sleep(2)
-    #server.stop()
-    
-
-
-    inventory.create("server","india[9-11].futuregrid.org,india[01-02].futuregrid.org")
-        
-    inventory.pprint()    
+    inventory.pprint()
 
     print "################"
     server = inventory.get_one("server", "india01.futuregrid.org")
@@ -451,15 +453,13 @@ def main():
     print server.data
 
     print "################"
-    
+
     for server in inventory.servers:
         print server.data
 
     print "################"
     print inventory.exists("server", "india01.futuregrid.org")
 
-
-                           
     """
         inventory.update("server", "Hallo2")
 
@@ -471,11 +471,6 @@ def main():
     """
 
 if __name__ == "__main__":
-     #main()
+     # main()
 
-    print ip_name_pair ("india[20-25]", "i-", "0000", 1)
-
-
-
-
-
+    print ip_name_pair("india[20-25]", "i-", "0000", 1)

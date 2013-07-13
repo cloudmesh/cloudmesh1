@@ -1,5 +1,5 @@
 # WILL BE DEPRECATED
-# 
+#
 # SEEMS NO ONE USING THIS FILE
 #
 # EXPIRATION: 30days after from April 25, 2013
@@ -17,11 +17,11 @@ import os
 # import shelve
 from cm_config import cm_config
 
-#Error Cannot Import Openstack
+# Error Cannot Import Openstack
 from openstack.cm_compute import openstack
 
 from eucalyptus.eucalyptus_new import eucalyptus
-from azure.cm_azure import cm_azure as azure 
+from azure.cm_azure import cm_azure as azure
 try:
     # from sh import fgmetric
     from fgmetric.FGMetricsAPI import FGMetricsAPI
@@ -42,33 +42,33 @@ except:
 
 class cloudmesh:
 
-    ######################################################################
+    #
     # global variables that define the information managed by this class
-    ######################################################################
+    #
 
     datastore = "data/clouds.txt"
 
     # dict that holds vms, flavors, images for al iaas
     clouds = {}
-    
+
     # array with keys from the user
     keys = []
 
-    ######################################################################
+    #
     # variables that we can most likely eliminate
-    ######################################################################
+    #
 
     # user needs to come from credential ...
     user = "gvonlasz"
 
-    ######################################################################
+    #
     # initialization methods
-    ######################################################################
+    #
 
     def __init__(self):
         self.clear()
-        #Read Yaml File to find all the cloud configurations present
-        self.config();
+        # Read Yaml File to find all the cloud configurations present
+        self.config()
         try:
             self.metric_api = FGMetricsAPI()
         except:
@@ -79,9 +79,9 @@ class cloudmesh:
         self.keys = []
         self.user = "gvonlasz"
 
-    ######################################################################
+    #
     # some metric methods
-    ######################################################################
+    #
 
     def get_metrics_cli(self, args):
         """ Get usage data from FG Metric CLI"""
@@ -130,11 +130,11 @@ class cloudmesh:
         self.metric_api.set_hostname(args["host"])
         self.metric_api.set_period(args["period"])
 
-    ######################################################################
+    #
     # the configuration method that must be called to get the cloud info
-    ######################################################################
+    #
 
-    #Updated the config method. Now It reads the config correctly.  
+    # Updated the config method. Now It reads the config correctly.
     def config(self):
         """
         reads the cloudmesh yaml file that defines which clouds build
@@ -143,28 +143,28 @@ class cloudmesh:
         configuration = cm_config()
         all_keys = configuration.keys()
         all_keys = all_keys[2:]
-        for name in all_keys :
+        for name in all_keys:
             if str(name) != 'username' and str(name) != 'default':
                 credential = configuration.get(name)
                 print name
                 type = credential['cm_type']
                 self.clouds[name] = {'cm_type': type, 'credential': credential}
-            #self.update(name, type)
+            # self.update(name, type)
         return
 
-    ######################################################################
+    #
     # importnat get methods
-    ######################################################################
+    #
 
     def get(self):
         """returns the dict that contains all the information"""
         return self.clouds
 
-    ######################################################################
+    #
     # important print methods
-    ######################################################################
+    #
     # includes sanitizing to remove the credentials
-    ######################################################################
+    #
 
     def __str__(self):
         tmp = self._sanitize()
@@ -173,7 +173,7 @@ class cloudmesh:
     def _sanitize(self):
         # copy the self.cloud
         # delete the attributes called credential for all clouds
-        all_keys =  self.clouds.keys()
+        all_keys = self.clouds.keys()
         for cloud in all_keys:
             self.clouds[cloud]['credential'] = {}
         return self.clouds
@@ -182,38 +182,39 @@ class cloudmesh:
         tmp = self._sanitize()
         print json.dumps(tmp, indent=4)
 
-    ######################################################################
+    #
     # the refresh method that gets upto date information for cloudmesh
-    # If cloudname is provided only that cloud will be refreshed 
+    # If cloudname is provided only that cloud will be refreshed
     # else all the clouds will be refreshed
-    ######################################################################
+    #
 
     def refresh(self, cloudname=None):
         print "Refershing cloudname %s" % cloudname
-        servers = {}        
-        cloud =None;
-        
-        if(cloudname == None):
+        servers = {}
+        cloud = None
+
+        if(cloudname is None):
             all_clouds = self.clouds.keys()
-            for cloud_name in all_clouds :
+            for cloud_name in all_clouds:
                 try:
                     type = self.clouds[cloud_name]['cm_type']
 
                     if type == 'openstack':
                         cloud = openstack(cloud_name)
-                        
+
                     elif type == 'eucalyptus':
-                        # Where do i find the project name ? Is there a defaul one ? 
+                        # Where do i find the project name ? Is there a defaul
+                        # one ?
                         cloud = eucalyptus(cloud_name, 'fg-82')
-                        
+
                     elif type == 'azure':
                         cloud = azure.cm_azure()
-                       
+
                     cloud.refresh()
                     self.clouds[cloud_name]['flavors'] = cloud.flavors
                     self.clouds[cloud_name]['images'] = cloud.images
                     self.clouds[cloud_name]['servers'] = cloud.servers
-                
+
                 except Exception, e:
                     print e
         else:
@@ -222,22 +223,22 @@ class cloudmesh:
 
                 if type == 'openstack':
                     cloud = openstack(cloud_name)
-                    
+
                 elif type == 'eucalyptus':
-                    # Where do i find the project name ? Is there a defaul one ? 
+                    # Where do i find the project name ? Is there a defaul one
+                    # ?
                     cloud = eucalyptus(cloud_name, 'fg-82')
-                    
+
                 elif type == 'azure':
                     cloud = azure.cm_azure()
-                   
+
                 cloud.refresh()
                 self.clouds[cloudname]['flavors'] = cloud.flavors
                 self.clouds[cloudname]['images'] = cloud.images
                 self.clouds[cloudname]['servers'] = cloud.servers
-                
+
             except Exception, e:
                     print e
-        
 
     def update(self, name, type):
         servers = self.refresh_servers(name)
@@ -277,9 +278,9 @@ class cloudmesh:
 
     """
 
-    ######################################################################
+    #
     # saves and reads the dict to and from a file
-    ######################################################################
+    #
     def save(self):
         tmp = self._sanitize()
         file = open(self.datastore, 'wb')
@@ -306,9 +307,9 @@ class cloudmesh:
         self.clouds = pickle.load(file)
         file.close()
 
-    ######################################################################
+    #
     # TODO: convenient +, += functions to add dicts with cm_type
-    ######################################################################
+    #
 
     def __add__(self, other):
         """
@@ -362,9 +363,9 @@ class cloudmesh:
             print "Error: Ignoring add"
             return
 
-##########################################################################
+#
 # MAIN METHOD FOR TESTING
-##########################################################################
+#
 
 if __name__ == "__main__":
 
