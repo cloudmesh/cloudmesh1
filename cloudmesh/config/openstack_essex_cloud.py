@@ -84,3 +84,7 @@ class openstack_essex_cloud(cloudmesh_cloud):
             os_tenants.append(tname)
         creds['FG_OS_TENANTS'] = ','.join(os_tenants)
         creds['OS_TENANT_NAME'] = self.defaultproject
+
+    def change_password(self, oldpass, newpass):
+        # TODO: Actually update the password
+        cloudmesh_cloud.change_password(self)

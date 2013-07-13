@@ -60,5 +60,5 @@ class cloudmesh_cloud:
     def initialize_cloud_user(self):
         raise Exception("Not implemented")
 
-    def change_password(self, oldpass, newpass):
-        raise Exception("Not implemented")
+    def change_password(self):
+        print "Changed password for user %s in %s." % (self.username, self.cloudname)

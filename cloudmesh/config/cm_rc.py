@@ -206,19 +206,13 @@ def main():
             sys.exit(0)
 
         if arguments['password'] or name == 'password':
-            profile = config.profile()
-            clouds = config.clouds()
             oldpass = getpass("Current password: ")
-            
-            pass1 = getpass("New password: ")
-            pass2 = getpass("New password (again): ")
+            newpass1 = getpass("New password: ")
+            newpass2 = getpass("New password (again): ")
 
             #TODO: some kind of password strength checking?
-            if pass1 == pass2:
-                for cloudname in clouds:
-                    clouddata = config.cloud(cloudname)
-                    # TODO: Actually update the password
-                    print "Changed password for user %s in %s on %s" % (profile['username'], clouddata['cm_type'], clouddata['cm_host'])
+            if newpass1 == newpass2:
+                config.change_own_password(oldpass, newpass1)
             else:
                 print "New passwords did not match; password not changed."
 

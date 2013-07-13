@@ -128,6 +128,14 @@ class cm_config(object):
         self._initialize_user(username)
         self._initialize_clouds()
 
+    def change_own_password(self, oldpass, newpass):
+        cloudlist = self.active()
+        for cloud in cloudlist:
+            cloudcreds_handler = cloudmesh_cloud_handler(cloud)
+            cloudcreds = cloudcreds_handler(self.profile(), self.projects('default'), self.projects('active'), cloud, self.clouddata[cloud])
+            cloudcreds.change_password(oldpass, newpass)
+
+
     # ----------------------------------------------------------------------
     # read and write methods
     # ----------------------------------------------------------------------
