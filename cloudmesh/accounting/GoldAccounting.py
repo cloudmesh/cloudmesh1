@@ -1,44 +1,17 @@
+sys.path.insert(0, '..')
+sys.path.insert(0, '.')
+
 from sh import gmkproject
 from sh import gchproject
 from sh import gchuser
-#
+from sh import glusers
+from sh import gstatement
 
-
-class AccountingBaseClass:
-
-    # all methods return some kind of id if possible or useful or the object
-
-    def add_project(self, name, description):
-        print "not yet implemented"
-        pass
-
-    def deactivate_project(self, name):
-        print "not yet implemented"
-        pass
-
-    def add_user(self, firstname, lastname, email, phone):
-        print "not yet implemented"
-        pass
-
-    def modify_user(self, userid, firstname, lastname, email, phone):
-        print "not yet implemented"
-        pass
-
-    def add_user_to_project(self, project, userid):
-        print "not yet implemented"
-        pass
-
-    def deactivate_user_from_project(self, project, userid):
-        print "not yet implemented"
-        pass
-
-    def activate_user_from_project(self, project, userid):
-        print "not yet implemented"
-        pass
-
+from cloudmesh.accountin.AccountingBaseClass import AccountingBaseClass
 
 class GoldAccounting(AccountingBaseClass):
-
+    """The gold accounting implementation class"""
+    
     def project_usage(self, project):
         statement = gstatement("-p", project)
         return statement
@@ -64,7 +37,7 @@ class GoldAccounting(AccountingBaseClass):
         # putting it in a list instead of a string
 
     def default_project(self, userid, project):
-        # can be done with gchgsuser
+        # can be done with gchsuser
         pass
 
     def modify_user(self, userid, email=None, phone=None,
@@ -72,16 +45,17 @@ class GoldAccounting(AccountingBaseClass):
         # needs to check if common name is unique, if its not we may
         # want to add numbers
         if firstname is not None or lastname is not None:
-            gchguser("-n", "%s %s" % (firstname, lastname))
+            gchuser("-n", "%s %s" % (firstname, lastname))
         if email is not None:
-            gchguser("-E", email)
+            gchuser("-E", email)
         if phone is not None:
-            gchguser("-F", phone)
+            gchuser("-F", phone)
 
-    def add_project(self, name):
+    def add_project(self, name, description):
         gmkproject("-d", description, "-p", name)
 
     def add_user_to_projects(self, project, userid):
+        username = None # transfer user id to username
         gchproject("-addUsers", username, project)
 
     def deactivate_project(self, name):
