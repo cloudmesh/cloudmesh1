@@ -8,14 +8,22 @@ def donotchange(fn):
 
 class ComputeBaseType:
 
-    """
-    flavors = {}         # global var
-    images = {}          # global var
-    servers = {}         # global var
-    credential = None    # global var
-    label = None         # global var
-    """
+    #: the dict for the flavors
+    flavors = {}         
 
+    #: the dict for the images
+    images = {}          
+    
+    #: the dict for the servers
+    servers = {}         
+
+    #: the dict for the credentials
+    credential = None    
+
+    #: the unique string identifying this cloud
+    label = None         
+
+    
     def _clear(self):
         self.flavors = {}         # global var
         self.images = {}          # global var
