@@ -3,8 +3,17 @@ from sh import git
 from sh import sort
 
 
-class GitInfo:
+class GitInfo: 
 
+    """This class can be used to return some elementary information
+    about the git hub directory.  This includes the: 
+
+    * version number of the code
+    * the list of people contributing to the code
+    * emails of the people contributing
+    * a statistic about canged code by person
+    ""
+    
     def version(self):
         return str(git.describe("--tags"))[:-1]
 
@@ -50,7 +59,7 @@ class GitInfo:
                 "commits": authors[name],
                 "email": email[name]}
         return info
-
+  
     def stat(self, email):
         sums = [0, 0, 0]
         for line in git.log("--all", "--stat", '--author={0}'.format(email), _tty_in=True, _tty_out=False, _iter=True):

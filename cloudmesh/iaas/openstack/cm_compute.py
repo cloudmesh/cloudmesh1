@@ -43,17 +43,31 @@ def donotchange(fn):
 
 class openstack(ComputeBaseType):
 
+    #: the type of the cloud. It is "openstack"
     type = "openstack"   # global var
+
+    #: a dict with the flavors
     flavors = {}         # global var
+
+    #: a dict with the images
     images = {}          # global var
+
+    #: a dict with the servers
     servers = {}         # global var
+
+    #: a dict containing the credentionls read with cm_config
     credential = None    # global var
+
+    #: a unique label for the clous
     label = None         # global var
 
     # cm_type = "openstack"
     # name = "undefined"
 
+    #: This is the cloud, should be internal though with _
     cloud = None         # internal var for the cloud client in openstack
+
+    #: The user id
     user_id = None       # internal var
 
     _nova = nova
@@ -167,8 +181,8 @@ class openstack(ComputeBaseType):
             return
 
     def novaclient_dump(self):
+        """a test function that is temporarily here to visualize novaclient output"""
 
-        # playing around to discover methods
         self.intro(self.cloud)
         self.intro(self.cloud.services)
         self.intro(self.cloud.servers)
@@ -261,7 +275,7 @@ class openstack(ComputeBaseType):
         return service
 
     def _get_conf(self):
-        "what example %/servers"
+        """what example %/servers"""
         compute_service = self._get_compute_service()
         pp.pprint(compute_service)
         conf = {}
@@ -292,10 +306,12 @@ class openstack(ComputeBaseType):
         return dd2
 
     def get_meta(self, id):
+        """get the metadata dict for the vm with the given id"""
         msg = "/servers/%s/metadata" % (id)
         return self._get("%s" + msg)
 
     def set_meta(self, id, metadata, replace=False):
+        """set the metadata for the given vm with the id"""
         conf = self._get_conf()
         conf['serverid'] = id
         if replace:
@@ -481,6 +497,7 @@ class openstack(ComputeBaseType):
     #
 
     def vm_set_meta(self, vm_id, metadata):
+        """an experimental class to set the metadata"""
         print metadata
         is_set = 0
 
@@ -514,7 +531,7 @@ class openstack(ComputeBaseType):
                   key_name=None,
                   meta=None):
         """
-        create a vm
+        create a vm with the given parameters
         """
 
         if not key_name is None:
@@ -620,7 +637,7 @@ class openstack(ComputeBaseType):
 
     def vms_project(self, refresh=False):
         """
-        find my vms
+        find my vms that arein this project. this method was needed for openstack essex deployment on fg
         """
         user_id = self.find_user_id()
 
@@ -656,6 +673,7 @@ class openstack(ComputeBaseType):
 
     @donotchange
     def find(self, key, value=None):
+        """find my vms"""
         ids = []
         if key == 'user_id' and value is None:
             value = self.user_id
@@ -670,6 +688,9 @@ class openstack(ComputeBaseType):
     #
 
     def rename(self, old, new, id=None):
+        """rename the vm with the given name old to new. If more than
+        one exist with the same name only the first one will be
+        renamed. consider moving the code to the baseclass."""
         all = self.find('name', old)
         print all
         if len(all) > 0:
@@ -708,6 +729,7 @@ class openstack(ComputeBaseType):
 
     @donotchange
     def table_col_to_dict(self, body):
+        """converts a given list of rows to a dict"""
         result = {}
         for element in body:
             key = element[0]
@@ -717,6 +739,9 @@ class openstack(ComputeBaseType):
 
     @donotchange
     def table_matrix(self, text, format=None):
+        """converts a given pretty table to a list of rows or a
+        dict. The format can be specified with 'dict' to return a
+        dict. otherwise it returns an array"""
         lines = text.splitlines()
         headline = lines[0].split("|")
         headline = headline[1:-1]
@@ -820,7 +845,7 @@ class openstack(ComputeBaseType):
         return list
 
     def check_key_pairs(self, key_name):
-
+        """simple check to see if a keyname is in the keypair list"""
         allKeys = self.cloud.keypairs.list()
         for key in allKeys:
             if key.name in key_name:

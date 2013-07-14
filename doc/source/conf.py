@@ -14,11 +14,18 @@
 import sys
 import os
 import sphinx_bootstrap_theme
+#import cloudmesh.util
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 # sys.path.insert(0, os.path.abspath('.'))
+
+sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('../../..'))
+
+#print "PATH", sys.path
+
 
 # -- General configuration -----------------------------------------------
 
@@ -28,8 +35,15 @@ import sphinx_bootstrap_theme
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    'sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.intersphinx', 'sphinx.ext.todo', 'sphinx.ext.pngmath',
-    'sphinx.ext.mathjax', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode', 'sphinxcontrib.webmocks', 'sphinxjp.shibukawa']
+    'sphinx.ext.autodoc', 
+    'sphinx.ext.doctest', 
+    'sphinx.ext.intersphinx', 
+    'sphinx.ext.todo', 
+    'sphinx.ext.mathjax', 
+    'sphinx.ext.ifconfig', 
+    'sphinx.ext.viewcode', 
+    'sphinxcontrib.webmocks', 
+    'sphinxjp.shibukawa']
 
 #'sphinxcontrib.issuetracker']
 # issuetracker = 'none',
@@ -136,8 +150,8 @@ html_theme_options = {
 
     # HTML navbar class (Default: "navbar") to attach to <div> element.
     # For black navbar, do "navbar navbar-inverse"
-    #'navbar_class': "navbar navbar-inverse",
-    'navbar_class': "navbar",
+    'navbar_class': "navbar navbar-inverse",
+    #'navbar_class': "navbar",
 
     # Fix navigation bar to top of page?
     # Values: "true" (default) or "false"
