@@ -1,13 +1,19 @@
 
 class table:
-
-    '''
+    """
+    This module should be moved to Util
+    
     format = HTML | ASCII | "%20s"
+    
     type is not used and wil be in future removed
+
     columns = number of columns
+
     structure is an array of rows
+
     header = True the firts row is a headline
-    '''
+    """
+    
     _content = ""
 
     def __init__(self):
@@ -18,6 +24,11 @@ class table:
         return self._content
 
     def create(self, structure, columns, format=None, type=None, header=True):
+        """ creates a table from a list of rows, where the row is also
+        a list. The format can be specified and may be HTML | ASCII |
+        formatstring. A format string may for example be '%20s' which
+        prints the string in a field 20 spaces wide.  """
+
         self._content = self._begin(format)
 
         # Create header

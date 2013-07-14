@@ -1,6 +1,7 @@
 from string import Template
 import os
 
+"""Some simple utility functions"""
 
 def check_file_for_tabs(filename, verbose=True):
     """identifies if the file contains tabs and returns True if it
@@ -28,6 +29,7 @@ def path_expand(text):
 
 
 def HEADING(txt):
+    """Prints a message to stdout with #### surrounding it. This is useful for nosetests to better distinguish them."""
     print
     print "#", 70 * '#'
     print "#", txt
@@ -35,6 +37,7 @@ def HEADING(txt):
 
 
 def table_printer(the_dict, header_info=None):
+    """prints recurseively a dict as an html. The header info is simpli a list with collun names."""
     # header_info ["attribute", "value"]
     if (header_info is not None) or (header_info == ""):
         result = '<tr><th>{0}</th><th>{1}</th></tr>'.format(

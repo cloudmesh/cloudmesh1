@@ -238,7 +238,7 @@ html_show_sphinx = False
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'CloudmeshPlandoc'
+htmlhelp_basename = 'Cloudmeshdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------
@@ -257,7 +257,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ('index', 'CloudmeshPlan.tex', u'Cloudmesh Plan Documentation',
+    ('index', 'Cloudmesh.tex', u'Cloudmesh Plan Documentation',
      u'Gregor von Laszewski', 'manual'),
 ]
 
@@ -301,8 +301,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'CloudmeshPlan', u'Cloudmesh Plan Documentation',
-     u'Gregor von Laszewski', 'CloudmeshPlan', 'One line description of project.',
+    ('index', 'Cloudmesh', u'Cloudmesh Plan Documentation',
+     u'Gregor von Laszewski', 'Cloudmesh', 'One line description of project.',
      'Miscellaneous'),
 ]
 

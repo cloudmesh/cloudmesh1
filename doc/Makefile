@@ -177,5 +177,5 @@ pseudoxml:
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
 manpages:
-	sphinx-apidoc -H "Modules and Classes" -o source/modules ../cloudmesh
+	sphinx-apidoc -H "Modules and Classes" -o source/modules ../cloudmesh ../webui
 
