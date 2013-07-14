@@ -10,6 +10,7 @@ from string import Template
 
 from cloudmesh.util.util import path_expand
 from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.util import check_file_for_tabs
 from cloudmesh.config.cloudmesh_cloud_handler import cloudmesh_cloud_handler
 
 ##### For testing
@@ -52,6 +53,11 @@ class cm_config(object):
         self._userdata_handler = None
         self._clouddata = None
 
+        # test for tab in yaml file
+        if check_file_for_tabs(self.filename):
+            log.error("The file {0} contains tabs. yaml Files are not allowed to contain tabs".format(filename))
+            sys.exit()
+        
 
     @property
     def userdata_handler(self):
