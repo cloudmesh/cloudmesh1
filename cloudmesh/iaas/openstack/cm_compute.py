@@ -268,7 +268,7 @@ class openstack(ComputeBaseType):
     # http
 
     def _get_compute_service(self):
-        print "LLLL", self.auth_token
+        #print "LLLL", self.auth_token
         for service in self.auth_token['access']['serviceCatalog']:
             if service['type'] == 'compute':
                 break
