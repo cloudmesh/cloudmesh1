@@ -46,9 +46,9 @@ req:
 dist:
 	make -f Makefile pip
 
-pip:
-	make -f Makefile clean
-	python setup.py sdist
+sdist: clean
+	#make -f Makefile clean
+	python setup.py sdist --format=bztar,zip
 
 
 force:
