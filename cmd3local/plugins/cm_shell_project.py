@@ -18,7 +18,8 @@ class cm_shell_project:
     def activate_shell_project(self):
         filename = "$HOME/.futuregrid/cloudmesh.yaml"
         self.projects = cm_projects(filename)
-        print self.projects
+        if self.echo:
+            log.info("Reading project information from -> {0}".format(filename))
         pass
 
     @command
@@ -42,9 +43,9 @@ class cm_shell_project:
            -v       verbose mode
 
         """
-        log.info(70 * "-")
-        log.info(arguments)
-        log.info(70 * "-")
+        #log.info(70 * "-")
+        #log.info(arguments)
+        #log.info(70 * "-")
 
 
         if arguments["default"] and arguments["NAME"]:
@@ -56,8 +57,7 @@ class cm_shell_project:
             return
 
         if arguments["info"] and arguments["NAME"] is None: 
-            log.info ("project info for all")
-            print self.projects
+            #log.info ("project info for all")
             if arguments["json"]:
                 print self.projects.dump()            
                 return
