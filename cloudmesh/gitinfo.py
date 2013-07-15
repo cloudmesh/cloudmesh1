@@ -12,7 +12,7 @@ class GitInfo:
     * the list of people contributing to the code
     * emails of the people contributing
     * a statistic about canged code by person
-    ""
+    """
     
     def version(self):
         return str(git.describe("--tags"))[:-1]
