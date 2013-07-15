@@ -244,8 +244,8 @@ class openstack(ComputeBaseType):
                 self.user_id = None
                 print "OS_USER_ID not set"
 
-        self.auth_token = result
-        self.user_id = result['access']['user']['id']
+        self.auth_token = self.get_token()
+        self.user_id = self.auth_token['access']['user']['id']
         return self.user_id
 
     def get_token(self):
