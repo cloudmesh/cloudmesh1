@@ -1,6 +1,9 @@
 from string import Template
 import os
 
+
+
+
 """Some simple utility functions"""
 
 def check_file_for_tabs(filename, verbose=True):
@@ -61,3 +64,7 @@ def table_printer(the_dict, header_info=None):
         return result
     else:
         return the_dict
+
+
+
+

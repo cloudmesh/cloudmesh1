@@ -7,11 +7,11 @@ or
 nosetests -v
 
 """
-import sys
+
 # from cloudmesh.openstack.cm_table import table as cm_table
 # from cloudmesh.cm_config import cm_config
 # from cloudmesh.openstack.cm_compute import openstack
-from cloudmesh import cloudmesh
+from cloudmesh.cloudmesh import cloudmesh
 
 import json
 import pprint
@@ -32,7 +32,7 @@ class Test_cloudmesh:
         pass
         # print self.c.clouds
 
-    def test_001_print(self):
+    def test_100_print(self):
         HEADING("test_001_print")
         print self.c
 

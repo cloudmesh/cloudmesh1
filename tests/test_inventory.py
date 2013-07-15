@@ -7,10 +7,7 @@ or
 nosetests -v
 
 """
-import sys
-sys.path.insert(0, '..')
 from datetime import datetime
-from pprint import pprint
 
 from cloudmesh.inventory.resources import Inventory
 from cloudmesh.inventory.resources import FabricService

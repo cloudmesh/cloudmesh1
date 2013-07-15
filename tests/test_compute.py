@@ -11,8 +11,6 @@ individual tests can be run with
 nosetests -v  --nocapture test_cm_compute.py:Test.test_06
 
 """
-import sys
-sys.path.insert(0, '..')
 
 from sh import head
 from sh import fgrep
@@ -49,16 +47,16 @@ class Test:
     def tearDown(self):
         pass
 
-    def test_00(self):
+    def test_00_label(self):
         HEADING("00 INFO OPENSTACK LABEL")
         print self.cloud_label
         assert self.cloud.label == self.cloud_label
 
-    def test_01(self):
+    def test_01_limit(self):
         HEADING("01 INFO OPENSTACK LIMIT")
         print json.dumps(self.cloud.limits(), indent=4)
 
-    def test_02(self):
+    def test_02_info(self):
         HEADING("02 INFO OPENSTACK IMAGES")
         self.cloud.refresh('images')
         print json.dumps(self.cloud.dump('images'), indent=4)
@@ -71,7 +69,7 @@ class Test:
         # we shoudl start our own vm and than probe for it for now > 0 will do
         assert self.cloud.images > 0
 
-    def test_03(self):
+    def test_03_flavors(self):
         HEADING("03 INFO OPENSTACK FLAVORS")
         self.cloud.refresh('flavors')
         print json.dumps(self.cloud.dump('flavors'), indent=4)
@@ -79,7 +77,7 @@ class Test:
         # doing a simple test as tiny is usually 512
         assert self.cloud.flavors['m1.tiny']['ram'] == 512
 
-    def test_04(self):
+    def test_04_start_vm(self):
         HEADING("04 START VM")
         configuration = cm_config()
         image = configuration.default(self.name)['image']
@@ -88,14 +86,14 @@ class Test:
         print result
         assert len(result.keys()) > 0
 
-    def test_05(self):
+    def test_05_print_vms(self):
         HEADING("05 PRINT INFO OPENSTACK VMS")
         self.cloud.refresh('servers')
         print json.dumps(self.cloud.dump('servers'), indent=4)
         # we assume that there are always images running
         assert len(self.cloud.servers) > 0
 
-    def test_06(self):
+    def test_06_refresh(self):
         HEADING("06 INFO OPENSTACK REFRESH")
         self.cloud.refresh()
         pp.pprint(self.cloud.get(self.name))
@@ -108,7 +106,7 @@ class Test:
         assert ['Instances'] > 0
     """
 
-    def test_07(self):
+    def test_07_print_tables(self):
         HEADING("07 INFO OPENSTACK TABLES")
         self.test_03()
         table = cm_table()
@@ -146,7 +144,7 @@ class Test:
         print vm
     """
 
-    def test_08(self):
+    def test_08_delete_vms_of_user(self):
         HEADING("08 INFO OPENSTACK DELETE VMS FROM USER")
 
         self.cloud.refresh()
@@ -187,8 +185,8 @@ class Test:
 
         assert vm_ids == []
 
-    def test_09(self):
-        HEADING("04 START 2 VMs")
+    def test_09_start_two_vms(self):
+        HEADING("09 START 2 VMs")
         configuration = cm_config()
         image = configuration.default(self.name)['image']
         print "STARTING IMAGE", image
@@ -210,17 +208,17 @@ class Test:
 
         assert len(vm_ids) == 2
 
-    def test_10(self):
+    def test_10_list_user_vms(self):
         HEADING("10 INFO LIST VMS FROM USER")
         list = self.cloud.vms_user(refresh=True)
         pp.pprint(list)
 
-    def test_11(self):
+    def test_11_refresh_all(self):
         HEADING("11 INFO OPENSTACK TEST")
         self.cloud.refresh()
         self.cloud.info()
 
-    def test_12(self):
+    def test_12_print_states(self):
         HEADING("12 INFO OPENSTACK TEST")
         self.cloud.refresh()
         print self.cloud.states
@@ -244,8 +242,8 @@ class Test:
 
         # print json.dumps(self.cloud.servers, indent=4)
 
-    def test_13(self):
-        HEADING("TEST META")
+    def test_13_meta(self):
+        HEADING("13 TEST META")
         self.clean()
         image = self.configuration.default(self.name)['image']
         flavor = self.configuration.default(self.name)['flavor']

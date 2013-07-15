@@ -7,8 +7,6 @@ or
 nosetests -v
 
 """
-import sys
-sys.path.insert(0, '..')
 
 from cloudmesh.config.cm_config import cm_config
 

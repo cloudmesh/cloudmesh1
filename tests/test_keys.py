@@ -8,14 +8,14 @@ nosetests -v
 
 """
 import sys
-sys.path.insert(0, '..')
 
 from sh import grep
-from cloudmesh.config.cm_keys import cm_keys
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
+
+from cloudmesh.config.cm_keys import cm_keys
 from cloudmesh.util.util import HEADING
 from cloudmesh.util.util import path_expand
 
@@ -32,12 +32,14 @@ class Test_cloudmesh:
     def tearDown(self):
         pass
 
+
     def test00_file(self):
         HEADING("00 FILE")
         try:
             self.keys = cm_keys("wrong file")
         except:
             pass
+
 
     def test01_print(self):
         HEADING("01 PRINT")
@@ -103,7 +105,7 @@ class Test_cloudmesh:
 
     def test09_type(self):
         HEADING("09 TYPE")
-        print "LLL", self.keys.type("gregor")
+        print "Find key type of gregor:", self.keys.type("gregor")
         for name in self.keys.names():
             print name
             value = self.keys[name]
@@ -116,3 +118,4 @@ class Test_cloudmesh:
         HEADING("10 FINGERPRINT")
         for name in self.keys.names():
             print self.keys.fingerprint(name)
+
