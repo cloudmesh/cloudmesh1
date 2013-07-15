@@ -29,3 +29,4 @@ python-keystoneclient
 apache-libcloud
 nose
 autopep8
+cmd3
