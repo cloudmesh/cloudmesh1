@@ -35,7 +35,7 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
                     cacert=cm_admin['OS_CACERT']
                 )
             except client.exceptions.AuthorizationFailure as authz_err:
-                print "%s\nHint: check configuration in %s" % (authz_err, self.CLOUD_DEFNS)
+                print "%s\nHint: check cloud configuration data." % authz_err
                 sys.exit(1)
         return self._keystone
 
