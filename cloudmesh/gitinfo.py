@@ -15,9 +15,17 @@ class GitInfo:
     """
     
     def version(self):
+        '''
+        retruns the verison of the code from github
+        '''
         return str(git.describe("--tags"))[:-1]
 
     def emails(self, format_arg=None):
+        '''
+        returns the emails of the authors either as a text or as a dict. The format is specified as an argument. 
+        
+        :param format_arg: if "dict" is specified a dict will be returned
+        '''
         if format_arg is None:
             format_string = "'%aN' <%cE>"
         elif format_arg == 'dict':
@@ -31,12 +39,17 @@ class GitInfo:
         elif format_arg == "dict":
             list = result.replace("\n", "\t").split("\t")[:-1]
             it = iter(list)
-            authors = dict(zip(it, it))
-            for name in authors:
-                authors[name] = authors[name]
-            return authors
+            emails = dict(zip(it, it))
+            for name in emails:
+                emails[name] = emails[name]
+            return emails
 
     def authors(self, format_arg=None):
+        '''
+        returns the authors of the authors either as a text or as a dict. The format is specified as an argument. 
+        
+        :param format_arg: if "dict" is specified a dict will be returned
+        '''
         result = git.shortlog("-s", "-n", _tty_in=True, _tty_out=False)
         if format_arg is None:
             return result
@@ -49,6 +62,9 @@ class GitInfo:
             return authors
 
     def info(self):
+        '''
+        returns the information about authors, emails, and commits in a dict.
+        '''
         authors = self.authors("dict")
         email = self.emails("dict")
 
@@ -61,6 +77,11 @@ class GitInfo:
         return info
   
     def stat(self, email):
+        '''
+        returns a statistick of a git author with the given e-mail.
+        
+        :param email: name of the author
+        '''
         sums = [0, 0, 0]
         for line in git.log("--all", "--stat", '--author={0}'.format(email), _tty_in=True, _tty_out=False, _iter=True):
             line = line[:-1]
@@ -84,6 +105,9 @@ class GitInfo:
                 }
 
     def compute(self):
+        '''
+        computes the statistic of all authors in a git repository and returns the result as a dict.
+        '''
         emails = set(gitinfo.emails("dict").values())
 
         stats = {}
