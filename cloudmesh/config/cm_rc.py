@@ -10,6 +10,7 @@ Usage:
   cm-manage config init [-o OUT] [-u USER]
   cm-manage config list
   cm-manage config password
+  cm-manage config show passwords
   cm-manage config fetch [-u USER] [-r HOST] 
   cm-manage --version
   cm-manage --help
@@ -77,12 +78,8 @@ def DEBUG(label, var):
         print str(var)
         print 70 * "-"
 
-#
-# http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input
-#
-
-
 def yn_choice(message, default='y'):
+    """http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input"""
     choices = 'Y/n' if default.lower() in ('y', 'yes') else 'y/N'
     choice = raw_input("%s (%s) " % (message, choices))
     values = ('y', 'yes', '') if default == 'y' else ('y', 'yes')
@@ -217,6 +214,17 @@ def main():
             else:
                 print "New passwords did not match; password not changed."
 
+            sys.exit(0)
+
+        if arguments['show'] or name == 'show' and arguments['passwords']:
+            warning = "Your passwords will appear on the screen. Continue?"
+            if yn_choice(warning, 'n'):
+                passwords = config.get_own_passwords()
+                print "\n%-40s | %s" % ("Cloud", "Password")
+                print 60 * '-'
+                for (cloud_name, cloud_pass) in passwords.items():
+                    print "%-40s | %s" % (cloud_name, cloud_pass)
+                print "\nPasswords may be incorrect if you changed any outside of cloudmesh."
             sys.exit(0)
 
         if arguments['dump'] or name =='dump':

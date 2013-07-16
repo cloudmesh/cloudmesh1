@@ -45,7 +45,8 @@ class cloudmesh_cloud:
     @property
     def data(self):
         d = dict(self._data)
-        del d['cm_admin']
+        if d.has_key('cm_admin'):
+            del d['cm_admin']
         return d
 
     @property
@@ -61,5 +62,12 @@ class cloudmesh_cloud:
     def initialize_cloud_user(self):
         raise Exception("Not implemented")
 
-    def change_password(self):
-        print "Changed password for user %s in %s." % (self.username, self.cloudname)
+    def change_own_password(self, oldpass, newpass):
+        if self.data['credentials']['OS_PASSWORD'] != oldpass:
+            print "Current password is incorrect; password not changed"
+            return False
+        else:
+            return True
+
+    def get_own_password(self):
+        raise Exception("Not implemented")

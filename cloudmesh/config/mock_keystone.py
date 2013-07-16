@@ -20,6 +20,10 @@ class Client(object):
         def update_password(self, user, password):
             pass
 
+        def change_own_password(self, oldpass, newpass):
+            print "keystone: change from %s to %s" % (oldpass, newpass)
+            pass
+
         def list(self):
             return self.users
 
