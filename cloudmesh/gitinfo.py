@@ -22,7 +22,8 @@ class GitInfo:
 
     def emails(self, format_arg=None):
         '''
-        returns the emails of the authors either as a text or as a dict. The format is specified as an argument. 
+        returns the emails of the authors either as a text or as a dict. The
+        format is specified as an argument.
         
         :param format_arg: if "dict" is specified a dict will be returned
         '''
@@ -46,7 +47,8 @@ class GitInfo:
 
     def authors(self, format_arg=None):
         '''
-        returns the authors of the authors either as a text or as a dict. The format is specified as an argument. 
+        returns the authors of the authors either as a text or as a dict. The
+        format is specified as an argument.
         
         :param format_arg: if "dict" is specified a dict will be returned
         '''
@@ -106,7 +108,8 @@ class GitInfo:
 
     def compute(self):
         '''
-        computes the statistic of all authors in a git repository and returns the result as a dict.
+        computes the statistic of all authors in a git repository and returns
+        the result as a dict.
         '''
         emails = set(gitinfo.emails("dict").values())
 
