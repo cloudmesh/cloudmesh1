@@ -56,9 +56,18 @@ class cm_shell_keys:
         
         if arguments["info"] and arguments["NAME"]:
             try:
-                print "%10s:" % "default", self.keys[arguments["NAME"]]
+                name = arguments["NAME"]
+                key = self.keys[name]
+                print
+                print "Key Information"
+                print "-------------------"
+                print
+                if name == "default":
+                    name =  self.keys.get_default_key()
+                print "%15s:" % name, key
             except:
                 print "Could not find the key with the name", arguments["NAME"]
+            print
             return
 
         if arguments["info"] and arguments["NAME"] is None: 
