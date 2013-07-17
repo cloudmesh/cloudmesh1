@@ -16,7 +16,10 @@ class cm_shell_inventory:
 
     """opt_example class"""
 
-    
+
+    def info_cm_shell_inventory(self):
+        print "%20s =" % "DBNAME", self.inventory_name
+        
     def activate_cm_shell_inventory(self):
         self.inventory_name = "test"
         
@@ -94,17 +97,18 @@ class cm_shell_inventory:
                 print "%15s:" % "cluster", name
                 print
 
-                cluster=self.inventory.find("cluster", name)
+                cluster = self.inventory.find("cluster", name)
                 m = cluster.management_node
-                line = " ".join(["%15s:" % m.name, "%8s" % m.status, m.ip_address,  "M", ""])
+                line = " ".join(["%15s:" % m.name, "%8s" % m.status, m.ip_address, "M", ""])
                 service_line = ', '.join([service.subkind for service in m["services"]])
                 service_line = service_line.replace("openstack", "o")
                 line += service_line
                 print line
                 
+                
                 servers = cluster.compute_nodes
                 for s in servers:
-                    line = " ".join(["%15s:" % s.name, "%8s" % s.status, s.ip_address,  "M",""])
+                    line = " ".join(["%15s:" % s.name, "%8s" % s.status, s.ip_address, "M", ""])
                     service_line = ', '.join([str(service.subkind) for service in s["services"]])
                     service_line = service_line.replace("openstack", "o")
                     line += service_line
@@ -112,17 +116,21 @@ class cm_shell_inventory:
                 print
 
                 print "%15s:" % "Legend"
-                print "%15s ="% "M", "Management"
-                print "%15s ="% "S", "Server"
-                print "%15s ="% "o", "OpenStack"
-                print "%15s ="% "e", "OpenStack"
-                print "%15s ="% "h", "HPC"
+                print "%15s =" % "M", "Management"
+                print "%15s =" % "S", "Server"
+                print "%15s =" % "o", "OpenStack"
+                print "%15s =" % "e", "OpenStack"
+                print "%15s =" % "h", "HPC"
                 
             return
 
         if arguments["info"] and arguments["service"]:
             name = arguments["NAME"]
             log.info ("info for service" + name)
+
+            service = self.inventory.find("cluster", name)   
+            for key in service:
+                print key
             return
 
 
