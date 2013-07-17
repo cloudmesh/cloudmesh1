@@ -7,6 +7,7 @@ import importlib
 from cmd3.shell import command
 
 from cloudmesh.util.logger import LOGGER
+from cloudmesh.inventory.resources import Inventory
 
 log = LOGGER('inventory shell')
 
@@ -14,7 +15,11 @@ class cm_shell_inventory:
 
     """opt_example class"""
 
+    
     def activate_cm_shell_inventory(self):
+        self.inventory_name = "test"
+        
+        self.inventory = Inventory(self.inventory_name)
         pass
 
     @command
@@ -27,10 +32,11 @@ class cm_shell_inventory:
                inventory test me DESCRIPTION
                inventory exists server NAME
                inventory exists service NAME
+               inventory
                inventory print
                inventory info
-               inventory info server NAME
-               inventory info service NAME
+               inventory server NAME
+               inventory service NAME
                
         Manages the inventory
 
@@ -49,6 +55,10 @@ class cm_shell_inventory:
 
         """
         log.info(arguments)
+        log.info(args)
+
+        if args == "":
+            log.info ("print inventory")
 
 
         if arguments["clean"]:
@@ -57,16 +67,21 @@ class cm_shell_inventory:
 
         if arguments["print"]:
             log.info ("print the inventory")
+            self.inventory.pprint()
             return
 
-        if arguments["info"] and not arguments["server"] and not arguments["service"]:
-            log.info ("print the inventory")
-            return
-        
-
-        if arguments["info"] and arguments["server"]:
-            name = arguments["NAME"]
-            log.info ("info for servers" + name)
+        if arguments["info"]:
+            log.info ("info for servers")
+            print
+            print "Inventory Information"
+            print "---------------------"
+            print
+            print "%15s:" % "name", self.inventory_name
+            print "%15s:" % "clusters", len(self.inventory.clusters), "->", ', '.join([c.name for c in self.inventory.clusters])
+            print "%15s:" % "services", len(self.inventory.services)
+            print "%15s:" % "servers", len(self.inventory.servers)
+            print "%15s:" % "images", len(self.inventory.images) , "->", ', '.join([c.name for c in self.inventory.images])
+            print
             return
 
         if arguments["info"] and arguments["service"]:
