@@ -1,3 +1,4 @@
+{% from "_helper.html" import flexible_menu %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -59,13 +60,7 @@
             </p>
 
 	    <ul class="nav">
-	      {% for page in g.topbar_pages %}
-	      <li {% if request.path == page.url %}class="active"{% endif %}>
-	        <a href="{{ page.url }}">
-	          {{ page.name }}
-	      	</a>
-	      </li>
-	      {% endfor %}
+	      {{ flexible_menu(g.topbar_pages) }}
 	    </ul>
 
 
@@ -81,37 +76,13 @@
             <ul class="nav nav-list">
                  
               <li class="nav-header">Cloud Mesh </li>
-
-	      {% for page in g.sidebar_pages %}
-	      <li {% if request.path == page.url %}class="active"{% endif %}>
-	           <a href="{{ page.url }}">
-	              {{ page.name }}
-	      	   </a>
-	      </li>
-
-	      {% endfor %}
+	      {{ flexible_menu (g.sidebar_pages) }}
 
 	      <li class="nav-header">Pages</li>
-	      {% for page in g.sidebar_flatpages %}
-	          <li {% if request.path == page.url %}class="active"{% endif %}>
-	            <a href="{{ page.url }}">
-	              {{ page.name }}
-	            </a>
-	      </li>
-	      {% else %}
-	         <li>No Pages.</li>
-	      {% endfor %}
-
+	      {{ flexible_menu(g.sidebar_flatpages) }}
 		    
               <li class="nav-header">External Links</li>
-
-	      {% for page in g.externalbar_pages %}
-	      <li {% if request.path == page.url %}class="active"{% endif %}>
-	        <a href="{{ page.url }}">
-	          {{ page.name }}
-	      	</a>
-	      </li>
-	      {% endfor %}
+	      {{ flexible_menu(g.externalbar_pages) }}
 
 
             </ul>

@@ -11,6 +11,15 @@ image_button("041_charts", "/table/")
 
 {% endmacro %}
 
+{% macro flexible_menu(pagelist) -%}
+  {% for page in pagelist %}
+   <li {% if request.path == page.url %}class="active"{% endif %}>
+      <a href="{{ page.url }}">
+         {{ page.name }}
+      </a>
+  </li>
+  {% endfor %}
+{%- endmacro %}
 
 
 
