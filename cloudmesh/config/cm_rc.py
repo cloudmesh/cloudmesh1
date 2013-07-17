@@ -9,7 +9,7 @@ Usage:
   cm-manage config dump [--format=(yaml|dict)]
   cm-manage config init [-o OUT] [-u USER]
   cm-manage config list
-  cm-manage config password
+  cm-manage config password NAME
   cm-manage config show passwords
   cm-manage config fetch [-u USER] [-r HOST] 
   cm-manage --version
@@ -203,14 +203,14 @@ def main():
                     print name, "(%s)" % config.data['cloudmesh']['clouds'][name]['cm_type']
             sys.exit(0)
 
-        if arguments['password'] or name == 'password':
+        if arguments['password']:
             oldpass = getpass("Current password: ")
             newpass1 = getpass("New password: ")
             newpass2 = getpass("New password (again): ")
 
             #TODO: some kind of password strength checking?
             if newpass1 == newpass2:
-                config.change_own_password(oldpass, newpass1)
+                config.change_own_password(name, oldpass, newpass1)
             else:
                 print "New passwords did not match; password not changed."
 

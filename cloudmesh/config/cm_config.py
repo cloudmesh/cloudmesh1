@@ -135,13 +135,11 @@ class cm_config(object):
         self._initialize_user(username)
         self._initialize_clouds()
 
-    def change_own_password(self, oldpass, newpass):
-        cloudlist = self.active()
-        for cloud in cloudlist:
-            cloudcreds = self._get_cloud_handler(cloud)
-            cloudcreds.change_own_password(oldpass, newpass)
-            # Save the yaml file so the new password is saved
-            self.write()
+    def change_own_password(self, cloudname, oldpass, newpass):
+        cloudcreds = self._get_cloud_handler(cloudname)
+        cloudcreds.change_own_password(oldpass, newpass)
+        # Save the yaml file so the new password is saved
+        self.write()
 
     def get_own_passwords(self):
         cloudlist = self.active()
