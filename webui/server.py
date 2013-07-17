@@ -553,9 +553,9 @@ def display_inventory_images():
 @app.route('/inventory/cluster/<cluster>/<name>')
 def display_named_resource(cluster, name):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    return render_template('inventory_cluster_resource.html',
+    return render_template('inventory_cluster_server.html',
                            updated=time_now,
-                           name=name,
+                           server=inventory.find("server", name),
                            cluster=inventory.find("cluster", cluster),
                            inventory=inventory)
 

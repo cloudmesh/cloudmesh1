@@ -4,15 +4,6 @@
 
 <script type="text/javascript">
 
-function change_service(server_name, service_name) {
-	var answer = confirm("Change the status of the " + server_name + " to " + service_name + "?")
-	if (answer) {
-        $.ajax("/inventory/set/service/",
-                { type: 'POST',
-                  data: { server: server_name, service: service_name },
-                  complete: function () { window.location.reload(); } } );
-    }
-}
 
 $(function() {
         /** This code runs when everything has been loaded on the page */
@@ -25,47 +16,52 @@ $(function() {
 
 </script>
 
-{% set cols = parameters.col %}
-{% set rows = parameters.row %}
-
-
-GREGOR
-
 <table>
   <tr>
-    <th colspan="{{ parameters.row }}">  
+    <th colspan="{{ parameters.columns }}">  
        Cloudmesh - Inventory for {{ cluster.name }}
     </th>
   </tr>
   <tr>
-    <td  colspan="{{ parameters.row }}"> 
-      Updated {{ updated }}
+    <td  colspan="{{ parameters.columns }}"> 
+      Updated :  {{ updated }}
     </td>
   </tr>
 
   <tr>
-    {% for server in cluster.compute_nodes|sort(attribute='name')  %}
+    
+	{% set server = cluster.management_node  %}
 
-      {% if loop.index %10 != 0  %}	
-
-	{{loop.index}}
-
-	{% if server.status=="active" %}
-           {% set cellstyle="background:#336600; font:bold" %}
+ 	{% if server.status=="active" %}
+   		{% set cellstyle="background:#336600; font:bold" %}
 	{% else %}
-           {% set cellstyle="background:#FFCC99; font:bold" %}
+      	{% set cellstyle="background:#FFCC99; font:bold" %}
   	{% endif %}
-        <td style="{{ cellstyle }}">
-	  
-	  <a href="/inventory/cluster/{{ cluster.name }}/{{ server.name }}"> 
-		  {{ server.name }}
+
+    <td style="{{ cellstyle }}">
+
+	   		<a href="/inventory/cluster/{{ cluster.name }}/{{server.name}}"> 
+		  		{{ server.name }}*
+		  	</a>
 	</td>
+    
+    {% for server in cluster.compute_nodes | sort(attribute='name')  %}
 
+ 		{% if server.status=="active" %}
+    		{% set cellstyle="background:#336600; font:bold" %}
+		{% else %}
+           	{% set cellstyle="background:#FFCC99; font:bold" %}
+  		{% endif %}
 
-      {% else %}
-  </tr>
-  <tr>
-  {% endif %}
+         <td style="{{ cellstyle }}">
+
+	   		<a href="/inventory/cluster/{{ cluster.name }}/{{server.name}}"> 
+		  		{{ server.name }}
+		  	</a>
+		</td>
+        {% if (loop.index + 1) %(parameters.columns+1) == 0  %}	
+           </tr>
+	    {% endif %}
   {% endfor %}
   </tr>
 
@@ -74,5 +70,4 @@ GREGOR
 
 
 {% endblock %} 
-
 

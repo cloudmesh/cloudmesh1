@@ -26,12 +26,12 @@ $(function() {
 </script>
 
   
-<h1> {{ name }} @ {{ cluster.name }} </h1>
+<h1> {{ server.name }} @ {{ cluster.name }} </h1>
 <hr>
-{% set server_data = inventory.find("server", name)['_data'] %}
+{% set server_data = server["_data"] %}
 <table>
     
-	{% for service in inventory.find("server", name)['services'] %}
+	{% for service in server['services'] %}
 	   <tr>
 	   	<td>service</td>
 	   	<td>
