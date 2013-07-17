@@ -22,6 +22,21 @@ app_sidebar = [
     ["Flavors", "/flavors/"],
 ]
 
+
+app_topbar = [
+    ["Home", "/"],
+    ["Profile", "/profile/"],
+    ["About", "/about/"],
+    ["Contact", "/contact/"],
+]
+
+app_externalbar = [
+    ["FutureGrid", "https://portal.futuregrid.org"],
+    ["Cloudmesh", "https://github.com/cloudmesh/cloudmesh"],
+    ["Blog", "http://cloudmesh.blogspot.com"],
+]
+
+
 sidebar_pages = []
 for page in app_sidebar:
     sidebar_pages.append({'name': page[0], 'url': page[1]})
@@ -30,6 +45,26 @@ for page in app_sidebar:
 flask.Flask.app_ctx_globals_class.sidebar_pages = sidebar_pages
 
 log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.sidebar_pages)))
+
+topbar_pages = []
+for page in app_topbar:
+    topbar_pages.append({'name': page[0], 'url': page[1]})
+
+# registering topbar into the global g
+flask.Flask.app_ctx_globals_class.topbar_pages = topbar_pages
+
+
+log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.topbar_pages)))
+
+externalbar_pages = []
+for page in app_externalbar  :
+    externalbar_pages.append({'name': page[0], 'url': page[1]})
+
+# registering externalbar   into the global g
+flask.Flask.app_ctx_globals_class.externalbar_pages = externalbar_pages
+
+
+log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.externalbar_pages)))
 
 
 #

@@ -36,9 +36,9 @@
     <!-- Fav and touch icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
-      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
-                    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
-                                   <link rel="shortcut icon" href="ico/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="ico/favicon.png">
   </head>
 
   <body>
@@ -59,10 +59,13 @@
             </p>
 
 	    <ul class="nav">
-              <li class=""><a href="/">Home</a></li>
-              <li class=""><a href="/about">About</a></li>
-              <li class=""><a href="/contact">Contact</a></li>
-	      <li class=""><a href="/profile">Profile</a></li>
+	      {% for page in g.topbar_pages %}
+	      <li {% if request.path == page.url %}class="active"{% endif %}>
+	        <a href="{{ page.url }}">
+	          {{ page.name }}
+	      	</a>
+	      </li>
+	      {% endfor %}
 	    </ul>
 
 
@@ -101,9 +104,14 @@
 
 		    
               <li class="nav-header">External Links</li>
-              <li><a href="https://github.com/futuregrid/flask_cm">Code</a></li>
-              <li><a href="http://cloudmesh.blogspot.com">Blog</a></li>
-              <li><a href="https://portal.futuregrid.org">Future Grid</a></li>
+
+	      {% for page in g.externalbar_pages %}
+	      <li {% if request.path == page.url %}class="active"{% endif %}>
+	        <a href="{{ page.url }}">
+	          {{ page.name }}
+	      	</a>
+	      </li>
+	      {% endfor %}
 
 
             </ul>

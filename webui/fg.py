@@ -38,15 +38,15 @@ else:
 
 inventory.clean()
 
-inventory.create_cluster("bravo", "101.102.203.[11-26]", "b{0:03d}", 1, 
+inventory.create_cluster("bravo", "101.102.203.[11-26]", "b{0:03d}", 1,
                          "b001", "b")
-inventory.create_cluster("delta", "102.202.204.[1-16]", "d-{0:03d}", 1, 
+inventory.create_cluster("delta", "102.202.204.[1-16]", "d-{0:03d}", 1,
                          "d-001", "d")
 inventory.create_cluster("gamma", "302.202.204.[1-16]", "g-{0:03d}", 1,
                          "g-001", "g")
-inventory.create_cluster("india", "402.202.204.[1-128]", "i-{0:03d}", 1, 
+inventory.create_cluster("india", "402.202.204.[1-128]", "i-{0:03d}", 1,
                          "i-001", "i")
-inventory.create_cluster("sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, 
+inventory.create_cluster("sierra", "502.202.204.[1-128]", "s-{0:03d}", 1,
                          "s-001", "s")
 
 
