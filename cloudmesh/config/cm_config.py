@@ -59,21 +59,27 @@ class cm_config(object):
             sys.exit()
         
 
-    @property
-    def userdata_handler(self):
-        """Plug-in class that knows how to get all the user/project data"""
-        return self._userdata_handler
-
-    @userdata_handler.setter
-    def userdata_handler(self, value):
-        self._userdata_handler = value
-
-
-    @property
-    def clouddata(self):
-        if self._clouddata is None:
-            self._clouddata = yaml.safe_load(open(self.clouddata_template, "r"))
-        return self._clouddata
+    # ----------------------------------------------------------------------
+    # Internal helper methods
+    # ----------------------------------------------------------------------
+    def _get_cloud_handler(self, cloud, as_admin=False):
+        handler_args = { 'profiledata': self.profile(),
+                         'defaultproj': self.projects('default'),
+                         'projectlist': self.projects('active'),
+                         'cloudname': cloud }
+        if as_admin:
+            handler_args['clouddata'] = self.clouddata[cloud]
+        else:
+            handler_args['clouddata'] = self.cloud(cloud)
+        cloud_handler_class = cloudmesh_cloud_handler(cloud)
+        cloud_handler = cloud_handler_class(**handler_args)
+        ########### for testing #############################################################
+        # cloud_handler._client = mock_keystone.Client
+        # cloud_handler._client.mockusername = self.data['cloudmesh']['profile']['username']
+        # cloud_handler._client.mocktenants = ['fg82','fg110','fg296']
+        #####################################################################################
+        return cloud_handler
+        
 
     # ----------------------------------------------------------------------
     # Methods to initialize (create) the config data
@@ -118,13 +124,7 @@ class cm_config(object):
         self.data['cloudmesh']['clouds'] = {}
         cloudlist = self.active()
         for cloud in cloudlist:
-            cloudcreds_handler = cloudmesh_cloud_handler(cloud)
-            cloudcreds = cloudcreds_handler(self.profile(), self.projects('default'), self.projects('active'), cloud, self.clouddata[cloud])
-            ########### for testing #############################################################
-            # cloudcreds._client = mock_keystone.Client
-            # cloudcreds._client.mockusername = self.data['cloudmesh']['profile']['username']
-            # cloudcreds._client.mocktenants = ['fg82','fg110','fg296']
-            #####################################################################################
+            cloudcreds = self._get_cloud_handler(cloud, as_admin=True)
             cloudcreds.initialize_cloud_user()
             self.data['cloudmesh']['clouds'][cloud] = cloudcreds.data
 
@@ -135,13 +135,19 @@ class cm_config(object):
         self._initialize_user(username)
         self._initialize_clouds()
 
-    def change_own_password(self, oldpass, newpass):
-        cloudlist = self.active()
-        for cloud in cloudlist:
-            cloudcreds_handler = cloudmesh_cloud_handler(cloud)
-            cloudcreds = cloudcreds_handler(self.profile(), self.projects('default'), self.projects('active'), cloud, self.clouddata[cloud])
-            cloudcreds.change_password(oldpass, newpass)
+    def change_own_password(self, cloudname, oldpass, newpass):
+        cloudcreds = self._get_cloud_handler(cloudname)
+        cloudcreds.change_own_password(oldpass, newpass)
+        # Save the yaml file so the new password is saved
+        self.write()
 
+    def get_own_passwords(self):
+        cloudlist = self.active()
+        passwords = {}
+        for cloud in cloudlist:
+            cloudcreds = self._get_cloud_handler(cloud)
+            passwords[cloud] = cloudcreds.get_own_password()
+        return passwords
 
     # ----------------------------------------------------------------------
     # read and write methods
@@ -179,22 +185,29 @@ class cm_config(object):
             avalue = value
         return 'export %s="%s"\n' % (attribute, avalue)
 
-    # ----------------------------------------------------------------------
-    # get methods
-    # ----------------------------------------------------------------------
 
-    def incr(self, value=1):
-        self.data['cloudmesh']['index'] = int(
-            self.data['cloudmesh']['index']) + int(value)
-        # self.write(self.filename)
+    # ----------------------------------------------------------------------
+    # Properties
+    # ----------------------------------------------------------------------
+    @property
+    def userdata_handler(self):
+        """Plug-in class that knows how to get all the user/project data"""
+        return self._userdata_handler
+
+    @userdata_handler.setter
+    def userdata_handler(self, value):
+        self._userdata_handler = value
+
+    @property
+    def clouddata(self):
+        if self._clouddata is None:
+            self._clouddata = yaml.safe_load(open(self.clouddata_template, "r"))
+        return self._clouddata
 
     @property
     def vmname(self):
         return "%s-%04d" % (self.data['cloudmesh']['prefix'], int(self.data['cloudmesh']['index']))
 
-    #
-    # warning we can not name a method default
-    #
     @property
     def default_cloud(self):
         return self.data['cloudmesh']['default']
@@ -202,9 +215,6 @@ class cm_config(object):
     @default_cloud.setter
     def default_cloud(self, value):
         self.data['cloudmesh']['default'] = str(value)
-
-    def active(self):
-        return self.data['cloudmesh']['active']
 
     @property
     def prefix(self):
@@ -261,6 +271,21 @@ class cm_config(object):
     @address.setter
     def address(self, value):
         self.data['cloudmesh']['profile']['address'] = str(value)
+
+
+    # ----------------------------------------------------------------------
+    # get methods
+    # ----------------------------------------------------------------------
+    def incr(self, value=1):
+        self.data['cloudmesh']['index'] = int(
+            self.data['cloudmesh']['index']) + int(value)
+        # self.write(self.filename)
+
+    #
+    # warning we can not name a method default
+    #
+    def active(self):
+        return self.data['cloudmesh']['active']
 
     def profile(self):
         return self.data['cloudmesh']['profile']

@@ -9,7 +9,8 @@ Usage:
   cm-manage config dump [--format=(yaml|dict)]
   cm-manage config init [-o OUT] [-u USER]
   cm-manage config list
-  cm-manage config password
+  cm-manage config password NAME
+  cm-manage config show passwords
   cm-manage config fetch [-u USER] [-r HOST] 
   cm-manage --version
   cm-manage --help
@@ -77,12 +78,8 @@ def DEBUG(label, var):
         print str(var)
         print 70 * "-"
 
-#
-# http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input
-#
-
-
 def yn_choice(message, default='y'):
+    """http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input"""
     choices = 'Y/n' if default.lower() in ('y', 'yes') else 'y/N'
     choice = raw_input("%s (%s) " % (message, choices))
     values = ('y', 'yes', '') if default == 'y' else ('y', 'yes')
@@ -206,17 +203,28 @@ def main():
                     print name, "(%s)" % config.data['cloudmesh']['clouds'][name]['cm_type']
             sys.exit(0)
 
-        if arguments['password'] or name == 'password':
+        if arguments['password']:
             oldpass = getpass("Current password: ")
             newpass1 = getpass("New password: ")
             newpass2 = getpass("New password (again): ")
 
             #TODO: some kind of password strength checking?
             if newpass1 == newpass2:
-                config.change_own_password(oldpass, newpass1)
+                config.change_own_password(name, oldpass, newpass1)
             else:
                 print "New passwords did not match; password not changed."
 
+            sys.exit(0)
+
+        if arguments['show'] or name == 'show' and arguments['passwords']:
+            warning = "Your passwords will appear on the screen. Continue?"
+            if yn_choice(warning, 'n'):
+                passwords = config.get_own_passwords()
+                print "\n%-40s | %s" % ("Cloud", "Password")
+                print 60 * '-'
+                for (cloud_name, cloud_pass) in passwords.items():
+                    print "%-40s | %s" % (cloud_name, cloud_pass)
+                print "\nPasswords may be incorrect if you changed any outside of cloudmesh."
             sys.exit(0)
 
         if arguments['dump'] or name =='dump':
