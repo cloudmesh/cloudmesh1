@@ -58,7 +58,7 @@ $(function() {
   <tr>
   <td></td>
   <td>
-    {{ image_button ("right", "195_circle_info", "/inventory/info/server/" + cluster.management_node.name + "/") }}
+    {{ image_button ("right", "195_circle_info", "/inventory/cluster/" + cluster.name + "/" + cluster.management_node.name) }}
   </td>
   <td> {{ cluster.management_node.name }} </td>
   <td> {{ cluster.management_node.status }} </td>
@@ -71,7 +71,7 @@ $(function() {
   <tr>
   <td> <input name="checkbox" value="{{ server.name }}" type="checkbox"> </td>
   <td>
-    {{ image_button ("right", "195_circle_info", "/inventory/info/server/" +server.name + "/") }}
+    {{ image_button ("right", "195_circle_info", "/inventory/cluster/" + cluster.name + "/"+  server.name) }}
   </td>
   <td> {{ server.name }} </td>
   <td> {{ server.status }} </td>

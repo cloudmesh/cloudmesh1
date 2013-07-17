@@ -25,10 +25,33 @@ $(function() {
 
 </script>
 
-	  
-{{ cluster.name }} {{ name }}
+  
+<h1> {{ name }} @ {{ cluster.name }} </h1>
+<hr>
+{% set server_data = inventory.find("server", name)['_data'] %}
+<table>
+    
+	{% for service in inventory.find("server", name)['services'] %}
+	   <tr>
+	   	<td>service</td>
+	   	<td>
+	   	  {{ service.subkind }} : {{service.name}} : {{service.status}}
+	   </td>
+	   </tr>
+	   
+	{% endfor %}
 
 
+{% for key in server_data %}
+   {% if key != "services" %}
+   <tr>
+     <td>{{ key }}</td>
+     <td>{{ server_data[key] }}</td>     
+   </tr>
+   {% endif %}
+{% endfor %}
+
+</table>
 {% endblock %} 
 
 

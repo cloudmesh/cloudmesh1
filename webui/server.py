@@ -1,25 +1,43 @@
+from ConfigParser import SafeConfigParser
+from cloudmesh.inventory.resources import FabricImage, FabricServer, \
+    FabricService, Inventory
+from cloudmesh.provisioner.provisioner import *
+from cloudmesh.util.util import table_printer
+from datetime import datetime
+from flask import Flask, render_template, request, redirect
+from flask.ext.autoindex import AutoIndex
 from flask_flatpages import FlatPages
+from modules.flatpages import flatpages_module
+from modules.inventory import inventory_module
+from modules.keys import keys_module
+from modules.menu import menu_module
+from modules.profile import profile_module
+from modules.view_git import git_module
+from os.path import isfile, join
+import base64
+import hashlib
+import json
+import os
+import pkg_resources
+import pprint
+import struct
+import sys
+import time
+import yaml
 debug = False
 
 
-from os.path import isfile, join
-with_cloudmesh = True
-import sys
+with_cloudmesh = False
+
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
 
-from ConfigParser import SafeConfigParser
-from cloudmesh.provisioner.provisioner import *
 
 server_config = SafeConfigParser(
     {'name': 'flasktest'})  # Default database name
 server_config.read("server.config")
 
-from cloudmesh.inventory.resources import FabricImage
-from cloudmesh.util.util import table_printer
 
-import json
-import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 if with_cloudmesh:
@@ -28,24 +46,9 @@ if with_cloudmesh:
     from cloudmesh.config.cm_config import cm_config
     from cloudmesh.cloudmesh import cloudmesh
 
-import os
-import time
-from flask import Flask, render_template, request, redirect
-from flask.ext.autoindex import AutoIndex
-from modules.flatpages import flatpages_module
-from modules.keys import keys_module
-from modules.inventory import inventory_module
-from modules.view_git import git_module
-from modules.profile import profile_module
-from modules.menu import menu_module
 # from menu.server_keys import menu_module
 
-import base64
-import struct
-import hashlib
 
-from datetime import datetime
-import yaml
 
 try:
     from sh import xterm
@@ -77,16 +80,12 @@ DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
 
-import pkg_resources
 version = pkg_resources.get_distribution("cloudmesh").version
 
 # ============================================================
 # INVENTORY
 # ============================================================
 
-from cloudmesh.inventory.resources import Inventory
-from cloudmesh.inventory.resources import FabricService
-from cloudmesh.inventory.resources import FabricServer
 
 inventory_db = server_config.get("mongo", "dbname")
 if server_config.has_option("mongo", "host"):
@@ -97,6 +96,8 @@ if server_config.has_option("mongo", "host"):
                           server_config.get("mongo", "pass"))
 else:
     inventory = Inventory(inventory_db)
+
+"""
 inventory.clean()
 
 inventory.create_cluster(
@@ -107,10 +108,10 @@ inventory.create_cluster(
     "delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001", "d")
 inventory.create_cluster("gamma", "302.202.204.[1-16]", "g-{0:03d}", 1,
                          "g-001", "g")
-inventory.create_cluster(
-    "india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
-inventory.create_cluster(
-    "sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
+#inventory.create_cluster(
+#    "india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
+#inventory.create_cluster(
+#    "sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
 
 
 centos = FabricImage(
@@ -138,7 +139,7 @@ redhat = FabricImage(
     grub='grub2',
     rootpass='reset'
 ).save()
-
+"""
 
     # print inventory.pprint()
 # ============================================================
@@ -555,7 +556,8 @@ def display_named_resource(cluster, name):
     return render_template('inventory_cluster_resource.html',
                            updated=time_now,
                            name=name,
-                           cluster=inventory.find("cluster", cluster))
+                           cluster=inventory.find("cluster", cluster),
+                           inventory=inventory)
 
 
 @app.route('/inventory/cluster/<cluster>/')

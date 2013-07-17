@@ -1,14 +1,16 @@
 # pip install python-hostlist
 
 
-from hostlist import expand_hostlist
-import time
-import sys
-import random
-from mongoengine import *
-from datetime import datetime
-from pprint import pprint
 from cloudmesh.util.logger import LOGGER
+from datetime import datetime
+from hostlist import expand_hostlist
+from mongoengine import *
+from pprint import pprint
+import os
+import random
+import sys
+import time
+import yaml
 
 #
 # SETTING UP A LOGGER
@@ -158,6 +160,36 @@ class FabricImage(FabricObject):
 
 class Inventory:
 
+    configuration = {}
+    
+    def config(self, filename):
+        '''
+        Reads in a configuration file of the form and eliminates all keys with the None value.
+        
+        {'inventory': 
+          {'name': 'inventory',
+           'host': None,
+           'port': None,
+           'user': None,
+           'pass': None,
+          } 
+        }
+        
+        Will return 
+        
+        {'inventory': {'name': 'inventory'}}
+        
+        :param filename:
+        '''
+        self.filename  = filename
+        if os.path.exists(filename):
+            f = open(self.filename, "r")
+            self.configuration = yaml.safe_load(f)
+            f.close()
+        # elininate all None attributes
+        d = dict((k, v) for (k, v) in self.configuration['inventory'].iteritems() if not v == 'None')
+        self.configuration['inventory'] = d
+    
     def __init__(self,
                  dbname,
                  host=None,
@@ -165,17 +197,17 @@ class Inventory:
                  username=None,
                  password=None):
 
-        connectArgs = {}
+        self.configuration = {}
         if host:
-            connectArgs['host'] = host
+            self.configuration['host'] = host
         if port:
-            connectArgs['port'] = port
+            self.configuration['port'] = port
         if username:
-            connectArgs['username'] = username
+            self.configuration['username'] = username
         if password:
-            connectArgs['password'] = password
+            self.configuration['password'] = password
 
-        self.db = connect(dbname, **connectArgs)
+        self.db = connect(dbname, **self.configuration)
         return
 
     def clean(self):

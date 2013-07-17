@@ -55,15 +55,13 @@ def cm():
     file = open("Makefile~", "w")
     print >> file, """
 all: server view
-
 server:
-        cd ..; python setup.py install
-        python server.py
-
+\tcd ..; python setup.py install
+\tpython server.py
 view:
-        sleep 1
-         %s http://127.0.0.1:5000/inventory/
-""" % browser
+\tsleep 1
+\t{0} http://127.0.0.1:5000/inventory/
+""".format(browser)
     # webbrowser.open("http://127.0.0.1:5000")
     file.close()
     os.system("make -j -f Makefile~ all")
