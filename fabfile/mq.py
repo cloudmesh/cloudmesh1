@@ -7,13 +7,18 @@ from cloudmesh.util.password import get_password, get_user, get_host
 
 input = raw_input
 
-__all__ = ['user','install','host','allow', 'check',"dns"]
+__all__ = ['user','install','host','allow', 'check',"dns","status","start","stop"]
 
 @task
 def install():
     """install the rabitmq"""
     if sys.platform == "darwin":
         local("brew install rabbitmq")
+    elif sys.platform == "linux":
+        # TODO: untested
+        local("sudo apt-get install rabbitmq-server")
+        # when completed we see:
+        # Starting rabbitmq-server: SUCCESS.
     else:
         print "ERROR: error no other install yet provided "
         sys.exit()
@@ -66,3 +71,15 @@ def check():
 @task
 def dns():
     local("dscacheutil -flushcache")
+
+@task
+def status():
+    local("sudo rabbitmqctl status")
+
+@task
+def start():
+    local("sudo rabbitmq-server -detached")
+
+@task
+def stop():
+    local("sudo rabbitmqctl stop")
