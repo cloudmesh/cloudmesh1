@@ -66,6 +66,22 @@ view:
     file.close()
     os.system("make -j -f Makefile~ all")
 
+def sneha():
+    """run the server and look at the output with the browser"""
+    file = open("Makefile-sneha~", "w")
+    print >> file, """
+all: server view
+server:
+\tcd ..; python setup.py install
+\tpython server-sneha.py
+view:
+\tsleep 1
+\t{0} http://127.0.0.1:5000/inventory/
+""".format(browser)
+    # webbrowser.open("http://127.0.0.1:5000")
+    file.close()
+    os.system("make -j -f Makefile-sneha~ all")
+
 
 def deltag(tag):
     local("git tag -d %s" % tag)
