@@ -9,11 +9,18 @@ input = raw_input
 
 __all__ = ['user','install','host','allow', 'check',"dns","status","start","stop"]
 
+
+def installed(name):
+    result = local("which {0} | wc -l".format(name), capture=True)
+    return result > 0
+   
 @task
 def install():
     """install the rabitmq"""
     if sys.platform == "darwin":
         local("brew install rabbitmq")
+        if not installed("rabbitmqctl"):
+            print("ERROR: make sure /usr/local/sbin/ is added to your PATH")
     elif sys.platform == "linux":
         # TODO: untested
         local("sudo apt-get install rabbitmq-server")
