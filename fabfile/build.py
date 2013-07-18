@@ -1,5 +1,7 @@
-from fabric.api import task, local
+from fabric.api import task, local, execute
 import clean
+
+__all__ = ['req','sdist','install']
 
 @task
 def req():
@@ -9,7 +11,7 @@ def req():
 @task
 def sdist():
     """create the sdist""" 
-    clean.all()
+    execute(clean.all)
     local("python setup.py sdist --format=bztar,zip")
 
 @task

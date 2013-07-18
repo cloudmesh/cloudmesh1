@@ -1,6 +1,8 @@
 from fabric.api import task, local
 import build
 
+__all__ = ['upload', 'register']
+
 @task
 def upload():
     """upload the dist to pypi"""
