@@ -2,6 +2,7 @@ from fabric.api import task, local
 
 @task
 def dir():
+    """clean the dirs"""
     local("rm -rf *.egg")
     local('find . -name "*~" -exec rm {} \;  ')
     local('find . -name "*.pyc" -exec rm {} \;  ')
@@ -11,6 +12,7 @@ def dir():
 
 @task
 def all():
+    """clean the dis and uninstall cloudmesh"""
     dir()
     r = int(local("pip freeze |fgrep cloudmesh | wc -l", capture=True))
     while r > 0:

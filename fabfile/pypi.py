@@ -1,14 +1,15 @@
 from fabric.api import task, local
-
+import build
 
 @task
 def upload():
-	local("make -f Makefile pip")
-	#local("python setup.py register")
-	local("python setup.py sdist upload")
+    """upload the dist to pypi"""
+    build.sdist()
+    local("python setup.py sdist upload")
 
 @task
 def register():
-	local("python setup.py register")
+    """register with pypi. Needs only to be done once."""
+    local("python setup.py register")
 
 

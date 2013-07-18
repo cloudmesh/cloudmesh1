@@ -1,20 +1,20 @@
 from fabric.api import task, local
+import clean
 
 @task
 def req():
-	local("pip install -r requirements.txt")
+    """install the requirements"""
+    local("pip install -r requirements.txt")
 
 @task
-def dist():
-	local("make -f Makefile pip")
-
-@task
-def sdist(): 
-    #clean.all()
-	local("python setup.py sdist --format=bztar,zip")
+def sdist():
+    """create the sdist""" 
+    clean.all()
+    local("python setup.py sdist --format=bztar,zip")
 
 @task
 def install(): 
-	local("python setup.py install")
+    """install cloudmesh"""
+    local("python setup.py install")
 
 
