@@ -1,10 +1,16 @@
 from fabric.api import task, local
+import sys
+
+browser = "firefox"
+
+if sys.platform == 'darwin':
+    browser = "open"
 
 @task
-def build():
+def html():
     """build the doc locally and view"""
     local("cd doc; make html")
-    local("open doc/build/html/index.html")
+    local("{browser} doc/build/html/index.html".format(browser=browser))
 
 @task
 def gh():
