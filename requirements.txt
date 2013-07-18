@@ -30,3 +30,4 @@ apache-libcloud
 nose
 autopep8
 cmd3
+celery
