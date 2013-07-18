@@ -4,10 +4,11 @@ import os
 import sys
 import platform
 from cloudmesh.util.password import get_password, get_user, get_host
+from cloudmesh.util.menu import ascii_menu
 
 input = raw_input
 
-__all__ = ['user','install','host','allow', 'check',"dns","status","start","stop"]
+__all__ = ['user','install','host','allow', 'check',"dns","status","start","stop","menu"]
 
 
 def installed(name):
@@ -90,3 +91,21 @@ def start():
 @task
 def stop():
     local("sudo rabbitmqctl stop")
+
+
+menu_list = [
+    ('install',install),
+    ('dns',dns),
+    ('host',host),
+    ('user',user),
+    ('allow',allow),
+    ('check',check),
+    ('status',status),
+    ('start',start),
+    ('stop',stop)
+    ]
+
+@task
+def menu():
+   ascii_menu("RabbitMQ", menu_list)
+         
