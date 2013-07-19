@@ -12,9 +12,9 @@ from mongoengine import *
 # INVENTORY
 # ============================================================
 
-db = connect ("nosetest")
+#db = connect ("nosetest")
 
-inventory = Inventory()
+inventory = Inventory("nosetest")
 
 # inventory.config("server.yaml")
 

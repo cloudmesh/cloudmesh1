@@ -136,12 +136,18 @@ class FabricServer(FabricObject):
         FabricService,
         reverse_delete_rule=CASCADE))
 
+    def append(self,service):
+        self.services.append(service)
+
+    def set(self,services):
+        self.services = services
+    
 class FabricCluster(FabricObject):
     '''
     an object to hold fabric clusters and their meta data
     '''
 
-    kind = StringField(default="server")
+    kind = StringField(default="cluster")
     servers = ListField(ReferenceField(
         FabricServer,
         reverse_delete_rule=CASCADE))
@@ -159,6 +165,17 @@ class Inventory:
         '''
         self.date_modified = datetime.now()
 
+    def clean(self):
+        name = self.configuration['dbname']
+        print name
+        self.db.drop_database(name)
+        
+        #database = FabricCluster._get_db()
+        #pprint (database.__dict__)
+        #name = FabricCluster._get_collection_name()
+        #print "NAME", name
+        #database.drop_collection(name)
+        
     def config(self, filename=None):
         self.configuration = read_yaml_config(inventory_config_filename, check=False)
         if self.configuration is None:
@@ -174,7 +191,7 @@ class Inventory:
         #
         # TODO: need to pass host, port and other stuff from config file dict to this
         #
-        db = connect (self.configuration['dbname'])
+        self.db = connect (self.configuration['dbname'])
 
         self.clusters = []
         self.servers = []
@@ -219,10 +236,13 @@ class Inventory:
                 element = FabricServer(name=name, kind=kind)
             elif kind == "service":
                 element = FabricService(name=name, kind=kind)
-                log.info("creating {0} {1} {2}".format(name, kind))
+                log.info("creating {0} {1}".format(name, kind))
             elif kind == "cluster":
                 element = FabricCluster(name=name, kind=kind)
-                log.info("creating {0} {1} {2}".format(name, kind))
+                log.info("creating {0} {1}".format(name, kind))
+            elif kind == "image":
+                element = FabricImage(name=name, kind=kind)
+                log.info("creating {0} {1}".format(name, kind))
             else:
                 log.error(
                     "kind is not defined, creation of objects failed, kind, nameregex")
@@ -340,6 +360,12 @@ class Inventory:
         print "%15s =" % "h", "HPC"
 
     def print_kind (self, kind, name=None):
+        '''
+        prints the attributes contained in the object with the given type.
+        
+        :param kind: the kind of the fabric object
+        :param name: the name of the fabric object
+        '''
         if kind in FABRIC_TYPES or name is not None:
             element = self.get(kind, name)   
             for key in element:
@@ -370,7 +396,7 @@ class Inventory:
                 self.services = self.get("service")
 
             if kind == "images" or kind is None:
-                self.services = self.get("images")
+                self.images = self.get("images")
 
         else:
             log.error("ERROR: can not find kind: '{0}'".format(kind))
@@ -390,6 +416,7 @@ class Inventory:
         print
 
 def main():
+    # this example will not work if you have not done a python setup.py install
     # server = FabricServer(name="i")
 
     # server.tags = ["hallo"]

@@ -7,9 +7,9 @@ nosetests -v
 """
 from datetime import datetime
 
-from cloudmesh.inventory.resources import Inventory
-from cloudmesh.inventory.resources import FabricService
-from cloudmesh.inventory.resources import FabricServer
+from cloudmesh.inventory.inventory import Inventory
+from cloudmesh.inventory.inventory import FabricService
+from cloudmesh.inventory.inventory import FabricServer
 import json
 from  pprint import pprint
 
@@ -22,20 +22,51 @@ class Test_Inventory:
 
     def setup(self):
         self.inventory = Inventory("nosetest")
-
+        self.inventory.clean()
+        
     def tearDown(self):
-        pass
+        self.inventory.print_info()
         # self.inventory.disconnect()
 
+    def test_clean(self):
+        HEADING("test01_clean")
+        self.inventory.clean()
+        self.inventory.print_info()
+        assert (
+            len(self.inventory.servers) + 
+            len(self.inventory.clusters) + 
+            len(self.inventory.images) + 
+            len(self.inventory.services) == 0)
+        
+    def test_cluster(self):
+        HEADING("CREATE CLUSTER")
+        self.inventory.create_cluster("bravo", "b-[001-016]", "101.102.203.[11-26]", "b[001]")
+        self.inventory.print_info()
+        assert len(self.inventory.servers) == 16 and len(self.inventory.clusters) == 1        
+    def test_server(self):
+        HEADING("TEST_SERVERS")
+        self.inventory.create("server","i[001-003]")
+        assert len(self.inventory.servers) == 3 and len(self.inventory.clusters) == 0     
+
+    def test_service(self):
+        HEADING("TEST_SERVICES")
+        self.inventory.create("service","service-i[001-003]")
+        assert len(self.inventory.services) == 3 and len(self.inventory.clusters) == 0    
+
+    def test_image(self):
+        HEADING("TEST_image")
+        self.inventory.create("image","image[001-003]")
+        assert len(self.inventory.images) == 3 and len(self.inventory.clusters) == 0    
+
+    def test_info(self):
+        HEADING("TEST_INFO")
+        self.inventory.print_info()
+        
     def test00_disconnect(self):
         HEADING("00 DISCONNECT")
         print "NOT YET IMPLEMENTED"
-
-    def test01_clean(self):
-        HEADING("test01_clean")
-        self.inventory.clean()
-
-    def test02_add_Service(self):
+        
+    def test_euca_service(self):
         HEADING("test02_add_Service")
         now = datetime.now()
         service = FabricService(
@@ -44,9 +75,12 @@ class Test_Inventory:
             date_update=now,
             date_stop=now
         )
-        self.inventory.save(service)
+        pprint (service.__dict__)
+        service.save(cascade=True)
+        self.inventory.refresh()
+        assert (self.inventory.services[0].name == 'Euca')
 
-    def test03_add_Server(self):
+    def test_date(self):
         HEADING("test03_add_Server")
         now = datetime.now()
         service = FabricService(
@@ -55,81 +89,63 @@ class Test_Inventory:
             date_update=now,
             date_stop=now
         )
-        self.inventory.save(service)
-
-        server = FabricServer(
-            name='Hallo4',
-            date_start=now,
-            date_update=now,
-            date_stop=now,
-            services=[service]
-        )
-
-        self.inventory.save(server)
+        service.save()
+        self.inventory.refresh()
+        pprint(service.__dict__)
+        print "name     :", self.inventory.services[0].name
+        print "now      :", now
+        print "date_stop:", self.inventory.services[0].date_stop
+        assert (str(self.inventory.services[0].date_stop) == str(now))
 
 
-    def test05_create(self):
-        HEADING("test05_create")
-        self.inventory.create(
-            "server", "dynamic", "india[9-11].futuregrid.org,india[01-02].futuregrid.org")
-        print self.inventory.pprint()
-        assert self.inventory.exists("server", "india01.futuregrid.org")
-
-    def test06_loop_print(self):
-        HEADING("test06_loop_print")
-        for server in self.inventory.servers:
-            print server.data
-
-    def test07_exists(self):
-        HEADING("test07_exists")
-        assert self.inventory.exists(
-            "server", "india01.futuregrid.org") is True
-
-    def test08_print(self):
-        HEADING("test08_print")
-        self.inventory.pprint()
-
-    def test09_count(self):
-        HEADING("test09_count")
-        print self.inventory.servers.count(), self.inventory.services.count()
-        assert (self.inventory.servers.count() == 6) and (
-            self.inventory.services.count() == 2)
-
-    def test10_set(self):
-        HEADING("test10_set")
+    def test_add(self):
+        HEADING("test_add")
         self.inventory.clean()
-        self.inventory.create(
-            "server",
-            "dynamic",
-            "india01.futuregrid.org")
 
-        print self.inventory.pprint()
-        print self.inventory.exists("server", "india01.futuregrid.org")
+        self.inventory.create("server","i001")
+        self.inventory.create("service","service-i001")
 
-        self.inventory.set_service(
-            "india01-opensatck",
-            "india01.futuregrid.org",
-            "openstack")
 
-        self.inventory.pprint()
+        service = self.inventory.get("service","service-i001")
+        service.save(cascade=True)
 
-    def test11_add(self):
-        HEADING("test11_add")
+        server = self.inventory.get("server", "i001")
+        server.save(cascade=True)
+        
+        pprint(server.__dict__)
+        pprint(service.__dict__)
+
+        server.services = [service]
+        server.save(cascade=True)
+        
+        pprint(server.__dict__)
+        self.inventory.refresh()
+        assert (self.inventory.servers[0].services[0].name == "service-i001")
+
+    def test_append(self):
+        HEADING("test_add")
         self.inventory.clean()
-        self.inventory.create(
-            "server",
-            "dynamic",
-            "india01.futuregrid.org")
 
-        print self.inventory.pprint()
-        print self.inventory.exists("server", "india01.futuregrid.org")
+        self.inventory.create("server","i001")
+        self.inventory.create("service","service-i001")
 
-        self.inventory.add_service(
-            "india01-opensatck",
-            "india01.futuregrid.org",
-            "openstack")
 
-        self.inventory.pprint()
+        service = self.inventory.get("service","service-i001")
+        service.save(cascade=True)
+
+        server = self.inventory.get("server", "i001")
+        server.save(cascade=True)
+        
+        pprint(server.__dict__)
+        pprint(service.__dict__)
+
+        server.append(service)
+        server.save(cascade=True)
+        
+        pprint(server.__dict__)
+        self.inventory.refresh()
+        assert (self.inventory.servers[0].services[0].name == "service-i001")
+
 
     def test12_logging(self):
         self.test11_add()
@@ -140,27 +156,3 @@ class Test_Inventory:
         s.start()
         s.start()
 
-    def test_category(self):
-        self.inventory.clean()
-        self.inventory.create("server", "dynamic", "i[1-3]")
-        self.inventory.save()
-
-        for server in self.inventory.servers:
-            server.subkind = "dynamic"
-
-        server.bad = "bad"
-        server.cm_category = ["compute","test"]
-        print server.name,server.cm_category
-        server.save()
-
-
-        servers = self.inventory.servers(name="i1")
-        for server in servers:
-            pprint (server.data)
-
-        print "HALLO"
-        pprint (server.__dict__)
-        
-    #print "MASTER", server.name,server.category    
-        #for server in self.inventory.servers:
-        #    print server.name, server.category
