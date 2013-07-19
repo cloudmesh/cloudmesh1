@@ -10,17 +10,25 @@ log = LOGGER('inventory')
 db = connect ("nosetest")
 
 FABRIC_TYPES = ["cluster", "server", "service", "iamge"]
+"""The types a fabric server can have"""
 
 PROVISIONING_CHOICES = ('openstack',
                         'eucalyptus',
                         'hpc')
+"""the provisioning choices for a fabric server"""
 
 SERVICE_CHOICES = ('ganglia',
                    'nagios')
+"""the service choices for a service"""
 
 SERVER_CHOICES = ('dynamic', 'static')
+"""the server choices we have"""
 
 class FabricObject(DynamicDocument):
+    '''
+    the base class that can be inherited to define a fabric object. this object
+    shoul dnot be directly used, but only inherited from.
+    '''
 
     kind = StringField(default="basic", required=True)
     name = StringField(required=True, unique=True)
@@ -40,16 +48,27 @@ class FabricObject(DynamicDocument):
 
     
     def stamp(self):
+        '''
+        an internal method to provide a time stap for a global modification data
+        in inventory. Calling of the inventory or any other save will create a
+        new time stamp
+        '''
         if not self.date_creation:
             self.date_creation = datetime.now()
         self.date_modified = datetime.now()
 
 
     def save(self, *args, **kwargs):
+        '''
+        saves the inventory objects
+        '''
         self.stamp()
         return super(FabricObject, self).save(*args, **kwargs)
         
     def start(self):
+        '''
+        cecods the starting time
+        '''
         if self.status == "start":
             log.warning(
                 "{0} is already started at {1}".format(self.name, self.date_start))
@@ -57,10 +76,14 @@ class FabricObject(DynamicDocument):
             self.status = "start"
             self.date_start = datetime.now()
             self.date_stop = None
+            self.stamp()
             self.save(cascade=True)
             log.info("START: {0} {1}".format(self.name, self.date_start))
 
     def stop(self):
+        '''
+        records the stop time
+        '''
         if self.status == "stop":
             log.warning(
                 "{0} is already started at {1}".format(self.name, self.date_start))
@@ -72,6 +95,7 @@ class FabricObject(DynamicDocument):
             delta = self.date_stop - self.date_start
             self.uptime = self.uptime + delta.seconds
             self.date_start = None
+            self.stamp()
             self.save(cascade=True)
         else:
             log.warning(
@@ -83,13 +107,22 @@ class FabricObject(DynamicDocument):
 
     
 class FabricImage(FabricObject):
+    '''
+    an object to hold fabric images and their metadata for image provisioning
+    '''
     kind = StringField(default="image")
     
 class FabricService(FabricObject):
+    '''
+    an object to hold fabric services and their meta data
+    '''
     kind = StringField(default="service")
     utility = StringField()
     
 class FabricServer(FabricObject):
+    '''
+    an object to hold fabric servers and their meta data
+    '''
     kind = StringField(default="server")
     ip = StringField()
     provisioned = StringField(choices=PROVISIONING_CHOICES, default="hpc")
@@ -98,14 +131,24 @@ class FabricServer(FabricObject):
         reverse_delete_rule=CASCADE))
 
 class FabricCluster(FabricObject):
+    '''
+    an object to hold fabric clusters and their meta data
+    '''
+
     kind = StringField(default="server")
     servers = ListField(ReferenceField(
         FabricServer,
         reverse_delete_rule=CASCADE))
 
 class Inventory:
+    '''
+    holds a simple inventory of a data center
+    '''
     
     def __init__(self):
+        '''
+        initializes the inventory
+        '''
         self.clusters = []
         self.servers = []
         self.services = []
@@ -113,19 +156,34 @@ class Inventory:
         pass
 
     def set (self, elements, attribute, value, namespec=None):
+        '''
+        sets an attribute of one or multiple matching objects defined by namespec to value.
+        
+        :param elements: a list of fabric objects
+        :param attribute: the attribute to be changed
+        :param value: the value to set the attribute to
+        :param namespec: the matching condition for the name of the object. 'i[001-003]'. matches the objects with names i001, i002, i003
+        '''
         if namespec is None:
             for element in elements:
                 element[attribute] = value
+                self.stamp()
                 element.save(cascade=True)
         else:
             name_list = expand_hostlist(namespec)
             for element in elements:
                 if element.name in name_list:
                     element[attribute] = value
+                    self.stamp()
                     element.save(cascade=True)
 
     
     def create (self, kind, namespec):
+        '''
+        creates fabric objects of the specified kind and matching the name specification
+        :param kind: the kind . see FABRIC_TYPES
+        :param namespec: the specifacation for a name list. 'i[001-003]'. creates the objects with names i001, i002, i003
+        '''
         elements = []
         names = expand_hostlist(namespec)
         for name in names:
@@ -141,6 +199,7 @@ class Inventory:
                 log.error(
                     "kind is not defined, creation of objects failed, kind, nameregex")
                 return
+            self.stamp()
             element.save(cascade=True)
             elements.append(object)
         return elements
@@ -150,6 +209,14 @@ class Inventory:
                        names,
                        ips,
                        management):
+        '''
+        creates a cluster with the given name specification ip specifications, and the identification of management node.
+        
+        :param name: name of the cluster
+        :param names: the names of the cluster servers. 'i[001-003]'. creates the objects with names i001, i002, i003
+        :param ips: the names of the ips for the servers. 'i[001-003].futuregrid.org' creates the ips for the previously defined names
+        :param management: the names of the management nodes. 'i[001-002]' sets the nodes i001 and i002 to management nodes. The rest will be set to compute nodes automatically.
+        '''
         name_list = expand_hostlist(names)
         ip_list = expand_hostlist(ips)
         management_list = expand_hostlist(management)
@@ -163,16 +230,24 @@ class Inventory:
                 server.tags = ["manage"]
             else:
                 server.tags = ["compute"]
+            self.stamp()
             server.save(cascade=True)
             servers.append(server)
             
         cluster = FabricCluster(name=name)
         cluster.servers = servers
+        self.stamp()
         cluster.save(cascade=True)
             
         pass
 
     def get (self, kind, name=None):
+        '''
+        returns the object with the specified kind and name
+        
+        :param kind: the kind . see FABRIC_TYPES
+        :param name: the name of the object
+        '''
         if name is not None:
             if kind == "cluster":
                 return FabricCluster.objects(name=name)[0]
@@ -201,6 +276,11 @@ class Inventory:
 
             
     def print_cluster (self, name):
+        '''
+        print some elementary, but not all information of the cluster.
+        
+        :param name: name of the cluster
+        '''
         self.refresh()
         cluster = self.get("cluster", name=name)
         print "%15s:" % "cluster", name
@@ -238,6 +318,19 @@ class Inventory:
                 print "%15s =" % key, element[key]
             
     def refresh(self, kind=None):
+        '''
+        the inventory object contains a number of lists to conveniently access all fabric objects by kind. After refresh you can access them through 
+        
+           inventory = Inventory()
+           inventory.refresh()
+           
+           inventory.servers
+           inventory.services
+           inventory.clusters
+           inventory.images
+           
+        :param kind:
+        '''
         if kind in FABRIC_TYPES or kind is None:
             if kind == "cluster" or kind is None:
                 self.clusters = self.get("cluster")
@@ -246,7 +339,10 @@ class Inventory:
                 self.servers = self.get("server")
 
             if kind == "service" or kind is None:
-                self.servces = self.get("service")
+                self.services = self.get("service")
+
+            if kind == "images" or kind is None:
+                self.services = self.get("images")
 
         else:
             log.error("ERROR: can not find kind: '{0}'".format(kind))
@@ -254,6 +350,9 @@ class Inventory:
 
 
     def print_info(self):
+        '''
+        print some elementary overview information 
+        '''
         self.refresh()
         # print "%15s:" % "dbname", self.inventory_name
         print "%15s:" % "clusters", len(self.clusters), "->", ', '.join([c.name for c in self.clusters])
