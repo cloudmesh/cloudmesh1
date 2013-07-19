@@ -108,6 +108,32 @@ class Inventory:
         self.services = []
         pass
 
+    def set (elements, attribute, value):
+        for element in elements:
+            element[attribute] = value
+            element.save(cascade=True)
+        pass
+    
+    def create (self, kind, namespec):
+        elements = []
+        names = expand_hostlist(namespec)
+        for name in names:
+            if kind == "server":
+                element = FabricServer(name=name, kind=kind)
+            elif kind == "service":
+                element = FabricService(name=name,kind=kind)
+                log.info("creating {0} {1} {2}".format(name, kind))
+            elif kind == "cluster":
+                element = FabricCluster(name=name,kind=kind)
+                log.info("creating {0} {1} {2}".format(name, kind))
+            else:
+                log.error(
+                    "kind is not defined, creation of objects failed, kind, nameregex")
+                return
+            element.save(cascade=True)
+            elements.append(object)
+        return elements
+    
     def create_cluster(self, 
                        name, 
                        names,
@@ -227,4 +253,6 @@ inventory.create_cluster(name="india",
                          management="i[003,004]")
 
 inventory.print_cluster ("india")
+servers = FabricServers.objects
+inventory.set(servers, "status", "running")
 inventory.print_info()
