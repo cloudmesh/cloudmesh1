@@ -38,86 +38,86 @@ class Test_cloudmesh:
         print self.config
 
     def test02_active(self):
-        HEADING("LIST ACTIVE PROJECTS")
+        HEADING()
         result = self.config.projects('active')
         print result
         assert 'fg82' in result
 
     def test03_completed(self):
-        HEADING("LIST COMPLETED PROJECTS")
+        HEADING()
         result = self.config.projects('completed')
         assert True
 
     def test04_active(self):
-        HEADING("LIST ACTIVE PROJECTS")
+        HEADING()
         result = self.config.projects('default')
         assert result == 'fg82'
 
     def test05_india(self):
-        HEADING("LIST India")
+        HEADING()
         result = self.config.get('india-openstack-essex')
         assert result["OS_VERSION"] == "essex"
 
     def test06_keys_india_openstack(self):
-        HEADING("KEY india-openstack")
+        HEADING()
         keys = self.config.keys()
         assert 'india-openstack-essex' in keys
 
     """
     def test07_keys_india_eucalyptus(self):
-        HEADING("KEY india-eucalyptus")
+        HEADING()
         keys = self.config.keys()
         assert 'india-eucalyptus' in keys
 
     def test09_keys_india_eucalyptus(self):
-        HEADING("KEY azure")
+        HEADING()
         keys = self.config.keys()
         assert 'azure' in key
 
     """
 
     def test08_keys_grizzly_openstack(self):
-        HEADING("KEY sierra-openstack-grizzly")
+        HEADING()
         keys = self.config.keys()
         assert 'sierra-openstack-grizzly' in keys
 
     def test10_grizzly(self):
-        HEADING("LIST GRIZZLY")
+        HEADING()
         result = self.config.get('sierra-openstack-grizzly')
         assert result["OS_VERSION"] == 'grizzly'
 
     def test11_grizzly(self):
-        HEADING("LIST GRIZZLY EXPANDED")
+        HEADING()
         result = self.config.get('sierra-openstack-grizzly', expand=True)
         assert result["OS_VERSION"] == 'grizzly'
 
     def test12_clouds(self):
-        HEADING("CLOUD")
+        HEADING()
         clouds = self.config.clouds()
         assert isinstance(clouds, dict)
         assert 'india-openstack-essex' in clouds
 
     def test13_cloud(self):
-        HEADING("CLOUD")
+        HEADING()
         india_cloud = self.config.cloud('india-openstack-essex')
         assert isinstance(india_cloud, dict)
         assert 'cm_host' in india_cloud
         assert india_cloud['cm_host'] == 'india.futuregrid.org'
 
     def test14_cloud_default(self):
-        HEADING("CLOUD")
+        HEADING()
         assert self.config.cloud_default(
             'india-openstack-essex', 'flavor') == 'm1.tiny'
         assert self.config.cloud_default(
             'india-openstack-essex', 'not defined') is None
 
     def test15_project_default(self):
-        HEADING("PROJECT")
+        HEADING()
         project = self.config.projects('default')
         assert project == 'fg82'
 
     def test16_write(self):
-        HEADING("WRITE")
+        HEADING()
         warnings.filterwarnings(
             'ignore', 'tempnam', RuntimeWarning)  # we open the file securely
         name = os.tempnam()
@@ -127,7 +127,7 @@ class Test_cloudmesh:
         os.remove(name)
 
     def test17_key(self):
-        HEADING("KEY")
+        HEADING()
         keys = self.config.userkeys()
 
         # print "DEFAULT>", self.config.userkeys('default')
@@ -137,6 +137,7 @@ class Test_cloudmesh:
         assert ('default' in keys) and (keys['default'] in keys['keylist'])
 
     def test20_set_index_and_prefix(self):
+        HEADING()
         print
         print "INDEX:", self.config.index
         print "PREFIX:", self.config.prefix
@@ -157,11 +158,11 @@ class Test_cloudmesh:
         assert self.config.index == 4 and self.config.prefix == "hallo"
 
     def test21_default(self):
-        HEADING("TEST 21 DEFAULT ")
+        HEADING()
         self.config.default = "hallo"
         print self.config.default
         assert self.config.default == "hallo"
 
     def test22_filter(self):
-        HEADING("TEST 22 FILTER")
+        HEADING()
         print self.config.get_filter('sierra-openstack-grizzly')

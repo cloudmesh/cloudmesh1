@@ -33,39 +33,39 @@ class Test_cloudmesh:
         # print self.c.clouds
 
     def test_100_print(self):
-        HEADING("test_001_print")
+        HEADING()
         print self.c
 
     def test_101_refresh(self):
-        HEADING("test_101_refresh")
+        HEADING()
         self.c.refresh([self.name])
         self.c.dump()
 
     def test_102_refresh_all(self):
-        HEADING("test_102_refresh_all")
+        HEADING()
         print self.c.refresh()
 
     def test_104_dump(self):
-        HEADING("test_104_dump")
+        HEADING()
         print self.c.dump()
 
     def test_105_info(self):
-        HEADING("test_105_info")
+        HEADING()
         self.c.refresh()
         print self.c.info()
 
     def test_106_active(self):
-        HEADING("test_106_active")
+        HEADING()
         print self.c.active()
 
     def test_107_profile(self):
-        HEADING("test_107_profile")
+        HEADING()
         print self.c.profile()
 
     def test_108_prefix(self):
-        HEADING("test_108_prefix")
+        HEADING()
         print self.c.prefix()
 
     def test_109_findall(self):
-        HEADING("test_109_findall")
+        HEADING()
         print self.c.find()

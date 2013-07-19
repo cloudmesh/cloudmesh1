@@ -29,39 +29,39 @@ class Test_cloudmesh:
         pass
 
     def test00_wrong_file(self):
-        HEADING("00 WRONG FILE")
+        HEADING()
         try:
             self.projects = cm_projects("wrong file")
         except:
             pass
 
     def test01_print(self):
-        HEADING("01 PRINT")
+        HEADING()
         print self.projects
         pass
 
     def test02_dump(self):
-        HEADING("02 DUMP")
+        HEADING()
         print self.projects.dump()
         pass
 
     def test03_active(self):
-        HEADING("03 ACTIVE")
+        HEADING()
         print self.projects.names("active")
         pass
 
     def test04_default(self):
-        HEADING("04 DEFAULT")
+        HEADING()
         print self.projects.names("default")
         pass
 
     def test05_default(self):
-        HEADING("05 COMPLETED")
+        HEADING()
         print self.projects.names("completed")
         pass
 
     def test06_wrong_status(self):
-        HEADING("06 WRONG STATUS")
+        HEADING()
         try:
             print self.projects.names("wrong")
         except Exception, e:
@@ -69,13 +69,13 @@ class Test_cloudmesh:
             pass
 
     def test07_add(self):
-        HEADING("05 ADD")
+        HEADING()
         print self.projects.add("gregor")
         print self.projects.dump()
         pass
 
     def test07_delete(self):
-        HEADING("05 DELETTE")
+        HEADING()
         print self.projects.add("gregor")
         print self.projects.dump()
         print self.projects.delete("gregor")

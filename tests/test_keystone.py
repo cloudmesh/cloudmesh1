@@ -25,7 +25,7 @@ from cloudmesh.util.util import HEADING
 class Test_cloudmesh_keystone:
 
     def test18_initialize(self):
-        HEADING("INITIALIZATION")
+        HEADING()
         username = 'misterbojangles'
         self.config.userdata_handler = mock_user
         self.config.cloudcreds_handler = mock_cloud
@@ -56,7 +56,7 @@ class Test_cloudmesh_keystone:
         assert cmdata['prefix'] == username
 
     def test19_openstack_grizzly(self):
-        HEADING("INITIALIZATION")
+        HEADING()
         username = 'misterbojangles'
         self.config.userdata_handler = mock_user
         self.config.cloudcreds_handler = openstack_grizzly_cloud

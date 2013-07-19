@@ -48,16 +48,16 @@ class Test:
         pass
 
     def test_00_label(self):
-        HEADING("00 INFO OPENSTACK LABEL")
+        HEADING()
         print self.cloud_label
         assert self.cloud.label == self.cloud_label
 
     def test_01_limit(self):
-        HEADING("01 INFO OPENSTACK LIMIT")
+        HEADING()
         print json.dumps(self.cloud.limits(), indent=4)
 
     def test_02_info(self):
-        HEADING("02 INFO OPENSTACK IMAGES")
+        HEADING()
         self.cloud.refresh('images')
         print json.dumps(self.cloud.dump('images'), indent=4)
         # pp.pprint(self.cloud.dump('images', with_manager=True))
@@ -70,7 +70,7 @@ class Test:
         assert self.cloud.images > 0
 
     def test_03_flavors(self):
-        HEADING("03 INFO OPENSTACK FLAVORS")
+        HEADING()
         self.cloud.refresh('flavors')
         print json.dumps(self.cloud.dump('flavors'), indent=4)
 
@@ -78,7 +78,7 @@ class Test:
         assert self.cloud.flavors['m1.tiny']['ram'] == 512
 
     def test_04_start_vm(self):
-        HEADING("04 START VM")
+        HEADING()
         configuration = cm_config()
         image = configuration.default(self.name)['image']
         print "STARTING IMAGE", image
@@ -87,14 +87,14 @@ class Test:
         assert len(result.keys()) > 0
 
     def test_05_print_vms(self):
-        HEADING("05 PRINT INFO OPENSTACK VMS")
+        HEADING()
         self.cloud.refresh('servers')
         print json.dumps(self.cloud.dump('servers'), indent=4)
         # we assume that there are always images running
         assert len(self.cloud.servers) > 0
 
     def test_06_refresh(self):
-        HEADING("06 INFO OPENSTACK REFRESH")
+        HEADING()
         self.cloud.refresh()
         pp.pprint(self.cloud.get(self.name))
         assert self.cloud.images > 0
@@ -107,7 +107,7 @@ class Test:
     """
 
     def test_07_print_tables(self):
-        HEADING("07 INFO OPENSTACK TABLES")
+        HEADING()
         self.test_03()
         table = cm_table()
         columns = ["id", "name", "ram", "vcpus"]
@@ -145,7 +145,7 @@ class Test:
     """
 
     def test_08_delete_vms_of_user(self):
-        HEADING("08 INFO OPENSTACK DELETE VMS FROM USER")
+        HEADING()
 
         self.cloud.refresh()
 
@@ -186,7 +186,7 @@ class Test:
         assert vm_ids == []
 
     def test_09_start_two_vms(self):
-        HEADING("09 START 2 VMs")
+        HEADING()
         configuration = cm_config()
         image = configuration.default(self.name)['image']
         print "STARTING IMAGE", image
@@ -209,17 +209,17 @@ class Test:
         assert len(vm_ids) == 2
 
     def test_10_list_user_vms(self):
-        HEADING("10 INFO LIST VMS FROM USER")
+        HEADING()
         list = self.cloud.vms_user(refresh=True)
         pp.pprint(list)
 
     def test_11_refresh_all(self):
-        HEADING("11 INFO OPENSTACK TEST")
+        HEADING()
         self.cloud.refresh()
         self.cloud.info()
 
     def test_12_print_states(self):
-        HEADING("12 INFO OPENSTACK TEST")
+        HEADING()
         self.cloud.refresh()
         print self.cloud.states
 
@@ -243,7 +243,7 @@ class Test:
         # print json.dumps(self.cloud.servers, indent=4)
 
     def test_13_meta(self):
-        HEADING("13 TEST META")
+        HEADING()
         self.clean()
         image = self.configuration.default(self.name)['image']
         flavor = self.configuration.default(self.name)['flavor']
@@ -261,7 +261,7 @@ class Test:
         print meta
 
     def start(self):
-        HEADING("START A SINGLE DEFAULT VM")
+        HEADING()
         image = self.configuration.default(self.name)['image']
         flavor = self.configuration.default(self.name)['flavor']
         self.configuration.prefix = "gvonlasz-test"
@@ -272,12 +272,12 @@ class Test:
         print result
 
     def info(self):
-        HEADING("LIST VMS")
+        HEADING()
         self.cloud.refresh()
         self.cloud.info()
 
     def clean(self):
-        HEADING("REMOVE ALL VMS")
+        HEADING()
 
         self.cloud.refresh()
         self.cloud.info()

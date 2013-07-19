@@ -34,7 +34,7 @@ class Test_cloudmesh:
 
 
     def test00_file(self):
-        HEADING("00 FILE")
+        HEADING()
         try:
             self.keys = cm_keys("wrong file")
         except:
@@ -42,12 +42,12 @@ class Test_cloudmesh:
 
 
     def test01_print(self):
-        HEADING("01 PRINT")
+        HEADING()
         print self.keys
         pass
 
     def test02_names(self):
-        HEADING("02 NAMES")
+        HEADING()
         print self.keys.names()
 
         names = []
@@ -64,31 +64,31 @@ class Test_cloudmesh:
         assert len(names) == len(self.keys.names())
 
     def test03_default(self):
-        HEADING("03 DEFAULT")
+        HEADING()
         print self.keys.default()
 
     def test04_getvalue(self):
-        HEADING("04 GET VALUE")
+        HEADING()
         for key in self.keys.names():
             print self.keys._getvalue(key)
 
     def test05_set(self):
-        HEADING("05 SET DEFAULT")
+        HEADING()
         first_key = self.keys.names()[0]
         self.keys.setdefault(first_key)
         print self.keys.default()
 
     def test06_get(self):
-        HEADING("06 GET FIRST KEY")
+        HEADING()
         first_key = self.keys.names()[0]
         print self.keys[first_key]
 
     def test07_get(self):
-        HEADING("07 GET")
+        HEADING()
         print self.keys["default"]
 
     def test08_set(self):
-        HEADING("08 SET HELLO WORLD")
+        HEADING()
 
         print self.keys["keys"]
 
@@ -104,7 +104,7 @@ class Test_cloudmesh:
         # (self.keys._getvalue("gregor") == "world")
 
     def test09_type(self):
-        HEADING("09 TYPE")
+        HEADING()
         print "Find key type of gregor:", self.keys.type("gregor")
         for name in self.keys.names():
             print name
@@ -115,7 +115,7 @@ class Test_cloudmesh:
         # assert (self.keys.type("gregor") == "file")
 
     def test10_fingerprint(self):
-        HEADING("10 FINGERPRINT")
+        HEADING()
         for name in self.keys.names():
             print self.keys.fingerprint(name)
 

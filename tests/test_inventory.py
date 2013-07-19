@@ -15,6 +15,8 @@ from  pprint import pprint
 
 from cloudmesh.util.util import HEADING
 import time
+import sys
+
 
 class Test_Inventory:
 
@@ -29,7 +31,7 @@ class Test_Inventory:
         # self.inventory.disconnect()
 
     def test_clean(self):
-        HEADING("test01_clean")
+        HEADING()
         self.inventory.clean()
         self.inventory.print_info()
         assert (
@@ -39,39 +41,35 @@ class Test_Inventory:
             len(self.inventory.services) == 0)
         
     def test_cluster(self):
-        HEADING("CREATE CLUSTER")
+        HEADING()
         self.inventory.create_cluster("bravo", "b-[001-016]", "101.102.203.[11-26]", "b[001]")
         self.inventory.print_info()
         self.inventory.refresh()
         assert len(self.inventory.servers) == 16 and len(self.inventory.clusters) == 1        
     def test_server(self):
-        HEADING("TEST_SERVERS")
+        HEADING()
         self.inventory.create("server","i[001-003]")
         self.inventory.refresh()
         assert len(self.inventory.servers) == 3 and len(self.inventory.clusters) == 0     
 
     def test_service(self):
-        HEADING("TEST_SERVICES")
+        HEADING()
         self.inventory.create("service","service-i[001-003]")
         self.inventory.refresh()
         assert len(self.inventory.services) == 3 and len(self.inventory.clusters) == 0    
 
     def test_image(self):
-        HEADING("TEST_image")
+        HEADING()
         self.inventory.create("image","image[001-003]")
         self.inventory.refresh()
         assert len(self.inventory.images) == 3 and len(self.inventory.clusters) == 0    
 
     def test_info(self):
-        HEADING("TEST_INFO")
+        HEADING()
         self.inventory.print_info()
         
-    def test00_disconnect(self):
-        HEADING("00 DISCONNECT")
-        print "NOT YET IMPLEMENTED"
-        
     def test_euca_service(self):
-        HEADING("test02_add_Service")
+        HEADING()
         now = datetime.now()
         service = FabricService(
             name='Euca',
@@ -85,7 +83,7 @@ class Test_Inventory:
         assert (self.inventory.services[0].name == 'Euca')
 
     def test_date(self):
-        HEADING("test03_add_Server")
+        HEADING()
         now = datetime.now()
         service = FabricService(
             name='OpenStack',
@@ -107,7 +105,7 @@ class Test_Inventory:
 
 
     def test_add(self):
-        HEADING("test_add")
+        HEADING()
         self.inventory.clean()
 
         self.inventory.create("server","i001")
@@ -131,7 +129,7 @@ class Test_Inventory:
         assert (self.inventory.servers[0].services[0].name == "service-i001")
 
     def test_append(self):
-        HEADING("test_add")
+        HEADING()
         self.inventory.clean()
 
         self.inventory.create("service","service-i001")
@@ -153,9 +151,9 @@ class Test_Inventory:
         self.inventory.refresh()
         assert (self.inventory.servers[0].services[0].name == "service-i001")
 
-
+    
     def test_logging(self):
-        HEADING("TEST_LOGGING")
+        HEADING()
 
         self.inventory.create("server","i001")
         server = self.inventory.get("server", "i001")

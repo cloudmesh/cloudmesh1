@@ -1,6 +1,7 @@
 from string import Template
 import os
 import sys
+import inspect
 #import yaml
 #from logger import LOGGER
 
@@ -29,7 +30,10 @@ def path_expand(text):
     return result
 
 
-def HEADING(txt):
+def HEADING(txt=None):
+    if txt is None:        
+        txt = inspect.getouterframes( inspect.currentframe() )[1][3]
+
     """Prints a message to stdout with #### surrounding it. This is useful for nosetests to better distinguish them."""
     print
     print "#", 70 * '#'
