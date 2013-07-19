@@ -4,10 +4,16 @@ from datetime import datetime
 from mongoengine import *
 from pprint import pprint
 from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.util import check_file_for_tabs
+from cloudmesh.util.util import path_expand
+from cloudmesh.util.config import read_yaml_config
+
 
 log = LOGGER('inventory')
 
-db = connect ("nosetest")
+inventory_config_filename = "~/.futuregrid/cloudmesh-db.yaml"
+
+
 
 FABRIC_TYPES = ["cluster", "server", "service", "iamge"]
 """The types a fabric server can have"""
@@ -142,17 +148,39 @@ class FabricCluster(FabricObject):
 
 class Inventory:
     '''
-    holds a simple inventory of a data center
+    holds a simple <ory of a data center
     '''
-    
-    def __init__(self):
+
+    def stamp(self):
+        '''
+        an internal method to provide a time stap for a global modification data
+        in inventory. Calling of the inventory or any other save will create a
+        new time stamp
+        '''
+        self.date_modified = datetime.now()
+
+    def config(self, filename=None):
+        self.configuration = read_yaml_config(inventory_config_filename, check=False)
+        if self.configuration is None:
+           self.configuration = {'dbname': "inventory"} 
+            
+    def __init__(self, filename=None):
         '''
         initializes the inventory
         '''
+        self.date_creation = datetime.now()
+        self.config(filename)
+        
+        #
+        # TODO: need to pass host, port and other stuff from config file dict to this
+        #
+        db = connect (self.configuration['dbname'])
+
         self.clusters = []
         self.servers = []
         self.services = []
         self.images = []
+        self.stamp()
         pass
 
     def set (self, elements, attribute, value, namespec=None):

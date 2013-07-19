@@ -1,10 +1,8 @@
 from string import Template
 import os
-
-
-
-
-"""Some simple utility functions"""
+import sys
+#import yaml
+#from logger import LOGGER
 
 def check_file_for_tabs(filename, verbose=True):
     """identifies if the file contains tabs and returns True if it
@@ -57,7 +55,7 @@ def table_printer(the_dict, header_info=None):
     elif type(the_dict) is list:
         for element in the_dict:
             for name, value in element.iteritems():
-                result = result +\
+                result = result + \
                     '<tr><td>{0}</td><td>{1}</td></tr>'.format(name.title(),
                                                                str(table_printer(value)))
         result = '<table>' + result + '</table>'

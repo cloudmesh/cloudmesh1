@@ -1,1 +1,2 @@
-__all__ = ['resources']
+__all__ = ['inventory']
+
