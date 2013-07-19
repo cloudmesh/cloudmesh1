@@ -108,11 +108,18 @@ class Inventory:
         self.services = []
         pass
 
-    def set (elements, attribute, value):
-        for element in elements:
-            element[attribute] = value
-            element.save(cascade=True)
-        pass
+    def set (self,elements, attribute, value, namespec= None):
+        if namespec is None:
+            for element in elements:
+                element[attribute] = value
+                element.save(cascade=True)
+        else:
+            name_list = expand_hostlist(namespec)
+            for element in elements:
+                if element.name in name_list:
+                    element[attribute] = value
+                    element.save(cascade=True)
+
     
     def create (self, kind, namespec):
         elements = []
@@ -192,9 +199,7 @@ class Inventory:
     def print_cluster (self, name):
         self.refresh()
         cluster = self.get("cluster", name=name)
-        print cluster.name, cluster.date_modified
-        for server in cluster.servers:
-            print "{0} {1}".format(server.name, "manage" in server.tags)
+        print cluster.name, cluster.date_modified, cluster["name"]
 
         #        print "%15s:" % "dbname", self.inventory_name
         print "%15s:" % "cluster", name
@@ -208,7 +213,7 @@ class Inventory:
             else:
                 c = " "
 
-            line = " ".join(["%15s:" % s.name, "%8s" % s.status, s.ip, c, ""])
+            line = " ".join(["%15s:" % s.name, "%-8s" % s.status, s.ip, c, ""])
             service_line = ', '.join([str(service.subkind) for service in s["services"]])
             service_line = service_line.replace("openstack", "o")
             line += service_line
@@ -252,7 +257,11 @@ inventory.create_cluster(name="india",
                          ips="india[003-010].futuregrid.org", 
                          management="i[003,004]")
 
+servers = FabricServer.objects
+inventory.set(servers, "status", "running", "i[003-010]")
+inventory.set(servers, "status", "done", "i[005-007]")
+
 inventory.print_cluster ("india")
-servers = FabricServers.objects
-inventory.set(servers, "status", "running")
+
+
 inventory.print_info()
