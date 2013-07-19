@@ -14,7 +14,7 @@ import json
 from  pprint import pprint
 
 from cloudmesh.util.util import HEADING
-
+import time
 
 class Test_Inventory:
 
@@ -42,20 +42,24 @@ class Test_Inventory:
         HEADING("CREATE CLUSTER")
         self.inventory.create_cluster("bravo", "b-[001-016]", "101.102.203.[11-26]", "b[001]")
         self.inventory.print_info()
+        self.inventory.refresh()
         assert len(self.inventory.servers) == 16 and len(self.inventory.clusters) == 1        
     def test_server(self):
         HEADING("TEST_SERVERS")
         self.inventory.create("server","i[001-003]")
+        self.inventory.refresh()
         assert len(self.inventory.servers) == 3 and len(self.inventory.clusters) == 0     
 
     def test_service(self):
         HEADING("TEST_SERVICES")
         self.inventory.create("service","service-i[001-003]")
+        self.inventory.refresh()
         assert len(self.inventory.services) == 3 and len(self.inventory.clusters) == 0    
 
     def test_image(self):
         HEADING("TEST_image")
         self.inventory.create("image","image[001-003]")
+        self.inventory.refresh()
         assert len(self.inventory.images) == 3 and len(self.inventory.clusters) == 0    
 
     def test_info(self):
@@ -94,8 +98,12 @@ class Test_Inventory:
         pprint(service.__dict__)
         print "name     :", self.inventory.services[0].name
         print "now      :", now
+        print "date_start:", self.inventory.services[0].date_start
+        print "date_update:", self.inventory.services[0].date_update
         print "date_stop:", self.inventory.services[0].date_stop
-        assert (str(self.inventory.services[0].date_stop) == str(now))
+        print ("WARNING: there is a rounding error wen reading the values. therfore"
+                 "ignore the last three digits of the date")
+        assert (str(self.inventory.services[0].date_stop)[:-3] == str(now)[:-3])
 
 
     def test_add(self):
@@ -126,9 +134,8 @@ class Test_Inventory:
         HEADING("test_add")
         self.inventory.clean()
 
-        self.inventory.create("server","i001")
         self.inventory.create("service","service-i001")
-
+        self.inventory.create("server","i001")
 
         service = self.inventory.get("service","service-i001")
         service.save(cascade=True)
@@ -147,12 +154,20 @@ class Test_Inventory:
         assert (self.inventory.servers[0].services[0].name == "service-i001")
 
 
-    def test12_logging(self):
-        self.test11_add()
-        HEADING("test12_logging")
-        s = self.inventory.get("server", "india01.futuregrid.org")[0]
-        print s.data
-        s.stop()
-        s.start()
-        s.start()
+    def test_logging(self):
+        HEADING("TEST_LOGGING")
 
+        self.inventory.create("server","i001")
+        server = self.inventory.get("server", "i001")
+        server.save(cascade=True)
+
+        pprint (server.__dict__)
+        server.stop()
+        server.start()
+        server.start()
+        server.stop()
+        server.save(cascade=True)
+        
+        pprint (server.__dict__)
+
+        assert(server.date_stop is not None)
