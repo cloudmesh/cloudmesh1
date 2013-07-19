@@ -1,7 +1,7 @@
 from fabric.api import task, local, execute
 import clean
 
-__all__ = ['req','sdist','install']
+__all__ = ['req', 'sdist', 'install']
 
 @task
 def req():

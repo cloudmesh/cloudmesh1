@@ -8,7 +8,8 @@ from cmd3.shell import command
 from pprint import pprint
 
 from cloudmesh.util.logger import LOGGER
-from cloudmesh.inventory.resources import Inventory
+from cloudmesh.inventory.inventory import Inventory
+from mongoengine import *
 
 log = LOGGER('inventory shell')
 
@@ -22,8 +23,9 @@ class cm_shell_inventory:
         
     def activate_cm_shell_inventory(self):
         self.inventory_name = "test"
+        db = connect (self.inventory_name)
         
-        self.inventory = Inventory(self.inventory_name)
+        self.inventory = Inventory()
         pass
 
     @command
@@ -83,55 +85,23 @@ class cm_shell_inventory:
             print
             if not (arguments["CLUSTER"] or arguments["SERVER"]):
 
-                print "%15s:" % "dbname", self.inventory_name
-                print "%15s:" % "clusters", len(self.inventory.clusters), "->", ', '.join([c.name for c in self.inventory.clusters])
-                print "%15s:" % "services", len(self.inventory.services)
-                print "%15s:" % "servers", len(self.inventory.servers)
-                print "%15s:" % "images", len(self.inventory.images) , "->", ', '.join([c.name for c in self.inventory.images])
+                print self.inventory.print_info()
                 print
 
             if arguments["CLUSTER"] and not arguments["SERVER"]:
 
                 name = arguments["CLUSTER"]
-                print "%15s:" % "dbname", self.inventory_name
-                print "%15s:" % "cluster", name
-                print
 
-                cluster = self.inventory.find("cluster", name)
-                m = cluster.management_node
-                line = " ".join(["%15s:" % m.name, "%8s" % m.status, m.ip_address, "M", ""])
-                service_line = ', '.join([service.subkind for service in m["services"]])
-                service_line = service_line.replace("openstack", "o")
-                line += service_line
-                print line
-                
-                
-                servers = cluster.compute_nodes
-                for s in servers:
-                    line = " ".join(["%15s:" % s.name, "%8s" % s.status, s.ip_address, "M", ""])
-                    service_line = ', '.join([str(service.subkind) for service in s["services"]])
-                    service_line = service_line.replace("openstack", "o")
-                    line += service_line
-                    print line
-                print
-
-                print "%15s:" % "Legend"
-                print "%15s =" % "M", "Management"
-                print "%15s =" % "S", "Server"
-                print "%15s =" % "o", "OpenStack"
-                print "%15s =" % "e", "OpenStack"
-                print "%15s =" % "h", "HPC"
+                self.inventory.print_cluster(name)
                 
             return
 
-        if arguments["info"] and arguments["service"]:
-            name = arguments["NAME"]
-            log.info ("info for service" + name)
-
-            service = self.inventory.find("cluster", name)   
-            for key in service:
-                print key
-            return
+        for kind in ["server","service","image"]:
+            if arguments["info"] and arguments[kind]:
+                name = arguments["NAME"]
+                kind = arguments[kind]
+                self.inventory.print_kind(serv, name)
+                return
 
 
         if arguments["create"] and arguments["server"]:

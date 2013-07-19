@@ -8,7 +8,7 @@ from cloudmesh.util.menu import ascii_menu
 
 input = raw_input
 
-__all__ = ['user','install','host','allow', 'check',"dns","status","start","stop","menu"]
+__all__ = ['user', 'install', 'host', 'allow', 'check', "dns", "status", "start", "stop", "menu"]
 
 
 def installed(name):
@@ -40,7 +40,7 @@ def user(name=None):
     if name is None: 
         user = get_user()
     password = get_password()
-    local("rabbitmqctl {0} {1}".format(name,password))
+    local("rabbitmqctl {0} {1}".format(name, password))
 
 @task
 def host():
@@ -55,7 +55,7 @@ def allow():
         'host': get_host(),
         'user': get_user()
         }
-    #print('rabbitmqctl set_permissions -p {host} {user} ".*" ".*" ".*"'.format(**values))
+    # print('rabbitmqctl set_permissions -p {host} {user} ".*" ".*" ".*"'.format(**values))
     local('rabbitmqctl set_permissions -p {host} {user} ".*" ".*" ".*"'.format(**values))
 
 @task
@@ -94,15 +94,15 @@ def stop():
 
 
 menu_list = [
-    ('install',install),
-    ('dns',dns),
-    ('host',host),
-    ('user',user),
-    ('allow',allow),
-    ('check',check),
-    ('status',status),
-    ('start',start),
-    ('stop',stop)
+    ('install', install),
+    ('dns', dns),
+    ('host', host),
+    ('user', user),
+    ('allow', allow),
+    ('check', check),
+    ('status', status),
+    ('start', start),
+    ('stop', stop)
     ]
 
 @task

@@ -1,6 +1,9 @@
 # pip install python-hostlist
 
 
+# mongo>     db.getSiblingDB("admin").runCommand({getCmdLineOpts:1})
+# finds path of db
+
 from cloudmesh.util.logger import LOGGER
 from datetime import datetime
 from hostlist import expand_hostlist
@@ -29,21 +32,23 @@ SERVICE_CHOICES = ('openstack',
 SERVER_CHOICES = ('dynamic', 'static')
 
 
-class FabricObject(Document):
-    meta = {
-        'allow_inheritance': True
-    }
+class FabricObject(DynamicDocument):
 
-    metadata = StringField()
-    name = StringField()
+    name = StringField(required=True, unique=True)
     kind = StringField()  # server, service
-    group = ListField(StringField())
     cluster = StringField()
+    bad = StringField(default="badme")
     subkind = StringField()
                           # server: dynamic, service: openstack, eucalyptus,
                           # hpc
     label = StringField()
-    status = StringField()
+    hallo = StringField(required=True)
+    status = StringField(default=None)
+
+    
+    metadata = ListField(StringField(),default=list)
+    group = ListField(StringField(),default=list)
+    tags = ListField(StringField(),default=list)
 
     date_start = DateTimeField()
     date_stop = DateTimeField()
@@ -53,6 +58,10 @@ class FabricObject(Document):
     date_modified = DateTimeField(default=datetime.now())
 
     uptime = LongField(default=0)
+
+    meta = {
+        'allow_inheritance': True
+    }
 
     def start(self):
         if self.status == "start":
@@ -96,10 +105,13 @@ class FabricObject(Document):
     def pprint(self):
         pprint(self.__dict__)
 
-
+    def set_category(self, which):
+        self.category = which
+        self.save()
+    
 class FabricService(FabricObject):
     ip_address = StringField()
-    kind = StringField(default="service")
+    kind = StringField(efault="service")
     subkind = StringField(choices=SERVICE_CHOICES)
 
 
@@ -107,7 +119,6 @@ class FabricServer(FabricObject):
     ip_address = StringField()
     kind = StringField(default="server")
     subkind = StringField(choices=SERVER_CHOICES, default='static')
-
     services = ListField(ReferenceField(
         FabricService,
         reverse_delete_rule=CASCADE))
@@ -120,11 +131,7 @@ class FabricServer(FabricObject):
 
 
 class FabricCluster(FabricObject):
-    management_node = ReferenceField(
-        FabricServer,
-        reverse_delete_rule=CASCADE
-    )
-    compute_nodes = ListField(ReferenceField(
+    servers = ListField(ReferenceField(
         FabricServer,
         reverse_delete_rule=CASCADE
     ))
@@ -181,7 +188,7 @@ class Inventory:
         
         :param filename:
         '''
-        self.filename  = filename
+        self.filename = filename
         if os.path.exists(filename):
             f = open(self.filename, "r")
             self.configuration = yaml.safe_load(f)
@@ -218,13 +225,14 @@ class Inventory:
             for element in data:
                 element.delete()
 
-    def create_cluster(self, clustername, nameregex, nameformat, startindex, managementnode, prefix):
-        # "delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001
+    def create_cluster(self, clustername, nameregex, nameformat, startindex, managementnodes, prefix):
+        # "delta", "102.202.204.[1-16]", "d-{0:03d}", [1,2], "d"
         # Simulate the Delta cluster
         # Simulate the Delta cluster
-        delta = self.ip_dict(nameregex, nameformat, startindex)
-        for name in delta:
-            ip = delta[name]
+        hostnames = self.ip_dict(nameregex, nameformat, startindex)
+        for name in hostnames:
+            print name
+            ip = hostnames[name]
             log.info("create {0} {1}".format(name, ip))
             self.create("server", "dynamic", name)
             self.add_service('%s-openstack' % name, name, 'openstack')
@@ -234,15 +242,15 @@ class Inventory:
             server.save()
 
         self.create("cluster", "dynamic", clustername)
-        delta_cluster = self.find("cluster", clustername)
-        delta_cluster.management_node = self.find("server", managementnode)
-        delta_cluster.compute_nodes = filter(
-            lambda s: s.name[:1] == prefix and s.name != managementnode, self.servers())
-        delta_cluster.service_choices = ('hpc', 'openstack', 'eucalyptus')
-        delta_cluster.save()
+        cluster = self.find("cluster", clustername)
+        # cluster.management_node = self.find("server", managementnode)
+        # cluster.compute_nodes = filter(
+        #    lambda s: s.name[:1] == prefix and s.name != managementnode, self.servers())
+        # cluster.service_choices = ('hpc', 'openstack', 'eucalyptus')
+        # cluster.()
 
     def create(self, kind, subkind, nameregex):
-        #"india[9-11].futuregrid.org,india[01-02].futuregrid.org"
+        # "india[9-11].futuregrid.org,india[01-02].futuregrid.org"
         names = expand_hostlist(nameregex)
         for name in names:
             if kind == "server":
@@ -348,6 +356,13 @@ class Inventory:
         s = self.fabrictype(kind)(name=name)[0]
         return s
 
+    def add_category(self, type, name, category):
+        '''sets the service of a server'''
+        s = self.find(type, name)
+        print s.name
+        c = s.category
+        s.save()
+        
     def set_service(self, name, server_name, subkind):
         '''sets the service of a server'''
         s = self.find('server', server_name)
@@ -505,5 +520,5 @@ def main():
 if __name__ == "__main__":
      # main()
 
-     #print ip_name_pair("india[20-25]", "i-", "0000", 1)
+     # print ip_name_pair("india[20-25]", "i-", "0000", 1)
      pass

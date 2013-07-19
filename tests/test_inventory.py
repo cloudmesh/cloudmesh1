@@ -1,9 +1,7 @@
 """ run with
 
 nosetests -v --nocapture --nologcapture
-
-or
-
+nosetests -v  --nocapture test_inventory.py:Test_Inventory.test_06
 nosetests -v
 
 """
@@ -13,8 +11,7 @@ from cloudmesh.inventory.resources import Inventory
 from cloudmesh.inventory.resources import FabricService
 from cloudmesh.inventory.resources import FabricServer
 import json
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
+from  pprint import pprint
 
 from cloudmesh.util.util import HEADING
 
@@ -69,6 +66,7 @@ class Test_Inventory:
         )
 
         self.inventory.save(server)
+
 
     def test05_create(self):
         HEADING("test05_create")
@@ -141,3 +139,28 @@ class Test_Inventory:
         s.stop()
         s.start()
         s.start()
+
+    def test_category(self):
+        self.inventory.clean()
+        self.inventory.create("server", "dynamic", "i[1-3]")
+        self.inventory.save()
+
+        for server in self.inventory.servers:
+            server.subkind = "dynamic"
+
+        server.bad = "bad"
+        server.cm_category = ["compute","test"]
+        print server.name,server.cm_category
+        server.save()
+
+
+        servers = self.inventory.servers(name="i1")
+        for server in servers:
+            pprint (server.data)
+
+        print "HALLO"
+        pprint (server.__dict__)
+        
+    #print "MASTER", server.name,server.category    
+        #for server in self.inventory.servers:
+        #    print server.name, server.category
