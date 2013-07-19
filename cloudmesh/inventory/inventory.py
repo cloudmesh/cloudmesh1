@@ -27,7 +27,7 @@ class FabricObject(DynamicDocument):
     tags = ListField(StringField(),default=list)
     groups = ListField(StringField(),default=list)
     cluster =  StringField()
-    
+    status = StringField(default="defined")    
     date_start = DateTimeField()
     date_stop = DateTimeField()
     date_update = DateTimeField()
@@ -164,11 +164,40 @@ class Inventory:
 
             
     def print_cluster (self, name):
+        self.refresh()
         cluster = self.get("cluster", name=name)
         print cluster.name, cluster.date_modified
         for server in cluster.servers:
             print "{0} {1}".format(server.name, "manage" in server.tags)
 
+        #        print "%15s:" % "dbname", self.inventory_name
+        print "%15s:" % "cluster", name
+        print
+
+        for s in self.servers:
+            if "manage" in s.tags:
+                c = "m"
+            elif "compute" in s.tags:
+                c = "c"
+            else:
+                c = " "
+
+            line = " ".join(["%15s:" % s.name, "%8s" % s.status, s.ip, c, ""])
+            service_line = ', '.join([str(service.subkind) for service in s["services"]])
+            service_line = service_line.replace("openstack", "o")
+            line += service_line
+            print line
+        print
+
+        print "%15s:" % "Legend"
+        print "%15s =" % "M", "Management"
+        print "%15s =" % "S", "Server"
+        print "%15s =" % "o", "OpenStack"
+        print "%15s =" % "e", "OpenStack"
+        print "%15s =" % "h", "HPC"
+
+
+            
     def refresh(self):
         self.clusters = self.get("cluster")
         self.servers = self.get("server")
