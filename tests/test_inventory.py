@@ -45,24 +45,29 @@ class Test_Inventory:
         self.inventory.create_cluster("bravo", "b-[001-016]", "101.102.203.[11-26]", "b[001]")
         self.inventory.print_info()
         self.inventory.refresh()
-        assert len(self.inventory.servers) == 16 and len(self.inventory.clusters) == 1        
+        assert len(self.inventory.servers) == 16
+        assert len(self.inventory.clusters) == 1 
+               
     def test_server(self):
         HEADING()
         self.inventory.create("server","i[001-003]")
         self.inventory.refresh()
-        assert len(self.inventory.servers) == 3 and len(self.inventory.clusters) == 0     
+        assert len(self.inventory.servers) == 3 
+        assert len(self.inventory.clusters) == 0     
 
     def test_service(self):
         HEADING()
         self.inventory.create("service","service-i[001-003]")
         self.inventory.refresh()
-        assert len(self.inventory.services) == 3 and len(self.inventory.clusters) == 0    
+        assert len(self.inventory.services) == 3 
+        assert len(self.inventory.clusters) == 0    
 
     def test_image(self):
         HEADING()
         self.inventory.create("image","image[001-003]")
         self.inventory.refresh()
-        assert len(self.inventory.images) == 3 and len(self.inventory.clusters) == 0    
+        assert len(self.inventory.images) == 3 
+        assert len(self.inventory.clusters) == 0    
 
     def test_info(self):
         HEADING()
