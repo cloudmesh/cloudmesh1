@@ -1,5 +1,5 @@
 from ConfigParser import SafeConfigParser
-from cloudmesh.inventory.resources import FabricImage, FabricServer, \
+from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
     FabricService, Inventory
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.util.util import table_printer
@@ -98,7 +98,7 @@ if server_config.has_option("mongo", "host"):
 else:
     inventory = Inventory(_db)
 """
-inventory = Inventory("test")
+inventory = Inventory("nosetest")
 """
 
 inventory.clean()

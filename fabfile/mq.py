@@ -5,10 +5,12 @@ import sys
 import platform
 from cloudmesh.util.password import get_password, get_user, get_host
 from cloudmesh.util.menu import ascii_menu
+from pprint import pprint
 
 input = raw_input
 
-__all__ = ['user', 'install', 'host', 'allow', 'check', "dns", "status", "start", "stop", "menu"]
+__all__ = ['user', 'install', 'host', 'allow', 'check', "dns", "status", "start", "stop", "menu",
+           "memory","conumers","msg","info"]
 
 
 def installed(name):
@@ -81,8 +83,22 @@ def dns():
     local("dscacheutil -flushcache")
 
 @task
+def info():
+    status()
+    l = ["name", "memory", "consumers", "messages","messages_ready","messages_unacknowledged"]
+    r = list_queues(" ".join(l)).split("\n")[1].split("\t")
+    print r
+    
+    d = zip(l,r)
+    pprint (d)
+    
+@task
 def status():
     local("sudo rabbitmqctl status")
+
+def list_queues(parameters):
+    r = local("sudo  rabbitmqctl list_queues {0}".format(parameters), capture=True)
+    return r
 
 @task
 def start():

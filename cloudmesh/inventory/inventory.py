@@ -282,7 +282,7 @@ class Inventory:
             server.save(cascade=True)
             servers.append(server)
             
-        cluster = FabricCluster(name=name)
+        cluster = FabricCluster(name=name, cluster=name)
         cluster.servers = servers
         self.stamp()
         cluster.save(cascade=True)
@@ -337,7 +337,7 @@ class Inventory:
         print "%15s:" % "cluster", name
         print
 
-        for s in self.servers:
+        for s in cluster.servers:
             if "manage" in s.tags:
                 c = "m"
             elif "compute" in s.tags:
@@ -345,7 +345,7 @@ class Inventory:
             else:
                 c = " "
 
-            line = " ".join(["%15s:" % s.name, "%-8s" % s.status, "%-15s" % s.ip, c, ""])
+            line = " ".join(["%15s:" % s.name, "%-8s" % s.status, "%-15s" % s.ip, c, s.provisioned , ""])
             service_line = ', '.join([str(service.subkind) for service in s["services"]])
             service_line = service_line.replace("openstack", "o")
             line += service_line
