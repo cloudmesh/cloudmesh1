@@ -14,12 +14,11 @@
   <tr>
     <th> </th>
     <th> </th>
-    <th> Name </th>
+    <th> Cluster </th>
     <th> Status </th>
-    <th> Services </th>
   </tr>
   
-  {% for cluster in inventory.clusters()|sort(attribute='name') %}
+  {% for cluster in inventory.clusters | sort(attribute='name') %}
   
   <tr>
   <td> <input name="checkbox" value="{{ cluster.name }}" type="checkbox"> </td>
@@ -27,9 +26,8 @@
     {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
     {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
   </td>
-  <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} Cluster</a></td>
+  <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} </a></td>
   <td> {{ cluster.status }} </td>
-  <td> {{ cluster.service_choices|join(", ") }}</td>
   </tr>
 
   {% endfor %}

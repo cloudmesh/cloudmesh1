@@ -10,6 +10,7 @@ from datetime import datetime
 from cloudmesh.inventory.inventory import Inventory
 from cloudmesh.inventory.inventory import FabricService
 from cloudmesh.inventory.inventory import FabricServer
+from cloudmesh.inventory.inventory import FabricImage
 import json
 from  pprint import pprint
 
@@ -21,6 +22,45 @@ import sys
 class Test_Inventory:
 
     # filename = "$HOME/.futuregrid/cloudmesh-new.yaml"
+
+    def setup_fg(self):
+
+        inventory = Inventory("nosetest")
+        inventory.clean()
+
+        inventory.create_cluster("bravo", "b-[001-016]", "101.102.203.[11-26]", "b[001]")
+        inventory.create_cluster("delta", "d-[001-016]", "102.202.204.[1-16]", "d-[001]")
+        inventory.create_cluster("gamma", "g-[001-016]", "302.202.204.[1-16]", "g-[001]")
+        inventory.create_cluster("india", "i-[001-128]", "402.202.204.[1-128]", "i-[001]")
+        inventory.create_cluster("sierra", "s-[001-128]", "502.202.204.[1-128]", "s-[001]")
+
+        centos = FabricImage(
+            name="centos6",
+            osimage='/path/to/centos0602v1-2013-06-11.squashfs',
+            os='centos6',
+            extension='squashfs',
+            partition_scheme='mbr',
+            method='put',
+            kernel='vmlinuz-2.6.32-279.19.1.el6.x86_64',
+            ramdisk='initramfs-2.6.32-279.19.1.el6.x86_64.img',
+            grub='grub',
+            rootpass='reset'
+        ).save()
+
+        redhat = FabricImage(
+            name="ubuntu",
+            osimage='/BTsync/ubuntu1304/ubuntu1304v1-2013-06-11.squashfs',
+            os='ubuntu',
+            extension='squashfs',
+            partition_scheme='mbr',
+            method='btsync',
+            kernel='vmlinuz-2.6.32-279.19.1.el6.x86_64',
+            ramdisk='initramfs-2.6.32-279.19.1.el6.x86_64.img',
+            grub='grub2',
+            rootpass='reset'
+        ).save()
+
+        inventory.print_info()
 
     def setup(self):
         self.inventory = Inventory("nosetest")
@@ -39,6 +79,13 @@ class Test_Inventory:
             len(self.inventory.clusters) + 
             len(self.inventory.images) + 
             len(self.inventory.services) == 0)
+
+    def test_names(self):
+        HEADING()
+        self.setup_fg()
+        names = self.inventory.names("cluster")
+        print names
+        assert [u'bravo', u'delta', u'gamma', u'india', u'sierra'] == names
         
     def test_cluster(self):
         HEADING()

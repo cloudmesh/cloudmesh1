@@ -1,6 +1,8 @@
 from __future__ import with_statement
 from fabric.api import task, local, execute, hide
+import sys
 
+__all__ = ["info", "start"]
 
 """usage: fab t:inventory,01 
 
@@ -20,6 +22,7 @@ def find_tests(filename):
     finds all tests in a given file
     :param filename: the file to test
     '''
+    filename = "tests/" + filename
     with hide('output','running'):
         result = local('fgrep "def" {0} | fgrep ":" | fgrep test '.format(filename),
                        capture = True).replace("def ", "").replace("(self):", "").replace(" ", "")
@@ -30,13 +33,13 @@ def find_classname(filename):
     finds the classname in the file
     :param filename: the filename in which to look for the class
     '''
+    filename = "tests/" + filename
     with hide('output','running'):
         result = local('fgrep "class " {0} | fgrep ":" '.format(filename),
                        capture = True).replace("class ", "").replace(":", "").replace(" ", "")
 
     return result
     
-
 
 def test(name,classname,filename):
     '''
@@ -45,14 +48,15 @@ def test(name,classname,filename):
     :param classname: the classname of the test
     :param filename: the filename in which the nosetest is
     '''
+    filename = "tests/" + filename
     print "Install package"
     with hide('output','running'):
-        local("cd ..; python setup.py install")
+        local("python setup.py install")
         
     local("nosetests -v  --nocapture {0}:{1}.{2}".format(filename, classname, name))
 
 @task
-def t(f,name):
+def start(f,name):
     '''
     
     executes a test with a given partial filename and partial name of the test
@@ -78,11 +82,20 @@ def t(f,name):
     test (element, class_name,filename)
 
 @task
-def i(f):
+def info(f=None):
     '''
     list all functions of file with the partial name f
     :param f: the name will be test_<f>.py
     '''
+
+    if f is None:
+        print "ERROR: spefifiy a test from the following list"
+        with hide('output','running'):
+            result = local("ls -1 tests/test_*.py",capture=True).replace("tests/test_","   - ").replace(".py","")
+        print "use fab test.info:<name> for more information about available tests"
+        print "use fab test.start:<name>,<test> for starting a test"
+        print result
+        sys.exit()
     filename = get_filename(f)
     class_name = find_classname(filename)
     test_names  = find_tests(filename) 

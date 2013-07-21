@@ -87,64 +87,8 @@ version = pkg_resources.get_distribution("cloudmesh").version
 # ============================================================
 
 
-"""
-nventory_db = server_config.get("mongo", "dbname")
-if server_config.has_option("mongo", "host"):
-    inventory = Inventory(inventory_db,
-                          server_config.get("mongo", "host"),
-                          server_config.getint("mongo", "port"),
-                          server_config.get("mongo", "user"),
-                          server_config.get("mongo", "pass"))
-else:
-    inventory = Inventory(_db)
-"""
 inventory = Inventory("nosetest")
-"""
 
-inventory.clean()
-
-inventory.create_cluster(
-    "bravo", "101.102.203.[11-26]", "b{0:03d}", 1, "b001", "b")
-
-
-inventory.create_cluster(
-    "delta", "102.202.204.[1-16]", "d-{0:03d}", 1, "d-001", "d")
-inventory.create_cluster("gamma", "302.202.204.[1-16]", "g-{0:03d}", 1,
-                         "g-001", "g")
-#inventory.create_cluster(
-#    "india", "402.202.204.[1-128]", "i-{0:03d}", 1, "i-001", "i")
-#inventory.create_cluster(
-#    "sierra", "502.202.204.[1-128]", "s-{0:03d}", 1, "s-001", "s")
-
-
-centos = FabricImage(
-    name="centos6",
-    osimage='/path/to/centos0602v1-2013-06-11.squashfs',
-    os='centos6',
-    extension='squashfs',
-    partition_scheme='mbr',
-    method='put',
-    kernel='vmlinuz-2.6.32-279.19.1.el6.x86_64',
-    ramdisk='initramfs-2.6.32-279.19.1.el6.x86_64.img',
-    grub='grub',
-    rootpass='reset'
-).save()
-
-redhat = FabricImage(
-    name="ubuntu",
-    osimage='/BTsync/ubuntu1304/ubuntu1304v1-2013-06-11.squashfs',
-    os='ubuntu',
-    extension='squashfs',
-    partition_scheme='mbr',
-    method='btsync',
-    kernel='vmlinuz-2.6.32-279.19.1.el6.x86_64',
-    ramdisk='initramfs-2.6.32-279.19.1.el6.x86_64.img',
-    grub='grub2',
-    rootpass='reset'
-).save()
-"""
-
-    # print inventory.pprint()
 # ============================================================
 # CLOUDMESH
 # ============================================================
@@ -542,6 +486,7 @@ def display_images():
 @app.route('/inventory/')
 def display_inventory():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    inventory.refresh()
     return render_template('inventory.html',
                            updated=time_now,
                            inventory=inventory)
@@ -549,6 +494,7 @@ def display_inventory():
 
 @app.route('/inventory/images/')
 def display_inventory_images():
+    inventory.refresh()
     return render_template('images.html',
                            inventory=inventory)
 
@@ -556,6 +502,7 @@ def display_inventory_images():
 @app.route('/inventory/cluster/<cluster>/<name>')
 def display_named_resource(cluster, name):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    inventory.refresh()
     return render_template('inventory_cluster_server.html',
                            updated=time_now,
                            server=inventory.find("server", name),
@@ -566,6 +513,7 @@ def display_named_resource(cluster, name):
 @app.route('/inventory/cluster/<cluster>/')
 def display_cluster(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    inventory.refresh()
     return render_template('inventory_cluster.html',
                            updated=time_now,
                            cluster=inventory.find("cluster", cluster))
@@ -574,7 +522,8 @@ def display_cluster(cluster):
 @app.route('/inventory/cluster/table/<cluster>/')
 def display_cluster_table(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-
+    inventory.refresh()
+    
     cluster_obj = inventory.find("cluster", cluster)
     n = len(cluster_obj['compute_nodes'])
     parameters = {
@@ -591,6 +540,7 @@ def display_cluster_table(cluster):
 @app.route('/inventory/images/<name>/')
 def display_image(name):
     image = inventory.get('image', name)[0]
+    inventory.refresh()
     return render_template('info_image.html',
                            table_printer=table_printer,
                            image=image.data,

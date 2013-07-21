@@ -321,8 +321,14 @@ class Inventory:
                 log.error("ERROR")
                 sys.exit()
 
+    def names (self, kind):
+        '''
+        returns the names of object with the specified kind and name
+        '''
+        elements = self.get(kind=kind)
+        names = [element.name for element in elements]
+        return names
 
-            
     def print_cluster (self, name):
         '''
         print some elementary, but not all information of the cluster.
