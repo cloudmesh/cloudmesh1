@@ -505,8 +505,8 @@ def display_named_resource(cluster, name):
     inventory.refresh()
     return render_template('inventory_cluster_server.html',
                            updated=time_now,
-                           server=inventory.find("server", name),
-                           cluster=inventory.find("cluster", cluster),
+                           server=inventory.get("server", name),
+                           cluster=inventory.get("cluster", cluster),
                            inventory=inventory)
 
 
@@ -516,7 +516,7 @@ def display_cluster(cluster):
     inventory.refresh()
     return render_template('inventory_cluster.html',
                            updated=time_now,
-                           cluster=inventory.find("cluster", cluster))
+                           cluster=inventory.get("cluster", cluster))
 
 
 @app.route('/inventory/cluster/table/<cluster>/')
@@ -524,8 +524,8 @@ def display_cluster_table(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     inventory.refresh()
     
-    cluster_obj = inventory.find("cluster", cluster)
-    n = len(cluster_obj['compute_nodes'])
+    cluster_obj = inventory.get("cluster", cluster)
+    n = len(cluster_obj['servers'])
     parameters = {
         "columns": 10,
         "n": n
@@ -534,7 +534,7 @@ def display_cluster_table(cluster):
     return render_template('inventory_cluster_table.html',
                            updated=time_now,
                            parameters=parameters,
-                           cluster=inventory.find("cluster", cluster))
+                           cluster=inventory.get("cluster", cluster))
 
 
 @app.route('/inventory/images/<name>/')
@@ -563,11 +563,13 @@ def server_info(server):
 
 @app.route('/inventory/set/service/', methods=['POST'])
 def set_service():
-    server = request.form['server']
-    service = request.form['service']
+    server_name = request.form['server']
+    service_name = request.form['provisioned']
 
-    inventory.set_service('%s-%s' % (server, service), server, service)
-    provisioner.provision([server], service)
+    server = inventory.get("server",server_name)
+    server.provisioned = service_name
+    server.save(cascade=True)
+    #provisioner.provision([server], service)
     return display_inventory()
 
 

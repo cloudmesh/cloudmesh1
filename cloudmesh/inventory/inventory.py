@@ -1,4 +1,5 @@
 import sys
+import random
 from hostlist import expand_hostlist
 from datetime import datetime
 from mongoengine import *
@@ -18,9 +19,9 @@ inventory_config_filename = "~/.futuregrid/cloudmesh-db.yaml"
 FABRIC_TYPES = ["cluster", "server", "service", "iamge"]
 """The types a fabric server can have"""
 
-PROVISIONING_CHOICES = ('openstack',
+PROVISIONING_CHOICES = ['openstack',
                         'eucalyptus',
-                        'hpc')
+                        'hpc']
 """the provisioning choices for a fabric server"""
 
 SERVICE_CHOICES = ('ganglia',
@@ -141,13 +142,26 @@ class FabricServer(FabricObject):
 
     def set(self,services):
         self.services = services
-    
+
+    @property
+    def load_vms(self):
+        ''' Simulated load on the server '''
+        return map(lambda r: random.random() * 24, range(0, 25))
+
+    @property
+    def load_users(self):
+        ''' Simulated load on the server '''
+        return map(lambda r: random.random() * 10, range(0, 25))
+
+        
 class FabricCluster(FabricObject):
     '''
     an object to hold fabric clusters and their meta data
     '''
 
     kind = StringField(default="cluster")
+    provision_choices = ListField(default=PROVISIONING_CHOICES)
+    PROVISIONING_CHOICES
     servers = ListField(ReferenceField(
         FabricServer,
         reverse_delete_rule=CASCADE))

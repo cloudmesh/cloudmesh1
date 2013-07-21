@@ -9,7 +9,7 @@ function change_service(server_name, service_name) {
 	if (answer) {
         $.ajax("/inventory/set/service/",
                 { type: 'POST',
-                  data: { server: server_name, service: service_name },
+                  data: { server: server_name, provisioned: service_name },
                   complete: function () { window.location.reload(); } } );
     }
 }
@@ -27,10 +27,10 @@ $(function() {
 <table>
   <tr>
     <th colspan="7"> Cloudmesh - Inventory for {{ cluster.name }}</th>  
-  <tr> <td colspan="7"> Updated {{ updated }}
+  <tr> <td colspan="8"> Updated {{ updated }}
     <select>
       <option value="">Bulk select...</option>
-      {% for choice in cluster.service_choices %}
+      {% for choice in cluster.provision_choices %}
           <option value="bulk-{{ choice }}">
 	    {{  choice }}
 	  </option>
@@ -39,59 +39,49 @@ $(function() {
   </td></tr>
 
   <tr>
-    <td></td>
-    <td></td>
-    <td>Groups</td>
-    <td colspan="4">{{ cluster.groups|join(', ') }}</td>
-  </tr>
-
-  <tr>
     <th> </th>
     <th> </th>
     <th> Name </th>
     <th> Status </th>
     <th> Services </th>
     <th> IP </th>
-    <th> Load </th>
-  </tr>
-  
-  <tr>
-  <td></td>
-  <td>
-    {{ image_button ("right", "195_circle_info", "/inventory/cluster/" + cluster.name + "/" + cluster.management_node.name) }}
-  </td>
-  <td> {{ cluster.management_node.name }} </td>
-  <td> {{ cluster.management_node.status }} </td>
-  <td>Management Node</td>
-  <td>{{ cluster.management_node.ip_address }}</td>
-  <td><span class="inlinesparkline">{{ cluster.management_node.load|join(', ') }}</span></td>
+    <th> Users </th>
+    <th> VMs/Jobs </th>
   </tr>
 
-  {% for server in cluster.compute_nodes|sort(attribute='name') %}
+  {% for server in cluster.servers|sort(attribute='name') %}
   <tr>
-  <td> <input name="checkbox" value="{{ server.name }}" type="checkbox"> </td>
+  <td>
+    <input name="checkbox" value="{{ server.name }}" type="checkbox">
+  </td>
   <td>
     {{ image_button ("right", "195_circle_info", "/inventory/cluster/" + cluster.name + "/"+  server.name) }}
   </td>
-  <td> {{ server.name }} </td>
+  <td> <a href="/inventory/cluster/{{ cluster.name }}/{{server.name}}"> 
+    {{ server.name }}
+    </a>
+  </td>
   <td> {{ server.status }} </td>
   <td>
     <select  onchange="change_service('{{ server.name }}', this.options[this.selectedIndex].value)">
       <option value="" 
-        {% if not server.data.services %}
+        {% if not server.provisioned %}
           selected="selected"
         {% endif %}>Select...</option>
-      {% for service in cluster.service_choices %}
+      {% for service in cluster.provision_choices %}
       <option value="{{ service }}"
-        {% if server.services and server.services[0].subkind == service %}
+        {% if server.provisioned and server.provisioned == service %}
           selected="selected"
         {% endif %}>{{ service }}</option>
       {% endfor %}
     </select>
   </td>
-  <td>{{ server.ip_address }}</td>
-  <td><span class="inlinesparkline">{{ server.load|join(', ') }}</span></td>
-  </tr>
+
+  <td>{{ server.ip }}</td>
+  <td><span class="inlinesparkline">{{ server.load_users|join(', ')}}</span></td>
+  <td><span class="inlinesparkline">{{ server.load_vms|join(', ') }}</span></td>
+
+</tr>
 
   {% endfor %}
   

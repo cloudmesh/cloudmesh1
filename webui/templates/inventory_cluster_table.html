@@ -30,22 +30,7 @@ $(function() {
 
   <tr>
     
-	{% set server = cluster.management_node  %}
-
- 	{% if server.status=="active" %}
-   		{% set cellstyle="background:#336600; font:bold" %}
-	{% else %}
-      	{% set cellstyle="background:#FFCC99; font:bold" %}
-  	{% endif %}
-
-    <td style="{{ cellstyle }}">
-
-	   		<a href="/inventory/cluster/{{ cluster.name }}/{{server.name}}"> 
-		  		{{ server.name }}*
-		  	</a>
-	</td>
-    
-    {% for server in cluster.compute_nodes | sort(attribute='name')  %}
+    {% for server in cluster.servers | sort(attribute='name')  %}
 
  		{% if server.status=="active" %}
     		{% set cellstyle="background:#336600; font:bold" %}
