@@ -2,50 +2,47 @@
 {% from "_helper.html" import image_button %}
 {% block content %}
 
-<script type="text/javascript">
 
-
-$(function() {
-        /** This code runs when everything has been loaded on the page */
-        /* Inline sparklines take their values from the contents of the tag */
-        $('.inlinesparkline').sparkline();
-
-
-});
-
-
-</script>
-
+<h1> Inventory Images </h1>
+<hr>
 <table>
   <tr>
-    <th colspan="{{ parameters.columns }}">  
-       Cloudmesh - Inventory for {{ cluster.name }}
-    </th>
+	<th> Name </th>
+	<th> Labels </th>
+	<th> Tags </th>
+	<th> Groups </th>
+	<th> Cluster </th>
+	<th> Status </th>
+	<th> Start date </th>
+	<th> Stop date </th>
+	<th> Date created </th>
+	<th> Date modified </th>
+	<th> Uptime </th>
   </tr>
+  {% for names in images %}
   <tr>
-    <td  colspan="{{ parameters.columns }}"> 
-      Updated :  {{ updated }}
-    </td>
+	<td> <a href = "/inventory/images/{{names.name}}">{{names.name}} <a></td>
+	<td> {{names.labels}} </td>
+	<td> {{names.tags}} </td>
+	<td> {{names.groups}} </td>
+	<td> {{names.cluster}} </td>
+	<td> {{names.status}} </td>
+	<td> {{names.date_start}} </td>
+	<td> {{names.date_stop}} </td>
+	<td> {{names.date_creation}} </td>
+	<td> {{names.date_modified}} </td>
+	<td> {{names.uptime}} </td>
   </tr>
-  <tr>
-    {% for server in cluster.servers | sort(attribute='name')  %}
- 		{% if server.status=="active" %}
-    		{% set cellstyle="background:#336600; font:bold" %}
-		{% else %}
-           	{% set cellstyle="background:#FFCC99; font:bold" %}
-  		{% endif %}
-     <td style="{{ cellstyle }}">
-	   		<a href="/inventory/cluster/{{ cluster.name }}/{{server.name}}"> 
-		  		{{ server.name }}
-		  	</a>
-     </td>
-        	{% if (loop.index) %(parameters.columns) == 0  %}	
-          	        </tr><tr>
-	   	{% endif %}
-    {% endfor %}
-  </tr>
+  {% endfor %}
 </table>
 
+{% endblock %}
 
-{% endblock %} 
+
+
+
+
+
+
+
 

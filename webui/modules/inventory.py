@@ -73,16 +73,15 @@ def display_cluster_table(cluster):
 
 
 @inventory_module.route('/inventory/image/<name>/')
-def display_image(name):
-    image = inventory.get('image', name)[0]
+def display_inventory_images(name):
     inventory.refresh()
     if name is None:
+        images = inventory.get("images")
         return render_template('inventory_images.html',
-                               table_printer=table_printer,
-                               image=image.data,
-                               name=name,
+                               images=images,
                                inventory=inventory)
     else:
+        image = inventory.get('image', name)[0]
         return render_template('inventory_image.html',
                                name=name,
                                inventory=inventory)
