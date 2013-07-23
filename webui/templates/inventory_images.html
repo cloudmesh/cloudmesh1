@@ -18,7 +18,7 @@
   </tr>
   {% for names in images %}
   <tr>
-	<td> <a href = "/inventory/images/{{names.name}}">{{names.name}} <a></td>
+	<td> <a href = "/inventory/image/{{names.name}}">{{names.name}} <a></td>
 	<td> {{", ". join(names.labels)}} </td>
 	<td> {{", ". join(names.tags)}} </td>
 	<td> {{", ". join(names.groups)}} </td>

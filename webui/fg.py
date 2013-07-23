@@ -75,10 +75,10 @@ redhat = FabricImage(
 ).save()
 
 
-#for cluster in inventory.clusters:
-#    cluster.images = [centos,redhat]
+for cluster in inventory.clusters:
+    cluster.images = [centos,redhat]
 
-#cluster.save(cascade=True)
+cluster.save(cascade=True)
 
 inventory.print_info()
 

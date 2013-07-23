@@ -5,34 +5,24 @@
 <script type="text/javascript">
 
 
-$(function() {
-        /** This code runs when everything has been loaded on the page */
-        /* Inline sparklines take their values from the contents of the tag */
-        $('.inlinesparkline').sparkline();
-
-
-});
-
-
 </script>
 
 <table>
   <tr>
     <th colspan="{{ parameters.columns }}">  
-       Cloudmesh - Inventory for {{ cluster.name }}
+       Cloudmesh - Inventory for Image {{ cluster.name }}
     </th>
   </tr>
-  <tr>
-    <td  colspan="{{ parameters.columns }}"> 
-      Updated :  {{ updated }}
-    </td>
+    <th>Attribute</th>
+    <th>Value</td>
   </tr>
+
+  {% for key in image  %}
   <tr>
-    {% for image in cluster.images | sort(attribute='name')  %}
-    <td> image.name </td>
-    <td> image.groups </td>
-    {% endfor %}
+    <td> {{key}} </td>
+    <td> image["attribute"] </td>
   </tr>
+  {% endfor %}
 </table>
 
 

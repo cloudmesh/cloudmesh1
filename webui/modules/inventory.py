@@ -80,12 +80,13 @@ def display_inventory_images():
 
 @inventory_module.route('/inventory/image/<name>')
 def display_inventory_image(name):
-    print "PRINT IMAGE"
+    print "PRINT IMAGE", name
     inventory.refresh()
     if name is not None:
-        image = inventory.get('image', name)[0]
+        image = inventory.get('image', name)
     return render_template('inventory_image.html',
                                name=name,
+                               image=image,
                                inventory=inventory)
     
     

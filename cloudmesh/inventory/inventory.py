@@ -330,6 +330,7 @@ class Inventory:
             elif kind == "service":
                 return FabricService.objects(name=name)[0]
             elif kind == "images":
+                print "PASSED", name
                 return FabricImage.objects(name=name)[0]
             else:
                 log.error("ERROR")
