@@ -45,7 +45,7 @@ for page in app_sidebar:
 # registering sidebar into the global g
 flask.Flask.app_ctx_globals_class.sidebar_pages = sidebar_pages
 
-log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.sidebar_pages)))
+#log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.sidebar_pages)))
 
 topbar_pages = []
 for page in app_topbar:
@@ -55,7 +55,7 @@ for page in app_topbar:
 flask.Flask.app_ctx_globals_class.topbar_pages = topbar_pages
 
 
-log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.topbar_pages)))
+#log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.topbar_pages)))
 
 externalbar_pages = []
 for page in app_externalbar  :
@@ -65,7 +65,7 @@ for page in app_externalbar  :
 flask.Flask.app_ctx_globals_class.externalbar_pages = externalbar_pages
 
 
-log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.externalbar_pages)))
+#log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.externalbar_pages)))
 
 
 #

@@ -13,25 +13,19 @@
 	<th> Groups </th>
 	<th> Cluster </th>
 	<th> Status </th>
-	<th> Start date </th>
-	<th> Stop date </th>
 	<th> Date created </th>
 	<th> Date modified </th>
-	<th> Uptime </th>
   </tr>
   {% for names in images %}
   <tr>
 	<td> <a href = "/inventory/images/{{names.name}}">{{names.name}} <a></td>
-	<td> {{names.labels}} </td>
-	<td> {{names.tags}} </td>
-	<td> {{names.groups}} </td>
+	<td> {{", ". join(names.labels)}} </td>
+	<td> {{", ". join(names.tags)}} </td>
+	<td> {{", ". join(names.groups)}} </td>
 	<td> {{names.cluster}} </td>
 	<td> {{names.status}} </td>
-	<td> {{names.date_start}} </td>
-	<td> {{names.date_stop}} </td>
 	<td> {{names.date_creation}} </td>
 	<td> {{names.date_modified}} </td>
-	<td> {{names.uptime}} </td>
   </tr>
   {% endfor %}
 </table>

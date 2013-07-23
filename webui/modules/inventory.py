@@ -71,21 +71,24 @@ def display_cluster_table(cluster):
                            parameters=parameters,
                            cluster=inventory.get("cluster", cluster))
 
+@inventory_module.route('/inventory/images/')
+def display_inventory_images():
+    images = inventory.get("images")
+    return render_template('inventory_images.html',
+                           images=images,
+                           inventory=inventory)
 
-@inventory_module.route('/inventory/image/<name>/')
-def display_inventory_images(name):
+@inventory_module.route('/inventory/image/<name>')
+def display_inventory_image(name):
+    print "PRINT IMAGE"
     inventory.refresh()
-    if name is None:
-        images = inventory.get("images")
-        return render_template('inventory_images.html',
-                               images=images,
-                               inventory=inventory)
-    else:
+    if name is not None:
         image = inventory.get('image', name)[0]
-        return render_template('inventory_image.html',
+    return render_template('inventory_image.html',
                                name=name,
                                inventory=inventory)
-
+    
+    
 # ============================================================
 # ROUTE: INVENTORY ACTIONS
 # ============================================================
