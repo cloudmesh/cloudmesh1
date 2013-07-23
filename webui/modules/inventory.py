@@ -35,7 +35,7 @@ def display_inventory():
 @inventory_module.route('/inventory/images/')
 def display_inventory_images():
     inventory.refresh()
-    return render_template('images.html',
+    return render_template('inventory_images.html',
                            inventory=inventory)
 
 

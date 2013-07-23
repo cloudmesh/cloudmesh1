@@ -25,7 +25,7 @@ $(function() {
 
 </script>
 
-  
+
 <h1> {{ server.name }} @ {{ cluster.name }} </h1>
 <hr>
 {% set server_data = server["_data"] %}
@@ -46,8 +46,12 @@ $(function() {
    {% if key != "services" %}
    <tr>
      <td>{{ key }}</td>
-     <td>{{ server_data[key] }}</td>     
-   </tr>
+     {% if server_data[key] | is_list  %}
+       <td> {{ ', '.join(server_data[key]) }}</td>
+     {% else %} 
+       <td>{{ server_data[key] }}</td>     
+    {% endif %}
+     </tr>
    {% endif %}
 {% endfor %}
 

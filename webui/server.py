@@ -1,3 +1,4 @@
+import types
 from hostlist import expand_hostlist
 from flask.ext.wtf import Form
 from wtforms import TextField, SelectField
@@ -528,6 +529,9 @@ def display_images():
         cloudmesh=clouds,
         config=config)
 
+@app.template_filter()
+def is_list(obj):
+    return isinstance(obj, types.ListType)
 
 # ============================================================
 # ROUTE: METRIC
