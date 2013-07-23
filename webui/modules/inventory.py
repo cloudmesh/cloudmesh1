@@ -10,6 +10,16 @@ from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
 
 inventory = Inventory("nosetest")
 
+
+@inventory_module.route('/inventory/summary/')
+def display_summary():
+    parameters={ 'columns': 12}
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    return render_template('inventory_summary_table.html',
+                           inventory=inventory,
+                           parameters=parameters, 
+                           updated = time_now)
+            
 # ============================================================
 # ROUTE: INVENTORY TABLE
 # ============================================================

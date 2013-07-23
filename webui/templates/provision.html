@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1>Provision Form</h1>
+
+
+<form method="POST" action=".">
+{{ form.csrf_token }}
+<table>
+  <tr>
+    <td> Cluster </td>
+    <td>{{form.cluster}}</td>
+  </tr>
+  <tr>
+     <td> Nodes </td>
+     <td> {{ form.nodespec(size=20) }} </td>
+  </tr>
+  </table>
+  <br>
+  <input type="submit" value="Provision">
+</form>
+
+The following clusters are currently defined.
+  
+<table>
+<tr>
+  <th>Cluster</th>
+  <th>Definition</th>
+</tr>
+{% for cluster in inventory.clusters %}
+<tr>
+  <td> {{ cluster.name }} </td>
+  <td> {{ cluster.definition }} </td>
+</tr>
+{% endfor %}
+</table>
+  
+{% endblock content %}
+

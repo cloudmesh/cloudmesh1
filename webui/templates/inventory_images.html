@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}
+{% block content %}
+
+<script type="text/javascript">
+
+
+$(function() {
+        /** This code runs when everything has been loaded on the page */
+        /* Inline sparklines take their values from the contents of the tag */
+        $('.inlinesparkline').sparkline();
+
+
+});
+
+
+</script>
+
+<table>
+  <tr>
+    <th colspan="{{ parameters.columns }}">  
+       Cloudmesh - Inventory for {{ cluster.name }}
+    </th>
+  </tr>
+  <tr>
+    <td  colspan="{{ parameters.columns }}"> 
+      Updated :  {{ updated }}
+    </td>
+  </tr>
+  <tr>
+    {% for server in cluster.servers | sort(attribute='name')  %}
+ 		{% if server.status=="active" %}
+    		{% set cellstyle="background:#336600; font:bold" %}
+		{% else %}
+           	{% set cellstyle="background:#FFCC99; font:bold" %}
+  		{% endif %}
+     <td style="{{ cellstyle }}">
+	   		<a href="/inventory/cluster/{{ cluster.name }}/{{server.name}}"> 
+		  		{{ server.name }}
+		  	</a>
+     </td>
+        	{% if (loop.index) %(parameters.columns) == 0  %}	
+          	        </tr><tr>
+	   	{% endif %}
+    {% endfor %}
+  </tr>
+</table>
+
+
+{% endblock %} 
+

@@ -12,10 +12,8 @@ menu_module = Blueprint('menu_module', __name__)
 app_sidebar = [
     ["Home", "/"],
     ["Inventory", "/inventory/"],
-    ["  - Clusters", "/inventory/clusters"],
+    ["  - Summary", "/inventory/summary"],
     ["  - Images", "/inventory/images"],
-    ["  - Servers", "/inventory/servers"],
-    ["  - Services", "/inventory/services"],
     ["Profile", "/profile/"],
     ["  - Keys", "/keys/"],
     ["VMs", "/table/"],
