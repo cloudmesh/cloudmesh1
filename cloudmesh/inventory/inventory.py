@@ -158,14 +158,14 @@ class FabricCluster(FabricObject):
     '''
     an object to hold fabric clusters and their meta data
     '''
-    definition = StringField(default="?")
+    definition = StringField(default=None)
     kind = StringField(default="cluster")
-    provision_choices = ListField(default=PROVISIONING_CHOICES)
-    PROVISIONING_CHOICES
+    provision_choices = ListField(StringField(),default=PROVISIONING_CHOICES)
+
     servers = ListField(ReferenceField(
         FabricServer,
         reverse_delete_rule=CASCADE))
-    servers = ListField(ReferenceField(
+    images = ListField(ReferenceField(
         FabricImage,
         reverse_delete_rule=CASCADE))
 
@@ -282,6 +282,8 @@ class Inventory:
         :param ips: the names of the ips for the servers. 'i[001-003].futuregrid.org' creates the ips for the previously defined names
         :param management: the names of the management nodes. 'i[001-002]' sets the nodes i001 and i002 to management nodes. The rest will be set to compute nodes automatically.
         '''
+        print 70*"-"
+        print "AAA"
         
         name_list = expand_hostlist(names)
         ip_list = expand_hostlist(ips)
@@ -299,10 +301,14 @@ class Inventory:
             self.stamp()
             server.save(cascade=True)
             servers.append(server)
-        print "NAMES $$$$$$", names
+        print 70*"-"
+        print "NAMES ", names
+        print "NAMES ", name
+        print 70*"-"
         cluster = FabricCluster(name=name, 
                                 cluster=name, 
                                 definition=names)
+        print "NAMES AAAAAA", names
         cluster.servers = servers
         self.stamp()
         cluster.save(cascade=True)

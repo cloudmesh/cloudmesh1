@@ -4,7 +4,7 @@ import clean
 import mq
 import time
 import hostlist
-__all__ = ['start', 'stop', 'list', 'clean','gui','monitor', 'cleanmongo']
+__all__ = ['start', 'stop', 'list', 'clean','gui','monitor']
 
 app="cloudmesh.provisioner.queue"
 
@@ -54,7 +54,3 @@ def list():
         if "grep" not in line:
             print line
 
-@task
-def cleanmongo():
-    local("rm -fr /usr/local/var/log/mongodb/*")
-    local("rm -fr /usr/local/var/mongodb/*")

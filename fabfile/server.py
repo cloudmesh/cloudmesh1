@@ -6,7 +6,7 @@ import webbrowser
 import platform
 import sys
 
-__all__ = ['start', 'kill', 'view', 'clean']
+__all__ = ['start', 'kill', 'view', 'clean', 'cleanmongo', 'fg']
 
 #
 # SETTING THE BROWSER BASED ON PLATFORM
@@ -35,6 +35,7 @@ def kill(server="server"):
     """kills all server processes """
     with settings(warn_only=True):
         with hide('output','running','warnings'):  
+            local("killall mongod")
             result = local('ps -a | fgrep "python {0}.py" | fgrep -v fgrep'.format(server), capture=True).split("\n")
             for line in result:
                 pid = line.split(" ")[0] 
@@ -44,6 +45,7 @@ def kill(server="server"):
 def start(link="inventory",server="server",port="5000"):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link""" 
     kill()
+    local("mongod &")
     local("python setup.py install")
     local("cd webui; python {0}.py &".format(server))
     local("sleep 2; {0} http://127.0.0.1:{2}/{1}".format(browser,link,port))
@@ -64,3 +66,20 @@ def clean():
     local("rm -rf doc/build ")
 
 
+@task
+def cleanmongo():
+    local('mongo invenntory --eval "db.dropDatabase();"')
+    if sys.platform == 'darwin':
+        local("killall mongod")
+        local("rm -fr /usr/local/var/log/mongodb/*")
+        local("rm -fr /usr/local/var/mongodb/*")
+    else:
+        print "THIS FUNCTION IS NOT YET IMPLEMENTED"
+
+@task
+def fg():
+    with settings(warn_only=True):
+        cleanmongo()
+    local("mongod &")
+    local("python setup.py install")
+    local("python webui/fg.py")

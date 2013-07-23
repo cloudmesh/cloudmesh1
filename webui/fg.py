@@ -41,16 +41,11 @@ else:
 
 #inventory.clean()
 
-inventory.create_cluster("bravo", "b-[001-016]", "101.102.203.[11-26]", "b[001]")
-
+inventory.create_cluster("bravo", "b-[001-016]", "101.102.203.[11-26]", "b-[001]")
 inventory.create_cluster("delta", "d-[001-016]", "102.202.204.[1-16]", "d-[001]")
-
 inventory.create_cluster("gamma", "g-[001-016]", "302.202.204.[1-16]", "g-[001]")
-
 inventory.create_cluster("india", "i-[001-128]", "402.202.204.[1-128]", "i-[001]")
-
 inventory.create_cluster("sierra", "s-[001-128]", "502.202.204.[1-128]", "s-[001]")
-
 
 
 centos = FabricImage(
@@ -79,10 +74,11 @@ redhat = FabricImage(
     rootpass='reset'
 ).save()
 
-for cluster in inventory.clusters:
-    cluster.images = [centos,redhat]
 
-cluster.save(cascade=True)
+#for cluster in inventory.clusters:
+#    cluster.images = [centos,redhat]
+
+#cluster.save(cascade=True)
 
 inventory.print_info()
 
