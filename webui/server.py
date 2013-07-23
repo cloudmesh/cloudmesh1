@@ -1,36 +1,36 @@
-import types
-from hostlist import expand_hostlist
-from flask.ext.wtf import Form
-from wtforms import TextField, SelectField
-from flask import flash, url_for
-
 from ConfigParser import SafeConfigParser
 from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
     FabricService, Inventory
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.util.util import table_printer
 from datetime import datetime
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash, url_for
 from flask.ext.autoindex import AutoIndex
+from flask.ext.wtf import Form
 from flask_flatpages import FlatPages
+from hostlist import expand_hostlist
 from modules.flatpages import flatpages_module
 from modules.inventory import inventory_module
+from modules.provisioner import provisioner_module
 from modules.keys import keys_module
 from modules.menu import menu_module
 from modules.profile import profile_module
 from modules.view_git import git_module
 from os.path import isfile, join
+from pprint import pprint
+from wtforms import TextField, SelectField
 import base64
 import hashlib
 import json
 import os
 import pkg_resources
-
 import struct
 import sys
 import time
+import types
 import yaml
-from pprint import pprint
+
+
 debug = False
 
 
@@ -88,12 +88,6 @@ FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
 
 version = pkg_resources.get_distribution("cloudmesh").version
-
-# ============================================================
-# INVENTORY
-# ============================================================
-
-
 
 
 # ============================================================
@@ -154,12 +148,13 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.debug = True
 pages = FlatPages(app)
-app.register_blueprint(keys_module, url_prefix='', )
-app.register_blueprint(inventory_module, url_prefix='', )
-app.register_blueprint(git_module, url_prefix='', )
-app.register_blueprint(profile_module, url_prefix='', )
-app.register_blueprint(menu_module, url_prefix='', )
-app.register_blueprint(flatpages_module, url_prefix='', )
+app.register_blueprint(keys_module, url_prefix='',)
+app.register_blueprint(inventory_module, url_prefix='',)
+app.register_blueprint(provisioner_module, url_prefix='',)
+app.register_blueprint(git_module, url_prefix='',)
+app.register_blueprint(profile_module, url_prefix='',)
+app.register_blueprint(menu_module, url_prefix='',)
+app.register_blueprint(flatpages_module, url_prefix='',)
 
 
 SECRET_KEY = 'development key'
@@ -173,39 +168,7 @@ def flash_errors(form):
                 error
             ))
             
-class ProvisionForm(Form):
-
-    clusters = [cluster.name for cluster in inventory.get("cluster")]
-    choices = zip (clusters, clusters)
-    cluster = SelectField("Cluster", choices=choices)
-    nodespec = TextField("Nodes")
-
-    def validate(self):
-        cluster= inventory.get("cluster",self.cluster.data)
-        posibilities = expand_hostlist(cluster.definition)
-        choice = expand_hostlist(self.nodespec.data)
-        if choice == []:
-            ok = False
-        else:
-            ok = set(choice).issubset(posibilities)
-        print "Validate", ok, choice
-        return ok
-    
-@app.route("/provision/", methods=("GET", "POST"))
-def provision():
-
-    form = ProvisionForm(csrf=False)
-
-    if form.validate_on_submit():
-        flash("Success")
-        return redirect(url_for("provision"))
-    else:
-        flash("Wrong submission")
-    inventory.refresh()
-    return render_template("provision.html", form=form, inventory=inventory)    
-    
-        
-#@app.context_processor
+# @app.context_processor
 # def inject_pages():
 #    return dict(pages=pages)
 # app.register_blueprint(menu_module, url_prefix='/', )
@@ -486,7 +449,7 @@ def vm_info(cloud=None, server=None):
 # ROUTE: FLAVOR
 # ============================================================
 
-#@app.route('/flavors/<cloud>/' )
+# @app.route('/flavors/<cloud>/' )
 
 
 @app.route('/flavors/', methods=['GET', 'POST'])
@@ -511,7 +474,7 @@ def display_flavors(cloud=None):
 # ============================================================
 # ROUTE: IMAGES
 # ============================================================
-#@app.route('/images/<cloud>/')
+# @app.route('/images/<cloud>/')
 @app.route('/images/', methods=['GET', 'POST'])
 def display_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -536,7 +499,7 @@ def is_list(obj):
 # ============================================================
 # ROUTE: METRIC
 # ============================================================
-#@app.route('/metric/<s_date>/<e_date>/<user>/<cloud>/<host>/<period>/<metric>')
+# @app.route('/metric/<s_date>/<e_date>/<user>/<cloud>/<host>/<period>/<metric>')
 @app.route('/metric/main', methods=['POST', 'GET'])
 def metric():
     args = {"s_date": request.args.get('s_date', ''),
