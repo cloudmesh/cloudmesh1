@@ -52,6 +52,7 @@ inventory.create_cluster("india", "i-[001-128]", "402.202.204.[1-128]", "i-[001]
 inventory.create_cluster("sierra", "s-[001-128]", "502.202.204.[1-128]", "s-[001]")
 
 
+
 centos = FabricImage(
     name="centos6",
     osimage='/path/to/centos0602v1-2013-06-11.squashfs',
@@ -78,4 +79,10 @@ redhat = FabricImage(
     rootpass='reset'
 ).save()
 
+for cluster in inventory.clusters:
+    cluster.images = [centos,redhat]
+
+cluster.save(cascade=True)
+
 inventory.print_info()
+

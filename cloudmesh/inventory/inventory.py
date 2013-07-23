@@ -165,6 +165,9 @@ class FabricCluster(FabricObject):
     servers = ListField(ReferenceField(
         FabricServer,
         reverse_delete_rule=CASCADE))
+    servers = ListField(ReferenceField(
+        FabricImage,
+        reverse_delete_rule=CASCADE))
 
 class Inventory:
     '''
