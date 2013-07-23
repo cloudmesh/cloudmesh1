@@ -31,3 +31,5 @@ nose
 autopep8
 cmd3
 celery
+#Flask-WTF
+wtforms

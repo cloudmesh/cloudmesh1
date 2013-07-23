@@ -5,22 +5,130 @@ from datetime import datetime
 
 inventory_module = Blueprint('inventory_module', __name__)
 
+from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
+    FabricService, Inventory
 
-#
-# ROUTE: SAVE
-#
+inventory = Inventory("nosetest")
+
+# ============================================================
+# ROUTE: INVENTORY TABLE
+# ============================================================
+@inventory_module.route('/inventory/')
+def display_inventory():
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    inventory.refresh()
+    return render_template('inventory.html',
+                           updated=time_now,
+                           inventory=inventory)
+
+
+@inventory_module.route('/inventory/images/')
+def display_inventory_images():
+    inventory.refresh()
+    return render_template('images.html',
+                           inventory=inventory)
+
+
+@inventory_module.route('/inventory/cluster/<cluster>/<name>')
+def display_named_resource(cluster, name):
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    inventory.refresh()
+    return render_template('inventory_cluster_server.html',
+                           updated=time_now,
+                           server=inventory.get("server", name),
+                           cluster=inventory.get("cluster", cluster),
+                           inventory=inventory)
+
+
+@inventory_module.route('/inventory/cluster/<cluster>/')
+def display_cluster(cluster):
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    inventory.refresh()
+    return render_template('inventory_cluster.html',
+                           updated=time_now,
+                           cluster=inventory.get("cluster", cluster))
+
+
+@inventory_module.route('/inventory/cluster/table/<cluster>/')
+def display_cluster_table(cluster):
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    inventory.refresh()
+    
+    cluster_obj = inventory.get("cluster", cluster)
+    n = len(cluster_obj['servers'])
+    parameters = {
+        "columns": 10,
+        "n": n
+    }
+
+    return render_template('inventory_cluster_table.html',
+                           updated=time_now,
+                           parameters=parameters,
+                           cluster=inventory.get("cluster", cluster))
+
+
+@inventory_module.route('/inventory/images/<name>/')
+def display_image(name):
+    image = inventory.get('image', name)[0]
+    inventory.refresh()
+    return render_template('info_image.html',
+                           table_printer=table_printer,
+                           image=image.data,
+                           name=name,
+                           inventory=inventory)
+
+# ============================================================
+# ROUTE: INVENTORY ACTIONS
+# ============================================================
+
+
+@inventory_module.route('/inventory/info/server/<server>/')
+def server_info(server):
+
+    server = inventory.find("server", server)
+    return render_template('info_server.html',
+                           server=server,
+                           inventory=inventory)
+
+
+@inventory_module.route('/inventory/set/service/', methods=['POST'])
+def set_service():
+    server_name = request.form['server']
+    service_name = request.form['provisioned']
+
+    server = inventory.get("server", server_name)
+    server.provisioned = service_name
+    server.save(cascade=True)
+    # provisioner.provision([server], service)
+    return display_inventory()
+
+
+@inventory_module.route('/inventory/set/attribute/', methods=['POST'])
+def set_attribute():
+    kind = request.form['kind']
+    name = request.form['name']
+    attribute = request.form['attribute']
+    value = request.form['value']
+
+    s = inventory.get(kind, name)
+    s[attribute] = value
+    s.save()
+    return display_inventory()
+
+@inventory_module.route('/inventory/get/<kind>/<name>/<attribute>')
+def get_attribute():
+    s = inventory.get(kind, name)
+    return s[attribute]
+
 
 @inventory_module.route('/inventory/save/')
 def inventory_save():
+    print "Not IMPLEMENTED YET"
     print "Saving the inventory"
     return display_inventory()
-
-#
-# ROUTE: LOAD
-#
 
 
 @inventory_module.route('/inventory/load/')
 def inventory_load():
-    print "Loading the inventory"
+    print "Not IMPLEMENTED YET"
     return display_inventory()

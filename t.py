@@ -7,6 +7,7 @@ inventory = Inventory("nosetest")
 import hostlist
 
 import time
+from pprint import pprint
 
 """
 t = info.delay()
@@ -29,11 +30,18 @@ for host in hosts:
     t[host] = provision.delay(host,"openstack")
     #t[host] = provision.delay(host,"hpc")
 
-for j in range(30):
+i = celery.control.inspect()
+
+
+
+for j in range(10):
     print chr(27) + "[2J"
     inventory.print_cluster("bravo")
     for host in hosts:
         print host, t[host].status
+    pprint (i.active())
+    pprint (i.scheduled())
+    pprint (i.reserved())
     time.sleep(1)
     
 #for j in range(10):

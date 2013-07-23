@@ -158,7 +158,7 @@ class FabricCluster(FabricObject):
     '''
     an object to hold fabric clusters and their meta data
     '''
-
+    definition = StringField(default="?")
     kind = StringField(default="cluster")
     provision_choices = ListField(default=PROVISIONING_CHOICES)
     PROVISIONING_CHOICES
@@ -279,6 +279,7 @@ class Inventory:
         :param ips: the names of the ips for the servers. 'i[001-003].futuregrid.org' creates the ips for the previously defined names
         :param management: the names of the management nodes. 'i[001-002]' sets the nodes i001 and i002 to management nodes. The rest will be set to compute nodes automatically.
         '''
+        
         name_list = expand_hostlist(names)
         ip_list = expand_hostlist(ips)
         management_list = expand_hostlist(management)
@@ -295,8 +296,10 @@ class Inventory:
             self.stamp()
             server.save(cascade=True)
             servers.append(server)
-            
-        cluster = FabricCluster(name=name, cluster=name)
+        print "NAMES $$$$$$", names
+        cluster = FabricCluster(name=name, 
+                                cluster=name, 
+                                definition=names)
         cluster.servers = servers
         self.stamp()
         cluster.save(cascade=True)

@@ -1,3 +1,8 @@
+from hostlist import expand_hostlist
+from flask.ext.wtf import Form
+from wtforms import TextField, SelectField
+from flask import flash, url_for
+
 from ConfigParser import SafeConfigParser
 from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
     FabricService, Inventory
@@ -19,11 +24,12 @@ import hashlib
 import json
 import os
 import pkg_resources
-import pprint
+
 import struct
 import sys
 import time
 import yaml
+from pprint import pprint
 debug = False
 
 
@@ -38,7 +44,7 @@ server_config = SafeConfigParser(
 server_config.read("server.config")
 
 
-pp = pprint.PrettyPrinter(indent=4)
+
 
 if with_cloudmesh:
     from cloudmesh.config.cm_keys import cm_keys
@@ -87,7 +93,7 @@ version = pkg_resources.get_distribution("cloudmesh").version
 # ============================================================
 
 
-inventory = Inventory("nosetest")
+
 
 # ============================================================
 # CLOUDMESH
@@ -155,6 +161,49 @@ app.register_blueprint(menu_module, url_prefix='', )
 app.register_blueprint(flatpages_module, url_prefix='', )
 
 
+SECRET_KEY = 'development key'
+app.secret_key = SECRET_KEY
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ))
+            
+class ProvisionForm(Form):
+
+    clusters = [cluster.name for cluster in inventory.get("cluster")]
+    choices = zip (clusters, clusters)
+    cluster = SelectField("Cluster", choices=choices)
+    nodespec = TextField("Nodes")
+
+    def validate(self):
+        cluster= inventory.get("cluster",self.cluster.data)
+        posibilities = expand_hostlist(cluster.definition)
+        choice = expand_hostlist(self.nodespec.data)
+        if choice == []:
+            ok = False
+        else:
+            ok = set(choice).issubset(posibilities)
+        print "Validate", ok, choice
+        return ok
+    
+@app.route("/provision/", methods=("GET", "POST"))
+def provision():
+
+    form = ProvisionForm(csrf=False)
+
+    if form.validate_on_submit():
+        flash("Success")
+        return redirect(url_for("provision"))
+    else:
+        flash("Wrong submission")
+    inventory.refresh()
+    return render_template("provision.html", form=form, inventory=inventory)    
+    
+        
 #@app.context_processor
 # def inject_pages():
 #    return dict(pages=pages)
@@ -478,118 +527,6 @@ def display_images():
         clouds=clouds.clouds,
         cloudmesh=clouds,
         config=config)
-
-
-# ============================================================
-# ROUTE: INVENTORY TABLE
-# ============================================================
-@app.route('/inventory/')
-def display_inventory():
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    inventory.refresh()
-    return render_template('inventory.html',
-                           updated=time_now,
-                           inventory=inventory)
-
-
-@app.route('/inventory/images/')
-def display_inventory_images():
-    inventory.refresh()
-    return render_template('images.html',
-                           inventory=inventory)
-
-
-@app.route('/inventory/cluster/<cluster>/<name>')
-def display_named_resource(cluster, name):
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    inventory.refresh()
-    return render_template('inventory_cluster_server.html',
-                           updated=time_now,
-                           server=inventory.get("server", name),
-                           cluster=inventory.get("cluster", cluster),
-                           inventory=inventory)
-
-
-@app.route('/inventory/cluster/<cluster>/')
-def display_cluster(cluster):
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    inventory.refresh()
-    return render_template('inventory_cluster.html',
-                           updated=time_now,
-                           cluster=inventory.get("cluster", cluster))
-
-
-@app.route('/inventory/cluster/table/<cluster>/')
-def display_cluster_table(cluster):
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    inventory.refresh()
-    
-    cluster_obj = inventory.get("cluster", cluster)
-    n = len(cluster_obj['servers'])
-    parameters = {
-        "columns": 10,
-        "n": n
-    }
-
-    return render_template('inventory_cluster_table.html',
-                           updated=time_now,
-                           parameters=parameters,
-                           cluster=inventory.get("cluster", cluster))
-
-
-@app.route('/inventory/images/<name>/')
-def display_image(name):
-    image = inventory.get('image', name)[0]
-    inventory.refresh()
-    return render_template('info_image.html',
-                           table_printer=table_printer,
-                           image=image.data,
-                           name=name,
-                           inventory=inventory)
-
-# ============================================================
-# ROUTE: INVENTORY ACTIONS
-# ============================================================
-
-
-@app.route('/inventory/info/server/<server>/')
-def server_info(server):
-
-    server = inventory.find("server", server)
-    return render_template('info_server.html',
-                           server=server,
-                           inventory=inventory)
-
-
-@app.route('/inventory/set/service/', methods=['POST'])
-def set_service():
-    server_name = request.form['server']
-    service_name = request.form['provisioned']
-
-    server = inventory.get("server",server_name)
-    server.provisioned = service_name
-    server.save(cascade=True)
-    #provisioner.provision([server], service)
-    return display_inventory()
-
-
-@app.route('/inventory/set/attribute/', methods=['POST'])
-def set_attribute():
-    kind = request.form['kind']
-    name = request.form['name']
-    attribute = request.form['attribute']
-    value = request.form['value']
-
-    s = inventory.get(kind, name)
-    s[attribute] = value
-    s.save()
-    return display_inventory()
-
-
-@app.route('/inventory/get/<kind>/<name>/<attribute>')
-def get_attribute():
-    s = inventory.get(kind, name)
-    return s[attribute]
 
 
 # ============================================================
