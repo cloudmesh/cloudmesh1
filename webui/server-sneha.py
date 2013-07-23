@@ -546,6 +546,11 @@ def display_inventory():
                            updated=time_now,
                            inventory=inventory)
 
+@app.route('/inventory/summarytable/')
+def display_summary():
+    parameters={ 'columns': 12}
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    return render_template('inventory_summary_table.html',inventory=inventory,parameters=parameters, updated = time_now)
 
 @app.route('/inventory/images/')
 def display_inventory_images():
