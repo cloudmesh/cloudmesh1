@@ -496,6 +496,27 @@ def display_images():
 def is_list(obj):
     return isinstance(obj, types.ListType)
 
+@app.template_filter()
+def only_numbers(str):
+    return ''.join(c for c in str if c.isdigit())
+
+
+@app.template_filter()
+def state_color(state):
+    s = state.lower()
+    if s == "active":
+        color = "#336600"
+    else:
+        color = "#FFCC99"
+    return color
+
+@app.template_filter()
+def state_style(state):
+    color = state_color(state)
+    return 'style="background:{0}; font:bold"'.format(color)
+
+
+
 # ============================================================
 # ROUTE: METRIC
 # ============================================================

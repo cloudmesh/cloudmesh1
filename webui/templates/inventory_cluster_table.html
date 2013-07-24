@@ -29,15 +29,10 @@ $(function() {
   </tr>
   <tr>
     {% for server in cluster.servers | sort(attribute='name')  %}
- 		{% if server.status=="active" %}
-    		{% set cellstyle="background:#336600; font:bold" %}
-		{% else %}
-           	{% set cellstyle="background:#FFCC99; font:bold" %}
-  		{% endif %}
-     <td style="{{ cellstyle }}">
-	   		<a href="/inventory/cluster/{{ cluster.name }}/{{server.name}}"> 
-		  		{{ server.name }}
-		  	</a>
+        <td {{server.status | state_style | safe}}>
+	   <a href="/inventory/cluster/{{ cluster.name }}/{{server.name}}"> 
+		  {{ server.name | only_numbers }}
+	   </a>
      </td>
         	{% if (loop.index) %(parameters.columns) == 0  %}	
           	        </tr><tr>
