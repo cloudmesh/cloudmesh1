@@ -13,9 +13,8 @@
 
   <tr>
     <th> </th>
-    <th>&nbsp; &nbsp; {{ image_button ("center","119_table","/inventory/summarytable/") }}</th>
-    <th> Cluster </th>
-    <th> Status </th>
+    <th>&nbsp; &nbsp; {{ image_button ("center","119_table","/inventory/summary/") }}</th>
+    <th> Cluster </th>    <th> Status </th>
   </tr>
   
   {% for cluster in inventory.clusters | sort(attribute='name') %}
