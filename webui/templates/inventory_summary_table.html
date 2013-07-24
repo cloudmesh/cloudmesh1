@@ -2,8 +2,11 @@
 {% from "_helper.html" import image_button %}
 {% block content %}
 
-<h1>Summary of all clusters</h1>
-<hr>
+<table>
+<th>  {{ image_button ("center","195_circle_info","/inventory/") }}
+List of all clusters</th>
+</table>
+ <hr>
 {% for cluster in inventory.clusters |sort(attribute='name') %}
 {# % set server = cluster.management_node  % #}
 

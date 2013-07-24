@@ -6,15 +6,18 @@
 
 <table>
   <tr>
-    <th colspan="5"> Cloud Mesh - Inventory for FutureGrid</th>  
+    <th colspan="5">
+      {{ image_button ("center","119_table","/inventory/summary/") }}
+      Cloud Mesh - Inventory for FutureGrid</th>  
   <tr>
     <td colspan=5> Updated {{ updated }}</td>
   </tr>
 
   <tr>
     <th> </th>
-    <th>&nbsp; &nbsp; {{ image_button ("center","119_table","/inventory/summary/") }}</th>
-    <th> Cluster </th>    <th> Status </th>
+    <th> </th>
+    <th> Cluster </th>
+    <th> Status </th>
   </tr>
   
   {% for cluster in inventory.clusters | sort(attribute='name') %}
