@@ -52,3 +52,33 @@ We are providing a number of useful command that will make your development effo
 .. runblock:: console
 
    $ fab -l 
+
+Creating the Documentation:
+---------------------------
+
+We assume you have autodoc installed for sphinx (see previously) it is
+not in the requirements file, As I could not finss it in pypi
+
+    mkdir /tmp/install-cloudmesh
+    hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
+    cd sphinx-contrib/autorun
+    python setup.py install
+
+    cd /tmp/install-cloudmesh
+
+    git@github.com:cloudmesh/cloudmesh.git
+    cd cloudmesh
+    pip install -r requirements.txt
+
+This will publish the documentation locally::
+
+    fab doc.html
+
+If you do::
+
+    fab doc.gh
+
+it will publish the page to gh-pages
+
+
+
