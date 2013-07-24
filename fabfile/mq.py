@@ -14,6 +14,7 @@ __all__ = ['user', 'install', 'host', 'allow', 'check', "dns", "status", "start"
 
 
 def installed(name):
+    """check if the command with the name is installed and return true if it is"""
     result = local("which {0} | wc -l".format(name), capture=True)
     return result > 0
    
@@ -62,6 +63,7 @@ def allow():
 
 @task
 def check():
+    """check if the /etc/hosts file is properly configures"""
     values = {
         'host': platform.node(),
         'hostname': platform.node().replace(".local", ""),
@@ -80,10 +82,12 @@ def check():
 
 @task
 def dns():
+    """restart the dns server"""
     local("dscacheutil -flushcache")
 
 @task
 def info():
+    """print some essential information about the messaging system"""
     status()
     l = ["name", "memory", "consumers", "messages","messages_ready","messages_unacknowledged"]
     r = list_queues(" ".join(l)).split("\n")[1].split("\t")
@@ -94,18 +98,22 @@ def info():
     
 @task
 def status():
+    """print the status of rabbitmq"""
     local("sudo rabbitmqctl status")
 
 def list_queues(parameters):
+    """list all queues available in rabitmq"""
     r = local("sudo  rabbitmqctl list_queues {0}".format(parameters), capture=True)
     return r
 
 @task
 def start():
+    """start the rabit mq server"""
     local("sudo rabbitmq-server -detached")
 
 @task
 def stop():
+    """stop the rabit mq server"""
     local("sudo rabbitmqctl stop")
 
 
@@ -123,5 +131,6 @@ menu_list = [
 
 @task
 def menu():
-   ascii_menu("RabbitMQ", menu_list)
+    """open a menu to start some commands with an ascii menu"""
+    ascii_menu("RabbitMQ", menu_list)
          

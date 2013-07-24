@@ -58,7 +58,6 @@ def test(name,classname,filename):
 @task
 def start(f,name):
     '''
-    
     executes a test with a given partial filename and partial name of the test
     class. the first function in the test file will be returned. for example :
     

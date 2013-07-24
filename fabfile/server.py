@@ -68,6 +68,7 @@ def clean():
 
 @task
 def cleanmongo():
+    """erase the database and kill the mongo processes"""
     local('mongo invenntory --eval "db.dropDatabase();"')
     if sys.platform == 'darwin':
         local("killall mongod")
@@ -78,6 +79,7 @@ def cleanmongo():
 
 @task
 def fg():
+    """create a simple testbed"""
     with settings(warn_only=True):
         cleanmongo()
     local("mongod &")
