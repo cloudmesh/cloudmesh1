@@ -45,6 +45,8 @@ extensions = [
     'sphinxcontrib.webmocks', 
     'sphinxjp.shibukawa']
 
+extensions.append('sphinxcontrib.autorun')
+
 #'sphinxcontrib.issuetracker']
 # issuetracker = 'none',
 # issuetracker_project = 'https://jira.futuregrid.org/browse',
