@@ -500,6 +500,10 @@ def is_list(obj):
 def only_numbers(str):
     return ''.join(c for c in str if c.isdigit())
 
+@app.template_filter()
+def simple_date(d):
+    return str(d).rpartition(':')[0]
+
 
 @app.template_filter()
 def state_color(state):

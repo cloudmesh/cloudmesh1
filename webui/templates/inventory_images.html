@@ -24,8 +24,8 @@
 	<td> {{", ". join(names.groups)}} </td>
 	<td> {{names.cluster}} </td>
 	<td> {{names.status}} </td>
-	<td> {{names.date_creation}} </td>
-	<td> {{names.date_modified}} </td>
+	<td> {{names.date_creation | simple_date }} </td>
+	<td> {{names.date_modified | simple_date}} </td>
   </tr>
   {% endfor %}
 </table>

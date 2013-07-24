@@ -42,5 +42,45 @@ $(function() {
 </table>
 
 
+<table>
+<tr>
+  <th> Attributes </th>
+  <th> Values </th>
+</tr>  
+<tr>
+  <td> Groups </td>
+  <td>{{ ",".join (cluster.groups) }}</td>
+</tr>  
+<tr>
+  <td>Label</td>
+  <td>{{ ",".join(cluster.labels) }}</td>
+</tr>  
+<tr>
+  <td>Created</td>
+  <td>{{ cluster.date_creation | simple_date }}</td>
+</tr>  
+<tr>
+  <td>modified</td>
+  <td>{{ cluster.date_modified | simple_date }}</td>
+</tr>  
+<tr>
+  <td>Uptime</td>
+  <td>{{ cluster.uptime }}</td>
+</tr>  
+
+<tr>
+  <td>Images</td>
+  <td>
+    {% for image in cluster.images %}
+    {{ image.name }}
+    {% endfor %}
+  </td>
+</tr>  
+<tr>
+  <td>Keys</td>
+  <td>{{ "<br>".join(cluster._data.keys()) |safe }}</td>
+</tr>  
+<table>
+  
 {% endblock %} 
 
