@@ -3,36 +3,41 @@
 {% block content %}
 
 <script type="text/javascript">
-
-
 $(function() {
         /** This code runs when everything has been loaded on the page */
         /* Inline sparklines take their values from the contents of the tag */
         $('.inlinesparkline').sparkline();
 
-
 });
-
-
 </script>
 
+<h1> {{image.name }} details </h1>
+<hr>
 <table>
-  <tr>
-    <th colspan="{{ parameters.columns }}">  
-       Cloudmesh - Inventory for {{ cluster.name }}
-    </th>
-  </tr>
-  <tr>
-    <td  colspan="{{ parameters.columns }}"> 
-      Updated :  {{ updated }}
-    </td>
-  </tr>
-  <tr>
-    {% for image in cluster.images | sort(attribute='name')  %}
-    <td> image.name </td>
-    <td> image.groups </td>
-    {% endfor %}
-  </tr>
+ <tr>
+    <td> Name      </td><td> {{ image.name }}       </td>
+ </tr>
+ <tr>
+    <td> OS Image  </td><td> {{ image.osimage}}     </td>
+ </tr>
+ <tr>
+    <td> Kernel    </td><td> {{ image.kernel}}      </td>
+ </tr>
+ <tr>
+    <td> Partition </td><td> {{ image.partition_scheme }}  </td>
+ </tr>
+ <tr>
+    <td> Method    </td><td> {{ image.method }}     </td>
+ </tr>
+ <tr>
+    <td> Ramdisk   </td><td> {{ image.ramdisk }}    </td>
+ </tr>
+ <tr>
+    <td> Grub      </td><td> {{ image.grub }}       </td>
+ </tr>
+ <tr>
+    <td> Rootpass  </td><td> {{ image.rootpass }}   </td>
+ </tr>
 </table>
 
 
