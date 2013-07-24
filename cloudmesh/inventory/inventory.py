@@ -361,6 +361,7 @@ class Inventory:
         print "%15s:" % "modified", cluster.date_modified
         #        print "%15s:" % "dbname", self.inventory_name
         print "%15s:" % "cluster", name
+        print "%15s:" % "images", cluster.images
         print
 
         for s in cluster.servers:
@@ -452,14 +453,14 @@ def main():
 
     inventory = Inventory()
 
-    inventory.create_cluster(name="india",
-                             names="i[003-010]",
+    inventory.create_cluster(name="xindia",
+                             names="xi[003-010]",
                              ips="india[003-010].futuregrid.org",
-                             management="i[003,004]")
+                             management="xi[003,004]")
 
     servers = FabricServer.objects
-    inventory.set(servers, "status", "running", "i[003-010]")
-    inventory.set(servers, "status", "done", "i[005-007]")
+    inventory.set(servers, "status", "running", "xi[003-010]")
+    inventory.set(servers, "status", "done", "xi[005-007]")
 
     inventory.print_cluster ("india")
 

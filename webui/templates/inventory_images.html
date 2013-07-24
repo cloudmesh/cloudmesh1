@@ -18,11 +18,21 @@
   </tr>
   {% for names in images %}
   <tr>
-	<td> <a href = "/inventory/image/{{names.name}}">{{names.name}} <a></td>
+	<td> <a href = "/inventory/image/{{names.name}}">{{names.name}} </a></td>
 	<td> {{", ". join(names.labels)}} </td>
 	<td> {{", ". join(names.tags)}} </td>
 	<td> {{", ". join(names.groups)}} </td>
-	<td> {{names.cluster}} </td>
+	<td> 
+
+	{% for cluster in inventory.clusters %}
+	  {% for image in inventory.images %}
+	    {% if image.name == names.name %}
+	       <a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} </a>
+	    {% endif %}
+	  {% endfor %}
+	{% endfor %}
+	</td>
+
 	<td> {{names.status}} </td>
 	<td> {{names.date_creation | simple_date }} </td>
 	<td> {{names.date_modified | simple_date}} </td>

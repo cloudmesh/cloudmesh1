@@ -26,7 +26,11 @@ $(function() {
 
 <table>
   <tr>
-    <th colspan="7"> Cloudmesh - Inventory for {{ cluster.name }}</th>  
+    <th colspan="7">
+
+    {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
+
+      Cloudmesh - Inventory for {{ cluster.name }}</th>  
   <tr> <td colspan="8"> Updated {{ updated }}
     <select>
       <option value="">Bulk select...</option>

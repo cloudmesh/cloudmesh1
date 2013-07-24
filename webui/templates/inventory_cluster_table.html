@@ -19,7 +19,9 @@ $(function() {
 <table>
   <tr>
     <th colspan="{{ parameters.columns }}">  
-       Cloudmesh - Inventory for {{ cluster.name }}
+    {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
+
+      Cloudmesh - Inventory for {{ cluster.name }}
     </th>
   </tr>
   <tr>
@@ -71,8 +73,9 @@ $(function() {
 <tr>
   <td>Images</td>
   <td>
+
     {% for image in cluster.images %}
-    {{ image.name }}
+       <a href = "/inventory/image/{{image.name}}">{{image.name}} </a><br>
     {% endfor %}
   </td>
 </tr>  

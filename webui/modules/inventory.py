@@ -74,6 +74,7 @@ def display_cluster_table(cluster):
 @inventory_module.route('/inventory/images/')
 def display_inventory_images():
     images = inventory.get("images")
+    inventory.refresh()
     return render_template('inventory_images.html',
                            images=images,
                            inventory=inventory)

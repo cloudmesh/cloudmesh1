@@ -59,7 +59,8 @@ centos = FabricImage(
     ramdisk='initramfs-2.6.32-279.19.1.el6.x86_64.img',
     grub='grub',
     rootpass='reset'
-).save()
+)
+centos.save()
 
 redhat = FabricImage(
     name="ubuntu",
@@ -72,12 +73,21 @@ redhat = FabricImage(
     ramdisk='initramfs-2.6.32-279.19.1.el6.x86_64.img',
     grub='grub2',
     rootpass='reset'
-).save()
+)
+redhat.save()
 
+inventory.refresh()
 
 for cluster in inventory.clusters:
     cluster.images = [centos,redhat]
     cluster.save(cascade=True)
+    print "CCCCC", cluster.images
+
+c = inventory.get("cluster","bravo")
+
+print "BBBB", c.images
+
+print "LLLL", [image.name for image in c.images]
 
 inventory.print_info()
 
