@@ -174,6 +174,14 @@ class Inventory:
     holds a simple <ory of a data center
     '''
 
+    def clean(self):
+        """removes all services and servers"""
+        for kind in self.fabrictype("all").keys():
+            log.info("Deleting all {0}".format(kind))
+            data = self.fabrictype(kind)
+            for element in data:
+                element.delete()
+
     def stamp(self):
         '''
         an internal method to provide a time stap for a global modification data

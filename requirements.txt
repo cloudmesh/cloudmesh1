@@ -6,7 +6,6 @@ sphinx_bootstrap_theme
 sphinxcontrib-webmocks
 sphinxjp.shibukawa
 sphinxcontrib-blockdiag
-sphinxcontrib-autorun
 paramiko
 blessings
 fabric

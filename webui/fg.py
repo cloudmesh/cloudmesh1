@@ -39,7 +39,7 @@ else:
     inventory = Inventory(inventory_db)
 """
 
-#inventory.clean()
+inventory.clean()
 
 inventory.create_cluster("bravo", "b-[001-016]", "101.102.203.[11-26]", "b-[001]")
 inventory.create_cluster("delta", "d-[001-016]", "102.202.204.[1-16]", "d-[001]")
