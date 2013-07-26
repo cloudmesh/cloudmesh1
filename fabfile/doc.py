@@ -7,10 +7,16 @@ if sys.platform == 'darwin':
     browser = "open"
 
 @task
+def view():
+    """view the documentation in a browser"""
+    local("{browser} doc/build/html/index.html".format(browser=browser))
+
+@task
 def html():
     """build the doc locally and view"""
     local("cd doc; make html")
-    local("{browser} doc/build/html/index.html".format(browser=browser))
+    view()
+    
 
 @task
 def gh():

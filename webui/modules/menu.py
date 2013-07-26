@@ -14,6 +14,8 @@ app_sidebar = [
     ["Inventory", "/inventory/"],
     ["  - Summary", "/inventory/summary"],
     ["  - Images", "/inventory/images"],
+    ["Provisioner", "/provision/summary/"],
+    ["  - form", "/provision/"],
     ["Profile", "/profile/"],
     ["  - Keys", "/keys/"],
     ["VMs", "/table/"],
@@ -23,6 +25,8 @@ app_sidebar = [
     ["Flavors", "/flavors/"],
 ]
 
+def add_menu(label, link):
+    app_sidebar.append([label,link])
 
 app_topbar = [
     ["Home", "/"],

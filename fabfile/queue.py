@@ -4,16 +4,24 @@ import clean
 import mq
 import time
 import hostlist
-__all__ = ['start', 'stop', 'list', 'clean','gui','monitor']
+__all__ = ['start', 'stop', 'list', 'clean','gui','monitor', 'kill']
 
 app="cloudmesh.provisioner.queue"
 
 workers = hostlist.expand_hostlist("w[1-2]")
 
 @task
+def kill():
+    stop()
+    with settings(warn_only=True):
+        with hide('output','running','warnings'):  
+            local("killall mongod")
+            local("killall python")
+
+@task
 def gui():
     """start the flower celery gui"""
-    local("celery flower")
+    local("celery flower &")
     time.sleep(1)
     local("open http://localhost:5555")
 
@@ -24,22 +32,28 @@ def monitor():
 
 def celery_command(command, app, workers):
     """execute the celery command on the application and workers specified"""
-    local("celery multi {0} {1} -A {2} -l info".format(command, workers, app))
+
+    worker_str = " ".join(workers)
+    local("celery multi {0} {1} -A {2} -l info".format(command, worker_str, app))
     
 @task
 def start(view=None):
     """start the celery server
     :param: if view is set to any value start also rabit and attach to it so we can see the log
     """
-    if view is None:
-        # if rabit is not running 
+    with settings(warn_only=True):
+        stop()
+        time.sleep(2)
         mq.start()
+        time.sleep(2)
         celery_command("start", app, workers)
-    else:
-        local("celery worker --app={0} -l info".format(app))
+    if view is None:
+        #local("celery worker --app={0} -l info".format(app))
+        local("celery worker -l info".format(app))
 @task
 def stop():
     """stop the workers"""
+
     celery_command("stop", app, workers)
     mq.stop()
     clean()
@@ -51,7 +65,7 @@ def clean():
         with hide('output','running','warnings'):  
             local("ps auxww | grep 'celery worker' | awk '{print $2}' | xargs kill -9")
         
-    local("rm -f celeryd@*")
+        local("rm -f celeryd@*")
 
     
 @task

@@ -39,9 +39,10 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
         
     def provision(self, hosts, provisioned):
         for host in hosts:
+            server = inventory.get("server",host)
             print "PROVISION", host, provisioned
             log.info("Provision {0}<-{1}".format(host, provisioned))
-            server = inventory.get("server",host)
+
 
             server.provisioned = provisioned
             self.set_status(server, "INITIATING")
@@ -63,14 +64,12 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
             # image = inventory.get("server",host)
             time.sleep(randrange(0, 3))
 
-            
-
         
     def provision_image(self, hosts, image):
 
         for host in hosts:
-            log.info("Provision {0}->{1}".format(image, host))
             server = inventory.get("server",host)
+            log.info("Provision {0}->{1}".format(image, host))
             # image = inventory.get("server",host)
             
             time.sleep(randrange(0, 3))

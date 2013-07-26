@@ -107,9 +107,12 @@ def list_queues(parameters):
     return r
 
 @task
-def start():
+def start(detached=None):
     """start the rabit mq server"""
-    local("sudo rabbitmq-server -detached")
+    if detached is None:
+        local("sudo rabbitmq-server -detached")
+    else:
+        local("sudo rabbitmq-server")
 
 @task
 def stop():

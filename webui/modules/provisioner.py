@@ -7,19 +7,45 @@ from wtforms import TextField, SelectField
 from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
     FabricService, Inventory
 from hostlist import expand_hostlist
+from cloudmesh.provisioner.provisioner import *
+
+from cloudmesh.provisioner.queue.celery import celery
+from cloudmesh.provisioner.queue.tasks import info, provision
+
     
 provisioner_module = Blueprint('provisioner_module', __name__)
 
 
 inventory = Inventory("nosetest")
 
+# ============================================================
+# PROVISINOR
+# ============================================================
+provisionerImpl = ProvisionerSimulator
+provisioner = provisionerImpl()
+
 @provisioner_module.route('/provision/summary/')
 def display_summary():
-    parameters = { 'columns': 12}
+    
+    queue = celery.control.inspect()
+
+
+
+    """
+    for j in range(10):
+    print chr(27) + "[2J"
+    inventory.print_cluster("bravo")
+    for host in hosts:
+        print host, t[host].status
+    pprint (i.active())
+    pprint (i.scheduled())
+    pprint (i.reserved())
+    time.sleep(1)
+    """
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    return render_template('provisioner_summary_table.html',
+    return render_template('provision_summary_table.html',
                            provisioner=provisioner,
-                           parameters=parameters,
+                           queue=queue,
                            updated=time_now)
 
 class ProvisionForm(Form):
