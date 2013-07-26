@@ -83,4 +83,31 @@ If you do::
 it will publish the page to gh-pages
 
 
+Starting and testing the Queue Service
+----------------------------------------------------------------------
+
+To start the queue service please use the command::
+
+    fab queue.start:True
+
+This will start the necessary background services, but also will shut
+down existing services. Essentially it will start a clean development
+environment. To start a service you can use::
+
+   fab server.start:/provision/summary/
+
+Which starts the server oand gos to the provision summay page
+
+There is also a program called t.py in the base dir, so if you say::
+
+    python t.py
+   
+and refresh quickly the /provision/summary page you will see some
+commands queed up. The commands hafe random state updates and aer very
+short as to allow for a quick debuging simulation. One could add the
+refresh of the web page automatically to other test programs.
+
+
+
+
 
