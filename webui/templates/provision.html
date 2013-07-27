@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from "_helper.html" import image_button %}
 
 {% block content %}
 
@@ -16,20 +17,33 @@
      <td> Nodes </td>
      <td> {{ form.nodespec(size=20) }} </td>
   </tr>
+  <tr>
+     <td> Service </td>
+     <td> {{ form.service }} </td>
+  </tr>
   </table>
   <br>
   <input type="submit" value="Provision">
 </form>
 
+
 The following clusters are currently defined.
   
 <table>
 <tr>
+  <th>
+    {{ image_button ("center","195_circle_info","/inventory/") }}
+    {{ image_button ("center","119_table","/inventory/summary/") }}
+  </th>
+  
   <th>Cluster</th>
   <th>Definition</th>
 </tr>
 {% for cluster in inventory.clusters %}
 <tr>
+  <td>
+    {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
+    {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
   <td> {{ cluster.name }} </td>
   <td> {{ cluster.definition }} </td>
 </tr>

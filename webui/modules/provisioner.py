@@ -8,10 +8,10 @@ from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
     FabricService, Inventory
 from hostlist import expand_hostlist
 from cloudmesh.provisioner.provisioner import *
-
+from cloudmesh.inventory.inventory import PROVISIONING_CHOICES
 from cloudmesh.provisioner.queue.celery import celery
 from cloudmesh.provisioner.queue.tasks import info, provision
-
+from pprint import pprint
     
 provisioner_module = Blueprint('provisioner_module', __name__)
 
@@ -54,6 +54,8 @@ class ProvisionForm(Form):
     choices = zip (clusters, clusters)
     cluster = SelectField("Cluster", choices=choices)
     nodespec = TextField("Nodes")
+    provision_choices = zip(PROVISIONING_CHOICES,PROVISIONING_CHOICES)
+    service = SelectField("Service", choices=provision_choices)
 
     def validate(self):
         cluster = inventory.get("cluster", self.cluster.data)
@@ -65,15 +67,27 @@ class ProvisionForm(Form):
             ok = set(choice).issubset(posibilities)
         print "Validate", ok, choice
         return ok
-    
+
 @provisioner_module.route("/provision/", methods=("GET", "POST"))
-def provision():
+def display_provision_form():
 
     form = ProvisionForm(csrf=False)
 
     if form.validate_on_submit():
         flash("Success")
-        return render_template("provision.html", form=form, inventory=inventory)    
+        print "FORM"
+        pprint( form.__dict__)
+        print "CLUSTER", form.cluster.data
+        print "Service", form.service.data
+        hosts = expand_hostlist(form.nodespec.data)
+        print "Nodespec", hosts
+
+        for host in hosts:
+            print "PROVISION HOST", host
+            provision.delay(host,form.service.data)
+
+        return redirect("/provision/summary/")
+
     else:
         flash("Wrong submission")
     inventory.refresh()
