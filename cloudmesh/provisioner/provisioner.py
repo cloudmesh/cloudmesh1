@@ -46,23 +46,23 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
 
             server.provisioned = provisioned
             self.set_status(server, "INITIATING")
-            time.sleep(randrange(0, 3))
+            time.sleep(randrange(1, 3))
 
             self.set_status(server, "PREPARING_IMAGE")
             # image = inventory.get("server",host)
-            time.sleep(randrange(0, 3))
+            time.sleep(randrange(1, 3))
 
             self.set_status(server, "BOOTING")
             # image = inventory.get("server",host)
-            time.sleep(randrange(0, 3))
+            time.sleep(randrange(1, 3))
 
             self.set_status(server, "AVAILABLE")
             # image = inventory.get("server",host)
-            time.sleep(randrange(0, 3))
+            time.sleep(randrange(1, 3))
 
             self.set_status(server, "SUCCESS")
             # image = inventory.get("server",host)
-            time.sleep(randrange(0, 3))
+            time.sleep(randrange(1, 3))
 
         
     def provision_image(self, hosts, image):

@@ -494,7 +494,9 @@ def timesince(dt, format="float", default="just now"):
     Returns string representing "time since" e.g.
     3 days ago, 5 hours ago etc.
     """
-
+    if dt == "None" or dt == "" or dt == None or dt == "completed":
+        return "completed"
+    
     #now = datetime.utcnow()
     now = datetime.now()
     if format == 'float':

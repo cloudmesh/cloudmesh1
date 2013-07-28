@@ -48,6 +48,7 @@ def start(view=None):
         time.sleep(2)
         celery_command("start", app, workers)
     if view is None:
+        time.sleep(2)
         #local("celery worker --app={0} -l info".format(app))
         local("celery worker -l info".format(app))
 @task

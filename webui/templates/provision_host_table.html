@@ -4,54 +4,29 @@
 
 <h1>Provision Summary</h1>
 
-{% set active = queue.active() %}
-{% set scheduled = queue.scheduled() %}
-{% set reserved = queue.reserved() %}
-
-
 
 <table>
 	<tr>
-	  <th> Status </th>	
-	   <th> Worker </th>	
-	   <th> Task Name </th>
-	   <th> Host </th>
-	   <th> Service </th>
-	   <th> Start </th>	
+		<th> Cluster </th>			
+		<th> Host </th>			
+		<th> Service </th>			
+	  	<th> Task </th>	
+	   	<th> Worker </th>	
+	   	<th> Status </th>
+	   	<th> Service </th>
+	   	<th> Start </th>	
 	</tr>
-	{% for worker in active %}
-	  {% for task in active[worker] %}
-	     <tr>
-	       <td> Active </td>	
-	       <td> {{ worker }} </td>	
-	       <td> {{ task.name | replace ("cloudmesh.provisioner.queue.tasks.","")}} </td>
-	       <td> {{ task.args | get_tuple_element_from_string(0) }} </td>
-	       <td> {{ task.args | get_tuple_element_from_string(1) }}</td>
-	       <td> {{ task.time_start | timesince }} </td>	
+	{% for host in table %}
+		<tr>
+			<td> {{ cluster }} </td>
+			<td> {{ host }} </td>
+			<td> {{ service }} </td>
+			<td> {{ table[host]["task"] }} </td>	
+	       	<td> {{ table[host]["worker"] }} </td>	
+	       	<td> {{ table[host]["status"] }} </td>
+	       	<td> {{ table[host]["provision"] }} </td>
+	       	<td> {{ table[host]["start"] | timesince }} </td>	
 	   </tr>
-	   {% endfor %}
-	{% endfor %}
-	{% for worker in scheduled %}
-	  {% for task in scheduled[worker] %}
-	     <tr>
-	       <td> scheduled </td>	
-	       <td> {{ worker }} </td>	
-	       <td> {{ task.name | replace ("cloudmesh.provisioner.queue.tasks.","")}} </td>
-	       <td> {{ task.args }} </td>
-	       <td> {{ task.args }} </td>	
-	   </tr>
-	   {% endfor %}
-	{% endfor %}
-	{% for worker in reserved %}
-	  {% for task in reserved[worker] %}
-	     <tr>
-	       <td> reserved </td>	
-	       <td> {{ worker }} </td>	
-	       <td> {{ task.name | replace ("cloudmesh.provisioner.queue.tasks.","")}} </td>
-	       <td> {{ task.args }} </td>
-	       <td> {{ task.args }} </td>	
-	   </tr>
-	   {% endfor %}
 	{% endfor %}
 	
 </table>

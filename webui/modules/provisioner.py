@@ -30,7 +30,6 @@ def display_summary():
     queue = celery.control.inspect()
 
 
-
     """
     for j in range(10):
     print chr(27) + "[2J"
@@ -46,6 +45,75 @@ def display_summary():
     return render_template('provision_summary_table.html',
                            provisioner=provisioner,
                            queue=queue,
+                           updated=time_now)
+
+@provisioner_module.route('/provision/tasks/<cluster>/<spec>/<service>')
+def display_provision_host_summary(cluster,spec,service):
+
+    
+    time.sleep(1)    
+    hosts = expand_hostlist(spec)    
+    queue = celery.control.inspect()
+
+
+    active = queue.active()     
+    scheduled = queue.scheduled() 
+    reserved = queue.reserved()
+    
+    table = {}
+    for host in hosts:
+        table[host] = {"provision": service,
+                       "start": "None",
+                       "worker": "",
+                       "task":"provision",
+                       "status": "completed"  
+                       }              
+                
+    for worker in active:
+        for task in active[worker]: 
+            (host, service) = list(eval(task["args"]))
+            table[host]['worker'] = worker
+            table[host]['status'] = 'active'
+            table[host]['task'] = host    
+            table[host]['start'] = task['time_start']
+
+    for worker in scheduled:
+        for task in scheduled[worker]: 
+            (host, service) = list(eval(task["args"]))
+            table[host]['worker'] = worker
+            table[host]['status'] = 'scheduled'
+            table[host]['task'] = host    
+            table[host]['start'] = task['time_start']
+
+    for worker in reserved:
+        for task in reserved[worker]: 
+            (host, service) = list(eval(task["args"]))
+            table[host]['worker'] = worker
+            table[host]['status'] = 'reserved'
+            table[host]['task'] = host    
+            table[host]['start'] = task['time_start']
+            
+            
+    pprint (table)
+    """
+    for j in range(10):
+    print chr(27) + "[2J"
+    inventory.print_cluster("bravo")
+    for host in hosts:
+        print host, t[host].status
+    pprint (i.active())
+    pprint (i.scheduled())
+    pprint (i.reserved())
+    time.sleep(1)
+    """
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    return render_template('provision_host_table.html',
+                           provisioner=provisioner,
+                           queue=queue,
+                           table=table,
+                           hosts=hosts,
+                           cluster=cluster,
+                           service=service,
                            updated=time_now)
 
 class ProvisionForm(Form):
@@ -86,7 +154,8 @@ def display_provision_form():
             print "PROVISION HOST", host
             provision.delay(host,form.service.data)
 
-        return redirect("/provision/summary/")
+        return redirect("provision/tasks/{0}/{1}/{2}".format(form.cluster.data,form.nodespec.data,form.service.data))
+        #return redirect("/provision/summary/")
 
     else:
         flash("Wrong submission")
