@@ -1,14 +1,16 @@
 from ConfigParser import SafeConfigParser
 from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
     FabricService, Inventory
+from cloudmesh.util.webutil import setup_imagedraw, setup_plugins, setup_noderenderers
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.util.util import table_printer
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask, render_template, request, redirect, flash, url_for, send_from_directory
 from flask.ext.autoindex import AutoIndex
 from flask.ext.wtf import Form
 from flask_flatpages import FlatPages
 from hostlist import expand_hostlist
+from modules.workflow import workflow_module
 from modules.flatpages import flatpages_module
 from modules.inventory import inventory_module
 from modules.provisioner import provisioner_module
@@ -151,6 +153,7 @@ app.register_blueprint(git_module, url_prefix='',)
 app.register_blueprint(profile_module, url_prefix='',)
 app.register_blueprint(menu_module, url_prefix='',)
 app.register_blueprint(flatpages_module, url_prefix='',)
+app.register_blueprint(workflow_module, url_prefix='',)
 
 
 SECRET_KEY = 'development key'
@@ -210,6 +213,10 @@ def site_map():
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/workflow')
+def display_diagram():
+    return render_template('workflow.html')
 
 
 # ============================================================
@@ -578,10 +585,20 @@ def metric():
 # ============================================================
 
 
+
 @app.route('/<path:path>/')
 def page(path):
     page = pages.get_or_404(path)
     return render_template('page.html', page=page)
 
+
+@app.route('/workflows/<filename>')
+def retrieve_files(filename):
+    """    Retrieve files that have been uploaded    """
+    return send_from_directory('workflows',filename)
+
 if __name__ == "__main__":
+    setup_imagedraw()
+    #setup_plugins()
+    #setup_noderenderers()
     app.run()

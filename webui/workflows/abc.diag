@@ -1,0 +1,4 @@
+blockdiag {
+provision -> "b-[001-002]" -> wait;
+provision -> "b-[008-009]" -> wait;
+}

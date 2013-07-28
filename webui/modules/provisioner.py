@@ -1,9 +1,12 @@
+from sh import blockdiag
+from sh import pwd
+from sh import ls
 from flask import Blueprint
 from flask import Flask, render_template, request, redirect, flash, url_for
 from cloudmesh.config.cm_keys import cm_keys
 from datetime import datetime
 from flask.ext.wtf import Form
-from wtforms import TextField, SelectField
+from wtforms import TextField, SelectField, TextAreaField
 from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
     FabricService, Inventory
 from hostlist import expand_hostlist
@@ -12,7 +15,8 @@ from cloudmesh.inventory.inventory import PROVISIONING_CHOICES
 from cloudmesh.provisioner.queue.celery import celery
 from cloudmesh.provisioner.queue.tasks import info, provision
 from pprint import pprint
-    
+import textwrap
+
 provisioner_module = Blueprint('provisioner_module', __name__)
 
 
@@ -25,7 +29,7 @@ provisionerImpl = ProvisionerSimulator
 provisioner = provisionerImpl()
 
 @provisioner_module.route('/provision/summary/')
-def display_summary():
+def display_provisioner_summary():
     
     queue = celery.control.inspect()
 
@@ -59,6 +63,8 @@ def display_provision_host_summary(cluster,spec,service):
     active = queue.active()     
     scheduled = queue.scheduled() 
     reserved = queue.reserved()
+    
+    #total = len(active) + len(scheduled) + len(reserved)
     
     table = {}
     for host in hosts:
@@ -116,6 +122,55 @@ def display_provision_host_summary(cluster,spec,service):
                            service=service,
                            updated=time_now)
 
+class ProvisionWorkflowForm(Form):
+
+    filename="abc"    
+
+    with open("./workflows/" + filename + ".diag", "r") as f:
+        data=f.readlines()[1:-1]
+    default = "".join(data)
+    filename = TextField("Filename", default=filename)
+    workflow = TextAreaField("Workflow", default=default)
+    
+@provisioner_module.route("/provision/workflow/", methods=("GET", "POST"))
+def display_provision_workflow_form():
+
+    form = ProvisionWorkflowForm(csrf=False)
+
+    dir = "/workflows/"
+    filename="abc"    
+
+    #if form.validate_on_submit():
+        
+    #    print "SKIP"
+    try: 
+        with open("." + dir + filename + ".diag", "w") as f:
+            f.write("blockdiag {\n")
+            f.write(form.workflow.data)
+            f.write("\n}")
+    except:
+        print "file does not exists"
+    print "." + dir + filename + ".svg"
+        
+    blockdiag("-Tsvg", 
+              "-o", "." + dir + filename + ".svg",
+              "." + dir + filename + ".diag")     
+    blockdiag("-Tpng", 
+              "-o", "." + dir + filename + ".png",
+              "." + dir + filename + ".diag")     
+                  
+        
+    #else:
+    #    flash("Wrong submission")
+    inventory.refresh()
+    return render_template("provision_workflow.html", 
+                           workflow=form.workflow.data,
+                           form=form, 
+                           dir=dir,
+                           filename=filename,
+                           inventory=inventory)    
+    
+        
 class ProvisionForm(Form):
 
     clusters = [cluster.name for cluster in inventory.get("cluster")]

@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}
+
+
+
+
+{% macro image_workflow(dir, name,type,width=None, height=None) %}
+   <!--Width={{width}}<br>
+   Height={{Height}}<br>
+   -->
+   <img src="{{dir}}{{name}}.{{type}}"/>
+{% endmacro %}
+
+
+
+{% block content %}
+
+<h1>Workflow Provision Form</h1>
+
+<form method="POST" action=".">
+{{ form.csrf_token }}
+
+{{form.filename}}
+
+<input type="submit" value="Redraw"><br>
+{{form.workflow(rows=5,cols=64)}}
+
+{{ image_workflow(dir, filename, "svg") }}
+
+
+</form>
+
+
+{% endblock %}

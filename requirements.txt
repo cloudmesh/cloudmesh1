@@ -33,3 +33,11 @@ cmd3
 celery
 #Flask-WTF
 wtforms
+actdiag
+blockdiag
+blockdiagcontrib-square
+blockdiagcontrib-qb
+blockdiagcontrib-class
+blockdiagcontrib-cisco
+nwdiag
+seqdiag
