@@ -1,4 +1,9 @@
 blockdiag {
-provision -> "b-[001-002]" -> wait;
+  default_shape = roundedbox;  default_node_color = lightyellow;provision -> "b-[001-002]" -> wait;
 provision -> "b-[008-009]" -> wait;
+wait -> l;
+
+
+
+
 }

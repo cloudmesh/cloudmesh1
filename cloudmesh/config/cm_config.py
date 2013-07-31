@@ -7,7 +7,7 @@ import json
 import collections
 
 from string import Template
-
+from pprint import pprint
 from cloudmesh.util.util import path_expand
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import check_file_for_tabs
@@ -325,9 +325,13 @@ class cm_config(object):
             return self.data['cloudmesh']
         else:
             if expand:
+                print "PPPP", key
                 d = self.cloud(key)['credentials']
+                print "UUUU"
+                pprint(d) 
+                
                 for key in d:
-                    d[key] = path_expand(d[key])
+                    d[key] = path_expand(str(d[key]))
                 return d
             else:
                 return self.cloud(key)['credentials']

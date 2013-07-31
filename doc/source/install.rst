@@ -10,6 +10,23 @@ Documentation
 Developmnet Version
 ===============
 
+New way
+
+window 1::
+
+	mongod
+
+window 2::
+
+	fab queue.start:1
+
+window 3::
+
+	fab server.start
+
+Other way
+===========
+
 Checkout the code from the repository::
 
     git@github.com:cloudmesh/cloudmesh.git
