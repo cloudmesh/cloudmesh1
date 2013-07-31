@@ -1,8 +1,6 @@
 {% extends "layout.html" %}
+
 {% from "_helper.html" import image_button %}
-
-
-
 
 {% macro image_workflow(dir, name,type,width=None, height=None) %}
    <!--Width={{width}}<br>
@@ -10,7 +8,6 @@
    -->
    <img src="{{dir}}{{name}}.{{type}}" cache="no-cache"/>
 {% endmacro %}
-
 
 
 {% block content %}
@@ -25,10 +22,21 @@
 <input type="submit" value="Redraw"><br>
 {{form.workflow(rows=5,cols=64)}}
 
-{{ image_workflow(dir, filename, "svg") }}
-
-
 </form>
 
+<div id="workflow_drawing_container">
+</div>
+
+<script type="text/javascript">
+    function newimg(dir,name,type){
+        dummytag = Math.random().toString();
+        strval = "<img src=\"" + dir + name + "." + type + "?" + dummytag + "\"/>";
+        return strval;
+    }
+    function redraw(){
+        $('#workflow_drawing_container').html(newimg("{{dir}}", "{{filename}}", "svg"));
+    }
+    $(document).ready(redraw());
+</script>
 
 {% endblock %}
