@@ -17,10 +17,11 @@
 <form method="POST" action="">
 {{ form.csrf_token }}
 
-{{form.filename}}
-
 <input type="submit" value="Redraw"><br>
-{{form.workflow(rows=5,cols=64)}}
+
+{{form.workflow(rows="5", cols="256")}}<br>
+
+
 
 </form>
 

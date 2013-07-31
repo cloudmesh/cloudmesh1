@@ -8,9 +8,11 @@
   </defs>
   <title>blockdiag</title>
   <desc>blockdiag {
-  default_shape = roundedbox;  default_node_color = lightyellow;provision -&gt; "b-[001-002]" -&gt; wait;
+  default_shape = roundedbox;  default_node_color = lightyellow;  default_shape = roundedbox;  default_node_color = lightyellow;default_shape = roundedbox;  default_node_color = lightyellow;provision -&gt; "b-[001-005]" -&gt; wait;
 provision -&gt; "b-[008-009]" -&gt; wait;
 wait -&gt; l;
+
+
 
 
 
@@ -24,7 +26,7 @@ wait -&gt; l;
   <path d="M 72 40 L 184 40 A8,8 0 0 1 192 48 L 192 72 A8,8 0 0 1 184 80 L 72 80 A8,8 0 0 1 64 72 L 64 48 A8,8 0 0 1 72 40" fill="rgb(255,255,224)" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="103" y="69">provision</text>
   <path d="M 264 40 L 376 40 A8,8 0 0 1 384 48 L 384 72 A8,8 0 0 1 376 80 L 264 80 A8,8 0 0 1 256 72 L 256 48 A8,8 0 0 1 264 40" fill="rgb(255,255,224)" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="288" y="69">b-[001-002]</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="288" y="69">b-[001-005]</text>
   <path d="M 264 120 L 376 120 A8,8 0 0 1 384 128 L 384 152 A8,8 0 0 1 376 160 L 264 160 A8,8 0 0 1 256 152 L 256 128 A8,8 0 0 1 264 120" fill="rgb(255,255,224)" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="288" y="149">b-[008-009]</text>
   <path d="M 456 40 L 568 40 A8,8 0 0 1 576 48 L 576 72 A8,8 0 0 1 568 80 L 456 80 A8,8 0 0 1 448 72 L 448 48 A8,8 0 0 1 456 40" fill="rgb(255,255,224)" stroke="rgb(0,0,0)" />

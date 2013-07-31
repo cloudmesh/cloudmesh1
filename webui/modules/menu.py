@@ -16,6 +16,7 @@ app_sidebar = [
     ["  - Images", "/inventory/images"],
     ["Provisioner", "/provision/summary/"],
     ["  - form", "/provision/"],
+    ["  - workflow", "/provision/workflow"],
     ["Profile", "/profile/"],
     ["  - Keys", "/keys/"],
     ["VMs", "/table/"],
