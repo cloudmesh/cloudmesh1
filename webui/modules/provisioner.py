@@ -152,12 +152,12 @@ def display_provision_workflow_form():
         print "file does not exists"
     print "." + dir + filename + ".svg"
         
-    blockdiag("-Tsvg", 
+    blockdiag("--ignore-pil", "-Tsvg", 
               "-o", "." + dir + filename + ".svg",
               "." + dir + filename + ".diag")     
-    blockdiag("-Tpng", 
-              "-o", "." + dir + filename + ".png",
-              "." + dir + filename + ".diag")     
+    #blockdiag("-Tpng",
+    #          "-o", "." + dir + filename + ".png",
+    #          "." + dir + filename + ".diag")
                   
         
     #else:
