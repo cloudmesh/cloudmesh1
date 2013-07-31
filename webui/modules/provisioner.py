@@ -1,4 +1,5 @@
 from sh import blockdiag
+from sh import dot
 from sh import pwd
 from sh import ls
 from flask import Blueprint
@@ -146,6 +147,8 @@ def display_provision_workflow_form():
     try: 
         with open("." + dir + filename + ".diag", "w") as f:
             f.write("blockdiag {\n")
+            f.write("  default_shape = roundedbox;")
+            f.write("  default_node_color = lightyellow;")
             f.write(form.workflow.data)
             f.write("\n}")
     except:

@@ -6,7 +6,7 @@
    <!--Width={{width}}<br>
    Height={{Height}}<br>
    -->
-   <img src="{{dir}}{{name}}.{{type}}"/>
+   <img src="{{dir}}{{name}}.{{type}}" cache="no-cache"/>
 {% endmacro %}
 
 
@@ -14,13 +14,14 @@
 
 <h1>Workflow Provision Form</h1>
 
-<form method="POST" action=".">
+<form method="POST" action="">
 {{ form.csrf_token }}
 
-{{form.filename}}
-
 <input type="submit" value="Redraw"><br>
-{{form.workflow(rows=5,cols=64)}}
+
+{{form.workflow(rows="5", cols="256")}}<br>
+
+
 
 </form>
 

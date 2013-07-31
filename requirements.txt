@@ -29,9 +29,7 @@ python-keystoneclient
 apache-libcloud
 nose
 autopep8
-cmd3
 celery
-#Flask-WTF
 wtforms
 actdiag
 blockdiag
@@ -41,3 +39,4 @@ blockdiagcontrib-class
 blockdiagcontrib-cisco
 nwdiag
 seqdiag
+cmd3

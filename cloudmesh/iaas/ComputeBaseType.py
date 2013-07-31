@@ -73,7 +73,10 @@ class ComputeBaseType:
             with_manager = True
         if not with_manager:
             for element in d.keys():
-                del d[element]['manager']
+                try:
+                    del d[element]['manager']
+                except:
+                    pass
         return d
 
     def get(self, type="server"):
