@@ -20,6 +20,38 @@ from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 
 class eucalyptus(ComputeBaseType):
 
+    """
+    does not yet have proper yaml file management
+    """
+
+    """
+    requires a cloudmesh yaml file with the following structure:
+
+    default: sierra-openstack
+
+    cloudmesh:
+
+        india-eucalyptus:
+            BASEDIR: ~/.futuregrid/india/eucalyptus
+            host: 127.127.127.127
+            port: 8773
+            fg-82:
+                EC2_PRIVATE_KEY: euca2-user-05.....-pk.pem
+                EC2_CERT: euca2-user-0429....-cert.pem
+                EUCALYPTUS_CERT: cloud-cert.pem
+                EC2_ACCOUNT_NUMBER: '709......'
+                EC2_ACCESS_KEY: 'GF78F0E7......'
+                EC2_SECRET_KEY: 'yf07e87fe.......'
+                EC2_USER_ID: '09876....'
+
+    """
+
+    # filename not yet used
+    filename = "%(home)s/%(location)s" % {
+        "home": os.environ['HOME'],
+        "location": ".futuregrid/cloudmesh.yaml"
+    }
+
     type = "eucalyptus"
     sizes = {}
     images = {}
@@ -37,21 +69,47 @@ class eucalyptus(ComputeBaseType):
     #
     # change to gregors credential class
     #
+    def _get_vmname(self,prefix):
+        return _generate_vmname(prefix, self.no)
+    
+    def _generate_vmname(self, prefix, index):
+        number = str(index).zfill(3)
+        name = '%s-%s' % (prefix, number)
+        return name
+
+
+    
     def connect(self, label, project):
         """
         establishes a connection to the eucalyptus cloud,
         e.g. initializes the needed components to conduct subsequent
         queries.
         """
+        
+        # from old eucalyptus_libcloud
+        # path = os.environ['HOME'] + "/" + \
+        # self.credentials.location.replace("/eucarc", "")
+        # os.environ['CA_CERTS_PATH'] = path
+        #         libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
+
+
+        
         self.label = label
         self.project = project
+        
+        # copied from deprecated code
+        #if project is None:
+        #    self.activate_project("fg82")
+        #else:
+        #    self.activate_project(project)
+
         print "Loading", self.label, self.project
         Driver = get_driver(Provider.EUCALYPTUS)
         
         self.config = cm_config()
 
 
-        cred = self.config.get(self.label)
+        cred = self.config.get(self.label, expand=True)
 
         euca_id = cred['EC2_ACCESS_KEY']
         euca_key = cred['EC2_SECRET_KEY']
@@ -128,13 +186,34 @@ class eucalyptus(ComputeBaseType):
             element_array.append(vm)
         return element_array
 
-    def __init__(self, label, project=None):
-        """ initializes the openstack cloud from a defould novaRC file
+
+    def activate_project(self, project):
+        """ this routine is wrong and has been copied from a deprecated code"""
+        self.credentials = credentials_rc("eucalyptus")
+        self.credentials.location = ".futuregrid/india/eucalyptus/" + \
+            project + "/eucarc"
+
+        self.credentials.type('eucalyptus')
+
+        self.access_key = self.credentials._get_rc_variable("accesskey")
+        self.secret_key = self.credentials._get_rc_variable("secretkey")
+
+        print self.access_key
+        print self.secret_key
+        
+    def __init__(self, label,
+                 project=None,
+                 accessKey=None,
+                 secretKey=None):
+        """
+        initializes the openstack cloud from a defould novaRC file
         locates at ~/.futuregrid.org/openstack. However if the
         parameters are provided it will instead use them
         """
+        self.clear()
+        #self.config(label, project, accessKey, secretKey)
+        #self.connect()
         self.connect(label, project)
-        
 
     def clear(self):
         """
@@ -146,7 +225,10 @@ class eucalyptus(ComputeBaseType):
         self.sizes = {}
         self.images = {}
         self.nodes = {}
-        # self.credential = None
+        flavors_cache = None
+        images_cache = None 
+        servers_cache = None
+        self.credential = None
         self.cloud = None
         self.user_id = None
 
@@ -238,7 +320,7 @@ class eucalyptus(ComputeBaseType):
         image = [i for i in self.images_cache if i.id == image_id][0]
 
         if key_name is None and security_groups is None:
-            vm = self.cloud.create_node(name='test node', image=image, size=size)
+            vm = self.cloud.create_node(name=name, image=image, size=size)
         else:
             print "not yet implemented"
             # bug would passing None just work?
