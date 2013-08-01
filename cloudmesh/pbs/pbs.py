@@ -120,7 +120,7 @@ class PBS:
         """ prints true if the host is in the node list """
         return host in self.data
 
-    def __str__(self)
+    def __str__(self):
         return str(self.data)
     
     def get(self, host):
@@ -136,7 +136,7 @@ class PBS:
         i20"""
         hosts = expand_hostlist(spec)    
         for host in hosts:
-            self._set(host, attribute):
+            self._set(host, attribute)
             
     def _set(self, host, attribute):
         """add an attribute for the specified hosts"""
