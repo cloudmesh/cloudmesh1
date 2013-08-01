@@ -5,7 +5,7 @@ from flask import Blueprint, redirect, request, make_response, render_template
 workflow_module = Blueprint('workflow_module', __name__)
 
 
-@workflow_module.route('/workflow/')
+@workflow_module.route('/')
 def display_workflow():
 
     print "DISPALY WORKFLOW"
