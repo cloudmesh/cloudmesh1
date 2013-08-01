@@ -4,6 +4,7 @@
 from sh import ssh
 from pprint import pprint
 from ast import literal_eval
+from hostlist import expand_hostlist
 
 data= """i51
      state = down,job-exclusive
@@ -129,8 +130,11 @@ class PBS:
         else:
             return None
 
-    def set(self, hosts, attribute):
-        """add an attribute for the specified hosts"""
+    def set(self, spec, attribute):
+        """add an attribute for the specified hosts in the format
+        i[1-20]. which would set the attribute for all hosts in i1 to
+        i20"""
+        hosts = expand_hostlist(spec)    
         for host in hosts:
             self._set(host, attribute):
             
