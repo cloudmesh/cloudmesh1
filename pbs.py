@@ -2,6 +2,7 @@
 #    data=myfile.readlines()
 
 from pprint import pprint
+from ast import literal_eval
 
 data= """i51
      state = down,job-exclusive
@@ -9,6 +10,7 @@ data= """i51
      properties = compute
      ntype = cluster
      jobs = 0/594490.i136, 1/594490.i136, 2/594490.i136, 3/594490.i136, 4/594490.i136, 5/594490.i136, 6/594490.i136, 7/594490.i136
+     note = {'service': 'hpc', 'project': 'fg82', 'owner': 'gvonlasz', 'type': 'reserved', 'provisioner': 'teefaa'}
      gpus = 0
 
 i52
@@ -86,6 +88,8 @@ def _create_pbsinfo_dict(data):
                         pbsinfo[name][attribute][a] = v
                 elif attribute == 'jobs':
                     pbsinfo[name][attribute] = value.split(',')
+                elif attribute == 'note':
+                    pbsinfo[name][attribute] = literal_eval(value)
                 else:
                     pbsinfo[name][attribute] = value
             except:
