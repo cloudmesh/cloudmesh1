@@ -1,6 +1,7 @@
 #with open ("data.txt", "r") as myfile:
 #    data=myfile.readlines()
 
+from sh import ssh
 from pprint import pprint
 from ast import literal_eval
 
@@ -66,34 +67,50 @@ i72
 
 #print data
 
+class PBS:
 
-def _create_pbsinfo_dict(data):
-    """data is a string see above for example"""
-    pbsinfo = {}
+    user = None
+    host = None
+    data = None
+    
+    def __init__(self,user, host):
+        self.user = user
+        self.host = host
+    
+    def refresh(self):
+        """fetches the pbs nodes info"""
+        self.data = ssh("{0}@{1}".format(self.user,self.host), "pbsnodes", "-a")
 
-    nodes = data.split("\n\n")
-    for node in nodes:
-        data = node.split("\n")
-        data = [e.strip()  for e in data]
-        name = data[0]
-        pbsinfo[name] = {}
-        for element in data[1:]:
-            try:
-                (attribute, value) = element.split (" = ")
-                if attribute == 'status':
-                    status_elements = value.split(",")
-                    pbsinfo[name][attribute] = {}
-                    for e in status_elements:
-                        (a,v) = e.split("=")
-                        pbsinfo[name][attribute][a] = v
-                elif attribute == 'jobs':
-                    pbsinfo[name][attribute] = value.split(',')
-                elif attribute == 'note':
-                    pbsinfo[name][attribute] = literal_eval(value)
-                else:
-                    pbsinfo[name][attribute] = value
-            except:
-                pass
-    return pbsinfo
+    @property
+    def info(self):
+        """returns the pbs node infor from an data is a string see above for example"""
+        pbsinfo = {}
+        if self.data is None:
+            self.refresh()
+            
+        nodes = self.data.split("\n\n")
+        for node in nodes:
+            data = node.split("\n")
+            data = [e.strip()  for e in data]
+            name = data[0]
+            pbsinfo[name] = {}
+            for element in data[1:]:
+                try:
+                    (attribute, value) = element.split (" = ")
+                    if attribute == 'status':
+                        status_elements = value.split(",")
+                        pbsinfo[name][attribute] = {}
+                        for e in status_elements:
+                            (a,v) = e.split("=")
+                            pbsinfo[name][attribute][a] = v
+                    elif attribute == 'jobs':
+                        pbsinfo[name][attribute] = value.split(',')
+                    elif attribute == 'note':
+                        pbsinfo[name][attribute] = literal_eval(value)
+                    else:
+                        pbsinfo[name][attribute] = value
+                except:
+                    pass
+        return pbsinfo
 
-pprint (_create_pbsinfo_dict(data))
+
