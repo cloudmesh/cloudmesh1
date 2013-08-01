@@ -71,7 +71,8 @@ class PBS:
 
     user = None
     host = None
-    data = None
+    pbs_data = None
+    
     
     def __init__(self,user, host):
         self.user = user
@@ -79,22 +80,22 @@ class PBS:
     
     def refresh(self):
         """fetches the pbs nodes info"""
-        self.data = ssh("{0}@{1}".format(self.user,self.host), "pbsnodes", "-a")
+        self.pbs_data = ssh("{0}@{1}".format(self.user,self.host), "pbsnodes", "-a")
 
     @property
     def info(self):
-        """returns the pbs node infor from an data is a string see above for example"""
+        """returns the pbs node infor from an pbs_data is a string see above for example"""
         pbsinfo = {}
-        if self.data is None:
+        if self.pbs_data is None:
             self.refresh()
             
-        nodes = self.data.split("\n\n")
+        nodes = self.pbs_data.split("\n\n")
         for node in nodes:
-            data = node.split("\n")
-            data = [e.strip()  for e in data]
-            name = data[0]
+            pbs_data = node.split("\n")
+            pbs_data = [e.strip()  for e in pbs_data]
+            name = pbs_data[0]
             pbsinfo[name] = {}
-            for element in data[1:]:
+            for element in pbs_data[1:]:
                 try:
                     (attribute, value) = element.split (" = ")
                     if attribute == 'status':
@@ -111,6 +112,29 @@ class PBS:
                         pbsinfo[name][attribute] = value
                 except:
                     pass
-        return pbsinfo
+        self.data = pbsinfo
+        return self.data
 
+    def exists(self, host):
+        """ prints true if the host is in the node list """
+        return host in self.data
 
+    def __str__(self)
+        return str(self.data)
+    
+    def get(self, host):
+        """returns just the info for the specified host as dict"""
+        if self.exists(host):
+            return self.data[host]
+        else:
+            return None
+
+    def set(self, hosts, attribute):
+        """add an attribute for the specified hosts"""
+        for host in hosts:
+            self._set(host, attribute):
+            
+    def _set(self, host, attribute):
+        """add an attribute for the specified hosts"""
+        print "TODO: ALLAN"
+            
