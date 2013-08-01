@@ -24,6 +24,9 @@ class eucalyptus(ComputeBaseType):
     sizes = {}
     images = {}
     nodes = {}
+    flavors_cache = None
+    images_cache = None
+    servers_cache = None
     credentials = None
     accesskey = None
     secretkey = None
@@ -66,27 +69,14 @@ class eucalyptus(ComputeBaseType):
     
         path = result.path
 
-
-
-
-        
-        #pprint(self.config.__dict__)
-        print "DDD", self.label        
         self.credential = self.config.get(self.label, expand=True)
-        print "CCC"
         pprint(self.credential)
-        print "XXXX", self.credential['EUCALYPTUS_CERT']
-                
-        print "YYYYY", self.config.cloud(self.label)['cm_host']
         
         #libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
         #libcloud.security.VERIFY_SSL_CERT = False
 
         Driver = get_driver(Provider.EUCALYPTUS)
         self.cloud = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
-
-        print "YYYY"
-
 
     """
     # url =
@@ -100,30 +90,33 @@ class eucalyptus(ComputeBaseType):
 
     """
 
-    def _retrief(self,f,exclude=[]):
-        """ obtain information from libcloud, call with returns dicts
-
+    def _retrief(self,type,f,exclude=[]):
+        """ obtain information from libcloud, call with returns dicts.
         
         Driver = get_driver(Provider.EUCALYPTUS)
         conn = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
 
         images = retrief(conn.list_images, 
                       ['driver','ownerid','owneralias','platform','hypervisor','virtualizationtype','_uuid'])
-        pprint (images)
         flavors = retrief(conn.list_sizes, ['_uuid'])
-        pprint (flavors)
-
-
         vms = retrief(conn.list_nodes, ['private_dns','dns_name', 'instanceId', 'driver','_uuid'])
 
         pprint (vms)
         """
-        vms = []
-        nodes = f()
-        for node in nodes:
+        element_array = []
+
+        elements = f()
+        if type == 'flavors':
+            self.flavors_cache = elements
+        elif type == 'servers':
+            self.servers_cache = elements
+        elif type == 'images':
+            self.images_cache = elements
+
+        for element in elements:
             vm = {}
-            for key in node.__dict__:
-                value = node.__dict__[key]
+            for key in element.__dict__:
+                value = element.__dict__[key]
                 if key == 'extra':
                   for e in value:
                        vm[e] = value[e]
@@ -132,45 +125,9 @@ class eucalyptus(ComputeBaseType):
             for d in exclude:
                 if d in vm: 
                     del vm[d]
-            vms.append(vm)
-        return vms
+            element_array.append(vm)
+        return element_array
 
-    def _clean_list(self,f,exclude=[]):
-        """ obtain information from libcloud, call with returns dicts
-
-        
-        Driver = get_driver(Provider.EUCALYPTUS)
-        conn = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
-
-        images = retrief(conn.list_images, 
-                      ['driver','ownerid','owneralias','platform','hypervisor','virtualizationtype','_uuid'])
-        pprint (images)
-        flavors = retrief(conn.list_sizes, ['_uuid'])
-        pprint (flavors)
-
-
-        vms = retrief(conn.list_nodes, ['private_dns','dns_name', 'instanceId', 'driver','_uuid'])
-
-        pprint (vms)
-        """
-        vms = []
-        nodes = f()
-        for node in nodes:
-            vm = {}
-            for key in node.__dict__:
-                value = node.__dict__[key]
-                if key == 'extra':
-                  for e in value:
-                       vm[e] = value[e]
-                else:
-                    vm[key] = value
-            for d in exclude:
-                if d in vm: 
-                    del vm[d]
-            vms.append(vm)
-        return vms
-
-    
     def __init__(self, label, project=None):
         """ initializes the openstack cloud from a defould novaRC file
         locates at ~/.futuregrid.org/openstack. However if the
@@ -206,15 +163,6 @@ class eucalyptus(ComputeBaseType):
             'images': self.images}
         return json.dumps(information, indent=4)
 
-    def vm_create(self, name=None,
-                  flavor_name=None,
-                  image_id=None,
-                  security_groups=None,
-                  key_name=None,
-                  meta=None):
-        """create a virtual machine with the given parameters"""
-        return self.cloud.create_node(name=name, size=flavor_name,image=image_id)
-
     def _delete_keys_from_dict(self,elements, exclude):
         for d in exclude:
             if d in elements: 
@@ -222,7 +170,7 @@ class eucalyptus(ComputeBaseType):
         return elements
 
     def _get_flavors_dict(self):
-        return self._retrief(self.cloud.list_sizes, ['_uuid','driver'])
+        return self._retrief("flavors", self.cloud.list_sizes, ['_uuid','driver'])
 
     def _update_flavors_dict(self, information):
         id = information["id"]
@@ -230,12 +178,7 @@ class eucalyptus(ComputeBaseType):
 
 
     def _get_servers_dict(self):
-        print "IOIOIOIOIO"
-        print self.cloud.list_nodes()
-        r = self._retrief(self.cloud.list_nodes, ['private_dns','dns_name', 'instanceId', 'driver','_uuid'])
-        print "UIUIUIUIUIUI"
-        pprint (r)
-        return r
+        return self._retrief("servers", self.cloud.list_nodes, ['private_dns','dns_name', 'instanceId', 'driver','_uuid'])
     
     def _update_servers_dict(self, information):
         id = information["id"]
@@ -243,7 +186,8 @@ class eucalyptus(ComputeBaseType):
 
     
     def _get_images_dict(self):
-        r = self._retrief(self.cloud.list_images, 
+        return self._retrief("images", 
+                             self.cloud.list_images, 
                              ['driver',
                               'ownerid',
                               'owneralias',
@@ -251,13 +195,74 @@ class eucalyptus(ComputeBaseType):
                               'hypervisor',
                               'virtualizationtype',
                               '_uuid'])
-        print r
-        return r
 
     def _update_images_dict(self, information):
         id = information["id"]
         return (id, information)
+
+
+    #
+    # create a vm
+    #
+    def vm_create(self,
+                  name=None,
+                  flavor_name=None,
+                  image_id=None,
+                  security_groups=None,
+                  key_name=None,
+                  meta=None):
+        """
+        create a vm with the given parameters
+        """
+
+        """
+        if not key_name is None:
+            if not self.check_key_pairs(key_name):
+                config = cm_config()
+                dict_t = config.get()
+                key = dict_t['keys']['keylist'][key_name]
+                if not 'ssh-rsa' in key and not 'ssh-dss' in key:
+                    key = open(key, "r").read()
+                self.upload_key_pair(key, key_name)
+        """
         
+        config = cm_config()
+
+        if flavor_name is None:
+            flavor_name = config.default(self.label)['flavor']
+
+        if image_id is None:
+            image_id = config.default(self.label)['image']
+            
+        size = [s for s in self.flavors_cache if s.id == flavor_name][0]
+        image = [i for i in self.images_cache if i.id == image_id][0]
+
+        if key_name is None and security_groups is None:
+            vm = self.cloud.create_node(name='test node', image=image, size=size)
+        else:
+            print "not yet implemented"
+            # bug would passing None just work?
+            # vm = self.cloud.servers.create(name,
+            #                               flavor=vm_flavor,
+            #                               image=vm_image,
+            #                               key_name=key_name,
+            #                               security_groups=security_groups,
+            #                               meta=meta
+            #                               )
+        data = vm.__dict__
+        return data
+
+    def vm_delete(self, id):
+        """
+        delete a single vm and returns the id
+        """
+        print "self.servers_cachec", self.servers_cache
+        vm = [i for i in self.servers_cache if i.id == id][0]
+        
+        r = self.cloud.destroy_node(vm)
+
+        return r.__dict__
+    
 
     
 if __name__ == "__main__":
