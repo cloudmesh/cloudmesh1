@@ -8,6 +8,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.pbs.pbs import PBS
 
 pbs_module = Blueprint('pbs_module', __name__)
+from pprint import pprint
 
 #
 # ROUTE: PROFILE
@@ -17,7 +18,9 @@ pbs_module = Blueprint('pbs_module', __name__)
 @pbs_module.route('/pbs/<host>')
 def pbs_qstat(host):
 
-    user = "gvonlasz"
+    config = cm_config()
+    
+    user = config.data["cloudmesh"]["hpc"]["username"]
     
     pbs = PBS(user, host)
     pbs.qstat()
