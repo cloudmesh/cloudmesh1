@@ -32,6 +32,41 @@ app_sidebar = [
                 
 ]
 
+super_sidebar_pages = [
+    ["Cloudmesh",
+       [
+         ["Home", "/"],
+         ["Inventory", "/inventory/"],
+         ["  - Summary", "/inventory/summary"],
+         ["  - Images", "/inventory/images"]
+       ],
+    ["Provision", 
+       [
+         ["Provisioner", "/provision/summary/"],
+         ["  - form", "/provision/"],
+         ["  - workflow", "/provision/workflow"],
+         ["Profile", "/profile/"],
+         ["  - Keys", "/keys/"],
+         ["VMs", "/table/"],
+         ["  - Images", "/images/"],
+         ["Metric", "/metric/main/"],
+         ["Projects", "/projects/"],
+         ["Flavors", "/flavors/"],
+       ],
+    ["QStat",
+       [
+        ["India", "/pbs/india.futuregrid.org"],
+        ["Sierra", "/pbs/sierra.futuregrid.org"],
+        ["Alamo", "/pbs/alamo.futuregrid.org"],
+        ["Hotel", "/pbs/hotel.futuregrid.org"],
+       ]
+    ]
+]
+]
+]
+
+flask.Flask.app_ctx_globals_class.super_sidebar_pages = super_sidebar_pages
+
 def add_menu(label, link):
     app_sidebar.append([label,link])
 
@@ -47,6 +82,7 @@ app_externalbar = [
     ["Cloudmesh", "https://github.com/cloudmesh/cloudmesh"],
     ["Blog", "http://cloudmesh.blogspot.com"],
 ]
+
 
 
 sidebar_pages = []

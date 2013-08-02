@@ -78,7 +78,13 @@
         <div class="span3">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
-                 
+
+	      {{ g.super_sidebar_pages }}
+
+	      {% for menu in g.super_sidebar_pages %}
+	         <li class="nav-header"> {{ menu[0]}} </li>
+		 Test
+	      {% endfor %}
               <li class="nav-header">Cloud Mesh </li>
 	      {{ flexible_menu (g.sidebar_pages) }}
 
