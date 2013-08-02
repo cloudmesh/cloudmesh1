@@ -2,8 +2,13 @@
 {% from "_helper.html" import image_button %}
 {% block content %}
 
-</script>
 
+{% set val = ['bravo','delta','gamma'] %}
+<script tye="text/javascript">
+available(name){
+if(name) in {"india","sierra"} return true;
+}
+</script>
 <table>
   <tr>
     <th colspan="5">
@@ -17,7 +22,7 @@
     <th> </th>
     <th> </th>
     <th> Cluster </th>
-    <th> Status </th>
+    <th> HPC Queues </th>
   </tr>
   
   {% for cluster in inventory.clusters | sort(attribute='name') %}
@@ -29,7 +34,7 @@
     {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
   </td>
   <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} </a></td>
-  <td> {{ cluster.status }} </td>
+  <td><a href="/pbs/{{cluster.name}}.futuregrid.org">Link to QStat </a></td>
   </tr>
 
   {% endfor %}
