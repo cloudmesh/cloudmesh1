@@ -9,53 +9,40 @@ log = LOGGER("module/menu")
 
 menu_module = Blueprint('menu_module', __name__)
 
-app_sidebar = [
-    ["Home", "/"],
-    ["Inventory", "/inventory/"],
-    ["  - Summary", "/inventory/summary"],
-    ["  - Images", "/inventory/images"],
-    ["Provisioner", "/provision/summary/"],
-    ["  - form", "/provision/"],
-    ["  - workflow", "/provision/workflow"],
-    ["Profile", "/profile/"],
-    ["  - Keys", "/keys/"],
-    ["VMs", "/table/"],
-    ["  - Images", "/images/"],
-    ["Metric", "/metric/main/"],
-    ["Projects", "/projects/"],
-    ["Flavors", "/flavors/"],
-    ["QStat", "/pbs/india.futuregrid.org"],
-    ["    - India", "/pbs/india.futuregrid.org"],
-    ["    - Sierra", "/pbs/sierra.futuregrid.org"],
-    ["    - Alamo", "/pbs/alamo.futuregrid.org"],
-    ["    - Hotel", "/pbs/hotel.futuregrid.org"],
-                
-]
 
 super_sidebar_pages = [
+
     ["Cloudmesh",
        [
          ["Home", "/"],
-         ["Inventory", "/inventory/"],
-         ["  - Summary", "/inventory/summary"],
-         ["  - Images", "/inventory/images"]
+         ["Profile", "/profile/"],
+         ["Keys", "/keys/"],
+       ],
+    ],
+    ["Inventory",
+       [
+         ["Overview", "/inventory/"],
+         ["Table", "/inventory/summary"],
+         ["Images", "/inventory/images"]
        ],
     ],
     ["Provision", 
        [
-         ["Provisioner", "/provision/summary/"],
-         ["  - form", "/provision/"],
-         ["  - workflow", "/provision/workflow"],
-         ["Profile", "/profile/"],
-         ["  - Keys", "/keys/"],
+         ["Overview", "/provision/summary/"],
+         ["Form", "/provision/"],
+         ["Workflow", "/provision/workflow"],
+       ],
+    ],
+    ["Clouds", 
+       [
          ["VMs", "/table/"],
-         ["  - Images", "/images/"],
+         ["Images", "/images/"],
          ["Metric", "/metric/main/"],
          ["Projects", "/projects/"],
          ["Flavors", "/flavors/"],
        ],
     ],
-    ["QStat",
+    ["HPC Queues",
        [
         ["India", "/pbs/india.futuregrid.org"],
         ["Sierra", "/pbs/sierra.futuregrid.org"],
@@ -85,15 +72,6 @@ app_externalbar = [
 ]
 
 
-
-sidebar_pages = []
-for page in app_sidebar:
-    sidebar_pages.append({'name': page[0], 'url': page[1]})
-
-# registering sidebar into the global g
-flask.Flask.app_ctx_globals_class.sidebar_pages = sidebar_pages
-
-#log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.sidebar_pages)))
 
 topbar_pages = []
 for page in app_topbar:
