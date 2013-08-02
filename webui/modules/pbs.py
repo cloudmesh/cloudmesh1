@@ -19,12 +19,13 @@ from pprint import pprint
 def pbs_qstat(host):
 
     config = cm_config()
-    
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     user = config.data["cloudmesh"]["hpc"]["username"]
     
     pbs = PBS(user, host)
     pbs.qstat()
     
     return render_template('qstat.html',
+			   updated = time_now,
                            host=host,
                            qstat=pbs.pbs_qstat)
