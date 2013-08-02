@@ -1,4 +1,4 @@
-{% from "_helper.html" import flexible_menu %}
+{% from "_helper.html" import flexible_menu,super_flexible_menu %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -79,12 +79,14 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
 
-	      {{ g.super_sidebar_pages }}
-
+	      {# { g.super_sidebar_pages } #}
+		
 	      {% for menu in g.super_sidebar_pages %}
-	         <li class="nav-header"> {{ menu [0]}} </li>
-		 {{ menu[1] }}
+	         <li class="nav-header"> {{menu[0] }} </li>
+		    {{ super_flexible_menu(menu[1]) }}
+		
 	      {% endfor %}
+		
               <li class="nav-header">Cloud Mesh </li>
 	      {{ flexible_menu (g.sidebar_pages) }}
 
