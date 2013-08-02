@@ -40,10 +40,16 @@ class Test:
     def tearDown(self):
         pass
 
+    def test_qstat(self):
+        HEADING()
+        self.pbs.qstat()
+        pprint (self.pbs.pbs_qstat)
+
     def test_info(self):
         HEADING()
         self.pbs.refresh()
         pprint (self.pbs.info)
+
         
         
         # ssh gvonlasz@alamo.futuregrid.org pbsnodes -a

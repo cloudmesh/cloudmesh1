@@ -1,6 +1,7 @@
 #with open ("data.txt", "r") as myfile:
 #    data=myfile.readlines()
 
+import xmltodict
 from sh import ssh
 from pprint import pprint
 from ast import literal_eval
@@ -142,3 +143,27 @@ class PBS:
         """add an attribute for the specified hosts"""
         print "TODO: ALLAN"
             
+
+    def qstat(self):
+        xmldata = str(ssh("{0}@{1}".format(self.user,self.host), "qstat", "-x"))
+
+        self.pbs_qstat = {}
+        
+        from xml.dom import minidom
+        xmldoc = minidom.parseString(xmldata)
+        
+        itemlist = xmldoc.getElementsByTagName('Job') 
+        for item in itemlist:
+            job = {}
+            for attribute in item.childNodes:
+                print attribute, attribute.nodeName, attribute.firstChild.nodeValue
+                if len(attribute.childNodes) == 1:
+                    job[attribute.nodeName] = attribute.firstChild.nodeValue
+                else:
+                    job[attribute.nodeName] = {}                    
+                    for subchild in attribute.childNodes:
+                        job[attribute.nodeName][subchild.nodeName] = subchild.firstChild.nodeValue
+
+            self.pbs_qstat[job['Job_Id']] = job
+
+        return self.pbs_qstat
