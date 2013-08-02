@@ -1,7 +1,6 @@
 #with open ("data.txt", "r") as myfile:
 #    data=myfile.readlines()
 
-import xmltodict
 from sh import ssh
 from pprint import pprint
 from ast import literal_eval
@@ -156,7 +155,6 @@ class PBS:
         for item in itemlist:
             job = {}
             for attribute in item.childNodes:
-                print attribute, attribute.nodeName, attribute.firstChild.nodeValue
                 if len(attribute.childNodes) == 1:
                     job[attribute.nodeName] = attribute.firstChild.nodeValue
                 else:
