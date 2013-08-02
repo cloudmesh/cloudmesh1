@@ -33,7 +33,7 @@ class Test:
         #pprint (self.configuration.__dict__)
         self.user = "gvonlasz" 
         self.host = "india.futuregrid.org" 
-        self.pbs = PBS(self.user, self.host)
+
         
         #pprint (_create_pbsinfo_dict(data))
 
@@ -42,11 +42,20 @@ class Test:
 
     def test_qstat(self):
         HEADING()
+        self.pbs = PBS(self.user, self.host)
+        self.pbs.qstat()
+        pprint (self.pbs.pbs_qstat)
+
+    def test_qstat_alamo(self):
+        HEADING()
+        self.host = "alamo.futuregrid.org"
+        self.pbs = PBS(self.user, self.host)
         self.pbs.qstat()
         pprint (self.pbs.pbs_qstat)
 
     def test_info(self):
         HEADING()
+        self.pbs = PBS(self.user, self.host)
         self.pbs.refresh()
         pprint (self.pbs.info)
 

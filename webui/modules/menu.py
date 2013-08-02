@@ -24,6 +24,12 @@ app_sidebar = [
     ["Metric", "/metric/main/"],
     ["Projects", "/projects/"],
     ["Flavors", "/flavors/"],
+    ["QStat", "/pbs/india.futuregrid.org"],
+    ["    - India", "/pbs/india.futuregrid.org"],
+    ["    - Sierra", "/pbs/sierra.futuregrid.org"],
+    ["    - Alamo", "/pbs/alamo.futuregrid.org"],
+    ["    - Hotel", "/pbs/hotel.futuregrid.org"],
+                
 ]
 
 def add_menu(label, link):

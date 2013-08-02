@@ -10,7 +10,8 @@ from flask.ext.autoindex import AutoIndex
 from flask.ext.wtf import Form
 from flask_flatpages import FlatPages
 from hostlist import expand_hostlist
-from modules.workflow import workflow_module
+from modules.pbs import pbs_module
+#from modules.workflow import workflow_module
 from modules.flatpages import flatpages_module
 from modules.inventory import inventory_module
 from modules.provisioner import provisioner_module
@@ -153,7 +154,8 @@ app.register_blueprint(git_module, url_prefix='',)
 app.register_blueprint(profile_module, url_prefix='',)
 app.register_blueprint(menu_module, url_prefix='',)
 app.register_blueprint(flatpages_module, url_prefix='',)
-app.register_blueprint(workflow_module, url_prefix='',)
+#app.register_blueprint(workflow_module, url_prefix='',)
+app.register_blueprint(pbs_module, url_prefix='',)
 
 
 SECRET_KEY = 'development key'
@@ -214,9 +216,9 @@ def site_map():
 def index():
     return render_template('index.html')
 
-@app.route('/workflow')
-def display_diagram():
-    return render_template('workflow.html')
+#@app.route('/workflow')
+#def display_diagram():
+#    return render_template('workflow.html')
 
 
 # ============================================================
