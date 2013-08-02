@@ -40,6 +40,7 @@ super_sidebar_pages = [
          ["  - Summary", "/inventory/summary"],
          ["  - Images", "/inventory/images"]
        ],
+    ],
     ["Provision", 
        [
          ["Provisioner", "/provision/summary/"],
@@ -53,6 +54,7 @@ super_sidebar_pages = [
          ["Projects", "/projects/"],
          ["Flavors", "/flavors/"],
        ],
+    ],
     ["QStat",
        [
         ["India", "/pbs/india.futuregrid.org"],
@@ -62,8 +64,7 @@ super_sidebar_pages = [
        ]
     ]
 ]
-]
-]
+
 
 flask.Flask.app_ctx_globals_class.super_sidebar_pages = super_sidebar_pages
 

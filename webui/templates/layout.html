@@ -82,8 +82,8 @@
 	      {{ g.super_sidebar_pages }}
 
 	      {% for menu in g.super_sidebar_pages %}
-	         <li class="nav-header"> {{ menu[0]}} </li>
-		 Test
+	         <li class="nav-header"> {{ menu [0]}} </li>
+		 {{ menu[1] }}
 	      {% endfor %}
               <li class="nav-header">Cloud Mesh </li>
 	      {{ flexible_menu (g.sidebar_pages) }}
