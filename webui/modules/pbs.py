@@ -16,7 +16,7 @@ from pprint import pprint
 
 
 @pbs_module.route('/pbs/<host>')
-def pbs_qstat(host):
+def display_pbs_qstat(host):
 
     config = cm_config()
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -29,3 +29,17 @@ def pbs_qstat(host):
 			   updated = time_now,
                            host=host,
                            qstat=pbs.pbs_qstat)
+
+@pbs_module.route('/pbsnodes/<host>')
+def display_pbs_nodes(host):
+
+    config = cm_config()
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    user = config.data["cloudmesh"]["hpc"]["username"]
+    
+    pbs = PBS(user, host)
+    
+    return render_template('pbsnodes.html',
+			   updated = time_now,
+                           host=host,
+                           data=pbs.info)

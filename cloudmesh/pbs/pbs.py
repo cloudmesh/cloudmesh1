@@ -73,7 +73,8 @@ class PBS:
     user = None
     host = None
     pbs_data = None
-    
+    pbs_qstat = None
+    data = None
     
     def __init__(self,user, host):
         self.user = user
@@ -95,24 +96,26 @@ class PBS:
             pbs_data = node.split("\n")
             pbs_data = [e.strip()  for e in pbs_data]
             name = pbs_data[0]
-            pbsinfo[name] = {}
-            for element in pbs_data[1:]:
-                try:
-                    (attribute, value) = element.split (" = ")
-                    if attribute == 'status':
-                        status_elements = value.split(",")
-                        pbsinfo[name][attribute] = {}
-                        for e in status_elements:
-                            (a,v) = e.split("=")
-                            pbsinfo[name][attribute][a] = v
-                    elif attribute == 'jobs':
-                        pbsinfo[name][attribute] = value.split(',')
-                    elif attribute == 'note':
-                        pbsinfo[name][attribute] = literal_eval(value)
-                    else:
-                        pbsinfo[name][attribute] = value
-                except:
-                    pass
+            if name != "":
+                print "NNN", name
+                pbsinfo[name] = {}
+                for element in pbs_data[1:]:
+                    try:
+                        (attribute, value) = element.split (" = ")
+                        if attribute == 'status':
+                            status_elements = value.split(",")
+                            pbsinfo[name][attribute] = {}
+                            for e in status_elements:
+                                (a,v) = e.split("=")
+                                pbsinfo[name][attribute][a] = v
+                        elif attribute == 'jobs':
+                            pbsinfo[name][attribute] = value.split(',')
+                        elif attribute == 'note':
+                            pbsinfo[name][attribute] = literal_eval(value)
+                        else:
+                            pbsinfo[name][attribute] = value
+                    except:
+                        pass
         self.data = pbsinfo
         return self.data
 
