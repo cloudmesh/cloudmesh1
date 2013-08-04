@@ -23,12 +23,12 @@ def display_pbs_qstat(host):
     user = config.data["cloudmesh"]["hpc"]["username"]
     
     pbs = PBS(user, host)
-    pbs.qstat()
+    data=pbs.qstat()
     
     return render_template('qstat.html',
 			   updated = time_now,
                            host=host,
-                           qstat=pbs.pbs_qstat)
+                           qstat=data)
 
 @pbs_module.route('/pbsnodes/<host>')
 def display_pbs_nodes(host):
@@ -38,8 +38,9 @@ def display_pbs_nodes(host):
     user = config.data["cloudmesh"]["hpc"]["username"]
     
     pbs = PBS(user, host)
+    data = pbs.pbsnodes()
     
     return render_template('pbsnodes.html',
 			   updated = time_now,
                            host=host,
-                           data=pbs.info)
+                           data=data)

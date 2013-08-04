@@ -1,137 +1,64 @@
-#with open ("data.txt", "r") as myfile:
-#    data=myfile.readlines()
+#with open ("pbs_nodes_data.txt", "r") as myfile:
+#    pbs_nodes_data=myfile.readlines()
 
+from xml.dom import minidom
 from sh import ssh
 from pprint import pprint
 from ast import literal_eval
 from hostlist import expand_hostlist
 
-data= """i51
-     state = down,job-exclusive
-     np = 8
-     properties = compute
-     ntype = cluster
-     jobs = 0/594490.i136, 1/594490.i136, 2/594490.i136, 3/594490.i136, 4/594490.i136, 5/594490.i136, 6/594490.i136, 7/594490.i136
-     note = {'service': 'hpc', 'project': 'fg82', 'owner': 'gvonlasz', 'type': 'reserved', 'provisioner': 'teefaa'}
-     gpus = 0
-
-i52
-     state = down,job-exclusive
-     np = 8
-     properties = compute
-     ntype = cluster
-     jobs = 0/594490.i136, 1/594490.i136, 2/594490.i136, 3/594490.i136, 4/594490.i136, 5/594490.i136, 6/594490.i136, 7/594490.i136
-     status = rectime=1375095999,varattr=,jobs=,state=free,netload=1261133500,gres=,loadave=0.00,ncpus=8,physmem=24659396kb,availmem=26474592kb,totmem=26763868kb,idletime=1605207,nusers=0,nsessions=? 0,sessions=? 0,uname=Linux i52 2.6.18-348.6.1.el5 #1 SMP Fri Apr 26 09:21:26 EDT 2013 x86_64,opsys=statefulrhels5,arch=x86_64
-     gpus = 0
-
-i53
-     state = down,job-exclusive
-     np = 8
-     properties = compute
-     ntype = cluster
-     jobs = 0/594490.i136, 1/594490.i136, 2/594490.i136, 3/594490.i136, 4/594490.i136, 5/594490.i136, 6/594490.i136, 7/594490.i136
-     status = rectime=1375096495,varattr=,jobs=,state=free,netload=1253604666,gres=,loadave=0.00,ncpus=8,physmem=24659396kb,availmem=26474128kb,totmem=26763868kb,idletime=1605707,nusers=0,nsessions=? 0,sessions=? 0,uname=Linux i53 2.6.18-348.6.1.el5 #1 SMP Fri Apr 26 09:21:26 EDT 2013 x86_64,opsys=statefulrhels5,arch=x86_64
-     gpus = 0
-
-i54
-     state = down,job-exclusive
-     np = 8
-     properties = compute
-     ntype = cluster
-     jobs = 0/594490.i136, 1/594490.i136, 2/594490.i136, 3/594490.i136, 4/594490.i136, 5/594490.i136, 6/594490.i136, 7/594490.i136
-     status = rectime=1375096494,varattr=,jobs=,state=free,netload=1239414644,gres=,loadave=0.00,ncpus=8,physmem=24659396kb,availmem=26473364kb,totmem=26763868kb,idletime=1605666,nusers=0,nsessions=? 0,sessions=? 0,uname=Linux i54 2.6.18-348.6.1.el5 #1 SMP Fri Apr 26 09:21:26 EDT 2013 x86_64,opsys=statefulrhels5,arch=x86_64
-     gpus = 0
-
-i70
-     state = down,offline,job-exclusive
-     np = 8
-     properties = provision
-     ntype = cluster
-     jobs = 0/594490.i136, 1/594490.i136, 2/594490.i136, 3/594490.i136, 4/594490.i136, 5/594490.i136, 6/594490.i136, 7/594490.i136
-     gpus = 0
-
-i71
-     state = down
-     np = 8
-     properties = compute
-     ntype = cluster
-     status = rectime=1375097304,varattr=,jobs=,state=free,netload=2783777877,gres=,loadave=0.00,ncpus=8,physmem=24659396kb,availmem=26461836kb,totmem=26763868kb,idletime=1606519,nusers=0,nsessions=? 0,sessions=? 0,uname=Linux i71 2.6.18-348.6.1.el5 #1 SMP Fri Apr 26 09:21:26 EDT 2013 x86_64,opsys=statefulrhels5,arch=x86_64
-     gpus = 0
-
-i72
-     state = down
-     np = 8
-     properties = provision
-     ntype = cluster
-     gpus = 0
-"""
-
-#print data
 
 class PBS:
 
     user = None
     host = None
-    pbs_data = None
-    pbs_qstat = None
-    data = None
+    pbs_qstat_data = None
+    pbs_nodes_data = None
     
     def __init__(self,user, host):
         self.user = user
         self.host = host
-    
-    def refresh(self):
-        """fetches the pbs nodes info"""
-        self.pbs_data = ssh("{0}@{1}".format(self.user,self.host), "pbsnodes", "-a")
 
-    @property
-    def info(self):
-        """returns the pbs node infor from an pbs_data is a string see above for example"""
-        pbsinfo = {}
-        if self.pbs_data is None:
-            self.refresh()
-            
-        nodes = self.pbs_data.split("\n\n")
-        for node in nodes:
-            pbs_data = node.split("\n")
-            pbs_data = [e.strip()  for e in pbs_data]
-            name = pbs_data[0]
-            if name != "":
-                print "NNN", name
-                pbsinfo[name] = {}
-                for element in pbs_data[1:]:
-                    try:
-                        (attribute, value) = element.split (" = ")
-                        if attribute == 'status':
-                            status_elements = value.split(",")
-                            pbsinfo[name][attribute] = {}
-                            for e in status_elements:
-                                (a,v) = e.split("=")
-                                pbsinfo[name][attribute][a] = v
-                        elif attribute == 'jobs':
-                            pbsinfo[name][attribute] = value.split(',')
-                        elif attribute == 'note':
-                            pbsinfo[name][attribute] = literal_eval(value)
-                        else:
-                            pbsinfo[name][attribute] = value
-                    except:
-                        pass
-        self.data = pbsinfo
-        return self.data
+    def pbsnodes(self, refresh="True"):
+        """returns the pbs node infor from an pbs_nodes_raw_data is a string see above for example"""
+        
+        if self.pbs_nodes_data is None or refresh:
+            try:
+                result = ssh("{0}@{1}".format(self.user,self.host), "pbsnodes", "-a")
+            except:
+                print "ERROR can not execute pbs nodes"
+            pbsinfo = {}        
+            nodes = result.split("\n\n")
+            for node in nodes:
+                pbs_data = node.split("\n")
+                pbs_data = [e.strip()  for e in pbs_data]
+                name = pbs_data[0]
+                if name != "":
+                    pbsinfo[name] = {u'name': name}
+                    for element in pbs_data[1:]:
+                        try:
+                            (attribute, value) = element.split (" = ")
+                            if attribute == 'status':
+                                status_elements = value.split(",")
+                                pbsinfo[name][attribute] = {}
+                                for e in status_elements:
+                                    (a,v) = e.split("=")
+                                    pbsinfo[name][attribute][a] = v
+                            elif attribute == 'jobs':
+                                pbsinfo[name][attribute] = value.split(',')
+                            elif attribute == 'note':
+                                pbsinfo[name][attribute] = literal_eval(value)
+                            else:
+                                pbsinfo[name][attribute] = value
+                        except:
+                            pass
+            self.pbs_nodes_data = pbsinfo
+        
+        return self.pbs_nodes_data
 
     def exists(self, host):
         """ prints true if the host is in the node list """
-        return host in self.data
-
-    def __str__(self):
-        return str(self.data)
-    
-    def get(self, host):
-        """returns just the info for the specified host as dict"""
-        if self.exists(host):
-            return self.data[host]
-        else:
-            return None
+        return host in self.pbs_nodes_data
 
     def set(self, spec, attribute):
         """add an attribute for the specified hosts in the format
@@ -146,25 +73,30 @@ class PBS:
         print "TODO: ALLAN"
             
 
-    def qstat(self):
-        xmldata = str(ssh("{0}@{1}".format(self.user,self.host), "qstat", "-x"))
-
-        self.pbs_qstat = {}
+    def qstat(self, refresh=True):
+        if self.pbs_qstat_data is None or refresh:
+            try:
+                xmldata = str(ssh("{0}@{1}".format(self.user,self.host), "qstat", "-x"))
+            except:
+                print "ERROR can not extecute qstat"
+            info = {}
+            
+            try:
+                xmldoc = minidom.parseString(xmldata)
+                
+                itemlist = xmldoc.getElementsByTagName('Job') 
+                for item in itemlist:
+                    job = {}
+                    for attribute in item.childNodes:
+                        if len(attribute.childNodes) == 1:
+                            job[attribute.nodeName] = attribute.firstChild.nodeValue
+                        else:
+                            job[attribute.nodeName] = {}                    
+                            for subchild in attribute.childNodes:
+                                job[attribute.nodeName][subchild.nodeName] = subchild.firstChild.nodeValue
         
-        from xml.dom import minidom
-        xmldoc = minidom.parseString(xmldata)
-        
-        itemlist = xmldoc.getElementsByTagName('Job') 
-        for item in itemlist:
-            job = {}
-            for attribute in item.childNodes:
-                if len(attribute.childNodes) == 1:
-                    job[attribute.nodeName] = attribute.firstChild.nodeValue
-                else:
-                    job[attribute.nodeName] = {}                    
-                    for subchild in attribute.childNodes:
-                        job[attribute.nodeName][subchild.nodeName] = subchild.firstChild.nodeValue
-
-            self.pbs_qstat[job['Job_Id']] = job
-
-        return self.pbs_qstat
+                    info[job['Job_Id']] = job
+            except:
+                pass
+            self.pbs_qstat_data = info
+        return self.pbs_qstat_data
