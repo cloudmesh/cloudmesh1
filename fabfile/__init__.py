@@ -8,4 +8,4 @@ import pypi
 import doc
 import mq
 import test
-
+import nose

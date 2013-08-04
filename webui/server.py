@@ -13,6 +13,7 @@ from hostlist import expand_hostlist
 from modules.pbs import pbs_module
 #from modules.workflow import workflow_module
 from modules.flatpages import flatpages_module
+from modules.nose import nose_module
 from modules.inventory import inventory_module
 from modules.provisioner import provisioner_module
 from modules.keys import keys_module
@@ -156,6 +157,7 @@ app.register_blueprint(menu_module, url_prefix='',)
 app.register_blueprint(flatpages_module, url_prefix='',)
 #app.register_blueprint(workflow_module, url_prefix='',)
 app.register_blueprint(pbs_module, url_prefix='',)
+app.register_blueprint(nose_module, url_prefix='',)
 
 
 SECRET_KEY = 'development key'

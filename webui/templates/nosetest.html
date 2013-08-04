@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}
+{% block content %}
+
+
+
+    
+  <h1>Statistics</h1>
+
+  <table>
+	 <tr>
+    	<th colspan="2"> Test  {{name}} </th>  
+	 </tr>
+  	 <tr> 
+  	 	<td> Updated </td>  
+  	 	<td> {{ updated }} </td>
+  	 </tr>
+  	 <tr>
+    	<th> Attribute </th>  
+    	<th> Value </th>  
+     </tr>
+     <tr> 
+  	 	<td> Filename </td>  
+  	 	<td > {{ filename }} </td>
+  	 </tr>
+  	  <tr> 
+  	 	<td> Result Filename </td>  
+  	 	<td > {{ resultname }} </td>
+  	 </tr>
+    {% for stat in tests.stats %}
+       <tr>
+       <td>{{ stat }}</td>
+       <td> {{ tests.stats[stat] }}</td>
+	   </tr>
+     {% endfor %}
+  </table>
+
+  
+  <h1>Results</h1>
+
+  <table>
+  <tr>
+    <th colspan="8"> Test  {{name}} </th>  
+   
+  </tr>
+  <tr>
+    	<th> Attribute </th>  
+    	<th> Value </th>  
+  </tr>
+  {% for test in tests.results %}
+    {% for key in test %}
+      <tr>
+    	<td> {{ key }}  </td>
+    	<td> {{ test[key] }}  </td>
+      </tr>
+	{% endfor %}
+  {% endfor %}
+  
+   </table>
+
+{% endblock %}
