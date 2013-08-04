@@ -43,17 +43,18 @@
     <th colspan="8"> Test  {{name}} </th>  
    
   </tr>
+  
   <tr>
-    	<th> Attribute </th>  
-    	<th> Value </th>  
-  </tr>
+    {% for key in tests.results[0] %}
+    	<th> {{ key }}  </th>
+    {% endfor %}
+  </tr>  	
   {% for test in tests.results %}
+    <tr>
     {% for key in test %}
-      <tr>
-    	<td> {{ key }}  </td>
     	<td> {{ test[key] }}  </td>
-      </tr>
 	{% endfor %}
+  </tr>
   {% endfor %}
   
    </table>
