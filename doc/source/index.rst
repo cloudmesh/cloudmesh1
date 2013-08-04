@@ -18,6 +18,7 @@ Cloudmesh
    install
    about
    todo
+   nosetest
 
    inventory/index.rst
    inventory/assign
