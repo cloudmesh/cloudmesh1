@@ -12,12 +12,34 @@ from pprint import pprint
 from ast import literal_eval
 from sh import pwd
 
+from cloudmesh.util.ping import ping
 #
 # ROUTE: PROFILE
 #
 
 from sh import nosetests
 
+
+@nose_module.route('/ping')
+def display_pingtest():
+    
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    hosts = ['alamo.futuregrid.org',
+             'india.futuregrid.org',
+             'sierra.futuregrid.org',
+             'hotel.futuregrid.org',   
+             'bravo.futuregrid.org',   
+             'echo.futuregrid.org']
+    results = []
+    for host in hosts:
+        results.append(ping(host))
+        
+    return render_template('ping.html',
+                           updated = time_now,
+                           hosts=hosts,
+                           results=results)
+                           
 
 @nose_module.route('/nose/<test>')
 def display_nosetest(test):

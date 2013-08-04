@@ -11,6 +11,7 @@ blessings
 fabric
 progress
 sh
+pingparser
 console
 envoy
 python-ldap
