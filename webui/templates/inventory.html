@@ -17,7 +17,8 @@
     <th> </th>
     <th> </th>
     <th> Cluster </th>
-    <th> HPC Queues </th>
+    <th>PbsNodes </th>
+    <th> QStat </th>
   </tr>
   
   {% for cluster in inventory.clusters | sort(attribute='name') %}
@@ -30,10 +31,10 @@
    </td>
    <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} </a></td>
   {% if cluster.name == "india" or cluster.name =="sierra" %}
-   <td>&nbsp;&nbsp;<a href = "/pbsnodes/{{cluster.name}}.futuregrid.org">N</a>&nbsp;&nbsp;&nbsp;
-     <a href="/pbs/{{cluster.name}}.futuregrid.org">Q </a></td>
+   <td><a href ="/pbsnodes/{{cluster.name}}.futuregrid.org">N</a></td>
+   <td><a href="/pbs/{{cluster.name}}.futuregrid.org">Q </a></td>
   {%else%} 
-   <td></td>
+   <td>-</td><td>-</td>
   {% endif %}
   </tr>
 
@@ -42,9 +43,9 @@
 </table>
 
 <table style = "position:relative;float:left; display:inline;" >
- <th colspan="2"> Legend </th>
- <tr><td>N - </td><td>Pbs Nodes</td></tr>
- <tr><td>Q - </td><td>QStat</td></tr>
+ <tr><th colspan="2"> Legend </th></tr>
+ <tr><td>N</td><td>Pbs Nodes</td></tr>
+ <tr><td>Q</td><td>QStat</td></tr>
 </table>
 
 {% endblock %}
