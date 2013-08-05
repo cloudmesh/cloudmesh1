@@ -2,21 +2,17 @@
 {% from "_helper.html" import image_button %}
 {% block content %}
 
-<script tye="text/javascript">
-available(name){
-if(name) in {"india","sierra"} return true;
-}
-</script>
-<div>
-<table style="float:left;">
+
+<table style="float:left">
   <tr>
     <th colspan="5">
       {{ image_button ("center","119_table","/inventory/summary/") }}
-      Cloud Mesh - Inventory for FutureGrid</th>  
+      Cloud Mesh - Inventory for FutureGrid
+    </th>
+  </tr>
   <tr>
     <td colspan=5> Updated {{ updated }}</td>
   </tr>
-
   <tr>
     <th> </th>
     <th> </th>
@@ -27,17 +23,18 @@ if(name) in {"india","sierra"} return true;
   {% for cluster in inventory.clusters | sort(attribute='name') %}
   
   <tr>
-  <td> <input name="checkbox" value="{{ cluster.name }}" type="checkbox"> </td>
-  <td>
-    {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
-    {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
-  </td>
-  <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} </a></td>
-{% if cluster.name == "india" or cluster.name =="sierra" %}
-  <td>&nbsp;&nbsp;<a href = "/pbsnodes/{{cluster.name}}.futuregrid.org">N</a>&nbsp;&nbsp;&nbsp;<a href="/pbs/{{cluster.name}}.futuregrid.org">Q </a></td>
-{%else%} 
-  <td></td>
-{% endif %}
+   <td> <input name="checkbox" value="{{ cluster.name }}" type="checkbox"> </td>
+   <td>
+     {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
+     {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
+   </td>
+   <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} </a></td>
+  {% if cluster.name == "india" or cluster.name =="sierra" %}
+   <td>&nbsp;&nbsp;<a href = "/pbsnodes/{{cluster.name}}.futuregrid.org">N</a>&nbsp;&nbsp;&nbsp;
+     <a href="/pbs/{{cluster.name}}.futuregrid.org">Q </a></td>
+  {%else%} 
+   <td></td>
+  {% endif %}
   </tr>
 
   {% endfor %}
@@ -45,9 +42,9 @@ if(name) in {"india","sierra"} return true;
 </table>
 
 <table style = "position:relative;float:left; display:inline;" >
-<th colspan="2"> Legend </th>
-<tr><td>N - </td><td>Pbs Nodes</td></tr>
-<tr><td>Q - </td><td>QStat</td></tr>
+ <th colspan="2"> Legend </th>
+ <tr><td>N - </td><td>Pbs Nodes</td></tr>
+ <tr><td>Q - </td><td>QStat</td></tr>
 </table>
-</div>
+
 {% endblock %}
