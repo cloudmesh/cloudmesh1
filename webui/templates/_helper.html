@@ -23,7 +23,7 @@ image_button("041_charts", "/table/")
 
 {% macro super_flexible_menu(itemlist) -%}
    {% for item in itemlist %}
-	<li> <a href="{{item[1]}}"> &nbsp;&nbsp;&nbsp;&nbsp;{{item[0]}}</a></li>
+	<li> <a href="{{ item[1] }}"> &nbsp;&nbsp;&nbsp;&nbsp;{{ item[0] }}</a></li>
    {% endfor %}
    
 

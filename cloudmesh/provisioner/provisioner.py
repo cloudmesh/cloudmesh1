@@ -22,10 +22,12 @@ class BaremetalProvisinerABC:
     # image = 'hpc'
 
     hosts = []
-    images = []
+    image = []
 
     @abstractmethod
     def provision(self, hosts, image):
+        self.hosts = hosts
+        self.image = image
         pass
 
 
@@ -33,11 +35,13 @@ class BaremetalProvisinerABC:
 class ProvisionerSimulator(BaremetalProvisinerABC):
 
     def set_status(self, element, status):
+        
         element.status = status
         element.save(cascade=True)
 
         
     def provision(self, hosts, provisioned):
+        self.hosts = hosts
         for host in hosts:
             server = inventory.get("server",host)
             print "PROVISION", host, provisioned
