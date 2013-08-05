@@ -2,14 +2,13 @@
 {% from "_helper.html" import image_button %}
 {% block content %}
 
-
-{% set val = ['bravo','delta','gamma'] %}
 <script tye="text/javascript">
 available(name){
 if(name) in {"india","sierra"} return true;
 }
 </script>
-<table>
+<div>
+<table style="float:left;">
   <tr>
     <th colspan="5">
       {{ image_button ("center","119_table","/inventory/summary/") }}
@@ -35,7 +34,7 @@ if(name) in {"india","sierra"} return true;
   </td>
   <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} </a></td>
 {% if cluster.name == "india" or cluster.name =="sierra" %}
-  <td><a href="/pbs/{{cluster.name}}.futuregrid.org">Link to QStat </a></td>
+  <td>&nbsp;&nbsp;<a href = "/pbsnodes/{{cluster.name}}.futuregrid.org">N</a>&nbsp;&nbsp;&nbsp;<a href="/pbs/{{cluster.name}}.futuregrid.org">Q </a></td>
 {%else%} 
   <td></td>
 {% endif %}
@@ -45,4 +44,10 @@ if(name) in {"india","sierra"} return true;
   
 </table>
 
+<table style = "position:relative;float:left; display:inline;" >
+<th colspan="2"> Legend </th>
+<tr><td>N - </td><td>Pbs Nodes</td></tr>
+<tr><td>Q - </td><td>QStat</td></tr>
+</table>
+</div>
 {% endblock %}
