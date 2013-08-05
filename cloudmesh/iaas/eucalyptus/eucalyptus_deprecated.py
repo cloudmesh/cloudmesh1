@@ -85,8 +85,8 @@ class eucalyptus:
         """
         create a vm
         """
-            self.vm = self.cloud.create_node(
-            name=vm_name, image=vm_image, size=vm_flavour)
+        self.vm = self.cloud.create_node(
+        name=vm_name, image=vm_image, size=vm_flavour)
 
         while 1:
             time.sleep(15)
