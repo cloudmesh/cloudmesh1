@@ -18,12 +18,13 @@ def profile():
     # bug the global var of the ditc should be used
 
     config = cm_config()
+    user=config.data["cloudmesh"]["hpc"]["username"]
     configuration = config.get()
     projects = cm_projects()
     person = configuration['profile']
     keys = cm_keys()
     version = "tmp"
-
+    
     if request.method == 'POST':
         print request.form
         print "p", projects
@@ -37,7 +38,6 @@ def profile():
         config.lastname = request.form['field-lastname']
         config.phone = request.form['field-phone']
         config.email = request.form['field-email']
-
         print "setting the values"
         config.default_cloud = request.form['field-default-cloud']
         # print request.form["field-cloud-activated-" + value]
@@ -47,7 +47,7 @@ def profile():
         print "WRITING DONE"
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-
+    
     address = '<br>'.join(str(x) for x in person['address'])
     return render_template('profile.html',
                            updated=time_now,
@@ -59,4 +59,5 @@ def profile():
                            config=config,
                            configuration=configuration,
                            version=version,
-                           )
+         		   user=user,
+	                  )
