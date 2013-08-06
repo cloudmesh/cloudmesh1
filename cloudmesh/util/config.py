@@ -19,7 +19,6 @@ def read_yaml_config (filename, check=True):
     location = filename
     if location is not None:
         location = cm_path_expand(location)
-        print "KKKK", location
 
     if not os.path.exists(location) and not check:
        return None         

@@ -325,11 +325,7 @@ class cm_config(object):
             return self.data['cloudmesh']
         else:
             if expand:
-                print "PPPP", key
                 d = self.cloud(key)['credentials']
-                print "UUUU"
-                pprint(d) 
-                
                 for key in d:
                     d[key] = path_expand(str(d[key]))
                 return d
