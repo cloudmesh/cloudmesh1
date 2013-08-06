@@ -12,38 +12,6 @@ from flask_flatpages import FlatPages
 from hostlist import expand_hostlist
 from ast import literal_eval
 
-all_modules = ['pbs',
-               'flatpages',
-               'nose',
-               'inventory',
-               'provisioner',
-               'keys',
-               'menu',
-               'profile',
-               'git',
-               'cloud',
-               'workflow']
-
-exclude_modules =['workflow']
-
-modules = [m for m in all_modules if m not in exclude_modules]
-    
-for m in modules:
-    print "Loading module", m
-    exec "from modules.{0} import {0}_module".format(m)
-
-#from modules.pbs import pbs_module
-#from modules.workflow import workflow_module
-#from modules.flatpages import flatpages_module
-#from modules.nose import nose_module
-#from modules.inventory import inventory_module
-#from modules.provisioner import provisioner_module
-#from modules.keys import keys_module
-#from modules.menu import menu_module
-#from modules.profile import profile_module
-#from modules.cloud import cloud_module
-#from modules.git import git_module
-
 from os.path import isfile, join
 from pprint import pprint
 from wtforms import TextField, SelectField
@@ -60,6 +28,36 @@ import yaml
 
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
+
+
+# ============================================================
+# DYNAMIC MODULE MANAGEMENT
+# ============================================================
+
+all_modules = ['pbs',
+               'flatpages',
+               'nose',
+               'inventory',
+               'provisioner',
+               'keys',
+               'menu',
+               'profile',
+               'git',
+               'cloud',
+               'workflow']
+
+exclude_modules =['workflow','cloud']
+
+modules = [m for m in all_modules if m not in exclude_modules]
+    
+for m in modules:
+    print "Loading module", m
+    exec "from modules.{0} import {0}_module".format(m)
+
+
+# ============================================================
+# DYNAMIC MODULE MANAGEMENT
+# ============================================================
 
 debug = True
 
@@ -103,17 +101,14 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.debug = debug
 pages = FlatPages(app)
-app.register_blueprint(keys_module, url_prefix='',)
-app.register_blueprint(inventory_module, url_prefix='',)
-app.register_blueprint(provisioner_module, url_prefix='',)
-app.register_blueprint(git_module, url_prefix='',)
-app.register_blueprint(profile_module, url_prefix='',)
-app.register_blueprint(menu_module, url_prefix='',)
-app.register_blueprint(flatpages_module, url_prefix='',)
-#app.register_blueprint(workflow_module, url_prefix='',)
-app.register_blueprint(pbs_module, url_prefix='',)
-app.register_blueprint(nose_module, url_prefix='',)
-app.register_blueprint(cloud_module, url_prefix='',)
+
+
+# dynamic app loading from defined modules
+#app.register_blueprint(keys_module, url_prefix='',)
+
+for m in modules:
+    print "Loading module", m
+    exec "app.register_blueprint({0}_module, url_prefix='',)".format(m)
 
 
 app.secret_key = SECRET_KEY

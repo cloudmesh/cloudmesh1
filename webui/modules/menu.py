@@ -37,8 +37,8 @@ super_sidebar_pages = [
        [
          ["VMs", "/table/"],
          ["Images", "/images/"],
-         ["Metric", "/metric/main/"],
-         ["Projects", "/projects/"],
+#         ["Metric", "/metric/main/"],
+#         ["Projects", "/projects/"],
          ["Flavors", "/flavors/"],
        ],
     ],
