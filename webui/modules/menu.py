@@ -1,8 +1,5 @@
 from flask import Blueprint
-from flask import g
 import flask
-from os import listdir
-from os.path import isfile, join
 from cloudmesh.util.logger import LOGGER
 
 log = LOGGER("module/menu")
@@ -11,52 +8,48 @@ menu_module = Blueprint('menu_module', __name__)
 
 
 super_sidebar_pages = [
-
     ["Cloudmesh",
-       [
-         ["Home", "/"],
-         ["Profile", "/profile/"],
-         ["Keys", "/keys/"],
-       ],
+        [
+            ["Home", "/"],
+            ["Profile", "/profile/"],
+            ["Keys", "/keys/"],
+        ],
     ],
     ["Inventory",
-       [
-         ["Overview", "/inventory/"],
-         ["Table", "/inventory/summary"],
-         ["Images", "/inventory/images"]
-       ],
+        [
+            ["Overview", "/inventory/"],
+            ["Table", "/inventory/summary"],
+            ["Images", "/inventory/images"]
+        ],
     ],
-    ["Provision", 
-       [
-         ["Overview", "/provision/summary/"],
-         ["Form", "/provision/"],
-         ["Workflow", "/provision/workflow"],
-       ],
+    ["Provision",
+        [
+            ["Overview", "/provision/summary/"],
+            ["Form", "/provision/"],
+            ["Workflow", "/provision/workflow"],
+        ],
     ],
-    ["Clouds", 
-       [
-         ["VMs", "/table/"],
-         ["Images", "/images/"],
-#         ["Metric", "/metric/main/"],
-#         ["Projects", "/projects/"],
-         ["Flavors", "/flavors/"],
-       ],
+    ["Clouds",
+        [
+            ["VMs", "/table/"],
+            ["Images", "/images/"],
+            #["Metric", "/metric/main/"],
+            #["Projects", "/projects/"],
+            ["Flavors", "/flavors/"],
+        ],
     ],
     ["HPC Queues",
-       [
-        ["India", "/pbs/india.futuregrid.org"],
-        ["Sierra", "/pbs/sierra.futuregrid.org"],
-        ["Alamo", "/pbs/alamo.futuregrid.org"],
-        ["Hotel", "/pbs/hotel.futuregrid.org"],
-       ]
+        [
+            ["India", "/pbs/india.futuregrid.org"],
+            ["Sierra", "/pbs/sierra.futuregrid.org"],
+            ["Alamo", "/pbs/alamo.futuregrid.org"],
+            ["Hotel", "/pbs/hotel.futuregrid.org"],
+        ]
     ]
 ]
 
 
 flask.Flask.app_ctx_globals_class.super_sidebar_pages = super_sidebar_pages
-
-def add_menu(label, link):
-    app_sidebar.append([label,link])
 
 app_topbar = [
     ["Home", "/"],
@@ -72,7 +65,6 @@ app_externalbar = [
 ]
 
 
-
 topbar_pages = []
 for page in app_topbar:
     topbar_pages.append({'name': page[0], 'url': page[1]})
@@ -81,17 +73,17 @@ for page in app_topbar:
 flask.Flask.app_ctx_globals_class.topbar_pages = topbar_pages
 
 
-#log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.topbar_pages)))
+# log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.topbar_pages)))
 
 externalbar_pages = []
-for page in app_externalbar  :
+for page in app_externalbar:
     externalbar_pages.append({'name': page[0], 'url': page[1]})
 
 # registering externalbar   into the global g
 flask.Flask.app_ctx_globals_class.externalbar_pages = externalbar_pages
 
 
-#log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.externalbar_pages)))
+# log.info("{0}".format(str(flask.Flask.app_ctx_globals_class.externalbar_pages)))
 
 
 #

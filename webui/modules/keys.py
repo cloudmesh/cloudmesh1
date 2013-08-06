@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import Flask, render_template, request, redirect
+from flask import render_template, request, redirect
 from cloudmesh.config.cm_keys import cm_keys
 
 keys_module = Blueprint('keys_module', __name__)
@@ -14,13 +14,12 @@ def managekeys():
     keys = cm_keys()
 
     msg = ''
-    error = False
     """
     keys:
       default: name 1
       keylist:
-         name 1: $HOME/.ssh/id_rsa.pub # this is automatically replaced with the key
-         name 2: $HOME/.ssh/id_rsa2.pub # this is automatically replaced with the key
+         name 1: $HOME/.ssh/id_rsa.pub #  replaced with the key
+         name 2: $HOME/.ssh/id_rsa2.pub #  replaced with the key
          bla: key ssh-rsa AAAAB3.....zzzz keyname
     """
     if request.method == 'POST' and request.form.has_key('keyname'):
@@ -28,8 +27,7 @@ def managekeys():
         fileorstring = request.form['keyorpath']
 
         if keys.defined(keyname):
-
-            msg = "Key name already exists. Please delete the key '%s' before proceeding." % keyname
+            msg = "Key name already exists. Please delete the key '{0}' before proceeding.".format(keyname)
         else:
             try:
                 keys.set(keyname, fileorstring, expand=True)

@@ -1,22 +1,16 @@
 from sh import blockdiag
-from sh import dot
-from sh import pwd
-from sh import ls
 from flask import Blueprint
-from flask import Flask, render_template, request, redirect, flash, url_for
-from cloudmesh.config.cm_keys import cm_keys
+from flask import render_template, redirect, flash
 from datetime import datetime
 from flask.ext.wtf import Form
 from wtforms import TextField, SelectField, TextAreaField
-from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
-    FabricService, Inventory
+from cloudmesh.inventory.inventory import Inventory
 from hostlist import expand_hostlist
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.inventory.inventory import PROVISIONING_CHOICES
 from cloudmesh.provisioner.queue.celery import celery
-from cloudmesh.provisioner.queue.tasks import info, provision
+from cloudmesh.provisioner.queue.tasks import provision
 from pprint import pprint
-import textwrap
 
 provisioner_module = Blueprint('provisioner_module', __name__)
 
@@ -29,11 +23,11 @@ inventory = Inventory("nosetest")
 provisionerImpl = ProvisionerSimulator
 provisioner = provisionerImpl()
 
+
 @provisioner_module.route('/provision/summary/')
 def display_provisioner_summary():
-    
-    queue = celery.control.inspect()
 
+    queue = celery.control.inspect()
 
     """
     for j in range(10):
@@ -52,56 +46,54 @@ def display_provisioner_summary():
                            queue=queue,
                            updated=time_now)
 
-@provisioner_module.route('/provision/tasks/<cluster>/<spec>/<service>')
-def display_provision_host_summary(cluster,spec,service):
 
-    
-    time.sleep(1)    
-    hosts = expand_hostlist(spec)    
+@provisioner_module.route('/provision/tasks/<cluster>/<spec>/<service>')
+def display_provision_host_summary(cluster, spec, service):
+
+    time.sleep(1)
+    hosts = expand_hostlist(spec)
     queue = celery.control.inspect()
 
-
-    active = queue.active()     
-    scheduled = queue.scheduled() 
+    active = queue.active()
+    scheduled = queue.scheduled()
     reserved = queue.reserved()
-    
-    #total = len(active) + len(scheduled) + len(reserved)
-    
+
+    # total = len(active) + len(scheduled) + len(reserved)
+
     table = {}
     for host in hosts:
         table[host] = {"provision": service,
                        "start": "None",
                        "worker": "",
-                       "task":"provision",
-                       "status": "completed"  
-                       }              
-                
+                       "task": "provision",
+                       "status": "completed"
+                       }
+
     for worker in active:
-        for task in active[worker]: 
+        for task in active[worker]:
             (host, service) = list(eval(task["args"]))
             table[host]['worker'] = worker
             table[host]['status'] = 'active'
-            table[host]['task'] = host    
+            table[host]['task'] = host
             table[host]['start'] = task['time_start']
 
     for worker in scheduled:
-        for task in scheduled[worker]: 
+        for task in scheduled[worker]:
             (host, service) = list(eval(task["args"]))
             table[host]['worker'] = worker
             table[host]['status'] = 'scheduled'
-            table[host]['task'] = host    
+            table[host]['task'] = host
             table[host]['start'] = task['time_start']
 
     for worker in reserved:
-        for task in reserved[worker]: 
+        for task in reserved[worker]:
             (host, service) = list(eval(task["args"]))
             table[host]['worker'] = worker
             table[host]['status'] = 'reserved'
-            table[host]['task'] = host    
+            table[host]['task'] = host
             table[host]['start'] = task['time_start']
-            
-            
-    pprint (table)
+
+    pprint(table)
     """
     for j in range(10):
     print chr(27) + "[2J"
@@ -123,28 +115,30 @@ def display_provision_host_summary(cluster,spec,service):
                            service=service,
                            updated=time_now)
 
+
 class ProvisionWorkflowForm(Form):
 
-    filename="abc"    
+    filename = "abc"
 
     with open("./workflows/" + filename + ".diag", "r") as f:
-        data=f.readlines()[1:-1]
+        data = f.readlines()[1:-1]
     default = "".join(data)
     filename = TextField("Filename", default=filename)
     workflow = TextAreaField("Workflow", default=default)
-    
+
+
 @provisioner_module.route("/provision/workflow/", methods=("GET", "POST"))
 def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)
 
     dir = "/workflows/"
-    filename="abc"    
+    filename = "abc"
 
-    #if form.validate_on_submit():
-        
+    # if form.validate_on_submit():
+
     #    print "SKIP"
-    try: 
+    try:
         with open("." + dir + filename + ".diag", "w") as f:
             f.write("blockdiag {\n")
             f.write("  default_shape = roundedbox;")
@@ -154,33 +148,32 @@ def display_provision_workflow_form():
     except:
         print "file does not exists"
     print "." + dir + filename + ".svg"
-        
-    blockdiag("--ignore-pil", "-Tsvg", 
+
+    blockdiag("--ignore-pil", "-Tsvg",
               "-o", "." + dir + filename + ".svg",
-              "." + dir + filename + ".diag")     
-    #blockdiag("-Tpng",
+              "." + dir + filename + ".diag")
+    # blockdiag("-Tpng",
     #          "-o", "." + dir + filename + ".png",
     #          "." + dir + filename + ".diag")
-                  
-        
-    #else:
+
+    # else:
     #    flash("Wrong submission")
     inventory.refresh()
-    return render_template("provision_workflow.html", 
+    return render_template("provision_workflow.html",
                            workflow=form.workflow.data,
-                           form=form, 
+                           form=form,
                            dir=dir,
                            filename=filename,
-                           inventory=inventory)    
-    
-        
+                           inventory=inventory)
+
+
 class ProvisionForm(Form):
 
     clusters = [cluster.name for cluster in inventory.get("cluster")]
-    choices = zip (clusters, clusters)
+    choices = zip(clusters, clusters)
     cluster = SelectField("Cluster", choices=choices)
     nodespec = TextField("Nodes")
-    provision_choices = zip(PROVISIONING_CHOICES,PROVISIONING_CHOICES)
+    provision_choices = zip(PROVISIONING_CHOICES, PROVISIONING_CHOICES)
     service = SelectField("Service", choices=provision_choices)
 
     def validate(self):
@@ -194,6 +187,7 @@ class ProvisionForm(Form):
         print "Validate", ok, choice
         return ok
 
+
 @provisioner_module.route("/provision/", methods=("GET", "POST"))
 def display_provision_form():
 
@@ -202,7 +196,7 @@ def display_provision_form():
     if form.validate_on_submit():
         flash("Success")
         print "FORM"
-        pprint( form.__dict__)
+        pprint(form.__dict__)
         print "CLUSTER", form.cluster.data
         print "Service", form.service.data
         hosts = expand_hostlist(form.nodespec.data)
@@ -210,14 +204,15 @@ def display_provision_form():
 
         for host in hosts:
             print "PROVISION HOST", host
-            provision.delay(host,form.service.data)
+            provision.delay(host, form.service.data)
 
-        return redirect("provision/tasks/{0}/{1}/{2}".format(form.cluster.data,form.nodespec.data,form.service.data))
-        #return redirect("/provision/summary/")
+        return redirect("provision/tasks/{0}/{1}/{2}"
+                        .format(form.cluster.data,
+                                form.nodespec.data,
+                                form.service.data))
+        # return redirect("/provision/summary/")
 
     else:
         flash("Wrong submission")
     inventory.refresh()
-    return render_template("provision.html", form=form, inventory=inventory)    
-    
-        
+    return render_template("provision.html", form=form, inventory=inventory)

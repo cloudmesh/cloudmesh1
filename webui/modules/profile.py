@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import Blueprint
-from flask import Flask, render_template, request, redirect
+from flask import render_template, request
 from cloudmesh.config.cm_keys import cm_keys
 
 from cloudmesh.config.cm_projects import cm_projects
@@ -18,13 +18,13 @@ def profile():
     # bug the global var of the ditc should be used
 
     config = cm_config()
-    user=config.data["cloudmesh"]["hpc"]["username"]
+    user = config.data["cloudmesh"]["hpc"]["username"]
     configuration = config.get()
     projects = cm_projects()
     person = configuration['profile']
     keys = cm_keys()
     version = "tmp"
-    
+
     if request.method == 'POST':
         print request.form
         print "p", projects
@@ -47,7 +47,7 @@ def profile():
         print "WRITING DONE"
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    
+
     address = '<br>'.join(str(x) for x in person['address'])
     return render_template('profile.html',
                            updated=time_now,
@@ -59,5 +59,5 @@ def profile():
                            config=config,
                            configuration=configuration,
                            version=version,
-         		   user=user,
-	                  )
+                           user=user,
+                           )

@@ -1,28 +1,28 @@
 from flask import Blueprint
-from flask import Flask, render_template, request, redirect
-from cloudmesh.config.cm_keys import cm_keys
+from flask import render_template, request
 from datetime import datetime
 
 inventory_module = Blueprint('inventory_module', __name__)
 
-from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
-    FabricService, Inventory
+from cloudmesh.inventory.inventory import Inventory
 
 inventory = Inventory("nosetest")
 
 
 @inventory_module.route('/inventory/summary/')
 def display_summary():
-    parameters = { 'columns': 12}
+    parameters = {'columns': 12}
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     return render_template('inventory_summary_table.html',
                            inventory=inventory,
                            parameters=parameters,
                            updated=time_now)
-            
+
 # ============================================================
 # ROUTE: INVENTORY TABLE
 # ============================================================
+
+
 @inventory_module.route('/inventory/')
 def display_inventory():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -30,8 +30,6 @@ def display_inventory():
     return render_template('inventory.html',
                            updated=time_now,
                            inventory=inventory)
-
-
 
 
 @inventory_module.route('/inventory/cluster/<cluster>/<name>')
@@ -58,7 +56,7 @@ def display_cluster(cluster):
 def display_cluster_table(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     inventory.refresh()
-    
+
     cluster_obj = inventory.get("cluster", cluster)
     n = len(cluster_obj['servers'])
     parameters = {
@@ -71,6 +69,7 @@ def display_cluster_table(cluster):
                            parameters=parameters,
                            cluster=inventory.get("cluster", cluster))
 
+
 @inventory_module.route('/inventory/images/')
 def display_inventory_images():
     images = inventory.get("images")
@@ -79,6 +78,7 @@ def display_inventory_images():
                            images=images,
                            inventory=inventory)
 
+
 @inventory_module.route('/inventory/image/<name>/')
 def display_inventory_image(name):
     print "PRINT IMAGE", name
@@ -86,9 +86,9 @@ def display_inventory_image(name):
     if name is not None:
         image = inventory.get('images', name)
     return render_template('inventory_image.html',
-			       image = image)   
+                           image=image)
 
-    
+
 # ============================================================
 # ROUTE: INVENTORY ACTIONS
 # ============================================================
@@ -127,8 +127,9 @@ def set_attribute():
     s.save()
     return display_inventory()
 
+
 @inventory_module.route('/inventory/get/<kind>/<name>/<attribute>')
-def get_attribute():
+def get_attribute(kind, name, attribute):
     s = inventory.get(kind, name)
     return s[attribute]
 

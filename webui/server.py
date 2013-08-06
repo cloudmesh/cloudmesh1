@@ -1,30 +1,17 @@
 from ConfigParser import SafeConfigParser
-from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
-    FabricService, Inventory
-from cloudmesh.util.webutil import setup_imagedraw, setup_plugins, setup_noderenderers
 from cloudmesh.provisioner.provisioner import *
-from cloudmesh.util.util import table_printer
+from cloudmesh.util.webutil import setup_imagedraw
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, flash, url_for, send_from_directory
-from flask.ext.autoindex import AutoIndex
-from flask.ext.wtf import Form
+from flask import Flask, render_template, flash, send_from_directory
+#from flask.ext.autoindex import AutoIndex
 from flask_flatpages import FlatPages
-from hostlist import expand_hostlist
-from ast import literal_eval
-
-from os.path import isfile, join
-from pprint import pprint
-from wtforms import TextField, SelectField
-import base64
-import hashlib
-import json
+#from pprint import pprint
 import os
 import pkg_resources
-import struct
 import sys
-import time
 import types
-import yaml
+
+
 
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
@@ -46,7 +33,7 @@ all_modules = ['pbs',
                'cloud',
                'workflow']
 
-exclude_modules =['workflow','cloud']
+exclude_modules = ['workflow', 'cloud']
 
 modules = [m for m in all_modules if m not in exclude_modules]
     
@@ -104,7 +91,7 @@ pages = FlatPages(app)
 
 
 # dynamic app loading from defined modules
-#app.register_blueprint(keys_module, url_prefix='',)
+# app.register_blueprint(keys_module, url_prefix='',)
 
 for m in modules:
     print "Loading module", m
@@ -125,7 +112,7 @@ def flash_errors(form):
 # def inject_pages():
 #    return dict(pages=pages)
 # app.register_blueprint(menu_module, url_prefix='/', )
-#if debug:
+# if debug:
 #    AutoIndex(app, browse_root=os.path.curdir)
 
 # ============================================================
@@ -169,8 +156,8 @@ def site_map():
 def index():
     return render_template('index.html')
 
-#@app.route('/workflow')
-#def display_diagram():
+# @app.route('/workflow')
+# def display_diagram():
 #    return render_template('workflow.html')
 
 
@@ -195,7 +182,7 @@ def login():
 @app.route('/workflows/<filename>')
 def retrieve_files(filename):
     """    Retrieve files that have been uploaded    """
-    return send_from_directory('workflows',filename)
+    return send_from_directory('workflows', filename)
 
 
 # ============================================================
@@ -211,7 +198,7 @@ def timesince(dt, format="float", default="just now"):
     if dt == "None" or dt == "" or dt == None or dt == "completed":
         return "completed"
     
-    #now = datetime.utcnow()
+    # now = datetime.utcnow()
     now = datetime.now()
     if format == 'float':
         diff = now - datetime.fromtimestamp(dt)
@@ -240,7 +227,7 @@ def timesince(dt, format="float", default="just now"):
 # ============================================================
 
 @app.template_filter()
-def get_tuple_element_from_string(obj,i):
+def get_tuple_element_from_string(obj, i):
     l = obj[1:-1].split(", ")
     return l[i][1:-1]
 
@@ -304,6 +291,6 @@ def page(path):
 
 if __name__ == "__main__":
     setup_imagedraw()
-    #setup_plugins()
-    #setup_noderenderers()
+    # setup_plugins()
+    # setup_noderenderers()
     app.run()
