@@ -30,7 +30,7 @@ from config.cm_config import cm_config
 # Error Cannot Import Openstack
 from iaas.openstack.cm_compute import openstack
 
-from iaas.eucalyptus.eucalyptus_new import eucalyptus
+from iaas.eucalyptus.eucalyptus import eucalyptus
 try:
     from iaas.azure.cm_azure import cm_azure as azure
 except:
