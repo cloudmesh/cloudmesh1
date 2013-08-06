@@ -21,44 +21,53 @@ $(function() {
 
 <table>
 <form name="profile" action="/profile/" method="POST">
-<tr><td colspan="3"><b> Contact </b></td> </tr>  
-<tr><td></td><td>Firstname</td><td>
-  <input type="text"
+<tr><th colspan="4"><b> Personal Details </b></th></tr>  
+<tr><td></td><td>Firstname</td>
+<td colspan="2"><input type="text"
   name="field-firstname"
   value="{{ person.firstname }}"
   style="width:240px">
-</td><td></td></tr>
-<tr><td></td><td>Lastname</td><td>
-  <input type="text"
+</td></tr>
+<tr><td></td><td>Lastname</td>
+<td colspan="2"><input type="text"
   name="field-lastname"
   value="{{ person.lastname }}"
   style="width:240px">
-</td><td></td></tr>
-<tr><td></td><td>Phone</td><td>
-    <input type="text"
+</td></tr>
+<tr><td></td><td>Phone</td>
+<td colspan="2"><input type="text"
   name="field-phone"
   value="{{ person.phone }}"
   style="width:240px">
-</td><td></td></tr>
-<tr><td></td><td>e-mail</td><td>
-    <input type="text"
+</td></tr>
+<tr><td></td><td>e-mail</td>
+<td colspan="2"><input type="text"
   name="field-email"
   value="{{ person['e-mail'] }}"
   style="width:240px">
-</td><td></td></tr>
-<tr><td></td><td>Address</td><td>
-  {{ address | replace ("\n", "<br>") | safe}}
-</td><td></td></tr>
+</td></tr>
+<tr><td></td><td>Address</td>
+<td colspan="2">{{ address | replace ("\n", "<br>") | safe}}</td>
+</tr>
+<tr>
+<td></td><td colspan="3"><b>HPC</b></td></tr>
+</tr>
+<tr>
+  <td></td>
+  <td>UserName</td>
+  <td colspan="2"><input type="text"
+	name= "field-hpc-name"
+        value="{{user}}"
+ 	style="width:240px"></td>
+</tr>
+<tr><td></td><td colspan="3"> <input type="submit" name="btnindex" value="Save"> </td></tr>
 
-<tr><td></td><td colspan="2"> <input type="submit" name="btnindex" value="Save"> </td> <td></td></tr>
-
-<tr><td></td><td colspan="2"><b> Prefix and Index </b></td> <td></td></tr>
+<tr><th colspan="4"><b> Project Details</b></th></tr>
 
 <tr>
   <td></td>
   <td> VM Name </td>
-  <td>
-    <input type="text"
+  <td colspan="2"><input type="text"
     name="field-prefix"
     value="{{ configuration.prefix }}"
     style="width:120px">
@@ -72,13 +81,11 @@ $(function() {
 </tr>
 
 
-<tr><td></td><td>
-
-<b> Projects </b></td>
-<td>
-
-{% for projectname in projects.names(status="active") %}
- <input type="radio"
+<tr><td></td>
+    <td><b> Projects </b></td>
+    <td colspan="2">
+     {% for projectname in projects.names(status="active") %}
+ 	<input type="radio"
         name="field-selected-project"
         value="{{ projectname }}"
         id="{{ projectname }}"
@@ -87,15 +94,13 @@ $(function() {
         {% endif %}
         onclick="document.forms['profile'].submit()"/>
         {{ projectname }}
-{% endfor %}
-
-</td>
-
- <td></td></tr>
+      {% endfor %}
+     </td>
+</tr>
 <tr><td>{{ image_button ("right", "030_pencil", "") }}</td><td>
 <b> SecurityGroups </b></td>
 
-<td>
+<td colspan="2">
 
 
 {% for group in configuration['security']['security_groups'].keys() %}
@@ -113,15 +118,11 @@ $(function() {
 
 
 </td>
+</tr>
+<tr><td></td><td>Completed</td><td colspan="2">{{ ', '.join(configuration.projects.completed) }}</td></tr>    
+<tr><td>{{ image_button ("right", "030_pencil", "/clouds/") }}</td><td colspan="3"><b> Clouds </b></td></tr>
 
- <td> </td></tr>
-
-
-
- <tr><td></td><td>Completed</td><td>{{ ', '.join(configuration.projects.completed) }}</td><td></td></tr>    
-<tr><td>{{ image_button ("right", "030_pencil", "/clouds/") }}</td><td colspan="2"><b> Clouds </b></td> <td></td></tr>
-
-<tr><td></td><td>Active </td><td>
+<tr><td></td><td>Active </td><td colspan="2">
   {% for cloudname in configuration.clouds.keys() %}
   <input type="checkbox"
         name="field-cloud-activated-{{cloudname}}"
@@ -133,10 +134,10 @@ $(function() {
         onclick="document.forms['profile'].submit()"
         /> {{ cloudname}}
 {% endfor %}
-</td><td></td></tr>
+</td></tr>
 
 
-<tr><td></td><td>Default </td><td>
+<tr><td></td><td>Default </td><td colspan="2">
 
   {% for cloudname in config.active() %}
  <input
@@ -150,28 +151,57 @@ $(function() {
   onclick="document.forms['profile'].submit()"
   /> {{ cloudname }}
 {% endfor %}
-</td><td></td></tr>
+</td></tr>
 </form>
 
-<tr><td>{{ image_button ("right", "030_pencil", "/keys/") }}</td><td colspan="2"><b> Keys </b></td> <td> </td></tr>
-<tr><td></td><td>List</td><td>
-        <table>
-	<tr><th>Default</th><th>Name</th><th>Fingerprint</th></tr>
-        {% for name in keys.names() %}
-        <tr>
-	  <td>
-	    {%if name == keys.get_default_key() %}
-              <input type="radio"
-                     name="keyselect"
-                     value="dummy""
-	             id="dummy"
-	             checked="checked">
-	    {% endif %}
-	  </td>
-	  <td>{{name}}</td> <td>{{keys.fingerprint(name)}}</td></tr>
+<tr><td>{{ image_button ("right", "030_pencil", "/keys/") }}</td><td colspan="3"><b> Keys </b></td></tr>
+<tr>
+{% if keys.no_of_keys() > 0 %}
+<form action="" name = "selectKeyForm" method=post enctype=multipart/form-data >
+<tr><td></td>
+   <td>Key Name</td>
+   <td colspan="2">Path/Fingerprint</td>
+</tr>
+        {% set defaultkey = keys.get_default_key() %}
+	{% for name in keys.names() %}
+		{% set value = keys[name] %}
+		{% if name == defaultkey %}
+			{% set checked = 'checked' %}
+		{% else %}
+			{% set checked = '' %}
+		{% endif %}
+<tr> 
+  <td><input type="radio" name="selectkeys" value="{{name}}" {{checked}}  
+	 onclick="document.forms['selectKeyForm'].submit()" title="select"> 
+  </td>
+  <td>{{name}}</td>
+  <td>{{keys.fingerprint(name)}}
+	<a href="delete/{{name}}/"><img src="/static/img/icons/png/glyphicons_016_bin.png" width="12" height="12" title="delete" align="right"></a>
+  </td>
+</tr>
 	{% endfor %}
-	</table>
-</td><td></td></tr>
+
+{% else %}
+	There are no keys present, please add one.
+</form>
+{% endif %}
+
+<form action="" method=post enctype=multipart/form-data name = "addkeysform">
+
+<tr>
+  <td></td>
+  <td><input name = "keyname" type="text" /></td> 
+  <td colspan="2"><textarea name = "keyorpath" rows="1" cols="100"></textarea></td>
+</tr>
+<tr>
+<td></td>
+<td colspan="3"><input type="submit" name = "addkey" value="Add"></td>
+</tr>
+</form>
+
+</table>
+{{show}}
+</tr>
 
 
 </table>
