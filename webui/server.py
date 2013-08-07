@@ -132,8 +132,67 @@ def inject_version():
 # ROUTE: mongo
 # ============================================================
 
+@app.route('/mongo/flavors')
+def mongo_flavors():
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    #filter()
+    config = cm_config()
+    
+    c = cloudmesh_mongo()
+    c.activate()
+    clouds=c.flavors()
+    
+    """    
+    2
+    disk 20
+    name m1.small
+    links [{u'href': u'http://198.202.120.83:8774/v1.1/1ae6813a3a6d4cebbeb1912f6d139ad0/flavors/2', u'rel': u'self'}, {u'href': u'http://198.202.120.83:8774/1ae6813a3a6d4cebbeb1912f6d139ad0/flavors/2', u'rel': u'bookmark'}]
+    OS-FLV-EXT-DATA:ephemeral 0
+    ram 2048
+    cm_refresh 2013-08-06T21-44-13Z
+    OS-FLV-DISABLED:disabled False
+    cm_id sierra-openstack-grizzly-flavors-m1-small
+    vcpus 1
+    cm_cloud sierra-openstack-grizzly
+    swap 
+    os-flavor-access:is_public True
+    rxtx_factor 1.0
+    cm_kind flavors
+    _id 5201a66d7df38caf0fe160bc
+    cm_type openstack
+    id 2
+    """
+
+
+    for cloud in clouds:
+        print cloud
+        for flavor in clouds[cloud]:
+            print flavor
+            for attribute in clouds[cloud][flavor]:
+                print attribute, clouds[cloud][flavor][attribute]
+
+    os_attributes = [
+                     'id',
+                     'name',
+                     'vcpus',
+                     'ram',
+                     'disk',
+                     'cm_refresh',
+                     ]
+    
+    return render_template('mongo_flavors.html',
+                           address_string=address_string,
+                           attributes=os_attributes,
+                           updated=time_now,
+                           clouds=clouds,
+                           config=config)
+
+# ============================================================
+# ROUTE: mongo
+# ============================================================
+
 @app.route('/mongo')
-def table():
+def mongo_table():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     #filter()
     config = cm_config()
@@ -158,7 +217,6 @@ def table():
                            updated=time_now,
                            clouds=clouds,
                            config=config)
-    
 # ============================================================
 # ROUTE: sitemap
 # ============================================================
