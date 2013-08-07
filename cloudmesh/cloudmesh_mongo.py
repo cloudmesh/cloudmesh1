@@ -9,10 +9,6 @@ from util.stopwatch import StopWatch
 from iaas.openstack.cm_compute import openstack
 from iaas.eucalyptus.eucalyptus import eucalyptus
 
-try:
-    from iaas.azure.cm_azure import cm_azure as azure
-except:
-    log.warning("AZURE NOT ENABLED")
 
 from util.logger import LOGGER
 
@@ -21,6 +17,13 @@ from util.logger import LOGGER
 # ----------------------------------------------------------------------
 
 log = LOGGER('cloudmesh_mongo')
+
+
+try:
+    from iaas.azure.cm_azure import cm_azure as azure
+except:
+    log.warning("AZURE NOT ENABLED")
+
 
 class cloudmesh_mongo:
     
