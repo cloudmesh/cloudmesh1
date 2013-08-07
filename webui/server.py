@@ -1,6 +1,8 @@
 from ConfigParser import SafeConfigParser
 from cloudmesh.provisioner.provisioner import *
+from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.webutil import setup_imagedraw
+from cloudmesh.cloudmesh_mongo import cloudmesh_mongo
 from datetime import datetime
 from flask import Flask, render_template, flash, send_from_directory
 #from flask.ext.autoindex import AutoIndex
@@ -125,7 +127,33 @@ version = pkg_resources.get_distribution("cloudmesh").version
 def inject_version():
     return dict(version=version)
 
+# ============================================================
+# ROUTE: mongo
+# ============================================================
 
+@app.route('/mongo')
+def table():
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    #filter()
+    config = cm_config()
+    
+    c = cloudmesh_mongo()
+    c.activate()
+    clouds=c.servers()
+    
+    """
+    for cloud in clouds:
+        print cloud
+        for server in clouds[cloud]:
+            print server
+            for attribute in clouds[cloud][server]:
+                print attribute, clouds[cloud][server][attribute]
+    """
+    return render_template('mongo.html',
+                           updated=time_now,
+                           clouds=clouds,
+                           config=config)
+    
 # ============================================================
 # ROUTE: sitemap
 # ============================================================

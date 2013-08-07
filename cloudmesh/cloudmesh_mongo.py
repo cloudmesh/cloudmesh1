@@ -1,13 +1,11 @@
 import sys
-sys.path.insert(0, '.')
-sys.path.insert(0, '..')
 import traceback
 import pymongo
 from pymongo import MongoClient
 from pprint import pprint
 from bson.objectid import ObjectId
-from cloudmesh.config.cm_config import cm_config
-from cloudmesh.util.stopwatch import StopWatch
+from config.cm_config import cm_config
+from util.stopwatch import StopWatch
 from iaas.openstack.cm_compute import openstack
 from iaas.eucalyptus.eucalyptus import eucalyptus
 
@@ -156,13 +154,42 @@ class cloudmesh_mongo:
         data = self.db_pbsnodes.find({"pbs_host": host})
         return data
     
-    
+    def find(self,query):
+        return self.db_clouds.find(query) 
        
+    
+    def _get_kind(self, kind):
+        data = {}
+        names = self.clouds.keys()
+        for name in names:
+            data[name] = {}
+            result = self.find({'cm_kind' : kind, 'cm_cloud': name})
+            for entry in result:
+                data[name][entry['id']] = entry
+        return data
+   
+    def servers(self):
+        return self._get_kind('servers')
+        
+    def flavors(self):
+        return self._get_kind('flavors')
+        
+    def images(self):
+        return self._get_kind('images')
+        
+
 def main():
     c = cloudmesh_mongo()
     c.activate()
     #c.refresh(types=['flavors'])
-    c.refresh(types=['servers','images','flavors'])
+    #c.refresh(types=['servers','images','flavors'])
+    
+    #data = c.find({})
+    #data = c.find({'cm_kind' : 'servers'})
+    #for entry in data:
+    #   pprint (entry)
+    
+    pprint (c.servers())
     
 if __name__ == "__main__":
     main()
