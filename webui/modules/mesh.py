@@ -112,7 +112,7 @@ def mongo_images():
                 print attribute, clouds[cloud][image][attribute]
 
         
-    return render_template('mongo_images.html',
+    return render_template('mesh_images.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
                            updated=time_now,
@@ -172,7 +172,7 @@ def mongo_flavors():
                      'cm_refresh',
                      ]
     
-    return render_template('mongo_flavors.html',
+    return render_template('mesh_flavors.html',
                            address_string=address_string,
                            attributes=os_attributes,
                            updated=time_now,
@@ -203,7 +203,7 @@ def mongo_table():
     """
     os_attributes = ['name','addresses','flavor','id','user_id','metadata','key_name','created']
     
-    return render_template('mongo_images.html',
+    return render_template('mesh_images.html',
                            address_string=address_string,
                            attributes=os_attributes,
                            updated=time_now,
