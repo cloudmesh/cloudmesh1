@@ -2,11 +2,14 @@ cloudmesh:
     active:
     - sierra-openstack-grizzly
     - india-openstack-essex
+    hpc:
+        username: portalname    
     clouds:
         india-openstack-essex:
             cm_host: india.futuregrid.org
             cm_label: ios
             cm_type: openstack
+            cm_type_version: essex
             credentials:
                 OS_AUTH_URL: http://149.165.146.50:5000/v2.0
                 OS_CACERT: None
@@ -36,6 +39,7 @@ cloudmesh:
             cm_host: sierra.futuregrid.org
             cm_label: ios
             cm_type: openstack
+            cm_type_version: grizzly
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem

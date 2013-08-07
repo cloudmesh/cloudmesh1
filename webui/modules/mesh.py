@@ -5,26 +5,22 @@ from cloudmesh.cloudmesh_mongo import cloudmesh_mongo
 from datetime import datetime
 from cloudmesh.util.util import address_string
 from pprint import pprint
+
 mesh_module = Blueprint('mesh_module', __name__)
 
-#
-# ROUTE: KEYS
-#
-
-
 # ============================================================
-# ROUTE: mongo
+# ROUTE: /mesh/images
 # ============================================================
 
 @mesh_module.route('/mesh/images/')
 def mongo_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    #filter()
+    # filter()
     config = cm_config()
     
     c = cloudmesh_mongo()
     c.activate()
-    clouds=c.images()
+    clouds = c.images()
    
     """
     
@@ -95,7 +91,7 @@ def mongo_images():
                         [ "iname" , "metadata", "instance_type_name"],
                         [ "updated" , "updated"],
                         [ "minDisk" , "minDisk"],
-                        [ "memory_mb" , "metadata",'instance_type_memory_mb'],
+                        [ "memory_mb" , "metadata", 'instance_type_memory_mb'],
                         [ "fid" , "metadata", "instance_type_flavorid"],
                         [ "vcpus" , "metadata", "instance_type_vcpus"],
                         [ "user_id" , "metadata", "user_id"],
@@ -127,12 +123,12 @@ def mongo_images():
 @mesh_module.route('/mesh/flavors/')
 def mongo_flavors():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    #filter()
+    # filter()
     config = cm_config()
     
     c = cloudmesh_mongo()
     c.activate()
-    clouds=c.flavors()
+    clouds = c.flavors()
     
     """    
     2
@@ -187,12 +183,12 @@ def mongo_flavors():
 @mesh_module.route('/mesh/servers/')
 def mongo_table():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    #filter()
+    # filter()
     config = cm_config()
     
     c = cloudmesh_mongo()
     c.activate()
-    clouds=c.servers()
+    clouds = c.servers()
     
     """
     for cloud in clouds:
@@ -202,7 +198,7 @@ def mongo_table():
             for attribute in clouds[cloud][server]:
                 print attribute, clouds[cloud][server][attribute]
     """
-    os_attributes = ['name','addresses','flavor','id','user_id','metadata','key_name','created']
+    os_attributes = ['name', 'addresses', 'flavor', 'id', 'user_id', 'metadata', 'key_name', 'created']
     
     return render_template('mesh_servers.html',
                            address_string=address_string,
