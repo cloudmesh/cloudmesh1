@@ -58,14 +58,15 @@ class cloudmesh_mongo:
           
             try:
                 credential = self.config.get(cloud_name)
-                cloud_type = self.config.get()[
-                    'clouds'][cloud_name]['cm_type']
-
-                if cloud_type in ['openstack', 'eucalyptus', 'azure']:
+                cm_type = self.config.get()['clouds'][cloud_name]['cm_type']
+                print "CCC", cm_type
+                cm_type_version = self.config.get()['clouds'][cloud_name]['cm_type_version']
+                if cm_type in ['openstack', 'eucalyptus', 'azure']:
                     self.clouds[cloud_name] = {'name': cloud_name,
-                                               'cm_type': cloud_type}
+                                               'cm_type': cm_type,
+                                               'cm_type_version': cm_type_version }
 #                                               'credential': credential}
-                    provider = self.cloud_provider(cloud_type)
+                    provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name)
                     self.clouds[cloud_name].update({'manager': cloud})
             
@@ -142,6 +143,7 @@ class cloudmesh_mongo:
                     result[element]['cm_id'] = id 
                     result[element]['cm_cloud'] = name
                     result[element]['cm_type'] = self.clouds[name]['cm_type'] 
+                    result[element]['cm_type_version'] = self.clouds[name]['cm_type_version'] 
                     result[element]['cm_kind'] = type
                     del result[element]['manager']
                     self.db_clouds.remove({"cm_id": id},safe=True) 
