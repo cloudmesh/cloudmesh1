@@ -2,6 +2,7 @@ from ConfigParser import SafeConfigParser
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.webutil import setup_imagedraw
+from cloudmesh.util.util import address_string
 from cloudmesh.cloudmesh_mongo import cloudmesh_mongo
 from datetime import datetime
 from flask import Flask, render_template, flash, send_from_directory
@@ -149,7 +150,11 @@ def table():
             for attribute in clouds[cloud][server]:
                 print attribute, clouds[cloud][server][attribute]
     """
+    os_attributes = ['name','addresses','flavor','id','user_id','metadata','key_name','created']
+    
     return render_template('mongo.html',
+                           address_string=address_string,
+                           attributes=os_attributes,
                            updated=time_now,
                            clouds=clouds,
                            config=config)
