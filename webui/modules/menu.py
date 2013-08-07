@@ -29,7 +29,14 @@ super_sidebar_pages = [
             ["Workflow", "/provision/workflow"],
         ],
     ],
-    ["Clouds",
+    ["Clouds (Mongo)",
+        [
+            ["VMs", "/mesh/servers"],
+            ["Images", "/mesh/images"],
+            ["Flavors", "/mesh/flavors/"],
+        ],
+    ],
+   ["Clouds",
         [
             ["VMs", "/table/"],
             ["Images", "/images/"],

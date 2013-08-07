@@ -2,8 +2,6 @@ from ConfigParser import SafeConfigParser
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.webutil import setup_imagedraw
-from cloudmesh.util.util import address_string
-from cloudmesh.cloudmesh_mongo import cloudmesh_mongo
 from datetime import datetime
 from flask import Flask, render_template, flash, send_from_directory
 #from flask.ext.autoindex import AutoIndex

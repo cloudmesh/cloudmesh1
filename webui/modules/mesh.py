@@ -1,9 +1,10 @@
 from flask import Blueprint
 from flask import render_template, request, redirect
-from cloudmesh.config.cm_keys import cm_keys
+from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cloudmesh_mongo import cloudmesh_mongo
 from datetime import datetime
-
+from cloudmesh.util.util import address_string
+from pprint import pprint
 mesh_module = Blueprint('mesh_module', __name__)
 
 #
@@ -15,7 +16,7 @@ mesh_module = Blueprint('mesh_module', __name__)
 # ROUTE: mongo
 # ============================================================
 
-@mesh_module.route('/mesh/images')
+@mesh_module.route('/mesh/images/')
 def mongo_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     #filter()
@@ -123,7 +124,7 @@ def mongo_images():
 # ROUTE: mongo
 # ============================================================
 
-@mesh_module.route('/mesh/flavors')
+@mesh_module.route('/mesh/flavors/')
 def mongo_flavors():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     #filter()
@@ -183,7 +184,7 @@ def mongo_flavors():
 # ROUTE: mongo/servers
 # ============================================================
 
-@mesh_module.route('/mesh/servers')
+@mesh_module.route('/mesh/servers/')
 def mongo_table():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     #filter()
@@ -203,7 +204,7 @@ def mongo_table():
     """
     os_attributes = ['name','addresses','flavor','id','user_id','metadata','key_name','created']
     
-    return render_template('mesh_images.html',
+    return render_template('mesh_servers.html',
                            address_string=address_string,
                            attributes=os_attributes,
                            updated=time_now,
