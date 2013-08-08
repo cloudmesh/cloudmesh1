@@ -30,7 +30,10 @@ class cm_config_server(object):
         self.config = read_yaml_config (self.filename, check=True) 
 
     def __str__(self):
-        return str(self.config)
+        return json.dumps(self.config, indent=4)
+
+
+    
 
 class cm_config(object):
 
@@ -44,7 +47,7 @@ class cm_config(object):
 
     filename = ""
 
-    data = collections.OrderedDict()
+    config = collections.OrderedDict()
 
     # ----------------------------------------------------------------------
     # initialization methods
@@ -87,23 +90,23 @@ class cm_config(object):
         cloud_handler = cloud_handler_class(**handler_args)
         ########### for testing #############################################################
         # cloud_handler._client = mock_keystone.Client
-        # cloud_handler._client.mockusername = self.data['cloudmesh']['profile']['username']
+        # cloud_handler._client.mockusername = self.config['cloudmesh']['profile']['username']
         # cloud_handler._client.mocktenants = ['fg82','fg110','fg296']
         #####################################################################################
         return cloud_handler
         
 
     # ----------------------------------------------------------------------
-    # Methods to initialize (create) the config data
+    # Methods to initialize (create) the config config
     # ----------------------------------------------------------------------
     def _initialize_user(self, username):
-        """Loads user data, including profile, projects, and credentials"""
+        """Loads user config, including profile, projects, and credentials"""
         user = self.userdata_handler(username)
 
-        self.data['cloudmesh']['prefix'] = username
-        self.data['cloudmesh']['index'] = "001"
+        self.config['cloudmesh']['prefix'] = username
+        self.config['cloudmesh']['index'] = "001"
 
-        self.data['cloudmesh']['profile'] = {
+        self.config['cloudmesh']['profile'] = {
             'username': username,
             'uid': user.uid,
             'gid': user.gid,
@@ -120,30 +123,30 @@ class cm_config(object):
                 if keys['default'] is None:
                     keys['default'] = key
                 keys['keylist'][key] = user.keys[key]
-        self.data['cloudmesh']['keys'] = keys
+        self.config['cloudmesh']['keys'] = keys
 
-        self.data['cloudmesh']['projects'] = {
+        self.config['cloudmesh']['projects'] = {
             'active': user.activeprojects,
             'completed': user.completedprojects,
             'default': user.defaultproject
         }
 
-        self.data['cloudmesh']['active'] = user.activeclouds
-        self.data['cloudmesh']['default'] = user.defaultcloud
+        self.config['cloudmesh']['active'] = user.activeclouds
+        self.config['cloudmesh']['default'] = user.defaultcloud
 
     def _initialize_clouds(self):
         """Creates cloud credentials for the user"""
-        self.data['cloudmesh']['clouds'] = {}
+        self.config['cloudmesh']['clouds'] = {}
         cloudlist = self.active()
         for cloud in cloudlist:
             cloudcreds = self._get_cloud_handler(cloud, as_admin=True)
             cloudcreds.initialize_cloud_user()
-            self.data['cloudmesh']['clouds'][cloud] = cloudcreds.data
+            self.config['cloudmesh']['clouds'][cloud] = cloudcreds.config
 
     def initialize(self, username):
-        """Creates or resets the data for a user.  Note that the
+        """Creates or resets the config for a user.  Note that the
         userdata_handler property must be set with appropriate handler class."""
-        self.data = yaml.safe_load(open(self.yaml_template, "r"))
+        self.config = yaml.safe_load(open(self.yaml_template, "r"))
         self._initialize_user(username)
         self._initialize_clouds()
 
@@ -169,14 +172,14 @@ class cm_config(object):
         self.filename = filename
         if os.path.exists(filename):
             f = open(self.filename, "r")
-            self.data = yaml.safe_load(f)
+            self.config = yaml.safe_load(f)
             f.close()
 
     def write(self, filename=None):
-        # pyaml.dump(self.data, f, vspacing=[2, 1, 1])
-        # text = yaml.dump(self.data, default_flow_style=False)
+        # pyaml.dump(self.config, f, vspacing=[2, 1, 1])
+        # text = yaml.dump(self.config, default_flow_style=False)
         content = ""
-        content = yaml.safe_dump(self.data, default_flow_style=False, indent=4)
+        content = yaml.safe_dump(self.config, default_flow_style=False, indent=4)
 
         fpath = filename or self.filename
         f = os.open(fpath, os.O_CREAT | os.O_TRUNC | 
@@ -188,7 +191,7 @@ class cm_config(object):
     # print methods
     # ----------------------------------------------------------------------
     def __str__(self):
-        return json.dumps(self.data, indent=4)
+        return json.dumps(self.config, indent=4)
 
     def export_line(self, attribute, value):
         if isinstance(value, (list, tuple)):
@@ -203,7 +206,7 @@ class cm_config(object):
     # ----------------------------------------------------------------------
     @property
     def userdata_handler(self):
-        """Plug-in class that knows how to get all the user/project data"""
+        """Plug-in class that knows how to get all the user/project config"""
         return self._userdata_handler
 
     @userdata_handler.setter
@@ -218,114 +221,114 @@ class cm_config(object):
 
     @property
     def vmname(self):
-        return "%s-%04d" % (self.data['cloudmesh']['prefix'], int(self.data['cloudmesh']['index']))
+        return "%s-%04d" % (self.config['cloudmesh']['prefix'], int(self.config['cloudmesh']['index']))
 
     @property
     def default_cloud(self):
-        return self.data['cloudmesh']['default']
+        return self.config['cloudmesh']['default']
 
     @default_cloud.setter
     def default_cloud(self, value):
-        self.data['cloudmesh']['default'] = str(value)
+        self.config['cloudmesh']['default'] = str(value)
 
     @property
     def prefix(self):
-        return self.data['cloudmesh']['prefix']
+        return self.config['cloudmesh']['prefix']
 
     @prefix.setter
     def prefix(self, value):
-        self.data['cloudmesh']['prefix'] = value
+        self.config['cloudmesh']['prefix'] = value
 
     @property
     def index(self):
-        return self.data['cloudmesh']['index']
+        return self.config['cloudmesh']['index']
 
     @index.setter
     def index(self, value):
-        self.data['cloudmesh']['index'] = int(value)
+        self.config['cloudmesh']['index'] = int(value)
 
     @property
     def firstname(self):
-        return self.data['cloudmesh']['profile']['firstname']
+        return self.config['cloudmesh']['profile']['firstname']
 
     @firstname.setter
     def firstname(self, value):
-        self.data['cloudmesh']['profile']['firstname'] = str(value)
+        self.config['cloudmesh']['profile']['firstname'] = str(value)
 
     @property
     def lastname(self):
-        return self.data['cloudmesh']['profile']['lastname']
+        return self.config['cloudmesh']['profile']['lastname']
 
     @lastname.setter
     def lastname(self, value):
-        self.data['cloudmesh']['profile']['lastname'] = str(value)
+        self.config['cloudmesh']['profile']['lastname'] = str(value)
 
     @property
     def phone(self):
-        return self.data['cloudmesh']['profile']['phone']
+        return self.config['cloudmesh']['profile']['phone']
 
     @phone.setter
     def phone(self, value):
-        self.data['cloudmesh']['profile']['phone'] = str(value)
+        self.config['cloudmesh']['profile']['phone'] = str(value)
 
     @property
     def email(self):
-        return self.data['cloudmesh']['profile']['e-mail']
+        return self.config['cloudmesh']['profile']['e-mail']
 
     @email.setter
     def email(self, value):
-        self.data['cloudmesh']['profile']['e-mail'] = str(value)
+        self.config['cloudmesh']['profile']['e-mail'] = str(value)
 
     @property
     def address(self):
-        return self.data['cloudmesh']['profile']['address']
+        return self.config['cloudmesh']['profile']['address']
 
     @address.setter
     def address(self, value):
-        self.data['cloudmesh']['profile']['address'] = str(value)
+        self.config['cloudmesh']['profile']['address'] = str(value)
 
 
     # ----------------------------------------------------------------------
     # get methods
     # ----------------------------------------------------------------------
     def incr(self, value=1):
-        self.data['cloudmesh']['index'] = int(
-            self.data['cloudmesh']['index']) + int(value)
+        self.config['cloudmesh']['index'] = int(
+            self.config['cloudmesh']['index']) + int(value)
         # self.write(self.filename)
 
     #
     # warning we can not name a method default
     #
     def active(self):
-        return self.data['cloudmesh']['active']
+        return self.config['cloudmesh']['active']
 
     def profile(self):
-        return self.data['cloudmesh']['profile']
+        return self.config['cloudmesh']['profile']
 
     def userkeys(self, attribute=None, expand=True):
         if attribute is None:
-            return self.data['cloudmesh']['keys']
+            return self.config['cloudmesh']['keys']
         else:
             if attribute == 'default':
-                name = self.data['cloudmesh']['keys']['default']
-                value = self.data['cloudmesh']['keys']['keylist'][name]
+                name = self.config['cloudmesh']['keys']['default']
+                value = self.config['cloudmesh']['keys']['keylist'][name]
             else:
-                value = self.data['cloudmesh']['keys']['keylist'][attribute]
+                value = self.config['cloudmesh']['keys']['keylist'][attribute]
             if expand:
                 value = path_expand(value)
             return value
 
     def default(self, cloudname):
-        return self.data['cloudmesh']['clouds'][cloudname]['default']
+        return self.config['cloudmesh']['clouds'][cloudname]['default']
 
     def projects(self, status):
-        return self.data['cloudmesh']['projects'][status]
+        return self.config['cloudmesh']['projects'][status]
 
     def clouds(self):
-        return self.data['cloudmesh']['clouds']
+        return self.config['cloudmesh']['clouds']
 
     def cloud(self, cloudname):
-        return self.data['cloudmesh']['clouds'][cloudname] if cloudname in self.data['cloudmesh']['clouds'] else None
+        return self.config['cloudmesh']['clouds'][cloudname] if cloudname in self.config['cloudmesh']['clouds'] else None
 
     def cloud_default(self, cloudname, defname):
         cloud = self.cloud(cloudname)
@@ -334,7 +337,7 @@ class cm_config(object):
 
     def get(self, key=None, expand=False):
         if key is None:
-            return self.data['cloudmesh']
+            return self.config['cloudmesh']
         else:
             if expand:
                 d = self.cloud(key)['credentials']
@@ -374,24 +377,24 @@ class cm_config(object):
 
     def set_filter(self, cloudname, filter, type='state'):
         # try:
-        #    test = self.data['cloudmesh']['clouds'][cloudname]['default']['filter']
+        #    test = self.config['cloudmesh']['clouds'][cloudname]['default']['filter']
         # except:
-        # self.data['cloudmesh']['clouds'][cloudname]['default']['filter'] = {}
-        self.data['cloudmesh']['clouds'][cloudname][
+        # self.config['cloudmesh']['clouds'][cloudname]['default']['filter'] = {}
+        self.config['cloudmesh']['clouds'][cloudname][
             'default']['filter'][type] = filter
 
     def get_filter(self, cloudname, type='state'):
         print "getting the filter for cloud", cloudname
         # try:
-        #    result = self.data['cloudmesh']['clouds'][cloudname]['default']['filter'][type]
+        #    result = self.config['cloudmesh']['clouds'][cloudname]['default']['filter'][type]
         # except:
         #    self.set_filter(cloudname, {}, type)
-        result = self.data['cloudmesh']['clouds'][
+        result = self.config['cloudmesh']['clouds'][
             cloudname]['default']['filter'][type]
         return result
 
     def create_filter(self, cloudname, states):
-        self.data['cloudmesh']['clouds'][cloudname]['default']['filter'] = {}
+        self.config['cloudmesh']['clouds'][cloudname]['default']['filter'] = {}
         state_flags = {}
         for state in states:
             state_flags[state] = True

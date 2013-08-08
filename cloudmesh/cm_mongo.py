@@ -8,6 +8,7 @@ from config.cm_config import cm_config
 from util.stopwatch import StopWatch
 from iaas.openstack.cm_compute import openstack
 from iaas.eucalyptus.eucalyptus import eucalyptus
+from config.cm_config import cm_config_server
 
 
 from util.logger import LOGGER
@@ -35,9 +36,10 @@ class cm_mongo:
     
     def __init__(self, collection="clouds"):
         
+        db_name = cm_config_server().config["mongo"]["db"]
         
         self.client = MongoClient()    
-        self.db = self.client["cm-clouds"]          
+        self.db = self.client[db_name]          
         self.db_clouds = self.db[collection]    
         self.config = cm_config()
         
