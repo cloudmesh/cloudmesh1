@@ -40,17 +40,21 @@ class cm_profile (object):
 
     # methods dependent on username 
     
-    def _id(self,username):
+    def _id(self, username):
         return "profile-{0}".format(username)
     
-    def find_one(self,query):
+    def find_one(self, query):
         return self.db_collection.find_one(query) 
        
-    def update(self,username, dict, page=None):
+    def update(self, username, dict, page=None):
         """updates for the username the dict and if a page is given also includes the page"""
         self.write(username, dict, page=None, update=True)
-    
-    def write(self,username, dict, page=None, update=False):
+
+    def save(self, username, dict, page=None):
+        """saves for the username the dict and if a page is given also includes the page"""
+        self.write(username, dict, page=None, update=False)
+      
+    def write(self, username, dict, page=None, update=False):
         """updates for the username the dict and if a page is given also includes the page. 
             if update is set to True, it jsut works as an update function, use the update method instead."""
         id = self._id(username)
@@ -59,12 +63,12 @@ class cm_profile (object):
             try:
                 d = self.find_one({"cm_id": id})
             except:
-                pass # no element with cm_id
+                pass  # no element with cm_id
             
         d.update(dict)
         
-        self.db_collection.remove({"cm_id": id},safe=True)
-        d.update({"cm_id": id, 
+        self.db_collection.remove({"cm_id": id}, safe=True)
+        d.update({"cm_id": id,
                   "cm_username": username})
 
         if page is not None:
