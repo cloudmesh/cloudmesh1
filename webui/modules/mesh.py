@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import render_template, request, redirect
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.cloudmesh_mongo import cloudmesh_mongo
+from cloudmesh.cm_mongo import cm_mongo
 from datetime import datetime
 from cloudmesh.util.util import address_string
 from pprint import pprint
@@ -18,7 +18,7 @@ def mongo_images():
     # filter()
     config = cm_config()
     
-    c = cloudmesh_mongo()
+    c = cm_mongo()
     c.activate()
     clouds = c.images()
    
@@ -69,6 +69,7 @@ def mongo_images():
     """
     attributes = {"essex": 
                   [
+                        [ "Gregor", "metadata"],
                         [ "status" , "status"],
                         [ "name" , "name"],
                         [ "type_id" , "metadata", "instance_type_id"],
@@ -85,6 +86,7 @@ def mongo_images():
                   ],
                   "grizzly": 
                     [    
+                        [ "Gregor", "metadata"],
                         [ "status" , "status"],
                         [ "name" , "name"],
                         [ "type_id" , "metadata", "instance_type_id"],
@@ -126,7 +128,7 @@ def mongo_flavors():
     # filter()
     config = cm_config()
     
-    c = cloudmesh_mongo()
+    c = cm_mongo()
     c.activate()
     clouds = c.flavors()
     
@@ -186,7 +188,7 @@ def mongo_table():
     # filter()
     config = cm_config()
     
-    c = cloudmesh_mongo()
+    c = cm_mongo()
     c.activate()
     clouds = c.servers()
     

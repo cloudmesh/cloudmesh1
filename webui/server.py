@@ -12,8 +12,6 @@ import pkg_resources
 import sys
 import types
 
-
-
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
 

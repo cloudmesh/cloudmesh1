@@ -1,6 +1,6 @@
 from fabric.api import task, local
 from pprint import pprint
-from cloudmesh.cloudmesh_mongo import cloudmesh_mongo
+from cloudmesh.cm_mongo import cm_mongo
     
 @task
 def start():
@@ -17,13 +17,13 @@ def clean():
 
 @task
 def vms_find():
-    c = cloudmesh_mongo()
+    c = cm_mongo()
     c.activate()
     pprint (c.servers())
     
 @task
 def vms_refresh():
-    c = cloudmesh_mongo()
+    c = cm_mongo()
     c.activate()
     c.refresh(types=['servers','images','flavors'])
     

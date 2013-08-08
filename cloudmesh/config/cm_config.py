@@ -1,5 +1,4 @@
 import sys
-sys.path.insert(0, '../..')
 import yaml
 import os
 import stat
@@ -11,7 +10,8 @@ from pprint import pprint
 from cloudmesh.util.util import path_expand
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import check_file_for_tabs
-from cloudmesh.config.cloudmesh_cloud_handler import cloudmesh_cloud_handler
+from cloudmesh_cloud_handler import cloudmesh_cloud_handler
+from cloudmesh.util.config import read_yaml_config
 
 ##### For testing
 # import mock_keystone
@@ -19,6 +19,18 @@ from cloudmesh.config.cloudmesh_cloud_handler import cloudmesh_cloud_handler
 
 log = LOGGER("cm_config")
 
+class cm_config_server(object):
+    filename = "~/.futuregrid/cloudmesh_server.yaml"
+    config = None
+
+    def __init__(self, filename=None):
+        if filename is not None:
+            self.filename = filename
+
+        self.config = read_yaml_config (self.filename, check=True) 
+
+    def __str__(self):
+        return str(self.config)
 
 class cm_config(object):
 
@@ -167,7 +179,7 @@ class cm_config(object):
         content = yaml.safe_dump(self.data, default_flow_style=False, indent=4)
 
         fpath = filename or self.filename
-        f = os.open(fpath, os.O_CREAT | os.O_TRUNC |
+        f = os.open(fpath, os.O_CREAT | os.O_TRUNC | 
                     os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
         os.write(f, content)
         os.close(f)

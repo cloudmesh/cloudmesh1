@@ -16,7 +16,7 @@ from util.logger import LOGGER
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
 
-log = LOGGER('cloudmesh_mongo')
+log = LOGGER('cm_mongo')
 
 
 try:
@@ -25,7 +25,7 @@ except:
     log.warning("AZURE NOT ENABLED")
 
 
-class cloudmesh_mongo:
+class cm_mongo:
     
     clouds = {}
     client = None
@@ -34,6 +34,8 @@ class cloudmesh_mongo:
     config = None
     
     def __init__(self, collection="clouds"):
+        
+        
         self.client = MongoClient()    
         self.db = self.client["cm-clouds"]          
         self.db_clouds = self.db[collection]    
@@ -184,7 +186,7 @@ class cloudmesh_mongo:
         
 
 def main():
-    c = cloudmesh_mongo()
+    c = cm_mongo()
     c.activate()
     #c.refresh(types=['flavors'])
     #c.refresh(types=['servers','images','flavors'])

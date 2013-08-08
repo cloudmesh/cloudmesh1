@@ -1,3 +1,4 @@
+"""
 __all__ = ['cloudmesh_cloud.py',
            'cloudmesh_cloud_handler.py',
            'cm_config.py',
@@ -10,3 +11,4 @@ __all__ = ['cloudmesh_cloud.py',
            'mock_user.py',
            'openstack_essex_cloud.py',
            'openstack_grizzly_cloud.py']
+"""
