@@ -2,23 +2,32 @@
 {% from "_helper.html" import image_button %}
 {% block content %}
 
+<script type="text/javascript">
+/* http://stackoverflow.com/a/10237915 */
+(function($) {
+    $(function() {
+        $("#cluster-accordion > div").accordion({ header: "h3", collapsible: true, active: false });
+    })
+})(jQuery);
+</script>
+
 <table>
 <th>  {{ image_button ("center","195_circle_info","/inventory/") }}
 List of all clusters</th>
 </table>
  <hr>
+
+<div id="cluster-accordion">
 {% for cluster in inventory.clusters |sort(attribute='name') %}
 {# % set server = cluster.management_node  % #}
+  <div style="margin-bottom:1em;">
+  <h3>
+    {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
+    {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
+    Cloudmesh - Inventory for {{ cluster.name }}
+  </h3>
 
-<table width = 55%, height = 60%>
-  <tr>
-     <th colspan="{{ parameters.columns }}">
-       {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
-       {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
-
-       Cloudmesh - Inventory for {{ cluster.name }}
-     </th>
- </tr>
+<table width="55%">
  <tr>
      <td  colspan="{{ parameters.columns }}"> 
       Updated :  {{ updated }}
@@ -38,6 +47,8 @@ List of all clusters</th>
         {% endfor %}
  </tr>
 </table>
+  </div>
 {% endfor %}
+</div>
 {% endblock %} 
 
