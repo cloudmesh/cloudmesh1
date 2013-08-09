@@ -11,6 +11,21 @@ function killall(cloud) {
 	}
 }
 
+/* http://stackoverflow.com/a/10237915 */
+(function($) {
+    $(function() {
+        $("#flavors-accordion > div").accordion({ header: "h3", collapsible: true, active: false });
+    })
+})(jQuery);
+
+$(function() {
+  {% for cloudnum in range(clouds|count) %}
+    $("#cloud-table-{{ cloudnum }}").tablesorter({
+        sortList: [[0,0]],
+    });
+  {% endfor %}
+});
+
 </script>
 
  <!--
@@ -22,42 +37,39 @@ function killall(cloud) {
                 print attribute, clouds[cloud][server][attribute]
 -->
 
-<table>
-
-    {% for cloud in clouds %}
-
-	  	<tr>
-			<th {{ attributes|length }}>{{ cloud }}</th>
-		</tr>
-		<tr>
-		  {% for attribute in attributes %}	
-				<th>{{attribute}}</th>
-		  {% endfor %}			
-		</tr>
-
-	    {% for server in clouds[cloud] %}
-	    
-	       <tr>
-	           <!-- for attribute in clouds[cloud][server] -->
-		       {% for attribute in attributes %}	
-		            {% if attribute == "created" %}
-	        			<td>{{ clouds[cloud][server][attribute] }}</td>
-		            {% elif attribute == "flavor" %}
-	        			<td>{{ clouds[cloud][server][attribute]['id'] }}</td>	        			
-		            {% elif attribute == "addresses" %}
-	        			<td>{{ address_string(clouds[cloud][server][attribute]) }}</td>	        			
-	        		{% else %}
-	        			<td>{{ clouds[cloud][server][attribute]  }}</td>
-	        		{% endif %}
-	           {% endfor %}
-
-	       </tr>
-	    
-	    {% endfor %}
-  
-  
+<div id="flavors-accordion">
+  {% for cloud in clouds %}
+  <div style="margin-bottom:1em;">
+    <h3>{{ cloud }}</h3>
+    <table id="cloud-table-{{ loop.index0 }}" class="tablesorter" >
+      <thead>
+          <tr>
+            {% for attribute in attributes %}	
+                  <th>{{attribute}}</th>
+            {% endfor %}			
+          </tr>
+      </thead>
+      <tbody>
+          {% for server in clouds[cloud] %}
+             <tr>
+                 <!-- for attribute in clouds[cloud][server] -->
+                 {% for attribute in attributes %}	
+                      {% if attribute == "created" %}
+                          <td>{{ clouds[cloud][server][attribute] }}</td>
+                      {% elif attribute == "flavor" %}
+                          <td>{{ clouds[cloud][server][attribute]['id'] }}</td>	        			
+                      {% elif attribute == "addresses" %}
+                          <td>{{ address_string(clouds[cloud][server][attribute]) }}</td>	        			
+                      {% else %}
+                          <td>{{ clouds[cloud][server][attribute]  }}</td>
+                      {% endif %}
+                 {% endfor %}
+             </tr>
+          {% endfor %}
+      </tbody>  
+    </table>
+  </div>  
   {% endfor %}
-  
-</table>
+</div>  
 
 {% endblock %}
