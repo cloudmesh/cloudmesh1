@@ -76,12 +76,14 @@ class openstack(ComputeBaseType):
     # initialize
     #
     # possibly make connext seperate
-    def __init__(self, label,
+    def __init__(self, 
+                 label=None,
                  authurl=None,
                  project=None,
                  username=None,
                  password=None,
-                 cacert=None):
+                 cacert=None,
+                 credential=None):
         """
         initializes the openstack cloud from a defould novaRC file
         locates at ~/.futuregrid.org/openstack. However if the
@@ -89,7 +91,10 @@ class openstack(ComputeBaseType):
         """
         self.clear()
         self.label = label
-        self.config(label)
+        if credential is not None:
+            self.credential = credential
+        else:
+            self.config(label)
         self.connect()
 
     def clear(self):
@@ -295,9 +300,10 @@ class openstack(ComputeBaseType):
             'token'], "Content-type": "application/json"}
         conn2 = httplib.HTTPConnection(url2)
 
+        
         # conn2.request("GET", "%s/servers" % apiurlt[2], params2, headers2)
         conn2.request("GET", what % (apiurlt[2]), params2, headers2)
-
+        
         response2 = conn2.getresponse()
         data2 = response2.read()
         dd2 = json.loads(data2)
@@ -305,6 +311,11 @@ class openstack(ComputeBaseType):
         conn2.close()
         return dd2
 
+    def get_tenants(self):
+        """get the tenants dict for the vm with the given id"""
+        msg = "/tenants"
+        return self._get(msg)
+        
     def get_meta(self, id):
         """get the metadata dict for the vm with the given id"""
         msg = "/servers/%s/metadata" % (id)
