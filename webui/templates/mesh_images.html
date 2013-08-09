@@ -7,7 +7,7 @@
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#flavors-accordion > div").accordion({ header: "h3", collapsible: true, active: false });
+        $("#images-accordion > div").accordion({ header: "h3", collapsible: true, active: false });
     })
 })(jQuery);
 
@@ -30,7 +30,7 @@ $(function() {
                 print attribute, clouds[cloud][server][attribute]
 -->
 
-<div id="flavors-accordion">
+<div id="images-accordion">
   {% for cloud in clouds %}
     {% set version = clouds[cloud]['cm_type_version'] %}
     {% set attributes = cloud_attributes['grizzly']%}
