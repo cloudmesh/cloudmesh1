@@ -11,6 +11,19 @@ function killall(cloud) {
 	}
 }
 
+/* http://stackoverflow.com/a/10237915 */
+(function($) {
+    $(function() {
+        $("#flavors-accordion > div").accordion({ header: "h3", collapsible: true, active: false });
+    })
+})(jQuery);
+
+$(function() {
+  {% for cloud in clouds %}
+    $("#cloud-table-{{ loop.index }}").tablesorter();
+  {% endfor %}
+});
+
 </script>
 
  <!--
@@ -22,35 +35,37 @@ function killall(cloud) {
                 print attribute, clouds[cloud][server][attribute]
 -->
 
-<table>
 
-    {% for cloud in clouds %}
+<div id="flavors-accordion">
+  {% for cloud in clouds %}
+  <div style="margin-bottom:1em;">
+  <h3>{{ cloud }}</h3>
+    <table id="cloud-table-{{ loop.index }}" class="tablesorter" style="width:100%;">
+      <thead>
+          <tr>
+            <!-- for attribute in clouds[cloud][flavor]  --> 
+            {% for attribute in attributes %}	
+                  <th>{{attribute}}</th>
+            {% endfor %}			
+          </tr>
+      </thead>
+      <tbody>
+          {% for flavor in clouds[cloud] %}
 
-	  	<tr>
-			<th colspan="{{ attributes|length }}">{{ cloud }}</th>
-		</tr>
-		<tr>
-	      <!-- for attribute in clouds[cloud][flavor]  --> 
-		  {% for attribute in attributes %}	
-		  		<th>{{attribute}}</th>
-		  {% endfor %}			
-		</tr>
+             <tr>
+                 <!-- for attribute in clouds[cloud][flavor] --> 
+                 {% for attribute in attributes  %}
+                      <td>{{ clouds[cloud][flavor][attribute]  }}</td>
+                 {% endfor %}
 
-	    {% for flavor in clouds[cloud] %}
-	    
-	       <tr>
-	           <!-- for attribute in clouds[cloud][flavor] --> 
-		       {% for attribute in attributes  %}
-        			<td>{{ clouds[cloud][flavor][attribute]  }}</td>
-	           {% endfor %}
+             </tr>
 
-	       </tr>
-	    
-	    {% endfor %}
-  
-  
+          {% endfor %}
+      </tbody>
+    </table>
+  </div>
   {% endfor %}
+</div>
   
-</table>
 
 {% endblock %}
