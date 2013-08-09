@@ -46,15 +46,15 @@ class cm_profile (object):
     def find_one(self, query):
         return self.db_collection.find_one(query) 
        
-    def update(self, username, dict, page=None):
+    def update(self, username, dict, cloud=None, page=None):
         """updates for the username the dict and if a page is given also includes the page"""
-        self.write(username, dict, page=None, update=True)
+        self.write(username, dict, cloud, page, update=True)
 
-    def save(self, username, dict, page=None):
+    def save(self, username, dict, cloud=None, page=None):
         """saves for the username the dict and if a page is given also includes the page"""
-        self.write(username, dict, page=None, update=False)
+        self.write(username, dict, cloud, page, update=False)
       
-    def write(self, username, dict, page=None, update=False):
+    def write(self, username, dict, cloud=None, page=None, update=False):
         """updates for the username the dict and if a page is given also includes the page. 
             if update is set to True, it jsut works as an update function, use the update method instead."""
         id = self._id(username)
@@ -74,9 +74,12 @@ class cm_profile (object):
         if page is not None:
             d.update({"cm_page": page})
 
+        if cloud is not None:
+            d.update({"cm_cloud": cloud})
+
         self.db_collection.insert(d)
 
-    def get(self, username):
+    def get(self, username, cloud=None, page=None):
         """returns the profile information for the user"""
         id = self._id(username)
         result = self.find_one({'cm_id' : id})    
