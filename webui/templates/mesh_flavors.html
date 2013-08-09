@@ -58,7 +58,7 @@ $(function() {
           {% for flavor in clouds[cloud] %}
 
              <tr>
-               <td><input type="radio" name="cloud-{{ outer_loop.index }}-default-flavor" /></td>
+               <td><input type="radio" name="cloud-{{ outer_loop.index0 }}-default-flavor" /></td>
                  <!-- for attribute in clouds[cloud][flavor] --> 
                  {% for attribute in attributes  %}
                       <td>{{ clouds[cloud][flavor][attribute]  }}</td>
