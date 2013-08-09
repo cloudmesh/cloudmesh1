@@ -82,13 +82,11 @@ inventory.refresh()
 for cluster in inventory.clusters:
     cluster.images = [centos,redhat]
     cluster.save(cascade=True)
-    print "CCCCC", cluster.images
+    
 
 c = inventory.get("cluster","bravo")
 
-print "BBBB", c.images
-
-print "LLLL", [image.name for image in c.images]
+# print "LLLL", [image.name for image in c.images]
 
 inventory.print_info()
 

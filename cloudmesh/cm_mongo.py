@@ -66,7 +66,6 @@ class cm_mongo:
             try:
                 credential = self.config.get(cloud_name)
                 cm_type = self.config.get()['clouds'][cloud_name]['cm_type']
-                print "CCC", cm_type
                 cm_type_version = self.config.get()['clouds'][cloud_name]['cm_type_version']
                 if cm_type in ['openstack', 'eucalyptus', 'azure']:
                     self.clouds[cloud_name] = {'name': cloud_name,
@@ -140,7 +139,7 @@ class cm_mongo:
                 cloud.refresh(type)
                 result = cloud.get(type)
 
-                # add result to db
+                # add result to db,
                 watch.stop(name)
                 print 'Refresh time:', watch.get(name)
 
