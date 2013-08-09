@@ -3,6 +3,13 @@
 #
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
 #
+import requests
+from requests.auth import AuthBase
+
+import sys
+from pprint import pprint
+import json
+
 from collections import OrderedDict
 import iso8601
 import sys
@@ -76,14 +83,7 @@ class openstack(ComputeBaseType):
     # initialize
     #
     # possibly make connext seperate
-    def __init__(self, 
-                 label=None,
-                 authurl=None,
-                 project=None,
-                 username=None,
-                 password=None,
-                 cacert=None,
-                 credential=None):
+    def __init__(self, label=None):
         """
         initializes the openstack cloud from a defould novaRC file
         locates at ~/.futuregrid.org/openstack. However if the
@@ -91,10 +91,9 @@ class openstack(ComputeBaseType):
         """
         self.clear()
         self.label = label
-        if credential is not None:
-            self.credential = credential
-        else:
-            self.config(label)
+        
+        config = cm_config()
+        self.credential = config.credential(label)
         self.connect()
 
     def clear(self):
@@ -113,19 +112,7 @@ class openstack(ComputeBaseType):
         e.g. initializes the needed components to conduct subsequent
         queries.
         """
-        """
-           def __init__(self, username, api_key, project_id, auth_url=None,
-                  insecure=False, timeout=None, proxy_tenant_id=None,
-                  proxy_token=None, region_name=None,
-                  endpoint_type='publicURL', extensions=None,
-                  service_type='compute', service_name=None,
-                  volume_service_name=None, timings=False,
-                  bypass_url=None, os_cache=False, no_cache=True,
-                  http_log_debug=False, auth_system='keystone',
-                  auth_plugin=None,
-                  cacert=None):
-        """
-
+        
         self.cloud = client.Client(
             self.credential['OS_USERNAME'],
             self.credential['OS_PASSWORD'],
@@ -133,7 +120,7 @@ class openstack(ComputeBaseType):
             self.credential['OS_AUTH_URL'],
             cacert=self.credential['OS_CACERT']
         )
-        self.auth_token = self.get_token()
+        self.auth_token = self.get_token(self.credential)
 
     # BIG BUG, MUST BE DICT
     # config should have dict as parameter
@@ -253,31 +240,55 @@ class openstack(ComputeBaseType):
         self.user_id = self.auth_token['access']['user']['id']
         return self.user_id
 
-    def get_token(self):
-        """returns the authentikation token from keystone with a curl call"""
-        param = '{"auth":{"passwordCredentials":{"username": "%(OS_USERNAME)s", "password":"%(OS_PASSWORD)s"}, "tenantName":"%(OS_TENANT_NAME)s"}}' % (
-            self.credential)
+    def get_token(self, credential=None):
 
-        response = curl(
-            "--cacert", self.credential['OS_CACERT'],
-            "-k",
-            "-X",
-            "POST", "%s/tokens" % self.credential['OS_AUTH_URL'],
-            "-d", param,
-            "-H", 'Content-type: application/json'
-        )
+        param = {"auth": { "passwordCredentials": {
+                                "username": credential['OS_USERNAME'],
+                                "password":credential['OS_PASSWORD'],
+                            },
+                           "tenantName":credential['OS_TENANT_NAME']
+                        }
+             }
+    
+        url = "{0}/tokens".format(credential['OS_AUTH_URL'])
+        headers = {'content-type': 'application/json'}
+        
+        
 
-        result = json.loads(str(response))
-        return result
-
-    # http
-
-    def _get_compute_service(self):
-        #print "LLLL", self.auth_token
-        for service in self.auth_token['access']['serviceCatalog']:
+        if 'OS_CACERT' in credential:
+            if os.path.isfile(credential['OS_CACERT']):            
+                r = requests.post(url,
+                                  data=json.dumps(param),
+                                  headers=headers,
+                                  verify=credential['OS_CACERT'])
+            else:
+                r = requests.post(url,
+                              data=json.dumps(param),
+                              headers=headers, verify=False)
+                                          
+        return r.json()
+    
+    
+    def _get_compute_service(self, token=None):
+        if token is None:
+            token = self.auth_token
+            
+        for service in token['access']['serviceCatalog']:
             if service['type'] == 'compute':
                 break
         return service
+    
+    def _get(self, token,  msg, url=None):
+
+        if url is not None:
+            conf = self._get_conf()
+            url = conf['publicURL']        
+        url = "{0}/{1}".format(url, msg)
+        headers = {'X-Auth-Token': token}
+        r = requests.get(url, headers=headers, verify=credential['OS_CACERT'])
+        return r.json()
+
+    # http
 
     def _get_conf(self):
         """what example %/servers"""
@@ -287,29 +298,6 @@ class openstack(ComputeBaseType):
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
         conf['token'] = str(self.auth_token['access']['token']['id'])
         return conf
-
-    def _get(self, what):
-
-        conf = self._get_conf()
-
-        apiurlt = urlparse(conf['publicURL'])
-        url2 = apiurlt[1]
-
-        params2 = ""
-        headers2 = {"X-Auth-Token": conf[
-            'token'], "Content-type": "application/json"}
-        conn2 = httplib.HTTPConnection(url2)
-
-        
-        # conn2.request("GET", "%s/servers" % apiurlt[2], params2, headers2)
-        conn2.request("GET", what % (apiurlt[2]), params2, headers2)
-        
-        response2 = conn2.getresponse()
-        data2 = response2.read()
-        dd2 = json.loads(data2)
-
-        conn2.close()
-        return dd2
 
     def get_tenants(self):
         """get the tenants dict for the vm with the given id"""
