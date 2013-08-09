@@ -62,26 +62,60 @@ def get_token(credential):
                       data=json.dumps(param), 
                       headers=headers,
                       #cert=credential['OS_CACERT'],
-                      verify=False).json() 
-    return r
+                      verify=False)
+    return r.json()
     
 
-    
 r = get_token(credential)
 
 pprint(r)
 
 print 70 * "="
-pprint (r["access"]["token"]["id"])
+token = r["access"]["token"]["id"]
+tenant = r["access"]["token"]["tenant"]["id"]
+
+def _get_compute_service(r):
+    for service in r['access']['serviceCatalog']:
+        if service['type'] == 'compute':
+            break
+    return service
 
 
+
+url = _get_compute_service(r)['endpoints'][0]['publicURL']
+pprint (url)
+
+
+def get(token, url, msg):
+    url = "{0}/{1}".format(url,msg)
+    headers = {'X-Auth-Token': token}
+    print "URL", url
+    print "HEADERS", headers
+    print "TOKEN", token
+
+    r = requests.post(url, headers=headers, verify=False)
+    return r.json()
+
+pprint (get(token, url, "flavors"))
+
+sys.exit
 """
+msg = "flavors"
+url = "{0}/{1}/{2}".format(credential['OS_AUTH_URL'],tenant,msg)
+
+print '1ae6813a3a6d4cebbeb1912f6d139ad0' == tenant
+print "URL", url
+headers = {'X-Auth-Token': token}
+r = requests.get(url, headers=headers, verify=False)
+
+print r.json()
+
+
 r = requests.get('http://google.com')
                  
 print r.status_code
 print r.text
-"""              
-"""
+
 class OpenStackAuth(AuthBase):
     def __init__(self, auth_user, auth_key, auth_tenant):
         self.auth_key = auth_key
