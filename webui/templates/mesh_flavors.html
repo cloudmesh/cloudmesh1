@@ -34,7 +34,7 @@ $(function() {
 
 <div id="flavors-accordion">
   {% for cloud in clouds %}
-    {% set outer_loop = loop %}
+    {% set cloud_loop = loop %}
   <div style="margin-bottom:1em;">
   <h3>{{ cloud }}</h3>
     <table id="cloud-table-{{ loop.index0 }}" class="tablesorter" >
@@ -51,7 +51,7 @@ $(function() {
           {% for flavor in clouds[cloud] %}
 
              <tr>
-               <td><input type="radio" name="cloud-{{ outer_loop.index0 }}-default-flavor" /></td>
+               <td><input type="radio" name="cloud-{{ cloud_loop.index0 }}-default-flavor" /></td>
                  <!-- for attribute in clouds[cloud][flavor] --> 
                  {% for attribute in attributes  %}
                       <td>{{ clouds[cloud][flavor][attribute]  }}</td>
