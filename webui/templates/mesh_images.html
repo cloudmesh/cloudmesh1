@@ -32,6 +32,7 @@ $(function() {
 
 <div id="images-accordion">
   {% for cloud in clouds %}
+    {% set cloud_loop = loop %}
     {% set version = clouds[cloud]['cm_type_version'] %}
     {% set attributes = cloud_attributes['grizzly']%}
   <div style="margin-bottom:1em;">
@@ -39,6 +40,7 @@ $(function() {
     <table id="cloud-table-{{ loop.index0 }}" class="tablesorter" >
       <thead>
           <tr>
+            <th>default</th>
             {% for attribute in attributes %}   
               <th>{{attribute [0] }}</th>
             {% endfor %}            
@@ -49,6 +51,7 @@ $(function() {
             {% set version = clouds[cloud][image]['cm_type_version'] %}
             {% set attributes = cloud_attributes[version]%}
              <tr>
+                 <td><input type="radio" name="cloud-{{ cloud_loop.index0 }}-default-image" /></td>
                  {% for attribute in attributes  %}
                       <td>
                           {% set l = attribute | length %}
