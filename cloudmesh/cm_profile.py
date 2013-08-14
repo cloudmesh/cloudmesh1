@@ -27,6 +27,9 @@ class cm_profile (object):
 
 
     def _get_usernames_from_config(self):
+        '''
+        gets the various usernames from the clouds, as well as the portal and hpc from the yaml file
+        '''
         cm = self.config.get()
         username = {}
         username ["hpc"] = cm["hpc"]["username"]
@@ -41,9 +44,17 @@ class cm_profile (object):
     # methods dependent on username 
     
     def _id(self, username):
+        '''
+        creates a unique name for the profile based on the unique username
+        :param username:
+        '''
         return "profile-{0}".format(username)
     
     def find_one(self, query):
+        '''
+        executed the find_one query on the database
+        :param query: a regular query
+        '''
         return self.db_collection.find_one(query) 
        
     def update(self, username, dict, cloud=None, page=None):

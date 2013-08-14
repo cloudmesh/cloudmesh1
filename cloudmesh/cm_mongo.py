@@ -35,7 +35,7 @@ class cm_mongo:
     config = None
     
     def __init__(self, collection="clouds"):
-        
+        """initializes the cloudmesh mongo db. The name of the collection os passed."""
         db_name = cm_config_server().config["mongo"]["db"]
         
         self.client = MongoClient()    
@@ -45,6 +45,10 @@ class cm_mongo:
         
 
     def cloud_provider(self, type):
+        '''
+        returns the cloud provider based on the type
+        :param type: the type is openstack, eucalyptus, or azure (azure is not yet supported)
+        '''
         provider = None
         if type == 'openstack':
             provider = openstack
@@ -55,13 +59,16 @@ class cm_mongo:
         return provider
     
     def activate(self, names=None):
-        """activates a specific host to be queried"""
-        
+        '''
+        activates a specific host by name. to be queried
+        :param names: the array with the names of the clouds in the yaml file to be activated.
+        '''
+                
         if names is None:
             names = self.config.active()
                     
         for cloud_name in names:
-            print "Activating ->", cloud_name
+            # print "Activating ->", cloud_name
           
             try:
                 credential = self.config.get(cloud_name)
@@ -76,10 +83,11 @@ class cm_mongo:
                     cloud = provider(cloud_name)
                     self.clouds[cloud_name].update({'manager': cloud})
             
-            except:  
+            except Exception, e:  
                 print "ERROR: can not activate cloud", cloud_name
-                print traceback.format_exc()
-                sys.exit()
+                print e
+                # print traceback.format_exc()
+                # sys.exit()
 
 
     def refresh(self, names=["all"], types=["all"]):
@@ -145,14 +153,14 @@ class cm_mongo:
 
                 watch.start(name)                   
                 for element in result:
-                    id = "{0}-{1}-{2}".format(name,type,result[element]['name']).replace(".","-")
+                    id = "{0}-{1}-{2}".format(name, type, result[element]['name']).replace(".", "-")
                     result[element]['cm_id'] = id 
                     result[element]['cm_cloud'] = name
                     result[element]['cm_type'] = self.clouds[name]['cm_type'] 
                     result[element]['cm_type_version'] = self.clouds[name]['cm_type_version'] 
                     result[element]['cm_kind'] = type
                     del result[element]['manager']
-                    self.db_clouds.remove({"cm_id": id},safe=True) 
+                    self.db_clouds.remove({"cm_id": id}, safe=True) 
                     self.db_clouds.insert(result[element])
                 watch.stop(name)
                 print 'Store time:', watch.get(name)
@@ -162,7 +170,7 @@ class cm_mongo:
         data = self.db_pbsnodes.find({"pbs_host": host})
         return data
     
-    def find(self,query):
+    def find(self, query):
         return self.db_clouds.find(query) 
        
     
@@ -189,12 +197,12 @@ class cm_mongo:
 def main():
     c = cm_mongo()
     c.activate()
-    #c.refresh(types=['flavors'])
-    #c.refresh(types=['servers','images','flavors'])
+    # c.refresh(types=['flavors'])
+    # c.refresh(types=['servers','images','flavors'])
     
-    #data = c.find({})
-    #data = c.find({'cm_kind' : 'servers'})
-    #for entry in data:
+    # data = c.find({})
+    # data = c.find({'cm_kind' : 'servers'})
+    # for entry in data:
     #   pprint (entry)
     
     pprint (c.servers())
