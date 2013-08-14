@@ -69,7 +69,7 @@ def mongo_images():
     """
     attributes = {"essex": 
                   [
-                        [ "Gregor", "metadata"],
+                        [ "Metadata", "metadata"],
                         [ "status" , "status"],
                         [ "name" , "name"],
                         [ "type_id" , "metadata", "instance_type_id"],
@@ -86,7 +86,7 @@ def mongo_images():
                   ],
                   "grizzly": 
                     [    
-                        [ "Gregor", "metadata"],
+                        [ "Metadata", "metadata"],
                         [ "status" , "status"],
                         [ "name" , "name"],
                         [ "type_id" , "metadata", "instance_type_id"],
@@ -102,14 +102,14 @@ def mongo_images():
                         [ "arch", ""]
                     ]
                   }
-    
+    """
     for cloud in clouds:
         pprint (clouds[cloud])
         for image in clouds[cloud]:
             print image
             for attribute in clouds[cloud][image]:
                 print attribute, clouds[cloud][image][attribute]
-
+    """
         
     return render_template('mesh_images.html',
                            address_string=address_string,
