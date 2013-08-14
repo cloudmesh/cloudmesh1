@@ -5,6 +5,7 @@ from cloudmesh.cm_mongo import cm_mongo
 from datetime import datetime
 from cloudmesh.util.util import address_string
 from pprint import pprint
+from ast import literal_eval
 
 mesh_module = Blueprint('mesh_module', __name__)
 
@@ -183,7 +184,8 @@ def mongo_flavors():
 # ============================================================
 
 @mesh_module.route('/mesh/servers/')
-def mongo_table():
+@mesh_module.route('/mesh/servers/<filters>')
+def mongo_table(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
@@ -201,10 +203,40 @@ def mongo_table():
                 print attribute, clouds[cloud][server][attribute]
     """
     os_attributes = ['name', 'addresses', 'flavor', 'id', 'user_id', 'metadata', 'key_name', 'created']
-    
+
+
+    def test_server_filters(server_attrs, server_filters):
+        """ Note there are special cases handled when the direct value of a server attribute
+        is itself not a simple value... can we handle this better? """
+        if len(server_filters) == 0:
+            return True
+        check_attr, check_value = server_filters[0]
+        if check_attr == 'flavor':
+            test_value = server_attrs[check_attr]['id']
+        else:
+            test_value = server_attrs[check_attr]
+        return test_value == check_value and test_server_filters(server_attrs, server_filters[1:])
+
+
+    def server_filter_maker(cloud_filters):
+        """ Condtions should be passed as a dict keyed by cloud name,
+        with a list of (attr, value) filters, e.g.:
+            { cloud_name: [(attribute, value), ... ]) } """
+        return lambda((c, s)): { sk: sa for sk, sa in s.iteritems()
+                                 if not cloud_filters.has_key(c) or test_server_filters(sa, cloud_filters[c]) }
+
+    if filters:
+        cloud_filters = literal_eval(filters)
+        server_filter = server_filter_maker(cloud_filters)
+        filtered_clouds = { c: server_filter((c, s)) for c, s in clouds.iteritems() }
+    else:
+        cloud_filters = None
+        filtered_clouds = clouds
+
     return render_template('mesh_servers.html',
                            address_string=address_string,
                            attributes=os_attributes,
                            updated=time_now,
-                           clouds=clouds,
-                           config=config)
+                           clouds=filtered_clouds,
+                           config=config,
+                           filters=cloud_filters)

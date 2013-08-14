@@ -21,7 +21,8 @@ function killall(cloud) {
 $(function() {
   {% for cloudnum in range(clouds|count) %}
     $("#cloud-table-{{ cloudnum }}").tablesorter({
-        sortList: [[0,0]],
+        sortList: [[1,0]],
+        headers: {0: {sorter: false}}
     });
   {% endfor %}
 });
@@ -50,15 +51,12 @@ $(function() {
       	{{ image_button ("none", "044_keys", "/updatekeypair/" + cloud + "/") }}
       	{{ cloud }}
     </h3>
-    Placeholder for filter
+    <div>
+    Filters: {{ filters[cloud] }}
     <table id="cloud-table-{{ loop.index0 }}" class="tablesorter" >
       <thead>
           <tr>
-	      	<th></th>
-	      	<th></th>
-	      	<th></th>
-	      	<th></th>
-	      	<th></th>
+	      	<th width="100"></th>
 
             {% for attribute in attributes %}	
                   <th>{{attribute}}</th>
@@ -71,17 +69,9 @@ $(function() {
              <tr>
              	<td>
              	 	{{ image_button ("none", "368_collapse", "/cm/login/" + server + "/" + s_id + "/") }}
-             	</td>
-             	<td>
 	  				{{ image_button ("right", "195_circle_info", "/cm/info/" + server + "/" + s_id + "/") }}
-	  			</td>
-	  			<td>
 	  				<a href="/cm/assignpubip/{{server}}/{{s_id}}/">  IP </a>
-	             </td>
-	             <td>
 	  				{{ image_button ("none", "041_charts", "/cm/stats/" + server + "/" + s_id + "/") }}
-                 </td>
-                 <td>
 	  				{{ image_button ("right", "016_bin", "/cm/delete/" + server + "/" + s_id + "/") }}
              	 </td>
                  <!-- for attribute in clouds[cloud][server] -->
@@ -100,7 +90,7 @@ $(function() {
           {% endfor %}
       </tbody>  
     </table>
-    
+    </div>
   </div>  
   {% endfor %}
 </div>  
