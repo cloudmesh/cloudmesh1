@@ -36,6 +36,10 @@ class pbs_mongo:
         return data
         
     def refresh_qstat(self, host):
+        '''
+        obtains a refreshed qstat data set from the specified host. The result is written into the mongo db.
+        :param host: The host on which to execute qstat
+        '''
         data =  self.hosts[host].qstat(refresh=True)
         for name in data:
             print "mongo: add {0}, {1}, {2}".format(host, 
@@ -50,10 +54,18 @@ class pbs_mongo:
             self.db_qstat.insert(data[name])
     
     def get_qstat(self, host):
+        '''
+        returns the qstat data from the mongo db. The data can be put into the mongo db via refresh
+        :param host:
+        '''
         data = self.db_qstat.find({"pbs_host": host})
         return data
         
     def refresh_pbsnodes(self, host):
+        '''
+        retrieves the qstat data from the host and puts it into mongodb
+        :param host:
+        '''
         data = self.hosts[host].pbsnodes(refresh=True)
         for name in data:
             print "mongo: add {0}, {1}".format(host, 
@@ -66,16 +78,29 @@ class pbs_mongo:
             self.db_pbsnodes.insert(data[name])
 
     def get_pbsnodes(self, host):
+        '''
+        retrieves the pbsnodes data for the ost from mongodb. the data can be put with a refresh method into mongo db.
+        :param host:
+        '''
         data = self.db_pbsnodes.find({"pbs_host": host})
         return data
     
     def delete_qstat(self,host):
-        pass
+        '''
+        NOT IMPLEMENTED .deletes the qstat information from mongodb
+        :param host:
+        '''
     
     def delete_pbsnodes(self,host):
-        pass
+        '''
+        NOT IMPLEMENTED. deletes the pbsnodes information from mongodb
+        :param host:
+        '''
     
     def clear(self):
+        '''
+        NOT IMPLEMENTED. clears the mongo db data for pbs and qstat
+        '''
         """deletes the data in the collection"""
         
 def main():

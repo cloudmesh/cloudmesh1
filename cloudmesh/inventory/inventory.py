@@ -191,6 +191,9 @@ class Inventory:
         self.date_modified = datetime.now()
 
     def clean(self):
+        '''
+        cleans the database. 
+        '''
         name = self.configuration['dbname']
         print name
         self.db.drop_database(name)
@@ -202,6 +205,10 @@ class Inventory:
         #database.drop_collection(name)
         
     def config(self, filename=None):
+        '''
+        reads from the specified yaml file the server configuration
+        :param filename: name of the yaml file
+        '''
         self.configuration = read_yaml_config(inventory_config_filename, check=False)
         if self.configuration is None:
            self.configuration = {'dbname': "inventory"} 

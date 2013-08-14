@@ -47,6 +47,11 @@ class ProvisionerTeefaa(BaremetalProvisinerABC):
         self.teefaa_config = read_yaml_config (self.filename, check=True)        
 
     def set_status(self, element, status):
+        '''
+        sets the status of a specific element 
+        :param element:
+        :param status:
+        '''
         
         element.status = status
         element.save(cascade=True)
