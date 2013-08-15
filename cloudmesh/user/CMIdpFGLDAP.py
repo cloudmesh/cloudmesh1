@@ -76,8 +76,7 @@ class CMIdpFGLDAP(object):
 def main():
     idp = CMIdpFGLDAP()
     users = idp.getUsersProjs()
-    print users["fuwang"]
-    print users["gvonlasz"]
+
 
 if __name__ == "__main__":
     main()

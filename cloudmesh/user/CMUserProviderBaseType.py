@@ -15,8 +15,7 @@ log = LOGGER('cm_user')
 
 class CMUserProviderBaseType:
     
-    
-    provider = {}
+    provider s= {}
     
     client = None
     db_clouds = None
@@ -82,12 +81,12 @@ class CMUserProviderBaseType:
         '''
         log.error("to be implemented")
         
-    def refresh(self, ):
+    def refresh(self):
         '''
         refreshes the userdatabase from the user provider
         '''
         log.error("to be implemented")
-
+        
     def register(self, name, type, params):
         '''
         registers a provider with som parameters specified in the dict params
