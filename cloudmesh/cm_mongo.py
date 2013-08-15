@@ -167,14 +167,26 @@ class cm_mongo:
 
                 
     def get_pbsnodes(self, host):
+        '''
+        returns the data associated with pbsnodes from mongodb.
+        :param host:
+        '''
         data = self.db_pbsnodes.find({"pbs_host": host})
         return data
     
     def find(self, query):
+        '''
+        executes a query and returns the results from mongo db.
+        :param query:
+        '''
         return self.db_clouds.find(query) 
        
     
     def _get_kind(self, kind):
+        '''
+        returns all the data from clouds of a specific type.
+        :param kind:
+        '''
         data = {}
         names = self.clouds.keys()
         for name in names:
@@ -185,12 +197,21 @@ class cm_mongo:
         return data
    
     def servers(self):
+        '''
+        returns all the servers from all clouds
+        '''
         return self._get_kind('servers')
         
     def flavors(self):
+        '''
+        returns all the flavors from the various clouds
+        '''
         return self._get_kind('flavors')
         
     def images(self):
+        '''
+        returns all the images from various clouds
+        '''
         return self._get_kind('images')
         
 

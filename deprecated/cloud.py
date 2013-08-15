@@ -22,6 +22,16 @@ configuration = config.get()
 prefix = config.prefix
 index = config.index
 
+clouds = cloudmesh()
+# refresh, misses the search for display
+
+clouds.refresh()
+clouds.refresh_user_id()
+
+# clouds.load()
+# clouds.refresh("openstack")
+# clouds.clouds
+
 # DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
 
 """
@@ -38,6 +48,10 @@ for name in clouds.active():
         config.write()
 """
 
+print config
+
+clouds.all_filter()
+
 # ============================================================
 # ROUTE: SAVE
 # ============================================================
@@ -46,8 +60,8 @@ for name in clouds.active():
 @cloud_module .route('/save/')
 def save():
     print "Saving the cloud status"
-    #clouds.save()
-    return mongo_images()
+    clouds.save()
+    return table()
 
 # ============================================================
 # ROUTE: LOAD
@@ -57,8 +71,24 @@ def save():
 @cloud_module .route('/load/')
 def load():
     print "Loading the cloud status"
-    #clouds.load()
-    return mongo_images()
+    clouds.load()
+    return table()
+
+# ============================================================
+# ROUTE: TABLE
+# ============================================================
+
+
+@cloud_module .route('/table/')
+def table():
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    filter()
+    return render_template('table.html',
+                           updated=time_now,
+                           keys="",  # ",".join(clouds.get_keys()),
+                           cloudmesh=clouds,
+                           clouds=clouds.clouds,
+                           config=config)
 
 # ============================================================
 # ROUTE: REFRESH
@@ -71,7 +101,7 @@ def refresh(cloud=None, server=None):
     # print "-> refresh", cloud, server
     clouds.refresh()
     clouds.all_filter()
-    return mongo_iamges()
+    return table()
 
 # ============================================================
 # ROUTE: Filter
@@ -98,7 +128,7 @@ def filter(cloud=None):
 
         clouds.state_filter(name, query_states)
 
-    return mongo_images()
+    return redirect("/table/")
 
 
 # ============================================================
@@ -108,7 +138,7 @@ def filter(cloud=None):
 def kill_vms():
     print "-> kill all"
     r = cm("--set", "quiet", "kill", _tty_in=True)
-    return mongo_images()
+    return table()
 
 # ============================================================
 # ROUTE: DELETE
@@ -123,7 +153,8 @@ def delete_vm(cloud=None, server=None):
     clouds.delete(cloud, server)
     time.sleep(5)
     #    clouds.refresh()
-    return mongo_images()
+    return redirect("/table/")
+#    return table()
 
 # ============================================================
 # ROUTE: DELETE GROUP
@@ -139,7 +170,7 @@ def delete_vms(cloud=None):
         clouds.delete(cloud, id)
     time.sleep(7)
     f_cloud['servers'] = {}
-    return mongo_images()
+    return redirect("/table/")
 
 
 # ============================================================
@@ -153,7 +184,7 @@ def assign_public_ip(cloud=None, server=None):
         if configuration['clouds'][cloud]['cm_automatic_ip'] is False:
             clouds.assign_public_ip(cloud, server)
             clouds.refresh(names=[cloud])
-            return mongo_images
+            return redirect("/table/")
         else:
             return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
     except Exception, e:
@@ -192,7 +223,7 @@ def start_vm(cloud=None, server=None):
     config.incr()
     config.write()
 
-    return mongo_images()
+    return table()
 
 
 # ============================================================
@@ -219,7 +250,7 @@ def vm_login(cloud=None, server=None):
         print "ssh", 'ubuntu@' + ip
         xterm('-e', 'ssh', 'ubuntu@' + ip, _bg=True)
 
-    return mongo_images()
+    return redirect("/table/")
 # ============================================================
 # ROUTE: VM INFO
 # ============================================================
