@@ -1,0 +1,22 @@
+teefaa:
+    username: name
+    hostname: iporhostname
+    bmcname: bmciporhostname
+    dir: directory
+mongo:
+    db: cloudmesh
+keystone:
+    sierra:
+        OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
+        OS_CACERT : /Users/neu/.futuregrid/sierra-cacert.pem
+        OS_PASSWORD : mypassword
+        OS_TENANT_NAME : mytennant
+        OS_USERNAME : myusername
+    india:
+        OS_AUTH_URL : http://computeiporhostname:5000/v2.0
+        OS_PASSWORD : password
+        OS_TENANT_NAME : tenantname
+        OS_USERNAME : username
+ldap:
+    hostname: ldapiporhostname
+    cert: /Users/neu/.futuregrid/FGLdapCacert.pem
