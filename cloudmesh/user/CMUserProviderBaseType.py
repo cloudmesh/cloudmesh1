@@ -1,9 +1,9 @@
-from config.cm_config import cm_config_server
+from cloudmesh.config.cm_config import cm_config_server
 import pymongo
 from pymongo import MongoClient
 #from config.cm_config import cm_config
 
-from util.logger import LOGGER
+from cloudmesh.util.logger import LOGGER
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -13,9 +13,9 @@ log = LOGGER('cm_user')
 
 
 
-class CMUserProviderBaseType:
+class CMUserProviderBaseType(object):
     
-    provider s= {}
+    providers= {}
     
     client = None
     db_clouds = None
@@ -29,7 +29,9 @@ class CMUserProviderBaseType:
         self.client = MongoClient()    
         self.db = self.client[db_name]          
         self.db_clouds = self.db[collection]    
-        #self.config = cm_config()
+        #print db_name
+	#print self.db
+	#self.config = cm_config()
    
     def find(self, query):
         '''
@@ -52,8 +54,14 @@ class CMUserProviderBaseType:
         :param id: the unique id of the user
         :param dict: the attributes of the user
         '''
-        result[element]['cm_user_id'] = id 
-        self.db_clouds.insert(result[element])
+	#print "IDIDID", id
+	#print "DICTDICT", dict
+	result = {}
+	result['cm_user_id'] = id
+	result.update(dict)
+	self.db_clouds.insert(result)
+        #result[element]['cm_user_id'] = id 
+        #self.db_clouds.insert(result[element])
         
     def updates(self,id, dict):
         '''
@@ -62,8 +70,13 @@ class CMUserProviderBaseType:
         :param id: the unique id of the user
         :param dict: the attributes of the use
         '''
+	#print "DICT in updates():", dict
         data = self.find_one({'cm_user_id': id})
-        data = data.update(dict)
+	#print "EXISTING data in updates():", data
+	if data is None:
+		data = {}
+        data.update(dict)
+	#print "data after update in updates():", data
         self.remove(id)
         self.add(id, data)
         

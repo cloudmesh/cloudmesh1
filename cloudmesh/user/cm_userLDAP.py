@@ -1,6 +1,7 @@
-from config.cm_config import cm_config_server
-
-from util.logger import LOGGER
+from cloudmesh.config.cm_config import cm_config_server
+from cloudmesh.util.logger import LOGGER
+from CMUserProviderBaseType import CMUserProviderBaseType
+import ldap
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -15,7 +16,7 @@ class cm_userLDAP (CMUserProviderBaseType):
     providers = {}
     
     def __init__(self, collection="user"):
-        super( cm_mongo, self ).__init__()
+        super( cm_userLDAP, self ).__init__()
 
     def refresh(self):
         '''
@@ -24,8 +25,8 @@ class cm_userLDAP (CMUserProviderBaseType):
         self._refresh()
         users = self.list()
         for user in users:
-            data = self.get(username)
-            self.update(username, data)  
+            data = self.get(user)
+            self.updates(user, data)  
 
     def connect(self, name, type, **kwargs):
         '''
@@ -41,10 +42,10 @@ class cm_userLDAP (CMUserProviderBaseType):
         for k,v in kwargs.iteritems():
             provider[k] = v
         
-        if kwargs['host'] is None:
+        if not kwargs.has_key('host'):#if kwargs['host'] is None:
             self.host = cm_config_server().config["ldap"]["hostname"]
     
-        if kwargs['ldapcert'] is None:
+        if not kwargs.has_key('ldapcert'):#if kwargs['ldapcert'] is None:
             self.cert = cm_config_server().config["ldap"]["cert"]
             
         ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, self.cert)
@@ -127,7 +128,7 @@ class cm_userLDAP (CMUserProviderBaseType):
 
 def main():
     idp = cm_userLDAP (CMUserProviderBaseType)
-    idp = idp.connect("fg-ldap","ldap")
+    idp.connect("fg-ldap","ldap")
     idp.refresh()
     users = idp.list()
 
