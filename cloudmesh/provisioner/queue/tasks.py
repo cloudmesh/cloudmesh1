@@ -17,6 +17,11 @@ provisioner = Provider()
 
 @celery.task(track_started=True)
 def provision(host, image):
+    '''
+    provisions on a specific host the image specified
+    :param host:
+    :param image:
+    '''
     provisioner.provision([host],image)
 
 
