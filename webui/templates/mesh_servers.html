@@ -20,9 +20,9 @@ function killall(cloud) {
 
 $(function() {
   {% for cloudnum in range(clouds|count) %}
-    $("#cloud-table-{{ cloudnum }}").tablesorter({
-        sortList: [[1,0]],
-        headers: {0: {sorter: false}}
+    $("#cloud-table-{{ cloudnum }}").dataTable({
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
     });
   {% endfor %}
 });
@@ -53,7 +53,7 @@ $(function() {
     </h3>
     <div>
     Filters: {{ filters[cloud] }}
-    <table id="cloud-table-{{ loop.index0 }}" class="tablesorter" >
+    <table id="cloud-table-{{ loop.index0 }}" >
       <thead>
           <tr>
 	      	<th width="100"></th>
