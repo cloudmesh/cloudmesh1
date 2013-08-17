@@ -34,6 +34,7 @@ super_sidebar_pages = [
             ["VMs", "/mesh/servers"],
             ["Images", "/mesh/images"],
             ["Flavors", "/mesh/flavors/"],
+            ["Users", "/mesh/users/"],
         ],
     ],
     ["HPC Queues",

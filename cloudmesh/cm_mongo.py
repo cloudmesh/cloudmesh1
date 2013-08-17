@@ -44,6 +44,7 @@ class cm_mongo:
         self.config = cm_config()
         
 
+
     def cloud_provider(self, type):
         '''
         returns the cloud provider based on the type
@@ -154,14 +155,22 @@ class cm_mongo:
                 watch.start(name)                   
                 for element in result:
                     id = "{0}-{1}-{2}".format(name, type, result[element]['name']).replace(".", "-")
+                    #print "ID", id
                     result[element]['cm_id'] = id 
                     result[element]['cm_cloud'] = name
                     result[element]['cm_type'] = self.clouds[name]['cm_type'] 
                     result[element]['cm_type_version'] = self.clouds[name]['cm_type_version'] 
                     result[element]['cm_kind'] = type
-                    del result[element]['manager']
-                    self.db_clouds.remove({"cm_id": id}, safe=True) 
-                    self.db_clouds.insert(result[element])
+                    if 'manager' in result[element]:
+                        del result[element]['manager']
+                    try:
+                        self.db_clouds.remove({"cm_id": id}, safe=True) 
+                        self.db_clouds.insert(result[element], safe=True)
+                    except Exception, e:
+                        print "ERROR: user id duplicated", id
+                        pprint (result[element])
+                        print e
+                        sys.exit()
                 watch.stop(name)
                 print 'Store time:', watch.get(name)
 
@@ -196,6 +205,18 @@ class cm_mongo:
                 data[name][entry['id']] = entry
         return data
    
+    def users(self):
+        '''
+        returns all the servers from all clouds
+        '''
+        return self._get_kind('users')
+
+    def tenants(self):
+        '''
+        returns all the servers from all clouds
+        '''
+        return self._get_kind('tenants')
+
     def servers(self):
         '''
         returns all the servers from all clouds
