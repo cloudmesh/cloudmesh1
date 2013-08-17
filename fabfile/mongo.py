@@ -14,6 +14,9 @@ def stop():
 @task
 def clean():
     local("make clean")
+    local('mongo cloudmesh --eval "db.dropDatabase();"')
+    local('mongo inventory --eval "db.dropDatabase();"')
+    local('mongo test --eval "db.dropDatabase();"')
 
 @task
 def vms_find():
@@ -22,7 +25,8 @@ def vms_find():
     pprint (c.servers())
     
 @task
-def vms_refresh():
+def cloud():
+    clean()
     c = cm_mongo()
     c.activate()
     c.refresh(types=['users','servers','images','flavors'])
