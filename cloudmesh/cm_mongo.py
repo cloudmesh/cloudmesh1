@@ -133,7 +133,6 @@ class cm_mongo:
                     result = cloud.get(type)
                     self.clouds[name][type] = cloud.get(type)
                     self.clouds[name].update({'cm_data': type})
-                    
 
         except Exception, e:
             print traceback.format_exc()
@@ -152,10 +151,10 @@ class cm_mongo:
                 watch.stop(name)
                 print 'Refresh time:', watch.get(name)
 
-                watch.start(name)                   
+                watch.start(name) 
                 for element in result:
                     id = "{0}-{1}-{2}".format(name, type, result[element]['name']).replace(".", "-")
-                    #print "ID", id
+                    
                     result[element]['cm_id'] = id 
                     result[element]['cm_cloud'] = name
                     result[element]['cm_type'] = self.clouds[name]['cm_type'] 
@@ -164,12 +163,18 @@ class cm_mongo:
                     if 'manager' in result[element]:
                         del result[element]['manager']
                     try:
-                        self.db_clouds.remove({"cm_id": id}, safe=True) 
-                        self.db_clouds.insert(result[element], safe=True)
+                        self.db_clouds.remove({"cm_id": id, "cm_kind" : type}) 
+                        if '_id' in result[element]:
+                            del result[element]['_id']
+                        self.db_clouds.insert(result[element])
+                    
+                        #self.db.clouds.update( { item: "magazine", qty: { $gt: 5 } }, { $set: { x: 25, y: 50 } }, { upsert: true } )
+                        
                     except Exception, e:
                         print "ERROR: user id duplicated", id
                         pprint (result[element])
                         print e
+                        print self.db.clouds.index_information()
                         sys.exit()
                 watch.stop(name)
                 print 'Store time:', watch.get(name)
