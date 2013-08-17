@@ -8,6 +8,9 @@ def donotchange(fn):
 
 class ComputeBaseType:
 
+    users = {}         
+    tenants = {}
+
     #: the dict for the flavors
     flavors = {}         
 
@@ -17,12 +20,15 @@ class ComputeBaseType:
     #: the dict for the servers
     servers = {}         
 
-    #: the dict for the credentials
+    #: the dict for the set_credentials
     credential = None    
 
     #: the unique string identifying this cloud
     label = None         
 
+    def __init__(self, label, cred=None):
+        self.credential = cred
+        self.label = label
     
     def _clear(self):
         self.flavors = {}         # global var
@@ -41,6 +47,8 @@ class ComputeBaseType:
         print "Flavors:", len(self.flavors)
         print "Servers:", len(self.servers)
         print "Images:", len(self.images)
+        print "Users:", len(self.users)
+        print "Tenants:", len(self.tenants)
 
     def connect(self):
         """connect to the cloud"""
@@ -90,10 +98,26 @@ class ComputeBaseType:
             d = self.flavors
         elif selection == 's':
             d = self.servers
+        elif selection == 'u':
+            d = self.users
+        elif selection == 't':
+            d = self.tenants
         elif type is not None:
             print "refresh type not supported"
             assert False
         return d
+
+    def _get_users_dict(self):
+        raise NotImplementedError()
+
+    def _update_users_dict(self, information):
+        raise NotImplementedError()
+
+    def _get_tenants_dict(self):
+        raise NotImplementedError()
+
+    def _update_tenants_dict(self, information):
+        raise NotImplementedError()
 
     def _get_image_dict(self):
         raise NotImplementedError()
@@ -158,7 +182,7 @@ class ComputeBaseType:
     #
     def __str__(self):
         """
-        print everything but the credentials that is known about this
+        print everything but the set_credentials that is known about this
         cloud in json format.
         """
         information = {
@@ -184,16 +208,9 @@ class ComputeBaseType:
         """returns that status of a given virtual machine"""
         return self.servers[vm_id]['status']
 
-    #
-    # set credentials
-    #
-    def credentials(self, cred):
-        """sets the credentials to the dict cred"""
+    def set_credentials(self, cred):
+        """sets the set_credentials to the dict cred"""
         self.credential = cred
-
-    #
-    # set credentials
-    #
 
     def refresh(self, type=None):
         """refreshes the information of the cache for a given type 'images', 'flavors', 'servers', or 'all' for all of them"""
@@ -222,6 +239,14 @@ class ComputeBaseType:
             list_function = self._get_servers_dict
             update_function = self._update_servers_dict
             d = self.servers
+        elif selection == 'u':
+            list_function = self._get_users_dict
+            update_function = self._update_users_dict
+            d = self.users
+        elif selection == 't':
+            list_function = self._get_tenants_dict
+            update_function = self._update_tenants_dict
+            d = self.tenants
         elif type is not None:
             print "refresh type not supported"
             assert False
@@ -235,6 +260,8 @@ class ComputeBaseType:
                 self.flavors = {}
             elif selection == 's':
                 self.servers = {}
+            elif selection == 'u':
+                self.users = {}
 
         else:
 

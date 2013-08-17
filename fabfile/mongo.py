@@ -25,6 +25,12 @@ def vms_find():
 def vms_refresh():
     c = cm_mongo()
     c.activate()
-    c.refresh(types=['servers','images','flavors'])
+    c.refresh(types=['users','servers','images','flavors'])
+    
+@task
+def users():
+    c = cm_mongo()
+    c.activate()
+    c.refresh(types=['users'])
     
     

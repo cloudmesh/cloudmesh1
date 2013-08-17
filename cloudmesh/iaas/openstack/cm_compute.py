@@ -38,6 +38,7 @@ from sh import nova
 from cloudmesh.iaas.openstack.cm_table import table as cm_table
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
+from cloudmesh.cm_profile import cm_profile
 
 from novaclient.v1_1 import client
 from novaclient.v1_1 import security_groups
@@ -62,6 +63,9 @@ class openstack(ComputeBaseType):
     #: a dict with the servers
     servers = {}         # global var
 
+    #: a dict with the users
+    users = {}         # global var
+    
     #: a dict containing the credentionls read with cm_config
     credential = None    # global var
 
@@ -83,17 +87,21 @@ class openstack(ComputeBaseType):
     # initialize
     #
     # possibly make connext seperate
-    def __init__(self, label=None):
+    def __init__(self, label, credential=None):
         """
         initializes the openstack cloud from a defould novaRC file
-        locates at ~/.futuregrid.org/openstack. However if the
+        locates at ~/.futuregrid.org/cloudmesh.yaml. However if the
         parameters are provided it will instead use them
         """
         self.clear()
         self.label = label
+        self.credential = credential
         
         config = cm_config()
-        self.credential = config.credential(label)
+        if credential is None:
+            self.credential = config.credential(label)
+        else:
+            self.credential = credential
         self.connect()
 
     def clear(self):
@@ -113,13 +121,22 @@ class openstack(ComputeBaseType):
         queries.
         """
         
-        self.cloud = client.Client(
-            self.credential['OS_USERNAME'],
-            self.credential['OS_PASSWORD'],
-            self.credential['OS_TENANT_NAME'],
-            self.credential['OS_AUTH_URL'],
-            cacert=self.credential['OS_CACERT']
-        )
+        if 'OS_CACERT' in self.credential:
+            self.cloud = client.Client(
+                                       self.credential['OS_USERNAME'],
+                                       self.credential['OS_PASSWORD'],
+                                       self.credential['OS_TENANT_NAME'],
+                                       self.credential['OS_AUTH_URL'],
+                                       cacert=self.credential['OS_CACERT']
+                                       )
+        else:
+            self.cloud = client.Client(
+                                       self.credential['OS_USERNAME'],
+                                       self.credential['OS_PASSWORD'],
+                                       self.credential['OS_TENANT_NAME'],
+                                       self.credential['OS_AUTH_URL'],
+                                       )
+            
         self.auth_token = self.get_token(self.credential)
 
     # BIG BUG, MUST BE DICT
@@ -146,6 +163,7 @@ class openstack(ComputeBaseType):
             self.credential['OS_AUTH_URL'] = authurl
             self.credential['label'] = label
             self.credential['OS_TENANT_NAME'] = project
+            
             self.credential['OS_CACERT'] = cacert
         """
         self._nova = nova.bake("--os-username",    self.credential.username,
@@ -242,6 +260,9 @@ class openstack(ComputeBaseType):
 
     def get_token(self, credential=None):
 
+        if credential is None:
+            credential = self.credential
+            
         param = {"auth": { "passwordCredentials": {
                                 "username": credential['OS_USERNAME'],
                                 "password":credential['OS_PASSWORD'],
@@ -249,60 +270,90 @@ class openstack(ComputeBaseType):
                            "tenantName":credential['OS_TENANT_NAME']
                         }
              }
-    
         url = "{0}/tokens".format(credential['OS_AUTH_URL'])
         headers = {'content-type': 'application/json'}
-        
-        
 
-        if 'OS_CACERT' in credential:
-            if os.path.isfile(credential['OS_CACERT']):            
-                r = requests.post(url,
-                                  data=json.dumps(param),
-                                  headers=headers,
-                                  verify=credential['OS_CACERT'])
-            else:
-                r = requests.post(url,
-                              data=json.dumps(param),
-                              headers=headers, verify=False)
+        verify = False
+        
+        if 'OS_CACERT' in credential: 
+            if credential['OS_CACERT'] is not None and \
+               credential['OS_CACERT'] != "None" and \
+               os.path.isfile(credential['OS_CACERT']):            
+                verify=credential['OS_CACERT']
+                
+        r = requests.post(url,
+                          data=json.dumps(param),
+                          headers=headers, 
+                          verify=verify)
+
                                           
         return r.json()
     
-    
-    def _get_compute_service(self, token=None):
+
+    def _get_service(self, type, token=None):
         if token is None:
             token = self.auth_token
             
         for service in token['access']['serviceCatalog']:
-            if service['type'] == 'compute':
+            if service['type'] == type:
                 break
         return service
     
-    def _get(self, token,  msg, url=None):
-
-        if url is not None:
-            conf = self._get_conf()
-            url = conf['publicURL']        
+    def _get_compute_service(self, token=None):
+        return self._get_service("compute") 
+    
+    
+    def _get(self, msg, token=None, url=None, credential=None, type=None,urltype=None):
+        if urltype is None:
+            urltype = 'publicURL'
+        if credential is None:
+            credential = self.credential
+        if token is None:
+            token = self.auth_token
+        if url is None:
+            conf = self._get_conf(type)
+            url = conf[urltype]   
         url = "{0}/{1}".format(url, msg)
-        headers = {'X-Auth-Token': token}
+
+        headers = {'X-Auth-Token': token['access']['token']['id']}
         r = requests.get(url, headers=headers, verify=credential['OS_CACERT'])
         return r.json()
 
     # http
 
-    def _get_conf(self):
+    def _get_conf(self,type):
         """what example %/servers"""
-        compute_service = self._get_compute_service()
-        pp.pprint(compute_service)
+        if type is None:
+            type = "compute"
+        compute_service = self._get_service(type)
+        #pp.pprint(compute_service)
         conf = {}
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
+        conf['adminURL'] = str(compute_service['endpoints'][0]['adminURL'])
         conf['token'] = str(self.auth_token['access']['token']['id'])
         return conf
 
-    def get_tenants(self):
+
+    def get_tenants(self,credential=None):
         """get the tenants dict for the vm with the given id"""
-        msg = "/tenants"
-        return self._get(msg)
+        if credential is None:
+            p = cm_profile()
+            credential = p.server.config["keystone"]["sierra-openstack-grizzly"]
+    
+        msg = "tenants"
+        return self._get(msg,credential=credential, type="keystone")
+
+    def get_users(self,credential=None):
+        """get the tenants dict for the vm with the given id"""
+        if credential is None:
+            
+            p = cm_profile()
+            name = self.label
+            credential = p.server.config["keystone"][name]
+        
+        cloud = openstack(name, credential=credential)
+        msg = "users"
+        return cloud._get(msg,credential=credential, type="keystone",urltype='adminURL')
         
     def get_meta(self, id):
         """get the metadata dict for the vm with the given id"""
@@ -352,7 +403,26 @@ class openstack(ComputeBaseType):
     #
     # refresh
     #
+    def _get_users_dict(self):
+        result = self.get_users()
+        return result['users']
+    
+    def _update_users_dict(self,information):        
+        user = information
+        user['cloud'] = self.label 
+        id = "{0}-{1}".format(user['id'],self.label)   
+        return (id, user)
 
+    def _get_tenants_dict(self):
+        result = self.get_tenants()
+        return result['tenants']
+    
+    def _update_tenants_dict(self,information):        
+        tenants = information
+        id = "{0}-{1}".format(tenents['id'],self.label)   
+        tenants['cloud'] = self.label 
+        return (id, tenants)
+    
     def _get_images_dict(self):
         return self.cloud.images.list(detailed=True)
 
