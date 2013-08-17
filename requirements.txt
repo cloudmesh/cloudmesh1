@@ -22,6 +22,9 @@ Flask-FlatPages
 Flask-WTF
 Flask-AutoIndex
 Flask-Silk
+flask_login
+Flask-OpenID
+flask-principal
 pymongo
 mongoengine
 python-novaclient

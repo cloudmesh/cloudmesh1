@@ -180,6 +180,37 @@ def mongo_flavors():
                            config=config)
 
 # ============================================================
+# ROUTE: mongo
+# ============================================================
+
+@mesh_module.route('/mesh/flavors/')
+def mongo_flavors():
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    # filter()
+    config = cm_config()
+    
+    c = cm_mongo()
+    c.activate()
+    clouds = c.users()
+    
+
+    attributes = [
+                     'id',
+                     'e-mail',
+                     'enabled',
+                     'name',
+                     'tenantId',
+                     'cm_refresh',
+                     ]
+    
+    return render_template('mesh_users.html',
+                           address_string=address_string,
+                           attributes=attributes,
+                           updated=time_now,
+                           clouds=clouds,
+                           config=config)
+
+# ============================================================
 # ROUTE: mongo/servers
 # ============================================================
 
