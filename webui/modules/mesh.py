@@ -183,8 +183,8 @@ def mongo_flavors():
 # ROUTE: mongo
 # ============================================================
 
-@mesh_module.route('/mesh/flavors/')
-def mongo_flavors():
+@mesh_module.route('/mesh/users/')
+def mongo_users():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
@@ -195,11 +195,11 @@ def mongo_flavors():
     
 
     attributes = [
+                     'name',
                      'id',
+                     'tenantId',
                      'e-mail',
                      'enabled',
-                     'name',
-                     'tenantId',
                      'cm_refresh',
                      ]
     
