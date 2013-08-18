@@ -1,44 +1,64 @@
 {% extends "layout.html" %}
 {% from "_helper.html" import image_button %}
+
+
+
 {% block content %}
 
-<table>
-  <tr>
-    <th colspan="8"> Queue for {{host}} </th>  
-   
-  </tr>
-  <tr> <td> Updated </td>  <td colspan=8> {{ updated }} </td></tr>
-  <tr>
-	<th> Queue   </th>
-	<!-- <th> Server   </th> -->
-	<th> State   </th>
-	<th> Name   </th>
-	<th> Owner   </th>
-	<th> NCpus   </th>
-	<th> Walltime   </th>
-	<th> Nodes   </th>
-	<th> Nodect   </th>
-  </tr>
+
+<script type="text/javascript">
 
 
-  {% for jobname in qstat %}
-      {% set job = qstat[jobname] %}
-      <tr>
-	<td> {{job.queue }}  </td>
-	<!-- <td> {{job.server }}  </td> -->
-	<td> {{job.job_state }}  </td>
-	<td> {{job.Job_Name }}  </td>
-	<td> {{job.Job_Owner.split("@")[0] }}  </td>
-	<td> {{job.Resource_List.ncpus }}  </td>
-	<td> {{job.Resource_List.walltime }}  </td>
-	<td> {{job.Resource_List.nodes }}  </td>
-	<td> {{job.Resource_List.nodect }}  </td>
+$(function() {
+     $("#host-table-0").dataTable({
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
+    });
+});
+
+</script>
+
+
+<h2> Qstat </h2>
+
+<h3>{{ host }}</h3>
+<div>
+	Updated:{{ updated }} 
+	<table id="host-table-0">
+	<thead>
+	  <tr>
+		<th> Queue   </th>
+		<!-- <th> Server   </th> -->
+		<th> State   </th>
+		<th> Name   </th>
+		<th> Owner   </th>
+		<th> NCpus   </th>
+		<th> Walltime   </th>
+		<th> Nodes   </th>
+		<th> Nodect   </th>
+	  </tr>
+	  </thead>
+	  <tbody>
+	  {% for jobname in qstat %}
+	      {% set job = qstat[jobname] %}
+	      <tr>
+		<td> {{job.queue }}  </td>
+		<!-- <td> {{job.server }}  </td> -->
+		<td> {{job.job_state }}  </td>
+		<td> {{job.Job_Name }}  </td>
+		<td> {{job.Job_Owner.split("@")[0] }}  </td>
+		<td> {{job.Resource_List.ncpus }}  </td>
+		<td> {{job.Resource_List.walltime }}  </td>
+		<td> {{job.Resource_List.nodes }}  </td>
+		<td> {{job.Resource_List.nodect }}  </td>
+		
 	
+	      </tr>
+		
+	  {% endfor %}
+	  </tbody>
+	</table>
+</div>
 
-      </tr>
-	
-  {% endfor %}
-  
-</table>
 
 {% endblock %}
