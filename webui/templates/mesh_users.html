@@ -36,6 +36,8 @@ $(function() {
 <div id="servers-accordion">
   {% for cloud in clouds %}
     {% set cloud_loop = loop %}
+    {% set version = clouds[cloud]['cm_type_version'] %}
+    {% set attributes = cloud_attributes['grizzly']%}
   <div style="margin-bottom:1em;">
   <h3>{{ cloud }}</h3>
   <div>
@@ -44,7 +46,7 @@ $(function() {
           <tr>
             <!-- for attribute in clouds[cloud][flavor]  --> 
             {% for attribute in attributes %}	
-                  <th>{{attribute}}</th>
+                  <th>{{attribute[0]}}</th>
             {% endfor %}			
           </tr>
       </thead>
@@ -54,7 +56,17 @@ $(function() {
              <tr>
                  <!-- for attribute in clouds[cloud][flavor] --> 
                  {% for attribute in attributes  %}
-                      <td>{{ clouds[cloud][flavor][attribute]  }}</td>
+                      <td>
+                       {% set l = attribute | length %}
+
+                          {% if l == 2%}
+                             {{ clouds[cloud][flavor][attribute[1]] }}
+                          {% elif l == 3%}
+                             {{ clouds[cloud][flavor][attribute[1]][attribute[2]] }}       				
+                          {% elif l == 4%}
+                             {{ clouds[cloud][flavor][attribute[1]][attribute[2]][attribute[4]] }}
+                          {% endif %}
+                      </td>
                  {% endfor %}
 
              </tr>

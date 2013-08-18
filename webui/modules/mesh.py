@@ -193,19 +193,40 @@ def mongo_users():
     c.activate()
     clouds = c.users()
     
+    """
+    for cloud in clouds:
+        print cloud
+        for server in clouds[cloud]:
+            print server
+            for attribute in clouds[cloud][server]:
+                print attribute, clouds[cloud][server][attribute]
+    """
 
-    attributes = [
-                     'name',
-                     'id',
-                     'tenantId',
-                     'e-mail',
-                     'enabled',
-                     'cm_refresh',
-                     ]
+    attributes = {"essex": 
+                  [
+                        [ "Name", "name"],
+                        [ "Id" , "id"],
+                        [ "TenentId" , "tenantId"],
+                        [ "e-mail" , "e-mail"],
+                        [ "enabled" , "enabled"],
+                        [ "Cloud" , "cloud"],
+                        [ "Refresh", "cm_refresh"]
+                  ],
+                  "grizzly": 
+                    [    
+                        [ "Name", "name"],
+                        [ "Id" , "id"],
+                        [ "TenentId" , "tenantId"],
+                        [ "e-mail" , "e-mail"],
+                        [ "enabled" , "enabled"],
+                        [ "Cloud" , "cloud"],
+                        [ "Refresh", "cm_refresh"]
+                    ]
+                  }
     
     return render_template('mesh_users.html',
                            address_string=address_string,
-                           attributes=attributes,
+                           cloud_attributes=attributes,
                            updated=time_now,
                            clouds=clouds,
                            config=config)
