@@ -276,7 +276,7 @@ class openstack(ComputeBaseType):
                           data=json.dumps(param),
                           headers=headers, 
                           verify=verify)
-
+        
         self.auth_token = r.json()
                                           
         return r.json()
@@ -295,7 +295,7 @@ class openstack(ComputeBaseType):
         return self._get_service("compute") 
     
     
-    def _get(self, msg, token=None, url=None, credential=None, type=None,urltype=None):
+    def _get(self, msg, token=None, url=None, credential=None, type=None,urltype=None, json=True):
         if urltype is None:
             urltype = 'publicURL'
         if credential is None:
@@ -309,8 +309,10 @@ class openstack(ComputeBaseType):
 
         headers = {'X-Auth-Token': token['access']['token']['id']}
         r = requests.get(url, headers=headers, verify=credential['OS_CACERT'])
-        return r.json()
-
+        if json:
+            return r.json()
+        else:
+            return r
     # http
 
     def _get_conf(self,type):
@@ -341,6 +343,26 @@ class openstack(ComputeBaseType):
             element['cm_refresh'] = time_stamp
             d[element[id]] = dict(element)
         return d
+
+    # new
+    def get_extensions(self):
+        time_stamp = self._now()
+        msg = "extensons"
+        #list = self._get(msg)['extensions']
+        result = self._get(msg, json=False)
+        if result.status_code == 404:
+            print "ERROR: extensions not available"
+            return {}
+        else:
+            list = r.json()
+        return self._list_to_dict(list, 'name', "extensions", time_stamp)
+    
+     # new
+    def get_limits(self):
+        time_stamp = self._now()
+        msg = "limits"
+        list = self._get(msg)['limits']
+        return list
     
     # new
     def get_servers(self):

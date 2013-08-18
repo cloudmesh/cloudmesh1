@@ -7,15 +7,15 @@
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#flavors-accordion > div").accordion({ header: "h3", collapsible: true, active: false });
+        $("#flavors-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: false });
     })
 })(jQuery);
 
 $(function() {
   {% for cloudnum in range(clouds|count) %}
-    $("#cloud-table-{{ cloudnum }}").tablesorter({
-        sortList: [[1,0]],
-        headers: {0: {sorter: false}}
+    $("#cloud-table-{{ cloudnum }}").dataTable({
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
     });
   {% endfor %}
 });
@@ -31,12 +31,13 @@ $(function() {
                 print attribute, clouds[cloud][server][attribute]
 -->
 
-
+<h2> Flavors </h2>
 <div id="flavors-accordion">
   {% for cloud in clouds %}
     {% set cloud_loop = loop %}
   <div style="margin-bottom:1em;">
   <h3>{{ cloud }}</h3>
+  <div>
     <table id="cloud-table-{{ loop.index0 }}" class="tablesorter" >
       <thead>
           <tr>
@@ -62,6 +63,7 @@ $(function() {
           {% endfor %}
       </tbody>
     </table>
+  </div>
   </div>
   {% endfor %}
 </div>

@@ -48,18 +48,27 @@ class Test:
     def tearDown(self):
         pass
 
+    def test_get_extensions(self):
+        HEADING()
+        
+        print json.dumps(self.cloud.get_extensions(), indent=4)
+        assert True
+
+    def test_get_limits(self):
+        HEADING()
+        print json.dumps(self.cloud.get_limits(), indent=4)
+        assert True
+
     def test_get_servers(self):
         HEADING()
-        #self.cloud.refresh('flavors')
-        #print json.dumps(self.cloud.dump('flavors'), indent=4)
 
         print json.dumps(self.cloud.get_servers(), indent=4)
         assert True
 
     def test_get_flavors(self):
         HEADING()
-        self.cloud.refresh('flavors')
-        print json.dumps(self.cloud.dump('flavors'), indent=4)
+        #self.cloud.refresh('flavors')
+        #print json.dumps(self.cloud.dump('flavors'), indent=4)
 
         print json.dumps(self.cloud.get_flavors(), indent=4)
         assert True

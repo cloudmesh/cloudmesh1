@@ -8,7 +8,7 @@
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#servers-accordion > div").accordion({ header: "h3", collapsible: true, active: false });
+        $("#servers-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: false });
     })
 })(jQuery);
 
@@ -32,6 +32,7 @@ $(function() {
                 print attribute, clouds[cloud][server][attribute]
 -->
 
+<h2> Users </h2>
 
 <div id="servers-accordion">
   {% for cloud in clouds %}
