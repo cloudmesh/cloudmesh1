@@ -26,8 +26,8 @@ sys.path.insert(0, '../..')
 from sh import curl
 
 from datetime import datetime
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
+from pprint import pprint
+
 
 
 from sh import fgrep
@@ -54,8 +54,8 @@ class openstack(ComputeBaseType):
     #: the type of the cloud. It is "openstack"
     type = "openstack"   # global var
 
-    #: a dict with the flavors
-    flavors = {}         # global var
+    #: a dict with the images
+    images = {}         # global var
 
     #: a dict with the images
     images = {}          # global var
@@ -68,7 +68,8 @@ class openstack(ComputeBaseType):
     
     #: a dict containing the credentionls read with cm_config
     credential = None    # global var
-
+    keystone_credential = None
+    
     #: a unique label for the clous
     label = None         # global var
 
@@ -77,6 +78,7 @@ class openstack(ComputeBaseType):
 
     #: This is the cloud, should be internal though with _
     cloud = None         # internal var for the cloud client in openstack
+    keystone = None      
 
     #: The user id
     user_id = None       # internal var
@@ -89,20 +91,29 @@ class openstack(ComputeBaseType):
     # possibly make connext seperate
     def __init__(self, label, credential=None):
         """
-        initializes the openstack cloud from a defould novaRC file
-        locates at ~/.futuregrid.org/cloudmesh.yaml. However if the
-        parameters are provided it will instead use them
+        initializes the openstack cloud from a file
+        located at ~/.futuregrid.org/cloudmesh.yaml. 
+        However if a credential dict is used it is used instead
         """
         self.clear()
         self.label = label
         self.credential = credential
         
-        config = cm_config()
+        self.config = cm_config()
         if credential is None:
-            self.credential = config.credential(label)
-        else:
-            self.credential = credential
+            self.credential = self.config.credential(label)
         self.connect()
+
+
+    def set_keystone_credential(self, credential=None):
+                
+        profile = cm_profile()
+        credential = profile.server.config["keystone"][name]
+        cloud = openstack(name, credential=credential)
+        if credential is None:
+            self.keystone_credential = config.credential(label)
+
+        
 
     def clear(self):
         """
@@ -139,8 +150,6 @@ class openstack(ComputeBaseType):
             
         self.auth_token = self.get_token(self.credential)
 
-    # BIG BUG, MUST BE DICT
-    # config should have dict as parameter
     def config(self, label, dict=None):
         """
         reads in the configuration file if specified, and does some
@@ -150,28 +159,10 @@ class openstack(ComputeBaseType):
         if dict is None:
             config = cm_config()
             self.credential = config.get(label, expand=True)
-
-            # print self.credential
-
-            # self.user_id = self.credential['OS_USER_ID']
-            # self.credential = credentials(label)
         else:
-            # TODO: BUG: THIS PROBABLY CAN BE REMOVED AS PART OF THE CONFIG, cars do not exist or are self?
-            self.credential = {}
-            self.credential['OS_USERNAME'] = username
-            self.credential['OS_PASSWORD'] = password
-            self.credential['OS_AUTH_URL'] = authurl
-            self.credential['label'] = label
-            self.credential['OS_TENANT_NAME'] = project
+            self.credential = dict
             
-            self.credential['OS_CACERT'] = cacert
-        """
-        self._nova = nova.bake("--os-username",    self.credential.username,
-                               "--os-password",    self.credential.password,
-                               "--os-auth-url",    self.credential.url,
-                               "--os-tenant-name", self.credential.project)
-        """
-
+        
     #
     # TESTS
     #
@@ -186,7 +177,7 @@ class openstack(ComputeBaseType):
         for element in list:
             print "    ", element[0]
         try:
-            pp.pprint(what.__dict__)
+            pprint(what.__dict__)
         except:
             return
 
@@ -209,7 +200,7 @@ class openstack(ComputeBaseType):
         self.intro(self.cloud.dns_entries)
         self.intro(self.cloud.fixed_ips)
         self.intro(self.cloud.flavor_access)
-        self.intro(self.cloud.flavors)
+        self.intro(self.cloud.images)
         self.intro(self.cloud.floating_ip_pools)
         self.intro(self.cloud.floating_ips)
         self.intro(self.cloud.floating_ips_bulk)
@@ -286,6 +277,7 @@ class openstack(ComputeBaseType):
                           headers=headers, 
                           verify=verify)
 
+        self.auth_token = r.json()
                                           
         return r.json()
     
@@ -326,14 +318,52 @@ class openstack(ComputeBaseType):
         if type is None:
             type = "compute"
         compute_service = self._get_service(type)
-        #pp.pprint(compute_service)
+        #pprint(compute_service)
         conf = {}
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
         conf['adminURL'] = str(compute_service['endpoints'][0]['adminURL'])
         conf['token'] = str(self.auth_token['access']['token']['id'])
         return conf
+    
+    # new
+    def _now(self):
+        return datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
+     
+    # new
+    def _list_to_dict(self, list, id, type, time_stamp):
+        d = {}
+        cm_type_version = self.config.get()['clouds'][self.label]['cm_type_version']
+        for element in list:
+            element['cm_type'] = type
+            element['cm_cloud'] = self.label
+            element['cm_cloud_type'] = self.type  
+            element['cm_cloud_version'] = cm_type_version
+            element['cm_refresh'] = time_stamp
+            d[element[id]] = dict(element)
+        return d
+    
+    # new
+    def get_servers(self):
+        time_stamp = self._now()
+        msg = "servers/detail"
+        list = self._get(msg)['servers']
+        return self._list_to_dict(list, 'id', "server", time_stamp)
+    
+    # new
+    def get_flavors(self):
+        time_stamp = self._now()
+        msg = "flavors/detail"
+        list = self._get(msg)['flavors']
+        return self._list_to_dict(list, 'name', "flavor", time_stamp)
 
+    # new
+    def get_images(self):
+        time_stamp = self._now()
+        msg = "images/detail"
+        list = self._get(msg)['images']
+        return self._list_to_dict(list, 'id', "image", time_stamp)
 
+    # new
     def get_tenants(self,credential=None):
         """get the tenants dict for the vm with the given id"""
         if credential is None:
@@ -343,6 +373,7 @@ class openstack(ComputeBaseType):
         msg = "tenants"
         return self._get(msg,credential=credential, type="keystone")
 
+    # new
     def get_users(self,credential=None):
         """get the tenants dict for the vm with the given id"""
         if credential is None:
@@ -378,7 +409,7 @@ class openstack(ComputeBaseType):
             'token'], "Accept": "application/json", "Content-type": "application/json"}
 
         print "%%%%%%%%%%%%%%%%%%"
-        pp.pprint(conf)
+        pprint(conf)
         print "%%%%%%%%%%%%%%%%%%"
         print "PARAMS", params2
         print "HEADERS", headers2
@@ -437,7 +468,7 @@ class openstack(ComputeBaseType):
         return (id, image)
 
     def _get_flavors_dict(self):
-        return self.cloud.flavors.list()
+        return self.cloud.images.list()
 
     def _update_flavors_dict(self, information):
         flavor = information.__dict__
@@ -454,8 +485,8 @@ class openstack(ComputeBaseType):
 
     def _update_servers_dict(self, information):
         vm = information.__dict__
-        # pp.pprint (vm)
-        # pp.pprint(vm)
+        # pprint (vm)
+        # pprint(vm)
         delay = vm['id']
         # del vm['manager']
         del vm['_info']
@@ -624,7 +655,7 @@ class openstack(ComputeBaseType):
         # print image_id
         # print flavor_name
 
-        vm_flavor = self.cloud.flavors.find(name=flavor_name)
+        vm_flavor = self.cloud.images.find(name=flavor_name)
         vm_image = self.cloud.images.find(id=image_id)
 
         if key_name is None:
@@ -788,7 +819,7 @@ class openstack(ComputeBaseType):
     """
     refresh just a specific VM
     delete all images that follow a regualr expression in name
-    look into sort of images, flavors, vms
+    look into sort of images, images, vms
     """
 
     #
@@ -1002,14 +1033,16 @@ if __name__ == "__main__":
 
     name ="%s-%04d" % (cloud.credential["OS_USERNAME"], 1)
     out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
-    pp.pprint(out)
+    pprint(out)
 
     """
 
-    cloud = openstack("grizzly-openstack")
-    keys = cloud.list_key_pairs()
-    for key in keys:
-        print key.name
+    cloud = openstack("sierra-grizzly-openstack")
+    cloud.get_flavors()
+    
+    #keys = cloud.list_key_pairs()
+    #for key in keys:
+    #    print key.name
     """
     print cloud.find_user_id()
 
@@ -1019,7 +1052,7 @@ if __name__ == "__main__":
     for i in range (1,3):
         name ="%s-%04d" % (cloud.credential["OS_USERNAME"], i)
         out = cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
-        pp.pprint(out)
+        <pprint(out)
     """
 
     """
