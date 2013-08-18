@@ -2,54 +2,70 @@
 {% from "_helper.html" import image_button %}
 {% block content %}
 
-<table>
-
-  {% set status_attributes = ['jobs', 'gres', 'nusers','idletime', 'rectime', 'sessions', 'physmem', 'totmem', 'netload','loadave', 'state', 'uname', 'opsys', 'nsessions', 'ncpus', 'availmem', 'varattr'] %}
-  {% set host_attributes = ['ntype', 'state', 'np', 'gpus', 'properties'] %}
-
-  
-  {% set all_cols = status_attributes|list + host_attributes|list %}
-  {% set cols = all_cols|count %}
-  <tr>
-    <th colspan="{{ cols + 1 }}"> PBS nodes for {{host}} </th>  
-   
-  </tr>
-  <tr> <td> Updated </td>  <td colspan="{{ cols }}"> {{ updated }} </td></tr>
 
 
-  <tr>
-	<th> Name   </th>
-	{% for attribute in host_attributes %}
-         <th> {{ attribute }} </td>
-        {% endfor %}
-	{% for attribute in status_attributes %}
-         <th> {{ attribute }} </td>
-        {% endfor %}
-  </tr>
-
-  {% for host in data|sort %}
-      <!-- {% set job = data[jobname] %} -->
-
-    <tr>
-      <td> {{ host }} </td>
-      {% for attribute in host_attributes %}
-         <td> {{ data[host][attribute] }} </td>
-      {% endfor %}
+<script type="text/javascript">
 
 
-        {% for attribute in status_attributes %}
-	 {% if data[host]['status'] %}
-           <td> {{ data[host]['status'][attribute] }} </td>
-	 {% else %}
-	   <td> </td>
-	 {% endif %}	 
-        {% endfor %}
+$(function() {
+     $("#host-table-0").dataTable({
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
+    });
+});
+
+</script>
 
 
-    </tr>
+
+<h3> PBS nodes for {{host}} </h3>
+<div>
+	Updated:{{ updated }} 
+
+	  {% set status_attributes = ['jobs', 'gres', 'nusers','idletime', 'rectime', 'sessions', 'physmem', 'totmem', 'netload','loadave', 'state', 'uname', 'opsys', 'nsessions', 'ncpus', 'availmem', 'varattr'] %}
+	  {% set host_attributes = ['ntype', 'state', 'np', 'gpus', 'properties'] %}
 	
-  {% endfor %}
-  
-</table>
+	  
+	  {% set all_cols = status_attributes|list + host_attributes|list %}
+	  {% set cols = all_cols|count %}
+
+	<table id="host-table-0">
+	  <thead>
+	  <tr>
+		<th> Name   </th>
+		{% for attribute in host_attributes %}
+	         <th> {{ attribute }} </td>
+	        {% endfor %}
+		{% for attribute in status_attributes %}
+	         <th> {{ attribute }} </td>
+	        {% endfor %}
+	  </tr>
+	  </thead>
+	  <tbody>
+	  {% for host in data|sort %}
+	      <!-- {% set job = data[jobname] %} -->
+	
+	    <tr>
+	      <td> {{ host }} </td>
+	      {% for attribute in host_attributes %}
+	         <td> {{ data[host][attribute] }} </td>
+	      {% endfor %}
+	
+	
+	        {% for attribute in status_attributes %}
+		 {% if data[host]['status'] %}
+	           <td> {{ data[host]['status'][attribute] }} </td>
+		 {% else %}
+		   <td> </td>
+		 {% endif %}	 
+	        {% endfor %}
+	
+	
+	    </tr>
+		
+	  {% endfor %}
+	  </tbody>
+	</table>
+</div>
 
 {% endblock %}
