@@ -42,10 +42,35 @@ class Test:
         self.name = self.configuration.active()[0]
         print "ACTIVE CLOUD", self.name
         self.cloud = openstack(self.name)
+        self.cloud.get_token()
         print "LOADED CLOUD"
 
     def tearDown(self):
         pass
+
+    def test_get_servers(self):
+        HEADING()
+        #self.cloud.refresh('flavors')
+        #print json.dumps(self.cloud.dump('flavors'), indent=4)
+
+        print json.dumps(self.cloud.get_servers(), indent=4)
+        assert True
+
+    def test_get_flavors(self):
+        HEADING()
+        self.cloud.refresh('flavors')
+        print json.dumps(self.cloud.dump('flavors'), indent=4)
+
+        print json.dumps(self.cloud.get_flavors(), indent=4)
+        assert True
+
+    def test_get_images(self):
+        HEADING()
+        self.cloud.refresh('images')
+        print json.dumps(self.cloud.dump('images'), indent=4)
+
+        print json.dumps(self.cloud.get_images(), indent=4)
+        assert True
 
     def test_00_label(self):
         HEADING()
@@ -74,6 +99,7 @@ class Test:
         self.cloud.refresh('flavors')
         print json.dumps(self.cloud.dump('flavors'), indent=4)
 
+        
         # doing a simple test as tiny is usually 512
         assert self.cloud.flavors['m1.tiny']['ram'] == 512
 

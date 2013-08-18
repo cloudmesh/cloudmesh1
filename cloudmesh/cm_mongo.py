@@ -168,7 +168,7 @@ class cm_mongo:
                             del result[element]['_id']
                         self.db_clouds.insert(result[element])
                     
-                        #self.db.clouds.update( { item: "magazine", qty: { $gt: 5 } }, { $set: { x: 25, y: 50 } }, { upsert: true } )
+                        # self.db.clouds.update( { item: "magazine", qty: { $gt: 5 } }, { $set: { x: 25, y: 50 } }, { upsert: true } )
                         
                     except Exception, e:
                         print "ERROR: user id duplicated", id
@@ -196,13 +196,14 @@ class cm_mongo:
         return self.db_clouds.find(query) 
        
     
-    def _get_kind(self, kind):
+    def _get_kind(self, kind, names=None):
         '''
         returns all the data from clouds of a specific type.
         :param kind:
         '''
         data = {}
-        names = self.clouds.keys()
+        if names is None:
+            names = self.clouds.keys()
         for name in names:
             data[name] = {}
             result = self.find({'cm_kind' : kind, 'cm_cloud': name})
@@ -210,35 +211,35 @@ class cm_mongo:
                 data[name][entry['id']] = entry
         return data
    
-    def users(self):
+    def users(self, clouds=None):
         '''
         returns all the servers from all clouds
         '''
-        return self._get_kind('users')
+        return self._get_kind('users', clouds)
 
-    def tenants(self):
+    def tenants(self, clouds=None):
         '''
         returns all the servers from all clouds
         '''
-        return self._get_kind('tenants')
+        return self._get_kind('tenants', clouds)
 
-    def servers(self):
+    def servers(self, clouds=None):
         '''
         returns all the servers from all clouds
         '''
-        return self._get_kind('servers')
+        return self._get_kind('servers', clouds)
         
-    def flavors(self):
+    def flavors(self, clouds=None):
         '''
         returns all the flavors from the various clouds
         '''
-        return self._get_kind('flavors')
+        return self._get_kind('flavors', clouds)
         
-    def images(self):
+    def images(self, clouds=None):
         '''
         returns all the images from various clouds
         '''
-        return self._get_kind('images')
+        return self._get_kind('images', clouds)
         
 
 def main():
