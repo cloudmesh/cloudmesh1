@@ -2,6 +2,8 @@ from flask import Blueprint
 from flask import render_template, request
 from datetime import datetime
 
+from flask.ext.login import login_required
+
 inventory_module = Blueprint('inventory_module', __name__)
 
 from cloudmesh.inventory.inventory import Inventory
@@ -24,6 +26,7 @@ def display_summary():
 
 
 @inventory_module.route('/inventory/')
+@login_required
 def display_inventory():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     inventory.refresh()
