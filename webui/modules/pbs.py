@@ -3,6 +3,7 @@ from flask import Blueprint
 from flask import render_template
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.pbs.pbs import PBS
+from flask.ext.login import login_required
 
 pbs_module = Blueprint('pbs_module', __name__)
 
@@ -13,6 +14,7 @@ pbs_module = Blueprint('pbs_module', __name__)
 
 
 @pbs_module.route('/pbs/<host>')
+@login_required
 def display_pbs_qstat(host):
 
     config = cm_config()
@@ -29,6 +31,7 @@ def display_pbs_qstat(host):
 
 
 @pbs_module.route('/pbsnodes/<host>')
+@login_required
 def display_pbs_nodes(host):
 
     config = cm_config()
