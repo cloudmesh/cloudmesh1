@@ -14,6 +14,50 @@ log = LOGGER('cm_user')
 class cm_userLDAP (CMUserProviderBaseType):
     
     providers = {}
+    host = None
+    cert = None
+    
+    def get_config(self, **kwargs):
+        
+        if not kwargs.has_key('host'):#if kwargs['host'] is None:
+            self.host = cm_config_server().config["ldap"]["hostname"]
+    
+        if not kwargs.has_key('ldapcert'):#if kwargs['ldapcert'] is None:
+            self.cert = cm_config_server().config["ldap"]["cert"]
+            
+            
+    def authenticate(self, userId, password, **kwargs):
+        ret = False
+                
+        # bug pass **kwargs
+        self.get_config()
+        
+        
+        # print "'" + userId + "':'" + authProvider + "':'" + authCred + "'"
+        
+        #print adminuser, adminpass
+        userdn = "uid=" + userId + ",ou=People,dc=futuregrid,dc=org"
+        #print userdn
+        ldapconn = ldap.initialize("ldap://{0}".format(self.host))
+        log.info("Initializing the LDAP connection to server: " + self.host)
+        try:
+            ldapconn.start_tls_s()
+            log.info("tls started...")
+            ldapconn.bind_s(userdn, password)
+            ret = True                
+        except ldap.INVALID_CREDENTIALS:
+            log.info("Your username or password is incorrect. Cannot bind.")
+            ret = False
+        except ldap.LDAPError:
+            log.info("User '" + userId + "' failed to authenticate due to LDAP error. The user may not exist."+ str(sys.exc_info()))
+            ret = False
+        except:
+            ret = False
+            log.info("User '" + userId + "' failed to authenticate due to possible password encryption error."+str(sys.exc_info()))
+        finally:
+            log.info("Unbinding from the LDAP.")
+            ldapconn.unbind()
+        return ret
     
     def __init__(self, collection="user"):
         super( cm_userLDAP, self ).__init__()

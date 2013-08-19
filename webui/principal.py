@@ -9,6 +9,7 @@ from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
      identity_changed
 from flask import render_template, flash, send_from_directory
 
+from cloudmesh.user.cm_userLDAP import cm_userLDAP 
 
 SECRET_KEY = 'development key'
 
@@ -52,11 +53,18 @@ class LoginForm(Form):
     username = TextField('Username')
     password = PasswordField('Password')
 
-    user = {'name': 'gregor', 'password': 'gregor', 'id':1}
-    error = ""
-    
+
+    idp = cm_userLDAP ()
+    idp.connect("fg-ldap","ldap")
+
+    user = None
+
     def validate(self):
         print "validate"
+
+        self.user =  self.idp.find_one({'cm_user_id': self.username.data})
+
+        print "UUU", self.user
         
         #user = User.query.filter_by(
         #    username=self.username.data).first()
@@ -68,14 +76,17 @@ class LoginForm(Form):
         else:
             print "user not None"
 
-        if self.user['name'] != self.username.data:
+        if self.user['cm_user_id'] != self.username.data:
             print "username invalid"
             self.error = 'Invalid username'
             return False
         else:
             print "user found"
             
-        if not self.user['password'] == self.password.data:
+            #if not self.user['password'] == self.password.data:
+       
+        test = self.idp.authenticate(self.username.data,self.password.data)
+        if not test:
             print "password invalid"
             self.error = 'Invalid password'
             return False
@@ -99,7 +110,7 @@ def login():
     
     if form.validate_on_submit():
         flash(u'Successfully logged in as %s' % form.username.data)
-        session['user_id'] = form.user["id"]
+        session['user_id'] = form.user["cm_user_id"]
         return redirect(url_for('index'))
         
     return render_template('login.html', form=form)
