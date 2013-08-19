@@ -21,7 +21,6 @@ import json
 import os
 from urlparse import urlparse
 
-sys.path.insert(0, '../..')
 
 from sh import curl
 
@@ -85,6 +84,11 @@ class openstack(ComputeBaseType):
 
     _nova = nova
 
+
+
+    nova_token = None
+    keystone_token = None
+    
     #
     # initialize
     #
@@ -125,6 +129,8 @@ class openstack(ComputeBaseType):
         self._clear()
         self.type = "openstack"
 
+
+            
     def connect(self):
         """
         establishes a connection to the OpenStack cloud,
@@ -181,6 +187,7 @@ class openstack(ComputeBaseType):
         except:
             return
 
+    '''
     def novaclient_dump(self):
         """a test function that is temporarily here to visualize novaclient output"""
 
@@ -226,7 +233,8 @@ class openstack(ComputeBaseType):
         self.intro(self.cloud.volumes)
 
         now = datetime.now()
-
+    '''
+    
     #
     # FIND USER ID
     #
@@ -358,6 +366,7 @@ class openstack(ComputeBaseType):
         return self._list_to_dict(list, 'name', "extensions", time_stamp)
     
      # new
+     # BUG not yet a dict
     def get_limits(self):
         time_stamp = self._now()
         msg = "limits"
@@ -387,16 +396,21 @@ class openstack(ComputeBaseType):
 
     # new
     def get_tenants(self,credential=None):
+        time_stamp = self._now()
         """get the tenants dict for the vm with the given id"""
         if credential is None:
             p = cm_profile()
             credential = p.server.config["keystone"]["sierra-openstack-grizzly"]
     
         msg = "tenants"
-        return self._get(msg,credential=credential, type="keystone")
+        list = self._get(msg,credential=credential, type="keystone")['tenants']
+        return self._list_to_dict(list, 'id', "tenants", time_stamp)
+
+
 
     # new
     def get_users(self,credential=None):
+        time_stamp = self._now()
         """get the tenants dict for the vm with the given id"""
         if credential is None:
             
@@ -406,7 +420,8 @@ class openstack(ComputeBaseType):
         
         cloud = openstack(name, credential=credential)
         msg = "users"
-        return cloud._get(msg,credential=credential, type="keystone",urltype='adminURL')
+        list = cloud._get(msg,credential=credential, type="keystone",urltype='adminURL')['users']
+        return self._list_to_dict(list, 'id', "users", time_stamp)
         
     def get_meta(self, id):
         """get the metadata dict for the vm with the given id"""
@@ -458,65 +473,25 @@ class openstack(ComputeBaseType):
     #
     def _get_users_dict(self):
         result = self.get_users()
-        return result['users']
+        return result
     
-    def _update_users_dict(self,information):        
-        user = information
-        user['cloud'] = self.label 
-        id = "{0}-{1}".format(user['id'],self.label)   
-        return (id, user)
-
     def _get_tenants_dict(self):
         result = self.get_tenants()
-        return result['tenants']
-    
-    def _update_tenants_dict(self,information):        
-        tenants = information
-        id = "{0}-{1}".format(tenents['id'],self.label)   
-        tenants['cloud'] = self.label 
-        return (id, tenants)
+        return result
     
     def _get_images_dict(self):
-        return self.cloud.images.list(detailed=True)
-
-    def _update_images_dict(self, information):
-        image = information.__dict__
-        id = image['id']
-        # clean not neaded info
-        # del image['manager']
-        del image['_info']
-        del image['_loaded']
-        # del information.links
-        return (id, image)
+        result = self.get_images()
+        return result
 
     def _get_flavors_dict(self):
-        return self.cloud.images.list()
-
-    def _update_flavors_dict(self, information):
-        flavor = information.__dict__
-        # clean not neaded info
-        # del flavor['manager']
-        del flavor['_info']
-        del flavor['_loaded']
-        # del information.links
-        id = information.name
-        return (id, flavor)
+        result = self.get_flavors()
+        return result
 
     def _get_servers_dict(self):
-        return self.cloud.servers.list(detailed=True)
-
-    def _update_servers_dict(self, information):
-        vm = information.__dict__
-        # pprint (vm)
-        # pprint(vm)
-        delay = vm['id']
-        # del vm['manager']
-        del vm['_info']
-        del vm['_loaded']
-        # del information.links
-        id = vm['id']
-        return (id, vm)
-
+        result = self.get_servers()
+        return result
+        
+        
     #
     # security Groups of VMS
     #
@@ -526,6 +501,8 @@ class openstack(ComputeBaseType):
     #
     # comments of wht these things do and how they work are missing
     #
+    
+    '''
     def createSecurityGroup(self, default_security_group, description="no-description"):
         """
         comment is missing
@@ -589,7 +566,7 @@ class openstack(ComputeBaseType):
 
         else:
             return self.createSecurityGroup(default_security_group)
-
+    
     # GVL: review
     # how does this look for azure and euca? Should there be a general framework for this in the BaseCloud class
     # based on that analysis?
@@ -613,7 +590,8 @@ class openstack(ComputeBaseType):
         comment is missing
         """
         self.cloud.servers.add_floating_ip(serverid, ip)
-
+    
+    
     #
     # set vm meta
     #
@@ -733,7 +711,8 @@ class openstack(ComputeBaseType):
     #
     # list user images
     #
-
+    '''
+    
     @donotchange
     def vms_user(self, refresh=False):
         """
@@ -808,7 +787,7 @@ class openstack(ComputeBaseType):
     #
     # rename
     #
-
+    '''
     def rename(self, old, new, id=None):
         """rename the vm with the given name old to new. If more than
         one exist with the same name only the first one will be
@@ -833,7 +812,7 @@ class openstack(ComputeBaseType):
             if old != new:
                 vm = self.cloud.servers.update(id, new)
             counter += 1
-
+    '''
 
     #
     # TODO
@@ -949,6 +928,7 @@ class openstack(ComputeBaseType):
     #    conf = get_conf()
     #    return _get(conf, "%s/limits")
 
+    '''
     def limits(self):
         """ returns the usage information of the tennant"""
 
@@ -965,7 +945,7 @@ class openstack(ComputeBaseType):
                 list.append(limit)
 
         return list
-
+    
     def check_key_pairs(self, key_name):
         """simple check to see if a keyname is in the keypair list"""
         allKeys = self.cloud.keypairs.list()
@@ -1033,7 +1013,7 @@ class openstack(ComputeBaseType):
             if userid is not None:
                 vm['cm_display'] = vm['cm_display'] and (
                     vm['user_id'] == userid)
-
+    '''
     def display_regex(self, state_check, userid):
 
         print state_check

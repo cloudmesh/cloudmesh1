@@ -15,6 +15,7 @@
 $(function() {
   {% for cloudnum in range(clouds|count) %}
     $("#cloud-table-{{ cloudnum }}").dataTable({
+    	"sPaginationType": "full_numbers",
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
     });
@@ -52,8 +53,7 @@ $(function() {
           </tr>
       </thead>
       <tbody>
-          {% for flavor in clouds[cloud] %}
-
+          {% for user in clouds[cloud] %}
              <tr>
                  <!-- for attribute in clouds[cloud][flavor] --> 
                  {% for attribute in attributes  %}
@@ -61,11 +61,11 @@ $(function() {
                        {% set l = attribute | length %}
 
                           {% if l == 2%}
-                             {{ clouds[cloud][flavor][attribute[1]] }}
+                             {{ clouds[cloud][user][attribute[1]] }}
                           {% elif l == 3%}
-                             {{ clouds[cloud][flavor][attribute[1]][attribute[2]] }}       				
+                             {{ clouds[cloud][user][attribute[1]][attribute[2]] }}       				
                           {% elif l == 4%}
-                             {{ clouds[cloud][flavor][attribute[1]][attribute[2]][attribute[4]] }}
+                             {{ clouds[cloud][user][attribute[1]][attribute[2]][attribute[4]] }}
                           {% endif %}
                       </td>
                  {% endfor %}

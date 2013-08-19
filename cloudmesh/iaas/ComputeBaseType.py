@@ -31,6 +31,8 @@ class ComputeBaseType:
         self.label = label
     
     def _clear(self):
+        self.users = {}         
+        self.tenants = {}         
         self.flavors = {}         # global var
         self.images = {}          # global var
         self.servers = {}         # global var
@@ -90,7 +92,6 @@ class ComputeBaseType:
     def get(self, type="server"):
         """returns information in a dict for 'servers','flavours','images'"""
         selection = type.lower()[0]
-        list_function = self._get_servers_dict
         d = {}
         if selection == 'i':
             d = self.images
@@ -110,31 +111,16 @@ class ComputeBaseType:
     def _get_users_dict(self):
         raise NotImplementedError()
 
-    def _update_users_dict(self, information):
-        raise NotImplementedError()
-
     def _get_tenants_dict(self):
-        raise NotImplementedError()
-
-    def _update_tenants_dict(self, information):
         raise NotImplementedError()
 
     def _get_image_dict(self):
         raise NotImplementedError()
 
-    def _update_image_dict(self, information):
-        raise NotImplementedError()
-
     def _get_flavors_dict(self):
         raise NotImplementedError()
 
-    def _update_flavors_dict(self, information):
-        raise NotImplementedError()
-
     def _get_servers_dict(self):
-        raise NotImplementedError()
-
-    def _update_servers_dict(self, information):
         raise NotImplementedError()
 
     def vm_create(self, name=None,
@@ -180,6 +166,7 @@ class ComputeBaseType:
     #
     # print
     #
+    
     def __str__(self):
         """
         print everything but the set_credentials that is known about this
@@ -189,9 +176,13 @@ class ComputeBaseType:
             'label': self.label,
             'flavors': self.flavors,
             'servers': self.servers,
-            'images': self.images}
+            'images': self.images,
+            #'users': self.users,  
+            'users': len(self.users),  
+            'tenants': self.tenants,
+            }
         return json.dumps(information, indent=4)
-
+    
     #
     # get methods
     #
@@ -220,7 +211,7 @@ class ComputeBaseType:
             selection = type.lower()[0]
 
         list_function = self._get_servers_dict
-        update_function = self._update_servers_dict
+        
         d = self.servers
         if selection == 'a' or type is None:
             self.refresh("images")
@@ -229,23 +220,18 @@ class ComputeBaseType:
             return
         elif selection == 'i':
             list_function = self._get_images_dict
-            update_function = self._update_images_dict
             d = self.images
         elif selection == 'f':
             list_function = self._get_flavors_dict
-            update_function = self._update_flavors_dict
             d = self.flavors
         elif selection == 's':
             list_function = self._get_servers_dict
-            update_function = self._update_servers_dict
             d = self.servers
         elif selection == 'u':
             list_function = self._get_users_dict
-            update_function = self._update_users_dict
             d = self.users
         elif selection == 't':
             list_function = self._get_tenants_dict
-            update_function = self._update_tenants_dict
             d = self.tenants
         elif type is not None:
             print "refresh type not supported"
@@ -262,10 +248,12 @@ class ComputeBaseType:
                 self.servers = {}
             elif selection == 'u':
                 self.users = {}
+            elif selection == 't':
+                self.tenants = {}
 
         else:
 
-            for information in list:
-                (id, element) = update_function(information)
-                d[id] = element
+            for element in list:
+                id = list[element]['id']
+                d[id] = list[element]
                 d[id]['cm_refresh'] = time_stamp
