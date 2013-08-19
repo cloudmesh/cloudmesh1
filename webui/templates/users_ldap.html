@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% from "_helper.html" import image_button %}
+
+
+
+{% block content %}
+
+<script type="text/javascript">
+
+$(function() {
+     $("#host-table-0").dataTable({
+     	"sPaginationType": "full_numbers",
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
+    });
+});
+
+</script>
+
+
+<h2> Users </h2>
+<div>
+	Updated:{{ updated }} 
+	<table id="host-table-0">
+	<thead>
+	  <tr>
+		<th> ID   </th>
+		<th> Lastname   </th>
+		<th> Firstname   </th>
+		<th> Active Projects   </th>
+	  </tr>
+	  </thead>
+	  <tbody>
+	  {% for element in users %}
+	      {% set user = users[element] %}
+	      <tr>
+		<td> 
+			<a href="https://portal.futuregrid.org/users/{{user.cm_user_id }}  ">{{user.cm_user_id }}  </a> 
+		</td>
+		
+				
+		<td> {{user.lastname }}  </td>	
+		<td> {{user.firstname }}  </td>	
+
+		<td>		
+		{%  for project in user.projects.active %}
+		  <a href="https://portal.futuregrid.org/projects/{{project}}">{{ project }}</a> &nbsp;
+	    {% endfor %}
+	    </td>
+					
+			
+	      </tr>
+		
+	  {% endfor %}
+	  </tbody>
+	</table>
+</div>
+
+
+{% endblock %}
