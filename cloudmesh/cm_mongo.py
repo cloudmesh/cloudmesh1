@@ -69,7 +69,7 @@ class cm_mongo:
             names = self.config.active()
                     
         for cloud_name in names:
-            # print "Activating ->", cloud_name
+            print "Activating ->", cloud_name
           
             try:
                 credential = self.config.get(cloud_name)
@@ -83,6 +83,8 @@ class cm_mongo:
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name)
                     self.clouds[cloud_name].update({'manager': cloud})
+                    
+
             
             except Exception, e:  
                 print "ERROR: can not activate cloud", cloud_name
@@ -123,26 +125,15 @@ class cm_mongo:
         if names == ['all'] or names is None:
             names = self.clouds.keys()
 
-        # at one point use a threadpool.
-        try:
-            for name in names:
-                cloud = self.clouds[name]['manager']
-                for type in types:
-                    log.info("    Refresh {0} -> {1}".format(name, type))
-                    cloud.refresh(type=type)
-                    result = cloud.get(type)
-                    self.clouds[name][type] = cloud.get(type)
-                    self.clouds[name].update({'cm_data': type})
-
-        except Exception, e:
-            print traceback.format_exc()
-            log.error(str(e))
-            
         watch = StopWatch()
         for name in names:
+            
+            cloud = self.clouds[name]['manager']
+                        
             for type in types:
-                cloud = self.clouds[name]['manager']
-                print "Refreshing {0}->".format(type), name
+
+                print "Refreshing {0}->".format(type)  
+                            
                 watch.start(name)
                 cloud.refresh(type)
                 result = cloud.get(type)
@@ -152,34 +143,25 @@ class cm_mongo:
                 print 'Refresh time:', watch.get(name)
 
                 watch.start(name) 
+                
+                self.db_clouds.remove({"cm_cloud" : name, "cm_kind": type})
+                
                 for element in result:
                     id = "{0}-{1}-{2}".format(name, type, result[element]['name']).replace(".", "-")
-                    
+                    #print "ID", id
                     result[element]['cm_id'] = id 
                     result[element]['cm_cloud'] = name
                     result[element]['cm_type'] = self.clouds[name]['cm_type'] 
                     result[element]['cm_type_version'] = self.clouds[name]['cm_type_version'] 
                     result[element]['cm_kind'] = type
-                    if 'manager' in result[element]:
-                        del result[element]['manager']
-                    try:
-                        self.db_clouds.remove({"cm_id": id, "cm_kind" : type}) 
-                        if '_id' in result[element]:
-                            del result[element]['_id']
-                        self.db_clouds.insert(result[element])
                     
-                        # self.db.clouds.update( { item: "magazine", qty: { $gt: 5 } }, { $set: { x: 25, y: 50 } }, { upsert: true } )
-                        
-                    except Exception, e:
-                        print "ERROR: user id duplicated", id
-                        pprint (result[element])
-                        print e
-                        print self.db.clouds.index_information()
-                        sys.exit()
+                    self.db_clouds.insert(result[element])
+                    
+                    
                 watch.stop(name)
                 print 'Store time:', watch.get(name)
+        
 
-                
     def get_pbsnodes(self, host):
         '''
         returns the data associated with pbsnodes from mongodb.
@@ -204,6 +186,7 @@ class cm_mongo:
         data = {}
         if names is None:
             names = self.clouds.keys()
+   
         for name in names:
             data[name] = {}
             result = self.find({'cm_kind' : kind, 'cm_cloud': name})

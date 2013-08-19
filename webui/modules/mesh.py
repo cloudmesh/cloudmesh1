@@ -191,7 +191,12 @@ def mongo_users():
     
     c = cm_mongo()
     c.activate()
+    clouds = {}
     clouds = c.users()
+    print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
+    print len(clouds['india-openstack-essex'])
+    print len(clouds['sierra-openstack-grizzly'])
+    
     
     """
     for cloud in clouds:
@@ -210,6 +215,9 @@ def mongo_users():
                         [ "e-mail" , "e-mail"],
                         [ "enabled" , "enabled"],
                         [ "Cloud" , "cloud"],
+                        ['cm_cloud', "cm_cloud"],
+                        ['cm_id', "cm_id"],
+                        ['cm_type', "cm_type"],
                         [ "Refresh", "cm_refresh"]
                   ],
                   "grizzly": 
@@ -220,6 +228,9 @@ def mongo_users():
                         [ "e-mail" , "e-mail"],
                         [ "enabled" , "enabled"],
                         [ "Cloud" , "cloud"],
+                        ['cm_cloud', "cm_cloud"],
+                        ['cm_id', "cm_id"],
+                        ['cm_type', "cm_type"],
                         [ "Refresh", "cm_refresh"]
                     ]
                   }

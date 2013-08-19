@@ -39,7 +39,7 @@ class Test:
 
     def setup(self):
         self.configuration = cm_config()
-        self.name = self.configuration.active()[0]
+        self.name = self.configuration.active()[1]
         print "ACTIVE CLOUD", self.name
         self.cloud = openstack(self.name)
         self.cloud.get_token()
@@ -54,6 +54,16 @@ class Test:
         print json.dumps(self.cloud.get_extensions(), indent=4)
         assert True
 
+    def test_get_users(self):
+        HEADING()
+        
+        self.cloud.refresh("users")
+        
+        #        print json.dumps(self.cloud.get_users(), indent=4)
+        print json.dumps(self.cloud.users, indent=4)
+        
+        assert True
+    
     def test_get_limits(self):
         HEADING()
         print json.dumps(self.cloud.get_limits(), indent=4)
