@@ -6,7 +6,7 @@ import webbrowser
 import platform
 import sys
 
-__all__ = ['start', 'kill', 'view', 'clean', 'cleanmongo', 'fg']
+__all__ = ['start', 'kill', 'view', 'clean', 'cleanmongo']
 
 #
 # SETTING THE BROWSER BASED ON PLATFORM
@@ -78,11 +78,3 @@ def cleanmongo():
     else:
         print "THIS FUNCTION IS NOT YET IMPLEMENTED"
 
-@task
-def fg():
-    """create a simple testbed"""
-    with settings(warn_only=True):
-        cleanmongo()
-    local("mongod &")
-    local("python setup.py install")
-    local("python webui/fg.py")
