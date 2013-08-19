@@ -15,6 +15,7 @@
 $(function() {
   {% for cloudnum in range(clouds|count) %}
     $("#cloud-table-{{ cloudnum }}").dataTable({
+    	"sPaginationType": "full_numbers",
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
     });

@@ -13,6 +13,7 @@ super_sidebar_pages = [
             ["Home", "/"],
             ["Profile", "/profile/"],
             ["Keys", "/keys/"],
+            ["HPC Users", "/users/ldap"]
         ],
     ],
     ["Inventory",

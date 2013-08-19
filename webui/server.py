@@ -31,7 +31,8 @@ all_modules = ['pbs',
                'git',
                'cloud',
                'workflow',
-               'mesh']
+               'mesh',
+               'users']
 
 exclude_modules = ['workflow', 'cloud']
 

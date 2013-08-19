@@ -5,12 +5,11 @@
 
 {% block content %}
 
-
 <script type="text/javascript">
-
 
 $(function() {
      $("#host-table-0").dataTable({
+     	"sPaginationType": "full_numbers",
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
     });
