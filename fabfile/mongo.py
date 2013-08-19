@@ -1,7 +1,8 @@
 from fabric.api import task, local
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
-    
+from cloudmesh.user.cm_userLDAP import cm_userLDAP
+
 @task
 def start():
     local("mkdir -p ./mongodb/")
@@ -30,6 +31,8 @@ def cloud():
     c = cm_mongo()
     c.activate()
     c.refresh(types=['users','servers','images','flavors'])
+    ldap()
+    fg()
     
 @task
 def users():
@@ -38,3 +41,21 @@ def users():
     c.refresh(types=['users'])
     
     
+@task
+def ldap():
+    idp = cm_userLDAP ()
+    idp.connect("fg-ldap","ldap")
+    idp.refresh()
+
+    users = idp.list()
+
+    print ("Fetching {0} Users from LDAP".format(len(users)))
+    
+
+@task
+def fg():
+    """create a simple testbed"""
+    local("mongod &")
+    local("python setup.py install")
+    local("python webui/fg.py")    
+
