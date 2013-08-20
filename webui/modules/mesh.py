@@ -70,11 +70,13 @@ def mongo_images():
     """
     attributes = {"essex": 
                   [
-                        [ "Metadata", "metadata"],
+                        #[ "Metadata", "metadata"],
                         [ "status" , "status"],
                         [ "name" , "name"],
                         [ "type_id" , "metadata", "instance_type_id"],
                         [ "iname" , "metadata", "image_location"],
+                        [ "location" , "metadata", "image_location"],
+                        [ "state" , "metadata", "image_state"],
                         [ "updated" , "updated"],
                         [ "minDisk" , "minDisk"],
                         [ "memory_mb", ''],
@@ -87,11 +89,13 @@ def mongo_images():
                   ],
                   "grizzly": 
                     [    
-                        [ "Metadata", "metadata"],
+                        #[ "Metadata", "metadata"],
                         [ "status" , "status"],
                         [ "name" , "name"],
                         [ "type_id" , "metadata", "instance_type_id"],
                         [ "iname" , "metadata", "instance_type_name"],
+                        [ "location" , "metadata", "image_location"],
+                        [ "state" , "metadata", "image_state"],
                         [ "updated" , "updated"],
                         [ "minDisk" , "minDisk"],
                         [ "memory_mb" , "metadata", 'instance_type_memory_mb'],

@@ -1,34 +1,16 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
-<h2>List of dynamic pages</h2>
-
-<ul>
-{% for page in sidebar_pages %}
-  <li>
-    <a href="{{sidebar_pages[page].url}}">{{sidebar_pages[page].name}}</a>
-  </li>
-{% endfor %}
-</ul>
-      
-<h2>List of static pages</h2>
-
-<ul>
-  {% for page in pages %}
-    <li>
-      <a href="{{ url_for("page", path=page.path) }}">{{ page.title }}</a>
-    </li>
-  {% else %}
-    <li>No static pages found.</li>
-  {% endfor %}
-</ul>
-
 {% endblock content %}
+      
+{% block contentbox %}
+<h1>Cloudmesh</h1>
+ <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p> 
+{% endblock contentbox %}
 
 {% block contentsmall11 %}
 
-<h1>Cloud</h1>
+<h2>Cloud</h2>
 
 hallo
 
@@ -37,7 +19,7 @@ hallo
 
 {% block contentsmall12 %}
 
-<h1>HPC</h1>
+<h2>HPC</h2>
 
 hallo
 
@@ -46,9 +28,40 @@ hallo
 
 {% block contentsmall13 %}
 
-<h1>Test</h1>
+<h2>Provisioning</h2>
 
 hallo
 
 <p><a class="btn" href="#">View details &raquo;</a></p> 
 {% endblock contentsmall13 %}
+
+
+
+{% block contentsmall21 %}
+
+<h2>Monitor</h2>
+
+<p><a class="btn" href="#">View details &raquo;</a></p> 
+
+{% endblock contentsmall21 %}
+
+
+{% block contentsmall22 %}
+
+<h2>Information</h2>
+
+{{ flexible_menu(g.sidebar_flatpages) }}
+
+{% endblock contentsmall22 %}
+
+{% block contentsmall23 %}
+
+<h2>Links</h2>
+
+ {{ flexible_menu(g.externalbar_pages) }}
+ 
+{% endblock contentsmall23 %}
+
+
+
+

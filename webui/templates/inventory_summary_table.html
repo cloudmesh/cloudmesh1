@@ -1,5 +1,11 @@
 {% extends "layout.html" %}
 {% from "_helper.html" import image_button %}
+
+
+{% block contentbox %}
+<h2> Inventory Table </h2>
+{% endblock contentbox %}
+
 {% block content %}
 
 <script type="text/javascript">
@@ -11,6 +17,8 @@
 })(jQuery);
 </script>
 
+
+<div class="span9">
 <table>
 <th>  {{ image_button ("center","195_circle_info","/inventory/") }}
 List of all clusters</th>
@@ -49,6 +57,7 @@ List of all clusters</th>
 </table>
   </div>
 {% endfor %}
+</div>
 </div>
 {% endblock %} 
 

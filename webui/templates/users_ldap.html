@@ -2,6 +2,10 @@
 {% from "_helper.html" import image_button %}
 
 
+{% block contentbox %}
+<h2> Users </h2>
+{% endblock contentbox %}
+
 
 {% block content %}
 
@@ -17,8 +21,7 @@ $(function() {
 
 </script>
 
-
-<h2> Users </h2>
+<div class="span9">
 <div>
 	Updated:{{ updated }} 
 	<table id="host-table-0">
@@ -54,6 +57,7 @@ $(function() {
 	  {% endfor %}
 	  </tbody>
 	</table>
+</div>
 </div>
 
 

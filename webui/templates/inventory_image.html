@@ -1,12 +1,19 @@
 {% extends "layout.html" %}
 {% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+<h1> Inventory Images </h1>
+ Details for image {{image.name }}
+{% endblock contentbox %}
+
+
 {% block content %}
 
 <script type="text/javascript">
 
 </script>
 
-<h1> {{image.name }} details </h1>
+
 <hr>
 <table>
   <tr>
