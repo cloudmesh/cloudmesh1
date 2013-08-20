@@ -111,6 +111,7 @@ def login():
     if form.validate_on_submit():
         flash(u'Successfully logged in as %s' % form.username.data)
         session['user_id'] = form.user["cm_user_id"]
+        
         return redirect(url_for('index'))
         
     return render_template('login.html', form=form)

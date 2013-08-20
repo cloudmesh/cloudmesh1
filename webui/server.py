@@ -6,21 +6,20 @@ from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from datetime import datetime
 
 
-from flask import Flask, render_template, flash, send_from_directory
+from flask import Flask, render_template, flash, send_from_directory, redirect, g
 #from flask.ext.autoindex import AutoIndex
 from flask_flatpages import FlatPages
 
-from flask import current_app, request, session
+from flask import Flask, current_app, request, session
 from flask.ext.login import LoginManager, login_user, logout_user, \
      login_required, current_user, UserMixin
-from flask import session, redirect, url_for, abort 
-
-from flask.ext.wtf import Form, validators, TextField, TextAreaField, PasswordField, SubmitField, DataRequired, ValidationError
-
+from flask.ext.wtf import Form, TextField, PasswordField, Required, Email
 from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
-     identity_changed
+     identity_changed, Permission
 
-from flask.ext.principal import Principal, Permission, RoleNeed
+from flask.ext.principal import identity_loaded, RoleNeed, UserNeed
+     
+import sys
 
 from pprint import pprint
 import os
@@ -32,7 +31,7 @@ import types
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
 
-with_login = False
+with_login = True
 
 # ============================================================
 # DYNAMIC MODULE MANAGEMENT
@@ -52,7 +51,7 @@ all_modules = ['pbs',
                'mesh',
                'users']
 
-exclude_modules = ['workflow', 'cloud']
+exclude_modules = ['workflow', 'cloud','mesh','workflow','git','keys','nose']
 
 modules = [m for m in all_modules if m not in exclude_modules]
     
@@ -184,6 +183,19 @@ def site_map():
 @login_required
 def restricted_index():
     return render_template('index.html')
+
+
+@app.route('/rain')
+@login_required
+@rain_permission.require(http_exception=403)
+def rain_index():
+    return render_template('rain.html')
+
+@app.route('/admin')
+@login_required
+@admin_permission.require(http_exception=403)
+def admin_index():
+    return render_template('admin.html')
 
 # ============================================================
 # ROUTE: /
@@ -327,101 +339,108 @@ def page(path):
     return render_template('page.html', page=page)
 
 
-
 #
 #  PRINCOIPAL LOGIN
 #
 
+if with_login:
+    idp = cm_userLDAP ()
+    idp.connect("fg-ldap","ldap")
 
+"""
+@app.before_request
+def before_request():
+    if 'user_id' in session:
+        current_user = load_user(session['user_id'])
+        g.user = current_user
+"""
+
+@identity_loaded.connect_via(app)
+def on_identity_loaded(sender, identity):
+    
+    if 'user_id' in session:
+        current_user = load_user(session['user_id'])
+        # Set the identity user object
+        identity.user = current_user
+
+        # Add the UserNeed to the identity
+        if hasattr(current_user, 'id'):
+            identity.provides.add(UserNeed(current_user.id))
+    
+        # Assuming the User model has a list of roles, update the
+        # identity with the roles that the user provides
+        if hasattr(current_user, 'roles'):
+            for role in current_user.roles:
+                identity.provides.add(RoleNeed(role))
+    
+    """
+    identity.provides.add(RoleNeed("rain"))
+    """
+        
 @login_manager.user_loader
-def load_user(userid):
-    # Return an instance of the User model
-    return get_user_object(userid)
+def load_user(id):
+    user =  idp.find_one({'cm_user_id': id})
+    #load from yaml the roles and check them
+    
+    return User(id, id, ["rain","admin"])
 
 
-class UserClass(UserMixin):
-     def __init__(self, name, id, active=True):
+class User(UserMixin):
+    
+     def __init__(self, name, id, roles=['rain'], active=True):
           self.name = name
           self.id = id
           self.active = active
+          self.roles = roles
 
      def is_active(self):
-         return self.active
+        return True
+     
+     def is_anonymous(self):
+        return False
 
-def get_user_object(userid):
+     def get_id(self):
+        return unicode(self.id)
 
-     # query database (again), just so we can pass an object to the callback
-     #db_check = users_collection.find_one({ 'userid' : userid })
-     #UserObject = UserClass(db_check['username'], userid, active=True)
-     #if userObject.id == userid:
-     #     return UserObject
-     #else:
-     #     return None
-     #user =  self.idp.find_one({'cm_user_id': self.username.data})
-     #print "OOOOO", user
-     return UserClass('gregor','1')
+     def is_authenticated(self):
+        return True
 
 class LoginForm(Form):
 
-    username = TextField('Username')
-    password = PasswordField('Password')
+    username = TextField()
+    password = PasswordField()
 
-    if with_login:
-        idp = cm_userLDAP ()
-        idp.connect("fg-ldap","ldap")
-
-    user = None
-
-    def validate(self):
-        print "validate"
-
-        if with_login:
-            self.user =  self.idp.find_one({'cm_user_id': self.username.data})
-        
-            if self.user is None:
-                print "user is None"
-                self.error = 'Unknown user'
-                return False
-            else:
-                print "user not None"
-        
-            if self.user['cm_user_id'] != self.username.data:
-                print "username invalid"
-                self.error = 'Invalid username'
-                return False
-            else:
-                print "user found"
-        
-            test = self.idp.authenticate(self.username.data,self.password.data)
-    
-        else:
-            test = True
-        
-        if not test:
-            print "password invalid"
-            self.error = 'Invalid password'
-            return False
-        else:
-            print "password found"
-
+    def validate_on_submit(self):
         return True
-
-
-
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     # A hypothetical login form that uses Flask-WTF
     form = LoginForm()
-
-    print "DDD", form.__dict__
-    print "UUU", form.user
     
     if form.validate_on_submit():
-        flash(u'Successfully logged in as %s' % form.username.data)
-        session['user_id'] = form.user["cm_user_id"]
-        return redirect(url_for('index'))
+        idp = cm_userLDAP ()
+        idp.connect("fg-ldap","ldap")
+        user =  idp.find_one({'cm_user_id': form.username.data})
+        
+        form.error = None                
+        if user is None:
+            form.error = 'Login Invalid'
+        elif user['cm_user_id'] != form.username.data:
+            form.error = 'Login Invalid'
+        elif idp.authenticate(form.username.data,form.password.data):
+            print "LOGIN USER"
+
+            g.user = load_user(form.username.data)
+                        
+            ret= login_user(g.user)
+            
+            identity_changed.send(current_app._get_current_object(),
+                                  identity=Identity(g.user.id))
+
+            return redirect(request.args.get('next') or '/')
+        else:
+            form.error = 'Login Invalid'
         
     return render_template('login.html', form=form)
 

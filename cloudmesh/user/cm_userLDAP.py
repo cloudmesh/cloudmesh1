@@ -2,6 +2,7 @@ from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.logger import LOGGER
 from CMUserProviderBaseType import CMUserProviderBaseType
 import ldap
+import sys
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
