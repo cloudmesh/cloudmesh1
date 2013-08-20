@@ -26,7 +26,6 @@ def display_summary():
 
 
 @inventory_module.route('/inventory/')
-@login_required
 def display_inventory():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     inventory.refresh()

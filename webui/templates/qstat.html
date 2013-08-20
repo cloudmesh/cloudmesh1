@@ -5,18 +5,25 @@
 
 {% block content %}
 
+
 <script type="text/javascript">
 
 $(function() {
      $("#host-table-0").dataTable({
+     	"sDom": 'C<"clear">lfrtip',
+     	"oColVis": {
+						"aiExclude": [ 0 ]
+					},
      	"sPaginationType": "full_numbers",
         aaSorting: [[1,'asc']],
-        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
+        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ],
+     	
     });
 });
 
 </script>
 
+Gregor
 
 <h2> Qstat </h2>
 
