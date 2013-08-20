@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% endblock content %}
+      
+{% block contentbox %}
+<h1>ADMIN</h1>
+ <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p> 
+{% endblock contentbox %}
+
+{% block contentsmall11 %}
+
+<h2>Cloud</h2>
+
+hallo
+
+<p><a class="btn" href="#">View details &raquo;</a></p> 
+{% endblock contentsmall11 %}
+
+{% block contentsmall12 %}
+
+<h2>HPC</h2>
+
+hallo
+
+<p><a class="btn" href="#">View details &raquo;</a></p> 
+{% endblock contentsmall12 %}
+
+{% block contentsmall13 %}
+
+<h2>Provisioning</h2>
+
+hallo
+
+<p><a class="btn" href="#">View details &raquo;</a></p> 
+{% endblock contentsmall13 %}
+
+
+
+{% block contentsmall21 %}
+
+<h2>Monitor</h2>
+
+<p><a class="btn" href="#">View details &raquo;</a></p> 
+
+{% endblock contentsmall21 %}
+
+
+{% block contentsmall22 %}
+
+<h2>Information</h2>
+
+{{ flexible_menu(g.sidebar_flatpages) }}
+
+{% endblock contentsmall22 %}
+
+{% block contentsmall23 %}
+
+<h2>Links</h2>
+
+ {{ flexible_menu(g.externalbar_pages) }}
+ 
+{% endblock contentsmall23 %}
+
+
+
+
