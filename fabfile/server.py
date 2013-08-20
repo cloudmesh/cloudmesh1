@@ -42,7 +42,7 @@ def kill(server="server"):
                 local("kill -9 {0}".format(pid))
 
 @task
-def start(link="inventory",server="server",port="5000",start_browser='yes'):
+def start(link="login",server="server",port="5000",start_browser='yes'):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link""" 
     kill()
     local("mongod &")
