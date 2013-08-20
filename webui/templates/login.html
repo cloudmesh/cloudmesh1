@@ -1,10 +1,13 @@
 {% extends "layout.html" %}
 {% block title %}Sign in{% endblock %}
 
-{% block content %}
+{% block contentbox %}
   <h2>Sign in</h2>
+  Please specify your username and password to log into cloudmesh
+{% endblock %}
+
+{% block content %}
   <form action="" method=post>
-    {% if form.error %}<p class=error><strong>Error:</strong> {{ form.error }}</p>{% endif %}
     <p>
       {{ form.username.label}}
       {{ form.username }}
@@ -13,8 +16,19 @@
        {{ form.password.label }}
        {{ form.password }}
     </p>
-      <input type=submit value="Login">
+    {% if form.error %}
+    <hr>
+    <p class=error style="color:red;">
+    	<strong>Error:</strong> {{ form.error }}
+    </p>
+    <hr>
+    {% endif %}
+
+
+      <input type=submit value="Submit">
       <input type=hidden name=next value="{{ next }}">
+
+
   </form>
 
 
