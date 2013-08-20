@@ -1,6 +1,7 @@
 from ConfigParser import SafeConfigParser
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.user.roles import Roles
 from cloudmesh.util.webutil import setup_imagedraw
 from cloudmesh.user.cm_userLDAP import cm_userLDAP 
 from datetime import datetime
@@ -31,7 +32,7 @@ import types
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
 
-with_login = True
+with_login = False
 
 # ============================================================
 # DYNAMIC MODULE MANAGEMENT
@@ -381,13 +382,14 @@ def on_identity_loaded(sender, identity):
 def load_user(id):
     user =  idp.find_one({'cm_user_id': id})
     #load from yaml the roles and check them
-    
-    return User(id, id, ["rain","admin"])
+    role_server = Roles()
+    roles = role_server.get(id)
+    return User(id, id, roles)
 
 
 class User(UserMixin):
     
-     def __init__(self, name, id, roles=['rain'], active=True):
+     def __init__(self, name, id, roles=['user'], active=True):
           self.name = name
           self.id = id
           self.active = active

@@ -2,6 +2,9 @@
 {% from "_helper.html" import image_button %}
 
 
+{% block contentbox %}
+<h2> Qstat for {{ host }}</h3>
+{% endblock %}
 
 {% block content %}
 
@@ -23,11 +26,6 @@ $(function() {
 
 </script>
 
-Gregor
-
-<h2> Qstat </h2>
-
-<h3>{{ host }}</h3>
 <div>
 	Updated:{{ updated }} 
 	<table id="host-table-0">
