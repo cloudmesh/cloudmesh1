@@ -107,20 +107,22 @@
           </div><!--/.well -->
         </div><!--/span-->
 
+	    <div class="span9">
+          <div class="hero-unit">
+	        {% block contentbox %}
+	        {% endblock %}
+          </div>
+        </div>
+
         <div class="span9">
-	  <div class="container">
-	    {% block content %}
-	    {% endblock %}
-	  </div>
+	      <div class="container">
+	      {% block content %}
+	      {% endblock %}
+	      </div>
         </div><!--/span-->
         <div class="span9">
-{#
-          <div class="hero-unit">
-	    {% block contentbox %}
-	    {% endblock %}
-            <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p> 
-          </div>
-#}
+
+
           <div class="row-fluid">
             <div class="span4">
 	      {% block contentsmall11 %}

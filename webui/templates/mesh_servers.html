@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 {% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+<h2> Servers </h2>
+{% endblock contentbox %}
+
 {% block content %}
 
 <script type="text/javascript">
@@ -39,7 +44,7 @@ $(function() {
                 print attribute, clouds[cloud][server][attribute]
 -->
 
-<h2> Servers </h2>
+
 <div id="servers-accordion">
   {% for cloud in clouds %}
   <div style="margin-bottom:1em;">
@@ -95,5 +100,6 @@ $(function() {
   </div>  
   {% endfor %}
 </div>  
+
 
 {% endblock %}

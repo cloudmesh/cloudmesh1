@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 {% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+<h2> Users </h2>
+{% endblock contentbox %}
+
 {% block content %}
 
 <script type="text/javascript">
@@ -33,8 +38,7 @@ $(function() {
                 print attribute, clouds[cloud][server][attribute]
 -->
 
-<h2> Users </h2>
-
+<div class="span9">
 <div id="servers-accordion">
   {% for cloud in clouds %}
     {% set cloud_loop = loop %}
@@ -79,6 +83,6 @@ $(function() {
   </div>
   {% endfor %}
 </div>
-  
+</div>
 
 {% endblock %}

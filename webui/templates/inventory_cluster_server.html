@@ -1,5 +1,13 @@
 {% extends "layout.html" %}
 {% from "_helper.html" import image_button %}
+
+
+
+{% block contentbox %}
+<h2> Inventory Server </h2>
+ Details for server {{ server.name }} @ {{ cluster.name }} 
+{% endblock contentbox %}
+
 {% block content %}
 
 <script type="text/javascript">
@@ -26,8 +34,7 @@ $(function() {
 </script>
 
 
-<h1> {{ server.name }} @ {{ cluster.name }} </h1>
-<hr>
+
 {% set server_data = server["_data"] %}
 <table>
     
