@@ -32,7 +32,7 @@ import types
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
 
-no_login = True
+with_login = False
 
 # ============================================================
 # DYNAMIC MODULE MANAGEMENT
@@ -169,13 +169,24 @@ def site_map():
 """
 
 
+
+
+# ============================================================
+# ROUTE: /test
+# ============================================================
+
+
+@app.route('/test')
+@login_required
+def restricted_index():
+    return render_template('index.html')
+
 # ============================================================
 # ROUTE: /
 # ============================================================
 
 
 @app.route('/')
-@login_required
 def index():
     return render_template('index.html')
 
@@ -350,38 +361,36 @@ class LoginForm(Form):
     username = TextField('Username')
     password = PasswordField('Password')
 
-
-    idp = cm_userLDAP ()
-    idp.connect("fg-ldap","ldap")
+    if with_login:
+        idp = cm_userLDAP ()
+        idp.connect("fg-ldap","ldap")
 
     user = None
 
     def validate(self):
         print "validate"
 
-        self.user =  self.idp.find_one({'cm_user_id': self.username.data})
-
-        print "UUU", self.user
+        if with_login:
+            self.user =  self.idp.find_one({'cm_user_id': self.username.data})
         
-        #user = User.query.filter_by(
-        #    username=self.username.data).first()
-
-
-        if self.user is None:
-            print "user is None"
-            self.error = 'Unknown user'
-            return False
-        else:
-            print "user not None"
+            if self.user is None:
+                print "user is None"
+                self.error = 'Unknown user'
+                return False
+            else:
+                print "user not None"
+        
+            if self.user['cm_user_id'] != self.username.data:
+                print "username invalid"
+                self.error = 'Invalid username'
+                return False
+            else:
+                print "user found"
+        
+            test = self.idp.authenticate(self.username.data,self.password.data)
     
-        if self.user['cm_user_id'] != self.username.data:
-            print "username invalid"
-            self.error = 'Invalid username'
-            return False
         else:
-            print "user found"
-                
-        test = self.idp.authenticate(self.username.data,self.password.data)
+            test = True
         
         if not test:
             print "password invalid"
