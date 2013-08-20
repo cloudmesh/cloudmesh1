@@ -20,7 +20,7 @@ from flask.ext.wtf import Form, validators, TextField, TextAreaField, PasswordFi
 from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
      identity_changed
 
-
+from flask.ext.principal import Principal, Permission, RoleNeed
 
 from pprint import pprint
 import os
@@ -115,9 +115,13 @@ for m in modules:
     print "Loading module", m
     exec "app.register_blueprint({0}_module, url_prefix='',)".format(m)
 
-principal = Principal(app)
+principals = Principal(app)
 login_manager = LoginManager(app)
 
+
+admin_permission = Permission(RoleNeed('admin'))
+user_permission = Permission(RoleNeed('user'))
+rain_permission = Permission(RoleNeed('rain'))
 
 app.secret_key = SECRET_KEY
 
@@ -353,7 +357,8 @@ def get_user_object(userid):
      #     return UserObject
      #else:
      #     return None
-
+     #user =  self.idp.find_one({'cm_user_id': self.username.data})
+     #print "OOOOO", user
      return UserClass('gregor','1')
 
 class LoginForm(Form):
