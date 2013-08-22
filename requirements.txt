@@ -19,7 +19,7 @@ python-hostlist
 pyaml
 Flask>=0.7
 Flask-FlatPages
-Flask-WTF
+Flask-WTF>=0.8.4,<0.9
 Flask-AutoIndex
 Flask-Silk
 flask_login
