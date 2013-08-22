@@ -7,13 +7,10 @@ nosetests -v
 """
 from datetime import datetime
 
+from cloudmesh.util.util import HEADING
 from cloudmesh.inventory.ninventory import ninventory
-import json
 from  pprint import pprint
 
-from cloudmesh.util.util import HEADING
-import time
-import sys
 
 
 class Test_Inventory:
