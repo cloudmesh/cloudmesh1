@@ -49,6 +49,7 @@ class ninventory:
                 for i in range(0,len(names)):
                     name = n_index[i]
                     element[name] = {'cm_type': "inventory",
+                                     'cm_kind': 'server',
                                      'cm_id': name,
                                      'cluster': cluster_name, 
                                      'id': name, 
