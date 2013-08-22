@@ -32,6 +32,9 @@ class cm_config_server(object):
     def __str__(self):
         return json.dumps(self.config, indent=4)
 
+    def get(self):
+        """returns the dict of the information as read from the yaml file"""
+        return self.config
 
     
 
