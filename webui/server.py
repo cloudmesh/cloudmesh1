@@ -32,7 +32,7 @@ import types
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
 
-with_login = False
+with_login = True
 
 # ============================================================
 # DYNAMIC MODULE MANAGEMENT
@@ -197,6 +197,28 @@ def rain_index():
 @admin_permission.require(http_exception=403)
 def admin_index():
     return render_template('admin.html')
+
+
+# ============================================================
+# ROUTE: erros
+# ============================================================
+
+@app.errorhandler(404)
+def page_not_found(error):
+    error = 'This page does not exist {0}'.format(404)
+    return render_template('error.html', 
+                           error=error,
+                           type="Page not found",
+                           msg="")
+    
+@app.errorhandler(403)
+def page_not_found(error):
+    error = 'Access denied {0}'.format(403)
+    return render_template('error.html', 
+                           error=eror,
+                           type="Access Denied",
+                           msg="You need to Login first")
+    
 
 # ============================================================
 # ROUTE: /
