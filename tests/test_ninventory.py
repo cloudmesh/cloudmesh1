@@ -12,9 +12,7 @@ from cloudmesh.inventory.ninventory import ninventory
 from  pprint import pprint
 
 
-
 class Test_Inventory:
-
 
     def setup(self):
         self.name = "b010"
