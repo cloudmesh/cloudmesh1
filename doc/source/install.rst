@@ -124,6 +124,25 @@ commands queed up. The commands hafe random state updates and aer very
 short as to allow for a quick debuging simulation. One could add the
 refresh of the web page automatically to other test programs.
 
+Ubuntu
+======
+
+
+apt-get install \
+ python-virtualenv \
+ python-dev \
+ libsasl2-dev \
+ python-ldap \
+ libldap2-dev \
+ ldap-devel \
+ ldap-client \
+ mongodb
+
+In virtualenv we did:
+
+pip install -r requirements.txt
+pip install python-novaclient
+
 
 
 
