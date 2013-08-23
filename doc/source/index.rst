@@ -7,15 +7,14 @@
     alt="Fork me on GitHub"></a>
 
 
-File: index.rst
 
-.. sectnum::
-
+#################
 Cloudmesh 
-==========================================
+#################
+
 
 Introduction
--------------
+==============
 
 .. toctree::
    :maxdepth: 2
@@ -24,19 +23,35 @@ Introduction
 
 
 Instalation
--------------
+==============
 
 .. toctree::
    :maxdepth: 2
   
    install/install
    install/virtualenv
+   
+Configuration
+==============
+.. toctree::
+   :maxdepth: 2
+  
    install/configuration
    install/testing
 
-   todo
+Execution
+========
+.. toctree::
+   :maxdepth: 2
+  
    nosetest
 
+TODO
+=====
+
+.. toctree::
+   :maxdepth: 2
+  
    cm-shell
 
 Plan

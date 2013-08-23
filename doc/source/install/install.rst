@@ -1,11 +1,10 @@
-File: install.rst
+.. sectnum::
+   :start: 2
 
-
-Development Instalation 
+Development Installation 
 ================================
 
 Preparing the system with basic software
-
 
 Install Mongo
 -------------
