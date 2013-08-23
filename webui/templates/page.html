@@ -1,6 +1,9 @@
-{% extends "layout.html" %}
+{% extends "layout_title.html" %}
+
+{% block contentbox %}
+<h2>{{ page.title }}</h2>
+{% endblock %}
 
 {% block content %}
-    <h2>{{ page.title }}</h2>
     {{ page.html|safe }}
 {% endblock content %}

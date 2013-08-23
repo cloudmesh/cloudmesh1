@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout_title.html" %}
 
 {% from "_helper.html" import image_button %}
 
@@ -9,10 +9,13 @@
    <img src="{{dir}}{{name}}.{{type}}" cache="no-cache"/>
 {% endmacro %}
 
+{% block contentbox %}
+<h2>Workflow Provision Form</h2>
+{% endblock %}
 
 {% block content %}
 
-<h1>Workflow Provision Form</h1>
+
 
 <form method="POST" action="">
 {{ form.csrf_token }}
