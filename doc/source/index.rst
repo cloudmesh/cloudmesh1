@@ -9,16 +9,31 @@
 
 File: index.rst
 
+.. sectnum::
+
 Cloudmesh 
 ==========================================
 
-.. sectnum::
+Introdusction
+-------------
+
+.. toctree::
+   :maxdepth: 2
+
+   about  
+
+
+Instalation
+-------------
 
 .. toctree::
    :maxdepth: 2
   
-   install
-   about
+   install/install
+   install/virtualenv
+   install/configuration
+   install/testing
+
    todo
    nosetest
 
@@ -30,8 +45,15 @@ Cloudmesh
    inventory/support
 
 
+
    cm-shell
 
+Plan
+======
+
+.. toctree::
+   :maxdepth: 2
+   
    plan/plan
    plan/design 
    plan/mock
