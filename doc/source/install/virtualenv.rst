@@ -58,3 +58,6 @@ Go to your home directory, log in your .bashrc,
 
 This way you do not forget to type it in next time you 
 login. Only do this if you are familar with .bash_profile.
+
+
+
