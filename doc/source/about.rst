@@ -5,21 +5,26 @@
 About this document
 ======================================================================
 
-This document will continualy evolve to reflect the newest findings in
-our agile programming approach. The document is hosted on github at 
+This document is mainatined via spphinx and uploaded regularly to github
 
-* https://github.com/cloudmesh/plan
+* https://cloudmes.github.com/cloudmesh/
 
-You can check it out with::
+You can check it out the code and the documentation with::
 
-  git clone git@github.com:cloudmesh/plan.git
+  git clone git@github.com:cloudmesh/cloudmesh.git
 
-Once you make changes you can say::
+Once you make changes to the documentation you can say::
 
    make sphinx
 
-Make sure you do not have **any** errors in the document before
-pushing it to gh-pages. The compiled documentation is generated while using the command::
+The pages will be locally avalable to yu under::
+
+   src/build/html/index.html
+
+The pages will be regularly uploaded to github by Gregor von Laszewski. Make usre that the documentation do not contain any compile errors. Once that is done the pages can be uploaded.   
+with the command::   
 
   make gh-pages
+  
+  
 
