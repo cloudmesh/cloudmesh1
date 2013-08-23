@@ -66,7 +66,7 @@ Published Documentation
 
 The final documentation will be located at
 
-* http://futuregrid.github.com/flask_cm/
+* http://cloudmesh.github.com/cloudmesh
 
-If you find something missing communicate with Gregor von Laszewski so
+If you find something missing communicate with Gregor von Laszewski (laszewski@gmail.com) so
 he updates the gh-pages.
