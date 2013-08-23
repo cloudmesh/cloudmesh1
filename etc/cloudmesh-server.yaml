@@ -5,6 +5,19 @@ teefaa:
     dir: directory
 mongo:
     db: cloudmesh
+    host: localhost
+    port: 27017
+    collections:
+        inventory:
+            db: new-inventory
+        cloudmesh:
+            db: cloudmesh
+        profile:
+            db: cloudmesh
+        user:
+            db: user
+        pbs:
+            db: cm-pbs
 keystone:
     sierra:
         OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
@@ -18,5 +31,23 @@ keystone:
         OS_TENANT_NAME : tenantname
         OS_USERNAME : username
 ldap:
+    with_ldap: True
     hostname: ldapiporhostname
     cert: /Users/neu/.futuregrid/FGLdapCacert.pem
+roles:
+    user:
+       users: 
+       - active
+       projects:
+       - active
+    admin:
+       users:
+       - fufu
+       projects:
+       - 1
+       - 82
+    rain:
+        users:
+        - gvgv
+        projects:
+        - 82
