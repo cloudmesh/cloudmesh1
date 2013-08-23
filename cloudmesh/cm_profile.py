@@ -13,16 +13,38 @@ class cm_profile (object):
     
     # initialization
     
+    
+     
+    mongo_host = 'localhost'
+    mongo_port = 27017
+    mongo_db_name = "cloudmesh"
+    mongo_collection = "cloudmesh"
+    
+    config = None
+    
+    
     def __init__(self, collection="profile"):
         
         self.data = {}
         self.server = cm_config_server()
         self.config = cm_config()
+
+        # Read in the mongo db information from the cloudmesh_server.yaml
+        location = cm_path_expand("~/.futuregrid/cloudmesh_server.yaml")
+        result = open(location, 'r').read()
         
-        db_name = self.server.config["mongo"]["db"]
-        self.client = MongoClient()    
-        self.db = self.client[db_name]          
-        self.db_collection = self.db[collection] 
+        self.mongo_collection = collection
+        
+        self.mongo_config = yaml.load(result)["mongo"]
+        self.mongo_host = self.mongo_config["host"]
+        self.mongo_port = self.mongo_config["port"]
+        self.mongo_db_name = self.mongo_config["collections"][self.mongo_collection]['db']
+        
+        self.client = MongoClient(host=self.mongo_host,
+                                  port=self.mongo_port)  
+
+        self.db = self.client[self.mongo_db_name]          
+        self.db_collection = self.db[self.mongo_collection]    
         self._get_usernames_from_config()   
 
 
