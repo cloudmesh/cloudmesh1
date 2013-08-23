@@ -78,7 +78,7 @@ TODO: do we also have to do::
 
 TODO: do we have to install ldap-user
 
-   (Allan did not need to do this)
+   (Allan did not need to do this, already in requirements.txt)
    sudo apt-get install ldap-user
 
 
