@@ -1,29 +1,69 @@
 .. sectnum::
    :start: 2
 
-Development Installation 
+Operating System Preparation
 ================================
 
-Preparing the system with basic software
+In this Section we summarize some important packages that need to be installed in order to run cloudmesh.
 
-Install Mongo
--------------
 
-OSX: TBD 
-^^^^^^^^^
+OSX
+----------
 
 TODO: lots of missing 
 
-Install sphinx autorun::
+Install Mongo
+^^^^^^^^^^^^^^^
+
+TBD
+
+Install RabitMQ
+^^^^^^^^^^^^^^^^
+
+TBD
+
+Sphinx autorun
+^^^^^^^^^^^^^^^
+
+This package is only needed if you like to generate the documentation. Most developers will want to install it::
 
     $ hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
     $ cd sphinx-contrib/autorun
     $ python setup.py install
 
+Blockdiag family
+^^^^^^^^^^^^^^^^^
 
+TODO: this expalanation is incomplete
 
-Ubuntu: TBD (Allan)
-^^^^^^^^^^^^^^^^^^^^
+To install these packages you need to execute::
+
+    pip install "blockdiag[PDF]"
+	pip install "rackdiag[PDF]"
+	pip install nwdiag[PDF]"
+	
+The documentation to this package is located at 
+
+* http://blockdiag.com/en/blockdiag/introduction.html#setup
+
+blockdiag uses TrueType Font to render text. blockdiag try to detect installed fonts but if nothing detected, You can specify fonts with -f (–font) option::
+
+    $ blockdiag -f /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf simple.diag
+
+If you always use same font, write $HOME/.blockdiagrc::
+
+    $ cat $HOME/.blockdiagrc
+    [blockdiag]
+    fontpath = /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf
+
+TODO: distribute a standard ttf font and use sh so that the -f font is included from the deployed package
+
+Ubuntu: 
+=======================
+
+ubunto may be differently installing between 12.04 and 13. 0
+
+probably two differnt sections are neede dif they indeed are differnt
 
 TODO:: lots missing
 
@@ -31,17 +71,79 @@ On ubuntu you need first tto install curl. This can be done with::
 
    $ sudo apt-get install curl
 
-
 You also need to install ldap which you need to do with::
 
-   $ sudo apt-get install python-dev libldap2-dev libsasl2-dev libssl-dev
+   $ sudo apt-get install \
+      libldap2-dev \
+      libsasl2-dev \
+      libssl-dev \
+      python-ldap \
+      python-dev \
+      python-virtualenv \
+      ldap-client \     
+      mongodb      
+
+TODO: do we also have to do::
+
    $ pip install python-ldap
 
-CentOS: TBD (Allan)
+TODO: do we have to install ldap-user
 
+   sudo apt-get install ldap-user
+
+apt-get install \
+ 
+
+Install Mongo
+^^^^^^^^^^^^^^^
+
+TBD
+
+configuration of mongodb is missing
+
+/data/db and permissions
+
+Install RabitMQ
+^^^^^^^^^^^^^^^^
+
+TBD
+
+Sphinx autorun
+^^^^^^^^^^^^^^^
+
+TBD
+
+Blockdiag family
+^^^^^^^^^^^^^^^^^
+
+TBD
+
+CentOS: TBD (Allan)
+=====================
+
+
+Install Mongo
+^^^^^^^^^^^^^^^
+
+TBD
+
+Install RabitMQ
+^^^^^^^^^^^^^^^^
+
+TBD
+
+Sphinx autorun
+^^^^^^^^^^^^^^^
+
+TBD
+
+Blockdiag family
+^^^^^^^^^^^^^^^^^
+
+TBD
 
 Get/create the yaml files
---------------------------
+=============================
 
 TBD
 
@@ -71,7 +173,7 @@ sometimes it is important to clean things and start new. This can be done by ::
 
 
 Convenient command shortcuts
-----------------------------------------------------------------------
+=================================
 
 We are providing a number of useful command that will make your development efforts easier.  These commands are build with fablies in the fabfile directory. in the cloudmesh directory, you will find a diretcory called fabfile that includes the agglomerated helper files. To access them you can use the name of the file, followed by a task that is defined within the file. Next we list the available commands:
 
@@ -131,19 +233,6 @@ commands queed up. The commands hafe random state updates and aer very
 short as to allow for a quick debuging simulation. One could add the
 refresh of the web page automatically to other test programs.
 
-Ubuntu
-======
-
-
-apt-get install \
- python-virtualenv \
- python-dev \
- libsasl2-dev \
- python-ldap \
- libldap2-dev \
- ldap-devel \
- ldap-client \
- mongodb
 
 In virtualenv we did:
 
