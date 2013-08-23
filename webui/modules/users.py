@@ -16,12 +16,20 @@ users_module = Blueprint('users_module', __name__)
 def display_usres_ldap():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    collection = "user"
-    db_name = cm_config_server().config["mongo"]["db"]
+    
+    self.mongo_config = cm_config_server().config["mongo"]
+    self.mongo_collection = "user"
         
-    client = MongoClient()    
-    db = client[db_name]          
-    db_clouds = db[collection]    
+    self.mongo_host = self.mongo_config["host"]
+    self.mongo_port = self.mongo_config["port"]
+    self.mongo_db_name = self.mongo_config["collections"][self.mongo_collection]['db']
+
+    self.client = MongoClient(host=self.mongo_host,
+                              port=self.mongo_port)  
+    db = client[self.mongo_db_name]          
+    self.db_clouds = db[self.mongo_collection]    
+    
+    
     config = cm_config()
 
     result = db_clouds.find({})

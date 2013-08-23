@@ -21,21 +21,38 @@ class ninventory:
             
     server_config = None
     
+    mongo_host = 'localhost'
+    mongo_port = 27017
+    mongo_db_name = "new-inventory"
+    mongo_collection = "inventory"
+    
     def __init__(self):         
+
+        
+        # read the host file definition from cloudmesh_cludter.yaml
         self.server_config = cm_config_server().config
         location = cm_path_expand("~/.futuregrid/cloudmesh_cluster.yaml")
         result = open(location, 'r').read()
         template = Template(result)
         self.config = yaml.load(template.render(self.server_config))
+        
+        # Read in the mongo db information from the cloudmesh_server.yaml
+        location = cm_path_expand("~/.futuregrid/cloudmesh_server.yaml")
+        result = open(location, 'r').read()
+        self.mongo_config = yaml.load(result)["mongo"]
+        self.mongo_host = self.mongo_config["host"]
+        self.mongo_port = self.mongo_config["port"]
+        self.mongo_db_name = self.mongo_config["collections"]["inventory"]['db']
+        self.mongo_collection = "inventory"
+        
         self._connect_to_mongo()
         self.generate()
 
     def _connect_to_mongo(self):
-        db_name = "new-inventory"
-        collection = "inventory"
-        self.client = MongoClient()    
-        self.db = self.client[db_name]          
-        self.db_inventory = self.db[collection]    
+        self.client = MongoClient(host=self.mongo_host,
+                                  port=self.mongo_port)    
+        self.db = self.client[self.mongo_db_name]          
+        self.db_inventory = self.db[self.mongo_collection]    
 
 
     def insert(self,element):

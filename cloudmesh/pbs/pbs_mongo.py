@@ -12,9 +12,42 @@ class pbs_mongo:
     client = None
     pbs_client = None
     
+    
+    
+     
+    mongo_host = 'localhost'
+    mongo_port = 27017
+    mongo_db_name = "cloudmesh"
+    mongo_collection = "cloudmesh"
+    
+    config = None
+    
+    def __init__(self, collection="clouds"):
+        """initializes the cloudmesh mongo db. The name of the collection os passed."""
+        
+  
+        self.config = cm_config()
+        
+        
+        
     def __init__(self, collections=["qstat","pbsnodes"]):
-        self.client = MongoClient()    
-        self.db = self.client["cm-pbs"]          
+        
+        # Read in the mongo db information from the cloudmesh_server.yaml
+        location = cm_path_expand("~/.futuregrid/cloudmesh_server.yaml")
+        result = open(location, 'r').read()
+        
+        self.mongo_collection = "pbs"
+        
+        self.mongo_config = yaml.load(result)["mongo"]
+        self.mongo_host = self.mongo_config["host"]
+        self.mongo_port = self.mongo_config["port"]
+        self.mongo_db_name = self.mongo_config["collections"][self.mongo_collection]['db']
+
+        self.client = MongoClient(host=self.mongo_host,
+                                  port=self.mongo_port) 
+        
+        self.db = self.client[self.mongo_db_name]          
+        
         self.db_qstat = self.db[collections[0]]    
         self.db_pbsnodes = self.db[collections[1]]    
             
