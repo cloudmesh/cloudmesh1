@@ -124,8 +124,18 @@ CentOS
 
 Install Mongo
 ^^^^^^^^^^^^^^^
+Create /etc/yum.repos.d/10gen containing:
 
-TBD
+    [10gen]
+    name=10gen Repository
+    baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
+    gpgcheck=0
+    enabled=1
+
+Then,
+
+    $ sudo yum install mongo-10gen mongo-10gen-server
+
 
 Install RabitMQ
 ^^^^^^^^^^^^^^^^
