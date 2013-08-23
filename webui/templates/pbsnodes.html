@@ -1,5 +1,11 @@
-{% extends "layout.html" %}
+{% extends "layout_title.html" %}
 {% from "_helper.html" import image_button %}
+
+
+{% block contentbox %}
+<h3> PBS nodes for {{host}} </h3>
+{% endblock %}
+
 {% block content %}
 
 
@@ -18,7 +24,7 @@ $(function() {
 
 
 
-<h3> PBS nodes for {{host}} </h3>
+
 <div>
 	Updated:{{ updated }} 
 

@@ -33,6 +33,14 @@ def cloud():
     c.refresh(types=['users','servers','images','flavors'])
     ldap()
     fg()
+
+@task
+def simple():
+    clean()
+    c = cm_mongo()
+    c.activate()
+    c.refresh(types=['servers','images','flavors'])
+    fg()
     
 @task
 def users():
