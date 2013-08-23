@@ -254,18 +254,8 @@ class eucalyptus(ComputeBaseType):
     def _get_flavors_dict(self):
         return self._retrief("flavors", self.cloud.list_sizes, ['_uuid','driver'])
 
-    def _update_flavors_dict(self, information):
-        id = information["id"]
-        return (id, information)
-
-
     def _get_servers_dict(self):
         return self._retrief("servers", self.cloud.list_nodes, ['private_dns','dns_name', 'instanceId', 'driver','_uuid'])
-    
-    def _update_servers_dict(self, information):
-        id = information["id"]
-        return (id, information)
-
     
     def _get_images_dict(self):
         return self._retrief("images", 
@@ -277,11 +267,6 @@ class eucalyptus(ComputeBaseType):
                               'hypervisor',
                               'virtualizationtype',
                               '_uuid'])
-
-    def _update_images_dict(self, information):
-        id = information["id"]
-        return (id, information)
-
 
     #
     # create a vm
