@@ -58,8 +58,8 @@ If you always use same font, write $HOME/.blockdiagrc::
 
 TODO: distribute a standard ttf font and use sh so that the -f font is included from the deployed package
 
-Ubuntu: 
-=======================
+Ubuntu
+------------
 
 ubunto may be differently installing between 12.04 and 13. 0
 
@@ -118,8 +118,8 @@ Blockdiag family
 
 TBD
 
-CentOS: TBD (Allan)
-=====================
+CentOS
+--------------------
 
 
 Install Mongo
@@ -142,10 +142,6 @@ Blockdiag family
 
 TBD
 
-Get/create the yaml files
-=============================
-
-TBD
 
 Installing the source code
 =============================
