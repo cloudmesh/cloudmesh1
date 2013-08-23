@@ -52,7 +52,7 @@ all_modules = ['pbs',
                'mesh',
                'users']
 
-exclude_modules = ['workflow', 'cloud']
+exclude_modules = ['workflow']
 
 modules = [m for m in all_modules if m not in exclude_modules]
     

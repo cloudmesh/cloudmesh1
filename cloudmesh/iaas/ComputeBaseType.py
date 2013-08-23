@@ -252,7 +252,8 @@ class ComputeBaseType:
                 self.tenants = {}
 
         else:
-            for element in list:
+            for key in list:
+                element = list[key]
                 #id = list[element]['id']
                 #d[id] = list[element]
                 #d[id]['cm_refresh'] = time_stamp
