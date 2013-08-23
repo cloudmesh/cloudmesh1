@@ -7,13 +7,18 @@ For more info please contact
 
     laszewski@gmail.com
 
-Authors
--------
+Contributors
+-------------
 
 * Gregor von Laszewski 
+* Fugang Wang 
+* Allen Streib
+* Koji Tanaka
+* Hyungro Lee
+* Sneha Shekatar
 * Pushkar Newaskar 
 * Shweta Balkrishna Patil 
-* Fugang Wang 
+
 
 Blog
 ----
