@@ -174,10 +174,11 @@ Then:
     $ sudo yum install mongo-10gen mongo-10gen-server
 
 
-Install RabitMQ
+Install RabbitMQ
 ^^^^^^^^^^^^^^^^
 
-TBD
+    $ sudo yum install rabbitmq-server
+
 
 Sphinx autorun
 ^^^^^^^^^^^^^^^
