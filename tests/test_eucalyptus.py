@@ -39,10 +39,9 @@ class Test:
 
     def setup(self):
         self.configuration = cm_config()
-        print
         euca_clouds = []
-        for name in self.configuration.data['cloudmesh']['clouds'].keys():
-           if self.configuration.data['cloudmesh']['clouds'][name]['cm_type'] == 'eucalyptus':
+        for name in self.configuration.config['cloudmesh']['clouds'].keys():
+           if self.configuration.config['cloudmesh']['clouds'][name]['cm_type'] == 'eucalyptus':
                euca_clouds.append(name)
         self.name = euca_clouds[0]
         print "LOADING EUCA CLOUD", self.name
