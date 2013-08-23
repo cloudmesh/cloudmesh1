@@ -178,6 +178,7 @@ Install RabbitMQ
 ^^^^^^^^^^^^^^^^
 
     $ sudo yum install rabbitmq-server
+    $ sudo service rabbitmq-server start
 
 
 Sphinx autorun
