@@ -1,37 +1,116 @@
 Documentation 
 ==============
 
-::
+Development Instalation 
+------------------------
 
-    $ hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
-    $ cd sphinx-contrib/autorun
-    $ python setup.py install
+Install Mongo
+-------------
 
-Developmnet Version
-===============
+OSX: TBD 
 
-New way
+Ubuntu: TBD (Allan)
 
-window 1::
+CentOS: TBD (Allan)
 
-	mongod
 
-window 2::
+Get/create the yaml files
+--------------------------
 
-	fab queue.start:1
+TBD
 
-window 3::
+Installing the source code
+----------------------------
 
-	fab server.start
-
-Other way
-===========
+from the shell:
 
 Checkout the code from the repository::
 
     git@github.com:cloudmesh/cloudmesh.git
     cd cloudmesh
     pip install -r requirements.txt
+
+from Aptana Studio:
+
+
+Basic Configuration
+--------------------
+
+open a new terminal and type in::
+
+   mongod
+   
+Now you can either generate a simple cloud without user or a cloud with user information. What you chose depends on what you need to develop and have access to.
+
+
+To generating a simple cloud do::
+
+   fab mongo.simple
+   
+To generate a complete cloud including users (requires access to LDAP):
+
+    fab mongo.cloud
+
+Next you can start the Webui with::
+
+	fab server.start    
+	
+If you like to start with a particular route, you can pass it as parameter.
+
+    fab server.start:inventory
+    
+opens the page 
+
+    http://localhost:5000/inventory in your browser
+
+Cleaning
+=========
+
+sometimes it is important to clean things and start new. This can be done by ::
+
+    fab clean.all
+
+
+
+Testing
+========
+
+fab test.info
+
+fab test:compute,clean
+
+
+
+
+
+    
+    
+    
+    
+    
+
+
+
+
+OLD
+===
+::
+
+    $ hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
+    $ cd sphinx-contrib/autorun
+    $ python setup.py install
+
+
+
+	fab queue.start:1
+
+window 3::
+
+
+
+Other way
+===========
+
 
 Start mongod::
 
