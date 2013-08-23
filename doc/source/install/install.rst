@@ -15,7 +15,7 @@ TODO: lots of missing
 Install Mongo
 ^^^^^^^^^^^^^^^
 
-TBD
+
 
 Install RabitMQ
 ^^^^^^^^^^^^^^^^
@@ -61,47 +61,45 @@ TODO: distribute a standard ttf font and use sh so that the -f font is included 
 Ubuntu
 ------------
 
-ubunto may be differently installing between 12.04 and 13. 0
-
-probably two differnt sections are neede dif they indeed are differnt
-
-TODO:: lots missing
-
-On ubuntu you need first tto install curl. This can be done with::
-
-   $ sudo apt-get install curl
-
-You also need to install ldap which you need to do with::
+Assuming a basic Ubuntu Desktop 13.04, install prerequsites:
 
    $ sudo apt-get install \
-      libldap2-dev \
-      libsasl2-dev \
-      libssl-dev \
-      python-ldap \
-      python-dev \
+      git \
+      curl \
       python-virtualenv \
-      ldap-client \     
-      mongodb      
+      python-dev \
+      libldap2-dev \
+      libsasl2-dev
 
 TODO: do we also have to do::
 
+   (Allan did not need to do this)
    $ pip install python-ldap
 
 TODO: do we have to install ldap-user
 
+   (Allan did not need to do this)
    sudo apt-get install ldap-user
 
-apt-get install \
+
+TODO: What is different for Ubuntu 12.04 ?
  
+TODO: Do we need to test Ubuntu 10.04 ?
+
 
 Install Mongo
 ^^^^^^^^^^^^^^^
 
-TBD
+    $ sudo apt-get install mongodb
 
-configuration of mongodb is missing
+Note: the mongod process will by default try to use /data/db for its
+database files.  We recommend using the --dbpath option to specify a
+directory in your own home.  See start() method in fabfiles/server.py.
 
-/data/db and permissions
+The first startup of mongod will take some time as it creates files in
+the dbpath.  Unless these are deleted, subsequent startup times should
+be much faster.
+
 
 Install RabitMQ
 ^^^^^^^^^^^^^^^^
