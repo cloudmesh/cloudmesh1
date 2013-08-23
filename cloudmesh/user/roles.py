@@ -10,14 +10,26 @@ class Roles:
         if not kwargs.has_key('roles'):#if kwargs['host'] is None:
             self.roles = cm_config_server().config["roles"]
     
+     
+    mongo_host = 'localhost'
+    mongo_port = 27017
+    mongo_db_name = "cloudmesh"
+    mongo_collection = "cloudmesh"
+    
     
     def __init__(self):
-        collection = "user"
-        db_name = cm_config_server().config["mongo"]["db"]
         
-        client = MongoClient()    
-        db = client[db_name]          
-        self.db_clouds = db[collection]    
+        self.mongo_config = cm_config_server().config["mongo"]
+        self.mongo_collection = "user"
+        
+        self.mongo_host = self.mongo_config["host"]
+        self.mongo_port = self.mongo_config["port"]
+        self.mongo_db_name = self.mongo_config["collections"][self.mongo_collection]['db']
+
+        self.client = MongoClient(host=self.mongo_host,
+                                  port=self.mongo_port)  
+        db = self.client[self.mongo_db_name]          
+        self.db_clouds = db[self.mongo_collection]    
         
         self.get_config()
         
