@@ -156,7 +156,7 @@ Verify that python2.7 is active:
 If you see Python 2.6.6, fix your PATH to include /opt/python/bin before /usr/bin.
 
     $ curl -O https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gz
-    $ tar xvfz virtualenv-1.10.1.tar.gz
+    $ tar xfz virtualenv-1.10.1.tar.gz
     $ cd virtualenv-1.10.1.tar.gz
     $ sudo python setup.py install
 
@@ -171,7 +171,7 @@ Create /etc/yum.repos.d/10gen containing:
     gpgcheck=0
     enabled=1
 
-Then,
+Then:
 
     $ sudo yum install mongo-10gen mongo-10gen-server
 
