@@ -1,49 +1,193 @@
 .. sectnum::
    :start: 2
 
-Development Installation 
+Operating System Preparation
 ================================
 
-Preparing the system with basic software
+In this Section we summarize some important packages that need to be installed in order to run cloudmesh.
 
-Install Mongo
--------------
 
-OSX: TBD 
-^^^^^^^^^
+OSX
+----------
 
 TODO: lots of missing 
 
-Install sphinx autorun::
+Install Mongo
+^^^^^^^^^^^^^^^
+
+
+
+Install RabitMQ
+^^^^^^^^^^^^^^^^
+
+TBD
+
+Sphinx autorun
+^^^^^^^^^^^^^^^
+
+This package is only needed if you like to generate the documentation. Most developers will want to install it::
 
     $ hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
     $ cd sphinx-contrib/autorun
     $ python setup.py install
 
+Blockdiag family
+^^^^^^^^^^^^^^^^^
 
+TODO: this expalanation is incomplete
 
-Ubuntu: TBD (Allan)
-^^^^^^^^^^^^^^^^^^^^
+To install these packages you need to execute::
 
-TODO:: lots missing
+    pip install "blockdiag[PDF]"
+	pip install "rackdiag[PDF]"
+	pip install nwdiag[PDF]"
+	
+The documentation to this package is located at 
 
-On ubuntu you need first tto install curl. This can be done with::
+* http://blockdiag.com/en/blockdiag/introduction.html#setup
 
-   $ sudo apt-get install curl
+blockdiag uses TrueType Font to render text. blockdiag try to detect installed fonts but if nothing detected, You can specify fonts with -f (–font) option::
 
+    $ blockdiag -f /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf simple.diag
 
-You also need to install ldap which you need to do with::
+If you always use same font, write $HOME/.blockdiagrc::
 
-   $ sudo apt-get install python-dev libldap2-dev libsasl2-dev libssl-dev
+    $ cat $HOME/.blockdiagrc
+    [blockdiag]
+    fontpath = /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf
+
+TODO: distribute a standard ttf font and use sh so that the -f font is included from the deployed package
+
+Ubuntu
+------------
+
+Assuming a basic Ubuntu Desktop 13.04, install prerequsites:
+
+   $ sudo apt-get install \
+      git \
+      curl \
+      python-virtualenv \
+      python-dev \
+      libldap2-dev \
+      libsasl2-dev
+
+TODO: do we also have to do::
+
+   (Allan did not need to do this, already in requirements.txt)
    $ pip install python-ldap
 
-CentOS: TBD (Allan)
+TODO: do we have to install ldap-user
+
+   sudo apt-get install ldap-user
 
 
-Get/create the yaml files
---------------------------
+TODO: What is different for Ubuntu 12.04 ?
+ 
+TODO: Do we need to test Ubuntu 10.04 ?
+
+
+Install Mongo
+^^^^^^^^^^^^^^^
+
+    $ sudo apt-get install mongodb
+
+Note: the mongod process will by default try to use /data/db for its
+database files.  We recommend using the --dbpath option to specify a
+directory in your own home.  See start() method in fabfiles/server.py.
+
+The first startup of mongod will take some time as it creates files in
+the dbpath.  Unless these are deleted, subsequent startup times should
+be much faster.
+
+
+Install RabitMQ
+^^^^^^^^^^^^^^^^
 
 TBD
+
+Sphinx autorun
+^^^^^^^^^^^^^^^
+
+TBD
+
+Blockdiag family
+^^^^^^^^^^^^^^^^^
+
+TBD
+
+CentOS
+--------------------
+
+Assuming a basic CentOS 6.4 Server, install prerequsites:
+
+    $ sudo yum install git openldap-devel bzip2-devel
+
+
+Install Python
+^^^^^^^^^^^^^^^
+
+Cloudmesh requires python 2.7, and CentOS comes with Python 2.6.
+However we cannot replace the system python as yum and other tools
+depend on it, so we will configure it to install in /opt/python
+
+    $ wget http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz
+
+Recommended: verify the md5 checksum, b4f01a1d0ba0b46b05c73b2ac909b1df for the above.
+
+    $ tar xzf Python-2.7.5.tgz
+    $ cd Python-2.7.5
+    $ configure --prefix=/opt/python && make
+    $ sudo make install
+
+Edit your ~/.bash_profile to add /opt/python/bin to the start of your
+PATH, then log out and back in.
+
+Install Python Virtualenv
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Verify that python2.7 is active:
+
+    $ python --version
+    Python 2.7.5
+
+If you see Python 2.6.6, fix your PATH to include /opt/python/bin before /usr/bin.
+
+    $ curl -O https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gz
+    $ tar xfz virtualenv-1.10.1.tar.gz
+    $ cd virtualenv-1.10.1.tar.gz
+    $ sudo python setup.py install
+
+
+Install Mongo
+^^^^^^^^^^^^^^^
+Create /etc/yum.repos.d/10gen containing:
+
+    [10gen]
+    name=10gen Repository
+    baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
+    gpgcheck=0
+    enabled=1
+
+Then:
+
+    $ sudo yum install mongo-10gen mongo-10gen-server
+
+
+Install RabitMQ
+^^^^^^^^^^^^^^^^
+
+TBD
+
+Sphinx autorun
+^^^^^^^^^^^^^^^
+
+TBD
+
+Blockdiag family
+^^^^^^^^^^^^^^^^^
+
+TBD
+
 
 Installing the source code
 =============================
@@ -71,7 +215,7 @@ sometimes it is important to clean things and start new. This can be done by ::
 
 
 Convenient command shortcuts
-----------------------------------------------------------------------
+=================================
 
 We are providing a number of useful command that will make your development efforts easier.  These commands are build with fablies in the fabfile directory. in the cloudmesh directory, you will find a diretcory called fabfile that includes the agglomerated helper files. To access them you can use the name of the file, followed by a task that is defined within the file. Next we list the available commands:
 
@@ -131,19 +275,6 @@ commands queed up. The commands hafe random state updates and aer very
 short as to allow for a quick debuging simulation. One could add the
 refresh of the web page automatically to other test programs.
 
-Ubuntu
-======
-
-
-apt-get install \
- python-virtualenv \
- python-dev \
- libsasl2-dev \
- python-ldap \
- libldap2-dev \
- ldap-devel \
- ldap-client \
- mongodb
 
 In virtualenv we did:
 
@@ -164,65 +295,4 @@ Description:    Ubuntu 12.10
 Release:    12.10
 Codename:    quantal
 
-
-Instalation
-===========
-
-Virtualenv
-----------
-
-Download virtualenv
-^^^^^^^^^^^^^^^^^^^^^^
-
-This step is only needed if virtualenv is not installed. To
-test this say::
-
-    $ which virtualenv
-
-..
-
-If the result does not provide the path followed by
-virtualenv, it is installed, you can do::
-         
-    $virtualenv ENV
-
-..
-
-and skip step 2.
-        
-Since you do not have super user priviledges, you need virtualenv in
-order to finish the installtion. You may download virtualenv.py by
-following command::
-
-    $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
- 
-Install virtualenv
-^^^^^^^^^^^^^^^^^^^^^
-        
-After you downloaded virtualenv, you can install it by following
-command::
-
-    $ python virtualenv.py --system-site-packages ENV
-          
-Activate virtualenv
-^^^^^^^^^^^^^^^^^^^^^^
-
-After installation of virtualenv, you can activate virtualenv by
-following command::
-
-    $ source ENV/bin/activate
-    
-Modify your rc file (optional):
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Go to your home directory, log in your .bashrc,
-.bash_profile, or .bash_login file and add::
-
-    $ echo "source ENV/bin/activate" >> .bash_profile
-
-..
-
-
-This way you do not forget to type it in next time you 
-login. Only do this if you are familar with .bash_profile.
 
