@@ -1,3 +1,5 @@
+File: install.rst
+
 Documentation 
 ==============
 
@@ -10,6 +12,17 @@ Install Mongo
 OSX: TBD 
 
 Ubuntu: TBD (Allan)
+^^^^^^^^^^^^^^^^^^^^
+
+On ubuntu you need first tto install curl. This can be done with::
+
+   $ sudo apt-get install curl
+
+
+You also need to install ldap which you need to do with::
+
+   $ sudo apt-get install python-dev libldap2-dev libsasl2-dev libssl-dev
+   $ pip install python-ldap
 
 CentOS: TBD (Allan)
 
@@ -224,5 +237,16 @@ pip install python-novaclient
 
 
 
+
+sudo aptitude install libldap2-dev
+sudo aptitude install libsasl2-dev
+sudo aptitude install mongodb
+
+lsb_release -a
+No LSB modules are available.
+Distributor ID:    Ubuntu
+Description:    Ubuntu 12.10
+Release:    12.10
+Codename:    quantal
 
 
