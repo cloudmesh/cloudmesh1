@@ -121,6 +121,45 @@ TBD
 CentOS
 --------------------
 
+Assuming a basic CentOS 6.4 Server, install prerequsites:
+
+    $ sudo yum install git openldap-devel bzip2-devel
+
+
+Install Python
+^^^^^^^^^^^^^^^
+
+Cloudmesh requires python 2.7, and CentOS comes with Python 2.6.
+However we cannot replace the system python as yum and other tools
+depend on it, so we will configure it to install in /opt/python
+
+    $ wget http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz
+
+Recommended: verify the md5 checksum, b4f01a1d0ba0b46b05c73b2ac909b1df for the above.
+
+    $ tar xzf Python-2.7.5.tgz
+    $ cd Python-2.7.5
+    $ configure --prefix=/opt/python && make
+    $ sudo make install
+
+Edit your ~/.bash_profile to add /opt/python/bin to the start of your
+PATH, then log out and back in.
+
+Install Python Virtualenv
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Verify that python2.7 is active:
+
+    $ python --version
+    Python 2.7.5
+
+If you see Python 2.6.6, fix your PATH to include /opt/python/bin before /usr/bin.
+
+    $ curl -O https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gz
+    $ tar xvfz virtualenv-1.10.1.tar.gz
+    $ cd virtualenv-1.10.1.tar.gz
+    $ sudo python setup.py install
+
 
 Install Mongo
 ^^^^^^^^^^^^^^^
