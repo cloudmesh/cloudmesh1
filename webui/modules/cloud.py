@@ -47,7 +47,7 @@ for name in clouds.active():
 # ============================================================
 
 
-@cloud_module .route('/save/')
+@cloud_module.route('/save/')
 def save():
     print "Saving the cloud status"
     #clouds.save()
@@ -58,7 +58,7 @@ def save():
 # ============================================================
 
 
-@cloud_module .route('/load/')
+@cloud_module.route('/load/')
 def load():
     print "Loading the cloud status"
     #clouds.load()
@@ -86,7 +86,7 @@ def refresh(cloud=None, server=None):
 # ============================================================
 
 
-@cloud_module .route('/cm/filter/<cloud>/', methods=['GET', 'POST'])
+@cloud_module.route('/cm/filter/<cloud>/', methods=['GET', 'POST'])
 def filter(cloud=None):
     # print "-> filter", cloud
 
@@ -112,7 +112,7 @@ def filter(cloud=None):
 # ============================================================
 # ROUTE: KILL
 # ============================================================
-@cloud_module .route('/cm/kill/')
+@cloud_module.route('/cm/kill/')
 def kill_vms():
     print "-> kill all"
     r = cm("--set", "quiet", "kill", _tty_in=True)
@@ -123,7 +123,7 @@ def kill_vms():
 # ============================================================
 
 
-@cloud_module .route('/cm/delete/<cloud>/<server>/')
+@cloud_module.route('/cm/delete/<cloud>/<server>/')
 def delete_vm(cloud=None, server=None):
     print "-> delete", cloud, server
     # if (cloud == 'india'):
@@ -138,7 +138,7 @@ def delete_vm(cloud=None, server=None):
 # ============================================================
 
 
-@cloud_module .route('/cm/delete/<cloud>/')
+@cloud_module.route('/cm/delete/<cloud>/')
 def delete_vms(cloud=None):
 # donot do refresh before delete, this will cause all the vms to get deleted
     f_cloud = clouds.clouds[cloud]
@@ -155,7 +155,7 @@ def delete_vms(cloud=None):
 # ============================================================
 
 
-@cloud_module .route('/cm/assignpubip/<cloud>/<server>/')
+@cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
 def assign_public_ip(cloud=None, server=None):
     try:
         if configuration['clouds'][cloud]['cm_automatic_ip'] is False:
@@ -176,7 +176,7 @@ def assign_public_ip(cloud=None, server=None):
 #
 
 
-@cloud_module .route('/cm/start/<cloud>/')
+@cloud_module.route('/cm/start/<cloud>/')
 def start_vm(cloud=None, server=None):
     print "*********** STARTVM", cloud
     print "-> start", cloud
@@ -208,7 +208,7 @@ def start_vm(cloud=None, server=None):
 # ============================================================
 
 
-@cloud_module .route('/cm/login/<cloud>/<server>/')
+@cloud_module.route('/cm/login/<cloud>/<server>/')
 def vm_login(cloud=None, server=None):
     message = ''
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -233,7 +233,7 @@ def vm_login(cloud=None, server=None):
 # ============================================================
 
 
-@cloud_module .route('/cm/info/<cloud>/<server>/')
+@cloud_module.route('/cm/info/<cloud>/<server>/')
 def vm_info(cloud=None, server=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -253,10 +253,10 @@ def vm_info(cloud=None, server=None):
 # ROUTE: FLAVOR
 # ============================================================
 
-# @cloud_module .route('/flavors/<cloud>/' )
+# @cloud_module.route('/flavors/<cloud>/' )
 
 
-@cloud_module .route('/flavors/', methods=['GET', 'POST'])
+@cloud_module.route('/flavors/', methods=['GET', 'POST'])
 def display_flavors(cloud=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -278,8 +278,8 @@ def display_flavors(cloud=None):
 # ============================================================
 # ROUTE: IMAGES
 # ============================================================
-# @cloud_module .route('/images/<cloud>/')
-@cloud_module .route('/images/', methods=['GET', 'POST'])
+# @cloud_module.route('/images/<cloud>/')
+@cloud_module.route('/images/', methods=['GET', 'POST'])
 def display_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
