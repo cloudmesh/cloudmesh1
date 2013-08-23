@@ -1,18 +1,32 @@
 File: install.rst
 
-Documentation 
-==============
 
 Development Instalation 
-------------------------
+================================
+
+Preparing the system with basic software
+
 
 Install Mongo
 -------------
 
 OSX: TBD 
+^^^^^^^^^
+
+TODO: lots of missing 
+
+Install sphinx autorun::
+
+    $ hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
+    $ cd sphinx-contrib/autorun
+    $ python setup.py install
+
+
 
 Ubuntu: TBD (Allan)
 ^^^^^^^^^^^^^^^^^^^^
+
+TODO:: lots missing
 
 On ubuntu you need first tto install curl. This can be done with::
 
@@ -33,11 +47,9 @@ Get/create the yaml files
 TBD
 
 Installing the source code
-----------------------------
+=============================
 
-from the shell:
-
-Checkout the code from the repository::
+From the shell checkout the code from the repository::
 
     git@github.com:cloudmesh/cloudmesh.git
     cd cloudmesh
@@ -45,36 +57,7 @@ Checkout the code from the repository::
 
 from Aptana Studio:
 
-
-Basic Configuration
---------------------
-
-open a new terminal and type in::
-
-   mongod
-   
-Now you can either generate a simple cloud without user or a cloud with user information. What you chose depends on what you need to develop and have access to.
-
-
-To generating a simple cloud do::
-
-   fab mongo.simple
-   
-To generate a complete cloud including users (requires access to LDAP):
-
-    fab mongo.cloud
-
-Next you can start the Webui with::
-
-	fab server.start    
-	
-If you like to start with a particular route, you can pass it as parameter.
-
-    fab server.start:inventory
-    
-opens the page 
-
-    http://localhost:5000/inventory in your browser
+	Aptana studio contains an import function which is convenient for importing it directly from github.
 
 Cleaning
 =========
@@ -85,74 +68,7 @@ sometimes it is important to clean things and start new. This can be done by ::
 
 
 
-Testing
-========
 
-fab test.info
-
-fab test:compute,clean
-
-
-
-
-
-    
-    
-    
-    
-    
-
-
-
-
-OLD
-===
-::
-
-    $ hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
-    $ cd sphinx-contrib/autorun
-    $ python setup.py install
-
-
-
-	fab queue.start:1
-
-window 3::
-
-
-
-Other way
-===========
-
-
-Start mongod::
-
-    $ mongod
-
-Create a test cluster::
-
-    $ fab server.fg
-
-This will print something like (if everything is ok)::
-
-        clusters: 5 -> bravo, delta, gamma, india, sierra
-        services: 0
-        servers: 304
-        images: 2 -> centos6, ubuntu
-
-To start the service you can say::
-
-    $ fab server.start
-
-You can repeatedly issue that command and it will shut down the server. If you want to do thia by hand you can do this with::
-
-    $ fab server.stop
-
-Note that when you edit anything related to the Fabric datatypes, you will most likely hav to recreate the test cluster data. DO this agian with::
-
-    $ fab server.fg
-
-And than start the server as descripbed above.
 
 
 Convenient command shortcuts
