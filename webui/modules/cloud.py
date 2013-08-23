@@ -3,6 +3,7 @@ from flask import render_template, request, redirect
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cloudmesh import cloudmesh
 from cloudmesh.util.util import table_printer
+from cloudmesh.cm_mongo import cm_mongo
 from datetime import datetime
 import time
 
@@ -22,6 +23,9 @@ configuration = config.get()
 prefix = config.prefix
 index = config.index
 
+clouds = cm_mongo()
+clouds.activate()
+               
 # DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
 
 """
@@ -65,13 +69,17 @@ def load():
 # ============================================================
 
 
-@cloud_module .route('/cm/refresh/')
-@cloud_module .route('/cm/refresh/<cloud>/')
+@cloud_module.route('/cm/refresh/')
+@cloud_module.route('/cm/refresh/<cloud>/')
 def refresh(cloud=None, server=None):
-    # print "-> refresh", cloud, server
-    clouds.refresh()
-    clouds.all_filter()
-    return mongo_iamges()
+    print "-> refresh", cloud, server
+    if cloud is None:
+        clouds.refresh(types=['servers','images','flavors'])
+    else:
+        clouds.refresh(names=[cloud],types=['servers','images','flavors'])
+    #clouds.refresh()
+    #clouds.all_filter()
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: Filter
@@ -185,7 +193,7 @@ def start_vm(cloud=None, server=None):
     vm_image = clouds.default(cloud)['image']
 
     print "STARTING", config.prefix, config.index
-    result = clouds.create(
+    result = clouds.vm_create(
         cloud, config.prefix, config.index, vm_image, vm_flavor, key)
     # print "PPPPPPPPPPPP", result
     clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
