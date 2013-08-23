@@ -69,16 +69,16 @@ class cm_keys:
 
     def _getvalue(self, name):
         if name == 'keys':
-            return self.config.data["cloudmesh"]["keys"]
+            return self.config.get()["keys"]
         elif name == 'default':
-            key = self.config.data["cloudmesh"]["keys"]["default"]
+            key = self.config.get()["keys"]["default"]
         else:
             key = name
-        value = self.config.data["cloudmesh"]["keys"]["keylist"][key]
+        value = self.config.get()["keys"]["keylist"][key]
         return value
 
     def get_default_key(self):
-        return self.config.data["cloudmesh"]["keys"]["default"]
+        return self.config.get()["keys"]["default"]
 
     def __getitem__(self, name):
         value = self._getvalue(name)
@@ -91,10 +91,10 @@ class cm_keys:
 
     def __setitem__(self, name, value):
         if name == 'default':
-            self.config.data["cloudmesh"]["keys"]["default"] = value
+            self.config.get()["keys"]["default"] = value
             return
         else:
-            self.config.data["cloudmesh"]["keys"]["keylist"][name] = value
+            self.config.get()["keys"]["keylist"][name] = value
 
     def set(self, name, value, expand=False):
         self.__setitem__(name, value)
@@ -110,17 +110,17 @@ class cm_keys:
         """ not tested"""
         newdefault = False
         if name == 'default':
-            key = self.config.data["cloudmesh"]["keys"]["default"]
+            key = self.config.get()["keys"]["default"]
             newdefault = True
         else:
             key = name
 
-        del self.config.data["cloudmesh"]["keys"]["keylist"][key]
+        del self.config.get()["keys"]["keylist"][key]
 
         # ERROR Defalut is not self?
         if newdefault:
-            if len(self.config.data["cloudmesh"]["keys"]["keylist"]) > 0:
-                default = self.config.data["cloudmesh"]["keys"]["keylist"][0]
+            if len(self.config.get()["keys"]["keylist"]) > 0:
+                default = self.config.get()["keys"]["keylist"][0]
         else:
             default = None
 
@@ -136,7 +136,7 @@ class cm_keys:
 
     def setdefault(self, name):
         """sets the default key"""
-        self.config.data["cloudmesh"]["keys"]["default"] = name
+        self.config.get()["keys"]["default"] = name
 
     def default(self):
         """sets the default key"""
@@ -144,7 +144,7 @@ class cm_keys:
 
     def names(self):
         """returns all key names in an array"""
-        return self.config.data["cloudmesh"]["keys"]["keylist"].keys()
+        return self.config.get()["keys"]["keylist"].keys()
 
     def validate(self, line):
         """validates if a default key os ok and follows 'keyencryptiontype keystring keyname'"""
