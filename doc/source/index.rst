@@ -14,7 +14,7 @@ File: index.rst
 Cloudmesh 
 ==========================================
 
-Introdusction
+Introduction
 -------------
 
 .. toctree::
@@ -36,15 +36,6 @@ Instalation
 
    todo
    nosetest
-
-   inventory/index.rst
-   inventory/assign
-   inventory/add
-   inventory/unassign
-   inventory/list
-   inventory/support
-
-
 
    cm-shell
 
