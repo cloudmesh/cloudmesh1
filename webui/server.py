@@ -32,7 +32,7 @@ import types
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
 
-with_login = True
+with_login = False
 
 # ============================================================
 # DYNAMIC MODULE MANAGEMENT
@@ -52,7 +52,7 @@ all_modules = ['pbs',
                'mesh',
                'users']
 
-exclude_modules = ['workflow', 'cloud','mesh','workflow','git','keys','nose']
+exclude_modules = ['workflow', 'cloud']
 
 modules = [m for m in all_modules if m not in exclude_modules]
     

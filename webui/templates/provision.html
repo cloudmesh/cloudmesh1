@@ -1,10 +1,11 @@
-{% extends "layout.html" %}
+{% extends "layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
+{% block contentbox %}
+<h2>Provision Form</h2>
+{% endblock  %}
+
 {% block content %}
-
-<h1>Provision Form</h1>
-
 
 <form method="POST" action=".">
 {{ form.csrf_token }}
