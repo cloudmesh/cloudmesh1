@@ -252,8 +252,13 @@ class ComputeBaseType:
                 self.tenants = {}
 
         else:
-
             for element in list:
-                id = list[element]['id']
-                d[id] = list[element]
+                #id = list[element]['id']
+                #d[id] = list[element]
+                #d[id]['cm_refresh'] = time_stamp
+
+                # element is a dictionary. It doesn't have to lookup the list
+                # like 'list[element]...'. element[...] simply works.
+                id = element['id']
+                d[id] = element
                 d[id]['cm_refresh'] = time_stamp
