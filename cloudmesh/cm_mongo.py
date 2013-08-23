@@ -9,8 +9,8 @@ from util.stopwatch import StopWatch
 from iaas.openstack.cm_compute import openstack
 from iaas.eucalyptus.eucalyptus import eucalyptus
 from config.cm_config import cm_config_server
-
-
+from util.util import path_expand
+import yaml
 from util.logger import LOGGER
 
 # ----------------------------------------------------------------------
@@ -40,11 +40,14 @@ class cm_mongo:
     
     config = None
     
+    
+    
+    
     def __init__(self, collection="clouds"):
         """initializes the cloudmesh mongo db. The name of the collection os passed."""
         
         # Read in the mongo db information from the cloudmesh_server.yaml
-        location = cm_path_expand("~/.futuregrid/cloudmesh_server.yaml")
+        location = path_expand("~/.futuregrid/cloudmesh_server.yaml")
         result = open(location, 'r').read()
         
         self.mongo_collection = "cloudmesh"
