@@ -4,6 +4,8 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import cm_config_server
 from pymongo import MongoClient
 from datetime import datetime
+from cloudmesh.util.util import path_expand
+import yaml
 
 users_module = Blueprint('users_module', __name__)
 
@@ -17,17 +19,17 @@ def display_usres_ldap():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     
-    self.mongo_config = cm_config_server().config["mongo"]
-    self.mongo_collection = "user"
+    mongo_config = cm_config_server().config["mongo"]
+    mongo_collection = "user"
         
-    self.mongo_host = self.mongo_config["host"]
-    self.mongo_port = self.mongo_config["port"]
-    self.mongo_db_name = self.mongo_config["collections"][self.mongo_collection]['db']
+    mongo_host = mongo_config["host"]
+    mongo_port = mongo_config["port"]
+    mongo_db_name = mongo_config["collections"][mongo_collection]['db']
 
-    self.client = MongoClient(host=self.mongo_host,
-                              port=self.mongo_port)  
-    db = client[self.mongo_db_name]          
-    self.db_clouds = db[self.mongo_collection]    
+    client = MongoClient(host=mongo_host,
+                              port=mongo_port)  
+    db = client[mongo_db_name]          
+    db_clouds = db[mongo_collection]    
     
     
     config = cm_config()
