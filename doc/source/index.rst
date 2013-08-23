@@ -30,7 +30,7 @@ Cloudmesh
    inventory/support
 
 
-   cm/intro.rst
+   cm-shell
 
    plan/plan
    plan/design 
