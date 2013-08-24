@@ -48,6 +48,7 @@ class cm_mongo:
         
         
         self.db_clouds = get_mongo_db(collection)
+
         self.config = cm_config()
         
 

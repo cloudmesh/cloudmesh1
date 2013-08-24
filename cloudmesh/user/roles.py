@@ -1,8 +1,8 @@
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.util import path_expand
-
 from cloudmesh.config.cm_config import get_mongo_db
+
 import yaml
 class Roles:
     
@@ -20,7 +20,7 @@ class Roles:
     
     
     def __init__(self):
-      
+
         collection = "user"  
         self.db_clouds = get_mongo_db(collection)        
         

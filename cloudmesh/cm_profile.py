@@ -23,13 +23,7 @@ class cm_profile (object):
         self.server = cm_config_server()
         self.config = cm_config()
 
-        # Read in the mongo db information from the cloudmesh_server.yaml
-        location = cm_path_expand("~/.futuregrid/cloudmesh_server.yaml")
-        result = open(location, 'r').read()
-        
-
         self.db_clouds = get_mongo_db(collection)        
-
         self._get_usernames_from_config()   
 
 
