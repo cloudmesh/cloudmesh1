@@ -71,12 +71,25 @@ def load():
 
 @cloud_module.route('/cm/refresh/')
 @cloud_module.route('/cm/refresh/<cloud>/')
-def refresh(cloud=None, server=None):
+@cloud_module.route('/cm/refresh/<cloud>/<service_type>')
+def refresh(cloud=None, server=None, service_type=None):
     print "-> refresh", cloud, server
+    
+    print "REQ",  redirect(request.args.get('next') or '/').__dict__
+    
+    if cloud in ['servers','flavors','images','users']:
+        service_type = cloud 
+        cloud_names = config.active()
+    else:
+        cloud_names = [cloud]
+    
     if cloud is None:
         clouds.refresh(types=['servers','images','flavors'])
+    elif service_type is None:
+        clouds.refresh(names=cloud_names,types=['servers','images','flavors'])
     else:
-        clouds.refresh(names=[cloud],types=['servers','images','flavors'])
+        clouds.refresh(names=cloud_names,types=[service_type])
+        return redirect('/mesh/{0}'.format(service_type))
     #clouds.refresh()
     #clouds.all_filter()
     return redirect('/mesh/servers')

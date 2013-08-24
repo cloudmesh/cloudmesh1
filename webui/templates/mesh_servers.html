@@ -2,7 +2,7 @@
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
-<h2> {{ image_button ("none", "365_restart", "/cm/refresh/") }} Servers </h2>
+<h2> {{ image_button ("none", "365_restart", "/cm/refresh/servers") }} Servers </h2>
 {% endblock contentbox %}
 
 {% block content %}
@@ -51,7 +51,7 @@ $(function() {
   {% for cloud in clouds %}
   <div style="margin-bottom:1em;">
     <h3> 
-    	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/") }}
+    	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
       	&nbsp;
       	{{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}
       	&nbsp;
