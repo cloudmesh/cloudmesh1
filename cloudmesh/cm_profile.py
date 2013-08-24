@@ -1,7 +1,8 @@
 from config.cm_config import cm_config_server, cm_config
+from config.cm_config import  get_mongo_db
+
 
 import json
-from pymongo import MongoClient
 from pprint import pprint
 
 class cm_profile (object):
@@ -12,13 +13,6 @@ class cm_profile (object):
     data = None
     
     # initialization
-    
-    
-     
-    mongo_host = 'localhost'
-    mongo_port = 27017
-    mongo_db_name = "cloudmesh"
-    mongo_collection = "cloudmesh"
     
     config = None
     
@@ -33,18 +27,9 @@ class cm_profile (object):
         location = cm_path_expand("~/.futuregrid/cloudmesh_server.yaml")
         result = open(location, 'r').read()
         
-        self.mongo_collection = collection
-        
-        self.mongo_config = yaml.load(result)["mongo"]
-        self.mongo_host = self.mongo_config["host"]
-        self.mongo_port = self.mongo_config["port"]
-        self.mongo_db_name = self.mongo_config["collections"][self.mongo_collection]['db']
-        
-        self.client = MongoClient(host=self.mongo_host,
-                                  port=self.mongo_port)  
 
-        self.db = self.client[self.mongo_db_name]          
-        self.db_collection = self.db[self.mongo_collection]    
+        self.db_clouds = get_mongo_db(collection)        
+
         self._get_usernames_from_config()   
 
 

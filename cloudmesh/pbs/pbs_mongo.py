@@ -1,10 +1,11 @@
 import pymongo
-from pymongo import MongoClient
 from pbs import PBS
 from pprint import pprint
 from bson.objectid import ObjectId
 from cloudmesh.util.util import path_expand
 import yaml
+
+from cloudmesh.config.cm_config import get_mongo_db
 
 class pbs_mongo:
 
@@ -34,24 +35,8 @@ class pbs_mongo:
         
     def __init__(self, collections=["qstat","pbsnodes"]):
         
-        # Read in the mongo db information from the cloudmesh_server.yaml
-        location = cm_path_expand("~/.futuregrid/cloudmesh_server.yaml")
-        result = open(location, 'r').read()
-        
-        self.mongo_collection = "pbs"
-        
-        self.mongo_config = yaml.load(result)["mongo"]
-        self.mongo_host = self.mongo_config["host"]
-        self.mongo_port = self.mongo_config["port"]
-        self.mongo_db_name = self.mongo_config["collections"][self.mongo_collection]['db']
-
-        self.client = MongoClient(host=self.mongo_host,
-                                  port=self.mongo_port) 
-        
-        self.db = self.client[self.mongo_db_name]          
-        
-        self.db_qstat = self.db[collections[0]]    
-        self.db_pbsnodes = self.db[collections[1]]    
+        self.db_qstat = get_mongo_db(collections[0])
+        self.db_pbsnodes = get_mongo_db(collections[1])  
             
     def activate(self,host,user):
         """activates a specific host to be queried"""

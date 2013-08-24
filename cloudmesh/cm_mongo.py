@@ -26,6 +26,8 @@ except:
     log.warning("AZURE NOT ENABLED")
 
 
+
+
 class cm_mongo:
     
     clouds = {}
@@ -41,26 +43,11 @@ class cm_mongo:
     config = None
     
     
-    
-    
     def __init__(self, collection="clouds"):
         """initializes the cloudmesh mongo db. The name of the collection os passed."""
         
-        # Read in the mongo db information from the cloudmesh_server.yaml
-        location = path_expand("~/.futuregrid/cloudmesh_server.yaml")
-        result = open(location, 'r').read()
         
-        self.mongo_collection = "cloudmesh"
-        
-        self.mongo_config = yaml.load(result)["mongo"]
-        self.mongo_host = self.mongo_config["host"]
-        self.mongo_port = self.mongo_config["port"]
-        self.mongo_db_name = self.mongo_config["collections"][self.mongo_collection]['db']
-        
-        self.client = MongoClient(host=self.mongo_host,
-                                  port=self.mongo_port)  
-        self.db = self.client[self.mongo_db_name]          
-        self.db_clouds = self.db[self.mongo_collection]    
+        self.db_clouds = get_mongo_db(collection)
         self.config = cm_config()
         
 

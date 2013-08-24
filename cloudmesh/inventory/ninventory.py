@@ -10,6 +10,8 @@ from cloudmesh.util.util import path_expand as cm_path_expand
 from cloudmesh.config.cm_config import cm_config_server
 import yaml
 import json
+from cloudmesh.config.cm_config import get_mongo_db
+
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
@@ -36,23 +38,10 @@ class ninventory:
         template = Template(result)
         self.config = yaml.load(template.render(self.server_config))
         
-        # Read in the mongo db information from the cloudmesh_server.yaml
-        location = cm_path_expand("~/.futuregrid/cloudmesh_server.yaml")
-        result = open(location, 'r').read()
-        self.mongo_config = yaml.load(result)["mongo"]
-        self.mongo_host = self.mongo_config["host"]
-        self.mongo_port = self.mongo_config["port"]
-        self.mongo_db_name = self.mongo_config["collections"]["inventory"]['db']
-        self.mongo_collection = "inventory"
-        
-        self._connect_to_mongo()
-        self.generate()
+        collection = "inventory"
+        self.db_inventory = get_mongo_db(collection)        
 
-    def _connect_to_mongo(self):
-        self.client = MongoClient(host=self.mongo_host,
-                                  port=self.mongo_port)    
-        self.db = self.client[self.mongo_db_name]          
-        self.db_inventory = self.db[self.mongo_collection]    
+        self.generate()
 
 
     def insert(self,element):
