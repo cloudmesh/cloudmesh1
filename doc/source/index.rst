@@ -28,8 +28,10 @@ Instalation
 .. toctree::
    :maxdepth: 2
   
+   install/deployment
    install/install
    install/virtualenv
+   
    
 Configuration
 ==============
