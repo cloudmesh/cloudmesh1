@@ -32,6 +32,7 @@ super_sidebar_pages = [
     ],
     ["Clouds",
         [
+            ["Refresh", "/cm/refresh"],
             ["VMs", "/mesh/servers"],
             ["Images", "/mesh/images"],
             ["Flavors", "/mesh/flavors/"],

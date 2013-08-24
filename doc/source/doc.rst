@@ -11,24 +11,22 @@ documentation in your local directory, do::
 
    cd doc
    make html
-   open a browser on build/html/index.html
 
-..
-
-
-to create a single html page you can say ::
+Than open a browser on the file build/html/index.html. In OSX this can be done with::
+  
+    open build/html/index.html
+    
+On a Linux machien you may want to substitute the open call with firefox or another browser. 
+To create a single html page you can say ::
 
    cd doc
    make singlehtml
-   open a browser on build/singlehtml/index.html
+   open build/singlehtml/index.html
 
 ..
 
-
-if this works view the result by opening a web browser on the file
-build/html/index.html. On OSX this can easily be done with::
-
-   open build/html/index.html
+RST Documentation
+^^^^^^^^^^^^^^^^^^^^^
 
 Information about rst and sphinx can be found at 
 
