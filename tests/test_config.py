@@ -162,7 +162,8 @@ class Test_cloudmesh:
         self.config.default = "hallo"
         print self.config.default
         assert self.config.default == "hallo"
-
+    """
     def test22_filter(self):
         HEADING()
         print self.config.get_filter('sierra-openstack-grizzly')
+    """
