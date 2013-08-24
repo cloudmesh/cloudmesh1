@@ -11,7 +11,6 @@ from cloudmesh.config.cm_config import cm_config_server
 import yaml
 import json
 from cloudmesh.config.cm_config import get_mongo_db
-
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
@@ -22,11 +21,6 @@ log = LOGGER('cm_mongo')
 class ninventory:
             
     server_config = None
-    
-    mongo_host = 'localhost'
-    mongo_port = 27017
-    mongo_db_name = "new-inventory"
-    mongo_collection = "inventory"
     
     def __init__(self):         
 

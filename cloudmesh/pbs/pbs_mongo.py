@@ -4,7 +4,6 @@ from pprint import pprint
 from bson.objectid import ObjectId
 from cloudmesh.util.util import path_expand
 import yaml
-
 from cloudmesh.config.cm_config import get_mongo_db
 
 class pbs_mongo:
@@ -15,13 +14,6 @@ class pbs_mongo:
     client = None
     pbs_client = None
     
-    
-    
-     
-    mongo_host = 'localhost'
-    mongo_port = 27017
-    mongo_db_name = "cloudmesh"
-    mongo_collection = "cloudmesh"
     
     config = None
     
