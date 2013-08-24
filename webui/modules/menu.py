@@ -61,6 +61,7 @@ app_topbar = [
 
 app_externalbar = [
     ["FutureGrid", "https://portal.futuregrid.org"],
+    ["-- Manual", "http://manual.futuregrid.org"],
     ["Cloudmesh", "https://github.com/cloudmesh/cloudmesh"],
     ["Blog", "http://cloudmesh.blogspot.com"],
 ]

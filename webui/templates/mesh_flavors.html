@@ -42,7 +42,7 @@ $(function() {
   {% for cloud in clouds %}
     {% set cloud_loop = loop %}
   <div style="margin-bottom:1em;">
-  <h3>{{ cloud }}</h3>
+  <h3> {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/flavors") }} {{ cloud }}</h3>
   <div>
     <table id="cloud-table-{{ loop.index0 }}">
       <thead>

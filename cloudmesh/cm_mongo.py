@@ -12,6 +12,7 @@ from config.cm_config import cm_config_server
 from util.util import path_expand
 import yaml
 from util.logger import LOGGER
+from config.cm_config import get_mongo_db
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
