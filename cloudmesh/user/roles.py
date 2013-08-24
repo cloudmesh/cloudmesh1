@@ -1,7 +1,8 @@
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.util import path_expand
-from pymongo import MongoClient
+
+from cloudmesh.config.cm_config import get_mongo_db
 import yaml
 class Roles:
     
@@ -19,18 +20,9 @@ class Roles:
     
     
     def __init__(self):
-        
-        self.mongo_config = cm_config_server().config["mongo"]
-        self.mongo_collection = "user"
-        
-        self.mongo_host = self.mongo_config["host"]
-        self.mongo_port = self.mongo_config["port"]
-        self.mongo_db_name = self.mongo_config["collections"][self.mongo_collection]['db']
-
-        self.client = MongoClient(host=self.mongo_host,
-                                  port=self.mongo_port)  
-        db = self.client[self.mongo_db_name]          
-        self.db_clouds = db[self.mongo_collection]    
+      
+        collection = "user"  
+        self.db_clouds = get_mongo_db(collection)        
         
         self.get_config()
         

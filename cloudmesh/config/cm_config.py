@@ -12,6 +12,8 @@ from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import check_file_for_tabs
 from cloudmesh_cloud_handler import cloudmesh_cloud_handler
 from cloudmesh.util.config import read_yaml_config
+from pymongo import MongoClient
+import yaml
 
 ##### For testing
 # import mock_keystone
@@ -19,6 +21,24 @@ from cloudmesh.util.config import read_yaml_config
 
 log = LOGGER("cm_config")
 
+def get_mongo_db(collection):
+    # Read in the mongo db information from the cloudmesh_server.yaml
+    location = path_expand("~/.futuregrid/cloudmesh_server.yaml")
+    result = open(location, 'r').read()
+        
+    mongo_collection = collection
+        
+    mongo_config = yaml.load(result)["mongo"]
+    mongo_host = mongo_config["host"]
+    mongo_port = mongo_config["port"]
+    mongo_db_name = mongo_config["collections"][mongo_collection]['db']
+        
+    client = MongoClient(host=mongo_host,
+                              port=mongo_port)  
+    db = client[mongo_db_name]          
+    db_clouds = db[mongo_collection] 
+    return db_clouds
+    
 class cm_config_server(object):
     filename = "~/.futuregrid/cloudmesh_server.yaml"
     config = None
