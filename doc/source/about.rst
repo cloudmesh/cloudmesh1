@@ -1,5 +1,3 @@
-.. sectnum::
-   :start: 1
 
 
 About this document
@@ -26,5 +24,8 @@ with the command::
 
   make gh-pages
   
-  
+Ohloh
+------
+
+* https://www.ohloh.net/p/cloudmesh-rain  
 
