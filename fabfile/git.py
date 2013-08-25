@@ -17,12 +17,12 @@ def gregor():
     local('git config --global user.name "Gregor von Laszewski"')
     local('git config --global user.email laszewski@gmail.com')
 
-def git():
+def up():
     """upload the changes to git"""
     clean()
-    _git("add", ".")
-    os.system("git commit")
-    _git("push")
+    local("git add .")
+    local("git commit")
+    local("git push")
 
 
 '''
