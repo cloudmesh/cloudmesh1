@@ -24,6 +24,7 @@ def display_usres_ldap():
     db_clouds = get_mongo_db(collection)        
 
         
+
     config = cm_config()
 
     result = db_clouds.find({})
