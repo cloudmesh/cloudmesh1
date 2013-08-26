@@ -33,7 +33,10 @@ $(function() {
     {% for host in hosts %}
         {% set version = 'pbs' %}
         <div style="margin-bottom:1em;">
-       <h3>{{ image_button ("none", "365_restart", "/cm/refresh/" + host + "/qstat") }}  {{ host }}</h3>
+       <h3>{{ image_button ("none", "365_restart", "/cm/refresh/" + host + "/qstat") }} 
+       	 {{ host }}, 
+       	 {{ jobcount[host] }} jobs
+       	</h3>
        <div>
        <small>Last updated: {{updated | timesince(format="date")}}</small><br>
        <table id="cloud-table-{{ loop.index0 }}">
