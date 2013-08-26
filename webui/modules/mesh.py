@@ -8,14 +8,16 @@ from pprint import pprint
 from ast import literal_eval
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 
+
+mesh_module = Blueprint('mesh_module', __name__)
+
 # ============================================================
 # ROUTE: /mesh/qstat
 # ============================================================
 
-mesh_module = Blueprint('mesh_module', __name__)
 @mesh_module.route('/mesh/qstat/')
 def mongo_qstat_new():
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    time_now = datetime.now()
     
     address_string = ""
     error = ""
@@ -23,16 +25,18 @@ def mongo_qstat_new():
     user = config.config["cloudmesh"]["hpc"]["username"]
 
     pbs = pbs_mongo()
-    hosts = ["india.futuregrid.org"]
+    hosts = ["india.futuregrid.org",
+             "sierra.futuregrid.org",
+             "hotel.futuregrid.org",
+             "alamo.futuregrid.org"]
     for host in hosts:
         pbs.activate(host,user)
         
-    time_now = datetime.now()
-
+    
     data = {}
     for host in hosts:    
         data[host] = pbs.get_qstat(host)
-        print "DDD", data[host].count()
+        print "DDD", host, data[host].count()
 
     attributes = {"pbs": 
                   [
