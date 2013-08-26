@@ -392,6 +392,41 @@ class openstack(ComputeBaseType):
         print params
         return self._post(posturl, params)
     
+    def delete_public_ip(self, idofip):
+        """
+        delete a public ip that is assigned but not currently being used
+        """
+        conf = self._get_conf("compute")
+        publicURL = conf['publicURL']
+        url = "%s/os-floating-ips/%s" % (publicURL, idofip)
+        headers = {'content-type': 'application/json','X-Auth-Token': '%s' % conf['token']}
+        r = requests.delete(url, headers=headers, verify=self.credential['OS_CACERT'])
+        ret = {"msg":"success"}
+        if r.text:
+            ret = r.json()
+        return ret
+    
+    def list_allocated_ips(self):
+        """
+        return list of ips allocated to current account
+        """
+        conf = self._get_conf("compute")
+        publicURL = conf['publicURL']
+        url = "%s/os-floating-ips" % publicURL
+        headers = {'content-type': 'application/json','X-Auth-Token': '%s' % conf['token']}
+        r = requests.get(url, headers=headers, verify=self.credential['OS_CACERT'])
+        return r.json()["floating_ips"]
+    
+    def release_unused_public_ips(self):
+        ips = self.list_allocated_ips()
+        ips_id_to_instance = {}
+        for ip in ips:
+            ips_id_to_instance[ip['id']] = ip['instance_id']
+        for id, instance in ips_id_to_instance.iteritems():
+            if instance is None:
+                self.delete_public_ip(id)
+        return True
+            
     def _get(self, msg, token=None, url=None, credential=None, type=None,urltype=None, json=True):
         if urltype is None:
             urltype = 'publicURL'
