@@ -14,6 +14,27 @@ pbs_module = Blueprint('pbs_module', __name__)
 # ROUTE: PROFILE
 #
 
+
+@pbs_module.route('/hpc')
+#login_required
+def display_hpc():
+    
+    hpc_menu = [
+        ["QStat Direct",
+            [
+                ["India", "/pbs/probe/india.futuregrid.org"],
+                ["Sierra", "/pbs/probe/sierra.futuregrid.org"],
+                ["Alamo", "/pbs/probe/alamo.futuregrid.org"],
+                ["Hotel", "/pbs/probe/hotel.futuregrid.org"],
+            ]
+        ]
+    ]
+    return render_template('hpc.html',
+                           hpc_menu=hpc_menu)
+                           
+
+
+
 @pbs_module.route('/pbs/<action>/<host>')
 #login_required
 def display_pbs_action(action,host):
