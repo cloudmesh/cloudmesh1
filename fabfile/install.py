@@ -33,12 +33,13 @@ def download():
 
 @task
 def install():
-    local("pip install -r requirements.txt")
-    local("pip setup.py install")
+    local("virtualenv --no-site-packages ~/.cloudmesh_v")
+    local("source ~/.cloudmesh_v/bin/activate && pip install -r requirements.txt && pip setup.py install")
 
 
 def install_mongodb():
     if is_ubuntu():
+
         local('sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10')
         local(
               'sudo sh -c "echo \'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen\' > /etc/apt/sources.list.d/10gen.list"')
