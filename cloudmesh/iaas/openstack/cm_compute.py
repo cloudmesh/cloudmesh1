@@ -302,6 +302,95 @@ class openstack(ComputeBaseType):
     def _get_compute_service(self, token=None):
         return self._get_service("compute") 
     
+    def _post(self, posturl, params=None):
+        #print self.config
+        conf = self._get_conf("compute")
+        headers = {'content-type': 'application/json','X-Auth-Token': '%s' % conf['token']}
+        #print headers
+        r = requests.post(posturl, headers=headers, data=json.dumps(params), verify=self.credential['OS_CACERT'])
+        ret = {"msg":"success"}
+        if r.text:
+            ret = r.json()
+        return ret
+        
+    def vm_create(self, name=None,
+                  flavor_name=None,
+                  image_id=None,
+                  security_groups=None,
+                  key_name=None,
+                  meta={}):
+        """
+        start a vm via rest api call
+        """
+        conf = self._get_conf("compute")
+        publicURL = conf['publicURL']
+        posturl = "%s/servers" % publicURL
+        #print posturl
+        #keycontent = base64.b64encode(key_name)
+        secgroups = []
+        if security_groups:
+            for secgroup in security_groups:
+                secgroups.append({"name": secgroup})
+        else:
+            secgroups=[{"name":"default"}]
+        params = {
+                    "server" : {
+                        "name" : "%s" % name,
+                        "imageRef" : "%s" % image_id,
+                        "flavorRef" : "%s" % flavor_name,
+                        "security_groups" : secgroups,
+                        "key_name": "%s" % key_name,
+                        "metadata" : meta,
+                        }
+                  }
+        print params
+        #token = self.auth_token
+        #pprint(token)
+        return self._post(posturl, params)
+    
+    def vm_delete(self, id):
+        """
+        delete a single vm and returns the id
+        """
+        conf = self._get_conf("compute")
+        publicURL = conf['publicURL']
+        url = "%s/servers/%s" % (publicURL, id)
+        
+        headers = {'content-type': 'application/json','X-Auth-Token': '%s' % conf['token']}
+        #print headers
+        # no return from http delete via rest api
+        r = requests.delete(url, headers=headers, verify=self.credential['OS_CACERT'])
+        ret = {"msg":"success"}
+        if r.text:
+            ret = r.json()
+        return ret
+    
+    def get_public_ip(self):
+        """
+        Obtaining a floating ip from the pool via the rest api call
+        """
+        conf = self._get_conf("compute")
+        publicURL = conf['publicURL']
+        posturl = "%s/os-floating-ips" % publicURL
+        ret = {"msg":"failed"}
+        r = self._post(posturl)
+        if r.has_key("floating_ip"):
+            ret = r["floating_ip"]["ip"]
+        return ret
+
+    def assign_public_ip(self, serverid, ip):
+        """
+        assigning public ip to an instance
+        """
+        conf = self._get_conf("compute")
+        publicURL = conf['publicURL']
+        posturl = "%s/servers/%s/action" % (publicURL, serverid)
+        params = {"addFloatingIp": {
+                                    "address": "%s" % ip
+                                    }
+                  }
+        print params
+        return self._post(posturl, params)
     
     def _get(self, msg, token=None, url=None, credential=None, type=None,urltype=None, json=True):
         if urltype is None:
@@ -323,7 +412,7 @@ class openstack(ComputeBaseType):
             return r
     # http
 
-    def _get_conf(self,type):
+    def _get_conf(self,type=None):
         """what example %/servers"""
         if type is None:
             type = "compute"

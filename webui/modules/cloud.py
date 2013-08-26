@@ -141,10 +141,10 @@ def delete_vm(cloud=None, server=None):
     print "-> delete", cloud, server
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
-    clouds.delete(cloud, server)
+    clouds.vm_delete(cloud, server)
     time.sleep(5)
-    #    clouds.refresh()
-    return mongo_images()
+    clouds.refresh(names=[cloud],types=["servers"])
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: DELETE GROUP
@@ -170,15 +170,13 @@ def delete_vms(cloud=None):
 
 @cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
 def assign_public_ip(cloud=None, server=None):
-    try:
-        if configuration['clouds'][cloud]['cm_automatic_ip'] is False:
-            clouds.assign_public_ip(cloud, server)
-            clouds.refresh(names=[cloud])
-            return mongo_images
-        else:
-            return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
-    except Exception, e:
-        return str(e) + "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
+    mycloud = configuration['clouds'][cloud]
+    if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
+        clouds.assign_public_ip(cloud, server)
+        clouds.refresh(names=[cloud],types=["servers"])
+        return redirect('/mesh/servers')
+    #else:
+    #    return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
 
 # ============================================================
 # ROUTE: START
@@ -202,19 +200,30 @@ def start_vm(cloud=None, server=None):
         key = configuration['keys']['default']
 
     # THIS IS A BUG
-    vm_flavor = clouds.default(cloud)['flavor']
-    vm_image = clouds.default(cloud)['image']
-
+    #vm_flavor = clouds.default(cloud)['flavor']
+    #vm_image = clouds.default(cloud)['image']
+    #
+    # before the info could be maintained in mongo, using the config file
+    vm_flavor = configuration["clouds"][cloud]["default"]["flavor"]
+    vm_image = configuration["clouds"][cloud]["default"]["image"]
+    vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
+    # in case of error, setting default flavor id
+    if vm_flavor_id < 0:
+        vm_flavor_id = 1
     print "STARTING", config.prefix, config.index
+    print "FLAVOR", vm_flavor, vm_flavor_id
+    metadata = {'cm_owner': config.prefix}
     result = clouds.vm_create(
-        cloud, config.prefix, config.index, vm_image, vm_flavor, key)
+        cloud, config.prefix, config.index, vm_flavor_id, vm_image, key, meta=metadata)
+    print "P"*20
+    print result
     # print "PPPPPPPPPPPP", result
-    clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
+    #clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     config.incr()
     config.write()
-
-    return mongo_images()
-
+    time.sleep(5)
+    clouds.refresh(names=[cloud],types=["servers"])
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: VM Login
