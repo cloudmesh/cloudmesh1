@@ -143,6 +143,7 @@ def delete_vm(cloud=None, server=None):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
     clouds.vm_delete(cloud, server)
     time.sleep(5)
+    clouds.release_unused_public_ips(cloud)
     clouds.refresh(names=[cloud],types=["servers"])
     return redirect('/mesh/servers')
 
