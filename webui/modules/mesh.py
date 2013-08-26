@@ -15,8 +15,30 @@ mesh_module = Blueprint('mesh_module', __name__)
 # ROUTE: /mesh/qstat
 # ============================================================
 
+@mesh_module.route('/mesh/refresh/qstat')
+@mesh_module.route('/mesh/refresh/qstat/<host>')
+def display_mongo_qstat_refresh(host=None):
+    
+    config = cm_config()
+    user = config.config["cloudmesh"]["hpc"]["username"]
+    pbs = pbs_mongo()
+    
+    if host is None:
+        hosts = ["india.futuregrid.org",
+                 "sierra.futuregrid.org",
+                 "hotel.futuregrid.org",
+                 "alamo.futuregrid.org"]
+    else:
+        hosts = [host]
+                
+    for host in hosts:
+        pbs.activate(host,user)
+        d = pbs.refresh_qstat(host)
+    return redirect('mesh/qstat')
+
+
 @mesh_module.route('/mesh/qstat/')
-def mongo_qstat_new():
+def display_mongo_qstat_new():
     time_now = datetime.now()
     
     address_string = ""
