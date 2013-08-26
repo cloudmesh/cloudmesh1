@@ -47,7 +47,7 @@ def start(link="",server="server",port="5000",start_browser='yes'):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link""" 
     kill()
     local("mkdir -p ./mongodb/")
-    local("mongod --fork --dbpath ./mongodb/")
+    local("mongod --fork --dbpath ./mongodb/ --logpath ./mongodb/mongod.log")
     local("python setup.py install")
     local("cd webui; python {0}.py &".format(server))
     if start_browser == 'yes':

@@ -78,9 +78,9 @@ $(function() {
              	<td>
              	 	{{ image_button ("none", "368_collapse", "/cm/login/" + server + "/" + s_id + "/") }}
 	  				{{ image_button ("right", "195_circle_info", "/cm/info/" + server + "/" + s_id + "/") }}
-	  				<a href="/cm/assignpubip/{{server}}/{{s_id}}/">  IP </a>
+	  				<a href="/cm/assignpubip/{{cloud}}/{{s_id}}/">  IP </a>
 	  				{{ image_button ("none", "041_charts", "/cm/stats/" + server + "/" + s_id + "/") }}
-	  				{{ image_button ("right", "016_bin", "/cm/delete/" + server + "/" + s_id + "/") }}
+	  				{{ image_button ("right", "016_bin", "/cm/delete/" + cloud + "/" + s_id + "/") }}
              	 </td>
                  <!-- for attribute in clouds[cloud][server] -->
                  {% for attribute in attributes %}	
