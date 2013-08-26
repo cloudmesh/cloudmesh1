@@ -61,7 +61,7 @@ TODO: distribute a standard ttf font and use sh so that the -f font is included 
 Ubuntu
 ------------
 
-Assuming a basic Ubuntu Desktop 13.04, install prerequsites:
+Assuming a basic Ubuntu Desktop 13.04, install prerequsites::
 
    $ sudo apt-get install \
       git \
@@ -103,6 +103,8 @@ be much faster.
 Install RabbitMQ
 ^^^^^^^^^^^^^^^^
 
+Install from standard packages::
+
     $ sudo apt-get install rabbitmq-server
 
 
@@ -119,7 +121,7 @@ TBD
 CentOS
 --------------------
 
-Assuming a basic CentOS 6.4 Server, install prerequsites:
+Assuming a basic CentOS 6.4 Server, install prerequsites::
 
     $ sudo yum install git openldap-devel bzip2-devel
 
@@ -129,11 +131,11 @@ Install Python
 
 Cloudmesh requires python 2.7, and CentOS comes with Python 2.6.
 However we cannot replace the system python as yum and other tools
-depend on it, so we will configure it to install in /opt/python
+depend on it, so we will configure it to install in /opt/python::
 
     $ wget http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz
 
-Recommended: verify the md5 checksum, b4f01a1d0ba0b46b05c73b2ac909b1df for the above.
+Recommended: verify the md5 checksum, b4f01a1d0ba0b46b05c73b2ac909b1df for the above.::
 
     $ tar xzf Python-2.7.5.tgz
     $ cd Python-2.7.5
@@ -146,12 +148,12 @@ PATH, then log out and back in.
 Install Python Virtualenv
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Verify that python2.7 is active:
+Verify that python2.7 is active::
 
     $ python --version
     Python 2.7.5
 
-If you see Python 2.6.6, fix your PATH to include /opt/python/bin before /usr/bin.
+If you see Python 2.6.6, fix your PATH to include /opt/python/bin before /usr/bin.::
 
     $ curl -O https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gz
     $ tar xfz virtualenv-1.10.1.tar.gz
@@ -161,7 +163,7 @@ If you see Python 2.6.6, fix your PATH to include /opt/python/bin before /usr/bi
 
 Install Mongo
 ^^^^^^^^^^^^^^^
-Create /etc/yum.repos.d/10gen containing:
+Create /etc/yum.repos.d/10gen containing::
 
     [10gen]
     name=10gen Repository
@@ -169,13 +171,15 @@ Create /etc/yum.repos.d/10gen containing:
     gpgcheck=0
     enabled=1
 
-Then:
+Then::
 
     $ sudo yum install mongo-10gen mongo-10gen-server
 
 
 Install RabbitMQ
 ^^^^^^^^^^^^^^^^
+
+Intstall from standard packages::
 
     $ sudo yum install rabbitmq-server
     $ sudo service rabbitmq-server start
@@ -195,13 +199,13 @@ TBD
 Installing the source code
 =============================
 
-Create a virtualenv:
+Create a virtualenv::
 
     $ virtualenv --no-site-packages cloudmesh_v
 
 Note: the name of the virtualenv is your choice, it does not need to be called "cloudmesh_v."
 
-Activate the vitrualenv:
+Activate the vitrualenv::
 
     $ . cloudmesh_v/bin/activate
 
@@ -211,7 +215,7 @@ From the shell checkout the code from the repository::
     git@github.com:cloudmesh/cloudmesh.git
     cd cloudmesh
 
-Be sure you have activated your virtualenv, then:
+Be sure you have activated your virtualenv, then::
 
     pip install -r requirements.txt
 
