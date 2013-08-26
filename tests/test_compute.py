@@ -39,7 +39,7 @@ class Test:
 
     def setup(self):
         self.configuration = cm_config()
-        self.name = self.configuration.active()[1]
+        self.name = self.configuration.active()[0]
         print "ACTIVE CLOUD", self.name
         self.cloud = openstack(self.name)
         self.cloud.get_token()
@@ -126,11 +126,35 @@ class Test:
         HEADING()
         configuration = cm_config()
         image = configuration.default(self.name)['image']
+        keys = configuration.userkeys()
+        key_name = keys["default"]
+        key_content = keys["keylist"][key_name]
+        #print key_name
+        #print key_content
         print "STARTING IMAGE", image
-        result = self.cloud.vm_create("gregor-test-001", "m1.tiny", image)
-        print result
+        meta = {"cmtag":"testing tag from creation via rest api"}
+        result = self.cloud.vm_create("fw-test-by-post-003", "2", image, key_name="grizzlykey",meta=meta)
+        pp.pprint(result)
         assert len(result.keys()) > 0
 
+    def test_04_get_public_ip(self):
+        HEADING()
+        print "Obtaining public ip......"
+        ip = self.cloud.get_public_ip()
+        print "this is the ip returned:--->%s<---" % ip
+    
+    def test04_assign_public_ip(self):
+        HEADING()
+        print "Associate a public ip to an running instance......"
+        #serverid = "cc9bd86b-babf-4760-a5cd-c1f28df7506b"
+        #ip = "fakeip" # {u'itemNotFound': {u'message': u'floating ip not found', u'code': 404}}
+        #ip = "198.202.120.175"
+        serverid = "b088e764-681c-4448-b487-9028b23a729e"
+        print "In process of obtaining a new ip..."
+        ip = self.cloud.get_public_ip()
+        print "Got a new ip as: %s, now associating the ip..." % ip
+        print self.cloud.assign_public_ip(serverid,ip)
+        
     def test_05_print_vms(self):
         HEADING()
         self.cloud.refresh('servers')
@@ -173,8 +197,10 @@ class Test:
         print table
 
         assert table is not None
-    """
+
     def test_07_start_delete_vm(self):
+        print "no test was being done"
+        '''
         name ="%s-%04d" % (self.cloud.credential["OS_USERNAME"], 1)
         out = self.cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
 
@@ -184,10 +210,14 @@ class Test:
         key = out.keys()[0]
         id = out[key]["id"]
         print id
-
-        vm = self.cloud.vm_delete(id)
-        print vm
-    """
+        '''
+        #id = "d9e73d16-a85e-47bf-8ab4-19d7955622db"
+        #id = "2a00332d-6a4a-4f7e-ad46-751438cc4d5e"
+        #id = "af46b3cd-99d9-4609-8c27-c481b0227e15"
+        #id="fakeid"
+        #id="b1279fa1-390a-41f8-b5d2-ad9b26cfb48a"
+        #ret=self.cloud.vm_delete(id)
+        #print "--->%s<---" % ret
 
     def test_08_delete_vms_of_user(self):
         HEADING()
