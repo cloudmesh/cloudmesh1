@@ -49,7 +49,7 @@ def display_pbs_action(action,host):
                            table_data=data)
 
 
-
+#deprected
 @pbs_module.route('/pbs/probe/<host>')
 #login_required
 def display_pbs_qstat(host):

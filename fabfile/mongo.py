@@ -19,6 +19,9 @@ def clean():
     local("make clean")
     local('mongo cloudmesh --eval "db.dropDatabase();"')
     local('mongo inventory --eval "db.dropDatabase();"')
+    local('mongo clouds --eval "db.dropDatabase();"')
+    local('mongo hpc-qstat --eval "db.dropDatabase();"')
+    local('mongo hpc-pbsnodes --eval "db.dropDatabase();"')
     local('mongo test --eval "db.dropDatabase();"')
 
 @task

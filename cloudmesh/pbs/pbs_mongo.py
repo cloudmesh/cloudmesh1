@@ -5,6 +5,7 @@ from bson.objectid import ObjectId
 from cloudmesh.util.util import path_expand
 import yaml
 from cloudmesh.config.cm_config import get_mongo_db
+from datetime import datetime
 
 class pbs_mongo:
 
@@ -45,19 +46,34 @@ class pbs_mongo:
         obtains a refreshed qstat data set from the specified host. The result is written into the mongo db.
         :param host: The host on which to execute qstat
         '''
+        time_now = datetime.now()
         data =  dict(self.hosts[host].qstat(refresh=True))
-        print data
+        print "DDDD"
+        pprint (data)
+        self.db_qstat.remove({"cm_host": host, "cm_kind" : "qstat"}, safe=True)
+        print "EEEE"
+        pprint (data)
         for name in data:
+            
+            
             print "mongo: add {0}, {1}, {2}".format(host, 
                                                     data[name]['Job_Id'], 
                                                     data[name]['Job_Owner'], 
                                                     data[name]['Job_Name'])  
 
             id = "{0}-{1}-qstat".format(host,name).replace(".","-")
-            data[name]["pbs_host"] = host
-            data[name]["pbs_kind"] = "qstat"
+            data[name]["cm_host"] = host
+            data[name]["cm_kind"] = "qstat"
             data[name]["cm_id"] = id
-            self.db_qstat.remove({"cm_id": id}, safe=True)
+            data[name]["cm_refresh"] = time_now
+
+            print "mongo: add {0}, {1}, {2}".format(host, 
+                                                    data[name]['Job_Id'], 
+                                                    data[name]['Job_Owner'], 
+                                                    data[name]['Job_Name'])  
+
+            print "IIIIII"
+            pprint(data)
             self.db_qstat.insert(data[name])
     
     def get(self, host, type):
@@ -77,9 +93,9 @@ class pbs_mongo:
         :param host:
         '''
         if host is None:
-            data = self.db_qstat.find({"pbs_kind": "qstat"})
+            data = self.db_qstat.find({"cm_kind": "qstat"})
         else:
-            data = self.db_qstat.find({"pbs_host": host, "pbs_kind": "qstat"})
+            data = self.db_qstat.find({"cm_host": host, "cm_kind": "qstat"})
         print "COUNT", data.count()
         return data
         
@@ -88,15 +104,17 @@ class pbs_mongo:
         retrieves the qstat data from the host and puts it into mongodb
         :param host:
         '''
+        time_now = datetime.now()
         data = self.hosts[host].pbsnodes(refresh=True)
         for name in data:
             print "mongo: add {0}, {1}".format(host, 
                                                name) 
             
             id = "{0}-{1}".format(host,name).replace(".","-")
-            data[name]["pbs_host"] = host
+            data[name]["cm_host"] = host
             data[name]["cm_id"] = id
-            data[name]["pbs_kind"] = "pbsnodes"    
+            data[name]["cm_kind"] = "pbsnodes"    
+            data[name]["cm_refresh"] = time_now
             self.db_pbsnodes.remove({"cm_id": id}, safe=True)
             self.db_pbsnodes.insert(data[name])
 
@@ -106,9 +124,9 @@ class pbs_mongo:
         :param host:
         '''
         if host is None:
-            data = self.db_pbsnodes.find({"pbs_kind": "pbsnodes"})
+            data = self.db_pbsnodes.find({"cm_kind": "pbsnodes"})
         else:
-            data = self.db_pbsnodes.find({"pbs_host": host, "pbs_kind": "pbsnodes"})
+            data = self.db_pbsnodes.find({"cm_host": host, "cm_kind": "pbsnodes"})
         return data
     
     def delete_qstat(self,host):
