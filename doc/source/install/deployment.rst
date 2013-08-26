@@ -5,7 +5,12 @@ Quick deployment
 
     git clone git@github.com:cloudmesh/cloudmesh.git
     cd cloudmesh
-    fab install.deploy()
+    cd install
+    fab deploy
+    
+    sudo  mkdir -p /data/db/
+    sudo  chgrp srrajago /data/db/
+    sudo  chown srrajago /data/db/
 
 YAML files
 ---------------
@@ -26,6 +31,14 @@ Mongo
 
 Quick Configuration
 ------------------------
+
+simple install without users
+::
+
+   fab mongo.simple
+
+
+install with users
 
 ::
 
