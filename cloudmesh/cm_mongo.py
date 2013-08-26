@@ -44,7 +44,7 @@ class cm_mongo:
     config = None
     
     
-    def __init__(self, collection="clouds"):
+    def __init__(self, collection="cloudmesh"):
         """initializes the cloudmesh mongo db. The name of the collection os passed."""
         
         
@@ -226,14 +226,38 @@ class cm_mongo:
         returns all the flavors from the various clouds
         '''
         return self._get_kind('flavors', clouds)
+    
+    #need to make sure other clouds have the same flavor dict as in openstack
+    #otherwide will need to put this into the openstack iaas class
+    def flavor_name_to_id(self, cloud, flavor_name):
+        ret = -1
+        flavor_of_the_cloud = self.flavors([cloud])[cloud]
+        for id,details in flavor_of_the_cloud.iteritems():
+            if details["name"] == flavor_name:
+                ret = id
+                break
+        return ret
         
     def images(self, clouds=None):
         '''
         returns all the images from various clouds
         '''
         return self._get_kind('images', clouds)
-        
 
+    def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta):
+        cloudmanager = self.clouds[cloud]["manager"]
+        name = "%s_%s" % (prefix, index)
+        return cloudmanager.vm_create(name=name, flavor_name=vm_flavor, image_id=vm_image, key_name=key, meta=meta)
+    
+    def assign_public_ip(self, cloud, server):
+        cloudmanager = self.clouds[cloud]["manager"]
+        ip = cloudmanager.get_public_ip()
+        return cloudmanager.assign_public_ip(server, ip)
+    
+    def vm_delete(self, cloud, server):
+        cloudmanager = self.clouds[cloud]["manager"]
+        return cloudmanager.vm_delete(server)
+    
 def main():
     c = cm_mongo()
     c.activate()
