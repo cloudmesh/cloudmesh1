@@ -24,7 +24,7 @@ def deploy():
         print "OS distribution not supported; please see documatation for manual installation instructions."
         sys.exit()
 
-    install()
+    #install()
 
 @task
 def download():
@@ -33,8 +33,8 @@ def download():
 
 @task
 def install():
-    local("virtualenv --no-site-packages ~/.cloudmesh_v")
-    local("source ~/.cloudmesh_v/bin/activate && pip install -r requirements.txt && pip setup.py install")
+    local("cd ..; pip install -r requirements.txt")
+    local("cd ..; pip setup.py install")
 
 
 def install_mongodb():
@@ -44,7 +44,7 @@ def install_mongodb():
         local(
               'sudo sh -c "echo \'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen\' > /etc/apt/sources.list.d/10gen.list"')
         local('sudo apt-get update')
-        local('sudo apt-get install mongodb-10gen')
+        #local('sudo apt-get install mongodb-10gen')
     elif is_centos():
         local("sh -c \"echo '[10gen]\nname=10gen Repository\nbaseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64\ngpgcheck=0\nenabled=1' >/etc/yum.repos.d/10gen\"")
         install_packages(["mongo-10gen", "mongo-10gen-server"])
@@ -87,7 +87,7 @@ def ubuntu():
     install_packages(["rabbitmq-server"])
 
 def centos():
-    install_packages ["git", "openldap-devel", "bzip2-devel", "rabbitmq-server"])
+    install_packages (["git", "openldap-devel", "bzip2-devel", "rabbitmq-server"])
     local('sudo sh -c "chkconfig rabbitmq-server on && service rabbitmq-server start"')
     if not os.path.exists("/opt/python"):
         local('sudo mkdir -p /opt/python')
