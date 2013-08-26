@@ -41,17 +41,11 @@ super_sidebar_pages = [
     ["HPC",
         [
             ["Queues", "/mesh/qstat"],
-            ["Users", "/users/ldap"]            
+            ["Users", "/users/ldap"],
+            ["Admin", "/hpc"]            
         ]
     ],
-    ["HPC Queues Direct",
-        [
-            ["India", "/pbs/probe/india.futuregrid.org"],
-            ["Sierra", "/pbs/probe/sierra.futuregrid.org"],
-            ["Alamo", "/pbs/probe/alamo.futuregrid.org"],
-            ["Hotel", "/pbs/probe/hotel.futuregrid.org"],
-        ]
-    ]
+    
 ]
 
 
