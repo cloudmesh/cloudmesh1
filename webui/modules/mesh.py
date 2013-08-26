@@ -63,10 +63,10 @@ def display_mongo_qstat_new():
         print "DDD", host, data[host].count()
         jobcount[host] = data[host].count()
         if jobcount[host] > 0:
-            #timer[host] = data[host][0]["cm_refresh"]
+            timer[host] = data[host][0]["cm_refresh"]
             print "TTTTT"
             pprint(data[host][0])
-            timer[host] = datetime.now() 
+            #timer[host] = datetime.now() 
         else:
             timer[host] = datetime.now()
         print "TIMER", timer
