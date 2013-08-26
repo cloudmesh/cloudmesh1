@@ -34,10 +34,11 @@ def mongo_qstat_new():
         
     
     data = {}
+    jobcount = {}
     for host in hosts:    
         data[host] = pbs.get_qstat(host)
         print "DDD", host, data[host].count()
-
+        jobcount[host] = data[host].count()
     attributes = {"pbs": 
                   [
                         [ "Queue" , "queue"],
@@ -63,6 +64,7 @@ def mongo_qstat_new():
         
     return render_template('mesh_qstat.html',
                            hosts=hosts,
+                           jobcount=jobcount,
                            address_string=address_string,
                            attributes=attributes,
                            updated=time_now,
