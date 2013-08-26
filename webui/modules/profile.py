@@ -18,7 +18,7 @@ def profile():
     # bug the global var of the ditc should be used
 
     config = cm_config()
-    user = config.data["cloudmesh"]["hpc"]["username"]
+    user = config.get()["hpc"]["username"]
     configuration = config.get()
     projects = cm_projects()
     person = configuration['profile']

@@ -1,7 +1,9 @@
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.util.util import path_expand
+from cloudmesh.config.cm_config import get_mongo_db
 
-from pymongo import MongoClient
+import yaml
 class Roles:
     
     
@@ -10,14 +12,17 @@ class Roles:
         if not kwargs.has_key('roles'):#if kwargs['host'] is None:
             self.roles = cm_config_server().config["roles"]
     
+     
+    mongo_host = 'localhost'
+    mongo_port = 27017
+    mongo_db_name = "cloudmesh"
+    mongo_collection = "cloudmesh"
+    
     
     def __init__(self):
-        collection = "user"
-        db_name = cm_config_server().config["mongo"]["db"]
-        
-        client = MongoClient()    
-        db = client[db_name]          
-        self.db_clouds = db[collection]    
+
+        collection = "user"  
+        self.db_clouds = get_mongo_db(collection)        
         
         self.get_config()
         

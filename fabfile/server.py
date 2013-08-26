@@ -5,6 +5,7 @@ import os
 import webbrowser
 import platform
 import sys
+from cloudmesh.util.util import path_expand
 
 __all__ = ['start', 'kill', 'view', 'clean', 'cleanmongo']
 
@@ -42,11 +43,11 @@ def kill(server="server"):
                 local("kill -9 {0}".format(pid))
 
 @task
-def start(link="/",server="server",port="5000",start_browser='yes'):
+def start(link="",server="server",port="5000",start_browser='yes'):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link""" 
     kill()
     local("mkdir -p ./mongodb/")
-    local("mongod --fork --syslog --dbpath ./mongodb/")
+    local("mongod --fork --dbpath ./mongodb/ --logpath ./mongodb/mongod.log")
     local("python setup.py install")
     local("cd webui; python {0}.py &".format(server))
     if start_browser == 'yes':

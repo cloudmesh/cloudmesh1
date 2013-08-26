@@ -2,7 +2,7 @@
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
-<h2> Users </h2>
+<h2> {{ image_button ("none", "365_restart", "/cm/refresh/users") }} Users </h2>
 {% endblock contentbox %}
 
 {% block content %}
@@ -29,9 +29,13 @@ $(function() {
 
 </script>
 
+ 
+{%     for cloud in hosts %}
+        {{ cloud }}
+        
+{% endfor %}
+ 
  <!--
-    for cloud in clouds:
-        print cloud
         for server in clouds[cloud]:
             print server
             for attribute in clouds[cloud][server]:
@@ -44,8 +48,9 @@ $(function() {
     {% set cloud_loop = loop %}
     {% set version = clouds[cloud]['cm_type_version'] %}
     {% set attributes = cloud_attributes['grizzly']%}
+    
   <div style="margin-bottom:1em;">
-  <h3>{{ cloud }}</h3>
+  <h3> {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/users") }} {{ cloud }}</h3>
   <div>
     <table id="cloud-table-{{ loop.index0 }}">
       <thead>

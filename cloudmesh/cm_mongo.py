@@ -9,9 +9,10 @@ from util.stopwatch import StopWatch
 from iaas.openstack.cm_compute import openstack
 from iaas.eucalyptus.eucalyptus import eucalyptus
 from config.cm_config import cm_config_server
-
-
+from util.util import path_expand
+import yaml
 from util.logger import LOGGER
+from config.cm_config import get_mongo_db
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -26,21 +27,29 @@ except:
     log.warning("AZURE NOT ENABLED")
 
 
+
+
 class cm_mongo:
     
     clouds = {}
     client = None
     db_clouds = None
     
+    
+    mongo_host = 'localhost'
+    mongo_port = 27017
+    mongo_db_name = "cloudmesh"
+    mongo_collection = "cloudmesh"
+    
     config = None
     
-    def __init__(self, collection="clouds"):
+    
+    def __init__(self, collection="cloudmesh"):
         """initializes the cloudmesh mongo db. The name of the collection os passed."""
-        db_name = cm_config_server().config["mongo"]["db"]
         
-        self.client = MongoClient()    
-        self.db = self.client[db_name]          
-        self.db_clouds = self.db[collection]    
+        
+        self.db_clouds = get_mongo_db(collection)
+
         self.config = cm_config()
         
 
@@ -217,14 +226,38 @@ class cm_mongo:
         returns all the flavors from the various clouds
         '''
         return self._get_kind('flavors', clouds)
+    
+    #need to make sure other clouds have the same flavor dict as in openstack
+    #otherwide will need to put this into the openstack iaas class
+    def flavor_name_to_id(self, cloud, flavor_name):
+        ret = -1
+        flavor_of_the_cloud = self.flavors([cloud])[cloud]
+        for id,details in flavor_of_the_cloud.iteritems():
+            if details["name"] == flavor_name:
+                ret = id
+                break
+        return ret
         
     def images(self, clouds=None):
         '''
         returns all the images from various clouds
         '''
         return self._get_kind('images', clouds)
-        
 
+    def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta):
+        cloudmanager = self.clouds[cloud]["manager"]
+        name = "%s_%s" % (prefix, index)
+        return cloudmanager.vm_create(name=name, flavor_name=vm_flavor, image_id=vm_image, key_name=key, meta=meta)
+    
+    def assign_public_ip(self, cloud, server):
+        cloudmanager = self.clouds[cloud]["manager"]
+        ip = cloudmanager.get_public_ip()
+        return cloudmanager.assign_public_ip(server, ip)
+    
+    def vm_delete(self, cloud, server):
+        cloudmanager = self.clouds[cloud]["manager"]
+        return cloudmanager.vm_delete(server)
+    
 def main():
     c = cm_mongo()
     c.activate()

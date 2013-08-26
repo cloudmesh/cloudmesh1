@@ -6,8 +6,106 @@ from datetime import datetime
 from cloudmesh.util.util import address_string
 from pprint import pprint
 from ast import literal_eval
+from cloudmesh.pbs.pbs_mongo import pbs_mongo
+
 
 mesh_module = Blueprint('mesh_module', __name__)
+
+# ============================================================
+# ROUTE: /mesh/qstat
+# ============================================================
+
+@mesh_module.route('/mesh/refresh/qstat')
+@mesh_module.route('/mesh/refresh/qstat/<host>')
+def display_mongo_qstat_refresh(host=None):
+    
+    config = cm_config()
+    user = config.config["cloudmesh"]["hpc"]["username"]
+    pbs = pbs_mongo()
+    
+    if host is None:
+        hosts = ["india.futuregrid.org",
+                 "sierra.futuregrid.org",
+                 "hotel.futuregrid.org",
+                 "alamo.futuregrid.org"]
+    else:
+        hosts = [host]
+                
+    for host in hosts:
+        pbs.activate(host,user)
+        d = pbs.refresh_qstat(host)
+    return redirect('mesh/qstat')
+
+
+@mesh_module.route('/mesh/qstat/')
+def display_mongo_qstat_new():
+    time_now = datetime.now()
+    
+    address_string = ""
+    error = ""
+    config = cm_config()
+    user = config.config["cloudmesh"]["hpc"]["username"]
+
+    pbs = pbs_mongo()
+    hosts = ["india.futuregrid.org",
+             "sierra.futuregrid.org",
+             "hotel.futuregrid.org",
+             "alamo.futuregrid.org"]
+    for host in hosts:
+        pbs.activate(host,user)
+        
+    
+    data = {}
+    jobcount = {}
+    timer = {}
+    for host in hosts:    
+        data[host] = pbs.get_qstat(host)
+        print "DDD", host, data[host].count()
+        jobcount[host] = data[host].count()
+        if jobcount[host] > 0:
+            timer[host] = data[host][0]["cm_refresh"]
+            print "TTTTT"
+            pprint(data[host][0])
+            #timer[host] = datetime.now() 
+        else:
+            timer[host] = datetime.now()
+        print "TIMER", timer
+    attributes = {"pbs": 
+                  [
+                        [ "Queue" , "queue"],
+                        [ "Server" , "server"],
+                        [ "State" , "job_state"],
+                        [ "Name" , "Job_Name"],
+                        [ "Owner" , "Job_Owner"],
+                        [ "NCpus" , "Resource_List", "ncpus"],
+                        [ "Walltime" , "Resource_List", "walltime"],
+                        [ "Nodes" , "Resource_List", "nodes"],
+                        [ "Nodect" , "Resource_List", "nodect"],
+                        [ "Walltime" , "Resource_List", "walltime"],
+                        #[ "Used Cpu Time", "resources_used", 'cput'],
+                        #[ "Used Mem ", "resources_used", 'mem'],
+                        #[ "Used VMem ", "resources_used", 'vmem'],
+                        #[ "Used Cpu Walltime", "resources_used", 'walltime']
+                  ],
+                  }
+    """
+    for host in hosts:
+        pprint (host)
+        for server in data[host]:
+            print "S", server
+            for attribute in server:
+                print attribute, server[attribute]
+    """
+        
+    return render_template('mesh_qstat.html',
+                           hosts=hosts,
+                           jobcount=jobcount,
+                           timer=timer,
+                           address_string=address_string,
+                           attributes=attributes,
+                           updated=time_now,
+                           qstat=data,
+                           config=config)
 
 # ============================================================
 # ROUTE: /mesh/images

@@ -1,7 +1,8 @@
 from config.cm_config import cm_config_server, cm_config
+from config.cm_config import  get_mongo_db
+
 
 import json
-from pymongo import MongoClient
 from pprint import pprint
 
 class cm_profile (object):
@@ -13,16 +14,16 @@ class cm_profile (object):
     
     # initialization
     
+    config = None
+    
+    
     def __init__(self, collection="profile"):
         
         self.data = {}
         self.server = cm_config_server()
         self.config = cm_config()
-        
-        db_name = self.server.config["mongo"]["db"]
-        self.client = MongoClient()    
-        self.db = self.client[db_name]          
-        self.db_collection = self.db[collection] 
+
+        self.db_clouds = get_mongo_db(collection)        
         self._get_usernames_from_config()   
 
 
