@@ -2,23 +2,27 @@
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
-<h2> {{ image_button ("none", "365_restart", "/cm/refresh/images") }} QStat </h2>
+<h2> {{ image_button ("none", "365_restart", "/mesh/refresh/qstat") }} QStat </h2>
 {% endblock %}
 
 {% block content %}
 <script type="text/javascript">
 
+/* 
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#images-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: false });
+        $("#qstat-accordion > div").accordion({ header: "h3", 
+        										collapsible: true, 
+        										heightStyle: "content", 
+        										active: false });
     })
 })(jQuery);
 
 
 $(function() {
   {% for cloudnum in range(hosts|count) %}
-    $("#cloud-table-{{ cloudnum }}").dataTable({
+    $("#display-table-{{ cloudnum }}").dataTable({
     	"sPaginationType": "full_numbers",
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
@@ -29,17 +33,18 @@ $(function() {
 </script>
 
 
-<div id="images-accordion">
+<div id="qstat-accordion">
     {% for host in hosts %}
+        {% set host_loop = loop %}
         {% set version = 'pbs' %}
         <div style="margin-bottom:1em;">
-       <h3>{{ image_button ("none", "365_restart", "/cm/refresh/" + host + "/qstat") }} 
+       <h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + host) }} 
        	 {{ host }}, 
        	 {{ jobcount[host] }} jobs
        	</h3>
        <div>
        <small>Last updated: {{updated | timesince(format="date")}}</small><br>
-       <table id="cloud-table-{{ loop.index0 }}">
+       <table id="display-table-{{ loop.index0 }}">
        	<thead>
         <tr>
         {% for attribute in attributes[version] %}
