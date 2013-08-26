@@ -17,14 +17,7 @@ class pbs_mongo:
     
     config = None
     
-    def __init__(self, collection="clouds"):
-        """initializes the cloudmesh mongo db. The name of the collection os passed."""
-        
-  
-        self.config = cm_config()
-        
-        
-        
+
     def __init__(self, collections=["qstat","pbsnodes"]):
         
         self.db_qstat = get_mongo_db(collections[0])
@@ -52,25 +45,42 @@ class pbs_mongo:
         obtains a refreshed qstat data set from the specified host. The result is written into the mongo db.
         :param host: The host on which to execute qstat
         '''
-        data =  self.hosts[host].qstat(refresh=True)
+        data =  dict(self.hosts[host].qstat(refresh=True))
+        print data
         for name in data:
             print "mongo: add {0}, {1}, {2}".format(host, 
                                                     data[name]['Job_Id'], 
                                                     data[name]['Job_Owner'], 
                                                     data[name]['Job_Name'])  
 
-            id = "{0}-{1}".format(host,name).replace(".","-")
+            id = "{0}-{1}-qstat".format(host,name).replace(".","-")
             data[name]["pbs_host"] = host
+            data[name]["pbs_kind"] = "qstat"
             data[name]["cm_id"] = id
             self.db_qstat.remove({"cm_id": id}, safe=True)
             self.db_qstat.insert(data[name])
     
-    def get_qstat(self, host):
+    def get(self, host, type):
+        """refreshes the specified data from the given host"""
+        data = None
+        if type.startswith("q"): 
+           data = self.get_qstat(host)
+        elif type.startswith("n"):
+            data = self.get_pbsnodes(host)
+        else:
+            print "type not suported"
+        return data
+        
+    def get_qstat(self, host=None):
         '''
         returns the qstat data from the mongo db. The data can be put into the mongo db via refresh
         :param host:
         '''
-        data = self.db_qstat.find({"pbs_host": host})
+        if host is None:
+            data = self.db_qstat.find({"pbs_kind": "qstat"})
+        else:
+            data = self.db_qstat.find({"pbs_host": host, "pbs_kind": "qstat"})
+        print "COUNT", data.count()
         return data
         
     def refresh_pbsnodes(self, host):
@@ -86,15 +96,19 @@ class pbs_mongo:
             id = "{0}-{1}".format(host,name).replace(".","-")
             data[name]["pbs_host"] = host
             data[name]["cm_id"] = id
+            data[name]["pbs_kind"] = "pbsnodes"    
             self.db_pbsnodes.remove({"cm_id": id}, safe=True)
             self.db_pbsnodes.insert(data[name])
 
-    def get_pbsnodes(self, host):
+    def get_pbsnodes(self, host=None):
         '''
         retrieves the pbsnodes data for the ost from mongodb. the data can be put with a refresh method into mongo db.
         :param host:
         '''
-        data = self.db_pbsnodes.find({"pbs_host": host})
+        if host is None:
+            data = self.db_pbsnodes.find({"pbs_kind": "pbsnodes"})
+        else:
+            data = self.db_pbsnodes.find({"pbs_host": host, "pbs_kind": "pbsnodes"})
         return data
     
     def delete_qstat(self,host):
