@@ -43,15 +43,17 @@ class Test:
     def test_qstat(self):
         HEADING()
         self.pbs = PBS(self.user, self.host)
-        self.pbs.qstat()
-        pprint (self.pbs.pbs_qstat)
+        results = self.pbs.qstat()
+        for name in results:
+            element = results[name]
+            pprint (element)
 
     def test_qstat_alamo(self):
         HEADING()
         self.host = "alamo.futuregrid.org"
         self.pbs = PBS(self.user, self.host)
         self.pbs.qstat()
-        pprint (self.pbs.pbs_qstat)
+        pprint (self.pbs.qstat)
 
     def test_info(self):
         HEADING()

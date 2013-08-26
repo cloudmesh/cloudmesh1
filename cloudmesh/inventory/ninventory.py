@@ -10,6 +10,7 @@ from cloudmesh.util.util import path_expand as cm_path_expand
 from cloudmesh.config.cm_config import cm_config_server
 import yaml
 import json
+from cloudmesh.config.cm_config import get_mongo_db
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
@@ -22,20 +23,19 @@ class ninventory:
     server_config = None
     
     def __init__(self):         
+
+        
+        # read the host file definition from cloudmesh_cludter.yaml
         self.server_config = cm_config_server().config
         location = cm_path_expand("~/.futuregrid/cloudmesh_cluster.yaml")
         result = open(location, 'r').read()
         template = Template(result)
         self.config = yaml.load(template.render(self.server_config))
-        self._connect_to_mongo()
-        self.generate()
-
-    def _connect_to_mongo(self):
-        db_name = "new-inventory"
+        
         collection = "inventory"
-        self.client = MongoClient()    
-        self.db = self.client[db_name]          
-        self.db_inventory = self.db[collection]    
+        self.db_inventory = get_mongo_db(collection)        
+
+        self.generate()
 
 
     def insert(self,element):

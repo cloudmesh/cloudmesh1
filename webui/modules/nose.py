@@ -57,18 +57,3 @@ def display_nosetest(test):
                            resultname=filename,
                            name=test)
 
-
-@nose_module.route('/pbsnodes/<host>')
-def display_pbs_nodes(host):
-
-    config = cm_config()
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    user = config.data["cloudmesh"]["hpc"]["username"]
-
-    pbs = PBS(user, host)
-    data = pbs.pbsnodes()
-
-    return render_template('pbsnodes.html',
-                           updated=time_now,
-                           host=host,
-                           data=data)

@@ -13,7 +13,6 @@ super_sidebar_pages = [
             ["Home", "/"],
             ["Profile", "/profile/"],
             ["Keys", "/keys/"],
-            ["HPC Users", "/users/ldap"]
         ],
     ],
     ["Inventory",
@@ -32,18 +31,25 @@ super_sidebar_pages = [
     ],
     ["Clouds",
         [
+            ["Refresh", "/cm/refresh"],
             ["VMs", "/mesh/servers"],
             ["Images", "/mesh/images"],
             ["Flavors", "/mesh/flavors/"],
             ["Users", "/mesh/users/"],
         ],
     ],
-    ["HPC Queues",
+    ["HPC",
         [
-            ["India", "/pbs/india.futuregrid.org"],
-            ["Sierra", "/pbs/sierra.futuregrid.org"],
-            ["Alamo", "/pbs/alamo.futuregrid.org"],
-            ["Hotel", "/pbs/hotel.futuregrid.org"],
+            ["Queues", "/mesh/qstat"],
+            ["Users", "/users/ldap"]            
+        ]
+    ],
+    ["HPC Queues Direct",
+        [
+            ["India", "/pbs/probe/india.futuregrid.org"],
+            ["Sierra", "/pbs/probe/sierra.futuregrid.org"],
+            ["Alamo", "/pbs/probe/alamo.futuregrid.org"],
+            ["Hotel", "/pbs/probe/hotel.futuregrid.org"],
         ]
     ]
 ]
@@ -60,6 +66,7 @@ app_topbar = [
 
 app_externalbar = [
     ["FutureGrid", "https://portal.futuregrid.org"],
+    ["-- Manual", "http://manual.futuregrid.org"],
     ["Cloudmesh", "https://github.com/cloudmesh/cloudmesh"],
     ["Blog", "http://cloudmesh.blogspot.com"],
 ]

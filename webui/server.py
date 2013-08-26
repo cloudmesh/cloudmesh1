@@ -6,6 +6,7 @@ from cloudmesh.util.webutil import setup_imagedraw
 from cloudmesh.user.cm_userLDAP import cm_userLDAP 
 from datetime import datetime
 
+from cloudmesh.util.util import path_expand
 
 from flask import Flask, render_template, flash, send_from_directory, redirect, g
 #from flask.ext.autoindex import AutoIndex
@@ -32,7 +33,12 @@ import types
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
 
-with_login = False
+
+try:
+     with_login = cm_config_server().config["ldap"]["with_ldap"]
+except:
+    with_login = False
+    print "WARGING: not using user login"
 
 # ============================================================
 # DYNAMIC MODULE MANAGEMENT
@@ -52,7 +58,7 @@ all_modules = ['pbs',
                'mesh',
                'users']
 
-exclude_modules = ['workflow', 'cloud']
+exclude_modules = ['workflow']
 
 modules = [m for m in all_modules if m not in exclude_modules]
     

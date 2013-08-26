@@ -1,0 +1,68 @@
+{% extends "layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+<h2>  {{ image_button ("none", "365_restart", "/pbs/refresh/" + host + "/qstat") }} Qstat for {{ host }}</h3>
+
+{% endblock %}
+
+{% block content %}
+
+
+<script type="text/javascript">
+
+$(function() {
+     $("#host-table-0").dataTable({
+       	"sPaginationType": "full_numbers",
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ],
+     	
+    });
+});
+
+</script>
+
+
+{% for job in table_data %}
+ <!--{{job}}<br>-->
+ <p>{{ job.Job_Name }}: {{job.qtime }}</p>
+{% endfor %}
+
+
+<div>
+	Updated: {{ updated | timesince(format="date") }} 
+	<table id="host-table-0">
+	<thead>
+		  <tr>
+				<th> Queue   </th>
+				<th> Server   </th>
+				<th> State   </th>
+				<th> Name   </th>
+				<th> Owner   </th>
+				<th> NCpus   </th>
+				<th> Walltime   </th>
+				<th> Nodes   </th>
+				<th> Nodect   </th>
+		  </tr>
+	</thead>
+	<tbody>
+	  {% for job in table_data %}
+	      <tr>
+			<td> {{ job }} {{job.queue }}  </td>
+			<td> {{job.server }}  </td> 
+			<td> {{job.job_state }}  </td>
+			<td> {{job.Job_Name }}  </td>
+			<td> {{job.Job_Owner.split("@")[0] }}  </td>
+			<td> {{job.Resource_List.ncpus }}  </td>
+			<td> {{job.Resource_List.walltime }}  </td>
+			<td> {{job.Resource_List.nodes }}  </td>
+			<td> {{job.Resource_List.nodect }}  </td>
+	      </tr>
+		
+	  {% endfor %}
+	  </tbody>
+	</table>
+</div>
+
+
+{% endblock %}

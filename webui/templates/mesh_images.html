@@ -2,7 +2,7 @@
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
-<h2> Images </h2>
+<h2> {{ image_button ("none", "365_restart", "/cm/refresh/images") }} Images </h2>
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,10 @@
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#images-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: false });
+        $("#images-accordion > div").accordion({ header: "h3", 
+        										 collapsible: true, 
+        										 heightStyle: "content", 
+        										 active: false });
     })
 })(jQuery);
 
@@ -44,7 +47,7 @@ $(function() {
     {% set version = clouds[cloud]['cm_type_version'] %}
     {% set attributes = cloud_attributes['grizzly']%}
   <div style="margin-bottom:1em;">
-  <h3>{{ cloud }}</h3>
+  <h3> {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/images") }} {{ cloud }}</h3>
   <div>
     <table id="cloud-table-{{ loop.index0 }}">
       <thead>
