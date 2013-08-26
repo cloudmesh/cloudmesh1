@@ -6,8 +6,64 @@ from datetime import datetime
 from cloudmesh.util.util import address_string
 from pprint import pprint
 from ast import literal_eval
+from cloudmesh.pbs.pbs_mongo import pbs_mongo
+
+# ============================================================
+# ROUTE: /mesh/qstat
+# ============================================================
 
 mesh_module = Blueprint('mesh_module', __name__)
+@mesh_module.route('/mesh/qstat/')
+def mongo_qstat_new():
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    address_string = ""
+    error = ""
+    config = cm_config()
+    user = config.config["cloudmesh"]["hpc"]["username"]
+
+    pbs = pbs_mongo()
+    hosts = ["india.futuregrid.org"]
+    for host in hosts:
+        pbs.activate(host,user)
+        
+    time_now = datetime.now()
+
+    data = {}
+    for host in hosts:    
+        data[host] = pbs.get_qstat(host)
+        print "DDD", data[host].count()
+
+    attributes = {"pbs": 
+                  [
+                        [ "Queue" , "queue"],
+                        [ "Server" , "server"],
+                        [ "State" , "job_state"],
+                        [ "Name" , "Job_Name"],
+                        [ "Owner" , "Job_Owner"],
+                        [ "NCpus" , "Resource_List", "ncpus"],
+                        [ "Walltime" , "Resource_List", "walltime"],
+                        [ "Nodes" , "Resource_List", "nodes"],
+                        [ "Nodect" , "Resource_List", "nodect"],
+                        [ "Walltime" , "Resource_List", "walltime"],
+                  ],
+                  }
+    """
+    for host in hosts:
+        pprint (host)
+        for server in data[host]:
+            print "S", server
+            for attribute in server:
+                print attribute, server[attribute]
+    """
+        
+    return render_template('mesh_qstat.html',
+                           hosts=hosts,
+                           address_string=address_string,
+                           attributes=attributes,
+                           updated=time_now,
+                           qstat=data,
+                           config=config)
 
 # ============================================================
 # ROUTE: /mesh/images

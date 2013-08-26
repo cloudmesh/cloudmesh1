@@ -41,10 +41,18 @@ super_sidebar_pages = [
     ],
     ["HPC Queues",
         [
-            ["India", "/pbs/india.futuregrid.org"],
-            ["Sierra", "/pbs/sierra.futuregrid.org"],
-            ["Alamo", "/pbs/alamo.futuregrid.org"],
-            ["Hotel", "/pbs/hotel.futuregrid.org"],
+            ["India", "/pbs/queue/india.futuregrid.org"],
+            ["Sierra", "/pbs/queue/sierra.futuregrid.org"],
+            ["Alamo", "/pbs/queue/alamo.futuregrid.org"],
+            ["Hotel", "/pbs/queue/hotel.futuregrid.org"],
+        ]
+    ],
+    ["HPC Queues Direct",
+        [
+            ["India", "/pbs/probe/india.futuregrid.org"],
+            ["Sierra", "/pbs/probe/sierra.futuregrid.org"],
+            ["Alamo", "/pbs/probe/alamo.futuregrid.org"],
+            ["Hotel", "/pbs/probe/hotel.futuregrid.org"],
         ]
     ]
 ]
