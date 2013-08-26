@@ -154,7 +154,26 @@ class Test:
         ip = self.cloud.get_public_ip()
         print "Got a new ip as: %s, now associating the ip..." % ip
         print self.cloud.assign_public_ip(serverid,ip)
-        
+
+    def test04_list_public_ips(self):
+        HEADING()
+        print "List all public ips allocated to the current account..."
+        ips = self.cloud.list_allocated_ips()
+        ips_id_to_instance = {}
+        for ip in ips:
+            ips_id_to_instance[ip['id']] = ip['instance_id']
+        print ips_id_to_instance
+
+    def test04_release_public_ips(self):
+        HEADING()
+        print "Release all public ips allocated to the current account but not being used..."
+        print "Before releasing, we have..."
+        self.test04_list_public_ips()
+        print "releasing..."
+        self.cloud.release_unused_public_ips()
+        print "after releasing..."
+        self.test04_list_public_ips()
+                        
     def test_05_print_vms(self):
         HEADING()
         self.cloud.refresh('servers')

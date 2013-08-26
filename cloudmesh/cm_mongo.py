@@ -253,7 +253,11 @@ class cm_mongo:
         cloudmanager = self.clouds[cloud]["manager"]
         ip = cloudmanager.get_public_ip()
         return cloudmanager.assign_public_ip(server, ip)
-    
+
+    def release_unused_public_ips(self, cloud):
+        cloudmanager = self.clouds[cloud]["manager"]
+        return cloudmanager.release_unused_public_ips()
+        
     def vm_delete(self, cloud, server):
         cloudmanager = self.clouds[cloud]["manager"]
         return cloudmanager.vm_delete(server)
