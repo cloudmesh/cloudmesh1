@@ -14,9 +14,16 @@ def is_centos():
 
 @task
 def deploy():
-    """deploys the system on ubuntu"""
+    """deploys the system on supported distributions"""
     # download()
-    ubuntu()
+    if is_ubuntu():
+        ubuntu()
+    elif is_centos():
+        centos()
+    else:
+        print "OS distribution not supported; please see documatation for manual installation instructions."
+        sys.exit()
+
     install()
 
 @task
@@ -40,7 +47,6 @@ def install_mongodb():
     elif is_centos():
         local("sh -c \"echo '[10gen]\nname=10gen Repository\nbaseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64\ngpgcheck=0\nenabled=1' >/etc/yum.repos.d/10gen\"")
         install_packages(["mongo-10gen", "mongo-10gen-server"])
-        
     elif sys.platform == "darwin":
         local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
         local('brew update')
