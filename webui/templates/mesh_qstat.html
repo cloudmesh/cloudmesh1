@@ -1,0 +1,73 @@
+{% extends "layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+<h2> {{ image_button ("none", "365_restart", "/cm/refresh/images") }} QStat </h2>
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+
+/* http://stackoverflow.com/a/10237915 */
+(function($) {
+    $(function() {
+        $("#images-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: false });
+    })
+})(jQuery);
+
+
+$(function() {
+  {% for cloudnum in range(hosts|count) %}
+    $("#cloud-table-{{ cloudnum }}").dataTable({
+    	"sPaginationType": "full_numbers",
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
+    });
+  {% endfor %}
+});
+
+</script>
+
+
+<div id="images-accordion">
+    {% for host in hosts %}
+        {% set version = 'pbs' %}
+        <div style="margin-bottom:1em;">
+       <h3>{{ image_button ("none", "365_restart", "/cm/refresh/" + host + "/qstat") }}  {{ host }}</h3>
+       <div>
+       <small>Last updated: {{updated | timesince(format="date")}}</small><br>
+       <table id="cloud-table-{{ loop.index0 }}">
+       	<thead>
+        <tr>
+        {% for attribute in attributes[version] %}
+        	<th>
+        		{{attribute[0]}}
+        	</th>
+        {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for server in qstat[host] %}
+            <tr>
+            {% for attribute in attributes[version] %}
+            <td>
+            {% set l = attribute | length %}
+
+                          {% if l == 2%}
+                             {{ server[attribute[1]] }}
+                          {% elif l == 3%}
+                             {{ server[attribute[1]][attribute[2]] }}       				
+                          {% elif l == 4%}
+                             {{ server[attribute[1]][attribute[2]][attribute[4]] }}
+                          {% endif %}
+              </td>
+              {% endfor %}
+              </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -29,9 +29,13 @@ $(function() {
 
 </script>
 
+ 
+{%     for cloud in hosts %}
+        {{ cloud }}
+        
+{% endfor %}
+ 
  <!--
-    for cloud in clouds:
-        print cloud
         for server in clouds[cloud]:
             print server
             for attribute in clouds[cloud][server]:

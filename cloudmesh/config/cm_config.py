@@ -21,16 +21,15 @@ import yaml
 
 log = LOGGER("cm_config")
 
-def get_mongo_db(collection):
+def get_mongo_db(mongo_collection):
     # Read in the mongo db information from the cloudmesh_server.yaml
     location = path_expand("~/.futuregrid/cloudmesh_server.yaml")
     result = open(location, 'r').read()
         
-    mongo_collection = collection
-        
     mongo_config = yaml.load(result)["mongo"]
     mongo_host = mongo_config["host"]
     mongo_port = mongo_config["port"]
+    
     mongo_db_name = mongo_config["collections"][mongo_collection]['db']
         
     client = MongoClient(host=mongo_host,
