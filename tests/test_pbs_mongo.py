@@ -41,18 +41,19 @@ class Test:
     def tearDown(self):
         pass
 
-    def dump(self, action, d):
+    def dump(self, msg, action):
         print 70 * "="
-        print action, self.user, self.host
+        print msg, self.user, self.host
         print 70 * "="
-        d = self.pbs.get_qstat(self.host)
-        for e in d:
-            pprint(e) 
+        if action == "qstat":
+            d = self.pbs.get_qstat(self.host)
+            for e in d:
+                pprint(e) 
    
     def test_qstat(self):
         HEADING()
-        d = self.pbs.refresh_qstat(self.host)
-        self.dump("refresh", d)
+        self.pbs.refresh_qstat(self.host)
+        self.dump("refresh","qstat")
         
     def test_nodes(self):
         HEADING()

@@ -57,10 +57,19 @@ def display_mongo_qstat_new():
     
     data = {}
     jobcount = {}
+    timer = {}
     for host in hosts:    
         data[host] = pbs.get_qstat(host)
         print "DDD", host, data[host].count()
         jobcount[host] = data[host].count()
+        if jobcount[host] > 0:
+            #timer[host] = data[host][0]["cm_refresh"]
+            print "TTTTT"
+            pprint(data[host][0])
+            timer[host] = datetime.now() 
+        else:
+            timer[host] = datetime.now()
+        print "TIMER", timer
     attributes = {"pbs": 
                   [
                         [ "Queue" , "queue"],
@@ -73,6 +82,10 @@ def display_mongo_qstat_new():
                         [ "Nodes" , "Resource_List", "nodes"],
                         [ "Nodect" , "Resource_List", "nodect"],
                         [ "Walltime" , "Resource_List", "walltime"],
+                        #[ "Used Cpu Time", "resources_used", 'cput'],
+                        #[ "Used Mem ", "resources_used", 'mem'],
+                        #[ "Used VMem ", "resources_used", 'vmem'],
+                        #[ "Used Cpu Walltime", "resources_used", 'walltime']
                   ],
                   }
     """
@@ -87,6 +100,7 @@ def display_mongo_qstat_new():
     return render_template('mesh_qstat.html',
                            hosts=hosts,
                            jobcount=jobcount,
+                           timer=timer,
                            address_string=address_string,
                            attributes=attributes,
                            updated=time_now,
