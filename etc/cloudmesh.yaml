@@ -19,20 +19,6 @@ cloudmesh:
                 OS_USER_ID: 1234567890abcdefg
                 OS_VERSION: essex
             default:
-                filter:
-                    select:
-                        me: true
-                    state:
-                        ACTIVE: true
-                        BUILDING: true
-                        DELETED: true
-                        ERROR: true
-                        PAUSED: true
-                        RESCUED: true
-                        RESIZED: true
-                        SOFT_DELETED: true
-                        STOPPED: true
-                        SUSPENDED: true
                 flavor: m1.tiny
                 image: 717d1dc8-3ed4-4758-9678-8f6421e1fbf2
         sierra-openstack-grizzly:
@@ -49,20 +35,6 @@ cloudmesh:
                 OS_USER_ID: 1234567thisneedstobechanged
                 OS_VERSION: grizzly
             default:
-                filter:
-                    select:
-                        me: true
-                    state:
-                        ACTIVE: true
-                        BUILDING: true
-                        DELETED: true
-                        ERROR: true
-                        PAUSED: true
-                        RESCUED: true
-                        RESIZED: true
-                        SOFT_DELETED: true
-                        STOPPED: true
-                        SUSPENDED: true
                 flavor: m1.tiny
                 image: 4199d988-0833-4497-a473-96fc456fac2f
                 project: fg2

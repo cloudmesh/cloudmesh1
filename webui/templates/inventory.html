@@ -40,8 +40,8 @@
      {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
      {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
 	 {% if cluster.name not in exclude %}
-	 <a href ="/pbsnodes/{{cluster.name}}.futuregrid.org">N</a>	
-	 <a href="/pbs/{{cluster.name}}.futuregrid.org">Q </a>
+	 <a href ="/pbs/nodes/{{cluster.name}}.futuregrid.org">N</a>	
+	 <a href="/pbs/qstat/{{cluster.name}}.futuregrid.org">Q </a>
 	 {% endif %}
    </td>
 

@@ -3,6 +3,7 @@ from flask import render_template, request, redirect
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cloudmesh import cloudmesh
 from cloudmesh.util.util import table_printer
+from cloudmesh.cm_mongo import cm_mongo
 from datetime import datetime
 import time
 
@@ -22,6 +23,9 @@ configuration = config.get()
 prefix = config.prefix
 index = config.index
 
+clouds = cm_mongo()
+clouds.activate()
+               
 # DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
 
 """
@@ -43,7 +47,7 @@ for name in clouds.active():
 # ============================================================
 
 
-@cloud_module .route('/save/')
+@cloud_module.route('/save/')
 def save():
     print "Saving the cloud status"
     #clouds.save()
@@ -54,7 +58,7 @@ def save():
 # ============================================================
 
 
-@cloud_module .route('/load/')
+@cloud_module.route('/load/')
 def load():
     print "Loading the cloud status"
     #clouds.load()
@@ -65,20 +69,37 @@ def load():
 # ============================================================
 
 
-@cloud_module .route('/cm/refresh/')
-@cloud_module .route('/cm/refresh/<cloud>/')
-def refresh(cloud=None, server=None):
-    # print "-> refresh", cloud, server
-    clouds.refresh()
-    clouds.all_filter()
-    return mongo_iamges()
+@cloud_module.route('/cm/refresh/')
+@cloud_module.route('/cm/refresh/<cloud>/')
+@cloud_module.route('/cm/refresh/<cloud>/<service_type>')
+def refresh(cloud=None, server=None, service_type=None):
+    print "-> refresh", cloud, server
+    
+    print "REQ",  redirect(request.args.get('next') or '/').__dict__
+    
+    if cloud in ['servers','flavors','images','users']:
+        service_type = cloud 
+        cloud_names = config.active()
+    else:
+        cloud_names = [cloud]
+    
+    if cloud is None:
+        clouds.refresh(types=['servers','images','flavors'])
+    elif service_type is None:
+        clouds.refresh(names=cloud_names,types=['servers','images','flavors'])
+    else:
+        clouds.refresh(names=cloud_names,types=[service_type])
+        return redirect('/mesh/{0}'.format(service_type))
+    #clouds.refresh()
+    #clouds.all_filter()
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: Filter
 # ============================================================
 
 
-@cloud_module .route('/cm/filter/<cloud>/', methods=['GET', 'POST'])
+@cloud_module.route('/cm/filter/<cloud>/', methods=['GET', 'POST'])
 def filter(cloud=None):
     # print "-> filter", cloud
 
@@ -104,7 +125,7 @@ def filter(cloud=None):
 # ============================================================
 # ROUTE: KILL
 # ============================================================
-@cloud_module .route('/cm/kill/')
+@cloud_module.route('/cm/kill/')
 def kill_vms():
     print "-> kill all"
     r = cm("--set", "quiet", "kill", _tty_in=True)
@@ -115,22 +136,22 @@ def kill_vms():
 # ============================================================
 
 
-@cloud_module .route('/cm/delete/<cloud>/<server>/')
+@cloud_module.route('/cm/delete/<cloud>/<server>/')
 def delete_vm(cloud=None, server=None):
     print "-> delete", cloud, server
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
-    clouds.delete(cloud, server)
+    clouds.vm_delete(cloud, server)
     time.sleep(5)
-    #    clouds.refresh()
-    return mongo_images()
+    clouds.refresh(names=[cloud],types=["servers"])
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: DELETE GROUP
 # ============================================================
 
 
-@cloud_module .route('/cm/delete/<cloud>/')
+@cloud_module.route('/cm/delete/<cloud>/')
 def delete_vms(cloud=None):
 # donot do refresh before delete, this will cause all the vms to get deleted
     f_cloud = clouds.clouds[cloud]
@@ -147,17 +168,15 @@ def delete_vms(cloud=None):
 # ============================================================
 
 
-@cloud_module .route('/cm/assignpubip/<cloud>/<server>/')
+@cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
 def assign_public_ip(cloud=None, server=None):
-    try:
-        if configuration['clouds'][cloud]['cm_automatic_ip'] is False:
-            clouds.assign_public_ip(cloud, server)
-            clouds.refresh(names=[cloud])
-            return mongo_images
-        else:
-            return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
-    except Exception, e:
-        return str(e) + "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
+    mycloud = configuration['clouds'][cloud]
+    if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
+        clouds.assign_public_ip(cloud, server)
+        clouds.refresh(names=[cloud],types=["servers"])
+        return redirect('/mesh/servers')
+    #else:
+    #    return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
 
 # ============================================================
 # ROUTE: START
@@ -168,7 +187,7 @@ def assign_public_ip(cloud=None, server=None):
 #
 
 
-@cloud_module .route('/cm/start/<cloud>/')
+@cloud_module.route('/cm/start/<cloud>/')
 def start_vm(cloud=None, server=None):
     print "*********** STARTVM", cloud
     print "-> start", cloud
@@ -181,26 +200,37 @@ def start_vm(cloud=None, server=None):
         key = configuration['keys']['default']
 
     # THIS IS A BUG
-    vm_flavor = clouds.default(cloud)['flavor']
-    vm_image = clouds.default(cloud)['image']
-
+    #vm_flavor = clouds.default(cloud)['flavor']
+    #vm_image = clouds.default(cloud)['image']
+    #
+    # before the info could be maintained in mongo, using the config file
+    vm_flavor = configuration["clouds"][cloud]["default"]["flavor"]
+    vm_image = configuration["clouds"][cloud]["default"]["image"]
+    vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
+    # in case of error, setting default flavor id
+    if vm_flavor_id < 0:
+        vm_flavor_id = 1
     print "STARTING", config.prefix, config.index
-    result = clouds.create(
-        cloud, config.prefix, config.index, vm_image, vm_flavor, key)
+    print "FLAVOR", vm_flavor, vm_flavor_id
+    metadata = {'cm_owner': config.prefix}
+    result = clouds.vm_create(
+        cloud, config.prefix, config.index, vm_flavor_id, vm_image, key, meta=metadata)
+    print "P"*20
+    print result
     # print "PPPPPPPPPPPP", result
-    clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
+    #clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     config.incr()
     config.write()
-
-    return mongo_images()
-
+    time.sleep(5)
+    clouds.refresh(names=[cloud],types=["servers"])
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: VM Login
 # ============================================================
 
 
-@cloud_module .route('/cm/login/<cloud>/<server>/')
+@cloud_module.route('/cm/login/<cloud>/<server>/')
 def vm_login(cloud=None, server=None):
     message = ''
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -225,7 +255,7 @@ def vm_login(cloud=None, server=None):
 # ============================================================
 
 
-@cloud_module .route('/cm/info/<cloud>/<server>/')
+@cloud_module.route('/cm/info/<cloud>/<server>/')
 def vm_info(cloud=None, server=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -245,10 +275,10 @@ def vm_info(cloud=None, server=None):
 # ROUTE: FLAVOR
 # ============================================================
 
-# @cloud_module .route('/flavors/<cloud>/' )
+# @cloud_module.route('/flavors/<cloud>/' )
 
 
-@cloud_module .route('/flavors/', methods=['GET', 'POST'])
+@cloud_module.route('/flavors/', methods=['GET', 'POST'])
 def display_flavors(cloud=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -270,8 +300,8 @@ def display_flavors(cloud=None):
 # ============================================================
 # ROUTE: IMAGES
 # ============================================================
-# @cloud_module .route('/images/<cloud>/')
-@cloud_module .route('/images/', methods=['GET', 'POST'])
+# @cloud_module.route('/images/<cloud>/')
+@cloud_module.route('/images/', methods=['GET', 'POST'])
 def display_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
