@@ -40,7 +40,8 @@ $(function() {
         <div style="margin-bottom:1em;">
        <h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + host) }} 
        	 {{ host }}, 
-       	 {{ jobcount[host] }} jobs
+       	 {{ jobcount[host] }} jobs, 
+       	 {{ timer[host] | timesince(format="date") }}
        	</h3>
        <div>
        <small>Last updated: {{updated | timesince(format="date")}}</small><br>
