@@ -203,23 +203,15 @@ If you see Python 2.6.6, fix your PATH to include /opt/python/bin before /usr/bi
 
 Install Mongo
 ^^^^^^^^^^^^^^^
-Create /etc/yum.repos.d/10gen containing::
+Intstall from EPEL packages::
 
-    [10gen]
-    name=10gen Repository
-    baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
-    gpgcheck=0
-    enabled=1
-
-Then::
-
-    $ sudo yum install mongo-10gen mongo-10gen-server
+    $ sudo yum install mongodb mongodb-server
 
 
 Install RabbitMQ
 ^^^^^^^^^^^^^^^^
 
-Intstall from standard packages::
+Intstall from EPEL packages::
 
     $ sudo yum install rabbitmq-server
     $ sudo service rabbitmq-server start
