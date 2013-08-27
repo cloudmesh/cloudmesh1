@@ -17,10 +17,16 @@ class Test_Inventory:
     def setup(self):
         self.name = "b010"
         self.inventory = ninventory()
+        print "AAAAA"
+        self.inventory.clear()
+        print "AAAAA"
+        self.inventory.generate()
+        print "GENERATION COMPLETE"
         
         
     def tearDown(self):
         pass
+
     
     def test_clear(self):
         HEADING()
@@ -36,10 +42,67 @@ class Test_Inventory:
         HEADING()
         data = self.inventory.host(self.name)
         pprint(data)
+        
+        """        
+        attribute = "cm_temp"
+        value = "32"
+        
+        print "SET ATTRIBUTE"
+        print 70 * '='
+        data = self.inventory.set_attribute(self.name, attribute, value)
+        print 70 * '='
+        print data
 
+        print "GET ATTRIBUTE"
+        data = self.inventory.get_attribute(self.name, attribute)
+        print data
+        """
+        
+        
+    def test_set(self):
+        HEADING()
+        
+        """
+        data = self.inventory.find({'cm_id': self.name})
+        
+        for e in data:
+            pprint (e)
+        """
+        print 70 * '='
+        """
+        print "BEFORE"
+        
+        
+        data = self.inventory.host(self.name)
+        pprint(data)
+        """
+
+        attribute = "cm_temp"
+        value = "32"
+        
+        print "SET ATTRIBUTE"
+        print 70 * '='
+        data = self.inventory.set_attribute(self.name, attribute, value)
+        print 70 * '='
+        print data
+        
+        
+        print "GET ATTRIBUTE"
+        data = self.inventory.get_attribute(self.name, attribute)
+        print data
+        
+        
+
+        """    
+        data = self.inventory.host(self.name)
+        print "AFTER"
+        pprint(data)
+    
+        
                
     def test_ipaddr(self):
         HEADING()
         
         print self.inventory.ipadr (self.name, "public")
         print self.inventory.ipadr (self.name, "internal")
+    """
