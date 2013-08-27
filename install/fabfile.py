@@ -8,7 +8,7 @@ def is_ubuntu():
 
 def is_centos():
     (centos, version, release) = platform.dist()
-    if version != "6.4":
+    if centos == "centos" and version != "6.4":
         print "Warning: centos %s is not tested" % version
     return centos == "centos"
 
@@ -40,8 +40,8 @@ def download():
 
 @task
 def install():
-    local("cd ..; pip install -r requirements.txt")
-    local("cd ..; python setup.py install")
+    local("pip install -r requirements.txt")
+    local("python setup.py install")
 
 
 def install_mongodb():
@@ -57,7 +57,7 @@ def install_mongodb():
 
 def install_package(package):
     if is_ubuntu():
-        local ("sudo apt-get install {0}".format(package)) 
+        local ("sudo apt-get -y install {0}".format(package)) 
     if is_centos():
         local("sudo yum -y install {0}".format(package))
     elif sys.platform == "darwin":
@@ -86,6 +86,7 @@ def ubuntu():
                       "libsasl2-dev"])
     install_mongodb()
     install_packages(["rabbitmq-server"])
+    install()
 
 def centos():
     install_packages (["git", "wget", "gcc", "make", "readline-devel", "zlib-devel", "openssl-devel", "openldap-devel", "bzip2-devel"])
