@@ -127,7 +127,16 @@ CentOS
 
 Assuming a basic CentOS 6.4 Server, install prerequsites::
 
-    $ sudo yum install git openldap-devel bzip2-devel
+    $ sudo yum install -y \
+        git \
+        wget \
+        gcc \
+        make \
+        readline-devel \
+        zlib-devel \
+        openssl-devel \
+        openldap-devel \
+        bzip2-devel
 
 
 Install Python
