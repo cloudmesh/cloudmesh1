@@ -65,6 +65,34 @@ TODO: distribute a standard ttf font and use sh so that the -f font is included 
 Ubuntu
 ------------
 
+Minimal initial requirements, git, gcc, python-dev and virtualenv installed.  If
+these are not in your base system you can run::
+
+   $ sudo apt-get update
+   $ sudo apt-get install gcc git python-dev python-virtualenv
+
+Create a virtualenv for cloudmesh, activate it, and run::
+
+    $ pip install fabric
+
+Then clone the cloudmesh repository::
+
+    $ git clone https://github.com/cloudmesh/cloudmesh.git
+
+Then run::
+
+    $ cd cloudmesh && fab -f install.fabfile.py deploy
+
+TODO: Explain how the user gets their cloudmesh.yaml file.
+
+Assuming there are no errors, run::
+
+    $ fab server.start
+
+
+Manual installation
+^^^^^^^^^^^^^^^^^^^
+
 Assuming a basic Ubuntu Desktop 13.04, install prerequsites::
 
    $ sudo apt-get install \
@@ -75,23 +103,11 @@ Assuming a basic Ubuntu Desktop 13.04, install prerequsites::
       libldap2-dev \
       libsasl2-dev
 
-TODO: do we also have to do::
-
-   (Allan did not need to do this, already in requirements.txt)
-   $ pip install python-ldap
-
-TODO: do we have to install ldap-user
-
-   sudo apt-get install ldap-user
-
-
-TODO: What is different for Ubuntu 12.04 ?
- 
-TODO: Do we need to test Ubuntu 10.04 ?
 
 
 Install Mongo
 ^^^^^^^^^^^^^^^
+Install from standard packages::
 
     $ sudo apt-get install mongodb
 
@@ -125,9 +141,45 @@ TBD
 CentOS
 --------------------
 
+Minimal initial requirements, git, python2.7, and virtualenv
+installed.  If you don't have python2.7, see the manual installation
+steps below.  The system will also need to be configure to use the
+EPEL repo (for mongodb and rabbitmq).
+
+Otherwise, create a virtualenv for cloudmesh, activate it, and run::
+
+    $ pip install fabric
+
+Then clone the cloudmesh repository::
+
+    $ git clone https://github.com/cloudmesh/cloudmesh.git
+
+Then run::
+
+    $ cd cloudmesh && fab -f install.fabfile.py deploy
+
+TODO: Explain how the user gets their cloudmesh.yaml file.
+
+Assuming there are no errors, run::
+
+    $ fab server.start
+
+
+Manual installation
+^^^^^^^^^^^^^^^^^^^
+
 Assuming a basic CentOS 6.4 Server, install prerequsites::
 
-    $ sudo yum install git openldap-devel bzip2-devel
+    $ sudo yum install -y \
+        git \
+        wget \
+        gcc \
+        make \
+        readline-devel \
+        zlib-devel \
+        openssl-devel \
+        openldap-devel \
+        bzip2-devel
 
 
 Install Python
@@ -159,7 +211,7 @@ Verify that python2.7 is active::
 
 If you see Python 2.6.6, fix your PATH to include /opt/python/bin before /usr/bin.::
 
-    $ curl -O https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gz
+    $ curl -O https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gzcd
     $ tar xfz virtualenv-1.10.1.tar.gz
     $ cd virtualenv-1.10.1.tar.gz
     $ sudo python setup.py install
@@ -167,23 +219,15 @@ If you see Python 2.6.6, fix your PATH to include /opt/python/bin before /usr/bi
 
 Install Mongo
 ^^^^^^^^^^^^^^^
-Create /etc/yum.repos.d/10gen containing::
+Intstall from EPEL packages::
 
-    [10gen]
-    name=10gen Repository
-    baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
-    gpgcheck=0
-    enabled=1
-
-Then::
-
-    $ sudo yum install mongo-10gen mongo-10gen-server
+    $ sudo yum install mongodb mongodb-server
 
 
 Install RabbitMQ
 ^^^^^^^^^^^^^^^^
 
-Intstall from standard packages::
+Intstall from EPEL packages::
 
     $ sudo yum install rabbitmq-server
     $ sudo service rabbitmq-server start
