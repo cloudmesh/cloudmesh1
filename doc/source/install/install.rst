@@ -65,6 +65,34 @@ TODO: distribute a standard ttf font and use sh so that the -f font is included 
 Ubuntu
 ------------
 
+Minimal initial requirements, git, gcc, python-dev and virtualenv installed.  If
+these are not in your base system you can run::
+
+   $ sudo apt-get update
+   $ sudo apt-get install gcc git python-dev python-virtualenv
+
+Create a virtualenv for cloudmesh, activate it, and run::
+
+    $ pip install fabric
+
+Then clone the cloudmesh repository::
+
+    $ git clone https://github.com/cloudmesh/cloudmesh.git
+
+Then run::
+
+    $ cd cloudmesh && fab -f install.fabfile.py deploy
+
+TODO: Explain how the user gets their cloudmesh.yaml file.
+
+Assuming there are no errors, run::
+
+    $ fab server.start
+
+
+Manual installation
+^^^^^^^^^^^^^^^^^^^
+
 Assuming a basic Ubuntu Desktop 13.04, install prerequsites::
 
    $ sudo apt-get install \
@@ -75,23 +103,11 @@ Assuming a basic Ubuntu Desktop 13.04, install prerequsites::
       libldap2-dev \
       libsasl2-dev
 
-TODO: do we also have to do::
-
-   (Allan did not need to do this, already in requirements.txt)
-   $ pip install python-ldap
-
-TODO: do we have to install ldap-user
-
-   sudo apt-get install ldap-user
-
-
-TODO: What is different for Ubuntu 12.04 ?
- 
-TODO: Do we need to test Ubuntu 10.04 ?
 
 
 Install Mongo
 ^^^^^^^^^^^^^^^
+Install from standard packages::
 
     $ sudo apt-get install mongodb
 
