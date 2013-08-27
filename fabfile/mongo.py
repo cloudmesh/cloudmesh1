@@ -1,31 +1,34 @@
-from fabric.api import task, local
+from fabric.api import task, local, settings
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 
+import sys
 
 @task
 def start():
     path = cm_config_server().get()["mongo"]["path"]
-    path = cm_config_server().get()["mongo"]["port"]
-    local("mkdir -pf {0}".format(path))
-    local("mongod --dbpath {0} --port {1}".format(path, port))
+    port = cm_config_server().get()["mongo"]["port"]
+    local("mkdir -p {0}".format(path))
+    local("mongod --fork --dbpath {0} --port {1}".format(path, port))
 
 @task
 def stop():
-    local("mongod --shutdown")
+    # for some reason shutdown does not work
+    # local("mongod --shutdown")
+    with settings(warn_only=True):
+        pid = local("ps -ax |fgrep mongo | fgrep '??'", capture=True).split(" ")[0]
+        local ("kill -9 {0}".format(pid))
 
 @task
 def clean():
     local("make clean")
-    local('mongo cloudmesh --eval "db.dropDatabase();"')
-    local('mongo inventory --eval "db.dropDatabase();"')
-    local('mongo clouds --eval "db.dropDatabase();"')
-    local('mongo hpc-qstat --eval "db.dropDatabase();"')
-    local('mongo hpc-pbsnodes --eval "db.dropDatabase();"')
-    local('mongo test --eval "db.dropDatabase();"')
+    result = local('echo "show dbs" | mongo --quiet ', capture=True).splitlines()
+    for line in result:
+        name = line.split()[0]
+        local('mongo {0} --eval "db.dropDatabase();"'.format(name))
 
 @task
 def vms_find():
@@ -38,7 +41,7 @@ def cloud():
     clean()
     c = cm_mongo()
     c.activate()
-    c.refresh(types=['users','servers','images','flavors'])
+    c.refresh(types=['users', 'servers', 'images', 'flavors'])
     ldap()
     fg()
 
@@ -47,7 +50,7 @@ def simple():
     clean()
     c = cm_mongo()
     c.activate()
-    c.refresh(types=['servers','images','flavors'])
+    c.refresh(types=['servers', 'images', 'flavors'])
     fg()
     
 @task
@@ -60,7 +63,7 @@ def users():
 @task
 def ldap():
     idp = cm_userLDAP ()
-    idp.connect("fg-ldap","ldap")
+    idp.connect("fg-ldap", "ldap")
     idp.refresh()
 
     users = idp.list()
@@ -76,16 +79,16 @@ def fg():
     local("python webui/fg.py")    
 
 @task
-def pbs(host,type):
+def pbs(host, type):
     pbs = pbs_mongo()
     
-    #get hpc user
+    # get hpc user
 
     config = cm_config()
     user = config.config["cloudmesh"]["hpc"]["username"]
 
     
-    pbs.activate(host,user)
+    pbs.activate(host, user)
 
     print "ACTIVE PBS HOSTS", pbs.hosts
     
@@ -95,7 +98,7 @@ def pbs(host,type):
         hosts = [host]
         
     if type is None:
-        types =['qstat', 'nodes']
+        types = ['qstat', 'nodes']
     else:
         types = [type]
     
@@ -103,7 +106,7 @@ def pbs(host,type):
     
     for host in hosts:
         for type in types:
-            if type in  ["qstat", "queue","q"]:
+            if type in  ["qstat", "queue", "q"]:
                 d = pbs.get_pbsnodes(host)    
             elif type in ["nodes"]:
                 d = pbs.refresh_pbsnodes(host)
