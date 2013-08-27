@@ -16,6 +16,13 @@ def is_centos():
 def deploy():
     """deploys the system on supported distributions"""
     # download()
+    (major, minor, micro, releaselevel, serial) = sys.version_info
+    if major != 2 or (major == 2 and minor < 7):
+        print "Your version of python is not supported.  Please install python 2.7 for cloudmesh"
+        sys.exit()
+    if not hasattr(sys, 'real_prefix'):
+        print "You do not appear to be in a vitualenv.  Please create and/or activate a virtualenv for cloudmesh installation"
+        sys.exit()
     if is_ubuntu():
         ubuntu()
     elif is_centos():
@@ -39,15 +46,9 @@ def install():
 
 def install_mongodb():
     if is_ubuntu():
-
-        local('sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10')
-        local(
-              'sudo sh -c "echo \'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen\' > /etc/apt/sources.list.d/10gen.list"')
-        local('sudo apt-get update')
-        #local('sudo apt-get install mongodb-10gen')
+        install_packages(["mongodb"])
     elif is_centos():
-        local("sh -c \"echo '[10gen]\nname=10gen Repository\nbaseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64\ngpgcheck=0\nenabled=1' >/etc/yum.repos.d/10gen\"")
-        install_packages(["mongo-10gen", "mongo-10gen-server"])
+        install_packages(["mongodb"])
     elif sys.platform == "darwin":
         local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
         local('brew update')
@@ -87,13 +88,9 @@ def ubuntu():
     install_packages(["rabbitmq-server"])
 
 def centos():
-    install_packages (["git", "openldap-devel", "bzip2-devel", "rabbitmq-server"])
+    install_packages (["git", "wget", "gcc", "make", "readline-devel", "zlib-devel", "openssl-devel", "openldap-devel", "bzip2-devel"])
+    install_mongodb()
     local('sudo sh -c "chkconfig rabbitmq-server on && service rabbitmq-server start"')
-    if not os.path.exists("/opt/python"):
-        local('sudo mkdir -p /opt/python')
-        local('sh -c "cd /tmp && wget http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz && tar xzf python/2.7.5/Python-2.7.5.tgz && ./configure --prefix=/opt/python && make && sudo make install')
-        local('sh -c "cd /tmp && curl -O https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gz && tar xfz virtualenv-1.10.1.tar.gz && virtualenv-1.10.1.tar.gz && sudo python setup.py install"')
-        print "Add /opt/python/bin to your PATH"
-    else:
+    install_packages(["rabbitmq-server"])
         print "Could not install python, /opt/python already exists"
         sys.exit()
