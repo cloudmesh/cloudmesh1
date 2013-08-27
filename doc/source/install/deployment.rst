@@ -1,16 +1,15 @@
-Quick deployment
-================
+Quick deployment on ubuntu
+===========================
 
-::
+This quick deployment is targeted for ubuntu. It can be achieved in several easy steps.
+First, obtain a avanilla ubuntu system. Make sure that git is installed, which is standard by now.
+Next execute the following commands ::
 
-    git clone git@github.com:cloudmesh/cloudmesh.git
-    cd cloudmesh
-    cd install
-    fab deploy
-    
-    sudo  mkdir -p /data/db/
-    sudo  chgrp srrajago /data/db/
-    sudo  chown srrajago /data/db/
+    $ git clone git@github.com:cloudmesh/cloudmesh.git
+    $ cd cloudmesh
+    $ cd install
+    $ fab deploy
+
 
 YAML files
 ---------------
@@ -24,23 +23,24 @@ Configure the yaml files if changes need to be done.
 Mongo
 ---------------
 
-::
+To managing mongo db it is important that you use our special fabric commands fro doing so
+To start mongod do::
 
-	mongod
-   
+	fab mongod.start
 
-Quick Configuration
-------------------------
+To stop mongod   
 
-simple install without users
-::
+	fab mongod.stop
+	
+To clean the entire data base (not just the data for cloudmesh, so be careful) say::
 
-   fab mongo.simple
+	fab mongo.clean
+	
+To create a simple cluster without usernames, say::
 
-
-install with users
-
-::
+	fab mongo.simple
+	
+To create a cluster with user data base say::
 
 	fab mongo.cloud
 	
