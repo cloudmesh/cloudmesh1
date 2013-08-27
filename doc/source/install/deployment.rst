@@ -2,7 +2,7 @@ Quick deployment on ubuntu
 ===========================
 
 This quick deployment is targeted for ubuntu. It can be achieved in several easy steps.
-First, obtain a avanilla ubuntu system. Make sure that git is installed, which is standard by now.
+First, obtain a vanilla ubuntu system. Make sure that git is installed, which is standard by now.
 Next execute the following commands ::
 
     $ git clone git@github.com:cloudmesh/cloudmesh.git
@@ -51,20 +51,17 @@ Developer Tests
 
 Python has a very good unit test framework called nosetests. As we have many different tests it is sometimes useful not to run all of them but to run a selected test. Running all of the tests would take simply to long during debugging. We are providing an easy to use test fabric command that can be used as follows. Assume that in your directory tests are located a number of tests. They can be listed with::
 
-
-::
-
     $ fab test.info 
 
-Thos will list the available test files/groups by name (the test_ prefix is omitted). To list the individual tests in a file/grou, you can use it as a parameter to info. Thus::
+This will list the available test files/groups by name (the test_ prefix is omitted). To list the individual tests in a file/grou, you can use it as a parameter to info. Thus::
 
    fab test.info:compute 
 
 will list the tests in the file test_compute.py. To call an individual test, you can use the name of the file and a unique prefix of the test you like to call via test.start. Thus::
 
 
-     fag test.start:compute,label
+     fab test.start:compute,label
 
-will execute the thes which has label in its method name first
+will execute the test which has label in its method name first
 
 
