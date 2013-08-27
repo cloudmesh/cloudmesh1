@@ -1,14 +1,17 @@
 from fabric.api import task, local
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
-from cloudmesh.config.cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 
+
 @task
 def start():
-    local("mkdir -p ./mongodb/")
-    local("mongod --dbpath ./mongodb/ --port 27017")
+    path = cm_config_server().get()["mongo"]["path"]
+    path = cm_config_server().get()["mongo"]["port"]
+    local("mkdir -pf {0}".format(path))
+    local("mongod --dbpath {0} --port {1}".format(path, port))
 
 @task
 def stop():
@@ -68,7 +71,7 @@ def ldap():
 @task
 def fg():
     """create a simple testbed"""
-    local("mongod &")
+    start()
     local("python setup.py install")
     local("python webui/fg.py")    
 
