@@ -11,6 +11,8 @@ from cloudmesh.config.cm_config import cm_config_server
 import yaml
 import json
 from cloudmesh.config.cm_config import get_mongo_db
+from datetime import datetime
+
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
@@ -22,9 +24,8 @@ class ninventory:
             
     server_config = None
     
+    
     def __init__(self):         
-
-        
         # read the host file definition from cloudmesh_cludter.yaml
         self.server_config = cm_config_server().config
         location = cm_path_expand("~/.futuregrid/cloudmesh_cluster.yaml")
@@ -35,45 +36,119 @@ class ninventory:
         collection = "inventory"
         self.db_inventory = get_mongo_db(collection)        
 
-        self.generate()
+    def get_attribute(self, host_label, attribute):
+
+        try:
+            value = self.find ({"cm_id" : host_label, 'cm_attribute' : True, 'cm_key' : attribute})[0]
+        except:
+            value = None
+        return value
 
 
+
+    
+    def set_attribute(self, host_label, attribute, value, time=None):
+        print "SETTING", host_label, attribute, value
+
+        if time is None:
+            time = datetime.now()
+        
+        cursor = self.update ({"cm_id" : host_label, 'cm_attribute' : True, 'cm_key' : attribute},
+                                  { "$set": { attribute: value,
+                                             'cm_type': "inventory",
+                                             'cm_kind': 'server',
+                                             'cm_key': attribute,
+                                             'cm_value': value,
+                                             'cm_attribute': True,
+                                             'cm_refresh': time,
+                                             }
+                                   })
+
+    def update(self, query, values=None):
+        '''
+        executes a query and updates the results from mongo db.
+        :param query:
+        '''
+        if values is None:
+            return self.db_inventory.update(query,upsert=True) 
+        else:
+            print query
+            print values
+            return self.db_inventory.update(query, values,upsert=True) 
+
+    
     def insert(self,element):
         self.db_inventory.insert(element)
 
+    def clear(self):
+        self.db_inventory.remove({"cm_type" : "inventory"})
+        
+    def find(self, query):
+        '''
+        executes a query and returns the results from mongo db.
+        :param query:
+        '''
+        return self.db_inventory.find(query) 
+    
+    def find_one(self, query):
+        '''
+        executes a query and returns the results from mongo db.
+        :param query:
+        '''
+        return self.db_inventory.find_one(query) 
+    
+       
     def _generate_globals(self):
+        
         for name in self.config["clusters"]:
+
             cluster = self.config["clusters"][name]
             keys = cluster.keys()
+            
+            print "NAME", name
             for key in keys: 
+                print "KEY", key
                 if (type(cluster[key]) is str) and (not key in ["id","network"]):
-                  element = {'cm_id': name,
+                    element = dict({'cm_id': name,
                              'cm_type': "inventory",
                              'cm_kind': 'server',
                              'cm_key': key,
-                             'cm_value': cluster[key]
-                             }
-                  self.insert(element)
+                             'cm_value': cluster[key],
+                             'cm_attribute': True
+                             })
+                    print "OOOO", element
+                    self.insert(element)
                 elif key == "publickeys":
-                      publickeys = cluster[key]
-                      for k in publickeys:
-                         element = {'cm_id': name,
-                                    'cm_type': "inventory",
-                                    'cm_kind': 'publickey',
-                                    'cm_key': k['name'],
-                                    'cm_name': cm_path_expand(k['path']), 
-                                    'cm_value': cluster[key]
-                                    }
-                         self.insert(element)
+                    publickeys = cluster[key]
+                    for k in publickeys:
+                        element = dict({'cm_id': name,
+                                        'cm_type': "inventory",
+                                        'cm_kind': 'publickey',
+                                        'cm_key': k['name'],
+                                        'cm_name': cm_path_expand(k['path']), 
+                                        'cm_value': cluster[key],
+                                        'cm_attribute': True
+                                        })
+                        print "LLLL", element
+                        self.insert(element)
 
         
     def generate(self):    
-        self.clear()
         self._generate_globals()
+        
+        
+        
         clusters = self.config["clusters"]
         
-        data = {}
+        pprint (clusters)
         
+        print "CLUSTER"
+        c = self.find({})
+        for e in c:
+            pprint (e)
+        print "CLUSTER"
+        
+
         for cluster_name in clusters:
             cluster = clusters[cluster_name]
             names = expand_hostlist(cluster["id"])
@@ -96,34 +171,34 @@ class ninventory:
                                      'id': name, 
                                      'label' : n_label[i], 
                                      'network_name': n_name, 
-                                     'network_id': net_id, 
+                                     'cm_network_id': net_id, 
                                      'ipaddr': n_range[i]})
+                    print "NNN", element
                     self.insert(element)
                 net_id +=1
-                    
-    def clear(self):
-        self.db_inventory.remove({"cm_type" : "inventory"})
+
         
-    def find(self, query):
-        '''
-        executes a query and returns the results from mongo db.
-        :param query:
-        '''
-        return self.db_inventory.find(query) 
-       
+                 
     def host (self, index):
         cursor = self.find ({"cm_id" : index})
         
         data = {}
-        
+                
         data['cluster'] = cursor[0]['cluster']
         data['cm_type'] = cursor[0]['cm_type']  
         data['cm_id'] = cursor[0]['cm_id']  
         data['label'] = cursor[0]['label']  
         
+        
+        
+        cursor_attributes = self.find ({"cm_id" : index, 'cm_attribute' : True})
+        for element in cursor_attributes:
+            data[element['cm_key']] = element['cm_value']
+        
+        
         data['network']={}
         for result in cursor:
-            n_id = result["network_id"]
+            n_id = result["cm_network_id"]
             n_name = result["network_name"]
             n_ipaddr = result["ipaddr"]
             data['network'][n_name] = dict(result)
@@ -132,11 +207,11 @@ class ninventory:
         
         cluster_name = data["cluster"]
         cluster_auth = self.server_config["clusters"][cluster_name]
-
+        
         for name in cluster_auth:
             network = data["network"][name]
             network.update(cluster_auth[name])
-  
+        
         for name in data["network"]:
             del data["network"][name]["_id"]
         

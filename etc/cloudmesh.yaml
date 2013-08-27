@@ -3,7 +3,7 @@ cloudmesh:
     - sierra-openstack-grizzly
     - india-openstack-essex
     hpc:
-        username: portalname    
+        username: {{portalname}}
     clouds:
         india-openstack-essex:
             cm_host: india.futuregrid.org
@@ -13,10 +13,9 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: http://149.165.146.50:5000/v2.0
                 OS_CACERT: None
-                OS_PASSWORD: abcdefghijklmnopqrstuvwxyz
+                OS_PASSWORD: {{india.openstack.password}}
                 OS_TENANT_NAME: member
-                OS_USERNAME: portalname
-                OS_USER_ID: 1234567890abcdefg
+                OS_USERNAME: {{portalname}}
                 OS_VERSION: essex
             default:
                 flavor: m1.tiny
@@ -29,22 +28,20 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
-                OS_PASSWORD: abcdefghCHANGEME
-                OS_TENANT_NAME: fg82
-                OS_USERNAME: portalname
-                OS_USER_ID: 1234567thisneedstobechanged
+                OS_PASSWORD: {{sierra.openstack.password}}
+                OS_TENANT_NAME: {{project.default}}
+                OS_USERNAME: {{portalname}}
                 OS_VERSION: grizzly
             default:
                 flavor: m1.tiny
                 image: 4199d988-0833-4497-a473-96fc456fac2f
-                project: fg2
     default: sierra-openstack-grizzly
-    index: 116
+    index: 1
     keys:
         default: mykey
         keylist:
             mykey: ssh-rsa AAAA.... put your key such as the one from ~/.ssh_id.pub here. yourname@youremail.edu
-    prefix: portalname
+    prefix: {{portalname}}
     profile:
         address:
         - PTI
@@ -54,12 +51,12 @@ cloudmesh:
         gid: '100'
         lastname: Changeme
         phone: 812 856 1234
-        username: gvonlasz
+        username: {{portalname}}
     projects:
         active:
-          - fg82
+          - {{projects}}
         completed: []
-        default: fg82
+        default: {{project.default}}
     security:
         default: secGroup2
         rules:
