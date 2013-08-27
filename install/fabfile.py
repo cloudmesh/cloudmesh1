@@ -41,14 +41,14 @@ def download():
 @task
 def install():
     local("cd ..; pip install -r requirements.txt")
-    local("cd ..; pip setup.py install")
+    local("cd ..; python setup.py install")
 
 
 def install_mongodb():
     if is_ubuntu():
         install_packages(["mongodb"])
     elif is_centos():
-        install_packages(["mongodb"])
+        install_packages(["mongodb", "mongodb-server"])
     elif sys.platform == "darwin":
         local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
         local('brew update')
@@ -92,3 +92,4 @@ def centos():
     install_mongodb()
     install_packages(["rabbitmq-server"])
     local('sudo sh -c "chkconfig rabbitmq-server on && service rabbitmq-server start"')
+    install()

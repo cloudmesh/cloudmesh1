@@ -125,6 +125,33 @@ TBD
 CentOS
 --------------------
 
+Minimal initial requirements, git, python2.7, and virtualenv
+installed.  If you don't have python2.7, see the manual installation
+steps below.  The system will also need to be configure to use the
+EPEL repo (for mongodb and rabbitmq).
+
+Otherwise, create a virtualenv for cloudmesh, activate it, and run::
+
+    $ pip install fabric
+
+Then clone the cloudmesh repository::
+
+    $ git clone https://github.com/cloudmesh/cloudmesh.git
+
+Then run::
+
+    $ cd cloudmesh && fab -f install.fabfile.py deploy
+
+TODO: Explain how the user gets their cloudmesh.yaml file.
+
+Assuming there are no errors, run::
+
+    $ fab server.start
+
+
+Manual installation
+^^^^^^^^^^^^^^^^^^^
+
 Assuming a basic CentOS 6.4 Server, install prerequsites::
 
     $ sudo yum install -y \
@@ -168,7 +195,7 @@ Verify that python2.7 is active::
 
 If you see Python 2.6.6, fix your PATH to include /opt/python/bin before /usr/bin.::
 
-    $ curl -O https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gz
+    $ curl -O https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gzcd
     $ tar xfz virtualenv-1.10.1.tar.gz
     $ cd virtualenv-1.10.1.tar.gz
     $ sudo python setup.py install
