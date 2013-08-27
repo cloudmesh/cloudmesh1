@@ -9,6 +9,9 @@ import sys
 
 @task
 def start():
+    '''
+    start the mongod service in the location as specified in ~/.futuregrid/cloudmesh_server.yaml
+    '''
     path = cm_config_server().get()["mongo"]["path"]
     port = cm_config_server().get()["mongo"]["port"]
     local("mkdir -p {0}".format(path))
@@ -16,6 +19,9 @@ def start():
 
 @task
 def stop():
+    '''
+    stops the currently running mongod
+    '''
     # for some reason shutdown does not work
     # local("mongod --shutdown")
     with settings(warn_only=True):
@@ -24,6 +30,9 @@ def stop():
 
 @task
 def clean():
+    '''
+    deletes _ALL_ databases from mongo. Even thos not related to cloudmesh.
+    '''
     local("make clean")
     result = local('echo "show dbs" | mongo --quiet ', capture=True).splitlines()
     for line in result:
@@ -38,6 +47,9 @@ def vms_find():
     
 @task
 def cloud():
+    '''
+    puts a snapshot of users, servers, images, and flavors into mongo
+    '''
     clean()
     c = cm_mongo()
     c.activate()
@@ -47,6 +59,9 @@ def cloud():
 
 @task
 def simple():
+    '''
+    puts a snapshot of servers, images, and flavors into mongo (no users)
+    '''
     clean()
     c = cm_mongo()
     c.activate()
@@ -55,6 +70,9 @@ def simple():
     
 @task
 def users():
+    '''
+    puts a snapshot of the users into mongo
+    '''
     c = cm_mongo()
     c.activate()
     c.refresh(types=['users'])
@@ -62,6 +80,10 @@ def users():
     
 @task
 def ldap():
+    '''
+    festches a user list from ldap and displayes them
+    '''
+
     idp = cm_userLDAP ()
     idp.connect("fg-ldap", "ldap")
     idp.refresh()
@@ -70,13 +92,13 @@ def ldap():
 
     print ("Fetching {0} Users from LDAP".format(len(users)))
     
-
-@task
-def fg():
-    """create a simple testbed"""
-    start()
-    local("python setup.py install")
-    local("python webui/fg.py")    
+'''
+#@task
+#def fg():
+#    """create a simple testbed"""
+#    start()
+#   local("python setup.py install")
+#   local("python webui/fg.py")    
 
 @task
 def pbs(host, type):
@@ -115,3 +137,4 @@ def pbs(host, type):
         print "PBS -->"
         pprint(e) 
 
+'''
