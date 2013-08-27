@@ -90,7 +90,5 @@ def ubuntu():
 def centos():
     install_packages (["git", "wget", "gcc", "make", "readline-devel", "zlib-devel", "openssl-devel", "openldap-devel", "bzip2-devel"])
     install_mongodb()
-    local('sudo sh -c "chkconfig rabbitmq-server on && service rabbitmq-server start"')
     install_packages(["rabbitmq-server"])
-        print "Could not install python, /opt/python already exists"
-        sys.exit()
+    local('sudo sh -c "chkconfig rabbitmq-server on && service rabbitmq-server start"')
