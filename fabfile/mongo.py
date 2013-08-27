@@ -16,7 +16,7 @@ def start():
     port = cm_config_server().get()["mongo"]["port"]
         
     local("mkdir -p {0}".format(path))
-    local("mongod --fork --dbpath {0} -- logpath {0}/mongodb.log --port {1}".format(path, port))
+    local("mongod --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port))
 
 @task
 def stop():
