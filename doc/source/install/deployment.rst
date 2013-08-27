@@ -28,7 +28,7 @@ To start mongod do::
 
 	fab mongod.start
 
-To stop mongod   
+To stop mongod::
 
 	fab mongod.stop
 	
@@ -46,15 +46,25 @@ To create a cluster with user data base say::
 	
 Now you have data in the mongo db and you can use and test it
 
-Quick Test
-------------
+Developer Tests
+-----------------
+
+Python has a very good unit test framework called nosetests. As we have many different tests it is sometimes useful not to run all of them but to run a selected test. Running all of the tests would take simply to long during debugging. We are providing an easy to use test fabric command that can be used as follows. Assume that in your directory tests are located a number of tests. They can be listed with::
 
 
-Inventory::
+::
 
-    fab test.start:ninventory,host
-    
-What is if this does not work?
-----------------------------------
+    $ fab test.info 
 
-Please get help from Allan. He is responsible for getting this deployment script properly done.
+Thos will list the available test files/groups by name (the test_ prefix is omitted). To list the individual tests in a file/grou, you can use it as a parameter to info. Thus::
+
+   fab test.info:compute 
+
+will list the tests in the file test_compute.py. To call an individual test, you can use the name of the file and a unique prefix of the test you like to call via test.start. Thus::
+
+
+     fag test.start:compute,label
+
+will execute the thes which has label in its method name first
+
+
