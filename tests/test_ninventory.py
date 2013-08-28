@@ -15,11 +15,10 @@ from  pprint import pprint
 class Test_Inventory:
 
     def setup(self):
+        self.cluster = "bravo"
         self.name = "b010"
         self.inventory = ninventory()
-        print "AAAAA"
         self.inventory.clear()
-        print "AAAAA"
         self.inventory.generate()
         print "GENERATION COMPLETE"
         
@@ -42,8 +41,14 @@ class Test_Inventory:
         HEADING()
         data = self.inventory.host(self.name)
         pprint(data)
+
+    def test_list(self):
+        HEADING()
+        data = self.inventory.hostlist(self.cluster)
+        #pprint(data)
+
+    def test_combine(self):        
         
-        """        
         attribute = "cm_temp"
         value = "32"
         
@@ -56,7 +61,10 @@ class Test_Inventory:
         print "GET ATTRIBUTE"
         data = self.inventory.get_attribute(self.name, attribute)
         print data
-        """
+
+        data = self.inventory.host(self.name)
+        pprint(data)
+        
         
         
     def test_set(self):
