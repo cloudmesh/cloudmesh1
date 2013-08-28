@@ -8,8 +8,6 @@ from util.logger import LOGGER
 
 log = LOGGER('cm_user')
 
-
-
 class cm_userLDAP (CMUserProviderBaseType):
     
     
