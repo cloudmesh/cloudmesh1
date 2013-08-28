@@ -27,32 +27,25 @@ except:
     log.warning("AZURE NOT ENABLED")
 
 
-
-
 class cm_mongo:
-    
+
     clouds = {}
     client = None
     db_clouds = None
-    
-    
+
     mongo_host = 'localhost'
     mongo_port = 27017
     mongo_db_name = "cloudmesh"
     mongo_collection = "cloudmesh"
-    
+
     config = None
-    
-    
+
     def __init__(self, collection="cloudmesh"):
         """initializes the cloudmesh mongo db. The name of the collection os passed."""
-        
-        
+
         self.db_clouds = get_mongo_db(collection)
 
         self.config = cm_config()
-        
-
 
     def cloud_provider(self, type):
         '''
@@ -67,40 +60,38 @@ class cm_mongo:
         elif type == 'azure':
             provider = azure
         return provider
-    
+
     def activate(self, names=None):
         '''
         activates a specific host by name. to be queried
         :param names: the array with the names of the clouds in the yaml file to be activated.
         '''
-                
+
         if names is None:
             names = self.config.active()
-                    
+
         for cloud_name in names:
             print "Activating ->", cloud_name
-          
+
             try:
                 credential = self.config.get(cloud_name)
                 cm_type = self.config.get()['clouds'][cloud_name]['cm_type']
-                cm_type_version = self.config.get()['clouds'][cloud_name]['cm_type_version']
+                cm_type_version = self.config.get()[
+                    'clouds'][cloud_name]['cm_type_version']
                 if cm_type in ['openstack', 'eucalyptus', 'azure']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cm_type,
-                                               'cm_type_version': cm_type_version }
+                                               'cm_type_version': cm_type_version}
 #                                               'credential': credential}
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name)
                     self.clouds[cloud_name].update({'manager': cloud})
-                    
 
-            
-            except Exception, e:  
+            except Exception, e:
                 print "ERROR: can not activate cloud", cloud_name
                 print e
                 # print traceback.format_exc()
                 # sys.exit()
-
 
     def refresh(self, names=["all"], types=["all"]):
         """
@@ -136,13 +127,13 @@ class cm_mongo:
 
         watch = StopWatch()
         for name in names:
-            
+
             cloud = self.clouds[name]['manager']
-                        
+
             for type in types:
 
-                print "Refreshing {0}->".format(type)  
-                            
+                print "Refreshing {0}->".format(type)
+
                 watch.start(name)
                 cloud.refresh(type)
                 result = cloud.get(type)
@@ -151,25 +142,25 @@ class cm_mongo:
                 watch.stop(name)
                 print 'Refresh time:', watch.get(name)
 
-                watch.start(name) 
-                
-                self.db_clouds.remove({"cm_cloud" : name, "cm_kind": type})
-                
+                watch.start(name)
+
+                self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
+
                 for element in result:
-                    id = "{0}-{1}-{2}".format(name, type, result[element]['name']).replace(".", "-")
-                    #print "ID", id
-                    result[element]['cm_id'] = id 
+                    id = "{0}-{1}-{2}".format(
+                        name, type, result[element]['name']).replace(".", "-")
+                    # print "ID", id
+                    result[element]['cm_id'] = id
                     result[element]['cm_cloud'] = name
-                    result[element]['cm_type'] = self.clouds[name]['cm_type'] 
-                    result[element]['cm_type_version'] = self.clouds[name]['cm_type_version'] 
+                    result[element]['cm_type'] = self.clouds[name]['cm_type']
+                    result[element]['cm_type_version'] = self.clouds[
+                        name]['cm_type_version']
                     result[element]['cm_kind'] = type
-                    
+
                     self.db_clouds.insert(result[element])
-                    
-                    
+
                 watch.stop(name)
                 print 'Store time:', watch.get(name)
-        
 
     def get_pbsnodes(self, host):
         '''
@@ -178,15 +169,14 @@ class cm_mongo:
         '''
         data = self.db_pbsnodes.find({"pbs_host": host})
         return data
-    
+
     def find(self, query):
         '''
         executes a query and returns the results from mongo db.
         :param query:
         '''
-        return self.db_clouds.find(query) 
-       
-    
+        return self.db_clouds.find(query)
+
     def _get_kind(self, kind, names=None):
         '''
         returns all the data from clouds of a specific type.
@@ -195,14 +185,14 @@ class cm_mongo:
         data = {}
         if names is None:
             names = self.clouds.keys()
-   
+
         for name in names:
             data[name] = {}
-            result = self.find({'cm_kind' : kind, 'cm_cloud': name})
+            result = self.find({'cm_kind': kind, 'cm_cloud': name})
             for entry in result:
                 data[name][entry['id']] = entry
         return data
-   
+
     def users(self, clouds=None):
         '''
         returns all the servers from all clouds
@@ -220,24 +210,24 @@ class cm_mongo:
         returns all the servers from all clouds
         '''
         return self._get_kind('servers', clouds)
-        
+
     def flavors(self, clouds=None):
         '''
         returns all the flavors from the various clouds
         '''
         return self._get_kind('flavors', clouds)
-    
-    #need to make sure other clouds have the same flavor dict as in openstack
-    #otherwide will need to put this into the openstack iaas class
+
+    # need to make sure other clouds have the same flavor dict as in openstack
+    # otherwide will need to put this into the openstack iaas class
     def flavor_name_to_id(self, cloud, flavor_name):
         ret = -1
         flavor_of_the_cloud = self.flavors([cloud])[cloud]
-        for id,details in flavor_of_the_cloud.iteritems():
+        for id, details in flavor_of_the_cloud.iteritems():
             if details["name"] == flavor_name:
                 ret = id
                 break
         return ret
-        
+
     def images(self, clouds=None):
         '''
         returns all the images from various clouds
@@ -248,7 +238,7 @@ class cm_mongo:
         cloudmanager = self.clouds[cloud]["manager"]
         name = "%s_%s" % (prefix, index)
         return cloudmanager.vm_create(name=name, flavor_name=vm_flavor, image_id=vm_image, key_name=key, meta=meta)
-    
+
     def assign_public_ip(self, cloud, server):
         cloudmanager = self.clouds[cloud]["manager"]
         ip = cloudmanager.get_public_ip()
@@ -257,23 +247,24 @@ class cm_mongo:
     def release_unused_public_ips(self, cloud):
         cloudmanager = self.clouds[cloud]["manager"]
         return cloudmanager.release_unused_public_ips()
-        
+
     def vm_delete(self, cloud, server):
         cloudmanager = self.clouds[cloud]["manager"]
         return cloudmanager.vm_delete(server)
-    
+
+
 def main():
     c = cm_mongo()
     c.activate()
     # c.refresh(types=['flavors'])
     # c.refresh(types=['servers','images','flavors'])
-    
+
     # data = c.find({})
     # data = c.find({'cm_kind' : 'servers'})
     # for entry in data:
     #   pprint (entry)
-    
-    pprint (c.servers())
-    
+
+    pprint(c.servers())
+
 if __name__ == "__main__":
     main()
