@@ -3,39 +3,44 @@ from jinja2 import Template
 from jinja2 import Environment, PackageLoader, meta
 from sh import fgrep
 
-#config = cm_config_server("etc/cloudmesh.yaml")
+class cm_template:
 
-#rint config
+    def __init__(self,filename):
+    	self.filename = filename
+	self.content = open(filename, 'r').read()	  
+
+    @property
+    def variables(self):
+    	vars = []
+    	lines = self.content.splitlines()
+	for line in lines:
+	    if "{{" in line:
+	        vars.append(line.split("{{")[1].split("}}")[0])
+	return vars
+
+    @property
+    def _variables(self):
+        env = Environment()
+	parsed_content = env.parse(self.content)
+	print meta.find_undeclared_variables(parsed_content)
+
+    def replace(self,d):
+    	template = Template(self.content)        
+	self.reuslt = template.render(d)
+	return self.result
 
 
-d = {}
+if __name__ == "__main__":
+    d = {}
+    filename = "etc/cloudmesh.yaml"
 
+    t = cm_template(filename)
+    print t.content
 
-filename = "etc/cloudmesh.yaml"
-
-
-file_content = open(filename, 'r').read()
-
-print file_content
-
-
+    #print t.variables
 
 
 
-template = Template(file_content)
+    #print t.replace(d)
 
-env = Environment()
 
-parsed_content = env.parse(file_content)
-print meta.find_undeclared_variables(parsed_content)
-
-"""
-r = fgrep ("{{")
-for line in r:
-    print line
-"""
-
-#content = template.render(d)
-        
-    
-#print content

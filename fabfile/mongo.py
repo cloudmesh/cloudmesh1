@@ -55,6 +55,7 @@ def cloud():
     c = cm_mongo()
     c.activate()
     c.refresh(types=['users', 'servers', 'images', 'flavors'])
+    fg()
     ldap()
 
 
@@ -67,7 +68,7 @@ def simple():
     c = cm_mongo()
     c.activate()
     c.refresh(types=['servers', 'images', 'flavors'])
-
+    fg()
     
 @task
 def users():
@@ -93,13 +94,13 @@ def ldap():
 
     print ("Fetching {0} Users from LDAP".format(len(users)))
     
-'''
-#@task
-#def fg():
-#    """create a simple testbed"""
-#    start()
-#   local("python setup.py install")
-#   local("python webui/fg.py")    
+
+@task
+def fg():
+    """create a simple testbed"""
+    start()
+    local("python setup.py install")
+    local("python webui/fg.py")    
 
 @task
 def pbs(host, type):
@@ -138,4 +139,3 @@ def pbs(host, type):
         print "PBS -->"
         pprint(e) 
 
-'''

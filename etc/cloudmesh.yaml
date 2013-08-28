@@ -3,7 +3,7 @@ cloudmesh:
     - sierra-openstack-grizzly
     - india-openstack-essex
     hpc:
-        username: {{portalname}}
+        username: {{portalname}}hsdj{{abc}}
     clouds:
         india-openstack-essex:
             cm_host: india.futuregrid.org
