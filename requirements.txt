@@ -17,7 +17,7 @@ python-ldap
 docopt
 python-hostlist
 pyaml
-Flask>=0.7
+Flask>=0.10
 Flask-FlatPages
 Flask-WTF>=0.8.4,<0.9
 Flask-AutoIndex
