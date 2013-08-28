@@ -39,7 +39,7 @@ class ninventory:
     def get_attribute(self, host_label, attribute):
 
         try:
-            value = self.find ({"cm_id" : host_label, 'cm_attribute' : True, 'cm_key' : attribute})[0]
+            value = self.find ({"cm_id" : host_label, 'cm_attribute' : 'variable', 'cm_key' : attribute})[0]
         except:
             value = None
         return value
@@ -53,13 +53,16 @@ class ninventory:
         if time is None:
             time = datetime.now()
         
-        cursor = self.update ({"cm_id" : host_label, 'cm_attribute' : True, 'cm_key' : attribute},
+        host = self.find_one({"cm_id": host_label, "cm_attribute":"network"})["cm_cluster"]
+        
+        cursor = self.update ({"cm_id" : host_label, 'cm_attribute' : 'variable', 'cm_key' : attribute},
                                   { "$set": { attribute: value,
+                                             'cm_cluster': host,
                                              'cm_type': "inventory",
                                              'cm_kind': 'server',
                                              'cm_key': attribute,
                                              'cm_value': value,
-                                             'cm_attribute': True,
+                                             'cm_attribute': 'variable',
                                              'cm_refresh': time,
                                              }
                                    })
@@ -105,31 +108,39 @@ class ninventory:
             cluster = self.config["clusters"][name]
             keys = cluster.keys()
             
-            print "NAME", name
-            for key in keys: 
-                print "KEY", key
-                if (type(cluster[key]) is str) and (not key in ["id","network"]):
-                    element = dict({'cm_id': name,
-                             'cm_type': "inventory",
-                             'cm_kind': 'server',
-                             'cm_key': key,
-                             'cm_value': cluster[key],
-                             'cm_attribute': True
+            element = dict({'cm_cluster': name,
+                            'cm_id': name,
+                            'cm_type': "inventory",
+                            'cm_kind': 'server',
+                            'cm_key': 'range',
+                            'cm_value': expand_hostlist(cluster["id"]),
+                            'cm_attribute': 'variable'
                              })
-                    print "OOOO", element
+            self.insert(element)
+            
+            for key in keys: 
+                if (type(cluster[key]) is str) and (not key in ["id","network"]):
+                    element = dict({'cm_cluster': name,
+                                    'cm_id': name,
+                                    'cm_type': "inventory",
+                                    'cm_kind': 'server',
+                                    'cm_key': key,
+                                    'cm_value': cluster[key],
+                                    'cm_attribute': 'variable'
+                             })
                     self.insert(element)
                 elif key == "publickeys":
                     publickeys = cluster[key]
                     for k in publickeys:
-                        element = dict({'cm_id': name,
+                        element = dict({'cm_cluster': name,
+                                        'cm_id': name,
                                         'cm_type': "inventory",
                                         'cm_kind': 'publickey',
                                         'cm_key': k['name'],
                                         'cm_name': cm_path_expand(k['path']), 
                                         'cm_value': cluster[key],
-                                        'cm_attribute': True
+                                        'cm_attribute': 'variable'
                                         })
-                        print "LLLL", element
                         self.insert(element)
 
         
@@ -140,15 +151,6 @@ class ninventory:
         
         clusters = self.config["clusters"]
         
-        pprint (clusters)
-        
-        print "CLUSTER"
-        c = self.find({})
-        for e in c:
-            pprint (e)
-        print "CLUSTER"
-        
-
         for cluster_name in clusters:
             cluster = clusters[cluster_name]
             names = expand_hostlist(cluster["id"])
@@ -167,37 +169,61 @@ class ninventory:
                     element.update({'cm_type': "inventory",
                                      'cm_kind': 'server',
                                      'cm_id': name,
-                                     'cluster': cluster_name, 
+                                     'cm_cluster': cluster_name, 
                                      'id': name, 
                                      'label' : n_label[i], 
                                      'network_name': n_name, 
                                      'cm_network_id': net_id, 
-                                     'ipaddr': n_range[i]})
-                    print "NNN", element
+                                     'ipaddr': n_range[i],
+                                     'cm_attribute': 'network'}
+                    )
                     self.insert(element)
                 net_id +=1
 
         
+        
+    def cluster (selfself, name):
+        """returns cluster data in dict"""
                  
+        
+    def hostlist (self, name):
+        print "NAME", name
+        hosts = self.find ({"cm_cluster": name, 'cm_key': 'range' })[0]['cm_value']
+        print hosts
+        return hosts    
+                         
+    
     def host (self, index):
-        cursor = self.find ({"cm_id" : index})
+        cursor = self.find ({"cm_id" : index, 'cm_attribute' : 'network'})
+        
+        print "CCCC", cursor[0]
+        
         
         data = {}
                 
-        data['cluster'] = cursor[0]['cluster']
+        data['cm_cluster'] = cursor[0]['cm_cluster']
         data['cm_type'] = cursor[0]['cm_type']  
         data['cm_id'] = cursor[0]['cm_id']  
-        data['label'] = cursor[0]['label']  
+                
+        pprint (cursor[0]['cm_cluster'])
         
+        c2 = self.find({"cm_attribute": 'variable'})
         
+        for e in c2:
+            print "EEE", e
+            print
         
-        cursor_attributes = self.find ({"cm_id" : index, 'cm_attribute' : True})
+        cursor_attributes = self.find ({"cm_id" : index, 'cm_attribute' : 'variable'})
         for element in cursor_attributes:
             data[element['cm_key']] = element['cm_value']
         
         
         data['network']={}
         for result in cursor:
+            print 70* "R"
+            pprint(result)
+            print 70* "S"
+            
             n_id = result["cm_network_id"]
             n_name = result["network_name"]
             n_ipaddr = result["ipaddr"]
@@ -205,7 +231,7 @@ class ninventory:
             #del data["network"][name]["_id"]
 
         
-        cluster_name = data["cluster"]
+        cluster_name = data['cm_cluster']
         cluster_auth = self.server_config["clusters"][cluster_name]
         
         for name in cluster_auth:

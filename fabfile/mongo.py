@@ -16,6 +16,10 @@ def start():
     port = cm_config_server().get()["mongo"]["port"]
         
     local("mkdir -p {0}".format(path))
+
+    #pid = local("ps -ax |fgrep mongod |fgrep -v fgrep ", capture=True).split(" ")[0]
+
+    #print pid 
     local("mongod --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port))
 
 @task
@@ -26,7 +30,7 @@ def stop():
     # for some reason shutdown does not work
     # local("mongod --shutdown")
     with settings(warn_only=True):
-        pid = local("ps -ax |fgrep mongo | fgrep '??'", capture=True).split(" ")[0]
+        pid = local("ps -ax |fgrep mongod | fgrep '??'", capture=True).split(" ")[0]
         local ("kill -9 {0}".format(pid))
 
 @task
