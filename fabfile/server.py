@@ -36,7 +36,7 @@ def kill(server="server"):
     """kills all server processes """
     with settings(warn_only=True):
         with hide('output','running','warnings'):  
-            local("killall mongod")
+            local("fab mongo.stop")
             result = local('ps -a | fgrep "python {0}.py" | fgrep -v fgrep'.format(server), capture=True).split("\n")
             for line in result:
                 pid = line.split(" ")[0] 
@@ -46,8 +46,7 @@ def kill(server="server"):
 def start(link="",server="server",port="5000",start_browser='yes'):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link""" 
     kill()
-    local("mkdir -p ./mongodb/")
-    local("mongod --fork --dbpath ./mongodb/ --logpath ./mongodb/mongod.log")
+    local("fab mongo.start")
     local("python setup.py install")
     local("cd webui; python {0}.py &".format(server))
     if start_browser == 'yes':
@@ -69,14 +68,4 @@ def clean():
     local("rm -rf doc/build ")
 
 
-@task
-def cleanmongo():
-    """erase the database and kill the mongo processes"""
-    local('mongo invenntory --eval "db.dropDatabase();"')
-    if sys.platform == 'darwin':
-        local("killall mongod")
-        local("rm -fr /usr/local/var/log/mongodb/*")
-        local("rm -fr /usr/local/var/mongodb/*")
-    else:
-        print "THIS FUNCTION IS NOT YET IMPLEMENTED"
 
