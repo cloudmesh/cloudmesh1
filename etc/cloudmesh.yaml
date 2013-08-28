@@ -3,7 +3,7 @@ cloudmesh:
     - sierra-openstack-grizzly
     - india-openstack-essex
     hpc:
-        username: {{portalname}}hsdj{{abc}}
+        username: {{portalname}}
     clouds:
         india-openstack-essex:
             cm_host: india.futuregrid.org
@@ -13,7 +13,7 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: http://149.165.146.50:5000/v2.0
                 OS_CACERT: None
-                OS_PASSWORD: {{india.openstack.password}}
+                OS_PASSWORD: {{india_openstack_password}}
                 OS_TENANT_NAME: member
                 OS_USERNAME: {{portalname}}
                 OS_VERSION: essex
@@ -28,8 +28,8 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
-                OS_PASSWORD: {{sierra.openstack.password}}
-                OS_TENANT_NAME: {{project.default}}
+                OS_PASSWORD: {{sierra_openstack_password}}
+                OS_TENANT_NAME: {{project_default}}
                 OS_USERNAME: {{portalname}}
                 OS_VERSION: grizzly
             default:
@@ -56,7 +56,7 @@ cloudmesh:
         active:
           - {{projects}}
         completed: []
-        default: {{project.default}}
+        default: {{project_default}}
     security:
         default: secGroup2
         rules:

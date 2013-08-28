@@ -20,20 +20,23 @@ class cm_template:
                     if "}}" in word:
                         name = word.split("}}")[0]
                         vars.append(name)
-    	return vars
+        return vars
 
     def _variables(self):
         env = Environment()
         parsed_content = env.parse(self.content)
-	print meta.find_undeclared_variables(parsed_content)
+        print meta.find_undeclared_variables(parsed_content)
 
+    
+    
     def replace(self, d, format="text"):
 
-    	v = self.variables()
+        v = self.variables()
         k = d.keys()
 
         diff = set(v) - set(k)
 
+        self.complete = len(diff) == 0
         if len(diff) > 0:
 
             print "\nERROR: substitution abborted"
