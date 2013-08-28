@@ -46,6 +46,7 @@ except:
 
 all_modules = ['pbs',
                #'flatpages',
+               'launch',
                'nose',
                'inventory',
                'provisioner',
