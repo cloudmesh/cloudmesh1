@@ -45,6 +45,11 @@ super_sidebar_pages = [
             ["Admin", "/hpc"]            
         ]
     ],
+    ["Launcher",
+        [
+            ["Launcher", "/cm/launch"]            
+        ]
+    ],
     
 ]
 

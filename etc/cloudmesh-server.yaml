@@ -7,6 +7,7 @@ mongo:
     db: cloudmesh
     host: localhost
     port: 27017
+    path: ~/.futuregrid/mongodb
     collections:
         inventory:
             db: new-inventory
