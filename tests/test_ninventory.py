@@ -26,6 +26,9 @@ class Test_Inventory:
     def tearDown(self):
         pass
 
+    def test_fail(self):
+        HEADING()
+        assert False
     
     def test_clear(self):
         HEADING()
@@ -65,7 +68,7 @@ class Test_Inventory:
         data = self.inventory.host(self.name)
         pprint(data)
         
-        
+    
         
     def test_set(self):
         HEADING()
