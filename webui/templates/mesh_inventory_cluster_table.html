@@ -1,0 +1,56 @@
+{% extends "layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+
+{% block contentbox %}
+<h2> Inventory Table </h2>
+{% endblock contentbox %}
+
+
+{% block content %}
+
+<script type="text/javascript">
+
+
+$(function() {
+        /** This code runs when everything has been loaded on the page */
+        /* Inline sparklines take their values from the contents of the tag */
+        $('.inlinesparkline').sparkline();
+
+
+});
+
+
+</script>
+
+<table>
+  <tr>
+    <th colspan="{{ parameters.columns }}">  
+    {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster + "/") }}
+
+      Cloudmesh - Inventory for {{ cluster }}
+    </th>
+  </tr>
+  <tr>
+    <td  colspan="{{ parameters.columns }}"> 
+      Updated :  {{ updated }}
+    </td>
+  </tr>
+  <tr>
+    {% for server in servers | sort  %}
+        <td>
+	   <a href="/inventory/cluster/{{ cluster }}/{{server}}"> 
+		  {{ server | only_numbers }}
+	   </a>
+     </td>
+        	{% if (loop.index) %(parameters.columns) == 0  %}	
+          	        </tr><tr>
+	   	{% endif %}
+    {% endfor %}
+  </tr>
+</table>
+
+
+  
+{% endblock %} 
+

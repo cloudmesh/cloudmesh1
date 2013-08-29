@@ -7,33 +7,72 @@ from flask.ext.login import login_required
 inventory_module = Blueprint('inventory_module', __name__)
 
 from cloudmesh.inventory.inventory import Inventory
+from cloudmesh.inventory.ninventory import ninventory
+
+from cloudmesh.util.util import table_printer
 
 inventory = Inventory("nosetest")
 
 
-@inventory_module.route('/inventory/summary/')
-def display_summary():
+n_inventory = ninventory()
+n_inventory.clear()
+n_inventory.generate()
+
+
+
+@inventory_module.route('/inventory/')
+def display_inventory():
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    #inventory.refresh()
+
+    clusters = ["bravo", "india", "delta", "echo", "sierra"]
+    
+    return render_template('mesh_inventory.html',
+                           updated=time_now,
+                           clusters=clusters)
+
+"""
+@inventory_module.route('/old/inventory/summary/')
+def old_display_summary():
     parameters = {'columns': 12}
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     return render_template('inventory_summary_table.html',
                            inventory=inventory,
                            parameters=parameters,
                            updated=time_now)
+"""
 
 # ============================================================
 # ROUTE: INVENTORY TABLE
 # ============================================================
 
-
+"""
 @inventory_module.route('/inventory/')
-def display_inventory():
+def display_old_inventory():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     inventory.refresh()
     return render_template('inventory.html',
                            updated=time_now,
                            inventory=inventory)
+"""
 
 
+@inventory_module.route('/inventory/cluster/<cluster>/<name>')
+def display_named_resource(cluster, name):
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    #inventory.refresh()
+    
+    clusters = n_inventory.hostlist(cluster)
+    server = n_inventory.host(name,auth=False)
+    
+    return render_template('mesh_inventory_cluster_server.html',
+                           updated=time_now,
+                           server=server,
+                           printer=table_printer,
+                           cluster=cluster)
+
+"""
 @inventory_module.route('/inventory/cluster/<cluster>/<name>')
 def display_named_resource(cluster, name):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -53,7 +92,22 @@ def display_cluster(cluster):
                            updated=time_now,
                            cluster=inventory.get("cluster", cluster))
 
+"""
 
+@inventory_module.route('/inventory/cluster/<cluster>/')
+def display_cluster(cluster):
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    #inventory.refresh()
+    
+    servers = n_inventory.hostlist(cluster)
+    
+    return render_template('mesh_inventory_cluster.html',
+                           updated=time_now,
+                           servers=servers,
+                           cluster=cluster,
+                           services=['openstack', 'eucalyptus', 'hpc'])
+
+"""
 @inventory_module.route('/inventory/cluster/table/<cluster>/')
 def display_cluster_table(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -70,6 +124,30 @@ def display_cluster_table(cluster):
                            updated=time_now,
                            parameters=parameters,
                            cluster=inventory.get("cluster", cluster))
+"""
+
+@inventory_module.route('/inventory/cluster/table/<cluster>/')
+def display_cluster_table(cluster):
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    #inventory.refresh()
+
+    servers = n_inventory.hostlist(cluster)
+
+
+    cluster_obj = inventory.get("cluster", cluster)
+    n = len(servers)
+    parameters = {
+        "columns": 10,
+        "n": n
+    }
+
+    return render_template('mesh_inventory_cluster_table.html',
+                           updated=time_now,
+                           parameters=parameters,
+                           servers= servers,
+                           cluster=cluster)
+                           
+#                           cluster=inventory.get("cluster", cluster))
 
 
 @inventory_module.route('/inventory/images/')
