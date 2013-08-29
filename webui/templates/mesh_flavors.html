@@ -13,7 +13,7 @@
 (function($) {
     $(function() {
         $("#flavors-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: false });
-    })
+    });
 })(jQuery);
 
 $(function() {
@@ -51,10 +51,10 @@ $(function() {
       <thead>
           <tr>
             <th>default</th>
-            <!-- for attribute in clouds[cloud][flavor]  --> 
-            {% for attribute in attributes %}	
+            <!-- for attribute in clouds[cloud][flavor]  -->
+            {% for attribute in attributes %}
                   <th>{{attribute}}</th>
-            {% endfor %}			
+            {% endfor %}
           </tr>
       </thead>
       <tbody>
@@ -62,7 +62,7 @@ $(function() {
 
              <tr>
                <td><input type="radio" name="cloud-{{ cloud_loop.index0 }}-default-flavor" /></td>
-                 <!-- for attribute in clouds[cloud][flavor] --> 
+                 <!-- for attribute in clouds[cloud][flavor] -->
                  {% for attribute in attributes  %}
                       <td>{{ clouds[cloud][flavor][attribute]  }}</td>
                  {% endfor %}
