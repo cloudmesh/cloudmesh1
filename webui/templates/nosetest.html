@@ -1,9 +1,18 @@
-{% extends "layout.html" %}
+{% extends "layout_title.html" %}
 {% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+<h2>{{ image_button ("none", "365_restart", "/test/run") }} Nosetests</h2>
+{% endblock %}
+
 {% block content %}
 
-    
-  <h1>Statistics</h1>
+{%if tests == None %}
+
+
+{% else %}
+
+<h3>Statistics</h3>
 
   <table>
 	 <tr>
@@ -34,7 +43,7 @@
   </table>
 
   
-  <h1>Results</h1>
+  <h3>Results</h3>
 
   <table>
   <tr>
@@ -56,5 +65,7 @@
   {% endfor %}
   
    </table>
+
+{% endif %}
 
 {% endblock %}

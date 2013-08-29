@@ -2,7 +2,7 @@ from fabric.api import task, local
 import shutil
 
 @task
-def json():
+def install():
     """install nose-json"""
     print "UNINSTALL"
     r = int(local("pip freeze | fgrep nose-json | wc -l", capture=True))
@@ -14,3 +14,11 @@ def json():
     print ("INSTALLING")
     local("cd /tmp/nose-json; python setup.py install", capture=True)
     
+@task
+def run():
+    """run the nosetests"""
+    local('nosetests --with-json --json-file="nosetests.json"')
+
+@task
+def view():
+    local("fab server.start:test/nose")
