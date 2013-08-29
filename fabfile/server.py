@@ -7,15 +7,16 @@ import platform
 import sys
 from cloudmesh.util.util import path_expand
 
-__all__ = ['start', 'kill', 'view', 'clean', 'cleanmongo']
+__all__ = ['start', 'kill', 'view', 'clean', 'cleanmongo','agent']
 
 #
 # SETTING THE BROWSER BASED ON PLATFORM
 #
-browser = "firefox"
+web_browser = "firefox"
 
 if sys.platform == 'darwin':
-    browser = "open"
+    web_browser = "open"
+
 
 #
 # VERSION MANAGEMENT
@@ -30,6 +31,15 @@ if sys.platform == 'darwin':
 # filename = "VERSION.txt"
 # version = open(filename).read()
 
+@task
+def agent():
+    #with settings(warn_only=True):
+    #    local("killall ssh-agent")
+    print 70*"="
+    print" PLEASE COPY THE FOLLOWING COMMNADS AND EXECUTE IN YOUR SHELL"
+    print 70*"="
+    print ("eval `ssh-agent -s`")
+    print("ssh-add") 
 
 @task
 def kill(server="server"):
@@ -43,20 +53,20 @@ def kill(server="server"):
                 local("kill -9 {0}".format(pid))
 
 @task
-def start(link="",server="server",port="5000",start_browser='yes'):
+def start(link="",server="server",port="5000",browser='yes'):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link""" 
     kill()
     local("fab mongo.start")
     local("python setup.py install")
     local("cd webui; python {0}.py &".format(server))
-    if start_browser == 'yes':
-        local("sleep 2; {0} http://127.0.0.1:{2}/{1}".format(browser,link,port))
+    if browser == 'yes':
+        local("sleep 2; {0} http://127.0.0.1:{2}/{1}".format(web_browser,link,port))
 
 @task
 def view(link="inventory"):
     """run the browser"""
     local("sleep 1")
-    local("%s http://localhost:5000/%s" % (browser, link))
+    local("%s http://localhost:5000/%s" % (web_browser, link))
 
 @task
 def clean():
