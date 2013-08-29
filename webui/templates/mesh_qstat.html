@@ -8,15 +8,15 @@
 {% block content %}
 <script type="text/javascript">
 
-/* 
+/*
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#qstat-accordion > div").accordion({ header: "h3", 
-        										collapsible: true, 
-        										heightStyle: "content", 
+        $("#qstat-accordion > div").accordion({ header: "h3",
+        										collapsible: true,
+        										heightStyle: "content",
         										active: false });
-    })
+    });
 })(jQuery);
 
 
@@ -38,9 +38,9 @@ $(function() {
         {% set host_loop = loop %}
         {% set version = 'pbs' %}
         <div style="margin-bottom:1em;">
-       <h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + host) }} 
-       	 {{ host }}, 
-       	 {{ jobcount[host] }} jobs, 
+       <h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + host) }}
+       	 {{ host }},
+       	 {{ jobcount[host] }} jobs,
        	 {{ timer[host] | timesince(format="date") }}
        	</h3>
        <div>
@@ -61,11 +61,10 @@ $(function() {
             {% for attribute in attributes[version] %}
             <td>
             {% set l = attribute | length %}
-
                           {% if l == 2%}
                              {{ server[attribute[1]] }}
                           {% elif l == 3%}
-                             {{ server[attribute[1]][attribute[2]] }}       				
+                             {{ server[attribute[1]][attribute[2]] }}
                           {% elif l == 4%}
                              {{ server[attribute[1]][attribute[2]][attribute[4]] }}
                           {% endif %}
@@ -76,6 +75,7 @@ $(function() {
         </tbody>
         </table>
         </div>
+    </div>
     {% endfor %}
 </div>
 
