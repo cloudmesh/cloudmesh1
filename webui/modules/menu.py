@@ -50,7 +50,6 @@ super_sidebar_pages = [
             ["Launcher", "/cm/launch"]            
         ]
     ],
-    
 ]
 
 
