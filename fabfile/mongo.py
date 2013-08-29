@@ -9,14 +9,19 @@ from cloudmesh.util.util import path_expand as cm_path_expand
 import sys
 import os.path
 
-def get_mongo_pid():
-    lines= local("ps -ax |fgrep mongod ", capture=True).split("\n")
+def get_pid(command):
+    lines= local("ps -ax |fgrep {0}".format(command), capture=True).split("\n")
     pid = None
     for line in lines:
         if not "fgrep" in line:
             pid = line.split(" ")[0]
             break
-    return pid
+    return (pid, line)
+
+@task
+def info():
+    (pid, line) = get_pid("mongod")
+    print line
 
 @task
 def start():
@@ -31,7 +36,7 @@ def start():
         local("mkdir -p {0}".format(path))
 
     lines= local("ps -ax |fgrep mongod ", capture=True).split("\n")
-    pid = get_mongo_pid()
+    (pid, line) = get_pid("mongod")
 
     if not pid is None:
         print "mongo already running in pid", pid
@@ -48,7 +53,7 @@ def stop():
     '''
     # for some reason shutdown does not work
     # local("mongod --shutdown")
-    pid = get_mongo_pid()
+    (pid, line) = get_pid("mongod")
     if pid is None:
         print "No mongod running"
     else:
