@@ -1,0 +1,129 @@
+{% extends "layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+<h2> {{ image_button ("none", "365_restart", "/mesh/refresh/qstat") }} Launcher </h2> {# change redirects. currently to qStat#}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+
+/* 
+/* http://stackoverflow.com/a/10237915 */
+(function($) {
+    $(function() {
+        $("#launcher-accordion > div").accordion({ header: "h3", 
+        										collapsible: true, 
+        										heightStyle: "content", 
+        										active: false });
+    })
+})(jQuery);
+
+
+$(function() {
+  {% for cloudnum in range(hosts|count) %}
+    $("#display-table-{{ cloudnum }}").dataTable({
+    	"sPaginationType": "full_numbers",
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
+    });
+  {% endfor %}
+});
+
+</script>
+
+
+<div id="launcher-accordion">
+    {% for column in columns %}
+
+    	<div style="margin-bottom:1em;">
+
+       		<h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + column) }} {#make refresh changes. currently follows qstat#}
+        		{{ column }}
+        	</h3>
+	        <div>
+	        	<form action = "/cm/launch/launch_servers" method = post>
+	        	<input type = hidden name = server value = {{column}}>
+	        	{%set attribute_list = columns[column]%}
+			    <table id="display-table-{{ loop.index0 }}">
+		       	<thead>
+		        <tr>
+		        <th> Select </th>
+		        {% for attribute in attribute_list %}
+		        	<th>
+		        		{{attribute}}
+		        	</th>
+		        {% endfor %}
+		        </tr>
+
+		        {% for recipie in recipies[column] %}
+		        <tr>
+		        	{{recipie["name"]}}
+		        	<td><input type = "checkbox" name = "resource" value = {{recipie["name"]}}></td>  {#this part looks for key name. use the name as key to indicate the name of the resource..#}
+		        	{% for a in attribute_list%}
+			        	<td>
+			        		{{recipie[a]}}
+			        	</td>	
+			        {%endfor%}
+		        </tr>
+		        {% endfor %}	
+		        
+		        </table>
+		        <input type = submit value = "press to launch">
+		       </form>
+	        </div>
+       </div>
+        
+        
+    {% endfor %}
+    {#
+ <div id="qstat-accordion">
+    {% for host in hosts %}
+        {% set host_loop = loop %}
+        {% set version = 'pbs' %}
+        <div style="margin-bottom:1em;">
+       <h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + host) }} 
+       	 {{ host }}, 
+       	 {{ jobcount[host] }} jobs, 
+       	 {{ timer[host] | timesince(format="date") }}
+       	</h3>
+       <div>
+       <small>Last updated: {{updated | timesince(format="date")}}</small><br>
+       <table id="display-table-{{ loop.index0 }}">
+       	<thead>
+        <tr>
+        {% for attribute in attributes[version] %}
+        	<th>
+        		{{attribute[0]}}
+        	</th>
+        {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for server in qstat[host] %}
+            <tr>
+            {% for attribute in attributes[version] %}
+            <td>
+            {% set l = attribute | length %}
+
+                          {% if l == 2%}
+                             {{ server[attribute[1]] }}
+                          {% elif l == 3%}
+                             {{ server[attribute[1]][attribute[2]] }}       				
+                          {% elif l == 4%}
+                             {{ server[attribute[1]][attribute[2]][attribute[4]] }}
+                          {% endif %}
+              </td>
+              {% endfor %}
+              </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+        </div>
+    {% endfor %}
+</div>
+
+   #}
+</div>
+
+{% endblock %}
