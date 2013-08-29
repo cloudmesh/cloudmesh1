@@ -4,9 +4,11 @@ import platform
 import os
 
 def is_ubuntu():
+    """test sif the platform is ubuntu"""
     return platform.dist()[0] == 'Ubuntu'
 
 def is_centos():
+    """test if the platform is centos"""
     (centos, version, release) = platform.dist()
     if centos == "centos" and version != "6.4":
         print "Warning: centos %s is not tested" % version
@@ -40,8 +42,8 @@ def download():
 
 @task
 def install():
-    local("pip install -r requirements.txt")
-    local("python setup.py install")
+    local("cd ..; pip install -r requirements.txt")
+    local("cd ..; python setup.py install")
 
 
 def install_mongodb():
