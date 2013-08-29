@@ -1,0 +1,102 @@
+{% extends "layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+
+
+{% block contentbox %}
+<h1> Inventory Cluster </h1>
+ Details for cluster {{cluster.name }}
+{% endblock contentbox %}
+
+{% block content %}
+
+<script type="text/javascript">
+
+function change_service(server_name, service_name) {
+	var answer = confirm("Change the status of the " + server_name + " to " + service_name + "?")
+	if (answer) {
+        $.ajax("/inventory/set/service/",
+                { type: 'POST',
+                  data: { server: server_name, provisioned: service_name },
+                  complete: function () { window.location.reload(); } } );
+    }
+}
+
+$(document).ready(function() {
+        /** This code runs when everything has been loaded on the page */
+        /* Inline sparklines take their values from the contents of the tag */
+        $('.inlinesparkline').sparkline();
+});
+
+
+</script>
+
+
+<table>
+  <tr>
+    <th colspan="7">
+
+    {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster + "/") }}
+
+      Cloudmesh - Inventory for {{ cluster }}</th>  
+  <tr> <td colspan="8"> Updated {{ updated }}
+    <select>
+      <option value="">Bulk select...</option>
+      {% for choice in cluster.provision_choices %}
+          <option value="bulk-{{ choice }}">
+	    {{  choice }}
+	  </option>
+      {% endfor %}
+    </select>
+  </td></tr>
+
+  <tr>
+    <th> </th>
+    <th> </th>
+    <th> Name </th>
+    <th> Status </th>
+    <th> Services </th>
+    <th> IP </th>
+    <th> Users </th>
+    <th> VMs/Jobs </th>
+  </tr>
+
+  {% for server in servers | sort  %}
+  <tr>
+  <td>
+    <input name="checkbox" value="{{ server }}" type="checkbox">
+  </td>
+  <td>
+    {{ image_button ("right", "195_circle_info", "/inventory/cluster/" + cluster + "/"+  server) }}
+  </td>
+  <td> <a href="/inventory/cluster/{{ cluster }}/{{server}}"> 
+    {{ server }}
+    </a>
+  </td>
+  <td> server-status </td>
+  <td>
+    <select  onchange="change_service('{{ server }}', this.options[this.selectedIndex].value)">
+      <option value="" 
+        {% if not server.provisioned %}
+          selected="selected"
+        {% endif %}>Select...</option>
+      {% for service in services %}
+      <option value="{{ service }}"
+        {% if server.provisioned and server.provisioned == service %}
+          selected="selected"
+        {% endif %}>{{ service }}</option>
+      {% endfor %}
+    </select>
+  </td>
+
+  <td>{{ server.ip }}</td>
+  <td><!--<span class="inlinesparkline">{{ server.load_users|join(', ')}}</span>--></td>
+  <td><!--<span class="inlinesparkline">{{ server.load_vms|join(', ') }}</span>--></td>
+
+</tr>
+
+  {% endfor %}
+  
+</table>
+
+{% endblock %}

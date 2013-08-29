@@ -1,0 +1,70 @@
+{% extends "layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+
+
+{% block contentbox %}
+<h2> Inventory Server </h2>
+ Details for server {{ server.name }} @ {{ cluster }} 
+{% endblock contentbox %}
+
+{% block content %}
+
+<script type="text/javascript">
+
+function change_service(server_name, service_name) {
+	var answer = confirm("Change the status of the " + server_name + " to " + service_name + "?")
+	if (answer) {
+        $.ajax("/inventory/set/service/",
+                { type: 'POST',
+                  data: { server: server_name, service: service_name },
+                  complete: function () { window.location.reload(); } } );
+    }
+}
+
+$(function() {
+        /** This code runs when everything has been loaded on the page */
+        /* Inline sparklines take their values from the contents of the tag */
+        $('.inlinesparkline').sparkline();
+
+
+});
+
+
+</script>
+
+
+{{ printer(server) |safe }}
+
+
+{% set server_data = server["_data"] %}
+<table>
+    
+	{% for service in server['services'] %}
+	   <tr>
+	   	<td>service</td>
+	   	<td>
+	   	  {{ service.subkind }} : {{service.name}} : {{service.status}}
+	   </td>
+	   </tr>
+	   
+	{% endfor %}
+
+
+{% for key in server_data %}
+   {% if key != "services" %}
+   <tr>
+     <td>{{ key }}</td>
+     {% if server_data[key] | is_list  %}
+       <td> {{ ', '.join(server_data[key]) }}</td>
+     {% else %} 
+       <td>{{ server_data[key] }}</td>     
+    {% endif %}
+     </tr>
+   {% endif %}
+{% endfor %}
+
+</table>
+{% endblock %} 
+
+

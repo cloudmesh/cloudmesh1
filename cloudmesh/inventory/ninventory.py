@@ -193,7 +193,7 @@ class ninventory:
         return hosts    
                          
     
-    def host (self, index):
+    def host (self, index, auth=True):
         cursor = self.find ({"cm_id" : index, 'cm_attribute' : 'network'})
         
         print "CCCC", cursor[0]
@@ -236,11 +236,18 @@ class ninventory:
         
         for name in cluster_auth:
             network = data["network"][name]
-            network.update(cluster_auth[name])
+            d = dict(cluster_auth[name])
+            network.update(d)
+            
+        excludes = ['user', 'password']
         
         for name in data["network"]:
             del data["network"][name]["_id"]
-        
+            if not auth:
+                for exclude in excludes:
+                    if exclude in data["network"][name]:
+                        del data["network"][name][exclude]
+                        
         return data
                 
     def ipadr (self, index, type):
