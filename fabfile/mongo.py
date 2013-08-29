@@ -4,24 +4,43 @@ from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
+from cloudmesh.util.util import path_expand as cm_path_expand
 
 import sys
+import os.path
+
+def get_mongo_pid():
+    lines= local("ps -ax |fgrep mongod ", capture=True).split("\n")
+    pid = None
+    for line in lines:
+        if not "fgrep" in line:
+            pid = line.split(" ")[0]
+            break
+    return pid
 
 @task
 def start():
     '''
     start the mongod service in the location as specified in ~/.futuregrid/cloudmesh_server.yaml
     '''
-    path = cm_config_server().get()["mongo"]["path"]
+    path = cm_path_expand(cm_config_server().get()["mongo"]["path"])
     port = cm_config_server().get()["mongo"]["port"]
+
+    if not os.path.exists(path):
+        print "Creating mongodb directory in", path
+        local("mkdir -p {0}".format(path))
+
+    lines= local("ps -ax |fgrep mongod ", capture=True).split("\n")
+    pid = get_mongo_pid()
+
+    if not pid is None:
+        print "mongo already running in pid", pid
+    else:
+        print "Starting mongod"
+        local("mongod --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port))
+
+       
         
-    local("mkdir -p {0}".format(path))
-
-    #pid = local("ps -ax |fgrep mongod |fgrep -v fgrep ", capture=True).split(" ")[0]
-
-    #print pid 
-    local("mongod --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port))
-
 @task
 def stop():
     '''
@@ -29,8 +48,11 @@ def stop():
     '''
     # for some reason shutdown does not work
     # local("mongod --shutdown")
-    with settings(warn_only=True):
-        pid = local("ps -ax |fgrep mongod | fgrep '??'", capture=True).split(" ")[0]
+    pid = get_mongo_pid()
+    if pid is None:
+        print "No mongod running"
+    else:
+        print "Kill mongod"
         local ("kill -9 {0}".format(pid))
 
 @task
