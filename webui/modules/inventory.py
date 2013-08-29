@@ -43,6 +43,27 @@ def old_display_summary():
                            updated=time_now)
 """
 
+@inventory_module.route('/inventory/summary/')
+def old_display_summary():
+    
+    #clusters = ["bravo", "india", "delta", "echo", "sierra"]
+    clusters = ["bravo", "india", "delta", "echo"]
+    
+    inv = {}
+    
+    for cluster in clusters:
+        inv[cluster] = n_inventory.hostlist(cluster)
+    
+    parameters = {'columns': 12}
+    
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    return render_template('mesh_inventory_summary_table.html',
+                           inventory=inv,
+                           clusters=clusters,
+                           parameters=parameters,
+                           updated=time_now)
+
 # ============================================================
 # ROUTE: INVENTORY TABLE
 # ============================================================
