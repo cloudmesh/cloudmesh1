@@ -1,10 +1,23 @@
 from __future__ import with_statement
+
+import sys
+try:
+   import cloudmesh
+   print "Version", cloudmesh.__version__ 
+   print "Full Version", cloudmesh.__full_version__ 
+except:
+    print "ERROR: could not find package\n\n   cloudmesh\n"
+    print "please run first\n" 
+    print "     python setup.py install\n"
+    sys.exit()
+
+
 from fabric.api import task, local, execute, hide,settings
 from fabric.contrib.console import confirm
 import os
 import webbrowser
 import platform
-import sys
+
 from cloudmesh.util.util import path_expand
 
 __all__ = ['start', 'kill', 'view', 'clean', 'cleanmongo','agent']
