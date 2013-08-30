@@ -41,3 +41,17 @@ Shortcuts
 * list of open issues: https://github.com/cloudmesh/cloudmesh/issues?direction=desc&sort=updated&state=open
 * milestones: https://github.com/cloudmesh/cloudmesh/issues/milestones
 * oholo: https://www.ohloh.net/p/cloudmesh-rain
+
+Examples of user specific shortcuts
+
+* List all open tasks assigned to gregor:
+https://github.com/cloudmesh/cloudmesh/issues/assigned/laszewsk?direction=desc&sort=updated&state=open
+* List all open tasks with the label gregor:
+https://github.com/cloudmesh/cloudmesh/issues/assigned/laszewsk?direction=desc&labels=z-gregor&page=1&sort=updated&state=open
+
+* List all currently active tasks: https://github.com/cloudmesh/cloudmesh/issues/assigned/laszewsk?direction=desc&labels=active&page=1&sort=updated&state=open
+
+* List tasks that need help: https://github.com/cloudmesh/cloudmesh/issues/assigned/laszewsk?direction=desc&labels=help&page=1&sort=updated&state=open
+
+* List tasks that need review:  https://github.com/cloudmesh/cloudmesh/issues/assigned/laszewsk?direction=desc&labels=review&milestone=&page=1&sort=updated&state=open
+
