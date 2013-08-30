@@ -4,14 +4,15 @@ import os
 import stat
 import json
 import collections
+import copy
 
-from string import Template
 from pprint import pprint
 from cloudmesh.util.util import path_expand
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import check_file_for_tabs
 from cloudmesh_cloud_handler import cloudmesh_cloud_handler
 from cloudmesh.util.config import read_yaml_config
+from cloudmesh.user.cm_template import cm_template
 from pymongo import MongoClient
 import yaml
 
@@ -20,6 +21,9 @@ import yaml
 
 
 log = LOGGER("cm_config")
+
+package_dir = os.path.dirname(os.path.abspath(__file__))
+
 
 def get_mongo_db(mongo_collection):
     """
@@ -72,8 +76,8 @@ class cm_config(object):
     # ----------------------------------------------------------------------
 
     default_path = '.futuregrid/cloudmesh.yaml'
-    yaml_template = '%s/cloudmesh_template.yaml' % os.path.dirname(__file__)
-    clouddata_template = '%s/cloudmesh_clouds.yaml' % os.path.dirname(__file__)
+    yaml_template_path = os.path.normpath(os.path.join(package_dir, '..', '..', 'etc', 'cloudmesh.yaml'))
+    cloudmesh_server_path = os.path.join(os.environ['HOME'], '.futuregrid', 'cloudmesh_server.yaml')
 
     filename = ""
 
@@ -96,7 +100,7 @@ class cm_config(object):
             log.error("Can not find the file: {0}".format(self.filename))
             sys.exit()
         self._userdata_handler = None
-        self._clouddata = None
+        self._serverdata = None
 
         # test for tab in yaml file
         if check_file_for_tabs(self.filename):
@@ -113,7 +117,7 @@ class cm_config(object):
                          'projectlist': self.projects('active'),
                          'cloudname': cloud }
         if as_admin:
-            handler_args['clouddata'] = self.clouddata[cloud]
+            handler_args['clouddata'] = self.serverdata
         else:
             handler_args['clouddata'] = self.cloud(cloud)
         cloud_handler_class = cloudmesh_cloud_handler(cloud)
@@ -133,10 +137,10 @@ class cm_config(object):
         """Loads user config, including profile, projects, and credentials"""
         user = self.userdata_handler(username)
 
-        self.config['cloudmesh']['prefix'] = username
-        self.config['cloudmesh']['index'] = "001"
+        self.init_config['cloudmesh']['prefix'] = username
+        self.init_config['cloudmesh']['index'] = "001"
 
-        self.config['cloudmesh']['profile'] = {
+        self.init_config['cloudmesh']['profile'] = {
             'username': username,
             'uid': user.uid,
             'gid': user.gid,
@@ -153,30 +157,31 @@ class cm_config(object):
                 if keys['default'] is None:
                     keys['default'] = key
                 keys['keylist'][key] = user.keys[key]
-        self.config['cloudmesh']['keys'] = keys
+        self.init_config['cloudmesh']['keys'] = keys
 
-        self.config['cloudmesh']['projects'] = {
+        self.init_config['cloudmesh']['projects'] = {
             'active': user.activeprojects,
             'completed': user.completedprojects,
             'default': user.defaultproject
         }
 
-        self.config['cloudmesh']['active'] = user.activeclouds
-        self.config['cloudmesh']['default'] = user.defaultcloud
+        self.init_config['cloudmesh']['active'] = user.activeclouds
+        self.init_config['cloudmesh']['default'] = user.defaultcloud
 
     def _initialize_clouds(self):
         """Creates cloud credentials for the user"""
-        self.config['cloudmesh']['clouds'] = {}
+        self.init_config['cloudmesh']['clouds'] = {}
         cloudlist = self.active()
         for cloud in cloudlist:
             cloudcreds = self._get_cloud_handler(cloud, as_admin=True)
             cloudcreds.initialize_cloud_user()
-            self.config['cloudmesh']['clouds'][cloud] = cloudcreds.config
+            self.init_config['cloudmesh']['clouds'][cloud] = copy.deepcopy(cloudcreds.data)
 
     def initialize(self, username):
         """Creates or resets the config for a user.  Note that the
         userdata_handler property must be set with appropriate handler class."""
-        self.config = yaml.safe_load(open(self.yaml_template, "r"))
+        self.init_config = collections.OrderedDict()
+        self.init_config['cloudmesh'] = collections.OrderedDict()
         self._initialize_user(username)
         self._initialize_clouds()
 
@@ -208,8 +213,9 @@ class cm_config(object):
     def write(self, filename=None):
         # pyaml.dump(self.config, f, vspacing=[2, 1, 1])
         # text = yaml.dump(self.config, default_flow_style=False)
-        content = ""
-        content = yaml.safe_dump(self.config, default_flow_style=False, indent=4)
+        template_path = os.path.normpath(os.path.join(package_dir, '..', '..', 'etc', 'cloudmesh.yaml'))
+        template = cm_template(template_path)
+        content = template.replace(self.config['cloudmesh'], format="dict")
 
         fpath = filename or self.filename
         f = os.open(fpath, os.O_CREAT | os.O_TRUNC | 
@@ -244,10 +250,10 @@ class cm_config(object):
         self._userdata_handler = value
 
     @property
-    def clouddata(self):
-        if self._clouddata is None:
-            self._clouddata = yaml.safe_load(open(self.clouddata_template, "r"))
-        return self._clouddata
+    def serverdata(self):
+        if self._serverdata is None:
+            self._serverdata = yaml.safe_load(open(self.cloudmesh_server_path, "r"))
+        return self._serverdata
 
     @property
     def vmname(self):

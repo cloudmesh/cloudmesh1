@@ -35,22 +35,11 @@ class cloudmesh_cloud:
         return self._defaultproj
 
     @property
-    def clouddefaults(self):
-        return self._data['default']
-
-    @property
     def credentials(self):
         return self._data['credentials']
 
     @property
     def data(self):
-        d = dict(self._data)
-        if d.has_key('cm_admin'):
-            del d['cm_admin']
-        return d
-
-    @property
-    def admin_data(self):
         return self._data
 
     def newpass(self):
