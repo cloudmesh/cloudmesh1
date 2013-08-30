@@ -17,7 +17,7 @@ from pymongo import MongoClient
 import yaml
 
 ##### For testing
-import mock_keystone
+# import mock_keystone
 
 
 log = LOGGER("cm_config")
@@ -123,9 +123,9 @@ class cm_config(object):
         cloud_handler_class = cloudmesh_cloud_handler(cloud)
         cloud_handler = cloud_handler_class(**handler_args)
         ########### for testing #############################################################
-        cloud_handler._client = mock_keystone.Client
-        cloud_handler._client.mockusername = self.config['cloudmesh']['profile']['username']
-        cloud_handler._client.mocktenants = ['fg82','fg110','fg296']
+        # cloud_handler._client = mock_keystone.Client
+        # cloud_handler._client.mockusername = self.config['cloudmesh']['profile']['username']
+        # cloud_handler._client.mocktenants = ['fg82','fg110','fg296']
         #####################################################################################
         return cloud_handler
         
