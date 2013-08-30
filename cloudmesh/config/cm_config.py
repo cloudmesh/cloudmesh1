@@ -22,7 +22,9 @@ import yaml
 log = LOGGER("cm_config")
 
 def get_mongo_db(mongo_collection):
-    # Read in the mongo db information from the cloudmesh_server.yaml
+    """
+    Read in the mongo db information from the cloudmesh_server.yaml
+    """
     location = path_expand("~/.futuregrid/cloudmesh_server.yaml")
     result = open(location, 'r').read()
         
@@ -39,6 +41,10 @@ def get_mongo_db(mongo_collection):
     return db_clouds
     
 class cm_config_server(object):
+    """
+    reads the information contained in the file
+    ~/.futuregrid/cloudmesh_server.yaml
+    """
     filename = "~/.futuregrid/cloudmesh_server.yaml"
     config = None
 
