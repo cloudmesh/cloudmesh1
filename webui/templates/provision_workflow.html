@@ -6,7 +6,7 @@
    <!--Width={{width}}<br>
    Height={{Height}}<br>
    -->
-   <img src="{{dir}}{{name}}.{{type}}" cache="no-cache"/>
+   <img src="{{basename}}.{{type}}" cache="no-cache"/>
 {% endmacro %}
 
 {% block contentbox %}
@@ -32,15 +32,17 @@
 </div>
 
 <script type="text/javascript">
-    function newimg(dir,name,type){
+    function newimg(name,type){
         dummytag = Math.random().toString();
-        strval = "<img src=\"" + dir + name + "." + type + "?" + dummytag + "\"/>";
+        strval = "<img src=\""  name + "." + type + "?" + dummytag + "\"/>";
         return strval;
     }
     function redraw(){
-        $('#workflow_drawing_container').html(newimg("{{dir}}", "{{filename}}", "svg"));
+        $('#workflow_drawing_container').html(newimg("{{basename}}", "svg"));
     }
     $(document).ready(redraw());
 </script>
+
+{{basename}}
 
 {% endblock %}
