@@ -45,7 +45,7 @@ except:
 # ============================================================
 
 all_modules = ['pbs',
-               #'flatpages',
+               'flatpages',
                'launch',
                'nose',
                'inventory',
@@ -59,7 +59,7 @@ all_modules = ['pbs',
                'mesh',
                'users']
 
-exclude_modules = ['workflow']
+exclude_modules = ['flatpages']
 
 modules = [m for m in all_modules if m not in exclude_modules]
     
