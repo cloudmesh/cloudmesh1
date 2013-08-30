@@ -4,7 +4,9 @@ import sys
 try:
    import cloudmesh
    print "Version", cloudmesh.__version__ 
-   print "Full Version", cloudmesh.__full_version__ 
+   # TODO: ful version does not work whne installed via setup.py install
+   # thus we simply do not print for now.
+   #print "Full Version", cloudmesh.__full_version__ 
 except:
     print "ERROR: could not find package\n\n   cloudmesh\n"
     print "please run first\n" 
