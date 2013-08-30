@@ -61,6 +61,8 @@ class cm_config_server(object):
         """returns the dict of the information as read from the yaml file"""
         return self.config
 
+            
+        
     
 
 class cm_config(object):
