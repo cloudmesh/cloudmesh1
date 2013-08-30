@@ -21,7 +21,7 @@ import time
 
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
-#from cloudmesh.iaas.openstack.cm_table import table as cm_table
+from cloudmesh.util.cm_table import cm_table
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
