@@ -16,7 +16,7 @@ import libcloud.security
 import time
 from sh import fgrep
 
-# from openstack.cm_table import table as cm_table
+# from openstack.util.cm_table import table as cm_table
 from cloudmesh.config.cm_config import cm_config
 
 

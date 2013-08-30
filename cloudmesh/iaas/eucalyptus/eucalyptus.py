@@ -14,7 +14,7 @@ import time
 from sh import fgrep
 import urlparse
 
-# from cm_table import table as cm_table
+from cloudmesh.util.cm_table import cm_table
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 

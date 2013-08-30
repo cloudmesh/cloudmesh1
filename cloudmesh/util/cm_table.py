@@ -1,5 +1,5 @@
 
-class table:
+class cm_table:
     """
     This module should be moved to Util
     
