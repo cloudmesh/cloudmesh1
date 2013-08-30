@@ -1,8 +1,0 @@
-{'inventory': 
-  {'name': 'inventory',
-   'host': None,
-   'port': None,
-   'user': None,
-   'pass': None,
-  } 
-}
