@@ -140,6 +140,7 @@ class ProvisionWorkflowForm(Form):
 # ROUTE: workflows
 # ============================================================
 
+diagram_format="png"
 
 @provisioner_module.route('/workflows/<filename>')
 def retrieve_files(filename):
@@ -169,11 +170,11 @@ def display_provision_workflow_form():
             f.write("\n}")
     except:
         print "file does not exists"
-    print "{0}.{1}".format(basename,"svg")
+    print "{0}.{1}".format(basename,diagram_format)
 
     print "OOOO", basename
     blockdiag("--ignore-pil", "-Tsvg",
-              "-o", "{0}.{1}".format(basename,"svg"),
+              "-o", "{0}.{1}".format(basename,diagram_format),
               "{0}.{1}".format(basename,"diag"))
     # blockdiag("-Tpng",
     #          "-o", "." + dir + filename + ".png",
@@ -185,7 +186,7 @@ def display_provision_workflow_form():
     return render_template("provision_workflow.html",
                            workflow=form.workflow.data,
                            form=form,
-                           basename=basename,
+                           diagram="{0}.{1}".format(basename,diagram_format),
                            inventory=inventory)
 
 

@@ -2,11 +2,11 @@
 
 {% from "_helper.html" import image_button %}
 
-{% macro image_workflow(dir, name,type,width=None, height=None) %}
+{% macro image_workflow(diagram,width=None, height=None) %}
    <!--Width={{width}}<br>
    Height={{Height}}<br>
    -->
-   <img src="{{basename}}.{{type}}" cache="no-cache"/>
+   <img src="{{diagram}}" cache="no-cache"/>
 {% endmacro %}
 
 {% block contentbox %}
@@ -14,8 +14,6 @@
 {% endblock %}
 
 {% block content %}
-
-
 
 <form method="POST" action="">
 {{ form.csrf_token }}
@@ -34,15 +32,17 @@
 <script type="text/javascript">
     function newimg(name,type){
         dummytag = Math.random().toString();
-        strval = "<img src=\""  name + "." + type + "?" + dummytag + "\"/>";
+        strval = "<img src=\"+  name + "?" + dummytag + "\"/>";
         return strval;
     }
     function redraw(){
-        $('#workflow_drawing_container').html(newimg("{{basename}}", "svg"));
+        $('#workflow_drawing_container').html(newimg("{{diagram}}"));
     }
     $(document).ready(redraw());
 </script>
 
-{{basename}}
+{{diagram}}
+
+<img src="{{ diagram }}"/>
 
 {% endblock %}
