@@ -3,6 +3,12 @@ teefaa:
     hostname: iporhostname
     bmcname: bmciporhostname
     dir: directory
+provisioner:
+    clusters:
+    - india
+    - sierra
+workflows:
+    path: ~/.futuregrid/workflows
 mongo:
     db: cloudmesh
     host: localhost
