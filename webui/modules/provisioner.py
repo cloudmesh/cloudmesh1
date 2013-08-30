@@ -12,6 +12,7 @@ from cloudmesh.provisioner.queue.celery import celery
 from cloudmesh.provisioner.queue.tasks import provision
 from cloudmesh.config.cm_config import cm_config_server
 from pprint import pprint
+from cloudmesh.util.util import path_expand
 
 from cloudmesh.inventory.ninventory import ninventory
 
@@ -124,7 +125,11 @@ class ProvisionWorkflowForm(Form):
 
     filename = "abc"
 
-    with open("./workflows/" + filename + ".diag", "r") as f:
+    dir = path_expand(cm_config_server().get()["workflows"]["path"])
+
+    basename = "{0}/{1}".format(dir,filename)
+
+    with open("{0}.{1}".format(basename,"diag"), "r") as f:
         data = f.readlines()[1:-1]
     default = "".join(data)
     filename = TextField("Filename", default=filename)
@@ -136,7 +141,7 @@ class ProvisionWorkflowForm(Form):
 # ============================================================
 
 
-@app.route('/workflows/<filename>')
+@provisioner_module.route('/workflows/<filename>')
 def retrieve_files(filename):
     """    Retrieve files that have been uploaded    """
     return send_from_directory('/tmp/workflows', filename)
@@ -147,15 +152,16 @@ def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)
 
-    dir = cm_config_server().get()["workflow"]["path"] + "/"
+    dir = path_expand(cm_config_server().get()["workflows"]["path"])
 
     filename = "abc"
 
+    basename = "{0}/{1}".format(dir,filename)
     # if form.validate_on_submit():
 
     #    print "SKIP"
     try:
-        with open("." + dir + filename + ".diag", "w") as f:
+        with open("{0}.{1}".format(basename,"diag"), "w") as f:
             f.write("blockdiag {\n")
             f.write("  default_shape = roundedbox;")
             f.write("  default_node_color = lightyellow;")
@@ -163,11 +169,12 @@ def display_provision_workflow_form():
             f.write("\n}")
     except:
         print "file does not exists"
-    print "." + dir + filename + ".svg"
+    print "{0}.{1}".format(basename,"svg")
 
+    print "OOOO", basename
     blockdiag("--ignore-pil", "-Tsvg",
-              "-o", "." + dir + filename + ".svg",
-              "." + dir + filename + ".diag")
+              "-o", "{0}.{1}".format(basename,"svg"),
+              "{0}.{1}".format(basename,"diag"))
     # blockdiag("-Tpng",
     #          "-o", "." + dir + filename + ".png",
     #          "." + dir + filename + ".diag")
@@ -178,8 +185,7 @@ def display_provision_workflow_form():
     return render_template("provision_workflow.html",
                            workflow=form.workflow.data,
                            form=form,
-                           dir=dir,
-                           filename=filename,
+                           basename=basename,
                            inventory=inventory)
 
 
