@@ -3,7 +3,7 @@ cloudmesh:
     - sierra-openstack-grizzly
     - india-openstack-essex
     hpc:
-        username: {{portalname}}
+        username: {{data.profile.username}}
     clouds:
         india-openstack-essex:
             cm_host: india.futuregrid.org
@@ -13,9 +13,9 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: http://149.165.146.50:5000/v2.0
                 OS_CACERT: None
-                OS_PASSWORD: {{india_openstack_password}}
+                OS_PASSWORD: {{data.clouds['india-openstack-essex'].credentials.OS_PASSWORD}}
                 OS_TENANT_NAME: member
-                OS_USERNAME: {{portalname}}
+                OS_USERNAME: {{data.profile.username}}
                 OS_VERSION: essex
             default:
                 flavor: m1.tiny
@@ -28,9 +28,9 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
-                OS_PASSWORD: {{sierra_openstack_password}}
-                OS_TENANT_NAME: {{project_default}}
-                OS_USERNAME: {{portalname}}
+                OS_PASSWORD: {{data.clouds['sierra-openstack-grizzly'].credentials.OS_PASSWORD}}
+                OS_TENANT_NAME: {{data.projects.default}}
+                OS_USERNAME: {{data.profile.username}}
                 OS_VERSION: grizzly
             default:
                 flavor: m1.tiny
@@ -38,25 +38,31 @@ cloudmesh:
     default: sierra-openstack-grizzly
     index: 1
     keys:
-        default: mykey
+        default: {{data['keys'].default}}
         keylist:
-            mykey: ssh-rsa AAAA.... put your key such as the one from ~/.ssh_id.pub here. yourname@youremail.edu
-    prefix: {{portalname}}
+            {% for keyname, key in data['keys'].iteritems() -%}
+            {{keyname}}: {{key}}
+            {% endfor -%}
+    prefix: {{data.profile.username}}
     profile:
         address:
-        - PTI
-        - here and there
-        e-mail: yourname@youremail.com
-        firstname: Albert
-        gid: '100'
-        lastname: Changeme
-        phone: 812 856 1234
-        username: {{portalname}}
+        - TBD
+        e-mail: {{data.profile['e-mail']}}
+        firstname: {{data.profile.firstname}}
+        gid: {{data.profile.gid}}
+        lastname: {{data.profile.lastname}}
+        phone: {{data.profile.phone}}
+        username: {{data.profile.username}}
     projects:
         active:
-          - {{projects}}
-        completed: []
-        default: {{project_default}}
+        {% for project in data.projects.active -%}
+        - {{project}}
+        {% endfor -%}
+        completed:
+        {% for project in data.projects.completed -%}
+        - {{project}}
+        {% endfor -%}
+        default: {{data.projects.default}}
     security:
         default: secGroup2
         rules:

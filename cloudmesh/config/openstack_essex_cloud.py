@@ -42,7 +42,7 @@ class openstack_essex_cloud(cloudmesh_cloud):
         if self._keystone is None:
             if as_admin:
                 # Create/connect to keystone as administrator
-                cloud_creds = self.admin_data['cm_admin']
+                cloud_creds = self.data['keystone'][self.cloudname]
             else:
                 # Create/connect to keystone as user
                 cloud_creds = self.credentials
@@ -78,8 +78,8 @@ class openstack_essex_cloud(cloudmesh_cloud):
         return tenant[0] if len(tenant) == 1 else None
 
     def initialize_cloud_user(self):
-        creds = self.credentials
-        defaults = self.clouddefaults
+        creds = {}
+        defaults = {}
         password = self.newpass()
 
         creds['OS_USERNAME'] = self.username
