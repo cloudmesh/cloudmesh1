@@ -19,7 +19,7 @@ import novaclient
 from sh import nova
 
 # from cm_credential import credentials
-from cloudmesh.iaas.openstack.cm_table import table as cm_table
+from cloudmesh.util.cm_table import cm_table
 from cloudmesh.config.cm_config import cm_config
 
 from novaclient.v1_1 import client
