@@ -10,12 +10,16 @@ from cloudmesh.provisioner.provisioner import *
 from cloudmesh.inventory.inventory import PROVISIONING_CHOICES
 from cloudmesh.provisioner.queue.celery import celery
 from cloudmesh.provisioner.queue.tasks import provision
+from cloudmesh.config.cm_config import cm_config_server
 from pprint import pprint
+
+from cloudmesh.inventory.ninventory import ninventory
 
 provisioner_module = Blueprint('provisioner_module', __name__)
 
 
 inventory = Inventory("nosetest")
+n_inventory = ninventory()
 
 # ============================================================
 # PROVISINOR
@@ -169,12 +173,17 @@ def display_provision_workflow_form():
 
 class ProvisionForm(Form):
 
-    clusters = [cluster.name for cluster in inventory.get("cluster")]
+    #clusters = [cluster.name for cluster in inventory.get("cluster")]
+    
+    clusters = ['india','bravo','sierra']
+    
     choices = zip(clusters, clusters)
     cluster = SelectField("Cluster", choices=choices)
     nodespec = TextField("Nodes")
     provision_choices = zip(PROVISIONING_CHOICES, PROVISIONING_CHOICES)
     service = SelectField("Service", choices=provision_choices)
+
+
 
     def validate(self):
         cluster = inventory.get("cluster", self.cluster.data)
@@ -190,6 +199,15 @@ class ProvisionForm(Form):
 
 @provisioner_module.route("/provision/", methods=("GET", "POST"))
 def display_provision_form():
+
+    clusters = cm_config_server().get()["provisioner"]["clusters"]
+    
+    print "CCCC", clusters
+    #clusters = ['india','bravo','sierra']
+    
+    #servers = n_inventory.hostlist(cluster)
+    #server = n_inventory.host(name,auth=False)
+
 
     form = ProvisionForm(csrf=False)
 
@@ -215,4 +233,4 @@ def display_provision_form():
     else:
         flash("Wrong submission")
     inventory.refresh()
-    return render_template("provision.html", form=form, inventory=inventory)
+    return render_template("provision.html", clusters=clusters, form=form)
