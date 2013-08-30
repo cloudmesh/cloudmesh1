@@ -131,12 +131,24 @@ class ProvisionWorkflowForm(Form):
     workflow = TextAreaField("Workflow", default=default)
 
 
+# ============================================================
+# ROUTE: workflows
+# ============================================================
+
+
+@app.route('/workflows/<filename>')
+def retrieve_files(filename):
+    """    Retrieve files that have been uploaded    """
+    return send_from_directory('/tmp/workflows', filename)
+
+
 @provisioner_module.route("/provision/workflow/", methods=("GET", "POST"))
 def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)
 
-    dir = "/workflows/"
+    dir = cm_config_server().get()["workflow"]["path"] + "/"
+
     filename = "abc"
 
     # if form.validate_on_submit():
@@ -175,7 +187,7 @@ class ProvisionForm(Form):
 
     #clusters = [cluster.name for cluster in inventory.get("cluster")]
     
-    clusters = ['india','bravo','sierra']
+    clusters = cm_config_server().get()["provisioner"]["clusters"]
     
     choices = zip(clusters, clusters)
     cluster = SelectField("Cluster", choices=choices)
@@ -202,7 +214,6 @@ def display_provision_form():
 
     clusters = cm_config_server().get()["provisioner"]["clusters"]
     
-    print "CCCC", clusters
     #clusters = ['india','bravo','sierra']
     
     #servers = n_inventory.hostlist(cluster)
