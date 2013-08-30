@@ -24,8 +24,6 @@ with the command::
 
   make gh-pages
   
-Ohloh
-------
-
-* https://www.ohloh.net/p/cloudmesh-rain  
-
+Please note that the make gh-pages should only be executed by
+gregor. Please notify him when you think that your documentation
+contribution justifies an update.
