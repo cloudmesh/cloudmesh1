@@ -236,10 +236,6 @@ def page_not_found(error):
 def index():
     return render_template('index.html')
 
-# @app.route('/workflow')
-# def display_diagram():
-#    return render_template('workflow.html')
-
 
 '''
 # ============================================================
@@ -254,15 +250,7 @@ def login():
                            updated=time_now)
                            
 '''
-# ============================================================
-# ROUTE: workflows
-# ============================================================
 
-
-@app.route('/workflows/<filename>')
-def retrieve_files(filename):
-    """    Retrieve files that have been uploaded    """
-    return send_from_directory('workflows', filename)
 
 
 # ============================================================
