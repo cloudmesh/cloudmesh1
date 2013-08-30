@@ -78,7 +78,7 @@ def display_provision_workflow_form():
     print "{0}.{1}".format(basename,diagram_format)
 
     print "OOOO", basename
-    blockdiag("opetionNO", "--ignore-pil", "-Tsvg",
+    blockdiag("--ignore-pil", "-Tsvg",
               "-o", "{0}.{1}".format(basename,diagram_format),
               "{0}.{1}".format(basename,"diag"))
     # blockdiag("-Tpng",
