@@ -1,9 +1,87 @@
-Start the Virtualenv
-======================================================================
+**********************************************************************
+Development Documentation
+**********************************************************************
+
+Pip
+====
+
+We do not use easy_install, but pip instead. 
+
+please make sure that you install pip. In most cases this can be doen
+with::
+
+     easy_install pip 
+
+Once installed we will typically not use easy_install.
+
+
+Virtualenv
+================
+
+As we like to have an isolated development environment we require that
+you use virtualenv. For simplicity our virtual env will be placed in
+the home directory under ~/ENV. If you already have such a directory
+for other projects, we suggest that you find a new name for the
+virtualenv. However, for the rest of the manual we assum it is "ENV"
+
+Download virtualenv
+------------------------
+
+This step is only needed if virtualenv is not installed. To
+test this say::
+
+    $ which virtualenv
+
+In case virtualenv is not isntalled, you can download it for example
+with 
+
+    $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
+ 
+Install virtualenv
+------------------------
+        
+After you downloaded virtualenv, you can install it by following
+command::
+
+    $ python virtualenv.py --system-site-packages ENV
+
+
+..
+
+If the result does not provide the path followed by
+virtualenv, it is installed, you can do::
+         
+    $ virtualenv ENV
+
+..
+
+and skip step 2.
+        
+          
+Activate virtualenv
+------------------------
+
+After installation of virtualenv, you can activate virtualenv by
+following command::
+
+    $ source ENV/bin/activate
+    
+Modify your rc file (optional):
+------------------------
+
+Go to your home directory, log in your .bashrc,
+.bash_profile, or .bash_login file and add::
+
+    $ echo "source ENV/bin/activate" >> .bash_profile
+
+..
+
+
+This way you do not forget to type it in next time you 
+login. Only do this if you are familar with .bash_profile.
 
 
 
-jjjj
 
 
 Install fabric

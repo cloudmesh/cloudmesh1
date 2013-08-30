@@ -40,13 +40,13 @@ The following clusters are currently defined.
   <th>Cluster</th>
   <th>Definition</th>
 </tr>
-{% for cluster in inventory.clusters %}
+{% for cluster in clusters %}
 <tr>
   <td>
-    {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
-    {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
-  <td> {{ cluster.name }} </td>
-  <td> {{ cluster.definition }} </td>
+    {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster + "/") }}
+    {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster + "/") }}
+  <td> {{ cluster }} </td>
+  <td> TBD  </td>
 </tr>
 {% endfor %}
 </table>
