@@ -1,5 +1,12 @@
-{% extends "layout.html" %}
+{% extends "layout_title.html" %}
 {% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+
+<h2>Profile</h2>
+
+{% endblock %}
+
 {% block content %}
 
 <script type="text/javascript" charset="utf-8">
@@ -11,14 +18,12 @@ $(function() {
 });
 </script>
 
-<h2>Other Profile Data</h2>
-
     <ul>
       <li><a href="/images">Select Default Images</a></li>
       <li><a href="/flavors">Select Default Flavors</a></li>
     </ul>
 
-<h2>Profile</h2>
+
 
 <table>
     <form name="profile" action="/profile/" method="POST">
