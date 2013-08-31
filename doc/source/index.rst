@@ -22,15 +22,13 @@ Introduction
    about  
    tasks
 
-Instalation
-==============
+Developers Documentation
+====================
 
 .. toctree::
    :maxdepth: 2
   
-   install/deployment
-   install/install
-      
+   developer
    
 Configuration
 ==============
