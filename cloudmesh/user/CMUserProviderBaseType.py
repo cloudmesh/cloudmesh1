@@ -24,7 +24,7 @@ class CMUserProviderBaseType(object):
     
     def __init__(self, collection="user"):
         """initializes the cloudmesh mongo db. The name of the collection os passed."""
-        db_name = cm_config_server().config["mongo"]["db"]
+        db_name = cm_config_server().get("mongo.db")
         
         self.client = MongoClient()    
         self.db = self.client[db_name]          

@@ -30,7 +30,7 @@ class ProvisionWorkflowForm(Form):
 
     filename = "abc"
 
-    dir = path_expand(cm_config_server().get()["workflows"]["path"])
+    dir = path_expand(cm_config_server().get("workflows.path"))
 
     basename = "{0}/{1}".format(dir,filename)
 
@@ -58,8 +58,8 @@ def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)
 
-    dir = path_expand(cm_config_server().get()["workflows"]["path"])
-
+    dir = path_expand(cm_config_server().get("workflows.path"))
+    
     filename = "abc"
 
     basename = "{0}/{1}".format(dir,filename)
