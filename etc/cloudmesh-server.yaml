@@ -8,12 +8,13 @@ provisioner:
     - india
     - sierra
     policy:
-      user:
+      users:
         gvgv:
-          - i[0066-0066]
+          - i[0066-0068]
           - s[01-16]
       projects:
-          - i[0066-0066]
+         fg82:
+          - i[0066-0068]
           - s[01-16]
 workflows:
     path: ~/.futuregrid/workflows

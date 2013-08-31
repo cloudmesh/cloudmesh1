@@ -1,0 +1,42 @@
+{% extends "layout_title.html" %}
+
+{% block contentbox %}
+<h2>Provision Policy</h2>
+{% endblock %}
+
+{% block content %}
+
+
+<h3>User Policies</h3>
+<table>
+	<tr>
+		<th> User </th>			
+		<th> Policy </th>			
+	</tr>
+	{% for name in policy.users %}
+		<tr>
+			<td> {{ name }} </td>
+	   		<td>  {{policy.users[name] | join("<br>") |safe }}</td>
+	   </tr>
+	{% endfor %}
+	
+</table>
+
+
+<h3>Project Policies</h3>
+<table>
+	<tr>
+		<th> User </th>			
+		<th> Policy </th>			
+	</tr>
+	{% for name in policy.projects %}
+		<tr>
+			<td> {{ name }} </td>
+			<td> {{ policy.projects[name] | join("<br>") |safe}} </td>
+	   </tr>
+	{% endfor %}
+	
+</table>
+
+{% endblock content %}
+
