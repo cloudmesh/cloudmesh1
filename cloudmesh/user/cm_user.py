@@ -12,7 +12,7 @@ log = LOGGER('cm_user')
 class cm_user(object):
     
     def __init__(self):
-        db_name = cm_config_server().config["mongo"]["db"]
+        db_name = cm_config_server().get("mongo.db")
         client = MongoClient()
         db = client[db_name]
         ldapcollection = 'user'

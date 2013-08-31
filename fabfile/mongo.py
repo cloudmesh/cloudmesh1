@@ -28,8 +28,8 @@ def start():
     '''
     start the mongod service in the location as specified in ~/.futuregrid/cloudmesh_server.yaml
     '''
-    path = cm_path_expand(cm_config_server().get()["mongo"]["path"])
-    port = cm_config_server().get()["mongo"]["port"]
+    path = cm_path_expand(cm_config_server().get("mongo.path"))
+    port = cm_config_server().get("mongo.port")
 
     if not os.path.exists(path):
         print "Creating mongodb directory in", path

@@ -125,7 +125,7 @@ class ProvisionForm(Form):
 
     #clusters = [cluster.name for cluster in inventory.get("cluster")]
     
-    clusters = cm_config_server().get()["provisioner"]["clusters"]
+    clusters = cm_config_server().get("provisioner.clusters")
     
     choices = zip(clusters, clusters)
     cluster = SelectField("Cluster", choices=choices)
@@ -150,7 +150,7 @@ class ProvisionForm(Form):
 @provisioner_module.route("/provision/", methods=("GET", "POST"))
 def display_provision_form():
 
-    clusters = cm_config_server().get()["provisioner"]["clusters"]
+    clusters = cm_config_server().get("provisioner.clusters")
     
     #clusters = ['india','bravo','sierra']
     

@@ -8,6 +8,7 @@ nosetests -v
 
 """
 
+from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config
 
 import json
@@ -33,6 +34,53 @@ class Test_cloudmesh:
 
     def tearDown(self):
         pass
+
+    def test_server(self):
+        filename = "~/.futuregrid/cloudmesh_server.yaml"
+        config = cm_config_server(filename)  
+        print config
+        existing = config.get("mongo","db")
+        test1 =  existing is not None
+        print existing
+        try:
+            none_existing = config.get("mongo","xyz")
+            test2 = False
+        except:
+            print "Error"
+            test2 = True
+        assert test1 and test2
+
+    def test_dot(self):
+        filename = "~/.futuregrid/cloudmesh_server.yaml"
+        config = cm_config_server(filename)  
+        print config
+        existing = config.get("mongo.db")
+        test1 =  existing is not None
+        print existing
+        try:
+            none_existing = config.get("mongo.xyz")
+            test2 = False
+        except:
+            print "Error"
+            test2 = True
+        assert test1 and test2
+
+    def test_getitem_server(self):
+        filename = "~/.futuregrid/cloudmesh_server.yaml"
+        config = cm_config_server(filename)  
+        print config
+        existing = config["mongo"]["db"]
+        test1 =  existing is not None
+        print "QUERY", existing
+        print "Port", config["mongo"]["port"]
+        try:
+            none_existing = config["mongo"]["xyz"]
+            test2 = False
+        except:
+            print "Error can not find xyz"
+            test2 = True
+        assert test1 and test2
+
 
     def test01_print(self):
         print self.config
