@@ -1,3 +1,0 @@
-.. sectnum::
-   :start: 7
-

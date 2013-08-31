@@ -1,4 +1,22 @@
-# -*- coding: utf-8 -*-
+
+from sh import blockdiag
+from flask import Blueprint
+from flask import render_template, redirect, flash
+from datetime import datetime
+from flask.ext.wtf import Form
+from wtforms import TextField, SelectField, TextAreaField
+from cloudmesh.inventory.inventory import Inventory
+from hostlist import expand_hostlist
+from cloudmesh.provisioner.provisioner import *
+from cloudmesh.inventory.inventory import PROVISIONING_CHOICES
+from cloudmesh.provisioner.queue.celery import celery
+from cloudmesh.provisioner.queue.tasks import provision
+from cloudmesh.config.cm_config import cm_config_server
+from pprint import pprint
+from cloudmesh.util.util import path_expand
+
+from cloudmesh.inventory.ninventory import ninventory
+
 from cloudmesh.util.webutil import decode_source
 from flask import Blueprint, request, make_response, render_template
 
@@ -29,13 +47,13 @@ class ProvisionWorkflowForm(Form):
 
 
 
-@provisioner_module.route('/workflows/<filename>')
+@workflow_module.route('/workflows/<filename>')
 def retrieve_files(filename):
     """    Retrieve files that have been uploaded    """
     return send_from_directory('/tmp/workflows', filename)
 
 
-@provisioner_module.route("/provision/workflow/", methods=("GET", "POST"))
+@workflow_module.route("/provision/workflow/", methods=("GET", "POST"))
 def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)
