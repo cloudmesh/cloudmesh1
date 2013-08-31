@@ -7,6 +7,14 @@ provisioner:
     clusters:
     - india
     - sierra
+    policy:
+      user:
+        gvgv:
+          - i[0066-0066]
+          - s[01-16]
+      projects:
+          - i[0066-0066]
+          - s[01-16]
 workflows:
     path: ~/.futuregrid/workflows
 mongo:
