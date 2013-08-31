@@ -173,9 +173,9 @@ class cm_config(object):
         self.init_config['cloudmesh']['clouds'] = {}
         cloudlist = self.active()
         for cloud in cloudlist:
-            cloudcreds = self._get_cloud_handler(cloud, as_admin=True)
-            cloudcreds.initialize_cloud_user()
-            self.init_config['cloudmesh']['clouds'][cloud] = copy.deepcopy(cloudcreds.data)
+            cloud_handler = self._get_cloud_handler(cloud, as_admin=True)
+            cloud_handler.initialize_cloud_user()
+            self.init_config['cloudmesh']['clouds'][cloud] = copy.deepcopy(cloud_handler.data)
 
     def initialize(self, username):
         """Creates or resets the config for a user.  Note that the
@@ -186,8 +186,8 @@ class cm_config(object):
         self._initialize_clouds()
 
     def change_own_password(self, cloudname, oldpass, newpass):
-        cloudcreds = self._get_cloud_handler(cloudname)
-        cloudcreds.change_own_password(oldpass, newpass)
+        cloud_handler = self._get_cloud_handler(cloudname)
+        cloud_handler.change_own_password(oldpass, newpass)
         # Save the yaml file so the new password is saved
         self.write()
 
@@ -195,8 +195,8 @@ class cm_config(object):
         cloudlist = self.active()
         passwords = {}
         for cloud in cloudlist:
-            cloudcreds = self._get_cloud_handler(cloud)
-            passwords[cloud] = cloudcreds.get_own_password()
+            cloud_handler = self._get_cloud_handler(cloud)
+            passwords[cloud] = cloud_handler.get_own_password()
         return passwords
 
     # ----------------------------------------------------------------------
