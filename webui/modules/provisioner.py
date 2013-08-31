@@ -29,6 +29,17 @@ provisionerImpl = ProvisionerSimulator
 provisioner = provisionerImpl()
 
 
+
+@provisioner_module.route('/provision/policy')
+def display_provisioner_policy():
+    
+    policy = cm_config_server().get("provisioner.policy")
+    
+    return render_template('provision_policy.html',
+                           policy=policy)
+
+
+
 @provisioner_module.route('/provision/summary/')
 def display_provisioner_summary():
 
