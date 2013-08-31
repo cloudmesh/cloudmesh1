@@ -1,6 +1,6 @@
 
 
-Generating the documentation
+Documentation Management
 ======================================================================
 
 This document is maintained via sphinx and uploaded regularly to github
@@ -13,7 +13,7 @@ You can check it out the code and the documentation with::
 
 Once you make changes to the documentation you can say::
 
-   make sphinx
+   fab doc.html
 
 The pages will be locally available to you under::
 
@@ -22,14 +22,14 @@ The pages will be locally available to you under::
 The pages will be regularly uploaded to github by Gregor von Laszewski. Make sure that the documentation do not contain any compile errors. Once that is done the pages can be uploaded.   
 with the command::   
 
-  make gh-pages
+   fab doc.gh
 
-Please note that the make gh-pages should only be executed by
+Please note that the fab doc.gh should only be executed by
 Gregor von Laszewski (laszewski@gmail.com). Please notify him when you think that your documentation
 contribution justifies an update.
 
 
-Installation requirements for the Documentation Generation
+Installation Requirements for the Documentation Generation
 ---------------------------
 
 We assume you have autodoc installed for sphinx (see previously) it is
@@ -49,15 +49,20 @@ install it before hand::
 
 If anything is missing, please let us know so we can update this documentation.
 
-Document creation
-----------------
+Document Generation
+--------------------
 
 This will publish the documentation locally::
 
     fab doc.html
 
-If you do::
+Publishing the Documentation
+--------------------------
+
+If you do (which you should not, only Gregor should do this)::
 
     fab doc.gh
 
-it will publish the page to gh-pages
+it will publish the page to gh-pages at
+
+* http://cloudmesh.github.io/cloudmesh/
