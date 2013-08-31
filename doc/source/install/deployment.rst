@@ -46,17 +46,11 @@ command::
     $ python virtualenv.py --system-site-packages ENV
 
 
-..
-
-If the result does not provide the path followed by
-virtualenv, it is installed, you can do::
+Once that is acomplished you can create a virtual env as followsin the
+directory ENV:
          
-    $ virtualenv ENV
+    $ virtualenv ~/ENV
 
-..
-
-and skip step 2.
-        
           
 Activate virtualenv
 ------------------------
@@ -64,7 +58,7 @@ Activate virtualenv
 After installation of virtualenv, you can activate virtualenv by
 following command::
 
-    $ source ENV/bin/activate
+    $ source ~/ENV/bin/activate
     
 Modify your rc file (optional):
 ------------------------
@@ -72,7 +66,7 @@ Modify your rc file (optional):
 Go to your home directory, log in your .bashrc,
 .bash_profile, or .bash_login file and add::
 
-    $ echo "source ENV/bin/activate" >> .bash_profile
+    $ echo "source ~/ENV/bin/activate" >> .bash_profile
 
 ..
 
@@ -120,11 +114,12 @@ account. Otherwise our commits will not properly work.
 
 
 
-Quick deployment on ubuntu
+Quick Deployment 
 ===========================
 
-This quick deployment is targeted for ubuntu. It can be achieved in several easy steps.
-First, obtain a vanilla ubuntu system. Make sure that git is installed, which is standard by now.
+This quick deployment is targeted for ubuntu. However, it should also
+work on centos. If not send us mail with corrections for the
+quickdeploy.  First, obtain a vanilla ubuntu system. Make sure that git is installed, which is standard by now.
 Next execute the following commands ::
 
     $ git clone git@github.com:cloudmesh/cloudmesh.git
@@ -208,5 +203,6 @@ will list the tests in the file test_compute.py. To call an individual test, you
      fab test.start:compute,label
 
 will execute the test which has label in its method name first
+
 
 
