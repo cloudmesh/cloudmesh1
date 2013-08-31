@@ -30,8 +30,7 @@ Instalation
   
    install/deployment
    install/install
-   install/virtualenv
-   
+      
    
 Configuration
 ==============
