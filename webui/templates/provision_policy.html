@@ -7,80 +7,116 @@
 
 {% block content %}
 
+<script type="text/javascript">
 
-<h3>User Policies</h3>
-<form>
-<table>
-	<tr>
-		<th> User </th>			
-		<th> Policy </th>			
-	</tr>
-	{% for name in policy.users %}
-	   		{% for pol in policy.users[name] %}
-		   	<tr> 
-		   		<td> {{ image_button ("right", "016_bin", "/cm/policy/delete/" + name + "/" + pol) }}</td>
-		   		<td> {{name}} </td>
-		   		<td> {{pol}} </td>
-		   </tr>
-		   	{% endfor %}
-	{% endfor %}
-	<tr>
-		<td> {{ image_button ("none", "190_circle_plus", "/cm/policy/user/add/") }}
-      	</td>
-		<td>
-			<input type="text" name="username">	
-		</td>
-		<td>
-			<input type="text" name="userhostlist">	
-		</td>
-	</tr>
-</table>
-</form>
+/* http://stackoverflow.com/a/10237915 */
+(function($) {
+    $(function() {
+        $("#policy-accordion > div").accordion({ header: "h3", 
+        										 collapsible: true, 
+        										 heightStyle: "content", 
+        										 active: [1, 2] });
+    })
+})(jQuery);
 
 
-<h3>Project Policies</h3>
-<form>
-<table>
-	<tr>
-		<th> Project </th>			
-		<th> Policy </th>			
-	</tr>
-	{% for name in policy.projects %}
-	   		{% for pol in policy.projects[name] %}
-		   	<tr> 
-		   		<td> {{ image_button ("right", "016_bin", "/cm/policy/delete/" + name + "/" + pol) }}</td>
-		   		<td> {{name}} </td>
-		   		<td> {{pol}} </td>
-		   </tr>
-		   	{% endfor %}
-	{% endfor %}
-	<tr>
-		<td> {{ image_button ("none", "190_circle_plus", "/cm/policy/project/add/") }}
-      	</td>
-		<td>
-			<input type="text" name="projectname">	
-		</td>
-		<td>
-			<input type="text" name="projecthostlist">	
-		</td>
-	</tr>
-</table>
-</form>
+$(function() {
+  {% for cloudnum in ["1","2"] %}
+    $("#cloud-table-{{ cloudnum }}").dataTable({
+        "aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
+    	"iDisplayLength": -1,
+    	"sPaginationType": "full_numbers",
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
+    });
+  {% endfor %}
+});
 
-<h3>Project Policies</h3>
-<table>
-	<tr>
-		<th> User </th>			
-		<th> Policy </th>			
-	</tr>
-	{% for name in policy.projects %}
-		<tr>
-			<td> {{ name }} </td>
-			<td> {{ policy.projects[name] | join("<br>") |safe}} </td>
-	   </tr>
-	{% endfor %}
+</script>
+
+<div class="span9">
 	
-</table>
+<div id="policy-accordion">
+
+<div style="margin-bottom:1em;">
+	
+<h3>User Policies</h3>
+<div>
+	<form>
+	<table id="cloud-table-1">
+		<thead>
+		<tr>
+			<th></th>
+			<th> User </th>			
+			<th> Policy </th>			
+		</tr>
+		</thead>
+		<tbody>
+		{% for name in policy.users %}
+		   		{% for pol in policy.users[name] %}
+			   	<tr> 
+			   		<td> {{ image_button ("right", "016_bin", "/cm/policy/delete/" + name + "/" + pol) }}</td>
+			   		<td> {{name}} </td>
+			   		<td> {{pol}} </td>
+			   </tr>
+			   	{% endfor %}
+		{% endfor %}
+		<tr>
+			<td> {{ image_button ("right", "190_circle_plus", "/cm/policy/user/add/") }}
+	      	</td>
+			<td>
+				<input type="text" name="username">	
+			</td>
+			<td>
+				<input type="text" name="userhostlist">	
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	</form>
+</div>
+</div>
+
+<div style="margin-bottom:1em;">
+	
+<h3>Project Policies</h3>
+<div>
+	<form>
+	<table id="cloud-table-2">
+		<thead>
+		<tr>
+			<th></th>
+			<th> Project </th>			
+			<th> Policy </th>			
+		</tr>
+		</thead>
+		<tbody>
+		{% for name in policy.projects %}
+		   		{% for pol in policy.projects[name] %}
+			   	<tr> 
+			   		<td> {{ image_button ("right", "016_bin", "/cm/policy/delete/" + name + "/" + pol) }}</td>
+			   		<td> {{name}} </td>
+			   		<td> {{pol}} </td>
+			   </tr>
+			   	{% endfor %}
+		{% endfor %}
+		<tr>
+			<td> {{ image_button ("right", "190_circle_plus", "/cm/policy/project/add/") }}
+	      	</td>
+			<td>
+				<input type="text" name="projectname">	
+			</td>
+			<td>
+				<input type="text" name="projecthostlist">	
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	</form>
+</div>
+</div>
+</div>
+
 
 {% endblock content %}
 
