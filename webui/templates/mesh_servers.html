@@ -26,6 +26,8 @@ function killall(cloud) {
 $(function() {
   {% for cloudnum in range(clouds|count) %}
     $("#cloud-table-{{ cloudnum }}").dataTable({
+    	"aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
+    	"iDisplayLength": 25,
     	"sPaginationType": "full_numbers",
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
