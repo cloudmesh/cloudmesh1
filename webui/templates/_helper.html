@@ -2,13 +2,18 @@
 image_button("041_charts", "/table/")
 #}
 
+{% macro cm_image_input(align, type) %}
+      <input align={{ align }} type="image" 
+	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}" 
+	     width="16" height="16">
+{% endmacro %}
+
 
 {% macro image_button(align, type, actionpath) %}
       <input align={{ align }} type="image" 
 	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}" 
 	     onclick="document.location.href='{{ actionpath }}';"
 	     width="16" height="16">
-
 {% endmacro %}
 
 {% macro flexible_menu(pagelist) -%}
