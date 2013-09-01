@@ -7,6 +7,8 @@
 
 {% block content %}
 
+<script src="/static/library/DataTables/extras/ColReorder/media/js/ColReorder.min.js" type="text/javascript" charset="utf-8" ></script>
+
 <script type="text/javascript">
 
 /* http://stackoverflow.com/a/10237915 */
@@ -25,6 +27,7 @@ $(function() {
     $("#cloud-table-{{ cloudnum }}").dataTable({
         "aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
     	"iDisplayLength": -1,
+    	"sDom": 'Rlfrtip',
     	"sPaginationType": "full_numbers",
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
