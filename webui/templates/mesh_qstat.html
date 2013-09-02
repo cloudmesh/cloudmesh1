@@ -24,6 +24,7 @@ $(function() {
   {% for cloudnum in range(hosts|count) %}
     $("#display-table-{{ cloudnum }}").dataTable({
     	"sPaginationType": "full_numbers",
+    	"sDom": 'Rlfrtip',
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
     });

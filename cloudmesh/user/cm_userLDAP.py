@@ -21,10 +21,10 @@ class cm_userLDAP (CMUserProviderBaseType):
     def get_config(self, **kwargs):
         
         if not kwargs.has_key('host'):#if kwargs['host'] is None:
-            self.host = cm_config_server().config["ldap"]["hostname"]
+            self.host = cm_config_server().get("ldap.hostname")
     
         if not kwargs.has_key('ldapcert'):#if kwargs['ldapcert'] is None:
-            self.cert = cm_config_server().config["ldap"]["cert"]
+            self.cert = cm_config_server().get("ldap.cert")
             
             
     def authenticate(self, userId, password, **kwargs):
@@ -88,10 +88,10 @@ class cm_userLDAP (CMUserProviderBaseType):
             provider[k] = v
         
         if not kwargs.has_key('host'):#if kwargs['host'] is None:
-            self.host = cm_config_server().config["ldap"]["hostname"]
+            self.host = cm_config_server().get("ldap.hostname")
     
         if not kwargs.has_key('ldapcert'):#if kwargs['ldapcert'] is None:
-            self.cert = cm_config_server().config["ldap"]["cert"]
+            self.cert = cm_config_server().get("ldap.cert")
             
         ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, self.cert)
         self.ldapconn = ldap.initialize("ldap://" + self.host)

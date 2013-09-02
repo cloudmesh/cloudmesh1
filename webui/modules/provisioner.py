@@ -29,6 +29,17 @@ provisionerImpl = ProvisionerSimulator
 provisioner = provisionerImpl()
 
 
+
+@provisioner_module.route('/provision/policy')
+def display_provisioner_policy():
+    
+    policy = cm_config_server().get("provisioner.policy")
+    
+    return render_template('provision_policy.html',
+                           policy=policy)
+
+
+
 @provisioner_module.route('/provision/summary/')
 def display_provisioner_summary():
 
@@ -125,7 +136,7 @@ class ProvisionForm(Form):
 
     #clusters = [cluster.name for cluster in inventory.get("cluster")]
     
-    clusters = cm_config_server().get()["provisioner"]["clusters"]
+    clusters = cm_config_server().get("provisioner.clusters")
     
     choices = zip(clusters, clusters)
     cluster = SelectField("Cluster", choices=choices)
@@ -150,7 +161,7 @@ class ProvisionForm(Form):
 @provisioner_module.route("/provision/", methods=("GET", "POST"))
 def display_provision_form():
 
-    clusters = cm_config_server().get()["provisioner"]["clusters"]
+    clusters = cm_config_server().get("provisioner.clusters")
     
     #clusters = ['india','bravo','sierra']
     

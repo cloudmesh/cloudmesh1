@@ -10,7 +10,7 @@ class Roles:
     def get_config(self, **kwargs):
         
         if not kwargs.has_key('roles'):#if kwargs['host'] is None:
-            self.roles = cm_config_server().config["roles"]
+            self.roles = cm_config_server().get("roles")
     
      
     mongo_host = 'localhost'

@@ -26,18 +26,10 @@ Developers Documentation
 ====================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: -1
   
    developer
    
-Configuration
-==============
-.. toctree::
-   :maxdepth: 3
-  
-   install/configuration
-   install/testing
-
 Execution
 ========
 .. toctree::

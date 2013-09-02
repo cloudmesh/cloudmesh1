@@ -35,7 +35,7 @@ sys.path.insert(0, '..')
 
 
 try:
-     with_login = cm_config_server().config["ldap"]["with_ldap"]
+     with_login = cm_config_server().get("ldap.with_ldap")
 except:
     with_login = False
     print "WARGING: not using user login"
@@ -438,11 +438,19 @@ def login():
     form = LoginForm()
     
     if form.validate_on_submit():
-        idp = cm_userLDAP ()
-        idp.connect("fg-ldap","ldap")
-        user =  idp.find_one({'cm_user_id': form.username.data})
         
         form.error = None                
+        try:
+            idp = cm_userLDAP ()
+            idp.connect("fg-ldap","ldap")
+        except:
+            error = "LDAP server not reachable"
+            return render_template('error.html', 
+                           error=error,
+                           type="Can not reach LDAP",
+                           msg="")
+
+        
         if user is None:
             form.error = 'Login Invalid'
         elif user['cm_user_id'] != form.username.data:
