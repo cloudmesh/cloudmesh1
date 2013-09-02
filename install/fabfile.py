@@ -50,7 +50,8 @@ def install_mongodb():
     if is_ubuntu():
         install_packages(["mongodb"])
     elif is_centos():
-        install_packages(["mongodb", "mongodb-server"])
+        install_packages(["mongodb", 
+                          "mongodb-server"])
     elif sys.platform == "darwin":
         local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
         local('brew update')
@@ -80,7 +81,9 @@ def ubuntu():
     '''prepares an system and installs all 
     needed packages before we install cloudmesch'''
     
+    local ("sudo apt-get update")
     install_packages(["git", 
+                      "mercurial", 
                       "curl", 
                       "python-virtualenv", 
                       "python-dev", 
@@ -91,7 +94,16 @@ def ubuntu():
     install()
 
 def centos():
-    install_packages (["git", "wget", "gcc", "make", "readline-devel", "zlib-devel", "openssl-devel", "openldap-devel", "bzip2-devel"])
+    install_packages (["git",
+                       "mercurial", 
+                       "wget", 
+                       "gcc", 
+                       "make", 
+                       "readline-devel", 
+                       "zlib-devel", 
+                       "openssl-devel", 
+                       "openldap-devel", 
+                       "bzip2-devel"])
     install_mongodb()
     install_packages(["rabbitmq-server"])
     local('sudo sh -c "chkconfig rabbitmq-server on && service rabbitmq-server start"')
