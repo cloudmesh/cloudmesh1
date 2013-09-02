@@ -42,15 +42,13 @@ Install virtualenv
 After you downloaded virtualenv, you can install it by following
 command::
 
-    $ python virtualenv.py --system-site-packages ENV
+    $ python virtualenv.py --system-site-packages ~/ENV
 
 
-..
-
-If the result does not provide the path followed by
-virtualenv, it is installed, you can do::
+Once that is accomplished you can create a virtual env as follows in the
+directory ENV:
          
-    $ virtualenv ENV
+    $ virtualenv ~/ENV
 
           
 Activate virtualenv
@@ -59,7 +57,7 @@ Activate virtualenv
 After installation of virtualenv, you can activate virtualenv by
 following command::
 
-    $ source ENV/bin/activate
+    $ source ~/ENV/bin/activate
 
 Please note that you have to do this every time you open a terminal or login on the computer you work. Often you may forget it, so we recommend that you put it in your .bash_profile page at the end. 
     
@@ -69,7 +67,7 @@ Modify your rc file (optional):
 Go to your home directory, log in and change your .bash_profile,
 .bashrc, or .bash_login file (e.g. whatever works best for you). ON my computer I added it to the .bash_profile which is a MAC OSX machine::
 
-    $ echo "source ENV/bin/activate" >> .bash_profile
+    $ echo "source ~/ENV/bin/activate" >> .bash_profile
 
 
 Install fabric
@@ -128,6 +126,51 @@ Next execute the following commands ::
     $ fab install
     $ cd ..
 
+Note: ALternative may be better fab -f install/fabfile.py deploy
+
+Requirements
+------------
+
+Although the install contains the automatic installation of
+requirements, we like to point out that changes in the requirements.txt
+file that you may do does require an installation with::
+
+    pip install -r requirements.txt
+
+If you do not change the requirements file, this step will be
+automatically executed as part of the installation.
+
+Additional Installation for Documentation Generation
+======================================================================
+
+To create the documentation locally, a couple of additional steps are
+needed that have not yet been included into the install fab scripts.
+
+The documentation depends on the autorun
+package. This package can be downloaded and installed as follows::
+
+    $ cd /tmp
+    $ mkdir autorun
+    $ cd autorun
+    $ hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
+    $ cd sphinx-contrib/autorun
+    $ python setup.py install
+
+Blockdiag family
+------------------------------
+
+blockdiag uses TrueType Font to render text. blockdiag try to detect installed fonts but if nothing detected, You can specify fonts with -f (–font) option::
+
+    $ blockdiag -f /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf simple.diag
+
+If you always use same font, write $HOME/.blockdiagrc::
+
+    $ cat $HOME/.blockdiagrc
+    [blockdiag]
+    fontpath = /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf
+
+TODO: distribute a standard ttf font and use sh so that the -f font is included from the deployed package
+
 YAML files
 ---------------
 
@@ -137,17 +180,24 @@ directly with him on FutureGrid.
 
 Configure the yaml files if changes need to be done.
 
+We need three files:
+
+* cloudmesh.yaml
+* cloudmesh_server.yaml
+* cloumesh_clutser.yaml
+
+
 Mongo
 ---------------
 
 To managing mongo db it is important that you use our special fabric commands fro doing so
 To start mongod do::
 
-	fab mongod.start
+	fab mongo.start
 
 To stop mongod::
 
-	fab mongod.stop
+	fab mongo.stop
 	
 To clean the entire data base (not just the data for cloudmesh, so be careful) say::
 
@@ -205,170 +255,19 @@ it is best if you do an ssh agent so you can access some more sophisticated serv
    $ ssh-add 
 
 
-Unordered notes
-=============
 
-
-Sphinx autorun
-------------------------------
-
-
-This package is only needed if you like to generate the documentation. Most developers will want to install it::
-
-    $ hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
-    $ cd sphinx-contrib/autorun
-    $ python setup.py install
-
-Blockdiag family
-------------------------------
-
-
-TODO: this explanation is incomplete
-
-To install these packages you need to execute::
-
-    pip install "blockdiag[PDF]"
-	pip install "rackdiag[PDF]"
-	pip install nwdiag[PDF]"
-	
-The documentation to this package is located at 
-
-* http://blockdiag.com/en/blockdiag/introduction.html#setup
-
-blockdiag uses TrueType Font to render text. blockdiag try to detect installed fonts but if nothing detected, You can specify fonts with -f (–font) option::
-
-    $ blockdiag -f /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf simple.diag
-
-If you always use same font, write $HOME/.blockdiagrc::
-
-    $ cat $HOME/.blockdiagrc
-    [blockdiag]
-    fontpath = /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf
-
-TODO: distribute a standard ttf font and use sh so that the -f font is included from the deployed package
-
-Ubuntu
-------------
-
-Minimal initial requirements, git, gcc, python-dev and virtualenv installed.  If
-these are not in your base system you can run::
-
-   $ sudo apt-get update
-   $ sudo apt-get install gcc git python-dev python-virtualenv
-
-Create a virtualenv for cloudmesh, activate it, and run::
-
-    $ pip install fabric
-
-Then clone the cloudmesh repository::
-
-    $ git clone https://github.com/cloudmesh/cloudmesh.git
-
-Then run::
-
-    $ cd cloudmesh && fab -f install.fabfile.py deploy
-
-TODO: Explain how the user gets their cloudmesh.yaml file.
-
-Assuming there are no errors, run::
-
-    $ fab server.start
-
-
-Manual installation
-^^^^^^^^^^^^^^^^^^^
-
-Assuming a basic Ubuntu Desktop 13.04, install prerequsites::
-
-   $ sudo apt-get install \
-      git \
-      curl \
-      python-virtualenv \
-      python-dev \
-      libldap2-dev \
-      libsasl2-dev
-
-
-
-Install Mongo
-^^^^^^^^^^^^^^^
-Install from standard packages::
-
-    $ sudo apt-get install mongodb
-
-Note: the mongod process will by default try to use /data/db for its
-database files.  We recommend using the --dbpath option to specify a
-directory in your own home.  See start() method in fabfiles/server.py.
-
-The first startup of mongod will take some time as it creates files in
-the dbpath.  Unless these are deleted, subsequent startup times should
-be much faster.
-
-
-Install RabbitMQ
-^^^^^^^^^^^^^^^^
-
-Install from standard packages::
-
-    $ sudo apt-get install rabbitmq-server
-
-
-Sphinx autorun
-^^^^^^^^^^^^^^^
-
-TBD
-
-Blockdiag family
-^^^^^^^^^^^^^^^^^
-
-TBD
 
 CentOS
---------------------
+================================================================
 
 Minimal initial requirements, git, python2.7, and virtualenv
 installed.  If you don't have python2.7, see the manual installation
 steps below.  The system will also need to be configure to use the
 EPEL repo (for mongodb and rabbitmq).
 
-Otherwise, create a virtualenv for cloudmesh, activate it, and run::
-
-    $ pip install fabric
-
-Then clone the cloudmesh repository::
-
-    $ git clone https://github.com/cloudmesh/cloudmesh.git
-
-Then run::
-
-    $ cd cloudmesh && fab -f install.fabfile.py deploy
-
-TODO: Explain how the user gets their cloudmesh.yaml file.
-
-Assuming there are no errors, run::
-
-    $ fab server.start
-
-
-Manual installation
-^^^^^^^^^^^^^^^^^^^
-
-Assuming a basic CentOS 6.4 Server, install prerequsites::
-
-    $ sudo yum install -y \
-        git \
-        wget \
-        gcc \
-        make \
-        readline-devel \
-        zlib-devel \
-        openssl-devel \
-        openldap-devel \
-        bzip2-devel
-
 
 Install Python
-^^^^^^^^^^^^^^^
+------------------------------
 
 Cloudmesh requires python 2.7, and CentOS comes with Python 2.6.
 However we cannot replace the system python as yum and other tools
@@ -386,71 +285,17 @@ Recommended: verify the md5 checksum, b4f01a1d0ba0b46b05c73b2ac909b1df for the a
 Edit your ~/.bash_profile to add /opt/python/bin to the start of your
 PATH, then log out and back in.
 
-Install Python Virtualenv
-^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Verify that python2.7 is active::
+Starting the  RabbitMQ service
+------------------------------
 
-    $ python --version
-    Python 2.7.5
+::
 
-If you see Python 2.6.6, fix your PATH to include /opt/python/bin before /usr/bin.::
-
-    $ curl -O https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.10.1.tar.gzcd
-    $ tar xfz virtualenv-1.10.1.tar.gz
-    $ cd virtualenv-1.10.1.tar.gz
-    $ sudo python setup.py install
-
-
-Install Mongo
-^^^^^^^^^^^^^^^
-Intstall from EPEL packages::
-
-    $ sudo yum install mongodb mongodb-server
-
-
-Install RabbitMQ
-^^^^^^^^^^^^^^^^
-
-Intstall from EPEL packages::
-
-    $ sudo yum install rabbitmq-server
     $ sudo service rabbitmq-server start
 
 
-Sphinx autorun
-^^^^^^^^^^^^^^^
-
-TBD
-
-Blockdiag family
-^^^^^^^^^^^^^^^^^
-
-TBD
-
-
-Installing the source code
+Aptana Studio
 =============================
-
-Create a virtualenv::
-
-    $ virtualenv --no-site-packages cloudmesh_v
-
-Note: the name of the virtualenv is your choice, it does not need to be called "cloudmesh_v."
-
-Activate the virtualenv::
-
-    $ . cloudmesh_v/bin/activate
-
-
-From the shell checkout the code from the repository::
-
-    git@github.com:cloudmesh/cloudmesh.git
-    cd cloudmesh
-
-Be sure you have activated your virtualenv, then::
-
-    pip install -r requirements.txt
 
 from Aptana Studio:
 
@@ -462,10 +307,6 @@ Cleaning
 sometimes it is important to clean things and start new. This can be done by ::
 
     fab clean.all
-
-
-
-
 
 
 Convenient command shortcuts
@@ -517,5 +358,71 @@ Distributor ID:    Ubuntu
 Description:    Ubuntu 12.10
 Release:    12.10
 Codename:    quantal
+
+
+Making the documentation
+====================
+
+::
+
+    fab doc.html
+    fab doc.view
+
+
+   
+Basic Configuration
+--------------------
+
+open a new terminal and type in::
+
+   fab mongo.start
+   
+Now you can either generate a simple cloud without user or a cloud with user information. 
+To generating a simple cloud do without user information do::
+
+   fab mongo.simple
+   
+This will print something like (if everything is ok) at the end::
+
+        clusters: 5 -> bravo, delta, gamma, india, sierra
+        services: 0
+        servers: 304
+        images: 2 -> centos6, ubuntu
+   
+To generate a complete cloud including users (requires access to LDAP) do::
+
+    fab mongo.cloud
+
+Next you can start the webui with::
+
+	fab server.start    
+	
+	
+If you like to start with a particular route, you can pass it as parameter.
+
+    fab server.start:inventory
+    
+opens the page 
+
+*    http://localhost:5000/inventory 
+
+in your browser
+
+
+You can repeatedly issue that command and it will shut down the server. 
+If you want to do thia by hand you can do this with::
+
+    $ fab server.stop
+    
+Sometimes you may want to say::
+
+    killall python 
+    
+before you start the server. On ubuntu we found:::
+
+    killall python;  server.start
+
+works well
+
 
 
