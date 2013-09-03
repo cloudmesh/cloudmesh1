@@ -33,6 +33,10 @@ $(function() {
 
 </script>
 
+{% if error != "" %}
+<h2> error </h2>
+  {{error}}
+{% endif %}
 
 <div id="qstat-accordion">
     {% for host in hosts %}
