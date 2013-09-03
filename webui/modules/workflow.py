@@ -32,11 +32,19 @@ class ProvisionWorkflowForm(Form):
 
     dir = path_expand(cm_config_server().get("workflows.path"))
 
-    basename = "{0}/{1}".format(dir,filename)
+    # not so nice cludge, ask for location of statcic instead
+    
+    basename = "./static/{0}/{1}".format(dir,filename)
 
-    with open("{0}.{1}".format(basename,"diag"), "r") as f:
-        data = f.readlines()[1:-1]
-    default = "".join(data)
+    print "BBBB", basename    
+    try:
+        with open("{0}.{1}".format(basename,"diag"), "r") as f:
+            data = f.readlines()[1:-1]
+            default = "".join(data)
+    except:
+        print "Error: diagram not found" 
+        default = ""
+    
     filename = TextField("Filename", default=filename)
     workflow = TextAreaField("Workflow", default=default)
 
@@ -62,7 +70,7 @@ def display_provision_workflow_form():
     
     filename = "abc"
 
-    basename = "{0}/{1}".format(dir,filename)
+    basename = "./static/{0}/{1}".format(dir,filename)
     # if form.validate_on_submit():
 
     #    print "SKIP"
