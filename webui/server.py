@@ -397,12 +397,15 @@ def on_identity_loaded(sender, identity):
         
 @login_manager.user_loader
 def load_user(id):
-    user =  idp.find_one({'cm_user_id': id})
-    #load from yaml the roles and check them
-    role_server = Roles()
-    roles = role_server.get(id)
-    return User(id, id, roles)
-
+    try:
+        user =  idp.find_one({'cm_user_id': id})
+        #load from yaml the roles and check them
+        role_server = Roles()
+        roles = role_server.get(id)
+        return User(id, id, roles)
+    except:
+        # TODO: this could bea bug
+        return None
 
 class User(UserMixin):
     
