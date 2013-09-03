@@ -1,9 +1,12 @@
 blockdiag {
-  default_shape = roundedbox;  default_node_color = lightyellow;  default_shape = roundedbox;  default_node_color = lightyellow;  default_shape = roundedbox;  default_node_color = lightyellow;  default_shape = roundedbox;  
-  default_node_color = lightyellow;  
-  default_shape = roundedbox;  
-  default_node_color = lightyellow;
+  default_shape = roundedbox; default_node_color = lightblue;
+
+//graph
+
 provision -> "d-[001-005]" -> wait;
 provision -> "b-[001-005]" -> wait;
 provision -> "b-[008-009]" -> wait;
+
+
+
 }
