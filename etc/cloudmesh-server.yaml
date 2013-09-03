@@ -17,7 +17,7 @@ provisioner:
           - i[0066-0068]
           - s[01-16]
 workflows:
-    path: ~/.futuregrid/workflows
+    path: /static/workflows
 mongo:
     db: cloudmesh
     host: localhost
