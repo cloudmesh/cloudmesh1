@@ -18,6 +18,7 @@ def get_pid(command):
             break
     return (pid, line)
 
+
 @task
 def info():
     (pid, line) = get_pid("mongod")
@@ -26,7 +27,8 @@ def info():
 @task
 def start():
     '''
-    start the mongod service in the location as specified in ~/.futuregrid/cloudmesh_server.yaml
+    start the mongod service in the location as specified in
+    ~/.futuregrid/cloudmesh_server.yaml
     '''
     path = cm_path_expand(cm_config_server().get("mongo.path"))
     port = cm_config_server().get("mongo.port")
@@ -100,6 +102,23 @@ def simple():
     c.activate()
     c.refresh(types=['servers', 'images', 'flavors'])
     fg()
+    
+@task
+def metric():
+    """puts an example of a log file into the mongodb logfile"""
+    log_file = path_expand("~/.futuregrid/metric/sierra-sample.log")
+    # create the mongo object
+    # parse the log file
+    # put each log information into the mongodb (or an obkject an than to mongodb)
+    #maybe you do not need to parese log files for openstack but just read it from sql???
+    
+@task
+def errormetric():
+    """puts an example of a log file into the mongodb logfile"""
+    # create the mongo object
+    # parse the log file
+    # put each error form the sql databse in toit
+    
     
 @task
 def users():
