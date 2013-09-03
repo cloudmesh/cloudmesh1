@@ -78,7 +78,7 @@ class PBS:
             try:
                 xmldata = str(ssh("{0}@{1}".format(self.user,self.host), "qstat", "-x"))
             except:
-                raise RuntimeError("can not execute pbs nodes via ssh")
+                raise RuntimeError("can not execute pbs qstat via ssh")
             info = {}
             
             try:
