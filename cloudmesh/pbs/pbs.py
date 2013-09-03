@@ -26,7 +26,7 @@ class PBS:
             try:
                 result = ssh("{0}@{1}".format(self.user,self.host), "pbsnodes", "-a")
             except:
-                print "ERROR can not execute pbs nodes"
+                raise RuntimeError("can not execute pbs nodes via ssh")
             pbsinfo = {}        
             nodes = result.split("\n\n")
             for node in nodes:
@@ -78,7 +78,7 @@ class PBS:
             try:
                 xmldata = str(ssh("{0}@{1}".format(self.user,self.host), "qstat", "-x"))
             except:
-                print "ERROR can not extecute qstat"
+                raise RuntimeError("can not execute pbs nodes via ssh")
             info = {}
             
             try:
