@@ -37,23 +37,30 @@ class Migrate_MySQL_to_Mongo:
          self.dbinfo["mysqldb_hostname"],
          query)
 
-        cmd2 = "sed 's/\t/\",\"/g;s/^/\"/;s/$/\"/;s/\n//g'" 
+        #cmd2 = "sed 's/\t/\",\"/g;s/^/\"/;s/$/\"/;s/\n//g'" 
 
         #p1 = subprocess.Popen(cmd1.split(), stdout=subprocess.PIPE)
-        res = mysql("-u", "{0}".format(self.dbinfo["mysqldb_userid"]),
-                    "-p{0}".format(self.dbinfo["mysqldb_passwd"]),
-                    "-h", "{0}".format(self.dbinfo["mysqldb_hostname"]),
-                    "-e", "\"{0}\"".format(query),
-                    "--batch")
+        res_mysql = mysql("-u", "{0}".format(self.dbinfo["mysqldb_userid"]),
+                          "-p{0}".format(self.dbinfo["mysqldb_passwd"]),
+                          "-h", "{0}".format(self.dbinfo["mysqldb_hostname"]),
+                          "-e", "\"{0}\"".format(query),
+                          "--batch")
 
-        p2 = subprocess.Popen(cmd2.split(" "), stdin=p1.stdout,
-                              stdout=subprocess.PIPE)
+        #p2 = subprocess.Popen(cmd2.split(" "), stdin=p1.stdout,
+        #                      stdout=subprocess.PIPE)
 
-        output = p2.communicate()[0]
+        # Add quote(") at first
+        # Then replace tab to ","
+        # , add quote(") between new line
+        output = "\"" + str(res_mysql) \
+                .replace("\t","\",\"") \
+                .replace("\n","\"\n\"")
+
+        #output = p2.communicate()[0]
         print output
 
-        p1.stdout.close()
-        p2.stdout.close()
+        #p1.stdout.close()
+        #p2.stdout.close()
 
     def mongoimport_csv(self, table):
         # mongoimport -u cmetrics_user -p -d cloudmetrics -c cloudplatform
