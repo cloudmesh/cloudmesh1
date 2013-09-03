@@ -34,6 +34,12 @@ mongo:
             db: user
         pbs:
             db: cm-pbs
+        metric:
+            db: cm-metric
+        qstat:
+            db: hpc-qstat
+        pbsnodes:
+            db: hpc-pbsnodes
 keystone:
     sierra:
         OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
