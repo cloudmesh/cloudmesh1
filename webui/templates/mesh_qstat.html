@@ -62,17 +62,26 @@ $(function() {
             {% for attribute in attributes[version] %}
             <td>
             {% set l = attribute | length %}
+					{% if  attribute[1] in server %}                       
                           {% if l == 2%}
-                             {% if attribute[1] in ["ctime","mtime","qtime"] %}
-                             	{{ server[attribute[1]] | timesince(format="float") }}
+	                          {% if attribute[0] in ["Owner"] %}
+				                 {{ server[attribute[1]].split("@")[0] }}
+                             {% elif attribute[0] in ["ctime","mtime","qtime"] %}
+                              	{{ server[attribute[1]] | timesince(format="float") }}
                              {% else %}
                                 {{ server[attribute[1]] }}
-                             {% endif %}
-                          {% elif l == 3%}
-                             {{ server[attribute[1]][attribute[2]] }}
+							 {% endif %}
+                 
+                          {% elif (l == 3) %}
+                          	  {% if  attribute[2] in server[attribute[1]] %}                       
+                                  {{ server[attribute[1]][attribute[2]] }}
+                               {% endif %}
                           {% elif l == 4%}
-                             {{ server[attribute[1]][attribute[2]][attribute[4]] }}
+                             {% if (attribute[2] in server[attribute[1]]) and (attribute[3] in server[attribute[1]][attribute[3]]) %}
+                               {{ server[attribute[1]][attribute[2]][attribute[3]] }}
+                             {% endif %}
                           {% endif %}
+                     {% endif %}
               </td>
               {% endfor %}
               </tr>

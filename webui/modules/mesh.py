@@ -85,10 +85,10 @@ def display_mongo_qstat_new():
                         [ "ctime", "ctime"],
                         [ "mtime", "mtime"],
                         [ "qtime", "qtime"],
-                        #[ "Used Cpu Time", "resources_used", 'cput'],
-                        #[ "Used Mem ", "resources_used", 'mem'],
-                        #[ "Used VMem ", "resources_used", 'vmem'],
-                        #[ "Used Cpu Walltime", "resources_used", 'walltime']
+                        [ "Used Cpu Time", "resources_used", 'cput'],
+                        [ "Used Mem ", "resources_used", 'mem'],
+                        [ "Used VMem ", "resources_used", 'vmem'],
+                        [ "Used Cpu Walltime", "resources_used", 'walltime']
                   ],
                   }
     """
