@@ -3,13 +3,7 @@ blockdiag {
   default_node_color = lightyellow;  
   default_shape = roundedbox;  
   default_node_color = lightyellow;
-
-
-a -> b;
-
-
-
-
-
-
+provision -> "d-[001-005]" -> wait;
+provision -> "b-[001-005]" -> wait;
+provision -> "b-[008-009]" -> wait;
 }
