@@ -6,24 +6,6 @@ class Migrate_MySQL_to_Mongo:
     def load_db_info(self):
         stream = open("dbinfo.yaml", "r")
         self.dbinfo = yaml.load(stream)
-        #self.load_mysqldb_info()
-        #self.load_mongodb_info()
-
-    def load_mysqldb_info(self):
-        self.mysqldb_userid = ""
-        self.mysqldb_passwd = ""
-        self.mysqldb_hostname = ""
-        self.mysqldb_port = 3306
-        self.mysqldb_dbname = ""
-        self.mysqldb_tables = []
-
-    def load_mongodb_info(self):
-        self.mongodb_hostname = ""
-        self.mongodb_userid = ""
-        self.mongodb_passwd = ""
-        self.mongodb_port = 27107
-        self.mongodb_dbname = ""
-        self.mongodb_collections = []
 
     def get_tables(self):
         return self.dbinfo["mysqldb_tables"]
