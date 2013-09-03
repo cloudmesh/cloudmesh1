@@ -269,7 +269,7 @@ def timesince(dt, format="float", default="just now"):
     # now = datetime.utcnow()
     now = datetime.now()
     if format == 'float':
-        diff = now - datetime.fromtimestamp(dt)
+        diff = now - datetime.fromtimestamp(float(dt))
     else:
         diff = now - dt
         

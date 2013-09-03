@@ -63,7 +63,11 @@ $(function() {
             <td>
             {% set l = attribute | length %}
                           {% if l == 2%}
-                             {{ server[attribute[1]] }}
+                             {% if attribute[1] in ["ctime","mtime","qtime"] %}
+                             	{{ server[attribute[1]] | timesince(format="float") }}
+                             {% else %}
+                                {{ server[attribute[1]] }}
+                             {% endif %}
                           {% elif l == 3%}
                              {{ server[attribute[1]][attribute[2]] }}
                           {% elif l == 4%}
