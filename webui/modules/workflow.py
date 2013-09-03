@@ -24,7 +24,7 @@ from flask import Blueprint, request, make_response, render_template
 workflow_module = Blueprint('workflow_module', __name__)
 
 
-diagram_format="png"
+diagram_format="svg"
 
 
 class ProvisionWorkflowForm(Form):
@@ -74,7 +74,7 @@ def display_provision_workflow_form():
 
     web_pwd = pwd().strip()
     print "PWD", web_pwd
-    basename = "static/{0}/{1}".format(dir,filename,)
+    basename = "/static/{0}/{1}".format(dir,filename,)
     # if form.validate_on_submit():
 
     #    print "SKIP"
