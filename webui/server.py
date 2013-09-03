@@ -357,9 +357,9 @@ def page(path):
     return render_template('page.html', page=page)
 
 
-#
-#  PRINCOIPAL LOGIN
-#
+# ============================================================
+#  PRINCIPAL LOGIN
+# ============================================================
 
 if with_login:
     idp = cm_userLDAP ()

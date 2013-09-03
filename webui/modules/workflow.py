@@ -14,6 +14,7 @@ from cloudmesh.provisioner.queue.tasks import provision
 from cloudmesh.config.cm_config import cm_config_server
 from pprint import pprint
 from cloudmesh.util.util import path_expand
+from sh import pwd
 
 from cloudmesh.inventory.ninventory import ninventory
 
@@ -34,11 +35,12 @@ class ProvisionWorkflowForm(Form):
 
     # not so nice cludge, ask for location of statcic instead
     
-    basename = "./static/{0}/{1}".format(dir,filename)
+    web_pwd = pwd().strip()
+    basename = "/static/{0}/{1}".format(dir,filename)
 
     print "BBBB", basename    
     try:
-        with open("{0}.{1}".format(basename,"diag"), "r") as f:
+        with open("{2}/{0}.{1}".format(basename,"diag",web_pwd), "r") as f:
             data = f.readlines()[1:-1]
             default = "".join(data)
     except:
@@ -70,12 +72,14 @@ def display_provision_workflow_form():
     
     filename = "abc"
 
-    basename = "./static/{0}/{1}".format(dir,filename)
+    web_pwd = pwd().strip()
+    print "PWD", web_pwd
+    basename = "static/{0}/{1}".format(dir,filename,)
     # if form.validate_on_submit():
 
     #    print "SKIP"
     try:
-        with open("{0}.{1}".format(basename,"diag"), "w") as f:
+        with open("{2}/{0}.{1}".format(basename,"diag",web_pwd), "w") as f:
             f.write("blockdiag {\n")
             f.write("  default_shape = roundedbox;")
             f.write("  default_node_color = lightyellow;")
@@ -87,8 +91,8 @@ def display_provision_workflow_form():
 
     print "OOOO", basename
     blockdiag("--ignore-pil", "-Tsvg",
-              "-o", "{0}.{1}".format(basename,diagram_format),
-              "{0}.{1}".format(basename,"diag"))
+              "-o", "{2}/{0}.{1}".format(basename,diagram_format,web_pwd),
+              "{2}/{0}.{1}".format(basename,"diag",web_pwd))
     # blockdiag("-Tpng",
     #          "-o", "." + dir + filename + ".png",
     #          "." + dir + filename + ".diag")
@@ -99,6 +103,7 @@ def display_provision_workflow_form():
     return render_template("provision_workflow.html",
                            workflow=form.workflow.data,
                            form=form,
+                           pwd=pwd,
                            diagram="{0}.{1}".format(basename,diagram_format),
                            inventory=inventory)
 
