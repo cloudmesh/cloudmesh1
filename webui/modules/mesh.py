@@ -30,10 +30,19 @@ def display_mongo_qstat_refresh(host=None):
                  "alamo.futuregrid.org"]
     else:
         hosts = [host]
-                
+    
+    error = ""
     for host in hosts:
         pbs.activate(host,user)
-        d = pbs.refresh_qstat(host)
+        try:
+            d = pbs.refresh_qstat(host)
+        except Exception, e:
+            error += "error {0} {1}".format(str(host),str(e))
+    if error != "":
+        return render_template('error.html', 
+                               error=error,
+                               type="Some error in qstat",
+                               msg="")
     return redirect('mesh/qstat')
 
 
@@ -59,9 +68,19 @@ def display_mongo_qstat_new():
     jobcount = {}
     timer = {}
     for host in hosts:    
-        data[host] = pbs.get_qstat(host)
-        print "DDD", host, data[host].count()
-        jobcount[host] = data[host].count()
+        try:
+            data[host] = pbs.get_qstat(host)
+        except:
+            error += "get_qstat({0})".format(host)
+        
+        try:
+        
+            print "DDD", host, data[host].count()
+            jobcount[host] = data[host].count()
+        except:
+            error += "jobcount {0}".format(host)
+        
+
         if jobcount[host] > 0:
             timer[host] = data[host][0]["cm_refresh"]
             print "TTTTT"
@@ -69,7 +88,7 @@ def display_mongo_qstat_new():
             #timer[host] = datetime.now() 
         else:
             timer[host] = datetime.now()
-        print "TIMER", timer
+        #print "TIMER", timer
     attributes = {"pbs": 
                   [
                         [ "Queue" , "queue"],
@@ -108,6 +127,7 @@ def display_mongo_qstat_new():
                            attributes=attributes,
                            updated=time_now,
                            qstat=data,
+                           error=error,
                            config=config)
 
 # ============================================================
