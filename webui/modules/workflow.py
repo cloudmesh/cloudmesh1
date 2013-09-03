@@ -28,7 +28,7 @@ diagram_format="svg"
 
 
 class ProvisionWorkflowForm(Form):
-    #print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",Form
+
     filename = "abc"
 
     dir = path_expand(cm_config_server().get("workflows.path"))
@@ -46,11 +46,9 @@ class ProvisionWorkflowForm(Form):
     except:
         print "Error: diagram not found" 
         default = ""
-    default = default.split("//graph")
+    
     filename = TextField("Filename", default=filename)
-    properties = TextAreaField("Workflow", default=default[0])
-    workflow = TextAreaField("Workflow", default=default[1])
-    #print workflow
+    workflow = TextAreaField("Workflow", default=default)
 
 
 # ============================================================
@@ -82,20 +80,11 @@ def display_provision_workflow_form():
     #    print "SKIP"
     try:
         with open("{2}/{0}.{1}".format(basename,"diag",web_pwd), "w") as f:
-            #print "########################################################################################"
-            #print "aaaaaa"+form.workflow.data+"bbb"
             f.write("blockdiag {\n")
-            if form.workflow.data == "":
-                form.work.data = f.work.default
-            if form.properties.data == "":
-                form.properties.data = form.properties.default
-            f.write(form.properties.data)
-            f.write("//graph\n")
+            f.write("  default_shape = roundedbox;")
+            f.write("  default_node_color = lightyellow;")
             f.write(form.workflow.data)
             f.write("\n}")
-            
-            #print "########################################################################################"
-            print form.workflow
     except:
         print "file does not exists"
     print "{0}.{1}".format(basename,diagram_format)
