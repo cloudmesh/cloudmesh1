@@ -1,4 +1,6 @@
+from cloudmesh.config.cm_config import cm_config_server
 from pbr import version
+
 __version__ = version.VersionInfo('cloudmesh')
 
 #import pkg_resources
@@ -16,6 +18,3 @@ try:
 except:
     with_login = False
     print "WARGING: not using user login"
-
-
-
