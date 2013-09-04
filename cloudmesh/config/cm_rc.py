@@ -58,7 +58,7 @@ Options:
 import getpass
 import yaml
 from docopt import docopt
-from cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config
 import sys
 import os
 import stat

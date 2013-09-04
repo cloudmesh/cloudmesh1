@@ -1,4 +1,4 @@
-from cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config
 from string import Template
 import os
 import json
