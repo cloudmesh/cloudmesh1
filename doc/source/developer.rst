@@ -242,7 +242,7 @@ Working with Cloudmesh on a remote server
 
 Sometimes it is desirable to work on cloudmesh on a remote server and use your laptop to connect to that server. This can be done for example via port forwarding. Let us assume you are running a cloudmesh server on the machine my.org. Than you can establish a port forwarding from port 5000 to 5001 as follows, where 5001 is the locally used port::
 
-     ssh -L 80:localhost:5000 gvonlasz@cm 
+     ssh -L 5001:localhost:5000 user@machine.edu
 
 Once you have started cloudmesh, you will be able to see the page form that server in the browser at::
 
