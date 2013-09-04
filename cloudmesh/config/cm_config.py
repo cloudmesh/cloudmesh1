@@ -18,8 +18,6 @@ from cloudmesh.user.cm_template import cm_template
 from pymongo import MongoClient
 import yaml
 
-from easydict import EasyDict 
-
 ##### For testing
 # import mock_keystone
 
