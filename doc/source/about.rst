@@ -1,3 +1,5 @@
+.. sectnum::
+   :start: 1
 
 
 Documentation Management
