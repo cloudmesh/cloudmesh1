@@ -4,15 +4,15 @@ import pymongo
 from pymongo import MongoClient
 from pprint import pprint
 from bson.objectid import ObjectId
-from config.cm_config import cm_config
-from util.stopwatch import StopWatch
-from iaas.openstack.cm_compute import openstack
-from iaas.eucalyptus.eucalyptus import eucalyptus
-from config.cm_config import cm_config_server
-from util.util import path_expand
+from cloudmesh.config.cm_config import cm_config
+from cloudmesh.util.stopwatch import StopWatch
+from cloudmesh.iaas.openstack.cm_compute import openstack
+from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
+from cloudmesh.config.cm_config import cm_config_server
+from cloudmesh.util.util import path_expand
 import yaml
-from util.logger import LOGGER
-from config.cm_config import get_mongo_db
+from cloudmesh.util.logger import LOGGER
+from cloudmesh.config.cm_config import get_mongo_db
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
