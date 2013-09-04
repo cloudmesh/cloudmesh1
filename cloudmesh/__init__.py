@@ -1,4 +1,4 @@
-#from cloudmesh.config.cm_config import cm_config_server
+from cloudmesh.config.cm_config import cm_config_server
 from pbr import version
 
 __version__ = version.VersionInfo('cloudmesh')
@@ -15,7 +15,7 @@ with_login = True
 
 
 try:
-     with_login = config.cm_config_server().get("ldap.with_ldap")
+     with_login = cm_config_server().get("ldap.with_ldap")
      print "WWWW", with_login
      
 except:
@@ -23,7 +23,7 @@ except:
     print "WARGING: not using user login", with_login
 
 
-with_login = False
+#with_login = False
 
 print "XXXXOOOO", with_login
 
