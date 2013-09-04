@@ -17,6 +17,7 @@ mesh_module = Blueprint('mesh_module', __name__)
 
 @mesh_module.route('/mesh/refresh/qstat')
 @mesh_module.route('/mesh/refresh/qstat/<host>')
+@cond_decorator(with_login, login_required)
 def display_mongo_qstat_refresh(host=None):
     
     config = cm_config()
@@ -47,6 +48,7 @@ def display_mongo_qstat_refresh(host=None):
 
 
 @mesh_module.route('/mesh/qstat/')
+@cond_decorator(with_login, login_required)
 def display_mongo_qstat_new():
     time_now = datetime.now()
     
@@ -135,6 +137,7 @@ def display_mongo_qstat_new():
 # ============================================================
 
 @mesh_module.route('/mesh/images/')
+@cond_decorator(with_login, login_required)
 def mongo_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
@@ -249,6 +252,7 @@ def mongo_images():
 # ============================================================
 
 @mesh_module.route('/mesh/flavors/')
+@cond_decorator(with_login, login_required)
 def mongo_flavors():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
@@ -309,6 +313,7 @@ def mongo_flavors():
 # ============================================================
 
 @mesh_module.route('/mesh/users/')
+@cond_decorator(with_login, login_required)
 def mongo_users():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
@@ -373,6 +378,7 @@ def mongo_users():
 
 @mesh_module.route('/mesh/servers/')
 @mesh_module.route('/mesh/servers/<filters>')
+@cond_decorator(with_login, login_required)
 def mongo_table(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()

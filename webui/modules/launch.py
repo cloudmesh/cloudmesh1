@@ -55,11 +55,13 @@ launch_recipies = {"india-openstack-essex":
 
 
 @launch_module.route('/cm/launch/<host>/<recipie>')
+@cond_decorator(with_login, login_required)
 def launch_run ():
     print "implement"
     pass
 
 @launch_module.route('/cm/launch/launch_servers', methods = ["POST"])
+@cond_decorator(with_login, login_required)
 def launch_servers():
     
     columns = {"india-openstack-essex" :
@@ -77,6 +79,7 @@ def launch_servers():
 
 
 @launch_module.route('/cm/launch')
+@cond_decorator(with_login, login_required)
 def display_launch_table():
     
     # fake list of recipies which we need to get from cm_launcher
