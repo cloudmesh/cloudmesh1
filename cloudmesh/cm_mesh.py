@@ -43,6 +43,7 @@ class cloudmesh:
     # global variables that define the information managed by this class
     # ----------------------------------------------------------------------
 
+    # deprecated
     datastore = "data/clouds.txt"
 
     # dict that holds vms, flavors, images for al iaas
