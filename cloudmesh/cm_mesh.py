@@ -13,8 +13,8 @@ import os
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
-from util.util import HEADING
-from util.logger import LOGGER
+from cloudmesh.util.util import HEADING
+from cloudmesh.util.logger import LOGGER
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -24,15 +24,15 @@ log = LOGGER('cloudmesh')
 
 
 # import shelve
-from config.cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config
 # from openstack.cm_compute import openstack as os_client
 
 # Error Cannot Import Openstack
-from iaas.openstack.cm_compute import openstack
+from cloudmesh.iaas.openstack.cm_compute import openstack
 
-from iaas.eucalyptus.eucalyptus import eucalyptus
+from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
 try:
-    from iaas.azure.cm_azure import cm_azure as azure
+    from cloudmesh.iaas.azure.cm_azure import cm_azure as azure
 except:
     log.warning("AZURE NOT ENABLED")
 
