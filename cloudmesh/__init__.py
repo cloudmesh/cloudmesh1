@@ -16,14 +16,9 @@ with_login = True
 
 try:
      with_login = cm_config_server().get("ldap.with_ldap")
-     print "WWWW", with_login
      
 except:
     with_login = False
     print "WARGING: not using user login", with_login
 
-
-#with_login = False
-
-print "XXXXOOOO", with_login
 
