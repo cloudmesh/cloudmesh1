@@ -1,3 +1,6 @@
+.. sectnum::
+   :start: 2
+
 Issue Management
 =============
 
