@@ -29,10 +29,12 @@
 <div id="workflow_drawing_container">
 </div>
 
+
+
 <script type="text/javascript">
-    function newimg(name,type){
+    function newimg(name){
         dummytag = Math.random().toString();
-        strval = "<img src=\"+  name + "?" + dummytag + "\"/>";
+        strval = "<img src=\""+  name + "?" + dummytag + "\"/>";
         return strval;
     }
     function redraw(){
@@ -41,8 +43,5 @@
     $(document).ready(redraw());
 </script>
 
-{{diagram}}
-
-<img src="{{ diagram }}"/>
 
 {% endblock %}

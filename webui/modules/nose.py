@@ -1,13 +1,17 @@
+import cloudmesh
 from datetime import datetime
 from flask import Blueprint
 from flask import render_template, redirect
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.pbs.pbs import PBS
-
-nose_module = Blueprint('nose_module', __name__)
+from cloudmesh.util.util import cond_decorator
 from ast import literal_eval
 from sh import pwd
 from cloudmesh.util.ping import ping
+from flask.ext.login import login_required
+
+nose_module = Blueprint('nose_module', __name__)
+
 #
 # ROUTE: PROFILE
 #
@@ -16,6 +20,7 @@ from sh import nosetests
 
 
 @nose_module.route('/test/ping')
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_pingtest():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -39,6 +44,7 @@ def display_pingtest():
 @nose_module.route('/test/nose')
 @nose_module.route('/test/nose/')
 @nose_module.route('/test/nose/<test>')
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_nosetest(test=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -64,6 +70,7 @@ def display_nosetest(test=None):
 
 @nose_module.route('/test/run')
 @nose_module.route('/test/run/<test>')
+@cond_decorator(cloudmesh.with_login, login_required)
 def run_nosetest(test=None):
 
     if test is None:

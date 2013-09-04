@@ -6,6 +6,9 @@ from cloudmesh.util.util import table_printer
 from cloudmesh.cm_mongo import cm_mongo
 from datetime import datetime
 import time
+from cloudmesh.util.util import cond_decorator
+import cloudmesh
+from flask.ext.login import login_required
 
 try:
     from sh import xterm
@@ -48,6 +51,7 @@ for name in clouds.active():
 
 
 @cloud_module.route('/save/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def save():
     print "Saving the cloud status"
     #clouds.save()
@@ -59,6 +63,7 @@ def save():
 
 
 @cloud_module.route('/load/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def load():
     print "Loading the cloud status"
     #clouds.load()
@@ -72,6 +77,7 @@ def load():
 @cloud_module.route('/cm/refresh/')
 @cloud_module.route('/cm/refresh/<cloud>/')
 @cloud_module.route('/cm/refresh/<cloud>/<service_type>')
+@cond_decorator(cloudmesh.with_login, login_required)
 def refresh(cloud=None, server=None, service_type=None):
     print "-> refresh", cloud, server
     
@@ -100,6 +106,7 @@ def refresh(cloud=None, server=None, service_type=None):
 
 
 @cloud_module.route('/cm/filter/<cloud>/', methods=['GET', 'POST'])
+@cond_decorator(cloudmesh.with_login, login_required)
 def filter(cloud=None):
     # print "-> filter", cloud
 
@@ -126,6 +133,7 @@ def filter(cloud=None):
 # ROUTE: KILL
 # ============================================================
 @cloud_module.route('/cm/kill/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def kill_vms():
     print "-> kill all"
     r = cm("--set", "quiet", "kill", _tty_in=True)
@@ -137,6 +145,7 @@ def kill_vms():
 
 
 @cloud_module.route('/cm/delete/<cloud>/<server>/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def delete_vm(cloud=None, server=None):
     print "-> delete", cloud, server
     # if (cloud == 'india'):
@@ -153,6 +162,7 @@ def delete_vm(cloud=None, server=None):
 
 
 @cloud_module.route('/cm/delete/<cloud>/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def delete_vms(cloud=None):
 # donot do refresh before delete, this will cause all the vms to get deleted
     f_cloud = clouds.clouds[cloud]
@@ -170,6 +180,7 @@ def delete_vms(cloud=None):
 
 
 @cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def assign_public_ip(cloud=None, server=None):
     mycloud = configuration['clouds'][cloud]
     if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
@@ -189,6 +200,7 @@ def assign_public_ip(cloud=None, server=None):
 
 
 @cloud_module.route('/cm/start/<cloud>/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def start_vm(cloud=None, server=None):
     print "*********** STARTVM", cloud
     print "-> start", cloud
@@ -232,6 +244,7 @@ def start_vm(cloud=None, server=None):
 
 
 @cloud_module.route('/cm/login/<cloud>/<server>/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def vm_login(cloud=None, server=None):
     message = ''
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -257,6 +270,7 @@ def vm_login(cloud=None, server=None):
 
 
 @cloud_module.route('/cm/info/<cloud>/<server>/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def vm_info(cloud=None, server=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -280,6 +294,7 @@ def vm_info(cloud=None, server=None):
 
 
 @cloud_module.route('/flavors/', methods=['GET', 'POST'])
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_flavors(cloud=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -302,6 +317,7 @@ def display_flavors(cloud=None):
 # ROUTE: IMAGES
 # ============================================================
 # @cloud_module.route('/images/<cloud>/')
+@cond_decorator(cloudmesh.with_login, login_required)
 @cloud_module.route('/images/', methods=['GET', 'POST'])
 def display_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")

@@ -7,7 +7,9 @@ from cloudmesh.util.util import address_string
 from pprint import pprint
 from ast import literal_eval
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
-
+from cloudmesh.util.util import cond_decorator
+from flask.ext.login import login_required
+import cloudmesh
 
 mesh_module = Blueprint('mesh_module', __name__)
 
@@ -17,6 +19,7 @@ mesh_module = Blueprint('mesh_module', __name__)
 
 @mesh_module.route('/mesh/refresh/qstat')
 @mesh_module.route('/mesh/refresh/qstat/<host>')
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_mongo_qstat_refresh(host=None):
 
     config = cm_config()
@@ -31,13 +34,23 @@ def display_mongo_qstat_refresh(host=None):
     else:
         hosts = [host]
 
+    error = ""
     for host in hosts:
         pbs.activate(host,user)
-        d = pbs.refresh_qstat(host)
+        try:
+            d = pbs.refresh_qstat(host)
+        except Exception, e:
+            error += "error {0} {1}".format(str(host),str(e))
+    if error != "":
+        return render_template('error.html',
+                               error=error,
+                               type="Some error in qstat",
+                               msg="")
     return redirect('mesh/qstat')
 
 
 @mesh_module.route('/mesh/qstat/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_mongo_qstat_new():
     time_now = datetime.now()
 
@@ -59,12 +72,24 @@ def display_mongo_qstat_new():
     jobcount = {}
     timer = {}
     for host in hosts:
-        data[host] = pbs.get_qstat(host)
-        jobcount[host] = data[host].count()
+        try:
+            data[host] = pbs.get_qstat(host)
+        except:
+            error += "get_qstat({0})".format(host)
+
+        try:
+
+            print "DDD", host, data[host].count()
+            jobcount[host] = data[host].count()
+        except:
+            error += "jobcount {0}".format(host)
+
+
         if jobcount[host] > 0:
             timer[host] = data[host][0]["cm_refresh"]
         else:
             timer[host] = datetime.now()
+        #print "TIMER", timer
     attributes = {"pbs":
                   [
                         [ "Queue" , "queue"],
@@ -77,10 +102,13 @@ def display_mongo_qstat_new():
                         [ "Nodes" , "Resource_List", "nodes"],
                         [ "Nodect" , "Resource_List", "nodect"],
                         [ "Walltime" , "Resource_List", "walltime"],
-                        #[ "Used Cpu Time", "resources_used", 'cput'],
-                        #[ "Used Mem ", "resources_used", 'mem'],
-                        #[ "Used VMem ", "resources_used", 'vmem'],
-                        #[ "Used Cpu Walltime", "resources_used", 'walltime']
+                        [ "ctime", "ctime"],
+                        [ "mtime", "mtime"],
+                        [ "qtime", "qtime"],
+                        [ "Used Cpu Time", "resources_used", 'cput'],
+                        [ "Used Mem ", "resources_used", 'mem'],
+                        [ "Used VMem ", "resources_used", 'vmem'],
+                        [ "Used Cpu Walltime", "resources_used", 'walltime']
                   ],
                   }
     """
@@ -100,6 +128,7 @@ def display_mongo_qstat_new():
                            attributes=attributes,
                            updated = timer,
                            qstat=data,
+                           error=error,
                            config=config)
 
 # ============================================================
@@ -107,6 +136,7 @@ def display_mongo_qstat_new():
 # ============================================================
 
 @mesh_module.route('/mesh/images/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def mongo_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
@@ -221,6 +251,7 @@ def mongo_images():
 # ============================================================
 
 @mesh_module.route('/mesh/flavors/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def mongo_flavors():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
@@ -281,6 +312,7 @@ def mongo_flavors():
 # ============================================================
 
 @mesh_module.route('/mesh/users/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def mongo_users():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
@@ -345,6 +377,7 @@ def mongo_users():
 
 @mesh_module.route('/mesh/servers/')
 @mesh_module.route('/mesh/servers/<filters>')
+@cond_decorator(cloudmesh.with_login, login_required)
 def mongo_table(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()

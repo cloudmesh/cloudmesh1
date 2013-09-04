@@ -14,31 +14,45 @@ from cloudmesh.provisioner.queue.tasks import provision
 from cloudmesh.config.cm_config import cm_config_server
 from pprint import pprint
 from cloudmesh.util.util import path_expand
-
+from sh import pwd
+from cloudmesh.util.util import cond_decorator
 from cloudmesh.inventory.ninventory import ninventory
 
 from cloudmesh.util.webutil import decode_source
 from flask import Blueprint, request, make_response, render_template
+from flask.ext.login import login_required
+import cloudmesh
 
 workflow_module = Blueprint('workflow_module', __name__)
 
 
-diagram_format="png"
+diagram_format="svg"
 
 
 class ProvisionWorkflowForm(Form):
-
+    #print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",Form
     filename = "abc"
 
     dir = path_expand(cm_config_server().get("workflows.path"))
 
-    basename = "{0}/{1}".format(dir,filename)
+    # not so nice cludge, ask for location of statcic instead
+    
+    web_pwd = pwd().strip()
+    basename = "/static/{0}/{1}".format(dir,filename)
 
-    with open("{0}.{1}".format(basename,"diag"), "r") as f:
-        data = f.readlines()[1:-1]
-    default = "".join(data)
+    print "BBBB", basename    
+    try:
+        with open("{2}/{0}.{1}".format(basename,"diag",web_pwd), "r") as f:
+            data = f.readlines()[1:-1]
+            default = "".join(data)
+    except:
+        print "Error: diagram not found" 
+        default = ""
+    default = default.split("//graph")
     filename = TextField("Filename", default=filename)
-    workflow = TextAreaField("Workflow", default=default)
+    properties = TextAreaField("Workflow", default=default[0])
+    workflow = TextAreaField("Workflow", default=default[1])
+    #print workflow
 
 
 # ============================================================
@@ -48,12 +62,14 @@ class ProvisionWorkflowForm(Form):
 
 
 @workflow_module.route('/workflows/<filename>')
+@cond_decorator(cloudmesh.with_login, login_required)
 def retrieve_files(filename):
     """    Retrieve files that have been uploaded    """
     return send_from_directory('/tmp/workflows', filename)
 
 
 @workflow_module.route("/provision/workflow/", methods=("GET", "POST"))
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)
@@ -62,25 +78,36 @@ def display_provision_workflow_form():
     
     filename = "abc"
 
-    basename = "{0}/{1}".format(dir,filename)
+    web_pwd = pwd().strip()
+    print "PWD", web_pwd
+    basename = "/static/{0}/{1}".format(dir,filename,)
     # if form.validate_on_submit():
 
     #    print "SKIP"
     try:
-        with open("{0}.{1}".format(basename,"diag"), "w") as f:
+        with open("{2}/{0}.{1}".format(basename,"diag",web_pwd), "w") as f:
+            #print "########################################################################################"
+            #print "aaaaaa"+form.workflow.data+"bbb"
             f.write("blockdiag {\n")
-            f.write("  default_shape = roundedbox;")
-            f.write("  default_node_color = lightyellow;")
+            if form.workflow.data == "":
+                form.work.data = f.work.default
+            if form.properties.data == "":
+                form.properties.data = form.properties.default
+            f.write(form.properties.data)
+            f.write("//graph\n")
             f.write(form.workflow.data)
             f.write("\n}")
+            
+            #print "########################################################################################"
+            print form.workflow
     except:
         print "file does not exists"
     print "{0}.{1}".format(basename,diagram_format)
 
     print "OOOO", basename
     blockdiag("--ignore-pil", "-Tsvg",
-              "-o", "{0}.{1}".format(basename,diagram_format),
-              "{0}.{1}".format(basename,"diag"))
+              "-o", "{2}/{0}.{1}".format(basename,diagram_format,web_pwd),
+              "{2}/{0}.{1}".format(basename,"diag",web_pwd))
     # blockdiag("-Tpng",
     #          "-o", "." + dir + filename + ".png",
     #          "." + dir + filename + ".diag")
@@ -91,6 +118,7 @@ def display_provision_workflow_form():
     return render_template("provision_workflow.html",
                            workflow=form.workflow.data,
                            form=form,
+                           pwd=pwd,
                            diagram="{0}.{1}".format(basename,diagram_format),
                            inventory=inventory)
 

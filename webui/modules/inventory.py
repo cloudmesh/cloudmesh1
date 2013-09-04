@@ -10,6 +10,8 @@ from cloudmesh.inventory.inventory import Inventory
 from cloudmesh.inventory.ninventory import ninventory
 
 from cloudmesh.util.util import table_printer
+from cloudmesh.util.util import cond_decorator
+import cloudmesh
 
 inventory = Inventory("nosetest")
 
@@ -21,6 +23,7 @@ n_inventory.generate()
 
 
 @inventory_module.route('/inventory/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_inventory():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     
@@ -44,6 +47,7 @@ def old_display_summary():
 """
 
 @inventory_module.route('/inventory/summary/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def old_display_summary():
     
     #clusters = ["bravo", "india", "delta", "echo", "sierra"]
@@ -80,6 +84,7 @@ def display_old_inventory():
 
 
 @inventory_module.route('/inventory/cluster/<cluster>/<name>')
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_named_resource(cluster, name):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     #inventory.refresh()
@@ -116,6 +121,7 @@ def display_cluster(cluster):
 """
 
 @inventory_module.route('/inventory/cluster/<cluster>/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_cluster(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     #inventory.refresh()
@@ -148,6 +154,7 @@ def display_cluster_table(cluster):
 """
 
 @inventory_module.route('/inventory/cluster/table/<cluster>/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_cluster_table(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     #inventory.refresh()
@@ -172,6 +179,7 @@ def display_cluster_table(cluster):
 
 
 @inventory_module.route('/inventory/images/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_inventory_images():
     images = inventory.get("images")
     inventory.refresh()
@@ -181,6 +189,7 @@ def display_inventory_images():
 
 
 @inventory_module.route('/inventory/image/<name>/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_inventory_image(name):
     print "PRINT IMAGE", name
     inventory.refresh()
@@ -196,6 +205,7 @@ def display_inventory_image(name):
 
 
 @inventory_module.route('/inventory/info/server/<server>/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def server_info(server):
 
     server = inventory.find("server", server)
@@ -205,6 +215,7 @@ def server_info(server):
 
 
 @inventory_module.route('/inventory/set/service/', methods=['POST'])
+@cond_decorator(cloudmesh.with_login, login_required)
 def set_service():
     server_name = request.form['server']
     service_name = request.form['provisioned']
@@ -217,6 +228,7 @@ def set_service():
 
 
 @inventory_module.route('/inventory/set/attribute/', methods=['POST'])
+@cond_decorator(cloudmesh.with_login, login_required)
 def set_attribute():
     kind = request.form['kind']
     name = request.form['name']
@@ -230,12 +242,14 @@ def set_attribute():
 
 
 @inventory_module.route('/inventory/get/<kind>/<name>/<attribute>')
+@cond_decorator(cloudmesh.with_login, login_required)
 def get_attribute(kind, name, attribute):
     s = inventory.get(kind, name)
     return s[attribute]
 
 
 @inventory_module.route('/inventory/save/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def inventory_save():
     print "Not IMPLEMENTED YET"
     print "Saving the inventory"
@@ -243,6 +257,7 @@ def inventory_save():
 
 
 @inventory_module.route('/inventory/load/')
+@cond_decorator(cloudmesh.with_login, login_required)
 def inventory_load():
     print "Not IMPLEMENTED YET"
     return display_inventory()

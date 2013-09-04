@@ -1,3 +1,6 @@
+import cloudmesh
+from flask.ext.login import login_required
+
 from ConfigParser import SafeConfigParser
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.config.cm_config import cm_config
@@ -6,7 +9,11 @@ from cloudmesh.util.webutil import setup_imagedraw
 from cloudmesh.user.cm_userLDAP import cm_userLDAP 
 from datetime import datetime
 
+
+
+
 from cloudmesh.util.util import path_expand
+from cloudmesh.util.util import cond_decorator
 
 from flask import Flask, render_template, flash, send_from_directory, redirect, g
 #from flask.ext.autoindex import AutoIndex
@@ -29,16 +36,9 @@ import pkg_resources
 import sys
 import types
 
-
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
 
-
-try:
-     with_login = cm_config_server().get("ldap.with_ldap")
-except:
-    with_login = False
-    print "WARGING: not using user login"
 
 # ============================================================
 # DYNAMIC MODULE MANAGEMENT
@@ -125,7 +125,6 @@ for m in modules:
 principals = Principal(app)
 login_manager = LoginManager(app)
 
-
 admin_permission = Permission(RoleNeed('admin'))
 user_permission = Permission(RoleNeed('user'))
 rain_permission = Permission(RoleNeed('rain'))
@@ -186,21 +185,22 @@ def site_map():
 # ROUTE: /test
 # ============================================================
 
+# 
 
 @app.route('/test')
-@login_required
+@cond_decorator(cloudmesh.with_login, login_required)
 def restricted_index():
     return render_template('index.html')
 
 
 @app.route('/rain')
-@login_required
+@cond_decorator(cloudmesh.with_login, login_required)
 @rain_permission.require(http_exception=403)
 def rain_index():
     return render_template('rain.html')
 
 @app.route('/admin')
-@login_required
+@cond_decorator(cloudmesh.with_login, login_required)
 @admin_permission.require(http_exception=403)
 def admin_index():
     return render_template('admin.html')
@@ -222,7 +222,7 @@ def page_not_found(error):
 def page_not_found(error):
     error = 'Access denied {0}'.format(403)
     return render_template('error.html', 
-                           error=eror,
+                           error=error,
                            type="Access Denied",
                            msg="You need to Login first")
     
@@ -269,7 +269,7 @@ def timesince(dt, format="float", default="just now"):
     # now = datetime.utcnow()
     now = datetime.now()
     if format == 'float':
-        diff = now - datetime.fromtimestamp(dt)
+        diff = now - datetime.fromtimestamp(float(dt))
     else:
         diff = now - dt
         
@@ -357,11 +357,11 @@ def page(path):
     return render_template('page.html', page=page)
 
 
-#
-#  PRINCOIPAL LOGIN
-#
+# ============================================================
+#  PRINCIPAL LOGIN
+# ============================================================
 
-if with_login:
+if cloudmesh.with_login:
     idp = cm_userLDAP ()
     idp.connect("fg-ldap","ldap")
 
@@ -397,12 +397,15 @@ def on_identity_loaded(sender, identity):
         
 @login_manager.user_loader
 def load_user(id):
-    user =  idp.find_one({'cm_user_id': id})
-    #load from yaml the roles and check them
-    role_server = Roles()
-    roles = role_server.get(id)
-    return User(id, id, roles)
-
+    try:
+        user =  idp.find_one({'cm_user_id': id})
+        #load from yaml the roles and check them
+        role_server = Roles()
+        roles = role_server.get(id)
+        return User(id, id, roles)
+    except:
+        # TODO: this could bea bug
+        return None
 
 class User(UserMixin):
     

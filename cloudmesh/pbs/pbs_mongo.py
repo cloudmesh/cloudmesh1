@@ -48,6 +48,7 @@ class pbs_mongo:
         '''
         time_now = datetime.now()
         data =  dict(self.hosts[host].qstat(refresh=True))
+    
         print "DDDD"
         pprint (data)
         self.db_qstat.remove({"cm_host": host, "cm_kind" : "qstat"}, safe=True)
