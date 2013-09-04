@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import render_template, request, redirect
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.cloudmesh import cloudmesh
+from cloudmesh.cm_mesh import cloudmesh
 from cloudmesh.util.util import table_printer
 from cloudmesh.cm_mongo import cm_mongo
 from datetime import datetime

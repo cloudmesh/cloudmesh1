@@ -11,7 +11,7 @@ nosetests -v
 # from cloudmesh.openstack.cm_table import table as cm_table
 # from cloudmesh.cm_config import cm_config
 # from cloudmesh.openstack.cm_compute import openstack
-from cloudmesh.cloudmesh import cloudmesh
+from cloudmesh.cm_mesh import cloudmesh
 
 import json
 import pprint
