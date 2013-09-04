@@ -49,6 +49,7 @@ $(function() {
 		       	<thead>
 		        <tr>
 		        <th> Select </th>
+		        <th> Type </th>
 		        {% for attribute in attribute_list %}
 		        	<th>
 		        		{{attribute}}
@@ -60,15 +61,40 @@ $(function() {
 		        <tr>
 		        	{{recipie["name"]}}
 		        	<td><input type = "checkbox" name = "resource" value = {{recipie["name"]}}></td>  {#this part looks for key name. use the name as key to indicate the name of the resource..#}
+			        <td>
+						<select>
+			        	{% for t in recipie["types"] %}
+			        	   <option value="{{t}}">{{t}}</option>
+			        	{% endfor %}
+			        	</select>
+			        </td>
 		        	{% for a in attribute_list%}
 			        	<td>
 			        		{{recipie[a]}}
 			        	</td>	
+			        	
 			        {%endfor%}
 		        </tr>
 		        {% endfor %}	
-		        
+	            <tr>
+	            	<td></td>
+        	        <td valign="top">
+        		       <input type="text" value="... specify" name="hostlist-{{ loop.index0 }}">
+        	        </td>
+                 	<td valign="top">
+        	        	Hosts
+        	        </td>
+        	        <td valign="top">
+        	        	Specify the hosts on which you like to deploy the recipies. <br>
+        	        	<b>username[001-003]</b> = would deploy the recipy on the vms with the names 
+        	        	username001, username002, username003, where username is your purtal username. <br> 
+        	        	<b>prefix[001-003]</b> = use prefix instead, your prefix name defined in the profile is used.
+        	        	 
+        	        </td>
+                </tr>
+
 		        </table>
+		        Note: you can not yet mix bare metal and VM at the same time via this interface. Please make sure all Types of slected items are of the same type.<br><br>
 		        <input type = submit value = "press to launch">
 		       </form>
 	        </div>
@@ -76,54 +102,6 @@ $(function() {
         
         
     {% endfor %}
-    {#
- <div id="qstat-accordion">
-    {% for host in hosts %}
-        {% set host_loop = loop %}
-        {% set version = 'pbs' %}
-        <div style="margin-bottom:1em;">
-       <h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + host) }} 
-       	 {{ host }}, 
-       	 {{ jobcount[host] }} jobs, 
-       	 {{ timer[host] | timesince(format="date") }}
-       	</h3>
-       <div>
-       <small>Last updated: {{updated | timesince(format="date")}}</small><br>
-       <table id="display-table-{{ loop.index0 }}">
-       	<thead>
-        <tr>
-        {% for attribute in attributes[version] %}
-        	<th>
-        		{{attribute[0]}}
-        	</th>
-        {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for server in qstat[host] %}
-            <tr>
-            {% for attribute in attributes[version] %}
-            <td>
-            {% set l = attribute | length %}
-
-                          {% if l == 2%}
-                             {{ server[attribute[1]] }}
-                          {% elif l == 3%}
-                             {{ server[attribute[1]][attribute[2]] }}       				
-                          {% elif l == 4%}
-                             {{ server[attribute[1]][attribute[2]][attribute[3]] }}
-                          {% endif %}
-              </td>
-              {% endfor %}
-              </tr>
-        {% endfor %}
-        </tbody>
-        </table>
-        </div>
-    {% endfor %}
-</div>
-
-   #}
 </div>
 
 {% endblock %}
