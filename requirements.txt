@@ -44,3 +44,4 @@ nwdiag
 seqdiag
 cmd3
 django
+easydict
