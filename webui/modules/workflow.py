@@ -28,7 +28,7 @@ diagram_format="svg"
 
 
 class ProvisionWorkflowForm(Form):
-
+    #print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",Form
     filename = "abc"
 
     dir = path_expand(cm_config_server().get("workflows.path"))
@@ -46,9 +46,11 @@ class ProvisionWorkflowForm(Form):
     except:
         print "Error: diagram not found" 
         default = ""
-    
+    default = default.split("//graph")
     filename = TextField("Filename", default=filename)
-    workflow = TextAreaField("Workflow", default=default)
+    properties = TextAreaField("Workflow", default=default[0])
+    workflow = TextAreaField("Workflow", default=default[1])
+    #print workflow
 
 
 # ============================================================
@@ -58,12 +60,14 @@ class ProvisionWorkflowForm(Form):
 
 
 @workflow_module.route('/workflows/<filename>')
+@cond_decorator(with_login, login_required)
 def retrieve_files(filename):
     """    Retrieve files that have been uploaded    """
     return send_from_directory('/tmp/workflows', filename)
 
 
 @workflow_module.route("/provision/workflow/", methods=("GET", "POST"))
+@cond_decorator(with_login, login_required)
 def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)
@@ -80,11 +84,20 @@ def display_provision_workflow_form():
     #    print "SKIP"
     try:
         with open("{2}/{0}.{1}".format(basename,"diag",web_pwd), "w") as f:
+            #print "########################################################################################"
+            #print "aaaaaa"+form.workflow.data+"bbb"
             f.write("blockdiag {\n")
-            f.write("  default_shape = roundedbox;")
-            f.write("  default_node_color = lightyellow;")
+            if form.workflow.data == "":
+                form.work.data = f.work.default
+            if form.properties.data == "":
+                form.properties.data = form.properties.default
+            f.write(form.properties.data)
+            f.write("//graph\n")
             f.write(form.workflow.data)
             f.write("\n}")
+            
+            #print "########################################################################################"
+            print form.workflow
     except:
         print "file does not exists"
     print "{0}.{1}".format(basename,diagram_format)

@@ -40,6 +40,13 @@ except:
     with_login = False
     print "WARGING: not using user login"
 
+
+def cond_decorator(flag, dec):
+   def decorate(fn):
+      return dec(fn) if flag else fn
+   return decorate
+
+
 # ============================================================
 # DYNAMIC MODULE MANAGEMENT
 # ============================================================
@@ -125,7 +132,6 @@ for m in modules:
 principals = Principal(app)
 login_manager = LoginManager(app)
 
-
 admin_permission = Permission(RoleNeed('admin'))
 user_permission = Permission(RoleNeed('user'))
 rain_permission = Permission(RoleNeed('rain'))
@@ -188,19 +194,19 @@ def site_map():
 
 
 @app.route('/test')
-@login_required
+@cond_decorator(with_login, login_required)
 def restricted_index():
     return render_template('index.html')
 
 
 @app.route('/rain')
-@login_required
+@cond_decorator(with_login, login_required)
 @rain_permission.require(http_exception=403)
 def rain_index():
     return render_template('rain.html')
 
 @app.route('/admin')
-@login_required
+@cond_decorator(with_login, login_required)
 @admin_permission.require(http_exception=403)
 def admin_index():
     return render_template('admin.html')
