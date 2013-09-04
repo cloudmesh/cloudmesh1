@@ -5,6 +5,9 @@ from cloudmesh.config.cm_keys import cm_keys
 
 from cloudmesh.config.cm_projects import cm_projects
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.util.util import cond_decorator
+import cloudmesh
+from flask.ext.login import login_required
 
 profile_module = Blueprint('profile_module', __name__)
 
@@ -14,7 +17,7 @@ profile_module = Blueprint('profile_module', __name__)
 
 
 @profile_module.route('/profile/', methods=['GET', 'POST'])
-@cond_decorator(with_login, login_required)
+@cond_decorator(cloudmesh.with_login, login_required)
 def profile():
     # bug the global var of the ditc should be used
 

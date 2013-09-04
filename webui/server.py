@@ -1,3 +1,6 @@
+import cloudmesh
+from flask.ext.login import login_required
+
 from ConfigParser import SafeConfigParser
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.config.cm_config import cm_config
@@ -33,17 +36,8 @@ import pkg_resources
 import sys
 import types
 
-
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
-
-
-try:
-     with_login = cm_config_server().get("ldap.with_ldap")
-except:
-    with_login = False
-    print "WARGING: not using user login"
-
 
 
 # ============================================================
@@ -193,19 +187,19 @@ def site_map():
 
 
 @app.route('/test')
-@cond_decorator(with_login, login_required)
+@cond_decorator(cloudmesh.cloudmesh.cloudmesh.with_login    , login_required)
 def restricted_index():
     return render_template('index.html')
 
 
 @app.route('/rain')
-@cond_decorator(with_login, login_required)
+@cond_decorator(cloudmesh.cloudmesh.cloudmesh.with_login    , login_required)
 @rain_permission.require(http_exception=403)
 def rain_index():
     return render_template('rain.html')
 
 @app.route('/admin')
-@cond_decorator(with_login, login_required)
+@cond_decorator(cloudmesh.cloudmesh.cloudmesh.with_login    , login_required)
 @admin_permission.require(http_exception=403)
 def admin_index():
     return render_template('admin.html')
@@ -366,7 +360,7 @@ def page(path):
 #  PRINCIPAL LOGIN
 # ============================================================
 
-if with_login:
+if cloudmesh.with_login:
     idp = cm_userLDAP ()
     idp.connect("fg-ldap","ldap")
 

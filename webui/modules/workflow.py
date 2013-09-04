@@ -20,6 +20,8 @@ from cloudmesh.inventory.ninventory import ninventory
 
 from cloudmesh.util.webutil import decode_source
 from flask import Blueprint, request, make_response, render_template
+from flask.ext.login import login_required
+import cloudmesh
 
 workflow_module = Blueprint('workflow_module', __name__)
 
@@ -60,14 +62,14 @@ class ProvisionWorkflowForm(Form):
 
 
 @workflow_module.route('/workflows/<filename>')
-@cond_decorator(with_login, login_required)
+@cond_decorator(cloudmesh.with_login, login_required)
 def retrieve_files(filename):
     """    Retrieve files that have been uploaded    """
     return send_from_directory('/tmp/workflows', filename)
 
 
 @workflow_module.route("/provision/workflow/", methods=("GET", "POST"))
-@cond_decorator(with_login, login_required)
+@cond_decorator(cloudmesh.with_login, login_required)
 def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)

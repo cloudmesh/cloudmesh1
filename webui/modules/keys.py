@@ -3,6 +3,9 @@ from flask import render_template, request, redirect
 from cloudmesh.config.cm_keys import cm_keys
 from cloudmesh.util.util import cond_decorator
 
+import cloudmesh
+from flask.ext.login import login_required
+
 keys_module = Blueprint('keys_module', __name__)
 
 #
@@ -11,7 +14,7 @@ keys_module = Blueprint('keys_module', __name__)
 
 
 @keys_module.route('/keys/', methods=['GET', 'POST'])
-@cond_decorator(with_login, login_required)
+@cond_decorator(cloudmesh.with_login, login_required)
 def managekeys():
     keys = cm_keys()
 
@@ -49,7 +52,7 @@ def managekeys():
 
 
 @keys_module.route('/keys/delete/<name>/')
-@cond_decorator(with_login, login_required)
+@cond_decorator(cloudmesh.with_login, login_required)
 def deletekey(name):
     keys = cm_keys()
 
