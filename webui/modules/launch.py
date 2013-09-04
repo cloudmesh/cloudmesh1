@@ -56,7 +56,11 @@ launch_recipies = {"india-openstack-essex":
                      "description": "Deploys R. Demonstrating different recipies for different clusters."},
                     ],
                    }
-
+columns = {"india-openstack-essex" :
+           ["name","description"] ,
+           "sierra-openstack-grizzly":
+            ["name", "description"] 
+}
 
 @launch_module.route('/cm/launch/<host>/<recipie>')
 @cond_decorator(cloudmesh.with_login, login_required)
@@ -67,19 +71,21 @@ def launch_run ():
 @launch_module.route('/cm/launch/launch_servers', methods = ["POST"])
 @cond_decorator(cloudmesh.with_login, login_required)
 def launch_servers():
-    
-    columns = {"india-openstack-essex" :
-               ["name", "description"] ,
-               "sierra-openstack-grizzly":
-                ["name", "description"] 
-    }
-    server = request.form.get("server")
+    name = request.form.get("name")
     resources = request.form.getlist("resource")
-    return_string = "in server " + server + "<br>"
-    for r in launch_recipies[server]:
-        if r["name"] in resources:
-            return_string += " start " + str(r["name"]) + "<br>"
-    return return_string
+    return_dict = {}
+    return_dict["name"] = name
+    return_dict["host_list"] = request.form.get("hostlist")
+    recipies_list = []
+    for r in resources:
+        recipies_list.append((r,request.form.get(r+"-select")))
+    return_dict["recipies"] = recipies_list
+    return str(return_dict)
+   
+#     return_string = "in server " + server + "<br>" #+ str(resources)
+#     for r in resources:
+#         return_string += " start " + str(r) +" - " + str(request.form.get(r+"-select")) +"</br>"
+#     return return_string
 
 
 @launch_module.route('/cm/launch')
@@ -87,11 +93,7 @@ def launch_servers():
 def display_launch_table():
     
     # fake list of recipies which we need to get from cm_launcher
-    columns = {"india-openstack-essex" :
-               ["name", "description"] ,
-               "sierra-openstack-grizzly":
-                ["name", "description"] 
-    }
+
         
     return render_template('mesh_launch.html',
                            recipies=launch_recipies,
