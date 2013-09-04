@@ -10,6 +10,7 @@ from cloudmesh.inventory.inventory import Inventory
 from cloudmesh.inventory.ninventory import ninventory
 
 from cloudmesh.util.util import table_printer
+from cloudmesh.util.util import cond_decorator
 
 inventory = Inventory("nosetest")
 

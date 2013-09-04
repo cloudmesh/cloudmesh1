@@ -5,6 +5,12 @@ import inspect
 #import yaml
 #from logger import LOGGER
 
+def cond_decorator(flag, dec):
+   def decorate(fn):
+      return dec(fn) if flag else fn
+   return decorate
+
+
 def address_string(content, labels=False):
     """content is a dict of the form {u'private': [{u'version':
     4,u'addr': u'10.35.23.30',u'OS-EXT-IPS:type':u'fixed'},
