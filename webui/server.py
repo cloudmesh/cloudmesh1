@@ -6,7 +6,11 @@ from cloudmesh.util.webutil import setup_imagedraw
 from cloudmesh.user.cm_userLDAP import cm_userLDAP 
 from datetime import datetime
 
+
+
+
 from cloudmesh.util.util import path_expand
+from cloudmesh.util.util import cond_decorator
 
 from flask import Flask, render_template, flash, send_from_directory, redirect, g
 #from flask.ext.autoindex import AutoIndex
@@ -40,11 +44,6 @@ except:
     with_login = False
     print "WARGING: not using user login"
 
-
-def cond_decorator(flag, dec):
-   def decorate(fn):
-      return dec(fn) if flag else fn
-   return decorate
 
 
 # ============================================================

@@ -6,6 +6,7 @@ from cloudmesh.util.util import table_printer
 from cloudmesh.cm_mongo import cm_mongo
 from datetime import datetime
 import time
+from cloudmesh.util.util import cond_decorator
 
 try:
     from sh import xterm

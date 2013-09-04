@@ -7,7 +7,7 @@ from cloudmesh.util.util import address_string
 from pprint import pprint
 from ast import literal_eval
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
-
+from cloudmesh.util.util import cond_decorator
 
 mesh_module = Blueprint('mesh_module', __name__)
 

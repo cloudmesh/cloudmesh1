@@ -14,6 +14,7 @@ profile_module = Blueprint('profile_module', __name__)
 
 
 @profile_module.route('/profile/', methods=['GET', 'POST'])
+@cond_decorator(with_login, login_required)
 def profile():
     # bug the global var of the ditc should be used
 

@@ -15,7 +15,7 @@ from cloudmesh.config.cm_config import cm_config_server
 from pprint import pprint
 from cloudmesh.util.util import path_expand
 from sh import pwd
-
+from cloudmesh.util.util import cond_decorator
 from cloudmesh.inventory.ninventory import ninventory
 
 from cloudmesh.util.webutil import decode_source
