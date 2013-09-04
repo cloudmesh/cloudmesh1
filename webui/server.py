@@ -187,19 +187,19 @@ def site_map():
 
 
 @app.route('/test')
-@cond_decorator(cloudmesh.cloudmesh.cloudmesh.with_login    , login_required)
+@cond_decorator(cloudmesh.with_login, login_required)
 def restricted_index():
     return render_template('index.html')
 
 
 @app.route('/rain')
-@cond_decorator(cloudmesh.cloudmesh.cloudmesh.with_login    , login_required)
+@cond_decorator(cloudmesh.with_login, login_required)
 @rain_permission.require(http_exception=403)
 def rain_index():
     return render_template('rain.html')
 
 @app.route('/admin')
-@cond_decorator(cloudmesh.cloudmesh.cloudmesh.with_login    , login_required)
+@cond_decorator(cloudmesh.with_login, login_required)
 @admin_permission.require(http_exception=403)
 def admin_index():
     return render_template('admin.html')
