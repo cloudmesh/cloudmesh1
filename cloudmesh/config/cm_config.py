@@ -104,6 +104,62 @@ class cm_config_server:
                 sys.exit()
         return element
     
+class cm_config_launcher:
+    """
+    reads the information contained in the file
+    ~/.futuregrid/cloudmesh_launcher.yaml
+    """
+    filename = "~/.futuregrid/cloudmesh_launcher.yaml"
+    config = None
+
+    def __init__(self, filename=None):
+        if filename is not None:
+            self.filename = filename
+        
+        self.config = read_yaml_config (self.filename, check=True) 
+        
+    def __str__(self):
+        return json.dumps(self.config, indent=4)
+
+    def __getitem__(self,*mykeys):        
+        try:
+            item = self.get(mykeys[0])
+        except:
+             log.error('calling cm_config_launcher.get("' + '", "'.join(mykeys) +'")')
+             log.error("Your configuration file does not contain the proper variable")
+             key_string = "[" + ']['.join(mykeys) + "]"
+             log.error("Variable requested self.config" + mykey_string)
+             log.error("Error occured while accessing " + v)
+             sys.exit()
+        return item
+
+    def get(self,*keys):
+        """
+        returns the dict of the information as read from the yaml file. To
+        access the file safely, you can use the keys in the order of the access.
+        Example: get("provisiner","policy") will return the value of
+        config["provisiner"]["policy"] from the yaml file if it does not exists
+        an error will be printing that the value does not exists and we exit.
+        Alternatively you can use the . notation e.g. get("provisiner.policy")
+        """
+        if keys is None:
+            return self.config
+
+        if "." in keys[0]:
+            keys = keys[0].split('.')
+        element = self.config
+        for v in keys:
+            try:
+               element = element[v]
+            except:
+                log.error('calling cm_config_launcher.get("' + '", "'.join(keys) +'")')
+                log.error("Your configuration file does not contain the proper variable")
+                key_string = "[" + ']['.join(keys) + "]"
+                log.error("Variable requested self.config" + key_string)
+                log.error("Error occured while accessing " + v)
+                sys.exit()
+        return element
+     
 
 class cm_config(object):
 
