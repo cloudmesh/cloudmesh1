@@ -56,7 +56,7 @@ pprint (c.get("users"))
 #print c.get("tenants")     
 
 """
-from cloudmesh.cloudmesh import cloudmesh
+from cloudmesh.cm_mesh import cloudmesh
 
 
 
