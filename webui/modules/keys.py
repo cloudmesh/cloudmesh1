@@ -10,6 +10,7 @@ keys_module = Blueprint('keys_module', __name__)
 
 
 @keys_module.route('/keys/', methods=['GET', 'POST'])
+@cond_decorator(with_login, login_required)
 def managekeys():
     keys = cm_keys()
 
@@ -47,6 +48,7 @@ def managekeys():
 
 
 @keys_module.route('/keys/delete/<name>/')
+@cond_decorator(with_login, login_required)
 def deletekey(name):
     keys = cm_keys()
 
