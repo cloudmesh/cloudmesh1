@@ -50,8 +50,10 @@ class ProvisionWorkflowForm(Form):
         default = ""
     default = default.split("//graph")
     filename = TextField("Filename", default=filename)
-    properties = TextAreaField("Workflow", default=default[0])
-    workflow = TextAreaField("Workflow", default=default[1])
+    #properties = TextAreaField("Workflow", default=default[0])
+    #workflow = TextAreaField("Workflow", default=default[1])
+    properties = TextAreaField("Workflow", default="fake")
+    workflow = TextAreaField("Workflow", default="fake")
     #print workflow
 
 

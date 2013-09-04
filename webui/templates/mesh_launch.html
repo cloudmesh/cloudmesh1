@@ -16,7 +16,7 @@
         										collapsible: true, 
         										heightStyle: "content", 
         										active: false });
-    })
+    });
 })(jQuery);
 
 
@@ -32,8 +32,8 @@ $(function() {
 
 </script>
 
-
 <div id="launcher-accordion">
+	
     {% for column in columns %}
 
     	<div style="margin-bottom:1em;">
@@ -42,14 +42,15 @@ $(function() {
         		{{ column }}
         	</h3>
 	        <div>
-	        	<form action = "/cm/launch/launch_servers" method = post>
-	        	<input type = hidden name = server value = {{column}}>
+	        	<form action = "/cm/launch/launch_servers" method = "post">
+	        	<input type = hidden name = "name" value = {{column}}>
 	        	{%set attribute_list = columns[column]%}
 			    <table id="display-table-{{ loop.index0 }}">
 		       	<thead>
 		        <tr>
 		        <th> Select </th>
-		        <th> Type </th>
+		        <th> Types </th>
+		        
 		        {% for attribute in attribute_list %}
 		        	<th>
 		        		{{attribute}}
@@ -60,9 +61,9 @@ $(function() {
 		        {% for recipie in recipies[column] %}
 		        <tr>
 		        	{{recipie["name"]}}
-		        	<td><input type = "checkbox" name = "resource" value = {{recipie["name"]}}></td>  {#this part looks for key name. use the name as key to indicate the name of the resource..#}
+		        	<td><input type = "checkbox" name = "resource" value = "{{recipie["name"]}}"></td>  {#this part looks for key name. use the name as key to indicate the name of the resource..#}
 			        <td>
-						<select>
+						<select name = "{{recipie["name"]}}-select">
 			        	{% for t in recipie["types"] %}
 			        	   <option value="{{t}}">{{t}}</option>
 			        	{% endfor %}
@@ -79,7 +80,8 @@ $(function() {
 	            <tr>
 	            	<td></td>
         	        <td valign="top">
-        		       <input type="text" value="... specify" name="hostlist-{{ loop.index0 }}">
+        		       <input type="text" value="... specify" name="hostlist">
+        		       
         	        </td>
                  	<td valign="top">
         	        	Hosts
