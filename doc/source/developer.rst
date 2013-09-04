@@ -2,8 +2,30 @@
    :start: 3
 
 **********************************************************************
+Quickstart for a deployed version of cloudmesh
+**********************************************************************
+
+The following are the current steps to bring all services fro
+cloudmesh up and running. Naturallky we could have included them in
+one script, which we will do at a later time. For now we want o keep
+the services seperate to ease debugging of various parts. It is
+assumed that the machine has access to LDAP.
+
+::
+
+    python setup.py install
+    fab mongo.start
+    fab mongo.cloud     # if thsi does not work use fab mongo.simple
+    fab mq.start
+    fab queue.start:True
+    fab server.start
+    
+
+**********************************************************************
 Installation
 **********************************************************************
+
+
 
 Next we describe the installation for developers. However it is much the same as for those that want to deploy it.
 
@@ -216,6 +238,14 @@ To create a cluster with user data base say::
 	
 Now you have data in the mongo db and you can use and test it
 
+RabbitMQ
+---------
+
+
+
+
+
+
 Developer Tests
 -----------------
 
@@ -256,6 +286,9 @@ it is best if you do an ssh agent so you can access some more sophisticated serv
 
    $  eval `ssh-agent -s`
    $ ssh-add 
+
+
+
 
 
 
