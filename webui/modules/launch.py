@@ -47,6 +47,9 @@ launch_recipies = {"india-openstack-essex":
                      "types": ["VM", "baremetal"],                     
                      "description": "Deploys a Nagios service for the vms specified. "
                                     "The ganglia server will be the first node in the list"},
+                    {"name": "R",
+                     "types": ["VM", "baremetal"],                     
+                     "description": "Deploys R. Demonstrating different recipies for different clusters."},
                     ],
                    }
 
