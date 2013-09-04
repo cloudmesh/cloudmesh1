@@ -185,6 +185,7 @@ def site_map():
 # ROUTE: /test
 # ============================================================
 
+# 
 
 @app.route('/test')
 @cond_decorator(cloudmesh.with_login, login_required)
@@ -221,7 +222,7 @@ def page_not_found(error):
 def page_not_found(error):
     error = 'Access denied {0}'.format(403)
     return render_template('error.html', 
-                           error=eror,
+                           error=error,
                            type="Access Denied",
                            msg="You need to Login first")
     
