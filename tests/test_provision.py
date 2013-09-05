@@ -45,6 +45,8 @@ class Test_cloudmesh:
 
         Provisioner = ProvisionerSimulator   
 
+        (success, result) = (None, None)
+
         p = Provisioner()
         (success, result) = p.provision(hosts, image)
     
