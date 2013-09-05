@@ -25,6 +25,7 @@ class Inventory:
     server_config = None
     
     
+    
     def __init__(self):         
         # read the host file definition from cloudmesh_cludter.yaml
         self.server_config = cm_config_server().config
@@ -33,9 +34,22 @@ class Inventory:
         template = Template(result)
         self.config = yaml.load(template.render(self.server_config))
         
+        
+        location = cm_path_expand("~/.futuregrid/cloudmesh_bootspec.yaml")
+        result = open(location, 'r').read()
+        self.bootspec_config = yaml.load(result)
+        
         collection = "inventory"
         self.db_inventory = get_mongo_db(collection)        
 
+    def generate_bootspec(self):
+        for name in self.bootspec_config:
+            print "Adding to inventory bootspec", name
+            description = self.bootspec_config[name]
+            self.add_bootspec(name, description)
+        
+        
+        
     def get_attribute(self, host_label, attribute):
 
         try:
@@ -44,9 +58,26 @@ class Inventory:
             value = None
         return value
 
+    def get(self, cm_kind, id_kind, name):
+        host = None
+        if id_kind == 'cm_id':
+            host = self.find_one({'cm_type': "inventory",
+                                  'cm_key': 'server',
+                                  'cm_kind': cm_kind,
+                                  'cm_id': name})
+        elif id_kind == "label":
+            host = self.find_one({'cm_type': "inventory",
+                                  'cm_key': 'server',
+                                  'cm_kind': cm_kind,
+                                  'label': name})
+            
+        else:
+            print "ERROR Wrong type"
+            print cm_kind, id_kind, name
+            sys.exit()
+        return host
 
-
-    
+            
     def set_attribute(self, host_label, attribute, value, time=None):
         print "SETTING", host_label, attribute, value
 
@@ -301,6 +332,60 @@ class Inventory:
     def ipadr (self, index, type):
         return self.find ({"cm_id": index, "type": type})[0]['ipaddr']
             
+            
+    def add_bootspec(self, name, description):
+        '''
+        cm_type: inventory
+        cm_kind: bootspec
+        cm_key: bootspec
+        
+        cm_id: name
+        label: name
+        cm_refresh: now
+        
+        osimage: '/backup/snapshot/india_openstack-2013-07-01.squashfs'
+        os: 'ubuntu12'
+        extension: 'squashfs'
+        partition_scheme: 'gpt'
+        fstab_append: False
+        method: 'put'
+        boot:
+           kernel_type: kernel
+           bootloader: 'grub2'
+        rootpass: False
+        disk:
+           device: '/dev/sda'
+           partitions:
+               swap:
+                   size: '2'
+               system:
+                   size: '100'
+                   mount: '/'
+                   type: 'ext4'
+               data:
+                   size: '-1'
+                   mount: '/var/lib/nova'
+                   type: 'xfs'
+        '''
+        time = datetime.now()
+        element = dict(description)
+        element.update({'cm_type': "inventory",
+                        'cm_key': 'bootspec',
+                        'cm_kind': 'bootspec',
+                        'cm_id': name,
+                        'id': name, 
+                        'label' : name,
+                        'cm_refresh': time})
+        self.update({'cm_key': 'bootspec', 'id': name}, element)            
+        
+    def get_bootspec (self, name):
+        spec = self.find_one ({'cm_type': "inventory",
+                               'cm_key': 'bootspec',
+                               'cm_kind': 'bootspec',
+                               'cm_id': name})
+        return spec
+        
+        
 def main():
     inventory = Inventory()
 
