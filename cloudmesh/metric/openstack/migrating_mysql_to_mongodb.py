@@ -26,7 +26,10 @@ class Migrate_MySQL_to_Mongo:
 
     def get_tables(self):
         """Return mysql database tables to export"""
-        return self.dbinfo["mysqldb_tables"]
+        try:
+            return self.dbinfo["mysqldb_tables"]
+        except:
+            return 
 
     def export_mysql_in_csv(self, table):
         """Export mysql database tables using 'mysql' command line tools"""
@@ -45,25 +48,34 @@ class Migrate_MySQL_to_Mongo:
                 .replace("\n","\"\n\"")
 
         #Debugging
-        print output
+        #print output
         self.csv_data = output
+        return output
 
-    def mongoimport_csv(self, table):
+    def mongoimport_csv(self, csv_data, tablename):
         # mongoimport -u cmetrics_user -p -d cloudmetrics -c cloudplatform
         # -type csv -f fields-sep-by-coma --drop cloudplatform.csv --headerline
-        filename = table + ".csv"
-        cmd = "mongoimport -u %s -p %s -d %s -c %s -type csv -f \
-        fields-sep-by-coma --drop %s --headerline" % \
-                     (self.dbinfo["mongodb_userid"], 
-                      self.dbinfo["mongodb_passwd"], 
-                      self.dbinfo["mongodb_dbname"], 
-                      table,
-                      filename)
-        subprocess.call(cmd.split())
+        #filename = tablename + ".csv"
+        #cmd = "mongoimport -u %s -p %s -d %s -c %s -type csv -f \
+        #fields-sep-by-coma --drop %s --headerline" % \
+        #             (self.dbinfo["mongodb_userid"], 
+        #              self.dbinfo["mongodb_passwd"], 
+        #              self.dbinfo["mongodb_dbname"], 
+        #              tablename,
+        #              filename)
+        mongoimport("-u", "{0}".format(self.dbinfo["mongodb_userid"]),
+                    "-p", "{0}".format(self.dbinfo["mongodb_passwd"]),
+                    "-d", "{0}".format(self.dbinfo["mongodb_dbname"]),
+                    "-c", "{0}".format(tablename),
+                    "-type", "csv",
+                    "-f", "fields-sep-by-coma", "--headerline", "--drop",
+                    _in=csv_data)
+
+        #subprocess.call(cmd.split())
 
 if __name__ == "__main__":
     migrate = Migrate_MySQL_to_Mongo()
     migrate.load_db_info()
-    for table_name in migrate.get_tables():
-        migrate.export_mysql_in_csv(table_name)
-        migrate.mongoimport_csv(table_name)
+    for tablename in migrate.get_tables():
+        csv_data = migrate.export_mysql_in_csv(tablename)
+        migrate.mongoimport_csv(csv_data, tablename)
