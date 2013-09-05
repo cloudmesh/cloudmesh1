@@ -132,7 +132,7 @@ class cm_mongo:
 
             for type in types:
 
-                print "Refreshing {0}->".format(type)
+                print "Refreshing {0} {1} ->".format(type, name)
 
                 watch.start(name)
                 cloud.refresh(type)
