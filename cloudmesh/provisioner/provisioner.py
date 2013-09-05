@@ -41,9 +41,9 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
         self.inventory = Inventory()
     
     def set_status(self, host_label, status):
-        print "setting", host_label, status
-        self.inventory.set_attribute(self, host_label, "cm_provision_status", status)        
-        print "ok setting", host_label, status 
+        print "SIM setting", host_label, status
+        self.inventory.set_attribute(host_label, "cm_provision_status", status)        
+        print "SIM ok setting", host_label, status 
         
     def provision(self, hosts, provisioned):
         self.hosts = hosts
@@ -71,6 +71,8 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
             self.set_status(host, "SUCCESS")
             # image = inventory.get("server",host)
             time.sleep(randrange(1, 3))
+
+        return (True, None)
 
         
     def provision_image(self, hosts, image):

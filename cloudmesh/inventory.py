@@ -53,7 +53,13 @@ class Inventory:
         if time is None:
             time = datetime.now()
         
-        host = self.find_one({"cm_id": host_label, "cm_attribute":"network"})["cm_cluster"]
+        # get the cluster from the host_label
+        try:
+            host = self.find_one({"cm_id": host_label, "cm_attribute": "network"})["cm_cluster"]
+        except:
+            print "could not find host with the label", host_label
+            sys.exit()
+            
         
         cursor = self.update ({"cm_id" : host_label, 'cm_attribute' : 'variable', 'cm_key' : attribute},
                                   { "$set": { attribute: value,
@@ -114,6 +120,7 @@ class Inventory:
                             'cm_kind': 'server',
                             'cm_key': 'range',
                             'cm_value': expand_hostlist(cluster["id"]),
+                            'cm_hostlist': cluster["id"],
                             'cm_attribute': 'variable'
                              })
             self.insert(element)
@@ -167,6 +174,7 @@ class Inventory:
                     element = dict(network)
                     del element['range']
                     element.update({'cm_type': "inventory",
+                                    'cm_key': 'server',
                                      'cm_kind': 'server',
                                      'cm_id': name,
                                      'cm_cluster': cluster_name, 
@@ -184,12 +192,52 @@ class Inventory:
         
     def cluster (selfself, name):
         """returns cluster data in dict"""
+        raise RuntimeError("Not Implemented")
                  
+
+    def info(self):
+        '''
+        print some elementary overview information 
+        '''
+       
+        '''
+            element = dict({'cm_cluster': name,
+                            'cm_id': name,
+                            'cm_type': "inventory",
+                            'cm_kind': 'server',
+                            'cm_key': 'range',
+                            'cm_value': expand_hostlist(cluster["id"]),
+                            'cm_attribute': 'variable'
+                             })
+        '''
+        clusters = self.find({'cm_type' : 'inventory', 'cm_key' : 'range', 'cm_kind' : 'server'})
+        servers = self.find({'cm_type' : 'inventory', 'cm_key' : 'server', 'cm_kind' : 'server'})   
+        services = self.find({'cm_type' : 'inventory', 'cm_key' : 'image', 'cm_kind' : 'image'})   
+        images = self.find({'cm_type' : 'inventory', 'cm_key' : 'service', 'cm_kind' : 'service'})   
+ 
+ 
+ 
+        # print "%15s:" % "dbname", self.inventory_name
+        print "%15s:" % "clusters", clusters.count(), "->", ', '.join([c['cm_cluster'] for c in clusters])
+        print "%15s:" % "services", services.count()
+        print "%15s:" % "servers", servers.count()
+        print "%15s:" % "images", images.count() , "->", ', '.join([c['cm_label'] for c in images])
+        print
+       
+        print clusters.count()
+        
+        print "Clusters"
+        print 30 * "="
+        for host in clusters:
+            print "    ", host['cm_cluster'], "->",  host['cm_hostlist']
+
+        print 
+        
+
         
     def hostlist (self, name):
         print "NAME", name
         hosts = self.find ({"cm_cluster": name, 'cm_key': 'range' })[0]['cm_value']
-        print hosts
         return hosts    
                          
     
