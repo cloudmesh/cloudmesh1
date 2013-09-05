@@ -12,7 +12,7 @@ from cloudmesh.inventory import Inventory
 
 log = LOGGER('provision')
 
-inventory = Inventory()
+
 
 class BaremetalProvisinerABC:
     __metaclass__ = ABCMeta
@@ -37,10 +37,12 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
     # needs Inventory
     #status = get_attribute(self, host_label, "cm_provision_status", attribute)
 
+    def __init__(self):
+        self.inventory = Inventory()
     
     def set_status(self, host_label, status):
         print "setting", host_label, status
-        inventory.set_attribute(self, host_label, "cm_provision_status", status)        
+        self.inventory.set_attribute(self, host_label, "cm_provision_status", status)        
         print "ok setting", host_label, status 
         
     def provision(self, hosts, provisioned):
