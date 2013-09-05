@@ -6,7 +6,7 @@ from flask.ext.login import login_required
 
 inventory_module = Blueprint('inventory_module', __name__)
 
-from cloudmesh.inventory.inventory import Inventory as oldInventory
+from cloudmesh.old_inventory.inventory import Inventory as oldInventory
 from cloudmesh.inventory import Inventory
 
 from cloudmesh.util.util import table_printer
