@@ -16,7 +16,7 @@ from pprint import pprint
 from cloudmesh.util.util import path_expand
 from sh import pwd
 from cloudmesh.util.util import cond_decorator
-from cloudmesh.inventory.ninventory import ninventory
+from cloudmesh.inventory import Inventory
 
 from cloudmesh.util.webutil import decode_source
 from flask import Blueprint, request, make_response, render_template

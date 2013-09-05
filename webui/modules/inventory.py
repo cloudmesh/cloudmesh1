@@ -6,17 +6,17 @@ from flask.ext.login import login_required
 
 inventory_module = Blueprint('inventory_module', __name__)
 
-from cloudmesh.inventory.inventory import Inventory
-from cloudmesh.inventory.ninventory import ninventory
+from cloudmesh.inventory.inventory import Inventory as oldInventory
+from cloudmesh.inventory import Inventory
 
 from cloudmesh.util.util import table_printer
 from cloudmesh.util.util import cond_decorator
 import cloudmesh
 
-inventory = Inventory("nosetest")
+inventory = oldInventory("nosetest")
 
 
-n_inventory = ninventory()
+n_inventory = Inventory()
 n_inventory.clear()
 n_inventory.generate()
 

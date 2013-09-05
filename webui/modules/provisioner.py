@@ -4,7 +4,7 @@ from flask import render_template, redirect, flash
 from datetime import datetime
 from flask.ext.wtf import Form
 from wtforms import TextField, SelectField, TextAreaField
-from cloudmesh.inventory.inventory import Inventory
+from cloudmesh.inventory.inventory import Inventory as oldInventory
 from hostlist import expand_hostlist
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.inventory.inventory import PROVISIONING_CHOICES
@@ -17,7 +17,7 @@ from cloudmesh.util.util import cond_decorator
 from flask.ext.login import login_required
 
 
-from cloudmesh.inventory.ninventory import ninventory
+from cloudmesh.inventory import Inventory
 
 
 import cloudmesh
@@ -26,8 +26,8 @@ import cloudmesh
 provisioner_module = Blueprint('provisioner_module', __name__)
 
 
-inventory = Inventory("nosetest")
-n_inventory = ninventory()
+inventory = oldInventory("nosetest")
+n_inventory = Inventory()
 
 # ============================================================
 # PROVISINOR
