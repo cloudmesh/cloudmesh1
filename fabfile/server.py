@@ -71,8 +71,8 @@ def kill(server="server"):
 def start(link="",server="server",port="5000",browser='yes'):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link""" 
     kill()
-    local("fab mongo.start")
     local("python setup.py install")
+    local("fab mongo.start")
     local("cd webui; python {0}.py &".format(server))
     if browser == 'yes':
         local("sleep 2; {0} http://127.0.0.1:{2}/{1}".format(web_browser,link,port))
