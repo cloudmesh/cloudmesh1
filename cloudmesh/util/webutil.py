@@ -53,6 +53,10 @@ def get_hostname():
 
     return hostname
 
+"""
+
+BUG: THIS CAN NOT BE DONE LIKE THIS, GREGOR
+
 
 def get_redirect_url(urlbase, request):
     url = None
@@ -148,3 +152,5 @@ def setup_noderenderers():
 
     import nationalflags
     nationalflags.setup(nationalflags, 'http://%s/static/flag_images' % get_hostname())
+    
+"""
