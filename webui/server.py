@@ -5,12 +5,9 @@ from ConfigParser import SafeConfigParser
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.roles import Roles
-from cloudmesh.util.webutil import setup_imagedraw
+#from cloudmesh.util.webutil import setup_imagedraw
 from cloudmesh.user.cm_userLDAP import cm_userLDAP 
 from datetime import datetime
-
-
-
 
 from cloudmesh.util.util import path_expand
 from cloudmesh.util.util import cond_decorator
@@ -492,7 +489,7 @@ def logout():
 
 
 if __name__ == "__main__":
-    setup_imagedraw()
+    # setup_imagedraw()
     # setup_plugins()
     # setup_noderenderers()
     app.run()

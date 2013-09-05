@@ -5,6 +5,7 @@ from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.util.util import path_expand as cm_path_expand
+from cloudmesh.inventory import Inventory
 
 import sys
 import os.path
@@ -18,6 +19,13 @@ def get_pid(command):
             break
     return (pid, line)
 
+
+@task 
+def inventory():
+    mesh_inventory = Inventory()
+    mesh_inventory.clear()
+    mesh_inventory.generate()
+    mesh_inventory.info()
 
 @task
 def info():
@@ -72,7 +80,7 @@ def clean():
     for line in result:
         name = line.split()[0]
         local('mongo {0} --eval "db.dropDatabase();"'.format(name))
-
+        
 @task
 def vms_find():
     c = cm_mongo()
@@ -88,9 +96,8 @@ def cloud():
     c = cm_mongo()
     c.activate()
     c.refresh(types=['users', 'servers', 'images', 'flavors'])
-    fg()
     ldap()
-
+    inventory()
 
 @task
 def simple():
@@ -101,7 +108,7 @@ def simple():
     c = cm_mongo()
     c.activate()
     c.refresh(types=['servers', 'images', 'flavors'])
-    fg()
+    inventory()
     
 @task
 def metric():
@@ -144,13 +151,13 @@ def ldap():
 
     print ("Fetching {0} Users from LDAP".format(len(users)))
     
-
+'''
 @task
 def fg():
     """create a simple testbed"""
     start()
-    local("python setup.py install")
     local("python webui/fg.py")    
+'''
 
 @task
 def pbs(host, type):

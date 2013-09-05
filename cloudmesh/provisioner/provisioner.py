@@ -4,8 +4,7 @@ import logging
 from cloudmesh.util.logger import LOGGER
 import time
 from random import randrange
-from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
-    FabricService, Inventory
+from cloudmesh.inventory import Inventory
 
 #
 # SETTING UP A LOGGER
@@ -13,7 +12,7 @@ from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
 
 log = LOGGER('provision')
 
-inventory = Inventory("nosetest")
+
 
 class BaremetalProvisinerABC:
     __metaclass__ = ABCMeta
@@ -24,65 +23,67 @@ class BaremetalProvisinerABC:
     hosts = []
     image = []
 
+    def __init__(self):
+        self.inventory = Inventory()
+
     @abstractmethod
     def provision(self, hosts, image):
         self.hosts = hosts
         self.image = image
         pass
+    
+    def set_status(self, host_label, status):
+        print "SIM setting", host_label, status
+        self.inventory.set_attribute(host_label, "cm_provision_status", status)        
+        print "SIM ok setting", host_label, status 
 
 
 
 class ProvisionerSimulator(BaremetalProvisinerABC):
 
-    def set_status(self, element, status):
-        
-        element.status = status
-        element.save(cascade=True)
 
-        
+    # needs Inventory
+    #status = get_attribute(self, host_label, "cm_provision_status", attribute)
+
+    def __init__(self):
+        BaremetalProvisinerABC.__init__(self)
+    
     def provision(self, hosts, provisioned):
         self.hosts = hosts
         for host in hosts:
-            server = inventory.get("server",host)
+
             print "PROVISION", host, provisioned
             log.info("Provision {0}<-{1}".format(host, provisioned))
 
 
-            server.provisioned = provisioned
-            self.set_status(server, "INITIATING")
+            self.set_status(host, "INITIATING")
             time.sleep(randrange(1, 3))
 
-            self.set_status(server, "PREPARING_IMAGE")
+            self.set_status(host, "PREPARING_IMAGE")
             # image = inventory.get("server",host)
             time.sleep(randrange(1, 3))
 
-            self.set_status(server, "BOOTING")
+            self.set_status(host, "BOOTING")
             # image = inventory.get("server",host)
             time.sleep(randrange(1, 3))
 
-            self.set_status(server, "AVAILABLE")
+            self.set_status(host, "AVAILABLE")
             # image = inventory.get("server",host)
             time.sleep(randrange(1, 3))
 
-            self.set_status(server, "SUCCESS")
+            self.set_status(host, "SUCCESS")
             # image = inventory.get("server",host)
             time.sleep(randrange(1, 3))
+
+        return (True, None)
 
         
     def provision_image(self, hosts, image):
 
         for host in hosts:
-            server = inventory.get("server",host)
             log.info("Provision {0}->{1}".format(image, host))
             # image = inventory.get("server",host)
-            
             time.sleep(randrange(0, 3))
-
-class ProvisionerTeefaa(BaremetalProvisinerABC):
-
-    def provision(self, hosts, image):
-        for host in hosts:
-            log.info("Provision {0}->{1}".format(image, host))
 
 
 class ProvisionerCobbler(BaremetalProvisinerABC):

@@ -31,9 +31,9 @@ PORT_RULE = "%s -p tcp -m state --state NEW -m tcp --dport %s -j ACCEPT"
 
 @task
 def info():
-"""                                                                                                                             
+    """                                                                                                                             
     provides some info about the iptable rules set on this machine                                                                  
-"""
+    """
     results1 = local("sudo iptables --line-numbers -L %s" % PORTS_CHAIN, capture=True)
     results2 = local("sudo iptables --line-numbers -L %s" % PRODUCTION_CHAIN, capture=True)
     print "%s\n\n%s" % (results1, results2)
