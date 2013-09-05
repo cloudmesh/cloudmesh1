@@ -43,4 +43,3 @@ blockdiagcontrib-cisco
 nwdiag
 seqdiag
 cmd3
-easydict
