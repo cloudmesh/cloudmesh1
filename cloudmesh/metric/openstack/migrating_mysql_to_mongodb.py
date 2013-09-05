@@ -43,18 +43,18 @@ class Migrate_MySQL_to_Mongo:
         res_mysql = mysql("-u", "{0}".format(self.dbinfo["mysqldb_userid"]),
                           "-p{0}".format(self.dbinfo["mysqldb_passwd"]),
                           "-h", "{0}".format(self.dbinfo["mysqldb_hostname"]),
-                          "-e", "\"{0}\"".format(query),
+                          "-e", "{0}".format(query),
                           "--batch")
 
         # Add quote(") at first
         # Then replace tab to ","
         # , add quote(") between new line
+        # remove the last quote by [:-1] since \"\n\" adds dummy quote at last
         output = "\"" + str(res_mysql) \
                 .replace("\t","\",\"") \
-                .replace("\n","\"\n\"")
+                .replace("\n","\"\n\"") \
+                [:-1]
 
-        #Debugging
-        #print output
         self.csv_data = output
         return output
 
