@@ -4,10 +4,10 @@ from flask import render_template, redirect, flash
 from datetime import datetime
 from flask.ext.wtf import Form
 from wtforms import TextField, SelectField, TextAreaField
-from cloudmesh.inventory.inventory import Inventory as oldInventory
+from cloudmesh.old_inventory.inventory import Inventory as oldInventory
 from hostlist import expand_hostlist
 from cloudmesh.provisioner.provisioner import *
-from cloudmesh.inventory.inventory import PROVISIONING_CHOICES
+from cloudmesh.old_inventory.inventory import PROVISIONING_CHOICES
 from cloudmesh.provisioner.queue.celery import celery
 from cloudmesh.provisioner.queue.tasks import provision
 from cloudmesh.config.cm_config import cm_config_server
