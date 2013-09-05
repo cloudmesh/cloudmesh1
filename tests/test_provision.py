@@ -14,7 +14,7 @@ import pprint
 from cloudmesh.util.util import HEADING
 from cloudmesh.util.util import path_expand
 from cloudmesh.provisioner.provisioner import ProvisionerSimulator   
-from cloudmesh.provisioner.provisioner import ProvisionerTeefaa 
+from cloudmesh.provisioner.provisioner_teefaa import ProvisionerTeefaa 
 
 class Test_cloudmesh:
 
@@ -62,7 +62,7 @@ class Test_cloudmesh:
         
             
 
-        host = "i66"
+        host = "i066"
         image = "ubuntu1304v2btsync"
 
         Provisioner = ProvisionerTeefaa 

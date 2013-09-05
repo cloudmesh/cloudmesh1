@@ -4,8 +4,7 @@ import logging
 from cloudmesh.util.logger import LOGGER
 import time
 from random import randrange
-from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
-    FabricService, Inventory
+from cloudmesh.inventory import Inventory
 
 from cloudmesh.provisioner.provisioner import BaremetalProvisinerABC
 from cloudmesh.util.config import read_yaml_config
@@ -37,35 +36,34 @@ imageman@i130:~/teefaa$
 
 log = LOGGER('provision')
 
-inventory = Inventory("nosetest")
+
 
 class ProvisionerTeefaa(BaremetalProvisinerABC):
 
     def __init__(self):
         """read config"""
+        BaremetalProvisinerABC.__init__(self)
+        
         self.filename = "~/.futuregrid/cloudmesh_server.yaml"
-        self.teefaa_config = read_yaml_config (self.filename, check=True)        
-
-    def set_status(self, element, status):
-        '''
-        sets the status of a specific element 
-        :param element:
-        :param status:
-        '''
+        self.teefaa_config = read_yaml_config (self.filename, check=True)   
         
-        element.status = status
-        element.save(cascade=True)
 
-        
     def provision(self, host, image):
         """returns a verctor (success, log) where success is True, False and log contains the teefaa log"""
         
-        server = inventory.get("server",host)
+        cursor = self.inventory.get("server", "cm_id", host)
+        server = cursor['cm_id'] 
+        label = cursor['label'] 
+        
+        
+        print "GGGG", server
+        
+        
         self.set_status(server, "INITIATING")
         
         print self.teefaa_config
         log.info("Provision {0}->{1}".format(image, host))
-        self.host = host
+        self.host = label
         self.image = image
         
         parameters = ["-t", "{0}@{1}".format(self.teefaa_config["teefaa"]["username"],self.teefaa_config["teefaa"]["hostname"]), 
@@ -123,7 +121,7 @@ class ProvisionerTeefaa(BaremetalProvisinerABC):
             self.set_status(server, "FAILED")
     
         
-        return success
+        return (success, None)
 
         # check status
 

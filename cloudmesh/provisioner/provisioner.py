@@ -23,11 +23,19 @@ class BaremetalProvisinerABC:
     hosts = []
     image = []
 
+    def __init__(self):
+        self.inventory = Inventory()
+
     @abstractmethod
     def provision(self, hosts, image):
         self.hosts = hosts
         self.image = image
         pass
+    
+    def set_status(self, host_label, status):
+        print "SIM setting", host_label, status
+        self.inventory.set_attribute(host_label, "cm_provision_status", status)        
+        print "SIM ok setting", host_label, status 
 
 
 
@@ -38,13 +46,8 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
     #status = get_attribute(self, host_label, "cm_provision_status", attribute)
 
     def __init__(self):
-        self.inventory = Inventory()
+        BaremetalProvisinerABC.__init__(self)
     
-    def set_status(self, host_label, status):
-        print "SIM setting", host_label, status
-        self.inventory.set_attribute(host_label, "cm_provision_status", status)        
-        print "SIM ok setting", host_label, status 
-        
     def provision(self, hosts, provisioned):
         self.hosts = hosts
         for host in hosts:
@@ -81,12 +84,6 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
             log.info("Provision {0}->{1}".format(image, host))
             # image = inventory.get("server",host)
             time.sleep(randrange(0, 3))
-
-class ProvisionerTeefaa(BaremetalProvisinerABC):
-
-    def provision(self, hosts, image):
-        for host in hosts:
-            log.info("Provision {0}->{1}".format(image, host))
 
 
 class ProvisionerCobbler(BaremetalProvisinerABC):
