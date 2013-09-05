@@ -205,7 +205,7 @@ directly with him on FutureGrid.
 
 Configure the yaml files if changes need to be done.
 
-We need three files:
+We need three files in the .futuregrid directory:
 
 * cloudmesh.yaml
 * cloudmesh_server.yaml
