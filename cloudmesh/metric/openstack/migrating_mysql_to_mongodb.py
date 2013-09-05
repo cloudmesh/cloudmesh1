@@ -31,9 +31,15 @@ class Migrate_MySQL_to_Mongo:
         except:
             return 
 
-    def export_mysql_in_csv(self, table):
-        """Export mysql database tables using 'mysql' command line tools"""
-        query = "select * from %s.%s" % (self.dbinfo["mysqldb_dbname"], table)
+    def export_mysql_in_csv(self, tablename):
+        """Export mysql database tables using 'mysql' command line tools
+
+        :param tablename: table name to export
+        :type tablename: str
+        
+        """
+        query = "select * from %s.%s" % (self.dbinfo["mysqldb_dbname"],
+                                         tablename)
         res_mysql = mysql("-u", "{0}".format(self.dbinfo["mysqldb_userid"]),
                           "-p{0}".format(self.dbinfo["mysqldb_passwd"]),
                           "-h", "{0}".format(self.dbinfo["mysqldb_hostname"]),
@@ -53,16 +59,19 @@ class Migrate_MySQL_to_Mongo:
         return output
 
     def mongoimport_csv(self, csv_data, tablename):
+        """Import database data in a csv,json or tsv format using mongoimport
+        command line tool.
+
+        Reference: http://docs.mongodb.org/manual/reference/program/mongoimport/
+
+        :param csv_data: database content to import
+        :type csv_data: str.
+        :param tablename: collection name for importing data
+        :type tablename: str.
+
+        """
         # mongoimport -u cmetrics_user -p -d cloudmetrics -c cloudplatform
         # -type csv -f fields-sep-by-coma --drop cloudplatform.csv --headerline
-        #filename = tablename + ".csv"
-        #cmd = "mongoimport -u %s -p %s -d %s -c %s -type csv -f \
-        #fields-sep-by-coma --drop %s --headerline" % \
-        #             (self.dbinfo["mongodb_userid"], 
-        #              self.dbinfo["mongodb_passwd"], 
-        #              self.dbinfo["mongodb_dbname"], 
-        #              tablename,
-        #              filename)
         mongoimport("-u", "{0}".format(self.dbinfo["mongodb_userid"]),
                     "-p", "{0}".format(self.dbinfo["mongodb_passwd"]),
                     "-d", "{0}".format(self.dbinfo["mongodb_dbname"]),
@@ -70,8 +79,6 @@ class Migrate_MySQL_to_Mongo:
                     "-type", "csv",
                     "-f", "fields-sep-by-coma", "--headerline", "--drop",
                     _in=csv_data)
-
-        #subprocess.call(cmd.split())
 
 if __name__ == "__main__":
     migrate = Migrate_MySQL_to_Mongo()
