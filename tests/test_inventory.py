@@ -26,6 +26,30 @@ class Test_Inventory:
     def tearDown(self):
         pass
     
+    def test_bootspec(self):
+        self.inventory.generate_bootspec()
+        
+        specs = self.inventory.find ({'cm_type': "inventory",
+                                      'cm_key': 'bootspec',
+                                      'cm_kind': 'bootspec'})
+        
+        print specs.count()
+        
+        for spec in specs:
+            print '#', 70 * "-"
+            print '#', spec['cm_id']
+            print '#', 70 * "-"
+            pprint (spec)
+
+        assert True
+        
+    def test_getspec(self):
+        self.inventory.generate_bootspec()
+        spec = self.inventory.get_bootspec('ubuntu-2013-07-b')
+        pprint (spec)
+        assert True
+        
+    
     def test_clear(self):
         HEADING()
         self.inventory.clear()
