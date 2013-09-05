@@ -72,6 +72,8 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
             # image = inventory.get("server",host)
             time.sleep(randrange(1, 3))
 
+        return (True, None)
+
         
     def provision_image(self, hosts, image):
 
