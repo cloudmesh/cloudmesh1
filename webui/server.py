@@ -9,9 +9,6 @@ from cloudmesh.util.webutil import setup_imagedraw
 from cloudmesh.user.cm_userLDAP import cm_userLDAP 
 from datetime import datetime
 
-
-
-
 from cloudmesh.util.util import path_expand
 from cloudmesh.util.util import cond_decorator
 

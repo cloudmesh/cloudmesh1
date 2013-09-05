@@ -20,7 +20,7 @@ from datetime import datetime
 log = LOGGER('cm_mongo')
 
  
-class ninventory:
+class Inventory:
             
     server_config = None
     
@@ -254,7 +254,7 @@ class ninventory:
         return self.find ({"cm_id": index, "type": type})[0]['ipaddr']
             
 def main():
-    inventory = ninventory()
+    inventory = Inventory()
 
 
     r = inventory.find ({})

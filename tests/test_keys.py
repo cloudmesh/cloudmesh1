@@ -118,4 +118,3 @@ class Test_cloudmesh:
         HEADING()
         for name in self.keys.names():
             print self.keys.fingerprint(name)
-
