@@ -4,7 +4,7 @@ import yaml
 
 sys.path.insert(0, '..')
 
-from cloudmesh.inventory.inventory import FabricImage, FabricServer, \
+from cloudmesh.inventory.old_inventory import FabricImage, FabricServer, \
     FabricService, Inventory
 from mongoengine import *
 
