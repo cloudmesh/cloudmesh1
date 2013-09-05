@@ -55,6 +55,7 @@ class cm_config_file:
     config = None
 
     def __init__(self, filename=None, kind="server"):
+        self.kind = kind
         if filename is not None:
             self.filename = filename
         
@@ -67,7 +68,7 @@ class cm_config_file:
         try:
             item = self.get(mykeys[0])
         except:
-             log.error('kind of cm_config_file {0}'.format(kind))
+             log.error('kind of cm_config_file {0}'.format(self.kind))
              log.error('calling cm_config_file.get("' + '", "'.join(mykeys) +'")')
              log.error("Your configuration file does not contain the proper variable")
              key_string = "[" + ']['.join(mykeys) + "]"
@@ -95,7 +96,7 @@ class cm_config_file:
             try:
                element = element[v]
             except:
-                log.error('kind of cm_config_file {0}'.format(kind))
+                #log.error('kind of cm_config_file {0}'.format(kind))
                 log.error('calling cm_config_file.get("' + '", "'.join(keys) +'")')
                 log.error("Your configuration file does not contain the proper variable")
                 key_string = "[" + ']['.join(keys) + "]"
