@@ -35,6 +35,21 @@ class Test_cloudmesh:
     def tearDown(self):
         pass
 
+    def test_launcher(self):
+        filename = "~/.futuregrid/cloudmesh_launcher.yaml"
+        config = cm_config_server(filename)  
+        print config
+        existing = config.get("recipies")
+        test1 =  existing is not None
+        print existing
+        try:
+            none_existing = config.get("mongo","xyz")
+            test2 = False
+        except:
+            print "Error"
+            test2 = True
+        assert test1 and test2
+
     def test_server(self):
         filename = "~/.futuregrid/cloudmesh_server.yaml"
         config = cm_config_server(filename)  
