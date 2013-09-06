@@ -21,11 +21,11 @@ mesh_module = Blueprint('mesh_module', __name__)
 @mesh_module.route('/mesh/refresh/qstat/<host>')
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_mongo_qstat_refresh(host=None):
-    
+
     config = cm_config()
     user = config.config["cloudmesh"]["hpc"]["username"]
     pbs = pbs_mongo()
-    
+
     if host is None:
         hosts = ["india.futuregrid.org",
                  "sierra.futuregrid.org",
@@ -33,7 +33,7 @@ def display_mongo_qstat_refresh(host=None):
                  "alamo.futuregrid.org"]
     else:
         hosts = [host]
-    
+
     error = ""
     for host in hosts:
         pbs.activate(host,user)
@@ -42,7 +42,7 @@ def display_mongo_qstat_refresh(host=None):
         except Exception, e:
             error += "error {0} {1}".format(str(host),str(e))
     if error != "":
-        return render_template('error.html', 
+        return render_template('error.html',
                                error=error,
                                type="Some error in qstat",
                                msg="")
@@ -53,7 +53,7 @@ def display_mongo_qstat_refresh(host=None):
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_mongo_qstat_new():
     time_now = datetime.now()
-    
+
     address_string = ""
     error = ""
     config = cm_config()
@@ -66,34 +66,31 @@ def display_mongo_qstat_new():
              "alamo.futuregrid.org"]
     for host in hosts:
         pbs.activate(host,user)
-        
-    
+
+
     data = {}
     jobcount = {}
     timer = {}
-    for host in hosts:    
+    for host in hosts:
         try:
             data[host] = pbs.get_qstat(host)
         except:
             error += "get_qstat({0})".format(host)
-        
+
         try:
-        
+
             print "DDD", host, data[host].count()
             jobcount[host] = data[host].count()
         except:
             error += "jobcount {0}".format(host)
-        
+
 
         if jobcount[host] > 0:
             timer[host] = data[host][0]["cm_refresh"]
-            print "TTTTT"
-            pprint(data[host][0])
-            #timer[host] = datetime.now() 
         else:
             timer[host] = datetime.now()
         #print "TIMER", timer
-    attributes = {"pbs": 
+    attributes = {"pbs":
                   [
                         [ "Queue" , "queue"],
                         [ "Server" , "server"],
@@ -122,14 +119,14 @@ def display_mongo_qstat_new():
             for attribute in server:
                 print attribute, server[attribute]
     """
-        
+
     return render_template('mesh_qstat.html',
                            hosts=hosts,
                            jobcount=jobcount,
                            timer=timer,
                            address_string=address_string,
                            attributes=attributes,
-                           updated=time_now,
+                           updated = timer,
                            qstat=data,
                            error=error,
                            config=config)
@@ -144,37 +141,37 @@ def mongo_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
-    
+
     c = cm_mongo()
     c.activate()
     clouds = c.images()
-   
+
     """
-    
+
     status ACTIVE
     updated 2013-05-26T19:29:09Z
     name menghan/custom-utuntu-01
     links [{u'href': u'http://198.202.120.83:8774/v1.1/1ae6813a3a6d4cebbeb1912f6d139ad0/images/502a5967-18ff-448b-830f-d6150b650d6b', u'rel': u'self'}, {u'href': u'http://198.202.120.83:8774/1ae6813a3a6d4cebbeb1912f6d139ad0/images/502a5967-18ff-448b-830f-d6150b650d6b', u'rel': u'bookmark'}, {u'href': u'http://198.202.120.83:9292/1ae6813a3a6d4cebbeb1912f6d139ad0/images/502a5967-18ff-448b-830f-d6150b650d6b', u'type': u'application/vnd.openstack.image', u'rel': u'alternate'}]
     created 2013-05-26T19:28:09Z
     minDisk 0
-    metadata {u'instance_uuid': u'16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', 
-              u'image_location': u'snapshot', 
-              u'image_state': u'available', 
-              u'instance_type_memory_mb': u'2048', 
-              u'instance_type_swap': u'0', 
-              u'instance_type_vcpu_weight': u'None', 
-              u'image_type': u'snapshot', 
-              u'instance_type_id': u'5', 
-              u'ramdisk_id': None, 
-              u'instance_type_name': u'm1.small', 
-              u'instance_type_ephemeral_gb': u'0', 
-              u'instance_type_rxtx_factor': u'1', 
-              u'kernel_id': None, 
-              u'instance_type_flavorid': u'2', 
-              u'instance_type_vcpus': u'1', 
-              u'user_id': u'f603818711324203970ed1e3bb4b90ed', 
-              u'instance_type_root_gb': u'20', 
-              u'base_image_ref': u'1a5fd55e-79b9-4dd5-ae9b-ea10ef3156e9', 
+    metadata {u'instance_uuid': u'16a5f5ac-7f39-4b01-a2c3-b2003beffb9d',
+              u'image_location': u'snapshot',
+              u'image_state': u'available',
+              u'instance_type_memory_mb': u'2048',
+              u'instance_type_swap': u'0',
+              u'instance_type_vcpu_weight': u'None',
+              u'image_type': u'snapshot',
+              u'instance_type_id': u'5',
+              u'ramdisk_id': None,
+              u'instance_type_name': u'm1.small',
+              u'instance_type_ephemeral_gb': u'0',
+              u'instance_type_rxtx_factor': u'1',
+              u'kernel_id': None,
+              u'instance_type_flavorid': u'2',
+              u'instance_type_vcpus': u'1',
+              u'user_id': u'f603818711324203970ed1e3bb4b90ed',
+              u'instance_type_root_gb': u'20',
+              u'base_image_ref': u'1a5fd55e-79b9-4dd5-ae9b-ea10ef3156e9',
               u'owner_id': u'1ae6813a3a6d4cebbeb1912f6d139ad0'}
     server {u'id': u'16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'links': [{u'href': u'http://198.202.120.83:8774/v1.1/1ae6813a3a6d4cebbeb1912f6d139ad0/servers/16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'rel': u'self'}, {u'href': u'http://198.202.120.83:8774/1ae6813a3a6d4cebbeb1912f6d139ad0/servers/16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'rel': u'bookmark'}]}
     cm_id sierra-openstack-grizzly-images-menghan/custom-utuntu-01
@@ -190,11 +187,11 @@ def mongo_images():
     b99fa4c8-6b92-49e6-b53f-37e56f9383b6
     """
     """
-    2 essex A {u'image_location': u'ktanaka/ubuntu1204-ramdisk.manifest.xml', 
-               u'image_state':    u'available', 
-               u'architecture':   u'x86_64'} 
+    2 essex A {u'image_location': u'ktanaka/ubuntu1204-ramdisk.manifest.xml',
+               u'image_state':    u'available',
+               u'architecture':   u'x86_64'}
     """
-    attributes = {"essex": 
+    attributes = {"essex":
                   [
                         #[ "Metadata", "metadata"],
                         [ "status" , "status"],
@@ -213,8 +210,8 @@ def mongo_images():
                         [ "gb" , ""],
                         [ "arch", "metadata", "architecture"]
                   ],
-                  "grizzly": 
-                    [    
+                  "grizzly":
+                    [
                         #[ "Metadata", "metadata"],
                         [ "status" , "status"],
                         [ "name" , "name"],
@@ -241,14 +238,14 @@ def mongo_images():
             for attribute in clouds[cloud][image]:
                 print attribute, clouds[cloud][image][attribute]
     """
-        
+
     return render_template('mesh_images.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
                            updated=time_now,
                            clouds=clouds,
                            config=config)
-    
+
 # ============================================================
 # ROUTE: mongo
 # ============================================================
@@ -259,12 +256,12 @@ def mongo_flavors():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
-    
+
     c = cm_mongo()
     c.activate()
     clouds = c.flavors()
-    
-    """    
+
+    """
     2
     disk 20
     name m1.small
@@ -276,7 +273,7 @@ def mongo_flavors():
     cm_id sierra-openstack-grizzly-flavors-m1-small
     vcpus 1
     cm_cloud sierra-openstack-grizzly
-    swap 
+    swap
     os-flavor-access:is_public True
     rxtx_factor 1.0
     cm_kind flavors
@@ -293,7 +290,7 @@ def mongo_flavors():
             for attribute in clouds[cloud][flavor]:
                 print attribute, clouds[cloud][flavor][attribute]
     """
-    
+
     os_attributes = [
                      'id',
                      'name',
@@ -302,7 +299,7 @@ def mongo_flavors():
                      'disk',
                      'cm_refresh',
                      ]
-    
+
     return render_template('mesh_flavors.html',
                            address_string=address_string,
                            attributes=os_attributes,
@@ -320,7 +317,7 @@ def mongo_users():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
-    
+
     c = cm_mongo()
     c.activate()
     clouds = {}
@@ -328,8 +325,8 @@ def mongo_users():
     print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
     print len(clouds['india-openstack-essex'])
     print len(clouds['sierra-openstack-grizzly'])
-    
-    
+
+
     """
     for cloud in clouds:
         print cloud
@@ -339,7 +336,7 @@ def mongo_users():
                 print attribute, clouds[cloud][server][attribute]
     """
 
-    attributes = {"essex": 
+    attributes = {"essex":
                   [
                         [ "Name", "name"],
                         [ "Id" , "id"],
@@ -352,8 +349,8 @@ def mongo_users():
                         ['cm_type', "cm_type"],
                         [ "Refresh", "cm_refresh"]
                   ],
-                  "grizzly": 
-                    [    
+                  "grizzly":
+                    [
                         [ "Name", "name"],
                         [ "Id" , "id"],
                         [ "TenentId" , "tenantId"],
@@ -366,7 +363,7 @@ def mongo_users():
                         [ "Refresh", "cm_refresh"]
                     ]
                   }
-    
+
     return render_template('mesh_users.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
@@ -385,11 +382,11 @@ def mongo_table(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
-    
+
     c = cm_mongo()
     c.activate()
     clouds = c.servers()
-    
+
     """
     for cloud in clouds:
         print cloud
