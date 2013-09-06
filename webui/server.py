@@ -181,6 +181,7 @@ def site_map():
 
 # 
 
+'''
 @app.route('/test')
 @cond_decorator(cloudmesh.with_login, login_required)
 def restricted_index():
@@ -198,7 +199,7 @@ def rain_index():
 @admin_permission.require(http_exception=403)
 def admin_index():
     return render_template('admin.html')
-
+'''
 
 # ============================================================
 # ROUTE: erros
