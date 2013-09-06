@@ -117,7 +117,7 @@ class GitInfo:
         sums = {"fileschanged": 0, "inserted":
                 0, "deleted": 0, "lineschanged": 0}
         for email in emails:
-            print "Calculating stats for",  email
+            print "Calculating stats for", email
             stats[email] = gitinfo.stat(email)
 
             sums["fileschanged"] += stats[email]["fileschanged"]

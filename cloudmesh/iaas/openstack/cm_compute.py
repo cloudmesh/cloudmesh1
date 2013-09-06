@@ -50,37 +50,37 @@ def donotchange(fn):
 
 class openstack(ComputeBaseType):
 
-    #: the type of the cloud. It is "openstack"
-    type = "openstack"   # global var
+    # : the type of the cloud. It is "openstack"
+    type = "openstack"  # global var
 
-    #: a dict with the images
-    images = {}         # global var
+    # : a dict with the images
+    images = {}  # global var
 
-    #: a dict with the images
-    images = {}          # global var
+    # : a dict with the images
+    images = {}  # global var
 
-    #: a dict with the servers
-    servers = {}         # global var
+    # : a dict with the servers
+    servers = {}  # global var
 
-    #: a dict with the users
-    users = {}         # global var
+    # : a dict with the users
+    users = {}  # global var
     
-    #: a dict containing the credentionls read with cm_config
-    credential = None    # global var
+    # : a dict containing the credentionls read with cm_config
+    credential = None  # global var
     keystone_credential = None
     
-    #: a unique label for the clous
-    label = None         # global var
+    # : a unique label for the clous
+    label = None  # global var
 
     # cm_type = "openstack"
     # name = "undefined"
 
-    #: This is the cloud, should be internal though with _
-    cloud = None         # internal var for the cloud client in openstack
+    # : This is the cloud, should be internal though with _
+    cloud = None  # internal var for the cloud client in openstack
     keystone = None      
 
-    #: The user id
-    user_id = None       # internal var
+    # : The user id
+    user_id = None  # internal var
 
     _nova = nova
 
@@ -278,11 +278,11 @@ class openstack(ComputeBaseType):
             if credential['OS_CACERT'] is not None and \
                credential['OS_CACERT'] != "None" and \
                os.path.isfile(credential['OS_CACERT']):            
-                verify=credential['OS_CACERT']
+                verify = credential['OS_CACERT']
                 
         r = requests.post(url,
                           data=json.dumps(param),
-                          headers=headers, 
+                          headers=headers,
                           verify=verify)
         
         self.auth_token = r.json()
@@ -303,10 +303,10 @@ class openstack(ComputeBaseType):
         return self._get_service("compute") 
     
     def _post(self, posturl, params=None):
-        #print self.config
+        # print self.config
         conf = self._get_conf("compute")
-        headers = {'content-type': 'application/json','X-Auth-Token': '%s' % conf['token']}
-        #print headers
+        headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
+        # print headers
         r = requests.post(posturl, headers=headers, data=json.dumps(params), verify=self.credential['OS_CACERT'])
         ret = {"msg":"success"}
         if r.text:
@@ -325,14 +325,14 @@ class openstack(ComputeBaseType):
         conf = self._get_conf("compute")
         publicURL = conf['publicURL']
         posturl = "%s/servers" % publicURL
-        #print posturl
-        #keycontent = base64.b64encode(key_name)
+        # print posturl
+        # keycontent = base64.b64encode(key_name)
         secgroups = []
         if security_groups:
             for secgroup in security_groups:
                 secgroups.append({"name": secgroup})
         else:
-            secgroups=[{"name":"default"}]
+            secgroups = [{"name":"default"}]
         params = {
                     "server" : {
                         "name" : "%s" % name,
@@ -344,8 +344,8 @@ class openstack(ComputeBaseType):
                         }
                   }
         print params
-        #token = self.auth_token
-        #pprint(token)
+        # token = self.auth_token
+        # pprint(token)
         return self._post(posturl, params)
     
     def vm_delete(self, id):
@@ -356,8 +356,8 @@ class openstack(ComputeBaseType):
         publicURL = conf['publicURL']
         url = "%s/servers/%s" % (publicURL, id)
         
-        headers = {'content-type': 'application/json','X-Auth-Token': '%s' % conf['token']}
-        #print headers
+        headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
+        # print headers
         # no return from http delete via rest api
         r = requests.delete(url, headers=headers, verify=self.credential['OS_CACERT'])
         ret = {"msg":"success"}
@@ -399,7 +399,7 @@ class openstack(ComputeBaseType):
         conf = self._get_conf("compute")
         publicURL = conf['publicURL']
         url = "%s/os-floating-ips/%s" % (publicURL, idofip)
-        headers = {'content-type': 'application/json','X-Auth-Token': '%s' % conf['token']}
+        headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
         r = requests.delete(url, headers=headers, verify=self.credential['OS_CACERT'])
         ret = {"msg":"success"}
         if r.text:
@@ -413,7 +413,7 @@ class openstack(ComputeBaseType):
         conf = self._get_conf("compute")
         publicURL = conf['publicURL']
         url = "%s/os-floating-ips" % publicURL
-        headers = {'content-type': 'application/json','X-Auth-Token': '%s' % conf['token']}
+        headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
         r = requests.get(url, headers=headers, verify=self.credential['OS_CACERT'])
         return r.json()["floating_ips"]
     
@@ -427,7 +427,7 @@ class openstack(ComputeBaseType):
                 self.delete_public_ip(id)
         return True
             
-    def _get(self, msg, token=None, url=None, credential=None, type=None,urltype=None, json=True):
+    def _get(self, msg, token=None, url=None, credential=None, type=None, urltype=None, json=True):
         if urltype is None:
             urltype = 'publicURL'
         if credential is None:
@@ -447,12 +447,12 @@ class openstack(ComputeBaseType):
             return r
     # http
 
-    def _get_conf(self,type=None):
+    def _get_conf(self, type=None):
         """what example %/servers"""
         if type is None:
             type = "compute"
         compute_service = self._get_service(type)
-        #pprint(compute_service)
+        # pprint(compute_service)
         conf = {}
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
         conf['adminURL'] = str(compute_service['endpoints'][0]['adminURL'])
@@ -480,7 +480,7 @@ class openstack(ComputeBaseType):
     def get_extensions(self):
         time_stamp = self._now()
         msg = "extensons"
-        #list = self._get(msg)['extensions']
+        # list = self._get(msg)['extensions']
         result = self._get(msg, json=False)
         if result.status_code == 404:
             print "ERROR: extensions not available"
@@ -519,7 +519,7 @@ class openstack(ComputeBaseType):
         return self._list_to_dict(list, 'id', "image", time_stamp)
 
     # new
-    def get_tenants(self,credential=None):
+    def get_tenants(self, credential=None):
         time_stamp = self._now()
         """get the tenants dict for the vm with the given id"""
         if credential is None:
@@ -527,13 +527,13 @@ class openstack(ComputeBaseType):
             credential = p.server.config["keystone"]["sierra-openstack-grizzly"]
     
         msg = "tenants"
-        list = self._get(msg,credential=credential, type="keystone")['tenants']
+        list = self._get(msg, credential=credential, type="keystone")['tenants']
         return self._list_to_dict(list, 'id', "tenants", time_stamp)
 
 
 
     # new
-    def get_users(self,credential=None):
+    def get_users(self, credential=None):
         time_stamp = self._now()
         """get the tenants dict for the vm with the given id"""
         if credential is None:
@@ -544,7 +544,7 @@ class openstack(ComputeBaseType):
         
         cloud = openstack(name, credential=credential)
         msg = "users"
-        list = cloud._get(msg,credential=credential, type="keystone",urltype='adminURL')['users']
+        list = cloud._get(msg, credential=credential, type="keystone", urltype='adminURL')['users']
         return self._list_to_dict(list, 'id', "users", time_stamp)
         
     def get_meta(self, id):
@@ -582,7 +582,7 @@ class openstack(ComputeBaseType):
 
         conn2 = httplib.HTTPConnection(url2)
 
-        conn2.request(conf['set'], "%s/servers/%s/metadata" %
+        conn2.request(conf['set'], "%s/servers/%s/metadata" % 
                       (apiurlt[2], conf['serverid']), params2, headers2)
 
         response2 = conn2.getresponse()
@@ -1166,8 +1166,8 @@ if __name__ == "__main__":
     cloud = openstack("sierra-grizzly-openstack")
     cloud.get_flavors()
     
-    #keys = cloud.list_key_pairs()
-    #for key in keys:
+    # keys = cloud.list_key_pairs()
+    # for key in keys:
     #    print key.name
     """
     print cloud.find_user_id()
