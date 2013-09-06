@@ -35,6 +35,8 @@ mongo:
             db: cloudmesh
         user:
             db: user
+        userauth:
+            db: cm-auth
         pbs:
             db: cm-pbs
         metric:
