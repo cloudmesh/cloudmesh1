@@ -92,8 +92,9 @@ filename = "%s/%s" % (home, default_path)
 # ============================================================
 # global vars
 # ============================================================
+config = cm_config_server()
 
-SECRET_KEY = 'development key'
+SECRET_KEY = config.get('webui.secret')
 DEBUG = debug
 FLATPAGES_AUTO_RELOAD = debug
 FLATPAGES_EXTENSION = '.md'
@@ -477,7 +478,6 @@ if __name__ == "__main__":
     # setup_imagedraw()
     # setup_plugins()
     # setup_noderenderers()
-    config = cm_config_server()
     web_host = config.get('webui.host')
     web_port = config.get('webui.port')
     app.run(host=web_host, port=web_port)
