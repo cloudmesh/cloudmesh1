@@ -444,8 +444,9 @@ def login():
             idp = cm_userLDAP ()
             idp.connect("fg-ldap","ldap")
             user =  idp.find_one({'cm_user_id': form.username.data})
-        except:
+        except Exception, e:
             error = "LDAP server not reachable"
+            error += str(e)
             return render_template('error.html', 
                            error=error,
                            type="Can not reach LDAP",
