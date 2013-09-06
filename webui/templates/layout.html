@@ -73,7 +73,7 @@
             
             <p class="navbar-text pull-right">
             {% if g.user and g.user.is_authenticated() %}
-              Logged in as <a href="#" class="navbar-link">{{ g.user.username }}</a> <a href="/logout">(Logout)</a>
+              Logged in as <a href="#" class="navbar-link">{{ g.user.id }}</a> <a href="/logout">(Logout)</a>
             {% else %}
               <a href="/login">Not logged in</a>
             {% endif %}
