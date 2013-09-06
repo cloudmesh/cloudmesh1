@@ -31,7 +31,7 @@ class StopWatch(object):
         '''
         returns the time of the timer
         '''
-        time_elapsed = self.timer_end[name] -\
+        time_elapsed = self.timer_end[name] - \
             self.timer_start[name]
         return time_elapsed
 

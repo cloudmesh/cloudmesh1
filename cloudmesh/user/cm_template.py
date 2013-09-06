@@ -2,7 +2,7 @@ from jinja2 import Template
 
 class cm_template():
 
-    def __init__(self,filename):
+    def __init__(self, filename):
         self.filename = filename
         self.content = open(filename, 'r').read()
 
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     t = cm_template(filename)
     print t.variables()
     
-    print t.replace(d,format="dict")
+    print t.replace(d, format="dict")
 
 #    if not t.complete():
 #       print "ERROR: undefined variables"
