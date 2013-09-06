@@ -24,6 +24,7 @@ from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
      identity_changed, Permission
 
 from flask.ext.principal import identity_loaded, RoleNeed, UserNeed
+from cloudmesh.config.cm_config import cm_config_server
      
 import sys
 
@@ -486,4 +487,7 @@ if __name__ == "__main__":
     # setup_imagedraw()
     # setup_plugins()
     # setup_noderenderers()
-    app.run()
+    config=cm_config_server()
+    web_host = config.get('webui.host')
+    web_port = config.get('webui.port')
+    app.run(host=web_host, port=web_port)
