@@ -1,4 +1,5 @@
-from cloudmesh.config.cm_config import cm_config_server, cm_config
+from cloudmesh.config.cm_config import cm_config_server
+from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import get_mongo_db
 
 
