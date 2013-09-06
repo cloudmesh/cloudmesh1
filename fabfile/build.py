@@ -1,7 +1,7 @@
 from fabric.api import task, local, execute
 import clean
 
-__all__ = ['req', 'sdist', 'install']
+__all__ = ['req', 'sdist', 'install', 'sphinx']
 
 @task
 def req():
@@ -22,5 +22,6 @@ def install():
 
 @task
 def sphinx():
+    local("rm -rf  /tmp/sphinx-contrib")
     local("cd /tmp; hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/")
     local("cd /tmp/sphinx-contrib/autorun/; python setup.py install")
