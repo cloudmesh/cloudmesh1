@@ -1,16 +1,17 @@
 cloud:
-        sierra-openstack-grizzly:
-                mysqldb_userid :
-                mysqldb_passwd :
-                mysqldb_hostname :
-                mysqldb_port : 3306
-                mysqldb_dbname : 
-                mysqldb_tables : ["instance_faults"]
 
-        india-openstack-essex:
-                mysqldb_userid :
-                mysqldb_passwd :
-                mysqldb_hostname :
-                mysqldb_port : 3306
-                mysqldb_dbname : 
-                mysqldb_tables : ["instance_faults"]
+    sierra-openstack-grizzly:
+        mysqldb_userid :
+        mysqldb_passwd :
+        mysqldb_hostname :
+        mysqldb_port : 3306
+        mysqldb_dbname : 
+        mysqldb_tables : ["instance_faults"]
+
+    india-openstack-essex:
+        mysqldb_userid :
+        mysqldb_passwd :
+        mysqldb_hostname :
+        mysqldb_port : 3306
+        mysqldb_dbname : 
+        mysqldb_tables : ["instance_faults"]
