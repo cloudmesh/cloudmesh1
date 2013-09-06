@@ -1,7 +1,7 @@
 from cloudmesh.config.cm_config import cm_config_server
 import pymongo
 from pymongo import MongoClient
-#from config.cm_config import cm_config
+# from config.cm_config import cm_config
 
 from cloudmesh.util.logger import LOGGER
 
@@ -15,7 +15,7 @@ log = LOGGER('cm_user')
 
 class CMUserProviderBaseType(object):
     
-    providers= {}
+    providers = {}
     
     client = None
     db_clouds = None
@@ -29,9 +29,9 @@ class CMUserProviderBaseType(object):
         self.client = MongoClient()    
         self.db = self.client[db_name]          
         self.db_clouds = self.db[collection]    
-        #print db_name
-	#print self.db
-	#self.config = cm_config()
+        # print db_name
+	# print self.db
+	# self.config = cm_config()
    
     def find(self, query):
         '''
@@ -47,40 +47,40 @@ class CMUserProviderBaseType(object):
         '''
         return self.db_clouds.find_one(query) 
          
-    def add(self,id, dict):
+    def add(self, id, dict):
         '''
         adds a user with the given id to the users database. The attributes are specified in the dict.
         
         :param id: the unique id of the user
         :param dict: the attributes of the user
         '''
-	#print "IDIDID", id
-	#print "DICTDICT", dict
+	# print "IDIDID", id
+	# print "DICTDICT", dict
 	result = {}
 	result['cm_user_id'] = id
 	result.update(dict)
 	self.db_clouds.insert(result)
-        #result[element]['cm_user_id'] = id 
-        #self.db_clouds.insert(result[element])
+        # result[element]['cm_user_id'] = id 
+        # self.db_clouds.insert(result[element])
         
-    def updates(self,id, dict):
+    def updates(self, id, dict):
         '''
         updates the attributes specified in the dict for a given user with the id
         
         :param id: the unique id of the user
         :param dict: the attributes of the use
         '''
-	#print "DICT in updates():", dict
+	# print "DICT in updates():", dict
         data = self.find_one({'cm_user_id': id})
-	#print "EXISTING data in updates():", data
+	# print "EXISTING data in updates():", data
 	if data is None:
 		data = {}
         data.update(dict)
-	#print "data after update in updates():", data
+	# print "data after update in updates():", data
         self.remove(id)
         self.add(id, data)
         
-    def remove(self,id):
+    def remove(self, id):
         '''
         removes the used with the given id
                 

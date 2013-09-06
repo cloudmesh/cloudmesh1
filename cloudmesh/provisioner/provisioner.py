@@ -43,7 +43,7 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
 
 
     # needs Inventory
-    #status = get_attribute(self, host_label, "cm_provision_status", attribute)
+    # status = get_attribute(self, host_label, "cm_provision_status", attribute)
 
     def __init__(self):
         BaremetalProvisinerABC.__init__(self)

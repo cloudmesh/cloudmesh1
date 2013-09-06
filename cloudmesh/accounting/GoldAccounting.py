@@ -55,7 +55,7 @@ class GoldAccounting(AccountingBaseClass):
         gmkproject("-d", description, "-p", name)
 
     def add_user_to_projects(self, project, userid):
-        username = None # transfer user id to username
+        username = None  # transfer user id to username
         gchproject("-addUsers", username, project)
 
     def deactivate_project(self, name):
