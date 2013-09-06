@@ -69,7 +69,7 @@ class eucalyptus(ComputeBaseType):
     #
     # change to gregors credential class
     #
-    def _get_vmname(self,prefix):
+    def _get_vmname(self, prefix):
         return _generate_vmname(prefix, self.no)
     
     def _generate_vmname(self, prefix, index):
@@ -98,9 +98,9 @@ class eucalyptus(ComputeBaseType):
         self.project = project
         
         # copied from deprecated code
-        #if project is None:
+        # if project is None:
         #    self.activate_project("fg82")
-        #else:
+        # else:
         #    self.activate_project(project)
 
         print "Loading", self.label, self.project
@@ -130,8 +130,8 @@ class eucalyptus(ComputeBaseType):
         self.credential = self.config.get(self.label, expand=True)
         pprint(self.credential)
         
-        #libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
-        #libcloud.security.VERIFY_SSL_CERT = False
+        # libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
+        # libcloud.security.VERIFY_SSL_CERT = False
 
         Driver = get_driver(Provider.EUCALYPTUS)
         self.cloud = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
@@ -148,7 +148,7 @@ class eucalyptus(ComputeBaseType):
 
     """
 
-    def _retrief(self,type,f,exclude=[]):
+    def _retrief(self, type, f, exclude=[]):
         """ obtain information from libcloud, call with returns dicts.
         
         Driver = get_driver(Provider.EUCALYPTUS)
@@ -211,8 +211,8 @@ class eucalyptus(ComputeBaseType):
         parameters are provided it will instead use them
         """
         self.clear()
-        #self.config(label, project, accessKey, secretKey)
-        #self.connect()
+        # self.config(label, project, accessKey, secretKey)
+        # self.connect()
         self.connect(label, project)
 
     def clear(self):
@@ -245,21 +245,21 @@ class eucalyptus(ComputeBaseType):
             'images': self.images}
         return json.dumps(information, indent=4)
 
-    def _delete_keys_from_dict(self,elements, exclude):
+    def _delete_keys_from_dict(self, elements, exclude):
         for d in exclude:
             if d in elements: 
                 del elements[d]
         return elements
 
     def _get_flavors_dict(self):
-        return self._retrief("flavors", self.cloud.list_sizes, ['_uuid','driver'])
+        return self._retrief("flavors", self.cloud.list_sizes, ['_uuid', 'driver'])
 
     def _get_servers_dict(self):
-        return self._retrief("servers", self.cloud.list_nodes, ['private_dns','dns_name', 'instanceId', 'driver','_uuid'])
+        return self._retrief("servers", self.cloud.list_nodes, ['private_dns', 'dns_name', 'instanceId', 'driver', '_uuid'])
     
     def _get_images_dict(self):
-        return self._retrief("images", 
-                             self.cloud.list_images, 
+        return self._retrief("images",
+                             self.cloud.list_images,
                              ['driver',
                               'ownerid',
                               'owneralias',
@@ -347,7 +347,7 @@ if __name__ == "__main__":
       print credential
     """
 
-    cloud = eucalyptus("india-eucalyptus","fg-82")
+    cloud = eucalyptus("india-eucalyptus", "fg-82")
     """
     if flavor_test or table_test:
       cloud.refresh('flavors')
@@ -369,7 +369,7 @@ if __name__ == "__main__":
     if image_test:
         cloud.refresh('images')
         print json.dumps(cloud.images, indent=4)
-#-      pp.pprint (cloud.images)
+# -      pp.pprint (cloud.images)
     """
     if vm_test:
       cloud.refresh('vms')

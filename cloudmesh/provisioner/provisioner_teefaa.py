@@ -66,20 +66,20 @@ class ProvisionerTeefaa(BaremetalProvisinerABC):
         self.host = label
         self.image = image
         
-        parameters = ["-t", "{0}@{1}".format(self.teefaa_config["teefaa"]["username"],self.teefaa_config["teefaa"]["hostname"]), 
-                     "cd", "{0}".format(self.teefaa_config["teefaa"]["dir"]), ";", 
-                     "fab", "baremetal.provisioning:{0},{1}".format(host,image)]
+        parameters = ["-t", "{0}@{1}".format(self.teefaa_config["teefaa"]["username"], self.teefaa_config["teefaa"]["hostname"]),
+                     "cd", "{0}".format(self.teefaa_config["teefaa"]["dir"]), ";",
+                     "fab", "baremetal.provisioning:{0},{1}".format(host, image)]
         print "ssh", " ".join(parameters)
 
         print 70 * "="
         sys.stdout.flush()
         
         result = ""
-        for line in ssh(parameters, _iter=True,_out_bufsize=1):
+        for line in ssh(parameters, _iter=True, _out_bufsize=1):
             line = line[:-1]
             print line
             sys.stdout.flush()
-            result = result+line+"\n"
+            result = result + line + "\n"
             if line.startswith("CM STATUS"):
                 (ignore, status) = line.split(":")
                 self.set_status(server, status)
@@ -91,7 +91,7 @@ class ProvisionerTeefaa(BaremetalProvisinerABC):
 
 
         
-        #To check if things are ok we just do 
+        # To check if things are ok we just do 
 
         # Done.
         # Disconnecting from {ip form bmc}... done.
@@ -129,9 +129,9 @@ class ProvisionerTeefaa(BaremetalProvisinerABC):
 
 if __name__ == "__main__":
 
-    #hosts = ["1", "2", "3", "a1", "a2", "a3",
+    # hosts = ["1", "2", "3", "a1", "a2", "a3",
     #         "b1", "b2", "b3", "c1", "c2", "c3", ]
-    #image = "a"
+    # image = "a"
 
     provisioner = ProvisionerTeefaa
 
