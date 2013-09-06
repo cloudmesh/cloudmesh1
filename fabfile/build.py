@@ -20,4 +20,7 @@ def install():
     local("pip install -r requirements.txt")
     local("python setup.py install")
 
-
+@task
+def sphinx():
+    local("cd /tmp; hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/")
+    local("cd /tmp/sphinx-contrib/autorun/; python setup.py install")
