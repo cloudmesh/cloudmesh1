@@ -199,17 +199,18 @@ TODO: distribute a standard ttf font and use sh so that the -f font is included 
 YAML files
 ---------------
 
-You will need three yaml files. Samples can be found in the etc source directory. 
+You will need four yaml files. Samples can be found in the etc source directory. 
 More elaborate examples can be obtained from Gregor for the personel that work 
 directly with him on FutureGrid.
 
 Configure the yaml files if changes need to be done.
 
-We need three files in the .futuregrid directory:
+We need four files in the .futuregrid directory:
 
 * cloudmesh.yaml
 * cloudmesh_server.yaml
-* cloumesh_clutser.yaml
+* cloudmesh_clutser.yaml
+* cloudmesh_bootspec.yaml
 
 
 Mongo
