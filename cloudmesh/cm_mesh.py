@@ -1,6 +1,6 @@
 import sys
-#sys.path.insert(0, '..')
-#sys.path.insert(0, '.')
+# sys.path.insert(0, '..')
+# sys.path.insert(0, '.')
 
 import pickle
 from sh import fgrep
@@ -544,7 +544,7 @@ class cloudmesh:
                         result = result + type
                     result = result + address['addr']
                     result = result + ", "
-                    position = + 1
+                    position = position + 1
                 result = result[:-2]
             except:
                 result = content

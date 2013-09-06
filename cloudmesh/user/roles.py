@@ -9,7 +9,7 @@ class Roles:
     
     def get_config(self, **kwargs):
         
-        if not kwargs.has_key('roles'):#if kwargs['host'] is None:
+        if not kwargs.has_key('roles'):  # if kwargs['host'] is None:
             self.roles = cm_config_server().get("roles")
     
      
@@ -41,13 +41,13 @@ class Roles:
     def clear(self):
         self.roles = None
     
-    def get_roles(self,user):
+    def get_roles(self, user):
         pass
     
-    def authorized(self,user,role):
+    def authorized(self, user, role):
         return False
  
-    def users(self,role):
+    def users(self, role):
         single_users = self.roles[role]['users']
         projects = self.roles[role]['projects']
         result = self.db_clouds.find({'projects.active': { "$in": projects}})
@@ -57,7 +57,7 @@ class Roles:
         s = list(set(single_users + project_users))
         return s
 
-    def get(self,user):
+    def get(self, user):
         user_roles = []
         for r in self.roles:
             print "checking", r

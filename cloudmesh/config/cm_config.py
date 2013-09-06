@@ -66,20 +66,20 @@ class cm_config_file:
     def __str__(self):
         return json.dumps(self.config, indent=4)
 
-    def __getitem__(self,*mykeys):        
+    def __getitem__(self, *mykeys):        
         try:
             item = self.get(mykeys[0])
         except:
              log.error('kind of cm_config_file {0}'.format(self.kind))
-             log.error('calling cm_config_file.get("' + '", "'.join(mykeys) +'")')
+             log.error('calling cm_config_file.get("' + '", "'.join(mykeys) + '")')
              log.error("Your configuration file does not contain the proper variable")
              key_string = "[" + ']['.join(mykeys) + "]"
              log.error("Variable requested" + mykey_string)
-             #log.error("Error occured while accessing " + v)
+             # log.error("Error occured while accessing " + v)
              sys.exit()
         return item
 
-    def get(self,*keys):
+    def get(self, *keys):
         """
         returns the dict of the information as read from the yaml file. To
         access the file safely, you can use the keys in the order of the access.
@@ -98,8 +98,8 @@ class cm_config_file:
             try:
                element = element[v]
             except:
-                #log.error('kind of cm_config_file {0}'.format(kind))
-                log.error('calling cm_config_file.get("' + '", "'.join(keys) +'")')
+                # log.error('kind of cm_config_file {0}'.format(kind))
+                log.error('calling cm_config_file.get("' + '", "'.join(keys) + '")')
                 log.error("Your configuration file does not contain the proper variable")
                 key_string = "[" + ']['.join(keys) + "]"
                 log.error("Variable requested" + key_string)
@@ -116,7 +116,7 @@ class cm_config_server(cm_config_file):
     config = None
 
     def __init__(self, filename=None):
-        cm_config_file.__init__(self,filename=filename,kind="server")
+        cm_config_file.__init__(self, filename=filename, kind="server")
 
     
 class cm_config_launcher(cm_config_file):
@@ -128,7 +128,7 @@ class cm_config_launcher(cm_config_file):
     config = None
 
     def __init__(self, filename=None):
-        cm_config_file.__init__(self,filename=filename,kind="launcher")
+        cm_config_file.__init__(self, filename=filename, kind="launcher")
 
     
 class cm_config(object):

@@ -110,14 +110,14 @@ class Inventory:
         :param query:
         '''
         if values is None:
-            return self.db_inventory.update(query,upsert=True) 
+            return self.db_inventory.update(query, upsert=True) 
         else:
             print query
             print values
-            return self.db_inventory.update(query, values,upsert=True) 
+            return self.db_inventory.update(query, values, upsert=True) 
 
     
-    def insert(self,element):
+    def insert(self, element):
         self.db_inventory.insert(element)
 
     def clear(self):
@@ -157,7 +157,7 @@ class Inventory:
             self.insert(element)
             
             for key in keys: 
-                if (type(cluster[key]) is str) and (not key in ["id","network"]):
+                if (type(cluster[key]) is str) and (not key in ["id", "network"]):
                     element = dict({'cm_cluster': name,
                                     'cm_id': name,
                                     'cm_type': "inventory",
@@ -175,7 +175,7 @@ class Inventory:
                                         'cm_type': "inventory",
                                         'cm_kind': 'publickey',
                                         'cm_key': k['name'],
-                                        'cm_name': cm_path_expand(k['path']), 
+                                        'cm_name': cm_path_expand(k['path']),
                                         'cm_value': cluster[key],
                                         'cm_attribute': 'variable'
                                         })
@@ -200,7 +200,7 @@ class Inventory:
                 n_range = expand_hostlist(network["range"])
                 n_name = network["name"]
                 
-                for i in range(0,len(names)):
+                for i in range(0, len(names)):
                     name = n_index[i]
                     element = dict(network)
                     del element['range']
@@ -208,16 +208,16 @@ class Inventory:
                                     'cm_key': 'server',
                                      'cm_kind': 'server',
                                      'cm_id': name,
-                                     'cm_cluster': cluster_name, 
-                                     'id': name, 
-                                     'label' : n_label[i], 
-                                     'network_name': n_name, 
-                                     'cm_network_id': net_id, 
+                                     'cm_cluster': cluster_name,
+                                     'id': name,
+                                     'label' : n_label[i],
+                                     'network_name': n_name,
+                                     'cm_network_id': net_id,
                                      'ipaddr': n_range[i],
                                      'cm_attribute': 'network'}
                     )
                     self.insert(element)
-                net_id +=1
+                net_id += 1
 
         
         
@@ -260,7 +260,7 @@ class Inventory:
         print "Clusters"
         print 30 * "="
         for host in clusters:
-            print "    ", host['cm_cluster'], "->",  host['cm_hostlist']
+            print "    ", host['cm_cluster'], "->", host['cm_hostlist']
 
         print 
         
@@ -297,17 +297,17 @@ class Inventory:
             data[element['cm_key']] = element['cm_value']
         
         
-        data['network']={}
+        data['network'] = {}
         for result in cursor:
-            print 70* "R"
+            print 70 * "R"
             pprint(result)
-            print 70* "S"
+            print 70 * "S"
             
             n_id = result["cm_network_id"]
             n_name = result["network_name"]
             n_ipaddr = result["ipaddr"]
             data['network'][n_name] = dict(result)
-            #del data["network"][name]["_id"]
+            # del data["network"][name]["_id"]
 
         
         cluster_name = data['cm_cluster']
@@ -373,7 +373,7 @@ class Inventory:
                         'cm_key': 'bootspec',
                         'cm_kind': 'bootspec',
                         'cm_id': name,
-                        'id': name, 
+                        'id': name,
                         'label' : name,
                         'cm_refresh': time})
         self.update({'cm_key': 'bootspec', 'id': name}, element)            
@@ -404,6 +404,6 @@ def main():
     print inventory.ipadr (name, "internal")
 
     
-if  __name__ =='__main__':
+if  __name__ == '__main__':
     main()
  

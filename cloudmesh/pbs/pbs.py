@@ -1,4 +1,4 @@
-#with open ("pbs_nodes_data.txt", "r") as myfile:
+# with open ("pbs_nodes_data.txt", "r") as myfile:
 #    pbs_nodes_data=myfile.readlines()
 
 from xml.dom import minidom
@@ -15,7 +15,7 @@ class PBS:
     pbs_qstat_data = None
     pbs_nodes_data = None
     
-    def __init__(self,user, host):
+    def __init__(self, user, host):
         self.user = user
         self.host = host
 
@@ -24,7 +24,7 @@ class PBS:
         
         if self.pbs_nodes_data is None or refresh:
             try:
-                result = ssh("{0}@{1}".format(self.user,self.host), "pbsnodes", "-a")
+                result = ssh("{0}@{1}".format(self.user, self.host), "pbsnodes", "-a")
             except:
                 raise RuntimeError("can not execute pbs nodes via ssh")
             pbsinfo = {}        
@@ -42,7 +42,7 @@ class PBS:
                                 status_elements = value.split(",")
                                 pbsinfo[name][attribute] = {}
                                 for e in status_elements:
-                                    (a,v) = e.split("=")
+                                    (a, v) = e.split("=")
                                     pbsinfo[name][attribute][a] = v
                             elif attribute == 'jobs':
                                 pbsinfo[name][attribute] = value.split(',')
@@ -76,7 +76,7 @@ class PBS:
     def qstat(self, refresh=True):
         if self.pbs_qstat_data is None or refresh:
             try:
-                xmldata = str(ssh("{0}@{1}".format(self.user,self.host), "qstat", "-x"))
+                xmldata = str(ssh("{0}@{1}".format(self.user, self.host), "qstat", "-x"))
             except:
                 raise RuntimeError("can not execute pbs qstat via ssh")
             info = {}
