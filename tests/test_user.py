@@ -43,7 +43,7 @@ class Test_cloudmesh:
             pass
         assert True
 
-    def test_use(self):
+    def test_user(self):
         d = {
             "portalname" : "gvonlasz",
             "sierra_openstack_password" : "sierra",
