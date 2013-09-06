@@ -354,13 +354,10 @@ if cloudmesh.with_login:
     idp = cm_userLDAP ()
     idp.connect("fg-ldap","ldap")
 
-"""
+
 @app.before_request
 def before_request():
-    if 'user_id' in session:
-        current_user = load_user(session['user_id'])
-        g.user = current_user
-"""
+    g.user = current_user
 
 @identity_loaded.connect_via(app)
 def on_identity_loaded(sender, identity):
@@ -491,3 +488,4 @@ if __name__ == "__main__":
     web_host = config.get('webui.host')
     web_port = config.get('webui.port')
     app.run(host=web_host, port=web_port)
+
