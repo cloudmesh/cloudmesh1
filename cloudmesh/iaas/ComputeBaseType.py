@@ -11,19 +11,19 @@ class ComputeBaseType:
     users = {}         
     tenants = {}
 
-    #: the dict for the flavors
+    # : the dict for the flavors
     flavors = {}         
 
-    #: the dict for the images
+    # : the dict for the images
     images = {}          
     
-    #: the dict for the servers
+    # : the dict for the servers
     servers = {}         
 
-    #: the dict for the set_credentials
+    # : the dict for the set_credentials
     credential = None    
 
-    #: the unique string identifying this cloud
+    # : the unique string identifying this cloud
     label = None         
 
     def __init__(self, label, cred=None):
@@ -33,11 +33,11 @@ class ComputeBaseType:
     def _clear(self):
         self.users = {}         
         self.tenants = {}         
-        self.flavors = {}         # global var
-        self.images = {}          # global var
-        self.servers = {}         # global var
-        self.credential = None    # global var
-        self.label = None         # global var
+        self.flavors = {}  # global var
+        self.images = {}  # global var
+        self.servers = {}  # global var
+        self.credential = None  # global var
+        self.label = None  # global var
         self.type = None
         self.user_id = None
         self.auth_token = None
@@ -177,8 +177,8 @@ class ComputeBaseType:
             'flavors': self.flavors,
             'servers': self.servers,
             'images': self.images,
-            #'users': self.users,  
-            'users': len(self.users),  
+            # 'users': self.users,  
+            'users': len(self.users),
             'tenants': self.tenants,
             }
         return json.dumps(information, indent=4)
@@ -187,7 +187,7 @@ class ComputeBaseType:
     # get methods
     #
     # TODO BUG REMOVE THIS METHOD and replace with .type
-    #def type():
+    # def type():
     #    return self.type
 
     def vms(self):
@@ -254,9 +254,9 @@ class ComputeBaseType:
         else:
             for key in list:
                 element = list[key]
-                #id = list[element]['id']
-                #d[id] = list[element]
-                #d[id]['cm_refresh'] = time_stamp
+                # id = list[element]['id']
+                # d[id] = list[element]
+                # d[id]['cm_refresh'] = time_stamp
 
                 # element is a dictionary. It doesn't have to lookup the list
                 # like 'list[element]...'. element[...] simply works.

@@ -10,7 +10,7 @@ celery = Celery('cloudmesh.provisioner.queue.celery',
 # Optional configuration, see the application user guide.
 celery.conf.update(
     CELERY_TASK_RESULT_EXPIRES=3600,
-    CELERY_DISABLE_RATE_LIMITS = True
+    CELERY_DISABLE_RATE_LIMITS=True
     )
 
 if __name__ == '__main__':

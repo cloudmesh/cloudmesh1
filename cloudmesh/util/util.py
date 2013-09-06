@@ -2,8 +2,8 @@ from string import Template
 import os
 import sys
 import inspect
-#import yaml
-#from logger import LOGGER
+# import yaml
+# from logger import LOGGER
 
 def cond_decorator(flag, dec):
    def decorate(fn):
@@ -43,7 +43,7 @@ def address_string(content, labels=False):
                     result = result + type
                 result = result + address['addr']
                 result = result + ", "
-                position = + 1
+                position = +1
             result = result[:-2]
         except:
             result = content
@@ -87,7 +87,7 @@ def path_expand(text):
 
 def HEADING(txt=None):
     if txt is None:        
-        txt = inspect.getouterframes( inspect.currentframe() )[1][3]
+        txt = inspect.getouterframes(inspect.currentframe())[1][3]
 
     """Prints a message to stdout with #### surrounding it. This is useful for nosetests to better distinguish them."""
     print

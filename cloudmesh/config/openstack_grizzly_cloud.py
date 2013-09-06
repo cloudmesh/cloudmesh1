@@ -50,7 +50,7 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
                 self._keystone = self._client(**client_creds)
             except (client.exceptions.AuthorizationFailure,
                     client.exceptions.Unauthorized) as authz_err:
-                print >>sys.stderr, ('\n'.join(
+                print >> sys.stderr, ('\n'.join(
                     ["Error: %s" % authz_err,
                      "Hint: check cloud configuration data; problems can occur if you",
                      "changed your password outside of cloudmesh.  If you need an",

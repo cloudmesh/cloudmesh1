@@ -22,7 +22,7 @@ def provision(host, image):
     :param host:
     :param image:
     '''
-    provisioner.provision([host],image)
+    provisioner.provision([host], image)
 
 
 @celery.task
