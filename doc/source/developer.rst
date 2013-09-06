@@ -2,37 +2,62 @@
    :start: 3
 
 **********************************************************************
-Quickstart for a deployed version of cloudmesh
+Usage Quickstart for a Deployed Version of cloudmesh
 **********************************************************************
 
-The following are the current steps to bring all services fro
-cloudmesh up and running. Naturallky we could have included them in
+The following are the current steps to bring all services for
+cloudmesh up and running. After you have Installed the software (see
+). Naturally we could have included them in the Section `ref:s-instalation`
 one script, which we will do at a later time. For now we want o keep
-the services seperate to ease debugging of various parts. It is
-assumed that the machine has access to LDAP.
+the services separate to simplify development and debugging of various
+parts. Naturally, if you can just pick the commands that you really
+need and do not have to execute all of them. Over time you will notice
+which commands are needed by you. An overview of available commands
+can be found with::
+
+   $ fab -l
+
+
+With access to LDAP 
+===============
+It is assumed that the machine has access to LDAP.
+
+::
+
+    python setup.py install  
+    fab mongo.start
+    fab mongo.cloud     
+    fab mq.start
+    fab queue.start:1
+    fab server.start
+    
+Without access to LDAP
+===============
 
 ::
 
     python setup.py install
     fab mongo.start
-    fab mongo.cloud     # if thsi does not work use fab mongo.simple
+    fab mongo.cloud     
     fab mq.start
-    fab queue.start:True
+    fab queue.start:1
     fab server.start
-    
+
+.. _s-instalation:
 
 **********************************************************************
 Installation
 **********************************************************************
 
-
-
-Next we describe the installation for developers. However it is much the same as for those that want to deploy it.
+In this Section, we describe how to  deploy cloudmesh for
+**developers**. It is much the same as for those that want to deploy
+it. 
 
 Pip
 ====
 
-We do not use easy_install, but pip instead. Please make sure that you install pip. In most cases this can be done with::
+We typically do not use easy_install, but use pip instead. Please make
+sure that you install pip. THis can be done with::
 
      easy_install pip 
 
@@ -48,7 +73,7 @@ the home directory under ~/ENV. If you already have such a directory
 for other projects, we suggest that you find a new name for the
 virtualenv. However, for the rest of the manual we assume it is "ENV"
 
-Download virtualenv
+Install virtualenv
 ------------------------
 
 This step is only needed if virtualenv is not installed. To
@@ -56,25 +81,20 @@ test this say::
 
     $ which virtualenv
 
-In case virtualenv is not installed, you can download it for example
-with::
+In case virtualenv is not installed, you can install it via pip::
 
-    $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
- 
-Install virtualenv
-------------------------
-        
-After you downloaded virtualenv, you can install it by following
-command::
 
-    $ python virtualenv.py --system-site-packages ~/ENV
-
+    $ sudo pip install virtualenv
 
 Once that is accomplished you can create a virtual env as follows in the
 directory ENV:
          
     $ virtualenv ~/ENV
 
+If you do not have root access you can install it from source as
+documented at 
+
+* http://www.virtualenv.org/en/latest/
           
 Activate virtualenv
 ------------------------
@@ -89,14 +109,34 @@ Please note that you have to do this every time you open a terminal or login on 
 Modify your rc file (optional):
 ------------------------
 
-Go to your home directory, log in and change your .bash_profile,
+Go to your home directory, log in and change your .bash_profile, 
 .bashrc, or .bash_login file (e.g. whatever works best for you). ON my computer I added it to the .bash_profile which is a MAC OSX machine::
 
     $ echo "source ~/ENV/bin/activate" >> .bash_profile
 
+On ubuntu, you can add it to::
+
+  $ echo "source ~/ENV/bin/activate" >> .bashrc
+
+If in doubt add it to both. It will be up to you to decide if you like
+to go into virtual env at login time. If you do it this way you do not
+forget. You can also add a ``cd`` command so that you go into the
+working directory immediately after you login. For example when you
+check out cloudmesh to ~/github/cloudmesh you can add::
+
+   cd ~/github/cloudmesh
+
+SO you jump into your working directory after you start a new
+terminal, which is quite handy. Alternatively, you may want to set an
+alias such as::
+
+   alias dev="cd ~/github/cloudmesh"
+
+This way if you type dev you cd into the development directory
+
 
 Install fabric
-==================================================================
+===========================================================
 
 Much of our setup scripts are using fabric which is a nice management tool and is for our purpose a fancy makefile like tool (with many additional feature). To install it, please say::
 
@@ -137,7 +177,8 @@ account. Otherwise our commits will not properly work::
 
 Please replace name and e-mail with the once you used in Github. Please make sure your name is spelled out properly. We do not accept pseudonyms. If you do not agree to this, you can not participate in the code development.
 
-Quick deployment on ubuntu
+
+Quick deployment 
 ===========================
 
 This quick deployment is targeted for ubuntu. It can be achieved in several easy steps.
@@ -146,12 +187,26 @@ Next execute the following commands ::
 
     $ git clone https://github.com/cloudmesh/cloudmesh.git
     $ cd cloudmesh
-    $ cd install
-    $ fab deploy
-    $ fab install
-    $ cd ..
+    $ fab -f install/fabfile.py deploy
+    $ fab build.install
 
-Note: ALternative may be better fab -f install/fabfile.py deploy
+Aptana Studio
+--------------------------------------------------
+
+A good IDE for python development for Python is Aptana Studio (based
+on eclypse). It contains the ability to directly import packages from
+github by filling out a simple form. So instead of using the
+command line github tool you can use the Aptana Studio version. It
+also contains a very nice way of managing your commits while allowing
+you to select via a GUI the files you have changed and commit them
+with a nice commit message. Pull and Push functions are also
+available. HAving said that there is some advantage of using the
+Aptana GUI tools for git as it makes it easier. Aptana Studio has also the
+ability to use emacs key mappings, which is a real nice
+feature. Naturally not all of emacs is supported.
+
+For those new to python an the project we recommend you use it for development.
+
 
 Requirements
 ------------
@@ -171,8 +226,8 @@ Additional Installation for Documentation Generation
 To create the documentation locally, a couple of additional steps are
 needed that have not yet been included into the install fab scripts.
 
-The documentation depends on the autorun
-package. This package can be downloaded and installed as follows::
+The documentation depends on the autorun package. This package can be
+downloaded and installed as follows::
 
     $ cd /tmp
     $ mkdir autorun
@@ -199,23 +254,29 @@ TODO: distribute a standard ttf font and use sh so that the -f font is included 
 YAML files
 ---------------
 
-You will need three yaml files. Samples can be found in the etc source directory. 
+You will need a number of  yaml files. Samples can be found in the etc source directory. 
 More elaborate examples can be obtained from Gregor for the personel that work 
 directly with him on FutureGrid.
 
 Configure the yaml files if changes need to be done.
 
-We need three files in the .futuregrid directory:
+We need the files in the .futuregrid directory:
 
-* cloudmesh.yaml
-* cloudmesh_server.yaml
-* cloumesh_clutser.yaml
+* `cloudmesh.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml>`_
+* `cloudmesh_server.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml>`_
+* `cloumesh_cluster.yaml (ask Gregor)
+* `cloumesh_launcher.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml>`_
+* `cloumesh_bootspec.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml>`_
 
 
 Mongo
 ---------------
 
-To managing mongo db it is important that you use our special fabric commands fro doing so
+Cloudmesh uses mongo for serving information to the different
+services.  To managing mongo db it is important that you use our
+special fabric commands in order to make sure that the database is
+properly initialized and managed. We make this real simple:
+
 To start mongod do::
 
 	fab mongo.start
@@ -232,19 +293,60 @@ To create a simple cluster without usernames, say::
 
 	fab mongo.simple
 	
-To create a cluster with user data base say::
+To create a cluster with user data base say (requires access to LDAP)::
 
 	fab mongo.cloud
 	
 Now you have data in the mongo db and you can use and test it
 
-RabbitMQ
----------
+Starting and testing the Queue Service
+----------------------------------------------------------------------
 
+Our framework uses rabbitMQ and Celery for managing asynchronous
+processes. They require that additional services are running. This is
+only important if you conduct development for dynamic provisioning and
+our launcher framework. All others, probably do not need these
+services. To start them simply say::
 
+   $ fab mq.start
 
+It will ask you for the system password as rabbitMQ runs system
+wide. Next start the queue service with
 
+   $ fab queue.start:1
 
+Now you are all set. and can access even the asynchronous queue services.
+This will start the necessary background services, but also will shut
+down existing services. Essentially it will start a clean development
+environment. 
+
+Starting the Web Service
+----------------------
+
+To start a service you can use::
+
+   fab server.start:/provision/summary/
+
+Which starts the server and goes to the provision summary page. If you
+just use::
+
+   fab server.start
+
+It will be just starting at the home page.
+
+The t.py program
+---------------
+
+(May not work)
+
+There is also a program called t.py in the base dir, so if you say::
+
+    python t.py
+   
+and refresh quickly the /provision/summary page you will see some
+commands queued up. The commands have random state updates and are very
+short as to allow for a quick debugging simulation. One could add the
+refresh of the web page automatically to other test programs.
 
 Developer Tests
 -----------------
@@ -264,6 +366,27 @@ will list the tests in the file test_compute.py. To call an individual test, you
 
 will execute the test which has label in its method name first
 
+
+Cleaning
+=========
+
+sometimes it is important to clean things and start new. This can be done by ::
+
+    fab clean.all
+
+After that you naturally need to do a new install. 
+``fab server.start`` automatically does such an install for you.
+
+
+
+Convenient command shortcuts
+=================================
+
+We are providing a number of useful command that will make your development efforts easier.  These commands are build with fabfiles in the fabfile directory. in the cloudmesh directory, you will find a directory called fabfile that includes the agglomerated helper files. To access them you can use the name of the file, followed by a task that is defined within the file. Next we list the available commands:
+
+.. runblock:: console
+
+   $ fab -l 
 
 
 
@@ -289,12 +412,8 @@ it is best if you do an ssh agent so you can access some more sophisticated serv
 
 
 
-
-
-
-
-CentOS
-================================================================
+Special notes for CentOS
+============================================================
 
 Minimal initial requirements, git, python2.7, and virtualenv
 installed.  If you don't have python2.7, see the manual installation
@@ -325,75 +444,16 @@ PATH, then log out and back in.
 Starting the  RabbitMQ service
 ------------------------------
 
-::
+On centos rabbit mq can be started as a service with as follows::
 
     $ sudo service rabbitmq-server start
 
-
-Aptana Studio
-=============================
-
-from Aptana Studio:
-
-	Aptana studio contains an import function which is convenient for importing it directly from github.
-
-Cleaning
-=========
-
-sometimes it is important to clean things and start new. This can be done by ::
-
-    fab clean.all
-
-
-Convenient command shortcuts
-=================================
-
-We are providing a number of useful command that will make your development efforts easier.  These commands are build with fabfiles in the fabfile directory. in the cloudmesh directory, you will find a directory called fabfile that includes the agglomerated helper files. To access them you can use the name of the file, followed by a task that is defined within the file. Next we list the available commands:
-
-.. runblock:: console
-
-   $ fab -l 
+Note: I am not yet sure if this is needed for development, this is
+probably good at deployment. I am not sure about default
+values. 
 
 
 
-Starting and testing the Queue Service
-----------------------------------------------------------------------
-
-To start the queue service please use the command::
-
-    fab queue.start:True
-
-This will start the necessary background services, but also will shut
-down existing services. Essentially it will start a clean development
-environment. To start a service you can use::
-
-   fab server.start:/provision/summary/
-
-Which starts the server and goes to the provision summary page
-
-There is also a program called t.py in the base dir, so if you say::
-
-    python t.py
-   
-and refresh quickly the /provision/summary page you will see some
-commands queued up. The commands have random state updates and are very
-short as to allow for a quick debugging simulation. One could add the
-refresh of the web page automatically to other test programs.
-
-
-In virtualenv we did:
-
-pip install -r requirements.txt
-pip install python-novaclient
-
-sudo aptitude install mongodb
-
-lsb_release -a
-No LSB modules are available.
-Distributor ID:    Ubuntu
-Description:    Ubuntu 12.10
-Release:    12.10
-Codename:    quantal
 
 
 Making the documentation
@@ -406,10 +466,10 @@ Making the documentation
 
 
    
-Basic Configuration
+Example: Start the GUI for development
 --------------------
 
-open a new terminal and type in::
+Open a new terminal and type in::
 
    fab mongo.start
    
