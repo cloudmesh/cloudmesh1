@@ -50,10 +50,8 @@ def production(status="on"):
         local("sudo iptables -F %s" % PRODUCTION_CHAIN)
         for port in production_ports:
             local("sudo iptables -A " + PORT_RULE % (PRODUCTION_CHAIN, port))
-        local("sudo iptables -A %s -j RETURN" % PRODUCTION_CHAIN)
     elif status == "off":
         local("sudo iptables -F %s" % PRODUCTION_CHAIN)
-        local("sudo iptables -A %s -j RETURN" % PRODUCTION_CHAIN)
     else:
         print usage
 
@@ -69,7 +67,7 @@ def port (number,status="on"):
         return
 
     if status == "on":
-        local("sudo iptables -I " + PORT_RULE % (PORTS_CHAIN, number))
+        local("sudo iptables -A " + PORT_RULE % (PORTS_CHAIN, number))
     elif status == "off":
         local("sudo iptables -D " + PORT_RULE % (PORTS_CHAIN, number))
     else:
