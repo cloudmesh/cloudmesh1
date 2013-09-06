@@ -2,7 +2,7 @@
    :start: 3
 
 **********************************************************************
-Usage Quickstart for a Deployed Version of cloudmesh
+Usage Quickstart 
 **********************************************************************
 
 The following are the current steps to bring all services for
