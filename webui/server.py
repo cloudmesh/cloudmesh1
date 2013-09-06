@@ -232,21 +232,6 @@ def index():
     return render_template('index.html')
 
 
-'''
-# ============================================================
-# ROUTE: LOGIN
-# ============================================================
-
-
-@app.route('/login')
-def login():
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    return render_template('login.html',
-                           updated=time_now)
-                           
-'''
-
-
 
 # ============================================================
 # FILTER: timesince
