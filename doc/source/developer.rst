@@ -463,10 +463,18 @@ values.
 Making the documentation
 ====================
 
-::
+The documentation requiresa couple of add ons that are not included in
+the requirements.txt file. However, they can be installed with::
 
-    fab doc.html
-    fab doc.view
+   $ fab build.sphinx
+
+After that you can create the newest documentation with::
+
+    $ fab doc.html
+
+To view it just say::
+
+    $ fab doc.view
 
 
    
