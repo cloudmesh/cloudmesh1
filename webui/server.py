@@ -54,6 +54,7 @@ all_modules = ['pbs',
                'cloud',
                'workflow',
                'mesh',
+               'mesh_hpc',
                'users']
 
 exclude_modules = ['flatpages']
