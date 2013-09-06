@@ -43,6 +43,7 @@ sys.path.insert(0, '..')
 
 all_modules = ['pbs',
                'flatpages',
+               'users',
                'mesh_hpc',
                'menu_hpc']
 
