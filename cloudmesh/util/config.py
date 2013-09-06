@@ -5,10 +5,11 @@ from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import check_file_for_tabs
 from cloudmesh.util.util import path_expand as cm_path_expand
 import yaml
-
+from string import Template
+            
 log = LOGGER("yaml reader")
 
-def read_yaml_config (filename, check=True):
+def read_yaml_config (filename, check=True, osreplace=True):
     '''
     reads in a yaml file from the specified filename. If check is set to true
     the code will faile if the file does not exist. However if it is set to
@@ -31,9 +32,17 @@ def read_yaml_config (filename, check=True):
                       "Files are not allowed to contain tabs".format(location))
             sys.exit()
         try:
-            f = open(location, "r")
-            data = yaml.safe_load(f)
-            f.close()
+            
+            if osreplace:
+                result = open(location, 'r').read()
+                t = Template(result)
+                result = t.substitute(os.environ)
+                data = yaml.safe_load(result)
+            else:
+                f = open(location, "r")
+                data = yaml.safe_load(f)
+                f.close()
+            
             return data
         except Exception, e:
             log.error("The file {0} contianed a yaml read error".format(filename))
@@ -43,5 +52,6 @@ def read_yaml_config (filename, check=True):
     else:
         log.error("The file {0} does not exists".format(filename))
         sys.exit()
+
 
     return None

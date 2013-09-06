@@ -22,6 +22,8 @@ import yaml
 # import mock_keystone
 
 
+
+
 log = LOGGER("cm_config")
 
 package_dir = os.path.dirname(os.path.abspath(__file__))
@@ -32,9 +34,9 @@ def get_mongo_db(mongo_collection):
     Read in the mongo db information from the cloudmesh_server.yaml
     """
     location = path_expand("~/.futuregrid/cloudmesh_server.yaml")
-    result = open(location, 'r').read()
         
-    mongo_config = yaml.load(result)["mongo"]
+    mongo_config = read_yaml_config (location, check=True)["mongo"] 
+
     mongo_host = mongo_config["host"]
     mongo_port = mongo_config["port"]
     
@@ -51,13 +53,13 @@ class cm_config_file:
     reads the information contained in the file
     ~/.futuregrid/cloudmesh_server.yaml
     """
-    filename = "~/.futuregrid/cloudmesh_server.yaml"
+    filename = path_expand("~/.futuregrid/cloudmesh_server.yaml")
     config = None
 
     def __init__(self, filename=None, kind="server"):
         self.kind = kind
         if filename is not None:
-            self.filename = filename
+            self.filename = path_expand(filename)
         
         self.config = read_yaml_config (self.filename, check=True) 
         
@@ -136,6 +138,10 @@ class cm_config(object):
     # ----------------------------------------------------------------------
 
     default_path = '.futuregrid/cloudmesh.yaml'
+    
+    #
+    # BUG: this may be wrong as we do not want to read from etc but just from ~/.futuregrd/ and a specified file
+    #
     yaml_template_path = os.path.normpath(os.path.join(package_dir, '..', '..', 'etc', 'cloudmesh.yaml'))
     cloudmesh_server_path = os.path.join(os.environ['HOME'], '.futuregrid', 'cloudmesh_server.yaml')
 
@@ -264,11 +270,14 @@ class cm_config(object):
     # ----------------------------------------------------------------------
 
     def read(self, filename):
+        '''
         self.filename = filename
         if os.path.exists(filename):
             f = open(self.filename, "r")
             self.config = yaml.safe_load(f)
             f.close()
+        ''' 
+        self.config = read_yaml_config (filename, check=True)
 
     def write(self, filename=None):
         # pyaml.dump(self.config, f, vspacing=[2, 1, 1])
