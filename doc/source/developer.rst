@@ -1,3 +1,9 @@
+.. sidebar:: Page Contents
+
+   .. contents::
+      :local:
+
+
 .. sectnum::
    :start: 3
 
@@ -24,7 +30,7 @@ It is assumed that the machine has access to LDAP.
 
 ::
 
-    python setup.py install  
+    fab build.install
     fab mongo.start
     fab mongo.cloud     
     fab mq.start
@@ -36,7 +42,7 @@ Without access to LDAP
 
 ::
 
-    python setup.py install
+    fab build.install
     fab mongo.start
     fab mongo.cloud     
     fab mq.start
