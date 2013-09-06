@@ -254,13 +254,17 @@ TODO: distribute a standard ttf font and use sh so that the -f font is included 
 YAML files
 ---------------
 
+
 You will need a number of  yaml files. Samples can be found in the etc source directory. 
 More elaborate examples can be obtained from Gregor for the personel that work 
 directly with him on FutureGrid.
 
 Configure the yaml files if changes need to be done.
 
-We need the files in the .futuregrid directory:
+We to copy and modify the files in the .futuregrid directory. THis has
+to be done only once, but you maust make sure you keep the yaml files
+up to date in case we change them, typically we send an e-mail to all
+develpers when a change occured so you can update yours:
 
 * `cloudmesh.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml>`_
 * `cloudmesh_server.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml>`_
