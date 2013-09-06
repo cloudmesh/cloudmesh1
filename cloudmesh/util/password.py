@@ -3,18 +3,18 @@ import platform
 
 input = raw_input
 
-def ask_for_input(label,init_function,echo=False):
+def ask_for_input(label, init_function, echo=False):
     '''
     A generic input function that asks for a string and returns it after typoing it in 
     :param label: the label 
     :param init_function: a function that is used to initialize the value
     :param echo: if True, the typed in value is echoed. default is False
     '''
-    result = input("{0} [{1}]: ".format(label,init_function()))
+    result = input("{0} [{1}]: ".format(label, init_function()))
     if not result:
         result = init_function()
     if echo:
-        print "{0}: {1}".format(label,result)
+        print "{0}: {1}".format(label, result)
     return result
     
 def get_host():

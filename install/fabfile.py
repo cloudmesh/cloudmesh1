@@ -33,7 +33,7 @@ def deploy():
         print "OS distribution not supported; please see documatation for manual installation instructions."
         sys.exit()
 
-    #install()
+    # install()
 
 @task
 def download():
@@ -50,7 +50,7 @@ def install_mongodb():
     if is_ubuntu():
         install_packages(["mongodb"])
     elif is_centos():
-        install_packages(["mongodb", 
+        install_packages(["mongodb",
                           "mongodb-server"])
     elif sys.platform == "darwin":
         local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
@@ -82,12 +82,12 @@ def ubuntu():
     needed packages before we install cloudmesch'''
     
     local ("sudo apt-get update")
-    install_packages(["git", 
-                      "mercurial", 
-                      "curl", 
-                      "python-virtualenv", 
-                      "python-dev", 
-                      "libldap2-dev", 
+    install_packages(["git",
+                      "mercurial",
+                      "curl",
+                      "python-virtualenv",
+                      "python-dev",
+                      "libldap2-dev",
                       "libsasl2-dev"])
     install_mongodb()
     install_packages(["rabbitmq-server"])
@@ -95,14 +95,14 @@ def ubuntu():
 
 def centos():
     install_packages (["git",
-                       "mercurial", 
-                       "wget", 
-                       "gcc", 
-                       "make", 
-                       "readline-devel", 
-                       "zlib-devel", 
-                       "openssl-devel", 
-                       "openldap-devel", 
+                       "mercurial",
+                       "wget",
+                       "gcc",
+                       "make",
+                       "readline-devel",
+                       "zlib-devel",
+                       "openssl-devel",
+                       "openldap-devel",
                        "bzip2-devel"])
     install_mongodb()
     install_packages(["rabbitmq-server"])

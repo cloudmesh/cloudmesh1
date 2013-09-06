@@ -1,5 +1,5 @@
 
-def ascii_menu(title=None,menu_list=None):
+def ascii_menu(title=None, menu_list=None):
     '''
     creates a simple ASCII menu from a list of tuples containing a label and a functions refernec. The function should not use parameters.
     :param title: the title of the menu
@@ -11,13 +11,13 @@ def ascii_menu(title=None,menu_list=None):
     n = len(menu_list)
     
     def display():
-        index=1
+        index = 1
         print
         print title
         print len(title) * "="
         print
-        for (label,function) in menu_list:
-            print "    {0} - {1}".format(index,label)
+        for (label, function) in menu_list:
+            print "    {0} - {1}".format(index, label)
             index += 1
         print "    q - quit"
         print
@@ -25,7 +25,7 @@ def ascii_menu(title=None,menu_list=None):
 
     display()
     while True:
-        result = input("Select between {0} - {1}: ".format(1,n))
+        result = input("Select between {0} - {1}: ".format(1, n))
         print "<{0}>".format(result) 
         if result == "q":
             break
@@ -33,7 +33,7 @@ def ascii_menu(title=None,menu_list=None):
             try:
                 result = int(result) - 1
                 if result > 0 and result < n:
-                    (label,f) = menu_list[result]   
+                    (label, f) = menu_list[result]   
                     print "EXECUTING:", label, f.__name__
                     f()
                 else:

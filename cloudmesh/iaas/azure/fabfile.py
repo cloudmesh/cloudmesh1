@@ -166,7 +166,7 @@ def _buildAzureImageDict():
     for line in cleanLines:
         imageNameCounter = imageNameCounter + 1
         l = []
-        #(name, id, os) = line.split()
+        # (name, id, os) = line.split()
         # l.append(name)
         # l.append(id)
         # l.append(os)
