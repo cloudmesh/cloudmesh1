@@ -440,9 +440,14 @@ def login():
                            error=error,
                            type="Can not reach LDAP",
                            msg="")
-
         
-        if user is None:
+        try:
+            a = g.user
+            user_exists = True
+        except:
+            user_exists = False
+
+        if not user_exists:
             form.error = 'Login Invalid'
         elif user['cm_user_id'] != form.username.data:
             form.error = 'Login Invalid'
