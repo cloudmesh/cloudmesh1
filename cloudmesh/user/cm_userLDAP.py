@@ -20,10 +20,10 @@ class cm_userLDAP (CMUserProviderBaseType):
     
     def get_config(self, **kwargs):
         
-        if not kwargs.has_key('host'):#if kwargs['host'] is None:
+        if not kwargs.has_key('host'):  # if kwargs['host'] is None:
             self.host = cm_config_server().get("ldap.hostname")
     
-        if not kwargs.has_key('ldapcert'):#if kwargs['ldapcert'] is None:
+        if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
             self.cert = cm_config_server().get("ldap.cert")
             
             
@@ -36,9 +36,9 @@ class cm_userLDAP (CMUserProviderBaseType):
         
         # print "'" + userId + "':'" + authProvider + "':'" + authCred + "'"
         
-        #print adminuser, adminpass
+        # print adminuser, adminpass
         userdn = "uid=" + userId + ",ou=People,dc=futuregrid,dc=org"
-        #print userdn
+        # print userdn
         ldapconn = ldap.initialize("ldap://{0}".format(self.host))
         log.info("Initializing the LDAP connection to server: " + self.host)
         try:
@@ -50,18 +50,18 @@ class cm_userLDAP (CMUserProviderBaseType):
             log.info("Your username or password is incorrect. Cannot bind.")
             ret = False
         except ldap.LDAPError:
-            log.info("User '" + userId + "' failed to authenticate due to LDAP error. The user may not exist."+ str(sys.exc_info()))
+            log.info("User '" + userId + "' failed to authenticate due to LDAP error. The user may not exist." + str(sys.exc_info()))
             ret = False
         except:
             ret = False
-            log.info("User '" + userId + "' failed to authenticate due to possible password encryption error."+str(sys.exc_info()))
+            log.info("User '" + userId + "' failed to authenticate due to possible password encryption error." + str(sys.exc_info()))
         finally:
             log.info("Unbinding from the LDAP.")
             ldapconn.unbind()
         return ret
     
     def __init__(self, collection="user"):
-        super( cm_userLDAP, self ).__init__()
+        super(cm_userLDAP, self).__init__()
 
     def refresh(self):
         '''
@@ -81,16 +81,16 @@ class cm_userLDAP (CMUserProviderBaseType):
         :param type: the type of the provider, overwrites a possibly given type in params
         :param params: a dictionary describing wht needs to be poassed to the service that provides user information
         '''
-        #kwargs host=None, ldapcert=None)
-        provider = {'type': type, 
+        # kwargs host=None, ldapcert=None)
+        provider = {'type': type,
                     'name': name}
-        for k,v in kwargs.iteritems():
+        for k, v in kwargs.iteritems():
             provider[k] = v
         
-        if not kwargs.has_key('host'):#if kwargs['host'] is None:
+        if not kwargs.has_key('host'):  # if kwargs['host'] is None:
             self.host = cm_config_server().get("ldap.hostname")
     
-        if not kwargs.has_key('ldapcert'):#if kwargs['ldapcert'] is None:
+        if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
             self.cert = cm_config_server().get("ldap.cert")
             
         ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, self.cert)
@@ -106,7 +106,7 @@ class cm_userLDAP (CMUserProviderBaseType):
         self.disconnect()
 
         
-    def get(self,username):
+    def get(self, username):
         '''
         returns the dict associated with the username
         :param username:
@@ -125,7 +125,7 @@ class cm_userLDAP (CMUserProviderBaseType):
         return self.users
             
     def _getUsers(self):
-        #print "LDAP query..."
+        # print "LDAP query..."
         try:
             # ldap constant
             ldapbasedn = "dc=futuregrid,dc=org"
@@ -137,7 +137,7 @@ class cm_userLDAP (CMUserProviderBaseType):
             # retrieve all ldap users
             ldapresults = list(self.ldapconn.search_s(ldapbasedn, ldapscope, ldapfilter, ldapattribs))
             for ldapresult in ldapresults:
-                #print ldapresult[1]
+                # print ldapresult[1]
                 # a result may not have 'mail' attribute, but valid account must have
                 if ldapresult[1].has_key('mail'):
                     ldapmail = ldapresult[1]['mail'][0]
@@ -173,7 +173,7 @@ class cm_userLDAP (CMUserProviderBaseType):
 
 def main():
     idp = cm_userLDAP (CMUserProviderBaseType)
-    idp.connect("fg-ldap","ldap")
+    idp.connect("fg-ldap", "ldap")
     idp.refresh()
     users = idp.list()
 
