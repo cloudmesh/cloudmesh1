@@ -100,7 +100,7 @@ def main():
     # This secion deals with handeling "cm config" related commands
 
     ######################################################################
-    is_config =  arguments['config'] != None
+    is_config = arguments['config'] != None
 
     if is_config:
 
@@ -208,7 +208,7 @@ def main():
             newpass1 = getpass("New password: ")
             newpass2 = getpass("New password (again): ")
 
-            #TODO: some kind of password strength checking?
+            # TODO: some kind of password strength checking?
             if newpass1 == newpass2:
                 config.change_own_password(name, oldpass, newpass1)
             else:
@@ -227,7 +227,7 @@ def main():
                 print "\nPasswords may be incorrect if you changed any outside of cloudmesh."
             sys.exit(0)
 
-        if arguments['dump'] or name =='dump':
+        if arguments['dump'] or name == 'dump':
             format = arguments['--format']
             if format == 'yaml':
                 print yaml.dump(config, default_flow_style=False, indent=4)

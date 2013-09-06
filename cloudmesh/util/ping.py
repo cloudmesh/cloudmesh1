@@ -1,15 +1,15 @@
 from sh import ping as sh_ping
 
-#from pprint import pprint
+# from pprint import pprint
 
 def ping(host):
     try:
-        r = sh_ping("-o", "-c","1",host).strip().split("\n")
+        r = sh_ping("-o", "-c", "1", host).strip().split("\n")
     except:
        pass
    
     try: 
-        (attributes, values) = r[-1].replace("round-trip","").strip().split("=") 
+        (attributes, values) = r[-1].replace("round-trip", "").strip().split("=") 
         attributes = attributes.strip().split("/")
         values = values.strip().split("/")
     
@@ -21,6 +21,6 @@ def ping(host):
     data['host'] = host        
     return data
 
-#host = "india.futuregrid.org"
+# host = "india.futuregrid.org"
 
-#print ping(host)
+# print ping(host)

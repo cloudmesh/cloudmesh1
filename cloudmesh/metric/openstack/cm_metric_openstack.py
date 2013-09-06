@@ -17,14 +17,14 @@ class cm_metric_openstack:
         :param query:
         '''
         if values is None:
-            return self.db_qstat.update(query,upsert=True) 
+            return self.db_qstat.update(query, upsert=True) 
         else:
             print query
             print values
-            return self.db_qstat.update(query, values,upsert=True) 
+            return self.db_qstat.update(query, values, upsert=True) 
 
     
-    def insert(self,element):
+    def insert(self, element):
         self.db_qstat.insert(element)
 
     def clear(self):
@@ -44,18 +44,18 @@ class cm_metric_openstack:
         '''
         return self.db_qstat.find_one(query) 
     
-    def create_id(self, cluster,vm):
-        return "cm-metric-{0}-{1}".format(cluster,vm)
+    def create_id(self, cluster, vm):
+        return "cm-metric-{0}-{1}".format(cluster, vm)
 
-    def cm_insert(self,element):
+    def cm_insert(self, element):
         e = cm_element(element)
         self.db_qstat.insert(e)
     
     def cm_element(self, d):
         element = dict(d)
             
-        cluster ="pass me?"
-        vm ="pass me?"
+        cluster = "pass me?"
+        vm = "pass me?"
         refresh = "time when the element was refreshed"
         element = element.upodate({'cm_cluster': name,
                                     'cm_id': self.create(cluster, vm),
