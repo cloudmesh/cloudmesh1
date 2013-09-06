@@ -532,5 +532,13 @@ before you start the server. On ubuntu we found:::
 
 works well
 
+Example: HPC queue server
+===================
+
+In case you do not need to work with a cloud, you can also use our hpc
+queue server. That inspects certain queues. This can be done by
+specifing a specific server at startup called hpc::
+
+    $ fab server.start:server=hpc
 
 
