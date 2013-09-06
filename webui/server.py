@@ -5,7 +5,7 @@ from ConfigParser import SafeConfigParser
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.roles import Roles
-#from cloudmesh.util.webutil import setup_imagedraw
+# from cloudmesh.util.webutil import setup_imagedraw
 from cloudmesh.user.cm_userLDAP import cm_userLDAP 
 from datetime import datetime
 
@@ -13,7 +13,7 @@ from cloudmesh.util.util import path_expand
 from cloudmesh.util.util import cond_decorator
 
 from flask import Flask, render_template, flash, send_from_directory, redirect, g
-#from flask.ext.autoindex import AutoIndex
+# from flask.ext.autoindex import AutoIndex
 from flask_flatpages import FlatPages
 
 from flask import Flask, current_app, request, session
@@ -208,7 +208,7 @@ def admin_index():
 @app.errorhandler(404)
 def page_not_found(error):
     error = 'This page does not exist {0}'.format(404)
-    return render_template('error.html', 
+    return render_template('error.html',
                            error=error,
                            type="Page not found",
                            msg="")
@@ -216,7 +216,7 @@ def page_not_found(error):
 @app.errorhandler(403)
 def page_not_found(error):
     error = 'Access denied {0}'.format(403)
-    return render_template('error.html', 
+    return render_template('error.html',
                            error=error,
                            type="Access Denied",
                            msg="You need to Login first")
@@ -230,7 +230,6 @@ def page_not_found(error):
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 
 # ============================================================
@@ -343,7 +342,7 @@ def page(path):
 
 if cloudmesh.with_login:
     idp = cm_userLDAP ()
-    idp.connect("fg-ldap","ldap")
+    idp.connect("fg-ldap", "ldap")
 
 """
 @app.before_request
@@ -378,8 +377,8 @@ def on_identity_loaded(sender, identity):
 @login_manager.user_loader
 def load_user(id):
     try:
-        user =  idp.find_one({'cm_user_id': id})
-        #load from yaml the roles and check them
+        user = idp.find_one({'cm_user_id': id})
+        # load from yaml the roles and check them
         role_server = Roles()
         roles = role_server.get(id)
         return User(id, id, roles)
@@ -425,12 +424,12 @@ def login():
         form.error = None                
         try:
             idp = cm_userLDAP ()
-            idp.connect("fg-ldap","ldap")
-            user =  idp.find_one({'cm_user_id': form.username.data})
+            idp.connect("fg-ldap", "ldap")
+            user = idp.find_one({'cm_user_id': form.username.data})
         except Exception, e:
             error = "LDAP server not reachable"
             error += str(e)
-            return render_template('error.html', 
+            return render_template('error.html',
                            error=error,
                            type="Can not reach LDAP",
                            msg="")
@@ -441,12 +440,12 @@ def login():
             form.error = 'Login Invalid'
         elif user['cm_user_id'] != form.username.data:
             form.error = 'Login Invalid'
-        elif idp.authenticate(form.username.data,form.password.data):
+        elif idp.authenticate(form.username.data, form.password.data):
             print "LOGIN USER"
 
             g.user = load_user(form.username.data)
                         
-            ret= login_user(g.user)
+            ret = login_user(g.user)
             
             identity_changed.send(current_app._get_current_object(),
                                   identity=Identity(g.user.id))
@@ -478,7 +477,7 @@ if __name__ == "__main__":
     # setup_imagedraw()
     # setup_plugins()
     # setup_noderenderers()
-    config=cm_config_server()
+    config = cm_config_server()
     web_host = config.get('webui.host')
     web_port = config.get('webui.port')
     app.run(host=web_host, port=web_port)
