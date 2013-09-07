@@ -1,41 +1,43 @@
 cloudmesh:
     active:
-    - sierra-openstack-grizzly
-    - india-openstack-essex
+    - sierra_openstack_grizzly
+    - india_openstack_essex
     hpc:
         username: {{data.profile.username}}
     clouds:
-        india-openstack-essex:
+        india_openstack_essex:
             cm_host: india.futuregrid.org
+            cm_heading: India Openstack, Essex
             cm_label: ios
             cm_type: openstack
             cm_type_version: essex
             credentials:
                 OS_AUTH_URL: http://149.165.146.50:5000/v2.0
                 OS_CACERT: None
-                OS_PASSWORD: {{data.clouds['india-openstack-essex'].credentials.OS_PASSWORD}}
+                OS_PASSWORD: {{data.clouds['india_openstack_essex'].credentials.OS_PASSWORD}}
                 OS_TENANT_NAME: member
                 OS_USERNAME: {{data.profile.username}}
                 OS_VERSION: essex
             default:
                 flavor: m1.tiny
                 image: 717d1dc8-3ed4-4758-9678-8f6421e1fbf2
-        sierra-openstack-grizzly:
+        sierra_openstack_grizzly:
             cm_host: sierra.futuregrid.org
-            cm_label: ios
+            cm_heading: Sierra OpenStack, Grizzly
+            cm_label: sos
             cm_type: openstack
             cm_type_version: grizzly
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
-                OS_PASSWORD: {{data.clouds['sierra-openstack-grizzly'].credentials.OS_PASSWORD}}
+                OS_PASSWORD: {{data.clouds['sierra_openstack_grizzly'].credentials.OS_PASSWORD}}
                 OS_TENANT_NAME: {{data.projects.default}}
                 OS_USERNAME: {{data.profile.username}}
                 OS_VERSION: grizzly
             default:
                 flavor: m1.tiny
                 image: 4199d988-0833-4497-a473-96fc456fac2f
-    default: sierra-openstack-grizzly
+    default: sierra_openstack_grizzly
     index: 1
     keys:
         default: {{data['keys'].default}}
@@ -47,7 +49,7 @@ cloudmesh:
     profile:
         address:
         - TBD
-        e-mail: {{data.profile['e-mail']}}
+        e_mail: {{data.profile['e_mail']}}
         firstname: {{data.profile.firstname}}
         gid: {{data.profile.gid}}
         lastname: {{data.profile.lastname}}

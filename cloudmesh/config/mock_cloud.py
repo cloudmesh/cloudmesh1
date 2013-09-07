@@ -28,7 +28,7 @@ class mock_cloud:
                     'project': 'fg-181'
                 }
             }
-        elif self.cloudname == 'sierra-openstack-grizzly':
+        elif self.cloudname == 'sierra_openstack_grizzly':
             self._data = {
                 'cm_label': 'ios',
                 'cm_host': 'abc.futuregrid.org',

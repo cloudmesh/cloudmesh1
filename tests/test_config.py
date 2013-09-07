@@ -118,13 +118,13 @@ class Test_cloudmesh:
 
     def test05_india(self):
         HEADING()
-        result = self.config.get('india-openstack-essex')
+        result = self.config.get('india_openstack_essex')
         assert result["OS_VERSION"] == "essex"
 
     def test06_keys_india_openstack(self):
         HEADING()
         keys = self.config.keys()
-        assert 'india-openstack-essex' in keys
+        assert 'india_openstack_essex' in keys
 
     """
     def test07_keys_india_eucalyptus(self):
@@ -142,27 +142,27 @@ class Test_cloudmesh:
     def test08_keys_grizzly_openstack(self):
         HEADING()
         keys = self.config.keys()
-        assert 'sierra-openstack-grizzly' in keys
+        assert 'sierra_openstack_grizzly' in keys
 
     def test10_grizzly(self):
         HEADING()
-        result = self.config.get('sierra-openstack-grizzly')
+        result = self.config.get('sierra_openstack_grizzly')
         assert result["OS_VERSION"] == 'grizzly'
 
     def test11_grizzly(self):
         HEADING()
-        result = self.config.get('sierra-openstack-grizzly', expand=True)
+        result = self.config.get('sierra_openstack_grizzly', expand=True)
         assert result["OS_VERSION"] == 'grizzly'
 
     def test12_clouds(self):
         HEADING()
         clouds = self.config.clouds()
         assert isinstance(clouds, dict)
-        assert 'india-openstack-essex' in clouds
+        assert 'india_openstack_essex' in clouds
 
     def test13_cloud(self):
         HEADING()
-        india_cloud = self.config.cloud('india-openstack-essex')
+        india_cloud = self.config.cloud('india_openstack_essex')
         assert isinstance(india_cloud, dict)
         assert 'cm_host' in india_cloud
         assert india_cloud['cm_host'] == 'india.futuregrid.org'
@@ -170,9 +170,9 @@ class Test_cloudmesh:
     def test14_cloud_default(self):
         HEADING()
         assert self.config.cloud_default(
-            'india-openstack-essex', 'flavor') == 'm1.tiny'
+            'india_openstack_essex', 'flavor') == 'm1.tiny'
         assert self.config.cloud_default(
-            'india-openstack-essex', 'not defined') is None
+            'india_openstack_essex', 'not defined') is None
 
     def test15_project_default(self):
         HEADING()
@@ -228,5 +228,5 @@ class Test_cloudmesh:
     """
     def test22_filter(self):
         HEADING()
-        print self.config.get_filter('sierra-openstack-grizzly')
+        print self.config.get_filter('sierra_openstack_grizzly')
     """

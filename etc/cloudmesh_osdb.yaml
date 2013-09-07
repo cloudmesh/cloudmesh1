@@ -1,6 +1,6 @@
 cloud:
 
-    sierra-openstack-grizzly:
+    sierra_openstack_grizzly:
         mysqldb_userid :
         mysqldb_passwd :
         mysqldb_hostname :
@@ -8,7 +8,7 @@ cloud:
         mysqldb_dbname : 
         mysqldb_tables : ["instance_faults"]
 
-    india-openstack-essex:
+    india_openstack_essex:
         mysqldb_userid :
         mysqldb_passwd :
         mysqldb_hostname :

@@ -20,7 +20,7 @@ class cloudmesh_cloud:
 
     @property
     def email(self):
-        return self._profile['e-mail']
+        return self._profile['e_mail']
 
     @property
     def cloudname(self):

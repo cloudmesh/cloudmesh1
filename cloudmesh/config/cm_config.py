@@ -217,7 +217,7 @@ class cm_config(object):
             'firstname': user.firstname,
             'lastname': user.lastname,
             'phone': user.phone,
-            'e-mail': user.email,
+            'e_mail': user.email,
             'address': user.address
         }
 
@@ -382,11 +382,11 @@ class cm_config(object):
 
     @property
     def email(self):
-        return self.config['cloudmesh']['profile']['e-mail']
+        return self.config['cloudmesh']['profile']['e_mail']
 
     @email.setter
     def email(self, value):
-        self.config['cloudmesh']['profile']['e-mail'] = str(value)
+        self.config['cloudmesh']['profile']['e_mail'] = str(value)
 
     @property
     def address(self):
