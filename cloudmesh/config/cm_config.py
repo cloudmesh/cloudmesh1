@@ -66,17 +66,26 @@ class cm_config_file:
     def __str__(self):
         return json.dumps(self.config, indent=4)
 
+    def _notify_of_error(self, keys):
+        log.error('Configuration file error in ' + self.filename)
+        log.error("Your configuration file does not contain the proper variable")
+        key_string = "[" + ']['.join(keys) + "]"
+        log.error("Variable requested " + key_string)
+        indent = ""
+        last_index = len(keys) -1
+        for i, k in enumerate(keys):
+            if i == last_index:
+                log.error(indent + k + ": <- this value is missing")
+            else:
+                log.error(indent + k + ":")
+            indent = indent + "    "     
+        
     def __getitem__(self, *mykeys):        
         try:
             item = self.get(mykeys[0])
         except:
-             log.error('kind of cm_config_file {0}'.format(self.kind))
-             log.error('calling cm_config_file.get("' + '", "'.join(mykeys) + '")')
-             log.error("Your configuration file does not contain the proper variable")
-             key_string = "[" + ']['.join(mykeys) + "]"
-             log.error("Variable requested" + mykey_string)
-             # log.error("Error occured while accessing " + v)
-             sys.exit()
+            self._notify_of_error(mykeys)
+            sys.exit()
         return item
 
     def get(self, *keys):
@@ -98,12 +107,7 @@ class cm_config_file:
             try:
                element = element[v]
             except:
-                # log.error('kind of cm_config_file {0}'.format(kind))
-                log.error('calling cm_config_file.get("' + '", "'.join(keys) + '")')
-                log.error("Your configuration file does not contain the proper variable")
-                key_string = "[" + ']['.join(keys) + "]"
-                log.error("Variable requested" + key_string)
-                log.error("Error occured while accessing " + v)
+                self._notify_of_error(keys)
                 sys.exit()
         return element
 
