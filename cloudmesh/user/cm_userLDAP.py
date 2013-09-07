@@ -37,7 +37,8 @@ class cm_userLDAP (CMUserProviderBaseType):
         # print "'" + userId + "':'" + authProvider + "':'" + authCred + "'"
         
         # print adminuser, adminpass
-        userdn = "uid=" + userId + ",ou=People,dc=futuregrid,dc=org"
+        basedn = "ou=People,dc=futuregrid,dc=org"
+        userdn = "uid={0},{1}".format(uid,basedn)
         # print userdn
         ldapconn = ldap.initialize("ldap://{0}".format(self.host))
         log.info("Initializing the LDAP connection to server: " + self.host)
