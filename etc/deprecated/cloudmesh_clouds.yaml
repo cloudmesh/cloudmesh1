@@ -3,7 +3,7 @@
 # properties, etc.  This information should ideally be pulled from
 # inventory?
 
-sierra-openstack-grizzly:
+sierra_openstack_grizzly:
     cm_label: ios
     cm_host: sierra.futuregrid.org
     cm_type: openstack
@@ -38,7 +38,7 @@ sierra-openstack-grizzly:
         flavor: m1.small
         image: futuregrid/ubuntu-12.04
 
-india-openstack-essex:
+india_openstack_essex:
     cm_label: ios
     cm_host: india.futuregrid.org
     cm_type: openstack

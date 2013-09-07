@@ -100,12 +100,12 @@ class ldap_user:
     @property
     def activeclouds(self):
         """Not yet implemented"""
-        return ['sierra-openstack-grizzly', 'india-openstack-essex']
+        return ['sierra_openstack_grizzly', 'india_openstack_essex']
 
     @property
     def defaultcloud(self):
         """Not yet implemented"""
-        return 'sierra-openstack-grizzly'
+        return 'sierra_openstack_grizzly'
 
     @property
     def activeprojects(self):

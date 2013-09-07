@@ -80,7 +80,7 @@ class GitInfo:
   
     def stat(self, email):
         '''
-        returns a statistick of a git author with the given e-mail.
+        returns a statistick of a git author with the given e_mail.
         
         :param email: name of the author
         '''

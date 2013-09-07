@@ -31,6 +31,6 @@ class Test_Users:
         print self.usersobj.info("gvonlasz")
         print self.usersobj.info("nonexistuser")
         print self.usersobj.info("nova")
-        print self.usersobj.info("fuwang", ["sierra-openstack-grizzly"])
+        print self.usersobj.info("fuwang", ["sierra_openstack_grizzly"])
         print self.usersobj.info("fuwang", ["cloud-non-exist"])
 

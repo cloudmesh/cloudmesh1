@@ -47,11 +47,11 @@ class Test_cloudmesh_keystone:
         assert 'security' in cmdata
         assert 'default' in cmdata['keys']
         assert 'india-openstack' in cmdata['clouds']
-        assert 'sierra-openstack-grizzly' in cmdata['clouds']
-        assert 'credentials' in cmdata['clouds']['sierra-openstack-grizzly']
-        assert cmdata['clouds']['sierra-openstack-grizzly'][
+        assert 'sierra_openstack_grizzly' in cmdata['clouds']
+        assert 'credentials' in cmdata['clouds']['sierra_openstack_grizzly']
+        assert cmdata['clouds']['sierra_openstack_grizzly'][
             'credentials']['OS_VERSION'] == 'grizzly'
-        assert cmdata['clouds']['sierra-openstack-grizzly'][
+        assert cmdata['clouds']['sierra_openstack_grizzly'][
             'credentials']['OS_USERNAME'] == username
         assert cmdata['prefix'] == username
 
@@ -66,11 +66,11 @@ class Test_cloudmesh_keystone:
             'cloudmesh']['active']
         self.config.initialize(username)
         cmdata = self.config.data['cloudmesh']
-        assert cmdata['clouds']['sierra-openstack-grizzly'][
+        assert cmdata['clouds']['sierra_openstack_grizzly'][
             'credentials']['OS_VERSION'] == 'grizzly'
-        assert cmdata['clouds']['sierra-openstack-grizzly'][
+        assert cmdata['clouds']['sierra_openstack_grizzly'][
             'credentials']['OS_USERNAME'] == username
         assert 'OS_PASSWORD' in cmdata['clouds'][
-            'sierra-openstack-grizzly']['credentials']
+            'sierra_openstack_grizzly']['credentials']
         assert 'project' in cmdata['clouds'][
-            'sierra-openstack-grizzly']['default']
+            'sierra_openstack_grizzly']['default']

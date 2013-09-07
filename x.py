@@ -26,8 +26,8 @@ p.write ("abc", {"saturn": "jupiter"})
 pprint (p.get("abc"))
 
 
-name = "sierra-openstack-grizzly"
-#name = "india-openstack-essex"
+name = "sierra_openstack_grizzly"
+#name = "india_openstack_essex"
 
 credential = p.server.config["keystone"][name]
 

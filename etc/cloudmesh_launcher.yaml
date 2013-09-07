@@ -1,5 +1,5 @@
 recipies:
-    india-openstack-essex:
+    india_openstack_essex:
         - name: Slurm Cluster
           description: Deploys a Slurm cluster. One of the Vms is the Master,while the others register with the master as worker nodes. The master will be the first node in the list
           types:
@@ -20,7 +20,7 @@ recipies:
           types:
               - vm
               - baremetal
-    sierra-openstack-grizzly:
+    sierra_openstack_grizzly:
         - name: Slurm Cluster
           description: Deploys a Slurm cluster. One of the Vms is the Master,while the others register with the master as worker nodes. The master will be the first node in the list
           types:
@@ -42,10 +42,10 @@ recipies:
               - vm
               - baremetal
 columns:
-    india-openstack-essex:
+    india_openstack_essex:
         - name
         - description
-    sierra-openstack-grizzly:
+    sierra_openstack_grizzly:
         - name
         - description
 

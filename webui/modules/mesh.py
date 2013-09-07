@@ -56,9 +56,9 @@ def mongo_images():
               u'base_image_ref': u'1a5fd55e-79b9-4dd5-ae9b-ea10ef3156e9', 
               u'owner_id': u'1ae6813a3a6d4cebbeb1912f6d139ad0'}
     server {u'id': u'16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'links': [{u'href': u'http://198.202.120.83:8774/v1.1/1ae6813a3a6d4cebbeb1912f6d139ad0/servers/16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'rel': u'self'}, {u'href': u'http://198.202.120.83:8774/1ae6813a3a6d4cebbeb1912f6d139ad0/servers/16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'rel': u'bookmark'}]}
-    cm_id sierra-openstack-grizzly-images-menghan/custom-utuntu-01
+    cm_id sierra_openstack_grizzly-images-menghan/custom-utuntu-01
     cm_refresh 2013-08-06T21-44-13Z
-    cm_cloud sierra-openstack-grizzly
+    cm_cloud sierra_openstack_grizzly
     minRam 0
     progress 100
     cm_kind images
@@ -152,9 +152,9 @@ def mongo_flavors():
     ram 2048
     cm_refresh 2013-08-06T21-44-13Z
     OS-FLV-DISABLED:disabled False
-    cm_id sierra-openstack-grizzly-flavors-m1-small
+    cm_id sierra_openstack_grizzly-flavors-m1-small
     vcpus 1
-    cm_cloud sierra-openstack-grizzly
+    cm_cloud sierra_openstack_grizzly
     swap 
     os-flavor-access:is_public True
     rxtx_factor 1.0
@@ -205,8 +205,8 @@ def mongo_users():
     clouds = {}
     clouds = c.users()
     print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
-    print len(clouds['india-openstack-essex'])
-    print len(clouds['sierra-openstack-grizzly'])
+    print len(clouds['india_openstack_essex'])
+    print len(clouds['sierra_openstack_grizzly'])
     
     
     """
@@ -223,7 +223,7 @@ def mongo_users():
                         [ "Name", "name"],
                         [ "Id" , "id"],
                         [ "TenentId" , "tenantId"],
-                        [ "e-mail" , "e-mail"],
+                        [ "e-mail" , "e_mail"],
                         [ "enabled" , "enabled"],
                         [ "Cloud" , "cloud"],
                         ['cm_cloud', "cm_cloud"],
@@ -236,7 +236,7 @@ def mongo_users():
                         [ "Name", "name"],
                         [ "Id" , "id"],
                         [ "TenentId" , "tenantId"],
-                        [ "e-mail" , "e-mail"],
+                        [ "e-mail" , "e_mail"],
                         [ "enabled" , "enabled"],
                         [ "Cloud" , "cloud"],
                         ['cm_cloud', "cm_cloud"],

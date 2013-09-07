@@ -16,7 +16,7 @@ class mock_user:
                 'firstname': 'Gregor',
                 'lastname': 'von Laszewski',
                 'phone': '812 ...',
-                'e-mail': 'laszewski@gmail.com',
+                'e_mail': 'laszewski@gmail.com',
                 'address': ['Indiana University', 'Bloomington, IN 47408']
             },
             'keys': {
@@ -29,8 +29,8 @@ class mock_user:
                 'completed': ['fg-81', 'fg-102'],
                 'default': 'fg-82'
             },
-            'active': ['sierra-openstack-grizzly', 'india-openstack'],
-            'default': 'sierra-openstack-grizzly'
+            'active': ['sierra_openstack_grizzly', 'india-openstack'],
+            'default': 'sierra_openstack_grizzly'
         }
 
     @property
@@ -61,7 +61,7 @@ class mock_user:
 
     @property
     def email(self):
-        return self.data['profile']['e-mail']
+        return self.data['profile']['e_mail']
 
     @property
     def address(self):

@@ -47,7 +47,7 @@ def get(token, url, msg):
     
 
 config = cm_config()
-credential = config.credential('sierra-openstack-grizzly')
+credential = config.credential('sierra_openstack_grizzly')
 
 #pprint(credential)
 
