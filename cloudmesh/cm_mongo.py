@@ -18,7 +18,7 @@ from cloudmesh.config.cm_config import get_mongo_db
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
 
-log = LOGGER('cm_mongo')
+log = LOGGER(__file__)
 
 
 try:

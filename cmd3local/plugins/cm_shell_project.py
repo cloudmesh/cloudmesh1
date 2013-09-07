@@ -9,7 +9,7 @@ from cmd3.shell import command
 from cloudmesh.config.cm_projects import cm_projects
 from cloudmesh.util.logger import LOGGER
 
-log = LOGGER('project shell')
+log = LOGGER(__file__)
 
 class cm_shell_project:
 

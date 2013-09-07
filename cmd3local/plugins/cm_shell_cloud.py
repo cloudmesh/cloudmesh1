@@ -8,7 +8,7 @@ from cmd3.shell import command
 
 from cloudmesh.util.logger import LOGGER
 
-log = LOGGER('cloud shell')
+log = LOGGER(__file__)
 
 class cm_shell_cloud:
 

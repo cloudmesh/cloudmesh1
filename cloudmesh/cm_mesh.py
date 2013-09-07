@@ -20,7 +20,7 @@ from cloudmesh.util.logger import LOGGER
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
 
-log = LOGGER('cloudmesh')
+log = LOGGER(__file__)
 
 
 # import shelve

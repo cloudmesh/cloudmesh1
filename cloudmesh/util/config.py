@@ -7,7 +7,7 @@ from cloudmesh.util.util import path_expand as cm_path_expand
 import yaml
 from string import Template
             
-log = LOGGER("yaml reader")
+log = LOGGER(__file__)
 
 def read_yaml_config (filename, check=True, osreplace=True):
     '''

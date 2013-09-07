@@ -10,7 +10,7 @@ from cloudmesh.util.util import path_expand
 from cloudmesh.util.config import read_yaml_config
 
 
-log = LOGGER('inventory')
+log = LOGGER(__file__)
 
 inventory_config_filename = "~/.futuregrid/cloudmesh-db.yaml"
 

@@ -11,7 +11,7 @@ from cloudmesh.util.logger import LOGGER
 from cloudmesh.inventory.inventory import Inventory
 from mongoengine import *
 
-log = LOGGER('inventory shell')
+log = LOGGER(__file__)
 
 class cm_shell_inventory:
 

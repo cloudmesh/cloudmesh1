@@ -8,7 +8,7 @@ import sys
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
 
-log = LOGGER('cm_user')
+log = LOGGER(__file__)
 
 
 

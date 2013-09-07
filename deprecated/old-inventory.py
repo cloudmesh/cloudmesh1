@@ -19,7 +19,7 @@ import yaml
 # SETTING UP A LOGGER
 #
 
-log = LOGGER('inventory')
+log = LOGGER(__file__)
 
 #
 
