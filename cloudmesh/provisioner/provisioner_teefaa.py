@@ -34,9 +34,7 @@ sys    0m1.076s
 imageman@i130:~/teefaa$ 
 """
 
-log = LOGGER('provision')
-
-
+log = LOGGER(__file__)
 
 class ProvisionerTeefaa(BaremetalProvisinerABC):
 

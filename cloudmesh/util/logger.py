@@ -7,7 +7,7 @@ def LOGGER(name):
 
     You can use it as follows::
 
-       log = cloudmesh.util.LOGGER("my text")
+       log = cloudmesh.util.LOGGER(__file__)
        log.error("this is an error")
        log.info("this is an info")
        log.warning("this is a warning")

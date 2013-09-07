@@ -9,7 +9,7 @@ import pprint
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
 
-log = LOGGER('cm_user')
+log = LOGGER(__file__)
 
 class cm_userauth(object):
     

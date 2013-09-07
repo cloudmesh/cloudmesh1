@@ -6,7 +6,7 @@ from cloudmesh.util.logger import LOGGER
 
 flatpages_module = Blueprint('flatpages_module', __name__)
 
-log = LOGGER("module/menu")
+log = LOGGER(__file__)
 
 pages_files = [f.replace(".md", "")
                for f in listdir("./pages") if isfile(join("./pages", f))]

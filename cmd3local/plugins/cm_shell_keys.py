@@ -12,7 +12,7 @@ from cmd3.shell import command
 from cloudmesh.config.cm_keys import cm_keys
 from cloudmesh.util.logger import LOGGER
 
-log = LOGGER('keys shell')
+log = LOGGER(__file__)
 
 class cm_shell_keys:
 

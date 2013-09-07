@@ -10,7 +10,7 @@ from cloudmesh.inventory import Inventory
 # SETTING UP A LOGGER
 #
 
-log = LOGGER('provision')
+log = LOGGER(__file__)
 
 
 

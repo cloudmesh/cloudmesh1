@@ -22,9 +22,9 @@ import yaml
 # import mock_keystone
 
 
+ 
 
-
-log = LOGGER("cm_config")
+log = LOGGER(__file__)
 
 package_dir = os.path.dirname(os.path.abspath(__file__))
 

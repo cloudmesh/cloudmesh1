@@ -3,7 +3,7 @@ import flask
 from cloudmesh.util.logger import LOGGER
 
 import cloudmesh
-log = LOGGER("module/menu")
+log = LOGGER(__file__)
 
 menu_module = Blueprint('menu_module', __name__)
 

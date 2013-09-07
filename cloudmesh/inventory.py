@@ -17,7 +17,7 @@ from datetime import datetime
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
 
-log = LOGGER('cm_mongo')
+log = LOGGER(__file__)
 
  
 class Inventory:
