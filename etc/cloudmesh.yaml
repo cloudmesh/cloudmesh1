@@ -3,7 +3,7 @@ cloudmesh:
     - sierra_openstack_grizzly
     - india_openstack_essex
     hpc:
-        username: {{data.profile.username}}
+        username: {{portalname}}
     clouds:
         india_openstack_essex:
             cm_host: india.futuregrid.org
@@ -14,9 +14,9 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: http://149.165.146.50:5000/v2.0
                 OS_CACERT: None
-                OS_PASSWORD: {{data.clouds['india_openstack_essex'].credentials.OS_PASSWORD}}
+                OS_PASSWORD: {{india_openstack_essex_OS_PASSWORD}}
                 OS_TENANT_NAME: member
-                OS_USERNAME: {{data.profile.username}}
+                OS_USERNAME: {{portalname}}
                 OS_VERSION: essex
             default:
                 flavor: m1.tiny
@@ -30,9 +30,9 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
-                OS_PASSWORD: {{data.clouds['sierra_openstack_grizzly'].credentials.OS_PASSWORD}}
-                OS_TENANT_NAME: {{data.projects.default}}
-                OS_USERNAME: {{data.profile.username}}
+                OS_PASSWORD: {{sierra_openstack_grizzly_OS_PASSWORD}}
+                OS_TENANT_NAME: {{projects.default}}
+                OS_USERNAME: {{portalname}}
                 OS_VERSION: grizzly
             default:
                 flavor: m1.tiny
@@ -40,33 +40,33 @@ cloudmesh:
     default: sierra_openstack_grizzly
     index: 1
     keys:
-        default: {{data['keys'].default}}
+        default: {{keys.default}}
         keylist:
-            {% for keyname, key in data['keys'].iteritems() -%}
+            {% for keyname, key in keys.list.iteritems() -%}
             {{keyname}}: {{key}}
             {% endfor -%}
-    prefix: {{data.profile.username}}
+    prefix: {{portalname}}
     profile:
         address:
         - TBD
-        e_mail: {{data.profile['e_mail']}}
-        firstname: {{data.profile.firstname}}
-        gid: {{data.profile.gid}}
-        lastname: {{data.profile.lastname}}
-        phone: {{data.profile.phone}}
-        username: {{data.profile.username}}
+        e_mail: {{profile.e_mail}}
+        firstname: {{profile.firstname}}
+        gid: {{gid}}
+        lastname: {{profile.lastname}}
+        phone: {{profile.phone}}
+        username: {{profile.portalname}}
     projects:
         active:
-        {% for project in data.projects.active -%}
+        {% for project in projects.active -%}
         - {{project}}
         {% endfor -%}
         completed:
-        {% for project in data.projects.completed -%}
+        {% for project in projects.completed -%}
         - {{project}}
         {% endfor -%}
-        default: {{data.projects.default}}
+        default: {{projects.default}}
     security:
-        default: secGroup2
+        default: development
         rules:
             ping:
                 ip-address: 0.0.0.0/0
@@ -84,8 +84,9 @@ cloudmesh:
                 min_port: 80
                 protocol: tcp
         security_groups:
-            secGroup1:
+            development:
             - ssh
             - ping
-            secGroup2:
+            - web
+            webserver:
             - web
