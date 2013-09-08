@@ -23,8 +23,9 @@ from cloudmesh.util.util import HEADING
 
 class Test_cloudmesh:
 
-    # filename = "credentials-example.yaml"
     filename = None
+    filename = "~/.futuregrid/cloudmesh.yaml"
+    
 
     def setup(self):
         print "READING THE FILE", self.filename
