@@ -56,7 +56,7 @@ def test(name,classname,filename):
     local("nosetests -v  --nocapture {0}:{1}.{2}".format(filename, classname, name))
 
 @task
-def start(f,name):
+def start(f,name=None):
     '''
     executes a test with a given partial filename and partial name of the test
     class. the first function in the test file will be returned. for example :
@@ -74,11 +74,16 @@ def start(f,name):
     filename = get_filename(f)
     class_name = find_classname(filename)
     test_names  = find_tests(filename) 
-    for element in test_names:
-        print element
-        if name in element:
-            break
-    test (element, class_name,filename)
+    if name is None:
+        tests = test_names
+    else:
+        for element in test_names:
+            print element
+            if name in element:
+                break
+        tests = [element]
+    for element in tests:
+        test (element, class_name,filename)
 
 @task
 def info(f=None):

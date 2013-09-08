@@ -13,6 +13,7 @@ from cloudmesh.util.util import check_file_for_tabs
 
 from cloudmesh_cloud_handler import cloudmesh_cloud_handler
 from cloudmesh.util.config import read_yaml_config
+from cloudmesh.config.ConfigDict import ConfigDict
 
 from cloudmesh.user.cm_template import cm_template
 from pymongo import MongoClient
@@ -47,7 +48,7 @@ def get_mongo_db(mongo_collection):
     db = client[mongo_db_name]          
     db_clouds = db[mongo_collection] 
     return db_clouds
-    
+
 class cm_config_file:
     """
     reads the information contained in the file
@@ -111,19 +112,20 @@ class cm_config_file:
                 sys.exit()
         return element
 
-class cm_config_server(cm_config_file):
+class cm_config_server(ConfigDict):
     """
     reads the information contained in the file
     ~/.futuregrid/cloudmesh_server.yaml
     """
     filename = "~/.futuregrid/cloudmesh_server.yaml"
-    config = None
 
     def __init__(self, filename=None):
-        cm_config_file.__init__(self, filename=filename, kind="server")
+        if filename is None:
+            filename = self.filename
+        ConfigDict.__init__(self, filename=filename, kind="server")
 
     
-class cm_config_launcher(cm_config_file):
+class cm_config_launcher(ConfigDict):
     """
     reads the information contained in the file
     ~/.futuregrid/cloudmesh_server.yaml
@@ -132,8 +134,10 @@ class cm_config_launcher(cm_config_file):
     config = None
 
     def __init__(self, filename=None):
-        cm_config_file.__init__(self, filename=filename, kind="launcher")
-
+        if filename is None:
+            filename = self.filename
+        ConfigDict.__init__(self, filename=filename, kind="launcher")
+        
     
 class cm_config(object):
 

@@ -11,6 +11,7 @@ from cloudmesh.config.cm_config import cm_config_server
 import yaml
 import json
 from cloudmesh.config.cm_config import get_mongo_db
+from cloudmesh.config.ConfigDict import ConfigDict
 from datetime import datetime
 
 # ----------------------------------------------------------------------
@@ -28,16 +29,12 @@ class Inventory:
     
     def __init__(self):         
         # read the host file definition from cloudmesh_cludter.yaml
-        self.server_config = cm_config_server().config
-        location = cm_path_expand("~/.futuregrid/cloudmesh_cluster.yaml")
-        result = open(location, 'r').read()
-        template = Template(result)
-        self.config = yaml.load(template.render(self.server_config))
+        self.server_config = cm_config_server()
         
+        self.config = ConfigDict(filename="~/.futuregrid/cloudmesh_cluster.yaml")
         
-        location = cm_path_expand("~/.futuregrid/cloudmesh_bootspec.yaml")
-        result = open(location, 'r').read()
-        self.bootspec_config = yaml.load(result)
+        self.bootspec_config = ConfigDict(filename="~/.futuregrid/cloudmesh_bootspec.yaml")
+        
         
         collection = "inventory"
         self.db_inventory = get_mongo_db(collection)        

@@ -1,16 +1,32 @@
 from __future__ import with_statement
 
 import sys
+from cloudmesh.util.logger import LOGGER
+
+# ----------------------------------------------------------------------
+# SETTING UP A LOGGER
+# ----------------------------------------------------------------------
+
+log = LOGGER(__file__)
+
+
+# ----------------------------------------------------------------------
+# TRY cloudmesh
+# ----------------------------------------------------------------------
+
 try:
    import cloudmesh
    print "Version", cloudmesh.__version__ 
    # TODO: ful version does not work whne installed via setup.py install
    # thus we simply do not print for now.
    #print "Full Version", cloudmesh.__full_version__ 
-except:
+except Exception, e:
     print "ERROR: could not find package\n\n   cloudmesh\n"
     print "please run first\n" 
     print "     python setup.py install\n"
+    print 
+    print "Exception"
+    print e
     sys.exit()
 
 
