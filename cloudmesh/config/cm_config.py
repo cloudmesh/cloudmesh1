@@ -23,8 +23,6 @@ import yaml
 # import mock_keystone
 
 
- 
-
 log = LOGGER(__file__)
 
 package_dir = os.path.dirname(os.path.abspath(__file__))
@@ -34,9 +32,9 @@ def get_mongo_db(mongo_collection):
     """
     Read in the mongo db information from the cloudmesh_server.yaml
     """
-    location = path_expand("~/.futuregrid/cloudmesh_server.yaml")
+    filename = "~/.futuregrid/cloudmesh_server.yaml"
         
-    mongo_config = read_yaml_config (location, check=True)["mongo"] 
+    mongo_config = ConfigDict(filename=filename).get("mongo") 
 
     mongo_host = mongo_config["host"]
     mongo_port = mongo_config["port"]
@@ -44,73 +42,12 @@ def get_mongo_db(mongo_collection):
     mongo_db_name = mongo_config["collections"][mongo_collection]['db']
         
     client = MongoClient(host=mongo_host,
-                              port=mongo_port)  
+                         port=mongo_port)  
     db = client[mongo_db_name]          
     db_clouds = db[mongo_collection] 
     return db_clouds
 
-class cm_config_file:
-    """
-    reads the information contained in the file
-    ~/.futuregrid/cloudmesh_server.yaml
-    """
-    filename = path_expand("~/.futuregrid/cloudmesh_server.yaml")
-    config = None
 
-    def __init__(self, filename=None, kind="server"):
-        self.kind = kind
-        if filename is not None:
-            self.filename = path_expand(filename)
-        
-        self.config = read_yaml_config (self.filename, check=True) 
-        
-    def __str__(self):
-        return json.dumps(self.config, indent=4)
-
-    def _notify_of_error(self, keys):
-        log.error('Configuration file error in ' + self.filename)
-        log.error("Your configuration file does not contain the proper variable")
-        key_string = "[" + ']['.join(keys) + "]"
-        log.error("Variable requested " + key_string)
-        indent = ""
-        last_index = len(keys) -1
-        for i, k in enumerate(keys):
-            if i == last_index:
-                log.error(indent + k + ": <- this value is missing")
-            else:
-                log.error(indent + k + ":")
-            indent = indent + "    "     
-        
-    def __getitem__(self, *mykeys):        
-        try:
-            item = self.get(mykeys[0])
-        except:
-            self._notify_of_error(mykeys)
-            sys.exit()
-        return item
-
-    def get(self, *keys):
-        """
-        returns the dict of the information as read from the yaml file. To
-        access the file safely, you can use the keys in the order of the access.
-        Example: get("provisiner","policy") will return the value of
-        config["provisiner"]["policy"] from the yaml file if it does not exists
-        an error will be printing that the value does not exists and we exit.
-        Alternatively you can use the . notation e.g. get("provisiner.policy")
-        """
-        if keys is None:
-            return self.config
-
-        if "." in keys[0]:
-            keys = keys[0].split('.')
-        element = self.config
-        for v in keys:
-            try:
-               element = element[v]
-            except:
-                self._notify_of_error(keys)
-                sys.exit()
-        return element
 
 class cm_config_server(ConfigDict):
     """
@@ -131,7 +68,6 @@ class cm_config_launcher(ConfigDict):
     ~/.futuregrid/cloudmesh_server.yaml
     """
     filename = "~/.futuregrid/cloudmesh_launcher.yaml"
-    config = None
 
     def __init__(self, filename=None):
         if filename is None:
@@ -315,7 +251,7 @@ class cm_config(object):
 
 
     # ----------------------------------------------------------------------
-    # Properties
+    # <roperties
     # ----------------------------------------------------------------------
     @property
     def userdata_handler(self):
