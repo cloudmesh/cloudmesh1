@@ -10,6 +10,7 @@ nosetests -v
 
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.config.ConfigDict import ConfigDict
 
 import json
 import os
@@ -37,7 +38,7 @@ class Test_cloudmesh:
 
     def test_launcher(self):
         filename = "~/.futuregrid/cloudmesh_launcher.yaml"
-        config = cm_config_server(filename)  
+        config = cm_config_server(filename=filename)  
         print config
         existing = config.get("recipies")
         test1 =  existing is not None
@@ -52,7 +53,7 @@ class Test_cloudmesh:
 
     def test_server(self):
         filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = cm_config_server(filename)  
+        config = cm_config_server(filename=filename)  
         print config
         existing = config.get("mongo","db")
         test1 =  existing is not None
@@ -67,7 +68,7 @@ class Test_cloudmesh:
 
     def test_dot(self):
         filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = cm_config_server(filename)  
+        config = cm_config_server(filename=filename)  
         print config
         existing = config.get("mongo.db")
         test1 =  existing is not None
@@ -82,7 +83,7 @@ class Test_cloudmesh:
 
     def test_getitem_server(self):
         filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = cm_config_server(filename)  
+        config = cm_config_server(filename=filename)  
         print config
         existing = config["mongo"]["db"]
         test1 =  existing is not None
