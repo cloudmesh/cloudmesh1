@@ -12,13 +12,13 @@ import getpass
 
 from cloudmesh.user.cm_userLDAP import cm_userLDAP 
 from cloudmesh.util.util import HEADING
-from cloudmesh.config.cm_config import cm_config_file
+from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.util import path_expand
 from pprint import pprint
 
 class Test_cloudmesh:
 
-    username = cm_config_file("~/.futuregrid/cloudmesh.yaml").get("cloudmesh.hpc.username")
+    username = ConfigDict("~/.futuregrid/cloudmesh.yaml").get("cloudmesh.hpc.username")
 
 
     filename = "etc/cloudmesh.yaml"

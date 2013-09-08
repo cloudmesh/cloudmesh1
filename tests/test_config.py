@@ -38,7 +38,7 @@ class Test_cloudmesh:
 
     def test_launcher(self):
         filename = "~/.futuregrid/cloudmesh_launcher.yaml"
-        config = cm_config_server(filename=filename)  
+        config = ConfigDict(filename=filename)  
         print config
         existing = config.get("recipies")
         test1 =  existing is not None
@@ -53,11 +53,11 @@ class Test_cloudmesh:
 
     def test_server(self):
         filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = cm_config_server(filename=filename)  
-        print config
+        config = ConfigDict(filename=filename)  
+        #print config
         existing = config.get("mongo","db")
         test1 =  existing is not None
-        print existing
+        print "mongo.db =", existing
         try:
             none_existing = config.get("mongo","xyz")
             test2 = False
@@ -68,7 +68,7 @@ class Test_cloudmesh:
 
     def test_dot(self):
         filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = cm_config_server(filename=filename)  
+        config = ConfigDict(filename=filename)  
         print config
         existing = config.get("mongo.db")
         test1 =  existing is not None
@@ -83,7 +83,7 @@ class Test_cloudmesh:
 
     def test_getitem_server(self):
         filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = cm_config_server(filename=filename)  
+        config = ConfigDict(filename=filename)  
         print config
         existing = config["mongo"]["db"]
         test1 =  existing is not None

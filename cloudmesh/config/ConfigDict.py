@@ -35,11 +35,32 @@ class ConfigDict (OrderedDict):
             self['location'] = kwargs['filename']
         self.load(self['location'])
         
+    def read(self, filename):
+        """does the same as load"""
+        self.load(filename)
+        
     def load(self, filename):
         self['location'] = path_expand(filename)
         d = OrderedDict(read_yaml_config (self['location'], check=True)) 
         self.update(d)
+    
+    '''
+    def write(self, filename=None):
+        """thismethod has not been tested"""
+        # pyaml.dump(self.config, f, vspacing=[2, 1, 1])
+        # text = yaml.dump(self.config, default_flow_style=False)
+        # this is a potential bug
+        template_path = os.path.normpath(os.path.join(package_dir, '..', '..', 'etc', 'cloudmesh.yaml'))
+        template = cm_template(template_path)
+        content = template.replace(self, format="dict")
 
+        fpath = filename or self.filename
+        f = os.open(fpath, os.O_CREAT | os.O_TRUNC | 
+                    os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
+        os.write(f, content)
+        os.close(f)
+    '''
+         
     def error_keys_not_found(self, keys):
         log.error("Filename: {0}".format(self['location']))
         log.error("Key '{0}' does not exist".format('.'.join(keys)))
@@ -65,6 +86,16 @@ class ConfigDict (OrderedDict):
     
     def pprint(self):
         print custom_print(self,4)
+        
+    """
+    def __getitem__(self, *mykeys):        
+        try:
+            item = self.get(mykeys[0])
+        except:
+            self._notify_of_error(mykeys)
+            sys.exit()
+        return item
+    """
     
     def get(self, *keys):
         """
