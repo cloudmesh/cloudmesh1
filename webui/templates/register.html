@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Sign in{% endblock %}
+
+{% block contentbox %}
+  <h2>Register</h2>
+  Please specify your username and password and cloud server for registration.
+{% endblock %}
+
+{% block content %}
+  <form action="" method="post">
+    <p>
+      {{ form.username.label}}
+      {{ form.username }}
+    <p>
+    <p>
+       {{ form.password.label }}
+       {{ form.password }}
+    </p>
+    <p>
+    	{{form.cloud_server.label}}
+    	{{form.cloud_server}}
+    </p>
+      <input type="submit" value="Submit">
+      <input type="hidden" name=next value="{{ next }}">
+
+
+  </form>
+
+
+{% endblock %}
+
+
