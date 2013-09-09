@@ -180,6 +180,7 @@ class Inventory:
 
         
     def generate(self):    
+        self.generate_bootspec()
         self._generate_globals()
         
         
