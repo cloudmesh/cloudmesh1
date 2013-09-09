@@ -24,7 +24,7 @@ class cm_template():
         parsed_content = env.parse(self.content)
         print meta.find_undeclared_variables(parsed_content)
     
-    def replace(self, kwargs=**d, format="text"):
+    def replace(self, format="text", **d):
         template = Template(self.content)
         self.result = template.render(d)
         return self.result
