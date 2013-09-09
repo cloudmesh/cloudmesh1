@@ -25,10 +25,7 @@ class Test_Inventory:
         t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
         pprint (set(t.variables()))
     
-        #        self.config = t.replace(dict(self.sample_user), format="dict")
-        self.config = t.replace({"portalname":"hallo"}, format="dict")
-
-        
+        self.config = t.replace(format="dict", **self.sample_user)
         
     def tearDown(self):
         pass
