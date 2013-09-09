@@ -33,6 +33,8 @@ class ConfigDict (OrderedDict):
         OrderedDict.__init__(self, *args, **kwargs) 
         if 'filename' in kwargs:
             self['location'] = kwargs['filename']
+        else:
+            log.error("filename not specified")
         self.load(self['location'])
         
     def read(self, filename):
