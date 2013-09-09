@@ -1,8 +1,9 @@
+portalname: myportalname
+
 profile:
     firstname: Gregor
     lastname: von Laszewski
     e-mail: gvonlasz@gmail.com  
-    portalname: myportalname
 
 password:
   india_openstack_essex: iiii01

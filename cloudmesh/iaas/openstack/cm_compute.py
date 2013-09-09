@@ -541,7 +541,7 @@ class openstack(ComputeBaseType):
             
             p = cm_profile()
             name = self.label
-            credential = p.server.config["keystone"][name]
+            credential = p.server["keystone"][name]
         
         cloud = openstack(name, credential=credential)
         msg = "users"
