@@ -238,7 +238,7 @@ class Inventory:
         clusters = self.find({'cm_type' : 'inventory', 'cm_key' : 'range', 'cm_kind' : 'server'})
         servers = self.find({'cm_type' : 'inventory', 'cm_key' : 'server', 'cm_kind' : 'server'})   
         services = self.find({'cm_type' : 'inventory', 'cm_key' : 'image', 'cm_kind' : 'image'})   
-        images = self.find({'cm_key' : 'boot_spec'})   
+        images = self.find({'cm_key' : 'bootspec'})   
         print "IIII", images.count() 
  
  
@@ -378,6 +378,7 @@ class Inventory:
         element.update({'cm_type': "inventory",
                         'cm_key': 'bootspec',
                         'cm_kind': 'bootspec',
+                        'cm_label': name,
                         'cm_id': name,
                         'id': name,
                         'label' : name,
