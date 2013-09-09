@@ -18,7 +18,7 @@ from pprint import pprint
 
 class Test_cloudmesh:
 
-    username = ConfigDict("~/.futuregrid/cloudmesh.yaml").get("cloudmesh.hpc.username")
+    username = ConfigDict(filename="~/.futuregrid/cloudmesh.yaml").get("cloudmesh.hpc.username")
 
 
     filename = "etc/cloudmesh.yaml"
@@ -41,7 +41,7 @@ class Test_cloudmesh:
     def test_full(self):
         users = self.idp.list()
         pprint(users)
-        pprint(idp.users)
+        pprint(self.idp.users)
     
     def test_auth(self):
         password = getpass.getpass()
