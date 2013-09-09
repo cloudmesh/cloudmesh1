@@ -4,9 +4,9 @@ profile:
     e-mail: gvonlasz@gmail.com  
     portalname: myportalname
 
-clouds:
-  india_openstack_essex_OS_PASSWORD: iiii01
-  sierra_openstack_grizzly_OS_PASSWORD: ssss01
+password:
+  india_openstack_essex: iiii01
+  sierra_openstack_grizzly: ssss01
 
 projects:
   default: fg82
@@ -15,7 +15,6 @@ projects:
   - fg101
   completed:
   - fg130
-  
 keys:
   name 1: file $HOME/.ssh/id_rsa.pub
   name 2: file $HOME/.ssh/id_rsa2.pub

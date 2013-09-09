@@ -3,7 +3,7 @@ cloudmesh:
     - sierra_openstack_grizzly
     - india_openstack_essex
     hpc:
-        username: {{portalname}}
+        username: {{ portalname }}
     clouds:
         india_openstack_essex:
             cm_host: india.futuregrid.org
@@ -14,9 +14,9 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: http://149.165.146.50:5000/v2.0
                 OS_CACERT: None
-                OS_PASSWORD: {{india_openstack_essex_OS_PASSWORD}}
+                OS_PASSWORD: {{ password.india_openstack_essex }}
                 OS_TENANT_NAME: member
-                OS_USERNAME: {{portalname}}
+                OS_USERNAME: {{ portalname }}
                 OS_VERSION: essex
             default:
                 flavor: m1.tiny
@@ -30,9 +30,9 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
-                OS_PASSWORD: {{sierra_openstack_grizzly_OS_PASSWORD}}
-                OS_TENANT_NAME: {{projects.default}}
-                OS_USERNAME: {{portalname}}
+                OS_PASSWORD: {{ password.sierra_openstack_grizzly }}
+                OS_TENANT_NAME: {{ projects.default }}
+                OS_USERNAME: {{ portalname }}
                 OS_VERSION: grizzly
             default:
                 flavor: m1.tiny
@@ -43,28 +43,28 @@ cloudmesh:
         default: {{keys.default}}
         keylist:
             {% for keyname, key in keys.list.iteritems() -%}
-            {{keyname}}: {{key}}
+            {{ keyname }}: {{ key }}
             {% endfor -%}
-    prefix: {{portalname}}
+    prefix: {{ portalname }}
     profile:
         address:
         - TBD
-        e_mail: {{profile.e_mail}}
-        firstname: {{profile.firstname}}
-        gid: {{gid}}
-        lastname: {{profile.lastname}}
-        phone: {{profile.phone}}
-        username: {{profile.portalname}}
+        e_mail: {{ profile.e_mail }}
+        firstname: {{ profile.firstname }}
+        gid: {{ profile.gid }}
+        lastname: {{ profile.lastname }}
+        phone: {{ profile.phone }}
+        username: {{ profile.portalname }}
     projects:
         active:
         {% for project in projects.active -%}
-        - {{project}}
+        - {{ project }}
         {% endfor -%}
         completed:
         {% for project in projects.completed -%}
-        - {{project}}
+        - {{ project }}
         {% endfor -%}
-        default: {{projects.default}}
+        default: {{ projects.default }}
     security:
         default: development
         rules:

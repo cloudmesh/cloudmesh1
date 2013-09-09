@@ -103,6 +103,7 @@ class cm_mongo:
 
         Usage is defined through arrays that are passed along.
 
+
         type = "servers", "images", "flavors"
 
         The type specifies the kind of element that we look for
