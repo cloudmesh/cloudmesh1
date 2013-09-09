@@ -18,7 +18,7 @@ class RegisterForm(Form):
         self.cloud_server.choices = choices = [('india_openstack_essex','india_openstack_essex'),('sierra_openstack_grizzly','sierra_openstack_grizzly')]
 
 
-@register_module.route('/register', methods=['GET', 'POST'])
+@register_module.route('/cm/register', methods=['GET', 'POST'])
 def render_register():
     # A hypothetical register form that uses Flask-WTF
     
