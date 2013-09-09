@@ -112,7 +112,7 @@ class openstack(ComputeBaseType):
     def set_keystone_credential(self, credential=None):
                 
         profile = cm_profile()
-        credential = profile.server.config["keystone"][name]
+        credential = profile.server["keystone"][name]
         cloud = openstack(name, credential=credential)
         if credential is None:
             self.keystone_credential = config.credential(label)
@@ -525,7 +525,7 @@ class openstack(ComputeBaseType):
         if credential is None:
             p = cm_profile()
             # BUG needs to be based on parmeters not hardcoded
-            credential = p.server.config["keystone"]["sierra_openstack_grizzly"]
+            credential = p.server["keystone"]["sierra_openstack_grizzly"]
     
         msg = "tenants"
         list = self._get(msg, credential=credential, type="keystone")['tenants']
@@ -541,7 +541,7 @@ class openstack(ComputeBaseType):
             
             p = cm_profile()
             name = self.label
-            credential = p.server.config["keystone"][name]
+            credential = p.server["keystone"][name]
         
         cloud = openstack(name, credential=credential)
         msg = "users"

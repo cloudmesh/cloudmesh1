@@ -49,7 +49,8 @@ super_sidebar_pages = [
     ],
     ["Launcher",
         [
-            ["Launcher", "/cm/launch"]            
+            ["Launcher", "/cm/launch"],            
+            ["Register", "/cm/register"]            
         ]
     ],
 ]
