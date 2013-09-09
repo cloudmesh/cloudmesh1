@@ -93,8 +93,12 @@ class cm_userLDAP (CMUserProviderBaseType):
     
         if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
             self.cert = cm_config_server().get("ldap.cert")
-            
+         
+           
         ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, self.cert)
+        # BUG IN FINAL VERSION MAKE SURE WE CHECK
+        ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT,ldap.OPT_X_TLS_NEVER)
+         
         self.ldapconn = ldap.initialize("ldap://" + self.host)
         self.ldapconn.start_tls_s()
         self.ldapconn.bind_s('', '')

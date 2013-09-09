@@ -1,3 +1,4 @@
+import yaml
 from jinja2 import Template
 from cloudmesh.util.util import path_expand
 class cm_template():
@@ -26,7 +27,10 @@ class cm_template():
     
     def replace(self, format="text", **d):
         template = Template(self.content)
-        self.result = template.render(d)
+        if format == "text":
+            self.result = template.render(d)
+        elif format == "dict":
+            self.result = yaml.safe_load(template.render(d))
         return self.result
 
 if __name__ == "__main__":
