@@ -39,11 +39,7 @@ class Inventory:
         collection = "inventory"
         self.db_inventory = get_mongo_db(collection)        
 
-    def generate_bootspec(self):
-        for name in self.bootspec_config:
-            print "Adding to inventory bootspec", name
-            description = self.bootspec_config[name]
-            self.add_bootspec(name, description)
+   
         
         
         
@@ -242,8 +238,8 @@ class Inventory:
         clusters = self.find({'cm_type' : 'inventory', 'cm_key' : 'range', 'cm_kind' : 'server'})
         servers = self.find({'cm_type' : 'inventory', 'cm_key' : 'server', 'cm_kind' : 'server'})   
         services = self.find({'cm_type' : 'inventory', 'cm_key' : 'image', 'cm_kind' : 'image'})   
-        images = self.find({'cm_type' : 'inventory', 'cm_key' : 'service', 'cm_kind' : 'service'})   
- 
+        images = self.find({'cm_key' : 'boot_spec'})   
+        print "IIII", images.count() 
  
  
         # print "%15s:" % "dbname", self.inventory_name
@@ -330,7 +326,16 @@ class Inventory:
     def ipadr (self, index, type):
         return self.find ({"cm_id": index, "type": type})[0]['ipaddr']
             
-            
+    def generate_bootspec(self):
+        print self.bootspec_config
+        
+        for name in self.bootspec_config:
+            if name not in ['filename','location']:  
+                print "Adding to inventory bootspec", name
+                description = self.bootspec_config[name]
+                print "DDD", description
+                self.add_bootspec(name, description)
+                        
     def add_bootspec(self, name, description):
         '''
         cm_type: inventory
@@ -365,8 +370,11 @@ class Inventory:
                    mount: '/var/lib/nova'
                    type: 'xfs'
         '''
+        print "IAM IN", name, description
         time = datetime.now()
+        print "TYPE", type(description)
         element = dict(description)
+        print "ELEMENT", element
         element.update({'cm_type': "inventory",
                         'cm_key': 'bootspec',
                         'cm_kind': 'bootspec',
