@@ -23,7 +23,6 @@ class ldap_user:
 
         # connect
         ldapconn = ldap.initialize('ldap://%s' % self.LDAP_HOST)
-
         # start tls connection and bind
         ldapconn.start_tls_s()
         ldapconn.simple_bind_s()
@@ -31,13 +30,11 @@ class ldap_user:
         # Get profile and project data from LDAP
         self._data = {}
 
-        search_result_person = ldapconn.search_s(
-            self.LDAP_PERSONBASE, ldap.SCOPE_SUBTREE, '(cn=%s)' % self.username)
-        self._data['person'] = search_result_person[0][
-            1] if search_result_person is not None else None
+        search_result_person = ldapconn.search_s(self.LDAP_PERSONBASE, ldap.SCOPE_SUBTREE, '(cn=%s)' % self.username)
+        self._data['person'] = search_result_person[0][1] if search_result_person is not None else None
+        self._data['projects'] = ldapconn.search_s(self.LDAP_PROJECTBASE, ldap.SCOPE_SUBTREE, '(&(memberUid=%s)(cn=fg*))' % self.username, ['cn'])
 
-        self._data['projects'] = ldapconn.search_s(
-            self.LDAP_PROJECTBASE, ldap.SCOPE_SUBTREE, '(&(memberUid=%s)(cn=fg*))' % self.username, ['cn'])
+        ldapconn.unbind()
 
     @property
     def username(self):
@@ -67,8 +64,7 @@ class ldap_user:
 
     @property
     def phone(self):
-        p = self.data['person']['telephoneNumber'][
-            0] if 'telephoneNumber' in self.data['person'] else None
+        p = self.data['person']['telephoneNumber'][0] if 'telephoneNumber' in self.data['person'] else None
         return p or 'TBD'
 
     @property
