@@ -133,7 +133,14 @@ class cm_userLDAP (CMUserProviderBaseType):
             ldapscope = ldap.SCOPE_SUBTREE
             ldapfilter = "(objectclass=inetorgperson)"
             # info to be retrieved from ldap
-            ldapattribs = ['uid', 'uidNumber', 'mail', 'givenName', 'sn']
+            ldapattribs = ['uid',
+                           'uidNumber',
+                           'gidNumber',
+                           'mail',
+                           'givenName',
+                           'sn',
+                           'telephoneNumber',
+                           'sshPublicKey']
 
             # retrieve all ldap users
             ldapresults = list(self.ldapconn.search_s(ldapbasedn, ldapscope, ldapfilter, ldapattribs))
@@ -145,7 +152,19 @@ class cm_userLDAP (CMUserProviderBaseType):
                     ldapuid = ldapresult[1]['uid'][0]
                     firstname = ldapresult[1]['givenName'][0]
                     lastname = ldapresult[1]['sn'][0]
-                self.users[ldapuid] = {"firstname":firstname, "lastname":lastname, "projects":{"active":[]} }
+
+                    keys = {}
+                    if ldapresult[1].has_key('sshPublicKey'):
+                        for sshkey in ldapresult[1]['sshPublicKey']:
+                            if sshkey.strip():
+                                (keytype, key, nickname) = (
+                                    sshkey.strip().split(None, 2) + [''])[0:3]
+                                keys[nickname] = "key %s" % sshkey
+
+                    self.users[ldapuid] = {"firstname":firstname,
+                                           "lastname":lastname,
+                                           "projects":{"active":[]},
+                                           "keys":keys }
         except:
             print "WRONG" + str(sys.exc_info())
 
@@ -188,10 +207,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-        
-        
-            
-        
-        
-        
-        
