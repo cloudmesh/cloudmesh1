@@ -14,17 +14,19 @@ log = LOGGER(__file__)
 class cm_userauth(object):
     
     def __init__(self):
-        self.db_userauth = get_mongo_db("userauth")
+        self.cm_type = "userauth"
+        
+        self.db_userauth = get_mongo_db(self.cm_type)
 
     def get(self, username):
-        return self.find_one({"cm_id": username, "cm_type": "userauth"})
+        return self.find_one({"cm_id": username, "cm_type": self.cm_type})
     
 
     def set(self, username, d):
         element = dict (d)
         element["cm_id"] = username
         element["cm_type"] = "userauth"
-        self.update({"cm_id": username, "cm_type": "userauth"}, element)
+        self.update({"cm_id": username, "cm_type": self.cm_type}, element)
     
     
     def update(self, query, values=None):
@@ -44,7 +46,7 @@ class cm_userauth(object):
         self.db_userauth.insert(element)
 
     def clear(self):
-        self.db_userauth.remove({"cm_type" : "userauth"})
+        self.db_userauth.remove({"cm_type" : self.cm_type})
         
     def find(self, query):
         '''
