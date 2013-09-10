@@ -65,8 +65,8 @@ ldap:
     proxyhost: hostnameofproxy
     proxyuser: usernameofprxyhost
     proxyldap: hostnameofldap
-    personbase = 'ou=People,dc=futuregrid,dc=org'
-    projectbase = 'ou=Groups,dc=futuregrid,dc=org'
+    personbase: "ou=People,dc=futuregrid,dc=org"
+    projectbase: "ou=Groups,dc=futuregrid,dc=org"
 roles:
     user:
        users: 
