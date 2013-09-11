@@ -1,37 +1,12 @@
-{% extends "layout_title.html" %}
+{% extends "layoutTable.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
 <h2> {{ image_button ("none", "365_restart", "/mesh/refresh/qstat") }} QStat </h2>
 {% endblock %}
 
+
 {% block content %}
-<script type="text/javascript">
-
-/*
-/* http://stackoverflow.com/a/10237915 */
-(function($) {
-    $(function() {
-        $("#qstat-accordion > div").accordion({ header: "h3",
-        										collapsible: true,
-        										heightStyle: "content",
-        										active: false });
-    });
-})(jQuery);
-
-
-$(function() {
-  {% for cloudnum in range(hosts|count) %}
-    $("#display-table-{{ cloudnum }}").dataTable({
-    	"sPaginationType": "full_numbers",
-    	"sDom": 'Rlfrtip',
-        aaSorting: [[1,'asc']],
-        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
-    });
-  {% endfor %}
-});
-
-</script>
 
 {% if error != "" %}
 <h2> error </h2>
@@ -44,19 +19,19 @@ $(function() {
         {% set version = 'pbs' %}
         <div style="margin-bottom:1em;">
        <h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + host) }}
-       	 {{ host }},
-       	 {{ jobcount[host] }} jobs,
-       	 {{ timer[host] | timesince(format="date") }}
-       	</h3>
+         {{ host }},
+         {{ jobcount[host] }} jobs,
+         {{ timer[host] | timesince(format="date") }}
+        </h3>
        <div>
        <small>Last updated: {{updated | timesince(format="date")}}</small><br>
        <table id="display-table-{{ loop.index0 }}">
-       	<thead>
+        <thead>
         <tr>
         {% for attribute in attributes[version] %}
-        	<th>
-        		{{attribute[0]}}
-        	</th>
+            <th>
+                {{attribute[0]}}
+            </th>
         {% endfor %}
         </tr>
         </thead>
@@ -66,18 +41,18 @@ $(function() {
             {% for attribute in attributes[version] %}
             <td>
             {% set l = attribute | length %}
-					{% if  attribute[1] in server %}                       
+                    {% if  attribute[1] in server %}
                           {% if l == 2%}
-	                          {% if attribute[0] in ["Owner"] %}
-				                 {{ server[attribute[1]].split("@")[0] }}
+                              {% if attribute[0] in ["Owner"] %}
+                                 {{ server[attribute[1]].split("@")[0] }}
                              {% elif attribute[0] in ["ctime","mtime","qtime"] %}
-                              	{{ server[attribute[1]] | timesince(format="float") }}
+                                {{ server[attribute[1]] | timesince(format="float") }}
                              {% else %}
                                 {{ server[attribute[1]] }}
-							 {% endif %}
-                 
+                             {% endif %}
+
                           {% elif (l == 3) %}
-                          	  {% if  attribute[2] in server[attribute[1]] %}                       
+                              {% if  attribute[2] in server[attribute[1]] %}
                                   {{ server[attribute[1]][attribute[2]] }}
                                {% endif %}
                           {% elif l == 4%}
@@ -97,4 +72,38 @@ $(function() {
     {% endfor %}
 </div>
 
+<script type="text/javascript">
+/*
+/* http://stackoverflow.com/a/10237915 */
+(function($) {
+    $(function() {
+        $("#qstat-accordion > div").accordion({ header: "h3",
+                                                collapsible: true,
+                                                heightStyle: "content",
+                                                active: false });
+    });
+})(jQuery);
+
+$(function() {
+  {% for cloudnum in range(hosts|count) %}
+    $("#display-table-{{ cloudnum }}").dataTable({
+        "sPaginationType": "full_numbers",
+        "sDom": 'C<"clear">lftipr',
+        "oColVis": {
+            "aiExclude": [ 0 ],
+            "sAlign": "center"
+        },
+        "fnDrawCallback": function(o) {
+            var nColVis = $('div.ColVis', o.nTableWrapper)[0];
+            nColVis.align = "right";
+            nColVis.style.paddingBottom = "15px";
+        },
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ],
+    });
+  {% endfor %}
+});
+</script>
+
 {% endblock %}
+
