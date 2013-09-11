@@ -57,7 +57,7 @@ def display_mongo_qstat_new():
     address_string = ""
     error = ""
     config = cm_config()
-    user = config.config["cloudmesh"]["hpc"]["username"]
+    user = config["cloudmesh"]["hpc"]["username"]
 
     pbs = pbs_mongo()
     hosts = ["india.futuregrid.org",
