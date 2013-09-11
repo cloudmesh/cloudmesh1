@@ -71,7 +71,7 @@ class ConfigDict (OrderedDict):
         template_vars['keys'] = copy.deepcopy(configuration['cloudmesh']['keys'])
         template_vars['profile'] = copy.deepcopy(configuration['cloudmesh']['profile'])
 
-        print custom_print(template_vars, 4)
+        # print custom_print(template_vars, 4)
 
         content = template.replace(format="text", **template_vars)
 
@@ -82,8 +82,8 @@ class ConfigDict (OrderedDict):
         os.close(f)
 
     def write_init(self, filename=None):
-        print "******************************\n"
-        print custom_print(self.init_config, 4)
+        # print "******************************\n"
+        # print custom_print(self.init_config, 4)
         self.write(filename, self.init_config)
          
     def error_keys_not_found(self, keys):
