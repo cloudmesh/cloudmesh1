@@ -1,7 +1,6 @@
 import sys
 import yaml
 import os
-import stat
 import json
 import collections
 import copy
@@ -15,7 +14,6 @@ from cloudmesh_cloud_handler import cloudmesh_cloud_handler
 from cloudmesh.util.config import read_yaml_config
 from cloudmesh.config.ConfigDict import ConfigDict
 
-from cloudmesh.user.cm_template import cm_template
 from pymongo import MongoClient
 import yaml
 
@@ -25,14 +23,11 @@ import yaml
 
 log = LOGGER(__file__)
 
-package_dir = os.path.dirname(os.path.abspath(__file__))
-
-
 def get_mongo_db(mongo_collection):
     """
     Read in the mongo db information from the cloudmesh_server.yaml
     """
-    filename = "~/.futuregrid/cloudmesh_server.yaml"
+    filename = os.path.expanduser("~/.futuregrid/cloudmesh_server.yaml")
         
     mongo_config = ConfigDict(filename=filename).get("mongo") 
 
@@ -54,7 +49,7 @@ class cm_config_server(ConfigDict):
     reads the information contained in the file
     ~/.futuregrid/cloudmesh_server.yaml
     """
-    filename = "~/.futuregrid/cloudmesh_server.yaml"
+    filename = os.path.expanduser("~/.futuregrid/cloudmesh_server.yaml")
 
     def __init__(self, filename=None):
         if filename is None:
@@ -67,7 +62,7 @@ class cm_config_launcher(ConfigDict):
     reads the information contained in the file
     ~/.futuregrid/cloudmesh_server.yaml
     """
-    filename = "~/.futuregrid/cloudmesh_launcher.yaml"
+    filename = os.path.expanduser("~/.futuregrid/cloudmesh_launcher.yaml")
 
     def __init__(self, filename=None):
         if filename is None:
@@ -81,14 +76,8 @@ class cm_config(ConfigDict):
     # global variables
     # ----------------------------------------------------------------------
 
-    default_path = '.futuregrid/cloudmesh.yaml'
-    filename = "~/" + default_path
-    
-    #
-    # BUG: this may be wrong as we do not want to read from etc but just from ~/.futuregrd/ and a specified file
-    #
-    yaml_template_path = os.path.normpath(os.path.join(package_dir, '..', '..', 'etc', 'cloudmesh.yaml'))
-    cloudmesh_server_path = os.path.join(os.environ['HOME'], '.futuregrid', 'cloudmesh_server.yaml')
+    filename  = os.path.expanduser('~/.futuregrid/cloudmesh.yaml')
+    cloudmesh_server_path = os.path.expanduser('~/.futuregrid/cloudmesh_server.yaml')
 
     # ----------------------------------------------------------------------
     # initialization methods
@@ -109,13 +98,14 @@ class cm_config(ConfigDict):
     # Internal helper methods
     # ----------------------------------------------------------------------
     def _get_cloud_handler(self, cloud, as_admin=False):
-        """not sure what this is for"""
+        """This gets a class that knows how to handle the specific type of
+        cloud (how to provision users, etc)"""
         handler_args = { 'profiledata': self.profile(),
                          'defaultproj': self.projects('default'),
                          'projectlist': self.projects('active'),
                          'cloudname': cloud }
         if as_admin:
-            handler_args['clouddata'] = self.serverdata
+            handler_args['clouddata'] = self.serverdata['keystone'][cloud]
         else:
             handler_args['clouddata'] = self.cloud(cloud)
         cloud_handler_class = cloudmesh_cloud_handler(cloud)
@@ -173,7 +163,7 @@ class cm_config(ConfigDict):
         for cloud in cloudlist:
             cloud_handler = self._get_cloud_handler(cloud, as_admin=True)
             cloud_handler.initialize_cloud_user()
-            self.init_config['cloudmesh']['clouds'][cloud] = copy.deepcopy(cloud_handler.data)
+            self.init_config['cloudmesh']['clouds'][cloud] = copy.deepcopy(cloud_handler.credentials)
 
     def initialize(self, username):
         """Creates or resets the config for a user.  Note that the

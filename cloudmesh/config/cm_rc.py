@@ -191,7 +191,7 @@ def main():
             config.userdata_handler = ldap_user
             config.initialize(username)
             try:
-                config.write(output)
+                config.write_init(output)
             except OSError as oserr:
                 if oserr.errno == 17:
                     print "'%s' exists, please rename or remove it and try again." % oserr.filename
