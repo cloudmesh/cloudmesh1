@@ -21,11 +21,11 @@ mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 @mesh_hpc_module.route('/mesh/refresh/qstat/<host>')
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_mongo_qstat_refresh(host=None):
-    
+
     config = cm_config()
     user = config.config["cloudmesh"]["hpc"]["username"]
     pbs = pbs_mongo()
-    
+
     if host is None:
         hosts = ["india.futuregrid.org",
                  "sierra.futuregrid.org",
@@ -33,7 +33,7 @@ def display_mongo_qstat_refresh(host=None):
                  "alamo.futuregrid.org"]
     else:
         hosts = [host]
-    
+
     error = ""
     for host in hosts:
         pbs.activate(host,user)
@@ -42,7 +42,7 @@ def display_mongo_qstat_refresh(host=None):
         except Exception, e:
             error += "error {0} {1}".format(str(host),str(e))
     if error != "":
-        return render_template('error.html', 
+        return render_template('error.html',
                                error=error,
                                type="Some error in qstat",
                                msg="")
@@ -53,7 +53,7 @@ def display_mongo_qstat_refresh(host=None):
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_mongo_qstat_new():
     time_now = datetime.now()
-    
+
     address_string = ""
     error = ""
     config = cm_config()
@@ -66,34 +66,34 @@ def display_mongo_qstat_new():
              "alamo.futuregrid.org"]
     for host in hosts:
         pbs.activate(host,user)
-        
-    
+
+
     data = {}
     jobcount = {}
     timer = {}
-    for host in hosts:    
+    for host in hosts:
         try:
             data[host] = pbs.get_qstat(host)
         except:
             error += "get_qstat({0})".format(host)
-        
+
         try:
-        
+
             print "DDD", host, data[host].count()
             jobcount[host] = data[host].count()
         except:
             error += "jobcount {0}".format(host)
-        
+
 
         if jobcount[host] > 0:
             timer[host] = data[host][0]["cm_refresh"]
             print "TTTTT"
             pprint(data[host][0])
-            #timer[host] = datetime.now() 
+            #timer[host] = datetime.now()
         else:
             timer[host] = datetime.now()
         #print "TIMER", timer
-    attributes = {"pbs": 
+    attributes = {"pbs":
                   [
                         [ "Queue" , "queue"],
                         [ "Server" , "server"],
@@ -122,8 +122,8 @@ def display_mongo_qstat_new():
             for attribute in server:
                 print attribute, server[attribute]
     """
-        
-    return render_template('mesh_qstat.html',
+
+    return render_template('qstat_mesh.html',
                            hosts=hosts,
                            jobcount=jobcount,
                            timer=timer,
