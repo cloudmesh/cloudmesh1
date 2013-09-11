@@ -42,7 +42,7 @@ cloudmesh:
     keys:
         default: {{keys.default}}
         keylist:
-            {% for keyname, key in keys.iteritems() -%}
+            {% for keyname, key in keys.keylist.iteritems() -%}
             {{ keyname }}: {{ key }}
             {% endfor -%}
     prefix: {{ portalname }}
@@ -54,7 +54,7 @@ cloudmesh:
         gid: {{ profile.gid }}
         lastname: {{ profile.lastname }}
         phone: {{ profile.phone }}
-        username: {{ profile.portalname }}
+        username: {{ portalname }}
     projects:
         active:
         {% for project in projects.active -%}
