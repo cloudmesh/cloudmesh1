@@ -10,6 +10,7 @@ class cloudmesh_cloud_handler(object):
 
     def __new__(__class, cloudname):
         # assume cloudnames are like:
-        #   host-cloudtype-cloudversion, e.g. sierra_openstack_grizzly
-        (cloudtype, cloudversion) = cloudname.split('-')[1:]
+        #   host_cloudtype_cloudversion, e.g. sierra_openstack_grizzly
+        # this may be fragile?
+        (cloudtype, cloudversion) = cloudname.split('_')[1:]
         return cloudmesh_cloud_handler.cloud_handlers[(cloudtype, cloudversion)]
