@@ -5,9 +5,14 @@ from collections import OrderedDict
 import simplejson
 from pprint import pprint
 import json
+import os
+import stat
 import sys
+import copy
+from cloudmesh.user.cm_template import cm_template
 
 log = LOGGER(__file__)
+package_dir = os.path.dirname(os.path.abspath(__file__))
 
 class OrderedJsonEncoder( simplejson.JSONEncoder ):
     indent = 4
@@ -46,22 +51,40 @@ class ConfigDict (OrderedDict):
         d = OrderedDict(read_yaml_config (self['location'], check=True)) 
         self.update(d)
     
-    '''
-    def write(self, filename=None):
+    def write(self, filename=None, configuration=None):
         """thismethod has not been tested"""
         # pyaml.dump(self.config, f, vspacing=[2, 1, 1])
         # text = yaml.dump(self.config, default_flow_style=False)
         # this is a potential bug
+        if configuration is None:
+            configuration = self
         template_path = os.path.normpath(os.path.join(package_dir, '..', '..', 'etc', 'cloudmesh.yaml'))
         template = cm_template(template_path)
-        content = template.replace(self, format="dict")
+
+        # Set up a dict to pass to the template
+        template_vars = {}
+        template_vars['portalname'] = configuration['cloudmesh']['profile']['username']
+        template_vars['password'] = {}
+        for cloudname, cloudattrs in configuration['cloudmesh']['clouds'].iteritems():
+            template_vars['password'][cloudname] = cloudattrs['OS_PASSWORD']
+        template_vars['projects'] = copy.deepcopy(configuration['cloudmesh']['projects'])
+        template_vars['keys'] = copy.deepcopy(configuration['cloudmesh']['keys'])
+        template_vars['profile'] = copy.deepcopy(configuration['cloudmesh']['profile'])
+
+        # print custom_print(template_vars, 4)
+
+        content = template.replace(format="text", **template_vars)
 
         fpath = filename or self.filename
         f = os.open(fpath, os.O_CREAT | os.O_TRUNC | 
                     os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
         os.write(f, content)
         os.close(f)
-    '''
+
+    def write_init(self, filename=None):
+        # print "******************************\n"
+        # print custom_print(self.init_config, 4)
+        self.write(filename, self.init_config)
          
     def error_keys_not_found(self, keys):
         log.error("Filename: {0}".format(self['location']))

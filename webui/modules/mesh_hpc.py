@@ -23,7 +23,7 @@ mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 def display_mongo_qstat_refresh(host=None):
     
     config = cm_config()
-    user = config.config["cloudmesh"]["hpc"]["username"]
+    user = config["cloudmesh"]["hpc"]["username"]
     pbs = pbs_mongo()
     
     if host is None:
@@ -57,7 +57,7 @@ def display_mongo_qstat_new():
     address_string = ""
     error = ""
     config = cm_config()
-    user = config.config["cloudmesh"]["hpc"]["username"]
+    user = config["cloudmesh"]["hpc"]["username"]
 
     pbs = pbs_mongo()
     hosts = ["india.futuregrid.org",
