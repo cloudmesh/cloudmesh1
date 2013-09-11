@@ -46,6 +46,8 @@ mongo:
             db: hpc-qstat
         pbsnodes:
             db: hpc-pbsnodes
+        launcher:
+            db: launcher
 keystone:
     sierra:
         OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0

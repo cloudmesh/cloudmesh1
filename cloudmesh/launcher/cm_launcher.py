@@ -1,6 +1,7 @@
 from cloudmesh.config.cm_config import cm_config_launcher
 from time  import sleep
 from random import randint
+from cloudmesh.launcher.cm_launcher_db import cm_launcher_db
 
 class BaseClassLauncher:
 
@@ -38,27 +39,50 @@ class ChefLauncher(BaseClassLauncher):
         raise NotImplementedError()
 
 class SimulatorLauncher(BaseClassLauncher):
-
+    def __init__(self):
+        self.db = cm_launcher_db()
+    
+    def set(self,user,host,server,recipie,status,error_message=""):
+        query = {}
+        query["user"] = user
+        query["host"] = host
+        query["server"] = server
+        query["recipie"] = recipie
+        #print query["host"]
+        if self.db.find_one(query) == None:
+            query["status"] = ""
+            query["error"] = ""
+            self.db.insert(query)
+        status_dict = {"status":status, "error":error_message}
+        #print "query, dict", query, status_dict
+        self.db.update(query, status_dict)
+        print "After Update"
+        res = self.db.find(query)
+        for r in res:
+            print r
+        
+        
     def run(self, task_dict):
         print "launching on server {0}, host - {1}".format(task_dict["name"],task_dict["host_list"])
         for task in task_dict["recipies"]:
-            print "recipie " + task[0] +" type: " + task[1]
+            #print "recipie " + task[0] +" type: " + task[1]
             if task[1]=='vm':
                 for state in self.states():                                                              #scheduling only for VM
                     sleep(randint(1,3))
-                    self.status = "in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], task[0], task_dict["host_list"])
-                    print "status: " + self.status
-                if state == "error":                                #error message
-                    self.error =  "error in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], task[0], task_dict["host_list"])
-                    self.traceback ="error in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], task[0], task_dict["host_list"])
-                    print "error and tracebacks"
+                    #self.status = "in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], task[0], task_dict["host_list"])
+                    #print "status: " + self.status
+                    error = ""    
+                    if state == "error":                                #error message
+                        self.error =  "error in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], task[0], task_dict["host_list"])
+                        self.traceback ="error in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], task[0], task_dict["host_list"])
+                        error = self.error
+                        #print "error and tracebacks"
+                    self.set(task_dict["user"], task_dict["host_list"], task_dict["name"], task[0], state, error_message=error )
             else:
                 print "failed: at this moment we only launch only vms"
 
     def states(self):
         """array of all valid status msges"""
-        for state in self.states_list:
-            print "SimulatorLauncher: states {0}".format(state)
         return self.states_list
     
     @property
@@ -83,10 +107,6 @@ class SimulatorLauncher(BaseClassLauncher):
             return None    
 """
 debug = True
-
-
-
-
 if debug:
     provider = SimulaterLauncher
 else:
