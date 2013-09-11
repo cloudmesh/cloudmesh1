@@ -112,7 +112,7 @@ class openstack(ComputeBaseType):
     def set_keystone_credential(self, credential=None):
                 
         profile = cm_profile()
-        credential = profile.server.config["keystone"][name]
+        credential = profile.server["keystone"][name]
         cloud = openstack(name, credential=credential)
         if credential is None:
             self.keystone_credential = config.credential(label)
@@ -524,9 +524,9 @@ class openstack(ComputeBaseType):
         """get the tenants dict for the vm with the given id"""
         if credential is None:
             p = cm_profile()
+            name = self.label
             # BUG needs to be based on parmeters not hardcoded
-            credential = p.server.config["keystone"]["sierra_openstack_grizzly"]
-    
+            credential = p.server["keystone"][name]
         msg = "tenants"
         list = self._get(msg, credential=credential, type="keystone")['tenants']
         return self._list_to_dict(list, 'id', "tenants", time_stamp)
