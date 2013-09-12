@@ -42,3 +42,9 @@ class cm_user(object):
     def __getitem__(self,key):
         return self.info(key)
 
+    def get_name(self, portalname):
+        ldapret = self.db_users.find({"cm_user_id": portalname})
+        (firstname, lastname) = (ldapret['firstname'], ldapret['lastname'])
+
+        return (firstname, lastname)
+
