@@ -76,9 +76,9 @@ class Test:
         assert True
 
     def test_get_users_all(self):
-        HEADING()
        
         for cloud in self.clouds:
+            HEADING()
             cloud.refresh("users")
             print json.dumps(cloud.users, indent=4)
         
