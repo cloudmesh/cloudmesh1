@@ -1,3 +1,4 @@
+yaml_version: 1.0
 recipies:
     india_openstack_essex:
         - name: Slurm Cluster
