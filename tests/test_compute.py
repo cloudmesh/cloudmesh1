@@ -52,7 +52,7 @@ class Test:
             print "ACTIVE CLOUDS", ",".join(self.names)
             self.clouds = []
             for name in self.names:
-                self.clouds.append(openstack(self.names))
+                self.clouds.append(openstack(name))
                 self.clouds[-1].get_token()
             print "LOADED CLOUDS"
 
