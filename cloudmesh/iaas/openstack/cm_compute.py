@@ -3,14 +3,12 @@
 #
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
 #
+
 import requests
 from requests.auth import AuthBase
 
-import sys
-from pprint import pprint
-import json
-
 from collections import OrderedDict
+from datetime import datetime
 import iso8601
 import sys
 import time
@@ -19,18 +17,10 @@ import urllib
 import httplib
 import json
 import os
+from pprint import pprint
 from urlparse import urlparse
 
-
-from sh import curl
-
-from datetime import datetime
-from pprint import pprint
-
-
-
 from sh import fgrep
-import novaclient
 from sh import nova
 
 # from cm_credential import credentials
@@ -39,10 +29,11 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.cm_profile import cm_profile
 
+import novaclient
 from novaclient.v1_1 import client
 from novaclient.v1_1 import security_groups
 from novaclient.v1_1 import security_group_rules
-
+from novaclient.openstack.common import strutils
 
 def donotchange(fn):
     return fn
@@ -64,11 +55,11 @@ class openstack(ComputeBaseType):
 
     # : a dict with the users
     users = {}  # global var
-    
+
     # : a dict containing the credentionls read with cm_config
     credential = None  # global var
     keystone_credential = None
-    
+
     # : a unique label for the clous
     label = None  # global var
 
@@ -77,7 +68,7 @@ class openstack(ComputeBaseType):
 
     # : This is the cloud, should be internal though with _
     cloud = None  # internal var for the cloud client in openstack
-    keystone = None      
+    keystone = None
 
     # : The user id
     user_id = None  # internal var
@@ -88,7 +79,7 @@ class openstack(ComputeBaseType):
 
     nova_token = None
     keystone_token = None
-    
+
     #
     # initialize
     #
@@ -96,13 +87,13 @@ class openstack(ComputeBaseType):
     def __init__(self, label, credential=None):
         """
         initializes the openstack cloud from a file
-        located at ~/.futuregrid.org/cloudmesh.yaml. 
+        located at ~/.futuregrid.org/cloudmesh.yaml.
         However if a credential dict is used it is used instead
         """
         self.clear()
         self.label = label
         self.credential = credential
-        
+
         self.config = cm_config()
         if credential is None:
             self.credential = self.config.credential(label)
@@ -110,14 +101,12 @@ class openstack(ComputeBaseType):
 
 
     def set_keystone_credential(self, credential=None):
-                
         profile = cm_profile()
         credential = profile.server["keystone"][name]
         cloud = openstack(name, credential=credential)
         if credential is None:
             self.keystone_credential = config.credential(label)
 
-        
 
     def clear(self):
         """
@@ -130,14 +119,14 @@ class openstack(ComputeBaseType):
         self.type = "openstack"
 
 
-            
+
     def connect(self):
         """
         establishes a connection to the OpenStack cloud,
         e.g. initializes the needed components to conduct subsequent
         queries.
         """
-        
+
         if 'OS_CACERT' in self.credential:
             self.cloud = client.Client(
                                        self.credential['OS_USERNAME'],
@@ -167,8 +156,8 @@ class openstack(ComputeBaseType):
             self.credential = config.get(label, expand=True)
         else:
             self.credential = dict
-            
-        
+
+
     #
     # TESTS
     #
@@ -234,7 +223,7 @@ class openstack(ComputeBaseType):
 
         now = datetime.now()
     '''
-    
+
     #
     # FIND USER ID
     #
@@ -261,7 +250,7 @@ class openstack(ComputeBaseType):
 
         if credential is None:
             credential = self.credential
-            
+
         param = {"auth": { "passwordCredentials": {
                                 "username": credential['OS_USERNAME'],
                                 "password":credential['OS_PASSWORD'],
@@ -273,22 +262,21 @@ class openstack(ComputeBaseType):
         headers = {'content-type': 'application/json'}
 
         verify = False
-        
-        if 'OS_CACERT' in credential: 
+
+        if 'OS_CACERT' in credential:
             if credential['OS_CACERT'] is not None and \
                credential['OS_CACERT'] != "None" and \
-               os.path.isfile(credential['OS_CACERT']):            
+               os.path.isfile(credential['OS_CACERT']):
                 verify = credential['OS_CACERT']
-                
+
         r = requests.post(url,
                           data=json.dumps(param),
                           headers=headers,
                           verify=verify)
-        
+
         self.auth_token = r.json()
-                                          
         return r.json()
-    
+
 
     def _get_service(self, type, token=None):
         if token is None:
@@ -300,14 +288,17 @@ class openstack(ComputeBaseType):
         return service
     
     def _get_compute_service(self, token=None):
-        return self._get_service("compute") 
-    
+        return self._get_service("compute")
+
     def _post(self, posturl, params=None):
         # print self.config
         conf = self._get_conf("compute")
-        headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
+        headers = {'content-type': 'application/json', 
+                   'X-Auth-Token': '%s' % conf['token']}
         # print headers
-        r = requests.post(posturl, headers=headers, data=json.dumps(params), verify=self.credential['OS_CACERT'])
+        r = requests.post(posturl, headers=headers,
+                          data=json.dumps(params),
+                          verify=self.credential['OS_CACERT'])
         ret = {"msg":"success"}
         if r.text:
             ret = r.json()
@@ -318,7 +309,8 @@ class openstack(ComputeBaseType):
                   image_id=None,
                   security_groups=None,
                   key_name=None,
-                  meta={}):
+                  meta={},
+                  userdata=None):
         """
         start a vm via rest api call
         """
@@ -333,6 +325,7 @@ class openstack(ComputeBaseType):
                 secgroups.append({"name": secgroup})
         else:
             secgroups = [{"name":"default"}]
+
         params = {
                     "server" : {
                         "name" : "%s" % name,
@@ -343,6 +336,12 @@ class openstack(ComputeBaseType):
                         "metadata" : meta,
                         }
                   }
+
+        if userdata:
+            safe_userdata = strutils.safe_encode(userdata)
+            params["server"]["user_data"] = base64.b64encode(safe_userdata)
+
+
         print params
         # token = self.auth_token
         # pprint(token)
@@ -1164,9 +1163,11 @@ if __name__ == "__main__":
 
     """
 
-    cloud = openstack("sierra-grizzly-openstack")
-    cloud.get_flavors()
-    
+    #cloud = openstack("sierra-grizzly-openstack")
+    #flavors = cloud.get_flavors()
+    #for flavor in flavors:
+    #    print(flavor)
+
     # keys = cloud.list_key_pairs()
     # for key in keys:
     #    print key.name
