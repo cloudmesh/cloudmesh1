@@ -28,15 +28,15 @@ class cm_user(object):
         if ldapret.count() > 0:
             ldapuser = ldapret[0]
             del ldapuser['_id']
-            userinfo = ldapuser
-        userinfo['cloud_ids'] = []
+            userinfo["profile"] = ldapuser
+        userinfo['clouds'] = {}
         for arec in cloudret:
             del arec['_id']
             if len(cloudnames) > 0:
                 if arec['cm_cloud'] in cloudnames:
-                    userinfo['cloud_ids'].append(arec)
+                    userinfo['clouds'][arec['cm_cloud']] = arec
             else:
-                userinfo['cloud_ids'].append(arec)
+                userinfo['clouds'][arec['cm_cloud']] = arec
         return userinfo
 
     def __getitem__(self,key):
