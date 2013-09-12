@@ -191,10 +191,17 @@ This quick deployment is targeted for ubuntu. It can be achieved in several easy
 First, obtain a vanilla ubuntu system. Make sure that git is installed, which is standard by now.
 Next execute the following commands ::
 
-    $ git clone https://github.com/cloudmesh/cloudmesh.git
+    $ git clone git@github.com:cloudmesh/cloudmesh.git
     $ cd cloudmesh
     $ fab -f install/fabfile.py deploy
     $ fab build.install
+
+Some developers may prefer using https for accessing git::
+
+    $ git clone https://github.com/cloudmesh/cloudmesh.git
+
+We recommend that you use the non https version if you are part of the
+development team as it is much faster.
 
 Aptana Studio
 --------------------------------------------------
