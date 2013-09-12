@@ -39,3 +39,6 @@ class cm_user(object):
                 userinfo['cloud_ids'].append(arec)
         return userinfo
 
+    def __getitem__(self,key):
+        return self.info(key)
+
