@@ -95,8 +95,8 @@ class cm_mongo:
 
     def refresh(self, names=["all"], types=["all"]):
         """
-        This method obtians information about servers, images, and
-        flavours that build the cloudmesh. The information is held
+        This method obtains information about servers, images, and
+        flavors that build the cloudmesh. The information is held
         internally after a refresh. Than the find method can be used
         to query form this information. To pull new information into
         this data structure a new refresh needs to be called.

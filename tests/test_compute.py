@@ -45,6 +45,17 @@ class Test:
         self.cloud.get_token()
         print "LOADED CLOUD"
 
+        # For multiple clouds
+        # e.g. india-essex and sierra-grizzly 
+        self.names = self.configuration.active()
+        if len(self.names) > 1:
+            print "ACTIVE CLOUDS", ",".join(self.names)
+            self.clouds = []
+            for name in self.names:
+                self.clouds.append(openstack(name))
+                self.clouds[-1].get_token()
+            print "LOADED CLOUDS"
+
     def tearDown(self):
         pass
 
@@ -61,6 +72,15 @@ class Test:
         
         #        print json.dumps(self.cloud.get_users(), indent=4)
         print json.dumps(self.cloud.users, indent=4)
+        
+        assert True
+
+    def test_get_users_all(self):
+       
+        for cloud in self.clouds:
+            HEADING()
+            cloud.refresh("users")
+            print json.dumps(cloud.users, indent=4)
         
         assert True
     

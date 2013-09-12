@@ -66,7 +66,7 @@ class cm_userLDAP (CMUserProviderBaseType):
 
     def refresh(self):
         '''
-        refreshes the userdatabase from the user provider
+        Refresh the user database from the user provider
         '''
         self._refresh()
         users = self.list()
@@ -76,7 +76,7 @@ class cm_userLDAP (CMUserProviderBaseType):
 
     def connect(self, name, type, **kwargs):
         '''
-        registers a provider with som parameters specified in the dict params
+        Register a provider with som parameters specified in the dict params
         
         :param name: the name of the provider
         :param type: the type of the provider, overwrites a possibly given type in params
@@ -109,14 +109,14 @@ class cm_userLDAP (CMUserProviderBaseType):
         
     def get(self, username):
         '''
-        returns the dict associated with the username
+        Return the dict associated with the username
         :param username:
         '''
         return self.users[username]
                 
     def list(self):
         '''
-        returns a list with all usernames
+        Return a list with all usernames
         '''
         return self.users.keys()
 
