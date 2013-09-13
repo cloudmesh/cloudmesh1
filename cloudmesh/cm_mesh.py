@@ -87,9 +87,8 @@ class cloudmesh:
 
         for cloud_name in active_clouds:
             try:
-                credential = self.configuration.get(cloud_name)
-                cloud_type = self.configuration.get()[
-                    'clouds'][cloud_name]['cm_type']
+                credential = self.configuration.credential(cloud_name)
+                cloud_type = self.configuration.cloud(cloud_name)['cm_type']
 
                 if cloud_type in ['openstack', 'eucalyptus', 'azure']:
                     self.clouds[cloud_name] = {'name': cloud_name,

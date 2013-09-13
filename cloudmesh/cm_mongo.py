@@ -74,10 +74,9 @@ class cm_mongo:
             print "Activating ->", cloud_name
 
             try:
-                credential = self.config.get(cloud_name)
-                cm_type = self.config.get()['clouds'][cloud_name]['cm_type']
-                cm_type_version = self.config.get()[
-                    'clouds'][cloud_name]['cm_type_version']
+                credential = self.config.cloud(cloud_name)
+                cm_type = credential['cm_type']
+                cm_type_version = credential['cm_type_version']
                 if cm_type in ['openstack', 'eucalyptus', 'azure']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cm_type,
