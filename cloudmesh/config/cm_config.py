@@ -335,9 +335,9 @@ class cm_config(ConfigDict):
         return defaults[defname] if defname in defaults else None
 
     def credential(self, name):
-        return self.get (key=name, expand=True)
+        return self.get_data (key=name, expand=True)
     
-    def get(self, key=None, expand=False):
+    def get_data(self, key=None, expand=False):
         if key is None:
             return self['cloudmesh']
         else:

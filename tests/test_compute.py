@@ -38,10 +38,18 @@ class Test:
     cloud_label = cloud_label.replace(" - ", "").strip()
 
     def setup(self):
+        print "CONFIG"
         self.configuration = cm_config()
+        print "OK"
+        
+
         self.name = self.configuration.active()[0]
         print "ACTIVE CLOUD", self.name
+
         self.cloud = openstack(self.name)
+        print "PPPP"
+        """
+
         self.cloud.get_token()
         print "LOADED CLOUD"
 
@@ -55,9 +63,8 @@ class Test:
                 self.clouds.append(openstack(name))
                 self.clouds[-1].get_token()
             print "LOADED CLOUDS"
-
-    def tearDown(self):
-        pass
+        """
+        
 
     def test_get_extensions(self):
         HEADING()
@@ -77,8 +84,9 @@ class Test:
 
     def test_get_users_all(self):
        
-        for cloud in self.clouds:
+        for name in self.configuration.active():
             HEADING()
+            cloud = openstack(name)
             cloud.refresh("users")
             print json.dumps(cloud.users, indent=4)
         
@@ -111,7 +119,7 @@ class Test:
         print json.dumps(self.cloud.get_images(), indent=4)
         assert True
 
-    def test_00_label(self):
+    def test_label(self):
         HEADING()
         print self.cloud_label
         assert self.cloud.label == self.cloud_label
