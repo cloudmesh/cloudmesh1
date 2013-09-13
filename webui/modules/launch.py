@@ -41,7 +41,7 @@ def launch_servers():
     for r in resources:
         recipies_list.append((r,request.form.get(r+"-select")))
     return_dict["recipies"] = recipies_list
-    task_launch.delay(return_dict)
+    task_launch.apply_async(queue = "launcher", args = [return_dict])
     return "tasks have been submitted to the queue."
    
 #     return_string = "in server " + server + "<br>" #+ str(resources)
