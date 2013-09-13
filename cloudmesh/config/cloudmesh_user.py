@@ -57,7 +57,7 @@ class cloudmesh_user:
 
     @property
     def keys(self):
-        self.data['keys']
+        return self.data['keys']
 
     @property
     def activeclouds(self):
