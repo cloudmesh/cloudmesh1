@@ -73,26 +73,7 @@ def mongo_images():
                u'image_state':    u'available', 
                u'architecture':   u'x86_64'} 
     """
-    attributes = {"essex": 
-                  [
-                        #[ "Metadata", "metadata"],
-                        [ "status" , "status"],
-                        [ "name" , "name"],
-                        [ "type_id" , "metadata", "instance_type_id"],
-                        [ "iname" , "metadata", "image_location"],
-                        [ "location" , "metadata", "image_location"],
-                        [ "state" , "metadata", "image_state"],
-                        [ "updated" , "updated"],
-                        [ "minDisk" , "minDisk"],
-                        [ "memory_mb", ''],
-                        [ "fid" , ""],
-                        [ "vcpus" , ""],
-                        [ "user_id" , ""],
-                        [ "owner_id" , "metadata", "owner_id"],
-                        [ "gb" , ""],
-                        [ "arch", "metadata", "architecture"]
-                  ],
-                  "grizzly": 
+    attributes = {"grizzly": 
                     [    
                         #[ "Metadata", "metadata"],
                         [ "status" , "status"],
@@ -205,7 +186,6 @@ def mongo_users():
     clouds = {}
     clouds = c.users()
     print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
-    print len(clouds['india_openstack_essex'])
     print len(clouds['sierra_openstack_grizzly'])
     
     
@@ -218,20 +198,7 @@ def mongo_users():
                 print attribute, clouds[cloud][server][attribute]
     """
 
-    attributes = {"essex": 
-                  [
-                        [ "Name", "name"],
-                        [ "Id" , "id"],
-                        [ "TenentId" , "tenantId"],
-                        [ "e-mail" , "e_mail"],
-                        [ "enabled" , "enabled"],
-                        [ "Cloud" , "cloud"],
-                        ['cm_cloud', "cm_cloud"],
-                        ['cm_id', "cm_id"],
-                        ['cm_type', "cm_type"],
-                        [ "Refresh", "cm_refresh"]
-                  ],
-                  "grizzly": 
+    attributes = {"grizzly": 
                     [    
                         [ "Name", "name"],
                         [ "Id" , "id"],

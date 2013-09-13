@@ -118,15 +118,15 @@ class Test_cloudmesh:
         result = self.config.projects('default')
         assert result == 'fg82'
 
-    def test05_india(self):
+    def test05_sierra(self):
         HEADING()
-        result = self.config.get('india_openstack_essex')
-        assert result["OS_VERSION"] == "essex"
+        result = self.config.get('sierra_openstack_grizzly')
+        assert result["OS_VERSION"] == "grizzly"
 
-    def test06_keys_india_openstack(self):
+    def test06_keys_sierra_openstack(self):
         HEADING()
         keys = self.config.keys()
-        assert 'india_openstack_essex' in keys
+        assert 'sierra_openstack_grizzly' in keys
 
     """
     def test07_keys_india_eucalyptus(self):
@@ -160,21 +160,21 @@ class Test_cloudmesh:
         HEADING()
         clouds = self.config.clouds()
         assert isinstance(clouds, dict)
-        assert 'india_openstack_essex' in clouds
+        assert 'sierra_openstack_grizzly' in clouds
 
     def test13_cloud(self):
         HEADING()
-        india_cloud = self.config.cloud('india_openstack_essex')
-        assert isinstance(india_cloud, dict)
-        assert 'cm_host' in india_cloud
-        assert india_cloud['cm_host'] == 'india.futuregrid.org'
+        sierra_cloud = self.config.cloud('sierra_openstack_grizzly')
+        assert isinstance(sierra_cloud, dict)
+        assert 'cm_host' in sierra_cloud
+        assert sierra_cloud['cm_host'] == 'sierra.futuregrid.org'
 
     def test14_cloud_default(self):
         HEADING()
         assert self.config.cloud_default(
-            'india_openstack_essex', 'flavor') == 'm1.tiny'
+            'sierra_openstack_grizzly', 'flavor') == 'm1.tiny'
         assert self.config.cloud_default(
-            'india_openstack_essex', 'not defined') is None
+            'sierra_openstack_grizzly', 'not defined') is None
 
     def test15_project_default(self):
         HEADING()
