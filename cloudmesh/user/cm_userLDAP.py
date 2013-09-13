@@ -168,7 +168,7 @@ class cm_userLDAP (CMUserProviderBaseType):
                             if sshkey.strip():
                                 (keytype, key, nickname) = (
                                     sshkey.strip().split(None, 2) + [''])[0:3]
-                                keys[nickname] = "key %s" % sshkey
+                                keys[nickname.translate(None, '.$') = "key %s" % sshkey
 
                     self.users[ldapuid] = {"firstname":firstname,
                                            "lastname":lastname,
