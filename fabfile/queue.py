@@ -6,11 +6,12 @@ import time
 import hostlist
 __all__ = ['start', 'stop', 'list', 'clean','gui','monitor', 'kill']
 
-app="cloudmesh.provisioner.queue"
+#app="cloudmesh.provisioner.queue"
 
-launcher_workers = {"app":"cloudmesh.launcher.queue", "hostlist":hostlist.expand_hostlist("l[1-2]")}
-provisioner_workers = {"app":"cloudmesh.provisioner.queue", "hostlist":hostlist.expand_hostlist("p[1-2]")}
-
+launcher_workers = {"app":"cloudmesh.launcher.queue", "hostlist":hostlist.expand_hostlist("l[1-2]"), "queue":"launcher"}
+provisioner_workers = {"app":"cloudmesh.provisioner.queue", "hostlist":hostlist.expand_hostlist("p[1-2]"), "queue":"provisioner"}
+questat_workers = {"app":"cloudmesh.pbs", "hostlist":['q1'], "queue":"questat", "concurrency":1}
+worker_list = [provisioner_workers, launcher_workers, questat_workers];
 @task
 def kill():
     stop()
@@ -31,12 +32,15 @@ def monitor():
     """provide some information about celery"""
     local("celery worker -l info -Q celery")
 
-def celery_command(command, app, workers):
+def celery_command(command, app, workers, queue, concurrency = None):
     """execute the celery command on the application and workers specified"""
 
     worker_str = " ".join(workers)
-    local("celery multi {0} {1} -A {2} -l info".format(command, worker_str, app))
-    print "celery multi {0} {1} -A {2} -l info".format(command, worker_str, app)
+    exec_string = "celery multi {0} {1} -A {2} -l info -Q {3}".format(command, worker_str, app, queue)
+    if concurrency != None:
+        exec_string += " --concurrency={0}".format(concurrency)
+    local(exec_string)
+    #print "celery multi {0} {1} -A {2} -l info".format(command, worker_str, app)
     
 @task
 def start(view=None):
@@ -48,18 +52,22 @@ def start(view=None):
         time.sleep(2)
         mq.start()
         time.sleep(2)
-        celery_command("start", launcher_workers["app"], launcher_workers["hostlist"])
-        celery_command("start", provisioner_workers["app"], provisioner_workers["hostlist"])
+        
+        for worker in worker_list:
+            concurrency = None;
+            if "concurrency" in worker:
+                concurrency = worker["concurrency"]
+            celery_command("start", worker["app"], worker["hostlist"], worker["queue"], concurrency = concurrency)
+            
     if view is None:
         time.sleep(2)
         #local("celery worker --app={0} -l info".format(app))
-        local("celery worker -l info".format(app))
+        #local("celery worker -l info".format(app))
 @task
 def stop():
     """stop the workers"""
-
-    celery_command("stop", launcher_workers["app"], launcher_workers["hostlist"])
-    celery_command("stop", provisioner_workers["app"], provisioner_workers["hostlist"])
+    for worker in worker_list:
+        celery_command("stop", worker["app"], worker["hostlist"], worker["queue"])
     mq.stop()
     clean()
 
