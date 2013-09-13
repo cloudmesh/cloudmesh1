@@ -1,25 +1,4 @@
 recipies:
-    india_openstack_essex:
-        - name: Slurm Cluster
-          description: Deploys a Slurm cluster. One of the Vms is the Master,while the others register with the master as worker nodes. The master will be the first node in the list
-          types:
-              - vm
-              - baremetal
-        - name: Hadoop
-          description: Deploys a haddop cluster on the VMs specified
-          types:
-              - vm
-              - baremetal
-        - name: Ganglia
-          description: Deploys a Ganglia service for the vms specified. The ganglia server will be the first node in the list
-          types:
-              - vm
-              - baremetal
-        - name: Nagios
-          description: Deploys a Nagios service for the vms specified. The ganglia server will be the first node in the list
-          types:
-              - vm
-              - baremetal
     sierra_openstack_grizzly:
         - name: Slurm Cluster
           description: Deploys a Slurm cluster. One of the Vms is the Master,while the others register with the master as worker nodes. The master will be the first node in the list
@@ -42,9 +21,6 @@ recipies:
               - vm
               - baremetal
 columns:
-    india_openstack_essex:
-        - name
-        - description
     sierra_openstack_grizzly:
         - name
         - description

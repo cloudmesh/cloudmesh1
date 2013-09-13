@@ -9,6 +9,5 @@ __all__ = ['cloudmesh_cloud.py',
            'mock_cloud.py',
            'mock_keystone.py',
            'mock_user.py',
-           'openstack_essex_cloud.py',
            'openstack_grizzly_cloud.py']
 """

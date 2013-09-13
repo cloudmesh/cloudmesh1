@@ -1,26 +1,9 @@
 cloudmesh:
     active:
     - sierra_openstack_grizzly
-    - india_openstack_essex
     hpc:
         username: {{ portalname }}
     clouds:
-        india_openstack_essex:
-            cm_host: india.futuregrid.org
-            cm_heading: India Openstack, Essex
-            cm_label: ios
-            cm_type: openstack
-            cm_type_version: essex
-            credentials:
-                OS_AUTH_URL: http://149.165.146.50:5000/v2.0
-                OS_CACERT: None
-                OS_PASSWORD: {{ password.india_openstack_essex }}
-                OS_TENANT_NAME: member
-                OS_USERNAME: {{ portalname }}
-                OS_VERSION: essex
-            default:
-                flavor: m1.tiny
-                image: 717d1dc8-3ed4-4758-9678-8f6421e1fbf2
         sierra_openstack_grizzly:
             cm_host: sierra.futuregrid.org
             cm_heading: Sierra OpenStack, Grizzly
