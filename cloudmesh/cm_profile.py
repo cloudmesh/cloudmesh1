@@ -32,7 +32,11 @@ class cm_profile (object):
         gets the various usernames from the clouds, as well as the portal and
         hpc from the yaml file
         '''
-        cm = self.config.get()
+        cm = self.config.get("cloudmesh")
+
+
+        
+        
         username = {}
         username["hpc"] = cm["hpc"]["username"]
         username["portal"] = cm["profile"]["username"]
