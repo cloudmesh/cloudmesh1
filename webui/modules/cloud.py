@@ -22,7 +22,6 @@ except:
 cloud_module = Blueprint('cloud_module', __name__)
 
 config = cm_config()
-configuration = config.get()
 prefix = config.prefix
 index = config.index
 
@@ -182,7 +181,7 @@ def delete_vms(cloud=None):
 @cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
 @cond_decorator(cloudmesh.with_login, login_required)
 def assign_public_ip(cloud=None, server=None):
-    mycloud = configuration['clouds'][cloud]
+    mycloud = config.cloud(cloud)
     if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
         clouds.assign_public_ip(cloud, server)
         clouds.refresh(names=[cloud],types=["servers"])
@@ -208,17 +207,16 @@ def start_vm(cloud=None, server=None):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
     key = None
 
-    #if configuration.has_key('keys'):
-    if 'keys' in configuration:
-        key = configuration['keys']['default']
+    if 'keys' in config['cloudmesh']:
+        key = config.get('cloudmesh.keys.default')
 
     # THIS IS A BUG
     #vm_flavor = clouds.default(cloud)['flavor']
     #vm_image = clouds.default(cloud)['image']
     #
     # before the info could be maintained in mongo, using the config file
-    vm_flavor = configuration["clouds"][cloud]["default"]["flavor"]
-    vm_image = configuration["clouds"][cloud]["default"]["image"]
+    vm_flavor = config.cloud(cloud)["default"]["flavor"]
+    vm_image = config.cloud(cloud)["default"]["image"]
     vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
     # in case of error, setting default flavor id
     if vm_flavor_id < 0:
@@ -301,7 +299,7 @@ def display_flavors(cloud=None):
 
     if request.method == 'POST':
         for cloud in config.active():
-            configuration['clouds'][cloud]['default'][
+            config['cloudmesh']['clouds'][cloud]['default'][
                 'flavor'] = request.form[cloud]
             config.write()
 
@@ -324,7 +322,7 @@ def display_images():
 
     if request.method == 'POST':
         for cloud in config.active():
-            configuration['clouds'][cloud][
+            config['cloudmesh']['clouds'][cloud][
                 'default']['image'] = request.form[cloud]
             config.write()
 
