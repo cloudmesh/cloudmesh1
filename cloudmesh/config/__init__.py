@@ -5,9 +5,6 @@ __all__ = ['cloudmesh_cloud.py',
            'cm_keys.py',
            'cm_projects.py',
            'cm_rc.py',
-           'ldap_user.py',
-           'mock_cloud.py',
-           'mock_keystone.py',
-           'mock_user.py',
+           'cloudmesh_user.py',
            'openstack_grizzly_cloud.py']
 """
