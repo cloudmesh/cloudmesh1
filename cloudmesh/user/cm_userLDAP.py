@@ -159,7 +159,7 @@ class cm_userLDAP (CMUserProviderBaseType):
                     ldapgidNumber = ldapresult[1]['gidNumber'][0]
                     firstname = ldapresult[1]['givenName'][0]
                     lastname = ldapresult[1]['sn'][0]
-                    phone = ldapresult[1]['telephoneNumber'][0]
+                    phone = ldapresult[1]['telephoneNumber'][0] if 'telephoneNumber' in ldapresult[1] else None
                     address = 'TBD' # not currently in LDAP
 
                     keys = {}
