@@ -68,7 +68,7 @@ class cm_keys:
         return value
 
     def get_default_key(self):
-        return self.config.get("clodmesh.keys.default")
+        return self.config.get("cloudmesh.keys.default")
 
     def __getitem__(self, name):
         value = self._getvalue(name)
