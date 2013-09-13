@@ -62,7 +62,7 @@ from cloudmesh.config.cm_config import cm_config
 import sys
 import os
 import stat
-from ldap_user import ldap_user
+from cloudmesh_user import cloudmesh_user
 from sh import scp
 from getpass import getpass
 
@@ -188,7 +188,7 @@ def main():
         if arguments['init'] or name == 'init':
             output = arguments['--out']
             username = arguments['--user'] or os.getenv('USER')
-            config.userdata_handler = ldap_user
+            config.userdata_handler = cloudmesh_user
             config.initialize(username)
             try:
                 config.write_init(output)
