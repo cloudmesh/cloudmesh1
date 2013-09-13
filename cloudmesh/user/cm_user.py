@@ -52,8 +52,8 @@ class cm_user(object):
         :returns: dict
 
         """
-        ldap_info = self.db_users.find({"cm_user_id": portal_name})
-        cloud_info = self.db_clouds.find({"name": portal_name, "cm_kind": "users"})
+        ldap_info = self.db_users.find({"cm_user_id": portal_id})
+        cloud_info = self.db_clouds.find({"name": portal_id, "cm_kind": "users"})
         userinfo = {}
         # username is unique in ldap
         if ldap_info.count() > 0:
