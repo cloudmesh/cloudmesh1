@@ -1,10 +1,12 @@
+import yaml
 from jinja2 import Template
-
+from cloudmesh.util.util import path_expand
 class cm_template():
 
     def __init__(self, filename):
-        self.filename = filename
-        self.content = open(filename, 'r').read()
+
+        self.filename = path_expand(filename)
+        self.content = open(self.filename, 'r').read()
 
     def variables(self):
         vars = list()
@@ -14,7 +16,7 @@ class cm_template():
                 words = line.split("{{")
                 for word in words:
                     if "}}" in word:
-                        name = word.split("}}")[0]
+                        name = word.split("}}")[0].strip()
                         vars.append(name)
         return vars
 
@@ -23,9 +25,12 @@ class cm_template():
         parsed_content = env.parse(self.content)
         print meta.find_undeclared_variables(parsed_content)
     
-    def replace(self, d, format="text"):
+    def replace(self, format="text", **d):
         template = Template(self.content)
-        self.result = template.render(data=d)
+        if format == "text":
+            self.result = template.render(d)
+        elif format == "dict":
+            self.result = yaml.safe_load(template.render(d))
         return self.result
 
 if __name__ == "__main__":

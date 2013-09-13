@@ -523,9 +523,8 @@ class openstack(ComputeBaseType):
         """get the tenants dict for the vm with the given id"""
         if credential is None:
             p = cm_profile()
-            # BUG needs to be based on parmeters not hardcoded
-            credential = p.server["keystone"]["sierra_openstack_grizzly"]
-    
+            name = self.label
+            credential = p.server["keystone"][name]
         msg = "tenants"
         list = self._get(msg, credential=credential, type="keystone")['tenants']
         return self._list_to_dict(list, 'id', "tenants", time_stamp)
