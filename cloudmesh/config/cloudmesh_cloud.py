@@ -37,6 +37,9 @@ class cloudmesh_cloud:
     @property
     def credentials(self):
         return self._data['credentials']
+    @credentials.setter
+    def credentials(self, v):
+        self._data['credentials'] = v
 
     @property
     def data(self):

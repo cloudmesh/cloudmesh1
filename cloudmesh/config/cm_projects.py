@@ -29,17 +29,7 @@ class cm_projects:
     def __init__(self, filename=None):
         """initializes based on cm_config and returns pointer to the projects dict."""
         # Check if the file exists
-        if filename is None:
-            self.config = cm_config()
-        else:
-            self.filename = self._path_expand(filename)
-            try:
-                with open(self.filename):
-                    pass
-            except IOError:
-                print 'ERROR: cm_projects, file "%s" does not exist' % self.filename
-                sys.exit()
-            self.config = cm_config(self.filename)
+        self.config = cm_config(filename)
 
     @property
     def default(self):

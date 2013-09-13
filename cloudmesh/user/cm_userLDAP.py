@@ -38,7 +38,7 @@ class cm_userLDAP (CMUserProviderBaseType):
         
         # print adminuser, adminpass
         basedn = "ou=People,dc=futuregrid,dc=org"
-        userdn = "uid={0},{1}".format(uid,basedn)
+        userdn = "uid={0},{1}".format(userId,basedn)
         # print userdn
         ldapconn = ldap.initialize("ldap://{0}".format(self.host))
         log.info("Initializing the LDAP connection to server: " + self.host)
@@ -93,8 +93,12 @@ class cm_userLDAP (CMUserProviderBaseType):
     
         if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
             self.cert = cm_config_server().get("ldap.cert")
-            
+         
+           
         ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, self.cert)
+        # BUG IN FINAL VERSION MAKE SURE WE CHECK
+        ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT,ldap.OPT_X_TLS_NEVER)
+         
         self.ldapconn = ldap.initialize("ldap://" + self.host)
         self.ldapconn.start_tls_s()
         self.ldapconn.bind_s('', '')
@@ -133,7 +137,15 @@ class cm_userLDAP (CMUserProviderBaseType):
             ldapscope = ldap.SCOPE_SUBTREE
             ldapfilter = "(objectclass=inetorgperson)"
             # info to be retrieved from ldap
-            ldapattribs = ['uid', 'uidNumber', 'mail', 'givenName', 'sn']
+            ldapattribs = ['uid',
+                           'uidNumber',
+                           'gidNumber',
+                           'mail',
+                           'givenName',
+                           'sn',
+                           'telephoneNumber',
+                           'address',
+                           'sshPublicKey']
 
             # retrieve all ldap users
             ldapresults = list(self.ldapconn.search_s(ldapbasedn, ldapscope, ldapfilter, ldapattribs))
@@ -143,9 +155,30 @@ class cm_userLDAP (CMUserProviderBaseType):
                 if ldapresult[1].has_key('mail'):
                     ldapmail = ldapresult[1]['mail'][0]
                     ldapuid = ldapresult[1]['uid'][0]
+                    ldapuidNumber = ldapresult[1]['uidNumber'][0]
+                    ldapgidNumber = ldapresult[1]['gidNumber'][0]
                     firstname = ldapresult[1]['givenName'][0]
                     lastname = ldapresult[1]['sn'][0]
-                self.users[ldapuid] = {"firstname":firstname, "lastname":lastname, "projects":{"active":[]} }
+                    phone = ldapresult[1]['telephoneNumber'][0] if 'telephoneNumber' in ldapresult[1] else None
+                    address = 'TBD' # not currently in LDAP
+
+                    keys = {}
+                    if ldapresult[1].has_key('sshPublicKey'):
+                        for sshkey in ldapresult[1]['sshPublicKey']:
+                            if sshkey.strip():
+                                (keytype, key, nickname) = (
+                                    sshkey.strip().split(None, 2) + [''])[0:3]
+                                keys[nickname.translate(None, '.$') = "key %s" % sshkey
+
+                    self.users[ldapuid] = {"firstname":firstname,
+                                           "lastname":lastname,
+                                           "uidNumber":ldapuidNumber,
+                                           "gidNumber":ldapgidNumber,
+                                           "phone":phone,
+                                           "email":ldapmail,
+                                           "address":address,
+                                           "projects":{"active":[]},
+                                           "keys":keys }
         except:
             print "WRONG" + str(sys.exc_info())
 
@@ -188,10 +221,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-        
-        
-            
-        
-        
-        
-        

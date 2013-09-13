@@ -1,0 +1,22 @@
+portalname: myportalname
+
+profile:
+    firstname: Gregor
+    lastname: von Laszewski
+    e-mail: gvonlasz@gmail.com  
+
+password:
+  sierra_openstack_grizzly: ssss01
+
+projects:
+  default: fg82
+  active:
+  - fg82
+  - fg101
+  completed:
+  - fg130
+keys:
+  name 1: file $HOME/.ssh/id_rsa.pub
+  name 2: file $HOME/.ssh/id_rsa2.pub
+  bla: key ssh-rsa AAAAB3.....zzzz keyname
+            
