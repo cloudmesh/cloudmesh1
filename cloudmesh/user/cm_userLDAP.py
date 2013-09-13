@@ -144,6 +144,7 @@ class cm_userLDAP (CMUserProviderBaseType):
                            'givenName',
                            'sn',
                            'telephoneNumber',
+                           'address',
                            'sshPublicKey']
 
             # retrieve all ldap users
@@ -154,8 +155,12 @@ class cm_userLDAP (CMUserProviderBaseType):
                 if ldapresult[1].has_key('mail'):
                     ldapmail = ldapresult[1]['mail'][0]
                     ldapuid = ldapresult[1]['uid'][0]
+                    ldapuidNumber = ldapresult[1]['uidNumber'][0]
+                    ldapgidNumber = ldapresult[1]['gidNumber'][0]
                     firstname = ldapresult[1]['givenName'][0]
                     lastname = ldapresult[1]['sn'][0]
+                    phone = ldapresult[1]['phone'][0]
+                    address = 'TBD' # not currently in LDAP
 
                     keys = {}
                     if ldapresult[1].has_key('sshPublicKey'):
@@ -167,6 +172,11 @@ class cm_userLDAP (CMUserProviderBaseType):
 
                     self.users[ldapuid] = {"firstname":firstname,
                                            "lastname":lastname,
+                                           "uidNumber":ldapuidNumber,
+                                           "gidNumber":ldapgidNumber,
+                                           "phone":phone,
+                                           "email":ldapmail,
+                                           "address":address,
                                            "projects":{"active":[]},
                                            "keys":keys }
         except:
