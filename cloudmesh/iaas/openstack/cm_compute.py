@@ -31,9 +31,6 @@ from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.cm_profile import cm_profile
 
 import novaclient
-from novaclient.v1_1 import client
-from novaclient.v1_1 import security_groups
-from novaclient.v1_1 import security_group_rules
 from novaclient.openstack.common import strutils
 
 def donotchange(fn):
@@ -250,6 +247,21 @@ class openstack(ComputeBaseType):
         """
         start a vm via rest api call
         """
+        #
+        # TODO: add logic for getting default image
+
+        #if image_id is None:
+        #    get image id from profile information (default image for that cloud)
+            
+        # TODO: add logic for getting label of machine
+        # 
+
+        #if flavor_name is None:
+        #    get flavorname from profile information (ther is a get label function ...)
+
+        #if keyname is None:
+        #    get the default key from the profile information
+        
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         posturl = "%s/servers" % publicURL
@@ -277,10 +289,8 @@ class openstack(ComputeBaseType):
             safe_userdata = strutils.safe_encode(userdata)
             params["server"]["user_data"] = base64.b64encode(safe_userdata)
 
-
         print params
-        # token = self.auth_token
-        # pprint(token)
+
         return self._post(posturl, params)
     
     def vm_delete(self, id):
