@@ -18,7 +18,7 @@ with_login = True
 
 
 try:
-     with_login = cm_config_server().get("ldap.with_ldap")
+    with_login = cm_config_server().get("ldap.with_ldap")
 
 except:
     with_login = False
