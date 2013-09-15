@@ -42,19 +42,19 @@ class SimulatorLauncher(BaseClassLauncher):
     def __init__(self):
         self.db = cm_launcher_db()
     
-    def set(self,user,host,server,recipie,status,error_message=""):
+    def set(self, user, host, server, recipie, status, error_message=""):
         query = {}
         query["user"] = user
         query["host"] = host
         query["server"] = server
         query["recipie"] = recipie
-        #print query["host"]
+        # print query["host"]
         if self.db.find_one(query) == None:
             query["status"] = ""
             query["error"] = ""
             self.db.insert(query)
         status_dict = {"status":status, "error":error_message}
-        #print "query, dict", query, status_dict
+        # print "query, dict", query, status_dict
         self.db.update(query, status_dict)
         print "After Update"
         res = self.db.find(query)
@@ -63,21 +63,23 @@ class SimulatorLauncher(BaseClassLauncher):
         
         
     def run(self, task_dict):
-        print "launching on server {0}, host - {1}".format(task_dict["name"],task_dict["host_list"])
+        print "launching on server {0}, host - {1}".format(task_dict["name"], task_dict["host_list"])
         for task in task_dict["recipies"]:
-            #print "recipie " + task[0] +" type: " + task[1]
-            if task[1]=='vm':
-                for state in self.states():                                                              #scheduling only for VM
-                    sleep(randint(1,3))
-                    #self.status = "in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], task[0], task_dict["host_list"])
-                    #print "status: " + self.status
+            # print "recipie " + task[0] +" type: " + task[1]
+            if task[1] == 'vm':
+                for state in self.states():  # scheduling only for VM
+                    sleep(randint(1, 3))
+                    # self.status = "in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], task[0], task_dict["host_list"])
+                    # print "status: " + self.status
                     error = ""    
-                    if state == "error":                                #error message
-                        self.error =  "error in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], task[0], task_dict["host_list"])
-                        self.traceback ="error in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], task[0], task_dict["host_list"])
+                    if state == "error":  # error message
+                        self.error = "error in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], 
+                                                                                                          task[0], task_dict["host_list"])
+                        self.traceback = "error in state {0}, server - {1}, recipie - {2}, host - {3}".format(state, task_dict["name"], 
+                                                                                                              task[0], task_dict["host_list"])
                         error = self.error
-                        #print "error and tracebacks"
-                    self.set(task_dict["user"], task_dict["host_list"], task_dict["name"], task[0], state, error_message=error )
+                        # print "error and tracebacks"
+                    self.set(task_dict["user"], task_dict["host_list"], task_dict["name"], task[0], state, error_message=error)
             else:
                 print "failed: at this moment we only launch only vms"
 
