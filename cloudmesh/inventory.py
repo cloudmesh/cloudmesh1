@@ -3,13 +3,9 @@ from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.logger import LOGGER
 from hostlist import expand_hostlist
 from pprint import pprint
-from pymongo import MongoClient
-from jinja2 import Template
 import sys
 from cloudmesh.util.util import path_expand as cm_path_expand
 from cloudmesh.config.cm_config import cm_config_server
-import yaml
-import json
 from cloudmesh.config.cm_config import get_mongo_db
 from cloudmesh.config.ConfigDict import ConfigDict
 from datetime import datetime
@@ -25,15 +21,16 @@ class Inventory:
 
     server_config = None
 
-
+    CONFIG_FILE = "~/.futuregrid/cloudmesh_cluster.yaml"
+    BOOTSPEC_FILE = "~/.futuregrid/cloudmesh_bootspec.yaml"
 
     def __init__(self):
         # read the host file definition from cloudmesh_cludter.yaml
         self.server_config = cm_config_server()
 
-        self.config = ConfigDict(filename="~/.futuregrid/cloudmesh_cluster.yaml")
+        self.config = ConfigDict(filename=CONFIG_FILE)
 
-        self.bootspec_config = ConfigDict(filename="~/.futuregrid/cloudmesh_bootspec.yaml")
+        self.bootspec_config = ConfigDict(filename=BOOTSPEC_FILE)
 
 
         collection = "inventory"
@@ -46,7 +43,9 @@ class Inventory:
     def get_attribute(self, host_label, attribute):
 
         try:
-            value = self.find ({"cm_id" : host_label, 'cm_attribute' : 'variable', 'cm_key' : attribute})[0]
+            value = self.find ({"cm_id" : host_label,
+                                'cm_attribute' : 'variable',
+                                'cm_key' : attribute})[0]
         except:
             value = None
         return value
@@ -79,13 +78,16 @@ class Inventory:
 
         # get the cluster from the host_label
         try:
-            host = self.find_one({"cm_id": host_label, "cm_attribute": "network"})["cm_cluster"]
+            host = self.find_one({"cm_id": host_label,
+                                  "cm_attribute": "network"})["cm_cluster"]
         except:
             print "could not find host with the label", host_label
             sys.exit()
 
 
-        cursor = self.update ({"cm_id" : host_label, 'cm_attribute' : 'variable', 'cm_key' : attribute},
+        cursor = self.update ({"cm_id" : host_label,
+                               'cm_attribute' : 'variable',
+                               'cm_key' : attribute},
                                   { "$set": { attribute: value,
                                              'cm_cluster': host,
                                              'cm_type': "inventory",
@@ -150,7 +152,8 @@ class Inventory:
             self.insert(element)
 
             for key in keys:
-                if (type(cluster[key]) is str) and (not key in ["id", "network"]):
+                if (type(cluster[key]) is str) and \
+                    (not key in ["id", "network"]):
                     element = dict({'cm_cluster': name,
                                     'cm_id': name,
                                     'cm_type': "inventory",
@@ -215,8 +218,9 @@ class Inventory:
 
 
 
-    def cluster (selfself, name):
+    def cluster (self, name):
         """returns cluster data in dict"""
+        name = "NOT IMPLEMENTED"
         raise RuntimeError("Not Implemented")
 
 
@@ -224,20 +228,15 @@ class Inventory:
         '''
         print some elementary overview information 
         '''
-
-        '''
-            element = dict({'cm_cluster': name,
-                            'cm_id': name,
-                            'cm_type': "inventory",
-                            'cm_kind': 'server',
-                            'cm_key': 'range',
-                            'cm_value': expand_hostlist(cluster["id"]),
-                            'cm_attribute': 'variable'
-                             })
-        '''
-        clusters = self.find({'cm_type' : 'inventory', 'cm_key' : 'range', 'cm_kind' : 'server'})
-        servers = self.find({'cm_type' : 'inventory', 'cm_key' : 'server', 'cm_kind' : 'server'})
-        services = self.find({'cm_type' : 'inventory', 'cm_key' : 'image', 'cm_kind' : 'image'})
+        clusters = self.find({'cm_type' : 'inventory',
+                              'cm_key' : 'range',
+                              'cm_kind' : 'server'})
+        servers = self.find({'cm_type' : 'inventory',
+                             'cm_key' : 'server',
+                             'cm_kind' : 'server'})
+        services = self.find({'cm_type' : 'inventory',
+                              'cm_key' : 'image',
+                              'cm_kind' : 'image'})
         images = self.find({'cm_key' : 'bootspec'})
         print "IIII", images.count()
 
@@ -267,7 +266,8 @@ class Inventory:
 
 
     def host (self, index, auth=True):
-        cursor = self.find ({"cm_id" : index, 'cm_attribute' : 'network'})
+        cursor = self.find ({"cm_id" : index,
+                             'cm_attribute' : 'network'})
 
         print "CCCC", cursor[0]
 
@@ -323,8 +323,9 @@ class Inventory:
 
         return data
 
-    def ipadr (self, index, type):
-        return self.find ({"cm_id": index, "type": type})[0]['ipaddr']
+    def ipadr (self, index, iptype):
+        return self.find ({"cm_id": index,
+                           "type": iptype})[0]['ipaddr']
 
     def generate_bootspec(self):
         print self.bootspec_config
