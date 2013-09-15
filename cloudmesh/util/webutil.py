@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+'''some useful functions when working with web servers'''
 import re
 import os
 import sys
