@@ -20,11 +20,11 @@ class clusterheatmap:
 
     def cluster(self):
         india = expand_hostlist("india[001-136")
-        for h in india:
+        # for h in india:
 
-        zip loock this up
+        # zip loock this up
 
-        zip can be used to merge two arrays into a dict
+        # zip can be used to merge two arrays into a dict
 
 
     def random(self, name):
