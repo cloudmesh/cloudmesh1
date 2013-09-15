@@ -1,8 +1,10 @@
+'''Ping a machine'''
 from sh import ping as sh_ping
 
 # from pprint import pprint
 
 def ping(host):
+    '''ping the specified host'''
     try:
         r = sh_ping("-o", "-c", "1", host).strip().split("\n")
     except:

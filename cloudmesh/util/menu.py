@@ -1,3 +1,4 @@
+'''Ascii menu class'''
 
 def ascii_menu(title=None, menu_list=None):
     '''

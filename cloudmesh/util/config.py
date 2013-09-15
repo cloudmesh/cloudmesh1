@@ -1,6 +1,8 @@
+"""Some simple yaml file reader"""
+
 import os
 import sys
-"""Some simple yaml file reader"""
+
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import check_file_for_tabs
 from cloudmesh.util.util import path_expand as cm_path_expand

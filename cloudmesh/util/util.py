@@ -1,3 +1,4 @@
+'''a number of useful functions'''
 from string import Template
 import inspect
 import os

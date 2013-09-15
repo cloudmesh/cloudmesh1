@@ -1,3 +1,5 @@
+'''simplifing password management'''
+
 import getpass
 import platform
 
