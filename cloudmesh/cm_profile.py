@@ -35,8 +35,8 @@ class cm_profile (object):
         cm = self.config.get("cloudmesh")
 
 
-        
-        
+
+
         username = {}
         username["hpc"] = cm["hpc"]["username"]
         username["portal"] = cm["profile"]["username"]
@@ -73,7 +73,7 @@ class cm_profile (object):
         """
         saves for the username the dict and if a page is given also includes the
         page
-        """ 
+        """
         self.write(username, dict, cloud, page, update=False)
 
     def write(self, username, dict, cloud=None, page=None, update=False):
