@@ -30,9 +30,9 @@ class CMUserProviderBaseType(object):
         self.db = self.client[db_name]          
         self.db_clouds = self.db[collection]    
         # print db_name
-	# print self.db
-	# self.config = cm_config()
-   
+    	# print self.db
+    	# self.config = cm_config()
+       
     def find(self, query):
         '''
         executes a query and returns the results from mongo db.
@@ -54,12 +54,12 @@ class CMUserProviderBaseType(object):
         :param id: the unique id of the user
         :param dict: the attributes of the user
         '''
-	# print "IDIDID", id
-	# print "DICTDICT", dict
-	result = {}
-	result['cm_user_id'] = id
-	result.update(dict)
-	self.db_clouds.insert(result)
+    	# print "IDIDID", id
+    	# print "DICTDICT", dict
+    	result = {}
+    	result['cm_user_id'] = id
+    	result.update(dict)
+    	self.db_clouds.insert(result)
         # result[element]['cm_user_id'] = id 
         # self.db_clouds.insert(result[element])
         
@@ -70,13 +70,13 @@ class CMUserProviderBaseType(object):
         :param id: the unique id of the user
         :param dict: the attributes of the use
         '''
-	# print "DICT in updates():", dict
+    	# print "DICT in updates():", dict
         data = self.find_one({'cm_user_id': id})
-	# print "EXISTING data in updates():", data
-	if data is None:
-		data = {}
-        data.update(dict)
-	# print "data after update in updates():", data
+    	# print "EXISTING data in updates():", data
+    	if data is None:
+    	    data = {}
+            data.update(dict)
+    	# print "data after update in updates():", data
         self.remove(id)
         self.add(id, data)
         
