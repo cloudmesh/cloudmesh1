@@ -1,3 +1,4 @@
+"""managing information from GIT"""
 from pprint import pprint
 from sh import git
 from sh import sort
