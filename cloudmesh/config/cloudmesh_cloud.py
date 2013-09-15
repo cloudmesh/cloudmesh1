@@ -5,7 +5,7 @@ from random import choice
 
 
 class cloudmesh_cloud:
-    """Abstract class, provides credentials for various cloud platforms""" 
+    """Abstract class, provides credentials for various cloud platforms"""
 
     def __init__(self, profiledata, defaultproj, projectlist, cloudname, clouddata):
         self._profile = profiledata

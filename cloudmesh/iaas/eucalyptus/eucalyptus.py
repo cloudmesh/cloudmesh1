@@ -71,21 +71,21 @@ class eucalyptus(ComputeBaseType):
     #
     def _get_vmname(self, prefix):
         return _generate_vmname(prefix, self.no)
-    
+
     def _generate_vmname(self, prefix, index):
         number = str(index).zfill(3)
         name = '%s-%s' % (prefix, number)
         return name
 
 
-    
+
     def connect(self, label, project):
         """
         establishes a connection to the eucalyptus cloud,
         e.g. initializes the needed components to conduct subsequent
         queries.
         """
-        
+
         # from old eucalyptus_libcloud
         # path = os.environ['HOME'] + "/" + \
         # self.credentials.location.replace("/eucarc", "")
@@ -93,10 +93,10 @@ class eucalyptus(ComputeBaseType):
         #         libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
 
 
-        
+
         self.label = label
         self.project = project
-        
+
         # copied from deprecated code
         # if project is None:
         #    self.activate_project("fg82")
@@ -105,7 +105,7 @@ class eucalyptus(ComputeBaseType):
 
         print "Loading", self.label, self.project
         Driver = get_driver(Provider.EUCALYPTUS)
-        
+
         self.config = cm_config()
 
 
@@ -124,12 +124,12 @@ class eucalyptus(ComputeBaseType):
         else:
             host = result.netloc
             port = None
-    
+
         path = result.path
 
         self.credential = self.config.get(self.label, expand=True)
         pprint(self.credential)
-        
+
         # libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
         # libcloud.security.VERIFY_SSL_CERT = False
 
@@ -181,7 +181,7 @@ class eucalyptus(ComputeBaseType):
                 else:
                     vm[key] = value
             for d in exclude:
-                if d in vm: 
+                if d in vm:
                     del vm[d]
             element_array.append(vm)
         return element_array
@@ -200,7 +200,7 @@ class eucalyptus(ComputeBaseType):
 
         print self.access_key
         print self.secret_key
-        
+
     def __init__(self, label,
                  project=None,
                  accessKey=None,
@@ -226,7 +226,7 @@ class eucalyptus(ComputeBaseType):
         self.images = {}
         self.nodes = {}
         flavors_cache = None
-        images_cache = None 
+        images_cache = None
         servers_cache = None
         self.credential = None
         self.cloud = None
@@ -247,7 +247,7 @@ class eucalyptus(ComputeBaseType):
 
     def _delete_keys_from_dict(self, elements, exclude):
         for d in exclude:
-            if d in elements: 
+            if d in elements:
                 del elements[d]
         return elements
 
@@ -256,7 +256,7 @@ class eucalyptus(ComputeBaseType):
 
     def _get_servers_dict(self):
         return self._retrief("servers", self.cloud.list_nodes, ['private_dns', 'dns_name', 'instanceId', 'driver', '_uuid'])
-    
+
     def _get_images_dict(self):
         return self._retrief("images",
                              self.cloud.list_images,
@@ -292,7 +292,7 @@ class eucalyptus(ComputeBaseType):
                     key = open(key, "r").read()
                 self.upload_key_pair(key, key_name)
         """
-        
+
         config = cm_config()
 
         if flavor_name is None:
@@ -300,7 +300,7 @@ class eucalyptus(ComputeBaseType):
 
         if image_id is None:
             image_id = config.default(self.label)['image']
-            
+
         size = [s for s in self.flavors_cache if s.id == flavor_name][0]
         image = [i for i in self.images_cache if i.id == image_id][0]
 
@@ -325,13 +325,13 @@ class eucalyptus(ComputeBaseType):
         """
         print "self.servers_cachec", self.servers_cache
         vm = [i for i in self.servers_cache if i.id == id][0]
-        
+
         r = self.cloud.destroy_node(vm)
 
         return r.__dict__
-    
 
-    
+
+
 if __name__ == "__main__":
 
     credential_test = False

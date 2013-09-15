@@ -25,7 +25,7 @@ class Test_cloudmesh:
 
     filename = None
     filename = "~/.futuregrid/cloudmesh.yaml"
-    
+
 
     def setup(self):
         print "READING THE FILE", self.filename
@@ -39,13 +39,13 @@ class Test_cloudmesh:
 
     def test_launcher(self):
         filename = "~/.futuregrid/cloudmesh_launcher.yaml"
-        config = ConfigDict(filename=filename)  
+        config = ConfigDict(filename=filename)
         print config
         existing = config.get("recipies")
-        test1 =  existing is not None
+        test1 = existing is not None
         print existing
         try:
-            none_existing = config.get("mongo","xyz")
+            none_existing = config.get("mongo", "xyz")
             test2 = False
         except:
             print "Error"
@@ -54,13 +54,13 @@ class Test_cloudmesh:
 
     def test_server(self):
         filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = ConfigDict(filename=filename)  
-        #print config
-        existing = config.get("mongo","db")
-        test1 =  existing is not None
+        config = ConfigDict(filename=filename)
+        # print config
+        existing = config.get("mongo", "db")
+        test1 = existing is not None
         print "mongo.db =", existing
         try:
-            none_existing = config.get("mongo","xyz")
+            none_existing = config.get("mongo", "xyz")
             test2 = False
         except:
             print "Error"
@@ -69,10 +69,10 @@ class Test_cloudmesh:
 
     def test_dot(self):
         filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = ConfigDict(filename=filename)  
+        config = ConfigDict(filename=filename)
         print config
         existing = config.get("mongo.db")
-        test1 =  existing is not None
+        test1 = existing is not None
         print existing
         try:
             none_existing = config.get("mongo.xyz")
@@ -84,10 +84,10 @@ class Test_cloudmesh:
 
     def test_getitem_server(self):
         filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = ConfigDict(filename=filename)  
+        config = ConfigDict(filename=filename)
         print config
         existing = config["mongo"]["db"]
-        test1 =  existing is not None
+        test1 = existing is not None
         print "QUERY", existing
         print "Port", config["mongo"]["port"]
         try:

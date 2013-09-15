@@ -13,7 +13,7 @@ import pprint
 log = LOGGER(__file__)
 
 class cm_launcher_db(object):
-    
+
     def __init__(self):
         self.cm_type = "launcher"
         self.db = get_mongo_db(self.cm_type)
@@ -23,28 +23,28 @@ class cm_launcher_db(object):
         element["cm_id"] = username
         element["cm_type"] = "userauth"
         self.update({"cm_id": username, "cm_type": "userauth"}, element)
-    
-    
+
+
     def update(self, query, values=None):
         '''
         executes a query and updates the results from mongo db.
         :param query:
         '''
         if values is None:
-            return self.db.update(query, upsert=True) 
+            return self.db.update(query, upsert=True)
         else:
            # print "query: ",query
            # print "values: ",values
-            return self.db.update(query, {"$set":values}, upsert=True) 
+            return self.db.update(query, {"$set":values}, upsert=True)
 
-    
+
     def insert(self, element):
         self.db.insert(element)
 
     def clear(self):
         self.db.drop()
 
-        
+
     def find(self, query=None):
         '''
         executes a query and returns the results from mongo db.
@@ -52,13 +52,13 @@ class cm_launcher_db(object):
         '''
         if query == None:
             return self.db.find()
-        return self.db.find(query) 
-    
+        return self.db.find(query)
+
     def find_one(self, query):
         '''
         executes a query and returns the results from mongo db.
         :param query:
         '''
-        return self.db.find_one(query) 
-    
+        return self.db.find_one(query)
+
 

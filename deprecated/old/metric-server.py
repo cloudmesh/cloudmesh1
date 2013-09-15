@@ -84,7 +84,7 @@ def start_vm(cloud=None, server=None):
         active=active,
         version=version,
         endate=enddate)
-    #return table()
+    # return table()
 
 
 @app.route('/save/')

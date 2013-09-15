@@ -85,7 +85,7 @@ def start_vm(cloud=None, server=None):
         version=version,
         endate=enddate)
 
-    #return table()
+    # return table()
     # there mey be a problem here on return
 
 

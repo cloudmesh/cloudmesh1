@@ -14,43 +14,43 @@ from cloudmesh.user.cm_template import cm_template
 log = LOGGER(__file__)
 package_dir = os.path.dirname(os.path.abspath(__file__))
 
-class OrderedJsonEncoder( simplejson.JSONEncoder ):
+class OrderedJsonEncoder(simplejson.JSONEncoder):
     indent = 4
-    def encode(self,o, depth=0):
-        if isinstance(o,OrderedDict):
-            return "{" + (",\n ").join( [ self.encode(k)+":"+self.encode(v,depth+1) for (k,v) in o.iteritems() ] ) + "}\n"
+    def encode(self, o, depth=0):
+        if isinstance(o, OrderedDict):
+            return "{" + (",\n ").join([ self.encode(k) + ":" + self.encode(v, depth + 1) for (k, v) in o.iteritems() ]) + "}\n"
         else:
             return simplejson.JSONEncoder.encode(self, o)
 
 def custom_print(data_structure, indent):
     for key, value in data_structure.items():
-        print "\n%s%s:" % ('    '*indent,str(key)),
+        print "\n%s%s:" % ('    ' * indent, str(key)),
         if isinstance(value, OrderedDict):
-            custom_print(value, indent+1)
+            custom_print(value, indent + 1)
         elif isinstance(value, dict):
-            custom_print(value, indent+1)
+            custom_print(value, indent + 1)
         else:
-            print "%s" %   (str(value)), 
-       
+            print "%s" % (str(value)),
+
 class ConfigDict (OrderedDict):
 
-    def __init__(self, *args, **kwargs) : 
-        OrderedDict.__init__(self, *args, **kwargs) 
+    def __init__(self, *args, **kwargs) :
+        OrderedDict.__init__(self, *args, **kwargs)
         if 'filename' in kwargs:
             self['location'] = kwargs['filename']
         else:
             log.error("filename not specified")
         self.load(self['location'])
-        
+
     def read(self, filename):
         """does the same as load"""
         self.load(filename)
-        
+
     def load(self, filename):
         self['location'] = path_expand(filename)
-        d = OrderedDict(read_yaml_config (self['location'], check=True)) 
+        d = OrderedDict(read_yaml_config (self['location'], check=True))
         self.update(d)
-    
+
     def write(self, filename=None, configuration=None):
         """thismethod has not been tested"""
         # pyaml.dump(self.config, f, vspacing=[2, 1, 1])
@@ -76,7 +76,7 @@ class ConfigDict (OrderedDict):
         content = template.replace(format="text", **template_vars)
 
         fpath = filename or self.filename
-        f = os.open(fpath, os.O_CREAT | os.O_TRUNC | 
+        f = os.open(fpath, os.O_CREAT | os.O_TRUNC |
                     os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
         os.write(f, content)
         os.close(f)
@@ -85,33 +85,33 @@ class ConfigDict (OrderedDict):
         # print "******************************\n"
         # print custom_print(self.init_config, 4)
         self.write(filename, self.init_config)
-         
+
     def error_keys_not_found(self, keys):
         log.error("Filename: {0}".format(self['location']))
         log.error("Key '{0}' does not exist".format('.'.join(keys)))
         indent = ""
-        last_index = len(keys) -1
+        last_index = len(keys) - 1
         for i, k in enumerate(keys):
             if i == last_index:
                 log.error(indent + k + ": <- this value is missing")
             else:
                 log.error(indent + k + ":")
-            indent = indent + "    "    
+            indent = indent + "    "
 
     def __str__(self):
         return self.json()
-    
-    
+
+
     def json(self):
         return json.dumps(self, indent=4)
-    
+
     def dump(self):
         orderedPrinter = OrderedJsonEncoder()
         return orderedPrinter.encode(self)
-    
+
     def pprint(self):
-        print custom_print(self,4)
-        
+        print custom_print(self, 4)
+
     """
     def __getitem__(self, *mykeys):        
         try:
@@ -121,7 +121,7 @@ class ConfigDict (OrderedDict):
             sys.exit()
         return item
     """
-    
+
     def get(self, *keys):
         """
         returns the dict of the information as read from the yaml file. To
@@ -144,26 +144,26 @@ class ConfigDict (OrderedDict):
                 self.error_keys_not_found(keys)
                 sys.exit()
         return element
-    
+
 if __name__ == "__main__":
     config = ConfigDict({"a":"1", "b" : {"c": 3}}, filename="~/.futuregrid/cloudmesh_server.yaml")
-    
+
     print "PPRINT"
     print 70 * "="
     pprint(config)
-    
+
     print "PRINT"
     print 70 * "="
-    print config.pprint()    
-    print config.json()    
-    
+    print config.pprint()
+    print config.json()
+
     print 70 * "="
     print "A =", config["a"]
     print "mongo.path =", config["mongo"]["path"]
     print "mongo.path GET =", config.get("mongo.path")
     print "mongo.path GET =", config.get("mongo.path.wrong")
 
-    
+
     print "get A =", config.get("a")
 
     print "mongo.path.wrong =", config["mongo"]["path"]["wrong"]
@@ -172,5 +172,5 @@ if __name__ == "__main__":
     # print config["x"]
     # print config.x
 
-    
-    
+
+

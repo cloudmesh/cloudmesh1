@@ -29,13 +29,13 @@ from cloudmesh.util.util import HEADING
 class Test:
 
     def setup(self):
-        #self.configuration = cm_config() 
-        #pprint (self.configuration.__dict__)
-        self.user = "gvonlasz" 
-        self.host = "india.futuregrid.org" 
+        # self.configuration = cm_config()
+        # pprint (self.configuration.__dict__)
+        self.user = "gvonlasz"
+        self.host = "india.futuregrid.org"
 
-        
-        #pprint (_create_pbsinfo_dict(data))
+
+        # pprint (_create_pbsinfo_dict(data))
 
     def tearDown(self):
         pass
@@ -61,7 +61,7 @@ class Test:
         self.pbs.refresh()
         pprint (self.pbs.info)
 
-        
-        
+
+
         # ssh gvonlasz@alamo.futuregrid.org pbsnodes -a
-        
+

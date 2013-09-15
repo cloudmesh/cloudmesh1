@@ -12,9 +12,9 @@ import pprint
 log = LOGGER(__file__)
 
 class cm_userauth(cm_MongoBase):
-    
+
     def __init__(self):
         self.cm_type = "userauth"
         self.db_userauth = get_mongo_db(self.cm_type)
-    
+
 

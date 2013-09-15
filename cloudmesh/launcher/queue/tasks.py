@@ -11,7 +11,7 @@ from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
 launcher = Launcher()
-    
+
 
 @celery.task(track_started=True)
 def task_launch(task_dict):
@@ -23,6 +23,6 @@ def task_launch(task_dict):
     '''
     print "task recieved"
     launcher.run(task_dict)
-    
+
 
 

@@ -49,10 +49,10 @@ def display_nosetest(test=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    
+
 
     if test is None:
-        filename = "/tmp/nosetests_all.json"    
+        filename = "/tmp/nosetests_all.json"
     else:
         testname = "../tests/test_{0}.py".format(test)
         filename = "/tmp/nosetests_{0}.json".format(test)
@@ -61,7 +61,7 @@ def display_nosetest(test=None):
             tests = literal_eval(myfile.read())
     except:
         tests = {'name': 'please run test'}
-        
+
     return render_template('nosetest.html',
                            updated=time_now,
                            tests=tests,
@@ -74,7 +74,7 @@ def display_nosetest(test=None):
 def run_nosetest(test=None):
 
     if test is None:
-        filename = "/tmp/nosetests_all.json"    
+        filename = "/tmp/nosetests_all.json"
         testname = ""
     else:
         filename = "/tmp/nosetests_{0}.json".format(test)

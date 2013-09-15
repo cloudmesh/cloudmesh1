@@ -26,11 +26,11 @@ n_inventory.generate()
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_inventory():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    
-    #inventory.refresh()
+
+    # inventory.refresh()
 
     clusters = ["bravo", "india", "delta", "echo", "sierra"]
-    
+
     return render_template('mesh_inventory.html',
                            updated=time_now,
                            clusters=clusters)
@@ -49,19 +49,19 @@ def old_display_summary():
 @inventory_module.route('/inventory/summary/')
 @cond_decorator(cloudmesh.with_login, login_required)
 def old_display_summary():
-    
-    #clusters = ["bravo", "india", "delta", "echo", "sierra"]
+
+    # clusters = ["bravo", "india", "delta", "echo", "sierra"]
     clusters = ["bravo", "india", "delta", "echo"]
-    
+
     inv = {}
-    
+
     for cluster in clusters:
         inv[cluster] = n_inventory.hostlist(cluster)
-    
+
     parameters = {'columns': 12}
-    
+
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    
+
     return render_template('mesh_inventory_summary_table.html',
                            inventory=inv,
                            clusters=clusters,
@@ -87,11 +87,11 @@ def display_old_inventory():
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_named_resource(cluster, name):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    #inventory.refresh()
-    
+    # inventory.refresh()
+
     clusters = n_inventory.hostlist(cluster)
-    server = n_inventory.host(name,auth=False)
-    
+    server = n_inventory.host(name, auth=False)
+
     return render_template('mesh_inventory_cluster_server.html',
                            updated=time_now,
                            server=server,
@@ -124,10 +124,10 @@ def display_cluster(cluster):
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_cluster(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    #inventory.refresh()
-    
+    # inventory.refresh()
+
     servers = n_inventory.hostlist(cluster)
-    
+
     return render_template('mesh_inventory_cluster.html',
                            updated=time_now,
                            servers=servers,
@@ -157,7 +157,7 @@ def display_cluster_table(cluster):
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_cluster_table(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    #inventory.refresh()
+    # inventory.refresh()
 
     servers = n_inventory.hostlist(cluster)
 
@@ -172,9 +172,9 @@ def display_cluster_table(cluster):
     return render_template('mesh_inventory_cluster_table.html',
                            updated=time_now,
                            parameters=parameters,
-                           servers= servers,
+                           servers=servers,
                            cluster=cluster)
-                           
+
 #                           cluster=inventory.get("cluster", cluster))
 
 

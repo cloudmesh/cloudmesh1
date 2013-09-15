@@ -207,7 +207,7 @@ def start_vm(cloud=None, server=None):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
     key = None
 
-    #if configuration.has_key('keys'):
+    # if configuration.has_key('keys'):
     if 'keys' in configuration:
         key = configuration['keys']['default']
 

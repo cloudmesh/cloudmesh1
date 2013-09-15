@@ -14,39 +14,39 @@ log = LOGGER(__file__)
 
 
 class CMUserProviderBaseType(object):
-    
+
     providers = {}
-    
+
     client = None
     db_clouds = None
-    
+
 #    config = None
-    
+
     def __init__(self, collection="user"):
         """initializes the cloudmesh mongo db. The name of the collection os passed."""
         db_name = cm_config_server().get("mongo.db")
-        
-        self.client = MongoClient()    
-        self.db = self.client[db_name]          
-        self.db_clouds = self.db[collection]    
+
+        self.client = MongoClient()
+        self.db = self.client[db_name]
+        self.db_clouds = self.db[collection]
         # print db_name
     	# print self.db
     	# self.config = cm_config()
-       
+
     def find(self, query):
         '''
         executes a query and returns the results from mongo db.
         :param query:
         '''
-        return self.db_clouds.find(query) 
+        return self.db_clouds.find(query)
 
     def find_one(self, query):
         '''
         executes a query and returns the results from mongo db.
         :param query:
         '''
-        return self.db_clouds.find_one(query) 
-         
+        return self.db_clouds.find_one(query)
+
     def add(self, id, dict):
         '''
         adds a user with the given id to the users database. The attributes are specified in the dict.
@@ -60,9 +60,9 @@ class CMUserProviderBaseType(object):
     	result['cm_user_id'] = id
     	result.update(dict)
     	self.db_clouds.insert(result)
-        # result[element]['cm_user_id'] = id 
+        # result[element]['cm_user_id'] = id
         # self.db_clouds.insert(result[element])
-        
+
     def updates(self, id, dict):
         '''
         updates the attributes specified in the dict for a given user with the id
@@ -79,27 +79,27 @@ class CMUserProviderBaseType(object):
     	# print "data after update in updates():", data
         self.remove(id)
         self.add(id, data)
-        
+
     def remove(self, id):
         '''
         removes the used with the given id
                 
         :param id: the unique id of the user
         '''
-        self.db_clouds.remove({"cm_user_id": id}, safe=True) 
-                
+        self.db_clouds.remove({"cm_user_id": id}, safe=True)
+
     def clear(self):
         '''
         empties th user database
         '''
         log.error("to be implemented")
-        
+
     def refresh(self):
         '''
         refreshes the userdatabase from the user provider
         '''
         log.error("to be implemented")
-        
+
     def register(self, name, type, params):
         '''
         registers a provider with som parameters specified in the dict params
@@ -109,7 +109,7 @@ class CMUserProviderBaseType(object):
         :param params: a dictionary describing wht needs to be poassed to the service that provides user information
         '''
         log.error("to be implemented")
-        
-        
-        
-        
+
+
+
+

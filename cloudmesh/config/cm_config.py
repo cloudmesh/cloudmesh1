@@ -28,18 +28,18 @@ def get_mongo_db(mongo_collection):
     Read in the mongo db information from the cloudmesh_server.yaml
     """
     filename = os.path.expanduser("~/.futuregrid/cloudmesh_server.yaml")
-        
-    mongo_config = ConfigDict(filename=filename).get("mongo") 
+
+    mongo_config = ConfigDict(filename=filename).get("mongo")
 
     mongo_host = mongo_config["host"]
     mongo_port = mongo_config["port"]
-    
+
     mongo_db_name = mongo_config["collections"][mongo_collection]['db']
-        
+
     client = MongoClient(host=mongo_host,
-                         port=mongo_port)  
-    db = client[mongo_db_name]          
-    db_clouds = db[mongo_collection] 
+                         port=mongo_port)
+    db = client[mongo_db_name]
+    db_clouds = db[mongo_collection]
     return db_clouds
 
 
@@ -56,7 +56,7 @@ class cm_config_server(ConfigDict):
             filename = self.filename
         ConfigDict.__init__(self, filename=filename, kind="server")
 
-    
+
 class cm_config_launcher(ConfigDict):
     """
     reads the information contained in the file
@@ -68,15 +68,15 @@ class cm_config_launcher(ConfigDict):
         if filename is None:
             filename = self.filename
         ConfigDict.__init__(self, filename=filename, kind="launcher")
-        
-    
+
+
 class cm_config(ConfigDict):
 
     # ----------------------------------------------------------------------
     # global variables
     # ----------------------------------------------------------------------
 
-    filename  = os.path.expanduser('~/.futuregrid/cloudmesh.yaml')
+    filename = os.path.expanduser('~/.futuregrid/cloudmesh.yaml')
     cloudmesh_server_path = os.path.expanduser('~/.futuregrid/cloudmesh_server.yaml')
 
     # ----------------------------------------------------------------------
@@ -93,7 +93,7 @@ class cm_config(ConfigDict):
         self._userdata_handler = None
         self._serverdata = None
 
-        
+
     # ----------------------------------------------------------------------
     # Internal helper methods
     # ----------------------------------------------------------------------
@@ -116,7 +116,7 @@ class cm_config(ConfigDict):
         # cloud_handler._client.mocktenants = ['fg82','fg110','fg296']
         #####################################################################################
         return cloud_handler
-        
+
 
     # ----------------------------------------------------------------------
     # Methods to initialize (create) the config config
@@ -336,7 +336,7 @@ class cm_config(ConfigDict):
 
     def credential(self, name):
         return self.get_data (key=name, expand=True)
-    
+
     def get_data(self, key=None, expand=False):
         if key is None:
             return self['cloudmesh']
@@ -377,7 +377,7 @@ class cm_config(ConfigDict):
                     lines += self.export_line(attribute, value)
         return lines
 
-    
+
 # ----------------------------------------------------------------------
 # MAIN METHOD FOR TESTING
 # ----------------------------------------------------------------------

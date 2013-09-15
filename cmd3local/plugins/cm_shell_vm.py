@@ -54,7 +54,7 @@ class cm_shell_vm:
         if arguments["delete"] and arguments["NAME"]:
             log.info ("delete the vm")
             return
-        
+
         if arguments["info"] and arguments["NAME"]:
             log.info ("vm info")
             return
@@ -64,5 +64,5 @@ class cm_shell_vm:
             return
 
 
-        
-        
+
+

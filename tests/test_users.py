@@ -21,7 +21,7 @@ class Test_Users:
 
     def setup(self):
         self.usersobj = cm_user()
-        
+
     def tearDown(self):
         pass
 

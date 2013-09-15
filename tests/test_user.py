@@ -24,7 +24,7 @@ class Test_cloudmesh:
     }
     filename = "etc/cloudmesh.yaml"
 
-    
+
     def setup(self):
         self.t = cm_template(path_expand(self.filename))
 
@@ -36,10 +36,10 @@ class Test_cloudmesh:
         HEADING()
         print self.t.variables()
         assert "portalname" in self.t.variables()
-    
+
     def test_replace_incomplete(self):
         try:
-            print self.t.replace(self.d,format="dict")
+            print self.t.replace(self.d, format="dict")
         except:
             pass
         assert True
@@ -54,7 +54,7 @@ class Test_cloudmesh:
             }
         print self.t.replace(d)
         assert self.t.complete
-        
+
 #    if not t.complete():
 #       print "ERROR: undefined variables"
 #       print t.variables()
@@ -65,7 +65,7 @@ class Test_cloudmesh:
         r = auth.get("dummy")
         pprint (r)
 
-    
-    
+
+
 
 

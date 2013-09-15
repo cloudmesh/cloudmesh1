@@ -9,11 +9,11 @@ from sh import curl
 import json
 
 def get_token(credential):
-    
+
     if not os.path.isfile(credential['OS_CACERT']):
         print "Error: certfile", credential['OS_CACERT'], "does not exist"
         sys.exit()
-        
+
     param = {"auth": { "passwordCredentials": {
                             "username": credential['OS_USERNAME'],
                             "password":credential['OS_PASSWORD'],
@@ -29,7 +29,7 @@ def get_token(credential):
                       data=json.dumps(param),
                       headers=headers,
                       verify=credential['OS_CACERT'])
-                      
+
     return r.json()
 
 
@@ -44,12 +44,12 @@ def get(token, url, msg):
     headers = {'X-Auth-Token': token}
     r = requests.get(url, headers=headers, verify=credential['OS_CACERT'])
     return r.json()
-    
+
 
 config = cm_config()
 credential = config.credential('sierra_openstack_grizzly')
 
-#pprint(credential)
+# pprint(credential)
 
 r = get_token(credential)
 token = r["access"]["token"]["id"]
@@ -59,6 +59,6 @@ tenant = r["access"]["token"]["tenant"]["id"]
 # print 70 * "="
 
 url = _get_compute_service(r)['endpoints'][0]['publicURL']
-#pprint (url)
+# pprint (url)
 pprint (get(token, url, "flavors"))
 

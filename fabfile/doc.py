@@ -16,7 +16,7 @@ def html():
     """build the doc locally and view"""
     local("cd doc; make html")
     view()
-    
+
 
 @task
 def gh():

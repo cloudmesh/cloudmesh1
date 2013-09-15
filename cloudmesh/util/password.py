@@ -16,7 +16,7 @@ def ask_for_input(label, init_function, echo=False):
     if echo:
         print "{0}: {1}".format(label, result)
     return result
-    
+
 def get_host():
     '''
     asks for a hostname and uses the platforms hostname as initial value
@@ -35,8 +35,8 @@ def _password_valid(password, repeat_password):
     :param password: first password
     :param repeat_password: second password
     '''
-    return password == repeat_password and password != "" and password != None 
-    
+    return password == repeat_password and password != "" and password != None
+
 def get_password():
     '''
     gets a new password while asking twice for it and making sure we did not mistype.
@@ -45,7 +45,7 @@ def get_password():
     # http://stackoverflow.com/questions/1761744/python-read-password-from-stdin
 
     pprompt = lambda: (getpass.getpass(), getpass.getpass('Retype password: '))
-    
+
     password, repeat_password = pprompt()
     while not _password_valid(password, repeat_password):
         print('Passwords do not match or is empty. Try again')

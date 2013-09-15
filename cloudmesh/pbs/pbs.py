@@ -14,20 +14,20 @@ class PBS:
     host = None
     pbs_qstat_data = None
     pbs_nodes_data = None
-    
+
     def __init__(self, user, host):
         self.user = user
         self.host = host
 
     def pbsnodes(self, refresh="True"):
         """returns the pbs node infor from an pbs_nodes_raw_data is a string see above for example"""
-        
+
         if self.pbs_nodes_data is None or refresh:
             try:
                 result = ssh("{0}@{1}".format(self.user, self.host), "pbsnodes", "-a")
             except:
                 raise RuntimeError("can not execute pbs nodes via ssh")
-            pbsinfo = {}        
+            pbsinfo = {}
             nodes = result.split("\n\n")
             for node in nodes:
                 pbs_data = node.split("\n")
@@ -53,7 +53,7 @@ class PBS:
                         except:
                             pass
             self.pbs_nodes_data = pbsinfo
-        
+
         return self.pbs_nodes_data
 
     def exists(self, host):
@@ -64,14 +64,14 @@ class PBS:
         """add an attribute for the specified hosts in the format
         i[1-20]. which would set the attribute for all hosts in i1 to
         i20"""
-        hosts = expand_hostlist(spec)    
+        hosts = expand_hostlist(spec)
         for host in hosts:
             self._set(host, attribute)
-            
+
     def _set(self, host, attribute):
         """add an attribute for the specified hosts"""
         print "TODO: ALLAN"
-            
+
 
     def qstat(self, refresh=True):
         if self.pbs_qstat_data is None or refresh:
@@ -80,21 +80,21 @@ class PBS:
             except:
                 raise RuntimeError("can not execute pbs qstat via ssh")
             info = {}
-            
+
             try:
                 xmldoc = minidom.parseString(xmldata)
-                
-                itemlist = xmldoc.getElementsByTagName('Job') 
+
+                itemlist = xmldoc.getElementsByTagName('Job')
                 for item in itemlist:
                     job = {}
                     for attribute in item.childNodes:
                         if len(attribute.childNodes) == 1:
                             job[attribute.nodeName] = attribute.firstChild.nodeValue
                         else:
-                            job[attribute.nodeName] = {}                    
+                            job[attribute.nodeName] = {}
                             for subchild in attribute.childNodes:
                                 job[attribute.nodeName][subchild.nodeName] = subchild.firstChild.nodeValue
-        
+
                     info[job['Job_Id']] = job
             except:
                 pass

@@ -6,7 +6,7 @@ def memory_usage():
     run('free -m')
 
 def main():
-    hosts = 'localhost,india.futuregrid.org'    
+    hosts = 'localhost,india.futuregrid.org'
     with settings(host_string=hosts):
         memory_usage()
 
@@ -30,6 +30,6 @@ class SystemInfo:
     def _get(self,ip):
         """gets the systme information from the machine with the given ip"""
         pass
-'''    
-    
-    
+'''
+
+
