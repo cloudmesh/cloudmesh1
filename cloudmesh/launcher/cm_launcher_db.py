@@ -1,4 +1,5 @@
 from cloudmesh.util.logger import LOGGER
+from cloudmesh.cm_mongo import cm_MongoBase
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
