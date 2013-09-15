@@ -12,14 +12,14 @@ from mongoengine import *
 # INVENTORY
 # ============================================================
 
-#db = connect ("nosetest")
+# db = connect ("nosetest")
 
 inventory = Inventory("nosetest")
 
 # inventory.config("server.yaml")
 
-        
-#print inventory.configuration
+
+# print inventory.configuration
 
 
 """
@@ -80,11 +80,11 @@ redhat.save()
 inventory.refresh()
 
 for cluster in inventory.clusters:
-    cluster.images = [centos,redhat]
+    cluster.images = [centos, redhat]
     cluster.save(cascade=True)
-    
 
-c = inventory.get("cluster","bravo")
+
+c = inventory.get("cluster", "bravo")
 
 # print "LLLL", [image.name for image in c.images]
 

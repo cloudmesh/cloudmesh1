@@ -8,31 +8,31 @@ def donotchange(fn):
 
 class ComputeBaseType:
 
-    users = {}         
+    users = {}
     tenants = {}
 
     # : the dict for the flavors
-    flavors = {}         
+    flavors = {}
 
     # : the dict for the images
-    images = {}          
-    
+    images = {}
+
     # : the dict for the servers
-    servers = {}         
+    servers = {}
 
     # : the dict for the set_credentials
-    credential = None    
+    credential = None
 
     # : the unique string identifying this cloud
-    label = None         
+    label = None
 
     def __init__(self, label, cred=None):
         self.credential = cred
         self.label = label
-    
+
     def _clear(self):
-        self.users = {}         
-        self.tenants = {}         
+        self.users = {}
+        self.tenants = {}
         self.flavors = {}  # global var
         self.images = {}  # global var
         self.servers = {}  # global var
@@ -67,7 +67,7 @@ class ComputeBaseType:
         raise NotImplementedError()
 
     def dump(self, type="server", with_manager=False):
-        """returns a string that contains information about the cloud. One can ste the type to 'images','flavors','servers'""" 
+        """returns a string that contains information about the cloud. One can ste the type to 'images','flavors','servers'"""
         selection = type.lower()[0]
         if selection == 'i':
             d = self.images.copy()
@@ -166,7 +166,7 @@ class ComputeBaseType:
     #
     # print
     #
-    
+
     def __str__(self):
         """
         print everything but the set_credentials that is known about this
@@ -177,12 +177,12 @@ class ComputeBaseType:
             'flavors': self.flavors,
             'servers': self.servers,
             'images': self.images,
-            # 'users': self.users,  
+            # 'users': self.users,
             'users': len(self.users),
             'tenants': self.tenants,
             }
         return json.dumps(information, indent=4)
-    
+
     #
     # get methods
     #
@@ -211,7 +211,7 @@ class ComputeBaseType:
             selection = type.lower()[0]
 
         list_function = self._get_servers_dict
-        
+
         d = self.servers
         if selection == 'a' or type is None:
             self.refresh("images")

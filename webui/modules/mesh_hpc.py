@@ -34,9 +34,9 @@ def display_mongo_qstat_refresh(host=None):
     else:
         hosts = [host]
     error = ""
-    res = tasks.refresh_qstat.apply_async(queue = "questat", priority = 0, args = [hosts])
+    res = tasks.refresh_qstat.apply_async(queue="questat", priority=0, args=[hosts])
     try:
-        error = res.get(timeout = timeout)
+        error = res.get(timeout=timeout)
     except :
             return render_template('error.html',
                            error="Time out",
@@ -76,7 +76,7 @@ def display_mongo_qstat_new():
         try:
             data[host] = pbs.get_qstat(host)
             print"101010101010101001010101001"
-            #print data[host]
+            # print data[host]
         except:
             error += "get_qstat({0})".format(host)
         try:
@@ -91,10 +91,10 @@ def display_mongo_qstat_new():
             print timer
             print "TTTTT"
             pprint(data[host][0])
-            #timer[host] = datetime.now()
+            # timer[host] = datetime.now()
         else:
             timer[host] = datetime.now()
-        #print "TIMER", timer
+        # print "TIMER", timer
     attributes = {"pbs":
                   [
                         [ "Queue" , "queue"],

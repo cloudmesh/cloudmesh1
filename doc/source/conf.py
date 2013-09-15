@@ -14,7 +14,7 @@
 import sys
 import os
 import sphinx_bootstrap_theme
-#import cloudmesh.util
+# import cloudmesh.util
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -24,7 +24,7 @@ import sphinx_bootstrap_theme
 sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, os.path.abspath('../../..'))
 
-#print "PATH", sys.path
+# print "PATH", sys.path
 
 
 # -- General configuration -----------------------------------------------
@@ -35,19 +35,19 @@ sys.path.insert(0, os.path.abspath('../../..'))
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    'sphinx.ext.autodoc', 
-    'sphinx.ext.doctest', 
-    'sphinx.ext.intersphinx', 
-    'sphinx.ext.todo', 
-    'sphinx.ext.mathjax', 
-    'sphinx.ext.ifconfig', 
-    'sphinx.ext.viewcode', 
-    'sphinxcontrib.webmocks', 
+    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.ifconfig',
+    'sphinx.ext.viewcode',
+    'sphinxcontrib.webmocks',
     'sphinxjp.shibukawa']
 
 extensions.append('sphinxcontrib.autorun')
 
-#'sphinxcontrib.issuetracker']
+# 'sphinxcontrib.issuetracker']
 # issuetracker = 'none',
 # issuetracker_project = 'https://jira.futuregrid.org/browse',
 # issuetracker_project = 'FG-',
@@ -139,7 +139,7 @@ html_theme_options = {
 
     # Global TOC depth for "site" navbar tab. (Default: 1)
     # Switching to -1 shows all levels.
-    'globaltoc_depth': -1,
+    'globaltoc_depth':-1,
 
     # Include hidden TOCs in Site navbar?
     #
@@ -153,7 +153,7 @@ html_theme_options = {
     # HTML navbar class (Default: "navbar") to attach to <div> element.
     # For black navbar, do "navbar navbar-inverse"
     'navbar_class': "navbar navbar-inverse",
-    #'navbar_class': "navbar",
+    # 'navbar_class': "navbar",
 
     # Fix navigation bar to top of page?
     # Values: "true" (default) or "false"
@@ -169,7 +169,7 @@ html_theme_options = {
     # such as "amelia" or "cosmo".
     #
     # Note that this is served off CDN, so won't be available offline.
-    #'bootswatch_theme': "cosmo",
+    # 'bootswatch_theme': "cosmo",
 }
 
 
@@ -247,13 +247,13 @@ htmlhelp_basename = 'Cloudmeshdoc'
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
-    #'papersize': 'letterpaper',
+    # 'papersize': 'letterpaper',
 
     # The font size ('10pt', '11pt' or '12pt').
-    #'pointsize': '10pt',
+    # 'pointsize': '10pt',
 
     # Additional stuff for the LaTeX preamble.
-    #'preamble': '',
+    # 'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples

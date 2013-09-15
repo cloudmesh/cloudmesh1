@@ -1,5 +1,5 @@
 import sys
-#print sys.path
+# print sys.path
 
 from cloudmesh.cm_profile import cm_profile
 from pprint import pprint
@@ -27,7 +27,7 @@ pprint (p.get("abc"))
 
 
 name = "sierra_openstack_grizzly"
-#name = "india_openstack_essex"
+# name = "india_openstack_essex"
 
 credential = p.server.config["keystone"][name]
 
@@ -35,15 +35,15 @@ cloud = openstack(name, credential=credential)
 
 
 
-#cloud.refresh("flavors")
+# cloud.refresh("flavors")
 
-#print cloud.flavors
+# print cloud.flavors
 
-#pprint (cloud.get_token(credential=credential))
+# pprint (cloud.get_token(credential=credential))
 
-#pprint (cloud.get_tenants(credential))
-#pprint (cloud.get_users(credential))
-#pprint (cloud.get_users())
+# pprint (cloud.get_tenants(credential))
+# pprint (cloud.get_users(credential))
+# pprint (cloud.get_users())
 
 
 c = openstack(name)
@@ -52,8 +52,8 @@ c.refresh("users")
 
 pprint (c.get("users"))
 
-#c.refresh("tenants")     
-#print c.get("tenants")     
+# c.refresh("tenants")
+# print c.get("tenants")
 
 """
 from cloudmesh.cm_mesh import cloudmesh
@@ -67,5 +67,5 @@ print c.clouds
 
 
 
-#os = openstack()
+# os = openstack()
 

@@ -13,7 +13,7 @@ class cm_table:
 
     header = True the firts row is a headline
     """
-    
+
     _content = ""
 
     def __init__(self):

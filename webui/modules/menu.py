@@ -44,13 +44,13 @@ super_sidebar_pages = [
         [
             ["Queues", "/mesh/qstat"],
             ["Users", "/users/ldap"],
-            ["Admin", "/hpc"]            
+            ["Admin", "/hpc"]
         ]
     ],
     ["Launcher",
         [
-            ["Launcher", "/cm/launch"],            
-            ["Register", "/cm/register"]            
+            ["Launcher", "/cm/launch"],
+            ["Register", "/cm/register"]
         ]
     ],
 ]
@@ -98,7 +98,7 @@ flask.Flask.app_ctx_globals_class.externalbar_pages = externalbar_pages
 # ACTIVATE STRUCTURE
 #
 
-#@menu_module.context_processor
+# @menu_module.context_processor
 # def inject_sidebar():
 
 #    print "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"

@@ -11,7 +11,7 @@ import sys
 import os.path
 
 def get_pid(command):
-    lines= local("ps -ax |fgrep {0}".format(command), capture=True).split("\n")
+    lines = local("ps -ax |fgrep {0}".format(command), capture=True).split("\n")
     pid = None
     for line in lines:
         if not "fgrep" in line:
@@ -20,7 +20,7 @@ def get_pid(command):
     return (pid, line)
 
 
-@task 
+@task
 def inventory():
     mesh_inventory = Inventory()
     mesh_inventory.clear()
@@ -45,7 +45,7 @@ def start():
         print "Creating mongodb directory in", path
         local("mkdir -p {0}".format(path))
 
-    lines= local("ps -ax |fgrep mongod ", capture=True).split("\n")
+    lines = local("ps -ax |fgrep mongod ", capture=True).split("\n")
     (pid, line) = get_pid("mongod")
 
     if not pid is None:
@@ -54,8 +54,8 @@ def start():
         print "Starting mongod"
         local("mongod --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port))
 
-       
-        
+
+
 @task
 def stop():
     '''
@@ -80,13 +80,13 @@ def clean():
     for line in result:
         name = line.split()[0]
         local('mongo {0} --eval "db.dropDatabase();"'.format(name))
-        
+
 @task
 def vms_find():
     c = cm_mongo()
     c.activate()
     pprint (c.servers())
-    
+
 @task
 def cloud():
     '''
@@ -109,7 +109,7 @@ def simple():
     c.activate()
     c.refresh(types=['servers', 'images', 'flavors'])
     inventory()
-    
+
 @task
 def metric():
     """puts an example of a log file into the mongodb logfile"""
@@ -117,16 +117,16 @@ def metric():
     # create the mongo object
     # parse the log file
     # put each log information into the mongodb (or an obkject an than to mongodb)
-    #maybe you do not need to parese log files for openstack but just read it from sql???
-    
+    # maybe you do not need to parese log files for openstack but just read it from sql???
+
 @task
 def errormetric():
     """puts an example of a log file into the mongodb logfile"""
     # create the mongo object
     # parse the log file
     # put each error form the sql databse in toit
-    
-    
+
+
 @task
 def users():
     '''
@@ -135,8 +135,8 @@ def users():
     c = cm_mongo()
     c.activate()
     c.refresh(types=['users'])
-    
-    
+
+
 @task
 def ldap():
     '''
@@ -150,7 +150,7 @@ def ldap():
     users = idp.list()
 
     print ("Fetching {0} Users from LDAP".format(len(users)))
-    
+
 '''
 @task
 def fg():
@@ -162,37 +162,37 @@ def fg():
 @task
 def pbs(host, type):
     pbs = pbs_mongo()
-    
+
     # get hpc user
 
     config = cm_config()
     user = config.config["cloudmesh"]["hpc"]["username"]
 
-    
+
     pbs.activate(host, user)
 
     print "ACTIVE PBS HOSTS", pbs.hosts
-    
+
     if host is None:
         hosts = pbs.hosts
     else:
         hosts = [host]
-        
+
     if type is None:
         types = ['qstat', 'nodes']
     else:
         types = [type]
-    
+
     d = []
-    
+
     for host in hosts:
         for type in types:
             if type in  ["qstat", "queue", "q"]:
-                d = pbs.get_pbsnodes(host)    
+                d = pbs.get_pbsnodes(host)
             elif type in ["nodes"]:
                 d = pbs.refresh_pbsnodes(host)
-    
+
     for e in d:
         print "PBS -->"
-        pprint(e) 
+        pprint(e)
 

@@ -26,35 +26,35 @@ import cloudmesh
 workflow_module = Blueprint('workflow_module', __name__)
 
 
-diagram_format="svg"
+diagram_format = "svg"
 
 
 class ProvisionWorkflowForm(Form):
-    #print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",Form
+    # print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",Form
     filename = "abc"
 
     dir = path_expand(cm_config_server().get("workflows.path"))
 
     # not so nice cludge, ask for location of statcic instead
-    
-    web_pwd = pwd().strip()
-    basename = "/static/{0}/{1}".format(dir,filename)
 
-    print "BBBB", basename    
+    web_pwd = pwd().strip()
+    basename = "/static/{0}/{1}".format(dir, filename)
+
+    print "BBBB", basename
     try:
-        with open("{2}/{0}.{1}".format(basename,"diag",web_pwd), "r") as f:
+        with open("{2}/{0}.{1}".format(basename, "diag", web_pwd), "r") as f:
             data = f.readlines()[1:-1]
             default = "".join(data)
     except:
-        print "Error: diagram not found" 
+        print "Error: diagram not found"
         default = ""
     default = default.split("//graph")
     filename = TextField("Filename", default=filename)
-    #properties = TextAreaField("Workflow", default=default[0])
-    #workflow = TextAreaField("Workflow", default=default[1])
+    # properties = TextAreaField("Workflow", default=default[0])
+    # workflow = TextAreaField("Workflow", default=default[1])
     properties = TextAreaField("Workflow", default="fake")
     workflow = TextAreaField("Workflow", default="fake")
-    #print workflow
+    # print workflow
 
 
 # ============================================================
@@ -77,19 +77,19 @@ def display_provision_workflow_form():
     form = ProvisionWorkflowForm(csrf=False)
 
     dir = path_expand(cm_config_server().get("workflows.path"))
-    
+
     filename = "abc"
 
     web_pwd = pwd().strip()
     print "PWD", web_pwd
-    basename = "/static/{0}/{1}".format(dir,filename,)
+    basename = "/static/{0}/{1}".format(dir, filename,)
     # if form.validate_on_submit():
 
     #    print "SKIP"
     try:
-        with open("{2}/{0}.{1}".format(basename,"diag",web_pwd), "w") as f:
-            #print "########################################################################################"
-            #print "aaaaaa"+form.workflow.data+"bbb"
+        with open("{2}/{0}.{1}".format(basename, "diag", web_pwd), "w") as f:
+            # print "########################################################################################"
+            # print "aaaaaa"+form.workflow.data+"bbb"
             f.write("blockdiag {\n")
             if form.workflow.data == "":
                 form.work.data = f.work.default
@@ -99,17 +99,17 @@ def display_provision_workflow_form():
             f.write("//graph\n")
             f.write(form.workflow.data)
             f.write("\n}")
-            
-            #print "########################################################################################"
+
+            # print "########################################################################################"
             print form.workflow
     except:
         print "file does not exists"
-    print "{0}.{1}".format(basename,diagram_format)
+    print "{0}.{1}".format(basename, diagram_format)
 
     print "OOOO", basename
     blockdiag("--ignore-pil", "-Tsvg",
-              "-o", "{2}/{0}.{1}".format(basename,diagram_format,web_pwd),
-              "{2}/{0}.{1}".format(basename,"diag",web_pwd))
+              "-o", "{2}/{0}.{1}".format(basename, diagram_format, web_pwd),
+              "{2}/{0}.{1}".format(basename, "diag", web_pwd))
     # blockdiag("-Tpng",
     #          "-o", "." + dir + filename + ".png",
     #          "." + dir + filename + ".diag")
@@ -121,7 +121,7 @@ def display_provision_workflow_form():
                            workflow=form.workflow.data,
                            form=form,
                            pwd=pwd,
-                           diagram="{0}.{1}".format(basename,diagram_format),
+                           diagram="{0}.{1}".format(basename, diagram_format),
                            inventory=inventory)
 
 

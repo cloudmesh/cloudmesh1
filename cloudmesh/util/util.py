@@ -67,7 +67,7 @@ def check_file_for_tabs(filename, verbose=True):
     with file(filename) as f:
         lines = f.read().split("\n")
 
-    line_no = 1   
+    line_no = 1
     for line in lines:
         if "\t" in line:
             file_contains_tabs = True
@@ -75,8 +75,8 @@ def check_file_for_tabs(filename, verbose=True):
             if verbose:
                 print "Tab found in line", line_no, "and column(s)", location
         line_no = line_no + 1
-    return file_contains_tabs 
-        
+    return file_contains_tabs
+
 def path_expand(text):
     """ returns a string with expanded variavble """
     template = Template(text)
@@ -86,7 +86,7 @@ def path_expand(text):
 
 
 def HEADING(txt=None):
-    if txt is None:        
+    if txt is None:
         txt = inspect.getouterframes(inspect.currentframe())[1][3]
 
     """Prints a message to stdout with #### surrounding it. This is useful for nosetests to better distinguish them."""
