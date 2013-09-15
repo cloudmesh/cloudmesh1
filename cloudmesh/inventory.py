@@ -28,9 +28,9 @@ class Inventory:
         # read the host file definition from cloudmesh_cludter.yaml
         self.server_config = cm_config_server()
 
-        self.config = ConfigDict(filename=CONFIG_FILE)
+        self.config = ConfigDict(filename=self.CONFIG_FILE)
 
-        self.bootspec_config = ConfigDict(filename=BOOTSPEC_FILE)
+        self.bootspec_config = ConfigDict(filename=self.BOOTSPEC_FILE)
 
 
         collection = "inventory"
