@@ -1,20 +1,19 @@
 from string import Template
-import os
-import sys
 import inspect
-# import yaml
+import os
+
 # from logger import LOGGER
 
 def cond_decorator(flag, dec):
-   def decorate(fn):
-      return dec(fn) if flag else fn
-   return decorate
+    def decorate(fn):
+        return dec(fn) if flag else fn
+    return decorate
 
 def address_string(content, labels=False):
     """content is a dict of the form {u'private': [{u'version':
-    4,u'addr': u'10.35.23.30',u'OS-EXT-IPS:type':u'fixed'},
+    4,u'addr': u'10.35.23.30',u'OS-EXT-IPS:kind':u'fixed'},
     {u'version': 4, u'addr': u'198.202.120.194',
-    u'OS-EXT-IPS:type': u'floating'}]}
+    u'OS-EXT-IPS:kind': u'floating'}]}
 
     it will return
 
@@ -24,7 +23,7 @@ def address_string(content, labels=False):
         result = ""
         for address in content['private']:
             if labels:
-                result = result + address['OS-EXT-IPS:type'] + "="
+                result = result + address['OS-EXT-IPS:kind'] + "="
             result = result + address['addr']
             result = result + ", "
         result = result[:-2]
@@ -36,11 +35,11 @@ def address_string(content, labels=False):
             position = 0
             for address in content['vlan102']:
                 if position == 0:
-                    type = "fixed"
+                    kind = "fixed"
                 else:
-                    type = "floating"
+                    kind = "floating"
                 if labels:
-                    result = result + type
+                    result = result + kind
                 result = result + address['addr']
                 result = result + ", "
                 position = +1
@@ -49,7 +48,7 @@ def address_string(content, labels=False):
             result = content
     return result
 
-def status_color(self, status):
+def status_color(status):
     if status == 'ACTIVE':
         return "green"
     if status == 'BUILDING':
@@ -86,10 +85,13 @@ def path_expand(text):
 
 
 def HEADING(txt=None):
+    """
+    Prints a message to stdout with #### surrounding it. This is useful for
+    nosetests to better distinguish them.
+    """
     if txt is None:
         txt = inspect.getouterframes(inspect.currentframe())[1][3]
 
-    """Prints a message to stdout with #### surrounding it. This is useful for nosetests to better distinguish them."""
     print
     print "#", 70 * '#'
     print "#", txt
@@ -97,26 +99,29 @@ def HEADING(txt=None):
 
 
 def table_printer(the_dict, header_info=None):
-    """prints recurseively a dict as an html. The header info is simpli a list with collun names."""
+    """
+    prints recurseively a dict as an html. The header info is simpli a list with
+    collun names.
+    """
     # header_info ["attribute", "value"]
     if (header_info is not None) or (header_info == ""):
-        result = '<tr><th>{0}</th><th>{1}</th></tr>'.format(
-            header_info[0], header_info[1])
+        result = '<tr><th>{0}</th><th>{1}</th></tr>'\
+                .format(header_info[0], header_info[1])
     else:
         result = ''
     if isinstance(the_dict, dict):
         for name, value in the_dict.iteritems():
             result = result + \
-                '<tr><td>{0}</td><td>{1}</td></tr>'.format(name.title(),
-                                                           str(table_printer(value)))
+                '<tr><td>{0}</td><td>{1}</td></tr>'\
+                .format(name.title(), str(table_printer(value)))
         result = '<table>' + result + '</table>'
         return result
     elif type(the_dict) is list:
         for element in the_dict:
             for name, value in element.iteritems():
                 result = result + \
-                    '<tr><td>{0}</td><td>{1}</td></tr>'.format(name.title(),
-                                                               str(table_printer(value)))
+                    '<tr><td>{0}</td><td>{1}</td></tr>'\
+                    .format(name.title(), str(table_printer(value)))
         result = '<table>' + result + '</table>'
         return result
     else:
