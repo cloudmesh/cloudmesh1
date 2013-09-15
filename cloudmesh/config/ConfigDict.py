@@ -58,7 +58,7 @@ class ConfigDict (OrderedDict):
         # this is a potential bug
         if configuration is None:
             configuration = self
-        template_path = os.path.normpath(os.path.join(package_dir, '..', '..', 'etc', 'cloudmesh.yaml'))
+        template_path = os.path.expanduser("~/.futuregrid/etc/cloudmesh.yaml")
         template = cm_template(template_path)
 
         # Set up a dict to pass to the template
