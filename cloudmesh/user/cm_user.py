@@ -81,8 +81,9 @@ class cm_user(object):
         :returns: tuple
 
         """
-        ldap_info = self.db_users.find({"cm_user_id": portal_id})
-        (first_name, last_name) = (ldap_info['firstname'], ldap_info['lastname'])
+        ldap_data = self.db_users.find({"cm_user_id": portal_id})
+        if ldap_data.count() > 0:
+            ldap_info = ldap_data[0]
+            (first_name, last_name) = (ldap_info['firstname'], ldap_info['lastname'])
 
-        return (first_name, last_name)
-
+            return (first_name, last_name)
