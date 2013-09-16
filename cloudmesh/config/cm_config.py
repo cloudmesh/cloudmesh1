@@ -97,12 +97,12 @@ class cm_config(ConfigDict):
     # ----------------------------------------------------------------------
     # Internal helper methods
     # ----------------------------------------------------------------------
-    def _get_cloud_handler(self, cloud, as_admin=False):
+    def _get_cloud_handler(self, profile, projects, cloud, as_admin=False):
         """This gets a class that knows how to handle the specific type of
         cloud (how to provision users, etc)"""
-        handler_args = { 'profiledata': self.profile(),
-                         'defaultproj': self.projects('default'),
-                         'projectlist': self.projects('active'),
+        handler_args = { 'profiledata': profile,
+                         'defaultproj': projects['default'],
+                         'projectlist': projects['active'],
                          'cloudname': cloud }
         if as_admin:
             handler_args['clouddata'] = self.serverdata['keystone'][cloud]
@@ -159,9 +159,14 @@ class cm_config(ConfigDict):
     def _initialize_clouds(self):
         """Creates cloud credentials for the user"""
         self.init_config['cloudmesh']['clouds'] = {}
-        cloudlist = self.active()
+        cloudlist = self.init_config['cloudmesh']['active']
         for cloud in cloudlist:
-            cloud_handler = self._get_cloud_handler(cloud, as_admin=True)
+            cloud_handler = self._get_cloud_handler(
+                self.init_config['profile'],
+                self.init_config['cloudmesh']['projects'],
+                cloud,
+                as_admin=True
+            )
             cloud_handler.initialize_cloud_user()
             self.init_config['cloudmesh']['clouds'][cloud] = copy.deepcopy(cloud_handler.credentials)
 
@@ -174,7 +179,7 @@ class cm_config(ConfigDict):
         self._initialize_clouds()
 
     def change_own_password(self, cloudname, oldpass, newpass):
-        cloud_handler = self._get_cloud_handler(cloudname)
+        cloud_handler = self._get_cloud_handler(self.profile(), self['cloudmesh']['projects'], cloudname)
         cloud_handler.change_own_password(oldpass, newpass)
         # Save the yaml file so the new password is saved
         self.write()
@@ -183,7 +188,7 @@ class cm_config(ConfigDict):
         cloudlist = self.active()
         passwords = {}
         for cloud in cloudlist:
-            cloud_handler = self._get_cloud_handler(cloud)
+            cloud_handler = self._get_cloud_handler(self.profile(), self['cloudmesh']['projects'], cloud)
             passwords[cloud] = cloud_handler.get_own_password()
         return passwords
 
