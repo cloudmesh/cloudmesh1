@@ -70,7 +70,7 @@ class Test:
         print self.cloud.credentials
         assert True
 
-    #def test_01_limit(self):
+    # def test_01_limit(self):
     #    HEADING()
     #    print json.dumps(self.cloud.limits(), indent=4)
 
@@ -103,7 +103,7 @@ class Test:
         print json.dumps(self.cloud.dump('images'), indent=4)
 
         # doing a simple test as tiny is usually 512
-        #assert self.cloud.flavors['m1.small']['ram'] == 512
+        # assert self.cloud.flavors['m1.small']['ram'] == 512
         assert True
 
     def test_list_servers(self):
@@ -113,11 +113,11 @@ class Test:
         print json.dumps(self.cloud.dump('servers'), indent=4)
 
         # doing a simple test as tiny is usually 512
-        #assert self.cloud.flavors['m1.small']['ram'] == 512
+        # assert self.cloud.flavors['m1.small']['ram'] == 512
         assert True
 
-        
-        
+
+
     def test_start_vm(self):
         HEADING()
         configuration = cm_config()
@@ -126,14 +126,14 @@ class Test:
         print "Getting Flavours"
         self.cloud.refresh('flavors')
         flavor = configuration.default(self.name)['flavor']
-        
+
         print "Getting Images"
         self.cloud.refresh('images')
         image = configuration.default(self.name)['image']
-        
+
         print self.cloud.flavors_cache
         print self.cloud.images_cache
-        
+
         print "STARTING IMAGE", image, flavor
         result = self.cloud.vm_create("gregor-test-001", flavor_name=flavor, image_id=image)
         print result
@@ -148,14 +148,14 @@ class Test:
         print "Getting Flavours"
         self.cloud.refresh('flavors')
         flavor = configuration.default(self.name)['flavor']
-        
+
         print "Getting Images"
         self.cloud.refresh('images')
         image = configuration.default(self.name)['image']
-        
-        #print self.cloud.flavors_cache
-        #print self.cloud.images_cache
-        
+
+        # print self.cloud.flavors_cache
+        # print self.cloud.images_cache
+
         print "STARTING VM", image, flavor
         result = self.cloud.vm_create("gregor-test-del", flavor_name=flavor, image_id=image)
         print result
@@ -166,10 +166,10 @@ class Test:
         result = self.cloud.vm_delete("gregor-test-del")
         print result
 
-        
+
         assert len(result.keys()) > 0
 
-        
+
     def test_refresh(self):
         HEADING()
         self.cloud.refresh()
@@ -266,7 +266,7 @@ class Test:
             self.cloud.info()
             time.sleep(1)
 
-        print "vms",  vm_ids
+        print "vms", vm_ids
 
         assert vm_ids == []
 
@@ -369,6 +369,6 @@ class Test:
             self.cloud.info()
             time.sleep(1)
 
-        print "vms",  vm_ids
+        print "vms", vm_ids
 
         assert vm_ids == []

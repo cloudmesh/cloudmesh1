@@ -27,7 +27,7 @@ index = config.index
 
 clouds = cm_mongo()
 clouds.activate()
-               
+
 # DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
 
 """
@@ -53,7 +53,7 @@ for name in clouds.active():
 @cond_decorator(cloudmesh.with_login, login_required)
 def save():
     print "Saving the cloud status"
-    #clouds.save()
+    # clouds.save()
     return mongo_images()
 
 # ============================================================
@@ -65,7 +65,7 @@ def save():
 @cond_decorator(cloudmesh.with_login, login_required)
 def load():
     print "Loading the cloud status"
-    #clouds.load()
+    # clouds.load()
     return mongo_images()
 
 # ============================================================
@@ -79,24 +79,24 @@ def load():
 @cond_decorator(cloudmesh.with_login, login_required)
 def refresh(cloud=None, server=None, service_type=None):
     print "-> refresh", cloud, server
-    
-    print "REQ",  redirect(request.args.get('next') or '/').__dict__
-    
-    if cloud in ['servers','flavors','images','users']:
-        service_type = cloud 
+
+    print "REQ", redirect(request.args.get('next') or '/').__dict__
+
+    if cloud in ['servers', 'flavors', 'images', 'users']:
+        service_type = cloud
         cloud_names = config.active()
     else:
         cloud_names = [cloud]
-    
+
     if cloud is None:
-        clouds.refresh(types=['servers','images','flavors'])
+        clouds.refresh(types=['servers', 'images', 'flavors'])
     elif service_type is None:
-        clouds.refresh(names=cloud_names,types=['servers','images','flavors'])
+        clouds.refresh(names=cloud_names, types=['servers', 'images', 'flavors'])
     else:
-        clouds.refresh(names=cloud_names,types=[service_type])
+        clouds.refresh(names=cloud_names, types=[service_type])
         return redirect('/mesh/{0}'.format(service_type))
-    #clouds.refresh()
-    #clouds.all_filter()
+    # clouds.refresh()
+    # clouds.all_filter()
     return redirect('/mesh/servers')
 
 # ============================================================
@@ -152,7 +152,7 @@ def delete_vm(cloud=None, server=None):
     clouds.vm_delete(cloud, server)
     time.sleep(5)
     clouds.release_unused_public_ips(cloud)
-    clouds.refresh(names=[cloud],types=["servers"])
+    clouds.refresh(names=[cloud], types=["servers"])
     return redirect('/mesh/servers')
 
 # ============================================================
@@ -184,9 +184,9 @@ def assign_public_ip(cloud=None, server=None):
     mycloud = config.cloud(cloud)
     if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
         clouds.assign_public_ip(cloud, server)
-        clouds.refresh(names=[cloud],types=["servers"])
+        clouds.refresh(names=[cloud], types=["servers"])
         return redirect('/mesh/servers')
-    #else:
+    # else:
     #    return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
 
 # ============================================================
@@ -211,8 +211,8 @@ def start_vm(cloud=None, server=None):
         key = config.get('cloudmesh.keys.default')
 
     # THIS IS A BUG
-    #vm_flavor = clouds.default(cloud)['flavor']
-    #vm_image = clouds.default(cloud)['image']
+    # vm_flavor = clouds.default(cloud)['flavor']
+    # vm_image = clouds.default(cloud)['image']
     #
     # before the info could be maintained in mongo, using the config file
     vm_flavor = config.cloud(cloud)["default"]["flavor"]
@@ -229,11 +229,11 @@ def start_vm(cloud=None, server=None):
     print "P"*20
     print result
     # print "PPPPPPPPPPPP", result
-    #clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
+    # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     config.incr()
     config.write()
     time.sleep(5)
-    clouds.refresh(names=[cloud],types=["servers"])
+    clouds.refresh(names=[cloud], types=["servers"])
     return redirect('/mesh/servers')
 
 # ============================================================

@@ -1,1 +1,1 @@
-__all__=['launcher']
+__all__ = ['launcher']

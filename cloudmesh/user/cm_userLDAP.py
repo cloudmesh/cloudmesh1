@@ -13,32 +13,32 @@ log = LOGGER(__file__)
 
 
 class cm_userLDAP (CMUserProviderBaseType):
-    
+
     providers = {}
     host = None
     cert = None
-    
+
     def get_config(self, **kwargs):
-        
+
         if not kwargs.has_key('host'):  # if kwargs['host'] is None:
             self.host = cm_config_server().get("ldap.hostname")
-    
+
         if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
             self.cert = cm_config_server().get("ldap.cert")
-            
-            
+
+
     def authenticate(self, userId, password, **kwargs):
         ret = False
-                
+
         # bug pass **kwargs
         self.get_config()
-        
-        
+
+
         # print "'" + userId + "':'" + authProvider + "':'" + authCred + "'"
-        
+
         # print adminuser, adminpass
         basedn = "ou=People,dc=futuregrid,dc=org"
-        userdn = "uid={0},{1}".format(userId,basedn)
+        userdn = "uid={0},{1}".format(userId, basedn)
         # print userdn
         ldapconn = ldap.initialize("ldap://{0}".format(self.host))
         log.info("Initializing the LDAP connection to server: " + self.host)
@@ -46,7 +46,7 @@ class cm_userLDAP (CMUserProviderBaseType):
             ldapconn.start_tls_s()
             log.info("tls started...")
             ldapconn.bind_s(userdn, password)
-            ret = True                
+            ret = True
         except ldap.INVALID_CREDENTIALS:
             log.info("Your username or password is incorrect. Cannot bind.")
             ret = False
@@ -60,7 +60,7 @@ class cm_userLDAP (CMUserProviderBaseType):
             log.info("Unbinding from the LDAP.")
             ldapconn.unbind()
         return ret
-    
+
     def __init__(self, collection="user"):
         super(cm_userLDAP, self).__init__()
 
@@ -72,7 +72,7 @@ class cm_userLDAP (CMUserProviderBaseType):
         users = self.list()
         for user in users:
             data = self.get(user)
-            self.updates(user, data)  
+            self.updates(user, data)
 
     def connect(self, name, type, **kwargs):
         '''
@@ -87,18 +87,18 @@ class cm_userLDAP (CMUserProviderBaseType):
                     'name': name}
         for k, v in kwargs.iteritems():
             provider[k] = v
-        
+
         if not kwargs.has_key('host'):  # if kwargs['host'] is None:
             self.host = cm_config_server().get("ldap.hostname")
-    
+
         if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
             self.cert = cm_config_server().get("ldap.cert")
-         
-           
+
+
         ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, self.cert)
         # BUG IN FINAL VERSION MAKE SURE WE CHECK
-        ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT,ldap.OPT_X_TLS_NEVER)
-         
+        ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_NEVER)
+
         self.ldapconn = ldap.initialize("ldap://" + self.host)
         self.ldapconn.start_tls_s()
         self.ldapconn.bind_s('', '')
@@ -106,18 +106,18 @@ class cm_userLDAP (CMUserProviderBaseType):
 
     def disconnect(self):
         self.ldapconn.unbind()
-    
+
     def __del__(self):
         self.disconnect()
 
-        
+
     def get(self, username):
         '''
         Return the dict associated with the username
         :param username:
         '''
         return self.users[username]
-                
+
     def list(self):
         '''
         Return a list with all usernames
@@ -128,7 +128,7 @@ class cm_userLDAP (CMUserProviderBaseType):
         self._getUsers()
         self._getProjects()
         return self.users
-            
+
     def _getUsers(self):
         # print "LDAP query..."
         try:
@@ -160,7 +160,7 @@ class cm_userLDAP (CMUserProviderBaseType):
                     firstname = ldapresult[1]['givenName'][0]
                     lastname = ldapresult[1]['sn'][0]
                     phone = ldapresult[1]['telephoneNumber'][0] if 'telephoneNumber' in ldapresult[1] else None
-                    address = 'TBD' # not currently in LDAP
+                    address = 'TBD'  # not currently in LDAP
 
                     keys = {}
                     if ldapresult[1].has_key('sshPublicKey'):
@@ -203,7 +203,7 @@ class cm_userLDAP (CMUserProviderBaseType):
         except:
             print "WRONG" + str(sys.exc_info())
 
-  
+
 
 def main():
     idp = cm_userLDAP (CMUserProviderBaseType)
@@ -212,12 +212,12 @@ def main():
     users = idp.list()
 
     from pprint import pprint
-    
+
     pprint(users)
-    
+
     pprint(idp.users)
-    
-    
+
+
 
 if __name__ == "__main__":
     main()

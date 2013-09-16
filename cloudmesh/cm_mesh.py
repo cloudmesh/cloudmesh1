@@ -331,7 +331,7 @@ class cloudmesh:
         pickle.dump(tmp, file)
         file.close()
         """
-        
+
     def load(self):
         file = open(self.datastore, 'rb')
         # self.keys = pickle.load(file)

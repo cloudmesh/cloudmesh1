@@ -24,7 +24,7 @@ class cm_template():
         env = Environment()
         parsed_content = env.parse(self.content)
         print meta.find_undeclared_variables(parsed_content)
-    
+
     def replace(self, format="text", **d):
         template = Template(self.content)
         if format == "text":
@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     t = cm_template(filename)
     print t.variables()
-    
+
     print t.replace(d, format="dict")
 
 #    if not t.complete():

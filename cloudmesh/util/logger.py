@@ -1,6 +1,8 @@
-import logging
+'''
+A simple class to set up a custom logger for a class
+'''
 
-"""A simple class to set up a custom logger for a class"""
+import logging
 
 def LOGGER(name):
     """creates a logger with the given name.

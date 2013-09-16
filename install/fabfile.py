@@ -60,7 +60,7 @@ def install_mongodb():
 
 def install_package(package):
     if is_ubuntu():
-        local ("sudo apt-get -y install {0}".format(package)) 
+        local ("sudo apt-get -y install {0}".format(package))
     if is_centos():
         local("sudo yum -y install {0}".format(package))
     elif sys.platform == "darwin":
@@ -71,16 +71,16 @@ def install_package(package):
         print "Use Linux instead"
         sys.exit()
 
-@task 
+@task
 def install_packages(packages):
     for package in packages:
-        install_package (package) 
+        install_package (package)
 
 @task
 def ubuntu():
     '''prepares an system and installs all 
     needed packages before we install cloudmesch'''
-    
+
     local ("sudo apt-get update")
     install_packages(["git",
                       "mercurial",

@@ -1,8 +1,8 @@
+"""Prints tables in html, text, or with right alighned columns"""
 
 class cm_table:
     """
-    This module should be moved to Util
-    
+
     format = HTML | ASCII | "%20s"
     
     type is not used and wil be in future removed
@@ -13,7 +13,7 @@ class cm_table:
 
     header = True the firts row is a headline
     """
-    
+
     _content = ""
 
     def __init__(self):

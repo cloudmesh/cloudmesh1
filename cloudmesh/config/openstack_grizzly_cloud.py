@@ -18,7 +18,7 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
     def __init__(self, profiledata, defaultproj, projectlist, cloudname, clouddata):
         self._credentials = None
         self._keystone = None
-        self._keystone_admin = None 
+        self._keystone_admin = None
         cloudmesh_cloud.__init__(self, profiledata, defaultproj, projectlist, cloudname, clouddata)
 
     @property
