@@ -20,19 +20,19 @@ import sys
 class Test_Users:
 
     def setup(self):
-        self.usersobj = cm_user()
+        self.user = cm_user()
 
     def tearDown(self):
         pass
 
     def test_get(self):
         HEADING()
-        print self.usersobj.info("fuwang")
-        print self.usersobj.info("gvonlasz")
-        print self.usersobj.info("nonexistuser")
-        print self.usersobj.info("nova")
-        print self.usersobj.info("fuwang", ["sierra_openstack_grizzly"])
-        print self.usersobj.info("fuwang", ["cloud-non-exist"])
+        print self.user.info("fuwang")
+        print self.user.info("gvonlasz")
+        print self.user.info("nonexistuser")
+        print self.user.info("nova")
+        print self.user.info("fuwang", ["sierra_openstack_grizzly"])
+        print self.user.info("fuwang", ["cloud-non-exist"])
         print "============================"
-        pprint (self.usersobj["gvonlasz"])
-        print self.usersobj.get_name('gvonlasz')
+        pprint (self.user["gvonlasz"])
+        print self.user.get_name('gvonlasz')
