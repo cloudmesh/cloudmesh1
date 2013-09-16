@@ -9,7 +9,7 @@ from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
      identity_changed
 from flask import render_template, flash, send_from_directory
 
-from cloudmesh.user.cm_userLDAP import cm_userLDAP 
+from cloudmesh.user.cm_userLDAP import cm_userLDAP
 
 SECRET_KEY = 'development key'
 
@@ -39,14 +39,14 @@ class UserClass(UserMixin):
 def get_user_object(userid):
 
      # query database (again), just so we can pass an object to the callback
-     #db_check = users_collection.find_one({ 'userid' : userid })
-     #UserObject = UserClass(db_check['username'], userid, active=True)
-     #if userObject.id == userid:
+     # db_check = users_collection.find_one({ 'userid' : userid })
+     # UserObject = UserClass(db_check['username'], userid, active=True)
+     # if userObject.id == userid:
      #     return UserObject
-     #else:
+     # else:
      #     return None
 
-     return UserClass('gregor','1')
+     return UserClass('gregor', '1')
 
 class LoginForm(Form):
 
@@ -55,18 +55,18 @@ class LoginForm(Form):
 
 
     idp = cm_userLDAP ()
-    idp.connect("fg-ldap","ldap")
+    idp.connect("fg-ldap", "ldap")
 
     user = None
 
     def validate(self):
         print "validate"
 
-        self.user =  self.idp.find_one({'cm_user_id': self.username.data})
+        self.user = self.idp.find_one({'cm_user_id': self.username.data})
 
         print "UUU", self.user
-        
-        #user = User.query.filter_by(
+
+        # user = User.query.filter_by(
         #    username=self.username.data).first()
 
         if self.user is None:
@@ -82,10 +82,10 @@ class LoginForm(Form):
             return False
         else:
             print "user found"
-            
-            #if not self.user['password'] == self.password.data:
-       
-        test = self.idp.authenticate(self.username.data,self.password.data)
+
+            # if not self.user['password'] == self.password.data:
+
+        test = self.idp.authenticate(self.username.data, self.password.data)
         if not test:
             print "password invalid"
             self.error = 'Invalid password'
@@ -107,13 +107,13 @@ def login():
 
     print "DDD", form.__dict__
     print "UUU", form.user
-    
+
     if form.validate_on_submit():
         flash(u'Successfully logged in as %s' % form.username.data)
         session['user_id'] = form.user["cm_user_id"]
-        
+
         return redirect(url_for('index'))
-        
+
     return render_template('login.html', form=form)
 
 @app.route('/logout')

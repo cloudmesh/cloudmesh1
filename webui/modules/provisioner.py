@@ -40,9 +40,9 @@ provisioner = provisionerImpl()
 @provisioner_module.route('/provision/policy')
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_provisioner_policy():
-    
+
     policy = cm_config_server().get("provisioner.policy")
-    
+
     return render_template('provision_policy.html',
                            policy=policy)
 
@@ -144,10 +144,10 @@ def display_provision_host_summary(cluster, spec, service):
 
 class ProvisionForm(Form):
 
-    #clusters = [cluster.name for cluster in inventory.get("cluster")]
-    
+    # clusters = [cluster.name for cluster in inventory.get("cluster")]
+
     clusters = cm_config_server().get("provisioner.clusters")
-    
+
     choices = zip(clusters, clusters)
     cluster = SelectField("Cluster", choices=choices)
     nodespec = TextField("Nodes")
@@ -173,11 +173,11 @@ class ProvisionForm(Form):
 def display_provision_form():
 
     clusters = cm_config_server().get("provisioner.clusters")
-    
-    #clusters = ['india','bravo','sierra']
-    
-    #servers = n_inventory.hostlist(cluster)
-    #server = n_inventory.host(name,auth=False)
+
+    # clusters = ['india','bravo','sierra']
+
+    # servers = n_inventory.hostlist(cluster)
+    # server = n_inventory.host(name,auth=False)
 
 
     form = ProvisionForm(csrf=False)

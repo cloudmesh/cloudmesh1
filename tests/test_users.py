@@ -21,7 +21,7 @@ class Test_Users:
 
     def setup(self):
         self.usersobj = cm_user()
-        
+
     def tearDown(self):
         pass
 
@@ -33,4 +33,5 @@ class Test_Users:
         print self.usersobj.info("nova")
         print self.usersobj.info("fuwang", ["sierra_openstack_grizzly"])
         print self.usersobj.info("fuwang", ["cloud-non-exist"])
-
+        print "============================"
+        pprint (self.usersobj["gvonlasz"])

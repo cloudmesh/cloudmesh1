@@ -21,7 +21,7 @@ class Test_Roles:
 
     def setup(self):
         self.roles = Roles()
-        
+
     def tearDown(self):
         pass
 

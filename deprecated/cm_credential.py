@@ -1,4 +1,4 @@
-#! /usr/bin/env pythos
+# ! /usr/bin/env pythos
 from pprint import pprint
 import json
 import os

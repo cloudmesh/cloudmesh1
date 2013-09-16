@@ -22,10 +22,9 @@ def profile():
     # bug the global var of the ditc should be used
 
     config = cm_config()
-    user = config.get()["hpc"]["username"]
-    configuration = config.get()
+    user = config.get("cloudmesh.hpc.username")
     projects = cm_projects()
-    person = configuration['profile']
+    person = config.get('cloudmesh.profile')
     keys = cm_keys()
     version = "tmp"
 
@@ -34,7 +33,7 @@ def profile():
         print "p", projects
         # print "c", config
         projects.default = request.form['field-selected-project']
-        configuration['security']['default'] = request.form[
+        config['cloudmesh']['security']['default'] = request.form[
             'field-selected-securityGroup']
         config.index = request.form['field-index']
         config.prefix = request.form['field-prefix']
@@ -61,7 +60,7 @@ def profile():
                            address=address,
                            # clouds=clouds,
                            config=config,
-                           configuration=configuration,
+                           configuration=config['cloudmesh'],
                            version=version,
                            user=user,
                            )

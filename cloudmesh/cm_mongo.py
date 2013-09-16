@@ -27,6 +27,63 @@ except:
     log.warning("AZURE NOT ENABLED")
 
 
+
+class cm_MongoBase(object):
+
+    def __init__(self):
+        self.cm_type = "overwriteme"
+        self.connect()
+
+    def connect(self):
+        self.db_mongo = get_mongo_db(self.cm_type)
+
+    def get(self, username):
+        return self.find_one({"cm_id": username, "cm_type": self.cm_type})
+
+
+    def set(self, username, d):
+        element = dict (d)
+        element["cm_id"] = username
+        element["cm_type"] = self.cm_type
+        self.update({"cm_id": username, "cm_type": self.cm_type}, element)
+
+
+    def update(self, query, values=None):
+        '''
+        executes a query and updates the results from mongo db.
+        :param query:
+        '''
+        if values is None:
+            return self.db_mongo.update(query, upsert=True)
+        else:
+            print query
+            print values
+            return self.db_mongo.update(query, values, upsert=True)
+
+
+    def insert(self, element):
+        self.db_mongo.insert(element)
+
+    def clear(self):
+        self.db_mongo.remove({"cm_type" : self.cm_type})
+
+    def find(self, query):
+        '''
+        executes a query and returns the results from mongo db.
+        :param query:
+        '''
+        return self.db_mongo.find(query)
+
+    def find_one(self, query):
+        '''
+        executes a query and returns the results from mongo db.
+        :param query:
+        '''
+        return self.db_mongo.find_one(query)
+
+
+
+
 class cm_mongo:
 
     clouds = {}
@@ -74,10 +131,9 @@ class cm_mongo:
             print "Activating ->", cloud_name
 
             try:
-                credential = self.config.get(cloud_name)
-                cm_type = self.config.get()['clouds'][cloud_name]['cm_type']
-                cm_type_version = self.config.get()[
-                    'clouds'][cloud_name]['cm_type_version']
+                credential = self.config.cloud(cloud_name)
+                cm_type = credential['cm_type']
+                cm_type_version = credential['cm_type_version']
                 if cm_type in ['openstack', 'eucalyptus', 'azure']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cm_type,
@@ -102,6 +158,7 @@ class cm_mongo:
         this data structure a new refresh needs to be called.
 
         Usage is defined through arrays that are passed along.
+
 
         type = "servers", "images", "flavors"
 

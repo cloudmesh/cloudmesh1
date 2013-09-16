@@ -31,11 +31,11 @@ class BaremetalProvisinerABC:
         self.hosts = hosts
         self.image = image
         pass
-    
+
     def set_status(self, host_label, status):
         print "SIM setting", host_label, status
-        self.inventory.set_attribute(host_label, "cm_provision_status", status)        
-        print "SIM ok setting", host_label, status 
+        self.inventory.set_attribute(host_label, "cm_provision_status", status)
+        print "SIM ok setting", host_label, status
 
 
 
@@ -47,7 +47,7 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
 
     def __init__(self):
         BaremetalProvisinerABC.__init__(self)
-    
+
     def provision(self, hosts, provisioned):
         self.hosts = hosts
         for host in hosts:
@@ -77,7 +77,7 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
 
         return (True, None)
 
-        
+
     def provision_image(self, hosts, image):
 
         for host in hosts:
