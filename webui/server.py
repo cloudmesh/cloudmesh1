@@ -418,7 +418,7 @@ def login():
     # A hypothetical login form that uses Flask-WTF
     form = LoginForm()
 
-    if form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit():
 
         form.error = None
         try:
