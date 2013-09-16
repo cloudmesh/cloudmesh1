@@ -63,7 +63,7 @@ class cloudmesh_user:
     @property
     def activeclouds(self):
         """Not yet implemented"""
-        return self.data['clouds'].keys()[0]
+        return self.data['clouds'].keys()
 
     @property
     def defaultcloud(self):
