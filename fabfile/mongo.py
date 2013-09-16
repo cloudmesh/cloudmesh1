@@ -140,7 +140,7 @@ def users():
 @task
 def ldap():
     '''
-    festches a user list from ldap and displayes them
+    fetches a user list from ldap and displays it
     '''
 
     idp = cm_userLDAP ()

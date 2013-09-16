@@ -49,18 +49,18 @@ class pbs_mongo:
         time_now = datetime.now()
         data = dict(self.hosts[host].qstat(refresh=True))
 
-        print "DDDD"
-        pprint (data)
+        #print "DDDD"
+        #pprint (data)
         self.db_qstat.remove({"cm_host": host, "cm_kind" : "qstat"}, safe=True)
-        print "EEEE"
-        pprint (data)
+        #print "EEEE"
+        #pprint (data)
         for name in data:
 
 
-            print "mongo: add {0}, {1}, {2}".format(host,
-                                                    data[name]['Job_Id'],
-                                                    data[name]['Job_Owner'],
-                                                    data[name]['Job_Name'])
+            #print "mongo: add {0}, {1}, {2}".format(host,
+             #                                       data[name]['Job_Id'],
+              #                                      data[name]['Job_Owner'],
+               #                                     data[name]['Job_Name'])
 
             id = "{0}-{1}-qstat".format(host, name).replace(".", "-")
             data[name]["cm_host"] = host
@@ -68,13 +68,13 @@ class pbs_mongo:
             data[name]["cm_id"] = id
             data[name]["cm_refresh"] = time_now
 
-            print "mongo: add {0}, {1}, {2}".format(host,
-                                                    data[name]['Job_Id'],
-                                                    data[name]['Job_Owner'],
-                                                    data[name]['Job_Name'])
+            #print "mongo: add {0}, {1}, {2}".format(host,
+                #                                    data[name]['Job_Id'],
+                 #                                   data[name]['Job_Owner'],
+                  #                                  data[name]['Job_Name'])
 
-            print "IIIIII"
-            pprint(data)
+            #print "IIIIII"
+            #pprint(data)
             self.db_qstat.insert(data[name])
 
     def get(self, host, type):
