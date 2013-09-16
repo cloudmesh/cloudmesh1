@@ -1,11 +1,18 @@
-#
-# based on a similar java class in cyberaide, and java cog kit
-# however the java class is still mor fancy as we can suspend and resume
-#
+'''
+Module to introduce s Stop wacth.
+
+This class is based on a similar java class in cyberaide, and java cog kit.
+However the java class is still mor fancy as we can suspend and resume. At a
+later time we may want o also introduce these features.
+'''
+
 import time
 
 
 class StopWatch(object):
+    '''
+    A class to measure times between events.
+    '''
 
     # Timer start dict
     timer_start = {}
@@ -13,6 +20,9 @@ class StopWatch(object):
     timer_end = {}
 
     def __init__(self):
+        '''
+        Set up the stopwatch.
+        '''
         self.clear()
 
     def start(self, name):

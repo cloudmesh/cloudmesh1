@@ -1,3 +1,4 @@
+'''Ascii menu class'''
 
 def ascii_menu(title=None, menu_list=None):
     '''
@@ -9,7 +10,7 @@ def ascii_menu(title=None, menu_list=None):
         title = "Menu"
 
     n = len(menu_list)
-    
+
     def display():
         index = 1
         print
@@ -21,19 +22,19 @@ def ascii_menu(title=None, menu_list=None):
             index += 1
         print "    q - quit"
         print
-        print 
+        print
 
     display()
     while True:
         result = input("Select between {0} - {1}: ".format(1, n))
-        print "<{0}>".format(result) 
+        print "<{0}>".format(result)
         if result == "q":
             break
         else:
             try:
                 result = int(result) - 1
                 if result > 0 and result < n:
-                    (label, f) = menu_list[result]   
+                    (label, f) = menu_list[result]
                     print "EXECUTING:", label, f.__name__
                     f()
                 else:
@@ -41,4 +42,4 @@ def ascii_menu(title=None, menu_list=None):
             except Exception, e:
                 print "ERROR: ", e
         display()
-         
+

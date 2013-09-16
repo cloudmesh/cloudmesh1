@@ -13,7 +13,7 @@ import time
 logger = get_task_logger(__name__)
 
 provisioner = Provider()
-    
+
 
 @celery.task(track_started=True)
 def provision(host, image):

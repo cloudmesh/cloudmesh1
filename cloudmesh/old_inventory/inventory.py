@@ -43,7 +43,7 @@ class FabricObject(DynamicDocument):
     tags = ListField(StringField(), default=list)
     groups = ListField(StringField(), default=list)
     cluster = StringField()
-    status = StringField(default="defined")    
+    status = StringField(default="defined")
     date_start = DateTimeField()
     date_stop = DateTimeField()
     date_update = DateTimeField()
@@ -53,7 +53,7 @@ class FabricObject(DynamicDocument):
 
     uptime = LongField(default=0)
 
-    
+
     def stamp(self):
         '''
         an internal method to provide a time stap for a global modification data
@@ -71,7 +71,7 @@ class FabricObject(DynamicDocument):
         '''
         self.stamp()
         return super(FabricObject, self).save(*args, **kwargs)
-        
+
     def start(self):
         '''
         cecods the starting time
@@ -112,20 +112,20 @@ class FabricObject(DynamicDocument):
         'allow_inheritance': True
     }
 
-    
+
 class FabricImage(FabricObject):
     '''
     an object to hold fabric images and their metadata for image provisioning
     '''
     kind = StringField(default="image")
-    
+
 class FabricService(FabricObject):
     '''
     an object to hold fabric services and their meta data
     '''
     kind = StringField(default="service")
     utility = StringField()
-    
+
 class FabricServer(FabricObject):
     '''
     an object to hold fabric servers and their meta data
@@ -137,10 +137,10 @@ class FabricServer(FabricObject):
         FabricService,
         reverse_delete_rule=CASCADE))
 
-    def append(self,service):
+    def append(self, service):
         self.services.append(service)
 
-    def set(self,services):
+    def set(self, services):
         self.services = services
 
     @property
@@ -153,14 +153,14 @@ class FabricServer(FabricObject):
         ''' Simulated load on the server '''
         return map(lambda r: random.random() * 10, range(0, 25))
 
-        
+
 class FabricCluster(FabricObject):
     '''
     an object to hold fabric clusters and their meta data
     '''
     definition = StringField(default=None)
     kind = StringField(default="cluster")
-    provision_choices = ListField(StringField(),default=PROVISIONING_CHOICES)
+    provision_choices = ListField(StringField(), default=PROVISIONING_CHOICES)
 
     servers = ListField(ReferenceField(
         FabricServer,
@@ -197,13 +197,13 @@ class Inventory:
         name = self.configuration['dbname']
         print name
         self.db.drop_database(name)
-        
-        #database = FabricCluster._get_db()
-        #pprint (database.__dict__)
-        #name = FabricCluster._get_collection_name()
-        #print "NAME", name
-        #database.drop_collection(name)
-        
+
+        # database = FabricCluster._get_db()
+        # pprint (database.__dict__)
+        # name = FabricCluster._get_collection_name()
+        # print "NAME", name
+        # database.drop_collection(name)
+
     def config(self, filename=None):
         '''
         reads from the specified yaml file the server configuration
@@ -211,15 +211,15 @@ class Inventory:
         '''
         self.configuration = read_yaml_config(inventory_config_filename, check=False)
         if self.configuration is None:
-           self.configuration = {'dbname': "inventory"} 
-            
+           self.configuration = {'dbname': "inventory"}
+
     def __init__(self, filename=None):
         '''
         initializes the inventory
         '''
         self.date_creation = datetime.now()
         self.config(filename)
-        
+
         #
         # TODO: need to pass host, port and other stuff from config file dict to this
         #
@@ -254,7 +254,7 @@ class Inventory:
                     self.stamp()
                     element.save(cascade=True)
 
-    
+
     def create (self, kind, namespec):
         '''
         creates fabric objects of the specified kind and matching the name specification
@@ -283,7 +283,7 @@ class Inventory:
             element.save(cascade=True)
             elements.append(object)
         return elements
-    
+
     def create_cluster(self,
                        name,
                        names,
@@ -297,7 +297,7 @@ class Inventory:
         :param ips: the names of the ips for the servers. 'i[001-003].futuregrid.org' creates the ips for the previously defined names
         :param management: the names of the management nodes. 'i[001-002]' sets the nodes i001 and i002 to management nodes. The rest will be set to compute nodes automatically.
         '''
-        
+
         name_list = expand_hostlist(names)
         ip_list = expand_hostlist(ips)
         management_list = expand_hostlist(management)
@@ -314,13 +314,13 @@ class Inventory:
             self.stamp()
             server.save(cascade=True)
             servers.append(server)
-        cluster = FabricCluster(name=name, 
-                                cluster=name, 
+        cluster = FabricCluster(name=name,
+                                cluster=name,
                                 definition=names)
         cluster.servers = servers
         self.stamp()
         cluster.save(cascade=True)
-            
+
         pass
 
     def get (self, kind, name=None):
@@ -409,10 +409,10 @@ class Inventory:
         :param name: the name of the fabric object
         '''
         if kind in FABRIC_TYPES or name is not None:
-            element = self.get(kind, name)   
+            element = self.get(kind, name)
             for key in element:
                 print "%15s =" % key, element[key]
-            
+
     def refresh(self, kind=None):
         '''
         the inventory object contains a number of lists to conveniently access all fabric objects by kind. After refresh you can access them through 

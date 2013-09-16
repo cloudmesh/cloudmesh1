@@ -10,12 +10,12 @@ def req():
 
 @task
 def sdist():
-    """create the sdist""" 
+    """create the sdist"""
     execute(clean.all)
     local("python setup.py sdist --format=bztar,zip")
 
 @task
-def install(): 
+def install():
     """install cloudmesh"""
     local("pip install -r requirements.txt")
     local("python setup.py install")

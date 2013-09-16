@@ -10,7 +10,7 @@ from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.util.util import cond_decorator
 from flask.ext.login import login_required
 import cloudmesh
-
+from cloudmesh.pbs import tasks
 mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 
 # ============================================================
@@ -21,11 +21,11 @@ mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 @mesh_hpc_module.route('/mesh/refresh/qstat/<host>')
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_mongo_qstat_refresh(host=None):
-
+    print "recieved refresh request ===========", host
+    timeout = 5;
     config = cm_config()
-    user = config.config["cloudmesh"]["hpc"]["username"]
+    user = config["cloudmesh"]["hpc"]["username"]
     pbs = pbs_mongo()
-
     if host is None:
         hosts = ["india.futuregrid.org",
                  "sierra.futuregrid.org",
@@ -33,14 +33,15 @@ def display_mongo_qstat_refresh(host=None):
                  "alamo.futuregrid.org"]
     else:
         hosts = [host]
-
     error = ""
-    for host in hosts:
-        pbs.activate(host,user)
-        try:
-            d = pbs.refresh_qstat(host)
-        except Exception, e:
-            error += "error {0} {1}".format(str(host),str(e))
+    res = tasks.refresh_qstat.apply_async(queue="questat", priority=0, args=[hosts])
+    try:
+        error = res.get(timeout=timeout)
+    except :
+            return render_template('error.html',
+                           error="Time out",
+                           type="Some error in qstat",
+                           msg="")
     if error != "":
         return render_template('error.html',
                                error=error,
@@ -57,15 +58,15 @@ def display_mongo_qstat_new():
     address_string = ""
     error = ""
     config = cm_config()
-    user = config.config["cloudmesh"]["hpc"]["username"]
+    user = config["cloudmesh"]["hpc"]["username"]
 
     pbs = pbs_mongo()
     hosts = ["india.futuregrid.org",
              "sierra.futuregrid.org",
              "hotel.futuregrid.org",
              "alamo.futuregrid.org"]
-    for host in hosts:
-        pbs.activate(host,user)
+#    for host in hosts:
+#        pbs.activate(host,user)
 
 
     data = {}
@@ -74,9 +75,10 @@ def display_mongo_qstat_new():
     for host in hosts:
         try:
             data[host] = pbs.get_qstat(host)
+            print"101010101010101001010101001"
+            # print data[host]
         except:
             error += "get_qstat({0})".format(host)
-
         try:
 
             print "DDD", host, data[host].count()
@@ -84,15 +86,15 @@ def display_mongo_qstat_new():
         except:
             error += "jobcount {0}".format(host)
 
-
         if jobcount[host] > 0:
             timer[host] = data[host][0]["cm_refresh"]
+            print timer
             print "TTTTT"
             pprint(data[host][0])
-            #timer[host] = datetime.now()
+            # timer[host] = datetime.now()
         else:
             timer[host] = datetime.now()
-        #print "TIMER", timer
+        # print "TIMER", timer
     attributes = {"pbs":
                   [
                         [ "Queue" , "queue"],

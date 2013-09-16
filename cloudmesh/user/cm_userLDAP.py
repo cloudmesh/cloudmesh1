@@ -13,32 +13,32 @@ log = LOGGER(__file__)
 
 
 class cm_userLDAP (CMUserProviderBaseType):
-    
+
     providers = {}
     host = None
     cert = None
-    
+
     def get_config(self, **kwargs):
-        
+
         if not kwargs.has_key('host'):  # if kwargs['host'] is None:
             self.host = cm_config_server().get("ldap.hostname")
-    
+
         if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
             self.cert = cm_config_server().get("ldap.cert")
-            
-            
+
+
     def authenticate(self, userId, password, **kwargs):
         ret = False
-                
+
         # bug pass **kwargs
         self.get_config()
-        
-        
+
+
         # print "'" + userId + "':'" + authProvider + "':'" + authCred + "'"
-        
+
         # print adminuser, adminpass
         basedn = "ou=People,dc=futuregrid,dc=org"
-        userdn = "uid={0},{1}".format(uid,basedn)
+        userdn = "uid={0},{1}".format(userId, basedn)
         # print userdn
         ldapconn = ldap.initialize("ldap://{0}".format(self.host))
         log.info("Initializing the LDAP connection to server: " + self.host)
@@ -46,7 +46,7 @@ class cm_userLDAP (CMUserProviderBaseType):
             ldapconn.start_tls_s()
             log.info("tls started...")
             ldapconn.bind_s(userdn, password)
-            ret = True                
+            ret = True
         except ldap.INVALID_CREDENTIALS:
             log.info("Your username or password is incorrect. Cannot bind.")
             ret = False
@@ -60,23 +60,23 @@ class cm_userLDAP (CMUserProviderBaseType):
             log.info("Unbinding from the LDAP.")
             ldapconn.unbind()
         return ret
-    
+
     def __init__(self, collection="user"):
         super(cm_userLDAP, self).__init__()
 
     def refresh(self):
         '''
-        refreshes the userdatabase from the user provider
+        Refresh the user database from the user provider
         '''
         self._refresh()
         users = self.list()
         for user in users:
             data = self.get(user)
-            self.updates(user, data)  
+            self.updates(user, data)
 
     def connect(self, name, type, **kwargs):
         '''
-        registers a provider with som parameters specified in the dict params
+        Register a provider with som parameters specified in the dict params
         
         :param name: the name of the provider
         :param type: the type of the provider, overwrites a possibly given type in params
@@ -87,14 +87,18 @@ class cm_userLDAP (CMUserProviderBaseType):
                     'name': name}
         for k, v in kwargs.iteritems():
             provider[k] = v
-        
+
         if not kwargs.has_key('host'):  # if kwargs['host'] is None:
             self.host = cm_config_server().get("ldap.hostname")
-    
+
         if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
             self.cert = cm_config_server().get("ldap.cert")
-            
+
+
         ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, self.cert)
+        # BUG IN FINAL VERSION MAKE SURE WE CHECK
+        ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_NEVER)
+
         self.ldapconn = ldap.initialize("ldap://" + self.host)
         self.ldapconn.start_tls_s()
         self.ldapconn.bind_s('', '')
@@ -102,21 +106,21 @@ class cm_userLDAP (CMUserProviderBaseType):
 
     def disconnect(self):
         self.ldapconn.unbind()
-    
+
     def __del__(self):
         self.disconnect()
 
-        
+
     def get(self, username):
         '''
-        returns the dict associated with the username
+        Return the dict associated with the username
         :param username:
         '''
         return self.users[username]
-                
+
     def list(self):
         '''
-        returns a list with all usernames
+        Return a list with all usernames
         '''
         return self.users.keys()
 
@@ -124,7 +128,7 @@ class cm_userLDAP (CMUserProviderBaseType):
         self._getUsers()
         self._getProjects()
         return self.users
-            
+
     def _getUsers(self):
         # print "LDAP query..."
         try:
@@ -133,7 +137,15 @@ class cm_userLDAP (CMUserProviderBaseType):
             ldapscope = ldap.SCOPE_SUBTREE
             ldapfilter = "(objectclass=inetorgperson)"
             # info to be retrieved from ldap
-            ldapattribs = ['uid', 'uidNumber', 'mail', 'givenName', 'sn']
+            ldapattribs = ['uid',
+                           'uidNumber',
+                           'gidNumber',
+                           'mail',
+                           'givenName',
+                           'sn',
+                           'telephoneNumber',
+                           'address',
+                           'sshPublicKey']
 
             # retrieve all ldap users
             ldapresults = list(self.ldapconn.search_s(ldapbasedn, ldapscope, ldapfilter, ldapattribs))
@@ -143,9 +155,30 @@ class cm_userLDAP (CMUserProviderBaseType):
                 if ldapresult[1].has_key('mail'):
                     ldapmail = ldapresult[1]['mail'][0]
                     ldapuid = ldapresult[1]['uid'][0]
+                    ldapuidNumber = ldapresult[1]['uidNumber'][0]
+                    ldapgidNumber = ldapresult[1]['gidNumber'][0]
                     firstname = ldapresult[1]['givenName'][0]
                     lastname = ldapresult[1]['sn'][0]
-                self.users[ldapuid] = {"firstname":firstname, "lastname":lastname, "projects":{"active":[]} }
+                    phone = ldapresult[1]['telephoneNumber'][0] if 'telephoneNumber' in ldapresult[1] else None
+                    address = 'TBD'  # not currently in LDAP
+
+                    keys = {}
+                    if ldapresult[1].has_key('sshPublicKey'):
+                        for sshkey in ldapresult[1]['sshPublicKey']:
+                            if sshkey.strip():
+                                (keytype, key, nickname) = (
+                                    sshkey.strip().split(None, 2) + [''])[0:3]
+                                keys[nickname.translate(None, '.$')] = "key %s" % sshkey
+
+                    self.users[ldapuid] = {"firstname":firstname,
+                                           "lastname":lastname,
+                                           "uidNumber":ldapuidNumber,
+                                           "gidNumber":ldapgidNumber,
+                                           "phone":phone,
+                                           "email":ldapmail,
+                                           "address":address,
+                                           "projects":{"active":[]},
+                                           "keys":keys }
         except:
             print "WRONG" + str(sys.exc_info())
 
@@ -170,7 +203,7 @@ class cm_userLDAP (CMUserProviderBaseType):
         except:
             print "WRONG" + str(sys.exc_info())
 
-  
+
 
 def main():
     idp = cm_userLDAP (CMUserProviderBaseType)
@@ -179,19 +212,12 @@ def main():
     users = idp.list()
 
     from pprint import pprint
-    
+
     pprint(users)
-    
+
     pprint(idp.users)
-    
-    
+
+
 
 if __name__ == "__main__":
     main()
-        
-        
-            
-        
-        
-        
-        
