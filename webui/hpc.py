@@ -65,11 +65,6 @@ debug = True
 
 with_cloudmesh = False
 
-# not sure what this is for ?????
-server_config = SafeConfigParser(
-    {'name': 'flasktest'})  # Default database name
-server_config.read("server.config")
-
 # ============================================================
 # allowing the yaml file to be written back upon change
 # ============================================================
