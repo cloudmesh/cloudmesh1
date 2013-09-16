@@ -75,7 +75,7 @@ class cloudmesh_user:
         """List of active projects"""
         if self.data['profile']['projects']:
             projects = []
-            for project in self.data['projects']['active']:
+            for project in self.data['profile']['projects']['active']:
                 projects.append("fg-%s" % project)
         return projects
 
