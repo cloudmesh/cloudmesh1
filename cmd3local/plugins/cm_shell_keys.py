@@ -45,15 +45,15 @@ class cm_shell_keys:
            -v       verbose mode
 
         """
-        #log.info(70 * "-")
-        #log.info(arguments)
-        #log.info(70 * "-")
+        # log.info(70 * "-")
+        # log.info(arguments)
+        # log.info(70 * "-")
 
 
         if arguments["default"] and arguments["NAME"]:
             log.info ("delete the keys")
             return
-        
+
         if arguments["info"] and arguments["NAME"]:
             try:
                 name = arguments["NAME"]
@@ -63,39 +63,39 @@ class cm_shell_keys:
                 print "-------------------"
                 print
                 if name == "default":
-                    name =  self.keys.get_default_key()
+                    name = self.keys.get_default_key()
                 print "%15s:" % name, key
             except:
                 print "Could not find the key with the name", arguments["NAME"]
             print
             return
 
-        if arguments["info"] and arguments["NAME"] is None: 
-            #log.info ("keys info for all")
+        if arguments["info"] and arguments["NAME"] is None:
+            # log.info ("keys info for all")
             if arguments["json"]:
-                pprint( self.keys["keys"])
+                pprint(self.keys["keys"])
                 return
             else:
                 print
                 print "Key Information"
                 print "-------------------"
-                
+
                 print
                 if self.keys["default"] is not None:
-                    #print "%15s:" % "name", self.keys.default()
+                    # print "%15s:" % "name", self.keys.default()
                     print "%15s:" % "default", self.keys.get_default_key()
                     for name in self.keys.names():
                         print "%15s:" % name, self.keys.fingerprint(name)
-                    print 
+                    print
                 else:
                     print "%10s:" % "default", "default is not set, please set it"
 
 
                 print
-                    
+
                 return
 
 
 
-        
-        
+
+

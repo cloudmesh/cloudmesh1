@@ -15,97 +15,97 @@ class MyTempMap:
     # Filename of server.diag
     #
     diag_filename = ""
-    
+
     #
     # type of image
     #
     image_type = "svg"
-    
+
     #
     # filename of image
     #
     image_filename = ""
-    
+
     # content of diag file
     diag_content = ""
-    
+
     # temporary diag file
     diag_temp_filename = ""
-    
+
     #
     # Array of sever names
     # This array is always a double array
     # the 1st array is related to a rack
     # the 2nd items is a server in the specific rack
     # the 3rd is the data of the corresponding server (name, code of template)
-    # 
-    arr_servers = []
-    
     #
-    # color substitute dict 
+    arr_servers = []
+
+    #
+    # color substitute dict
     #
     dict_colors = {}
-    
-    
+
+
     #
     # static regex pattern for parsing rackXXX.diag file
     #
-    
+
     # racklist, a group of rack
     patt_racklist = re.compile("rackdiag\s*?\{", re.I)
-    
+
     # rack, a group of server
     patt_rack = re.compile("rack\s*?\{", re.I)
-    
-    # description // .... 
+
+    # description // ....
     patt_desc = re.compile("^//", re.I)
-    
+
     # total server units, e.g., 48U
     patt_total_u = re.compile("^\d+?u", re.I)
-    
-    # a record of normal server 
+
+    # a record of normal server
     # 5: gravel01 [2U] {{gravel01}}
     # 5: gravel01 {{gravel01}}
     # 5: {{gravel01}}
     patt_server_normal = re.compile("(^\d+?):((?:\s*?\w+?)?(?:\s*?\[\w+?\])?)\s*?\{\{(\w+?)\}\}", re.I)
-    
+
     # already rendered record of server
     #  5: gravel01 [2U] [color=XXXX]
     #  5: gravel01 [color=XXXX]
     #  5: [color=XXXX]
     patt_server_render = re.compile("(^\d+?):((?:\s*?\w+?)?(?:\s*?\[\w+?\])?)\s*?\[color\s*?=\s*?(\w+?)\]", re.I)
-    
-        
+
+
     #
     # the image file locates in the same directory with the input filename
     # param: filename is the input filename of a rackXXX.diag
-    # 
+    #
     def __init__(self, filename, type):
     	fullname = path.abspath(filename)
     	self.diag_filename = fullname.lower()
-    	
+
     	basename = path.basename(self.diag_filename)
     	dirname = path.dirname(self.diag_filename)
-    	
+
     	# check extension of input filename
     	if not basename.endswith(".diag"):
     		print "Warning: ONLY .diag file is supported. Exit immediately!"
     		sys.exit(-1)
-    	
+
     	# set diag temporary filename
     	self.diag_temp_filename = self.diag_filename[0:-5] + "-temp.diag"
-    	
+
     	# set image file to the default svg format
     	self.set_image_format(self.image_type)
-    	    	
-    
+
+
     # set image type
     # change the extension of image filename
     def set_image_format(self, type):
     	if not type:
     		print "You must set a non-empty type."
     		exit
-    	
+
     	# lower string of type
     	ltype = type.lower()
     	if self.image_filename:
@@ -119,67 +119,67 @@ class MyTempMap:
     		print "Image type {0} is NOT supported currently!".format(type)
     		print "Use svg to replace ."
     		self.image_type = "svg"
-    	
+
     	# filename, diag filename ends with ".diag"
-    	# image filename ends with "." + a valid lower image type 
+    	# image filename ends with "." + a valid lower image type
     	self.image_filename = self.diag_filename[0:-4] + self.image_type
 
 
-        # bug use    (name, ending) = self.image_filename.split(".",-1) 
+        # bug use    (name, ending) = self.image_filename.split(".",-1)
         # http://stackoverflow.com/questions/541390/extracting-extension-from-filename-in-python
     	print "image filename is: " + self.image_filename
 
-    
+
 	# update server color code to a real color in RGB space
     def update_server_color(self, scode, scolor):
     	if scode in self.dict_colors:
     		print "update dict_colors with [{0}, {1}]".format(scode, scolor)
     		self.dict_colors.update({scode: scolor})
     	else:
-    		print "[Error] code {0} does NOT exist in dict_colors.".format(scode) 
-    
-    
+    		print "[Error] code {0} does NOT exist in dict_colors.".format(scode)
+
+
     # add color to color_dict
     def append_server_color(self, scode):
 		if scode in self.dict_colors:
 			print "Find a same color code among different server. \n Please check the origial rackXXX.diag file."
 		else:
 			self.dict_colors[scode] = scode
-    
-    
+
+
     #
     # ONLY used when a rack embed in the racklist
     # IF there is only one rack, this function should NOT be called
-    # 
+    #
     # add one server record into 3-dimension array data structure
-    # 	
+    #
     def addRackListServer(self, rackIndex, numIndex, sname, scolor):
     	print "into add server info ..."
-    	
+
     	arr_record = (numIndex, sname, scolor)
     	print arr_record
-    	
+
     	self.arr_servers[rackIndex].append(arr_record)
-    	
+
     	# add color to color_dict
     	self.append_server_color(scolor)
-    	
-    	
-    	
+
+
+
     # ONLY has a rack in rackXXX.diag file
     # It will be a 2-dimension array, containing ONLY one rack
     def addRackServer(self, numIndex, sname, scolor):
     	print "into add server info [rack] ..."
-    	
+
     	arr_record = (numIndex, sname, scolor)
     	print arr_record
-    	
+
     	self.arr_servers.append(arr_record)
-    	
+
     	# add color to color_dict
     	self.append_server_color(scolor)
-    
-    
+
+
 
     #
     # read information from the diag file
@@ -187,18 +187,18 @@ class MyTempMap:
     def readDiagInfo(self):
     	print "Ready to read DIAG info from {0} ...".format(self.diag_filename)
         rf = open(self.diag_filename, "r")
-        
+
         print rf
-        
+
         rackindex = -2;
         for aline in rf:
         	print aline
-        	
+
         	# keep the file content in memory
         	# add line string to diag_content
         	self.diag_content += aline
         	self.diag_content += "\n"
-        	
+
         	line = aline.strip()
         	# normal server
         	m = self.patt_server_normal.match(line)
@@ -212,9 +212,9 @@ class MyTempMap:
         			self.addRackServer(sindex, sname, scolor)
         		else:
         			self.addRackListServer(rackindex, sindex, sname, scolor)
-        		
+
         		continue
-        	
+
         	# rendered server
         	m = self.patt_server_render.match(line)
         	if m:
@@ -224,16 +224,16 @@ class MyTempMap:
         		scolor = m.group(3).strip()
         		if rackindex < 0:
         			print "ONLY a SINGLE rack exist..."
-        		
+
         		print "RENDERED Info: index={0}, name={1}, color={2}".format(sindex, sname, scolor)
         		continue
-        	
+
         	# description
         	m = self.patt_desc.match(line)
         	if m:
         		print "find description..."
         		continue
-        		
+
         	# rack
         	m = self.patt_rack.match(line)
         	if m:
@@ -241,54 +241,54 @@ class MyTempMap:
         		self.arr_servers.append([]);
         		rackindex += 1
         		continue
-        	
+
         	# total U
         	m = self.patt_total_u.match(line)
         	if m:
         		print "find total u.."
         		continue
-        	
+
         	# racklist
         	m = self.patt_racklist.match(line)
         	if m:
         		print "find racklist.."
         		rackindex += 1
         		continue
-        	
+
         	# currently, ignore all unmatched items/lines
-        	# To do...	
-        	
+        	# To do...
+
         # Finally, close file
         rf.close()
-    
+
     #
     # generate a new diag file with random temperature or color
-    # 
+    #
     def writeTempDiagInfo(self):
     	arr = {}
     	for k in self.dict_colors.keys():
     		vcolor = '[color="{0}"];'.format(self.dict_colors[k])
     		arr[k] = vcolor
-    		
+
     	wf = open(self.diag_temp_filename, "w")
     	template = Template(self.diag_content)
     	scontent = template.render(arr)
     	wf.write(scontent)
     	wf.close()
-    	
-    
+
+
     #
     # generate an image with the tool of rackdiag
     #
     def gen_rack_image(self):
     	# step 1. write temporary diag file to disk
     	self.writeTempDiagInfo()
-    	
+
     	# step 2. call rackdiag to make a image
     	self.plot_rackdiag()
-        
-    
-    
+
+
+
     def convertNumToRGB_2(self, value):
         h = [
             (0, 0, 255),
@@ -391,7 +391,7 @@ class MyTempMap:
             (255, 10, 0),
             (255, 8, 0),
             (255, 3, 0)]
-        
+
         i = int(value * 100)
 
 
@@ -401,7 +401,7 @@ class MyTempMap:
         return "#{0:02X}{1:02X}{2:02X}".format(r, g, b)
 
 
-    # 
+    #
     # convert a number between 0.00 and 1.00 to a RGB value represented by Hex value
     #
     def convertNumToRGB(self, value):
@@ -443,9 +443,9 @@ class MyTempMap:
         shexRGB = "#{0:02X}{1:02X}{2:02X}".format(int(round(RGB_R)), int(round(RGB_G)), int(round(RGB_B)))
 
         return shexRGB
-    
 
-    
+
+
     # generate random temperature for all possilbe server with color code
     # just do this in dict_colors data structure
     def gen_random_temperature(self):
@@ -454,22 +454,22 @@ class MyTempMap:
     		rtemp = self.get_random(False);
     		rcolor = self.convertNumToRGB_2(rtemp)
     		self.update_server_color(scode, rcolor)
-    
+
     # set a specific temperature for a server
     # this method MUST call after gen_random_temperature
     def set_server_temperature(self, scode, stemp):
     	if stemp < 0.0 or stemp > 1.0:
     		print "[Error]Temperature MUST in range 0.0 -- 1.0, "
     		return
-    	
+
     	if scode in self.dict_colors:
     		print "Find server {0}".format(scode)
     		rtemp = self.convertNumToRGB_2(stemp)
     		self.dict_colors.update({scode:rtemp})
     	else:
     		print "Cannot find server {0} in server list".format(scode)
-    
-    
+
+
     # get random number
     # range is 0.00 ~ 0.99
     # params:
@@ -479,25 +479,25 @@ class MyTempMap:
         if bResetSeed:
             rseed = time.time()
             random.seed(100)
-        
+
         rand = random.random()
         # ivalue = int(rand * 100)
         # fvalue = float(ivalue / 100.0)
         return rand
-    
+
     #
     # call rackdiag to make a image
     #
     def plot_rackdiag(self):
     	# write temporary diag file to disk
     	self.writeTempDiagInfo()
-    	
+
     	# call rackdiag to plot
     	r = rackdiag("-T{0}".format(self.image_type),
                     "-o", self.image_filename, self.diag_temp_filename)
-        
+
     # plot_rackdiag(type, input_filename, output_filename)
-    
+
     # only for testing ....
     # t = get_random_temperature()
     # print t
@@ -518,14 +518,14 @@ if  __name__ == '__main__':
         print "\t python chmap svg india-color.diag"
         print "\t or"
         print "\t python chmap india-color.diag"
-        print ""    
+        print ""
         exit(-1)
 
     diag_file = sys.argv[arg_len - 1]
-    print "input filename is ", diag_file 
+    print "input filename is ", diag_file
     t = MyTempMap(diag_file, "svg")
     t.readDiagInfo()
-    
+
     """
     print "server info..."
     print t.arr_servers

@@ -36,6 +36,7 @@ cloudmesh:
         e_mail: {{ profile.e_mail }}
         firstname: {{ profile.firstname }}
         gid: {{ profile.gid }}
+        uid: {{ profile.uid }}
         lastname: {{ profile.lastname }}
         phone: {{ profile.phone }}
         username: {{ portalname }}

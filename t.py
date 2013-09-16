@@ -32,17 +32,17 @@ hosts = hostlist.expand_hostlist("b-[001-008]")
 
 for host in hosts:
     print "PROVISION HOST", host
-    provision.delay(host,"openstack")
-        
-    #t[host] = provision.delay(host,"openstack")
+    provision.delay(host, "openstack")
 
-    #t[host] = provision.delay(host,"hpc")
+    # t[host] = provision.delay(host,"openstack")
 
-    #i = celery.control.inspect()
+    # t[host] = provision.delay(host,"hpc")
+
+    # i = celery.control.inspect()
 
 
 
-#for j in range(10):
+# for j in range(10):
 #    print chr(27) + "[2J"
 #    inventory.print_cluster("bravo")
 #    for host in hosts:
@@ -51,8 +51,8 @@ for host in hosts:
 #    pprint (i.scheduled())
 #    pprint (i.reserved())
 #    time.sleep(1)
-    
-#for j in range(10):
+
+# for j in range(10):
 #    for host in hosts:
 #        print t[host].status()
 

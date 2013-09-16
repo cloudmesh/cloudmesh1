@@ -1,8 +1,8 @@
 from cloudmesh.config.cm_config import cm_config
-import os
 from string import Template
 import base64
 import hashlib
+import os
 import sys
 
 

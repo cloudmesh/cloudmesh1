@@ -27,7 +27,7 @@ class cm_user(object):
     project ids. In OpenStack Keystone, it has cloud-related information such as
     a tenant id, user id, cloud version, cloud type and location.
     """
-    
+
     def __init__(self):
         self.connect_db()
 
@@ -40,8 +40,8 @@ class cm_user(object):
         cloud_collection = 'cloudmesh'
         self.db_clouds = db[cloud_collection]
         self.db_users = db[ldap_collection]
-        
-    def info(self, portal_id, cloud_names = []):
+
+    def info(self, portal_id, cloud_names=[]):
         """Return the user information with a given portal id.
 
         :param portal_id: the unique portal id to retrieve
@@ -70,7 +70,7 @@ class cm_user(object):
                 userinfo['clouds'][arec['cm_cloud']] = arec
         return userinfo
 
-    def __getitem__(self,key):
+    def __getitem__(self, key):
         return self.info(key)
 
     def get_name(self, portal_id):
@@ -81,8 +81,9 @@ class cm_user(object):
         :returns: tuple
 
         """
-        ldap_info = self.db_users.find({"cm_user_id": portal_id})
-        (first_name, last_name) = (ldapret['firstname'], ldapret['lastname'])
+        ldap_data = self.db_users.find({"cm_user_id": portal_id})
+        if ldap_data.count() > 0:
+            ldap_info = ldap_data[0]
+            (first_name, last_name) = (ldap_info['firstname'], ldap_info['lastname'])
 
-        return (first_name, last_name)
-
+            return (first_name, last_name)

@@ -28,18 +28,18 @@ def get_mongo_db(mongo_collection):
     Read in the mongo db information from the cloudmesh_server.yaml
     """
     filename = os.path.expanduser("~/.futuregrid/cloudmesh_server.yaml")
-        
-    mongo_config = ConfigDict(filename=filename).get("mongo") 
+
+    mongo_config = ConfigDict(filename=filename).get("mongo")
 
     mongo_host = mongo_config["host"]
     mongo_port = mongo_config["port"]
-    
+
     mongo_db_name = mongo_config["collections"][mongo_collection]['db']
-        
+
     client = MongoClient(host=mongo_host,
-                         port=mongo_port)  
-    db = client[mongo_db_name]          
-    db_clouds = db[mongo_collection] 
+                         port=mongo_port)
+    db = client[mongo_db_name]
+    db_clouds = db[mongo_collection]
     return db_clouds
 
 
@@ -56,7 +56,7 @@ class cm_config_server(ConfigDict):
             filename = self.filename
         ConfigDict.__init__(self, filename=filename, kind="server")
 
-    
+
 class cm_config_launcher(ConfigDict):
     """
     reads the information contained in the file
@@ -68,15 +68,15 @@ class cm_config_launcher(ConfigDict):
         if filename is None:
             filename = self.filename
         ConfigDict.__init__(self, filename=filename, kind="launcher")
-        
-    
+
+
 class cm_config(ConfigDict):
 
     # ----------------------------------------------------------------------
     # global variables
     # ----------------------------------------------------------------------
 
-    filename  = os.path.expanduser('~/.futuregrid/cloudmesh.yaml')
+    filename = os.path.expanduser('~/.futuregrid/cloudmesh.yaml')
     cloudmesh_server_path = os.path.expanduser('~/.futuregrid/cloudmesh_server.yaml')
 
     # ----------------------------------------------------------------------
@@ -93,16 +93,16 @@ class cm_config(ConfigDict):
         self._userdata_handler = None
         self._serverdata = None
 
-        
+
     # ----------------------------------------------------------------------
     # Internal helper methods
     # ----------------------------------------------------------------------
-    def _get_cloud_handler(self, cloud, as_admin=False):
+    def _get_cloud_handler(self, profile, projects, cloud, as_admin=False):
         """This gets a class that knows how to handle the specific type of
         cloud (how to provision users, etc)"""
-        handler_args = { 'profiledata': self.profile(),
-                         'defaultproj': self.projects('default'),
-                         'projectlist': self.projects('active'),
+        handler_args = { 'profiledata': profile,
+                         'defaultproj': projects['default'],
+                         'projectlist': projects['active'],
                          'cloudname': cloud }
         if as_admin:
             handler_args['clouddata'] = self.serverdata['keystone'][cloud]
@@ -116,7 +116,7 @@ class cm_config(ConfigDict):
         # cloud_handler._client.mocktenants = ['fg82','fg110','fg296']
         #####################################################################################
         return cloud_handler
-        
+
 
     # ----------------------------------------------------------------------
     # Methods to initialize (create) the config config
@@ -159,9 +159,14 @@ class cm_config(ConfigDict):
     def _initialize_clouds(self):
         """Creates cloud credentials for the user"""
         self.init_config['cloudmesh']['clouds'] = {}
-        cloudlist = self.active()
+        cloudlist = self.init_config['cloudmesh']['active']
         for cloud in cloudlist:
-            cloud_handler = self._get_cloud_handler(cloud, as_admin=True)
+            cloud_handler = self._get_cloud_handler(
+                self.init_config['cloudmesh']['profile'],
+                self.init_config['cloudmesh']['projects'],
+                cloud,
+                as_admin=True
+            )
             cloud_handler.initialize_cloud_user()
             self.init_config['cloudmesh']['clouds'][cloud] = copy.deepcopy(cloud_handler.credentials)
 
@@ -174,7 +179,7 @@ class cm_config(ConfigDict):
         self._initialize_clouds()
 
     def change_own_password(self, cloudname, oldpass, newpass):
-        cloud_handler = self._get_cloud_handler(cloudname)
+        cloud_handler = self._get_cloud_handler(self.profile(), self['cloudmesh']['projects'], cloudname)
         cloud_handler.change_own_password(oldpass, newpass)
         # Save the yaml file so the new password is saved
         self.write()
@@ -183,7 +188,7 @@ class cm_config(ConfigDict):
         cloudlist = self.active()
         passwords = {}
         for cloud in cloudlist:
-            cloud_handler = self._get_cloud_handler(cloud)
+            cloud_handler = self._get_cloud_handler(self.profile(), self['cloudmesh']['projects'], cloud)
             passwords[cloud] = cloud_handler.get_own_password()
         return passwords
 
@@ -336,7 +341,7 @@ class cm_config(ConfigDict):
 
     def credential(self, name):
         return self.get_data (key=name, expand=True)
-    
+
     def get_data(self, key=None, expand=False):
         if key is None:
             return self['cloudmesh']
@@ -377,7 +382,7 @@ class cm_config(ConfigDict):
                     lines += self.export_line(attribute, value)
         return lines
 
-    
+
 # ----------------------------------------------------------------------
 # MAIN METHOD FOR TESTING
 # ----------------------------------------------------------------------

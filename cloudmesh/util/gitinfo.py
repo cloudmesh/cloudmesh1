@@ -1,9 +1,10 @@
+"""managing information from GIT"""
 from pprint import pprint
 from sh import git
 from sh import sort
 
 
-class GitInfo: 
+class GitInfo:
 
     """This class can be used to return some elementary information
     about the git hub directory.  This includes the: 
@@ -13,7 +14,7 @@ class GitInfo:
     * emails of the people contributing
     * a statistic about canged code by person
     """
-    
+
     def version(self):
         '''
         retruns the verison of the code from github
@@ -77,7 +78,7 @@ class GitInfo:
                 "commits": authors[name],
                 "email": email[name]}
         return info
-  
+
     def stat(self, email):
         '''
         returns a statistick of a git author with the given e_mail.

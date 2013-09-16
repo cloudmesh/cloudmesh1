@@ -43,29 +43,29 @@ class cm_shell_project:
            -v       verbose mode
 
         """
-        #log.info(70 * "-")
-        #log.info(arguments)
-        #log.info(70 * "-")
+        # log.info(70 * "-")
+        # log.info(arguments)
+        # log.info(70 * "-")
 
 
         if arguments["default"] and arguments["NAME"]:
             log.info ("delete the project")
             return
-        
+
         if arguments["info"] and arguments["NAME"]:
             log.info ("project info for the NAMED one")
             return
 
-        if arguments["info"] and arguments["NAME"] is None: 
-            #log.info ("project info for all")
+        if arguments["info"] and arguments["NAME"] is None:
+            # log.info ("project info for all")
             if arguments["json"]:
-                print self.projects.dump()            
+                print self.projects.dump()
                 return
             else:
                 print
                 print "Project Information"
                 print "-------------------"
-                
+
                 print
                 if self.projects.names("default") is not "" and not []:
                     print "%10s:" % "default", self.projects.names("default")
@@ -76,7 +76,7 @@ class cm_shell_project:
                 if len(self.projects.names("completed")) > 0:
                     print "%10s:" % "completed", ' '.join(self.projects.names("completed"))
                 print
-            
+
             return
 
         if arguments["members"]:
@@ -84,5 +84,5 @@ class cm_shell_project:
             return
 
 
-        
-        
+
+
