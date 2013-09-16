@@ -130,17 +130,24 @@ class openstack(ComputeBaseType):
         """
         creates tokens for a connection
         """
-        if self.user_credential is None:
-            log("error connecting to openstack compute, credential is None")
-        else:
-            self.user_token = self.get_token(self.user_credentials)
-        
+        try:
+            if self.user_credential is None:
+                log("error connecting to openstack compute, credential is None")
+            else:
+                self.user_token = self.get_token(self.user_credentials)
+        except:
+            print "I could not authenticate to the cloud as user", self.label
+
         # check if keystone is defined, and if failed print log msg
         #
-        if self.admin_credential is None:
-            log("error connecting to openstack compute, credential is None")
-        else:
-            self.admin_token = self.get_token(self.admin_credential)
+
+        try:
+            if self.admin_credential is None:
+                log("error connecting to openstack compute, credential is None")
+            else:
+                self.admin_token = self.get_token(self.admin_credential)
+        except:
+            print "I could not authenticate to the cloud as admin", self.label
 
         
     def get_token(self, credential=None):
