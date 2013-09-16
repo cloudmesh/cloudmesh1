@@ -22,7 +22,7 @@ mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_mongo_qstat_refresh(host=None):
     print "recieved refresh request ===========", host
-    timeout = 5;
+    timeout = 300;
     config = cm_config()
     user = config["cloudmesh"]["hpc"]["username"]
     pbs = pbs_mongo()
