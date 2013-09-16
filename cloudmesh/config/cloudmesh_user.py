@@ -63,12 +63,12 @@ class cloudmesh_user:
     @property
     def activeclouds(self):
         """Not yet implemented"""
-        return self.data['clouds'][0]['cm_cloud']
+        return self.data['clouds'].keys()[0]
 
     @property
     def defaultcloud(self):
         """Not yet implemented"""
-        return self.data['clouds'][0]['cm_cloud']
+        return self.data['clouds'].keys()[0]
 
     @property
     def activeprojects(self):
