@@ -29,10 +29,13 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.cm_profile import cm_profile
+from cloudmesh.util.logger import LOGGER
 
 import novaclient
 from novaclient.openstack.common import strutils
 
+log = LOGGER(__file__)
+    
 def donotchange(fn):
     return fn
 
@@ -55,14 +58,14 @@ class openstack(ComputeBaseType):
     users = {}  # global var
 
     # : a dict containing the credentionls read with cm_config
-    #credential = None  # global var
+    # credential = None  # global var
     user_credential = None  # global var
     admin_credential = None
 
     user_token = None
     admin_token = None
 
-    
+
     # : a unique label for the clous
     label = None  # global var
 
@@ -78,9 +81,6 @@ class openstack(ComputeBaseType):
 
     _nova = nova
 
-
-
-
     #
     # initialize
     #
@@ -94,20 +94,25 @@ class openstack(ComputeBaseType):
         self.clear()
         self.label = label
 
-        user_credential = credential # HACK to avoid changes in older code
+        user_credential = credential  # HACK to avoid changes in older code
+        self.user_credential = user_credential
+        self.admin_credential = admin_credential
         
         if user_credential is None:
-            self.compute_config = cm_config()
-            self.user_credential = self.compute_config.credential(label)
-        else:
-            self.user_credential = user_credential
+            try:
+                self.compute_config = cm_config()
+                self.user_credential = self.compute_config.credential(label)
+            except:
+                log.error("No user credentail found! Please check your cloudmesh.yaml file.")
+                #sys.exit(1)
+            
 
-        if admin_credential is None:            
-            self.admin_credential = cm_config_server().get("keystone",label)
-        else:
-            self.admin_credential = admin_credential
-        
-        
+        if admin_credential is None:
+            try:
+                self.admin_credential = cm_config_server().get("keystone", label)
+            except:
+                log.error("No admin credentail found! Please check your cloudmesh_server.yaml file.")
+            
         self.connect()
 
     def clear(self):
@@ -124,32 +129,25 @@ class openstack(ComputeBaseType):
         self.admin_credentials = None
         self.type = "openstack"
 
-        
+
 
     def connect(self):
         """
         creates tokens for a connection
         """
-        try:
-            if self.user_credential is None:
-                log("error connecting to openstack compute, credential is None")
-            else:
-                self.user_token = self.get_token(self.user_credentials)
-        except:
-            print "I could not authenticate to the cloud as user", self.label
+        if self.user_credential is None:
+            log.error("error connecting to openstack compute, credential is None")
+        else:
+            self.user_token = self.get_token(self.user_credentials)
 
         # check if keystone is defined, and if failed print log msg
         #
+        if self.admin_credential is None:
+            log.error("error connecting to openstack compute, credential is None")
+        else:
+            self.admin_token = self.get_token(self.admin_credential)
 
-        try:
-            if self.admin_credential is None:
-                log("error connecting to openstack compute, credential is None")
-            else:
-                self.admin_token = self.get_token(self.admin_credential)
-        except:
-            print "I could not authenticate to the cloud as admin", self.label
 
-        
     def get_token(self, credential=None):
 
         if credential is None:
@@ -167,7 +165,7 @@ class openstack(ComputeBaseType):
         url = "{0}/tokens".format(credential['OS_AUTH_URL'])
 
         print "URL", url
-        
+
         headers = {'content-type': 'application/json'}
 
         verify = False
@@ -182,7 +180,7 @@ class openstack(ComputeBaseType):
         print "PARAM", json.dumps(param)
         print "HEADER", headers
         print "VERIFY", verify
-                
+
         r = requests.post(url,
                           data=json.dumps(param),
                           headers=headers,
@@ -191,7 +189,7 @@ class openstack(ComputeBaseType):
 
         return r.json()
 
-            
+
     #
     # FIND USER ID
     #
@@ -218,7 +216,7 @@ class openstack(ComputeBaseType):
 
     def _get_service(self, kind="user"):
 
-        token = self.user_token 
+        token = self.user_token
         if kind == "admin":
             token = self.admin_token
 
@@ -226,14 +224,14 @@ class openstack(ComputeBaseType):
             if service['type'] == kind:
                 break
         return service
-    
+
     def _get_compute_service(self, token=None):
         return self._get_service("compute")
 
     def _post(self, posturl, params=None):
         # print self.config
         conf = self._get_service_endpoint("compute")
-        headers = {'content-type': 'application/json', 
+        headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
         # print headers
         r = requests.post(posturl, headers=headers,
@@ -243,7 +241,7 @@ class openstack(ComputeBaseType):
         if r.text:
             ret = r.json()
         return ret
-        
+
     def vm_create(self, name=None,
                   flavor_name=None,
                   image_id=None,
@@ -257,18 +255,18 @@ class openstack(ComputeBaseType):
         #
         # TODO: add logic for getting default image
 
-        #if image_id is None:
+        # if image_id is None:
         #    get image id from profile information (default image for that cloud)
-            
-        # TODO: add logic for getting label of machine
-        # 
 
-        #if flavor_name is None:
+        # TODO: add logic for getting label of machine
+        #
+
+        # if flavor_name is None:
         #    get flavorname from profile information (ther is a get label function ...)
 
-        #if keyname is None:
+        # if keyname is None:
         #    get the default key from the profile information
-        
+
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         posturl = "%s/servers" % publicURL
@@ -299,7 +297,7 @@ class openstack(ComputeBaseType):
         print params
 
         return self._post(posturl, params)
-    
+
     def vm_delete(self, id):
         """
         delete a single vm and returns the id
@@ -307,7 +305,7 @@ class openstack(ComputeBaseType):
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         url = "%s/servers/%s" % (publicURL, id)
-        
+
         headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
         # print headers
         # no return from http delete via rest api
@@ -316,7 +314,7 @@ class openstack(ComputeBaseType):
         if r.text:
             ret = r.json()
         return ret
-    
+
     def get_public_ip(self):
         """
         Obtaining a floating ip from the pool via the rest api call
@@ -343,7 +341,7 @@ class openstack(ComputeBaseType):
                   }
         print params
         return self._post(posturl, params)
-    
+
     def delete_public_ip(self, idofip):
         """
         delete a public ip that is assigned but not currently being used
@@ -357,7 +355,7 @@ class openstack(ComputeBaseType):
         if r.text:
             ret = r.json()
         return ret
-    
+
     def list_allocated_ips(self):
         """
         return list of ips allocated to current account
@@ -368,7 +366,7 @@ class openstack(ComputeBaseType):
         headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
         r = requests.get(url, headers=headers, verify=self.credential['OS_CACERT'])
         return r.json()["floating_ips"]
-    
+
     def release_unused_public_ips(self):
         ips = self.list_allocated_ips()
         ips_id_to_instance = {}
@@ -378,33 +376,33 @@ class openstack(ComputeBaseType):
             if instance is None:
                 self.delete_public_ip(id)
         return True
-            
+
     def _get(self, msg, kind="user", service="compute", urltype="publicURL", json=True):
 
-        # kind = "admin", "user" 
+        # kind = "admin", "user"
         # service = "publicURL, adminURL"
         # service=  "compute", "identity", ....
 
 
-        #token=None, url=None, kind=None, urltype=None, json=True):
+        # token=None, url=None, kind=None, urltype=None, json=True):
 
         credential = self.user_credential
         token = self.user_token
         if kind is "admin":
             credential = self.admin_credential
             token = self.admin_token
-            
+
         conf = self._get_service_endpoint(service)
-        url = conf[urltype]   
+        url = conf[urltype]
 
         url = "{0}/{1}".format(url, msg)
 
-        
+
         headers = {'X-Auth-Token': token['access']['token']['id']}
         r = requests.get(url, headers=headers, verify=credential['OS_CACERT'])
 
         print "RRRRR", r
-        
+
         if json:
             return r.json()
         else:
@@ -418,27 +416,27 @@ class openstack(ComputeBaseType):
         compute_service = self._get_service(type)
         # pprint(compute_service)
         conf = {}
-        
+
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
         conf['adminURL'] = str(compute_service['endpoints'][0]['adminURL'])
         conf['token'] = str(self.user_token['access']['token']['id'])
         return conf
-    
+
     # new
     def _now(self):
         return datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
-     
+
     # new
     def _list_to_dict(self, list, id, type, time_stamp):
         d = {}
-        cm_type_version = self.compute_config.get('cloudmesh','clouds',self.label,'cm_type_version')
+        cm_type_version = self.compute_config.get('cloudmesh', 'clouds', self.label, 'cm_type_version')
 
         print "VVVVV", cm_type_version
-        
+
         for element in list:
             element['cm_type'] = type
             element['cm_cloud'] = self.label
-            element['cm_cloud_type'] = self.type  
+            element['cm_cloud_type'] = self.type
             element['cm_cloud_version'] = cm_type_version
             element['cm_refresh'] = time_stamp
             d[element[id]] = dict(element)
@@ -456,7 +454,7 @@ class openstack(ComputeBaseType):
         else:
             list = r.json()
         return self._list_to_dict(list, 'name', "extensions", time_stamp)
-    
+
      # new
      # BUG not yet a dict
     def get_limits(self):
@@ -464,14 +462,14 @@ class openstack(ComputeBaseType):
         msg = "limits"
         list = self._get(msg)['limits']
         return list
-    
+
     # new
     def get_servers(self):
         time_stamp = self._now()
         msg = "servers/detail"
         list = self._get(msg)['servers']
         return self._list_to_dict(list, 'id', "server", time_stamp)
-    
+
     # new
     def get_flavors(self):
         time_stamp = self._now()
@@ -505,16 +503,16 @@ class openstack(ComputeBaseType):
         time_stamp = self._now()
         """get the tenants dict for the vm with the given id"""
         if credential is None:
-            
+
             p = cm_profile()
             name = self.label
             credential = p.server["keystone"][name]
-        
+
         cloud = openstack(name, credential=credential)
         msg = "users"
         list = cloud._get(msg, kind="admin", service="identity", urltype='adminURL')['users']
         return self._list_to_dict(list, 'id', "users", time_stamp)
-        
+
     def get_meta(self, id):
         """get the metadata dict for the vm with the given id"""
         msg = "/servers/%s/metadata" % (id)
@@ -550,7 +548,7 @@ class openstack(ComputeBaseType):
 
         conn2 = httplib.HTTPConnection(url2)
 
-        conn2.request(conf['set'], "%s/servers/%s/metadata" % 
+        conn2.request(conf['set'], "%s/servers/%s/metadata" %
                       (apiurlt[2], conf['serverid']), params2, headers2)
 
         response2 = conn2.getresponse()
@@ -566,11 +564,11 @@ class openstack(ComputeBaseType):
     def _get_users_dict(self):
         result = self.get_users()
         return result
-    
+
     def _get_tenants_dict(self):
         result = self.get_tenants()
         return result
-    
+
     def _get_images_dict(self):
         result = self.get_images()
         return result
@@ -582,8 +580,8 @@ class openstack(ComputeBaseType):
     def _get_servers_dict(self):
         result = self.get_servers()
         return result
-        
-    
+
+
     def limits(self):
         """ returns the usage information of the tennant"""
 
@@ -602,7 +600,7 @@ class openstack(ComputeBaseType):
         return list
 
 
-    
+
     #
     # security Groups of VMS
     #
@@ -612,7 +610,7 @@ class openstack(ComputeBaseType):
     #
     # comments of wht these things do and how they work are missing
     #
-    
+
     '''
     def createSecurityGroup(self, default_security_group, description="no-description"):
         """
@@ -823,7 +821,7 @@ class openstack(ComputeBaseType):
     # list user images
     #
     '''
-    
+
     @donotchange
     def vms_user(self, refresh=False):
         """
@@ -1134,9 +1132,9 @@ if __name__ == "__main__":
 
     """
 
-    #cloud = openstack("sierra-grizzly-openstack")
-    #flavors = cloud.get_flavors()
-    #for flavor in flavors:
+    # cloud = openstack("sierra-grizzly-openstack")
+    # flavors = cloud.get_flavors()
+    # for flavor in flavors:
     #    print(flavor)
 
     # keys = cloud.list_key_pairs()
