@@ -82,7 +82,7 @@ class cm_user(object):
 
         """
         ldap_info = self.db_users.find({"cm_user_id": portal_id})
-        (first_name, last_name) = (ldapret['firstname'], ldapret['lastname'])
+        (first_name, last_name) = (ldap_info['firstname'], ldap_info['lastname'])
 
         return (first_name, last_name)
 

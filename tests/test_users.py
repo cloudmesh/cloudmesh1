@@ -35,3 +35,4 @@ class Test_Users:
         print self.usersobj.info("fuwang", ["cloud-non-exist"])
         print "============================"
         pprint (self.usersobj["gvonlasz"])
+        print self.usersobj.get_name('gvonlasz')
