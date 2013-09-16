@@ -162,7 +162,7 @@ class cm_config(ConfigDict):
         cloudlist = self.init_config['cloudmesh']['active']
         for cloud in cloudlist:
             cloud_handler = self._get_cloud_handler(
-                self.init_config['profile'],
+                self.init_config['cloudmesh']['profile'],
                 self.init_config['cloudmesh']['projects'],
                 cloud,
                 as_admin=True
