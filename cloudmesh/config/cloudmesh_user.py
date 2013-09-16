@@ -11,6 +11,7 @@ class cloudmesh_user:
         # Get profile and project data from LDAP
         cmu = cm_user.cm_user()
         self._data = cmu.info(self.username)
+        
 
     @property
     def username(self):
@@ -24,27 +25,27 @@ class cloudmesh_user:
 
     @property
     def uid(self):
-        return self.data['uidNumber']
+        return self.data['profile']['uidNumber']
 
     @property
     def gid(self):
-        return self.data['gidNumber']
+        return self.data['profile']['gidNumber']
 
     @property
     def firstname(self):
-        return self.data['firstname']
+        return self.data['profile']['firstname']
 
     @property
     def lastname(self):
-        return self.data['lastname']
+        return self.data['profile']['lastname']
 
     @property
     def phone(self):
-        return self.data['phone'] or 'n/a'
+        return self.data['profile']['phone'] or 'n/a'
 
     @property
     def email(self):
-        return self.data['email']
+        return self.data['profile']['email']
 
     @property
     def address(self):
@@ -53,26 +54,26 @@ class cloudmesh_user:
         # it is not yet done.
         # return self.data['person']['homePostalAddress'] if
         # 'homePostalAddress' in self.data['person'] else None
-        return self.data['address'] or 'n/a'
+        return self.data['profile']['address'] or 'n/a'
 
     @property
     def keys(self):
-        return self.data['keys']
+        return self.data['profile']['keys']
 
     @property
     def activeclouds(self):
         """Not yet implemented"""
-        return ['sierra_openstack_grizzly']
+        return self.data['clouds'][0]['cm_cloud']
 
     @property
     def defaultcloud(self):
         """Not yet implemented"""
-        return 'sierra_openstack_grizzly'
+        return self.data['clouds'][0]['cm_cloud']
 
     @property
     def activeprojects(self):
         """List of active projects"""
-        if self.data['projects']:
+        if self.data['profile']['projects']:
             projects = []
             for project in self.data['projects']['active']:
                 projects.append("fg-%s" % project)
