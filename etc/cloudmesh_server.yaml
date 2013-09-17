@@ -50,11 +50,11 @@ mongo:
         launcher:
             db: launcher
 mongo_user:
-    db: cloudmesh_user
+    db: cm_user
     host: localhost
     port: 27018
     username: admin
-    userpass: asdf!@#$%
+    userpass: password
     path: ~/.futuregrid/mongodb_user
     collections:
         cm_password: 
