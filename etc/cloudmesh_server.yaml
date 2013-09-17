@@ -54,7 +54,7 @@ mongo_user:
     host: localhost
     port: 27018
     username: admin
-    userpass: password
+    password: password
     path: ~/.futuregrid/mongodb_user
     collections:
         cm_password: 
