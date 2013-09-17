@@ -54,7 +54,7 @@ for name in clouds.active():
 def save():
     print "Saving the cloud status"
     # clouds.save()
-    return mongo_images()
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: LOAD
@@ -66,7 +66,7 @@ def save():
 def load():
     print "Loading the cloud status"
     # clouds.load()
-    return mongo_images()
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: REFRESH
@@ -125,7 +125,7 @@ def filter(cloud=None):
 
         clouds.state_filter(name, query_states)
 
-    return mongo_images()
+    return redirect('/mesh/servers')
 
 
 # ============================================================
@@ -136,7 +136,7 @@ def filter(cloud=None):
 def kill_vms():
     print "-> kill all"
     r = cm("--set", "quiet", "kill", _tty_in=True)
-    return mongo_images()
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: DELETE
@@ -170,7 +170,7 @@ def delete_vms(cloud=None):
         clouds.delete(cloud, id)
     time.sleep(7)
     f_cloud['servers'] = {}
-    return mongo_images()
+    return redirect('/mesh/servers')
 
 
 # ============================================================
@@ -247,7 +247,7 @@ def vm_login(cloud=None, server=None):
     message = ''
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    server = clouds.clouds[cloud]['servers'][server]
+    server = clouds.servers()[cloud][server]
 
     if len(server['addresses'][server['addresses'].keys()[0]]) < 2:
         mesage = 'Cannot Login Now, Public IP not assigned'
@@ -261,7 +261,7 @@ def vm_login(cloud=None, server=None):
         print "ssh", 'ubuntu@' + ip
         xterm('-e', 'ssh', 'ubuntu@' + ip, _bg=True)
 
-    return mongo_images()
+    return redirect('/mesh/servers')
 # ============================================================
 # ROUTE: VM INFO
 # ============================================================
@@ -272,14 +272,14 @@ def vm_login(cloud=None, server=None):
 def vm_info(cloud=None, server=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-
-    clouds.clouds[cloud]['servers'][server]['cm_vm_id'] = server
-    clouds.clouds[cloud]['servers'][server]['cm_cloudname'] = cloud
+    print clouds.servers()[cloud]
+    clouds.servers()[cloud][server]['cm_vm_id'] = server
+    clouds.servers()[cloud][server]['cm_cloudname'] = cloud
 
     return render_template('vm_info.html',
                            updated=time_now,
                            keys="",
-                           server=clouds.clouds[cloud]['servers'][server],
+                           server=clouds.servers()[cloud][server],
                            id=server,
                            cloudname=cloud,
                            table_printer=table_printer)
