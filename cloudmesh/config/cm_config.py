@@ -32,8 +32,8 @@ def get_mongo_db(mongo_collection):
     mongo_config = ConfigDict(filename=filename).get("mongo")
 
     mongo_host = mongo_config["host"]
-    mongo_port = mongo_config["port"]
-
+    mongo_port = int(mongo_config["port"])
+    
     mongo_db_name = mongo_config["collections"][mongo_collection]['db']
 
     client = MongoClient(host=mongo_host,
