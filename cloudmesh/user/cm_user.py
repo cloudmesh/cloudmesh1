@@ -43,6 +43,26 @@ class cm_user(object):
         self.db_users = db[ldap_collection]
 
     def connect_userdb(self):
+        try:
+            self._connect_userdb()
+        except:
+            print
+            print "The below lines should be existed in cloudmesh_server.yaml"
+            print "----------------------"
+            print "mongo_user:\n" + \
+                    "    db: cm_user\n" + \
+                    "    host: hostname\n" + \
+                    "    port: portnumber\n" + \
+                    "    username: admin\n" + \
+                    "    password: passwd\n" + \
+                    "    path: ~/.futuregrid/mongodb_user\n" + \
+                    "    collections:\n" + \
+                    "        cm_password:\n" + \
+                    "            db: cm_user"
+            print "---------------------"
+
+
+    def _connect_userdb(self):
         """ Connect to the mongo user db."""
         # This will be enabled with ssl
         db_name = cm_config_server().get("mongo_user.db")
