@@ -9,11 +9,13 @@ nosetests -v
 """
 import sys
 
-from cloudmesh.user.cm_template import cm_template
+from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.util import HEADING
 from cloudmesh.util.util import path_expand
+from cloudmesh.user.cm_template import cm_template
 from cloudmesh.user.cm_mesh_auth import cm_userauth
 from cloudmesh.user.cm_user import cm_user
+from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from pprint import pprint
 
 class Test_cloudmesh:
@@ -26,6 +28,12 @@ class Test_cloudmesh:
     def setup(self):
         self.t = cm_template(path_expand(self.filename))
         self.user = cm_user()
+        try:
+            self.setup_inventory()
+        except:
+            print "=" * 40
+            print "setup_inventory() failed. ldap test will not be performed"
+            print "=" * 40
 
     def tearDown(self):
         pass
@@ -76,5 +84,61 @@ class Test_cloudmesh:
         pprint (self.user["gvonlasz"])
         print self.user.get_name('gvonlasz')
 
+    def setup_inventory(self):
+
+        self.sample_user = ConfigDict(filename="~/.futuregrid/etc/sample_user.yaml")
+        self.portalname = ConfigDict(filename="~/.futuregrid/cloudmesh.yaml").get("cloudmesh.hpc.username")
+
+        print
+        print self.sample_user
+
+        t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
+        pprint (set(t.variables()))
+
+        self.config = t.replace(format="dict", **self.sample_user)
+
+        print type(self.config)
+        print self.config
+
+        self.idp = cm_userLDAP ()
+        self.idp.connect("fg-ldap", "ldap")
+        self.idp.refresh()
+
+        ldap_info = self.idp.get(self.portalname)
+        print ldap_info
+        print type(self.config)
+
+        self.config['cloudmesh']['projects'] = ldap_info['projects']
+        self.config['cloudmesh']['keys'] = ldap_info['keys']
+        try:
+            self.config['cloudmesh']['projects']['deafult'] = ldap_info['projects']['active'][0]
+        except:
+            print "ERROR: you have no projects"
+
+    def test_print(self):
+        pprint (self.config)
+
+    def test_projects(self):
+        projects = dict()
+
+        keys = dict()
 
 
+        # read the yaml
+        # read projects info from ldap
+        # write out new dict/json file
+        pass
+
+    def test_keys(self):
+        # read the yaml
+
+        # read KEYS from ldap
+        # write out new dict/json file
+        pass
+
+    def test_user(self):
+        # read yaml
+        # read projects from ldap
+        # read keys from ldap
+        # write dict
+        pass
