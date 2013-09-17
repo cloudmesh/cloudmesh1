@@ -44,11 +44,17 @@ class cm_user(object):
 
     def connect_userdb(self):
         """ Connect to the mongo user db."""
+        # This will be enabled with ssl
         db_name = cm_config_server().get("mongo_user.db")
-        client = MongoClient()
+        host = cm_config_server().get("mongo_user.host")
+        port = cm_config_server().get("mongo_user.port")
+        username = cm_config_server().get("mongo_user.username")
+        password = cm_config_server().get("mongo_user.password")
+        client = MongoClient(host=host, port=port)
         db = client[db_name]
         passwd_collection = 'cm_password'
         self.userdb_passwd = db[passwd_collection]
+        db.authenticate(username, password)
 
     def info(self, portal_id, cloud_names=[]):
         """Return the user information with a given portal id.
@@ -96,3 +102,18 @@ class cm_user(object):
             (first_name, last_name) = (ldap_info['firstname'], ldap_info['lastname'])
 
             return (first_name, last_name)
+
+    def set_password(self, username, password, cloud):
+        """Store a user password for a cloud
+
+        :param username: OS_USERNAME
+        :type username: str
+        :param password: OS_PASSWORD
+        :type password: str
+        :param cloud: the cloud name e.g. sierra_openstack_grizzly
+        :type cloud: str
+
+        """
+        self.userdb_passwd.insert({"username":username, "password":password,
+                                   "cloud": cloud})
+
