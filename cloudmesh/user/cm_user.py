@@ -104,9 +104,9 @@ class cm_user(object):
             return (first_name, last_name)
 
     def set_password(self, username, password, cloud):
-        """Store a user password for a cloud
+        """Store a user password for the cloud
 
-        :param username: OS_USERNAME
+        :param username: OS_USERNAME or cm_user_id
         :type username: str
         :param password: OS_PASSWORD
         :type password: str
@@ -117,3 +117,17 @@ class cm_user(object):
         self.userdb_passwd.insert({"username":username, "password":password,
                                    "cloud": cloud})
 
+    def get_password(self, username, cloud):
+        """Return a user password for the cloud
+
+        :param username: OS_USERNAME
+        :type username: str
+        :param cloud: the cloud name e.g. sierra_openstack_grizzly
+        :type cloud:str
+
+        """
+        passwd = self.userdb_passwd.find({"username": username, "cloud":cloud})
+        try:
+            return passwd[0]
+        except:
+            return None
