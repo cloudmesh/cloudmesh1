@@ -13,6 +13,7 @@ from cloudmesh.user.cm_template import cm_template
 from cloudmesh.util.util import HEADING
 from cloudmesh.util.util import path_expand
 from cloudmesh.user.cm_mesh_auth import cm_userauth
+from cloudmesh.user.cm_user import cm_user
 from pprint import pprint
 
 class Test_cloudmesh:
@@ -24,6 +25,7 @@ class Test_cloudmesh:
 
     def setup(self):
         self.t = cm_template(path_expand(self.filename))
+        self.user = cm_user()
 
     def tearDown(self):
         pass
@@ -62,7 +64,17 @@ class Test_cloudmesh:
         r = auth.get("dummy")
         pprint (r)
 
-
+    def test_userinfo(self):
+        HEADING()
+        print self.user.info("fuwang")
+        print self.user.info("gvonlasz")
+        print self.user.info("nonexistuser")
+        print self.user.info("nova")
+        print self.user.info("fuwang", ["sierra_openstack_grizzly"])
+        print self.user.info("fuwang", ["cloud-non-exist"])
+        print "============================"
+        pprint (self.user["gvonlasz"])
+        print self.user.get_name('gvonlasz')
 
 
 
