@@ -26,12 +26,15 @@ class cm_template():
         print meta.find_undeclared_variables(parsed_content)
 
     def replace(self, format="text", **d):
-        template = Template(self.content)
-        if format == "text":
-            self.result = template.render(d)
-        elif format == "dict":
-            self.result = yaml.safe_load(template.render(d))
-        return self.result
+        try:
+            template = Template(self.content)
+            if format == "text":
+                self.result = template.render(d)
+            elif format == "dict":
+                self.result = yaml.safe_load(template.render(d))
+            return self.result
+        except:
+            return self.content
 
 if __name__ == "__main__":
     d = {
