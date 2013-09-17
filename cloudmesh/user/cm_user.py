@@ -30,6 +30,7 @@ class cm_user(object):
 
     def __init__(self):
         self.connect_db()
+        self.connect_userdb()
 
     def connect_db(self):
         """ Connect to the mongo db."""
@@ -40,6 +41,14 @@ class cm_user(object):
         cloud_collection = 'cloudmesh'
         self.db_clouds = db[cloud_collection]
         self.db_users = db[ldap_collection]
+
+    def connect_userdb(self):
+        """ Connect to the mongo user db."""
+        db_name = cm_config_server().get("mongo_user.db")
+        client = MongoClient()
+        db = client[db_name]
+        passwd_collection = 'cm_password'
+        self.userdb_passwd = db[passwd_collection]
 
     def info(self, portal_id, cloud_names=[]):
         """Return the user information with a given portal id.
