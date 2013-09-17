@@ -47,7 +47,7 @@ def read_yaml_config (filename, check=True, osreplace=True):
 
             return data
         except Exception, e:
-            log.error("The file {0} contianed a yaml read error".format(filename))
+            log.error("The file {0} fails with a yaml read error".format(filename))
             log.error(str(e))
             sys.exit()
 
