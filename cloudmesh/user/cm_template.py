@@ -1,6 +1,8 @@
+import sys
 import yaml
 from jinja2 import Template
 from cloudmesh.util.util import path_expand
+
 class cm_template():
 
     def __init__(self, filename):
@@ -34,6 +36,7 @@ class cm_template():
                 self.result = yaml.safe_load(template.render(d))
             return self.result
         except:
+            print sys.exc_info()
             return self.content
 
 if __name__ == "__main__":
