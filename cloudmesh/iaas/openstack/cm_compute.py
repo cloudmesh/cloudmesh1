@@ -236,7 +236,7 @@ class openstack(ComputeBaseType):
         # print headers
         r = requests.post(posturl, headers=headers,
                           data=json.dumps(params),
-                          verify=self.credential['OS_CACERT'])
+                          verify=self.user_credential['OS_CACERT'])
         ret = {"msg":"success"}
         if r.text:
             ret = r.json()
@@ -309,7 +309,7 @@ class openstack(ComputeBaseType):
         headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
         # print headers
         # no return from http delete via rest api
-        r = requests.delete(url, headers=headers, verify=self.credential['OS_CACERT'])
+        r = requests.delete(url, headers=headers, verify=self.user_credential['OS_CACERT'])
         ret = {"msg":"success"}
         if r.text:
             ret = r.json()
@@ -350,7 +350,7 @@ class openstack(ComputeBaseType):
         publicURL = conf['publicURL']
         url = "%s/os-floating-ips/%s" % (publicURL, idofip)
         headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
-        r = requests.delete(url, headers=headers, verify=self.credential['OS_CACERT'])
+        r = requests.delete(url, headers=headers, verify=self.user_credential['OS_CACERT'])
         ret = {"msg":"success"}
         if r.text:
             ret = r.json()
@@ -364,7 +364,7 @@ class openstack(ComputeBaseType):
         publicURL = conf['publicURL']
         url = "%s/os-floating-ips" % publicURL
         headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
-        r = requests.get(url, headers=headers, verify=self.credential['OS_CACERT'])
+        r = requests.get(url, headers=headers, verify=self.user_credential['OS_CACERT'])
         return r.json()["floating_ips"]
 
     def release_unused_public_ips(self):
