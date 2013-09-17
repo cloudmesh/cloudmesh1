@@ -141,12 +141,19 @@ class cm_mongo:
 #                                               'credential': credential}
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name)
-                    self.clouds[cloud_name].update({'manager': cloud})
+                    # try to see if the credential works
+                    # if so, update the 'manager' so the cloud is successfully activated
+                    # otherwise log error message and skip this cloud
+                    tryauth = cloud.get_token()
+                    if 'access' in tryauth:
+                        self.clouds[cloud_name].update({'manager': cloud})
+                    else:
+                        log.error("Credential not working, cloud is not activated")
 
             except Exception, e:
                 print "ERROR: can not activate cloud", cloud_name
                 print e
-                # print traceback.format_exc()
+                #print traceback.format_exc()
                 # sys.exit()
 
     def refresh(self, names=["all"], types=["all"]):
@@ -184,40 +191,40 @@ class cm_mongo:
 
         watch = StopWatch()
         for name in names:
-
-            cloud = self.clouds[name]['manager']
-
-            for type in types:
-
-                print "Refreshing {0} {1} ->".format(type, name)
-
-                watch.start(name)
-                cloud.refresh(type)
-                result = cloud.get(type)
-
-                # add result to db,
-                watch.stop(name)
-                print 'Refresh time:', watch.get(name)
-
-                watch.start(name)
-
-                self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
-
-                for element in result:
-                    id = "{0}-{1}-{2}".format(
-                        name, type, result[element]['name']).replace(".", "-")
-                    # print "ID", id
-                    result[element]['cm_id'] = id
-                    result[element]['cm_cloud'] = name
-                    result[element]['cm_type'] = self.clouds[name]['cm_type']
-                    result[element]['cm_type_version'] = self.clouds[
-                        name]['cm_type_version']
-                    result[element]['cm_kind'] = type
-
-                    self.db_clouds.insert(result[element])
-
-                watch.stop(name)
-                print 'Store time:', watch.get(name)
+            if 'manager' in self.clouds[name]:
+                cloud = self.clouds[name]['manager']
+    
+                for type in types:
+    
+                    print "Refreshing {0} {1} ->".format(type, name)
+    
+                    watch.start(name)
+                    cloud.refresh(type)
+                    result = cloud.get(type)
+    
+                    # add result to db,
+                    watch.stop(name)
+                    print 'Refresh time:', watch.get(name)
+    
+                    watch.start(name)
+    
+                    self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
+    
+                    for element in result:
+                        id = "{0}-{1}-{2}".format(
+                            name, type, result[element]['name']).replace(".", "-")
+                        # print "ID", id
+                        result[element]['cm_id'] = id
+                        result[element]['cm_cloud'] = name
+                        result[element]['cm_type'] = self.clouds[name]['cm_type']
+                        result[element]['cm_type_version'] = self.clouds[
+                            name]['cm_type_version']
+                        result[element]['cm_kind'] = type
+    
+                        self.db_clouds.insert(result[element])
+    
+                    watch.stop(name)
+                    print 'Store time:', watch.get(name)
 
     def get_pbsnodes(self, host):
         '''

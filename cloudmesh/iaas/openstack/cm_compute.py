@@ -29,10 +29,13 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.cm_profile import cm_profile
+from cloudmesh.util.logger import LOGGER
 
 import novaclient
 from novaclient.openstack.common import strutils
 
+log = LOGGER(__file__)
+    
 def donotchange(fn):
     return fn
 
@@ -78,9 +81,6 @@ class openstack(ComputeBaseType):
 
     _nova = nova
 
-
-
-
     #
     # initialize
     #
@@ -95,19 +95,24 @@ class openstack(ComputeBaseType):
         self.label = label
 
         user_credential = credential  # HACK to avoid changes in older code
-
+        self.user_credential = user_credential
+        self.admin_credential = admin_credential
+        
         if user_credential is None:
-            self.compute_config = cm_config()
-            self.user_credential = self.compute_config.credential(label)
-        else:
-            self.user_credential = user_credential
+            try:
+                self.compute_config = cm_config()
+                self.user_credential = self.compute_config.credential(label)
+            except:
+                log.error("No user credentail found! Please check your cloudmesh.yaml file.")
+                #sys.exit(1)
+            
 
         if admin_credential is None:
-            self.admin_credential = cm_config_server().get("keystone", label)
-        else:
-            self.admin_credential = admin_credential
-
-
+            try:
+                self.admin_credential = cm_config_server().get("keystone", label)
+            except:
+                log.error("No admin credentail found! Please check your cloudmesh_server.yaml file.")
+            
         self.connect()
 
     def clear(self):
@@ -131,14 +136,14 @@ class openstack(ComputeBaseType):
         creates tokens for a connection
         """
         if self.user_credential is None:
-            log("error connecting to openstack compute, credential is None")
+            log.error("error connecting to openstack compute, credential is None")
         else:
             self.user_token = self.get_token(self.user_credentials)
 
         # check if keystone is defined, and if failed print log msg
         #
         if self.admin_credential is None:
-            log("error connecting to openstack compute, credential is None")
+            log.error("error connecting to openstack compute, credential is None")
         else:
             self.admin_token = self.get_token(self.admin_credential)
 
