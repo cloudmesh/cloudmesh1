@@ -49,6 +49,16 @@ mongo:
             db: hpc-pbsnodes
         launcher:
             db: launcher
+mongo_user:
+    db: cloudmesh_user
+    host: localhost
+    port: 27018
+    username: admin
+    userpass: asdf!@#$%
+    path: ~/.futuregrid/mongodb_user
+    collections:
+        cm_password: 
+            db: cm_user
 keystone:
     sierra:
         OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
