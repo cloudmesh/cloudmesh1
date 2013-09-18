@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layoutTable.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -10,7 +10,7 @@
 <script type="text/javascript">
 
 function killall(cloud) {
-	var answer = confirm("Delete all selected VMs in "+cloud+"?")
+	var answer = confirm("Delete all selected VMs in "+cloud+"?");
 	if (answer){
 		window.location = "/cm/delete/"+cloud+"/";
 	}
@@ -20,7 +20,7 @@ function killall(cloud) {
 (function($) {
     $(function() {
         $("#servers-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: false });
-    })
+    });
 })(jQuery);
 
 $(function() {
@@ -29,6 +29,16 @@ $(function() {
     	"aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
     	"iDisplayLength": 25,
     	"sPaginationType": "full_numbers",
+    	"sDom": 'CR<"clear">lftipr',
+        "oColVis": {
+            "aiExclude": [ 0 ],
+            "sAlign": "center"
+        },
+        "fnDrawCallback": function(o) {
+            var nColVis = $('div.ColVis', o.nTableWrapper)[0];
+            nColVis.align = "right";
+            nColVis.style.paddingBottom = "15px";
+        },
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
     });
@@ -52,13 +62,13 @@ $(function() {
 <div id="servers-accordion">
   {% for cloud in clouds %}
   <div style="margin-bottom:1em;">
-    <h3> 
+    <h3>
     	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
       	&nbsp;
       	{{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}
       	&nbsp;
       	{{ image_button ("none", "041_charts", "/table/") }}
-      	&nbsp;     
+      	&nbsp;
       	{{ image_button ("none", "044_keys", "/updatekeypair/" + cloud + "/") }}
       	{{ cloud }}
     </h3>
@@ -68,9 +78,9 @@ $(function() {
           <tr>
 	      	<th width="100"></th>
 
-            {% for attribute in attributes %}	
+            {% for attribute in attributes %}
                   <th>{{attribute}}</th>
-            {% endfor %}			
+            {% endfor %}
           </tr>
       </thead>
       <tbody>
@@ -85,25 +95,25 @@ $(function() {
 	  				{{ image_button ("right", "016_bin", "/cm/delete/" + cloud + "/" + s_id + "/") }}
              	 </td>
                  <!-- for attribute in clouds[cloud][server] -->
-                 {% for attribute in attributes %}	
+                 {% for attribute in attributes %}
                       {% if attribute == "created" %}
                           <td>{{ clouds[cloud][server][attribute] }}</td>
                       {% elif attribute == "flavor" %}
-                          <td>{{ clouds[cloud][server][attribute]['id'] }}</td>	        			
+                          <td>{{ clouds[cloud][server][attribute]['id'] }}</td>
                       {% elif attribute == "addresses" %}
-                          <td>{{ address_string(clouds[cloud][server][attribute]) }}</td>	        			
+                          <td>{{ address_string(clouds[cloud][server][attribute]) }}</td>
                       {% else %}
                           <td>{{ clouds[cloud][server][attribute]  }}</td>
                       {% endif %}
                  {% endfor %}
              </tr>
           {% endfor %}
-      </tbody>  
+      </tbody>
     </table>
     </div>
-  </div>  
+  </div>
   {% endfor %}
-</div>  
+</div>
 
 
 {% endblock %}
