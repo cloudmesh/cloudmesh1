@@ -25,9 +25,9 @@ def display_usres_ldap():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     collection = "user"
-    db_clouds = get_mongo_db(collection)        
+    db_clouds = get_mongo_db(collection)
 
-        
+
 
     config = cm_config()
 
@@ -36,9 +36,9 @@ def display_usres_ldap():
     for entry in result:
         id = entry['cm_user_id']
         data[id] = entry
-        
-        
-    #print data
+
+
+    # print data
 
 
     return render_template('users_ldap.html', updated=time_now, users=data)

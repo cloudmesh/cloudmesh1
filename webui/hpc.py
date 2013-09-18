@@ -6,7 +6,7 @@ from cloudmesh.provisioner.provisioner import *
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.roles import Roles
 # from cloudmesh.util.webutil import setup_imagedraw
-from cloudmesh.user.cm_userLDAP import cm_userLDAP 
+from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from datetime import datetime
 
 from cloudmesh.util.util import path_expand
@@ -25,7 +25,7 @@ from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
 
 from flask.ext.principal import identity_loaded, RoleNeed, UserNeed
 from cloudmesh.config.cm_config import cm_config_server
-     
+
 import sys
 
 from pprint import pprint
@@ -51,7 +51,7 @@ all_modules = ['pbs',
 exclude_modules = ['flatpages']
 
 modules = [m for m in all_modules if m not in exclude_modules]
-    
+
 for m in modules:
     print "Loading module", m
     exec "from modules.{0} import {0}_module".format(m)
@@ -64,11 +64,6 @@ for m in modules:
 debug = True
 
 with_cloudmesh = False
-
-# not sure what this is for ?????
-server_config = SafeConfigParser(
-    {'name': 'flasktest'})  # Default database name
-server_config.read("server.config")
 
 # ============================================================
 # allowing the yaml file to be written back upon change
@@ -128,7 +123,7 @@ def flash_errors(form):
                 getattr(form, field).label.text,
                 error
             ))
-            
+
 # @app.context_processor
 # def inject_pages():
 #    return dict(pages=pages)
@@ -207,7 +202,7 @@ def page_not_found(error):
                            error=error,
                            type="Page not found",
                            msg="")
-    
+
 @app.errorhandler(403)
 def page_not_found(error):
     error = 'Access denied {0}'.format(403)
@@ -215,7 +210,7 @@ def page_not_found(error):
                            error=error,
                            type="Access Denied",
                            msg="You need to Login first")
-    
+
 
 # ============================================================
 # ROUTE: /
@@ -239,14 +234,14 @@ def timesince(dt, format="float", default="just now"):
     """
     if dt == "None" or dt == "" or dt == None or dt == "completed":
         return "completed"
-    
+
     # now = datetime.utcnow()
     now = datetime.now()
     if format == 'float':
         diff = now - datetime.fromtimestamp(float(dt))
     else:
         diff = now - dt
-        
+
     periods = (
         (diff.days / 365, "year", "years"),
         (diff.days / 30, "month", "months"),
@@ -258,7 +253,7 @@ def timesince(dt, format="float", default="just now"):
     )
 
     for period, singular, plural in periods:
-        
+
         if period:
             return "%d %s ago" % (period, singular if period == 1 else plural)
 
@@ -346,7 +341,7 @@ def before_request():
 
 @identity_loaded.connect_via(app)
 def on_identity_loaded(sender, identity):
-    
+
     if 'user_id' in session:
         current_user = load_user(session['user_id'])
         # Set the identity user object
@@ -355,17 +350,17 @@ def on_identity_loaded(sender, identity):
         # Add the UserNeed to the identity
         if hasattr(current_user, 'id'):
             identity.provides.add(UserNeed(current_user.id))
-    
+
         # Assuming the User model has a list of roles, update the
         # identity with the roles that the user provides
         if hasattr(current_user, 'roles'):
             for role in current_user.roles:
                 identity.provides.add(RoleNeed(role))
-    
+
     """
     identity.provides.add(RoleNeed("rain"))
     """
-        
+
 @login_manager.user_loader
 def load_user(id):
     try:
@@ -379,7 +374,7 @@ def load_user(id):
         return None
 
 class User(UserMixin):
-    
+
      def __init__(self, name, id, roles=['user'], active=True):
           self.name = name
           self.id = id
@@ -388,7 +383,7 @@ class User(UserMixin):
 
      def is_active(self):
         return True
-     
+
      def is_anonymous(self):
         return False
 
@@ -410,10 +405,10 @@ class LoginForm(Form):
 def login():
     # A hypothetical login form that uses Flask-WTF
     form = LoginForm()
-    
+
     if form.validate_on_submit():
-        
-        form.error = None                
+
+        form.error = None
         try:
             idp = cm_userLDAP ()
             idp.connect("fg-ldap", "ldap")
@@ -427,7 +422,7 @@ def login():
                            msg="")
 
 
-         
+
         if user is None:
             form.error = 'Login Invalid'
         elif user['cm_user_id'] != form.username.data:
@@ -436,16 +431,16 @@ def login():
             print "LOGIN USER"
 
             g.user = load_user(form.username.data)
-                        
+
             ret = login_user(g.user)
-            
+
             identity_changed.send(current_app._get_current_object(),
                                   identity=Identity(g.user.id))
 
             return redirect(request.args.get('next') or '/')
         else:
             form.error = 'Login Invalid'
-        
+
     return render_template('login.html', form=form)
 
 @app.route('/logout')

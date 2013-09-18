@@ -29,7 +29,8 @@ Developers Documentation
    :maxdepth: -1
   
    developer
-   
+   celery   
+
 Execution
 ========
 .. toctree::

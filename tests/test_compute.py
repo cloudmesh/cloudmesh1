@@ -38,32 +38,60 @@ class Test:
     cloud_label = cloud_label.replace(" - ", "").strip()
 
     def setup(self):
+        print "CONFIG"
         self.configuration = cm_config()
+        print "OK"
+
+
         self.name = self.configuration.active()[0]
         print "ACTIVE CLOUD", self.name
+
         self.cloud = openstack(self.name)
+        print "PPPP"
+        """
+
         self.cloud.get_token()
         print "LOADED CLOUD"
 
-    def tearDown(self):
-        pass
+        # For multiple clouds
+        # e.g. india-essex and sierra-grizzly 
+        self.names = self.configuration.active()
+        if len(self.names) > 1:
+            print "ACTIVE CLOUDS", ",".join(self.names)
+            self.clouds = []
+            for name in self.names:
+                self.clouds.append(openstack(name))
+                self.clouds[-1].get_token()
+            print "LOADED CLOUDS"
+        """
+
 
     def test_get_extensions(self):
         HEADING()
-        
+
         print json.dumps(self.cloud.get_extensions(), indent=4)
         assert True
 
     def test_get_users(self):
         HEADING()
-        
+
         self.cloud.refresh("users")
-        
+
         #        print json.dumps(self.cloud.get_users(), indent=4)
         print json.dumps(self.cloud.users, indent=4)
-        
+
         assert True
-    
+
+    def test_get_users_all(self):
+
+        for name in self.configuration.active():
+            HEADING()
+            cloud = openstack(name)
+            cloud.refresh("users")
+            print json.dumps(cloud.users, indent=4)
+
+        assert True
+
     def test_get_limits(self):
         HEADING()
         print json.dumps(self.cloud.get_limits(), indent=4)
@@ -77,8 +105,8 @@ class Test:
 
     def test_get_flavors(self):
         HEADING()
-        #self.cloud.refresh('flavors')
-        #print json.dumps(self.cloud.dump('flavors'), indent=4)
+        # self.cloud.refresh('flavors')
+        # print json.dumps(self.cloud.dump('flavors'), indent=4)
 
         print json.dumps(self.cloud.get_flavors(), indent=4)
         assert True
@@ -91,7 +119,7 @@ class Test:
         print json.dumps(self.cloud.get_images(), indent=4)
         assert True
 
-    def test_00_label(self):
+    def test_label(self):
         HEADING()
         print self.cloud_label
         assert self.cloud.label == self.cloud_label
@@ -118,7 +146,7 @@ class Test:
         self.cloud.refresh('flavors')
         print json.dumps(self.cloud.dump('flavors'), indent=4)
 
-        
+
         # doing a simple test as tiny is usually 512
         assert self.cloud.flavors['m1.tiny']['ram'] == 512
 
@@ -129,11 +157,11 @@ class Test:
         keys = configuration.userkeys()
         key_name = keys["default"]
         key_content = keys["keylist"][key_name]
-        #print key_name
-        #print key_content
+        # print key_name
+        # print key_content
         print "STARTING IMAGE", image
         meta = {"cmtag":"testing tag from creation via rest api"}
-        result = self.cloud.vm_create("fw-test-by-post-003", "2", image, key_name="grizzlykey",meta=meta)
+        result = self.cloud.vm_create("fw-test-by-post-003", "2", image, key_name="grizzlykey", meta=meta)
         pp.pprint(result)
         assert len(result.keys()) > 0
 
@@ -142,18 +170,18 @@ class Test:
         print "Obtaining public ip......"
         ip = self.cloud.get_public_ip()
         print "this is the ip returned:--->%s<---" % ip
-    
+
     def test04_assign_public_ip(self):
         HEADING()
         print "Associate a public ip to an running instance......"
-        #serverid = "cc9bd86b-babf-4760-a5cd-c1f28df7506b"
-        #ip = "fakeip" # {u'itemNotFound': {u'message': u'floating ip not found', u'code': 404}}
-        #ip = "198.202.120.175"
+        # serverid = "cc9bd86b-babf-4760-a5cd-c1f28df7506b"
+        # ip = "fakeip" # {u'itemNotFound': {u'message': u'floating ip not found', u'code': 404}}
+        # ip = "198.202.120.175"
         serverid = "b088e764-681c-4448-b487-9028b23a729e"
         print "In process of obtaining a new ip..."
         ip = self.cloud.get_public_ip()
         print "Got a new ip as: %s, now associating the ip..." % ip
-        print self.cloud.assign_public_ip(serverid,ip)
+        print self.cloud.assign_public_ip(serverid, ip)
 
     def test04_list_public_ips(self):
         HEADING()
@@ -173,7 +201,7 @@ class Test:
         self.cloud.release_unused_public_ips()
         print "after releasing..."
         self.test04_list_public_ips()
-                        
+
     def test_05_print_vms(self):
         HEADING()
         self.cloud.refresh('servers')
@@ -230,13 +258,13 @@ class Test:
         id = out[key]["id"]
         print id
         '''
-        #id = "d9e73d16-a85e-47bf-8ab4-19d7955622db"
-        #id = "2a00332d-6a4a-4f7e-ad46-751438cc4d5e"
-        #id = "af46b3cd-99d9-4609-8c27-c481b0227e15"
-        #id="fakeid"
-        #id="b1279fa1-390a-41f8-b5d2-ad9b26cfb48a"
-        #ret=self.cloud.vm_delete(id)
-        #print "--->%s<---" % ret
+        # id = "d9e73d16-a85e-47bf-8ab4-19d7955622db"
+        # id = "2a00332d-6a4a-4f7e-ad46-751438cc4d5e"
+        # id = "af46b3cd-99d9-4609-8c27-c481b0227e15"
+        # id="fakeid"
+        # id="b1279fa1-390a-41f8-b5d2-ad9b26cfb48a"
+        # ret=self.cloud.vm_delete(id)
+        # print "--->%s<---" % ret
 
     def test_08_delete_vms_of_user(self):
         HEADING()
@@ -275,7 +303,7 @@ class Test:
             self.cloud.info()
             time.sleep(1)
 
-        print "vms",  vm_ids
+        print "vms", vm_ids
 
         assert vm_ids == []
 
@@ -389,6 +417,6 @@ class Test:
             self.cloud.info()
             time.sleep(1)
 
-        print "vms",  vm_ids
+        print "vms", vm_ids
 
         assert vm_ids == []

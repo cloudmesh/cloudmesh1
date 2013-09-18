@@ -2,10 +2,10 @@ from __future__ import absolute_import
 
 from celery import Celery
 
-celery = Celery('cloudmesh.launcher.queue.celery',
+celery = Celery('cloudmesh.pbs.celery',
                 broker='amqp://guest@localhost',
                 backend='amqp://guest@localhost',
-                include=['cloudmesh.launcher.queue.tasks'])
+                include=['cloudmesh.pbs.tasks'])
 
 # Optional configuration, see the application user guide.
 celery.conf.update(

@@ -23,11 +23,11 @@ def mongo_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
-    
+
     c = cm_mongo()
     c.activate()
     clouds = c.images()
-   
+
     """
     
     status ACTIVE
@@ -73,28 +73,9 @@ def mongo_images():
                u'image_state':    u'available', 
                u'architecture':   u'x86_64'} 
     """
-    attributes = {"essex": 
-                  [
-                        #[ "Metadata", "metadata"],
-                        [ "status" , "status"],
-                        [ "name" , "name"],
-                        [ "type_id" , "metadata", "instance_type_id"],
-                        [ "iname" , "metadata", "image_location"],
-                        [ "location" , "metadata", "image_location"],
-                        [ "state" , "metadata", "image_state"],
-                        [ "updated" , "updated"],
-                        [ "minDisk" , "minDisk"],
-                        [ "memory_mb", ''],
-                        [ "fid" , ""],
-                        [ "vcpus" , ""],
-                        [ "user_id" , ""],
-                        [ "owner_id" , "metadata", "owner_id"],
-                        [ "gb" , ""],
-                        [ "arch", "metadata", "architecture"]
-                  ],
-                  "grizzly": 
-                    [    
-                        #[ "Metadata", "metadata"],
+    attributes = {"grizzly":
+                    [
+                        # [ "Metadata", "metadata"],
                         [ "status" , "status"],
                         [ "name" , "name"],
                         [ "type_id" , "metadata", "instance_type_id"],
@@ -120,14 +101,14 @@ def mongo_images():
             for attribute in clouds[cloud][image]:
                 print attribute, clouds[cloud][image][attribute]
     """
-        
+
     return render_template('mesh_images.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
                            updated=time_now,
                            clouds=clouds,
                            config=config)
-    
+
 # ============================================================
 # ROUTE: mongo
 # ============================================================
@@ -138,11 +119,11 @@ def mongo_flavors():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
-    
+
     c = cm_mongo()
     c.activate()
     clouds = c.flavors()
-    
+
     """    
     2
     disk 20
@@ -172,7 +153,7 @@ def mongo_flavors():
             for attribute in clouds[cloud][flavor]:
                 print attribute, clouds[cloud][flavor][attribute]
     """
-    
+
     os_attributes = [
                      'id',
                      'name',
@@ -181,7 +162,7 @@ def mongo_flavors():
                      'disk',
                      'cm_refresh',
                      ]
-    
+
     return render_template('mesh_flavors.html',
                            address_string=address_string,
                            attributes=os_attributes,
@@ -199,16 +180,15 @@ def mongo_users():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
-    
+
     c = cm_mongo()
     c.activate()
     clouds = {}
     clouds = c.users()
     print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
-    print len(clouds['india_openstack_essex'])
     print len(clouds['sierra_openstack_grizzly'])
-    
-    
+
+
     """
     for cloud in clouds:
         print cloud
@@ -218,21 +198,8 @@ def mongo_users():
                 print attribute, clouds[cloud][server][attribute]
     """
 
-    attributes = {"essex": 
-                  [
-                        [ "Name", "name"],
-                        [ "Id" , "id"],
-                        [ "TenentId" , "tenantId"],
-                        [ "e-mail" , "e_mail"],
-                        [ "enabled" , "enabled"],
-                        [ "Cloud" , "cloud"],
-                        ['cm_cloud', "cm_cloud"],
-                        ['cm_id', "cm_id"],
-                        ['cm_type', "cm_type"],
-                        [ "Refresh", "cm_refresh"]
-                  ],
-                  "grizzly": 
-                    [    
+    attributes = {"grizzly":
+                    [
                         [ "Name", "name"],
                         [ "Id" , "id"],
                         [ "TenentId" , "tenantId"],
@@ -245,7 +212,7 @@ def mongo_users():
                         [ "Refresh", "cm_refresh"]
                     ]
                   }
-    
+
     return render_template('mesh_users.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
@@ -264,11 +231,11 @@ def mongo_table(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
-    
+
     c = cm_mongo()
     c.activate()
     clouds = c.servers()
-    
+
     """
     for cloud in clouds:
         print cloud

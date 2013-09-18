@@ -55,7 +55,7 @@ class cm_shell_cloud:
         if arguments["off"] and arguments["NAME"]:
             log.info ("activatethe cloud")
             return
-        
+
         if arguments["info"] and arguments["NAME"]:
             log.info ("cloud info")
             return
@@ -65,5 +65,5 @@ class cm_shell_cloud:
             return
 
 
-        
-        
+
+

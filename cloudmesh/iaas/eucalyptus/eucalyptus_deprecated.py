@@ -22,9 +22,9 @@ from cloudmesh.config.cm_config import cm_config
 
 class eucalyptus:
 
-    
-  
-   
+
+
+
 
     def config(self, label=None, project=None, accessKey=None, secretKey=None):
         """
@@ -61,7 +61,7 @@ class eucalyptus:
             self.credentials['accessKey'] = accessKey
             self.credentials['secretkey'] = secretKey
 
-  
+
 
     def getNodebyID(self, nodeid):
         nodes = self.cloud.list_nodes()
@@ -108,4 +108,4 @@ class eucalyptus:
         pp.pprint(data)
         return {}
 
-    
+

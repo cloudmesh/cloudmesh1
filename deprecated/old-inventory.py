@@ -45,10 +45,10 @@ class FabricObject(DynamicDocument):
     hallo = StringField(required=True)
     status = StringField(default=None)
 
-    
-    metadata = ListField(StringField(),default=list)
-    group = ListField(StringField(),default=list)
-    tags = ListField(StringField(),default=list)
+
+    metadata = ListField(StringField(), default=list)
+    group = ListField(StringField(), default=list)
+    tags = ListField(StringField(), default=list)
 
     date_start = DateTimeField()
     date_stop = DateTimeField()
@@ -108,7 +108,7 @@ class FabricObject(DynamicDocument):
     def set_category(self, which):
         self.category = which
         self.save()
-    
+
 class FabricService(FabricObject):
     ip_address = StringField()
     kind = StringField(efault="service")
@@ -168,7 +168,7 @@ class FabricImage(FabricObject):
 class Inventory:
 
     configuration = {}
-    
+
     def config(self, filename):
         '''
         Reads in a configuration file of the form and eliminates all keys with the None value.
@@ -196,7 +196,7 @@ class Inventory:
         # elininate all None attributes
         d = dict((k, v) for (k, v) in self.configuration['inventory'].iteritems() if not v == 'None')
         self.configuration['inventory'] = d
-    
+
     def __init__(self,
                  dbname,
                  host=None,
@@ -362,7 +362,7 @@ class Inventory:
         print s.name
         c = s.category
         s.save()
-        
+
     def set_service(self, name, server_name, subkind):
         '''sets the service of a server'''
         s = self.find('server', server_name)

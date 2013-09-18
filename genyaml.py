@@ -5,9 +5,9 @@ from sh import fgrep
 
 class cm_template:
 
-    def __init__(self,filename):
+    def __init__(self, filename):
     	self.filename = filename
-	self.content = open(filename, 'r').read()	  
+	self.content = open(filename, 'r').read()
 
     @property
     def variables(self):
@@ -24,8 +24,8 @@ class cm_template:
 	parsed_content = env.parse(self.content)
 	print meta.find_undeclared_variables(parsed_content)
 
-    def replace(self,d):
-    	template = Template(self.content)        
+    def replace(self, d):
+    	template = Template(self.content)
 	self.reuslt = template.render(d)
 	return self.result
 
@@ -37,10 +37,10 @@ if __name__ == "__main__":
     t = cm_template(filename)
     print t.content
 
-    #print t.variables
+    # print t.variables
 
 
 
-    #print t.replace(d)
+    # print t.replace(d)
 
 
