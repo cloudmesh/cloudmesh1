@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layoutTable.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -11,11 +11,11 @@
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#images-accordion > div").accordion({ header: "h3", 
-        										 collapsible: true, 
-        										 heightStyle: "content", 
+        $("#images-accordion > div").accordion({ header: "h3",
+        										 collapsible: true,
+        										 heightStyle: "content",
         										 active: false });
-    })
+    });
 })(jQuery);
 
 
@@ -25,6 +25,16 @@ $(function() {
     	"aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
     	"iDisplayLength": 25,
     	"sPaginationType": "full_numbers",
+    	"sDom": 'CR<"clear">lftipr',
+    	"oColVis": {
+            "aiExclude": [ 0 ],
+            "sAlign": "center"
+        },
+        "fnDrawCallback": function(o) {
+            var nColVis = $('div.ColVis', o.nTableWrapper)[0];
+            nColVis.align = "right";
+            nColVis.style.paddingBottom = "15px";
+        },
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
     });
@@ -55,9 +65,9 @@ $(function() {
       <thead>
           <tr>
             <th>default</th>
-            {% for attribute in attributes %}   
+            {% for attribute in attributes %}
               <th>{{attribute [0] }}</th>
-            {% endfor %}            
+            {% endfor %}
           </tr>
       </thead>
       <tbody>
@@ -73,17 +83,17 @@ $(function() {
                           {% if l == 2%}
                              {{ clouds[cloud][image][attribute[1]] }}
                           {% elif l == 3%}
-                             {{ clouds[cloud][image][attribute[1]][attribute[2]] }}       				
+                             {{ clouds[cloud][image][attribute[1]][attribute[2]] }}
                           {% elif l == 4%}
                              {{ clouds[cloud][image][attribute[1]][attribute[2]][attribute[4]] }}
                           {% endif %}
-                      </td> 
+                      </td>
                  {% endfor %}
 
              </tr>
 
           {% endfor %}
-      </tbody>          
+      </tbody>
     </table>
   </div>
   </div>
