@@ -1,3 +1,4 @@
+yaml_version: 1.0
 webui:
     host: 127.0.0.1
     port: 5000
@@ -46,6 +47,18 @@ mongo:
             db: hpc-qstat
         pbsnodes:
             db: hpc-pbsnodes
+        launcher:
+            db: launcher
+mongo_user:
+    db: cm_user
+    host: localhost
+    port: 27018
+    username: admin
+    password: password
+    path: ~/.futuregrid/mongodb_user
+    collections:
+        cm_password: 
+            db: cm_user
 keystone:
     sierra:
         OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
@@ -59,9 +72,14 @@ keystone:
         OS_TENANT_NAME : tenantname
         OS_USERNAME : username
 ldap:
-    with_ldap: True
-    hostname: ldapiporhostname
+    with_ldap: False
+    hostname: localhost
     cert: /Users/neu/.futuregrid/FGLdapCacert.pem
+    proxyhost: hostnameofproxy
+    proxyuser: usernameofprxyhost
+    proxyldap: hostnameofldap
+    personbase: "ou=People,dc=futuregrid,dc=org"
+    projectbase: "ou=Groups,dc=futuregrid,dc=org"
 roles:
     user:
        users: 

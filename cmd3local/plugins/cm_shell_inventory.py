@@ -20,11 +20,11 @@ class cm_shell_inventory:
 
     def info_cm_shell_inventory(self):
         print "%20s =" % "DBNAME", self.inventory_name
-        
+
     def activate_cm_shell_inventory(self):
         self.inventory_name = "test"
         db = connect (self.inventory_name)
-        
+
         self.inventory = Inventory()
         pass
 
@@ -93,10 +93,10 @@ class cm_shell_inventory:
                 name = arguments["CLUSTER"]
 
                 self.inventory.print_cluster(name)
-                
+
             return
 
-        for kind in ["server","service","image"]:
+        for kind in ["server", "service", "image"]:
             if arguments["info"] and arguments[kind]:
                 name = arguments["NAME"]
                 kind = arguments[kind]
@@ -131,5 +131,5 @@ class cm_shell_inventory:
                 print "false"
             return
 
-        
-        
+
+

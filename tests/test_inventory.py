@@ -21,20 +21,20 @@ class Test_Inventory:
         self.inventory.clear()
         self.inventory.generate()
         print "GENERATION COMPLETE"
-        
-        
+
+
     def tearDown(self):
         pass
-    
+
     def test_bootspec(self):
         self.inventory.generate_bootspec()
-        
+
         specs = self.inventory.find ({'cm_type': "inventory",
                                       'cm_key': 'bootspec',
                                       'cm_kind': 'bootspec'})
-        
+
         print specs.count()
-        
+
         for spec in specs:
             print '#', 70 * "-"
             print '#', spec['cm_id']
@@ -42,14 +42,14 @@ class Test_Inventory:
             pprint (spec)
 
         assert True
-        
+
     def test_getspec(self):
         self.inventory.generate_bootspec()
         spec = self.inventory.get_bootspec('ubuntu-2013-07-b')
         pprint (spec)
         assert True
-        
-    
+
+
     def test_clear(self):
         HEADING()
         self.inventory.clear()
@@ -59,7 +59,7 @@ class Test_Inventory:
         r = self.inventory.find ({})
         print r.count()
         assert r.count > 0
-        
+
     def test_host(self):
         HEADING()
         data = self.inventory.host(self.name)
@@ -68,13 +68,13 @@ class Test_Inventory:
     def test_list(self):
         HEADING()
         data = self.inventory.hostlist(self.cluster)
-        #pprint(data)
+        # pprint(data)
 
-    def test_combine(self):        
-        
+    def test_combine(self):
+
         attribute = "cm_temp"
         value = "32"
-        
+
         print "SET ATTRIBUTE"
         print 70 * '='
         data = self.inventory.set_attribute(self.name, attribute, value)
@@ -87,12 +87,12 @@ class Test_Inventory:
 
         data = self.inventory.host(self.name)
         pprint(data)
-        
-    
-        
+
+
+
     def test_set(self):
         HEADING()
-        
+
         """
         data = self.inventory.find({'cm_id': self.name})
         
@@ -110,20 +110,20 @@ class Test_Inventory:
 
         attribute = "cm_temp"
         value = "32"
-        
+
         print "SET ATTRIBUTE"
         print 70 * '='
         data = self.inventory.set_attribute(self.name, attribute, value)
         print 70 * '='
         print data
-        
-        
+
+
         print "GET ATTRIBUTE"
         data = self.inventory.get_attribute(self.name, attribute)
         print data
-        
-        
-        
+
+
+
     def test_i066(self):
         HEADING()
 
@@ -132,8 +132,8 @@ class Test_Inventory:
         print "GET ATTRIBUTE"
         data = self.inventory.get_attribute(name, attribute)
         print data
-        
-                
+
+
 
 
 

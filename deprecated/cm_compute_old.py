@@ -1,4 +1,4 @@
-#! /usr/bin/env pytho
+# ! /usr/bin/env pytho
 
 #
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
@@ -27,15 +27,15 @@ from novaclient.v1_1 import client
 
 class openstack:
 
-    type = "openstack"   # global var
-    flavors = {}         # global var
-    images = {}          # global var
-    servers = {}         # global var
-    credential = None    # global var
-    label = None         # global var
+    type = "openstack"  # global var
+    flavors = {}  # global var
+    images = {}  # global var
+    servers = {}  # global var
+    credential = None  # global var
+    label = None  # global var
 
-    cloud = None         # internal var
-    user_id = None       # internal var
+    cloud = None  # internal var
+    user_id = None  # internal var
 
     _nova = nova
 

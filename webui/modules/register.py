@@ -13,23 +13,23 @@ class RegisterForm(Form):
     def validate_on_submit(self):
         return True
     def initialize_form(self):
-        self.username.data = "dummy username" # dummy username -read from session
+        self.username.data = "dummy username"  # dummy username -read from session
         self.password.data = ""
-        self.cloud_server.choices = choices = [('india_openstack_essex','india_openstack_essex'),('sierra_openstack_grizzly','sierra_openstack_grizzly')]
+        self.cloud_server.choices = choices = [('india_openstack_essex', 'india_openstack_essex'), ('sierra_openstack_grizzly', 'sierra_openstack_grizzly')]
 
 
 @register_module.route('/cm/register', methods=['GET', 'POST'])
 def render_register():
     # A hypothetical register form that uses Flask-WTF
-    
+
     form = RegisterForm()
     if form.validate_on_submit():
-        form.error = None                
+        form.error = None
         if form.username.data is None:
             form.initialize_form()
-            return render_template("register.html", form = form)
+            return render_template("register.html", form=form)
         else:
-            
+
             return register(form);
 
 def register(form):
@@ -38,5 +38,5 @@ def register(form):
     data_dict['username'] = form.username.data
     data_dict['password'] = form.password.data
     return str(data_dict)
-    
-    
+
+

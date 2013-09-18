@@ -65,7 +65,7 @@ class Test_Inventory:
     def setup(self):
         self.inventory = Inventory("nosetest")
         self.inventory.clean()
-        
+
     def tearDown(self):
         self.inventory.print_info()
         # self.inventory.disconnect()
@@ -75,9 +75,9 @@ class Test_Inventory:
         self.inventory.clean()
         self.inventory.print_info()
         assert (
-            len(self.inventory.servers) + 
-            len(self.inventory.clusters) + 
-            len(self.inventory.images) + 
+            len(self.inventory.servers) +
+            len(self.inventory.clusters) +
+            len(self.inventory.images) +
             len(self.inventory.services) == 0)
 
     def test_names(self):
@@ -86,40 +86,40 @@ class Test_Inventory:
         names = self.inventory.names("cluster")
         print names
         assert [u'bravo', u'delta', u'gamma', u'india', u'sierra'] == names
-        
+
     def test_cluster(self):
         HEADING()
         self.inventory.create_cluster("bravo", "b-[001-016]", "101.102.203.[11-26]", "b[001]")
         self.inventory.print_info()
         self.inventory.refresh()
         assert len(self.inventory.servers) == 16
-        assert len(self.inventory.clusters) == 1 
-               
+        assert len(self.inventory.clusters) == 1
+
     def test_server(self):
         HEADING()
-        self.inventory.create("server","i[001-003]")
+        self.inventory.create("server", "i[001-003]")
         self.inventory.refresh()
-        assert len(self.inventory.servers) == 3 
-        assert len(self.inventory.clusters) == 0     
+        assert len(self.inventory.servers) == 3
+        assert len(self.inventory.clusters) == 0
 
     def test_service(self):
         HEADING()
-        self.inventory.create("service","service-i[001-003]")
+        self.inventory.create("service", "service-i[001-003]")
         self.inventory.refresh()
-        assert len(self.inventory.services) == 3 
-        assert len(self.inventory.clusters) == 0    
+        assert len(self.inventory.services) == 3
+        assert len(self.inventory.clusters) == 0
 
     def test_image(self):
         HEADING()
-        self.inventory.create("image","image[001-003]")
+        self.inventory.create("image", "image[001-003]")
         self.inventory.refresh()
-        assert len(self.inventory.images) == 3 
-        assert len(self.inventory.clusters) == 0    
+        assert len(self.inventory.images) == 3
+        assert len(self.inventory.clusters) == 0
 
     def test_info(self):
         HEADING()
         self.inventory.print_info()
-        
+
     def test_euca_service(self):
         HEADING()
         now = datetime.now()
@@ -160,22 +160,22 @@ class Test_Inventory:
         HEADING()
         self.inventory.clean()
 
-        self.inventory.create("server","i001")
-        self.inventory.create("service","service-i001")
+        self.inventory.create("server", "i001")
+        self.inventory.create("service", "service-i001")
 
 
-        service = self.inventory.get("service","service-i001")
+        service = self.inventory.get("service", "service-i001")
         service.save(cascade=True)
 
         server = self.inventory.get("server", "i001")
         server.save(cascade=True)
-        
+
         pprint(server.__dict__)
         pprint(service.__dict__)
 
         server.services = [service]
         server.save(cascade=True)
-        
+
         pprint(server.__dict__)
         self.inventory.refresh()
         assert (self.inventory.servers[0].services[0].name == "service-i001")
@@ -184,30 +184,30 @@ class Test_Inventory:
         HEADING()
         self.inventory.clean()
 
-        self.inventory.create("service","service-i001")
-        self.inventory.create("server","i001")
+        self.inventory.create("service", "service-i001")
+        self.inventory.create("server", "i001")
 
-        service = self.inventory.get("service","service-i001")
+        service = self.inventory.get("service", "service-i001")
         service.save(cascade=True)
 
         server = self.inventory.get("server", "i001")
         server.save(cascade=True)
-        
+
         pprint(server.__dict__)
         pprint(service.__dict__)
 
         server.append(service)
         server.save(cascade=True)
-        
+
         pprint(server.__dict__)
         self.inventory.refresh()
         assert (self.inventory.servers[0].services[0].name == "service-i001")
 
-    
+
     def test_logging(self):
         HEADING()
 
-        self.inventory.create("server","i001")
+        self.inventory.create("server", "i001")
         server = self.inventory.get("server", "i001")
         server.save(cascade=True)
 
@@ -217,7 +217,7 @@ class Test_Inventory:
         server.start()
         server.stop()
         server.save(cascade=True)
-        
+
         pprint (server.__dict__)
 
         assert(server.date_stop is not None)

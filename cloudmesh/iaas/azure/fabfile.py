@@ -30,7 +30,7 @@ vm_delete = azure.bake("vm", "delete")
 
 
 def activate():
-    settingsFilePath = config.get('azure', 'publishsettings_file_path')
+    settingsFilePath = config.get('cloudmesh.azurepublishsettings_file_path')
     _azure('account', 'clear')
     errmsg = 'No account information found'
     cmd = 'azure account import \'' + settingsFilePath + '\''
@@ -60,11 +60,11 @@ def _selectImage():
     return var
 
 
-def create(index, name=config.get('azure', 'username')):
+def create(index, name=config.get('cloudmesh.azure.username')):
     global vmName, vmImage, vmPassword
-    vmImage = config.get('azure', 'image')
-    userName = config.get('azure', 'username')
-    vmPassword = config.get('azure', 'password')
+    vmImage = config.get('cloudmesh.azure.image')
+    userName = config.get('cloudmesh.azure.username')
+    vmPassword = config.get('cloudmesh.azure.password')
     vmName = name
 
     if(vmImage == ''):

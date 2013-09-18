@@ -56,7 +56,7 @@ def production(status="on"):
         print usage
 
 @task
-def port (number,status="on"):
+def port (number, status="on"):
     """                                                                                                                             
     sets the ip table rule for a particular port. accepted values are 'on' and 'off'                                                
     """

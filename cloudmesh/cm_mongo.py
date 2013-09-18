@@ -27,6 +27,63 @@ except:
     log.warning("AZURE NOT ENABLED")
 
 
+
+class cm_MongoBase(object):
+
+    def __init__(self):
+        self.cm_type = "overwriteme"
+        self.connect()
+
+    def connect(self):
+        self.db_mongo = get_mongo_db(self.cm_type)
+
+    def get(self, username):
+        return self.find_one({"cm_id": username, "cm_type": self.cm_type})
+
+
+    def set(self, username, d):
+        element = dict (d)
+        element["cm_id"] = username
+        element["cm_type"] = self.cm_type
+        self.update({"cm_id": username, "cm_type": self.cm_type}, element)
+
+
+    def update(self, query, values=None):
+        '''
+        executes a query and updates the results from mongo db.
+        :param query:
+        '''
+        if values is None:
+            return self.db_mongo.update(query, upsert=True)
+        else:
+            print query
+            print values
+            return self.db_mongo.update(query, values, upsert=True)
+
+
+    def insert(self, element):
+        self.db_mongo.insert(element)
+
+    def clear(self):
+        self.db_mongo.remove({"cm_type" : self.cm_type})
+
+    def find(self, query):
+        '''
+        executes a query and returns the results from mongo db.
+        :param query:
+        '''
+        return self.db_mongo.find(query)
+
+    def find_one(self, query):
+        '''
+        executes a query and returns the results from mongo db.
+        :param query:
+        '''
+        return self.db_mongo.find_one(query)
+
+
+
+
 class cm_mongo:
 
     clouds = {}
@@ -74,10 +131,9 @@ class cm_mongo:
             print "Activating ->", cloud_name
 
             try:
-                credential = self.config.get(cloud_name)
-                cm_type = self.config.get()['clouds'][cloud_name]['cm_type']
-                cm_type_version = self.config.get()[
-                    'clouds'][cloud_name]['cm_type_version']
+                credential = self.config.cloud(cloud_name)
+                cm_type = credential['cm_type']
+                cm_type_version = credential['cm_type_version']
                 if cm_type in ['openstack', 'eucalyptus', 'azure']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cm_type,
@@ -85,23 +141,31 @@ class cm_mongo:
 #                                               'credential': credential}
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name)
-                    self.clouds[cloud_name].update({'manager': cloud})
+                    # try to see if the credential works
+                    # if so, update the 'manager' so the cloud is successfully activated
+                    # otherwise log error message and skip this cloud
+                    tryauth = cloud.get_token()
+                    if 'access' in tryauth:
+                        self.clouds[cloud_name].update({'manager': cloud})
+                    else:
+                        log.error("Credential not working, cloud is not activated")
 
             except Exception, e:
                 print "ERROR: can not activate cloud", cloud_name
                 print e
-                # print traceback.format_exc()
+                #print traceback.format_exc()
                 # sys.exit()
 
     def refresh(self, names=["all"], types=["all"]):
         """
-        This method obtians information about servers, images, and
-        flavours that build the cloudmesh. The information is held
+        This method obtains information about servers, images, and
+        flavors that build the cloudmesh. The information is held
         internally after a refresh. Than the find method can be used
         to query form this information. To pull new information into
         this data structure a new refresh needs to be called.
 
         Usage is defined through arrays that are passed along.
+
 
         type = "servers", "images", "flavors"
 
@@ -127,40 +191,40 @@ class cm_mongo:
 
         watch = StopWatch()
         for name in names:
-
-            cloud = self.clouds[name]['manager']
-
-            for type in types:
-
-                print "Refreshing {0} {1} ->".format(type, name)
-
-                watch.start(name)
-                cloud.refresh(type)
-                result = cloud.get(type)
-
-                # add result to db,
-                watch.stop(name)
-                print 'Refresh time:', watch.get(name)
-
-                watch.start(name)
-
-                self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
-
-                for element in result:
-                    id = "{0}-{1}-{2}".format(
-                        name, type, result[element]['name']).replace(".", "-")
-                    # print "ID", id
-                    result[element]['cm_id'] = id
-                    result[element]['cm_cloud'] = name
-                    result[element]['cm_type'] = self.clouds[name]['cm_type']
-                    result[element]['cm_type_version'] = self.clouds[
-                        name]['cm_type_version']
-                    result[element]['cm_kind'] = type
-
-                    self.db_clouds.insert(result[element])
-
-                watch.stop(name)
-                print 'Store time:', watch.get(name)
+            if 'manager' in self.clouds[name]:
+                cloud = self.clouds[name]['manager']
+    
+                for type in types:
+    
+                    print "Refreshing {0} {1} ->".format(type, name)
+    
+                    watch.start(name)
+                    cloud.refresh(type)
+                    result = cloud.get(type)
+    
+                    # add result to db,
+                    watch.stop(name)
+                    print 'Refresh time:', watch.get(name)
+    
+                    watch.start(name)
+    
+                    self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
+    
+                    for element in result:
+                        id = "{0}-{1}-{2}".format(
+                            name, type, result[element]['name']).replace(".", "-")
+                        # print "ID", id
+                        result[element]['cm_id'] = id
+                        result[element]['cm_cloud'] = name
+                        result[element]['cm_type'] = self.clouds[name]['cm_type']
+                        result[element]['cm_type_version'] = self.clouds[
+                            name]['cm_type_version']
+                        result[element]['cm_kind'] = type
+    
+                        self.db_clouds.insert(result[element])
+    
+                    watch.stop(name)
+                    print 'Store time:', watch.get(name)
 
     def get_pbsnodes(self, host):
         '''

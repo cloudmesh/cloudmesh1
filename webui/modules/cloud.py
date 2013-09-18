@@ -22,13 +22,12 @@ except:
 cloud_module = Blueprint('cloud_module', __name__)
 
 config = cm_config()
-configuration = config.get()
 prefix = config.prefix
 index = config.index
 
 clouds = cm_mongo()
 clouds.activate()
-               
+
 # DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
 
 """
@@ -54,8 +53,8 @@ for name in clouds.active():
 @cond_decorator(cloudmesh.with_login, login_required)
 def save():
     print "Saving the cloud status"
-    #clouds.save()
-    return mongo_images()
+    # clouds.save()
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: LOAD
@@ -66,8 +65,8 @@ def save():
 @cond_decorator(cloudmesh.with_login, login_required)
 def load():
     print "Loading the cloud status"
-    #clouds.load()
-    return mongo_images()
+    # clouds.load()
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: REFRESH
@@ -80,24 +79,24 @@ def load():
 @cond_decorator(cloudmesh.with_login, login_required)
 def refresh(cloud=None, server=None, service_type=None):
     print "-> refresh", cloud, server
-    
-    print "REQ",  redirect(request.args.get('next') or '/').__dict__
-    
-    if cloud in ['servers','flavors','images','users']:
-        service_type = cloud 
+
+    print "REQ", redirect(request.args.get('next') or '/').__dict__
+
+    if cloud in ['servers', 'flavors', 'images', 'users']:
+        service_type = cloud
         cloud_names = config.active()
     else:
         cloud_names = [cloud]
-    
+
     if cloud is None:
-        clouds.refresh(types=['servers','images','flavors'])
+        clouds.refresh(types=['servers', 'images', 'flavors'])
     elif service_type is None:
-        clouds.refresh(names=cloud_names,types=['servers','images','flavors'])
+        clouds.refresh(names=cloud_names, types=['servers', 'images', 'flavors'])
     else:
-        clouds.refresh(names=cloud_names,types=[service_type])
+        clouds.refresh(names=cloud_names, types=[service_type])
         return redirect('/mesh/{0}'.format(service_type))
-    #clouds.refresh()
-    #clouds.all_filter()
+    # clouds.refresh()
+    # clouds.all_filter()
     return redirect('/mesh/servers')
 
 # ============================================================
@@ -126,7 +125,7 @@ def filter(cloud=None):
 
         clouds.state_filter(name, query_states)
 
-    return mongo_images()
+    return redirect('/mesh/servers')
 
 
 # ============================================================
@@ -137,7 +136,7 @@ def filter(cloud=None):
 def kill_vms():
     print "-> kill all"
     r = cm("--set", "quiet", "kill", _tty_in=True)
-    return mongo_images()
+    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: DELETE
@@ -153,7 +152,7 @@ def delete_vm(cloud=None, server=None):
     clouds.vm_delete(cloud, server)
     time.sleep(5)
     clouds.release_unused_public_ips(cloud)
-    clouds.refresh(names=[cloud],types=["servers"])
+    clouds.refresh(names=[cloud], types=["servers"])
     return redirect('/mesh/servers')
 
 # ============================================================
@@ -171,7 +170,7 @@ def delete_vms(cloud=None):
         clouds.delete(cloud, id)
     time.sleep(7)
     f_cloud['servers'] = {}
-    return mongo_images()
+    return redirect('/mesh/servers')
 
 
 # ============================================================
@@ -182,12 +181,12 @@ def delete_vms(cloud=None):
 @cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
 @cond_decorator(cloudmesh.with_login, login_required)
 def assign_public_ip(cloud=None, server=None):
-    mycloud = configuration['clouds'][cloud]
+    mycloud = config.cloud(cloud)
     if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
         clouds.assign_public_ip(cloud, server)
-        clouds.refresh(names=[cloud],types=["servers"])
+        clouds.refresh(names=[cloud], types=["servers"])
         return redirect('/mesh/servers')
-    #else:
+    # else:
     #    return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
 
 # ============================================================
@@ -208,17 +207,16 @@ def start_vm(cloud=None, server=None):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
     key = None
 
-    #if configuration.has_key('keys'):
-    if 'keys' in configuration:
-        key = configuration['keys']['default']
+    if 'keys' in config['cloudmesh']:
+        key = config.get('cloudmesh.keys.default')
 
     # THIS IS A BUG
-    #vm_flavor = clouds.default(cloud)['flavor']
-    #vm_image = clouds.default(cloud)['image']
+    # vm_flavor = clouds.default(cloud)['flavor']
+    # vm_image = clouds.default(cloud)['image']
     #
     # before the info could be maintained in mongo, using the config file
-    vm_flavor = configuration["clouds"][cloud]["default"]["flavor"]
-    vm_image = configuration["clouds"][cloud]["default"]["image"]
+    vm_flavor = config.cloud(cloud)["default"]["flavor"]
+    vm_image = config.cloud(cloud)["default"]["image"]
     vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
     # in case of error, setting default flavor id
     if vm_flavor_id < 0:
@@ -231,11 +229,11 @@ def start_vm(cloud=None, server=None):
     print "P"*20
     print result
     # print "PPPPPPPPPPPP", result
-    #clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
+    # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     config.incr()
     config.write()
     time.sleep(5)
-    clouds.refresh(names=[cloud],types=["servers"])
+    clouds.refresh(names=[cloud], types=["servers"])
     return redirect('/mesh/servers')
 
 # ============================================================
@@ -249,7 +247,7 @@ def vm_login(cloud=None, server=None):
     message = ''
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    server = clouds.clouds[cloud]['servers'][server]
+    server = clouds.servers()[cloud][server]
 
     if len(server['addresses'][server['addresses'].keys()[0]]) < 2:
         mesage = 'Cannot Login Now, Public IP not assigned'
@@ -263,7 +261,7 @@ def vm_login(cloud=None, server=None):
         print "ssh", 'ubuntu@' + ip
         xterm('-e', 'ssh', 'ubuntu@' + ip, _bg=True)
 
-    return mongo_images()
+    return redirect('/mesh/servers')
 # ============================================================
 # ROUTE: VM INFO
 # ============================================================
@@ -274,14 +272,14 @@ def vm_login(cloud=None, server=None):
 def vm_info(cloud=None, server=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-
-    clouds.clouds[cloud]['servers'][server]['cm_vm_id'] = server
-    clouds.clouds[cloud]['servers'][server]['cm_cloudname'] = cloud
+    print clouds.servers()[cloud]
+    clouds.servers()[cloud][server]['cm_vm_id'] = server
+    clouds.servers()[cloud][server]['cm_cloudname'] = cloud
 
     return render_template('vm_info.html',
                            updated=time_now,
                            keys="",
-                           server=clouds.clouds[cloud]['servers'][server],
+                           server=clouds.servers()[cloud][server],
                            id=server,
                            cloudname=cloud,
                            table_printer=table_printer)
@@ -301,7 +299,7 @@ def display_flavors(cloud=None):
 
     if request.method == 'POST':
         for cloud in config.active():
-            configuration['clouds'][cloud]['default'][
+            config['cloudmesh']['clouds'][cloud]['default'][
                 'flavor'] = request.form[cloud]
             config.write()
 
@@ -324,7 +322,7 @@ def display_images():
 
     if request.method == 'POST':
         for cloud in config.active():
-            configuration['clouds'][cloud][
+            config['cloudmesh']['clouds'][cloud][
                 'default']['image'] = request.form[cloud]
             config.write()
 

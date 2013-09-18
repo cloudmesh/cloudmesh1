@@ -20,27 +20,27 @@ class Test_Launcher:
     def setup(self):
         provider = SimulatorLauncher
         self.launcher = provider()
-        
+
     def tearDown(self):
         pass
-        
+
     def test_register(self):
         HEADING()
-        assert (self.launcher.register(None) )
-        
+        assert (self.launcher.register(None))
+
     def test_states(self):
         HEADING()
         assert self.launcher.states() == self.launcher.states_list
-        
+
     def test_status(self):
         HEADING()
         states = self.launcher.states()
         assert self.launcher.status in states
-        
+
     def test_run(self):
         HEADING()
-        self.launcher.register(None)   
+        self.launcher.register(None)
         for host in self.launcher.recipies:
             recipie_list = self.launcher.recipies[host]
             for recipie in recipie_list:
-                assert (self.launcher.run(host,recipie["name"]))         #assuming "name" to be the key in the dictionary
+                assert (self.launcher.run(host, recipie["name"]))  # assuming "name" to be the key in the dictionary

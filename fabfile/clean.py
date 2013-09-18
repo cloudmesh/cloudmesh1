@@ -9,8 +9,8 @@ def dir():
     local("rm -rf build doc/build dist *.egg-info *~ #*")
     local("cd doc; make clean")
     local("rm -rf *.egg-info")
-    local("rm -f celeryd@*")  
-    local("rm -f *.dump")  
+    local("rm -f celeryd@*")
+    local("rm -f *.dump")
 
 @task
 def all():

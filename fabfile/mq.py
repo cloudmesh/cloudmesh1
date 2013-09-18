@@ -10,14 +10,14 @@ from pprint import pprint
 input = raw_input
 
 __all__ = ['user', 'install', 'host', 'allow', 'check', "dns", "status", "start", "stop", "menu",
-           "memory","conumers","msg","info"]
+           "memory", "conumers", "msg", "info"]
 
 
 def installed(name):
     """check if the command with the name is installed and return true if it is"""
     result = local("which {0} | wc -l".format(name), capture=True)
     return result > 0
-   
+
 @task
 def install():
     """install the rabitmq"""
@@ -40,7 +40,7 @@ def user(name=None):
     
     :param name: if the name is ommited it will be queried for it.
     '''
-    if name is None: 
+    if name is None:
         user = get_user()
     password = get_password()
     local("rabbitmqctl {0} {1}".format(name, password))
@@ -89,13 +89,13 @@ def dns():
 def info():
     """print some essential information about the messaging system"""
     status()
-    l = ["name", "memory", "consumers", "messages","messages_ready","messages_unacknowledged"]
+    l = ["name", "memory", "consumers", "messages", "messages_ready", "messages_unacknowledged"]
     r = list_queues(" ".join(l)).split("\n")[1].split("\t")
     print r
-    
-    d = zip(l,r)
+
+    d = zip(l, r)
     pprint (d)
-    
+
 @task
 def status():
     """print the status of rabbitmq"""
@@ -136,4 +136,4 @@ menu_list = [
 def menu():
     """open a menu to start some commands with an ascii menu"""
     ascii_menu("RabbitMQ", menu_list)
-         
+

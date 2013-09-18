@@ -1,4 +1,4 @@
-#! /usr/local/bin
+# ! /usr/local/bin
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 import libcloud.security

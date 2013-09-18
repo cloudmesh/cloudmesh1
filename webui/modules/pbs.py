@@ -21,7 +21,7 @@ pbs_module = Blueprint('pbs_module', __name__)
 @pbs_module.route('/hpc')
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_hpc():
-    
+
     hpc_menu = [
         ["QStat Direct",
             [
@@ -34,33 +34,33 @@ def display_hpc():
     ]
     return render_template('hpc.html',
                            hpc_menu=hpc_menu)
-                           
+
 
 
 
 @pbs_module.route('/pbs/<action>/<host>')
 @cond_decorator(cloudmesh.with_login, login_required)
-def display_pbs_action(action,host):
+def display_pbs_action(action, host):
 
     error = ""
     config = cm_config()
     user = config.config["cloudmesh"]["hpc"]["username"]
 
     pbs = pbs_mongo()
-    pbs.activate(host,user)
-        
+    pbs.activate(host, user)
+
     time_now = datetime.now()
     if action == "nodes":
         data = pbs.get(host, "nodes")
         page = 'mesh_pbsnodes.html',
-        
+
     elif action == "queue":
-        #data = pbs.refresh_pbsnodes(host)
+        # data = pbs.refresh_pbsnodes(host)
         data = pbs.get(host, "qstat")
         page = 'mesh_qstat.html'
     else:
         return render_template('error.html',
-                               updated=time_now, 
+                               updated=time_now,
                                error=error,
                                type="Page not found",
                                msg="action {0} does not exist".format(action))
@@ -73,7 +73,7 @@ def display_pbs_action(action,host):
                            table_data=data)
 
 
-#deprected
+# deprected
 @pbs_module.route('/pbs/probe/<host>')
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_pbs_qstat(host):

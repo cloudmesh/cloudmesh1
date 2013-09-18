@@ -13,7 +13,7 @@ def install():
     local("cd /tmp; git clone https://github.com/dcramer/nose-json.git")
     print ("INSTALLING")
     local("cd /tmp/nose-json; python setup.py install", capture=True)
-    
+
 @task
 def run():
     """run the nosetests"""

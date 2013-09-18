@@ -1,14 +1,7 @@
+yaml_version: 1.0
 cloud:
 
     sierra_openstack_grizzly:
-        mysqldb_userid :
-        mysqldb_passwd :
-        mysqldb_hostname :
-        mysqldb_port : 3306
-        mysqldb_dbname : 
-        mysqldb_tables : ["instance_faults"]
-
-    india_openstack_essex:
         mysqldb_userid :
         mysqldb_passwd :
         mysqldb_hostname :
