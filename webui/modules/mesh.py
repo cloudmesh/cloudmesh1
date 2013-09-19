@@ -246,6 +246,11 @@ def mongo_table(filters=None):
     """
     os_attributes = ['name', 'addresses', 'flavor', 'id', 'user_id', 'metadata', 'key_name', 'created']
 
+    # c.aggregate needs to be defined
+    # def count_status(cloudname):
+    #    result = c.aggregate( [ {$match: {"cm_kind":"servers","cm_cloud":cloudname}},
+    #                                     {$group: { _id: "$status", count: { $sum: 1}}}
+    #                          ])
 
     def test_server_filters(server_attrs, server_filters):
         """ Note there are special cases handled when the direct value of a server attribute
