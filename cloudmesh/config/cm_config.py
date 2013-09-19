@@ -17,10 +17,6 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from pymongo import MongoClient
 import yaml
 
-##### For testing
-# import mock_keystone
-
-
 log = LOGGER(__file__)
 
 def get_mongo_db(mongo_collection):
@@ -97,24 +93,18 @@ class cm_config(ConfigDict):
     # ----------------------------------------------------------------------
     # Internal helper methods
     # ----------------------------------------------------------------------
-    def _get_cloud_handler(self, profile, projects, cloud, as_admin=False):
+    def _get_cloud_handler(self, cloud, as_admin=False):
         """This gets a class that knows how to handle the specific type of
         cloud (how to provision users, etc)"""
-        handler_args = { 'profiledata': profile,
-                         'defaultproj': projects['default'],
-                         'projectlist': projects['active'],
-                         'cloudname': cloud }
-        if as_admin:
-            handler_args['clouddata'] = self.serverdata['keystone'][cloud]
-        else:
-            handler_args['clouddata'] = self.cloud(cloud)
+        handler_args = { 'username': self.init_config['cloudmesh']['profile']['username'],
+                         'email':  self.init_config['cloudmesh']['profile']['e_mail'],
+                         'defaultproj': self.init_config['cloudmesh']['projects']['default'],
+                         'projectlist': self.init_config['cloudmesh']['projects']['active'],
+                         'cloudname': cloud,
+                         'cloudcreds': self.get_data(cloud),
+                         'cloudadmincreds': self.serverdata['keystone'][cloud] }
         cloud_handler_class = cloudmesh_cloud_handler(cloud)
         cloud_handler = cloud_handler_class(**handler_args)
-        ########### for testing #############################################################
-        # cloud_handler._client = mock_keystone.Client
-        # cloud_handler._client.mockusername = self['cloudmesh']['profile']['username']
-        # cloud_handler._client.mocktenants = ['fg82','fg110','fg296']
-        #####################################################################################
         return cloud_handler
 
 
@@ -161,12 +151,7 @@ class cm_config(ConfigDict):
         self.init_config['cloudmesh']['clouds'] = {}
         cloudlist = self.init_config['cloudmesh']['active']
         for cloud in cloudlist:
-            cloud_handler = self._get_cloud_handler(
-                self.init_config['cloudmesh']['profile'],
-                self.init_config['cloudmesh']['projects'],
-                cloud,
-                as_admin=True
-            )
+            cloud_handler = self._get_cloud_handler(cloud, as_admin=True)
             cloud_handler.initialize_cloud_user()
             self.init_config['cloudmesh']['clouds'][cloud] = copy.deepcopy(cloud_handler.credentials)
 
@@ -179,7 +164,7 @@ class cm_config(ConfigDict):
         self._initialize_clouds()
 
     def change_own_password(self, cloudname, oldpass, newpass):
-        cloud_handler = self._get_cloud_handler(self.profile(), self['cloudmesh']['projects'], cloudname)
+        cloud_handler = self._get_cloud_handler(cloudname)
         cloud_handler.change_own_password(oldpass, newpass)
         # Save the yaml file so the new password is saved
         self.write()
@@ -188,7 +173,7 @@ class cm_config(ConfigDict):
         cloudlist = self.active()
         passwords = {}
         for cloud in cloudlist:
-            cloud_handler = self._get_cloud_handler(self.profile(), self['cloudmesh']['projects'], cloud)
+            cloud_handler = self._get_cloud_handler(cloud)
             passwords[cloud] = cloud_handler.get_own_password()
         return passwords
 
@@ -206,7 +191,7 @@ class cm_config(ConfigDict):
 
 
     # ----------------------------------------------------------------------
-    # <roperties
+    # Properties
     # ----------------------------------------------------------------------
     @property
     def userdata_handler(self):
