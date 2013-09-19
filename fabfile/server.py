@@ -38,7 +38,7 @@ import platform
 
 from cloudmesh.util.util import path_expand
 
-__all__ = ['start', 'kill', 'view', 'clean', 'cleanmongo', 'agent']
+__all__ = ['start', 'stop', 'kill', 'view', 'clean', 'cleanmongo', 'agent']
 
 #
 # SETTING THE BROWSER BASED ON PLATFORM
@@ -71,6 +71,11 @@ def agent():
     print 70 * "="
     print ("eval `ssh-agent -s`")
     print("ssh-add")
+
+@task
+def stop(server="server"):
+    """sma e as the kill command"""
+    kill(server)
 
 @task
 def kill(server="server"):
