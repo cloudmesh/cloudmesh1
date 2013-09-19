@@ -28,6 +28,7 @@ from cloudmesh.util.cm_table import cm_table
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
+from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
 from cloudmesh.cm_profile import cm_profile
 from cloudmesh.util.logger import LOGGER
 
@@ -229,11 +230,12 @@ class openstack(ComputeBaseType):
         return self._get_service("compute")
 
     def _post(self, posturl, params=None):
+        #print posturl
         # print self.config
         conf = self._get_service_endpoint("compute")
         headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
-        # print headers
+        #print headers
         r = requests.post(posturl, headers=headers,
                           data=json.dumps(params),
                           verify=self.user_credential['OS_CACERT'])
@@ -242,9 +244,9 @@ class openstack(ComputeBaseType):
             ret = r.json()
         return ret
 
-    def vm_create(self, name=None,
-                  flavor_name=None,
-                  image_id=None,
+    def vm_create(self, name,
+                  flavor_name,
+                  image_id,
                   security_groups=None,
                   key_name=None,
                   meta={},
@@ -598,9 +600,74 @@ class openstack(ComputeBaseType):
                 list.append(limit)
 
         return list
-
-
-
+    
+    # return the security groups for a tenant, in dict format
+    def listSecurityGroup(self, tenant_id):
+        apiurl = "os-security-groups"
+        return self._get(apiurl)
+    
+    # return the security group id given a name.
+    # The id is used to identify a group when adding more rules to it
+    def findSecurityGroupIdByName(self, tenant_id, name):
+        groupid = None
+        secgroups = self.listSecurityGroup(tenant_id)
+        for secgroup in secgroups["security_groups"]:
+            if secgroup["name"] == name:
+                groupid = secgroup["id"]
+                break
+        return groupid
+    
+    # creating a security group, and optionally add rules to it
+    # This implementation is based on the rest api
+    def createSecurityGroup(self, tenant_id, secgroup, rules=[]):
+        conf = self._get_service_endpoint("compute")
+        publicURL = conf['publicURL']
+        posturl = "%s/os-security-groups" % publicURL
+        params = {"security_group":{
+                                    "name": secgroup.name,
+                                    "description": secgroup.description
+                                    }
+                  }
+        #print params
+        ret = self._post(posturl,params)
+        groupid = None
+        # upon successful, it returns a dict keyed by 'security_group',
+        # otherwide may have failed due to some reason
+        if "security_group" in ret:
+            groupid = ret["security_group"]["id"]
+        # if the security group object has rules included, add them first
+        if len(secgroup.rules) > 0:
+            self.addSecurityGroupRules(groupid, secgroup.rules)
+        
+        # only trying to add the additional rules if the empty group has been created successfully    
+        if not groupid:
+            log.error("Failed to create security group. Error message: '%s'" % ret)
+        else:
+            self.addSecurityGroupRules(groupid, rules)
+        # return the groupid of the newly created group, or None if failed
+        return groupid
+    
+    # add rules to an existing security group
+    def addSecurityGroupRules(self, groupid, rules):
+        conf = self._get_service_endpoint("compute")
+        publicURL = conf['publicURL']
+        posturl = "%s/os-security-group-rules" % publicURL
+        ret = None
+        for rule in rules:
+            params = {"security_group_rule":{
+                                            "ip_protocol": rule.ip_protocol,
+                                            "from_port": rule.from_port,
+                                            "to_port": rule.to_port,
+                                            "cidr": rule.cidr,
+                                            "parent_group_id": groupid
+                                            }
+                      }
+            #print params
+            ret = self._post(posturl, params)
+            if "security_group_rule" not in ret:
+                log.error("Failed to create security group rule(s). Error message: '%s'" % ret)
+                break
+        return ret
     #
     # security Groups of VMS
     #

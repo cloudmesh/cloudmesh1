@@ -21,6 +21,7 @@ import time
 
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.openstack.cm_compute import openstack
+from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
 from cloudmesh.util.cm_table import cm_table
 import json
 import pprint
@@ -397,6 +398,30 @@ class Test:
         self.azure_cloud.refresh("services")
         print json.dumps(self.azure_cloud.dump('services'), indent=4)
 
+    def test_15_list_secgroup(self):
+        tenant_id = '1ae6813a3a6d4cebbeb1912f6d139ad0'
+        pp.pprint(self.cloud.listSecurityGroup(tenant_id))
+    
+    def test_15_create_secgroup(self):
+        tenant_id = '1ae6813a3a6d4cebbeb1912f6d139ad0'
+        #print "defining a group"
+        mygroup = Ec2SecurityGroup("testSecGroupCM")
+        #print "defining a security rule"
+        rule1 = Ec2SecurityGroup.Rule(8088, 8088)
+        rule2 = Ec2SecurityGroup.Rule(9090, 9099, "UDP")
+        rules = [rule1, rule2]
+        #print self.cloud.createSecurityGroup(tenant_id, mygroup, rules)
+        mygroup.setRules(rules)
+        print self.cloud.createSecurityGroup(tenant_id, mygroup)
+        groupid = self.cloud.findSecurityGroupIdByName(tenant_id, mygroup.name)
+        #print groupid
+        assert groupid is not None
+        rule3 = Ec2SecurityGroup.Rule(5000, 5000)
+        print self.cloud.addSecurityGroupRules(groupid, [rule3])
+        groupid = self.cloud.findSecurityGroupIdByName(tenant_id, "dummy_name_not_exist")
+        #print groupid
+        assert groupid is None
+        
     def start(self):
         HEADING()
         image = self.configuration.default(self.name)['image']
