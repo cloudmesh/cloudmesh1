@@ -8,9 +8,19 @@ __all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill']
 
 # app="cloudmesh.provisioner.queue"
 
-launcher_workers = {"app":"cloudmesh.launcher.queue", "hostlist":hostlist.expand_hostlist("l[1-2]"), "queue":"launcher"}
-provisioner_workers = {"app":"cloudmesh.provisioner.queue", "hostlist":hostlist.expand_hostlist("p[1-2]"), "queue":"provisioner"}
-questat_workers = {"app":"cloudmesh.pbs", "hostlist":['q1'], "queue":"questat", "concurrency":1}
+launcher_workers = {"app":"cloudmesh.launcher.queue", 
+                    "hostlist":hostlist.expand_hostlist("l[1-2]"), 
+                    "queue":"launcher"}
+
+provisioner_workers = {"app":"cloudmesh.provisioner.queue", 
+                       "hostlist":hostlist.expand_hostlist("p[1-2]"), 
+                       "queue":"provisioner"}
+
+questat_workers = {"app":"cloudmesh.pbs", 
+                   "hostlist":['q1'], 
+                   "queue":"questat", 
+                   "concurrency":1}
+
 worker_list = [provisioner_workers, launcher_workers, questat_workers];
 @task
 def kill():
@@ -57,7 +67,9 @@ def start(view=None):
             concurrency = None;
             if "concurrency" in worker:
                 concurrency = worker["concurrency"]
-            celery_command("start", worker["app"], worker["hostlist"], worker["queue"], concurrency=concurrency)
+            celery_command("start", worker["app"], 
+                           worker["hostlist"], worker["queue"], 
+                           concurrency=concurrency)
 
     if view is None:
         time.sleep(2)
