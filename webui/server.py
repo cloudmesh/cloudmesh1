@@ -7,6 +7,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.roles import Roles
 # from cloudmesh.util.webutil import setup_imagedraw
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
+from cloudmesh.user.cm_user import cm_user
 from datetime import datetime
 
 from cloudmesh.util.util import path_expand
@@ -391,6 +392,7 @@ class User(UserMixin):
         self.id = id
         self.active = active
         self.roles = roles
+        self._cm_info = None
 
     def is_active(self):
         return True
@@ -403,6 +405,18 @@ class User(UserMixin):
 
     def is_authenticated(self):
         return True
+
+    def cm_info(self):
+        if self._cm_info is None:
+            cmu = cm_user()
+            self._cm_info = cmu.info(self.id)
+        return self._cm_info
+
+    def cm_profile(self):
+        return self.cm_info()['profile']
+
+    def cm_clouds(self):
+        return self.cm_info()['clouds']
 
 class LoginForm(Form):
 
