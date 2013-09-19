@@ -32,31 +32,17 @@ class azure(ComputeBaseType):
         return self.get_images()
 
     def get_images(self):
-        return self._get_registered_image()
-
-    def _get_registered_image(self, label=None, name=None):
         """Return available operating systems images on Windows Azure
 
-        :param label: (optional) a simple description of images. not unique
-        value
-        :type label: str.
-        :param name: (optional) a unique name of images.
-        :type name: str.
         :returns: dict.
 
         """
 
         images = self.sms.list_os_images()
-        if not label and not name:
-            return images
-
+        res = {}
         for image in images:
-            if name and image.name == name:
-                return image
-            if label and image.label == label:
-                lastone = image
+            name = image.name
+            res[name] = image.__dict__
+            res[name]['id'] = name
 
-        if lastone:
-            return lastone
-
-        return images
+        return res
