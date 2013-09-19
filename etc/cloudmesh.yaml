@@ -21,6 +21,9 @@ cloudmesh:
             default:
                 flavor: m1.tiny
                 image: 4199d988-0833-4497-a473-96fc456fac2f
+        windows_azure:
+            subscriptionid: 91b7cd65-6dac-4f0a-9c2c-38128cb871cd
+            managementcertfile: $HOME/.futuregrid/azure-managementCertificate.pem
     default: sierra_openstack_grizzly
     index: 1
     keys:
