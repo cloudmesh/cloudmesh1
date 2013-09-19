@@ -65,6 +65,9 @@ class Test:
             print "LOADED CLOUDS"
         """
 
+    def setup_azure(self):
+        from cloudmesh.iaas.azure.cm_compute import azure
+        self.azure_cloud = azure("windows_azure")
 
     def test_get_extensions(self):
         HEADING()
@@ -381,6 +384,11 @@ class Test:
         print "RESULT", result
         meta = self.cloud.get_meta(id)
         print meta
+
+    def test_14_azure(self):
+        HEADING()
+        self.setup_azure()
+        self.azure_cloud.refresh("images")
 
     def start(self):
         HEADING()
