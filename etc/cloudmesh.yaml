@@ -21,6 +21,25 @@ cloudmesh:
             default:
                 flavor: m1.tiny
                 image: 4199d988-0833-4497-a473-96fc456fac2f
+        windows_azure:
+            cm_host: windowsazure.com
+            cm_label: ios
+            cm_type: windowszure
+            cm_type_version:
+            credentials:
+                OS_AUTH_URL:
+                OS_CACERT:
+                OS_PASSWORD:
+                OS_TENANT_NAME:
+                OS_USERNAME:
+                OS_VERSION:
+                subscriptionid: 91b7cd65-6dac-4f0a-9c2c-38128cb871cd
+                managementcertfile: $HOME/.futuregrid/azure-managementCertificate.pem
+            default:
+                flavor:
+                role_size: ExtraSmall
+                image: b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-saucy-13_10-amd64-server-20130919-en-us-30GB
+                location: "Central US"
     default: sierra_openstack_grizzly
     index: 1
     keys:
