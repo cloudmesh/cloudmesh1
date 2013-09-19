@@ -15,11 +15,10 @@ except:
 class openstack_grizzly_cloud(cloudmesh_cloud):
     _client = client.Client
 
-    def __init__(self, profiledata, defaultproj, projectlist, cloudname, clouddata):
-        self._credentials = None
+    def __init__(self, username, email, defaultproj, projectlist, cloudname, cloudcreds, cloudadmincreds=None):
         self._keystone = None
         self._keystone_admin = None
-        cloudmesh_cloud.__init__(self, profiledata, defaultproj, projectlist, cloudname, clouddata)
+        cloudmesh_cloud.__init__(self, username, email, defaultproj, projectlist, cloudname, cloudcreds, cloudadmincreds)
 
     @property
     def keystone_admin(self):
@@ -37,7 +36,7 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
         if self._keystone is None:
             if as_admin:
                 # Create/connect to keystone as administrator
-                cloud_creds = self.data
+                cloud_creds = self.admin_credentials
             else:
                 # Create/connect to keystone as user
                 cloud_creds = self.credentials

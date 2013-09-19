@@ -7,20 +7,22 @@ from random import choice
 class cloudmesh_cloud:
     """Abstract class, provides credentials for various cloud platforms"""
 
-    def __init__(self, profiledata, defaultproj, projectlist, cloudname, clouddata):
-        self._profile = profiledata
-        self._projectlist = projectlist
+    def __init__(self, username, email, defaultproj, projectlist, cloudname, cloudcreds, cloudadmincreds=None):
+        self._username = username
+        self._email = email
         self._defaultproj = defaultproj
+        self._projectlist = projectlist
         self._cloudname = cloudname
-        self._data = clouddata
+        self._cloudcreds = cloudcreds
+        self._cloudadmincreds = cloudadmincreds
 
     @property
     def username(self):
-        return self._profile['username']
+        return self._username
 
     @property
     def email(self):
-        return self._profile['e_mail']
+        return self._email
 
     @property
     def cloudname(self):
@@ -36,14 +38,14 @@ class cloudmesh_cloud:
 
     @property
     def credentials(self):
-        return self._data['credentials']
+        return self._cloudcreds
     @credentials.setter
     def credentials(self, v):
-        self._data['credentials'] = v
+        self._cloudcreds = v
 
     @property
-    def data(self):
-        return self._data
+    def admin_credentials(self):
+        return self._cloudadmincreds
 
     def newpass(self):
         """Credit: http://stackoverflow.com/questions/3854692/generate-password-in-python"""
@@ -55,11 +57,7 @@ class cloudmesh_cloud:
         raise Exception("Not implemented")
 
     def change_own_password(self, oldpass, newpass):
-        if self.data['credentials']['OS_PASSWORD'] != oldpass:
-            print "Current password is incorrect; password not changed"
-            return False
-        else:
-            return True
+        raise Exception("Not implemented")
 
     def get_own_password(self):
         raise Exception("Not implemented")
