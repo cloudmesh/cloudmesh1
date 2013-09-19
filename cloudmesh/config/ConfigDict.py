@@ -66,7 +66,7 @@ class ConfigDict (OrderedDict):
         template_vars['portalname'] = configuration['cloudmesh']['profile']['username']
         template_vars['password'] = {}
         for cloudname, cloudattrs in configuration['cloudmesh']['clouds'].iteritems():
-            template_vars['password'][cloudname] = cloudattrs['OS_PASSWORD']
+            template_vars['password'][cloudname] = cloudattrs['credentials']['OS_PASSWORD']
         template_vars['projects'] = copy.deepcopy(configuration['cloudmesh']['projects'])
         template_vars['keys'] = copy.deepcopy(configuration['cloudmesh']['keys'])
         template_vars['profile'] = copy.deepcopy(configuration['cloudmesh']['profile'])
