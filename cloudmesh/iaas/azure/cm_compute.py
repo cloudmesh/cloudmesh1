@@ -46,3 +46,24 @@ class azure(ComputeBaseType):
             res[name]['id'] = name
 
         return res
+
+    def _get_services_dict(self):
+        return self.get_services()
+
+    def get_services(self):
+        """Return the cloud services available on the account.
+        A launched vm instance is the cloud service.
+        """
+
+        cloud_services = self.sms.list_hosted_services()
+        res = {}
+        for service in cloud_services:
+            name = service.service_name
+            main_properties = service.__dict__
+            sub_properties = service.hosted_service_properties.__dict__
+            merged_properties = dict(main_properties.items() +
+                                     sub_properties.items())
+            res[name] = merged_properties
+            res[name]['id'] = name
+
+        return res

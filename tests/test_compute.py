@@ -391,6 +391,12 @@ class Test:
         self.azure_cloud.refresh("images")
         print json.dumps(self.azure_cloud.dump('images'), indent=4)
 
+    def test_azure_services(self):
+        HEADING()
+        self.setup_azure()
+        self.azure_cloud.refresh("services")
+        print json.dumps(self.azure_cloud.dump('services'), indent=4)
+
     def start(self):
         HEADING()
         image = self.configuration.default(self.name)['image']
