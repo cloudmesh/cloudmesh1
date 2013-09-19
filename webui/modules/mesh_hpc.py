@@ -98,7 +98,7 @@ def display_mongo_qstat_new():
     attributes = {"pbs":
                   [
                         [ "Queue" , "queue"],
-                        [ "Server" , "server"],
+                        # [ "Server" , "server"],
                         [ "State" , "job_state"],
                         [ "Name" , "Job_Name"],
                         [ "Owner" , "Job_Owner"],
@@ -106,8 +106,7 @@ def display_mongo_qstat_new():
                         [ "Walltime" , "Resource_List", "walltime"],
                         [ "Nodes" , "Resource_List", "nodes"],
                         [ "Nodect" , "Resource_List", "nodect"],
-                        [ "Walltime" , "Resource_List", "walltime"],
-                        [ "ctime", "ctime"],
+                        # [ "ctime", "ctime"],
                         [ "mtime", "mtime"],
                         [ "qtime", "qtime"],
                         [ "Used Cpu Time", "resources_used", 'cput'],
