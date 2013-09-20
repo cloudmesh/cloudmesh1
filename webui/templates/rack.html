@@ -1,13 +1,20 @@
-{% extends "layout_error.html" %}
+{% extends "layout_title.html" %}
 {% block title %}Error{% endblock %}
 
 {% block contentbox %}
-  <h2>RACK PAGE TEMPLATE: {{ type }}</h2>
+  <h2>Rack {{service}} Diagram of the Cluster: {{ name }}</h2>
 {% endblock %}
 
 {% block content %}
   <p>{{ error }}</p>
-  <p></p>
+
+ <p>
+  	<img src="/static/racks/{{name}}.svg"/>
+</p>
+<p>
+  	<img src="/static/racks/{{name}}-legend.png"/>
+</p>
+
   <p>{{ msg }}</p>
 {% endblock %}
 
