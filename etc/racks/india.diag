@@ -1,0 +1,189 @@
+rackdiag {
+   rack {
+       //description: India A1 Left
+       48U;
+       
+       1: india001 {{i001}}
+       2: india002 {{i002}}
+       3: india003 {{i003}}
+       4: india004 {{i004}}
+       5: india005 {{i005}}
+       6: india006 {{i006}}
+       7: india007 {{i007}}
+       8: india008 {{i008}}
+       9: india009 {{i009}}
+       10: india010 {{i010}}
+       11: india011 {{i011}}
+       12: india012 {{i012}}
+       13: india013 {{i013}}
+       14: india014 {{i014}}
+       15: india015 {{i015}}
+       16: india016 {{i016}}
+       17: india017 {{i017}}
+       18: india018 {{i018}}
+       19: india019 {{i019}}
+       20: india020 {{i020}}
+       21: india021 {{i021}}
+       22: india022 {{i022}}
+       23: india023 {{i023}}
+       24: india024 {{i024}}
+       25: india025 {{i025}}
+       26: india026 {{i026}}
+       27: india027 {{i027}}
+       28: india028 {{i028}}
+       29: india029 {{i029}}
+       30: india030 {{i030}}
+       31: india031 {{i031}}
+       32: india032 {{i032}}
+       33: india033 {{i033}}
+       34: india034 {{i034}}
+       35: india035 {{i035}}
+       36: india036 {{i036}}
+       37: india037 {{i037}}
+       38: india038 {{i038}}
+       39: india039 {{i039}}
+       40: india040 {{i040}}
+       41: india041 {{i041}}
+       42: india042 {{i042}}
+       43: [color=gray];
+       44: only 43 U high [5U] [color=black];
+   }
+   rack {
+       //description: India A1 Right
+       48U;
+       
+       1: [color=gray];
+       2: india043 {{i043}}
+       3: india044 {{i044}}
+       4: india045 {{i045}}
+       5: india046 {{i046}}
+       6: india047 {{i047}}
+       7: india048 {{i048}}
+       8: india049 {{i049}}
+       9: india050 {{i050}}
+       10: india051 {{i051}}
+       11: india052 {{i052}}
+       12: india053 {{i053}}
+       13: india054 {{i054}}
+       14: india055 {{i055}}
+       15: india056 {{i056}}
+       16: india057 {{i057}}
+       17: india058 {{i058}}
+       18: india059 {{i059}}
+       19: india060 {{i060}}
+       20: india061 {{i061}}
+       21: india062 {{i062}}
+       22: india063 {{i063}}
+       23: india064 {{i064}}
+       24: india065 {{i065}}
+       25: india066 {{i066}}
+       26: india067 {{i067}}
+       27: india068 {{i068}}
+       28: india069 {{i069}}
+       29: india070 {{i070}}
+       30: india071 {{i071}}
+       31: india072 {{i072}}
+       32: india073 {{i073}}
+       33: india074 {{i074}}
+       34: india075 {{i075}}
+       35: india076 {{i076}}
+       36: india077 {{i077}}
+       37: india078 {{i078}}
+       38: india079 {{i079}}
+       39: india080 {{i080}}
+       40: india081 {{i081}}
+       41: india082 {{i082}}
+       42: india083 {{i083}}
+       43: india084 {{i084}}
+       44: only 43 U high [5U] [color=black];
+   }
+   rack {
+       //description: India Management Rack A2
+       48U;
+       
+       1: [5U] [color=gray];
+       6: Force 10 router [9U];
+       15: [color=gray];
+       16: serverA [2U];
+       18: serverB [2U];
+       20: keyboard
+       21: KVM switch
+       22: serverc [2U];
+       24: [color=gray];
+       25: Qlogic fiber switch [7U];
+       32: HP Storageworks array [2U];
+       34: ldapB [2U];
+       36: ldapA [2U];
+       38: Dell server (? not sure what this is for)
+       39: [5U] [color=gray];
+       44: only 43 U high [5U] [color=black];
+   }
+   rack {
+       //description: India Rack A3 Left
+       48U;
+       
+       1: india085 {{i085}}
+       2: india086 {{i086}}
+       3: india087 {{i087}}
+       4: india088 {{i088}}
+       5: india089 {{i089}}
+       6: india090 {{i090}}
+       7: india091 {{i091}}
+       8: india092 {{i092}}
+       9: india093 {{i093}}
+       10: india094 {{i094}}
+       11: india095 {{i095}}
+       12: india096 {{i096}}
+       13: india097 {{i097}}
+       14: india098 {{i098}}
+       15: india099 {{i099}}
+       16: india100 {{i100}}
+       17: india101 {{i101}}
+       18: india102 {{i102}}
+       19: india103 {{i103}}
+       20: india104 {{i104}}
+       21: india105 {{i105}}
+       22: india106 {{i106}}
+       23: tm1 [2U];
+       25: i130 [2U];
+       27: i131 [2U];
+       29: i132 [2U];
+       31: [13U] [color=gray];
+       44: only 43 U high [5U] [color=black];
+  }
+   rack {
+       //description: India Rack A3 Right
+       48U;
+       
+       1: [color=gray];
+       2: india111 {{i111}}
+       3: india112 {{i112}}
+       4: india113 {{i113}}
+       5: india114 {{i114}}
+       6: india115 {{i115}}
+       7: india116 {{i116}}
+       8: india117 {{i117}}
+       9: india118 {{i118}}
+       10: india119 {{i119}}
+       11: india120 {{i120}}
+       12: india121 {{i121}}
+       13: india122 {{i122}}
+       14: india123 {{i123}}
+       15: india124 {{i124}}
+       16: india125 {{i125}}
+       17: india126 {{i126}}
+       18: india127 {{i127}}
+       19: india128 {{i128}}
+       20: india107 {{i107}}
+       21: india108 {{i108}}
+       22: india109 {{i109}}
+       23: india110 {{i110}}
+       24: india133 [2U] {{i133}}
+       26: india134 [2U] {{i134}}
+       28: india135 [2U] {{i135}}
+       30: india136 [2U] {{i136}}
+       32: [12U] [color=gray];
+       44: only 43 U high [5U] [color=black];
+   }
+}
+

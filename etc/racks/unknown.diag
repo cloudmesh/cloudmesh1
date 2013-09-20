@@ -1,0 +1,9 @@
+rackdiag {
+   rack {
+       //description: Unknown
+       48U;
+       
+       1: unknown[48U] [color=gray];
+   }
+}
+

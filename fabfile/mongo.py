@@ -6,6 +6,8 @@ from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.util.util import path_expand as cm_path_expand
 from cloudmesh.inventory import Inventory
+from cloudmesh.user.cm_template import cm_template
+from cloudmesh.config.ConfigDict import ConfigDict
 
 import sys
 import os.path
@@ -18,6 +20,23 @@ def get_pid(command):
             pid = line.split(" ")[0]
             break
     return (pid, line)
+
+@task
+def user():
+    """
+    creates a user from tempalte and a simplified version of the yaml file and
+    puts it into mongo as a profile
+    """
+    print "NOT YET IMPLEMENTED"
+
+    user_config = ConfigDict(filename="~/.futuregrid/me.yaml")
+
+    print user_config
+
+    t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
+    config = t.replace(format="dict", **user_config)
+
+    print config
 
 
 @task

@@ -1,0 +1,788 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg viewBox="0 0 1024 2000" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs id="defs_block">
+    <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
+      <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
+    </filter>
+  </defs>
+  <title>blockdiag</title>
+  <desc>rackdiag {
+   rack {
+       //description: India A1 Left
+       48U;
+       
+       1: india001 [color="#FF0000"]
+       2: india002 [color="#FFCC00"]
+       3: india003 [color="#66FF00"]
+       4: india004 [color="#00FF66"]
+       5: india005 [color="#0000FF"]
+       6: india006 [color="#FF0000"]
+       7: india007 [color="#FFCC00"]
+       8: india008 [color="#66FF00"]
+       9: india009 [color="#00FF66"]
+       10: india010 [color="#0000FF"]
+       11: india011 [color="#FF0000"]
+       12: india012 [color="#FFCC00"]
+       13: india013 [color="#66FF00"]
+       14: india014 [color="#00FF66"]
+       15: india015 [color="#0000FF"]
+       16: india016 [color="#FF0000"]
+       17: india017 [color="#FFCC00"]
+       18: india018 [color="#66FF00"]
+       19: india019 [color="#00FF66"]
+       20: india020 [color="#0000FF"]
+       21: india021 [color="#FF0000"]
+       22: india022 [color="#FFCC00"]
+       23: india023 [color="#66FF00"]
+       24: india024 [color="#00FF66"]
+       25: india025 [color="#0000FF"]
+       26: india026 [color="#FF0000"]
+       27: india027 [color="#FFCC00"]
+       28: india028 [color="#66FF00"]
+       29: india029 [color="#00FF66"]
+       30: india030 [color="#0000FF"]
+       31: india031 [color="#FF0000"]
+       32: india032 [color="#FFCC00"]
+       33: india033 [color="#66FF00"]
+       34: india034 [color="#00FF66"]
+       35: india035 [color="#0000FF"]
+       36: india036 [color="#FF0000"]
+       37: india037 [color="#FFCC00"]
+       38: india038 [color="#66FF00"]
+       39: india039 [color="#00FF66"]
+       40: india040 [color="#0000FF"]
+       41: india041 [color="#FF0000"]
+       42: india042 [color="#FFCC00"]
+       43: [color=gray];
+       44: only 43 U high [5U] [color=black];
+   }
+   rack {
+       //description: India A1 Right
+       48U;
+       
+       1: [color=gray];
+       2: india043 [color="#66FF00"]
+       3: india044 [color="#00FF66"]
+       4: india045 [color="#0000FF"]
+       5: india046 [color="#FF0000"]
+       6: india047 [color="#FFCC00"]
+       7: india048 [color="#66FF00"]
+       8: india049 [color="#00FF66"]
+       9: india050 [color="#0000FF"]
+       10: india051 [color="#FF0000"]
+       11: india052 [color="#FFCC00"]
+       12: india053 [color="#66FF00"]
+       13: india054 [color="#00FF66"]
+       14: india055 [color="#0000FF"]
+       15: india056 [color="#FF0000"]
+       16: india057 [color="#FFCC00"]
+       17: india058 [color="#66FF00"]
+       18: india059 [color="#00FF66"]
+       19: india060 [color="#0000FF"]
+       20: india061 [color="#FF0000"]
+       21: india062 [color="#FFCC00"]
+       22: india063 [color="#66FF00"]
+       23: india064 [color="#00FF66"]
+       24: india065 [color="#0000FF"]
+       25: india066 [color="#FF0000"]
+       26: india067 [color="#FFCC00"]
+       27: india068 [color="#66FF00"]
+       28: india069 [color="#00FF66"]
+       29: india070 [color="#0000FF"]
+       30: india071 [color="#FF0000"]
+       31: india072 [color="#FFCC00"]
+       32: india073 [color="#66FF00"]
+       33: india074 [color="#00FF66"]
+       34: india075 [color="#0000FF"]
+       35: india076 [color="#FF0000"]
+       36: india077 [color="#FFCC00"]
+       37: india078 [color="#66FF00"]
+       38: india079 [color="#00FF66"]
+       39: india080 [color="#0000FF"]
+       40: india081 [color="#FF0000"]
+       41: india082 [color="#FFCC00"]
+       42: india083 [color="#66FF00"]
+       43: india084 [color="#00FF66"]
+       44: only 43 U high [5U] [color=black];
+   }
+   rack {
+       //description: India Management Rack A2
+       48U;
+       
+       1: [5U] [color=gray];
+       6: Force 10 router [9U];
+       15: [color=gray];
+       16: servera [2U];
+       18: serverb [2U];
+       20: keyboard
+       21: KVM switch
+       22: serverc [2U];
+       24: [color=gray];
+       25: Qlogic fiber switch [7U];
+       32: HP Storageworks array [2U];
+       34: ldapb [2U];
+       36: ldap1 [2U];
+       38: Dell server (? not sure what this is for)
+       39: [5U] [color=gray];
+       44: only 43 U high [5U] [color=black];
+   }
+   rack {
+       //description: India Rack A3 Left
+       48U;
+       
+       1: india085 [color="#0000FF"]
+       2: india086 [color="#FF0000"]
+       3: india087 [color="#FFCC00"]
+       4: india088 [color="#66FF00"]
+       5: india089 [color="#00FF66"]
+       6: india090 [color="#0000FF"]
+       7: india091 [color="#FF0000"]
+       8: india092 [color="#FFCC00"]
+       9: india093 [color="#66FF00"]
+       10: india094 [color="#00FF66"]
+       11: india095 [color="#0000FF"]
+       12: india096 [color="#FF0000"]
+       13: india097 [color="#FFCC00"]
+       14: india098 [color="#66FF00"]
+       15: india099 [color="#00FF66"]
+       16: india100 [color="#0000FF"]
+       17: india101 [color="#FF0000"]
+       18: india102 [color="#FFCC00"]
+       19: india103 [color="#66FF00"]
+       20: india104 [color="#00FF66"]
+       21: india105 [color="#0000FF"]
+       22: india106 [color="#FF0000"]
+       23: tm1 [2U];
+       25: i130 [2U];
+       27: i131 [2U];
+       29: i132 [2U];
+       31: [13U] [color=gray];
+       44: only 43 U high [5U] [color=black];
+  }
+   rack {
+       //description: India Rack A3 Right
+       48U;
+       
+       1: [color=gray];
+       2: india111 [color="#FF0000"]
+       3: india112 [color="#FFCC00"]
+       4: india113 [color="#66FF00"]
+       5: india114 [color="#00FF66"]
+       6: india115 [color="#0000FF"]
+       7: india116 [color="#FF0000"]
+       8: india117 [color="#FFCC00"]
+       9: india118 [color="#66FF00"]
+       10: india119 [color="#00FF66"]
+       11: india120 [color="#0000FF"]
+       12: india121 [color="#FF0000"]
+       13: india122 [color="#FFCC00"]
+       14: india123 [color="#66FF00"]
+       15: india124 [color="#00FF66"]
+       16: india125 [color="#0000FF"]
+       17: india126 [color="#FF0000"]
+       18: india127 [color="#FFCC00"]
+       19: india128 [color="#66FF00"]
+       20: india107 [color="#FFCC00"]
+       21: india108 [color="#66FF00"]
+       22: india109 [color="#00FF66"]
+       23: india110 [color="#0000FF"]
+       24: india133 [2U] [color="#66FF00"]
+       26: india134 [2U] [color="#00FF66"]
+       28: india135 [2U] [color="#0000FF"]
+       30: india136 [2U] [color="#FF0000"]
+       32: [12U] [color=gray];
+       44: only 43 U high [5U] [color=black];
+   }
+}
+</desc>
+  <rect fill="rgb(0,0,0)" height="1920" style="filter:url(#filter_blur)" width="128" x="67" y="46" />
+  <rect fill="rgb(0,0,0)" height="1920" style="filter:url(#filter_blur)" width="128" x="259" y="46" />
+  <rect fill="rgb(0,0,0)" height="1920" style="filter:url(#filter_blur)" width="128" x="451" y="46" />
+  <rect fill="rgb(0,0,0)" height="1920" style="filter:url(#filter_blur)" width="128" x="643" y="46" />
+  <rect fill="rgb(0,0,0)" height="1920" style="filter:url(#filter_blur)" width="128" x="835" y="46" />
+  <rect fill="white" height="1920" stroke="rgb(0,0,0)" width="128" x="64" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="49" y="1949">1</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="49" y="1909">2</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="49" y="1869">3</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="48" y="1829">4</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="49" y="1789">5</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="49" y="1749">6</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="49" y="1709">7</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="49" y="1669">8</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="49" y="1629">9</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1589">10</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1549">11</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1509">12</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1469">13</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="41" y="1429">14</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1389">15</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1349">16</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1309">17</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1269">18</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1229">19</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1189">20</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1149">21</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1109">22</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="1069">23</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="41" y="1029">24</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="989">25</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="949">26</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="909">27</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="869">28</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="829">29</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="789">30</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="749">31</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="709">32</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="669">33</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="41" y="629">34</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="589">35</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="549">36</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="509">37</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="469">38</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="429">39</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="389">40</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="349">41</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="309">42</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="269">43</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="41" y="229">44</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="189">45</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="149">46</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="109">47</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="42" y="69">48</text>
+  <rect fill="white" height="1920" stroke="rgb(0,0,0)" width="128" x="256" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="241" y="1949">1</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="241" y="1909">2</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="241" y="1869">3</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="240" y="1829">4</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="241" y="1789">5</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="241" y="1749">6</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="241" y="1709">7</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="241" y="1669">8</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="241" y="1629">9</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1589">10</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1549">11</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1509">12</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1469">13</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="233" y="1429">14</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1389">15</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1349">16</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1309">17</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1269">18</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1229">19</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1189">20</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1149">21</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1109">22</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="1069">23</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="233" y="1029">24</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="989">25</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="949">26</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="909">27</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="869">28</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="829">29</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="789">30</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="749">31</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="709">32</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="669">33</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="233" y="629">34</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="589">35</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="549">36</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="509">37</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="469">38</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="429">39</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="389">40</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="349">41</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="309">42</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="269">43</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="233" y="229">44</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="189">45</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="149">46</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="109">47</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="234" y="69">48</text>
+  <rect fill="white" height="1920" stroke="rgb(0,0,0)" width="128" x="448" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="433" y="1949">1</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="433" y="1909">2</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="433" y="1869">3</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="432" y="1829">4</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="433" y="1789">5</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="433" y="1749">6</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="433" y="1709">7</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="433" y="1669">8</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="433" y="1629">9</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1589">10</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1549">11</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1509">12</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1469">13</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="425" y="1429">14</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1389">15</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1349">16</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1309">17</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1269">18</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1229">19</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1189">20</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1149">21</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1109">22</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="1069">23</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="425" y="1029">24</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="989">25</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="949">26</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="909">27</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="869">28</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="829">29</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="789">30</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="749">31</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="709">32</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="669">33</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="425" y="629">34</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="589">35</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="549">36</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="509">37</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="469">38</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="429">39</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="389">40</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="349">41</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="309">42</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="269">43</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="425" y="229">44</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="189">45</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="149">46</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="109">47</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="426" y="69">48</text>
+  <rect fill="white" height="1920" stroke="rgb(0,0,0)" width="128" x="640" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="625" y="1949">1</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="625" y="1909">2</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="625" y="1869">3</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="624" y="1829">4</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="625" y="1789">5</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="625" y="1749">6</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="625" y="1709">7</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="625" y="1669">8</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="625" y="1629">9</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1589">10</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1549">11</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1509">12</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1469">13</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="617" y="1429">14</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1389">15</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1349">16</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1309">17</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1269">18</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1229">19</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1189">20</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1149">21</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1109">22</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="1069">23</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="617" y="1029">24</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="989">25</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="949">26</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="909">27</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="869">28</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="829">29</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="789">30</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="749">31</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="709">32</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="669">33</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="617" y="629">34</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="589">35</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="549">36</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="509">37</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="469">38</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="429">39</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="389">40</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="349">41</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="309">42</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="269">43</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="617" y="229">44</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="189">45</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="149">46</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="109">47</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="618" y="69">48</text>
+  <rect fill="white" height="1920" stroke="rgb(0,0,0)" width="128" x="832" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="817" y="1949">1</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="817" y="1909">2</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="817" y="1869">3</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="816" y="1829">4</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="817" y="1789">5</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="817" y="1749">6</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="817" y="1709">7</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="817" y="1669">8</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="817" y="1629">9</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1589">10</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1549">11</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1509">12</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1469">13</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="809" y="1429">14</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1389">15</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1349">16</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1309">17</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1269">18</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1229">19</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1189">20</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1149">21</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1109">22</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="1069">23</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="809" y="1029">24</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="989">25</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="949">26</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="909">27</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="869">28</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="829">29</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="789">30</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="749">31</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="709">32</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="669">33</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="809" y="629">34</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="589">35</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="549">36</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="509">37</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="469">38</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="429">39</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="389">40</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="349">41</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="309">42</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="269">43</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="809" y="229">44</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="189">45</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="149">46</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="109">47</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="810" y="69">48</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1920" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1949">india001</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1880" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1909">india002</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1840" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1869">india003</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1800" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="104" y="1829">india004</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1760" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1789">india005</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1720" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1749">india006</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1680" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1709">india007</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1640" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1669">india008</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1600" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1629">india009</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1560" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1589">india010</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1520" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1549">india011</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1480" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1509">india012</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1440" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1469">india013</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1400" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="104" y="1429">india014</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1360" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1389">india015</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1320" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1349">india016</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1280" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1309">india017</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1240" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1269">india018</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1200" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1229">india019</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1160" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1189">india020</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1120" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1149">india021</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1080" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1109">india022</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1040" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="1069">india023</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="1000" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="104" y="1029">india024</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="960" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="989">india025</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="920" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="949">india026</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="880" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="909">india027</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="840" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="869">india028</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="800" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="829">india029</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="760" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="789">india030</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="720" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="749">india031</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="680" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="709">india032</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="640" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="669">india033</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="600" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="104" y="629">india034</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="560" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="589">india035</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="520" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="549">india036</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="480" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="509">india037</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="440" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="469">india038</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="400" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="429">india039</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="360" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="389">india040</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="320" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="349">india041</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="280" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="105" y="309">india042</text>
+  <rect fill="rgb(128,128,128)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="240" />
+  <rect fill="rgb(0,0,0)" height="200" stroke="rgb(0,0,0)" width="128" x="64" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="87" y="139">only 43 U high</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="116" y="158">[5U]</text>
+  <rect fill="rgb(128,128,128)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1920" />
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1880" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1909">india043</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1840" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="296" y="1869">india044</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1800" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1829">india045</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1760" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1789">india046</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1720" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1749">india047</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1680" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1709">india048</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1640" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1669">india049</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1600" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1629">india050</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1560" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1589">india051</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1520" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1549">india052</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1480" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1509">india053</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1440" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="296" y="1469">india054</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1400" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1429">india055</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1360" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1389">india056</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1320" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1349">india057</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1280" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1309">india058</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1240" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1269">india059</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1200" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1229">india060</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1160" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1189">india061</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1120" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1149">india062</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1080" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1109">india063</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1040" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="296" y="1069">india064</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="1000" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="1029">india065</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="960" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="989">india066</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="920" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="949">india067</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="880" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="909">india068</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="840" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="869">india069</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="800" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="829">india070</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="760" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="789">india071</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="720" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="749">india072</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="680" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="709">india073</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="640" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="296" y="669">india074</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="600" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="629">india075</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="560" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="589">india076</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="520" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="549">india077</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="480" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="509">india078</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="440" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="469">india079</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="400" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="429">india080</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="360" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="389">india081</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="320" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="349">india082</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="280" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="297" y="309">india083</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="240" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="296" y="269">india084</text>
+  <rect fill="rgb(0,0,0)" height="200" stroke="rgb(0,0,0)" width="128" x="256" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="279" y="139">only 43 U high</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="308" y="158">[5U]</text>
+  <rect fill="rgb(128,128,128)" height="200" stroke="rgb(0,0,0)" width="128" x="448" y="1760" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="500" y="1869">[5U]</text>
+  <rect fill="rgb(255,255,255)" height="360" stroke="rgb(0,0,0)" width="128" x="448" y="1400" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="469" y="1579">Force 10 router</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="500" y="1598">[9U]</text>
+  <rect fill="rgb(128,128,128)" height="40" stroke="rgb(0,0,0)" width="128" x="448" y="1360" />
+  <rect fill="rgb(255,255,255)" height="80" stroke="rgb(0,0,0)" width="128" x="448" y="1280" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="492" y="1319">servera</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="500" y="1338">[2U]</text>
+  <rect fill="rgb(255,255,255)" height="80" stroke="rgb(0,0,0)" width="128" x="448" y="1200" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="492" y="1239">serverb</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="500" y="1258">[2U]</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="448" y="1160" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="487" y="1189">keyboard</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="448" y="1120" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="480" y="1149">KVM switch</text>
+  <rect fill="rgb(255,255,255)" height="80" stroke="rgb(0,0,0)" width="128" x="448" y="1040" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="492" y="1079">serverc</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="500" y="1098">[2U]</text>
+  <rect fill="rgb(128,128,128)" height="40" stroke="rgb(0,0,0)" width="128" x="448" y="1000" />
+  <rect fill="rgb(255,255,255)" height="280" stroke="rgb(0,0,0)" width="128" x="448" y="720" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="461" y="859">Qlogic fiber switch</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="500" y="878">[7U]</text>
+  <rect fill="rgb(255,255,255)" height="80" stroke="rgb(0,0,0)" width="128" x="448" y="640" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="449" y="679">HP Storageworks array</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="500" y="698">[2U]</text>
+  <rect fill="rgb(255,255,255)" height="80" stroke="rgb(0,0,0)" width="128" x="448" y="560" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="497" y="599">ldapb</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="500" y="618">[2U]</text>
+  <rect fill="rgb(255,255,255)" height="80" stroke="rgb(0,0,0)" width="128" x="448" y="480" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="497" y="519">ldap1</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="500" y="538">[2U]</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="448" y="440" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="449" y="459">Dell server (? not sure </text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="469" y="478">what this is for)</text>
+  <rect fill="rgb(128,128,128)" height="200" stroke="rgb(0,0,0)" width="128" x="448" y="240" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="500" y="349">[5U]</text>
+  <rect fill="rgb(0,0,0)" height="200" stroke="rgb(0,0,0)" width="128" x="448" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="471" y="139">only 43 U high</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="500" y="158">[5U]</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1920" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1949">india085</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1880" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1909">india086</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1840" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1869">india087</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1800" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1829">india088</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1760" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1789">india089</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1720" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1749">india090</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1680" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1709">india091</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1640" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1669">india092</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1600" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1629">india093</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1560" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="680" y="1589">india094</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1520" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1549">india095</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1480" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1509">india096</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1440" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1469">india097</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1400" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1429">india098</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1360" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1389">india099</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1320" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1349">india100</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1280" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1309">india101</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1240" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1269">india102</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1200" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1229">india103</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1160" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="680" y="1189">india104</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1120" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1149">india105</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="1080" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="681" y="1109">india106</text>
+  <rect fill="rgb(255,255,255)" height="80" stroke="rgb(0,0,0)" width="128" x="640" y="1000" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="693" y="1039">tm1</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="692" y="1058">[2U]</text>
+  <rect fill="rgb(255,255,255)" height="80" stroke="rgb(0,0,0)" width="128" x="640" y="920" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="692" y="959">i130</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="692" y="978">[2U]</text>
+  <rect fill="rgb(255,255,255)" height="80" stroke="rgb(0,0,0)" width="128" x="640" y="840" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="692" y="879">i131</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="692" y="898">[2U]</text>
+  <rect fill="rgb(255,255,255)" height="80" stroke="rgb(0,0,0)" width="128" x="640" y="760" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="692" y="799">i132</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="692" y="818">[2U]</text>
+  <rect fill="rgb(128,128,128)" height="520" stroke="rgb(0,0,0)" width="128" x="640" y="240" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="689" y="509">[13U]</text>
+  <rect fill="rgb(0,0,0)" height="200" stroke="rgb(0,0,0)" width="128" x="640" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="663" y="139">only 43 U high</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="692" y="158">[5U]</text>
+  <rect fill="rgb(128,128,128)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1920" />
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1880" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1909">india111</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1840" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1869">india112</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1800" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1829">india113</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1760" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="872" y="1789">india114</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1720" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1749">india115</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1680" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1709">india116</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1640" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1669">india117</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1600" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1629">india118</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1560" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1589">india119</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1520" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1549">india120</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1480" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1509">india121</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1440" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1469">india122</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1400" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1429">india123</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1360" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="872" y="1389">india124</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1320" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1349">india125</text>
+  <rect fill="rgb(255,0,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1280" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1309">india126</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1240" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1269">india127</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1200" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1229">india128</text>
+  <rect fill="rgb(255,204,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1160" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1189">india107</text>
+  <rect fill="rgb(102,255,0)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1120" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1149">india108</text>
+  <rect fill="rgb(0,255,102)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1080" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1109">india109</text>
+  <rect fill="rgb(0,0,255)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="1040" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="1069">india110</text>
+  <rect fill="rgb(102,255,0)" height="80" stroke="rgb(0,0,0)" width="128" x="832" y="960" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="999">india133</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="884" y="1018">[2U]</text>
+  <rect fill="rgb(0,255,102)" height="80" stroke="rgb(0,0,0)" width="128" x="832" y="880" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="872" y="919">india134</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="884" y="938">[2U]</text>
+  <rect fill="rgb(0,0,255)" height="80" stroke="rgb(0,0,0)" width="128" x="832" y="800" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="839">india135</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="884" y="858">[2U]</text>
+  <rect fill="rgb(255,0,0)" height="80" stroke="rgb(0,0,0)" width="128" x="832" y="720" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="873" y="759">india136</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="884" y="778">[2U]</text>
+  <rect fill="rgb(128,128,128)" height="480" stroke="rgb(0,0,0)" width="128" x="832" y="240" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="881" y="489">[12U]</text>
+  <rect fill="rgb(0,0,0)" height="200" stroke="rgb(0,0,0)" width="128" x="832" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="855" y="139">only 43 U high</text>
+  <text fill="rgb(0,0,0)" font-family="sansserif" font-size="11" font-style="normal" font-weight="normal" x="884" y="158">[5U]</text>
+</svg>
