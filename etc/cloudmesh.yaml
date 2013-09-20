@@ -33,7 +33,7 @@ cloudmesh:
                 OS_TENANT_NAME:
                 OS_USERNAME:
                 OS_VERSION:
-                subscriptionid: 91b7cd65-6dac-4f0a-9c2c-38128cb871cd
+                subscriptionid: 00000000-aaaa-bbbb-cccc-dddddddddddd
                 managementcertfile: $HOME/.futuregrid/azure-managementCertificate.pem
             default:
                 flavor:
