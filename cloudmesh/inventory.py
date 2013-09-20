@@ -36,10 +36,6 @@ class Inventory:
         collection = "inventory"
         self.db_inventory = get_mongo_db(collection)
 
-
-
-
-
     def get_attribute(self, host_label, attribute):
 
         try:
@@ -68,7 +64,6 @@ class Inventory:
             print cm_kind, id_kind, name
             sys.exit()
         return host
-
 
     def set_attribute(self, host_label, attribute, value, time=None):
         print "SETTING", host_label, attribute, value
@@ -111,7 +106,6 @@ class Inventory:
             print values
             return self.db_inventory.update(query, values, upsert=True)
 
-
     def insert(self, element):
         self.db_inventory.insert(element)
 
@@ -131,7 +125,6 @@ class Inventory:
         :param query:
         '''
         return self.db_inventory.find_one(query)
-
 
     def _generate_globals(self):
 
@@ -177,7 +170,6 @@ class Inventory:
                                         })
                         self.insert(element)
 
-
     def generate(self):
         self.generate_bootspec()
         self._generate_globals()
@@ -216,13 +208,10 @@ class Inventory:
                     self.insert(element)
                 net_id += 1
 
-
-
     def cluster (self, name):
         """returns cluster data in dict"""
         name = "NOT IMPLEMENTED"
         raise RuntimeError("Not Implemented")
-
 
     def info(self):
         '''
@@ -257,13 +246,11 @@ class Inventory:
 
         print
 
-
-
     def hostlist (self, name):
         print "NAME", name
         hosts = self.find ({"cm_cluster": name, 'cm_key': 'range' })[0]['cm_value']
+        #print "===================", self.find_one({"cm_cluster": name, 'cm_key': 'range' })
         return hosts
-
 
     def host (self, index, auth=True):
         cursor = self.find ({"cm_id" : index,
