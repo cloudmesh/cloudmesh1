@@ -2,6 +2,7 @@
 from string import Template
 import inspect
 import os
+import uuid
 
 # from logger import LOGGER
 
@@ -128,6 +129,9 @@ def table_printer(the_dict, header_info=None):
     else:
         return the_dict
 
-
-
-
+def get_unique_name(prefix=""):
+    """Make a UUID without some characters such as '-', '_', ' ', '.'
+    """
+    id = uuid.uuid1()
+    text = str(id).replace("-","")
+    return str(prefix) + text
