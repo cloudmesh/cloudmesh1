@@ -12,9 +12,10 @@ from cloudmesh.inventory import Inventory
 from cloudmesh.util.util import table_printer
 from cloudmesh.util.util import cond_decorator
 import cloudmesh
+from cloudmesh.config.cm_config import cm_config_server
 
 inventory = oldInventory("nosetest")
-
+import hostlist
 
 n_inventory = Inventory()
 n_inventory.clear()
@@ -88,7 +89,7 @@ def display_old_inventory():
 def display_named_resource(cluster, name):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # inventory.refresh()
-
+    print cluster
     clusters = n_inventory.hostlist(cluster)
     server = n_inventory.host(name, auth=False)
 
@@ -125,7 +126,6 @@ def display_cluster(cluster):
 def display_cluster(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # inventory.refresh()
-
     servers = n_inventory.hostlist(cluster)
 
     return render_template('mesh_inventory_cluster.html',
@@ -134,6 +134,69 @@ def display_cluster(cluster):
                            cluster=cluster,
                            services=['openstack', 'eucalyptus', 'hpc'])
 
+
+@inventory_module.route('/inventory/cluster-user')
+@cond_decorator(cloudmesh.with_login, login_required)
+def display_cluster_for_user():
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    # inventory.refresh()
+    user = "gvonlasz"
+    try:
+        host_lists = get_user_host_list(user)
+    except:
+        return render_template('error.html', error = "Could not load the user details")
+    cluster_data = get_servers_for_clusters(host_lists)
+    #servers = n_inventory.hostlist(cluster)
+    return render_template('mesh_inventory_cluster_limited.html',
+                            updated=time_now,
+                            cluster_data = cluster_data,
+                            services=['openstack', 'eucalyptus', 'hpc'])
+
+@inventory_module.route('/inventory/cluster-proj')
+@cond_decorator(cloudmesh.with_login, login_required)
+def display_cluster_for_proj():
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    # inventory.refresh()
+    proj = "fg82fsdfsd"
+    try:
+        host_lists = get_proj_host_list(proj)
+    except:
+        return render_template('error.html', error = "Could not load the project details")
+    cluster_data = get_servers_for_clusters(host_lists)
+
+    #servers = n_inventory.hostlist(cluster)
+    return render_template('mesh_inventory_cluster_limited.html',
+                            updated=time_now,
+                            cluster_data = cluster_data,
+                            services=['openstack', 'eucalyptus', 'hpc'])
+
+def get_user_host_list(user):
+    config = cm_config_server()
+    host_lists = config.get("provisioner.policy.users."+user)
+    return host_lists
+
+def get_proj_host_list(proj):
+    config = cm_config_server()
+    host_lists = config.get("provisioner.policy.projects."+proj)    
+    return host_lists
+   
+def get_servers_for_clusters(host_lists):
+    print "sdbnafjkfsdlfjdklgjdfigjfiofjasdiofjsdiogjfiofgjsdiofsdiafnsdifhsdifjsdiofjsaofjsdiofjsdiofjsiogjsiofjnasdiofjhsiof"
+    cluster_dict = {"i":"india", "s":"sierra", "b":"bravo", "e":"echo", "d":"delta"}                        #move to config at some point
+    return_dict = {}
+    #print hostlist.expand_hostlist()
+    for h in host_lists:
+        print h
+        allowed_servers = hostlist.expand_hostlist(h)
+        index = h.find("[")
+        key = h[0:index]
+        cluster = cluster_dict[key]
+        cluster_servers = n_inventory.hostlist(cluster)
+        l = list(set(cluster_servers) & set(allowed_servers))
+        if cluster in return_dict:
+            return_dict[cluster].extend(l)
+        return_dict[cluster] = l
+    return return_dict
 """
 @inventory_module.route('/inventory/cluster/table/<cluster>/')
 def display_cluster_table(cluster):
