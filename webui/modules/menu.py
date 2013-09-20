@@ -20,7 +20,8 @@ super_sidebar_pages = [
         [
             ["Overview", "/inventory/"],
             ["Table", "/inventory/summary"],
-            ["Images", "/inventory/images"]
+            ["Images", "/inventory/images"],
+            ["Rack Diagram", "/inventory/rack"]
         ],
     ],
     ["Provision",
