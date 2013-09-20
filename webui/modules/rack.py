@@ -1,5 +1,7 @@
 from flask import Blueprint
 from flask import render_template, request, redirect
+from cloudmesh.util.util import path_expand
+from cloudmesh.config.cm_config import cm_config_server
 
 # from cloudmesh.config.cm_rack import cm_keys
 
@@ -41,14 +43,15 @@ def display_rack(name, service=None):
     if service is None:
         service = "temperature"
 
-    diag_dir = path_expand(cm_config_server().get("rack.input"))
-    output_dir = path_expand(cm_config_server().get("rack.diagramms.{0}".format(service)))
+    basename = None
+    # diag_dir = path_expand(cm_config_server().get("rack.input"))
+    # output_dir = path_expand(cm_config_server().get("rack.diagramms.{0}".format(service)))
 
 
     # not so nice cludge, ask for location of statcic instead
 
     # web_pwd = pwd().strip()
-    basename = "/static/{0}/{1}".format(output_dir, name)
+    # basename = "/static/{0}/{1}".format(output_dir, name)
 
     #  /static/racks/diagrams/india
     # .svg
