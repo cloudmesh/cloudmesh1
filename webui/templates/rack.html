@@ -1,0 +1,14 @@
+{% extends "layout_error.html" %}
+{% block title %}Error{% endblock %}
+
+{% block contentbox %}
+  <h2>RACK PAGE TEMPLATE: {{ type }}</h2>
+{% endblock %}
+
+{% block content %}
+  <p>{{ error }}</p>
+  <p></p>
+  <p>{{ msg }}</p>
+{% endblock %}
+
+
