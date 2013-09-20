@@ -67,3 +67,45 @@ class azure(ComputeBaseType):
             res[name]['id'] = name
 
         return res
+
+    def vm_create(self, name=None, location=None):
+        """Create a Window Azure Virtual Machine
+
+        :param name: (optional) the name of a virtual machine to use.
+        :type name: str.
+        :param location: (optional) the name of a
+        location to use for the
+        virtual machine.
+        :type location: str.
+        :returns: azure.servicemanagement.AsynchronousOperationResult
+
+        """
+        self.set_name(name)
+        self.connect_service()
+        self.create_cloud_service(name, location)
+        self.set_image()
+        self.get_media_link(blobname=name)
+
+        os_hd = OSVirtualHardDisk(self.image_name, self.media_link)
+        linux_config = LinuxConfigurationSet(self.get_name(), self.linux_user_id,
+                                             self.linux_user_passwd, True)
+
+        self.set_ssh_keys(linux_config)
+        self.set_network()
+        self.set_service_certs()
+        # can't find certificate right away.
+        sleep(5)
+
+        result = \
+        self.sms.create_virtual_machine_deployment(service_name=self.get_name(), \
+                                                   deployment_name=self.get_name(), \
+                                                   deployment_slot='production',\
+                                                   label=self.get_name(), \
+                                                   role_name=self.get_name(), \
+                                                   system_config=linux_config, \
+                                                   os_virtual_hard_disk=os_hd, \
+                                                   network_config=self.network,\
+                                                   role_size=self.get_role_size())
+
+        self.result = result
+        return result
