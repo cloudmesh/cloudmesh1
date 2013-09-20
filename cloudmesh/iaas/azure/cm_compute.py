@@ -41,6 +41,10 @@ class azure(ComputeBaseType):
         location = self.compute_config.default(label)['location']
         self.set_location(location)
 
+        #Set a default os image name
+        os_image_name = self.compute_config.default(label)['image']
+        self.set_os_image(os_image_name)
+
     def connect(self):
         subscription_id = self.user_credential['subscriptionid']
         certificate_path = self.user_credential['managementcertfile']
@@ -97,7 +101,9 @@ class azure(ComputeBaseType):
 
         """
         self.create_hosted_service()
-        self.set_os_image()
+        #Load the os image information
+        self.load_os_image()
+
         self.get_media_link(blobname=name)
 
         os_hd = OSVirtualHardDisk(self.image_name, self.media_link)
@@ -158,6 +164,25 @@ class azure(ComputeBaseType):
         self.location = name
 
     def set_os_image(self, name):
-        """Set os image for the virtual machine"""
+        """Set os image for the virtual machine
 
+        :param name: the name of the operating system image to use
+        :type name: str
+
+        """
+        self.os_image = name
+
+    def load_os_image(self, name=None):
+        """Load the os image information from Windows Azure
+
+        :param name: the name of the os image to load
+        :type name: str
+
+        """
+        if not name:
+            name = self.os_image
+        self.image = self.sms.get_os_image(name)
+
+    def get_media_link(self, blobname):
+        """"""
 
