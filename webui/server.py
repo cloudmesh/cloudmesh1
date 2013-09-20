@@ -58,7 +58,8 @@ all_modules = ['pbs',
                'mesh',
                'mesh_hpc',
                'users',
-               'register']
+               'register',
+               'rack']
 
 exclude_modules = ['flatpages']
 

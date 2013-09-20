@@ -1,0 +1,43 @@
+rackdiag {
+   rack {
+       //description: Delta 1
+       48U;
+       
+       1: RAID,Inc storage array [4U];
+       5: storage01 [2U];
+       7: storage02 [2U];
+       9: serverm [2U];
+       11: serverp [2U];
+       13: servery [2U];
+       15: servere [2U];
+       17: delta01 [4U] {{d001}}
+       21: delta02 [4U] {{d002}}
+       25: delta03 [4U] {{d003}}
+       29: delta04 [4U] {{d004}}
+       33: delta05 [4U] {{d005}}
+       37: delta06 [4U] {{d006}}
+       41: delta [4U] {{d000}}
+       45: [color=gray];
+       46: rack switch
+       47: network switch
+       48: [color=gray];
+   }
+   rack {
+       //description: Delta 2
+       48U;
+       
+       1: delta07 [4U] {{d007}}
+       5: delta08 [4U] {{d008}}
+       9: delta09 [4U] {{d009}}
+       13: delta10 [4U] {{d010}}
+       17: delta11 [4U] {{d011}}
+       21: delta12 [4U] {{d012}}
+       25: delta13 [4U] {{d013}}
+       29: delta14 [4U] {{d014}}
+       33: delta15 [4U] {{d015}}
+       37: delta16 [4U] {{d016}}
+       41: delta [4U];
+       45: [4U] [color=gray];
+   }
+}
+
