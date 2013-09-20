@@ -213,8 +213,13 @@ class openstack(ComputeBaseType):
         self.user_id = self.user_token['access']['user']['id']
         return self.user_id
 
-
-
+    #not working yet
+    #user role is disalowed to execute this by policy setting
+    #admin role gives uninformative error
+    def get_server_usage(self, serverid):
+        apiurl = "servers/%s/diagnostics" % serverid
+        return self._get(msg=apiurl,kind='admin')
+    
     def _get_service(self, kind="user"):
 
         token = self.user_token
@@ -399,7 +404,7 @@ class openstack(ComputeBaseType):
 
         url = "{0}/{1}".format(url, msg)
 
-
+        print url
         headers = {'X-Auth-Token': token['access']['token']['id']}
         r = requests.get(url, headers=headers, verify=credential['OS_CACERT'])
 
@@ -602,15 +607,15 @@ class openstack(ComputeBaseType):
         return list
     
     # return the security groups for a tenant, in dict format
-    def listSecurityGroup(self, tenant_id):
+    def list_security_groups(self, tenant_id):
         apiurl = "os-security-groups"
         return self._get(apiurl)
     
     # return the security group id given a name.
     # The id is used to identify a group when adding more rules to it
-    def findSecurityGroupIdByName(self, tenant_id, name):
+    def find_security_groupid_by_name(self, tenant_id, name):
         groupid = None
-        secgroups = self.listSecurityGroup(tenant_id)
+        secgroups = self.list_security_groups(tenant_id)
         for secgroup in secgroups["security_groups"]:
             if secgroup["name"] == name:
                 groupid = secgroup["id"]
@@ -619,7 +624,7 @@ class openstack(ComputeBaseType):
     
     # creating a security group, and optionally add rules to it
     # This implementation is based on the rest api
-    def createSecurityGroup(self, tenant_id, secgroup, rules=[]):
+    def create_security_group(self, tenant_id, secgroup, rules=[]):
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         posturl = "%s/os-security-groups" % publicURL
@@ -637,18 +642,18 @@ class openstack(ComputeBaseType):
             groupid = ret["security_group"]["id"]
         # if the security group object has rules included, add them first
         if len(secgroup.rules) > 0:
-            self.addSecurityGroupRules(groupid, secgroup.rules)
+            self.add_security_group_rules(groupid, secgroup.rules)
         
         # only trying to add the additional rules if the empty group has been created successfully    
         if not groupid:
             log.error("Failed to create security group. Error message: '%s'" % ret)
         else:
-            self.addSecurityGroupRules(groupid, rules)
+            self.add_security_group_rules(groupid, rules)
         # return the groupid of the newly created group, or None if failed
         return groupid
     
     # add rules to an existing security group
-    def addSecurityGroupRules(self, groupid, rules):
+    def add_security_group_rules(self, groupid, rules):
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         posturl = "%s/os-security-group-rules" % publicURL

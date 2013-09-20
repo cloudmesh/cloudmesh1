@@ -21,5 +21,5 @@ class Ec2SecurityGroup(object):
         self.description = description
         self.rules = []
         
-    def setRules(self, rules):
+    def set_rules(self, rules):
         self.rules = rules
