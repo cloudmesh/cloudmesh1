@@ -23,6 +23,13 @@ provisioner:
           - s[01-16]
 workflows:
     path: /static/workflows
+rack:
+    input: racks/diag
+    diagrams:
+        temperature:
+            output: racks/temperature
+        service:
+            output: racks/service
 mongo:
     db: cloudmesh
     host: localhost
@@ -57,7 +64,7 @@ mongo_user:
     password: password
     path: ~/.futuregrid/mongodb_user
     collections:
-        cm_password: 
+        cm_password:
             db: cm_user
 keystone:
     sierra:
@@ -82,7 +89,7 @@ ldap:
     projectbase: "ou=Groups,dc=futuregrid,dc=org"
 roles:
     user:
-       users: 
+       users:
        - active
        projects:
        - active
