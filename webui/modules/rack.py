@@ -41,13 +41,20 @@ def display_rack(name, service=None):
     if service is None:
         service = "temperature"
 
+    diag_dir = path_expand(cm_config_server().get("rack.input"))
+    output_dir = path_expand(cm_config_server().get("rack.diagramms.{0}".format(service)))
 
-    # dir = path_expand(cm_config_server().get("rack.path"))
 
     # not so nice cludge, ask for location of statcic instead
 
     # web_pwd = pwd().strip()
-    # basename = "/static/{0}/{1}".format(dir, filename)
+    basename = "/static/{0}/{1}".format(output_dir, name)
+
+    #  /static/racks/diagrams/india
+    # .svg
+    # .png
+    # -legend.png
+
 
     #
     # CREATE YOU IMAGES NOW
@@ -62,5 +69,6 @@ def display_rack(name, service=None):
 
     return render_template('rack.html',
                            service=service,
+                           basename=basename,
                            name=name,
                            rack=rack)
