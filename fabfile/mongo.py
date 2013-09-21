@@ -5,10 +5,12 @@ from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.util.util import path_expand as cm_path_expand
+from cloudmesh.util.util import banner
 from cloudmesh.inventory import Inventory
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.config.ConfigDict import ConfigDict
 
+import yaml
 import sys
 import os.path
 
@@ -31,13 +33,24 @@ def user():
 
     user_config = ConfigDict(filename="~/.futuregrid/me.yaml")
 
+    banner("CONFIG DICT")
     print user_config
 
+
     t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
-    config = t.replace(format="dict", **user_config)
 
-    print config
+    banner("VARIBALES")
+    print '\n'.join(t.variables())
 
+    banner("REPLACE")
+    result = t.replace(kind="dict", values=user_config)
+
+    banner("TEMPLATE")
+    print t
+
+    banner("CONFIG")
+    # print result
+    print yaml.dump(result, default_flow_style=False)
 
 @task
 def inventory():

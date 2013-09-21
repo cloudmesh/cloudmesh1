@@ -94,10 +94,15 @@ def HEADING(txt=None):
     if txt is None:
         txt = inspect.getouterframes(inspect.currentframe())[1][3]
 
+    banner(txt)
+
+
+def banner(txt=None):
     print
     print "#", 70 * '#'
     print "#", txt
     print "#", 70 * '#'
+
 
 
 def table_printer(the_dict, header_info=None):
@@ -133,5 +138,5 @@ def get_unique_name(prefix=""):
     """Make a UUID without some characters such as '-', '_', ' ', '.'
     """
     id = uuid.uuid1()
-    text = str(id).replace("-","")
+    text = str(id).replace("-", "")
     return str(prefix) + text
