@@ -19,11 +19,27 @@ class azure(ComputeBaseType):
 
     def __init__(self, label=DEFAULT_LABEL):
 
-        self.compute_config = cm_config()
-        self.user_credential = self.compute_config.credential(label)
-
+        self.set_vars()
         self.load_default(label)
         self.connect()
+
+    def set_vars(self):
+        """Set default variables for the azure class"""
+
+        #Set a default name from uuid random string
+        name = get_unique_name(self.name_prefix)
+        self.set_name(name)
+
+
+        self.blob_domain = "blob.core.windows.net"
+        self.blob_ext = ""
+        self.container = "os-image"
+        # Use a same name with blob and vm deployment
+        self.blobname = self.name
+        
+        # Linux
+        linux_user_id = 'azureuser'
+        linux_user_passwd = 'azureuser@password'
 
     def load_default(self, label):
         """Load default values and set them to the object
@@ -32,11 +48,13 @@ class azure(ComputeBaseType):
         :type label: str
         
         """
-        
-        #Set a default name from uuid random string
-        name = get_unique_name(self.name_prefix)
-        self.set_name(name)
 
+        self.compute_config = cm_config()
+        self.user_credential = self.compute_config.credential(label)
+
+        #SSH
+        self.thumbprint_path =  self.user_credential['thumbprint']
+       
         #set default location from yaml
         location = self.compute_config.default(label)['location']
         self.set_location(location)
@@ -104,11 +122,12 @@ class azure(ComputeBaseType):
         #Load the os image information
         self.load_os_image()
 
-        self.get_media_link(blobname=name)
+        #Get the url for the blob image file of the vm to be generated
+        self.get_media_url()
 
-        os_hd = OSVirtualHardDisk(self.image_name, self.media_link)
-        linux_config = LinuxConfigurationSet(self.get_name(), self.linux_user_id,
-                                             self.linux_user_passwd, True)
+        os_hd = OSVirtualHardDisk(self.os_image_name, self.media_url)
+        linux_config = LinuxConfigurationSet(self.get_name(), None, None, True)
+        #self.linux_user_id, self.linux_user_passwd, True)
 
         self.set_ssh_keys(linux_config)
         self.set_network()
@@ -170,7 +189,7 @@ class azure(ComputeBaseType):
         :type name: str
 
         """
-        self.os_image = name
+        self.os_image_name = name
 
     def load_os_image(self, name=None):
         """Load the os image information from Windows Azure
@@ -180,9 +199,159 @@ class azure(ComputeBaseType):
 
         """
         if not name:
-            name = self.os_image
-        self.image = self.sms.get_os_image(name)
+            name = self.os_image_name
+        self.os_image = self.sms.get_os_image(name)
 
-    def get_media_link(self, blobname):
-        """"""
+    def get_media_url(self):
+        """Return a media url to create a http url for the blob file
+        
+        :returns: str.
+        
+        """
 
+        storage_account = self.get_storage_account()
+        blob_domain = self.get_blob_domain()
+        blobname = self.get_blobname()
+        container = self.get_container()
+        blob_filename = blobname + self.blob_ext
+        media_url = "http://" + storage_account + "." + blob_domain \
+                + "/" + container + "/" + blob_filename
+        self.media_url = media_url
+                                 
+        return media_url
+
+    def get_storage_account(self):
+        """Return a storage account.
+
+        If there is a selected image to deploy, the same storage account will be
+        used where the image's located.
+        Otherwise, the last storage account of the subscription will be used.
+
+        Note. 
+        The disk's VHD must be in the same account as the VHD of the source
+        image (source account: xxx.blob.core.windows.net, target
+        account: xxx.blob.core.windows.net).
+
+        :returns: str.
+
+        """
+
+        if self.os_image and self.os_image.media_link:
+            account_name = self.get_hostname(self.os_image.media_link)
+        else:
+            account_name = self.get_last_storage_account()
+        
+        self.storage_account = account_name
+        return account_name
+
+    def get_last_storage_account(self):
+        """Return the last storage account name of a subscription id
+ 
+        :returns: str.
+
+        """
+        result = self.sms.list_storage_accounts()
+        for account in result:
+            storage_account = account.service_name
+        return storage_account
+
+    def get_hostname(self, url):
+        """Return a hostname from the url.
+        top hostname indicates a storage account name
+
+        :param url: a media_link
+        :type url: str.
+
+        """
+        try:
+            o = urlparse(url)
+            host = o.hostname.split(".")[0]
+        except:
+            host = None
+
+        return host
+
+    def get_container(self):
+        return self.container
+
+    def get_blobname(self):
+        return self.blobname
+
+    def get_os_name(self):
+        return self.os_image_name
+
+    def get_blob_domain(self):
+        return self.blob_domain
+
+    def set_ssh_keys(self, config):
+        """Configure the login credentials with ssh keys for the virtual machine.
+        This is only for linux OS, not Windows.
+
+        :param config: the return value of LinuxConfigurationSet()
+        :type config: class LinuxConfigurationSet
+
+        """
+
+        # fingerprint captured by 'openssl x509 -in myCert.pem -fingerprint
+        # -noout|cut -d"=" -f2|sed 's/://g'> thumbprint'
+        # (Sample output) C453D10B808245E0730CD023E88C5EB8A785ED6B
+        self.thumbprint = open(self.thumbprint_path, 'r').readline().split('\n')[0]
+        publickey = PublicKey(self.thumbprint, self.authorized_keys)
+        # KeyPair is a SSH kay pair both a public and a private key to be stored
+        # on the virtual machine.
+        # http://msdn.microsoft.com/en-us/library/windowsazure/jj157194.aspx#SSH
+        keypair = KeyPair(self.thumbprint, self.key_pair_path)
+        config.ssh.public_keys.public_keys.append(publickey)
+        config.ssh.key_pairs.key_pairs.append(keypair)
+
+        # Note
+        # Since PKCS#10 X.509 is not fully supported by pycrypto, paramiko can
+        # not use the key generated with PKCS, for example, openssl req ...
+        # To do bypass, ssh-keygen can be used in the following order
+        #
+        # Generate a key pair
+        # 1. ssh-keygen -f myPrivateKey.key (default is rsa and 2048 bits)
+        #
+        # Get certificate from a private key
+        # 2. openssl req -x509 -nodes -days 365 -new -key myPrivateKey.key
+        # -out myCert.pem
+        #
+        # .cer can be generated
+        # openssl x509 -outform der -in public_key_file.pem -out myCert.cer
+        #
+        # .pfx
+        # openssl pkcs12 -in public_key_file.pem -inkey private_key_file.key
+        # -export -out myCert.pfx
+
+    def set_network(self):
+        """Configure network for a virtual machine.
+        End Points (ports) can be opened through this function.
+        For example, opening ssh(22) port will be configured.
+
+        """
+        network = ConfigurationSet()
+        network.configuration_set_type = 'NetworkConfiguration'
+        network.input_endpoints.input_endpoints.append(ConfigurationSetInputEndpoint('ssh', 'tcp', '22', '22'))
+        self.network = network
+
+    def set_service_certs(self):
+        """Add a certificate to cloud (hosted) service.
+        Personal Information Exchange (.pfx) should exist in the azure config
+        directory (e.g. $HOME/.azure/.ssh/myCert.pfx). Python SDK only support
+        .pfx at this time.
+
+        """
+        # command used: 
+        # openssl pkcs12 -in myCert.pem -inkey myPrivateKey.key
+        # -export -out myCert.pfx
+        cert_data_path = self.azure_config + "/.ssh/myCert.pfx"
+        with open(cert_data_path, "rb") as bfile:
+            cert_data = base64.b64encode(bfile.read())
+
+        cert_format = 'pfx'
+        cert_password = ''
+        cert_res = self.sms.add_service_certificate(service_name=self.get_name(),
+                                                    data=cert_data,
+                                                    certificate_format=cert_format,
+                                                    password=cert_password)
+        self.cert_return = cert_res
