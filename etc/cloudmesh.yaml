@@ -3,7 +3,7 @@ cloudmesh:
     active:
     - sierra_openstack_grizzly
     hpc:
-        username: {{ portalname }}
+        username: {{portalname}}
     clouds:
         sierra_openstack_grizzly:
             cm_host: sierra.futuregrid.org
@@ -14,9 +14,9 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
-                OS_PASSWORD: {{ password.sierra_openstack_grizzly }}
-                OS_TENANT_NAME: {{ projects.default }}
-                OS_USERNAME: {{ portalname }}
+                OS_PASSWORD: {{password.sierra_openstack_grizzly}}
+                OS_TENANT_NAME: {{projects.default}}
+                OS_USERNAME: {{portalname}}
                 OS_VERSION: grizzly
             default:
                 flavor: m1.tiny
@@ -27,12 +27,6 @@ cloudmesh:
             cm_type: windowszure
             cm_type_version:
             credentials:
-                OS_AUTH_URL:
-                OS_CACERT:
-                OS_PASSWORD:
-                OS_TENANT_NAME:
-                OS_USERNAME:
-                OS_VERSION:
                 subscriptionid: 00000000-aaaa-bbbb-cccc-dddddddddddd
                 managementcertfile: $HOME/.futuregrid/azure-managementCertificate.pem
             default:
@@ -45,7 +39,7 @@ cloudmesh:
     keys:
         default: {{keys.default}}
         keylist:
-            {% for keyname, key in keys.keylist.iteritems() -%}
+            {% for keyname, key in keys.iteritems() -%}
             {{ keyname }}: {{ key }}
             {% endfor -%}
     prefix: {{ portalname }}
