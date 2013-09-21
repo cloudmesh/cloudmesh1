@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layoutTable.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -22,6 +22,16 @@ $(function() {
     	"aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
     	"iDisplayLength": -1,
     	"sPaginationType": "full_numbers",
+    	"sDom" : 'RC<"clear">lftipr',
+            "oColVis" : {
+                "aiExclude" : [0],
+                "sAlign" : "center"
+            },
+            "fnDrawCallback" : function(o) {
+                var nColVis = $('div.ColVis', o.nTableWrapper)[0];
+                nColVis.align = "right";
+                nColVis.style.paddingBottom = "15px";
+            },
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
     });
@@ -58,16 +68,13 @@ $(function() {
       </thead>
       <tbody>
           {% for flavor in clouds[cloud] %}
-
              <tr>
                <td><input type="radio" name="cloud-{{ cloud_loop.index0 }}-default-flavor" /></td>
                  <!-- for attribute in clouds[cloud][flavor] -->
                  {% for attribute in attributes  %}
                       <td>{{ clouds[cloud][flavor][attribute]  }}</td>
                  {% endfor %}
-
              </tr>
-
           {% endfor %}
       </tbody>
     </table>
