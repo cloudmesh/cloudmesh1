@@ -34,7 +34,8 @@ cloudmesh:
                 OS_USERNAME:
                 OS_VERSION:
                 subscriptionid: 00000000-aaaa-bbbb-cccc-dddddddddddd
-                managementcertfile: $HOME/.futuregrid/azure-managementCertificate.pem
+                managementcertfile: $HOME/.futuregrid/azure_managementCertificate.pem
+                thumbprint: $HOME/.futuregrid/azure_thumbprint
             default:
                 flavor:
                 role_size: ExtraSmall
