@@ -285,6 +285,60 @@ develpers when a change occured so you can update yours:
 * `cloumesh_launcher.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml>`_
 * `cloumesh_bootspec.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml>`_
 
+Generating a cloudmesh.yaml file
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To generate a simple cloudmesh.yaml file, you may want to use place
+the following contents (with modifications applying to you), in a file
+called me.yaml::
+
+    portalname: albert
+
+    profile:
+	firstname: Gregor
+	lastname: von Laszewski
+	e-mail: elfstein@gmail.com
+
+    password:
+      sierra_openstack_grizzly: 1234abcde
+
+    projects:
+      default: fg82
+      active:
+      - fg82
+      - fg101
+      completed:
+      - fg130
+    keys:
+      mykey1: ssh-rsa lkhjasdlkjhaskjhdaslkjdshsalk mykey1
+      mykey2: ssh-rsa jhadkjsahdkjsahdkjsahlkjdhlak mykey2
+
+Than you can print the contents of the yaml file that this input
+generets to the stdout with::
+
+    fab user.yaml
+
+ERROR: not that this prints a Done. msg at the end so if you redirect
+it to ~/.futuregrid/cloudmesh.yaml you need to correct this.
+
+WARNING: If you have a working yaml file, than I suggest you copy this
+first into a backup before overwriting somthing that worked befor ;-)
+
+In future we will have::
+
+   fab user.yaml,safe
+
+which safes this into ~/.futuregrid/cloudmesh.yaml and
+
+   fab user.verify
+
+which will verify if you can log into the clouds with your credentials
+
+WARNING: fab user.verify, and    fab user.yaml,safe are not yet implemented
+
+
+
+
 
 Mongo
 ---------------

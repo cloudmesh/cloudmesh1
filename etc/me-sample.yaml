@@ -1,0 +1,20 @@
+portalname: albert
+
+profile:
+    firstname: Gregor
+    lastname: von Laszewski
+    e-mail: elfstein@gmail.com
+
+password:
+  sierra_openstack_grizzly: 1234abcde
+
+projects:
+  default: fg82
+  active:
+  - fg82
+  - fg101
+  completed:
+  - fg130
+keys:
+  mykey1: ssh-rsa lkhjasdlkjhaskjhdaslkjdshsalk mykey1
+  mykey2: ssh-rsa jhadkjsahdkjsahdkjsahlkjdhlak mykey2
