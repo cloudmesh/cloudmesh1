@@ -8,7 +8,7 @@ import requests
 from requests.auth import AuthBase
 
 from collections import OrderedDict
-from datetime import datetime
+from datetime import datetime, timedelta
 import iso8601
 import sys
 import time
@@ -218,7 +218,7 @@ class openstack(ComputeBaseType):
     #admin role gives uninformative error
     def get_server_usage(self, serverid):
         apiurl = "servers/%s/diagnostics" % serverid
-        return self._get(msg=apiurl,kind='admin')
+        return self._get(msg=apiurl,kind='admin',urltype='adminURL')
     
     def _get_service(self, kind="user"):
 
@@ -249,6 +249,26 @@ class openstack(ComputeBaseType):
             ret = r.json()
         return ret
 
+    def _put(self, posturl, params=None):
+        # print self.config
+        conf = self._get_service_endpoint("compute")
+        headers = {'content-type': 'application/json', 
+                   'X-Auth-Token': '%s' % conf['token']}
+        # print headers
+        r = requests.put(posturl, headers=headers,
+                          data=json.dumps(params),
+                          verify=self.credential['OS_CACERT'])
+        ret = {"msg":"success"}
+        if r.text:
+            ret = r.json()
+        return ret
+    
+    #    
+    def ks_get_extensions(self):
+        pass
+    #    conf = self._get_service_endpoint("identity")
+
+        
     def vm_create(self, name,
                   flavor_name,
                   image_id,
@@ -384,7 +404,7 @@ class openstack(ComputeBaseType):
                 self.delete_public_ip(id)
         return True
 
-    def _get(self, msg, kind="user", service="compute", urltype="publicURL", json=True):
+    def _get(self, msg, kind="user", service="compute", urltype="publicURL", payload=None, json=True):
 
         # kind = "admin", "user"
         # service = "publicURL, adminURL"
@@ -406,7 +426,7 @@ class openstack(ComputeBaseType):
 
         print url
         headers = {'X-Auth-Token': token['access']['token']['id']}
-        r = requests.get(url, headers=headers, verify=credential['OS_CACERT'])
+        r = requests.get(url, headers=headers, verify=credential['OS_CACERT'], params=payload)
 
         print "RRRRR", r
 
@@ -1066,41 +1086,78 @@ class openstack(ComputeBaseType):
             raise ValueError(e.message)
         except TypeError as e:
             raise ValueError(e.message)
-
-    def usage(self, start, end, format='dict'):
+    
+    def usage(self, tenant_id=None, serverid=None, start=None, end=None, format='dict'):
         """ returns the usage information of the tennant"""
+        DEFAULT_STAT_DURATION=30
+        if not tenant_id:
+            computePubUrl = self._get_service_endpoint("compute")["publicURL"]
+            urlsplit = computePubUrl.split("/")
+            tenant_id = urlsplit[len(urlsplit)-1]
 
         # print 70 * "-"
         # print self.cloud.certs.__dict__.get()
         # print 70 * "-"
 
         # tenantid = "member"  # not sure how to get that
-        iso_start = self.parse_isotime(start)
-        iso_end = self.parse_isotime(end)
+        if not end:
+            end = datetime.now()
+            #end = self._now()
+        if not start:
+            start = end - timedelta(days=DEFAULT_STAT_DURATION)
+            #start = start.strftime('%Y-%m-%dT%H-%M-%SZ')
+        #iso_start = self.parse_isotime(start)
+        #iso_end = self.parse_isotime(end)
         # print ">>>>>", iso_start, iso_end
         # info = self.cloud.usage.get(tenantid, iso_start, iso_end)
 
         # print info.__dict__
         # sys.exit()
 
-        (start, rest) = start.split("T")  # ignore time for now
-        (end, rest) = end.split("T")  # ignore time for now
-        result = fgrep(
-            self._nova("usage", "--start", start, "--end", end), "|")
+        #(start, rest) = start.split("T")  # ignore time for now
+        #(end, rest) = end.split("T")  # ignore time for now
 
-        (headline, matrix) = self.table_matrix(result)
-        headline.append("Start")
-        headline.append("End")
-        matrix[0].append(start)
-        matrix[0].append(end)
-
-        if format == 'dict':
-            result = {}
-            for i in range(0, len(headline)):
-                result[headline[i]] = matrix[0][i]
-            return result
+        apiurl = "os-simple-tenant-usage/%s" % tenant_id
+        payload = {'start': start, 'end': end}
+        result = self._get(apiurl,payload=payload)['tenant_usage']
+        instances = result['server_usages']
+        numInstances = len(instances)
+        ramhours = result['total_memory_mb_usage']
+        cpuhours = result['total_hours']
+        vcpuhours = result['total_vcpus_usage']
+        diskhours = result['total_local_gb_usage']
+        # if serverid provided, only return the server specific data
+        ret = None
+        if serverid:
+            for instance in instances:
+                if instance["instance_id"] == serverid:
+                    ret = instance
+                    break
+        # else return tenant usage info
         else:
-            return (headline, matrix[0])
+            ret = {'tenant_id': tenant_id,
+                   'start': start.strftime('%Y-%m-%dT%H-%M-%SZ'),
+                   'end': end.strftime('%Y-%m-%dT%H-%M-%SZ'),
+                   'instances': numInstances,
+                   'cpuHours': cpuhours,
+                   'vcpuHours': vcpuhours,
+                   'ramMBHours': ramhours,
+                   'diskGBHours': diskhours}
+        return ret
+        
+        #(headline, matrix) = self.table_matrix(result)
+        #headline.append("Start")
+        #headline.append("End")
+        #matrix[0].append(start)
+        #matrix[0].append(end)
+
+        #if format == 'dict':
+        #    result = {}
+        #    for i in range(0, len(headline)):
+        #        result[headline[i]] = matrix[0][i]
+        #    return result
+        #else:
+        #    return (headline, matrix[0])
 
     #
     # CLI call of absolute-limits
