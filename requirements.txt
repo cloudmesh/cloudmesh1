@@ -42,4 +42,5 @@ blockdiagcontrib-class
 blockdiagcontrib-cisco
 nwdiag
 seqdiag
+pyzmq
 cmd3
