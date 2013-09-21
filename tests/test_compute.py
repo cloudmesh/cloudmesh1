@@ -422,10 +422,17 @@ class Test:
         #print groupid
         assert groupid is None
     
-    def test_16_server_usage_diagnostics(self):
+    def test_16_usage(self):
+        # by default, expect getting tenant usage info
+        pp.pprint(self.cloud.usage())
         serverid = "e24807f6-c0d1-4cd0-a9d6-14ccd06a5c79"
-        pp.pprint(self.cloud.get_server_usage(serverid))
-        
+        # getting usage data for one specific server
+        pp.pprint(self.cloud.usage(serverid=serverid))
+        pp.pprint(self.cloud.usage(serverid="fakeserverid"))
+
+    def test_17_ks_get_extensions(self):
+        pp.pprint(self.cloud.ks_get_extensions())
+                
     def start(self):
         HEADING()
         image = self.configuration.default(self.name)['image']
