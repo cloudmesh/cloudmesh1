@@ -36,7 +36,7 @@ import novaclient
 from novaclient.openstack.common import strutils
 
 log = LOGGER(__file__)
-    
+
 def donotchange(fn):
     return fn
 
@@ -98,22 +98,22 @@ class openstack(ComputeBaseType):
         user_credential = credential  # HACK to avoid changes in older code
         self.user_credential = user_credential
         self.admin_credential = admin_credential
-        
+
         if user_credential is None:
             try:
                 self.compute_config = cm_config()
                 self.user_credential = self.compute_config.credential(label)
             except:
                 log.error("No user credentail found! Please check your cloudmesh.yaml file.")
-                #sys.exit(1)
-            
+                # sys.exit(1)
+
 
         if admin_credential is None:
             try:
                 self.admin_credential = cm_config_server().get("keystone", label)
             except:
                 log.error("No admin credentail found! Please check your cloudmesh_server.yaml file.")
-            
+
         self.connect()
 
     def clear(self):
@@ -213,13 +213,13 @@ class openstack(ComputeBaseType):
         self.user_id = self.user_token['access']['user']['id']
         return self.user_id
 
-    #not working yet
-    #user role is disalowed to execute this by policy setting
-    #admin role gives uninformative error
+    # not working yet
+    # user role is disalowed to execute this by policy setting
+    # admin role gives uninformative error
     def get_server_usage(self, serverid):
         apiurl = "servers/%s/diagnostics" % serverid
-        return self._get(msg=apiurl,kind='admin',urltype='adminURL')
-    
+        return self._get(msg=apiurl, kind='admin', urltype='adminURL')
+
     def _get_service(self, kind="user"):
 
         token = self.user_token
@@ -235,12 +235,12 @@ class openstack(ComputeBaseType):
         return self._get_service("compute")
 
     def _post(self, posturl, params=None):
-        #print posturl
+        # print posturl
         # print self.config
         conf = self._get_service_endpoint("compute")
         headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
-        #print headers
+        # print headers
         r = requests.post(posturl, headers=headers,
                           data=json.dumps(params),
                           verify=self.user_credential['OS_CACERT'])
@@ -252,7 +252,7 @@ class openstack(ComputeBaseType):
     def _put(self, posturl, params=None):
         # print self.config
         conf = self._get_service_endpoint("compute")
-        headers = {'content-type': 'application/json', 
+        headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
         # print headers
         r = requests.put(posturl, headers=headers,
@@ -262,13 +262,13 @@ class openstack(ComputeBaseType):
         if r.text:
             ret = r.json()
         return ret
-    
-    #    
+
+    #
     def ks_get_extensions(self):
         pass
     #    conf = self._get_service_endpoint("identity")
 
-        
+
     def vm_create(self, name,
                   flavor_name,
                   image_id,
@@ -625,12 +625,12 @@ class openstack(ComputeBaseType):
                 list.append(limit)
 
         return list
-    
+
     # return the security groups for a tenant, in dict format
     def list_security_groups(self, tenant_id):
         apiurl = "os-security-groups"
         return self._get(apiurl)
-    
+
     # return the security group id given a name.
     # The id is used to identify a group when adding more rules to it
     def find_security_groupid_by_name(self, tenant_id, name):
@@ -641,7 +641,7 @@ class openstack(ComputeBaseType):
                 groupid = secgroup["id"]
                 break
         return groupid
-    
+
     # creating a security group, and optionally add rules to it
     # This implementation is based on the rest api
     def create_security_group(self, tenant_id, secgroup, rules=[]):
@@ -653,8 +653,8 @@ class openstack(ComputeBaseType):
                                     "description": secgroup.description
                                     }
                   }
-        #print params
-        ret = self._post(posturl,params)
+        # print params
+        ret = self._post(posturl, params)
         groupid = None
         # upon successful, it returns a dict keyed by 'security_group',
         # otherwide may have failed due to some reason
@@ -663,15 +663,15 @@ class openstack(ComputeBaseType):
         # if the security group object has rules included, add them first
         if len(secgroup.rules) > 0:
             self.add_security_group_rules(groupid, secgroup.rules)
-        
-        # only trying to add the additional rules if the empty group has been created successfully    
+
+        # only trying to add the additional rules if the empty group has been created successfully
         if not groupid:
             log.error("Failed to create security group. Error message: '%s'" % ret)
         else:
             self.add_security_group_rules(groupid, rules)
         # return the groupid of the newly created group, or None if failed
         return groupid
-    
+
     # add rules to an existing security group
     def add_security_group_rules(self, groupid, rules):
         conf = self._get_service_endpoint("compute")
@@ -687,7 +687,7 @@ class openstack(ComputeBaseType):
                                             "parent_group_id": groupid
                                             }
                       }
-            #print params
+            # print params
             ret = self._post(posturl, params)
             if "security_group_rule" not in ret:
                 log.error("Failed to create security group rule(s). Error message: '%s'" % ret)
@@ -1086,14 +1086,14 @@ class openstack(ComputeBaseType):
             raise ValueError(e.message)
         except TypeError as e:
             raise ValueError(e.message)
-    
+
     def usage(self, tenant_id=None, serverid=None, start=None, end=None, format='dict'):
         """ returns the usage information of the tennant"""
-        DEFAULT_STAT_DURATION=30
+        DEFAULT_STAT_DURATION = 30
         if not tenant_id:
             computePubUrl = self._get_service_endpoint("compute")["publicURL"]
             urlsplit = computePubUrl.split("/")
-            tenant_id = urlsplit[len(urlsplit)-1]
+            tenant_id = urlsplit[len(urlsplit) - 1]
 
         # print 70 * "-"
         # print self.cloud.certs.__dict__.get()
@@ -1102,24 +1102,24 @@ class openstack(ComputeBaseType):
         # tenantid = "member"  # not sure how to get that
         if not end:
             end = datetime.now()
-            #end = self._now()
+            # end = self._now()
         if not start:
             start = end - timedelta(days=DEFAULT_STAT_DURATION)
-            #start = start.strftime('%Y-%m-%dT%H-%M-%SZ')
-        #iso_start = self.parse_isotime(start)
-        #iso_end = self.parse_isotime(end)
+            # start = start.strftime('%Y-%m-%dT%H-%M-%SZ')
+        # iso_start = self.parse_isotime(start)
+        # iso_end = self.parse_isotime(end)
         # print ">>>>>", iso_start, iso_end
         # info = self.cloud.usage.get(tenantid, iso_start, iso_end)
 
         # print info.__dict__
         # sys.exit()
 
-        #(start, rest) = start.split("T")  # ignore time for now
-        #(end, rest) = end.split("T")  # ignore time for now
+        # (start, rest) = start.split("T")  # ignore time for now
+        # (end, rest) = end.split("T")  # ignore time for now
 
         apiurl = "os-simple-tenant-usage/%s" % tenant_id
         payload = {'start': start, 'end': end}
-        result = self._get(apiurl,payload=payload)['tenant_usage']
+        result = self._get(apiurl, payload=payload)['tenant_usage']
         instances = result['server_usages']
         numInstances = len(instances)
         ramhours = result['total_memory_mb_usage']
@@ -1144,19 +1144,19 @@ class openstack(ComputeBaseType):
                    'ramMBHours': ramhours,
                    'diskGBHours': diskhours}
         return ret
-        
-        #(headline, matrix) = self.table_matrix(result)
-        #headline.append("Start")
-        #headline.append("End")
-        #matrix[0].append(start)
-        #matrix[0].append(end)
 
-        #if format == 'dict':
+        # (headline, matrix) = self.table_matrix(result)
+        # headline.append("Start")
+        # headline.append("End")
+        # matrix[0].append(start)
+        # matrix[0].append(end)
+
+        # if format == 'dict':
         #    result = {}
         #    for i in range(0, len(headline)):
         #        result[headline[i]] = matrix[0][i]
         #    return result
-        #else:
+        # else:
         #    return (headline, matrix[0])
 
     #
