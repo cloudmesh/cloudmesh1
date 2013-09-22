@@ -29,7 +29,7 @@ def get_mongo_db(mongo_collection):
 
     mongo_host = mongo_config["host"]
     mongo_port = int(mongo_config["port"])
-    
+
     mongo_db_name = mongo_config["collections"][mongo_collection]['db']
 
     client = MongoClient(host=mongo_host,
@@ -293,6 +293,9 @@ class cm_config(ConfigDict):
 
     def profile(self):
         return self['cloudmesh']['profile']
+
+    def username(self):
+        return self['cloudmesh']['hpc']['username']
 
     def userkeys(self, attribute=None, expand=True):
         if attribute is None:
