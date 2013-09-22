@@ -36,10 +36,10 @@ class azure(ComputeBaseType):
         self.container = "os-image"
         # Use a same name with blob and vm deployment
         self.blobname = self.name
-        
-        # Linux
-        linux_user_id = 'azureuser'
-        linux_user_passwd = 'azureuser@password'
+       
+        # account for the vm
+        self.userid = 'azureuser'
+        self.user_passwd = 'azureuser@password'
 
     def load_default(self, label):
         """Load default values and set them to the object
@@ -54,7 +54,10 @@ class azure(ComputeBaseType):
 
         #SSH
         self.thumbprint_path =  self.user_credential['thumbprint']
-       
+
+        #Service certificate & SSH
+        self.service_certificate_path = self.user_credential['servicecertfile']
+      
         #set default location from yaml
         location = self.compute_config.default(label)['location']
         self.set_location(location)
@@ -126,8 +129,8 @@ class azure(ComputeBaseType):
         self.get_media_url()
 
         os_hd = OSVirtualHardDisk(self.os_image_name, self.media_url)
-        linux_config = LinuxConfigurationSet(self.get_name(), None, None, True)
-        #self.linux_user_id, self.linux_user_passwd, True)
+        linux_config = LinuxConfigurationSet(self.get_name(), self.userid, None, True)
+        #self.userid, self.user_passwd, True)
 
         self.set_ssh_keys(linux_config)
         self.set_network()
@@ -296,11 +299,11 @@ class azure(ComputeBaseType):
         # -noout|cut -d"=" -f2|sed 's/://g'> thumbprint'
         # (Sample output) C453D10B808245E0730CD023E88C5EB8A785ED6B
         self.thumbprint = open(self.thumbprint_path, 'r').readline().split('\n')[0]
-        publickey = PublicKey(self.thumbprint, self.authorized_keys)
+        publickey = PublicKey(self.thumbprint, self.get_authorized_keys_path())
         # KeyPair is a SSH kay pair both a public and a private key to be stored
         # on the virtual machine.
         # http://msdn.microsoft.com/en-us/library/windowsazure/jj157194.aspx#SSH
-        keypair = KeyPair(self.thumbprint, self.key_pair_path)
+        keypair = KeyPair(self.thumbprint, self.get_key_pair_path())
         config.ssh.public_keys.public_keys.append(publickey)
         config.ssh.key_pairs.key_pairs.append(keypair)
 
@@ -317,11 +320,14 @@ class azure(ComputeBaseType):
         # -out myCert.pem
         #
         # .cer can be generated
-        # openssl x509 -outform der -in public_key_file.pem -out myCert.cer
+        # openssl x509 -outform der -in myCert.pem -out myCert.cer
         #
         # .pfx
-        # openssl pkcs12 -in public_key_file.pem -inkey private_key_file.key
+        # openssl pkcs12 -in myCert.pem -inkey myPrivateKey.key
         # -export -out myCert.pfx
+
+        # reference:
+        # http://www.sslshopper.com/article-most-common-openssl-commands.html
 
     def set_network(self):
         """Configure network for a virtual machine.
@@ -344,7 +350,8 @@ class azure(ComputeBaseType):
         # command used: 
         # openssl pkcs12 -in myCert.pem -inkey myPrivateKey.key
         # -export -out myCert.pfx
-        cert_data_path = self.azure_config + "/.ssh/myCert.pfx"
+
+        cert_data_path = self.service_certificate_path
         with open(cert_data_path, "rb") as bfile:
             cert_data = base64.b64encode(bfile.read())
 
@@ -355,3 +362,21 @@ class azure(ComputeBaseType):
                                                     certificate_format=cert_format,
                                                     password=cert_password)
         self.cert_return = cert_res
+
+    def set_userid(self, name):
+        self.userid = name
+
+    def set_user_password(self, passwd):
+        self.user_passwd = passwd
+
+    def get_authorized_keys_path(self):
+        self.authorized_keys_path = "/home/" + self.userid + \
+        "/.ssh/authorized_keys"
+
+        return self.authorized_keys_path
+
+
+    def get_key_pair_path(self):
+        path = "/home/" + self.userid + '/.azure/myPrivateKey.key'
+        return path
+
