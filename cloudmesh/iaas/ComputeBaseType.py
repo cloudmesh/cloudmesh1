@@ -64,6 +64,7 @@ class ComputeBaseType:
         """finds the user id of a user and caches it. If a chaced
         value is ther it will use that. If you specify force, it will
         regenerate it"""
+        self.user_id = "unkown"
         raise NotImplementedError()
 
     def dump(self, type="server", with_manager=False):
