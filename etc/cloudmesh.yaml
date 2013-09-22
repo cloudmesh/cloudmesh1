@@ -30,6 +30,7 @@ cloudmesh:
                 subscriptionid: 00000000-aaaa-bbbb-cccc-dddddddddddd
                 managementcertfile: $HOME/.futuregrid/azure_managementCertificate.pem
                 thumbprint: $HOME/.futuregrid/azure_thumbprint
+                servicecertfile: $HOME/.futuregrid/azure_serviceCertificate.pfx
             default:
                 flavor:
                 role_size: ExtraSmall
