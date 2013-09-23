@@ -105,6 +105,46 @@ class cm_user(object):
                 userinfo['clouds'][arec['cm_cloud']] = arec
         return userinfo
 
+    def list_users(self, cloud_names=[]):
+        """Return all user information with a given cloud.
+
+        :param cloud_names: the cloud name
+        :type cloud_names: list
+        
+        """
+        ldap_info = self.db_users.find()
+        usersinfo = {}
+        for ldap_user in ldap_info:
+            # e.g. ldap_user = {u'cm_user_id': u'abc', u'lastname': u'abc'
+            # , u'_id': ObjectId('abc'), u'projects':
+            # {u'active': []}, u'firstname': u'bbc'}
+            portal_id = ldap_user['cm_user_id']
+            usersinfo[portal_id] = {}
+            usersinfo[portal_id]['profile'] = ldap_user
+        cloud_info = self.db_clouds.find({"cm_kind": "users"})
+        for cloud_user in cloud_info:
+            portal_id = cloud_user['name']
+            try:
+                usersinfo[portal_id]
+            except KeyError:
+                print portal_id + " doesn't exist in the ldap, skip to search"
+                continue
+
+            try:
+                usersinfo[portal_id]['clouds']
+            except KeyError:
+                usersinfo[portal_id]['clouds'] = {}
+
+            if cloud_names:
+                if cloud_user['cm_cloud'] in cloud_names:
+                    usersinfo[portal_id]['clouds'][cloud_user['cm_cloud']] = \
+                    cloud_user
+            else:
+                usersinfo[portal_id]['clouds'][cloud_user['cm_cloud']] = \
+                cloud_user
+
+        return usersinfo
+
     def __getitem__(self, key):
         return self.info(key)
 
