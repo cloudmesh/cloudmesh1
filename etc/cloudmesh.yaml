@@ -32,10 +32,9 @@ cloudmesh:
                 thumbprint: $HOME/.futuregrid/azure_thumbprint
                 servicecertfile: $HOME/.futuregrid/azure_serviceCertificate.pfx
             default:
-                flavor:
-                role_size: ExtraSmall
+                flavor: ExtraSmall
                 image: b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-saucy-13_10-amd64-server-20130919-en-us-30GB
-                location: "Central US"
+                location: "East US"
     default: sierra_openstack_grizzly
     index: 1
     keys:
