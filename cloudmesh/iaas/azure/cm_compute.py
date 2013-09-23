@@ -276,7 +276,11 @@ class azure(ComputeBaseType):
             return storage_account
 
     def create_storage_account(self):
-        name = self.get_name()
+        name = self.get_name()[:24].replace("-","")
+        # A name for the storage account that is unique within Windows Azure. 
+        # Storage account names must be between 3 and 24 characters in
+        # length 
+        # and use numbers and lower-case letters only.
         desc = name + "description"
         labe = name + "label"
         loca = self.get_location()
