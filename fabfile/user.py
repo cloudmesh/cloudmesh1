@@ -30,7 +30,7 @@ def yaml():
         print yaml_dump(result, default_flow_style=False)
 
 @task
-def list_users():
+def list():
      user = cm_user()
      list_of_users = user.list_users()
      pprint (list_of_users)
@@ -38,3 +38,9 @@ def list_users():
      print "========================="
      num = len(list_of_users)
      print str(num) + " users listed"
+
+@task
+def info(id):
+    user = cm_user()
+    res = user.info(id)
+    pprint (res)
