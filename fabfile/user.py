@@ -27,3 +27,7 @@ def yaml():
         t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
         result = t.replace(kind="dict", values=user_config)
         print yaml_dump(result, default_flow_style=False)
+
+@task
+def cloud():
+     user = cm_user()
