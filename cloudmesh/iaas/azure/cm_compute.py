@@ -275,7 +275,7 @@ class azure(ComputeBaseType):
             storage_account = self.get_name()
             return storage_account
 
-    def create_storage_accout(self):
+    def create_storage_account(self):
         name = self.get_name()
         desc = name + "description"
         labe = name + "label"
