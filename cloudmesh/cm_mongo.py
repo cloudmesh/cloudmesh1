@@ -118,7 +118,7 @@ class cm_mongo:
             provider = azure
         return provider
 
-    def activate(self, names=None):
+    def activate(self, names=None, force_auth_verify=False):
         '''
         activates a specific host by name. to be queried
         :param names: the array with the names of the clouds in the yaml file to be activated.
@@ -144,11 +144,12 @@ class cm_mongo:
                     # try to see if the credential works
                     # if so, update the 'manager' so the cloud is successfully activated
                     # otherwise log error message and skip this cloud
-                    tryauth = cloud.get_token()
-                    if 'access' in tryauth:
-                        self.clouds[cloud_name].update({'manager': cloud})
-                    else:
-                        log.error("Credential not working, cloud is not activated")
+                    if force_auth_verify:
+                        tryauth = cloud.get_token()
+                        if 'access' in tryauth:
+                            self.clouds[cloud_name].update({'manager': cloud})
+                        else:
+                            log.error("Credential not working, cloud is not activated")
 
             except Exception, e:
                 print "ERROR: can not activate cloud", cloud_name
