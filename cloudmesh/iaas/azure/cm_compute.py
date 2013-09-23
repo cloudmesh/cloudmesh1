@@ -122,6 +122,9 @@ class azure(ComputeBaseType):
         return res
 
     def vm_create(self):
+        self.create_vm()
+
+    def create_vm(self):
         """Create a Window Azure Virtual Machine
 
         :returns: azure.servicemanagement.AsynchronousOperationResult
@@ -157,6 +160,12 @@ class azure(ComputeBaseType):
 
         self.result = result
         return result
+
+    def vm_delete(self):
+        self.delete_vm()
+
+    def delete_vm(self):
+        return
 
     def set_name(self, name):
         """Set a name of the virtual machine to deploy. Unique name is required
