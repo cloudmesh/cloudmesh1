@@ -9,6 +9,8 @@ log = LOGGER(__file__)
 
 vbox_list = VBoxManage.bake("list", "vms", "-l")
 vbox_vminfo = VBoxManage.bake("showvminfo")
+vbox_controlvm = VBoxManage.bake("controlvm")
+
 #
 # LIST
 #
@@ -125,6 +127,43 @@ class virtualbox(ComputeBaseType):
         """gets the state of a named vm"""
         info = get_vminfo(name, filter=["state"])
         return info["state"]
+
+    def vm_create(self, name=None,
+                  flavor_name=None,
+                  image_id=None,
+                  security_groups=None,
+                  key_name=None,
+                  meta=None):
+        """create a virtual machine with the given parameters"""
+        raise NotImplementedError()
+
+    def vm_delete(self, id):
+        """delete the virtual machine with the id"""
+        """ here id is the same as name"""
+        raise NotImplementedError()
+
+    def vm_control(self, name, action):
+        try:
+            state = _get_state(name)
+        except:
+            log.error("can not stop VM. VM with the name {0} does not exist".format(name))
+            return
+        if state == "running":
+            result = vbox_controlvm(name, action)
+            log.info("exit code {0}".format(result))
+        if exitcode:
+            return False
+        else:
+            return True
+
+    def vm_stop(self, name):
+        return self.vm_control(name, "savestate")
+
+    def vm_halt(self, name):
+        return self.vm_control(name, "poweroff")
+
+    def vm_reset(self, name):
+        return self.vm_control(name, "reset")
 
 
 #     print "OOOO"
