@@ -47,23 +47,6 @@ class cm_MongoBase(object):
         element["cm_type"] = self.cm_type
         self.update({"cm_id": username, "cm_type": self.cm_type}, element)
 
-    # put those realy somehwere else
-    def set_default(self, username, d):
-        if type(d) == dict:
-            element = dict (d)
-        else:
-            element = d
-        element["cm_id"] = username
-        element["cm_type"] = self.cm_type
-        # BUG make sure the update is on default dict and not the outer dict.
-        self.update({"cm_id": username, "cm_type": self.cm_type}, {"default": element})
-        raise NotImplementedError()
-
-    # put those realy somehwere else
-    def get_default(selfusername, attribute):
-        """returns the datastructure that s the value of teh attribute"""
-        raise NotImplementedError()
-
     def update(self, query, values=None):
         '''
         executes a query and updates the results from mongo db.

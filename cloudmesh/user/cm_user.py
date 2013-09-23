@@ -39,8 +39,10 @@ class cm_user(object):
         db = client[db_name]
         ldap_collection = 'user'
         cloud_collection = 'cloudmesh'
+        defaults_collection = 'defaults'
         self.db_clouds = db[cloud_collection]
         self.db_users = db[ldap_collection]
+        self.db_defaults = db[defaults_collection]
 
     def connect_userdb(self):
         try:
@@ -103,6 +105,7 @@ class cm_user(object):
                     userinfo['clouds'][arec['cm_cloud']] = arec
             else:
                 userinfo['clouds'][arec['cm_cloud']] = arec
+        userinfo['defaults'] = self.get_defaults(portal_id)
         return userinfo
 
     def __getitem__(self, key):
@@ -122,6 +125,19 @@ class cm_user(object):
             (first_name, last_name) = (ldap_info['firstname'], ldap_info['lastname'])
 
             return (first_name, last_name)
+
+    def set_defaults(self, username, d):
+        """ Sets the defaults for a user """
+        if type(d) is dict:
+            self.db_defaults.update({'cm_user_id': username}, {'$set': {'defaults': d}})
+        else
+            raise TypeError, 'defaults value must be a dict'
+
+    def get_defaults(self, username):
+        """returns the defaults for the user"""
+        user = self.db_defaults.findOne({'cm_user_id': username})
+        return user['defaults'] when 'defaults' in user else {}
+
 
     def set_password(self, username, password, cloud):
         """Store a user password for the cloud
