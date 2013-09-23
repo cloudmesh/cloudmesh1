@@ -5,6 +5,7 @@ cloudmesh.iaas.azure.cm_compute
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
+import time
 
 from azure import *
 from azure.servicemanagement import *
@@ -65,6 +66,11 @@ class azure(ComputeBaseType):
         #Set a default os image name
         os_image_name = self.compute_config.default(label)['image']
         self.set_os_image(os_image_name)
+
+        #Set a default flavor (role size between ExtraSmall, Small, Medium,
+        # Large, ExtraLarge
+        flavor = self.compute_config.default(label)['flavor']
+        self.set_flavor(flavor)
 
     def connect(self):
         subscription_id = self.user_credential['subscriptionid']
@@ -136,7 +142,7 @@ class azure(ComputeBaseType):
         self.set_network()
         self.set_service_certs()
         # can't find certificate right away.
-        sleep(5)
+        time.sleep(5)
 
         result = \
         self.sms.create_virtual_machine_deployment(service_name=self.get_name(), \
@@ -147,7 +153,7 @@ class azure(ComputeBaseType):
                                                    system_config=linux_config, \
                                                    os_virtual_hard_disk=os_hd, \
                                                    network_config=self.network,\
-                                                   role_size=self.get_role_size())
+                                                   role_size=self.get_flavor())
 
         self.result = result
         return result
@@ -161,6 +167,9 @@ class azure(ComputeBaseType):
 
         """
         self.name = name
+
+    def get_name(self):
+        return self.name
 
     def create_hosted_service(self):
         """Create a cloud (hosted) service via create_hosted_service()
@@ -184,6 +193,9 @@ class azure(ComputeBaseType):
 
         """
         self.location = name
+
+    def get_location(self):
+        return self.location
 
     def set_os_image(self, name):
         """Set os image for the virtual machine
@@ -256,7 +268,22 @@ class azure(ComputeBaseType):
         result = self.sms.list_storage_accounts()
         for account in result:
             storage_account = account.service_name
-        return storage_account
+        try:
+            return storage_account
+        except:
+            self.create_storage_account()
+            storage_account = self.get_name()
+            return storage_account
+
+    def create_storage_accout(self):
+        name = self.get_name()
+        desc = name + "description"
+        labe = name + "label"
+        loca = self.get_location()
+        self.sms.create_storage_account(service_name = name,
+                                        description = desc,
+                                        label = labe,
+                                        location = loca)
 
     def get_hostname(self, url):
         """Return a hostname from the url.
@@ -375,8 +402,24 @@ class azure(ComputeBaseType):
 
         return self.authorized_keys_path
 
-
     def get_key_pair_path(self):
         path = "/home/" + self.userid + '/.azure/myPrivateKey.key'
         return path
+
+    def set_flavor(self, size):
+        """Set role size (flavor)
+        
+        :param size: ExtraSmall|Small|Medium|Large|ExtraLarge
+        :type size: str
+        """
+
+        self.flavor = size
+
+    def get_flavor(self):
+        """Return the image size to deploy
+
+        :returns: str.
+        """
+
+        return self.flavor
 
