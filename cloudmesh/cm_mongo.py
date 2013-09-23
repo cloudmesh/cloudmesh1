@@ -47,6 +47,22 @@ class cm_MongoBase(object):
         element["cm_type"] = self.cm_type
         self.update({"cm_id": username, "cm_type": self.cm_type}, element)
 
+    # put those realy somehwere else
+    def set_default(self, username, d):
+        if type(d) == dict:
+            element = dict (d)
+        else:
+            element = d
+        element["cm_id"] = username
+        element["cm_type"] = self.cm_type
+        # BUG make sure the update is on default dict and not the outer dict.
+        self.update({"cm_id": username, "cm_type": self.cm_type}, {"default": element})
+        raise NotImplementedError()
+
+    # put those realy somehwere else
+    def get_default(selfusername, attribute):
+        """returns the datastructure that s the value of teh attribute"""
+        raise NotImplementedError()
 
     def update(self, query, values=None):
         '''
@@ -154,7 +170,7 @@ class cm_mongo:
             except Exception, e:
                 print "ERROR: can not activate cloud", cloud_name
                 print e
-                #print traceback.format_exc()
+                # print traceback.format_exc()
                 # sys.exit()
 
     def refresh(self, names=["all"], types=["all"]):
@@ -194,23 +210,23 @@ class cm_mongo:
         for name in names:
             if 'manager' in self.clouds[name]:
                 cloud = self.clouds[name]['manager']
-    
+
                 for type in types:
-    
+
                     print "Refreshing {0} {1} ->".format(type, name)
-    
+
                     watch.start(name)
                     cloud.refresh(type)
                     result = cloud.get(type)
-    
+
                     # add result to db,
                     watch.stop(name)
                     print 'Refresh time:', watch.get(name)
-    
+
                     watch.start(name)
-    
+
                     self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
-    
+
                     for element in result:
                         id = "{0}-{1}-{2}".format(
                             name, type, result[element]['name']).replace(".", "-")
@@ -221,9 +237,9 @@ class cm_mongo:
                         result[element]['cm_type_version'] = self.clouds[
                             name]['cm_type_version']
                         result[element]['cm_kind'] = type
-    
+
                         self.db_clouds.insert(result[element])
-    
+
                     watch.stop(name)
                     print 'Store time:', watch.get(name)
 
