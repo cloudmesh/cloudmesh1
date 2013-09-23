@@ -398,6 +398,12 @@ class Test:
         self.azure_cloud.refresh("services")
         print json.dumps(self.azure_cloud.dump('services'), indent=4)
 
+    def tes_create_azure_vm(self):
+        HEADING()
+        self.setup_azure()
+        self.azure_cloud.vm_create()
+        print json.dumps(self.azure_cloud.get_deployment(), indent=4)
+
     def test_15_list_secgroup(self):
         tenant_id = '1ae6813a3a6d4cebbeb1912f6d139ad0'
         pp.pprint(self.cloud.list_security_groups(tenant_id))
