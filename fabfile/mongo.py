@@ -23,34 +23,6 @@ def get_pid(command):
             break
     return (pid, line)
 
-@task
-def user():
-    """
-    creates a user from tempalte and a simplified version of the yaml file and
-    puts it into mongo as a profile
-    """
-    print "NOT YET IMPLEMENTED"
-
-    user_config = ConfigDict(filename="~/.futuregrid/me.yaml")
-
-    banner("CONFIG DICT")
-    print user_config
-
-
-    t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
-
-    banner("VARIBALES")
-    print '\n'.join(t.variables())
-
-    banner("REPLACE")
-    result = t.replace(kind="dict", values=user_config)
-
-    banner("TEMPLATE")
-    print t
-
-    banner("CONFIG")
-    # print result
-    print yaml.dump(result, default_flow_style=False)
 
 @task
 def inventory():
@@ -167,6 +139,14 @@ def users():
     c = cm_mongo()
     c.activate()
     c.refresh(types=['users'])
+
+@task
+def cloudusers():
+    '''adds the clud user information from FG to the users mongo info'''
+    # to be done by hyungro
+    user = cm_user()
+    # hyungro
+
 
 
 @task
