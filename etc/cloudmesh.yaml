@@ -21,10 +21,10 @@ cloudmesh:
             default:
                 flavor: m1.tiny
                 image: 4199d988-0833-4497-a473-96fc456fac2f
-        windows_azure:
+        azure:
             cm_host: windowsazure.com
-            cm_label: ios
-            cm_type: windowszure
+            cm_label: waz
+            cm_type: azure
             cm_type_version:
             credentials:
                 subscriptionid: 00000000-aaaa-bbbb-cccc-dddddddddddd
