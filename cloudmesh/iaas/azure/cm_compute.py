@@ -165,7 +165,11 @@ class azure(ComputeBaseType):
         self.delete_vm()
 
     def delete_vm(self):
+        
         return
+
+    def list_cloud_services(self):
+        return self.sms.list_hosted_services()
 
     def set_name(self, name):
         """Set a name of the virtual machine to deploy. Unique name is required
@@ -436,3 +440,16 @@ class azure(ComputeBaseType):
 
         return self.flavor
 
+    def get_status(self, name=None):
+        """Get information about the deployed service by the name
+
+        :param name: the name of the deployment
+        :type name: str
+        :returns: object
+        """
+
+        if not name:
+            name = self.get_name()
+
+        return self.sms.get_deployment_by_name(service_name=name,
+                                               deployment_name=name)
