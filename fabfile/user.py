@@ -34,3 +34,7 @@ def list_users():
      user = cm_user()
      list_of_users = user.list_users()
      pprint (list_of_users)
+     print
+     print "========================="
+     num = len(list_of_users)
+     print str(num) + " users listed"
