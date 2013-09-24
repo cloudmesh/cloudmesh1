@@ -33,12 +33,13 @@ from cloudmesh.util.util import HEADING
 class Test:
 
     # assuming first - is the prefered cloud
-    print os.path.expandvars("$HOME/.futuregrid/cloudmesh.yaml")
-    cloud_label = head(
-        fgrep("-", os.path.expandvars("$HOME/.futuregrid/cloudmesh.yaml")), "-n", "1")
+    cloudmesh_yaml = os.path.expandvars("$HOME/.futuregrid/cloudmesh.yaml")
+    print cloudmesh_yaml
+    cloud_label = head(fgrep("-", cloudmesh_yaml), "-n", "1")
     cloud_label = cloud_label.replace(" - ", "").strip()
 
     def setup(self):
+        """setup the test"""
         print "CONFIG"
         self.configuration = cm_config()
         print "OK"
@@ -67,16 +68,19 @@ class Test:
         """
 
     def setup_azure(self):
+        """setup azure"""
         from cloudmesh.iaas.azure.cm_compute import azure
         self.azure_cloud = azure("windows_azure")
 
     def test_get_extensions(self):
+        """test geting the cloud extensions"""
         HEADING()
 
         print json.dumps(self.cloud.get_extensions(), indent=4)
         assert True
 
     def test_get_users(self):
+        """test to get the users"""
         HEADING()
 
         self.cloud.refresh("users")
@@ -87,6 +91,7 @@ class Test:
         assert True
 
     def test_get_users_all(self):
+        """testto get all information for the users"""
 
         for name in self.configuration.active():
             HEADING()
@@ -97,17 +102,20 @@ class Test:
         assert True
 
     def test_get_limits(self):
+        """test to get the limits"""
         HEADING()
         print json.dumps(self.cloud.get_limits(), indent=4)
         assert True
 
     def test_get_servers(self):
+        """test to get the servers"""
         HEADING()
 
         print json.dumps(self.cloud.get_servers(), indent=4)
         assert True
 
     def test_get_flavors(self):
+        """test to get the flavors"""
         HEADING()
         # self.cloud.refresh('flavors')
         # print json.dumps(self.cloud.dump('flavors'), indent=4)
@@ -116,6 +124,7 @@ class Test:
         assert True
 
     def test_get_images(self):
+        """test to get the images"""
         HEADING()
         self.cloud.refresh('images')
         print json.dumps(self.cloud.dump('images'), indent=4)
@@ -124,15 +133,18 @@ class Test:
         assert True
 
     def test_label(self):
+        """test the label"""
         HEADING()
         print self.cloud_label
         assert self.cloud.label == self.cloud_label
 
     def test_01_limit(self):
+        """different way to get limits"""
         HEADING()
         print json.dumps(self.cloud.limits(), indent=4)
 
     def test_02_info(self):
+        """get some infor about the cloud"""
         HEADING()
         self.cloud.refresh('images')
         print json.dumps(self.cloud.dump('images'), indent=4)
@@ -146,6 +158,7 @@ class Test:
         assert self.cloud.images > 0
 
     def test_03_flavors(self):
+        """get the flavor"""
         HEADING()
         self.cloud.refresh('flavors')
         print json.dumps(self.cloud.dump('flavors'), indent=4)
@@ -155,6 +168,7 @@ class Test:
         assert self.cloud.flavors['m1.tiny']['ram'] == 512
 
     def test_04_start_vm(self):
+        """start a vm"""
         HEADING()
         configuration = cm_config()
         image = configuration.default(self.name)['image']
@@ -170,12 +184,14 @@ class Test:
         assert len(result.keys()) > 0
 
     def test_04_get_public_ip(self):
+        """get an ip"""
         HEADING()
         print "Obtaining public ip......"
         ip = self.cloud.get_public_ip()
         print "this is the ip returned:--->%s<---" % ip
 
     def test04_assign_public_ip(self):
+        """assign an ip"""
         HEADING()
         print "Associate a public ip to an running instance......"
         # serverid = "cc9bd86b-babf-4760-a5cd-c1f28df7506b"
@@ -188,6 +204,7 @@ class Test:
         print self.cloud.assign_public_ip(serverid, ip)
 
     def test04_list_public_ips(self):
+        """list the ips"""
         HEADING()
         print "List all public ips allocated to the current account..."
         ips = self.cloud.list_allocated_ips()
@@ -197,6 +214,7 @@ class Test:
         print ips_id_to_instance
 
     def test04_release_public_ips(self):
+        """release the ips"""
         HEADING()
         print "Release all public ips allocated to the current account but not being used..."
         print "Before releasing, we have..."
@@ -207,6 +225,7 @@ class Test:
         self.test04_list_public_ips()
 
     def test_05_print_vms(self):
+        """print the servers"""
         HEADING()
         self.cloud.refresh('servers')
         print json.dumps(self.cloud.dump('servers'), indent=4)
@@ -214,6 +233,7 @@ class Test:
         assert len(self.cloud.servers) > 0
 
     def test_06_refresh(self):
+        """refresh"""
         HEADING()
         self.cloud.refresh()
         pp.pprint(self.cloud.get(self.name))
@@ -227,6 +247,7 @@ class Test:
     """
 
     def test_07_print_tables(self):
+        """print a table"""
         HEADING()
         self.test_03()
         table = cm_table()
@@ -250,6 +271,7 @@ class Test:
         assert table is not None
 
     def test_07_start_delete_vm(self):
+        """delete a vm"""
         print "no test was being done"
         '''
         name ="%s-%04d" % (self.cloud.credential["OS_USERNAME"], 1)
@@ -271,6 +293,7 @@ class Test:
         # print "--->%s<---" % ret
 
     def test_08_delete_vms_of_user(self):
+        """delete a vm of a specific user"""
         HEADING()
 
         self.cloud.refresh()
@@ -312,6 +335,7 @@ class Test:
         assert vm_ids == []
 
     def test_09_start_two_vms(self):
+        """start two vms"""
         HEADING()
         configuration = cm_config()
         image = configuration.default(self.name)['image']
@@ -335,16 +359,19 @@ class Test:
         assert len(vm_ids) == 2
 
     def test_10_list_user_vms(self):
+        """list user and vms"""
         HEADING()
         list = self.cloud.vms_user(refresh=True)
         pp.pprint(list)
 
     def test_11_refresh_all(self):
+        """refresh all"""
         HEADING()
         self.cloud.refresh()
         self.cloud.info()
 
     def test_12_print_states(self):
+        """print states"""
         HEADING()
         self.cloud.refresh()
         print self.cloud.states
@@ -369,6 +396,7 @@ class Test:
         # print json.dumps(self.cloud.servers, indent=4)
 
     def test_13_meta(self):
+        """test metadata"""
         HEADING()
         self.clean()
         image = self.configuration.default(self.name)['image']
@@ -387,48 +415,54 @@ class Test:
         print meta
 
     def test_14_azure(self):
+        """test azure"""
         HEADING()
         self.setup_azure()
         self.azure_cloud.refresh("images")
         print json.dumps(self.azure_cloud.dump('images'), indent=4)
 
     def test_azure_services(self):
+        """test azure services"""
         HEADING()
         self.setup_azure()
         self.azure_cloud.refresh("services")
         print json.dumps(self.azure_cloud.dump('services'), indent=4)
 
-    def tes_create_azure_vm(self):
+    def test_create_azure_vm(self):
+        """test to create azure vm"""
         HEADING()
         self.setup_azure()
         self.azure_cloud.vm_create()
         print json.dumps(self.azure_cloud.get_deployment(), indent=4)
 
     def test_15_list_secgroup(self):
+        """list security group"""
         tenant_id = '1ae6813a3a6d4cebbeb1912f6d139ad0'
         pp.pprint(self.cloud.list_security_groups(tenant_id))
-    
+
     def test_15_create_secgroup(self):
+        """test security group"""
         tenant_id = '1ae6813a3a6d4cebbeb1912f6d139ad0'
-        #print "defining a group"
+        # print "defining a group"
         mygroup = Ec2SecurityGroup("testSecGroupCM")
-        #print "defining a security rule"
+        # print "defining a security rule"
         rule1 = Ec2SecurityGroup.Rule(8088, 8088)
         rule2 = Ec2SecurityGroup.Rule(9090, 9099, "UDP")
         rules = [rule1, rule2]
-        #print self.cloud.create_security_group(tenant_id, mygroup, rules)
+        # print self.cloud.create_security_group(tenant_id, mygroup, rules)
         mygroup.set_rules(rules)
         print self.cloud.create_security_group(tenant_id, mygroup)
         groupid = self.cloud.find_security_groupid_by_name(tenant_id, mygroup.name)
-        #print groupid
+        # print groupid
         assert groupid is not None
         rule3 = Ec2SecurityGroup.Rule(5000, 5000)
         print self.cloud.add_security_group_rules(groupid, [rule3])
         groupid = self.cloud.find_security_groupid_by_name(tenant_id, "dummy_name_not_exist")
-        #print groupid
+        # print groupid
         assert groupid is None
-    
+
     def test_16_usage(self):
+        """test usage"""
         # by default, expect getting tenant usage info
         pp.pprint(self.cloud.usage())
         serverid = "e24807f6-c0d1-4cd0-a9d6-14ccd06a5c79"
@@ -437,9 +471,11 @@ class Test:
         pp.pprint(self.cloud.usage(serverid="fakeserverid"))
 
     def test_17_ks_get_extensions(self):
+        """test getting extensions"""
         pp.pprint(self.cloud.ks_get_extensions())
-                
+
     def start(self):
+        """start image"""
         HEADING()
         image = self.configuration.default(self.name)['image']
         flavor = self.configuration.default(self.name)['flavor']
@@ -451,11 +487,13 @@ class Test:
         print result
 
     def info(self):
+        """info"""
         HEADING()
         self.cloud.refresh()
         self.cloud.info()
 
     def clean(self):
+        """clean"""
         HEADING()
 
         self.cloud.refresh()
