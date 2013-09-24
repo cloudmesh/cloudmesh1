@@ -15,7 +15,7 @@ from cloudmesh.util.util import get_unique_name
 
 class azure(ComputeBaseType):
 
-    DEFAULT_LABEL = "windows_azure"
+    DEFAULT_LABEL = "azure"
     name_prefix = "cm-"
 
     def __init__(self, label=DEFAULT_LABEL):
@@ -41,6 +41,8 @@ class azure(ComputeBaseType):
         # account for the vm
         self.userid = 'azureuser'
         self.user_passwd = 'azureuser@password'
+
+        self.cloud_services = None
 
     def load_default(self, label):
         """Load default values and set them to the object
@@ -101,11 +103,14 @@ class azure(ComputeBaseType):
 
     # FOR refresh
     def _get_services_dict(self):
-        return self.get_services()
+        return self.list_services()
 
-    def get_services(self):
+    def list_services(self):
         """Return the cloud services available on the account.
-        A launched vm instance is the cloud service.
+        cloud service is required to create a deployment.
+
+        :returns: dict.
+
         """
 
         cloud_services = self.sms.list_hosted_services()
@@ -119,7 +124,30 @@ class azure(ComputeBaseType):
             res[name] = merged_properties
             res[name]['id'] = name
 
+        self.cloud_services = cloud_services
+
         return res
+
+    def list_deployments(self):
+        """Return the deployments available on the account.
+        A launched vm instance is a deployment.
+
+        """
+        #if not self.cloud_services:
+        self.cloud_services = self.sms.list_hosted_services()
+
+        deployments = {}
+        self.cloud_services_props = {}
+        for cloud_service in self.cloud_services:
+            name = cloud_service.service_name
+            props = self.sms.get_hosted_service_properties(name, True)
+            self.cloud_services_props[name] = props
+            for deployment in props.deployments:
+                id = deployment.private_id
+                deployments[id] = deployment.__dict__
+
+        self.deployments = deployments
+        return deployments
 
     def vm_create(self):
         self.create_vm()
