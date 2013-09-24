@@ -39,8 +39,10 @@ class cm_user(object):
         db = client[db_name]
         ldap_collection = 'user'
         cloud_collection = 'cloudmesh'
+        defaults_collection = 'defaults'
         self.db_clouds = db[cloud_collection]
         self.db_users = db[ldap_collection]
+        self.db_defaults = db[defaults_collection]
 
     def connect_userdb(self):
         try:
@@ -103,7 +105,48 @@ class cm_user(object):
                     userinfo['clouds'][arec['cm_cloud']] = arec
             else:
                 userinfo['clouds'][arec['cm_cloud']] = arec
+        userinfo['defaults'] = self.get_defaults(portal_id)
         return userinfo
+
+    def list_users(self, cloud_names=[]):
+        """Return all user information with a given cloud.
+
+        :param cloud_names: the cloud name
+        :type cloud_names: list
+        
+        """
+        ldap_info = self.db_users.find()
+        usersinfo = {}
+        for ldap_user in ldap_info:
+            # e.g. ldap_user = {u'cm_user_id': u'abc', u'lastname': u'abc'
+            # , u'_id': ObjectId('abc'), u'projects':
+            # {u'active': []}, u'firstname': u'bbc'}
+            portal_id = ldap_user['cm_user_id']
+            usersinfo[portal_id] = {}
+            usersinfo[portal_id]['profile'] = ldap_user
+        cloud_info = self.db_clouds.find({"cm_kind": "users"})
+        for cloud_user in cloud_info:
+            portal_id = cloud_user['name']
+            try:
+                usersinfo[portal_id]
+            except KeyError:
+                print portal_id + " doesn't exist in the ldap, skip to search"
+                continue
+
+            try:
+                usersinfo[portal_id]['clouds']
+            except KeyError:
+                usersinfo[portal_id]['clouds'] = {}
+
+            if cloud_names:
+                if cloud_user['cm_cloud'] in cloud_names:
+                    usersinfo[portal_id]['clouds'][cloud_user['cm_cloud']] = \
+                    cloud_user
+            else:
+                usersinfo[portal_id]['clouds'][cloud_user['cm_cloud']] = \
+                cloud_user
+
+        return usersinfo
 
     def __getitem__(self, key):
         return self.info(key)
@@ -122,6 +165,19 @@ class cm_user(object):
             (first_name, last_name) = (ldap_info['firstname'], ldap_info['lastname'])
 
             return (first_name, last_name)
+
+    def set_defaults(self, username, d):
+        """ Sets the defaults for a user """
+        if type(d) is dict:
+            self.db_defaults.update({'cm_user_id': username}, {'$set': {'defaults': d}})
+        else
+            raise TypeError, 'defaults value must be a dict'
+
+    def get_defaults(self, username):
+        """returns the defaults for the user"""
+        user = self.db_defaults.findOne({'cm_user_id': username})
+        return user['defaults'] when 'defaults' in user else {}
+
 
     def set_password(self, username, password, cloud):
         """Store a user password for the cloud
