@@ -189,12 +189,32 @@ class azure(ComputeBaseType):
         self.result = result
         return result
 
-    def vm_delete(self):
-        self.delete_vm()
+    def vm_delete(self, name):
+        self.delete_vm(name)
 
-    def delete_vm(self):
-        
-        return
+    def delete_vm(self, name):
+        """Tear down the virtual machine deployment (instance).
+        It requires several steps to clear up all allocated resources.
+
+        1. delete deployment
+        2. delete cloud (hosted) service
+        3. delete os image
+        4. delete blob storage disk
+
+        :param name: the name of the cloud service
+        :type name: str.
+
+        """
+
+        props = self.sms.get_hosted_service_properties(name, True)
+        for deployment in props.deployments:
+            result = self.sms.delete_deployment(name, deployment.name)
+            time.sleep(5)
+        self.sms.delete_hosted_service(name)
+        result = self.sms.delete_os_image(self.os_image_name)
+        time.sleep(5)
+        self.sms.delete_disk(disk_name)
+        #self.bc.delete_container(self.container_name)
 
     def list_cloud_services(self):
         return self.sms.list_hosted_services()
