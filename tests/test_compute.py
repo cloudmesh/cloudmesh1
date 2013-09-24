@@ -435,6 +435,12 @@ class Test:
         self.azure_cloud.vm_create()
         print json.dumps(self.azure_cloud.get_deployment(), indent=4)
 
+    def test_delete_azure_vm(self, name):
+        """Test to tear down azure vm"""
+        HEADING()
+        self.setup_azure()
+        self.azure_cloud.vm_delete(name)
+
     def test_azure_deployments(self):
         """Test to list deployments"""
         HEADING()
