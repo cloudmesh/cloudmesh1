@@ -176,7 +176,7 @@ class cm_user(object):
     def get_defaults(self, username):
         """returns the defaults for the user"""
         user = self.db_defaults.findOne({'cm_user_id': username})
-        return user['defaults'] when 'defaults' in user else {}
+        return user['defaults'] if 'defaults' in user else {}
 
 
     def set_password(self, username, password, cloud):
