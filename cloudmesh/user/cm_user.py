@@ -170,7 +170,7 @@ class cm_user(object):
         """ Sets the defaults for a user """
         if type(d) is dict:
             self.db_defaults.update({'cm_user_id': username}, {'$set': {'defaults': d}})
-        else
+        else:
             raise TypeError, 'defaults value must be a dict'
 
     def get_defaults(self, username):
