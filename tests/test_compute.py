@@ -435,6 +435,13 @@ class Test:
         self.azure_cloud.vm_create()
         print json.dumps(self.azure_cloud.get_deployment(), indent=4)
 
+    def test_azure_deployments(self):
+        """Test to list deployments"""
+        HEADING()
+        self.setup_azure()
+        res = self.azure_cloud.list_deployments()
+        print json.dumps(res, indent=4)
+
     def test_15_list_secgroup(self):
         """list security group"""
         tenant_id = '1ae6813a3a6d4cebbeb1912f6d139ad0'
