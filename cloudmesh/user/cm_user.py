@@ -175,7 +175,8 @@ class cm_user(object):
 
     def get_defaults(self, username):
         """returns the defaults for the user"""
-        user = self.db_defaults.findOne({'cm_user_id': username})
+        user = self.db_defaults.find({'cm_user_id': username})
+        print "****** ", user['defaults'] if 'defaults' in user else "no defaults for {0}".format(username)
         return user['defaults'] if 'defaults' in user else {}
 
 
