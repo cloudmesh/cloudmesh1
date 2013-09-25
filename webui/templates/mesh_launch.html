@@ -8,13 +8,13 @@
 {% block content %}
 <script type="text/javascript">
 
-/* 
+/*
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#launcher-accordion > div").accordion({ header: "h3", 
-        										collapsible: true, 
-        										heightStyle: "content", 
+        $("#launcher-accordion > div").accordion({ header: "h3",
+        										collapsible: true,
+        										heightStyle: "content",
         										active: false });
     });
 })(jQuery);
@@ -33,7 +33,7 @@ $(function() {
 </script>
 
 <div id="launcher-accordion">
-	
+
     {% for column in columns %}
 
     	<div style="margin-bottom:1em;">
@@ -50,7 +50,7 @@ $(function() {
 		        <tr>
 		        <th> Select </th>
 		        <th> Types </th>
-		        
+
 		        {% for attribute in attribute_list %}
 		        	<th>
 		        		{{attribute}}
@@ -71,27 +71,44 @@ $(function() {
 			        </td>
 		        	{% for a in attribute_list%}
 			        	<td>
-			        		{{recipie[a]}}
-			        	</td>	
-			        	
+			        		{% if a == "description" %}
+				        		GGG {{recipie[a]}}
+				        		<br>
+				        		<table>
+				        		{% for param in recipie['parameters'] %}
+				        		    <tr>
+				        		    <td>
+				        		    {{param}}
+									</td>
+									<td>
+				        		    <input type = "text" name = "key-recipie[name]{{param}}" value = "param[vlue]">
+									</td>
+									</tr>
+				        		{% endfor %}
+				        		</table>
+				        	{% else %}
+				      	       {{recipie[a]}}
+				      	    {% endif %}
+			        	</td>
+
 			        {%endfor%}
 		        </tr>
-		        {% endfor %}	
+		        {% endfor %}
 	            <tr>
 	            	<td></td>
         	        <td valign="top">
         		       <input type="text" value="... specify" name="hostlist">
-        		       
+
         	        </td>
                  	<td valign="top">
         	        	Hosts
         	        </td>
         	        <td valign="top">
         	        	Specify the hosts on which you like to deploy the recipies. <br>
-        	        	<b>username[001-003]</b> = would deploy the recipy on the vms with the names 
-        	        	username001, username002, username003, where username is your purtal username. <br> 
+        	        	<b>username[001-003]</b> = would deploy the recipy on the vms with the names
+        	        	username001, username002, username003, where username is your purtal username. <br>
         	        	<b>prefix[001-003]</b> = use prefix instead, your prefix name defined in the profile is used.
-        	        	 
+
         	        </td>
                 </tr>
 
@@ -101,8 +118,8 @@ $(function() {
 		       </form>
 	        </div>
        </div>
-        
-        
+
+
     {% endfor %}
 </div>
 

@@ -1,27 +1,36 @@
-yaml_version: 1.0
-cm_launcher:        
+yaml_version: 1.2
+launcher:
     recipies:
-        india_openstack_essex:
+        sierra_openstack_grizzly:
             - name: Slurm Cluster
               description: Deploys a Slurm cluster. One of the Vms is the Master,while the others register with the master as worker nodes. The master will be the first node in the list
               types:
                   - vm
                   - baremetal
+              parameters:
+                  - nodes: 1
+                  - other: 5
             - name: Hadoop
               description: Deploys a haddop cluster on the VMs specified
               types:
                   - vm
                   - baremetal
+              parameters:
+                  - nodes: 1
             - name: Ganglia
               description: Deploys a Ganglia service for the vms specified. The ganglia server will be the first node in the list
               types:
                   - vm
                   - baremetal
+              parameters:
+                  hostnames: please fill out
             - name: Nagios
               description: Deploys a Nagios service for the vms specified. The ganglia server will be the first node in the list
               types:
                   - vm
                   - baremetal
+              parameters:
+                  hostnames: please fill out
     columns:
         india_openstack_essex:
             - name
