@@ -23,7 +23,9 @@ class RackForm(Form):
 	select_rack = SelectField()
 	select_service = SelectField()
 	
-	rack_list = [ ('india', 'India Cluster'), 
+	rack_list = [ ('india', 'India Cluster'),
+				  ('echo',  'Echo Cluster'),
+				  ('delta', 'Delta Cluster') 
 				  ('bravo', 'Bravo Cluster'), 
 				  ('all',   'All Clusters')
 				]
