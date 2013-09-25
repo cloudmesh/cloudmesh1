@@ -50,11 +50,12 @@ class Test:
 
         self.cloud = openstack(self.name)
         print "PPPP"
-        """
 
         self.cloud.get_token()
+        pp.pprint(self.cloud.user_token)
         print "LOADED CLOUD"
-
+        
+        """
         # For multiple clouds
         # e.g. india-essex and sierra-grizzly 
         self.names = self.configuration.active()
@@ -175,6 +176,7 @@ class Test:
         print "STARTING IMAGE", image
         meta = {"cmtag":"testing tag from creation via rest api"}
         result = self.cloud.vm_create("fw-test-by-post-003", "2", image, key_name="grizzlykey", meta=meta)
+        #result = self.cloud.vm_create("fw-test-by-post-003", "100", image, meta=meta)
         pp.pprint(result)
         assert len(result.keys()) > 0
 
