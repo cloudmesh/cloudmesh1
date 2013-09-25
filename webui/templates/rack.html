@@ -1,21 +1,45 @@
 {% extends "layout_title.html" %}
-{% block title %}Error{% endblock %}
+{% block title %}Rack Map{% endblock %}
 
 {% block contentbox %}
-  <h2>Rack {{service}} Diagram of the Cluster: {{ name }}</h2>
+{% if flag_home %}
+	<h2>Choose a Rack Cluster and a type of Service:</h2>
+{% else %}
+	<h2>{{ service }} Map of the {{ rack }} Cluster: </h2>
+{% endif %}
 {% endblock %}
 
 {% block content %}
-  <p>{{ error }}</p>
 
- <p>
-  	<img src="/static/racks/{{name}}.svg"/>
-</p>
-<p>
-  	<img src="/static/racks/{{name}}-legend.png"/>
-</p>
+{% if flag_home %}
+	<form action="/inventory/rack/map" method="post">
+		<p>
+			{{ form.select_rack.label }}
+			{{ form.select_rack }}
+		<p>
+		<p>
+			{{ form.select_service.label }}
+			{{ form.select_service }}
+		</p>
+			<input type="reset" value="Reset">
+			<input type="submit" value="Show Map">
+	</form>
+{% else %}
+	{% if True %}
+	<div id="table_div" style="overflow: auto; max-height: 600px">
+		<p> <img src="{{ imageFilename }}"/> </p>
+	</div>
+		<p> <img src="{{ legendFilename }}"/> </p>
+	{% else %}
+		<p>
+	  		<img src="/static/racks/{{name}}.svg"/>
+		</p>
+		<p>
+			<img src="/static/racks/{{name}}-legend.png"/>
+		</p>
+	{% endif %}
+{% endif %}
 
-  <p>{{ msg }}</p>
 {% endblock %}
 
 
