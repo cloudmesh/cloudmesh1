@@ -35,6 +35,17 @@ cloudmesh:
                 flavor: ExtraSmall
                 image: b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-saucy-13_10-amd64-server-20130919-en-us-30GB
                 location: "East US"
+        aws:
+            cm_host: aws.amazon.com
+            cm_label: aws
+            cm_type: amazon
+            credentials:
+                aws_access_key_id = <your_access_key_here>
+                aws_secret_access_key = <your_secret_key_here>
+            default:
+                flavor: m1.small
+                image: ami-fbb2fc92
+                location: us-east-1
     default: sierra_openstack_grizzly
     index: 1
     keys:
