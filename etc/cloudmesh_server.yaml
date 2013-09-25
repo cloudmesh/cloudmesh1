@@ -54,6 +54,8 @@ mongo:
             db: hpc-pbsnodes
         launcher:
             db: launcher
+        pagestatus:
+            db: pagestatus
 mongo_user:
     db: cm_user
     host: localhost

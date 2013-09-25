@@ -15,7 +15,7 @@ from cloudmesh.util.util import get_unique_name
 
 class azure(ComputeBaseType):
 
-    DEFAULT_LABEL = "windows_azure"
+    DEFAULT_LABEL = "azure"
     name_prefix = "cm-"
 
     def __init__(self, label=DEFAULT_LABEL):
@@ -41,6 +41,8 @@ class azure(ComputeBaseType):
         # account for the vm
         self.userid = 'azureuser'
         self.user_passwd = 'azureuser@password'
+
+        self.cloud_services = None
 
     def load_default(self, label):
         """Load default values and set them to the object
@@ -101,11 +103,14 @@ class azure(ComputeBaseType):
 
     # FOR refresh
     def _get_services_dict(self):
-        return self.get_services()
+        return self.list_services()
 
-    def get_services(self):
+    def list_services(self):
         """Return the cloud services available on the account.
-        A launched vm instance is the cloud service.
+        cloud service is required to create a deployment.
+
+        :returns: dict.
+
         """
 
         cloud_services = self.sms.list_hosted_services()
@@ -119,7 +124,30 @@ class azure(ComputeBaseType):
             res[name] = merged_properties
             res[name]['id'] = name
 
+        self.cloud_services = cloud_services
+
         return res
+
+    def list_deployments(self):
+        """Return the deployments available on the account.
+        A launched vm instance is a deployment.
+
+        """
+        #if not self.cloud_services:
+        self.cloud_services = self.sms.list_hosted_services()
+
+        deployments = {}
+        self.cloud_services_props = {}
+        for cloud_service in self.cloud_services:
+            name = cloud_service.service_name
+            props = self.sms.get_hosted_service_properties(name, True)
+            self.cloud_services_props[name] = props
+            for deployment in props.deployments:
+                id = deployment.private_id
+                deployments[id] = deployment.__dict__
+
+        self.deployments = deployments
+        return deployments
 
     def vm_create(self):
         self.create_vm()
@@ -161,11 +189,35 @@ class azure(ComputeBaseType):
         self.result = result
         return result
 
-    def vm_delete(self):
-        self.delete_vm()
+    def vm_delete(self, name):
+        self.delete_vm(name)
 
-    def delete_vm(self):
-        return
+    def delete_vm(self, name):
+        """Tear down the virtual machine deployment (instance).
+        It requires several steps to clear up all allocated resources.
+
+        1. delete deployment
+        2. delete cloud (hosted) service
+        3. delete os image
+        4. delete blob storage disk
+
+        :param name: the name of the cloud service
+        :type name: str.
+
+        """
+
+        props = self.sms.get_hosted_service_properties(name, True)
+        for deployment in props.deployments:
+            result = self.sms.delete_deployment(name, deployment.name)
+            time.sleep(5)
+        self.sms.delete_hosted_service(name)
+        result = self.sms.delete_os_image(self.os_image_name)
+        time.sleep(5)
+        self.sms.delete_disk(disk_name)
+        #self.bc.delete_container(self.container_name)
+
+    def list_cloud_services(self):
+        return self.sms.list_hosted_services()
 
     def set_name(self, name):
         """Set a name of the virtual machine to deploy. Unique name is required
@@ -436,3 +488,16 @@ class azure(ComputeBaseType):
 
         return self.flavor
 
+    def get_status(self, name=None):
+        """Get information about the deployed service by the name
+
+        :param name: the name of the deployment
+        :type name: str
+        :returns: object
+        """
+
+        if not name:
+            name = self.get_name()
+
+        return self.sms.get_deployment_by_name(service_name=name,
+                                               deployment_name=name)

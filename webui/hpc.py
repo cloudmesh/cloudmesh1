@@ -375,22 +375,22 @@ def load_user(id):
 
 class User(UserMixin):
 
-     def __init__(self, name, id, roles=['user'], active=True):
-          self.name = name
-          self.id = id
-          self.active = active
-          self.roles = roles
+    def __init__(self, name, id, roles=['user'], active=True):
+        self.name = name
+        self.id = id
+        self.active = active
+        self.roles = roles
 
-     def is_active(self):
+    def is_active(self):
         return True
 
-     def is_anonymous(self):
+    def is_anonymous(self):
         return False
 
-     def get_id(self):
+    def get_id(self):
         return unicode(self.id)
 
-     def is_authenticated(self):
+    def is_authenticated(self):
         return True
 
 class LoginForm(Form):
