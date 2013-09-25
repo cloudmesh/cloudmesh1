@@ -25,7 +25,7 @@ class RackForm(Form):
 	
 	rack_list = [ ('india', 'India Cluster'),
 				  ('echo',  'Echo Cluster'),
-				  ('delta', 'Delta Cluster') 
+				  ('delta', 'Delta Cluster'), 
 				  ('bravo', 'Bravo Cluster'), 
 				  ('all',   'All Clusters')
 				]
@@ -107,7 +107,8 @@ def display_rack_map():
 	
 	return render_template( "rack.html", 
 							flag_home=False, 
-							rack=rack, 
+							rack=rack,
+							imageWidth=300 * map_class.getRackCount(), 
 							service=service,
 							imageFilename=abs_web_path_image,
 							legendFilename=abs_web_path_legend
