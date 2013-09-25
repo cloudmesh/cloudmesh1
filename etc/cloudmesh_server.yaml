@@ -1,4 +1,4 @@
-yaml_version: 1.0
+yaml_version: 1.2
 webui:
     host: 127.0.0.1
     port: 5000
@@ -26,10 +26,8 @@ workflows:
 rack:
     input: racks/diag
     diagrams:
-        temperature:
-            output: racks/temperature
-        service:
-            output: racks/service
+        temperature: racks/temperature
+        service: racks/service
 mongo:
     db: cloudmesh
     host: localhost
