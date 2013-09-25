@@ -26,10 +26,8 @@ workflows:
 rack:
     input: racks/diag
     diagrams:
-        temperature:
-            output: racks/temperature
-        service:
-            output: racks/service
+        temperature: racks/temperature
+        service: racks/service
 mongo:
     db: cloudmesh
     host: localhost
