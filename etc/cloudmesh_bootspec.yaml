@@ -1,4 +1,4 @@
-yaml_version: 1.1
+yaml_version: 1.2
 bootspec:
     ubuntu-2013-07-a:
         osimage: '/backup/snapshot/india_openstack-2013-07-01.squashfs'
