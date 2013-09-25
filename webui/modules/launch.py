@@ -3,7 +3,7 @@ from flask import render_template, request, redirect
 # from cloudmesh.provisioner.cm_launcher import cm_launcher
 from cloudmesh.util.util import cond_decorator
 from flask.ext.login import login_required
-from cloudmesh.config.cm_config import cm_config_launcher
+from cloudmesh.config.ConfigDict import ConfigDict as cm_config_launcher
 from cloudmesh.launcher.queue.tasks import task_launch
 from cloudmesh.launcher.cm_launcher_db import cm_launcher_db
 import cloudmesh
@@ -15,9 +15,9 @@ launch_module = Blueprint('launch  _module', __name__)
 #
 
 # list of recipies which we need to get from cm_launcher.yaml
-launcher_config = cm_config_launcher()
-launch_recipies = launcher_config.get("recipies")
-columns = launcher_config.get("columns")
+launcher_config = cm_config_launcher(filename = "~/.futuregrid/cloudmesh_launcher.yaml")
+launch_recipies = launcher_config.get("cm_launcher.recipies")
+columns = launcher_config.get("cm_launcher.columns")
 
 @launch_module.route('/cm/launch/<host>/<recipie>')
 @cond_decorator(cloudmesh.with_login, login_required)
