@@ -3,7 +3,7 @@ cloudmesh:
     active:
     - sierra_openstack_grizzly
     hpc:
-        username: {{ portalname }}
+        username: {{portalname}}
     clouds:
         sierra_openstack_grizzly:
             cm_host: sierra.futuregrid.org
@@ -14,38 +14,33 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
-                OS_PASSWORD: {{ password.sierra_openstack_grizzly }}
-                OS_TENANT_NAME: {{ projects.default }}
-                OS_USERNAME: {{ portalname }}
+                OS_PASSWORD: {{password.sierra_openstack_grizzly}}
+                OS_TENANT_NAME: {{projects.default}}
+                OS_USERNAME: {{portalname}}
                 OS_VERSION: grizzly
             default:
                 flavor: m1.tiny
                 image: 4199d988-0833-4497-a473-96fc456fac2f
-        windows_azure:
+        azure:
             cm_host: windowsazure.com
-            cm_label: ios
-            cm_type: windowszure
+            cm_label: waz
+            cm_type: azure
             cm_type_version:
             credentials:
-                OS_AUTH_URL:
-                OS_CACERT:
-                OS_PASSWORD:
-                OS_TENANT_NAME:
-                OS_USERNAME:
-                OS_VERSION:
                 subscriptionid: 00000000-aaaa-bbbb-cccc-dddddddddddd
-                managementcertfile: $HOME/.futuregrid/azure-managementCertificate.pem
+                managementcertfile: $HOME/.futuregrid/azure_managementCertificate.pem
+                thumbprint: $HOME/.futuregrid/azure_thumbprint
+                servicecertfile: $HOME/.futuregrid/azure_serviceCertificate.pfx
             default:
-                flavor:
-                role_size: ExtraSmall
+                flavor: ExtraSmall
                 image: b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-saucy-13_10-amd64-server-20130919-en-us-30GB
-                location: "Central US"
+                location: "East US"
     default: sierra_openstack_grizzly
     index: 1
     keys:
         default: {{keys.default}}
         keylist:
-            {% for keyname, key in keys.keylist.iteritems() -%}
+            {% for keyname, key in keys.iteritems() -%}
             {{ keyname }}: {{ key }}
             {% endfor -%}
     prefix: {{ portalname }}

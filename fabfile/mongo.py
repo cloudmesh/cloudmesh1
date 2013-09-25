@@ -5,8 +5,12 @@ from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.util.util import path_expand as cm_path_expand
+from cloudmesh.util.util import banner
 from cloudmesh.inventory import Inventory
+from cloudmesh.user.cm_template import cm_template
+from cloudmesh.config.ConfigDict import ConfigDict
 
+import yaml
 import sys
 import os.path
 
@@ -135,6 +139,14 @@ def users():
     c = cm_mongo()
     c.activate()
     c.refresh(types=['users'])
+
+@task
+def cloudusers():
+    '''adds the clud user information from FG to the users mongo info'''
+    # to be done by hyungro
+    user = cm_user()
+    # hyungro
+
 
 
 @task

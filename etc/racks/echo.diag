@@ -1,0 +1,32 @@
+rackdiag {
+   rack {
+       //description: Echo
+       48U;
+       
+       1: [4U] [color=gray];
+       5: gravel01 [2U] {{g001}}
+       7: gravel02 [2U] {{g002}}
+       9: gravel03 [2U] {{g003}}
+       11: echo01 {{e001}}
+       12: echo02 {{e002}}
+       13: echo03 {{e003}}
+       14: echo04 {{e004}}
+       15: echo05 {{e005}}
+       16: echo06 {{e006}}
+       17: echo07 {{e007}}
+       18: echo08 {{e008}}
+       19: echo09 {{e009}}
+       20: echo10 {{e010}}
+       21: echo11 {{e011}}
+       22: echo12 {{e012}}
+       23: echo13 {{e013}}
+       24: echo14 {{e014}}
+       25: echo15 {{e015}}
+       26: echo16 {{e016}}
+       27: [19U] [color=gray];
+       46: rack switch
+       47: network switch
+       48: [color=gray];
+   }
+}
+

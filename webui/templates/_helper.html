@@ -3,17 +3,20 @@ image_button("041_charts", "/table/")
 #}
 
 {% macro cm_image_input(align, type) %}
-      <input align={{ align }} type="image" 
-	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}" 
+      <input align={{ align }} type="image"
+	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
 	     width="16" height="16">
 {% endmacro %}
 
 
 {% macro image_button(align, type, actionpath) %}
-      <input align={{ align }} type="image" 
-	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}" 
-	     onclick="document.location.href='{{ actionpath }}';"
+<!-- modal for progress -->
+      <input align={{ align }} type="image"
+	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
+	     onclick="refresh('{{ actionpath }}')"
 	     width="16" height="16">
+
+
 {% endmacro %}
 
 {% macro flexible_menu(pagelist) -%}
@@ -30,9 +33,10 @@ image_button("041_charts", "/table/")
    {% for item in itemlist %}
 	<li> <a href="{{ item[1] }}"> &nbsp;&nbsp;&nbsp;&nbsp;{{ item[0] }}</a></li>
    {% endfor %}
-   
+
 
 {%- endmacro %}
+
 
 
 

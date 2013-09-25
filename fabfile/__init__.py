@@ -12,3 +12,4 @@ import nose
 import mongo
 import iptable
 import tunnel
+import user

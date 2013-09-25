@@ -16,7 +16,7 @@ log = LOGGER(__file__)
 
 try:
    import cloudmesh
-   print "Version", cloudmesh.__version__
+   # print "Version", cloudmesh.__version__
    # TODO: ful version does not work whne installed via setup.py install
    # thus we simply do not print for now.
    # print "Full Version", cloudmesh.__full_version__

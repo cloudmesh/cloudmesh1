@@ -29,8 +29,7 @@ def display_mongo_qstat_refresh(host=None):
     if host is None:
         hosts = ["india.futuregrid.org",
                  "sierra.futuregrid.org",
-                 "hotel.futuregrid.org",
-                 "alamo.futuregrid.org"]
+                 "hotel.futuregrid.org"]
     else:
         hosts = [host]
     error = ""
@@ -63,8 +62,7 @@ def display_mongo_qstat_new():
     pbs = pbs_mongo()
     hosts = ["india.futuregrid.org",
              "sierra.futuregrid.org",
-             "hotel.futuregrid.org",
-             "alamo.futuregrid.org"]
+             "hotel.futuregrid.org"]
 #    for host in hosts:
 #        pbs.activate(host,user)
 

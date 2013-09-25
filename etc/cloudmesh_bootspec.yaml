@@ -1,48 +1,50 @@
-ubuntu-2013-07-a:
-    osimage: '/backup/snapshot/india_openstack-2013-07-01.squashfs'
-    os: 'ubuntu12'
-    extension: 'squashfs'
-    partition_scheme: 'gpt'
-    fstab_append: False
-    method: 'put'
-    boot:
-       kernel_type: kernel
-       bootloader: 'grub2'
-    rootpass: False
-    disk:
-       device: '/dev/sda'
-       partitions:
-           swap:
-               size: '2'
-           system:
-               size: '100'
-               mount: '/'
-               type: 'ext4'
-           data:
-               size: '-1'
-               mount: '/var/lib/nova'
-               type: 'xfs'
-ubuntu-2013-07-b:
-    osimage: '/backup/snapshot/india_openstack-2013-07-01.squashfs'
-    os: 'ubuntu12'
-    extension: 'squashfs'
-    partition_scheme: 'gpt'
-    fstab_append: False
-    method: 'put'
-    boot:
-       kernel_type: kernel
-       bootloader: 'grub2'
-    rootpass: False
-    disk:
-       device: '/dev/sda'
-       partitions:
-           swap:
-               size: '2'
-           system:
-               size: '100'
-               mount: '/'
-               type: 'ext4'
-           data:
-               size: '-1'
-               mount: '/var/lib/nova'
-               type: 'xfs'
+yaml_version: 1.1
+bootspec:
+    ubuntu-2013-07-a:
+        osimage: '/backup/snapshot/india_openstack-2013-07-01.squashfs'
+        os: 'ubuntu12'
+        extension: 'squashfs'
+        partition_scheme: 'gpt'
+        fstab_append: False
+        method: 'put'
+        boot:
+           kernel_type: kernel
+           bootloader: 'grub2'
+        rootpass: False
+        disk:
+           device: '/dev/sda'
+           partitions:
+               swap:
+                   size: '2'
+               system:
+                   size: '100'
+                   mount: '/'
+                   type: 'ext4'
+               data:
+                   size: '-1'
+                   mount: '/var/lib/nova'
+                   type: 'xfs'
+    ubuntu-2013-07-b:
+        osimage: '/backup/snapshot/india_openstack-2013-07-01.squashfs'
+        os: 'ubuntu12'
+        extension: 'squashfs'
+        partition_scheme: 'gpt'
+        fstab_append: False
+        method: 'put'
+        boot:
+           kernel_type: kernel
+           bootloader: 'grub2'
+        rootpass: False
+        disk:
+           device: '/dev/sda'
+           partitions:
+               swap:
+                   size: '2'
+               system:
+                   size: '100'
+                   mount: '/'
+                   type: 'ext4'
+               data:
+                   size: '-1'
+                   mount: '/var/lib/nova'
+                   type: 'xfs'

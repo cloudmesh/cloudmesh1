@@ -20,7 +20,10 @@ super_sidebar_pages = [
         [
             ["Overview", "/inventory/"],
             ["Table", "/inventory/summary"],
-            ["Images", "/inventory/images"]
+            ["Images", "/inventory/images"],
+            ["Rack Diagram", "/inventory/rack"],
+            ["- India (T)", "/inventory/rack/india"],
+            ["- India (S)", "/inventory/rack/india/service"]
         ],
     ],
     ["Provision",
