@@ -1,4 +1,4 @@
-yaml_version: 1.0
+yaml_version: 1.2
 launcher:
     recipies:
         sierra_openstack_grizzly:

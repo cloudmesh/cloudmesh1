@@ -1,4 +1,4 @@
-yaml_version: 1.0
+yaml_version: 1.2
 cloudmesh:
     active:
     - sierra_openstack_grizzly
