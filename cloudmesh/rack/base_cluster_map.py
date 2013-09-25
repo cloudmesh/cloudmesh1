@@ -90,6 +90,9 @@ class BaseClusterMap:
 	# btw, this file can be deleted after use according to the flag_delete_temp_diag
 	filename_diag_temp = ""
 
+	# total number of racks
+	rack_count = 1
+
 	#
 	# flag of delete filename_diag_temp after used
 	#
@@ -186,6 +189,11 @@ class BaseClusterMap:
 		print "clusters name list: ", self.cluster_name_list
 
 
+	# get the total racks of cluster
+	def getRackCount(self):
+		return self.rack_count
+
+
 	# read default_rack_yaml configuration
 	def readRackConfig(self, name, dir_yaml, dir_diag):
 		rack_config = ConfigDict(filename=dir_yaml + "/" + self.default_rack_yaml)
@@ -197,8 +205,21 @@ class BaseClusterMap:
 		print "rack name is: ", self.cluster_name
 		
 		# diag filename
-		self.filename_diag = dir_diag + "/" + self.dict_rack_config["cluster"][self.cluster_name]
+		self.filename_diag = dir_diag + "/" + self.dict_rack_config["cluster"][self.cluster_name]["diag"]
+		self.rack_count = self.dict_rack_config["cluster"][self.cluster_name]["count"]
 		self.filename_diag_temp = self.filename_diag + ".temp"
+		
+		# additional process for 'all'
+		# its count equals the sum of all other cluster exclude 'all' and 'unknown'
+		if name == "all":
+			raw_set = set(self.dict_rack_config["cluster"].keys())
+			exclude_set = set(["all", "unknown"])
+			all_set = raw_set - exclude_set
+			self.rack_count = 0
+			for rack in all_set:
+				self.rack_count += self.dict_rack_config["cluster"][rack]["count"]
+			
+		print "total rack count is: {0} = {1}".format(name, self.rack_count)
 
 
 	# set the type of rack image
@@ -445,8 +466,8 @@ class BaseClusterMap:
 
 
 if __name__ == "__main__":
-	mytest = BaseClusterMap("india")
+	mytest = BaseClusterMap("all")
 	print "=" * 60
-	print mytest.dict_servers
+	#print mytest.dict_servers
 
 

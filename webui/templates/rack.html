@@ -27,9 +27,9 @@
 {% else %}
 	{% if True %}
 	<div id="table_div" style="overflow: auto; max-height: 600px">
-		<p> <img src="{{ imageFilename }}"/> </p>
+		<p> <img src="{{ imageFilename }}" width="{{imageWidth}}px" style="display:block; margin-left: auto; margin-right: auto"/> </p>
 	</div>
-		<p> <img src="{{ legendFilename }}"/> </p>
+		<p> <img src="{{ legendFilename }}" width="1000px" style="display:block; margin-left: auto; margin-right: auto"/> </p>
 	{% else %}
 		<p>
 	  		<img src="/static/racks/{{name}}.svg"/>
