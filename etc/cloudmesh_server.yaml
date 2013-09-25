@@ -1,4 +1,4 @@
-yaml_version: 1.0
+yaml_version: 1.2
 webui:
     host: 127.0.0.1
     port: 5000
