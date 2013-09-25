@@ -1,6 +1,7 @@
 from cloudmesh.config.cm_config import cm_config_server
-from cloudmesh.config.cm_config import cm_config as UserLoad
+from cloudmesh.config.cm_config import cm_config as load
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.pbs.pbs import PBS
 
 from pbr import version
 

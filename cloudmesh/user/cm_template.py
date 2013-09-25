@@ -2,6 +2,7 @@ import sys
 import yaml
 from jinja2 import Template
 from cloudmesh.util.util import path_expand
+from cloudmesh.util.util import banner
 
 class cm_template():
 
@@ -27,17 +28,23 @@ class cm_template():
         parsed_content = env.parse(self.content)
         print meta.find_undeclared_variables(parsed_content)
 
-    def replace(self, format="text", **d):
+    def replace(self, kind='text', values=None):
+
         try:
             template = Template(self.content)
-            if format == "text":
-                self.result = template.render(d)
-            elif format == "dict":
-                self.result = yaml.safe_load(template.render(d))
+            if kind == "text":
+                self.result = template.render(**values)
+            elif kind == "dict":
+                self.result = yaml.safe_load(template.render(**values))
+            else:
+                log.error("kind='dict' or 'text' parameter missing in template replace")
+                raise RuntimeError
             return self.result
         except:
+            banner ("ERROR")
             print sys.exc_info()
-            return self.content
+            # return self.content
+            return None
 
 if __name__ == "__main__":
     d = {
@@ -48,7 +55,7 @@ if __name__ == "__main__":
     t = cm_template(filename)
     print t.variables()
 
-    print t.replace(d, format="dict")
+    print t.replace(values=d, format="dict")
 
 #    if not t.complete():
 #       print "ERROR: undefined variables"

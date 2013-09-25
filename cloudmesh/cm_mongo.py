@@ -47,7 +47,6 @@ class cm_MongoBase(object):
         element["cm_type"] = self.cm_type
         self.update({"cm_id": username, "cm_type": self.cm_type}, element)
 
-
     def update(self, query, values=None):
         '''
         executes a query and updates the results from mongo db.
@@ -56,8 +55,6 @@ class cm_MongoBase(object):
         if values is None:
             return self.db_mongo.update(query, upsert=True)
         else:
-            print query
-            print values
             return self.db_mongo.update(query, values, upsert=True)
 
 
@@ -118,7 +115,7 @@ class cm_mongo:
             provider = azure
         return provider
 
-    def activate(self, names=None):
+    def activate(self, names=None, force_auth_verify=False):
         '''
         activates a specific host by name. to be queried
         :param names: the array with the names of the clouds in the yaml file to be activated.
@@ -144,16 +141,17 @@ class cm_mongo:
                     # try to see if the credential works
                     # if so, update the 'manager' so the cloud is successfully activated
                     # otherwise log error message and skip this cloud
-                    tryauth = cloud.get_token()
-                    if 'access' in tryauth:
-                        self.clouds[cloud_name].update({'manager': cloud})
-                    else:
-                        log.error("Credential not working, cloud is not activated")
+                    if force_auth_verify:
+                        tryauth = cloud.get_token()
+                        if 'access' in tryauth:
+                            self.clouds[cloud_name].update({'manager': cloud})
+                        else:
+                            log.error("Credential not working, cloud is not activated")
 
             except Exception, e:
                 print "ERROR: can not activate cloud", cloud_name
                 print e
-                #print traceback.format_exc()
+                # print traceback.format_exc()
                 # sys.exit()
 
     def refresh(self, names=["all"], types=["all"]):
@@ -193,23 +191,23 @@ class cm_mongo:
         for name in names:
             if 'manager' in self.clouds[name]:
                 cloud = self.clouds[name]['manager']
-    
+
                 for type in types:
-    
+
                     print "Refreshing {0} {1} ->".format(type, name)
-    
+
                     watch.start(name)
                     cloud.refresh(type)
                     result = cloud.get(type)
-    
+
                     # add result to db,
                     watch.stop(name)
                     print 'Refresh time:', watch.get(name)
-    
+
                     watch.start(name)
-    
+
                     self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
-    
+
                     for element in result:
                         id = "{0}-{1}-{2}".format(
                             name, type, result[element]['name']).replace(".", "-")
@@ -220,9 +218,9 @@ class cm_mongo:
                         result[element]['cm_type_version'] = self.clouds[
                             name]['cm_type_version']
                         result[element]['cm_kind'] = type
-    
+
                         self.db_clouds.insert(result[element])
-    
+
                     watch.stop(name)
                     print 'Store time:', watch.get(name)
 

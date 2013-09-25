@@ -16,8 +16,8 @@ launch_module = Blueprint('launch  _module', __name__)
 
 # list of recipies which we need to get from cm_launcher.yaml
 launcher_config = cm_config_launcher(filename = "~/.futuregrid/cloudmesh_launcher.yaml")
-launch_recipies = launcher_config.get("cm_launcher.recipies")
-columns = launcher_config.get("cm_launcher.columns")
+launch_recipies = launcher_config.get("launcher.recipies")
+columns = launcher_config.get("launcher.columns")
 
 @launch_module.route('/cm/launch/<host>/<recipie>')
 @cond_decorator(cloudmesh.with_login, login_required)

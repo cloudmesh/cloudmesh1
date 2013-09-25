@@ -1,0 +1,32 @@
+rackdiag {
+   rack {
+       //description: Bravo
+       48U
+       
+       1: InfiniBand switch [5U];
+       6: bravo01 [2U] {{b001}}
+       8: bravo02 [2U] {{b002}}
+       10: bravo03 [2U] {{b003}}
+       12: bravo04 [2U] {{b004}}
+       14: bravo05 [2U] {{b005}}
+       16: bravo06 [2U] {{b006}}
+       18: bravo07 [2U] {{b007}}
+       20: bravo08 [2U] {{b008}}
+       22: bravo09 [2U] {{b009}}
+       24: bravo10 [2U] {{b010}}
+       26: bravo11 [2U] {{b011}}
+       28: bravo12 [2U] {{b012}}
+       30: bravo13 [2U] {{b013}}
+       32: bravo14 [2U] {{b014}}
+       34: bravo15 [2U] {{b015}}
+       36: bravo16 [2U] {{b016}}
+       38: bravo [2U] {{b000}}
+       40: fibre router [2U];
+       42: fibre switch
+       43: [3U] [color=gray];
+       46: rack switch
+       47: network switch
+       48: [color=gray];
+   }
+}
+

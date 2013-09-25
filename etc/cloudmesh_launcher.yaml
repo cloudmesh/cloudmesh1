@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 yaml_version: 1.0
 cm_launcher:        
     recipies:
@@ -22,6 +23,11 @@ cm_launcher:
               types:
                   - vm
                   - baremetal
+=======
+yaml_version: 1.1
+launcher:
+    recipies:
+>>>>>>> 83472317a123b013a9e111e517248f05ef13693e
         sierra_openstack_grizzly:
             - name: Slurm Cluster
               description: Deploys a Slurm cluster. One of the Vms is the Master,while the others register with the master as worker nodes. The master will be the first node in the list
@@ -44,9 +50,16 @@ cm_launcher:
                   - vm
                   - baremetal
     columns:
+<<<<<<< HEAD
         india_openstack_essex:
             - name
             - description
         sierra_openstack_grizzly:
             - name
             - description
+=======
+        sierra_openstack_grizzly:
+            - name
+            - description
+
+>>>>>>> 83472317a123b013a9e111e517248f05ef13693e
