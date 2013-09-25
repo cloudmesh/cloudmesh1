@@ -55,8 +55,6 @@ class cm_MongoBase(object):
         if values is None:
             return self.db_mongo.update(query, upsert=True)
         else:
-            print query
-            print values
             return self.db_mongo.update(query, values, upsert=True)
 
 
