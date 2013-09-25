@@ -9,6 +9,7 @@ from cloudmesh.util.util import banner
 from cloudmesh.inventory import Inventory
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh.user.cm_user import cm_user
 
 from  yaml import dump as yaml_dump
 import sys
@@ -27,3 +28,19 @@ def yaml():
         t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
         result = t.replace(kind="dict", values=user_config)
         print yaml_dump(result, default_flow_style=False)
+
+@task
+def list():
+     user = cm_user()
+     list_of_users = user.list_users()
+     pprint (list_of_users)
+     print
+     print "========================="
+     num = len(list_of_users)
+     print str(num) + " users listed"
+
+@task
+def info(id):
+    user = cm_user()
+    res = user.info(id)
+    pprint (res)
