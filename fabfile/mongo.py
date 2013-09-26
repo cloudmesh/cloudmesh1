@@ -172,6 +172,12 @@ def fg():
 '''
 
 @task
+def projects():
+    print "NOT IMPLEMENTED YET"
+    print "this class will when finished be able to import project titles and description from the fg portal"
+
+
+@task
 def pbs(host, type):
     pbs = pbs_mongo()
 

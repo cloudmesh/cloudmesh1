@@ -34,14 +34,19 @@ class cm_projects():
     def url(self, identifier):
         return project_url_basename + id(identifier)
 
-    def info(self, identifier):
+    def info(self, identifier, unavailable="not available"):
         """
         returns a dict with the information about the project.
         This includes
            title
            description
 
-            other information may be added in future
+            other information may be added in future.
+            
+            If no information is available it will return 
+            description = "not available"
+            title = "not available"
+            the messgae can be set with unavailable = "msg"
         """
         number = id(identifier)
         raise NotImplementedError()
