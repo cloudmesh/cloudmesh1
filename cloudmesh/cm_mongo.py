@@ -141,7 +141,9 @@ class cm_mongo:
                     # try to see if the credential works
                     # if so, update the 'manager' so the cloud is successfully activated
                     # otherwise log error message and skip this cloud
-                    if force_auth_verify:
+                    if not force_auth_verify:
+                        self.clouds[cloud_name].update({'manager': cloud})
+                    else:
                         tryauth = cloud.get_token()
                         if 'access' in tryauth:
                             self.clouds[cloud_name].update({'manager': cloud})
