@@ -285,7 +285,21 @@ class openstack(ComputeBaseType):
         pass
     #    conf = self._get_service_endpoint("identity")
 
-
+    def keypair_list(self):
+        apiurl = "os-keypairs"
+        return self._get(msg=apiurl)
+    
+    def keypair_add(self, keyname, keycontent):
+        conf = self._get_service_endpoint("compute")
+        publicURL = conf['publicURL']
+        posturl = "%s/os-keypairs" % publicURL
+        
+        params = {"keypair": {"name": "%s" % keyname,
+                              "public_key": "%s" % keycontent
+                              }
+                 }
+        return self._post(posturl, params)
+        
     def vm_create(self, name,
                   flavor_name,
                   image_id,
@@ -334,7 +348,7 @@ class openstack(ComputeBaseType):
                   }
         if key_name:
             params["server"]["key_name"] = key_name
-
+            
         if userdata:
             safe_userdata = strutils.safe_encode(userdata)
             params["server"]["user_data"] = base64.b64encode(safe_userdata)
@@ -438,14 +452,13 @@ class openstack(ComputeBaseType):
             token = self.admin_token
 
         conf = self._get_service_endpoint(service)
-        print "TTTTTT CONF", conf
         url = conf[urltype]
 
         url = "{0}/{1}".format(url, msg)
 
         print url
         headers = {'X-Auth-Token': token['access']['token']['id']}
-
+                
         r = requests.get(url, headers=headers, verify=self._get_cacert(credential), params=payload)
 
         print "RRRRR", r
@@ -465,12 +478,9 @@ class openstack(ComputeBaseType):
         conf = {}
 
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
-
-        if 'adminURL' in compute_service['endpoints'][0]:
+        conf['adminURL'] = None
+        if 'admin' in compute_service['endpoints'][0]:
             conf['adminURL'] = str(compute_service['endpoints'][0]['adminURL'])
-        else:
-            conf['adminURL'] = None
-
         conf['token'] = str(self.user_token['access']['token']['id'])
         return conf
 
@@ -562,13 +572,7 @@ class openstack(ComputeBaseType):
 
         cloud = openstack(name, credential=credential)
         msg = "users"
-        print 70 * "O"
-        print msg
-        xyz = cloud._get(msg, kind="admin", service="identity", urltype='adminURL')
-        print 70 * "O"
-        print xyz
-        print 70 * "O"
-        list = xyz['users']
+        list = cloud._get(msg, kind="admin", service="identity", urltype='adminURL')['users']
         return self._list_to_dict(list, 'id', "users", time_stamp)
 
     def get_meta(self, id):
