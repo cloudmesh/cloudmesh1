@@ -11,6 +11,10 @@ from cloudmesh.util.util import cond_decorator
 from flask.ext.login import login_required
 import cloudmesh
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 mesh_module = Blueprint('mesh_module', __name__)
 
 # ============================================================
@@ -244,7 +248,15 @@ def mongo_table(filters=None):
             for attribute in clouds[cloud][server]:
                 print attribute, clouds[cloud][server][attribute]
     """
-    os_attributes = ['name', 'addresses', 'flavor', 'id', 'user_id', 'metadata', 'key_name', 'created']
+    os_attributes = ['name',
+                     'status',
+                     'addresses',
+                     'flavor',
+                     'id',
+                     'user_id',
+                     'metadata',
+                     'key_name',
+                     'created']
 
     # c.aggregate needs to be defined
     # def count_status(cloudname):
