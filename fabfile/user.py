@@ -10,6 +10,7 @@ from cloudmesh.inventory import Inventory
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.user.cm_user import cm_user
+from sh import keystone
 
 from  yaml import dump as yaml_dump
 import sys
@@ -49,3 +50,26 @@ def info(id):
     user = cm_user()
     res = user.info(id)
     pprint (res)
+
+@task
+def password():
+    user_config = cm_config(filename="~/.futuregrid/cloudmesh.yaml")
+    user = user_config.cloud('sierra_openstack_grizzly')['credentials']
+
+    server_config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")
+    server = server_config['keystone']['sierra_openstack_grizzly']
+
+    print(" ".join(["keystone", "--os-username", server['OS_USERNAME'],
+             "--os-password", server['OS_PASSWORD'],
+             "--os-tenant-name", server['OS_TENANT_NAME'],
+             "--os-auth-url", server['OS_AUTH_URL'],
+             "user-password-update",
+             "--pass", user['OS_PASSWORD'], user['OS_USERNAME']]))
+
+
+    keystone("--os-username", server['OS_USERNAME'],
+             "--os-password", server['OS_PASSWORD'],
+             "--os-tenant-name", server['OS_TENANT_NAME'],
+             "--os-auth-url", server['OS_AUTH_URL'],
+             "user-password-update",
+             "--pass", user['OS_PASSWORD'], user['OS_USERNAME'])
