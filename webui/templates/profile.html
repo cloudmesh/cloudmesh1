@@ -113,23 +113,28 @@ $(function() {
 		</tr>
 	    {% endfor %}
 
-	<tr>
-		<td></td>
 
-		<td colspan="2">
+	<tr>
 
 	    {% for projectname in projects.names(status="completed") %}
+		<td></td>
+		<td colspan="2">
+	    {% if projectname != "None" %}
 	        <a href="https://portal.futuregrid.org/projects/{{projectname | replace('fg','')}}"> {{projectname }} </a>
 	      	&nbsp;
-	    {% endfor %}
+
 
 
 		</td>
 		<td>
 			<span class="label label-default">Completed</span>
 		</td>
+		{% else %}
+		<!-- No completed projects -->
+		<td></td>
+		{% endif %}
+	    {% endfor %}
 	</tr>
-
 
 
 	<!-- -------------- Security Groups ---------------------------------- -->
