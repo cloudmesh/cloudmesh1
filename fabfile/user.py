@@ -1,4 +1,4 @@
-from fabric.api import task, local, settings, hide
+from fabric.api import task, local, settings, hide, run
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
@@ -23,11 +23,16 @@ def yaml():
     
     """
 
-    with hide('status'):
+    with hide('running', 'status', 'output'):
         user_config = ConfigDict(filename="~/.futuregrid/me.yaml")
         t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
         result = t.replace(kind="dict", values=user_config)
         print yaml_dump(result, default_flow_style=False)
+        location = cm_path_expand('~/.futuregrid/cloudmesh-new.yaml')
+        yaml_file = open(location, 'w+')
+        print >> yaml_file, yaml_dump(result, default_flow_style=False)
+        yaml_file.close()
+        print "Written new yaml file in " + location
 
 @task
 def list():
