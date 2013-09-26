@@ -24,6 +24,33 @@ def get_pid(command):
     return (pid, line)
 
 
+def mongo_start(config_name):
+    path = cm_path_expand(cm_config_server().get("{0}.path".format(config_name)))
+    port = cm_config_server().get("{0}.port".format(config_name))
+
+    if not os.path.exists(path):
+        print "Creating mongodb directory in", path
+        local("mkdir -p {0}".format(path))
+
+    try:
+        lines = local("ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True).split("\n")
+    except:
+        lines = []
+    if lines:
+        pid = lines[0].split(" ")[0]
+        print "mongo already running in pid {0} for port {1}".format(pid, port)
+    else:
+        print "Starting mongod"
+        local("mongod --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port))
+
+def mongo_clean(config_name):
+    port = cm_config_server().get("{0}.port".format(config_name))
+    result = local('echo "show dbs" | mongo --quiet --port {0}'.format(port), capture=True).splitlines()
+    for line in result:
+        name = line.split()[0]
+        local('mongo {0} --port {1} --eval "db.dropDatabase();"'.format(name, port))
+
+
 @task
 def inventory():
     mesh_inventory = Inventory()
@@ -42,23 +69,8 @@ def start():
     start the mongod service in the location as specified in
     ~/.futuregrid/cloudmesh_server.yaml
     '''
-    path = cm_path_expand(cm_config_server().get("mongo.path"))
-    port = cm_config_server().get("mongo.port")
-
-    if not os.path.exists(path):
-        print "Creating mongodb directory in", path
-        local("mkdir -p {0}".format(path))
-
-    lines = local("ps -ax |fgrep mongod ", capture=True).split("\n")
-    (pid, line) = get_pid("mongod")
-
-    if not pid is None:
-        print "mongo already running in pid", pid
-    else:
-        print "Starting mongod"
-        local("mongod --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port))
-
-
+    mongo_start('mongo')
+    mongo_start('mongo_user')
 
 @task
 def stop():
@@ -72,7 +84,7 @@ def stop():
         print "No mongod running"
     else:
         print "Kill mongod"
-        local ("kill -9 {0}".format(pid))
+        local ("killall -9 mongod")
 
 @task
 def clean():
@@ -80,10 +92,9 @@ def clean():
     deletes _ALL_ databases from mongo. Even thos not related to cloudmesh.
     '''
     local("make clean")
-    result = local('echo "show dbs" | mongo --quiet ', capture=True).splitlines()
-    for line in result:
-        name = line.split()[0]
-        local('mongo {0} --eval "db.dropDatabase();"'.format(name))
+    mongo_clean('mongo')
+    mongo_clean('mongo_user')
+
 
 @task
 def vms_find():
@@ -170,6 +181,12 @@ def fg():
     start()
     local("python webui/fg.py")    
 '''
+
+@task
+def projects():
+    print "NOT IMPLEMENTED YET"
+    print "this class will when finished be able to import project titles and description from the fg portal"
+
 
 @task
 def pbs(host, type):
