@@ -1,4 +1,5 @@
-import boto
+#import boto
+import libcloud
 
 class aws:
     """ Amazon Cloud service with the boto interface
