@@ -10,11 +10,9 @@ from cloudmesh.util.util import cond_decorator
 import cloudmesh
 from flask.ext.login import login_required
 
-
 from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
-
 
 try:
     from sh import xterm
@@ -207,7 +205,6 @@ def assign_public_ip(cloud=None, server=None):
 @cloud_module.route('/cm/start/<cloud>/')
 @cond_decorator(cloudmesh.with_login, login_required)
 def start_vm(cloud=None, server=None):
-    log.info("====================================")
     print "*********** STARTVM", cloud
     print "-> start", cloud
     # if (cloud == 'india'):
@@ -232,12 +229,12 @@ def start_vm(cloud=None, server=None):
     print "FLAVOR", vm_flavor, vm_flavor_id
     metadata = {'cm_owner': config.prefix}
     result = clouds.vm_create(
-        cloud,
-        config.prefix,
-        config.index,
-        vm_flavor_id,
-        vm_image,
-        key,
+        cloud, 
+        config.prefix, 
+        config.index, 
+        vm_flavor_id, 
+        vm_image, 
+        key, 
         meta=metadata)
     print "P"*20
     print result
@@ -285,10 +282,16 @@ def vm_login(cloud=None, server=None):
 def vm_info(cloud=None, server=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    print clouds.servers()[cloud]
+    #print clouds.servers()[cloud]
+    
+    # a trick to deal with different type of server_id
+    # (string in FG; or int in e.g. hp_cloud)
+    if "%s" % int(server) == server:
+        server = int(server)
+        
     clouds.servers()[cloud][server]['cm_vm_id'] = server
     clouds.servers()[cloud][server]['cm_cloudname'] = cloud
-
+    
     return render_template('vm_info.html',
                            updated=time_now,
                            keys="",
