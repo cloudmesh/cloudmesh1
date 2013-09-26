@@ -106,12 +106,20 @@ def mongo():
     if projects != {}:
         element["projects"] = projects
     
+    # get keys and clean the key titles (replace '.' with '_' due to mongo restriction)
     keys = config.get("cloudmesh.keys.keylist")
+    for keytitle in keys.keys():
+        if "." in keytitle:
+            keycontent = keys[keytitle]
+            newkeytitle = keytitle.replace(".", "_")
+            del keys[keytitle]
+            keys[newkeytitle] = keycontent
     element['keys'] = keys
 
-    pprint (element)
-
-
-    print "TODO NOW STIC THIS IN MONGO"
-
-
+    #pprint (element)
+    
+    # hpc username as key
+    username = element["cm_user_id"]
+    # populate the local userinfo into the same mongo as though it were from LDAP.
+    userstore = cm_userLDAP()
+    userstore.updates(username, element)
