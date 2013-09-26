@@ -45,7 +45,7 @@ class Test:
         print "OK"
 
 
-        self.name = self.configuration.active()[0]
+        self.name = self.configuration.active()[1]
         print "ACTIVE CLOUD", self.name
 
         self.cloud = openstack(self.name)
