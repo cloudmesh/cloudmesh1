@@ -450,6 +450,14 @@ class Test:
         """test getting extensions"""
         pp.pprint(self.cloud.ks_get_extensions())
 
+    def test18_keypair_add(self):
+        keyname = "grizzlykey"
+        keycontent = "ssh-dss AAAAB3NzaC1kc3MAAACBAPkCkTkLqyqpmjYSU0P6cLMfuY6YPrZr5NkpVVuK9nLEKxdV3oAL1EOhTvgdve6hAVENX76fJFqUeBL1POBvsV92OH3e84cwwUiXBoQ9VrFtAn0l1tsdKkiEadWakCjxp0DqkjWJz1sLDzmB37QqO16T3KI5+yFviJPkn/LUYTMrAAAAFQCbgsFrwjHQqIlOhAKwW7tCt+M+VwAAAIEArgHogg4cLFS9uNtjP4H8vz6f+kYJ2zpHwnBMA7caO9IyFwYz/0BTjF4J/qD+Gwra+PKL7llQJlOAG1Odg79RRqPgk/4LN5KuXNkNbL9GZhcqdxD+ZpUtVjs4WLXA0C1t53CQvNKhkCKEZMTvS603rfBCJ8SBc4d4x6fAD7I6+fsAAACBALuHfiLksJR9xyexDNQpmtK12aIX+xZ+ryLEGbHGd0QIwskdnB9tqFH0S9NZg//ywSqntV9PlEqacmjEsfWojlM30b1wIJl0xCa+5eZiwFm2Xfsm4OhH0NE32SCb+Zr3ho4tcizpR9PVSoTxkU97rnGj1PDrjf1ZsuaG0Dr6Fzv3"
+        pp.pprint(self.cloud.keypair_add(keyname, keycontent))
+ 
+    def test18_keypair_list(self):
+        pp.pprint(self.cloud.keypair_list())
+               
     def start(self):
         """start image"""
         HEADING()
