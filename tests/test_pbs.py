@@ -59,7 +59,6 @@ class Test:
             self.get_qstat(host)
 
 
-
     def test_info(self):
         HEADING()
 
