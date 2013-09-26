@@ -1,6 +1,5 @@
 {% extends "layout_title.html" %}
 {% from "_helper.html" import image_button %}
-{% from "_helper.html" import cm_image_input %}
 
 {% block contentbox %}
 
@@ -13,7 +12,7 @@
 <script type="text/javascript" charset="utf-8">
 
 $(function() {
-
+        
   $('.edit').editable('/profile');
 
 });
@@ -30,52 +29,56 @@ $(function() {
     <form name="profile" action="/profile/" method="POST">
     <tr>
     	<th></th><th colspan="3"><b> Personal Details </b></th>
-    </tr>
+    </tr>  
 	<tr>
 		<td></td><td>Firstname</td>
-		<td colspan="2"> {{ person.firstname }}
+		<td colspan="2"><input type="text"
+ 							   name="field-firstname"
+                               value="{{ person.firstname }}"
+                               style="width:240px">
         </td>
     </tr>
     <tr>
     	<td></td><td>Lastname</td>
-		<td colspan="2">{{ person.lastname }}
+		<td colspan="2"><input type="text"
+  							   name="field-lastname"
+  							   value="{{ person.lastname }}"
+							   style="width:240px">
 		</td>
 	</tr>
 	<tr><td></td><td>Phone</td>
-	<td colspan="2">{{ person.phone }}
+	<td colspan="2"><input type="text"
+	  name="field-phone"
+	  value="{{ person.phone }}"
+	  style="width:240px">
 	</td></tr>
 	<tr><td></td><td>e-mail</td>
-	<td colspan="2">{{ person.e_mail }}
+	<td colspan="2"><input type="text"
+	  name="field-email"
+	  value="{{ person.e_mail }}"
+	  style="width:240px">
 	</td></tr>
 	<tr><td></td><td>Address</td>
 	<td colspan="2">{{ address | replace ("\n", "<br>") | safe}}</td>
 	</tr>
-
-	<!-- -------------- HPC DETAILS ---------------------------------- -->
-
 	<tr>
-     	<th></th><th colspan="3"><b> HPC </b></th>
+	<td></td><td colspan="3"><b>HPC</b></td></tr>
 	</tr>
-
 	<tr>
-	  <td>
-	  	{{  cm_image_input("right", "222_share") }}
-	  	<input type="submit"
-	  	         name="btnindex"
-	  	         value="Save A">
-	  </td>
+	  <td></td>
 	  <td>UserName</td>
 	  <td colspan="2"><input type="text"
 		name= "field-hpc-name"
 	        value="{{user}}"
 	 	style="width:240px"></td>
 	</tr>
-
+	<tr><td></td><td colspan="3"> <input type="submit" name="btnindex" value="Save Personal Deatils"> </td></tr>
+	
 	<!-- -------------- CLOUD DETAILS ---------------------------------- -->
 	<tr><th></th><th colspan="3"><b> Cloud Details</b></th></tr>
-
+	
 	<tr>
-	  <td>{{  cm_image_input("right", "222_share") }}</td>
+	  <td></td>
 	  <td> VM Name </td>
 	  <td colspan="2"><input type="text"
 	    name="field-prefix"
@@ -89,12 +92,10 @@ $(function() {
 	    <input type="submit" name="btnindex" value="Save VM Name">
 	  </td>
 	</tr>
-
-<!-- -------------- Projects ---------------------------------- -->
-	<tr><th></th><th colspan="3"><b> Projects </b></th></tr>
-
+	
+	
 	<tr><td></td>
-	    <td><b> Default </b></td>
+	    <td><b> Projects </b></td>
 	    <td colspan="2">
 	     {% for projectname in projects.names(status="active") %}
 	 	<input type="radio"
@@ -105,39 +106,18 @@ $(function() {
 	          checked="checked"
 	        {% endif %}
 	        onclick="document.forms['profile'].submit()"/>
-	        <a href="https://portal.futuregrid.org/projects/{{projectname | replace('fg','')}}"> {{projectname }} </a>
-	      	&nbsp;
+	        {{ projectname }}
 	      {% endfor %}
 	     </td>
 	</tr>
-	<tr>
-		<td></td>
-		<td>Completed</td>
-		<td colspan="2">
-
-	    {% for projectname in projects.names(status="completed") %}
-	        <a href="https://portal.futuregrid.org/projects/{{projectname | replace('fg','')}}"> {{projectname }} </a>
-	      	&nbsp;
-	    {% endfor %}
-
-
-			</td>
-	</tr>
-
-
-
-	<!-- -------------- Security Groups ---------------------------------- -->
-
-	<tr><th></th><th colspan="3"><b> Security Groups </b></th></tr>
-
 	<tr><td>{{ image_button ("right", "030_pencil", "") }}</td><td>
-	<b> Default </b></td>
-
+	<b> SecurityGroups </b></td>
+	
 	<td colspan="2">
-
-
+	
+	
 	{% for group in configuration['security']['security_groups'].keys() %}
-
+	
 	  <input type="radio"
 	  name="field-selected-securityGroup"
 	  value="{{ group }}"
@@ -148,16 +128,17 @@ $(function() {
 	  onclick="document.forms['profile'].submit()"
 	  /> {{ group }}
 	{% endfor %}
-
-
+	
+	
 	</td>
 	</tr>
-
-
-<!-- -------------- Clouds ---------------------------------- -->
-
-	<tr><th></th><th colspan="3"><b> Clouds </b></th></tr>
-
+	<tr>
+		<td></td><td>Completed</td><td colspan="2">{{ ', '.join(configuration.projects.completed) }}</td>
+	</tr>    
+	<tr>
+		<td>{{ image_button ("right", "030_pencil", "/clouds/") }}</td><td colspan="3"><b> Clouds </b></td>
+	</tr>
+	
 	<tr><td></td><td>Active </td><td colspan="2">
 	  {% for cloudname in configuration.clouds.keys() %}
 	  <input type="checkbox"
@@ -169,11 +150,10 @@ $(function() {
 	        {% endif %}
 	        onclick="document.forms['profile'].submit()"
 	        /> {{ cloudname}}
-	        <br>
 	{% endfor %}
 	</td></tr>
-
-
+	
+	
 	<tr>
 		<td></td><td>Default </td>
 		<td colspan="2">
@@ -192,10 +172,9 @@ $(function() {
 		</td>
 	</tr>
 	</form>
-
-<!-- -------------- Keys ---------------------------------- -->
+	
 	<tr>
-		<th></th><th colspan="3"><b> Keys </b></th></tr>
+		<th>{{ image_button ("right", "030_pencil", "/keys/") }}</th><th colspan="3"><b> Keys </b></th></tr>
 	<tr>
 	{% if keys.no_of_keys() > 0 %}
 		<form action="" name = "selectKeyForm" method=post enctype=multipart/form-data >
@@ -211,9 +190,9 @@ $(function() {
 			{% else %}
 				{% set checked = '' %}
 			{% endif %}
-			<tr>
-			  	<td><input type="radio" name="selectkeys" value="{{name}}" {{checked}}
-					 onclick="document.forms['selectKeyForm'].submit()" title="select">
+			<tr> 
+			  	<td><input type="radio" name="selectkeys" value="{{name}}" {{checked}}  
+					 onclick="document.forms['selectKeyForm'].submit()" title="select"> 
 		  		</td>
 		  		<td>{{name}}</td>
 		  		<td>{{keys.fingerprint(name)}}
@@ -221,25 +200,25 @@ $(function() {
 		  		</td>
 			</tr>
 		{% endfor %}
-
+		
 	{% else %}
 		There are no keys present, please add one.
 	</form>
 	{% endif %}
-
+	
 	<form action="" method=post enctype=multipart/form-data name = "addkeysform">
-
+	
 	<tr>
-	  	<td>{{  cm_image_input("right", "222_share") }} </td>
-	  	<td><input name = "keyname" type="text" /></td>
+	  	<td></td>
+	  	<td><input name = "keyname" type="text" /></td> 
 	  	<td colspan="2">
 	  		<textarea name = "keyorpath" rows="1" cols="100"></textarea>
 	  		<input type="submit" name = "addkey" value="Add Key">
 	  	</td>
-
+	
 	</tr>
 	</form>
-
+	
 </table>
 {{show}}
 </tr>
