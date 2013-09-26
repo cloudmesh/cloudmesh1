@@ -40,8 +40,11 @@ cloudmesh:
             cm_label: aws
             cm_type: amazon
             credentials:
-                aws_access_key_id = <your_access_key_here>
-                aws_secret_access_key = <your_secret_key_here>
+                access_key_id: {{your_access_key_here}}
+                secret_access_key: {{your_secret_key_here}}
+                keyname: cloudmesh
+                userid: {{portalname}}
+                privatekeyfile: $HOME/.futuregrid/aws_pk.pem
             default:
                 flavor: m1.small
                 image: ami-fbb2fc92
