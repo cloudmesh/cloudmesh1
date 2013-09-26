@@ -1,5 +1,6 @@
 {% extends "layoutTable.html" %}
 {% from "_helper.html" import image_button %}
+{% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
 <h2> {{ image_button ("none", "365_restart", "/cm/refresh/servers") }} Servers </h2>
@@ -98,6 +99,8 @@ $(function() {
                  {% for attribute in attributes %}
                       {% if attribute == "created" %}
                           <td>{{ clouds[cloud][server][attribute] }}</td>
+					  {% elif attribute == "status"%}
+					      <td> {{ cm_state_color(clouds[cloud][server][attribute]) }}</td>
                       {% elif attribute == "flavor" %}
                           <td>{{ clouds[cloud][server][attribute]['id'] }}</td>
                       {% elif attribute == "addresses" %}
