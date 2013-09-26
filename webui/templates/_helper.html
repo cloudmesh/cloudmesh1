@@ -3,9 +3,14 @@ image_button("041_charts", "/table/")
 #}
 
 {% macro cm_state_color(state) %}
-	{% if state|lower == "active" %}
+    {% set s = state|lower %}
+   	{% if s in ["active", "r"] %}
 		<span class="label label-success">{{state}}</span>
-	{% elif state|lower == "" %}
+	{% elif s in ["error"] %}
+		<span class="label label-danger">{{state}}</span>
+	{% elif s in ["q"] %}
+		<span class="label label-info">{{state}}</span>
+	{% else %}
 		<span class="label label-default">{{state}}</span>
 	{% endif %}
 {% endmacro %}
