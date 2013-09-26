@@ -73,3 +73,41 @@ def password():
              "--os-auth-url", server['OS_AUTH_URL'],
              "user-password-update",
              "--pass", user['OS_PASSWORD'], user['OS_USERNAME'])
+
+
+@task
+def mongo():
+    yaml()
+    config = cm_config(filename="~/.futuregrid/cloudmesh.yaml")
+    profile = config.profile()
+
+    element = {
+               "firstname" : profile["firstname"],
+               "lastname" : profile["lastname"],
+               "uidNumber" : profile["uid"],
+               "phone" : profile["phone"],
+               "gidNumber" : profile["gid"],
+               "address" : profile["address"],
+               "cm_user_id" : config.get("cloudmesh.hpc.username"),
+               "email" : profile["e_mail"]
+    }
+
+    projects = {}
+
+    active = config.get("cloudmesh.projects.active")
+
+    if active != ['None']:
+        projects["active"] = active
+
+    completed = config.get("cloudmesh.projects.completed")
+    if completed != ['None']:
+        projects["completed"] = completed
+
+    if projects != {}:
+        element["projects"] = projects
+
+    pprint (element)
+
+    print "TODO NOW STIC THIS IN MONGO"
+
+
