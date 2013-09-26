@@ -1,5 +1,6 @@
 {% extends "layout_title.html" %}
 {% from "_helper.html" import image_button %}
+{% from "_helper.html" import image_link %}
 {% from "_helper.html" import cm_image_input %}
 
 {% block contentbox %}
@@ -29,7 +30,11 @@ $(function() {
 <table>
     <form name="profile" action="/profile/" method="POST">
     <tr>
-    	<th></th><th colspan="3"><b> Personal Details </b></th>
+    	<th>
+    		{{ image_link ("right", "030_pencil", "https://portal.futuregrid.org/my/edit/Contact") }}
+
+    	</th>
+    	<th colspan="3"><b> Personal Details </b></th>
     </tr>
 	<tr>
 		<td></td><td>Firstname</td>
@@ -59,16 +64,9 @@ $(function() {
 
 	<tr>
 	  <td>
-	  	{{  cm_image_input("right", "222_share") }}
-	  	<input type="submit"
-	  	         name="btnindex"
-	  	         value="Save A">
 	  </td>
-	  <td>UserName</td>
-	  <td colspan="2"><input type="text"
-		name= "field-hpc-name"
-	        value="{{user}}"
-	 	style="width:240px"></td>
+	  <td>Username</td>
+	  <td colspan="2">{{user}}</td>
 	</tr>
 
 	<!-- -------------- CLOUD DETAILS ---------------------------------- -->
@@ -93,10 +91,10 @@ $(function() {
 <!-- -------------- Projects ---------------------------------- -->
 	<tr><th></th><th colspan="3"><b> Projects </b></th></tr>
 
-	<tr><td></td>
-	    <td><b> Default </b></td>
-	    <td colspan="2">
+
 	     {% for projectname in projects.names(status="active") %}
+		<tr>
+	 	<td>
 	 	<input type="radio"
 	        name="field-selected-project"
 	        value="{{ projectname }}"
@@ -105,14 +103,19 @@ $(function() {
 	          checked="checked"
 	        {% endif %}
 	        onclick="document.forms['profile'].submit()"/>
+	    </td>
+	    <td colspan="2">
 	        <a href="https://portal.futuregrid.org/projects/{{projectname | replace('fg','')}}"> {{projectname }} </a>
-	      	&nbsp;
-	      {% endfor %}
-	     </td>
-	</tr>
+	    </td>
+	    <td>
+	    <span class="label label-success">Active</span>
+	    </td>
+		</tr>
+	    {% endfor %}
+
 	<tr>
 		<td></td>
-		<td>Completed</td>
+
 		<td colspan="2">
 
 	    {% for projectname in projects.names(status="completed") %}
@@ -121,7 +124,10 @@ $(function() {
 	    {% endfor %}
 
 
-			</td>
+		</td>
+		<td>
+			<span class="label label-default">Completed</span>
+		</td>
 	</tr>
 
 
@@ -146,7 +152,10 @@ $(function() {
 	    checked="checked"
 	  {% endif %}
 	  onclick="document.forms['profile'].submit()"
-	  /> {{ group }}
+	  />
+
+
+	  {{ group }}
 	{% endfor %}
 
 
@@ -158,7 +167,9 @@ $(function() {
 
 	<tr><th></th><th colspan="3"><b> Clouds </b></th></tr>
 
-	<tr><td></td><td>Active </td><td colspan="2">
+	<tr>
+		<td></td>
+		<td valign="top">Active </td><td colspan="2">
 	  {% for cloudname in configuration.clouds.keys() %}
 	  <input type="checkbox"
 	        name="field-cloud-activated-{{cloudname}}"
@@ -216,7 +227,7 @@ $(function() {
 					 onclick="document.forms['selectKeyForm'].submit()" title="select">
 		  		</td>
 		  		<td>{{name}}</td>
-		  		<td>{{keys.fingerprint(name)}}
+		  		<td colspan="2">{{keys.fingerprint(name)}}
 					<a href="delete/{{name}}/"><img src="/static/img/icons/png/glyphicons_016_bin.png" width="12" height="12" title="delete" align="right"></a>
 		  		</td>
 			</tr>

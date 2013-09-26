@@ -16,8 +16,14 @@ image_button("041_charts", "/table/")
 	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
 	     onclick="refresh('{{ actionpath }}')"
 	     width="16" height="16">
+{% endmacro %}
 
-
+{% macro image_link(align, type, actionpath) %}
+<!-- modal for progress -->
+      <a href={{actionpath}}>
+	     <img = src="{{url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
+	     width="16" height="16">
+	 </a>
 {% endmacro %}
 
 {% macro flexible_menu(pagelist) -%}
