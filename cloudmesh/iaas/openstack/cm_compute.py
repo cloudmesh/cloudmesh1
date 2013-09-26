@@ -155,7 +155,7 @@ class openstack(ComputeBaseType):
             credential = self.user_credential
 
         print "GET CRED", credential
-        
+
         param = None
         if 'OS_TENANT_NAME' in credential:
             param = {"auth": { "passwordCredentials": {
@@ -178,7 +178,7 @@ class openstack(ComputeBaseType):
         print "URL", url
 
         headers = {'content-type': 'application/json'}
-        verify=self._get_cacert(credential)
+        verify = self._get_cacert(credential)
         print "PARAM", json.dumps(param)
         print "HEADER", headers
         print "VERIFY", verify
@@ -235,7 +235,7 @@ class openstack(ComputeBaseType):
     def _get_compute_service(self, token=None):
         return self._get_service("compute")
 
-    def _get_cacert(self,credential=None):
+    def _get_cacert(self, credential=None):
         if credential is None:
             credential = self.user_credential
         verify = False
@@ -245,17 +245,17 @@ class openstack(ComputeBaseType):
                os.path.isfile(credential['OS_CACERT']):
                 verify = credential['OS_CACERT']
         return verify
-            
+
     def _post(self, posturl, params=None, credential=None):
-        #print posturl
+        # print posturl
         # print self.config
         if credential is None:
             credential = self.user_credential
         conf = self._get_service_endpoint("compute")
         headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
-        #print headers
-        #print self._get_cacert(credential)
+        # print headers
+        # print self._get_cacert(credential)
         r = requests.post(posturl, headers=headers,
                           data=json.dumps(params),
                           verify=self._get_cacert(credential))
@@ -334,7 +334,7 @@ class openstack(ComputeBaseType):
                   }
         if key_name:
             params["server"]["key_name"] = key_name
-            
+
         if userdata:
             safe_userdata = strutils.safe_encode(userdata)
             params["server"]["user_data"] = base64.b64encode(safe_userdata)
@@ -438,13 +438,14 @@ class openstack(ComputeBaseType):
             token = self.admin_token
 
         conf = self._get_service_endpoint(service)
+        print "TTTTTT CONF", conf
         url = conf[urltype]
 
         url = "{0}/{1}".format(url, msg)
 
         print url
         headers = {'X-Auth-Token': token['access']['token']['id']}
-                
+
         r = requests.get(url, headers=headers, verify=self._get_cacert(credential), params=payload)
 
         print "RRRRR", r
@@ -464,9 +465,12 @@ class openstack(ComputeBaseType):
         conf = {}
 
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
-        conf['adminURL'] = None
-        if 'admin' in compute_service['endpoints'][0]:
+
+        if 'adminURL' in compute_service['endpoints'][0]:
             conf['adminURL'] = str(compute_service['endpoints'][0]['adminURL'])
+        else:
+            conf['adminURL'] = None
+
         conf['token'] = str(self.user_token['access']['token']['id'])
         return conf
 
@@ -558,7 +562,13 @@ class openstack(ComputeBaseType):
 
         cloud = openstack(name, credential=credential)
         msg = "users"
-        list = cloud._get(msg, kind="admin", service="identity", urltype='adminURL')['users']
+        print 70 * "O"
+        print msg
+        xyz = cloud._get(msg, kind="admin", service="identity", urltype='adminURL')
+        print 70 * "O"
+        print xyz
+        print 70 * "O"
+        list = xyz['users']
         return self._list_to_dict(list, 'id', "users", time_stamp)
 
     def get_meta(self, id):
