@@ -1,5 +1,6 @@
 {% extends "layoutTable.html" %}
 {% from "_helper.html" import image_button %}
+{% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
 <h2> {{ image_button ("none", "365_restart", "/cm/refresh/images") }} Images </h2>
@@ -81,7 +82,11 @@ $(function() {
                           {% set l = attribute | length %}
 
                           {% if l == 2%}
-                             {{ clouds[cloud][image][attribute[1]] }}
+                             {% if attribute[0] == 'status' %}
+                             	{{ cm_state_color(clouds[cloud][image][attribute[1]]) }}
+    						 {% else %}
+	                          	{{ clouds[cloud][image][attribute[1]] }}
+    						 {% endif %}
                           {% elif l == 3%}
                              {{ clouds[cloud][image][attribute[1]][attribute[2]] }}
                           {% elif l == 4%}

@@ -1,5 +1,6 @@
 {% extends "layoutTable.html" %}
 {% from "_helper.html" import image_button %}
+{% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
 <h2> {{ image_button ("none", "365_restart", "/mesh/refresh/qstat") }} QStat </h2>
@@ -47,6 +48,8 @@
                                  {{ server[attribute[1]].split("@")[0] }}
                              {% elif attribute[0] in ["ctime","mtime","qtime"] %}
                                 {{ server[attribute[1]] | timesince(format="float") }}
+							 {% elif attribute[0] in ["State"] %}
+								 {{ cm_state_color(server[attribute[1]]) }}
                              {% else %}
                                 {{ server[attribute[1]] }}
                              {% endif %}

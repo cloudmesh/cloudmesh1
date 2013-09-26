@@ -8,13 +8,13 @@
 {% block content %}
 <script type="text/javascript">
 
-/* 
+/*
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#launcher-accordion > div").accordion({ header: "h3", 
-        										collapsible: true, 
-        										heightStyle: "content", 
+        $("#launcher-accordion > div").accordion({ header: "h3",
+        										collapsible: true,
+        										heightStyle: "content",
         										active: false });
     });
 })(jQuery);
@@ -33,76 +33,73 @@ $(function() {
 </script>
 
 <div id="launcher-accordion">
-	
-    {% for column in columns %}
+
+    {% for server in columns %}
 
     	<div style="margin-bottom:1em;">
 
-       		<h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + column) }} {#make refresh changes. currently follows qstat#}
-        		{{ column }}
+       		<h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + server) }} {#make refresh changes. currently follows qstat#}
+        		{{ server }}
         	</h3>
 	        <div>
-	        	<form action = "/cm/launch/launch_servers" method = "post">
-	        	<input type = hidden name = "name" value = {{column}}>
-	        	{%set attribute_list = columns[column]%}
+
+	        	{%set attribute_list = columns[server]%}
 			    <table id="display-table-{{ loop.index0 }}">
 		       	<thead>
 		        <tr>
 		        <th> Select </th>
-		        <th> Types </th>
-		        
+
 		        {% for attribute in attribute_list %}
 		        	<th>
 		        		{{attribute}}
 		        	</th>
 		        {% endfor %}
 		        </tr>
-
-		        {% for recipie in recipies[column] %}
+				{% set name_index = 0 %}
+		        {% for recipie in recipies[server] %}
+		        
+		        <form action = "/cm/launch/launch_servers" method = "post">
+	        	<input type = hidden name = "server" value = {{server}}>
+	        	
+	        	<input type = hidden name = "name_index" value = "{{name_index}}">
 		        <tr>
-		        	{{recipie["name"]}}
-		        	<td><input type = "checkbox" name = "resource" value = "{{recipie["name"]}}"></td>  {#this part looks for key name. use the name as key to indicate the name of the resource..#}
-			        <td>
-						<select name = "{{recipie["name"]}}-select">
-			        	{% for t in recipie["types"] %}
-			        	   <option value="{{t}}">{{t}}</option>
-			        	{% endfor %}
-			        	</select>
-			        </td>
+
+		        	<td><input align="right" type="image" src="/static/img/icons/png/glyphicons_190_circle_plus.png" width="16" height="16"></td>  
+
 		        	{% for a in attribute_list%}
 			        	<td>
-			        		{{recipie[a]}}
-			        	</td>	
-			        	
+			        		{% if a == "description" %}
+				        		GGG {{recipie[a]}}
+				        		<br>
+				        		<table>
+				        		{{recipie['parameters']}}
+				        		{% for param in recipie['parameters'] %}
+				        		    <tr>
+				        		    <td>
+				        		    {{param}}
+									</td>
+									<td>
+				        		    <input type = "text" name = "parameter_{{param}}" value = "{{recipie['parameters'][param]}}">
+									</td>
+									</tr>
+				        		{% endfor %}
+				        		</table>
+				        	{% else %}
+				      	       {{recipie[a]}}
+				      	    {% endif %}
+			        	</td>
+			    	
+			    	
 			        {%endfor%}
 		        </tr>
-		        {% endfor %}	
-	            <tr>
-	            	<td></td>
-        	        <td valign="top">
-        		       <input type="text" value="... specify" name="hostlist">
-        		       
-        	        </td>
-                 	<td valign="top">
-        	        	Hosts
-        	        </td>
-        	        <td valign="top">
-        	        	Specify the hosts on which you like to deploy the recipies. <br>
-        	        	<b>username[001-003]</b> = would deploy the recipy on the vms with the names 
-        	        	username001, username002, username003, where username is your purtal username. <br> 
-        	        	<b>prefix[001-003]</b> = use prefix instead, your prefix name defined in the profile is used.
-        	        	 
-        	        </td>
-                </tr>
-
-		        </table>
-		        Note: you can not yet mix bare metal and VM at the same time via this interface. Please make sure all Types of slected items are of the same type.<br><br>
-		        <input type = submit value = "press to launch">
-		       </form>
+		        {% set name_index = name_index+1 %}
+		        </form>
+		        {% endfor %}
+		        </table>	       
 	        </div>
        </div>
-        
-        
+
+
     {% endfor %}
 </div>
 

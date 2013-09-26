@@ -1,14 +1,12 @@
 """
 Heat map of cluster servers, use HSV color space
 """
-import math
 from copy import deepcopy
 from cloudmesh.rack.base_cluster_map import BaseClusterMap
 
 
 class HeatClusterMap(BaseClusterMap):
 
-    
 	# maximum h, 240/360 = 2/3
 	h_max = 2.0 / 3.0
 	
@@ -18,12 +16,25 @@ class HeatClusterMap(BaseClusterMap):
 	# maximum temperature user defined
 	temperature_max = 100
 	
+	# default temperature
+	temperature_default = 0
+	
 	# mapping dict
 	# map the value of a temperature to a tuple RGB color
 	# the key of dict is the different temperature got from cluster servers
 	# the precise of the key is 0.1
 	# formation is: {10.2:(255, 3, 5), 25.3:(34, 50, 200), ...}
 	dict_mapping = {} 
+	
+	# temperature marker dict
+	dict_marker = {"min": None,     # minimum temperature displayed on color bar, <= temperature_min
+				   "max": None,     # maximum temperature displayed on color bar, >= temperature_max
+				   "start": None,   # marker start displayed on color bar
+				   "end": None,     # marker end displayed on color bar
+				   "step": None,    # marker step
+				   "round": None,   # temperarture precise
+				   "range": None    # marker_max - marker_min 
+				}
 	
 	# color table, NOT used, 
 	#
@@ -32,25 +43,87 @@ class HeatClusterMap(BaseClusterMap):
 	# If possilbe, we can change the 240 colors to 2M (240 * 100 * 100) colors according to the HSV color space
 	# But, I think it is enough for us to denote the different status of clusters with 240 colors
 	
-	def __init__(self, name, min_temp=0, max_temp=100):
-		self.temperature_min = float(min_temp if min_temp > 0 else 0)
-		self.temperature_max = float(max_temp)
+	def __init__(self, name, 
+				 dir_yaml=None, dir_diag=None, dir_output=None, img_type=None,
+				 min_temp=0, max_temp=100):
+		self.setTemperatureMinMax(min_temp, max_temp)
 		# call parent init function
-		BaseClusterMap.__init__(self, name)
+		BaseClusterMap.__init__(self, name, "temperature", dir_yaml, dir_diag, dir_output, img_type)
+		
+	
+	# set min/max temperature
+	# adjust min/max and marker on color bar
+	# 
+	def setTemperatureMinMax(self, tmin, tmax):
+		self.temperature_min = float(tmin if tmin > 0 else 0)
+		self.temperature_max = float(tmax if self.temperature_min < tmax else self.temperature_min + 1)
+		
+		# step of temperature marker
+		marker_step = round(self.temperature_max - self.temperature_min) / 10
+		#marker_step_half = 0.5 * marker_step
+		marker_list =       [0.01, 0.02, 0.05, 0.1,  0.2, 0.5, 1,   2, 5, 10, 25, 50, 100, 200, 500]
+		marker_round_list = [0.01, 0.01, 0.01, 0.01, 0.1, 0.1, 0.1, 1, 1, 2,  5,  10, 20,  50,  100]
+		temp_round_list =   [3,    3,    3,    3,    2,   2,   2,   1, 1, 1,  1,  1,  1,   1,   1]
+		# guess the perfect step of color bar marker
+		prev_index = 0
+		for value in marker_list:
+			if marker_step < value:
+				marker_step = marker_list[prev_index]
+				marker_round = marker_round_list[prev_index]
+				temp_round_precise = temp_round_list[prev_index]
+				break;
+			prev_index += 1
+		# marker start/end on color bar marker
+		marker_start = int(round(self.temperature_min / marker_step)) * marker_step
+		marker_end = int(round(self.temperature_max / marker_step)) * marker_step
+		# min/max temperature on color bar
+		marker_min = marker_start
+		while marker_min > self.temperature_min:
+			marker_min -= marker_round
+		if marker_min < 0:
+			marker_min = 0
+		marker_max = marker_end
+		while marker_max < self.temperature_max:
+			marker_max += marker_round
+		# re-evaluate marker start/end
+		if marker_start == marker_min:
+			marker_start += marker_step 
+		while marker_start - marker_step > marker_min:
+			marker_start -= marker_step
+		
+		if marker_end == marker_max:
+			marker_end -= marker_step
+		while marker_end + marker_step < marker_max:
+			marker_end += marker_step
+		# save the property of marker
+		self.dict_marker.update({"min": marker_min,
+								 "max": marker_max,
+								 "start": marker_start,
+								 "end": marker_end,
+								 "step": marker_step,
+								 "round": temp_round_precise,
+								 "range": marker_max - marker_min
+								})
+		print "[Debug] color bar marker, ", self.dict_marker
+		
 		
 	
 	# get the RGB according to a specific temperature
 	# the MAX different colors is 240, from #0000FF to #FF0000 with temperature ascending
 	def getRGB(self, temp):
-		rate = (self.temperature_max - temp) / (self.temperature_max - self.temperature_min)
+		rate = (self.dict_marker["max"] - temp) / self.dict_marker["range"]
 		h = rate * self.h_max
 		return self.getRGBWithH(h)
 	
 	
 	# get proper temperature for cluster server
-	# formation is XXX.X, the precise is 0.1
+	# formation is XXX.YYY, the precise (YYY) is controlled by self.dict_marker["round"] 
 	def getProperTemperature(self, temp):
-		return round(temp, 1)
+		round_temp = round(temp, self.dict_marker["round"])
+		temp_rgb = self.getRGB(round_temp)
+		self.dict_mapping.update({round_temp:temp_rgb})
+		
+		return round_temp
 	
 	
 	# default temperature for cluster servers
@@ -66,12 +139,8 @@ class HeatClusterMap(BaseClusterMap):
 	#
 	# get default value for dict_servers
 	def getServersDefaultValue(self):
-		temp_default = self.getProperTemperature(self.getDefaultTemperature())
-		temp_rgb = self.getRGB(temp_default)
-		# update mapping dict with {temp_default:temp_rgb}
-		self.dict_mapping.update({temp_default:temp_rgb})
-		
-		return temp_default
+		self.temperature_default = self.getDefaultTemperature()
+		return self.temperature_default
 		
 	
 	
@@ -88,23 +157,27 @@ class HeatClusterMap(BaseClusterMap):
 	
 	
 	# ======================================
-	#           abstract function
-	#         sub-class MUST override
+	#		   abstract function
+	#		 sub-class MUST override
 	# ======================================
-	# 
+	#
 	# get the current status of servers
-	def update(self):
-		if self.flag_debug:
-			print "Update servers with DEBUG random data ..."
-			#self.generateRandomTemperature()
-			self.generateContinousTemperature()
+	# params: dict_values means the data get from each server
+	# this function MUST be called before plot to refresh status of servers in memory
+	def update(self, dict_values):
+		if dict_values is None:
 			return
 		
-		# to do ....
-		# grab real data from mongo db
-		# ...
-	
-	
+		self.dict_mapping.clear()
+		arr_values = sorted(dict_values.values())
+		self.setTemperatureMinMax(arr_values[0], arr_values[-1])
+		self.resetDictServers(self.getServersDefaultValue())
+		
+		for server in dict_values:
+			value = self.getProperTemperature(dict_values[server])
+			self.updateServer(server, value)
+
+
 	# ======================================
 	#           abstract function
 	#         sub-class MUST override
@@ -114,28 +187,12 @@ class HeatClusterMap(BaseClusterMap):
 	# param, ax is an instance of matplotlib.axes.Axes
 	# return value is the filename of legend image file
 	def drawLegendContent(self, ax, xylim):
-		# step of temperature marker
-		marker_step = int(round(self.temperature_max - self.temperature_min)) / 10
-		marker_step_half = 0.5 * marker_step
-		marker_list = [1, 2, 5, 10, 25, 50]
-		
-		prev_value = 1
-		for value in marker_list:
-			if marker_step < value:
-				marker_step = prev_value
-				break;
-			prev_value = value;
-		# start temperature on marker
-		marker_start = int(round(self.temperature_min / marker_step)) * marker_step
-		while marker_start < self.temperature_min + marker_step_half:
-			marker_start += marker_step
-		
-		marker_end = int(round(self.temperature_max / marker_step)) * marker_step
-		while marker_end > self.temperature_max - marker_step_half:
-			marker_end -= marker_step
+		marker_min = self.dict_marker["min"]
+		marker_max = self.dict_marker["max"]
+		marker_start = self.dict_marker["start"]
+		#marker_end = self.dict_marker["end"]
+		marker_step = self.dict_marker["step"]
 			
-		marker_count = (marker_end - marker_start) / marker_step + 1
-		#color_bar_count = xylim[0]
 		color_bar_count = 240
 		
 		xcount = color_bar_count + 20
@@ -148,14 +205,10 @@ class HeatClusterMap(BaseClusterMap):
 		yheight = 0.8 * ystep
 		
 		hstep = self.h_max / color_bar_count
-		tstep_half = 0.5 * (self.temperature_max - self.temperature_min) / color_bar_count
+		tstep_half = 0.5 * (marker_max - marker_min) / color_bar_count
 		tstep = 2 * tstep_half
 		
-		# the first and last color bar
-		color_bar_first = {"color": "#0000FF", "temp": self.temperature_min}
-		color_bar_last = {"color": "#FF0000", "temp": self.temperature_max}
-		
-		temp_current = self.temperature_min
+		temp_current = marker_min
 		marker_current = marker_start
 		for i in range(0, color_bar_count+1):
 			rect = self.genDefaultRect()
@@ -164,9 +217,9 @@ class HeatClusterMap(BaseClusterMap):
 			rect.update({"verts":{"lb":(lb_x, lb_y), "rt":(lb_x + xwidth, lb_y + yheight)}})
 			# color
 			if i == 0:
-				rcolor = color_bar_first["color"]
+				rcolor = "#0000FF"
 			elif i == color_bar_count:
-				rcolor = color_bar_last["color"]
+				rcolor = "#FF0000"
 			else:
 				h = (color_bar_count - i) * hstep
 				rcolor = self.convertRGB2Hex(self.getRGBWithH(h))
@@ -176,9 +229,9 @@ class HeatClusterMap(BaseClusterMap):
 			# label
 			lb_x -= xstep
 			if i == 0:
-				rect.update({"label":{"lb":(lb_x-0.5*xstep, ystart), "text": self.temperature_min}})
+				rect.update({"label":{"lb":(lb_x-0.5*xstep, ystart), "text": marker_min}})
 			elif i == color_bar_count:
-				rect.update({"label":{"lb":(lb_x, ystart), "text": self.temperature_max}})
+				rect.update({"label":{"lb":(lb_x, ystart), "text": marker_max}})
 			# marker
 			elif abs(temp_current - marker_current) < tstep_half:
 				rect.update({"label":{"lb":(lb_x, ystart), "text": marker_current}})
@@ -191,6 +244,13 @@ class HeatClusterMap(BaseClusterMap):
 			self.drawRectangle(ax, rect)
 		
 		
+	# only for test
+	def genRandomValues(self, flag_continue=True):
+		if flag_continue:
+			return self.generateContinousTemperature()
+		else:
+			return self.generateRandomTemperature()
+	
 	
 	# only for test
 	# generate random temperature for cluster servers
@@ -198,14 +258,14 @@ class HeatClusterMap(BaseClusterMap):
 		# init the seed of random function
 		self.getRandom(True)
 		
+		dict_data = {}
 		for server in self.dict_servers:
 			temp_rand = self.getRandom()
 			temp = self.getProperTemperature(self.temperature_min + temp_rand * (self.temperature_max - self.temperature_min))
-			rgb = self.getRGB(temp)
-			# update mapping dict
-			self.dict_mapping.update({temp:rgb})
+			dict_data[server] = temp
 			
-			self.dict_servers[server] = temp
+		return dict_data
+	
 		
 	# only for test, especially continuous colors
 	def generateContinousTemperature(self):
@@ -218,16 +278,16 @@ class HeatClusterMap(BaseClusterMap):
 		step = (self.temperature_max - self.temperature_min)/len_arr
 		temp_current = self.temperature_min
 		
+		dict_data = {}
 		for server in arr:
-			temp = self.getProperTemperature(temp_current)
-			rgb = self.getRGB(temp)
-			self.dict_mapping.update({temp:rgb})
+			dict_data[server] = self.getProperTemperature(temp_current)
 			temp_current += step
 			
-			self.dict_servers[server] = temp
+		return dict_data
 	
 	
 # test
 if __name__ == "__main__":
-	mytest = HeatClusterMap("india", 43, 349)
+	mytest = HeatClusterMap("all")
+	mytest.update(mytest.genRandomValues())
 	mytest.plot()

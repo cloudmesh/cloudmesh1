@@ -1,0 +1,28 @@
+yaml_version: 1.2
+
+cloudmesh:
+    rack:
+        cluster:
+            all:
+                diag: rack.diag
+                count: 1
+            bravo:
+                diag: bravo.diag
+                count: 1
+            echo:
+                diag: echo.diag
+                count: 1
+            delta:
+                diag: delta.diag
+                count: 2
+            india:
+                diag: india.diag
+                count: 5
+            unknown:
+                diag: unknown.diag
+                count: 1
+        service:
+            hpc: HPC
+            openstack: Openstack
+            hadoop: Hadoop
+            ency: ency

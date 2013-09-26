@@ -45,16 +45,17 @@ class Test:
         print "OK"
 
 
-        self.name = self.configuration.active()[0]
+        self.name = self.configuration.active()[1]
         print "ACTIVE CLOUD", self.name
 
         self.cloud = openstack(self.name)
         print "PPPP"
-        """
 
         self.cloud.get_token()
+        pp.pprint(self.cloud.user_token)
         print "LOADED CLOUD"
-
+        
+        """
         # For multiple clouds
         # e.g. india-essex and sierra-grizzly 
         self.names = self.configuration.active()
@@ -66,11 +67,6 @@ class Test:
                 self.clouds[-1].get_token()
             print "LOADED CLOUDS"
         """
-
-    def setup_azure(self):
-        """setup azure"""
-        from cloudmesh.iaas.azure.cm_compute import azure
-        self.azure_cloud = azure("windows_azure")
 
     def test_get_extensions(self):
         """test geting the cloud extensions"""
@@ -180,6 +176,7 @@ class Test:
         print "STARTING IMAGE", image
         meta = {"cmtag":"testing tag from creation via rest api"}
         result = self.cloud.vm_create("fw-test-by-post-003", "2", image, key_name="grizzlykey", meta=meta)
+        #result = self.cloud.vm_create("fw-test-by-post-003", "100", image, meta=meta)
         pp.pprint(result)
         assert len(result.keys()) > 0
 
@@ -414,40 +411,6 @@ class Test:
         meta = self.cloud.get_meta(id)
         print meta
 
-    def test_14_azure(self):
-        """test azure"""
-        HEADING()
-        self.setup_azure()
-        self.azure_cloud.refresh("images")
-        print json.dumps(self.azure_cloud.dump('images'), indent=4)
-
-    def test_azure_services(self):
-        """test azure services"""
-        HEADING()
-        self.setup_azure()
-        self.azure_cloud.refresh("services")
-        print json.dumps(self.azure_cloud.dump('services'), indent=4)
-
-    def test_create_azure_vm(self):
-        """test to create azure vm"""
-        HEADING()
-        self.setup_azure()
-        self.azure_cloud.vm_create()
-        print json.dumps(self.azure_cloud.get_deployment(), indent=4)
-
-    def test_delete_azure_vm(self, name):
-        """Test to tear down azure vm"""
-        HEADING()
-        self.setup_azure()
-        self.azure_cloud.vm_delete(name)
-
-    def test_azure_deployments(self):
-        """Test to list deployments"""
-        HEADING()
-        self.setup_azure()
-        res = self.azure_cloud.list_deployments()
-        print json.dumps(res, indent=4)
-
     def test_15_list_secgroup(self):
         """list security group"""
         tenant_id = '1ae6813a3a6d4cebbeb1912f6d139ad0'
@@ -487,6 +450,14 @@ class Test:
         """test getting extensions"""
         pp.pprint(self.cloud.ks_get_extensions())
 
+    def test18_keypair_add(self):
+        keyname = "grizzlykey"
+        keycontent = "ssh-dss AAAAB3NzaC1kc3MAAACBAPkCkTkLqyqpmjYSU0P6cLMfuY6YPrZr5NkpVVuK9nLEKxdV3oAL1EOhTvgdve6hAVENX76fJFqUeBL1POBvsV92OH3e84cwwUiXBoQ9VrFtAn0l1tsdKkiEadWakCjxp0DqkjWJz1sLDzmB37QqO16T3KI5+yFviJPkn/LUYTMrAAAAFQCbgsFrwjHQqIlOhAKwW7tCt+M+VwAAAIEArgHogg4cLFS9uNtjP4H8vz6f+kYJ2zpHwnBMA7caO9IyFwYz/0BTjF4J/qD+Gwra+PKL7llQJlOAG1Odg79RRqPgk/4LN5KuXNkNbL9GZhcqdxD+ZpUtVjs4WLXA0C1t53CQvNKhkCKEZMTvS603rfBCJ8SBc4d4x6fAD7I6+fsAAACBALuHfiLksJR9xyexDNQpmtK12aIX+xZ+ryLEGbHGd0QIwskdnB9tqFH0S9NZg//ywSqntV9PlEqacmjEsfWojlM30b1wIJl0xCa+5eZiwFm2Xfsm4OhH0NE32SCb+Zr3ho4tcizpR9PVSoTxkU97rnGj1PDrjf1ZsuaG0Dr6Fzv3"
+        pp.pprint(self.cloud.keypair_add(keyname, keycontent))
+ 
+    def test18_keypair_list(self):
+        pp.pprint(self.cloud.keypair_list())
+               
     def start(self):
         """start image"""
         HEADING()

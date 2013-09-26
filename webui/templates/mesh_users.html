@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layoutTable.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -29,12 +29,12 @@ $(function() {
 
 </script>
 
- 
+
 {%     for cloud in hosts %}
         {{ cloud }}
-        
+
 {% endfor %}
- 
+
  <!--
         for server in clouds[cloud]:
             print server
@@ -48,23 +48,23 @@ $(function() {
     {% set cloud_loop = loop %}
     {% set version = clouds[cloud]['cm_type_version'] %}
     {% set attributes = cloud_attributes['grizzly']%}
-    
+
   <div style="margin-bottom:1em;">
   <h3> {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/users") }} {{ cloud }}</h3>
   <div>
     <table id="cloud-table-{{ loop.index0 }}">
       <thead>
           <tr>
-            <!-- for attribute in clouds[cloud][flavor]  --> 
-            {% for attribute in attributes %}	
+            <!-- for attribute in clouds[cloud][flavor]  -->
+            {% for attribute in attributes %}
                   <th>{{attribute[0]}}</th>
-            {% endfor %}			
+            {% endfor %}
           </tr>
       </thead>
       <tbody>
           {% for user in clouds[cloud] %}
              <tr>
-                 <!-- for attribute in clouds[cloud][flavor] --> 
+                 <!-- for attribute in clouds[cloud][flavor] -->
                  {% for attribute in attributes  %}
                       <td>
                        {% set l = attribute | length %}
@@ -72,7 +72,7 @@ $(function() {
                           {% if l == 2%}
                              {{ clouds[cloud][user][attribute[1]] }}
                           {% elif l == 3%}
-                             {{ clouds[cloud][user][attribute[1]][attribute[2]] }}       				
+                             {{ clouds[cloud][user][attribute[1]][attribute[2]] }}
                           {% elif l == 4%}
                              {{ clouds[cloud][user][attribute[1]][attribute[2]][attribute[4]] }}
                           {% endif %}

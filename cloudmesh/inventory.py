@@ -25,16 +25,15 @@ class Inventory:
     BOOTSPEC_FILE = "~/.futuregrid/cloudmesh_bootspec.yaml"
 
     def __init__(self):
-        # read the host file definition from cloudmesh_cludter.yaml
-        self.server_config = cm_config_server()
+		# read the host file definition from cloudmesh_cludter.yaml
+		self.server_config = cm_config_server()
 
-        self.config = ConfigDict(filename=self.CONFIG_FILE)
+		self.config = ConfigDict(filename=self.CONFIG_FILE)
 
-        self.bootspec_config = ConfigDict(filename=self.BOOTSPEC_FILE)
-
-
-        collection = "inventory"
-        self.db_inventory = get_mongo_db(collection)
+		self.bootspec_config = ConfigDict(filename=self.BOOTSPEC_FILE)
+		
+		collection = "inventory"
+		self.db_inventory = get_mongo_db(collection)
 
     def get_attribute(self, host_label, attribute):
 
@@ -315,14 +314,15 @@ class Inventory:
                            "type": iptype})[0]['ipaddr']
 
     def generate_bootspec(self):
-        print self.bootspec_config
+		print self.bootspec_config
 
-        for name in self.bootspec_config:
-            if name not in ['filename', 'location']:
-                print "Adding to inventory bootspec", name
-                description = self.bootspec_config[name]
-                print "DDD", description
-                self.add_bootspec(name, description)
+		bootspecs =  self.bootspec_config['bootspec']
+		for name in bootspecs:
+			
+			print "Adding to inventory bootspec", name
+			description = bootspecs[name]
+			print "DDD", description
+			self.add_bootspec(name, description)
 
     def add_bootspec(self, name, description):
         '''

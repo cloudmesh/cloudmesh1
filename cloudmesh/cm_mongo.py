@@ -55,8 +55,6 @@ class cm_MongoBase(object):
         if values is None:
             return self.db_mongo.update(query, upsert=True)
         else:
-            print query
-            print values
             return self.db_mongo.update(query, values, upsert=True)
 
 
@@ -143,7 +141,9 @@ class cm_mongo:
                     # try to see if the credential works
                     # if so, update the 'manager' so the cloud is successfully activated
                     # otherwise log error message and skip this cloud
-                    if force_auth_verify:
+                    if not force_auth_verify:
+                        self.clouds[cloud_name].update({'manager': cloud})
+                    else:
                         tryauth = cloud.get_token()
                         if 'access' in tryauth:
                             self.clouds[cloud_name].update({'manager': cloud})
@@ -220,7 +220,21 @@ class cm_mongo:
                         result[element]['cm_type_version'] = self.clouds[
                             name]['cm_type_version']
                         result[element]['cm_kind'] = type
-
+                        #print "HPCLOUD_DEBUG", result[element]
+                        for key in result[element]:
+                            print key
+                            if '.' in key:
+                                del result[element][key]                        
+                        if 'metadata' in result[element].keys():
+                            for key in result[element]['metadata']:
+                                if '.' in key:
+                                    fixedkey = key.replace(".", "_")
+                                    #print "%s->%s" % (key,fixedkey)
+                                    value = result[element]['metadata'][key]
+                                    del result[element]['metadata'][key]
+                                    result[element]['metadata'][fixedkey] = value
+                        #print "HPCLOUD_DEBUG - AFTER DELETING PROBLEMATIC KEYS", result[element]
+                        
                         self.db_clouds.insert(result[element])
 
                     watch.stop(name)
