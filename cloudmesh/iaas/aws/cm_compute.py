@@ -1,7 +1,7 @@
 #import boto
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
-from libcloud.base import NodeImage, NodeSize
+from libcloud.compute.base import NodeImage, NodeSize
 
 from cloudmesh.config.cm_config import cm_config
 
@@ -15,6 +15,7 @@ class aws:
 
     def __init__(self):
         self.load_default(self.name)
+        self.connect()
 
     def load_default(self, label):
         """Load default values and set them to the object
@@ -29,7 +30,7 @@ class aws:
 
         #Service certificate
         self.access_key_id = self.user_credential['access_key_id']
-        self.secret_access_key =
+        self.secret_access_key = \
         self.user_credential['secret_access_key']
        
         #SSH
@@ -60,7 +61,7 @@ class aws:
         image = NodeImage(id=self.get_image_name(), name="", driver="")
         size = NodeSize(id=self.get_flavor(), name="", ram=None, disk=None,
                         bandwidth=None, price=None, driver="")
-        self.conn.create_node(self.get_name(), image=image, size=size,
+        self.conn.create_node(name=self.get_name(), image=image, size=size,
                               ex_keyname=self.get_keyname())
         return
 
@@ -91,3 +92,6 @@ class aws:
 
     def get_keyname(self):
         return self.ssh_keyname
+
+    def get_image_name(self):
+        return self.image_name
