@@ -87,7 +87,7 @@ def mongo():
                "uidNumber" : profile["uid"],
                "phone" : profile["phone"],
                "gidNumber" : profile["gid"],
-               "address" : profile["address"],
+               "address" : profile["address"][0],
                "cm_user_id" : config.get("cloudmesh.hpc.username"),
                "email" : profile["e_mail"]
     }
@@ -95,7 +95,7 @@ def mongo():
     projects = {}
 
     active = config.get("cloudmesh.projects.active")
-
+    
     if active != ['None']:
         projects["active"] = active
 
@@ -105,8 +105,12 @@ def mongo():
 
     if projects != {}:
         element["projects"] = projects
+    
+    keys = config.get("cloudmesh.keys.keylist")
+    element['keys'] = keys
 
     pprint (element)
+
 
     print "TODO NOW STIC THIS IN MONGO"
 
