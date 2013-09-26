@@ -1,4 +1,4 @@
-yaml_version: 1.0
+yaml_version: 1.2
 webui:
     host: 127.0.0.1
     port: 5000
@@ -24,12 +24,11 @@ provisioner:
 workflows:
     path: /static/workflows
 rack:
+    with_rack: True
     input: racks/diag
     diagrams:
-        temperature:
-            output: racks/temperature
-        service:
-            output: racks/service
+        temperature: racks/temperature
+        service: racks/service
 mongo:
     db: cloudmesh
     host: localhost
@@ -37,7 +36,7 @@ mongo:
     path: ~/.futuregrid/mongodb
     collections:
         inventory:
-            db: new-inventory
+            db: cm_inventory
         cloudmesh:
             db: cloudmesh
         profile:
@@ -45,17 +44,19 @@ mongo:
         user:
             db: user
         userauth:
-            db: cm-auth
+            db: cm_auth
         pbs:
-            db: cm-pbs
+            db: cm_pbs
         metric:
-            db: cm-metric
+            db: cm_metric
         qstat:
-            db: hpc-qstat
+            db: hpc_qstat
         pbsnodes:
-            db: hpc-pbsnodes
+            db: hpc_pbsnodes
         launcher:
             db: launcher
+        pagestatus:
+            db: pagestatus
 mongo_user:
     db: cm_user
     host: localhost
@@ -104,3 +105,23 @@ roles:
         - gvgv
         projects:
         - 82
+clusters:
+    india:
+        bmc:
+            user: abc
+            password: xyz
+    echo:
+        bmc:
+            user: abc
+            password: xyz
+    bravo:
+        pxe:
+            proxy:
+               ip: ip
+               user: abc
+        bmc:
+            user: abc
+            password: xyz
+            proxy:
+               ip: ip
+               user: abc

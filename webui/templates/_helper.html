@@ -2,10 +2,32 @@
 image_button("041_charts", "/table/")
 #}
 
+{% macro cm_state_color(state) %}
+    {% set s = state|lower %}
+   	{% if s in ["active", "r"] %}
+		<span class="label label-success">{{state}}</span>
+	{% elif s in ["error"] %}
+		<span class="label label-danger">{{state}}</span>
+	{% elif s in ["q"] %}
+		<span class="label label-info">{{state}}</span>
+	{% else %}
+		<span class="label label-default">{{state}}</span>
+	{% endif %}
+{% endmacro %}
+
+<!--
+<span class="label label-primary">Blue</span>
+<span class="label label-info">lightblue</span>
+<span class="label label-warning">yellow</span>
+<span class="label label-danger">red/gray</span>
+-->
+
+
 {% macro cm_image_input(align, type) %}
-      <input align={{ align }} type="image"
-	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
-	     width="16" height="16">
+      <input align={{ align }}
+             type="image"
+	         src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
+	         width="16" height="16">
 {% endmacro %}
 
 
@@ -15,8 +37,14 @@ image_button("041_charts", "/table/")
 	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
 	     onclick="refresh('{{ actionpath }}')"
 	     width="16" height="16">
+{% endmacro %}
 
-
+{% macro image_link(align, type, actionpath) %}
+<!-- modal for progress -->
+      <a href={{actionpath}}>
+	     <img = src="{{url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
+	     width="16" height="16">
+	 </a>
 {% endmacro %}
 
 {% macro flexible_menu(pagelist) -%}

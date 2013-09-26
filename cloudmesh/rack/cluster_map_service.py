@@ -16,8 +16,17 @@ class ServiceClusterMap(BaseClusterMap):
 	# service dict
 	dict_services = None
 	
-	# ascending sorted service list
-	list_services = None
+	# already know service list, read from 'default_rack_yaml' file
+	list_services_known = None
+	
+	# service found in current clusters
+	list_services_found = []
+	
+	# unknown service list had found
+	list_unknown_services_found = []
+	
+	# unknown service
+	unknown_service = "unknown"
 	
 	# mapping dict
 	# map a type of service to a tuple RGB color
@@ -26,9 +35,9 @@ class ServiceClusterMap(BaseClusterMap):
 	dict_mapping = {} 
 	
 	
-	def __init__(self, name):
+	def __init__(self, name, dir_yaml=None, dir_diag=None, dir_output=None, img_type=None):
 		# call parent init function
-		BaseClusterMap.__init__(self, name)
+		BaseClusterMap.__init__(self, name, "service", dir_yaml, dir_diag, dir_output, img_type)
 		
 	
 	# get the RGB according to a specific h param
@@ -37,29 +46,29 @@ class ServiceClusterMap(BaseClusterMap):
 		return self.getRGBWithH(h)
 	
 	
-	# init mapping dict
-	def initMappingDict(self):
-		len_arr = len(self.list_services)
-		if len_arr < 1:
-			return
-		
-		step = self.h_max / len_arr
-		h_current = 0
-		# update the first and last service type with #FF0000 and #0000FF
-		self.dict_mapping.update({self.list_services[0]: (255, 0, 0)})
-		if len_arr > 1:
-			self.dict_mapping.update({self.list_services[-1]: (0, 0, 255)})
+	# get proper service
+	def getProperService(self, value):
+		lvalue = value.lower()
+		# check 'value' is a service in known service list or not
+		# if not, assign it to a unknown servcie, and print warning message
+		if lvalue not in self.list_services_known:
+			if lvalue not in self.list_unknown_services_found:
+				print "[Warning] '{0}' is NOT a known service, assign its status to 'unknown'.".format(value)
+				self.list_unknown_services_found.append(lvalue)
+				
+			lvalue = self.unknown_service
+		# update current service list
+		# service_found will NOT include unknown service 
+		elif lvalue not in self.list_services_found:
+			self.list_services_found.append(lvalue)
 			
-		# update other services RGB
-		for i in range(1, len_arr-1):
-			h_current += step
-			self.dict_mapping.update({self.list_services[i]: self.getRGB(h_current)})
-		
+		return lvalue
+	
 	
 	# default service for cluster servers
-	#    default value is the first type in ascending order
+	#    default value is "unknown"
 	def getDefaultService(self):
-		return self.list_services[0]
+		return self.getProperService(self.unknown_service)
 		
 	
 	# ======================================
@@ -69,10 +78,11 @@ class ServiceClusterMap(BaseClusterMap):
 	#
 	# get default value for dict_servers
 	def getServersDefaultValue(self):
-		# get service list 
+		# get service list by reading 'default_rack_yaml' file
 		self.dict_services = self.dict_rack_config[self.service_section_name]
-		self.list_services = sorted(self.dict_services.keys())
-		self.initMappingDict()
+		self.list_services_known = map(lambda x:x.lower(), self.dict_services.keys())
+		
+		print "services known", self.list_services_known
 		
 		return self.getDefaultService()
 		
@@ -87,27 +97,44 @@ class ServiceClusterMap(BaseClusterMap):
 	# the formation of RGB is: (R, G, B)
 	# for example: {1:(255, 0, 16), 2:(25, 20, 16), ...} 
 	def getMappingDict(self):
+		# update the last/unknown type with #FF0000
+		self.dict_mapping.update({self.unknown_service: (255, 0, 0)})
+		
+		len_found = len(self.list_services_found)
+		if len_found >= 1:
+			list_found_sorted = sorted(self.list_services_found)
+			# the first service type with #0000FF
+			self.dict_mapping.update({list_found_sorted[0]: (0, 0, 255)})
+		
+			# update other services RGB
+			step = self.h_max / len_found
+			for i in range(len_found):
+				h_current = step * (len_found - i)
+				self.dict_mapping.update({list_found_sorted[i]: self.getRGB(h_current)})
+				
 		return deepcopy(self.dict_mapping)
 	
 	
 	# ======================================
-	#           abstract function
-	#         sub-class MUST override
+	#		   abstract function
+	#		 sub-class MUST override
 	# ======================================
-	# 
+	#
 	# get the current status of servers
-	def update(self):
-		if self.flag_debug:
-			print "Update servers with DEBUG random data ..."
-			#self.generateRandomService()
-			self.generateContinousService()
+	# params: dict_values means the data get from each server
+	# this function MUST be called before plot to refresh status of servers in memory
+	def update(self, dict_values):
+		if dict_values is None:
 			return
 		
-		# to do ....
-		# grab real data from mongo db
-		# ...
-	
-	
+		self.dict_mapping.clear()
+		self.resetDictServers(self.getDefaultService())
+		# update servce with proper service 
+		for server in dict_values:
+			value = self.getProperService(dict_values[server])
+			self.updateServer(server, value)
+
+
 	# ======================================
 	#           abstract function
 	#         sub-class MUST override
@@ -117,7 +144,7 @@ class ServiceClusterMap(BaseClusterMap):
 	# param, ax is an instance of matplotlib.axes.Axes
 	# return value is the filename of legend image file
 	def drawLegendContent(self, ax, xylim):
-		xcount = len(self.list_services) + 1
+		xcount = len(self.list_services_found) + 1 + 1
 		xstep = xylim[0] / float(xcount)
 		xstart = 0.5 * xstep
 		xwidth = 0.6 * xstep
@@ -126,7 +153,8 @@ class ServiceClusterMap(BaseClusterMap):
 		ystart = 0.5 * ystep
 		yheight = 0.6 * ystep
 		
-		for service in self.list_services:
+		# we always arrange the display location of the 'unknown service' to the last 
+		for service in sorted(self.list_services_found) + [self.unknown_service]:
 			rect = self.genDefaultRect()
 			lb_x = xstart
 			lb_y = ystart + ystep
@@ -140,33 +168,49 @@ class ServiceClusterMap(BaseClusterMap):
 	
 	
 	# only for test
+	def genRandomValues(self, flag_continue=True):
+		if flag_continue:
+			return self.generateContinousService()
+		else:
+			return self.generateRandomService()
+	
+	
+	# only for test
 	# generate random service for cluster servers
 	def generateRandomService(self):
 		# init the seed of random function
 		self.getRandom(True)
 		
+		dict_data = {}
+		arr_services = self.list_services_known + [self.unknown_service]
+		len_services = len(arr_services)
 		for server in self.dict_servers:
 			temp_rand = self.getRandom()
-			temp = int(round(temp_rand * len(self.list_services))) - 1
+			temp = int(round(temp_rand * len_services)) - 1
+			dict_data[server] = self.getProperService(arr_services[temp])
 			
-			self.dict_servers[server] = self.list_services[temp]
+		return dict_data
 		
 	
 	# only for test, especially continuous colors
 	def generateContinousService(self):
-		arr = sorted(self.dict_servers.keys())
-		len_arr = len(arr)
-		# found a unknown cluster
-		if len_arr == 0:
-			return
-		len_service = len(self.list_services)
+		arr_servers = sorted(self.dict_servers.keys())
+		len_servers = len(arr_servers)
+		
+		dict_data = {}
+		arr_services = sorted(self.list_services_known) + [self.unknown_service]
+		len_services = len(arr_services)
 		count = 0
-		for server in arr:
-			self.dict_servers[server] = self.list_services[count % len_service]
+		for server in arr_servers:
+			dict_data[server] = self.getProperService(arr_services[count % len_services])
 			count += 1
+			
+		return dict_data
 	
 	
 # test
 if __name__ == "__main__":
-	mytest = ServiceClusterMap("india")
+	mytest = ServiceClusterMap("all")
+	mytest.update(mytest.genRandomValues())
 	mytest.plot()
+	#print mytest.genRandomValues()
