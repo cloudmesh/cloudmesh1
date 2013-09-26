@@ -144,7 +144,7 @@ class Test_Inventory:
     
         
                
-    def test_ipaddr(self):
+    ef test_ipaddr(self):
         HEADING()
         
         print self.inventory.ipadr (self.name, "public")
