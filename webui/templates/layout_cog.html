@@ -19,7 +19,6 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='library/jquery-ui/themes/base/minified/jquery-ui.min.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', filename='library/DataTables/media/css/jquery.dataTables.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', filename='library/DataTables/extras/ColVis/css/ColVis.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
 
         <style type="text/css">
             body {
@@ -29,7 +28,6 @@
             .sidebar-nav {
                 padding: 9px 0;
             }
-
         </style>
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
@@ -65,7 +63,6 @@
                 <img src='/static/img/image_spin.gif'/>
             </div>
         </div>
-
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
@@ -75,7 +72,7 @@
 
                         <p class="navbar-text pull-right">
                             {% if g.user and g.user.is_authenticated() %}
-                            Logged in as <a href="#" class="navbar-link">{{ g.user.id }}</a><a href="/logout">(Logout)</a>
+                            Logged in as <a href="#" class="navbar-link">{{ g.user.cm_profile()['firstname'] }} {{ g.user.cm_profile()['lastname'] }} ({{ g.user.id }})</a><a href="/logout">(Logout)</a>
                             {% else %}
                             <a href="/login">Not logged in</a>
                             {% endif %}
@@ -93,6 +90,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span3">
+                    <!--span for navigation -->
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
 
@@ -121,101 +119,104 @@
                 </div><!--/span-->
 
                 <div class="span9">
-                    <div class="hero-unit">
-                        {% block contentbox %}
-                        {% endblock %}
+                    <!--span for body-->
+                    <div class="span9">
+                        <div class="hero-unit">
+                            {% block contentbox %}
+                            {% endblock %}
+                        </div>
                     </div>
-                </div>
 
-                <div class="span9">
-                    <div class="container">
-                        {% block content %}
-                        {% endblock %}
-                    </div>
-                </div><!--/span-->
-                <div class="span9">
+                    <div class="span9">
+                        <div class="container">
+                            {% block content %}
+                            {% endblock %}
+                        </div>
+                    </div><!--/span-->
+                    <div class="span9">
 
-                    <div class="row-fluid">
-                        <div class="span4">
-                            {% block contentsmall11 %}
-                            {% endblock %}
-                        </div><!--/span-->
-                        <div class="span4">
-                            {% block contentsmall12 %}
-                            {% endblock %}
-                        </div><!--/span-->
-                        <div class="span4">
-                            {% block contentsmall13 %}
-                            {% endblock %}
-                        </div><!--/span-->
-                    </div><!--/row-->
-                    <div class="row-fluid">
-                        <div class="span4">
-                            {% block contentsmall21 %}
-                            {% endblock %}
-                            {#
-                            <p>
-                                <a class="btn" href="#">View details &raquo;</a>
-                            </p>
-                            #}
-                        </div><!--/span-->
-                        <div class="span4">
-                            {% block contentsmall22 %}
-                            {% endblock %}
-                            {#
-                            <p>
-                                <a class="btn" href="#">View details &raquo;</a>
-                            </p>
-                            #}
-                        </div><!--/span-->
-                        <div class="span4">
-                            {% block contentsmall23 %}
-                            {% endblock %}
-                            {#
-                            <p>
-                                <a class="btn" href="#">View details &raquo;</a>
-                            </p>
-                            #}
-                        </div><!--/span-->
-                    </div><!--/row-->
-                </div><!--/span-->
-            </div><!--/row-->
-        </div><!--/.fluid-container-->
+                        <div class="row-fluid">
+                            <div class="span4">
+                                {% block contentsmall11 %}
+                                {% endblock %}
+                            </div><!--/span-->
+                            <div class="span4">
+                                {% block contentsmall12 %}
+                                {% endblock %}
+                            </div><!--/span-->
+                            <div class="span4">
+                                {% block contentsmall13 %}
+                                {% endblock %}
+                            </div><!--/span-->
+                        </div><!--/row-->
+                        <div class="row-fluid">
+                            <div class="span4">
+                                {% block contentsmall21 %}
+                                {% endblock %}
+                                {#
+                                <p>
+                                    <a class="btn" href="#">View details &raquo;</a>
+                                </p>
+                                #}
+                            </div><!--/span-->
+                            <div class="span4">
+                                {% block contentsmall22 %}
+                                {% endblock %}
+                                {#
+                                <p>
+                                    <a class="btn" href="#">View details &raquo;</a>
+                                </p>
+                                #}
+                            </div><!--/span-->
+                            <div class="span4">
+                                {% block contentsmall23 %}
+                                {% endblock %}
+                                {#
+                                <p>
+                                    <a class="btn" href="#">View details &raquo;</a>
+                                </p>
+                                #}
+                            </div><!--/span-->
+                        </div><!--/row-->
+                    </div><!--/span4-->
+                </div><!-- /span for body content>
+                </div><!--/row-->
+            </div><!--/.fluid-container-->
 
-        <footer>
-            <hr>
-            <p align="right">
-                &copy; Cloud Mesh {{ version }}, FutuerGrid, Indiana University,
-                Gregor von Laszewski, laszewski@gmail.com, 2013
-            </p>
-        </footer>
+            <footer>
+                <hr>
+                <p align="right">
+                    &copy; Cloud Mesh {{ version }}, FutuerGrid, Indiana University,
+                    Gregor von Laszewski, laszewski@gmail.com, 2013
+                </p>
+            </footer>
 
-        <!-- javascript ------------------------------------------------------- -->
+            <!-- javascript ------------------------------------------------------- -->
 
-        <!--
-        <script src="/static/js/bootstrap-transition.js"></script>
-        <script src="/static/js/bootstrap-alert.js"></script>
-        <script src="/static/js/bootstrap-modal.js"></script>
-        <script src="/static/js/bootstrap-dropdown.js"></script>
-        <script src="/static/js/bootstrap-scrollspy.js"></script>
-        <script src="/static/js/bootstrap-tab.js"></script>
-        <script src="/static/js/bootstrap-tooltip.js"></script>
-        <script src="/static/js/bootstrap-popover.js"></script>
-        <script src="/static/js/bootstrap-button.js"></script>
-        <script src="/static/js/bootstrap-collapse.js"></script>
-        <script src="/static/js/bootstrap-carousel.js"></script>
-        <script src="/static/js/bootstrap-typeahead.js"></script>
-        -->
-        <script src="/static/js/bootstrap-datepicker.js"></script>
-        <script>
+            <!--
+            <script src="/static/js/bootstrap-transition.js"></script>
+            <script src="/static/js/bootstrap-alert.js"></script>
+            <script src="/static/js/bootstrap-modal.js"></script>
+            <script src="/static/js/bootstrap-dropdown.js"></script>
+            <script src="/static/js/bootstrap-scrollspy.js"></script>
+            <script src="/static/js/bootstrap-tab.js"></script>
+            <script src="/static/js/bootstrap-tooltip.js"></script>
+            <script src="/static/js/bootstrap-popover.js"></script>
+            <script src="/static/js/bootstrap-button.js"></script>
+            <script src="/static/js/bootstrap-collapse.js"></script>
+            <script src="/static/js/bootstrap-carousel.js"></script>
+            <script src="/static/js/bootstrap-typeahead.js"></script>
+            -->
+            <script src="/static/js/bootstrap-datepicker.js"></script>
+            <script>
 //Show progress using spinner
-//$("head").ready(function(){
-//refresh(window.location.pathname);
-//});
+$("head").ready(function(){
+refresh(window.location.pathname);
+});
 
-<!--
+
 function refresh(actionPath){
-//$('#progress').css({"z-index": "500", "background-color": "black"});
+$('#progress').css({"z-index": "500", "background-color": "black"});
 var pageWidth = $(document).width();
 var pageHeight = $(document).height();
 $('#progressImage').css("position", "fixed");
@@ -227,8 +228,7 @@ $.get( actionPath, function( data ) {
 $('#progress').hide();
 });
 }
--->
-        </script>
 
+            </script>
     </body>
 </html>

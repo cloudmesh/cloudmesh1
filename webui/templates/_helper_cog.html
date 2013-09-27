@@ -35,7 +35,7 @@ image_button("041_charts", "/table/")
 <!-- modal for progress -->
       <input align={{ align }} type="image"
 	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
-	     onclick="document.location.href='{{ actionpath }}';"
+	     onclick="refresh('{{ actionpath }}')"
 	     width="16" height="16">
 {% endmacro %}
 
