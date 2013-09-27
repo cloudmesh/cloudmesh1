@@ -8,9 +8,11 @@ from pprint import pprint
 
 from cloudmesh.util.util import banner
 from cloudmesh.provisioner.queue.celery import celery as p_queue
+from cloudmesh.launcher.queue.celery import celery as l_queue
+from cloudmesh.pbs.celery import celery as pbs_queue
 from celery import Celery
 
-__all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill', 'ls']
+__all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill', 'ls', 'lspbs']
 
 # app="cloudmesh.provisioner.queue"
 
@@ -71,18 +73,76 @@ def ls():
     i = p_queue.control.inspect()
     c = p_queue.control
     banner("Active Queues")
-    print i.active_queues()
+    pprint (i.active_queues())
     banner("Registered")
-    print i.registered()
+    pprint (i.registered())
     banner("Active")
-    print i.active()
+    pprint (i.active())
     banner("Scheduled")
-    print i.scheduled()
+    pprint (i.scheduled())
     banner("Reserved")
-    print i.reserved()
+    pprint (i.reserved())
+    # banner("Revoked")
+    # pprint (i.resoked())
+    banner("Stats")
+    pprint (i.stats())
 
     banner("Ping")
-    print c.ping(timeout=0.5)
+    pprint (c.ping(timeout=0.5))
+
+@task
+def lspbs():
+    print pbs_queue
+
+    banner("Dict")
+    pprint (pbs_queue.__dict__)
+
+    i = pbs_queue.control.inspect()
+    c = pbs_queue.control
+    banner("Active Queues")
+    pprint (i.active_queues())
+    banner("Registered")
+    pprint (i.registered())
+    banner("Active")
+    pprint (i.active())
+    banner("Scheduled")
+    pprint (i.scheduled())
+    banner("Reserved")
+    pprint (i.reserved())
+    # banner("Revoked")
+    # pprint (i.resoked())
+    banner("Stats")
+    pprint (i.stats())
+
+    banner("Ping")
+    pprint (c.ping(timeout=0.5))
+
+@task
+def lsl():
+    print pbs_queue
+
+    banner("Dict")
+    pprint (l_queue.__dict__)
+
+    i = l_queue.control.inspect()
+    c = l_queue.control
+    banner("Active Queues")
+    pprint (i.active_queues())
+    banner("Registered")
+    pprint (i.registered())
+    banner("Active")
+    pprint (i.active())
+    banner("Scheduled")
+    pprint (i.scheduled())
+    banner("Reserved")
+    pprint (i.reserved())
+    # banner("Revoked")
+    # pprint (i.resoked())
+    banner("Stats")
+    pprint (i.stats())
+
+    banner("Ping")
+    pprint (c.ping(timeout=0.5))
 
 
 @task
