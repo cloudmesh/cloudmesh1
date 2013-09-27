@@ -1,0 +1,29 @@
+yaml_version: 1.2
+username:
+    cloudmesh:
+        clouds:
+            sierra_openstack_grizzly:
+                default:
+                    flavor: m1.tiny
+                    image: 4199d988-0833-4497-a473-96fc456fac2f
+            azure:
+                default:
+                    flavor: ExtraSmall
+                    image: b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-saucy-13_10-amd64-server-20130919-en-us-30GB
+                    location: "East US"
+            aws:
+                default:
+                    flavor: m1.small
+                    image: ami-fbb2fc92
+                    location: us-east-1
+        default: sierra_openstack_grizzly
+        index: 1
+
+
+
+pushkar:
+
+ui:
+   /mesch/resfresh:
+     open:
+     - sierra_openstack_grizzly
