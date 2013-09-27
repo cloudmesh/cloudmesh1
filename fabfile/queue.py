@@ -8,12 +8,12 @@ __all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill']
 
 # app="cloudmesh.provisioner.queue"
 
-"""
-workers = {"launcher": {"count"": "2"},
-           "provisioner": {"count":"2"},
-           "qstat": {"count": "1", "councurrency : 1}
-           }
 
+workers = {"launcher": {"count": "2"},
+           "provisioner": {"count":"2"},
+           "qstat": {"count": "1", "councurrency": 1}
+           }
+"""
 for worker in workers:
     workers[worker] = {"app":"cloudmesh.launcher{0}.queue", 
                     "hostlist":hostlist.expand_hostlist("l[1-{0}]".format(workers[worker])), 
@@ -26,7 +26,7 @@ for worker in workers:
 
 
 launcher_workers = {"app":"cloudmesh.launcher.queue",
-                    "hostlist":hostlist.expand_hostlist("l[1-{0}]".format(workers["launcher"])),
+                    "hostlist":hostlist.expand_hostlist("l[1-{0}]".format(workers["launcher"]["count"])),
                     "queue":"launcher"}
 
 provisioner_workers = {"app":"cloudmesh.provisioner.queue",
