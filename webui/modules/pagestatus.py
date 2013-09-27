@@ -55,47 +55,50 @@ class cm_config_pagestatus(ConfigDict):
             filename = self.filename
         ConfigDict.__init__(self, filename=filename, kind="pagestatus")
 
-config = cm_config_pagestatus()
-print config.get('mongo.collections.pagestatus.db')
+
+if __name__ == "__main__":
+
+    config = cm_config_pagestatus()
+    print config.get('mongo.collections.pagestatus.db')
 
 
-m = cm_mongo_pagestatus()
-m.clear()
+    m = cm_mongo_pagestatus()
+    m.clear()
 
 
-m.kill()
+    m.kill()
 
 
-'''
-m.update({'cm_kind': cm_kind, 'user': user, 'page': page}, {'cm_kind': cm_kind, 'user': user, 'page': page, 'attribute': value})
-cursor = m.find({})
-for element in cursor:
-    print element
+    '''
+    m.update({'cm_kind': cm_kind, 'user': user, 'page': page}, {'cm_kind': cm_kind, 'user': user, 'page': page, 'attribute': value})
+    cursor = m.find({})
+    for element in cursor:
+        print element
+    
+    cursor = m.find({'user': user, 'page': page})
+    print cursor
+    print cursor[0]
+    for element in cursor:
+        print element
+    
+    cursor = m.find_one({'user': user, 'page': page})
+    print cursor
+    
+    
+    m.kill()
+    '''
 
-cursor = m.find({'user': user, 'page': page})
-print cursor
-print cursor[0]
-for element in cursor:
-    print element
+    print 'done killing'
 
-cursor = m.find_one({'user': user, 'page': page})
-print cursor
+    m.add('gregor', '/hello', 'VMs', '100')
+    m.add('gregor', '/hello', 'images', '99')
 
-
-m.kill()
-'''
-
-print 'done killing'
-
-m.add('gregor', '/hello', 'VMs', '100')
-m.add('gregor', '/hello', 'images', '99')
-
-cursor = m.find({})
-for element in cursor:
-    print 'a', element
+    cursor = m.find({})
+    for element in cursor:
+        print 'a', element
 
 
-print m.get('gregor', '/hello', 'VMs')
-print m.get('gregor', '/hello', 'images')
+    print m.get('gregor', '/hello', 'VMs')
+    print m.get('gregor', '/hello', 'images')
 
 
