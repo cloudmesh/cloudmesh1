@@ -290,6 +290,7 @@ class openstack(ComputeBaseType):
         return self._get(msg=apiurl)
     
     def keypair_add(self, keyname, keycontent):
+        #keysnow = self.keypair_list()
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         posturl = "%s/os-keypairs" % publicURL

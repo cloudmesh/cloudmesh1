@@ -89,7 +89,8 @@ def ubuntu():
                       "python-dev",
                       "libldap2-dev",
                       "libsasl2-dev",
-                      "python-matplotlib"])
+                      "python-matplotlib",
+                      "libpng-dev"])
     install_mongodb()
     install_packages(["rabbitmq-server"])
     install()
@@ -105,7 +106,8 @@ def centos():
                        "openssl-devel",
                        "openldap-devel",
                        "bzip2-devel",
-                       "python-matplotlib"])
+                       "python-matplotlib",
+                       "libpng-devel"])
     install_mongodb()
     install_packages(["rabbitmq-server"])
     local('sudo sh -c "chkconfig rabbitmq-server on && service rabbitmq-server start"')

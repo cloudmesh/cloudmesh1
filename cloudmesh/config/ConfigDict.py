@@ -73,8 +73,10 @@ class ConfigDict (OrderedDict):
 
         # print custom_print(template_vars, 4)
 
-        content = template.replace(format="text", **template_vars)
-
+        #content = template.replace(format="text", **template_vars)
+        # changed otherwise it throws unexpected keyword error
+        content = template.replace(kind="text", values=template_vars)
+        
         fpath = filename or self.filename
         f = os.open(fpath, os.O_CREAT | os.O_TRUNC |
                     os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
