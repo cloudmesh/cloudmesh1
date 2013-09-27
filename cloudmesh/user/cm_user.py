@@ -169,9 +169,16 @@ class cm_user(object):
     def set_defaults(self, username, d):
         """ Sets the defaults for a user """
         if type(d) is dict:
-            self.db_defaults.update({'cm_user_id': username}, {'$set': {'defaults': d}})
+            self.db_defaults.update({'cm_user_id': username},
+                                    {'$set': {'defaults': d}})
         else:
             raise TypeError, 'defaults value must be a dict'
+
+    def set_default_attribute(self, username, attribute):
+        """will set a variable in mongo
+            ["defaults"][attribute]
+        """
+        raise NotImplementedError()
 
     def get_defaults(self, username):
         """returns the defaults for the user"""
