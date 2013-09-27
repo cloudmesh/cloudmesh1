@@ -209,11 +209,10 @@
         <script src="/static/js/bootstrap-datepicker.js"></script>
         <script>
 //Show progress using spinner
-//$("head").ready(function(){
-//refresh(window.location.pathname);
-//});
+$("head").ready(function(){
+refresh(window.location.pathname);
+});
 
-<!--
 function refresh(actionPath){
 //$('#progress').css({"z-index": "500", "background-color": "black"});
 var pageWidth = $(document).width();
@@ -227,7 +226,6 @@ $.get( actionPath, function( data ) {
 $('#progress').hide();
 });
 }
--->
         </script>
 
     </body>
