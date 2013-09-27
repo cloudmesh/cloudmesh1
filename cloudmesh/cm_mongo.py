@@ -234,7 +234,7 @@ class cm_mongo:
                         result[element]['cm_kind'] = type
                         #print "HPCLOUD_DEBUG", result[element]
                         for key in result[element]:
-                            print key
+                            #print key
                             if '.' in key:
                                 del result[element][key]                        
                         if 'metadata' in result[element].keys():
