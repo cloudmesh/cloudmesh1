@@ -174,11 +174,13 @@ class cm_user(object):
         else:
             raise TypeError, 'defaults value must be a dict'
 
-    def set_default_attribute(self, username, attribute):
+    def set_default_attribute(self, username, attribute, value):
         """will set a variable in mongo
             ["defaults"][attribute]
         """
-        raise NotImplementedError()
+        d = self.get_defaults(username)
+        d[attribute] = value
+        self.set_defaults(username, d)
 
     def get_defaults(self, username):
         """returns the defaults for the user"""
