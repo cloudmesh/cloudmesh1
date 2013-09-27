@@ -3,32 +3,52 @@ launcher:
     recipies:
         sierra_openstack_grizzly:
             - name: Slurm Cluster
-              description: Deploys a Slurm cluster. One of the Vms is the Master,while the others register with the master as worker nodes. The master will be the first node in the list
+              description:
+                >
+                  Deploys a Slurm cluster. One of the Vms is the Master,
+                  while the others register with the master as worker nodes.
+                  The master will be the first node in the list.
+              label: slurm
               parameters:
                   nodes: 1
                   other: 5
                   types: enter vm or bare metal
+              image: /static/img/launcher/slurm.png
             - name: Hadoop
-              description: Deploys a haddop cluster on the VMs specified
+              description:
+                >
+                  Deploys a haddop cluster on the VMs specified
               parameters:
                   nodes: 1
                   types: enter vm or bare metal
+              image: /static/img/launcher/hadoop.jpg
             - name: Ganglia
-              description: Deploys a Ganglia service for the vms specified. The ganglia server will be the first node in the list
-              types: enter vm or bare metal
+              description:
+                >
+                  Deploys a Ganglia service for the vms specified.
+                  The ganglia server will be the first node in the list.
+              label: ganglia
               parameters:
+                  types: enter vm or bare metal
                   hostnames: please fill out
+              image: /static/img/launcher/ganglia.jpg
             - name: Nagios
-              description: Deploys a Nagios service for the vms specified. The ganglia server will be the first node in the list
+              description:
+                >
+                  Deploys a Nagios service for the vms specified.
+                  The ganglia server will be the first node in the list.
+              label: nagios
               parameters:
                   hostnames: please fill out
                   types: enter vm or bare metal
-
+              image: /static/img/launcher/nagios.png
     columns:
         india_openstack_essex:
+            - image
             - name
             - description
         sierra_openstack_grizzly:
+            - image
             - name
             - description
 

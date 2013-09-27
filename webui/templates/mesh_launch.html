@@ -51,51 +51,63 @@ $(function() {
 
 		        {% for attribute in attribute_list %}
 		        	<th>
-		        		{{attribute}}
+		        		{{attribute|capitalize}}
 		        	</th>
 		        {% endfor %}
 		        </tr>
 				{% set name_index = 0 %}
 		        {% for recipie in recipies[server] %}
-		        
+
 		        <form action = "/cm/launch/launch_servers" method = "post">
 	        	<input type = hidden name = "server" value = {{server}}>
-	        	
+
 	        	<input type = hidden name = "name_index" value = "{{name_index}}">
 		        <tr>
 
-		        	<td><input align="right" type="image" src="/static/img/icons/png/glyphicons_190_circle_plus.png" width="16" height="16"></td>  
+		        	<td valign="top">
+		        		<input align="right"
+		        		       type="image"
+		        		       src="/static/img/icons/png/glyphicons_190_circle_plus.png"
+		        		       width="16" height="16"></td>
 
 		        	{% for a in attribute_list%}
-			        	<td>
+			        	<td valign="top">
 			        		{% if a == "description" %}
-				        		GGG {{recipie[a]}}
+				        		{{recipie[a]}}
 				        		<br>
 				        		<table>
+<<<<<<< HEAD
 				        		
+=======
+
+>>>>>>> 95b46b1d32765a026e2ee5ada74aa4861a458820
 				        		{% for param in recipie['parameters'] %}
 				        		    <tr>
 				        		    <td>
-				        		    {{param}}
+				        		    {{param|capitalize}}
 									</td>
 									<td>
-				        		    <input type = "text" name = "parameter_{{param}}" value = "{{recipie['parameters'][param]}}">
+				        		    <input type = "text"
+				        		           name = "parameter_{{param}}"
+				        		           value = "{{recipie['parameters'][param]}}">
 									</td>
 									</tr>
 				        		{% endfor %}
 				        		</table>
+				        	{% elif a == "image" %}
+				        		<img src="{{recipie[a]}}" width="128">
 				        	{% else %}
 				      	       {{recipie[a]}}
 				      	    {% endif %}
 			        	</td>
-			    	
-			    	
+
+
 			        {%endfor%}
 		        </tr>
 		        {% set name_index = name_index+1 %}
 		        </form>
 		        {% endfor %}
-		        </table>	       
+		        </table>
 	        </div>
        </div>
 

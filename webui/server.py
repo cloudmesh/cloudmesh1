@@ -58,8 +58,16 @@ all_modules = ['pbs',
                'mesh',
                'mesh_hpc',
                'users',
-               'register',
-               'rack']
+               'register']
+
+s_config = cm_config_server()
+
+with_rack = s_config.get("rack.with_rack")
+
+if with_rack:
+    all_modules.append('rack')
+else:
+    log.info("The Rack diagrams are not enabled")
 
 exclude_modules = ['flatpages']
 

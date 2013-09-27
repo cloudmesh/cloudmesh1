@@ -3,7 +3,7 @@ from flask import render_template, request, redirect
 # from cloudmesh.provisioner.cm_launcher import cm_launcher
 from cloudmesh.util.util import cond_decorator
 from flask.ext.login import login_required
-from cloudmesh.config.ConfigDict import ConfigDict 
+from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.launcher.queue.tasks import task_launch
 from cloudmesh.launcher.cm_launcher_db import cm_launcher_db
 import cloudmesh
@@ -29,22 +29,25 @@ def launch_run ():
 @cond_decorator(cloudmesh.with_login, login_required)
 def launch_servers():
 
+
+    launcher_config = ConfigDict(filename="~/.futuregrid/cloudmesh_launcher.yaml")
+    launch_recipies = launcher_config.get("launcher.recipies")
+
     server = request.form.get("server")
     name_index = request.form.get("name_index")
-    return_dict = {}
+    return_dict = dict(launch_recipies[server][int(name_index)])
     return_dict["user"] = "sridhar"  # default user.... change to read from session
     return_dict["server"] = server
 
-    launcher_config = ConfigDict(filename = "~/.futuregrid/cloudmesh_launcher.yaml")
-    launch_recipies = launcher_config.get("launcher.recipies")
-    parameters = launch_recipies[server][int(name_index)]["parameters"] # load the needed set of parameters
+    parameters = launch_recipies[server][int(name_index)]["parameters"]  # load the needed set of parameters
     for parameter in parameters:
         parameters[parameter] = request.form.get("parameter_{0}".format(parameter))
     return_dict["parameters"] = parameters
+
     return_dict["name"] = launch_recipies[server][int(name_index)]["name"]
     task_launch.apply_async(queue="launcher", args=[return_dict])
     return "Task has been submitted to the queue.... <br/><br/>Data sent was:<br/>" + str(return_dict)
-    #return "tasks have been submitted to the queue."
+    # return "tasks have been submitted to the queue."
 
 #     return_string = "in server " + server + "<br>" #+ str(resources)
 #     for r in resources:
@@ -55,7 +58,7 @@ def launch_servers():
 @launch_module.route('/cm/launch')
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_launch_table():
-    launcher_config = ConfigDict(filename = "~/.futuregrid/cloudmesh_launcher.yaml")
+    launcher_config = ConfigDict(filename="~/.futuregrid/cloudmesh_launcher.yaml")
     launch_recipies = launcher_config.get("launcher.recipies")
     columns = launcher_config.get("launcher.columns")
     return render_template('mesh_launch.html',

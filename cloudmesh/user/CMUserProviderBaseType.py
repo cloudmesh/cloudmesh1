@@ -78,7 +78,7 @@ class CMUserProviderBaseType(object):
             data.update(dict)
     	# print "data after update in updates():", data
         self.remove(id)
-        self.add(id, data)
+        self.add(id, dict)
 
     def remove(self, id):
         '''
