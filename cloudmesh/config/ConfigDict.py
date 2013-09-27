@@ -75,13 +75,8 @@ class ConfigDict (OrderedDict):
 
         # content = template.replace(format="text", **template_vars)
         # changed otherwise it throws unexpected keyword error
-<<<<<<< HEAD
-        content = template.replace(kind="text", values=template_vars)
-
-=======
         content = template.replace(kind="dict", values=template_vars)
-        
->>>>>>> 99962ccc4d589f7cc8ff7a0cdc0063ce697d3f08
+
         fpath = filename or self.filename
         f = os.open(fpath, os.O_CREAT | os.O_TRUNC |
                     os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
