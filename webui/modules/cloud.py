@@ -286,9 +286,11 @@ def vm_info(cloud=None, server=None):
     
     # a trick to deal with different type of server_id
     # (string in FG; or int in e.g. hp_cloud)
-    if "%s" % int(server) == server:
-        server = int(server)
-        
+    try:
+        if "%s" % int(server) == server:
+            server = int(server)
+    except:
+        pass    
     clouds.servers()[cloud][server]['cm_vm_id'] = server
     clouds.servers()[cloud][server]['cm_cloudname'] = cloud
     
