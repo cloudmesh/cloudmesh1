@@ -34,10 +34,14 @@ def custom_print(data_structure, indent):
 
 class ConfigDict (OrderedDict):
 
+    def _set_filename(self, filename):
+        self['filename'] = kwargs['filename']
+        self['location'] = path_expand(self.filename)
+
     def __init__(self, *args, **kwargs) :
         OrderedDict.__init__(self, *args, **kwargs)
         if 'filename' in kwargs:
-            self['location'] = kwargs['filename']
+            self._set_filename(kwargs['filename'])
         else:
             log.error("filename not specified")
         self.load(self['location'])
@@ -47,40 +51,17 @@ class ConfigDict (OrderedDict):
         self.load(filename)
 
     def load(self, filename):
-        self['location'] = path_expand(filename)
+        self._set_filename(filename)
         d = OrderedDict(read_yaml_config (self['location'], check=True))
         self.update(d)
 
-    def write(self, filename=None, configuration=None):
-        """this method has not been tested"""
-        # pyaml.dump(self.config, f, vspacing=[2, 1, 1])
-        # text = yaml.dump(self.config, default_flow_style=False)
-        # this is a potential bug
-        if configuration is None:
-            configuration = self
-        template_path = os.path.expanduser("~/.futuregrid/etc/cloudmesh.yaml")
-        template = cm_template(template_path)
-
-        # Set up a dict to pass to the template
-        template_vars = {}
-        template_vars['portalname'] = configuration['cloudmesh']['profile']['username']
-        template_vars['password'] = {}
-        for cloudname, cloudattrs in configuration['cloudmesh']['clouds'].iteritems():
-            template_vars['password'][cloudname] = cloudattrs['credentials']['OS_PASSWORD']
-        template_vars['projects'] = copy.deepcopy(configuration['cloudmesh']['projects'])
-        template_vars['keys'] = copy.deepcopy(configuration['cloudmesh']['keys'])
-        template_vars['profile'] = copy.deepcopy(configuration['cloudmesh']['profile'])
-
-        # print custom_print(template_vars, 4)
-
-        # content = template.replace(format="text", **template_vars)
-        # changed otherwise it throws unexpected keyword error
-        content = template.replace(kind="dict", values=template_vars)
+    def write(self, filename=None):
+        """write the dict"""
 
         fpath = filename or self.filename
         f = os.open(fpath, os.O_CREAT | os.O_TRUNC |
                     os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
-        os.write(f, content)
+        os.write(f, self)
         os.close(f)
 
     def write_init(self, filename=None):
