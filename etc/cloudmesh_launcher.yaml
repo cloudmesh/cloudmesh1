@@ -13,6 +13,10 @@ launcher:
                   nodes: 1
                   other: 5
                   types: enter vm or bare metal
+                  selector:
+                  - vm
+                  - baremetal
+                  - xyz
               image: /static/img/launcher/slurm.png
             - name: Hadoop
               description:
