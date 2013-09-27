@@ -2,10 +2,18 @@ yaml_version: 1.3
 cloudmesh:
    workers:
       launcher:
+        id: l
+        app: cloudmesh.launcher.queue
         count: 2
-      provisioner
+        queue: launcher
+      provisioner:
+        id: p
+        app: cloudmesh.provisioner.queue
         count: 2
+        queue: provisioner
       qstat:
+        id: q
+        app: cloudmesh.pbs
         count: 1
-        councurrency : 1
-
+        queue: qstat
+        concurrency: 1
