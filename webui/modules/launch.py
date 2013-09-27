@@ -31,6 +31,7 @@ def launch_servers():
 
 
     launcher_config = ConfigDict(filename="~/.futuregrid/cloudmesh_launcher.yaml")
+    celery_config = ConfigDict(filename="~/.futuregrid/cloudmesh_celery.yaml")
     launch_recipies = launcher_config.get("launcher.recipies")
 
     server = request.form.get("server")
@@ -45,7 +46,8 @@ def launch_servers():
     return_dict["parameters"] = parameters
 
     return_dict["name"] = launch_recipies[server][int(name_index)]["name"]
-    task_launch.apply_async(queue="launcher", args=[return_dict])
+    queue = celery_config = celery_config.get("cloudmesh.workers.launcher.queue")
+    task_launch.apply_async(queue=queue, args=[return_dict])
     return "Task has been submitted to the queue.... <br/><br/>Data sent was:<br/>" + str(return_dict)
     # return "tasks have been submitted to the queue."
 
