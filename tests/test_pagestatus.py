@@ -33,12 +33,12 @@ class Test_cloudmesh:
 
     def test_add(self):
         HEADING()
-        db.add('gregor', '/hello', 'VMs', '100')
-        db.add('gregor', '/hello', 'images', '99')
+        self.db.add('gregor', '/hello', 'VMs', '100')
+        self.db.add('gregor', '/hello', 'images', '99')
 
 
-        vms = db.get('gregor', '/hello', 'VMs')
-        images = db.get('gregor', '/hello', 'images')
+        vms = self.db.get('gregor', '/hello', 'VMs')
+        images = self.db.get('gregor', '/hello', 'images')
         assert vms == 100
         assert images == 99
 
