@@ -228,13 +228,15 @@ def start_vm(cloud=None, server=None):
     print "STARTING", config.prefix, config.index
     print "FLAVOR", vm_flavor, vm_flavor_id
     metadata = {'cm_owner': config.prefix}
+    username = config.get('cloudmesh.hpc.username')
+    keynamenew = "%s_%s" % (username, key.replace('.','_').replace('@', '_'))
     result = clouds.vm_create(
         cloud, 
         config.prefix, 
         config.index, 
         vm_flavor_id, 
         vm_image, 
-        key, 
+        keynamenew, 
         meta=metadata)
     print "P"*20
     print result
