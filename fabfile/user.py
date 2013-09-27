@@ -77,7 +77,6 @@ def password():
 
 @task
 def mongo():
-    yaml()
     config = cm_config(filename="~/.futuregrid/cloudmesh.yaml")
     profile = config.profile()
 
@@ -95,7 +94,7 @@ def mongo():
     projects = {}
 
     active = config.get("cloudmesh.projects.active")
-    
+
     if active != ['None']:
         projects["active"] = active
 
@@ -105,7 +104,7 @@ def mongo():
 
     if projects != {}:
         element["projects"] = projects
-    
+
     # get keys and clean the key titles (replace '.' with '_' due to mongo restriction)
     keys = config.get("cloudmesh.keys.keylist")
     for keytitle in keys.keys():
@@ -116,8 +115,8 @@ def mongo():
             keys[newkeytitle] = keycontent
     element['keys'] = keys
 
-    #pprint (element)
-    
+    pprint (element)
+
     # hpc username as key
     username = element["cm_user_id"]
     # populate the local userinfo into the same mongo as though it were from LDAP.
