@@ -479,7 +479,7 @@ class openstack(ComputeBaseType):
 
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
         conf['adminURL'] = None
-        if 'admin' in compute_service['endpoints'][0]:
+        if 'adminURL' in compute_service['endpoints'][0]:
             conf['adminURL'] = str(compute_service['endpoints'][0]['adminURL'])
         conf['token'] = str(self.user_token['access']['token']['id'])
         return conf
