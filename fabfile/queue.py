@@ -8,17 +8,34 @@ __all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill']
 
 # app="cloudmesh.provisioner.queue"
 
-launcher_workers = {"app":"cloudmesh.launcher.queue", 
-                    "hostlist":hostlist.expand_hostlist("l[1-2]"), 
+"""
+workers = {"launcher": {"count"": "2"},
+           "provisioner": {"count":"2"},
+           "qstat": {"count": "1", "councurrency : 1}
+           }
+
+for worker in workers:
+    workers[worker] = {"app":"cloudmesh.launcher{0}.queue", 
+                    "hostlist":hostlist.expand_hostlist("l[1-{0}]".format(workers[worker])), 
+                    "queue": worker}
+
+
+"""
+
+# no_workers_launcher =
+
+
+launcher_workers = {"app":"cloudmesh.launcher.queue",
+                    "hostlist":hostlist.expand_hostlist("l[1-{0}]".format(workers["launcher"])),
                     "queue":"launcher"}
 
-provisioner_workers = {"app":"cloudmesh.provisioner.queue", 
-                       "hostlist":hostlist.expand_hostlist("p[1-2]"), 
+provisioner_workers = {"app":"cloudmesh.provisioner.queue",
+                       "hostlist":hostlist.expand_hostlist("p[1-2]"),
                        "queue":"provisioner"}
 
-questat_workers = {"app":"cloudmesh.pbs", 
-                   "hostlist":['q1'], 
-                   "queue":"questat", 
+questat_workers = {"app":"cloudmesh.pbs",
+                   "hostlist":['q1'],
+                   "queue":"questat",
                    "concurrency":1}
 
 worker_list = [provisioner_workers, launcher_workers, questat_workers];
@@ -67,8 +84,8 @@ def start(view=None):
             concurrency = None;
             if "concurrency" in worker:
                 concurrency = worker["concurrency"]
-            celery_command("start", worker["app"], 
-                           worker["hostlist"], worker["queue"], 
+            celery_command("start", worker["app"],
+                           worker["hostlist"], worker["queue"],
                            concurrency=concurrency)
 
     if view is None:
