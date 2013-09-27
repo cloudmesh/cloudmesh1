@@ -4,7 +4,13 @@ import clean
 import mq
 import time
 import hostlist
-__all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill']
+from pprint import pprint
+
+from cloudmesh.util.util import banner
+from cloudmesh.provisioner.queue.celery import celery as p_queue
+from celery import Celery
+
+__all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill', 'ls']
 
 # app="cloudmesh.provisioner.queue"
 
@@ -13,6 +19,7 @@ workers = {"launcher": {"count": "2"},
            "provisioner": {"count":"2"},
            "qstat": {"count": "1", "councurrency": 1}
            }
+
 """
 for worker in workers:
     workers[worker] = {"app":"cloudmesh.launcher{0}.queue", 
@@ -53,6 +60,30 @@ def gui():
     local("celery flower &")
     time.sleep(1)
     local("open http://localhost:5555")
+
+@task
+def ls():
+    print p_queue
+
+    banner("Dict")
+    pprint (p_queue.__dict__)
+
+    i = p_queue.control.inspect()
+    c = p_queue.control
+    banner("Active Queues")
+    print i.active_queues()
+    banner("Registered")
+    print i.registered()
+    banner("Active")
+    print i.active()
+    banner("Scheduled")
+    print i.scheduled()
+    banner("Reserved")
+    print i.reserved()
+
+    banner("Ping")
+    print c.ping(timeout=0.5)
+
 
 @task
 def monitor():
