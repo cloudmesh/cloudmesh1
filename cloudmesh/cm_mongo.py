@@ -149,6 +149,18 @@ class cm_mongo:
                             self.clouds[cloud_name].update({'manager': cloud})
                         else:
                             log.error("Credential not working, cloud is not activated")
+                            
+                    if cm_type == 'openstack':
+                        keys = self.config.userkeys()['keylist']
+                        username = self.config.username()
+                        for keyname, keycontent in keys.iteritems():
+                            keynamenew = "%s_%s" % (username, keyname.replace('.','_').replace('@', '_'))
+                            #print "Transformed key name: %s" % keynamenew
+                            log.info("Adding a key for user <%s> in cloud <%s>" % (username, cloud_name))
+                            keypart = keycontent.split(" ")
+                            keycontent = "%s %s" % (keypart[0], keypart[1])
+                            cloud.keypair_add(keynamenew, keycontent)
+                        #pprint(keys)
 
             except Exception, e:
                 print "ERROR: can not activate cloud", cloud_name
