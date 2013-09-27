@@ -1,0 +1,11 @@
+yaml_version: 1.3
+cloudmesh:
+   workers:
+      launcher:
+        count: 2
+      provisioner
+        count: 2
+      qstat:
+        count: 1
+        councurrency : 1
+
