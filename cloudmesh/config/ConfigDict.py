@@ -64,11 +64,6 @@ class ConfigDict (OrderedDict):
         os.write(f, self)
         os.close(f)
 
-    def write_init(self, filename=None):
-        # print "******************************\n"
-        # print custom_print(self.init_config, 4)
-        self.write(filename, self.init_config)
-
     def error_keys_not_found(self, keys):
         log.error("Filename: {0}".format(self['location']))
         log.error("Key '{0}' does not exist".format('.'.join(keys)))
