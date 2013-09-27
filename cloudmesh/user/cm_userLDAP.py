@@ -63,7 +63,8 @@ class cm_userLDAP (CMUserProviderBaseType):
 
     def __init__(self, collection="user"):
         super(cm_userLDAP, self).__init__()
-
+        self.ldapconn = None
+        
     def refresh(self):
         '''
         Refresh the user database from the user provider
@@ -105,7 +106,8 @@ class cm_userLDAP (CMUserProviderBaseType):
         self.users = {}
 
     def disconnect(self):
-        self.ldapconn.unbind()
+        if self.ldapconn:
+            self.ldapconn.unbind()
 
     def __del__(self):
         self.disconnect()

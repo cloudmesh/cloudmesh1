@@ -15,10 +15,10 @@ from cloudmesh.config.ConfigDict import ConfigDict
 import json
 import os
 import warnings
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
+from pprint import pprint
 
 from cloudmesh.util.util import HEADING
+from cloudmesh.util.util import path_expand
 
 
 class Test_cloudmesh:
@@ -38,10 +38,11 @@ class Test_cloudmesh:
         pass
 
     def test_launcher(self):
+        HEADING()
         filename = "~/.futuregrid/cloudmesh_launcher.yaml"
         config = ConfigDict(filename=filename)
         print config
-        existing = config.get("recipies")
+        existing = config.get("launcher.recipies")
         test1 = existing is not None
         print existing
         try:
@@ -53,6 +54,7 @@ class Test_cloudmesh:
         assert test1 and test2
 
     def test_server(self):
+        HEADING()
         filename = "~/.futuregrid/cloudmesh_server.yaml"
         config = ConfigDict(filename=filename)
         # print config
@@ -68,6 +70,7 @@ class Test_cloudmesh:
         assert test1 and test2
 
     def test_dot(self):
+        HEADING()
         filename = "~/.futuregrid/cloudmesh_server.yaml"
         config = ConfigDict(filename=filename)
         print config
@@ -83,6 +86,7 @@ class Test_cloudmesh:
         assert test1 and test2
 
     def test_getitem_server(self):
+        HEADING()
         filename = "~/.futuregrid/cloudmesh_server.yaml"
         config = ConfigDict(filename=filename)
         print config
@@ -99,34 +103,51 @@ class Test_cloudmesh:
         assert test1 and test2
 
 
-    def test01_print(self):
+    def test_print(self):
+        HEADING()
         print self.config
 
-    def test02_active(self):
+    def test_active(self):
         HEADING()
         result = self.config.projects('active')
         print result
         assert 'fg82' in result
 
-    def test03_completed(self):
+    def test_completed(self):
         HEADING()
         result = self.config.projects('completed')
         assert True
 
-    def test04_active(self):
+    def test_active(self):
         HEADING()
         result = self.config.projects('default')
         assert result == 'fg82'
 
-    def test05_sierra(self):
+    def test_sierra(self):
         HEADING()
-        result = self.config.get('sierra_openstack_grizzly')
-        assert result["OS_VERSION"] == "grizzly"
+        result = self.config.cloud('sierra_openstack_grizzly')
+        pprint (result)
+        assert result["credentials"]["OS_VERSION"] == 'grizzly'
 
-    def test06_keys_sierra_openstack(self):
+
+    def test_expand(self):
+        HEADING()
+        result = self.config.get('cloudmesh.clouds.sierra_openstack_grizzly')
+        dir = result['credentials']['OS_CACERT']
+        print dir
+        assert dir.startswith("~")
+        dir = path_expand(dir)
+        print dir
+        assert not dir.startswith("~")
+
+
+
+    def test_keys_sierra_openstack(self):
         HEADING()
         keys = self.config.keys()
         assert 'sierra_openstack_grizzly' in keys
+
+
 
     """
     def test07_keys_india_eucalyptus(self):
@@ -141,28 +162,13 @@ class Test_cloudmesh:
 
     """
 
-    def test08_keys_grizzly_openstack(self):
-        HEADING()
-        keys = self.config.keys()
-        assert 'sierra_openstack_grizzly' in keys
-
-    def test10_grizzly(self):
-        HEADING()
-        result = self.config.get('sierra_openstack_grizzly')
-        assert result["OS_VERSION"] == 'grizzly'
-
-    def test11_grizzly(self):
-        HEADING()
-        result = self.config.get('sierra_openstack_grizzly', expand=True)
-        assert result["OS_VERSION"] == 'grizzly'
-
-    def test12_clouds(self):
+    def test_clouds(self):
         HEADING()
         clouds = self.config.clouds()
         assert isinstance(clouds, dict)
         assert 'sierra_openstack_grizzly' in clouds
 
-    def test13_cloud(self):
+    def test_cloud(self):
         HEADING()
         sierra_cloud = self.config.cloud('sierra_openstack_grizzly')
         assert isinstance(sierra_cloud, dict)
@@ -181,6 +187,7 @@ class Test_cloudmesh:
         project = self.config.projects('default')
         assert project == 'fg82'
 
+    """
     def test16_write(self):
         HEADING()
         warnings.filterwarnings(
@@ -190,6 +197,7 @@ class Test_cloudmesh:
         self.config.write(name)
         print open(name, "rb").read()
         os.remove(name)
+    """
 
     def test17_key(self):
         HEADING()

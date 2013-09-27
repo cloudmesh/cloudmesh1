@@ -27,7 +27,7 @@ cloudmesh:
             cm_type: azure
             cm_type_version:
             credentials:
-                subscriptionid: 00000000-aaaa-bbbb-cccc-dddddddddddd
+                subscriptionid: {{azure.subscriptionid}}
                 managementcertfile: $HOME/.futuregrid/azure_managementCertificate.pem
                 thumbprint: $HOME/.futuregrid/azure_thumbprint
                 servicecertfile: $HOME/.futuregrid/azure_serviceCertificate.pfx
@@ -40,8 +40,11 @@ cloudmesh:
             cm_label: aws
             cm_type: amazon
             credentials:
-                aws_access_key_id = <your_access_key_here>
-                aws_secret_access_key = <your_secret_key_here>
+                access_key_id: {{aws.access_key_id}}
+                secret_access_key: {{aws.secret_access_key}}
+                keyname: cloudmesh
+                userid: {{aws.userid}}
+                privatekeyfile: $HOME/.futuregrid/aws_pk.pem
             default:
                 flavor: m1.small
                 image: ami-fbb2fc92
