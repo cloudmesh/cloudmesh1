@@ -243,7 +243,7 @@ def start_vm(cloud=None, server=None):
     # print "PPPPPPPPPPPP", result
     # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     config.incr()
-    config.write()
+    #config.write()
     time.sleep(5)
     clouds.refresh(names=[cloud], types=["servers"])
     return redirect('/mesh/servers')
