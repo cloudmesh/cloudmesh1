@@ -187,18 +187,13 @@ if __name__ == "__main__":
 
 
     print "mongo.path GET =", config.get("cloudmesh.server.mongo.path")
-    print "mongo.path ATTIRBUTE =", config.attribute("server.mongo.path")
+    print "mongo.path ATTIRBUTE =", config.attribute("mongo.path")
 
-    print "mongo.path GET =", config.get("cloudmesh.server.mongo.path.wrong")
+
     print "get A =", config.get("a")
 
-
-
-
-
-
-
-    print "mongo.path.wrong =", config.get("cloudmesh.server.mongo.path.wrong")
+    print "wrong mongo.path ATTRIBUTE =", config.attribute("mongo.path.wrong")
+    print "wrong mongo.path GET =", config.get("cloudmesh.server.mongo.path.wrong")
 
     # print config["dummy"]
     # config["x"] = "2"
