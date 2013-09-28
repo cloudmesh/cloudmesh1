@@ -50,19 +50,20 @@ cloudmesh:
                 flavor: m1.small
                 image: ami-fbb2fc92
                 location: us-east-1
-    default: sierra_openstack_grizzly
-    index: 1
+    default:
+      cloud: sierra_openstack_grizzly
+      index: 1
+      prefix: {{ portalname }}
     keys:
         default: {{keys.default}}
         keylist:
             {% for keyname, key in keys.iteritems() -%}
             {{ keyname }}: {{ key }}
             {% endfor -%}
-    prefix: {{ portalname }}
     profile:
         address:
         - TBD
-        e_mail: {{ profile.e_mail }}
+        email: {{ profile.e_mail }}
         firstname: {{ profile.firstname }}
         gid: {{ profile.gid }}
         uid: {{ profile.uid }}
