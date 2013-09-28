@@ -1,4 +1,5 @@
-yaml_version: 1.3
+meta:
+  yaml_version: 1.3
 cloudmesh:
    workers:
       launcher:
