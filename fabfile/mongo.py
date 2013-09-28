@@ -23,8 +23,40 @@ def get_pid(command):
             break
     return (pid, line)
 
+@task
+def admin():
+    """creates a password protected user for mongo"""
 
+    config = cm_config_server().get("cloudmesh.server.mongo")
 
+    user = config["username"]
+    password = config["password"]
+
+    #
+    # setting up the list of dbs
+    #
+    dbs = set()
+    print config["collections"]
+    for collection in config["collections"]:
+        dbs.add(config['collections'][collection]['db'])
+
+    script = []
+    script.append('db.addUser("{0}", "{1}");'.format(user, password))
+    script.append('db.auth("{0}", "{1}");'.format(user, password))
+
+    for db in dbs:
+        script.append('db = db.getSiblingDB("{0}");'.format(db))
+        script.append('db.addUser("{0}", "{1}");'.format(user, password))
+    script.append("use admin;")
+    script.append('db.shutdownServer();')
+
+    mongo_script = '\n'.join(script)
+
+    print mongo_script
+    local("echo -e '{0}' | mongo".format(mongo_script))
+
+    print "USER", user
+    print "PASSWORD", password
 
 def mongo_start(config_name):
     path = cm_path_expand(cm_config_server().get("cloudmesh.server.{0}.path".format(config_name)))
