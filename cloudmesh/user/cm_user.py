@@ -28,13 +28,16 @@ class cm_user(object):
     a tenant id, user id, cloud version, cloud type and location.
     """
 
+    config_server = None
+
     def __init__(self):
+        self.config_server = cm_config_server()
         self.connect_db()
         self.connect_userdb()
 
     def connect_db(self):
         """ Connect to the mongo db."""
-        db_name = cm_config_server().get("cloudmesh.server.mongo.db")
+        db_name = self.config_server.get("cloudmesh.server.mongo.db")
         client = MongoClient()
         db = client[db_name]
         ldap_collection = 'user'
@@ -49,34 +52,50 @@ class cm_user(object):
             self._connect_userdb()
         except:
             print
-            print "The below lines should be existed in cloudmesh_server.yaml"
+            print "The following lines should exist in cloudmesh_server.yaml"
             print "----------------------"
-            print "mongo_user:\n" + \
-                    "    db: cm_user\n" + \
-                    "    host: hostname\n" + \
-                    "    port: portnumber\n" + \
-                    "    username: admin\n" + \
-                    "    password: passwd\n" + \
-                    "    path: ~/.futuregrid/mongodb_user\n" + \
-                    "    collections:\n" + \
-                    "        cm_password:\n" + \
-                    "            db: cm_user"
+            print "cloudmesh:"
+            print "    server:"
+            print "        mongo_user:\n" + \
+                    "           db: cm_user\n" + \
+                    "           host: hostname\n" + \
+                    "           port: portnumber\n" + \
+                    "           username: admin\n" + \
+                    "           password: passwd\n" + \
+                    "           path: ~/.futuregrid/mongodb_user\n" + \
+                    "           collections:\n" + \
+                    "               cm_password:\n" + \
+                    "                   db: cm_user"
             print "---------------------"
 
 
     def _connect_userdb(self):
         """ Connect to the mongo user db."""
         # This will be enabled with ssl
-        db_name = cm_config_server().get("mongo_user.db")
-        host = cm_config_server().get("mongo_user.host")
-        port = cm_config_server().get("mongo_user.port")
-        username = cm_config_server().get("mongo_user.username")
-        password = cm_config_server().get("mongo_user.password")
+        print "A"
+        db_name = self.config_server.get("cloudmesh.server.mongo_user.db")
+        print "B", db_name
+        host = self.config_server.get("cloudmesh.server.mongo_user.host")
+        print "C", host
+        port = self.config_server.get("cloudmesh.server.mongo_user.port")
+        print "D", port
+        username = self.config_server.get("cloudmesh.server.mongo_user.username")
+        print "E", username
+        password = self.config_server.get("cloudmesh.server.mongo_user.password")
+        print "F", password
         client = MongoClient(host=host, port=port)
+        print "G"
         db = client[db_name]
+        print "H"
         passwd_collection = 'cm_password'
+        print "I"
         self.userdb_passwd = db[passwd_collection]
+        print "J"
+        print username
+        print password
         db.authenticate(username, password)
+
+        print "K"
 
     def info(self, portal_id, cloud_names=[]):
         """Return the user information with a given portal id.
@@ -200,7 +219,8 @@ class cm_user(object):
         :type cloud: str
 
         """
-        self.userdb_passwd.insert({"username":username, "password":password,
+        self.userdb_passwd.insert({"username":username,
+                                   "password":password,
                                    "cloud": cloud})
 
     def get_password(self, username, cloud):
