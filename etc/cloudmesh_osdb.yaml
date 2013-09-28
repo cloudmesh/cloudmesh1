@@ -1,5 +1,6 @@
 meta:
   yaml_version: 1.0
+  kind: metric
 cloudmesh:
    metric:
      sierra_openstack_grizzly:
