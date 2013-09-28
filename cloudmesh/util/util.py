@@ -6,7 +6,13 @@ import uuid
 import functools
 import warnings
 
-# from logger import LOGGER
+def yn_choice(message, default='y'):
+    """http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input"""
+    choices = 'Y/n' if default.lower() in ('y', 'yes') else 'y/N'
+    choice = raw_input("%s (%s) " % (message, choices))
+    values = ('y', 'yes', '') if default == 'y' else ('y', 'yes')
+    return True if choice.strip().lower() in values else False
+
 
 def deprecated(func):
      '''This is a decorator which can be used to mark functions

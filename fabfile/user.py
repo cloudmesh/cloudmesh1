@@ -4,17 +4,19 @@ from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
-from cloudmesh.util.util import path_expand as cm_path_expand
+from cloudmesh.util.util import path_expand as path_expand
 from cloudmesh.util.util import banner
 from cloudmesh.inventory import Inventory
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.user.cm_user import cm_user
+from cloudmesh.util.util import yn_choice
 from sh import keystone
-
+from sh import less
 from  yaml import dump as yaml_dump
 import sys
 import os.path
+import os
 
 @task
 def yaml():
@@ -23,9 +25,17 @@ def yaml():
     puts it into mongo as a profile
     
     """
+    new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
+    old_yaml = path_expand('~/.futuregrid/cloudmesh.yaml')
+
     t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
+
     t.generate("~/.futuregrid/me.yaml",
-               '~/.futuregrid/cloudmesh-new.yaml')
+               new_yaml)
+    if yn_choice("Review the new yaml file", default='n'):
+        os.system ("less -E {0}".format(new_yaml))
+    if yn_choice("Move the new yaml file to {0}".format(old_yaml), default='y'):
+        os.rename (new_yaml, old_yaml)
 
 @task
 def list():
