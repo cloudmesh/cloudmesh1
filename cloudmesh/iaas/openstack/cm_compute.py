@@ -110,10 +110,10 @@ class openstack(ComputeBaseType):
 
         if admin_credential is None:
             try:
-                self.admin_credential = cm_config_server().get("keystone", label)
+                self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(label))
             except:
                 log.error("No admin credentail found! Please check your cloudmesh_server.yaml file.")
-
+        # connecting within init will lead to long delays
         self.connect()
 
     def clear(self):
@@ -130,12 +130,11 @@ class openstack(ComputeBaseType):
         self.admin_credentials = None
         self.type = "openstack"
 
-
-
     def connect(self):
         """
         creates tokens for a connection
         """
+        log.info("Loading User Credentials")
         if self.user_credential is None:
             log.error("error connecting to openstack compute, credential is None")
         else:
@@ -143,6 +142,7 @@ class openstack(ComputeBaseType):
 
         # check if keystone is defined, and if failed print log msg
         #
+        log.info("Loading Admin Credentials")
         if self.admin_credential is None:
             log.error("error connecting to openstack compute, credential is None")
         else:
@@ -288,19 +288,19 @@ class openstack(ComputeBaseType):
     def keypair_list(self):
         apiurl = "os-keypairs"
         return self._get(msg=apiurl)
-    
+
     def keypair_add(self, keyname, keycontent):
-        #keysnow = self.keypair_list()
+        # keysnow = self.keypair_list()
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         posturl = "%s/os-keypairs" % publicURL
-        
+
         params = {"keypair": {"name": "%s" % keyname,
                               "public_key": "%s" % keycontent
                               }
                  }
         return self._post(posturl, params)
-        
+
     def vm_create(self, name,
                   flavor_name,
                   image_id,
@@ -349,7 +349,7 @@ class openstack(ComputeBaseType):
                   }
         if key_name:
             params["server"]["key_name"] = key_name
-            
+
         if userdata:
             safe_userdata = strutils.safe_encode(userdata)
             params["server"]["user_data"] = base64.b64encode(safe_userdata)
@@ -459,7 +459,7 @@ class openstack(ComputeBaseType):
 
         print url
         headers = {'X-Auth-Token': token['access']['token']['id']}
-                
+
         r = requests.get(url, headers=headers, verify=self._get_cacert(credential), params=payload)
 
         print "RRRRR", r
@@ -492,7 +492,7 @@ class openstack(ComputeBaseType):
     # new
     def _list_to_dict(self, list, id, type, time_stamp):
         d = {}
-        cm_type_version = self.compute_config.get('cloudmesh', 'clouds', self.label, 'cm_type_version')
+        cm_type_version = self.compute_config.get('cloudmesh.clouds.{0}.cm_type_version'.format(self.label))
 
         print "VVVVV", cm_type_version
 

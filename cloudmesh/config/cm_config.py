@@ -279,7 +279,7 @@ class cm_config(ConfigDict):
 
     def get_credential (self, cloud=None, expand=False):
         if expand:
-            d = self.get("cloudmesh.{0}.credentials".format(cloud))
+            d = self.get("cloudmesh.clouds.{0}.credentials".format(cloud))
             for key in d:
                d[key] = path_expand(str(d[key]))
             return d

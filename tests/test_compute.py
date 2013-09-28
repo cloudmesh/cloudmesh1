@@ -44,7 +44,6 @@ class Test:
         self.configuration = cm_config()
         print "OK"
 
-
         self.name = self.configuration.active()[0]
         print "ACTIVE CLOUD", self.name
 
@@ -54,7 +53,7 @@ class Test:
         self.cloud.get_token()
         pp.pprint(self.cloud.user_token)
         print "LOADED CLOUD"
-        
+
         """
         # For multiple clouds
         # e.g. india-essex and sierra-grizzly 
@@ -68,65 +67,6 @@ class Test:
             print "LOADED CLOUDS"
         """
 
-    def test_get_extensions(self):
-        """test geting the cloud extensions"""
-        HEADING()
-
-        print json.dumps(self.cloud.get_extensions(), indent=4)
-        assert True
-
-    def test_get_users(self):
-        """test to get the users"""
-        HEADING()
-
-        self.cloud.refresh("users")
-
-        #        print json.dumps(self.cloud.get_users(), indent=4)
-        print json.dumps(self.cloud.users, indent=4)
-
-        assert True
-
-    def test_get_users_all(self):
-        """testto get all information for the users"""
-
-        for name in self.configuration.active():
-            HEADING()
-            cloud = openstack(name)
-            cloud.refresh("users")
-            print json.dumps(cloud.users, indent=4)
-
-        assert True
-
-    def test_get_limits(self):
-        """test to get the limits"""
-        HEADING()
-        print json.dumps(self.cloud.get_limits(), indent=4)
-        assert True
-
-    def test_get_servers(self):
-        """test to get the servers"""
-        HEADING()
-
-        print json.dumps(self.cloud.get_servers(), indent=4)
-        assert True
-
-    def test_get_flavors(self):
-        """test to get the flavors"""
-        HEADING()
-        # self.cloud.refresh('flavors')
-        # print json.dumps(self.cloud.dump('flavors'), indent=4)
-
-        print json.dumps(self.cloud.get_flavors(), indent=4)
-        assert True
-
-    def test_get_images(self):
-        """test to get the images"""
-        HEADING()
-        self.cloud.refresh('images')
-        print json.dumps(self.cloud.dump('images'), indent=4)
-
-        print json.dumps(self.cloud.get_images(), indent=4)
-        assert True
 
     def test_label(self):
         """test the label"""
@@ -176,7 +116,7 @@ class Test:
         print "STARTING IMAGE", image
         meta = {"cmtag":"testing tag from creation via rest api"}
         result = self.cloud.vm_create("fw-test-by-post-003", "2", image, key_name="grizzlykey", meta=meta)
-        #result = self.cloud.vm_create("fw-test-by-post-003", "100", image, meta=meta)
+        # result = self.cloud.vm_create("fw-test-by-post-003", "100", image, meta=meta)
         pp.pprint(result)
         assert len(result.keys()) > 0
 
@@ -454,10 +394,10 @@ class Test:
         keyname = "skwind"
         keycontent = "ssh-dss AAAAB3NzaC1kc3MAAACBAPkCkTkLqyqpmjYSU0P6cLMfuY6YPrZr5NkpVVuK9nLEKxdV3oAL1EOhTvgdve6hAVENX76fJFqUeBL1POBvsV92OH3e84cwwUiXBoQ9VrFtAn0l1tsdKkiEadWakCjxp0DqkjWJz1sLDzmB37QqO16T3KI5+yFviJPkn/LUYTMrAAAAFQCbgsFrwjHQqIlOhAKwW7tCt+M+VwAAAIEArgHogg4cLFS9uNtjP4H8vz6f+kYJ2zpHwnBMA7caO9IyFwYz/0BTjF4J/qD+Gwra+PKL7llQJlOAG1Odg79RRqPgk/4LN5KuXNkNbL9GZhcqdxD+ZpUtVjs4WLXA0C1t53CQvNKhkCKEZMTvS603rfBCJ8SBc4d4x6fAD7I6+fsAAACBALuHfiLksJR9xyexDNQpmtK12aIX+xZ+ryLEGbHGd0QIwskdnB9tqFH0S9NZg//ywSqntV9PlEqacmjEsfWojlM30b1wIJl0xCa+5eZiwFm2Xfsm4OhH0NE32SCb+Zr3ho4tcizpR9PVSoTxkU97rnGj1PDrjf1ZsuaG0Dr6Fzv3"
         pp.pprint(self.cloud.keypair_add(keyname, keycontent))
- 
+
     def test18_keypair_list(self):
         pp.pprint(self.cloud.keypair_list())
-               
+
     def start(self):
         """start image"""
         HEADING()
@@ -499,3 +439,64 @@ class Test:
         print "vms", vm_ids
 
         assert vm_ids == []
+
+
+    def test_get_extensions(self):
+        """test geting the cloud extensions"""
+        HEADING()
+
+        print json.dumps(self.cloud.get_extensions(), indent=4)
+        assert True
+
+    def test_get_users(self):
+        """test to get the users"""
+        HEADING()
+
+        self.cloud.refresh("users")
+
+        #        print json.dumps(self.cloud.get_users(), indent=4)
+        print json.dumps(self.cloud.users, indent=4)
+
+        assert True
+
+    def test_get_users_all(self):
+        """testto get all information for the users"""
+
+        for name in self.configuration.active():
+            HEADING()
+            cloud = openstack(name)
+            cloud.refresh("users")
+            print json.dumps(cloud.users, indent=4)
+
+        assert True
+
+    def test_get_limits(self):
+        """test to get the limits"""
+        HEADING()
+        print json.dumps(self.cloud.get_limits(), indent=4)
+        assert True
+
+    def test_get_servers(self):
+        """test to get the servers"""
+        HEADING()
+
+        print json.dumps(self.cloud.get_servers(), indent=4)
+        assert True
+
+    def test_get_flavors(self):
+        """test to get the flavors"""
+        HEADING()
+        # self.cloud.refresh('flavors')
+        # print json.dumps(self.cloud.dump('flavors'), indent=4)
+
+        print json.dumps(self.cloud.get_flavors(), indent=4)
+        assert True
+
+    def test_get_images(self):
+        """test to get the images"""
+        HEADING()
+        self.cloud.refresh('images')
+        print json.dumps(self.cloud.dump('images'), indent=4)
+
+        print json.dumps(self.cloud.get_images(), indent=4)
+        assert True
