@@ -14,6 +14,7 @@
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.logger import LOGGER
 from pymongo import MongoClient
+import traceback
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -68,6 +69,8 @@ class cm_user(object):
                     "                   db: cm_user"
             print "---------------------"
             print e
+            print traceback.format_exc()
+            print "---------------------"
 
     def _connect_userdb(self):
         """ Connect to the mongo user db."""
