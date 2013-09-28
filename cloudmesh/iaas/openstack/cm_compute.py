@@ -49,8 +49,8 @@ class openstack(ComputeBaseType):
     # : a dict with the images
     images = {}  # global var
 
-    # : a dict with the images
-    images = {}  # global var
+    # : a dict with the flavors
+    flavors = {}  # global var
 
     # : a dict with the servers
     servers = {}  # global var
@@ -518,8 +518,6 @@ class openstack(ComputeBaseType):
             list = r.json()
         return self._list_to_dict(list, 'name', "extensions", time_stamp)
 
-     # new
-     # BUG not yet a dict
     def get_limits(self):
         time_stamp = self._now()
         msg = "limits"
@@ -538,7 +536,19 @@ class openstack(ComputeBaseType):
         time_stamp = self._now()
         msg = "flavors/detail"
         list = self._get(msg)['flavors']
+
         return self._list_to_dict(list, 'name', "flavor", time_stamp)
+
+    def flavorid(self, name):
+        for key in self.flavors:
+            if self.flavors[key]['name'] == name:
+                return key
+
+    def flavor(self, id_or_name):
+        keys = self.flavors.keys()
+        if id_or_name not in keys:
+            key = self.flavorid(id_or_name)
+        return self.flavors[key]
 
     # new
     def get_images(self):
@@ -646,19 +656,19 @@ class openstack(ComputeBaseType):
 
 
     def limits(self):
-        """ returns the usage information of the tennant"""
+        """ returns the limats of the tennant"""
 
         list = []
 
-        info = self.cloud.limits.get()
-        del info.manager
-        rates = info.__dict__['_info']['rate']
+        info = self.get_limits()
 
-        for rate in rates:
+        for rate in info['rate']:
             limit_set = rate['limit']
             print limit_set
             for limit in limit_set:
                 list.append(limit)
+
+        print list
 
         return list
 
