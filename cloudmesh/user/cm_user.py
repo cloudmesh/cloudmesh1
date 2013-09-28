@@ -34,7 +34,7 @@ class cm_user(object):
 
     def connect_db(self):
         """ Connect to the mongo db."""
-        db_name = cm_config_server().get("mongo.db")
+        db_name = cm_config_server().get("cloudmesh.server.mongo.db")
         client = MongoClient()
         db = client[db_name]
         ldap_collection = 'user'
