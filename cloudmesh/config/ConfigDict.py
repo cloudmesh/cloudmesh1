@@ -88,8 +88,7 @@ class ConfigDict (OrderedDict):
         if format == "json":
             os.write(f, self.json())
         elif format in ['yml', 'yaml']:
-            d = {}
-            d["cloudmesh"] = dict(self)
+            d = dict(self)
             os.write(f, yaml.dump(d, default_flow_style=False))
         elif format == "print":
             os.write(f, custom_print(self, 4))
