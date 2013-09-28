@@ -74,7 +74,6 @@ class cm_config(ConfigDict):
     # ----------------------------------------------------------------------
 
     filename = os.path.expanduser('~/.futuregrid/cloudmesh.yaml')
-    cloudmesh_server_path = os.path.expanduser('~/.futuregrid/cloudmesh_server.yaml')
 
     # ----------------------------------------------------------------------
     # initialization methods
