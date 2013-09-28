@@ -25,17 +25,19 @@ def yaml():
     puts it into mongo as a profile
     
     """
-    new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
-    old_yaml = path_expand('~/.futuregrid/cloudmesh.yaml')
+    os.system ("cm init generate yaml")
 
-    t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
+    # new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
+    # old_yaml = path_expand('~/.futuregrid/cloudmesh.yaml')
 
-    t.generate("~/.futuregrid/me.yaml",
-               new_yaml)
-    if yn_choice("Review the new yaml file", default='n'):
-        os.system ("less -E {0}".format(new_yaml))
-    if yn_choice("Move the new yaml file to {0}".format(old_yaml), default='y'):
-        os.rename (new_yaml, old_yaml)
+    # t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
+
+    # t.generate("~/.futuregrid/me.yaml",
+    #           new_yaml)
+    # if yn_choice("Review the new yaml file", default='n'):
+    #    os.system ("less -E {0}".format(new_yaml))
+    # if yn_choice("Move the new yaml file to {0}".format(old_yaml), default='y'):
+    #    os.rename (new_yaml, old_yaml)
 
 @task
 def list():
