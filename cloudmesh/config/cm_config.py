@@ -83,7 +83,7 @@ class cm_config(ConfigDict):
     def __init__(self, filename=None):
         if filename is None:
             filename = self.filename
-        ConfigDict.__init__(self, filename=filename)
+        ConfigDict.__init__(self, filename=filename, kind="basic")
 
     # ======================================================================
     # Properties
@@ -372,7 +372,6 @@ if __name__ == "__main__":
     outfile = path_expand("~/.futuregrid/junk.yaml")
     print config.write(outfile)
     os.system("cat " + outfile)
-
     print "= AZURE ================"
     configuration = config.credential('azure')
 
