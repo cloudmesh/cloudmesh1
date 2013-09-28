@@ -262,7 +262,6 @@ class cm_config(ConfigDict):
     def clouds(self):
         return self['cloudmesh']['clouds']
 
-    @deprecated
     def default(self, cloudname):
         return self['cloudmesh']['clouds'][cloudname]['default']
 
