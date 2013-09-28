@@ -11,7 +11,7 @@ class cloudmesh_user:
         # Get profile and project data from LDAP
         cmu = cm_user.cm_user()
         self._data = cmu.info(self.username)
-        
+
 
     @property
     def username(self):
