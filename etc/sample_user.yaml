@@ -1,6 +1,7 @@
 yaml_version: 1.2
+kind: me
 
-portalname: myportalname
+me: myportalname
 
 profile:
     firstname: Gregor

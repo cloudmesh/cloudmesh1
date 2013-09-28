@@ -1,5 +1,6 @@
 meta:
   yaml_version: 1.3
+  kind: workers
 cloudmesh:
    workers:
       launcher:

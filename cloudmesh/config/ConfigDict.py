@@ -50,10 +50,11 @@ class ConfigDict (OrderedDict):
 
         self.load(self['location'])
 
-        if 'prefix' in kwargs:
-            self['prefix'] = kwargs['prefix']
-        else:
-            self['prefix'] = None
+        for attribute in ['prefix']:
+            if attribute in kwargs:
+                self[attribute] = kwargs[attribute]
+            else:
+                self[attribute] = None
 
         self._update_meta()
 

@@ -1,5 +1,6 @@
 meta:
   yaml_version: 1.2
+  kind: bootspec
 cloudmesh:
   bootspec:
       ubuntu-2013-07-a:

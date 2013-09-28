@@ -14,7 +14,7 @@ from celery import Celery
 
 __all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill', 'ls', 'lspbs']
 
-celery_config = ConfigDict(filename="~/.futuregrid/cloudmesh_celery.yaml")
+celery_config = ConfigDict(filename="~/.futuregrid/cloudmesh_celery.yaml", kind="worker")
 workers = celery_config.get("cloudmesh.workers")
 
 """
@@ -25,16 +25,16 @@ for worker in workers:
 """
 # no_workers_launcher =
 for worker in workers:
-    workers[worker]["hostlist"] = hostlist.expand_hostlist("{0}[1-{1}]".format(workers[worker]["id"],workers[worker]["count"]))
+    workers[worker]["hostlist"] = hostlist.expand_hostlist("{0}[1-{1}]".format(workers[worker]["id"], workers[worker]["count"]))
 
 # launcher_workers = {"app":"cloudmesh.launcher.queue",
 #                     "hostlist":hostlist.expand_hostlist("l[1-{0}]".format(workers["launcher"]["count"])),
 #                     "queue":"launcher"}
-# 
+#
 # provisioner_workers = {"app":"cloudmesh.provisioner.queue",
 #                        "hostlist":hostlist.expand_hostlist("p[1-2]"),
 #                        "queue":"provisioner"}
-# 
+#
 # questat_workers = {"app":"cloudmesh.pbs",
 #                    "hostlist":['q1'],
 #                    "queue":"questat",
@@ -85,7 +85,7 @@ def start(view=None):
             concurrency = None;
             if "concurrency" in workers[worker]:
                 concurrency = workers[worker]["concurrency"]
-            #print worker, ":   ", str(workers[worker])
+            # print worker, ":   ", str(workers[worker])
             celery_command("start", workers[worker]["app"],
                            workers[worker]["hostlist"], workers[worker]["queue"],
                            concurrency=concurrency)
