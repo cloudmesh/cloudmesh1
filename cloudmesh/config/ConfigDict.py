@@ -41,18 +41,27 @@ class ConfigDict (OrderedDict):
 
     def __init__(self, *args, **kwargs) :
         OrderedDict.__init__(self, *args, **kwargs)
+
         if 'filename' in kwargs:
             self._set_filename(kwargs['filename'])
         else:
             log.error("filename not specified")
             sys.exit()
 
+        self.load(self['location'])
+
         if 'prefix' in kwargs:
             self['prefix'] = kwargs['prefix']
         else:
             self['prefix'] = None
 
-        self.load(self['location'])
+        self._update_meta()
+
+
+    def _update_meta(self):
+        for v in ["filename", "location", "prefix"]:
+            self["meta"][v] = self[v]
+            del self[v]
 
     def read(self, filename):
         """does the same as load"""
@@ -89,7 +98,7 @@ class ConfigDict (OrderedDict):
         os.close(f)
 
     def error_keys_not_found(self, keys):
-        log.error("Filename: {0}".format(self['location']))
+        log.error("Filename: {0}".format(self['meta']['location']))
         log.error("Key '{0}' does not exist".format('.'.join(keys)))
         indent = ""
         last_index = len(keys) - 1
@@ -147,10 +156,10 @@ class ConfigDict (OrderedDict):
         return element
 
     def attribute(self, keys):
-        if self['prefix'] is None:
+        if self['meta']['prefix'] is None:
             k = keys
         else:
-            k = self['prefix'] + "." + keys
+            k = self['meta']['prefix'] + "." + keys
         return self.get(k)
 
 if __name__ == "__main__":
