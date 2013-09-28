@@ -10,7 +10,7 @@ import os
 import stat
 import sys
 import copy
-from cloudmesh.user.cm_template import cm_template
+
 
 log = LOGGER(__file__)
 package_dir = os.path.dirname(os.path.abspath(__file__))
