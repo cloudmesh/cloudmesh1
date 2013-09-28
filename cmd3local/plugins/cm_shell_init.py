@@ -12,6 +12,7 @@ from cloudmesh.util.util import yn_choice
 from sh import less
 import os
 
+
 from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
@@ -20,7 +21,7 @@ class cm_shell_init:
 
     """opt_example class"""
 
-    def activate_cm_shell_cloud(self):
+    def activate_cm_shell_init(self):
         pass
 
     @command

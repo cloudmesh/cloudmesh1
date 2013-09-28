@@ -25,8 +25,8 @@ def get_pid(command):
 
 
 def mongo_start(config_name):
-    path = cm_path_expand(cm_config_server().get("{0}.path".format(config_name)))
-    port = cm_config_server().get("{0}.port".format(config_name))
+    path = cm_path_expand(cm_config_server().get("cloudmesh.server.{0}.path".format(config_name)))
+    port = cm_config_server().get("cloudmesh.server.{0}.port".format(config_name))
 
     if not os.path.exists(path):
         print "Creating mongodb directory in", path
