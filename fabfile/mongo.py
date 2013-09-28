@@ -24,6 +24,8 @@ def get_pid(command):
     return (pid, line)
 
 
+
+
 def mongo_start(config_name):
     path = cm_path_expand(cm_config_server().get("cloudmesh.server.{0}.path".format(config_name)))
     port = cm_config_server().get("cloudmesh.server.{0}.port".format(config_name))
@@ -43,8 +45,18 @@ def mongo_start(config_name):
         print "Starting mongod"
         local("mongod --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port))
 
+@task
+def start():
+    '''
+    start the mongod service in the location as specified in
+    ~/.futuregrid/cloudmesh_server.yaml
+    '''
+    mongo_start('mongo')
+    mongo_start('mongo_user')
+
+
 def mongo_clean(config_name):
-    port = cm_config_server().get("{0}.port".format(config_name))
+    port = cm_config_server().get("cloudmesh.server.{0}.port".format(config_name))
     result = local('echo "show dbs" | mongo --quiet --port {0}'.format(port), capture=True).splitlines()
     for line in result:
         name = line.split()[0]
@@ -63,14 +75,6 @@ def info():
     (pid, line) = get_pid("mongod")
     print line
 
-@task
-def start():
-    '''
-    start the mongod service in the location as specified in
-    ~/.futuregrid/cloudmesh_server.yaml
-    '''
-    mongo_start('mongo')
-    mongo_start('mongo_user')
 
 @task
 def stop():

@@ -50,7 +50,7 @@ class cm_user(object):
     def connect_userdb(self):
         try:
             self._connect_userdb()
-        except:
+        except Exception, e:
             print
             print "The following lines should exist in cloudmesh_server.yaml"
             print "----------------------"
@@ -67,7 +67,7 @@ class cm_user(object):
                     "               cm_password:\n" + \
                     "                   db: cm_user"
             print "---------------------"
-
+            print e
 
     def _connect_userdb(self):
         """ Connect to the mongo user db."""
