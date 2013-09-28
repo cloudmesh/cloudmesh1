@@ -12,6 +12,8 @@ from cloudmesh.util.util import check_file_for_tabs
 
 from cloudmesh_cloud_handler import cloudmesh_cloud_handler
 from cloudmesh.util.config import read_yaml_config
+from cloudmesh.util.util import deprecated
+from cloudmesh.util.util import path_expand
 from cloudmesh.config.ConfigDict import ConfigDict
 
 from pymongo import MongoClient
@@ -23,9 +25,9 @@ def get_mongo_db(mongo_collection):
     """
     Read in the mongo db information from the cloudmesh_server.yaml
     """
-    filename = os.path.expanduser("~/.futuregrid/cloudmesh_server.yaml")
+    filename = "~/.futuregrid/cloudmesh_server.yaml"
 
-    mongo_config = ConfigDict(filename=filename).get("mongo")
+    mongo_config = ConfigDict(filename=filename).attribute("mongo")
 
     mongo_host = mongo_config["host"]
     mongo_port = int(mongo_config["port"])
@@ -45,7 +47,7 @@ class cm_config_server(ConfigDict):
     reads the information contained in the file
     ~/.futuregrid/cloudmesh_server.yaml
     """
-    filename = os.path.expanduser("~/.futuregrid/cloudmesh_server.yaml")
+    filename = "~/.futuregrid/cloudmesh_server.yaml"
 
     def __init__(self, filename=None):
         if filename is None:
@@ -83,7 +85,7 @@ class cm_config(ConfigDict):
     def __init__(self, filename=None):
         if filename is None:
             filename = self.filename
-        ConfigDict.__init__(self, filename=filename, kind="user")
+        ConfigDict.__init__(self, filename=filename)
 
 
         self._userdata_handler = None
@@ -93,6 +95,7 @@ class cm_config(ConfigDict):
     # ----------------------------------------------------------------------
     # Internal helper methods
     # ----------------------------------------------------------------------
+    @deprecated
     def _get_cloud_handler(self, cloud, as_admin=False):
         """This gets a class that knows how to handle the specific type of
         cloud (how to provision users, etc)"""
@@ -111,6 +114,7 @@ class cm_config(ConfigDict):
     # ----------------------------------------------------------------------
     # Methods to initialize (create) the config config
     # ----------------------------------------------------------------------
+    @deprecated
     def _initialize_user(self, username):
         """Loads user config, including profile, projects, and credentials"""
         user = self.userdata_handler(username)
@@ -146,6 +150,7 @@ class cm_config(ConfigDict):
         self.init_config['cloudmesh']['active'] = user.activeclouds
         self.init_config['cloudmesh']['default'] = user.defaultcloud
 
+    @deprecated
     def _initialize_clouds(self):
         """Creates cloud credentials for the user"""
         self.init_config['cloudmesh']['clouds'] = {}
@@ -155,6 +160,7 @@ class cm_config(ConfigDict):
             cloud_handler.initialize_cloud_user()
             self.init_config['cloudmesh']['clouds'][cloud] = copy.deepcopy(cloud_handler.credentials)
 
+    @deprecated
     def initialize(self, username):
         """Creates or resets the config for a user.  Note that the
         userdata_handler property must be set with appropriate handler class."""
@@ -163,12 +169,14 @@ class cm_config(ConfigDict):
         self._initialize_user(username)
         self._initialize_clouds()
 
+    @deprecated
     def change_own_password(self, cloudname, oldpass, newpass):
         cloud_handler = self._get_cloud_handler(cloudname)
         cloud_handler.change_own_password(oldpass, newpass)
         # Save the yaml file so the new password is saved
         self.write()
 
+    @deprecated
     def get_own_passwords(self):
         cloudlist = self.active()
         passwords = {}
@@ -182,17 +190,11 @@ class cm_config(ConfigDict):
     # print methods
     # ----------------------------------------------------------------------
 
-    def export_line(self, attribute, value):
-        if isinstance(value, (list, tuple)):
-            avalue = ','.join(value)
-        else:
-            avalue = value
-        return 'export %s="%s"\n' % (attribute, avalue)
 
+    # ======================================================================
+    # NOT SURE WHY THESE METHODS ARE NEEDED
+    # ======================================================================
 
-    # ----------------------------------------------------------------------
-    # Properties
-    # ----------------------------------------------------------------------
     @property
     def userdata_handler(self):
         """Plug-in class that knows how to get all the user/project config"""
@@ -208,33 +210,86 @@ class cm_config(ConfigDict):
             self._serverdata = yaml.safe_load(open(self.cloudmesh_server_path, "r"))
         return self._serverdata
 
+    # ======================================================================
+    # Properties
+    # ======================================================================
+
+    # ----------------------------------------------------------------------
+    # vmname
+    # ----------------------------------------------------------------------
+
     @property
     def vmname(self):
         return "%s-%04d" % (self['cloudmesh']['prefix'], int(self['cloudmesh']['index']))
 
+    # ----------------------------------------------------------------------
+    # default cloud
+    # ----------------------------------------------------------------------
+
     @property
     def default_cloud(self):
-        return self['cloudmesh']['default']
+        return self['cloudmesh']['default']['cloud']
 
     @default_cloud.setter
     def default_cloud(self, value):
-        self['cloudmesh']['default'] = str(value)
+        self['cloudmesh']['default']['cloud'] = str(value)
+
+    # ----------------------------------------------------------------------
+    # generalized set/get default
+    # ----------------------------------------------------------------------
+
+    def get_default(self, cloudname=None, attribute=None):
+        """
+        get_default('sierra_openstack_grizzly')
+        get_default('cloud')
+        get_default('index')
+        """
+        if cloudname is None:
+            return self['cloudmesh']['default'][attribute]
+        else:
+            return self['cloudmesh']['clouds'][cloudname]['default']
+
+    def set_default(self, cloudname=None, attribute=None, value=None):
+        if cloudname is None:
+            if attribute == 'index':
+                self['cloudmesh']['default'][attribute] = int(value)
+            else:
+                self['cloudmesh']['default'][attribute] = value
+        else:
+            self['cloudmesh']['clouds'][cloudname]['default'] = value
+
+    # ----------------------------------------------------------------------
+    # default prefix
+    # ----------------------------------------------------------------------
 
     @property
     def prefix(self):
-        return self['cloudmesh']['prefix']
+        return self['cloudmesh']['default']['prefix']
 
     @prefix.setter
     def prefix(self, value):
-        self['cloudmesh']['prefix'] = value
+        self['cloudmesh']['default']['prefix'] = value
+
+    # ----------------------------------------------------------------------
+    # default index
+    # ----------------------------------------------------------------------
 
     @property
     def index(self):
-        return self['cloudmesh']['index']
+        return self['cloudmesh']['default']['index']
 
     @index.setter
     def index(self, value):
-        self['cloudmesh']['index'] = int(value)
+        self['cloudmesh']['default']['index'] = int(value)
+
+    def incr(self, value=1):
+        self['cloudmesh']['default']['index'] = int(
+            self['cloudmesh']['default']['index']) + int(value)
+        # self.write(self.filename)
+
+    # ----------------------------------------------------------------------
+    # profile fistname
+    # ----------------------------------------------------------------------
 
     @property
     def firstname(self):
@@ -244,6 +299,10 @@ class cm_config(ConfigDict):
     def firstname(self, value):
         self['cloudmesh']['profile']['firstname'] = str(value)
 
+    # ----------------------------------------------------------------------
+    # profile lastname
+    # ----------------------------------------------------------------------
+
     @property
     def lastname(self):
         return self['cloudmesh']['profile']['lastname']
@@ -251,6 +310,10 @@ class cm_config(ConfigDict):
     @lastname.setter
     def lastname(self, value):
         self['cloudmesh']['profile']['lastname'] = str(value)
+
+    # ----------------------------------------------------------------------
+    # profile phone
+    # ----------------------------------------------------------------------
 
     @property
     def phone(self):
@@ -260,13 +323,22 @@ class cm_config(ConfigDict):
     def phone(self, value):
         self['cloudmesh']['profile']['phone'] = str(value)
 
+    # ----------------------------------------------------------------------
+    # profile email
+    # ----------------------------------------------------------------------
+
+
     @property
     def email(self):
-        return self['cloudmesh']['profile']['e_mail']
+        return self['cloudmesh']['profile']['email']
 
     @email.setter
     def email(self, value):
-        self['cloudmesh']['profile']['e_mail'] = str(value)
+        self['cloudmesh']['profile']['email'] = str(value)
+
+    # ----------------------------------------------------------------------
+    # profile address
+    # ----------------------------------------------------------------------
 
     @property
     def address(self):
@@ -280,10 +352,6 @@ class cm_config(ConfigDict):
     # ----------------------------------------------------------------------
     # get methods
     # ----------------------------------------------------------------------
-    def incr(self, value=1):
-        self['cloudmesh']['index'] = int(
-            self['cloudmesh']['index']) + int(value)
-        # self.write(self.filename)
 
     #
     # warning we can not name a method default
@@ -310,14 +378,17 @@ class cm_config(ConfigDict):
                 value = path_expand(value)
             return value
 
-    def default(self, cloudname):
-        return self['cloudmesh']['clouds'][cloudname]['default']
 
     def projects(self, status):
         return self['cloudmesh']['projects'][status]
 
+
     def clouds(self):
         return self['cloudmesh']['clouds']
+
+    @deprecated
+    def default(self, cloudname):
+        return self['cloudmesh']['clouds'][cloudname]['default']
 
     def cloud(self, cloudname):
         return self['cloudmesh']['clouds'][cloudname] if cloudname in self['cloudmesh']['clouds'] else None
@@ -330,31 +401,51 @@ class cm_config(ConfigDict):
     def credential(self, name):
         return self.get_data (key=name, expand=True)
 
+    def get_credential (self, cloud=None, expand=False):
+        if expand:
+            d = self.get("cloudmesh.{0}.credentials".format(cloud))
+            for key in d:
+               d[key] = path_expand(str(d[key]))
+            return d
+        else:
+            return self.cloud(key)['credentials']
+
     def get_data(self, key=None, expand=False):
         if key is None:
             return self['cloudmesh']
         else:
-            if expand:
-                d = self.cloud(key)['credentials']
-                for key in d:
-                    d[key] = path_expand(str(d[key]))
-                return d
-            else:
-                return self.cloud(key)['credentials']
+            return self.get_credential(key, expand)
 
     # This method may not be exactly what I think it is, but based on usage it
     # appears as if it is supposed to get the keys of the clouds
 
+    @deprecated
     def keys(self):
+        return self.cloudnames()
+
+    def cloudnames(self):
         return self.clouds().keys()
 
+    def export_line(self, attribute, value):
+        if isinstance(value, (list, tuple)):
+            avalue = ','.join(value)
+        else:
+            avalue = value
+        return 'export %s="%s"\n' % (attribute, avalue)
+
     def rc(self, name):
-        result = self.get(name)
+        """returns the lines that can be put in an rc file"""
+        result = self.cloud(name)
         lines = ""
         for (attribute, value) in iter(sorted(result.iteritems())):
-            lines += self.export_line(attribute, value)
+            if attribute not in ['credentials', 'default']:
+                lines += self.export_line(attribute, value)
+            else:
+                for key in value:
+                    lines += self.export_line(key, value[key])
         return lines
 
+    @deprecated
     def rc_euca(self, name, project):
         result = self.cloud(name)
         eucakeydir = 'EUCA_KEY_DIR'
@@ -380,31 +471,39 @@ if __name__ == "__main__":
 
     print config
 
-    print "================="
+    print "= ACTIVE ================"
     print config.projects('active')
+    print "= COMPLETED ================"
     print config.projects('completed')
-    print "================="
-    print config.get('india-openstack')
-    print "================="
-    print config.get()
-    print "================="
-    print config.keys()
-    print "================="
-    print config.rc('india-openstack')
-    print "================="
+    print "= SIERRA ================"
+    print config.cloud('sierra_openstack_grizzly')
+    print "= PROFILE ================"
+    print config.get("cloudmesh.profile")
+    print "= KEYS ================"
+    print config.clouds()
+    print "= RC ================"
+    print config.rc('sierra_openstack_grizzly')
+    print "= DEFAULT ================"
     print config.default
-    print "================="
-    outfile = "%s/%s" % (os.environ['HOME'], ".futuregrid/junk.yaml")
+    print "= TO FILE ================"
+    outfile = path_expand("~/.futuregrid/junk.yaml")
     print config.write(outfile)
     os.system("cat " + outfile)
-    print "================="
-    configuration = config.get('azure')
+
+
+    print config.cloudnames()
+
+    print "= AZURE ================"
+    configuration = config.credential('azure')
 
     print configuration['username']
 
-    print "================="
 
-    configuration = config.get('india-eucalyptus')
-    print configuration
 
-    print configuration['host']
+
+    # print "================="
+
+    # configuration = config.get('india-eucalyptus')
+    # print configuration
+
+    # print configuration['host']

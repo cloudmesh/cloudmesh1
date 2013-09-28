@@ -3,8 +3,46 @@ from string import Template
 import inspect
 import os
 import uuid
+import functools
+import warnings
 
 # from logger import LOGGER
+
+def deprecated(func):
+     '''This is a decorator which can be used to mark functions
+     as deprecated. It will result in a warning being emitted
+     when the function is used.'''
+
+     @functools.wraps(func)
+     def new_func(*args, **kwargs):
+         '''
+         warnings.warn_explicit(
+             "Call to deprecated function {}.".format(func.__name__),
+             category=DeprecationWarning,
+             filename=func.func_code.co_filename,
+             lineno=func.func_code.co_firstlineno + 1
+         )
+         '''
+         print
+         print 70 * "-"
+         print("Warning: Call to deprecated function {}.".format(func.__name__))
+         print "         filename=", func.func_code.co_filename
+         print "         lineno=", func.func_code.co_firstlineno + 1
+         print 70 * "-"
+
+         return func(*args, **kwargs)
+     return new_func
+
+
+# # Usage examples ##
+# @deprecated
+# def my_func():
+#     pass
+#
+# @other_decorators_must_be_upper
+# @deprecated
+# def my_func():
+#     pass
 
 def cond_decorator(flag, dec):
     def decorate(fn):
