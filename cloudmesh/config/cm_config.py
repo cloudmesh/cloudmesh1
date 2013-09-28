@@ -479,8 +479,8 @@ if __name__ == "__main__":
     print config.cloud('sierra_openstack_grizzly')
     print "= PROFILE ================"
     print config.get("cloudmesh.profile")
-    print "= KEYS ================"
-    print config.clouds()
+    print "= CLOUDS ================"
+    print config.cloudnames()
     print "= RC ================"
     print config.rc('sierra_openstack_grizzly')
     print "= DEFAULT ================"
@@ -489,9 +489,6 @@ if __name__ == "__main__":
     outfile = path_expand("~/.futuregrid/junk.yaml")
     print config.write(outfile)
     os.system("cat " + outfile)
-
-
-    print config.cloudnames()
 
     print "= AZURE ================"
     configuration = config.credential('azure')
