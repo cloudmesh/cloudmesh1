@@ -95,7 +95,8 @@ class cm_config(ConfigDict):
 
     @property
     def vmname(self):
-        return "%s-%04d" % (self['cloudmesh']['prefix'], int(self['cloudmesh']['index']))
+        return "%s-%04d" % (self['cloudmesh']['default']['prefix'],
+                            int(self['cloudmesh']['default']['index']))
 
     # ----------------------------------------------------------------------
     # default cloud

@@ -23,9 +23,9 @@ from cloudmesh.util.util import path_expand
 
 class Test_cloudmesh:
 
-    filename = None
     filename = "~/.futuregrid/cloudmesh.yaml"
 
+    project = 82
 
     def setup(self):
         print "READING THE FILE", self.filename
@@ -37,71 +37,6 @@ class Test_cloudmesh:
     def tearDown(self):
         pass
 
-    def test_launcher(self):
-        HEADING()
-        filename = "~/.futuregrid/cloudmesh_launcher.yaml"
-        config = ConfigDict(filename=filename)
-        print config
-        existing = config.get("launcher.recipies")
-        test1 = existing is not None
-        print existing
-        try:
-            none_existing = config.get("mongo", "xyz")
-            test2 = False
-        except:
-            print "Error"
-            test2 = True
-        assert test1 and test2
-
-    def test_server(self):
-        HEADING()
-        filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = ConfigDict(filename=filename)
-        # print config
-        existing = config.get("mongo", "db")
-        test1 = existing is not None
-        print "mongo.db =", existing
-        try:
-            none_existing = config.get("mongo", "xyz")
-            test2 = False
-        except:
-            print "Error"
-            test2 = True
-        assert test1 and test2
-
-    def test_dot(self):
-        HEADING()
-        filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = ConfigDict(filename=filename)
-        print config
-        existing = config.get("mongo.db")
-        test1 = existing is not None
-        print existing
-        try:
-            none_existing = config.get("mongo.xyz")
-            test2 = False
-        except:
-            print "Error"
-            test2 = True
-        assert test1 and test2
-
-    def test_getitem_server(self):
-        HEADING()
-        filename = "~/.futuregrid/cloudmesh_server.yaml"
-        config = ConfigDict(filename=filename)
-        print config
-        existing = config["mongo"]["db"]
-        test1 = existing is not None
-        print "QUERY", existing
-        print "Port", config["mongo"]["port"]
-        try:
-            none_existing = config["mongo"]["xyz"]
-            test2 = False
-        except:
-            print "Error can not find xyz"
-            test2 = True
-        assert test1 and test2
-
 
     def test_print(self):
         HEADING()
@@ -110,18 +45,18 @@ class Test_cloudmesh:
     def test_active(self):
         HEADING()
         result = self.config.projects('active')
-        print result
-        assert 'fg82' in result
+        print self.project, result, type(self.project)
+        assert self.project in result
 
     def test_completed(self):
         HEADING()
         result = self.config.projects('completed')
         assert True
 
-    def test_active(self):
+    def test_default(self):
         HEADING()
         result = self.config.projects('default')
-        assert result == 'fg82'
+        assert result == self.project
 
     def test_sierra(self):
         HEADING()
@@ -142,9 +77,9 @@ class Test_cloudmesh:
 
 
 
-    def test_keys_sierra_openstack(self):
+    def test_cloudnames_sierra_openstack(self):
         HEADING()
-        keys = self.config.keys()
+        keys = self.config.cloudnames()
         assert 'sierra_openstack_grizzly' in keys
 
 
@@ -185,7 +120,7 @@ class Test_cloudmesh:
     def test15_project_default(self):
         HEADING()
         project = self.config.projects('default')
-        assert project == 'fg82'
+        assert project == self.project
 
     """
     def test16_write(self):
@@ -240,3 +175,47 @@ class Test_cloudmesh:
         HEADING()
         print self.config.get_filter('sierra_openstack_grizzly')
     """
+
+    def test_launcher(self):
+        HEADING()
+        filename = "~/.futuregrid/cloudmesh_launcher.yaml"
+        config = ConfigDict(filename=filename)
+        print config
+        existing = config.get("cloudmesh.launcher.recipies")
+        test1 = existing is not None
+        print existing
+        try:
+            none_existing = config.get("cloudmesh.launcher.recipies.xyz")
+            test2 = False
+        except:
+            print "Error"
+            test2 = True
+        assert test1 and test2
+
+    def test_server(self):
+        HEADING()
+        filename = "~/.futuregrid/cloudmesh_server.yaml"
+        config = ConfigDict(filename=filename)
+        # print config
+        existing = config.get("cloudmesh.server.mongo.db")
+        test1 = existing is not None
+        print "mongo.db =", existing
+        try:
+            none_existing = config.get("cloudmesh.server.mongo.xyz")
+            test2 = False
+        except:
+            print "Error"
+            test2 = True
+        assert test1 and test2
+
+    def test_getitem_server(self):
+        HEADING()
+        filename = "~/.futuregrid/cloudmesh_server.yaml"
+        config = ConfigDict(filename=filename)
+        print config
+        existing = config.get("cloudmesh.server.mongo.db")
+        test1 = existing is not None
+        print "QUERY", existing
+        print "Port", config.get("cloudmesh.server.mongo.port")
+
+
