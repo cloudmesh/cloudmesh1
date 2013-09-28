@@ -7,6 +7,18 @@ from cloudmesh.config.ConfigDict import ConfigDict
 import yaml
 from sh import grep as _grep
 from pprint import pprint
+from cloudmesh.util.logger import LOGGER
+
+
+# ----------------------------------------------------------------------
+# SETTING UP A LOGGER
+# ----------------------------------------------------------------------
+
+log = LOGGER(__file__)
+
+# ----------------------------------------------------------------------
+# CM TEMPLATE
+# ----------------------------------------------------------------------
 
 class cm_template():
 
@@ -60,6 +72,22 @@ class cm_template():
             # return self.content
             return None
 
+    def generate(self,
+                 me_file,
+                 out_file):
+        cloudmesh_yaml = path_expand(self.filename)
+        user_config = ConfigDict(filename=me_file)
+        t = cm_template(cloudmesh_yaml)
+
+        result = t.replace(kind="dict", values=user_config)
+        location = path_expand(out_file)
+        yaml_file = open(location, 'w+')
+        print >> yaml_file, yaml.dump(result, default_flow_style=False)
+        yaml_file.close()
+        log.info("Written new yaml file in " + location)
+
+
+
 if __name__ == "__main__":
 
     cloudmesh_yaml = path_expand("~/.futuregrid/etc/cloudmesh.yaml")
@@ -75,14 +103,17 @@ if __name__ == "__main__":
     print ("\n".join(s))
 
 
-    banner("YAML FILE")
-    result = t.replace(kind="dict", values=user_config)
-    print yaml.dump(result, default_flow_style=False)
-    location = path_expand('~/.futuregrid/cloudmesh-new.yaml')
-    yaml_file = open(location, 'w+')
-    print >> yaml_file, yaml.dump(result, default_flow_style=False)
-    yaml_file.close()
-    print "Written new yaml file in " + location
+    # banner("YAML FILE")
+    # result = t.replace(kind="dict", values=user_config)
+    # print yaml.dump(result, default_flow_style=False)
+    # location = path_expand('~/.futuregrid/cloudmesh-new.yaml')
+    # yaml_file = open(location, 'w+')
+    # print >> yaml_file, yaml.dump(result, default_flow_style=False)
+    # yaml_file.close()
+    # print "Written new yaml file in " + location
+
+    t.generate("~/.futuregrid/me.yaml",
+               '~/.futuregrid/cloudmesh-new.yaml')
 
     # print t.replace(values=d)
 
