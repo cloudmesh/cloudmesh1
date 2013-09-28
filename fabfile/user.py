@@ -23,17 +23,9 @@ def yaml():
     puts it into mongo as a profile
     
     """
-
-    with hide('running', 'status', 'output'):
-        user_config = ConfigDict(filename="~/.futuregrid/me.yaml")
-        t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
-        result = t.replace(kind="dict", values=user_config)
-        print yaml_dump(result, default_flow_style=False)
-        location = cm_path_expand('~/.futuregrid/cloudmesh-new.yaml')
-        yaml_file = open(location, 'w+')
-        print >> yaml_file, yaml_dump(result, default_flow_style=False)
-        yaml_file.close()
-        print "Written new yaml file in " + location
+    t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
+    t.generate("~/.futuregrid/me.yaml",
+               '~/.futuregrid/cloudmesh-new.yaml')
 
 @task
 def list():
