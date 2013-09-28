@@ -4,6 +4,7 @@ from cloudmesh.util.config import read_yaml_config
 from collections import OrderedDict
 import simplejson
 from pprint import pprint
+import yaml
 import json
 import os
 import stat
@@ -35,8 +36,8 @@ def custom_print(data_structure, indent):
 class ConfigDict (OrderedDict):
 
     def _set_filename(self, filename):
-        self['filename'] = kwargs['filename']
-        self['location'] = path_expand(self.filename)
+        self['filename'] = filename
+        self['location'] = path_expand(self["filename"])
 
     def __init__(self, *args, **kwargs) :
         OrderedDict.__init__(self, *args, **kwargs)
@@ -44,6 +45,13 @@ class ConfigDict (OrderedDict):
             self._set_filename(kwargs['filename'])
         else:
             log.error("filename not specified")
+            sys.exit()
+
+        if 'prefix' in kwargs:
+            self['prefix'] = kwargs['prefix']
+        else:
+            self['prefix'] = None
+
         self.load(self['location'])
 
     def read(self, filename):
@@ -55,13 +63,29 @@ class ConfigDict (OrderedDict):
         d = OrderedDict(read_yaml_config (self['location'], check=True))
         self.update(d)
 
-    def write(self, filename=None):
+    def write(self, filename=None, format="dict"):
         """write the dict"""
 
-        fpath = filename or self.filename
-        f = os.open(fpath, os.O_CREAT | os.O_TRUNC |
+        if filename is not None:
+            location = path_expand(filename)
+        else:
+            location = self.location
+
+        # with open('data.yml', 'w') as outfile:
+            #    outfile.write( yaml.dump(data, default_flow_style=True) )
+
+        f = os.open(location, os.O_CREAT | os.O_TRUNC |
                     os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
-        os.write(f, self)
+        if format == "json":
+            os.write(f, self.json())
+        elif format in ['yml', 'yaml']:
+            d = {}
+            d["cloudmesh"] = dict(self)
+            os.write(f, yaml.dump(d, default_flow_style=False))
+        elif format == "print":
+            os.write(f, custom_print(self, 4))
+        else:
+            os.write(f, self.dump())
         os.close(f)
 
     def error_keys_not_found(self, keys):
@@ -78,7 +102,6 @@ class ConfigDict (OrderedDict):
 
     def __str__(self):
         return self.json()
-
 
     def json(self):
         return json.dumps(self, indent=4)
@@ -123,8 +146,17 @@ class ConfigDict (OrderedDict):
                 sys.exit()
         return element
 
+    def attribute(self, keys):
+        if self['prefix'] is None:
+            k = keys
+        else:
+            k = self['prefix'] + "." + keys
+        return self.get(k)
+
 if __name__ == "__main__":
-    config = ConfigDict({"a":"1", "b" : {"c": 3}}, filename="~/.futuregrid/cloudmesh_server.yaml")
+    config = ConfigDict({"a":"1", "b" : {"c": 3}},
+                        prefix="cloudmesh.server",
+                        filename="./etc/cloudmesh_server.yaml")
 
     print "PPRINT"
     print 70 * "="
@@ -137,14 +169,29 @@ if __name__ == "__main__":
 
     print 70 * "="
     print "A =", config["a"]
-    print "mongo.path =", config["mongo"]["path"]
-    print "mongo.path GET =", config.get("mongo.path")
-    print "mongo.path GET =", config.get("mongo.path.wrong")
+    config.write("~/.futuregrid/d.yaml", format="dict")
+    config.write("~/.futuregrid/j.yaml", format="json")
+    config.write("~/.futuregrid/y.yaml", format="yaml")
+
+    # this does not work
+    # config.write("~/.futuregrid/print.yaml", format="print")
 
 
+
+    print "mongo.path GET =", config.get("cloudmesh.server.mongo.path")
+    print "mongo.path ATTIRBUTE =", config.attribute("server.mongo.path")
+
+    print "mongo.path GET =", config.get("cloudmesh.server.mongo.path.wrong")
     print "get A =", config.get("a")
 
-    print "mongo.path.wrong =", config["mongo"]["path"]["wrong"]
+
+
+
+
+
+
+    print "mongo.path.wrong =", config.get("cloudmesh.server.mongo.path.wrong")
+
     # print config["dummy"]
     # config["x"] = "2"
     # print config["x"]
