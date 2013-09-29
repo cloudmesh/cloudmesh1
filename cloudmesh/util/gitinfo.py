@@ -137,34 +137,36 @@ class GitInfo:
 
         return stats
 
-gitinfo = GitInfo()
+if __name__ == "__main__":
+    gitinfo = GitInfo()
 
-# print gitinfo.version()
+    # print gitinfo.version()
 
-print "A"
-print gitinfo.authors()
+    print "A"
+    print gitinfo.authors()
 
-print "b"
-pprint(gitinfo.authors("dict"))
+    print "b"
+    pprint(gitinfo.authors("dict"))
 
-print "c"
-pprint(gitinfo.emails())
+    print "c"
+    pprint(gitinfo.emails())
 
-print "d"
-pprint(gitinfo.emails("dict"))
+    print "d"
+    pprint(gitinfo.emails("dict"))
 
-print "e"
-pprint(gitinfo.info())
+    print "e"
+    pprint(gitinfo.info())
 
-print "f"
-print gitinfo.stat("laszewski@gmail.com")
+    print "f"
+    print gitinfo.stat("laszewski@gmail.com")
 
-print "g"
-stats = gitinfo.compute()
+    print "g"
+    stats = gitinfo.compute()
 
-print stats
+    print stats
 
-print "h"
-for email in stats:
-    p = stats[email]["percentage"]
-    print "{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%".format(email, p[0], p[1], p[2], p[3])
+    print "h"
+    for email in stats:
+        p = stats[email]["percentage"]
+        print "{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%".format(email, p[0], p[1], p[2], p[3])
+

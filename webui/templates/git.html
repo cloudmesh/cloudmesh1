@@ -10,12 +10,38 @@
 
 
 {% block content %}
-  <table>
+
+
+<script type="text/javascript">
+
+$(function() {
+     $("#host-table-0").dataTable({
+     	"sDom": 'C<"clear">lfrtip',
+     	"oColVis": {
+						"aiExclude": [ 0 ]
+					},
+     	"sPaginationType": "full_numbers",
+     	"aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
+    	"iDisplayLength": -1,
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": true,
+        				 "sType": "numeric",
+        				 "aTargets": [1]} ],
+
+    });
+});
+
+</script>
+
+<div class="span9">
+  <table id="host-table-0">
+  <thead>
   <tr>
   <th> Name </th>
   <th> Commits </th>
   </tr>
-  {{authors }}
+  </thead>
+  <tbody>
   {% for key in authors %}
     <tr>
       <td>{{ authors[key].name }}</td>
@@ -23,7 +49,8 @@
   </tr>
 
   {% endfor %}
-  
+  </tbody>
 </table>
+<div>
 
 {% endblock %}

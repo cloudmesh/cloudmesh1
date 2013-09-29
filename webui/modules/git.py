@@ -2,6 +2,8 @@ import envoy
 from flask import Blueprint
 from flask import render_template
 from sh import git
+from cloudmesh.util.gitinfo import GitInfo
+from pprint import pprint
 
 git_module = Blueprint('git_module', __name__)
 
@@ -21,16 +23,40 @@ def display_git_authors():
 
     result = envoy.run('git log --all --format=\"%aN <%cE>\" | sort -u')
     print result.std_out
-    print "abc", result.__dict__
-    """
-    for line in result:
-        print line
-        try:
-            (name, email) = line.split("\t")
-            authors[name]["email"] = email
-        except:
-            print "error:", line
 
-    print authors
     """
-    return render_template('git.html', authors=authors)
+    gitinfo = GitInfo()
+
+    # print gitinfo.version()
+
+    print "A"
+    print gitinfo.authors()
+
+    print "b"
+    pprint(gitinfo.authors("dict"))
+
+    print "c"
+    pprint(gitinfo.emails())
+
+    print "d"
+    pprint(gitinfo.emails("dict"))
+
+    print "e"
+    pprint(gitinfo.info())
+
+    print "f"
+    print gitinfo.stat("laszewski@gmail.com")
+
+    print "g"
+    stats = gitinfo.compute()
+
+    print stats
+
+    print "h"
+    for email in stats:
+        p = stats[email]["percentage"]
+        print "{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%".format(email, p[0], p[1], p[2], p[3])
+    """
+
+    return render_template('git.html',
+                           authors=authors)
