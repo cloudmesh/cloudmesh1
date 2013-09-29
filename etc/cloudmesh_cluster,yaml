@@ -1,0 +1,96 @@
+meta:
+  yaml_version: 1.2
+  kind: clusters
+cloudmesh:
+    inventory:
+        india:
+            id: i[001-136]
+            nameserver: 999.99.1.1
+            network:
+            - name: idpm
+              id: i[001-136]
+              label: i[1-136]
+              range: 998.98.999.[1-136]
+            - name: internal
+              id: i[001-136]
+              label: i[1-136]r
+              range: 997.997.997.[1-136]
+            - name: bmc
+              id: i[001-136]
+              label: bmc[1-136]
+              range: 996.996.996.[1-136]
+        bravo:
+            id: b[001-016]
+            nameserver: 999.99.1.1
+            publickeys:
+            - name: im1
+              path: ~/.futuregrid/keys/id_rsa_im1.pub
+            - name: fgstor02 
+              path: ~/.futuregrid/keys/id_rsa_fgstor02.pub
+            network:
+            - name: eth0
+              type: internal
+              id: b[001-016]
+              label: b[001-016]i
+              range: 996.996.996.[11-26]
+              broadcast: 992.992.992.255
+              netmask: 255.255.252.0
+              bootproto: dhcp
+              onboot: yes
+            - name: eth1
+              koji: hallo
+              type: public
+              id: b[001-016]
+              label: b[001-016]
+              range: 990.90.90.[11-26]
+              broadcast: 990.90.90.255
+              netmask: 255.255.255.0
+              gateway: 990.90.90.254
+              bootproto: static
+              onboot: yes
+            - name: ib0
+              type: infiniband
+              id: b[001-016]
+              label: b[001-016]ib
+              range: 999.99.99.[11-26]
+              broadcast: 999.99.99.255
+              netmask: 255.255.255.0
+              bootproto: static
+              onboot: yes
+            - name: bmc
+              type: bmc
+              id: b[001-016]
+              label: bmc-b[001-016]
+              range: 999.90.900.[11-26]
+            - name: pxe
+              id: b[001-016]
+              label: b[001-016]pxe
+              range: na[001-016]
+              type: pxe
+              pxe_prefix: /tftpboot/pxelinux.cfg
+        echo:
+            id: e[001-016]
+            network:
+            - name: 0
+              id: e[001-016]
+              label: echo-[01-16]
+              range: 990.90.90.[71-86]
+            - name: internal
+              id: e[001-016]
+              label: echo-[01-16]i
+              range: 996.996.996.[11-26]
+            - name: bmc-echo
+              id: e[001-016]
+              label: bmc-echo-[01-16]
+              range: 992.99.99.[1-16]
+        delta:
+            id: d[001-016]
+            network:
+            - name: 0
+              id: d[001-016]
+              label: d[001-016]
+              range: 996.996.996.[51-67]
+            - name: bmc-d
+              id: d[001-016]
+              label: bmc-d[001-17]
+              range: 992.992.992.[151-167]
