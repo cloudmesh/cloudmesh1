@@ -15,6 +15,28 @@ image_button("041_charts", "/table/")
 	{% endif %}
 {% endmacro %}
 
+{% macro cm_boolean_color(state) %}
+    {% set s = state|lower %}
+   	{% if s in ["true", "yes"] %}
+		<span class="label label-success">{{state}}</span>
+	{% elif s in ["false", "no"] %}
+		<span class="label label-danger">{{state}}</span>
+	{% else %}
+		<span class="label label-default">{{state}}</span>
+	{% endif %}
+{% endmacro %}
+
+{% macro cm_boolean_plusminus(state) %}
+    {% set s = state|lower %}
+   	{% if s in ["true", "yes"] %}
+		<span class="label label-success">+</span>
+	{% elif s in ["false", "no"] %}
+		<span class="label label-danger">-</span>
+	{% else %}
+		<span class="label label-default">{{state}}</span>
+	{% endif %}
+{% endmacro %}
+
 <!--
 <span class="label label-primary">Blue</span>
 <span class="label label-info">lightblue</span>
