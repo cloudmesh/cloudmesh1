@@ -21,10 +21,10 @@ class cm_userLDAP (CMUserProviderBaseType):
     def get_config(self, **kwargs):
 
         if not kwargs.has_key('host'):  # if kwargs['host'] is None:
-            self.host = cm_config_server().get("ldap.hostname")
+            self.host = cm_config_server().get("cloudmesh.server.ldap.hostname")
 
         if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
-            self.cert = cm_config_server().get("ldap.cert")
+            self.cert = cm_config_server().get("cloudmesh.server.ldap.cert")
 
 
     def authenticate(self, userId, password, **kwargs):
@@ -64,7 +64,7 @@ class cm_userLDAP (CMUserProviderBaseType):
     def __init__(self, collection="user"):
         super(cm_userLDAP, self).__init__()
         self.ldapconn = None
-        
+
     def refresh(self):
         '''
         Refresh the user database from the user provider
@@ -90,10 +90,10 @@ class cm_userLDAP (CMUserProviderBaseType):
             provider[k] = v
 
         if not kwargs.has_key('host'):  # if kwargs['host'] is None:
-            self.host = cm_config_server().get("ldap.hostname")
+            self.host = cm_config_server().get("cloudmesh.server.ldap.hostname")
 
         if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
-            self.cert = cm_config_server().get("ldap.cert")
+            self.cert = cm_config_server().get("cloudmesh.server.ldap.cert")
 
 
         ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, self.cert)
