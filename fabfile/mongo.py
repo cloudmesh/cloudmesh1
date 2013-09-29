@@ -249,7 +249,9 @@ def ldap():
 
     users = idp.list()
 
+    print users
     print ("Fetching {0} Users from LDAP".format(len(users)))
+
 
 '''
 @task
