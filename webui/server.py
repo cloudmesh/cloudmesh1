@@ -62,7 +62,7 @@ all_modules = ['pbs',
 
 s_config = cm_config_server()
 
-with_rack = s_config.get("rack.with_rack")
+with_rack = s_config.get("cloudmesh.server.rack.with_rack")
 
 if with_rack:
     all_modules.append('rack')
@@ -105,7 +105,7 @@ filename = "%s/%s" % (home, default_path)
 # ============================================================
 config = cm_config_server()
 
-SECRET_KEY = config.get('webui.secret')
+SECRET_KEY = config.get('cloudmesh.server.webui.secret')
 DEBUG = debug
 FLATPAGES_AUTO_RELOAD = debug
 FLATPAGES_EXTENSION = '.md'
@@ -498,6 +498,6 @@ if __name__ == "__main__":
     # setup_imagedraw()
     # setup_plugins()
     # setup_noderenderers()
-    web_host = config.get('webui.host')
-    web_port = config.get('webui.port')
+    web_host = config.get('cloudmesh.server.webui.host')
+    web_port = config.get('cloudmesh.server.webui.port')
     app.run(host=web_host, port=web_port)

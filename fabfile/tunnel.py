@@ -20,10 +20,10 @@ def ldap(host=None):
     config_server = get_server_config()
     config_user = get_user_config()
     user = config_user.get("cloudmesh.hpc.username")
-    ldaphost = config_server.get("ldap.hostname")
-    ldapproxyhost = config_server.get("ldap.proxyldap")
-    proxyuser = config_server.get("ldap.proxyuser")
-    proxyhost = config_server.get("ldap.proxyhost")
+    ldaphost = config_server.get("cloudmesh.server.ldap.hostname")
+    ldapproxyhost = config_server.get("cloudmesh.server.ldap.proxyldap")
+    proxyuser = config_server.get("cloudmesh.server.ldap.proxyuser")
+    proxyhost = config_server.get("cloudmesh.server.ldap.proxyhost")
     port = 389
 
     command = "sudo ssh -f -N -L {1}:{0}:{1} {2}@{3}".format(ldapproxyhost, port, proxyuser, proxyhost)

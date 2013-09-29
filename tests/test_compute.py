@@ -8,7 +8,7 @@ nosetests -v
 
 individual tests can be run with
 
-nosetests -v  --nocapture test_cm_compute.py:Test.test_06
+nosetests -v  --nocapture tests/test_compute.py:Test.test_06
 
 """
 
@@ -44,7 +44,6 @@ class Test:
         self.configuration = cm_config()
         print "OK"
 
-
         self.name = self.configuration.active()[0]
         print "ACTIVE CLOUD", self.name
 
@@ -54,7 +53,7 @@ class Test:
         self.cloud.get_token()
         pp.pprint(self.cloud.user_token)
         print "LOADED CLOUD"
-        
+
         """
         # For multiple clouds
         # e.g. india-essex and sierra-grizzly 
@@ -68,67 +67,8 @@ class Test:
             print "LOADED CLOUDS"
         """
 
-    def test_get_extensions(self):
-        """test geting the cloud extensions"""
-        HEADING()
 
-        print json.dumps(self.cloud.get_extensions(), indent=4)
-        assert True
-
-    def test_get_users(self):
-        """test to get the users"""
-        HEADING()
-
-        self.cloud.refresh("users")
-
-        #        print json.dumps(self.cloud.get_users(), indent=4)
-        print json.dumps(self.cloud.users, indent=4)
-
-        assert True
-
-    def test_get_users_all(self):
-        """testto get all information for the users"""
-
-        for name in self.configuration.active():
-            HEADING()
-            cloud = openstack(name)
-            cloud.refresh("users")
-            print json.dumps(cloud.users, indent=4)
-
-        assert True
-
-    def test_get_limits(self):
-        """test to get the limits"""
-        HEADING()
-        print json.dumps(self.cloud.get_limits(), indent=4)
-        assert True
-
-    def test_get_servers(self):
-        """test to get the servers"""
-        HEADING()
-
-        print json.dumps(self.cloud.get_servers(), indent=4)
-        assert True
-
-    def test_get_flavors(self):
-        """test to get the flavors"""
-        HEADING()
-        # self.cloud.refresh('flavors')
-        # print json.dumps(self.cloud.dump('flavors'), indent=4)
-
-        print json.dumps(self.cloud.get_flavors(), indent=4)
-        assert True
-
-    def test_get_images(self):
-        """test to get the images"""
-        HEADING()
-        self.cloud.refresh('images')
-        print json.dumps(self.cloud.dump('images'), indent=4)
-
-        print json.dumps(self.cloud.get_images(), indent=4)
-        assert True
-
-    def test_label(self):
+    def test_00_label(self):
         """test the label"""
         HEADING()
         print self.cloud_label
@@ -157,11 +97,13 @@ class Test:
         """get the flavor"""
         HEADING()
         self.cloud.refresh('flavors')
+
+
         print json.dumps(self.cloud.dump('flavors'), indent=4)
 
 
         # doing a simple test as tiny is usually 512
-        assert self.cloud.flavors['m1.tiny']['ram'] == 512
+        assert self.cloud.flavor('m1.tiny')['ram'] == 512
 
     def test_04_start_vm(self):
         """start a vm"""
@@ -176,18 +118,18 @@ class Test:
         print "STARTING IMAGE", image
         meta = {"cmtag":"testing tag from creation via rest api"}
         result = self.cloud.vm_create("fw-test-by-post-003", "2", image, key_name="grizzlykey", meta=meta)
-        #result = self.cloud.vm_create("fw-test-by-post-003", "100", image, meta=meta)
+        # result = self.cloud.vm_create("fw-test-by-post-003", "100", image, meta=meta)
         pp.pprint(result)
         assert len(result.keys()) > 0
 
-    def test_04_get_public_ip(self):
+    def test_05_get_public_ip(self):
         """get an ip"""
         HEADING()
         print "Obtaining public ip......"
         ip = self.cloud.get_public_ip()
         print "this is the ip returned:--->%s<---" % ip
 
-    def test04_assign_public_ip(self):
+    def test_06_assign_public_ip(self):
         """assign an ip"""
         HEADING()
         print "Associate a public ip to an running instance......"
@@ -200,7 +142,7 @@ class Test:
         print "Got a new ip as: %s, now associating the ip..." % ip
         print self.cloud.assign_public_ip(serverid, ip)
 
-    def test04_list_public_ips(self):
+    def test_07_list_public_ips(self):
         """list the ips"""
         HEADING()
         print "List all public ips allocated to the current account..."
@@ -210,7 +152,7 @@ class Test:
             ips_id_to_instance[ip['id']] = ip['instance_id']
         print ips_id_to_instance
 
-    def test04_release_public_ips(self):
+    def test_08_release_public_ips(self):
         """release the ips"""
         HEADING()
         print "Release all public ips allocated to the current account but not being used..."
@@ -221,7 +163,7 @@ class Test:
         print "after releasing..."
         self.test04_list_public_ips()
 
-    def test_05_print_vms(self):
+    def test_09_print_vms(self):
         """print the servers"""
         HEADING()
         self.cloud.refresh('servers')
@@ -229,21 +171,15 @@ class Test:
         # we assume that there are always images running
         assert len(self.cloud.servers) > 0
 
-    def test_06_refresh(self):
+    def test_10_refresh(self):
         """refresh"""
         HEADING()
         self.cloud.refresh()
         pp.pprint(self.cloud.get(self.name))
         assert self.cloud.images > 0
 
-    """
-    def test_0??_usage(self):
-        result = self.cloud.usage("2000-01-01T00:00:00", "2013-12-31T00:00:00")
-        print json.dumps(result, indent=4)
-        assert ['Instances'] > 0
-    """
 
-    def test_07_print_tables(self):
+    def test_11_print_tables(self):
         """print a table"""
         HEADING()
         self.test_03()
@@ -267,7 +203,7 @@ class Test:
 
         assert table is not None
 
-    def test_07_start_delete_vm(self):
+    def test_12_start_delete_vm(self):
         """delete a vm"""
         print "no test was being done"
         '''
@@ -289,7 +225,7 @@ class Test:
         # ret=self.cloud.vm_delete(id)
         # print "--->%s<---" % ret
 
-    def test_08_delete_vms_of_user(self):
+    def test_13_delete_vms_of_user(self):
         """delete a vm of a specific user"""
         HEADING()
 
@@ -331,7 +267,7 @@ class Test:
 
         assert vm_ids == []
 
-    def test_09_start_two_vms(self):
+    def test_14_start_two_vms(self):
         """start two vms"""
         HEADING()
         configuration = cm_config()
@@ -355,19 +291,19 @@ class Test:
 
         assert len(vm_ids) == 2
 
-    def test_10_list_user_vms(self):
+    def test_15_list_user_vms(self):
         """list user and vms"""
         HEADING()
         list = self.cloud.vms_user(refresh=True)
         pp.pprint(list)
 
-    def test_11_refresh_all(self):
+    def test_16_refresh_all(self):
         """refresh all"""
         HEADING()
         self.cloud.refresh()
         self.cloud.info()
 
-    def test_12_print_states(self):
+    def test_17_print_states(self):
         """print states"""
         HEADING()
         self.cloud.refresh()
@@ -392,7 +328,7 @@ class Test:
 
         # print json.dumps(self.cloud.servers, indent=4)
 
-    def test_13_meta(self):
+    def test_18_meta(self):
         """test metadata"""
         HEADING()
         self.clean()
@@ -411,12 +347,12 @@ class Test:
         meta = self.cloud.get_meta(id)
         print meta
 
-    def test_15_list_secgroup(self):
+    def test_19_list_secgroup(self):
         """list security group"""
         tenant_id = '1ae6813a3a6d4cebbeb1912f6d139ad0'
         pp.pprint(self.cloud.list_security_groups(tenant_id))
 
-    def test_15_create_secgroup(self):
+    def test_20_create_secgroup(self):
         """test security group"""
         tenant_id = '1ae6813a3a6d4cebbeb1912f6d139ad0'
         # print "defining a group"
@@ -437,7 +373,7 @@ class Test:
         # print groupid
         assert groupid is None
 
-    def test_16_usage(self):
+    def test_21_usage(self):
         """test usage"""
         # by default, expect getting tenant usage info
         pp.pprint(self.cloud.usage())
@@ -446,18 +382,18 @@ class Test:
         pp.pprint(self.cloud.usage(serverid=serverid))
         pp.pprint(self.cloud.usage(serverid="fakeserverid"))
 
-    def test_17_ks_get_extensions(self):
+    def test_22_ks_get_extensions(self):
         """test getting extensions"""
         pp.pprint(self.cloud.ks_get_extensions())
 
-    def test18_keypair_add(self):
+    def test_23_keypair_add(self):
         keyname = "skwind"
         keycontent = "ssh-dss AAAAB3NzaC1kc3MAAACBAPkCkTkLqyqpmjYSU0P6cLMfuY6YPrZr5NkpVVuK9nLEKxdV3oAL1EOhTvgdve6hAVENX76fJFqUeBL1POBvsV92OH3e84cwwUiXBoQ9VrFtAn0l1tsdKkiEadWakCjxp0DqkjWJz1sLDzmB37QqO16T3KI5+yFviJPkn/LUYTMrAAAAFQCbgsFrwjHQqIlOhAKwW7tCt+M+VwAAAIEArgHogg4cLFS9uNtjP4H8vz6f+kYJ2zpHwnBMA7caO9IyFwYz/0BTjF4J/qD+Gwra+PKL7llQJlOAG1Odg79RRqPgk/4LN5KuXNkNbL9GZhcqdxD+ZpUtVjs4WLXA0C1t53CQvNKhkCKEZMTvS603rfBCJ8SBc4d4x6fAD7I6+fsAAACBALuHfiLksJR9xyexDNQpmtK12aIX+xZ+ryLEGbHGd0QIwskdnB9tqFH0S9NZg//ywSqntV9PlEqacmjEsfWojlM30b1wIJl0xCa+5eZiwFm2Xfsm4OhH0NE32SCb+Zr3ho4tcizpR9PVSoTxkU97rnGj1PDrjf1ZsuaG0Dr6Fzv3"
         pp.pprint(self.cloud.keypair_add(keyname, keycontent))
- 
-    def test18_keypair_list(self):
+
+    def test_24_keypair_list(self):
         pp.pprint(self.cloud.keypair_list())
-               
+
     def start(self):
         """start image"""
         HEADING()
@@ -499,3 +435,71 @@ class Test:
         print "vms", vm_ids
 
         assert vm_ids == []
+
+
+    def test_24_get_extensions(self):
+        """test geting the cloud extensions"""
+        HEADING()
+
+        print json.dumps(self.cloud.get_extensions(), indent=4)
+        assert True
+
+    def test_25_get_users(self):
+        """test to get the users"""
+        HEADING()
+
+        self.cloud.refresh("users")
+
+        #        print json.dumps(self.cloud.get_users(), indent=4)
+        print json.dumps(self.cloud.users, indent=4)
+
+        assert True
+
+    def test_26_get_users_all(self):
+        """testto get all information for the users"""
+
+        for name in self.configuration.active():
+            HEADING()
+            cloud = openstack(name)
+            cloud.refresh("users")
+            print json.dumps(cloud.users, indent=4)
+
+        assert True
+
+    def test_27_get_limits(self):
+        """test to get the limits"""
+        HEADING()
+        print json.dumps(self.cloud.get_limits(), indent=4)
+        assert True
+
+    def test_28_get_servers(self):
+        """test to get the servers"""
+        HEADING()
+
+        print json.dumps(self.cloud.get_servers(), indent=4)
+        assert True
+
+    def test_29_get_flavors(self):
+        """test to get the flavors"""
+        HEADING()
+        # self.cloud.refresh('flavors')
+        # print json.dumps(self.cloud.dump('flavors'), indent=4)
+
+        print json.dumps(self.cloud.get_flavors(), indent=4)
+        assert True
+
+    def test_30_get_images(self):
+        """test to get the images"""
+        HEADING()
+        self.cloud.refresh('images')
+        print json.dumps(self.cloud.dump('images'), indent=4)
+
+        print json.dumps(self.cloud.get_images(), indent=4)
+        assert True
+
+    """
+    def test_31_usage(self):
+        result = self.cloud.usage("2000-01-01T00:00:00", "2013-12-31T00:00:00")
+        print json.dumps(result, indent=4)
+        assert ['Instances'] > 0
+    """

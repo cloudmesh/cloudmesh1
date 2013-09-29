@@ -1,0 +1,32 @@
+meta:
+  kind: me
+  yaml_version: 1.2
+
+portalname: albert
+
+profile:
+    firstname: Gregor
+    lastname: von Laszewski
+    e-mail: laszewski@gmail.com
+
+password:
+  sierra_openstack_grizzly: None
+
+azure:
+  subscriptionid: None
+
+aws:
+  access_key_id: None
+  secret_access_key: None
+  userid: None
+
+projects:
+  default: fg82
+  active:
+  - fg82
+  - fg101
+  completed:
+  - fg130
+keys:
+  fg_0: ssh-rsa ABCD... fg_0
+  fg_1: ssh-rsa EFGH... fg_1

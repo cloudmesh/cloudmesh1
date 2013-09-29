@@ -49,8 +49,8 @@ class openstack(ComputeBaseType):
     # : a dict with the images
     images = {}  # global var
 
-    # : a dict with the images
-    images = {}  # global var
+    # : a dict with the flavors
+    flavors = {}  # global var
 
     # : a dict with the servers
     servers = {}  # global var
@@ -110,10 +110,10 @@ class openstack(ComputeBaseType):
 
         if admin_credential is None:
             try:
-                self.admin_credential = cm_config_server().get("keystone", label)
+                self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(label))
             except:
                 log.error("No admin credentail found! Please check your cloudmesh_server.yaml file.")
-
+        # connecting within init will lead to long delays
         self.connect()
 
     def clear(self):
@@ -130,12 +130,11 @@ class openstack(ComputeBaseType):
         self.admin_credentials = None
         self.type = "openstack"
 
-
-
     def connect(self):
         """
         creates tokens for a connection
         """
+        log.info("Loading User Credentials")
         if self.user_credential is None:
             log.error("error connecting to openstack compute, credential is None")
         else:
@@ -143,6 +142,7 @@ class openstack(ComputeBaseType):
 
         # check if keystone is defined, and if failed print log msg
         #
+        log.info("Loading Admin Credentials")
         if self.admin_credential is None:
             log.error("error connecting to openstack compute, credential is None")
         else:
@@ -288,19 +288,19 @@ class openstack(ComputeBaseType):
     def keypair_list(self):
         apiurl = "os-keypairs"
         return self._get(msg=apiurl)
-    
+
     def keypair_add(self, keyname, keycontent):
-        #keysnow = self.keypair_list()
+        # keysnow = self.keypair_list()
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         posturl = "%s/os-keypairs" % publicURL
-        
+
         params = {"keypair": {"name": "%s" % keyname,
                               "public_key": "%s" % keycontent
                               }
                  }
         return self._post(posturl, params)
-        
+
     def vm_create(self, name,
                   flavor_name,
                   image_id,
@@ -349,7 +349,7 @@ class openstack(ComputeBaseType):
                   }
         if key_name:
             params["server"]["key_name"] = key_name
-            
+
         if userdata:
             safe_userdata = strutils.safe_encode(userdata)
             params["server"]["user_data"] = base64.b64encode(safe_userdata)
@@ -459,7 +459,7 @@ class openstack(ComputeBaseType):
 
         print url
         headers = {'X-Auth-Token': token['access']['token']['id']}
-                
+
         r = requests.get(url, headers=headers, verify=self._get_cacert(credential), params=payload)
 
         print "RRRRR", r
@@ -492,7 +492,7 @@ class openstack(ComputeBaseType):
     # new
     def _list_to_dict(self, list, id, type, time_stamp):
         d = {}
-        cm_type_version = self.compute_config.get('cloudmesh', 'clouds', self.label, 'cm_type_version')
+        cm_type_version = self.compute_config.get('cloudmesh.clouds.{0}.cm_type_version'.format(self.label))
 
         print "VVVVV", cm_type_version
 
@@ -518,8 +518,6 @@ class openstack(ComputeBaseType):
             list = r.json()
         return self._list_to_dict(list, 'name', "extensions", time_stamp)
 
-     # new
-     # BUG not yet a dict
     def get_limits(self):
         time_stamp = self._now()
         msg = "limits"
@@ -538,7 +536,19 @@ class openstack(ComputeBaseType):
         time_stamp = self._now()
         msg = "flavors/detail"
         list = self._get(msg)['flavors']
+
         return self._list_to_dict(list, 'name', "flavor", time_stamp)
+
+    def flavorid(self, name):
+        for key in self.flavors:
+            if self.flavors[key]['name'] == name:
+                return key
+
+    def flavor(self, id_or_name):
+        keys = self.flavors.keys()
+        if id_or_name not in keys:
+            key = self.flavorid(id_or_name)
+        return self.flavors[key]
 
     # new
     def get_images(self):
@@ -554,7 +564,7 @@ class openstack(ComputeBaseType):
         if credential is None:
             p = cm_profile()
             name = self.label
-            credential = p.server["keystone"][name]
+            credential = p.server.get("cloudmesh.server.keystone")[name]
         msg = "tenants"
         list = self._get(msg, kind="admin")['tenants']
         return self._list_to_dict(list, 'id', "tenants", time_stamp)
@@ -569,7 +579,7 @@ class openstack(ComputeBaseType):
 
             p = cm_profile()
             name = self.label
-            credential = p.server["keystone"][name]
+            credential = p.server.get("cloudmesh.server.keystone")[name]
 
         cloud = openstack(name, credential=credential)
         msg = "users"
@@ -646,19 +656,19 @@ class openstack(ComputeBaseType):
 
 
     def limits(self):
-        """ returns the usage information of the tennant"""
+        """ returns the limats of the tennant"""
 
         list = []
 
-        info = self.cloud.limits.get()
-        del info.manager
-        rates = info.__dict__['_info']['rate']
+        info = self.get_limits()
 
-        for rate in rates:
+        for rate in info['rate']:
             limit_set = rate['limit']
             print limit_set
             for limit in limit_set:
                 list.append(limit)
+
+        print list
 
         return list
 

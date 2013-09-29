@@ -4,17 +4,19 @@ from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
-from cloudmesh.util.util import path_expand as cm_path_expand
+from cloudmesh.util.util import path_expand as path_expand
 from cloudmesh.util.util import banner
 from cloudmesh.inventory import Inventory
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.user.cm_user import cm_user
+from cloudmesh.util.util import yn_choice
 from sh import keystone
-
+from sh import less
 from  yaml import dump as yaml_dump
 import sys
 import os.path
+import os
 
 @task
 def yaml():
@@ -23,17 +25,19 @@ def yaml():
     puts it into mongo as a profile
     
     """
+    os.system ("cm init generate yaml")
 
-    with hide('running', 'status', 'output'):
-        user_config = ConfigDict(filename="~/.futuregrid/me.yaml")
-        t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
-        result = t.replace(kind="dict", values=user_config)
-        print yaml_dump(result, default_flow_style=False)
-        location = cm_path_expand('~/.futuregrid/cloudmesh-new.yaml')
-        yaml_file = open(location, 'w+')
-        print >> yaml_file, yaml_dump(result, default_flow_style=False)
-        yaml_file.close()
-        print "Written new yaml file in " + location
+    # new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
+    # old_yaml = path_expand('~/.futuregrid/cloudmesh.yaml')
+
+    # t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
+
+    # t.generate("~/.futuregrid/me.yaml",
+    #           new_yaml)
+    # if yn_choice("Review the new yaml file", default='n'):
+    #    os.system ("less -E {0}".format(new_yaml))
+    # if yn_choice("Move the new yaml file to {0}".format(old_yaml), default='y'):
+    #    os.rename (new_yaml, old_yaml)
 
 @task
 def list():
@@ -57,7 +61,7 @@ def password():
     user = user_config.cloud('sierra_openstack_grizzly')['credentials']
 
     server_config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")
-    server = server_config['keystone']['sierra_openstack_grizzly']
+    server = server_config.get('cloudmesh.server.keystone.sierra_openstack_grizzly')
 
     print(" ".join(["keystone", "--os-username", server['OS_USERNAME'],
              "--os-password", server['OS_PASSWORD'],

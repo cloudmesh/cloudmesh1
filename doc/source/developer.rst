@@ -290,17 +290,36 @@ Generating a cloudmesh.yaml file
 
 To generate a simple cloudmesh.yaml file, you may want to use place
 the following contents (with modifications applying to you), in a file
-called me.yaml::
+called ~/.futuregrid/me.yaml. In that file, please replace the
+appropriate values with your cloud information. If you do not knwo the
+values you can just fill in a placeholder, such as None. With active
+we specify the clouds that we like to activate. Clouds not listed in
+activate will be ignored::
 
-    portalname: albert
+    meta:
+      kind: me
+      yaml_version: 1.2
+
+    portalname: gvonlasz
 
     profile:
 	firstname: Gregor
 	lastname: von Laszewski
-	e-mail: elfstein@gmail.com
+	e-mail: gvonlasz@gmail.com  
+
+    active:
+    - sierra_openstack_grizzly
 
     password:
-      sierra_openstack_grizzly: 1234abcde
+      sierra_openstack_grizzly: mypassword
+
+    azure:
+      subscriptionid: None
+
+    aws: 
+      access_key_id: None
+      secret_access_key: None
+      userid: None
 
     projects:
       default: fg82
@@ -310,8 +329,8 @@ called me.yaml::
       completed:
       - fg130
     keys:
-      mykey1: ssh-rsa lkhjasdlkjhaskjhdaslkjdshsalk mykey1
-      mykey2: ssh-rsa jhadkjsahdkjsahdkjsahlkjdhlak mykey2
+      fg_0: ssh-rsa ABCD .... fg-0
+      fg_1: ssh-rsa VWXY .... fg-1
 
 Than you can print the contents of the yaml file that this input
 generets to the stdout with::

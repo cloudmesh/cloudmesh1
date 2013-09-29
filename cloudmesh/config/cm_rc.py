@@ -65,7 +65,7 @@ import stat
 from cloudmesh_user import cloudmesh_user
 from sh import scp
 from getpass import getpass
-
+from cloudmesh.util.util import yn_choice
 
 debug = True
 

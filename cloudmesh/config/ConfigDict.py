@@ -4,12 +4,13 @@ from cloudmesh.util.config import read_yaml_config
 from collections import OrderedDict
 import simplejson
 from pprint import pprint
+import yaml
 import json
 import os
 import stat
 import sys
 import copy
-from cloudmesh.user.cm_template import cm_template
+
 
 log = LOGGER(__file__)
 package_dir = os.path.dirname(os.path.abspath(__file__))
@@ -34,62 +35,70 @@ def custom_print(data_structure, indent):
 
 class ConfigDict (OrderedDict):
 
+    def _set_filename(self, filename):
+        self['filename'] = filename
+        self['location'] = path_expand(self["filename"])
+
     def __init__(self, *args, **kwargs) :
         OrderedDict.__init__(self, *args, **kwargs)
+
         if 'filename' in kwargs:
-            self['location'] = kwargs['filename']
+            self._set_filename(kwargs['filename'])
         else:
             log.error("filename not specified")
+            sys.exit()
+
         self.load(self['location'])
+
+        for attribute in ['prefix']:
+            if attribute in kwargs:
+                self[attribute] = kwargs[attribute]
+            else:
+                self[attribute] = None
+
+        self._update_meta()
+
+
+    def _update_meta(self):
+        for v in ["filename", "location", "prefix"]:
+            self["meta"][v] = self[v]
+            del self[v]
 
     def read(self, filename):
         """does the same as load"""
         self.load(filename)
 
     def load(self, filename):
-        self['location'] = path_expand(filename)
+        self._set_filename(filename)
         d = OrderedDict(read_yaml_config (self['location'], check=True))
         self.update(d)
 
-    def write(self, filename=None, configuration=None):
-        """this method has not been tested"""
-        # pyaml.dump(self.config, f, vspacing=[2, 1, 1])
-        # text = yaml.dump(self.config, default_flow_style=False)
-        # this is a potential bug
-        if configuration is None:
-            configuration = self
-        template_path = os.path.expanduser("~/.futuregrid/etc/cloudmesh.yaml")
-        template = cm_template(template_path)
+    def write(self, filename=None, format="dict"):
+        """write the dict"""
 
-        # Set up a dict to pass to the template
-        template_vars = {}
-        template_vars['portalname'] = configuration['cloudmesh']['profile']['username']
-        template_vars['password'] = {}
-        for cloudname, cloudattrs in configuration['cloudmesh']['clouds'].iteritems():
-            template_vars['password'][cloudname] = cloudattrs['credentials']['OS_PASSWORD']
-        template_vars['projects'] = copy.deepcopy(configuration['cloudmesh']['projects'])
-        template_vars['keys'] = copy.deepcopy(configuration['cloudmesh']['keys'])
-        template_vars['profile'] = copy.deepcopy(configuration['cloudmesh']['profile'])
+        if filename is not None:
+            location = path_expand(filename)
+        else:
+            location = self.location
 
-        # print custom_print(template_vars, 4)
+        # with open('data.yml', 'w') as outfile:
+            #    outfile.write( yaml.dump(data, default_flow_style=True) )
 
-        # content = template.replace(format="text", **template_vars)
-        # changed otherwise it throws unexpected keyword error
-        content = template.replace(kind="dict", values=template_vars)
-
-        fpath = filename or self.filename
-        f = os.open(fpath, os.O_CREAT | os.O_TRUNC |
+        f = os.open(location, os.O_CREAT | os.O_TRUNC |
                     os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
-        os.write(f, content)
+        if format == "json":
+            os.write(f, self.json())
+        elif format in ['yml', 'yaml']:
+            d = dict(self)
+            os.write(f, yaml.dump(d, default_flow_style=False))
+        elif format == "print":
+            os.write(f, custom_print(self, 4))
+        else:
+            os.write(f, self.dump())
         os.close(f)
 
-    def write_init(self, filename=None):
-        # print "******************************\n"
-        # print custom_print(self.init_config, 4)
-        self.write(filename, self.init_config)
-
     def error_keys_not_found(self, keys):
-        log.error("Filename: {0}".format(self['location']))
+        log.error("Filename: {0}".format(self['meta']['location']))
         log.error("Key '{0}' does not exist".format('.'.join(keys)))
         indent = ""
         last_index = len(keys) - 1
@@ -102,7 +111,6 @@ class ConfigDict (OrderedDict):
 
     def __str__(self):
         return self.json()
-
 
     def json(self):
         return json.dumps(self, indent=4)
@@ -123,7 +131,6 @@ class ConfigDict (OrderedDict):
             sys.exit()
         return item
     """
-
     def get(self, *keys):
         """
         returns the dict of the information as read from the yaml file. To
@@ -147,8 +154,17 @@ class ConfigDict (OrderedDict):
                 sys.exit()
         return element
 
+    def attribute(self, keys):
+        if self['meta']['prefix'] is None:
+            k = keys
+        else:
+            k = self['meta']['prefix'] + "." + keys
+        return self.get(k)
+
 if __name__ == "__main__":
-    config = ConfigDict({"a":"1", "b" : {"c": 3}}, filename="~/.futuregrid/cloudmesh_server.yaml")
+    config = ConfigDict({"a":"1", "b" : {"c": 3}},
+                        prefix="cloudmesh.server",
+                        filename="./etc/cloudmesh_server.yaml")
 
     print "PPRINT"
     print 70 * "="
@@ -161,14 +177,24 @@ if __name__ == "__main__":
 
     print 70 * "="
     print "A =", config["a"]
-    print "mongo.path =", config["mongo"]["path"]
-    print "mongo.path GET =", config.get("mongo.path")
-    print "mongo.path GET =", config.get("mongo.path.wrong")
+    config.write("~/.futuregrid/d.yaml", format="dict")
+    config.write("~/.futuregrid/j.yaml", format="json")
+    config.write("~/.futuregrid/y.yaml", format="yaml")
+
+    # this does not work
+    # config.write("~/.futuregrid/print.yaml", format="print")
+
+
+
+    print "mongo.path GET =", config.get("cloudmesh.server.mongo.path")
+    print "mongo.path ATTIRBUTE =", config.attribute("mongo.path")
 
 
     print "get A =", config.get("a")
 
-    print "mongo.path.wrong =", config["mongo"]["path"]["wrong"]
+    print "wrong mongo.path ATTRIBUTE =", config.attribute("mongo.path.wrong")
+    print "wrong mongo.path GET =", config.get("cloudmesh.server.mongo.path.wrong")
+
     # print config["dummy"]
     # config["x"] = "2"
     # print config["x"]
