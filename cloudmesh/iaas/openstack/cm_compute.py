@@ -564,7 +564,7 @@ class openstack(ComputeBaseType):
         if credential is None:
             p = cm_profile()
             name = self.label
-            credential = p.server["keystone"][name]
+            credential = p.server.get("cloudmesh.server.keystone")[name]
         msg = "tenants"
         list = self._get(msg, kind="admin")['tenants']
         return self._list_to_dict(list, 'id', "tenants", time_stamp)
@@ -579,7 +579,7 @@ class openstack(ComputeBaseType):
 
             p = cm_profile()
             name = self.label
-            credential = p.server["keystone"][name]
+            credential = p.server.get("cloudmesh.server.keystone")[name]
 
         cloud = openstack(name, credential=credential)
         msg = "users"
