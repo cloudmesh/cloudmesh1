@@ -9,8 +9,20 @@ from pprint import pprint
 
 input = raw_input
 
-__all__ = ['user', 'install', 'host', 'allow', 'check', "dns", "status", "start", "stop", "menu",
-           "memory", "conumers", "msg", "info"]
+__all__ = ['user',
+           'install',
+           'host',
+           'allow',
+           'check',
+           "dns",
+           "status",
+           "start",
+           "stop",
+           "menu",
+           "memory",
+           "conumers",
+           "msg",
+           "info"]
 
 
 def installed(name):
