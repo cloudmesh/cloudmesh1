@@ -272,7 +272,7 @@ def pbs(host, type):
     # get hpc user
 
     config = cm_config()
-    user = config.config["cloudmesh"]["hpc"]["username"]
+    user = config.get("cloudmesh.hpc.username")
 
 
     pbs.activate(host, user)
