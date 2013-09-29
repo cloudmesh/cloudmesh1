@@ -61,14 +61,6 @@ cloudmesh:
                 db: launcher
             pagestatus:
                 db: pagestatus
-    mongo_user:
-        db: cm_user
-        host: localhost
-        port: 27018
-        username: admin
-        password: password
-        path: ~/.futuregrid/mongodb_user
-        collections:
             cm_password:
                 db: cm_user
     keystone:

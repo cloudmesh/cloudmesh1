@@ -4,8 +4,9 @@ from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
-from cloudmesh.util.util import path_expand as cm_path_expand
+from cloudmesh.util.util import path_expand
 from cloudmesh.util.util import banner
+from cloudmesh.util.util import yn_choice
 from cloudmesh.inventory import Inventory
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.config.ConfigDict import ConfigDict
@@ -40,9 +41,12 @@ def admin():
     for collection in config["collections"]:
         dbs.add(config['collections'][collection]['db'])
 
+    # setting the admin user
     script = []
     script.append('db.addUser("{0}", "{1}");'.format(user, password))
     script.append('db.auth("{0}", "{1}");'.format(user, password))
+
+    # setting a password for each db
 
     for db in dbs:
         script.append('db = db.getSiblingDB("{0}");'.format(db))
@@ -58,9 +62,57 @@ def admin():
     print "USER", user
     print "PASSWORD", password
 
-def mongo_start(config_name):
-    path = cm_path_expand(cm_config_server().get("cloudmesh.server.{0}.path".format(config_name)))
-    port = cm_config_server().get("cloudmesh.server.{0}.port".format(config_name))
+@task
+def wipe():
+    """wipes out all traces from mongo"""
+    kill()
+    config = cm_config_server().get("cloudmesh.server.mongo")
+
+    path = path_expand(config["path"])
+
+    banner("{0}".format(path))
+    local("mkdir -p {0}".format(path))
+    result = local("ls {0}".format(path), capture=True)
+    if ''.join(result.split("\n")) is '':
+        print "directory is empty"
+    else:
+        local("ls {0}".format(path))
+
+    print 70 * "-"
+    if yn_choice("deleting the directory", default="n"):
+        local("rm -rf {0}".format(path))
+        local("mkdir -p {0}".format(path))
+        banner("{0}".format(path))
+        local("ls {0}".format(path))
+
+@task
+def boot():
+    # wipe mongo
+    wipe()
+    # kill mongo
+    kill()
+    # start mongo without auth
+    start(auth=False)
+    # create users
+    admin()
+    # restart with auth
+    start(auth=True)
+
+    config = cm_config_server().get("cloudmesh.server.mongo")
+    path = path_expand(config["path"])
+
+    local("ls {0}".format(path))
+
+@task
+def start(auth=True):
+    '''
+    start the mongod service in the location as specified in
+    ~/.futuregrid/cloudmesh_server.yaml
+    '''
+    config = cm_config_server().get("cloudmesh.server.mongo")
+
+    path = path_expand(config["path"])
+    port = config["port"]
 
     if not os.path.exists(path):
         print "Creating mongodb directory in", path
@@ -75,20 +127,15 @@ def mongo_start(config_name):
         print "mongo already running in pid {0} for port {1}".format(pid, port)
     else:
         print "Starting mongod"
-        local("mongod --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port))
+        with_auth = ""
+        if auth:
+            with_auth = "--auth"
+
+        local("mongod {2} --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port, with_auth))
 
 @task
-def start():
-    '''
-    start the mongod service in the location as specified in
-    ~/.futuregrid/cloudmesh_server.yaml
-    '''
-    mongo_start('mongo')
-    mongo_start('mongo_user')
-
-
-def mongo_clean(config_name):
-    port = cm_config_server().get("cloudmesh.server.{0}.port".format(config_name))
+def clean():
+    port = cm_config_server().get("cloudmesh.server.mongo.port")
     result = local('echo "show dbs" | mongo --quiet --port {0}'.format(port), capture=True).splitlines()
     for line in result:
         name = line.split()[0]
@@ -109,6 +156,10 @@ def info():
 
 
 @task
+def kill():
+    stop()
+
+@task
 def stop():
     '''
     stops the currently running mongod
@@ -121,16 +172,6 @@ def stop():
     else:
         print "Kill mongod"
         local ("killall -9 mongod")
-
-@task
-def clean():
-    '''
-    deletes _ALL_ databases from mongo. Even thos not related to cloudmesh.
-    '''
-    local("make clean")
-    mongo_clean('mongo')
-    mongo_clean('mongo_user')
-
 
 @task
 def vms_find():
