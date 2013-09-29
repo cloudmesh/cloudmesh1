@@ -27,7 +27,7 @@ def get_mongo_db(mongo_collection):
     """
     filename = "~/.futuregrid/cloudmesh_server.yaml"
 
-    mongo_config = ConfigDict(filename=filename).attribute("mongo")
+    mongo_config = ConfigDict(filename=filename).get("cloudmesh.server.mongo")
 
     mongo_host = mongo_config["host"]
     mongo_port = int(mongo_config["port"])
