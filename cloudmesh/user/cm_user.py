@@ -86,7 +86,11 @@ class cm_user(object):
         print "E", username
         password = self.config_server.get("cloudmesh.server.mongo_user.password")
         print "F", password
-        client = MongoClient(host=host, port=port)
+        client = MongoClient(host=host,
+                             port=port,
+                             username=username,
+                             password=password
+                             )
         print "G"
         db = client[db_name]
         print "H"
