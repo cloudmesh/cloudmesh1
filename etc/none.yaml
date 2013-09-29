@@ -21,12 +21,12 @@ aws:
   userid: None
 
 projects:
-  default: 82
+  default: fg82
   active:
-  - 82
-  - 101
+  - fg82
+  - fg101
   completed:
-  - 130
+  - fg130
 keys:
   fg_0: ssh-rsa ABCD... fg_0
   fg_1: ssh-rsa EFGH... fg_1
