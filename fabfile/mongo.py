@@ -87,10 +87,10 @@ def wipe():
 
 @task
 def boot():
-    # wipe mongo
-    wipe()
     # kill mongo
     kill()
+    # wipe mongo
+    wipe()
     # start mongo without auth
     start(auth=False)
     # create users
