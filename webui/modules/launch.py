@@ -32,7 +32,7 @@ def launch_servers():
 
     launcher_config = ConfigDict(filename="~/.futuregrid/cloudmesh_launcher.yaml")
     celery_config = ConfigDict(filename="~/.futuregrid/cloudmesh_celery.yaml")
-    launch_recipies = launcher_config.get("launcher.recipies")
+    launch_recipies = launcher_config.get("cloudmesh.launcher.recipies")
 
     server = request.form.get("server")
     name_index = request.form.get("name_index")
@@ -61,8 +61,8 @@ def launch_servers():
 @cond_decorator(cloudmesh.with_login, login_required)
 def display_launch_table():
     launcher_config = ConfigDict(filename="~/.futuregrid/cloudmesh_launcher.yaml")
-    launch_recipies = launcher_config.get("launcher.recipies")
-    columns = launcher_config.get("launcher.columns")
+    launch_recipies = launcher_config.get("cloudmesh.launcher.recipies")
+    columns = launcher_config.get("cloudmesh.launcher.columns")
     return render_template('mesh_launch.html',
                            recipies=launch_recipies,
                            columns=columns,

@@ -120,7 +120,7 @@ def display_rack_map():
 def display_all_racks():
 
 
-	# dir = path_expand(cm_config_server().get("rack.path"))
+	# dir = path_expand(cm_config_server().get("cloudmesh.server.rack.path"))
 
 	# not so nice cludge, ask for location of statcic instead
 
@@ -143,7 +143,7 @@ def display_rack(name, service=None):
 		service = "temperature"
 	print "test begin/...."
 	basename = None
-	# diag_dir = path_expand(cm_config_server().get("rack.input"))
+	# diag_dir = path_expand(cm_config_server().get("cloudmesh.server.rack.input"))
 	# output_dir = path_expand(cm_config_server().get("rack.diagramms.{0}".format(service)))
 
 
