@@ -55,12 +55,6 @@ cloudmesh:
       cloud: sierra_openstack_grizzly
       index: 1
       prefix: {{ portalname }}
-    keys:
-        default: {{keys.default}}
-        keylist:
-            {% for keyname, key in keys.iteritems() -%}
-            {{ keyname }}: {{ key }}
-            {% endfor -%}
     profile:
         address:
         - TBD
@@ -106,3 +100,11 @@ cloudmesh:
             - web
             webserver:
             - web
+
+    keys:
+        default: {{keys.default}}
+        keylist:
+            {% for keyname, key in keys.iteritems() -%}
+            {{ keyname }}: {{ key }}
+            {% endfor -%}
+
