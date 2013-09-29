@@ -33,7 +33,7 @@ class ProvisionWorkflowForm(Form):
     # print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",Form
     filename = "abc"
 
-    dir = path_expand(cm_config_server().get("workflows.path"))
+    dir = path_expand(cm_config_server().get("cloudmesh.server.workflows.path"))
 
     # not so nice cludge, ask for location of statcic instead
 
@@ -76,7 +76,7 @@ def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)
 
-    dir = path_expand(cm_config_server().get("workflows.path"))
+    dir = path_expand(cm_config_server().get("cloudmesh.server.workflows.path"))
 
     filename = "abc"
 

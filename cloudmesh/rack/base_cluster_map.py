@@ -10,7 +10,7 @@ from hostlist import expand_hostlist
 from sh import rackdiag  # @UnresolvedImport
 from sh import rm  # @UnresolvedImport
 from sh import pwd  # @UnresolvedImport
-from sh import mkdir # @UnresolvedImport
+from sh import mkdir  # @UnresolvedImport
 import random
 import time
 import colorsys
@@ -23,12 +23,12 @@ import matplotlib.patches as patches
 class BaseClusterMap:
 	# default location of yaml configuration file
 	default_home_yaml = "~/.futuregrid"
-	
+
 	# default location of cloudmesh_clusters.yaml
-	default_clusters_yaml = "cloudmesh_cluster.yaml"
+	default_clusters_yaml = "~/.futuregrid/cloudmesh_cluster.yaml"
 
 	# default location of cloudmesh_rack.yaml
-	default_rack_yaml = "cloudmesh_rack.yaml"
+	default_rack_yaml = "~/.futuregrid/cloudmesh_rack.yaml"
 
 	# the name of Clusters
 	cluster_name_all = "all"
@@ -56,20 +56,20 @@ class BaseClusterMap:
 	# the global routine is: cloudmesh:rack:cluster
 	# its children are: all, bravo, delta, echo, india and unknown
 	dict_rack_config = None
-	
+
 	#
 	# type of image with rackdiag
 	#
 	# If more image type supported, append the list to ["svg", "png", "gif", "jpg", ...]
 	image_type_list = ["svg", "png"]
-	
+
 	# subclass type list
 	subclass_type_list = ["temperature", "service"]
-	
+
 	# user choose a specific image type from image_type_list,
 	# if not, the default type will be the default_image_type, "svg"
 	image_type = ""
-	
+
 	# subclass type
 	subclass_type = ""
 
@@ -118,15 +118,15 @@ class BaseClusterMap:
 			dir_output = self.guessDefaultDiagramLocation()
 		if img_type is None:
 			img_type = self.image_type_list[0]
-		
+
 		abs_dir_yaml = cm_path_expand(dir_yaml)
 		abs_dir_diag = cm_path_expand(dir_diag)
 		abs_dir_output = cm_path_expand(dir_output)
-		
+
 		print "dir output,,,,,", abs_dir_output
 		# make sure the output directory exist
 		mkdir("-p", abs_dir_output)
-		
+
 		self.readClustersConfig(abs_dir_yaml)
 		self.readRackConfig(name, abs_dir_yaml, abs_dir_diag)
 		self.setRackImageType(subclass_type, img_type, abs_dir_output)
@@ -134,8 +134,8 @@ class BaseClusterMap:
 
 
 	# ======================================
-	#		   abstract function
-	#		 sub-class MUST override
+	# 		   abstract function
+	# 		 sub-class MUST override
 	# ======================================
 	#
 	# get default value for dict_servers
@@ -144,8 +144,8 @@ class BaseClusterMap:
 
 
 	# ======================================
-	#		   abstract function
-	#		 sub-class MUST override
+	# 		   abstract function
+	# 		 sub-class MUST override
 	# ======================================
 	#
 	# get corresponding mapping dict, from specific value to RGB value
@@ -156,8 +156,8 @@ class BaseClusterMap:
 
 
 	# ======================================
-	#		   abstract function
-	#		 sub-class MUST override
+	# 		   abstract function
+	# 		 sub-class MUST override
 	# ======================================
 	#
 	# get the current status of servers
@@ -168,8 +168,8 @@ class BaseClusterMap:
 
 
 	# ======================================
-	#		   abstract function
-	#		 sub-class MUST override
+	# 		   abstract function
+	# 		 sub-class MUST override
 	# ======================================
 	#
 	# plot the legend of cluster map
@@ -181,8 +181,8 @@ class BaseClusterMap:
 
 	# read clusters config
 	def readClustersConfig(self, dir_yaml):
-		clusters_config = ConfigDict(filename=dir_yaml + "/" + self.default_clusters_yaml)
-		self.dict_clusters_config = clusters_config["clusters"]
+		clusters_config = ConfigDict(filename=self.default_clusters_yaml)
+		self.dict_clusters_config = clusters_config.get("cloudmesh.inventory")
 		# get all possible cluster names from dict_clusters_config
 		self.cluster_name_list += self.dict_clusters_config.keys()
 
@@ -196,19 +196,19 @@ class BaseClusterMap:
 
 	# read default_rack_yaml configuration
 	def readRackConfig(self, name, dir_yaml, dir_diag):
-		rack_config = ConfigDict(filename=dir_yaml + "/" + self.default_rack_yaml)
-		self.dict_rack_config = rack_config["cloudmesh"]["rack"]
+		rack_config = ConfigDict(filename=self.default_rack_yaml)
+		self.dict_rack_config = rack_config.get("cloudmesh.rack")
 		print self.dict_rack_config
 
 		lname = name.lower()
 		self.cluster_name = lname if lname in self.cluster_name_list else self.cluster_name_unknown
 		print "rack name is: ", self.cluster_name
-		
+
 		# diag filename
 		self.filename_diag = dir_diag + "/" + self.dict_rack_config["cluster"][self.cluster_name]["diag"]
 		self.rack_count = self.dict_rack_config["cluster"][self.cluster_name]["count"]
 		self.filename_diag_temp = self.filename_diag + ".temp"
-		
+
 		# additional process for 'all'
 		# its count equals the sum of all other cluster exclude 'all' and 'unknown'
 		if name == "all":
@@ -218,7 +218,7 @@ class BaseClusterMap:
 			self.rack_count = 0
 			for rack in all_set:
 				self.rack_count += self.dict_rack_config["cluster"][rack]["count"]
-			
+
 		print "total rack count is: {0} = {1}".format(name, self.rack_count)
 
 
@@ -226,7 +226,7 @@ class BaseClusterMap:
 	def setRackImageType(self, subclass_type, img_type, dir_output):
 		ltype = subclass_type.lower()
 		self.subclass_type = ltype if ltype in self.subclass_type_list else self.subclass_type_list[0]
-		
+
 		# lower string of type
 		ltype = img_type.lower()
 
@@ -243,7 +243,7 @@ class BaseClusterMap:
 		self.only_filename_legend = image_basename + "-legend.png"
 		self.filename_rack_image = dir_output + "/" + self.only_filename_image
 		self.filename_rack_legend = dir_output + "/" + self.only_filename_legend
-		
+
 
 		print "rack image filename is: ", self.filename_rack_image
 
@@ -268,11 +268,11 @@ class BaseClusterMap:
 		for spec in servers_range_list:
 			servers = expand_hostlist(spec)
 			list_servers += servers
-			
+
 		self.dict_servers = dict.fromkeys(list_servers, self.getServersDefaultValue())
 
 
-	# 
+	#
 	# reset dict servers to a default value
 	#
 	def resetDictServers(self, value):
@@ -284,8 +284,8 @@ class BaseClusterMap:
 	# update a server info in dict servers
 	def updateServer(self, server, value):
 		self.dict_servers.update({server:value})
-	
-	
+
+
 	#
 	# Enable/Disable the function of delete filename_diag_temp after used
 	#
@@ -299,7 +299,7 @@ class BaseClusterMap:
 	# only filename
 	def getImageFilename(self):
 		return self.only_filename_image
-	
+
 	def getLegendFilename(self):
 		return self.only_filename_legend
 
@@ -387,7 +387,7 @@ class BaseClusterMap:
 	def plot(self):
 		# get mapping dict of colors
 		dict_mapping = self.getMappingDict()
-		#print "dict mapping, ", dict_mapping
+		# print "dict mapping, ", dict_mapping
 		# render dict_servers with correct color formation
 		self.render(dict_mapping)
 
@@ -430,20 +430,20 @@ class BaseClusterMap:
 	# guess default location of yaml configuration
 	def guessDefaultConfigLocation(self):
 		return self.default_home_yaml
-	
+
 	# guess default location of diag configuration
 	def guessDefaultDiagLocation(self):
 		return self.default_home_yaml + "/racks"
-	
+
 	# guess default location of image output
 	def guessDefaultDiagramLocation(self):
 		arr_dir_current = pwd().strip().split("/")
 		# current py file: cloudmesh_home/cloudmesh/rack/*.py
 		# webui static dir: cloudmesh_home/webui/static
-		arr_dir_guess = arr_dir_current[0: -2] + ["webui", "static", "racks"]
+		arr_dir_guess = arr_dir_current[0:-2] + ["webui", "static", "racks"]
 		return "/".join(arr_dir_guess)
-	
-	
+
+
 	# a helper function
 	# get the RGB according to a specific h param
 	# ONLY called by sub-class, the valid range of h is [0.0, 2/3]
@@ -468,6 +468,6 @@ class BaseClusterMap:
 if __name__ == "__main__":
 	mytest = BaseClusterMap("all")
 	print "=" * 60
-	#print mytest.dict_servers
+	# print mytest.dict_servers
 
 
