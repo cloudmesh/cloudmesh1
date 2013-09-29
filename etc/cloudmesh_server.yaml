@@ -38,6 +38,8 @@ cloudmesh:
         host: localhost
         port: 27017
         path: ~/.futuregrid/mongodb
+        username: admin
+        password: abc
         collections:
             inventory:
                 db: cm_inventory
