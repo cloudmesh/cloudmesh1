@@ -61,7 +61,7 @@ def password():
     user = user_config.cloud('sierra_openstack_grizzly')['credentials']
 
     server_config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")
-    server = server_config['keystone']['sierra_openstack_grizzly']
+    server = server_config.get('cloudmesh.server.keystone.sierra_openstack_grizzly')
 
     print(" ".join(["keystone", "--os-username", server['OS_USERNAME'],
              "--os-password", server['OS_PASSWORD'],
