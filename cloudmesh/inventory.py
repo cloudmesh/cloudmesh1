@@ -31,7 +31,7 @@ class Inventory:
 		self.config = ConfigDict(filename=self.CONFIG_FILE)
 
 		self.bootspec_config = ConfigDict(filename=self.BOOTSPEC_FILE)
-		
+
 		collection = "inventory"
 		self.db_inventory = get_mongo_db(collection)
 
@@ -127,9 +127,9 @@ class Inventory:
 
     def _generate_globals(self):
 
-        for name in self.config["clusters"]:
+        for name in self.config.get("cloudmesh.inventory"):
 
-            cluster = self.config["clusters"][name]
+            cluster = self.config.get("cloudmesh.inventory")[name]
             keys = cluster.keys()
 
             element = dict({'cm_cluster': name,
@@ -175,7 +175,7 @@ class Inventory:
 
 
 
-        clusters = self.config["clusters"]
+        clusters = self.config.get("cloudmesh.inventory")
 
         for cluster_name in clusters:
             cluster = clusters[cluster_name]
@@ -248,7 +248,7 @@ class Inventory:
     def hostlist (self, name):
         print "NAME", name
         hosts = self.find ({"cm_cluster": name, 'cm_key': 'range' })[0]['cm_value']
-        #print "===================", self.find_one({"cm_cluster": name, 'cm_key': 'range' })
+        # print "===================", self.find_one({"cm_cluster": name, 'cm_key': 'range' })
         return hosts
 
     def host (self, index, auth=True):
@@ -291,7 +291,7 @@ class Inventory:
 
 
         cluster_name = data['cm_cluster']
-        cluster_auth = self.server_config["clusters"][cluster_name]
+        cluster_auth = self.server_config.get("cloudmesh.clusters")[cluster_name]
 
         for name in cluster_auth:
             network = data["network"][name]
@@ -316,9 +316,9 @@ class Inventory:
     def generate_bootspec(self):
 		print self.bootspec_config
 
-		bootspecs =  self.bootspec_config['bootspec']
+		bootspecs = self.bootspec_config.get("cloudmesh.bootspec")
 		for name in bootspecs:
-			
+
 			print "Adding to inventory bootspec", name
 			description = bootspecs[name]
 			print "DDD", description

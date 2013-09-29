@@ -1,5 +1,6 @@
 {% extends "layoutTable.html" %}
 {% from "_helper.html" import image_button %}
+{% from "_helper.html" import cm_boolean_plusminus %}
 
 {% block contentbox %}
 <h2> {{ image_button ("none", "365_restart", "/cm/refresh/users") }} Users </h2>
@@ -22,7 +23,7 @@ $(function() {
     $("#cloud-table-{{ cloudnum }}").dataTable({
     	"sPaginationType": "full_numbers",
         aaSorting: [[1,'asc']],
-        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
+        aoColumnDefs: [ {"bSortable": true, "aTargets": [0]} ]
     });
   {% endfor %}
 });
@@ -67,10 +68,19 @@ $(function() {
                  <!-- for attribute in clouds[cloud][flavor] -->
                  {% for attribute in attributes  %}
                       <td>
+
                        {% set l = attribute | length %}
 
                           {% if l == 2%}
-                             {{ clouds[cloud][user][attribute[1]] }}
+
+                             {% if attribute[0]|lower in ["enabled"] %}
+                                {{ cm_boolean_plusminus(clouds[cloud][user][attribute[1]]) }}
+                             {% else %}
+                                {{ clouds[cloud][user][attribute[1]] }}
+                             {% endif %}
+
+
+
                           {% elif l == 3%}
                              {{ clouds[cloud][user][attribute[1]][attribute[2]] }}
                           {% elif l == 4%}
