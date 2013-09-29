@@ -58,6 +58,7 @@ all_modules = ['pbs',
                'mesh',
                'mesh_hpc',
                'users',
+               'status',
                'register']
 
 s_config = cm_config_server()
