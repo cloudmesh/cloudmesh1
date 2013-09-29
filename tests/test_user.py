@@ -11,12 +11,14 @@ import sys
 
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.util import HEADING
+from cloudmesh.util.util import banner
 from cloudmesh.util.util import path_expand
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.user.cm_mesh_auth import cm_userauth
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from pprint import pprint
+import os
 
 class Test_cloudmesh:
 
@@ -36,6 +38,7 @@ class Test_cloudmesh:
             print "=" * 40
 
     def tearDown(self):
+        os.system("fab test.info:user")
         pass
 
     def test_variables(self):
@@ -60,7 +63,7 @@ class Test_cloudmesh:
             }
         print self.t.replace(d=d)
         # self.t.complete does not exist in cm_template?
-        #assert self.t.complete 
+        # assert self.t.complete
 
 #    if not t.complete():
 #       print "ERROR: undefined variables"
@@ -85,17 +88,17 @@ class Test_cloudmesh:
         print self.user.get_name('gvonlasz')
 
     def setup_inventory(self):
+        banner("Read Dicts")
+        self.sample_user = ConfigDict(filename="~/.futuregrid/me.yaml")
+        self.portalname = self.sample_user.get("portalname")
+        print "PORTALNAME", self.portalname
+        print "SAMPLE USER", self.sample_user
 
-        self.sample_user = ConfigDict(filename="~/.futuregrid/etc/sample_user.yaml")
-        self.portalname = ConfigDict(filename="~/.futuregrid/cloudmesh.yaml").get("cloudmesh.hpc.username")
-
-        print
-        print self.sample_user
-
+        banner("create user from template, duplicates cm init generate me")
         t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
         pprint (set(t.variables()))
 
-        self.config = t.replace(format="dict", **self.sample_user)
+        self.config = t.replace(kind="dict", values=self.sample_user)
 
         print type(self.config)
         print self.config
