@@ -205,14 +205,12 @@ def mongo_users():
     attributes = {"grizzly":
                     [
                         [ "Name", "name"],
+                        [ "Firstname", "firstname"],
+                        [ "Lastname", "lastname"],
                         [ "Id" , "id"],
-                        [ "TenentId" , "tenantId"],
-                        [ "e-mail" , "e_mail"],
-                        [ "enabled" , "enabled"],
-                        [ "Cloud" , "cloud"],
-                        ['cm_cloud', "cm_cloud"],
-                        ['cm_id', "cm_id"],
-                        ['cm_type', "cm_type"],
+                        # [ "TenentId" , "tenantId"],
+                        [ "E-mail" , "email"],
+                        [ "Enabled" , "enabled"],
                         [ "Refresh", "cm_refresh"]
                     ]
                   }
