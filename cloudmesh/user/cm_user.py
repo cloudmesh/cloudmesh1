@@ -75,33 +75,20 @@ class cm_user(object):
     def _connect_userdb(self):
         """ Connect to the mongo user db."""
         # This will be enabled with ssl
-        print "A"
         db_name = self.config_server.get("cloudmesh.server.mongo.db")
-        print "B", db_name
         host = self.config_server.get("cloudmesh.server.mongo.host")
-        print "C", host
         port = self.config_server.get("cloudmesh.server.mongo.port")
-        print "D", port
         username = self.config_server.get("cloudmesh.server.mongo.username")
-        print "E", username
         password = self.config_server.get("cloudmesh.server.mongo.password")
-        print "F", password
         client = MongoClient(host=host,
                              port=port,
                              # username=username,
                              # password=password
                              )
-        print "G"
         db = client[db_name]
-        print "H"
         passwd_collection = 'cm_password'
-        print "I"
         self.userdb_passwd = db[passwd_collection]
-        print "J"
-        print username
-        print password
         db.authenticate(username, password)
-        print "K"
 
     def info(self, portal_id, cloud_names=[]):
         """Return the user information with a given portal id.
