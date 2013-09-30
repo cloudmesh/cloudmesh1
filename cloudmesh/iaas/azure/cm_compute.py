@@ -523,17 +523,16 @@ class azure(ComputeBaseType):
         for deployment_id in deployments:
             deployment = deployments[deployment_id]
             deployment.update({ #"name": exist
-                            "status": self.convert_states(deployment['status']),\
-                            "addresses":
+                               "status": self.convert_states(deployment['status']),\
+                               "addresses":
                                self.convert_ips(deployment['role_instance_list']),\
-                            "flavor":
+                               "flavor":
                                self.convert_flavors(deployment['role_instance_list']),\
-                            # "id": exists
-                            "user_id": unicode(""), \
-                            "metadata": {}, \
-                            "key_name": unicode(""), \
-                            "created": deployment['created_time'], \
-
+                               "id": deployment['name'], \
+                               "user_id": unicode(""), \
+                               "metadata": {}, \
+                               "key_name": unicode(""), \
+                               "created": deployment['created_time'] \
                               })
 
             try:
