@@ -23,6 +23,20 @@ cloudmesh:
             default:
                 flavor: m1.tiny
                 image: 4199d988-0833-4497-a473-96fc456fac2f
+        hp:
+            cm_heading: HP Openstack
+            cm_label: hpos
+            cm_type: openstack
+            cm_type_version: grizzly
+            credentials:
+                OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
+                OS_CACERT: None
+                OS_PASSWORD: {{password.hp}}
+                OS_TENANT_NAME: FutureGrid
+                OS_USERNAME: {{username.hp}}
+            default:
+                flavor: standard.small
+                image: 142792
         azure:
             cm_host: windowsazure.com
             cm_label: waz
