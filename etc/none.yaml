@@ -32,5 +32,7 @@ projects:
   completed:
   - fg130
 keys:
-  fg_0: ssh-rsa ABCD... fg_0
-  fg_1: ssh-rsa EFGH... fg_1
+  default: fg_0
+  keylist:
+    fg_0: ssh-rsa ABCD... fg_0
+    fg_1: ssh-rsa EFGH... fg_1

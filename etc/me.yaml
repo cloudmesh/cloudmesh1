@@ -39,6 +39,6 @@ projects:
 keys:
     default: {{keys.default}}
     keylist:
-        {% for keyname, key in keys.iteritems() -%}
+        {% for keyname, key in keys.keylist.iteritems() -%}
         {{ keyname }}: {{ key }}
         {% endfor -%}
