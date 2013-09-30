@@ -21,6 +21,14 @@ mesh_module = Blueprint('mesh_module', __name__)
 # ROUTE: /mesh/images
 # ============================================================
 
+@mesh_module.route('/mesh/register/clouds')
+def mesh_register_clouds():
+
+        error = None
+
+        return render_template('mesh_register.html',
+                               error=error)
+
 @mesh_module.route('/mesh/images/')
 @cond_decorator(cloudmesh.with_login, login_required)
 def mongo_images():
