@@ -52,22 +52,7 @@ class cm_user(object):
         try:
             self._connect_userdb()
         except Exception, e:
-            print
-            print "The following lines should exist in cloudmesh_server.yaml"
-            print "----------------------"
-            print "cloudmesh:"
-            print "    server:"
-            print "        mongo_user:\n" + \
-                    "           db: cm_user\n" + \
-                    "           host: hostname\n" + \
-                    "           port: portnumber\n" + \
-                    "           username: admin\n" + \
-                    "           password: passwd\n" + \
-                    "           path: ~/.futuregrid/mongodb_user\n" + \
-                    "           collections:\n" + \
-                    "               cm_password:\n" + \
-                    "                   db: cm_user"
-            print "---------------------"
+            print "Is your yaml file correct?"
             print e
             print traceback.format_exc()
             print "---------------------"
@@ -80,11 +65,8 @@ class cm_user(object):
         port = self.config_server.get("cloudmesh.server.mongo.port")
         username = self.config_server.get("cloudmesh.server.mongo.username")
         password = self.config_server.get("cloudmesh.server.mongo.password")
-        client = MongoClient(host=host,
-                             port=port,
-                             # username=username,
-                             # password=password
-                             )
+        client = MongoClient(host=host, port=port)
+        # client.the_database.authenticate(username, password)
         db = client[db_name]
         passwd_collection = 'cm_password'
         self.userdb_passwd = db[passwd_collection]

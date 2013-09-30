@@ -72,6 +72,17 @@ class cm_template():
             # return self.content
             return None
 
+    def generate_from_dict(self, d, out_file):
+        cloudmesh_yaml = path_expand(self.filename)
+        t = cm_template(cloudmesh_yaml)
+
+        result = t.replace(kind="dict", values=d)
+        location = path_expand(out_file)
+        yaml_file = open(location, 'w+')
+        print >> yaml_file, yaml.dump(result, default_flow_style=False)
+        yaml_file.close()
+        log.info("Written new yaml file in " + location)
+
     def generate(self,
                  me_file,
                  out_file):

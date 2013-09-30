@@ -1,0 +1,39 @@
+meta:
+  kind: me
+  yaml_version: 1.2
+
+portalname: {{portalname}}
+
+profile:
+    firstname: {{profile.firstname}}
+    lastname: {{profile.lastname}}
+    e-mail: {{profile.email}}
+
+password:
+  sierra_openstack_grizzly: None
+
+azure:
+  subscriptionid: None
+
+aws:
+  access_key_id: None
+  secret_access_key: None
+  userid: None
+
+projects:
+    active:
+    {% for project in projects.active -%}
+    - {{ project }}
+    {% endfor -%}
+    completed:
+    {% for project in projects.completed -%}
+    - {{ project }}
+    {% endfor -%}
+    default: {{ projects.default }}
+
+keys:
+    default: {{keys.default}}
+    keylist:
+        {% for keyname, key in keys.iteritems() -%}
+        {{ keyname }}: {{ key }}
+        {% endfor -%}

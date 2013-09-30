@@ -86,7 +86,7 @@ def wipe():
         local("ls {0}".format(path))
 
 @task
-def boot():
+def boot(auth=True):
     # kill mongo
     kill()
     # wipe mongo
@@ -96,7 +96,7 @@ def boot():
     # create users
     admin()
     # restart with auth
-    start(auth=True)
+    start(auth=auth)
 
     config = cm_config_server().get("cloudmesh.server.mongo")
     path = path_expand(config["path"])
@@ -128,7 +128,7 @@ def start(auth=True):
     else:
         print "Starting mongod"
         with_auth = ""
-        if auth:
+        if str(auth).lower() in ["true", "y", "yes"]:
             with_auth = "--auth"
 
         local("mongod {2} --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port, with_auth))
