@@ -83,7 +83,7 @@ class cm_config(ConfigDict):
     def __init__(self, filename=None):
         if filename is None:
             filename = self.filename
-        ConfigDict.__init__(self, filename=filename, kind="basic")
+        ConfigDict.__init__(self, filename=filename)
 
     # ======================================================================
     # Properties
