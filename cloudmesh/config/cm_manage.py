@@ -4,7 +4,8 @@
 Command to generate rc files from our cloudmesh configuration files.
 
 Usage:
-  cm-manage config projects [list|?]
+  cm-manage config projects list
+  cm-manage config projects
   cm-manage config [-f FILE] [-o OUT] [-p PROJECT] cloud NAME [-]
   cm-manage config dump [--format=(yaml|dict)]
   cm-manage config init [-o OUT] [-u USER]
@@ -33,8 +34,8 @@ Example:
   file called ~/.futuregrid/novarc
 
 Arguments:
-  NAME name of the cloud
-
+  NAME                 name of the cloud
+  
 Options:
   -h --help            show this help message and exit
 
@@ -62,7 +63,7 @@ from cloudmesh.config.cm_config import cm_config
 import sys
 import os
 import stat
-from cloudmesh_user import cloudmesh_user
+# from cloudmesh_user import cloudmesh_user
 from sh import scp
 from getpass import getpass
 from cloudmesh.util.util import yn_choice
@@ -91,7 +92,7 @@ def main():
 
     home = os.environ['HOME']
 
-    DEBUG("home", home)
+    # DEBUG("home", home)
 
     #
     # This secion deals with handeling "cm config" related commands
@@ -101,7 +102,7 @@ def main():
 
     if is_config:
 
-        DEBUG('Arguments', arguments)
+        # DEBUG('Arguments', arguments)
 
         file = arguments['--file']
         try:
@@ -155,11 +156,23 @@ def main():
             sys.exit(0)
 
 
+
         #
-        # NOT TESTED
+        # ok
+        #
+        # if (arguments['projects'] and arguments['list']) :
+        if arguments['projects'] and arguments['list']:
+
+            projects = config.get('cloudmesh.projects')
+            print yaml.dump(projects, default_flow_style=False, indent=4)
+            sys.exit(0)
+
+
+        #
+        # OK, needs setting
         #
 
-        if arguments['projects'] and arguments['?']:
+        if arguments['projects']:
 
             projects = config.projects('active')
 
@@ -183,17 +196,10 @@ def main():
             name = choices[input - 1]
             print name
 
+            print "ERROR: THIS JUST SELECTS A PROJECT ID BUT DOES NOT SET IT"
             sys.exit(0)
 
-        #
-        # ok
-        #
-        # if (arguments['projects'] and arguments['list']) :
-        if (arguments['projects'] and arguments['list']):
 
-            projects = config.get('cloudmesh.projects')
-            print yaml.dump(projects, default_flow_style=False, indent=4)
-            sys.exit(0)
 
         #
         # NOT TESTED
@@ -212,7 +218,7 @@ def main():
             sys.exit(0)
 
         #
-        # NOT TESTED
+        # OK
         #
 
         if arguments['list'] or name == 'list':
@@ -239,7 +245,7 @@ def main():
 
 
         #
-        # OK
+        # OK, but does not display the username
         #
         if arguments['show'] or name == 'show' and arguments['passwords']:
             warning = "Your passwords will appear on the screen. Continue?"
@@ -268,7 +274,7 @@ def main():
         #
         # NOT TESTED
         #
-        if name == '?':
+        if name in ['?', 'x']:
             if file is None:
                 arguments['--out'] = "%s/%s" % (home, default_path)
             print "Please select from the following:"
@@ -277,9 +283,9 @@ def main():
             choices = []
             while not selected:
                 counter = 1
-                for name in config.keys():
+                for name in config.cloudnames():
                     if 'cm_type' in config.cloud(name):
-                        print counter, "-" "%20s" % name, "(%s)" % config.cloud(name)['cm_type']
+                        print "{0} - {1:<30} ({2})".format(counter, name, config.cloud(name)['cm_type'])
                         choices.append(name)
                         counter += 1
                 print "Please select:"
@@ -294,14 +300,14 @@ def main():
         output = arguments['--out']
 
         #
-        # NOT TESTED
+        # OK
         #
         if name is not None:
             cloud = config.cloud(name)
             if not cloud:
                 print "%s: The cloud '%s' is not defined." % ("CM ERROR", name)
                 print "Try instead:"
-                for keyname in config.keys():
+                for keyname in config.cloudnames():
                     print "    ", keyname
                 sys.exit(1)
 
@@ -324,7 +330,7 @@ def main():
             result = rc_func(name)
 
             #
-            # NOT TESTED
+            # OK
             #
             if arguments["-"]:
                 print result
@@ -333,6 +339,10 @@ def main():
                     arguments['--out'] = "%s/%s" % (home, default_path)
                     output = arguments['--out']
                 out = False
+                if yn_choice("Would you like to review the information", default="y"):
+                    banner("WARNING: FIle will be written to " + output)
+                    print result
+                    print banner("")
                 try:
                     # First we try to open the file assuming it doesn't exist
                     out = os.open(
