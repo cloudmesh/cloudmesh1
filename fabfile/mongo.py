@@ -42,6 +42,8 @@ def install():
         print "WARNING: You are using a non standrad development firtualenv location"
         print "         The standard location is", path_expand("~/ENV/bin")
         print "         You use", ENV
+        if not yn_choice("Would you like to proceed", default="n"):
+            sys.exit()
     else:
         print "SUCCESS: You use the standard virtualenv setup"
         print "         The standard location is", path_expand("~/ENV/bin")
