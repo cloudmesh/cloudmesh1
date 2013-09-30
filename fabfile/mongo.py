@@ -29,10 +29,10 @@ def install():
     """installs mongo in ~/ENV/bin. Make sure your path is set correctly"""
     if sys.platform == "darwin":
         os_version = "osx"
-    elif sys.platform == "linux":
+    elif sys.platform in ["linux", "linux2"]:
         os_version = "linux"
     else:
-        print "ERROR: error no other install yet provided "
+        print "ERROR: Wrong opertaing system: Found", sys.platform
         sys.exit()
 
 
