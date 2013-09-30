@@ -26,7 +26,7 @@ def mesh_register_clouds():
 
         error = None
 
-        return render_template('mesh_register.html',
+        return render_template('mesh_register_clouds.html',
                                error=error)
 
 @mesh_module.route('/mesh/images/')
