@@ -4,8 +4,8 @@
 Command to generate rc files from our cloudmesh configuration files.
 
 Usage:
-  cm-manage config projects (list|?)
-  cm-manage config [-f FILE] [-o OUT] [-p PROJECT] NAME [-]
+  cm-manage config projects [list|?]
+  cm-manage config [-f FILE] [-o OUT] [-p PROJECT] cloud NAME [-]
   cm-manage config dump [--format=(yaml|dict)]
   cm-manage config init [-o OUT] [-u USER]
   cm-manage config list
@@ -154,12 +154,6 @@ def main():
 
             sys.exit(0)
 
-        # ok
-        if arguments['projects'] and arguments['list']:
-
-            projects = config.get('cloudmesh.projects')
-            print yaml.dump(projects, default_flow_style=False, indent=4)
-            sys.exit(0)
 
         #
         # NOT TESTED
@@ -189,6 +183,16 @@ def main():
             name = choices[input - 1]
             print name
 
+            sys.exit(0)
+
+        #
+        # ok
+        #
+        # if (arguments['projects'] and arguments['list']) :
+        if (arguments['projects'] and arguments['list']):
+
+            projects = config.get('cloudmesh.projects')
+            print yaml.dump(projects, default_flow_style=False, indent=4)
             sys.exit(0)
 
         #
