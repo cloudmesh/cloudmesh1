@@ -119,6 +119,10 @@ def main():
 
         name = arguments['NAME']
 
+        #
+        # NOT TESTED
+        #
+
         if arguments['fetch'] or name == 'fetch':
 
             DEBUG('Arguments', arguments)
@@ -157,6 +161,10 @@ def main():
             print yaml.dump(projects, default_flow_style=False, indent=4)
             sys.exit(0)
 
+        #
+        # NOT TESTED
+        #
+
         if arguments['projects'] and arguments['?']:
 
             projects = config.projects('active')
@@ -183,6 +191,10 @@ def main():
 
             sys.exit(0)
 
+        #
+        # NOT TESTED
+        #
+
         if arguments['init'] or name == 'init':
             output = arguments['--out']
             username = arguments['--user'] or os.getenv('USER')
@@ -195,12 +207,19 @@ def main():
                     print "'%s' exists, please rename or remove it and try again." % oserr.filename
             sys.exit(0)
 
+        #
+        # NOT TESTED
+        #
+
         if arguments['list'] or name == 'list':
             for name in config.cloudnames():
                 if 'cm_type' in config.cloud(name):
                     print name, "(%s)" % config.cloud(name)['cm_type']
             sys.exit(0)
 
+        #
+        # NOT TESTED
+        #
         if arguments['password']:
             oldpass = getpass("Current password: ")
             newpass1 = getpass("New password: ")
@@ -242,6 +261,9 @@ def main():
                 print config
             sys.exit(0)
 
+        #
+        # NOT TESTED
+        #
         if name == '?':
             if file is None:
                 arguments['--out'] = "%s/%s" % (home, default_path)
@@ -267,6 +289,9 @@ def main():
 
         output = arguments['--out']
 
+        #
+        # NOT TESTED
+        #
         if name is not None:
             cloud = config.cloud(name)
             if not cloud:
@@ -294,6 +319,9 @@ def main():
 
             result = rc_func(name)
 
+            #
+            # NOT TESTED
+            #
             if arguments["-"]:
                 print result
             else:
