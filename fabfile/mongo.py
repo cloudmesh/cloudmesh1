@@ -1,4 +1,4 @@
-from fabric.api import task, local, settings
+from fabric.api import task, local, settings, cd, run
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
@@ -23,6 +23,44 @@ def get_pid(command):
             pid = line.split(" ")[0]
             break
     return (pid, line)
+
+@task
+def install():
+    """installs mongo in ~/ENV/bin. Make sure your path is set correctly"""
+    if sys.platform == "darwin":
+        os = "osx"
+    elif sys.platform == "linux":
+        os = "linux"
+    else:
+        print "ERROR: error no other install yet provided "
+        sys.exit()
+
+    ENV = path_expand("~/ENV/bin")
+    mongo_version = "mongodb-{0}-x86_64-2.4.6".format(os)
+    with cd('/tmp'):
+        # local("wget http://fastdl.mongodb.org/osx/{0}.tgz".format(mongo_version))
+        local("tar -xvf {0}.tgz".format(mongo_version))
+        local("cp {0}/bin/* {1}".format(mongo_version, ENV))
+    local("which mongo")
+
+
+
+    """
+    # see above
+    # its better to just download from the mongo site for us
+
+    
+    if is_ubuntu():
+        install_packages(["mongodb"])
+    elif is_centos():
+        install_packages(["mongodb",
+                          "mongodb-server"])
+    elif sys.platform == "darwin":
+        local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
+        local('brew update')
+        local('brew install mongodb')
+    """
+
 
 @task
 def admin():
@@ -54,10 +92,12 @@ def admin():
     script.append("use admin;")
     script.append('db.shutdownServer();')
 
-    mongo_script = '\n'.join(script)
+    mongo_script = ' '.join(script)
 
-    print mongo_script
-    local("echo -e '{0}' | mongo".format(mongo_script))
+    for statement in script:
+        command = "echo -e '{0}' | mongo".format(statement)
+        print command
+        os.system(command)
 
     print "USER", user
     print "PASSWORD", password

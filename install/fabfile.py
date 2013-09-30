@@ -45,18 +45,9 @@ def install():
     local("cd ..; pip install -r requirements.txt")
     local("cd ..; python setup.py install")
 
-
+@task
 def install_mongodb():
-    if is_ubuntu():
-        install_packages(["mongodb"])
-    elif is_centos():
-        install_packages(["mongodb",
-                          "mongodb-server"])
-    elif sys.platform == "darwin":
-        local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
-        local('brew update')
-        local('brew install mongodb')
-
+    local("cd ..; fab mongo.install")
 
 def install_package(package):
     if is_ubuntu():
