@@ -102,6 +102,15 @@ class azure(ComputeBaseType):
         return res
 
     # FOR refresh
+    def _get_servers_dict(self):
+        """Return running virtual machines
+
+        :returns: dict.
+        """
+        deployments = self.list_deployments()
+        self.convert_to_openstack_style(deployments)
+        return deployments 
+
     def _get_services_dict(self):
         return self.list_services()
 
@@ -501,3 +510,89 @@ class azure(ComputeBaseType):
 
         return self.sms.get_deployment_by_name(service_name=name,
                                                deployment_name=name)
+
+    def convert_to_openstack_style(self, deployments):
+        """Chance key names of the deployments to fit into openstack's list.
+           name, status, addresses, flavor, id, user_id, metadata, key_name,
+           created are required in openstack's list.
+
+        :param deployments: list of deployments
+        :type deployments: dict
+        """
+
+        for deployment_id in deployments:
+            deployment = deployments[deployment_id]
+            deployment.update({ #"name": exist
+                            "status": self.convert_states(deployment['status']),\
+                            "addresses":
+                               self.convert_ips(deployment['role_instance_list']),\
+                            "flavor":
+                               self.convert_flavors(deployment['role_instance_list']),\
+                            # "id": exists
+                            "user_id": unicode(""), \
+                            "metadata": {}, \
+                            "key_name": unicode(""), \
+                            "created": deployment['created_time'], \
+
+                              })
+
+            try:
+                # flattening class variables to the top level dict
+                deployment.update({"role_list":
+                                   deployment['role_list'][0].__dict__, \
+                                   "role_instance_list":
+                                   deployment['role_instance_list'][0].__dict__})
+            except:
+                pass
+
+    def convert_states(self, state):
+        if state == "Running":
+            return "ACTIVE"
+
+    def convert_ips(self, role_instance_list):
+        """Convert azure's data into openstack's type
+
+        role_instance_list is an azure class which contains, for example,
+
+        {'instance_upgrade_domain': 0, 'instance_size': u'ExtraSmall', 
+        'fqdn': u'', 'instance_fault_domain': 0, 
+        'instance_name': u'cm-e7a65a9e29dd11e39a290026b9852d93', 
+        'role_name': u'cm-e7a65a9e29dd11e39a290026b9852d93', 
+        'power_state': u'Started', 'instance_error_code': u'', 
+        'ip_address': u'100.67.38.83', 'instance_status': u'ReadyRole',
+        'instance_state_details': u''}
+
+        :param role_instance_list: role instance list class of azure
+        :type role_instance_list: class
+        :returns: dict
+
+        """
+
+        ril = role_instance_list[0]
+        ip_address = ril.ip_address
+
+        ip_ver = 4 # can we see it is ipv6 in azure?
+        ip_type = u'fixed' # determine if it is a fixed address or a floating
+
+        #Openstack's type
+        res = {u'private':[ {u'version', u'addr', u'OS-EXT-IPS:type'} ],
+               u'public':[ {u'version':ip_ver, u'addr':ip_address, \
+                            u'OS-EXT-IPS:type': ip_type } ] }
+        return res
+
+    def convert_flavors(self, role_instance_list):
+        """Convert azure's data into openstack's type
+
+        :param role_instance_list: role instance list class of azure
+        :type role_instance_list: class
+        :returns: dict
+
+        """
+
+        ril = role_instance_list[0]
+        flavor = ril.instance_size
+        res = {u'id': unicode(flavor), \
+               u'links': \
+               [ {u'href', \
+                  u'rel'}]}
+        return res
