@@ -574,7 +574,8 @@ class azure(ComputeBaseType):
         ip_type = u'fixed' # determine if it is a fixed address or a floating
 
         #Openstack's type
-        res = {u'private':[ {u'version', u'addr', u'OS-EXT-IPS:type'} ],
+        res = {u'private':[ {u'version':None, u'addr':None, \
+                             u'OS-EXT-IPS:type': None} ],
                u'public':[ {u'version':ip_ver, u'addr':ip_address, \
                             u'OS-EXT-IPS:type': ip_type } ] }
         return res
@@ -592,6 +593,6 @@ class azure(ComputeBaseType):
         flavor = ril.instance_size
         res = {u'id': unicode(flavor), \
                u'links': \
-               [ {u'href', \
-                  u'rel'}]}
+               [ {u'href':None, \
+                  u'rel':None}]}
         return res
