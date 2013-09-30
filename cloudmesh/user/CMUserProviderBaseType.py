@@ -27,6 +27,20 @@ class CMUserProviderBaseType(object):
         db_name = cm_config_server().get("cloudmesh.server.mongo.db")
 
         self.client = MongoClient()
+
+
+        db_name = self.config_server.get("cloudmesh.server.mongo.db")
+        host = self.config_server.get("cloudmesh.server.mongo.host")
+        port = self.config_server.get("cloudmesh.server.mongo.port")
+        username = self.config_server.get("cloudmesh.server.mongo.username")
+        password = self.config_server.get("cloudmesh.server.mongo.password")
+        client = MongoClient(host=host, port=port)
+        # client.the_database.authenticate(username, password)
+
+        #
+        #  OUTCOMMENT
+        #
+
         self.db = self.client[db_name]
         self.db_clouds = self.db[collection]
         # print db_name

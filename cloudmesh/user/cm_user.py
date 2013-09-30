@@ -38,8 +38,17 @@ class cm_user(object):
 
     def connect_db(self):
         """ Connect to the mongo db."""
+        # db_name = self.config_server.get("cloudmesh.server.mongo.db")
+        # client = MongoClient()
+
         db_name = self.config_server.get("cloudmesh.server.mongo.db")
-        client = MongoClient()
+        host = self.config_server.get("cloudmesh.server.mongo.host")
+        port = self.config_server.get("cloudmesh.server.mongo.port")
+        username = self.config_server.get("cloudmesh.server.mongo.username")
+        password = self.config_server.get("cloudmesh.server.mongo.password")
+        client = MongoClient(host=host, port=port)
+        # client.the_database.authenticate(username, password)
+
         db = client[db_name]
         ldap_collection = 'user'
         cloud_collection = 'cloudmesh'
@@ -67,6 +76,11 @@ class cm_user(object):
         password = self.config_server.get("cloudmesh.server.mongo.password")
         client = MongoClient(host=host, port=port)
         # client.the_database.authenticate(username, password)
+
+        #
+        # THIS SEEMS CORRECT JUST UNCOMMENT
+        #
+
         db = client[db_name]
         passwd_collection = 'cm_password'
         self.userdb_passwd = db[passwd_collection]
