@@ -20,13 +20,15 @@ from cloudmesh.config.cm_config import get_mongo_db
 
 log = LOGGER(__file__)
 
-
 try:
-    from iaas.azure.cm_azure import cm_azure as azure
+    from cloudmesh.iaas.azure.cm_compute import azure
 except:
     log.warning("AZURE NOT ENABLED")
 
-
+try:
+    from cloudmesh.iaas.aws.cm_compute import aws
+except:
+    log.warning("Amazon NOT ENABLED")
 
 class cm_MongoBase(object):
 
@@ -113,6 +115,8 @@ class cm_mongo:
             provider = eucalyptus
         elif type == 'azure':
             provider = azure
+        elif type == 'aws':
+            provider = aws
         return provider
 
     def activate(self, names=None, force_auth_verify=False):
@@ -131,7 +135,7 @@ class cm_mongo:
                 credential = self.config.cloud(cloud_name)
                 cm_type = credential['cm_type']
                 cm_type_version = credential['cm_type_version']
-                if cm_type in ['openstack', 'eucalyptus', 'azure']:
+                if cm_type in ['openstack', 'eucalyptus', 'azure', 'aws']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cm_type,
                                                'cm_type_version': cm_type_version}
