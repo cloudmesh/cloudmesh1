@@ -57,7 +57,10 @@ def install():
         print "WRANING: mongo tar file already downloaded"
         print "         using", "/tmp/{0}".format(mongo_tar)
     else:
-        local("cd /tmp; wget http://fastdl.mongodb.org/osx/{0}.tgz".format(mongo_version))
+        if sys.platform == "darwin":
+            local("cd /tmp; curl -O http://fastdl.mongodb.org/osx/{0}.tgz".format(mongo_version))
+        else:
+            local("cd /tmp; wget http://fastdl.mongodb.org/osx/{0}.tgz".format(mongo_version))
 
     local("cd /tmp; tar -xvf {0}.tgz".format(mongo_version))
     local("cd /tmp; cp {0}/bin/* {1}".format(mongo_version, ENV))
