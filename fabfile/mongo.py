@@ -41,7 +41,16 @@ def install():
         # local("wget http://fastdl.mongodb.org/osx/{0}.tgz".format(mongo_version))
         local("tar -xvf {0}.tgz".format(mongo_version))
         local("cp {0}/bin/* {1}".format(mongo_version, ENV))
-    local("which mongo")
+    where = local("which mongo", capture=True)
+    print where
+
+    if where.startswith(ENV):
+        print "mongo is now installed"
+    else:
+        print "ERROR: mongo is not in the path"
+        print "       it should be in", ENV
+        print "       we found it in", where
+
 
 
 
