@@ -296,6 +296,7 @@ class cm_config(ConfigDict):
 
     @deprecated
     def keys(self):
+        print "please user the function cloudnames()"
         return self.cloudnames()
 
     def cloudnames(self):

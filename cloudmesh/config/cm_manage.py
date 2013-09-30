@@ -66,6 +66,9 @@ from cloudmesh_user import cloudmesh_user
 from sh import scp
 from getpass import getpass
 from cloudmesh.util.util import yn_choice
+from cloudmesh.util.util import path_expand
+from cloudmesh.util.util import banner
+from cloudmesh.config.ConfigDict import ConfigDict
 
 debug = True
 
@@ -78,15 +81,9 @@ def DEBUG(label, var):
         print str(var)
         print 70 * "-"
 
-def yn_choice(message, default='y'):
-    """http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input"""
-    choices = 'Y/n' if default.lower() in ('y', 'yes') else 'y/N'
-    choice = raw_input("%s (%s) " % (message, choices))
-    values = ('y', 'yes', '') if default == 'y' else ('y', 'yes')
-    return True if choice.strip().lower() in values else False
-
 
 def main():
+
     default_path = '.futuregrid/novarc'
     arguments = docopt(__doc__, version='0.8')
 
@@ -109,12 +106,12 @@ def main():
         file = arguments['--file']
         try:
             config = cm_config(file)
-            DEBUG("config", config)
+            # DEBUG("config", config)
         except IOError:
-            print "%s: Configuration file '%s' not found" % ("CM ERROR", file)
+            print "{0}: Configuration file '{1}' not found".format("CM ERROR", file)
             sys.exit(1)
         except (yaml.scanner.ScannerError, yaml.parser.ParserError) as yamlerror:
-            print "%s: YAML error: %s, in configuration file '%s'" % ("CM ERROR", yamlerror, file)
+            print "{0}: YAML error: {1}, in configuration file '{2}'".format("CM ERROR", yamlerror, file)
             sys.exit(1)
         except:
             print "Unexpected error:", sys.exc_info()[0]
@@ -153,15 +150,16 @@ def main():
 
             sys.exit(0)
 
+        # ok
         if arguments['projects'] and arguments['list']:
 
-            projects = config.data['cloudmesh']['projects']
+            projects = config.get('cloudmesh.projects')
             print yaml.dump(projects, default_flow_style=False, indent=4)
             sys.exit(0)
 
         if arguments['projects'] and arguments['?']:
 
-            projects = config.data['cloudmesh']['projects']['active']
+            projects = config.projects('active')
 
             print "Please select from the following:"
             print "0 - Cancel"
@@ -198,9 +196,9 @@ def main():
             sys.exit(0)
 
         if arguments['list'] or name == 'list':
-            for name in config.keys():
-                if 'cm_type' in config.data['cloudmesh']['clouds'][name]:
-                    print name, "(%s)" % config.data['cloudmesh']['clouds'][name]['cm_type']
+            for name in config.cloudnames():
+                if 'cm_type' in config.cloud(name):
+                    print name, "(%s)" % config.cloud(name)['cm_type']
             sys.exit(0)
 
         if arguments['password']:
@@ -216,17 +214,25 @@ def main():
 
             sys.exit(0)
 
+
+        #
+        # OK
+        #
         if arguments['show'] or name == 'show' and arguments['passwords']:
             warning = "Your passwords will appear on the screen. Continue?"
             if yn_choice(warning, 'n'):
-                passwords = config.get_own_passwords()
-                print "\n%-40s | %s" % ("Cloud", "Password")
-                print 60 * '-'
-                for (cloud_name, cloud_pass) in passwords.items():
-                    print "%-40s | %s" % (cloud_name, cloud_pass)
-                print "\nPasswords may be incorrect if you changed any outside of cloudmesh."
+
+                me = ConfigDict(filename=path_expand("~/.futuregrid/me.yaml"))
+                banner("PASSWORDS")
+                for name in me['password']:
+                    print "{0}: {1}".format(name, me['password'][name])
+
             sys.exit(0)
 
+
+        #
+        # does not work
+        #
         if arguments['dump'] or name == 'dump':
             format = arguments['--format']
             if format == 'yaml':
@@ -245,8 +251,8 @@ def main():
             while not selected:
                 counter = 1
                 for name in config.keys():
-                    if 'cm_type' in config.data['cloudmesh']['clouds'][name]:
-                        print counter, "-" "%20s" % name, "(%s)" % config.data['cloudmesh']['clouds'][name]['cm_type']
+                    if 'cm_type' in config.cloud(name):
+                        print counter, "-" "%20s" % name, "(%s)" % config.cloud(name)['cm_type']
                         choices.append(name)
                         counter += 1
                 print "Please select:"
