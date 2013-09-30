@@ -55,8 +55,8 @@ class cm_shell_init:
            -v       verbose mode
 
         """
-        # log.info(arguments)
-        # print "<", args, ">"
+        log.info(arguments)
+        print "<", args, ">"
 
         if arguments["generate"]:
 

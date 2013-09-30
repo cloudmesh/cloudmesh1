@@ -82,6 +82,9 @@ class cm_shell_user:
 
             result["portalname"] = result["profile"]["cm_user_id"]
 
+
+            # del result["keys"]["keylist"]["default"]
+
             banner("RESULT")
             pprint (result)
 
@@ -92,6 +95,9 @@ class cm_shell_user:
             t = cm_template(etc_filename)
             out = t.replace(kind='dict', values=result)
             banner("{0} DATA".format(basename))
+
+
+
             print yaml.dump(out,
                             default_flow_style=False)
 
