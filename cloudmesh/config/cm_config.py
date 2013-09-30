@@ -36,6 +36,20 @@ def get_mongo_db(mongo_collection):
 
     client = MongoClient(host=mongo_host,
                          port=mongo_port)
+
+    # TEMPLATE PROVIDED BELLOW
+
+    #    db_name = self.config_server.get("cloudmesh.server.mongo.db")
+    #    host = self.config_server.get("cloudmesh.server.mongo.host")
+    #    port = self.config_server.get("cloudmesh.server.mongo.port")
+    #    username = self.config_server.get("cloudmesh.server.mongo.username")
+    #    password = self.config_server.get("cloudmesh.server.mongo.password")
+    #    client = MongoClient(host=host, port=port)
+    #    client.the_database.authenticate(username, password)
+
+
+    # AUTH CALL COMES HERE
+
     db = client[mongo_db_name]
     db_clouds = db[mongo_collection]
     return db_clouds
