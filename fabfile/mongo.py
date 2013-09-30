@@ -13,7 +13,7 @@ from cloudmesh.config.ConfigDict import ConfigDict
 
 import yaml
 import sys
-import os.path
+import os
 
 def get_pid(command):
     lines = local("ps -ax |fgrep {0}".format(command), capture=True).split("\n")
@@ -28,19 +28,37 @@ def get_pid(command):
 def install():
     """installs mongo in ~/ENV/bin. Make sure your path is set correctly"""
     if sys.platform == "darwin":
-        os = "osx"
+        os_version = "osx"
     elif sys.platform == "linux":
-        os = "linux"
+        os_version = "linux"
     else:
         print "ERROR: error no other install yet provided "
         sys.exit()
 
-    ENV = path_expand("~/ENV/bin")
-    mongo_version = "mongodb-{0}-x86_64-2.4.6".format(os)
-    with cd('/tmp'):
-        # local("wget http://fastdl.mongodb.org/osx/{0}.tgz".format(mongo_version))
-        local("tar -xvf {0}.tgz".format(mongo_version))
-        local("cp {0}/bin/* {1}".format(mongo_version, ENV))
+
+    ENV = os.environ['VIRTUAL_ENV'] + "/bin"
+
+    if not ENV.endswith("ENV/bin"):
+        print "WARNING: You are using a non standrad development firtualenv location"
+        print "         The standard location is", path_expand("~/ENV/bin")
+        print "         You use", ENV
+    else:
+        print "SUCCESS: You use the standard virtualenv setup"
+        print "         The standard location is", path_expand("~/ENV/bin")
+
+    mongo_version = "mongodb-{0}-x86_64-2.4.6".format(os_version)
+    mongo_tar = "{0}.tgz".format(mongo_version)
+    # for some reason with does not work
+    # with cd('/tmp'):
+
+    if os.path.isfile("/tmp/{0}".format(mongo_tar)):
+        print "WRANING: mongo tar file already downloaded"
+        print "         using", "/tmp/{0}".format(mongo_tar)
+    else:
+        local("cd /tmp; wget http://fastdl.mongodb.org/osx/{0}.tgz".format(mongo_version))
+
+    local("cd /tmp; tar -xvf {0}.tgz".format(mongo_version))
+    local("cd /tmp; cp {0}/bin/* {1}".format(mongo_version, ENV))
     where = local("which mongo", capture=True)
 
     if where.startswith(ENV):
