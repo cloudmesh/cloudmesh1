@@ -208,8 +208,16 @@ def main():
         if arguments['init'] or name == 'init':
             output = arguments['--out']
             username = arguments['--user'] or os.getenv('USER')
+            #
+            # BUG
+            #
+            # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
             config.userdata_handler = cloudmesh_user
             config.initialize(username)
+
+            # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
             try:
                 config.write_init(output)
             except OSError as oserr:
