@@ -593,6 +593,6 @@ class azure(ComputeBaseType):
         flavor = ril.instance_size
         res = {u'id': unicode(flavor), \
                u'links': \
-               [ {u'href', \
-                  u'rel'}]}
+               [ {u'href':None, \
+                  u'rel':None}]}
         return res
