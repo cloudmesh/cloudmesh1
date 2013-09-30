@@ -42,10 +42,9 @@ def install():
         local("tar -xvf {0}.tgz".format(mongo_version))
         local("cp {0}/bin/* {1}".format(mongo_version, ENV))
     where = local("which mongo", capture=True)
-    print where
 
     if where.startswith(ENV):
-        print "mongo is now installed"
+        print "SUCCESS. mongo commands are now installed in", ENV
     else:
         print "ERROR: mongo is not in the path"
         print "       it should be in", ENV
