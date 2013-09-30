@@ -202,7 +202,7 @@ def start(auth=True):
         if str(auth).lower() in ["true", "y", "yes"]:
             with_auth = "--auth"
 
-        local("mongod {2} --bind-ip 127.0.0.1 --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port, with_auth))
+        local("mongod {2} --bind_ip 127.0.0.1 --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port, with_auth))
 
 @task
 def clean():
