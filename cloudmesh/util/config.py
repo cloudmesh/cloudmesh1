@@ -8,6 +8,7 @@ from cloudmesh.util.util import check_file_for_tabs
 from cloudmesh.util.util import path_expand as cm_path_expand
 import yaml
 from string import Template
+import traceback
 
 log = LOGGER(__file__)
 
@@ -49,6 +50,7 @@ def read_yaml_config (filename, check=True, osreplace=True):
         except Exception, e:
             log.error("The file {0} fails with a yaml read error".format(filename))
             log.error(str(e))
+            print traceback.format_exc()
             sys.exit()
 
     else:
