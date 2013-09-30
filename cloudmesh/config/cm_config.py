@@ -10,7 +10,6 @@ from cloudmesh.util.util import path_expand
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import check_file_for_tabs
 
-from cloudmesh_cloud_handler import cloudmesh_cloud_handler
 from cloudmesh.util.config import read_yaml_config
 from cloudmesh.util.util import deprecated
 from cloudmesh.util.util import path_expand
