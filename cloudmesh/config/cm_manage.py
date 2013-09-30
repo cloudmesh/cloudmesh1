@@ -231,12 +231,13 @@ def main():
 
 
         #
-        # does not work
+        # OK
         #
         if arguments['dump'] or name == 'dump':
             format = arguments['--format']
             if format == 'yaml':
-                print yaml.dump(config, default_flow_style=False, indent=4)
+                d = dict(config)
+                print yaml.dump(d, default_flow_style=False)
             elif format == 'dict' or format is None:
                 print config
             sys.exit(0)
