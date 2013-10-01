@@ -71,7 +71,7 @@ class cm_user(object):
             # repositionning kesya nd projects
             #
 
-            userinfo["keys"] = ldap_user['keys']
+            userinfo["keys"] = {'keylist': ldap_user['keys']}
 
             userinfo["projects"] = ldap_user['projects']
             del userinfo['profile']['keys']
@@ -138,7 +138,7 @@ class cm_user(object):
             #
             # repositioning
             #
-            userinfo["keys"] = ldap_user['keys']
+            userinfo["keys"] = {'keylist': ldap_user['keys']}
 
             userinfo["projects"] = ldap_user['projects']
             del userinfo['profile']['keys']
