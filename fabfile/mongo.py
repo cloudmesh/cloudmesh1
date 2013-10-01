@@ -14,6 +14,7 @@ from cloudmesh.config.ConfigDict import ConfigDict
 import yaml
 import sys
 import os
+import time
 
 def get_pid(command):
     lines = local("ps -ax |fgrep {0}".format(command), capture=True).split("\n")
@@ -161,18 +162,35 @@ def wipe():
 def boot(auth=True):
     # kill mongo
     kill()
+
+    time.sleep(1)
+
     # wipe mongo
     wipe()
+
+    time.sleep(1)
+
     # start mongo without auth
     start(auth=False)
+
+    time.sleep(1)
+
     # create users
     admin()
+
+    time.sleep(1)
+
     # restart with auth
+    kill()
+
+    time.sleep(1)
+
     start(auth=auth)
+
+    time.sleep(1)
 
     config = cm_config_server().get("cloudmesh.server.mongo")
     path = path_expand(config["path"])
-
     local("ls {0}".format(path))
 
 @task
@@ -238,12 +256,16 @@ def stop():
     '''
     # for some reason shutdown does not work
     # local("mongod --shutdown")
+    with settings(warn_only=True):
+        local ("killall -9 mongod")
+    """
     (pid, line) = get_pid("mongod")
     if pid is None:
         print "No mongod running"
     else:
         print "Kill mongod"
         local ("killall -9 mongod")
+    """
 
 @task
 def vms_find():
