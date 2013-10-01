@@ -123,12 +123,13 @@ def admin():
     script.append("use admin;")
     script.append('db.shutdownServer();')
 
-    mongo_script = ' '.join(script)
+    mongo_script = '\n'.join(script)
 
-    for statement in script:
-        command = "echo -e '{0}' | mongo".format(statement)
-        print command
-        os.system(command)
+    print mongo_script
+
+    command = "echo -e '{0}' | mongo".format(mongo_script)
+    print command
+    os.system(command)
 
     print "USER", user
     print "PASSWORD", password
