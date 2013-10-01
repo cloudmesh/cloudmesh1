@@ -10,6 +10,7 @@ from cloudmesh.util.util import banner
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.util.util import yn_choice
+from cloudmesh.config.ConfigDict import ConfigDict
 from sh import less
 import os
 from pprint import pprint
@@ -36,7 +37,7 @@ class cm_shell_user:
                user ID me
                user ID yaml
                user ID ldap
-               
+               user ID new FORMAT
                
         Administrative command to lists the users from LDAP 
 
@@ -47,6 +48,7 @@ class cm_shell_user:
           me         specifies to generate the me related yaml file
           yaml       specifie to generate the cloudmesh.yaml file
           ldap       get the specifie to generate the cloudmesh.yaml file
+          FORMAT     either me or cloudmesh
           
         Options:
            
@@ -64,6 +66,7 @@ class cm_shell_user:
 
             banner("RESULT")
             pprint (result)
+
 
             etc_filename = path_expand("~/.futuregrid/etc/{0}.yaml".format(basename))
 
@@ -95,7 +98,15 @@ class cm_shell_user:
 
         elif (arguments["ID"] is not None) and arguments["yaml"]:
 
+            print "HJDGHKJHSGHJK"
+
+            # me_local_yaml = ConfigDict("~/.futuregrid/me.yaml")
+            # cloudmesh_yaml = ConfigDict("~/.futuregrid/cloudmesh.yaml")
+
             out = generate(arguments["ID"], "cloudmesh")
+
+
+
             print yaml.dump(out,
                             default_flow_style=False)
 
@@ -112,6 +123,57 @@ class cm_shell_user:
             user = cm_user()
             result = user.info(id)
             pprint (result)
+
+        elif arguments["ID"] is not None and arguments["new"]:
+
+            # read ldap dict
+
+            id = arguments["ID"]
+            user = cm_user()
+            ldap = user.info(id)
+
+
+            # read me dict
+            me_from_ldap = generate(arguments["ID"], "me")
+            banner("ME FROM LDAP")
+            pprint (me_from_ldap)
+
+
+            # banner("LDAP")
+            # pprint (ldap)
+
+            me_local_yaml = path_expand("~/.futuregrid/me.yaml")
+            if os.path.isfile(me_local_yaml):
+                me = dict(ConfigDict(filename=me_local_yaml))
+                banner("ME")
+                pprint (me)
+            else:
+                print "WARNING: no file found", me_local_yaml
+
+
+            new_me = dict(me_from_ldap)
+
+            for key in ['password', 'aws', 'azure', 'username']:
+                new_me[key] = me [key]
+
+
+            banner("NEW")
+            pprint(new_me)
+
+            basename = arguments["FORMAT"]
+
+
+            etc_filename = path_expand("~/.futuregrid/etc/{0}.yaml".format(basename))
+
+            print etc_filename
+
+            t = cm_template(etc_filename)
+            print t
+            out = t.replace(kind='dict', values=new_me)
+            banner("{0} DATA".format(basename))
+
+
+
 
         elif (arguments["list"]):
 

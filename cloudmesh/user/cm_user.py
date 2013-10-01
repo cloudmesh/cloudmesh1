@@ -77,7 +77,7 @@ class cm_user(object):
             del userinfo['profile']['keys']
             del userinfo['profile']['projects']
 
-
+            userinfo['portalname'] = portal_id
 
         userinfo['clouds'] = {}
         for arec in cloud_info:
@@ -102,6 +102,13 @@ class cm_user(object):
 
         def correct_project_names(projects):
             tmp = [ "fg" + str(x) for x in projects]
+            print "YYYYYY", tmp
+            if tmp is None:
+                #
+                #  BUG HACK must be empty list
+                #
+
+                tmp = ['fg0']
             return tmp
 
         # projects = usersinfo[portal_id]["profile"]["projects"]
@@ -134,6 +141,7 @@ class cm_user(object):
 
             userinfo = usersinfo[portal_id]
 
+            userinfo['portalname'] = portal_id
             userinfo['profile'] = ldap_user
             #
             # repositioning
