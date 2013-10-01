@@ -270,14 +270,14 @@ def stop():
     # local("mongod --shutdown")
     with settings(warn_only=True):
         with hide('output', 'running', 'warnings'):
-            local ("killall -9 mongod")
+            local ("killall -15 mongod")
     """
     (pid, line) = get_pid("mongod")
     if pid is None:
         print "No mongod running"
     else:
         print "Kill mongod"
-        local ("killall -9 mongod")
+        local ("killall -15 mongod")
     """
 
 @task
