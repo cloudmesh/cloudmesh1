@@ -35,6 +35,8 @@ class cm_shell_user:
                user ID
                user ID me
                user ID yaml
+               user ID ldap
+               
                
         Administrative command to lists the users from LDAP 
 
@@ -44,15 +46,13 @@ class cm_shell_user:
           ID         list the user with the given ID
           me         specifies to generate the me related yaml file
           yaml       specifie to generate the cloudmesh.yaml file
+          ldap       get the specifie to generate the cloudmesh.yaml file
           
         Options:
            
            -v       verbose mode
 
         """
-        def correct_project_names(projects):
-            tmp = [ "fg" + str(x) for x in projects]
-            return tmp
 
         def generate(id, basename):
             """id = username"""
@@ -61,29 +61,6 @@ class cm_shell_user:
             banner("GENERATE")
             user = cm_user()
             result = user.info(id)
-
-            projects = result["profile"]["projects"]
-            try:
-                projects["active"] = correct_project_names(projects["active"])
-            except Exception, e:
-                print e
-                pass
-            try:
-                projects["completed"] = correct_project_names(projects["completed"])
-            except:
-                pass
-
-            # HACK TO MAKE PROJECTS NOT SIT UNDER PROFILE
-            result["projects"] = result["profile"]["projects"]
-            del result["profile"]["projects"]
-
-            result["keys"] = result["profile"]["keys"]
-            del result["profile"]["keys"]
-
-            result["portalname"] = result["profile"]["cm_user_id"]
-
-
-            # del result["keys"]["keylist"]["default"]
 
             banner("RESULT")
             pprint (result)
@@ -96,10 +73,7 @@ class cm_shell_user:
             out = t.replace(kind='dict', values=result)
             banner("{0} DATA".format(basename))
 
-
-
-            print yaml.dump(out,
-                            default_flow_style=False)
+            return out
 
 
 
@@ -108,7 +82,10 @@ class cm_shell_user:
 
         if (arguments["ID"] is not None) and arguments["me"]:
 
-            generate(arguments["ID"], "me")
+            out = generate(arguments["ID"], "me")
+            print yaml.dump(out,
+                            default_flow_style=False)
+
 
             # location = path_expand(out_file)
             # yaml_file = open(location, 'w+')
@@ -118,7 +95,9 @@ class cm_shell_user:
 
         elif (arguments["ID"] is not None) and arguments["yaml"]:
 
-            generate(arguments["ID"], "cloudmesh")
+            out = generate(arguments["ID"], "cloudmesh")
+            print yaml.dump(out,
+                            default_flow_style=False)
 
             # location = path_expand(out_file)
             # yaml_file = open(location, 'w+')
@@ -126,7 +105,8 @@ class cm_shell_user:
             # yaml_file.close()
             # log.info("Written new yaml file in " + location)
 
-        elif arguments["ID"] is not None:
+
+        elif arguments["ID"] is not None and arguments["ldap"]:
 
             id = arguments["ID"]
             user = cm_user()
