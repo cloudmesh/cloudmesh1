@@ -1,4 +1,4 @@
-from fabric.api import task, local, settings, cd, run
+from fabric.api import task, local, settings, cd, run, hide
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
@@ -11,18 +11,25 @@ from cloudmesh.inventory import Inventory
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.config.ConfigDict import ConfigDict
 
+from sh import ls
+
 import yaml
 import sys
 import os
 import time
 
 def get_pid(command):
-    lines = local("ps -ax |fgrep {0}".format(command), capture=True).split("\n")
+    with hide('output', 'running', 'warnings'):
+        lines = local("ps -ax |fgrep {0}".format(command), capture=True).split("\n")
     pid = None
     for line in lines:
         if not "fgrep" in line:
             pid = line.split(" ")[0]
             break
+    if pid is None:
+        print "No mongod running"
+    else:
+        print "SUCCESS: mongod PID", pid
     return (pid, line)
 
 @task
@@ -98,6 +105,7 @@ def install():
 def admin():
     """creates a password protected user for mongo"""
 
+    banner("create auth user")
     config = cm_config_server().get("cloudmesh.server.mongo")
 
     user = config["username"]
@@ -107,7 +115,7 @@ def admin():
     # setting up the list of dbs
     #
     dbs = set()
-    print config["collections"]
+    # print config["collections"]
     for collection in config["collections"]:
         dbs.add(config['collections'][collection]['db'])
 
@@ -126,14 +134,17 @@ def admin():
 
     mongo_script = '\n'.join(script)
 
-    print mongo_script
+    # print mongo_script
 
     command = "echo -e '{0}' | mongo".format(mongo_script)
     print command
+    banner("Executing js")
     os.system(command)
 
+    banner ("Debugging reminder, remove in final version")
     print "USER", user
     print "PASSWORD", password
+
 
 @task
 def wipe():
@@ -145,18 +156,16 @@ def wipe():
 
     banner("{0}".format(path))
     local("mkdir -p {0}".format(path))
-    result = local("ls {0}".format(path), capture=True)
-    if ''.join(result.split("\n")) is '':
-        print "directory is empty"
-    else:
-        local("ls {0}".format(path))
-
+    result = str(ls(path))
+    banner(path, "-")
+    print result
     print 70 * "-"
-    if yn_choice("deleting the directory", default="n"):
-        local("rm -rf {0}".format(path))
-        local("mkdir -p {0}".format(path))
-        banner("{0}".format(path))
-        local("ls {0}".format(path))
+    if result != "":
+        if yn_choice("deleting the directory", default="n"):
+            local("rm -rf {0}".format(path))
+            local("mkdir -p {0}".format(path))
+            banner("{0}".format(path))
+            local("ls {0}".format(path))
 
 @task
 def boot(auth=True):
@@ -189,9 +198,11 @@ def boot(auth=True):
 
     time.sleep(1)
 
+
     config = cm_config_server().get("cloudmesh.server.mongo")
     path = path_expand(config["path"])
-    local("ls {0}".format(path))
+    banner(path)
+    print ls(path)
 
 @task
 def start(auth=True):
@@ -199,6 +210,7 @@ def start(auth=True):
     start the mongod service in the location as specified in
     ~/.futuregrid/cloudmesh_server.yaml
     '''
+    banner("Starting mongod")
     config = cm_config_server().get("cloudmesh.server.mongo")
 
     path = path_expand(config["path"])
@@ -208,15 +220,15 @@ def start(auth=True):
         print "Creating mongodb directory in", path
         local("mkdir -p {0}".format(path))
 
-    try:
-        lines = local("ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True).split("\n")
-    except:
-        lines = []
-    if lines:
+    with settings(warn_only=True):
+        with hide('output', 'running', 'warnings'):
+            lines = local("ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True).split("\n")
+
+    if lines != ['']:
         pid = lines[0].split(" ")[0]
-        print "mongo already running in pid {0} for port {1}".format(pid, port)
+        print "NO ACTION: mongo already running in pid {0} for port {1}".format(pid, port)
     else:
-        print "Starting mongod"
+        print "ACTION: Starting mongod"
         with_auth = ""
         if str(auth).lower() in ["true", "y", "yes"]:
             with_auth = "--auth"
@@ -257,7 +269,8 @@ def stop():
     # for some reason shutdown does not work
     # local("mongod --shutdown")
     with settings(warn_only=True):
-        local ("killall -9 mongod")
+        with hide('output', 'running', 'warnings'):
+            local ("killall -9 mongod")
     """
     (pid, line) = get_pid("mongod")
     if pid is None:
