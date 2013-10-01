@@ -14,6 +14,7 @@ from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.util.util import HEADING
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.util import path_expand
+
 from pprint import pprint
 
 class Test_cloudmesh:
@@ -38,10 +39,11 @@ class Test_cloudmesh:
         print user
 
 
-    def test_full(self):
+    def test_list(self):
         users = self.idp.list()
         pprint(users)
         pprint(self.idp.users)
+
 
     def test_auth(self):
         password = getpass.getpass()

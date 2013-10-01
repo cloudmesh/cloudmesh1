@@ -56,6 +56,7 @@ Options:
   -                    this option is a - at the end of the command. If data is written to a file it is also put out to stdout
 
 """
+from pprint import pprint
 import getpass
 import yaml
 from docopt import docopt
@@ -69,6 +70,7 @@ from getpass import getpass
 from cloudmesh.util.util import yn_choice
 from cloudmesh.util.util import path_expand
 from cloudmesh.util.util import banner
+from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.ConfigDict import ConfigDict
 
 debug = True
@@ -213,16 +215,27 @@ def main():
             #
             # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-            config.userdata_handler = cloudmesh_user
-            config.initialize(username)
+
+
+          # Get profile and project data from LDAP
+            user = cm_user().info(username)
+
+            pprint (user)
+
+            # template = cloudmesh
+
+            # config.userdata_handler = cloudmesh_user
+            # config.initialize(username)
 
             # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+            """
             try:
                 config.write_init(output)
             except OSError as oserr:
                 if oserr.errno == 17:
                     print "'%s' exists, please rename or remove it and try again." % oserr.filename
+            """
             sys.exit(0)
 
         #

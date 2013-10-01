@@ -5,7 +5,7 @@ cloudmesh.iaas.aws.cm_compute
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-#import boto
+# import boto
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from libcloud.compute.base import NodeImage, NodeSize
@@ -37,24 +37,24 @@ class aws(ComputeBaseType):
         self.compute_config = cm_config()
         self.user_credential = self.compute_config.credential(label)
 
-        #Service certificate
+        # Service certificate
         self.access_key_id = self.user_credential['access_key_id']
         self.secret_access_key = \
         self.user_credential['secret_access_key']
-       
-        #SSH
+
+        # SSH
         self.ssh_userid = self.user_credential['userid']
         self.ssh_keyname = self.user_credential['keyname']
         self.ssh_pkey = self.user_credential['privatekeyfile']
-        
-        #set default flavor from yaml
+
+        # set default flavor from yaml
         flavor = self.compute_config.default(label)['flavor']
         self.set_flavor(flavor)
 
         image_name = self.compute_config.default(label)['image']
         self.set_image_name(image_name)
 
-        #set default location from yaml
+        # set default location from yaml
         location = self.compute_config.default(label)['location']
         self.set_location(location)
 
@@ -62,7 +62,7 @@ class aws(ComputeBaseType):
         Driver = get_driver(Provider.EC2)
         conn = Driver(self.access_key_id, self.secret_access_key)
         self.conn = conn
- 
+
     def vm_create(self):
         self.create_vm()
 
@@ -121,15 +121,15 @@ class aws(ComputeBaseType):
     def convert_to_openstack_style(self, vmlist):
         for vmid in vmlist:
             vm = vmlist[vmid]
-            vm.update({"name": unicode(vm['id']),\
-                       "status": self.convert_states(vm['extra']['status']),\
-                       "addresses": self.convert_ips(vm['public_ips']),\
+            vm.update({"name": unicode(vm['id']), \
+                       "status": self.convert_states(vm['extra']['status']), \
+                       "addresses": self.convert_ips(vm['public_ips']), \
                        "flavor":
-                       self.convert_flavors(vm['extra']['instancetype']),\
-                       #"id": exists
-                       "user_id": unicode(""),\
-                       "metadata": {},\
-                       "key_name": unicode(vm['extra']['keyname']),\
+                       self.convert_flavors(vm['extra']['instancetype']), \
+                       # "id": exists
+                       "user_id": unicode(""), \
+                       "metadata": {}, \
+                       "key_name": unicode(vm['extra']['keyname']), \
                        "created": unicode(vm['extra']['launchdatetime'])\
                       })
             try:
@@ -141,17 +141,18 @@ class aws(ComputeBaseType):
     def convert_states(self, status):
         if status == "running":
             return "ACTIVE"
+
     def convert_ips(self, ip):
         ip_address = ip[0]
         ip_ver = 4
         ip_type = "fixed"
-        res = {u'private':[ {u'version': ip_ver, u'addr': ip_address,\
+        res = {u'private':[ {u'version': ip_ver, u'addr': ip_address, \
                              u'OS-EXT-IPS:type': ip_type}]}
         return res
 
     def convert_flavors(self, flavor):
         res = {u'id': unicode(flavor), \
                u'links':\
-               [ {u'href':None,\
+               [ {u'href':None, \
                   u'rel':None}]}
         return res

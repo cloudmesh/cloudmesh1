@@ -67,6 +67,18 @@ class cm_user(object):
             ldap_user = ldap_info[0]
             del ldap_user['_id']
             userinfo["profile"] = ldap_user
+            #
+            # repositionning kesya nd projects
+            #
+
+            userinfo["keys"] = ldap_user['keys']
+
+            userinfo["projects"] = ldap_user['projects']
+            del userinfo['profile']['keys']
+            del userinfo['profile']['projects']
+
+
+
         userinfo['clouds'] = {}
         for arec in cloud_info:
             del arec['_id']
@@ -79,7 +91,7 @@ class cm_user(object):
         #
         # update project names
         #
-        projects = userinfo["profile"]["projects"]
+        projects = userinfo["projects"]
         projects = self.update_users_project_names(projects)
 
         return userinfo
@@ -119,11 +131,23 @@ class cm_user(object):
             # {u'active': []}, u'firstname': u'bbc'}
             portal_id = ldap_user['cm_user_id']
             usersinfo[portal_id] = {}
-            usersinfo[portal_id]['profile'] = ldap_user
+
+            userinfo = usersinfo[portal_id]
+
+            userinfo['profile'] = ldap_user
+            #
+            # repositioning
+            #
+            userinfo["keys"] = ldap_user['keys']
+
+            userinfo["projects"] = ldap_user['projects']
+            del userinfo['profile']['keys']
+            del userinfo['profile']['projects']
+
             #
             # correct projects
             #
-            projects = usersinfo[portal_id]["profile"]["projects"]
+            projects = userinfo["projects"]
             projects = self.update_users_project_names(projects)
 
         cloud_info = self.db_clouds.find({"cm_kind": "users"})

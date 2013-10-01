@@ -139,9 +139,26 @@ class Test_cloudmesh:
         # write out new dict/json file
         pass
 
-    def test_user(self):
-        # read yaml
-        # read projects from ldap
-        # read keys from ldap
-        # write dict
+    def test_gregor(self):
+
+        banner("ME")
+        id = ConfigDict(filename="~/.futuregrid/me.yaml").get("portalname")
+        user = cm_user()
+        result = user.info(id)
+        pprint (result)
         pass
+
+    def test_list(self):
+        user = cm_user()
+        list_of_users = user.list_users()
+        pprint (list_of_users)
+        print
+        print "========================="
+        num = len(list_of_users)
+        print str(num) + " users listed"
+
+
+
+
+
+
