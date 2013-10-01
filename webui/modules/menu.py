@@ -12,6 +12,7 @@ super_sidebar_pages = [
     ["Cloudmesh",
         [
             ["Home", "/"],
+            ["Status", "/status"],
             ["Profile", "/profile/"],
             ["Keys", "/keys/"],
         ],
