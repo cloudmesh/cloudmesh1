@@ -32,7 +32,7 @@ class Test_cloudmesh:
     def tearDown(self):
         pass
 
-    def test_find(self):
+    def test_me(self):
         print "USERNAME", self.username
         user = self.idp.find_one({'cm_user_id': self.username})
         print user
