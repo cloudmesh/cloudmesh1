@@ -1,20 +1,29 @@
+# -*- coding: utf-8 -*-
+
+"""
+cloudmesh.iaas.aws.cm_compute
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+"""
 #import boto
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from libcloud.compute.base import NodeImage, NodeSize
 
+from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.config.cm_config import cm_config
 
-class aws:
+class aws(ComputeBaseType):
     """ Amazon Cloud service with the boto interface
     With boto interface, cloudmesh supports Amazon Web Services such as EC2, S3,
     EBS, etc.
     """
 
     name = "aws"
+    DEFAULT_LABEL = name
 
-    def __init__(self):
-        self.load_default(self.name)
+    def __init__(self, label=DEFAULT_LABEL):
+        self.load_default(label)
         self.connect()
 
     def load_default(self, label):
@@ -115,7 +124,8 @@ class aws:
             vm.update({"name": unicode(vm['id']),\
                        "status": self.convert_states(vm['extra']['status']),\
                        "addresses": self.convert_ips(vm['public_ips']),\
-                       "flavor": vm['extra']['instance_type'],\
+                       "flavor":
+                       self.convert_flavors(vm['extra']['instancetype']),\
                        #"id": exists
                        "user_id": unicode(""),\
                        "metadata": {},\
@@ -137,4 +147,11 @@ class aws:
         ip_type = "fixed"
         res = {u'private':[ {u'version': ip_ver, u'addr': ip_address,\
                              u'OS-EXT-IPS:type': ip_type}]}
+        return res
+
+    def convert_flavors(self, flavor):
+        res = {u'id': unicode(flavor), \
+               u'links':\
+               [ {u'href':None,\
+                  u'rel':None}]}
         return res
