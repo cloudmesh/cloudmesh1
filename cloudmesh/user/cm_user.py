@@ -33,7 +33,6 @@ class cm_user(object):
     def __init__(self):
         self.config_server = cm_config_server()
         self.connect_db()
-        self.connect_userdb()
 
     def connect_db(self):
         """ Connect to the mongo db."""
@@ -41,27 +40,13 @@ class cm_user(object):
         ldap_collection = 'user'
         cloud_collection = 'cloudmesh'
         defaults_collection = 'defaults'
+        passwd_collection = 'password'
 
         self.db_clouds = get_mongo_db(cloud_collection)
         self.db_users = get_mongo_db(ldap_collection)
         self.db_defaults = get_mongo_db(defaults_collection)
-
-
-
-
-    def connect_userdb(self):
-        try:
-            self._connect_userdb()
-        except Exception, e:
-            print "Is your yaml file correct?"
-            print e
-            print traceback.format_exc()
-            print "---------------------"
-
-    def _connect_userdb(self):
-        """ Connect to the mongo user db."""
-        passwd_collection = 'password'
         self.userdb_passwd = get_mongo_db(passwd_collection)
+
 
     def info(self, portal_id, cloud_names=[]):
         """Return the user information with a given portal id.
@@ -91,7 +76,33 @@ class cm_user(object):
             else:
                 userinfo['clouds'][arec['cm_cloud']] = arec
         userinfo['defaults'] = self.get_defaults(portal_id)
+        #
+        # update project names
+        #
+        projects = userinfo["profile"]["projects"]
+        projects = self.update_users_project_names(projects)
+
         return userinfo
+
+
+
+    def update_users_project_names(self, projects):
+
+        def correct_project_names(projects):
+            tmp = [ "fg" + str(x) for x in projects]
+            return tmp
+
+        # projects = usersinfo[portal_id]["profile"]["projects"]
+        try:
+            projects["active"] = correct_project_names(projects["active"])
+        except Exception, e:
+            print e
+            pass
+        try:
+            projects["completed"] = correct_project_names(projects["completed"])
+        except:
+            pass
+        return projects
 
     def list_users(self, cloud_names=[]):
         """Return all user information with a given cloud.
@@ -109,6 +120,12 @@ class cm_user(object):
             portal_id = ldap_user['cm_user_id']
             usersinfo[portal_id] = {}
             usersinfo[portal_id]['profile'] = ldap_user
+            #
+            # correct projects
+            #
+            projects = usersinfo[portal_id]["profile"]["projects"]
+            projects = self.update_users_project_names(projects)
+
         cloud_info = self.db_clouds.find({"cm_kind": "users"})
         for cloud_user in cloud_info:
             portal_id = cloud_user['name']
