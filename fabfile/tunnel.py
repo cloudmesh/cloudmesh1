@@ -1,5 +1,7 @@
-from fabric.api import task, local
+from fabric.api import task, local, settings, hide
 from cloudmesh.config.ConfigDict import ConfigDict
+from sh import kill
+from sh import sudo
 
 def get_server_config():
     return ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")
@@ -32,6 +34,23 @@ def ldap(host=None):
     print "   ", command
 
     local (command)
+
+@task
+def kill():
+    with settings(warn_only=True):
+        with hide('output', 'running', 'warnings'):
+            procs = local('ps -j -ax -u root -o pid | fgrep ssh | fgrep 389', capture=True).split("\n")
+
+    if procs != ['']:
+
+        for proc in procs:
+            columns = proc.split()
+            pid = columns[1]
+            print "Killing", proc
+            sudo.kill("-9", "{0}".format(pid))
+        print "SUCCESS. tunnel killed"
+    else:
+        print "WARNING: no tunnel were running"
 
 @task
 def flask():
