@@ -32,9 +32,19 @@ def get_mongo_db(mongo_collection):
     port = int(config["port"])
     username = config["username"]
     password = config["password"]
-    client = MongoClient(host=host, port=port)
-    client.the_database.authenticate(username, password)
 
+    print "KKK"
+    uri = "mongodb://{0}:{1}@{2}/{3}".format(username, password, host, db_name)
+
+    print uri
+
+    client = MongoClient(uri)
+    # client = MongoClient(host=host, port=port)
+    # client.authenticate(username, password)
+
+    client.authenticate(uri)
+
+    print "LLL"
     db = client[db_name]
     return db[mongo_collection]
 
