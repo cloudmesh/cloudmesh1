@@ -1,18 +1,15 @@
+from bson.objectid import ObjectId
+from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
+from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
+from cloudmesh.iaas.openstack.cm_compute import openstack
+from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.stopwatch import StopWatch
+from cloudmesh.util.util import path_expand
+from pprint import pprint
+import pymongo
 import sys
 import traceback
-import pymongo
-from pymongo import MongoClient
-from pprint import pprint
-from bson.objectid import ObjectId
-from cloudmesh.config.cm_config import cm_config
-from cloudmesh.util.stopwatch import StopWatch
-from cloudmesh.iaas.openstack.cm_compute import openstack
-from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
-from cloudmesh.config.cm_config import cm_config_server
-from cloudmesh.util.util import path_expand
 import yaml
-from cloudmesh.util.logger import LOGGER
-from cloudmesh.config.cm_config import get_mongo_db
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -153,18 +150,18 @@ class cm_mongo:
                             self.clouds[cloud_name].update({'manager': cloud})
                         else:
                             log.error("Credential not working, cloud is not activated")
-                            
+
                     if cm_type == 'openstack':
                         keys = self.config.userkeys()['keylist']
                         username = self.config.username()
                         for keyname, keycontent in keys.iteritems():
-                            keynamenew = "%s_%s" % (username, keyname.replace('.','_').replace('@', '_'))
-                            #print "Transformed key name: %s" % keynamenew
+                            keynamenew = "%s_%s" % (username, keyname.replace('.', '_').replace('@', '_'))
+                            # print "Transformed key name: %s" % keynamenew
                             log.info("Adding a key for user <%s> in cloud <%s>" % (username, cloud_name))
                             keypart = keycontent.split(" ")
                             keycontent = "%s %s" % (keypart[0], keypart[1])
                             cloud.keypair_add(keynamenew, keycontent)
-                        #pprint(keys)
+                        # pprint(keys)
 
             except Exception, e:
                 print "ERROR: can not activate cloud", cloud_name
@@ -236,21 +233,21 @@ class cm_mongo:
                         result[element]['cm_type_version'] = self.clouds[
                             name]['cm_type_version']
                         result[element]['cm_kind'] = type
-                        #print "HPCLOUD_DEBUG", result[element]
+                        # print "HPCLOUD_DEBUG", result[element]
                         for key in result[element]:
-                            #print key
+                            # print key
                             if '.' in key:
-                                del result[element][key]                        
+                                del result[element][key]
                         if 'metadata' in result[element].keys():
                             for key in result[element]['metadata']:
                                 if '.' in key:
                                     fixedkey = key.replace(".", "_")
-                                    #print "%s->%s" % (key,fixedkey)
+                                    # print "%s->%s" % (key,fixedkey)
                                     value = result[element]['metadata'][key]
                                     del result[element]['metadata'][key]
                                     result[element]['metadata'][fixedkey] = value
-                        #print "HPCLOUD_DEBUG - AFTER DELETING PROBLEMATIC KEYS", result[element]
-                        
+                        # print "HPCLOUD_DEBUG - AFTER DELETING PROBLEMATIC KEYS", result[element]
+
                         self.db_clouds.insert(result[element])
 
                     watch.stop(name)

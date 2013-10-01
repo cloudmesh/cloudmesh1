@@ -1,21 +1,15 @@
-import sys
-import yaml
-import os
-import json
+from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh.util.config import read_yaml_config
+from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.util import check_file_for_tabs, deprecated, path_expand, \
+    path_expand
+from pprint import pprint
+from pymongo import MongoClient
 import collections
 import copy
-
-from pprint import pprint
-from cloudmesh.util.util import path_expand
-from cloudmesh.util.logger import LOGGER
-from cloudmesh.util.util import check_file_for_tabs
-
-from cloudmesh.util.config import read_yaml_config
-from cloudmesh.util.util import deprecated
-from cloudmesh.util.util import path_expand
-from cloudmesh.config.ConfigDict import ConfigDict
-
-from pymongo import MongoClient
+import json
+import os
+import sys
 import yaml
 
 log = LOGGER(__file__)
@@ -24,34 +18,26 @@ def get_mongo_db(mongo_collection):
     """
     Read in the mongo db information from the cloudmesh_server.yaml
     """
-    filename = "~/.futuregrid/cloudmesh_server.yaml"
 
-    mongo_config = ConfigDict(filename=filename).get("cloudmesh.server.mongo")
+def get_mongo_db(mongo_collection):
+    """
+    Read in the mongo db information from the cloudmesh_server.yaml
+    """
 
-    mongo_host = mongo_config["host"]
-    mongo_port = int(mongo_config["port"])
+    config = cm_config_server().get("cloudmesh.server.mongo")
 
-    mongo_db_name = mongo_config["collections"][mongo_collection]['db']
+    db_name = config["collections"][mongo_collection]['db']
 
-    client = MongoClient(host=mongo_host,
-                         port=mongo_port)
+    host = config["host"]
+    port = int(config["port"])
+    username = config["username"]
+    password = config["password"]
+    client = MongoClient(host=host, port=port)
+    client.the_database.authenticate(username, password)
 
-    # TEMPLATE PROVIDED BELLOW
+    db = client[db_name]
+    return db[mongo_collection]
 
-    #    db_name = self.config_server.get("cloudmesh.server.mongo.db")
-    #    host = self.config_server.get("cloudmesh.server.mongo.host")
-    #    port = self.config_server.get("cloudmesh.server.mongo.port")
-    #    username = self.config_server.get("cloudmesh.server.mongo.username")
-    #    password = self.config_server.get("cloudmesh.server.mongo.password")
-    #    client = MongoClient(host=host, port=port)
-    #    client.the_database.authenticate(username, password)
-
-
-    # AUTH CALL COMES HERE
-
-    db = client[mongo_db_name]
-    db_clouds = db[mongo_collection]
-    return db_clouds
 
 
 class cm_config_server(ConfigDict):

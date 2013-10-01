@@ -13,7 +13,7 @@
 """
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.logger import LOGGER
-from pymongo import MongoClient
+from cloudmesh.config.cm_config import get_mongo_db
 import traceback
 
 # ----------------------------------------------------------------------
@@ -38,24 +38,17 @@ class cm_user(object):
 
     def connect_db(self):
         """ Connect to the mongo db."""
-        # db_name = self.config_server.get("cloudmesh.server.mongo.db")
-        # client = MongoClient()
 
-        db_name = self.config_server.get("cloudmesh.server.mongo.db")
-        host = self.config_server.get("cloudmesh.server.mongo.host")
-        port = self.config_server.get("cloudmesh.server.mongo.port")
-        username = self.config_server.get("cloudmesh.server.mongo.username")
-        password = self.config_server.get("cloudmesh.server.mongo.password")
-        client = MongoClient(host=host, port=port)
-        # client.the_database.authenticate(username, password)
-
-        db = client[db_name]
         ldap_collection = 'user'
         cloud_collection = 'cloudmesh'
         defaults_collection = 'defaults'
-        self.db_clouds = db[cloud_collection]
-        self.db_users = db[ldap_collection]
-        self.db_defaults = db[defaults_collection]
+
+        self.db_clouds = get_mongo_db(cloud_collection)
+        self.db_users = get_mongo_db(ldap_collection)
+        self.db_defaults = get_mongo_db(defaults_collection)
+
+
+
 
     def connect_userdb(self):
         try:
@@ -68,23 +61,8 @@ class cm_user(object):
 
     def _connect_userdb(self):
         """ Connect to the mongo user db."""
-        # This will be enabled with ssl
-        db_name = self.config_server.get("cloudmesh.server.mongo.db")
-        host = self.config_server.get("cloudmesh.server.mongo.host")
-        port = self.config_server.get("cloudmesh.server.mongo.port")
-        username = self.config_server.get("cloudmesh.server.mongo.username")
-        password = self.config_server.get("cloudmesh.server.mongo.password")
-        client = MongoClient(host=host, port=port)
-        # client.the_database.authenticate(username, password)
-
-        #
-        # THIS SEEMS CORRECT JUST UNCOMMENT
-        #
-
-        db = client[db_name]
         passwd_collection = 'cm_password'
-        self.userdb_passwd = db[passwd_collection]
-        db.authenticate(username, password)
+        self.userdb_passwd = get_mongo_db(passwd_collection)
 
     def info(self, portal_id, cloud_names=[]):
         """Return the user information with a given portal id.

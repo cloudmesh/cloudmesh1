@@ -1,9 +1,7 @@
-from cloudmesh.config.cm_config import cm_config_server
-import pymongo
-from pymongo import MongoClient
-# from config.cm_config import cm_config
-
+from cloudmesh.config.cm_config import cm_config_server, get_mongo_db
 from cloudmesh.util.logger import LOGGER
+import pymongo
+
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -24,28 +22,7 @@ class CMUserProviderBaseType(object):
 
     def __init__(self, collection="user"):
         """initializes the cloudmesh mongo db. The name of the collection os passed."""
-        db_name = cm_config_server().get("cloudmesh.server.mongo.db")
-
-        self.client = MongoClient()
-
-
-        db_name = self.config_server.get("cloudmesh.server.mongo.db")
-        host = self.config_server.get("cloudmesh.server.mongo.host")
-        port = self.config_server.get("cloudmesh.server.mongo.port")
-        username = self.config_server.get("cloudmesh.server.mongo.username")
-        password = self.config_server.get("cloudmesh.server.mongo.password")
-        client = MongoClient(host=host, port=port)
-        # client.the_database.authenticate(username, password)
-
-        #
-        #  OUTCOMMENT
-        #
-
-        self.db = self.client[db_name]
-        self.db_clouds = self.db[collection]
-        # print db_name
-    	# print self.db
-    	# self.config = cm_config()
+        self.db_clouds = get_mongo_db(collection)
 
     def find(self, query):
         '''
