@@ -150,18 +150,18 @@ class virtualbox(ComputeBaseType):
             log.error("can not stop VM. VM with the name {0} does not exist".format(name))
             return
 
-    if state != "running":
+        if state != "running":
 
-        result = vbox_startvm("startvm", name, "--type", mode)
+            result = vbox_startvm("startvm", name, "--type", mode)
 
-        if result:
-            log.error(str(result))
-            return False
+            if result:
+                log.error(str(result))
+                return False
+            else:
+                return True
         else:
-            return True
-    else:
-        log.error("vm with the name {0} is already running".format(name))
-        return False
+            log.error("vm with the name {0} is already running".format(name))
+            return False
 
 
     def vm_delete(self, id):
