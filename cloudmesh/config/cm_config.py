@@ -14,10 +14,6 @@ import yaml
 
 log = LOGGER(__file__)
 
-def get_mongo_db(mongo_collection):
-    """
-    Read in the mongo db information from the cloudmesh_server.yaml
-    """
 
 def get_mongo_db(mongo_collection):
     """
@@ -39,10 +35,6 @@ def get_mongo_db(mongo_collection):
     print uri
 
     client = MongoClient(uri)
-    # client = MongoClient(host=host, port=port)
-    # client.authenticate(username, password)
-
-    client.authenticate(uri)
 
     print "LLL"
     db = client[db_name]

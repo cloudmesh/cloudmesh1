@@ -42,7 +42,7 @@ cloudmesh:
         password: abc
         collections:
             inventory:
-                db: cm_inventory
+                db: inventory
             cloudmesh:
                 db: cloudmesh
             profile:
@@ -50,21 +50,21 @@ cloudmesh:
             user:
                 db: user
             userauth:
-                db: cm_auth
+                db: auth
             pbs:
-                db: cm_pbs
+                db: pbs
             metric:
-                db: cm_metric
+                db: metric
             qstat:
-                db: hpc_qstat
+                db: qstat
             pbsnodes:
-                db: hpc_pbsnodes
+                db: pbsnodes
             launcher:
                 db: launcher
             pagestatus:
                 db: pagestatus
-            cm_password:
-                db: cm_user
+            password:
+                db: hallo
     keystone:
         sierra:
             OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0

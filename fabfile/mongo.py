@@ -216,6 +216,9 @@ def boot(auth=True):
     path = path_expand(config["path"])
     banner(path)
     print ls(path)
+    banner("PROCESS")
+    with settings(warn_only=True):
+        local("ps -ax | fgrep mongo")
 
 @task
 def start(auth=True):
@@ -304,7 +307,6 @@ def cloud():
     '''
     puts a snapshot of users, servers, images, and flavors into mongo
     '''
-    clean()
     c = cm_mongo()
     c.activate()
     c.refresh(types=['users', 'servers', 'images', 'flavors'])
@@ -316,7 +318,6 @@ def simple():
     '''
     puts a snapshot of servers, images, and flavors into mongo (no users)
     '''
-    clean()
     c = cm_mongo()
     c.activate()
     c.refresh(types=['servers', 'images', 'flavors'])

@@ -11,9 +11,8 @@
     the unique identification in ldap and cloud.
 
 """
-from cloudmesh.config.cm_config import cm_config_server
+from cloudmesh.config.cm_config import cm_config_server, get_mongo_db
 from cloudmesh.util.logger import LOGGER
-from cloudmesh.config.cm_config import get_mongo_db
 import traceback
 
 # ----------------------------------------------------------------------
@@ -61,7 +60,7 @@ class cm_user(object):
 
     def _connect_userdb(self):
         """ Connect to the mongo user db."""
-        passwd_collection = 'cm_password'
+        passwd_collection = 'password'
         self.userdb_passwd = get_mongo_db(passwd_collection)
 
     def info(self, portal_id, cloud_names=[]):
