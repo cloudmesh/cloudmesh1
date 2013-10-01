@@ -141,11 +141,11 @@ def HEADING(txt=None):
     banner(txt)
 
 
-def banner(txt=None):
+def banner(txt=None, c="#"):
     print
-    print "#", 70 * '#'
+    print "#", 70 * c
     print "#", txt
-    print "#", 70 * '#'
+    print "#", 70 * c
 
 
 
