@@ -167,8 +167,19 @@ def wipe():
             banner("{0}".format(path))
             local("ls {0}".format(path))
 
+
+def isyes(value):
+    check = str(value).lower()
+    if check in ['true', 'false', 'y', 'n', 'yes', 'no']:
+        return check in ['true', 'y', 'yes']
+    else:
+        print "parameter not in", ['true', 'false', 'y', 'n', 'yes', 'no']
+        print "found", value, check
+        sys.exit()
+
 @task
 def boot(auth=True):
+
     # kill mongo
     kill()
 
@@ -184,19 +195,21 @@ def boot(auth=True):
 
     time.sleep(1)
 
-    # create users
-    admin()
+    if isyes(auth):
 
-    time.sleep(1)
+        # create users
+        admin()
 
-    # restart with auth
-    kill()
+        time.sleep(1)
 
-    time.sleep(1)
+        # restart with auth
+        kill()
 
-    start(auth=auth)
+        time.sleep(1)
 
-    time.sleep(1)
+        start(auth=auth)
+
+        time.sleep(1)
 
 
     config = cm_config_server().get("cloudmesh.server.mongo")
@@ -230,7 +243,7 @@ def start(auth=True):
     else:
         print "ACTION: Starting mongod"
         with_auth = ""
-        if str(auth).lower() in ["true", "y", "yes"]:
+        if isyes(auth):
             with_auth = "--auth"
 
         local("mongod {2} --bind_ip 127.0.0.1 --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port, with_auth))
