@@ -55,6 +55,7 @@ cloudmesh:
             cm_host: aws.amazon.com
             cm_label: aws
             cm_type: amazon
+            cm_type_version:
             credentials:
                 access_key_id: {{aws.access_key_id}}
                 secret_access_key: {{aws.secret_access_key}}
