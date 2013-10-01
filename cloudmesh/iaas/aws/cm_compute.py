@@ -66,7 +66,15 @@ class aws:
         return
 
     def list_vm(self):
-        self.nodes = self.conn.list_nodes()
+        nodes = self.conn.list_nodes()
+        vm_dict = {}
+        for vm_obj in nodes:
+            vm = vm_obj.__dict__
+            instanceid = vm_obj.id
+            vm_dict[instanceid] = vm
+
+        self.nodes = vm_dict
+
         return self.nodes
 
     def vm_delete(self):
@@ -95,3 +103,38 @@ class aws:
 
     def get_image_name(self):
         return self.image_name
+
+    def _get_servers_dict(self):
+        vm_list = self.list_vm()
+        self.convert_to_openstack_style(vm_list)
+        return vm_list
+
+    def convert_to_openstack_style(self, vmlist):
+        for vmid in vmlist:
+            vm = vmlist[vmid]
+            vm.update({"name": unicode(vm['id']),\
+                       "status": self.convert_states(vm['extra']['status']),\
+                       "addresses": self.convert_ips(vm['public_ips']),\
+                       "flavor": vm['extra']['instance_type'],\
+                       #"id": exists
+                       "user_id": unicode(""),\
+                       "metadata": {},\
+                       "key_name": unicode(vm['extra']['keyname']),\
+                       "created": unicode(vm['extra']['launchdatetime'])\
+                      })
+            try:
+                # deleting object to avoid mongodb errors when inserts
+                vm.update({"driver":None})
+            except:
+                pass
+
+    def convert_states(self, status):
+        if status == "running":
+            return "ACTIVE"
+    def convert_ips(self, ip):
+        ip_address = ip[0]
+        ip_ver = 4
+        ip_type = "fixed"
+        res = {u'private':[ {u'version': ip_ver, u'addr': ip_address,\
+                             u'OS-EXT-IPS:type': ip_type}]}
+        return res
