@@ -65,6 +65,8 @@ cloudmesh:
                 db: pagestatus
             password:
                 db: hallo
+            defaults:
+                db: defaults
     keystone:
         sierra:
             OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
