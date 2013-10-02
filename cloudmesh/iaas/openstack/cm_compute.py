@@ -579,7 +579,14 @@ class openstack(ComputeBaseType):
 
             p = cm_profile()
             name = self.label
-            credential = p.server.get("cloudmesh.server.keystone")[name]
+
+            idp_clouds = p.server.get("cloudmesh.server.keystone").keys()
+
+            if name in idp_clouds:
+                credential = p.server.get("cloudmesh.server.keystone")[name]
+            else:
+                log.error("The cloud {0} does not have keyston access".format(name))
+                return dict({})
 
         cloud = openstack(name, credential=credential)
         msg = "users"
