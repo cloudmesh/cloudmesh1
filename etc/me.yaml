@@ -12,10 +12,11 @@ profile:
 password:
   sierra_openstack_grizzly: None
   hp: None
-
+  hp_east: None
 
 username:
   hp: None
+  hp_east: None
 
 azure:
   subscriptionid: None
