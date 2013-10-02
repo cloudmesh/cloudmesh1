@@ -137,7 +137,7 @@ class openstack(ComputeBaseType):
         log.info("Loading User Credentials")
         if self.user_credential is None:
             log.error("error connecting to openstack compute, credential is None")
-        else:
+        elif not self.user_token:
             self.user_token = self.get_token(self.user_credentials)
 
         # check if keystone is defined, and if failed print log msg
@@ -145,7 +145,7 @@ class openstack(ComputeBaseType):
         log.info("Loading Admin Credentials")
         if self.admin_credential is None:
             log.error("error connecting to openstack compute, credential is None")
-        else:
+        elif not self.admin_token:
             self.admin_token = self.get_token(self.admin_credential)
 
 
@@ -221,14 +221,14 @@ class openstack(ComputeBaseType):
         apiurl = "servers/%s/diagnostics" % serverid
         return self._get(msg=apiurl, kind='admin', urltype='adminURL')
 
-    def _get_service(self, kind="user"):
+    def _get_service(self, type="compute", kind="user"):
 
         token = self.user_token
         if kind == "admin":
             token = self.admin_token
 
         for service in token['access']['serviceCatalog']:
-            if service['type'] == kind:
+            if service['type'] == type:
                 break
         return service
 
@@ -568,9 +568,6 @@ class openstack(ComputeBaseType):
         msg = "tenants"
         list = self._get(msg, kind="admin")['tenants']
         return self._list_to_dict(list, 'id', "tenants", time_stamp)
-
-
-
     # new
     def get_users(self, credential=None):
         time_stamp = self._now()
@@ -634,6 +631,8 @@ class openstack(ComputeBaseType):
     #
     # refresh
     #
+    # identity management moved to its dedicated class
+    """
     def _get_users_dict(self):
         result = self.get_users()
         return result
@@ -641,7 +640,8 @@ class openstack(ComputeBaseType):
     def _get_tenants_dict(self):
         result = self.get_tenants()
         return result
-
+    """
+    
     def _get_images_dict(self):
         result = self.get_images()
         return result
