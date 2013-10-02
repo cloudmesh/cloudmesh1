@@ -378,7 +378,7 @@ class cloudmesh:
             names = cloud_names
 
         for cloud_name in names:
-            print "Activating ->", cloud_name
+            print "Uploading keys to ->", cloud_name
 
             try:
                 credential = self.config.cloud(cloud_name)
@@ -406,7 +406,6 @@ class cloudmesh:
                     if cm_type == 'openstack':
                         keys = self.config.userkeys()['keylist']
                         username = self.config.username()
-                        """
                         for keyname, keycontent in keys.iteritems():
                             keynamenew = "%s_%s" % (username, keyname.replace('.', '_').replace('@', '_'))
                             # print "Transformed key name: %s" % keynamenew
@@ -415,7 +414,6 @@ class cloudmesh:
                             keycontent = "%s %s" % (keypart[0], keypart[1])
                             cloud.keypair_add(keynamenew, keycontent)
                         # pprint(keys)
-                        """
             except Exception, e:
                 print "ERROR: can not activate cloud", cloud_name
                 print e
