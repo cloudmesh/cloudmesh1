@@ -179,7 +179,7 @@ class cm_userLDAP (CMUserProviderBaseType):
                                            "phone":phone,
                                            "email":ldapmail,
                                            "address":address,
-                                           "projects":{"active":[]},
+                                           "projects":{"active":[], "completed": []},
                                            "keys":keys }
         except:
             print "WRONG" + str(sys.exc_info())
