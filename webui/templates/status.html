@@ -79,12 +79,74 @@ $(function () {
             	   {{values.sierra.users}},
             	   {{values.alamo.users}}],
             pointPlacement: 'on'
-        }]
+        },
+        ]
 
     });
 });
 })(jQuery);
 </script>
+
+<script type="text/javascript">
+(function($){ // encapsulate jQuery
+
+$(function () {
+
+    $('#servicescontainer').highcharts({
+
+        chart: {
+            polar: true,
+            type: 'line'
+        },
+
+        title: {
+            text: 'Services',
+            x: -80
+        },
+
+        pane: {
+            size: '80%'
+        },
+
+        xAxis: {
+            categories: [{% for category in services.categories %}'{{category}}',{% endfor %}],
+            tickmarkPlacement: 'on',
+            lineWidth: 0
+        },
+
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0
+        },
+
+        tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+        },
+
+        legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            y: 70,
+            layout: 'vertical'
+        },
+
+        series: [
+        	{% for machine in services.machines %}
+            {
+            name: '{{machine}}',
+            data: [{% for v in services['data'][machine] %}{{v}},{% endfor %}],
+            pointPlacement: 'on'
+            },
+            {% endfor %}
+           ]
+
+    });
+});
+})(jQuery);
+</script>
+
 
 <table>
 <tr>
@@ -93,18 +155,35 @@ $(function () {
 </tr>
 <tr>
 <td>
-{% set width=350 %}
+{% set height=350 %}
+{% set width=450 %}
+
 <div id="container"
 	 style="min-width: {{width}}px;
 	 max-width: {{width}}px;
-	 height: {{width}}px;
+	 height: {{height}}px;
 	 margin: 0 auto">
 </div>
+
 </td>
 <td>
 
 </td>
 </tr>
+<tr>
+	<td>
+		<div id="servicescontainer"
+	 		style="min-width: {{width}}px;
+	 		max-width: {{width}}px;
+	 		height: {{height}}px;
+	 		margin: 0 auto">
+		</div>
+	</td>
+	<td></td>
+
+
+</tr>
+
 </table>
 
 
