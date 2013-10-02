@@ -107,7 +107,6 @@ class cm_user(object):
                 #
                 #  BUG HACK must be empty list
                 #
-
                 tmp = ['fg0']
             return tmp
 
