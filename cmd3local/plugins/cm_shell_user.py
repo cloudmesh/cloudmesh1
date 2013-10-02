@@ -37,7 +37,7 @@ class cm_shell_user:
                user ID me
                user ID yaml
                user ID ldap
-               user ID new FORMAT
+               user ID new FORMAT [dict|yaml]
                
         Administrative command to lists the users from LDAP 
 
@@ -49,6 +49,7 @@ class cm_shell_user:
           yaml       specifie to generate the cloudmesh.yaml file
           ldap       get the specifie to generate the cloudmesh.yaml file
           FORMAT     either me or cloudmesh
+          OUTPUT     either yaml or dict 
           
         Options:
            
@@ -158,20 +159,35 @@ class cm_shell_user:
 
 
             banner("NEW")
+
+            new_me["projects"]["completed"] = "fg-None"
             pprint(new_me)
+
+
 
             basename = arguments["FORMAT"]
 
 
             etc_filename = path_expand("~/.futuregrid/etc/{0}.yaml".format(basename))
 
+
+
             print etc_filename
 
             t = cm_template(etc_filename)
             print t
             out = t.replace(kind='dict', values=new_me)
-            banner("{0} DATA".format(basename))
 
+
+            banner("{0} DATA".format(basename))
+            pprint (out)
+
+            banner("yaml")
+            print yaml.dump(out, default_flow_style=False)
+
+
+            pprint(arguments)
+            pprint (args)
 
 
 
