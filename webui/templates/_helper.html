@@ -17,9 +17,9 @@ image_button("041_charts", "/table/")
 
 {% macro cm_boolean_color(state) %}
     {% set s = state|lower %}
-   	{% if s in ["true", "yes"] %}
+   	{% if s in ["true", "yes", "verified"] %}
 		<span class="label label-success">{{state}}</span>
-	{% elif s in ["false", "no"] %}
+	{% elif s in ["false", "no", "unknown"] %}
 		<span class="label label-danger">{{state}}</span>
 	{% else %}
 		<span class="label label-default">{{state}}</span>
