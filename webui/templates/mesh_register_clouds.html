@@ -13,14 +13,20 @@
         <tr>
             <th colspan="1"><b> Clouds </b></th>
             <th></th>
-            <th style="text-align: right">Verified </th>
+            <th style="text-align: right">
+           	  	{{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
+            	Verified
+            </th>
         </tr>
         <tr>
             <th colspan="1">
             <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
             sierra_openstack_grizzly</th>
             <th></th>
-            <th style="text-align: right">{{cm_boolean_color('unknown')}}</th>
+            <th style="text-align: right">
+            	  	{{ image_button ("none", "044_keys", "/updatekeypair/" + "sierra_openstack_grizzly" + "/") }}
+            	{{cm_boolean_color('unknown')}}
+            </th>
         </tr>
         <tr>
             <td style="text-align: right"> Username:</td>
@@ -41,10 +47,17 @@
         </tr>
         <tr>
             <th colspan="1">
-            <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-            HP</th>
+            	<input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+            	HP
+            	&nbsp;
+            	<input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+            	HP East
+            </th>
             <th></th>
-            <th style="text-align: right">{{cm_boolean_color('verified')}} </th>
+            <th style="text-align: right">
+            	{{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
+            	{{cm_boolean_color('verified')}}
+            </th>
         </tr>
         <tr>
             <td  style="text-align: right"> Username:</td>
@@ -68,7 +81,10 @@
             <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
             AWS</th>
             <th></th>
-            <th style="text-align: right">{{cm_boolean_color('verified')}} </th>
+            <th style="text-align: right">
+           	  	{{ image_button ("none", "044_keys", "/updatekeypair/" + "aws" + "/") }}
+            	{{cm_boolean_color('verified')}}
+            </th>
         </tr>
         <tr>
             <td  style="text-align: right"> Username:</td>
@@ -101,7 +117,10 @@
             <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
             Azure</th>
             <th></th>
-            <th style="text-align: right">{{cm_boolean_color('verified')}} </th>
+            <th style="text-align: right">
+            	  	{{ image_button ("none", "044_keys", "/updatekeypair/" + "azure" + "/") }}
+            	{{cm_boolean_color('verified')}}
+            </th>
         </tr>
         <tr>
             <td style="text-align: right">Secret Access Key:</td>
