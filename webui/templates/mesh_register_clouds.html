@@ -1,44 +1,198 @@
 {% extends "layout_title.html" %}
 {% from "_helper.html" import image_button %}
+{% from "_helper.html" import cm_boolean_color %}
 
 {% block contentbox %}
 <h1> Register </h1>
 {% endblock contentbox %}
 
-
 {% block content %}
 
-<pre>
+<table>
+    <form name="profile" action="/profile/" method="POST">
+        <tr>
+            <th colspan="1"><b> Clouds </b></th>
+            <th></th>
+            <th style="text-align: right">Verified </th>
+        </tr>
+        <tr>
+            <th colspan="1">
+            <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+            sierra_openstack_grizzly</th>
+            <th></th>
+            <th style="text-align: right">{{cm_boolean_color('unknown')}}</th>
+        </tr>
+        <tr>
+            <td style="text-align: right"> Username:</td>
+            <td colspan="2">
+            <input id="uname1" valign="middle" type="text" name="uname1"
+            value="psjoshi" disabled="disabled"
+            style="margin-bottom: 5px; margin-top: 5px;">
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right">Password:</td>
+            <td colspan="2"><form>
+                <input id="passwordField1" valign="middle" type="password" name="passwordField1"
+                value="" autocomplete="off" placeholder="Password"
+                style="margin-bottom: 5px; margin-top: 5px;">
+                <input type="button" id="togglePasswordField1" value="T" style="display:none" />
+            </form></td>
+        </tr>
+        <tr>
+            <th colspan="1">
+            <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+            HP</th>
+            <th></th>
+            <th style="text-align: right">{{cm_boolean_color('verified')}} </th>
+        </tr>
+        <tr>
+            <td  style="text-align: right"> Username:</td>
+            <td colspan="2">
+            <input id="uname2" valign="middle" type="text" name="uname2"
+            value="psjoshi" disabled="disabled"
+            style="margin-bottom: 5px; margin-top: 5px;">
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right">Password:</td>
+            <td colspan="2"><form>
+                <input id="passwordField2" valign="middle" type="password" name="passwordField2"
+                value="" autocomplete="off" placeholder="Password"
+                style="margin-bottom: 5px; margin-top: 5px;">
+                <input type="button" id="togglePasswordField2" value="T" style="display:none" />
+            </form></td>
+        </tr>
+        <tr>
+            <th colspan="1">
+            <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+            AWS</th>
+            <th></th>
+            <th style="text-align: right">{{cm_boolean_color('verified')}} </th>
+        </tr>
+        <tr>
+            <td  style="text-align: right"> Username:</td>
+            <td colspan="2">
+            <input id="uname3" valign="middle" type="text" name="uname3"
+            value="psjoshi" disabled="disabled"
+            style="margin-bottom: 5px; margin-top: 5px;">
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right">Access Key:</td>
+            <td colspan="2"><form>
+                <input id="passwordField3" valign="middle" type="password" name="passwordField3"
+                value="" autocomplete="off" placeholder="Password"
+                style="margin-bottom: 5px; margin-top: 5px;">
+                <input type="button" id="togglePasswordField3" value="T" style="display:none" />
+            </form></td>
+        </tr>
+        <tr>
+            <td style="text-align: right">Secret Access Key:</td>
+            <td colspan="2"><form>
+                <input id="passwordField3" valign="middle" type="password" name="passwordField3"
+                value="" autocomplete="off" placeholder="Password"
+                style="margin-bottom: 5px; margin-top: 5px;">
+                <input type="button" id="togglePasswordField3" value="T" style="display:none" />
+            </form></td>
+        </tr>
+        <tr>
+            <th colspan="1">
+            <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+            Azure</th>
+            <th></th>
+            <th style="text-align: right">{{cm_boolean_color('verified')}} </th>
+        </tr>
+        <tr>
+            <td style="text-align: right">Secret Access Key:</td>
+            <td colspan="2"><form>
+                <input id="passwordField3" valign="middle" type="password" name="passwordField3"
+                value="" autocomplete="off" placeholder="Subscription ID"
+                style="margin-bottom: 5px; margin-top: 5px;">
+                <input type="button" id="togglePasswordField3" value="T" style="display:none" />
+            </form></td>
+        </tr>
+    </form>
+</table>
 
-  {{ error }}
+<script>
+    (function() {
 
- [ ] sierra_openstack_grizzly:
-			username     portaklname (can not edit)
-            password     ____________________  *** []
-  [+] [verified]
+        try {
 
+            // switch the password field to text, then back to password to see if it supports
+            // changing the field type (IE9+, and all other browsers do). then switch it back.
+            var passwordField = document.getElementById('passwordField1');
+            passwordField.type = 'text';
+            passwordField.type = 'password';
 
- [ ] hp:
-            username: ____________________
-            password: ____________________ ***
-  [+] [verified]
+            // if it does support changing the field type then add the event handler and make
+            // the button visible. if the browser doesn't support it, then this is bypassed
+            // and code execution continues in the catch() section below
+            var togglePasswordField = document.getElementById('togglePasswordField1');
+            togglePasswordField.addEventListener('click', togglePasswordFieldClicked, false);
+            togglePasswordField.style.display = 'inline';
 
- [ ] azure:
-      subscriptionid: __________________ ***
-  [+] [verified]
+        } catch(err) {
+            console.log(err.message);
+        }
 
- [ ] aws:
-     userid:              ____________________
-     access_key_id:       ____________________ ***
-     secret_access_key:   ____________________ ***
-  [+] [verified]
+    })();
 
+    function togglePasswordFieldClicked() {
+
+        var passwordField = document.getElementById('passwordField1');
+        var value = passwordField.value;
+
+        if (passwordField.type == 'password') {
+            passwordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+        }
+
+        passwordField.value = value;
+
+    }
+</script>
+
+<script>
+    (function() {
+
+        try {
+
+            // switch the password field to text, then back to password to see if it supports
+            // changing the field type (IE9+, and all other browsers do). then switch it back.
+            var passwordField = document.getElementById('passwordField2');
+            passwordField.type = 'text';
+            passwordField.type = 'password';
+
+            // if it does support changing the field type then add the event handler and make
+            // the button visible. if the browser doesn't support it, then this is bypassed
+            // and code execution continues in the catch() section below
+            var togglePasswordField = document.getElementById('togglePasswordField2');
+            togglePasswordField.addEventListener('click', togglePasswordFieldClicked, false);
+            togglePasswordField.style.display = 'inline';
+
+        } catch(err) {
+            console.log(err.message);
+        }
+
+    })();
+
+    function togglePasswordFieldClicked() {
+
+        var passwordField = document.getElementById('passwordField2');
+        var value = passwordField.value;
+
+        if (passwordField.type == 'password') {
+            passwordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+        }
+
+        passwordField.value = value;
+
+    }
+</script>
 
 {% endblock %}
-
-044_keys
-051_eye_open
-
-222_share
-
-[verified] green
