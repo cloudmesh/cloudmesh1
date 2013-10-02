@@ -45,7 +45,7 @@ def display_pbs_action(action, host):
 
     error = ""
     config = cm_config()
-    user = config.config["cloudmesh"]["hpc"]["username"]
+    user = config.get("cloudmesh.hpc.username")
 
     pbs = pbs_mongo()
     pbs.activate(host, user)
@@ -81,7 +81,7 @@ def display_pbs_qstat(host):
 
     config = cm_config()
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    user = config.config["cloudmesh"]["hpc"]["username"]
+    user = config.get("cloudmesh.hpc.username")
 
     pbs = PBS(user, host)
     data = pbs.qstat()
@@ -98,7 +98,8 @@ def display_pbs_nodes(host):
 
     config = cm_config()
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    user = config.config["cloudmesh"]["hpc"]["username"]
+    user = config.get("cloudmesh.hpc.username")
+
 
     pbs = PBS(user, host)
     data = pbs.pbsnodes()

@@ -364,6 +364,67 @@ class cloudmesh:
         except:
             log.error("could not delete {0} {1}".format(cloud_name, server_id))
 
+    def add_key_pairs(self, cloud_names=None):
+        print "not implemented"
+
+        '''
+        activates a specific host by name. to be queried
+        :param names: the array with the names of the clouds in the yaml file to be activated.
+        '''
+
+        if cloud_names is None:
+            names = self.config.active()
+        else:
+            names = cloud_names
+
+        for cloud_name in names:
+            print "Uploading keys to ->", cloud_name
+
+            try:
+                credential = self.config.cloud(cloud_name)
+                cm_type = credential['cm_type']
+                cm_type_version = credential['cm_type_version']
+                if cm_type in ['openstack', 'eucalyptus', 'azure', 'aws']:
+                    self.clouds[cloud_name] = {'name': cloud_name,
+                                               'cm_type': cm_type,
+                                               'cm_type_version': cm_type_version}
+#                                               'credential': credential}
+                    provider = self.cloud_provider(cm_type)
+                    cloud = provider(cloud_name)
+                    # try to see if the credential works
+                    # if so, update the 'manager' so the cloud is successfully activated
+                    # otherwise log error message and skip this cloud
+                    if not force_auth_verify:
+                        self.clouds[cloud_name].update({'manager': cloud})
+                    else:
+                        tryauth = cloud.get_token()
+                        if 'access' in tryauth:
+                            self.clouds[cloud_name].update({'manager': cloud})
+                        else:
+                            log.error("Credential not working, cloud is not activated")
+
+                    if cm_type == 'openstack':
+                        keys = self.config.userkeys()['keylist']
+                        username = self.config.username()
+                        for keyname, keycontent in keys.iteritems():
+                            keynamenew = "%s_%s" % (username, keyname.replace('.', '_').replace('@', '_'))
+                            # print "Transformed key name: %s" % keynamenew
+                            log.info("Adding a key for user <%s> in cloud <%s>" % (username, cloud_name))
+                            keypart = keycontent.split(" ")
+                            keycontent = "%s %s" % (keypart[0], keypart[1])
+                            cloud.keypair_add(keynamenew, keycontent)
+                        # pprint(keys)
+            except Exception, e:
+                print "ERROR: can not activate cloud", cloud_name
+                print e
+                # print traceback.format_exc()
+                # sys.exit()
+
+
+
+    def del_key_pairs(self, cloud_names=None):
+        print "not implemented"
+
     def add_key_pair(self, cloud_name, key, name):
         try:
             cloud_type = self.clouds[cloud_name]['cm_type']

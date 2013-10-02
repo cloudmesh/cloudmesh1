@@ -1,8 +1,10 @@
 from flask import Blueprint
 from flask import render_template, request, redirect
-
+from cloudmesh.pbs.pbs import PBS
+from cloudmesh.config.cm_config import cm_config
 import cloudmesh
 from flask.ext.login import login_required
+from datetime import datetime
 
 status_module = Blueprint('status_module', __name__)
 
@@ -26,15 +28,58 @@ def display_status():
               'alamo' : { 'jobs' : 53, 'users' : 1},
               }
 
-    categories = ['India', 'Bravo', 'Echo', 'Hotel', 'Sierra', 'Alamo']
-    jobs = [43000, 19000, 60000, 35000, 50000, 70000]
-    users = [50000, 39000, 42000, 31000, 50000, 70000]
+    config = cm_config()
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    user = config.get("cloudmesh.hpc.username")
 
+    services = {}
+
+    for host in ['sierra', 'india']:
+        pbs = PBS(user, host)
+        services[host] = pbs.service_distribution()
+
+
+    machines = services.keys()
+
+    print "FFF", machines
+
+
+
+    #
+    # collecting all atttributes
+    #
+    all_attributes = set()
+
+    for machine in machines:
+        attributes = set(list(services[machine].keys()))
+        print "P", attributes
+        all_attributes.update(attributes)
+
+        print "XXX", all_attributes
+
+    spider_services = {'machines' : machines,
+                       'categories' : list(all_attributes),
+                       'data' : {}}
+
+    #
+    # seeting all attributes to 0
+    #
+
+    for machine in machines:
+        ser = []
+        i = 0
+        for attribute in all_attributes:
+            try:
+                ser.append(services[machine][attribute])
+            except:
+                ser.append(0)
+            i = i + 1
+        spider_services['data'][machine] = ser
+
+    print "SSS", spider_services
 
     return render_template('status.html',
+                           services=spider_services,
                            values=values,
-                           categories=categories,
-                           jobs=jobs,
-                           users=users,
                            status=status,
                            show=msg)

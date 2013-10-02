@@ -1,11 +1,12 @@
 # with open ("pbs_nodes_data.txt", "r") as myfile:
 #    pbs_nodes_data=myfile.readlines()
 
-from xml.dom import minidom
-from sh import ssh
-from pprint import pprint
 from ast import literal_eval
+from collections import Counter
 from hostlist import expand_hostlist
+from pprint import pprint
+from sh import ssh, ssh
+from xml.dom import minidom
 
 
 class PBS:
@@ -100,3 +101,41 @@ class PBS:
                 pass
             self.pbs_qstat_data = info
         return self.pbs_qstat_data
+
+    def service_distribution(self, simple=True):
+        """prints the distribution of services"""
+
+        def pbsnodes_data(host):
+            result = str(ssh(host, "pbsnodes", "-l", "-n"))[:-1]
+            return result
+
+        empty = ["", "", ""]
+        x = [x.split() for x in pbsnodes_data(self.host).split("\n")]
+
+        # Fill missing values
+
+        r = []
+        for line in x:
+            new = ["unkown", "unkown", "unkown"]
+            for i in range(0, len(line)):
+                try:
+                    new[i] = line[i]
+                except:
+                    pass
+            r.append(new)
+
+        # just taking column 2
+
+        x = [x[2] for x in r]
+
+
+
+        print "GFKHFJH ", x
+        cnt = Counter(x)
+
+        print "COUNT",
+
+        return dict(cnt)
+
+
+

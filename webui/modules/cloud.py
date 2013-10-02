@@ -9,6 +9,7 @@ import time
 from cloudmesh.util.util import cond_decorator
 import cloudmesh
 from flask.ext.login import login_required
+import webbrowser
 
 from cloudmesh.util.logger import LOGGER
 
@@ -229,21 +230,21 @@ def start_vm(cloud=None, server=None):
     print "FLAVOR", vm_flavor, vm_flavor_id
     metadata = {'cm_owner': config.prefix}
     username = config.get('cloudmesh.hpc.username')
-    keynamenew = "%s_%s" % (username, key.replace('.','_').replace('@', '_'))
+    keynamenew = "%s_%s" % (username, key.replace('.', '_').replace('@', '_'))
     result = clouds.vm_create(
-        cloud, 
-        config.prefix, 
-        config.index, 
-        vm_flavor_id, 
-        vm_image, 
-        keynamenew, 
+        cloud,
+        config.prefix,
+        config.index,
+        vm_flavor_id,
+        vm_image,
+        keynamenew,
         meta=metadata)
     print "P"*20
     print result
     # print "PPPPPPPPPPPP", result
     # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     config.incr()
-    #config.write()
+    # config.write()
     time.sleep(5)
     clouds.refresh(names=[cloud], types=["servers"])
     return redirect('/mesh/servers')
@@ -270,8 +271,10 @@ def vm_login(cloud=None, server=None):
         ip = server['addresses'][server['addresses'].keys()[0]][1]['addr']
         # THIS IS A BUG AND MUST BE SET PER VM, E.G. sometimesvm type probably
         # decides that?
-        print "ssh", 'ubuntu@' + ip
-        xterm('-e', 'ssh', 'ubuntu@' + ip, _bg=True)
+        # print "ssh", 'ubuntu@' + ip
+        # xterm('-e', 'ssh', 'ubuntu@' + ip, _bg=True)
+        link = 'ubuntu@' + ip
+        webbrowser.open("ssh://" + link)
 
     return redirect('/mesh/servers')
 # ============================================================
@@ -284,18 +287,18 @@ def vm_login(cloud=None, server=None):
 def vm_info(cloud=None, server=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    #print clouds.servers()[cloud]
-    
+    # print clouds.servers()[cloud]
+
     # a trick to deal with different type of server_id
     # (string in FG; or int in e.g. hp_cloud)
     try:
         if "%s" % int(server) == server:
             server = int(server)
     except:
-        pass    
+        pass
     clouds.servers()[cloud][server]['cm_vm_id'] = server
     clouds.servers()[cloud][server]['cm_cloudname'] = cloud
-    
+
     return render_template('vm_info.html',
                            updated=time_now,
                            keys="",
