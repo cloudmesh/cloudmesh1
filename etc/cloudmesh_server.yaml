@@ -68,13 +68,13 @@ cloudmesh:
             defaults:
                 db: defaults
     keystone:
-        sierra:
+        sierra_openstack_grizzly:
             OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
             OS_CACERT : /Users/neu/.futuregrid/sierra-cacert.pem
             OS_PASSWORD : mypassword
             OS_TENANT_NAME : mytennant
             OS_USERNAME : myusername
-        india:
+        india_openstack_essex:
             OS_AUTH_URL : http://computeiporhostname:5000/v2.0
             OS_PASSWORD : password
             OS_TENANT_NAME : tenantname
