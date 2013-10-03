@@ -208,9 +208,9 @@ class cm_mongo:
         watch = StopWatch()
 
         for name in names:
-            print "-"*80
-            print "retrieving for %s" % name
-            print "-"*80
+            #print "-"*80
+            #print "retrieving for %s" % name
+            #print "-"*80
             cloud = None
             for type in types:
                 # for identity management operations, use the keystone class
@@ -225,7 +225,7 @@ class cm_mongo:
                 watch.start(name)
                 cloud.refresh(type)
                 result = cloud.get(type)
-                pprint(result)
+                #pprint(result)
                 # add result to db,
                 watch.stop(name)
                 print 'Refresh time:', watch.get(name)

@@ -64,8 +64,8 @@ class keystone(object):
 
     # load users, tenants, roles from keystone
     def load(self,types=None):
-        banner("admin token before loading...")
-        print self.admin_token
+        #banner("admin token before loading...")
+        #print self.admin_token
         if self.admin_token:
             if types is None or types == ['all']:
                 types = ['users','tenants','roles']
@@ -104,13 +104,13 @@ class keystone(object):
                  }
         url = "{0}/tokens".format(credential['OS_AUTH_URL'])
 
-        print "URL", url
+        #print "URL", url
 
         headers = {'content-type': 'application/json'}
         verify = self._get_cacert(credential)
-        print "PARAM", json.dumps(param)
-        print "HEADER", headers
-        print "VERIFY", verify
+        #print "PARAM", json.dumps(param)
+        #print "HEADER", headers
+        #print "VERIFY", verify
 
         r = requests.post(url,
                           data=json.dumps(param),
