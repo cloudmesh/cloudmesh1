@@ -243,7 +243,7 @@ class openstack(ComputeBaseType):
     def _get_service(self, type="compute", kind="user"):
 
         token = self.user_token
-        print token
+        #print token
         if kind == "admin":
             token = self.admin_token
 
