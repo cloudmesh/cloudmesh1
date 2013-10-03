@@ -74,14 +74,16 @@ class cm_shell_admin:
         for p in projects:
             tenant = k.get_tenant_by_name(p)
             if tenant is None:
-                k.create_new_tenant(p)
-                tenant = k.get_tenant_by_name(p)
-            add_role_to_user_tenant(tenant, uid, member_rid)
+                # k.create_new_tenant(p)
+                # tenant = k.get_tenant_by_name(p)
+                print "create tenant for {0}".format(p)
+            # k.add_role_to_user_tenant(tenant, uid, member_rid)
+            print "Add member role {0} for user {1} in tenant {2}".format(member_rid, uid, tenant)
 
     def create_user_in_cloud(self, username, password, cloudname, projects):
         self.create_user_in_keystone(username, password, cloudname)
         self.create_user_project_tenants(username, cloudname, projects)
-        
+
     def generate_me_yaml(self, username, values, configdir):
         cmu = self.get_cm_user()
         cm_passwords = cmu.get_passwords(username)
@@ -105,7 +107,7 @@ class cm_shell_admin:
         """
         Usage:
                admin [force] newuser USERNAME CLOUDNAME [CONFIGDIR]
-               
+
         Initializes new user in the CLOUDNAME cloud. A me.yaml
         file will be generated and placed in CONFIGDIR, or printed
         to stdout if CONDIGDIR is None.
@@ -117,13 +119,13 @@ class cm_shell_admin:
           USERNAME   the username of the new user
 
           CLOUDNAME  the name of the cloud
-          
+
           CONFIGDIR  where to place the me.yaml file
 
           force      force mode does not ask. This may be dangerous.
 
         Options:
-           
+
            -v       verbose mode
 
         """
@@ -141,6 +143,6 @@ class cm_shell_admin:
             else:
                 me_values = self.get_user_profile(new_username)
                 new_password = generate_password()
-                self.create_user_in_cloud(new_username, new_password, cloudname, me_values['projects'])
+                self.create_user_in_cloud(new_username, new_password, cloudname, me_values['projects']['active'])
                 self.save_user_password(new_username, new_password, cloudname)
                 self.generate_me_yaml(new_username, me_values, configdir)
