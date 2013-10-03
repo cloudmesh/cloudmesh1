@@ -226,7 +226,7 @@ class azure(ComputeBaseType):
             result = self.sms.delete_deployment(name, deployment.name)
             time.sleep(5)
         self.sms.delete_hosted_service(name)
-        result = self.sms.delete_os_image(self.os_image_name)
+        #result = self.sms.delete_os_image(self.os_image_name)
         time.sleep(5)
         self.sms.delete_disk(disk_name)
         #self.bc.delete_container(self.container_name)
@@ -573,8 +573,11 @@ class azure(ComputeBaseType):
 
         """
 
-        ril = role_instance_list[0]
-        ip_address = ril.ip_address
+        try:
+            ril = role_instance_list[0]
+            ip_address = ril.ip_address
+        except IndexError:
+            ip_address = ""
 
         ip_ver = 4 # can we see it is ipv6 in azure?
         ip_type = u'fixed' # determine if it is a fixed address or a floating
@@ -595,8 +598,11 @@ class azure(ComputeBaseType):
 
         """
 
-        ril = role_instance_list[0]
-        flavor = ril.instance_size
+        try:
+            ril = role_instance_list[0]
+            flavor = ril.instance_size
+        except IndexError:
+            flavor = ""
         res = {u'id': unicode(flavor), \
                u'links': \
                [ {u'href':None, \
