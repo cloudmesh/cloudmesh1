@@ -126,7 +126,7 @@ class cm_mongo:
             names = self.config.active()
 
         for cloud_name in names:
-            print "Activating ->", cloud_name
+            log.debug("Activating -> {0}".format(cloud_name))
 
             try:
                 credential = self.config.cloud(cloud_name)
