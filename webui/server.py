@@ -18,13 +18,14 @@ from pprint import pprint
 import cloudmesh
 import os
 import pkg_resources
+import requests
 import sys
 import sys
+import time
 import types
 import webbrowser
-import time
 
-# from cloudmesh.util.webutil import setup_imagedraw
+
 
 
 # from flask.ext.autoindex import AutoIndex
@@ -57,6 +58,12 @@ all_modules = ['menu',
                 ]
 
 s_config = cm_config_server()
+
+
+with_browser = s_config.get("cloudmesh.server.webui.browser")
+browser_page = s_config.get("cloudmesh.server.webui.page")
+url_link = "http://localhost:5000/{0}".format(browser_page)
+# from cloudmesh.util.webutil import setup_imagedraw
 
 with_rack = s_config.get("cloudmesh.server.rack.with_rack")
 
@@ -490,17 +497,14 @@ def logout():
     return redirect(request.args.get('next') or '/')
 
 
-with_browser = s_config.get("cloudmesh.server.webui.browser")
-browser_page = s_config.get("cloudmesh.server.webui.page")
-# webbrowser.register("safari", None)
-
-print "PPP", with_browser
-print "KKK", browser_page
 
 if with_browser:
-    print "page update"
-    time.sleep(1)
-    webbrowser.open_new_tab("http://localhost:5000/{0}".format(browser_page))
+    log.debug("Web page update {0}".format(browser_page))
+
+    webbrowser.register("safari", None)
+    webbrowser.open(url_link, 2, autoraise=True)
+
+
 
 if __name__ == "__main__":
     # setup_imagedraw()
@@ -514,3 +518,29 @@ if __name__ == "__main__":
     # for debugging
     #
 
+    """
+    # SHOULD BE IN A THERAD
+    
+    with_browser = s_config.get("cloudmesh.server.webui.browser")
+    browser_page = s_config.get("cloudmesh.server.webui.page")
+    url_link = "http://localhost:5000/{0}".format(browser_page)
+
+    webbrowser.register("safari", None)
+    webbrowser.open(url_link, 2, autorise=True)
+    if with_browser:
+        log.debug("Web page update {0}".format(browser_page))
+
+        not_found = True
+        counter = 0
+        while not_found and  (counter < 10):
+            checkpage = None
+            try:
+                log.debug("Check if server is ready")
+                checkpage = requests.get(url_link)
+                not_found = False
+            except Exception, e:
+                print e
+                print "B PAGE NOT YET READY"
+                time.sleep(1)
+            counter = counter + 1
+    """
