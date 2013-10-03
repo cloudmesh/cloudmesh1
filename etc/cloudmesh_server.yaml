@@ -7,6 +7,8 @@ cloudmesh:
         host: 127.0.0.1
         port: 5000
         secret: development key
+        browser: True
+        page:
     teefaa:
         username: name
         hostname: iporhostname
