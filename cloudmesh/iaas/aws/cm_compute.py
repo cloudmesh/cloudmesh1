@@ -63,7 +63,13 @@ class aws(ComputeBaseType):
         conn = Driver(self.access_key_id, self.secret_access_key)
         self.conn = conn
 
-    def vm_create(self):
+    def vm_create(self, name,
+                  flavor_name,
+                  image_id,
+                  security_groups=None,
+                  key_name=None,
+                  meta={},
+                  userdata=None):
         self.create_vm()
 
     def create_vm(self):

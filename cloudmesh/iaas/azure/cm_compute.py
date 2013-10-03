@@ -158,7 +158,13 @@ class azure(ComputeBaseType):
         self.deployments = deployments
         return deployments
 
-    def vm_create(self):
+    def vm_create(self, name,
+                  flavor_name,
+                  image_id,
+                  security_groups=None,
+                  key_name=None,
+                  meta={},
+                  userdata=None):
         self.create_vm()
 
     def create_vm(self):
