@@ -109,11 +109,14 @@ class ComputeBaseType:
             assert False
         return d
 
+    # identity management moved to its dedicated class
+    """
     def _get_users_dict(self):
         raise NotImplementedError()
 
     def _get_tenants_dict(self):
         raise NotImplementedError()
+    """
 
     def _get_image_dict(self):
         raise NotImplementedError()
