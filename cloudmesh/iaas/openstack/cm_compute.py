@@ -82,6 +82,21 @@ class openstack(ComputeBaseType):
 
     _nova = nova
 
+
+
+    def _load_admin_credential(self):
+        if self.admin_credential is None:
+            self.idp_clouds = cm_config_server().get("cloudmesh.server.keystone").keys()
+            self.with_admin_credential = self.label in self.idp_clouds
+            if self.with_admin_credential:
+                try:
+                    self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(label))
+                except:
+                    log.error("No admin credentail found! Please check your cloudmesh_server.yaml file.")
+            else:
+                self.admin_credential = None
+                log.info("The cloud {0} has no admin credential".format(self.label))
+        return self.admin_credential
     #
     # initialize
     #
@@ -107,13 +122,8 @@ class openstack(ComputeBaseType):
                 log.error("No user credentail found! Please check your cloudmesh.yaml file.")
                 # sys.exit(1)
 
+        self._load_admin_credential()
 
-        if admin_credential is None:
-            try:
-                self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(label))
-            except:
-                log.error("No admin credentail found! Please check your cloudmesh_server.yaml file.")
-        # connecting within init will lead to long delays
         self.connect()
 
     def clear(self):
@@ -143,18 +153,27 @@ class openstack(ComputeBaseType):
         # check if keystone is defined, and if failed print log msg
         #
         log.info("Loading Admin Credentials")
-        if self.admin_credential is None:
+
+        if (self.admin_credential is None) and (self.with_admin_credential):
             log.error("error connecting to openstack compute, credential is None")
         elif not self.admin_token:
             self.admin_token = self.get_token(self.admin_credential)
 
+
+    def DEBUG(self, msg):
+        if msg == "credential":
+            debug_dict = dict(self.user_credential)
+            debug_dict['OS_PASSWORD'] = "********"
+            log.debug("GET CRED {0}".format(debug_dict))
+        else:
+            log.debug(str(msg))
 
     def get_token(self, credential=None):
 
         if credential is None:
             credential = self.user_credential
 
-        print "GET CRED", credential
+        self.DEBUG("credential")
 
         param = None
         if 'OS_TENANT_NAME' in credential:
@@ -648,7 +667,7 @@ class openstack(ComputeBaseType):
         result = self.get_tenants()
         return result
     """
-    
+
     def _get_images_dict(self):
         result = self.get_images()
         return result
