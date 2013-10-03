@@ -358,11 +358,11 @@ class Inventory:
                    mount: '/var/lib/nova'
                    type: 'xfs'
         '''
-        print "IAM IN", name, description
+        log.info("Adding bootspec {0}".format(name))
+        # log.debug("Adding bootspec {0}".format(description)
+
         time = datetime.now()
-        print "TYPE", type(description)
         element = dict(description)
-        print "ELEMENT", element
         element.update({'cm_type': "inventory",
                         'cm_key': 'bootspec',
                         'cm_kind': 'bootspec',
