@@ -1,12 +1,14 @@
 from flask import Blueprint
 import flask
 from cloudmesh.util.logger import LOGGER
-
+from cloudmesh.util.util import banner
+from pprint import pprint
 import cloudmesh
 log = LOGGER(__file__)
 
 menu_module = Blueprint('menu_module', __name__)
 
+banner("MENU")
 
 super_sidebar_pages = [
     ["Cloudmesh",
@@ -58,6 +60,9 @@ super_sidebar_pages = [
     ],
 ]
 
+banner ("JKJLKJ")
+pprint (super_sidebar_pages)
+banner ("JKJLKJ")
 
 flask.Flask.app_ctx_globals_class.super_sidebar_pages = super_sidebar_pages
 

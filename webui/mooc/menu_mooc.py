@@ -8,7 +8,7 @@ log = LOGGER(__file__)
 menu_mooc_module = Blueprint('menu_mooc_module', __name__)
 
 
-super_sidebar_pages = [
+xsuper_sidebar_pages = [
     ["Cloudmesh",
         [
             ["Home", "/"],
