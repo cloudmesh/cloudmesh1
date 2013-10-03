@@ -137,5 +137,19 @@ class PBS:
 
         return dict(cnt)
 
+    """
+    def _namemap(self,"0000"):
+        result = (str(ssh(host, "pbsnodes", "-l", "-n"))[:-1]).split("\n")
+        names = [x.split()[0] for x in result]
+
+        #
+        #
+        #  s1 -> s0001
+        #  i11 -> i0011
+        #  deltai -> delta   ???
+        #  d012i  -> d0012
+        #  b011i  -> d0011
+        #
+    """
 
 
