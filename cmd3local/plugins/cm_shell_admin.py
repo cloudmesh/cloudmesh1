@@ -1,19 +1,16 @@
 import types
 import textwrap
-from docopt import docopt
 import inspect
 import sys
 import importlib
-from cmd3.shell import command
-from cloudmesh.util.util import path_expand
-
-from jinja2 import Template
-from cloudmesh.user.cm_template import cm_template
-from cloudmesh.util.util import yn_choice
-from sh import less
-import os
 import string
 from random import choice
+
+from jinja2 import Template
+from docopt import docopt
+from cmd3.shell import command
+from cloudmesh.util.util import path_expand, yn_choice
+from cloudmesh.user.cm_user import cm_user
 
 
 
@@ -35,15 +32,9 @@ def user_exists_in_cloud(username, cloudname):
     return False
 
 def get_user_profile(username):
-    return { "portalname": "jrandom",
-             "profile": { "firstname": "J. Random",
-                          "lastname": "User",
-                          "e-mail": "jrandom@example.com" },
-             "projects": { "active": [ "fg82", "fg83" ],
-                           "competed": [ "fg84" ],
-                           "default": "fg82" },
-             "keys": { "keylist": { "defkey": "default-ssh-key"},
-                       "default": "defkey" } }
+    cmu = cm_user()
+    profile = cmu.info('astreib')
+    return profile
 
 class cm_shell_admin:
 
@@ -99,7 +90,7 @@ class cm_shell_admin:
                 create_user_in_cloud(new_username, new_password, cloudname)
 
                 me_content = open(me_yaml, 'r').read()
-                me_values["password"] = { cloudname: new_password }
+                me_values["passwords"] = { cloudname: new_password }
                 t = Template(me_content)
                 print t.render(**me_values)
 
