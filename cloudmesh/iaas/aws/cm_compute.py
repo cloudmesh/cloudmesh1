@@ -157,6 +157,8 @@ class aws(ComputeBaseType):
             return "ACTIVE"
         elif status == "terminated":
             return "SHUTOFF"
+        else:
+            return status
 
     def convert_ips(self, ip):
         try:
