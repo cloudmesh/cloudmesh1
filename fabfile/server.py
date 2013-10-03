@@ -2,6 +2,7 @@ from __future__ import with_statement
 
 import sys
 from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.util import banner
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -81,19 +82,29 @@ def stop(server="server"):
 def kill(server="server"):
     """kills all server processes """
     with settings(warn_only=True):
-        with hide('output', 'running', 'warnings'):
-            local("fab mongo.stop")
-            result = local('ps -a | fgrep "python {0}.py" | fgrep -v fgrep'.format(server), capture=True).split("\n")
-            for line in result:
-                pid = line.split(" ")[0]
-                local("kill -9 {0}".format(pid))
+        local("fab mongo.stop")
+        result = local('ps -a | fgrep "python {0}.py" | fgrep -v fgrep'.format(server), capture=True).split("\n")
+        for line in result:
+            pid = line.split(" ")[0]
+            local("kill -9 {0}".format(pid))
 
 @task
 def start(link="", server="server", port="5000", browser='yes'):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link"""
+    banner("KILL THE SERVER")
     kill()
+
+    banner("INSTALL CLOUDMESH")
     local("python setup.py install")
+
+    banner("START MONGO")
     local("fab mongo.start")
+
+    banner("SATRT RABITMQ")
+    local("fab queue.start")
+
+
+    banner("START WEB SERVER")
     local("cd webui; python {0}.py &".format(server))
     # view(link)
 

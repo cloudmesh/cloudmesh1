@@ -59,8 +59,7 @@ class Inventory:
                                   'label': name})
 
         else:
-            print "ERROR Wrong type"
-            print cm_kind, id_kind, name
+            log.error("Wrong type {0} {1} {2}".format(cm_kind, id_kind, name))
             sys.exit()
         return host
 
@@ -75,7 +74,7 @@ class Inventory:
             host = self.find_one({"cm_id": host_label,
                                   "cm_attribute": "network"})["cm_cluster"]
         except:
-            print "could not find host with the label", host_label
+            log.error("could not find host with the label".format(host_label))
             sys.exit()
 
 
@@ -101,8 +100,7 @@ class Inventory:
         if values is None:
             return self.db_inventory.update(query, upsert=True)
         else:
-            print query
-            print values
+            # log.info("Query {0} {1}".format(query, values))
             return self.db_inventory.update(query, values, upsert=True)
 
     def insert(self, element):
@@ -226,8 +224,6 @@ class Inventory:
                               'cm_key' : 'image',
                               'cm_kind' : 'image'})
         images = self.find({'cm_key' : 'bootspec'})
-        print "IIII", images.count()
-
 
         # print "%15s:" % "dbname", self.inventory_name
         print "%15s:" % "clusters", clusters.count(), "->", ', '.join([c['cm_cluster'] for c in clusters])
@@ -235,8 +231,6 @@ class Inventory:
         print "%15s:" % "servers", servers.count()
         print "%15s:" % "images", images.count() , "->", ', '.join([c['cm_label'] for c in images])
         print
-
-        print clusters.count()
 
         print "Clusters"
         print 30 * "="
@@ -246,7 +240,7 @@ class Inventory:
         print
 
     def hostlist (self, name):
-        print "NAME", name
+        # print "NAME", name
         hosts = self.find ({"cm_cluster": name, 'cm_key': 'range' })[0]['cm_value']
         # print "===================", self.find_one({"cm_cluster": name, 'cm_key': 'range' })
         return hosts
@@ -255,7 +249,7 @@ class Inventory:
         cursor = self.find ({"cm_id" : index,
                              'cm_attribute' : 'network'})
 
-        print "CCCC", cursor[0]
+        # print "CCCC", cursor[0]
 
 
         data = {}
@@ -264,7 +258,7 @@ class Inventory:
         data['cm_type'] = cursor[0]['cm_type']
         data['cm_id'] = cursor[0]['cm_id']
 
-        pprint (cursor[0]['cm_cluster'])
+        # pprint (cursor[0]['cm_cluster'])
 
         c2 = self.find({"cm_attribute": 'variable'})
 
@@ -314,14 +308,12 @@ class Inventory:
                            "type": iptype})[0]['ipaddr']
 
     def generate_bootspec(self):
-		print self.bootspec_config
-
 		bootspecs = self.bootspec_config.get("cloudmesh.bootspec")
 		for name in bootspecs:
 
-			print "Adding to inventory bootspec", name
+			log.info("Adding to inventory bootspec".format(name))
 			description = bootspecs[name]
-			print "DDD", description
+			# log.debug("{0}".format(description))
 			self.add_bootspec(name, description)
 
     def add_bootspec(self, name, description):

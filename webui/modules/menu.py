@@ -8,8 +8,6 @@ log = LOGGER(__file__)
 
 menu_module = Blueprint('menu_module', __name__)
 
-banner("MENU")
-
 super_sidebar_pages = [
     ["Cloudmesh",
         [
