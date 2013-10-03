@@ -32,7 +32,7 @@ from cloudmesh.iaas.openstack.cm_compute import openstack
 
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
 try:
-    from cloudmesh.iaas.azure.cm_azure import cm_azure as azure
+    from cloudmesh.iaas.azure.cm_compute import azure
 except:
     log.warning("AZURE NOT ENABLED")
 
