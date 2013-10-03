@@ -92,10 +92,11 @@ class aws(ComputeBaseType):
 
         return self.nodes
 
-    def vm_delete(self):
-        self.delete_vm()
+    def vm_delete(self, name):
+        self.delete_vm(name)
 
-    def delete_vm(self):
+    def delete_vm(self, name):
+        self.conn.destroy_node(name)
         return
 
     def set_location(self, name):
