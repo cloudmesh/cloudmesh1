@@ -155,9 +155,14 @@ class aws(ComputeBaseType):
     def convert_states(self, status):
         if status == "running":
             return "ACTIVE"
+        elif status == "terminated":
+            return "SHUTOFF"
 
     def convert_ips(self, ip):
-        ip_address = ip[0]
+        try:
+            ip_address = ip[0]
+        except IndexError:
+            ip_address = ""
         ip_ver = 4
         ip_type = "fixed"
         res = {u'private':[ {u'version': ip_ver, u'addr': ip_address, \
@@ -170,3 +175,6 @@ class aws(ComputeBaseType):
                [ {u'href':None, \
                   u'rel':None}]}
         return res
+
+    def release_unused_public_ips(self):
+        return
