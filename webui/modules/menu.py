@@ -60,10 +60,6 @@ super_sidebar_pages = [
     ],
 ]
 
-banner ("JKJLKJ")
-pprint (super_sidebar_pages)
-banner ("JKJLKJ")
-
 flask.Flask.app_ctx_globals_class.super_sidebar_pages = super_sidebar_pages
 
 app_topbar = [
