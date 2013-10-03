@@ -233,9 +233,9 @@ class cm_user(object):
         :type cloud: str
 
         """
-        self.userdb_passwd.insert({"username":username,
-                                   "password":password,
-                                   "cloud": cloud})
+        self.userdb_passwd.update({"username": username, "cloud": cloud }, \
+                                  {"username":username, "password":password, \
+                                   "cloud": cloud}, upsert=True)
 
     def get_password(self, username, cloud):
         """Return a user password for the cloud
