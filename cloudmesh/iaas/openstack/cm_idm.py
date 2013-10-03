@@ -38,9 +38,10 @@ class keystone(object):
             except:
                 log.error("No admin credentail found! Please check your cloudmesh_server.yaml file.")
         # connecting within init will lead to long delays
-        self.connect()
-        self.load()
-    
+        if self.admin_credential is not None:
+            self.connect()
+            self.load()
+
     # clear all data
     def clear(self):
         """
@@ -48,8 +49,9 @@ class keystone(object):
         """
         self.users = {}
         self.tenants = {}
-        self.admin_token = None
-        self.admin_credentials = None
+        self.roles = {}
+        #self.admin_token = None
+        #self.admin_credentials = None
 
     # obtain admin token
     def connect(self):
@@ -61,16 +63,22 @@ class keystone(object):
             self.admin_token = self.get_token(self.admin_credential)
 
     # load users, tenants, roles from keystone
-    def load(self):
-        if not self.admin_token:
-            self.connect()
-        self.users = self.get_users()
-        self.tenants = self.get_tenants()
-        self.roles = self.get_roles()
+    def load(self,types=None):
+        banner("admin token before loading...")
+        print self.admin_token
+        if self.admin_token:
+            if types is None or types == ['all']:
+                types = ['users','tenants','roles']
+            if 'users' in types:
+                self.users = self.load_users()
+            if 'tenants' in types:
+                self.tenants = self.load_tenants()
+            if 'roles' in types:
+                self.roles = self.load_roles()
         
-    def refresh(self):
+    def refresh(self,types=None):
         self.clear()
-        self.load()
+        self.load(types)
         
     def get_token(self, credential=None):
         #print "get_token is being invoked"
@@ -96,13 +104,13 @@ class keystone(object):
                  }
         url = "{0}/tokens".format(credential['OS_AUTH_URL'])
 
-        #print "URL", url
+        print "URL", url
 
         headers = {'content-type': 'application/json'}
         verify = self._get_cacert(credential)
-        #print "PARAM", json.dumps(param)
-        #print "HEADER", headers
-        #print "VERIFY", verify
+        print "PARAM", json.dumps(param)
+        print "HEADER", headers
+        print "VERIFY", verify
 
         r = requests.post(url,
                           data=json.dumps(param),
@@ -212,23 +220,33 @@ class keystone(object):
     def _now(self):
         return datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
 
-    def get_tenants(self):
+    def load_tenants(self):
         time_stamp = self._now()
         msg = "tenants"
         tenantslist = self._get(msg, urltype='adminURL')['tenants']
         return self._list_to_dict(tenantslist, 'name', 'tenants', time_stamp)
 
-    def get_users(self):
+    def load_users(self):
         time_stamp = self._now()
         msg = "users"
         userslist = self._get(msg, urltype='adminURL')['users']
         return self._list_to_dict(userslist, 'name', 'users', time_stamp)
     
-    def get_roles(self):
+    def load_roles(self):
         time_stamp = self._now()
         msg = "OS-KSADM/roles"
         roleslist = self._get(msg, urltype='adminURL')['roles']
         return self._list_to_dict(roleslist, 'name', 'roles', time_stamp)
+    
+    def get(self, type="users"):
+        d = {}
+        if type == 'users':
+            d = self.users
+        elif type == 'tenants':
+            d = self.tenants
+        elif type == 'roles':
+            d = self.roles
+        return d
     
     def get_user_by_name(self,name):
         userid = None

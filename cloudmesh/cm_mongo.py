@@ -2,6 +2,7 @@ from bson.objectid import ObjectId
 from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
 from cloudmesh.iaas.openstack.cm_compute import openstack
+from cloudmesh.iaas.openstack.cm_idm import keystone
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.stopwatch import StopWatch
 from cloudmesh.util.util import path_expand
@@ -197,6 +198,7 @@ class cm_mongo:
            refresh the given types for the given clouds
 
         """
+        
         if types == ['all'] or types is None:
             types = ['servers', 'flavors', 'images']
 
@@ -204,55 +206,62 @@ class cm_mongo:
             names = self.clouds.keys()
 
         watch = StopWatch()
+
         for name in names:
-            if 'manager' in self.clouds[name]:
-                cloud = self.clouds[name]['manager']
+            print "-"*80
+            print "retrieving for %s" % name
+            print "-"*80
+            cloud = None
+            for type in types:
+                # for identity management operations, use the keystone class
+                if type in ['users','tenants','roles']:
+                    cloud = keystone(name)
+                # else try compute/nova class
+                elif 'manager' in self.clouds[name]:
+                    cloud = self.clouds[name]['manager']
+                    
+                print "Refreshing {0} {1} ->".format(type, name)
 
-                for type in types:
+                watch.start(name)
+                cloud.refresh(type)
+                result = cloud.get(type)
+                pprint(result)
+                # add result to db,
+                watch.stop(name)
+                print 'Refresh time:', watch.get(name)
 
-                    print "Refreshing {0} {1} ->".format(type, name)
+                watch.start(name)
 
-                    watch.start(name)
-                    cloud.refresh(type)
-                    result = cloud.get(type)
+                self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
 
-                    # add result to db,
-                    watch.stop(name)
-                    print 'Refresh time:', watch.get(name)
-
-                    watch.start(name)
-
-                    self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
-
-                    for element in result:
-                        id = "{0}-{1}-{2}".format(
-                            name, type, result[element]['name']).replace(".", "-")
-                        # print "ID", id
-                        result[element]['cm_id'] = id
-                        result[element]['cm_cloud'] = name
-                        result[element]['cm_type'] = self.clouds[name]['cm_type']
-                        result[element]['cm_type_version'] = self.clouds[
-                            name]['cm_type_version']
-                        result[element]['cm_kind'] = type
-                        # print "HPCLOUD_DEBUG", result[element]
-                        for key in result[element]:
-                            # print key
+                for element in result:
+                    id = "{0}-{1}-{2}".format(
+                        name, type, result[element]['name']).replace(".", "-")
+                    # print "ID", id
+                    result[element]['cm_id'] = id
+                    result[element]['cm_cloud'] = name
+                    result[element]['cm_type'] = self.clouds[name]['cm_type']
+                    result[element]['cm_type_version'] = self.clouds[name]['cm_type_version']
+                    result[element]['cm_kind'] = type
+                    # print "HPCLOUD_DEBUG", result[element]
+                    for key in result[element]:
+                        # print key
+                        if '.' in key:
+                            del result[element][key]
+                    if 'metadata' in result[element].keys():
+                        for key in result[element]['metadata']:
                             if '.' in key:
-                                del result[element][key]
-                        if 'metadata' in result[element].keys():
-                            for key in result[element]['metadata']:
-                                if '.' in key:
-                                    fixedkey = key.replace(".", "_")
-                                    # print "%s->%s" % (key,fixedkey)
-                                    value = result[element]['metadata'][key]
-                                    del result[element]['metadata'][key]
-                                    result[element]['metadata'][fixedkey] = value
-                        # print "HPCLOUD_DEBUG - AFTER DELETING PROBLEMATIC KEYS", result[element]
+                                fixedkey = key.replace(".", "_")
+                                # print "%s->%s" % (key,fixedkey)
+                                value = result[element]['metadata'][key]
+                                del result[element]['metadata'][key]
+                                result[element]['metadata'][fixedkey] = value
+                    # print "HPCLOUD_DEBUG - AFTER DELETING PROBLEMATIC KEYS", result[element]
 
-                        self.db_clouds.insert(result[element])
+                    self.db_clouds.insert(result[element])
 
-                    watch.stop(name)
-                    print 'Store time:', watch.get(name)
+                watch.stop(name)
+                print 'Store time:', watch.get(name)
 
     def get_pbsnodes(self, host):
         '''

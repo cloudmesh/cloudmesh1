@@ -56,7 +56,7 @@ class openstack(ComputeBaseType):
     servers = {}  # global var
 
     # : a dict with the users
-    users = {}  # global var
+    #users = {}  # global var
 
     # : a dict containing the credentionls read with cm_config
     # credential = None  # global var
@@ -243,6 +243,7 @@ class openstack(ComputeBaseType):
     def _get_service(self, type="compute", kind="user"):
 
         token = self.user_token
+        print token
         if kind == "admin":
             token = self.admin_token
 
@@ -577,9 +578,10 @@ class openstack(ComputeBaseType):
         return self._list_to_dict(list, 'id', "image", time_stamp)
 
     # new
+    """
     def get_tenants(self, credential=None):
         time_stamp = self._now()
-        """get the tenants dict for the vm with the given id"""
+        #get the tenants dict for the vm with the given id
         if credential is None:
             p = cm_profile()
             name = self.label
@@ -590,7 +592,7 @@ class openstack(ComputeBaseType):
     # new
     def get_users(self, credential=None):
         time_stamp = self._now()
-        """get the tenants dict for the vm with the given id"""
+        #get the tenants dict for the vm with the given id
         if credential is None:
 
             p = cm_profile()
@@ -608,7 +610,8 @@ class openstack(ComputeBaseType):
         msg = "users"
         list = cloud._get(msg, kind="admin", service="identity", urltype='adminURL')['users']
         return self._list_to_dict(list, 'id', "users", time_stamp)
-
+    """
+    
     def get_meta(self, id):
         """get the metadata dict for the vm with the given id"""
         msg = "/servers/%s/metadata" % (id)
