@@ -1,39 +1,33 @@
-import cloudmesh
-from flask.ext.login import login_required
-
 from ConfigParser import SafeConfigParser
+from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.provisioner.provisioner import *
-from cloudmesh.config.cm_config import cm_config
-from cloudmesh.user.roles import Roles
-# from cloudmesh.util.webutil import setup_imagedraw
-from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.user.cm_user import cm_user
+from cloudmesh.user.cm_userLDAP import cm_userLDAP
+from cloudmesh.user.roles import Roles
+from cloudmesh.util.util import cond_decorator, path_expand
 from datetime import datetime
-
-from cloudmesh.util.util import path_expand
-from cloudmesh.util.util import cond_decorator
-
-from flask import Flask, render_template, flash, send_from_directory, redirect, g
-# from flask.ext.autoindex import AutoIndex
-from flask_flatpages import FlatPages
-
-from flask import Flask, current_app, request, session
+from flask import Flask, current_app, request, session, Flask, render_template, \
+    flash, send_from_directory, redirect, g
 from flask.ext.login import LoginManager, login_user, logout_user, \
-     login_required, current_user, UserMixin
-from flask.ext.wtf import Form, TextField, PasswordField, Required, Email
+    login_required, current_user, UserMixin, login_required
 from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
-     identity_changed, Permission
-
-from flask.ext.principal import identity_loaded, RoleNeed, UserNeed
-from cloudmesh.config.cm_config import cm_config_server
-
-import sys
-
+    identity_changed, Permission, identity_loaded, RoleNeed, UserNeed
+from flask.ext.wtf import Form, TextField, PasswordField, Required, Email
+from flask_flatpages import FlatPages
 from pprint import pprint
+import cloudmesh
 import os
 import pkg_resources
 import sys
+import sys
 import types
+import webbrowser
+import time
+
+# from cloudmesh.util.webutil import setup_imagedraw
+
+
+# from flask.ext.autoindex import AutoIndex
 
 sys.path.insert(0, '.')
 sys.path.insert(0, '..')
@@ -43,14 +37,14 @@ sys.path.insert(0, '..')
 # DYNAMIC MODULE MANAGEMENT
 # ============================================================
 
-all_modules = ['pbs',
+all_modules = ['menu',
+               'pbs',
                'flatpages',
                'launch',
                'nose',
                'inventory',
                'provisioner',
                'keys',
-               'menu',
                'profile',
                'git',
                'cloud',
@@ -59,7 +53,8 @@ all_modules = ['pbs',
                'mesh_hpc',
                'users',
                'status',
-               'register']
+               'register',
+                ]
 
 s_config = cm_config_server()
 
@@ -75,7 +70,7 @@ exclude_modules = ['flatpages']
 modules = [m for m in all_modules if m not in exclude_modules]
 
 for m in modules:
-    print "Loading module", m
+    log.debug("Import module {0}".format(m))
     exec "from modules.{0} import {0}_module".format(m)
 
 
@@ -126,7 +121,7 @@ pages = FlatPages(app)
 # app.register_blueprint(keys_module, url_prefix='',)
 
 for m in modules:
-    print "Loading module", m
+    log.debug("Loading module {0}".format(m))
     exec "app.register_blueprint({0}_module, url_prefix='',)".format(m)
 
 principals = Principal(app)
@@ -495,6 +490,18 @@ def logout():
     return redirect(request.args.get('next') or '/')
 
 
+with_browser = s_config.get("cloudmesh.server.webui.browser")
+browser_page = s_config.get("cloudmesh.server.webui.page")
+# webbrowser.register("safari", None)
+
+print "PPP", with_browser
+print "KKK", browser_page
+
+if with_browser:
+    print "page update"
+    time.sleep(1)
+    webbrowser.open_new_tab("http://localhost:5000/{0}".format(browser_page))
+
 if __name__ == "__main__":
     # setup_imagedraw()
     # setup_plugins()
@@ -502,3 +509,8 @@ if __name__ == "__main__":
     web_host = config.get('cloudmesh.server.webui.host')
     web_port = config.get('cloudmesh.server.webui.port')
     app.run(host=web_host, port=web_port)
+
+    #
+    # for debugging
+    #
+
