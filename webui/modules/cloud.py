@@ -230,7 +230,10 @@ def start_vm(cloud=None, server=None):
     print "FLAVOR", vm_flavor, vm_flavor_id
     metadata = {'cm_owner': config.prefix}
     username = config.get('cloudmesh.hpc.username')
-    keynamenew = "%s_%s" % (username, key.replace('.', '_').replace('@', '_'))
+    try:
+        keynamenew = "%s_%s" % (username, key.replace('.', '_').replace('@', '_'))
+    except AttributeError:
+        keynamenew = "cloudmesh" # Default key name if it is missing
     result = clouds.vm_create(
         cloud,
         config.prefix,
