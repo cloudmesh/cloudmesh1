@@ -221,14 +221,28 @@ class azure(ComputeBaseType):
 
         """
 
+        disk_names = []
         props = self.sms.get_hosted_service_properties(name, True)
         for deployment in props.deployments:
+            try:
+                for role in deployment.role_list:
+                    role_props = self.sms.get_role(name, deployment.name,
+                                                   role.role_name)
+                    d_name = role_props.os_virtual_hard_disk.disk_name
+                    if d_name not in disk_names:
+                        disk_names.append(d_name)
+            except:
+                pass
             result = self.sms.delete_deployment(name, deployment.name)
             time.sleep(5)
         self.sms.delete_hosted_service(name)
         #result = self.sms.delete_os_image(self.os_image_name)
         time.sleep(5)
-        self.sms.delete_disk(disk_name)
+        for disk_name in disk_names:
+            try:
+                self.sms.delete_disk(disk_name)
+            except:
+                pass
         #self.bc.delete_container(self.container_name)
 
     def list_cloud_services(self):
@@ -556,6 +570,8 @@ class azure(ComputeBaseType):
     def convert_states(self, state):
         if state == "Running":
             return "ACTIVE"
+        else:
+            return state
 
     def convert_ips(self, role_instance_list):
         """Convert azure's data into openstack's type
@@ -611,3 +627,6 @@ class azure(ComputeBaseType):
                [ {u'href':None, \
                   u'rel':None}]}
         return res
+
+    def release_unused_public_ips(self):
+        return
