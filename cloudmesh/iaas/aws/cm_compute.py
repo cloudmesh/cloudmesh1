@@ -96,8 +96,15 @@ class aws(ComputeBaseType):
         self.delete_vm(name)
 
     def delete_vm(self, name):
-        self.conn.destroy_node(name)
+        node = self.get_node_from_id(name)
+        self.conn.destroy_node(node)
         return
+
+    def get_node_from_id(self, id):
+        nodelist = self.conn.list_nodes()
+        for node in nodelist:
+            if node.id == id:
+                return node
 
     def set_location(self, name):
         self.location = name
