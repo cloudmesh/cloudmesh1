@@ -10,7 +10,7 @@ profile:
     e-mail: {{profile.email}}
 
 password:
-  sierra_openstack_grizzly: None
+  sierra_openstack_grizzly: {{ password.sierra_openstack_grizzly }}
   hp: None
   hp_east: None
 
