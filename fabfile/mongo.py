@@ -205,7 +205,7 @@ def boot(auth=True):
         # restart with auth
         kill()
 
-        time.sleep(1)
+        time.sleep(10)
 
         start(auth=auth)
 
