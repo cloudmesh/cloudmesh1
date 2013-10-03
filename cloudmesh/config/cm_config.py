@@ -29,7 +29,7 @@ def get_mongo_db(mongo_collection):
     username = config["username"]
     password = config["password"]
 
-    uri = "mongodb://{0}:{1}@{2}/{3}".format(username, password, host, db_name)
+    uri = "mongodb://{0}:{1}@{2}:{3}/{4}".format(username, password, host, port, db_name)
 
     client = MongoClient(uri)
 
