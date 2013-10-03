@@ -547,6 +547,9 @@ class azure(ComputeBaseType):
                                    deployment['role_list'][0].__dict__, \
                                    "role_instance_list":
                                    deployment['role_instance_list'][0].__dict__})
+            except IndexError:
+                deployment.update({"role_list": None, \
+                                   "role_instance_list": None})
             except:
                 pass
 
