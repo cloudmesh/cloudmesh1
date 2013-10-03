@@ -149,7 +149,7 @@ class ConfigDict (OrderedDict):
         for v in keys:
             try:
                element = element[v]
-            except:
+            except KeyError:
                 self.error_keys_not_found(keys)
                 sys.exit()
         return element
