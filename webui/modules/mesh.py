@@ -246,7 +246,7 @@ def mongo_table(filters=None):
 
     c = cm_mongo()
     c.activate()
-    c.refresh(types=["servers"])
+    #c.refresh(types=["servers"])
     clouds = c.servers()
 
     """
