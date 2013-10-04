@@ -83,19 +83,16 @@ def load():
 @cloud_module.route('/cm/refresh/<cloud>/<service_type>')
 @cond_decorator(cloudmesh.with_login, login_required)
 def refresh(cloud=None, server=None, service_type=None):
-    print "-> refresh", cloud, server
+    print "-> refresh", cloud, service_type
 
-    print "REQ", redirect(request.args.get('next') or '/').__dict__
-
-    if cloud in ['servers', 'flavors', 'images', 'users']:
-        service_type = cloud
+    #print "REQ", redirect(request.args.get('next') or '/').__dict__
+    cloud_names = None
+    if cloud is None: #in ['servers', 'flavors', 'images', 'users']:
         cloud_names = config.active()
     else:
         cloud_names = [cloud]
 
-    if cloud is None:
-        clouds.refresh(types=['servers', 'images', 'flavors'])
-    elif service_type is None:
+    if service_type is None:
         clouds.refresh(names=cloud_names, types=['servers', 'images', 'flavors'])
     else:
         clouds.refresh(names=cloud_names, types=[service_type])
