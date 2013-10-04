@@ -56,7 +56,7 @@ class openstack(ComputeBaseType):
     servers = {}  # global var
 
     # : a dict with the users
-    #users = {}  # global var
+    # users = {}  # global var
 
     # : a dict containing the credentionls read with cm_config
     # credential = None  # global var
@@ -194,13 +194,13 @@ class openstack(ComputeBaseType):
                  }
         url = "{0}/tokens".format(credential['OS_AUTH_URL'])
 
-        print "URL", url
+        log.debug("URL {0}".format(url))
 
         headers = {'content-type': 'application/json'}
         verify = self._get_cacert(credential)
-        print "PARAM", json.dumps(param)
-        print "HEADER", headers
-        print "VERIFY", verify
+        log.debug("PARAM {0}".format(json.dumps(param)))
+        log.debug("HEADER {0}".format(headers))
+        log.debug("VERIFY {0}".format(verify))
 
         r = requests.post(url,
                           data=json.dumps(param),
@@ -243,7 +243,7 @@ class openstack(ComputeBaseType):
     def _get_service(self, type="compute", kind="user"):
 
         token = self.user_token
-        #print token
+        # print token
         if kind == "admin":
             token = self.admin_token
 
@@ -611,7 +611,7 @@ class openstack(ComputeBaseType):
         list = cloud._get(msg, kind="admin", service="identity", urltype='adminURL')['users']
         return self._list_to_dict(list, 'id', "users", time_stamp)
     """
-    
+
     def get_meta(self, id):
         """get the metadata dict for the vm with the given id"""
         msg = "/servers/%s/metadata" % (id)
