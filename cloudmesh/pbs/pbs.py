@@ -106,7 +106,8 @@ class PBS:
         """prints the distribution of services"""
 
         def pbsnodes_data(host):
-            result = str(ssh(host, "pbsnodes", "-l", "-n"))[:-1]
+
+            result = str(ssh("{0}@{1}".format(self.user, host), "pbsnodes", "-l", "-n"))[:-1]
             return result
 
         empty = ["", "", ""]

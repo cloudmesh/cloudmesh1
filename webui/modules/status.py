@@ -34,7 +34,7 @@ def display_status():
 
     services = {}
 
-    for host in ['sierra', 'india']:
+    for host in ['sierra.futuregrid.org', 'india.futuregrid.org']:
         pbs = PBS(user, host)
         services[host] = pbs.service_distribution()
 
