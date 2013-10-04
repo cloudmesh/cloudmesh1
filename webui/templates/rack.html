@@ -5,11 +5,7 @@
 {% if flag_home %}
 	<h2>Choose a Rack Cluster and a type of Service:</h2>
 {% else %}
-<<<<<<< HEAD
 	<h2>The {{ service }} map of the {{ rack }} cluster </h2>
-=======
-	<h2>{{ service|capitalize }} Map of the {{ rack }} Cluster </h2>
->>>>>>> 23fb529db48ad61ed16474c1083d50c18bdda201
 {% endif %}
 {% endblock %}
 
@@ -30,11 +26,9 @@
 	</form>
 {% else %}
 	{% if True %}
-<<<<<<< HEAD
-
 	<p>
-	  
-	  Zoom: 
+
+	  Zoom:
 	  <select>
 	    <option value="100"> 100 </option>
 	    <option value="75"> 75 </option>
@@ -44,26 +38,17 @@
 	   </select>
 	</p>
 
-        <p> 
-	  <img src="{{ legendFilename }}" 
-	       width="1000px" 
-	       style="display:block; margin-left: auto; margin-right: auto"/> 
+        <p>
+	  <img src="{{ legendFilename }}"
+	       width="1000px"
+	       style="display:block; margin-left: auto; margin-right: auto"/>
 	</p>
 
 	<div id="table_div" style="max-height: 600px">
-		<p> <img src="{{ imageFilename }}" 
-			 width="{{imageWidth}}px" 
+		<p> <img src="{{ imageFilename }}"
+			 width="{{imageWidth}}px"
 			 style="display:block; margin-left: auto; margin-right: auto"/> </p>
 	</div>
-=======
-	<div id="table_div" style="overflow: auto; max-height: 600px">
-		<p> <img src="{{ imageFilename }}"
-			width="{{imageWidth}}px"
-			style="display:block; margin-left: auto; margin-right: auto"/> </p>
-	</div>
-		<p> <img src="{{ legendFilename }}"
-			width="1000px" style="display:block; margin-left: auto; margin-right: auto"/> </p>
->>>>>>> 23fb529db48ad61ed16474c1083d50c18bdda201
 	{% else %}
 		<p>
 	  		<img src="/static/racks/{{name}}.svg"/>

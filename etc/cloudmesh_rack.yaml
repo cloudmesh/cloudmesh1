@@ -22,8 +22,10 @@ cloudmesh:
             unknown:
                 diag: unknown.diag
                 count: 1
-        service:
+       service:
             hpc: HPC
-            openstack: Openstack
+            openstack: OpenStack
             hadoop: Hadoop
-            ency: ency
+            eucalyptus: Eucalyptus
+            nimbus: Nimbus
+            hardwareerror: HardwareError
