@@ -134,10 +134,11 @@ class cm_mongo:
                                                'cm_type_version': cm_type_version}
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name)
-                    tryauth = cloud.get_token()
-                    if 'access' not in tryauth:
-                        cloud = None
-                        log.error("Credential not working, cloud is not activated")
+                    if cm_type in ['openstack']:
+                        tryauth = cloud.get_token()
+                        if 'access' not in tryauth:
+                            cloud = None
+                            log.error("Credential not working, cloud is not activated")
                     self.clouds[cloud_name].update({'manager': cloud})
             except Exception, e:
                 log.error("Cannot activate cloud <%s>\n%s" % (cloud_name,e) )
