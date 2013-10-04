@@ -1,20 +1,17 @@
-from flask import Blueprint
-from flask import render_template, request, redirect
-# from cloudmesh.util.util import path_expand
-
-from cloudmesh.config.cm_config import cm_config_server
-
-# from cloudmesh.config.cm_rack import cm_keys
-
+from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.rack.cluster_map_heat import HeatClusterMap
 from cloudmesh.rack.cluster_map_service import ServiceClusterMap
 from cloudmesh.rack.fetch_cluster_info import FetchClusterInfo
-
-from sh import pwd  # @UnresolvedImport
-from flask.ext.wtf import Form  # @UnresolvedImport
-from wtforms import SelectField
+from flask import Blueprint, render_template, request, redirect
 from flask.ext.login import login_required  # @UnresolvedImport
+from flask.ext.wtf import Form  # @UnresolvedImport
 from pprint import pprint
+from sh import pwd  # @UnresolvedImport
+from wtforms import SelectField
+
+
+# from cloudmesh.config.cm_rack import cm_keys
+
 
 
 rack_module = Blueprint('rack_module', __name__)
@@ -71,8 +68,8 @@ def display_rack_map():
     # get location of configuration file, input diag, output image
     dir_base = "~/.futuregrid"
     server_config = cm_config_server()
-    relative_dir_diag = server_config.get("cloudmesh.rack.input")
-    relative_dir_image = server_config.get("cloudmesh.rack.diagrams." + service)
+    relative_dir_diag = server_config.get("cloudmesh.server.rack.input")
+    relative_dir_image = server_config.get("cloudmesh.server.rack.diagrams." + service)
     print "relative dir image, ", relative_dir_image
     flask_dir = "static"
     # guess absolute path of webui
@@ -96,7 +93,11 @@ def display_rack_map():
     else:
         # fetch the real data ....
         # to do ...
-        myfetch = FetchClusterInfo("hengchen", "india.futuregrid.org")
+
+        config = cm_config()
+        user = config.get("cloudmesh.hpc.username")
+
+        myfetch = FetchClusterInfo(user, "india.futuregrid.org")
         flag_filter = None if rack == "all" else rack
         dict_data = myfetch.fetch_service_type(flag_filter)
         print "=" * 30

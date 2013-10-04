@@ -22,7 +22,7 @@ cloudmesh:
             unknown:
                 diag: unknown.diag
                 count: 1
-       service:
+        service:
             hpc: HPC
             openstack: OpenStack
             hadoop: Hadoop

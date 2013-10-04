@@ -184,7 +184,7 @@ class BaseClusterMap:
     # read clusters config
     def readClustersConfig(self, dir_yaml):
         clusters_config = ConfigDict(filename=dir_yaml + "/" + self.default_clusters_yaml)
-        self.dict_clusters_config = clusters_config["clusters"]
+        self.dict_clusters_config = clusters_config.get("cloudmesh.inventory")
         print "=" * 30
         pprint(self.dict_clusters_config)
         print "-" * 30
@@ -202,7 +202,7 @@ class BaseClusterMap:
     # read default_rack_yaml configuration
     def readRackConfig(self, name, dir_yaml, dir_diag):
         rack_config = ConfigDict(filename=dir_yaml + "/" + self.default_rack_yaml)
-        self.dict_rack_config = rack_config["cloudmesh"]["rack"]
+        self.dict_rack_config = rack_config.get("cloudmesh.rack")
         print self.dict_rack_config
 
         lname = name.lower()
