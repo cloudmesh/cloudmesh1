@@ -47,7 +47,7 @@ class PBS:
                                     pbsinfo[name][attribute][a] = v
                             elif attribute == 'jobs':
                                 pbsinfo[name][attribute] = value.split(',')
-                            elif attribute == 'note':
+                            elif attribute == 'note' and (value.strip().startswith("{") or value.strip().startswith("[")):
                                 pbsinfo[name][attribute] = literal_eval(value)
                             else:
                                 pbsinfo[name][attribute] = value

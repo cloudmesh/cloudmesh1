@@ -5,17 +5,17 @@ cloudmesh.iaas.aws.cm_compute
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-# import boto
-from libcloud.compute.types import Provider
-from libcloud.compute.providers import get_driver
-from libcloud.compute.base import NodeImage, NodeSize
-
-from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
+from libcloud.compute.base import NodeImage, NodeSize
+from libcloud.compute.providers import get_driver
+from libcloud.compute.types import Provider
+
 
 class aws(ComputeBaseType):
-    """ Amazon Cloud service with the boto interface
-    With boto interface, cloudmesh supports Amazon Web Services such as EC2, S3,
+    """ 
+    Amazon Cloud service with the libcloud interface
+    With libcloud interface, cloudmesh supports Amazon Web Services such as EC2, S3,
     EBS, etc.
     """
 
@@ -60,7 +60,25 @@ class aws(ComputeBaseType):
 
     def connect(self):
         Driver = get_driver(Provider.EC2)
-        conn = Driver(self.access_key_id, self.secret_access_key)
+
+        # #self.credential = self.config.get(self.label, expand=True)
+        # #pprint(self.credential)
+
+        #### libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
+        #### libcloud.security.VERIFY_SSL_CERT = False
+
+        # #Driver = get_driver(Provider.EUCALYPTUS)
+        # #self.cloud = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
+
+
+        # certfile = self.compute_config.get("cloudmesh.clouds.aws.privatekeyfile")
+        # libcloud.security.CA_CERTS_PATH.append(certfile)
+
+        #
+        # BUG, make sure we use the cert, confirm with team ....
+        #
+
+        conn = Driver(self.access_key_id, self.secret_access_key, secure=False)
         self.conn = conn
 
     def vm_create(self, name,

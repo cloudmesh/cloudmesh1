@@ -27,7 +27,7 @@ class azure(ComputeBaseType):
     def set_vars(self):
         """Set default variables for the azure class"""
 
-        #Set a default name from uuid random string
+        # Set a default name from uuid random string
         name = get_unique_name(self.name_prefix)
         self.set_name(name)
 
@@ -37,7 +37,7 @@ class azure(ComputeBaseType):
         self.container = "os-image"
         # Use a same name with blob and vm deployment
         self.blobname = self.name
-       
+
         # account for the vm
         self.userid = 'azureuser'
         self.user_passwd = 'azureuser@password'
@@ -55,21 +55,21 @@ class azure(ComputeBaseType):
         self.compute_config = cm_config()
         self.user_credential = self.compute_config.credential(label)
 
-        #SSH
-        self.thumbprint_path =  self.user_credential['thumbprint']
+        # SSH
+        self.thumbprint_path = self.user_credential['thumbprint']
 
-        #Service certificate & SSH
+        # Service certificate & SSH
         self.service_certificate_path = self.user_credential['servicecertfile']
-      
-        #set default location from yaml
+
+        # set default location from yaml
         location = self.compute_config.default(label)['location']
         self.set_location(location)
 
-        #Set a default os image name
+        # Set a default os image name
         os_image_name = self.compute_config.default(label)['image']
         self.set_os_image(os_image_name)
 
-        #Set a default flavor (role size between ExtraSmall, Small, Medium,
+        # Set a default flavor (role size between ExtraSmall, Small, Medium,
         # Large, ExtraLarge
         flavor = self.compute_config.default(label)['flavor']
         self.set_flavor(flavor)
@@ -80,7 +80,7 @@ class azure(ComputeBaseType):
 
         self.sms = ServiceManagementService(subscription_id,
                                             certificate_path)
-
+#
     # FOR refresh
     def _get_images_dict(self):
         return self.get_images()
@@ -109,7 +109,7 @@ class azure(ComputeBaseType):
         """
         deployments = self.list_deployments()
         self.convert_to_openstack_style(deployments)
-        return deployments 
+        return deployments
 
     def _get_services_dict(self):
         return self.list_services()
@@ -142,7 +142,7 @@ class azure(ComputeBaseType):
         A launched vm instance is a deployment.
 
         """
-        #if not self.cloud_services:
+        # if not self.cloud_services:
         self.cloud_services = self.sms.list_hosted_services()
 
         deployments = {}
@@ -174,15 +174,15 @@ class azure(ComputeBaseType):
 
         """
         self.create_hosted_service()
-        #Load the os image information
+        # Load the os image information
         self.load_os_image()
 
-        #Get the url for the blob image file of the vm to be generated
+        # Get the url for the blob image file of the vm to be generated
         self.get_media_url()
 
         os_hd = OSVirtualHardDisk(self.os_image_name, self.media_url)
         linux_config = LinuxConfigurationSet(self.get_name(), self.userid, None, True)
-        #self.userid, self.user_passwd, True)
+        # self.userid, self.user_passwd, True)
 
         self.set_ssh_keys(linux_config)
         self.set_network()
@@ -193,12 +193,12 @@ class azure(ComputeBaseType):
         result = \
         self.sms.create_virtual_machine_deployment(service_name=self.get_name(), \
                                                    deployment_name=self.get_name(), \
-                                                   deployment_slot='production',\
+                                                   deployment_slot='production', \
                                                    label=self.get_name(), \
                                                    role_name=self.get_name(), \
                                                    system_config=linux_config, \
                                                    os_virtual_hard_disk=os_hd, \
-                                                   network_config=self.network,\
+                                                   network_config=self.network, \
                                                    role_size=self.get_flavor())
 
         self.result = result
@@ -236,14 +236,14 @@ class azure(ComputeBaseType):
             result = self.sms.delete_deployment(name, deployment.name)
             time.sleep(5)
         self.sms.delete_hosted_service(name)
-        #result = self.sms.delete_os_image(self.os_image_name)
+        # result = self.sms.delete_os_image(self.os_image_name)
         time.sleep(5)
         for disk_name in disk_names:
             try:
                 self.sms.delete_disk(disk_name)
             except:
                 pass
-        #self.bc.delete_container(self.container_name)
+        # self.bc.delete_container(self.container_name)
 
     def list_cloud_services(self):
         return self.sms.list_hosted_services()
@@ -322,7 +322,7 @@ class azure(ComputeBaseType):
         media_url = "http://" + storage_account + "." + blob_domain \
                 + "/" + container + "/" + blob_filename
         self.media_url = media_url
-                                 
+
         return media_url
 
     def get_storage_account(self):
@@ -345,7 +345,7 @@ class azure(ComputeBaseType):
             account_name = self.get_hostname(self.os_image.media_link)
         else:
             account_name = self.get_last_storage_account()
-        
+
         self.storage_account = account_name
         return account_name
 
@@ -366,18 +366,18 @@ class azure(ComputeBaseType):
             return storage_account
 
     def create_storage_account(self):
-        name = self.get_name()[:24].replace("-","")
-        # A name for the storage account that is unique within Windows Azure. 
+        name = self.get_name()[:24].replace("-", "")
+        # A name for the storage account that is unique within Windows Azure.
         # Storage account names must be between 3 and 24 characters in
-        # length 
+        # length
         # and use numbers and lower-case letters only.
         desc = name + "description"
         labe = name + "label"
         loca = self.get_location()
-        self.sms.create_storage_account(service_name = name,
-                                        description = desc,
-                                        label = labe,
-                                        location = loca)
+        self.sms.create_storage_account(service_name=name,
+                                        description=desc,
+                                        label=labe,
+                                        location=loca)
 
     def get_hostname(self, url):
         """Return a hostname from the url.
@@ -468,7 +468,7 @@ class azure(ComputeBaseType):
         .pfx at this time.
 
         """
-        # command used: 
+        # command used:
         # openssl pkcs12 -in myCert.pem -inkey myPrivateKey.key
         # -export -out myCert.pfx
 
@@ -542,12 +542,12 @@ class azure(ComputeBaseType):
 
         for deployment_id in deployments:
             deployment = deployments[deployment_id]
-            deployment.update({ #"name": exist
-                               "status": self.convert_states(deployment['status']),\
+            deployment.update({  # "name": exist
+                               "status": self.convert_states(deployment['status']), \
                                "addresses":
-                               self.convert_ips(deployment['role_instance_list']),\
+                               self.convert_ips(deployment['role_instance_list']), \
                                "flavor":
-                               self.convert_flavors(deployment['role_instance_list']),\
+                               self.convert_flavors(deployment['role_instance_list']), \
                                "id": deployment['name'], \
                                "user_id": unicode(""), \
                                "metadata": {}, \
@@ -598,11 +598,11 @@ class azure(ComputeBaseType):
         except IndexError:
             ip_address = ""
 
-        ip_ver = 4 # can we see it is ipv6 in azure?
-        ip_type = u'fixed' # determine if it is a fixed address or a floating
+        ip_ver = 4  # can we see it is ipv6 in azure?
+        ip_type = u'fixed'  # determine if it is a fixed address or a floating
 
-        #Openstack's type
-        res = {#u'private':[ {u'version':None, u'addr':None, \
+        # Openstack's type
+        res = {  # u'private':[ {u'version':None, u'addr':None, \
                #              u'OS-EXT-IPS:type': None} ],
                u'private':[ {u'version':ip_ver, u'addr':ip_address, \
                             u'OS-EXT-IPS:type': ip_type } ] }
