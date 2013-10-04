@@ -38,6 +38,7 @@ def mongo_images():
 
     c = cm_mongo()
     c.activate()
+    #c.refresh(types=["images"])
     clouds = c.images()
 
     """
@@ -134,6 +135,7 @@ def mongo_flavors():
 
     c = cm_mongo()
     c.activate()
+    #c.refresh(types=["flavors"])
     clouds = c.flavors()
 
     """    
@@ -244,6 +246,7 @@ def mongo_table(filters=None):
 
     c = cm_mongo()
     c.activate()
+    c.refresh(types=["servers"])
     clouds = c.servers()
 
     """
