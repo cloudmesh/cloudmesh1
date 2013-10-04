@@ -45,3 +45,4 @@ seqdiag
 pyzmq
 cmd3
 azure
+numpy
