@@ -251,3 +251,8 @@ class cm_user(object):
             return passwd[0]
         except:
             return None
+
+    def get_passwords(self, username):
+        """Return all user passwords in the form of a dict, keyed by cloud name"""
+        passwds = self.userdb_passwd.find({ "username": username })
+        return dict(map(lambda d: (d["cloud"], d["password"]), passwds))
