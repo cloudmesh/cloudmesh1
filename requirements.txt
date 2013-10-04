@@ -44,3 +44,4 @@ nwdiag
 seqdiag
 pyzmq
 cmd3
+azure
