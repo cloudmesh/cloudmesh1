@@ -90,7 +90,7 @@ class openstack(ComputeBaseType):
             self.with_admin_credential = self.label in self.idp_clouds
             if self.with_admin_credential:
                 try:
-                    self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(label))
+                    self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(self.label))
                 except:
                     log.error("No admin credentail found! Please check your cloudmesh_server.yaml file.")
             else:

@@ -116,19 +116,13 @@ class cm_mongo:
         elif type == 'aws':
             provider = aws
         return provider
-
-    def activate(self, names=None, force_auth_verify=False):
-        '''
-        activates a specific host by name. to be queried
-        :param names: the array with the names of the clouds in the yaml file to be activated.
-        '''
-
-        if names is None:
-            names = self.config.active()
-
-        for cloud_name in names:
-            log.debug("Activating -> {0}".format(cloud_name))
-
+    
+    def get_cloud(self,cloud_name,force=False):
+        if not force and cloud_name in self.clouds:
+            if 'manager' in self.clouds[cloud_name]:
+                if self.clouds[cloud_name]['manager']:
+                    cloud = self.clouds[cloud_name]['manager']
+        else:
             try:
                 credential = self.config.cloud(cloud_name)
                 cm_type = credential['cm_type']
@@ -137,39 +131,28 @@ class cm_mongo:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cm_type,
                                                'cm_type_version': cm_type_version}
-#                                               'credential': credential}
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name)
-                    # try to see if the credential works
-                    # if so, update the 'manager' so the cloud is successfully activated
-                    # otherwise log error message and skip this cloud
-                    if not force_auth_verify:
-                        self.clouds[cloud_name].update({'manager': cloud})
-                    else:
-                        tryauth = cloud.get_token()
-                        if 'access' in tryauth:
-                            self.clouds[cloud_name].update({'manager': cloud})
-                        else:
-                            log.error("Credential not working, cloud is not activated")
-
-                    if cm_type == 'openstack':
-                        keys = self.config.userkeys()['keylist']
-                        username = self.config.username()
-                        """
-                        for keyname, keycontent in keys.iteritems():
-                            keynamenew = "%s_%s" % (username, keyname.replace('.', '_').replace('@', '_'))
-                            # print "Transformed key name: %s" % keynamenew
-                            log.info("Adding a key for user <%s> in cloud <%s>" % (username, cloud_name))
-                            keypart = keycontent.split(" ")
-                            keycontent = "%s %s" % (keypart[0], keypart[1])
-                            cloud.keypair_add(keynamenew, keycontent)
-                        # pprint(keys)
-                        """
+                    tryauth = cloud.get_token()
+                    if 'access' not in tryauth:
+                        cloud = None
+                        log.error("Credential not working, cloud is not activated")
+                    self.clouds[cloud_name].update({'manager': cloud})
             except Exception, e:
-                print "ERROR: can not activate cloud", cloud_name
-                print e
-                # print traceback.format_exc()
-                # sys.exit()
+                log.error("Cannot activate cloud <%s>\n%s" % (cloud_name,e) )
+        return cloud
+
+    def activate(self, names=None):
+        if names is None:
+            names = self.config.active()
+
+        for cloud_name in names:
+            log.info("Activating -> {0}".format(cloud_name))
+            cloud = self.get_cloud(cloud_name)
+            if not cloud:
+                log.info("Activation of cloud <%s> Failed!" % cloud_name)
+            else:
+                log.info("Activation of cloud <%s> Succeeded!" % cloud_name)
 
     def refresh(self, names=["all"], types=["all"]):
         """
