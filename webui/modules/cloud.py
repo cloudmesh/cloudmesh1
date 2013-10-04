@@ -87,7 +87,8 @@ def refresh(cloud=None, server=None, service_type=None):
 
     #print "REQ", redirect(request.args.get('next') or '/').__dict__
     cloud_names = None
-    if cloud is None: #in ['servers', 'flavors', 'images', 'users']:
+    # cloud field could be empty thus in that position it could be the types
+    if cloud is None or cloud in ['servers', 'flavors', 'images', 'users']:
         cloud_names = config.active()
     else:
         cloud_names = [cloud]
