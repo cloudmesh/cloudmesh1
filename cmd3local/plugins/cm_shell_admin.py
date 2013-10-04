@@ -50,7 +50,6 @@ class cm_shell_admin:
     def user_exists_in_cloud(self, username, cloudname):
         k = self.get_keystone(cloudname)
         k_id = k.get_user_by_name(username)
-        return False
         return not k_id is None
 
     def get_user_profile(self, username):
@@ -64,7 +63,7 @@ class cm_shell_admin:
 
     def create_user_in_keystone(self, username, password, cloudname):
         k = self.get_keystone(cloudname)
-        # k.create_new_user(username, password)
+        k.create_new_user(username, password)
         print "Create user {0} in {1}".format(username, cloudname)
 
     def create_user_project_tenants(self, username, cloudname, projects):
@@ -74,10 +73,10 @@ class cm_shell_admin:
         for p in projects:
             tenant = k.get_tenant_by_name(p)
             if tenant is None:
-                # k.create_new_tenant(p)
-                # tenant = k.get_tenant_by_name(p)
+                k.create_new_tenant(p)
+                tenant = k.get_tenant_by_name(p)
                 print "create tenant for {0}".format(p)
-            # k.add_role_to_user_tenant(tenant, uid, member_rid)
+            k.add_role_to_user_tenant(tenant, uid, member_rid)
             print "Add member role {0} for user {1} in tenant {2}".format(member_rid, uid, tenant)
 
     def create_user_in_cloud(self, username, password, cloudname, projects):
@@ -141,8 +140,9 @@ class cm_shell_admin:
             if self.user_exists_in_cloud(new_username, cloudname):
                 print "User {0} is already created in cloud {1}".format(new_username, cloudname)
             else:
-                me_values = self.get_user_profile(new_username)
-                new_password = generate_password()
-                self.create_user_in_cloud(new_username, new_password, cloudname, me_values['projects']['active'])
-                self.save_user_password(new_username, new_password, cloudname)
-                self.generate_me_yaml(new_username, me_values, configdir)
+                if arguments["force"] or yn_choice("Create the user {0} in {1}".format(new_username, cloudname), default='n'):
+                    me_values = self.get_user_profile(new_username)
+                    new_password = generate_password()
+                    self.create_user_in_cloud(new_username, new_password, cloudname, me_values['projects']['active'])
+                    self.save_user_password(new_username, new_password, cloudname)
+                    self.generate_me_yaml(new_username, me_values, configdir)
