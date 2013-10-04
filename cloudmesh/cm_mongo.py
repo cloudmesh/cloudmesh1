@@ -118,6 +118,7 @@ class cm_mongo:
         return provider
     
     def get_cloud(self,cloud_name,force=False):
+        cloud = None
         if not force and cloud_name in self.clouds:
             if 'manager' in self.clouds[cloud_name]:
                 if self.clouds[cloud_name]['manager']:
