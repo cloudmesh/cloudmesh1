@@ -57,6 +57,7 @@ class cm_shell_user:
 
         """
 
+        '''
         def generate(id, basename):
             """id = username"""
             """basename = me, cloudmesh"""
@@ -78,15 +79,17 @@ class cm_shell_user:
             banner("{0} DATA".format(basename))
 
             return out
-
+        '''
 
 
         log.info(arguments)
         print "<", args, ">"
 
+        user = cm_user()
+
         if (arguments["ID"] is not None) and arguments["me"]:
 
-            out = generate(arguments["ID"], "me")
+            out = user.generate_yaml(arguments["ID"], "me")
             print yaml.dump(out,
                             default_flow_style=False)
 
@@ -104,7 +107,7 @@ class cm_shell_user:
             # me_local_yaml = ConfigDict("~/.futuregrid/me.yaml")
             # cloudmesh_yaml = ConfigDict("~/.futuregrid/cloudmesh.yaml")
 
-            out = generate(arguments["ID"], "cloudmesh")
+            out = user.generate_yaml(arguments["ID"], "cloudmesh")
 
 
 
@@ -135,7 +138,7 @@ class cm_shell_user:
 
 
             # read me dict
-            me_from_ldap = generate(arguments["ID"], "me")
+            me_from_ldap = user.generate_yaml(arguments["ID"], "me")
             banner("ME FROM LDAP")
             pprint (me_from_ldap)
 

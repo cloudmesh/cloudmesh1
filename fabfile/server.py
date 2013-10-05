@@ -87,6 +87,7 @@ def kill(server="server"):
         for line in result:
             pid = line.split(" ")[0]
             local("kill -9 {0}".format(pid))
+        local("fab queue.stop")
 
 @task
 def start(link="", server="server", port="5000", browser='yes'):

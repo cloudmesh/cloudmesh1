@@ -6,6 +6,13 @@ import uuid
 import functools
 import warnings
 
+
+def cat(filename):
+    banner(filename)
+    with open(path_expand(filename), 'r') as f:
+        print f.read()
+
+        
 def yn_choice(message, default='y'):
     """http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input"""
     choices = 'Y/n' if default.lower() in ('y', 'yes') else 'y/N'
