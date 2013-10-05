@@ -13,6 +13,7 @@
 """
 from cloudmesh.config.cm_config import cm_config_server, get_mongo_db
 from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.encryptdata import encrypt, decrypt
 import traceback
 
 # ----------------------------------------------------------------------
@@ -32,6 +33,7 @@ class cm_user(object):
 
     def __init__(self):
         self.config_server = cm_config_server()
+        self.password_key = self.config_server.get("cloudmesh.server.mongo.collections.password.key")
         self.connect_db()
 
     def connect_db(self):
@@ -233,8 +235,9 @@ class cm_user(object):
         :type cloud: str
 
         """
+        safe_password = encrypt(password, self.password_key)
         self.userdb_passwd.update({"username": username, "cloud": cloud }, \
-                                  {"username":username, "password":password, \
+                                  {"username":username, "password":safe_password, \
                                    "cloud": cloud}, upsert=True)
 
     def get_password(self, username, cloud):
@@ -246,13 +249,13 @@ class cm_user(object):
         :type cloud:str
 
         """
-        passwd = self.userdb_passwd.find({"username": username, "cloud":cloud})
         try:
-            return passwd[0]
+            safe_password = self.userdb_passwd.find({"username": username, "cloud":cloud})[0]["password"]
+            return decrypt(safe_password, self.password_key)
         except:
             return None
 
     def get_passwords(self, username):
         """Return all user passwords in the form of a dict, keyed by cloud name"""
         passwds = self.userdb_passwd.find({ "username": username })
-        return dict(map(lambda d: (d["cloud"], d["password"]), passwds))
+        return dict(map(lambda d: (d["cloud"], decrypt(d["password"], self.password_key)), passwds))
