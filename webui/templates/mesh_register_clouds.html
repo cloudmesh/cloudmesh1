@@ -1,138 +1,208 @@
 {% extends "layout_title.html" %}
 {% from "_helper.html" import image_button %}
 {% from "_helper.html" import cm_boolean_color %}
+{% from "_helper.html" import cm_image_input %}
 
 {% block contentbox %}
 <h1> Register </h1>
+<style>
+    .modalDialog:target {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .modalDialog > div {
+        width: 400px;
+        position: relative;
+        margin: 10% auto;
+        padding: 5px 20px 13px 20px;
+        border-radius: 10px;
+        background: #fff;
+        background: -moz-linear-gradient(#fff, #999);
+        background: -webkit-linear-gradient(#fff, #999);
+        background: -o-linear-gradient(#fff, #999);
+    }
+
+    .modalDialog {
+        position: fixed;
+        font-family: Arial, Helvetica, sans-serif;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(0,0,0,0.8);
+        z-index: 99999;
+        opacity: 0;
+        -webkit-transition: opacity 400ms ease-in;
+        -moz-transition: opacity 400ms ease-in;
+        transition: opacity 400ms ease-in;
+        pointer-events: none;
+    }
+
+    .close {
+        background: #606061;
+        color: #FFFFFF;
+        line-height: 25px;
+        position: absolute;
+        right: -12px;
+        text-align: center;
+        top: -10px;
+        width: 24px;
+        text-decoration: none;
+        font-weight: bold;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        border-radius: 12px;
+        -moz-box-shadow: 1px 1px 3px #000;
+        -webkit-box-shadow: 1px 1px 3px #000;
+        box-shadow: 1px 1px 3px #000;
+    }
+
+    .close:hover {
+        background: #00d9ff;
+    }
+</style>
 {% endblock contentbox %}
 
 {% block content %}
 
-<table>
-    <form name="profile" action="/profile/" method="POST">
-        <tr>
-            <th colspan="1"><b> Clouds </b></th>
-            <th></th>
-            <th style="text-align: right">
-           	  	{{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
-            	Verified
-            </th>
-        </tr>
-        <tr>
-            <th colspan="1">
-            <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-            sierra_openstack_grizzly</th>
-            <th></th>
-            <th style="text-align: right">
-            	  	{{ image_button ("none", "044_keys", "/updatekeypair/" + "sierra_openstack_grizzly" + "/") }}
-            	{{cm_boolean_color('unknown')}}
-            </th>
-        </tr>
-        <tr>
-            <td style="text-align: right"> Username:</td>
-            <td colspan="2">
-            <input id="sierraUname" valign="middle" type="text" name="sierraUname"
-            value="psjoshi" disabled="disabled"
+<table id="clouds" style="display: inline-block; float: left;">
+    <tr>
+        <th colspan="1"><b>Clouds <a href="#openModal"><img height="15" width="15" src="{{ url_for('static', filename='img/icons/png/glyphicons_136_cogwheel.png') }}" /></a> </b></th>
+        <th></th>
+        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
+        Verified </th>
+    </tr>
+    <tr>
+        <th colspan="1">
+        <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+        sierra_openstack_grizzly</th>
+        <th></th>
+        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "sierra_openstack_grizzly" + "/") }}
+        {{cm_boolean_color('unknown')}} </th>
+    </tr>
+    <tr>
+        <td style="text-align: right"> Username:</td>
+        <td colspan="2">
+        <input id="sierraUname" valign="middle" type="text" name="sierraUname"
+        value="psjoshi" disabled="disabled"
+        style="margin-bottom: 5px; margin-top: 5px;">
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: right">Password:</td>
+        <td colspan="2">
+        <form>
+            <input id="sierraPassword" valign="middle" type="password" name="sierraPassword"
+            value="" autocomplete="off" placeholder="Password"
             style="margin-bottom: 5px; margin-top: 5px;">
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: right">Password:</td>
-            <td colspan="2"><form>
-                <input id="sierraPassword" valign="middle" type="password" name="sierraPassword"
-                value="" autocomplete="off" placeholder="Password"
-                style="margin-bottom: 5px; margin-top: 5px;">
-                <input type="button" id="toggle_sierraPassword" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
-            </form></td>
-        </tr>
-        <tr>
-            <th colspan="1">
-            	<input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-            	HP
-            	&nbsp;
-            	<input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-            	HP East
-            </th>
-            <th></th>
-            <th style="text-align: right">
-            	{{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
-            	{{cm_boolean_color('verified')}}
-            </th>
-        </tr>
-        <tr>
-            <td  style="text-align: right"> Username:</td>
-            <td colspan="2">
-            <input id="hpUname" valign="middle" type="text" name="hpUname"
-            value="psjoshi" disabled="disabled"
+            <input type="button" id="toggle_sierraPassword" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
+        </form></td>
+    </tr>
+    <tr>
+        <th colspan="1">
+        <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+        HP
+        &nbsp;
+        <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+        HP East </th>
+        <th></th>
+        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
+        {{cm_boolean_color('verified')}} </th>
+    </tr>
+    <tr>
+        <td  style="text-align: right"> Username:</td>
+        <td colspan="2">
+        <input id="hpUname" valign="middle" type="text" name="hpUname"
+        value="psjoshi" disabled="disabled"
+        style="margin-bottom: 5px; margin-top: 5px;">
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: right">Password:</td>
+        <td colspan="2">
+        <form>
+            <input id="hpPassword" valign="middle" type="password" name="hpPassword"
+            value="" autocomplete="off" placeholder="Password"
             style="margin-bottom: 5px; margin-top: 5px;">
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: right">Password:</td>
-            <td colspan="2"><form>
-                <input id="hpPassword" valign="middle" type="password" name="hpPassword"
-                value="" autocomplete="off" placeholder="Password"
-                style="margin-bottom: 5px; margin-top: 5px;">
-                <input type="button" id="toggle_hpPassword" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
-            </form></td>
-        </tr>
-        <tr>
-            <th colspan="1">
-            <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-            AWS</th>
-            <th></th>
-            <th style="text-align: right">
-           	  	{{ image_button ("none", "044_keys", "/updatekeypair/" + "aws" + "/") }}
-            	{{cm_boolean_color('verified')}}
-            </th>
-        </tr>
-        <tr>
-            <td  style="text-align: right"> Username:</td>
-            <td colspan="2">
-            <input id="awsUname" valign="middle" type="text" name="awsUname"
-            value="psjoshi" disabled="disabled"
+            <input type="button" id="toggle_hpPassword" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
+        </form></td>
+    </tr>
+    <tr>
+        <th colspan="1">
+        <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+        AWS</th>
+        <th></th>
+        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "aws" + "/") }}
+        {{cm_boolean_color('verified')}} </th>
+    </tr>
+    <tr>
+        <td  style="text-align: right"> Username:</td>
+        <td colspan="2">
+        <input id="awsUname" valign="middle" type="text" name="awsUname"
+        value="psjoshi" disabled="disabled"
+        style="margin-bottom: 5px; margin-top: 5px;">
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: right">Access Key:</td>
+        <td colspan="2">
+        <form>
+            <input id="awsAccessKey" valign="middle" type="password" name="awsAccessKey"
+            value="" autocomplete="off" placeholder="Access Key"
             style="margin-bottom: 5px; margin-top: 5px;">
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: right">Access Key:</td>
-            <td colspan="2"><form>
-                <input id="awsAccessKey" valign="middle" type="password" name="awsAccessKey"
-                value="" autocomplete="off" placeholder="Password"
-                style="margin-bottom: 5px; margin-top: 5px;">
-                <input type="button" id="toggle_awsAccessKey" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
-            </form></td>
-        </tr>
-        <tr>
-            <td style="text-align: right">Secret Access Key:</td>
-            <td colspan="2"><form>
-                <input id="awsSecretAccessKey" valign="middle" type="password" name="awsSecretAccessKey"
-                value="" autocomplete="off" placeholder="Password"
-                style="margin-bottom: 5px; margin-top: 5px;">
-                <input type="button" id="toggle_awsSecretAccessKey" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
-            </form></td>
-        </tr>
-        <tr>
-            <th colspan="1">
-            <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-            Azure</th>
-            <th></th>
-            <th style="text-align: right">
-            	  	{{ image_button ("none", "044_keys", "/updatekeypair/" + "azure" + "/") }}
-            	{{cm_boolean_color('verified')}}
-            </th>
-        </tr>
-        <tr>
-            <td style="text-align: right">Subscription ID:</td>
-            <td colspan="2"><form>
-                <input id="azureId" valign="middle" type="password" name="azureId"
-                value="" autocomplete="off" placeholder="Subscription ID"
-                style="margin-bottom: 5px; margin-top: 5px;">
-                <input type="button" id="toggle_azureId" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
-            </form></td>
-        </tr>
+            <input type="button" id="toggle_awsAccessKey" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
+        </form></td>
+    </tr>
+    <tr>
+        <td style="text-align: right">Secret Access Key:</td>
+        <td colspan="2">
+        <form>
+            <input id="awsSecretAccessKey" valign="middle" type="password" name="awsSecretAccessKey"
+            value="" autocomplete="off" placeholder="Secret Access Key"
+            style="margin-bottom: 5px; margin-top: 5px;">
+            <input type="button" id="toggle_awsSecretAccessKey" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
+        </form></td>
+    </tr>
+    <tr>
+        <th colspan="1">
+        <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+        Azure</th>
+        <th></th>
+        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "azure" + "/") }}
+        {{cm_boolean_color('verified')}} </th>
+    </tr>
+    <tr>
+        <td style="text-align: right">Subscription ID:</td>
+        <td colspan="2">
+        <form>
+            <input id="azureId" valign="middle" type="password" name="azureId"
+            value="" autocomplete="off" placeholder="Subscription ID"
+            style="margin-bottom: 5px; margin-top: 5px;">
+            <input type="button" id="toggle_azureId" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
+        </form></td>
+    </tr>
+    <tr>
+        <th align="center">
+            <!--To Do : Add link to this. -->
+            Manage keys
+        </th>
+    </tr>
     </form>
 </table>
+
+<div id="openModal" class="modalDialog">
+    <div>
+        <a href="#close" title="Close" class="close">X</a>
+        <h2>Generate Files</h2>
+        <figure>
+            Me.yaml{{ image_button ("none", "359_file_export", "/updatekeypair/" + "hp" + "/") }}
+        </figure>
+        <figure>
+            Cloudmesh.yaml{{ image_button ("none", "359_file_export", "/updatekeypair/" + "hp" + "/") }}
+        </figure>
+    </div>
+</div>
 
 <script>
     function toggle_PasswordFieldClicked() {
@@ -140,7 +210,7 @@
         //Regex to get the password field associated with button
         //Following regex would get hpPassword from toogle_hpPassword
         var passwordFieldId = ((event.target).id.split("_"))[1];
-        var passwordObject = $('#'+passwordFieldId).get(0);
+        var passwordObject = $('#' + passwordFieldId).get(0);
         var value = passwordObject.value;
 
         if (passwordObject.type == 'password') {
