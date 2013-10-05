@@ -67,6 +67,7 @@ cloudmesh:
                 db: pagestatus
             password:
                 db: hallo
+                key: change_me
             defaults:
                 db: defaults
     keystone:

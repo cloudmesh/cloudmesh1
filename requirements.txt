@@ -17,6 +17,7 @@ python-ldap
 docopt
 python-hostlist
 pyaml
+pycrypto
 Flask>=0.10
 Flask-FlatPages
 Flask-WTF>=0.8.4,<0.9
