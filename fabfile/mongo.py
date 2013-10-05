@@ -130,6 +130,8 @@ def admin():
         script.append('db = db.getSiblingDB("{0}");'.format(db))
         script.append('db.addUser("{0}", "{1}");'.format(user, password))
     script.append("use admin;")
+    script.append('db.addUser("{0}", "{1}");'.format(user, password))
+    script.append('db.auth("{0}", "{1}");'.format(user, password))
     script.append('db.shutdownServer();')
 
     mongo_script = '\n'.join(script)
