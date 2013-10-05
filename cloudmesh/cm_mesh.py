@@ -43,9 +43,6 @@ class cloudmesh:
     # global variables that define the information managed by this class
     # ----------------------------------------------------------------------
 
-    # deprecated
-    datastore = "data/clouds.txt"
-
     # dict that holds vms, flavors, images for al iaas
     clouds = {}
 
@@ -324,32 +321,10 @@ class cloudmesh:
     # ----------------------------------------------------------------------
     def save(self):
         log.error("save() not implemented")
-        """
-        # tmp = self._sanitize()
-        file = open(self.datastore, 'wb')
-        # pickle.dump(self.keys, file)
-        pickle.dump(tmp, file)
-        file.close()
-        """
+
 
     def load(self):
-        file = open(self.datastore, 'rb')
-        # self.keys = pickle.load(file)
-        self.clouds = pickle.load(file)
-        ''' above returns:
-        [u'gvonlasz']
-         So, call pickle again to get more:
-            {'india': {'name': 'india',
-            'servers': {u'2731c421-d985-44ce-91bf-2a89ce4ba033': {'cloud': 'india',
-            'id': u'2731c421-d985-44ce-91bf-2a89ce4ba033',
-            'ip': u'vlan102=10.1.2.85, 149.165.158.7',
-            'name': u'gvonlasz-001',
-            'refresh': '2013-02-11 20:30:04.472583',
-            'status': u'ACTIVE'},
-            ...
-        '''
-        self.clouds = pickle.load(file)
-        file.close()
+        log.error("load() not implemented")
 
     # ----------------------------------------------------------------------
     # TODO: convenient +, += functions to add dicts with cm_type

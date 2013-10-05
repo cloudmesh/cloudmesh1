@@ -45,13 +45,11 @@ except:
 # WHY ARE WE NOT MORE CLEANLY SEPARATING METRIC FROM THIS?
 
 
-class cloudmesh:
+class metrics:
 
     #
     # global variables that define the information managed by this class
     #
-
-    datastore = "data/clouds.txt"
 
     # dict that holds vms, flavors, images for al iaas
     clouds = {}
@@ -323,13 +321,18 @@ class cloudmesh:
     # saves and reads the dict to and from a file
     #
     def save(self):
+        log.error("not implemented")
+        """
         tmp = self._sanitize()
         file = open(self.datastore, 'wb')
         # pickle.dump(self.keys, file)
         pickle.dump(tmp, file)
         file.close()
+        """
 
     def load(self):
+        log.error("not implemented")
+        """
         file = open(self.datastore, 'rb')
         # self.keys = pickle.load(file)
         self.clouds = pickle.load(file)
@@ -347,7 +350,7 @@ class cloudmesh:
         '''
         self.clouds = pickle.load(file)
         file.close()
-
+        """
     #
     # TODO: convenient +, += functions to add dicts with cm_type
     #
