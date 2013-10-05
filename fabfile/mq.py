@@ -3,8 +3,10 @@ import clean
 import os
 import sys
 import platform
+from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.password import get_password, get_user, get_host
 from cloudmesh.util.menu import ascii_menu
+from cloudmesh.util.util import yn_choice
 from pprint import pprint
 
 input = raw_input
@@ -24,6 +26,7 @@ __all__ = ['user',
            "msg",
            "info"]
 
+PRODUCTION=cm_config_server().get('cloudmesh.server.production')
 
 def installed(name):
     """check if the command with the name is installed and return true if it is"""
@@ -32,6 +35,9 @@ def installed(name):
 
 @task
 def install():
+    if PRODUCTION:
+        print "Installation not enabled in production mode."
+        sys.exit()
     """install the rabitmq"""
     if sys.platform == "darwin":
         local("brew install rabbitmq")
@@ -111,25 +117,41 @@ def info():
 @task
 def status():
     """print the status of rabbitmq"""
-    local("sudo rabbitmqctl status")
+    if PRODUCTION:
+        print "Run '/etc/init.d/rabbitmq-server status' to check status"
+    else:
+        local("sudo rabbitmqctl status")
 
 def list_queues(parameters):
     """list all queues available in rabitmq"""
-    r = local("sudo  rabbitmqctl list_queues {0}".format(parameters), capture=True)
+    if PRODUCTION:
+        print "Use 'rabbitmqctl list_queues' to list queues"
+    else:
+        r = local("sudo  rabbitmqctl list_queues {0}".format(parameters), capture=True)
     return r
 
 @task
 def start(detached=None):
     """start the rabit mq server"""
-    if detached is None:
-        local("sudo rabbitmq-server -detached")
+    if PRODUCTION:
+        print "Run '/etc/init.d/rabbitmq-server start' to start server"
+        while not yn_choice("Is rabbitmq running?", 'n'):
+            print "Please start rabbitmq-server."
     else:
-        local("sudo rabbitmq-server")
+        if detached is None:
+            local("sudo rabbitmq-server -detached")
+        else:
+            local("sudo rabbitmq-server")
 
 @task
 def stop():
     """stop the rabit mq server"""
-    local("sudo rabbitmqctl stop")
+    if PRODUCTION:
+        print "Run '/etc/init.d/rabbitmq-server stop' to stop server"
+        while not yn_choice("Is rabbitmq stopped?", 'n'):
+            print "Please stop rabbitmq-server."
+    else:
+        local("sudo rabbitmqctl stop")
 
 
 menu_list = [
