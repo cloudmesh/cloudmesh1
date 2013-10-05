@@ -83,7 +83,7 @@ def kill(server="server"):
     """kills all server processes """
     with settings(warn_only=True):
         local("fab mongo.stop")
-        result = local('ps -a | fgrep "python {0}.py" | fgrep -v fgrep'.format(server), capture=True).split("\n")
+        result = local('ps -ax | fgrep "python {0}.py" | fgrep -v fgrep'.format(server), capture=True).split("\n")
         for line in result:
             pid = line.split(" ")[0]
             local("kill -9 {0}".format(pid))
