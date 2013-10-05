@@ -36,6 +36,38 @@ class cm_user(object):
         self.password_key = self.config_server.get("cloudmesh.server.mongo.collections.password.key")
         self.connect_db()
 
+    def generate_yaml(id, basename):
+        '''
+        Generates the content for a yaml file based on the passwed parameters.
+        
+        :param id: The username for which we want to create the yaml file
+        :type id: String
+        :param basename: The base name of the yaml file in the etc directory.
+                         Allowed values are 'me' and 'cloudmesh'
+        :type basename: String
+        '''
+
+        """id = username"""
+        """basename = me, cloudmesh"""
+
+        log.info("generate {1} yaml {0}".format(id, basename))
+        result = self.info(id)
+
+        # banner("RESULT")
+        # pprint (result)
+
+
+        etc_filename = path_expand("~/.futuregrid/etc/{0}.yaml".format(basename))
+
+        # print etc_filename
+
+        t = cm_template(etc_filename)
+        out = t.replace(kind='dict', values=result)
+        # banner("{0} DATA".format(basename))
+
+        return out
+
+
     def connect_db(self):
         """ Connect to the mongo db."""
 
