@@ -227,7 +227,7 @@ class openstack(ComputeBaseType):
                 return self.user_id
             except:
                 self.user_id = None
-                print "OS_USER_ID not set"
+                log.error("OS_USER_ID not set")
 
         self.user_token = self.get_token()
         self.user_id = self.user_token['access']['user']['id']
@@ -374,7 +374,7 @@ class openstack(ComputeBaseType):
             safe_userdata = strutils.safe_encode(userdata)
             params["server"]["user_data"] = base64.b64encode(safe_userdata)
 
-        print params
+        log.debug("POST PARAMS {0}".format(params))
 
         return self._post(posturl, params)
 
@@ -419,7 +419,7 @@ class openstack(ComputeBaseType):
                                     "address": "%s" % ip
                                     }
                   }
-        print params
+        log.debug ("POST PARAMS {0}".format(params))
         return self._post(posturl, params)
 
     def delete_public_ip(self, idofip):
@@ -477,12 +477,12 @@ class openstack(ComputeBaseType):
 
         url = "{0}/{1}".format(url, msg)
 
-        print url
+        log.debug("AUTH URL {0}".format(url))
         headers = {'X-Auth-Token': token['access']['token']['id']}
 
         r = requests.get(url, headers=headers, verify=self._get_cacert(credential), params=payload)
 
-        print "RRRRR", r
+        log.debug("Response {0}".format(r))
 
         if json:
             return r.json()
@@ -514,7 +514,7 @@ class openstack(ComputeBaseType):
         d = {}
         cm_type_version = self.compute_config.get('cloudmesh.clouds.{0}.cm_type_version'.format(self.label))
 
-        print "VVVVV", cm_type_version
+        log.debug ("CM TYPE VERSION {0}".format(cm_type_version))
 
         for element in list:
             element['cm_type'] = type
@@ -532,7 +532,7 @@ class openstack(ComputeBaseType):
         # list = self._get(msg)['extensions']
         result = self._get(msg, json=False)
         if result.status_code == 404:
-            print "ERROR: extensions not available"
+            log.error("extensions not available")
             return {}
         else:
             list = r.json()
@@ -728,7 +728,7 @@ class openstack(ComputeBaseType):
                                     "description": secgroup.description
                                     }
                   }
-        # print params
+        #         log.debug ("POST PARAMS {0}".format(params))
         ret = self._post(posturl, params)
         groupid = None
         # upon successful, it returns a dict keyed by 'security_group',
@@ -762,7 +762,7 @@ class openstack(ComputeBaseType):
                                             "parent_group_id": groupid
                                             }
                       }
-            # print params
+            #         log.debug ("POST PARAMS {0}".format(params))
             ret = self._post(posturl, params)
             if "security_group_rule" not in ret:
                 log.error("Failed to create security group rule(s). Error message: '%s'" % ret)

@@ -1,10 +1,11 @@
 '''
 A simple class to set up a custom logger for a class
 '''
-
+from sh import grep
 import logging
 import sys
 import os
+from cloudmesh.util.util import path_expand
 
 def LOGGER(filename):
     """creates a logger with the given name.
@@ -25,8 +26,29 @@ def LOGGER(filename):
     except:
         pass
 
+
+
+
+    loglevel = logging.CRITICAL
+    try:
+        level = grep("loglevel:", path_expand("~/.futuregrid/cloudmesh_server.yaml")).strip().split(":")[1].strip().lower()
+
+        if level == "debug":
+            loglevel = logging.DEBUG
+        elif level == "info":
+            loglevel = logging.INFO
+        elif level == "warning":
+            loglevel = logging.WARNING
+        else:
+             level = logging.CRITICAL
+    except:
+        print "LOGLEVEL NOT FOUND"
+        loglevel = logging.DEBUG
+
     log = logging.getLogger(name)
-    log.setLevel(logging.DEBUG)
+    log.setLevel(loglevel)
+
+
     formatter = logging.Formatter(
         'CM {0:>50}: %(levelname)6s - %(message)s'.format(name))
     handler = logging.StreamHandler()
