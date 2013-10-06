@@ -285,7 +285,7 @@ class Inventory:
 
 
         cluster_name = data['cm_cluster']
-        cluster_auth = self.server_config.get("cloudmesh.clusters")[cluster_name]
+        cluster_auth = self.server_config.get("cloudmesh.server.clusters")[cluster_name]
 
         for name in cluster_auth:
             network = data["network"][name]
