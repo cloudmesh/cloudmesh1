@@ -116,8 +116,8 @@ class cm_mongo:
         elif type == 'aws':
             provider = aws
         return provider
-    
-    def get_cloud(self,cloud_name,force=False):
+
+    def get_cloud(self, cloud_name, force=False):
         cloud = None
         if not force and cloud_name in self.clouds:
             if 'manager' in self.clouds[cloud_name]:
@@ -141,7 +141,7 @@ class cm_mongo:
                             log.error("Credential not working, cloud is not activated")
                     self.clouds[cloud_name].update({'manager': cloud})
             except Exception, e:
-                log.error("Cannot activate cloud <%s>\n%s" % (cloud_name,e) )
+                log.error("Cannot activate cloud <%s>\n%s" % (cloud_name, e))
         return cloud
 
     def activate(self, names=None):
@@ -183,7 +183,7 @@ class cm_mongo:
            refresh the given types for the given clouds
 
         """
-        
+
         if types == ['all'] or types is None:
             types = ['servers', 'flavors', 'images']
 
@@ -193,24 +193,24 @@ class cm_mongo:
         watch = StopWatch()
 
         for name in names:
-            #print "-"*80
-            #print "retrieving for %s" % name
-            #print "-"*80
+            # print "-"*80
+            # print "retrieving for %s" % name
+            # print "-"*80
             cloud = None
             for type in types:
                 # for identity management operations, use the keystone class
-                if type in ['users','tenants','roles']:
+                if type in ['users', 'tenants', 'roles']:
                     cloud = keystone(name)
                 # else try compute/nova class
                 elif 'manager' in self.clouds[name]:
                     cloud = self.clouds[name]['manager']
-                    
+
                 print "Refreshing {0} {1} ->".format(type, name)
 
                 watch.start(name)
                 cloud.refresh(type)
                 result = cloud.get(type)
-                #pprint(result)
+                # pprint(result)
                 # add result to db,
                 watch.stop(name)
                 print 'Refresh time:', watch.get(name)
