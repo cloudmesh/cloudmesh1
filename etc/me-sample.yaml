@@ -6,7 +6,7 @@ portalname: albert
 profile:
     firstname: Gregor
     lastname: von Laszewski
-    e-mail: elfstein@gmail.com
+    email: elfstein@gmail.com
 
 password:
   sierra_openstack_grizzly: 1234abcde

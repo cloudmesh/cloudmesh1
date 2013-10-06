@@ -7,7 +7,7 @@ portalname: {{portalname}}
 profile:
     firstname: {{profile.firstname}}
     lastname: {{profile.lastname}}
-    e-mail: {{profile.email}}
+    email: {{profile.email}}
 
 password:
   sierra_openstack_grizzly: {{ passwords.sierra_openstack_grizzly }}

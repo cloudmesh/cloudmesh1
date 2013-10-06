@@ -6,7 +6,7 @@ me: myportalname
 profile:
     firstname: Gregor
     lastname: von Laszewski
-    e-mail: gvonlasz@gmail.com
+    email: gvonlasz@gmail.com
 
 password:
   sierra_openstack_grizzly: ssss01
