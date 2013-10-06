@@ -1,9 +1,14 @@
-from cloudmesh.config.cm_config import cm_config_server
-from cloudmesh.config.cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config, \
+                                       cm_config_server, \
+                                       get_mongo_db
+from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import path_expand
-from cloudmesh.config.cm_config import get_mongo_db
-
 import yaml
+
+
+log = LOGGER(__file__)
+
+
 class Roles:
 
 
@@ -60,9 +65,9 @@ class Roles:
     def get(self, user):
         user_roles = []
         for r in self.roles:
-            print "checking", r
+            log.debug("checking {0}".format(r))
             us = self.users(r)
-            print "     ", us
+            log.debug("     {0}".format(us))
             if user in us:
                 user_roles.append(r)
         return user_roles
