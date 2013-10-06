@@ -2,7 +2,7 @@ from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config as load
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.pbs.pbs import PBS
-
+from cloudmesh.cm_mesh import cloudmesh as mesh
 from pbr import version
 
 __version__ = version.VersionInfo('cloudmesh')
