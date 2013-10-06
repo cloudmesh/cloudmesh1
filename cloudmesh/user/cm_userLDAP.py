@@ -1,6 +1,8 @@
+from CMUserProviderBaseType import CMUserProviderBaseType
+from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.logger import LOGGER
-from CMUserProviderBaseType import CMUserProviderBaseType
+from pprint import pprint
 import ldap
 import sys
 
@@ -10,6 +12,43 @@ import sys
 
 log = LOGGER(__file__)
 
+def get_ldap_user_from_yaml():
+    me = ConfigDict(filename="~/.futuregrid/me.yaml")
+    d = {}
+    for element in ["firstname",
+                    "lastname",
+                    "email",
+                    "phone",
+                    "address"]:
+        d[element] = me.get("profile.{0}".format(element))
+    d["cm_user_id"] = me.get("portalname")
+    d["gidNumber"] = 0
+    d["uidNumber"] = 0
+
+    if "gidNumber" in me.keys():
+        d["gidNumber"] = me.get("gidNumber")
+
+    if "uidNumber" in me.keys():
+        d["uidNumber"] = me.get("uidNumber")
+
+    d["projects"] = me.get("projects")
+
+    #
+    # remove the fg from the project names
+    #
+    for project in d["projects"]["active"]:
+        d["projects"]["active"] = project.replace("fg", "")
+
+    for project in d["projects"]["completed"]:
+        d["projects"]["completed"] = project.replace("fg", "")
+
+    d["projects"]["default"] = d["projects"]["default"].replace("fg", "")
+
+    #
+    # copy the keys
+    #
+    d['keys'] = me.get("keys.keylist")
+    return d
 
 
 class cm_userLDAP (CMUserProviderBaseType):
@@ -205,10 +244,15 @@ class cm_userLDAP (CMUserProviderBaseType):
         except:
             print "WRONG" + str(sys.exc_info())
 
+    def _get_uesr_from_yaml(self, username):
+        me = ConfigDict("~/.futuregrid/me.yaml")
+
+        print me
 
 
 def main():
     idp = cm_userLDAP (CMUserProviderBaseType)
+
     idp.connect("fg-ldap", "ldap")
     idp.refresh()
     users = idp.list()
@@ -220,6 +264,7 @@ def main():
     pprint(idp.users)
 
 
+    # idp._get_uesr_from_yaml(None)
 
 if __name__ == "__main__":
     main()
