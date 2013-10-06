@@ -3,6 +3,7 @@ from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
+from cloudmesh.user.cm_userLDAP import get_ldap_user_from_yaml
 from cloudmesh.user.roles import Roles
 from cloudmesh.util.util import cond_decorator, path_expand
 from datetime import datetime
@@ -59,6 +60,8 @@ all_modules = ['menu',
 
 s_config = cm_config_server()
 
+
+with_ldap = s_config.get("cloudmesh.server.ldap.with_ldap")
 
 with_browser = s_config.get("cloudmesh.server.webui.browser")
 browser_page = s_config.get("cloudmesh.server.webui.page")
@@ -363,6 +366,8 @@ if cloudmesh.with_login:
 @app.before_request
 def before_request():
     g.user = current_user
+    print "USER", g.user
+    print "USER", g.user.__dict__
 
 @identity_loaded.connect_via(app)
 def on_identity_loaded(sender, identity):
@@ -438,47 +443,63 @@ class LoginForm(Form):
     def validate_on_submit(self):
         return True
 
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # A hypothetical login form that uses Flask-WTF
-    form = LoginForm()
-
-    if request.method == 'POST' and form.validate_on_submit():
-
-        form.error = None
-        try:
-            idp = cm_userLDAP ()
-            idp.connect("fg-ldap", "ldap")
-            user = idp.find_one({'cm_user_id': form.username.data})
-        except Exception, e:
-            error = "LDAP server not reachable"
-            error += str(e)
-            return render_template('error.html',
-                           error=error,
-                           type="Can not reach LDAP",
-                           msg="")
 
 
+    if with_ldap:
+        form = LoginForm()
 
-        if user is None:
-            form.error = 'Login Invalid'
-        elif user['cm_user_id'] != form.username.data:
-            form.error = 'Login Invalid'
-        elif idp.authenticate(form.username.data, form.password.data):
-            print "LOGIN USER"
+        if request.method == 'POST' and form.validate_on_submit():
 
-            g.user = load_user(form.username.data)
+            form.error = None
+            try:
+                idp = cm_userLDAP ()
+                idp.connect("fg-ldap", "ldap")
+                user = idp.find_one({'cm_user_id': form.username.data})
+                print "MONGO USER"
+                pprint (user)
+            except Exception, e:
+                error = "LDAP server not reachable"
+                error += str(e)
+                return render_template('error.html',
+                               error=error,
+                               type="Can not reach LDAP",
+                               msg="")
 
-            ret = login_user(g.user)
 
-            identity_changed.send(current_app._get_current_object(),
-                                  identity=Identity(g.user.id))
 
-            return redirect(request.args.get('next') or '/')
-        else:
-            form.error = 'Login Invalid'
+            if user is None:
+                form.error = 'Login Invalid'
+            elif user['cm_user_id'] != form.username.data:
+                form.error = 'Login Invalid'
+            elif idp.authenticate(form.username.data, form.password.data):
+                print "LOGIN USER"
 
-    return render_template('login.html', form=form)
+                g.user = load_user(form.username.data)
+
+                ret = login_user(g.user)
+
+                identity_changed.send(current_app._get_current_object(),
+                                      identity=Identity(g.user.id))
+
+                return redirect(request.args.get('next') or '/')
+            else:
+                form.error = 'Login Invalid'
+
+        return render_template('login.html', form=form)
+    else:
+        user = get_ldap_user_from_yaml()
+        g.user = user
+
+        ret = login_user(g.user)
+
+        identity_changed.send(current_app._get_current_object(),
+                              identity=Identity(g.user.id))
+
+        return redirect(request.args.get('next') or '/')
 
 @app.route('/logout')
 @login_required

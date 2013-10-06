@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout_title.html" %}
 {% block title %}Sign in{% endblock %}
 
 {% block contentbox %}
@@ -7,7 +7,13 @@
 {% endblock %}
 
 {% block content %}
+
   <form action="" method=post>
+
+    <div class="alert alert-danger">
+    	<strong>Error:</strong> {{ form.error }}
+    </div>
+    <hr>
     <p>
       {{ form.username.label}}
       {{ form.username }}
@@ -17,10 +23,6 @@
        {{ form.password }}
     </p>
     {% if form.error %}
-    <hr>
-    <p class=error style="color:red;">
-    	<strong>Error:</strong> {{ form.error }}
-    </p>
     <hr>
     {% endif %}
 
