@@ -509,7 +509,7 @@ def login():
             form.error = 'Login Invalid'
         elif user['cm_user_id'] != form.username.data:
             form.error = 'Login Invalid'
-        elif idp.authenticate(form.username.data, form.password.data):
+        elif user.authenticate(form.username.data, form.password.data):
             print "LOGIN USER"
             g.user = load_user(form.username.data)
 
