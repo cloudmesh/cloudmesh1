@@ -386,9 +386,9 @@ def page(path):
 #  PRINCIPAL LOGIN
 # ============================================================
 
-if cloudmesh.with_login:
-    idp = cm_userLDAP ()
-    idp.connect("fg-ldap", "ldap")
+# if cloudmesh.with_login:
+#    idp = cm_userLDAP ()
+#    idp.connect("fg-ldap", "ldap")
 
 
 @app.before_request
