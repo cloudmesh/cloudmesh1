@@ -142,6 +142,18 @@ rain_permission = Permission(RoleNeed('rain'))
 
 app.secret_key = SECRET_KEY
 
+# Production logging... send errors via email.
+# TODO: Make this configurable.
+if not app.debug:
+    import logging
+    from logging.handlers import SMTPHandler
+    mail_handler = SMTPHandler('localhost',
+                               'cloudmesh-server@cloudmesh.futuregrid.org',
+                               ['cm-errors'],
+                               'CloudMesh Server Error')
+    mail_handler.setLevel(logging.ERROR)
+    app.logger.addHandler(mail_handler)
+
 def flash_errors(form):
     for field, errors in form.errors.items():
         for error in errors:
