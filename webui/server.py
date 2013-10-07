@@ -25,7 +25,7 @@ import sys
 import time
 import types
 import webbrowser
-from cloudmesh.config.cm_keys import key_fingerprint
+from cloudmesh.config.cm_keys import get_fingerprint
 
 
 # from flask.ext.autoindex import AutoIndex
@@ -336,7 +336,7 @@ def simple_date(d):
 
 @app.template_filter()
 def filter_fingerprint(key):
-    return str(key_fingerprint(key))
+    return str(get_fingerprint(key))
 
 # ============================================================
 # FILTER: state color
