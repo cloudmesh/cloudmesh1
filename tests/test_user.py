@@ -103,6 +103,9 @@ class Test_cloudmesh:
         print type(self.config)
         print self.config
 
+        #
+        # BUG?
+        #
         self.idp = cm_userLDAP ()
         self.idp.connect("fg-ldap", "ldap")
         self.idp.refresh()
