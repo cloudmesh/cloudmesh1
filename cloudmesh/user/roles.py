@@ -65,9 +65,7 @@ class Roles:
     def get(self, user):
         user_roles = []
         for r in self.roles:
-            log.debug("checking {0}".format(r))
             us = self.users(r)
-            log.debug("     {0}".format(us))
             if user in us:
                 user_roles.append(r)
         return user_roles
