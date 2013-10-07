@@ -25,6 +25,14 @@ $(function() {
       <li><a href="/mesh/flavors">Select Default Flavors</a></li>
     </ul>
 
+{{userdata.__dict__}}<br>
+
+{{userdata["name"]}}<br>
+{{username}}<br>
+
+{{user}}<br>
+
+
 
 
 <table>
@@ -38,23 +46,37 @@ $(function() {
     </tr>
 	<tr>
 		<td></td><td>Firstname</td>
-		<td colspan="2"> {{ person.firstname }}
+		<td colspan="2"> {{ user.firstname }}
         </td>
     </tr>
     <tr>
     	<td></td><td>Lastname</td>
-		<td colspan="2">{{ person.lastname }}
+		<td colspan="2">{{ user.lastname }}
 		</td>
 	</tr>
 	<tr><td></td><td>Phone</td>
-	<td colspan="2">{{ person.phone }}
+	<td colspan="2">{{ user.phone }}
 	</td></tr>
 	<tr><td></td><td>e-mail</td>
-	<td colspan="2">{{ person.e_mail }}
+	<td colspan="2">{{ user.email }}
 	</td></tr>
 	<tr><td></td><td>Address</td>
-	<td colspan="2">{{ address | replace ("\n", "<br>") | safe}}</td>
+	<td colspan="2">{{ user.address | replace ("\n", "<br>") | safe}}</td>
 	</tr>
+
+	<!-- -------------- CLOUDMESH DETAILS ---------------------------------- -->
+
+	<tr>
+     	<th></th><th colspan="3"><b> Cloudmesh  </b></th>
+	</tr>
+
+	<tr>
+	  <td>
+	  </td>
+	  <td>Roles</td>
+	  <td colspan="2">{{userdata.roles}}</td>
+	</tr>
+
 
 	<!-- -------------- HPC DETAILS ---------------------------------- -->
 
@@ -66,7 +88,7 @@ $(function() {
 	  <td>
 	  </td>
 	  <td>Username</td>
-	  <td colspan="2">{{user}}</td>
+	  <td colspan="2">{{user.cm_user_id}}</td>
 	</tr>
 
 	<!-- -------------- CLOUD DETAILS ---------------------------------- -->
@@ -92,7 +114,7 @@ $(function() {
 	<tr><th></th><th colspan="3"><b> Projects </b></th></tr>
 
 
-	     {% for projectname in projects.names(status="active") %}
+	     {% for projectname in user.projects["active"] %}
 		<tr>
 	 	<td>
 	 	<input type="radio"
@@ -116,7 +138,7 @@ $(function() {
 
 	<tr>
 
-	    {% for projectname in projects.names(status="completed") %}
+	    {% for projectname in user.projects["completed"] %}
 		<td></td>
 		<td colspan="2">
 	    {% if projectname != "None" %}
@@ -220,8 +242,8 @@ $(function() {
 		   <td colspan="2">Path/Fingerprint</td>
 		</tr>
 		{% set defaultkey = keys.get_default_key() %}
-		{% for name in keys.names() %}
-		    {% set value = keys[name] %}
+		{% for name in user["keys"] %}
+		    {% set value = user["keys"][name] %}
 		    {% if name == defaultkey %}
 				{% set checked = 'checked' %}
 			{% else %}
@@ -232,7 +254,7 @@ $(function() {
 					 onclick="document.forms['selectKeyForm'].submit()" title="select">
 		  		</td>
 		  		<td>{{name}}</td>
-		  		<td colspan="2">{{keys.fingerprint(name)}}
+		  		<td colspan="2">{{user["keys"][name] | replace("key ","")  }}
 					<a href="delete/{{name}}/"><img src="/static/img/icons/png/glyphicons_016_bin.png" width="12" height="12" title="delete" align="right"></a>
 		  		</td>
 			</tr>

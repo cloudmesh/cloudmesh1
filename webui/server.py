@@ -25,8 +25,7 @@ import sys
 import time
 import types
 import webbrowser
-
-
+from cloudmesh.config.cm_keys import key_fingerprint
 
 
 # from flask.ext.autoindex import AutoIndex
@@ -236,8 +235,18 @@ def page_not_found(error):
     error = 'Access denied {0}'.format(403)
     return render_template('error.html',
                            error=error,
-                           type="Access Denied",
-                           msg="You need to Login first")
+                           type="Authorization Denied",
+                           msg="You need to login first")
+
+@app.errorhandler(401)
+def page_not_found(error):
+    error = 'Access denied {0}'.format(401)
+    return render_template('error.html',
+                           error=error,
+                           type="Authentication Denied",
+                           msg="You need to login first")
+
+
 
 
 # ============================================================
@@ -319,6 +328,15 @@ def only_numbers(str):
 @app.template_filter()
 def simple_date(d):
     return str(d).rpartition(':')[0]
+
+
+# ============================================================
+# FILTER: simple_data, cuts of microseconds
+# ============================================================
+
+@app.template_filter()
+def filter_fingerprint(key):
+    return str(key_fingerprint(key))
 
 # ============================================================
 # FILTER: state color
@@ -448,7 +466,7 @@ class LoginForm(Form):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
-
+    error = None
     if with_ldap:
         form = LoginForm()
 
