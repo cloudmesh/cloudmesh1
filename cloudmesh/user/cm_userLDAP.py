@@ -34,17 +34,6 @@ def get_ldap_user_from_yaml():
     d["projects"] = me.get("projects")
 
     #
-    # remove the fg from the project names
-    #
-    for project in d["projects"]["active"]:
-        d["projects"]["active"] = project.replace("fg", "")
-
-    for project in d["projects"]["completed"]:
-        d["projects"]["completed"] = project.replace("fg", "")
-
-    d["projects"]["default"] = d["projects"]["default"].replace("fg", "")
-
-    #
     # copy the keys
     #
     d['keys'] = me.get("keys.keylist")
@@ -233,18 +222,18 @@ class cm_userLDAP (CMUserProviderBaseType):
             for ldapresult in ldapresults:
                 if ldapresult[1].has_key('cn'):
                     cn = ldapresult[1]['cn'][0]
-                    projid = cn[2:]
+                    # projid = cn
                     if ldapresult[1].has_key('memberUid'):
                         for auid in ldapresult[1]['memberUid']:
                             if self.users.has_key(auid):
                                 if self.users[auid]["projects"]["active"] is not None:
-                                    self.users[auid]["projects"]["active"].append(int(projid))
+                                    self.users[auid]["projects"]["active"].append(cn)
                                 else:
-                                    self.users[auid]["projects"]["active"] = [int(projid)]
+                                    self.users[auid]["projects"]["active"] = [cn]
         except:
             print "WRONG" + str(sys.exc_info())
 
-    def _get_uesr_from_yaml(self, username):
+    def _get_user_from_yaml(self, username):
         me = ConfigDict("~/.futuregrid/me.yaml")
 
         print me
@@ -264,7 +253,7 @@ def main():
     pprint(idp.users)
 
 
-    # idp._get_uesr_from_yaml(None)
+    # idp._get_user_from_yaml(None)
 
 if __name__ == "__main__":
     main()

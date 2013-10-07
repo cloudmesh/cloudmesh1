@@ -125,6 +125,7 @@ class cm_user(object):
         #
         # update project names
         #
+
         projects = userinfo["projects"]
         projects = self.update_users_project_names(projects)
 
@@ -134,26 +135,12 @@ class cm_user(object):
 
     def update_users_project_names(self, projects):
 
-        def correct_project_names(projects):
-            tmp = [ "fg" + str(x) for x in projects]
-            print "YYYYYY", tmp
-            if tmp is None:
-                #
-                #  BUG HACK must be empty list
-                #
-                tmp = ['fg0']
-            return tmp
+        if "active" not in projects.keys():
+            projects["active"] = []
 
-        # projects = usersinfo[portal_id]["profile"]["projects"]
-        try:
-            projects["active"] = correct_project_names(projects["active"])
-        except Exception, e:
-            print e
-            pass
-        try:
-            projects["completed"] = correct_project_names(projects["completed"])
-        except:
-            pass
+        if "completed" not in projects.keys():
+            projects["active"] = []
+
         return projects
 
     def list_users(self, cloud_names=[]):
