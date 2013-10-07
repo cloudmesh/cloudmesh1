@@ -239,7 +239,7 @@ $(function() {
 		<form action="" name = "selectKeyForm" method=post enctype=multipart/form-data >
 		<tr><td></td>
 		   <td>Key Name</td>
-		   <td colspan="2">Path/Fingerprint</td>
+		   <td colspan="2"> Fingerprint</td>
 		</tr>
 		{% set defaultkey = keys.get_default_key() %}
 		{% for name in user["keys"] %}
@@ -254,7 +254,7 @@ $(function() {
 					 onclick="document.forms['selectKeyForm'].submit()" title="select">
 		  		</td>
 		  		<td>{{name}}</td>
-		  		<td colspan="2">{{user["keys"][name] | replace("key ","")  }}
+		  		<td colspan="2">{{ user["keys"][name]  }}
 					<a href="delete/{{name}}/"><img src="/static/img/icons/png/glyphicons_016_bin.png" width="12" height="12" title="delete" align="right"></a>
 		  		</td>
 			</tr>
