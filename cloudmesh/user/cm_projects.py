@@ -10,7 +10,7 @@ class cm_projects():
         """retrieves the information from the portal into mongo"""
         raise NotImplementedError()
 
-    def id(self, identifier):
+    def number(self, identifier):
         """
         returns the number of a probect. Input can be. 
         Assume number is 82
