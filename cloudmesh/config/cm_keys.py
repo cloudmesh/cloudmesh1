@@ -6,6 +6,11 @@ import os
 import sys
 
 
+def get_fingerprint(self, entirekey):
+        value = self.__getitem__(entirekey)
+        t, keystring, comment = value.split()
+        return key_fingerprint(keystring)
+
 def key_fingerprint(key_string):
     key = base64.decodestring(key_string)
     fp_plain = hashlib.md5(key).hexdigest()
