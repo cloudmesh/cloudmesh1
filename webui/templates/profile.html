@@ -25,15 +25,6 @@ $(function() {
       <li><a href="/mesh/flavors">Select Default Flavors</a></li>
     </ul>
 
-{{userdata.__dict__}}<br>
-
-{{userdata["name"]}}<br>
-{{username}}<br>
-
-{{user}}<br>
-
-
-
 
 <table>
     <form name="profile" action="/profile/" method="POST">
@@ -46,22 +37,22 @@ $(function() {
     </tr>
 	<tr>
 		<td></td><td>Firstname</td>
-		<td colspan="2"> {{ user.firstname }}
+		<td colspan="2"> {{ user.profile.firstname }}
         </td>
     </tr>
     <tr>
     	<td></td><td>Lastname</td>
-		<td colspan="2">{{ user.lastname }}
+		<td colspan="2">{{ user.profile.lastname }}
 		</td>
 	</tr>
 	<tr><td></td><td>Phone</td>
-	<td colspan="2">{{ user.phone }}
+	<td colspan="2">{{ user.profile.phone }}
 	</td></tr>
 	<tr><td></td><td>e-mail</td>
-	<td colspan="2">{{ user.email }}
+	<td colspan="2">{{ user.profile.email }}
 	</td></tr>
 	<tr><td></td><td>Address</td>
-	<td colspan="2">{{ user.address }}
+	<td colspan="2">{{ user.profile.address }}
 	</tr>
 
 	<!-- -------------- CLOUDMESH DETAILS ---------------------------------- -->
@@ -88,7 +79,7 @@ $(function() {
 	  <td>
 	  </td>
 	  <td>Username</td>
-	  <td colspan="2">{{user.cm_user_id}}</td>
+	  <td colspan="2">{{user.portalname}}</td>
 	</tr>
 
 	<!-- -------------- CLOUD DETAILS ---------------------------------- -->
@@ -99,16 +90,34 @@ $(function() {
 	  <td> VM Name </td>
 	  <td colspan="2"><input type="text"
 	    name="field-prefix"
-	    value="{{ user.prefix }}"
+	    value="{{ user.defaults.prefix }}"
 	    style="width:120px">
 	    -
 	    <input type="text"
 	    name="field-index"
-	    value="{{ user.index }}"
+	    value="{{ user.defaults.index }}"
 	    style="width:120px">
 	    <input type="submit" name="btnindex" value="Save VM Name">
 	  </td>
 	</tr>
+	{% for cloud in user.clouds: %}
+
+	   <tr>
+	   	<td></td>
+	   	<th colspan="3">{{cloud}}</th>
+	   </tr>
+	   {% for a in ['name','enabled', 'cm_type_version', 'tenantId', 'id', 'cm_type', 'email'] %}
+		<tr>
+			<td></td>
+			<td>{{a }}</td>
+			<td colspan="2">{{user.clouds[cloud][a]}}</td>
+		</tr>
+
+	{% endfor %}
+	{% endfor %}
+
+
+
 
 <!-- -------------- Projects ---------------------------------- -->
 	<tr><th></th><th colspan="3"><b> Projects </b></th></tr>
@@ -121,7 +130,7 @@ $(function() {
 	        name="field-selected-project"
 	        value="{{ projectname }}"
 	        id="{{ projectname }}"
-	        {% if projectname == user.default.project %}
+	        {% if projectname == user.defaults.project %}
 	          checked="checked"
 	        {% endif %}
 	        onclick="document.forms['profile'].submit()"/>
@@ -175,7 +184,7 @@ $(function() {
 	  name="field-selected-securityGroup"
 	  value="{{ group }}"
 	  id="{{ group }}"
-	  {% if group ==  user.default.security %}
+	  {% if group ==  user.defaults.security %}
 	    checked="checked"
 	  {% endif %}
 	  onclick="document.forms['profile'].submit()"
@@ -233,17 +242,15 @@ $(function() {
 
 <!-- -------------- Keys ---------------------------------- -->
 	<tr>
-		<th></th><th colspan="3"><b> Keys </b></th></tr>
+		<th>
+			{{ image_link ("right", "030_pencil", "https://portal.futuregrid.org/my/ssh-keys") }}
+		</th><th colspan="3"><b> Keys </b></th></tr>
 	<tr>
 	{% if (user["keys"] | count) > 0 %}
 		<form action="" name = "selectKeyForm" method=post enctype=multipart/form-data >
-		<tr><td></td>
-		   <td>Key Name</td>
-		   <td colspan="2"> Fingerprint</td>
-		</tr>
-		{% set defaultkey = user.default.key %}
-		{% for name in user["keys"] %}
-		    {% set value = user["keys"][name] %}
+		{% set defaultkey = user.defaults.key %}
+		{% for name in user["keys"]["keylist"] %}
+		    {% set value = user["keys"]["keylist"][name] %}
 		    {% if name == defaultkey %}
 				{% set checked = 'checked' %}
 			{% else %}
@@ -254,7 +261,7 @@ $(function() {
 					 onclick="document.forms['selectKeyForm'].submit()" title="select">
 		  		</td>
 		  		<td>{{name}}</td>
-		  		<td colspan="2">{{  user["keys"][name] | replace ("key ssh", "") |  filter_fingerprint  }}
+		  		<td colspan="2">{{  user["keys"]["keylist"][name] | replace ("key ssh", "") |  filter_fingerprint  }}
 					<a href="delete/{{name}}/"><img src="/static/img/icons/png/glyphicons_016_bin.png" width="12" height="12" title="delete" align="right"></a>
 		  		</td>
 			</tr>
@@ -264,7 +271,7 @@ $(function() {
 		There are no keys present, please add one.
 	</form>
 	{% endif %}
-
+	<!--
 	<form action="" method=post enctype=multipart/form-data name = "addkeysform">
 
 	<tr>
@@ -277,6 +284,7 @@ $(function() {
 
 	</tr>
 	</form>
+	-->
 
 </table>
 {{show}}

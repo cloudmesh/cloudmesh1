@@ -12,10 +12,11 @@
 
 """
 from cloudmesh.config.cm_config import cm_config_server, get_mongo_db
-from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.encryptdata import encrypt, decrypt
+from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.util import deprecated
 import traceback
-
+from pprint import pprint
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
@@ -31,10 +32,17 @@ class cm_user(object):
 
     config_server = None
 
-    def __init__(self):
+
+    def __init__(self, from_yaml=False):
+        self.from_yaml = from_yaml
         self.config_server = cm_config_server()
         self.password_key = self.config_server.get("cloudmesh.server.mongo.collections.password.key")
         self.connect_db()
+
+
+
+
+
 
     def generate_yaml(id, basename):
         '''
@@ -71,15 +79,17 @@ class cm_user(object):
     def connect_db(self):
         """ Connect to the mongo db."""
 
-        ldap_collection = 'user'
-        cloud_collection = 'cloudmesh'
-        defaults_collection = 'defaults'
-        passwd_collection = 'password'
+        if not self.from_yaml:
 
-        self.db_clouds = get_mongo_db(cloud_collection)
-        self.db_users = get_mongo_db(ldap_collection)
-        self.db_defaults = get_mongo_db(defaults_collection)
-        self.userdb_passwd = get_mongo_db(passwd_collection)
+            ldap_collection = 'user'
+            cloud_collection = 'cloudmesh'
+            defaults_collection = 'defaults'
+            passwd_collection = 'password'
+
+            self.db_clouds = get_mongo_db(cloud_collection)
+            self.db_users = get_mongo_db(ldap_collection)
+            self.db_defaults = get_mongo_db(defaults_collection)
+            self.userdb_passwd = get_mongo_db(passwd_collection)
 
 
     def info(self, portal_id, cloud_names=[]):
@@ -89,43 +99,56 @@ class cm_user(object):
         :returns: dict
 
         """
-        ldap_info = self.db_users.find({"cm_user_id": portal_id})
-        cloud_info = self.db_clouds.find({"name": portal_id, "cm_kind": "users"})
-        userinfo = {}
-        # username is unique in ldap
-        if ldap_info.count() > 0:
-            ldap_user = ldap_info[0]
-            del ldap_user['_id']
-            userinfo["profile"] = ldap_user
-            #
-            # repositionning kesya nd projects
-            #
 
-            userinfo["keys"] = {'keylist': ldap_user['keys']}
+        if self.from_yaml:
+            return get_ldap_user_from_yaml()
 
-            userinfo["projects"] = ldap_user['projects']
-            del userinfo['profile']['keys']
-            del userinfo['profile']['projects']
+        else:
 
-            userinfo['portalname'] = portal_id
+            ldap_info = self.db_users.find({"cm_user_id": portal_id})
+            cloud_info = self.db_clouds.find({"name": portal_id, "cm_kind": "users"})
+            userinfo = {}
+            # username is unique in ldap
+            if ldap_info.count() > 0:
+                ldap_user = ldap_info[0]
+                del ldap_user['_id']
+                userinfo["profile"] = ldap_user
+                #
+                # repositionning kesya nd projects
+                #
 
-        userinfo['clouds'] = {}
-        for arec in cloud_info:
-            del arec['_id']
-            if len(cloud_names) > 0:
-                if arec['cm_cloud'] in cloud_names:
+                userinfo["keys"] = {}
+                userinfo["keys"]["keylist"] = ldap_user['keys']
+
+                userinfo["projects"] = ldap_user['projects']
+                del userinfo['profile']['keys']
+                del userinfo['profile']['projects']
+
+                userinfo['portalname'] = portal_id
+                userinfo['cm_user_id'] = portal_id
+
+            userinfo['clouds'] = {}
+            for arec in cloud_info:
+                del arec['_id']
+                if len(cloud_names) > 0:
+                    if arec['cm_cloud'] in cloud_names:
+                        userinfo['clouds'][arec['cm_cloud']] = arec
+                else:
                     userinfo['clouds'][arec['cm_cloud']] = arec
-            else:
-                userinfo['clouds'][arec['cm_cloud']] = arec
-        userinfo['defaults'] = self.get_defaults(portal_id)
-        #
-        # update project names
-        #
+            userinfo['defaults'] = self.get_defaults(portal_id)
+            #
+            # update project names
+            #
 
-        projects = userinfo["projects"]
-        projects = self.update_users_project_names(projects)
 
-        return userinfo
+            print 70 * "T"
+            pprint(userinfo)
+
+
+            projects = userinfo["projects"]
+            projects = self.update_users_project_names(projects)
+
+            return userinfo
 
 
 
@@ -146,61 +169,66 @@ class cm_user(object):
         :type cloud_names: list
         
         """
-        ldap_info = self.db_users.find()
-        usersinfo = {}
-        for ldap_user in ldap_info:
-            # e.g. ldap_user = {u'cm_user_id': u'abc', u'lastname': u'abc'
-            # , u'_id': ObjectId('abc'), u'projects':
-            # {u'active': []}, u'firstname': u'bbc'}
-            portal_id = ldap_user['cm_user_id']
-            usersinfo[portal_id] = {}
+        if self.from_yaml:
+            log.critical("NOT IMPLEMENTED")
+        else:
 
-            userinfo = usersinfo[portal_id]
+            ldap_info = self.db_users.find()
+            usersinfo = {}
+            for ldap_user in ldap_info:
+                # e.g. ldap_user = {u'cm_user_id': u'abc', u'lastname': u'abc'
+                # , u'_id': ObjectId('abc'), u'projects':
+                # {u'active': []}, u'firstname': u'bbc'}
+                portal_id = ldap_user['cm_user_id']
+                usersinfo[portal_id] = {}
 
-            userinfo['portalname'] = portal_id
-            userinfo['profile'] = ldap_user
-            #
-            # repositioning
-            #
-            userinfo["keys"] = {'keylist': ldap_user['keys']}
+                userinfo = usersinfo[portal_id]
 
-            userinfo["projects"] = ldap_user['projects']
-            del userinfo['profile']['keys']
-            del userinfo['profile']['projects']
+                userinfo['portalname'] = portal_id
+                userinfo['profile'] = ldap_user
+                #
+                # repositioning
+                #
+                userinfo["keys"] = {'keylist': ldap_user['keys']}
 
-            #
-            # correct projects
-            #
-            projects = userinfo["projects"]
-            projects = self.update_users_project_names(projects)
+                userinfo["projects"] = ldap_user['projects']
+                del userinfo['profile']['keys']
+                del userinfo['profile']['projects']
 
-        cloud_info = self.db_clouds.find({"cm_kind": "users"})
-        for cloud_user in cloud_info:
-            portal_id = cloud_user['name']
-            try:
-                usersinfo[portal_id]
-            except KeyError:
-                print portal_id + " doesn't exist in the ldap, skip to search"
-                continue
+                #
+                # correct projects
+                #
+                projects = userinfo["projects"]
+                projects = self.update_users_project_names(projects)
 
-            try:
-                usersinfo[portal_id]['clouds']
-            except KeyError:
-                usersinfo[portal_id]['clouds'] = {}
+            cloud_info = self.db_clouds.find({"cm_kind": "users"})
+            for cloud_user in cloud_info:
+                portal_id = cloud_user['name']
+                try:
+                    usersinfo[portal_id]
+                except KeyError:
+                    print portal_id + " doesn't exist in the ldap, skip to search"
+                    continue
 
-            if cloud_names:
-                if cloud_user['cm_cloud'] in cloud_names:
+                try:
+                    usersinfo[portal_id]['clouds']
+                except KeyError:
+                    usersinfo[portal_id]['clouds'] = {}
+
+                if cloud_names:
+                    if cloud_user['cm_cloud'] in cloud_names:
+                        usersinfo[portal_id]['clouds'][cloud_user['cm_cloud']] = \
+                        cloud_user
+                else:
                     usersinfo[portal_id]['clouds'][cloud_user['cm_cloud']] = \
                     cloud_user
-            else:
-                usersinfo[portal_id]['clouds'][cloud_user['cm_cloud']] = \
-                cloud_user
 
-        return usersinfo
+            return usersinfo
 
     def __getitem__(self, key):
         return self.info(key)
 
+    @deprecated
     def get_name(self, portal_id):
         """Return a user name in a tuple. (firstname, lastname)
         
@@ -209,12 +237,13 @@ class cm_user(object):
         :returns: tuple
 
         """
+        (firstname, lastname) = (None, None)
         ldap_data = self.db_users.find({"cm_user_id": portal_id})
         if ldap_data.count() > 0:
             ldap_info = ldap_data[0]
             (first_name, last_name) = (ldap_info['firstname'], ldap_info['lastname'])
 
-            return (first_name, last_name)
+        return (first_name, last_name)
 
     def set_defaults(self, username, d):
         """ Sets the defaults for a user """

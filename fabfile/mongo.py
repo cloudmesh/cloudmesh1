@@ -304,14 +304,18 @@ def vms_find():
     c.activate()
     pprint (c.servers())
 
+
+def refresh(types):
+    c = cm_mongo()
+    c.activate()
+    c.refresh(types=types)
+
 @task
 def cloud():
     '''
     puts a snapshot of users, servers, images, and flavors into mongo
     '''
-    c = cm_mongo()
-    c.activate()
-    c.refresh(types=['users', 'servers', 'images', 'flavors'])
+    refresh(types=['users', 'servers', 'images', 'flavors'])
     ldap()
     inventory()
 
@@ -320,10 +324,16 @@ def simple():
     '''
     puts a snapshot of servers, images, and flavors into mongo (no users)
     '''
-    c = cm_mongo()
-    c.activate()
-    c.refresh(types=['servers', 'images', 'flavors'])
+    refresh(types=['servers', 'images', 'flavors'])
     inventory()
+
+@task
+def users():
+    '''
+    puts a snapshot of the users into mongo
+    '''
+    refresh(types=['users'])
+
 
 @task
 def metric():
@@ -340,23 +350,6 @@ def errormetric():
     # create the mongo object
     # parse the log file
     # put each error form the sql databse in toit
-
-
-@task
-def users():
-    '''
-    puts a snapshot of the users into mongo
-    '''
-    c = cm_mongo()
-    c.activate()
-    c.refresh(types=['users'])
-
-@task
-def cloudusers():
-    '''adds the clud user information from FG to the users mongo info'''
-    # to be done by hyungro
-    user = cm_user()
-    # hyungro
 
 
 

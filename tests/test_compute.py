@@ -112,7 +112,7 @@ class Test:
         image = configuration.default(self.name)['image']
         keys = configuration.userkeys()
         key_name = keys["default"]
-        key_content = keys["keylist"][key_name]
+        key_content = keys[key_name]
         # print key_name
         # print key_content
         print "STARTING IMAGE", image

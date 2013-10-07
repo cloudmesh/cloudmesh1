@@ -1,10 +1,9 @@
-from flask import Blueprint
-from flask import render_template, request, redirect
-from cloudmesh.config.cm_keys import cm_keys
+from cloudmesh.user.cm_user import cm_user
 from cloudmesh.util.util import cond_decorator
-
-import cloudmesh
+from flask import Blueprint, g, render_template, request, redirect
 from flask.ext.login import login_required
+import cloudmesh
+from pprint import pprint
 
 keys_module = Blueprint('keys_module', __name__)
 
@@ -16,7 +15,20 @@ keys_module = Blueprint('keys_module', __name__)
 @keys_module.route('/keys/', methods=['GET', 'POST'])
 @cond_decorator(cloudmesh.with_login, login_required)
 def managekeys():
-    keys = cm_keys()
+
+
+    idp = cm_user ()
+    user_mongo = idp.info(g.user.id)
+
+    # else:
+    #    user_mongo = get_ldap_user_from_yaml()
+
+
+    print 70 * "-"
+    pprint (user_mongo)
+    if 'defaults' not in user_mongo:
+        user_mongo['defaults'] = {}
+
 
     msg = ''
     """
@@ -47,7 +59,7 @@ def managekeys():
             keys.write()
 
     return render_template('keys.html',
-                           keys=keys,
+                           user=user_mongo,
                            show=msg)
 
 

@@ -81,7 +81,10 @@ def password():
 
 @task
 def mongo():
-    config = cm_config(filename="~/.futuregrid/cloudmesh.yaml")
+    filename = "~/.futuregrid/cloudmesh.yaml"
+    banner("reding data from {0}".format(filename))
+    config = cm_config(filename=filename)
+
     profile = config.profile()
 
     element = {
@@ -92,7 +95,7 @@ def mongo():
                "gidNumber" : profile["gid"],
                "address" : profile["address"][0],
                "cm_user_id" : config.get("cloudmesh.hpc.username"),
-               "email" : profile["e_mail"]
+               "email" : profile["email"]
     }
 
     projects = {}

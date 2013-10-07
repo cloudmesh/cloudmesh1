@@ -18,11 +18,4 @@ with_login = True
 
 
 
-try:
-    with_login = cm_config_server().get("cloudmesh.server.ldap.with_ldap")
-
-except:
-    with_login = False
-    print "WARGING: not using user login", with_login
-
 
