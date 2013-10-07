@@ -1,10 +1,17 @@
-<html>
-<head>
-  <title>CloudMesh Server Error</title>
-</head>
-<body>
-  <h1>Server Error</h1>
+{% extends "layout_title.html" %}
+{% block title %}
+  <title>CloudMesh Server Error
+{% endblock %}
+
+{% block contentbox %}
+	<h1>Server Error</h1>
+  {% endblock %}
+
+{% block content %}
+
+<div class="alert alert-danger">
   <p>Sorry, that didn't work.</p>
-  <p>(Also, the appearance of this page needs to be customized).</p>
-</body>
-</html>
+<div>
+
+{% endblock %}
+
