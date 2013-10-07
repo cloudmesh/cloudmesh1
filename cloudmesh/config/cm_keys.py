@@ -6,9 +6,8 @@ import os
 import sys
 
 
-def get_fingerprint(self, entirekey):
-        value = self.__getitem__(entirekey)
-        t, keystring, comment = value.split()
+def get_fingerprint(entirekey):
+        t, keystring, comment = entirekey.split()
         return key_fingerprint(keystring)
 
 def key_fingerprint(key_string):

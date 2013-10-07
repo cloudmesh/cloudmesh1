@@ -87,7 +87,8 @@ def kill(server="server"):
         for line in result:
             pid = line.split(" ")[0]
             local("kill -9 {0}".format(pid))
-        local("fab queue.stop")
+
+        # local("fab queue.stop")
 
 @task
 def start(link="", server="server", port="5000", browser='yes'):
@@ -101,8 +102,8 @@ def start(link="", server="server", port="5000", browser='yes'):
     banner("START MONGO")
     local("fab mongo.start")
 
-    banner("SATRT RABITMQ")
-    local("fab queue.start")
+    # banner("SATRT RABITMQ")
+    # local("fab queue.start")
 
 
     banner("START WEB SERVER")

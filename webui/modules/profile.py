@@ -24,41 +24,51 @@ def profile():
     # bug the global var of the ditc should be used
 
     with_ldap = cm_config_server().get("cloudmesh.server.ldap.with_ldap")
+
+
     config = cm_config()
-    username = config.get("cloudmesh.hpc.username")
-    projects = cm_projects()
-    person = config.get('cloudmesh.profile')
-    keys = cm_keys()
-    version = "tmp"
+    # username = config.get("cloudmesh.hpc.username")
+    # projects = cm_projects()
+    # person = config.get('cloudmesh.profile')
+    # keys = cm_keys()
+    # version = "tmp"
 
     userdata = g.user
 
     if with_ldap:
         idp = cm_userLDAP ()
         idp.connect("fg-ldap", "ldap")
-        user_mongo = idp.find_one({'cm_user_id': username})
+        user_mongo = idp.find_one({'cm_user_id': userdata.id})
         print "MONGO USER"
     else:
         user_mongo = get_ldap_user_from_yaml()
     print 70 * "-"
     pprint (user_mongo)
+    if 'default' not in user_mongo:
+        user_mongo['default'] = {}
     print 70 * "-"
 
     if request.method == 'POST':
         print request.form
         print "p", projects
         # print "c", config
+
         projects.default = request.form['field-selected-project']
-        config['cloudmesh']['security']['default'] = request.form[
+
+
+        user_mongo['default']['security'] = request.form[
             'field-selected-securityGroup']
-        config.index = request.form['field-index']
-        config.prefix = request.form['field-prefix']
-        config.firstname = request.form['field-firstname']
-        config.lastname = request.form['field-lastname']
-        config.phone = request.form['field-phone']
-        config.email = request.form['field-email']
+
+        user_mongo['index'] = request.form['field-index']
+
+        user_mongo['prefix'] = request.form['field-prefix']
+
+        user_mongo['firstname'] = request.form['field-firstname']
+        user_mongo['lastname'] = request.form['field-lastname']
+        user_mongo['phone'] = request.form['field-phone']
+        user_mongo['email'] = request.form['field-email']
         print "setting the values"
-        config.default_cloud = request.form['field-default-cloud']
+        user_mongo['default']['security'] = request.form['field-default-cloud']
         # # print request.form["field-cloud-activated-" + value]
         # print "setting the cloud values"
         # print config
@@ -67,18 +77,12 @@ def profile():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    address = '<br>'.join(str(x) for x in person['address'])
+    address = '<br>'.join(str(x) for x in user_mongo['address'])
     return render_template('profile.html',
                            updated=time_now,
-                           keys=keys,
-                           projects=projects,
-                           person=person,
-                           address=address,
                            # clouds=clouds,
-                           config=config,
-                           configuration=config['cloudmesh'],
-                           version=version,
-                           username=username,
+                           config=config,  # just to populate active projects
+                           configuration=config['cloudmesh'],  # just to populate security groups
                            user=user_mongo,
                            userdata=userdata
                            )

@@ -61,7 +61,7 @@ $(function() {
 	<td colspan="2">{{ user.email }}
 	</td></tr>
 	<tr><td></td><td>Address</td>
-	<td colspan="2">{{ user.address | replace ("\n", "<br>") | safe}}</td>
+	<td colspan="2">{{ user.address }}
 	</tr>
 
 	<!-- -------------- CLOUDMESH DETAILS ---------------------------------- -->
@@ -74,7 +74,7 @@ $(function() {
 	  <td>
 	  </td>
 	  <td>Roles</td>
-	  <td colspan="2">{{userdata.roles}}</td>
+	  <td colspan="2">{{userdata.roles | join(', ')}}</td>
 	</tr>
 
 
@@ -99,12 +99,12 @@ $(function() {
 	  <td> VM Name </td>
 	  <td colspan="2"><input type="text"
 	    name="field-prefix"
-	    value="{{ configuration.prefix }}"
+	    value="{{ user.prefix }}"
 	    style="width:120px">
 	    -
 	    <input type="text"
 	    name="field-index"
-	    value="{{ configuration.index }}"
+	    value="{{ user.index }}"
 	    style="width:120px">
 	    <input type="submit" name="btnindex" value="Save VM Name">
 	  </td>
@@ -121,7 +121,7 @@ $(function() {
 	        name="field-selected-project"
 	        value="{{ projectname }}"
 	        id="{{ projectname }}"
-	        {% if projectname == projects.default %}
+	        {% if projectname == user.default.project %}
 	          checked="checked"
 	        {% endif %}
 	        onclick="document.forms['profile'].submit()"/>
@@ -175,7 +175,7 @@ $(function() {
 	  name="field-selected-securityGroup"
 	  value="{{ group }}"
 	  id="{{ group }}"
-	  {% if group ==  configuration['security']['default'] %}
+	  {% if group ==  user.default.security %}
 	    checked="checked"
 	  {% endif %}
 	  onclick="document.forms['profile'].submit()"
@@ -202,7 +202,7 @@ $(function() {
 	        name="field-cloud-activated-{{cloudname}}"
 	        value="{{ cloudname }}"
 	        id="{{ cloudname }}"
-	        {% if cloudname in config.active() %}
+	        {% if cloudname in user.projects.active %}
 	          checked = "checked"
 	        {% endif %}
 	        onclick="document.forms['profile'].submit()"
@@ -215,7 +215,7 @@ $(function() {
 	<tr>
 		<td></td><td>Default </td>
 		<td colspan="2">
-			{% for cloudname in config.active() %}
+			{% for cloudname in user.projects.active %}
 				 <input
 					  type="radio"
 					  name="field-default-cloud"
@@ -235,13 +235,13 @@ $(function() {
 	<tr>
 		<th></th><th colspan="3"><b> Keys </b></th></tr>
 	<tr>
-	{% if keys.no_of_keys() > 0 %}
+	{% if (user["keys"] | count) > 0 %}
 		<form action="" name = "selectKeyForm" method=post enctype=multipart/form-data >
 		<tr><td></td>
 		   <td>Key Name</td>
 		   <td colspan="2"> Fingerprint</td>
 		</tr>
-		{% set defaultkey = keys.get_default_key() %}
+		{% set defaultkey = user.default.key %}
 		{% for name in user["keys"] %}
 		    {% set value = user["keys"][name] %}
 		    {% if name == defaultkey %}
@@ -254,7 +254,7 @@ $(function() {
 					 onclick="document.forms['selectKeyForm'].submit()" title="select">
 		  		</td>
 		  		<td>{{name}}</td>
-		  		<td colspan="2">{{ user["keys"][name]  }}
+		  		<td colspan="2">{{  user["keys"][name] | replace ("key ssh", "") |  filter_fingerprint  }}
 					<a href="delete/{{name}}/"><img src="/static/img/icons/png/glyphicons_016_bin.png" width="12" height="12" title="delete" align="right"></a>
 		  		</td>
 			</tr>

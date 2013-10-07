@@ -83,11 +83,7 @@ class cm_user(object):
 
 
     def info(self, portal_id, cloud_names=[]):
-        """Return the user information with a given portal id.
-
-        :param portal_id: the unique portal id to retrieve
-        :type portal_id: str
-        :param cloud_names: the list of cloud names to search, e.g.
+        """Return th<: the list of cloud names to search, e.g.
         sierra_openstack_grizzly
         :type cloud_names: list
         :returns: dict
