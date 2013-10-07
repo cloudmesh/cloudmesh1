@@ -36,7 +36,7 @@ def profile():
     if with_ldap:
         idp = cm_userLDAP ()
         idp.connect("fg-ldap", "ldap")
-        user_mongo = idp.find_one({'cm_user_id': username})
+        user_mongo = idp.find_one({'cm_user_id': userdata.id})
         print "MONGO USER"
     else:
         user_mongo = get_ldap_user_from_yaml()
