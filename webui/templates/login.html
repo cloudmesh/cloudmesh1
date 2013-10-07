@@ -10,10 +10,12 @@
 
   <form action="" method=post>
 
-    <div class="alert alert-danger">
-    	<strong>Error:</strong> {{ form.error }}
-    </div>
+	{% if form.error != "" %}
+	    <div class="alert alert-danger">
+	    	<strong>Error:</strong> {{ form.error }}
+	    </div>
     <hr>
+	{% endif %}
     <p>
       {{ form.username.label}}
       {{ form.username }}
