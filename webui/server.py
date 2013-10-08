@@ -491,7 +491,8 @@ def login():
 
 
             banner("CM_USER")
-            user = cm_user().info(form.username.data)
+            user_obj = cm_user()
+            user = user_obj.info(form.username.data)
 
 
         except Exception, e:
@@ -509,7 +510,7 @@ def login():
             form.error = 'Login Invalid'
         elif user['cm_user_id'] != form.username.data:
             form.error = 'Login Invalid'
-        elif user.authenticate(form.username.data, form.password.data):
+        elif user_obj.authenticate(form.username.data, form.password.data):
             print "LOGIN USER"
             g.user = load_user(form.username.data)
 
