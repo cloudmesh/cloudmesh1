@@ -125,11 +125,14 @@ class cm_user(object):
                 del ldap_user['_id']
                 userinfo["profile"] = ldap_user
                 #
-                # repositionning kesya nd projects
+                # repositionning keys and projects
                 #
 
-                userinfo["keys"] = {}
-                userinfo["keys"]["keylist"] = ldap_user['keys']
+                try:
+                    userinfo["keys"] = {}
+                    userinfo["keys"]["keylist"] = ldap_user['keys']
+                except:
+                    pass
 
                 userinfo["projects"] = ldap_user['projects']
                 del userinfo['profile']['keys']
