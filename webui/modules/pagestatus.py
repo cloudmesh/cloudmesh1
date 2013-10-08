@@ -1,18 +1,4 @@
 
-cm_kind = 'pagestatus'
-user = 'psjoshi'
-page = 'mesh/qstat'
-attribute = 'openpages'
-value = ['sierra.futuregrid.org', 'hotel.futuregrid.org']
-
-userDefaults = {
-                'user': 'psjoshi',
-                'images': 'sierra',
-                'servers': 'India',
-                'qstat': 'hotel'
-                }
-
-
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.cm_mongo import cm_MongoBase
 from cloudmesh.config.ConfigDict import ConfigDict
@@ -35,12 +21,43 @@ class cm_mongo_pagestatus(cm_MongoBase):
         self.db_mongo.remove({})
 
     def add(self, user, page, attribute, value):
-        self.update({'cm_kind': cm_kind, 'user': user, 'page': page, 'attribute': attribute}, {'cm_kind': cm_kind, 'user': user, 'page': page, 'attribute': attribute, 'value': value})
+        self.update({
+                     'cm_kind': cm_kind,
+                     'user': user,
+                     'page': page,
+                     'attribute': attribute
+                    }, {
+                     'cm_kind': cm_kind,
+                     'user': user,
+                     'page': page,
+                     'attribute': attribute,
+                     'value': value})
 
     def get(self, user, page, attribute):
-        result = m.find_one({'user': user, 'page': page, 'attribute': attribute})
+        result = m.find_one({'user': user,
+                             'page': page,
+                             'attribute': attribute})
         print 'Result:', result
         return result['value']
+
+
+'''
+not sure what this is for
+
+
+cm_kind = 'pagestatus'
+user = 'psjoshi'
+page = 'mesh/qstat'
+attribute = 'openpages'
+value = ['sierra.futuregrid.org', 'hotel.futuregrid.org']
+
+userDefaults = {
+                'user': 'psjoshi',
+                'images': 'sierra',
+                'servers': 'India',
+                'qstat': 'hotel'
+                }
+
 
 
 class cm_config_pagestatus(ConfigDict):
@@ -55,18 +72,18 @@ class cm_config_pagestatus(ConfigDict):
             filename = self.filename
         ConfigDict.__init__(self, filename=filename, kind="pagestatus")
 
+config = cm_config_pagestatus()
+print config.get('mongo.collections.pagestatus.db')
+
+
+'''
 
 if __name__ == "__main__":
-
-    config = cm_config_pagestatus()
-    print config.get('mongo.collections.pagestatus.db')
 
 
     m = cm_mongo_pagestatus()
     m.clear()
-
-
-    m.kill()
+    # m.kill()
 
 
     '''
@@ -86,9 +103,11 @@ if __name__ == "__main__":
     
     
     m.kill()
+    
+    print 'done killing'
+    
     '''
 
-    print 'done killing'
 
     m.add('gregor', '/hello', 'VMs', '100')
     m.add('gregor', '/hello', 'images', '99')
