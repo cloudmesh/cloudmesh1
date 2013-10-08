@@ -15,6 +15,8 @@ from cloudmesh.config.cm_config import cm_config_server, get_mongo_db
 from cloudmesh.util.encryptdata import encrypt, decrypt
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import deprecated
+from cloudmesh.user.cm_userLDAP import cm_userLDAP
+
 import traceback
 from pprint import pprint
 # ----------------------------------------------------------------------
@@ -37,12 +39,21 @@ class cm_user(object):
         self.from_yaml = from_yaml
         self.config_server = cm_config_server()
         self.password_key = self.config_server.get("cloudmesh.server.mongo.collections.password.key")
+        self.with_ldap = cm_config_server().get("cloudmesh.server.ldap.with_ldap")
         self.connect_db()
 
 
 
-
-
+    def authenticate(self, userId, password):
+        if not self.with_ldap:
+            return True
+        try:
+            idp = cm_userLDAP ()
+            idp.connect("fg-ldap", "ldap")
+            return idp.authenticate(userId, password)
+        except Exception, e:
+            log.error("{0}".format(e))
+            return False
 
     def generate_yaml(id, basename):
         '''
