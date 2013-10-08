@@ -1,4 +1,4 @@
-{% from "_helper.html" import flexible_menu,super_flexible_menu %}
+{% from "_helper.html" import flexible_menu,super_flexible_menu,loggedin_msg %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -71,11 +71,9 @@
                     <div class="nav-collapse collapse">
 
                         <p class="navbar-text pull-right">
-                            {% if g.user and g.user.is_authenticated() %}
-                            Logged in as <a href="#" class="navbar-link">{{ g.user.cm_profile()['firstname'] }} {{ g.user.cm_profile()['lastname'] }} ({{ g.user.id }})</a> <a href="/logout">(Logout)</a>
-                            {% else %}
-                            <a href="/login">Not logged in</a>
-                            {% endif %}
+
+                        	{{ loggedin_msg() }}
+
                         </p>
 
                         <ul class="nav">

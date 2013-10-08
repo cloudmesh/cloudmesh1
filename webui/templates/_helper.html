@@ -2,6 +2,18 @@
 image_button("041_charts", "/table/")
 #}
 
+{% macro loggedin_msg() %}
+ {% if g.user and g.user.is_authenticated() %}
+   Logged in as <a href="#" class="navbar-link">
+   	{{ g.user.cm_profile()['firstname'] }}
+   {{ g.user.cm_profile()['lastname'] }}
+    ({{ g.user.id }})</a> <a href="/logout">(Logout)</a>
+ {% else %}
+     <a href="/login">Not logged in</a>
+  {% endif %}
+{% endmacro %}
+
+
 {% macro cm_state_color(state) %}
     {% set s = state|lower %}
    	{% if s in ["active", "r"] %}
