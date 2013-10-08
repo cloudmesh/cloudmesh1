@@ -127,7 +127,7 @@ class cm_user(object):
                 del ldap_user['_id']
                 userinfo["profile"] = ldap_user
                 #
-                # repositionning kesya nd projects
+                # repositionning keys and projects
                 #
 
                 try:
@@ -143,6 +143,7 @@ class cm_user(object):
 
                 del userinfo['profile']['keys']
                 del userinfo['profile']['projects']
+
 
                 userinfo['portalname'] = portal_id
                 userinfo['cm_user_id'] = portal_id
