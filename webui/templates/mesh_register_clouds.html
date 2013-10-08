@@ -66,6 +66,134 @@
 
 {% block content %}
 
+
+{% macro password(label, cloudname) %}
+   <tr>
+        <td style="text-align: right">{{label}}:</td>
+        <td colspan="2">
+        <form>
+            <input id="id-{{cloudname}}-password"
+            	   valign="middle"
+            	   type="password"
+            	   name="field-{{cloudname}}-password"
+            	   value="" autocomplete="off"
+            	   placeholder="{{label}}"
+            	   style="margin-bottom: 5px; margin-top: 5px;">
+            <input type="button"
+                   id="toggle-{{cloudname}}"
+                   value="T"
+                   style="display:inline"
+                   onclick="toggle_PasswordFieldClicked()"/>
+        </form></td>
+    </tr>
+{% endmacro %}
+
+{% macro username(label, cloudname, username_edit_enabled) %}
+    <tr>
+        <td style="text-align: right"> Username:</td>
+        <td colspan="2">
+        <input id="id-{{cloudname}}-username"
+               valign="middle"
+               type="text"
+               name="field-{{cloudname}}-username"
+        	   value="psjoshi"
+        	   {%if not username_edit_enabled %}
+               disabled="disabled"
+               {% endif %}
+        style="margin-bottom: 5px; margin-top: 5px;">
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro openstack(cloudname, username_edit_enabled) %}
+      <tr>
+        <th colspan="1">
+        <input type="checkbox"
+                    name="field-activated-{{cloudname}}"
+        			{% if cloudname in user.defaults.activeclouds %}
+	           		checked = "checked"
+	           		{% endif %}
+        style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+        sierra_openstack_grizzly</th>
+        <th></th>
+        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "sierra_openstack_grizzly" + "/") }}
+        {{cm_boolean_color('unknown')}} </th>
+    </tr>
+    {{ username ("Username", cloudname, username_edit_enabled)}}
+    {{ password ("Password", cloudname)}}
+{% endmacro %}
+
+{% macro aws(cloudname) %}
+   <tr>
+        <th colspan="1">
+        <input type="checkbox"
+               name="field-activated-{{cloudname}}"
+               {% if cloudname in user.defaults.activeclouds %}
+	           checked = "checked"
+	           {% endif %}
+
+        style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+        AWS</th>
+        <th></th>
+        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "aws" + "/") }}
+        {{cm_boolean_color('verified')}} </th>
+    </tr>
+    {{ username ("Username", cloudname, True)}}
+
+    {% set accesskey= cloudname + "-accesskey" %}
+    {% set secretkey= cloudname + "-secretkey" %}
+
+    {{ password ("Access Key", accesskey)}}
+    {{ password ("Secret Key", secretkey)}}
+
+{% endmacro %}
+
+{% macro hp(cloudname, regions) %}
+    <tr>
+        <th colspan="1">
+        {% for region in regions %}
+           <input type="checkbox"
+                  name="field-activated-{{cloudname}}-{{region}}"
+                  {% if "hp" in user.defaults.activeclouds %}
+	              checked = "checked"
+	              {% endif %}
+	              style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+        {{region}}
+        &nbsp;
+        {% endfor %}
+        </th>
+        <th>
+
+        </th>
+        <th style="text-align: right">
+        	{{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
+        	{{cm_boolean_color('verified')}}
+        </th>
+    </tr>
+	{{ username ("Username", cloudname, True)}}
+    {{ password ("Password", cloudname)}}
+
+{% endmacro %}
+
+
+
+{% macro azure(cloudname) %}
+    <tr>
+        <th colspan="1">
+        <input type="checkbox"
+        	   name="field-activated-{{cloudname}}"
+        	   {% if cloudname in user.defaults.activeclouds %}
+	           checked = "checked"
+	           {% endif %}
+               style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+        Azure</th>
+        <th></th>
+        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "azure" + "/") }}
+        {{cm_boolean_color('verified')}} </th>
+    </tr>
+    {{ password("Subscription ID", cloudname) }}
+{% endmacro %}
+
 <table id="clouds" style="display: inline-block; float: left;">
     <tr>
         <th colspan="1"><b>Clouds <a href="#openModal"><img height="15" width="15" src="{{ url_for('static', filename='img/icons/png/glyphicons_136_cogwheel.png') }}" /></a> </b></th>
@@ -73,121 +201,20 @@
         <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
         Verified </th>
     </tr>
-    <tr>
-        <th colspan="1">
-        <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-        sierra_openstack_grizzly</th>
-        <th></th>
-        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "sierra_openstack_grizzly" + "/") }}
-        {{cm_boolean_color('unknown')}} </th>
-    </tr>
-    <tr>
-        <td style="text-align: right"> Username:</td>
-        <td colspan="2">
-        <input id="sierraUname" valign="middle" type="text" name="sierraUname"
-        value="psjoshi" disabled="disabled"
-        style="margin-bottom: 5px; margin-top: 5px;">
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: right">Password:</td>
-        <td colspan="2">
-        <form>
-            <input id="sierraPassword" valign="middle" type="password" name="sierraPassword"
-            value="" autocomplete="off" placeholder="Password"
-            style="margin-bottom: 5px; margin-top: 5px;">
-            <input type="button" id="toggle_sierraPassword" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
-        </form></td>
-    </tr>
-    <tr>
-        <th colspan="1">
-        <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-        HP
-        &nbsp;
-        <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-        HP East </th>
-        <th></th>
-        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
-        {{cm_boolean_color('verified')}} </th>
-    </tr>
-    <tr>
-        <td  style="text-align: right"> Username:</td>
-        <td colspan="2">
-        <input id="hpUname" valign="middle" type="text" name="hpUname"
-        value="psjoshi" disabled="disabled"
-        style="margin-bottom: 5px; margin-top: 5px;">
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: right">Password:</td>
-        <td colspan="2">
-        <form>
-            <input id="hpPassword" valign="middle" type="password" name="hpPassword"
-            value="" autocomplete="off" placeholder="Password"
-            style="margin-bottom: 5px; margin-top: 5px;">
-            <input type="button" id="toggle_hpPassword" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
-        </form></td>
-    </tr>
-    <tr>
-        <th colspan="1">
-        <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-        AWS</th>
-        <th></th>
-        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "aws" + "/") }}
-        {{cm_boolean_color('verified')}} </th>
-    </tr>
-    <tr>
-        <td  style="text-align: right"> Username:</td>
-        <td colspan="2">
-        <input id="awsUname" valign="middle" type="text" name="awsUname"
-        value="psjoshi" disabled="disabled"
-        style="margin-bottom: 5px; margin-top: 5px;">
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: right">Access Key:</td>
-        <td colspan="2">
-        <form>
-            <input id="awsAccessKey" valign="middle" type="password" name="awsAccessKey"
-            value="" autocomplete="off" placeholder="Access Key"
-            style="margin-bottom: 5px; margin-top: 5px;">
-            <input type="button" id="toggle_awsAccessKey" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
-        </form></td>
-    </tr>
-    <tr>
-        <td style="text-align: right">Secret Access Key:</td>
-        <td colspan="2">
-        <form>
-            <input id="awsSecretAccessKey" valign="middle" type="password" name="awsSecretAccessKey"
-            value="" autocomplete="off" placeholder="Secret Access Key"
-            style="margin-bottom: 5px; margin-top: 5px;">
-            <input type="button" id="toggle_awsSecretAccessKey" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
-        </form></td>
-    </tr>
-    <tr>
-        <th colspan="1">
-        <input type="checkbox" style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-        Azure</th>
-        <th></th>
-        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "azure" + "/") }}
-        {{cm_boolean_color('verified')}} </th>
-    </tr>
-    <tr>
-        <td style="text-align: right">Subscription ID:</td>
-        <td colspan="2">
-        <form>
-            <input id="azureId" valign="middle" type="password" name="azureId"
-            value="" autocomplete="off" placeholder="Subscription ID"
-            style="margin-bottom: 5px; margin-top: 5px;">
-            <input type="button" id="toggle_azureId" value="T" style="display:inline" onclick="toggle_PasswordFieldClicked()"/>
-        </form></td>
-    </tr>
+
+	{{ openstack("sierra_openstack_grizzly", False) }}
+	{{ aws("aws") }}
+	{{ hp("hp", ["hp", "hp_east"]) }}
+	{{ azure("azure") }}
+
+ <!-- onclick="document.forms['profile'].submit()"/> -->
+
     <tr>
         <th align="center">
             Manage
         </th>
     </tr>
-    </form>
+
 	<tr>
 	<td colspan="3">
 	<a class="btn" href="/keys">

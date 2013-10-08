@@ -1,17 +1,15 @@
-from flask import Blueprint
-from flask import render_template, request, redirect
-from cloudmesh.config.cm_config import cm_config
-from cloudmesh.cm_mongo import cm_mongo
-from datetime import datetime
-from cloudmesh.util.util import address_string
-from pprint import pprint
 from ast import literal_eval
+from cloudmesh.cm_mongo import cm_mongo
+from cloudmesh.config.cm_config import cm_config
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
-from cloudmesh.util.util import cond_decorator
-from flask.ext.login import login_required
-import cloudmesh
-
 from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.util import address_string, cond_decorator
+from datetime import datetime
+from flask import Blueprint, g, render_template, request, redirect
+from flask.ext.login import login_required
+from pprint import pprint
+import cloudmesh
+from cloudmesh.user.cm_user import cm_user
 
 log = LOGGER(__file__)
 
@@ -21,13 +19,30 @@ mesh_module = Blueprint('mesh_module', __name__)
 # ROUTE: /mesh/images
 # ============================================================
 
-@mesh_module.route('/mesh/register/clouds')
+
+@mesh_module.route('/mesh/register/clouds', methods=['GET', 'POST'])
 def mesh_register_clouds():
 
-        error = None
+    error = None
 
-        return render_template('mesh_register_clouds.html',
-                               error=error)
+    config = cm_config()
+    userdata = g.user
+    username = userdata.id
+    user_obj = cm_user()
+    user = user_obj.info(username)
+
+
+    if request.method == 'POST':
+
+        print "REQUEST"
+        pprint(request.__dict__)
+        print "OOOOOO", request.form
+
+
+    return render_template('mesh_register_clouds.html',
+                           user=user,
+                           cloudnames=config.cloudnames(),
+                           error=error)
 
 @mesh_module.route('/mesh/images/')
 @cond_decorator(cloudmesh.with_login, login_required)
@@ -38,7 +53,7 @@ def mongo_images():
 
     c = cm_mongo()
     c.activate()
-    #c.refresh(types=["images"])
+    # c.refresh(types=["images"])
     clouds = c.images()
 
     """
@@ -135,7 +150,7 @@ def mongo_flavors():
 
     c = cm_mongo()
     c.activate()
-    #c.refresh(types=["flavors"])
+    # c.refresh(types=["flavors"])
     clouds = c.flavors()
 
     """    
@@ -246,7 +261,7 @@ def mongo_table(filters=None):
 
     c = cm_mongo()
     c.activate()
-    #c.refresh(types=["servers"])
+    # c.refresh(types=["servers"])
     clouds = c.servers()
 
     """

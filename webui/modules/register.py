@@ -22,6 +22,8 @@ class RegisterForm(Form):
 def render_register():
     # A hypothetical register form that uses Flask-WTF
 
+
+
     form = RegisterForm()
     if form.validate_on_submit():
         form.error = None

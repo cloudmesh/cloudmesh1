@@ -49,12 +49,9 @@ def profile():
     #    user = get_ldap_user_from_yaml()
 
 
-    print 70 * "-"
-    pprint (user)
     if 'defaults' not in user:
         user['defaults'] = {}
         user.set_defaults(username, {})
-    print 70 * "-"
 
     if request.method == 'POST':
 
