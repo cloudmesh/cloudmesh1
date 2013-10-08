@@ -61,9 +61,6 @@ class cm_MongoBase(object):
     def insert(self, element):
         self.db_mongo.insert(element)
 
-    def clear(self):
-        self.db_mongo.remove({"cm_type" : self.cm_type})
-
     def find(self, query):
         '''
         executes a query and returns the results from mongo db.
@@ -78,6 +75,12 @@ class cm_MongoBase(object):
         '''
         return self.db_mongo.find_one(query)
 
+    def clear(self):
+        self.db_mongo.remove({"cm_type" : self.cm_type})
+
+
+    def wipe(self):
+        self.db_mongo.remove({})
 
 
 

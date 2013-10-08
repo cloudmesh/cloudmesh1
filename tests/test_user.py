@@ -14,7 +14,6 @@ from cloudmesh.util.util import HEADING
 from cloudmesh.util.util import banner
 from cloudmesh.util.util import path_expand
 from cloudmesh.user.cm_template import cm_template
-from cloudmesh.user.cm_mesh_auth import cm_userauth
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from pprint import pprint
@@ -69,11 +68,6 @@ class Test_cloudmesh:
 #       print "ERROR: undefined variables"
 #       print t.variables()
 
-    def test_auth(self):
-        auth = cm_userauth()
-        auth.set("dummy", {"a": "1"})
-        r = auth.get("dummy")
-        pprint (r)
 
     def test_userinfo(self):
         HEADING()
