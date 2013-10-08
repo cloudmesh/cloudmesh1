@@ -11,7 +11,7 @@
     the unique identification in ldap and cloud.
 
 """
-from cloudmesh.config.cm_config import cm_config_server, get_mongo_db
+from cloudmesh.config.cm_config import cm_config_server, get_mongo_db, cm_config
 from cloudmesh.util.encryptdata import encrypt, decrypt
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import deprecated
@@ -103,6 +103,8 @@ class cm_user(object):
             self.userdb_passwd = get_mongo_db(passwd_collection)
 
 
+
+
     def info(self, portal_id, cloud_names=[]):
         """Return th<: the list of cloud names to search, e.g.
         sierra_openstack_grizzly
@@ -128,10 +130,17 @@ class cm_user(object):
                 # repositionning kesya nd projects
                 #
 
-                userinfo["keys"] = {}
-                userinfo["keys"]["keylist"] = ldap_user['keys']
+                try:
+                    userinfo["keys"] = {}
+                    userinfo["keys"]["keylist"] = ldap_user['keys']
+                except:
+                    userinfo["keys"]["keylist"] = {}
 
-                userinfo["projects"] = ldap_user['projects']
+                try:
+                    userinfo["projects"] = ldap_user['projects']
+                except:
+                    userinfo["projects"] = {'active': [], 'completed': []}
+
                 del userinfo['profile']['keys']
                 del userinfo['profile']['projects']
 
@@ -152,16 +161,53 @@ class cm_user(object):
             #
 
 
-            print 70 * "T"
-            pprint(userinfo)
-
-
             projects = userinfo["projects"]
             projects = self.update_users_project_names(projects)
 
+
             return userinfo
 
+    cloud_names = cm_config().cloudnames()
+    default_security_group = cm_config().get("cloudmesh.security.default")
+    default_cloud = 'sierra_openstack_grizzly'
 
+    def init_defaults(self, username):
+
+        user = self.info(username)
+
+        defaults = self.get_defaults(username)
+        defaults['cm_user_id'] = username
+        if 'prefix' not in defaults:
+            defaults['prefix'] = user['cm_user_id']
+        if 'index' not in defaults:
+            defaults['index'] = 1
+
+        if 'cloud' not in defaults:
+            if self.default_cloud in self.cloud_names:
+                defaults['cloud'] = self.default_cloud
+            elif len(self.cloud_names) > 0:
+                defaults['cloud'] = self.cloud_names[0]
+
+        if 'key' not in defaults:
+            keylist = user['keys']['keylist']
+            if len(keylist) > 0:
+                defaults['key'] = keylist.keys()[0]
+
+        if 'project' not in defaults:
+            projectlist = user['projects']['active']
+            if len(projectlist) > 0:
+                defaults['project'] = projectlist[0]
+
+        if 'activeclouds' not in defaults:
+            if 'cloud' in defaults:
+                defaults['activeclouds'] = [defaults['cloud']]
+
+
+        if 'securitygroup' not in defaults:
+            defaults['securitygroup'] = self.default_security_group
+
+
+        self.update_defaults(username, defaults)
 
     def update_users_project_names(self, projects):
 
@@ -256,11 +302,18 @@ class cm_user(object):
 
         return (first_name, last_name)
 
+    def update_defaults(self, username, d):
+        """ Sets the defaults for a user """
+        stored_d = self.get_defaults(username)
+        for attribute in d:
+            stored_d[attribute] = d[attribute]
+        self.set_defaults(username, stored_d)
+
     def set_defaults(self, username, d):
         """ Sets the defaults for a user """
         if type(d) is dict:
-            self.db_defaults.update({'cm_user_id': username},
-                                    {'$set': {'defaults': d}})
+            self.db_defaults.update({'cm_user_id': username}, d, upsert=True)
+
         else:
             raise TypeError, 'defaults value must be a dict'
 
@@ -274,10 +327,11 @@ class cm_user(object):
 
     def get_defaults(self, username):
         """returns the defaults for the user"""
-        user = self.db_defaults.find({'cm_user_id': username})
-        print "****** ", user['defaults'] if 'defaults' in user else "no defaults for {0}".format(username)
-        return user['defaults'] if 'defaults' in user else {}
+        user = self.db_defaults.find_one({'cm_user_id': username})
 
+        if user is None:
+            user = {}
+        return user
 
     def set_password(self, username, password, cloud):
         """Store a user password for the cloud

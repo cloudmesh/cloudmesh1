@@ -22,6 +22,10 @@ profile_module = Blueprint('profile_module', __name__)
 @profile_module.route('/profile/', methods=['GET', 'POST'])
 @login_required
 def profile():
+
+    def upload_default(username, attribute):
+        user_obj.set_default_attribute(username, attribute, user['defaults'][attribute])
+
     # bug the global var of the ditc should be used
 
     # with_ldap = cm_config_server().get("cloudmesh.server.ldap.with_ldap")
@@ -37,41 +41,69 @@ def profile():
     userdata = g.user
 
     # if with_ldap:
-
-    idp = cm_user ()
-    user_mongo = idp.info(userdata.id)
+    username = userdata.id
+    user_obj = cm_user()
+    user = user_obj.info(username)
 
     # else:
-    #    user_mongo = get_ldap_user_from_yaml()
+    #    user = get_ldap_user_from_yaml()
 
 
     print 70 * "-"
-    pprint (user_mongo)
-    if 'defaults' not in user_mongo:
-        user_mongo['defaults'] = {}
+    pprint (user)
+    if 'defaults' not in user:
+        user['defaults'] = {}
+        user.set_defaults(username, {})
     print 70 * "-"
 
     if request.method == 'POST':
-        print request.form
-        print "p", projects
-        # print "c", config
-
-        projects.default = request.form['field-selected-project']
 
 
-        user_mongo['defaults']['security'] = request.form[
-            'field-selected-securityGroup']
 
-        user_mongo['defaults']['index'] = request.form['field-index']
 
-        user_mongo['defaults']['prefix'] = request.form['field-prefix']
+        print "REQUEST"
+        pprint(request.__dict__)
+        print "OOOOOO", request.form
 
-        user_mongo['profile']['firstname'] = request.form['field-firstname']
-        user_mongo['profile']['lastname'] = request.form['field-lastname']
-        user_mongo['profile']['phone'] = request.form['field-phone']
-        user_mongo['profile']['email'] = request.form['field-email']
+        if 'field-project' in request.form:
+            user['defaults']['project'] = request.form['field-project']
+
+        if 'field-securitygroup' in request.form:
+            user['defaults']['securitygroup'] = request.form['field-securitygroup']
+
+        if 'field-index' in request.form:
+            user['defaults']['index'] = request.form['field-index']
+
+        if 'field-prefix' in request.form:
+            user['defaults']['prefix'] = request.form['field-prefix']
+
+        if 'field-default-cloud' in request.form:
+            user['defaults']['cloud'] = request.form['field-default-cloud']
+
+        if 'field-key' in request.form:
+            user['defaults']['key'] = request.form['field-key']
+
+
+        user['defaults']['activeclouds'] = []
+        for cloudname in config.cloudnames():
+            form_key = 'field-cloud-activated-{0}'.format(cloudname)
+            if form_key in request.form:
+                user['defaults']['activeclouds'].append(cloudname)
+
+
+
+
+
+        '''
+        user['profile']['firstname'] = request.form['field-firstname']
+        user['profile']['lastname'] = request.form['field-lastname']
+        user['profile']['phone'] = request.form['field-phone']
+        user['profile']['email'] = request.form['field-email']
+        '''
+
         print "setting the values"
-        user_mongo['defaults']['cloud'] = request.form['field-default-cloud']
+        user_obj.set_defaults(username, user['defaults'])
+
         # # print request.form["field-cloud-activated-" + value]
         # print "setting the cloud values"
         # print config
@@ -82,9 +114,7 @@ def profile():
 
     return render_template('profile.html',
                            updated=time_now,
-                           # clouds=clouds,
-                           config=config,  # just to populate active projects
                            configuration=config['cloudmesh'],  # just to populate security groups
-                           user=user_mongo,
+                           user=user,
                            userdata=userdata
                            )

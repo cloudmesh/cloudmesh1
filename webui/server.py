@@ -453,6 +453,7 @@ class User(UserMixin):
         if self._cm_info is None:
             cmu = cm_user()
             self._cm_info = cmu.info(self.id)
+            cmu.init_defaults(self.id)
         return self._cm_info
 
     def cm_profile(self):

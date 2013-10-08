@@ -129,3 +129,7 @@ def mongo():
     # populate the local userinfo into the same mongo as though it were from LDAP.
     userstore = cm_userLDAP()
     userstore.updates(username, element)
+
+    user_obj = cm_user()
+    user_obj.init_defaults(username)
+
