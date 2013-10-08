@@ -39,7 +39,7 @@ import platform
 
 from cloudmesh.util.util import path_expand
 
-__all__ = ['start', 'stop', 'kill', 'view', 'clean', 'cleanmongo', 'agent']
+__all__ = ['start', 'stop', 'kill', 'view', 'clean', 'cleanmongo', 'agent', 'quick']
 
 #
 # SETTING THE BROWSER BASED ON PLATFORM
@@ -93,18 +93,9 @@ def kill(server="server"):
 @task
 def quick(link="", server="server", port="5000", browser='yes'):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link"""
-    banner("KILL THE SERVER")
-    kill()
 
     banner("INSTALL CLOUDMESH")
     local("python setup.py install")
-
-    # banner("START MONGO")
-    # local("fab mongo.start")
-
-    # banner("SATRT RABITMQ")
-    # local("fab queue.start")
-
 
     banner("START WEB SERVER")
     local("cd webui; python {0}.py &".format(server))
