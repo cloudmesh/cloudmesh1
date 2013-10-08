@@ -135,8 +135,11 @@ class cm_user(object):
                     pass
 
                 userinfo["projects"] = ldap_user['projects']
-                del userinfo['profile']['keys']
-                del userinfo['profile']['projects']
+                try:
+                    del userinfo['profile']['keys']
+                    del userinfo['profile']['projects']
+                except:
+                    pass
 
                 userinfo['portalname'] = portal_id
                 userinfo['cm_user_id'] = portal_id
