@@ -110,13 +110,15 @@ def display_rack_map():
     # get image names
     filename_image = map_class.getImageFilename()
     filename_legend = map_class.getLegendFilename()
+    image_size = map_class.getImageSize()
     abs_web_path_image = "/".join([""] + list_image_dir + [filename_image])
     abs_web_path_legend = "/".join([""] + list_image_dir + [filename_legend])
 
     return render_template("rack.html",
                             flag_home=False,
                             rack=rack,
-                            imageWidth=300 * map_class.getRackCount(),
+                            imageWidth=image_size["width"],
+                            imageHeight=image_size["height"],
                             service=service,
                             imageFilename=abs_web_path_image,
                             legendFilename=abs_web_path_legend

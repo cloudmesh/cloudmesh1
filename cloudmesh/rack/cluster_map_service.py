@@ -103,8 +103,8 @@ class ServiceClusterMap(BaseClusterMap):
     # the formation of RGB is: (R, G, B)
     # for example: {1:(255, 0, 16), 2:(25, 20, 16), ...}
     def getMappingDict(self):
-        # update the unknown type with #808080 (gray)
-        self.dict_mapping.update({self.unknown_service: (128, 128, 128)})
+        # update the unknown type with #d3d3d3 (gray)
+        self.dict_mapping.update({self.unknown_service: (211, 211, 211)})
         # update the HardwareError type with #FF0000 if exist
         if self.hardware_error in self.list_services_found:
             self.dict_mapping.update({self.hardware_error: (255, 0, 0)})
