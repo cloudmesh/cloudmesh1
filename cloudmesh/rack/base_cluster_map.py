@@ -13,7 +13,9 @@ from sh import pwd  # @UnresolvedImport
 from sh import mkdir  # @UnresolvedImport
 import random
 import time
+import re
 import colorsys
+from PIL import Image
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 from matplotlib.lines import Line2D
@@ -307,6 +309,41 @@ class BaseClusterMap:
 
     def getLegendFilename(self):
         return self.only_filename_legend
+    
+    # get 2-D size of image file
+    # return {"width": width, "height", height}
+    def getImageSize(self):
+        options = {
+                   "svg": self.getSVGSize,
+                   "png": self.getPNGSize,
+                   }
+        return options[self.image_type]()
+    
+    # get 2-D size of svg file
+    def getSVGSize(self):
+        # parse svg file to get width and height
+        # <svg viewBox="0 0 1792 2000"
+        dict_result = {"width": 0, "height": 0}
+        patt = re.compile('<svg viewBox=.+?\s+?.+?\s+?(\d+)\s+?(\d+)')
+        fsvg = open(self.filename_rack_image)
+        for line in fsvg:
+            m = patt.match(line)
+            if m:
+                dict_result["width"] = m.group(1)
+                dict_result["height"] = m.group(2)
+                break
+        fsvg.close()
+        return dict_result
+    
+    # get 2-D size of png file
+    def getPNGSize(self):
+        dict_result = {"width": 0, "height": 0}
+        png = Image.open(self.filename_rack_image)
+        (w, h) = png.size
+        dict_result["width"] = w
+        dict_result["height"] = h
+        return dict_result
+    
 
     # render dict_servers with correct colors
     # param: mapping is a dict provided by function getMappingDict
