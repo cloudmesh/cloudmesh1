@@ -14,7 +14,6 @@ super_sidebar_pages = [
             ["Home", "/"],
             ["Status", "/status"],
             ["Profile", "/profile/"],
-            ["Keys", "/keys/"],
         ],
     ],
     ["Inventory",

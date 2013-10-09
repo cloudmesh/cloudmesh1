@@ -4,6 +4,7 @@ from flask import render_template
 from sh import git
 from cloudmesh.util.gitinfo import GitInfo
 from pprint import pprint
+from flask.ext.login import login_required
 
 git_module = Blueprint('git_module', __name__)
 
