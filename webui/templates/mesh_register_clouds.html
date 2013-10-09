@@ -116,8 +116,10 @@
         style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
         sierra_openstack_grizzly</th>
         <th></th>
-        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "sierra_openstack_grizzly" + "/") }}
-        {{cm_boolean_color('unknown')}} </th>
+        <th style="text-align: right">
+        	{{ image_button ("none", "044_keys", "/updatekeypair/" + "sierra_openstack_grizzly" + "/") }}
+        	{{cm_boolean_color('unknown')}}
+        </th>
     </tr>
     {{ username ("Username", cloudname, username_edit_enabled)}}
     {{ password ("Password", cloudname)}}
@@ -188,15 +190,24 @@
                style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
         Azure</th>
         <th></th>
-        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "azure" + "/") }}
-        {{cm_boolean_color('verified')}} </th>
+        <th style="text-align: right">
+        	{{ image_button ("none", "044_keys", "/updatekeypair/" + "azure" + "/") }}
+        	{{cm_boolean_color('verified')}}
+        </th>
     </tr>
     {{ password("Subscription ID", cloudname) }}
 {% endmacro %}
 
 <table id="clouds" style="display: inline-block; float: left;">
     <tr>
-        <th colspan="1"><b>Clouds <a href="#openModal"><img height="15" width="15" src="{{ url_for('static', filename='img/icons/png/glyphicons_136_cogwheel.png') }}" /></a> </b></th>
+        <th colspan="1">
+        	<b>Clouds
+        	   <a href="#openModal">
+        			<img height="15" width="15"
+        			     src="{{ url_for('static', filename='img/icons/png/glyphicons_136_cogwheel.png') }}" />
+        	   </a>
+            </b>
+        </th>
         <th></th>
         <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
         Verified </th>
