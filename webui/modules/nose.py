@@ -70,7 +70,7 @@ def display_nosetest(test=None):
 
 @nose_module.route('/test/run')
 @nose_module.route('/test/run/<test>')
-
+@login_required
 def run_nosetest(test=None):
 
     if test is None:

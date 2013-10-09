@@ -19,6 +19,7 @@ class RegisterForm(Form):
 
 
 @register_module.route('/cm/register', methods=['GET', 'POST'])
+@login_required
 def render_register():
     # A hypothetical register form that uses Flask-WTF
 

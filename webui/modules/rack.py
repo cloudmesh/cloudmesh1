@@ -45,6 +45,7 @@ class RackForm(Form):
 
 
 @rack_module.route('/inventory/rack')
+@login_required
 def display_rack_home():
     rack_form = RackForm()
     if rack_form.validate_on_submit():
@@ -54,6 +55,7 @@ def display_rack_home():
 
 
 @rack_module.route('/inventory/rack/map', methods=['POST'])
+@login_required
 def display_rack_map():
 
     ####
@@ -126,6 +128,7 @@ def display_rack_map():
 
 
 @rack_module.route('/inventory/rack/old')
+@login_required
 def display_all_racks():
 
 
@@ -146,6 +149,7 @@ def display_all_racks():
 
 @rack_module.route('/inventory/rack/<name>')
 @rack_module.route('/inventory/rack/<name>/<service>')
+@login_required
 def display_rack(name, service=None):
 
 

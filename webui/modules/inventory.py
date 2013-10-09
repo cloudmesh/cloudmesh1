@@ -75,6 +75,7 @@ def old_display_summary():
 
 """
 @inventory_module.route('/inventory/')
+@login_required
 def display_old_inventory():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     inventory.refresh()
@@ -101,6 +102,7 @@ def display_named_resource(cluster, name):
 
 """
 @inventory_module.route('/inventory/cluster/<cluster>/<name>')
+@login_required
 def display_named_resource(cluster, name):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     inventory.refresh()
@@ -112,6 +114,7 @@ def display_named_resource(cluster, name):
 
 
 @inventory_module.route('/inventory/cluster/<cluster>/')
+@login_required
 def display_cluster(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     inventory.refresh()
@@ -199,6 +202,7 @@ def get_servers_for_clusters(host_lists):
     return return_dict
 """
 @inventory_module.route('/inventory/cluster/table/<cluster>/')
+@login_required
 def display_cluster_table(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     inventory.refresh()
@@ -320,7 +324,7 @@ def inventory_save():
 
 
 @inventory_module.route('/inventory/load/')
-
+@login_required
 def inventory_load():
     print "Not IMPLEMENTED YET"
     return display_inventory()
