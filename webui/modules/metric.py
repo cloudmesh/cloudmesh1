@@ -13,6 +13,7 @@ metric_module = Blueprint('metric_module', __name__)
 
 
 @metric_module.route('/metric', methods=['POST', 'GET'])
+@login_required
 def metric():
     args = {"s_date": request.args.get('s_date', ''),
             "e_date": request.args.get('e_date', ''),

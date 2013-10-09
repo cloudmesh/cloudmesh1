@@ -71,7 +71,7 @@ def retrieve_files(filename):
 
 
 @workflow_module.route("/provision/workflow/", methods=("GET", "POST"))
-
+@login_required
 def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)
@@ -130,6 +130,7 @@ def display_provision_workflow_form():
  this is not used
  
 @workflow_module.route('/workflow/')
+@login_required
 def display_workflow():
 
     print "DISPALY WORKFLOW"

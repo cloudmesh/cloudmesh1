@@ -169,7 +169,7 @@ class ProvisionForm(Form):
 
 
 @provisioner_module.route("/provision/", methods=("GET", "POST"))
-
+@login_required
 def display_provision_form():
 
     clusters = cm_config_server().get("cloudmesh.server.provisioner.clusters")

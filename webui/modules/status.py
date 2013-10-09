@@ -14,6 +14,7 @@ status_module = Blueprint('status_module', __name__)
 
 
 @status_module.route('/status')
+@login_required
 def display_status():
 
     msg = ""

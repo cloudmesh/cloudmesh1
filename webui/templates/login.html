@@ -10,7 +10,7 @@
 
   <form action="" method=post>
 
-	{% if form.error != "" %}
+	{% if form.error |count > 0 %}
 	    <div class="alert alert-danger">
 	    	<strong>Error:</strong> {{ form.error }}
 	    </div>

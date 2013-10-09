@@ -91,7 +91,7 @@ def kill(server="server"):
         # local("fab queue.stop")
 
 @task
-def quick(link="", server="server", port="5000", browser='yes'):
+def quick(link="", server="server", port="5555", browser='yes'):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link"""
 
     banner("INSTALL CLOUDMESH")
@@ -102,7 +102,7 @@ def quick(link="", server="server", port="5000", browser='yes'):
     # view(link)
 
 @task
-def start(link="", server="server", port="5000", browser='yes'):
+def start(link="", server="server", port="5555", browser='yes'):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link"""
     banner("KILL THE SERVER")
     kill()
@@ -125,7 +125,7 @@ def start(link="", server="server", port="5000", browser='yes'):
 def view(link="inventory"):
     """run the browser"""
     local("sleep 1")
-    local("%s http://localhost:5000/%s" % (web_browser, link))
+    local("%s http://localhost:5555/%s" % (web_browser, link))
     # if browser == 'yes':
     #    local("sleep 2; {0} http://127.0.0.1:{2}/{1}".format(web_browser, link, port))
 

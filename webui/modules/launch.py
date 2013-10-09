@@ -58,7 +58,7 @@ def launch_servers():
 
 
 @launch_module.route('/cm/launch')
-
+@login_required
 def display_launch_table():
     launcher_config = ConfigDict(filename="~/.futuregrid/cloudmesh_launcher.yaml")
     launch_recipies = launcher_config.get("cloudmesh.launcher.recipies")
@@ -69,6 +69,7 @@ def display_launch_table():
                            )
 
 @launch_module.route('/cm/launch/db_stats')
+@login_required
 def launch_status():
     db = cm_launcher_db()
     res = db.find()
@@ -79,6 +80,7 @@ def launch_status():
     return str(l)
 
 @launch_module.route('/cm/db_reset')
+@login_required
 def launch_clear():
     print "clearing db ----------------------------- "
     db = cm_launcher_db()

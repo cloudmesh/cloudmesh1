@@ -21,6 +21,7 @@ mesh_module = Blueprint('mesh_module', __name__)
 
 
 @mesh_module.route('/mesh/register/clouds', methods=['GET', 'POST'])
+@login_required
 def mesh_register_clouds():
 
     error = None
@@ -253,7 +254,7 @@ def mongo_users():
 
 @mesh_module.route('/mesh/servers/')
 @mesh_module.route('/mesh/servers/<filters>')
-
+@login_required
 def mongo_table(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()

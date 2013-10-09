@@ -19,7 +19,7 @@ users_module = Blueprint('users_module', __name__)
 
 
 @users_module.route('/users/ldap/')
-
+@login_required
 def display_usres_ldap():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
