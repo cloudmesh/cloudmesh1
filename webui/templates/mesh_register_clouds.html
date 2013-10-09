@@ -140,8 +140,8 @@
     </tr>
     {{ username ("Username", cloudname, True)}}
 
-    {% set accesskey= cloudname + "-accesskey" %}
-    {% set secretkey= cloudname + "-secretkey" %}
+    {% set accesskey= cloudname + "_accesskey" %}
+    {% set secretkey= cloudname + "_secretkey" %}
 
     {{ password ("Access Key", accesskey)}}
     {{ password ("Secret Key", secretkey)}}
@@ -253,8 +253,8 @@
 
         //Regex to get the password field associated with button
         //Following regex would get hpPassword from toogle_hpPassword
-        var passwordFieldId = ((event.target).id.split("_"))[1];
-        var passwordObject = $('#' + passwordFieldId).get(0);
+        var passwordFieldId = ((event.target).id.split("-"))[1];
+        var passwordObject = $('#' + "id-" + passwordFieldId + "-password").get(0);
         var value = passwordObject.value;
 
         if (passwordObject.type == 'password') {
