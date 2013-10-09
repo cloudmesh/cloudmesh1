@@ -14,6 +14,9 @@ def is_centos():
         print "Warning: centos %s is not tested" % version
     return centos == "centos"
 
+def is_osx():
+    return platform.system().lower() == 'darwin'
+
 @task
 def deploy():
     """deploys the system on supported distributions"""
@@ -29,6 +32,8 @@ def deploy():
         ubuntu()
     elif is_centos():
         centos()
+    elif is_osx():
+        osx()
     else:
         print "OS distribution not supported; please see documatation for manual installation instructions."
         sys.exit()
@@ -42,12 +47,12 @@ def download():
 
 @task
 def install():
-    local("cd ..; pip install -r requirements.txt")
-    local("cd ..; python setup.py install")
+    local("pip install -r requirements.txt")
+    local("python setup.py install")
 
 @task
 def install_mongodb():
-    local("cd ..; fab mongo.install")
+    local("fab mongo.install")
 
 def install_package(package):
     if is_ubuntu():
@@ -103,3 +108,17 @@ def centos():
     install_packages(["rabbitmq-server"])
     local('sudo sh -c "chkconfig rabbitmq-server on && service rabbitmq-server start"')
     install()
+
+def osx():
+    try:
+        import numpy
+        local('pip install numpy')
+    except:
+        pass
+    try:
+        import matplotlib
+        local('pip install matplotlib')
+    except:
+        pass
+    install()
+    
