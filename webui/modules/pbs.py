@@ -20,7 +20,7 @@ pbs_module = Blueprint('pbs_module', __name__)
 
 
 @pbs_module.route('/hpc')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def display_hpc():
 
     hpc_menu = [
@@ -40,7 +40,7 @@ def display_hpc():
 
 
 @pbs_module.route('/pbs/<action>/<host>')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def display_pbs_action(action, host):
 
     error = ""
@@ -76,7 +76,7 @@ def display_pbs_action(action, host):
 
 # deprected
 @pbs_module.route('/pbs/probe/<host>')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def display_pbs_qstat(host):
 
     config = cm_config()
@@ -93,7 +93,7 @@ def display_pbs_qstat(host):
 
 
 @pbs_module.route('/pbsnodes/probe/<host>')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def display_pbs_nodes(host):
 
     config = cm_config()

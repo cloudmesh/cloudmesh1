@@ -17,8 +17,6 @@ profile_module = Blueprint('profile_module', __name__)
 #
 
 
-# @cond_decorator(cloudmesh.with_login, login_required)
-
 @profile_module.route('/profile/', methods=['GET', 'POST'])
 @login_required
 def profile():

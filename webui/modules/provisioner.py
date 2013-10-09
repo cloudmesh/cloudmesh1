@@ -38,7 +38,7 @@ provisioner = provisionerImpl()
 
 
 @provisioner_module.route('/provision/policy')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def display_provisioner_policy():
 
     policy = cm_config_server().get("cloudmesh.server.provisioner.policy")
@@ -49,7 +49,7 @@ def display_provisioner_policy():
 
 
 @provisioner_module.route('/provision/summary/')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def display_provisioner_summary():
 
     queue = celery.control.inspect()
@@ -73,7 +73,7 @@ def display_provisioner_summary():
 
 
 @provisioner_module.route('/provision/tasks/<cluster>/<spec>/<service>')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def display_provision_host_summary(cluster, spec, service):
 
     time.sleep(1)
@@ -169,7 +169,7 @@ class ProvisionForm(Form):
 
 
 @provisioner_module.route("/provision/", methods=("GET", "POST"))
-@cond_decorator(cloudmesh.with_login, login_required)
+
 def display_provision_form():
 
     clusters = cm_config_server().get("cloudmesh.server.provisioner.clusters")

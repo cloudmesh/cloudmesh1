@@ -18,7 +18,7 @@ launch_module = Blueprint('launch  _module', __name__)
 
 
 @launch_module.route('/cm/launch/<host>/<recipie>')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def launch_run ():
     print "implement"
     pass
@@ -26,7 +26,7 @@ def launch_run ():
 
 
 @launch_module.route('/cm/launch/launch_servers', methods=["POST"])
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def launch_servers():
 
 
@@ -58,7 +58,7 @@ def launch_servers():
 
 
 @launch_module.route('/cm/launch')
-@cond_decorator(cloudmesh.with_login, login_required)
+
 def display_launch_table():
     launcher_config = ConfigDict(filename="~/.futuregrid/cloudmesh_launcher.yaml")
     launch_recipies = launcher_config.get("cloudmesh.launcher.recipies")

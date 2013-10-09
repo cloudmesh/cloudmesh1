@@ -13,7 +13,7 @@ keys_module = Blueprint('keys_module', __name__)
 
 
 @keys_module.route('/keys/', methods=['GET', 'POST'])
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def managekeys():
 
 
@@ -64,7 +64,7 @@ def managekeys():
 
 
 @keys_module.route('/keys/delete/<name>/')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def deletekey(name):
     keys = cm_keys()
 

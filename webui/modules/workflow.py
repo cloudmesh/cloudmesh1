@@ -64,14 +64,14 @@ class ProvisionWorkflowForm(Form):
 
 
 @workflow_module.route('/workflows/<filename>')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def retrieve_files(filename):
     """    Retrieve files that have been uploaded    """
     return send_from_directory('/tmp/workflows', filename)
 
 
 @workflow_module.route("/provision/workflow/", methods=("GET", "POST"))
-@cond_decorator(cloudmesh.with_login, login_required)
+
 def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)

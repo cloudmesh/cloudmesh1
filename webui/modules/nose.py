@@ -20,7 +20,7 @@ from sh import nosetests
 
 
 @nose_module.route('/test/ping')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def display_pingtest():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -44,7 +44,7 @@ def display_pingtest():
 @nose_module.route('/test/nose')
 @nose_module.route('/test/nose/')
 @nose_module.route('/test/nose/<test>')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def display_nosetest(test=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -70,7 +70,7 @@ def display_nosetest(test=None):
 
 @nose_module.route('/test/run')
 @nose_module.route('/test/run/<test>')
-@cond_decorator(cloudmesh.with_login, login_required)
+
 def run_nosetest(test=None):
 
     if test is None:

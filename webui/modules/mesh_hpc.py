@@ -23,7 +23,7 @@ mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 
 @mesh_hpc_module.route('/mesh/refresh/qstat')
 @mesh_hpc_module.route('/mesh/refresh/qstat/<host>')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def display_mongo_qstat_refresh(host=None):
     celery_config = ConfigDict(filename="~/.futuregrid/cloudmesh_celery.yaml")
     print "recieved refresh request ===========", host
@@ -56,7 +56,7 @@ def display_mongo_qstat_refresh(host=None):
 
 
 @mesh_hpc_module.route('/mesh/qstat/')
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def display_mongo_qstat_new():
     time_now = datetime.now()
 
