@@ -47,6 +47,7 @@ def mesh_register_clouds():
 
     return render_template('mesh/cloud/mesh_register_clouds.html',
                            user=user,
+                           username=username,
                            cloudnames=config.cloudnames(),
                            error=error)
 
