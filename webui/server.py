@@ -62,7 +62,14 @@ s_config = cm_config_server()
 
 with_browser = s_config.get("cloudmesh.server.webui.browser")
 browser_page = s_config.get("cloudmesh.server.webui.page")
-url_link = "http://localhost:5555/{0}".format(browser_page)
+host = s_config.get("cloudmesh.server.webui.host")
+port = s_config.get("cloudmesh.server.webui.port")
+
+url_link = "http://{0}:{1}/{2}".format(host, port, browser_page)
+
+webbrowser.register("safari", None)
+
+
 # from cloudmesh.util.webutil import setup_imagedraw
 
 with_rack = s_config.get("cloudmesh.server.rack.with_rack")
@@ -570,7 +577,9 @@ if __name__ == "__main__":
     
     with_browser = s_config.get("cloudmesh.server.webui.browser")
     browser_page = s_config.get("cloudmesh.server.webui.page")
-    url_link = "http://localhost:5555/{0}".format(browser_page)
+    host = s_config.get("cloudmesh.server.webui.host")
+    port = s_config.get("cloudmesh.server.webui.port")
+    url_link = "http://{0}:{1}/{2}".format(host, port, browser_page)
 
     webbrowser.register("safari", None)
     webbrowser.open(url_link, 2, autorise=True)
