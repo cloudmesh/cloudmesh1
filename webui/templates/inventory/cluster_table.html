@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 
@@ -25,25 +25,25 @@ $(function() {
 
 <table>
   <tr>
-    <th colspan="{{ parameters.columns }}">  
+    <th colspan="{{ parameters.columns }}">
     {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
 
       Cloudmesh - Inventory for {{ cluster.name }}
     </th>
   </tr>
   <tr>
-    <td  colspan="{{ parameters.columns }}"> 
+    <td  colspan="{{ parameters.columns }}">
       Updated :  {{ updated }}
     </td>
   </tr>
   <tr>
     {% for server in cluster.servers | sort(attribute='name')  %}
         <td {{server.status | state_style | safe}}>
-	   <a href="/inventory/cluster/{{ cluster.name }}/{{server.name}}"> 
+	   <a href="/inventory/cluster/{{ cluster.name }}/{{server.name}}">
 		  {{ server.name | only_numbers }}
 	   </a>
      </td>
-        	{% if (loop.index) %(parameters.columns) == 0  %}	
+        	{% if (loop.index) %(parameters.columns) == 0  %}
           	        </tr><tr>
 	   	{% endif %}
     {% endfor %}
@@ -55,27 +55,27 @@ $(function() {
 <tr>
   <th> Attributes </th>
   <th> Values </th>
-</tr>  
+</tr>
 <tr>
   <td> Groups </td>
   <td>{{ ",".join (cluster.groups) }}</td>
-</tr>  
+</tr>
 <tr>
   <td>Label</td>
   <td>{{ ",".join(cluster.labels) }}</td>
-</tr>  
+</tr>
 <tr>
   <td>Created</td>
   <td>{{ cluster.date_creation | simple_date }}</td>
-</tr>  
+</tr>
 <tr>
   <td>modified</td>
   <td>{{ cluster.date_modified | simple_date }}</td>
-</tr>  
+</tr>
 <tr>
   <td>Uptime</td>
   <td>{{ cluster.uptime }}</td>
-</tr>  
+</tr>
 
 <tr>
   <td>Images</td>
@@ -85,12 +85,12 @@ $(function() {
        <a href = "/inventory/image/{{image.name}}">{{image.name}} </a><br>
     {% endfor %}
   </td>
-</tr>  
+</tr>
 <tr>
   <td>Keys</td>
   <td>{{ "<br>".join(cluster._data.keys()) |safe }}</td>
-</tr>  
+</tr>
 <table>
-  
-{% endblock %} 
+
+{% endblock %}
 

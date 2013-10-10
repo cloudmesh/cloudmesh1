@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -10,18 +10,18 @@
 {% block content %}
 
   <table>
-      <th colspan="6"> Ping Test </th>  
+      <th colspan="6"> Ping Test </th>
 	 </tr>
-  	 <tr> 
-  	 	<td> Updated </td>  
+  	 <tr>
+  	 	<td> Updated </td>
   	 	<td colspan="5"> {{ updated }} </td>
   	 </tr>
-  
+
   <tr>
     {% for key in results[0] %}
     	<th> {{ key }}  </th>
     {% endfor %}
-  </tr>  	
+  </tr>
   {% for test in results %}
     <tr>
     {% for key in test %}
@@ -29,7 +29,7 @@
 	{% endfor %}
   </tr>
   {% endfor %}
-  
+
    </table>
 
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -19,7 +19,7 @@ $(function() {
      	"sPaginationType": "full_numbers",
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ],
-     	
+
     });
 });
 
@@ -28,7 +28,7 @@ $(function() {
 
 
 <div>
-	Updated:{{ updated }} 
+	Updated:{{ updated }}
 	<table id="host-table-0">
 	<thead>
 	  <tr>
@@ -56,10 +56,10 @@ $(function() {
 		<td> {{job.Resource_List.walltime }}  </td>
 		<td> {{job.Resource_List.nodes }}  </td>
 		<td> {{job.Resource_List.nodect }}  </td>
-		
-	
+
+
 	      </tr>
-		
+
 	  {% endfor %}
 	  </tbody>
 	</table>

@@ -1,11 +1,11 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 
 
 {% block contentbox %}
 <h2> Inventory Server </h2>
- Details for server {{ server.name }} @ {{ cluster.name }} 
+ Details for server {{ server.name }} @ {{ cluster.name }}
 {% endblock contentbox %}
 
 {% block content %}
@@ -37,7 +37,7 @@ $(function() {
 
 {% set server_data = server["_data"] %}
 <table>
-    
+
 	{% for service in server['services'] %}
 	   <tr>
 	   	<td>service</td>
@@ -45,7 +45,7 @@ $(function() {
 	   	  {{ service.subkind }} : {{service.name}} : {{service.status}}
 	   </td>
 	   </tr>
-	   
+
 	{% endfor %}
 
 
@@ -55,14 +55,14 @@ $(function() {
      <td>{{ key }}</td>
      {% if server_data[key] | is_list  %}
        <td> {{ ', '.join(server_data[key]) }}</td>
-     {% else %} 
-       <td>{{ server_data[key] }}</td>     
+     {% else %}
+       <td>{{ server_data[key] }}</td>
     {% endif %}
      </tr>
    {% endif %}
 {% endfor %}
 
 </table>
-{% endblock %} 
+{% endblock %}
 
 

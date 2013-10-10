@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 
@@ -28,7 +28,7 @@
 	<td> {{", ". join(names.labels)}} </td>
 	<td> {{", ". join(names.tags)}} </td>
 	<td> {{", ". join(names.groups)}} </td>
-	<td> 
+	<td>
 
 	{% for cluster in inventory.clusters %}
 	  {% for image in inventory.images %}

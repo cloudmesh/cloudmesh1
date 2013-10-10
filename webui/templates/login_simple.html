@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout/layout.html" %}
 {% block title %}Sign in{% endblock %}
 
 {% block content %}
@@ -23,21 +23,21 @@
 
 <script type="text/javascript">
 
-    function checkform() 
-    { 
-        var username=document.getElementById('usernameID').value; 
-        username=username.trim(); 
-        document.getElementById('usernameID').value=username; 
+    function checkform()
+    {
+        var username=document.getElementById('usernameID').value;
+        username=username.trim();
+        document.getElementById('usernameID').value=username;
 
-        var openid= "https://sso.futuregrid.org/openidserver/users/" + document.getElementById('usernameID').value; 
-        document.getElementsByName('openid')[0].value=openid; 
+        var openid= "https://sso.futuregrid.org/openidserver/users/" + document.getElementById('usernameID').value;
+        document.getElementsByName('openid')[0].value=openid;
 
 
-        return true; 
+        return true;
     }
 
-      String.prototype.trim = function () 
-     { 
+      String.prototype.trim = function ()
+     {
          return this.replace(/^\s*/, "").replace(/\s*$/, "");
 
      }

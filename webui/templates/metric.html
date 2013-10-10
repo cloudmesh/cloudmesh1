@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout/layout.html" %}
 {% from "_helper.html" import image_button %}
 {% block content %}
 <script src="/static/js/jquery.js"></script>
@@ -16,7 +16,7 @@
     $('#alert').hide();
     startDate = new Date(ev.date);
     $('#startDate').text($('#dp4').data('date'));
-    $('#s_date').val($('#dp4').data('date')+'T00:00:00'); 
+    $('#s_date').val($('#dp4').data('date')+'T00:00:00');
     }
     $('#dp4').datepicker('hide');
     });
@@ -28,7 +28,7 @@
 			    $('#alert').hide();
 			    endDate = new Date(ev.date);
 			    $('#endDate').text($('#dp5').data('date'));
-    				$('#e_date').val($('#dp5').data('date')+'T23:59:59'); 
+    				$('#e_date').val($('#dp5').data('date')+'T23:59:59');
 			    }
 			    $('#dp5').datepicker('hide');
 		    });
@@ -127,6 +127,6 @@
 		   <td></td>
 	   </tr>
 	   {% endif %}
- </table> 
+ </table>
 
 {% endblock %}

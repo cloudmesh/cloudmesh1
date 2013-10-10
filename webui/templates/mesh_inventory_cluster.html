@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 
@@ -38,7 +38,7 @@ $(document).ready(function() {
 
     {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster + "/") }}
 
-      Cloudmesh - Inventory for {{ cluster }}</th>  
+      Cloudmesh - Inventory for {{ cluster }}</th>
   <tr> <td colspan="8"> Updated {{ updated }}
     <select>
       <option value="">Bulk select...</option>
@@ -69,14 +69,14 @@ $(document).ready(function() {
   <td>
     {{ image_button ("right", "195_circle_info", "/inventory/cluster/" + cluster + "/"+  server) }}
   </td>
-  <td> <a href="/inventory/cluster/{{ cluster }}/{{server}}"> 
+  <td> <a href="/inventory/cluster/{{ cluster }}/{{server}}">
     {{ server }}
     </a>
   </td>
   <td> server-status </td>
   <td>
     <select  onchange="change_service('{{ server }}', this.options[this.selectedIndex].value)">
-      <option value="" 
+      <option value=""
         {% if not server.provisioned %}
           selected="selected"
         {% endif %}>Select...</option>
@@ -96,7 +96,7 @@ $(document).ready(function() {
 </tr>
 
   {% endfor %}
-  
+
 </table>
 
 {% endblock %}

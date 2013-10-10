@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 
@@ -26,12 +26,12 @@ $(function() {
 
 
 <div>
-	Updated:{{ updated | timesince }} 
+	Updated:{{ updated | timesince }}
 
 	  {% set status_attributes = ['jobs', 'gres', 'nusers','idletime', 'rectime', 'sessions', 'physmem', 'totmem', 'netload','loadave', 'state', 'uname', 'opsys', 'nsessions', 'ncpus', 'availmem', 'varattr'] %}
 	  {% set host_attributes = ['ntype', 'state', 'np', 'gpus', 'properties'] %}
-	
-	  
+
+
 	  {% set all_cols = status_attributes|list + host_attributes|list %}
 	  {% set cols = all_cols|count %}
 
@@ -50,25 +50,25 @@ $(function() {
 	  <tbody>
 	  {% for host in data|sort %}
 	      <!-- {% set job = data[jobname] %} -->
-	
+
 	    <tr>
 	      <td> {{ host }} </td>
 	      {% for attribute in host_attributes %}
 	         <td> {{ data[host][attribute] }} </td>
 	      {% endfor %}
-	
-	
+
+
 	        {% for attribute in status_attributes %}
 		 {% if data[host]['status'] %}
 	           <td> {{ data[host]['status'][attribute] }} </td>
 		 {% else %}
 		   <td> </td>
-		 {% endif %}	 
+		 {% endif %}
 	        {% endfor %}
-	
-	
+
+
 	    </tr>
-		
+
 	  {% endfor %}
 	  </tbody>
 	</table>

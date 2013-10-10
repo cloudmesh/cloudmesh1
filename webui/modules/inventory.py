@@ -41,7 +41,7 @@ def display_inventory():
 def old_display_summary():
     parameters = {'columns': 12}
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    return render_template('inventory_summary_table.html',
+    return render_template('inventory/summary_table.html',
                            inventory=inventory,
                            parameters=parameters,
                            updated=time_now)
@@ -106,7 +106,7 @@ def display_named_resource(cluster, name):
 def display_named_resource(cluster, name):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     inventory.refresh()
-    return render_template('inventory_cluster_server.html',
+    return render_template('inventory/cluster_server.html',
                            updated=time_now,
                            server=inventory.get("server", name),
                            cluster=inventory.get("cluster", cluster),
@@ -118,7 +118,7 @@ def display_named_resource(cluster, name):
 def display_cluster(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     inventory.refresh()
-    return render_template('inventory_cluster.html',
+    return render_template('inventory/cluster.html',
                            updated=time_now,
                            cluster=inventory.get("cluster", cluster))
 
@@ -214,7 +214,7 @@ def display_cluster_table(cluster):
         "n": n
     }
 
-    return render_template('inventory_cluster_table.html',
+    return render_template('inventory/cluster_table.html',
                            updated=time_now,
                            parameters=parameters,
                            cluster=inventory.get("cluster", cluster))
@@ -250,7 +250,7 @@ def display_cluster_table(cluster):
 def display_inventory_images():
     images = inventory.get("images")
     inventory.refresh()
-    return render_template('inventory_images.html',
+    return render_template('inventory/images.html',
                            images=images,
                            inventory=inventory)
 
@@ -262,7 +262,7 @@ def display_inventory_image(name):
     inventory.refresh()
     if name is not None:
         image = inventory.get('images', name)
-    return render_template('inventory_image.html',
+    return render_template('inventory/image.html',
                            image=image)
 
 

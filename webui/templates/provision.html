@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -29,14 +29,14 @@
 
 
 The following clusters are currently defined.
-  
+
 <table>
 <tr>
   <th>
     {{ image_button ("center","195_circle_info","/inventory/") }}
     {{ image_button ("center","119_table","/inventory/summary/") }}
   </th>
-  
+
   <th>Cluster</th>
   <th>Definition</th>
 </tr>
@@ -50,6 +50,6 @@ The following clusters are currently defined.
 </tr>
 {% endfor %}
 </table>
-  
+
 {% endblock content %}
 

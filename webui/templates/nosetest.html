@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -16,22 +16,22 @@
 
   <table>
 	 <tr>
-    	<th colspan="2"> Test  {{name}} </th>  
+    	<th colspan="2"> Test  {{name}} </th>
 	 </tr>
-  	 <tr> 
-  	 	<td> Updated </td>  
+  	 <tr>
+  	 	<td> Updated </td>
   	 	<td> {{ updated }} </td>
   	 </tr>
   	 <tr>
-    	<th> Attribute </th>  
-    	<th> Value </th>  
+    	<th> Attribute </th>
+    	<th> Value </th>
      </tr>
-     <tr> 
-  	 	<td> Filename </td>  
+     <tr>
+  	 	<td> Filename </td>
   	 	<td > {{ filename }} </td>
   	 </tr>
-  	  <tr> 
-  	 	<td> Result Filename </td>  
+  	  <tr>
+  	 	<td> Result Filename </td>
   	 	<td > {{ resultname }} </td>
   	 </tr>
     {% for stat in tests.stats %}
@@ -42,20 +42,20 @@
      {% endfor %}
   </table>
 
-  
+
   <h3>Results</h3>
 
   <table>
   <tr>
-    <th colspan="8"> Test  {{name}} </th>  
-   
+    <th colspan="8"> Test  {{name}} </th>
+
   </tr>
-  
+
   <tr>
     {% for key in tests.results[0] %}
     	<th> {{ key }}  </th>
     {% endfor %}
-  </tr>  	
+  </tr>
   {% for test in tests.results %}
     <tr>
     {% for key in test %}
@@ -63,7 +63,7 @@
 	{% endfor %}
   </tr>
   {% endfor %}
-  
+
    </table>
 
 {% endif %}

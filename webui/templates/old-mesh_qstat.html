@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -16,7 +16,7 @@ $(function() {
        	"sPaginationType": "full_numbers",
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ],
-     	
+
     });
 });
 
@@ -30,7 +30,7 @@ $(function() {
 
 
 <div>
-	Updated: {{ updated | timesince(format="date") }} 
+	Updated: {{ updated | timesince(format="date") }}
 	<table id="host-table-0">
 	<thead>
 		  <tr>
@@ -49,7 +49,7 @@ $(function() {
 	  {% for job in table_data %}
 	      <tr>
 			<td> {{ job }} {{job.queue }}  </td>
-			<td> {{job.server }}  </td> 
+			<td> {{job.server }}  </td>
 			<td> {{job.job_state }}  </td>
 			<td> {{job.Job_Name }}  </td>
 			<td> {{job.Job_Owner.split("@")[0] }}  </td>
@@ -58,7 +58,7 @@ $(function() {
 			<td> {{job.Resource_List.nodes }}  </td>
 			<td> {{job.Resource_List.nodect }}  </td>
 	      </tr>
-		
+
 	  {% endfor %}
 	  </tbody>
 	</table>

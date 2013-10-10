@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -28,9 +28,9 @@ $(document).ready(function() {
 
 (function($) {
     $(function() {
-        $("#launcher-accordion > div").accordion({ header: "h3", 
-        										collapsible: true, 
-        										heightStyle: "content", 
+        $("#launcher-accordion > div").accordion({ header: "h3",
+        										collapsible: true,
+        										heightStyle: "content",
         										active: false });
     });
 })(jQuery);
@@ -53,7 +53,7 @@ $(function() {
 	<div><h3> Cloudmesh inventory {{ cluster }}</h3>
 	<div>
 	<table>
-	      
+
 		  <tr> <td colspan="8"> Updated {{ updated }}
 		    <select>
 		      <option value="">Bulk select...</option>
@@ -64,7 +64,7 @@ $(function() {
 		      {% endfor %}
 		    </select>
 		  </td></tr>
-	
+
 		  <tr>
 			    <th> </th>
 			    <th> </th>
@@ -75,7 +75,7 @@ $(function() {
 			    <th> Users </th>
 			    <th> VMs/Jobs </th>
 		  </tr>
-			{% set servers = cluster_data[cluster] %}	
+			{% set servers = cluster_data[cluster] %}
 		  {% for server in servers | sort  %}
 		  <tr>
 		  <td>
@@ -84,14 +84,14 @@ $(function() {
 		  <td>
 		    {{ image_button ("right", "195_circle_info", "/inventory/cluster/" + cluster + "/"+  server) }}
 		  </td>
-		  <td> <a href="/inventory/cluster/{{ cluster }}/{{server}}"> 
+		  <td> <a href="/inventory/cluster/{{ cluster }}/{{server}}">
 		    {{ server }}
 		    </a>
 		  </td>
 		  <td> server-status </td>
 		  <td>
 		    <select  onchange="change_service('{{ server }}', this.options[this.selectedIndex].value)">
-		      <option value="" 
+		      <option value=""
 		        {% if not server.provisioned %}
 		          selected="selected"
 		        {% endif %}>Select...</option>
@@ -103,15 +103,15 @@ $(function() {
 		      {% endfor %}
 		    </select>
 		  </td>
-		
+
 		  <td>{{ server.ip }}</td>
 		  <td><!--<span class="inlinesparkline">{{ server.load_users|join(', ')}}</span>--></td>
 		  <td><!--<span class="inlinesparkline">{{ server.load_vms|join(', ') }}</span>--></td>
-		
+
 		</tr>
-		
+
 		  {% endfor %}
-		  
+
 		</table>
 	</div>
 	</div>

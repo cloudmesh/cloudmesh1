@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout/layout.html" %}
 {% from "_helper.html" import image_button %}
 {% block content %}
 
@@ -10,12 +10,12 @@
 
 
  <input type="radio" name="selected_project" value="{{ projectname }}" id="{{ projectname }}" {{ selected[projectname] }} onclick="document.forms['projects'].submit()" >
-<b> {{ projectname }}</b> 
+<b> {{ projectname }}</b>
 
 
 
 {% endfor %}
 </table>
 </form>
- 
+
 {% endblock %}

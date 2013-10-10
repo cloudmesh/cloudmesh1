@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -14,9 +14,9 @@
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#policy-accordion > div").accordion({ header: "h3", 
-        										 collapsible: true, 
-        										 heightStyle: "content", 
+        $("#policy-accordion > div").accordion({ header: "h3",
+        										 collapsible: true,
+        										 heightStyle: "content",
         										 active: [1, 2] });
     })
 })(jQuery);
@@ -38,11 +38,11 @@ $(function() {
 </script>
 
 <div class="span9">
-	
+
 <div id="policy-accordion">
 
 <div style="margin-bottom:1em;">
-	
+
 <h3>User Policies</h3>
 <div>
 	<form>
@@ -50,14 +50,14 @@ $(function() {
 		<thead>
 		<tr>
 			<th></th>
-			<th> User </th>			
-			<th> Policy </th>			
+			<th> User </th>
+			<th> Policy </th>
 		</tr>
 		</thead>
 		<tbody>
 		{% for name in policy.users %}
 		   		{% for pol in policy.users[name] %}
-			   	<tr> 
+			   	<tr>
 			   		<td> {{ image_button ("right", "016_bin", "/cm/policy/delete/" + name + "/" + pol) }}</td>
 			   		<td> {{name}} </td>
 			   		<td> {{pol}} </td>
@@ -68,10 +68,10 @@ $(function() {
 			<td> {{ image_button ("right", "190_circle_plus", "/cm/policy/user/add/") }}
 	      	</td>
 			<td>
-				<input type="text" name="username">	
+				<input type="text" name="username">
 			</td>
 			<td>
-				<input type="text" name="userhostlist">	
+				<input type="text" name="userhostlist">
 			</td>
 		</tr>
 		</tbody>
@@ -81,7 +81,7 @@ $(function() {
 </div>
 
 <div style="margin-bottom:1em;">
-	
+
 <h3>Project Policies</h3>
 <div>
 	<form>
@@ -89,14 +89,14 @@ $(function() {
 		<thead>
 		<tr>
 			<th></th>
-			<th> Project </th>			
-			<th> Policy </th>			
+			<th> Project </th>
+			<th> Policy </th>
 		</tr>
 		</thead>
 		<tbody>
 		{% for name in policy.projects %}
 		   		{% for pol in policy.projects[name] %}
-			   	<tr> 
+			   	<tr>
 			   		<td> {{ image_button ("right", "016_bin", "/cm/policy/delete/" + name + "/" + pol) }}</td>
 			   		<td> {{name}} </td>
 			   		<td> {{pol}} </td>
@@ -107,10 +107,10 @@ $(function() {
 			<td> {{ image_button ("right", "190_circle_plus", "/cm/policy/project/add/") }}
 	      	</td>
 			<td>
-				<input type="text" name="projectname">	
+				<input type="text" name="projectname">
 			</td>
 			<td>
-				<input type="text" name="projecthostlist">	
+				<input type="text" name="projecthostlist">
 			</td>
 		</tr>
 		</tbody>

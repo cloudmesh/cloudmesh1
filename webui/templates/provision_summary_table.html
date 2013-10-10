@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 
 {% block contentbox %}
 <h2>Provision Summary</h2>
@@ -16,48 +16,48 @@
 
 <table>
 	<tr>
-	  <th> Status </th>	
-	   <th> Worker </th>	
+	  <th> Status </th>
+	   <th> Worker </th>
 	   <th> Task Name </th>
 	   <th> Host </th>
 	   <th> Service </th>
-	   <th> Start </th>	
+	   <th> Start </th>
 	</tr>
 	{% for worker in active %}
 	  {% for task in active[worker] %}
 	     <tr>
-	       <td> Active </td>	
-	       <td> {{ worker }} </td>	
+	       <td> Active </td>
+	       <td> {{ worker }} </td>
 	       <td> {{ task.name | replace ("cloudmesh.provisioner.queue.tasks.","")}} </td>
 	       <td> {{ task.args | get_tuple_element_from_string(0) }} </td>
 	       <td> {{ task.args | get_tuple_element_from_string(1) }}</td>
-	       <td> {{ task.time_start | timesince }} </td>	
+	       <td> {{ task.time_start | timesince }} </td>
 	   </tr>
 	   {% endfor %}
 	{% endfor %}
 	{% for worker in scheduled %}
 	  {% for task in scheduled[worker] %}
 	     <tr>
-	       <td> scheduled </td>	
-	       <td> {{ worker }} </td>	
+	       <td> scheduled </td>
+	       <td> {{ worker }} </td>
 	       <td> {{ task.name | replace ("cloudmesh.provisioner.queue.tasks.","")}} </td>
 	       <td> {{ task.args }} </td>
-	       <td> {{ task.args }} </td>	
+	       <td> {{ task.args }} </td>
 	   </tr>
 	   {% endfor %}
 	{% endfor %}
 	{% for worker in reserved %}
 	  {% for task in reserved[worker] %}
 	     <tr>
-	       <td> reserved </td>	
-	       <td> {{ worker }} </td>	
+	       <td> reserved </td>
+	       <td> {{ worker }} </td>
 	       <td> {{ task.name | replace ("cloudmesh.provisioner.queue.tasks.","")}} </td>
 	       <td> {{ task.args }} </td>
-	       <td> {{ task.args }} </td>	
+	       <td> {{ task.args }} </td>
 	   </tr>
 	   {% endfor %}
 	{% endfor %}
-	
+
 </table>
 
 

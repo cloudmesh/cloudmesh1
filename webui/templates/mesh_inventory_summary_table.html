@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 
@@ -37,7 +37,7 @@ List of all clusters</th>
 
 <table width="55%">
  <tr>
-     <td  colspan="{{ parameters.columns }}"> 
+     <td  colspan="{{ parameters.columns }}">
       Updated :  {{ updated }}
      </td>
  </tr>
@@ -46,11 +46,11 @@ List of all clusters</th>
       {% for server in inventory[cluster] | sort  %}
         <td>
         <!-- server-status | state_style | safe -->
-	   		<a href="/inventory/cluster/{{ cluster }}/{{server}}"> 
+	   		<a href="/inventory/cluster/{{ cluster }}/{{server}}">
 		  		{{ server}}
 		  	</a>
       </td>
-        {% if (loop.index) %(parameters.columns) == 0  %}	
+        {% if (loop.index) %(parameters.columns) == 0  %}
  		        </tr><tr>
 	{% endif %}
         {% endfor %}
@@ -60,5 +60,5 @@ List of all clusters</th>
 {% endfor %}
 </div>
 </div>
-{% endblock %} 
+{% endblock %}
 

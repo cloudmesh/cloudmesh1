@@ -1,4 +1,4 @@
-{% extends "layout_title.html" %}
+{% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
 
 {% block contentbox %}
@@ -12,7 +12,7 @@
 <script type="text/javascript" charset="utf-8">
 
 $(function() {
-        
+
   $('.edit').editable('/profile');
 
 });
@@ -29,7 +29,7 @@ $(function() {
     <form name="profile" action="/profile/" method="POST">
     <tr>
     	<th></th><th colspan="3"><b> Personal Details </b></th>
-    </tr>  
+    </tr>
 	<tr>
 		<td></td><td>Firstname</td>
 		<td colspan="2"><input type="text"
@@ -73,10 +73,10 @@ $(function() {
 	 	style="width:240px"></td>
 	</tr>
 	<tr><td></td><td colspan="3"> <input type="submit" name="btnindex" value="Save Personal Deatils"> </td></tr>
-	
+
 	<!-- -------------- CLOUD DETAILS ---------------------------------- -->
 	<tr><th></th><th colspan="3"><b> Cloud Details</b></th></tr>
-	
+
 	<tr>
 	  <td></td>
 	  <td> VM Name </td>
@@ -92,8 +92,8 @@ $(function() {
 	    <input type="submit" name="btnindex" value="Save VM Name">
 	  </td>
 	</tr>
-	
-	
+
+
 	<tr><td></td>
 	    <td><b> Projects </b></td>
 	    <td colspan="2">
@@ -112,12 +112,12 @@ $(function() {
 	</tr>
 	<tr><td>{{ image_button ("right", "030_pencil", "") }}</td><td>
 	<b> SecurityGroups </b></td>
-	
+
 	<td colspan="2">
-	
-	
+
+
 	{% for group in configuration['security']['security_groups'].keys() %}
-	
+
 	  <input type="radio"
 	  name="field-selected-securityGroup"
 	  value="{{ group }}"
@@ -128,17 +128,17 @@ $(function() {
 	  onclick="document.forms['profile'].submit()"
 	  /> {{ group }}
 	{% endfor %}
-	
-	
+
+
 	</td>
 	</tr>
 	<tr>
 		<td></td><td>Completed</td><td colspan="2">{{ ', '.join(configuration.projects.completed) }}</td>
-	</tr>    
+	</tr>
 	<tr>
 		<td>{{ image_button ("right", "030_pencil", "/clouds/") }}</td><td colspan="3"><b> Clouds </b></td>
 	</tr>
-	
+
 	<tr><td></td><td>Active </td><td colspan="2">
 	  {% for cloudname in configuration.clouds.keys() %}
 	  <input type="checkbox"
@@ -152,8 +152,8 @@ $(function() {
 	        /> {{ cloudname}}
 	{% endfor %}
 	</td></tr>
-	
-	
+
+
 	<tr>
 		<td></td><td>Default </td>
 		<td colspan="2">
@@ -172,7 +172,7 @@ $(function() {
 		</td>
 	</tr>
 	</form>
-	
+
 	<tr>
 		<th>{{ image_button ("right", "030_pencil", "/keys/") }}</th><th colspan="3"><b> Keys </b></th></tr>
 	<tr>
@@ -190,9 +190,9 @@ $(function() {
 			{% else %}
 				{% set checked = '' %}
 			{% endif %}
-			<tr> 
-			  	<td><input type="radio" name="selectkeys" value="{{name}}" {{checked}}  
-					 onclick="document.forms['selectKeyForm'].submit()" title="select"> 
+			<tr>
+			  	<td><input type="radio" name="selectkeys" value="{{name}}" {{checked}}
+					 onclick="document.forms['selectKeyForm'].submit()" title="select">
 		  		</td>
 		  		<td>{{name}}</td>
 		  		<td>{{keys.fingerprint(name)}}
@@ -200,25 +200,25 @@ $(function() {
 		  		</td>
 			</tr>
 		{% endfor %}
-		
+
 	{% else %}
 		There are no keys present, please add one.
 	</form>
 	{% endif %}
-	
+
 	<form action="" method=post enctype=multipart/form-data name = "addkeysform">
-	
+
 	<tr>
 	  	<td></td>
-	  	<td><input name = "keyname" type="text" /></td> 
+	  	<td><input name = "keyname" type="text" /></td>
 	  	<td colspan="2">
 	  		<textarea name = "keyorpath" rows="1" cols="100"></textarea>
 	  		<input type="submit" name = "addkey" value="Add Key">
 	  	</td>
-	
+
 	</tr>
 	</form>
-	
+
 </table>
 {{show}}
 </tr>
