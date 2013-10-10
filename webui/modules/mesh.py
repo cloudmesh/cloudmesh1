@@ -39,6 +39,21 @@ def mesh_register_clouds():
         pprint(request.__dict__)
         print "OOOOOO", request.form
         error = "POST"
+
+        '''        
+        if i clicked on aws:
+            username = get this from the form
+            access key = get this from the form
+            secret key = get this from the form
+           
+            print "WE FIX LATER", username, accesskye, secretkey
+            
+        elif i clicked hp ....
+        '''
+
+
+
+
         return render_template('error.html',
                                updated=datetime.now(),
                                error=error,
