@@ -32,13 +32,18 @@ def mesh_register_clouds():
     user_obj = cm_user()
     user = user_obj.info(username)
 
-
+    #todo define correct actions.
     if request.method == 'POST':
 
-        print "REQUEST"
+        print "REQUESTPushkar"
         pprint(request.__dict__)
         print "OOOOOO", request.form
-
+        error = "POST"
+        return render_template('error.html',
+                               updated= datetime.now(),
+                               error=error,
+                               type="Page not found",
+                               msg="action {0} does not exist")
 
     return render_template('mesh_register_clouds.html',
                            user=user,
@@ -58,31 +63,31 @@ def mongo_images():
     clouds = c.images()
 
     """
-    
+
     status ACTIVE
     updated 2013-05-26T19:29:09Z
     name menghan/custom-utuntu-01
     links [{u'href': u'http://198.202.120.83:8774/v1.1/1ae6813a3a6d4cebbeb1912f6d139ad0/images/502a5967-18ff-448b-830f-d6150b650d6b', u'rel': u'self'}, {u'href': u'http://198.202.120.83:8774/1ae6813a3a6d4cebbeb1912f6d139ad0/images/502a5967-18ff-448b-830f-d6150b650d6b', u'rel': u'bookmark'}, {u'href': u'http://198.202.120.83:9292/1ae6813a3a6d4cebbeb1912f6d139ad0/images/502a5967-18ff-448b-830f-d6150b650d6b', u'type': u'application/vnd.openstack.image', u'rel': u'alternate'}]
     created 2013-05-26T19:28:09Z
     minDisk 0
-    metadata {u'instance_uuid': u'16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', 
-              u'image_location': u'snapshot', 
-              u'image_state': u'available', 
-              u'instance_type_memory_mb': u'2048', 
-              u'instance_type_swap': u'0', 
-              u'instance_type_vcpu_weight': u'None', 
-              u'image_type': u'snapshot', 
-              u'instance_type_id': u'5', 
-              u'ramdisk_id': None, 
-              u'instance_type_name': u'm1.small', 
-              u'instance_type_ephemeral_gb': u'0', 
-              u'instance_type_rxtx_factor': u'1', 
-              u'kernel_id': None, 
-              u'instance_type_flavorid': u'2', 
-              u'instance_type_vcpus': u'1', 
-              u'user_id': u'f603818711324203970ed1e3bb4b90ed', 
-              u'instance_type_root_gb': u'20', 
-              u'base_image_ref': u'1a5fd55e-79b9-4dd5-ae9b-ea10ef3156e9', 
+    metadata {u'instance_uuid': u'16a5f5ac-7f39-4b01-a2c3-b2003beffb9d',
+              u'image_location': u'snapshot',
+              u'image_state': u'available',
+              u'instance_type_memory_mb': u'2048',
+              u'instance_type_swap': u'0',
+              u'instance_type_vcpu_weight': u'None',
+              u'image_type': u'snapshot',
+              u'instance_type_id': u'5',
+              u'ramdisk_id': None,
+              u'instance_type_name': u'm1.small',
+              u'instance_type_ephemeral_gb': u'0',
+              u'instance_type_rxtx_factor': u'1',
+              u'kernel_id': None,
+              u'instance_type_flavorid': u'2',
+              u'instance_type_vcpus': u'1',
+              u'user_id': u'f603818711324203970ed1e3bb4b90ed',
+              u'instance_type_root_gb': u'20',
+              u'base_image_ref': u'1a5fd55e-79b9-4dd5-ae9b-ea10ef3156e9',
               u'owner_id': u'1ae6813a3a6d4cebbeb1912f6d139ad0'}
     server {u'id': u'16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'links': [{u'href': u'http://198.202.120.83:8774/v1.1/1ae6813a3a6d4cebbeb1912f6d139ad0/servers/16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'rel': u'self'}, {u'href': u'http://198.202.120.83:8774/1ae6813a3a6d4cebbeb1912f6d139ad0/servers/16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'rel': u'bookmark'}]}
     cm_id sierra_openstack_grizzly-images-menghan/custom-utuntu-01
@@ -98,9 +103,9 @@ def mongo_images():
     b99fa4c8-6b92-49e6-b53f-37e56f9383b6
     """
     """
-    2 essex A {u'image_location': u'ktanaka/ubuntu1204-ramdisk.manifest.xml', 
-               u'image_state':    u'available', 
-               u'architecture':   u'x86_64'} 
+    2 essex A {u'image_location': u'ktanaka/ubuntu1204-ramdisk.manifest.xml',
+               u'image_state':    u'available',
+               u'architecture':   u'x86_64'}
     """
     attributes = {"grizzly":
                     [
@@ -154,7 +159,7 @@ def mongo_flavors():
     # c.refresh(types=["flavors"])
     clouds = c.flavors()
 
-    """    
+    """
     2
     disk 20
     name m1.small
@@ -166,7 +171,7 @@ def mongo_flavors():
     cm_id sierra_openstack_grizzly-flavors-m1-small
     vcpus 1
     cm_cloud sierra_openstack_grizzly
-    swap 
+    swap
     os-flavor-access:is_public True
     rxtx_factor 1.0
     cm_kind flavors

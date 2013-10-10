@@ -66,7 +66,6 @@ image_button("041_charts", "/table/")
 
 
 {% macro image_button(align, type, actionpath) %}
-<!-- modal for progress -->
       <input align={{ align }} type="image"
 	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
 	     onclick="document.location.href='{{ actionpath }}';"
@@ -74,7 +73,6 @@ image_button("041_charts", "/table/")
 {% endmacro %}
 
 {% macro image_link(align, type, actionpath) %}
-<!-- modal for progress -->
       <a href={{actionpath}}>
 	     <img = src="{{url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
 	     width="16" height="16">
@@ -99,6 +97,14 @@ image_button("041_charts", "/table/")
 
 {%- endmacro %}
 
+
+{% macro submit_button(align, type, formName) %}
+    <input align={{ align }} type="image"
+         src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
+         onclick="document.forms['{{ formName }}'].submit()"
+         title="Register {{ formName }}"
+         width="16" height="16">
+{% endmacro %}
 
 
 
