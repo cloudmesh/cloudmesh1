@@ -23,9 +23,9 @@ import requests
 import sys
 import sys
 import time
+import traceback
 import types
 import webbrowser
-import traceback
 
 
 # from flask.ext.autoindex import AutoIndex
@@ -213,7 +213,7 @@ def site_map():
 @login_required
 def restricted_index():
     return render_template('index.html')
-
+'''
 
 @app.route('/rain')
 @login_required
@@ -221,12 +221,12 @@ def restricted_index():
 def rain_index():
     return render_template('rain.html')
 
-@app.route('/admin')
 
+@app.route('/admin')
 @admin_permission.require(http_exception=403)
 def admin_index():
     return render_template('admin.html')
-'''
+
 
 # ============================================================
 # ROUTE: erros
