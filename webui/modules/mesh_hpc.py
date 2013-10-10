@@ -128,7 +128,7 @@ def display_mongo_qstat_new():
                 print attribute, server[attribute]
     """
 
-    return render_template('mesh_qstat.html',
+    return render_template('mesh/hpc/mesh_qstat.html',
                            hosts=hosts,
                            jobcount=jobcount,
                            timer=timer,

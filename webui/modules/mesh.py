@@ -32,7 +32,7 @@ def mesh_register_clouds():
     user_obj = cm_user()
     user = user_obj.info(username)
 
-    #todo define correct actions.
+    # todo define correct actions.
     if request.method == 'POST':
 
         print "REQUESTPushkar"
@@ -40,12 +40,12 @@ def mesh_register_clouds():
         print "OOOOOO", request.form
         error = "POST"
         return render_template('error.html',
-                               updated= datetime.now(),
+                               updated=datetime.now(),
                                error=error,
                                type="Page not found",
                                msg="action {0} does not exist")
 
-    return render_template('mesh_register_clouds.html',
+    return render_template('mesh/cloud/mesh_register_clouds.html',
                            user=user,
                            cloudnames=config.cloudnames(),
                            error=error)
@@ -136,7 +136,7 @@ def mongo_images():
                 print attribute, clouds[cloud][image][attribute]
     """
 
-    return render_template('mesh_images.html',
+    return render_template('mesh/cloud/mesh_images.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
                            updated=time_now,
@@ -198,7 +198,7 @@ def mongo_flavors():
                      'cm_refresh',
                      ]
 
-    return render_template('mesh_flavors.html',
+    return render_template('mesh/cloud/mesh_flavors.html',
                            address_string=address_string,
                            attributes=os_attributes,
                            updated=time_now,
@@ -246,7 +246,7 @@ def mongo_users():
                     ]
                   }
 
-    return render_template('mesh_users.html',
+    return render_template('mesh/mesh_users.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
                            updated=time_now,

@@ -32,7 +32,7 @@ def display_inventory():
 
     clusters = ["bravo", "india", "delta", "echo", "sierra"]
 
-    return render_template('mesh_inventory.html',
+    return render_template('mesh/inventory/mesh_inventory.html',
                            updated=time_now,
                            clusters=clusters)
 
@@ -63,7 +63,7 @@ def old_display_summary():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    return render_template('mesh_inventory_summary_table.html',
+    return render_template('mesh/inventory/mesh_inventory_summary_table.html',
                            inventory=inv,
                            clusters=clusters,
                            parameters=parameters,
@@ -94,7 +94,7 @@ def display_named_resource(cluster, name):
     clusters = n_inventory.hostlist(cluster)
     server = n_inventory.host(name, auth=False)
 
-    return render_template('mesh_inventory_cluster_server.html',
+    return render_template('mesh/inventory/mesh_inventory_cluster_server.html',
                            updated=time_now,
                            server=server,
                            printer=table_printer,
@@ -131,7 +131,7 @@ def display_cluster(cluster):
     # inventory.refresh()
     servers = n_inventory.hostlist(cluster)
 
-    return render_template('mesh_inventory_cluster.html',
+    return render_template('mesh/inventory/mesh_inventory_cluster.html',
                            updated=time_now,
                            servers=servers,
                            cluster=cluster,
@@ -150,7 +150,7 @@ def display_cluster_for_user():
         return render_template('error.html', error="Could not load the user details")
     cluster_data = get_servers_for_clusters(host_lists)
     # servers = n_inventory.hostlist(cluster)
-    return render_template('mesh_inventory_cluster_limited.html',
+    return render_template('mesh/inventory/mesh_inventory_cluster_limited.html',
                             updated=time_now,
                             cluster_data=cluster_data,
                             services=['openstack', 'eucalyptus', 'hpc'])
@@ -168,7 +168,7 @@ def display_cluster_for_proj():
     cluster_data = get_servers_for_clusters(host_lists)
 
     # servers = n_inventory.hostlist(cluster)
-    return render_template('mesh_inventory_cluster_limited.html',
+    return render_template('mesh/inventory/mesh_inventory_cluster_limited.html',
                             updated=time_now,
                             cluster_data=cluster_data,
                             services=['openstack', 'eucalyptus', 'hpc'])
@@ -236,7 +236,7 @@ def display_cluster_table(cluster):
         "n": n
     }
 
-    return render_template('mesh_inventory_cluster_table.html',
+    return render_template('mesh/inventory/mesh_inventory_cluster_table.html',
                            updated=time_now,
                            parameters=parameters,
                            servers=servers,

@@ -53,12 +53,12 @@ def display_pbs_action(action, host):
     time_now = datetime.now()
     if action == "nodes":
         data = pbs.get(host, "nodes")
-        page = 'mesh_pbsnodes.html',
+        page = 'mesh/cloud/mesh_pbsnodes.html',
 
     elif action == "queue":
         # data = pbs.refresh_pbsnodes(host)
         data = pbs.get(host, "qstat")
-        page = 'mesh_qstat.html'
+        page = 'mesh/cloud/mesh_qstat.html'
     else:
         return render_template('error.html',
                                updated=time_now,
