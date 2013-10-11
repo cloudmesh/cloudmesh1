@@ -338,7 +338,7 @@ def mongo_table(filters=None):
         cloud_filters = None
         filtered_clouds = clouds
 
-    return render_template('mesh_servers.html',
+    return render_template('mesh/cloud/mesh_servers.html',
                            address_string=address_string,
                            attributes=os_attributes,
                            updated=time_now,
