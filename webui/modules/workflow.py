@@ -23,6 +23,11 @@ from flask import Blueprint, request, make_response, render_template
 from flask.ext.login import login_required
 import cloudmesh
 
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 workflow_module = Blueprint('workflow_module', __name__)
 
 

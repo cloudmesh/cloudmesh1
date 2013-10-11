@@ -10,6 +10,11 @@ from sh import pwd
 from cloudmesh.util.ping import ping
 from flask.ext.login import login_required
 
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 nose_module = Blueprint('nose_module', __name__)
 
 #

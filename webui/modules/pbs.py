@@ -11,6 +11,11 @@ from cloudmesh.util.util import cond_decorator
 import cloudmesh
 from flask.ext.login import login_required
 
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 pbs_module = Blueprint('pbs_module', __name__)
 
 

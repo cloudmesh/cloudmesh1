@@ -11,6 +11,10 @@ from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
     identity_changed, Permission, identity_loaded, RoleNeed, UserNeed
 
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 launch_module = Blueprint('launch  _module', __name__)
 
 rain_permission = Permission(RoleNeed('rain'))

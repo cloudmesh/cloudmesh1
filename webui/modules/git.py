@@ -6,6 +6,11 @@ from cloudmesh.util.gitinfo import GitInfo
 from pprint import pprint
 from flask.ext.login import login_required
 
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 git_module = Blueprint('git_module', __name__)
 
 

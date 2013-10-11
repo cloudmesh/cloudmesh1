@@ -17,6 +17,11 @@ from cloudmesh.util.util import cond_decorator
 from flask.ext.login import login_required
 
 
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 from cloudmesh.inventory import Inventory
 
 

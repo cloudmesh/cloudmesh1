@@ -6,6 +6,10 @@ import cloudmesh
 from flask.ext.login import login_required
 from datetime import datetime
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 status_module = Blueprint('status_module', __name__)
 
 #

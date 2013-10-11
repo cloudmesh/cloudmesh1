@@ -10,6 +10,11 @@ from pprint import pprint
 # from cloudmesh.user.cm_userLDAP import get_ldap_user_from_yaml
 from cloudmesh.user.cm_user import cm_user
 
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 profile_module = Blueprint('profile_module', __name__)
 
 #

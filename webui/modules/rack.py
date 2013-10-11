@@ -10,6 +10,10 @@ from sh import pwd  # @UnresolvedImport
 from wtforms import SelectField
 
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 # from cloudmesh.config.cm_rack import cm_keys
 
 

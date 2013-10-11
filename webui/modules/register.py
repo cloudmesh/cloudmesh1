@@ -4,6 +4,10 @@ from flask.ext.wtf import Form
 from wtforms import TextField, PasswordField, SelectField
 from flask.ext.login import login_required
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 register_module = Blueprint('register_module', __name__)
 
 class RegisterForm(Form):

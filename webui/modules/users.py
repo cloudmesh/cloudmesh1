@@ -11,6 +11,10 @@ from cloudmesh.util.util import cond_decorator
 from flask.ext.login import login_required
 import cloudmesh
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 users_module = Blueprint('users_module', __name__)
 
 #

@@ -4,7 +4,13 @@ from cloudmesh.config.cm_keys import cm_keys
 from cloudmesh.util.util import cond_decorator
 
 import cloudmesh
+
 from flask.ext.login import login_required
+
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
 
 mooc_module = Blueprint('mooc_module', __name__)
 

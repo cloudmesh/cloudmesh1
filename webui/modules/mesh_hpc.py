@@ -14,6 +14,10 @@ from cloudmesh.pbs import tasks
 from cloudmesh.config.ConfigDict import ConfigDict
 
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 
 
@@ -26,7 +30,7 @@ mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 @login_required
 def display_mongo_qstat_refresh(host=None):
     celery_config = ConfigDict(filename="~/.futuregrid/cloudmesh_celery.yaml")
-    print "recieved refresh request ===========", host
+    log.info ("qstat refresh request {0}".format(host))
     timeout = 15;
     config = cm_config()
     user = config["cloudmesh"]["hpc"]["username"]
@@ -90,7 +94,7 @@ def display_mongo_qstat_new():
 
         if jobcount[host] > 0:
             timer[host] = data[host][0]["cm_refresh"]
-            pprint(data[host][0])
+            # pprint(data[host][0])
         else:
             timer[host] = datetime.now()
 

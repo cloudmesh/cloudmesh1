@@ -14,6 +14,13 @@ from cloudmesh.util.util import cond_decorator
 import cloudmesh
 from cloudmesh.config.cm_config import cm_config_server
 
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
+
+
 inventory = oldInventory("nosetest")
 import hostlist
 
