@@ -47,13 +47,23 @@ class Test:
         pass
 
     def get_qstat(self, host):
+        HEADING()
         self.pbs = PBS(self.user, host)
         results = self.pbs.qstat()
         for name in results:
             element = results[name]
             pprint (element)
 
+    def get_qinfo(self, host):
+        HEADING()
+        self.pbs = PBS(self.user, host)
+        results = self.pbs.qinfo()
+        for name in results:
+            element = results[name]
+            pprint (element)
+
     def test_all(self):
+        HEADING()
         for host in self.hosts:
             banner(host)
             self.get_qstat(host)
@@ -67,5 +77,11 @@ class Test:
             results = self.pbs.qstat()
 
             print host, " =", len(results), "jobs"
+
+    def test_qinfo(self):
+        for host in self.hosts:
+            banner(host)
+            self.get_qinfo(host)
+
 
 

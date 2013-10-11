@@ -45,6 +45,7 @@ super_sidebar_pages = [
     ["HPC",
         [
             ["Queues", "/mesh/qstat"],
+            ["Q Info", "/mesh/qinfo"],
             ["Users", "/users/ldap"],
             ["Admin", "/hpc"]
         ]

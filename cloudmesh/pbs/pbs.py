@@ -7,7 +7,8 @@ from hostlist import expand_hostlist
 from pprint import pprint
 from sh import ssh, ssh
 from xml.dom import minidom
-
+import yaml
+import sys
 
 class PBS:
 
@@ -19,6 +20,43 @@ class PBS:
     def __init__(self, user, host):
         self.user = user
         self.host = host
+
+
+    def qinfo(self):
+        """returns qstat -Q -f in dict format"""
+
+        result = ssh("{0}@{1}".format(self.user, self.host), "qstat -Q -f")
+        d = {}
+
+        # sanitize block
+
+        result = result.replace("\n\t", "")
+
+        for block in result.split("\n\n")[:-1]:
+            block = [x.replace(" =", ":", 1) for x in block.split("\n")]
+            block[0] = block[0].replace("Queue: ", "") + ":"
+            queue = block[0][:-1]
+
+            block = '\n'.join(block)
+
+            block_yaml = yaml.safe_load(block)
+            d[queue] = block_yaml[queue]
+
+            # end sanitize
+
+            if 'state_count' in d[queue]:
+                values = [x.split(":") for x in d[queue]['state_count'].split(" ")]
+                d[queue]['state_count'] = {}
+                for value in values:
+                    d[queue]['state_count'][value[0]] = value[1]
+
+            if 'acl_hosts' in d[queue]:
+                print d[queue]['acl_hosts']
+                d[queue]['acl_hosts'] = d[queue]['acl_hosts'].split("+")
+
+        return d
+
+
 
     def pbsnodes(self, refresh="True"):
         """returns the pbs node infor from an pbs_nodes_raw_data is a string see above for example"""
@@ -153,4 +191,9 @@ class PBS:
         #
     """
 
+if __name__ == "__main__":
+
+
+    pbs = PBS("gvonlasz", "alamo")
+    pprint (pbs.qinfo())
 
