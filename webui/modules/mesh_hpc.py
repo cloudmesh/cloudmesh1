@@ -34,7 +34,8 @@ def display_mongo_qstat_refresh(host=None):
     if host is None:
         hosts = ["india.futuregrid.org",
                  "sierra.futuregrid.org",
-                 "hotel.futuregrid.org"]
+                 "hotel.futuregrid.org",
+                 "alamo.futuregrid.org"]
     else:
         hosts = [host]
     error = ""
@@ -68,7 +69,8 @@ def display_mongo_qstat_new():
     pbs = pbs_mongo()
     hosts = ["india.futuregrid.org",
              "sierra.futuregrid.org",
-             "hotel.futuregrid.org"]
+             "hotel.futuregrid.org",
+             "alamo.futuregrid.org"]
 #    for host in hosts:
 #        pbs.activate(host,user)
 
@@ -79,8 +81,6 @@ def display_mongo_qstat_new():
     for host in hosts:
         try:
             data[host] = pbs.get_qstat(host)
-            print"101010101010101001010101001"
-            # print data[host]
         except:
             error += "get_qstat({0})".format(host)
         try:
@@ -92,13 +92,10 @@ def display_mongo_qstat_new():
 
         if jobcount[host] > 0:
             timer[host] = data[host][0]["cm_refresh"]
-            print timer
-            print "TTTTT"
             pprint(data[host][0])
-            # timer[host] = datetime.now()
         else:
             timer[host] = datetime.now()
-        # print "TIMER", timer
+
     attributes = {"pbs":
                   [
                         [ "Queue" , "queue"],
