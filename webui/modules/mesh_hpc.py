@@ -84,8 +84,6 @@ def display_mongo_qstat_new():
         except:
             error += "get_qstat({0})".format(host)
         try:
-
-            print "DDD", host, data[host].count()
             jobcount[host] = data[host].count()
         except:
             error += "jobcount {0}".format(host)
