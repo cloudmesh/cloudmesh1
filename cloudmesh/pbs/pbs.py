@@ -68,8 +68,6 @@ class PBS:
 
         self.pbs_qinfo_data = d
 
-        print self.pbs_qinfo_data
-
         return self.pbs_qinfo_data
 
 
