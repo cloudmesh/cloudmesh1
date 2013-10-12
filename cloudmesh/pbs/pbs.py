@@ -16,49 +16,65 @@ class PBS:
     host = None
     pbs_qstat_data = None
     pbs_nodes_data = None
+    pbs_qinfo_data = None
 
     def __init__(self, user, host):
         self.user = user
         self.host = host
 
 
-    def qinfo(self):
+    def qinfo(self, refresh=True):
         """returns qstat -Q -f in dict format"""
 
-        result = ssh("{0}@{1}".format(self.user, self.host), "qstat -Q -f")
-        d = {}
+        if self.pbs_qstat_data is None or refresh:
+            try:
+                result = ssh("{0}@{1}".format(self.user, self.host), "qstat -Q -f")
+            except:
+                raise RuntimeError("can not execute pbs qstat via ssh")
 
-        # sanitize block
+            d = {}
 
-        result = result.replace("\n\t", "")
+            # sanitize block
 
-        for block in result.split("\n\n")[:-1]:
-            block = [x.replace(" =", ":", 1) for x in block.split("\n")]
-            block[0] = block[0].replace("Queue: ", "") + ":"
-            queue = block[0][:-1]
+            result = result.replace("\n\t", "")
 
-            block = '\n'.join(block)
-
-            block_yaml = yaml.safe_load(block)
-            d[queue] = block_yaml[queue]
-
-            # end sanitize
-
-            if 'state_count' in d[queue]:
-                values = [x.split(":") for x in d[queue]['state_count'].split(" ")]
-                d[queue]['state_count'] = {}
-                for value in values:
-                    d[queue]['state_count'][value[0]] = value[1]
-
-            if 'acl_hosts' in d[queue]:
-                print d[queue]['acl_hosts']
-                d[queue]['acl_hosts'] = d[queue]['acl_hosts'].split("+")
-
-        return d
+            result = result.replace('resources_assigned.', 'resources_assigned_')
+            result = result.replace('resources_default.', 'resources_default_')
+            result = result.replace('resources_max.', 'resources_max_')
 
 
+            for block in result.split("\n\n")[:-1]:
+                block = [x.replace(" =", ":", 1) for x in block.split("\n")]
+                block[0] = block[0].replace("Queue: ", "") + ":"
+                queue = block[0][:-1]
 
-    def pbsnodes(self, refresh="True"):
+                block = '\n'.join(block)
+
+                block_yaml = yaml.safe_load(block)
+                d[queue] = block_yaml[queue]
+
+                d[queue]['queue'] = queue
+                # end sanitize
+
+                if 'state_count' in d[queue]:
+                    values = [x.split(":") for x in d[queue]['state_count'].split(" ")]
+                    d[queue]['state_count'] = {}
+                    for value in values:
+                        d[queue]['state_count'][value[0]] = value[1]
+
+                if 'acl_hosts' in d[queue]:
+                    print d[queue]['acl_hosts']
+                    d[queue]['acl_hosts'] = d[queue]['acl_hosts'].split("+")
+
+        self.pbs_qinfo_data = d
+
+        print self.pbs_qinfo_data
+
+        return self.pbs_qinfo_data
+
+
+
+    def pbsnodes(self, refresh=True):
         """returns the pbs node infor from an pbs_nodes_raw_data is a string see above for example"""
 
         if self.pbs_nodes_data is None or refresh:

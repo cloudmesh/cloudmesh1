@@ -137,3 +137,110 @@ def display_mongo_qstat_new():
                            qstat=data,
                            error=error,
                            config=config)
+
+
+
+
+@mesh_hpc_module.route('/mesh/refresh/qinfo')
+@mesh_hpc_module.route('/mesh/refresh/qinfo/<host>')
+@login_required
+def display_mongo_qinfo_refresh(host=None):
+    log.info ("qinfo refresh request {0}".format(host))
+    timeout = 15;
+    config = cm_config()
+    user = config["cloudmesh"]["hpc"]["username"]
+
+    if host is None:
+        hosts = ["india.futuregrid.org",
+                 "sierra.futuregrid.org",
+                 "hotel.futuregrid.org",
+                 "alamo.futuregrid.org"]
+    else:
+        hosts = [host]
+    error = ""
+    pbs = pbs_mongo()
+    for h in hosts:
+        pbs.activate(h, user)
+        res = pbs.refresh_qinfo(h)
+
+    return redirect('mesh/qinfo')
+
+
+
+@mesh_hpc_module.route('/mesh/qinfo/')
+@login_required
+def display_mongo_qinfo():
+    time_now = datetime.now()
+
+    address_string = ""
+    error = ""
+    config = cm_config()
+    user = config["cloudmesh"]["hpc"]["username"]
+
+    pbs = pbs_mongo()
+    hosts = ["india.futuregrid.org",
+             "sierra.futuregrid.org",
+             "hotel.futuregrid.org",
+             "alamo.futuregrid.org"]
+#    for host in hosts:
+#        pbs.activate(host,user)
+
+
+    data = {}
+    jobcount = {}
+    timer = {}
+    for host in hosts:
+        timer[host] = datetime.now()
+        try:
+            data[host] = pbs.get_qinfo(host)
+        except:
+            log.error("get_qinfo {0}".format(host))
+            error += "get_qinfo({0})".format(host)
+        try:
+            jobcount[host] = data[host].count()
+            if jobcount[host] > 0:
+                timer[host] = data[host][0]["cm_refresh"]
+                # pprint(data[host][0])
+            else:
+                timer[host] = datetime.now()
+
+        except:
+            error += "jobcount {0}".format(host)
+
+
+    attributes = {"pbs":
+                  [
+                        [ "Queue" , "queue"],
+                        # [ "Server" , "server"],
+                        [ "State" , "started"],
+                        [ "Type" , "queue_type"],
+                        [ "Walltime" , "resources_default_walltime"],
+                        [ "Total" , "total_jobs"],
+                        [ "Exiting" , "state_count", "Exiting"],
+                        [ "Held" , "state_count", "Held"],
+                        [ "Queued", "state_count", "Queued"],
+                        [ "Running", "state_count", "Running"],
+                        [ "Transit" , "state_count", "Transit"],
+                        [ "Waiting" , "state_count", "Waiting"],
+                  ],
+                  }
+    """
+    for host in hosts:
+        pprint (host)
+        for server in data[host]:
+            print "S", server
+            for attribute in server:
+                print attribute, server[attribute]
+    """
+
+    return render_template('mesh/hpc/mesh_qinfo.html',
+                           hosts=hosts,
+                           jobcount=jobcount,
+                           timer=timer,
+                           address_string=address_string,
+                           attributes=attributes,
+                           updated=time_now,
+                           qinfo=data,
+                           error=error,
+                           config=config)
+
