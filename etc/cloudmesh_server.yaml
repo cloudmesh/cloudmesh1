@@ -55,14 +55,16 @@ cloudmesh:
                 db: user
             userauth:
                 db: auth
-            pbs:
-                db: pbs
             metric:
                 db: metric
+            pbs:
+                db: pbs
             qstat:
-                db: qstat
+                db: hpc
+            qinfo:
+                db: hpc
             pbsnodes:
-                db: pbsnodes
+                db: hpc
             launcher:
                 db: launcher
             pagestatus:
