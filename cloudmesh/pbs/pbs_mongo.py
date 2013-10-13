@@ -58,7 +58,6 @@ class pbs_mongo:
 
 
     def _update_qinfo(self, host, data):
-        print ">>>> qinfo", host
         time_now = datetime.now()
         self.db_qinfo.remove({"cm_host": host, "cm_kind" : "qinfo"}, safe=True)
 
