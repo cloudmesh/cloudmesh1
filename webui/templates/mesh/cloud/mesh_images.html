@@ -60,7 +60,11 @@ $(function() {
     {% set version = clouds[cloud]['cm_type_version'] %}
     {% set attributes = cloud_attributes['grizzly']%}
   <div style="margin-bottom:1em;">
-  <h3> {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/images") }} {{ cloud }}</h3>
+  <h3>
+  	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/images") }}
+  	{{ cloud }}
+	 <span class="badge"> {{ clouds[cloud] |count }} </span> Images
+  </h3>
   <div>
     <table id="cloud-table-{{ loop.index0 }}">
       <thead>
