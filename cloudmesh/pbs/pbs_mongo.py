@@ -49,9 +49,17 @@ class pbs_mongo:
         obtains a refreshed qstat data set from the specified host. The result is written into the mongo db.
         :param host: The host on which to execute qstat
         '''
-        time_now = datetime.now()
-        data = dict(self.hosts[host].qinfo(refresh=True))
 
+        host_data = dict(self.hosts[host].qinfo(refresh=True))
+
+        for host in host_data:
+            self._update_qinfo(host, host_data[host])
+
+
+
+    def _update_qinfo(self, host, data):
+        print ">>>> qinfo", host
+        time_now = datetime.now()
         self.db_qinfo.remove({"cm_host": host, "cm_kind" : "qinfo"}, safe=True)
 
         for name in data:

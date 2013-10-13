@@ -155,6 +155,10 @@ def display_mongo_qinfo_refresh(host=None):
                  "sierra.futuregrid.org",
                  "hotel.futuregrid.org",
                  "alamo.futuregrid.org"]
+    elif host in ['bravo.futuregrid.org',
+                  'echo.futuregrid.org',
+                  'delta.futuregrid.org']:
+        hosts = ['india.futuregrid.org']
     else:
         hosts = [host]
     error = ""
@@ -179,6 +183,9 @@ def display_mongo_qinfo():
 
     pbs = pbs_mongo()
     hosts = ["india.futuregrid.org",
+             "echo.futuregrid.org",
+             "delta.futuregrid.org",
+             "bravo.futuregrid.org",
              "sierra.futuregrid.org",
              "hotel.futuregrid.org",
              "alamo.futuregrid.org"]

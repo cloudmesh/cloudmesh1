@@ -18,9 +18,46 @@ class PBS:
     pbs_nodes_data = None
     pbs_qinfo_data = None
 
+    cluster_queues = None
+
     def __init__(self, user, host):
         self.user = user
         self.host = host
+
+        #
+        # hard codd for now should be in yaml file
+        #
+        if host.startswith("india"):
+            self.cluster_queues = {
+                                   'india.futuregrid.org': [
+                                                            'ib',
+                                                            'fg40',
+                                                            'batch',
+                                                            'long',
+                                                            'provision',
+                                                            'b534',
+                                                            'systest',
+                                                            'reserved',
+                                                            'interactive'],
+                                   'delta.futuregrid.org': [
+                                                            'delta',
+                                                            'delta-long'],
+                                   'echo.futuregrid.org': ['echo'],
+                                   'bravo.futregrid.org': ['bravo', 'bravo-long'],
+                                   }
+
+    def requister_joint_queues(self, cluster_queues):
+        """allows the registration of queues for multiple clusters managed through the same queuing server
+        
+                
+        cluster_queues = {
+            'india.futuregrid.org': ['ib','fg40', 'batch', 'long', 'provision', 'b534', 'systest', 'reserved', 'interactive'],
+            'delta.futuregrid.org': ['delta', 'delta-long'],
+            'echo.futuregrid.org': ['echo'],
+            'bravo.futregrid.org': ['bravo', 'bravo-long'],
+        }
+        """
+        self.cluster_queues = cluster_queues
 
 
     def qinfo(self, refresh=True):
@@ -68,8 +105,26 @@ class PBS:
 
         self.pbs_qinfo_data = d
 
-        return self.pbs_qinfo_data
+        if self.cluster_queues is None:
+            return {self.host: self.pbs_qinfo_data}
+        else:
+            return self.qinfo_extract(self.cluster_queues, self.pbs_qinfo_data)
 
+
+    def qinfo_extract(self, cluster_queues, qinfo_data):
+
+
+        # initialize the queues
+        queues = {}
+        for q in cluster_queues:
+            queues[q] = {}
+
+        # separate the queues
+        for cluster in cluster_queues:
+            for q in cluster_queues[cluster]:
+                queues[cluster][q] = qinfo_data[q]
+
+        return queues
 
 
     def pbsnodes(self, refresh=True):
