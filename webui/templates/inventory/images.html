@@ -10,38 +10,58 @@
 
 
 
-<hr>
 <table>
   <tr>
 	<th> Name </th>
-	<th> Labels </th>
-	<th> Tags </th>
-	<th> Groups </th>
-	<th> Cluster </th>
-	<th> Status </th>
+	<th> Os </th>
+	<th> Partitions </th>
+
+	<!--
 	<th> Date created </th>
 	<th> Date modified </th>
+	-->
   </tr>
-  {% for names in images %}
-  <tr>
-	<td> <a href = "/inventory/image/{{names.name}}">{{names.name}} </a></td>
-	<td> {{", ". join(names.labels)}} </td>
-	<td> {{", ". join(names.tags)}} </td>
-	<td> {{", ". join(names.groups)}} </td>
+  {% for image in images %}
+  <tr valign="top">
 	<td>
-
-	{% for cluster in inventory.clusters %}
-	  {% for image in inventory.images %}
-	    {% if image.name == names.name %}
-	       <a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} </a>
-	    {% endif %}
-	  {% endfor %}
-	{% endfor %}
+		<a href = "/inventory/image/{{image.cm_id}}">{{image.cm_id}} </a>
 	</td>
-
-	<td> {{names.status}} </td>
-	<td> {{names.date_creation | simple_date }} </td>
-	<td> {{names.date_modified | simple_date}} </td>
+	<td>
+	<table>
+	<tr><th>Os</th><td> {{image.os}} </td></tr>
+	<tr><th>Image</th><td> {{image.osimage}} </td></tr>
+	<tr><th>Pt Scheme</th><td> {{image.partition_scheme}} </td></tr>
+	<tr><th>Device</th><td> {{image.disk.device}} </td></tr>
+	</table>
+	</td>
+	<td>
+	<table>
+	<th>Name</th>
+	<th>Mount</th>
+	<th>Type</th>
+	<th>Size</th>
+	{% for p in image.disk.partitions %}
+	<tr>
+		<td>
+		{{p}}
+		</td>
+		<td>
+			{{image.disk.partitions[p].mount}}<br>
+		</td>
+		<td>
+			{{image.disk.partitions[p].type}}<br>
+		</td>
+		<td>
+			{{image.disk.partitions[p].size}}<br>
+		</td>
+	</tr>
+	{% endfor %}
+	</table>
+	</td>
+	<!--
+	<td> {{image.date_creation | simple_date }} </td>
+	<td> {{image.date_modified | simple_date}} </td>
+    -->
   </tr>
   {% endfor %}
 </table>

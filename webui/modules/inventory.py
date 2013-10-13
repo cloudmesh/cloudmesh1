@@ -16,6 +16,7 @@ from cloudmesh.config.cm_config import cm_config_server
 
 
 from cloudmesh.util.logger import LOGGER
+from pprint import pprint
 
 log = LOGGER(__file__)
 
@@ -254,11 +255,16 @@ def display_cluster_table(cluster):
 @inventory_module.route('/inventory/images/')
 @login_required
 def display_inventory_images():
-    images = inventory.get("images")
-    inventory.refresh()
+
+    images = [i for i in n_inventory.find({'cm_key' : 'bootspec'})]
+
+    print ">>>>>>>>>>>>>>>"
+    pprint(images)
+    print ">>>>>>>>>>>>>>>"
+
     return render_template('inventory/images.html',
                            images=images,
-                           inventory=inventory)
+                           inventory=n_inventory)
 
 
 @inventory_module.route('/inventory/image/<name>/')
@@ -267,7 +273,7 @@ def display_inventory_image(name):
     print "PRINT IMAGE", name
     inventory.refresh()
     if name is not None:
-        image = inventory.get('images', name)
+        image = n_inventory.get('images', name)
     return render_template('inventory/image.html',
                            image=image)
 
@@ -281,10 +287,10 @@ def display_inventory_image(name):
 @login_required
 def server_info(server):
 
-    server = inventory.find("server", server)
+    server = n_inventory.find("server", server)
     return render_template('info_server.html',
                            server=server,
-                           inventory=inventory)
+                           inventory=n_inventory)
 
 
 @inventory_module.route('/inventory/set/service/', methods=['POST'])
@@ -293,7 +299,7 @@ def set_service():
     server_name = request.form['server']
     service_name = request.form['provisioned']
 
-    server = inventory.get("server", server_name)
+    server = n_inventory.get("server", server_name)
     server.provisioned = service_name
     server.save(cascade=True)
     # provisioner.provision([server], service)
@@ -308,7 +314,7 @@ def set_attribute():
     attribute = request.form['attribute']
     value = request.form['value']
 
-    s = inventory.get(kind, name)
+    s = n_inventory.get(kind, name)
     s[attribute] = value
     s.save()
     return display_inventory()
@@ -317,7 +323,7 @@ def set_attribute():
 @inventory_module.route('/inventory/get/<kind>/<name>/<attribute>')
 @login_required
 def get_attribute(kind, name, attribute):
-    s = inventory.get(kind, name)
+    s = n_inventory.get(kind, name)
     return s[attribute]
 
 
