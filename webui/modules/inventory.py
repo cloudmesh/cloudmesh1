@@ -235,8 +235,7 @@ def display_cluster_table(cluster):
 
     servers = n_inventory.hostlist(cluster)
 
-
-    cluster_obj = inventory.get("cluster", cluster)
+    cluster_obj = n_inventory.get("cluster", 'cm_id', cluster)
     n = len(servers)
     parameters = {
         "columns": 10,
