@@ -43,7 +43,7 @@ class PBS:
                                                             'delta',
                                                             'delta-long'],
                                    'echo.futuregrid.org': ['echo'],
-                                   'bravo.futregrid.org': ['bravo', 'bravo-long'],
+                                   'bravo.futuregrid.org': ['bravo', 'bravo-long'],
                                    }
 
     def requister_joint_queues(self, cluster_queues):
@@ -54,7 +54,7 @@ class PBS:
             'india.futuregrid.org': ['ib','fg40', 'batch', 'long', 'provision', 'b534', 'systest', 'reserved', 'interactive'],
             'delta.futuregrid.org': ['delta', 'delta-long'],
             'echo.futuregrid.org': ['echo'],
-            'bravo.futregrid.org': ['bravo', 'bravo-long'],
+            'bravo.futuregrid.org': ['bravo', 'bravo-long'],
         }
         """
         self.cluster_queues = cluster_queues
