@@ -64,7 +64,7 @@ def managekeys():
             keys['default'] = request.form['selectkeys']
             keys.write()
 
-    return render_template('keys.html',
+    return render_template('user/keys.html',
                            user=user_mongo,
                            show=msg)
 

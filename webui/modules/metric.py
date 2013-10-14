@@ -30,7 +30,7 @@ def metric():
 
     clouds = "TBD"
 
-    return render_template('metric.html',
+    return render_template('status/metric.html',
                            clouds=clouds.get(),
                            metrics=clouds.get_metrics(args))
 
