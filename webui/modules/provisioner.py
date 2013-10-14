@@ -48,7 +48,7 @@ def display_provisioner_policy():
 
     policy = cm_config_server().get("cloudmesh.server.provisioner.policy")
 
-    return render_template('provision_policy.html',
+    return render_template('mesh/provision/provision_policy.html',
                            policy=policy)
 
 
@@ -71,7 +71,7 @@ def display_provisioner_summary():
     time.sleep(1)
     """
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    return render_template('provision_summary_table.html',
+    return render_template('mesh/provision/provision_summary_table.html',
                            provisioner=provisioner,
                            queue=queue,
                            updated=time_now)
@@ -137,7 +137,7 @@ def display_provision_host_summary(cluster, spec, service):
     time.sleep(1)
     """
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    return render_template('provision_host_table.html',
+    return render_template('mesh/provision/provision_host_table.html',
                            provisioner=provisioner,
                            queue=queue,
                            table=table,
@@ -209,4 +209,4 @@ def display_provision_form():
     else:
         flash("Wrong submission")
     inventory.refresh()
-    return render_template("provision.html", clusters=clusters, form=form)
+    return render_template("mesh/provision/provision.html", clusters=clusters, form=form)
