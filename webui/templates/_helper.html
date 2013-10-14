@@ -49,14 +49,6 @@ image_button("041_charts", "/table/")
 	{% endif %}
 {% endmacro %}
 
-<!--
-<span class="label label-primary">Blue</span>
-<span class="label label-info">lightblue</span>
-<span class="label label-warning">yellow</span>
-<span class="label label-danger">red/gray</span>
--->
-
-
 {% macro cm_image_input(align, type) %}
       <input align={{ align }}
              type="image"
@@ -97,9 +89,8 @@ image_button("041_charts", "/table/")
 
 {%- endmacro %}
 
-
-{% macro submit_button(align, type, formName) %}
-    <input align={{ align }} type="image"
+{% macro submit_button(id, type, formName) %}
+    <input id="{{id}}" type="image"
          src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
          onclick="document.forms['{{ formName }}'].submit()"
          title="Register {{ formName }}"
