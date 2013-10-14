@@ -9,7 +9,7 @@ from ast import literal_eval
 from sh import pwd
 from cloudmesh.util.ping import ping
 from flask.ext.login import login_required
-
+from flask.ext.principal import Permission, RoleNeed
 
 from cloudmesh.util.logger import LOGGER
 
@@ -23,9 +23,11 @@ nose_module = Blueprint('nose_module', __name__)
 
 from sh import nosetests
 
+admin_permission = Permission(RoleNeed('admin'))
 
 @nose_module.route('/test/ping')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_pingtest():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -50,6 +52,7 @@ def display_pingtest():
 @nose_module.route('/test/nose/')
 @nose_module.route('/test/nose/<test>')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_nosetest(test=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -67,7 +70,7 @@ def display_nosetest(test=None):
     except:
         tests = {'name': 'please run test'}
 
-    return render_template('nosetest.html',
+    return render_template('admin/nosetest.html',
                            updated=time_now,
                            tests=tests,
                            filename=filename,
@@ -76,6 +79,7 @@ def display_nosetest(test=None):
 @nose_module.route('/test/run')
 @nose_module.route('/test/run/<test>')
 @login_required
+@admin_permission.require(http_exception=403)
 def run_nosetest(test=None):
 
     if test is None:
