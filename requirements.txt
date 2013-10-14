@@ -26,6 +26,7 @@ Flask-Silk
 flask_login
 Flask-OpenID
 flask-principal
+Flask-RST
 pymongo
 mongoengine
 python-novaclient
