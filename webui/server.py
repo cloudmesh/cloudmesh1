@@ -19,6 +19,7 @@ with_flatpages = False
 
 if with_flatpages:
     from flask_flatpages import FlatPages
+
 from flask.ext.rstpages import RSTPages
 from pprint import pprint
 import cloudmesh
@@ -236,13 +237,13 @@ def restricted_index():
 @login_required
 @rain_permission.require(http_exception=403)
 def rain_index():
-    return render_template('rain.html')
+    return render_template('sample/rain.html')
 
 
 @app.route('/admin')
 @admin_permission.require(http_exception=403)
 def admin_index():
-    return render_template('admin.html')
+    return render_template('admin/admin.html')
 
 
 # ============================================================
@@ -549,7 +550,7 @@ def login():
         else:
             form.error = 'Login Invalid'
 
-    return render_template('login.html', form=form)
+    return render_template('user/login.html', form=form)
 
 
 @app.route('/logout')

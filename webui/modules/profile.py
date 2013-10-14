@@ -112,7 +112,7 @@ def profile():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    return render_template('profile.html',
+    return render_template('user/profile.html',
                            updated=time_now,
                            configuration=config['cloudmesh'],  # just to populate security groups
                            user=user,

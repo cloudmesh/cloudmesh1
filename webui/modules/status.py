@@ -83,7 +83,7 @@ def display_status():
 
     print "SSS", spider_services
 
-    return render_template('status.html',
+    return render_template('status/status.html',
                            services=spider_services,
                            values=values,
                            status=status,
