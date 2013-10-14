@@ -14,7 +14,12 @@ from flask.ext.login import LoginManager, login_user, logout_user, \
 from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
     identity_changed, Permission, identity_loaded, RoleNeed, UserNeed
 from flask.ext.wtf import Form, TextField, PasswordField, Required, Email
-from flask_flatpages import FlatPages
+
+with_flatpages = False
+
+if with_flatpages:
+    from flask_flatpages import FlatPages
+from flask.ext.rstpages import RSTPages
 from pprint import pprint
 import cloudmesh
 import os
@@ -117,8 +122,10 @@ config = cm_config_server()
 
 SECRET_KEY = config.get('cloudmesh.server.webui.secret')
 DEBUG = debug
-FLATPAGES_AUTO_RELOAD = debug
-FLATPAGES_EXTENSION = '.md'
+
+if with_flatpages:
+    FLATPAGES_AUTO_RELOAD = debug
+    FLATPAGES_EXTENSION = '.md'
 
 
 # ============================================================
@@ -128,8 +135,11 @@ FLATPAGES_EXTENSION = '.md'
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.debug = debug
-pages = FlatPages(app)
 
+if with_flatpages:
+    pages = FlatPages(app)
+else:
+    pages = RSTPages(app)
 
 # dynamic app loading from defined modules
 # app.register_blueprint(keys_module, url_prefix='',)
@@ -170,7 +180,7 @@ def flash_errors(form):
 # @app.context_processor
 # def inject_pages():
 #    return dict(pages=pages)
-# app.register_blueprint(menu_module, url_prefix='/', )
+# app.register_blueprint(menu_module, url_prefix='', )
 # if debug:
 #    AutoIndex(app, browse_root=os.path.curdir)
 
@@ -383,10 +393,18 @@ def state_style(state):
 # ============================================================
 
 
+# @app.route('/<path:path>/')
+# def page(path):
+#    page = pages.get_or_403(path)
+#    return render_template('page.html', page=page)
+
+
 @app.route('/<path:path>/')
 def page(path):
-    page = pages.get_or_404(path)
+    page = pages.get(path)
     return render_template('page.html', page=page)
+
+
 
 
 # ============================================================
