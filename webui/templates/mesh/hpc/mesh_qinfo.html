@@ -91,6 +91,7 @@
 $(function() {
   {% for cloudnum in range(hosts|count) %}
     $("#display-table-{{ cloudnum }}").dataTable({
+    	"aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
         "sPaginationType": "full_numbers",
         "sDom": 'C<"clear">lftipr',
         "oColVis": {

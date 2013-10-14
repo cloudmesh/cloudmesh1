@@ -15,6 +15,7 @@
 
 $(function() {
      $("#host-table-0").dataTable({
+     	"aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
         aaSorting: [[1,'asc']],
         aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
     });
