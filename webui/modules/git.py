@@ -65,5 +65,5 @@ def display_git_authors():
         print "{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%".format(email, p[0], p[1], p[2], p[3])
     """
 
-    return render_template('git.html',
+    return render_template('general/git.html',
                            authors=authors)
