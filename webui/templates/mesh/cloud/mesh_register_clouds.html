@@ -23,7 +23,6 @@
 <tr>
     <td style="text-align: right">{{label}}:</td>
     <td colspan="2">
-
         <input id="id-{{cloudname}}-password"
         valign="middle"
         type="password"
@@ -31,13 +30,6 @@
         value="" autocomplete="off"
         placeholder="{{label}}"
         style="margin-bottom: 5px; margin-top: 5px;">
-      <!-- <form>
-        <input type="button"
-        id="toggle-{{cloudname}}"
-        value="T"
-        style="display:inline"
-        onclick="toggle_PasswordFieldClicked()"/>
-    </form> -->
     </td>
 </tr>
 {% endmacro %}
@@ -144,6 +136,7 @@
         {% for cloud in cloudList %}
         <h3><a href="#">{{ cloud }}</a></h3>
         <form id={{ cloud }} method="post">
+            <input name="cloudInput" type="hidden" value="{{ cloud }}"/>
             <table id={{ cloud }} + "clouds" style="display: inline-block; float: left;">
                 <tr>
                     {% if (cloud) == "sierra_openstack_grizzly" %}

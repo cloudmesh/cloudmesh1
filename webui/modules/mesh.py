@@ -35,30 +35,23 @@ def mesh_register_clouds():
     # todo define correct actions.
     if request.method == 'POST':
 
-        print "REQUESTPushkar"
-        pprint(request.__dict__)
-        print "OOOOOO", request.form
-        error = "POST"
-
-        '''        
-        if i clicked on aws:
-            username = get this from the form
-            access key = get this from the form
-            secret key = get this from the form
-           
-            print "WE FIX LATER", username, accesskye, secretkey
-            
-        elif i clicked hp ....
-        '''
-
-
-
+        if (request.form['cloudInput'] == 'aws'):
+            awsUserName     = request.form['field-aws-username']
+            awsAccessKey    = request.form['field-aws_accesskey-password']
+            awsSecretKey    = request.form['field-aws_secretkey-password']
+        elif (request.form['cloudInput'] == 'azure'):
+            azureSubscriptionKey = request.form['field-azure-password']
+        elif (request.form['cloudInput'] == 'hp'):
+            hpUserName      = request.form['field-hp-username']
+            hpPassword      = request.form['field-hp-password']
+        elif (request.form['cloudInput'] == 'sierra_openstack_grizzly'):
+            sierraPassword = request.form['field-sierra_openstack_grizzly-password']
 
         return render_template('error.html',
                                updated=datetime.now(),
                                error=error,
                                type="Page not found",
-                               msg="action {0} does not exist")
+                               msg="All data from Post request retrieved!")
 
     return render_template('mesh/cloud/mesh_register_clouds.html',
                            user=user,
