@@ -1,5 +1,5 @@
 {% extends "layout/layoutTable.html" %}
-{% from "_helper.html" import image_button %}
+{% from "_helper.html" import image_button, image_popup %}
 {% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
@@ -68,7 +68,7 @@ $(function() {
       	&nbsp;
       	{{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}
       	&nbsp;
-      	{{ image_button ("none", "041_charts", "/table/") }}
+      	{{ image_popup ("none", "041_charts", "/stats/table/" + cloud + "/") }}
       	&nbsp;
       	{{ image_button ("none", "044_keys", "/updatekeypair/" + cloud + "/") }}
       	{{ cloud }}
