@@ -25,48 +25,39 @@ db_metric.activate()
 # ============================================================
 # @app.route('/metric/<s_date>/<e_date>/<user>/<cloud>/<host>/<period>/<metric>')
 
-@metric_module.route('/stats/table/<cloud_name>/')
+@metric_module.route('/stats/table/<metric>/<period>/<cloud_name>/')
 @login_required
-def stats(cloud_name=None):
+def stats(metric=None, period=None, cloud_name=None):
+
+    return render_template("status/stats.html", metric=metric, period=period,
+                           cloud_name=cloud_name)
+
+@metric_module.route('/stats/figure/<metric>/<period>/<cloud_name>/')
+@login_required
+def figure(metric=None, period=None, cloud_name=None):
 
     # Temporary
     data = db_metric.find({})[0]
 
-    # vm count
+    # vm count / user count / walltime
     list_of_date = []
-    count_by_date = []
-    total_count = data['count']['total']
+    value_by_date = []
+    total_value = data[metric]['total']
 
-    for i in data['count']['by_date']:
+    for i in data[metric]['by_date']:
         date = datetime.strptime(i['date'], '%Y%m%d')
         list_of_date.append(date)
-        count_by_date.append(i['count'])
-
-   
-    # user count
-    list_of_date2 = []
-    user_count_by_date = []
-    total_user_count = data['usercount']['total']
-    for j in data['usercount']['by_date']:
-        date = datetime.strptime(j['date'], '%Y%m%d')
-        list_of_date2.append(date)
-        user_count_by_date.append(j['count'])
-
-    # walltime
-    list_of_date3 = []
-    walltime_by_date = []
-    total_walltime = data['walltime']['total']
-    for k in data['walltime']['by_date']:
-        date = datetime.strptime(k['date'],'%Y%m%d')
-        list_of_date3.append(date)
-        walltime_by_date.append(k['total'])
+        if metric == "walltime":
+            value_by_date.append(i['total'])
+        else:
+            value_by_date.append(i['count'])
 
     fig=Figure()
     ax=fig.add_subplot(111)
-    ax.plot_date(list_of_date, count_by_date, '-')
+    ax.plot_date(list_of_date, value_by_date, '-')
     ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
-    ax.set_ylabel("count")
-    ax.set_title("Number of VM instances deployed")
+    ax.set_ylabel(get_metric_name(metric))
+    ax.set_title(get_metric_title(metric, period, cloud_name))
     fig.autofmt_xdate()
     canvas=FigureCanvas(fig)
     png_output = StringIO.StringIO()
@@ -74,6 +65,26 @@ def stats(cloud_name=None):
     response=make_response(png_output.getvalue())
     response.headers['Content-Type'] = 'image/png'
     return response
+
+def get_metric_name(name):
+    if name == "usercount":
+        return "User Count"
+    elif name == "walltime":
+        return "Wall-clock time"
+    else:
+        return name.title()
+
+def get_metric_title(name, period, source):
+    if period == "daily":
+        pr = "day"
+    else:
+        pr = period[:-2]
+    if name == "usercount":
+        return "Unique User count for %s \n (source:%s)" % (pr, source)
+    elif name == "count":
+        return "The number of VM instances deployed for %s \n (source:%s)" % (pr, source)
+    elif name == "walltime":
+        return "Wall-clock time of VM instances for %s \n (source:%s)" % (pr, source)
 
 @metric_module.route('/metric', methods=['POST', 'GET'])
 @login_required
