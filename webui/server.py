@@ -60,7 +60,7 @@ all_modules = ['menu',
                'mesh_hpc',
                'users',
                'status',
-               'register',
+               # 'register',
                 ]
 
 s_config = cm_config_server()
