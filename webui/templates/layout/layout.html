@@ -35,6 +35,12 @@
   			box-shadow:         3px 3px 5px 6px #ccc;
 		}
 
+		.shadow-circular {
+			box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+			-webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+			-moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+		}
+
 		.blue-gradient {
 			background: #a7cfdf; /* Old browsers */
 			background: -moz-linear-gradient(top, #a7cfdf 0%, #23538a 100%); /* FF3.6+ */
@@ -99,12 +105,6 @@
     </head>
 
     <body>
-        <!-- Div for progress -->
-        <!--<div id="progress" style="position: absolute; left: 0px; top: 0px; opacity: 0.7">
-            <div id="progressImage">
-                <img src='/static/img/image_spin.gif'/>
-            </div>-->
-        </div>
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
@@ -220,6 +220,35 @@
                             </div><!--/span-->
                             <div class="span4">
                                 {% block contentsmall23 %}
+                                {% endblock %}
+                                {#
+                                <p>
+                                    <a class="btn" href="#">View details &raquo;</a>
+                                </p>
+                                #}
+                            </div><!--/span-->
+                        </div><!--/row-->
+                        <div class="row-fluid">
+                            <div class="span4">
+                                {% block contentsmall31 %}
+                                {% endblock %}
+                                {#
+                                <p>
+                                    <a class="btn" href="#">View details &raquo;</a>
+                                </p>
+                                #}
+                            </div><!--/span-->
+                            <div class="span4">
+                                {% block contentsmall32 %}
+                                {% endblock %}
+                                {#
+                                <p>
+                                    <a class="btn" href="#">View details &raquo;</a>
+                                </p>
+                                #}
+                            </div><!--/span-->
+                            <div class="span4">
+                                {% block contentsmall33 %}
                                 {% endblock %}
                                 {#
                                 <p>

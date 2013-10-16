@@ -63,7 +63,7 @@ def display_pbs_action(action, host):
     elif action == "queue":
         # data = pbs.refresh_pbsnodes(host)
         data = pbs.get(host, "qstat")
-        page = 'mesh/cloud/mesh_qstat.html'
+        page = 'mesh/hpc/mesh_qstat.html'
     else:
         return render_template('error.html',
                                updated=time_now,
@@ -91,7 +91,7 @@ def display_pbs_qstat(host):
     pbs = PBS(user, host)
     data = pbs.qstat()
 
-    return render_template('qstat.html',
+    return render_template('mesh/hpc/qstat.html',
                            updated=time_now,
                            host=host,
                            qstat=data)
@@ -109,7 +109,7 @@ def display_pbs_nodes(host):
     pbs = PBS(user, host)
     data = pbs.pbsnodes()
 
-    return render_template('pbsnodes.html',
+    return render_template('mesh/hpc/pbsnodes.html',
                            updated=time_now,
                            host=host,
                            data=data)

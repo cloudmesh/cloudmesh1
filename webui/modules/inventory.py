@@ -44,17 +44,6 @@ def display_inventory():
                            updated=time_now,
                            clusters=clusters)
 
-"""
-@inventory_module.route('/old/inventory/summary/')
-def old_display_summary():
-    parameters = {'columns': 12}
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    return render_template('inventory/summary_table.html',
-                           inventory=inventory,
-                           parameters=parameters,
-                           updated=time_now)
-"""
-
 @inventory_module.route('/inventory/summary/')
 @login_required
 def old_display_summary():

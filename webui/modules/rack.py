@@ -54,7 +54,7 @@ def display_rack_home():
     rack_form = RackForm()
     if rack_form.validate_on_submit():
         rack_form.initForm()
-        return render_template("rack.html", form=rack_form, flag_home=True)
+        return render_template("mesh/rack/rack.html", form=rack_form, flag_home=True)
 
 
 
@@ -120,7 +120,7 @@ def display_rack_map():
     abs_web_path_image = "/".join([""] + list_image_dir + [filename_image])
     abs_web_path_legend = "/".join([""] + list_image_dir + [filename_legend])
 
-    return render_template("rack.html",
+    return render_template("mesh/rack/rack.html",
                             flag_home=False,
                             rack=rack,
                             imageWidth=image_size["width"],
@@ -148,7 +148,7 @@ def display_all_racks():
 
     rack = None
 
-    return render_template('rack.html',
+    return render_template('mesh/rack/rack.html',
                            name="india",
                            rack=rack)
 
@@ -189,7 +189,7 @@ def display_rack(name, service=None):
 
     rack = name
 
-    return render_template('rack.html',
+    return render_template('mesh/rack/rack.html',
                            service=service,
                            basename=basename,
                            name=name,

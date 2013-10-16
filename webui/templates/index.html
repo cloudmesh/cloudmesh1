@@ -4,67 +4,106 @@
 {% endblock content %}
 
 {% block contentbox %}
-<h1>Cloudmesh</h1>
- <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+	<h1>Cloudmesh</h1>
+	 <p><a class="btn btn-primary">Learn more &raquo;</a></p>
 {% endblock contentbox %}
 
 {% block contentsmall11 %}
 
-<h2>Cloud</h2>
+	<h2>Cloud</h2>
 
-hallo
+	<img src="/static/img/splash/cloud.png" height="100" width="100"
+		 class="img-circle">
 
-<p><a class="btn" href="#">View details &raquo;</a></p>
+	<p><a class="btn btn-xs" href="#">View details &raquo;</a></p>
+
 {% endblock contentsmall11 %}
 
 {% block contentsmall12 %}
 
-<h2>HPC</h2>
+	<h2>HPC</h2>
+	<img src="/static/img/splash/hpc.png" height="100" width="100" class="img-circle">
+	<p><a class="btn btn-xs" href="#">View details &raquo;</a></p>
 
-hallo
-
-<p><a class="btn" href="#">View details &raquo;</a></p>
 {% endblock contentsmall12 %}
 
 {% block contentsmall13 %}
 
-<h2>Provisioning</h2>
+	<h2>Rain</h2>
 
-hallo
+	<img src="/static/img/splash/rain.jpg" height="100" width="100" class="img-circle">
 
-<p><a class="btn" href="#">View details &raquo;</a></p>
+	<p><a class="btn btn-xs" href="#">View details &raquo;</a></p>
+
 {% endblock contentsmall13 %}
 
 
 
 {% block contentsmall21 %}
 
-<h2>Monitor</h2>
+	<h2>Monitor</h2>
 
-<h3>Tests</h3>
+	<img src="/static/img/splash/ruler.jpg" height="100" width="100" class="img-circle">
 
-<p><a class="btn" href="/test/ping"> Ping &raquo;</a></p>
-
-<p><a class="btn" href="#">View details &raquo;</a></p>
+	<p><a class="btn btn-xs" href="#">View details &raquo;</a></p>
 
 {% endblock contentsmall21 %}
 
 
 {% block contentsmall22 %}
 
-<h2>Information</h2>
+	<h2>Tests</h2>
 
-{{ flexible_menu(g.sidebar_flatpages) }}
+	<img src="/static/img/splash/test.jpg" height="100" width="100" class="img-circle">
+
+	<p><a class="btn btn-xs" href="/test/ping"> Ping &raquo;</a></p>
+
 
 {% endblock contentsmall22 %}
 
 {% block contentsmall23 %}
 
+<h2>Inventory</h2>
+
+<img src="/static/img/splash/inventory.jpg" height="100" width="100" class="img-circle">
+
+{% endblock contentsmall23 %}
+
+
+
+
+{% block contentsmall31 %}
+
+<h2>News</h2>
+
+<img src="/static/img/splash/news.jpg" height="100" width="100" class="img-circle">
+
+<h3>Tests</h3>
+
+<p><a class="btn btn-xs" href="/test/ping"> Ping &raquo;</a></p>
+
+<p><a class="btn btn-xs" href="#">View details &raquo;</a></p>
+
+{% endblock contentsmall31 %}
+
+
+{% block contentsmall32 %}
+
+<h2>Information</h2>
+
+<img src="/static/img/splash/information.jpg" height="100" width="100" class="img-circle">
+
+{% endblock contentsmall32 %}
+
+{% block contentsmall33 %}
+
 <h2>Links</h2>
+
+<img src="/static/img/splash/links.jpg" height="100" width="100" class="img-circle">
 
  {{ flexible_menu(g.externalbar_pages) }}
 
-{% endblock contentsmall23 %}
+{% endblock contentsmall33 %}
 
 
 

@@ -1,0 +1,127 @@
+DONE 
+
+u+ webui/modules/git.py		:17:	@git_module.route('/git/')
+
+Moved to todo/modules/ufo.py:
+
+- webui/modules/cloud.py		:57:		@cloud_module.route('/save/')
+- webui/modules/cloud.py		:69:		@cloud_module.route('/load/')
+
+
+TODO
+
+
+? webui/modules/cloud.py		:81:		@cloud_module.route('/cm/refresh/')
+? webui/modules/cloud.py		:82:		@cloud_module.route('/cm/refresh/<cloud>/')
+? webui/modules/cloud.py		:83:		@cloud_module.route('/cm/refresh/<cloud>/<service_type>')
+? webui/modules/cloud.py		:110:	@cloud_module.route('/cm/filter/<cloud>/', methods=['GET', 'POST'])
+? webui/modules/cloud.py		:137:	@cloud_module.route('/cm/kill/')
+? webui/modules/cloud.py		:149:	@cloud_module.route('/cm/delete/<cloud>/<server>/')
+? webui/modules/cloud.py		:166:	@cloud_module.route('/cm/delete/<cloud>/')
+? webui/modules/cloud.py		:184:	@cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
+? webui/modules/cloud.py		:204:	@cloud_module.route('/cm/start/<cloud>/')
+? webui/modules/cloud.py		:258:	@cloud_module.route('/cm/login/<cloud>/<server>/')
+? webui/modules/cloud.py		:286:	@cloud_module.route('/cm/info/<cloud>/<server>/')
+- webui/modules/cloud.py		:315:	# @cloud_module.route('/flavors/<cloud>/' )
+? webui/modules/cloud.py		:318:	@cloud_module.route('/flavors/', methods=['GET', 'POST'])
+- webui/modules/cloud.py		:341:	# @cloud_module.route('/images/<cloud>/')
+? webui/modules/cloud.py		:343:	@cloud_module.route('/images/', methods=['GET', 'POST'])
+
+
+???? webui/modules/inventory.py	:34:	@inventory_module.route('/inventory/')
+???? webui/modules/inventory.py	:85:	@inventory_module.route('/inventory/')
+
+? webui/modules/inventory.py	:58:	@inventory_module.route('/inventory/summary/')
+
+???webui/modules/inventory.py	:96:	@inventory_module.route('/inventory/cluster/<cluster>/<name>')
+???webui/modules/inventory.py	:112:	@inventory_module.route('/inventory/cluster/<cluster>/<name>')
+???webui/modules/inventory.py	:124:	@inventory_module.route('/inventory/cluster/<cluster>/')
+???webui/modules/inventory.py	:135:	@inventory_module.route('/inventory/cluster/<cluster>/')
+? webui/modules/inventory.py	:149:	@inventory_module.route('/inventory/cluster-user')
+? webui/modules/inventory.py	:166:	@inventory_module.route('/inventory/cluster-proj')
+? webui/modules/inventory.py	:212:	@inventory_module.route('/inventory/cluster/table/<cluster>/')
+? webui/modules/inventory.py	:231:	@inventory_module.route('/inventory/cluster/table/<cluster>/')
+? webui/modules/inventory.py	:255:	@inventory_module.route('/inventory/images/')
+? webui/modules/inventory.py	:270:	@inventory_module.route('/inventory/image/<name>/')
+? webui/modules/inventory.py	:286:	@inventory_module.route('/inventory/info/server/<server>/')
+? webui/modules/inventory.py	:296:	@inventory_module.route('/inventory/set/service/', methods=['POST'])
+? webui/modules/inventory.py	:309:	@inventory_module.route('/inventory/set/attribute/', methods=['POST'])
+? webui/modules/inventory.py	:323:	@inventory_module.route('/inventory/get/<kind>/<name>/<attribute>')
+- webui/modules/inventory.py	:330:	@inventory_module.route('/inventory/save/')
+- webui/modules/inventory.py	:338:	@inventory_module.route('/inventory/load/')
+
+? webui/modules/keys.py		:21:	@keys_module.route('/keys/', methods=['GET', 'POST'])
+? webui/modules/keys.py		:72:	@keys_module.route('/keys/delete/<name>/')
+
+? webui/modules/launch.py	:29:	@launch_module.route('/cm/launch/<host>/<recipie>')
+? webui/modules/launch.py	:38:	@launch_module.route('/cm/launch/launch_servers', methods=["POST"])
+? webui/modules/launch.py	:71:	@launch_module.route('/cm/launch')
+? webui/modules/launch.py	:83:	@launch_module.route('/cm/launch/db_stats')
+? webui/modules/launch.py	:95:	@launch_module.route('/cm/db_reset')
+
+- webui/modules/login.py	:19:	@login_module.route('/abc/', methods=['GET', 'POST'])
+
+? webui/modules/mesh.py		:23:	@mesh_module.route('/mesh/register/clouds', methods=['GET', 'POST'])
++ webui/modules/mesh.py		:69:	@mesh_module.route('/mesh/images/')
++ webui/modules/mesh.py		:168:	@mesh_module.route('/mesh/flavors/')
++ webui/modules/mesh.py		:230:	@mesh_module.route('/mesh/users/')
++ webui/modules/mesh.py		:278:	@mesh_module.route('/mesh/servers/')
+? webui/modules/mesh.py		:279:	@mesh_module.route('/mesh/servers/<filters>')
+
+? webui/modules/mesh_hpc.py	:28:	@mesh_hpc_module.route('/mesh/refresh/qstat')
+? webui/modules/mesh_hpc.py	:29:	@mesh_hpc_module.route('/mesh/refresh/qstat/<host>')
+? webui/modules/mesh_hpc.py	:63:	@mesh_hpc_module.route('/mesh/qstat/')
+? webui/modules/mesh_hpc.py	:144:	@mesh_hpc_module.route('/mesh/refresh/qinfo')
+? webui/modules/mesh_hpc.py	:145:	@mesh_hpc_module.route('/mesh/refresh/qinfo/<host>')
+? webui/modules/mesh_hpc.py	:174:	@mesh_hpc_module.route('/mesh/qinfo/')
+
+? webui/modules/pbs.py		:27:	@pbs_module.route('/hpc')
+? webui/modules/pbs.py		:47:	@pbs_module.route('/pbs/<action>/<host>')
+? webui/modules/pbs.py		:83:	@pbs_module.route('/pbs/probe/<host>')
+? webui/modules/pbs.py		:100:	@pbs_module.route('/pbsnodes/probe/<host>')
+
+? webui/modules/metric.py	:17:	# @app.route('/metric/<s_date>/<e_date>/<user>/<cloud>/<host>/<period>/<metric>')
+? webui/modules/metric.py	:20:	@metric_module.route('/metric', methods=['POST', 'GET'])
+? webui/modules/metric.py	:39:	@app.route('/cm/metric/<startdate>/<enddate>/<host>')
+
++ webui/modules/mooc.py		:22:	@mooc_module.route('/mooc')
+
+? webui/modules/nose.py		:28:	@nose_module.route('/test/ping')
+? webui/modules/nose.py		:51:	@nose_module.route('/test/nose')
+? webui/modules/nose.py		:52:	@nose_module.route('/test/nose/')
+? webui/modules/nose.py		:53:	@nose_module.route('/test/nose/<test>')
+? webui/modules/nose.py		:79:	@nose_module.route('/test/run')
+? webui/modules/nose.py		:80:	@nose_module.route('/test/run/<test>')
+
+
++ webui/modules/profile.py	:25:	@profile_module.route('/profile/', methods=['GET', 'POST'])
+
+? webui/modules/provisioner.py	:40:	@provisioner_module.route('/provision/policy')
+? webui/modules/provisioner.py	:52:	@provisioner_module.route('/provision/summary/')
+? webui/modules/provisioner.py	:77:	@provisioner_module.route('/provision/tasks/<cluster>/<spec>/<service>')
+? webui/modules/provisioner.py	:174:	@provisioner_module.route("/provision/", methods=("GET", "POST"))
+
+? webui/modules/rack.py		:51:	@rack_module.route('/inventory/rack')
+? webui/modules/rack.py		:61:	@rack_module.route('/inventory/rack/map', methods=['POST'])
+? webui/modules/rack.py		:136:	@rack_module.route('/inventory/rack/old')
+? webui/modules/rack.py		:156:	@rack_module.route('/inventory/rack/<name>')
+? webui/modules/rack.py		:157:	@rack_module.route('/inventory/rack/<name>/<service>')
+
++? webui/modules/status.py	:20:	@status_module.route('/status')
+
+? webui/modules/users.py	:25:	@users_module.route('/users/ldap/')
+
+? webui/modules/workflow.py	:71:	@workflow_module.route('/workflows/<filename>')
+? webui/modules/workflow.py	:78:	@workflow_module.route("/provision/workflow/", methods=("GET", "POST"))
+? webui/modules/workflow.py	:137:	@workflow_module.route('/workflow/')
+
+- webui/server.py			:203:	@app.route("/site-map/")
++ webui/server.py			:230:	@app.route('/test')
++ webui/server.py			:236:	@app.route('/rain')
++ webui/server.py			:243:	@app.route('/admin')
++ webui/server.py			:285:	@app.route('/')
+- webui/server.py			:397:	# @app.route('/<path:path>/')
++ webui/server.py			:403:	@app.route('/<path:path>/')
++ webui/server.py			:501:	@app.route('/login', methods=['GET', 'POST'])
++ webui/server.py			:556:	@app.route('/logout')
+

@@ -14,7 +14,17 @@ from flask.ext.login import LoginManager, login_user, logout_user, \
 from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
     identity_changed, Permission, identity_loaded, RoleNeed, UserNeed
 from flask.ext.wtf import Form, TextField, PasswordField, Required, Email
+<<<<<<< HEAD
 from flask_flatpages import FlatPages
+=======
+
+with_flatpages = False
+
+if with_flatpages:
+    from flask_flatpages import FlatPages
+
+from flask.ext.rstpages import RSTPages
+>>>>>>> 6b5438ad9e5f3068b2674c56554cd775419c56f3
 from pprint import pprint
 import cloudmesh
 import os
@@ -54,8 +64,13 @@ all_modules = ['menu',
                'mesh_hpc',
                'users',
                'status',
+<<<<<<< HEAD
                'register',
                'delete'
+=======
+               # 'register',
+               'metric'
+>>>>>>> 6b5438ad9e5f3068b2674c56554cd775419c56f3
                 ]
 
 s_config = cm_config_server()
@@ -220,14 +235,19 @@ def restricted_index():
 @login_required
 @rain_permission.require(http_exception=403)
 def rain_index():
-    return render_template('rain.html')
+    return render_template('sample/rain.html')
 
 @app.route('/admin')
 
 @admin_permission.require(http_exception=403)
 def admin_index():
+<<<<<<< HEAD
     return render_template('admin.html')
 '''
+=======
+    return render_template('admin/admin.html')
+
+>>>>>>> 6b5438ad9e5f3068b2674c56554cd775419c56f3
 
 # ============================================================
 # ROUTE: erros
@@ -525,7 +545,7 @@ def login():
         else:
             form.error = 'Login Invalid'
 
-    return render_template('login.html', form=form)
+    return render_template('user/login.html', form=form)
 
 
 @app.route('/logout')

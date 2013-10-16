@@ -50,30 +50,6 @@ for name in clouds.active():
 """
 
 # ============================================================
-# ROUTE: SAVE
-# ============================================================
-
-
-@cloud_module.route('/save/')
-@login_required
-def save():
-    print "Saving the cloud status"
-    # clouds.save()
-    return redirect('/mesh/servers')
-
-# ============================================================
-# ROUTE: LOAD
-# ============================================================
-
-
-@cloud_module.route('/load/')
-@login_required
-def load():
-    print "Loading the cloud status"
-    # clouds.load()
-    return redirect('/mesh/servers')
-
-# ============================================================
 # ROUTE: REFRESH
 # ============================================================
 
@@ -300,7 +276,7 @@ def vm_info(cloud=None, server=None):
     clouds.servers()[cloud][server]['cm_vm_id'] = server
     clouds.servers()[cloud][server]['cm_cloudname'] = cloud
 
-    return render_template('vm_info.html',
+    return render_template('mesh/cloud/vm_info.html',
                            updated=time_now,
                            keys="",
                            server=clouds.servers()[cloud][server],
