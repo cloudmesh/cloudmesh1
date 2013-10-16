@@ -29,7 +29,6 @@ super_sidebar_pages = [
             ["Policy", "/provision/policy"],
             ["Overview", "/provision/summary/"],
             ["Form", "/provision/"],
-            ["Workflow", "/provision/workflow"],
         ],
     ],
     ["Clouds",

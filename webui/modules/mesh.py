@@ -36,21 +36,33 @@ def mesh_register_clouds():
     if request.method == 'POST':
 
         if (request.form['cloudInput'] == 'aws'):
-            awsUserName     = request.form['field-aws-username']
-            awsAccessKey    = request.form['field-aws_accesskey-password']
-            awsSecretKey    = request.form['field-aws_secretkey-password']
+            awsUserName = request.form['field-aws-username']
+            awsAccessKey = request.form['field-aws_accesskey-password']
+            awsSecretKey = request.form['field-aws_secretkey-password']
+
+            print awsUserName, awsAccessKey, awsSecretKey
+
         elif (request.form['cloudInput'] == 'azure'):
             azureSubscriptionKey = request.form['field-azure-password']
+
+            print azureSubscriptionKey
+
         elif (request.form['cloudInput'] == 'hp'):
-            hpUserName      = request.form['field-hp-username']
-            hpPassword      = request.form['field-hp-password']
+            hpUserName = request.form['field-hp-username']
+            hpPassword = request.form['field-hp-password']
+
+            print hpUserName, hpPassword
+
+
         elif (request.form['cloudInput'] == 'sierra_openstack_grizzly'):
             sierraPassword = request.form['field-sierra_openstack_grizzly-password']
+
+            print sierraPassword
 
         return render_template('error.html',
                                updated=datetime.now(),
                                error=error,
-                               type="Page not found",
+                               type="This feature has not yet been implemented",
                                msg="All data from Post request retrieved!")
 
     return render_template('mesh/cloud/mesh_register_clouds.html',

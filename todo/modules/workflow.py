@@ -23,13 +23,14 @@ from flask import Blueprint, request, make_response, render_template
 from flask.ext.login import login_required
 import cloudmesh
 
-
+from flask.ext.principal import Permission, RoleNeed
 from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
 workflow_module = Blueprint('workflow_module', __name__)
 
+admin_permission = Permission(RoleNeed('admin'))
 
 diagram_format = "svg"
 
@@ -70,6 +71,7 @@ class ProvisionWorkflowForm(Form):
 
 @workflow_module.route('/workflows/<filename>')
 @login_required
+@admin_permission.require(http_exception=403)
 def retrieve_files(filename):
     """    Retrieve files that have been uploaded    """
     return send_from_directory('/tmp/workflows', filename)
@@ -77,6 +79,7 @@ def retrieve_files(filename):
 
 @workflow_module.route("/provision/workflow/", methods=("GET", "POST"))
 @login_required
+@admin_permission.require(http_exception=403)
 def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)
@@ -136,6 +139,7 @@ def display_provision_workflow_form():
  
 @workflow_module.route('/workflow/')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_workflow():
 
     print "DISPALY WORKFLOW"

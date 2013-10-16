@@ -133,25 +133,6 @@ def display_rack_map():
 
 
 
-@rack_module.route('/inventory/rack/old')
-@login_required
-def display_all_racks():
-
-
-
-    # dir = path_expand(cm_config_server().get("rack.path"))
-
-    # not so nice cludge, ask for location of statcic instead
-
-    # web_pwd = pwd().strip()
-    # basename = "/static/{0}/{1}".format(dir, filename)
-
-    rack = None
-
-    return render_template('mesh/rack/rack.html',
-                           name="india",
-                           rack=rack)
-
 
 @rack_module.route('/inventory/rack/<name>')
 @rack_module.route('/inventory/rack/<name>/<service>')
@@ -161,8 +142,10 @@ def display_rack(name, service=None):
 
     if service is None:
         service = "temperature"
-    print "test begin/...."
+
     basename = None
+    rack = name
+
     # diag_dir = path_expand(cm_config_server().get("rack.input"))
     # output_dir = path_expand(cm_config_server().get("rack.diagramms.{0}".format(service)))
 
@@ -187,7 +170,7 @@ def display_rack(name, service=None):
     # else:
     #    do that
 
-    rack = name
+
 
     return render_template('mesh/rack/rack.html',
                            service=service,

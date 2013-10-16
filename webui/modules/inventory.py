@@ -70,16 +70,6 @@ def old_display_summary():
 # ROUTE: INVENTORY TABLE
 # ============================================================
 
-"""
-@inventory_module.route('/inventory/')
-@login_required
-def display_old_inventory():
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    inventory.refresh()
-    return render_template('inventory.html',
-                           updated=time_now,
-                           inventory=inventory)
-"""
 
 
 @inventory_module.route('/inventory/cluster/<cluster>/<name>')
@@ -97,29 +87,6 @@ def display_named_resource(cluster, name):
                            printer=table_printer,
                            cluster=cluster)
 
-"""
-@inventory_module.route('/inventory/cluster/<cluster>/<name>')
-@login_required
-def display_named_resource(cluster, name):
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    inventory.refresh()
-    return render_template('inventory/cluster_server.html',
-                           updated=time_now,
-                           server=inventory.get("server", name),
-                           cluster=inventory.get("cluster", cluster),
-                           inventory=inventory)
-
-
-@inventory_module.route('/inventory/cluster/<cluster>/')
-@login_required
-def display_cluster(cluster):
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    inventory.refresh()
-    return render_template('inventory/cluster.html',
-                           updated=time_now,
-                           cluster=inventory.get("cluster", cluster))
-
-"""
 
 @inventory_module.route('/inventory/cluster/<cluster>/')
 @login_required
@@ -197,25 +164,7 @@ def get_servers_for_clusters(host_lists):
             return_dict[cluster].extend(l)
         return_dict[cluster] = l
     return return_dict
-"""
-@inventory_module.route('/inventory/cluster/table/<cluster>/')
-@login_required
-def display_cluster_table(cluster):
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    inventory.refresh()
 
-    cluster_obj = inventory.get("cluster", cluster)
-    n = len(cluster_obj['servers'])
-    parameters = {
-        "columns": 10,
-        "n": n
-    }
-
-    return render_template('inventory/cluster_table.html',
-                           updated=time_now,
-                           parameters=parameters,
-                           cluster=inventory.get("cluster", cluster))
-"""
 
 @inventory_module.route('/inventory/cluster/table/<cluster>/')
 @login_required
@@ -316,16 +265,3 @@ def get_attribute(kind, name, attribute):
     return s[attribute]
 
 
-@inventory_module.route('/inventory/save/')
-@login_required
-def inventory_save():
-    print "Not IMPLEMENTED YET"
-    print "Saving the inventory"
-    return display_inventory()
-
-
-@inventory_module.route('/inventory/load/')
-@login_required
-def inventory_load():
-    print "Not IMPLEMENTED YET"
-    return display_inventory()
