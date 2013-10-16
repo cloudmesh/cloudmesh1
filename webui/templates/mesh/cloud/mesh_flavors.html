@@ -64,6 +64,7 @@ $(function() {
   	<form name = "flavor_{{cloud}}" method = 'POST' action = "/mesh/flavors/">
     <input type = hidden name = "cloud" value = "{{cloud}}"/>
     
+    
     <table id="cloud-table-{{ loop.index0 }}">
       <thead>
           <tr>
@@ -75,11 +76,17 @@ $(function() {
           </tr>
       </thead>
       <tbody>
-      		
+      	
           
           {% for flavor in clouds[cloud] %}
              <tr>
-               <td><input type="radio" name="default_flavor" value = {{flavor}} onclick = "document.forms['flavor_{{cloud}}'].submit()"/></td>
+               <td><input type="radio" 
+               	name="default_flavor" 
+               	value = {{flavor}} 
+				{% if flavor == user.defaults.flavors[cloud] %}
+					checked = checked
+				{%endif%}
+               	onclick = "document.forms['flavor_{{cloud}}'].submit()"/></td>
                  <!-- for attribute in clouds[cloud][flavor] -->
                  {% for attribute in attributes  %}
                       <td>{{ clouds[cloud][flavor][attribute]  }}</td>

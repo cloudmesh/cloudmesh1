@@ -66,6 +66,8 @@ $(function() {
 	 <span class="badge"> {{ clouds[cloud] |count }} </span> Images
   </h3>
   <div>
+  	 <form name = "image_{{cloud}}" method = 'POST' action = "/mesh/images/">
+    <input type = hidden name = "cloud" value = "{{cloud}}"/>
     <table id="cloud-table-{{ loop.index0 }}">
       <thead>
           <tr>
@@ -80,7 +82,13 @@ $(function() {
             {% set version = clouds[cloud][image]['cm_type_version'] %}
             {% set attributes = cloud_attributes[version]%}
              <tr>
-                 <td><input type="radio" name="cloud-{{ cloud_loop.index0 }}-default-image" /></td>
+                 <td><input type="radio" 
+               	name="default_image" 
+               	{% if image == user.defaults.images[cloud] %}
+					checked = checked
+				{%endif%}
+               	value = {{image}} 
+				onclick = "document.forms['image_{{cloud}}'].submit()"/></td>
                  {% for attribute in attributes  %}
                       <td>
                           {% set l = attribute | length %}
@@ -104,6 +112,7 @@ $(function() {
           {% endfor %}
       </tbody>
     </table>
+  </form>
   </div>
   </div>
   {% endfor %}
