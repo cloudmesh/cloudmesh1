@@ -34,7 +34,7 @@
 </tr>
 {% endmacro %}
 
-{% macro username(label, cloudname, username_edit_enabled) %}
+{% macro get_username(label, cloudname, name, username_edit_enabled) %}
 <tr>
     <td style="text-align: right"> Username:</td>
     <td colspan="2">
@@ -42,7 +42,7 @@
     valign="middle"
     type="text"
     name="field-{{cloudname}}-username"
-    value="psjoshi"
+    value="{{name}}"
     {% if not username_edit_enabled %}
     disabled="disabled"
     {% endif %}
@@ -51,9 +51,7 @@
 </tr>
 {% endmacro %}
 
-{% macro tableHeader(cloudname, regions, verified) %}
-<tr>
-    <th colspan="1">
+{% macro handle_checkbox (cloudname, regions) %}
         <input type="checkbox"
             name="field-activated-{{cloudname}}"
             {% if cloudname in user.defaults.activeclouds %}
@@ -73,6 +71,12 @@
                 &nbsp;
             {% endfor %}
         {% endif %}
+{% endmacro %}
+
+{% macro tableHeader(cloudname, regions, verified) %}
+<tr>
+    <th colspan="1">
+    	{{ handle_checkbox(cloudname, regions) }}
     </th>
     <th></th>
     <th style="text-align: right">
@@ -86,16 +90,16 @@
 </tr>
 {% endmacro %}
 
-{% macro openstack(cloudname, username_edit_enabled, verified) %}
+{% macro openstack(cloudname, name, username_edit_enabled, verified) %}
     {{ tableHeader(cloudname, false, verified) }}
-    {{ username ("Username", cloudname, username_edit_enabled)}}
+    {{ get_username ("Username", cloudname, name, username_edit_enabled)}}
     {{ password ("Password", cloudname)}}
 {% endmacro %}
 
 {% macro aws(cloudname, verified) %}
 
     {{ tableHeader(cloudname, false, verified) }}
-    {{ username ("Username", cloudname, True)}}
+    {{ get_username ("Username", "username", cloudname, True)}}
     {% set accesskey= cloudname + "_accesskey" %}
     {% set secretkey= cloudname + "_secretkey" %}
     {{ password ("Access Key", accesskey)}}
@@ -106,7 +110,7 @@
 {% macro hp(cloudname, regions, verified) %}
 
     {{ tableHeader(cloudname, regions, verified) }}
-    {{ username ("Username", cloudname, True)}}
+    {{ get_username ("Username", "username", cloudname, True)}}
     {{ password ("Password", cloudname)}}
 
 {% endmacro %}
@@ -128,19 +132,20 @@
     </tr>
 </table>
 
-
 <div id="accordion">
     <div>
         {% set cloudList = cloudnames %}
         {{ cloudList.remove("hp_east") }}
         {% for cloud in cloudList %}
-        <h3><a href="#">{{ cloud }}</a></h3>
+        <h3>
+        	<a href="#">{{ cloud }}</a>
+        </h3>
         <form id={{ cloud }} method="post">
             <input name="cloudInput" type="hidden" value="{{ cloud }}"/>
             <table id={{ cloud }} + "clouds" style="display: inline-block; float: left;">
                 <tr>
                     {% if (cloud) == "sierra_openstack_grizzly" %}
-                        {{ openstack(cloud, False, true) }}
+                        {{ openstack(cloud, username, False, true) }}
                     {% elif (cloud) == "aws" %}
                         {{ aws(cloud) }}
                     {% elif (cloud) == "hp" %}
@@ -184,4 +189,6 @@
     }
 
     </script>
+
+
 {% endblock %}
