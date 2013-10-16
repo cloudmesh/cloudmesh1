@@ -71,7 +71,7 @@ def mesh_register_clouds():
                            cloudnames=config.cloudnames(),
                            error=error)
 
-@mesh_module.route('/mesh/images/')
+@mesh_module.route('/mesh/images/', methods=['GET','POST'])
 @login_required
 def mongo_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -83,7 +83,11 @@ def mongo_images():
     # c.refresh(types=["images"])
     clouds = c.images()
 
-
+    #getting user info
+    userdata = g.user
+    username = userdata.id
+    user_obj = cm_user()
+    user = user_obj.info(username)
 
     """
 
@@ -158,19 +162,36 @@ def mongo_images():
             for attribute in clouds[cloud][image]:
                 print attribute, clouds[cloud][image][attribute]
     """
+    if 'defaults' not in user:
+        user['defaults'] = {}
+        user.set_defaults(username, {})
+    if 'images' not in user['defaults']:
+        user['defaults']['images'] = {}
+    
+    if request.method == 'POST':
+        print "REQUEST"
+        cloud = request.form['cloud']
+        default_image = request.form['default_image']
+        print cloud, "----------------------------->",default_image
+        user['defaults']['images'][cloud] = default_image
+        #if 'default_flavor' in request.form:
+         #   user['defaults']['flavor'] = request.form['default_flavor']
+        user_obj.set_defaults(username, user['defaults'])
+
 
     return render_template('mesh/cloud/mesh_images.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
                            updated=time_now,
                            clouds=clouds,
+                           user = user,
                            config=config)
 
 # ============================================================
 # ROUTE: mongo
 # ============================================================
 
-@mesh_module.route('/mesh/flavors/')
+@mesh_module.route('/mesh/flavors/', methods=['GET', 'POST'])
 @login_required
 def mongo_flavors():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -182,6 +203,11 @@ def mongo_flavors():
     # c.refresh(types=["flavors"])
     clouds = c.flavors()
 
+    #getting user info
+    userdata = g.user
+    username = userdata.id
+    user_obj = cm_user()
+    user = user_obj.info(username)
     """
     2
     disk 20
@@ -212,6 +238,24 @@ def mongo_flavors():
                 print attribute, clouds[cloud][flavor][attribute]
     """
 
+    if 'defaults' not in user:
+        user['defaults'] = {}
+        user.set_defaults(username, {})
+    if 'flavors' not in user['defaults']:
+        user['defaults']['flavors'] = {}
+        
+    
+    if request.method == 'POST':
+        print "REQUEST"
+        cloud = request.form['cloud']
+        default_flavor = request.form['default_flavor']
+        print request.form['cloud'], "----------------------------->",request.form['default_flavor']
+        user['defaults']['flavors'][cloud] = default_flavor
+        #if 'default_flavor' in request.form:
+         #   user['defaults']['flavor'] = request.form['default_flavor']
+        user_obj.set_defaults(username, user['defaults'])
+
+    
     os_attributes = [
                      'id',
                      'name',
@@ -226,6 +270,7 @@ def mongo_flavors():
                            attributes=os_attributes,
                            updated=time_now,
                            clouds=clouds,
+                           user = user,
                            config=config)
 
 # ============================================================
