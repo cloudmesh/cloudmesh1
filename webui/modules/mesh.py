@@ -165,9 +165,10 @@ def mongo_images():
 # ROUTE: mongo
 # ============================================================
 
-@mesh_module.route('/mesh/flavors/')
+@mesh_module.route('/mesh/flavors/', methods=['GET', 'POST'])
 @login_required
 def mongo_flavors():
+    print "got request+++++++++++++++++++++++"
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
@@ -177,6 +178,11 @@ def mongo_flavors():
     # c.refresh(types=["flavors"])
     clouds = c.flavors()
 
+    #getting user info
+    userdata = g.user
+    username = userdata.id
+    user_obj = cm_user()
+    user = user_obj.info(username)
     """
     2
     disk 20
@@ -206,6 +212,17 @@ def mongo_flavors():
             for attribute in clouds[cloud][flavor]:
                 print attribute, clouds[cloud][flavor][attribute]
     """
+
+    if 'defaults' not in user:
+        user['defaults'] = {}
+        user.set_defaults(username, {})
+
+    if request.method == 'POST':
+        print "REQUEST"
+        print request.form['cloud'], "----------------------------->",request.form['default_flavor']
+        #if 'default_flavor' in request.form:
+         #   user['defaults']['flavor'] = request.form['default_flavor']
+
 
     os_attributes = [
                      'id',

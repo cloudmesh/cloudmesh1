@@ -14,12 +14,7 @@ from flask.ext.login import LoginManager, login_user, logout_user, \
 from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
     identity_changed, Permission, identity_loaded, RoleNeed, UserNeed
 from flask.ext.wtf import Form, TextField, PasswordField, Required, Email
-
-with_flatpages = False
-
-if with_flatpages:
-    from flask_flatpages import FlatPages
-from flask.ext.rstpages import RSTPages
+from flask_flatpages import FlatPages
 from pprint import pprint
 import cloudmesh
 import os
@@ -28,9 +23,9 @@ import requests
 import sys
 import sys
 import time
-import traceback
 import types
 import webbrowser
+import traceback
 
 
 # from flask.ext.autoindex import AutoIndex
@@ -60,6 +55,7 @@ all_modules = ['menu',
                'users',
                'status',
                'register',
+               'delete'
                 ]
 
 s_config = cm_config_server()
@@ -67,14 +63,7 @@ s_config = cm_config_server()
 
 with_browser = s_config.get("cloudmesh.server.webui.browser")
 browser_page = s_config.get("cloudmesh.server.webui.page")
-host = s_config.get("cloudmesh.server.webui.host")
-port = s_config.get("cloudmesh.server.webui.port")
-
-url_link = "http://{0}:{1}/{2}".format(host, port, browser_page)
-
-webbrowser.register("safari", None)
-
-
+url_link = "http://localhost:5555/{0}".format(browser_page)
 # from cloudmesh.util.webutil import setup_imagedraw
 
 with_rack = s_config.get("cloudmesh.server.rack.with_rack")
@@ -122,10 +111,8 @@ config = cm_config_server()
 
 SECRET_KEY = config.get('cloudmesh.server.webui.secret')
 DEBUG = debug
-
-if with_flatpages:
-    FLATPAGES_AUTO_RELOAD = debug
-    FLATPAGES_EXTENSION = '.md'
+FLATPAGES_AUTO_RELOAD = debug
+FLATPAGES_EXTENSION = '.md'
 
 
 # ============================================================
@@ -135,11 +122,8 @@ if with_flatpages:
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.debug = debug
+pages = FlatPages(app)
 
-if with_flatpages:
-    pages = FlatPages(app)
-else:
-    pages = RSTPages(app)
 
 # dynamic app loading from defined modules
 # app.register_blueprint(keys_module, url_prefix='',)
@@ -180,7 +164,7 @@ def flash_errors(form):
 # @app.context_processor
 # def inject_pages():
 #    return dict(pages=pages)
-# app.register_blueprint(menu_module, url_prefix='', )
+# app.register_blueprint(menu_module, url_prefix='/', )
 # if debug:
 #    AutoIndex(app, browse_root=os.path.curdir)
 
@@ -230,7 +214,7 @@ def site_map():
 @login_required
 def restricted_index():
     return render_template('index.html')
-'''
+
 
 @app.route('/rain')
 @login_required
@@ -238,12 +222,12 @@ def restricted_index():
 def rain_index():
     return render_template('rain.html')
 
-
 @app.route('/admin')
+
 @admin_permission.require(http_exception=403)
 def admin_index():
     return render_template('admin.html')
-
+'''
 
 # ============================================================
 # ROUTE: erros
@@ -393,18 +377,10 @@ def state_style(state):
 # ============================================================
 
 
-# @app.route('/<path:path>/')
-# def page(path):
-#    page = pages.get_or_403(path)
-#    return render_template('page.html', page=page)
-
-
 @app.route('/<path:path>/')
 def page(path):
-    page = pages.get(path)
+    page = pages.get_or_404(path)
     return render_template('page.html', page=page)
-
-
 
 
 # ============================================================
@@ -595,9 +571,7 @@ if __name__ == "__main__":
     
     with_browser = s_config.get("cloudmesh.server.webui.browser")
     browser_page = s_config.get("cloudmesh.server.webui.page")
-    host = s_config.get("cloudmesh.server.webui.host")
-    port = s_config.get("cloudmesh.server.webui.port")
-    url_link = "http://{0}:{1}/{2}".format(host, port, browser_page)
+    url_link = "http://localhost:5555/{0}".format(browser_page)
 
     webbrowser.register("safari", None)
     webbrowser.open(url_link, 2, autorise=True)
