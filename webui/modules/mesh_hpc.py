@@ -12,7 +12,7 @@ from flask.ext.login import login_required
 from pprint import pprint
 import cloudmesh
 from flask.ext.principal import Permission, RoleNeed
-
+import traceback
 
 log = LOGGER(__file__)
 
@@ -53,19 +53,20 @@ def display_mongo_qstat_refresh(host=None):
 
     try:
         for host in hosts:
-            res = pbs.refresh_qstat(host)
+            pbs.activate(host, user)
+            pbs.refresh_qstat(host)
 
     #    error = res.get(timeout=timeout)
-    except :
-           return render_template('error.html',
-                          error="Time out",
+    except Exception, e:
+
+        print traceback.format_exc()
+        error = "{0}".format(e)
+        log.error(error)
+        return render_template('error.html',
+                          error=error,
                           type="Some error in qstat",
                           msg="")
-    if error != "":
-        return render_template('error.html',
-                               error=error,
-                               type="Some error in qstat",
-                               msg="")
+
     return redirect('mesh/qstat')
 
 
