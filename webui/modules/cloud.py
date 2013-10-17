@@ -155,7 +155,7 @@ def start_vm(cloud=None, server=None):
     if vm_flavor_id < 0:
         vm_flavor_id = 1
     log.info("STARTING {0} {1}".format(config.prefix, config.index))
-    log.infp("FLAVOR {0} {1}".format(vm_flavor, vm_flavor_id))
+    log.info("FLAVOR {0} {1}".format(vm_flavor, vm_flavor_id))
     metadata = {'cm_owner': config.prefix}
     username = config.get('cloudmesh.hpc.username')
     try:
