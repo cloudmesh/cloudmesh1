@@ -14,7 +14,9 @@ from flask.ext.login import LoginManager, login_user, logout_user, \
 from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
     identity_changed, Permission, identity_loaded, RoleNeed, UserNeed
 from flask.ext.wtf import Form, TextField, PasswordField, Required, Email
-from flask_flatpages import FlatPages
+from flask.ext.principal import Permission, RoleNeed
+
+from flask.ext.rstpages import RSTPages
 from pprint import pprint
 import cloudmesh
 import os
@@ -23,9 +25,13 @@ import requests
 import sys
 import sys
 import time
+import traceback
 import types
 import webbrowser
-import traceback
+
+
+
+admin_permission = Permission(RoleNeed('admin'))
 
 
 # from flask.ext.autoindex import AutoIndex
@@ -40,7 +46,6 @@ sys.path.insert(0, '..')
 
 all_modules = ['menu',
                'pbs',
-               'flatpages',
                'launch',
                'nose',
                'inventory',
@@ -54,7 +59,8 @@ all_modules = ['menu',
                'mesh_hpc',
                'users',
                'status',
-               'register',
+               # 'register',
+               'metric'
                 ]
 
 s_config = cm_config_server()
@@ -62,7 +68,14 @@ s_config = cm_config_server()
 
 with_browser = s_config.get("cloudmesh.server.webui.browser")
 browser_page = s_config.get("cloudmesh.server.webui.page")
-url_link = "http://localhost:5000/{0}".format(browser_page)
+host = s_config.get("cloudmesh.server.webui.host")
+port = s_config.get("cloudmesh.server.webui.port")
+
+url_link = "http://{0}:{1}/{2}".format(host, port, browser_page)
+
+webbrowser.register("safari", None)
+
+
 # from cloudmesh.util.webutil import setup_imagedraw
 
 with_rack = s_config.get("cloudmesh.server.rack.with_rack")
@@ -72,7 +85,8 @@ if with_rack:
 else:
     log.info("The Rack diagrams are not enabled")
 
-exclude_modules = ['flatpages']
+# exclude_modules = ['flatpages']
+exclude_modules = []
 
 modules = [m for m in all_modules if m not in exclude_modules]
 
@@ -110,8 +124,6 @@ config = cm_config_server()
 
 SECRET_KEY = config.get('cloudmesh.server.webui.secret')
 DEBUG = debug
-FLATPAGES_AUTO_RELOAD = debug
-FLATPAGES_EXTENSION = '.md'
 
 
 # ============================================================
@@ -121,8 +133,8 @@ FLATPAGES_EXTENSION = '.md'
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.debug = debug
-pages = FlatPages(app)
 
+pages = RSTPages(app)
 
 # dynamic app loading from defined modules
 # app.register_blueprint(keys_module, url_prefix='',)
@@ -163,7 +175,7 @@ def flash_errors(form):
 # @app.context_processor
 # def inject_pages():
 #    return dict(pages=pages)
-# app.register_blueprint(menu_module, url_prefix='/', )
+# app.register_blueprint(menu_module, url_prefix='', )
 # if debug:
 #    AutoIndex(app, browse_root=os.path.curdir)
 
@@ -177,30 +189,6 @@ version = pkg_resources.get_distribution("cloudmesh").version
 def inject_version():
     return dict(version=version)
 
-# ============================================================
-# ROUTE: sitemap
-# ============================================================
-
-"""
-@app.route("/site-map/")
-def site_map():
-    links = []
-    for rule in app.url_map.iter_rules():
-        print"PPP>",  rule, rule.methods, rule.defaults, rule.endpoint, rule.arguments
-        # Filter out rules we can't navigate to in a browser
-        # and rules that require parameters
-        try:
-            if "GET" in rule.methods and len(rule.defaults) >= len(rule.arguments):
-                url = url_for(rule.endpoint)
-                links.append((url, rule.endpoint))
-                print "Rule added", url, links[url]
-        except:
-            print "Rule not activated"
-    # links is now a list of url, endpoint tuples
-"""
-
-
-
 
 # ============================================================
 # ROUTE: /test
@@ -213,20 +201,21 @@ def site_map():
 @login_required
 def restricted_index():
     return render_template('index.html')
-
+'''
 
 @app.route('/rain')
 @login_required
 @rain_permission.require(http_exception=403)
 def rain_index():
-    return render_template('rain.html')
+    return render_template('sample/rain.html')
+
 
 @app.route('/admin')
-
+@login_required
 @admin_permission.require(http_exception=403)
 def admin_index():
-    return render_template('admin.html')
-'''
+    return render_template('admin/admin.html')
+
 
 # ============================================================
 # ROUTE: erros
@@ -246,8 +235,11 @@ def page_not_found(error):
     return render_template('error.html',
                            error=error,
                            type="Authorization Denied",
-                           msg="You need to login first")
-
+                           msg="You are not authorized to access this page.\n"
+                               "This may happen if you have not logged in or \n"
+                               "If you are not allowed to access this page\n"
+                               "as you are not member of the proper role."
+                           )
 @app.errorhandler(401)
 def page_not_found(error):
     error = 'Access denied {0}'.format(401)
@@ -376,10 +368,18 @@ def state_style(state):
 # ============================================================
 
 
+# @app.route('/<path:path>/')
+# def page(path):
+#    page = pages.get_or_403(path)
+#    return render_template('page.html', page=page)
+
+
 @app.route('/<path:path>/')
 def page(path):
-    page = pages.get_or_404(path)
+    page = pages.get(path)
     return render_template('page.html', page=page)
+
+
 
 
 # ============================================================
@@ -501,7 +501,7 @@ def login():
             error = "LDAP server not reachable"
             error += str(e)
             return render_template('error.html',
-                           error=error,
+                           form=form,
                            type="Can not reach LDAP",
                            msg="")
 
@@ -524,7 +524,7 @@ def login():
         else:
             form.error = 'Login Invalid'
 
-    return render_template('login.html', form=form)
+    return render_template('user/login.html', form=form)
 
 
 @app.route('/logout')
@@ -570,7 +570,9 @@ if __name__ == "__main__":
     
     with_browser = s_config.get("cloudmesh.server.webui.browser")
     browser_page = s_config.get("cloudmesh.server.webui.page")
-    url_link = "http://localhost:5000/{0}".format(browser_page)
+    host = s_config.get("cloudmesh.server.webui.host")
+    port = s_config.get("cloudmesh.server.webui.port")
+    url_link = "http://{0}:{1}/{2}".format(host, port, browser_page)
 
     webbrowser.register("safari", None)
     webbrowser.open(url_link, 2, autorise=True)

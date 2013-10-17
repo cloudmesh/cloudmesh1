@@ -7,7 +7,10 @@ from hostlist import expand_hostlist
 from pprint import pprint
 from sh import ssh, ssh
 from xml.dom import minidom
-
+import yaml
+import sys
+import re
+import csv
 
 class PBS:
 
@@ -15,12 +18,175 @@ class PBS:
     host = None
     pbs_qstat_data = None
     pbs_nodes_data = None
+    pbs_qinfo_data = None
+    pbs_qinfo_default_data = None
+
+    cluster_queues = None
 
     def __init__(self, user, host):
         self.user = user
         self.host = host
 
-    def pbsnodes(self, refresh="True"):
+        #
+        # hard codd for now should be in yaml file
+        #
+        if host.startswith("india"):
+            self.cluster_queues = {
+                                   'india.futuregrid.org': [
+                                                            'ib',
+                                                            'fg40',
+                                                            'batch',
+                                                            'long',
+                                                            'provision',
+                                                            'b534',
+                                                            'systest',
+                                                            'reserved',
+                                                            'interactive'],
+                                   'delta.futuregrid.org': [
+                                                            'delta',
+                                                            'delta-long'],
+                                   'echo.futuregrid.org': ['echo'],
+                                   'bravo.futuregrid.org': ['bravo', 'bravo-long'],
+                                   }
+
+    def requister_joint_queues(self, cluster_queues):
+        """allows the registration of queues for multiple clusters managed through the same queuing server
+        
+                
+        cluster_queues = {
+            'india.futuregrid.org': ['ib','fg40', 'batch', 'long', 'provision', 'b534', 'systest', 'reserved', 'interactive'],
+            'delta.futuregrid.org': ['delta', 'delta-long'],
+            'echo.futuregrid.org': ['echo'],
+            'bravo.futuregrid.org': ['bravo', 'bravo-long'],
+        }
+        """
+        self.cluster_queues = cluster_queues
+
+    def qinfo_user(self, refresh=True):
+        """Return the number of user from qstat
+        
+            example line is:
+            873664.i136 ...549.sh xcguser  0   Q long
+            $3 indicates an user id
+        """
+        if self.pbs_qinfo_default_data is None or refresh:
+            try:
+                result = ssh("{0}@{1}".format(self.user, self.host), "qstat")
+            except:
+                raise RuntimeError("can not execute pbs qstat via ssh")
+
+            # sanitize block
+            data = self.convert_into_json(result)
+            merged_data = self.merge_queues(self.cluster_queues, data)
+            self.pbs_qinfo_default_data = merged_data
+        else:
+            merged_data = self.pbs_qinfo_default_data
+
+        return merged_data
+
+    def merge_queues(self, machines, data):
+        res = {}
+        for row in data:
+            if not machines:
+                try:
+                    res[self.host].append(row)
+                except:
+                    res[self.host] = [row]
+            else:
+                for machine in machines:
+                    queues = machines[machine]
+                    if row['Use'] in queues:
+                        try:
+                            res[machine].append(row)
+                        except:
+                            res[machine] = [row]
+        return res
+
+    def convert_into_json(self, qstat):
+
+            list_qstat = qstat.split("\n")
+            try:
+                # delete a delimiter line between a header and contents looks
+                # like '-------- --- ---'
+                del(list_qstat[1])
+            except:
+                pass
+            pattern = re.compile(r'\s+')
+            tmp = []
+            for row in list_qstat:
+                tmp.append(re.sub(pattern, ',', row))
+
+            res = csv.DictReader(tmp, skipinitialspace=True)
+            return res
+
+    def qinfo(self, refresh=True):
+        """returns qstat -Q -f in dict format"""
+
+        if self.pbs_qinfo_data is None or refresh:
+            try:
+                result = ssh("{0}@{1}".format(self.user, self.host), "qstat -Q -f")
+            except:
+                raise RuntimeError("can not execute pbs qstat via ssh")
+
+            d = {}
+
+            # sanitize block
+
+            result = result.replace("\n\t", "")
+
+            result = result.replace('resources_assigned.', 'resources_assigned_')
+            result = result.replace('resources_default.', 'resources_default_')
+            result = result.replace('resources_max.', 'resources_max_')
+
+
+            for block in result.split("\n\n")[:-1]:
+                block = [x.replace(" =", ":", 1) for x in block.split("\n")]
+                block[0] = block[0].replace("Queue: ", "") + ":"
+                queue = block[0][:-1]
+
+                block = '\n'.join(block)
+
+                block_yaml = yaml.safe_load(block)
+                d[queue] = block_yaml[queue]
+
+                d[queue]['queue'] = queue
+                # end sanitize
+
+                if 'state_count' in d[queue]:
+                    values = [x.split(":") for x in d[queue]['state_count'].split(" ")]
+                    d[queue]['state_count'] = {}
+                    for value in values:
+                        d[queue]['state_count'][value[0]] = value[1]
+
+                if 'acl_hosts' in d[queue]:
+                    # print d[queue]['acl_hosts']
+                    d[queue]['acl_hosts'] = d[queue]['acl_hosts'].split("+")
+
+        self.pbs_qinfo_data = d
+
+        if self.cluster_queues is None:
+            return {self.host: self.pbs_qinfo_data}
+        else:
+            return self.qinfo_extract(self.cluster_queues, self.pbs_qinfo_data)
+
+
+    def qinfo_extract(self, cluster_queues, qinfo_data):
+
+
+        # initialize the queues
+        queues = {}
+        for q in cluster_queues:
+            queues[q] = {}
+
+        # separate the queues
+        for cluster in cluster_queues:
+            for q in cluster_queues[cluster]:
+                queues[cluster][q] = qinfo_data[q]
+
+        return queues
+
+
+    def pbsnodes(self, refresh=True):
         """returns the pbs node infor from an pbs_nodes_raw_data is a string see above for example"""
 
         if self.pbs_nodes_data is None or refresh:
@@ -131,10 +297,10 @@ class PBS:
 
 
 
-        print "GFKHFJH ", x
+        # print "GFKHFJH ", x
         cnt = Counter(x)
 
-        print "COUNT",
+        # print "COUNT",
 
         return dict(cnt)
 
@@ -153,4 +319,9 @@ class PBS:
         #
     """
 
+if __name__ == "__main__":
+
+
+    pbs = PBS("gvonlasz", "alamo")
+    pprint (pbs.qinfo())
 

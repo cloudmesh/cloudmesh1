@@ -5,6 +5,11 @@ import math
 from copy import deepcopy
 from cloudmesh.rack.base_cluster_map import BaseClusterMap
 
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 class ServiceClusterMap(BaseClusterMap):
 
     # maximum h, 240/360 = 2/3
@@ -59,7 +64,7 @@ class ServiceClusterMap(BaseClusterMap):
         # if not, assign it to a unknown servcie, and print warning message
         if lvalue not in self.list_services_known:
             if lvalue not in self.list_unknown_services_found:
-                print "[Warning] '{0}' is NOT a known service, assign its status to 'unknown'.".format(value)
+                log.error("'{0}' is NOT a known service, assign its status to 'unknown'.".format(value))
                 self.list_unknown_services_found.append(lvalue)
 
             lvalue = self.unknown_service
@@ -87,8 +92,6 @@ class ServiceClusterMap(BaseClusterMap):
         # get service list by reading 'default_rack_yaml' file
         self.dict_services = self.dict_rack_config[self.service_section_name]
         self.list_services_known = map(lambda x:x.lower(), self.dict_services.keys())
-
-        print "services known", self.list_services_known
 
         return self.getDefaultService()
 
@@ -171,7 +174,6 @@ class ServiceClusterMap(BaseClusterMap):
         if self.hardware_error in self.list_services_found:
             all_services += [self.hardware_error]
 
-        print "all services, ", all_services
         # we always arrange the display location of the 'unknown service' to the last
         for service in all_services:
             rect = self.genDefaultRect()

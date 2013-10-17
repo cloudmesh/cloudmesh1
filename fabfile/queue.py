@@ -6,6 +6,7 @@ import time
 import hostlist
 from pprint import pprint
 from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.util import banner
 from cloudmesh.provisioner.queue.celery import celery as p_queue
 from cloudmesh.launcher.queue.celery import celery as l_queue
@@ -40,6 +41,8 @@ for worker in workers:
 #                    "queue":"questat",
 #                    "concurrency":1}
 
+
+
 @task
 def kill():
     stop()
@@ -53,7 +56,11 @@ def gui():
     """start the flower celery gui"""
     local("celery flower &")
     time.sleep(1)
-    local("open http://localhost:5555")
+    server_config = cm_config_server()
+    port = cm_config_server().get("cloudmesh.server.webui.port")
+    host = cm_config_server().get("cloudmesh.server.webui.host")
+
+    local("open http://{0}:{1}".format(host, port))
 
 @task
 def monitor():

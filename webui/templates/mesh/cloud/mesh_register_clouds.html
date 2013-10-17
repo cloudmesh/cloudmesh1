@@ -1,0 +1,194 @@
+{% extends "layout/layout_title.html" %}
+{% from "_helper.html" import image_button %}
+{% from "_helper.html" import cm_boolean_color %}
+{% from "_helper.html" import cm_image_input %}
+{% from "_helper.html" import submit_button %}
+
+{% block contentbox %}
+<h1> Register </h1>
+{% endblock contentbox %}
+
+{% block content %}
+
+{{user}}
+<br>
+<hr>
+
+{{username}}
+<br>
+
+<hr>
+
+{% macro password(label, cloudname) %}
+<tr>
+    <td style="text-align: right">{{label}}:</td>
+    <td colspan="2">
+        <input id="id-{{cloudname}}-password"
+        valign="middle"
+        type="password"
+        name="field-{{cloudname}}-password"
+        value="" autocomplete="off"
+        placeholder="{{label}}"
+        style="margin-bottom: 5px; margin-top: 5px;">
+    </td>
+</tr>
+{% endmacro %}
+
+{% macro get_username(label, cloudname, name, username_edit_enabled) %}
+<tr>
+    <td style="text-align: right"> Username:</td>
+    <td colspan="2">
+    <input  id="id-{{cloudname}}-username"
+    valign="middle"
+    type="text"
+    name="field-{{cloudname}}-username"
+    value="{{name}}"
+    {% if not username_edit_enabled %}
+    disabled="disabled"
+    {% endif %}
+    style="margin-bottom: 5px; margin-top: 5px;">
+    </td>
+</tr>
+{% endmacro %}
+
+{% macro handle_checkbox (cloudname, regions) %}
+        <input type="checkbox"
+            name="field-activated-{{cloudname}}"
+            {% if cloudname in user.defaults.activeclouds %}
+            checked = "checked"
+            {% endif %}
+            style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+        {{cloudname}}&nbsp;
+        {% if regions %}
+            {% for region in regions %}
+                <input type="checkbox"
+                    name="field-activated-{{cloudname}}-{{region}}"
+                    {% if cloudname in user.defaults.activeclouds %}
+                    checked = "checked"
+                    {% endif %}
+                    style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+                {{region}}
+                &nbsp;
+            {% endfor %}
+        {% endif %}
+{% endmacro %}
+
+{% macro tableHeader(cloudname, regions, verified) %}
+<tr>
+    <th colspan="1">
+    	{{ handle_checkbox(cloudname, regions) }}
+    </th>
+    <th></th>
+    <th style="text-align: right">
+        {{ image_button ("none", "044_keys", "/updatekeypair/" + "sierra_openstack_grizzly" + "/") }}
+        {% if verified == true %}
+            {{ cm_boolean_color('verified') }}
+        {% else %}
+            {{ cm_boolean_color('unknown') }}
+        {% endif %}
+    </th>
+</tr>
+{% endmacro %}
+
+{% macro openstack(cloudname, name, username_edit_enabled, verified) %}
+    {{ tableHeader(cloudname, false, verified) }}
+    {{ get_username ("Username", cloudname, name, username_edit_enabled)}}
+    {{ password ("Password", cloudname)}}
+{% endmacro %}
+
+{% macro aws(cloudname, verified) %}
+
+    {{ tableHeader(cloudname, false, verified) }}
+    {{ get_username ("Username", "username", cloudname, True)}}
+    {% set accesskey= cloudname + "_accesskey" %}
+    {% set secretkey= cloudname + "_secretkey" %}
+    {{ password ("Access Key", accesskey)}}
+    {{ password ("Secret Key", secretkey)}}
+
+{% endmacro %}
+
+{% macro hp(cloudname, regions, verified) %}
+
+    {{ tableHeader(cloudname, regions, verified) }}
+    {{ get_username ("Username", "username", cloudname, True)}}
+    {{ password ("Password", cloudname)}}
+
+{% endmacro %}
+
+{% macro azure(cloudname, verified) %}
+
+    {{ tableHeader(cloudname, false, verified) }}
+    {{ password("Subscription ID", cloudname) }}
+
+{% endmacro %}
+
+<table>
+    <tr>
+        <th colspan="1">
+        <b>Clouds</b></th>
+        <th></th>
+        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
+        Verified </th>
+    </tr>
+</table>
+
+<div id="accordion">
+    <div>
+        {% set cloudList = cloudnames %}
+        {{ cloudList.remove("hp_east") }}
+        {% for cloud in cloudList %}
+        <h3>
+        	<a href="#">{{ cloud }}</a>
+        </h3>
+        <form id={{ cloud }} method="post">
+            <input name="cloudInput" type="hidden" value="{{ cloud }}"/>
+            <table id={{ cloud }} + "clouds" style="display: inline-block; float: left;">
+                <tr>
+                    {% if (cloud) == "sierra_openstack_grizzly" %}
+                        {{ openstack(cloud, username, False, true) }}
+                    {% elif (cloud) == "aws" %}
+                        {{ aws(cloud) }}
+                    {% elif (cloud) == "hp" %}
+                        {{ hp(cloud, ["hp_east"]) }}
+                    {% elif (cloud) == "azure" %}
+                        {{ azure(cloud) }}
+                    {% endif %}
+                    <th></th><th></th>
+                    <th style="text-align: right">
+                        {{ submit_button ("submit" + cloud, "235_pen", "submit" + cloud) }}
+                        Register {{ cloud }}
+                    </th>
+                </tr>
+            </table>
+        </form>
+        {% endfor %}
+    </div>
+</div>
+
+<p>
+    <script>
+    (function($) {
+        $(function() {
+            $("#accordion > div").accordion({ header: "h3", collapsible: true, active:false });
+        })
+    })(jQuery);
+
+    function toggle_PasswordFieldClicked() {
+        //Regex to get the password field associated with button
+        //Following regex would get hpPassword from toogle_hpPassword
+        var passwordFieldId = ((event.target).id.split("-"))[1];
+        var passwordObject = $('#' + "id-" + passwordFieldId + "-password").get(0);
+        var value = passwordObject.value;
+
+        if (passwordObject.type == 'password') {
+            passwordObject.type = 'text';
+        } else {
+            passwordObject.type = 'password';
+        }
+        passwordObject.value = value;
+    }
+
+    </script>
+
+
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "layout/layout.html" %}
+{% from "_helper.html" import image_button %}
+
+{% block content %}
+{% endblock content %}
+
+{% block contentbox %}
+<h1><img src='/static/img/launcher/mooc.png'></h1>
+ <p><a class="btn btn-primary btn-large" href="https://x-informatics.appspot.com/preview">Learn more &raquo;</a></p>
+
+The links provided on this page are in support of the <a href="https://x-informatics.appspot.com/preview"> MOOOC on Big Data. </a><br>
+
+
+
+
+{% endblock contentbox %}
+
+{% block contentsmall11 %}
+
+<h2>Mooc</h2>
+
+hallo
+
+
+<p><a class="btn" href="#">View details &raquo;</a></p>
+{% endblock contentsmall11 %}
+
+{% block contentsmall12 %}
+
+<h2>Launchers</h2>
+
+<ul>
+<li> Lesson 1: starting something </li>
+<li> Lesson 2: starting other </li>
+</ul>
+
+
+<p><a class="btn" href="#">View details &raquo;</a></p>
+{% endblock contentsmall12 %}
+
+{% block contentsmall13 %}
+
+<h2>iPython Lessons</h2>
+
+hallo
+
+<p><a class="btn" href="#">View details &raquo;</a></p>
+{% endblock contentsmall13 %}
+
+
+
+{% block contentsmall21 %}
+
+<h2>Monitor</h2>
+
+<h3>Tests</h3>
+
+<p><a class="btn" href="/test/ping"> Ping &raquo;</a></p>
+
+<p><a class="btn" href="#">View details &raquo;</a></p>
+
+{% endblock contentsmall21 %}
+
+
+{% block contentsmall22 %}
+
+<h2>Information</h2>
+
+{{ flexible_menu(g.sidebar_flatpages) }}
+
+{% endblock contentsmall22 %}
+
+{% block contentsmall23 %}
+
+<h2>Links</h2>
+
+ {{ flexible_menu(g.externalbar_pages) }}
+
+{% endblock contentsmall23 %}
+
+
+
+

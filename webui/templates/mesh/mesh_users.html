@@ -1,0 +1,108 @@
+{% extends "layout/layoutTable.html" %}
+{% from "_helper.html" import image_button %}
+{% from "_helper.html" import cm_boolean_plusminus %}
+
+{% block contentbox %}
+<h2> {{ image_button ("none", "365_restart", "/cm/refresh/users") }} Users </h2>
+{% endblock contentbox %}
+
+{% block content %}
+
+<script type="text/javascript">
+
+
+/* http://stackoverflow.com/a/10237915 */
+(function($) {
+    $(function() {
+        $("#servers-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: false });
+    })
+})(jQuery);
+
+$(function() {
+  {% for cloudnum in range(clouds|count) %}
+    $("#cloud-table-{{ cloudnum }}").dataTable({
+    	"aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
+    	"sPaginationType": "full_numbers",
+        aaSorting: [[1,'asc']],
+        aoColumnDefs: [ {"bSortable": true, "aTargets": [0]} ]
+    });
+  {% endfor %}
+});
+
+</script>
+
+
+{%     for cloud in hosts %}
+        {{ cloud }}
+
+{% endfor %}
+
+ <!--
+        for server in clouds[cloud]:
+            print server
+            for attribute in clouds[cloud][server]:
+                print attribute, clouds[cloud][server][attribute]
+-->
+
+<div class="span9">
+<div id="servers-accordion">
+  {% for cloud in clouds %}
+    {% set cloud_loop = loop %}
+    {% set version = clouds[cloud]['cm_type_version'] %}
+    {% set attributes = cloud_attributes['grizzly']%}
+
+  <div style="margin-bottom:1em;">
+  <h3>
+  	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/users") }}
+  	{{ cloud }}
+  	 <span class="badge"> {{ clouds[cloud] |count }} </span> Users
+  </h3>
+  <div>
+    <table id="cloud-table-{{ loop.index0 }}">
+      <thead>
+          <tr>
+            <!-- for attribute in clouds[cloud][flavor]  -->
+            {% for attribute in attributes %}
+                  <th>{{attribute[0]}}</th>
+            {% endfor %}
+          </tr>
+      </thead>
+      <tbody>
+          {% for user in clouds[cloud] %}
+             <tr>
+                 <!-- for attribute in clouds[cloud][flavor] -->
+                 {% for attribute in attributes  %}
+                      <td>
+
+                       {% set l = attribute | length %}
+
+                          {% if l == 2%}
+
+                             {% if attribute[0]|lower in ["enabled"] %}
+                                {{ cm_boolean_plusminus(clouds[cloud][user][attribute[1]]) }}
+                             {% else %}
+                                {{ clouds[cloud][user][attribute[1]] }}
+                             {% endif %}
+
+
+
+                          {% elif l == 3%}
+                             {{ clouds[cloud][user][attribute[1]][attribute[2]] }}
+                          {% elif l == 4%}
+                             {{ clouds[cloud][user][attribute[1]][attribute[2]][attribute[4]] }}
+                          {% endif %}
+                      </td>
+                 {% endfor %}
+
+             </tr>
+
+          {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  </div>
+  {% endfor %}
+</div>
+</div>
+
+{% endblock %}

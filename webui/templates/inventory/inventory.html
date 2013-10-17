@@ -1,0 +1,60 @@
+{% extends "layout/layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+
+
+<div id="contentbox" class="hero-unit" style="padding:0px; ">
+
+
+{% block contentbox %}
+<h2> Inventory Summary </h2>
+{% endblock contentbox %}
+
+{% block content %}
+
+
+{% set exclude = ['bravo','delta','gamma'] %}
+
+{% set cols = 2 %}
+
+<table style="float:left">
+  <tr>
+    <th colspan="{{ cols }}">
+      {{ image_button ("center","119_table","/inventory/summary/") }}
+      Cloud Mesh - Inventory for FutureGrid
+    </th>
+  </tr>
+  <tr>
+    <td colspan="{{ cols }}"> Updated {{ updated }}</td>
+  </tr>
+  <tr>
+  	<th></th>
+    <th> Cluster </th>
+  </tr>
+
+  {% for cluster in inventory.clusters | sort(attribute='name') %}
+
+  <tr>
+
+   <td>
+     {{ image_button ("center","195_circle_info","/inventory/cluster/"+ cluster.name + "/") }}
+     {{ image_button ("center","119_table","/inventory/cluster/table/"+ cluster.name + "/") }}
+	 {% if cluster.name not in exclude %}
+	 <a href ="/pbs/nodes/{{cluster.name}}.futuregrid.org">N</a>
+	 <a href="/pbs/qstat/{{cluster.name}}.futuregrid.org">Q </a>
+	 {% endif %}
+   </td>
+
+   <td><a href="/inventory/cluster/{{ cluster.name }}/">{{ cluster.name }} </a></td>
+
+  </tr>
+
+  {% endfor %}
+
+ <tr><th colspan="{{ cols }}"> Legend </th></tr>
+ <tr><td colspan="{{ cols }}">N = pbsnodes, Q = qstat</td></tr>
+
+</table>
+
+
+{% endblock %}

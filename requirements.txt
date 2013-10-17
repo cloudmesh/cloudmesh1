@@ -26,6 +26,7 @@ Flask-Silk
 flask_login
 Flask-OpenID
 flask-principal
+Flask-RSTPages
 pymongo
 mongoengine
 python-novaclient
@@ -44,6 +45,5 @@ blockdiagcontrib-cisco
 nwdiag
 seqdiag
 pyzmq
-cmd3
+cmd3>=0.7.7
 azure
-numpy

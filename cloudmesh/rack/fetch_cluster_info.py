@@ -9,18 +9,23 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from hostlist import expand_hostlist
 from cloudmesh.rack.tasks import task_sensors
 
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 class FetchClusterInfo:
-    
+
     username = None
-    
+
     hostname = None
-    
+
     def __init__(self, user, host):
         self.username = user
         self.hostname = host
-    
+
     # fetch cluster service type with "ssh user@host pbsnodes -a"
-    # params: 
+    # params:
     #    flag_filter, None or one item in list ['india', 'bravo', 'echo', 'delta']
     def fetch_service_type(self, flag_filter=None):
         pbs = PBS(self.username, self.hostname)
@@ -35,16 +40,16 @@ class FetchClusterInfo:
                     utype = server["note"]
                 dict_data[ukey] = utype
         return dict_data
-    
-    
+
+
     # fetch cluster temperature from mongo db
-    # params: 
+    # params:
     #    flag_filter, None or one item in list ['india', 'bravo', 'echo', 'delta']
     def fetch_temperature_mongo(self, flag_filter=None):
         # read data from mongo db
         pass
-    
-    
+
+
     # refresh cluster temperature to mongo db
     # file_yaml: the absolute path of cloudmesh_cluster.yaml
     def update_temperature_mongo(self, file_yaml):
@@ -58,8 +63,8 @@ class FetchClusterInfo:
             list_networks = dict_config[key]["network"]
             for network in list_networks:
                 dict_cluster[key][network["name"]] = network
-        
-        # construct a dict 
+
+        # construct a dict
         dict_idip = {}
         for key in dict_cluster.keys():
             dict_idip[key] = {}
@@ -73,12 +78,12 @@ class FetchClusterInfo:
             iplist = expand_hostlist(network["range"])
             for uid, ip in zip(idlist, iplist):
                 dict_idip[key][uid] = ip
-        
+
         # call async service/task to get real temperature
         # the async service will update the mongo db after success
         task_sensors(dict_idip)
-    
-    
+
+
     #
     # mapping between the uniform label and the real label
     # india: i001  <--> i1; i010 <--> i10, i100 <--> i100
@@ -90,7 +95,7 @@ class FetchClusterInfo:
     def getRealLabelFromUniform(self, ulabel):
         if ulabel == "d000":
             return "deltai"
-        
+
         lchar = list(ulabel)
         if lchar[0] == 'b'or lchar[0] == 'd':
             return ulabel + "i"
@@ -101,7 +106,7 @@ class FetchClusterInfo:
                 return "echo" + rsnum + "i"
             elif lchar[0] == 'i':
                 return "i" + rsnum
-        
+
         # don't know anymore, just return
         return ulabel
 
@@ -109,7 +114,7 @@ class FetchClusterInfo:
     def getUniformFromRealLabel(self, rlabel):
         if rlabel == "deltai":
             return "d000"
-        
+
         lchar = list(rlabel)
         lzero = list("000")
         lresult = []
@@ -125,13 +130,13 @@ class FetchClusterInfo:
             lresult.extend(lzero[-3:])
         else:
             return rlabel
-            
+
         return "".join(lresult)
 
 # debug
 if __name__ == "__main__":
     mytest = FetchClusterInfo("hengchen", "india.futuregrid.org")
-    #data = mytest.fetch_service_type()
+    # data = mytest.fetch_service_type()
     print "=" * 30
     print data
     print "-" * 30

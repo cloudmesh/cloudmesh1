@@ -10,6 +10,11 @@ from pprint import pprint
 # from cloudmesh.user.cm_userLDAP import get_ldap_user_from_yaml
 from cloudmesh.user.cm_user import cm_user
 
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 profile_module = Blueprint('profile_module', __name__)
 
 #
@@ -107,7 +112,7 @@ def profile():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    return render_template('profile.html',
+    return render_template('user/profile.html',
                            updated=time_now,
                            configuration=config['cloudmesh'],  # just to populate security groups
                            user=user,

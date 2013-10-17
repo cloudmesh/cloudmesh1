@@ -1,5 +1,6 @@
 from fabric.api import task, local, settings, hide
 from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh.config.cm_config import cm_config_server
 from sh import kill
 from sh import sudo
 
@@ -56,4 +57,8 @@ def kill():
 def flask():
     config = get_user_config()
     user = config.get("cloudmesh.hpc.username")
-    open(user, "cloudmesh.futuregrid.org", 5000)
+    server_config = cm_config_server()
+    port = cm_config_server().get("cloudmesh.server.webui.port")
+    host = cm_config_server().get("cloudmesh.server.webui.host")
+
+    open(user, host, port)

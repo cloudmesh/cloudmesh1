@@ -4,6 +4,9 @@ Heat map of cluster servers, use HSV color space
 from copy import deepcopy
 from cloudmesh.rack.base_cluster_map import BaseClusterMap
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
 
 class HeatClusterMap(BaseClusterMap):
 
@@ -104,7 +107,6 @@ class HeatClusterMap(BaseClusterMap):
                                  "round": temp_round_precise,
                                  "range": marker_max - marker_min
                                 })
-        print "[Debug] color bar marker, ", self.dict_marker
 
 
 

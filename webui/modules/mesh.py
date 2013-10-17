@@ -10,8 +10,11 @@ from flask.ext.login import login_required
 from pprint import pprint
 import cloudmesh
 from cloudmesh.user.cm_user import cm_user
+from flask.ext.principal import Permission, RoleNeed
 
 log = LOGGER(__file__)
+
+admin_permission = Permission(RoleNeed('admin'))
 
 mesh_module = Blueprint('mesh_module', __name__)
 
@@ -21,6 +24,8 @@ mesh_module = Blueprint('mesh_module', __name__)
 
 
 @mesh_module.route('/mesh/register/clouds', methods=['GET', 'POST'])
+@login_required
+@admin_permission.require(http_exception=403)
 def mesh_register_clouds():
 
     error = None
@@ -31,20 +36,46 @@ def mesh_register_clouds():
     user_obj = cm_user()
     user = user_obj.info(username)
 
-
+    # todo define correct actions.
     if request.method == 'POST':
 
-        print "REQUEST"
-        pprint(request.__dict__)
-        print "OOOOOO", request.form
+        if (request.form['cloudInput'] == 'aws'):
+            awsUserName = request.form['field-aws-username']
+            awsAccessKey = request.form['field-aws_accesskey-password']
+            awsSecretKey = request.form['field-aws_secretkey-password']
+
+            print awsUserName, awsAccessKey, awsSecretKey
+
+        elif (request.form['cloudInput'] == 'azure'):
+            azureSubscriptionKey = request.form['field-azure-password']
+
+            print azureSubscriptionKey
+
+        elif (request.form['cloudInput'] == 'hp'):
+            hpUserName = request.form['field-hp-username']
+            hpPassword = request.form['field-hp-password']
+
+            print hpUserName, hpPassword
 
 
-    return render_template('mesh_register_clouds.html',
+        elif (request.form['cloudInput'] == 'sierra_openstack_grizzly'):
+            sierraPassword = request.form['field-sierra_openstack_grizzly-password']
+
+            print sierraPassword
+
+        return render_template('error.html',
+                               updated=datetime.now(),
+                               error=error,
+                               type="This feature has not yet been implemented",
+                               msg="All data from Post request retrieved!")
+
+    return render_template('mesh/cloud/mesh_register_clouds.html',
                            user=user,
+                           username=username,
                            cloudnames=config.cloudnames(),
                            error=error)
 
-@mesh_module.route('/mesh/images/')
+@mesh_module.route('/mesh/images/', methods=['GET', 'POST'])
 @login_required
 def mongo_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -56,32 +87,38 @@ def mongo_images():
     # c.refresh(types=["images"])
     clouds = c.images()
 
+    # getting user info
+    userdata = g.user
+    username = userdata.id
+    user_obj = cm_user()
+    user = user_obj.info(username)
+
     """
-    
+
     status ACTIVE
     updated 2013-05-26T19:29:09Z
     name menghan/custom-utuntu-01
     links [{u'href': u'http://198.202.120.83:8774/v1.1/1ae6813a3a6d4cebbeb1912f6d139ad0/images/502a5967-18ff-448b-830f-d6150b650d6b', u'rel': u'self'}, {u'href': u'http://198.202.120.83:8774/1ae6813a3a6d4cebbeb1912f6d139ad0/images/502a5967-18ff-448b-830f-d6150b650d6b', u'rel': u'bookmark'}, {u'href': u'http://198.202.120.83:9292/1ae6813a3a6d4cebbeb1912f6d139ad0/images/502a5967-18ff-448b-830f-d6150b650d6b', u'type': u'application/vnd.openstack.image', u'rel': u'alternate'}]
     created 2013-05-26T19:28:09Z
     minDisk 0
-    metadata {u'instance_uuid': u'16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', 
-              u'image_location': u'snapshot', 
-              u'image_state': u'available', 
-              u'instance_type_memory_mb': u'2048', 
-              u'instance_type_swap': u'0', 
-              u'instance_type_vcpu_weight': u'None', 
-              u'image_type': u'snapshot', 
-              u'instance_type_id': u'5', 
-              u'ramdisk_id': None, 
-              u'instance_type_name': u'm1.small', 
-              u'instance_type_ephemeral_gb': u'0', 
-              u'instance_type_rxtx_factor': u'1', 
-              u'kernel_id': None, 
-              u'instance_type_flavorid': u'2', 
-              u'instance_type_vcpus': u'1', 
-              u'user_id': u'f603818711324203970ed1e3bb4b90ed', 
-              u'instance_type_root_gb': u'20', 
-              u'base_image_ref': u'1a5fd55e-79b9-4dd5-ae9b-ea10ef3156e9', 
+    metadata {u'instance_uuid': u'16a5f5ac-7f39-4b01-a2c3-b2003beffb9d',
+              u'image_location': u'snapshot',
+              u'image_state': u'available',
+              u'instance_type_memory_mb': u'2048',
+              u'instance_type_swap': u'0',
+              u'instance_type_vcpu_weight': u'None',
+              u'image_type': u'snapshot',
+              u'instance_type_id': u'5',
+              u'ramdisk_id': None,
+              u'instance_type_name': u'm1.small',
+              u'instance_type_ephemeral_gb': u'0',
+              u'instance_type_rxtx_factor': u'1',
+              u'kernel_id': None,
+              u'instance_type_flavorid': u'2',
+              u'instance_type_vcpus': u'1',
+              u'user_id': u'f603818711324203970ed1e3bb4b90ed',
+              u'instance_type_root_gb': u'20',
+              u'base_image_ref': u'1a5fd55e-79b9-4dd5-ae9b-ea10ef3156e9',
               u'owner_id': u'1ae6813a3a6d4cebbeb1912f6d139ad0'}
     server {u'id': u'16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'links': [{u'href': u'http://198.202.120.83:8774/v1.1/1ae6813a3a6d4cebbeb1912f6d139ad0/servers/16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'rel': u'self'}, {u'href': u'http://198.202.120.83:8774/1ae6813a3a6d4cebbeb1912f6d139ad0/servers/16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'rel': u'bookmark'}]}
     cm_id sierra_openstack_grizzly-images-menghan/custom-utuntu-01
@@ -97,9 +134,9 @@ def mongo_images():
     b99fa4c8-6b92-49e6-b53f-37e56f9383b6
     """
     """
-    2 essex A {u'image_location': u'ktanaka/ubuntu1204-ramdisk.manifest.xml', 
-               u'image_state':    u'available', 
-               u'architecture':   u'x86_64'} 
+    2 essex A {u'image_location': u'ktanaka/ubuntu1204-ramdisk.manifest.xml',
+               u'image_state':    u'available',
+               u'architecture':   u'x86_64'}
     """
     attributes = {"grizzly":
                     [
@@ -129,19 +166,36 @@ def mongo_images():
             for attribute in clouds[cloud][image]:
                 print attribute, clouds[cloud][image][attribute]
     """
+    if 'defaults' not in user:
+        user['defaults'] = {}
+        user.set_defaults(username, {})
+    if 'images' not in user['defaults']:
+        user['defaults']['images'] = {}
 
-    return render_template('mesh_images.html',
+    if request.method == 'POST':
+        print "REQUEST"
+        cloud = request.form['cloud']
+        default_image = request.form['default_image']
+        print cloud, "----------------------------->", default_image
+        user['defaults']['images'][cloud] = default_image
+        # if 'default_flavor' in request.form:
+         #   user['defaults']['flavor'] = request.form['default_flavor']
+        user_obj.set_defaults(username, user['defaults'])
+
+
+    return render_template('mesh/cloud/mesh_images.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
                            updated=time_now,
                            clouds=clouds,
+                           user=user,
                            config=config)
 
 # ============================================================
 # ROUTE: mongo
 # ============================================================
 
-@mesh_module.route('/mesh/flavors/')
+@mesh_module.route('/mesh/flavors/', methods=['GET', 'POST'])
 @login_required
 def mongo_flavors():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -153,7 +207,12 @@ def mongo_flavors():
     # c.refresh(types=["flavors"])
     clouds = c.flavors()
 
-    """    
+    # getting user info
+    userdata = g.user
+    username = userdata.id
+    user_obj = cm_user()
+    user = user_obj.info(username)
+    """
     2
     disk 20
     name m1.small
@@ -165,7 +224,7 @@ def mongo_flavors():
     cm_id sierra_openstack_grizzly-flavors-m1-small
     vcpus 1
     cm_cloud sierra_openstack_grizzly
-    swap 
+    swap
     os-flavor-access:is_public True
     rxtx_factor 1.0
     cm_kind flavors
@@ -183,6 +242,24 @@ def mongo_flavors():
                 print attribute, clouds[cloud][flavor][attribute]
     """
 
+    if 'defaults' not in user:
+        user['defaults'] = {}
+        user.set_defaults(username, {})
+    if 'flavors' not in user['defaults']:
+        user['defaults']['flavors'] = {}
+
+
+    if request.method == 'POST':
+        print "REQUEST"
+        cloud = request.form['cloud']
+        default_flavor = request.form['default_flavor']
+        print request.form['cloud'], "----------------------------->", request.form['default_flavor']
+        user['defaults']['flavors'][cloud] = default_flavor
+        # if 'default_flavor' in request.form:
+         #   user['defaults']['flavor'] = request.form['default_flavor']
+        user_obj.set_defaults(username, user['defaults'])
+
+
     os_attributes = [
                      'id',
                      'name',
@@ -192,11 +269,12 @@ def mongo_flavors():
                      'cm_refresh',
                      ]
 
-    return render_template('mesh_flavors.html',
+    return render_template('mesh/cloud/mesh_flavors.html',
                            address_string=address_string,
                            attributes=os_attributes,
                            updated=time_now,
                            clouds=clouds,
+                           user=user,
                            config=config)
 
 # ============================================================
@@ -205,6 +283,7 @@ def mongo_flavors():
 
 @mesh_module.route('/mesh/users/')
 @login_required
+@admin_permission.require(http_exception=403)
 def mongo_users():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
@@ -240,7 +319,7 @@ def mongo_users():
                     ]
                   }
 
-    return render_template('mesh_users.html',
+    return render_template('mesh/mesh_users.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
                            updated=time_now,
@@ -253,8 +332,61 @@ def mongo_users():
 
 @mesh_module.route('/mesh/servers/')
 @mesh_module.route('/mesh/servers/<filters>')
-
+@login_required
 def mongo_table(filters=None):
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    # filter()
+    config = cm_config()
+
+    c = cm_mongo()
+    c.activate()
+    # c.refresh(types=["servers"])
+    clouds = c.servers()
+
+    """
+    for cloud in clouds:
+        print cloud
+        for server in clouds[cloud]:
+            print server
+            for attribute in clouds[cloud][server]:
+                print attribute, clouds[cloud][server][attribute]
+    """
+    os_attributes = ['name',
+                     'status',
+                     'addresses',
+                     'flavor',
+                     'id',
+                     'user_id',
+                     'metadata',
+                     'key_name',
+                     'created']
+
+    # c.aggregate needs to be defined
+    # def count_status(cloudname):
+    #    result = c.aggregate( [ {$match: {"cm_kind":"servers","cm_cloud":cloudname}},
+    #                                     {$group: { _id: "$status", count: { $sum: 1}}}
+    #                          ])
+
+    cloud_filters = None
+    filtered_clouds = clouds
+
+    return render_template('mesh/cloud/mesh_servers.html',
+                           address_string=address_string,
+                           attributes=os_attributes,
+                           updated=time_now,
+                           clouds=filtered_clouds,
+                           config=config,
+                           filters=cloud_filters)
+
+
+# ============================================================
+# ROUTE: mongo/servers/<filters>
+# ============================================================
+
+@mesh_module.route('/mesh/servers/<filters>')
+@login_required
+@admin_permission.require(http_exception=403)
+def mongo_server_table_filter(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
@@ -316,7 +448,7 @@ def mongo_table(filters=None):
         cloud_filters = None
         filtered_clouds = clouds
 
-    return render_template('mesh_servers.html',
+    return render_template('mesh/cloud/mesh_servers.html',
                            address_string=address_string,
                            attributes=os_attributes,
                            updated=time_now,

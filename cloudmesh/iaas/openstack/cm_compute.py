@@ -549,15 +549,16 @@ class openstack(ComputeBaseType):
         time_stamp = self._now()
         msg = "servers/detail"
         list = self._get(msg)['servers']
-        return self._list_to_dict(list, 'id', "server", time_stamp)
+        self.servers = self._list_to_dict(list, 'id', "server", time_stamp)
+        return self.servers
 
     # new
     def get_flavors(self):
         time_stamp = self._now()
         msg = "flavors/detail"
         list = self._get(msg)['flavors']
-
-        return self._list_to_dict(list, 'name', "flavor", time_stamp)
+        self.flavors = self._list_to_dict(list, 'name', "flavor", time_stamp)
+        return self.flavors
 
     def flavorid(self, name):
         for key in self.flavors:
@@ -575,7 +576,8 @@ class openstack(ComputeBaseType):
         time_stamp = self._now()
         msg = "images/detail"
         list = self._get(msg)['images']
-        return self._list_to_dict(list, 'id', "image", time_stamp)
+        self.images = self._list_to_dict(list, 'id', "image", time_stamp)
+        return self.images
 
     # new
     """

@@ -1,0 +1,71 @@
+{% extends "layout/layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+<h2>{{ image_button ("none", "365_restart", "/test/run") }} Nosetests</h2>
+{% endblock %}
+
+{% block content %}
+
+{%if tests == None %}
+
+
+{% else %}
+
+<h3>Statistics</h3>
+
+  <table>
+	 <tr>
+    	<th colspan="2"> Test  {{name}} </th>
+	 </tr>
+  	 <tr>
+  	 	<td> Updated </td>
+  	 	<td> {{ updated }} </td>
+  	 </tr>
+  	 <tr>
+    	<th> Attribute </th>
+    	<th> Value </th>
+     </tr>
+     <tr>
+  	 	<td> Filename </td>
+  	 	<td > {{ filename }} </td>
+  	 </tr>
+  	  <tr>
+  	 	<td> Result Filename </td>
+  	 	<td > {{ resultname }} </td>
+  	 </tr>
+    {% for stat in tests.stats %}
+       <tr>
+       <td>{{ stat }}</td>
+       <td> {{ tests.stats[stat] }}</td>
+	   </tr>
+     {% endfor %}
+  </table>
+
+
+  <h3>Results</h3>
+
+  <table>
+  <tr>
+    <th colspan="8"> Test  {{name}} </th>
+
+  </tr>
+
+  <tr>
+    {% for key in tests.results[0] %}
+    	<th> {{ key }}  </th>
+    {% endfor %}
+  </tr>
+  {% for test in tests.results %}
+    <tr>
+    {% for key in test %}
+    	<td> {{ test[key] }}  </td>
+	{% endfor %}
+  </tr>
+  {% endfor %}
+
+   </table>
+
+{% endif %}
+
+{% endblock %}

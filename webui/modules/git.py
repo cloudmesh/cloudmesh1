@@ -4,11 +4,18 @@ from flask import render_template
 from sh import git
 from cloudmesh.util.gitinfo import GitInfo
 from pprint import pprint
+from flask.ext.login import login_required
+
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
 
 git_module = Blueprint('git_module', __name__)
 
 
 @git_module.route('/git/')
+@login_required
 def display_git_authors():
     result = git("shortlog", "-s", "-n",
                  _tty_in=True, _tty_out=False).split("\n")
@@ -58,5 +65,5 @@ def display_git_authors():
         print "{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%".format(email, p[0], p[1], p[2], p[3])
     """
 
-    return render_template('git.html',
+    return render_template('general/git.html',
                            authors=authors)

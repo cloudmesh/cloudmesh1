@@ -5,6 +5,12 @@ from flask.ext.login import login_required
 import cloudmesh
 from pprint import pprint
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
+
+
 keys_module = Blueprint('keys_module', __name__)
 
 #
@@ -58,7 +64,7 @@ def managekeys():
             keys['default'] = request.form['selectkeys']
             keys.write()
 
-    return render_template('keys.html',
+    return render_template('user/keys.html',
                            user=user_mongo,
                            show=msg)
 

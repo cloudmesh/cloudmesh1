@@ -1,0 +1,78 @@
+{% extends "layout/layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+
+{% block contentbox %}
+<h2> Inventory Images </h2>
+{% endblock contentbox %}
+
+{% block content %}
+
+
+
+<table>
+  <tr>
+	<th> Name </th>
+	<th> Os </th>
+	<th> Partitions </th>
+
+	<!--
+	<th> Date created </th>
+	<th> Date modified </th>
+	-->
+  </tr>
+  {% for image in images %}
+  <tr valign="top">
+	<td>
+		<a href = "/inventory/image/{{image.cm_id}}">{{image.cm_id}} </a>
+	</td>
+	<td>
+	<table>
+	<tr><th>Os</th><td> {{image.os}} </td></tr>
+	<tr><th>Image</th><td> {{image.osimage}} </td></tr>
+	<tr><th>Pt Scheme</th><td> {{image.partition_scheme}} </td></tr>
+	<tr><th>Device</th><td> {{image.disk.device}} </td></tr>
+	</table>
+	</td>
+	<td>
+	<table>
+	<th>Name</th>
+	<th>Mount</th>
+	<th>Type</th>
+	<th>Size</th>
+	{% for p in image.disk.partitions %}
+	<tr>
+		<td>
+		{{p}}
+		</td>
+		<td>
+			{{image.disk.partitions[p].mount}}<br>
+		</td>
+		<td>
+			{{image.disk.partitions[p].type}}<br>
+		</td>
+		<td>
+			{{image.disk.partitions[p].size}}<br>
+		</td>
+	</tr>
+	{% endfor %}
+	</table>
+	</td>
+	<!--
+	<td> {{image.date_creation | simple_date }} </td>
+	<td> {{image.date_modified | simple_date}} </td>
+    -->
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+

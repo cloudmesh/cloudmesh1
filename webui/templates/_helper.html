@@ -49,14 +49,6 @@ image_button("041_charts", "/table/")
 	{% endif %}
 {% endmacro %}
 
-<!--
-<span class="label label-primary">Blue</span>
-<span class="label label-info">lightblue</span>
-<span class="label label-warning">yellow</span>
-<span class="label label-danger">red/gray</span>
--->
-
-
 {% macro cm_image_input(align, type) %}
       <input align={{ align }}
              type="image"
@@ -66,15 +58,22 @@ image_button("041_charts", "/table/")
 
 
 {% macro image_button(align, type, actionpath) %}
-<!-- modal for progress -->
       <input align={{ align }} type="image"
 	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
 	     onclick="document.location.href='{{ actionpath }}';"
 	     width="16" height="16">
 {% endmacro %}
 
+{% macro image_popup(align, type, actionpath) %}
+      <input align={{ align }} type="image"
+	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
+	     onclick="window.open('{{ actionpath }}','Popup','toolbar=no, \
+	     location=no,status=no,menubar=no,scrollbars=no,resizable=no, \
+	     width=650,height=530,left=430,top=23'); return false;"
+	     width="16" height="16">
+{% endmacro %}
+
 {% macro image_link(align, type, actionpath) %}
-<!-- modal for progress -->
       <a href={{actionpath}}>
 	     <img = src="{{url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
 	     width="16" height="16">
@@ -99,6 +98,13 @@ image_button("041_charts", "/table/")
 
 {%- endmacro %}
 
+{% macro submit_button(id, type, formName) %}
+    <input id="{{id}}" type="image"
+         src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
+         onclick="document.forms['{{ formName }}'].submit()"
+         title="Register {{ formName }}"
+         width="16" height="16">
+{% endmacro %}
 
 
 

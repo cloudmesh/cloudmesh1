@@ -6,6 +6,10 @@ import cloudmesh
 from flask.ext.login import login_required
 from datetime import datetime
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 status_module = Blueprint('status_module', __name__)
 
 #
@@ -14,6 +18,7 @@ status_module = Blueprint('status_module', __name__)
 
 
 @status_module.route('/status')
+@login_required
 def display_status():
 
     msg = ""
@@ -26,6 +31,7 @@ def display_status():
               'hotel' : { 'jobs' : 33, 'users' : 20},
               'sierra' : { 'jobs' : 43, 'users' : 10},
               'alamo' : { 'jobs' : 53, 'users' : 1},
+              'delta' : { 'jobs' : 0, 'users': 0}
               }
 
     config = cm_config()
@@ -33,10 +39,12 @@ def display_status():
     user = config.get("cloudmesh.hpc.username")
 
     services = {}
+    qinfo = {}
 
     for host in ['sierra.futuregrid.org', 'india.futuregrid.org']:
         pbs = PBS(user, host)
         services[host] = pbs.service_distribution()
+        qinfo[host] = pbs.qinfo()
 
 
     machines = services.keys()
@@ -78,7 +86,20 @@ def display_status():
 
     print "SSS", spider_services
 
-    return render_template('status.html',
+    # Users and Jobs
+    total_jobs = {}
+    for machine in machines:
+        for qserver in qinfo[machine]:
+            total_jobs[qserver] = 0
+            try:
+                hostname = qserver.split('.')[0]
+            except:
+                hostname = ""
+            for qname in qinfo[machine][qserver]:
+                total_jobs[qserver] += qinfo[machine][qserver][qname]['total_jobs']
+            values[hostname]['jobs'] = total_jobs[qserver]
+
+    return render_template('status/status.html',
                            services=spider_services,
                            values=values,
                            status=status,

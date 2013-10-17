@@ -1,0 +1,20 @@
+{% extends "layout/layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+
+
+{% block contentbox %}
+<h2> VM Details </h2>
+{% endblock contentbox %}
+
+{% block content %}
+
+<style>
+table{
+margin:0px
+}
+</style>
+
+{{table_printer(server) | safe}}
+
+{% endblock %}

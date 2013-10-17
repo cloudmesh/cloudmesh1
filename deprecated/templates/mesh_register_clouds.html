@@ -1,0 +1,172 @@
+{% extends "layout/layout_title.html" %}
+{% from "_helper.html" import image_button %}
+{% from "_helper.html" import cm_boolean_color %}
+{% from "_helper.html" import cm_image_input %}
+{% from "_helper.html" import submit_button %}
+
+{% block contentbox %}
+<h1> Register </h1>
+{% endblock contentbox %}
+
+{% block content %}
+
+{{user}}
+<br>
+<hr>
+
+{{username}}
+<br>
+
+<hr>
+
+{% macro password(label, cloudname) %}
+<tr>
+    <td style="text-align: right">{{label}}:</td>
+    <td colspan="2">
+    <form>
+        <input id="id-{{cloudname}}-password"
+        valign="middle"
+        type="password"
+        name="field-{{cloudname}}-password"
+        value="" autocomplete="off"
+        placeholder="{{label}}"
+        style="margin-bottom: 5px; margin-top: 5px;">
+        <input type="button"
+        id="toggle-{{cloudname}}"
+        value="T"
+        style="display:inline"
+        onclick="toggle_PasswordFieldClicked()"/>
+    </form></td>
+</tr>
+{% endmacro %}
+
+{% macro username(label, cloudname, username_edit_enabled) %}
+<tr>
+    <td style="text-align: right"> Username:</td>
+    <td colspan="2">
+    <input  id="id-{{cloudname}}-username"
+    valign="middle"
+    type="text"
+    name="field-{{cloudname}}-username"
+    value="psjoshi"
+    {% if not username_edit_enabled %}
+    disabled="disabled"
+    {% endif %}
+    style="margin-bottom: 5px; margin-top: 5px;">
+    </td>
+</tr>
+{% endmacro %}
+
+{% macro tableHeader(cloudname, regions, verified) %}
+<tr>
+    <th colspan="1">
+        <input type="checkbox"
+            name="field-activated-{{cloudname}}"
+            {% if cloudname in user.defaults.activeclouds %}
+            checked = "checked"
+            {% endif %}
+            style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+        {{cloudname}}&nbsp;
+        {% if regions %}
+            {% for region in regions %}
+                <input type="checkbox"
+                    name="field-activated-{{cloudname}}-{{region}}"
+                    {% if cloudname in user.defaults.activeclouds %}
+                    checked = "checked"
+                    {% endif %}
+                    style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
+                {{region}}
+                &nbsp;
+            {% endfor %}
+        {% endif %}
+    </th>
+    <th></th>
+    <th style="text-align: right">
+        {{ image_button ("none", "044_keys", "/updatekeypair/" + "sierra_openstack_grizzly" + "/") }}
+        {% if verified == true %}
+            {{ cm_boolean_color('verified') }}
+        {% else %}
+            {{ cm_boolean_color('unknown') }}
+        {% endif %}
+    </th>
+    <th>
+        {{ submit_button ("submit" + cloudname, "235_pen", "cloudForm") }}
+    </th>
+</tr>
+{% endmacro %}
+
+{% macro openstack(cloudname, username_edit_enabled, verified) %}
+<td>
+    {{ tableHeader(cloudname, false, verified) }}
+    {{ username ("Username", cloudname, username_edit_enabled)}}
+    {{ password ("Password", cloudname)}}
+</td>
+{% endmacro %}
+
+{% macro aws(cloudname, verified) %}
+
+    {{ tableHeader(cloudname, false, verified) }}
+    {{ username ("Username", cloudname, True)}}
+    {% set accesskey= cloudname + "_accesskey" %}
+    {% set secretkey= cloudname + "_secretkey" %}
+    {{ password ("Access Key", accesskey)}}
+    {{ password ("Secret Key", secretkey)}}
+
+{% endmacro %}
+
+{% macro hp(cloudname, regions, verified) %}
+
+    {{ tableHeader(cloudname, regions, verified) }}
+    {{ username ("Username", cloudname, True)}}
+    {{ password ("Password", cloudname)}}
+
+{% endmacro %}
+
+{% macro azure(cloudname, verified) %}
+
+    {{ tableHeader(cloudname, false, verified) }}
+    {{ password("Subscription ID", cloudname) }}
+
+{% endmacro %}
+
+<form id="cloudForm" method="post">
+    <table id="clouds" style="display: inline-block; float: left;">
+        <tr>
+            <th colspan="1"><b>Clouds</b></th>
+            <th></th>
+            <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
+            Verified </th>
+
+        {{ openstack("sierra_openstack_grizzly", False, true) }}
+        {{ aws("aws") }}
+        {{ hp("hp", ["hp_east"]) }}
+        {{ azure("azure") }}
+
+            <th align="center"> Manage </th>
+        </tr>
+
+        <tr>
+            <td colspan="3"><a class="btn" href="/keys"> Keys &raquo; </a><a class="btn" href="/mesh/cm/init/generate/me"> Download me.yaml &raquo; </a><a class="btn" href="/mesh/cm/init/generate/cloudmesh"> Download cloudmesh.yaml &raquo; </a></td>
+        </tr>
+    </table>
+</form>
+
+<p>
+    <script>
+        function toggle_PasswordFieldClicked() {
+            //Regex to get the password field associated with button
+            //Following regex would get hpPassword from toogle_hpPassword
+            var passwordFieldId = ((event.target).id.split("-"))[1];
+            var passwordObject = $('#' + "id-" + passwordFieldId + "-password").get(0);
+            var value = passwordObject.value;
+
+            if (passwordObject.type == 'password') {
+                passwordObject.type = 'text';
+            } else {
+                passwordObject.type = 'password';
+            }
+
+            passwordObject.value = value;
+        }
+    </script>
+{% endblock %}

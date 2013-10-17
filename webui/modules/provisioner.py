@@ -1,27 +1,27 @@
-from sh import blockdiag
-from flask import Blueprint
-from flask import render_template, redirect, flash
-from datetime import datetime
-from flask.ext.wtf import Form
-from wtforms import TextField, SelectField, TextAreaField
-from cloudmesh.old_inventory.inventory import Inventory as oldInventory
-from hostlist import expand_hostlist
+from cloudmesh.config.cm_config import cm_config_server
+from cloudmesh.inventory import Inventory
+from cloudmesh.old_inventory.inventory import Inventory as oldInventory, \
+    PROVISIONING_CHOICES
 from cloudmesh.provisioner.provisioner import *
-from cloudmesh.old_inventory.inventory import PROVISIONING_CHOICES
 from cloudmesh.provisioner.queue.celery import celery
 from cloudmesh.provisioner.queue.tasks import provision
-from cloudmesh.config.cm_config import cm_config_server
-from pprint import pprint
-from cloudmesh.util.util import path_expand
-from cloudmesh.util.util import cond_decorator
+from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.util import cond_decorator, path_expand
+from datetime import datetime
+from flask import Blueprint, render_template, redirect, flash
 from flask.ext.login import login_required
-
-
-from cloudmesh.inventory import Inventory
-
-
+from flask.ext.principal import Permission, RoleNeed
+from flask.ext.wtf import Form
+from hostlist import expand_hostlist
+from pprint import pprint
+from sh import blockdiag
+from wtforms import TextField, SelectField, TextAreaField
 import cloudmesh
 
+
+log = LOGGER(__file__)
+
+admin_permission = Permission(RoleNeed('admin'))
 
 provisioner_module = Blueprint('provisioner_module', __name__)
 
@@ -39,17 +39,19 @@ provisioner = provisionerImpl()
 
 @provisioner_module.route('/provision/policy')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_provisioner_policy():
 
     policy = cm_config_server().get("cloudmesh.server.provisioner.policy")
 
-    return render_template('provision_policy.html',
+    return render_template('mesh/provision/provision_policy.html',
                            policy=policy)
 
 
 
 @provisioner_module.route('/provision/summary/')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_provisioner_summary():
 
     queue = celery.control.inspect()
@@ -66,7 +68,7 @@ def display_provisioner_summary():
     time.sleep(1)
     """
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    return render_template('provision_summary_table.html',
+    return render_template('mesh/provision/provision_summary_table.html',
                            provisioner=provisioner,
                            queue=queue,
                            updated=time_now)
@@ -74,6 +76,7 @@ def display_provisioner_summary():
 
 @provisioner_module.route('/provision/tasks/<cluster>/<spec>/<service>')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_provision_host_summary(cluster, spec, service):
 
     time.sleep(1)
@@ -132,7 +135,7 @@ def display_provision_host_summary(cluster, spec, service):
     time.sleep(1)
     """
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    return render_template('provision_host_table.html',
+    return render_template('mesh/provision/provision_host_table.html',
                            provisioner=provisioner,
                            queue=queue,
                            table=table,
@@ -169,7 +172,8 @@ class ProvisionForm(Form):
 
 
 @provisioner_module.route("/provision/", methods=("GET", "POST"))
-
+@login_required
+@admin_permission.require(http_exception=403)
 def display_provision_form():
 
     clusters = cm_config_server().get("cloudmesh.server.provisioner.clusters")
@@ -204,4 +208,4 @@ def display_provision_form():
     else:
         flash("Wrong submission")
     inventory.refresh()
-    return render_template("provision.html", clusters=clusters, form=form)
+    return render_template("mesh/provision/provision.html", clusters=clusters, form=form)

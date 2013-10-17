@@ -1,0 +1,200 @@
+{% extends "layout/layout_title.html" %}
+{% block title %}Rack Map{% endblock %}
+
+{% block contentbox %}
+{% if flag_home %}
+	<h2>Choose a Rack Cluster and a type of Service:</h2>
+{% else %}
+	<h2>
+		{{ service | capitalize }} Map of
+		{% if rack == "all" %}
+			{{ rack | capitalize }} Clusters
+		{% else %}
+			the {{ rack | capitalize }} Cluster
+		{% endif %}
+	</h2>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if flag_home %}
+	<form action="/inventory/rack/map" method="post">
+		<p>
+			{{ form.select_rack.label }}
+			{{ form.select_rack }}
+		<p>
+		<p>
+			{{ form.select_service.label }}
+			{{ form.select_service }}
+		</p>
+			<input type="reset" value="Reset">
+			<input type="submit" value="Show Map">
+	</form>
+{% else %}
+	{% if True %}
+    <style>#slider { margin: 10px; }  </style>
+    <style>
+        #tooltip {
+            position: relative;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #0000FF;
+            width:50px; height:20px
+        }
+    </style>
+    <script>
+        var prev_left_img = 0;
+        var prev_top_img = 0;
+        function OnClickMe() {
+            $container = $("#img_inner_div");
+            prev_left_img -= 100;
+            prev_top_img -= 100;
+            $container.css("left", prev_left_img);
+            $container.css("top", prev_top_img);
+        }
+    </script>
+    <div onclick="OnClickMe()" style="display:none">Click Me</div>
+    <div id="mousepos" style="display:none"></div>
+
+	Zoom Ratio: <span id="zoomratio">100</span> % &nbsp; Image offset (<span id="mapoffsetleft">0</span>, <span id="mapoffsettop">0</span>) &nbsp;&nbsp;[ Double click on the image to display the real size. ]<br>
+	<div id="slider"></div>
+
+    <script>
+        var Default_Slider_Min = 1;
+        var Default_Slider_Max = 300;
+        var Default_Image_Rate = 30;
+        var previous_zoom_rate = Default_Image_Rate;
+        var baseWidth = {{imageWidth}};
+        var baseHeight = {{imageHeight}};
+        function zoomImageMap(rate) {
+            $("#zoomratio").text( rate );
+            $imgContainer = $("#img_inner_div");
+            $("#mapoffsetleft").text(0);
+            $("#mapoffsettop").text(0);
+            $imgContainer.css("left", "0px");
+            $imgContainer.css("top", "0px");
+            $imgContainer.css("width", baseWidth * rate / 100 + "px");
+            $imgContainer.css("height", baseHeight * rate / 100 + "px");
+            $("#realmap").css("width",baseWidth * rate / 100);
+            previous_zoom_rate = rate;
+        }
+
+        var tooltip = $('<div id="tooltip"> </div>').hide();
+        $( "#slider" ).slider({
+                min: Default_Slider_Min,
+                max: Default_Slider_Max,
+                animate: 1,
+                value: 100,
+                slide: function( event, ui ) {
+                    if (Math.abs(ui.value - previous_zoom_rate) > 10) {
+                        zoomImageMap(ui.value);
+                    }
+                },
+                change: function( event, ui ) {
+                    zoomImageMap(ui.value);
+                },
+            }).on({
+                mousemove: function(e) {
+                    $area = $("#zoomratio");
+                    width = $(this).width();
+                    offset = $(this).offset();
+                    relative_pos_x = e.pageX - offset.left;
+                    relative_pos_y = e.pageY - offset.top + 20;
+                    value = Math.round((relative_pos_x / width) * (Default_Slider_Max - Default_Slider_Min)) + Default_Slider_Min;
+                    tooltip.css({left: relative_pos_x, top: relative_pos_y});
+                    tooltip.text(value + "%");
+                    tooltip.show();
+                },
+                mouseout: function() {
+                    tooltip.hide();
+                }
+            });
+        function setZoomRate(rate) {
+            $slider = $("#slider").slider("value", rate);
+        }
+        $(document).ready(function() {
+            setZoomRate(Default_Image_Rate);
+            $("#slider").slider().append(tooltip);
+            $container = $("#img_inner_div");
+            $container.data("flag_drag", false);
+            $("#realmap").on(
+                "mousedown", function(e) {
+                    e.stopPropagation();
+                    $container.data("flag_drag", true);
+                    $container.data("p0", {x: e.pageX, y: e.pageY});
+                    $("#realmap").css("cursor", "move");
+                    return false;
+            }).on(
+                "mousemove", function(e){
+                    if ( ! $container.data("flag_drag") ) {
+                        return true;
+                    }
+                    e.stopPropagation();
+                    $("#realmap").css("cursor", "move");
+                    p0 = $container.data("p0");
+                    p1 = {x: e.pageX, y: e.pageY};
+                    offset = {left: p1.x - p0.x, top: p1.y - p0.y};
+                    if (Math.abs(offset.left) + Math.abs(offset.top) > 30) {
+                        img_prev_left = $container.css("left");
+                        img_prev_top = $container.css("top");
+                        px_index = img_prev_left.indexOf("px");
+                        if (px_index > -1) {
+                            img_prev_left = img_prev_left.substring(0, px_index);
+                        }
+                        px_index = img_prev_top.indexOf("px");
+                        if (px_index > -1) {
+                            img_prev_top = img_prev_top.substring(0, px_index);
+                        }
+                        $("#mousepos").text("(" + p1.x + ", " + p1.y + "), (" + img_prev_left + ", " + img_prev_top + ")");
+                        abs_offset_left = offset.left + parseInt(img_prev_left);
+                        abs_offset_top = offset.top + parseInt(img_prev_top);
+                        $container.css("left", abs_offset_left);
+                        $container.css("top", abs_offset_top);
+                        $("#mapoffsetleft").text(abs_offset_left);
+                        $("#mapoffsettop").text(abs_offset_top);
+                        $container.data("p0", {x: p1.x, y: p1.y});
+                    }
+                    return false;
+            }).on(
+                "mouseout", function(e) {
+                    $container.data("flag_drag", false);
+                    $("#realmap").css("cursor", "default");
+            }).on(
+                "mouseup", function(e){
+                    e.stopPropagation();
+                    $container.data("flag_drag", false);
+                    $("#realmap").css("cursor", "default");
+                    return false;
+            });
+        });
+
+    </script>
+   <p>
+	  <img src="{{ legendFilename }}"
+	       width="1000px"
+	       style="display:block; margin-left: auto; margin-right: auto"/>
+	</p>
+
+    <div id="img_outer_div" style="width:100%; height:100%; overflow: auto; position: relative">
+        <div id="img_inner_div" style="width:{{imageWidth}}px; height:{{imageHeight}}px; overflow: hidden; position: relative">
+		<p> <img id="realmap" src="{{ imageFilename }}"
+			     style="width={{imageWidth}}px; position: relative"
+			     ondblclick="setZoomRate(100)"
+	           	 />
+		</p>
+        </div>
+	</div>
+	{% else %}
+		<p>
+	  		<img src="/static/racks/{{name}}.svg"/>
+		</p>
+		<p>
+			<img src="/static/racks/{{name}}-legend.png"/>
+		</p>
+	{% endif %}
+{% endif %}
+
+{% endblock %}
+
+

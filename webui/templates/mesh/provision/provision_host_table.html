@@ -1,0 +1,89 @@
+{% extends "layout/layout_title.html" %}
+
+{% block contentbox %}
+<h2>Provision Summary</h2>
+{% endblock %}
+
+{% block content %}
+
+<table>
+	<tr>
+		<th> Cluster </th>
+		<th> Host </th>
+		<th> Service </th>
+	  	<th> Task </th>
+	   	<th> Worker </th>
+	   	<th> Status </th>
+	   	<th> Service </th>
+	   	<th> Start </th>
+	</tr>
+	{% for host in table %}
+		<tr>
+			<td> {{ cluster }} </td>
+			<td> {{ host }} </td>
+			<td> {{ service }} </td>
+			<td> {{ table[host]["task"] }} </td>
+	       	<td> {{ table[host]["worker"] }} </td>
+	       	<td> {{ table[host]["status"] }} </td>
+	       	<td> {{ table[host]["provision"] }} </td>
+	       	<td> {{ table[host]["start"] | timesince }} </td>
+	   </tr>
+	{% endfor %}
+
+</table>
+
+
+
+<!--
+
+<h1> Notes</h1>
+
+<pre>
+w1.pro-2013.local	 [{u'args': u"('b-003', 'openstack')",
+u'time_start': 1374767421.78441, u'name':
+u'cloudmesh.provisioner.queue.tasks.provision', u'delivery_info':
+{u'priority': None, u'routing_key': u'celery', u'exchange':
+u'celery'}, u'hostname': u'w1.pro-2013.local', u'acknowledged': True,
+u'kwargs': u'{}', u'id': u'4a91893b-852e-43f8-bf26-237c420f2233',
+u'worker_pid': 13866}, {u'args': u"('b-006', 'openstack')",
+u'time_start': 1374767421.784821, u'name':
+u'cloudmesh.provisioner.queue.tasks.provision', u'delivery_info':
+{u'priority': None, u'routing_key': u'celery', u'exchange':
+u'celery'}, u'hostname': u'w1.pro-2013.local', u'acknowledged': True,
+u'kwargs': u'{}', u'id': u'55b5d50d-a9a5-4a07-aac8-ae605b9b6a0a',
+u'worker_pid': 13863}]
+
+w2.pro-2013.local	 [
+{u'args': u"('b-004', 'openstack')",
+u'time_start': 1374767421.783455,
+u'name': u'cloudmesh.provisioner.queue.tasks.provision',
+u'delivery_info': {u'priority': None, u'routing_key': u'celery',
+u'exchange': u'celery'},
+u'hostname': u'w2.pro-2013.local',
+u'acknowledged': True,
+u'kwargs': u'{}',
+u'id': u'be0b5516-5e29-4b45-8c37-f95846e756bf',
+u'worker_pid': 13875},
+{u'args': u"('b-001', 'openstack')",
+u'time_start': 1374767421.783425,
+u'name': u'cloudmesh.provisioner.queue.tasks.provision',
+u'delivery_info': {u'priority': None, u'routing_key': u'celery',
+u'exchange': u'celery'},
+u'hostname': u'w2.pro-2013.local',
+u'acknowledged': True,
+u'kwargs': u'{}',
+u'id': u'880da42d-f274-4aa1-b1ba-997aacd56390',
+u'worker_pid': 13880},
+{u'args': u"('b-007', 'openstack')",
+u'time_start': 1374767421.784897,
+u'name': u'cloudmesh.provisioner.queue.tasks.provision',
+u'delivery_info': {u'priority': None,
+u'routing_key': u'celery',
+u'exchange': u'celery'},
+u'hostname': u'w2.pro-2013.local', u'acknowledged': True,
+u'kwargs': u'{}', u'id': u'5be35af7-18e7-478e-be8c-2fe296e88d59', u'worker_pid': 13877}]
+</pre>
+-->
+
+{% endblock content %}
+

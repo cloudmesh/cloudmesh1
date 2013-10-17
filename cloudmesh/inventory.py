@@ -307,6 +307,12 @@ class Inventory:
         return self.find ({"cm_id": index,
                            "type": iptype})[0]['ipaddr']
 
+    def ipadr_cluster (self, index, iptype):
+        data = self.find ({"cm_id": index,
+                           "type": iptype})[0]
+        return (data['ipaddr'], data)
+
+
     def generate_bootspec(self):
 		bootspecs = self.bootspec_config.get("cloudmesh.bootspec")
 		for name in bootspecs:

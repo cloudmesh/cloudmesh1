@@ -10,6 +10,10 @@ from sh import pwd  # @UnresolvedImport
 from wtforms import SelectField
 
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 # from cloudmesh.config.cm_rack import cm_keys
 
 
@@ -45,15 +49,17 @@ class RackForm(Form):
 
 
 @rack_module.route('/inventory/rack')
+@login_required
 def display_rack_home():
     rack_form = RackForm()
     if rack_form.validate_on_submit():
         rack_form.initForm()
-        return render_template("rack.html", form=rack_form, flag_home=True)
+        return render_template("mesh/rack/rack.html", form=rack_form, flag_home=True)
 
 
 
 @rack_module.route('/inventory/rack/map', methods=['POST'])
+@login_required
 def display_rack_map():
 
     ####
@@ -100,8 +106,6 @@ def display_rack_map():
         myfetch = FetchClusterInfo(user, "india.futuregrid.org")
         flag_filter = None if rack == "all" else rack
         dict_data = myfetch.fetch_service_type(flag_filter)
-        print "=" * 30
-        pprint(dict_data)
     # update data
     map_class.update(dict_data)
     # plot map
@@ -114,7 +118,7 @@ def display_rack_map():
     abs_web_path_image = "/".join([""] + list_image_dir + [filename_image])
     abs_web_path_legend = "/".join([""] + list_image_dir + [filename_legend])
 
-    return render_template("rack.html",
+    return render_template("mesh/rack/rack.html",
                             flag_home=False,
                             rack=rack,
                             imageWidth=image_size["width"],
@@ -127,34 +131,19 @@ def display_rack_map():
 
 
 
-@rack_module.route('/inventory/rack/old')
-def display_all_racks():
-
-
-
-    # dir = path_expand(cm_config_server().get("rack.path"))
-
-    # not so nice cludge, ask for location of statcic instead
-
-    # web_pwd = pwd().strip()
-    # basename = "/static/{0}/{1}".format(dir, filename)
-
-    rack = None
-
-    return render_template('rack.html',
-                           name="india",
-                           rack=rack)
-
 
 @rack_module.route('/inventory/rack/<name>')
 @rack_module.route('/inventory/rack/<name>/<service>')
+@login_required
 def display_rack(name, service=None):
 
 
     if service is None:
         service = "temperature"
-    print "test begin/...."
+
     basename = None
+    rack = name
+
     # diag_dir = path_expand(cm_config_server().get("rack.input"))
     # output_dir = path_expand(cm_config_server().get("rack.diagramms.{0}".format(service)))
 
@@ -179,9 +168,9 @@ def display_rack(name, service=None):
     # else:
     #    do that
 
-    rack = name
 
-    return render_template('rack.html',
+
+    return render_template('mesh/rack/rack.html',
                            service=service,
                            basename=basename,
                            name=name,

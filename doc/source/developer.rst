@@ -95,7 +95,7 @@ In case virtualenv is not installed, you can install it via pip::
 Once that is accomplished you can create a virtual env as follows in the
 directory ENV:
          
-    $ virtualenv ~/ENV
+    $ virtualenv  --no-site-packages ~/ENV
 
 If you do not have root access you can install it from source as
 documented at 
@@ -628,3 +628,23 @@ specifing a specific server at startup called hpc::
     $ fab server.start:server=hpc
 
 
+ENVIRONMENT
+==========
+
+::
+
+    deactivate
+    cd
+    virtualenv --no-site-packages ENV
+
+open a new terminal 
+
+::
+
+    $ pip install numpy matplotlib fabric
+    $ git clone git@github.com:cloudmesh/cloudmesh.git
+    $ cd cloudmesh
+    $ fab -f install/fabfile.py deploy
+    $ fab build.install
+
+    

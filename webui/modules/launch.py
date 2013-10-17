@@ -7,8 +7,17 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.launcher.queue.tasks import task_launch
 from cloudmesh.launcher.cm_launcher_db import cm_launcher_db
 import cloudmesh
+from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
+    identity_changed, Permission, identity_loaded, RoleNeed, UserNeed
+
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
 
 launch_module = Blueprint('launch  _module', __name__)
+
+rain_permission = Permission(RoleNeed('rain'))
 
 #
 # ROUTE: launch
@@ -19,14 +28,16 @@ launch_module = Blueprint('launch  _module', __name__)
 
 @launch_module.route('/cm/launch/<host>/<recipie>')
 @login_required
+@rain_permission.require(http_exception=403)
 def launch_run ():
-    print "implement"
+    log.error ("not yet implemented")
     pass
 
 
 
 @launch_module.route('/cm/launch/launch_servers', methods=["POST"])
 @login_required
+@rain_permission.require(http_exception=403)
 def launch_servers():
 
 
@@ -58,31 +69,37 @@ def launch_servers():
 
 
 @launch_module.route('/cm/launch')
-
+@login_required
+@rain_permission.require(http_exception=403)
 def display_launch_table():
     launcher_config = ConfigDict(filename="~/.futuregrid/cloudmesh_launcher.yaml")
     launch_recipies = launcher_config.get("cloudmesh.launcher.recipies")
     columns = launcher_config.get("cloudmesh.launcher.columns")
-    return render_template('mesh_launch.html',
+    return render_template('mesh/mesh_launch.html',
                            recipies=launch_recipies,
                            columns=columns,
                            )
 
 @launch_module.route('/cm/launch/db_stats')
+@login_required
+@rain_permission.require(http_exception=403)
 def launch_status():
     db = cm_launcher_db()
     res = db.find()
-    print"000000000000000000000000000000000000000000000000000000000000"
     l = []
     for r in res:
         l.append(r)
     return str(l)
 
-@launch_module.route('/cm/db_reset')
+@launch_module.route('/cm/launch/db_reset')
+@login_required
+@rain_permission.require(http_exception=403)
 def launch_clear():
-    print "clearing db ----------------------------- "
     db = cm_launcher_db()
-    print db
-    print db.clear()
-    print "++++++++++++++++++++++++++++++++++++++++++"
+    log.info("DB: {0}".format(db))
+    db.clear()
+    log.info("DB after clear {0}".format(db))
+    #
+    # BUG: this return value does not look right
+    #
     return "jsdnklnkls"

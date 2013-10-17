@@ -1,0 +1,35 @@
+{% extends "layout/layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+
+<h1>Ping</h1>
+
+{% endblock %}
+
+{% block content %}
+
+  <table>
+      <th colspan="6"> Ping Test </th>
+	 </tr>
+  	 <tr>
+  	 	<td> Updated </td>
+  	 	<td colspan="5"> {{ updated }} </td>
+  	 </tr>
+
+  <tr>
+    {% for key in results[0] %}
+    	<th> {{ key }}  </th>
+    {% endfor %}
+  </tr>
+  {% for test in results %}
+    <tr>
+    {% for key in test %}
+    	<td> {{ test[key] }}  </td>
+	{% endfor %}
+  </tr>
+  {% endfor %}
+
+   </table>
+
+{% endblock %}

@@ -14,43 +14,47 @@ super_sidebar_pages = [
             ["Home", "/"],
             ["Status", "/status"],
             ["Profile", "/profile/"],
-            ["Keys", "/keys/"],
-        ],
-    ],
-    ["Inventory",
-        [
-            ["Overview", "/inventory/"],
-            ["Table", "/inventory/summary"],
-            ["Images", "/inventory/images"],
-            ["Rack Diagram", "/inventory/rack"],
-        ],
-    ],
-    ["Provision",
-        [
-            ["Policy", "/provision/policy"],
-            ["Overview", "/provision/summary/"],
-            ["Form", "/provision/"],
-            ["Workflow", "/provision/workflow"],
         ],
     ],
     ["Clouds",
         [
-            ["Register", "/mesh/register/clouds"],
             ["Refresh", "/cm/refresh"],
             ["VMs", "/mesh/servers"],
             ["Images", "/mesh/images"],
             ["Flavors", "/mesh/flavors/"],
-            ["Users", "/mesh/users/"],
         ],
     ],
-    ["HPC",
+    ["HPC Queues",
         [
-            ["Queues", "/mesh/qstat"],
-            ["Users", "/users/ldap"],
-            ["Admin", "/hpc"]
+            ["Jobs", "/mesh/qstat"],
+            ["Queueu Info", "/mesh/qinfo"],
+            ["Rack Diagram", "/inventory/rack"],
         ]
     ],
-    ["Launcher",
+
+    ["Admin",
+        [
+            ["Admin", "/admin"],
+            ["Users - LDAP", "/users/ldap"],
+            ["Users - Cloud", "/mesh/users/"],
+            ["Register - Cloud", "/mesh/register/clouds"],
+        ]
+    ],
+    ["Admin - Inventory",
+        [
+            ["Overview", "/inventory/"],
+            ["Table", "/inventory/summary"],
+            ["Images", "/inventory/images"],
+        ],
+    ],
+    ["Admin - Provision",
+        [
+            ["Policy", "/provision/policy"],
+            ["Overview", "/provision/summary/"],
+            ["Form", "/provision/"],
+        ],
+    ],
+    ["Admin - Launcher",
         [
             ["Launcher", "/cm/launch"],
             ["Register", "/cm/register"]
