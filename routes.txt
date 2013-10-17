@@ -20,17 +20,49 @@ a+ webui/modules/nose.py		:80:	@nose_module.route('/test/run/<test>')
 u+ webui/modules/rack.py		:51:	@rack_module.route('/inventory/rack')
 u+ webui/modules/rack.py		:61:	@rack_module.route('/inventory/rack/map', methods=['POST'])
 
-u? webui/modules/mesh_hpc.py	:28:	@mesh_hpc_module.route('/mesh/refresh/qstat')
-u? webui/modules/mesh_hpc.py	:29:	@mesh_hpc_module.route('/mesh/refresh/qstat/<host>')
-u? webui/modules/mesh_hpc.py	:63:	@mesh_hpc_module.route('/mesh/qstat/')
-u? webui/modules/mesh_hpc.py	:144:	@mesh_hpc_module.route('/mesh/refresh/qinfo')
-u? webui/modules/mesh_hpc.py	:145:	@mesh_hpc_module.route('/mesh/refresh/qinfo/<host>')
-u? webui/modules/mesh_hpc.py	:174:	@mesh_hpc_module.route('/mesh/qinfo/')
+Info commands  (prefix /cm/info?)
+=============
 
 + webui/modules/mesh.py		:69:	@mesh_module.route('/mesh/images/')
 + webui/modules/mesh.py		:168:	@mesh_module.route('/mesh/flavors/')
 + webui/modules/mesh.py		:230:	@mesh_module.route('/mesh/users/')
 + webui/modules/mesh.py		:278:	@mesh_module.route('/mesh/servers/')
+
+
+
+u? webui/modules/mesh_hpc.py	:28:	@mesh_hpc_module.route('/mesh/refresh/qstat')
+u? webui/modules/mesh_hpc.py	:29:	@mesh_hpc_module.route('/mesh/refresh/qstat/<host>')
+
+/cm/info/qstat?
+u? webui/modules/mesh_hpc.py	:63:	@mesh_hpc_module.route('/mesh/qstat/')
+
+
+
+
+u? webui/modules/mesh_hpc.py	:144:	@mesh_hpc_module.route('/mesh/refresh/qinfo')
+u? webui/modules/mesh_hpc.py	:145:	@mesh_hpc_module.route('/mesh/refresh/qinfo/<host>')
+
+/cm/info/qinfo?
+u? webui/modules/mesh_hpc.py	:174:	@mesh_hpc_module.route('/mesh/qinfo/')
+
+Cloud commands
+==============
+
+
+
+? webui/modules/cloud.py		:81:	@cloud_module.route('/cm/refresh/')
+? webui/modules/cloud.py		:82:	@cloud_module.route('/cm/refresh/<cloud>/')
+? webui/modules/cloud.py		:83:	@cloud_module.route('/cm/refresh/<cloud>/<service_type>')
+
+
+? webui/modules/cloud.py		:149:	@cloud_module.route('/cm/delete/<cloud>/<server>/')
+? webui/modules/cloud.py		:166:	@cloud_module.route('/cm/delete/<cloud>/')
+? webui/modules/cloud.py		:184:	@cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
+? webui/modules/cloud.py		:204:	@cloud_module.route('/cm/start/<cloud>/')
+? webui/modules/cloud.py		:258:	@cloud_module.route('/cm/login/<cloud>/<server>/')
+? webui/modules/cloud.py		:286:	@cloud_module.route('/cm/info/<cloud>/<server>/')
+
+
 
 
 u+ webui/server.py			:230:	@app.route('/test')
@@ -101,6 +133,7 @@ Moved to todo/modules/ufo.py:
 - webui/modules/cloud.py		:69:	@cloud_module.route('/load/')
 - webui/modules/mooc.py			:22:	@mooc_module.route('/mooc')
 ? webui/modules/cloud.py		:137:	@cloud_module.route('/cm/kill/')
+a? webui/modules/cloud.py		:110:	@cloud_module.route('/cm/filter/<cloud>/', methods=['GET', 'POST'])
 
 Moved to todo/modules/:
 
@@ -133,22 +166,9 @@ webui/modules/rack.py		:136:	@rack_module.route('/inventory/rack/old')
 TO CLASSIFY
 
 
-? webui/modules/cloud.py		:81:	@cloud_module.route('/cm/refresh/')
-? webui/modules/cloud.py		:82:	@cloud_module.route('/cm/refresh/<cloud>/')
-? webui/modules/cloud.py		:83:	@cloud_module.route('/cm/refresh/<cloud>/<service_type>')
 
 
-? webui/modules/cloud.py		:149:	@cloud_module.route('/cm/delete/<cloud>/<server>/')
-? webui/modules/cloud.py		:166:	@cloud_module.route('/cm/delete/<cloud>/')
-? webui/modules/cloud.py		:184:	@cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
-? webui/modules/cloud.py		:204:	@cloud_module.route('/cm/start/<cloud>/')
-? webui/modules/cloud.py		:258:	@cloud_module.route('/cm/login/<cloud>/<server>/')
-? webui/modules/cloud.py		:286:	@cloud_module.route('/cm/info/<cloud>/<server>/')
-
-
-
-? webui/modules/cloud.py		:110:	@cloud_module.route('/cm/filter/<cloud>/', methods=['GET', 'POST'])
-? webui/modules/mesh.py		:279:	@mesh_module.route('/mesh/servers/<filters>')
+a? webui/modules/mesh.py		:279:	@mesh_module.route('/mesh/servers/<filters>')
 
 
 ? webui/modules/metric.py	:17:	# @app.route('/metric/<s_date>/<e_date>/<user>/<cloud>/<host>/<period>/<metric>')
