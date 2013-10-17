@@ -8,7 +8,7 @@ from flask.ext.wtf import Form  # @UnresolvedImport
 from pprint import pprint
 from sh import pwd  # @UnresolvedImport
 from wtforms import SelectField
-
+from flask.ext.principal import Permission, RoleNeed
 
 from cloudmesh.util.logger import LOGGER
 
@@ -19,6 +19,8 @@ log = LOGGER(__file__)
 
 
 rack_module = Blueprint('rack_module', __name__)
+
+admin_permission = Permission(RoleNeed('admin'))
 
 #
 # ROUTE: rack
@@ -37,7 +39,7 @@ class RackForm(Form):
 
     service_list = [
         ('service', 'Service Map'),
-        ('temperature', 'Heat Map')
+        # ('temperature', 'Heat Map')
     ]
 
     def initForm(self):
