@@ -150,4 +150,4 @@ def clean():
 # For production server
 @task
 def wsgi():
-   local(uwsgi -s /tmp/cloudmesh.sock -M -p 2 -t 10 --chown-socket=cloudmesh:www-data --chdir=webui --module=server --callable=app)
+   local("uwsgi -s /tmp/cloudmesh.sock -M -p 2 -t 10 --chown-socket=cloudmesh:www-data --chdir=webui --module=server --callable=app")
