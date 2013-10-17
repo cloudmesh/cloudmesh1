@@ -5,6 +5,11 @@ import math
 from copy import deepcopy
 from cloudmesh.rack.base_cluster_map import BaseClusterMap
 
+
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 class ServiceClusterMap(BaseClusterMap):
 
     # maximum h, 240/360 = 2/3

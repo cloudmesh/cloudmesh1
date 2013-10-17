@@ -24,6 +24,10 @@ import matplotlib.patches as patches
 from pprint import pprint
 
 
+from cloudmesh.util.logger import LOGGER
+
+log = LOGGER(__file__)
+
 class BaseClusterMap:
     # default location of yaml configuration file
     default_home_yaml = "~/.futuregrid"
