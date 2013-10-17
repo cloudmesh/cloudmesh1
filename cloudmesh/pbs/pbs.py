@@ -100,7 +100,7 @@ class PBS:
                         d[queue]['state_count'][value[0]] = value[1]
 
                 if 'acl_hosts' in d[queue]:
-                    print d[queue]['acl_hosts']
+                    # print d[queue]['acl_hosts']
                     d[queue]['acl_hosts'] = d[queue]['acl_hosts'].split("+")
 
         self.pbs_qinfo_data = d
@@ -238,10 +238,10 @@ class PBS:
 
 
 
-        print "GFKHFJH ", x
+        # print "GFKHFJH ", x
         cnt = Counter(x)
 
-        print "COUNT",
+        # print "COUNT",
 
         return dict(cnt)
 
