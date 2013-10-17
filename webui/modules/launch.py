@@ -30,7 +30,7 @@ rain_permission = Permission(RoleNeed('rain'))
 @login_required
 @rain_permission.require(http_exception=403)
 def launch_run ():
-    print "implement"
+    log.error ("not yet implemented")
     pass
 
 
@@ -86,19 +86,20 @@ def display_launch_table():
 def launch_status():
     db = cm_launcher_db()
     res = db.find()
-    print"000000000000000000000000000000000000000000000000000000000000"
     l = []
     for r in res:
         l.append(r)
     return str(l)
 
-@launch_module.route('/cm/db_reset')
+@launch_module.route('/cm/launch/db_reset')
 @login_required
 @rain_permission.require(http_exception=403)
 def launch_clear():
-    print "clearing db ----------------------------- "
     db = cm_launcher_db()
-    print db
-    print db.clear()
-    print "++++++++++++++++++++++++++++++++++++++++++"
+    log.info("DB: {0}".format(db))
+    db.clear()
+    log.info("DB after clear {0}".format(db))
+    #
+    # BUG: this return value does not look right
+    #
     return "jsdnklnkls"

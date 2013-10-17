@@ -265,8 +265,11 @@ def page_not_found(error):
     return render_template('error.html',
                            error=error,
                            type="Authorization Denied",
-                           msg="You need to login first")
-
+                           msg="You are not authorized to access this page.\n"
+                               "This may happen if you have not logged in or \n"
+                               "If you are not allowed to access this page\n"
+                               "as you are not member of the proper role."
+                           )
 @app.errorhandler(401)
 def page_not_found(error):
     error = 'Access denied {0}'.format(401)

@@ -10,10 +10,15 @@ from cloudmesh.config.cm_config import get_mongo_db
 from cloudmesh.util.util import cond_decorator
 from flask.ext.login import login_required
 import cloudmesh
+from flask.ext.principal import Permission, RoleNeed
 
 from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
+
+
+admin_permission = Permission(RoleNeed('admin'))
+
 
 users_module = Blueprint('users_module', __name__)
 
@@ -24,6 +29,7 @@ users_module = Blueprint('users_module', __name__)
 
 @users_module.route('/users/ldap/')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_usres_ldap():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")

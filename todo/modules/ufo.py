@@ -27,3 +27,14 @@ def load():
     print "Loading the cloud status"
     # clouds.load()
     return redirect('/mesh/servers')
+
+
+# ============================================================
+# ROUTE: KILL
+# ============================================================
+@cloud_module.route('/cm/kill/')
+@login_required
+def kill_vms():
+    print "-> kill all"
+    r = cm("--set", "quiet", "kill", _tty_in=True)
+    return redirect('/mesh/servers')

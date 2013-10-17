@@ -15,14 +15,6 @@ from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
-try:
-    from sh import xterm
-except:
-    print "xterm not suppported"
-
-    # TODO: THERE SHOULD BE A VARIABLE SET HERE SO THAT THE ARROW
-    # START UP BUTTON CAN RETURN MEANINGFULL MESSAGE IF NOT SUPPORTED
-
 
 cloud_module = Blueprint('cloud_module', __name__)
 
@@ -107,15 +99,6 @@ def filter(cloud=None):
     return redirect('/mesh/servers')
 
 
-# ============================================================
-# ROUTE: KILL
-# ============================================================
-@cloud_module.route('/cm/kill/')
-@login_required
-def kill_vms():
-    print "-> kill all"
-    r = cm("--set", "quiet", "kill", _tty_in=True)
-    return redirect('/mesh/servers')
 
 # ============================================================
 # ROUTE: DELETE
@@ -125,7 +108,7 @@ def kill_vms():
 @cloud_module.route('/cm/delete/<cloud>/<server>/')
 @login_required
 def delete_vm(cloud=None, server=None):
-    print "-> delete", cloud, server
+    log.info ("-> delete {0} {1}".format(cloud, server))
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
     clouds.vm_delete(cloud, server)
@@ -145,7 +128,7 @@ def delete_vms(cloud=None):
 # donot do refresh before delete, this will cause all the vms to get deleted
     f_cloud = clouds.clouds[cloud]
     for id, server in f_cloud['servers'].iteritems():
-        print "-> delete", cloud, id
+        log.info("-> delete {0} {1}".format(cloud, id))
         clouds.delete(cloud, id)
     time.sleep(7)
     f_cloud['servers'] = {}
@@ -180,8 +163,7 @@ def assign_public_ip(cloud=None, server=None):
 @cloud_module.route('/cm/start/<cloud>/')
 @login_required
 def start_vm(cloud=None, server=None):
-    print "*********** STARTVM", cloud
-    print "-> start", cloud
+    log.info("-> start {0}".format(cloud))
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
     key = None
@@ -200,8 +182,8 @@ def start_vm(cloud=None, server=None):
     # in case of error, setting default flavor id
     if vm_flavor_id < 0:
         vm_flavor_id = 1
-    print "STARTING", config.prefix, config.index
-    print "FLAVOR", vm_flavor, vm_flavor_id
+    log.info("STARTING {0} {1}".format(config.prefix, config.index))
+    log.infp("FLAVOR {0} {1}".format(vm_flavor, vm_flavor_id))
     metadata = {'cm_owner': config.prefix}
     username = config.get('cloudmesh.hpc.username')
     try:
@@ -216,13 +198,17 @@ def start_vm(cloud=None, server=None):
         vm_image,
         keynamenew,
         meta=metadata)
-    print "P"*20
-    print result
-    # print "PPPPPPPPPPPP", result
+    log.info ("{0}".format(result))
     # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     config.incr()
     # config.write()
+
+    #
+    # BUG NOT SURE IF WE NEED THE SLEEP
+    #
+
     time.sleep(5)
+
     clouds.refresh(names=[cloud], types=["servers"])
     return redirect('/mesh/servers')
 
@@ -239,17 +225,21 @@ def vm_login(cloud=None, server=None):
 
     server = clouds.servers()[cloud][server]
 
+    #
+    # BUG MESSAGE IS NOT PROPAGATED
+    #
+
     if len(server['addresses'][server['addresses'].keys()[0]]) < 2:
-        mesage = 'Cannot Login Now, Public IP not assigned'
-        print message
+        message = 'Cannot Login Now, Public IP not assigned'
+        log.info ("{0}".format(message))
 
     else:
         message = 'Logged in Successfully'
         ip = server['addresses'][server['addresses'].keys()[0]][1]['addr']
-        # THIS IS A BUG AND MUST BE SET PER VM, E.G. sometimesvm type probably
-        # decides that?
-        # print "ssh", 'ubuntu@' + ip
-        # xterm('-e', 'ssh', 'ubuntu@' + ip, _bg=True)
+        #
+        # BUG: login must be based on os
+        # TODO: loginbug
+        #
         link = 'ubuntu@' + ip
         webbrowser.open("ssh://" + link)
 
@@ -257,7 +247,6 @@ def vm_login(cloud=None, server=None):
 # ============================================================
 # ROUTE: VM INFO
 # ============================================================
-
 
 @cloud_module.route('/cm/info/<cloud>/<server>/')
 @login_required
@@ -284,51 +273,3 @@ def vm_info(cloud=None, server=None):
                            cloudname=cloud,
                            table_printer=table_printer)
 
-# ============================================================
-# ROUTE: FLAVOR
-# ============================================================
-
-# @cloud_module.route('/flavors/<cloud>/' )
-
-
-@cloud_module.route('/flavors/', methods=['GET', 'POST'])
-@login_required
-def display_flavors(cloud=None):
-
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-
-    if request.method == 'POST':
-        for cloud in config.active():
-            config['cloudmesh']['clouds'][cloud]['default'][
-                'flavor'] = request.form[cloud]
-            config.write()
-
-    return render_template(
-        'flavor.html',
-        updated=time_now,
-        cloudmesh=clouds,
-        clouds=clouds.clouds,
-        config=config)
-
-
-# ============================================================
-# ROUTE: IMAGES
-# ============================================================
-# @cloud_module.route('/images/<cloud>/')
-@login_required
-@cloud_module.route('/images/', methods=['GET', 'POST'])
-def display_images():
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-
-    if request.method == 'POST':
-        for cloud in config.active():
-            config['cloudmesh']['clouds'][cloud][
-                'default']['image'] = request.form[cloud]
-            config.write()
-
-    return render_template(
-        'images.html',
-        updated=time_now,
-        clouds=clouds.clouds,
-        cloudmesh=clouds,
-        config=config)
