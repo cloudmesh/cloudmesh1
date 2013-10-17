@@ -12,19 +12,18 @@ celery = Celery('cloudmesh.rack.tasks', backend='amqp', broker='amqp://guest@loc
 def task_sensors(dict_idip):
     dict_data = {}
     for cluster in dict_idip.keys():
-        print "fetch ... ", cluster
         dict_data[cluster] = {}
         for uid in dict_idip[cluster].keys():
             ip = cluster[uid]
             dict_data[cluster][uid]["ip"] = ip
             # fetch uid-ip server's temperature
-            report = ssh("-o ConnectTimeout=1", "-o ConnectionAttempts=1", 
-                         "user", ip, 
+            report = ssh("-o ConnectTimeout=1", "-o ConnectionAttempts=1",
+                         "user", ip,
                          "sensors"
                          )
             temp = parseCpuTemperature(report)
             dict_data[cluster][uid]["temp"] = temp[0]
-            
+
     # write current temperature data to mongo db
     # ....
 
@@ -40,13 +39,12 @@ def task_sensors(dict_idip):
         for line in cpu_lines:
             # position of degree sign
             pos_degree = line.find(u"\xb0")
-            # position of + 
+            # position of +
             pos_plus = line.find(u"+")
-            tnum = float(line[pos_plus+1:pos_degree])
-            tunit = line[pos_degree+1:pos_degree+2]
+            tnum = float(line[pos_plus + 1:pos_degree])
+            tunit = line[pos_degree + 1:pos_degree + 2]
             if tnum > tmax:
                 tmax = tnum
-        
+
         return [tmax, tunit]
-        
-    
+

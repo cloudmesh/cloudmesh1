@@ -104,7 +104,6 @@ class HeatClusterMap(BaseClusterMap):
                                  "round": temp_round_precise,
                                  "range": marker_max - marker_min
                                 })
-        print "[Debug] color bar marker, ", self.dict_marker
 
 
 

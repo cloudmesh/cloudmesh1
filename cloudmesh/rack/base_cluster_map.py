@@ -127,7 +127,7 @@ class BaseClusterMap:
         abs_dir_diag = cm_path_expand(dir_diag)
         abs_dir_output = cm_path_expand(dir_output)
 
-        print "dir output,,,,,", abs_dir_output
+        log.info("dir output {0}".format(abs_dir_output))
         # make sure the output directory exist
         mkdir("-p", abs_dir_output)
 
@@ -187,13 +187,8 @@ class BaseClusterMap:
     def readClustersConfig(self, dir_yaml):
         clusters_config = ConfigDict(filename=dir_yaml + "/" + self.default_clusters_yaml)
         self.dict_clusters_config = clusters_config.get("cloudmesh.inventory")
-        print "=" * 30
-        pprint(self.dict_clusters_config)
-        print "-" * 30
         # get all possible cluster names from dict_clusters_config
         self.cluster_name_list += self.dict_clusters_config.keys()
-
-        print "clusters name list: ", self.cluster_name_list
 
 
     # get the total racks of cluster
@@ -205,11 +200,9 @@ class BaseClusterMap:
     def readRackConfig(self, name, dir_yaml, dir_diag):
         rack_config = ConfigDict(filename=dir_yaml + "/" + self.default_rack_yaml)
         self.dict_rack_config = rack_config.get("cloudmesh.rack")
-        print self.dict_rack_config
 
         lname = name.lower()
         self.cluster_name = lname if lname in self.cluster_name_list else self.cluster_name_unknown
-        print "rack name is: ", self.cluster_name
 
         # diag filename
         self.filename_diag = dir_diag + "/" + self.dict_rack_config["cluster"][self.cluster_name]["diag"]
@@ -226,8 +219,6 @@ class BaseClusterMap:
             for rack in all_set:
                 self.rack_count += self.dict_rack_config["cluster"][rack]["count"]
 
-        print "total rack count is: {0} = {1}".format(name, self.rack_count)
-
 
     # set the type of rack image
     def setRackImageType(self, subclass_type, img_type, dir_output):
@@ -240,7 +231,7 @@ class BaseClusterMap:
         if ltype in self.image_type_list:
             self.image_type = ltype
         else:
-            print "[Warn]BaseClusterMap: Rack image type {0} is NOT supported currently!\n Use {1} to replace.".format(img_type, self.image_type_list[0])
+            log.erro("Rack image type {0} is NOT supported currently! Use {1} to replace.".format(img_type, self.image_type_list[0]))
             self.image_type = self.image_type_list[0]
 
         # filename, diag filename ends with ".diag"
@@ -252,8 +243,6 @@ class BaseClusterMap:
         self.filename_rack_legend = dir_output + "/" + self.only_filename_legend
 
 
-        print "rack image filename is: ", self.filename_rack_image
-
 
     # initialize dict servers
     # formation, {"i001":None, "i002":None, ...}
@@ -262,10 +251,8 @@ class BaseClusterMap:
             return
 
         servers_range_list = []
-        print "rack name is: ", self.cluster_name
         if self.cluster_name == self.cluster_name_all:
             for name in self.dict_clusters_config.keys():
-                print "clusters config name.id: ", self.dict_clusters_config[name]["id"]
                 servers_range_list.append(self.dict_clusters_config[name]["id"])
         else:
             servers_range_list.append(self.dict_clusters_config[self.cluster_name]["id"])
@@ -309,7 +296,7 @@ class BaseClusterMap:
 
     def getLegendFilename(self):
         return self.only_filename_legend
-    
+
     # get 2-D size of image file
     # return {"width": width, "height", height}
     def getImageSize(self):
@@ -318,7 +305,7 @@ class BaseClusterMap:
                    "png": self.getPNGSize,
                    }
         return options[self.image_type]()
-    
+
     # get 2-D size of svg file
     def getSVGSize(self):
         # parse svg file to get width and height
@@ -334,7 +321,7 @@ class BaseClusterMap:
                 break
         fsvg.close()
         return dict_result
-    
+
     # get 2-D size of png file
     def getPNGSize(self):
         dict_result = {"width": 0, "height": 0}
@@ -343,7 +330,7 @@ class BaseClusterMap:
         dict_result["width"] = w
         dict_result["height"] = h
         return dict_result
-    
+
 
     # render dict_servers with correct colors
     # param: mapping is a dict provided by function getMappingDict
@@ -508,5 +495,4 @@ class BaseClusterMap:
 
 if __name__ == "__main__":
     mytest = BaseClusterMap("all")
-    print "=" * 60
     # print mytest.dict_servers
