@@ -1,9 +1,10 @@
 from flask import Blueprint
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, g
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mesh import cloudmesh
 from cloudmesh.util.util import table_printer
 from cloudmesh.cm_mongo import cm_mongo
+from cloudmesh.user.cm_user import cm_user
 from datetime import datetime
 import time
 from cloudmesh.util.util import cond_decorator
@@ -40,6 +41,10 @@ for name in clouds.active():
         config.create_filter(name, clouds.states(name))
         config.write()
 """
+
+def getCurrentUserinfo():
+    userinfo = cm_user().info(g.user.id)
+    return userinfo
 
 # ============================================================
 # ROUTE: REFRESH
@@ -142,7 +147,14 @@ def start_vm(cloud=None, server=None):
 
     if 'keys' in config['cloudmesh']:
         key = config.get('cloudmesh.keys.default')
-
+    userinfo = getCurrentUserinfo()
+    
+    #print userinfo
+    if "key" in userinfo["defaults"]:
+        key = userinfo["defaults"]["key"]
+    elif len(userinfo["keys"]["keylist"].keys()) > 0:
+        key = userinfo["keys"]["keylist"].keys()[0]
+    #print key
     # THIS IS A BUG
     # vm_flavor = clouds.default(cloud)['flavor']
     # vm_image = clouds.default(cloud)['image']
@@ -150,6 +162,9 @@ def start_vm(cloud=None, server=None):
     # before the info could be maintained in mongo, using the config file
     vm_flavor = config.cloud(cloud)["default"]["flavor"]
     vm_image = config.cloud(cloud)["default"]["image"]
+    # getting defulat flavor and image for the specified cloud out of mongo
+    # TODO
+    # 
     vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
     # in case of error, setting default flavor id
     if vm_flavor_id < 0:
