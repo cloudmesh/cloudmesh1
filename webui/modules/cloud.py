@@ -150,6 +150,7 @@ def start_vm(cloud=None, server=None):
     # before the info could be maintained in mongo, using the config file
     vm_flavor = config.cloud(cloud)["default"]["flavor"]
     vm_image = config.cloud(cloud)["default"]["image"]
+
     vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
     # in case of error, setting default flavor id
     if vm_flavor_id < 0:
