@@ -21,8 +21,8 @@ workers = celery_config.get("cloudmesh.workers")
 """
 for worker in workers:
     workers[worker] = {"app":"cloudmesh.launcher{0}.queue", 
-                    "hostlist":hostlist.expand_hostlist("l[1-{0}]".format(workers[worker])), 
-                    "queue": worker}
+                       "hostlist":hostlist.expand_hostlist("l[1-{0}]".format(workers[worker])), 
+                      "queue": worker}
 """
 # no_workers_launcher =
 for worker in workers:
