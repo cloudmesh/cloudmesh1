@@ -39,7 +39,8 @@ import platform
 
 from cloudmesh.util.util import path_expand
 
-__all__ = ['start', 'stop', 'kill', 'view', 'clean', 'cleanmongo', 'agent', 'quick']
+__all__ = ['start', 'stop', 'kill', 'view', 'clean', 'cleanmongo',
+           'agent', 'quick', 'wsgi']
 
 #
 # SETTING THE BROWSER BASED ON PLATFORM
