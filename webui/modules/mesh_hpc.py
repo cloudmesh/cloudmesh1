@@ -31,7 +31,9 @@ mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 def display_mongo_qstat_refresh(host=None):
     celery_config = ConfigDict(filename="~/.futuregrid/cloudmesh_celery.yaml")
     log.info ("qstat refresh request {0}".format(host))
-    timeout = 15;
+
+    # timeout = 15;
+
     config = cm_config()
     user = config["cloudmesh"]["hpc"]["username"]
     pbs = pbs_mongo()
@@ -43,15 +45,22 @@ def display_mongo_qstat_refresh(host=None):
     else:
         hosts = [host]
     error = ""
-    queue = celery_config = celery_config.get("cloudmesh.workers.qstat.queue")
-    res = tasks.refresh_qstat.apply_async(queue=queue, priority=0, args=[hosts])
+
+    # queue = celery_config = celery_config.get("cloudmesh.workers.qstat.queue")
+    # res = tasks.refresh_qstat.apply_async(queue=queue, priority=0, args=[hosts])
+
+
+
     try:
-        error = res.get(timeout=timeout)
+        for host in hosts:
+            res = pbs.refresh_qstat(host)
+
+    #    error = res.get(timeout=timeout)
     except :
-            return render_template('error.html',
-                           error="Time out",
-                           type="Some error in qstat",
-                           msg="")
+           return render_template('error.html',
+                          error="Time out",
+                          type="Some error in qstat",
+                          msg="")
     if error != "":
         return render_template('error.html',
                                error=error,
