@@ -106,8 +106,6 @@ def display_rack_map():
         myfetch = FetchClusterInfo(user, "india.futuregrid.org")
         flag_filter = None if rack == "all" else rack
         dict_data = myfetch.fetch_service_type(flag_filter)
-        print "=" * 30
-        pprint(dict_data)
     # update data
     map_class.update(dict_data)
     # plot map
