@@ -14,11 +14,7 @@ from flask.ext.login import LoginManager, login_user, logout_user, \
 from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
     identity_changed, Permission, identity_loaded, RoleNeed, UserNeed
 from flask.ext.wtf import Form, TextField, PasswordField, Required, Email
-
-with_flatpages = False
-
-if with_flatpages:
-    from flask_flatpages import FlatPages
+from flask.ext.principal import Permission, RoleNeed
 
 from flask.ext.rstpages import RSTPages
 from pprint import pprint
@@ -34,6 +30,10 @@ import types
 import webbrowser
 
 
+
+admin_permission = Permission(RoleNeed('admin'))
+
+
 # from flask.ext.autoindex import AutoIndex
 
 sys.path.insert(0, '.')
@@ -46,7 +46,6 @@ sys.path.insert(0, '..')
 
 all_modules = ['menu',
                'pbs',
-               'flatpages',
                'launch',
                'nose',
                'inventory',
@@ -86,7 +85,8 @@ if with_rack:
 else:
     log.info("The Rack diagrams are not enabled")
 
-exclude_modules = ['flatpages']
+# exclude_modules = ['flatpages']
+exclude_modules = []
 
 modules = [m for m in all_modules if m not in exclude_modules]
 
@@ -125,10 +125,6 @@ config = cm_config_server()
 SECRET_KEY = config.get('cloudmesh.server.webui.secret')
 DEBUG = debug
 
-if with_flatpages:
-    FLATPAGES_AUTO_RELOAD = debug
-    FLATPAGES_EXTENSION = '.md'
-
 
 # ============================================================
 # STARTING THE FLASK APP
@@ -138,10 +134,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.debug = debug
 
-if with_flatpages:
-    pages = FlatPages(app)
-else:
-    pages = RSTPages(app)
+pages = RSTPages(app)
 
 # dynamic app loading from defined modules
 # app.register_blueprint(keys_module, url_prefix='',)
@@ -195,30 +188,6 @@ version = pkg_resources.get_distribution("cloudmesh").version
 @app.context_processor
 def inject_version():
     return dict(version=version)
-
-# ============================================================
-# ROUTE: sitemap
-# ============================================================
-
-"""
-@app.route("/site-map/")
-def site_map():
-    links = []
-    for rule in app.url_map.iter_rules():
-        print"PPP>",  rule, rule.methods, rule.defaults, rule.endpoint, rule.arguments
-        # Filter out rules we can't navigate to in a browser
-        # and rules that require parameters
-        try:
-            if "GET" in rule.methods and len(rule.defaults) >= len(rule.arguments):
-                url = url_for(rule.endpoint)
-                links.append((url, rule.endpoint))
-                print "Rule added", url, links[url]
-        except:
-            print "Rule not activated"
-    # links is now a list of url, endpoint tuples
-"""
-
-
 
 
 # ============================================================
