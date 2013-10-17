@@ -1,22 +1,22 @@
-from flask import Blueprint
-from flask import render_template, request, redirect
-from cloudmesh.config.cm_config import cm_config
-from cloudmesh.cm_mongo import cm_mongo
-from datetime import datetime
-from cloudmesh.util.util import address_string
-from pprint import pprint
 from ast import literal_eval
-from cloudmesh.pbs.pbs_mongo import pbs_mongo
-from cloudmesh.util.util import cond_decorator
-from flask.ext.login import login_required
-import cloudmesh
-from cloudmesh.pbs import tasks
+from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.ConfigDict import ConfigDict
-
-
+from cloudmesh.config.cm_config import cm_config
+from cloudmesh.pbs import tasks
+from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.util import address_string, cond_decorator
+from datetime import datetime
+from flask import Blueprint, render_template, request, redirect
+from flask.ext.login import login_required
+from pprint import pprint
+import cloudmesh
+
+
 
 log = LOGGER(__file__)
+
+admin_permission = Permission(RoleNeed('admin'))
 
 mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 

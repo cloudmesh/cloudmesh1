@@ -10,6 +10,7 @@ from flask.ext.login import login_required
 from pprint import pprint
 import cloudmesh
 from cloudmesh.user.cm_user import cm_user
+from flask.ext.principal import Permission, RoleNeed
 
 log = LOGGER(__file__)
 
@@ -22,6 +23,7 @@ mesh_module = Blueprint('mesh_module', __name__)
 
 @mesh_module.route('/mesh/register/clouds', methods=['GET', 'POST'])
 @login_required
+@admin_permission.require(http_exception=403)
 def mesh_register_clouds():
 
     error = None
@@ -71,7 +73,7 @@ def mesh_register_clouds():
                            cloudnames=config.cloudnames(),
                            error=error)
 
-@mesh_module.route('/mesh/images/', methods=['GET','POST'])
+@mesh_module.route('/mesh/images/', methods=['GET', 'POST'])
 @login_required
 def mongo_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -83,7 +85,7 @@ def mongo_images():
     # c.refresh(types=["images"])
     clouds = c.images()
 
-    #getting user info
+    # getting user info
     userdata = g.user
     username = userdata.id
     user_obj = cm_user()
@@ -167,14 +169,14 @@ def mongo_images():
         user.set_defaults(username, {})
     if 'images' not in user['defaults']:
         user['defaults']['images'] = {}
-    
+
     if request.method == 'POST':
         print "REQUEST"
         cloud = request.form['cloud']
         default_image = request.form['default_image']
-        print cloud, "----------------------------->",default_image
+        print cloud, "----------------------------->", default_image
         user['defaults']['images'][cloud] = default_image
-        #if 'default_flavor' in request.form:
+        # if 'default_flavor' in request.form:
          #   user['defaults']['flavor'] = request.form['default_flavor']
         user_obj.set_defaults(username, user['defaults'])
 
@@ -184,7 +186,7 @@ def mongo_images():
                            cloud_attributes=attributes,
                            updated=time_now,
                            clouds=clouds,
-                           user = user,
+                           user=user,
                            config=config)
 
 # ============================================================
@@ -203,7 +205,7 @@ def mongo_flavors():
     # c.refresh(types=["flavors"])
     clouds = c.flavors()
 
-    #getting user info
+    # getting user info
     userdata = g.user
     username = userdata.id
     user_obj = cm_user()
@@ -243,19 +245,19 @@ def mongo_flavors():
         user.set_defaults(username, {})
     if 'flavors' not in user['defaults']:
         user['defaults']['flavors'] = {}
-        
-    
+
+
     if request.method == 'POST':
         print "REQUEST"
         cloud = request.form['cloud']
         default_flavor = request.form['default_flavor']
-        print request.form['cloud'], "----------------------------->",request.form['default_flavor']
+        print request.form['cloud'], "----------------------------->", request.form['default_flavor']
         user['defaults']['flavors'][cloud] = default_flavor
-        #if 'default_flavor' in request.form:
+        # if 'default_flavor' in request.form:
          #   user['defaults']['flavor'] = request.form['default_flavor']
         user_obj.set_defaults(username, user['defaults'])
 
-    
+
     os_attributes = [
                      'id',
                      'name',
@@ -270,7 +272,7 @@ def mongo_flavors():
                            attributes=os_attributes,
                            updated=time_now,
                            clouds=clouds,
-                           user = user,
+                           user=user,
                            config=config)
 
 # ============================================================
@@ -279,6 +281,7 @@ def mongo_flavors():
 
 @mesh_module.route('/mesh/users/')
 @login_required
+@admin_permission.require(http_exception=403)
 def mongo_users():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
@@ -329,6 +332,59 @@ def mongo_users():
 @mesh_module.route('/mesh/servers/<filters>')
 @login_required
 def mongo_table(filters=None):
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    # filter()
+    config = cm_config()
+
+    c = cm_mongo()
+    c.activate()
+    # c.refresh(types=["servers"])
+    clouds = c.servers()
+
+    """
+    for cloud in clouds:
+        print cloud
+        for server in clouds[cloud]:
+            print server
+            for attribute in clouds[cloud][server]:
+                print attribute, clouds[cloud][server][attribute]
+    """
+    os_attributes = ['name',
+                     'status',
+                     'addresses',
+                     'flavor',
+                     'id',
+                     'user_id',
+                     'metadata',
+                     'key_name',
+                     'created']
+
+    # c.aggregate needs to be defined
+    # def count_status(cloudname):
+    #    result = c.aggregate( [ {$match: {"cm_kind":"servers","cm_cloud":cloudname}},
+    #                                     {$group: { _id: "$status", count: { $sum: 1}}}
+    #                          ])
+
+    cloud_filters = None
+    filtered_clouds = clouds
+
+    return render_template('mesh/cloud/mesh_servers.html',
+                           address_string=address_string,
+                           attributes=os_attributes,
+                           updated=time_now,
+                           clouds=filtered_clouds,
+                           config=config,
+                           filters=cloud_filters)
+
+
+# ============================================================
+# ROUTE: mongo/servers/<filters>
+# ============================================================
+
+@mesh_module.route('/mesh/servers/<filters>')
+@login_required
+@admin_permission.require(http_exception=403)
+def mongo_server_table_filter(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
