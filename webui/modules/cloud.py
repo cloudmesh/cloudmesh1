@@ -255,7 +255,7 @@ def vm_info(cloud=None, server=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # print clouds.servers()[cloud]
 
-    # a trick to deal with different type of server_id
+    # a trick to deal with diffe1rent type of server_id
     # (string in FG; or int in e.g. hp_cloud)
     try:
         if "%s" % int(server) == server:
