@@ -16,40 +16,45 @@ super_sidebar_pages = [
             ["Profile", "/profile/"],
         ],
     ],
-    ["Inventory",
+    ["Clouds",
+        [
+            ["Refresh", "/cm/refresh"],
+            ["VMs", "/mesh/servers"],
+            ["Images", "/mesh/images"],
+            ["Flavors", "/mesh/flavors/"],
+        ],
+    ],
+    ["HPC Queues",
+        [
+            ["Jobs", "/mesh/qstat"],
+            ["Queueu Info", "/mesh/qinfo"],
+            ["Rack Diagram", "/inventory/rack"],
+        ]
+    ],
+
+    ["Admin",
+        [
+            ["Admin", "/admin"],
+            ["Users - LDAP", "/users/ldap"],
+            ["Users - Cloud", "/mesh/users/"],
+            ["Register - Cloud", "/mesh/register/clouds"],
+        ]
+    ],
+    ["Admin - Inventory",
         [
             ["Overview", "/inventory/"],
             ["Table", "/inventory/summary"],
             ["Images", "/inventory/images"],
-            ["Rack Diagram", "/inventory/rack"],
         ],
     ],
-    ["Provision",
+    ["Admin - Provision",
         [
             ["Policy", "/provision/policy"],
             ["Overview", "/provision/summary/"],
             ["Form", "/provision/"],
         ],
     ],
-    ["Clouds",
-        [
-            ["Register", "/mesh/register/clouds"],
-            ["Refresh", "/cm/refresh"],
-            ["VMs", "/mesh/servers"],
-            ["Images", "/mesh/images"],
-            ["Flavors", "/mesh/flavors/"],
-            ["Users", "/mesh/users/"],
-        ],
-    ],
-    ["HPC",
-        [
-            ["Queues", "/mesh/qstat"],
-            ["Q Info", "/mesh/qinfo"],
-            ["Users", "/users/ldap"],
-            ["Admin", "/hpc"]
-        ]
-    ],
-    ["Launcher",
+    ["Admin - Launcher",
         [
             ["Launcher", "/cm/launch"],
             ["Register", "/cm/register"]
