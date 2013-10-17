@@ -9,6 +9,8 @@ from sh import ssh, ssh
 from xml.dom import minidom
 import yaml
 import sys
+import re
+import csv
 
 class PBS:
 
@@ -17,6 +19,7 @@ class PBS:
     pbs_qstat_data = None
     pbs_nodes_data = None
     pbs_qinfo_data = None
+    pbs_qinfo_default_data = None
 
     cluster_queues = None
 
@@ -59,11 +62,67 @@ class PBS:
         """
         self.cluster_queues = cluster_queues
 
+    def qinfo_user(self, refresh=True):
+        """Return the number of user from qstat
+        
+            example line is:
+            873664.i136 ...549.sh xcguser  0   Q long
+            $3 indicates an user id
+        """
+        if self.pbs_qinfo_default_data is None or refresh:
+            try:
+                result = ssh("{0}@{1}".format(self.user, self.host), "qstat")
+            except:
+                raise RuntimeError("can not execute pbs qstat via ssh")
+
+            # sanitize block
+            data = self.convert_into_json(result)
+            merged_data = self.merge_queues(self.cluster_queues, data)
+            self.pbs_qinfo_default_data = merged_data
+        else:
+            merged_data = self.pbs_qinfo_default_data
+
+        return merged_data
+
+    def merge_queues(self, machines, data):
+        res = {}
+        for row in data:
+            if not machines:
+                try:
+                    res[self.host].append(row)
+                except:
+                    res[self.host] = [row]
+            else:
+                for machine in machines:
+                    queues = machines[machine]
+                    if row['Use'] in queues:
+                        try:
+                            res[machine].append(row)
+                        except:
+                            res[machine] = [row]
+        return res
+
+    def convert_into_json(self, qstat):
+
+            list_qstat = qstat.split("\n")
+            try:
+                # delete a delimiter line between a header and contents looks
+                # like '-------- --- ---'
+                del(list_qstat[1])
+            except:
+                pass
+            pattern = re.compile(r'\s+')
+            tmp = []
+            for row in list_qstat:
+                tmp.append(re.sub(pattern, ',', row))
+
+            res = csv.DictReader(tmp, skipinitialspace=True)
+            return res
 
     def qinfo(self, refresh=True):
         """returns qstat -Q -f in dict format"""
 
-        if self.pbs_qstat_data is None or refresh:
+        if self.pbs_qinfo_data is None or refresh:
             try:
                 result = ssh("{0}@{1}".format(self.user, self.host), "qstat -Q -f")
             except:
