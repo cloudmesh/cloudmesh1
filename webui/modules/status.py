@@ -49,9 +49,7 @@ def display_status():
 
     machines = services.keys()
 
-    print "FFF", machines
-
-
+    # print "FFF", machines
 
     #
     # collecting all atttributes
@@ -63,7 +61,7 @@ def display_status():
         print "P", attributes
         all_attributes.update(attributes)
 
-        print "XXX", all_attributes
+        # print "XXX", all_attributes
 
     spider_services = {'machines' : machines,
                        'categories' : list(all_attributes),
@@ -84,7 +82,7 @@ def display_status():
             i = i + 1
         spider_services['data'][machine] = ser
 
-    print "SSS", spider_services
+    # print "SSS", spider_services
 
     # Users and Jobs
     total_jobs = {}
