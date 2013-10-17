@@ -6,13 +6,14 @@ from flask.ext.login import login_required
 
 inventory_module = Blueprint('inventory_module', __name__)
 
-from cloudmesh.old_inventory.inventory import Inventory as oldInventory
+
 from cloudmesh.inventory import Inventory
 
 from cloudmesh.util.util import table_printer
 from cloudmesh.util.util import cond_decorator
-import cloudmesh
 from cloudmesh.config.cm_config import cm_config_server
+
+from flask.ext.principal import Permission, RoleNeed
 
 
 from cloudmesh.util.logger import LOGGER
@@ -21,18 +22,20 @@ from pprint import pprint
 log = LOGGER(__file__)
 
 
+admin_permission = Permission(RoleNeed('admin'))
 
-inventory = oldInventory("nosetest")
+
 import hostlist
 
-n_inventory = Inventory()
-n_inventory.clear()
-n_inventory.generate()
+inventory = Inventory()
+# inventory.clear()
+# inventory.generate()
 
 
 
 @inventory_module.route('/inventory/')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_inventory():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
@@ -46,6 +49,7 @@ def display_inventory():
 
 @inventory_module.route('/inventory/summary/')
 @login_required
+@admin_permission.require(http_exception=403)
 def old_display_summary():
 
     # clusters = ["bravo", "india", "delta", "echo", "sierra"]
@@ -54,7 +58,7 @@ def old_display_summary():
     inv = {}
 
     for cluster in clusters:
-        inv[cluster] = n_inventory.hostlist(cluster)
+        inv[cluster] = inventory.hostlist(cluster)
 
     parameters = {'columns': 12}
 
@@ -74,12 +78,12 @@ def old_display_summary():
 
 @inventory_module.route('/inventory/cluster/<cluster>/<name>')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_named_resource(cluster, name):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # inventory.refresh()
-    print cluster
-    clusters = n_inventory.hostlist(cluster)
-    server = n_inventory.host(name, auth=False)
+    clusters = inventory.hostlist(cluster)
+    server = inventory.host(name, auth=False)
 
     return render_template('mesh/inventory/mesh_inventory_cluster_server.html',
                            updated=time_now,
@@ -90,10 +94,11 @@ def display_named_resource(cluster, name):
 
 @inventory_module.route('/inventory/cluster/<cluster>/')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_cluster(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # inventory.refresh()
-    servers = n_inventory.hostlist(cluster)
+    servers = inventory.hostlist(cluster)
 
     return render_template('mesh/inventory/mesh_inventory_cluster.html',
                            updated=time_now,
@@ -104,6 +109,7 @@ def display_cluster(cluster):
 
 @inventory_module.route('/inventory/cluster-user')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_cluster_for_user():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # inventory.refresh()
@@ -113,7 +119,7 @@ def display_cluster_for_user():
     except:
         return render_template('error.html', error="Could not load the user details")
     cluster_data = get_servers_for_clusters(host_lists)
-    # servers = n_inventory.hostlist(cluster)
+    # servers = inventory.hostlist(cluster)
     return render_template('mesh/inventory/mesh_inventory_cluster_limited.html',
                             updated=time_now,
                             cluster_data=cluster_data,
@@ -121,6 +127,7 @@ def display_cluster_for_user():
 
 @inventory_module.route('/inventory/cluster-proj')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_cluster_for_proj():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # inventory.refresh()
@@ -131,7 +138,7 @@ def display_cluster_for_proj():
         return render_template('error.html', error="Could not load the project details")
     cluster_data = get_servers_for_clusters(host_lists)
 
-    # servers = n_inventory.hostlist(cluster)
+    # servers = inventory.hostlist(cluster)
     return render_template('mesh/inventory/mesh_inventory_cluster_limited.html',
                             updated=time_now,
                             cluster_data=cluster_data,
@@ -148,17 +155,16 @@ def get_proj_host_list(proj):
     return host_lists
 
 def get_servers_for_clusters(host_lists):
-    print "sdbnafjkfsdlfjdklgjdfigjfiofjasdiofjsdiogjfiofgjsdiofsdiafnsdifhsdifjsdiofjsaofjsdiofjsdiofjsiogjsiofjnasdiofjhsiof"
+    log.info("get server fo closyer")
     cluster_dict = {"i":"india", "s":"sierra", "b":"bravo", "e":"echo", "d":"delta"}  # move to config at some point
     return_dict = {}
-    # print hostlist.expand_hostlist()
+
     for h in host_lists:
-        print h
         allowed_servers = hostlist.expand_hostlist(h)
         index = h.find("[")
         key = h[0:index]
         cluster = cluster_dict[key]
-        cluster_servers = n_inventory.hostlist(cluster)
+        cluster_servers = inventory.hostlist(cluster)
         l = list(set(cluster_servers) & set(allowed_servers))
         if cluster in return_dict:
             return_dict[cluster].extend(l)
@@ -168,13 +174,14 @@ def get_servers_for_clusters(host_lists):
 
 @inventory_module.route('/inventory/cluster/table/<cluster>/')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_cluster_table(cluster):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # inventory.refresh()
 
-    servers = n_inventory.hostlist(cluster)
+    servers = inventory.hostlist(cluster)
 
-    cluster_obj = n_inventory.get("cluster", 'cm_id', cluster)
+    cluster_obj = inventory.get("cluster", 'cm_id', cluster)
     n = len(servers)
     parameters = {
         "columns": 10,
@@ -192,26 +199,23 @@ def display_cluster_table(cluster):
 
 @inventory_module.route('/inventory/images/')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_inventory_images():
 
-    images = [i for i in n_inventory.find({'cm_key' : 'bootspec'})]
-
-    print ">>>>>>>>>>>>>>>"
-    pprint(images)
-    print ">>>>>>>>>>>>>>>"
+    images = [i for i in inventory.find({'cm_key' : 'bootspec'})]
 
     return render_template('inventory/images.html',
                            images=images,
-                           inventory=n_inventory)
+                           inventory=inventory)
 
 
 @inventory_module.route('/inventory/image/<name>/')
 @login_required
+@admin_permission.require(http_exception=403)
 def display_inventory_image(name):
-    print "PRINT IMAGE", name
     inventory.refresh()
     if name is not None:
-        image = n_inventory.get('images', name)
+        image = inventory.get('images', name)
     return render_template('inventory/image.html',
                            image=image)
 
@@ -223,21 +227,23 @@ def display_inventory_image(name):
 
 @inventory_module.route('/inventory/info/server/<server>/')
 @login_required
+@admin_permission.require(http_exception=403)
 def server_info(server):
 
-    server = n_inventory.find("server", server)
+    server = inventory.find("server", server)
     return render_template('info_server.html',
                            server=server,
-                           inventory=n_inventory)
+                           inventory=inventory)
 
 
 @inventory_module.route('/inventory/set/service/', methods=['POST'])
 @login_required
+@admin_permission.require(http_exception=403)
 def set_service():
     server_name = request.form['server']
     service_name = request.form['provisioned']
 
-    server = n_inventory.get("server", server_name)
+    server = inventory.get("server", server_name)
     server.provisioned = service_name
     server.save(cascade=True)
     # provisioner.provision([server], service)
@@ -246,13 +252,14 @@ def set_service():
 
 @inventory_module.route('/inventory/set/attribute/', methods=['POST'])
 @login_required
+@admin_permission.require(http_exception=403)
 def set_attribute():
     kind = request.form['kind']
     name = request.form['name']
     attribute = request.form['attribute']
     value = request.form['value']
 
-    s = n_inventory.get(kind, name)
+    s = inventory.get(kind, name)
     s[attribute] = value
     s.save()
     return display_inventory()
@@ -260,8 +267,9 @@ def set_attribute():
 
 @inventory_module.route('/inventory/get/<kind>/<name>/<attribute>')
 @login_required
+@admin_permission.require(http_exception=403)
 def get_attribute(kind, name, attribute):
-    s = n_inventory.get(kind, name)
+    s = inventory.get(kind, name)
     return s[attribute]
 
 
