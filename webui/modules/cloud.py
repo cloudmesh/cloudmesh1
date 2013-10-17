@@ -21,8 +21,8 @@ log = LOGGER(__file__)
 cloud_module = Blueprint('cloud_module', __name__)
 
 config = cm_config()
-#prefix = config.prefix
-#index = config.index
+# prefix = config.prefix
+# index = config.index
 
 clouds = cm_mongo()
 clouds.activate()
@@ -63,7 +63,7 @@ def refresh(cloud=None, server=None, service_type=None):
     cloud_names = None
     # cloud field could be empty thus in that position it could be the types
     if cloud is None or cloud in ['servers', 'flavors', 'images', 'users']:
-        #cloud_names = config.active()
+        # cloud_names = config.active()
         cloud_names = userinfo["defaults"]["activeclouds"]
     else:
         cloud_names = [cloud]
@@ -87,6 +87,7 @@ def refresh(cloud=None, server=None, service_type=None):
 @cloud_module.route('/cm/delete/<cloud>/<server>/')
 @login_required
 def delete_vm(cloud=None, server=None):
+    print "HALLO"
     log.info ("-> delete {0} {1}".format(cloud, server))
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
@@ -149,22 +150,22 @@ def start_vm(cloud=None, server=None):
     vm_image = None
     vm_flavor = None
     vm_flavor_id = None
-    
+
     if 'keys' in config['cloudmesh']:
         key = config.get('cloudmesh.keys.default')
     userinfo = getCurrentUserinfo()
-    
-    #print userinfo
+
+    # print userinfo
     if "key" in userinfo["defaults"]:
         key = userinfo["defaults"]["key"]
     elif len(userinfo["keys"]["keylist"].keys()) > 0:
         key = userinfo["keys"]["keylist"].keys()[0]
     #
     # before the info could be maintained in mongo, using the config file
-    #vm_flavor = config.cloud(cloud)["default"]["flavor"]
-    #vm_image = config.cloud(cloud)["default"]["image"]
-    #vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
-    
+    # vm_flavor = config.cloud(cloud)["default"]["flavor"]
+    # vm_image = config.cloud(cloud)["default"]["image"]
+    # vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
+
     # getting defulat flavor and image for the specified cloud out of mongo
     if "flavors" in userinfo["defaults"]:
         if cloud in userinfo["defaults"]["flavors"]:
@@ -176,16 +177,16 @@ def start_vm(cloud=None, server=None):
             vm_image = userinfo["defaults"]["images"][cloud]
     if not vm_flavor_id:
         flavors = clouds.flavors([cloud])[cloud]
-        #pprint(flavors)
+        # pprint(flavors)
         vm_flavor_id = flavors.keys()[0]
         vm_flavor = flavors[vm_flavor_id]["name"]
     if not vm_image:
         images = clouds.images([cloud])[cloud]
-        #pprint(images)
+        # pprint(images)
         vm_image = images.keys()[0]
 
     # in case of error, setting default flavor id
-    #if vm_flavor_id < 0:
+    # if vm_flavor_id < 0:
     #    vm_flavor_id = 1
     prefix = userinfo["defaults"]["prefix"]
     index = userinfo["defaults"]["index"]
@@ -210,7 +211,7 @@ def start_vm(cloud=None, server=None):
     # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     # config.incr()
     userstore = cm_user()
-    userstore.set_default_attribute(username, "index", int(index)+1)
+    userstore.set_default_attribute(username, "index", int(index) + 1)
     # config.write()
 
     #
