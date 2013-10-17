@@ -14,6 +14,8 @@ from flask.ext.principal import Permission, RoleNeed
 
 log = LOGGER(__file__)
 
+admin_permission = Permission(RoleNeed('admin'))
+
 mesh_module = Blueprint('mesh_module', __name__)
 
 # ============================================================

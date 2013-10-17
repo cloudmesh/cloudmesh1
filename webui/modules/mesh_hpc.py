@@ -11,7 +11,7 @@ from flask import Blueprint, render_template, request, redirect
 from flask.ext.login import login_required
 from pprint import pprint
 import cloudmesh
-
+from flask.ext.principal import Permission, RoleNeed
 
 
 log = LOGGER(__file__)
