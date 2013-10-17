@@ -13,6 +13,7 @@ from flask.ext.login import login_required
 import webbrowser
 
 from cloudmesh.util.logger import LOGGER
+from pprint import pprint
 
 log = LOGGER(__file__)
 
@@ -20,8 +21,8 @@ log = LOGGER(__file__)
 cloud_module = Blueprint('cloud_module', __name__)
 
 config = cm_config()
-prefix = config.prefix
-index = config.index
+#prefix = config.prefix
+#index = config.index
 
 clouds = cm_mongo()
 clouds.activate()
@@ -57,12 +58,13 @@ def getCurrentUserinfo():
 @login_required
 def refresh(cloud=None, server=None, service_type=None):
     print "-> refresh", cloud, service_type
-
+    userinfo = getCurrentUserinfo()
     # print "REQ", redirect(request.args.get('next') or '/').__dict__
     cloud_names = None
     # cloud field could be empty thus in that position it could be the types
     if cloud is None or cloud in ['servers', 'flavors', 'images', 'users']:
-        cloud_names = config.active()
+        #cloud_names = config.active()
+        cloud_names = userinfo["defaults"]["activeclouds"]
     else:
         cloud_names = [cloud]
 
@@ -144,52 +146,71 @@ def start_vm(cloud=None, server=None):
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "start:1", _tty_in=True)
     key = None
-
+    vm_image = None
+    vm_flavor = None
+    vm_flavor_id = None
+    
     if 'keys' in config['cloudmesh']:
         key = config.get('cloudmesh.keys.default')
     userinfo = getCurrentUserinfo()
-
-    # print userinfo
+    
+    #print userinfo
     if "key" in userinfo["defaults"]:
         key = userinfo["defaults"]["key"]
     elif len(userinfo["keys"]["keylist"].keys()) > 0:
         key = userinfo["keys"]["keylist"].keys()[0]
-    # print key
-    # THIS IS A BUG
-    # vm_flavor = clouds.default(cloud)['flavor']
-    # vm_image = clouds.default(cloud)['image']
     #
     # before the info could be maintained in mongo, using the config file
-    vm_flavor = config.cloud(cloud)["default"]["flavor"]
-    vm_image = config.cloud(cloud)["default"]["image"]
-
+    #vm_flavor = config.cloud(cloud)["default"]["flavor"]
+    #vm_image = config.cloud(cloud)["default"]["image"]
+    #vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
+    
     # getting defulat flavor and image for the specified cloud out of mongo
-    # TODO
-    #
+    if "flavors" in userinfo["defaults"]:
+        if cloud in userinfo["defaults"]["flavors"]:
+            vm_flavor_id = userinfo["defaults"]["flavors"][cloud]
+            flavors = clouds.flavors([cloud])[cloud]
+            vm_flavor = flavors[vm_flavor_id]["name"]
+    if "images" in userinfo["defaults"]:
+        if cloud in userinfo["defaults"]["images"]:
+            vm_image = userinfo["defaults"]["images"][cloud]
+    if not vm_flavor_id:
+        flavors = clouds.flavors([cloud])[cloud]
+        #pprint(flavors)
+        vm_flavor_id = flavors.keys()[0]
+        vm_flavor = flavors[vm_flavor_id]["name"]
+    if not vm_image:
+        images = clouds.images([cloud])[cloud]
+        #pprint(images)
+        vm_image = images.keys()[0]
 
-    vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
     # in case of error, setting default flavor id
-    if vm_flavor_id < 0:
-        vm_flavor_id = 1
-    log.info("STARTING {0} {1}".format(config.prefix, config.index))
+    #if vm_flavor_id < 0:
+    #    vm_flavor_id = 1
+    prefix = userinfo["defaults"]["prefix"]
+    index = userinfo["defaults"]["index"]
+    log.info("STARTING {0} {1}".format(prefix, index))
     log.info("FLAVOR {0} {1}".format(vm_flavor, vm_flavor_id))
-    metadata = {'cm_owner': config.prefix}
-    username = config.get('cloudmesh.hpc.username')
+    metadata = {'cm_owner': prefix}
+    # username = config.get('cloudmesh.hpc.username')
+    username = userinfo["cm_user_id"]
     try:
         keynamenew = "%s_%s" % (username, key.replace('.', '_').replace('@', '_'))
     except AttributeError:
         keynamenew = "cloudmesh"  # Default key name if it is missing
     result = clouds.vm_create(
         cloud,
-        config.prefix,
-        config.index,
+        prefix,
+        index,
         vm_flavor_id,
         vm_image,
         keynamenew,
         meta=metadata)
     log.info ("{0}".format(result))
     # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
-    config.incr()
+    # config.incr()
+    userstore = cm_user()
+    userstore.set_default_attribute(username, "index", int(index)+1)
     # config.write()
 
     #
