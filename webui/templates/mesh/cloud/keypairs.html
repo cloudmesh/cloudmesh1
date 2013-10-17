@@ -1,0 +1,66 @@
+{% extends "layout/layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+<h2> Manage Keypairs for cloud - {{cloudname}} </h2>
+{% endblock contentbox %}
+
+{% block content %}
+
+<style>
+table{
+margin:0px
+}
+</style>
+<script type="text/javascript">
+    function toggleKeyReg(keyname){
+        $.ajax({
+        url: "/cm/keypairs/{{cloudname}}/",
+        type: "POST",
+        data: {'keyname':keyname},
+        cache: false,
+        success: function(html) {
+            $("#msg") = html
+        },
+        error: function(){
+            $("#msg") = "error when adding " + keyname
+        }
+    });
+    }
+</script>
+<div id='msg'>I should be replaced when you click some checkbox</div>
+    {% if (keys | count) > 0 %}
+        <table>
+        <tr>
+            <th>Registered?</th>
+            <th>Keyname</th>
+            <th>Fingerprint</th>
+        </tr>
+        {% for keyname in keys %}
+        <tr>
+        <td>
+        <input type="checkbox"
+            name="field-keys"
+            value="{{ keyname }}"
+            id="{{ keyname }}"
+            {% if registered[keyname] %}
+              checked = "checked"
+            {% endif %}
+            onclick="toggleKeyReg('{{keyname}}'); return false"
+        /> 
+        </td>
+        <td>
+        {{keyname}}
+        </td>
+        <td>
+        {{keys[keyname] | replace ("key ssh", "") |  filter_fingerprint  }}
+        </td>
+        </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        There are no keys present, please add one.
+
+    {% endif %}
+
+{% endblock %}
