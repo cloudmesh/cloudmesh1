@@ -211,6 +211,7 @@ def rain_index():
 
 
 @app.route('/admin')
+@login_required
 @admin_permission.require(http_exception=403)
 def admin_index():
     return render_template('admin/admin.html')
