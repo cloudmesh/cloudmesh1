@@ -51,6 +51,30 @@ u+ webui/server.py			:556:	@app.route('/logout')
 ? webui/modules/inventory.py	:255:	@inventory_module.route('/inventory/images/')
 
 
+a? webui/modules/inventory.py	:149:	@inventory_module.route('/inventory/cluster-user')
+a? webui/modules/inventory.py	:166:	@inventory_module.route('/inventory/cluster-proj')
+
+
+a? webui/modules/inventory.py	:286:	@inventory_module.route('/inventory/info/server/<server>/')
+a? webui/modules/inventory.py	:296:	@inventory_module.route('/inventory/set/service/', methods=['POST'])
+a? webui/modules/inventory.py	:309:	@inventory_module.route('/inventory/set/attribute/', methods=['POST'])
+a? webui/modules/inventory.py	:323:	@inventory_module.route('/inventory/get/<kind>/<name>/<attribute>')
+
+
+
+a? webui/modules/provisioner.py	:40:	@provisioner_module.route('/provision/policy')
+a? webui/modules/provisioner.py	:52:	@provisioner_module.route('/provision/summary/')
+a? webui/modules/provisioner.py	:77:	@provisioner_module.route('/provision/tasks/<cluster>/<spec>/<service>')
+a? webui/modules/provisioner.py	:174:	@provisioner_module.route("/provision/", methods=("GET", "POST"))
+
+
+r? webui/modules/launch.py	:29:	@launch_module.route('/cm/launch/<host>/<recipie>')
+r? webui/modules/launch.py	:38:	@launch_module.route('/cm/launch/launch_servers', methods=["POST"])
+r? webui/modules/launch.py	:71:	@launch_module.route('/cm/launch')
+r? webui/modules/launch.py	:83:	@launch_module.route('/cm/launch/db_stats')
+r? webui/modules/launch.py	:95:	@launch_module.route('/cm/db_reset')
+
+
 
 ? webui/modules/pbs.py		:47:	@pbs_module.route('/pbs/<action>/<host>')
 TODO
@@ -76,7 +100,7 @@ Moved to todo/modules/ufo.py:
 - webui/modules/cloud.py		:57:	@cloud_module.route('/save/')
 - webui/modules/cloud.py		:69:	@cloud_module.route('/load/')
 - webui/modules/mooc.py			:22:	@mooc_module.route('/mooc')
-
+? webui/modules/cloud.py		:137:	@cloud_module.route('/cm/kill/')
 
 Moved to todo/modules/:
 
@@ -98,6 +122,12 @@ webui/modules/rack.py		:136:	@rack_module.route('/inventory/rack/old')
 ? webui/modules/pbs.py		:100:	@pbs_module.route('/pbsnodes/probe/<host>')
 - webui/modules/inventory.py	:330:	@inventory_module.route('/inventory/save/')
 - webui/modules/inventory.py	:338:	@inventory_module.route('/inventory/load/')
+- webui/modules/cloud.py		:315:	# @cloud_module.route('/flavors/<cloud>/' )
+? webui/modules/cloud.py		:318:	@cloud_module.route('/flavors/', methods=['GET', 'POST'])
+- webui/modules/cloud.py		:341:	# @cloud_module.route('/images/<cloud>/')
+? webui/modules/cloud.py		:343:	@cloud_module.route('/images/', methods=['GET', 'POST'])
+
+- webui/server.py			:203:	@app.route("/site-map/")
 
 ========================
 TO CLASSIFY
@@ -106,40 +136,18 @@ TO CLASSIFY
 ? webui/modules/cloud.py		:81:	@cloud_module.route('/cm/refresh/')
 ? webui/modules/cloud.py		:82:	@cloud_module.route('/cm/refresh/<cloud>/')
 ? webui/modules/cloud.py		:83:	@cloud_module.route('/cm/refresh/<cloud>/<service_type>')
-? webui/modules/cloud.py		:110:	@cloud_module.route('/cm/filter/<cloud>/', methods=['GET', 'POST'])
-? webui/modules/cloud.py		:137:	@cloud_module.route('/cm/kill/')
+
+
 ? webui/modules/cloud.py		:149:	@cloud_module.route('/cm/delete/<cloud>/<server>/')
 ? webui/modules/cloud.py		:166:	@cloud_module.route('/cm/delete/<cloud>/')
 ? webui/modules/cloud.py		:184:	@cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
 ? webui/modules/cloud.py		:204:	@cloud_module.route('/cm/start/<cloud>/')
 ? webui/modules/cloud.py		:258:	@cloud_module.route('/cm/login/<cloud>/<server>/')
 ? webui/modules/cloud.py		:286:	@cloud_module.route('/cm/info/<cloud>/<server>/')
-- webui/modules/cloud.py		:315:	# @cloud_module.route('/flavors/<cloud>/' )
-? webui/modules/cloud.py		:318:	@cloud_module.route('/flavors/', methods=['GET', 'POST'])
-- webui/modules/cloud.py		:341:	# @cloud_module.route('/images/<cloud>/')
-? webui/modules/cloud.py		:343:	@cloud_module.route('/images/', methods=['GET', 'POST'])
-
-
-? webui/modules/inventory.py	:149:	@inventory_module.route('/inventory/cluster-user')
-? webui/modules/inventory.py	:166:	@inventory_module.route('/inventory/cluster-proj')
 
 
 
-
-
-
-? webui/modules/inventory.py	:286:	@inventory_module.route('/inventory/info/server/<server>/')
-? webui/modules/inventory.py	:296:	@inventory_module.route('/inventory/set/service/', methods=['POST'])
-? webui/modules/inventory.py	:309:	@inventory_module.route('/inventory/set/attribute/', methods=['POST'])
-? webui/modules/inventory.py	:323:	@inventory_module.route('/inventory/get/<kind>/<name>/<attribute>')
-
-? webui/modules/launch.py	:29:	@launch_module.route('/cm/launch/<host>/<recipie>')
-? webui/modules/launch.py	:38:	@launch_module.route('/cm/launch/launch_servers', methods=["POST"])
-? webui/modules/launch.py	:71:	@launch_module.route('/cm/launch')
-? webui/modules/launch.py	:83:	@launch_module.route('/cm/launch/db_stats')
-? webui/modules/launch.py	:95:	@launch_module.route('/cm/db_reset')
-
-
+? webui/modules/cloud.py		:110:	@cloud_module.route('/cm/filter/<cloud>/', methods=['GET', 'POST'])
 ? webui/modules/mesh.py		:279:	@mesh_module.route('/mesh/servers/<filters>')
 
 
@@ -148,15 +156,4 @@ TO CLASSIFY
 ? webui/modules/metric.py	:39:	@app.route('/cm/metric/<startdate>/<enddate>/<host>')
 
 
-
-? webui/modules/provisioner.py	:40:	@provisioner_module.route('/provision/policy')
-? webui/modules/provisioner.py	:52:	@provisioner_module.route('/provision/summary/')
-? webui/modules/provisioner.py	:77:	@provisioner_module.route('/provision/tasks/<cluster>/<spec>/<service>')
-? webui/modules/provisioner.py	:174:	@provisioner_module.route("/provision/", methods=("GET", "POST"))
-
-
-
-
-? webui/modules/users.py	:25:	@users_module.route('/users/ldap/')
-
-- webui/server.py			:203:	@app.route("/site-map/")
+a? webui/modules/users.py	:25:	@users_module.route('/users/ldap/')
