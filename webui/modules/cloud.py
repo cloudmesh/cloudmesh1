@@ -70,34 +70,6 @@ def refresh(cloud=None, server=None, service_type=None):
     # clouds.all_filter()
     return redirect('/mesh/servers')
 
-# ============================================================
-# ROUTE: Filter
-# ============================================================
-
-
-@cloud_module.route('/cm/filter/<cloud>/', methods=['GET', 'POST'])
-@login_required
-def filter(cloud=None):
-    # print "-> filter", cloud
-
-    #
-    # BUG: when cloud is none
-    #
-    name = cloud
-    if request.method == 'POST':
-        query_states = []
-        state_table = {}
-        for state in clouds.states(name):
-            state_name = "%s:%s" % (name, state)
-            state_table[state] = state_name in request.form
-            if state_table[state]:
-                query_states.append(state)
-        config.set_filter(name, state_table, 'state')
-
-        clouds.state_filter(name, query_states)
-
-    return redirect('/mesh/servers')
-
 
 
 # ============================================================
