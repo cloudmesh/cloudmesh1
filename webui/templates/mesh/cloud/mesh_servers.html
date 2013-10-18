@@ -127,12 +127,20 @@ $(function() {
 
                       {% elif attribute == "flavor" %}
                       	{% set id = clouds[cloud][server][attribute]['id'] %}
-                          <td> {{ flavors[cloud][id]['name']}}
+                          <td> {% if id in flavors[cloud] %}
+                                {{flavors[cloud][id]['name']}}
+                               {% else %}
+                                Flavor not available anymore!
+                               {% endif %}
                           </td>
 
                       {% elif attribute == "image" %}
                       	{% set id = clouds[cloud][server][attribute]['id'] %}
-                          <td> {{ images[cloud][id]['name']}}
+                          <td> {% if id in images[cloud] %}
+                                {{images[cloud][id]['name']}}
+                               {% else %}
+                                Image not available anymore!
+                               {% endif %}
                           </td>
 
                       {% elif attribute == "addresses" %}

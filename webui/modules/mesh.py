@@ -378,7 +378,13 @@ def mongo_table(filters=None):
 
     cloud_filters = None
     filtered_clouds = clouds
-
+    #pprint(clouds)
+    #pprint(flavors)
+    #for cloud in clouds:
+    #    print cloud
+    #    for server in clouds[cloud]:
+    #        print server
+    #        print clouds[cloud][server]['flavor']
     return render_template('mesh/cloud/mesh_servers.html',
                            address_string=address_string,
                            attributes=os_attributes,
