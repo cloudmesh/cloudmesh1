@@ -134,7 +134,7 @@ def mongo_images():
     b99fa4c8-6b92-49e6-b53f-37e56f9383b6
     """
     """
-    2 essex A {u'image_location': u'ktanaka/ubuntu1204-ramdisk.manifest.xml',
+    2 essex A {u'image_location': u'futuregrid/ubuntu1204-ramdisk.manifest.xml',
                u'image_state':    u'available',
                u'architecture':   u'x86_64'}
     """
