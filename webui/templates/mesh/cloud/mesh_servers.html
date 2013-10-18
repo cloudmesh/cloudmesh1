@@ -102,7 +102,6 @@ $(function() {
              {% set s_id = clouds[cloud][server]['id'] %}
              <tr>
              	<td>
-	{{         clouds[cloud][server]}}
              	 	{{ image_button ("none", "368_collapse", "/cm/login/" ~ cloud ~ "/" ~ s_id ~ "/") }}
 	  				{{ image_button ("right", "195_circle_info", "/cm/info/" ~ cloud ~ "/" ~ s_id ~ "/") }}
 	  				<a href="/cm/assignpubip/{{cloud}}/{{s_id}}/">  IP </a>
