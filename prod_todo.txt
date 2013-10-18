@@ -1,28 +1,55 @@
 Production issues noted 17-OCT-2013
 
-* TODO Admin Link shows auth required if not logged in
-  (should show login required)
-
 * TODO Admin - Launcher Register link leads to "Page not Found"
   (Route /cm/register/)
-
-* TODO Images on front page need to be optimized for web
 
 * TODO We need a utility to update profiles from Portal to LDAP
   - Currently LDAP is not updated after initial creation.
   - Should run as a periodic cron task
+  - e.g. defaults would be overwritten
+  - we shoudl allow somehow name and/or e-mail change
 
-* TODO Need kill/restart for wsgi
+* TODO (Allan) Document startup, admin tasks for production server
+
+	clean boot
+
+	fab	mongo.boot
+	fab mongo.cloud
+
+	... server start up
+
+	fab server.wsgi
+
+* TODO (Allan)  Need kill/restart for wsgi
   fab server.wsgi kill
   fab server.wsgi restart
 
 * TODO VM launcher needs to handle case of no default image/flavor set
-  '+' Button 
+  '+' Button
 
 * TODO Eliminate all use of "print" statements for debugging
   Use logger instead
 
 * TODO Need a way to add user keys to LDAP and Keystone
 
-* TODO Document startup, admin tasks for production server
+* TODO starting a new vm an dthan logging in with the > does not work
 
+* TODO starting multiple vms does not work
+
+* TODO registration of other clouds does not work
+
+* TODO job submission via qsub (low priority)
+
+* TODO status of clouds (FG)
+
+
+
+DONE
+========
+
+
+* DONE Images on front page need to be optimized for web
+
+
+* DONE Admin Link shows auth required if not logged in
+  (should show login required)
