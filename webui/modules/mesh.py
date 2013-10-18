@@ -331,7 +331,6 @@ def mongo_users():
 # ============================================================
 
 @mesh_module.route('/mesh/servers/')
-@mesh_module.route('/mesh/servers/<filters>')
 @login_required
 def mongo_table(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -344,7 +343,6 @@ def mongo_table(filters=None):
     clouds = c.servers()
     images = c.images()
     flavors = c.flavors()
-
 
     userdata = g.user
     username = userdata.id
@@ -396,7 +394,7 @@ def mongo_table(filters=None):
 # ============================================================
 # ROUTE: mongo/servers/<filters>
 # ============================================================
-
+'''
 @mesh_module.route('/mesh/servers/<filters>')
 @login_required
 @admin_permission.require(http_exception=403)
@@ -469,3 +467,5 @@ def mongo_server_table_filter(filters=None):
                            clouds=filtered_clouds,
                            config=config,
                            filters=cloud_filters)
+
+'''
