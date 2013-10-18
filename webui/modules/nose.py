@@ -40,7 +40,7 @@ def display_pingtest():
     for host in hosts:
         results.append(ping(host))
 
-    return render_template('user/ping.html',
+    return render_template('admin/ping.html',
                            updated=time_now,
                            hosts=hosts,
                            results=results)

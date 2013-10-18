@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import render_template, request, redirect, g
+from flask import render_template, request, redirect, g, jsonify
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mesh import cloudmesh
 from cloudmesh.util.util import table_printer
@@ -21,8 +21,8 @@ log = LOGGER(__file__)
 cloud_module = Blueprint('cloud_module', __name__)
 
 config = cm_config()
-#prefix = config.prefix
-#index = config.index
+# prefix = config.prefix
+# index = config.index
 
 clouds = cm_mongo()
 clouds.activate()
@@ -63,7 +63,7 @@ def refresh(cloud=None, server=None, service_type=None):
     cloud_names = None
     # cloud field could be empty thus in that position it could be the types
     if cloud is None or cloud in ['servers', 'flavors', 'images', 'users']:
-        #cloud_names = config.active()
+        # cloud_names = config.active()
         cloud_names = userinfo["defaults"]["activeclouds"]
     else:
         cloud_names = [cloud]
@@ -87,6 +87,7 @@ def refresh(cloud=None, server=None, service_type=None):
 @cloud_module.route('/cm/delete/<cloud>/<server>/')
 @login_required
 def delete_vm(cloud=None, server=None):
+    print "HALLO"
     log.info ("-> delete {0} {1}".format(cloud, server))
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
@@ -130,6 +131,60 @@ def assign_public_ip(cloud=None, server=None):
     # else:
     #    return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
 
+def _keyname_sanitation(username, keyname):
+    keynamenew = "%s_%s" % (username, keyname.replace('.','_').replace('@', '_'))
+    return keynamenew
+
+@cloud_module.route('/cm/keypairs/<cloud>/', methods=['GET', 'POST'])
+@login_required
+def manage_keypairs(cloud=None):
+    userinfo = getCurrentUserinfo()
+    username = userinfo["cm_user_id"]
+    keys = userinfo["keys"]["keylist"]
+    cloudmanager = clouds.clouds[cloud]['manager']
+    
+    # currently we do the registration only for openstack
+    # not yet sure if other clouds support this
+    # or if we have implemented them if they also support
+    if clouds.clouds[cloud]['cm_type'] == 'openstack':
+        if request.method == 'POST':
+            action = request.form['action']
+            keyname = request.form["keyname"]
+            # remove beginning 'key ' part
+            keycontent = keys[keyname]
+            if keycontent.startswith('key '):
+                keycontent = keycontent[4:]
+            #print keycontent
+            keynamenew = _keyname_sanitation(username, keyname)
+            if action == 'register':
+                log.debug("trying to register a key")
+                r = cloudmanager.keypair_add(keynamenew, keycontent)
+                #pprint(r)
+            else:
+                log.debug("trying to deregister a key")
+                r = cloudmanager.keypair_remove(keynamenew)
+            return jsonify(**r)
+        else:
+            registered = {}
+            keysRegistered = cloudmanager.keypair_list()
+            keynamesRegistered = []
+            if "keypairs" in keysRegistered:
+                keypairsRegistered = keysRegistered["keypairs"]
+                for akeypair in keypairsRegistered:
+                    keyname = akeypair['keypair']['name']
+                    keynamesRegistered.append(keyname)
+            #pprint(keynamesRegistered)
+            for keyname in keys.keys():
+                keynamenew = _keyname_sanitation(username, keyname)
+                #print keynamenew
+                if keynamenew in keynamesRegistered:
+                    registered[keyname] = True
+                else:
+                    registered[keyname] = False
+            return render_template('mesh/cloud/keypairs.html',
+                                   keys=keys,
+                                   registered=registered,
+                                   cloudname=cloud)
 # ============================================================
 # ROUTE: START
 # ============================================================
@@ -149,22 +204,22 @@ def start_vm(cloud=None, server=None):
     vm_image = None
     vm_flavor = None
     vm_flavor_id = None
-    
+
     if 'keys' in config['cloudmesh']:
         key = config.get('cloudmesh.keys.default')
     userinfo = getCurrentUserinfo()
-    
-    #print userinfo
+
+    # print userinfo
     if "key" in userinfo["defaults"]:
         key = userinfo["defaults"]["key"]
     elif len(userinfo["keys"]["keylist"].keys()) > 0:
         key = userinfo["keys"]["keylist"].keys()[0]
     #
     # before the info could be maintained in mongo, using the config file
-    #vm_flavor = config.cloud(cloud)["default"]["flavor"]
-    #vm_image = config.cloud(cloud)["default"]["image"]
-    #vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
-    
+    # vm_flavor = config.cloud(cloud)["default"]["flavor"]
+    # vm_image = config.cloud(cloud)["default"]["image"]
+    # vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
+
     # getting defulat flavor and image for the specified cloud out of mongo
     if "flavors" in userinfo["defaults"]:
         if cloud in userinfo["defaults"]["flavors"]:
@@ -176,16 +231,16 @@ def start_vm(cloud=None, server=None):
             vm_image = userinfo["defaults"]["images"][cloud]
     if not vm_flavor_id:
         flavors = clouds.flavors([cloud])[cloud]
-        #pprint(flavors)
+        # pprint(flavors)
         vm_flavor_id = flavors.keys()[0]
         vm_flavor = flavors[vm_flavor_id]["name"]
     if not vm_image:
         images = clouds.images([cloud])[cloud]
-        #pprint(images)
+        # pprint(images)
         vm_image = images.keys()[0]
 
     # in case of error, setting default flavor id
-    #if vm_flavor_id < 0:
+    # if vm_flavor_id < 0:
     #    vm_flavor_id = 1
     prefix = userinfo["defaults"]["prefix"]
     index = userinfo["defaults"]["index"]
@@ -210,7 +265,7 @@ def start_vm(cloud=None, server=None):
     # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     # config.incr()
     userstore = cm_user()
-    userstore.set_default_attribute(username, "index", int(index)+1)
+    userstore.set_default_attribute(username, "index", int(index) + 1)
     # config.write()
 
     #

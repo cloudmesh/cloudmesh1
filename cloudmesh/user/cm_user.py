@@ -16,7 +16,7 @@ from cloudmesh.util.encryptdata import encrypt, decrypt
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import deprecated
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
-
+from cloudmesh.cm_mongo import cm_mongo
 import traceback
 from pprint import pprint
 # ----------------------------------------------------------------------
@@ -161,10 +161,11 @@ class cm_user(object):
             # update project names
             #
 
-
-            projects = userinfo["projects"]
-            projects = self.update_users_project_names(projects)
-
+            try:
+                projects = userinfo["projects"]
+                projects = self.update_users_project_names(projects)
+            except:
+                pass
 
             return userinfo
 
@@ -202,6 +203,38 @@ class cm_user(object):
         if 'activeclouds' not in defaults:
             if 'cloud' in defaults:
                 defaults['activeclouds'] = [defaults['cloud']]
+
+
+        cm = cm_mongo()
+
+        #
+        # set default images for active clouds
+        #
+
+        if 'images' not in defaults:
+            defaults['images'] = {}
+        for cloud in defaults['activeclouds']:
+            if cloud not in defaults['images']:
+                default_image = "none"
+                try:
+                    default_image = cm.images([cloud])[cloud].keys()[0]
+                except:
+                    pass
+                defaults['images'][cloud] = default_image
+
+        #
+        # set default flavors for active clouds
+        #
+        if 'flavors' not in defaults:
+            defaults['flavors'] = {}
+        for cloud in defaults['activeclouds']:
+            if cloud not in defaults['flavors']:
+                default_flavor = "none"
+                try:
+                    default_flavor = cm.flavors([cloud])[cloud].keys()[0]
+                except:
+                    pass
+                defaults['flavors'][cloud] = default_flavor
 
 
         if 'securitygroup' not in defaults:

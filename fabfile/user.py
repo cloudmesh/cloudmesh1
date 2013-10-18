@@ -51,6 +51,7 @@ def list():
 
 @task
 def info(id):
+    banner("USER INFO IN MONGO")
     user = cm_user()
     res = user.info(id)
     pprint (res)
@@ -77,6 +78,23 @@ def password():
              "--os-auth-url", server['OS_AUTH_URL'],
              "user-password-update",
              "--pass", user['OS_PASSWORD'], user['OS_USERNAME'])
+
+
+@task
+def delete_defaults():
+    filename = "~/.futuregrid/cloudmesh.yaml"
+    banner("reding data from {0}".format(filename))
+    config = cm_config(filename=filename)
+    username = config.get("cloudmesh.hpc.username")
+
+    print username
+
+    user = cm_user()
+
+    user.set_defaults(username, {})
+    # user.set_default_attribute(username, 'images', {})
+    info(username)
+
 
 
 @task
@@ -133,3 +151,5 @@ def mongo():
     user_obj = cm_user()
     user_obj.init_defaults(username)
 
+
+    info(username)

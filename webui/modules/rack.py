@@ -8,7 +8,7 @@ from flask.ext.wtf import Form  # @UnresolvedImport
 from pprint import pprint
 from sh import pwd  # @UnresolvedImport
 from wtforms import SelectField
-
+from flask.ext.principal import Permission, RoleNeed
 
 from cloudmesh.util.logger import LOGGER
 
@@ -19,6 +19,8 @@ log = LOGGER(__file__)
 
 
 rack_module = Blueprint('rack_module', __name__)
+
+admin_permission = Permission(RoleNeed('admin'))
 
 #
 # ROUTE: rack
@@ -37,7 +39,7 @@ class RackForm(Form):
 
     service_list = [
         ('service', 'Service Map'),
-        ('temperature', 'Heat Map')
+        # ('temperature', 'Heat Map')
     ]
 
     def initForm(self):
@@ -130,48 +132,3 @@ def display_rack_map():
 
 
 
-
-
-@rack_module.route('/inventory/rack/<name>')
-@rack_module.route('/inventory/rack/<name>/<service>')
-@login_required
-def display_rack(name, service=None):
-
-
-    if service is None:
-        service = "temperature"
-
-    basename = None
-    rack = name
-
-    # diag_dir = path_expand(cm_config_server().get("rack.input"))
-    # output_dir = path_expand(cm_config_server().get("rack.diagramms.{0}".format(service)))
-
-
-    # not so nice cludge, ask for location of statcic instead
-
-    # web_pwd = pwd().strip()
-    # basename = "/static/{0}/{1}".format(output_dir, name)
-
-    #  /static/racks/diagrams/india
-    # .svg
-    # .png
-    # -legend.png
-
-
-    #
-    # CREATE YOU IMAGES NOW
-    #
-
-    # if service == "temperature":
-    #    do this
-    # else:
-    #    do that
-
-
-
-    return render_template('mesh/rack/rack.html',
-                           service=service,
-                           basename=basename,
-                           name=name,
-                           rack=rack)

@@ -20,9 +20,15 @@ function killall(cloud) {
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#servers-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: false });
+        $("#servers-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: true });
+
+		$("input[type=number]").on("click", function(event) {
+    		event.stopPropagation();
+		});
     });
 })(jQuery);
+
+
 
 $(function() {
   {% for cloudnum in range(clouds|count) %}
@@ -65,17 +71,31 @@ $(function() {
   <div style="margin-bottom:1em;">
     <h3>
     	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
+
+      	&nbsp;
+      	{{ cloud }}
+        <span class="badge"> {{ clouds[cloud] |count }} </span> VMs
       	&nbsp;
       	{{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}
+      	<input name="vms" id="vms" value ="1" min="1" max="1" maxlength="4" size="4" type="number">
       	&nbsp;
       	{{ image_popup ("none", "041_charts", "/stats/table/count/weekly/" + cloud + "/") }}
       	&nbsp;
-      	{{ image_button ("none", "044_keys", "/updatekeypair/" + cloud + "/") }}
-      	{{ cloud }}
-        <span class="badge"> {{ clouds[cloud] |count }} </span> VMs
+      	{{ image_button ("none", "044_keys", "/cm/keypairs/" + cloud + "/") }}
 
     </h3>
     <div>
+
+	{% set flavor_id = user.defaults.flavors[cloud] %}
+    {% set image_id = user.defaults.images[cloud] %}
+
+	<p>
+		Defaults:
+    <a href="/mesh/images"> Image: <span class="badge">{{images[cloud][image_id]['name']}} </span></a>
+    <a href="/mesh/flavors">Flavor: <span class="badge">{{flavors[cloud][flavor_id]['name']}} </span></a>
+    <a href="/profile"> last vm name: <span class="badge">{{user.defaults.prefix}}_{{user.defaults.index}} </span></a>
+	</p>
+
     <table id="cloud-table-{{ loop.index0 }}" >
       <thead>
           <tr>
@@ -101,10 +121,20 @@ $(function() {
                  {% for attribute in attributes %}
                       {% if attribute == "created" %}
                           <td>{{ clouds[cloud][server][attribute] }}</td>
+
 					  {% elif attribute == "status"%}
 					      <td> {{ cm_state_color(clouds[cloud][server][attribute]) }}</td>
+
                       {% elif attribute == "flavor" %}
-                          <td>{{ clouds[cloud][server][attribute]['id'] }}</td>
+                      	{% set id = clouds[cloud][server][attribute]['id'] %}
+                          <td> {{ flavors[cloud][id]['name']}}
+                          </td>
+
+                      {% elif attribute == "image" %}
+                      	{% set id = clouds[cloud][server][attribute]['id'] %}
+                          <td> {{ images[cloud][id]['name']}}
+                          </td>
+
                       {% elif attribute == "addresses" %}
                           <td>{{ address_string(clouds[cloud][server][attribute]) }}</td>
                       {% else %}

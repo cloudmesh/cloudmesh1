@@ -342,6 +342,16 @@ def mongo_table(filters=None):
     c.activate()
     # c.refresh(types=["servers"])
     clouds = c.servers()
+    images = c.images()
+    flavors = c.flavors()
+
+
+    userdata = g.user
+    username = userdata.id
+    user_obj = cm_user()
+    user = user_obj.info(username)
+
+
 
     """
     for cloud in clouds:
@@ -356,6 +366,7 @@ def mongo_table(filters=None):
                      'addresses',
                      'flavor',
                      'id',
+                     'image',
                      'user_id',
                      'metadata',
                      'key_name',
@@ -376,6 +387,9 @@ def mongo_table(filters=None):
                            updated=time_now,
                            clouds=filtered_clouds,
                            config=config,
+                           images=images,
+                           flavors=flavors,
+                           user=user,
                            filters=cloud_filters)
 
 

@@ -1,0 +1,28 @@
+Production issues noted 17-OCT-2013
+
+* TODO Admin Link shows auth required if not logged in
+  (should show login required)
+
+* TODO Admin - Launcher Register link leads to "Page not Found"
+  (Route /cm/register/)
+
+* TODO Images on front page need to be optimized for web
+
+* TODO We need a utility to update profiles from Portal to LDAP
+  - Currently LDAP is not updated after initial creation.
+  - Should run as a periodic cron task
+
+* TODO Need kill/restart for wsgi
+  fab server.wsgi kill
+  fab server.wsgi restart
+
+* TODO VM launcher needs to handle case of no default image/flavor set
+  '+' Button 
+
+* TODO Eliminate all use of "print" statements for debugging
+  Use logger instead
+
+* TODO Need a way to add user keys to LDAP and Keystone
+
+* TODO Document startup, admin tasks for production server
+

@@ -204,7 +204,7 @@ def display_inventory_images():
 
     images = [i for i in inventory.find({'cm_key' : 'bootspec'})]
 
-    return render_template('inventory/images.html',
+    return render_template('mesh/inventory/images.html',
                            images=images,
                            inventory=inventory)
 
@@ -216,7 +216,7 @@ def display_inventory_image(name):
     inventory.refresh()
     if name is not None:
         image = inventory.get('images', name)
-    return render_template('inventory/image.html',
+    return render_template('mesh/inventory/image.html',
                            image=image)
 
 

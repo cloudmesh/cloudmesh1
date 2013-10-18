@@ -310,6 +310,7 @@ class openstack(ComputeBaseType):
         return self._get(msg=apiurl)
 
     def keypair_add(self, keyname, keycontent):
+        log.debug("adding a keypair in cm_compute...")
         # keysnow = self.keypair_list()
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
@@ -319,8 +320,25 @@ class openstack(ComputeBaseType):
                               "public_key": "%s" % keycontent
                               }
                  }
+        #print params
         return self._post(posturl, params)
-
+    
+    def keypair_remove(self, keyname):
+        log.debug("removing a keypair in cm_compute...")
+        conf = self._get_service_endpoint("compute")
+        publicURL = conf['publicURL']
+        
+        url = "%s/os-keypairs/%s" % (publicURL, keyname)
+        headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
+        r = requests.delete(url, headers=headers, verify=self._get_cacert())
+        ret = {"msg":"success"}
+        if r.text:
+            try:
+                ret = r.json()
+            except:
+                pass
+        return ret
+    
     def vm_create(self, name,
                   flavor_name,
                   image_id,
