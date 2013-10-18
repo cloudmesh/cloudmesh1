@@ -28,9 +28,9 @@ def display_status():
               'india' : { 'jobs' : 3, 'users' : 50},
               'bravo' : { 'jobs' : 13, 'users' : 40},
               'echo' : { 'jobs' : 23, 'users' : 30},
-              'hotel' : { 'jobs' : 33, 'users' : 20},
+              'hotel' : { 'jobs' : 0, 'users' : 0},
               'sierra' : { 'jobs' : 43, 'users' : 10},
-              'alamo' : { 'jobs' : 53, 'users' : 1},
+              'alamo' : { 'jobs' : 0, 'users' : 0},
               'delta' : { 'jobs' : 0, 'users': 0}
               }
 
@@ -40,18 +40,20 @@ def display_status():
 
     services = {}
     qinfo = {}
+    qstat = {}
+    qstat_uniq_users = {}
 
     for host in ['sierra.futuregrid.org', 'india.futuregrid.org']:
         pbs = PBS(user, host)
         services[host] = pbs.service_distribution()
         qinfo[host] = pbs.qinfo()
+        qstat[host] = pbs.qstat()
+        qstat_uniq_users[host] = pbs.get_uniq_users()
 
 
     machines = services.keys()
 
-    print "FFF", machines
-
-
+    # print "FFF", machines
 
     #
     # collecting all atttributes
@@ -63,7 +65,7 @@ def display_status():
         print "P", attributes
         all_attributes.update(attributes)
 
-        print "XXX", all_attributes
+        # print "XXX", all_attributes
 
     spider_services = {'machines' : machines,
                        'categories' : list(all_attributes),
@@ -84,20 +86,27 @@ def display_status():
             i = i + 1
         spider_services['data'][machine] = ser
 
-    print "SSS", spider_services
+    # print "SSS", spider_services
 
     # Users and Jobs
     total_jobs = {}
+    unique_users = {}
     for machine in machines:
         for qserver in qinfo[machine]:
             total_jobs[qserver] = 0
+            unique_users[qserver] = 0
             try:
                 hostname = qserver.split('.')[0]
             except:
                 hostname = ""
             for qname in qinfo[machine][qserver]:
                 total_jobs[qserver] += qinfo[machine][qserver][qname]['total_jobs']
+                try:
+                    unique_users[qserver] += len(qstat_uniq_users[machine][qserver])
+                except KeyError:
+                    pass
             values[hostname]['jobs'] = total_jobs[qserver]
+            values[hostname]['users'] = unique_users[qserver]
 
     return render_template('status/status.html',
                            services=spider_services,
