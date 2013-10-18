@@ -10,16 +10,20 @@ from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from libcloud.compute.base import NodeImage, NodeSize
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider
+import libcloud
+import sys
+
+import urlparse
 
 
-class aws(ComputeBaseType):
+class ec2(ComputeBaseType):
     """ 
     Amazon Cloud service with the libcloud interface
     With libcloud interface, cloudmesh supports Amazon Web Services such as EC2, S3,
     EBS, etc.
     """
 
-    name = "aws"
+    name = "ec2"
     DEFAULT_LABEL = name
 
     def __init__(self, label=DEFAULT_LABEL):
@@ -59,6 +63,7 @@ class aws(ComputeBaseType):
         self.set_location(location)
 
     def connect(self):
+        print "CCCCCC"
         Driver = get_driver(Provider.EC2)
 
         # #self.credential = self.config.get(self.label, expand=True)
@@ -67,20 +72,43 @@ class aws(ComputeBaseType):
         #### libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
         #### libcloud.security.VERIFY_SSL_CERT = False
 
-        # #Driver = get_driver(Provider.EUCALYPTUS)
-        # #self.cloud = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
 
+        ec2_url = self.compute_config.get("cloudmesh.clouds.alamo.credentials.EC2_URL")
 
-        # certfile = self.compute_config.get("cloudmesh.clouds.aws.privatekeyfile")
-        # libcloud.security.CA_CERTS_PATH.append(certfile)
+        result = urlparse.urlparse(ec2_url)
+        is_secure = (result.scheme == 'https')
+        if ":" in result.netloc:
+           host_port_tuple = result.netloc.split(':')
+           host = host_port_tuple[0]
+           port = int(host_port_tuple[1])
+        else:
+           host = result.netloc
+           port = None
+
+        path = result.path
+
+        print host
+        print port
+
+        certfile = self.compute_config.get("cloudmesh.clouds.alamo.credentials.EUCALYPTUS_CERT")
+        libcloud.security.CA_CERTS_PATH.append(certfile)
 
         #
         # BUG, make sure we use the cert, confirm with team ....
         #
+        try:
 
-        conn = Driver(self.access_key_id,
-                      self.secret_access_key,
-                      secure=False)
+           conn = Driver(key=self.access_key_id,
+                      secret=self.secret_access_key,
+                      secure=True,
+                      host=host,
+                      path=path,
+                      port=port)
+
+        except Exception, e:
+            print e
+            sys.exit()
+
         self.conn = conn
 
     def vm_create(self, name,

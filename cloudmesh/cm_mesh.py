@@ -87,7 +87,7 @@ class cloudmesh:
                 credential = self.configuration.credential(cloud_name)
                 cloud_type = self.configuration.cloud(cloud_name)['cm_type']
 
-                if cloud_type in ['openstack', 'eucalyptus', 'azure']:
+                if cloud_type in ['openstack', 'eucalyptus', 'azure', 'ec2']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cloud_type,
                                                'credential': credential}
@@ -201,6 +201,8 @@ class cloudmesh:
             provider = eucalyptus
         elif type == 'azure':
             provider = azure
+        elif type == 'ec2':
+            provider = ec2
         return provider
 
     def info(self):
@@ -359,7 +361,7 @@ class cloudmesh:
                 credential = self.config.cloud(cloud_name)
                 cm_type = credential['cm_type']
                 cm_type_version = credential['cm_type_version']
-                if cm_type in ['openstack', 'eucalyptus', 'azure', 'aws']:
+                if cm_type in ['openstack', 'eucalyptus', 'azure', 'aws', 'ec2']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cm_type,
                                                'cm_type_version': cm_type_version}

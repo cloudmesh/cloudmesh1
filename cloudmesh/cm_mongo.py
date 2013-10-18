@@ -2,6 +2,7 @@ from bson.objectid import ObjectId
 from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
 from cloudmesh.iaas.openstack.cm_compute import openstack
+from cloudmesh.iaas.ec2.cm_compute import ec2
 from cloudmesh.iaas.openstack.cm_idm import keystone
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.stopwatch import StopWatch
@@ -107,7 +108,7 @@ class cm_mongo:
     def cloud_provider(self, type):
         '''
         returns the cloud provider based on the type
-        :param type: the type is openstack, eucalyptus, or azure (azure is not yet supported)
+        :param type: the type is openstack, eucalyptus, or azure (< is not yet supported)
         '''
         provider = None
         if type == 'openstack':
@@ -118,6 +119,8 @@ class cm_mongo:
             provider = azure
         elif type == 'aws':
             provider = aws
+        elif type == 'ec2':
+            provider = ec2
         return provider
 
     def get_cloud(self, cloud_name, force=False):
@@ -131,7 +134,7 @@ class cm_mongo:
                 credential = self.config.cloud(cloud_name)
                 cm_type = credential['cm_type']
                 cm_type_version = credential['cm_type_version']
-                if cm_type in ['openstack', 'eucalyptus', 'azure', 'aws']:
+                if cm_type in ['openstack', 'eucalyptus', 'azure', 'ec2', 'aws']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cm_type,
                                                'cm_type_version': cm_type_version}
@@ -213,8 +216,8 @@ class cm_mongo:
                 watch.start(name)
                 cloud.refresh(type)
                 result = cloud.get(type)
-                #print "YYYYY", len(result)
-                #pprint(result)
+                # print "YYYYY", len(result)
+                # pprint(result)
                 # add result to db,
                 watch.stop(name)
                 print 'Refresh time:', watch.get(name)
