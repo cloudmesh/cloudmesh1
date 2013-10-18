@@ -40,11 +40,15 @@ def display_status():
 
     services = {}
     qinfo = {}
+    qstat = {}
+    qstat_uniq_users = {}
 
     for host in ['sierra.futuregrid.org', 'india.futuregrid.org']:
         pbs = PBS(user, host)
         services[host] = pbs.service_distribution()
         qinfo[host] = pbs.qinfo()
+        qstat[host] = pbs.qstat()
+        qstat_uniq_users[host] = pbs.get_uniq_users()
 
 
     machines = services.keys()
@@ -86,16 +90,23 @@ def display_status():
 
     # Users and Jobs
     total_jobs = {}
+    unique_users = {}
     for machine in machines:
         for qserver in qinfo[machine]:
             total_jobs[qserver] = 0
+            unique_users[qserver] = 0
             try:
                 hostname = qserver.split('.')[0]
             except:
                 hostname = ""
             for qname in qinfo[machine][qserver]:
                 total_jobs[qserver] += qinfo[machine][qserver][qname]['total_jobs']
+                try:
+                    unique_users[qserver] += len(qstat_uniq_users[machine][qserver])
+                except KeyError:
+                    pass
             values[hostname]['jobs'] = total_jobs[qserver]
+            values[hostname]['users'] = unique_users[qserver]
 
     return render_template('status/status.html',
                            services=spider_services,

@@ -48,6 +48,9 @@ class PBS:
                                    'echo.futuregrid.org': ['echo'],
                                    'bravo.futuregrid.org': ['bravo', 'bravo-long'],
                                    }
+        elif host.startswith("sierra"):
+            self.cluster_queues = {
+                'sierra.futuregrid.org': [ 'batch'] }
 
     def requister_joint_queues(self, cluster_queues):
         """allows the registration of queues for multiple clusters managed through the same queuing server
@@ -287,6 +290,8 @@ class PBS:
 
     def get_machine_name(self, qname):
         machines = self.cluster_queues
+        if not machines:
+            return qname
         for machine in machines:
             queues = machines[machine]
             if qname in queues:
