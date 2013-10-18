@@ -25,6 +25,25 @@ cloudmesh:
             default:
                 flavor: m1.tiny
                 image: 4199d988-0833-4497-a473-96fc456fac2f
+         alamo:
+            cm_host: alamo.futuregrid.org
+            cm_label: alamo
+            cm_type: ec2
+            cm_type_version: null
+            credentials:
+              EC2_PRIVATE_KEY: $HOME/.futuregrid/alamo/pk.pem
+              EC2_CERT: $HOME/.futuregrid/alamo/cert.pem
+              NOVA_CERT: $HOME/.futuregrid/alamo/cacert.pem
+              EUCALYPTUS_CERT: $HOME/.futuregrid/alamo/cacert.pem
+              EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
+              EC2_ACCESS_KEY: {{password.alamo.EC2_ACCESS_KEY}}
+              EC2_SECRET_KEY: {{password.alamo.EC2_SECERT_KEY}}
+              keyname: cloudmesh
+              userid: gvonlasz
+            default:
+              flavor: m1.small-not-correct
+              image: ami-fbb2fc92-not-correct
+              location: us-east-1-not-correct
         hp:
             cm_heading: HP Openstack
             cm_label: hpos
