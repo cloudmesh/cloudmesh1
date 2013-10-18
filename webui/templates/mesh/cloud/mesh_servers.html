@@ -76,6 +76,17 @@ $(function() {
 
     </h3>
     <div>
+
+	{% set flavor_id = user.defaults.flavors[cloud] %}
+    {% set image_id = user.defaults.images[cloud] %}
+
+	<p>
+		Defaults:
+    <a href="/mesh/images"> Image: <span class="badge">{{images[cloud][image_id]['name']}} </span></a>
+    <a href="/mesh/flavors">Flavor: <span class="badge">{{flavors[cloud][flavor_id]['name']}} </span></a>
+    <a href="/profile"> last vm name: <span class="badge">{{user.defaults.prefix}}_{{user.defaults.index}} </span></a>
+	</p>
+
     <table id="cloud-table-{{ loop.index0 }}" >
       <thead>
           <tr>
@@ -91,6 +102,7 @@ $(function() {
              {% set s_id = clouds[cloud][server]['id'] %}
              <tr>
              	<td>
+	{{         clouds[cloud][server]}}
              	 	{{ image_button ("none", "368_collapse", "/cm/login/" ~ cloud ~ "/" ~ s_id ~ "/") }}
 	  				{{ image_button ("right", "195_circle_info", "/cm/info/" ~ cloud ~ "/" ~ s_id ~ "/") }}
 	  				<a href="/cm/assignpubip/{{cloud}}/{{s_id}}/">  IP </a>
@@ -101,10 +113,20 @@ $(function() {
                  {% for attribute in attributes %}
                       {% if attribute == "created" %}
                           <td>{{ clouds[cloud][server][attribute] }}</td>
+
 					  {% elif attribute == "status"%}
 					      <td> {{ cm_state_color(clouds[cloud][server][attribute]) }}</td>
+
                       {% elif attribute == "flavor" %}
-                          <td>{{ clouds[cloud][server][attribute]['id'] }}</td>
+                      	{% set id = clouds[cloud][server][attribute]['id'] %}
+                          <td> {{ flavors[cloud][id]['name']}}
+                          </td>
+
+                      {% elif attribute == "image" %}
+                      	{% set id = clouds[cloud][server][attribute]['id'] %}
+                          <td> {{ images[cloud][id]['name']}}
+                          </td>
+
                       {% elif attribute == "addresses" %}
                           <td>{{ address_string(clouds[cloud][server][attribute]) }}</td>
                       {% else %}
