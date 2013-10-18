@@ -10,6 +10,9 @@ profile:
 
 password:
   sierra_openstack_grizzly: 1234abcde
+  alamo:
+      EC2_ACCESS_KEY: hdjfhdskjfhlkj
+      EC2_SECERT_KEY: jdfkjdsf;lkjfk
 
 projects:
   default: fg82
