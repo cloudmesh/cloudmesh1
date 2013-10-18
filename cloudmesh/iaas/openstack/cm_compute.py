@@ -319,8 +319,21 @@ class openstack(ComputeBaseType):
                               "public_key": "%s" % keycontent
                               }
                  }
+        #print params
         return self._post(posturl, params)
-
+    
+    def keypair_remove(selfself, keyname):
+        conf = self._get_service_endpoint("compute")
+        publicURL = conf['publicURL']
+        
+        url = "%s/os-keypairs/%s" % (publicURL, keyname)
+        headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
+        r = requests.delete(url, headers=headers, verify=self._get_cacert())
+        ret = {"msg":"success"}
+        if r.text:
+            ret = r.json()
+        return ret
+    
     def vm_create(self, name,
                   flavor_name,
                   image_id,

@@ -131,6 +131,48 @@ def assign_public_ip(cloud=None, server=None):
     # else:
     #    return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
 
+def _keyname_sanitation(username, keyname):
+    keynamenew = "%s_%s" % (username, keyname.replace('.','_').replace('@', '_'))
+    return keynamenew
+
+@cloud_module.route('/cm/keypairs/<cloud>/', methods=['GET', 'POST'])
+@login_required
+def manage_keypairs(cloud=None):
+    userinfo = getCurrentUserinfo()
+    username = userinfo["cm_user_id"]
+    keys = userinfo["keys"]["keylist"]
+    cloudmanager = clouds.clouds[cloud]['manager']
+    if request.method == 'POST':
+        keyname = request.form["keyname"]
+        # remove beginning 'key ' part
+        keycontent = keys[keyname]
+        if keycontent.startswith('key '):
+            keycontent = keycontent[4:]
+        #print keycontent
+        keynamenew = _keyname_sanitation(username, keyname)
+        r = cloudmanager.keypair_add(keynamenew, keycontent)
+        return "dummy msg"
+    else:
+        registered = {}
+        keysRegistered = cloudmanager.keypair_list()
+        keynamesRegistered = []
+        if "keypairs" in keysRegistered:
+            keypairsRegistered = keysRegistered["keypairs"]
+            for akeypair in keypairsRegistered:
+                keyname = akeypair['keypair']['name']
+                keynamesRegistered.append(keyname)
+        pprint(keynamesRegistered)
+        for keyname in keys.keys():
+            keynamenew = _keyname_sanitation(username, keyname)
+            print keynamenew
+            if keynamenew in keynamesRegistered:
+                registered[keyname] = True
+            else:
+                registered[keyname] = False
+        return render_template('mesh/cloud/keypairs.html',
+                               keys=keys,
+                               registered=registered,
+                               cloudname=cloud)
 # ============================================================
 # ROUTE: START
 # ============================================================
