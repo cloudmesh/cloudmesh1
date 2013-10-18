@@ -57,7 +57,7 @@ def getCurrentUserinfo():
 @cloud_module.route('/cm/refresh/<cloud>/<service_type>')
 @login_required
 def refresh(cloud=None, server=None, service_type=None):
-    print "-> refresh", cloud, service_type
+    log.info("-> refresh {0} {1}".format(cloud, service_type))
     userinfo = getCurrentUserinfo()
     # print "REQ", redirect(request.args.get('next') or '/').__dict__
     cloud_names = None
@@ -87,7 +87,6 @@ def refresh(cloud=None, server=None, service_type=None):
 @cloud_module.route('/cm/delete/<cloud>/<server>/')
 @login_required
 def delete_vm(cloud=None, server=None):
-    print "HALLO"
     log.info ("-> delete {0} {1}".format(cloud, server))
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
@@ -132,7 +131,7 @@ def assign_public_ip(cloud=None, server=None):
     #    return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
 
 def _keyname_sanitation(username, keyname):
-    keynamenew = "%s_%s" % (username, keyname.replace('.','_').replace('@', '_'))
+    keynamenew = "%s_%s" % (username, keyname.replace('.', '_').replace('@', '_'))
     return keynamenew
 
 @cloud_module.route('/cm/keypairs/<cloud>/', methods=['GET', 'POST'])
@@ -142,7 +141,7 @@ def manage_keypairs(cloud=None):
     username = userinfo["cm_user_id"]
     keys = userinfo["keys"]["keylist"]
     cloudmanager = clouds.clouds[cloud]['manager']
-    
+
     # currently we do the registration only for openstack
     # not yet sure if other clouds support this
     # or if we have implemented them if they also support
@@ -154,12 +153,12 @@ def manage_keypairs(cloud=None):
             keycontent = keys[keyname]
             if keycontent.startswith('key '):
                 keycontent = keycontent[4:]
-            #print keycontent
+            # print keycontent
             keynamenew = _keyname_sanitation(username, keyname)
             if action == 'register':
                 log.debug("trying to register a key")
                 r = cloudmanager.keypair_add(keynamenew, keycontent)
-                #pprint(r)
+                # pprint(r)
             else:
                 log.debug("trying to deregister a key")
                 r = cloudmanager.keypair_remove(keynamenew)
@@ -173,10 +172,10 @@ def manage_keypairs(cloud=None):
                 for akeypair in keypairsRegistered:
                     keyname = akeypair['keypair']['name']
                     keynamesRegistered.append(keyname)
-            #pprint(keynamesRegistered)
+            # pprint(keynamesRegistered)
             for keyname in keys.keys():
                 keynamenew = _keyname_sanitation(username, keyname)
-                #print keynamenew
+                # print keynamenew
                 if keynamenew in keynamesRegistered:
                     registered[keyname] = True
                 else:
@@ -193,6 +192,7 @@ def manage_keypairs(cloud=None):
 # WHY NOT USE cm_keys as suggested?
 #
 
+# @cloud_module.route('/cm/start/<cloud>/<count>')
 
 @cloud_module.route('/cm/start/<cloud>/')
 @login_required
@@ -305,6 +305,25 @@ def vm_login(cloud=None, server=None):
         # BUG: login must be based on os
         # TODO: loginbug
         #
+
+        c = cm_mongo()
+        images = c.images([cloud])[cloud]
+
+        image = server['image']['id']
+
+        imagename = images[image]['name']
+        print imagename
+
+        if "ubuntu" in imagename:
+            loginname = "ubuntu"
+        elif "centos" in imagename:
+            loginname = "root"
+        elif "debian" in imagename:
+            loginname = "root"
+        else:
+            userdata = g.user
+            loginname = userdata.id
+
         link = 'ubuntu@' + ip
         webbrowser.open("ssh://" + link)
 
