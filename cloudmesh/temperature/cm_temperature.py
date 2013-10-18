@@ -5,7 +5,8 @@ from sh import ssh
 
 # class cm_temperature:
 
-hostname = "i066"
+# hostname = "i066"
+hostname = "e003"
 
 config_server = cm_config_server().get("cloudmesh.server.clusters")
 
