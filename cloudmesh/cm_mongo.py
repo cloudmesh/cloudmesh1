@@ -213,8 +213,8 @@ class cm_mongo:
                 watch.start(name)
                 cloud.refresh(type)
                 result = cloud.get(type)
-                print "YYYYY", len(result)
-                pprint(result)
+                #print "YYYYY", len(result)
+                #pprint(result)
                 # add result to db,
                 watch.stop(name)
                 print 'Refresh time:', watch.get(name)
