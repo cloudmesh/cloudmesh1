@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import render_template, request, redirect, g, jsonify
+from flask import render_template, request, redirect, g, jsonify, session
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mesh import cloudmesh
 from cloudmesh.util.util import table_printer
@@ -11,7 +11,7 @@ from cloudmesh.util.util import cond_decorator
 import cloudmesh
 from flask.ext.login import login_required
 import webbrowser
-
+from cloudmesh.util.util import address_string
 from cloudmesh.util.logger import LOGGER
 from pprint import pprint
 
@@ -96,6 +96,91 @@ def delete_vm(cloud=None, server=None):
     clouds.refresh(names=[cloud], types=["servers"])
     return redirect('/mesh/servers')
 
+# ============================================================
+# ROUTE: DELETE Multiple VM CONFIRMATION AND DELETION
+# ============================================================
+@cloud_module.route('/cm/delete_vm_confirm',methods=('GET', 'POST'))   
+@cond_decorator(cloudmesh.with_login, login_required)
+def delete_vm_confirm():
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    # filter()
+    config = cm_config()
+    c = cm_mongo()
+    c.activate()
+    # c.refresh(types=["servers"])
+    clouds = c.servers()
+    userdata = g.user
+    username = userdata.id
+    user_obj = cm_user()
+    user = user_obj.info(username)
+    images = c.images()
+    flavors = c.flavors()
+
+    os_attributes = ['name',
+                     'status',
+                     'addresses',
+                     'flavor',
+                     'id',
+                     'image',
+                     'user_id',
+                     'metadata',
+                     'key_name',
+                     'created']
+    cloud_filters = None
+    filtered_clouds = clouds
+    select = request.form.getlist("selection")
+    cloud = request.form["cloud"]
+    if select != None and cloud != None:
+        session["delete_selection"] = (cloud,select) 
+    if "delete_selection" in session:
+        print "writing selection to session"
+        #print filtered_clouds
+        selected_cloud_data = {}
+        selected_cloud_data[cloud] = get_selected_clouds(filtered_clouds[session["delete_selection"][0]],session["delete_selection"][1]) 
+        return render_template('mesh/cloud/delete_vms.html',
+                               address_string = address_string,
+                               attributes=os_attributes,
+                               updated=time_now,
+                               clouds=selected_cloud_data,
+                               config=config,
+                               user=user,
+                               images = images,
+                               flavors = flavors,
+                               filters=cloud_filters)
+
+    else:
+        return "nothing to delete"
+
+@cloud_module.route('/cm/delete_request_submit/<option>',methods=('GET', 'POST'))
+@cond_decorator(cloudmesh.with_login, login_required)
+def delete_vm_submit(option):
+    config = cm_config()
+    c = cm_mongo()
+    c.activate()
+    select = session.pop("delete_selection",None)
+
+    clouds = c.servers()
+
+    if option == "true":
+        cloud = select[0]
+        servers = select[1]#[cloud]
+        print cloud,"+++++++++++++++++++++++++++++++",servers
+        for server in servers:
+            delete_vm(cloud=cloud, server=server)
+            
+        return "Delete successful"
+    else:
+            return "delete aborted"        
+
+
+def get_selected_clouds(cloud,select_ids):
+    selected_clouds = {}
+    for id in select_ids:
+        if id in cloud:
+            selected_clouds[id] = cloud[id]
+    #print selected_clouds
+    return selected_clouds
+     
 # ============================================================
 # ROUTE: DELETE GROUP
 # ============================================================
