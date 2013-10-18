@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import render_template, request, redirect, g
+from flask import render_template, request, redirect, g, jsonify
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mesh import cloudmesh
 from cloudmesh.util.util import table_printer
@@ -142,37 +142,49 @@ def manage_keypairs(cloud=None):
     username = userinfo["cm_user_id"]
     keys = userinfo["keys"]["keylist"]
     cloudmanager = clouds.clouds[cloud]['manager']
-    if request.method == 'POST':
-        keyname = request.form["keyname"]
-        # remove beginning 'key ' part
-        keycontent = keys[keyname]
-        if keycontent.startswith('key '):
-            keycontent = keycontent[4:]
-        #print keycontent
-        keynamenew = _keyname_sanitation(username, keyname)
-        r = cloudmanager.keypair_add(keynamenew, keycontent)
-        return "dummy msg"
-    else:
-        registered = {}
-        keysRegistered = cloudmanager.keypair_list()
-        keynamesRegistered = []
-        if "keypairs" in keysRegistered:
-            keypairsRegistered = keysRegistered["keypairs"]
-            for akeypair in keypairsRegistered:
-                keyname = akeypair['keypair']['name']
-                keynamesRegistered.append(keyname)
-        pprint(keynamesRegistered)
-        for keyname in keys.keys():
+    
+    # currently we do the registration only for openstack
+    # not yet sure if other clouds support this
+    # or if we have implemented them if they also support
+    if clouds.clouds[cloud]['cm_type'] == 'openstack':
+        if request.method == 'POST':
+            action = request.form['action']
+            keyname = request.form["keyname"]
+            # remove beginning 'key ' part
+            keycontent = keys[keyname]
+            if keycontent.startswith('key '):
+                keycontent = keycontent[4:]
+            #print keycontent
             keynamenew = _keyname_sanitation(username, keyname)
-            print keynamenew
-            if keynamenew in keynamesRegistered:
-                registered[keyname] = True
+            if action == 'register':
+                log.debug("trying to register a key")
+                r = cloudmanager.keypair_add(keynamenew, keycontent)
+                #pprint(r)
             else:
-                registered[keyname] = False
-        return render_template('mesh/cloud/keypairs.html',
-                               keys=keys,
-                               registered=registered,
-                               cloudname=cloud)
+                log.debug("trying to deregister a key")
+                r = cloudmanager.keypair_remove(keynamenew)
+            return jsonify(**r)
+        else:
+            registered = {}
+            keysRegistered = cloudmanager.keypair_list()
+            keynamesRegistered = []
+            if "keypairs" in keysRegistered:
+                keypairsRegistered = keysRegistered["keypairs"]
+                for akeypair in keypairsRegistered:
+                    keyname = akeypair['keypair']['name']
+                    keynamesRegistered.append(keyname)
+            #pprint(keynamesRegistered)
+            for keyname in keys.keys():
+                keynamenew = _keyname_sanitation(username, keyname)
+                #print keynamenew
+                if keynamenew in keynamesRegistered:
+                    registered[keyname] = True
+                else:
+                    registered[keyname] = False
+            return render_template('mesh/cloud/keypairs.html',
+                                   keys=keys,
+                                   registered=registered,
+                                   cloudname=cloud)
 # ============================================================
 # ROUTE: START
 # ============================================================
