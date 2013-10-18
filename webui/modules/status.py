@@ -28,9 +28,9 @@ def display_status():
               'india' : { 'jobs' : 3, 'users' : 50},
               'bravo' : { 'jobs' : 13, 'users' : 40},
               'echo' : { 'jobs' : 23, 'users' : 30},
-              'hotel' : { 'jobs' : 33, 'users' : 20},
+              'hotel' : { 'jobs' : 0, 'users' : 0},
               'sierra' : { 'jobs' : 43, 'users' : 10},
-              'alamo' : { 'jobs' : 53, 'users' : 1},
+              'alamo' : { 'jobs' : 0, 'users' : 0},
               'delta' : { 'jobs' : 0, 'users': 0}
               }
 

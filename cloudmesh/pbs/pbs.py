@@ -268,6 +268,32 @@ class PBS:
             self.pbs_qstat_data = info
         return self.pbs_qstat_data
 
+    def get_uniq_users(self, refresh=False):
+        if self.pbs_qstat_data is None or refresh:
+            self.qstat()
+
+        data = self.pbs_qstat_data
+        job_owner = {}
+        for job in data:
+            queue_name = data[job]['queue']
+            server_name = self.get_machine_name(queue_name)
+            ownerid = (data[job]['Job_Owner']).split("@")[0]
+            try:
+                job_owner[server_name].add(ownerid)
+            except:
+                job_owner[server_name] = set([ownerid])
+
+        return job_owner
+
+    def get_machine_name(self, qname):
+        machines = self.cluster_queues
+        for machine in machines:
+            queues = machines[machine]
+            if qname in queues:
+                return machine
+
+        return qname
+
     def service_distribution(self, simple=True):
         """prints the distribution of services"""
 
