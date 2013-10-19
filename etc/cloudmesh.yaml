@@ -28,7 +28,7 @@ cloudmesh:
          alamo:
             cm_host: alamo.futuregrid.org
             cm_label: alamo
-            cm_type: eucalyptus
+            cm_type: ec2
             cm_type_version: folsom
             credentials:
               EC2_PRIVATE_KEY: $HOME/.futuregrid/alamo/pk.pem
