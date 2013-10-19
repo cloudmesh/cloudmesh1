@@ -36,45 +36,47 @@ def mesh_register_clouds():
     user_obj = cm_user()
     user = user_obj.info(username)
 
-    cloudtypes = {}
-    for cloud in config.get("cloudmesh.clouds"):
-        cloudtypes[cloud] = config['cloudmesh']['clouds'][cloud]['cm_type']
+
 
     # todo define correct actions.
     if request.method == 'POST':
 
-        if (request.form['cloudInput'] == 'aws'):
+        cloudname = request.form['cloudInput']
+
+        if cloudname == 'aws':
             awsUserName = request.form['field-aws-username']
             awsAccessKey = request.form['field-aws_accesskey-password']
             awsSecretKey = request.form['field-aws_secretkey-password']
 
             print awsUserName, awsAccessKey, awsSecretKey
 
-        elif (request.form['cloudInput'] == 'azure'):
+        elif cloudname == 'azure':
             azureSubscriptionKey = request.form['field-azure-password']
 
             print azureSubscriptionKey
 
-        elif (request.form['cloudInput'] == 'hp'):
+        elif cloudname == 'hp':
             hpUserName = request.form['field-hp-username']
-            hpPassword = request.form['field-hp-password']
+            password = request.form['field-hp-password']
 
-            print hpUserName, hpPassword
+            print hpUserName, password
+
+        elif cloudname in  ['sierra_openstack_grizzly', 'alamo']:
+            password = request.form['field-sierra_openstack_grizzly-password']
+
+            user_obj.set_password(username, password, cloudname)
+
+    passwords = {}
+    cloudtypes = {}
+    for cloud in config.get("cloudmesh.clouds"):
+        cloudtypes[cloud] = config['cloudmesh']['clouds'][cloud]['cm_type']
+        passwords[cloud] = user_obj.get_password(username, cloud)
 
 
-        elif (request.form['cloudInput'] == 'sierra_openstack_grizzly'):
-            sierraPassword = request.form['field-sierra_openstack_grizzly-password']
-
-            print sierraPassword
-
-        return render_template('error.html',
-                               updated=datetime.now(),
-                               error=error,
-                               type="This feature has not yet been implemented",
-                               msg="All data from Post request retrieved!")
 
     return render_template('mesh/cloud/mesh_register_clouds.html',
                            user=user,
+                           passwords=passwords,
                            username=username,
                            cloudnames=config.cloudnames(),
                            cloudtypes=cloudtypes,

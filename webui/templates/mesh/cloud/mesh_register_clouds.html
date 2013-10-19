@@ -4,16 +4,22 @@
 {% from "_helper.html" import cm_image_input %}
 {% from "_helper.html" import submit_button %}
 
+
+
 {% block contentbox %}
 <h1> Register </h1>
 {% endblock contentbox %}
 
 {% block content %}
 
+<script src="/static/js/hideShowPassword.min.js" type="text/javascript" charset="utf-8"></script>
+
+
 {{user}}
 <br>
 <hr>
-
+ passwords {{passwords}}
+<hr>
 {{username}}
 <br>
 
@@ -27,11 +33,17 @@
         valign="middle"
         type="password"
         name="field-{{cloudname}}-password"
-        value="" autocomplete="off"
+        value="{{passwords[cloudname]}}"
+        autocomplete="off"
         placeholder="{{label}}"
         style="margin-bottom: 5px; margin-top: 5px;">
     </td>
 </tr>
+<script>
+$('#id-{{cloudname}}-password').hideShowPassword({
+  innerToggle: true
+});
+</script>
 {% endmacro %}
 
 {% macro get_username(label, cloudname, name, username_edit_enabled) %}
@@ -220,5 +232,7 @@ $('#example').find('input').click(
     }
 );
 </script>
+
+
 
 {% endblock %}

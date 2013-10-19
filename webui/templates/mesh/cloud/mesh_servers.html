@@ -116,7 +116,13 @@ function toggle(source,select_list) {
     <table id="cloud-table-{{ loop.index0 }}" >
       <thead>
           <tr>
-          	<th><input type="checkbox" name="all" onClick="toggle(this,'selection')" /> </th>
+          	<th><input type="checkbox" name="all" onClick="toggle(this,'selection')" />
+          		 <input type = "image"
+          		        src = "/static/img/icons/png/glyphicons_016_bin.png"
+          		        alt = "delete" value = "delete"
+          		         width="16" height="16"
+          		        formaction = "/cm/delete_vm_confirm"/>
+          		</th>
 	      	<th width="100"></th>
             {% for attribute in attributes %}
                   <th>{{attribute}}</th>
@@ -172,7 +178,6 @@ function toggle(source,select_list) {
       </tbody>
     </table>
     <br>
-    <input type = "image" src = "/static/img/icons/png/glyphicons_016_bin.png" alt = "delete" value = "delete" formaction = "/cm/delete_vm_confirm"/>
    </form>
     </div>
   </div>
