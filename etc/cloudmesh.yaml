@@ -29,7 +29,7 @@ cloudmesh:
             cm_host: alamo.futuregrid.org
             cm_label: alamo
             cm_type: ec2
-            cm_type_version: null
+            cm_type_version: folsom
             credentials:
               EC2_PRIVATE_KEY: $HOME/.futuregrid/alamo/pk.pem
               EC2_CERT: $HOME/.futuregrid/alamo/cert.pem
@@ -41,9 +41,8 @@ cloudmesh:
               keyname: cloudmesh
               userid: gvonlasz
             default:
-              flavor: m1.small-not-correct
-              image: ami-fbb2fc92-not-correct
-              location: us-east-1-not-correct
+              flavor: m1.tiny
+              image: ami-00000017
         hp:
             cm_heading: HP Openstack
             cm_label: hpos
