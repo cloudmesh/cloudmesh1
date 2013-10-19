@@ -250,6 +250,9 @@ class cm_mongo:
                                 result[element]['metadata'][fixedkey] = value
                     # print "HPCLOUD_DEBUG - AFTER DELETING PROBLEMATIC KEYS", result[element]
 
+                    if "_id" in result[element]:
+                        del(result[element]['_id'])
+
                     self.db_clouds.insert(result[element])
 
                 watch.stop(name)
