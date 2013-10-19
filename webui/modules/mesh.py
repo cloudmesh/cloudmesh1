@@ -36,6 +36,10 @@ def mesh_register_clouds():
     user_obj = cm_user()
     user = user_obj.info(username)
 
+    cloudtypes = {}
+    for cloud in config.get("cloudmesh.clouds"):
+        cloudtypes[cloud] = config['cloudmesh']['clouds'][cloud]['cm_type']
+
     # todo define correct actions.
     if request.method == 'POST':
 
@@ -73,6 +77,7 @@ def mesh_register_clouds():
                            user=user,
                            username=username,
                            cloudnames=config.cloudnames(),
+                           cloudtypes=cloudtypes,
                            error=error)
 
 @mesh_module.route('/mesh/images/', methods=['GET', 'POST'])
@@ -378,9 +383,9 @@ def mongo_table(filters=None):
 
     cloud_filters = None
     filtered_clouds = clouds
-    #pprint(clouds)
-    #pprint(flavors)
-    #for cloud in clouds:
+    # pprint(clouds)
+    # pprint(flavors)
+    # for cloud in clouds:
     #    print cloud
     #    for server in clouds[cloud]:
     #        print server

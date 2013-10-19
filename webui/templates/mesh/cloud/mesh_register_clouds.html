@@ -96,10 +96,10 @@
     {{ password ("Password", cloudname)}}
 {% endmacro %}
 
-{% macro aws(cloudname, verified) %}
+{% macro aws(cloudname, username, verified) %}
 
     {{ tableHeader(cloudname, false, verified) }}
-    {{ get_username ("Username", "username", cloudname, True)}}
+    {{ get_username ("Username", "username", username, True)}}
     {% set accesskey= cloudname + "_accesskey" %}
     {% set secretkey= cloudname + "_secretkey" %}
     {{ password ("Access Key", accesskey)}}
@@ -107,10 +107,22 @@
 
 {% endmacro %}
 
-{% macro hp(cloudname, regions, verified) %}
+{% macro ec2(cloudname, name, username_edit_enabled, verified) %}
+
+    {{ tableHeader(cloudname, false, verified) }}
+    {{ get_username ("Username", "username", name,  username_edit_enabled)}}
+    {% set accesskey= cloudname + "_accesskey" %}
+    {% set secretkey= cloudname + "_secretkey" %}
+    {{ password ("Access Key", accesskey)}}
+    {{ password ("Secret Key", secretkey)}}
+
+{% endmacro %}
+
+
+{% macro hp(cloudname, username, regions, verified) %}
 
     {{ tableHeader(cloudname, regions, verified) }}
-    {{ get_username ("Username", "username", cloudname, True)}}
+    {{ get_username ("Username", "username", username, True)}}
     {{ password ("Password", cloudname)}}
 
 {% endmacro %}
@@ -132,26 +144,38 @@
     </tr>
 </table>
 
+<hr>
+{{cloudtypes}}
+<hr>
+{{user}}
+
 <div id="accordion">
     <div>
         {% set cloudList = cloudnames %}
         {{ cloudList.remove("hp_east") }}
         {% for cloud in cloudList %}
-        <h3>
-        	<a href="#">{{ cloud }}</a>
+        <h3 id="example">
+        	{{ cloud }}
         </h3>
         <form id={{ cloud }} method="post">
             <input name="cloudInput" type="hidden" value="{{ cloud }}"/>
             <table id={{ cloud }} + "clouds" style="display: inline-block; float: left;">
                 <tr>
-                    {% if (cloud) == "sierra_openstack_grizzly" %}
+                    {% if (cloud) == "hp" %}
+                        {{ hp(cloud, username, ["hp_east"]) }}
+                    {% elif cloud in ["sierra_openstack_grizzly"] %}
                         {{ openstack(cloud, username, False, true) }}
-                    {% elif (cloud) == "aws" %}
-                        {{ aws(cloud) }}
-                    {% elif (cloud) == "hp" %}
-                        {{ hp(cloud, ["hp_east"]) }}
-                    {% elif (cloud) == "azure" %}
+                    {% elif cloud in ["alamo"] %}
+                        {{ ec2(cloud, username, False, true) }}
+                    {% elif cloudtypes[cloud] == "openstack" %}
+                    	if cloud in ["sierra_openstack_grizzly"]
+                        {{ openstack(cloud, username, True, true) }}
+                    {% elif cloudtypes[cloud] == "aws" %}
+                        {{ aws(cloud, username) }}
+                    {% elif cloudtypes[cloud] == "azure" %}
                         {{ azure(cloud) }}
+                    {% elif cloudtypes[cloud] == "ec2" %}
+                        {{ ec2(cloud, username) }}
                     {% endif %}
                     <th></th><th></th>
                     <th style="text-align: right">
@@ -189,6 +213,12 @@
     }
 
     </script>
-
+<script>
+$('#example').find('input').click(
+    function(e){
+        e.stopPropagation();
+    }
+);
+</script>
 
 {% endblock %}
