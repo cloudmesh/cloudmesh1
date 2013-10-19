@@ -630,3 +630,16 @@ class azure(ComputeBaseType):
 
     def release_unused_public_ips(self):
         return
+
+    def _get_flavors_dict(self):
+        return self.list_flavors()
+
+    def list_flavors(self):
+
+        res = {u'ExtraSmall': {'id': 1, 'name':'ExtraSmall'},  \
+               u'Small': {'id': 2, 'name': 'Small'}, \
+               u'Medium': {'id': 3, 'name': 'Medium'}, \
+               u'Large': {'id': 4, 'name': 'Large'}, \
+               u'ExtraLarge': {'id': 5, 'name': 'ExtraLarge'} }
+
+        return res
