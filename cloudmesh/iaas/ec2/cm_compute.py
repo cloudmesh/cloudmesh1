@@ -10,7 +10,7 @@ from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from libcloud.compute.base import NodeImage, NodeSize
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider
-from libcloud import security
+import libcloud.security
 import sys
 
 import urlparse
@@ -67,7 +67,15 @@ class ec2(ComputeBaseType):
         self.hostname, self.port, self.path = self._urlparse(self.ec2_url)
 
         self.certfile = self.user_credential['EUCALYPTUS_CERT']
-        security.CA_CERTS_PATH.append(self.certfile)
+        libcloud.security.CA_CERTS_PATH.append(self.certfile)
+
+        # Skip this step if you are launching nodes on an official
+        # provider. It is intended only for self signed SSL certs in
+        # test deployments.
+        # Note: Code like this poses a security risk (MITM attack) and
+        # that's the reason why you should never use it for anything else
+        # besides testing. You have been warned.
+        libcloud.security.VERIFY_SSL_CERT = False
 
     def connect(self):
         Driver = get_driver(Provider.EUCALYPTUS)
