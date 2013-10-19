@@ -77,7 +77,7 @@ function toggle(source,select_list) {
   {% for cloud in clouds %}
   <div style="margin-bottom:1em;">
     <h3>
-    	
+
     	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
 
       	&nbsp;
@@ -92,14 +92,22 @@ function toggle(source,select_list) {
       	{{ image_button ("none", "044_keys", "/cm/keypairs/" + cloud + "/") }}
 	</h3>
     <div>
-    	
+
 	{% set flavor_id = user.defaults.flavors[cloud] %}
     {% set image_id = user.defaults.images[cloud] %}
 
 	<p>
 		Defaults:
-    <a href="/mesh/images"> Image: <span class="badge">{{images[cloud][image_id]['name']}} </span></a>
-    <a href="/mesh/flavors">Flavor: <span class="badge">{{flavors[cloud][flavor_id]['name']}} </span></a>
+	{% if image_id in images[cloud] %}
+	    <a href="/mesh/images"> Image: <span class="badge">{{images[cloud][image_id]['name']}} </span></a>
+    {% else %}
+	    <a href="/mesh/images"> Image: <span class="badge"> undefined </span></a>
+    {% endif %}
+    {% if flavor_id in flavors[cloud] %}
+	    <a href="/mesh/flavors">Flavor: <span class="badge">{{flavors[cloud][flavor_id]['name']}} </span></a>
+    {% else %}
+	    <a href="/mesh/images"> Image: <span class="badge"> undefined </span></a>
+	{% endif %}
     <a href="/profile"> last vm name: <span class="badge">{{user.defaults.prefix}}_{{user.defaults.index}} </span></a>
 	</p>
 	<form name = "selector_form_{{cloud}}" method = "post">
