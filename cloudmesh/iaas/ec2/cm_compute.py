@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-cloudmesh.iaas.aws.cm_compute
+cloudmesh.iaas.ec2.cm_compute
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
@@ -10,7 +10,7 @@ from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from libcloud.compute.base import NodeImage, NodeSize
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider
-import libcloud
+from libcloud import security
 import sys
 
 import urlparse
@@ -18,7 +18,7 @@ import urlparse
 
 class ec2(ComputeBaseType):
     """ 
-    Amazon Cloud service with the libcloud interface
+    ec2 service with the libcloud interface
     With libcloud interface, cloudmesh supports Amazon Web Services such as EC2, S3,
     EBS, etc.
     """
@@ -42,14 +42,14 @@ class ec2(ComputeBaseType):
         self.user_credential = self.compute_config.credential(label)
 
         # Service certificate
-        self.access_key_id = self.user_credential['access_key_id']
+        self.access_key_id = self.user_credential['EC2_ACCESS_KEY']
         self.secret_access_key = \
-        self.user_credential['secret_access_key']
+        self.user_credential['EC2_SECRET_KEY']
 
         # SSH
         self.ssh_userid = self.user_credential['userid']
         self.ssh_keyname = self.user_credential['keyname']
-        self.ssh_pkey = self.user_credential['privatekeyfile']
+        self.ssh_pkey = self.user_credential['EC2_PRIVATE_KEY']
 
         # set default flavor from yaml
         flavor = self.compute_config.default(label)['flavor']
@@ -59,51 +59,29 @@ class ec2(ComputeBaseType):
         self.set_image_name(image_name)
 
         # set default location from yaml
-        location = self.compute_config.default(label)['location']
-        self.set_location(location)
+        #location = self.compute_config.default(label)['location']
+        #self.set_location(location)
+
+        # Auth url
+        self.ec2_url = self.user_credential['EC2_URL']
+        self.hostname, self.port, self.path = self._urlparse(self.ec2_url)
+
+        self.certfile = self.user_credential['EUCALYPTUS_CERT']
+        security.CA_CERTS_PATH.append(self.certfile)
 
     def connect(self):
-        print "CCCCCC"
-        Driver = get_driver(Provider.EC2)
-
-        # #self.credential = self.config.get(self.label, expand=True)
-        # #pprint(self.credential)
-
-        #### libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
-        #### libcloud.security.VERIFY_SSL_CERT = False
-
-
-        ec2_url = self.compute_config.get("cloudmesh.clouds.alamo.credentials.EC2_URL")
-
-        result = urlparse.urlparse(ec2_url)
-        is_secure = (result.scheme == 'https')
-        if ":" in result.netloc:
-           host_port_tuple = result.netloc.split(':')
-           host = host_port_tuple[0]
-           port = int(host_port_tuple[1])
-        else:
-           host = result.netloc
-           port = None
-
-        path = result.path
-
-        print host
-        print port
-
-        certfile = self.compute_config.get("cloudmesh.clouds.alamo.credentials.EUCALYPTUS_CERT")
-        libcloud.security.CA_CERTS_PATH.append(certfile)
+        Driver = get_driver(Provider.EUCALYPTUS)
 
         #
         # BUG, make sure we use the cert, confirm with team ....
         #
         try:
-
-           conn = Driver(key=self.access_key_id,
+            conn = Driver(key=self.access_key_id,
                       secret=self.secret_access_key,
                       secure=True,
-                      host=host,
-                      path=path,
-                      port=port)
+                      host=self.hostname,
+                      path=self.path,
+                      port=self.port)
 
         except Exception, e:
             print e
@@ -228,3 +206,22 @@ class ec2(ComputeBaseType):
 
     def release_unused_public_ips(self):
         return
+
+    def _urlparse(self, ec2_url):
+        """Return host, port and path from ec2_url"""
+
+        result = urlparse.urlparse(ec2_url)
+        is_secure = (result.scheme == 'https')
+        if ":" in result.netloc:
+           host_port_tuple = result.netloc.split(':')
+           host = host_port_tuple[0]
+           port = int(host_port_tuple[1])
+        else:
+           host = result.netloc
+           port = None
+
+        path = result.path
+
+        return host, port, path
+
+
