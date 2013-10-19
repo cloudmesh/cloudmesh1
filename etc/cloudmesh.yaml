@@ -39,7 +39,7 @@ cloudmesh:
               EC2_ACCESS_KEY: {{password.alamo.EC2_ACCESS_KEY}}
               EC2_SECRET_KEY: {{password.alamo.EC2_SECERT_KEY}}
               keyname: cloudmesh
-              userid: gvonlasz
+              userid: {{portalname}}
             default:
               flavor: m1.tiny
               image: ami-00000017
