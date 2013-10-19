@@ -201,4 +201,30 @@ class aws(ComputeBaseType):
     def release_unused_public_ips(self):
         return
 
+    def _get_flavors_dict(self):
+        res = self.list_flavors()
+        res_dict = self.convert_to_dict(res)
+        return res_dict
 
+    def convert_to_dict(self, _list):
+        res_dict = {}
+        for row in _list:
+            # row looks like
+            # {'_uuid': None, 'name': 'Micro Instance', 'price': 0.02, 'ram':
+            # 613, 'driver': <libcloud.compute.drivers.ec2.EucNodeDriver
+            # object at 0x307e350>, 'bandwidth': None, 'disk': 15, 'id':
+            # 't1.micro'}
+            res_dict[row.id] = row.__dict__
+            del(row.driver)
+        return res_dict
+
+    def list_flavors(self):
+        return self.conn.list_sizes()
+
+    def _get_images_dict(self):
+        res = self.list_images()
+        res_dict = self.convert_to_dict(res)
+        return res_dict
+
+    def list_images(self):
+        return self.conn.list_images()
