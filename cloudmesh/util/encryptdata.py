@@ -3,6 +3,7 @@ import os
 from hashlib import sha256
 from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
+import uuid
 
 def pad(data, bs):
     """ Pad data to the given blocksize, PKCS-5 style """
@@ -43,6 +44,30 @@ def decrypt(data64, password):
     key = keydigest(password)
     aes = AES.new(key, AES.MODE_CBC, iv)
     return unpad(aes.decrypt(cypher))
+
+def encrypt_file(filepath):
+    """Encrypt file contents to base64"""
+    try:
+        # if it starts with ~
+        # os.path.expanduser
+        with open(filepath) as inf:
+            file_contents = inf.read()
+            return file_contents.encode('base64')
+    except IOError:
+        return filepath
+
+def decrypt_file(content, filename=None):
+    """Write a file by descrypting the content and return a filepath"""
+    file_contents = content.decode('base64')
+    try:
+        uniq_filename = filename or "~/.futuregrid/" + str(uuid.uuid4())
+        print uniq_filename
+        with open(uniq_filename, 'w') as outf:
+            outf.write(file_contents)
+        outf.close()
+        return uniq_filename
+    except:
+        pass
 
 if __name__ == "__main__":
     print "Easy to use data encryption functions"
