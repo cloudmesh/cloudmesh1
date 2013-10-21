@@ -20,10 +20,6 @@ Production issues noted 17-OCT-2013
 
 	fab server.wsgi
 
-* TODO (Allan)  Need kill/restart for wsgi
-  fab server.wsgi kill
-  fab server.wsgi restart
-
 * TODO VM launcher needs to handle case of no default image/flavor set
   '+' Button
 
@@ -53,3 +49,8 @@ DONE
 
 * DONE Admin Link shows auth required if not logged in
   (should show login required)
+
+* DONE (Allan)  Need kill/restart for wsgi
+  fab server.wsgi:kill (or :stop)
+  fab server.wsgi:restart
+  fab server.wsgi:reload
