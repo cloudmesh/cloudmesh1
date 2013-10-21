@@ -151,6 +151,10 @@ class cm_mongo:
         return cloud
 
     def activate(self, names=None):
+        #
+        # bug must come form mongo
+        #
+        #
         if names is None:
             names = self.config.active()
 

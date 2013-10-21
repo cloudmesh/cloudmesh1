@@ -11,6 +11,7 @@ from pprint import pprint
 import cloudmesh
 from cloudmesh.user.cm_user import cm_user
 from flask.ext.principal import Permission, RoleNeed
+from cloudmesh.util.util import banner
 
 log = LOGGER(__file__)
 
@@ -28,56 +29,169 @@ mesh_module = Blueprint('mesh_module', __name__)
 @admin_permission.require(http_exception=403)
 def mesh_register_clouds():
 
-    error = None
 
     config = cm_config()
     userdata = g.user
-    username = userdata.id
+    cm_user_id = userdata.id
     user_obj = cm_user()
-    user = user_obj.info(username)
+    user = user_obj.info(cm_user_id)
 
 
-
-    # todo define correct actions.
-    if request.method == 'POST':
-
-        cloudname = request.form['cloudInput']
-
-        if cloudname == 'aws':
-            awsUserName = request.form['field-aws-username']
-            awsAccessKey = request.form['field-aws_accesskey-password']
-            awsSecretKey = request.form['field-aws_secretkey-password']
-
-            print awsUserName, awsAccessKey, awsSecretKey
-
-        elif cloudname == 'azure':
-            azureSubscriptionKey = request.form['field-azure-password']
-
-            print azureSubscriptionKey
-
-        elif cloudname == 'hp':
-            hpUserName = request.form['field-hp-username']
-            password = request.form['field-hp-password']
-
-            print hpUserName, password
-
-        elif cloudname in  ['sierra_openstack_grizzly', 'alamo']:
-            password = request.form['field-sierra_openstack_grizzly-password']
-
-            user_obj.set_password(username, password, cloudname)
-
-    passwords = {}
     cloudtypes = {}
     for cloud in config.get("cloudmesh.clouds"):
         cloudtypes[cloud] = config['cloudmesh']['clouds'][cloud]['cm_type']
-        passwords[cloud] = user_obj.get_password(username, cloud)
 
+
+    credentials = user_obj.get_credentials(cm_user_id)
+
+
+    error = {}
+    # todo define correct actions.
+    if request.method == 'POST':
+
+
+
+        cloudname = request.form['cloudInput']
+
+        if cloudname in credentials:
+            if 'credential' in credentials[cloudname]:
+                credential = credentials[cloudname]['credential']
+            else:
+                credentials[cloudname] = None
+        else:
+            credentials[cloudname] = None
+
+
+        if cloudtypes[cloudname] == "openstack":
+
+
+            if credentials[cloudname] == None:
+                 d = {'OS_USERNAME' : cm_user_id,
+                      'OS_PASSWORD': '',
+                      'OS_TENANT_NAME': ''
+                }
+
+                 user_obj.set_credential(cm_user_id, cloudname, d)
+
+            error[cloudname] = ''
+
+            d = {"CM_CLOUD_TYPE": cloudtypes[cloudname]}
+
+
+            cloudid = 'field-{0}-{1}-text'.format(cloudname, "OS_USERNAME")
+
+            if cloudid in request.form:
+                username = request.form[cloudid]
+            else:
+                username = cm_user_id
+            d["OS_USERNAME"] = username
+
+
+            fields = ["OS_PASSWORD", "OS_TENANT_NAME"]
+
+            for key in fields:
+
+                if key == 'OS_PASSWORD':
+                    cloudid = 'field-{0}-{1}-password'.format(cloudname, key)
+                else:
+                    cloudid = 'field-{0}-{1}-text'.format(cloudname, key)
+
+
+                if cloudid in request.form:
+                    content = request.form[cloudid]
+                    d[key] = content
+                elif key in credential:
+                    content = credential[key]
+                    d[key] = content
+                if content == '':
+                    error[cloudname] = error[cloudname] + "Please set " + key + "."
+
+
+            if error[cloudname] == '':
+
+                user_obj.set_credential(cm_user_id, cloudname, d)
+
+
+        elif cloudtypes[cloudname] == "ec2":
+
+            error[cloudname] = ''
+
+            d = {"CM_CLOUD_TYPE": cloudtypes[cloudname]}
+
+
+            if credentials[cloudname] is None:
+                d = {'EC2_URL' : '',
+                      'EC2_ACCESS_KEY': '',
+                      'EC2_SECRET_KEY': '',
+                }
+
+                user_obj.set_credential(cm_user_id, cloudname, d)
+
+
+            '''
+            EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
+            EC2_ACCESS_KEY: abc
+            EC2_SECRET_KEY: def
+            '''
+
+            fields = ["EC2_ACCESS_KEY", "EC2_SECRET_KEY", "EC2_URL"]
+
+            for id in fields:
+                if id in ["EC2_URL"]:
+                    cloudid = 'field-{0}-{1}-text'.format(cloudname, id)
+                else:
+                    cloudid = 'field-{0}-{1}-password'.format(cloudname, id)
+
+                print "TTTT CLOUDID", cloudid
+
+
+                content = ''
+                if cloudid in request.form:
+                    content = request.form[cloudid]
+                    d[id] = content
+                elif id in credential:
+                    password = credential[id]
+                    d[id] = content
+
+                if content == '':
+                    error[cloudname] = error[cloudname] + "please set " + id
+
+
+            if error[cloudname] == '':
+
+                user_obj.set_credential(cm_user_id, cloudname, d)
+
+
+
+
+        '''
+
+            awsUserName = request.form['field-ec2-username']
+            awsAccessKey = request.form['field-ec2_accesskey-password']
+            awsSecretKey = request.form['field-ec2_secretkey-password']
+
+            user_obj.set_password(username, cloudname,
+                                  {"username": awsUserName,
+                                   "awsAccessKey": awsAccessKey,
+                                   "awsSecretKey": awsSecretKey,
+                                   "CM_CLOUD_TYPE": "ec2" }
+                                  )
+
+        elif cloudtypes[cloud] == "azure":
+            azureSubscriptionid = request.form['field-azure-password']
+
+            user_obj.set_password(username, cloudname,
+                                  {"subscriptionid": azureSubscriptionid,
+                                   "CM_CLOUD_TYPE": "azure" }
+                                  )
+        '''
+    credentials = user_obj.get_credentials(cm_user_id)
 
 
     return render_template('mesh/cloud/mesh_register_clouds.html',
                            user=user,
-                           passwords=passwords,
-                           username=username,
+                           credentials=credentials,
+                           cm_user_id=cm_user_id,
                            cloudnames=config.cloudnames(),
                            cloudtypes=cloudtypes,
                            error=error)

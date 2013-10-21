@@ -10,51 +10,55 @@
 <h1> Register </h1>
 {% endblock contentbox %}
 
+{{ credentials}}
 {% block content %}
 
 <script src="/static/js/hideShowPassword.min.js" type="text/javascript" charset="utf-8"></script>
 
 
-{{user}}
-<br>
-<hr>
- passwords {{passwords}}
-<hr>
-{{username}}
-<br>
 
-<hr>
-
-{% macro password(label, cloudname) %}
+{% macro get_password(label, cloudname, key) %}
 <tr>
     <td style="text-align: right">{{label}}:</td>
     <td colspan="2">
-        <input id="id-{{cloudname}}-password"
+        <input id="field-{{cloudname}}-{{key}}-password"
         valign="middle"
         type="password"
-        name="field-{{cloudname}}-password"
-        value="{{passwords[cloudname]}}"
+        name="field-{{cloudname}}-{{key}}-password"
+        {%if cloudname in credentials %}
+        	{% if "credential" in credentials[cloudname] %}
+        		{% if key in credentials[cloudname]["credential"] %}
+	    		    value="{{credentials[cloudname]["credential"][key]}}"
+    			{% endif %}
+   			{% endif %}
+		{% endif %}
         autocomplete="off"
         placeholder="{{label}}"
         style="margin-bottom: 5px; margin-top: 5px;">
     </td>
 </tr>
 <script>
-$('#id-{{cloudname}}-password').hideShowPassword({
+$('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
   innerToggle: true
 });
 </script>
 {% endmacro %}
 
-{% macro get_username(label, cloudname, name, username_edit_enabled) %}
+{% macro get_text (label, cloudname, key,  username_edit_enabled) %}
 <tr>
-    <td style="text-align: right"> Username:</td>
+    <td style="text-align: right"> {{label}}:</td>
     <td colspan="2">
-    <input  id="id-{{cloudname}}-username"
+    <input  id="field-{{cloudname}}-{{key}}-text"
     valign="middle"
     type="text"
-    name="field-{{cloudname}}-username"
-    value="{{name}}"
+    name="field-{{cloudname}}-{{key}}-text"
+    {%if cloudname in credentials %}
+       	{% if "credential" in credentials[cloudname] %}
+       		{% if key in credentials[cloudname]["credential"] %}
+	   		    value="{{credentials[cloudname]["credential"][key]}}"
+    		{% endif %}
+   		{% endif %}
+	{% endif %}
     {% if not username_edit_enabled %}
     disabled="disabled"
     {% endif %}
@@ -92,7 +96,7 @@ $('#id-{{cloudname}}-password').hideShowPassword({
     </th>
     <th></th>
     <th style="text-align: right">
-        {{ image_button ("none", "044_keys", "/updatekeypair/" + "sierra_openstack_grizzly" + "/") }}
+        {{ image_button ("none", "044_keys", "/updatekeypair/" + "{{cloudname}}" + "/") }}
         {% if verified == true %}
             {{ cm_boolean_color('verified') }}
         {% else %}
@@ -102,92 +106,89 @@ $('#id-{{cloudname}}-password').hideShowPassword({
 </tr>
 {% endmacro %}
 
-{% macro openstack(cloudname, name, username_edit_enabled, verified) %}
+{% macro openstack(cloudname, name, tenant, username_edit_enabled, verified) %}
     {{ tableHeader(cloudname, false, verified) }}
-    {{ get_username ("Username", cloudname, name, username_edit_enabled)}}
-    {{ password ("Password", cloudname)}}
+    {{ get_text ("Username", cloudname, "OS_USERNAME", username_edit_enabled)}}
+    {{ get_text ("Tenant", cloudname, "OS_TENANT_NAME", username_edit_enabled)}}
+    {{ get_password ("Password", cloudname, "OS_PASSWORD")}}
 {% endmacro %}
 
 {% macro aws(cloudname, username, verified) %}
 
     {{ tableHeader(cloudname, false, verified) }}
-    {{ get_username ("Username", "username", username, True)}}
-    {% set accesskey= cloudname + "_accesskey" %}
-    {% set secretkey= cloudname + "_secretkey" %}
-    {{ password ("Access Key", accesskey)}}
-    {{ password ("Secret Key", secretkey)}}
+    {{ get_text ("Username", cloudname, "userid", True)}}
+    {{ get_password ("Access Key", cloudname, "access_key_id")}}
+    {{ get_password ("Secret Key", cloudname, "secret_access_key")}}
 
 {% endmacro %}
 
 {% macro ec2(cloudname, name, username_edit_enabled, verified) %}
 
     {{ tableHeader(cloudname, false, verified) }}
-    {{ get_username ("Username", "username", name,  username_edit_enabled)}}
-    {% set accesskey= cloudname + "_accesskey" %}
-    {% set secretkey= cloudname + "_secretkey" %}
-    {{ password ("Access Key", accesskey)}}
-    {{ password ("Secret Key", secretkey)}}
+    {{ get_password ("Access Key", cloudname, "EC2_ACCESS_KEY")}}
+    {{ get_password ("Secret Key", cloudname, "EC2_SECRET_KEY")}}
+
+    {{ get_text ("URL", cloudname, "EC2_URL", True)}}
 
 {% endmacro %}
 
-
-{% macro hp(cloudname, username, regions, verified) %}
-
-    {{ tableHeader(cloudname, regions, verified) }}
-    {{ get_username ("Username", "username", username, True)}}
-    {{ password ("Password", cloudname)}}
-
-{% endmacro %}
 
 {% macro azure(cloudname, verified) %}
 
     {{ tableHeader(cloudname, false, verified) }}
-    {{ password("Subscription ID", cloudname) }}
+    {{ get_password("Subscription ID", cloudname, "subscriptionid") }}
 
 {% endmacro %}
 
-<table>
-    <tr>
-        <th colspan="1">
-        <b>Clouds</b></th>
-        <th></th>
-        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
-        Verified </th>
-    </tr>
-</table>
+{% set cloudList = cloudnames %}
+        {% for cloud in cloudList | sort  %}
+            {% if (cloud in error) %}
+               {%if (error[cloud] != '') %}
+                  <div class="alert alert-danger">
+		              Error in {{cloud}}: {{error[cloud]}}
+				  </div>
+	        	{% endif %}
+        	{% endif %}
+        {% endfor %}
 
-<hr>
-{{cloudtypes}}
-<hr>
-{{user}}
 
 <div id="accordion">
     <div>
-        {% set cloudList = cloudnames %}
-        {{ cloudList.remove("hp_east") }}
-        {% for cloud in cloudList %}
+
+        {% for cloud in cloudList | sort  %}
         <h3 id="example">
         	{{ cloud }}
         </h3>
+
         <form id={{ cloud }} method="post">
             <input name="cloudInput" type="hidden" value="{{ cloud }}"/>
+            {% if (cloud in error) %}
+               {%if (error[cloud] != '') %}
+                  <div class="alert alert-danger">
+		              {{error[cloud] }}
+				  </div>
+	        	{% endif %}
+        	{% endif %}
+
             <table id={{ cloud }} + "clouds" style="display: inline-block; float: left;">
                 <tr>
-                    {% if (cloud) == "hp" %}
-                        {{ hp(cloud, username, ["hp_east"]) }}
-                    {% elif cloud in ["sierra_openstack_grizzly"] %}
-                        {{ openstack(cloud, username, False, true) }}
-                    {% elif cloud in ["alamo"] %}
-                        {{ ec2(cloud, username, False, true) }}
-                    {% elif cloudtypes[cloud] == "openstack" %}
-                    	if cloud in ["sierra_openstack_grizzly"]
-                        {{ openstack(cloud, username, True, true) }}
+                    {% if cloudtypes[cloud] == "openstack" %}
+                        {% if cloud in credentials %}
+                    		{% if 'OS_TENANT_NAME' in credentials[cloud]['credential'] %}
+	    	    			   {% set tenant = credentials[cloud]['credential']['OS_TENANT_NAME']%}
+    					    {% else %}
+    						   {% set tenant = 'bla'%}
+  							{% endif %}
+  					    {% else %}
+   						   {% set tenant = 'alb' %}
+  						{% endif %}
+    	                {{ openstack(cloud, cm_user_id, tenant, True, true) }}
                     {% elif cloudtypes[cloud] == "aws" %}
-                        {{ aws(cloud, username) }}
+                        {{ aws(cloud, cm_user_id) }}
                     {% elif cloudtypes[cloud] == "azure" %}
                         {{ azure(cloud) }}
                     {% elif cloudtypes[cloud] == "ec2" %}
-                        {{ ec2(cloud, username) }}
+                        {{ ec2(cloud, cm_user_id, True) }}
                     {% endif %}
                     <th></th><th></th>
                     <th style="text-align: right">
@@ -213,7 +214,7 @@ $('#id-{{cloudname}}-password').hideShowPassword({
         //Regex to get the password field associated with button
         //Following regex would get hpPassword from toogle_hpPassword
         var passwordFieldId = ((event.target).id.split("-"))[1];
-        var passwordObject = $('#' + "id-" + passwordFieldId + "-password").get(0);
+        var passwordObject = $('#' + "field-" + passwordFieldId + "-password").get(0);
         var value = passwordObject.value;
 
         if (passwordObject.type == 'password') {

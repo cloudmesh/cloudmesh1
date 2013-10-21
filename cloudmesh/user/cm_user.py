@@ -367,38 +367,44 @@ class cm_user(object):
             user = {}
         return user
 
-    def set_password(self, username, password, cloud):
-        """Store a user password for the cloud
-
-        :param username: OS_USERNAME or cm_user_id
-        :type username: str
-        :param password: OS_PASSWORD
-        :type password: str
-        :param cloud: the cloud name e.g. sierra_openstack_grizzly
-        :type cloud: str
-
-        """
-        safe_password = encrypt(password, self.password_key)
-        self.userdb_passwd.update({"username": username, "cloud": cloud }, \
-                                  {"username":username, "password":safe_password, \
+    def set_credential(self, username, cloud, credential):
+        """credential is a dict"""
+        safe_credential = {}
+        for cred in credential:
+            safe_credential[cred] = encrypt(credential[cred], self.password_key)
+        self.userdb_passwd.update({"cm_user_id": username, "cloud": cloud }, \
+                                  {"cm_user_id":username, "credential":safe_credential, \
                                    "cloud": cloud}, upsert=True)
 
-    def get_password(self, username, cloud):
-        """Return a user password for the cloud
 
-        :param username: OS_USERNAME
-        :type username: str
-        :param cloud: the cloud name e.g. sierra_openstack_grizzly
-        :type cloud:str
 
-        """
+    def get_credential(self, username, cloud):
         try:
-            safe_password = self.userdb_passwd.find({"username": username, "cloud":cloud})[0]["password"]
-            return decrypt(safe_password, self.password_key)
+            safe_credential = self.userdb_passwd.find_one({"cm_user_id": username, "cloud":cloud})["credential"]
+            print "OOO", safe_credential
+
+            for cred in safe_credential:
+                t = safe_credential[cred]
+
+                n = decrypt(t, self.password_key)
+
+                print "III", n, t
+                safe_credential[cred] = n
+
+
+            return safe_credential
         except:
             return None
 
-    def get_passwords(self, username):
+
+    def get_credentials(self, username):
         """Return all user passwords in the form of a dict, keyed by cloud name"""
-        passwds = self.userdb_passwd.find({ "username": username })
-        return dict(map(lambda d: (d["cloud"], decrypt(d["password"], self.password_key)), passwds))
+        credentials = self.userdb_passwd.find({ "cm_user_id": username })
+        d = {}
+        """ bug multiple times same cloud ? """
+        for c in credentials:
+            cloud = c["cloud"]
+            d[cloud] = {}
+            d[cloud]["credential"] = self.get_credential(username, cloud)
+        return d
+
