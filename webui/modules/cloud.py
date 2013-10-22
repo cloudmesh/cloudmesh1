@@ -161,7 +161,10 @@ def delete_vm_confirm():
                                filters=cloud_filters)
 
     else:
-        return "nothing to delete"
+        return render_template('error.html',
+                               type="Deleting VMs",
+                               error="No VMs to delete. ")
+
 
 @cloud_module.route('/cm/delete_request_submit/<option>', methods=('GET', 'POST'))
 @cond_decorator(cloudmesh.with_login, login_required)
