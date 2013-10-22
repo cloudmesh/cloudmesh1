@@ -70,8 +70,6 @@ def mesh_register_clouds():
                 # create_dict(user, "defaults", "activeclouds")
                 print "ERROR user defaults activecloud does not exist"
 
-        print "FFFF", request.form
-
         user_obj.set_defaults(cm_user_id, user['defaults'])
         user = user_obj.info(cm_user_id)
 
