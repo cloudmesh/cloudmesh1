@@ -364,6 +364,18 @@ def state_style(state):
 
 
 # ============================================================
+# FILTER: check if roles are allowed
+# ============================================================
+@app.template_filter()
+def role_allowed(user_roles, allowed_roles):
+    if 'all' in allowed_roles:
+        return True
+    for role in user_roles:
+        if role in allowed_roles:
+            return True
+    return False
+
+# ============================================================
 # ROUTE: PAGES
 # ============================================================
 
