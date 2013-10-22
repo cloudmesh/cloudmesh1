@@ -260,3 +260,11 @@ class ec2(ComputeBaseType):
 
     def list_images(self):
         return self.conn.list_images()
+
+    def keypair_list(self):
+        keylist = self.conn.ex_describe_all_keypairs()
+        res = { 'keypairs': [] }
+        for keyname in keylist:
+            tmp = {'keypair':{'name': keyname}}
+            res['keypairs'].append(tmp)
+        return res
