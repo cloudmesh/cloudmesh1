@@ -165,8 +165,6 @@ class cm_mongo:
              db_defaults = get_mongo_db(defaults_collection)
              user = db_defaults.find_one({'cm_user_id': cm_user_id})
 
-             print "AAAAAAA USER", user
-
              names = user['activeclouds']
 
 
