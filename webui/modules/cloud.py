@@ -303,6 +303,13 @@ def manage_keypairs(cloud=None):
                                    keys=keys,
                                    registered=registered,
                                    cloudname=cloud)
+    else:
+        return render_template('error.html',
+                               error="Setting keypairs for this cloud is not yet enabled")
+        # return redirect('/mesh/servers')
+
+
+
 # ============================================================
 # ROUTE: START
 # ============================================================
