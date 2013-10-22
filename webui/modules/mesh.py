@@ -52,9 +52,10 @@ def mesh_register_clouds():
         cloudname = request.form['cloudInput']
 
         checkmark = 'field-cloud-activated-{0}'.format(cloudname)
+
+        print "ACTIVE", user['defaults']['activeclouds']
         if checkmark in request.form:
             print "SWITCHING cloud on", cloudname
-            print "ACTIVE", user['defaults']['activeclouds']
             try:
                 if cloudname not in user['defaults']['activeclouds']:
                     (user['defaults']['activeclouds']).append(cloudname)
@@ -62,15 +63,28 @@ def mesh_register_clouds():
                 # create_dict(user, "defaults", "activeclouds")
                 print "ERROR user defaults activecloud does not exist"
         else:
+            print "SWITCHING cloud off", cloudname
             try:
-                if cloudname not in user['defaults']['activeclouds']:
-                    (user['defaults']['activeclouds']).remove(cloudname)
+                print "A"
+                pprint(user)
+                print "DDD", user['defaults']['activeclouds']
+                if cloudname in user['defaults']['activeclouds']:
+                    print "B"
+                    active = user['defaults']['activeclouds']
+                    print "C"
+                    active.remove(cloudname)
+                    print "D"
+                    user['defaults']['activeclouds'] = active
+                    print "RRR", user['defaults']
             except:
+                print "E"
                 # create_dict(user, "defaults", "activeclouds")
                 print "ERROR user defaults activecloud does not exist"
 
         print "FFFF", request.form
 
+        user_obj.set_defaults(cm_user_id, user['defaults'])
+        user = user_obj.info(cm_user_id)
 
         """
         user['defaults']['activeclouds'] = []
@@ -80,6 +94,7 @@ def mesh_register_clouds():
                 user['defaults']['activeclouds'].append(cloudname)
 
         """
+
 
 
 
@@ -161,12 +176,6 @@ def mesh_register_clouds():
                 user_obj.set_credential(cm_user_id, cloudname, d)
 
 
-            '''
-            EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
-            EC2_ACCESS_KEY: abc
-            EC2_SECRET_KEY: def
-            '''
-
             fields = ["EC2_ACCESS_KEY", "EC2_SECRET_KEY", "EC2_URL"]
 
             for id in fields:
@@ -195,17 +204,6 @@ def mesh_register_clouds():
 
 
         '''
-
-            awsUserName = request.form['field-ec2-username']
-            awsAccessKey = request.form['field-ec2_accesskey-password']
-            awsSecretKey = request.form['field-ec2_secretkey-password']
-
-            user_obj.set_password(username, cloudname,
-                                  {"username": awsUserName,
-                                   "awsAccessKey": awsAccessKey,
-                                   "awsSecretKey": awsSecretKey,
-                                   "CM_CLOUD_TYPE": "ec2" }
-                                  )
 
         elif cloudtypes[cloud] == "azure":
             azureSubscriptionid = request.form['field-azure-password']
@@ -487,7 +485,7 @@ def mongo_users():
 # ROUTE: mongo/servers
 # ============================================================
 
-@mesh_module.route('/mesh/servers/')
+@mesh_module.route('/mesh/servers/', methods=['GET', 'POST'])
 @login_required
 def mongo_table(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")

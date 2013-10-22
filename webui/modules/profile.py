@@ -26,40 +26,18 @@ profile_module = Blueprint('profile_module', __name__)
 @login_required
 def profile():
 
-    def upload_default(username, attribute):
-        user_obj.set_default_attribute(username, attribute, user['defaults'][attribute])
-
-    # bug the global var of the ditc should be used
-
-    # with_ldap = cm_config_server().get("cloudmesh.server.ldap.with_ldap")
-
-
     config = cm_config()
-    # username = config.get("cloudmesh.hpc.username")
-    # projects = cm_projects()
-    # person = config.get('cloudmesh.profile')
-    # keys = cm_keys()
-    # version = "tmp"
 
     userdata = g.user
-
-    # if with_ldap:
     username = userdata.id
     user_obj = cm_user()
     user = user_obj.info(username)
-
-    # else:
-    #    user = get_ldap_user_from_yaml()
-
 
     if 'defaults' not in user:
         user['defaults'] = {}
         user.set_defaults(username, {})
 
     if request.method == 'POST':
-
-
-
 
         print "REQUEST"
         pprint(request.__dict__)
@@ -88,8 +66,8 @@ def profile():
         for cloudname in config.cloudnames():
             form_key = 'field-cloud-activated-{0}'.format(cloudname)
             if form_key in request.form:
+                print "ACTIVE IN FORM", cloudname
                 user['defaults']['activeclouds'].append(cloudname)
-
 
 
 
@@ -109,6 +87,10 @@ def profile():
         # print config
         # config.write()
         # print "WRITING DONE"
+
+
+        user = user_obj.info(username)
+        print "UD", user["defaults"]["activeclouds"]
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 

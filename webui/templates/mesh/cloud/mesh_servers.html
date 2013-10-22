@@ -1,9 +1,9 @@
 {% extends "layout/layoutTable.html" %}
-{% from "_helper.html" import image_button, image_popup %}
+{% from "_helper.html" import image_button, image_popup, href_image_button %}
 {% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
-<h2> {{ image_button ("none", "365_restart", "/cm/refresh/servers") }} Servers </h2>
+<h2> {{ href_image_button ("none", "365_restart", "/cm/refresh/servers") }} Servers </h2>
 {% endblock contentbox %}
 
 {% block content %}
@@ -135,11 +135,11 @@ function toggle(source,select_list) {
              <tr>
              	<td><input type="checkbox" name="selection" value = {{server}} /> </td>
              	<td>
-             	 	{{ image_button ("none", "368_collapse", "/cm/login/" ~ cloud ~ "/" ~ s_id ~ "/") }}
-	  				{{ image_button ("right", "195_circle_info", "/cm/info/" ~ cloud ~ "/" ~ s_id ~ "/") }}
+             	 	{{ href_image_button ("none", "368_collapse", "/cm/login/" ~ cloud ~ "/" ~ s_id ~ "/") }}
+	  				{{ href_image_button ("right", "195_circle_info", "/cm/info/" ~ cloud ~ "/" ~ s_id ~ "/") }}
 	  				<a href="/cm/assignpubip/{{cloud}}/{{s_id}}/">  IP </a>
-	  				{{ image_button ("none", "041_charts", "/cm/stats/" ~ cloud ~ "/" ~ s_id ~ "/") }}
-	  				{{ image_button ("right", "016_bin", "/cm/delete/" ~ cloud + "/" ~ s_id ~ "/") }}
+	  				{{ image_popup ("none", "041_charts", "/cm/stats/" ~ cloud ~ "/" ~ s_id ~ "/") }}
+	  				{{ href_image_button ("right", "016_bin", "/cm/delete/" ~ cloud + "/" ~ s_id ~ "/") }}
              	 </td>
                  <!-- for attribute in clouds[cloud][server] -->
                  {% for attribute in attributes %}

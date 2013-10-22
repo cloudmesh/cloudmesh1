@@ -64,6 +64,14 @@ image_button("041_charts", "/table/")
 	     width="16" height="16">
 {% endmacro %}
 
+{% macro href_image_button(align, type, actionpath) %}
+      <a href="{{ actionpath }}">
+      <img align={{ align }}
+	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
+	     width="16" height="16"></img>
+	  </a>
+{% endmacro %}
+
 {% macro image_popup(align, type, actionpath) %}
       <input align={{ align }} type="image"
 	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
