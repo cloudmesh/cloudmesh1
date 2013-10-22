@@ -106,10 +106,12 @@ image_button("041_charts", "/table/")
 
   {% for menu in g.super_duper_sidebar_pages %}
       <li class="nav-header">
+          <span>
 	      {{ menu[0] }}
           {% if menu[1] != None %}
              {{href_image_button (None, menu[2], menu[1])}}
           {% endif %}
+          </span>
       </li>
 
       {% for submenu in menu[4] %}
