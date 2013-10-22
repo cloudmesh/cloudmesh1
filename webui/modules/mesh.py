@@ -49,9 +49,42 @@ def mesh_register_clouds():
     # todo define correct actions.
     if request.method == 'POST':
 
-
-
         cloudname = request.form['cloudInput']
+
+        checkmark = 'field-cloud-activated-{0}'.format(cloudname)
+        if checkmark in request.form:
+            print "SWITCHING cloud on", cloudname
+            print "ACTIVE", user['defaults']['activeclouds']
+            try:
+                if cloudname not in user['defaults']['activeclouds']:
+                    (user['defaults']['activeclouds']).append(cloudname)
+            except:
+                # create_dict(user, "defaults", "activeclouds")
+                print "ERROR user defaults activecloud does not exist"
+        else:
+            try:
+                if cloudname not in user['defaults']['activeclouds']:
+                    (user['defaults']['activeclouds']).remove(cloudname)
+            except:
+                # create_dict(user, "defaults", "activeclouds")
+                print "ERROR user defaults activecloud does not exist"
+
+        print "FFFF", request.form
+
+
+        """
+        user['defaults']['activeclouds'] = []
+        for cloudname in config.cloudnames():
+            form_key = 'field-cloud-activated-{0}'.format(cloudname)
+            if form_key in request.form:
+                user['defaults']['activeclouds'].append(cloudname)
+
+        """
+
+
+
+
+
 
         if cloudname in credentials:
             if 'credential' in credentials[cloudname]:
@@ -141,9 +174,6 @@ def mesh_register_clouds():
                     cloudid = 'field-{0}-{1}-text'.format(cloudname, id)
                 else:
                     cloudid = 'field-{0}-{1}-password'.format(cloudname, id)
-
-                print "TTTT CLOUDID", cloudid
-
 
                 content = ''
                 if cloudid in request.form:

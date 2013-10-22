@@ -32,7 +32,6 @@
     			{% endif %}
    			{% endif %}
 		{% endif %}
-        autocomplete="off"
         placeholder="{{label}}"
         style="margin-bottom: 5px; margin-top: 5px;">
     </td>
@@ -67,32 +66,20 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
 </tr>
 {% endmacro %}
 
-{% macro handle_checkbox (cloudname, regions) %}
+{% macro handle_checkbox (cloudname) %}
         <input type="checkbox"
-            name="field-activated-{{cloudname}}"
+            name="field-cloud-activated-{{cloudname}}"
             {% if cloudname in user.defaults.activeclouds %}
             checked = "checked"
             {% endif %}
             style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
         {{cloudname}}&nbsp;
-        {% if regions %}
-            {% for region in regions %}
-                <input type="checkbox"
-                    name="field-activated-{{cloudname}}-{{region}}"
-                    {% if cloudname in user.defaults.activeclouds %}
-                    checked = "checked"
-                    {% endif %}
-                    style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-                {{region}}
-                &nbsp;
-            {% endfor %}
-        {% endif %}
 {% endmacro %}
 
-{% macro tableHeader(cloudname, regions, verified) %}
+{% macro tableHeader(cloudname, verified) %}
 <tr>
     <th colspan="1">
-    	{{ handle_checkbox(cloudname, regions) }}
+    	{{ handle_checkbox(cloudname) }}
     </th>
     <th></th>
     <th style="text-align: right">
@@ -107,7 +94,7 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
 {% endmacro %}
 
 {% macro openstack(cloudname, name, tenant, username_edit_enabled, verified) %}
-    {{ tableHeader(cloudname, false, verified) }}
+    {{ tableHeader(cloudname, verified) }}
     {{ get_text ("Username", cloudname, "OS_USERNAME", username_edit_enabled)}}
     {{ get_text ("Tenant", cloudname, "OS_TENANT_NAME", username_edit_enabled)}}
     {{ get_password ("Password", cloudname, "OS_PASSWORD")}}
@@ -115,7 +102,7 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
 
 {% macro aws(cloudname, username, verified) %}
 
-    {{ tableHeader(cloudname, false, verified) }}
+    {{ tableHeader(cloudname, verified) }}
     {{ get_text ("Username", cloudname, "userid", True)}}
     {{ get_password ("Access Key", cloudname, "access_key_id")}}
     {{ get_password ("Secret Key", cloudname, "secret_access_key")}}
@@ -124,7 +111,7 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
 
 {% macro ec2(cloudname, name, username_edit_enabled, verified) %}
 
-    {{ tableHeader(cloudname, false, verified) }}
+    {{ tableHeader(cloudname, verified) }}
     {{ get_password ("Access Key", cloudname, "EC2_ACCESS_KEY")}}
     {{ get_password ("Secret Key", cloudname, "EC2_SECRET_KEY")}}
 
@@ -135,7 +122,7 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
 
 {% macro azure(cloudname, verified) %}
 
-    {{ tableHeader(cloudname, false, verified) }}
+    {{ tableHeader(cloudname, verified) }}
     {{ get_password("Subscription ID", cloudname, "subscriptionid") }}
 
 {% endmacro %}
@@ -158,6 +145,9 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
         {% for cloud in cloudList | sort  %}
         <h3 id="example">
         	{{ cloud }}
+        	{% if cloud in user['defaults']['activeclouds'] %}
+			<span class="badge label-success"> active </span>
+        {% endif %}
         </h3>
 
         <form id={{ cloud }} method="post">
