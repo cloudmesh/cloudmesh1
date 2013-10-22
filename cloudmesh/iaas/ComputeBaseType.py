@@ -8,8 +8,8 @@ def donotchange(fn):
 
 class ComputeBaseType:
 
-    #users = {}
-    #tenants = {}
+    # users = {}
+    # tenants = {}
 
     # : the dict for the flavors
     flavors = {}
@@ -31,8 +31,8 @@ class ComputeBaseType:
         self.label = label
 
     def _clear(self):
-        #self.users = {}
-        #self.tenants = {}
+        # self.users = {}
+        # self.tenants = {}
         self.flavors = {}  # global var
         self.images = {}  # global var
         self.servers = {}  # global var
@@ -49,8 +49,8 @@ class ComputeBaseType:
         print "Flavors:", len(self.flavors)
         print "Servers:", len(self.servers)
         print "Images:", len(self.images)
-        #print "Users:", len(self.users)
-        #print "Tenants:", len(self.tenants)
+        # print "Users:", len(self.users)
+        # print "Tenants:", len(self.tenants)
 
     def connect(self):
         """connect to the cloud"""
@@ -100,9 +100,9 @@ class ComputeBaseType:
             d = self.flavors
         elif selection == 's':
             d = self.servers
-        #elif selection == 'u':
+        # elif selection == 'u':
         #    d = self.users
-        #elif selection == 't':
+        # elif selection == 't':
         #    d = self.tenants
         elif type is not None:
             print "refresh type not supported"
@@ -182,8 +182,8 @@ class ComputeBaseType:
             'servers': self.servers,
             'images': self.images,
             # 'users': self.users,
-            #'users': len(self.users),
-            #'tenants': self.tenants,
+            # 'users': len(self.users),
+            # 'tenants': self.tenants,
             }
         return json.dumps(information, indent=4)
 
@@ -231,10 +231,10 @@ class ComputeBaseType:
         elif selection == 's':
             list_function = self._get_servers_dict
             d = self.servers
-        #elif selection == 'u':
+        # elif selection == 'u':
         #    list_function = self._get_users_dict
         #    d = self.users
-        #elif selection == 't':
+        # elif selection == 't':
         #    list_function = self._get_tenants_dict
         #    d = self.tenants
         elif type is not None:
@@ -250,9 +250,9 @@ class ComputeBaseType:
                 self.flavors = {}
             elif selection == 's':
                 self.servers = {}
-            #elif selection == 'u':
+            # elif selection == 'u':
             #    self.users = {}
-            #elif selection == 't':
+            # elif selection == 't':
             #    self.tenants = {}
 
         else:
@@ -267,3 +267,13 @@ class ComputeBaseType:
                 id = element['id']
                 d[id] = element
                 d[id]['cm_refresh'] = time_stamp
+
+
+    def keypair_list(self):
+        raise NotImplementedError()
+
+    def keypair_add(self, keyname, keycontent):
+        raise NotImplementedError()
+
+    def keypair_remove(self, keyname):
+        raise NotImplementedError()
