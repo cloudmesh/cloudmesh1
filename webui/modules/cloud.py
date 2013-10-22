@@ -20,12 +20,12 @@ log = LOGGER(__file__)
 
 cloud_module = Blueprint('cloud_module', __name__)
 
-config = cm_config()
+# config = cm_config()
 # prefix = config.prefix
 # index = config.index
 
-clouds = cm_mongo()
-clouds.activate()
+# clouds = cm_mongo()
+# clouds.activate()
 
 # DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
 
@@ -57,6 +57,10 @@ def getCurrentUserinfo():
 @cloud_module.route('/cm/refresh/<cloud>/<service_type>')
 @login_required
 def refresh(cloud=None, server=None, service_type=None):
+
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
     log.info("-> refresh {0} {1}".format(cloud, service_type))
     userinfo = getCurrentUserinfo()
     # print "REQ", redirect(request.args.get('next') or '/').__dict__
@@ -88,6 +92,10 @@ def refresh(cloud=None, server=None, service_type=None):
 @login_required
 def delete_vm(cloud=None, server=None):
     log.info ("-> delete {0} {1}".format(cloud, server))
+
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
     clouds.vm_delete(cloud, server)
@@ -99,14 +107,18 @@ def delete_vm(cloud=None, server=None):
 # ============================================================
 # ROUTE: DELETE Multiple VM CONFIRMATION AND DELETION
 # ============================================================
-@cloud_module.route('/cm/delete_vm_confirm',methods=('GET', 'POST'))   
+@cloud_module.route('/cm/delete_vm_confirm', methods=('GET', 'POST'))
 @cond_decorator(cloudmesh.with_login, login_required)
 def delete_vm_confirm():
+
+
+
+
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
     c = cm_mongo()
-    c.activate()
+    c.activate(cm_user_id=g.user.id)
     # c.refresh(types=["servers"])
     clouds = c.servers()
     userdata = g.user
@@ -131,56 +143,57 @@ def delete_vm_confirm():
     select = request.form.getlist("selection")
     cloud = request.form["cloud"]
     if select != None and cloud != None:
-        session["delete_selection"] = (cloud,select) 
+        session["delete_selection"] = (cloud, select)
     if "delete_selection" in session:
         print "writing selection to session"
-        #print filtered_clouds
+        # print filtered_clouds
         selected_cloud_data = {}
-        selected_cloud_data[cloud] = get_selected_clouds(filtered_clouds[session["delete_selection"][0]],session["delete_selection"][1]) 
+        selected_cloud_data[cloud] = get_selected_clouds(filtered_clouds[session["delete_selection"][0]], session["delete_selection"][1])
         return render_template('mesh/cloud/delete_vms.html',
-                               address_string = address_string,
+                               address_string=address_string,
                                attributes=os_attributes,
                                updated=time_now,
                                clouds=selected_cloud_data,
                                config=config,
                                user=user,
-                               images = images,
-                               flavors = flavors,
+                               images=images,
+                               flavors=flavors,
                                filters=cloud_filters)
 
     else:
         return "nothing to delete"
 
-@cloud_module.route('/cm/delete_request_submit/<option>',methods=('GET', 'POST'))
+@cloud_module.route('/cm/delete_request_submit/<option>', methods=('GET', 'POST'))
 @cond_decorator(cloudmesh.with_login, login_required)
 def delete_vm_submit(option):
     config = cm_config()
     c = cm_mongo()
-    c.activate()
-    select = session.pop("delete_selection",None)
+    c.activate(cm_user_id=g.user.id)
+
+    select = session.pop("delete_selection", None)
 
     clouds = c.servers()
 
     if option == "true":
         cloud = select[0]
-        servers = select[1]#[cloud]
-        print cloud,"+++++++++++++++++++++++++++++++",servers
+        servers = select[1]  # [cloud]
+        print cloud, "+++++++++++++++++++++++++++++++", servers
         for server in servers:
             delete_vm(cloud=cloud, server=server)
-            
+
         return "Delete successful"
     else:
-            return "delete aborted"        
+            return "delete aborted"
 
 
-def get_selected_clouds(cloud,select_ids):
+def get_selected_clouds(cloud, select_ids):
     selected_clouds = {}
     for id in select_ids:
         if id in cloud:
             selected_clouds[id] = cloud[id]
-    #print selected_clouds
+    # print selected_clouds
     return selected_clouds
-     
+
 # ============================================================
 # ROUTE: DELETE GROUP
 # ============================================================
@@ -189,7 +202,12 @@ def get_selected_clouds(cloud,select_ids):
 @cloud_module.route('/cm/delete/<cloud>/')
 @login_required
 def delete_vms(cloud=None):
-# donot do refresh before delete, this will cause all the vms to get deleted
+
+
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
+    # donot do refresh before delete, this will cause all the vms to get deleted
     f_cloud = clouds.clouds[cloud]
     for id, server in f_cloud['servers'].iteritems():
         log.info("-> delete {0} {1}".format(cloud, id))
@@ -207,6 +225,11 @@ def delete_vms(cloud=None):
 @cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
 @login_required
 def assign_public_ip(cloud=None, server=None):
+
+    config = cm_config()
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
     mycloud = config.cloud(cloud)
     if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
         clouds.assign_public_ip(cloud, server)
@@ -222,6 +245,10 @@ def _keyname_sanitation(username, keyname):
 @cloud_module.route('/cm/keypairs/<cloud>/', methods=['GET', 'POST'])
 @login_required
 def manage_keypairs(cloud=None):
+
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
     userinfo = getCurrentUserinfo()
     username = userinfo["cm_user_id"]
     keys = userinfo["keys"]["keylist"]
@@ -283,8 +310,11 @@ def manage_keypairs(cloud=None):
 @login_required
 def start_vm(cloud=None, server=None):
     log.info("-> start {0}".format(cloud))
-    # if (cloud == 'india'):
-    #  r = cm("--set", "quiet", "start:1", _tty_in=True)
+
+    config = cm_config()
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
     key = None
     vm_image = None
     vm_flavor = None
@@ -299,34 +329,28 @@ def start_vm(cloud=None, server=None):
         key = userinfo["defaults"]["key"]
     elif len(userinfo["keys"]["keylist"].keys()) > 0:
         key = userinfo["keys"]["keylist"].keys()[0]
-    #
-    # before the info could be maintained in mongo, using the config file
-    # vm_flavor = config.cloud(cloud)["default"]["flavor"]
-    # vm_image = config.cloud(cloud)["default"]["image"]
-    # vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
 
-    # getting defulat flavor and image for the specified cloud out of mongo
-    if "flavors" in userinfo["defaults"]:
-        if cloud in userinfo["defaults"]["flavors"]:
-            vm_flavor_id = userinfo["defaults"]["flavors"][cloud]
-            flavors = clouds.flavors([cloud])[cloud]
-            vm_flavor = flavors[vm_flavor_id]["name"]
-    if "images" in userinfo["defaults"]:
-        if cloud in userinfo["defaults"]["images"]:
-            vm_image = userinfo["defaults"]["images"][cloud]
-    if not vm_flavor_id:
-        flavors = clouds.flavors([cloud])[cloud]
-        # pprint(flavors)
-        vm_flavor_id = flavors.keys()[0]
-        vm_flavor = flavors[vm_flavor_id]["name"]
-    if not vm_image:
-        images = clouds.images([cloud])[cloud]
-        # pprint(images)
-        vm_image = images.keys()[0]
+    error = ''
 
-    # in case of error, setting default flavor id
-    # if vm_flavor_id < 0:
-    #    vm_flavor_id = 1
+    try:
+        vm_flavor_id = userinfo["defaults"]["flavors"][cloud]
+    except:
+        error = error + "Please specify a default flavor."
+
+    if vm_flavor_id in [None, 'none']:
+        error = error + "Please specify a default flavor."
+
+    try:
+        vm_image = userinfo["defaults"]["images"][cloud]
+    except:
+        error = error + "Please specify a default image."
+
+    if vm_image in [None, 'none']:
+        error = error + "Please specify a default image."
+
+    if error != '':
+        return render_template('error.html', error=error)
+
     prefix = userinfo["defaults"]["prefix"]
     index = userinfo["defaults"]["index"]
     log.info("STARTING {0} {1}".format(prefix, index))
@@ -370,6 +394,10 @@ def start_vm(cloud=None, server=None):
 @cloud_module.route('/cm/login/<cloud>/<server>/')
 @login_required
 def vm_login(cloud=None, server=None):
+
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
     message = ''
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
@@ -421,6 +449,12 @@ def vm_login(cloud=None, server=None):
 @login_required
 def vm_info(cloud=None, server=None):
 
+    print "TYTYTYT"
+    clouds = cm_mongo()
+    print "TYTYTYT"
+    clouds.activate(cm_user_id=g.user.id)
+    print "TYTYTYT"
+
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # print clouds.servers()[cloud]
 
@@ -431,8 +465,9 @@ def vm_info(cloud=None, server=None):
             server = int(server)
     except:
         pass
-    clouds.servers()[cloud][server]['cm_vm_id'] = server
-    clouds.servers()[cloud][server]['cm_cloudname'] = cloud
+
+    # clouds.servers()[cloud][server]['cm_vm_id'] = server
+    # clouds.servers()[cloud][server]['cm_cloudname'] = cloud
 
     return render_template('mesh/cloud/vm_info.html',
                            updated=time_now,

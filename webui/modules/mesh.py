@@ -201,18 +201,22 @@ def mesh_register_clouds():
 def mongo_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
-    config = cm_config()
 
-    c = cm_mongo()
-    c.activate()
-    # c.refresh(types=["images"])
-    clouds = c.images()
+    config = cm_config()
 
     # getting user info
     userdata = g.user
     username = userdata.id
     user_obj = cm_user()
     user = user_obj.info(username)
+
+
+
+    c = cm_mongo()
+    c.activate(cm_user_id=username)
+    # c.refresh(types=["images"])
+    clouds = c.images()
+
 
     """
 
@@ -323,16 +327,17 @@ def mongo_flavors():
     # filter()
     config = cm_config()
 
-    c = cm_mongo()
-    c.activate()
-    # c.refresh(types=["flavors"])
-    clouds = c.flavors()
-
     # getting user info
     userdata = g.user
     username = userdata.id
     user_obj = cm_user()
     user = user_obj.info(username)
+
+    c = cm_mongo()
+    c.activate(cm_user_id=username)
+    # c.refresh(types=["flavors"])
+    clouds = c.flavors()
+
     """
     2
     disk 20
@@ -411,7 +416,8 @@ def mongo_users():
     config = cm_config()
 
     c = cm_mongo()
-    c.activate()
+    c.activate(cm_user_id=username)
+
     clouds = {}
     clouds = c.users()
     print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
@@ -455,20 +461,21 @@ def mongo_users():
 @login_required
 def mongo_table(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    # filter()
-    config = cm_config()
 
-    c = cm_mongo()
-    c.activate()
-    # c.refresh(types=["servers"])
-    clouds = c.servers()
-    images = c.images()
-    flavors = c.flavors()
+    config = cm_config()
 
     userdata = g.user
     username = userdata.id
     user_obj = cm_user()
     user = user_obj.info(username)
+
+    c = cm_mongo()
+    c.activate(cm_user_id=username)
+    # c.refresh(types=["servers"])
+    clouds = c.servers()
+    images = c.images()
+    flavors = c.flavors()
+
 
 
 

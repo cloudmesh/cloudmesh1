@@ -150,13 +150,25 @@ class cm_mongo:
                 log.error("Cannot activate cloud <%s>\n%s" % (cloud_name, e))
         return cloud
 
-    def activate(self, names=None):
+    def activate(self, names=None, cm_user_id=None):
         #
         # bug must come form mongo
         #
         #
-        if names is None:
-            names = self.config.active()
+
+        if cm_user_id is None:
+            if names is None:
+                names = self.config.active()
+        else:
+
+             defaults_collection = 'defaults'
+             db_defaults = get_mongo_db(defaults_collection)
+             user = db_defaults.find_one({'cm_user_id': cm_user_id})
+
+             print "AAAAAAA USER", user
+
+             names = user['activeclouds']
+
 
         for cloud_name in names:
             log.info("Activating -> {0}".format(cloud_name))
@@ -165,6 +177,8 @@ class cm_mongo:
                 log.info("Activation of cloud <%s> Failed!" % cloud_name)
             else:
                 log.info("Activation of cloud <%s> Succeeded!" % cloud_name)
+
+
 
     def refresh(self, names=["all"], types=["all"]):
         """
