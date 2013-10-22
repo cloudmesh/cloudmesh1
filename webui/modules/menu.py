@@ -16,15 +16,14 @@ super_duper_sidebar_pages = [
             ["Profile", "/profile/", None],
         ],
     ],
-    ["Clouds", "cm/refresh", "365_restart", ['all'],
+    ["Clouds", "/cm/refresh", "365_restart", ['all'],
         [
-            ["Refresh", "/cm/refresh", None],
             ["VMs", "/mesh/servers", None],
             ["Images", "/mesh/images", None],
             ["Flavors", "/mesh/flavors/", None],
         ],
     ],
-    ["HPC Queues", None, None, ['all'],
+    ["HPC Queues", "/mesh/refresh/qstat", "365_restart", ['all'],
         [
             ["Jobs", "/mesh/qstat", None],
             ["Queueu Info", "/mesh/qinfo", None],
@@ -62,62 +61,6 @@ super_duper_sidebar_pages = [
     ],
 ]
 
-
-super_sidebar_pages = [
-    ["Cloudmesh",
-        [
-            ["Home", "/"],
-            ["Status", "/status"],
-            ["Profile", "/profile/"],
-        ],
-    ],
-    ["Clouds",
-        [
-            ["Refresh", "/cm/refresh"],
-            ["VMs", "/mesh/servers"],
-            ["Images", "/mesh/images"],
-            ["Flavors", "/mesh/flavors/"],
-        ],
-    ],
-    ["HPC Queues",
-        [
-            ["Jobs", "/mesh/qstat"],
-            ["Queueu Info", "/mesh/qinfo"],
-            ["Rack Diagram", "/inventory/rack"],
-        ]
-    ],
-
-    ["Admin",
-        [
-            ["Admin", "/admin"],
-            ["Users - LDAP", "/users/ldap"],
-            ["Users - Cloud", "/mesh/users/"],
-            ["Register - Cloud", "/mesh/register/clouds"],
-        ]
-    ],
-    ["Admin - Inventory",
-        [
-            ["Overview", "/inventory/"],
-            ["Table", "/inventory/summary"],
-            ["Images", "/inventory/images"],
-        ],
-    ],
-    ["Admin - Provision",
-        [
-            ["Policy", "/provision/policy"],
-            ["Overview", "/provision/summary/"],
-            ["Form", "/provision/"],
-        ],
-    ],
-    ["Admin - Launcher",
-        [
-            ["Launcher", "/cm/launch"],
-            ["Register", "/cm/register"]
-        ]
-    ],
-]
-
-flask.Flask.app_ctx_globals_class.super_sidebar_pages = super_sidebar_pages
 flask.Flask.app_ctx_globals_class.super_duper_sidebar_pages = super_duper_sidebar_pages
 
 app_topbar = [
