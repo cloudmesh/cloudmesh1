@@ -278,9 +278,17 @@ class ec2(ComputeBaseType):
     def keypair_add(self, name, content):
         """Add a keypair"""
 
+        return self.conn.ex_import_keypair_from_string(name, content)
+        '''
+
         keyfile = tempfile.NamedTemporaryFile(delete=False)
         keyfile.write(content)
         keyfile_name = keyfile.name
         keyfile.close()
 
         return self.conn.ex_import_keypair(name, keyfile_name)
+        '''
+
+    def keypair_remove(self, name):
+        """Delete a keypair"""
+        return self.conn.ex_delete_keypair(name)
