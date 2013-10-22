@@ -53,9 +53,7 @@ def mesh_register_clouds():
 
         checkmark = 'field-cloud-activated-{0}'.format(cloudname)
 
-        print "ACTIVE", user['defaults']['activeclouds']
         if checkmark in request.form:
-            print "SWITCHING cloud on", cloudname
             try:
                 if cloudname not in user['defaults']['activeclouds']:
                     (user['defaults']['activeclouds']).append(cloudname)
@@ -63,21 +61,12 @@ def mesh_register_clouds():
                 # create_dict(user, "defaults", "activeclouds")
                 print "ERROR user defaults activecloud does not exist"
         else:
-            print "SWITCHING cloud off", cloudname
             try:
-                print "A"
-                pprint(user)
-                print "DDD", user['defaults']['activeclouds']
                 if cloudname in user['defaults']['activeclouds']:
-                    print "B"
                     active = user['defaults']['activeclouds']
-                    print "C"
                     active.remove(cloudname)
-                    print "D"
                     user['defaults']['activeclouds'] = active
-                    print "RRR", user['defaults']
             except:
-                print "E"
                 # create_dict(user, "defaults", "activeclouds")
                 print "ERROR user defaults activecloud does not exist"
 
