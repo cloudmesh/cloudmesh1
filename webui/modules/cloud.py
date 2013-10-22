@@ -177,13 +177,17 @@ def delete_vm_submit(option):
     if option == "true":
         cloud = select[0]
         servers = select[1]  # [cloud]
-        print cloud, "+++++++++++++++++++++++++++++++", servers
         for server in servers:
             delete_vm(cloud=cloud, server=server)
 
-        return "Delete successful"
+        return render_template('success.html',
+                               type="Deleting VMs",
+                               error="Deleting the VMs completed. {0}".format(servers))
     else:
-            return "delete aborted"
+        return render_template('error.html',
+                               type="Deleting VMs",
+                               error="Deleting the VMs aborted. ")
+
 
 
 def get_selected_clouds(cloud, select_ids):
