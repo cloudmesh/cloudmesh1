@@ -77,18 +77,10 @@ class pbs_mongo:
         obtains a refreshed qstat data set from the specified host. The result is written into the mongo db.
         :param host: The host on which to execute qstat
         '''
-        print "UUUU"
         time_now = datetime.now()
         data = dict(self.hosts[host].qstat(refresh=True))
-
-        print "DDDD"
-        pprint (data)
         self.db_qstat.remove({"cm_host": host, "cm_kind" : "qstat"}, safe=True)
-        print "EEEE"
-        pprint (data)
         for name in data:
-
-
             # print "mongo: add {0}, {1}, {2}".format(host,
              #                                       data[name]['Job_Id'],
               #                                      data[name]['Job_Owner'],
