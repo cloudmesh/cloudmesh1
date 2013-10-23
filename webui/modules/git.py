@@ -14,7 +14,7 @@ log = LOGGER(__file__)
 git_module = Blueprint('git_module', __name__)
 
 
-@git_module.route('/git/')
+@git_module.route('/git')
 @login_required
 def display_git_authors():
     result = git("shortlog", "-s", "-n",
