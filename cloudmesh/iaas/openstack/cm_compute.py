@@ -320,14 +320,14 @@ class openstack(ComputeBaseType):
                               "public_key": "%s" % keycontent
                               }
                  }
-        #print params
+        # print params
         return self._post(posturl, params)
-    
+
     def keypair_remove(self, keyname):
         log.debug("removing a keypair in cm_compute...")
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
-        
+
         url = "%s/os-keypairs/%s" % (publicURL, keyname)
         headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
         r = requests.delete(url, headers=headers, verify=self._get_cacert())
@@ -338,7 +338,7 @@ class openstack(ComputeBaseType):
             except:
                 pass
         return ret
-    
+
     def vm_create(self, name,
                   flavor_name,
                   image_id,
@@ -540,7 +540,7 @@ class openstack(ComputeBaseType):
             element['cm_cloud_type'] = self.type
             element['cm_cloud_version'] = cm_type_version
             element['cm_refresh'] = time_stamp
-            d[element[id]] = dict(element)
+            d[str(element[id])] = dict(element)
         return d
 
     # new
