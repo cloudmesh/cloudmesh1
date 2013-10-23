@@ -31,12 +31,9 @@ pymongo
 mongoengine
 python-novaclient
 python-keystoneclient
-#apache-libcloud
+apache-libcloud
 #-e git+https://github.com/apache/libcloud.git@0.14.0-beta2-tenative#egg=apache-libcloud
-<<<<<<< HEAD
-=======
--e git+https://github.com/apache/libcloud.git@trunk#egg=apache-libcloud
->>>>>>> 89d5bc4373b1ad8e8ca26c167b27cc9bba0f22c6
+#-e git+https://github.com/apache/libcloud.git@trunk#egg=apache-libcloud
 nose
 autopep8
 celery
