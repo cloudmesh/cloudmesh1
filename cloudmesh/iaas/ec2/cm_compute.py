@@ -291,4 +291,5 @@ class ec2(ComputeBaseType):
 
     def keypair_remove(self, name):
         """Delete a keypair"""
-        return self.conn.ex_delete_keypair(name)
+        if self.conn.ex_delete_keypair(name):
+            return {"msg":"success"}
