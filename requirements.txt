@@ -32,7 +32,7 @@ mongoengine
 python-novaclient
 python-keystoneclient
 #apache-libcloud
--e git+https://github.com/apache/libcloud.git@0.14.0-beta2-tenative#egg=apache-libcloud
+#-e git+https://github.com/apache/libcloud.git@0.14.0-beta2-tenative#egg=apache-libcloud
 nose
 autopep8
 celery
