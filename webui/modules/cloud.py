@@ -264,7 +264,7 @@ def manage_keypairs(cloud=None):
     # currently we do the registration only for openstack
     # not yet sure if other clouds support this
     # or if we have implemented them if they also support
-    if clouds.clouds[cloud]['cm_type'] == 'openstack':
+    if clouds.clouds[cloud]['cm_type'] in ['openstack', 'ec2']:
         if request.method == 'POST':
             action = request.form['action']
             keyname = request.form["keyname"]

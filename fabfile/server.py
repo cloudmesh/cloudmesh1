@@ -155,8 +155,8 @@ def wsgi(action="start"):
    logfile = "~/.futuregrid/uwsgi/cloudmesh_uwsgi.log"
    command = False
 
-   user_pidfile = expanduser(pidfile)
-   user_logfile = expanduser(logfile)
+   user_pidfile = os.path.expanduser(pidfile)
+   user_logfile = os.path.expanduser(logfile)
 
    if action == "restart":
       wsgi("stop")

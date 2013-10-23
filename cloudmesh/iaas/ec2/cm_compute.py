@@ -14,6 +14,7 @@ import libcloud.security
 import sys
 
 import urlparse
+import tempfile
 
 
 class ec2(ComputeBaseType):
@@ -260,3 +261,34 @@ class ec2(ComputeBaseType):
 
     def list_images(self):
         return self.conn.list_images()
+
+    def keypair_list(self):
+        """Return a keypair list. keypair_list() function name is fixed
+        
+        :returns: dict
+        """
+
+        keylist = self.conn.ex_describe_all_keypairs()
+        res = { 'keypairs': [] }
+        for keyname in keylist:
+            tmp = {'keypair':{'name': keyname}}
+            res['keypairs'].append(tmp)
+        return res
+
+    def keypair_add(self, name, content):
+        """Add a keypair"""
+
+        return self.conn.ex_import_keypair_from_string(name, content)
+        '''
+
+        keyfile = tempfile.NamedTemporaryFile(delete=False)
+        keyfile.write(content)
+        keyfile_name = keyfile.name
+        keyfile.close()
+
+        return self.conn.ex_import_keypair(name, keyfile_name)
+        '''
+
+    def keypair_remove(self, name):
+        """Delete a keypair"""
+        return self.conn.ex_delete_keypair(name)
