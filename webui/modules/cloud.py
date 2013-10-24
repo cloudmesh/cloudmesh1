@@ -376,6 +376,7 @@ def start_vm(cloud=None, server=None):
         keynamenew = "%s_%s" % (username, key.replace('.', '_').replace('@', '_'))
     except AttributeError:
         keynamenew = "cloudmesh"  # Default key name if it is missing
+    log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image, vm_flavor_id, keynamenew) )
     result = clouds.vm_create(
         cloud,
         prefix,
