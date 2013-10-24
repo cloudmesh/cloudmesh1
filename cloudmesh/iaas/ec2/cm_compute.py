@@ -126,9 +126,8 @@ class ec2(ComputeBaseType):
             instanceid = vm_obj.id
             vm_dict[instanceid] = vm
 
-        self.nodes = vm_dict
-
-        return self.nodes
+        self.servers = vm_dict
+        return self.servers
 
     def vm_delete(self, name):
         self.delete_vm(name)
@@ -240,7 +239,8 @@ class ec2(ComputeBaseType):
     def _get_flavors_dict(self):
         res = self.list_flavors()
         res_dict = self.convert_to_dict(res)
-        return res_dict
+        self.flavors = res_dict
+        return self.flavors
 
     def convert_to_dict(self, _list):
         res_dict = {}
@@ -260,7 +260,8 @@ class ec2(ComputeBaseType):
     def _get_images_dict(self):
         res = self.list_images()
         res_dict = self.convert_to_dict(res)
-        return res_dict
+        self.images = res_dict
+        return self.images
 
     def list_images(self):
         return self.conn.list_images()
