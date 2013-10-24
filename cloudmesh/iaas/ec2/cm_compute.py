@@ -108,14 +108,14 @@ class ec2(ComputeBaseType):
                   key_name=None,
                   meta={},
                   userdata=None):
-        self.create_vm()
+        self.create_vm(flavor_name, image_id, key_name)
 
-    def create_vm(self):
-        image = NodeImage(id=self.get_image_name(), name="", driver="")
-        size = NodeSize(id=self.get_flavor(), name="", ram=None, disk=None,
+    def create_vm(self, flavor_name, image_id, key_name):
+        image = NodeImage(id=image_id, name="", driver="")
+        size = NodeSize(id=flavor_name, name="", ram=None, disk=None,
                         bandwidth=None, price=None, driver="")
         self.conn.create_node(name=self.get_name(), image=image, size=size,
-                              ex_keyname=self.get_keyname())
+                              ex_keyname=key_name)
         return
 
     def list_vm(self):
