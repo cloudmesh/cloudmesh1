@@ -5,6 +5,7 @@ import inspect
 import sys
 import importlib
 from cmd3.shell import command
+import cloudmesh
 
 from cloudmesh.util.logger import LOGGER
 
@@ -22,7 +23,7 @@ class cm_shell_list:
         """
         Usage:
                list
-               list flavors
+               list flavors 
                list servers
                list images
                
@@ -43,6 +44,38 @@ class cm_shell_list:
 
         if arguments["servers"]:
             log.info ("list servers")
+            return
+
+
+        if arguments["images "]:
+            log.info ("list images s")
+            return
+
+    @command
+    def do_count(self, args, arguments):
+        """
+        Usage: count
+               count flavors 
+               count servers
+               count images
+               
+        Options:
+
+           -v       verbose mode
+
+        """
+        log.info(args)
+
+        log.info(arguments)
+
+
+        if arguments["flavors"]:
+            log.info ("count flavors")
+            return
+
+
+        if arguments["servers"]:
+            log.info ("count servers")
             return
 
 
