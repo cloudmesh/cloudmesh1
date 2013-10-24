@@ -60,12 +60,15 @@ class ec2(ComputeBaseType):
         self.set_image_name(image_name)
 
         # set default location from yaml
-        #location = self.compute_config.default(label)['location']
-        #self.set_location(location)
+        # location = self.compute_config.default(label)['location']
+        # self.set_location(location)
 
         # Auth url
         self.ec2_url = self.user_credential['EC2_URL']
-        self.hostname, self.port, self.path = self._urlparse(self.ec2_url)
+        self.hostname, self.port, self.path, self.is_secure = \
+                                                self._urlparse(self.ec2_url)
+
+
 
         self.certfile = self.user_credential['EUCALYPTUS_CERT']
         libcloud.security.CA_CERTS_PATH.append(self.certfile)
@@ -87,7 +90,7 @@ class ec2(ComputeBaseType):
         try:
             conn = Driver(key=self.access_key_id,
                       secret=self.secret_access_key,
-                      secure=True,
+                      secure=self.is_secure,
                       host=self.hostname,
                       path=self.path,
                       port=self.port)
@@ -231,7 +234,7 @@ class ec2(ComputeBaseType):
 
         path = result.path
 
-        return host, port, path
+        return host, port, path, is_secure
 
 
     def _get_flavors_dict(self):
