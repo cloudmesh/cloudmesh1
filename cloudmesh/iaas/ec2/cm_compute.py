@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-cloudmesh.iaas.aws.cm_compute
+cloudmesh.iaas.ec2.cm_compute
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
@@ -10,16 +10,21 @@ from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from libcloud.compute.base import NodeImage, NodeSize
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider
+import libcloud.security
+import sys
+
+import urlparse
+import tempfile
 
 
-class aws(ComputeBaseType):
+class ec2(ComputeBaseType):
     """ 
-    Amazon Cloud service with the libcloud interface
+    ec2 service with the libcloud interface
     With libcloud interface, cloudmesh supports Amazon Web Services such as EC2, S3,
     EBS, etc.
     """
 
-    name = "aws"
+    name = "ec2"
     DEFAULT_LABEL = name
 
     def __init__(self, label=DEFAULT_LABEL):
@@ -38,14 +43,14 @@ class aws(ComputeBaseType):
         self.user_credential = self.compute_config.credential(label)
 
         # Service certificate
-        self.access_key_id = self.user_credential['access_key_id']
+        self.access_key_id = self.user_credential['EC2_ACCESS_KEY']
         self.secret_access_key = \
-        self.user_credential['secret_access_key']
+        self.user_credential['EC2_SECRET_KEY']
 
         # SSH
         self.ssh_userid = self.user_credential['userid']
         self.ssh_keyname = self.user_credential['keyname']
-        self.ssh_pkey = self.user_credential['privatekeyfile']
+        self.ssh_pkey = self.user_credential['EC2_PRIVATE_KEY']
 
         # set default flavor from yaml
         flavor = self.compute_config.default(label)['flavor']
@@ -55,32 +60,45 @@ class aws(ComputeBaseType):
         self.set_image_name(image_name)
 
         # set default location from yaml
-        location = self.compute_config.default(label)['location']
-        self.set_location(location)
+        # location = self.compute_config.default(label)['location']
+        # self.set_location(location)
+
+        # Auth url
+        self.ec2_url = self.user_credential['EC2_URL']
+        self.hostname, self.port, self.path, self.is_secure = \
+                                                self._urlparse(self.ec2_url)
+
+
+
+        self.certfile = self.user_credential['EUCALYPTUS_CERT']
+        libcloud.security.CA_CERTS_PATH.append(self.certfile)
+
+        # Skip this step if you are launching nodes on an official
+        # provider. It is intended only for self signed SSL certs in
+        # test deployments.
+        # Note: Code like this poses a security risk (MITM attack) and
+        # that's the reason why you should never use it for anything else
+        # besides testing. You have been warned.
+        libcloud.security.VERIFY_SSL_CERT = False
 
     def connect(self):
-        Driver = get_driver(Provider.EC2)
-
-        # #self.credential = self.config.get(self.label, expand=True)
-        # #pprint(self.credential)
-
-        #### libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
-        #### libcloud.security.VERIFY_SSL_CERT = False
-
-        # #Driver = get_driver(Provider.EUCALYPTUS)
-        # #self.cloud = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
-
-
-        # certfile = self.compute_config.get("cloudmesh.clouds.aws.privatekeyfile")
-        # libcloud.security.CA_CERTS_PATH.append(certfile)
+        Driver = get_driver(Provider.EUCALYPTUS)
 
         #
         # BUG, make sure we use the cert, confirm with team ....
         #
+        try:
+            conn = Driver(key=self.access_key_id,
+                      secret=self.secret_access_key,
+                      secure=self.is_secure,
+                      host=self.hostname,
+                      path=self.path,
+                      port=self.port)
 
-        conn = Driver(self.access_key_id,
-                      self.secret_access_key,
-                      secure=False)
+        except Exception, e:
+            print e
+            sys.exit()
+
         self.conn = conn
 
     def vm_create(self, name,
@@ -90,14 +108,14 @@ class aws(ComputeBaseType):
                   key_name=None,
                   meta={},
                   userdata=None):
-        self.create_vm()
+        self.create_vm(flavor_name, image_id, key_name)
 
-    def create_vm(self):
-        image = NodeImage(id=self.get_image_name(), name="", driver="")
-        size = NodeSize(id=self.get_flavor(), name="", ram=None, disk=None,
+    def create_vm(self, flavor_name, image_id, key_name):
+        image = NodeImage(id=image_id, name="", driver="")
+        size = NodeSize(id=flavor_name, name="", ram=None, disk=None,
                         bandwidth=None, price=None, driver="")
         self.conn.create_node(name=self.get_name(), image=image, size=size,
-                              ex_keyname=self.get_keyname())
+                              ex_keyname=key_name)
         return
 
     def list_vm(self):
@@ -201,6 +219,24 @@ class aws(ComputeBaseType):
     def release_unused_public_ips(self):
         return
 
+    def _urlparse(self, ec2_url):
+        """Return host, port and path from ec2_url"""
+
+        result = urlparse.urlparse(ec2_url)
+        is_secure = (result.scheme == 'https')
+        if ":" in result.netloc:
+           host_port_tuple = result.netloc.split(':')
+           host = host_port_tuple[0]
+           port = int(host_port_tuple[1])
+        else:
+           host = result.netloc
+           port = None
+
+        path = result.path
+
+        return host, port, path, is_secure
+
+
     def _get_flavors_dict(self):
         res = self.list_flavors()
         res_dict = self.convert_to_dict(res)
@@ -228,3 +264,35 @@ class aws(ComputeBaseType):
 
     def list_images(self):
         return self.conn.list_images()
+
+    def keypair_list(self):
+        """Return a keypair list. keypair_list() function name is fixed
+        
+        :returns: dict
+        """
+
+        keylist = self.conn.ex_describe_all_keypairs()
+        res = { 'keypairs': [] }
+        for keyname in keylist:
+            tmp = {'keypair':{'name': keyname}}
+            res['keypairs'].append(tmp)
+        return res
+
+    def keypair_add(self, name, content):
+        """Add a keypair"""
+
+        return self.conn.ex_import_keypair_from_string(name, content)
+        '''
+
+        keyfile = tempfile.NamedTemporaryFile(delete=False)
+        keyfile.write(content)
+        keyfile_name = keyfile.name
+        keyfile.close()
+
+        return self.conn.ex_import_keypair(name, keyfile_name)
+        '''
+
+    def keypair_remove(self, name):
+        """Delete a keypair"""
+        if self.conn.ex_delete_keypair(name):
+            return {"msg":"success"}

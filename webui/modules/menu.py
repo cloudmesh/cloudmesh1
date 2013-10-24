@@ -8,61 +8,60 @@ log = LOGGER(__file__)
 
 menu_module = Blueprint('menu_module', __name__)
 
-super_sidebar_pages = [
-    ["Cloudmesh",
+super_duper_sidebar_pages = [
+    ["Cloudmesh", None, None, ['all'],
         [
-            ["Home", "/"],
-            ["Status", "/status"],
-            ["Profile", "/profile/"],
+            ["Home", "/", None],
+            ["Status", "/status", None],
+            ["Profile", "/profile/", None],
         ],
     ],
-    ["Clouds",
+    ["Clouds", "/cm/refresh", "365_restart", ['all'],
         [
-            ["Refresh", "/cm/refresh"],
-            ["VMs", "/mesh/servers"],
-            ["Images", "/mesh/images"],
-            ["Flavors", "/mesh/flavors/"],
+            ["VMs", "/mesh/servers", None],
+            ["Images", "/mesh/images", None],
+            ["Flavors", "/mesh/flavors/", None],
         ],
     ],
-    ["HPC Queues",
+    ["HPC Queues", "/mesh/refresh/qstat", "365_restart", ['all'],
         [
-            ["Jobs", "/mesh/qstat"],
-            ["Queueu Info", "/mesh/qinfo"],
-            ["Rack Diagram", "/inventory/rack"],
+            ["Jobs", "/mesh/qstat", None],
+            ["Queueu Info", "/mesh/qinfo", None],
+            ["Rack Diagram", "/inventory/rack", None],
         ]
     ],
 
-    ["Admin",
+    ["Admin", None, None, ['admin'],
         [
-            ["Admin", "/admin"],
-            ["Users - LDAP", "/users/ldap"],
-            ["Users - Cloud", "/mesh/users/"],
-            ["Register - Cloud", "/mesh/register/clouds"],
+            ["Admin", "/admin", None],
+            ["Users - LDAP", "/users/ldap", None],
+            ["Users - Cloud", "/mesh/users/", None],
+            ["Register - Cloud", "/mesh/register/clouds", None],
         ]
     ],
-    ["Admin - Inventory",
+    ["Admin - Inventory", None, None, ['admin'],
         [
-            ["Overview", "/inventory/"],
-            ["Table", "/inventory/summary"],
-            ["Images", "/inventory/images"],
+            ["Overview", "/inventory/", None],
+            ["Table", "/inventory/summary", None],
+            ["Images", "/inventory/images", None],
         ],
     ],
-    ["Admin - Provision",
+    ["Admin - Provision", None, None, ['admin', 'rain'],
         [
-            ["Policy", "/provision/policy"],
-            ["Overview", "/provision/summary/"],
-            ["Form", "/provision/"],
+            ["Policy", "/provision/policy", None],
+            ["Overview", "/provision/summary/", None],
+            ["Form", "/provision/", None],
         ],
     ],
-    ["Admin - Launcher",
+    ["Admin - Launcher", None, None, ['admin', 'rain'],
         [
-            ["Launcher", "/cm/launch"],
-            ["Register", "/cm/register"]
+            ["Launcher", "/cm/launch", None],
+            ["Register", "/cm/register", None],
         ]
     ],
 ]
 
-flask.Flask.app_ctx_globals_class.super_sidebar_pages = super_sidebar_pages
+flask.Flask.app_ctx_globals_class.super_duper_sidebar_pages = super_duper_sidebar_pages
 
 app_topbar = [
     ["Home", "/"],

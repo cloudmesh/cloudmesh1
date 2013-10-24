@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import render_template, request, redirect, g, jsonify
+from flask import render_template, request, redirect, g, jsonify, session
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mesh import cloudmesh
 from cloudmesh.util.util import table_printer
@@ -11,7 +11,7 @@ from cloudmesh.util.util import cond_decorator
 import cloudmesh
 from flask.ext.login import login_required
 import webbrowser
-
+from cloudmesh.util.util import address_string
 from cloudmesh.util.logger import LOGGER
 from pprint import pprint
 
@@ -20,12 +20,12 @@ log = LOGGER(__file__)
 
 cloud_module = Blueprint('cloud_module', __name__)
 
-config = cm_config()
+# config = cm_config()
 # prefix = config.prefix
 # index = config.index
 
-clouds = cm_mongo()
-clouds.activate()
+# clouds = cm_mongo()
+# clouds.activate()
 
 # DEFINING A STATE FOR THE CHECKMARKS IN THE TABLE
 
@@ -57,7 +57,11 @@ def getCurrentUserinfo():
 @cloud_module.route('/cm/refresh/<cloud>/<service_type>')
 @login_required
 def refresh(cloud=None, server=None, service_type=None):
-    print "-> refresh", cloud, service_type
+
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
+    log.info("-> refresh {0} {1}".format(cloud, service_type))
     userinfo = getCurrentUserinfo()
     # print "REQ", redirect(request.args.get('next') or '/').__dict__
     cloud_names = None
@@ -87,8 +91,11 @@ def refresh(cloud=None, server=None, service_type=None):
 @cloud_module.route('/cm/delete/<cloud>/<server>/')
 @login_required
 def delete_vm(cloud=None, server=None):
-    print "HALLO"
     log.info ("-> delete {0} {1}".format(cloud, server))
+
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
     clouds.vm_delete(cloud, server)
@@ -98,6 +105,103 @@ def delete_vm(cloud=None, server=None):
     return redirect('/mesh/servers')
 
 # ============================================================
+# ROUTE: DELETE Multiple VM CONFIRMATION AND DELETION
+# ============================================================
+@cloud_module.route('/cm/delete_vm_confirm', methods=('GET', 'POST'))
+@cond_decorator(cloudmesh.with_login, login_required)
+def delete_vm_confirm():
+
+
+
+
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    # filter()
+    config = cm_config()
+    c = cm_mongo()
+    c.activate(cm_user_id=g.user.id)
+    # c.refresh(types=["servers"])
+    clouds = c.servers()
+    userdata = g.user
+    username = userdata.id
+    user_obj = cm_user()
+    user = user_obj.info(username)
+    images = c.images()
+    flavors = c.flavors()
+
+    os_attributes = ['name',
+                     'status',
+                     'addresses',
+                     'flavor',
+                     'id',
+                     'image',
+                     'user_id',
+                     'metadata',
+                     'key_name',
+                     'created']
+    cloud_filters = None
+    filtered_clouds = clouds
+    select = request.form.getlist("selection")
+    cloud = request.form["cloud"]
+    if select != None and cloud != None:
+        session["delete_selection"] = (cloud, select)
+    if "delete_selection" in session:
+        print "writing selection to session"
+        # print filtered_clouds
+        selected_cloud_data = {}
+        selected_cloud_data[cloud] = get_selected_clouds(filtered_clouds[session["delete_selection"][0]], session["delete_selection"][1])
+        return render_template('mesh/cloud/delete_vms.html',
+                               address_string=address_string,
+                               attributes=os_attributes,
+                               updated=time_now,
+                               clouds=selected_cloud_data,
+                               config=config,
+                               user=user,
+                               images=images,
+                               flavors=flavors,
+                               filters=cloud_filters)
+
+    else:
+        return render_template('error.html',
+                               type="Deleting VMs",
+                               error="No VMs to delete. ")
+
+
+@cloud_module.route('/cm/delete_request_submit/<option>', methods=('GET', 'POST'))
+@cond_decorator(cloudmesh.with_login, login_required)
+def delete_vm_submit(option):
+    config = cm_config()
+    c = cm_mongo()
+    c.activate(cm_user_id=g.user.id)
+
+    select = session.pop("delete_selection", None)
+
+    clouds = c.servers()
+
+    if option == "true":
+        cloud = select[0]
+        servers = select[1]  # [cloud]
+        for server in servers:
+            delete_vm(cloud=cloud, server=server)
+
+        return render_template('success.html',
+                               type="Deleting VMs",
+                               error="Deleting the VMs completed. {0}".format(servers))
+    else:
+        return render_template('error.html',
+                               type="Deleting VMs",
+                               error="Deleting the VMs aborted. ")
+
+
+
+def get_selected_clouds(cloud, select_ids):
+    selected_clouds = {}
+    for id in select_ids:
+        if id in cloud:
+            selected_clouds[id] = cloud[id]
+    # print selected_clouds
+    return selected_clouds
+
+# ============================================================
 # ROUTE: DELETE GROUP
 # ============================================================
 
@@ -105,7 +209,12 @@ def delete_vm(cloud=None, server=None):
 @cloud_module.route('/cm/delete/<cloud>/')
 @login_required
 def delete_vms(cloud=None):
-# donot do refresh before delete, this will cause all the vms to get deleted
+
+
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
+    # donot do refresh before delete, this will cause all the vms to get deleted
     f_cloud = clouds.clouds[cloud]
     for id, server in f_cloud['servers'].iteritems():
         log.info("-> delete {0} {1}".format(cloud, id))
@@ -123,6 +232,11 @@ def delete_vms(cloud=None):
 @cloud_module.route('/cm/assignpubip/<cloud>/<server>/')
 @login_required
 def assign_public_ip(cloud=None, server=None):
+
+    config = cm_config()
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
     mycloud = config.cloud(cloud)
     if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
         clouds.assign_public_ip(cloud, server)
@@ -132,21 +246,25 @@ def assign_public_ip(cloud=None, server=None):
     #    return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
 
 def _keyname_sanitation(username, keyname):
-    keynamenew = "%s_%s" % (username, keyname.replace('.','_').replace('@', '_'))
+    keynamenew = "%s_%s" % (username, keyname.replace('.', '_').replace('@', '_'))
     return keynamenew
 
 @cloud_module.route('/cm/keypairs/<cloud>/', methods=['GET', 'POST'])
 @login_required
 def manage_keypairs(cloud=None):
+
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
     userinfo = getCurrentUserinfo()
     username = userinfo["cm_user_id"]
     keys = userinfo["keys"]["keylist"]
     cloudmanager = clouds.clouds[cloud]['manager']
-    
+
     # currently we do the registration only for openstack
     # not yet sure if other clouds support this
     # or if we have implemented them if they also support
-    if clouds.clouds[cloud]['cm_type'] == 'openstack':
+    if clouds.clouds[cloud]['cm_type'] in ['openstack', 'ec2']:
         if request.method == 'POST':
             action = request.form['action']
             keyname = request.form["keyname"]
@@ -154,12 +272,12 @@ def manage_keypairs(cloud=None):
             keycontent = keys[keyname]
             if keycontent.startswith('key '):
                 keycontent = keycontent[4:]
-            #print keycontent
+            # print keycontent
             keynamenew = _keyname_sanitation(username, keyname)
             if action == 'register':
                 log.debug("trying to register a key")
                 r = cloudmanager.keypair_add(keynamenew, keycontent)
-                #pprint(r)
+                # pprint(r)
             else:
                 log.debug("trying to deregister a key")
                 r = cloudmanager.keypair_remove(keynamenew)
@@ -173,10 +291,10 @@ def manage_keypairs(cloud=None):
                 for akeypair in keypairsRegistered:
                     keyname = akeypair['keypair']['name']
                     keynamesRegistered.append(keyname)
-            #pprint(keynamesRegistered)
+            # pprint(keynamesRegistered)
             for keyname in keys.keys():
                 keynamenew = _keyname_sanitation(username, keyname)
-                #print keynamenew
+                # print keynamenew
                 if keynamenew in keynamesRegistered:
                     registered[keyname] = True
                 else:
@@ -185,6 +303,13 @@ def manage_keypairs(cloud=None):
                                    keys=keys,
                                    registered=registered,
                                    cloudname=cloud)
+    else:
+        return render_template('error.html',
+                               error="Setting keypairs for this cloud is not yet enabled")
+        # return redirect('/mesh/servers')
+
+
+
 # ============================================================
 # ROUTE: START
 # ============================================================
@@ -193,13 +318,17 @@ def manage_keypairs(cloud=None):
 # WHY NOT USE cm_keys as suggested?
 #
 
+# @cloud_module.route('/cm/start/<cloud>/<count>')
 
 @cloud_module.route('/cm/start/<cloud>/')
 @login_required
 def start_vm(cloud=None, server=None):
     log.info("-> start {0}".format(cloud))
-    # if (cloud == 'india'):
-    #  r = cm("--set", "quiet", "start:1", _tty_in=True)
+
+    config = cm_config()
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
     key = None
     vm_image = None
     vm_flavor = None
@@ -214,34 +343,28 @@ def start_vm(cloud=None, server=None):
         key = userinfo["defaults"]["key"]
     elif len(userinfo["keys"]["keylist"].keys()) > 0:
         key = userinfo["keys"]["keylist"].keys()[0]
-    #
-    # before the info could be maintained in mongo, using the config file
-    # vm_flavor = config.cloud(cloud)["default"]["flavor"]
-    # vm_image = config.cloud(cloud)["default"]["image"]
-    # vm_flavor_id = clouds.flavor_name_to_id(cloud, vm_flavor)
 
-    # getting defulat flavor and image for the specified cloud out of mongo
-    if "flavors" in userinfo["defaults"]:
-        if cloud in userinfo["defaults"]["flavors"]:
-            vm_flavor_id = userinfo["defaults"]["flavors"][cloud]
-            flavors = clouds.flavors([cloud])[cloud]
-            vm_flavor = flavors[vm_flavor_id]["name"]
-    if "images" in userinfo["defaults"]:
-        if cloud in userinfo["defaults"]["images"]:
-            vm_image = userinfo["defaults"]["images"][cloud]
-    if not vm_flavor_id:
-        flavors = clouds.flavors([cloud])[cloud]
-        # pprint(flavors)
-        vm_flavor_id = flavors.keys()[0]
-        vm_flavor = flavors[vm_flavor_id]["name"]
-    if not vm_image:
-        images = clouds.images([cloud])[cloud]
-        # pprint(images)
-        vm_image = images.keys()[0]
+    error = ''
 
-    # in case of error, setting default flavor id
-    # if vm_flavor_id < 0:
-    #    vm_flavor_id = 1
+    try:
+        vm_flavor_id = userinfo["defaults"]["flavors"][cloud]
+    except:
+        error = error + "Please specify a default flavor."
+
+    if vm_flavor_id in [None, 'none']:
+        error = error + "Please specify a default flavor."
+
+    try:
+        vm_image = userinfo["defaults"]["images"][cloud]
+    except:
+        error = error + "Please specify a default image."
+
+    if vm_image in [None, 'none']:
+        error = error + "Please specify a default image."
+
+    if error != '':
+        return render_template('error.html', error=error)
+
     prefix = userinfo["defaults"]["prefix"]
     index = userinfo["defaults"]["index"]
     log.info("STARTING {0} {1}".format(prefix, index))
@@ -253,6 +376,7 @@ def start_vm(cloud=None, server=None):
         keynamenew = "%s_%s" % (username, key.replace('.', '_').replace('@', '_'))
     except AttributeError:
         keynamenew = "cloudmesh"  # Default key name if it is missing
+    log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image, vm_flavor_id, keynamenew) )
     result = clouds.vm_create(
         cloud,
         prefix,
@@ -285,6 +409,10 @@ def start_vm(cloud=None, server=None):
 @cloud_module.route('/cm/login/<cloud>/<server>/')
 @login_required
 def vm_login(cloud=None, server=None):
+
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
     message = ''
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
@@ -305,6 +433,25 @@ def vm_login(cloud=None, server=None):
         # BUG: login must be based on os
         # TODO: loginbug
         #
+
+        c = cm_mongo()
+        images = c.images([cloud])[cloud]
+
+        image = server['image']['id']
+
+        imagename = images[image]['name']
+        print imagename
+
+        if "ubuntu" in imagename:
+            loginname = "ubuntu"
+        elif "centos" in imagename:
+            loginname = "root"
+        elif "debian" in imagename:
+            loginname = "root"
+        else:
+            userdata = g.user
+            loginname = userdata.id
+
         link = 'ubuntu@' + ip
         webbrowser.open("ssh://" + link)
 
@@ -317,6 +464,12 @@ def vm_login(cloud=None, server=None):
 @login_required
 def vm_info(cloud=None, server=None):
 
+    print "TYTYTYT"
+    clouds = cm_mongo()
+    print "TYTYTYT"
+    clouds.activate(cm_user_id=g.user.id)
+    print "TYTYTYT"
+
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # print clouds.servers()[cloud]
 
@@ -327,8 +480,9 @@ def vm_info(cloud=None, server=None):
             server = int(server)
     except:
         pass
-    clouds.servers()[cloud][server]['cm_vm_id'] = server
-    clouds.servers()[cloud][server]['cm_cloudname'] = cloud
+
+    # clouds.servers()[cloud][server]['cm_vm_id'] = server
+    # clouds.servers()[cloud][server]['cm_cloudname'] = cloud
 
     return render_template('mesh/cloud/vm_info.html',
                            updated=time_now,

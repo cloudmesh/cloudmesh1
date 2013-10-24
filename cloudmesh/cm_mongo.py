@@ -2,6 +2,7 @@ from bson.objectid import ObjectId
 from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
 from cloudmesh.iaas.openstack.cm_compute import openstack
+from cloudmesh.iaas.ec2.cm_compute import ec2
 from cloudmesh.iaas.openstack.cm_idm import keystone
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.stopwatch import StopWatch
@@ -107,7 +108,7 @@ class cm_mongo:
     def cloud_provider(self, type):
         '''
         returns the cloud provider based on the type
-        :param type: the type is openstack, eucalyptus, or azure (azure is not yet supported)
+        :param type: the type is openstack, eucalyptus, or azure (< is not yet supported)
         '''
         provider = None
         if type == 'openstack':
@@ -118,6 +119,8 @@ class cm_mongo:
             provider = azure
         elif type == 'aws':
             provider = aws
+        elif type == 'ec2':
+            provider = ec2
         return provider
 
     def get_cloud(self, cloud_name, force=False):
@@ -131,7 +134,7 @@ class cm_mongo:
                 credential = self.config.cloud(cloud_name)
                 cm_type = credential['cm_type']
                 cm_type_version = credential['cm_type_version']
-                if cm_type in ['openstack', 'eucalyptus', 'azure', 'aws']:
+                if cm_type in ['openstack', 'eucalyptus', 'azure', 'ec2', 'aws']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cm_type,
                                                'cm_type_version': cm_type_version}
@@ -147,9 +150,23 @@ class cm_mongo:
                 log.error("Cannot activate cloud <%s>\n%s" % (cloud_name, e))
         return cloud
 
-    def activate(self, names=None):
-        if names is None:
-            names = self.config.active()
+    def activate(self, names=None, cm_user_id=None):
+        #
+        # bug must come form mongo
+        #
+        #
+
+        if cm_user_id is None:
+            if names is None:
+                names = self.config.active()
+        else:
+
+             defaults_collection = 'defaults'
+             db_defaults = get_mongo_db(defaults_collection)
+             user = db_defaults.find_one({'cm_user_id': cm_user_id})
+
+             names = user['activeclouds']
+
 
         for cloud_name in names:
             log.info("Activating -> {0}".format(cloud_name))
@@ -158,6 +175,8 @@ class cm_mongo:
                 log.info("Activation of cloud <%s> Failed!" % cloud_name)
             else:
                 log.info("Activation of cloud <%s> Succeeded!" % cloud_name)
+
+
 
     def refresh(self, names=["all"], types=["all"]):
         """
@@ -213,8 +232,8 @@ class cm_mongo:
                 watch.start(name)
                 cloud.refresh(type)
                 result = cloud.get(type)
-                print "YYYYY", len(result)
-                pprint(result)
+                # print "YYYYY", len(result)
+                # pprint(result)
                 # add result to db,
                 watch.stop(name)
                 print 'Refresh time:', watch.get(name)
@@ -246,6 +265,10 @@ class cm_mongo:
                                 del result[element]['metadata'][key]
                                 result[element]['metadata'][fixedkey] = value
                     # print "HPCLOUD_DEBUG - AFTER DELETING PROBLEMATIC KEYS", result[element]
+
+                    # exception.
+                    if "_id" in result[element]:
+                        del(result[element]['_id'])
 
                     self.db_clouds.insert(result[element])
 
@@ -331,12 +354,22 @@ class cm_mongo:
 
     def assign_public_ip(self, cloud, server):
         cloudmanager = self.clouds[cloud]["manager"]
-        ip = cloudmanager.get_public_ip()
-        return cloudmanager.assign_public_ip(server, ip)
+        type = self.clouds[cloud]["cm_type"]
+        if type == 'openstack':
+            ip = cloudmanager.get_public_ip()
+            ret = cloudmanager.assign_public_ip(server, ip)
+        else:
+            ret = None
+        return ret
 
     def release_unused_public_ips(self, cloud):
         cloudmanager = self.clouds[cloud]["manager"]
-        return cloudmanager.release_unused_public_ips()
+        type = self.clouds[cloud]["cm_type"]
+        if type == 'openstack':
+            ret = cloudmanager.release_unused_public_ips()
+        else:
+            ret = None
+        return ret
 
     def vm_delete(self, cloud, server):
         cloudmanager = self.clouds[cloud]["manager"]

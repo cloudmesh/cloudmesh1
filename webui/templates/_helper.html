@@ -16,7 +16,7 @@ image_button("041_charts", "/table/")
 
 {% macro cm_state_color(state) %}
     {% set s = state|lower %}
-   	{% if s in ["active", "r"] %}
+   	{% if s in ["active", "r", "available"] %}
 		<span class="label label-success">{{state}}</span>
 	{% elif s in ["error"] %}
 		<span class="label label-danger">{{state}}</span>
@@ -64,6 +64,17 @@ image_button("041_charts", "/table/")
 	     width="16" height="16">
 {% endmacro %}
 
+{% macro href_image_button(align, type, actionpath) %}
+      <a href="{{ actionpath }}">
+      <img
+      	 {% if align != None %}
+      	 	align={{ align }}
+      	 {% endif %}
+	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
+	     width="16" height="16"></img>
+	  </a>
+{% endmacro %}
+
 {% macro image_popup(align, type, actionpath) %}
       <input align={{ align }} type="image"
 	     src="{{ url_for('static', filename='img/icons/png/glyphicons_' + type + '.png') }}"
@@ -88,7 +99,56 @@ image_button("041_charts", "/table/")
       </a>
   </li>
   {% endfor %}
-{%- endmacro %}
+{% endmacro %}
+
+{% macro super_duper_flexible_menu(dummy) %}
+
+
+  {% for menu in g.super_duper_sidebar_pages %}
+
+      {% if g.user.roles | role_allowed(menu[3]) %}
+
+      <li class="nav-header">
+          <span>
+	      {{ menu[0] }}
+          {% if menu[1] != None %}
+          	  &nbsp;
+             {{href_image_button (None, menu[2], menu[1])}}
+          {% endif %}
+          </span>
+      </li>
+
+      {% for submenu in menu[4] %}
+		  <li>
+	      <a href="{{ submenu[1] }}"> &nbsp;&nbsp;&nbsp;&nbsp; {{ submenu[0] }} </a>
+          {% if submenu[2] != None %}
+             {{href_image_button (None, menu[2], menu[1])}}
+          {% endif %}
+          </li>
+       {% endfor %}
+
+   {% endif %}
+
+   {% endfor %}
+
+   <li class="nav-header">
+       Pages
+   </li>
+   {{ flexible_menu(g.sidebar_flatpages) }}
+
+   <li class="nav-header">
+       External Links
+   </li>
+   {{ flexible_menu(g.externalbar_pages) }}
+
+
+
+   {% for item in itemlist %}
+	<li> <a href="{{ item[1] }}"> &nbsp;&nbsp;&nbsp;&nbsp;{{ item[0] }}</a></li>
+   {% endfor %}
+
+
+{% endmacro %}
 
 {% macro super_flexible_menu(itemlist) -%}
    {% for item in itemlist %}
@@ -96,7 +156,7 @@ image_button("041_charts", "/table/")
    {% endfor %}
 
 
-{%- endmacro %}
+{% endmacro %}
 
 {% macro submit_button(id, type, formName) %}
     <input id="{{id}}" type="image"

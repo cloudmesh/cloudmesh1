@@ -13,6 +13,9 @@ password:
   sierra_openstack_grizzly: {{ passwords.sierra_openstack_grizzly }}
   hp: None
   hp_east: None
+  alamo:
+    EC2_ACCESS_KEY: {{passwords.alamo.EC2_ACCESS_KEY}}
+    EC2_ACCESS_KEY: {{passwords.alamo.EC2_SECERET_KEY}}
 
 username:
   hp: None

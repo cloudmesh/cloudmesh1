@@ -52,7 +52,7 @@ $(function() {
 <div class="span9">
 <div id="flavors-accordion">
   {% for cloud in clouds %}
-  
+
     {% set cloud_loop = loop %}
   <div style="margin-bottom:1em;">
   <h3>
@@ -63,8 +63,8 @@ $(function() {
   <div>
   	<form name = "flavor_{{cloud}}" method = 'POST' action = "/mesh/flavors/">
     <input type = hidden name = "cloud" value = "{{cloud}}"/>
-    
-    
+
+
     <table id="cloud-table-{{ loop.index0 }}">
       <thead>
           <tr>
@@ -76,16 +76,17 @@ $(function() {
           </tr>
       </thead>
       <tbody>
-      	
-          
+
+
           {% for flavor in clouds[cloud] %}
              <tr>
-               <td><input type="radio" 
-               	name="default_flavor" 
-               	value = {{flavor}} 
-				{% if flavor == user.defaults.flavors[cloud] %}
+               <td>
+               	<input type="radio"
+               	name="default_flavor"
+               	value="{{flavor}}"
+				{% if (flavor|string) == (user.defaults.flavors[cloud]|string) %}
 					checked = checked
-				{%endif%}
+				{% endif %}
                	onclick = "document.forms['flavor_{{cloud}}'].submit()"/></td>
                  <!-- for attribute in clouds[cloud][flavor] -->
                  {% for attribute in attributes  %}
@@ -93,15 +94,15 @@ $(function() {
                  {% endfor %}
              </tr>
           {% endfor %}
-         
+
       </tbody>
     </table>
     </form>
   </div>
   </div>
-   
+
   {% endfor %}
-	
+
 </div>
 </div>
 

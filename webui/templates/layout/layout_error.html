@@ -1,4 +1,4 @@
-{% from "_helper.html" import flexible_menu,super_flexible_menu,loggedin_msg %}
+{% from "_helper.html" import flexible_menu,super_duper_flexible_menu,loggedin_msg %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -92,19 +92,7 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
 
-	      {# { g.super_sidebar_pages } #}
-
-	      {% for menu in g.super_sidebar_pages %}
-	         <li class="nav-header"> {{menu[0] }} </li>
-		    {{ super_flexible_menu(menu[1]) }}
-
-	      {% endfor %}
-
-	      <li class="nav-header">Pages</li>
-	      {{ flexible_menu(g.sidebar_flatpages) }}
-
-              <li class="nav-header">External Links</li>
-	      {{ flexible_menu(g.externalbar_pages) }}
+	      		{{ super_duper_flexible_menu() }}
 
 
             </ul>

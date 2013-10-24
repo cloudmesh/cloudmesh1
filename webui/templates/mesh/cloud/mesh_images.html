@@ -58,7 +58,7 @@ $(function() {
   {% for cloud in clouds %}
     {% set cloud_loop = loop %}
     {% set version = clouds[cloud]['cm_type_version'] %}
-    {% set attributes = cloud_attributes['grizzly']%}
+
   <div style="margin-bottom:1em;">
   <h3>
   	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/images") }}
@@ -66,6 +66,18 @@ $(function() {
 	 <span class="badge"> {{ clouds[cloud] |count }} </span> Images
   </h3>
   <div>
+
+	{% if (clouds[cloud].keys() | count) == 0 %}
+
+		No images found. Please refresh.
+
+    {% else %}
+
+	  	{% set cloud_type = clouds[cloud][clouds[cloud].keys()[0]]['cm_type'] %}
+
+    {% set attributes = cloud_attributes[cloud_type]%}
+
+
   	 <form name = "image_{{cloud}}" method = 'POST' action = "/mesh/images/">
     <input type = hidden name = "cloud" value = "{{cloud}}"/>
     <table id="cloud-table-{{ loop.index0 }}">
@@ -79,28 +91,33 @@ $(function() {
       </thead>
       <tbody>
           {% for image in clouds[cloud] %}
-            {% set version = clouds[cloud][image]['cm_type_version'] %}
+            {% set version = clouds[cloud][image]['cm_type'] %}
             {% set attributes = cloud_attributes[version]%}
              <tr>
-                 <td><input type="radio" 
-               	name="default_image" 
+                 <td>
+                 	<input type="radio"
+               	name="default_image"
                	{% if image == user.defaults.images[cloud] %}
 					checked = checked
 				{%endif%}
-               	value = {{image}} 
+               	value = {{image}}
 				onclick = "document.forms['image_{{cloud}}'].submit()"/></td>
                  {% for attribute in attributes  %}
                       <td>
                           {% set l = attribute | length %}
 
                           {% if l == 2%}
-                             {% if attribute[0] == 'status' %}
+                             {% if attribute[0] in ['status'] %}
                              	{{ cm_state_color(clouds[cloud][image][attribute[1]]) }}
     						 {% else %}
 	                          	{{ clouds[cloud][image][attribute[1]] }}
     						 {% endif %}
                           {% elif l == 3%}
-                             {{ clouds[cloud][image][attribute[1]][attribute[2]] }}
+	                          {% if attribute[0] in ['state'] %}
+	                             {{ cm_state_color(clouds[cloud][image][attribute[1]][attribute[2]]) }}
+	                          {% else %}
+    	                         {{ clouds[cloud][image][attribute[1]][attribute[2]] }}
+    	                      {% endif %}
                           {% elif l == 4%}
                              {{ clouds[cloud][image][attribute[1]][attribute[2]][attribute[4]] }}
                           {% endif %}
@@ -109,13 +126,16 @@ $(function() {
 
              </tr>
 
+	    {%- if loop.index >= 50 %}{% break %}{% endif %}
           {% endfor %}
       </tbody>
     </table>
+	 {% endif %}
   </form>
   </div>
   </div>
   {% endfor %}
+
 </div>
 
 

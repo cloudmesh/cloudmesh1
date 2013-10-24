@@ -1,9 +1,9 @@
 {% extends "layout/layoutTable.html" %}
-{% from "_helper.html" import image_button, image_popup, href_image_button %}
+{% from "_helper.html" import image_button, image_popup %}
 {% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
-<h2> {{ href_image_button ("none", "365_restart", "/cm/refresh/servers") }} Servers </h2>
+<h2> Deletion Confirmation </h2>
 {% endblock contentbox %}
 
 {% block content %}
@@ -52,12 +52,6 @@ $(function() {
   {% endfor %}
 });
 
-function toggle(source,select_list) {
-  checkboxes = document.getElementsByName(select_list);
-  for(var i=0, n=checkboxes.length;i<n;i++) {
-    checkboxes[i].checked = source.checked;
-  }
-}
 
 </script>
 
@@ -78,51 +72,17 @@ function toggle(source,select_list) {
   <div style="margin-bottom:1em;">
     <h3>
     	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
-
       	&nbsp;
       	{{ cloud }}
-        <span class="badge"> {{ clouds[cloud] |count }} </span> VMs
-      	&nbsp;
-      	{{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}
-      	<input name="vms" id="vms" value ="1" min="1" max="1" maxlength="4" size="4" type="number">
-      	&nbsp;
-      	{{ image_popup ("none", "041_charts", "/stats/table/count/weekly/" + cloud + "/") }}
-      	&nbsp;
-      	{{ image_button ("none", "044_keys", "/cm/keypairs/" + cloud + "/") }}
+        <span class="badge"> {{ clouds[cloud] |count }} VMS</span>
+
 	</h3>
     <div>
 
-	{% set flavor_id = user.defaults.flavors[cloud] %}
-    {% set image_id = user.defaults.images[cloud] %}
-
-	<p>
-		Defaults:
-	{% if image_id in images[cloud] %}
-	    <a href="/mesh/images"> Image: <span class="badge">{{images[cloud][image_id]['name']}} </span></a>
-    {% else %}
-	    <a href="/mesh/images"> Image: <span class="badge"> undefined </span></a>
-    {% endif %}
-    {% if flavor_id in flavors[cloud] %}
-	    <a href="/mesh/flavors">Flavor: <span class="badge">{{flavors[cloud][flavor_id]['name']}} </span></a>
-    {% else %}
-	    <a href="/mesh/images"> Image: <span class="badge"> undefined </span></a>
-	{% endif %}
-    <a href="/profile"> last vm name: <span class="badge">{{user.defaults.prefix}}_{{user.defaults.index}} </span></a>
-	</p>
-	<form name = "selector_form_{{cloud}}" method = "post">
     <input type ="hidden" name = "cloud" value = "{{cloud}}"/>
-
     <table id="cloud-table-{{ loop.index0 }}" >
       <thead>
           <tr>
-          	<th><input type="checkbox" name="all" onClick="toggle(this,'selection')" />
-          		 <input type = "image"
-          		        src = "/static/img/icons/png/glyphicons_016_bin.png"
-          		        alt = "delete" value = "delete"
-          		         width="16" height="16"
-          		        formaction = "/cm/delete_vm_confirm"/>
-          		</th>
-	      	<th width="100"></th>
             {% for attribute in attributes %}
                   <th>{{attribute}}</th>
             {% endfor %}
@@ -132,14 +92,8 @@ function toggle(source,select_list) {
           {% for server in clouds[cloud] %}
              {% set s_id = clouds[cloud][server]['id'] %}
              <tr>
-             	<td><input type="checkbox" name="selection" value = {{server}} /> </td>
-             	<td>
-             	 	{{ href_image_button ("none", "368_collapse", "/cm/login/" ~ cloud ~ "/" ~ s_id ~ "/") }}
-	  				{{ href_image_button ("right", "195_circle_info", "/cm/info/" ~ cloud ~ "/" ~ s_id ~ "/") }}
-	  				<a href="/cm/assignpubip/{{cloud}}/{{s_id}}/">  IP </a>
-	  				{{ image_popup ("none", "041_charts", "/cm/stats/" ~ cloud ~ "/" ~ s_id ~ "/") }}
-	  				{{ href_image_button ("right", "016_bin", "/cm/delete/" ~ cloud + "/" ~ s_id ~ "/") }}
-             	 </td>
+             	
+             	
                  <!-- for attribute in clouds[cloud][server] -->
                  {% for attribute in attributes %}
                       {% if attribute == "created" %}
@@ -176,11 +130,19 @@ function toggle(source,select_list) {
           {% endfor %}
       </tbody>
     </table>
-    <br>
-   </form>
+
+<br>
+<br>
+    <form method = "GET" name = "123"> 
+	<input type = submit  value = "ok" formaction='/cm/delete_request_submit/true'/>
+	<input type = submit  value = "cancel" formaction='/cm/delete_request_submit/false'/>
+	&nbsp;
+	</form>
     </div>
+
   </div>
   {% endfor %}
+
 </div>
 
 

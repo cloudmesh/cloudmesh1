@@ -156,6 +156,40 @@ class Test_cloudmesh:
 
 
 
+    def test_mongo_credential(self):
+
+
+        banner("USER")
+        pprint (self.user.info("gvonlasz"))
+
+        username = "gvonlasz"
+        cloudname = "dummy"
+        password = "pa"
+        tennant = "fg1"
+        name = username
+
+        self.user.set_credential(username, cloudname,
+                                  {"OS_USERNAME": name,
+                                   "OS_PASSWORD": password,
+                                   "OS_TENANT_NAME": tennant,
+                                   "CM_CLOUD_TYPE": "openstack" }
+                                  )
+
+        cred = self.user.get_credential(username, cloudname)
+
+        banner("credential")
+        print cred
+
+        banner("credentials")
+        pprint(self.user.get_credentials(username))
+
+
+        banner("find")
+
+        result = self.user.userdb_passwd.find({})
+        for r in result:
+            pprint (r)
+
 
 
 

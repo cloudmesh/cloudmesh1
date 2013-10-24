@@ -11,6 +11,7 @@ from pprint import pprint
 import cloudmesh
 from cloudmesh.user.cm_user import cm_user
 from flask.ext.principal import Permission, RoleNeed
+from cloudmesh.util.util import banner
 
 log = LOGGER(__file__)
 
@@ -28,51 +29,186 @@ mesh_module = Blueprint('mesh_module', __name__)
 @admin_permission.require(http_exception=403)
 def mesh_register_clouds():
 
-    error = None
 
     config = cm_config()
     userdata = g.user
-    username = userdata.id
+    cm_user_id = userdata.id
     user_obj = cm_user()
-    user = user_obj.info(username)
+    user = user_obj.info(cm_user_id)
 
+
+    cloudtypes = {}
+    for cloud in config.get("cloudmesh.clouds"):
+        cloudtypes[cloud] = config['cloudmesh']['clouds'][cloud]['cm_type']
+
+
+    credentials = user_obj.get_credentials(cm_user_id)
+
+
+    error = {}
     # todo define correct actions.
     if request.method == 'POST':
 
-        if (request.form['cloudInput'] == 'aws'):
-            awsUserName = request.form['field-aws-username']
-            awsAccessKey = request.form['field-aws_accesskey-password']
-            awsSecretKey = request.form['field-aws_secretkey-password']
+        cloudname = request.form['cloudInput']
 
-            print awsUserName, awsAccessKey, awsSecretKey
+        checkmark = 'field-cloud-activated-{0}'.format(cloudname)
 
-        elif (request.form['cloudInput'] == 'azure'):
-            azureSubscriptionKey = request.form['field-azure-password']
+        if checkmark in request.form:
+            try:
+                if cloudname not in user['defaults']['activeclouds']:
+                    (user['defaults']['activeclouds']).append(cloudname)
+            except:
+                # create_dict(user, "defaults", "activeclouds")
+                print "ERROR user defaults activecloud does not exist"
+        else:
+            try:
+                if cloudname in user['defaults']['activeclouds']:
+                    active = user['defaults']['activeclouds']
+                    active.remove(cloudname)
+                    user['defaults']['activeclouds'] = active
+            except:
+                # create_dict(user, "defaults", "activeclouds")
+                print "ERROR user defaults activecloud does not exist"
 
-            print azureSubscriptionKey
+        user_obj.set_defaults(cm_user_id, user['defaults'])
+        user = user_obj.info(cm_user_id)
 
-        elif (request.form['cloudInput'] == 'hp'):
-            hpUserName = request.form['field-hp-username']
-            hpPassword = request.form['field-hp-password']
+        """
+        user['defaults']['activeclouds'] = []
+        for cloudname in config.cloudnames():
+            form_key = 'field-cloud-activated-{0}'.format(cloudname)
+            if form_key in request.form:
+                user['defaults']['activeclouds'].append(cloudname)
 
-            print hpUserName, hpPassword
+        """
 
 
-        elif (request.form['cloudInput'] == 'sierra_openstack_grizzly'):
-            sierraPassword = request.form['field-sierra_openstack_grizzly-password']
 
-            print sierraPassword
 
-        return render_template('error.html',
-                               updated=datetime.now(),
-                               error=error,
-                               type="This feature has not yet been implemented",
-                               msg="All data from Post request retrieved!")
+
+
+
+        if cloudname in credentials:
+            if 'credential' in credentials[cloudname]:
+                credential = credentials[cloudname]['credential']
+            else:
+                credentials[cloudname] = None
+        else:
+            credentials[cloudname] = None
+
+
+        if cloudtypes[cloudname] == "openstack":
+
+
+            if credentials[cloudname] == None:
+                 d = {'OS_USERNAME' : cm_user_id,
+                      'OS_PASSWORD': '',
+                      'OS_TENANT_NAME': ''
+                }
+
+                 user_obj.set_credential(cm_user_id, cloudname, d)
+
+            error[cloudname] = ''
+
+            d = {"CM_CLOUD_TYPE": cloudtypes[cloudname]}
+
+
+            cloudid = 'field-{0}-{1}-text'.format(cloudname, "OS_USERNAME")
+
+            if cloudid in request.form:
+                username = request.form[cloudid]
+            else:
+                username = cm_user_id
+            d["OS_USERNAME"] = username
+
+
+            fields = ["OS_PASSWORD", "OS_TENANT_NAME"]
+
+            for key in fields:
+
+                if key == 'OS_PASSWORD':
+                    cloudid = 'field-{0}-{1}-password'.format(cloudname, key)
+                else:
+                    cloudid = 'field-{0}-{1}-text'.format(cloudname, key)
+
+
+                if cloudid in request.form:
+                    content = request.form[cloudid]
+                    d[key] = content
+                elif key in credential:
+                    content = credential[key]
+                    d[key] = content
+                if content == '':
+                    error[cloudname] = error[cloudname] + "Please set " + key + "."
+
+
+            if error[cloudname] == '':
+
+                user_obj.set_credential(cm_user_id, cloudname, d)
+
+
+        elif cloudtypes[cloudname] == "ec2":
+
+            error[cloudname] = ''
+
+            d = {"CM_CLOUD_TYPE": cloudtypes[cloudname]}
+
+
+            if credentials[cloudname] is None:
+                d = {'EC2_URL' : '',
+                      'EC2_ACCESS_KEY': '',
+                      'EC2_SECRET_KEY': '',
+                }
+
+                user_obj.set_credential(cm_user_id, cloudname, d)
+
+
+            fields = ["EC2_ACCESS_KEY", "EC2_SECRET_KEY", "EC2_URL"]
+
+            for id in fields:
+                if id in ["EC2_URL"]:
+                    cloudid = 'field-{0}-{1}-text'.format(cloudname, id)
+                else:
+                    cloudid = 'field-{0}-{1}-password'.format(cloudname, id)
+
+                content = ''
+                if cloudid in request.form:
+                    content = request.form[cloudid]
+                    d[id] = content
+                elif id in credential:
+                    password = credential[id]
+                    d[id] = content
+
+                if content == '':
+                    error[cloudname] = error[cloudname] + "please set " + id
+
+
+            if error[cloudname] == '':
+
+                user_obj.set_credential(cm_user_id, cloudname, d)
+
+
+
+
+        '''
+
+        elif cloudtypes[cloud] == "azure":
+            azureSubscriptionid = request.form['field-azure-password']
+
+            user_obj.set_password(username, cloudname,
+                                  {"subscriptionid": azureSubscriptionid,
+                                   "CM_CLOUD_TYPE": "azure" }
+                                  )
+        '''
+    credentials = user_obj.get_credentials(cm_user_id)
+
 
     return render_template('mesh/cloud/mesh_register_clouds.html',
                            user=user,
-                           username=username,
+                           credentials=credentials,
+                           cm_user_id=cm_user_id,
                            cloudnames=config.cloudnames(),
+                           cloudtypes=cloudtypes,
                            error=error)
 
 @mesh_module.route('/mesh/images/', methods=['GET', 'POST'])
@@ -80,18 +216,23 @@ def mesh_register_clouds():
 def mongo_images():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
-    config = cm_config()
 
-    c = cm_mongo()
-    c.activate()
-    # c.refresh(types=["images"])
-    clouds = c.images()
+    config = cm_config()
 
     # getting user info
     userdata = g.user
     username = userdata.id
     user_obj = cm_user()
     user = user_obj.info(username)
+
+
+
+    c = cm_mongo()
+    c.activate(cm_user_id=username)
+    # c.refresh(types=["images"])
+    clouds = c.images()
+
+
 
     """
 
@@ -134,11 +275,11 @@ def mongo_images():
     b99fa4c8-6b92-49e6-b53f-37e56f9383b6
     """
     """
-    2 essex A {u'image_location': u'ktanaka/ubuntu1204-ramdisk.manifest.xml',
+    2 essex A {u'image_location': u'futuregrid/ubuntu1204-ramdisk.manifest.xml',
                u'image_state':    u'available',
                u'architecture':   u'x86_64'}
     """
-    attributes = {"grizzly":
+    attributes = {"openstack":
                     [
                         # [ "Metadata", "metadata"],
                         [ "status" , "status"],
@@ -156,6 +297,16 @@ def mongo_images():
                         [ "owner_id" , "metadata", "owner_id"],
                         [ "gb" , "metadata", "instance_type_root_gb"],
                         [ "arch", ""]
+                    ],
+                  "ec2":
+                    [
+                        # [ "Metadata", "metadata"],
+                        [ "state" , "extra", "state"],
+                        [ "name" , "name"],
+                        [ "id" , "id"],
+                        [ "public" , "extra", "ispublic"],
+                        [ "ownerid" , "extra", "ownerid"],
+                        [ "imagetype" , "extra", "imagetype"]
                     ]
                   }
     """
@@ -202,16 +353,19 @@ def mongo_flavors():
     # filter()
     config = cm_config()
 
-    c = cm_mongo()
-    c.activate()
-    # c.refresh(types=["flavors"])
-    clouds = c.flavors()
-
     # getting user info
     userdata = g.user
     username = userdata.id
     user_obj = cm_user()
     user = user_obj.info(username)
+
+    c = cm_mongo()
+    c.activate(cm_user_id=username)
+    # c.refresh(types=["flavors"])
+    clouds = c.flavors()
+
+    print "YYYYY"
+    pprint(clouds)
     """
     2
     disk 20
@@ -290,7 +444,8 @@ def mongo_users():
     config = cm_config()
 
     c = cm_mongo()
-    c.activate()
+    c.activate(cm_user_id=username)
+
     clouds = {}
     clouds = c.users()
     print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
@@ -330,26 +485,25 @@ def mongo_users():
 # ROUTE: mongo/servers
 # ============================================================
 
-@mesh_module.route('/mesh/servers/')
-@mesh_module.route('/mesh/servers/<filters>')
+@mesh_module.route('/mesh/servers/', methods=['GET', 'POST'])
 @login_required
 def mongo_table(filters=None):
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    # filter()
+
     config = cm_config()
-
-    c = cm_mongo()
-    c.activate()
-    # c.refresh(types=["servers"])
-    clouds = c.servers()
-    images = c.images()
-    flavors = c.flavors()
-
 
     userdata = g.user
     username = userdata.id
     user_obj = cm_user()
     user = user_obj.info(username)
+
+    c = cm_mongo()
+    c.activate(cm_user_id=username)
+    # c.refresh(types=["servers"])
+    clouds = c.servers()
+    images = c.images()
+    flavors = c.flavors()
+
 
 
 
@@ -380,7 +534,13 @@ def mongo_table(filters=None):
 
     cloud_filters = None
     filtered_clouds = clouds
-
+    # pprint(clouds)
+    # pprint(flavors)
+    # for cloud in clouds:
+    #    print cloud
+    #    for server in clouds[cloud]:
+    #        print server
+    #        print clouds[cloud][server]['flavor']
     return render_template('mesh/cloud/mesh_servers.html',
                            address_string=address_string,
                            attributes=os_attributes,
@@ -396,7 +556,7 @@ def mongo_table(filters=None):
 # ============================================================
 # ROUTE: mongo/servers/<filters>
 # ============================================================
-
+'''
 @mesh_module.route('/mesh/servers/<filters>')
 @login_required
 @admin_permission.require(http_exception=403)
@@ -469,3 +629,5 @@ def mongo_server_table_filter(filters=None):
                            clouds=filtered_clouds,
                            config=config,
                            filters=cloud_filters)
+
+'''

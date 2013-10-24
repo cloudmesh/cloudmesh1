@@ -4,45 +4,60 @@
 {% from "_helper.html" import cm_image_input %}
 {% from "_helper.html" import submit_button %}
 
+
+
 {% block contentbox %}
 <h1> Register </h1>
 {% endblock contentbox %}
 
+{{ credentials}}
 {% block content %}
 
-{{user}}
-<br>
-<hr>
+<script src="/static/js/hideShowPassword.min.js" type="text/javascript" charset="utf-8"></script>
 
-{{username}}
-<br>
 
-<hr>
 
-{% macro password(label, cloudname) %}
+{% macro get_password(label, cloudname, key) %}
 <tr>
     <td style="text-align: right">{{label}}:</td>
     <td colspan="2">
-        <input id="id-{{cloudname}}-password"
+        <input  id="field-{{cloudname}}-{{key}}-password"
         valign="middle"
         type="password"
-        name="field-{{cloudname}}-password"
-        value="" autocomplete="off"
+        name="field-{{cloudname}}-{{key}}-password"
+        {%if cloudname in credentials %}
+        	{% if "credential" in credentials[cloudname] %}
+        		{% if key in credentials[cloudname]["credential"] %}
+	    		    value="{{credentials[cloudname]["credential"][key]}}"
+    			{% endif %}
+   			{% endif %}
+		{% endif %}
         placeholder="{{label}}"
         style="margin-bottom: 5px; margin-top: 5px;">
     </td>
 </tr>
+<script>
+$('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
+  innerToggle: true
+});
+</script>
 {% endmacro %}
 
-{% macro get_username(label, cloudname, name, username_edit_enabled) %}
+{% macro get_text (label, cloudname, key,  username_edit_enabled) %}
 <tr>
-    <td style="text-align: right"> Username:</td>
+    <td style="text-align: right"> {{label}}:</td>
     <td colspan="2">
-    <input  id="id-{{cloudname}}-username"
+    <input  id="field-{{cloudname}}-{{key}}-text"
     valign="middle"
     type="text"
-    name="field-{{cloudname}}-username"
-    value="{{name}}"
+    name="field-{{cloudname}}-{{key}}-text"
+    {%if cloudname in credentials %}
+       	{% if "credential" in credentials[cloudname] %}
+       		{% if key in credentials[cloudname]["credential"] %}
+	   		    value="{{credentials[cloudname]["credential"][key]}}"
+    		{% endif %}
+   		{% endif %}
+	{% endif %}
     {% if not username_edit_enabled %}
     disabled="disabled"
     {% endif %}
@@ -51,36 +66,24 @@
 </tr>
 {% endmacro %}
 
-{% macro handle_checkbox (cloudname, regions) %}
+{% macro handle_checkbox (cloudname) %}
         <input type="checkbox"
-            name="field-activated-{{cloudname}}"
+            name="field-cloud-activated-{{cloudname}}"
             {% if cloudname in user.defaults.activeclouds %}
             checked = "checked"
             {% endif %}
             style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
         {{cloudname}}&nbsp;
-        {% if regions %}
-            {% for region in regions %}
-                <input type="checkbox"
-                    name="field-activated-{{cloudname}}-{{region}}"
-                    {% if cloudname in user.defaults.activeclouds %}
-                    checked = "checked"
-                    {% endif %}
-                    style="margin-right: 5px; vertical-align: middle;margin-bottom: 5px;">
-                {{region}}
-                &nbsp;
-            {% endfor %}
-        {% endif %}
 {% endmacro %}
 
-{% macro tableHeader(cloudname, regions, verified) %}
+{% macro tableHeader(cloudname, verified) %}
 <tr>
     <th colspan="1">
-    	{{ handle_checkbox(cloudname, regions) }}
+    	{{ handle_checkbox(cloudname) }}
     </th>
     <th></th>
     <th style="text-align: right">
-        {{ image_button ("none", "044_keys", "/updatekeypair/" + "sierra_openstack_grizzly" + "/") }}
+        {{ image_button ("none", "044_keys", "/updatekeypair/" + "{{cloudname}}" + "/") }}
         {% if verified == true %}
             {{ cm_boolean_color('verified') }}
         {% else %}
@@ -90,68 +93,92 @@
 </tr>
 {% endmacro %}
 
-{% macro openstack(cloudname, name, username_edit_enabled, verified) %}
-    {{ tableHeader(cloudname, false, verified) }}
-    {{ get_username ("Username", cloudname, name, username_edit_enabled)}}
-    {{ password ("Password", cloudname)}}
+{% macro openstack(cloudname, name, tenant, username_edit_enabled, verified) %}
+    {{ tableHeader(cloudname, verified) }}
+    {{ get_text ("Username", cloudname, "OS_USERNAME", username_edit_enabled)}}
+    {{ get_text ("Tenant", cloudname, "OS_TENANT_NAME", username_edit_enabled)}}
+    {{ get_password ("Password", cloudname, "OS_PASSWORD")}}
 {% endmacro %}
 
-{% macro aws(cloudname, verified) %}
+{% macro aws(cloudname, username, verified) %}
 
-    {{ tableHeader(cloudname, false, verified) }}
-    {{ get_username ("Username", "username", cloudname, True)}}
-    {% set accesskey= cloudname + "_accesskey" %}
-    {% set secretkey= cloudname + "_secretkey" %}
-    {{ password ("Access Key", accesskey)}}
-    {{ password ("Secret Key", secretkey)}}
+    {{ tableHeader(cloudname, verified) }}
+    {{ get_text ("Username", cloudname, "userid", True)}}
+    {{ get_password ("Access Key", cloudname, "access_key_id")}}
+    {{ get_password ("Secret Key", cloudname, "secret_access_key")}}
 
 {% endmacro %}
 
-{% macro hp(cloudname, regions, verified) %}
+{% macro ec2(cloudname, name, username_edit_enabled, verified) %}
 
-    {{ tableHeader(cloudname, regions, verified) }}
-    {{ get_username ("Username", "username", cloudname, True)}}
-    {{ password ("Password", cloudname)}}
+    {{ tableHeader(cloudname, verified) }}
+    {{ get_password ("Access Key", cloudname, "EC2_ACCESS_KEY")}}
+    {{ get_password ("Secret Key", cloudname, "EC2_SECRET_KEY")}}
+
+    {{ get_text ("URL", cloudname, "EC2_URL", True)}}
 
 {% endmacro %}
+
 
 {% macro azure(cloudname, verified) %}
 
-    {{ tableHeader(cloudname, false, verified) }}
-    {{ password("Subscription ID", cloudname) }}
+    {{ tableHeader(cloudname, verified) }}
+    {{ get_password("Subscription ID", cloudname, "subscriptionid") }}
 
 {% endmacro %}
 
-<table>
-    <tr>
-        <th colspan="1">
-        <b>Clouds</b></th>
-        <th></th>
-        <th style="text-align: right"> {{ image_button ("none", "044_keys", "/updatekeypair/" + "hp" + "/") }}
-        Verified </th>
-    </tr>
-</table>
+{% set cloudList = cloudnames %}
+        {% for cloud in cloudList | sort  %}
+            {% if (cloud in error) %}
+               {%if (error[cloud] != '') %}
+                  <div class="alert alert-danger">
+		              Error in {{cloud}}: {{error[cloud]}}
+				  </div>
+	        	{% endif %}
+        	{% endif %}
+        {% endfor %}
+
 
 <div id="accordion">
     <div>
-        {% set cloudList = cloudnames %}
-        {{ cloudList.remove("hp_east") }}
-        {% for cloud in cloudList %}
-        <h3>
-        	<a href="#">{{ cloud }}</a>
+
+        {% for cloud in cloudList | sort  %}
+        <h3 id="example">
+        	{{ cloud }}
+        	{% if cloud in user['defaults']['activeclouds'] %}
+			<span class="badge label-success"> active </span>
+        {% endif %}
         </h3>
+
         <form id={{ cloud }} method="post">
             <input name="cloudInput" type="hidden" value="{{ cloud }}"/>
+            {% if (cloud in error) %}
+               {%if (error[cloud] != '') %}
+                  <div class="alert alert-danger">
+		              {{error[cloud] }}
+				  </div>
+	        	{% endif %}
+        	{% endif %}
+
             <table id={{ cloud }} + "clouds" style="display: inline-block; float: left;">
                 <tr>
-                    {% if (cloud) == "sierra_openstack_grizzly" %}
-                        {{ openstack(cloud, username, False, true) }}
-                    {% elif (cloud) == "aws" %}
-                        {{ aws(cloud) }}
-                    {% elif (cloud) == "hp" %}
-                        {{ hp(cloud, ["hp_east"]) }}
-                    {% elif (cloud) == "azure" %}
+                    {% if cloudtypes[cloud] == "openstack" %}
+                        {% if cloud in credentials %}
+                    		{% if 'OS_TENANT_NAME' in credentials[cloud]['credential'] %}
+	    	    			   {% set tenant = credentials[cloud]['credential']['OS_TENANT_NAME']%}
+    					    {% else %}
+    						   {% set tenant = 'bla'%}
+  							{% endif %}
+  					    {% else %}
+   						   {% set tenant = 'alb' %}
+  						{% endif %}
+    	                {{ openstack(cloud, cm_user_id, tenant, True, true) }}
+                    {% elif cloudtypes[cloud] == "aws" %}
+                        {{ aws(cloud, cm_user_id) }}
+                    {% elif cloudtypes[cloud] == "azure" %}
                         {{ azure(cloud) }}
+                    {% elif cloudtypes[cloud] == "ec2" %}
+                        {{ ec2(cloud, cm_user_id, True) }}
                     {% endif %}
                     <th></th><th></th>
                     <th style="text-align: right">
@@ -177,7 +204,7 @@
         //Regex to get the password field associated with button
         //Following regex would get hpPassword from toogle_hpPassword
         var passwordFieldId = ((event.target).id.split("-"))[1];
-        var passwordObject = $('#' + "id-" + passwordFieldId + "-password").get(0);
+        var passwordObject = $('#' + "field-" + passwordFieldId + "-password").get(0);
         var value = passwordObject.value;
 
         if (passwordObject.type == 'password') {
@@ -189,6 +216,14 @@
     }
 
     </script>
+<script>
+$('#example').find('input').click(
+    function(e){
+        e.stopPropagation();
+    }
+);
+</script>
+
 
 
 {% endblock %}

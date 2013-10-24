@@ -150,5 +150,29 @@ def clean():
 
 # For production server
 @task
-def wsgi():
-   local("uwsgi -s /tmp/cloudmesh.sock -M -p 2 -t 10 --chown-socket=cloudmesh:www-data --chdir=webui --module=server --callable=app")
+def wsgi(action="start"):
+   pidfile = "~/.futuregrid/uwsgi/cloudmesh_uwsgi.pid"
+   logfile = "~/.futuregrid/uwsgi/cloudmesh_uwsgi.log"
+   command = False
+
+   user_pidfile = os.path.expanduser(pidfile)
+   user_logfile = os.path.expanduser(logfile)
+
+   if action == "restart":
+      wsgi("stop")
+      action="start"
+
+   if action == "start":
+      command = "uwsgi -s /tmp/cloudmesh.sock -M -p 2 -t 10 \
+      --daemonize={0} \
+      --pidfile={1} \
+      --chown-socket=cloudmesh:www-data \
+      --chdir=webui \
+      --module=server \
+      --callable=app".format(user_logfile, user_pidfile)
+   elif (action == "stop" or action == "kill"):
+      command = "kill -INT `cat {0}`".format(user_pidfile)
+   elif (action == "reload"):
+      command = "kill -HUP `cat {0}`".format(user_pidfile)
+   if (command):
+      local(command)
