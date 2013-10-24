@@ -58,8 +58,7 @@ $(function() {
   {% for cloud in clouds %}
     {% set cloud_loop = loop %}
     {% set version = clouds[cloud]['cm_type_version'] %}
-  	{% set cloud_type = clouds[cloud][clouds[cloud].keys()[0]]['cm_type'] %}
-    {% set attributes = cloud_attributes[cloud_type]%}
+
   <div style="margin-bottom:1em;">
   <h3>
   	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/images") }}
@@ -67,6 +66,18 @@ $(function() {
 	 <span class="badge"> {{ clouds[cloud] |count }} </span> Images
   </h3>
   <div>
+
+	{% if (clouds[cloud].keys() | count) == 0 %}
+
+		No images found. Please refresh.
+
+    {% else %}
+
+	  	{% set cloud_type = clouds[cloud][clouds[cloud].keys()[0]]['cm_type'] %}
+
+    {% set attributes = cloud_attributes[cloud_type]%}
+
+
   	 <form name = "image_{{cloud}}" method = 'POST' action = "/mesh/images/">
     <input type = hidden name = "cloud" value = "{{cloud}}"/>
     <table id="cloud-table-{{ loop.index0 }}">
@@ -118,10 +129,12 @@ $(function() {
           {% endfor %}
       </tbody>
     </table>
+	 {% endif %}
   </form>
   </div>
   </div>
   {% endfor %}
+
 </div>
 
 
