@@ -78,8 +78,8 @@ $(function() {
           </tr>
       </thead>
       <tbody>
-          {% for image in clouds[cloud] %}
-            {% set version = clouds[cloud][image]['cm_type_version'] %}
+	  {% for image in clouds[cloud] %}
+	  {% set version = clouds[cloud][image]['cm_type_version'] %}
             {% set attributes = cloud_attributes[version]%}
              <tr>
                  <td><input type="radio" 
@@ -109,6 +109,7 @@ $(function() {
 
              </tr>
 
+	    {%- if loop.index >= 50 %}{% break %}{% endif %}
           {% endfor %}
       </tbody>
     </table>

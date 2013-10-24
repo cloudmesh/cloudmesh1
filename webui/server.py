@@ -133,6 +133,7 @@ DEBUG = debug
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.debug = debug
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
 pages = RSTPages(app)
 
