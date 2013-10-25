@@ -315,8 +315,16 @@ def mongo_images():
                         [ "id", "id"],
                         [ "size", "logical_size_in_gb" ],
                         [ "os", "os" ]
+                    ],
+                  "aws":
+                    [
+                        [ "state", "extra", "state"],
+                        [ "name" , "name"],
+                        [ "id" , "id"],
+                        [ "public" , "extra", "ispublic"],
+                        [ "ownerid" , "extra", "ownerid"],
+                        [ "imagetype" , "extra", "imagetype"]
                     ]
-                        
                   }
     """
     for cloud in clouds:
