@@ -22,11 +22,15 @@ class cm_shell_list:
     def do_list(self, args, arguments):
         """
         Usage:
-               list
-               list flavors 
-               list servers
-               list images
-               
+               list flavors [CLOUD...] 
+               list servers [CLOUD...]
+               list images [CLOUD...]
+               list [CLOUD...]
+                              
+        Arguments:
+        
+                CLOUD    the name of the cloud
+                
         Options:
 
            -v       verbose mode
@@ -36,29 +40,46 @@ class cm_shell_list:
 
         log.info(arguments)
 
+        if len(arguments["CLOUD"]) == 0:
+            print "get all active clouds"
+            all = True
+            clouds = ['a', 'b']
+        else:
+            clouds = arguments['CLOUD']
 
-        if arguments["flavors"]:
-            log.info ("list flavors")
-            return
+        print clouds
+
+        if arguments["flavors"] or all:
+            log.info ("count flavors")
+            for cloud in clouds:
+                print "cloud: flavors", cloud, None
+
+        if arguments["servers"] or all:
+            log.info ("count servers")
+            for cloud in clouds:
+                print "cloud: servers", cloud, None
+
+        if arguments["images"] or all:
+            log.info ("list images")
+            for cloud in clouds:
+                print "cloud: images", cloud, None
 
 
-        if arguments["servers"]:
-            log.info ("list servers")
-            return
 
-
-        if arguments["images "]:
-            log.info ("list images s")
-            return
 
     @command
     def do_count(self, args, arguments):
         """
-        Usage: count
-               count flavors 
-               count servers
-               count images
+        Usage: 
+               count flavors [CLOUD...]
+               count servers [CLOUD...]
+               count images [CLOUD...]
+               count [CLOUD...]
                
+        Arguments:
+        
+                CLOUD    the name of the cloud
+        
         Options:
 
            -v       verbose mode
@@ -68,17 +89,28 @@ class cm_shell_list:
 
         log.info(arguments)
 
+        if len(arguments["CLOUD"]) == 0:
+            print "get all active clouds"
+            all = True
+            clouds = ['a', 'b']
+        else:
+            clouds = arguments['CLOUD']
 
-        if arguments["flavors"]:
+        print clouds
+
+        if arguments["flavors"] or all:
             log.info ("count flavors")
-            return
+            for cloud in clouds:
+                print "cloud: flavors", cloud, None
 
-
-        if arguments["servers"]:
+        if arguments["servers"] or all:
             log.info ("count servers")
-            return
+            for cloud in clouds:
+                print "cloud: servers", cloud, None
+
+        if arguments["images"] or all:
+            log.info ("list images")
+            for cloud in clouds:
+                print "cloud: images", cloud, None
 
 
-        if arguments["images "]:
-            log.info ("list images s")
-            return
