@@ -126,7 +126,7 @@ $(function() {
 
              </tr>
 
-	    {%- if loop.index >= 100 %}{% break %}{% endif %}
+	    {%- if cloud == "aws" and loop.index >= 200 %}{% break %}{% endif %}
           {% endfor %}
       </tbody>
     </table>
