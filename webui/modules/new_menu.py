@@ -17,7 +17,7 @@ super_duper_sidebar_pages = [
     ["HPC Queues", None, None, ['all'],
         [
             ["Jobs", "/mesh/qstat", None],
-            ["Queueu Info", "/mesh/qinfo", None],
+            ["Queues Info", "/mesh/qinfo", None],
             ["Rack Diagram", "/inventory/rack", None],
         ]
     ],
