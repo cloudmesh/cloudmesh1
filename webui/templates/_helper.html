@@ -16,7 +16,7 @@ image_button("041_charts", "/table/")
 
 {% macro cm_state_color(state) %}
     {% set s = state|lower %}
-   	{% if s in ["active", "r"] %}
+   	{% if s in ["active", "r", "available"] %}
 		<span class="label label-success">{{state}}</span>
 	{% elif s in ["error"] %}
 		<span class="label label-danger">{{state}}</span>

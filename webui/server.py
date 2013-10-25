@@ -71,7 +71,11 @@ browser_page = s_config.get("cloudmesh.server.webui.page")
 host = s_config.get("cloudmesh.server.webui.host")
 port = s_config.get("cloudmesh.server.webui.port")
 
-url_link = "http://{0}:{1}/{2}".format(host, port, browser_page)
+# load home page if no page specified
+if browser_page:
+    url_link = "http://{0}:{1}/{2}".format(host, port, browser_page)
+else:
+    url_link =  "http://{0}:{1}".format(host, port)
 
 webbrowser.register("safari", None)
 
@@ -133,6 +137,9 @@ DEBUG = debug
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.debug = debug
+
+# Added for loop control; break, continue
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
 pages = RSTPages(app)
 

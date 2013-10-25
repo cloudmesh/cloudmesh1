@@ -140,6 +140,8 @@ class cm_mongo:
                                                'cm_type_version': cm_type_version}
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name)
+                    log.debug("Created new cloud instance with name: %s, type:\
+                              %s" % (cloud_name, cm_type))
                     if cm_type in ['openstack']:
                         tryauth = cloud.get_token()
                         if 'access' not in tryauth:
@@ -354,12 +356,22 @@ class cm_mongo:
 
     def assign_public_ip(self, cloud, server):
         cloudmanager = self.clouds[cloud]["manager"]
-        ip = cloudmanager.get_public_ip()
-        return cloudmanager.assign_public_ip(server, ip)
+        type = self.clouds[cloud]["cm_type"]
+        if type == 'openstack':
+            ip = cloudmanager.get_public_ip()
+            ret = cloudmanager.assign_public_ip(server, ip)
+        else:
+            ret = None
+        return ret
 
     def release_unused_public_ips(self, cloud):
         cloudmanager = self.clouds[cloud]["manager"]
-        return cloudmanager.release_unused_public_ips()
+        type = self.clouds[cloud]["cm_type"]
+        if type == 'openstack':
+            ret = cloudmanager.release_unused_public_ips()
+        else:
+            ret = None
+        return ret
 
     def vm_delete(self, cloud, server):
         cloudmanager = self.clouds[cloud]["manager"]

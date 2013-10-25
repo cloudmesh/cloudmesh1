@@ -22,6 +22,7 @@ class cm_shell_list:
     def do_list(self, args, arguments):
         """
         Usage:
+
                list
                list flavors [CLOUDNAME]
                list servers [CLOUDNAME]
@@ -30,6 +31,64 @@ class cm_shell_list:
         Arguments:
           CLOUDNAME      name of cloud to be queried
               
+               list flavors [CLOUD...] 
+               list servers [CLOUD...]
+               list images [CLOUD...]
+               list [CLOUD...]
+                              
+        Arguments:
+        
+                CLOUD    the name of the cloud
+                
+        Options:
+
+           -v       verbose mode
+
+        """
+        log.info(args)
+
+        log.info(arguments)
+
+        if len(arguments["CLOUD"]) == 0:
+            print "get all active clouds"
+            all = True
+            clouds = ['a', 'b']
+        else:
+            clouds = arguments['CLOUD']
+
+        print clouds
+
+        if arguments["flavors"] or all:
+            log.info ("count flavors")
+            for cloud in clouds:
+                print "cloud: flavors", cloud, None
+
+        if arguments["servers"] or all:
+            log.info ("count servers")
+            for cloud in clouds:
+                print "cloud: servers", cloud, None
+
+        if arguments["images"] or all:
+            log.info ("list images")
+            for cloud in clouds:
+                print "cloud: images", cloud, None
+
+
+
+
+    @command
+    def do_count(self, args, arguments):
+        """
+        Usage: 
+               count flavors [CLOUD...]
+               count servers [CLOUD...]
+               count images [CLOUD...]
+               count [CLOUD...]
+               
+        Arguments:
+        
+                CLOUD    the name of the cloud
+        
         Options:
            -v       verbose mode
            
@@ -39,6 +98,14 @@ class cm_shell_list:
 
         log.info(arguments)
 
+        if len(arguments["CLOUD"]) == 0:
+            print "get all active clouds"
+            all = True
+            clouds = ['a', 'b']
+        else:
+            clouds = arguments['CLOUD']
+
+        print clouds
 
         if arguments["flavors"]:
             mesh = cloudmesh.mesh()
@@ -65,3 +132,19 @@ class cm_shell_list:
         print "list flavors"
         print "list servers"
         print "list images"
+        if arguments["flavors"] or all:
+            log.info ("count flavors")
+            for cloud in clouds:
+                print "cloud: flavors", cloud, None
+
+        if arguments["servers"] or all:
+            log.info ("count servers")
+            for cloud in clouds:
+                print "cloud: servers", cloud, None
+
+        if arguments["images"] or all:
+            log.info ("list images")
+            for cloud in clouds:
+                print "cloud: images", cloud, None
+
+

@@ -108,9 +108,9 @@ class aws(ComputeBaseType):
             instanceid = vm_obj.id
             vm_dict[instanceid] = vm
 
-        self.nodes = vm_dict
+        self.servers = vm_dict
 
-        return self.nodes
+        return self.servers
 
     def vm_delete(self, name):
         self.delete_vm(name)
@@ -204,6 +204,7 @@ class aws(ComputeBaseType):
     def _get_flavors_dict(self):
         res = self.list_flavors()
         res_dict = self.convert_to_dict(res)
+        self.flavors = res_dict
         return res_dict
 
     def convert_to_dict(self, _list):
@@ -224,6 +225,7 @@ class aws(ComputeBaseType):
     def _get_images_dict(self):
         res = self.list_images()
         res_dict = self.convert_to_dict(res)
+        self.images = res_dict
         return res_dict
 
     def list_images(self):
