@@ -307,7 +307,16 @@ def mongo_images():
                         [ "public" , "extra", "ispublic"],
                         [ "ownerid" , "extra", "ownerid"],
                         [ "imagetype" , "extra", "imagetype"]
+                    ],
+                  "azure":
+                    [
+                        [ "name", "label"],
+                        [ "category", "category"],
+                        [ "id", "id"],
+                        [ "size", "logical_size_in_gb" ],
+                        [ "os", "os" ]
                     ]
+                        
                   }
     """
     for cloud in clouds:
