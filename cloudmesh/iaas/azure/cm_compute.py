@@ -99,6 +99,7 @@ class azure(ComputeBaseType):
             res[name] = image.__dict__
             res[name]['id'] = name
 
+        self.images = res
         return res
 
     # FOR refresh
@@ -156,6 +157,7 @@ class azure(ComputeBaseType):
                 deployments[id] = deployment.__dict__
 
         self.deployments = deployments
+        self.servers = deployments
         return deployments
 
     def vm_create(self, name,
@@ -642,4 +644,5 @@ class azure(ComputeBaseType):
                u'Large': {'id': 4, 'name': 'Large'}, \
                u'ExtraLarge': {'id': 5, 'name': 'ExtraLarge'} }
 
+        self.flavors = res
         return res

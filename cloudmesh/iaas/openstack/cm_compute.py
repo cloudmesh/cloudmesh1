@@ -92,7 +92,7 @@ class openstack(ComputeBaseType):
                 try:
                     self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(self.label))
                 except:
-                    log.error("No admin credentail found! Please check your cloudmesh_server.yaml file.")
+                    log.error("No admin credential found! Please check your cloudmesh_server.yaml file.")
             else:
                 self.admin_credential = None
                 log.info("The cloud {0} has no admin credential".format(self.label))

@@ -36,7 +36,7 @@ class keystone(object):
             try:
                 self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(label))
             except:
-                log.error("No admin credentail found! Please check your cloudmesh_server.yaml file.")
+                log.error("No admin credential found! Please check your cloudmesh_server.yaml file.")
         # connecting within init will lead to long delays
         if self.admin_credential is not None:
             self.connect()

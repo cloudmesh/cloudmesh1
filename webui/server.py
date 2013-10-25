@@ -71,7 +71,11 @@ browser_page = s_config.get("cloudmesh.server.webui.page")
 host = s_config.get("cloudmesh.server.webui.host")
 port = s_config.get("cloudmesh.server.webui.port")
 
-url_link = "http://{0}:{1}/{2}".format(host, port, browser_page)
+# load home page if no page specified
+if browser_page:
+    url_link = "http://{0}:{1}/{2}".format(host, port, browser_page)
+else:
+    url_link =  "http://{0}:{1}".format(host, port)
 
 webbrowser.register("safari", None)
 

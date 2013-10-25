@@ -108,14 +108,14 @@ class ec2(ComputeBaseType):
                   key_name=None,
                   meta={},
                   userdata=None):
-        self.create_vm()
+        self.create_vm(flavor_name, image_id, key_name)
 
-    def create_vm(self):
-        image = NodeImage(id=self.get_image_name(), name="", driver="")
-        size = NodeSize(id=self.get_flavor(), name="", ram=None, disk=None,
+    def create_vm(self, flavor_name, image_id, key_name):
+        image = NodeImage(id=image_id, name="", driver="")
+        size = NodeSize(id=flavor_name, name="", ram=None, disk=None,
                         bandwidth=None, price=None, driver="")
         self.conn.create_node(name=self.get_name(), image=image, size=size,
-                              ex_keyname=self.get_keyname())
+                              ex_keyname=key_name)
         return
 
     def list_vm(self):
@@ -126,9 +126,8 @@ class ec2(ComputeBaseType):
             instanceid = vm_obj.id
             vm_dict[instanceid] = vm
 
-        self.nodes = vm_dict
-
-        return self.nodes
+        self.servers = vm_dict
+        return self.servers
 
     def vm_delete(self, name):
         self.delete_vm(name)
@@ -240,7 +239,8 @@ class ec2(ComputeBaseType):
     def _get_flavors_dict(self):
         res = self.list_flavors()
         res_dict = self.convert_to_dict(res)
-        return res_dict
+        self.flavors = res_dict
+        return self.flavors
 
     def convert_to_dict(self, _list):
         res_dict = {}
@@ -260,7 +260,8 @@ class ec2(ComputeBaseType):
     def _get_images_dict(self):
         res = self.list_images()
         res_dict = self.convert_to_dict(res)
-        return res_dict
+        self.images = res_dict
+        return self.images
 
     def list_images(self):
         return self.conn.list_images()
