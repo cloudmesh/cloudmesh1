@@ -22,15 +22,6 @@ class cm_shell_list:
     def do_list(self, args, arguments):
         """
         Usage:
-
-               list
-               list flavors [CLOUDNAME]
-               list servers [CLOUDNAME]
-               list images [CLOUDNAME]
-        
-        Arguments:
-          CLOUDNAME      name of cloud to be queried
-              
                list flavors [CLOUD...] 
                list servers [CLOUD...]
                list images [CLOUD...]
@@ -48,7 +39,7 @@ class cm_shell_list:
         log.info(args)
 
         log.info(arguments)
-
+        all = False
         if len(arguments["CLOUD"]) == 0:
             print "get all active clouds"
             all = True
@@ -90,8 +81,8 @@ class cm_shell_list:
                 CLOUD    the name of the cloud
         
         Options:
+
            -v       verbose mode
-           
 
         """
         log.info(args)
@@ -107,31 +98,6 @@ class cm_shell_list:
 
         print clouds
 
-        if arguments["flavors"]:
-            mesh = cloudmesh.mesh()
-            mesh.refresh(names=[arguments["CLOUDNAME"]], types=['flavor'])
-            flavors = mesh.clouds[arguments["CLOUDNAME"]]['flavor']
-            return flavors
-            
-
-        if arguments["servers"]:
-            mesh = cloudmesh.mesh()
-            mesh.refresh(names=[arguments["CLOUDNAME"]], types=['server'])
-            servers = mesh.clouds[arguments["CLOUDNAME"]]['server']
-            return servers
-            
-
-        if arguments["images"]:
-            mesh = cloudmesh.mesh()
-            mesh.refresh(names=[arguments["CLOUDNAME"]], types=['image'])
-            images = mesh.clouds[arguments["CLOUDNAME"]]['image']
-            return images
-        
-        print "choose a valid option"
-        print "list"
-        print "list flavors"
-        print "list servers"
-        print "list images"
         if arguments["flavors"] or all:
             log.info ("count flavors")
             for cloud in clouds:
@@ -146,5 +112,4 @@ class cm_shell_list:
             log.info ("list images")
             for cloud in clouds:
                 print "cloud: images", cloud, None
-
 
