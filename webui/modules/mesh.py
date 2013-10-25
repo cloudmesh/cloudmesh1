@@ -364,8 +364,8 @@ def mongo_flavors():
     # c.refresh(types=["flavors"])
     clouds = c.flavors()
 
-    print "YYYYY"
-    pprint(clouds)
+    #print "YYYYY"
+    #pprint(clouds)
     """
     2
     disk 20
