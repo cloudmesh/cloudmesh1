@@ -307,6 +307,23 @@ def mongo_images():
                         [ "public" , "extra", "ispublic"],
                         [ "ownerid" , "extra", "ownerid"],
                         [ "imagetype" , "extra", "imagetype"]
+                    ],
+                  "azure":
+                    [
+                        [ "name", "label"],
+                        [ "category", "category"],
+                        [ "id", "id"],
+                        [ "size", "logical_size_in_gb" ],
+                        [ "os", "os" ]
+                    ],
+                  "aws":
+                    [
+                        [ "state", "extra", "state"],
+                        [ "name" , "name"],
+                        [ "id" , "id"],
+                        [ "public" , "extra", "ispublic"],
+                        [ "ownerid" , "extra", "ownerid"],
+                        [ "imagetype" , "extra", "imagetype"]
                     ]
                   }
     """
@@ -364,8 +381,8 @@ def mongo_flavors():
     # c.refresh(types=["flavors"])
     clouds = c.flavors()
 
-    print "YYYYY"
-    pprint(clouds)
+    #print "YYYYY"
+    #pprint(clouds)
     """
     2
     disk 20
