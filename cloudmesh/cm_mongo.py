@@ -140,7 +140,8 @@ class cm_mongo:
                                                'cm_type_version': cm_type_version}
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name)
-                    log.debug("Created new cloud instance with name: %s, type: %s" % (cloud_name, cm_type)
+                    log.debug("Created new cloud instance with name: %s, type:\
+                              %s" % (cloud_name, cm_type))
                     if cm_type in ['openstack']:
                         tryauth = cloud.get_token()
                         if 'access' not in tryauth:
