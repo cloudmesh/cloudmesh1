@@ -1,7 +1,7 @@
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.logger import LOGGER
-from pprint import pprint
 from cloudmesh.util.util import banner
+from pprint import pprint
 import traceback
 
 log = LOGGER(__file__)
@@ -19,18 +19,25 @@ class CredentialBaseClass (dict):
     def save(self):
         raise NotImplementedError()
 
-
-
 class CredentialFromYaml(CredentialBaseClass):
 
+    def __init__(self,
+                 username,
+                 cloud,
+                 datasource=None,
+                 yaml_version=2.0,
+                 style=2.0):
+        """datasource is afilename"""
+        CredentialBaseClass.__init__(self, username, cloud, datasource)
 
-    def clean_cm(self):
-        '''temporary so we do not have to modify yaml files for now'''
-        for key in self.keys():
-            if key.startswith('cm_'):
-                new_key = key.replace('cm_', '')
-                self['cm'][new_key] = self[key]
-                del self[key]
+        if datasource != None:
+            self.filename = datasource
+        else:
+            self.filename = "~/.futuregrid/cloudmesh.yaml"
+
+        self.config = ConfigDict(filename=self.filename)
+
+        self.read(username, cloud)
 
     def read(self, username, cloud, style=2.0):
         self.style = style
@@ -56,23 +63,13 @@ class CredentialFromYaml(CredentialBaseClass):
         self.transform_cm(self['cm']['yaml_version'], style)
 
 
-    def __init__(self,
-                 username,
-                 cloud,
-                 datasource=None,
-                 yaml_version=2.0,
-                 style=2.0):
-        """datasource is afilename"""
-        CredentialBaseClass.__init__(self, username, cloud, datasource)
-
-        if datasource != None:
-            self.filename = datasource
-        else:
-            self.filename = "~/.futuregrid/cloudmesh.yaml"
-
-        self.config = ConfigDict(filename=self.filename)
-
-        self.read(username, cloud)
+    def clean_cm(self):
+        '''temporary so we do not have to modify yaml files for now'''
+        for key in self.keys():
+            if key.startswith('cm_'):
+                new_key = key.replace('cm_', '')
+                self['cm'][new_key] = self[key]
+                del self[key]
 
     def transform_cm(self, yaml_version, style):
         if yaml_version <= 2.0 and style == 2.0:
