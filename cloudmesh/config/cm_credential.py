@@ -2,6 +2,7 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.logger import LOGGER
 from pprint import pprint
 from cloudmesh.util.util import banner
+import traceback
 
 log = LOGGER(__file__)
 
@@ -77,9 +78,6 @@ class CredentialFromYaml(CredentialBaseClass):
 
         self.config = ConfigDict(filename=self.filename)
 
-
-
-
         self.read(username, cloud)
 
     def transform_cm(self, yaml_version, style):
@@ -127,5 +125,20 @@ if __name__ == "__main__":
 
     pprint (credential)
 
+    # -------------------------------------------------------------------------
+    banner ("testing gets")
 
+    print "demo of incositent behavior"
 
+    print "created new dict as a", credential["a"]
+    pprint (credential)
+
+    try:
+        print "credential cm.b", credential["cm"]["b"]
+        pprint (credential)
+    except Exception, e:
+        print e
+        print traceback.format_exc()
+
+    credential["cm"]["b"] = 'b content'
+    pprint (credential)
