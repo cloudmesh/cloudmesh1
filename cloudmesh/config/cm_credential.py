@@ -3,6 +3,8 @@ from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import banner
 from pprint import pprint
 import traceback
+from cloudmesh.util.encryptdata import encrypt as cm_encrypt
+from cloudmesh.util.encryptdata import decrypt as cm_decrypt
 
 log = LOGGER(__file__)
 
@@ -19,16 +21,24 @@ class CredentialBaseClass (dict):
     def save(self):
         raise NotImplementedError()
 
+
+
+
 class CredentialFromYaml(CredentialBaseClass):
+
+    password = None
 
     def __init__(self,
                  username,
                  cloud,
                  datasource=None,
                  yaml_version=2.0,
-                 style=2.0):
+                 style=2.0,
+                 password=None):
         """datasource is afilename"""
         CredentialBaseClass.__init__(self, username, cloud, datasource)
+
+        self.password = password
 
         if datasource != None:
             self.filename = datasource
@@ -85,17 +95,53 @@ class CredentialFromYaml(CredentialBaseClass):
 
 class CredentialStore(dict):
 
-    def __init__(self, username, filename, Credential, style=2.0):
+    password = None
+
+    def __init__(self, username, filename, Credential, style=2.0, password=None):
         config = ConfigDict(filename=filename)
+        self.password = password
         self[username] = {}
         for cloud in config.get("cloudmesh.clouds").keys():
             self[username][cloud] = Credential(username,
                                      cloud,
                                      filename,
-                                     style=style)
+                                     style=style,
+                                     password=self.password)
+            self.encrypt(username, cloud, style)
+
+    def encrypt_value(self, username, cloud, variable):
+        user_password = self[username][cloud]['credentials'][variable]
+        safe_value = cm_encrypt(user_password, self.password)
+        self[username][cloud]['credentials'][variable] = safe_value
+
+    def decrypt_value(self, username, cloud, variable):
+        user_password = self[username][cloud]['credentials'][variable]
+        decrypted_value = cm_decrypt(user_password, self.password)
+        return decrypted_value
 
 
+    def encrypt(self, username, cloud, style):
+        if style >= 2.0:
+            cloudtype = self[username][cloud]['cm']['type']
+            if cloudtype == 'openstack' and self.password != None:
+                self.encrypt_value(username, cloud, 'OS_PASSWORD')
+            elif cloudtype == 'ec2' and self.password != None:
+                self.encrypt_value(username, cloud, 'EC2_ACCESS_KEY')
+                self.encrypt_value(username, cloud, 'EC2_SECRET_KEY')
 
+    def credential(self, username, cloud, style=3.0):
+        credential = self[username][cloud]['credentials']
+        if style >= 2.0:
+            cloudtype = self[username][cloud]['cm']['type']
+            if cloudtype == 'openstack' and self.password != None:
+                password = self.decrypt_value(username, cloud, 'OS_PASSWORD')
+                credential['OS_PASSWORD'] = password
+            elif cloudtype == 'ec2' and self.password != None:
+                access_key = self.decrypt_value(username, cloud, 'EC2_ACCESS_KEY')
+                secrest_key = self.decrypt_value(username, cloud, 'EC2_SECRET_KEY')
+                credential['EC2_ACCESS_KEY'] = access_key
+                credential['EC2_SECERT_KEY'] = secret_key
+        return credential
 
 class CredentialFromMongo(CredentialBaseClass):
 
@@ -157,7 +203,12 @@ if __name__ == "__main__":
     store = CredentialStore("gvonlasz",
                             "~/.futuregrid/cloudmesh.yaml",
                             CredentialFromYaml,
-                            style=3.0)
+                            style=3.0,
+                            password="hallo")
 
     pprint (store)
+
+    print store["gvonlasz"]["hp"]["credentials"]
+    print store.credential("gvonlasz", "hp")
+
 
