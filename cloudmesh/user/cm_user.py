@@ -381,14 +381,12 @@ class cm_user(object):
     def get_credential(self, username, cloud):
         try:
             safe_credential = self.userdb_passwd.find_one({"cm_user_id": username, "cloud":cloud})["credential"]
-            print "OOO", safe_credential
 
             for cred in safe_credential:
                 t = safe_credential[cred]
 
                 n = decrypt(t, self.password_key)
 
-                print "III", n, t
                 safe_credential[cred] = n
 
 
