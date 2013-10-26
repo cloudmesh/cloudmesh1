@@ -19,12 +19,6 @@ class CredentialBaseClass (dict):
     def save(self):
         raise NotImplementedError()
 
-    def __getitem__(self, item):
-        try:
-            return dict.__getitem__(self, item)
-        except KeyError:
-            value = self[item] = {}
-            return value
 
 
 class CredentialFromYaml(CredentialBaseClass):
@@ -40,7 +34,7 @@ class CredentialFromYaml(CredentialBaseClass):
 
     def read(self, username, cloud, style=2.0):
         self.style = style
-
+        self['cm'] = {}
         self['cm']['source'] = 'yaml'
         self['cm']['filename'] = self.filename
         self['cm']['kind'] = self.config.get("meta.kind")
@@ -128,11 +122,6 @@ if __name__ == "__main__":
     # -------------------------------------------------------------------------
     banner ("testing gets")
 
-    print "demo of incositent behavior"
-
-    print "created new dict as a", credential["a"]
-    pprint (credential)
-
     try:
         print "credential cm.b", credential["cm"]["b"]
         pprint (credential)
@@ -140,5 +129,7 @@ if __name__ == "__main__":
         print e
         print traceback.format_exc()
 
+
     credential["cm"]["b"] = 'b content'
     pprint (credential)
+
