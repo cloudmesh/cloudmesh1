@@ -37,7 +37,7 @@ class CredentialFromYaml(CredentialBaseClass):
 
         self.config = ConfigDict(filename=self.filename)
 
-        self.read(username, cloud)
+        self.read(username, cloud, style=style)
 
     def read(self, username, cloud, style=2.0):
         self.style = style
@@ -61,7 +61,7 @@ class CredentialFromYaml(CredentialBaseClass):
         self['cm']['cloud'] = cloud
         self.clean_cm()
         self.transform_cm(self['cm']['yaml_version'], style)
-
+        self.remove_default()
 
     def clean_cm(self):
         '''temporary so we do not have to modify yaml files for now'''
@@ -71,12 +71,31 @@ class CredentialFromYaml(CredentialBaseClass):
                 self['cm'][new_key] = self[key]
                 del self[key]
 
+    def remove_default(self):
+        if 'default' in self.keys():
+            del self['default']
+
     def transform_cm(self, yaml_version, style):
         if yaml_version <= 2.0 and style == 2.0:
             for key in self['cm']:
                 new_key = 'cm_' + key
                 self[new_key] = self['cm'][key]
             del self['cm']
+
+
+class CredentialStore(dict):
+
+    def __init__(self, username, filename, Credential, style=2.0):
+        config = ConfigDict(filename=filename)
+        self[username] = {}
+        for cloud in config.get("cloudmesh.clouds").keys():
+            self[username][cloud] = Credential(username,
+                                     cloud,
+                                     filename,
+                                     style=style)
+
+
+
 
 class CredentialFromMongo(CredentialBaseClass):
 
@@ -129,4 +148,16 @@ if __name__ == "__main__":
 
     credential["cm"]["b"] = 'b content'
     pprint (credential)
+
+    banner ("testing gets")
+
+    # ---------------------------------------------
+
+    banner("credentialstore")
+    store = CredentialStore("gvonlasz",
+                            "~/.futuregrid/cloudmesh.yaml",
+                            CredentialFromYaml,
+                            style=3.0)
+
+    pprint (store)
 
