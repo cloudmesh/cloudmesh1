@@ -1,6 +1,7 @@
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.logger import LOGGER
 from pprint import pprint
+from cloudmesh.util.util import banner
 
 log = LOGGER(__file__)
 
@@ -23,18 +24,10 @@ class CredentialBaseClass (dict):
         except KeyError:
             value = self[item] = {}
             return value
-    '''
-    def __getitem__(self, key):
-        try:
-            return dict.__getitem__(self, key)
-        except KeyError:
-            log.error('key does not exist: {0}'.format(key))
-            return
-    '''
-
 
 
 class CredentialFromYaml(CredentialBaseClass):
+
 
     def clean_cm(self):
         '''temporary so we do not have to modify yaml files for now'''
@@ -43,9 +36,15 @@ class CredentialFromYaml(CredentialBaseClass):
                 new_key = key.replace('cm_', '')
                 self['cm'][new_key] = self[key]
                 del self[key]
-        del self['filename']
 
-    def read(self, username, cloud):
+    def read(self, username, cloud, style=2.0):
+        self.style = style
+
+        self['cm']['source'] = 'yaml'
+        self['cm']['filename'] = self.filename
+        self['cm']['kind'] = self.config.get("meta.kind")
+        self['cm']['yaml_version'] = self.config.get("meta.yaml_version")
+
         kind = self['cm']['kind']
         if kind == "clouds":
             self['cm']['filename'] = "~/.futuregrid/cloudmesh.yaml"
@@ -58,26 +57,37 @@ class CredentialFromYaml(CredentialBaseClass):
             log.error("kind wrong {0}".format(kind))
         self['cm']['username'] = username
         self['cm']['cloud'] = cloud
+        self.clean_cm()
+        self.transform_cm(self['cm']['yaml_version'], style)
 
-    def __init__(self, username, cloud, datasource=None):
+
+    def __init__(self,
+                 username,
+                 cloud,
+                 datasource=None,
+                 yaml_version=2.0,
+                 style=2.0):
         """datasource is afilename"""
         CredentialBaseClass.__init__(self, username, cloud, datasource)
-        self['cm']['source'] = 'yaml'
+
         if datasource != None:
             self.filename = datasource
         else:
-            self['filename'] = "~/.futuregrid/cloudmesh.yaml"
+            self.filename = "~/.futuregrid/cloudmesh.yaml"
 
-        self.config = ConfigDict(prefix="cloudmesh.server",
-                            filename=self['filename'])
-
+        self.config = ConfigDict(filename=self.filename)
 
 
-        self['cm']['kind'] = self.config.get("meta.kind")
+
 
         self.read(username, cloud)
-        self.clean_cm()
 
+    def transform_cm(self, yaml_version, style):
+        if yaml_version <= 2.0 and style == 2.0:
+            for key in self['cm']:
+                new_key = 'cm_' + key
+                self[new_key] = self['cm'][key]
+            del self['cm']
 
 class CredentialFromMongo(CredentialBaseClass):
 
@@ -87,17 +97,35 @@ class CredentialFromMongo(CredentialBaseClass):
         raise NotImplementedError()
 
 if __name__ == "__main__":
-    credential = CredentialFromYaml("gvonlasz", "sierra_openstack_grizzly")
 
+    # -------------------------------------------------------------------------
+    banner("YAML read test")
+    # -------------------------------------------------------------------------
+    banner("gvonlasz - sierra_openstack_grizzly - old")
+    # -------------------------------------------------------------------------
+    credential = CredentialFromYaml("gvonlasz", "sierra_openstack_grizzly")
+    pprint (credential)
+
+    banner("gvonlasz - sierra_openstack_grizzly - new")
+    # -------------------------------------------------------------------------
+    credential = CredentialFromYaml("gvonlasz", "sierra_openstack_grizzly", style=3.0)
     pprint (credential)
 
     print credential['credentials']['OS_USERNAME']
 
     print credential.keys()
 
+    banner("gvonlasz - hp - old")
+    # -------------------------------------------------------------------------
     credential.read("gvonlasz", "hp")
 
+    pprint (credential)
 
+    banner("gvonlasz - hp - new")
+    # -------------------------------------------------------------------------
+    credential.read("gvonlasz", "hp", style=3.0)
+
+    pprint (credential)
 
 
 
