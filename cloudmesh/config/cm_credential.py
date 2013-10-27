@@ -1,10 +1,12 @@
 from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh.config.cm_config import get_mongo_db
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import banner
 from pprint import pprint
 import traceback
 from cloudmesh.util.encryptdata import encrypt as cm_encrypt
 from cloudmesh.util.encryptdata import decrypt as cm_decrypt
+from cloudmesh.cm_mongo import cm_mongo
 
 log = LOGGER(__file__)
 
@@ -71,7 +73,7 @@ class CredentialFromYaml(CredentialBaseClass):
         self['cm']['cloud'] = cloud
         self.clean_cm()
         self.transform_cm(self['cm']['yaml_version'], style)
-        self.remove_default()
+        # self.remove_default()
 
     def clean_cm(self):
         '''temporary so we do not have to modify yaml files for now'''
@@ -80,10 +82,11 @@ class CredentialFromYaml(CredentialBaseClass):
                 new_key = key.replace('cm_', '')
                 self['cm'][new_key] = self[key]
                 del self[key]
-
+    """
     def remove_default(self):
         if 'default' in self.keys():
             del self['default']
+    """
 
     def transform_cm(self, yaml_version, style):
         if yaml_version <= 2.0 and style == 2.0:
@@ -210,5 +213,29 @@ if __name__ == "__main__":
 
     print store["gvonlasz"]["hp"]["credentials"]
     print store.credential("gvonlasz", "hp")
+
+    #
+    # experimenting to store yaml to mongo
+    #
+
+    collection = 'store'
+    username = 'gvonlasz'
+
+    db = get_mongo_db(collection)
+
+    d = {'cm_user_id': username}
+
+    # db.remove({'cm_user_id': username})
+    db.update({'cm_user_id': username},
+              {'cm_user_id': username,
+               'clouds': store[username]},
+              upsert=True)
+
+    entries = db.find({})
+
+    for e in entries:
+        pprint(e)
+
+    print entries.count()
 
 
