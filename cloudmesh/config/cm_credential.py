@@ -10,12 +10,10 @@ from cloudmesh.cm_mongo import cm_mongo
 
 log = LOGGER(__file__)
 
-class CredentialBaseClass (dict):
+class UserBaseClass (dict):
 
-    def __init__(self, username, cloud, datasource):
-        dict.__init__({'username': username,
-                       'cloud': cloud,
-                       'datasource': datasource})
+    def __init__(self, username, datasource):
+        dict.__init__({'username': username, 'datasource': datasource})
 
     def read(self, username, cloud):
         raise NotImplementedError()
@@ -23,22 +21,16 @@ class CredentialBaseClass (dict):
     def save(self):
         raise NotImplementedError()
 
-
-
-
-class CredentialFromYaml(CredentialBaseClass):
+class UserFromYaml(UserBaseClass):
 
     password = None
 
     def __init__(self,
                  username,
-                 cloud,
                  datasource=None,
-                 yaml_version=2.0,
-                 style=2.0,
                  password=None):
         """datasource is afilename"""
-        CredentialBaseClass.__init__(self, username, cloud, datasource)
+        UserBaseClass.__init__(self, username, datasource)
 
         self.password = password
 
@@ -47,172 +39,134 @@ class CredentialFromYaml(CredentialBaseClass):
         else:
             self.filename = "~/.futuregrid/cloudmesh.yaml"
 
-        self.config = ConfigDict(filename=self.filename)
+        config = ConfigDict(filename=self.filename)
 
-        self.read(username, cloud, style=style)
-
-    def read(self, username, cloud, style=2.0):
-        self.style = style
-        self['cm'] = {}
-        self['cm']['source'] = 'yaml'
-        self['cm']['filename'] = self.filename
-        self['cm']['kind'] = self.config.get("meta.kind")
-        self['cm']['yaml_version'] = self.config.get("meta.yaml_version")
-
-        kind = self['cm']['kind']
-        if kind == "clouds":
-            self['cm']['filename'] = "~/.futuregrid/cloudmesh.yaml"
-            self.update(self.config.get("cloudmesh.clouds.{0}".format(cloud)))
-
-        elif kind == "server":
-            self['cm']['filename'] = "~/.futuregrid/cloudmesh_server.yaml"
-            self.update(self.config.get("cloudmesh.server.keystone.{0}".format(cloud)))
-        else:
-            log.error("kind wrong {0}".format(kind))
-        self['cm']['username'] = username
-        self['cm']['cloud'] = cloud
-        self.clean_cm()
-        self.transform_cm(self['cm']['yaml_version'], style)
-        # self.remove_default()
-
-    def clean_cm(self):
-        '''temporary so we do not have to modify yaml files for now'''
-        for key in self.keys():
-            if key.startswith('cm_'):
-                new_key = key.replace('cm_', '')
-                self['cm'][new_key] = self[key]
-                del self[key]
-    """
-    def remove_default(self):
-        if 'default' in self.keys():
-            del self['default']
-    """
-
-    def transform_cm(self, yaml_version, style):
-        if yaml_version <= 2.0 and style == 2.0:
-            for key in self['cm']:
-                new_key = 'cm_' + key
-                self[new_key] = self['cm'][key]
-            del self['cm']
+        for key in config['cloudmesh']:
+            self[key] = config['cloudmesh'][key]
+        self['cm_user_id'] = username
 
 
-class CredentialStore(dict):
+class UserStore(dict):
 
     password = None
+    User = None
 
-    def __init__(self, username, filename, Credential, style=2.0, password=None):
-        config = ConfigDict(filename=filename)
+    def __init__(self, UserFrom, password=None):
         self.password = password
+        self.User = UserFrom
+
+    def add(self, user, datasource=None, password=None):
+
+        if (password is None) and (self.password is not None):
+            password = self.password
+
+        user = self.User(user, datasource, password)
+        username = user['cm_user_id']
         self[username] = {}
-        for cloud in config.get("cloudmesh.clouds").keys():
-            self[username][cloud] = Credential(username,
-                                     cloud,
-                                     filename,
-                                     style=style,
-                                     password=self.password)
-            self.encrypt(username, cloud, style)
+        self[username].update(user)
+        if password is not None:
+            for cloud in self[username]['clouds']:
+                self.encrypt(username, cloud, password)
 
-    def encrypt_value(self, username, cloud, variable):
-        user_password = self[username][cloud]['credentials'][variable]
-        safe_value = cm_encrypt(user_password, self.password)
-        self[username][cloud]['credentials'][variable] = safe_value
+    def check_keys(self, d, keys):
+        for key in keys:
+            if key not in d:
+                error = error + "Key {0} is not in the cloud definition\n"
+        if error != '':
+            log.error("Cloud definition incomplete \n")
+            log.error(error)
+        return (error != '')
 
-    def decrypt_value(self, username, cloud, variable):
-        user_password = self[username][cloud]['credentials'][variable]
-        decrypted_value = cm_decrypt(user_password, self.password)
+    def add_cloud_from_dict(self, d, password=password):
+        #
+        # check
+        #
+        if not check_keys(d, ['cm_heading',
+                              'cm_host',
+                              'cm_label',
+                              'cm_type',
+                              'cm_type_version',
+                              'credentials']):
+            return
+        if d['cm_type'] == 'openstack':
+            if not check_keys(d, ['OS_TENANT_NAME',
+                                  'OS_USERNAME',
+                                  'OS_PASSWORD',
+                                  'OS_AUTH_URL']):
+                return
+        elif d['cm_type'] == 'ec2':
+            if not check_keys(d, ['EC2_ACCESS_KEY',
+                                  'EC2_SECRET_KEY',
+                                  'EC2_URL']):
+                return
+
+        self[username]['clouds'][cloud] = d
+        self.encrypt(username, cloud, password)
+
+
+    def encrypt(self, username, cloud, password):
+        cloudtype = self[username]['clouds'][cloud]['cm_type']
+        if cloudtype == 'openstack' and password != None:
+            self.encrypt_value(username, cloud, 'OS_PASSWORD', password)
+        elif cloudtype == 'ec2' and password != None:
+            self.encrypt_value(username, cloud, 'EC2_ACCESS_KEY', password)
+            self.encrypt_value(username, cloud, 'EC2_SECRET_KEY', password)
+
+    def encrypt_value(self, username, cloud, variable, password):
+        user_password = self[username]['clouds'][cloud]['credentials'][variable]
+        safe_value = cm_encrypt(user_password, password)
+        self[username]['clouds'][cloud]['credentials'][variable] = safe_value
+
+    def decrypt_value(self, username, cloud, variable, password):
+        user_password = self[username]['clouds'][cloud]['credentials'][variable]
+        decrypted_value = cm_decrypt(user_password, password)
         return decrypted_value
 
 
-    def encrypt(self, username, cloud, style):
-        if style >= 2.0:
-            cloudtype = self[username][cloud]['cm']['type']
-            if cloudtype == 'openstack' and self.password != None:
-                self.encrypt_value(username, cloud, 'OS_PASSWORD')
-            elif cloudtype == 'ec2' and self.password != None:
-                self.encrypt_value(username, cloud, 'EC2_ACCESS_KEY')
-                self.encrypt_value(username, cloud, 'EC2_SECRET_KEY')
-
-    def credential(self, username, cloud, style=3.0):
-        credential = self[username][cloud]['credentials']
-        if style >= 2.0:
-            cloudtype = self[username][cloud]['cm']['type']
-            if cloudtype == 'openstack' and self.password != None:
-                password = self.decrypt_value(username, cloud, 'OS_PASSWORD')
-                credential['OS_PASSWORD'] = password
-            elif cloudtype == 'ec2' and self.password != None:
-                access_key = self.decrypt_value(username, cloud, 'EC2_ACCESS_KEY')
-                secrest_key = self.decrypt_value(username, cloud, 'EC2_SECRET_KEY')
-                credential['EC2_ACCESS_KEY'] = access_key
-                credential['EC2_SECERT_KEY'] = secret_key
+    def credential(self, username, cloud, password=None):
+        credential = self[username]['clouds'][cloud]['credentials']
+        cloudtype = self[username]['clouds'][cloud]['cm_type']
+        if cloudtype == 'openstack' and self.password != None:
+            password = self.decrypt_value(username, cloud, 'OS_PASSWORD', password)
+            credential['OS_PASSWORD'] = password
+        elif cloudtype == 'ec2' and self.password != None:
+            access_key = self.decrypt_value(username, cloud, 'EC2_ACCESS_KEY', password)
+            secrest_key = self.decrypt_value(username, cloud, 'EC2_SECRET_KEY', password)
+            credential['EC2_ACCESS_KEY'] = access_key
+            credential['EC2_SECERT_KEY'] = secret_key
         return credential
 
-class CredentialFromMongo(CredentialBaseClass):
+'''
+
+class CredentialFromMongo(UserBaseClass):
 
     def __init__(self, user, cloud, datasource=None):
         """data source is a collectionname in cloudmesh_server.yaml"""
         """if day=tasource is none than use the default on which is ?"""
         raise NotImplementedError()
+'''
 
 if __name__ == "__main__":
 
     # -------------------------------------------------------------------------
     banner("YAML read test")
     # -------------------------------------------------------------------------
-    banner("gvonlasz - sierra_openstack_grizzly - old")
-    # -------------------------------------------------------------------------
-    credential = CredentialFromYaml("gvonlasz", "sierra_openstack_grizzly")
-    pprint (credential)
-
-    banner("gvonlasz - sierra_openstack_grizzly - new")
-    # -------------------------------------------------------------------------
-    credential = CredentialFromYaml("gvonlasz", "sierra_openstack_grizzly", style=3.0)
-    pprint (credential)
-
-    print credential['credentials']['OS_USERNAME']
-
-    print credential.keys()
-
-    banner("gvonlasz - hp - old")
-    # -------------------------------------------------------------------------
-    credential.read("gvonlasz", "hp")
-
-    pprint (credential)
-
-    banner("gvonlasz - hp - new")
-    # -------------------------------------------------------------------------
-    credential.read("gvonlasz", "hp", style=3.0)
-
-    pprint (credential)
-
-    # -------------------------------------------------------------------------
-    banner ("testing gets")
-
-    try:
-        print "credential cm.b", credential["cm"]["b"]
-        pprint (credential)
-    except Exception, e:
-        print e
-        print traceback.format_exc()
+    user = UserFromYaml("gvonlasz")
+    pprint (user)
 
 
-    credential["cm"]["b"] = 'b content'
-    pprint (credential)
-
-    banner ("testing gets")
-
-    # ---------------------------------------------
+    store = UserStore(UserFromYaml, password="hallo")
+    store.add("gvonlasz", "~/.futuregrid/cloudmesh.yaml", password="Hallo")
 
     banner("credentialstore")
-    store = CredentialStore("gvonlasz",
-                            "~/.futuregrid/cloudmesh.yaml",
-                            CredentialFromYaml,
-                            style=3.0,
-                            password="hallo")
-
     pprint (store)
 
-    print store["gvonlasz"]["hp"]["credentials"]
-    print store.credential("gvonlasz", "hp")
+    banner("gvonlasz - hp")
+    # -------------------------------------------------------------------------
+    cred = store.credential("gvonlasz", "hp", password="Hallo")
+
+    pprint (cred)
+
 
     #
     # experimenting to store yaml to mongo
@@ -237,5 +191,4 @@ if __name__ == "__main__":
         pprint(e)
 
     print entries.count()
-
 
