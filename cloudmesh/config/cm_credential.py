@@ -46,7 +46,8 @@ class UserFromYaml(UserBaseClass):
         self['cm_user_id'] = username
 
 
-class UserStore(dict):
+
+class UserDictStore(dict):
 
     password = None
     User = None
@@ -136,6 +137,36 @@ class UserStore(dict):
             credential['EC2_SECERT_KEY'] = secret_key
         return credential
 
+class UserMongoStore():
+
+    def __init__(self):
+        collection = 'store'
+        self.db = get_mongo_db(collection)
+
+    def add(self, username, d):
+        d['cm_user_id'] = username
+        for key in d:
+            self.db.update({'cm_user_id': username}, d, upsert=True)
+
+    def delete(self, username):
+        self.db.remove({'cm_user_id': username})
+
+    def credential(self, username, cloudname):
+        u = self.get(username)
+        return u['clouds'][cloudname]['credentials']
+
+    def projects(self, username):
+        pass
+
+    def active_clouds(self, username):
+        pass
+
+    def default(self, username, cloud):
+        pass
+
+    def get(self, username):
+        return self.db.find_one({'cm_user_id': username})
+
 '''
 
 class CredentialFromMongo(UserBaseClass):
@@ -155,7 +186,7 @@ if __name__ == "__main__":
     pprint (user)
 
 
-    store = UserStore(UserFromYaml, password="hallo")
+    store = UserDictStore(UserFromYaml, password="hallo")
     store.add("gvonlasz", "~/.futuregrid/cloudmesh.yaml", password="Hallo")
 
     banner("credentialstore")
@@ -172,23 +203,20 @@ if __name__ == "__main__":
     # experimenting to store yaml to mongo
     #
 
+    banner("MONGO")
     collection = 'store'
     username = 'gvonlasz'
 
-    db = get_mongo_db(collection)
+    users = UserMongoStore()
 
-    d = {'cm_user_id': username}
+    users.add(username, store[username])
 
-    # db.remove({'cm_user_id': username})
-    db.update({'cm_user_id': username},
-              {'cm_user_id': username,
-               'clouds': store[username]},
-              upsert=True)
+    u = users.get(username)
 
-    entries = db.find({})
+    pprint (u)
 
-    for e in entries:
-        pprint(e)
+    banner("MONGO HP")
 
-    print entries.count()
+    hp = users.credential(username, "hp")
 
+    pprint (hp)
