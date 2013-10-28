@@ -124,6 +124,7 @@ def display_rack_map():
     filename_legend = map_class.getLegendFilename()
     image_size = map_class.getImageSize()
     legend_size = map_class.getImageLegendSize()
+    print "legend size is: ", legend_size
     abs_web_path_image = "/".join([""] + list_image_dir + [filename_image])
     abs_web_path_legend = "/".join([""] + list_image_dir + [filename_legend])
 

@@ -191,18 +191,18 @@
 
     </script>
 
-    <div id="img_outer_div" style="width:100%; height:100%; overflow: auto; position: relative">
-        <p>
-           <img id="legend" src="{{ legendFilename }}"
-               style="width={{legendWidth}}px;"
+    <div><p><img id="legend" src="{{ legendFilename }}"
+               style="width: {{legendWidth}}px; position: relative; display:block; margin-left: auto; margin-right: auto"
                ondblclick="setZoomRate(100)"
                />
-        </p>
+           </p>
+        </div>
 
+    <div id="img_outer_div" style="width:100%; height:100%; overflow: auto; position: relative">
         <div id="img_inner_div" style="width:{{imageWidth}}px; height:{{imageHeight}}px; overflow: hidden; position: relative; display:block; margin-left: auto; margin-right: auto">
 
 		<p> <img id="realmap" src="{{ imageFilename }}"
-			     style="width={{imageWidth}}px; "
+			     style="width: {{imageWidth}}px; "
 			     ondblclick="setZoomRate(100)"
 	           	 />
 		</p>

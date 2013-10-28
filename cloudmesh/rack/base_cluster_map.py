@@ -325,7 +325,7 @@ class BaseClusterMap:
         # parse svg file to get width and height
         # <svg viewBox="0 0 1792 2000"
         dict_result = {"width": 0, "height": 0}
-        patt = re.compile('<svg\s+?viewBox=.+?\s+?.+?\s+?(\d+)\s+?(\d+)')
+        patt = re.compile('<svg.*?viewBox=.+?\s+?.+?\s+?(\d+)\s+?(\d+)')
         fsvg = open(filename)
         for line in fsvg:
             m = patt.match(line)
