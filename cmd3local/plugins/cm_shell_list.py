@@ -39,7 +39,7 @@ class cm_shell_list:
         log.info(args)
 
         log.info(arguments)
-
+        all = False
         if len(arguments["CLOUD"]) == 0:
             print "get all active clouds"
             all = True
@@ -112,5 +112,4 @@ class cm_shell_list:
             log.info ("list images")
             for cloud in clouds:
                 print "cloud: images", cloud, None
-
 

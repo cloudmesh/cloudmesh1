@@ -1,4 +1,4 @@
-super_sidebar_pages = [
+super_duper_sidebar_pages = [
     ["Cloudmesh", None, None, ['all'],
         [
             ["Home", "/", None],

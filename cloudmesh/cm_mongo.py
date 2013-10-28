@@ -69,6 +69,13 @@ class cm_MongoBase(object):
         '''
         return self.db_mongo.find(query)
 
+    def remove(self, query):
+        '''
+        executes a query and removes the results from mongo db.
+        :param query:
+        '''
+        return self.db_mongo.remoe(query)
+
     def find_one(self, query):
         '''
         executes a query and returns the results from mongo db.
