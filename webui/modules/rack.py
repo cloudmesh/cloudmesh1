@@ -34,12 +34,12 @@ class RackForm(Form):
                   ('india', 'India Cluster'),
                   ('echo', 'Echo Cluster'),
                   ('delta', 'Delta Cluster'),
-                  ('bravo', 'Bravo Cluster')
+                  ('bravo', 'Bravo Cluster'),
                  ]
 
     service_list = [
         ('service', 'Service Map'),
-        # ('temperature', 'Heat Map')
+        ('temperature', 'Heat Map'),
     ]
 
     def initForm(self):
@@ -71,13 +71,24 @@ def display_rack_map():
     ####
     flag_debug = False
 
+    # class name means the specific class to generate map for different service type
+    # method name means the specific method to fetch real data of different service type, 
+    #     the methods are defined in class FetchClusterInfo
+    service_options = {"temperature": {"class": HeatClusterMap,
+                                       "method": "fetch_temperature_ipmi",
+                                       },
+                       "service": {"class": ServiceClusterMap,
+                                   "method": "fetch_service_type",
+                                   },
+                       }
+    
     rack = request.form['select_rack']
     service = request.form['select_service']
     # get location of configuration file, input diag, output image
     dir_base = "~/.futuregrid"
     server_config = cm_config_server()
     relative_dir_diag = server_config.get("cloudmesh.server.rack.input")
-    relative_dir_image = server_config.get("cloudmesh.server.rack.diagrams." + service)
+    relative_dir_image = server_config.get("cloudmesh.server.rack.diagrams.{0}".format(service))
     print "relative dir image, ", relative_dir_image
     flask_dir = "static"
     # guess absolute path of webui
@@ -89,11 +100,7 @@ def display_rack_map():
     abs_dir_image = "/".join(webui_dir + list_image_dir)
     abs_dir_diag = dir_base + "/" + relative_dir_diag
     # dynamic generate image
-    map_class = None
-    if service == "temperature":
-        map_class = HeatClusterMap(rack, dir_base, abs_dir_diag, abs_dir_image)
-    elif service == "service":
-        map_class = ServiceClusterMap(rack, dir_base, abs_dir_diag, abs_dir_image)
+    map_class = service_options[service]["class"](rack, dir_base, abs_dir_diag, abs_dir_image)
     # get cluster server data
     dict_data = None
     if flag_debug:
@@ -101,13 +108,12 @@ def display_rack_map():
     else:
         # fetch the real data ....
         # to do ...
-
         config = cm_config()
         user = config.get("cloudmesh.hpc.username")
-
         myfetch = FetchClusterInfo(user, "india.futuregrid.org")
         flag_filter = None if rack == "all" else rack
-        dict_data = myfetch.fetch_service_type(flag_filter)
+        dict_data = getattr(myfetch, service_options[service]["method"])(flag_filter)
+        #dict_data = myfetch.fetch_service_type(flag_filter)
     # update data
     map_class.update(dict_data)
     # plot map
@@ -117,6 +123,8 @@ def display_rack_map():
     filename_image = map_class.getImageFilename()
     filename_legend = map_class.getLegendFilename()
     image_size = map_class.getImageSize()
+    legend_size = map_class.getImageLegendSize()
+    print "legend size is: ", legend_size
     abs_web_path_image = "/".join([""] + list_image_dir + [filename_image])
     abs_web_path_legend = "/".join([""] + list_image_dir + [filename_legend])
 
@@ -125,6 +133,8 @@ def display_rack_map():
                             rack=rack,
                             imageWidth=image_size["width"],
                             imageHeight=image_size["height"],
+                            legendWidth=legend_size["width"],
+                            legendHeight=legend_size["height"],
                             service=service,
                             imageFilename=abs_web_path_image,
                             legendFilename=abs_web_path_legend

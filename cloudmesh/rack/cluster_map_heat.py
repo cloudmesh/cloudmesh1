@@ -21,6 +21,9 @@ class HeatClusterMap(BaseClusterMap):
 
     # default temperature
     temperature_default = 0
+    
+    # RGB for unknown temperature of host
+    rgb_unknown_temperature = (211, 211, 211)
 
     # mapping dict
     # map the value of a temperature to a tuple RGB color
@@ -121,9 +124,11 @@ class HeatClusterMap(BaseClusterMap):
     # get proper temperature for cluster server
     # formation is XXX.YYY, the precise (YYY) is controlled by self.dict_marker["round"]
     def getProperTemperature(self, temp):
-        round_temp = round(temp, self.dict_marker["round"])
-        temp_rgb = self.getRGB(round_temp)
-        self.dict_mapping.update({round_temp:temp_rgb})
+        # temperature unknown
+        round_temp = -1 if temp == -1 else round(temp, self.dict_marker["round"])
+        if round_temp not in self.dict_mapping.keys():
+            temp_rgb = self.getRGB(round_temp)
+            self.dict_mapping.update({round_temp:temp_rgb})
 
         return round_temp
 
@@ -171,6 +176,8 @@ class HeatClusterMap(BaseClusterMap):
             return
 
         self.dict_mapping.clear()
+        # unknow temperature of host
+        self.dict_mapping.update({-1: self.rgb_unknown_temperature})
         arr_values = sorted(dict_values.values())
         self.setTemperatureMinMax(arr_values[0], arr_values[-1])
         self.resetDictServers(self.getServersDefaultValue())
@@ -290,6 +297,10 @@ class HeatClusterMap(BaseClusterMap):
 
 # test
 if __name__ == "__main__":
-    mytest = HeatClusterMap("all")
-    mytest.update(mytest.genRandomValues())
+    mytest = HeatClusterMap("echo")
+    ddata = {'e010': 43.0, 'e016': 53.0, 'e011': 43.0, 'e012': 43.0, 'e003': 43.0, 'e002': 43.0, 'e001': 43.0, 'e013': 51.0, 'e007': 43.0, 'e006': 43.0, 'e005': 43.0, 'e004': 43.0, 'e014': 43.0, 'e009': 43.0, 'e008': 43.0, 'e015': 43.0}
+    #mytest.update(mytest.genRandomValues())
+    legend_size = mytest.getImageLegendSize()
+    print "legend size: ", legend_size
+    mytest.update(ddata)
     mytest.plot()

@@ -67,6 +67,8 @@
         var previous_zoom_rate = Default_Image_Rate;
         var baseWidth = {{imageWidth}};
         var baseHeight = {{imageHeight}};
+        var legendWidth = {{legendWidth}};
+        var legendHeight = {{legendHeight}};
         function zoomImageMap(rate) {
             $("#zoomratio").text( rate );
             $imgContainer = $("#img_inner_div");
@@ -77,6 +79,7 @@
             $imgContainer.css("width", baseWidth * rate / 100 + "px");
             $imgContainer.css("height", baseHeight * rate / 100 + "px");
             $("#realmap").css("width",baseWidth * rate / 100);
+            $("#legend").css("width",legendWidth * rate / 100);
             previous_zoom_rate = rate;
         }
 
@@ -118,6 +121,23 @@
             $("#slider").slider().append(tooltip);
             $container = $("#img_inner_div");
             $container.data("flag_drag", false);
+            $("#legend").on(
+                "mousedown", function(e) {
+                    return false;
+                }
+            ).on(
+                "mouseup", function(e) {
+                    return false;
+                }
+            ).on(
+                "mousemove", function(e) {
+                    return false;
+                }
+            ).on(
+                "mouseout", function(e) {
+                    return false;
+                }
+            );
             $("#realmap").on(
                 "mousedown", function(e) {
                     e.stopPropagation();
@@ -170,16 +190,19 @@
         });
 
     </script>
-   <p>
-	  <img src="{{ legendFilename }}"
-	       width="1000px"
-	       style="display:block; margin-left: auto; margin-right: auto"/>
-	</p>
+
+    <div><p><img id="legend" src="{{ legendFilename }}"
+               style="width: {{legendWidth}}px; position: relative; display:block; margin-left: auto; margin-right: auto"
+               ondblclick="setZoomRate(100)"
+               />
+           </p>
+        </div>
 
     <div id="img_outer_div" style="width:100%; height:100%; overflow: auto; position: relative">
-        <div id="img_inner_div" style="width:{{imageWidth}}px; height:{{imageHeight}}px; overflow: hidden; position: relative">
+        <div id="img_inner_div" style="width:{{imageWidth}}px; height:{{imageHeight}}px; overflow: hidden; position: relative; display:block; margin-left: auto; margin-right: auto">
+
 		<p> <img id="realmap" src="{{ imageFilename }}"
-			     style="width={{imageWidth}}px; position: relative"
+			     style="width: {{imageWidth}}px; "
 			     ondblclick="setZoomRate(100)"
 	           	 />
 		</p>

@@ -11,11 +11,14 @@ from sh import rackdiag  # @UnresolvedImport
 from sh import rm  # @UnresolvedImport
 from sh import pwd  # @UnresolvedImport
 from sh import mkdir  # @UnresolvedImport
+from os import path
 import random
 import time
 import re
 import colorsys
 from PIL import Image
+import matplotlib
+matplotlib.use("SVG")
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 from matplotlib.lines import Line2D
@@ -133,7 +136,9 @@ class BaseClusterMap:
 
         log.info("dir output {0}".format(abs_dir_output))
         # make sure the output directory exist
-        mkdir("-p", abs_dir_output)
+        if not path.exists(abs_dir_output):
+            print "abs dir output: ", abs_dir_output
+            mkdir("-p", abs_dir_output)
 
         self.readClustersConfig(abs_dir_yaml)
         self.readRackConfig(name, abs_dir_yaml, abs_dir_diag)
@@ -235,14 +240,14 @@ class BaseClusterMap:
         if ltype in self.image_type_list:
             self.image_type = ltype
         else:
-            log.erro("Rack image type {0} is NOT supported currently! Use {1} to replace.".format(img_type, self.image_type_list[0]))
+            log.error("Rack image type {0} is NOT supported currently! Use {1} to replace.".format(img_type, self.image_type_list[0]))
             self.image_type = self.image_type_list[0]
 
         # filename, diag filename ends with ".diag"
         # image filename ends with "." + a valid lower image type
         image_basename = self.cluster_name + "-" + self.subclass_type;
         self.only_filename_image = image_basename + "." + self.image_type
-        self.only_filename_legend = image_basename + "-legend.png"
+        self.only_filename_legend = image_basename + "-legend.svg"
         self.filename_rack_image = dir_output + "/" + self.only_filename_image
         self.filename_rack_legend = dir_output + "/" + self.only_filename_legend
 
@@ -301,22 +306,27 @@ class BaseClusterMap:
     def getLegendFilename(self):
         return self.only_filename_legend
 
+    def getImageLegendSize(self):
+        return self.getImageSize(self.filename_rack_legend)
+
     # get 2-D size of image file
     # return {"width": width, "height", height}
-    def getImageSize(self):
+    def getImageSize(self, filename=None):
         options = {
                    "svg": self.getSVGSize,
                    "png": self.getPNGSize,
                    }
-        return options[self.image_type]()
+        if filename is None:
+            filename = self.filename_rack_image
+        return options[self.image_type](filename)
 
     # get 2-D size of svg file
-    def getSVGSize(self):
+    def getSVGSize(self, filename):
         # parse svg file to get width and height
         # <svg viewBox="0 0 1792 2000"
         dict_result = {"width": 0, "height": 0}
-        patt = re.compile('<svg viewBox=.+?\s+?.+?\s+?(\d+)\s+?(\d+)')
-        fsvg = open(self.filename_rack_image)
+        patt = re.compile('<svg.*?viewBox=.+?\s+?.+?\s+?(\d+)\s+?(\d+)')
+        fsvg = open(filename)
         for line in fsvg:
             m = patt.match(line)
             if m:
@@ -329,10 +339,12 @@ class BaseClusterMap:
     # get 2-D size of png file
     def getPNGSize(self):
         dict_result = {"width": 0, "height": 0}
-        png = Image.open(self.filename_rack_image)
+        fpng = open(filename)
+        png = Image.open(fpng)
         (w, h) = png.size
         dict_result["width"] = w
         dict_result["height"] = h
+        fpng.close()
         return dict_result
 
 
@@ -411,7 +423,7 @@ class BaseClusterMap:
         self.drawLegendContent(ax, (xlim, ylim))
 
         # plt.show()
-        fig.savefig(self.filename_rack_legend, transparent=True, dpi=300)
+        fig.savefig(self.filename_rack_legend, transparent=True)
 
     #
     # update function MUST be called before call the plot function
