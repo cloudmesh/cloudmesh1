@@ -493,7 +493,7 @@ def vm_info(cloud=None, server=None):
     return render_template('mesh/cloud/vm_info.html',
                            updated=time_now,
                            keys="",
-                           server=clouds.servers()[cloud][server],
+                           server=clouds.servers(cm_user_id=g.user.id)[cloud][server],
                            id=server,
                            cloudname=cloud,
                            table_printer=table_printer)
