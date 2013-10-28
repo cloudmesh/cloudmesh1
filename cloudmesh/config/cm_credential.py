@@ -10,18 +10,29 @@ from cloudmesh.cm_mongo import cm_mongo
 
 log = LOGGER(__file__)
 
-class UserBaseClass (dict):
+class UserStoreBaseClass (dict):
 
     def __init__(self, username, datasource):
         dict.__init__({'username': username, 'datasource': datasource})
 
-    def read(self, username, cloud):
+    def get(self, username, cloud, password=None):
+        """
+        returns the information about a cloud for a user. 
+        Certain fields are encrypted which will be decrypted by the password.
+        """
         raise NotImplementedError()
 
-    def save(self):
+    def set(self, username, cloud, password=None):
+        """
+        Sets the information about a cloud for a user. 
+        Certain fields are encrypted by the password.
+        """
         raise NotImplementedError()
 
-class UserFromYaml(UserBaseClass):
+
+
+
+class UserFromYaml(dict):
 
     password = None
 
@@ -30,7 +41,9 @@ class UserFromYaml(UserBaseClass):
                  datasource=None,
                  password=None):
         """datasource is afilename"""
-        UserBaseClass.__init__(self, username, datasource)
+        dict.__init__(self)
+        self['username'] = username
+        self['datasource'] = datasource
 
         self.password = password
 
@@ -56,7 +69,7 @@ class UserDictStore(dict):
         self.password = password
         self.User = UserFrom
 
-    def add(self, user, datasource=None, password=None):
+    def set(self, user, datasource=None, password=None):
 
         if (password is None) and (self.password is not None):
             password = self.password
@@ -139,33 +152,71 @@ class UserDictStore(dict):
 
 class UserMongoStore():
 
-    def __init__(self):
+    def __init__(self, password=None):
+        self.password = password
         collection = 'store'
         self.db = get_mongo_db(collection)
 
-    def add(self, username, d):
+    def set(self, username, d, password=None):
+        if password is None and self.password is not None:
+            password = self.password
+
         d['cm_user_id'] = username
-        for key in d:
-            self.db.update({'cm_user_id': username}, d, upsert=True)
+        self.db.update({'cm_user_id': username}, d, upsert=True)
 
     def delete(self, username):
         self.db.remove({'cm_user_id': username})
 
-    def credential(self, username, cloudname):
-        u = self.get(username)
-        return u['clouds'][cloudname]['credentials']
+    def credential(self, username, cloud, password=None):
+        user = self.get(username)
+
+        credential = user['clouds'][cloud]['credentials']
+        print credential
+
+        cloudtype = user['clouds'][cloud]['cm_type']
+        print cloudtype
+
+        if password is None and self.password is not None:
+            password = self.password
+
+        if cloudtype == 'openstack' and self.password != None:
+            password = self.decrypt_value(user, cloud, 'OS_PASSWORD', password)
+            credential['OS_PASSWORD'] = password
+        elif cloudtype == 'ec2' and self.password != None:
+            access_key = self.decrypt_value(user, cloud, 'EC2_ACCESS_KEY', password)
+            secrest_key = self.decrypt_value(user, cloud, 'EC2_SECRET_KEY', password)
+            credential['EC2_ACCESS_KEY'] = access_key
+            credential['EC2_SECERT_KEY'] = secret_key
+        return credential
+
+
+    def encrypt_value(self, user, cloud, variable, password):
+        user_password = user['clouds'][cloud]['credentials'][variable]
+        safe_value = cm_encrypt(user_password, password)
+        user['clouds'][cloud]['credentials'][variable] = safe_value
+
+
+    def decrypt_value(self, user, cloud, variable, password):
+        user_password = user['clouds'][cloud]['credentials'][variable]
+        decrypted_value = cm_decrypt(user_password, password)
+        return decrypted_value
 
     def projects(self, username):
-        pass
+        u = self.get(username)
+        return u['projects']
 
     def active_clouds(self, username):
-        pass
+        u = self.get(username)
+        return u['active']
 
-    def default(self, username, cloud):
-        pass
+    def default(self, username, cloudname):
+        u = self.get(username)
+        return u['clouds'][cloudname]['default']
 
     def get(self, username):
         return self.db.find_one({'cm_user_id': username})
+
+
 
 '''
 
@@ -187,16 +238,16 @@ if __name__ == "__main__":
 
 
     store = UserDictStore(UserFromYaml, password="hallo")
-    store.add("gvonlasz", "~/.futuregrid/cloudmesh.yaml", password="Hallo")
+    store.set("gvonlasz", "~/.futuregrid/cloudmesh.yaml", password="Hallo")
 
     banner("credentialstore")
     pprint (store)
 
-    banner("gvonlasz - hp")
+    # banner("gvonlasz - hp")
     # -------------------------------------------------------------------------
-    cred = store.credential("gvonlasz", "hp", password="Hallo")
+    # cred = store.credential("gvonlasz", "hp", password="Hallo")
 
-    pprint (cred)
+    # pprint (cred)
 
 
     #
@@ -207,16 +258,30 @@ if __name__ == "__main__":
     collection = 'store'
     username = 'gvonlasz'
 
-    users = UserMongoStore()
+    users = UserMongoStore(password="Hallo")
 
-    users.add(username, store[username])
 
-    u = users.get(username)
+    banner("STORE")
+    pprint(store[username])
 
-    pprint (u)
+
+    users.set(username, store[username])
+
+    user = users.get(username)
+
+    pprint (user)
 
     banner("MONGO HP")
 
-    hp = users.credential(username, "hp")
+    cloudname = "hp"
+
+    banner("mongo get user hp")
+    pprint(users.get(username)['clouds'][cloudname])
+
+    banner("mongo hp")
+    hp = users.credential(username, cloudname, password="Hallo")
 
     pprint (hp)
+
+    pprint (users.projects(username))
+    pprint (users.default(username, cloudname))
