@@ -9,7 +9,7 @@ from ast import literal_eval
 from types import *
 from cloudmesh.pbs.pbs import PBS
 
-class PbsNoteBuilder:
+class pbs_note_builder:
 
     userName = None
     hostName = None
@@ -29,7 +29,7 @@ class PbsNoteBuilder:
     # note is a dict, {"attr1": "value1", "attr2": "value2"}
     # setNote doesn't check the correctness of the attribute-value pair
 
-    def setNote(self, node, note):
+    def set_note(self, node, note):
         if node not in self.pbs_nodes_info.keys():
             print "[Warning] PbsNoteBuilder: ", node, " is NOT a valid/existed node according to PBS.pbsnodes"
             return
@@ -70,24 +70,24 @@ class PbsNoteBuilder:
     
     
     # set server's temperature
-    # a shortcut of setNote
-    def setTemperatureNote(self, node, temp):
-        self.setNote(node, {"temperature": temp})
+    # a shortcut of set_note
+    def set_temperature_note(self, node, temp):
+        self.set_note(node, {"temperature": temp})
         
     
     # set server's service type
-    # a shortcut of setNote
-    def setServiceNote(self, node, service):
-        self.setNote(node, {"service": service})
+    # a shortcut of set_note
+    def set_service_note(self, node, service):
+        self.set_note(node, {"service": service})
         
         
 # test only
 if __name__ == "__main__":
-    pbsnote = PbsNoteBuilder("hengchen", "india")
+    pbsnote = pbs_note_builder("hengchen", "india")
     # test temperature
-    pbsnote.setTemperatureNote("i129", 99.2)
+    pbsnote.set_temperature_note("i129", 99.2)
     # test service type
-    pbsnote.setServiceNote("i129", "down")
+    pbsnote.set_service_note("i129", "down")
     # test setNote
     note = {"service": "down, offline", "temperature": "-100.12", "test": "debug", 0:12}
-    pbsnote.setNote("i129", note)
+    pbsnote.set_note("i129", note)
