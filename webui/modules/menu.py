@@ -21,6 +21,7 @@ super_duper_sidebar_pages = [
             ["VMs", "/mesh/servers", None],
             ["Images", "/mesh/images", None],
             ["Flavors", "/mesh/flavors/", None],
+            ["Register", "/mesh/register/clouds", None],
         ],
     ],
     ["HPC Queues", "/mesh/refresh/qstat", "365_restart", ['all'],
@@ -36,7 +37,6 @@ super_duper_sidebar_pages = [
             ["Admin", "/admin", None],
             ["Users - LDAP", "/users/ldap", None],
             ["Users - Cloud", "/mesh/users/", None],
-            ["Register - Cloud", "/mesh/register/clouds", None],
         ]
     ],
     ["Admin - Inventory", None, None, ['admin'],

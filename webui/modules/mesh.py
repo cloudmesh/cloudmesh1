@@ -26,7 +26,6 @@ mesh_module = Blueprint('mesh_module', __name__)
 
 @mesh_module.route('/mesh/register/clouds', methods=['GET', 'POST'])
 @login_required
-@admin_permission.require(http_exception=403)
 def mesh_register_clouds():
 
 
