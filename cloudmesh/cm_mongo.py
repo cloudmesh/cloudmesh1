@@ -12,6 +12,8 @@ import pymongo
 import sys
 import traceback
 import yaml
+from cloudmesh.util.encryptdata import decrypt
+import traceback
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -108,7 +110,17 @@ class cm_mongo:
     def __init__(self, collection="cloudmesh"):
         """initializes the cloudmesh mongo db. The name of the collection os passed."""
 
+        defaults_collection = 'defaults'
+        passwd_collection = 'password'
+        self.userdb_passwd = get_mongo_db(passwd_collection)
+        self.db_defaults = get_mongo_db(defaults_collection)
+
+
         self.db_clouds = get_mongo_db(collection)
+
+
+
+
 
         self.config = cm_config()
 
@@ -130,23 +142,96 @@ class cm_mongo:
             provider = ec2
         return provider
 
-    def get_cloud(self, cloud_name, force=False):
+
+    #
+    #  BUG NO USER IS INVOLVED
+    #
+
+
+    def get_credential(self, cm_user_id, cloud):
+        try:
+            password = cm_config_server().get("cloudmesh.server.mongo.collections.password.key")
+            safe_credential = (self.userdb_passwd.find_one({"cm_user_id": cm_user_id, "cloud":cloud}))["credential"]
+
+
+            print "SK", safe_credential
+
+            for cred in safe_credential:
+                t = safe_credential[cred]
+                n = decrypt(t, password)
+                safe_credential[cred] = n
+
+            return safe_credential
+        except:
+            print traceback.format_exc()
+            return None
+
+
+    def get_cloud_info(self, cm_user_id, cloudname):
+        cloud_config = self.config.cloud(cloudname)
+        if cloud_config['cm_type'] in ['openstack']:
+            del cloud_config['credentials']['OS_PASSWORD']
+            del cloud_config['credentials']['OS_TENANT_NAME']
+        elif cloud_config['cm_type'] in ['ec2']:
+             del cloud_config['credentials']['EC2_ACCESS_KEY']
+             del cloud_config['credentials']['EC2_SECRET_KEY']
+        elif cloud_config['cm_type'] in ['aws']:
+            del cloud_config['credentials']['secret_access_key']
+        elif cloud_config['cm_type'] in ['azure']:
+            del cloud_config['credentials']['subscriptionid']
+
+        credential = self.get_credential(cm_user_id, cloudname)
+
+        print "C", credential
+
+        for key in credential:
+            if key not in  cloud_config['credentials']:
+                cloud_config['credentials'][key] = credential[key]
+
+        if (cloud_config['cm_type'] in ['openstack']) and (cloud_config['cm_label'] in ['sos']):
+            cloud_config['credentials']['OS_TENANT_NAME'] = self.active_project(cm_user_id)
+
+        return cloud_config
+
+
+    def get_cloud(self, cm_user_id, cloud_name, force=False):
         cloud = None
-        if not force and cloud_name in self.clouds:
-            if 'manager' in self.clouds[cloud_name]:
-                if self.clouds[cloud_name]['manager']:
-                    cloud = self.clouds[cloud_name]['manager']
+        if (not force) and \
+            (cm_user_id in self.clouds) and \
+            (cloud_name in self.clouds[cm_user_id]) and \
+            ('manager' in self.clouds[cm_user_id][cloud_name]) and \
+            (self.clouds[cm_user_id][cloud_name]['manager']):
+                cloud = self.clouds[cm_user_id][cloud_name]['manager']
         else:
             try:
-                credential = self.config.cloud(cloud_name)
-                cm_type = credential['cm_type']
-                cm_type_version = credential['cm_type_version']
+
+                if cm_user_id not in self.clouds:
+                    self.clouds[cm_user_id] = {}
+
+
+                cloud_info = self.get_cloud_info(cm_user_id, cloud_name)
+
+                # credential = self.config.cloud(cloud_name)
+                cm_type = cloud_info['cm_type']
+                cm_type_version = cloud_info['cm_type_version']
+
+                credentials = cloud_info['credentials']
+
                 if cm_type in ['openstack', 'eucalyptus', 'azure', 'ec2', 'aws']:
-                    self.clouds[cloud_name] = {'name': cloud_name,
+
+
+
+                    self.clouds[cm_user_id][cloud_name] = {'name': cloud_name,
                                                'cm_type': cm_type,
                                                'cm_type_version': cm_type_version}
                     provider = self.cloud_provider(cm_type)
-                    cloud = provider(cloud_name)
+                    cloud = provider(cloud_name, credentials)
+
+                    #
+                    # BUG NO USER
+                    #
+                    #
+
                     log.debug("Created new cloud instance with name: %s, type:\
                               %s" % (cloud_name, cm_type))
                     if cm_type in ['openstack']:
@@ -154,12 +239,22 @@ class cm_mongo:
                         if 'access' not in tryauth:
                             cloud = None
                             log.error("Credential not working, cloud is not activated")
-                    self.clouds[cloud_name].update({'manager': cloud})
+                    self.clouds[cm_user_id][cloud_name].update({'manager': cloud})
             except Exception, e:
-                log.error("Cannot activate cloud <%s>\n%s" % (cloud_name, e))
+                log.error("Cannot activate cloud {0} for {1}\n{2}".format(cloud_name, cm_user_id, e))
+                print traceback.format_exc()
         return cloud
 
-    def activate(self, names=None, cm_user_id=None):
+    def active_clouds(self, cm_user_id):
+        user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
+        return user['activeclouds']
+
+    def active_project(self, cm_user_id):
+        user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
+        return user['project']
+
+
+    def activate(self, cm_user_id, names=None):
         #
         # bug must come form mongo
         #
@@ -169,25 +264,19 @@ class cm_mongo:
             if names is None:
                 names = self.config.active()
         else:
-
-             defaults_collection = 'defaults'
-             db_defaults = get_mongo_db(defaults_collection)
-             user = db_defaults.find_one({'cm_user_id': cm_user_id})
-
-             names = user['activeclouds']
-
+             names = self.active_clouds(cm_user_id)
 
         for cloud_name in names:
             log.info("Activating -> {0}".format(cloud_name))
-            cloud = self.get_cloud(cloud_name)
+            cloud = self.get_cloud(cm_user_id, cloud_name)
             if not cloud:
-                log.info("Activation of cloud <%s> Failed!" % cloud_name)
+                log.info("Activation of cloud {0} and user {1} Failed!".format(cloud_name, cm_user_id))
             else:
-                log.info("Activation of cloud <%s> Succeeded!" % cloud_name)
+                log.info("Activation of cloud {0} and user {1} Succeeded!".format(cloud_name, cm_user_id))
 
 
 
-    def refresh(self, names=["all"], types=["all"]):
+    def refresh(self, cm_user_id, names=["all"], types=["all"]):
         """
         This method obtains information about servers, images, and
         flavors that build the cloudmesh. The information is held
@@ -219,11 +308,15 @@ class cm_mongo:
             types = ['servers', 'flavors', 'images']
 
         if names == ['all'] or names is None:
-            names = self.clouds.keys()
+            # names = self.clouds.keys()
+            names = self.active_clouds(cm_user_id)
 
         watch = StopWatch()
 
+
+
         for name in names:
+            watch_name = "{0}-{1}".format(cm_user_id, name)
             print "-"*80
             print "retrieving for %s" % name
             print "-"*80
@@ -233,32 +326,40 @@ class cm_mongo:
                 if type in ['users', 'tenants', 'roles']:
                     cloud = keystone(name)
                 # else try compute/nova class
-                elif 'manager' in self.clouds[name]:
-                    cloud = self.clouds[name]['manager']
+                elif 'manager' in self.clouds[cm_user_id][name]:
+                    cloud = self.clouds[cm_user_id][name]['manager']
 
-                print "Refreshing {0} {1} ->".format(type, name)
+                print "Refreshing {0} {1} {2} ->".format(cm_user_id, type, name)
 
-                watch.start(name)
+
+
+                watch.start(watch_name)
                 cloud.refresh(type)
                 result = cloud.get(type)
                 # print "YYYYY", len(result)
                 # pprint(result)
                 # add result to db,
-                watch.stop(name)
-                print 'Refresh time:', watch.get(name)
+                watch.stop(watch_name)
+                print 'Refresh time:', watch.get(watch_name)
 
-                watch.start(name)
+                watch.start(watch_name)
 
-                self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
+                if type in ['servers']:
+                    self.db_clouds.remove({"cm_user_id": cm_user_id, "cm_cloud": name, "cm_kind": type})
+                else:
+                    self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
 
                 for element in result:
                     id = "{0}-{1}-{2}".format(
                         name, type, result[element]['name']).replace(".", "-")
                     # print "ID", id
+                    if type in ['servers']:
+                        result[element]['cm_user_id'] = cm_user_id
+
                     result[element]['cm_id'] = id
                     result[element]['cm_cloud'] = name
-                    result[element]['cm_type'] = self.clouds[name]['cm_type']
-                    result[element]['cm_type_version'] = self.clouds[name]['cm_type_version']
+                    result[element]['cm_type'] = self.clouds[cm_user_id][name]['cm_type']
+                    result[element]['cm_type_version'] = self.clouds[cm_user_id][name]['cm_type_version']
                     result[element]['cm_kind'] = type
                     # print "HPCLOUD_DEBUG", result[element]
                     for key in result[element]:
@@ -281,8 +382,8 @@ class cm_mongo:
 
                     self.db_clouds.insert(result[element])
 
-                watch.stop(name)
-                print 'Store time:', watch.get(name)
+                watch.stop(watch_name)
+                print 'Store time:', watch.get(watch_name)
 
     def get_pbsnodes(self, host):
         '''
@@ -299,18 +400,21 @@ class cm_mongo:
         '''
         return self.db_clouds.find(query)
 
-    def _get_kind(self, kind, names=None):
+    def _get_kind(self, kind, names=None, cm_user_id=None):
         '''
         returns all the data from clouds of a specific type.
         :param kind:
         '''
         data = {}
         if names is None:
-            names = self.clouds.keys()
+            names = self.active_clouds(cm_user_id)
 
         for name in names:
             data[name] = {}
-            result = self.find({'cm_kind': kind, 'cm_cloud': name})
+            if kind in ['flavors', 'images', 'users', 'tenants']:
+                result = self.find({'cm_kind': kind, 'cm_cloud': name})
+            else:
+                result = self.find({'cm_user_id': cm_user_id, 'cm_kind': kind, 'cm_cloud': name})
             for entry in result:
                 data[name][entry['id']] = entry
         return data
@@ -327,17 +431,20 @@ class cm_mongo:
         '''
         return self._get_kind('tenants', clouds)
 
-    def servers(self, clouds=None):
+    #
+    # BUG
+    #
+    def servers(self, clouds=None, cm_user_id=None):
         '''
         returns all the servers from all clouds
         '''
-        return self._get_kind('servers', clouds)
+        return self._get_kind('servers', clouds, cm_user_id)
 
-    def flavors(self, clouds=None):
+    def flavors(self, clouds=None, cm_user_id=None):
         '''
         returns all the flavors from the various clouds
         '''
-        return self._get_kind('flavors', clouds)
+        return self._get_kind('flavors', clouds, cm_user_id)
 
     # need to make sure other clouds have the same flavor dict as in openstack
     # otherwide will need to put this into the openstack iaas class
@@ -350,20 +457,20 @@ class cm_mongo:
                 break
         return ret
 
-    def images(self, clouds=None):
+    def images(self, clouds=None, cm_user_id=None):
         '''
         returns all the images from various clouds
         '''
-        return self._get_kind('images', clouds)
+        return self._get_kind('images', clouds, cm_user_id)
 
-    def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta):
-        cloudmanager = self.clouds[cloud]["manager"]
+    def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id):
+        cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         name = "%s_%s" % (prefix, index)
         return cloudmanager.vm_create(name=name, flavor_name=vm_flavor, image_id=vm_image, key_name=key, meta=meta)
 
-    def assign_public_ip(self, cloud, server):
-        cloudmanager = self.clouds[cloud]["manager"]
-        type = self.clouds[cloud]["cm_type"]
+    def assign_public_ip(self, cloud, server, cm_user_id):
+        cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
+        type = self.clouds[cm_user_id][cloud]["cm_type"]
         if type == 'openstack':
             ip = cloudmanager.get_public_ip()
             ret = cloudmanager.assign_public_ip(server, ip)
@@ -371,21 +478,22 @@ class cm_mongo:
             ret = None
         return ret
 
-    def release_unused_public_ips(self, cloud):
-        cloudmanager = self.clouds[cloud]["manager"]
-        type = self.clouds[cloud]["cm_type"]
+    def release_unused_public_ips(self, cloud, cm_user_id):
+        cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
+        type = self.clouds[cm_user_id][cloud]["cm_type"]
         if type == 'openstack':
             ret = cloudmanager.release_unused_public_ips()
         else:
             ret = None
         return ret
 
-    def vm_delete(self, cloud, server):
-        cloudmanager = self.clouds[cloud]["manager"]
+    def vm_delete(self, cloud, server, cm_user_id):
+        cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         return cloudmanager.vm_delete(server)
 
-
+'''
 def main():
+    user = ???
     c = cm_mongo()
     c.activate()
     # c.refresh(types=['flavors'])
@@ -400,3 +508,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+'''

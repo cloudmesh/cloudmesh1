@@ -10,7 +10,7 @@ from cloudmesh.util.util import yn_choice
 from cloudmesh.inventory import Inventory
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.config.ConfigDict import ConfigDict
-
+from cloudmesh.user.cm_user import cm_user
 from sh import ls
 
 import yaml
@@ -300,21 +300,27 @@ def stop():
 
 @task
 def vms_find():
+    user = cm_config().get("cloudmesh.hpc.username")
     c = cm_mongo()
-    c.activate()
+    c.activate(user)
     pprint (c.servers())
 
 
 def refresh(types):
+
+    user = cm_config().get("cloudmesh.hpc.username")
+
     c = cm_mongo()
-    c.activate()
-    c.refresh(types=types)
+    c.activate(user)
+    c.refresh(user, types=types)
+
 
 @task
 def cloud():
     '''
     puts a snapshot of users, servers, images, and flavors into mongo
     '''
+    user = cm_config().get("cloudmesh.hpc.username")
     refresh(types=['users', 'servers', 'images', 'flavors'])
     ldap()
     inventory()
@@ -324,6 +330,7 @@ def simple():
     '''
     puts a snapshot of servers, images, and flavors into mongo (no users)
     '''
+    user = cm_config().get("cloudmesh.hpc.username")
     refresh(types=['servers', 'images', 'flavors'])
     inventory()
 
@@ -332,6 +339,7 @@ def users():
     '''
     puts a snapshot of the users into mongo
     '''
+    user = cm_config().get("cloudmesh.hpc.username")
     refresh(types=['users'])
 
 
