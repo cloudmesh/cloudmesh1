@@ -91,7 +91,7 @@ class UserDictStore(dict):
             log.error(error)
         return (error != '')
 
-    def add_cloud_from_dict(self, d, password=password):
+    def add_cloud_from_dict(self, username, d, password=password):
         #
         # check
         #
