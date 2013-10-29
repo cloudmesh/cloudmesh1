@@ -4,7 +4,7 @@ import sys
 
 
 def get_fingerprint(entirekey):
-        t, keystring, comment = entirekey.split()
+        t, keystring, comment = entirekey.split(" ", 2)
         return key_fingerprint(keystring)
 
 def key_fingerprint(key_string):
