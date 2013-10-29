@@ -74,6 +74,7 @@ app_externalbar = [
     ["FutureGrid", "https://portal.futuregrid.org"],
     ["-- Manual", "http://manual.futuregrid.org"],
     ["-- Bugs", "/bugs"],
+    ["-- Git", "/git"],
     ["Cloudmesh", "https://github.com/cloudmesh/cloudmesh"],
     ["Blog", "http://cloudmesh.blogspot.com"],
 ]
