@@ -19,17 +19,30 @@
 {% block content %}
 
 {% if flag_home %}
-	<form action="/inventory/rack/map" method="post">
-		<p>
-			{{ form.select_rack.label }}
-			{{ form.select_rack }}
-		<p>
-		<p>
-			{{ form.select_service.label }}
-			{{ form.select_service }}
-		</p>
-			<input type="reset" value="Reset">
-			<input type="submit" value="Show Map">
+    <script>
+        function OnButtonClicked(rack_id, service) {
+            $(":button").prop("disabled", true);
+            $("#select_rack").val( $(rack_id).val() );
+            $("#select_service").val (service);
+            document.frm.submit();
+        }
+    </script>
+	<form name="frm" action="/inventory/rack/map" method="post">
+	    <table>
+	        <tr>
+	            {% for service in form.all_services_list %}
+	               <td>
+	                   <p> {{ form.selector_dict[service]["label"] }}</p>
+	                   <p> {{ form.selector_dict[service]["select"] }} </p>
+	                   {% set myselect = form.all_services_dict[service]["select"] %}
+	                   <p> <input type="button" value="Show {{form.selector_dict[service]['label']}}"
+	                       onclick="OnButtonClicked('#{{myselect}}', '{{service}}')"> </p>
+	               </td>
+	            {% endfor %}
+	        </tr>
+	    </table>
+        <input name="select_rack" id="select_rack" type="hidden" value="">
+        <input name="select_service" id="select_service" type="hidden" value="">
 	</form>
 {% else %}
 	{% if True %}
@@ -57,7 +70,7 @@
     <div onclick="OnClickMe()" style="display:none">Click Me</div>
     <div id="mousepos" style="display:none"></div>
 
-	Zoom Ratio: <span id="zoomratio">100</span> % &nbsp; Image offset (<span id="mapoffsetleft">0</span>, <span id="mapoffsettop">0</span>) &nbsp;&nbsp;[ Double click on the image to display the real size. ]<br>
+	Zoom Ratio: <span id="zoomratio">100</span> % &nbsp; Image offset (<span id="mapoffsetleft">0</span>, <span id="mapoffsettop">0</span>) &nbsp;&nbsp;[ Double click on the image to display the real size. Try to drag and move the map.]<br>
 	<div id="slider"></div>
 
     <script>

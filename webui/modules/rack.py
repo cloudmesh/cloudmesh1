@@ -2,7 +2,7 @@ from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.rack.cluster_map_heat import HeatClusterMap
 from cloudmesh.rack.cluster_map_service import ServiceClusterMap
 from cloudmesh.rack.fetch_cluster_info import FetchClusterInfo
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask.ext.login import login_required  # @UnresolvedImport
 from flask.ext.wtf import Form  # @UnresolvedImport
 from pprint import pprint
@@ -27,24 +27,54 @@ admin_permission = Permission(RoleNeed('admin'))
 #
 
 class RackForm(Form):
-    select_rack = SelectField()
-    select_service = SelectField()
+    # MUST create an unique selector for each different service
+    service_rack        = SelectField()
+    temperature_rack    = SelectField()
 
-    rack_list = [ ('all', 'All Clusters'),
-                  ('india', 'India Cluster'),
-                  ('echo', 'Echo Cluster'),
-                  ('delta', 'Delta Cluster'),
-                  ('bravo', 'Bravo Cluster'),
-                 ]
-
-    service_list = [
-        ('service', 'Service Map'),
-        ('temperature', 'Heat Map'),
-    ]
-
+    all_racks_dict = {
+                       "all":   ('all', 'All Clusters'),
+                       "india": ('india', 'India Cluster'),
+                       "echo":  ('echo', 'Echo Cluster'),
+                       "delta": ('delta', 'Delta Cluster'),
+                       "bravo": ('bravo', 'Bravo Cluster'),
+                     }
+    # all possible service provided
+    all_services_list = ["service", "temperature",]
+    
+    # content of each service, including label, and range of clusters
+    # 'clusters' means the specific service can be used on some different clusters
+    # 'select' means one attribute name of SelectField, typical name is "{service name}_rack"
+    all_services_dict = {
+                          "service":     {
+                                            "label": "Service Map",
+                                            "clusters": ["all", "india", "echo", "delta", "bravo",],
+                                            "select":   "service_rack",
+                                          },
+                          "temperature": {
+                                            "label": 'Heat Map',
+                                            "clusters": ["echo",],
+                                            "select":   "temperature_rack",
+                                          },
+                        }
+    
+    # a dict that holds all selector
+    selector_dict = {}
+    
+    
     def initForm(self):
-        self.select_rack.choices = self.rack_list
-        self.select_service.choices = self.service_list
+        for service in self.all_services_list:
+            service_dict = {}
+            service_dict["name"] = service
+            service_dict["label"] = self.all_services_dict[service]["label"]
+            service_dict["select"] = getattr(self, self.all_services_dict[service]["select"])
+            rack_list = []
+            for rack in self.all_services_dict[service]["clusters"]:
+                rack_list.append(self.all_racks_dict[rack])
+            
+            #print "rack list: ", rack_list
+            service_dict["select"].choices = rack_list
+            self.selector_dict[service] = service_dict
+            
 
     def validate_on_submit(self):
         return True
@@ -84,6 +114,13 @@ def display_rack_map():
     
     rack = request.form['select_rack']
     service = request.form['select_service']
+    
+    # double check to make sure cluster can provide the specific service
+    rack_form = RackForm()
+    if rack not in rack_form.all_services_dict[service]["clusters"]:
+        log.error("Someone try to hack the service provided by Rack Diagram. Just ignore it.")
+        return redirect("/inventory/rack")
+    
     # get location of configuration file, input diag, output image
     dir_base = "~/.futuregrid"
     server_config = cm_config_server()

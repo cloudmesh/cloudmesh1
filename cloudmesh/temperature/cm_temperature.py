@@ -60,7 +60,7 @@ class cm_temperature:
         proxyusername = config['proxy']['user']
     
         log.debug( "=" * 40 )
-        log.debug( "proxy [{0} @ {1}]".format(proxyusername, proxyaddr))
+        log.debug( "proxy [{0} @ {1}] for host [{2}]".format(proxyusername, proxyaddr, hostname))
         log.debug( "command [{0}]".format(command))
         log.debug( "." * 40 )
         result = ssh("{0}@{1}".format(proxyusername, proxyaddr), command)
@@ -102,7 +102,7 @@ class cm_temperature:
     # return: a dictary
     def parse_max_temp(self, tdict, unit):
         unit_upper = unit.upper()
-        max_temp = 0
+        max_temp = -1
         options = {"C": "convert_temp_C2F", 
                    "F": "convert_temp_F2C",
                   }
