@@ -517,9 +517,9 @@ class openstack(ComputeBaseType):
         if type is None:
             type = "compute"
         compute_service = self._get_service(type)
-        pprint(compute_service)
+        # pprint(compute_service)
         credential = self.user_credential
-        print credential
+        # print credential
 
         conf = {}
 

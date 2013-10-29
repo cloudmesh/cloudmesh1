@@ -154,7 +154,7 @@ class cm_mongo:
             safe_credential = (self.userdb_passwd.find_one({"cm_user_id": cm_user_id, "cloud":cloud}))["credential"]
 
 
-            print "SK", safe_credential
+            # print "SK", safe_credential
 
             for cred in safe_credential:
                 t = safe_credential[cred]
@@ -183,7 +183,7 @@ class cm_mongo:
 
         credential = self.get_credential(cm_user_id, cloudname)
 
-        print "C", credential
+        # print "C", credential
 
         for key in credential:
             if key not in  cloud_config['credentials']:

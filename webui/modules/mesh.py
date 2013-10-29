@@ -340,10 +340,10 @@ def mongo_images():
         user['defaults']['images'] = {}
 
     if request.method == 'POST':
-        print "REQUEST"
+        # print "REQUEST"
         cloud = request.form['cloud']
         default_image = request.form['default_image']
-        print cloud, "----------------------------->", default_image
+        # print cloud, "----------------------------->", default_image
         user['defaults']['images'][cloud] = default_image
         # if 'default_flavor' in request.form:
          #   user['defaults']['flavor'] = request.form['default_flavor']
@@ -381,8 +381,8 @@ def mongo_flavors():
     clouds = c.flavors(cm_user_id=username)
 
 
-    print "YYYYY"
-    pprint(clouds)
+    # print "YYYYY"
+    # pprint(clouds)
     """
     2
     disk 20
@@ -421,10 +421,10 @@ def mongo_flavors():
 
 
     if request.method == 'POST':
-        print "REQUEST"
+        # print "REQUEST"
         cloud = request.form['cloud']
         default_flavor = request.form['default_flavor']
-        print request.form['cloud'], "----------------------------->", request.form['default_flavor']
+        # print request.form['cloud'], "----------------------------->", request.form['default_flavor']
         user['defaults']['flavors'][cloud] = default_flavor
         # if 'default_flavor' in request.form:
          #   user['defaults']['flavor'] = request.form['default_flavor']
@@ -465,8 +465,8 @@ def mongo_users():
 
     clouds = {}
     clouds = c.users()
-    print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
-    print len(clouds['sierra_openstack_grizzly'])
+    # print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
+    # print len(clouds['sierra_openstack_grizzly'])
 
 
     """

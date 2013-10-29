@@ -38,9 +38,9 @@ def profile():
 
     if request.method == 'POST':
 
-        print "REQUEST"
-        pprint(request.__dict__)
-        print "OOOOOO", request.form
+        # print "REQUEST"
+        # pprint(request.__dict__)
+        # print "OOOOOO", request.form
 
         if 'field-project' in request.form:
             user['defaults']['project'] = request.form['field-project']
@@ -89,7 +89,7 @@ def profile():
 
 
         user = user_obj.info(username)
-        print "UD", user["defaults"]["activeclouds"]
+        #print "UD", user["defaults"]["activeclouds"]
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
