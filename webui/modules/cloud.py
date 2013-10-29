@@ -14,6 +14,7 @@ import webbrowser
 from cloudmesh.util.util import address_string
 from cloudmesh.util.logger import LOGGER
 from pprint import pprint
+from compiler.ast import Return
 
 log = LOGGER(__file__)
 
@@ -74,10 +75,15 @@ def refresh(cloud=None, server=None, service_type=None):
         cloud_names = [cloud]
 
     if service_type is None:
-        clouds.refresh(cm_user_id=cm_user_id,
-                       names=cloud_names,
-                       types=['servers', 'images', 'flavors'])
-        return redirect('/mesh/{0}'.format(cloud))
+        # if both cloud and service_type are none, it's coming from the
+        # refresh button from home page. So return to home
+        if cloud is None:
+            return redirect('/')
+        else:
+            clouds.refresh(cm_user_id=cm_user_id,
+                           names=cloud_names,
+                           types=['servers', 'images', 'flavors'])
+            return redirect('/mesh/{0}'.format(cloud))
     else:
         clouds.refresh(cm_user_id=cm_user_id,
                        names=cloud_names,
