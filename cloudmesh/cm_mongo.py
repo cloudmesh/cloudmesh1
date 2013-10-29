@@ -170,6 +170,7 @@ class cm_mongo:
     def get_cloud_info(self, cm_user_id, cloudname):
         cloud_config = self.config.cloud(cloudname)
         if cloud_config['cm_type'] in ['openstack']:
+            del cloud_config['credentials']['OS_USERNAME']
             del cloud_config['credentials']['OS_PASSWORD']
             del cloud_config['credentials']['OS_TENANT_NAME']
         elif cloud_config['cm_type'] in ['ec2']:
