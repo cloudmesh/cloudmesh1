@@ -102,10 +102,10 @@ function toggle(source,select_list) {
     {% else %}
 	    <a href="/mesh/images"> Image: <span class="badge"> undefined </span></a>
     {% endif %}
-    {% if flavor_id in flavors[cloud] %}
-	    <a href="/mesh/flavors">Flavor: <span class="badge">{{flavors[cloud][flavor_id]['name']}} </span></a>
+    {% if flavor_id  in flavors[cloud] %}
+    	 <a href="/mesh/flavors">Flavor: <span class="badge">{{flavors[cloud][flavor_id]['name']}} </span></a>
     {% else %}
-	    <a href="/mesh/images"> Image: <span class="badge"> undefined </span></a>
+	    <a href="/mesh/flavors"> Flavor: <span class="badge"> undefined </span></a>
 	{% endif %}
     <a href="/profile"> last vm name: <span class="badge">{{user.defaults.prefix}}_{{user.defaults.index}} </span></a>
 	</p>

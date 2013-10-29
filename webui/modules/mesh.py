@@ -26,7 +26,6 @@ mesh_module = Blueprint('mesh_module', __name__)
 
 @mesh_module.route('/mesh/register/clouds', methods=['GET', 'POST'])
 @login_required
-@admin_permission.require(http_exception=403)
 def mesh_register_clouds():
 
 
@@ -230,7 +229,7 @@ def mongo_images():
     c = cm_mongo()
     c.activate(cm_user_id=username)
     # c.refresh(types=["images"])
-    clouds = c.images()
+    clouds = c.images(cm_user_id=username)
 
 
 
@@ -379,10 +378,11 @@ def mongo_flavors():
     c = cm_mongo()
     c.activate(cm_user_id=username)
     # c.refresh(types=["flavors"])
-    clouds = c.flavors()
+    clouds = c.flavors(cm_user_id=username)
 
-    #print "YYYYY"
-    #pprint(clouds)
+
+    print "YYYYY"
+    pprint(clouds)
     """
     2
     disk 20
@@ -517,12 +517,14 @@ def mongo_table(filters=None):
     c = cm_mongo()
     c.activate(cm_user_id=username)
     # c.refresh(types=["servers"])
-    clouds = c.servers()
-    images = c.images()
-    flavors = c.flavors()
+    clouds = c.servers(cm_user_id=username)
+    images = c.images(cm_user_id=username)
+    flavors = c.flavors(cm_user_id=username)
 
 
-
+    #
+    # TODDO HACK for hp cloud to work as it has integer
+    #
 
     """
     for cloud in clouds:
@@ -583,9 +585,9 @@ def mongo_server_table_filter(filters=None):
     config = cm_config()
 
     c = cm_mongo()
-    c.activate()
-    # c.refresh(types=["servers"])
-    clouds = c.servers()
+    c.activate(cm_user_id=username)
+    # c.refresh(types=["servers"], cm_user_id=username)
+    clouds = c.servers(cm_user_id=username)
 
     """
     for cloud in clouds:

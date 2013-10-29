@@ -1,13 +1,13 @@
-import envoy
-from flask import Blueprint
-from flask import render_template
-from sh import git
 from cloudmesh.util.gitinfo import GitInfo
-from pprint import pprint
-from flask.ext.login import login_required
-
-
 from cloudmesh.util.logger import LOGGER
+from flask import Blueprint, render_template
+from flask.ext.login import login_required
+from pprint import pprint, pprint
+from sh import git
+import envoy
+import requests
+
+
 
 log = LOGGER(__file__)
 
@@ -67,3 +67,18 @@ def display_git_authors():
 
     return render_template('general/git.html',
                            authors=authors)
+
+
+@git_module.route('/bugs')
+@login_required
+def display_git_bugs():
+    issues_open = requests.get('https://api.github.com/repos/cloudmesh/cloudmesh/issues?state=closed').json()
+    issues_closed = requests.get('https://api.github.com/repos/cloudmesh/cloudmesh/issues?state=open').json()
+
+    issues = issues_closed + issues_open
+
+    return render_template('general/bugs.html',
+                           issues=issues)
+
+
+

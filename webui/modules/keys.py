@@ -72,6 +72,9 @@ def managekeys():
 @keys_module.route('/keys/delete/<name>/')
 @login_required
 def deletekey(name):
+    #
+    #  BUG cm_keys reads from config file
+    #
     keys = cm_keys()
 
     try:

@@ -4,6 +4,7 @@
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
 #
 
+from cloudmesh.util.util import banner
 import requests
 from requests.auth import AuthBase
 
@@ -101,7 +102,10 @@ class openstack(ComputeBaseType):
     # initialize
     #
     # possibly make connext seperate
-    def __init__(self, label, credential=None, admin_credential=None):
+    def __init__(self,
+                 label,
+                 credential=None,
+                 admin_credential=None):
         """
         initializes the openstack cloud from a file
         located at ~/.futuregrid.org/cloudmesh.yaml.
@@ -513,10 +517,21 @@ class openstack(ComputeBaseType):
         if type is None:
             type = "compute"
         compute_service = self._get_service(type)
-        # pprint(compute_service)
+        pprint(compute_service)
+        credential = self.user_credential
+        print credential
+
         conf = {}
 
+        credential = self.user_credential
+
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
+        if 'OS_REGION' in credential:
+            for endpoint in compute_service['endpoints']:
+                if endpoint['region'] == credential['OS_REGION']:
+                    conf['publicURL'] = endpoint['publicURL']
+                    break;
+
         conf['adminURL'] = None
         if 'adminURL' in compute_service['endpoints'][0]:
             conf['adminURL'] = str(compute_service['endpoints'][0]['adminURL'])
@@ -530,15 +545,14 @@ class openstack(ComputeBaseType):
     # new
     def _list_to_dict(self, list, id, type, time_stamp):
         d = {}
-        cm_type_version = self.compute_config.get('cloudmesh.clouds.{0}.cm_type_version'.format(self.label))
-
-        log.debug ("CM TYPE VERSION {0}".format(cm_type_version))
+        # cm_type_version = self.compute_config.get('cloudmesh.clouds.{0}.cm_type_version'.format(self.label))
+        # log.debug ("CM TYPE VERSION {0}".format(cm_type_version))
 
         for element in list:
             element['cm_type'] = type
             element['cm_cloud'] = self.label
             element['cm_cloud_type'] = self.type
-            element['cm_cloud_version'] = cm_type_version
+            # element['cm_cloud_version'] = cm_type_version
             element['cm_refresh'] = time_stamp
             d[str(element[id])] = dict(element)
         return d
@@ -568,6 +582,13 @@ class openstack(ComputeBaseType):
         msg = "servers/detail"
         list = self._get(msg)['servers']
         self.servers = self._list_to_dict(list, 'id', "server", time_stamp)
+
+        #
+        # hack for the hp cloud west
+        #
+        for server in self.servers:
+            self.servers[server]['id'] = str(self.servers[server]['id'])
+
         return self.servers
 
     # new
@@ -576,6 +597,13 @@ class openstack(ComputeBaseType):
         msg = "flavors/detail"
         list = self._get(msg)['flavors']
         self.flavors = self._list_to_dict(list, 'name', "flavor", time_stamp)
+
+        #
+        # hack for the hp cloud west
+        #
+        for flavor in self.flavors:
+            self.flavors[flavor]['id'] = str(self.flavors[flavor]['id'])
+
         return self.flavors
 
     def flavorid(self, name):

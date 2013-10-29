@@ -1,46 +1,7 @@
 from cloudmesh.config.cm_config import cm_config
 from string import Template
-import base64
-import hashlib
+from cloudmesh.util.keys import get_fingerprint, key_fingerprint, key_validate
 import os
-import sys
-
-
-def get_fingerprint(entirekey):
-        t, keystring, comment = entirekey.split()
-        return key_fingerprint(keystring)
-
-def key_fingerprint(key_string):
-    key = base64.decodestring(key_string)
-    fp_plain = hashlib.md5(key).hexdigest()
-    return ':'.join(a + b for a, b in zip(fp_plain[::2], fp_plain[1::2]))
-
-
-def key_validate(keytype, filename):
-    keystring = "undefined"
-    if keytype.lower() == "file":
-        try:
-            keystring = open(filename, "r").read()
-        except:
-            return False
-    else:
-        # TODO: BUG: what is file?
-        keystring = file
-
-    try:
-
-        keytype, key_string, comment = keystring.split()
-        data = base64.decodestring(key_string)
-        int_len = 4
-        str_len = struct.unpack('>I', data[:int_len])[
-            0]  # this should return 7
-
-        if data[int_len:int_len + str_len] == keytype:
-            return True
-    except Exception, e:
-        print e
-        return False
-
 
 class cm_keys:
 
@@ -153,7 +114,8 @@ class cm_keys:
 
     def fingerprint(self, name):
         value = self.__getitem__(name)
-        t, keystring, comment = value.split()
+        # maxsplit set to 2, which means extra blanks (in the comment field) are ignored
+        t, keystring, comment = value.split(' ', 2)
         return key_fingerprint(keystring)
 
     def defined(self, name):

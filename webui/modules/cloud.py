@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import render_template, request, redirect, g, jsonify, session
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.cm_mesh import cloudmesh
+#  from cloudmesh.cm_mesh import cloudmesh
 from cloudmesh.util.util import table_printer
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.user.cm_user import cm_user
@@ -59,7 +59,8 @@ def getCurrentUserinfo():
 def refresh(cloud=None, server=None, service_type=None):
 
     clouds = cm_mongo()
-    clouds.activate(cm_user_id=g.user.id)
+    cm_user_id = g.user.id
+    clouds.activate(cm_user_id=cm_user_id)
 
     log.info("-> refresh {0} {1}".format(cloud, service_type))
     userinfo = getCurrentUserinfo()
@@ -73,13 +74,17 @@ def refresh(cloud=None, server=None, service_type=None):
         cloud_names = [cloud]
 
     if service_type is None:
-        clouds.refresh(names=cloud_names, types=['servers', 'images', 'flavors'])
+        clouds.refresh(cm_user_id=cm_user_id,
+                       names=cloud_names,
+                       types=['servers', 'images', 'flavors'])
+        return redirect('/mesh/{0}'.format(cloud))
     else:
-        clouds.refresh(names=cloud_names, types=[service_type])
+        clouds.refresh(cm_user_id=cm_user_id,
+                       names=cloud_names,
+                       types=[service_type])
         return redirect('/mesh/{0}'.format(service_type))
-    # clouds.refresh()
-    # clouds.all_filter()
-    return redirect('/mesh/servers')
+
+
 
 
 
@@ -98,10 +103,10 @@ def delete_vm(cloud=None, server=None):
 
     # if (cloud == 'india'):
     #  r = cm("--set", "quiet", "delete:1", _tty_in=True)
-    clouds.vm_delete(cloud, server)
+    clouds.vm_delete(cloud, server, g.user.id)
     time.sleep(5)
-    clouds.release_unused_public_ips(cloud)
-    clouds.refresh(names=[cloud], types=["servers"])
+    clouds.release_unused_public_ips(cloud, g.user.id)
+    clouds.refresh(names=[cloud], types=["servers"], cm_user_id=g.user.id)
     return redirect('/mesh/servers')
 
 # ============================================================
@@ -119,14 +124,16 @@ def delete_vm_confirm():
     config = cm_config()
     c = cm_mongo()
     c.activate(cm_user_id=g.user.id)
-    # c.refresh(types=["servers"])
-    clouds = c.servers()
+
+
     userdata = g.user
     username = userdata.id
     user_obj = cm_user()
     user = user_obj.info(username)
-    images = c.images()
-    flavors = c.flavors()
+
+    clouds = c.servers(cm_user_id=username)
+    images = c.images(cm_user_id=username)
+    flavors = c.flavors(cm_user_id=username)
 
     os_attributes = ['name',
                      'status',
@@ -175,7 +182,7 @@ def delete_vm_submit(option):
 
     select = session.pop("delete_selection", None)
 
-    clouds = c.servers()
+    clouds = c.servers(g.user.id)
 
     if option == "true":
         cloud = select[0]
@@ -215,10 +222,10 @@ def delete_vms(cloud=None):
     clouds.activate(cm_user_id=g.user.id)
 
     # donot do refresh before delete, this will cause all the vms to get deleted
-    f_cloud = clouds.clouds[cloud]
+    f_cloud = clouds.clouds[g.user.id][cloud]
     for id, server in f_cloud['servers'].iteritems():
         log.info("-> delete {0} {1}".format(cloud, id))
-        clouds.delete(cloud, id)
+        clouds.vm_delete(cloud, id, g.user.id)
     time.sleep(7)
     f_cloud['servers'] = {}
     return redirect('/mesh/servers')
@@ -239,8 +246,8 @@ def assign_public_ip(cloud=None, server=None):
 
     mycloud = config.cloud(cloud)
     if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
-        clouds.assign_public_ip(cloud, server)
-        clouds.refresh(names=[cloud], types=["servers"])
+        clouds.assign_public_ip(cloud, server, g.user.id)
+        clouds.refresh(names=[cloud], types=["servers"], cm_user_id=g.user.id)
         return redirect('/mesh/servers')
     # else:
     #    return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
@@ -259,12 +266,12 @@ def manage_keypairs(cloud=None):
     userinfo = getCurrentUserinfo()
     username = userinfo["cm_user_id"]
     keys = userinfo["keys"]["keylist"]
-    cloudmanager = clouds.clouds[cloud]['manager']
+    cloudmanager = clouds.clouds[g.user.id][cloud]['manager']
 
     # currently we do the registration only for openstack
     # not yet sure if other clouds support this
     # or if we have implemented them if they also support
-    if clouds.clouds[cloud]['cm_type'] in ['openstack', 'ec2']:
+    if clouds.clouds[g.user.id][cloud]['cm_type'] in ['openstack', 'ec2']:
         if request.method == 'POST':
             action = request.form['action']
             keyname = request.form["keyname"]
@@ -314,10 +321,6 @@ def manage_keypairs(cloud=None):
 # ROUTE: START
 # ============================================================
 
-#
-# WHY NOT USE cm_keys as suggested?
-#
-
 # @cloud_module.route('/cm/start/<cloud>/<count>')
 
 @cloud_module.route('/cm/start/<cloud>/')
@@ -334,8 +337,6 @@ def start_vm(cloud=None, server=None):
     vm_flavor = None
     vm_flavor_id = None
 
-    if 'keys' in config['cloudmesh']:
-        key = config.get('cloudmesh.keys.default')
     userinfo = getCurrentUserinfo()
 
     # print userinfo
@@ -376,7 +377,7 @@ def start_vm(cloud=None, server=None):
         keynamenew = "%s_%s" % (username, key.replace('.', '_').replace('@', '_'))
     except AttributeError:
         keynamenew = "cloudmesh"  # Default key name if it is missing
-    log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image, vm_flavor_id, keynamenew) )
+    log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image, vm_flavor_id, keynamenew))
     result = clouds.vm_create(
         cloud,
         prefix,
@@ -384,7 +385,8 @@ def start_vm(cloud=None, server=None):
         vm_flavor_id,
         vm_image,
         keynamenew,
-        meta=metadata)
+        meta=metadata,
+        cm_user_id=g.user.id)
     log.info ("{0}".format(result))
     # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     # config.incr()
@@ -398,7 +400,7 @@ def start_vm(cloud=None, server=None):
 
     time.sleep(5)
 
-    clouds.refresh(names=[cloud], types=["servers"])
+    clouds.refresh(names=[cloud], types=["servers"], cm_user_id=g.user.id)
     return redirect('/mesh/servers')
 
 # ============================================================
@@ -416,7 +418,7 @@ def vm_login(cloud=None, server=None):
     message = ''
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    server = clouds.servers()[cloud][server]
+    server = clouds.servers(cm_user_id=g.user.id)[cloud][server]
 
     #
     # BUG MESSAGE IS NOT PROPAGATED
@@ -435,7 +437,7 @@ def vm_login(cloud=None, server=None):
         #
 
         c = cm_mongo()
-        images = c.images([cloud])[cloud]
+        images = c.images([cloud], g.user.id)[cloud]
 
         image = server['image']['id']
 
@@ -487,7 +489,7 @@ def vm_info(cloud=None, server=None):
     return render_template('mesh/cloud/vm_info.html',
                            updated=time_now,
                            keys="",
-                           server=clouds.servers()[cloud][server],
+                           server=clouds.servers(cm_user_id=g.user.id)[cloud][server],
                            id=server,
                            cloudname=cloud,
                            table_printer=table_printer)

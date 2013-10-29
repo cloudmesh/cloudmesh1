@@ -95,10 +95,25 @@ def delete_defaults():
     # user.set_default_attribute(username, 'images', {})
     info(username)
 
+@task
+def register():
+
+    config = cm_config()
+    cm_user_id = config.get("cloudmesh.hpc.username")
+    clouds = config.get("cloudmesh.clouds")
+
+    user_obj = cm_user()
+
+    for cloudname in config.cloudnames():
+        user_obj.set_credential(cm_user_id,
+                                cloudname,
+                                clouds[cloudname]['credentials'])
 
 
 @task
 def mongo():
+    register()
+
     filename = "~/.futuregrid/cloudmesh.yaml"
     banner("reding data from {0}".format(filename))
     config = cm_config(filename=filename)

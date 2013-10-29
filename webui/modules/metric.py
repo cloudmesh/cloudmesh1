@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, g
 from flask import render_template, request
 from flask.ext.login import login_required
 from flask import make_response
@@ -17,9 +17,6 @@ log = LOGGER(__file__)
 
 metric_module = Blueprint('metric_module', __name__)
 
-db_metric = cm_mongo("metric")
-db_metric.activate()
-
 # ============================================================
 # ROUTE: METRIC
 # ============================================================
@@ -35,6 +32,12 @@ def stats(metric=None, period=None, cloud_name=None):
 @metric_module.route('/stats/figure/<metric>/<period>/<cloud_name>/')
 @login_required
 def figure(metric=None, period=None, cloud_name=None):
+
+    cm_user_id = g.user.id
+
+    db_metric = cm_mongo("metric")
+    db_metric.activate(cm_user_id)
+
 
     # Temporary
     data = db_metric.find({})[0]
@@ -52,17 +55,17 @@ def figure(metric=None, period=None, cloud_name=None):
         else:
             value_by_date.append(i['count'])
 
-    fig=Figure()
-    ax=fig.add_subplot(111)
+    fig = Figure()
+    ax = fig.add_subplot(111)
     ax.plot_date(list_of_date, value_by_date, '-')
     ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
     ax.set_ylabel(get_metric_name(metric))
     ax.set_title(get_metric_title(metric, period, cloud_name))
     fig.autofmt_xdate()
-    canvas=FigureCanvas(fig)
+    canvas = FigureCanvas(fig)
     png_output = StringIO.StringIO()
     canvas.print_png(png_output)
-    response=make_response(png_output.getvalue())
+    response = make_response(png_output.getvalue())
     response.headers['Content-Type'] = 'image/png'
     return response
 
