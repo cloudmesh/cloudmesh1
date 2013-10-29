@@ -1,10 +1,13 @@
 {% extends "layout/layout_title.html" %}
-{% from "_helper.html" import image_button %}
+{% from "_helper.html" import href_image_button %}
 
 
 {% block contentbox %}
 
-<h2> Issues in Github </h2>
+<h2>
+	Issues in Github
+	{{ href_image_button(None, "190_circle_plus", 'https://github.com/cloudmesh/cloudmesh/issues/new') }}
+</h2>
 
 {% endblock %}
 
