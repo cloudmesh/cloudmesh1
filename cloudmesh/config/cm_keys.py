@@ -114,7 +114,8 @@ class cm_keys:
 
     def fingerprint(self, name):
         value = self.__getitem__(name)
-        t, keystring, comment = value.split()
+        # maxsplit set to 2, which means extra blanks (in the comment field) are ignored
+        t, keystring, comment = value.split(' ', 2)
         return key_fingerprint(keystring)
 
     def defined(self, name):
