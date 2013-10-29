@@ -197,41 +197,55 @@ class cm_mongo:
 
     def get_cloud(self, cm_user_id, cloud_name, force=False):
         cloud = None
-        if (not force) and \
-            (cm_user_id in self.clouds) and \
-            (cloud_name in self.clouds[cm_user_id]) and \
-            ('manager' in self.clouds[cm_user_id][cloud_name]) and \
-            (self.clouds[cm_user_id][cloud_name]['manager']):
-                cloud = self.clouds[cm_user_id][cloud_name]['manager']
-        else:
-            try:
+        # do we recreate a cloud instance?
+        # recreate only when user/tenant is changed for a certain cloud
+        recreate = False
+        cloud_info = self.get_cloud_info(cm_user_id, cloud_name)
 
+        # credential = self.config.cloud(cloud_name)
+        cm_type = cloud_info['cm_type']
+        cm_type_version = cloud_info['cm_type_version']
+
+        credentials = cloud_info['credentials']
+        
+        # we can force an update
+        if force:
+            recreate = True
+        # new user
+        if not cm_user_id in self.clouds:
+            recreate = True
+        # new cloud for that user
+        elif not cloud_name in self.clouds[cm_user_id]:
+            recreate = True
+        # manager pointer does not exist
+        elif 'manager' not in self.clouds[cm_user_id][cloud_name]:
+            recreate = True
+        # manager object ref is None
+        elif not self.clouds[cm_user_id][cloud_name]['manager']:
+            recreate = True
+        # for openstack, we check if tenant_name was recently changed
+        elif 'OS_TENANT_NAME' in credentials and\
+              hasattr(self.clouds[cm_user_id][cloud_name]['manager'], 'user_token') and\
+             'access' in self.clouds[cm_user_id][cloud_name]['manager'].user_token and\
+             self.clouds[cm_user_id][cloud_name]['manager'].user_token['access']['token']['tenant']['name'] != credentials['OS_TENANT_NAME']:
+                recreate = True
+        # in most case we return the existing object ref
+        else:
+            return self.clouds[cm_user_id][cloud_name]['manager']
+        
+        # in case new object needs to be created
+        if recreate:
+            try:
                 if cm_user_id not in self.clouds:
                     self.clouds[cm_user_id] = {}
 
-
-                cloud_info = self.get_cloud_info(cm_user_id, cloud_name)
-
-                # credential = self.config.cloud(cloud_name)
-                cm_type = cloud_info['cm_type']
-                cm_type_version = cloud_info['cm_type_version']
-
-                credentials = cloud_info['credentials']
-
                 if cm_type in ['openstack', 'eucalyptus', 'azure', 'ec2', 'aws']:
-
-
 
                     self.clouds[cm_user_id][cloud_name] = {'name': cloud_name,
                                                'cm_type': cm_type,
                                                'cm_type_version': cm_type_version}
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name, credentials)
-
-                    #
-                    # BUG NO USER
-                    #
-                    #
 
                     log.debug("Created new cloud instance with name: %s, type:\
                               %s" % (cloud_name, cm_type))
@@ -240,7 +254,10 @@ class cm_mongo:
                         if 'access' not in tryauth:
                             cloud = None
                             log.error("Credential not working, cloud is not activated")
+
                     self.clouds[cm_user_id][cloud_name].update({'manager': cloud})
+                    if cloud is not None:
+                        self.refresh(cm_user_id,[cloud_name],['servers'])
             except Exception, e:
                 log.error("Cannot activate cloud {0} for {1}\n{2}".format(cloud_name, cm_user_id, e))
                 print traceback.format_exc()
