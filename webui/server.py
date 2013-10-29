@@ -1,6 +1,6 @@
 from ConfigParser import SafeConfigParser
 from cloudmesh.config.cm_config import cm_config, cm_config_server
-from cloudmesh.config.cm_keys import get_fingerprint
+from cloudmesh.util.keys import get_fingerprint
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.user.cm_userLDAP import cm_userLDAP, get_ldap_user_from_yaml
@@ -75,7 +75,7 @@ port = s_config.get("cloudmesh.server.webui.port")
 if browser_page:
     url_link = "http://{0}:{1}/{2}".format(host, port, browser_page)
 else:
-    url_link =  "http://{0}:{1}".format(host, port)
+    url_link = "http://{0}:{1}".format(host, port)
 
 webbrowser.register("safari", None)
 

@@ -14,9 +14,6 @@ from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
-# from cloudmesh.config.cm_rack import cm_keys
-
-
 
 rack_module = Blueprint('rack_module', __name__)
 
@@ -72,7 +69,7 @@ def display_rack_map():
     flag_debug = False
 
     # class name means the specific class to generate map for different service type
-    # method name means the specific method to fetch real data of different service type, 
+    # method name means the specific method to fetch real data of different service type,
     #     the methods are defined in class FetchClusterInfo
     service_options = {"temperature": {"class": HeatClusterMap,
                                        "method": "fetch_temperature_ipmi",
@@ -81,7 +78,7 @@ def display_rack_map():
                                    "method": "fetch_service_type",
                                    },
                        }
-    
+
     rack = request.form['select_rack']
     service = request.form['select_service']
     # get location of configuration file, input diag, output image
@@ -113,7 +110,7 @@ def display_rack_map():
         myfetch = FetchClusterInfo(user, "india.futuregrid.org")
         flag_filter = None if rack == "all" else rack
         dict_data = getattr(myfetch, service_options[service]["method"])(flag_filter)
-        #dict_data = myfetch.fetch_service_type(flag_filter)
+        # dict_data = myfetch.fetch_service_type(flag_filter)
     # update data
     map_class.update(dict_data)
     # plot map

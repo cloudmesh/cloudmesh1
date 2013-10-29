@@ -321,10 +321,6 @@ def manage_keypairs(cloud=None):
 # ROUTE: START
 # ============================================================
 
-#
-# WHY NOT USE cm_keys as suggested?
-#
-
 # @cloud_module.route('/cm/start/<cloud>/<count>')
 
 @cloud_module.route('/cm/start/<cloud>/')

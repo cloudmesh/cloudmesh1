@@ -1,5 +1,4 @@
 from cloudmesh.config.cm_config import cm_config, cm_config_server
-from cloudmesh.config.cm_keys import cm_keys
 from cloudmesh.config.cm_projects import cm_projects
 from cloudmesh.util.util import cond_decorator
 from datetime import datetime
