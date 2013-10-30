@@ -175,6 +175,11 @@ class azure(ComputeBaseType):
                   key_name=None,
                   meta={},
                   userdata=None):
+
+        # Set a default name from uuid random string
+        vm_name = get_unique_name(name)
+        self.set_name(vm_name)
+
         self.create_vm()
 
     def create_vm(self):
