@@ -55,18 +55,18 @@ class cm_temperature:
         username = config['user']
 
         command = "ipmitool -I lanplus -H {0} -U {1} -P {2} sdr type temperature".format(hostaddr, username, password)
-        # visit ipmitool need a proxy server
+        # access ipmitool need a proxy server
         proxyaddr = config['proxy']['ip']
         proxyusername = config['proxy']['user']
 
-        log.debug("get temperatires for {2} via proxy server {0}@{1}".format(proxyusername, proxyaddr, hostname))
+        log.debug("Get temperature for host '{2}' via proxy server '{0}@{1}'".format(proxyusername, proxyaddr, hostname))
 
         result = ssh("{0}@{1}".format(proxyusername, proxyaddr), command)
         dict_result = None
         if result == "":
-            log.warning("Cannot access to host[{0}] OR ipmitool failed on host[{0}]".format(hostname))
+            log.warning("Cannot access to host '{0}' OR ipmitool failed on host '{0}'".format(hostname))
         else:
-            log.debug("temperature successfully retrieved for host{0}".format(hostname))
+            log.debug("Temperature data retrieved from host '{0}' successfully.".format(hostname))
             dict_result = {}
             lines = result.split("\n")
             for line in lines:
@@ -98,8 +98,9 @@ class cm_temperature:
     def parse_max_temp(self, tdict, unit):
         unit_upper = unit.upper()
         max_temp = -1
-        options = {"C": "convert_temp_C2F",
-                   "F": "convert_temp_F2C",
+        options = {
+                    "C": "convert_temp_C2F",
+                    "F": "convert_temp_F2C",
                   }
         for name in tdict:
             if tdict[name]["status"].lower() == "ok":

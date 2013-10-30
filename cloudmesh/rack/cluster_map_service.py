@@ -61,10 +61,10 @@ class ServiceClusterMap(BaseClusterMap):
     def getProperService(self, value):
         lvalue = value.lower()
         # check 'value' is a service in known service list or not
-        # if not, assign it to a unknown servcie, and print warning message
+        # if not, assign it to a unknown servcie, and log warning message
         if lvalue not in self.list_services_known:
             if lvalue not in self.list_unknown_services_found:
-                log.error("'{0}' is NOT a known service, assign its status to 'unknown'.".format(value))
+                log.warning("The param service '{0}' is NOT a known service, assign its status to 'unknown'.".format(value))
                 self.list_unknown_services_found.append(lvalue)
 
             lvalue = self.unknown_service
@@ -141,9 +141,7 @@ class ServiceClusterMap(BaseClusterMap):
             return
         # clear data structure
         self.dict_mapping.clear()
-        # self.list_services_found[:] = []
-        # self.list_unknown_services_found[:] = []
-
+        
         self.resetDictServers(self.getDefaultService())
         # update servce with proper service
         for server in dict_values:

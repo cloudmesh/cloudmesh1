@@ -5,11 +5,10 @@ that is ['india', 'bravo', 'echo', 'delta']
 If more cluster are added later, this class MUST be modified carefully
 """
 from cloudmesh.pbs.pbs import PBS
-from cloudmesh.config.ConfigDict import ConfigDict
 from hostlist import expand_hostlist
 from cloudmesh.rack.queue.tasks import temperature
 from cloudmesh.config.ConfigDict import ConfigDict
-
+from cloudmesh.config.cm_config import cm_config
 
 from cloudmesh.util.logger import LOGGER
 
@@ -44,10 +43,11 @@ class FetchClusterInfo:
                 utype = "unknown"
                 if "note" in server.keys():
                     note_value = server["note"]
+                    # to compatible with the future change
                     if type(note_value) is dict:
                         utype = note_value["service"]
-                    else:
-                         utype = note_value
+                    else:   # currently is a literal string for note
+                        utype = note_value
 
                 dict_data[ukey] = utype
         return dict_data
@@ -75,12 +75,17 @@ class FetchClusterInfo:
         elif flag_filter in default_list_cluster:
             list_id_ranges.append(self.cluster_config.get("cloudmesh.inventory.{0}.id".format(flag_filter)))
         else:
-            log.error("A invalid cluster name {0} in fetch_temperature_ipmi".format(flag_filter))
+            log.error("An invalid rack name {0} found in fetch_temperature_ipmi, cannot get any host list.".format(flag_filter))
+
         list_hosts = []
         for id_range in list_id_ranges:
             list_hosts += expand_hostlist(id_range)
+        
         dict_data = {}
         for host in list_hosts:
+            # TODO, FIXME
+            # currently, NOT use celery
+            # ONLY for debug
             result = temperature(host, unit)
             # temperature value -1 means the destination host is not reachable
             dict_data[host] = -1 if result is None else result["value"]
@@ -88,7 +93,6 @@ class FetchClusterInfo:
         # log.debug("fetch dict data: {0}".format(dict_data))
 
         return dict_data
-
 
 
     # refresh cluster temperature to mongo db
@@ -176,7 +180,9 @@ class FetchClusterInfo:
 
 # debug
 if __name__ == "__main__":
-    mytest = FetchClusterInfo("hengchen", "india.futuregrid.org")
+    config = cm_config()
+    user = config.get("cloudmesh.hpc.username")
+    mytest = FetchClusterInfo(user, "india.futuregrid.org")
     data = mytest.fetch_temperature_ipmi()
     print "=" * 30
     print data

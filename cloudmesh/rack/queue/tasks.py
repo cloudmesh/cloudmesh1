@@ -24,9 +24,10 @@ def temperature(host, unit):
     tdict = ipmi_temp.get_ipmi_temperature(host)
     if any(tdict):
         result = ipmi_temp.parse_max_temp(tdict, unit)
-        print "host [{0}] temperature: {1}".format(host, result)
+        # log.debug("host [{0}] temperature: {1}".format(host, result))
         # write the result to mongo DB
         # TODO ...
+        # TODO, use celery async event
     else:
         log.error("host [{0}] is NOT reachable with ipmitool".format(host))
 

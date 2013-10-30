@@ -73,6 +73,16 @@ class BaseClusterMap:
     #
     # If more image type supported, append the list to ["svg", "png", "gif", "jpg", ...]
     image_type_list = ["svg", "png"]
+    
+    # if more image type are supported later, please update the options dict
+    # and add corresponding function to get the size of the specific image type
+    # {key:value}, key denote the image type, 
+    #              value denote the function name to get the size of relevent image type
+    image_size_options = {
+                            "svg": "getSVGSize",
+                            "png": "getPNGSize",
+                         }
+    
 
     # subclass type list
     subclass_type_list = ["temperature", "service"]
@@ -134,10 +144,9 @@ class BaseClusterMap:
         abs_dir_diag = cm_path_expand(dir_diag)
         abs_dir_output = cm_path_expand(dir_output)
 
-        log.info("dir output {0}".format(abs_dir_output))
+        log.debug("The output directory of rack diagram is {0}".format(abs_dir_output))
         # make sure the output directory exist
         if not path.exists(abs_dir_output):
-            print "abs dir output: ", abs_dir_output
             mkdir("-p", abs_dir_output)
 
         self.readClustersConfig(abs_dir_yaml)
@@ -211,9 +220,10 @@ class BaseClusterMap:
         self.dict_rack_config = rack_config.get("cloudmesh.rack")
 
         lname = name.lower()
+        # the rack name in cloudmesh_rack.yaml MUST be valid/predefined in clouldmesh_cluster.yaml
         self.cluster_name = lname if lname in self.cluster_name_list else self.cluster_name_unknown
 
-        # diag filename
+        # diag filename and temporary diag filename
         self.filename_diag = dir_diag + "/" + self.dict_rack_config["cluster"][self.cluster_name]["diag"]
         self.rack_count = self.dict_rack_config["cluster"][self.cluster_name]["count"]
         self.filename_diag_temp = self.filename_diag + ".temp"
@@ -240,14 +250,14 @@ class BaseClusterMap:
         if ltype in self.image_type_list:
             self.image_type = ltype
         else:
-            log.error("Rack image type {0} is NOT supported currently! Use {1} to replace.".format(img_type, self.image_type_list[0]))
+            log.warning("The image type '{0}' of rack is NOT supported currently! Use the default type '{1}' instead.".format(img_type, self.image_type_list[0]))
             self.image_type = self.image_type_list[0]
 
         # filename, diag filename ends with ".diag"
         # image filename ends with "." + a valid lower image type
         image_basename = self.cluster_name + "-" + self.subclass_type;
         self.only_filename_image = image_basename + "." + self.image_type
-        self.only_filename_legend = image_basename + "-legend.svg"
+        self.only_filename_legend = image_basename + "-legend." + self.image_type
         self.filename_rack_image = dir_output + "/" + self.only_filename_image
         self.filename_rack_legend = dir_output + "/" + self.only_filename_legend
 
@@ -312,20 +322,18 @@ class BaseClusterMap:
     # get 2-D size of image file
     # return {"width": width, "height", height}
     def getImageSize(self, filename=None):
-        options = {
-                   "svg": self.getSVGSize,
-                   "png": self.getPNGSize,
-                   }
+        # the default action is to get the size of rack image
         if filename is None:
             filename = self.filename_rack_image
-        return options[self.image_type](filename)
+        return getattr(self, self.image_size_options[self.image_type])(filename)
+
 
     # get 2-D size of svg file
     def getSVGSize(self, filename):
         # parse svg file to get width and height
         # <svg viewBox="0 0 1792 2000"
         dict_result = {"width": 0, "height": 0}
-        patt = re.compile('<svg.*?viewBox=.+?\s+?.+?\s+?(\d+)\s+?(\d+)')
+        patt = re.compile('<svg.*?viewBox=.+?\s+?.+?\s+?(\d+)\s+?(\d+)', re.IGNORECASE)
         fsvg = open(filename)
         for line in fsvg:
             m = patt.match(line)
@@ -385,12 +393,12 @@ class BaseClusterMap:
         vlb = vdict["verts"]["lb"];
         vrt = vdict["verts"]["rt"]
         verts = [vlb, (vlb[0], vrt[1]), vrt, (vrt[0], vlb[1]), (0., 0.)]
-        codes = [Path.MOVETO,
+        codes = [ Path.MOVETO,
                   Path.LINETO,
-                 Path.LINETO,
+                  Path.LINETO,
                   Path.LINETO,
                   Path.CLOSEPOLY,
-                 ]
+                ]
         path = Path(verts, codes)
         patch = patches.PathPatch(path, facecolor=vdict["facecolor_rect"], edgecolor=vdict["edgecolor_rect"], lw=1)
         ax.add_patch(patch)
@@ -403,7 +411,6 @@ class BaseClusterMap:
                 vto = [vfrom[0], vfrom[1] + 1]
                 aline = Line2D([vfrom[0], vto[0]], [vfrom[1], vto[1]], lw=2, color=vdict["edgecolor_marker"])
                 ax.add_line(aline)
-
 
 
     # draw legend
@@ -422,8 +429,8 @@ class BaseClusterMap:
 
         self.drawLegendContent(ax, (xlim, ylim))
 
-        # plt.show()
         fig.savefig(self.filename_rack_legend, transparent=True)
+
 
     #
     # update function MUST be called before call the plot function
@@ -432,7 +439,7 @@ class BaseClusterMap:
     def plot(self):
         # get mapping dict of colors
         dict_mapping = self.getMappingDict()
-        # print "dict mapping, ", dict_mapping
+        # log.debug("dict mapping, {0}".format(dict_mapping))
         # render dict_servers with correct color formation
         self.render(dict_mapping)
 
@@ -448,12 +455,14 @@ class BaseClusterMap:
         wf.write(scontent)
         wf.close()
 
+        log.debug("Call rackdiag to draw the image of rack ...")
         # call rackdiag to plot
         rackdiag("-T{0}".format(self.image_type),
                     "-o", self.filename_rack_image, self.filename_diag_temp)
 
         # draw the image of legend
         self.legend()
+        log.debug("Draw the legend of rack image finished.")
 
         # delete the temporary diag file if needed
         if self.flag_delete_diag_temp:

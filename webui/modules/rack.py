@@ -68,7 +68,6 @@ class RackForm(Form):
             for rack in self.all_services_dict[service]["clusters"]:
                 rack_list.append(self.all_racks_dict[rack])
             
-            #print "rack list: ", rack_list
             service_dict["select"].choices = rack_list
             self.selector_dict[service] = service_dict
             
@@ -93,29 +92,34 @@ def display_rack_map():
 
     ####
     #
-    #  Flag of debug
-    #
+    #  Flag of debug, True means generate fake data with random generator
+    #                 False means fetch the real data from server
     ####
     flag_debug = False
 
     # class name means the specific class to generate map for different service type
     # method name means the specific method to fetch real data of different service type,
     #     the methods are defined in class FetchClusterInfo
-    service_options = {"temperature": {"class": HeatClusterMap,
-                                       "method": "fetch_temperature_ipmi",
-                                       },
-                       "service": {"class": ServiceClusterMap,
-                                   "method": "fetch_service_type",
+    service_options = {
+                        "temperature": {
+                                         "class": HeatClusterMap,
+                                         "method": "fetch_temperature_ipmi",
+                                        },
+                        "service": {
+                                     "class": ServiceClusterMap,
+                                     "method": "fetch_service_type",
                                    },
                        }
 
+    # rack denote the rack user selected
+    # service denote the service user selected on the specific rack
     rack = request.form['select_rack']
     service = request.form['select_service']
     
-    # double check to make sure cluster can provide the specific service
+    # double check to make sure rack can provide the specific service
     rack_form = RackForm()
     if rack not in rack_form.all_services_dict[service]["clusters"]:
-        log.error("Someone try to hack the service provided by Rack Diagram. Just ignore it.")
+        log.error("Someone try to hack the service [service: '{0}' on rack: '{1}'] provided by Rack Diagram. Just ignore it.".format(service, rack))
         return redirect("/inventory/rack")
     
     # get location of configuration file, input diag, output image
@@ -123,13 +127,12 @@ def display_rack_map():
     server_config = cm_config_server()
     relative_dir_diag = server_config.get("cloudmesh.server.rack.input")
     relative_dir_image = server_config.get("cloudmesh.server.rack.diagrams.{0}".format(service))
-    print "relative dir image, ", relative_dir_image
+    # log.debug("relative dir image, {0}".format(relative_dir_image))
     flask_dir = "static"
     # guess absolute path of webui
     rack_py_dir = pwd().strip().split("/")
-    # print "rack_py_dir dir,,,,", rack_py_dir
     webui_dir = rack_py_dir  # [:-1]
-    # print "webui dir,,,,", webui_dir
+    # log.debug("webui dir, {0}".format(webui_dir))
     list_image_dir = [ flask_dir ] + relative_dir_image.strip().split("/");
     abs_dir_image = "/".join(webui_dir + list_image_dir)
     abs_dir_diag = dir_base + "/" + relative_dir_diag
@@ -141,13 +144,14 @@ def display_rack_map():
         dict_data = map_class.genRandomValues()
     else:
         # fetch the real data ....
-        # to do ...
+        # TODO cloudmesh.hpc.proxyserver
+        # should we add a field in cloudmesh.yaml for the proxy server to run pbsnodes ???
         config = cm_config()
         user = config.get("cloudmesh.hpc.username")
         myfetch = FetchClusterInfo(user, "india.futuregrid.org")
         flag_filter = None if rack == "all" else rack
         dict_data = getattr(myfetch, service_options[service]["method"])(flag_filter)
-        # dict_data = myfetch.fetch_service_type(flag_filter)
+        
     # update data
     map_class.update(dict_data)
     # plot map
