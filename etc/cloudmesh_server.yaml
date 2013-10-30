@@ -74,6 +74,8 @@ cloudmesh:
                 key: change_me
             defaults:
                 db: defaults
+            store:
+                db: store
     keystone:
         sierra_openstack_grizzly:
             OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
