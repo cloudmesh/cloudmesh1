@@ -193,6 +193,6 @@ def get_unique_name(prefix=""):
     text = str(id).replace("-", "")
     for ch in change:
         if ch in prefix:
-            prefix = prefix.replace(ch, "\\"+ch)
+            prefix = prefix.replace(ch, "")
 
     return str(prefix) + text
