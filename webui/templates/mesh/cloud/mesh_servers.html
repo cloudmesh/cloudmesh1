@@ -158,7 +158,12 @@ function toggle(source,select_list) {
                           </td>
 
                       {% elif attribute == "image" %}
-                      	{% set id = clouds[cloud][server][attribute]['id'] %}
+		      {% if attribute in clouds[cloud][server] %}
+		      	{% set id = clouds[cloud][server][attribute]['id'] %}
+		      {% else %}
+			{% set id = None %}
+		      {% endif %}
+
                           <td> {% if id in images[cloud] %}
                                 {{images[cloud][id]['name']}}
                                {% else %}

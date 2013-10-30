@@ -188,6 +188,11 @@ def table_printer(the_dict, header_info=None):
 def get_unique_name(prefix=""):
     """Make a UUID without some characters such as '-', '_', ' ', '.'
     """
+    change = ['-', '_', ' ', '.']
     id = uuid.uuid1()
     text = str(id).replace("-", "")
+    for ch in change:
+        if ch in prefix:
+            prefix = prefix.replace(ch, "")
+
     return str(prefix) + text
