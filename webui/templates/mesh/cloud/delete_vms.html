@@ -7,7 +7,14 @@
 {% endblock contentbox %}
 
 {% block content %}
-
+<style>
+	.ui-accordion-content{
+   background:#F7B7BF;
+}
+	.ui-accordion-header{
+   background:#FC475C;
+}
+</style>
 <script type="text/javascript">
 
 function killall(cloud) {
@@ -20,7 +27,7 @@ function killall(cloud) {
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#servers-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: true });
+        $("#servers_accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: true });
 
 		$("input[type=number]").on("click", function(event) {
     		event.stopPropagation();
@@ -67,7 +74,7 @@ $(function() {
 
 
 
-<div id="servers-accordion">
+<div id="servers_accordion">
   {% for cloud in clouds %}
   <div style="margin-bottom:1em;">
     <h3>
@@ -80,7 +87,7 @@ $(function() {
     <div>
 
     <input type ="hidden" name = "cloud" value = "{{cloud}}"/>
-    <table id="cloud-table-{{ loop.index0 }}" >
+    <table id="cloud-table-{{ loop.index0 }}" bgcolor="#F7B7B7">
       <thead>
           <tr>
             {% for attribute in attributes %}
@@ -134,7 +141,7 @@ $(function() {
 <br>
 <br>
     <form method = "GET" name = "123"> 
-	<input type = submit  value = "ok" formaction='/cm/delete_request_submit/true'/>
+	<input type = submit  value = "delete" formaction='/cm/delete_request_submit/true'/>
 	<input type = submit  value = "cancel" formaction='/cm/delete_request_submit/false'/>
 	&nbsp;
 	</form>

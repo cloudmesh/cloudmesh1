@@ -115,7 +115,7 @@ function toggle(source,select_list) {
     <table id="cloud-table-{{ loop.index0 }}" >
       <thead>
           <tr>
-          	<th><input type="checkbox" name="all" onClick="toggle(this,'selection')" />
+          	<th><input type="checkbox" name="all" onClick="toggle(this,'selection_{{cloud}}')" />
           		 <input type = "image"
           		        src = "/static/img/icons/png/glyphicons_016_bin.png"
           		        alt = "delete" value = "delete"
@@ -132,7 +132,7 @@ function toggle(source,select_list) {
           {% for server in clouds[cloud] %}
              {% set s_id = clouds[cloud][server]['id'] %}
              <tr>
-             	<td><input type="checkbox" name="selection" value = {{server}} /> </td>
+             	<td><input type="checkbox" name="selection_{{cloud}}" value = {{server}} /> </td>
              	<td>
              	 	{{ href_image_button ("none", "368_collapse", "/cm/login/" ~ cloud ~ "/" ~ s_id ~ "/") }}
 	  				{{ href_image_button ("right", "195_circle_info", "/cm/info/" ~ cloud ~ "/" ~ s_id ~ "/") }}
