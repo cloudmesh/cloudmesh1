@@ -9,7 +9,7 @@ from pprint import pprint
 from sh import pwd  # @UnresolvedImport
 from wtforms import SelectField
 from flask.ext.principal import Permission, RoleNeed
-
+import time
 from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
@@ -150,7 +150,11 @@ def display_rack_map():
         user = config.get("cloudmesh.hpc.username")
         myfetch = FetchClusterInfo(user, "india.futuregrid.org")
         flag_filter = None if rack == "all" else rack
-        dict_data = getattr(myfetch, service_options[service]["method"])(flag_filter)
+        # If user want to customize the action, user can set optional param here
+        # by calling map_class.set_optional_param(value)
+        # optional param
+        aparam = map_class.get_optional_param()
+        dict_data = getattr(myfetch, service_options[service]["method"])(flag_filter, aparam)
         
     # update data
     map_class.update(dict_data)
@@ -162,10 +166,10 @@ def display_rack_map():
     filename_legend = map_class.getLegendFilename()
     image_size = map_class.getImageSize()
     legend_size = map_class.getImageLegendSize()
-    print "legend size is: ", legend_size
+    # log.debug("legend size is: {0}".format(legend_size))
     abs_web_path_image = "/".join([""] + list_image_dir + [filename_image])
     abs_web_path_legend = "/".join([""] + list_image_dir + [filename_legend])
-
+    img_flag = "?" + str(time.time())
     return render_template("mesh/rack/rack.html",
                             flag_home=False,
                             rack=rack,
@@ -174,8 +178,8 @@ def display_rack_map():
                             legendWidth=legend_size["width"],
                             legendHeight=legend_size["height"],
                             service=service,
-                            imageFilename=abs_web_path_image,
-                            legendFilename=abs_web_path_legend
+                            imageFilename=abs_web_path_image + img_flag,
+                            legendFilename=abs_web_path_legend + img_flag
                             )
 
 

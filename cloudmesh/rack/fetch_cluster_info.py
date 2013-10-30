@@ -32,7 +32,7 @@ class FetchClusterInfo:
     # fetch cluster service type with "ssh user@host pbsnodes -a"
     # params:
     #    flag_filter, None or one item in list ['india', 'bravo', 'echo', 'delta']
-    def fetch_service_type(self, flag_filter=None):
+    def fetch_service_type(self, flag_filter=None, unit=None):
         pbs = PBS(self.username, self.hostname)
         dict_pbs_info = pbs.pbsnodes()
         dict_data = {}

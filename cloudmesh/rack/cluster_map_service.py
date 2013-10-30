@@ -50,7 +50,13 @@ class ServiceClusterMap(BaseClusterMap):
         BaseClusterMap.__init__(self, name, "service", dir_yaml, dir_diag, dir_output, img_type)
 
 
-
+    def set_optional_param(self, aparam):
+        pass
+    
+    def get_optional_param(self):
+        return None
+    
+    
     # get the RGB according to a specific h param
     # there are only limited serveral colors according to the total services
     def getRGB(self, h):

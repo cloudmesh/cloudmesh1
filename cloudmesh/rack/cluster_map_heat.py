@@ -12,7 +12,10 @@ class HeatClusterMap(BaseClusterMap):
 
     # maximum h, 240/360 = 2/3
     h_max = 2.0 / 3.0
-
+    
+    # unit of temperature 'C' or 'F'
+    temperature_unit = 'C'
+    
     # minimum temperature user defined
     temperature_min = 0
 
@@ -56,7 +59,21 @@ class HeatClusterMap(BaseClusterMap):
         # call parent init function
         BaseClusterMap.__init__(self, name, "temperature", dir_yaml, dir_diag, dir_output, img_type)
 
-
+    def get_temperature_unit(self):
+        return self.temperature_unit;
+    
+    def set_temperature_unit(self, unit):
+        upper_unit = "C" if not unit else unit.upper()
+        if upper_unit in ['C', 'F']:
+            self.temperature_unit = upper_unit
+    
+    def set_optional_param(self, aparam):
+        self.set_temperature_unit(aparam)
+    
+    def get_optional_param(self):
+        return self.get_temperature_unit()
+    
+    
     # set min/max temperature
     # adjust min/max and marker on color bar
     #
@@ -249,8 +266,16 @@ class HeatClusterMap(BaseClusterMap):
 
             xstart += xstep
             temp_current += tstep
-
+            
             self.drawRectangle(ax, rect)
+        # temperature unit
+        pos_unit = (xstart*0.4, 0)
+        options = {
+                     "C": "Celsius",
+                     "F": "Fahrenheit",
+                   }
+        self.drawText(ax, pos_unit, "( Temperature unit: {0} )".format(options[self.temperature_unit]))
+
 
 
     # only for test

@@ -2,6 +2,13 @@
 Base class for different .diag render with rackdiag
 """
 
+import matplotlib
+matplotlib.use("SVG")
+import matplotlib.pyplot as plt
+from matplotlib.path import Path
+from matplotlib.lines import Line2D
+import matplotlib.patches as patches
+
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.util import path_expand as cm_path_expand
 
@@ -17,12 +24,6 @@ import time
 import re
 import colorsys
 from PIL import Image
-import matplotlib
-matplotlib.use("SVG")
-import matplotlib.pyplot as plt
-from matplotlib.path import Path
-from matplotlib.lines import Line2D
-import matplotlib.patches as patches
 
 from pprint import pprint
 
@@ -399,6 +400,7 @@ class BaseClusterMap:
                   Path.LINETO,
                   Path.CLOSEPOLY,
                 ]
+        
         path = Path(verts, codes)
         patch = patches.PathPatch(path, facecolor=vdict["facecolor_rect"], edgecolor=vdict["edgecolor_rect"], lw=1)
         ax.add_patch(patch)
@@ -412,6 +414,10 @@ class BaseClusterMap:
                 aline = Line2D([vfrom[0], vto[0]], [vfrom[1], vto[1]], lw=2, color=vdict["edgecolor_marker"])
                 ax.add_line(aline)
 
+    
+    # draw text
+    def drawText(self, ax, pos, stext):
+        ax.text(pos[0], pos[1], stext)
 
     # draw legend
     def legend(self):
