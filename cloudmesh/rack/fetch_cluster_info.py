@@ -16,13 +16,13 @@ from cloudmesh.util.logger import LOGGER
 log = LOGGER(__file__)
 
 class FetchClusterInfo:
-    
+
     CLUSTER_CONFIG_FILE = "~/.futuregrid/cloudmesh_cluster.yaml"
 
     username = None
 
     hostname = None
-    
+
     cluster_config = None
 
     def __init__(self, user, host):
@@ -48,7 +48,7 @@ class FetchClusterInfo:
                         utype = note_value["service"]
                     else:
                          utype = note_value
-                    
+
                 dict_data[ukey] = utype
         return dict_data
 
@@ -59,8 +59,8 @@ class FetchClusterInfo:
     def fetch_temperature_mongo(self, flag_filter=None):
         # read data from mongo db
         pass
-    
-    
+
+
     # fetch cluster temperature from ipmitools
     # params:
     #    flag_filter, None or one item in list ['india', 'bravo', 'echo', 'delta']
@@ -84,12 +84,13 @@ class FetchClusterInfo:
             result = temperature(host, unit)
             # temperature value -1 means the destination host is not reachable
             dict_data[host] = -1 if result is None else result["value"]
-        
-        print "fetch dict data: ", dict_data
+
+        # log.debug("fetch dict data: {0}".format(dict_data))
+
         return dict_data
 
-    
-    
+
+
     # refresh cluster temperature to mongo db
     # file_yaml: the absolute path of cloudmesh_cluster.yaml
     def update_temperature_mongo(self, file_yaml):
