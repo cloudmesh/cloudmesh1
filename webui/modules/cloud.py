@@ -153,8 +153,8 @@ def delete_vm_confirm():
                      'created']
     cloud_filters = None
     filtered_clouds = clouds
-    select = request.form.getlist("selection")
-    cloud = request.form["cloud"]
+    cloud = request.form["cloud"]   
+    select = request.form.getlist("selection_"+cloud);
     if select != None and cloud != None:
         session["delete_selection"] = (cloud, select)
     if "delete_selection" in session:

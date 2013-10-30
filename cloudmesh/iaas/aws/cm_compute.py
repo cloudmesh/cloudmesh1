@@ -22,9 +22,17 @@ class aws(ComputeBaseType):
     name = "aws"
     DEFAULT_LABEL = name
 
-    def __init__(self, label=DEFAULT_LABEL):
+    def __init__(self, label=DEFAULT_LABEL, credential=None,
+                 admin_credential=None):
         self.load_default(label)
+        self.set_credential(credential, admin_credential)
         self.connect()
+
+    def set_credential(self, cred, admin_cred):
+        if cred:
+            self.user_credential = cred
+        if admin_cred:
+            self.admin_credential = admin_cred
 
     def load_default(self, label):
         """Load default values and set them to the object
@@ -90,6 +98,7 @@ class aws(ComputeBaseType):
                   key_name=None,
                   meta={},
                   userdata=None):
+        self.set_keyname(key_name)
         self.create_vm()
 
     def create_vm(self):
@@ -140,6 +149,9 @@ class aws(ComputeBaseType):
 
     def get_flavor(self):
         return self.flavor
+
+    def set_keyname(self, name):
+        self.ssh_keyname = name
 
     def get_keyname(self):
         return self.ssh_keyname
