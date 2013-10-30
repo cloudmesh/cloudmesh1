@@ -18,11 +18,19 @@ class azure(ComputeBaseType):
     DEFAULT_LABEL = "azure"
     name_prefix = "cm-"
 
-    def __init__(self, label=DEFAULT_LABEL):
+    def __init__(self, label=DEFAULT_LABEL, credential=None,
+                 admin_credential=None):
 
         self.set_vars()
         self.load_default(label)
+        self.set_credential(credential, admin_credential)
         self.connect()
+
+    def set_credential(self, cred, admin_cred):
+        if cred:
+            self.user_credential = cred
+        if admin_cred:
+            self.admin_credential = admin_cred
 
     def set_vars(self):
         """Set default variables for the azure class"""
