@@ -80,7 +80,9 @@ function toggle(source,select_list) {
     	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
 
       	&nbsp;
+      	<span style="float:left; width:30%; white-space:nowrap;">
       	{{ cloud }}
+      	</span>
         <span class="badge"> {{ clouds[cloud] |count }} </span> VMs
       	&nbsp;
       	{{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}

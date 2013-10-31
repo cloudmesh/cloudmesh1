@@ -12,7 +12,8 @@
 /* http://stackoverflow.com/a/10237915 */
 (function($) {
     $(function() {
-        $("#flavors-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: false });
+        $("#flavors-accordion > div").accordion({ header: "h3",
+        collapsible: true, heightStyle: "content", active: true });
     });
 })(jQuery);
 
@@ -54,10 +55,12 @@ $(function() {
   {% for cloud in clouds %}
 
     {% set cloud_loop = loop %}
-  <div style="margin-bottom:1em;">
-  <h3>
+  <div id="d-{{cloud}}" style="margin-bottom:1em;">
+  <h3 id="h-{{cloud}}">
   	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/flavors") }}
-  	{{ cloud }}
+   	<span style="float:left; width:30%; white-space:nowrap;">
+  	    {{ cloud }}
+  	</span>
     <span class="badge"> {{ clouds[cloud] |count }} </span> Flavors
   </h3>
   <div>
@@ -105,5 +108,7 @@ $(function() {
 
 </div>
 </div>
+
+
 
 {% endblock %}

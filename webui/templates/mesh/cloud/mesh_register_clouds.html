@@ -139,24 +139,37 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
         	{% endif %}
         {% endfor %}
 
+<style type="text/css">
+.name-span {
+	border:1px dotted black;
+	width:10px;
+	white-space:nowrap;
+	float:left;
+}
+</style>
 
 <div id="accordion">
     <div>
-
         {% for cloud in cloudList | sort  %}
-        <h3 id="example">
+        <h3 id="example" style="white-space:nowrap">
             {% if cloud|string == user['defaults']['cloud']|string %}
-        	   <span style="color: green; font-size: 14pt;">{{ cloud }}</span>
+	            <span style="color:green; float:left; width:30%; white-space:nowrap;">
+	          	&#x2713;
+        		{{ cloud }}
+        	   </span>
+
         	{% else %}
-                {{ cloud }}
+                <span style="float:left; width:30%; white-space:nowrap;">
+          		 {{ cloud }}
+          		</span>
         	{% endif %}
-        	
+
         	{% if cloud in user['defaults']['registered_clouds'] %}
                 <span class="badge label-success"> registered </span>
             {% else %}
                 <span class="badge"> not registered </span>
             {% endif %}
-            
+
             {% if cloud in user['defaults']['activeclouds'] %}
                 <span class="badge label-success"> active </span>
             {% endif %}
