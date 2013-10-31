@@ -23,7 +23,9 @@
          <span style="float:left; width:30%; white-space:nowrap;">
          {{ host }}
          </span>
-         <span class="badge" style="width:300px; float:left;"> {{ jobcount[host] }} </span> Queues,
+         <span class="badge">
+         	{{ jobcount[host] }}
+         	</span> Queues,
          {{ timer[host] | timesince(format="date") }}
         </h3>
        <div>
