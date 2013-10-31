@@ -30,7 +30,7 @@ class ec2(ComputeBaseType):
     def __init__(self, label=DEFAULT_LABEL, credential=None,
                  admin_credential=None):
         self.load_default(label)
-        aself.set_credential(credential, admin_credential)
+        self.set_credential(credential, admin_credential)
         self.connect()
 
     def set_credential(self, cred, admin_cred):
