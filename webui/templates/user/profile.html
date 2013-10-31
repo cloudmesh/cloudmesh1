@@ -206,7 +206,11 @@ $(function() {
 
 	<tr>
 		<td></td>
-		<td valign="top">Registered Clouds - Check for Activate </td><td colspan="2">
+		<td valign="top">
+			<a href="/mesh/register/clouds">
+				Registered Clouds
+			</a> - Check to Activate
+		</td><td colspan="2">
 	  {% if user.defaults.registered_clouds|count > 0 %}
     	  {% for cloudname in user.defaults.registered_clouds %}
     	  <input type="checkbox"
