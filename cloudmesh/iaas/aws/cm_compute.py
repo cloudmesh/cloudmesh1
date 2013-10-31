@@ -242,3 +242,15 @@ class aws(ComputeBaseType):
 
     def list_images(self):
         return self.conn.list_images()
+
+    def keypair_list(self):
+        return self.conn.ex_describe_all_keypairs()
+
+    def keypair_add(self, name, content):
+        return self.conn.ex_import_keypair_from_string(name, content)
+
+    def keypair_remove(self, name):
+        """Delete a keypair"""
+        if self.conn.ex_delete_keypair(name):
+            return {"msg":"success"}
+
