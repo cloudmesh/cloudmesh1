@@ -64,7 +64,7 @@ def mesh_register_clouds():
 
         cloudname = request.form['cloudInput']
 
-        
+
 
         if cloudname in credentials:
             if 'credential' in credentials[cloudname]:
@@ -118,7 +118,7 @@ def mesh_register_clouds():
                     d[key] = content
                 if content == '':
                     error[cloudname] = error[cloudname] + "Please set " + key + "."
-                
+
             if error[cloudname] == '':
 
                 user_obj.set_credential(cm_user_id, cloudname, d)
@@ -192,10 +192,10 @@ def mesh_register_clouds():
 
         if error[cloudname] == '':
             c = cm_mongo()
-            cloud = c.get_cloud(cm_user_id=cm_user_id,cloud_name=cloudname,force=True)
+            cloud = c.get_cloud(cm_user_id=cm_user_id, cloud_name=cloudname, force=True)
             if cloud:
                 registered[cloudname] = True
-                # pprint(cloud.user_token)                    
+                # pprint(cloud.user_token)
                 if cloudname not in user['defaults']['registered_clouds']:
                     user['defaults']['registered_clouds'].append(cloudname)
                     user_obj.set_defaults(cm_user_id, user['defaults'])
@@ -226,7 +226,7 @@ def mesh_register_clouds():
                 (user['defaults']['registered_clouds']).remove(cloudname)
             if cloudname in user['defaults']['activeclouds']:
                 (user['defaults']['activeclouds']).remove(cloudname)
-                
+
         user_obj.set_defaults(cm_user_id, user['defaults'])
     credentials = user_obj.get_credentials(cm_user_id)
 
@@ -247,9 +247,9 @@ def mongo_images():
         error = "No Active Clouds set!"
         msg = "Please <a href='/mesh/register/clouds'>Register and Activate</a> a Cloud First"
         return render_template('error.html',
-                               type = "Refreshing Clouds",
-                               error = error,
-                               msg = msg)
+                               type="Refreshing Clouds",
+                               error=error,
+                               msg=msg)
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
 
@@ -406,9 +406,9 @@ def mongo_flavors():
         error = "No Active Clouds set!"
         msg = "Please <a href='/mesh/register/clouds'>Register and Activate</a> a Cloud First"
         return render_template('error.html',
-                               type = "Refreshing Clouds",
-                               error = error,
-                               msg = msg)
+                               type="Refreshing Clouds",
+                               error=error,
+                               msg=msg)
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
@@ -483,6 +483,10 @@ def mongo_flavors():
                      'disk',
                      'cm_refresh',
                      ]
+
+    # fake entry
+
+    user['defaults']['pagestatus'] = {'openclouds': ['sierra_open_stack_grizzly', 'hp']}
 
     return render_template('mesh/cloud/mesh_flavors.html',
                            address_string=address_string,
@@ -564,10 +568,10 @@ def mongo_table(filters=None):
         error = "No Active Clouds set!"
         msg = "Please <a href='/mesh/register/clouds'>Register and Activate</a> a Cloud First"
         return render_template('error.html',
-                               type = "Refreshing Clouds",
-                               error = error,
-                               msg = msg)
-        
+                               type="Refreshing Clouds",
+                               error=error,
+                               msg=msg)
+
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     config = cm_config()
@@ -713,3 +717,106 @@ def mongo_server_table_filter(filters=None):
                            filters=cloud_filters)
 
 '''
+
+
+# ============================================================
+# ROUTE: mongo
+# ============================================================
+
+@mesh_module.route('/mesh/demo/', methods=['GET', 'POST'])
+@login_required
+def mongo_flavors_demo():
+    if not with_active_clouds():
+        error = "No Active Clouds set!"
+        msg = "Please <a href='/mesh/register/clouds'>Register and Activate</a> a Cloud First"
+        return render_template('error.html',
+                               type="Refreshing Clouds",
+                               error=error,
+                               msg=msg)
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    # filter()
+    config = cm_config()
+
+    # getting user info
+    userdata = g.user
+    username = userdata.id
+    user_obj = cm_user()
+    user = user_obj.info(username)
+
+    c = cm_mongo()
+    c.activate(cm_user_id=username)
+    # c.refresh(types=["flavors"])
+    clouds = c.flavors(cm_user_id=username)
+
+
+    # print "YYYYY"
+    # pprint(clouds)
+    """
+    2
+    disk 20
+    name m1.small
+    links [{u'href': u'http://198.202.120.83:8774/v1.1/1ae6813a3a6d4cebbeb1912f6d139ad0/flavors/2', u'rel': u'self'}, {u'href': u'http://198.202.120.83:8774/1ae6813a3a6d4cebbeb1912f6d139ad0/flavors/2', u'rel': u'bookmark'}]
+    OS-FLV-EXT-DATA:ephemeral 0
+    ram 2048
+    cm_refresh 2013-08-06T21-44-13Z
+    OS-FLV-DISABLED:disabled False
+    cm_id sierra_openstack_grizzly-flavors-m1-small
+    vcpus 1
+    cm_cloud sierra_openstack_grizzly
+    swap
+    os-flavor-access:is_public True
+    rxtx_factor 1.0
+    cm_kind flavors
+    _id 5201a66d7df38caf0fe160bc
+    cm_type openstack
+    id 2
+    """
+
+    """
+    for cloud in clouds:
+        print cloud
+        for flavor in clouds[cloud]:
+            print flavor
+            for attribute in clouds[cloud][flavor]:
+                print attribute, clouds[cloud][flavor][attribute]
+    """
+
+    if 'defaults' not in user:
+        user['defaults'] = {}
+        user.set_defaults(username, {})
+    if 'flavors' not in user['defaults']:
+        user['defaults']['flavors'] = {}
+
+
+    if request.method == 'POST':
+        # print "REQUEST"
+        cloud = request.form['cloud']
+        default_flavor = request.form['default_flavor']
+        # print request.form['cloud'], "----------------------------->", request.form['default_flavor']
+        user['defaults']['flavors'][cloud] = default_flavor
+        # if 'default_flavor' in request.form:
+         #   user['defaults']['flavor'] = request.form['default_flavor']
+        user_obj.set_defaults(username, user['defaults'])
+
+
+    os_attributes = [
+                     'id',
+                     'name',
+                     'vcpus',
+                     'ram',
+                     'disk',
+                     'cm_refresh',
+                     ]
+
+    # fake entry
+
+    user['defaults']['pagestatus'] = {'openclouds': ['sierra_open_stack_grizzly', 'hp']}
+
+    return render_template('mesh/cloud/mesh_flavors_demo.html',
+                           address_string=address_string,
+                           attributes=os_attributes,
+                           updated=time_now,
+                           clouds=clouds,
+                           user=user,
+                           config=config)
+
