@@ -27,9 +27,17 @@ class ec2(ComputeBaseType):
     name = "ec2"
     DEFAULT_LABEL = name
 
-    def __init__(self, label=DEFAULT_LABEL):
+    def __init__(self, label=DEFAULT_LABEL, credential=None,
+                 admin_credential=None):
         self.load_default(label)
+        aself.set_credential(credential, admin_credential)
         self.connect()
+
+    def set_credential(self, cred, admin_cred):
+        if cred:
+            self.user_credential = cred
+        if admin_cred:
+            self.admin_credential = admin_cred
 
     def load_default(self, label):
         """Load default values and set them to the object
