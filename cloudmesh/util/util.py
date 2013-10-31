@@ -183,8 +183,7 @@ def table_printer(the_dict, header_info=None):
                         .format(name.title(), str(table_printer(value)))
             except:
                 #If the element is not dict
-                result = '<tr><td>{0}</td><td>{1}</td></tr>'\
-                .format(name.title(),str(value))
+                return str(element)
         result = '<table>' + result + '</table>'
         return result
     else:
