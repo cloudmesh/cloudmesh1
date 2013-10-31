@@ -50,6 +50,9 @@ $(function() {
                 print attribute, clouds[cloud][server][attribute]
 -->
 
+
+
+
 <div class="span9">
 <div id="flavors-accordion">
   {% for cloud in clouds %}
@@ -109,6 +112,8 @@ $(function() {
 </div>
 </div>
 
-
+<p>
+{{user['defaults']}}
+</p>
 
 {% endblock %}

@@ -64,7 +64,7 @@ def mesh_register_clouds():
 
         cloudname = request.form['cloudInput']
 
-        
+
 
         if cloudname in credentials:
             if 'credential' in credentials[cloudname]:
@@ -118,7 +118,7 @@ def mesh_register_clouds():
                     d[key] = content
                 if content == '':
                     error[cloudname] = error[cloudname] + "Please set " + key + "."
-                
+
             if error[cloudname] == '':
 
                 user_obj.set_credential(cm_user_id, cloudname, d)
@@ -192,10 +192,10 @@ def mesh_register_clouds():
 
         if error[cloudname] == '':
             c = cm_mongo()
-            cloud = c.get_cloud(cm_user_id=cm_user_id,cloud_name=cloudname,force=True)
+            cloud = c.get_cloud(cm_user_id=cm_user_id, cloud_name=cloudname, force=True)
             if cloud:
                 registered[cloudname] = True
-                # pprint(cloud.user_token)                    
+                # pprint(cloud.user_token)
                 if cloudname not in user['defaults']['registered_clouds']:
                     user['defaults']['registered_clouds'].append(cloudname)
                     user_obj.set_defaults(cm_user_id, user['defaults'])
@@ -226,7 +226,7 @@ def mesh_register_clouds():
                 (user['defaults']['registered_clouds']).remove(cloudname)
             if cloudname in user['defaults']['activeclouds']:
                 (user['defaults']['activeclouds']).remove(cloudname)
-                
+
         user_obj.set_defaults(cm_user_id, user['defaults'])
     credentials = user_obj.get_credentials(cm_user_id)
 
@@ -247,9 +247,9 @@ def mongo_images():
         error = "No Active Clouds set!"
         msg = "Please <a href='/mesh/register/clouds'>Register and Activate</a> a Cloud First"
         return render_template('error.html',
-                               type = "Refreshing Clouds",
-                               error = error,
-                               msg = msg)
+                               type="Refreshing Clouds",
+                               error=error,
+                               msg=msg)
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
 
@@ -406,9 +406,9 @@ def mongo_flavors():
         error = "No Active Clouds set!"
         msg = "Please <a href='/mesh/register/clouds'>Register and Activate</a> a Cloud First"
         return render_template('error.html',
-                               type = "Refreshing Clouds",
-                               error = error,
-                               msg = msg)
+                               type="Refreshing Clouds",
+                               error=error,
+                               msg=msg)
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
@@ -484,6 +484,10 @@ def mongo_flavors():
                      'cm_refresh',
                      ]
 
+    # fake entry
+
+    user['defaults']['pagestatus'] = {'openclouds': ['sierra_open_stack_grizzly', 'hp']}
+
     return render_template('mesh/cloud/mesh_flavors.html',
                            address_string=address_string,
                            attributes=os_attributes,
@@ -553,10 +557,10 @@ def mongo_table(filters=None):
         error = "No Active Clouds set!"
         msg = "Please <a href='/mesh/register/clouds'>Register and Activate</a> a Cloud First"
         return render_template('error.html',
-                               type = "Refreshing Clouds",
-                               error = error,
-                               msg = msg)
-        
+                               type="Refreshing Clouds",
+                               error=error,
+                               msg=msg)
+
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     config = cm_config()
