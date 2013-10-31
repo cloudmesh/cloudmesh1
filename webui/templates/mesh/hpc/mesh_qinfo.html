@@ -20,8 +20,10 @@
         {% set version = 'pbs' %}
         <div style="margin-bottom:1em;">
        <h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qinfo/" + host) }}
-         {{ host }},
-         <span class="badge"> {{ jobcount[host] }} </span> Queues,
+         <span style="float:left; width:30%; white-space:nowrap;">
+         {{ host }}
+         </span>
+         <span class="badge" style="width:300px; float:left;"> {{ jobcount[host] }} </span> Queues,
          {{ timer[host] | timesince(format="date") }}
         </h3>
        <div>
