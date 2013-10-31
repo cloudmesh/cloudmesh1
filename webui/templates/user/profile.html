@@ -206,39 +206,47 @@ $(function() {
 
 	<tr>
 		<td></td>
-		<td valign="top">Active </td><td colspan="2">
-	  {% for cloudname in configuration.clouds.keys() %}
-	  <input type="checkbox"
-	        name="field-cloud-activated-{{cloudname}}"
-	        value="{{ cloudname }}"
-	        id="{{ cloudname }}"
-	        {% if cloudname in user.defaults.activeclouds %}
-	          checked = "checked"
-	        {% endif %}
-	        onclick="document.forms['profile'].submit()"
-	        /> {{ cloudname}}
-	        <br>
-	{% endfor %}
+		<td valign="top">Registered Clouds - Check for Activate </td><td colspan="2">
+	  {% if user.defaults.registered_clouds|count > 0 %}
+    	  {% for cloudname in user.defaults.registered_clouds %}
+    	  <input type="checkbox"
+    	        name="field-cloud-activated-{{cloudname}}"
+    	        value="{{ cloudname }}"
+    	        id="{{ cloudname }}"
+    	        {% if cloudname in user.defaults.activeclouds %}
+    	          checked = "checked"
+    	        {% endif %}
+    	        onclick="document.forms['profile'].submit()"
+    	        /> {{ cloudname}}
+    	        <br>
+    	  {% endfor %}
+	  {% else %}
+	    No Registered Cloud. Go to <a href="/mesh/register/clouds"><b>Register Page</b></a> to Register.
+	  {% endif %}
 	</td></tr>
 
 
 	<tr>
-		<td></td><td>Default </td>
+		<td></td><td>Default Cloud </td>
 		<td colspan="2">
-			{% for cloudname in configuration.clouds.keys() %}
-				{%  if cloudname in user.defaults.activeclouds %}
-				 <input
-					  type="radio"
-					  name="field-default-cloud"
-					  value="{{ cloudname }}"
-				 	  id="{{ cloudname }}"
-				  	  {% if cloudname == user.defaults.cloud %}
-				   		 checked = "checked"
-				  	  {% endif %}
-				 	  onclick="document.forms['profile'].submit()"
-				  /> {{ cloudname }}
-				  {% endif %}
-			{% endfor %}
+            {% if user.defaults.activeclouds|count > 0 %}
+    			{% for cloudname in user.defaults.activeclouds %}
+    				{%  if cloudname in user.defaults.activeclouds %}
+    				 <input
+    					  type="radio"
+    					  name="field-default-cloud"
+    					  value="{{ cloudname }}"
+    				 	  id="{{ cloudname }}"
+    				  	  {% if cloudname == user.defaults.cloud %}
+    				   		 checked = "checked"
+    				  	  {% endif %}
+    				 	  onclick="document.forms['profile'].submit()"
+    				  /> {{ cloudname }}
+    				  {% endif %}
+    			{% endfor %}
+    		{% else %}
+    		    Please Make Sure You Have <a href="/mesh/register/clouds"><b>Registered and Activated</b></a> Any Clouds!
+    		{% endif %}
 		</td>
 	</tr>
 

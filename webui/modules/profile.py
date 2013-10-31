@@ -62,7 +62,8 @@ def profile():
 
 
         user['defaults']['activeclouds'] = []
-        for cloudname in config.cloudnames():
+        regclouds = user['defaults']['registered_clouds']
+        for cloudname in regclouds:
             form_key = 'field-cloud-activated-{0}'.format(cloudname)
             if form_key in request.form:
                 print "ACTIVE IN FORM", cloudname

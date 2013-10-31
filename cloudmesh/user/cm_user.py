@@ -171,8 +171,9 @@ class cm_user(object):
 
     cloud_names = cm_config().cloudnames()
     default_security_group = cm_config().get("cloudmesh.security.default")
-    default_cloud = 'sierra_openstack_grizzly'
-
+    # default_cloud = 'sierra_openstack_grizzly'
+    default_cloud = None
+    
     def init_defaults(self, username):
 
         user = self.info(username)
@@ -184,11 +185,12 @@ class cm_user(object):
         if 'index' not in defaults:
             defaults['index'] = 1
 
+        # DO NOT set default cloud any more
         if 'cloud' not in defaults:
             if self.default_cloud in self.cloud_names:
                 defaults['cloud'] = self.default_cloud
-            elif len(self.cloud_names) > 0:
-                defaults['cloud'] = self.cloud_names[0]
+            # elif len(self.cloud_names) > 0:
+            #    defaults['cloud'] = self.cloud_names[0]
 
         if 'key' not in defaults:
             keylist = user['keys']['keylist']
@@ -203,7 +205,14 @@ class cm_user(object):
         if 'activeclouds' not in defaults:
             if 'cloud' in defaults:
                 defaults['activeclouds'] = [defaults['cloud']]
-
+            else:
+                defaults['activeclouds'] = []
+                
+        if 'registered_clouds' not in defaults:
+            if 'activeclouds' in defaults:
+                defaults['registered_clouds'] = defaults['activeclouds']
+            else:
+                defaults['registered_clouds'] = []
 
         cm = cm_mongo()
 

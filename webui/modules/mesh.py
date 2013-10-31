@@ -23,6 +23,17 @@ mesh_module = Blueprint('mesh_module', __name__)
 # ROUTE: /mesh/images
 # ============================================================
 
+def getCurrentUserinfo():
+    userinfo = cm_user().info(g.user.id)
+    return userinfo
+
+def with_active_clouds():
+    ret = False
+    userinfo = getCurrentUserinfo()
+    if "activeclouds" in userinfo["defaults"] and\
+        len(userinfo["defaults"]["activeclouds"]) > 0:
+        ret = True
+    return ret
 
 @mesh_module.route('/mesh/register/clouds', methods=['GET', 'POST'])
 @login_required
@@ -42,50 +53,18 @@ def mesh_register_clouds():
 
 
     credentials = user_obj.get_credentials(cm_user_id)
-
+    # pprint(credentials)
 
     error = {}
+    registered = {}
+    for cloudname in user['defaults']['registered_clouds']:
+        registered[cloudname] = True
     # todo define correct actions.
     if request.method == 'POST':
 
         cloudname = request.form['cloudInput']
 
-        checkmark = 'field-cloud-activated-{0}'.format(cloudname)
-
-        if checkmark in request.form:
-            try:
-                if cloudname not in user['defaults']['activeclouds']:
-                    (user['defaults']['activeclouds']).append(cloudname)
-            except:
-                # create_dict(user, "defaults", "activeclouds")
-                print "ERROR user defaults activecloud does not exist"
-        else:
-            try:
-                if cloudname in user['defaults']['activeclouds']:
-                    active = user['defaults']['activeclouds']
-                    active.remove(cloudname)
-                    user['defaults']['activeclouds'] = active
-            except:
-                # create_dict(user, "defaults", "activeclouds")
-                print "ERROR user defaults activecloud does not exist"
-
-        user_obj.set_defaults(cm_user_id, user['defaults'])
-        user = user_obj.info(cm_user_id)
-
-        """
-        user['defaults']['activeclouds'] = []
-        for cloudname in config.cloudnames():
-            form_key = 'field-cloud-activated-{0}'.format(cloudname)
-            if form_key in request.form:
-                user['defaults']['activeclouds'].append(cloudname)
-
-        """
-
-
-
-
-
-
+        
 
         if cloudname in credentials:
             if 'credential' in credentials[cloudname]:
@@ -98,14 +77,14 @@ def mesh_register_clouds():
 
         if cloudtypes[cloudname] == "openstack":
 
-
+            d = {}
             if credentials[cloudname] == None:
                  d = {'OS_USERNAME' : cm_user_id,
                       'OS_PASSWORD': '',
                       'OS_TENANT_NAME': ''
                 }
 
-                 user_obj.set_credential(cm_user_id, cloudname, d)
+            user_obj.set_credential(cm_user_id, cloudname, d)
 
             error[cloudname] = ''
 
@@ -139,12 +118,23 @@ def mesh_register_clouds():
                     d[key] = content
                 if content == '':
                     error[cloudname] = error[cloudname] + "Please set " + key + "."
-
-
+                
             if error[cloudname] == '':
 
                 user_obj.set_credential(cm_user_id, cloudname, d)
 
+                '''
+                c = cm_mongo()
+                cloud = c.get_cloud(cm_user_id=cm_user_id,cloud_name=cloudname,force=True)
+                if cloud:
+                    registered[cloudname] = True
+                    # pprint(cloud.user_token)
+                    if cloudname not in user['defaults']['registered_clouds']:
+                        user['defaults']['registered_clouds'].append(cloudname)
+                        user_obj.set_defaults(cm_user_id, user['defaults'])
+                else:
+                    registered[cloudname] = False
+                '''
 
         elif cloudtypes[cloudname] == "ec2":
 
@@ -199,6 +189,45 @@ def mesh_register_clouds():
                                    "CM_CLOUD_TYPE": "azure" }
                                   )
         '''
+
+        if error[cloudname] == '':
+            c = cm_mongo()
+            cloud = c.get_cloud(cm_user_id=cm_user_id,cloud_name=cloudname,force=True)
+            if cloud:
+                registered[cloudname] = True
+                # pprint(cloud.user_token)                    
+                if cloudname not in user['defaults']['registered_clouds']:
+                    user['defaults']['registered_clouds'].append(cloudname)
+                    user_obj.set_defaults(cm_user_id, user['defaults'])
+            else:
+                registered[cloudname] = False
+
+        if registered[cloudname]:
+            checkmark = 'field-cloud-activated-{0}'.format(cloudname)
+            if checkmark in request.form:
+                try:
+                    if cloudname not in user['defaults']['activeclouds']:
+                        (user['defaults']['activeclouds']).append(cloudname)
+                except:
+                    # create_dict(user, "defaults", "activeclouds")
+                    log.info("ERROR user defaults activecloud does not exist")
+            else:
+                try:
+                    if cloudname in user['defaults']['activeclouds']:
+                        active = user['defaults']['activeclouds']
+                        active.remove(cloudname)
+                        user['defaults']['activeclouds'] = active
+                except:
+                    # create_dict(user, "defaults", "activeclouds")
+                    log.info("ERROR user defaults activecloud does not exist")
+        else:
+            error[cloudname] = error[cloudname] + "Credential Verification Failed!"
+            if cloudname in user['defaults']['registered_clouds']:
+                (user['defaults']['registered_clouds']).remove(cloudname)
+            if cloudname in user['defaults']['activeclouds']:
+                (user['defaults']['activeclouds']).remove(cloudname)
+                
+        user_obj.set_defaults(cm_user_id, user['defaults'])
     credentials = user_obj.get_credentials(cm_user_id)
 
 
@@ -208,11 +237,19 @@ def mesh_register_clouds():
                            cm_user_id=cm_user_id,
                            cloudnames=config.cloudnames(),
                            cloudtypes=cloudtypes,
-                           error=error)
+                           error=error,
+                           verified=registered)
 
 @mesh_module.route('/mesh/images/', methods=['GET', 'POST'])
 @login_required
 def mongo_images():
+    if not with_active_clouds():
+        error = "No Active Clouds set!"
+        msg = "Please <a href='/mesh/register/clouds'>Register and Activate</a> a Cloud First"
+        return render_template('error.html',
+                               type = "Refreshing Clouds",
+                               error = error,
+                               msg = msg)
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
 
@@ -365,6 +402,13 @@ def mongo_images():
 @mesh_module.route('/mesh/flavors/', methods=['GET', 'POST'])
 @login_required
 def mongo_flavors():
+    if not with_active_clouds():
+        error = "No Active Clouds set!"
+        msg = "Please <a href='/mesh/register/clouds'>Register and Activate</a> a Cloud First"
+        return render_template('error.html',
+                               type = "Refreshing Clouds",
+                               error = error,
+                               msg = msg)
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
@@ -505,6 +549,14 @@ def mongo_users():
 @mesh_module.route('/mesh/servers/', methods=['GET', 'POST'])
 @login_required
 def mongo_table(filters=None):
+    if not with_active_clouds():
+        error = "No Active Clouds set!"
+        msg = "Please <a href='/mesh/register/clouds'>Register and Activate</a> a Cloud First"
+        return render_template('error.html',
+                               type = "Refreshing Clouds",
+                               error = error,
+                               msg = msg)
+        
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     config = cm_config()

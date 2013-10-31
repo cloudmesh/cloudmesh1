@@ -1,5 +1,6 @@
 {% extends "layout/layout_title.html" %}
 {% from "_helper.html" import image_button %}
+{% from "_helper.html" import href_image_button %}
 {% from "_helper.html" import cm_boolean_color %}
 {% from "_helper.html" import cm_image_input %}
 {% from "_helper.html" import submit_button %}
@@ -83,7 +84,7 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
     </th>
     <th></th>
     <th style="text-align: right">
-        {{ image_button ("none", "044_keys", "/updatekeypair/" + "{{cloudname}}" + "/") }}
+        {{ href_image_button ("none", "044_keys", "/cm/keypairs/" + cloudname + "/") }}
         {% if verified == true %}
             {{ cm_boolean_color('verified') }}
         {% else %}
@@ -132,7 +133,7 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
             {% if (cloud in error) %}
                {%if (error[cloud] != '') %}
                   <div class="alert alert-danger">
-		              Error in {{cloud}}: {{error[cloud]}}
+		              Error in <b>{{cloud}}</b>: {{error[cloud]}}
 				  </div>
 	        	{% endif %}
         	{% endif %}
@@ -144,10 +145,21 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
 
         {% for cloud in cloudList | sort  %}
         <h3 id="example">
-        	{{ cloud }}
-        	{% if cloud in user['defaults']['activeclouds'] %}
-			<span class="badge label-success"> active </span>
-        {% endif %}
+            {% if cloud|string == user['defaults']['cloud']|string %}
+        	   <span style="color: green; font-size: 14pt;">{{ cloud }}</span>
+        	{% else %}
+                {{ cloud }}
+        	{% endif %}
+        	
+        	{% if cloud in user['defaults']['registered_clouds'] %}
+                <span class="badge label-success"> registered </span>
+            {% else %}
+                <span class="badge"> not registered </span>
+            {% endif %}
+            
+            {% if cloud in user['defaults']['activeclouds'] %}
+                <span class="badge label-success"> active </span>
+            {% endif %}
         </h3>
 
         <form id={{ cloud }} method="post">
@@ -172,13 +184,13 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
   					    {% else %}
    						   {% set tenant = 'alb' %}
   						{% endif %}
-    	                {{ openstack(cloud, cm_user_id, tenant, True, true) }}
+    	                {{ openstack(cloud, cm_user_id, tenant, True, verified[cloud]) }}
                     {% elif cloudtypes[cloud] == "aws" %}
-                        {{ aws(cloud, cm_user_id) }}
+                        {{ aws(cloud, cm_user_id, verified[cloud]) }}
                     {% elif cloudtypes[cloud] == "azure" %}
-                        {{ azure(cloud) }}
+                        {{ azure(cloud, verified[cloud]) }}
                     {% elif cloudtypes[cloud] == "ec2" %}
-                        {{ ec2(cloud, cm_user_id, True) }}
+                        {{ ec2(cloud, cm_user_id, verified[cloud]) }}
                     {% endif %}
                     <th></th><th></th>
                     <th style="text-align: right">

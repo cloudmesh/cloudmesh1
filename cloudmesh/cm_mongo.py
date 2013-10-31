@@ -212,7 +212,7 @@ class cm_mongo:
         if force:
             recreate = True
         # new user
-        if not cm_user_id in self.clouds:
+        elif not cm_user_id in self.clouds:
             recreate = True
         # new cloud for that user
         elif not cloud_name in self.clouds[cm_user_id]:
