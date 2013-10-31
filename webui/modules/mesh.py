@@ -1,6 +1,6 @@
 from ast import literal_eval
 from cloudmesh.cm_mongo import cm_mongo
-from cloudmesh.config.cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import address_string, cond_decorator
@@ -502,13 +502,24 @@ def mongo_flavors():
 def mongo_users():
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
-    config = cm_config()
-
+    config = cm_config_server()
+    adminclouds = config.get("cloudmesh.server.keystone").keys()
+    
+    username = g.user.id
+    userinfo = getCurrentUserinfo()
+    activeclouds = []
+    if 'activeclouds' in userinfo['defaults']:
+        activeclouds = userinfo['defaults']['activeclouds']
+    usersinclouds = []
+    for cloud in adminclouds:
+        if cloud in activeclouds:
+            usersinclouds.append(cloud)
+            
     c = cm_mongo()
     c.activate(cm_user_id=username)
 
     clouds = {}
-    clouds = c.users()
+    clouds = c.users(usersinclouds)
     # print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
     # print len(clouds['sierra_openstack_grizzly'])
 
