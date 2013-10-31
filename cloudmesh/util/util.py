@@ -174,12 +174,17 @@ def table_printer(the_dict, header_info=None):
                 .format(name.title(), str(table_printer(value)))
         result = '<table>' + result + '</table>'
         return result
-    elif type(the_dict) is list:
+    elif isinstance(the_dict, list):
         for element in the_dict:
-            for name, value in element.iteritems():
-                result = result + \
-                    '<tr><td>{0}</td><td>{1}</td></tr>'\
-                    .format(name.title(), str(table_printer(value)))
+            try:
+                for name, value in element.iteritems():
+                    result = result + \
+                        '<tr><td>{0}</td><td>{1}</td></tr>'\
+                        .format(name.title(), str(table_printer(value)))
+            except:
+                #If the element is not dict
+                result = '<tr><td>{0}</td><td>{1}</td></tr>'\ 
+                .format(name.title(),str(value)
         result = '<table>' + result + '</table>'
         return result
     else:
