@@ -321,7 +321,24 @@ def manage_keypairs(cloud=None):
                                error="Setting keypairs for this cloud is not yet enabled")
         # return redirect('/mesh/servers')
 
-
+def check_register_key(cloud, keyname, keycontent):
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+    cloudmanager = clouds.clouds[g.user.id][cloud]['manager']
+    
+    keynamenew = _keyname_sanitation(g.user.id, keyname)
+    keysRegistered = cloudmanager.keypair_list()
+    registered = False
+    if 'keypairs' in keysRegistered:
+        keypairsRegistered = keysRegistered["keypairs"]
+        for akeypair in keypairsRegistered:
+            if keynamenew == akeypair['keypair']['name']:
+                registered = True
+                break
+    
+    if not registered:
+        cloudmanager.keypair_add(keynamenew, keycontent)
+        log.info("Automatically registered the default key <%s> for user <%s>" % (keyname, g.user.id))
 
 # ============================================================
 # ROUTE: START
@@ -346,10 +363,6 @@ def start_vm(cloud=None, server=None):
     userinfo = getCurrentUserinfo()
 
     # print userinfo
-    if "key" in userinfo["defaults"]:
-        key = userinfo["defaults"]["key"]
-    elif len(userinfo["keys"]["keylist"].keys()) > 0:
-        key = userinfo["keys"]["keylist"].keys()[0]
 
     error = ''
 
@@ -369,20 +382,31 @@ def start_vm(cloud=None, server=None):
     if vm_image in [None, 'none']:
         error = error + "Please specify a default image."
 
+    username = userinfo["cm_user_id"]
+    
+    if "key" in userinfo["defaults"]:
+        key = userinfo["defaults"]["key"]
+    elif len(userinfo["keys"]["keylist"].keys()) > 0:
+        key = userinfo["keys"]["keylist"].keys()[0]
+        
+    if key:
+        keycontent = userinfo["keys"]["keylist"][key]
+        if keycontent.startswith('key '):
+            keycontent = keycontent[4:]
+        check_register_key(cloud, key, keycontent)
+        keynamenew = _keyname_sanitation(username, key)
+    else:
+        error = error + "No sshkey found. Please <a href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"
+    
     if error != '':
         return render_template('error.html', error=error)
 
+    metadata = {'cm_owner': username}
     prefix = userinfo["defaults"]["prefix"]
     index = userinfo["defaults"]["index"]
+    
     log.info("STARTING {0} {1}".format(prefix, index))
-    log.info("FLAVOR {0} {1}".format(vm_flavor, vm_flavor_id))
-    metadata = {'cm_owner': prefix}
-    # username = config.get('cloudmesh.hpc.username')
-    username = userinfo["cm_user_id"]
-    try:
-        keynamenew = "%s_%s" % (username, key.replace('.', '_').replace('@', '_'))
-    except AttributeError:
-        keynamenew = "cloudmesh"  # Default key name if it is missing
+    # log.info("FLAVOR {0} {1}".format(vm_flavor, vm_flavor_id))
     log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image, vm_flavor_id, keynamenew))
     result = clouds.vm_create(
         cloud,

@@ -8,7 +8,7 @@
 {% block content %}
 
 <div class="alert alert-danger">
-	{{ error }}
+	{{ error|safe }}
 <div></div>
   <p></p>
   <p>{{ msg|safe }}</p>

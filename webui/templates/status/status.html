@@ -38,7 +38,7 @@ $(function () {
         },
 
         xAxis: {
-            categories: ['India', 'Bravo', 'Echo', 'Hotel', 'Sierra', 'Alamo', 'Delta'],
+            categories: ['India', 'Bravo', 'Echo', 'Hotel', 'Sierra', 'Alamo', 'Delta', 'Lima'],
             tickmarkPlacement: 'on',
             lineWidth: 0
         },
@@ -68,8 +68,10 @@ $(function () {
             	   {{values.echo.jobs}},
             	   {{values.hotel.jobs}},
             	   {{values.sierra.jobs}},
-		   {{values.alamo.jobs}},
-		   {{values.delta.jobs}}],
+		   		   {{values.alamo.jobs}},
+		   		   {{values.delta.jobs}},
+		   		   {{values.lima.jobs}}
+		   ],
             pointPlacement: 'on'
         }, {
             name: 'Users',
@@ -78,8 +80,9 @@ $(function () {
             	   {{values.echo.users}},
             	   {{values.hotel.users}},
             	   {{values.sierra.users}},
-		   {{values.alamo.users}},
-		   {{values.delta.users}}],
+		           {{values.alamo.users}},
+		           {{values.delta.users}},
+		           {{values.lima.users}}],
             pointPlacement: 'on'
         },
         ]

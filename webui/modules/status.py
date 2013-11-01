@@ -25,13 +25,14 @@ def display_status():
     status = ""
 
     values = {
-              'india' : { 'jobs' : 3, 'users' : 50},
-              'bravo' : { 'jobs' : 13, 'users' : 40},
-              'echo' : { 'jobs' : 23, 'users' : 30},
+              'india' : { 'jobs' : 0, 'users' : 0},
+              'bravo' : { 'jobs' : 0, 'users' : 0},
+              'echo' : { 'jobs' : 0, 'users' : 0},
               'hotel' : { 'jobs' : 0, 'users' : 0},
-              'sierra' : { 'jobs' : 43, 'users' : 10},
+              'sierra' : { 'jobs' : 0, 'users' : 0},
               'alamo' : { 'jobs' : 0, 'users' : 0},
-              'delta' : { 'jobs' : 0, 'users': 0}
+              'delta' : { 'jobs' : 0, 'users': 0},
+              'lima' : { 'jobs' : 0, 'users': 0}
               }
 
     config = cm_config()
@@ -43,7 +44,9 @@ def display_status():
     qstat = {}
     qstat_uniq_users = {}
 
-    for host in ['sierra.futuregrid.org', 'india.futuregrid.org']:
+    for host in ['sierra.futuregrid.org',
+                 'india.futuregrid.org',
+                 ]:
         pbs = PBS(user, host)
         services[host] = pbs.service_distribution()
         qinfo[host] = pbs.qinfo()
