@@ -59,7 +59,7 @@ super_duper_sidebar_pages = [
             ["Register", "/cm/register", None],
         ]
     ],
-    ["Testing", None, None, ['all'],
+    ["Testing", None, None, ['admin', 'rain'],
         [
             ["falvor", "/mesh/demo", None],
         ]
