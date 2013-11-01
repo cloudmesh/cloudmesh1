@@ -8,14 +8,81 @@
 {% block content %}
 
 <script type="text/javascript">
+    var status_object = {};
 
-/* http://stackoverflow.com/a/10237915 */
-(function($) {
-    $(function() {
-        $("#flavors-accordion > div").accordion({ header: "h3",
-        collapsible: true, heightStyle: "content", active: true });
+    function OnFlavorClicked(cloud_name, flavor_value) {
+        status_object[cloud_name].flavor = flavor_value;
+    }
+
+    function CallbackOnAccordionClicked(cloud_name, status) {
+        status_object[cloud_name].open = status.toString();
+    }
+
+    function CallbackAfterAccordionCreated() {
+        {% set users_status = user['defaults']['pagestatus']%}
+        {% for cloud in clouds %}
+            status_object["{{cloud}}"] = {"open": "false", "flavor": ""};
+            {% if users_status[cloud]["flavor"] != "" %}
+                {% set flavor_value = users_status[cloud]["flavor"] %}
+                $("input[name='{{cloud}}_flavor'][value='{{flavor_value}}']").prop('checked', true);
+                status_object["{{cloud}}"].flavor = {{users_status[cloud]["flavor"]}};
+            {% endif %}
+            {% if users_status[cloud]["open"] == "true" %}
+                $("#{{cloud}}").click();
+            {% endif %}
+        {% endfor %}
+    }
+
+    function SavePageStatusToMongoDB() {
+        $.ajax({
+            type: "POST",
+            url:  "/mesh/savepagestatus/",
+            data: JSON.stringify(status_object),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+        });
+    }
+
+    $(window).bind("beforeunload", function() {
+        SavePageStatusToMongoDB();
     });
-})(jQuery);
+
+function CustomizeAccordionPlugin(aid, CallbackOnAccordionClicked, CallbackAfterAccordionCreated) {
+    $(aid).accordion(
+        {
+            collapsible: true,
+            heightStyle: "content",
+            active: false,
+            beforeActivate: function(event, ui) {
+                if (ui.newHeader[0]) {    // The accordion believes a panel is being opened
+                    var currHeader  = ui.newHeader;
+                    var currContent = currHeader.next('.ui-accordion-content');
+                } else {    // The accordion believes a panel is being closed
+                    var currHeader  = ui.oldHeader;
+                    var currContent = currHeader.next('.ui-accordion-content');
+                }
+                // Since we've changed the default behavior, this detects the actual status
+                var isPanelSelected = currHeader.attr('selected-status') == 'true';
+                // Toggle the panel's header
+                currHeader.toggleClass('ui-corner-all',isPanelSelected).toggleClass('accordion-header-active ui-state-active ui-corner-top',!isPanelSelected).attr('selected-status',((!isPanelSelected).toString()));
+                // Toggle the panel's icon
+                currHeader.children('.ui-icon').toggleClass('ui-icon-triangle-1-e',isPanelSelected).toggleClass('ui-icon-triangle-1-s',!isPanelSelected);
+                // Toggle the panel's content
+                currContent.toggleClass('accordion-content-active',!isPanelSelected);
+                if (isPanelSelected) {
+                    currContent.slideUp();
+                } else {
+                    currContent.slideDown();
+                }
+                CallbackOnAccordionClicked(currHeader.attr("id"), !isPanelSelected);
+
+                return false; // Cancel the default action
+            },
+            create: function( event, ui ) {
+                CallbackAfterAccordionCreated();
+            },
+        });
+}
 
 $(function() {
   {% for cloudnum in range(clouds|count) %}
@@ -39,81 +106,56 @@ $(function() {
   {% endfor %}
 });
 
+$(document).ready( function() {
+    CustomizeAccordionPlugin("#accordion", CallbackOnAccordionClicked, CallbackAfterAccordionCreated);
+});
+
 </script>
 
- <!--
-    for cloud in clouds:
-        print cloud
-        for server in clouds[cloud]:
-            print server
-            for attribute in clouds[cloud][server]:
-                print attribute, clouds[cloud][server][attribute]
--->
 
-
-
-
-<div class="span9">
-<div id="flavors-accordion">
-  {% for cloud in clouds %}
-
-    {% set cloud_loop = loop %}
-  <div id="d-{{cloud}}" style="margin-bottom:1em;">
-  <h3 id="h-{{cloud}}">
-  	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/flavors") }}
-   	<span style="float:left; width:30%; white-space:nowrap;">
-  	    {{ cloud }}
-  	</span>
-    <span class="badge"> {{ clouds[cloud] |count }} </span> Flavors
-  </h3>
-  <div>
-  	<form name = "flavor_{{cloud}}" method = 'POST' action = "/mesh/flavors/">
-    <input type = hidden name = "cloud" value = "{{cloud}}"/>
-
-
-    <table id="cloud-table-{{ loop.index0 }}">
-      <thead>
-          <tr>
-            <th>default</th>
-            <!-- for attribute in clouds[cloud][flavor]  -->
-            {% for attribute in attributes %}
-                  <th>{{attribute}}</th>
-            {% endfor %}
-          </tr>
-      </thead>
-      <tbody>
-
-
-          {% for flavor in clouds[cloud] %}
-             <tr>
-               <td>
-               	<input type="radio"
-               	name="default_flavor"
-               	value="{{flavor}}"
-				{% if (flavor|string) == (user.defaults.flavors[cloud]|string) %}
-					checked = checked
-				{% endif %}
-               	onclick = "document.forms['flavor_{{cloud}}'].submit()"/></td>
-                 <!-- for attribute in clouds[cloud][flavor] -->
-                 {% for attribute in attributes  %}
-                      <td>{{ clouds[cloud][flavor][attribute]  }}</td>
-                 {% endfor %}
-             </tr>
-          {% endfor %}
-
-      </tbody>
-    </table>
-    </form>
-  </div>
-  </div>
-
-  {% endfor %}
-
+<div class="span9" style="width:100%">
+<div id="accordion">
+    {% set table_index = 0 %}
+    {% for cloud in clouds %}
+        <h3 id="{{cloud}}">
+            <span>
+                {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/flavors") }}
+                {{ cloud }}
+            </span>
+            <span style="float:right">
+                <span class="badge"> {{ clouds[cloud] |count }} </span> Flavors
+            </span>
+        </h3>
+        <div>
+            <table id="cloud-table-{{table_index}}">
+                <thead>
+                    <tr>
+                        <th align="center">default</th>
+                        <!-- for attribute in clouds[cloud][flavor]  -->
+                        {% for attribute in attributes %}
+                            <th align="center">{{attribute}}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flavor in clouds[cloud] %}
+                        <tr>
+                            <td>
+                                <input type="radio" name="{{cloud}}_flavor" value="{{flavor}}"
+                                    onclick = "OnFlavorClicked('{{cloud}}', '{{flavor}}')"/>
+                            </td>
+                            <!-- for attribute in clouds[cloud][flavor] -->
+                            {% for attribute in attributes  %}
+                                <td>{{ clouds[cloud][flavor][attribute]  }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% set table_index = table_index + 1 %}
+    {% endfor %}
 </div>
 </div>
-
-<p>
-{{user['defaults']}}
-</p>
 
 {% endblock %}
