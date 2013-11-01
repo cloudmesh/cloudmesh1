@@ -38,6 +38,7 @@ def display_mongo_qstat_refresh(host=None):
     pbs = pbs_mongo()
     if host is None:
         hosts = ["india.futuregrid.org",
+                 "lima.futuregrid.org",
                  "sierra.futuregrid.org",
                  "hotel.futuregrid.org",
                  "alamo.futuregrid.org"]
@@ -81,6 +82,7 @@ def display_mongo_qstat_new():
 
     pbs = pbs_mongo()
     hosts = ["india.futuregrid.org",
+             "lima.futuregrid.org",
              "sierra.futuregrid.org",
              "hotel.futuregrid.org",
              "alamo.futuregrid.org"]
@@ -161,6 +163,7 @@ def display_mongo_qinfo_refresh(host=None):
 
     if host is None:
         hosts = ["india.futuregrid.org",
+                 "lima.futuregrid.org",
                  "sierra.futuregrid.org",
                  "hotel.futuregrid.org",
                  "alamo.futuregrid.org"]
@@ -197,6 +200,7 @@ def display_mongo_qinfo():
              "bravo.futuregrid.org",
              "sierra.futuregrid.org",
              "hotel.futuregrid.org",
+             "lima.futuregrid.org",
              "alamo.futuregrid.org"]
 #    for host in hosts:
 #        pbs.activate(host,user)
