@@ -5,8 +5,8 @@
 <h2> {{ image_button ("none", "365_restart", "/cm/refresh/flavors") }} Flavors - DEMO </h2>
 {% endblock contentbox %}
 
-{% block content %}
 
+{% block content %}
 <script type="text/javascript">
     var status_object = {};
 
@@ -21,17 +21,17 @@
     function CallbackAfterAccordionCreated() {
         {% set users_status = user['defaults']['pagestatus']%}
         {% for cloud in clouds %}
-            status_object["{{cloud}}"] = {"open": "false", "flavor": ""};
+            status_object['{{cloud}}'] = {'open': 'false', 'flavor':''};
             {% if users_status[cloud]["flavor"] != "" %}
                 {% set flavor_value = users_status[cloud]["flavor"] %}
                 $("input[name='{{cloud}}_flavor'][value='{{flavor_value}}']").prop('checked', true);
-                status_object["{{cloud}}"].flavor = {{users_status[cloud]["flavor"]}};
+                status_object['{{cloud}}'].flavor = '{{users_status[cloud]["flavor"]}}';
             {% endif %}
             {% if users_status[cloud]["open"] == "true" %}
                 $("#{{cloud}}").click();
             {% endif %}
         {% endfor %}
-    }
+    };
 
     function SavePageStatusToMongoDB() {
         $.ajax({
@@ -106,11 +106,13 @@ $(function() {
   {% endfor %}
 });
 
+
 $(document).ready( function() {
     CustomizeAccordionPlugin("#accordion", CallbackOnAccordionClicked, CallbackAfterAccordionCreated);
 });
 
 </script>
+
 
 
 <div class="span9" style="width:100%">
