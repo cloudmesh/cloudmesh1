@@ -61,7 +61,7 @@ super_duper_sidebar_pages = [
     ],
     ["Testing", None, None, ['admin', 'rain'],
         [
-            ["falvor", "/mesh/demo", None],
+            ["flavor", "/mesh/demo", None],
         ]
     ],
 ]

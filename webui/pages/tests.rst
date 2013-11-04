@@ -1,4 +1,5 @@
 Test
 ======================================================================
 
- `ping <test//ping>`_ 
+
+:ping: A test that measures a simple ping test between sites. `ping <test/ping>`_ 
