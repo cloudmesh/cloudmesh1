@@ -105,8 +105,8 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
 
     {{ tableHeader(cloudname, verified) }}
     {{ get_text ("Username", cloudname, "userid", True)}}
-    {{ get_password ("Access Key", cloudname, "access_key_id")}}
-    {{ get_password ("Secret Key", cloudname, "secret_access_key")}}
+    {{ get_password ("Access Key", cloudname, "EC2_ACCESS_KEY")}}
+    {{ get_password ("Secret Key", cloudname, "EC2_SECRET_KEY")}}
 
 {% endmacro %}
 
