@@ -209,27 +209,6 @@
 
 
     </body>
-
-    <script>
-//Show progress using spinner
-//$("head").ready(function(){
-//refresh(window.location.pathname);
-//});
-
-function refresh(actionPath){
-$('#progress').css({"z-index": "500", "background-color": "black"});
-var pageWidth = $(document).width();
-var pageHeight = $(document).height();
-$('#progressImage').css("position", "fixed");
-$('#progressImage').css("top", ($(window).height() / 2) - ($('#progressImage').outerHeight() / 2));
-$('#progressImage').css("left", ($(window).width() / 2) - ($('#progressImage').outerWidth() / 2));
-$('#progress').css({"height": pageHeight, "width": pageWidth});
-$('#progress').show();
-$.get( actionPath, function( data ) {
-$('#progress').hide();
-});
-}
-    </script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

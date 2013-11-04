@@ -63,7 +63,8 @@ class openstack(ComputeBaseType):
     # credential = None  # global var
     user_credential = None  # global var
     admin_credential = None
-
+    with_admin_credential = None
+    
     user_token = None
     admin_token = None
 
@@ -87,16 +88,17 @@ class openstack(ComputeBaseType):
 
     def _load_admin_credential(self):
         if self.admin_credential is None:
-            self.idp_clouds = cm_config_server().get("cloudmesh.server.keystone").keys()
-            self.with_admin_credential = self.label in self.idp_clouds
-            if self.with_admin_credential:
-                try:
-                    self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(self.label))
-                except:
-                    log.error("No admin credential found! Please check your cloudmesh_server.yaml file.")
-            else:
-                self.admin_credential = None
-                log.info("The cloud {0} has no admin credential".format(self.label))
+            if 'keystone' in cm_config_server().get('cloudmesh.server'):
+                self.idp_clouds = cm_config_server().get("cloudmesh.server.keystone").keys()
+                self.with_admin_credential = self.label in self.idp_clouds
+                if self.with_admin_credential:
+                    try:
+                        self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(self.label))
+                    except:
+                        log.error("No admin credential found! Please check your cloudmesh_server.yaml file.")
+                else:
+                    self.admin_credential = None
+                    log.info("The cloud {0} has no admin credential".format(self.label))
         return self.admin_credential
     #
     # initialize
@@ -160,8 +162,9 @@ class openstack(ComputeBaseType):
 
         if (self.admin_credential is None) and (self.with_admin_credential):
             log.error("error connecting to openstack compute, credential is None")
-        elif not self.admin_token:
-            self.admin_token = self.get_token(self.admin_credential)
+        else:
+            if self.with_admin_credential and (not self.admin_token):
+                self.admin_token = self.get_token(self.admin_credential)
 
 
     def DEBUG(self, msg):
