@@ -1,7 +1,7 @@
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from pprint import pprint
 import cloudmesh
-from sh import import ssh
+from sh import ssh
 
 
 class openstack(ComputeBaseType):
