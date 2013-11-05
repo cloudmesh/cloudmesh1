@@ -46,14 +46,14 @@ class aws(ComputeBaseType):
         self.user_credential = self.compute_config.credential(label)
 
         # Service certificate
-        self.access_key_id = self.user_credential['access_key_id']
+        self.access_key_id = self.user_credential['EC2_ACCESS_KEY']
         self.secret_access_key = \
-        self.user_credential['secret_access_key']
+        self.user_credential['EC2_SECRET_KEY']
 
         # SSH
         self.ssh_userid = self.user_credential['userid']
         self.ssh_keyname = self.user_credential['keyname']
-        self.ssh_pkey = self.user_credential['privatekeyfile']
+        self.ssh_pkey = self.user_credential['EC2_PRIVATE_KEY']
 
         # set default flavor from yaml
         flavor = self.compute_config.default(label)['flavor']

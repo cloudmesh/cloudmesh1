@@ -177,6 +177,54 @@ def mesh_register_clouds():
                 user_obj.set_credential(cm_user_id, cloudname, d)
 
 
+        elif cloudtypes[cloudname] == "aws":
+
+            error[cloudname] = ''
+
+            d = {"CM_CLOUD_TYPE": cloudtypes[cloudname]}
+
+
+            if credentials[cloudname] is None:
+                d = {
+                      'OS_USERNAME': cm_user_id,
+                      'EC2_ACCESS_KEY': '',
+                      'EC2_SECRET_KEY': '',
+                }
+
+                user_obj.set_credential(cm_user_id, cloudname, d)
+
+
+            fields = ["EC2_ACCESS_KEY", "EC2_SECRET_KEY"]
+
+            if cloudid in request.form:
+                username = request.form[cloudid]
+            else:
+                username = cm_user_id
+            d["OS_USERNAME"] = username
+
+            for id in fields:
+                if id in ["EC2_URL"]:
+                    cloudid = 'field-{0}-{1}-text'.format(cloudname, id)
+                else:
+                    cloudid = 'field-{0}-{1}-password'.format(cloudname, id)
+
+                content = ''
+                if cloudid in request.form:
+                    content = request.form[cloudid]
+                    d[id] = content
+                elif id in credential:
+                    password = credential[id]
+                    d[id] = content
+
+                if content == '':
+                    error[cloudname] = error[cloudname] + "please set " + id
+
+
+            if error[cloudname] == '':
+
+                user_obj.set_credential(cm_user_id, cloudname, d)
+
+
 
 
         '''

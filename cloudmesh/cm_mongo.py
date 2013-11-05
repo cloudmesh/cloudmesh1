@@ -177,7 +177,7 @@ class cm_mongo:
              del cloud_config['credentials']['EC2_ACCESS_KEY']
              del cloud_config['credentials']['EC2_SECRET_KEY']
         elif cloud_config['cm_type'] in ['aws']:
-            del cloud_config['credentials']['secret_access_key']
+            del cloud_config['credentials']['EC2_ACCESS_KEY']
         elif cloud_config['cm_type'] in ['azure']:
             del cloud_config['credentials']['subscriptionid']
 

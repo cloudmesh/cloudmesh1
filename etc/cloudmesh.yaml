@@ -91,11 +91,11 @@ cloudmesh:
             cm_type: amazon
             cm_type_version:
             credentials:
-                access_key_id: {{aws.access_key_id}}
-                secret_access_key: {{aws.secret_access_key}}
+                EC2_ACCESS_KEY: {{aws.access_key_id}}
+                EC2_SECRET_KEY: {{aws.secret_access_key}}
                 keyname: cloudmesh
                 userid: {{aws.userid}}
-                privatekeyfile: $HOME/.futuregrid/aws_pk.pem
+                EC2_PRIVATE_KEY: $HOME/.futuregrid/aws_pk.pem
             default:
                 flavor: m1.small
                 image: ami-fbb2fc92
