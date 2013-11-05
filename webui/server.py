@@ -208,13 +208,15 @@ def inject_version():
 @login_required
 def restricted_index():
     return render_template('index.html')
-'''
+
+
 
 @app.route('/rain')
 @login_required
 @rain_permission.require(http_exception=403)
 def rain_index():
     return render_template('sample/rain.html')
+'''
 
 
 @app.route('/admin')
