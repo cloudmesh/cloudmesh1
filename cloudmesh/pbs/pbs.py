@@ -188,6 +188,38 @@ class PBS:
 
         return queues
 
+    def _qmgr(self, command):
+        result = None
+        try:
+            result = ssh("{0}@{1}".format(self.user, self.host), command)
+        except:
+            raise RuntimeError("can not execute qmgr via ssh")
+        return result
+
+    def create_node(self, name):
+        """create node"""
+        result = None
+        try:
+            result = qmgr("create node {0}".format(name))
+        except:
+            raise RuntimeError("can not execute create node via ssh")
+        return result
+
+
+    def set_np(self, name, np):
+        """set node %name np %np | qmgr"""
+        result = None
+        try:
+            result = qmgr("set node {0} np {1}".format(name, np))
+        except:
+            raise RuntimeError("can not execute create node via ssh")
+        return result
+
+    def set_properties(self, name, properties):
+        """set node % properties %"""
+
+    def set_note (self, name, note):
+        """set node % note %"""
 
     def pbsnodes(self, refresh=True):
         """returns the pbs node infor from an pbs_nodes_raw_data is a string see above for example"""
