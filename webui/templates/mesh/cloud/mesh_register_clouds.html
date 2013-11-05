@@ -104,7 +104,7 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
 {% macro aws(cloudname, username, verified) %}
 
     {{ tableHeader(cloudname, verified) }}
-    {{ get_text ("Username", cloudname, "userid", True)}}
+    {{ get_text ("Username", cloudname, "userid", username_edit_enabled)}}
     {{ get_password ("Access Key", cloudname, "EC2_ACCESS_KEY")}}
     {{ get_password ("Secret Key", cloudname, "EC2_SECRET_KEY")}}
 
