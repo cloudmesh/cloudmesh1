@@ -416,18 +416,8 @@ def mongo_images():
         user.set_defaults(username, {})
     if 'images' not in user['defaults']:
         user['defaults']['images'] = {}
-
-    if request.method == 'POST':
-        # print "REQUEST"
-        cloud = request.form['cloud']
-        default_image = request.form['default_image']
-        # print cloud, "----------------------------->", default_image
-        user['defaults']['images'][cloud] = default_image
-        # if 'default_flavor' in request.form:
-         #   user['defaults']['flavor'] = request.form['default_flavor']
-        user_obj.set_defaults(username, user['defaults'])
-
-
+    
+    #log.debug("before render, user defaults: {0}".format(user['defaults']))
     return render_template('mesh/cloud/mesh_images.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
@@ -461,60 +451,9 @@ def mongo_flavors():
     user = user_obj.info(username)
 
     c = cm_mongo()
-    c.activate(cm_user_id=username)
+    c.activate(cm_user_id = username)
     # c.refresh(types=["flavors"])
-    clouds = c.flavors(cm_user_id=username)
-
-
-    # print "YYYYY"
-    # pprint(clouds)
-    """
-    2
-    disk 20
-    name m1.small
-    links [{u'href': u'http://198.202.120.83:8774/v1.1/1ae6813a3a6d4cebbeb1912f6d139ad0/flavors/2', u'rel': u'self'}, {u'href': u'http://198.202.120.83:8774/1ae6813a3a6d4cebbeb1912f6d139ad0/flavors/2', u'rel': u'bookmark'}]
-    OS-FLV-EXT-DATA:ephemeral 0
-    ram 2048
-    cm_refresh 2013-08-06T21-44-13Z
-    OS-FLV-DISABLED:disabled False
-    cm_id sierra_openstack_grizzly-flavors-m1-small
-    vcpus 1
-    cm_cloud sierra_openstack_grizzly
-    swap
-    os-flavor-access:is_public True
-    rxtx_factor 1.0
-    cm_kind flavors
-    _id 5201a66d7df38caf0fe160bc
-    cm_type openstack
-    id 2
-    """
-
-    """
-    for cloud in clouds:
-        print cloud
-        for flavor in clouds[cloud]:
-            print flavor
-            for attribute in clouds[cloud][flavor]:
-                print attribute, clouds[cloud][flavor][attribute]
-    """
-
-    if 'defaults' not in user:
-        user['defaults'] = {}
-        user.set_defaults(username, {})
-    if 'flavors' not in user['defaults']:
-        user['defaults']['flavors'] = {}
-
-
-    if request.method == 'POST':
-        # print "REQUEST"
-        cloud = request.form['cloud']
-        default_flavor = request.form['default_flavor']
-        # print request.form['cloud'], "----------------------------->", request.form['default_flavor']
-        user['defaults']['flavors'][cloud] = default_flavor
-        # if 'default_flavor' in request.form:
-         #   user['defaults']['flavor'] = request.form['default_flavor']
-        user_obj.set_defaults(username, user['defaults'])
-
+    clouds = c.flavors(cm_user_id = username)
 
     os_attributes = [
                      'id',
@@ -527,8 +466,11 @@ def mongo_flavors():
 
     # fake entry
 
-    user['defaults']['pagestatus'] = {'openclouds': ['sierra_open_stack_grizzly', 'hp']}
-
+    #user['defaults']['pagestatus'] = {'sierra-openstack-grizzly': {"open": "false", "flavor": "3"}}
+    if 'pagestatus' not in user['defaults']:
+        user['defaults']['pagestatus'] = init_user_pagestatus([cloud_name for cloud_name in clouds])
+    
+    #log.debug("..READING.. user default pagestatus: {0}".format(user['defaults']['pagestatus']))
     return render_template('mesh/cloud/mesh_flavors.html',
                            address_string=address_string,
                            attributes=os_attributes,
@@ -764,15 +706,11 @@ def mongo_server_table_filter(filters=None):
 # ROUTE: mongo
 # ============================================================
 
-# init page status of users
+# init page status of users, open or close
 def init_user_pagestatus(cloud_list):
     page_status_dict = {}
     for name in cloud_list:
-        page_status_dict[name] = {
-                                    "open":     "false",
-                                    "flavor":   "",
-                                    "image":    "",
-                                  }
+        page_status_dict[name] = "false"
         
     return page_status_dict
 
@@ -791,19 +729,25 @@ def mongo_save_pagestatus():
     
     for user_cloud in user_cloud_list:
         if user_cloud not in previous_page_status:
-            previous_page_status[user_cloud] = {}
+            previous_page_status[user_cloud] = "false"
+    user['defaults']['pagestatus'] = previous_page_status
     
     log.debug("request.json page status: {0}".format(request.json))
     current_page_status = request.json
+    status_options = {
+                        "open":   "pagestatus",
+                        "flavor": "flavors",
+                        "image":  "images",
+                      }
     for cloud_name in current_page_status:
         if cloud_name not in previous_page_status:
             log.error("Someone try to hack save_pagestatus by providing an invalid cloud name '{0}', just SKIP it.".format(cloud_name))
             continue
         
         for item in current_page_status[cloud_name]:
-            previous_page_status[cloud_name][item] = current_page_status[cloud_name][item]
+            user["defaults"][status_options[item]][cloud_name] = current_page_status[cloud_name][item]
     
-    user['defaults']['pagestatus'] = previous_page_status
+    #log.debug("before save, user defaults: {0}".format(user['defaults']))
     user_obj.set_defaults(username, user['defaults'])
     return "ok"
 

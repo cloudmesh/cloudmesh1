@@ -10,24 +10,33 @@
 
 <script type="text/javascript">
 
+    var status_object = {};
+
+    function CallbackOnAccordionClicked(cloud_name, status) {
+        status_object[cloud_name].open = status.toString();
+    };
+
+    function CallbackAfterAccordionCreated() {
+        {% set users_status = user['defaults']%}
+        {% for cloud in clouds %}
+            status_object['{{cloud}}'] = {'open': 'false', };
+            {% if users_status["pagestatus"][cloud] == "true" %}
+                $("#{{cloud}}").click();
+            {% endif %}
+        {% endfor %}
+    };
+
+    function CallbackBeforeUnload() {
+        SavePageStatusToMongoDB();
+    };
+
+
 function killall(cloud) {
 	var answer = confirm("Delete all selected VMs in "+cloud+"?");
 	if (answer){
 		window.location = "/cm/delete/"+cloud+"/";
 	}
 }
-
-/* http://stackoverflow.com/a/10237915 */
-(function($) {
-    $(function() {
-        $("#servers-accordion > div").accordion({ header: "h3", collapsible: true, heightStyle: "content", active: true });
-
-		$("input[type=number]").on("click", function(event) {
-    		event.stopPropagation();
-		});
-    });
-})(jQuery);
-
 
 
 $(function() {
@@ -61,133 +70,125 @@ function toggle(source,select_list) {
 
 </script>
 
- <!--
-    for cloud in clouds:
-        print cloud
-        for server in clouds[cloud]:
-            print server
-            for attribute in clouds[cloud][server]:
-                print attribute, clouds[cloud][server][attribute]
--->
+<script src="/static/js/accordion_plugin.js" type="text/javascript"></script>
+
+<script>
+    $(document).ready( function() {
+        CustomizeAccordionPlugin("#accordion", CallbackOnAccordionClicked, CallbackAfterAccordionCreated);
+    });
+
+</script>
 
 
-
-
-<div id="servers-accordion">
-  {% for cloud in clouds %}
-  <div style="margin-bottom:1em;">
-    <h3>
-    	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
-
-      	&nbsp;
-      	<span style="float:left; width:30%; white-space:nowrap;">
-      	{{ cloud }}
-      	</span>
+<div id="accordion">
+    {% set table_index = 0 %}
+    {% for cloud in clouds %}
+    <h3 id="{{cloud}}">
+        <span style="float:left; width:30%; white-space:nowrap;">
+            {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
+            {{ cloud }}
+        </span>
         <span class="badge"> {{ clouds[cloud] |count }} </span> VMs
-      	&nbsp;
-      	{{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}
-      	<input name="vms" id="vms" value ="1" min="1" max="1" maxlength="4" size="4" type="number">
-      	&nbsp;
-      	{{ image_popup ("none", "041_charts", "/stats/table/count/weekly/" + cloud + "/") }}
-      	&nbsp;
-      	{{ image_button ("none", "044_keys", "/cm/keypairs/" + cloud + "/") }}
-	</h3>
+        &nbsp;
+        {{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}
+        <input name="{{cloud}}_vms" id="{{cloud}}_vms" value ="1" min="1" max="1" maxlength="4" size="4" type="number" />
+        &nbsp;
+        {{ image_popup ("none", "041_charts", "/stats/table/count/weekly/" + cloud + "/") }}
+        &nbsp;
+        {{ image_button ("none", "044_keys", "/cm/keypairs/" + cloud + "/") }}
+    </h3>
     <div>
+        {% set flavor_id = user.defaults.flavors[cloud] %}
+        {% set image_id = user.defaults.images[cloud] %}
 
-	{% set flavor_id = user.defaults.flavors[cloud] %}
-    {% set image_id = user.defaults.images[cloud] %}
+        <p>
+            Defaults:
+            {% if image_id in images[cloud] %}
+                <a href="/mesh/images"> Image: <span class="badge"> {{images[cloud][image_id]['name']}} </span></a>
+            {% else %}
+                <a href="/mesh/images"> Image: <span class="badge"> undefined </span></a>
+            {% endif %}
 
-	<p>
-		Defaults:
-	{% if image_id in images[cloud] %}
-	    <a href="/mesh/images"> Image: <span class="badge">{{images[cloud][image_id]['name']}} </span></a>
-    {% else %}
-	    <a href="/mesh/images"> Image: <span class="badge"> undefined </span></a>
-    {% endif %}
-    {% if flavor_id  in flavors[cloud] %}
-    	 <a href="/mesh/flavors">Flavor: <span class="badge">{{flavors[cloud][flavor_id]['name']}} </span></a>
-    {% else %}
-	    <a href="/mesh/flavors"> Flavor: <span class="badge"> undefined </span></a>
-	{% endif %}
-    <a href="/profile"> last vm name: <span class="badge">{{user.defaults.prefix}}_{{user.defaults.index}} </span></a>
-	</p>
-	<form name = "selector_form_{{cloud}}" method = "post">
-    <input type ="hidden" name = "cloud" value = "{{cloud}}"/>
-
-    <table id="cloud-table-{{ loop.index0 }}" >
-      <thead>
-          <tr>
-          	<th><input type="checkbox" name="all" onClick="toggle(this,'selection_{{cloud}}')" />
-          		 <input type = "image"
-          		        src = "/static/img/icons/png/glyphicons_016_bin.png"
-          		        alt = "delete" value = "delete"
-          		         width="16" height="16"
-          		        formaction = "/cm/delete_vm_confirm"/>
-          		</th>
-	      	<th width="100"></th>
-            {% for attribute in attributes %}
-                  <th>{{attribute}}</th>
-            {% endfor %}
-          </tr>
-      </thead>
-      <tbody>
-          {% for server in clouds[cloud] %}
-             {% set s_id = clouds[cloud][server]['id'] %}
-             <tr>
-             	<td><input type="checkbox" name="selection_{{cloud}}" value = {{server}} /> </td>
-             	<td>
-             	 	{{ href_image_button ("none", "368_collapse", "/cm/login/" ~ cloud ~ "/" ~ s_id ~ "/") }}
-	  				{{ href_image_button ("right", "195_circle_info", "/cm/info/" ~ cloud ~ "/" ~ s_id ~ "/") }}
-	  				<a href="/cm/assignpubip/{{cloud}}/{{s_id}}/">  IP </a>
-	  				{{ image_popup ("none", "041_charts", "/cm/stats/" ~ cloud ~ "/" ~ s_id ~ "/") }}
-	  				{{ href_image_button ("right", "016_bin", "/cm/delete/" ~ cloud + "/" ~ s_id ~ "/") }}
-             	 </td>
-                 <!-- for attribute in clouds[cloud][server] -->
-                 {% for attribute in attributes %}
-                      {% if attribute == "created" %}
-                          <td>{{ clouds[cloud][server][attribute] }}</td>
-
-					  {% elif attribute == "status"%}
-					      <td> {{ cm_state_color(clouds[cloud][server][attribute]) }}</td>
-
-                      {% elif attribute == "flavor" %}
-                      	{% set id = clouds[cloud][server][attribute]['id'] %}
-                          <td> {% if id in flavors[cloud] %}
-                                {{flavors[cloud][id]['name']}}
-                               {% else %}
-                                Flavor not available anymore!
-                               {% endif %}
-                          </td>
-
-                      {% elif attribute == "image" %}
-		      {% if attribute in clouds[cloud][server] %}
-		      	{% set id = clouds[cloud][server][attribute]['id'] %}
-		      {% else %}
-			{% set id = None %}
-		      {% endif %}
-
-                          <td> {% if id in images[cloud] %}
-                                {{images[cloud][id]['name']}}
-                               {% else %}
-                                Image not available anymore!
-                               {% endif %}
-                          </td>
-
-                      {% elif attribute == "addresses" %}
-                          <td>{{ address_string(clouds[cloud][server][attribute]) }}</td>
-                      {% else %}
-                          <td>{{ clouds[cloud][server][attribute]  }}</td>
-                      {% endif %}
-                 {% endfor %}
-             </tr>
-          {% endfor %}
-      </tbody>
-    </table>
-    <br>
-   </form>
+            {% if flavor_id  in flavors[cloud] %}
+                <a href="/mesh/flavors">Flavor: <span class="badge"> {{flavors[cloud][flavor_id]['name']}} </span></a>
+            {% else %}
+                <a href="/mesh/flavors"> Flavor: <span class="badge"> undefined </span></a>
+            {% endif %}
+            <a href="/profile"> last vm name: <span class="badge"> {{user.defaults.prefix}}_{{user.defaults.index}} </span></a>
+        </p>
+        {% if (clouds[cloud].keys() | count) == 0 %}
+            No flavors found. Please refresh.
+        {% else %}
+            <table id="cloud-table-{{table_index}}" >
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" name="{{cloud}}_all" onClick="toggle(this,'selection_{{cloud}}')" />
+                            <input type = "image"
+                                src = "/static/img/icons/png/glyphicons_016_bin.png"
+                                alt = "delete" value = "delete"
+                                width="16" height="16"
+                                formaction = "/cm/delete_vm_confirm"/>
+                        </th>
+                        <th width="100">&nbsp;</th>
+                        {% for attribute in attributes %}
+                            <th>{{attribute}}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for server in clouds[cloud] %}
+                        {% set s_id = clouds[cloud][server]['id'] %}
+                        <tr>
+                            <td><input type="checkbox" name="selection_{{cloud}}" value = {{server}} /> </td>
+                            <td>
+                                {{ href_image_button ("none", "368_collapse", "/cm/login/" ~ cloud ~ "/" ~ s_id ~ "/") }}
+                                {{ href_image_button ("right", "195_circle_info", "/cm/info/" ~ cloud ~ "/" ~ s_id ~ "/") }}
+                                <a href="/cm/assignpubip/{{cloud}}/{{s_id}}/">  IP </a>
+                                {{ image_popup ("none", "041_charts", "/cm/stats/" ~ cloud ~ "/" ~ s_id ~ "/") }}
+                                {{ href_image_button ("right", "016_bin", "/cm/delete/" ~ cloud + "/" ~ s_id ~ "/") }}
+                            </td>
+                            <!-- for attribute in clouds[cloud][server] -->
+                            {% for attribute in attributes %}
+                                {% if attribute == "created" %}
+                                    <td>{{ clouds[cloud][server][attribute] }}</td>
+                                {% elif attribute == "status"%}
+                                    <td> {{ cm_state_color(clouds[cloud][server][attribute]) }}</td>
+                                {% elif attribute == "flavor" %}
+                                    {% set id = clouds[cloud][server][attribute]['id'] %}
+                                    <td>
+                                        {% if id in flavors[cloud] %}
+                                            {{flavors[cloud][id]['name']}}
+                                        {% else %}
+                                            Flavor not available anymore!
+                                        {% endif %}
+                                    </td>
+                                {% elif attribute == "image" %}
+                                    {% if attribute in clouds[cloud][server] %}
+                                        {% set id = clouds[cloud][server][attribute]['id'] %}
+                                    {% else %}
+                                        {% set id = None %}
+                                    {% endif %}
+                                    <td>
+                                        {% if id in images[cloud] %}
+                                            {{images[cloud][id]['name']}}
+                                        {% else %}
+                                            Image not available anymore!
+                                        {% endif %}
+                                    </td>
+                                {% elif attribute == "addresses" %}
+                                    <td>{{ address_string(clouds[cloud][server][attribute]) }}</td>
+                                {% else %}
+                                    <td>{{ clouds[cloud][server][attribute]  }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     </div>
-  </div>
-  {% endfor %}
+    {% set table_index = table_index + 1 %}
+    {% endfor %}
 </div>
 
 

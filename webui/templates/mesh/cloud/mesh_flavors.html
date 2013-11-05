@@ -8,14 +8,34 @@
 {% block content %}
 
 <script type="text/javascript">
+    var status_object = {};
 
-/* http://stackoverflow.com/a/10237915 */
-(function($) {
-    $(function() {
-        $("#flavors-accordion > div").accordion({ header: "h3",
-        collapsible: true, heightStyle: "content", active: true });
-    });
-})(jQuery);
+    function OnFlavorClicked(cloud_name, flavor_value) {
+        status_object[cloud_name].flavor = flavor_value;
+    };
+
+    function CallbackOnAccordionClicked(cloud_name, status) {
+        status_object[cloud_name].open = status.toString();
+    };
+
+    function CallbackAfterAccordionCreated() {
+        {% set users_status = user['defaults']%}
+        {% for cloud in clouds %}
+            status_object['{{cloud}}'] = {'open': 'false', 'flavor': 'none'};
+            {% if users_status["flavors"][cloud] and users_status["flavors"][cloud] != "none" %}
+                {% set flavor_value = users_status["flavors"][cloud] %}
+                $("input[name='{{cloud}}_flavor'][value='{{flavor_value}}']").prop('checked', true);
+                status_object['{{cloud}}'].flavor = '{{users_status["flavors"][cloud]}}';
+            {% endif %}
+            {% if users_status["pagestatus"][cloud] == "true" %}
+                $("#{{cloud}}").click();
+            {% endif %}
+        {% endfor %}
+    };
+
+    function CallbackBeforeUnload() {
+        SavePageStatusToMongoDB();
+    };
 
 $(function() {
   {% for cloudnum in range(clouds|count) %}
@@ -41,75 +61,61 @@ $(function() {
 
 </script>
 
- <!--
-    for cloud in clouds:
-        print cloud
-        for server in clouds[cloud]:
-            print server
-            for attribute in clouds[cloud][server]:
-                print attribute, clouds[cloud][server][attribute]
--->
+<script src="/static/js/accordion_plugin.js" type="text/javascript"></script>
+
+<script>
+    $(document).ready( function() {
+        CustomizeAccordionPlugin("#accordion", CallbackOnAccordionClicked, CallbackAfterAccordionCreated);
+    });
+
+</script>
 
 
-
-
-<div class="span9">
-<div id="flavors-accordion">
-  {% for cloud in clouds %}
-
-    {% set cloud_loop = loop %}
-  <div id="d-{{cloud}}" style="margin-bottom:1em;">
-  <h3 id="h-{{cloud}}">
-  	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/flavors") }}
-   	<span style="float:left; width:30%; white-space:nowrap;">
-  	    {{ cloud }}
-  	</span>
-    <span class="badge"> {{ clouds[cloud] |count }} </span> Flavors
-  </h3>
-  <div>
-  	<form name = "flavor_{{cloud}}" method = 'POST' action = "/mesh/flavors/">
-    <input type = hidden name = "cloud" value = "{{cloud}}"/>
-
-
-    <table id="cloud-table-{{ loop.index0 }}">
-      <thead>
-          <tr>
-            <th>default</th>
-            <!-- for attribute in clouds[cloud][flavor]  -->
-            {% for attribute in attributes %}
-                  <th>{{attribute}}</th>
-            {% endfor %}
-          </tr>
-      </thead>
-      <tbody>
-
-
-          {% for flavor in clouds[cloud] %}
-             <tr>
-               <td>
-               	<input type="radio"
-               	name="default_flavor"
-               	value="{{flavor}}"
-				{% if (flavor|string) == (user.defaults.flavors[cloud]|string) %}
-					checked = checked
-				{% endif %}
-               	onclick = "document.forms['flavor_{{cloud}}'].submit()"/></td>
-                 <!-- for attribute in clouds[cloud][flavor] -->
-                 {% for attribute in attributes  %}
-                      <td>{{ clouds[cloud][flavor][attribute]  }}</td>
-                 {% endfor %}
-             </tr>
-          {% endfor %}
-
-      </tbody>
-    </table>
-    </form>
-  </div>
-  </div>
-
-  {% endfor %}
-
-</div>
+<div id="accordion">
+    {% set table_index = 0 %}
+    {% for cloud in clouds %}
+        <h3 id="{{cloud}}">
+            <span style="float:left; width:30%; white-space:nowrap;">
+                {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/flavors") }}
+                {{ cloud }}
+            </span>
+            <span>
+                <span class="badge"> {{ clouds[cloud] |count }} </span> Flavors
+            </span>
+        </h3>
+        <div>
+            {% if (clouds[cloud].keys() | count) == 0 %}
+                No flavors found. Please refresh.
+            {% else %}
+                <table id="cloud-table-{{table_index}}">
+                    <thead>
+                        <tr>
+                            <th align="center">default</th>
+                            <!-- for attribute in clouds[cloud][flavor]  -->
+                            {% for attribute in attributes %}
+                                <th align="center">{{attribute}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for flavor in clouds[cloud] %}
+                            <tr>
+                                <td>
+                                    <input type="radio" name="{{cloud}}_flavor" value="{{flavor}}"
+                                        onclick = "OnFlavorClicked('{{cloud}}', '{{flavor}}')"/>
+                                </td>
+                                <!-- for attribute in clouds[cloud][flavor] -->
+                                {% for attribute in attributes  %}
+                                    <td>{{ clouds[cloud][flavor][attribute]  }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+        {% set table_index = table_index + 1 %}
+    {% endfor %}
 </div>
 
 {% endblock %}

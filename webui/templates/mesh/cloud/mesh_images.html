@@ -8,16 +8,34 @@
 
 {% block content %}
 <script type="text/javascript">
+    var status_object = {};
 
-/* http://stackoverflow.com/a/10237915 */
-(function($) {
-    $(function() {
-        $("#images-accordion > div").accordion({ header: "h3",
-        										 collapsible: true,
-        										 heightStyle: "content",
-        										 active: false });
-    });
-})(jQuery);
+    function OnImageClicked(cloud_name, image_value) {
+        status_object[cloud_name].image = image_value;
+    }
+
+    function CallbackOnAccordionClicked(cloud_name, status) {
+        status_object[cloud_name].open = status.toString();
+    }
+
+    function CallbackAfterAccordionCreated() {
+        {% set users_status = user['defaults']%}
+        {% for cloud in clouds %}
+            status_object['{{cloud}}'] = {'open': 'false', 'image': 'none',};
+            {% if users_status["images"][cloud] and users_status["images"][cloud] != "none" %}
+                {% set image_value = users_status["images"][cloud] %}
+                $("input[name='{{cloud}}_image'][value='{{image_value}}']").prop('checked', true);
+                status_object['{{cloud}}'].image = '{{users_status["images"][cloud]}}';
+            {% endif %}
+            {% if users_status["pagestatus"][cloud] == "true" %}
+                $("#{{cloud}}").click();
+            {% endif %}
+        {% endfor %}
+    };
+
+    function CallbackBeforeUnload() {
+        SavePageStatusToMongoDB();
+    };
 
 
 $(function() {
@@ -41,102 +59,86 @@ $(function() {
     });
   {% endfor %}
 });
-
 </script>
 
- <!--
-    for cloud in clouds:
-        print cloud
-        for server in clouds[cloud]:
-            print server
-            for attribute in clouds[cloud][server]:
-                print attribute, clouds[cloud][server][attribute]
--->
+<script src="/static/js/accordion_plugin.js" type="text/javascript"></script>
+
+<script>
+    $(document).ready( function() {
+        CustomizeAccordionPlugin("#accordion", CallbackOnAccordionClicked, CallbackAfterAccordionCreated);
+    });
+</script>
 
 
-<div id="images-accordion">
-  {% for cloud in clouds %}
-    {% set cloud_loop = loop %}
-    {% set version = clouds[cloud]['cm_type_version'] %}
+<div id="accordion">
+    {% set table_index = 0 %}
+    {% for cloud in clouds %}
+        {% set version = clouds[cloud]['cm_type_version'] %}
+        <h3 id="{{cloud}}">
+            <span style="float:left; width:30%; white-space:nowrap;">
+                {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/images") }}
+                {{ cloud }}
+            </span>
+            <span class="badge"> {{ clouds[cloud] |count }} </span> Images
+        </h3>
+        <div>
+        {% if (clouds[cloud].keys() | count) == 0 %}
+            No images found. Please refresh.
+        {% else %}
 
-  <div style="margin-bottom:1em;">
-  <h3>
-  	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/images") }}
-  	<span style="float:left; width:30%; white-space:nowrap;">
-  	{{ cloud }}
-  	</span>
-	 <span class="badge"> {{ clouds[cloud] |count }} </span> Images
-  </h3>
-  <div>
+            {% set cloud_type = clouds[cloud][clouds[cloud].keys()[0]]['cm_type'] %}
 
-	{% if (clouds[cloud].keys() | count) == 0 %}
+            {% set attributes = cloud_attributes[cloud_type] %}
 
-		No images found. Please refresh.
-
-    {% else %}
-
-	  	{% set cloud_type = clouds[cloud][clouds[cloud].keys()[0]]['cm_type'] %}
-
-    {% set attributes = cloud_attributes[cloud_type]%}
-
-
-  	 <form name = "image_{{cloud}}" method = 'POST' action = "/mesh/images/">
-    <input type = hidden name = "cloud" value = "{{cloud}}"/>
-    <table id="cloud-table-{{ loop.index0 }}">
-      <thead>
-          <tr>
-            <th>default</th>
-            {% for attribute in attributes %}
-              <th>{{attribute [0] }}</th>
-            {% endfor %}
-          </tr>
-      </thead>
-      <tbody>
-          {% for image in clouds[cloud] %}
-            {% set version = clouds[cloud][image]['cm_type'] %}
-            {% set attributes = cloud_attributes[version]%}
-             <tr>
-                 <td>
-                 	<input type="radio"
-               	name="default_image"
-               	{% if image == user.defaults.images[cloud] %}
-					checked = checked
-				{%endif%}
-               	value = {{image}}
-				onclick = "document.forms['image_{{cloud}}'].submit()"/></td>
-                 {% for attribute in attributes  %}
-                      <td>
-                          {% set l = attribute | length %}
-
-                          {% if l == 2%}
-                             {% if attribute[0] in ['status'] %}
-                             	{{ cm_state_color(clouds[cloud][image][attribute[1]]) }}
-    						 {% else %}
-	                          	{{ clouds[cloud][image][attribute[1]] }}
-    						 {% endif %}
-                          {% elif l == 3%}
-	                          {% if attribute[0] in ['state'] %}
-	                             {{ cm_state_color(clouds[cloud][image][attribute[1]][attribute[2]]) }}
-	                          {% else %}
-    	                         {{ clouds[cloud][image][attribute[1]][attribute[2]] }}
-    	                      {% endif %}
-                          {% elif l == 4%}
-                             {{ clouds[cloud][image][attribute[1]][attribute[2]][attribute[4]] }}
-                          {% endif %}
-                      </td>
-                 {% endfor %}
-
-             </tr>
-
-	    {%- if cloud == "aws" and loop.index >= 200 %}{% break %}{% endif %}
-          {% endfor %}
-      </tbody>
-    </table>
-	 {% endif %}
-  </form>
-  </div>
-  </div>
-  {% endfor %}
+            <table id="cloud-table-{{table_index}}">
+                <thead>
+                    <tr>
+                        <th>default</th>
+                        {% for attribute in attributes %}
+                            <th>{{attribute [0] }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for image in clouds[cloud] %}
+                        {% set version = clouds[cloud][image]['cm_type'] %}
+                        {% set attributes = cloud_attributes[version] %}
+                        <tr>
+                            <td>
+                                <input type="radio" name="{{cloud}}_image" value = "{{image}}"
+                                    onclick = "OnImageClicked('{{cloud}}', '{{image}}')" />
+                            </td>
+                            {% for attribute in attributes  %}
+                                <td>
+                                    {% set l = attribute | length %}
+                                    {% if l == 2%}
+                                        {% if attribute[0] in ['status'] %}
+                                            {{ cm_state_color(clouds[cloud][image][attribute[1]]) }}
+                                        {% else %}
+                                            {{ clouds[cloud][image][attribute[1]] }}
+                                        {% endif %}
+                                    {% elif l == 3%}
+                                        {% if attribute[0] in ['state'] %}
+                                            {{ cm_state_color(clouds[cloud][image][attribute[1]][attribute[2]]) }}
+                                        {% else %}
+                                            {{ clouds[cloud][image][attribute[1]][attribute[2]] }}
+                                        {% endif %}
+                                    {% elif l == 4%}
+                                        {{ clouds[cloud][image][attribute[1]][attribute[2]][attribute[4]] }}
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        {%- if cloud == "aws" and table_index >= 200 %}
+                            {% break %}
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+    {% set table_index = table_index + 1 %}
+{% endfor %}
 
 </div>
 
