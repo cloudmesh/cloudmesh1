@@ -7,10 +7,10 @@ stand alone user interface. Currently we support Torques qstat and quinfo
 
 
 :qinfo: Information about which queues are available
+
 :qstat: Information which jobs ar ecurrently running
 
-Bugs
------------
+**Bugs**
 
 Note that an older version of Torque is installed on FutureGrid, and sometimes 
 returns negative numbers. In future we will upgrade this version to remove this bug.

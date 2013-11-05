@@ -186,6 +186,7 @@ def mesh_register_clouds():
 
             if credentials[cloudname] is None:
                 d = {
+                      'OS_USERNAME': cm_user_id,
                       'EC2_ACCESS_KEY': '',
                       'EC2_SECRET_KEY': '',
                 }
@@ -194,6 +195,12 @@ def mesh_register_clouds():
 
 
             fields = ["EC2_ACCESS_KEY", "EC2_SECRET_KEY"]
+
+            if cloudid in request.form:
+                username = request.form[cloudid]
+            else:
+                username = cm_user_id
+            d["OS_USERNAME"] = username
 
             for id in fields:
                 if id in ["EC2_URL"]:
