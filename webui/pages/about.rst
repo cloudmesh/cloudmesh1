@@ -5,16 +5,16 @@ About
 ----------------------------------------------------------------------
 
 We are working towards providing the following features into
-Cloudmesh:
+cloudmesh:
 
-* easy management of multiple clouds in Cloudmesh while supporting
-  variious native libraries. 
-* portability library to access information in regrads to images,
+* easy management of multiple clouds in cloudmesh while supporting
+  various native libraries. 
+* portability library to access information in regards to images,
   flavors, and vms
-* management of hundrests/thausends of virtual machines
-* integration of non FutureGrid CLouds by users into cloudmesh so
-  users can acces sthem from cloudmesh
-* a commandline shell 
+* management of hundreds/thousands of virtual machines
+* integration of non FutureGrid cLouds by users into cloudmesh so
+  users can access them from cloudmesh
+* a command line shell 
 * a web interface
 * possibility to download and deploy cloudmesh locally by a user (so
   he can manage his own clouds)
@@ -25,12 +25,12 @@ Cloudmesh:
 ----------------------------------------------------------------------
 
 * AWS, Azure, and EC2 images can not yet be handled well in the
-  datatables if there are thoausends of entries.
+  data tables if there are thousands of entries.
 * Adding an arbitrary cloud has not yet been enabled, although it can
-  be achieved via adding it from the commandline
+  be achieved via adding it from the command line
 * The asynchronous refresh has not yet been enabled
-* The look of the table in server does not yet look noce on the header
-  level (allignment)
+* The look of the table in server does not yet look nice on the header
+  level (alignment)
 * keys for Azure and AWS vms are not yet managed via cloudmesh
 * certificates from AWS, and Azure are not yet uploadable by the user
 * AWS, and Azure return a large number of images. data tables may have
@@ -40,7 +40,7 @@ Cloudmesh:
 ----------------------------------------------------------------------
 
 `Cloudmesh <https://github.com/cloudmesh/cloudmesh>`_ is a community project and has received contributions from
-12 developers. Their anmes and contributions to the code are
+12 developers. Their names and contributions to the code are
 maintained in Github and you can find out more information about each
 individual contributor from out  `Github Project Page </git>`_ .
 
@@ -60,15 +60,15 @@ Cloudmesh is part of the effort of FutureGrid to provide a simple
 experiment management functionality. It has been used at IU for about
 9 month.
 
-Originally cloudmesh was just a `commandline tool
+Originally cloudmesh was just a `command line tool
 <https://github.com/futuregrid/cm>`_ that was able to
-start hundrets of VMs on various clouds in order to conduct stress
+start hundreds of VMs on various clouds in order to conduct stress
 testing of cloud deployments. There was no comparable tool
 available. Our requirements were simple, but none of the tools
-fullfilled the following requirements:
+fulfilled the following requirements:
 
-* start hundrets of VMs from the commandline with a simple command
-* delete the VMs from a user through the commandline
+* start hundreds of VMs from the command line with a simple command
+* delete the VMs from a user through the command line
 * provide native support of the cloud and not just using a wrapper
   library such as libcloud or a standard such as OCCI (we wanted to
   debug the cloud and not the wrapper libraries or standards)
@@ -95,9 +95,9 @@ more sophisticated interfaces in General.
 At the same time we reused our python command shell interpreter cmd3
 so that it is more easily possible to develop command line tools
 automatically from the commands we already developed as part of the
-commandshell anyways.
+command shell anyways.
 
-A command shell is obvioussly important as it allows us to describe
+A command shell is obviously important as it allows us to describe
 experiments as scripts.
 
 Cloudmesh 0.3
@@ -107,7 +107,7 @@ Base on the success from the earlier versions and the use of a web
 browser as interface, it became clear that users could benefit from
 our effort. Thus we started to generalize the framework a bit and work
 towards distributing cloudmesh as a single user environment while
-users can install a stand allone version of the software.
+users can install a stand alone version of the software.
 
 Based on this internal success of cloudmesh we started thinking it
 would be good to expose the functionality also to users.
@@ -115,15 +115,15 @@ would be good to expose the functionality also to users.
 Cloudmesh 0.4
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In cloudmesh 0.4 we transformed the store of the VM, flavore, and
-images into a database, we also moved the development of the code ina
+In cloudmesh 0.4 we transformed the store of the VM, flavor, and
+images into a database, we also moved the development of the code in a
 new  `Github Cloudmesh <https://github.com/cloudmesh/cloudmesh>`_ 
 repository.
 
 Cloudmesh 0.5 - 0.7
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following importnat changes took place:
+The following important changes took place:
 
 * introduction of a role based authentication theme
 * adding FG authentication from the portal account
@@ -131,3 +131,4 @@ The following importnat changes took place:
 * adding capabilities to list vms, flavors, and images from AWS
 * adding capabilities to list vms, flavors, and images from Azure
 * adding capabilities to list vms, flavors, and images from EC2 (via libcloud)
+
