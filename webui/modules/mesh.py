@@ -418,12 +418,17 @@ def mongo_images():
             for attribute in clouds[cloud][image]:
                 print attribute, clouds[cloud][image][attribute]
     """
+    # commented by Heng Chen on Nov. 8, 2013
+    # The following check is repetive because these attributes are added 
+    #    by 'cm_user.init_defaults(username)' 
+    #    this method will be called when page is loaded
+    """
     if 'defaults' not in user:
         user['defaults'] = {}
         user.set_defaults(username, {})
     if 'images' not in user['defaults']:
         user['defaults']['images'] = {}
-    
+    """
     #log.debug("before render, user defaults: {0}".format(user['defaults']))
     return render_template('mesh/cloud/mesh_images.html',
                            address_string=address_string,
@@ -474,9 +479,15 @@ def mongo_flavors():
     # fake entry
 
     #user['defaults']['pagestatus'] = {'sierra-openstack-grizzly': {"open": "false", "flavor": "3"}}
+    
+    # commented by Heng Chen on Nov. 8, 2013
+    # The following check is repetive because these attributes are added 
+    #    by 'cm_user.init_defaults(username)' 
+    #    this method will be called when page is loaded
+    """
     if 'pagestatus' not in user['defaults']:
         user['defaults']['pagestatus'] = init_user_pagestatus([cloud_name for cloud_name in clouds])
-    
+    """
     #log.debug("..READING.. user default pagestatus: {0}".format(user['defaults']['pagestatus']))
     return render_template('mesh/cloud/mesh_flavors.html',
                            address_string=address_string,
@@ -617,6 +628,7 @@ def mongo_table(filters=None):
     #    for server in clouds[cloud]:
     #        print server
     #        print clouds[cloud][server]['flavor']
+    
     return render_template('mesh/cloud/mesh_servers.html',
                            address_string=address_string,
                            attributes=os_attributes,
@@ -713,6 +725,8 @@ def mongo_server_table_filter(filters=None):
 # ROUTE: mongo
 # ============================================================
 
+# NOT USED
+# since Nov. 8, 2013
 # init page status of users, open or close
 def init_user_pagestatus(cloud_list):
     page_status_dict = {}
@@ -730,6 +744,11 @@ def mongo_save_pagestatus():
     user = user_obj.info(username)
     cmongo = cm_mongo()
     user_cloud_list = cmongo.active_clouds(username)
+    # commented/modified by Heng Chen on Nov. 8, 2013
+    # The following check is repetive because these attributes are added 
+    #    by 'cm_user.init_defaults(username)' 
+    #    this method will be called when page is loaded
+    """
     previous_page_status = {}
     if 'pagestatus' in user['defaults']:
         previous_page_status = user['defaults']['pagestatus']
@@ -738,7 +757,7 @@ def mongo_save_pagestatus():
         if user_cloud not in previous_page_status:
             previous_page_status[user_cloud] = "false"
     user['defaults']['pagestatus'] = previous_page_status
-    
+    """
     log.debug("request.json page status: {0}".format(request.json))
     current_page_status = request.json
     status_options = {
@@ -747,12 +766,9 @@ def mongo_save_pagestatus():
                         "image":  "images",
                       }
     for cloud_name in current_page_status:
-        if cloud_name not in previous_page_status:
-            log.error("Someone try to hack save_pagestatus by providing an invalid cloud name '{0}', just SKIP it.".format(cloud_name))
-            continue
-        
-        for item in current_page_status[cloud_name]:
-            user["defaults"][status_options[item]][cloud_name] = current_page_status[cloud_name][item]
+        if cloud_name in user_cloud_list:
+            for item in current_page_status[cloud_name]:
+                user["defaults"][status_options[item]][cloud_name] = current_page_status[cloud_name][item]
     
     #log.debug("before save, user defaults: {0}".format(user['defaults']))
     user_obj.set_defaults(username, user['defaults'])

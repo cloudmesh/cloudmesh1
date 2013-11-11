@@ -245,7 +245,19 @@ class cm_user(object):
                     pass
                 defaults['flavors'][cloud] = default_flavor
 
-
+        #
+        # set default page status (Accordion open/close) for active clouds
+        # added by Heng Chen, Nov. 8, 2013
+        # to fix the bug 'UndefinedError: no attribute pagestatus' found by Hyungro Lee on Nov. 7, 2013
+        #
+        str_pagestatus = 'pagestatus'
+        if str_pagestatus not in defaults:
+            defaults[str_pagestatus] = {}
+        for cloud in defaults['activeclouds']:
+            if cloud not in defaults[str_pagestatus]:
+                defaults[str_pagestatus][cloud] = "false"
+        
+        
         if 'securitygroup' not in defaults:
             defaults['securitygroup'] = self.default_security_group
 

@@ -12,6 +12,37 @@ function SavePageStatusToMongoDB() {
     });
 };
 
+function StopEventPropagation(e) {
+    if (!e)
+        e = window.event;
+
+    //IE9 & Other Browsers
+    if (e.stopPropagation) {
+        e.stopPropagation();
+    }
+    //IE8 and Lower
+    else {
+        e.cancelBubble = true;
+    }
+};
+
+function PreventClickEventPropagate(helem) {
+    $(helem).on(
+        "mousedown", function(e) {
+            StopEventPropagation(e);
+        }
+    ).on(
+        "mouseup", function(e) {
+            StopEventPropagation(e);
+        }
+    ).on(
+        "click", function(e) {
+            StopEventPropagation(e);
+        }
+    );
+};
+
+
 function CustomizeAccordionPlugin(aid, CallbackOnAccordionClicked, CallbackAfterAccordionCreated) {
     $(aid).accordion(
         {

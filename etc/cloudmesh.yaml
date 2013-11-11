@@ -88,7 +88,7 @@ cloudmesh:
         aws:
             cm_host: aws.amazon.com
             cm_label: aws
-            cm_type: amazon
+            cm_type: aws
             cm_type_version:
             credentials:
                 EC2_ACCESS_KEY: {{aws.access_key_id}}

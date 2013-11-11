@@ -75,6 +75,7 @@ function toggle(source,select_list) {
 <script>
     $(document).ready( function() {
         CustomizeAccordionPlugin("#accordion", CallbackOnAccordionClicked, CallbackAfterAccordionCreated);
+        PreventClickEventPropagate(".inner_function_button");
     });
 
 </script>
@@ -85,17 +86,27 @@ function toggle(source,select_list) {
     {% for cloud in clouds %}
     <h3 id="{{cloud}}">
         <span style="float:left; width:30%; white-space:nowrap;">
-            {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
+            <span class="inner_function_button">
+                {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
+            </span>
             {{ cloud }}
         </span>
         <span class="badge"> {{ clouds[cloud] |count }} </span> VMs
         &nbsp;
-        {{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}
-        <input name="{{cloud}}_vms" id="{{cloud}}_vms" value ="1" min="1" max="1" maxlength="4" size="4" type="number" />
+        <span class="inner_function_button" style="margin-left: 32px;">
+            {{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}
+        </span>
+        <span>
+            <label name="{{cloud}}_vms" id="{{cloud}}_vms" style="display: inline-block">{{user['defaults']['prefix']}}_{{user['defaults']['index']}} </label>
+        </span>
         &nbsp;
-        {{ image_popup ("none", "041_charts", "/stats/table/count/weekly/" + cloud + "/") }}
+        <span class="inner_function_button" style="margin-left: 32px;">
+            {{ image_popup ("none", "041_charts", "/stats/table/count/weekly/" + cloud + "/") }}
+        </span>
         &nbsp;
-        {{ image_button ("none", "044_keys", "/cm/keypairs/" + cloud + "/") }}
+        <span class="inner_function_button">
+            {{ image_button ("none", "044_keys", "/cm/keypairs/" + cloud + "/") }}
+        </span>
     </h3>
     <div>
         {% set flavor_id = user.defaults.flavors[cloud] %}

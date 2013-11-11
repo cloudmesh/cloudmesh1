@@ -21,8 +21,8 @@ import os
 from pprint import pprint
 from urlparse import urlparse
 
-from sh import fgrep
-from sh import nova
+# from sh import fgrep
+# from sh import nova
 
 # from cm_credential import credentials
 from cloudmesh.util.cm_table import cm_table
@@ -30,11 +30,11 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
-from cloudmesh.cm_profile import cm_profile
+# from cloudmesh.cm_profile import cm_profile
 from cloudmesh.util.logger import LOGGER
 
-import novaclient
-from novaclient.openstack.common import strutils
+# import novaclient
+# from novaclient.openstack.common import strutils
 
 log = LOGGER(__file__)
 
@@ -82,7 +82,7 @@ class openstack(ComputeBaseType):
     # : The user id
     user_id = None  # internal var
 
-    _nova = nova
+    # _nova = nova
 
 
 
