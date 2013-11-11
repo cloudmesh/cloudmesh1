@@ -196,6 +196,7 @@ def mesh_register_clouds():
 
             fields = ["EC2_ACCESS_KEY", "EC2_SECRET_KEY"]
 
+            cloudid = 'field-{0}-userid-text'.format(cloudname)
             if cloudid in request.form:
                 username = request.form[cloudid]
             else:
