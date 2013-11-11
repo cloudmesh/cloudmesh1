@@ -1,15 +1,35 @@
-$(window).bind("beforeunload", function() {
-        CallbackBeforeUnload();
-});
+// commented by Heng Chen on Nov. 11, 2013
+//    because this does not have a good compatibility with every browser
+//    The related actions will be changed to save to db immediately after user click
+// BEGIN comment
+//$(window).bind("beforeunload", function() {
+//        CallbackBeforeUnload();
+//});
+// END comment
 
-function SavePageStatusToMongoDB() {
-    $.ajax({
-        type: "POST",
-        url:  "/mesh/savepagestatus/",
-        data: JSON.stringify(status_object),
-        dataType: "json",
-        contentType: 'application/json; charset=utf-8',
-    });
+// function declaration
+// This function will be called after the accordion is created
+function CallbackAfterAccordionCreated() {
+    // The function MUST be override in html page
+}
+
+// function declaration
+// This function will be called after a section of the accordion is clicked
+function CallbackOnAccordionClicked(hid, bflag) {
+    // The function MUST be override in html page
+}
+
+
+function SavePageStatusToMongoDB(flag_save) {
+    if (flag_save) {
+        $.ajax({
+            type: "POST",
+            url:  "/mesh/savepagestatus/",
+            data: JSON.stringify(status_object),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+        });
+    }
 };
 
 function StopEventPropagation(e) {

@@ -175,6 +175,11 @@ class cm_user(object):
     default_cloud = None
     
     def init_defaults(self, username):
+        # ONLY for debug
+        # added by Heng Chen on Nov. 11, 2013 to test LDAP and user.mongo
+        # BEGIN debug
+        log.debug("cm_user_init_defaults, I was called.........")
+        # END debug
 
         user = self.info(username)
 

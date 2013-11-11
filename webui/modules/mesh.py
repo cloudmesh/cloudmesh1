@@ -429,7 +429,7 @@ def mongo_images():
     if 'images' not in user['defaults']:
         user['defaults']['images'] = {}
     """
-    #log.debug("before render, user defaults: {0}".format(user['defaults']))
+    log.debug("mesh_images, before render, user defaults: {0}".format(user['defaults']))
     return render_template('mesh/cloud/mesh_images.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
@@ -488,7 +488,7 @@ def mongo_flavors():
     if 'pagestatus' not in user['defaults']:
         user['defaults']['pagestatus'] = init_user_pagestatus([cloud_name for cloud_name in clouds])
     """
-    #log.debug("..READING.. user default pagestatus: {0}".format(user['defaults']['pagestatus']))
+    log.debug("mesh_flavors, before render, user defaults: {0}".format(user['defaults']))
     return render_template('mesh/cloud/mesh_flavors.html',
                            address_string=address_string,
                            attributes=os_attributes,
@@ -629,6 +629,7 @@ def mongo_table(filters=None):
     #        print server
     #        print clouds[cloud][server]['flavor']
     
+    log.debug("mesh_servers, before render, user defaults: {0}".format(user['defaults']))
     return render_template('mesh/cloud/mesh_servers.html',
                            address_string=address_string,
                            attributes=os_attributes,
@@ -770,8 +771,14 @@ def mongo_save_pagestatus():
             for item in current_page_status[cloud_name]:
                 user["defaults"][status_options[item]][cloud_name] = current_page_status[cloud_name][item]
     
-    #log.debug("before save, user defaults: {0}".format(user['defaults']))
+    log.debug("mesh_save_status, before save, user defaults: {0}".format(user['defaults']))
     user_obj.set_defaults(username, user['defaults'])
+    # ONLY for debug 
+    # BEGIN debug
+    user_obj = cm_user()
+    user = user_obj.info(username)
+    log.debug("mesh_save_status, after save, user defaults: {0}".format(user['defaults']))
+    # END debug
     return "ok"
 
 

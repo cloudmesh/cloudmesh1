@@ -7,15 +7,20 @@
 
 {% block content %}
 
+<script src="/static/js/accordion_plugin.js" type="text/javascript"></script>
+
 <script type="text/javascript">
     var status_object = {};
+    var  bcreated_accordion = false;
 
     function OnFlavorClicked(cloud_name, flavor_value) {
         status_object[cloud_name].flavor = flavor_value;
+        SavePageStatusToMongoDB(bcreated_accordion);
     };
 
     function CallbackOnAccordionClicked(cloud_name, status) {
         status_object[cloud_name].open = status.toString();
+        SavePageStatusToMongoDB(bcreated_accordion);
     };
 
     function CallbackAfterAccordionCreated() {
@@ -31,11 +36,9 @@
                 $("#{{cloud}}").click();
             {% endif %}
         {% endfor %}
+        bcreated_accordion = true;
     };
 
-    function CallbackBeforeUnload() {
-        SavePageStatusToMongoDB();
-    };
 
 $(function() {
   {% for cloudnum in range(clouds|count) %}
@@ -60,8 +63,6 @@ $(function() {
 });
 
 </script>
-
-<script src="/static/js/accordion_plugin.js" type="text/javascript"></script>
 
 <script>
     $(document).ready( function() {
