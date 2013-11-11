@@ -272,12 +272,12 @@ def manage_keypairs(cloud=None):
     userinfo = getCurrentUserinfo()
     username = userinfo["cm_user_id"]
     keys = userinfo["keys"]["keylist"]
-    cloudmanager = clouds.clouds[g.user.id][cloud]['manager']
 
     # currently we do the registration only for openstack
     # not yet sure if other clouds support this
     # or if we have implemented them if they also support
     if cloud in clouds.clouds[g.user.id] and clouds.clouds[g.user.id][cloud]['cm_type'] in ['openstack', 'ec2', 'aws']:
+        cloudmanager = clouds.clouds[g.user.id][cloud]['manager']
         if request.method == 'POST':
             action = request.form['action']
             keyname = request.form["keyname"]
