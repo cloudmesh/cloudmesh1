@@ -3,7 +3,7 @@ Base class for different .diag render with rackdiag
 """
 
 import matplotlib
-matplotlib.use("SVG")
+#matplotlib.use("SVG")
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 from matplotlib.lines import Line2D

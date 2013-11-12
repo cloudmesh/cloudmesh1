@@ -90,7 +90,7 @@ class FetchClusterInfo:
             # temperature value -1 means the destination host is not reachable
             dict_data[host] = -1 if result is None else result["value"]
 
-        # log.debug("fetch dict data: {0}".format(dict_data))
+        log.debug("fetch dict data: {0}".format(dict_data))
 
         return dict_data
 

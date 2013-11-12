@@ -61,7 +61,11 @@ class cm_temperature:
 
         log.debug("Get temperature for host '{2}' via proxy server '{0}@{1}'".format(proxyusername, proxyaddr, hostname))
 
-        result = ssh("{0}@{1}".format(proxyusername, proxyaddr), command)
+        try:
+            result = ssh("{0}@{1}".format(proxyusername, proxyaddr), command)
+        except:
+            result = ""
+        
         dict_result = None
         if result == "":
             log.warning("Cannot access to host '{0}' OR ipmitool failed on host '{0}'".format(hostname))
