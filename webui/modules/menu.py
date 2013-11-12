@@ -59,11 +59,6 @@ super_duper_sidebar_pages = [
             ["Register", "/cm/register", None],
         ]
     ],
-    ["Testing", None, None, ['admin', 'rain'],
-        [
-            ["flavor", "/mesh/demo", None],
-        ]
-    ],
 ]
 
 flask.Flask.app_ctx_globals_class.super_duper_sidebar_pages = super_duper_sidebar_pages

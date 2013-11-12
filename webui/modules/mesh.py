@@ -420,8 +420,8 @@ def mongo_images():
                 print attribute, clouds[cloud][image][attribute]
     """
     # commented by Heng Chen on Nov. 8, 2013
-    # The following check is repetive because these attributes are added 
-    #    by 'cm_user.init_defaults(username)' 
+    # The following check is repetive because these attributes are added
+    #    by 'cm_user.init_defaults(username)'
     #    this method will be called when page is loaded
     """
     if 'defaults' not in user:
@@ -464,9 +464,9 @@ def mongo_flavors():
     user = user_obj.info(username)
 
     c = cm_mongo()
-    c.activate(cm_user_id = username)
+    c.activate(cm_user_id=username)
     # c.refresh(types=["flavors"])
-    clouds = c.flavors(cm_user_id = username)
+    clouds = c.flavors(cm_user_id=username)
 
     os_attributes = [
                      'id',
@@ -479,11 +479,11 @@ def mongo_flavors():
 
     # fake entry
 
-    #user['defaults']['pagestatus'] = {'sierra-openstack-grizzly': {"open": "false", "flavor": "3"}}
-    
+    # user['defaults']['pagestatus'] = {'sierra-openstack-grizzly': {"open": "false", "flavor": "3"}}
+
     # commented by Heng Chen on Nov. 8, 2013
-    # The following check is repetive because these attributes are added 
-    #    by 'cm_user.init_defaults(username)' 
+    # The following check is repetive because these attributes are added
+    #    by 'cm_user.init_defaults(username)'
     #    this method will be called when page is loaded
     """
     if 'pagestatus' not in user['defaults']:
@@ -510,7 +510,7 @@ def mongo_users():
     # filter()
     config = cm_config_server()
     adminclouds = config.get("cloudmesh.server.keystone").keys()
-    
+
     username = g.user.id
     userinfo = getCurrentUserinfo()
     activeclouds = []
@@ -520,7 +520,7 @@ def mongo_users():
     for cloud in adminclouds:
         if cloud in activeclouds:
             usersinclouds.append(cloud)
-            
+
     c = cm_mongo()
     c.activate(cm_user_id=username)
 
@@ -629,7 +629,7 @@ def mongo_table(filters=None):
     #    for server in clouds[cloud]:
     #        print server
     #        print clouds[cloud][server]['flavor']
-    
+
     log.debug("mesh_servers, before render, user defaults: {0}".format(user['defaults']))
     return render_template('mesh/cloud/mesh_servers.html',
                            address_string=address_string,
@@ -734,7 +734,7 @@ def init_user_pagestatus(cloud_list):
     page_status_dict = {}
     for name in cloud_list:
         page_status_dict[name] = "false"
-        
+
     return page_status_dict
 
 
@@ -747,8 +747,8 @@ def mongo_save_pagestatus():
     cmongo = cm_mongo()
     user_cloud_list = cmongo.active_clouds(username)
     # commented/modified by Heng Chen on Nov. 8, 2013
-    # The following check is repetive because these attributes are added 
-    #    by 'cm_user.init_defaults(username)' 
+    # The following check is repetive because these attributes are added
+    #    by 'cm_user.init_defaults(username)'
     #    this method will be called when page is loaded
     """
     previous_page_status = {}
@@ -771,64 +771,14 @@ def mongo_save_pagestatus():
         if cloud_name in user_cloud_list:
             for item in current_page_status[cloud_name]:
                 user["defaults"][status_options[item]][cloud_name] = current_page_status[cloud_name][item]
-    
+
     log.debug("mesh_save_status, before save, user defaults: {0}".format(user['defaults']))
     user_obj.set_defaults(username, user['defaults'])
-    # ONLY for debug 
+    # ONLY for debug
     # BEGIN debug
     user_obj = cm_user()
     user = user_obj.info(username)
     log.debug("mesh_save_status, after save, user defaults: {0}".format(user['defaults']))
     # END debug
     return "ok"
-
-
-@mesh_module.route('/mesh/demo/', methods=['GET', 'POST'])
-@login_required
-def mongo_flavors_demo():
-    if not with_active_clouds():
-        error = "No Active Clouds set!"
-        msg = "Please <a href='/mesh/register/clouds'>Register and Activate</a> a Cloud First"
-        return render_template('error.html',
-                               type="Refreshing Clouds",
-                               error=error,
-                               msg=msg)
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    # filter()
-    config = cm_config()
-
-    # getting user info
-    userdata = g.user
-    username = userdata.id
-    user_obj = cm_user()
-    user = user_obj.info(username)
-
-    c = cm_mongo()
-    c.activate(cm_user_id = username)
-    # c.refresh(types=["flavors"])
-    clouds = c.flavors(cm_user_id = username)
-
-    os_attributes = [
-                     'id',
-                     'name',
-                     'vcpus',
-                     'ram',
-                     'disk',
-                     'cm_refresh',
-                     ]
-
-    # fake entry
-
-    #user['defaults']['pagestatus'] = {'sierra-openstack-grizzly': {"open": "false", "flavor": "3"}}
-    if 'pagestatus' not in user['defaults']:
-        user['defaults']['pagestatus'] = init_user_pagestatus([cloud_name for cloud_name in clouds])
-    
-    log.debug("..READING.. user default pagestatus: {0}".format(user['defaults']['pagestatus']))
-    return render_template('mesh/cloud/mesh_flavors_demo.html',
-                           address_string=address_string,
-                           attributes=os_attributes,
-                           updated=time_now,
-                           clouds=clouds,
-                           user=user,
-                           config=config)
 
