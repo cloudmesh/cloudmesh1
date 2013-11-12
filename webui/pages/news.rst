@@ -1,7 +1,7 @@
 News
 ======================================================================
 
-We are happy to announce the first alpha release of cloudmesh. Cloudmesh is 
+We are happy to announce the alpha release of cloudmesh. Cloudmesh is 
 capable of interfacing with clouds and HPC frameworks. We have successfully 
 demonstarted by our developers usage of
 
@@ -14,6 +14,11 @@ demonstarted by our developers usage of
 At this time we only expose the FutuureGrid Sierra OpenStack cloud. We like to 
 acknowledge all those that helped us developing Cloudmesh. 
 
+A number of `screenshots </screenshots>`_ is available to showcase some of 
+the features.
+
 Thanks
 
-Gregor von Laszewski & `The Cloudmesh Team </git>`_ 
+Gregor von Laszewski and the rest of 
+
+`the cloudmesh team </git>`_.

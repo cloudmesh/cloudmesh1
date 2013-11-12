@@ -31,15 +31,16 @@ The Cloudmesh interfaces include
        	features into cloudmesh. If you like to become a developer, please 
        	contact laszewski@gmail.com     
       
-:iPython: We are currently developing a set of simple examples to let users know how easy it is to use the API.
+:iPython: We are currently developing a set of simple examples to let users know 
+          how easy it is to use the API.
 
 Integration of External Clouds
 ---------------------------------
 
-Currently we support the native OpenStack and the EC2 protocol. This allows you to integrate a large number 
-of clouds. Hence it is possible to not only integrate FutureGrid Cloud resources.
-However, some clouds require you to use a certificate. In this case you can
-talk to us. 
+Currently we support the native OpenStack and the EC2 protocol. This allows you 
+to integrate a large number of clouds. Hence it is possible to not only integrate 
+FutureGrid Cloud resources. However, some clouds require you to use a certificate. 
+In this case you can talk to us. 
 
 We have demonstrated successfully the integration with
 
@@ -51,7 +52,8 @@ We have demonstrated successfully the integration with
 * Azure (standalone mode)
 * AWS (standalone mode)
 
-Although we have demonstrated that it is possible to integrate with cloudmesh we have not yet exposed this feature by default to the users. Users are welcome to try it.
+Although we have demonstrated that it is possible to integrate with cloudmesh we 
+have not yet exposed this feature by default to the users. Users are welcome to try it.
 
 Open Source     
 -----------------------      

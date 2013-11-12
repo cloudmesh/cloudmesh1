@@ -3,6 +3,12 @@ FAQ
 
 This section will include a number of FAQs
 
+Are there any screenshots?
+---------------------------
+
+* A number of `screenshots </screenshots>`_ is available to showcase some of 
+  the features.
+
 Setup - Register cloud in the cloudmesh.futuregrid.org service
 ---------------------------------------------------------------
 
@@ -74,8 +80,8 @@ Development Questions
 
 Cloudmesh is cool, can I participate in the development?
 
-* Yes, Yes, Yes. We love your participation. If you have ideas or want to help on 
-  documentation, testing and code cleanup let us know.
+* Yes, Yes, Yes. We love your participation. If you have ideas or want to help on extending cloudmesh, or even  
+  documentation, testing and code cleanup let us know. You will be properly acknowledged in our future releases.
 
 I like to contribute my code to cloudmesh?
 
@@ -90,8 +96,46 @@ You use Flask why not Django?
   than can help us with the transition. In the meanwhile we will continue to use
   flask. We believe it will not be that difficult to switch to django.
   
+Can I get credit at my university?
+------------------------------------
 
+* At IU you can get credit by enrolling in an independent study. Typically 3 credit 
+  hours result in 12 hours of work per week. YOu get out of this independent study as
+  much as you put in. We us modern software negeneering tools so you do not just contribute code,
+  but you learn also about software negeneering aspects in a fast developing project.
+  We have lots of aspects you can work on dependent on your interest and background 
+  we can determine a project that interests you. Please contact laszewski@gmail.com
   
+* If you are at a different university we you need to find a faculty member 
+  at your university that allows you to participate in the development and
+  issues you credits for it. 
+  
+Can I get a research assistentship at IU to work on cloudmesh?
+---------------------------------------------------------
 
+* Yes, and no but for this semester we are already maxed out due to administartive deleays.
+
+* We prefer at this time hourly payment. International students can take up to 20 
+  hours per week. Payment is competitive and depends on background knowledge
+  
+* What are we looking for. It is helpful to be a proven expert in a technolgy
+  that is used in cloudmesh such as
+  
+  * python
+  * javascript including jquery
+  * flask
+  * django
+  * desire to work in a team and contribute
+  
+* But I am a super java developer and do not have any knowledge about the above can I not 
+  just get paid for learning the above technologies?
+  
+  In case we would hire you, you are responsible to learn such technologies in 
+  your freetime. It is a prerequisit for participation
+  
+* I am at a different university. CAn I get an internship with you?
+
+  Now, however we have visitors form China and Turkey, that are paid through a 
+  government grant of their home country. I am sure you can get one to participate here.
 
 
