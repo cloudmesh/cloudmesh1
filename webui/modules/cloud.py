@@ -329,12 +329,16 @@ def check_register_key(cloud, keyname, keycontent):
     keynamenew = _keyname_sanitation(g.user.id, keyname)
     keysRegistered = cloudmanager.keypair_list()
     registered = False
+    # Openstack & Eucalyptus
     if 'keypairs' in keysRegistered:
         keypairsRegistered = keysRegistered["keypairs"]
         for akeypair in keypairsRegistered:
             if keynamenew == akeypair['keypair']['name']:
                 registered = True
                 break
+    else:
+        if keynamenew in keysRegistered:
+            registered = True
     
     if not registered:
         cloudmanager.keypair_add(keynamenew, keycontent)
