@@ -1,0 +1,64 @@
+experiment_a:
+  tyep: experiment
+  project: fg82
+  experimenter: albert
+  date:
+  	start: 01/01/2015 01:30:01pm
+  	end: 01/01/2015 01:59:01pm
+  specification:
+     type:
+     	name: simple
+     	version: 1.0
+     content:
+        >
+	        seq
+	           cm start vm "vm1" "sierra_openstack_grizzly" "m1.tiny"
+	           cm start vm "vm2" "sierra_openstack_grizzly" "m1.tiny"
+	        par
+	           cm start vm "vm3" "sierra_openstack_grizzly" "m1.tiny"
+	           cm start vm "vm4" "sierra_openstack_grizzly" "m1.tiny"
+	        seq
+	        	cm kill vm[1-4]
+
+experiment_b:
+  tyep: experiment
+  project: fg82
+  experimenter: albert
+  date:
+  	start: 01/01/2015 01:30:01pm
+  	end: 01/01/2015 01:59:01pm
+  specification:
+     type:
+     	name: cm_shell
+     	version: 1.0
+     content:
+        >
+	        set cloud = "sierra_openstack_grizzly"
+	        set image = "m1.tiny"
+	        start vm "vm1" cloud image
+	        start vm "vm2" cloud image
+	        kill vm1
+	        kill vm2
+
+experiment_c:
+  tyep: experiment
+  project: fg82
+  experimenter: albert
+  date:
+  	start: 01/01/2015 01:30:01pm
+  	end: 01/01/2015 01:59:01pm
+  specification:
+     type:
+     	name: bash
+     	version: 1.0
+     content:
+        >
+	        export cloud="sierra_openstack_grizzly"
+	        export image="m1.tiny"
+	        cm start vm "vm1" $cloud $image
+	        cm start vm "vm2" $cloud $image
+	        cm kill vm1
+	        cm kill vm2
+
+
+
