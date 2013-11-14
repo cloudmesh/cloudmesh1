@@ -195,7 +195,7 @@ class HeatClusterMap(BaseClusterMap):
         self.dict_mapping.clear()
         # unknow temperature of host
         self.dict_mapping.update({-1: self.rgb_unknown_temperature})
-        arr_values = sorted(dict_values.values())
+        arr_values = [value for value in sorted(dict_values.values()) if value >= 0]
         self.setTemperatureMinMax(arr_values[0], arr_values[-1])
         self.resetDictServers(self.getServersDefaultValue())
 

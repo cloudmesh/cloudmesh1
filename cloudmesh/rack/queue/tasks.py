@@ -22,7 +22,7 @@ def temperature(host, unit):
     '''
     result = None
     tdict = ipmi_temp.get_ipmi_temperature(host)
-    if any(tdict):
+    if tdict is not None:
         result = ipmi_temp.parse_max_temp(tdict, unit)
         # log.debug("host [{0}] temperature: {1}".format(host, result))
         # write the result to mongo DB

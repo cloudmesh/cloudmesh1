@@ -21,7 +21,7 @@
 {% if flag_home %}
     <script>
         function OnButtonClicked(rack_id, service) {
-            $(":button").prop("disabled", true);
+            //$(":button").prop("disabled", true);
             $("#select_rack").val( $(rack_id).val() );
             $("#select_service").val (service);
             document.frm.submit();
