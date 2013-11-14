@@ -25,7 +25,7 @@ class Inventory:
     BOOTSPEC_FILE = "~/.futuregrid/cloudmesh_bootspec.yaml"
 
     def __init__(self):
-		# read the host file definition from cloudmesh_cludter.yaml
+		# read the host file definition from cloudmesh_cluster.yaml
 		self.server_config = cm_config_server()
 
 		self.config = ConfigDict(filename=self.CONFIG_FILE)
