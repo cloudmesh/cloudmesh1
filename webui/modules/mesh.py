@@ -614,6 +614,44 @@ def mongo_table(filters=None):
                      'key_name',
                      'created']
 
+    attributes = {"openstack":
+                  [
+                      ['name','name'],
+                      ['id','id'],
+                      ['metadata','metadata'],
+                      ['key_name','key_name'],
+                      ['flavor', 'flavor','id'],
+                      ['created','created'],
+                      ['status','status'],
+                      ['image','image','id'],
+                      ['addresses','addresses'],
+                      ["status" , "status"],
+                  ],
+                  "ec2":
+                  [
+                      ["name", "id"],
+                      ["status", "extra", "status"],
+                      ["addresses", "public_ips"],
+                      ["flavor", "extra", "instancetype"],
+                      ["userid"],
+                      ["metadata"],
+                      ["key_name", "extra", "keyname"],
+                      ["created", "extra", "launchdatetime"]
+                  ],
+
+                  "aws":
+                  [
+                      ["name", "id"],
+                      ["status", "extra", "status"],
+                      ["addresses", "public_ips"],
+                      ["flavor", "extra", "instancetype"],
+                      ["userid"],
+                      ["metadata"],
+                      ["key_name", "extra", "keyname"],
+                      ["created", "extra", "launchdatetime"]
+                  ]
+                 }
+                  
     # c.aggregate needs to be defined
     # def count_status(cloudname):
     #    result = c.aggregate( [ {$match: {"cm_kind":"servers","cm_cloud":cloudname}},
@@ -634,6 +672,7 @@ def mongo_table(filters=None):
     return render_template('mesh/cloud/mesh_servers.html',
                            address_string=address_string,
                            attributes=os_attributes,
+                           cloud_attributes=attributes,
                            updated=time_now,
                            clouds=filtered_clouds,
                            config=config,
