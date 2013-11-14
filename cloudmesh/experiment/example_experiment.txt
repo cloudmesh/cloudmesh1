@@ -9,6 +9,11 @@ experiment_a:
      type:
      	name: simple
      	version: 1.0
+     parameter:
+     	cloud:
+     		- "abc"
+     		- "sierra_openstack_grizzly"
+     		- STRING
      content:
         >
 	        seq
