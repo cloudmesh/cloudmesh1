@@ -1,15 +1,18 @@
 
-from cloudmesh.util.logger import LOGGER
+#from cloudmesh.util.logger import LOGGER
 from cloudmesh.cm_mongo import cm_MongoBase
+from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh.user.cm_user import cm_user
 import os
 from pprint import pprint
+import json
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
 
-log = LOGGER(__file__)
+#log = LOGGER(__file__)
 
 class cm_experiment_db(cm_MongoBase):
     """
@@ -27,10 +30,10 @@ class cm_experiment_db(cm_MongoBase):
         '''
         Deletes the state values associated with a experiment. If non is specified for
         experiment all experiment state values are deleted
-        
+
         :param user: the user for which the state values are recorded
         :type user: string
-        :param experiment: the experiment base url 
+        :param experiment: the experiment base url
         :type experiment: of the form /uri (string)
         '''
 
@@ -45,7 +48,7 @@ class cm_experiment_db(cm_MongoBase):
     def add(self, user, experiment, attribute, value):
         '''
         adds the state value for a user and experiment
-        
+
         :param user:
         :type user:
         :param experiment:
@@ -71,7 +74,7 @@ class cm_experiment_db(cm_MongoBase):
     def get(self, user, experiment, attribute):
         '''
         get the state value for a user and a experiment
-        
+
         :param user:
         :type user:
         :param experiment:
@@ -84,6 +87,10 @@ class cm_experiment_db(cm_MongoBase):
                              'attribute': attribute})
         return result['value']
 
+    def getUserData(self):
+         userinfo = cm_user().info('psjoshi')
+         configuration = cm_config()
+         return configuration['cloudmesh']['experiment']
 
 if __name__ == "__main__":
 
@@ -99,6 +106,12 @@ if __name__ == "__main__":
 
 
     cursor = m.find({})
+
+    userinfo = cm_user().info('psjoshi')
+    configuration = cm_config()
+    #pprint(configuration['cloudmesh']['experiment'])
+
+    '''
     for element in cursor:
         print 'element', element
 
@@ -108,5 +121,6 @@ if __name__ == "__main__":
     print m.get('gregor', 'exp1', 'dict')
 
     pprint(m.get('gregor', 'exp1', 'dict')['b'])
+    '''
 
 
