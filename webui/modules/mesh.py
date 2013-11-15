@@ -12,6 +12,8 @@ import cloudmesh
 from cloudmesh.user.cm_user import cm_user
 from flask.ext.principal import Permission, RoleNeed
 from cloudmesh.util.util import banner
+# from cloudmesh.experiment.cm_experiment_db import cm_experiment_db
+import json
 
 log = LOGGER(__file__)
 
@@ -793,7 +795,7 @@ def mongo_save_pagestatus():
     previous_page_status = {}
     if 'pagestatus' in user['defaults']:
         previous_page_status = user['defaults']['pagestatus']
-    
+
     for user_cloud in user_cloud_list:
         if user_cloud not in previous_page_status:
             previous_page_status[user_cloud] = "false"
@@ -820,4 +822,34 @@ def mongo_save_pagestatus():
     log.debug("mesh_save_status, after save, user defaults: {0}".format(user['defaults']))
     # END debug
     return "ok"
+
+def prepJqTreeObj(data):
+        jsonList = []
+
+        if(type(data) is list):
+            for item in data:
+                jsonObject = {}
+                jsonObject['label'] = item
+                jsonList.append(jsonObject)
+        else:
+            for key, value in data.items():
+                jsonObject = {}
+                jsonObject['label'] = key
+                if type(value) is dict or type(value) is list:
+                    jsonChildObj = prepJqTreeObj(value)
+                    jsonObject['children'] = jsonChildObj
+                else:
+                    jsonObject['label'] += ": " + value
+                jsonList.append(jsonObject)
+        return jsonList
+
+@mesh_module.route('/mesh/test/', methods=['GET', 'POST'])
+@login_required
+def test_experiment():
+
+    experiment = cm_experiment_db()
+    exptData = experiment.getUserData()
+    jsonObj = prepJqTreeObj(exptData)
+    return render_template('mesh/test.html',
+                           user=json.dumps(jsonObj))
 
