@@ -5,7 +5,10 @@ import inspect
 import sys
 import importlib
 from cmd3.shell import command
-
+from cloudmesh.user.cm_user import cm_user
+from cloudmesh.cm_mongo import cm_mongo
+from pprint import pprint
+from prettytable import PrettyTable
 from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
@@ -30,13 +33,14 @@ class cm_shell_vm:
                vm flavour NAME
                vm index NAME
                vm count N
-               
+               vm list
+
         Manages the vm
 
         Arguments:
 
           NAME           The name of a service or server
-          N              The number of VMs to be started          
+          N              The number of VMs to be started
 
 
         Options:
@@ -45,7 +49,6 @@ class cm_shell_vm:
 
         """
         log.info(arguments)
-
 
         if arguments["clean"]:
             log.info ("clean the vm")
@@ -63,6 +66,13 @@ class cm_shell_vm:
             log.info ("vm info")
             return
 
-
-
-
+        if arguments["list"]:
+            c = cm_mongo()
+            c.activate(cm_user_id="psjoshi")
+            clouds = c.servers(cm_user_id="psjoshi")
+            vmList = clouds["sierra_openstack_grizzly"]
+            x = PrettyTable()
+            x.field_names = (["name", "status", "flavor", "id", "user_id"])
+            for key, vm in vmList.items():
+                x.add_row([vm['name'], vm['status'], vm['flavor'], vm['id'], vm['user_id']])
+            print x
