@@ -178,7 +178,7 @@ class cm_user(object):
         # ONLY for debug
         # added by Heng Chen on Nov. 11, 2013 to test LDAP and user.mongo
         # BEGIN debug
-        log.debug("cm_user_init_defaults, I was called.........")
+        #log.debug("cm_user_init_defaults, I was called.........")
         # END debug
 
         user = self.info(username)

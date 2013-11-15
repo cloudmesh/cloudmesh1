@@ -432,7 +432,8 @@ def mongo_images():
     if 'images' not in user['defaults']:
         user['defaults']['images'] = {}
     """
-    log.debug("mesh_images, before render, user defaults: {0}".format(user['defaults']))
+    # ONLY for debug, if the Accordion does not work, please uncomment it
+    #log.debug("mesh_images, before render, user defaults: {0}".format(user['defaults']))
     return render_template('mesh/cloud/mesh_images.html',
                            address_string=address_string,
                            cloud_attributes=attributes,
@@ -491,7 +492,8 @@ def mongo_flavors():
     if 'pagestatus' not in user['defaults']:
         user['defaults']['pagestatus'] = init_user_pagestatus([cloud_name for cloud_name in clouds])
     """
-    log.debug("mesh_flavors, before render, user defaults: {0}".format(user['defaults']))
+    # ONLY for debug, if the Accordion does not work, please uncomment it
+    #log.debug("mesh_flavors, before render, user defaults: {0}".format(user['defaults']))
     return render_template('mesh/cloud/mesh_flavors.html',
                            address_string=address_string,
                            attributes=os_attributes,
@@ -632,7 +634,13 @@ def mongo_table(filters=None):
     #        print server
     #        print clouds[cloud][server]['flavor']
 
-    log.debug("mesh_servers, before render, user defaults: {0}".format(user['defaults']))
+    # ONLY for debug, if the Accordion does not work, please uncomment it
+    #log.debug("mesh_servers, before render, user defaults: {0}".format(user['defaults']))
+    
+    # added by Heng Chen on Nov. 15, 2013
+    # control the display of 'run' button on a VM
+    config_server = cm_config_server()
+    flag_production = config_server.get("cloudmesh.server.production");
     return render_template('mesh/cloud/mesh_servers.html',
                            address_string=address_string,
                            attributes=os_attributes,
@@ -642,7 +650,9 @@ def mongo_table(filters=None):
                            images=images,
                            flavors=flavors,
                            user=user,
-                           filters=cloud_filters)
+                           filters=cloud_filters,
+                           flag_production=flag_production,
+                           )
 
 
 # ============================================================
@@ -762,7 +772,8 @@ def mongo_save_pagestatus():
             previous_page_status[user_cloud] = "false"
     user['defaults']['pagestatus'] = previous_page_status
     """
-    log.debug("request.json page status: {0}".format(request.json))
+    # ONLY for debug, if the Accordion does not work, please uncomment it
+    #log.debug("request.json page status: {0}".format(request.json))
     current_page_status = request.json
     status_options = {
                         "open":   "pagestatus",
@@ -774,13 +785,14 @@ def mongo_save_pagestatus():
             for item in current_page_status[cloud_name]:
                 user["defaults"][status_options[item]][cloud_name] = current_page_status[cloud_name][item]
 
-    log.debug("mesh_save_status, before save, user defaults: {0}".format(user['defaults']))
+    # ONLY for debug, if the Accordion does not work, please uncomment it
+    #log.debug("mesh_save_status, before save, user defaults: {0}".format(user['defaults']))
     user_obj.set_defaults(username, user['defaults'])
-    # ONLY for debug
+    # ONLY for debug, if the Accordion does not work, please uncomment it
     # BEGIN debug
-    user_obj = cm_user()
-    user = user_obj.info(username)
-    log.debug("mesh_save_status, after save, user defaults: {0}".format(user['defaults']))
+    #user_obj = cm_user()
+    #user = user_obj.info(username)
+    #log.debug("mesh_save_status, after save, user defaults: {0}".format(user['defaults']))
     # END debug
     return "ok"
 

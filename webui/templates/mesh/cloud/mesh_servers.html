@@ -107,6 +107,9 @@ function toggle(source,select_list) {
         <span class="inner_function_button">
             {{ image_button ("none", "044_keys", "/cm/keypairs/" + cloud + "/") }}
         </span>
+        <span style="margin-left: 32px;">
+            Project: <span class="badge"> {{user['defaults']['project']}} </span>
+        </span>
     </h3>
     <div>
         {% set flavor_id = user.defaults.flavors[cloud] %}
@@ -128,7 +131,7 @@ function toggle(source,select_list) {
             <a href="/profile"> last vm name: <span class="badge"> {{user.defaults.prefix}}_{{user.defaults.index}} </span></a>
         </p>
         {% if (clouds[cloud].keys() | count) == 0 %}
-            No flavors found. Please refresh.
+            No VMs found. Please refresh.
         {% else %}
             <table id="cloud-table-{{table_index}}" >
                 <thead>
@@ -152,7 +155,9 @@ function toggle(source,select_list) {
                         <tr>
                             <td><input type="checkbox" name="selection_{{cloud}}" value = {{server}} /> </td>
                             <td>
-                                {{ href_image_button ("none", "368_collapse", "/cm/login/" ~ cloud ~ "/" ~ s_id ~ "/") }}
+                                {% if not flag_production %}
+                                    {{ href_image_button ("none", "368_collapse", "/cm/login/" ~ cloud ~ "/" ~ s_id ~ "/") }}
+                                {% endif %}
                                 {{ href_image_button ("right", "195_circle_info", "/cm/info/" ~ cloud ~ "/" ~ s_id ~ "/") }}
                                 <a href="/cm/assignpubip/{{cloud}}/{{s_id}}/">  IP </a>
                                 {{ image_popup ("none", "041_charts", "/cm/stats/" ~ cloud ~ "/" ~ s_id ~ "/") }}
