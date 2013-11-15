@@ -165,6 +165,7 @@ class aws(ComputeBaseType):
         #self.convert_to_openstack_style(vm_list)
         return vm_list
 
+    ''' Will be deprecated
     def convert_to_openstack_style(self, vmlist):
         for vmid in vmlist:
             vm = vmlist[vmid]
@@ -210,6 +211,7 @@ class aws(ComputeBaseType):
                [ {u'href':None, \
                   u'rel':None}]}
         return res
+    '''
 
     def release_unused_public_ips(self):
         return
