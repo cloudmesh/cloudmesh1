@@ -163,8 +163,12 @@ function toggle(source,select_list) {
                             <!-- for attribute in clouds[cloud][server] -->
 			    {% for attribute in attributes %}
 			    {% set l = attribute | length %}
-                                {% if attribute[0] == "created" %}
-                                    <td>{{ clouds[cloud][server][attribute[1]] }}</td>
+			    {% if attribute[0] == "created" %}
+			    	{% if l == 2 %}
+				<td>{{ clouds[cloud][server][attribute[1]] }}</td>
+				{%else%}
+				<td>{{ clouds[cloud][server][attribute[1]][attribute[2]] }}</td>
+				{%endif%}
 				{% elif attribute[0] == "status"%}
 				     {% if l == 2 %}
 				     <td> {{ cm_state_color(clouds[cloud][server][attribute[1]]) }}</td>
@@ -196,8 +200,12 @@ function toggle(source,select_list) {
                                     </td>
                                 {% elif attribute[0] == "addresses" %}
                                     <td>{{ address_string(clouds[cloud][server][attribute[1]]) }}</td>
-                                {% else %}
-                                    <td>{{ clouds[cloud][server][attribute[1]]  }}</td>
+				    {% else %}
+				    {% if l == 2 %}
+				    <td>{{ clouds[cloud][server][attribute[1]]  }}</td>
+				    {%else%}
+				    <td>{{ clouds[cloud][server][attribute[1]][attribute[2]]  }}</td>
+				    {%endif%}
                                 {% endif %}
                             {% endfor %}
                         </tr>
