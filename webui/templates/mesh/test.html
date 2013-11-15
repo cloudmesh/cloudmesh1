@@ -1,0 +1,35 @@
+{% extends "layout/layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+<h2> {{ image_button ("none", "365_restart", "/mesh/test") }} Experiment Management </h2> {# change redirects. currently to qStat#}
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='library/TreeTable/media/css/jqtree.css') }}" />
+<script src="/static/library/TreeTable/media/js/tree.jquery.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+/* http://stackoverflow.com/a/10237915 */
+(function($) {
+    $(function() {
+        $("#images-accordion > div").accordion({ header: "h3",
+                                                 collapsible: true,
+                                                 heightStyle: "content",
+                                                 active: false });
+    });
+})(jQuery);
+
+$(function(){
+    var r = jQuery.parseJSON( $('#dict').val() );
+    console.log(r);
+    $('#tree1').tree({
+        data: r
+    });
+
+});
+
+</script><br />
+<input id= "dict" type="hidden" value="{{user}}"/>
+<div id="tree1"></div>
+
+{% endblock %}
