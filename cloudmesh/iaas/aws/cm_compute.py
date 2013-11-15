@@ -114,6 +114,7 @@ class aws(ComputeBaseType):
         vm_dict = {}
         for vm_obj in nodes:
             vm = vm_obj.__dict__
+            del(vm_obj.driver)
             instanceid = vm_obj.id
             vm_dict[instanceid] = vm
 
@@ -161,9 +162,10 @@ class aws(ComputeBaseType):
 
     def _get_servers_dict(self):
         vm_list = self.list_vm()
-        self.convert_to_openstack_style(vm_list)
+        #self.convert_to_openstack_style(vm_list)
         return vm_list
 
+    ''' Will be deprecated
     def convert_to_openstack_style(self, vmlist):
         for vmid in vmlist:
             vm = vmlist[vmid]
@@ -209,6 +211,7 @@ class aws(ComputeBaseType):
                [ {u'href':None, \
                   u'rel':None}]}
         return res
+    '''
 
     def release_unused_public_ips(self):
         return

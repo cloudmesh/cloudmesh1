@@ -150,7 +150,9 @@ function toggle(source,select_list) {
                     </tr>
                 </thead>
                 <tbody>
-                    {% for server in clouds[cloud] %}
+			{% for server in clouds[cloud] %}
+			{% set version = clouds[cloud][server]['cm_type'] %}
+			{% set attributes = cloud_attributes[version] %}
                         {% set s_id = clouds[cloud][server]['id'] %}
                         <tr>
                             <td><input type="checkbox" name="selection_{{cloud}}" value = {{server}} /> </td>
@@ -164,13 +166,23 @@ function toggle(source,select_list) {
                                 {{ href_image_button ("right", "016_bin", "/cm/delete/" ~ cloud + "/" ~ s_id ~ "/") }}
                             </td>
                             <!-- for attribute in clouds[cloud][server] -->
-                            {% for attribute in attributes %}
-                                {% if attribute == "created" %}
-                                    <td>{{ clouds[cloud][server][attribute] }}</td>
-                                {% elif attribute == "status"%}
-                                    <td> {{ cm_state_color(clouds[cloud][server][attribute]) }}</td>
-                                {% elif attribute == "flavor" %}
-                                    {% set id = clouds[cloud][server][attribute]['id'] %}
+			    {% for attribute in attributes %}
+			    {% set l = attribute | length %}
+			    {% if attribute[0] == "created" %}
+			    	{% if l == 2 %}
+				<td>{{ clouds[cloud][server][attribute[1]] }}</td>
+				{%else%}
+				<td>{{ clouds[cloud][server][attribute[1]][attribute[2]] }}</td>
+				{%endif%}
+				{% elif attribute[0] == "status"%}
+				     {% if l == 2 %}
+				     <td> {{ cm_state_color(clouds[cloud][server][attribute[1]]) }}</td>
+				     {%else %}
+				     <td> {{ cm_state_color(clouds[cloud][server][attribute[1]][attribute[2]]) }}</td>
+				     {% endif %}
+
+                                {% elif attribute[0] == "flavor" %}
+                                    {% set id = clouds[cloud][server][attribute[1]][attribute[2]] %}
                                     <td>
                                         {% if id in flavors[cloud] %}
                                             {{flavors[cloud][id]['name']}}
@@ -178,9 +190,9 @@ function toggle(source,select_list) {
                                             Flavor not available anymore!
                                         {% endif %}
                                     </td>
-                                {% elif attribute == "image" %}
-                                    {% if attribute in clouds[cloud][server] %}
-                                        {% set id = clouds[cloud][server][attribute]['id'] %}
+                                {% elif attribute[0] == "image" %}
+                                    {% if attribute[0] in clouds[cloud][server] %}
+                                        {% set id = clouds[cloud][server][attribute[1]][attribute[2]] %}
                                     {% else %}
                                         {% set id = None %}
                                     {% endif %}
@@ -191,10 +203,14 @@ function toggle(source,select_list) {
                                             Image not available anymore!
                                         {% endif %}
                                     </td>
-                                {% elif attribute == "addresses" %}
-                                    <td>{{ address_string(clouds[cloud][server][attribute]) }}</td>
-                                {% else %}
-                                    <td>{{ clouds[cloud][server][attribute]  }}</td>
+                                {% elif attribute[0] == "addresses" %}
+                                    <td>{{ address_string(clouds[cloud][server][attribute[1]]) }}</td>
+				    {% else %}
+				    {% if l == 2 %}
+				    <td>{{ clouds[cloud][server][attribute[1]]  }}</td>
+				    {%else%}
+				    <td>{{ clouds[cloud][server][attribute[1]][attribute[2]]  }}</td>
+				    {%endif%}
                                 {% endif %}
                             {% endfor %}
                         </tr>
