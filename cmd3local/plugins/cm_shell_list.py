@@ -38,9 +38,9 @@ class cm_shell_list:
 
         """
         mesh = cloudmesh.mesh()
-        log.info(args)
+        #log.info(args)
 
-        log.info(arguments)
+        #log.info(arguments)
         all = False
         if len(arguments["CLOUD"]) == 0:
             print "get all active clouds"
@@ -50,15 +50,19 @@ class cm_shell_list:
             clouds = arguments['CLOUD']
 
 #        print clouds
-        pprint(mesh.clouds)
-        a=9/0
+        #pprint(mesh.clouds)
+        #a=9/0
+        #print"-----------------------------------"
+        #pprint(mesh.clouds["jedi"])
         if arguments["flavors"] or all:
-            log.info ("count flavors")
-            for cloud in clouds:
-                print "cloud: flavors", cloud, None
-                mesh.refresh(names=[cloud], types=['flavor'])
-                flavors = mesh.clouds[cloud]['flavor']
-                pprint(flavors)
+             #log.info ("count flavors")
+             for cloud in clouds:
+                 #print "cloud: flavors", cloud, None
+                 mesh.refresh(names=[cloud], types=['flavor'])
+                 #print mesh.clouds[cloud]
+                 #pprint(mesh.clouds[cloud])
+                 flavors = mesh.clouds[cloud]['flavor']
+                 pprint(flavors)
 
         if arguments["servers"] or all:
             log.info ("count servers")
