@@ -100,23 +100,23 @@ cloudmesh:
                 flavor: m1.small
                 image: ami-fbb2fc92
                 location: us-east-1
-    india_eucalyptus:
-      cm_host: india.futuregrid.org
-      cm_label: india
-      cm_type: ec2
-      cm_type_version: 3.1
-      credentials:
-        EUCALYPTUS_CERT: $HOME/.futuregrid/india/cacert.pem
-        EC2_CERT: $HOME/.futuregrid/india/cert.pem
-        EC2_URL: http://149.165.146.135:8773/services/Eucalyptus
-        EC2_ACCESS_KEY: {{password.india_eucalyptus.EC2_ACCESS_KEY}}
-        EC2_SECRET_KEY: {{password.india_eucalyptus.EC2_SECERT_KEY}}
-        EC2_PRIVATE_KEY: $HOME/.futuregrid/india/pk.pem
-        keyname: cloudmesh
-        userid: {{portalname}}
-      default:
-        flavor: m1.small
-        image: emi-1C8C3ADF
+        india_eucalyptus:
+            cm_host: india.futuregrid.org
+            cm_label: india
+            cm_type: ec2
+            cm_type_version: 3.1
+            credentials:
+                EUCALYPTUS_CERT: $HOME/.futuregrid/india/cacert.pem
+                EC2_CERT: $HOME/.futuregrid/india/cert.pem
+                EC2_URL: http://149.165.146.135:8773/services/Eucalyptus
+                EC2_ACCESS_KEY: {{password.india_eucalyptus.EC2_ACCESS_KEY}}
+                EC2_SECRET_KEY: {{password.india_eucalyptus.EC2_SECERT_KEY}}
+                EC2_PRIVATE_KEY: $HOME/.futuregrid/india/pk.pem
+            keyname: cloudmesh
+            userid: {{portalname}}
+          default:
+                flavor: m1.small
+                image: emi-1C8C3ADF
     default:
       cloud: sierra_openstack_grizzly
       index: 1
