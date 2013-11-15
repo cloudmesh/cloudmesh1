@@ -619,15 +619,15 @@ def mongo_table(filters=None):
     attributes = {"openstack":
                   [
                       ['name','name'],
+                      ['status','status'],
+                      ['addresses','addresses'],
+                      ['flavor', 'flavor','id'],
                       ['id','id'],
+                      ['image','image','id'],
+                      ['user_id', 'user_id'],
                       ['metadata','metadata'],
                       ['key_name','key_name'],
-                      ['flavor', 'flavor','id'],
                       ['created','created'],
-                      ['status','status'],
-                      ['image','image','id'],
-                      ['addresses','addresses'],
-                      ["status" , "status"],
                   ],
                   "ec2":
                   [
@@ -635,20 +635,23 @@ def mongo_table(filters=None):
                       ["status", "extra", "status"],
                       ["addresses", "public_ips"],
                       ["flavor", "extra", "instancetype"],
-                      ["userid"],
-                      ["metadata"],
+                      ['id','id'],
+                      ['image','image'],
+                      ["user_id", 'user_id'],
+                      ["metadata", "metadata"],
                       ["key_name", "extra", "keyname"],
                       ["created", "extra", "launchdatetime"]
                   ],
-
                   "aws":
                   [
                       ["name", "id"],
                       ["status", "extra", "status"],
                       ["addresses", "public_ips"],
                       ["flavor", "extra", "instancetype"],
-                      ["userid"],
-                      ["metadata"],
+                      ['id','id'],
+                      ['image','image'],
+                      ["user_id","user_id"],
+                      ["metadata", "metadata"],
                       ["key_name", "extra", "keyname"],
                       ["created", "extra", "launchdatetime"]
                   ]
