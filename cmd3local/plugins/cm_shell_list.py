@@ -50,7 +50,8 @@ class cm_shell_list:
             clouds = arguments['CLOUD']
 
 #        print clouds
-
+        pprint(mesh.clouds)
+        a=9/0
         if arguments["flavors"] or all:
             log.info ("count flavors")
             for cloud in clouds:
