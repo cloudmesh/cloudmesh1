@@ -6,8 +6,9 @@ import sys
 import importlib
 from cmd3.shell import command
 import cloudmesh
-
+from pprint import pprint
 from cloudmesh.util.logger import LOGGER
+
 
 log = LOGGER(__file__)
 
@@ -36,6 +37,7 @@ class cm_shell_list:
            -v       verbose mode
 
         """
+        mesh = cloudmesh.mesh()
         log.info(args)
 
         log.info(arguments)
@@ -47,12 +49,15 @@ class cm_shell_list:
         else:
             clouds = arguments['CLOUD']
 
-        print clouds
+#        print clouds
 
         if arguments["flavors"] or all:
             log.info ("count flavors")
             for cloud in clouds:
                 print "cloud: flavors", cloud, None
+                mesh.refresh(names=[cloud], types=['flavor'])
+                flavors = mesh.clouds[cloud]['flavor']
+                pprint(flavors)
 
         if arguments["servers"] or all:
             log.info ("count servers")
