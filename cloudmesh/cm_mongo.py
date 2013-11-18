@@ -179,6 +179,7 @@ class cm_mongo:
         elif cloud_config['cm_type'] in ['aws']:
             if 'EC2_ACCESS_KEY' in cloud_config['credentials']:
                 del cloud_config['credentials']['EC2_ACCESS_KEY']
+                del cloud_config['credentials']['EC2_SECRET_KEY']
         elif cloud_config['cm_type'] in ['azure']:
             del cloud_config['credentials']['subscriptionid']
 
@@ -208,6 +209,7 @@ class cm_mongo:
         cm_type_version = cloud_info['cm_type_version']
 
         credentials = cloud_info['credentials']
+        # print "D",credentials
         
         # we can force an update
         if force:

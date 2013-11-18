@@ -1,6 +1,6 @@
 {% extends "layout/layout_title.html" %}
 {% from "_helper.html" import href_image_button %}
-
+{% from "_helper_bugs.html" import git_issues %}
 
 {% block contentbox %}
 
@@ -55,130 +55,24 @@ $(function() {
 
 </script>
 
-<div>
-
-{% set release="0.7.1" %}
-<h3> Issues for this realease: {{release}} </h3>
-
-Release date: Oct 31st, 2013
-
-
-<table id="bug-table-current">
- <thead>
- 	<tr>
- 		<td> Milestone</td>
- 		<td> Status</td>
- 		<td> Issue</td>
- 		<td> Number</td>
- 		<td> Label</td>
- 	</tr>
- </thead>
-
-<tbody>
-
-{% for issue in issues %}
-{% if issue['milestone']['title'] == release %}
-<tr>
-	<td>{{issue['milestone']['title']}}</td>
-	{% if issue['state'] == 'closed' %}
-		<td> <span class="label label-success"> {{issue['state']}} </span> </td>
-		<td><strike>
-				<a href="{{issue['html_url']}}">
-					{{issue['title']}}
-				</a>
-			</strike></td>
-		<td><span class="badge"><strike> {{issue['number']}}</strike> </span> </td>
-		<td>
-			{% for label in issue['labels'] %}
-			   <div bgcolor="#{{label['color']}}"> </span><strike>{{label['name']}}</strike></div>
-			{% endfor %}
-		</td>
-
-	{% else %}
-	    <td> <span class="label label-warning"> {{issue['state']}} </span> </td>
-			<td>
-				<a href="{{issue['html_url']}}">
-					{{issue['title']}}
-				</a>
-			</td>
-		<td><span class="badge"> {{issue['number']}} </span> </td>
-		<td>
-			{% for label in issue['labels'] %}
-			   <div bgcolor="#{{label['color']}}"> </span>{{label['name']}}</div>
-			{% endfor %}
-		</td>
-
-	{% endif %}
-
-
-
-</tr>
-{% endif %}
-{% endfor %}
-</tbody>
-</table>
 
 <div>
-<p></p>
-
-<h3> All Issues </h3>
-
-<table id="bug-table-all">
- <thead>
- 	<tr>
- 		<td> Milestone</td>
- 		<td> Status</td>
- 		<td> Issue</td>
- 		<td> Number</td>
- 		<td> Label</td>
- 	</tr>
- </thead>
-
-<tbody>
-
-{% for issue in issues %}
-<tr>
-	<td>{{issue['milestone']['title']}}</td>
-	{% if issue['state'] == 'closed' %}
-		<td> <span class="label label-success"> {{issue['state']}} </span> </td>
-		<td><strike>
-				<a href="{{issue['html_url']}}">
-					{{issue['title']}}
-				</a>
-			</strike></td>
-		<td><span class="badge"><strike> {{issue['number']}}</strike> </span> </td>
-		<td>
-			{% for label in issue['labels'] %}
-			   <div bgcolor="#{{label['color']}}"> </span><strike>{{label['name']}}</strike></div>
-			{% endfor %}
-		</td>
-
-	{% else %}
-	    <td> <span class="label label-warning"> {{issue['state']}} </span> </td>
-			<td>
-				<a href="{{issue['html_url']}}">
-					{{issue['title']}}
-				</a>
-			</td>
-		<td><span class="badge"> {{issue['number']}} </span> </td>
-		<td>
-			{% for label in issue['labels'] %}
-			   <div bgcolor="#{{label['color']}}"> </span>{{label['name']}}</div>
-			{% endfor %}
-		</td>
-
-	{% endif %}
-
-
-
-</tr>
-{% endfor %}
-</tbody>
-</table>
+	{{ git_issues(issues, "0.7.1") }}
 </div>
 
 <div>
+	{{ git_issues(issues, "0.8") }}
+</div>
 
+<div>
+	{{ git_issues(issues, "2.0") }}
+</div>
+
+
+
+<div>
+	{{ git_issues(issues, "all") }}
+</div>
 
 
 
