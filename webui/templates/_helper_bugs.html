@@ -1,0 +1,58 @@
+
+{% macro git_issues (issues, release) %}
+	<h3> Issues for Milestone: {{release}} </h3>
+
+	{% set all_issues =  (release == "all") %}
+
+	<table id="bug-table-current">
+	 <thead>
+	 	<tr>
+	 		<td> Milestone</td>
+	 		<td> Status</td>
+	 		<td> Issue</td>
+	 		<td> Number</td>
+	 		<td> Label</td>
+	 	</tr>
+	 </thead>
+
+	<tbody>
+		{% for issue in issues %}
+			{% if all_issues or (issue['milestone']['title'] == release) %}
+			<tr>
+				<td>
+					{{issue['milestone']['title']}}
+				</td>
+				{% if issue['state'] == 'closed' %}
+					<td> <span class="label label-success"> {{issue['state']}} </span> </td>
+					<td><strike>
+							<a href="{{issue['html_url']}}">
+								{{issue['title']}}
+							</a>
+						</strike></td>
+					<td><span class="badge"><strike> {{issue['number']}}</strike> </span> </td>
+					<td>
+						{% for label in issue['labels'] %}
+						   <div bgcolor="#{{label['color']}}"> </span><strike>{{label['name']}}</strike></div>
+						{% endfor %}
+					</td>
+				{% else %}
+				    <td> <span class="label label-warning"> {{issue['state']}} </span> </td>
+						<td>
+							<a href="{{issue['html_url']}}">
+								{{issue['title']}}
+							</a>
+						</td>
+					<td><span class="badge"> {{issue['number']}} </span> </td>
+					<td>
+						{% for label in issue['labels'] %}
+						   <div bgcolor="#{{label['color']}}"> </span>{{label['name']}}</div>
+						{% endfor %}
+					</td>
+				{% endif %}
+			</tr>
+			{% endif %}
+		{% endfor %}
+	</tbody>
+	</table>
+{% endmacro %}
+
