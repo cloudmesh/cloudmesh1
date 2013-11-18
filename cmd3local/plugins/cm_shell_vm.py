@@ -3,7 +3,9 @@ import textwrap
 import inspect
 import sys
 import importlib
-import json
+import simplejson as json
+from bson import Binary, Code
+from bson.json_util import dumps
 from cmd3.shell import command
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
@@ -50,6 +52,7 @@ class cm_shell_vm:
 
         """
         log.info(arguments)
+        #opt = docopt(__doc__, sys.argv[1:])
 
         if arguments["clean"]:
             log.info ("clean the vm")
@@ -61,7 +64,35 @@ class cm_shell_vm:
 
         if arguments["info"] and arguments["NAME"]:
             log.info ("vm info")
+            c = cm_mongo()
+            user_obj = cm_user()
+            """
+            TODO -- get user info //'g' alternative
+            """
+            user = user_obj.info('psjoshi')
+            user_id = user['cm_user_id']
+
+            clouds = c.servers(cm_user_id=user_id)
+            vmFound = False
+
+            for key, value in clouds.items():
+                for k, v in value.items():
+                    if(v['name'] == arguments['NAME']):
+                        reqdVM = v
+                        vmFound = True
+                        break
+                if(vmFound == True):
+                    break
+
+            pprint(reqdVM)
+
+            jsonReqd = False #ToDo -- assign the value from option "-json"
+
+            if(jsonReqd):
+                jsonObj = dumps(reqdVM)
+                return jsonObj
             return
+
 
         if arguments["create"] and arguments["NAME"]:
             log.info ("vm info")
@@ -86,7 +117,7 @@ class cm_shell_vm:
             userParamList = [] #ToDo -- assign the parameters from user to display
             jsonList = []
             x = PrettyTable()
-            jsonReqd = True
+            jsonReqd = True    #ToDo -- assign the value from option "-json"
 
             parameterList = ["name", "status", "flavor", "id", "user_id"]
 
