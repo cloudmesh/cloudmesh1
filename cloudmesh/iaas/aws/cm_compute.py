@@ -31,6 +31,9 @@ class aws(ComputeBaseType):
     def set_credential(self, cred, admin_cred):
         if cred:
             self.user_credential = cred
+            self.access_key_id = self.user_credential['EC2_ACCESS_KEY']
+            self.secret_access_key = \
+                    self.user_credential['EC2_SECRET_KEY']
         if admin_cred:
             self.admin_credential = admin_cred
 
