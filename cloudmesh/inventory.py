@@ -62,6 +62,48 @@ class Inventory:
             log.error("Wrong type {0} {1} {2}".format(cm_kind, id_kind, name))
             sys.exit()
         return host
+    
+    
+    # added by Heng Chen on Nov. 15, 2013
+    # to simplify the procedure of finding host information from Inventory
+    # the param 'id_label' can be a valid cm_id or a valid real label
+    # network_type can be a valid 'public', 'internal', 'bmc'
+    
+    # find host record information
+    # cm_id: i001; real label: i1
+    def get_host_info(self, id_label, network_type = None):
+        query = {
+                  '$or': [
+                           {'cm_id': id_label},
+                           {'label': id_label},
+                          ]
+                  }
+        if network_type:
+            query["type"] = network_type
+        host = self.find_one(query)
+        if host is None:
+            if network_type:
+                raise NameError("Wrong cm_id or label '{0}' of network '{1}', Cannot find host info from Inventory.".format(id_label, network_type))
+            else:
+                raise NameError("Wrong cm_id or label '{0}', Cannot find host info from Inventory.".format(id_label))
+        
+        return host
+    
+    # get cm_id and real lable of host
+    # cm_id is an unique label of clusters
+    # label is the real name of host in the configuration, /etc/hosts
+    # for example, valid cm_id: i100, b010, d001
+    #              valid label: i100, b10,  d1
+    def get_host_id_label(self, id_label, network_type = None):
+        sresult = None
+        try:
+            host = self.get_host_info(id_label, network_type)
+            sresult = (host["cm_id"], host["label"])
+        except NameError, ne:
+            log.error(str(ne))
+        
+        return sresult
+
 
     def set_attribute(self, host_label, attribute, value, time=None):
         print "SETTING", host_label, attribute, value
