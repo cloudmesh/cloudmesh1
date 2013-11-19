@@ -4,6 +4,7 @@ import inspect
 import sys
 import importlib
 import simplejson as json
+import time
 from bson import Binary, Code
 from bson.json_util import dumps
 from cmd3.shell import command
@@ -22,6 +23,14 @@ class cm_shell_vm:
 
     def activate_cm_shell_vm(self):
         pass
+
+    def findVM(self, clouds, server):
+        for key, value in clouds.items():
+            for k, v in value.items():
+                if(v['name'] == server):
+                    return v
+        print "VM not found."
+        return None
 
     @command
     def do_vm(self, args, arguments):
@@ -60,39 +69,43 @@ class cm_shell_vm:
 
         if arguments["delete"] and arguments["NAME"]:
             log.info ("delete the vm")
+            #ToDo -- get user info //'g' alternative
+            user = 'psjoshi'
+            #ToDo -- check if activate is necessary
+            mongoClass = cm_mongo()
+            mongoClass.activate(cm_user_id=user)
+            clouds = mongoClass.servers(cm_user_id=user)
+            server = self.findVM(clouds, arguments["NAME"])
+            cloud = server['cm_cloud']
+            serverId = server['id']
+
+            mongoClass.vm_delete(cloud, serverId, user)
+            time.sleep(5)
+            mongoClass.release_unused_public_ips(cloud, user)
+            mongoClass.refresh(names=[cloud], types=["servers"], cm_user_id=user)
             return
 
         if arguments["info"] and arguments["NAME"]:
             log.info ("vm info")
-            c = cm_mongo()
-            user_obj = cm_user()
-            """
-            TODO -- get user info //'g' alternative
-            """
-            user = user_obj.info('psjoshi')
-            user_id = user['cm_user_id']
+            #TODO -- get user info //'g' alternative
+            user = 'psjoshi'
+            mongoClass = cm_mongo()
+            mongoClass.activate(cm_user_id=user)
+            clouds = mongoClass.servers(cm_user_id=user)
+            reqdVM = self.findVM(clouds, arguments["NAME"])
 
-            clouds = c.servers(cm_user_id=user_id)
-            vmFound = False
+            if(reqdVM):
+                jsonReqd = True #ToDo -- assign the value from option "-json"
 
-            for key, value in clouds.items():
-                for k, v in value.items():
-                    if(v['name'] == arguments['NAME']):
-                        reqdVM = v
-                        vmFound = True
-                        break
-                if(vmFound == True):
-                    break
-
-            pprint(reqdVM)
-
-            jsonReqd = False #ToDo -- assign the value from option "-json"
-
-            if(jsonReqd):
-                jsonObj = dumps(reqdVM)
-                return jsonObj
-            return
-
+                if(jsonReqd):
+                    jsonObj = dumps(reqdVM, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
+                    print jsonObj
+                    return jsonObj
+                else:
+                    pprint(reqdVM)
+                return
+            else:
+                return
 
         if arguments["create"] and arguments["NAME"]:
             log.info ("vm info")
@@ -117,7 +130,7 @@ class cm_shell_vm:
             userParamList = [] #ToDo -- assign the parameters from user to display
             jsonList = []
             x = PrettyTable()
-            jsonReqd = True    #ToDo -- assign the value from option "-json"
+            jsonReqd = False    #ToDo -- assign the value from option "-json"
 
             parameterList = ["name", "status", "flavor", "id", "user_id"]
 
@@ -137,8 +150,10 @@ class cm_shell_vm:
                     insDict = {}
                     insDict[vm['name']]  = tableRowList
                     jsonList.append(insDict)
-            print x
             if(jsonReqd):
                 jsonArray = json.dumps(jsonList)
                 print jsonArray
+            else:
+                print x
+
 
