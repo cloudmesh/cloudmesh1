@@ -349,28 +349,29 @@ class Test:
 
     def test_19_list_secgroup(self):
         """list security group"""
-        tenant_id = '1ae6813a3a6d4cebbeb1912f6d139ad0'
-        pp.pprint(self.cloud.list_security_groups(tenant_id))
+        pp.pprint(self.cloud.list_security_groups())
 
     def test_20_create_secgroup(self):
         """test security group"""
-        tenant_id = '1ae6813a3a6d4cebbeb1912f6d139ad0'
         # print "defining a group"
-        mygroup = Ec2SecurityGroup("testSecGroupCM")
+        #mygroup = Ec2SecurityGroup("testSecGroupCM")
+        mygroup = Ec2SecurityGroup("default")
         # print "defining a security rule"
-        rule1 = Ec2SecurityGroup.Rule(8088, 8088)
-        rule2 = Ec2SecurityGroup.Rule(9090, 9099, "UDP")
-        rules = [rule1, rule2]
-        # print self.cloud.create_security_group(tenant_id, mygroup, rules)
-        mygroup.set_rules(rules)
-        print self.cloud.create_security_group(tenant_id, mygroup)
-        groupid = self.cloud.find_security_groupid_by_name(tenant_id, mygroup.name)
+        # rule1 = Ec2SecurityGroup.Rule(8088, 8088)
+        # rule2 = Ec2SecurityGroup.Rule(9090, 9099, "UDP")
+        # rules = [rule1, rule2]
+        # print self.cloud.create_security_group(mygroup, rules)
+        # mygroup.set_rules(rules)
+        # print self.cloud.create_security_group(mygroup)
+        groupid = self.cloud.find_security_groupid_by_name(mygroup.name)
         # print groupid
         assert groupid is not None
-        rule3 = Ec2SecurityGroup.Rule(5000, 5000)
-        print self.cloud.add_security_group_rules(groupid, [rule3])
-        groupid = self.cloud.find_security_groupid_by_name(tenant_id, "dummy_name_not_exist")
-        # print groupid
+        #rule3 = Ec2SecurityGroup.Rule(5000, 5000)
+        rule3 = Ec2SecurityGroup.Rule(22,22)
+        rule4 = Ec2SecurityGroup.Rule(-1,-1,'ICMP')
+        print self.cloud.add_security_group_rules(groupid, [rule3,rule4])
+        groupid = self.cloud.find_security_groupid_by_name("dummy_name_not_exist")
+        print groupid
         assert groupid is None
 
     def test_21_usage(self):
