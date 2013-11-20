@@ -752,16 +752,16 @@ class openstack(ComputeBaseType):
 
         return list
 
-    # return the security groups for a tenant, in dict format
-    def list_security_groups(self, tenant_id):
+    # return the security groups for the current authenticated tenant, in dict format
+    def list_security_groups(self):
         apiurl = "os-security-groups"
         return self._get(apiurl)
 
-    # return the security group id given a name.
+    # return the security group id given a name, if it's defined in the current tenant
     # The id is used to identify a group when adding more rules to it
-    def find_security_groupid_by_name(self, tenant_id, name):
+    def find_security_groupid_by_name(self, name):
         groupid = None
-        secgroups = self.list_security_groups(tenant_id)
+        secgroups = self.list_security_groups()
         for secgroup in secgroups["security_groups"]:
             if secgroup["name"] == name:
                 groupid = secgroup["id"]
@@ -769,8 +769,9 @@ class openstack(ComputeBaseType):
         return groupid
 
     # creating a security group, and optionally add rules to it
+    # for the current TENANT that it authenticated as
     # This implementation is based on the rest api
-    def create_security_group(self, tenant_id, secgroup, rules=[]):
+    def create_security_group(self, secgroup, rules=[]):
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         posturl = "%s/os-security-groups" % publicURL
