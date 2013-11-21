@@ -31,7 +31,7 @@ pymongo
 mongoengine
 python-novaclient
 python-keystoneclient
-apache-libcloud
+apache-libcloud==0.14.0-beta3
 nose
 autopep8
 celery
