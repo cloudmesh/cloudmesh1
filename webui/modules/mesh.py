@@ -421,7 +421,7 @@ def mongo_images():
             for attribute in clouds[cloud][image]:
                 print attribute, clouds[cloud][image][attribute]
     """
-    # commented by Heng Chen on Nov. 8, 2013
+    # commented by HC on Nov. 8, 2013
     # The following check is repetive because these attributes are added
     #    by 'cm_user.init_defaults(username)'
     #    this method will be called when page is loaded
@@ -484,7 +484,7 @@ def mongo_flavors():
 
     # user['defaults']['pagestatus'] = {'sierra-openstack-grizzly': {"open": "false", "flavor": "3"}}
 
-    # commented by Heng Chen on Nov. 8, 2013
+    # commented by HC on Nov. 8, 2013
     # The following check is repetive because these attributes are added
     #    by 'cm_user.init_defaults(username)'
     #    this method will be called when page is loaded
@@ -678,7 +678,7 @@ def mongo_table(filters=None):
     # ONLY for debug, if the Accordion does not work, please uncomment it
     #log.debug("mesh_servers, before render, user defaults: {0}".format(user['defaults']))
     
-    # added by Heng Chen on Nov. 15, 2013
+    # added by HC on Nov. 15, 2013
     # control the display of 'run' button on a VM
     config_server = cm_config_server()
     flag_production = config_server.get("cloudmesh.server.production");
@@ -800,7 +800,7 @@ def mongo_save_pagestatus():
     user = user_obj.info(username)
     cmongo = cm_mongo()
     user_cloud_list = cmongo.active_clouds(username)
-    # commented/modified by Heng Chen on Nov. 8, 2013
+    # commented/modified by HC on Nov. 8, 2013
     # The following check is repetive because these attributes are added
     #    by 'cm_user.init_defaults(username)'
     #    this method will be called when page is loaded

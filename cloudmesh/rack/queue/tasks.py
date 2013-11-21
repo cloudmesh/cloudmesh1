@@ -1,7 +1,9 @@
 from __future__ import absolute_import
 from celery import current_task
 from cloudmesh.rack.queue.celery import celery
+
 from cloudmesh.temperature.cm_temperature import cm_temperature as Temperature
+from cloudmesh.rack.rack_data import rack_data
 
 import sys
 import os
@@ -12,16 +14,21 @@ import time
 
 log = get_task_logger(__name__)
 
-ipmi_temp = Temperature()
-
 
 @celery.task(track_started=True)
-def temperature(host, unit):
+def temperature(host_name, rack_name, unit):
     '''
-    get the temperature of 'host' with the help of ipmi API
+    get the temperature of 'host_name' with the help of ipmi API
     '''
+    log.debug("temperature_task recieved")
+    ipmi_temp = Temperature()
+    tdict = ipmi_temp.get_ipmi_temperature(host_name)
+    rack_inventory = rack_data()
+    rack_inventory.server_refresh_update_temperature(rack_name, host_name, tdict)
+    
+    """
     result = None
-    tdict = ipmi_temp.get_ipmi_temperature(host)
+    tdict = ipmi_temp.get_ipmi_temperature(host_name)
     if tdict is not None:
         result = ipmi_temp.parse_max_temp(tdict, unit)
         # log.debug("host [{0}] temperature: {1}".format(host, result))
@@ -33,3 +40,4 @@ def temperature(host, unit):
 
     # only for debug, return the result directly
     return result
+    """
