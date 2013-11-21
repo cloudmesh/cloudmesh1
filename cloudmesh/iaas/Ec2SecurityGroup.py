@@ -14,7 +14,22 @@ class Ec2SecurityGroup(object):
             self.from_port = from_port
             self.to_port = to_port
             self.parent_group_id = parent_group_id
-    
+        
+        # overload '==' comparison
+        def __eq__(self, other):
+            ret = False
+            if isinstance(other,Ec2SecurityGroup.Rule) and\
+               self.ip_protocol==other.ip_protocol and\
+               self.cidr==other.cidr and\
+               self.from_port==other.from_port and\
+               self.to_port==other.to_port:
+                ret = True
+            return ret
+        
+        # '!=' comparison
+        def __ne__(self, other):
+            return not self.__eq__(other)
+        
     # a security group must have a name, and optionally a description        
     def __init__(self, name, description='generated via cloudmesh'):
         self.name = name
