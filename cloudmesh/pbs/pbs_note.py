@@ -109,16 +109,19 @@ class pbs_note_builder:
         
 # test only
 if __name__ == "__main__":
-    pbsnote = pbs_note_builder("hengchen", "india")
+    # only used for test
+    username = "change me"
+    hostname = "change me"
+    pbsnote = pbs_note_builder(username, "india")
     try:
-        pbsnote.get_note("i66")
+        pbsnote.get_note(hostname)
         # test temperature
-        pbsnote.set_temperature_note("i66", 99.2)
+        pbsnote.set_temperature_note(hostname, 99.2)
         # test service type
-        pbsnote.set_service_note("i66", "down")
+        pbsnote.set_service_note(hostname, "down")
         # test setNote
         note = {"service": "down, offline", "temperature": "-100.12", "test": "debug", 0:12}
-        pbsnote.set_note("i66", note)
+        pbsnote.set_note(hostname, note)
     except NameError, ne:
         print "My exception info: "
         print str(ne)

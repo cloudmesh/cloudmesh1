@@ -6,7 +6,34 @@ value of "-1" means cannot connect to server or get temperature
 from sh import ssh
 from celery import Celery
 
+from cloudmesh.temperature.cm_temperature import cm_temperature as Temperature
+from cloudmesh.rack.rack_data import rack_data
+
+import sys
+import os
+
+from celery.utils.log import get_task_logger
+
+import time
+
+log = get_task_logger(__name__)
+
+ipmi_temp = Temperature()
+
+
 celery = Celery('cloudmesh.rack.tasks', backend='amqp', broker='amqp://guest@localhost//')
+
+
+@celery.task
+def temperature(host_name, rack_name, unit):
+    '''
+    get the temperature of 'host_name' with the help of ipmi API
+    '''
+    tdict = ipmi_temp.get_ipmi_temperature(host_name)
+    rack_inventory = rack_data()
+    rack_inventory.server_refresh_update_temperature(rack_name, host_name, tdict)
+    
+
 
 @celery.task
 def task_sensors(dict_idip):
