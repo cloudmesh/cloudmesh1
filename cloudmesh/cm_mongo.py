@@ -4,6 +4,7 @@ from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
 from cloudmesh.iaas.openstack.cm_compute import openstack
 from cloudmesh.iaas.ec2.cm_compute import ec2
 from cloudmesh.iaas.openstack.cm_idm import keystone
+from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.stopwatch import StopWatch
 from cloudmesh.util.util import path_expand
@@ -105,6 +106,8 @@ class cm_mongo:
     mongo_db_name = "cloudmesh"
     mongo_collection = "cloudmesh"
 
+    ssh_ec2_rule = Ec2SecurityGroup.Rule(22,22)
+    
     config = None
 
     def __init__(self, collection="cloudmesh"):
@@ -191,7 +194,7 @@ class cm_mongo:
             if key not in  cloud_config['credentials']:
                 cloud_config['credentials'][key] = credential[key]
 
-        if (cloud_config['cm_type'] in ['openstack']) and (cloud_config['cm_label'] in ['sos']):
+        if (cloud_config['cm_type'] in ['openstack']) and (cloud_config['cm_label'] in ['sos','ios_havana']):
             cloud_config['credentials']['OS_TENANT_NAME'] = self.active_project(cm_user_id)
 
         return cloud_config
@@ -250,9 +253,10 @@ class cm_mongo:
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name, credentials)
 
-                    log.debug("Created new cloud instance with name: %s, type:\
-                              %s" % (cloud_name, cm_type))
+                    log.debug("Created new cloud instance for cloud name: %s, type: %s" \
+                              % (cloud_name, cm_type))
                     if cm_type in ['openstack']:
+                        log.debug("\tfor tenant: %s" % credentials['OS_TENANT_NAME'])
                         tryauth = cloud.get_token()
                         if 'access' not in tryauth:
                             cloud = None
@@ -261,6 +265,23 @@ class cm_mongo:
                     self.clouds[cm_user_id][cloud_name].update({'manager': cloud})
                     if cloud is not None:
                         self.refresh(cm_user_id,[cloud_name],['servers'])
+                        if cm_type in ['openstack']:
+                            secgroups = cloud.list_security_groups()['security_groups']
+                            for secgroup in secgroups:
+                                if secgroup['name'] == 'default':
+                                    foundsshrule = False
+                                    for rule in secgroup['rules']:
+                                        existRule = Ec2SecurityGroup.Rule(rule['from_port'],rule['to_port'])
+                                        if existRule == self.ssh_ec2_rule:
+                                            foundsshrule = True
+                                            log.debug("Ec2 security group rule allowing ssh exists for cloud: %s, type: %s, tenant: %s" \
+                                                      % (cloud_name, cm_type, credentials['OS_TENANT_NAME']) )
+                                    if not foundsshrule:
+                                        iddefault = cloud.find_security_groupid_by_name('default')
+                                        cloud.add_security_group_rules(iddefault,[self.ssh_ec2_rule])
+                                        log.debug("Added Ec2 security group rule to allow ssh for cloud: %s, type: %s, tenant: %s" \
+                                                  % (cloud_name, cm_type, credentials['OS_TENANT_NAME']) )
+                        
             except Exception, e:
                 log.error("Cannot activate cloud {0} for {1}\n{2}".format(cloud_name, cm_user_id, e))
                 print traceback.format_exc()
