@@ -1,23 +1,16 @@
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from pprint import pprint
 import cloudmesh
-from sh import ssh
+from cloudmesh.util.ssh import ssh
 
-
-class openstack(ComputeBaseType):
-    pass
-
-
+class opencirrus(ComputeBaseType):
+    def __init__(self,host,user, password=''):
+        self.host = host
+        self.user = user
+        self.password = password
 
     def connect(self):
         """connect to the cloud"""
-
-
-        mesh = cloudmesh.mesh()
-        cloudname = "sierra_openstack_grizzly"
-
-
-
         raise NotImplementedError()
 
     def config(self, dict):
@@ -33,14 +26,17 @@ class openstack(ComputeBaseType):
 
 
     def _get_image_dict(self):
-        raise NotImplementedError()
+        s = ssh(self.host,self.user,self.password)
+        return s.ssh_session('cm list images jedi','bash','exit\nexit')
 
     def _get_flavors_dict(self):
-        r = literal_eval(ssh ("username@servername", "cm list flavors"))
-        return r
-
+        s = ssh(self.host,self.user,self.password)
+        return s.ssh_session('cm list flavors jedi','bash','exit\nexit')
+    
     def _get_servers_dict(self):
-        raise NotImplementedError()
+        s = ssh(self.host,self.user,self.password)
+        return s.ssh_session('cm list servers jedi','bash','exit\nexit')
+        
 
     def vm_create(self, name=None,
                   flavor_name=None,
