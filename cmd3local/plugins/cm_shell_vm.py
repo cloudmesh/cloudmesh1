@@ -20,15 +20,17 @@ from docopt import docopt
 log = LOGGER(__file__)
 
 class cm_shell_vm:
+    user = None
 
     """opt_example class"""
 
     def __init__(self):
         cmd.Cmd.__init__(self)
         try:
+            self.user = 'psjoshi'
             self.mongoClass = cm_mongo()
             #ToDo -- get user -- 'g' alternative
-            self.mongoClass.activate(cm_user_id='psjoshi')
+            self.mongoClass.activate(cm_user_id=self.user)
         except:
             print sys.exc_info()
             sys.exit(errno.ECONNREFUSED)
@@ -175,8 +177,41 @@ class cm_shell_vm:
             else:
                 return
 
-        if arguments["create"] and arguments["NAME"]:
+        if arguments["create"]:
             log.info ("vm info")
+
+            print "Select the cloud you want to create VM for."
+            activeClouds = self.mongoClass.active_clouds(self.user)
+            cloudIndex = 0
+            for item in activeClouds:
+                cloudIndex = cloudIndex + 1
+                print str(cloudIndex)+".", item
+            cloudIndex = raw_input('')
+            #0 based in indexing
+            selectedCloud = activeClouds[int(cloudIndex) - 1]
+
+            print "Please enter parameters to create VM as required.\n",
+            print "--Select an image from following."
+            time.sleep(1)
+            try:
+                allImages = self.mongoClass.images(clouds = [selectedCloud], cm_user_id = self.user)
+                imgCounter = 1
+                imageList = allImages[selectedCloud]
+                if len(imageList) > 0:
+                    x = PrettyTable()
+                    x.field_names = ["Index", "ID", "Name"]
+                    for key, val in imageList.items():
+                        x.add_row([imgCounter, key,val['name']])
+                        imgCounter = imgCounter + 1
+                    print x
+                    imageIndex = raw_input('Enter the index for image to boot VM ')
+                    selectedImage = imageList.items()[int(imageIndex)]
+                    pprint(selectedImage)
+                else:
+                    print "No images found for selected cloud"
+            except:
+                print sys.exc_info()
+                sys.exit()
             return
 
         """
@@ -200,7 +235,7 @@ class cm_shell_vm:
             x = PrettyTable()
             jsonReqd = False #ToDo -- assign the value from option "-json"
 
-            parameterList = ["name", "status", "flavor", "id", "user_id"]
+            parameterList = ["id", "name", "status", "addresses"]
 
             for parameter in userParamList:
                 parameterList.append(parameter)
@@ -211,7 +246,15 @@ class cm_shell_vm:
                 tableRowList = []
 
                 for parameter in parameterList:
-                    tableRowList.append(vm[parameter])
+                    if parameter == "addresses":
+                        addresses = (vm[parameter]['private'])
+                        addrList = []
+                        for address in addresses:
+                            addr = address['OS-EXT-IPS:type']+"="+address['addr']
+                            print address['OS-EXT-IPS:type'], address['addr']
+                        tableRowList.append(addr)
+                    else:
+                        tableRowList.append(vm[parameter])
 
                 x.add_row(tableRowList)
                 if(jsonReqd):
