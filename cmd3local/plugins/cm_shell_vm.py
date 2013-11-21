@@ -6,6 +6,7 @@ import importlib
 import simplejson as json
 import time
 import cmd
+import errno
 from bson import Binary, Code
 from bson.json_util import dumps
 from cmd3.shell import command
@@ -24,9 +25,14 @@ class cm_shell_vm:
 
     def __init__(self):
         cmd.Cmd.__init__(self)
-        self.mongoClass = cm_mongo()
-        #ToDo -- get user -- 'g' alternative
-        self.mongoClass.activate(cm_user_id='psjoshi')
+        try:
+            self.mongoClass = cm_mongo()
+            #ToDo -- get user -- 'g' alternative
+            self.mongoClass.activate(cm_user_id='psjoshi')
+        except:
+            print sys.exc_info()
+            sys.exit(errno.ECONNREFUSED)
+
 
     def activate_cm_shell_vm(self):
         pass
