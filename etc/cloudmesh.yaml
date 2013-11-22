@@ -117,6 +117,22 @@ cloudmesh:
             default:
                 flavor: m1.small
                 image: emi-1C8C3ADF
+        india_openstack_havana:
+            cm_host: india.futuregrid.org
+            cm_heading: India OpenStack, Havana
+            cm_label: ios_havana
+            cm_type: openstack
+            cm_type_version: havana
+            credentials:
+                OS_AUTH_URL: https://i57r.idp.iu.futuregrid.org:5000/v2.0
+                OS_CACERT: /home/cloudmesh/.futuregrid/india-havana-cacert.pem
+                OS_PASSWORD: {{ password.india_openstack_havana.credential.OS_PASSWORD }}
+                OS_TENANT_NAME: {{ projects.default }}
+                OS_USERNAME: {{ portalname }}
+                OS_VERSION: havana
+            default:
+                flavor: m1.small
+                image: cae30f59-b702-41c8-a9e2-0d5337ebedd6
     default:
         cloud: sierra_openstack_grizzly
         index: 1
