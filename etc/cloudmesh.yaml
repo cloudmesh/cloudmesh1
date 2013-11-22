@@ -25,7 +25,7 @@ cloudmesh:
             default:
                 flavor: m1.tiny
                 image: 4199d988-0833-4497-a473-96fc456fac2f
-         alamo:
+        alamo:
             cm_host: alamo.futuregrid.org
             cm_label: alamo
             cm_type: ec2
@@ -36,8 +36,8 @@ cloudmesh:
               NOVA_CERT: $HOME/.futuregrid/alamo/cacert.pem
               EUCALYPTUS_CERT: $HOME/.futuregrid/alamo/cacert.pem
               EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
-              EC2_ACCESS_KEY: {{password.alamo.credential.EC2_ACCESS_KEY}}
-              EC2_SECRET_KEY: {{password.alamo.credential.EC2_SECRET_KEY}}
+              EC2_ACCESS_KEY: {% if password.alamo %} {{ password.alamo.credential.EC2_ACCESS_KEY }} {% else %} PROVIDE_THIS {% endif %}
+              EC2_SECRET_KEY: {% if password.alamo %} {{ password.alamo.credential.EC2_SECRET_KEY }} {% else %} PROVIDE_THIS {% endif %}
               keyname: cloudmesh
               userid: {{portalname}}
             default:
@@ -51,9 +51,9 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
                 OS_CACERT: None
-                OS_PASSWORD: {{password.hp.credential.OS_PASSWORD}}
+                OS_PASSWORD: {% if password.hp %} {{ password.hp.credential.OS_PASSWORD }} {% else %} PROVIDE_THIS {% endif %}
                 OS_TENANT_NAME: FutureGrid
-                OS_USERNAME: {{username.hp}}
+                OS_USERNAME: {% if username and username.hp %} {{ username.hp }} {% else %} PROVIDE_THIS {% endif %}
             default:
                 flavor: standard.small
                 image: 142792
@@ -65,9 +65,9 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
                 OS_CACERT: None
-                OS_PASSWORD: {{password.hp.credential.OS_PASSWORD}}
+                OS_PASSWORD: {% if password.hp %} {{ password.hp.credential.OS_PASSWORD }} {% else %} PROVIDE_THIS {% endif %}
                 OS_TENANT_NAME: FutureGrid
-                OS_USERNAME: {{username.hp}}
+                OS_USERNAME: {% if username and username.hp %} {{ username.hp }} {% else %} PROVIDE_THIS {% endif %}
             default:
                 flavor: standard.small
                 image: 142792
@@ -77,7 +77,7 @@ cloudmesh:
             cm_type: azure
             cm_type_version:
             credentials:
-                subscriptionid: {{azure.subscriptionid}}
+                subscriptionid: {% if azure %} {{ azure.subscriptionid }} {% else %} PROVIDE_THIS {% endif %}
                 managementcertfile: $HOME/.futuregrid/azure_managementCertificate.pem
                 thumbprint: $HOME/.futuregrid/azure_thumbprint
                 servicecertfile: $HOME/.futuregrid/azure_serviceCertificate.pfx
@@ -91,10 +91,10 @@ cloudmesh:
             cm_type: aws
             cm_type_version:
             credentials:
-                EC2_ACCESS_KEY: {{aws.access_key_id}}
-                EC2_SECRET_KEY: {{aws.secret_access_key}}
+                EC2_ACCESS_KEY: {% if aws %} {{ aws.access_key_id }} {% else %} PROVIDE_THIS {% endif %}
+                EC2_SECRET_KEY: {% if aws %} {{ aws.secret_access_key }} {% else %} PROVIDE_THIS {% endif %}
                 keyname: cloudmesh
-                userid: {{aws.userid}}
+                userid: {% if aws %} {{ aws.userid }} {% else %} PROVIDE_THIS {% endif %}
                 EC2_PRIVATE_KEY: $HOME/.futuregrid/aws_pk.pem
             default:
                 flavor: m1.small
@@ -109,18 +109,18 @@ cloudmesh:
                 EUCALYPTUS_CERT: $HOME/.futuregrid/india/cacert.pem
                 EC2_CERT: $HOME/.futuregrid/india/cert.pem
                 EC2_URL: http://149.165.146.135:8773/services/Eucalyptus
-                EC2_ACCESS_KEY: {{password.india_eucalyptus.credential.EC2_ACCESS_KEY}}
-                EC2_SECRET_KEY: {{password.india_eucalyptus.credential.EC2_SECRET_KEY}}
+                EC2_ACCESS_KEY: {% if password.india_eucalyptus %} {{ password.india_eucalyptus.credential.EC2_ACCESS_KEY }} {% else %} PROVIDE_THIS {% endif %}
+                EC2_SECRET_KEY: {% if password.india_eucalyptus %} {{ password.india_eucalyptus.credential.EC2_SECRET_KEY }} {% else %} PROVIDE_THIS {% endif %}
                 EC2_PRIVATE_KEY: $HOME/.futuregrid/india/pk.pem
             keyname: cloudmesh
             userid: {{portalname}}
-          default:
+            default:
                 flavor: m1.small
                 image: emi-1C8C3ADF
     default:
-      cloud: sierra_openstack_grizzly
-      index: 1
-      prefix: {{ portalname }}
+        cloud: sierra_openstack_grizzly
+        index: 1
+        prefix: {{ portalname }}
     profile:
         address:
         - TBD
