@@ -14,6 +14,7 @@ from cloudmesh.util.logger import LOGGER
 from cloudmesh.rack.rack_data import rack_data
 
 from cloudmesh.rack.queue.tasks import temperature
+from cloudmesh.temperature.cm_temperature import cm_temperature
 
 log = LOGGER(__file__)
 
@@ -33,6 +34,7 @@ class FetchClusterInfo:
         self.username = user
         self.hostname = host
         self.cluster_config = ConfigDict(filename=self.CLUSTER_CONFIG_FILE)
+        self.temperature_ipmi = cm_temperature()
         self.rackdata = rack_data()
     
     
@@ -105,9 +107,14 @@ class FetchClusterInfo:
     # fetch cluster temperature from mongo db
     # params:
     #    flag_filter, None or one item in list ['india', 'bravo', 'echo', 'delta']
-    def fetch_temperature_mongo(self, flag_filter=None):
+    def fetch_temperature_mongo(self, flag_filter=None, unit='C'):
         # read data from mongo db
-        pass
+        rack_data_dict = self.rackdata.get_rack_status_data(self.rackdata.TEMPERATURE_NAME, flag_filter)
+        dict_data = {}
+        for rack_name in rack_data_dict:
+            for host in rack_data_dict[rack_name]:
+                result = self.temperature_ipmi.parse_max_temp(rack_data_dict[rack_name][host], unit)
+                dict_data[host] = result["value"]
 
 
     # fetch cluster temperature from ipmitools

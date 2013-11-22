@@ -106,13 +106,14 @@ class cm_temperature:
                     "C": "convert_temp_C2F",
                     "F": "convert_temp_F2C",
                   }
-        for name in tdict:
-            if tdict[name]["status"].lower() == "ok":
-                value = round(float(tdict[name]["value"]), 1)
-                if unit_upper != tdict[name]["unit"].upper():
-                    value = getattr(self, options[unit_upper])(value)
-                if value > max_temp:
-                    max_temp = value
+        if tdict is not None:
+            for name in tdict:
+                if tdict[name]["status"].lower() == "ok":
+                    value = round(float(tdict[name]["value"]), 1)
+                    if unit_upper != tdict[name]["unit"].upper():
+                        value = getattr(self, options[unit_upper])(value)
+                    if value > max_temp:
+                        max_temp = value
 
         return {"unit": unit_upper, "value": max_temp}
 

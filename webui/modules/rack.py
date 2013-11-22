@@ -11,6 +11,8 @@ from wtforms import SelectField
 from flask.ext.principal import Permission, RoleNeed
 import time
 from cloudmesh.util.logger import LOGGER
+import json
+import sys
 
 log = LOGGER(__file__)
 
@@ -84,6 +86,111 @@ def display_rack_home():
         rack_form.initForm()
         return render_template("mesh/rack/rack.html", form=rack_form, flag_home=True)
 
+
+@rack_module.route('/inventory/rack/mapcontainer', methods=['POST'])
+@login_required
+def display_rack_map_container():
+    # rack denote the rack that user selected
+    # service denote the service user selected on the specific rack
+    rack = request.form['select_rack']
+    service = request.form['select_service']
+    
+    # double check to make sure rack can provide the specific service
+    rack_form = RackForm()
+    if rack not in rack_form.all_services_dict[service]["clusters"]:
+        log.error("Someone try to hack the service [service: '{0}' on rack: '{1}'] provided by Rack Diagram. Just ignore it.".format(service, rack))
+        return redirect("/inventory/rack")
+    
+    return render_template( 
+                             "mesh/rack/map_container.html",
+                             rack=rack,
+                             service=service,
+                           )
+
+
+@rack_module.route('/inventory/rack/loadmap', methods=['GET', 'POST'])
+@login_required
+def load_rack_map():
+    service = request.args.get("service")
+    rack = request.args.get("rack")
+    # double check to make sure rack can provide the specific service
+    rack_form = RackForm()
+    if rack not in rack_form.all_services_dict[service]["clusters"]:
+        log.error("Someone try to hack the service [service: '{0}' on rack: '{1}'] provided by Rack Diagram. Just ignore it.".format(service, rack))
+        return redirect("/inventory/rack")
+    
+    # the following begin to generate map
+    # class name means the specific class to generate map for different service type
+    # method name means the specific method to fetch real data of different service type,
+    #     the methods are defined in class FetchClusterInfo
+    service_options = {
+                        "temperature": {
+                                         "class": HeatClusterMap,
+                                         "method": "fetch_temperature_mongo",
+                                        },
+                        "service": {
+                                     "class": ServiceClusterMap,
+                                     "method": "fetch_service_type",
+                                   },
+                       }
+    
+    # get location of configuration file, input diag, output image
+    dir_base = "~/.futuregrid"
+    server_config = cm_config_server()
+    relative_dir_diag = server_config.get("cloudmesh.server.rack.input")
+    relative_dir_image = server_config.get("cloudmesh.server.rack.diagrams.{0}".format(service))
+    # log.debug("relative dir image, {0}".format(relative_dir_image))
+    flask_dir = "static"
+    # guess absolute path of webui
+    rack_py_dir = pwd().strip().split("/")
+    webui_dir = rack_py_dir  # [:-1]
+    # log.debug("webui dir, {0}".format(webui_dir))
+    list_image_dir = [ flask_dir ] + relative_dir_image.strip().split("/");
+    abs_dir_image = "/".join(webui_dir + list_image_dir)
+    abs_dir_diag = dir_base + "/" + relative_dir_diag
+    # dynamic generate image
+    map_class = service_options[service]["class"](rack, dir_base, abs_dir_diag, abs_dir_image)
+    # get cluster server data
+    dict_data = None
+    if False:
+        dict_data = map_class.genRandomValues()
+    else:
+        # fetch the real data ....
+        # TODO cloudmesh.hpc.proxyserver
+        # should we add a field in cloudmesh.yaml for the proxy server to run pbsnodes ???
+        config = cm_config()
+        user = config.get("cloudmesh.hpc.username")
+        myfetch = FetchClusterInfo(user, "india.futuregrid.org")
+        flag_filter = None if rack == "all" else rack
+        # If user want to customize the action, user can set optional param here
+        # by calling map_class.set_optional_param(value)
+        # optional param
+        aparam = map_class.get_optional_param()
+        dict_data = getattr(myfetch, service_options[service]["method"])(flag_filter, aparam)
+        
+    # update data
+    map_class.update(dict_data)
+    # plot map
+    map_class.plot()
+
+    # get image names
+    filename_image = map_class.getImageFilename()
+    filename_legend = map_class.getLegendFilename()
+    image_size = map_class.getImageSize()
+    legend_size = map_class.getImageLegendSize()
+    # log.debug("legend size is: {0}".format(legend_size))
+    abs_web_path_image = "/".join([""] + list_image_dir + [filename_image])
+    abs_web_path_legend = "/".join([""] + list_image_dir + [filename_legend])
+    img_flag = "?" + str(time.time())
+    
+    return json.dumps( {
+                          "map_width"    : image_size["width"],
+                          "map_height"   : image_size["height"],
+                          "legend_width" : legend_size["width"],
+                          "legend_height": legend_size["height"],
+                          "map_url"      : abs_web_path_image + img_flag,
+                          "legend_url"   : abs_web_path_legend + img_flag,
+                        })
 
 
 @rack_module.route('/inventory/rack/map', methods=['POST'])
