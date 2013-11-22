@@ -18,31 +18,31 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
-                OS_PASSWORD: {{password.sierra_openstack_grizzly}}
-                OS_TENANT_NAME: {{projects.default}}
+                OS_PASSWORD: {{ password.sierra_openstack_grizzly.credential.OS_PASSWORD }}
+                OS_TENANT_NAME: {{ password.sierra_openstack_grizzly.credential.OS_TENANT_NAME }}
                 OS_USERNAME: {{portalname}}
                 OS_VERSION: grizzly
             default:
-                flavor: m1.tiny
-                image: 4199d988-0833-4497-a473-96fc456fac2f
-         alamo:
+                flavor: {{ defaults.flavors.sierra_openstack_grizzly | default('m1.tiny') }}
+                image: {{ defaults.images.sierra_openstack_grizzly | default('4199d988-0833-4497-a473-96fc456fac2f') }}
+        alamo:
             cm_host: alamo.futuregrid.org
             cm_label: alamo
             cm_type: ec2
             cm_type_version: folsom
             credentials:
-              EC2_PRIVATE_KEY: $HOME/.futuregrid/alamo/pk.pem
-              EC2_CERT: $HOME/.futuregrid/alamo/cert.pem
-              NOVA_CERT: $HOME/.futuregrid/alamo/cacert.pem
-              EUCALYPTUS_CERT: $HOME/.futuregrid/alamo/cacert.pem
-              EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
-              EC2_ACCESS_KEY: {{password.alamo.EC2_ACCESS_KEY}}
-              EC2_SECRET_KEY: {{password.alamo.EC2_SECERT_KEY}}
-              keyname: cloudmesh
-              userid: {{portalname}}
+                EC2_PRIVATE_KEY: $HOME/.futuregrid/alamo/pk.pem
+                EC2_CERT: $HOME/.futuregrid/alamo/cert.pem
+                NOVA_CERT: $HOME/.futuregrid/alamo/cacert.pem
+                EUCALYPTUS_CERT: $HOME/.futuregrid/alamo/cacert.pem
+                EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
+                EC2_ACCESS_KEY: {% if password.alamo %} {{ password.alamo.credential.EC2_ACCESS_KEY }} {% else %} PROVIDE_THIS {% endif %}
+                EC2_SECRET_KEY: {% if password.alamo %} {{ password.alamo.credential.EC2_SECRET_KEY }} {% else %} PROVIDE_THIS {% endif %}
+                keyname: cloudmesh
+                userid: {{portalname}}
             default:
-              flavor: m1.tiny
-              image: ami-00000017
+                flavor: {{ defaults.flavors.alamo | default('m1.tiny') }}
+                image: {{ defaults.images.alamo | default('ami-00000017') }}
         hp:
             cm_heading: HP Openstack
             cm_label: hpos
@@ -51,12 +51,12 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
                 OS_CACERT: None
-                OS_PASSWORD: {{password.hp}}
+                OS_PASSWORD: {% if password.hp %} {{ password.hp.credential.OS_PASSWORD }} {% else %} PROVIDE_THIS {% endif %}
                 OS_TENANT_NAME: FutureGrid
-                OS_USERNAME: {{username.hp}}
+                OS_USERNAME: {% if username and username.hp %} {{ username.hp }} {% else %} PROVIDE_THIS {% endif %}
             default:
-                flavor: standard.small
-                image: 142792
+                flavor: {{ defaults.flavors.hp | default('standard.small') }}
+                image: {{ defaults.flavors.hp | default('142792') }}
         hp_east:
             cm_heading: HP Openstack East
             cm_label: hpeos
@@ -65,25 +65,25 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
                 OS_CACERT: None
-                OS_PASSWORD: {{password.hp}}
+                OS_PASSWORD: {% if password.hp %} {{ password.hp.credential.OS_PASSWORD }} {% else %} PROVIDE_THIS {% endif %}
                 OS_TENANT_NAME: FutureGrid
-                OS_USERNAME: {{username.hp}}
+                OS_USERNAME: {% if username and username.hp %} {{ username.hp }} {% else %} PROVIDE_THIS {% endif %}
             default:
-                flavor: standard.small
-                image: 142792
+                flavor: {{ defaults.flavors.hp | default('standard.small') }}
+                image: {{ defaults.flavors.hp | default('142792') }}
         azure:
             cm_host: windowsazure.com
             cm_label: waz
             cm_type: azure
             cm_type_version:
             credentials:
-                subscriptionid: {{azure.subscriptionid}}
+                subscriptionid: {% if azure %} {{ azure.subscriptionid }} {% else %} PROVIDE_THIS {% endif %}
                 managementcertfile: $HOME/.futuregrid/azure_managementCertificate.pem
                 thumbprint: $HOME/.futuregrid/azure_thumbprint
                 servicecertfile: $HOME/.futuregrid/azure_serviceCertificate.pfx
             default:
-                flavor: ExtraSmall
-                image: b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-saucy-13_10-amd64-server-20130930-en-us-30GB
+                flavor: {{ defaults.flavors.azure | default('ExtraSmall') }} 
+                image: {{ defaults.flavors.azure | default('b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-saucy-13_10-amd64-server-20130930-en-us-30GB') }}
                 location: "East US"
         aws:
             cm_host: aws.amazon.com
@@ -91,14 +91,14 @@ cloudmesh:
             cm_type: aws
             cm_type_version:
             credentials:
-                EC2_ACCESS_KEY: {{aws.access_key_id}}
-                EC2_SECRET_KEY: {{aws.secret_access_key}}
+                EC2_ACCESS_KEY: {% if aws %} {{ aws.access_key_id }} {% else %} PROVIDE_THIS {% endif %}
+                EC2_SECRET_KEY: {% if aws %} {{ aws.secret_access_key }} {% else %} PROVIDE_THIS {% endif %}
                 keyname: cloudmesh
-                userid: {{aws.userid}}
+                userid: {% if aws %} {{ aws.userid }} {% else %} PROVIDE_THIS {% endif %}
                 EC2_PRIVATE_KEY: $HOME/.futuregrid/aws_pk.pem
             default:
-                flavor: m1.small
-                image: ami-fbb2fc92
+                flavor: {{ defaults.flavors.aws | default('m1.small') }}
+                image: {{ defaults.images.aws | default('ami-fbb2fc92') }}
                 location: us-east-1
         india_eucalyptus:
             cm_host: india.futuregrid.org
@@ -109,18 +109,34 @@ cloudmesh:
                 EUCALYPTUS_CERT: $HOME/.futuregrid/india/cacert.pem
                 EC2_CERT: $HOME/.futuregrid/india/cert.pem
                 EC2_URL: http://149.165.146.135:8773/services/Eucalyptus
-                EC2_ACCESS_KEY: {{password.india_eucalyptus.EC2_ACCESS_KEY}}
-                EC2_SECRET_KEY: {{password.india_eucalyptus.EC2_SECERT_KEY}}
+                EC2_ACCESS_KEY: {% if password.india_eucalyptus %} {{ password.india_eucalyptus.credential.EC2_ACCESS_KEY }} {% else %} PROVIDE_THIS {% endif %}
+                EC2_SECRET_KEY: {% if password.india_eucalyptus %} {{ password.india_eucalyptus.credential.EC2_SECRET_KEY }} {% else %} PROVIDE_THIS {% endif %}
                 EC2_PRIVATE_KEY: $HOME/.futuregrid/india/pk.pem
             keyname: cloudmesh
             userid: {{portalname}}
-          default:
-                flavor: m1.small
-                image: emi-1C8C3ADF
+            default:
+                flavor: {{ defaults.flavors.india_eucalyptus | default('m1.small') }}
+                image: {{ defaults.images.india_eucalyptus | default('emi-1C8C3ADF') }}
+        india_openstack_havana:
+            cm_host: india.futuregrid.org
+            cm_heading: India OpenStack, Havana
+            cm_label: ios_havana
+            cm_type: openstack
+            cm_type_version: havana
+            credentials:
+                OS_AUTH_URL: https://i57r.idp.iu.futuregrid.org:5000/v2.0
+                OS_CACERT: /home/cloudmesh/.futuregrid/india-havana-cacert.pem
+                OS_PASSWORD: {{ password.india_openstack_havana.credential.OS_PASSWORD }}
+                OS_TENANT_NAME: {{ password.india_openstack_havana.credential.OS_TENANT_NAME }}
+                OS_USERNAME: {{ portalname }}
+                OS_VERSION: havana
+            default:
+                flavor: {{ defaults.flavors.india_openstack_havana }}
+                image: {{ defaults.images.india_openstack_havana }}
     default:
-      cloud: sierra_openstack_grizzly
-      index: 1
-      prefix: {{ portalname }}
+        cloud: {{ defaults.cloud }}
+        index: 1
+        prefix: {{ defaults.prefix }}
     profile:
         address:
         - TBD

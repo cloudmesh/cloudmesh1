@@ -202,40 +202,17 @@ def main():
             sys.exit(0)
 
 
-
-        #
-        # NOT TESTED
-        #
-
         if arguments['init'] or name == 'init':
             output = arguments['--out']
             username = arguments['--user'] or os.getenv('USER')
-            #
-            # BUG
-            #
-            # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+            location = path_expand(output)
+            new_yaml_file = open(location, 'w+')
 
-
-          # Get profile and project data from LDAP
-            user = cm_user().info(username)
-
-            pprint (user)
-
-            # template = cloudmesh
-
-            # config.userdata_handler = cloudmesh_user
-            # config.initialize(username)
-
-            # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-            """
-            try:
-                config.write_init(output)
-            except OSError as oserr:
-                if oserr.errno == 17:
-                    print "'%s' exists, please rename or remove it and try again." % oserr.filename
-            """
+            user_yaml = cm_user().generate_yaml(username, 'cloudmesh')
+            print >> new_yaml_file, yaml.dump(user_yaml, default_flow_style=False)
+            new_yaml_file.close()
+            print "Written new yaml file in " + location
             sys.exit(0)
 
         #
