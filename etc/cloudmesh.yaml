@@ -18,7 +18,7 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
-                OS_PASSWORD: {{password.sierra_openstack_grizzly}}
+                OS_PASSWORD: {{password.sierra_openstack_grizzly.credential.OS_PASSWORD}}
                 OS_TENANT_NAME: {{projects.default}}
                 OS_USERNAME: {{portalname}}
                 OS_VERSION: grizzly
@@ -36,8 +36,8 @@ cloudmesh:
               NOVA_CERT: $HOME/.futuregrid/alamo/cacert.pem
               EUCALYPTUS_CERT: $HOME/.futuregrid/alamo/cacert.pem
               EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
-              EC2_ACCESS_KEY: {{password.alamo.EC2_ACCESS_KEY}}
-              EC2_SECRET_KEY: {{password.alamo.EC2_SECRET_KEY}}
+              EC2_ACCESS_KEY: {{password.alamo.credential.EC2_ACCESS_KEY}}
+              EC2_SECRET_KEY: {{password.alamo.credential.EC2_SECRET_KEY}}
               keyname: cloudmesh
               userid: {{portalname}}
             default:
@@ -51,7 +51,7 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
                 OS_CACERT: None
-                OS_PASSWORD: {{password.hp}}
+                OS_PASSWORD: {{password.hp.credential.OS_PASSWORD}}
                 OS_TENANT_NAME: FutureGrid
                 OS_USERNAME: {{username.hp}}
             default:
@@ -65,7 +65,7 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
                 OS_CACERT: None
-                OS_PASSWORD: {{password.hp}}
+                OS_PASSWORD: {{password.hp.credential.OS_PASSWORD}}
                 OS_TENANT_NAME: FutureGrid
                 OS_USERNAME: {{username.hp}}
             default:
@@ -109,8 +109,8 @@ cloudmesh:
                 EUCALYPTUS_CERT: $HOME/.futuregrid/india/cacert.pem
                 EC2_CERT: $HOME/.futuregrid/india/cert.pem
                 EC2_URL: http://149.165.146.135:8773/services/Eucalyptus
-                EC2_ACCESS_KEY: {{password.india_eucalyptus.EC2_ACCESS_KEY}}
-                EC2_SECRET_KEY: {{password.india_eucalyptus.EC2_SECRET_KEY}}
+                EC2_ACCESS_KEY: {{password.india_eucalyptus.credential.EC2_ACCESS_KEY}}
+                EC2_SECRET_KEY: {{password.india_eucalyptus.credential.EC2_SECRET_KEY}}
                 EC2_PRIVATE_KEY: $HOME/.futuregrid/india/pk.pem
             keyname: cloudmesh
             userid: {{portalname}}
