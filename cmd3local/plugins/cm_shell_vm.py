@@ -7,6 +7,7 @@ import simplejson as json
 import time
 import cmd
 import errno
+import getpass
 from bson import Binary, Code
 from bson.json_util import dumps
 from cmd3.shell import command
@@ -27,10 +28,18 @@ class cm_shell_vm:
     def __init__(self):
         cmd.Cmd.__init__(self)
         try:
-            self.user = 'psjoshi'
-            self.mongoClass = cm_mongo()
-            #ToDo -- get user -- 'g' alternative
-            self.mongoClass.activate(cm_user_id=self.user)
+            print "Please provide your FutureGrid credentials"
+            userId   = raw_input("Username: ")
+            password = getpass.getpass("Password: ")
+            cmUser = cm_user()
+            if (cmUser.authenticate(userId, password)):
+                self.user = userId
+                self.mongoClass = cm_mongo()
+                #ToDo -- get user -- 'g' alternative
+                self.mongoClass.activate(cm_user_id=self.user)
+            else:
+                print "Invalid Credentials!"
+                sys.exit()
         except:
             print sys.exc_info()
             sys.exit(errno.ECONNREFUSED)
@@ -85,9 +94,8 @@ class cm_shell_vm:
 
         if arguments["cloud"] and arguments["NAME"]:
             log.info ("get the VM cloud")
-            user = 'psjoshi'
             try:
-                server = self.findVM(user, arguments["NAME"])
+                server = self.findVM(self.user, arguments["NAME"])
             except StandardError:
                 print "Could not activate mongoDB. Please check if mongo running."
             if(server):
@@ -98,9 +106,8 @@ class cm_shell_vm:
 
         if arguments["flavor"] and arguments["NAME"]:
             log.info ("get the VM flavor")
-            user = 'psjoshi'
             try:
-                server = self.findVM(user, arguments["NAME"])
+                server = self.findVM(self.user, arguments["NAME"])
             except StandardError:
                 print "Could not activate mongoDB. Please check if mongo running."
             if(server):
@@ -117,15 +124,14 @@ class cm_shell_vm:
 
         if arguments["image"] and arguments["NAME"]:
             log.info ("get the VM image")
-            user = 'psjoshi'
             try:
-                server = self.findVM(user, arguments["NAME"])
+                server = self.findVM(self.user, arguments["NAME"])
             except StandardError:
                 print "Could not activate mongoDB. Please check if mongo running."
                 return
             if(server):
                 vmImageId = server['image']['id']
-                images = self.mongoClass.images(cm_user_id=user)
+                images = self.mongoClass.images(cm_user_id=self.user)
 
                 reqdImage = images[server['cm_cloud']][vmImageId]
 
@@ -139,17 +145,16 @@ class cm_shell_vm:
         if arguments["delete"] and arguments["NAME"]:
             log.info ("delete the vm")
             #ToDo -- get user info //'g' alternative
-            user = 'psjoshi'
             #ToDo -- check if activate is necessary
-            server = self.findVM(user, arguments["NAME"])
+            server = self.findVM(self.user, arguments["NAME"])
             if(server):
                 cloud = server['cm_cloud']
                 serverId = server['id']
                 try:
-                    self.mongoClass.vm_delete(cloud, serverId, user)
+                    self.mongoClass.vm_delete(cloud, serverId, self.user)
                     time.sleep(5)
-                    self.mongoClass.release_unused_public_ips(cloud, user)
-                    self.mongoClass.refresh(names=[cloud], types=["servers"], cm_user_id=user)
+                    self.mongoClass.release_unused_public_ips(cloud, self.user)
+                    self.mongoClass.refresh(names=[cloud], types=["servers"], cm_user_id=self.user)
                     print arguments["NAME"], "deleted successfully\n"
                 except StandardError:
                     print "Error deleting the VM."
@@ -161,8 +166,7 @@ class cm_shell_vm:
             """
             TODO -- get user info //'g' alternative
             """
-            user = 'psjoshi'
-            reqdVM = self.findVM(user, arguments["NAME"])
+            reqdVM = self.findVM(self.user, arguments["NAME"])
 
             if(reqdVM):
                 jsonReqd = True #ToDo -- assign the value from option "-json"
@@ -224,11 +228,8 @@ class cm_shell_vm:
         We can add parameters by taking them as args from user.
         """
         if arguments["list"]:
-            c = cm_mongo()
-            #c.activate(cm_user_id="psjoshi")
-            clouds = c.servers(cm_user_id="psjoshi")
+            clouds = self.mongoClass.servers(cm_user_id=self.user)
             vmList = clouds["sierra_openstack_grizzly"]
-
 
             userParamList = [] #ToDo -- assign the parameters from user to display
             jsonList = []
@@ -251,7 +252,6 @@ class cm_shell_vm:
                         addrList = []
                         for address in addresses:
                             addr = address['OS-EXT-IPS:type']+"="+address['addr']
-                            print address['OS-EXT-IPS:type'], address['addr']
                         tableRowList.append(addr)
                     else:
                         tableRowList.append(vm[parameter])
