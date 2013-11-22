@@ -15,6 +15,8 @@ from cloudmesh.config.cm_config import cm_config_server, get_mongo_db, cm_config
 from cloudmesh.util.encryptdata import encrypt, decrypt
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import deprecated
+from cloudmesh.util.util import path_expand
+from cloudmesh.user.cm_template import cm_template
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.cm_mongo import cm_mongo
 import traceback
@@ -55,7 +57,7 @@ class cm_user(object):
             log.error("{0}".format(e))
             return False
 
-    def generate_yaml(id, basename):
+    def generate_yaml(self, id, basename):
         '''
         Generates the content for a yaml file based on the passwed parameters.
         
@@ -176,7 +178,7 @@ class cm_user(object):
     
     def init_defaults(self, username):
         # ONLY for debug
-        # added by HC on Nov. 11, 2013 to test LDAP and user.mongo
+        # added by Heng Chen on Nov. 11, 2013 to test LDAP and user.mongo
         # BEGIN debug
         #log.debug("cm_user_init_defaults, I was called.........")
         # END debug
@@ -252,8 +254,8 @@ class cm_user(object):
 
         #
         # set default page status (Accordion open/close) for active clouds
-        # added by HC, Nov. 8, 2013
-        # to fix the bug 'UndefinedError: no attribute pagestatus' found by HL on Nov. 7, 2013
+        # added by Heng Chen, Nov. 8, 2013
+        # to fix the bug 'UndefinedError: no attribute pagestatus' found by Hyungro Lee on Nov. 7, 2013
         #
         str_pagestatus = 'pagestatus'
         if str_pagestatus not in defaults:
