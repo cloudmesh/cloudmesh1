@@ -18,8 +18,8 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
-                OS_PASSWORD: {{password.sierra_openstack_grizzly.credential.OS_PASSWORD}}
-                OS_TENANT_NAME: {{projects.default}}
+                OS_PASSWORD: {{ password.sierra_openstack_grizzly.credential.OS_PASSWORD }}
+                OS_TENANT_NAME: {{ password.sierra_openstack_grizzly.credential.OS_TENANT_NAME }}
                 OS_USERNAME: {{portalname}}
                 OS_VERSION: grizzly
             default:
@@ -127,7 +127,7 @@ cloudmesh:
                 OS_AUTH_URL: https://i57r.idp.iu.futuregrid.org:5000/v2.0
                 OS_CACERT: /home/cloudmesh/.futuregrid/india-havana-cacert.pem
                 OS_PASSWORD: {{ password.india_openstack_havana.credential.OS_PASSWORD }}
-                OS_TENANT_NAME: {{ projects.default }}
+                OS_TENANT_NAME: {{ password.india_openstack_havana.credential.OS_TENANT_NAME }}
                 OS_USERNAME: {{ portalname }}
                 OS_VERSION: havana
             default:
