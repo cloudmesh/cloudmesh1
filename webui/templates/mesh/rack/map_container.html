@@ -2,50 +2,18 @@
 {% block title %}Rack Map{% endblock %}
 
 {% block contentbox %}
-{% if flag_home %}
-	<h2>Choose a Rack Cluster and a type of Service:</h2>
-{% else %}
-	<h2>
-		{{ service | capitalize }} Map of
-		{% if rack == "all" %}
-			{{ rack | capitalize }} Clusters
-		{% else %}
-			the {{ rack | capitalize }} Cluster
-		{% endif %}
-	</h2>
-{% endif %}
+<h2>
+    {{ service | capitalize }} Map of
+    {% if rack == "all" %}
+        {{ rack | capitalize }} Clusters
+    {% else %}
+        the {{ rack | capitalize }} Cluster
+    {% endif %}
+</h2>
 {% endblock %}
 
 {% block content %}
 
-{% if flag_home %}
-    <script>
-        function OnButtonClicked(rack_id, service) {
-            //$(":button").prop("disabled", true);
-            $("#select_rack").val( $(rack_id).val() );
-            $("#select_service").val (service);
-            document.frm.submit();
-        }
-    </script>
-	<form name="frm" action="/inventory/rack/mapcontainer" method="post">
-	    <table>
-	        <tr>
-	            {% for service in form.all_services_list %}
-	               <td>
-	                   <p> {{ form.selector_dict[service]["label"] }}</p>
-	                   <p> {{ form.selector_dict[service]["select"] }} </p>
-	                   {% set myselect = form.all_services_dict[service]["select"] %}
-	                   <p> <input type="button" value="Show {{form.selector_dict[service]['label']}}"
-	                       onclick="OnButtonClicked('#{{myselect}}', '{{service}}')"> </p>
-	               </td>
-	            {% endfor %}
-	        </tr>
-	    </table>
-        <input name="select_rack" id="select_rack" type="hidden" value="">
-        <input name="select_service" id="select_service" type="hidden" value="">
-	</form>
-{% else %}
-	{% if True %}
     <style>#slider { margin: 10px; }  </style>
     <style>
         #tooltip {
@@ -56,32 +24,98 @@
             width:50px; height:20px
         }
     </style>
-    <script>
-        var prev_left_img = 0;
-        var prev_top_img = 0;
-        function OnClickMe() {
-            $container = $("#img_inner_div");
-            prev_left_img -= 100;
-            prev_top_img -= 100;
-            $container.css("left", prev_left_img);
-            $container.css("top", prev_top_img);
-        }
-    </script>
-    <div onclick="OnClickMe()" style="display:none">Click Me</div>
-    <div id="mousepos" style="display:none"></div>
 
-	Zoom Ratio: <span id="zoomratio">100</span> % &nbsp; Image offset (<span id="mapoffsetleft">0</span>, <span id="mapoffsettop">0</span>) &nbsp;&nbsp;[ Double click on the image to display the real size. Try to drag and move the map.]<br>
-	<div id="slider"></div>
+    <div id = "waiting_div">Loading map, please wait ...</div>
+    <div id = "map_container_div" style="display:none">
+    Zoom Ratio: <span id="zoomratio">100</span> % &nbsp; Image offset (<span id="mapoffsetleft">0</span>, <span id="mapoffsettop">0</span>) &nbsp;&nbsp;[ Double click on the image to display the real size. Try to drag and move the map.]<br>
+    <div id="slider"></div>
 
-    <script>
+        <div><p><img id="legend"
+                   style="position: relative; display:block; margin-left: auto; margin-right: auto"
+                   ondblclick="setZoomRate(100)"
+                   />
+               </p>
+            </div>
+
+        <div id="img_outer_div" style="width:100%; height:100%; overflow: auto; position: relative">
+            <div id="img_inner_div" style="overflow: hidden; position: relative; display:block; margin-left: auto; margin-right: auto">
+
+            <p> <img id="realmap"
+                     ondblclick="setZoomRate(100)"
+                   />
+            </p>
+            </div>
+        </div>
+    </div>
+<script>
         var Default_Slider_Min = 1;
         var Default_Slider_Max = 300;
         var Default_Image_Rate = 30;
         var previous_zoom_rate = Default_Image_Rate;
-        var baseWidth = {{imageWidth}};
-        var baseHeight = {{imageHeight}};
-        var legendWidth = {{legendWidth}};
-        var legendHeight = {{legendHeight}};
+        var baseWidth = 0;
+        var baseHeight = 0;
+        var legendWidth = 0;
+        var legendHeight = 0;
+        var mapStatusIndicator = "not_ready";
+        var mapImage = new Image;
+        var legendImage = new Image;
+        var mapLoaded = false;
+        var legendLoaded = false;
+
+        mapImage.onload = function() {
+            mapLoaded = true;
+            display_loaded_images();
+        };
+
+        legendImage.onload = function() {
+            legendLoaded = true;
+            display_loaded_images();
+        };
+
+        function loadMap() {
+            mapLoaded = false;
+            legendLoader = false;
+            $.getJSON( "/inventory/rack/loadmap",
+                {service: '{{service}}', rack: '{{rack}}' },
+                function( data ) {
+                    baseWidth       = data["map_width"];
+                    baseHeight      = data["map_height"];
+                    legendWidth     = data["legend_width"];
+                    legendHeight    = data["legend_height"];
+                    // load image map
+                    mapImage.src    = data["map_url"];
+                    // load image legend
+                    legendImage.src = data["legend_url"];
+                }
+            );
+        };
+
+        function checkMapStatusIndicator() {
+            if (mapStatusIndicator == "not_ready") {
+                // first load
+                loadMap();
+                mapSatusIndicator = "loading";
+            }
+        };
+
+        function display_loaded_images() {
+            if (mapLoaded && legendLoaded) {
+                $("#legend").css("width", legendWidth + "px");
+                $("#img_inner_div").css("width", baseWidth + "px");
+                $("#img_inner_div").css("height", baseHeight + "px");
+                $("#realmap").css("width", baseWidth + "px");
+                $("#legend").attr("src", legendImage.src);
+                $("#realmap").attr("src", mapImage.src);
+                // zoom to default rate
+                $("#waiting_div").hide();
+                // display all images
+                $("#map_container_div").show();
+                setZoomRate(Default_Image_Rate);
+                // change map status indicator
+                mapStatusIndicator = "ready";
+            }
+        };
+
         function zoomImageMap(rate) {
             $("#zoomratio").text( rate );
             $imgContainer = $("#img_inner_div");
@@ -92,11 +126,16 @@
             $imgContainer.css("width", baseWidth * rate / 100 + "px");
             $imgContainer.css("height", baseHeight * rate / 100 + "px");
             $("#realmap").css("width",baseWidth * rate / 100);
-            <!-- $("#legend").css("width",legendWidth * rate / 100); -->
+            // $("#legend").css("width",legendWidth * rate / 100);
             previous_zoom_rate = rate;
         }
 
+        function setZoomRate(rate) {
+            $("#slider").slider("value", rate);
+        };
+
         var tooltip = $('<div id="tooltip"> </div>').hide();
+
         $( "#slider" ).slider({
                 min: Default_Slider_Min,
                 max: Default_Slider_Max,
@@ -115,8 +154,8 @@
                     $area = $("#zoomratio");
                     width = $(this).width();
                     offset = $(this).offset();
-                    relative_pos_x = e.pageX - offset.left;
-                    relative_pos_y = e.pageY - offset.top + 20;
+                    relative_pos_x = e.pageX - offset.left + 15;
+                    relative_pos_y = e.pageY - offset.top - 10;
                     value = Math.round((relative_pos_x / width) * (Default_Slider_Max - Default_Slider_Min)) + Default_Slider_Min;
                     tooltip.css({left: relative_pos_x, top: relative_pos_y});
                     tooltip.text(value + "%");
@@ -126,11 +165,11 @@
                     tooltip.hide();
                 }
             });
-        function setZoomRate(rate) {
-            $slider = $("#slider").slider("value", rate);
-        }
+
         $(document).ready(function() {
-            setZoomRate(Default_Image_Rate);
+            // setZoomRate(Default_Image_Rate);
+            checkMapStatusIndicator();
+
             $("#slider").slider().append(tooltip);
             $container = $("#img_inner_div");
             $container.data("flag_drag", false);
@@ -179,7 +218,7 @@
                         if (px_index > -1) {
                             img_prev_top = img_prev_top.substring(0, px_index);
                         }
-                        $("#mousepos").text("(" + p1.x + ", " + p1.y + "), (" + img_prev_left + ", " + img_prev_top + ")");
+
                         abs_offset_left = offset.left + parseInt(img_prev_left);
                         abs_offset_top = offset.top + parseInt(img_prev_top);
                         $container.css("left", abs_offset_left);
@@ -204,32 +243,6 @@
 
     </script>
 
-    <div><p><img id="legend" src="{{ legendFilename }}"
-               style="width: {{legendWidth}}px; position: relative; display:block; margin-left: auto; margin-right: auto"
-               ondblclick="setZoomRate(100)"
-               />
-           </p>
-        </div>
-
-    <div id="img_outer_div" style="width:100%; height:100%; overflow: auto; position: relative">
-        <div id="img_inner_div" style="width:{{imageWidth}}px; height:{{imageHeight}}px; overflow: hidden; position: relative; display:block; margin-left: auto; margin-right: auto">
-
-		<p> <img id="realmap" src="{{ imageFilename }}"
-			     style="width: {{imageWidth}}px; "
-			     ondblclick="setZoomRate(100)"
-	           	 />
-		</p>
-        </div>
-	</div>
-	{% else %}
-		<p>
-	  		<img src="/static/racks/{{name}}.svg"/>
-		</p>
-		<p>
-			<img src="/static/racks/{{name}}-legend.png"/>
-		</p>
-	{% endif %}
-{% endif %}
 
 {% endblock %}
 
