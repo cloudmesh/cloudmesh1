@@ -25,8 +25,7 @@ class cm_shell_vm:
 
     """opt_example class"""
 
-    def __init__(self):
-        cmd.Cmd.__init__(self)
+    def activate_cm_shell_vm(self):
         try:
             print "Please provide your FutureGrid credentials"
             userId   = raw_input("Username: ")
@@ -43,10 +42,6 @@ class cm_shell_vm:
         except:
             print sys.exc_info()
             sys.exit(errno.ECONNREFUSED)
-
-
-    def activate_cm_shell_vm(self):
-        pass
 
     def findVM(self, user, server):
         clouds = self.mongoClass.servers(cm_user_id=user)
@@ -70,7 +65,7 @@ class cm_shell_vm:
                vm flavor NAME
                vm index NAME
                vm count N
-               vm list
+               vm list CLOUD
 
         Manages the vm
 
@@ -78,7 +73,7 @@ class cm_shell_vm:
 
           NAME           The name of a service or server
           N              The number of VMs to be started
-
+          CLOUD          The name of Cloud
 
         Options:
 
@@ -126,7 +121,7 @@ class cm_shell_vm:
             log.info ("get the VM image")
             try:
                 server = self.findVM(self.user, arguments["NAME"])
-            except StandardError:
+            except:
                 print "Could not activate mongoDB. Please check if mongo running."
                 return
             if(server):
@@ -165,24 +160,45 @@ class cm_shell_vm:
             log.info ("vm info")
             """
             TODO -- get user info //'g' alternative
+            private network
+            flavor
+            security_groups
+            metadata
             """
             reqdVM = self.findVM(self.user, arguments["NAME"])
 
+            x = PrettyTable()
+            x.field_names = ["Property", "Value"]
+            x.align["Property"] = "l"
+            x.align["Value"] = "l"
+
             if(reqdVM):
-                jsonReqd = True #ToDo -- assign the value from option "-json"
+                jsonReqd = False #ToDo -- assign the value from option "-json"
+                cmCloud = reqdVM['cm_cloud']
 
                 if(jsonReqd):
                     jsonObj = dumps(reqdVM, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
                     print jsonObj
                     return jsonObj
                 else:
-                    pprint(reqdVM)
-                return
-            else:
-                return
+                    #get the VM image for the info display
+                    vmImageId = reqdVM['image']['id']
+                    allImages = self.mongoClass.images(clouds = [reqdVM['cm_cloud']], cm_user_id = self.user)
+
+                    imageValue = allImages[cmCloud][vmImageId]['name'] + " ("
+                    imageValue = imageValue + allImages[cmCloud][vmImageId]['id'] + ")"
+
+                    x.add_row(['image', imageValue])
+
+                    for key, value in reqdVM.items():
+                        if type(value) != dict and type(value) != list:
+                            x.add_row([key, value])
+                    print x.get_string(sortby="Property")
+            return
+
 
         if arguments["create"]:
-            log.info ("vm info")
+            log.info ("vm create")
 
             print "Select the cloud you want to create VM for."
             activeClouds = self.mongoClass.active_clouds(self.user)
@@ -227,43 +243,49 @@ class cm_shell_vm:
             -- user_id
         We can add parameters by taking them as args from user.
         """
-        if arguments["list"]:
+        if arguments["list"] and arguments["CLOUD"]:
             clouds = self.mongoClass.servers(cm_user_id=self.user)
-            vmList = clouds["sierra_openstack_grizzly"]
 
-            userParamList = [] #ToDo -- assign the parameters from user to display
-            jsonList = []
-            x = PrettyTable()
-            jsonReqd = False #ToDo -- assign the value from option "-json"
+            vmList = clouds[arguments["CLOUD"]]
 
-            parameterList = ["id", "name", "status", "addresses"]
-
-            for parameter in userParamList:
-                parameterList.append(parameter)
-
-            x.field_names = (parameterList)
-            for key, vm in vmList.items():
-
-                tableRowList = []
-
-                for parameter in parameterList:
-                    if parameter == "addresses":
-                        addresses = (vm[parameter]['private'])
-                        addrList = []
-                        for address in addresses:
-                            addr = address['OS-EXT-IPS:type']+"="+address['addr']
-                        tableRowList.append(addr)
-                    else:
-                        tableRowList.append(vm[parameter])
-
-                x.add_row(tableRowList)
-                if(jsonReqd):
-                    insDict = {}
-                    insDict[vm['name']]  = tableRowList
-                    jsonList.append(insDict)
-            if(jsonReqd):
-                jsonArray = json.dumps(jsonList)
-                print jsonArray
+            if(len(vmList) == 0):
+                print "No VMs on this cloud."
+                return
             else:
-                print x
+
+                userParamList = [] #ToDo -- assign the parameters from user to display
+                jsonList = []
+                x = PrettyTable()
+                jsonReqd = False #ToDo -- assign the value from option "-json"
+
+                parameterList = ["id", "name", "status", "addresses"]
+
+                for parameter in userParamList:
+                    parameterList.append(parameter)
+
+                x.field_names = (parameterList)
+                for key, vm in vmList.items():
+
+                    tableRowList = []
+
+                    for parameter in parameterList:
+                        if parameter == "addresses":
+                            addresses = (vm[parameter]['private'])
+                            addrList = []
+                            for address in addresses:
+                                addr = address['OS-EXT-IPS:type']+"="+address['addr']
+                            tableRowList.append(addr)
+                        else:
+                            tableRowList.append(vm[parameter])
+
+                    x.add_row(tableRowList)
+                    if(jsonReqd):
+                        insDict = {}
+                        insDict[vm['name']]  = tableRowList
+                        jsonList.append(insDict)
+                if(jsonReqd):
+                    jsonArray = json.dumps(jsonList)
+                    print jsonArray
+                else:
+                    print x
 
