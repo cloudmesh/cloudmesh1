@@ -15,6 +15,8 @@ from cloudmesh.config.cm_config import cm_config_server, get_mongo_db, cm_config
 from cloudmesh.util.encryptdata import encrypt, decrypt
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.util import deprecated
+from cloudmesh.util.util import path_expand
+from cloudmesh.user.cm_template import cm_template
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.cm_mongo import cm_mongo
 import traceback
@@ -55,9 +57,9 @@ class cm_user(object):
             log.error("{0}".format(e))
             return False
 
-    def generate_yaml(id, basename):
+    def generate_yaml(self, id, basename):
         '''
-        Generates the content for a yaml file based on the passwed parameters.
+        Generates the content for a yaml file based on the passed parameters.
         
         :param id: The username for which we want to create the yaml file
         :type id: String
@@ -71,18 +73,12 @@ class cm_user(object):
 
         log.info("generate {1} yaml {0}".format(id, basename))
         result = self.info(id)
-
-        # banner("RESULT")
-        # pprint (result)
-
+        result['password'] = self.get_credentials(id)
 
         etc_filename = path_expand("~/.futuregrid/etc/{0}.yaml".format(basename))
 
-        # print etc_filename
-
         t = cm_template(etc_filename)
         out = t.replace(kind='dict', values=result)
-        # banner("{0} DATA".format(basename))
 
         return out
 

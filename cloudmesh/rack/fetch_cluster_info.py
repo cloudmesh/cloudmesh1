@@ -6,13 +6,19 @@ If more cluster are added later, this class MUST be modified carefully
 """
 from cloudmesh.pbs.pbs import PBS
 from hostlist import expand_hostlist
-from cloudmesh.rack.queue.tasks import temperature
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config
 
 from cloudmesh.util.logger import LOGGER
 
+from cloudmesh.rack.rack_data import rack_data
+
+from cloudmesh.rack.queue.tasks import temperature
+from cloudmesh.temperature.cm_temperature import cm_temperature
+
 log = LOGGER(__file__)
+
+
 
 class FetchClusterInfo:
 
@@ -28,6 +34,51 @@ class FetchClusterInfo:
         self.username = user
         self.hostname = host
         self.cluster_config = ConfigDict(filename=self.CLUSTER_CONFIG_FILE)
+        self.temperature_ipmi = cm_temperature()
+        self.rackdata = rack_data()
+    
+    
+    # start async call to refresh racks
+    def start_async_refresh(self, type, rack_name, server):
+        if type == self.rackdata.TEMPERATURE_NAME:
+            self.rackdata.mydebug("start_async_refresh, BEGIN delay start server {0} of {1}-{2}".format(server, rack_name, type))
+            temperature.apply_async((server, rack_name, 'C'), queue='rack')
+            self.rackdata.mydebug("start_async_refresh, END delay start server {0} of {1}-{2}".format(server, rack_name, type))
+        elif type == self.rackdata.SERVICE_NAME:
+            log.debug("NOT implement '{0}'".format(type))
+        else:
+            log.debug("NOT Supported to refresh {0} status of {1}".format(type, rack_name))
+    
+    
+    # refresh rack status data
+    def refresh_rack_data(self, type, rack_name, interval_time=1800):
+        self.rackdata.mydebug("enter into refresh_rack_data of {0}-{1}".format(rack_name, type))
+        # check the status of 'rack_status'
+        refresh_dict = self.rackdata.can_start_refresh(type, rack_name, interval_time)
+        if refresh_dict is None:
+            return
+        
+        for rack_name in refresh_dict:
+            if refresh_dict[rack_name]:
+                # change the status of 'rack_status' to 'refresh'
+                self.rackdata.set_status_start_refresh(type, rack_name)
+                hosts = self.rackdata.inventory.hostlist(rack_name)
+                # fetch data for each host
+                for server in hosts:
+                    self.start_async_refresh(type, rack_name, server)
+        
+        self.rackdata.mydebug("exit from refresh_rack_data of {0}-{1} with refresh data {2}".format(rack_name, type, refresh_dict))
+    
+    
+    # refresh rack temperature
+    def refresh_rack_temperature(self, rack_name, interval_time=1800):
+        self.refresh_rack_data(self.rackdata.TEMPERATURE_NAME, rack_name, interval_time)
+
+
+    # refresh rack service
+    def refresh_rack_service(self, rack_name, interval_time=1800):
+        self.refresh_rack_data(self.rackdata.SERVICE_NAME, rack_name, interval_time)
+    
 
     # fetch cluster service type with "ssh user@host pbsnodes -a"
     # params:
@@ -56,9 +107,14 @@ class FetchClusterInfo:
     # fetch cluster temperature from mongo db
     # params:
     #    flag_filter, None or one item in list ['india', 'bravo', 'echo', 'delta']
-    def fetch_temperature_mongo(self, flag_filter=None):
+    def fetch_temperature_mongo(self, flag_filter=None, unit='C'):
         # read data from mongo db
-        pass
+        rack_data_dict = self.rackdata.get_rack_status_data(self.rackdata.TEMPERATURE_NAME, flag_filter)
+        dict_data = {}
+        for rack_name in rack_data_dict:
+            for host in rack_data_dict[rack_name]:
+                result = self.temperature_ipmi.parse_max_temp(rack_data_dict[rack_name][host], unit)
+                dict_data[host] = result["value"]
 
 
     # fetch cluster temperature from ipmitools
@@ -183,7 +239,8 @@ if __name__ == "__main__":
     config = cm_config()
     user = config.get("cloudmesh.hpc.username")
     mytest = FetchClusterInfo(user, "india.futuregrid.org")
-    data = mytest.fetch_temperature_ipmi()
-    print "=" * 30
-    print data
-    print "-" * 30
+    #data = mytest.fetch_temperature_ipmi()
+    #print "=" * 30
+    #print data
+    #print "-" * 30
+    mytest.refresh_rack_temperature("echo")

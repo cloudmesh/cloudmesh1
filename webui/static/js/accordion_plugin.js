@@ -1,4 +1,4 @@
-// commented by Heng Chen on Nov. 11, 2013
+// commented by HC on Nov. 11, 2013
 //    because this does not have a good compatibility with every browser
 //    The related actions will be changed to save to db immediately after user click
 // BEGIN comment

@@ -8,7 +8,8 @@ from cloudmesh.util.util import path_expand as cm_path_expand
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import get_mongo_db
 from cloudmesh.config.ConfigDict import ConfigDict
-from datetime import datetime
+from datetime import datetime, timedelta
+from copy import deepcopy
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -64,19 +65,23 @@ class Inventory:
         return host
     
     
-    # added by Heng Chen on Nov. 15, 2013
+    # added by HC on Nov. 15, 2013
     # to simplify the procedure of finding host information from Inventory
     # the param 'id_label' can be a valid cm_id or a valid real label
     # network_type can be a valid 'public', 'internal', 'bmc'
     
-    # find host record information
+    # find one host record information
     # cm_id: i001; real label: i1
+    # BEGIN host info
     def get_host_info(self, id_label, network_type = None):
         query = {
                   '$or': [
                            {'cm_id': id_label},
                            {'label': id_label},
-                          ]
+                          ],
+                   'cm_type': 'inventory',
+                   'cm_key' : 'server',
+                   'cm_kind': 'server',
                   }
         if network_type:
             query["type"] = network_type
@@ -103,7 +108,8 @@ class Inventory:
             log.error(str(ne))
         
         return sresult
-
+    
+    # END host info
 
     def set_attribute(self, host_label, attribute, value, time=None):
         print "SETTING", host_label, attribute, value
@@ -209,11 +215,10 @@ class Inventory:
                                         })
                         self.insert(element)
 
+
     def generate(self):
         self.generate_bootspec()
         self._generate_globals()
-
-
 
         clusters = self.config.get("cloudmesh.inventory")
 
@@ -246,6 +251,11 @@ class Inventory:
                     )
                     self.insert(element)
                 net_id += 1
+        
+        # added by HC
+        # init rack status
+        self.generate_rack_status()
+
 
     def cluster (self, name):
         """returns cluster data in dict"""
@@ -353,6 +363,84 @@ class Inventory:
         data = self.find ({"cm_id": index,
                            "type": iptype})[0]
         return (data['ipaddr'], data)
+
+    # added by HC on Nov. 18
+    # Append the service type and temperature of racks into Inventory
+    # BEGIN rack inventory
+    def get_clusters(self, rack_name=None):
+        query = {
+                   'cm_key'  : 'range',
+                   'cm_type' : 'inventory',
+                   'cm_kind' : 'server',
+                 }
+        if rack_name:
+            query['cm_id'] = rack_name
+        
+        return self.find(query)
+    
+    
+    def generate_rack_status(self):
+        service_list = [
+                          'temperature', 
+                          'service',
+                        ]
+        
+        racks = self.get_clusters()
+        for rack in racks:
+            log.info("Adding the initial status of rack {0}".format(rack["cm_cluster"]))
+            for service_type in service_list:
+                self.init_rack_status(service_type, rack)
+                self.init_rack_temp_status(service_type, rack)
+
+
+    # init a type of status of a rack
+    # two status: 'not_ready' means the init of the record
+    #             'ready' means the record contains useful data
+    def init_rack_status(self, service_type, rack):
+        query = {
+                     "cm_key"  : "rack_{0}".format(service_type),
+                     "cm_type" : "inventory",
+                     "cm_kind" : "rack",
+                     "cm_label": rack["cm_cluster"],
+                     "cm_id"   : rack["cm_cluster"],
+                     "id"      : rack["cm_cluster"],
+                     "label"   : rack["cm_cluster"],
+                   }
+        
+        element = deepcopy(query)
+        element['rack_status'] = 'not_ready'
+        element['cm_refresh'] = None
+        element['data'] = dict((h, None) for h in rack['cm_value'])
+        
+        self.update(query, element)
+        
+    
+    # init a type of temporary refreshing status of a rack
+    # three status: 'not_ready' means the init of the record
+    #               'refresh' mean the status data is updating
+    #               'ready' means the record contains useful data
+    def init_rack_temp_status(self, service_type, rack, status='not_ready'):
+        query = {
+                     "cm_key"  : "rack_temp_{0}".format(service_type),
+                     "cm_type" : "inventory",
+                     "cm_kind" : "rack",
+                     "cm_label": rack["cm_cluster"],
+                     "cm_id"   : rack["cm_cluster"],
+                     "id"      : rack["cm_cluster"],
+                     "label"   : rack["cm_cluster"],
+                   }
+        
+        element = deepcopy(query)
+        element['rack_status'] = status
+        # the start time of refresh
+        element['cm_refresh'] = None if status == 'not_ready' else datetime.now()
+        element['updated_node'] = 0
+        element['max_node'] = len(rack['cm_value'])
+        element['data'] = dict((h, None) for h in rack['cm_value'])
+        
+        self.update(query, element)
+    
+    # END rack inventory
 
 
     def generate_bootspec(self):
