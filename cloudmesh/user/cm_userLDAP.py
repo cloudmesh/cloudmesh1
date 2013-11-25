@@ -93,6 +93,13 @@ class cm_userLDAP (CMUserProviderBaseType):
         super(cm_userLDAP, self).__init__()
         self.ldapconn = None
 
+    def refresh_one(self, user):
+        '''
+        Refresh the user database from the user provider
+        '''
+        data = self.get(user)
+        self.updates(user, data)
+
     def refresh(self):
         '''
         Refresh the user database from the user provider
@@ -100,8 +107,7 @@ class cm_userLDAP (CMUserProviderBaseType):
         self._refresh()
         users = self.list()
         for user in users:
-            data = self.get(user)
-            self.updates(user, data)
+            self.refresh_one(user)
 
     def connect(self, name, type, **kwargs):
         '''
