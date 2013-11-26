@@ -13,10 +13,11 @@ from bson.json_util import dumps
 from cmd3.shell import command
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
+from cloudmesh.config.cm_config import cm_config
 from pprint import pprint
 from prettytable import PrettyTable
 from cloudmesh.util.logger import LOGGER
-from docopt import docopt
+import docopt
 
 log = LOGGER(__file__)
 
@@ -27,21 +28,14 @@ class cm_shell_vm:
 
     def activate_cm_shell_vm(self):
         try:
-            print "Please provide your FutureGrid credentials"
-            userId   = raw_input("Username: ")
-            password = getpass.getpass("Password: ")
-            cmUser = cm_user()
-            if (cmUser.authenticate(userId, password)):
-                self.user = userId
-                self.mongoClass = cm_mongo()
-                #ToDo -- get user -- 'g' alternative
-                self.mongoClass.activate(cm_user_id=self.user)
-            else:
-                print "Invalid Credentials!"
-                sys.exit()
-        except:
-            print sys.exc_info()
-            sys.exit(errno.ECONNREFUSED)
+            config = cm_config()
+            self.user = config.username()
+            self.mongoClass = cm_mongo()
+            self.mongoClass.activate(cm_user_id=self.user)
+        except Exception, e:
+            print e
+            print "Please check if mongo service is running."
+            sys.exit()
 
     def findVM(self, user, server):
         clouds = self.mongoClass.servers(cm_user_id=user)
@@ -56,16 +50,16 @@ class cm_shell_vm:
     def do_vm(self, args, arguments):
         """
         Usage:
-               vm clean
+               vm clean [options]
                vm delete NAME
                vm create [NAME]
-               vm info [NAME]
+               vm info [options] [NAME]
                vm cloud NAME
                vm image NAME
                vm flavor NAME
                vm index NAME
                vm count N
-               vm list CLOUD
+               vm list [options] CLOUD
 
         Manages the vm
 
@@ -77,7 +71,8 @@ class cm_shell_vm:
 
         Options:
 
-           -v       verbose mode
+           -v             verbose mode
+           -j --json      json output
 
         """
         log.info(arguments)
@@ -85,6 +80,7 @@ class cm_shell_vm:
 
         if arguments["clean"]:
             log.info ("clean the vm")
+            print arguments['-v']
             return
 
         if arguments["cloud"] and arguments["NAME"]:
@@ -173,7 +169,7 @@ class cm_shell_vm:
             x.align["Value"] = "l"
 
             if(reqdVM):
-                jsonReqd = False #ToDo -- assign the value from option "-json"
+                jsonReqd = arguments['--json']
                 cmCloud = reqdVM['cm_cloud']
 
                 if(jsonReqd):
@@ -256,7 +252,7 @@ class cm_shell_vm:
                 userParamList = [] #ToDo -- assign the parameters from user to display
                 jsonList = []
                 x = PrettyTable()
-                jsonReqd = False #ToDo -- assign the value from option "-json"
+                jsonReqd = arguments['--json']
 
                 parameterList = ["id", "name", "status", "addresses"]
 
