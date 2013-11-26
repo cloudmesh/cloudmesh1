@@ -93,12 +93,13 @@ class cm_userLDAP (CMUserProviderBaseType):
         super(cm_userLDAP, self).__init__()
         self.ldapconn = None
 
-    def refresh_one(self, user):
+    def refresh_one(self, user_cn):
         '''
-        Refresh the user database from the user provider
+        Refresh the user database from the user provider for one user
         '''
-        data = self.get(user)
-        self.updates(user, data)
+        self._refresh(user_cn)
+        data = self.get(user_cn)
+        self.updates(user_cn, data)
 
     def refresh(self):
         '''
@@ -107,7 +108,8 @@ class cm_userLDAP (CMUserProviderBaseType):
         self._refresh()
         users = self.list()
         for user in users:
-            self.refresh_one(user)
+            data = self.get(user)
+            self.updates(user, data)
 
     def connect(self, name, type, **kwargs):
         '''
@@ -160,18 +162,22 @@ class cm_userLDAP (CMUserProviderBaseType):
         '''
         return self.users.keys()
 
-    def _refresh(self):
-        self._getUsers()
-        self._getProjects()
+    def _refresh(self, user_cn=None):
+        self._getUsers(user_cn)
+        self._getProjects(user_cn)
         return self.users
 
-    def _getUsers(self):
+
+    def _getUsers(self, user_cn=None):
+        ldap_filter = "(objectclass=inetorgperson)"
+        if user_cn:
+            ldap_filter = "(&{0}(cn={1}))".format(ldap_filter, user_cn)
         # print "LDAP query..."
         try:
             # ldap constant
             ldapbasedn = "dc=futuregrid,dc=org"
             ldapscope = ldap.SCOPE_SUBTREE
-            ldapfilter = "(objectclass=inetorgperson)"
+            ldapfilter = ldap_filter
             # info to be retrieved from ldap
             ldapattribs = ['uid',
                            'uidNumber',
@@ -218,7 +224,10 @@ class cm_userLDAP (CMUserProviderBaseType):
         except:
             print "WRONG" + str(sys.exc_info())
 
-    def _getProjects(self):
+    def _getProjects(self, user_cn=None):
+        ldap_filter = "(&(objectclass=posixGroup)(cn=fg*))"
+        if user_cn:
+            ldap_filter="(&(objectclass=posixGroup)(cn=fg*)(memberUid={0}))".format(user_cn)
         try:
             ldapbasedn = "dc=futuregrid,dc=org"
             ldapscope = ldap.SCOPE_SUBTREE
