@@ -369,8 +369,10 @@ def ldap(username=None):
 
     idp = cm_userLDAP ()
     idp.connect("fg-ldap", "ldap")
-    idp.refresh(username)
-
+    if username:
+        idp.refresh_one(username)
+    else:
+        idp.refresh()
     users = idp.list()
 
     print users
