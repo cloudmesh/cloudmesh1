@@ -156,11 +156,17 @@ class cm_userLDAP (CMUserProviderBaseType):
         '''
         return self.users[username]
 
-    def list(self):
+    def list(self, username=None):
         '''
         Return a list with all usernames
         '''
-        return self.users.keys()
+        if username:
+            if username in self.users.keys():
+                return [username] 
+            else:
+                return []
+        else:
+            return self.users.keys()
 
     def _refresh(self, user_cn=None):
         self._getUsers(user_cn)
