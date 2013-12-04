@@ -6,9 +6,6 @@ import importlib
 import simplejson as json
 import time
 import cmd
-import errno
-import getpass
-from bson import Binary, Code
 from bson.json_util import dumps
 from cmd3.shell import command
 from cloudmesh.user.cm_user import cm_user
@@ -22,8 +19,6 @@ import docopt
 log = LOGGER(__file__)
 
 class cm_shell_vm:
-    user = None
-
     """opt_example class"""
 
     def activate_cm_shell_vm(self):
