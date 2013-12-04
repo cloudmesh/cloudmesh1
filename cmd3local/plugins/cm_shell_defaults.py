@@ -36,7 +36,8 @@ class cm_shell_defaults:
             print e
             print "Please check if mongo service is running."
             sys.exit()
-	@command
+
+    @command
     def do_defaults(self, args, arguments):
         """
         Usage:
@@ -59,6 +60,9 @@ class cm_shell_defaults:
            -j --json      json output
 
         """
+
+        print arguments
+
         if arguments["clean"]:
             log.info ("clean the vm")
             print arguments['-v']
