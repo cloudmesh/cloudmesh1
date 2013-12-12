@@ -10,9 +10,10 @@ from sh import pwd  # @UnresolvedImport
 from wtforms import SelectField
 from flask.ext.principal import Permission, RoleNeed
 import time
-from cloudmesh.util.logger import LOGGER
+from cloudmesh.rack.rack_progress import get_temperature_progress, get_service_progress
 import json
 import sys
+from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
@@ -108,9 +109,9 @@ def display_rack_map_container():
                            )
 
 
-@rack_module.route('/inventory/rack/loadmap', methods=['GET', 'POST'])
+@rack_module.route('/inventory/rack/genmap', methods=['GET', 'POST'])
 @login_required
-def load_rack_map():
+def gen_rack_map():
     service = request.args.get("service")
     rack = request.args.get("rack")
     # double check to make sure rack can provide the specific service
@@ -119,6 +120,13 @@ def load_rack_map():
         log.error("Someone try to hack the service [service: '{0}' on rack: '{1}'] provided by Rack Diagram. Just ignore it.".format(service, rack))
         return redirect("/inventory/rack")
     
+    myfetch = FetchClusterInfo()
+    map_progress = myfetch.get_map_progress(service)
+    map_progress.set_load_map()
+    map_progress.set_send_http_request()
+    myfetch.start_gen_map(service, rack)
+    return "ok"
+    """
     # the following begin to generate map
     # class name means the specific class to generate map for different service type
     # method name means the specific method to fetch real data of different service type,
@@ -127,12 +135,18 @@ def load_rack_map():
                         "temperature": {
                                          "class": HeatClusterMap,
                                          "method": "fetch_temperature_mongo",
+                                         "progress": get_temperature_progress,
                                         },
                         "service": {
                                      "class": ServiceClusterMap,
                                      "method": "fetch_service_type",
+                                     "progress": get_service_progress,
                                    },
                        }
+    # update progress satus
+    map_progress = service_options[service]["progress"]()
+    map_progress.set_load_map()
+    map_progress.set_send_http_request()
     
     # get location of configuration file, input diag, output image
     dir_base = "~/.futuregrid"
@@ -170,6 +184,7 @@ def load_rack_map():
         
     # update data
     map_class.update(dict_data)
+    map_progress.set_process_data()
     # plot map
     map_class.plot()
 
@@ -191,6 +206,24 @@ def load_rack_map():
                           "map_url"      : abs_web_path_image + img_flag,
                           "legend_url"   : abs_web_path_legend + img_flag,
                         })
+    """
+
+
+@rack_module.route('/inventory/rack/mapprogress', methods=['GET', 'POST'])
+@login_required
+def rack_map_progress_status():
+    service = request.args.get("service")
+    result = {"text": "", "value": 0, "next": ""}
+    
+    myfetch = FetchClusterInfo()
+    map_progress = myfetch.get_map_progress(service)
+    if map_progress:
+        result = map_progress.get_status()
+        log.debug("progress status: {0}".format(result))
+        if result["next"] == "loading map":
+            result["data"] = map_progress.get_data("map_data")
+    
+    return json.dumps(result)
 
 
 @rack_module.route('/inventory/rack/map', methods=['POST'])
