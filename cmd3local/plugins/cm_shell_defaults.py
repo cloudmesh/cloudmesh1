@@ -20,11 +20,29 @@ log = LOGGER(__file__)
 
 class cm_shell_defaults:
 
-    def createDefaultDict(self, cloudName):
-        defaultDict = {}
+    def createDefaultDict(self, cloudName=None):
+        defDict = {}
         config = cm_config()
-        pprint(config.cloud(cloudName))
-
+        #image
+        #flavor
+        #keyname
+        #nodename
+        #number of nodes
+        if(cloudName == None):
+            cloudName = config.default_cloud
+            defDict['cloud'] = cloudName
+        else:
+            defDict['cloud'] = cloudName
+        #pprint(config.cloud(cloudName))
+        cloudDict = config.cloud(cloudName)
+        defDict['flavor'] = cloudDict['default']['flavor']
+        defDict['image']  = cloudDict['default']['image']
+        keys = config.userkeys()
+        defKeyName = keys['default']
+        defKey = keys['keylist'][defKeyName]
+        defDict['keyname'] = defKeyName
+        defDict['prefix'] = defKeyName
+        return defDict
 
     def activate_cm_shell_defaults(self):
         try:
@@ -36,14 +54,14 @@ class cm_shell_defaults:
             print e
             print "Please check if mongo service is running."
             sys.exit()
-	@command
+    @command
     def do_defaults(self, args, arguments):
         """
         Usage:
                defaults [-v] clean
-               defaults [-v] load CLOUD
+               defaults [-v] load [CLOUD]
                defaults [options] info
-               defaults list [options] CLOUD
+               defaults list [options] [CLOUD]
 
         Manages the defaults
 
@@ -64,6 +82,14 @@ class cm_shell_defaults:
             print arguments['-v']
             return
 
-        if arguments["load"] and arguments["CLOUD"]:
-            createDefaultDict(arguments["CLOUD"])
+        if arguments["load"]:
+            self.createDefaultDict(arguments["CLOUD"])
             return
+
+def main():
+    def1 = cm_shell_defaults()
+    def1.createDefaultDict(None)
+
+if __name__ == "__main__":
+    main()
+

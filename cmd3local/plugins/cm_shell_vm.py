@@ -15,6 +15,7 @@ from pprint import pprint
 from prettytable import PrettyTable
 from cloudmesh.util.logger import LOGGER
 import docopt
+from cm_shell_defaults import cm_shell_defaults
 
 log = LOGGER(__file__)
 
@@ -27,6 +28,9 @@ class cm_shell_vm:
             self.user = config.username()
             self.mongoClass = cm_mongo()
             self.mongoClass.activate(cm_user_id=self.user)
+            defaults = cm_shell_defaults()
+            self.defDict = defaults.createDefaultDict()
+            self.index = 0
         except Exception, e:
             print e
             print "Please check if mongo service is running."
@@ -47,7 +51,7 @@ class cm_shell_vm:
         Usage:
                vm clean [options]
                vm delete NAME
-               vm create [NAME]
+               vm create [CLOUD]
                vm info [options] [NAME]
                vm cloud NAME
                vm image NAME
@@ -70,9 +74,6 @@ class cm_shell_vm:
            -j --json      json output
 
         """
-        log.info(arguments)
-        #opt = docopt(__doc__, sys.argv[1:])
-
         if arguments["clean"]:
             log.info ("clean the vm")
             print arguments['-v']
@@ -189,6 +190,26 @@ class cm_shell_vm:
 
 
         if arguments["create"]:
+            #toDo -- Replace this with actual nova call
+            #check if we can retrieve previously created vms and
+            #print "nova boot --image {0} --flavor {1} --key-name {2} defDict['image'] }
+            #def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id):
+            #decide about index and prefix
+
+            #log.info ("vm create")
+
+            if(arguments["CLOUD"]):
+                cloudName = arguments["CLOUD"]
+            else:
+                cloudName = self.defDict['cloud']
+            result = self.mongoClass.vm_create(cloudName, self.defDict['prefix'], self.index, 1, self.defDict['image'], self.defDict['keyname'], None, 'psjoshi')
+            badReq = 'badRequest'
+            if(badReq in result):
+                print result[badReq]['message']
+                return
+            pprint(result)
+            return
+            '''
             log.info ("vm create")
 
             print "Select the cloud you want to create VM for."
@@ -223,7 +244,9 @@ class cm_shell_vm:
             except:
                 print sys.exc_info()
                 sys.exit()
-            return
+            return'''
+
+
 
         """
         Currently presents list of following parameters for the VM
@@ -279,4 +302,10 @@ class cm_shell_vm:
                     print jsonArray
                 else:
                     print x
+def main():
+    print "test correct"
+
+if __name__ == "__main__":
+    main()
+
 
