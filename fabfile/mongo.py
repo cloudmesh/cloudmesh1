@@ -362,15 +362,17 @@ def errormetric():
 
 
 @task
-def ldap():
+def ldap(username=None):
     '''
     fetches a user list from ldap and displays it
     '''
 
     idp = cm_userLDAP ()
     idp.connect("fg-ldap", "ldap")
-    idp.refresh()
-
+    if username:
+        idp.refresh_one(username)
+    else:
+        idp.refresh()
     users = idp.list()
 
     print users
