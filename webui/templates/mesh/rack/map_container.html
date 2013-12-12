@@ -23,14 +23,119 @@
             border-color: #0000FF;
             width:50px; height:20px
         }
+
+        .ui-progressbar {
+            position: relative;
+            height: 16px;
+        }
+        .progress-label {
+            position: absolute;
+            left: 50%;
+            top: 0px;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        .colmask {
+            position:relative;
+            clear:both;
+            float:left;
+            width:100%;
+            overflow:hidden;
+        }
+
+        .colright,
+        .colmid,
+        .colleft {
+            float:left;
+            width:100%;
+            position:relative;
+        }
+        .col1,
+        .col2,
+        .col3 {
+            float:left;
+            position:relative;
+            padding:0 0 0 0;
+            overflow:hidden;
+        }
+
+        .threecol_lcr {
+            background:transparent;
+        }
+        .threecol_lcr .colmid {
+            right:75%;
+            background:transparent;
+        }
+        .threecol_lcr .colleft {
+            right:15%;
+            background:transparent;
+        }
+        .threecol_lcr .col1 {
+            width:10%;
+            left:90%;
+        }
+        .threecol_lcr .col2 {
+            width:15%;
+            left:90%;
+        }
+        .threecol_lcr .col3 {
+            width:75%;
+            left:90%;
+        }
+
+        .twocol_lr {
+            background:transparent;
+        }
+        .twocol_lr .colleft {
+            right:25%;
+            background:transparent;
+        }
+        .twocol_lr .col1 {
+            width:75%;
+            left:25%;
+        }
+        .twocol_lr .col2 {
+            width:25%;
+            left:25%;
+        }
     </style>
 
-    <div id = "waiting_div">Loading map, please wait ...</div>
-    <div id = "map_container_div" style="display:none">
-    Zoom Ratio: <span id="zoomratio">100</span> % &nbsp; Image offset (<span id="mapoffsetleft">0</span>, <span id="mapoffsettop">0</span>) &nbsp;&nbsp;[ Double click on the image to display the real size. Try to drag and move the map.]<br>
-    <div id="slider"></div>
-
-        <div><p><img id="legend"
+    <div id="page_progress_div" class="colmask twocol_lr">
+        <div class="colleft">
+            <div class="col1">
+                <div id="progressbar">
+                    <div class="progress-label">&nbsp;</div>
+                </div>
+            </div>
+            <div class="col2">
+                <div id="progress_status_text" style="padding-left: 10px;">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+    <div id="map_zoom_status_div" style="display: none">
+        Zoom Ratio: <span id="zoomratio">100</span> % &nbsp; Image offset (<span id="mapoffsetleft">0</span>, <span id="mapoffsettop">0</span>)
+    </div>
+    <div id="waiting_div">Loading map, please wait ...</div>
+    <div id="map_container_div" style="display:none">
+    <div style="width: 100%">
+        <div id="toolbar_div" class="colmask threecol_lcr">
+            <div class="colmid">
+                <div class="colleft">
+                    <div class="col1">
+                        <button id="refresh_button" type="button" onclick="refreshMap()">Refresh</button>
+                    </div>
+                    <div class="col2">
+                        <button id="show_hide_progressbar_button" onclick="showHideProgressStatusDiv()" type="button">Show Progress Status</button>
+                    </div>
+                    <div class="col3">
+                        <div id="slider" style="margin: 5px 20px; "> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="clear:both"><p><img id="legend"
                    style="position: relative; display:block; margin-left: auto; margin-right: auto"
                    ondblclick="setZoomRate(100)"
                    />
@@ -40,7 +145,7 @@
         <div id="img_outer_div" style="width:100%; height:100%; overflow: auto; position: relative">
             <div id="img_inner_div" style="overflow: hidden; position: relative; display:block; margin-left: auto; margin-right: auto">
 
-            <p> <img id="realmap"
+            <p> <img id="realmap" alt="map" title="Double click on the image to display the real size. Try to drag and move the map."
                      ondblclick="setZoomRate(100)"
                    />
             </p>
@@ -61,6 +166,16 @@
         var legendImage = new Image;
         var mapLoaded = false;
         var legendLoaded = false;
+        var progressTimeoutId;
+        var generate_map_success = false;
+        var map_load_refresh_status = "";
+        var my_debug_flag = false;
+
+        function mydebug(msg) {
+            if (my_debug_flag) {
+                console.debug(msg);
+            }
+        }
 
         mapImage.onload = function() {
             mapLoaded = true;
@@ -72,34 +187,116 @@
             display_loaded_images();
         };
 
-        function loadMap() {
-            mapLoaded = false;
-            legendLoader = false;
-            $.getJSON( "/inventory/rack/loadmap",
-                {service: '{{service}}', rack: '{{rack}}' },
-                function( data ) {
-                    baseWidth       = data["map_width"];
-                    baseHeight      = data["map_height"];
-                    legendWidth     = data["legend_width"];
-                    legendHeight    = data["legend_height"];
-                    // load image map
-                    mapImage.src    = data["map_url"];
-                    // load image legend
-                    legendImage.src = data["legend_url"];
+        // progress bar
+        $(document).ready(function() {
+            var progressbar = $( "#progressbar" ),
+                progressLabel = $( ".progress-label" );
+
+            progressbar.progressbar({
+                value: false,
+                change: function() {
+                    progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+                },
+                complete: function() {
+                    progressLabel.text( "Complete!" );
+                }
+            });
+        });
+
+        function load_page_progress() {
+            if (generate_map_success) {
+                return;
+            }
+            $.getJSON( "/inventory/rack/mapprogress", {"service": "{{service}}"},
+                function(data) {
+                    if (generate_map_success) {
+                        return;
+                    }
+                    if ( data.value > 0 ) {
+                        $( "#progressbar" ).progressbar( "value", data.value );
+                        $("#progress_status_text").text( data.next + " ..." );
+                    }
+                    mydebug(data);
+                    if ( data.next == "loading map" ) {
+                        generate_map_success = true;
+                        loadMap( data.data );
+                    }
+                    else {
+                        progressTimeoutId = setTimeout( load_page_progress, 99 );
+                    }
                 }
             );
+        };
+
+        function ready_to_load_page(text) {
+            map_load_refresh_status = text;
+            $( ".progress-label" ).text( text + " ...");
+            // set default value and next status for progress bar
+            $( "#progressbar" ).progressbar( "value", 0 );
+            $("#progress_status_text").text( "sending http request ..." );
+            load_page_progress();
+        };
+
+        function showHideProgressStatusDiv() {
+            btnShowHide = $("#show_hide_progressbar_button");
+            bshow = btnShowHide.data("show_hide_flag");
+            bshow = typeof bshow !== 'undefined' ? bshow : true;
+            progress_status_div = $( "#page_progress_div" );
+            if (! bshow) {
+                btnShowHide.text("Hide Progress Status");
+                btnShowHide.data("show_hide_flag", true);
+                progress_status_div.show();
+            }
+            else {
+                btnShowHide.text("Show Progress Status");
+                btnShowHide.data("show_hide_flag", false);
+                progress_status_div.hide();
+            }
+        };
+
+        function hideProgressStatusSoftly() {
+            progressbar = $( "#progressbar" );
+            clearTimeout(progressTimeoutId);
+            progressbar.progressbar( "value", 100 );
+            $("#progress_status_text").text( map_load_refresh_status + " success." );
+            showHideProgressStatusDiv();
+        };
+
+
+        function genMap() {
+            generate_map_success = false;
+
+            $.getJSON( "/inventory/rack/genmap", {service: '{{service}}', rack: '{{rack}}' } );
+            // progress bar
+            ready_to_load_page( "Load map" );
+        };
+
+
+        function loadMap(data) {
+            mapLoaded = false;
+            legendLoader = false;
+            baseWidth       = data["map_width"];
+            baseHeight      = data["map_height"];
+            legendWidth     = data["legend_width"];
+            legendHeight    = data["legend_height"];
+            // load image map
+            mapImage.src    = data["map_url"];
+            // load image legend
+            legendImage.src = data["legend_url"];
         };
 
         function checkMapStatusIndicator() {
             if (mapStatusIndicator == "not_ready") {
                 // first load
-                loadMap();
+                genMap();
                 mapSatusIndicator = "loading";
             }
         };
 
         function display_loaded_images() {
             if (mapLoaded && legendLoaded) {
+                hideProgressStatusSoftly();
+
                 $("#legend").css("width", legendWidth + "px");
                 $("#img_inner_div").css("width", baseWidth + "px");
                 $("#img_inner_div").css("height", baseHeight + "px");
@@ -134,7 +331,7 @@
             $("#slider").slider("value", rate);
         };
 
-        var tooltip = $('<div id="tooltip"> </div>').hide();
+        var tooltip = $('<div id="tooltip" style="clear: both; position: fixed; z-index: 9;"> </div>').hide();
 
         $( "#slider" ).slider({
                 min: Default_Slider_Min,
@@ -154,10 +351,16 @@
                     $area = $("#zoomratio");
                     width = $(this).width();
                     offset = $(this).offset();
-                    relative_pos_x = e.pageX - offset.left + 15;
-                    relative_pos_y = e.pageY - offset.top - 10;
+                    relative_pos_x = e.pageX - offset.left;
+                    relative_pos_y = e.pageY - offset.top;
                     value = Math.round((relative_pos_x / width) * (Default_Slider_Max - Default_Slider_Min)) + Default_Slider_Min;
-                    tooltip.css({left: relative_pos_x, top: relative_pos_y});
+                    //tooltip.css({left: relative_pos_x + 15, top: relative_pos_y - 10});
+                    tooltip.css({left: e.pageX + 15, top: e.pageY - 10});
+                    if ( value < Default_Slider_Min ) {
+                        value = Default_Slider_Min;
+                    } else if (value > Default_Slider_Max ) {
+                        value = Default_Slider_Max;
+                    }
                     tooltip.text(value + "%");
                     tooltip.show();
                 },
@@ -168,6 +371,7 @@
 
         $(document).ready(function() {
             // setZoomRate(Default_Image_Rate);
+            mydebug("ready, call genmap...");
             checkMapStatusIndicator();
 
             $("#slider").slider().append(tooltip);
@@ -240,9 +444,7 @@
                     return false;
             });
         });
-
     </script>
-
 
 {% endblock %}
 
