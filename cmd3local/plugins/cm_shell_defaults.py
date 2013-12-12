@@ -20,8 +20,37 @@ log = LOGGER(__file__)
 
 class cm_shell_defaults:
 
-    def createDefaultDict(self, cloudName=None):
+    def openstackDefs():
         defDict = {}
+        if(cloudName == None):
+            cloudName = config.default_cloud
+            defDict['cloud'] = cloudName
+        else:
+            defDict['cloud'] = cloudName
+        #pprint(config.cloud(cloudName))
+        cloudDict = config.cloud(cloudName)
+        defDict['flavor'] = cloudDict['default']['flavor']
+        defDict['image']  = cloudDict['default']['image']
+        keys = config.userkeys()
+        defKeyName = keys['default']
+        defKey = keys['keylist'][defKeyName]
+        defDict['keyname'] = defKeyName
+        defDict['prefix'] = defKeyName
+        return defDict
+
+    def alamoDefs():
+        return {}
+    def hpDefs():
+        return {}
+    def hpEastDefs():
+        return hpDefs()
+    def azureDefs():
+        return {}
+    def awsDefs():
+        return {}
+
+
+    def createDefaultDict(self, cloudName=None):
         config = cm_config()
         #image
         #flavor
@@ -30,9 +59,21 @@ class cm_shell_defaults:
         #number of nodes
         if(cloudName == None):
             cloudName = config.default_cloud
-            defDict['cloud'] = cloudName
-        else:
-            defDict['cloud'] = cloudName
+
+        if(cloudName == 'sierra_openstack_grizzly'):
+            return openstackDefs()
+        if(cloudName == 'alamo'):
+            return alamoDefs()
+        if(cloudName == 'hp'):
+            return hpDefs()
+        if(cloudName == 'hp_east'):
+            return hpEastDefs()
+        if(cloudName == 'azure'):
+            return azureDefs()
+        if(cloudName == 'aws'):
+            return awsDefs()
+
+        defDict['cloud'] = cloudName
         #pprint(config.cloud(cloudName))
         cloudDict = config.cloud(cloudName)
         defDict['flavor'] = cloudDict['default']['flavor']
