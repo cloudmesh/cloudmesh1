@@ -18,16 +18,14 @@ import docopt
 
 log = LOGGER(__file__)
 
+config = cm_config()
+
 class cm_shell_defaults:
 
-    def openstackDefs():
+    def openstackDefs(self):
         defDict = {}
-        if(cloudName == None):
-            cloudName = config.default_cloud
-            defDict['cloud'] = cloudName
-        else:
-            defDict['cloud'] = cloudName
-        #pprint(config.cloud(cloudName))
+        cloudName = 'sierra_openstack_grizzly'
+        defDict['cloud'] = cloudName
         cloudDict = config.cloud(cloudName)
         defDict['flavor'] = cloudDict['default']['flavor']
         defDict['image']  = cloudDict['default']['image']
@@ -38,20 +36,19 @@ class cm_shell_defaults:
         defDict['prefix'] = defKeyName
         return defDict
 
-    def alamoDefs():
+    def alamoDefs(self):
         return {}
-    def hpDefs():
+    def hpDefs(self):
         return {}
-    def hpEastDefs():
-        return hpDefs()
-    def azureDefs():
+    def hpEastDefs(self):
+        return self.hpDefs()
+    def azureDefs(self):
         return {}
-    def awsDefs():
+    def awsDefs(self):
         return {}
 
 
     def createDefaultDict(self, cloudName=None):
-        config = cm_config()
         #image
         #flavor
         #keyname
@@ -61,17 +58,20 @@ class cm_shell_defaults:
             cloudName = config.default_cloud
 
         if(cloudName == 'sierra_openstack_grizzly'):
-            return openstackDefs()
+            defDict = self.openstackDefs()
         if(cloudName == 'alamo'):
-            return alamoDefs()
+            defDict = self.alamoDefs()
         if(cloudName == 'hp'):
-            return hpDefs()
+            defDict = self.hpDefs()
         if(cloudName == 'hp_east'):
-            return hpEastDefs()
+            defDict = self.hpEastDefs()
         if(cloudName == 'azure'):
-            return azureDefs()
+            defDict = self.azureDefs()
         if(cloudName == 'aws'):
-            return awsDefs()
+            defDict = self.awsDefs()
+
+        return defDict
+        '''
 
         defDict['cloud'] = cloudName
         #pprint(config.cloud(cloudName))
@@ -84,10 +84,11 @@ class cm_shell_defaults:
         defDict['keyname'] = defKeyName
         defDict['prefix'] = defKeyName
         return defDict
+        '''
 
     def activate_cm_shell_defaults(self):
         try:
-            config = cm_config()
+            print "shell_Def"
             self.user = config.username()
             self.mongoClass = cm_mongo()
             self.mongoClass.activate(cm_user_id=self.user)
