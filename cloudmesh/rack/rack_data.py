@@ -1,13 +1,13 @@
 from cloudmesh.inventory import Inventory
+from datetime import datetime, timedelta
 
 from cloudmesh.util.logger import LOGGER
-from datetime import datetime, timedelta
 
 log = LOGGER(__file__)
 
-class rack_data:
+class RackData:
     # ONLY for debug test
-    MY_DEBUG_FLAG       = True
+    MY_DEBUG_FLAG       = False
     
     inventory = None
     
@@ -19,7 +19,6 @@ class rack_data:
     STATUS_NOT_READY    = "not_ready"
     STATUS_REFRESH      = "refresh"
     STATUS_READY        = "ready"
-    
     
     def __init__(self):
         self.inventory = Inventory()
@@ -34,30 +33,30 @@ class rack_data:
     def set_status_start_refresh(self, service_type, rack_name):
         self.mydebug("set status start refresh for {0}-{1}".format(rack_name, service_type))
         query_dict = self.get_rack_query_dict(service_type, rack_name, self.LOCATION_TEMP)
-        rack_info_dict = self.get_rack_info(query_dict)
+        curr_time = datetime.now()
         element = {
                      "rack_status"  : self.STATUS_REFRESH,
                      "updated_node" : 0,
-                     "cm_refresh"   : datetime.now(),
+                     "cm_refresh"   : curr_time,
                    }
         racks = self.inventory.get_clusters(rack_name)
         element['data'] = dict((h, None) for h in racks[0]['cm_value'])
         self.partly_update(query_dict[rack_name], {"$set": element})
-    
+        
     
     # get valid list of rack name
     # result: if rack_name is 'all', then ['india', 'echo', ...]
     #         else if rack_name is a valid rack name, then ['rack_name.lower()']
     #         else None
-    def get_rack_name_list(self, rack_name):
+    def get_rack_name_list(self, rack_name="all"):
         self.mydebug("enter into get_rack_name_list of {0}".format(rack_name))
         racks = self.inventory.get_clusters()
-        rack_name_list = [rack['cm_cluster'] for rack in racks]
+        rack_name_list = [ rack['cm_cluster'] for rack in racks ]
         rack_name_lower = rack_name.lower()
         if rack_name_lower != 'all':
-            rack_name_list = [rack_name_lower] if rack_name_lower in rack_name_list else None
+            rack_name_list = [ rack_name_lower ] if rack_name_lower in rack_name_list else None
         
-        self.mydebug("exit from get_rack_name_list {0}".format(rack_name_list))
+        #self.mydebug("exit from get_rack_name_list {0}".format(rack_name_list))
         return rack_name_list
     
     
@@ -80,13 +79,11 @@ class rack_data:
                        "cm_id"   : rack_name
                     }
             if location:
-                query["cm_key"] = "rack_{0}_{1}".format(location, service_type)
+                query["cm_key"] = "rack_{1}_{0}".format(service_type, location)
             else:
                 query["cm_key"] = "rack_{0}".format(service_type)
-            
             query_dict[rack_name] = query
-        
-        self.mydebug("get_rack_query_dict of {0}".format(query_dict))
+        #self.mydebug("get_rack_query_dict of {0}".format(query_dict))
         return query_dict
     
     
@@ -97,9 +94,9 @@ class rack_data:
         rack_info_dict = {}
         for rack_name in query_dict:
             rack_info_dict[rack_name] = self.inventory.find_one(query_dict[rack_name])
-        
-        self.mydebug("get_rack_info of {0}".format(rack_info_dict.keys()))
+        #self.mydebug("get_rack_info of {0}".format(rack_info_dict.keys()))
         return rack_info_dict
+    
     
     # result: {'rack_name': True, 'rack_name': False, ...}
     def can_start_refresh(self, service_type, rack_name, interval_time=1800):
@@ -116,7 +113,7 @@ class rack_data:
             status = rack_info['rack_status']
             if status == self.STATUS_NOT_READY:
                 flag_refresh = True
-            elif status == self.STATUS_READY:
+            elif status == self.STATUS_READY or status == self.STATUS_REFRESH:
                 time_now = datetime.now()
                 prev_refresh_time = rack_info['cm_refresh']
                 time_interval = timedelta(seconds=interval_time)
@@ -135,25 +132,27 @@ class rack_data:
         return self.inventory.db_inventory.update(query, value, upsert=flag_upsert, multi=flag_multi)
     
     
+    # Usually called in a different process
+    # update the temperature of a server
     # NOT support to update 'all'
     # The update of 'all' MUST be divided into serveral updates of each independent rack of 'all'
     # update the information of a server
-    def server_refresh_update_data(self, service_type, rack_name, server, data):
-        self.mydebug("enter into server_refresh_update_data update server {0} for {1}-{2}".format(server, rack_name, service_type))
+    def server_refresh_update_temperature(self, rack_name, server, data):
+        self.mydebug("enter into server_refresh_update_temperature update server {0} for {1}".format(server, rack_name))
+        service_type = self.TEMPERATURE_NAME
         flag_refresh_success = False
         query_dict = self.get_rack_query_dict(service_type, rack_name, self.LOCATION_TEMP)
         rack_info_dict = self.get_rack_info(query_dict)
         rack_info = None
         if rack_info_dict:
             rack_info = rack_info_dict[rack_name]
-        
-        if rack_info:
             time_now = datetime.now()
             element = {}
             element['cm_refresh'] = time_now
             element['data.{0}'.format(server)] = data
             # atomic update
             update_result = self.inventory.db_inventory.find_and_modify(query=query_dict[rack_name], update={'$inc': {'updated_node': 1}, '$set': element}, new=True, fields={'updated_node': 1})
+            
             if update_result['updated_node'] == rack_info['max_node']:
                 self.partly_update(query_dict[rack_name], {'$set': {'rack_status': self.STATUS_READY}})
                 flag_refresh_success = True
@@ -173,14 +172,44 @@ class rack_data:
         return flag_refresh_success
     
     
-    # update the temperature of a server
-    def server_refresh_update_temperature(self, rack_name, server, data):
-        self.server_refresh_update_data(self.TEMPERATURE_NAME, rack_name, server, data)
-    
-    
+    # Usually called in a different process
     # update the service of a server
-    def server_refresh_update_service(self, rack_name, server, data):
-        self.server_refresh_update_data(self.SERVICE_NAME, rack_name, server, data)
+    def server_refresh_update_service(self, rack_name, data):
+        self.mydebug("enter into server_refresh_update_service update rack {0}".format(rack_name))
+        service_type = self.SERVICE_NAME
+        flag_refresh_success = False
+        query_dict = {}
+        for rack_name in data:
+            tmp_result = self.get_rack_query_dict(service_type, rack_name, self.LOCATION_TEMP)
+            query_dict[rack_name] = tmp_result[rack_name]
+        rack_info_dict = self.get_rack_info(query_dict)
+        if rack_info_dict is None:
+            return flag_refresh_success
+        
+        for rack_name in rack_info_dict:
+            rack_info = rack_info_dict[rack_name]
+            time_now = datetime.now()
+            element = {}
+            element['cm_refresh'] = time_now
+            element['updated_node'] = rack_info['max_node']
+            element['rack_status'] = self.STATUS_READY
+            element['data'] = data[rack_name]
+            self.partly_update(query_dict[rack_name], {'$set': element})
+            flag_refresh_success = True
+            
+            # update the normal record, which provides information to WEB page
+            # After data of all servers in this rack are collected
+            if flag_refresh_success:
+                temp_query_dict = self.get_rack_query_dict(service_type, rack_name)
+                element = {}
+                element['rack_status'] = self.STATUS_READY
+                element['cm_refresh'] = time_now
+                element['data'] = data[rack_name]
+                self.mydebug("server_refresh_update_data, update rack {0} with data".format(rack_name))
+                self.partly_update(temp_query_dict[rack_name], {'$set': element})
+                
+            
+        return flag_refresh_success
     
     
     # get data of a rack
@@ -205,19 +234,26 @@ class rack_data:
         return self.get_rack_status_data(self.SERVICE_NAME, rack_name)
     
     # whether the data of a rack is ready or not
-    def is_rack_data_ready(self, service_type, rack_name):
-        rack_info_dict = self.get_rack_info(self.get_rack_query_dict(service_type, rack_name))
+    def is_rack_data_ready(self, service_type, rack_name, refresh_flag=False):
+        if refresh_flag:
+            query_dict = self.get_rack_query_dict(service_type, rack_name, self.LOCATION_TEMP)
+        else:
+            query_dict = self.get_rack_query_dict(service_type, rack_name)
+        rack_info_dict = self.get_rack_info(query_dict)
         if rack_info_dict is None:
             return False
         
         flag_ready = True
         for rack_name in rack_info_dict:
-            if rack_info_dict[rack_name]['rack_status'] != self.STATUS_READY:
+            #self.mydebug("{0} data is {1}".format(rack_name, rack_info_dict[rack_name]))
+            curr_status = rack_info_dict[rack_name]['rack_status']
+            if curr_status != self.STATUS_READY:
                 flag_ready = False
                 break;
-            
         return flag_ready
     
+    def is_refresh_rack_data_ready(self, service_type, rack_name):
+        return self.is_rack_data_ready(service_type, rack_name, True)
     
     # whether the temperature data of a rack is ready or not
     def is_rack_temperature_ready(self, rack_name):
@@ -231,7 +267,7 @@ class rack_data:
     
     
 if __name__ == '__main__':
-    rackdata = rack_data()
+    rackdata = RackData()
     rack_name = 'echo'
     #bready = rackdata.is_rack_temperature_ready(rack_name)
     #rackdata.mydebug("{0} is ready or not: {1}".format(rack_name, bready))

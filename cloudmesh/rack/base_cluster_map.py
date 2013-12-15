@@ -125,6 +125,9 @@ class BaseClusterMap:
     # we use random generated data instead of the real data reading from clusters
     #
     flag_debug = True
+    
+    # progress status
+    map_progress = None
 
 
     # construction function with default and image type rack filename
@@ -432,8 +435,10 @@ class BaseClusterMap:
         ax.set_xlim(0, xlim)
         ax.set_ylim(0, ylim)
         plt.axis('off')
+        self.map_progress.set_plot_legend(0.2)
 
         self.drawLegendContent(ax, (xlim, ylim))
+        self.map_progress.set_plot_legend(0.7)
 
         fig.savefig(self.filename_rack_legend, transparent=True)
 
@@ -448,6 +453,7 @@ class BaseClusterMap:
         # log.debug("dict mapping, {0}".format(dict_mapping))
         # render dict_servers with correct color formation
         self.render(dict_mapping)
+        self.map_progress.set_process_data(0.5)
 
         # write rendered temporary diag file to disk
         # read original diag file
@@ -455,19 +461,23 @@ class BaseClusterMap:
         template = Template(rf.read())
         scontent = template.render(self.dict_servers)
         rf.close()
+        self.map_progress.set_process_data(0.75)
 
         # write rendered diag file to temporary file
         wf = open(self.filename_diag_temp, "w")
         wf.write(scontent)
         wf.close()
+        self.map_progress.set_process_data()
 
         log.debug("Call rackdiag to draw the image of rack ...")
         # call rackdiag to plot
         rackdiag("-T{0}".format(self.image_type),
                     "-o", self.filename_rack_image, self.filename_diag_temp)
+        self.map_progress.set_plot_map()
 
         # draw the image of legend
         self.legend()
+        self.map_progress.set_plot_legend()
         log.debug("Draw the legend of rack image finished.")
 
         # delete the temporary diag file if needed
