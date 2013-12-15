@@ -2,6 +2,7 @@
 
 class cm_table:
     """
+    Class to print a table in various formats.
 
     format = HTML | ASCII | "%20s"
     
