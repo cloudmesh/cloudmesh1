@@ -22,6 +22,7 @@ config = cm_config()
 
 class cm_shell_defaults:
 
+
     def openstackDefs(self):
         defDict = {}
         cloudName = 'sierra_openstack_grizzly'
@@ -35,6 +36,9 @@ class cm_shell_defaults:
         defDict['keyname'] = defKeyName
         defDict['prefix'] = defKeyName
         return defDict
+
+    """This is wrong as we do not know which clouds are in cloudmesh as all of 
+    them are dynamically managed via yaml files."""
 
     def alamoDefs(self):
         return {}
@@ -54,6 +58,9 @@ class cm_shell_defaults:
         # keyname
         # nodename
         # number of nodes
+        """This is wrong as we do not know which clouds are in cloudmesh as all of 
+            them are dynamically managed via yaml files."""
+
         if(cloudName == None):
             cloudName = config.default_cloud
 
