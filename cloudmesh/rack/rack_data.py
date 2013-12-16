@@ -9,6 +9,9 @@ class RackData:
     # ONLY for debug test
     MY_DEBUG_FLAG       = False
     
+    # data valid time, unit second
+    data_valid_time     = 0
+    
     inventory = None
     
     TEMPERATURE_NAME    = "temperature"
@@ -20,7 +23,9 @@ class RackData:
     STATUS_REFRESH      = "refresh"
     STATUS_READY        = "ready"
     
-    def __init__(self):
+    # default data valid time is set to 1800 seconds
+    def __init__(self, valid_time=1800):
+        self.data_valid_time = valid_time
         self.inventory = Inventory()
     
     
@@ -28,6 +33,12 @@ class RackData:
         if self.MY_DEBUG_FLAG:
             log.debug(msg)
     
+    # get/set data valid time in mongo db
+    def get_data_valid_time(self):
+        return self.data_valid_time
+    
+    def set_data_valid_time(self, valid_time):
+        self.data_valid_time = valid_time if valid_time > 0 else 0
     
     # change refresh status
     def set_status_start_refresh(self, service_type, rack_name):
@@ -39,10 +50,16 @@ class RackData:
                      "updated_node" : 0,
                      "cm_refresh"   : curr_time,
                    }
-        racks = self.inventory.get_clusters(rack_name)
-        element['data'] = dict((h, None) for h in racks[0]['cm_value'])
-        self.partly_update(query_dict[rack_name], {"$set": element})
+        racks = {}
+        for rack_name in query_dict:
+            self.mydebug("set_status_start_refresh rackname is: {0} ".format(rack_name))
+            tmp_racks = self.inventory.get_clusters(rack_name)
+            racks[rack_name] = tmp_racks[0]
+            #self.mydebug("set_status_start_refresh racks[{0}] is: {1}".format(rack_name, racks[rack_name]))
+            element['data'] = dict((h, None) for h in racks[rack_name]['cm_value'])
+            self.partly_update(query_dict[rack_name], {"$set": element})
         
+        self.mydebug("Exit from status start refresh for {0}-{1}".format(rack_name, service_type))
     
     # get valid list of rack name
     # result: if rack_name is 'all', then ['india', 'echo', ...]
@@ -83,7 +100,7 @@ class RackData:
             else:
                 query["cm_key"] = "rack_{0}".format(service_type)
             query_dict[rack_name] = query
-        #self.mydebug("get_rack_query_dict of {0}".format(query_dict))
+        self.mydebug("get_rack_query_dict of {0}".format(query_dict))
         return query_dict
     
     
@@ -99,7 +116,7 @@ class RackData:
     
     
     # result: {'rack_name': True, 'rack_name': False, ...}
-    def can_start_refresh(self, service_type, rack_name, interval_time=1800):
+    def can_start_refresh(self, service_type, rack_name):
         self.mydebug("enter into can_start_refresh og {0}-{1}".format(rack_name, service_type))
         query_dict = self.get_rack_query_dict(service_type, rack_name, self.LOCATION_TEMP)
         rack_info_dict = self.get_rack_info(query_dict)
@@ -114,15 +131,18 @@ class RackData:
             if status == self.STATUS_NOT_READY:
                 flag_refresh = True
             elif status == self.STATUS_READY or status == self.STATUS_REFRESH:
-                time_now = datetime.now()
-                prev_refresh_time = rack_info['cm_refresh']
-                time_interval = timedelta(seconds=interval_time)
-                if (time_now > prev_refresh_time + time_interval):
-                    flag_refresh = True
+                flag_refresh = self.is_db_data_expired(rack_info['cm_refresh'])
             refresh_dict[rack_name] = flag_refresh
         
         self.mydebug("can_start_refresh of {0}".format(refresh_dict))
         return refresh_dict
+    
+    # projection query
+    def partly_query(self, query, partly_view):
+        if partly_view:
+            return self.inventory.db_inventory.find_one(query, partly_view)
+        return self.inventory.find_one(query)
+    
     
     # update a part of document in database
     def partly_update(self, query, value, flag_upsert=False, flag_multi=False):
@@ -235,35 +255,43 @@ class RackData:
     
     # whether the data of a rack is ready or not
     def is_rack_data_ready(self, service_type, rack_name, refresh_flag=False):
-        if refresh_flag:
-            query_dict = self.get_rack_query_dict(service_type, rack_name, self.LOCATION_TEMP)
-        else:
-            query_dict = self.get_rack_query_dict(service_type, rack_name)
+        location = self.LOCATION_TEMP if refresh_flag else None
+        query_dict = self.get_rack_query_dict(service_type, rack_name, location)
         rack_info_dict = self.get_rack_info(query_dict)
         if rack_info_dict is None:
             return False
         
-        flag_ready = True
+        flag_ready = False
         for rack_name in rack_info_dict:
             #self.mydebug("{0} data is {1}".format(rack_name, rack_info_dict[rack_name]))
-            curr_status = rack_info_dict[rack_name]['rack_status']
-            if curr_status != self.STATUS_READY:
-                flag_ready = False
+            rack_info = rack_info_dict[rack_name]
+            
+            if rack_info['rack_status'] == self.STATUS_READY:
+                flag_ready = not self.is_db_data_expired(rack_info["cm_refresh"])
+            if not flag_ready:
                 break;
         return flag_ready
     
+    # check data is ready or not in temp refresh db
     def is_refresh_rack_data_ready(self, service_type, rack_name):
         return self.is_rack_data_ready(service_type, rack_name, True)
     
     # whether the temperature data of a rack is ready or not
     def is_rack_temperature_ready(self, rack_name):
-        return self.is_rack_data_ready(self.TEMPERATURE_NAME, rack_name)
+        return self.is_rack_data_ready(self.TEMPERATURE_NAME)
     
     # whether the service data of a rack is ready or not
     def is_rack_service_ready(self, rack_name):
         return self.is_rack_data_ready(self.SERVICE_NAME, rack_name)
     
     
+    # check data in mongo db expired or not
+    def is_db_data_expired(self, db_time):
+        flag_expired = False
+        time_interval = timedelta(seconds=self.data_valid_time)
+        if (datetime.now() > db_time + time_interval):
+            flag_expired = True
+        return flag_expired
     
     
 if __name__ == '__main__':

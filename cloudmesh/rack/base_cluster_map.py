@@ -11,7 +11,7 @@ import matplotlib.patches as patches
 
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.util import path_expand as cm_path_expand
-
+from cloudmesh.rack.rack_progress import get_temperature_progress, get_service_progress
 from jinja2 import Template
 from hostlist import expand_hostlist
 from sh import rackdiag  # @UnresolvedImport
@@ -126,12 +126,15 @@ class BaseClusterMap:
     #
     flag_debug = True
     
+    # login username
+    username = None
+    
     # progress status
     map_progress = None
 
 
     # construction function with default and image type rack filename
-    def __init__(self, name, subclass_type=None, dir_yaml=None, dir_diag=None, dir_output=None, img_type=None):
+    def __init__(self, username, name, subclass_type=None, dir_yaml=None, dir_diag=None, dir_output=None, img_type=None):
         # init params with default values
         if subclass_type is None:
             subclass_type = self.subclass_type_list[0]
@@ -143,7 +146,9 @@ class BaseClusterMap:
             dir_output = self.guessDefaultDiagramLocation()
         if img_type is None:
             img_type = self.image_type_list[0]
-
+        # set login username
+        self.set_login_username(username)
+        
         abs_dir_yaml = cm_path_expand(dir_yaml)
         abs_dir_diag = cm_path_expand(dir_diag)
         abs_dir_output = cm_path_expand(dir_output)
@@ -157,6 +162,7 @@ class BaseClusterMap:
         self.readRackConfig(name, abs_dir_yaml, abs_dir_diag)
         self.setRackImageType(subclass_type, img_type, abs_dir_output)
         self.initDictServers()
+        self.get_map_progress()
 
 
     # ======================================
@@ -259,11 +265,11 @@ class BaseClusterMap:
 
         # filename, diag filename ends with ".diag"
         # image filename ends with "." + a valid lower image type
-        image_basename = self.cluster_name + "-" + self.subclass_type;
-        self.only_filename_image = image_basename + "." + self.image_type
-        self.only_filename_legend = image_basename + "-legend." + self.image_type
-        self.filename_rack_image = dir_output + "/" + self.only_filename_image
-        self.filename_rack_legend = dir_output + "/" + self.only_filename_legend
+        image_basename = "_".join([self.username, self.cluster_name, self.subclass_type]);
+        self.only_filename_image = ".".join([image_basename, self.image_type])
+        self.only_filename_legend = "_legend.".join([image_basename, self.image_type])
+        self.filename_rack_image = "/".join([dir_output, self.only_filename_image])
+        self.filename_rack_legend = "/".join([dir_output, self.only_filename_legend])
 
 
 
@@ -533,6 +539,20 @@ class BaseClusterMap:
     def formatRenderColor(self, str_color):
         return '[color="{0}"]'.format(str_color)
 
+    # MUST be called immediately after create an instance of this class and its sub-classes
+    # set login username
+    def set_login_username(self, username):
+        self.username = username if username else "None"
+        
+    # get unique instance of progress for login username
+    def get_map_progress(self):
+        service = self.subclass_type
+        if service == self.subclass_type_list[0]:
+            self.map_progress = get_temperature_progress(self.username)
+        elif service == self.subclass_type_list[1]:
+            self.map_progress = get_service_progress(self.username)
+        
+        return self.map_progress
 
 if __name__ == "__main__":
     mytest = BaseClusterMap("all")
