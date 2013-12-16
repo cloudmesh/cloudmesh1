@@ -14,33 +14,37 @@ type_class_dict = {
                    }
 
 # global unique instance
+# support multi user
 unique_progress_instance = None
 
-def get_temperature_progress():
-    return get_progress(TYPE_RACK_TEMPERATURE)
+def get_temperature_progress(username):
+    return get_progress(username, TYPE_RACK_TEMPERATURE)
 
-def get_service_progress():
-    return get_progress(TYPE_RACK_SERVICE)
+def get_service_progress(username):
+    return get_progress(username, TYPE_RACK_SERVICE)
 
-def get_progress(str_type):
-    progress_dict = get_progress_dict()
+def get_progress(username, str_type):
     result = None
-    if str_type in progress_dict:
-        result = progress_dict[str_type]
+    if username:
+        progress_dict = get_progress_dict(username)
+        if progress_dict and str_type in progress_dict:
+            result = progress_dict[str_type]
     return result
 
-def get_progress_dict():
+def get_progress_dict(username):
     global unique_progress_instance
     
     if unique_progress_instance is None:
         unique_progress_instance = {}
+    if username not in unique_progress_instance:
+        unique_progress_instance[username] = {}
         for type_name in type_class_dict:
-            unique_progress_instance[type_name] = type_class_dict[type_name]()
-    return unique_progress_instance
+            unique_progress_instance[username][type_name] = type_class_dict[type_name]()
+    return unique_progress_instance[username]
 
 # usage
 if __name__ == "__main__":
-    heat_progress = get_temperature_progress()
+    heat_progress = get_temperature_progress("username")
     heat_progress.set_load_map()
     heat_progress.set_send_http_request()
     

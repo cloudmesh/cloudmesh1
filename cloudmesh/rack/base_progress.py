@@ -23,6 +23,9 @@ class BaseProgress:
         self.set_next_status(next)
         sleep(0.05)    # sleep 50 ms, other thread can have a chance to get status
     
+    def set_error_status(self):
+        self.set_status("error", -1, self.next_status)
+    
     def clear_status(self):
         self.status_text = ""
         self.status_value = 0
