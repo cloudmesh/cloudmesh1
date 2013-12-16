@@ -18,21 +18,69 @@ import docopt
 
 log = LOGGER(__file__)
 
+config = cm_config()
+
 class cm_shell_defaults:
 
-    def createDefaultDict(self, cloudName=None):
+
+    def openstackDefs(self):
         defDict = {}
-        config = cm_config()
-        #image
-        #flavor
-        #keyname
-        #nodename
-        #number of nodes
+        cloudName = 'sierra_openstack_grizzly'
+        defDict['cloud'] = cloudName
+        cloudDict = config.cloud(cloudName)
+        defDict['flavor'] = cloudDict['default']['flavor']
+        defDict['image'] = cloudDict['default']['image']
+        keys = config.userkeys()
+        defKeyName = keys['default']
+        defKey = keys['keylist'][defKeyName]
+        defDict['keyname'] = defKeyName
+        defDict['prefix'] = defKeyName
+        return defDict
+
+    """This is wrong as we do not know which clouds are in cloudmesh as all of 
+    them are dynamically managed via yaml files."""
+
+    def alamoDefs(self):
+        return {}
+    def hpDefs(self):
+        return {}
+    def hpEastDefs(self):
+        return self.hpDefs()
+    def azureDefs(self):
+        return {}
+    def awsDefs(self):
+        return {}
+
+
+    def createDefaultDict(self, cloudName=None):
+        # image
+        # flavor
+        # keyname
+        # nodename
+        # number of nodes
+        """This is wrong as we do not know which clouds are in cloudmesh as all of 
+            them are dynamically managed via yaml files."""
+
         if(cloudName == None):
             cloudName = config.default_cloud
-            defDict['cloud'] = cloudName
-        else:
-            defDict['cloud'] = cloudName
+
+        if(cloudName == 'sierra_openstack_grizzly'):
+            defDict = self.openstackDefs()
+        if(cloudName == 'alamo'):
+            defDict = self.alamoDefs()
+        if(cloudName == 'hp'):
+            defDict = self.hpDefs()
+        if(cloudName == 'hp_east'):
+            defDict = self.hpEastDefs()
+        if(cloudName == 'azure'):
+            defDict = self.azureDefs()
+        if(cloudName == 'aws'):
+            defDict = self.awsDefs()
+
+        return defDict
+        '''
+
+        defDict['cloud'] = cloudName
         #pprint(config.cloud(cloudName))
         cloudDict = config.cloud(cloudName)
         defDict['flavor'] = cloudDict['default']['flavor']
@@ -43,10 +91,11 @@ class cm_shell_defaults:
         defDict['keyname'] = defKeyName
         defDict['prefix'] = defKeyName
         return defDict
+        '''
 
     def activate_cm_shell_defaults(self):
         try:
-            config = cm_config()
+            print "shell_Def"
             self.user = config.username()
             self.mongoClass = cm_mongo()
             self.mongoClass.activate(cm_user_id=self.user)
@@ -54,6 +103,7 @@ class cm_shell_defaults:
             print e
             print "Please check if mongo service is running."
             sys.exit()
+
     @command
     def do_defaults(self, args, arguments):
         """
@@ -77,6 +127,9 @@ class cm_shell_defaults:
            -j --json      json output
 
         """
+
+        print arguments
+
         if arguments["clean"]:
             log.info ("clean the vm")
             print arguments['-v']

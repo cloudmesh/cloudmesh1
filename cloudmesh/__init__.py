@@ -1,3 +1,6 @@
+"""
+A package to manage virtual machines on various clouds infrastructures and bare metal images.
+"""
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config as load
 from cloudmesh.config.cm_config import cm_config
