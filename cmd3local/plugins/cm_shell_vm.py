@@ -24,8 +24,8 @@ class cm_shell_vm:
 
     def activate_cm_shell_vm(self):
         try:
-            config = cm_config()
-            self.user = config.username()
+            self.config = cm_config()
+            self.user = self.config.username()
             self.mongoClass = cm_mongo()
             self.mongoClass.activate(cm_user_id=self.user)
             defaults = cm_shell_defaults()
@@ -33,7 +33,7 @@ class cm_shell_vm:
             self.index = 0
         except Exception, e:
             print e
-            print "Please check if mongo service is running."
+            print "Please check if mongo service is running --- VM"
             sys.exit()
 
     def findVM(self, user, server):
@@ -131,8 +131,8 @@ class cm_shell_vm:
 
         if arguments["delete"] and arguments["NAME"]:
             log.info ("delete the vm")
-            #ToDo -- get user info //'g' alternative
-            #ToDo -- check if activate is necessary
+            #ToDo -- deletes the first vm for multiple vms with same name
+            #change this behavior
             server = self.findVM(self.user, arguments["NAME"])
             if(server):
                 cloud = server['cm_cloud']
@@ -202,7 +202,8 @@ class cm_shell_vm:
                 cloudName = arguments["CLOUD"]
             else:
                 cloudName = self.defDict['cloud']
-            result = self.mongoClass.vm_create(cloudName, self.defDict['prefix'], self.index, 1, self.defDict['image'], self.defDict['keyname'], None, 'psjoshi')
+            result = self.mongoClass.vm_create(cloudName, self.defDict['prefix'], self.index, 1, self.defDict['image'], 'psjoshiSierra', None, self.user)
+            self.mongoClass.refresh(names=[cloudName], types=["servers"], cm_user_id=self.user)
             badReq = 'badRequest'
             if(badReq in result):
                 print result[badReq]['message']
