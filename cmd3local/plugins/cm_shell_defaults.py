@@ -37,45 +37,31 @@ class cm_shell_defaults:
         defDict['prefix'] = defKeyName
         return defDict
 
-    """This is wrong as we do not know which clouds are in cloudmesh as all of 
-    them are dynamically managed via yaml files."""
-
-    def alamoDefs(self):
-        return {}
     def hpDefs(self):
         return {}
-    def hpEastDefs(self):
-        return self.hpDefs()
     def azureDefs(self):
         return {}
     def awsDefs(self):
         return {}
 
 
-    def createDefaultDict(self, cloudName=None):
-        # image
-        # flavor
-        # keyname
-        # nodename
-        # number of nodes
-        """This is wrong as we do not know which clouds are in cloudmesh as all of 
-            them are dynamically managed via yaml files."""
+    def createDefaultDict(self, cmType):
+        #image
+        #flavor
+        #keyname
+        #nodename
+        #number of nodes
 
-        if(cloudName == None):
-            cloudName = config.default_cloud
-
-        if(cloudName == 'sierra_openstack_grizzly'):
+        if( cmType == 'openstack'):
             defDict = self.openstackDefs()
-        if(cloudName == 'alamo'):
-            defDict = self.alamoDefs()
-        if(cloudName == 'hp'):
+        if( cmType == 'hp'):
             defDict = self.hpDefs()
-        if(cloudName == 'hp_east'):
-            defDict = self.hpEastDefs()
-        if(cloudName == 'azure'):
+        if( cmType == 'azure'):
             defDict = self.azureDefs()
-        if(cloudName == 'aws'):
+        if( cmType == 'aws'):
             defDict = self.awsDefs()
+        if( cmType == 'ec2'):
+            defDict == self.awsDefs()
 
         return defDict
         '''
