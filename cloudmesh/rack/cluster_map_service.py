@@ -4,7 +4,6 @@ Service map of cluster servers, use HSV color space
 import math
 from copy import deepcopy
 from cloudmesh.rack.base_cluster_map import BaseClusterMap
-from cloudmesh.rack.rack_progress import get_service_progress
 
 
 from cloudmesh.util.logger import LOGGER
@@ -44,13 +43,12 @@ class ServiceClusterMap(BaseClusterMap):
     dict_mapping = {}
 
 
-    def __init__(self, name, dir_yaml=None, dir_diag=None, dir_output=None, img_type=None):
+    def __init__(self, username, name, dir_yaml=None, dir_diag=None, dir_output=None, img_type=None ):
         self.list_services_found = []
         self.list_unknown_services_found = []
         # call parent init function
-        BaseClusterMap.__init__(self, name, "service", dir_yaml, dir_diag, dir_output, img_type)
-        self.map_progress = get_service_progress()
-
+        BaseClusterMap.__init__(self, username, name, "service", dir_yaml, dir_diag, dir_output, img_type)
+        
 
     def set_optional_param(self, aparam):
         pass

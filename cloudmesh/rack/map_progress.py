@@ -172,12 +172,13 @@ class RackMapProgress(BaseProgress):
         self.set_map_progress_status(self.status_text)
     
     def set_map_progress_status(self, status, factor=1):
+        #print("map_progress_type is: {0}, status is: {1}".format(self.map_progress_type, status))
         curr_status = self.status_data_dict[self.map_progress_type][status]
         if factor == 1:
             value = curr_status["begin"] + curr_status["range"]
         else:
             value = curr_status["begin"] + int(round(curr_status["range"] * factor))
-        print("process status, status: '{0}', value: '{1}'".format(status, value))
+        #print("process status, status: '{0}', value: '{1}'".format(status, value))
         next_status = curr_status["next"] if factor == 1 else status
         self.set_status(status, value, next_status)
     
@@ -208,34 +209,6 @@ class RackMapProgress(BaseProgress):
     def set_receive_http_response(self, factor=1):
         self.set_map_progress_status(self.STATUS_LOADING_MAP, factor)
     
-    # flag_inc is a boolean variable
-    # True means a host data is updated, False means All hosts data are updated
-    def set_refresh_temperature_update(self, rack_name, flag_inc=True):
-        data_dict = self.get_data("map", "total_hosts")
-        if flag_inc:
-            data_dict[rack_name]["updated"] += 1
-            data_dict[rack_name]["ratio"] = data_dict[rack_name]["updated"] * 1.0 / (data_dict[rack_name]["total"] + 1)
-        else:
-            data_dict[rack_name]["updated"] = data_dict[rack_name]["total"]
-            data_dict[rack_name]["ratio"] = 1.0
-        
-        ratio_total = 0
-        for rack_name in data_dict:
-            ratio_total += data_dict[rack_name]["ratio"]
-        self.set_async_refresh(round(ratio_total/len(data_dict), 1))
-        
-    # flag_inc is a boolean variable
-    # True means a host data is updated, False means All hosts data are updated
-    def set_refresh_service_update(self, rack_name):
-        print("progress status datadata: {0}, {1}, {2}".format(self.status_text, self.status_value, self.data_dict))
-        data_dict = self.get_data("map", "total_hosts")
-        data_dict[rack_name]["updated"] = data_dict[rack_name]["total"]
-        data_dict[rack_name]["ratio"] = 1.0
-        
-        ratio_total = 0
-        for rack_name in data_dict:
-            ratio_total += data_dict[rack_name]["ratio"]
-        self.set_async_refresh(round(ratio_total/len(data_dict), 1))
     
 class HeatMapProgress(RackMapProgress):
     def __init__(self):

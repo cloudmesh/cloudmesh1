@@ -26,10 +26,12 @@ class cm_shell_vm:
         try:
             self.config = cm_config()
             self.user = self.config.username()
+            defCloud = self.config.default_cloud
+            defCloudType = self.config.cloud(defCloud)['cm_type']
             self.mongoClass = cm_mongo()
             self.mongoClass.activate(cm_user_id=self.user)
             defaults = cm_shell_defaults()
-            self.defDict = defaults.createDefaultDict()
+            self.defDict = defaults.createDefaultDict(defCloudType)
             self.index = 0
         except Exception, e:
             print e
@@ -58,7 +60,7 @@ class cm_shell_vm:
                vm flavor NAME
                vm index NAME
                vm count N
-               vm list [options] CLOUD
+               vm list [options] [CLOUD]
 
         Manages the vm
 

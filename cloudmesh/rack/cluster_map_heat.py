@@ -3,7 +3,6 @@ Heat map of cluster servers, use HSV color space
 """
 from copy import deepcopy
 from cloudmesh.rack.base_cluster_map import BaseClusterMap
-from cloudmesh.rack.rack_progress import get_temperature_progress
 
 from cloudmesh.util.logger import LOGGER
 
@@ -53,14 +52,13 @@ class HeatClusterMap(BaseClusterMap):
     # If possilbe, we can change the 240 colors to 2M (240 * 100 * 100) colors according to the HSV color space
     # But, I think it is enough for us to denote the different status of clusters with 240 colors
 
-    def __init__(self, name,
+    def __init__(self, username, name,
                  dir_yaml=None, dir_diag=None, dir_output=None, img_type=None,
                  min_temp=0, max_temp=100):
         self.setTemperatureMinMax(min_temp, max_temp)
         # call parent init function
-        BaseClusterMap.__init__(self, name, "temperature", dir_yaml, dir_diag, dir_output, img_type)
-        self.map_progress = get_temperature_progress()
-
+        BaseClusterMap.__init__(self, username, name, "temperature", dir_yaml, dir_diag, dir_output, img_type)
+        
     def get_temperature_unit(self):
         return self.temperature_unit;
     
