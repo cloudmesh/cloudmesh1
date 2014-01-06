@@ -293,14 +293,259 @@ Although Alamo on FG is an openstack grizzly cloud, it is not as sophisticated c
         location: us-east-1
 
 
-A complete example:
+A complete example
 ~~~~~~~~~~~~~~~~~~~~~~
 
-TODO. link to yaml file in github
+A more complete example of a cloudmesh.yaml file is available at 
+
+ * https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml
+
+Here you need to replace all varibles in brackets. However there is a more convenient way to do this with an additional yaml file that is called me.yaml
 
 
 
 cloudmesh-server.yaml
 ----------------------------------------------------------------------
 
-TODO.
+Cloudmesh contains also a configuration file which i used to interface with some server functionality. THis is only needed for some advanced concepts such as power and temperature management as wel as bare metal provisioning. As we at times modify the server yaml file and add new features we have added a meta attribute to the file to document the version and the type::
+
+  meta:
+    yaml_version: 2.0
+    kind: server
+  cloudmesh:
+    server:
+      ... all other text gis here ...
+
+In addition a file starts with the attributes cloudmesh and server. All other contents is indented under server.
+
+Debugging
+~~~~~~~~~~~~~
+
+cloudmesh allows to set the debug level conveniently via the loglevel attribute. Furthermore, one can disable the use of the production environment (which disables the use of LDAP) while setting the production attribute to False::
+
+  server:
+    loglevel: DEBUG
+    production: False
+
+
+Web UI
+~~~~~~~~~~~~
+
+Cloudmesh contains an optional Web UI interface that can be used to interface with various clouds similar to horizon. However in contrast to Horizopn it is not limited to OpenStack. It also provides access to temperature data and user interfaces to bare metal provisioning. These may be role based and not every user may be allowed to access them. Thus they may not see links in the user interface for them. Only priveleged users will. 
+
+The userinterface can be configured as follows::
+
+    webui:
+        host: 127.0.0.1
+        port: 5555
+        secret: development key
+        browser: True
+        page: ""
+
+The host on which the server is placeed is either specified by ip or hostname. A port on which the ui is started needs to be specified. In addition a secret key has to be specified to enable some security settings. It is best to use a key that is very difficult to crack.
+
+If you set the browser variable to true, cloudmesh will automatically upon restart open a web page. The web page can be specified via the page attribute. If you specify "" it will go to the home page. This is useful if you like to develop cloudmesh and like to repeatedly open a particular page you work on. 
+
+LDAP Integration
+~~~~~~~~~~~~~~~~~
+
+Cloudmesh can be configured to read usernames from an LDAP server. On FutureGrid we use the server configured for our FG users. However you can certainly manage your own LDAP server. The configuration is done via a proxy server that allows you to execute ldap commands. This allows you to connect to the proxy server as other servers may not allow to access the LDAP server as it is behind a firewall. The dn location of the people and groups are also specifiable::
+
+    ldap:
+        with_ldap: False
+        hostname: localhost
+        cert: /Users/neu/.futuregrid/FGLdapCacert.pem
+        proxyhost: <ip>
+        proxyuser: <username>
+        proxyldap: proxy.<yourdomain.org>
+        personbase: "ou=People,dc=futuregrid,dc=org"
+        projectbase: "ou=Groups,dc=futuregrid,dc=org"
+
+Baremetal provisioning with teefa
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We are in the process of integrating bare metal provisioning with teefaa which is part of cloudmesh and provides a very elementary mechnism of conducting bare metal provisioning. To do that you must specify a username that allows you to conduct bare metal provisioning. We assme that teefaa is installed in::
+
+  username@hostname:~/teefaa
+
+Furthermore, it could be tha the ipp to the control network is separate from the hostname and if so it can be specified with the bmcname attribute::
+
+    teefaa:
+        username: <username>
+        hostname: <hostname>
+        bmcname: <bmc-hostname>
+        dir: teefaa
+
+In addition to setting up the teefaa environment, cloudmesh contains a role based policy management that enables the administrator to grant certain users bare metal access to a specified set of resources. This is controlled by the following configureation parameters::
+
+    provisioner:
+        clusters:
+        - india
+        - sierra
+        policy:
+          users:
+            albert:
+              - i[064-066,068]
+              - b[001-002]
+          projects:
+             fg1000:
+              - i[064-066,068]
+
+
+First we set up on which clusters it is allowed to conduct bare metal provisioning. Than we set a policy either for users or projects. For users we use simply the username (in our case the futuregrid username, currently we assume the same username on all machines) and the hostlist of all hosts that can be provisioned by that user. IN case we define it an a per project basis, we replace the username with the projectid. The information of projectid and username is found in the LDAP server as part of the people and group ids.
+
+Clusters
+~~~~~~~~~~~~
+
+To access the control network of the clusters you can specify a username and password for each cluster. This is done via the following configuration::
+
+
+    clusters:
+        india:
+            bmc:
+                user: <username>
+                password: <password>
+                proxy: 
+                   ip: <proxyip>
+                   user: <proxyusername>
+        echo:
+                user: <username>
+                password: <password>
+                proxy: 
+                   ip: <proxyip>
+                   user: <proxyusername>
+        bravo:
+            pxe:
+                proxy: 
+                   ip: <ip>
+                   user: <username>
+            bmc:
+                user: <username>
+                password: <password>
+                proxy: 
+                   ip: <proxyip>
+                   user: <proxyusername>
+
+Note that you have te ability to specify a proxy machine in case the access to the control network is behind a firewall. Also it is possible to specify different usernames for access to pxe and bmc.
+
+Roles
+~~~~~~~
+
+The portal framework can specify explicitly different roles and users and projects to restrict access to 
+specific web pages. Some of the information such as active users and projects are fetsched frm the LDAP server for the role "user".
+
+However, two specific roles can be explicitly set, such as the admin and rain roles. Here it is possible to add usernames or project numbers and the specified user in the projects or the explicitly specified users will have the given role. This allows a fine grained control of users and roles. Additional roles could be added and become useful for customized plugins to cloudmesh to expose features seclectively.
+
+todo::
+
+    roles:
+        user:
+           users: 
+           - active
+           projects:
+           - active
+        admin:
+           users:
+           - albert
+           projects:
+           - fg1000
+           - fg1001
+        rain:
+            users:
+            - albert
+            projects:
+            - fg1000
+
+Keystone server
+~~~~~~~~~~~~~~~~~~
+
+certain actions of a keystone server may not be executed by a regular user. in his case the server yaml file allows you to use an administrative account that can be configured under the keystone attribute::
+
+    keystone:
+        sierra_openstack_grizzly:    
+            OS_AUTH_URL : https://<ipsdsc>:35357/v2.0
+            OS_CACERT : $HOME/.futuregrid/sierra-cacert.pem
+            OS_PASSWORD : <password>
+            OS_TENANT_NAME : <tenant>
+            OS_USERNAME : <username>
+        india_openstack_essex:
+            OS_AUTH_URL : http://<ipindia>:5000/v2.0
+            OS_PASSWORD : <password>
+            OS_TENANT_NAME : <tenant>
+            OS_USERNAME : <username>
+            OS_CACERT : None
+
+please note that the names of the clouds need to be the exact names used as in cloudmesh.yaml. The username and password can be obtained from the cloud administrator if allowed.
+
+Mongo
+~~~~~~
+
+currently we use mongo to save the state of cloudmesh. We have created an easy schem to separate information and we simply recommend to reuse the mongo section from the server yaml example file. Simply change the valeus for username, password, and key to values you like if you set it up on your local machine::
+
+    mongo:
+        db: cloudmesh
+        host: localhost
+        port: 27017
+        path: ~/.futuregrid/mongodb
+        username: <username>
+        password: <password>
+        collections:
+            inventory:
+                db: inventory
+            cloudmesh:
+                db: cloudmesh
+            profile:
+                db: cloudmesh
+            user:
+                db: user
+            metric:
+                db: metric
+            clouds:
+                db: clouds
+            pbs:
+                db: hpc
+            qstat:
+                db: hpc
+            qinfo:
+                db: hpc
+            pbsnodes:
+                db: hpc
+            launcher:
+                db: launcher
+            pagestatus:
+                db: defaults
+            password:
+                key: <key>
+                db: hallo
+            defaults:
+                db: defaults
+            experiment:
+                db: experiment
+            store:
+                db: store
+
+Complete Example
+~~~~~~~~~~~~~~~~~~
+
+An example cloudmesh_server.yaml file is located at
+
+* https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml
+
+Other Yaml files
+-----------------
+
+* https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml
+
+* https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_celery.yaml
+
+Note the the ip addresses in this file are ficticious
+* https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_cluster.yaml
+
+* https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml
+
+
+Me Sample
+------------
+
+* https://github.com/cloudmesh/cloudmesh/blob/master/etc/me-sample.yaml
+* https://github.com/cloudmesh/cloudmesh/blob/master/etc/me.yaml
