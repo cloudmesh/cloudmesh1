@@ -41,6 +41,8 @@ class cm_shell_defaults:
         defDict['prefix'] = defKeyName
         return defDict
 
+    # gvl: this is the wrong approach
+   
     def hpDefs(self):
         return {}
     def azureDefs(self):
@@ -56,6 +58,8 @@ class cm_shell_defaults:
         #nodename
         #number of nodes
 
+        # this is the wrong approach
+  
         if( cmType == 'openstack'):
             defDict = self.openstackDefs()
         if( cmType == 'hp'):
