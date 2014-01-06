@@ -22,6 +22,10 @@ config = cm_config()
 
 class cm_shell_defaults:
 
+    """ This seems wrong as the defaults are probably 
+    to be read from mongo. a default is only needed 
+    if thee is none in mongo. If there is non in mongo it needs to be set in mongo and 
+    than the default needs to be read from mongo"""
 
     def openstackDefs(self):
         defDict = {}
