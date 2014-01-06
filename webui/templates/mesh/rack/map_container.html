@@ -126,7 +126,7 @@
                         <button id="refresh_button" type="button" onclick="refreshMap()">Refresh</button>
                     </div>
                     <div class="col2">
-                        <button id="show_hide_progressbar_button" onclick="showHideProgressStatusDiv()" type="button">Show Progress Status</button>
+                        <button id="show_hide_progressbar_button" onclick="toggleProgressStatusDiv()" type="button">Show Progress Status</button>
                     </div>
                     <div class="col3">
                         <div id="slider" style="margin: 5px 20px; "> </div>
@@ -167,8 +167,9 @@
         var mapLoaded = false;
         var legendLoaded = false;
         var progressTimeoutId;
-        var generate_map_success = false;
+        var flag_continue_monitor_progress = true;
         var map_load_refresh_status = "";
+        var map_load_refresh_action = "";
         var my_debug_flag = false;
 
         function mydebug(msg) {
@@ -198,78 +199,148 @@
                     progressLabel.text( progressbar.progressbar( "value" ) + "%" );
                 },
                 complete: function() {
-                    progressLabel.text( "Complete!" );
+                    progressLabel.text( map_load_refresh_action + " " + map_load_refresh_status);
                 }
             });
         });
 
         function load_page_progress() {
-            if (generate_map_success) {
+            if (! flag_continue_monitor_progress) {
                 return;
             }
             $.getJSON( "/inventory/rack/mapprogress", {"service": "{{service}}"},
                 function(data) {
-                    if (generate_map_success) {
+                    mydebug(data);
+                    if (! flag_continue_monitor_progress) {
                         return;
                     }
                     if ( data.value > 0 ) {
                         $( "#progressbar" ).progressbar( "value", data.value );
                         $("#progress_status_text").text( data.next + " ..." );
-                    }
-                    mydebug(data);
-                    if ( data.next == "loading map" ) {
-                        generate_map_success = true;
-                        loadMap( data.data );
+                        if ( data.next == "loading map" ) {
+                            flag_continue_monitor_progress = false;
+                            loadMap( data.data );
+                        }
+                        else {
+                            progressTimeoutId = setTimeout( load_page_progress, 99 );
+                        }
                     }
                     else {
-                        progressTimeoutId = setTimeout( load_page_progress, 99 );
+                        // error occured on server
+                        flag_continue_monitor_progress = false;
+                        map_load_refresh_status = data.text;
+                        $( "#progressbar" ).progressbar( "value", 100 );
+                        $("#progress_status_text").text( data.next + " failed!" );
                     }
                 }
             );
         };
 
-        function ready_to_load_page(text) {
-            map_load_refresh_status = text;
-            $( ".progress-label" ).text( text + " ...");
+        // start the map load/refresh progress monitor
+        function ready_to_load_page() {
+            showProgressStatusDiv();
             // set default value and next status for progress bar
             $( "#progressbar" ).progressbar( "value", 0 );
             $("#progress_status_text").text( "sending http request ..." );
+            flag_continue_monitor_progress = true;
             load_page_progress();
         };
 
-        function showHideProgressStatusDiv() {
-            btnShowHide = $("#show_hide_progressbar_button");
+        function isProgressStatusDivShow() {
             bshow = btnShowHide.data("show_hide_flag");
             bshow = typeof bshow !== 'undefined' ? bshow : true;
+            return bshow;
+        };
+
+        function showProgressStatusDiv() {
+            btnShowHide = $("#show_hide_progressbar_button");
             progress_status_div = $( "#page_progress_div" );
-            if (! bshow) {
+            if (! isProgressStatusDivShow()) {
                 btnShowHide.text("Hide Progress Status");
                 btnShowHide.data("show_hide_flag", true);
                 progress_status_div.show();
             }
-            else {
+        };
+
+        function hideProgressStatusDiv() {
+            btnShowHide = $("#show_hide_progressbar_button");
+            progress_status_div = $( "#page_progress_div" );
+            if (isProgressStatusDivShow()) {
                 btnShowHide.text("Show Progress Status");
                 btnShowHide.data("show_hide_flag", false);
                 progress_status_div.hide();
             }
         };
 
-        function hideProgressStatusSoftly() {
-            progressbar = $( "#progressbar" );
-            clearTimeout(progressTimeoutId);
-            progressbar.progressbar( "value", 100 );
-            $("#progress_status_text").text( map_load_refresh_status + " success." );
-            showHideProgressStatusDiv();
+        function toggleProgressStatusDiv() {
+            if (isProgressStatusDivShow()) {
+                hideProgressStatusDiv();
+            }
+            else {
+                showProgressStatusDiv();
+            }
         };
 
+        function mapLoadRefreshSuccess() {
+            clearTimeout(progressTimeoutId);
+            map_load_refresh_status = "success";
+            $( "#progressbar" ).progressbar( "value", 100 );
+            $("#progress_status_text").text(map_load_refresh_action);
+            hideProgressStatusDiv();
+        };
+
+        // load/refresh request failed reason
+        function displayLoadRefreshFailure(reason) {
+            $( "#progressbar" ).progressbar( "value", 0 );
+            $( ".progress-label" ).text(map_load_refresh_action + " " + reason.status);
+            $("#progress_status_text").text(reason.text);
+            if (reason.status == "success") {
+                hideProgressStatusDiv();
+            }
+            else {
+                showProgressStatusDiv();
+            }
+        };
+
+        function clickLoadRefreshMapButton(text) {
+            map_load_refresh_action = text;
+            $( "#progressbar" ).progressbar( "value", 0 );
+            $( ".progress-label" ).text( text + " ..." );
+            $("#progress_status_text").text( text + " ...");
+        }
 
         function genMap() {
-            generate_map_success = false;
-
-            $.getJSON( "/inventory/rack/genmap", {service: '{{service}}', rack: '{{rack}}' } );
-            // progress bar
-            ready_to_load_page( "Load map" );
+            clickLoadRefreshMapButton("Load map");
+            $.getJSON( "/inventory/rack/genmap", {service: '{{service}}', rack: '{{rack}}' },
+                    function (data) {
+                        if (data.result == "success") {
+                            // progress bar
+                            ready_to_load_page();
+                        }
+                        else {
+                            // fail, display something to user
+                            displayLoadRefreshFailure(data.reason);
+                        }
+                    }
+            );
         };
+
+        function refreshMap() {
+            clickLoadRefreshMapButton("Refresh map");
+            $.getJSON( "/inventory/rack/refreshmap", {service: '{{service}}', rack: '{{rack}}' },
+                    function (data) {
+                        if (data.result == "success") {
+                            // progress bar
+                            ready_to_load_page();
+                        }
+                        else {
+                            // fail, display something to user
+                            displayLoadRefreshFailure(data.reason);
+                        }
+                    }
+            );
+        };
+
 
 
         function loadMap(data) {
@@ -295,7 +366,7 @@
 
         function display_loaded_images() {
             if (mapLoaded && legendLoaded) {
-                hideProgressStatusSoftly();
+                mapLoadRefreshSuccess();
 
                 $("#legend").css("width", legendWidth + "px");
                 $("#img_inner_div").css("width", baseWidth + "px");

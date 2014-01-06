@@ -14,10 +14,12 @@ log = LOGGER(__file__)
 
 class RackWork:
     map_progress = None
+    username = None
     
-    def __init__(self):
+    def __init__(self, username=None):
+        self.username = username
         self.temperature_ipmi = cm_temperature()
-        self.rackdata = RackData()
+        self.rackdata = RackData(self.username)
         
     # thread
     def generate_map(self, service, rack_name, refresh_flag=False):
@@ -29,16 +31,14 @@ class RackWork:
                             "temperature": {
                                              "class": HeatClusterMap,
                                              "method": "read_temperature_mongo",
-                                             "progress": get_temperature_progress,
                                             },
                             "service": {
                                          "class": ServiceClusterMap,
                                          "method": "read_service_mongo",
-                                         "progress": get_service_progress,
                                        },
                            }
         # update progress satus
-        self.map_progress = service_options[service]["progress"]()
+        self.get_map_progress(service)
         
         # get location of configuration file, input diag, output image
         dir_base = "~/.futuregrid"
@@ -55,7 +55,7 @@ class RackWork:
         abs_dir_image = "/".join(webui_dir + list_image_dir)
         abs_dir_diag = dir_base + "/" + relative_dir_diag
         # dynamic generate image
-        map_class = service_options[service]["class"](rack_name, dir_base, abs_dir_diag, abs_dir_image)
+        map_class = service_options[service]["class"](self.username, rack_name, dir_base, abs_dir_diag, abs_dir_image)
         # get cluster server data
         dict_data = None
         if False:
@@ -170,3 +170,17 @@ class RackWork:
             self.map_progress.set_read_data_from_db()
             
         return dict_data
+    
+    
+    def get_map_progress(self, service):
+        if service == self.rackdata.TEMPERATURE_NAME:
+            self.map_progress = get_temperature_progress(self.username)
+        elif service == self.rackdata.SERVICE_NAME:
+            self.map_progress = get_service_progress(self.username)
+        return self.map_progress
+    
+    
+# usage
+if __name__ == "__main__":
+    rackwork = RackWork("username")
+    map_progress = rackwork.get_map_progress("temperature")
