@@ -531,6 +531,235 @@ An example cloudmesh_server.yaml file is located at
 
 * https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml
 
+
+cloudmesh_cluster.yaml
+----------------------------------------------------------------------
+
+Cloudmesh has the ability to create automatically an inventory of
+large clusters based on some statically defined information. Because
+the cluster may be in offline mode this static definition is useful in
+order to also identif resources that may be offline or not reachable.
+
+The definition will be used to create for each resource a number of
+objects that can be used to easier access the resource or be used for
+starting services on the resource.
+
+We have created a simple program that creates a single yaml file for a
+resource form this information. However we also have a json
+representation that can be used in order not to depend on the file
+system and interface directly with the database. This is of advantage
+in a multi tenanted multi hosted environments in which provisioning of
+resources is executed by multiple users. It also allows more easily
+the dynamic management of resources that can be swapped in and out of
+the inventory. 
+
+A typical cloudmesh_cluster.yaml file looks as follows::
+
+  meta:
+    yaml_version: 1.2
+    kind: clusters
+  cloudmesh:
+      inventory:
+	  mycluster:
+	      id: c[001-016]
+	      nameserver: 123.123.1.1
+	      publickeys:
+	      - name: management
+		path: ~/.futuregrid/id_rsa_management.pub
+	      - name: storage
+		path: ~/.futuregrid/id_rsa_storage.pub
+	      network:
+	      - name: eth0
+		type: internal
+		id: c[001-016]
+		label: c-internal[001-016]
+		range: 172.100.100.[11-26]
+		broadcast: 172.100.101.255
+		netmask: 255.255.252.0
+		bootproto: dhcp
+		onboot: yes
+	      - name: eth1
+		type: public
+		id: c[001-016]
+		label: c-compuet[001-016]
+		range: 149.103.104.[11-26]
+		broadcast: 149.103.104.255
+		netmask: 255.255.255.0
+		gateway: 149.103.104.254
+		bootproto: static
+		onboot: yes
+	      - name: ib0
+		type: infiniband
+		id: c[001-016]
+		label: c-ib[001-016]
+		range: 192.168.0.[11-26]
+		broadcast: 192.168.0.255
+		netmask: 255.255.255.0
+		bootproto: static
+		onboot: yes
+	      - name: bmc
+		type: bmc
+		id: c[001-016]
+		label: bmc-c[001-016]
+		range: 192.168.105.[11-26]
+	      - name: pxe
+		id: c[001-016]
+		label: c-pxe[001-016]
+		range: na[001-016]
+		type: pxe
+		pxe_prefix: /tftpboot/pxelinux.cfg
+
+Metadata
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  meta:
+    yaml_version: 1.2
+    kind: clusters
+
+Clusters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  cloudmesh:
+      inventory:
+	  mycluster1:
+               ...
+	  mycluster2:
+               ...
+
+A Cluster
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	  mycluster:
+	      id: c[001-016]
+	      nameserver: 123.123.1.1
+	      publickeys:
+	      - name: management
+		path: ~/.futuregrid/id_rsa_management.pub
+	      - name: storage
+		path: ~/.futuregrid/id_rsa_storage.pub
+	      network:
+              - name: eth0
+                 ...                
+              - name: ib0
+                 ...                
+             - name: bmc
+                 ...                
+  
+Network:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	      network:
+	      - name: eth0
+		type: internal
+		id: c[001-016]
+		label: c-internal[001-016]
+		range: 172.100.100.[11-26]
+		broadcast: 172.100.101.255
+		netmask: 255.255.252.0
+		bootproto: [dhcp, static]
+		onboot: yes
+
+type:
+   internal, public, pxe, bmc
+
+id:
+   TBD
+
+label:
+    TBD
+
+range:
+    TBD
+
+broadcast:
+     TBD
+
+Bootprooto:
+   TBD
+
+onboot:
+   TBD
+
+
+
+
+Special resources bmc and pxe
+
+bmc::
+
+	      - name: bmc
+		type: bmc
+		id: c[001-016]
+		label: bmc-c[001-016]
+		range: 192.168.105.[11-26]
+
+pxe::
+	      - name: pxe
+		id: c[001-016]
+		label: c-pxe[001-016]
+		range: na[001-016]
+		type: pxe
+		pxe_prefix: /tftpboot/pxelinux.cfg
+
+
+
+cloudmesh_bootspec.yaml
+----------------------------------------------------------------------
+
+::
+
+   meta:
+     yaml_version: 2.0
+     kind: bootspec
+   cloudmesh:
+     bootspec:
+	 ubuntu-2013-07-a:
+	     osimage: '/backup/snapshot/openstack-2013-07-01.squashfs'
+	     os: 'ubuntu12'
+	     extension: 'squashfs'
+	     partition_scheme: 'gpt'
+	     fstab_append: False
+	     method: 'put'
+	     boot:
+		kernel_type: kernel
+		bootloader: 'grub2'
+	     rootpass: False
+	     disk:
+		device: '/dev/sda'
+		partitions:
+		    swap:
+			size: '2'
+		    system:
+			size: '100'
+			mount: '/'
+			type: 'ext4'
+		    data:
+			size: '-1'
+			mount: '/var/lib/nova'
+			type: 'xfs'
+	 ubuntu-2013-07-b:
+	     osimage: '/backup/snapshot/openstack-2013-07-01.squashfs'
+	     os: 'ubuntu12'
+	     extension: 'squashfs'
+	     partition_scheme: 'gpt'
+	     fstab_append: False
+	     method: 'put'
+	     boot:
+		kernel_type: kernel
+		bootloader: 'grub2'
+	     rootpass: False
+	     disk:
+		device: '/dev/sda'
+		partitions:
+		    swap:
+			size: '2'
+		    system:
+			size: '100'
+			mount: '/'
+			type: 'ext4'
+		    data:
+			size: '-1'
+			mount: '/var/lib/nova'
+			type: 'xfs'
+
+
 Other Yaml files
 -----------------
 

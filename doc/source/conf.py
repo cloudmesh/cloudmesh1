@@ -41,11 +41,12 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
-    'sphinx.ext.viewcode',
-    'sphinxcontrib.webmocks',
-    'sphinxjp.shibukawa']
+    'sphinx.ext.viewcode']
 
-extensions.append('sphinxcontrib.autorun')
+#    'sphinxcontrib.webmocks',
+#    'sphinxjp.shibukawa']
+
+#extensions.append('sphinxcontrib.autorun')
 
 # 'sphinxcontrib.issuetracker']
 # issuetracker = 'none',
