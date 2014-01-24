@@ -549,8 +549,14 @@ values.
 Making the documentation
 ====================
 
-The documentation requiresa couple of add ons that are not included in
-the requirements.txt file. However, they can be installed with::
+A simple way to creat ethe documentation is with::
+
+   make sphinx
+
+
+However, some extensions may require additional packages for sphinx.
+These add ons are unfortunatly not included in the requirements.txt. 
+However, they can be installed with (on OSX hg is a prerequisit)::
 
    $ fab build.sphinx
 
