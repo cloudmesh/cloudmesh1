@@ -19,6 +19,7 @@ import docopt
 log = LOGGER(__file__)
 
 config = cm_config()
+mongoClass = cm_mongo()
 
 class cm_shell_defaults:
 
@@ -27,13 +28,59 @@ class cm_shell_defaults:
         cloudName = config.default_cloud
         defDict['cloud'] = cloudName
         cloudDict = config.cloud(cloudName)
-        defDict['flavor'] = cloudDict['default']['flavor']
-        defDict['image'] = cloudDict['default']['image']
 
-        defDict['keyname'] = dbDict['key']
-        defDict['prefix'] = dbDict['prefix']
-        defDict['index'] = dbDict['index']
+        #check the flavor
+        if 'flavors' in dbDict:
+            if cloudName in dbDict['flavors'] and dbDict['flavors'][cloudName]:
+                defDict['flavors'] = dbDict['flavors'][cloudName]
+            else:
+                print 'saving default flavor to Mongo.'
+                defDict['flavor'] = cloudDict['default']['flavor']
+                flavors = dbDict['flavors']
+                flavors[cloudName] = cloudDict['default']['flavor']
+                mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'flavors': flavors}},upsert=False, multi=False)
+        else:
+            print 'Creating and saving default flavor to Mongo.'
+            flavors = {}
+            flavors[cloudName] = cloudDict['default']['flavor']
+            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'flavors': flavors}},upsert=False, multi=False)
+
+        #check the image
+        if 'images' in dbDict:
+            if cloudName in dbDict and dbDict['images'][cloudName]:
+                defDict['image'] = dbDict['images'][cloudName]
+            else:
+                print 'saving default image to Mongo.'
+                defDict['image'] = cloudDict['default']['image']
+                images = dbDict['images']
+                images[cloudName] = cloudDict['default']['image']
+                mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'images': images}},upsert=False, multi=False)
+        else:
+            print 'Creating and saving default image to Mongo.'
+            images = {}
+            images[cloudName] = cloudDict['default']['image']
+            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'images': images}},upsert=False, multi=False)
+
+        if dbDict['key']:
+            defDict['keyname'] = dbDict['key']
+        else:
+            defDict['keyname'] = config.userkeys()['default']
+            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'key': defDict['keyname']}},upsert=False, multi=False)
+
+        if dbDict['prefix']:
+            defDict['prefix'] = dbDict['prefix']
+        else:
+            defDict['prefix'] = config.username()
+            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'prefix': defDict['prefix']}},upsert=False, multi=False)
+
+        if dbDict['index']:
+            defDict['index'] = dbDict['index']
+        else:
+            defDict['index'] = 1
+            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': 1}},upsert=False, multi=False)
         return defDict
+
+    # gvl: this is the wrong approach
 
     def hpDefs(self):
         return {}
@@ -50,7 +97,6 @@ class cm_shell_defaults:
         #nodename
         #number of nodes
 
-        mongoClass = cm_mongo()
         dbDict = mongoClass.db_defaults.find_one({'cm_user_id': config.username()})
 
         defCloud = config.default_cloud
