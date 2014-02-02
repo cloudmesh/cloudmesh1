@@ -37,13 +37,16 @@ class cm_shell_vm:
             sys.exit()
 
     def findVM(self, user, server):
-        clouds = self.mongoClass.servers(cm_user_id=user)
-        for key, value in clouds.items():
-            for k, v in value.items():
-                if(v['name'] == server):
-                    return v
-        print "VM not found."
-        return None
+        try:
+            clouds = self.mongoClass.servers(cm_user_id=user)
+            for key, value in clouds.items():
+                for k, v in value.items():
+                    if(v['name'] == server):
+                        return v
+            print "VM not found."
+            return None
+        except:
+            print "Unexpected error: ", sys.exc_info()[0]
 
     def deleteVM(self, serverName):
         print "deleting ", serverName
@@ -101,10 +104,7 @@ class cm_shell_vm:
 
         if arguments["cloud"] and arguments["--name"]:
             log.info ("get the VM cloud")
-            try:
-                server = self.findVM(self.user, arguments["--name"])
-            except StandardError:
-                print "Could not activate mongoDB. Please check if mongo running."
+            server = self.findVM(self.user, arguments["--name"])
             if(server):
                 vmCloud = server['cm_cloud']
                 print "--------------------------------------------------------------------------------\n"
@@ -113,45 +113,45 @@ class cm_shell_vm:
 
         if arguments["flavor"] and arguments["--name"]:
             log.info ("get the VM flavor")
-            try:
-                server = self.findVM(self.user, arguments["--name"])
-            except StandardError:
-                print "Could not activate mongoDB. Please check if mongo running."
+            server = self.findVM(self.user, arguments["--name"])
             if(server):
-                vmFlavorId = server['flavor']['id']
-                flavors = self.mongoClass.flavors(cm_user_id=self.user)
-                if len(flavors[server['cm_cloud']]) == 0:
-                    print 'Flavor not available anymore.'
-                    return
-                else:
-                    reqdFlavor = flavors[server['cm_cloud']][vmFlavorId]
-                    jsonObj = dumps(reqdFlavor, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
-                    print "--------------------------------------------------------------------------------\n"
-                    print "The Flavor for:", arguments["--name"]
-                    print jsonObj, "\n"
-                    return jsonObj
+                try:
+                    vmFlavorId = server['flavor']['id']
+                    flavors = self.mongoClass.flavors(cm_user_id=self.user)
+                    if len(flavors[server['cm_cloud']]) == 0:
+                        print 'Flavor not available anymore.'
+                        return
+                    else:
+                        reqdFlavor = flavors[server['cm_cloud']][vmFlavorId]
+                        jsonObj = dumps(reqdFlavor, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
+                        print "--------------------------------------------------------------------------------\n"
+                        print "The Flavor for:", arguments["--name"]
+                        print jsonObj, "\n"
+                        return jsonObj
+                except:
+                    print "Unexpected error: ", sys.exc_info()[0]
             return
 
         if arguments["image"] and arguments["--name"]:
             log.info ("get the VM image")
-            try:
-                server = self.findVM(self.user, arguments["--name"])
-            except:
-                print "Could not activate mongoDB. Please check if mongo running."
-                return
+            server = self.findVM(self.user, arguments["--name"])
             if(server):
-                vmImageId = server['image']['id']
-                images = self.mongoClass.images(cm_user_id=self.user)
-                if len(images[server['cm_cloud']]) == 0:
-                    print 'Image not available anymore.'
-                    return
-                else:
-                    reqdImage = images[server['cm_cloud']][vmImageId]
-                    jsonObj = dumps(reqdImage, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
-                    print "--------------------------------------------------------------------------------\n"
-                    print "The image for:", arguments["--name"]
-                    print jsonObj, "\n"
-                    return jsonObj
+                try:
+                    vmImageId = server['image']['id']
+                    self.mongoClass.refresh(self.user, types=["images"])
+                    images = self.mongoClass.images(cm_user_id=self.user)
+                    if len(images[server['cm_cloud']]) == 0:
+                        print 'Image not available anymore.'
+                        return
+                    else:
+                        reqdImage = images[server['cm_cloud']][vmImageId]
+                        jsonObj = dumps(reqdImage, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
+                        print "--------------------------------------------------------------------------------\n"
+                        print "The image for:", arguments["--name"]
+                        print jsonObj, "\n"
+                        return jsonObj
+                except:
+                    print "Unexpected error: ", sys.exc_info()[0]
             return
 
         if arguments["info"] and arguments["--name"]:
@@ -173,19 +173,22 @@ class cm_shell_vm:
                     return jsonObj
                 else:
                     #get the VM image for the info display
-                    vmImageId = reqdVM['image']['id']
-                    self.mongoClass.refresh(self.user, types=["images"])
-                    allImages = self.mongoClass.images(clouds = [reqdVM['cm_cloud']], cm_user_id = self.user)
+                    try:
+                        vmImageId = reqdVM['image']['id']
+                        self.mongoClass.refresh(self.user, types=["images"])
+                        allImages = self.mongoClass.images(clouds = [reqdVM['cm_cloud']], cm_user_id = self.user)
 
-                    imageValue = allImages[cmCloud][vmImageId]['name'] + " ("
-                    imageValue = imageValue + allImages[cmCloud][vmImageId]['id'] + ")"
+                        imageValue = allImages[cmCloud][vmImageId]['name'] + " ("
+                        imageValue = imageValue + allImages[cmCloud][vmImageId]['id'] + ")"
 
-                    x.add_row(['image', imageValue])
+                        x.add_row(['image', imageValue])
 
-                    for key, value in reqdVM.items():
-                        if type(value) != dict and type(value) != list:
-                            x.add_row([key, value])
-                    print x.get_string(sortby="Property")
+                        for key, value in reqdVM.items():
+                            if type(value) != dict and type(value) != list:
+                                x.add_row([key, value])
+                        print x.get_string(sortby="Property")
+                    except:
+                        print 'Unexpected error: ', sys.exc_info()[0]
             return
 
 
@@ -199,7 +202,7 @@ class cm_shell_vm:
                 numberOfVMs = 1
             try:
                 for i in range(numberOfVMs):
-                    result = self.mongoClass.vm_create(cloudName, self.defDict['prefix'], dbIndex, 1, self.defDict['image'], 'psjoshiSierra', None, self.user)
+                    result = self.mongoClass.vm_create(cloudName, self.defDict['prefix'], dbIndex, 1, self.defDict['image'], self.defDict['keyname'], None, self.user)
                     self.mongoClass.refresh(names=[cloudName], types=["servers"], cm_user_id=self.user)
 
                     if ('server' not in result):
@@ -223,36 +226,39 @@ class cm_shell_vm:
         if arguments["delete"]:
             #ToDo -- deletes the first vm for multiple vms with same name
             #change this behavior
-            dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
-            nextIndex = int(dbDict['index'])
-            deletedVMs = 0
-            if arguments['--name']:
-                servName = arguments["--name"]
-                retVal = self.deleteVM(servName)
-            else:
-                if arguments['--count']:
-                    numberOfVMs = int(arguments['--count'])
-                    if nextIndex < numberOfVMs:
-                        print "Number of VMs specified is greater than running VMs. Deleting all VMs."
-                        numberOfVMs = nextIndex - 1
-                else:
-                    if nextIndex == 1:
-                        print "No default VM to delete. Please specify a name for a VM to be deleted."
-                        return
-                    numberOfVMs = 1
-                for i in range(numberOfVMs):
-                    nextIndex = nextIndex - 1
-                    servName = "%s_%s" % (self.defDict['prefix'], nextIndex)
+            try:
+                dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
+                nextIndex = int(dbDict['index'])
+                deletedVMs = 0
+                if arguments['--name']:
+                    servName = arguments["--name"]
                     retVal = self.deleteVM(servName)
-                    if retVal != 0:
-                        break
-                    deletedVMs = deletedVMs + 1
+                else:
+                    if arguments['--count']:
+                        numberOfVMs = int(arguments['--count'])
+                        if nextIndex < numberOfVMs:
+                            print "Number of VMs specified is greater than running VMs. Deleting all VMs."
+                            numberOfVMs = nextIndex - 1
+                    else:
+                        if nextIndex == 1:
+                            print "No default VM to delete. Please specify a name for a VM to be deleted."
+                            return
+                        numberOfVMs = 1
+                    for i in range(numberOfVMs):
+                        nextIndex = nextIndex - 1
+                        servName = "%s_%s" % (self.defDict['prefix'], nextIndex)
+                        retVal = self.deleteVM(servName)
+                        if retVal != 0:
+                            break
+                        deletedVMs = deletedVMs + 1
 
-            #update the index for db defaults
-            index = int(dbDict['index'])
-            #on deleting vm <prefix>_1 keep the index fixed to 1
-            index = unicode(index - deletedVMs)
-            self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': index}},upsert=False, multi=False)
+                #update the index for db defaults
+                index = int(dbDict['index'])
+                #on deleting vm <prefix>_1 keep the index fixed to 1
+                index = unicode(index - deletedVMs)
+                self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': index}},upsert=False, multi=False)
+            except:
+                print "Unexpected error: ", sys.exc_info()[0]
             return
 
 
