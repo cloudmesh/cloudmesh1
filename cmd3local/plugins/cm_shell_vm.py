@@ -33,7 +33,7 @@ class cm_shell_vm:
             self.defDict = defaults.createDefaultDict()
         except Exception, e:
             print e
-            print "Please check if mongo service is running."
+            print 'Unexpected error: ', sys.exc_info()[0], sys.exc_info()[1]
             sys.exit()
 
     def findVM(self, user, server):
@@ -70,10 +70,10 @@ class cm_shell_vm:
           vm reset [--index=<index>]
           vm delete [[--count=<count>] | [--name=<NAME>]] [--cloud=<CloudName>]
           vm create [--count=<count>] [--cloud=<CloudName>]
-          vm cloud NAME
-          vm image NAME
-          vm flavor NAME
-          vm index NAME
+          vm cloud [--name=<NAME>]
+          vm image [--name=<NAME>]
+          vm flavor [--name=<NAME>]
+          vm index [--name=<NAME>]
           vm info [--verbose | --json] [--name=<NAME>]
           vm list [--verbose | --json] [--cloud=<CloudName>]
 
@@ -90,17 +90,6 @@ class cm_shell_vm:
         '''
 
         if arguments["reset"]:
-            #print self.defDict
-            #config = cm_config()
-            #pprint()
-            #
-            '''
-            if arguments["<x>"]:
-                print "whoa!", arguments["<x>"]
-            else:
-                print ":("
-            return
-            '''
             if arguments['--index'] > 0:
                 indexToSet = arguments['--index']
             else:
@@ -110,22 +99,22 @@ class cm_shell_vm:
             self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': indexToSet}},upsert=False, multi=False)
             return
 
-        if arguments["cloud"] and arguments["NAME"]:
+        if arguments["cloud"] and arguments["--name"]:
             log.info ("get the VM cloud")
             try:
-                server = self.findVM(self.user, arguments["NAME"])
+                server = self.findVM(self.user, arguments["--name"])
             except StandardError:
                 print "Could not activate mongoDB. Please check if mongo running."
             if(server):
                 vmCloud = server['cm_cloud']
                 print "--------------------------------------------------------------------------------\n"
-                print arguments["NAME"],"is running on: ", vmCloud
+                print arguments["--name"],"is running on: ", vmCloud
             return
 
-        if arguments["flavor"] and arguments["NAME"]:
+        if arguments["flavor"] and arguments["--name"]:
             log.info ("get the VM flavor")
             try:
-                server = self.findVM(self.user, arguments["NAME"])
+                server = self.findVM(self.user, arguments["--name"])
             except StandardError:
                 print "Could not activate mongoDB. Please check if mongo running."
             if(server):
@@ -138,15 +127,15 @@ class cm_shell_vm:
                     reqdFlavor = flavors[server['cm_cloud']][vmFlavorId]
                     jsonObj = dumps(reqdFlavor, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
                     print "--------------------------------------------------------------------------------\n"
-                    print "The Flavor for:", arguments["NAME"]
+                    print "The Flavor for:", arguments["--name"]
                     print jsonObj, "\n"
                     return jsonObj
             return
 
-        if arguments["image"] and arguments["NAME"]:
+        if arguments["image"] and arguments["--name"]:
             log.info ("get the VM image")
             try:
-                server = self.findVM(self.user, arguments["NAME"])
+                server = self.findVM(self.user, arguments["--name"])
             except:
                 print "Could not activate mongoDB. Please check if mongo running."
                 return
@@ -160,21 +149,14 @@ class cm_shell_vm:
                     reqdImage = images[server['cm_cloud']][vmImageId]
                     jsonObj = dumps(reqdImage, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
                     print "--------------------------------------------------------------------------------\n"
-                    print "The image for:", arguments["NAME"]
+                    print "The image for:", arguments["--name"]
                     print jsonObj, "\n"
                     return jsonObj
             return
 
-        if arguments["info"] and arguments["NAME"]:
+        if arguments["info"] and arguments["--name"]:
             log.info ("vm info")
-            """
-            TODO -- get user info //'g' alternative
-            private network
-            flavor
-            security_groups
-            metadata
-            """
-            reqdVM = self.findVM(self.user, arguments["NAME"])
+            reqdVM = self.findVM(self.user, arguments["--name"])
 
             x = PrettyTable()
             x.field_names = ["Property", "Value"]
@@ -192,6 +174,7 @@ class cm_shell_vm:
                 else:
                     #get the VM image for the info display
                     vmImageId = reqdVM['image']['id']
+                    self.mongoClass.refresh(self.user, types=["images"])
                     allImages = self.mongoClass.images(clouds = [reqdVM['cm_cloud']], cm_user_id = self.user)
 
                     imageValue = allImages[cmCloud][vmImageId]['name'] + " ("
@@ -207,15 +190,8 @@ class cm_shell_vm:
 
 
         if arguments["create"]:
-            pprint(arguments)
-            '''
-            if(arguments["--cloud"]):
-                cloudName = arguments["--cloud"]
-            else:
-            '''
             cloudName = self.defDict['cloud']
             dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
-
             dbIndex = int(dbDict['index'])
             if arguments['--count']:
                 numberOfVMs = int(arguments['--count'])
@@ -291,14 +267,12 @@ class cm_shell_vm:
         """
         if arguments["list"]:
             currentCloud = None
-            print "Hola!"
             if arguments["--cloud"]:
                 currentCloud = arguments["--cloud"]
             else:
                 currentCloud = self.defDict['cloud']
 
             try:
-                print "Hola again!"
                 clouds = self.mongoClass.servers(cm_user_id=self.user)
                 if clouds is not None:
                     vmList = clouds[currentCloud]
