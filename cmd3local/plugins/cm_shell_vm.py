@@ -6,6 +6,8 @@ import importlib
 import simplejson as json
 import time
 import cmd
+import docopt
+import yaml
 from bson.json_util import dumps
 from cmd3.shell import command
 from cloudmesh.user.cm_user import cm_user
@@ -14,7 +16,6 @@ from cloudmesh.config.cm_config import cm_config
 from pprint import pprint
 from prettytable import PrettyTable
 from cloudmesh.util.logger import LOGGER
-import docopt
 from cm_shell_defaults import cm_shell_defaults
 
 log = LOGGER(__file__)
@@ -26,16 +27,13 @@ class cm_shell_vm:
         try:
             self.config = cm_config()
             self.user = self.config.username()
-            defCloud = self.config.default_cloud
-            defCloudType = self.config.cloud(defCloud)['cm_type']
             self.mongoClass = cm_mongo()
             self.mongoClass.activate(cm_user_id=self.user)
             defaults = cm_shell_defaults()
-            self.defDict = defaults.createDefaultDict(defCloudType)
-            self.index = 0
+            self.defDict = defaults.createDefaultDict()
         except Exception, e:
             print e
-            print "Please check if mongo service is running --- VM"
+            print "Please check if mongo service is running."
             sys.exit()
 
     def findVM(self, user, server):
@@ -47,38 +45,69 @@ class cm_shell_vm:
         print "VM not found."
         return None
 
+    def deleteVM(self, serverName):
+        print "deleting ", serverName
+        server = self.findVM(self.user, serverName)
+        if(server):
+            cloud = server['cm_cloud']
+            serverId = server['id']
+            try:
+                self.mongoClass.vm_delete(cloud, serverId, self.user)
+                time.sleep(5)
+                self.mongoClass.release_unused_public_ips(cloud, self.user)
+                self.mongoClass.refresh(names=[cloud], types=["servers"], cm_user_id=self.user)
+                print serverName, "deleted successfully!\n"
+                return 0
+
+            except StandardError:
+                print "Error deleting the VM."
+                return -1
+
     @command
     def do_vm(self, args, arguments):
-        """
+        '''
         Usage:
-               vm clean [options]
-               vm delete NAME
-               vm create [CLOUD]
-               vm info [options] [NAME]
-               vm cloud NAME
-               vm image NAME
-               vm flavor NAME
-               vm index NAME
-               vm count N
-               vm list [options] [CLOUD]
-
-        Manages the vm
+          vm reset [--index=<index>]
+          vm delete [[--count=<count>] | [--name=<NAME>]] [--cloud=<CloudName>]
+          vm create [--count=<count>] [--cloud=<CloudName>]
+          vm cloud NAME
+          vm image NAME
+          vm flavor NAME
+          vm index NAME
+          vm info [--verbose | --json] [--name=<NAME>]
+          vm list [--verbose | --json] [--cloud=<CloudName>]
 
         Arguments:
-
-          NAME           The name of a service or server
-          N              The number of VMs to be started
-          CLOUD          The name of Cloud
+          NAME name of the VM
 
         Options:
+           -v --verbose                         verbose mode
+           -j --json                            json output
+           -x <count> --count=<count>           number of VMs
+           -n <NAME> --name=<NAME>              Name of the VM
+           -c <CloudName> --cloud=<CloudName>   Name of the Cloud
+           -i <index> --index=<index>           Index for default VM Name
+        '''
 
-           -v             verbose mode
-           -j --json      json output
-
-        """
-        if arguments["clean"]:
-            log.info ("clean the vm")
-            print arguments['-v']
+        if arguments["reset"]:
+            #print self.defDict
+            #config = cm_config()
+            #pprint()
+            #
+            '''
+            if arguments["<x>"]:
+                print "whoa!", arguments["<x>"]
+            else:
+                print ":("
+            return
+            '''
+            if arguments['--index'] > 0:
+                indexToSet = arguments['--index']
+            else:
+                print 'Invalid index specified.'
+                return
+            dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
+            self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': indexToSet}},upsert=False, multi=False)
             return
 
         if arguments["cloud"] and arguments["NAME"]:
@@ -90,7 +119,7 @@ class cm_shell_vm:
             if(server):
                 vmCloud = server['cm_cloud']
                 print "--------------------------------------------------------------------------------\n"
-                print arguments["NAME"],"is under the cloud:", vmCloud
+                print arguments["NAME"],"is running on: ", vmCloud
             return
 
         if arguments["flavor"] and arguments["NAME"]:
@@ -101,14 +130,17 @@ class cm_shell_vm:
                 print "Could not activate mongoDB. Please check if mongo running."
             if(server):
                 vmFlavorId = server['flavor']['id']
-                flavors = self.mongoClass.flavors(cm_user_id=user)
-                reqdFlavor = flavors[server['cm_cloud']][vmFlavorId]
-
-                jsonObj = dumps(reqdFlavor, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
-                print "--------------------------------------------------------------------------------\n"
-                print "The Flavor for:", arguments["NAME"]
-                print jsonObj, "\n"
-                return jsonObj
+                flavors = self.mongoClass.flavors(cm_user_id=self.user)
+                if len(flavors[server['cm_cloud']]) == 0:
+                    print 'Flavor not available anymore.'
+                    return
+                else:
+                    reqdFlavor = flavors[server['cm_cloud']][vmFlavorId]
+                    jsonObj = dumps(reqdFlavor, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
+                    print "--------------------------------------------------------------------------------\n"
+                    print "The Flavor for:", arguments["NAME"]
+                    print jsonObj, "\n"
+                    return jsonObj
             return
 
         if arguments["image"] and arguments["NAME"]:
@@ -121,34 +153,17 @@ class cm_shell_vm:
             if(server):
                 vmImageId = server['image']['id']
                 images = self.mongoClass.images(cm_user_id=self.user)
-
-                reqdImage = images[server['cm_cloud']][vmImageId]
-
-                jsonObj = dumps(reqdImage, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
-                print "--------------------------------------------------------------------------------\n"
-                print "The image for:", arguments["NAME"]
-                print jsonObj, "\n"
-                return jsonObj
+                if len(images[server['cm_cloud']]) == 0:
+                    print 'Image not available anymore.'
+                    return
+                else:
+                    reqdImage = images[server['cm_cloud']][vmImageId]
+                    jsonObj = dumps(reqdImage, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
+                    print "--------------------------------------------------------------------------------\n"
+                    print "The image for:", arguments["NAME"]
+                    print jsonObj, "\n"
+                    return jsonObj
             return
-
-        if arguments["delete"] and arguments["NAME"]:
-            log.info ("delete the vm")
-            #ToDo -- deletes the first vm for multiple vms with same name
-            #change this behavior
-            server = self.findVM(self.user, arguments["NAME"])
-            if(server):
-                cloud = server['cm_cloud']
-                serverId = server['id']
-                try:
-                    self.mongoClass.vm_delete(cloud, serverId, self.user)
-                    time.sleep(5)
-                    self.mongoClass.release_unused_public_ips(cloud, self.user)
-                    self.mongoClass.refresh(names=[cloud], types=["servers"], cm_user_id=self.user)
-                    print arguments["NAME"], "deleted successfully\n"
-                except StandardError:
-                    print "Error deleting the VM."
-            return
-
 
         if arguments["info"] and arguments["NAME"]:
             log.info ("vm info")
@@ -192,63 +207,77 @@ class cm_shell_vm:
 
 
         if arguments["create"]:
-            #toDo -- Replace this with actual nova call
-            #check if we can retrieve previously created vms and
-            #print "nova boot --image {0} --flavor {1} --key-name {2} defDict['image'] }
-            #def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id):
-            #decide about index and prefix
-
-            #log.info ("vm create")
-
-            if(arguments["CLOUD"]):
-                cloudName = arguments["CLOUD"]
-            else:
-                cloudName = self.defDict['cloud']
-            result = self.mongoClass.vm_create(cloudName, self.defDict['prefix'], self.index, 1, self.defDict['image'], 'psjoshiSierra', None, self.user)
-            self.mongoClass.refresh(names=[cloudName], types=["servers"], cm_user_id=self.user)
-            badReq = 'badRequest'
-            if(badReq in result):
-                print result[badReq]['message']
-                return
-            pprint(result)
-            return
+            pprint(arguments)
             '''
-            log.info ("vm create")
+            if(arguments["--cloud"]):
+                cloudName = arguments["--cloud"]
+            else:
+            '''
+            cloudName = self.defDict['cloud']
+            dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
 
-            print "Select the cloud you want to create VM for."
-            activeClouds = self.mongoClass.active_clouds(self.user)
-            cloudIndex = 0
-            for item in activeClouds:
-                cloudIndex = cloudIndex + 1
-                print str(cloudIndex)+".", item
-            cloudIndex = raw_input('')
-            #0 based in indexing
-            selectedCloud = activeClouds[int(cloudIndex) - 1]
-
-            print "Please enter parameters to create VM as required.\n",
-            print "--Select an image from following."
-            time.sleep(1)
+            dbIndex = int(dbDict['index'])
+            if arguments['--count']:
+                numberOfVMs = int(arguments['--count'])
+            else:
+                numberOfVMs = 1
             try:
-                allImages = self.mongoClass.images(clouds = [selectedCloud], cm_user_id = self.user)
-                imgCounter = 1
-                imageList = allImages[selectedCloud]
-                if len(imageList) > 0:
-                    x = PrettyTable()
-                    x.field_names = ["Index", "ID", "Name"]
-                    for key, val in imageList.items():
-                        x.add_row([imgCounter, key,val['name']])
-                        imgCounter = imgCounter + 1
-                    print x
-                    imageIndex = raw_input('Enter the index for image to boot VM ')
-                    selectedImage = imageList.items()[int(imageIndex)]
-                    pprint(selectedImage)
-                else:
-                    print "No images found for selected cloud"
-            except:
-                print sys.exc_info()
-                sys.exit()
-            return'''
+                for i in range(numberOfVMs):
+                    result = self.mongoClass.vm_create(cloudName, self.defDict['prefix'], dbIndex, 1, self.defDict['image'], 'psjoshiSierra', None, self.user)
+                    self.mongoClass.refresh(names=[cloudName], types=["servers"], cm_user_id=self.user)
 
+                    if ('server' not in result):
+                        badReq = 'badRequest'
+                        if(badReq in result):
+                            print result[badReq]['message']
+                        return
+                    #update the index for next VM
+                    print 'VM successfully launched!'
+                    pprint(result)
+                    dbIndex = unicode(int(dbIndex) + 1)
+                dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
+                dbIndex = int(dbDict['index'])
+                dbIndex = unicode(dbIndex + numberOfVMs)
+                self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': dbIndex}},upsert=False, multi=False)
+                time.sleep(5)
+            except:
+                print "Unexpected error:", sys.exc_info()[0]
+            return
+
+        if arguments["delete"]:
+            #ToDo -- deletes the first vm for multiple vms with same name
+            #change this behavior
+            dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
+            nextIndex = int(dbDict['index'])
+            deletedVMs = 0
+            if arguments['--name']:
+                servName = arguments["--name"]
+                retVal = self.deleteVM(servName)
+            else:
+                if arguments['--count']:
+                    numberOfVMs = int(arguments['--count'])
+                    if nextIndex < numberOfVMs:
+                        print "Number of VMs specified is greater than running VMs. Deleting all VMs."
+                        numberOfVMs = nextIndex - 1
+                else:
+                    if nextIndex == 1:
+                        print "No default VM to delete. Please specify a name for a VM to be deleted."
+                        return
+                    numberOfVMs = 1
+                for i in range(numberOfVMs):
+                    nextIndex = nextIndex - 1
+                    servName = "%s_%s" % (self.defDict['prefix'], nextIndex)
+                    retVal = self.deleteVM(servName)
+                    if retVal != 0:
+                        break
+                    deletedVMs = deletedVMs + 1
+
+            #update the index for db defaults
+            index = int(dbDict['index'])
+            #on deleting vm <prefix>_1 keep the index fixed to 1
+            index = unicode(index - deletedVMs)
+            self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': index}},upsert=False, multi=False)
+            return
 
 
         """
@@ -260,51 +289,67 @@ class cm_shell_vm:
             -- user_id
         We can add parameters by taking them as args from user.
         """
-        if arguments["list"] and arguments["CLOUD"]:
-            clouds = self.mongoClass.servers(cm_user_id=self.user)
-
-            vmList = clouds[arguments["CLOUD"]]
-
-            if(len(vmList) == 0):
-                print "No VMs on this cloud."
-                return
+        if arguments["list"]:
+            currentCloud = None
+            print "Hola!"
+            if arguments["--cloud"]:
+                currentCloud = arguments["--cloud"]
             else:
+                currentCloud = self.defDict['cloud']
 
-                userParamList = [] #ToDo -- assign the parameters from user to display
-                jsonList = []
-                x = PrettyTable()
-                jsonReqd = arguments['--json']
-
-                parameterList = ["id", "name", "status", "addresses"]
-
-                for parameter in userParamList:
-                    parameterList.append(parameter)
-
-                x.field_names = (parameterList)
-                for key, vm in vmList.items():
-
-                    tableRowList = []
-
-                    for parameter in parameterList:
-                        if parameter == "addresses":
-                            addresses = (vm[parameter]['private'])
-                            addrList = []
-                            for address in addresses:
-                                addr = address['OS-EXT-IPS:type']+"="+address['addr']
-                            tableRowList.append(addr)
-                        else:
-                            tableRowList.append(vm[parameter])
-
-                    x.add_row(tableRowList)
-                    if(jsonReqd):
-                        insDict = {}
-                        insDict[vm['name']]  = tableRowList
-                        jsonList.append(insDict)
-                if(jsonReqd):
-                    jsonArray = json.dumps(jsonList)
-                    print jsonArray
+            try:
+                print "Hola again!"
+                clouds = self.mongoClass.servers(cm_user_id=self.user)
+                if clouds is not None:
+                    vmList = clouds[currentCloud]
                 else:
-                    print x
+                    print "No Cloud registered."
+                    return
+            except KeyError:
+                print 'Incorrect cloud name.'
+                return
+            try:
+
+                if(len(vmList) == 0):
+                    print "No VMs on this cloud."
+                    return
+                else:
+                    userParamList = [] #ToDo -- assign the parameters from user to display
+                    jsonList = []
+                    x = PrettyTable()
+                    jsonReqd = arguments['--json']
+
+                    parameterList = ["id", "name", "status", "addresses"]
+
+                    for parameter in userParamList:
+                        parameterList.append(parameter)
+                    x.field_names = (parameterList)
+                    for key, vm in vmList.items():
+
+                        tableRowList = []
+
+                        for parameter in parameterList:
+                            if parameter == "addresses":
+                                addresses = (vm[parameter]['private'])
+                                addrList = []
+                                for address in addresses:
+                                    addr = address['OS-EXT-IPS:type']+"="+address['addr']
+                                tableRowList.append(addr)
+                            else:
+                                tableRowList.append(vm[parameter])
+
+                        x.add_row(tableRowList)
+                        if(jsonReqd):
+                            insDict = {}
+                            insDict[vm['name']]  = tableRowList
+                            jsonList.append(insDict)
+                    if(jsonReqd):
+                        jsonArray = json.dumps(jsonList)
+                        print jsonArray
+                    else:
+                        print x.get_string(sortby="name")
+            except:
+                print "Unexpected error:", sys.exc_info()[0]
 def main():
     print "test correct"
 

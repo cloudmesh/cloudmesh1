@@ -22,19 +22,17 @@ config = cm_config()
 
 class cm_shell_defaults:
 
-
-    def openstackDefs(self):
+    def openstackDefs(self, dbDict):
         defDict = {}
-        cloudName = 'sierra_openstack_grizzly'
+        cloudName = config.default_cloud
         defDict['cloud'] = cloudName
         cloudDict = config.cloud(cloudName)
         defDict['flavor'] = cloudDict['default']['flavor']
         defDict['image'] = cloudDict['default']['image']
-        keys = config.userkeys()
-        defKeyName = keys['default']
-        defKey = keys['keylist'][defKeyName]
-        defDict['keyname'] = defKeyName
-        defDict['prefix'] = defKeyName
+
+        defDict['keyname'] = dbDict['key']
+        defDict['prefix'] = dbDict['prefix']
+        defDict['index'] = dbDict['index']
         return defDict
 
     def hpDefs(self):
@@ -45,24 +43,29 @@ class cm_shell_defaults:
         return {}
 
 
-    def createDefaultDict(self, cmType):
+    def createDefaultDict(self):
         #image
         #flavor
         #keyname
         #nodename
         #number of nodes
 
-        if( cmType == 'openstack'):
-            defDict = self.openstackDefs()
-        if( cmType == 'hp'):
-            defDict = self.hpDefs()
-        if( cmType == 'azure'):
-            defDict = self.azureDefs()
-        if( cmType == 'aws'):
-            defDict = self.awsDefs()
-        if( cmType == 'ec2'):
-            defDict == self.awsDefs()
+        mongoClass = cm_mongo()
+        dbDict = mongoClass.db_defaults.find_one({'cm_user_id': config.username()})
 
+        defCloud = config.default_cloud
+        cmType = config.cloud(defCloud)['cm_type']
+
+        if( cmType == 'openstack' ):
+            defDict = self.openstackDefs(dbDict)
+        if( cmType == 'hp' ):
+            defDict = self.hpDefs(dbDict)
+        if( cmType == 'azure' ):
+            defDict = self.azureDefs(dbDict)
+        if( cmType == 'aws' ):
+            defDict = self.awsDefs(dbDict)
+        if( cmType == 'ec2' ):
+            defDict == self.awsDefs(dbDict)
         return defDict
         '''
 
@@ -78,7 +81,7 @@ class cm_shell_defaults:
         defDict['prefix'] = defKeyName
         return defDict
         '''
-
+    '''
     def activate_cm_shell_defaults(self):
         try:
             print "shell_Def"
@@ -89,7 +92,7 @@ class cm_shell_defaults:
             print e
             print "Please check if mongo service is running."
             sys.exit()
-
+    '''
     @command
     def do_defaults(self, args, arguments):
         """
@@ -127,7 +130,7 @@ class cm_shell_defaults:
 
 def main():
     def1 = cm_shell_defaults()
-    def1.createDefaultDict(None)
+    def1.createDefaultDict('openstack')
 
 if __name__ == "__main__":
     main()
