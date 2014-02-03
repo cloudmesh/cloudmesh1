@@ -154,12 +154,6 @@ class cm_shell_defaults:
 
         Manages the defaults
 
-        Arguments:
-
-          NAME           The name of a service or server
-          N              The number of defaultss to be started
-          CLOUD          The name of Cloud
-
         Options:
 
            -v --verbose                   Verbose mode

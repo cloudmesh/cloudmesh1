@@ -70,9 +70,8 @@ class cm_shell_vm:
     def do_vm(self, args, arguments):
         '''
         Usage:
-          vm reset [--index=<index>]
-          vm delete [[--count=<count>] | [--name=<NAME>]] [--cloud=<CloudName>]
           vm create [--count=<count>] [--cloud=<CloudName>]
+          vm delete [[--count=<count>] | [--name=<NAME>]] [--cloud=<CloudName>]
           vm cloud [--name=<NAME>]
           vm image [--name=<NAME>]
           vm flavor [--name=<NAME>]
@@ -91,17 +90,6 @@ class cm_shell_vm:
            -c <CloudName> --cloud=<CloudName>   Name of the Cloud
            -i <index> --index=<index>           Index for default VM Name
         '''
-
-        if arguments["reset"]:
-            if arguments['--index'] > 0:
-                indexToSet = arguments['--index']
-            else:
-                print 'Invalid index specified.'
-                return
-            dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
-            self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': indexToSet}},upsert=False, multi=False)
-            return
-
         if arguments["cloud"] and arguments["--name"]:
             log.info ("get the VM cloud")
             server = self.findVM(self.user, arguments["--name"])
