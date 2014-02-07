@@ -33,8 +33,9 @@ It is assumed that the machine has access to LDAP.
     fab build.install
     fab mongo.start
     fab mongo.cloud     
-    fab mq.start
-    fab queue.start:1
+    # fab mq.start
+    # fab queue.start:1
+    fab hpc.touch
     fab server.start
     
 Without access to LDAP
@@ -46,8 +47,9 @@ Without access to LDAP
     fab mongo.start
     fab mongo.simple
     fab user.mongo
-    fab mq.start
-    fab queue.start:1
+    # fab mq.start
+    # fab queue.start:1
+    fab hpc.touch
     fab server.start
 
 .. _s-instalation:
@@ -190,6 +192,23 @@ Quick deployment
 
 This quick deployment is targeted for ubuntu. It can be achieved in several easy steps.
 First, obtain a vanilla ubuntu system. Make sure that git is installed, which is standard by now.
+
+Note: that on osx we have to set the ldflags to get to the ttfonts
+
+
+
+OSX
+
+::
+
+  xcode-select --install
+
+  ??? does not work
+
+::
+
+  LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib 
+
 Next execute the following commands ::
 
     $ git clone git@github.com:cloudmesh/cloudmesh.git
@@ -655,3 +674,11 @@ open a new terminal
     $ fab build.install
 
     
+HPC services 
+
+   log into
+   alamo
+   india
+   sierra
+   foxtrot
+   hotel
