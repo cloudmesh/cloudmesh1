@@ -21,5 +21,6 @@ def html():
 @task
 def gh():
     """deploy the documentation on gh-pages"""
+    local("rm doc/source/modules/*")
     local("git checkout gh-pages")
     local("make pages")
