@@ -8,6 +8,134 @@ Cloud Mesh
 A project to interface easily with multiple clouds from the
 commandline and a command shell.
 
+Defaults
+----------------------------------------------------------------------
+
+::
+   
+   env
+
+::
+
+   default ...
+
+
+
+Register Clouds
+----------------------------------------------------------------------
+
+Before you can use a cloud you need to register it. Registration will
+allow you to log into the cloud and use its resources.
+
+Register an AWS account
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+::
+
+  cm register aws ...
+
+Example:
+
+- Amazon AWS account
+
+Register an azure account
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+  cm register azure ...
+
+Example:
+
+- Microsoft azure Cloud
+
+Register an Eucalyptus account
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+  cm register eucalyptus ...
+
+- FutureGrid india (Eucalyptus)
+
+Register an OpenStack account
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+  cm register openstack ...
+
+
+Examples:
+
+- FutureGrid sierra
+- FutureGrid india (Openstack)
+- HP Cloud
+
+
+Register an EC2 account
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+  cm register ec2 ...
+
+Examples:
+
+- FutureGrid alamo
+- FutureGrid hotel
+
+Activate Clouds
+----------------------------------------------------------------------
+
+::
+
+   cm activate <label>
+
+::
+
+   cm deactivate <label>
+
+
+:: 
+    cm activate <label> yes
+    cm activate <label> no
+
+::
+    cm activate <label> select
+
+Prints a little menu that allows you to select a number and activate
+the cloud from the menu
+
+Managing Projects
+----------------------------------------------------------------------
+
+
+Managing Users
+----------------------------------------------------------------------
+
+TBD
+
+Manageing Virtual Machines
+----------------------------------------------------------------------
+
+List images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Starting VMs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Manageing Security Groups
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Managing Volumes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Managing heat's for OpenStack
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(Jonathan)
+
+
 
 Commands
 ========
