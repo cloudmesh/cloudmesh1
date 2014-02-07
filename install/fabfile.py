@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from fabric.api import task, local
 import sys
 import platform
@@ -110,15 +111,20 @@ def centos():
     install()
 
 def osx():
+    local('brew install freetype')
+    local('brew install libpng')
     try:
         import numpy
-        local('pip install numpy')
+        print "numpy already installed"
     except:
-        pass
+        local('pip install numpy')
     try:
         import matplotlib
-        local('pip install matplotlib')
+        print "matplotlib already installed"
     except:
-        pass
+        local ('LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib')
+
+        # local('pip install matplotlib')
+    install_mongodb()
     install()
     
