@@ -16,6 +16,8 @@ Cloudmesh
 Introduction
 ==============
 
+
+
 .. toctree::
    :maxdepth: 2
 
@@ -54,6 +56,15 @@ TODO
    :maxdepth: 2
   
    cm-shell
+   cm-manage
+   coding
+   contact
+   deploy
+   doc
+   fg
+   futuregrid
+   support
+
 
 Plan
 ======
