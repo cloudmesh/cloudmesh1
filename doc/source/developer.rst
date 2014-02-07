@@ -44,7 +44,8 @@ Without access to LDAP
 
     fab build.install
     fab mongo.start
-    fab mongo.cloud     
+    fab mongo.simple
+    fab user.mongo
     fab mq.start
     fab queue.start:1
     fab server.start
