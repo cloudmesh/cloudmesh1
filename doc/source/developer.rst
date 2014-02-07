@@ -571,7 +571,7 @@ Making the documentation
 
 A simple way to creat ethe documentation is with::
 
-   make sphinx
+   fab doc.html
 
 
 However, some extensions may require additional packages for sphinx.
@@ -588,7 +588,9 @@ To view it just say::
 
     $ fab doc.view
 
+To publish to github::
 
+    $ fab doc.gh
    
 Example: Start the GUI for development
 --------------------
