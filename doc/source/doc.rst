@@ -1,6 +1,9 @@
 Documentation Management
 ======================================================================
 
+Before doing anything please set up and use virtualenv and pip. (see
+develoeprs Documentation). Make sure to activate your virtualenv.
+
 This document is maintained via sphinx and uploaded regularly to github
 
 * https://cloudmes.github.com/cloudmesh/
@@ -9,23 +12,12 @@ You can check it out the code and the documentation with::
 
   git clone git@github.com:cloudmesh/cloudmesh.git
 
-Once you make changes to the documentation you can say::
+A number of packages need to be installed on your machine. YOu can do
+this with 
 
-   fab doc.html
-
-The pages will be locally available to you under::
-
-  doc/build/html/index.html 
-
-The pages will be regularly uploaded to github by Gregor von Laszewski. Make sure that the documentation do not contain any compile errors. Once that is done the pages can be uploaded.   
-with the command::   
-
-   fab doc.gh
-
-Please note that the fab doc.gh should only be executed by
-Gregor von Laszewski (laszewski@gmail.com). Please notify him when you think that your documentation
-contribution justifies an update.
-
+    $ cd cloudmesh
+    $ fab -f install/fabfile.py deploy
+    $ fab build.install
 
 Installation Requirements for the Documentation Generation
 ---------------------------
@@ -46,6 +38,28 @@ install it before hand::
     pip install -r requirements.txt
 
 If anything is missing, please let us know so we can update this documentation.
+
+Creating the Documentation
+----------------------------------------------------------------------
+
+Once you make changes to the documentation you can say::
+
+   fab doc.html
+
+The pages will be locally available to you under::
+
+  doc/build/html/index.html 
+
+The pages will be regularly uploaded to github by Gregor von Laszewski. Make sure that the documentation do not contain any compile errors. Once that is done the pages can be uploaded.   
+with the command::   
+
+   fab doc.gh
+
+Please note that the fab doc.gh should only be executed by
+Gregor von Laszewski (laszewski@gmail.com). Please notify him when you think that your documentation
+contribution justifies an update.
+
+
 
 Document Generation
 --------------------
@@ -76,14 +90,14 @@ Creating the documentation locally
 The documentation to this project is kept in doc/sources. You will
 find there a number of rst files. You can add new files, but must make
 sure that they are listed in the index.rst page. To create the
-documentation in your local directory, do::
+documentation in your local directory you can do this from the main
+cloudmesh directory with::
 
-   cd doc
-   make html
+   fab doc.html
 
 Than open a browser on the file build/html/index.html. In OSX this can be done with::
   
-    open build/html/index.html
+    open doc/build/html/index.html
     
 On a Linux machien you may want to substitute the open call with firefox or another browser. 
 To create a single html page you can say ::
@@ -118,7 +132,7 @@ the root directory of the project and say::
 
 This will create a clean dir. Third, execute the command::
 
-    make gh-pages
+    fab doc.gh
 
 ..
 

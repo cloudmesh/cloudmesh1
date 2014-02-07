@@ -196,7 +196,6 @@ First, obtain a vanilla ubuntu system. Make sure that git is installed, which is
 Note: that on osx we have to set the ldflags to get to the ttfonts
 
 
-
 OSX
 
 ::
@@ -563,9 +562,6 @@ probably good at deployment. I am not sure about default
 values. 
 
 
-
-
-
 Making the documentation
 ====================
 
@@ -678,9 +674,14 @@ open a new terminal
     
 HPC services 
 
-   log into
+::
+   fab hpc.touch
+
+   logs into
    alamo
    india
    sierra
    foxtrot
    hotel
+
+   is neede fo the hpc commands
