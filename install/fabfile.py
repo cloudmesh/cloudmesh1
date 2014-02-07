@@ -48,6 +48,7 @@ def download():
 
 @task
 def install():
+    sphinx_updates()
     local("pip install -r requirements.txt")
     local("python setup.py install")
 
@@ -111,6 +112,8 @@ def centos():
     install()
 
 def osx():
+    local('brew install wget')
+    local('brew install mercurial')
     local('brew install freetype')
     local('brew install libpng')
     try:
@@ -128,3 +131,10 @@ def osx():
     install_mongodb()
     install()
     
+
+def sphinx_updates():
+    local('rm -rf /tmp/install-cloudmesh')
+    local('mkdir -p /tmp/install-cloudmesh')
+    local('cd /tmp/install-cloudmesh; hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/')
+    local('~/ENV/bicd /tmp/install-cloudmesh/sphinx-contrib/autorun; python setup.py install')
+
