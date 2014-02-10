@@ -13,21 +13,18 @@ Cloudmesh
 #################
 
 
-Introduction
+I. Introduction
 ==============
 
-
-
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    about 
    contact 
-   support
    tasks
    coding
 
-Generating the Documentation
+II. Generating the Documentation
 =============================
 
 .. toctree::
@@ -35,7 +32,7 @@ Generating the Documentation
 
    doc
 	  
-Developers Documentation
+II. Developers Documentation
 ====================
 
 .. toctree::
@@ -44,14 +41,14 @@ Developers Documentation
    developer
    celery   
 
-Execution
+III. Execution
 ========
 .. toctree::
    :maxdepth: 2
   
    nosetest
 
-Configuration
+IV. Configuration
 ================
 .. toctree::
    :maxdepth: -1
