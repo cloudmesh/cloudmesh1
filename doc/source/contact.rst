@@ -1,11 +1,19 @@
+.. sectnum::
+   :start: 2
+
+
+.. sidebar:: 
+   . 
+
+  .. contents:: Table of Contents
+     :depth: 5
+
+..
+
 Contact
 =======
 
-For more info please contact
-
-    Gregor von Laszewski
-
-    laszewski@gmail.com
+For more info please contact Gregor von Laszewski, laszewski@gmail.com
 
 Contributors
 -------------
@@ -32,16 +40,19 @@ Repository
 
 Important repositories are located at 
 
-* https://github.com/futuregrid/flask_cm
+* https://github.com/cloudmesh
 
   * `Issues`_
   * `Milestones`_
   * `Code`_
 
-* https://github.com/futuregrid/cm
 
+.. _Issues: https://github.com/cloudmesh/cloudmesh/issues?sort=updated&state=open
+.. _Milestones: https://github.com/cloudmesh/cloudmesh/issues/milestones
+.. _Code: https://github.com/cloudmesh/cloudmesh
 
+Support
+----------------------------------------------------------------------
 
-.. _Issues: https://github.com/futuregrid/flask_cm/issues?sort=updated&state=open
-.. _Milestones: https://github.com/futuregrid/flask_cm/issues/milestones
-.. _Code: https://github.com/futuregrid/flask_cm
+If you run into problems when using the  framework, please use our 
+help form at `https://portal.futuregrid.org/help <https://portal.futuregrid.org/help>`_.
