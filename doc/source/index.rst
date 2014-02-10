@@ -21,9 +21,20 @@ Introduction
 .. toctree::
    :maxdepth: 2
 
-   about  
+   about 
+   contact 
+   support
    tasks
+   coding
 
+Generating the Documentation
+=============================
+
+.. toctree::
+   :maxdepth: 2
+
+   doc
+	  
 Developers Documentation
 ====================
 
@@ -57,13 +68,10 @@ TODO
   
    cm-shell
    cm-manage
-   coding
-   contact
    deploy
-   doc
    fg
    futuregrid
-   support
+
 
 
 Plan
