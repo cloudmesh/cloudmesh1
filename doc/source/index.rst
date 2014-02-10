@@ -20,9 +20,11 @@ I. Introduction
    :maxdepth: 1
 
    about 
+   bib
    contact 
    tasks
    coding
+
 
 II. Generating the Documentation
 =============================
