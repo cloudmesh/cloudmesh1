@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {        	
+		{% for attribute in data%}
+        var data = google.visualization.arrayToDataTable({{data[attribute]|safe}});
+
+        var options = { title: {{attribute|safe}} };
+
+        var chart = new google.visualization.PieChart(document.getElementById({{attribute|safe}}));
+        chart.draw(data, options);
+        {% endfor %}
+      }
+    </script>
+  </head>
+  <body>
+    
+  	<div>
+    {% for attribute in data %}
+     
+        <span id={{attribute|safe}} style="width: 300px;display:inline-block;"></span>
+
+     {% endfor %}
+  </div>
+	<form action = 'http://127.0.0.1:5555/pie_chart_fg380/{{cloud}}/'>
+		<input type=submit value = 'Reload'/>
+	</form>
+  </body>
+</html>
