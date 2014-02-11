@@ -61,7 +61,8 @@ all_modules = ['menu',
                'users',
                'status',
                # 'register',
-               'metric'
+               'metric',
+               'pie_chart_fg380'
                 ]
 
 s_config = cm_config_server()
