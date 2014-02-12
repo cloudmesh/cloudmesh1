@@ -23,65 +23,61 @@ mongoClass = cm_mongo()
 
 class cm_shell_defaults:
 
-    dictionary = None
-    dbDict = None
-
-    def openstackDefs(self):
+    def openstackDefs(self, dbDict):
         defDict = {}
         cloudName = config.default_cloud
         defDict['cloud'] = cloudName
         cloudDict = config.cloud(cloudName)
 
         #check the flavor
-        if 'flavors' in self.dbDict:
-            if cloudName in self.dbDict['flavors'] and self.dbDict['flavors'][cloudName]:
-                defDict['flavors'] = self.dbDict['flavors'][cloudName]
+        if 'flavors' in dbDict:
+            if cloudName in dbDict['flavors'] and dbDict['flavors'][cloudName]:
+                defDict['flavors'] = dbDict['flavors'][cloudName]
             else:
                 print 'saving default flavor to Mongo.'
                 defDict['flavor'] = cloudDict['default']['flavor']
-                flavors = self.dbDict['flavors']
+                flavors = dbDict['flavors']
                 flavors[cloudName] = cloudDict['default']['flavor']
-                mongoClass.db_defaults.update({'_id': self.dbDict['_id']}, {'$set':{'flavors': flavors}},upsert=False, multi=False)
+                mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'flavors': flavors}},upsert=False, multi=False)
         else:
             print 'Creating and saving default flavor to Mongo.'
             flavors = {}
             flavors[cloudName] = cloudDict['default']['flavor']
-            mongoClass.db_defaults.update({'_id': self.dbDict['_id']}, {'$set':{'flavors': flavors}},upsert=False, multi=False)
+            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'flavors': flavors}},upsert=False, multi=False)
 
         #check the image
-        if 'images' in self.dbDict:
-            if cloudName in self.dbDict['images'] and self.dbDict['images'][cloudName]:
-                defDict['image'] = self.dbDict['images'][cloudName]
+        if 'images' in dbDict:
+            if cloudName in dbDict and dbDict['images'][cloudName]:
+                defDict['image'] = dbDict['images'][cloudName]
             else:
                 print 'saving default image to Mongo.'
                 defDict['image'] = cloudDict['default']['image']
-                images = self.dbDict['images']
+                images = dbDict['images']
                 images[cloudName] = cloudDict['default']['image']
-                mongoClass.db_defaults.update({'_id': self.dbDict['_id']}, {'$set':{'images': images}},upsert=False, multi=False)
+                mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'images': images}},upsert=False, multi=False)
         else:
             print 'Creating and saving default image to Mongo.'
             images = {}
             images[cloudName] = cloudDict['default']['image']
-            mongoClass.db_defaults.update({'_id': self.dbDict['_id']}, {'$set':{'images': images}},upsert=False, multi=False)
+            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'images': images}},upsert=False, multi=False)
 
-        if self.dbDict['key']:
-            defDict['keyname'] = self.dbDict['key']
+        if dbDict['key']:
+            defDict['keyname'] = dbDict['key']
         else:
             defDict['keyname'] = config.userkeys()['default']
-            mongoClass.db_defaults.update({'_id': self.dbDict['_id']}, {'$set':{'key': defDict['keyname']}},upsert=False, multi=False)
+            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'key': defDict['keyname']}},upsert=False, multi=False)
 
-        if self.dbDict['prefix']:
-            defDict['prefix'] = self.dbDict['prefix']
+        if dbDict['prefix']:
+            defDict['prefix'] = dbDict['prefix']
         else:
             defDict['prefix'] = config.username()
-            mongoClass.db_defaults.update({'_id': self.dbDict['_id']}, {'$set':{'prefix': defDict['prefix']}},upsert=False, multi=False)
+            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'prefix': defDict['prefix']}},upsert=False, multi=False)
 
-        if self.dbDict['index']:
-            defDict['index'] = self.dbDict['index']
+        if dbDict['index']:
+            defDict['index'] = dbDict['index']
         else:
             defDict['index'] = 1
-            mongoClass.db_defaults.update({'_id': self.dbDict['_id']}, {'$set':{'index': 1}},upsert=False, multi=False)
-        self.dictionary = defDict
+            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': 1}},upsert=False, multi=False)
         return defDict
 
     # gvl: this is the wrong approach
@@ -94,30 +90,28 @@ class cm_shell_defaults:
         return {}
 
 
-    def createDefaultDict(self, cloudName=None):
+    def createDefaultDict(self):
         #image
         #flavor
         #keyname
         #nodename
         #number of nodes
 
-        self.dbDict = mongoClass.db_defaults.find_one({'cm_user_id': config.username()})
-        if cloudName == None:
-            defCloud = config.default_cloud
-            cmType = config.cloud(defCloud)['cm_type']
-        else:
-            cmType = config.cloud(cloudName)['cm_type']
+        dbDict = mongoClass.db_defaults.find_one({'cm_user_id': config.username()})
+
+        defCloud = config.default_cloud
+        cmType = config.cloud(defCloud)['cm_type']
 
         if( cmType == 'openstack' ):
-            defDict = self.openstackDefs()
+            defDict = self.openstackDefs(dbDict)
         if( cmType == 'hp' ):
-            defDict = self.hpDefs()
+            defDict = self.hpDefs(dbDict)
         if( cmType == 'azure' ):
-            defDict = self.azureDefs()
+            defDict = self.azureDefs(dbDict)
         if( cmType == 'aws' ):
-            defDict = self.awsDefs()
+            defDict = self.awsDefs(dbDict)
         if( cmType == 'ec2' ):
-            defDict == self.awsDefs()
+            defDict == self.awsDefs(dbDict)
         return defDict
         '''
 
@@ -149,49 +143,40 @@ class cm_shell_defaults:
     def do_defaults(self, args, arguments):
         """
         Usage:
-               defaults set [--prefix=<prefix> | --index=<index>]
-               defaults list [--verbose | --json] [--cloud=<cloud>]
+               defaults [-v] clean
+               defaults [-v] load [CLOUD]
+               defaults [options] info
+               defaults list [options] [CLOUD]
 
         Manages the defaults
 
+        Arguments:
+
+          NAME           The name of a service or server
+          N              The number of defaultss to be started
+          CLOUD          The name of Cloud
+
         Options:
 
-           -v --verbose                   Verbose mode
-           -j --json                      Json output
-           -p <prefix> --prefix=<prefix>  Prefix to be set for batch VM creation
-           -i <index> --index=<index>     Index to be set for batch VM creation
-           -c <cloud> --cloud=<cloud>     Name of the cloud
+           -v             verbose mode
+           -j --json      json output
 
         """
 
-        if arguments["list"]:
-            if arguments["--cloud"]:
-                pprint(self.createDefaultDict(arguments["--cloud"]))
-            else:
-                defCloud = config.default_cloud
-                pprint(self.createDefaultDict(config.default_cloud))
+        print arguments
+
+        if arguments["clean"]:
+            log.info ("clean the vm")
+            print arguments['-v']
             return
 
-        if arguments["set"]:
-            try:
-                if arguments['--index']:
-                    if arguments['--index'] > 0:
-                        indexToSet = arguments['--index']
-                    else:
-                        print 'Invalid index specified.'
-                        return
-                    self.mongoClass.db_defaults.update({'_id': self.dbDict['_id']}, {'$set':{'index': indexToSet}},upsert=False, multi=False)
-                    return
-                if arguments['--prefix']:
-                    self.mongoClass.db_defaults.update({'_id': self.dbDict['_id']}, {'$set':{'index': indexToSet}},upsert=False, multi=False)
-                    return
-            except:
-                print "Unexpected error: ", sys.exc_info()[0]
+        if arguments["load"]:
+            self.createDefaultDict(arguments["CLOUD"])
+            return
 
 def main():
     def1 = cm_shell_defaults()
-    def1.createDefaultDict()
+    def1.createDefaultDict('openstack')
 
 if __name__ == "__main__":
     main()
-
