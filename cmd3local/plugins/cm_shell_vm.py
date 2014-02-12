@@ -9,7 +9,6 @@ import cmd
 import docopt
 import yaml
 import subprocess
-import readline
 from bson.json_util import dumps
 from cmd3.shell import command
 from cloudmesh.user.cm_user import cm_user
@@ -25,20 +24,17 @@ log = LOGGER(__file__)
 class cm_shell_vm:
     """opt_example class"""
 
-
-    amd = "awesome"
-
     def activate_cm_shell_vm(self):
         try:
             self.config = cm_config()
             self.user = self.config.username()
             self.mongoClass = cm_mongo()
+            print "activating!!"
             self.mongoClass.activate(cm_user_id=self.user)
             defaults = cm_shell_defaults()
             self.defDict = defaults.createDefaultDict()
-        except Exception, e:
-            print e
-            print 'Unexpected error: ', sys.exc_info()[0], sys.exc_info()[1]
+        except Exception:
+            print 'Unexpected error at cmd VM: ', sys.exc_info()[0], sys.exc_info()[1]
             sys.exit()
 
     def findVM(self, user, server):
@@ -71,35 +67,11 @@ class cm_shell_vm:
                 print "Error deleting the VM."
                 return -1
 
-    vmCmd = [ 'create', 'delete', 'info', 'list', 'cloud', 'image', 'flavor', 'index']
-
-    def complete_vm(self, text, line, start_index, end_index):
-        if text:
-            return [
-                arg for arg in vmCmd
-                if arg.startswith(text)
-            ]
-        else:
-            return vmCmd
-        '''
-        if not text:
-            completions = self.vmCmd[:]
-        else:
-            completions = [ f
-                            for f in self.vmCmd
-                            if f.startswith(text)
-                            ]
-        return completions
-        '''
-    readline.set_completer(complete_vm)
-    readline.parse_and_bind("tab: complete")
-
-
     @command
     def do_vm(self, args, arguments):
         '''
         Usage:
-          vm create [--count=<count>] [--image=<imgName>] [--cloud=<CloudName>]
+          vm create [--count=<count>] [--image=<imgName>] [--flavor=<FlavorId>] [--cloud=<CloudName>]
           vm delete [[--count=<count>] | [--name=<NAME>]] [--cloud=<CloudName>]
           vm cloud [--name=<NAME>]
           vm image [--name=<NAME>]
@@ -119,6 +91,7 @@ class cm_shell_vm:
            -c <CloudName> --cloud=<CloudName>   Name of the Cloud
            -i <index> --index=<index>           Index for default VM Name
            -img <imgName> --image=<imgName>     Name of the image for VM
+           -f <FlavorId> --flavor=<FlavorId>    Flavor Id for VM
         '''
         if arguments["cloud"] and arguments["--name"]:
             log.info ("get the VM cloud")
@@ -209,7 +182,6 @@ class cm_shell_vm:
                         print 'Unexpected error: ', sys.exc_info()[0]
             return
 
-
         if arguments["create"]:
             cloudName = self.defDict['cloud']
             dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
@@ -219,11 +191,12 @@ class cm_shell_vm:
                 numberOfVMs = int(arguments['--count'])
             else:
                 numberOfVMs = 1
-
+            imgId = None
+            images = None
             if arguments['--image']:
                 imgName = arguments['--image']
+                self.mongoClass.refresh(self.user, types=["images"])
                 images = self.mongoClass.images(cm_user_id=self.user)
-                imgId = None
                 if defCloud in images:
                     cloudImages = images[defCloud]
                     for key, value in cloudImages.iteritems():
@@ -233,17 +206,39 @@ class cm_shell_vm:
                 else:
                     print "The default cloud does not have images!"
                     imgId = 'NotNull'
-            if imgId == None:
-                print "\nImage not found for this cloud. Please choose one of the following!\n"
-                for key, value in images[defCloud].items():
-                    print value['name']
-                return
+                if imgId == None:
+                    print "\nImage not found for this cloud. Please choose one of the following!\n"
+                    for key, value in images[defCloud].items():
+                        print value['name']
+                    return
+
+            flavorId = None
+            if arguments['--flavor']:
+                flavor = arguments['--flavor']
+                self.mongoClass.refresh(self.user, types=["flavors"])
+                flavors = self.mongoClass.flavors(cm_user_id=self.user)
+                if defCloud in flavors:
+                    cloudFlavors = flavors[defCloud]
+                    if flavor in cloudFlavors:
+                        flavorId = flavor
+                    else:
+                        print "\nFlavor not found for this cloud. Please choose one id from the following!\n"
+                        x
+                        for key, value in flavors[defCloud].items():
+                            print key, value['name']
+                        return
+                else:
+                    print "The default  cloud does not have images!"
+                    flavId = "NotNull"
             try:
                 for i in range(numberOfVMs):
-                    if arguments['--image']:
-                        result = self.mongoClass.vm_create(cloudName, self.defDict['prefix'], dbIndex, 1, imgId, self.defDict['keyname'], None, self.user)
-                    else:
-                        result = self.mongoClass.vm_create(cloudName, self.defDict['prefix'], dbIndex, 1, self.defDict['image'], self.defDict['keyname'], None, self.user)
+
+                    if imgId == None: #implies default image to be used.
+                        imgId = self.defDict['image']
+                    if flavorId == None: #implies default flavor to be used.
+                        flavorId = 1
+
+                    result = self.mongoClass.vm_create(cloudName, self.defDict['prefix'], dbIndex, flavorId, imgId, self.defDict['keyname'], None, self.user)
 
                     self.mongoClass.refresh(names=[cloudName], types=["servers"], cm_user_id=self.user)
 
@@ -266,8 +261,6 @@ class cm_shell_vm:
             return
 
         if arguments["delete"]:
-            #ToDo -- deletes the first vm for multiple vms with same name
-            #change this behavior
             try:
                 dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
                 nextIndex = int(dbDict['index'])
@@ -327,8 +320,8 @@ class cm_shell_vm:
                 else:
                     print "No Cloud registered."
                     return
-            except KeyError:
-                print 'Incorrect cloud name.'
+            except Exception:
+                print 'Unexpected error getting the list of VMs: ', sys.exc_info()[1]
                 return
             try:
 
@@ -351,7 +344,7 @@ class cm_shell_vm:
                         tableRowList = []
 
                         for parameter in parameterList:
-                            if parameter == "addresses":
+                            if parameter == "addresses" and 'private' in vm[parameter]:
                                 addresses = (vm[parameter]['private'])
                                 addrList = []
                                 for address in addresses:
@@ -360,7 +353,7 @@ class cm_shell_vm:
                             else:
                                 tableRowList.append(vm[parameter])
 
-                        x.add_row(tableRowList)
+                        x.add_row(tableRowList) #toDo, send it to 'if !jsonReqd'
                         if(jsonReqd):
                             insDict = {}
                             insDict[vm['name']]  = tableRowList
