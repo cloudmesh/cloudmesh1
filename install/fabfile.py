@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from fabric.api import task, local
 import sys
 import platform
@@ -47,6 +48,7 @@ def download():
 
 @task
 def install():
+    sphinx_updates()
     local("pip install -r requirements.txt")
     local("python setup.py install")
 
@@ -110,15 +112,29 @@ def centos():
     install()
 
 def osx():
+    local('brew install wget')
+    local('brew install mercurial')
+    local('brew install freetype')
+    local('brew install libpng')
     try:
         import numpy
-        local('pip install numpy')
+        print "numpy already installed"
     except:
-        pass
+        local('pip install numpy')
     try:
         import matplotlib
-        local('pip install matplotlib')
+        print "matplotlib already installed"
     except:
-        pass
+        local ('LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib')
+
+        # local('pip install matplotlib')
+    install_mongodb()
     install()
     
+
+def sphinx_updates():
+    local('rm -rf /tmp/install-cloudmesh')
+    local('mkdir -p /tmp/install-cloudmesh')
+    local('cd /tmp/install-cloudmesh; hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/')
+    local('~/ENV/bicd /tmp/install-cloudmesh/sphinx-contrib/autorun; python setup.py install')
+

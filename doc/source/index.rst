@@ -13,16 +13,28 @@ Cloudmesh
 #################
 
 
-Introduction
+I. Introduction
 ==============
+
+.. toctree::
+   :maxdepth: 1
+
+   about 
+   bib
+   contact 
+   tasks
+   coding
+
+
+II. Generating the Documentation
+=============================
 
 .. toctree::
    :maxdepth: 2
 
-   about  
-   tasks
-
-Developers Documentation
+   doc
+	  
+II. Developers Documentation
 ====================
 
 .. toctree::
@@ -31,14 +43,14 @@ Developers Documentation
    developer
    celery   
 
-Execution
+III. Execution
 ========
 .. toctree::
    :maxdepth: 2
   
    nosetest
 
-Configuration
+IV. Configuration
 ================
 .. toctree::
    :maxdepth: -1
@@ -54,6 +66,12 @@ TODO
    :maxdepth: 2
   
    cm-shell
+   cm-manage
+   deploy
+   fg
+   futuregrid
+
+
 
 Plan
 ======

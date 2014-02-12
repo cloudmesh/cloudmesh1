@@ -1,3 +1,15 @@
+.. sectnum::
+   :start: 5
+
+
+.. sidebar:: 
+   . 
+
+  .. contents:: Table of Contents
+     :depth: 5
+
+..
+
 Cloudmesh Style Guide
 =======================
 
@@ -7,9 +19,12 @@ https://raw.github.com/openstack/nova/master/HACKING.rst
 Information
 ------------
 
-- Step 1: Read http://www.python.org/dev/peps/pep-0008/
-- Step 2: Read http://www.python.org/dev/peps/pep-0008/ again
-- Step 3: Read on
+Our codeing style uses as much as possiple the pep-0008 format as
+documented in 
+
+* http://www.python.org/dev/peps/pep-0008/
+
+Please read that document carefully. Please also read the following sections
 
 
 General
@@ -63,26 +78,6 @@ Imports
 - Do not make new nova.db imports in nova/virt/*
 - Order your imports by the full module path
 - Organize your imports according to the following template
-
-(*) exceptions are:
-
-- imports from ``migrate`` package
-- imports from ``sqlalchemy`` package
-- imports from ``nova.db.sqlalchemy.session`` module
-- imports from ``nova.db.sqlalchemy.migration.versioning_api`` package
-
-Example::
-
-  # vim: tabstop=4 shiftwidth=4 softtabstop=4
-  {{stdlib imports in human alphabetical order}}
-  \n
-  {{third-party lib imports in human alphabetical order}}
-  \n
-  {{nova imports in human alphabetical order}}
-  \n
-  \n
-  {{begin your code}}
-
 
 Human Alphabetical Order Examples
 ---------------------------------
@@ -192,30 +187,8 @@ Rather than constructing parameters inline, it is better to break things up::
 
 Internationalization (i18n) Strings
 -----------------------------------
-In order to support multiple languages, we have a mechanism to support
-automatic translations of exception and log strings.
 
-Example::
-
-    msg = _("An error occurred")
-    raise HTTPBadRequest(explanation=msg)
-
-If you have a variable to place within the string, first internationalize the
-template string then do the replacement.
-
-Example::
-
-    msg = _("Missing parameter: %s") % ("flavor",)
-    LOG.error(msg)
-
-If you have multiple variables to place in the string, use keyword parameters.
-This helps our translators reorder parameters when needed.
-
-Example::
-
-    msg = _("The server with id %(s_id)s has no key %(m_key)s")
-    LOG.error(msg % {"s_id": "1234", "m_key": "imageId"})
-
+At this time we have not worried much about internationalization.
 
 Python 3.x compatibility
 ------------------------
@@ -238,94 +211,85 @@ at the top of your module.
 
 Creating Unit Tests
 -------------------
-For every new feature, unit tests should be created that both test and
-(implicitly) document the usage of said feature. If submitting a patch for a
-bug that had no unit test, a new passing unit test should be added. If a
-submitted bug fix does have a unit test, be sure to add a new one that fails
-without the patch and passes with the patch.
 
-For more information on creating unit tests and utilizing the testing
-infrastructure in  Cloudmesh, please read nova/tests/README.rst.
+For every new feature, unit tests should be created that both test and
+(implicitly) document the usage of said feature. If submitting a patch
+for a bug that had no unit test, a new passing unit test should be
+added. If a submitted bug fix does have a unit test, be sure to add a
+new one that fails without the patch and passes with the patch.
+
+We are using nosetest for our unit test environment.
 
 
 Running Tests
 -------------
-The testing system is based on a combination of tox and testr. The canonical
-approach to running tests is to simply run the command `tox`. This will
-create virtual environments, populate them with depenedencies and run all of
-the tests that  CI systems run. Behind the scenes, tox is running
-`testr run --parallel`, but is set up such that you can supply any additional
-testr arguments that are needed to tox. For example, you can run:
-`tox -- --analyze-isolation` to cause tox to tell testr to add
---analyze-isolation to its argument list.
 
-It is also possible to run the tests inside of a virtual environment
-you have created, or it is possible that you have all of the dependencies
-installed locally already. In this case, you can interact with the testr
-command directly. Running `testr run` will run the entire test suite. `testr
-run --parallel` will run it in parallel (this is the default incantation tox
-uses.) More information about testr can be found at:
-http://wiki.openstack.org/testr
+We have build an easy to use test environment. To list the available
+tests, please issue::
 
-Building Docs
--------------
-Normal Sphinx docs can be built via the setuptools `build_sphinx` command. To
-do this via `tox`, simply run `tox -evenv -- python setup.py build_sphinx`,
-which will cause a virtualenv with all of the needed dependencies to be
-created and then inside of the virtualenv, the docs will be created and
-put into doc/build/html.
+  fab test.info
 
-If you'd like a PDF of the documentation, you'll need LaTeX installed, and
-additionally some fonts. On Ubuntu systems, you can get what you need with::
+it will list a number of available test classes. To further drill
+down, please use one of the classes and issue the command (in our case
+we use "keys")::
 
-    apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+  fab test.info:keys
 
-Then run `build_sphinx_latex`, change to the build dir and run `make`.
-Like so::
+This will list you individual tests::
 
-    tox -evenv -- python setup.py build_sphinx_latex
-    cd build/sphinx/latex
-    make
+  test00_file
+  test01_print
+  test02_names
+  test03_default
+  test04_getvalue
+  test05_set
+  test06_get
+  test07_get
+  test08_set
+  test09_type
+  test10_fingerprint
 
-You should wind up with a PDF - Cloudmesh.pdf.
+You can execute them while specifying them to the start command by
+giving a unique substring for that test. Thus::
 
-oslo-incubator
-----------------
+  fab test.start:keys,file
 
-A number of modules from oslo-incubator are imported into the project.
+or::
 
-These modules are "incubating" in oslo-incubator and are kept in sync
-with the help of oslo's update.py script. See:
+  fab test.start:keys,00
 
-  https://wiki.openstack.org/wiki/Oslo#Incubation
+would both execute the test in keys with the name
 
-The copy of the code should never be directly modified here. Please
-always update oslo-incubator first and then run the script to copy
-the changes across.
+  test00_file 
 
+Please not that not all tests are designed to pass as of yet. They are
+also used for debugging the deployment environments.
 
+ 
+   
 Commit Messages
 ---------------
-Using a common format for commit messages will help keep our git history
-readable. Follow these guidelines:
 
-  First, provide a brief summary of 50 characters or less.  Summaries
+Using a common format for commit messages will help keep our git
+history readable. Follow these guidelines:
+
+* First, provide a brief summary of 50 characters or less.  Summaries
   of greater then 72 characters will be rejected by the gate.
 
-  The first line of the commit message should provide an accurate
+* The first line of the commit message should provide an accurate
   description of the change, not just a reference to a bug or
   blueprint. It must be followed by a single blank line.
 
-  If the change relates to a specific driver (libvirt, xenapi, qpid, etc...),
+* If the change relates to a specific driver (libvirt, xenapi, qpid, etc...),
   begin the first line of the commit message with the driver name, lowercased,
   followed by a colon.
 
-  Following your brief summary, provide a more detailed description of
+* Following your brief summary, provide a more detailed description of
   the patch, manually wrapping the text at 72 characters. This
   description should provide enough detail that one does not have to
   refer to external resources to determine its high-level functionality.
 
-  Once you use 'git review', two lines will be appended to the commit
+* Once you use 'git review', two lines will be appended to the commit
   message: a blank line followed by a 'Change-Id'. This is important
   to correlate this commit with a specific review in Gerrit, and it
   should not be modified.

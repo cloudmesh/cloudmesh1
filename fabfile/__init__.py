@@ -14,3 +14,4 @@ import iptable
 import tunnel
 import user
 import mooc
+import hpc

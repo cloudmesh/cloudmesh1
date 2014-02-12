@@ -1,22 +1,104 @@
-Adding to the Documentation
-------------------------
+.. sectnum::
+   :start: 6
 
-Creating the documentation locally
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The documentation to this project is kept in doc/sources. You will
-find there a number of rst files. You can add new files, but must make
-sure that they are listed in the index.rst page. To create the
-documentation in your local directory, do::
+.. sidebar:: 
+   . 
 
-   cd doc
-   make html
+  .. contents:: Table of Contents
+     :depth: 5
 
-Than open a browser on the file build/html/index.html. In OSX this can be done with::
-  
-    open build/html/index.html
-    
-On a Linux machien you may want to substitute the open call with firefox or another browser. 
+..
+
+Documentation Management
+======================================================================
+
+Before doing anything please set up and use virtualenv and pip. (see
+developers documentation). Make sure to activate your virtualenv.
+
+This document is maintained via sphinx and uploaded regularly to github
+
+* https://cloudmesh.github.com/cloudmesh/
+
+You can check it out the code and the documentation with::
+
+  git clone git@github.com:cloudmesh/cloudmesh.git
+
+A number of packages need to be installed on your machine. You can do
+this with 
+
+    $ cd cloudmesh
+    $ fab -f install/fabfile.py deploy
+    $ fab build.install
+
+(Deprecated) Requirements for the Documentation
+----------------------------------------------------------------------
+
+.. warning:: This stap has been deprecated and is part of the previous
+   setup step.
+
+We assume you have autodoc installed for sphinx (see previously) it is
+not in the requirements file, as I could not find it in pypi. Hence we
+install it before hand::
+
+    mkdir /tmp/install-cloudmesh
+    hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
+    cd sphinx-contrib/autorun
+    python setup.py install
+
+    cd /tmp/install-cloudmesh
+
+    git@github.com:cloudmesh/cloudmesh.git
+    cd cloudmesh
+    pip install -r requirements.txt
+
+If anything is missing, please let us know so we can update this documentation.
+
+Creating the Documentation
+----------------------------------------------------------------------
+
+The documentation to this project is kept in doc/sources in RST
+format. Information about rst and sphinx can be found at 
+
+* http://sphinx-doc.org/rest.html
+* http://sphinx-doc.org/markup/index.html#sphinxmarkup
+
+You will find there a number of rst files. You can add new files, but
+must make sure that they are listed in the index.rst page. To create
+the documentation in your local directory you can do this from the
+main cloudmesh directory with::
+
+   fab doc.html
+
+The pages will be locally available to you under::
+
+  doc/build/html/index.html 
+
+To view the documentation you can also say::
+
+  fab doc.view
+
+The pages will be regularly uploaded to github by Gregor von Laszewski. Make sure that the documentation do not contain any compile errors. Once that is done the pages can be uploaded.   
+with the command::   
+
+   fab doc.gh
+
+.. warning:: Please note that the fab doc.gh should only be executed by
+Gregor von Laszewski (laszewski@gmail.com). Please notify him when you
+think that your documentation contribution justifies an update. This
+step will publish the page to gh-pages at
+
+* http://cloudmesh.github.io/cloudmesh/
+
+Sometimes it is necessary to clean the documentation and code before you build
+it. This is achieved with:: 
+
+    fab clean
+
+
+Creating the documentation in a single page
+----------------------------------------------------------------------
+
 To create a single html page you can say ::
 
    cd doc
@@ -25,46 +107,3 @@ To create a single html page you can say ::
 
 ..
 
-RST Documentation
-^^^^^^^^^^^^^^^^^^^^^
-
-Information about rst and sphinx can be found at 
-
-* http://sphinx-doc.org/rest.html
-* http://sphinx-doc.org/markup/index.html#sphinxmarkup
-
-gh-pages
-^^^^^^^^
-
-.. warning:: This step is only to be executed by Gregor von Laszewski
-
-The document can be published into gh-pages as follows. Firts make
-sure you have everything committed. Second, go into
-the root directory of the project and say::
-
-    fab clean
-
-..
-
-
-This will create a clean dir. Third, execute the command::
-
-    make gh-pages
-
-..
-
-
-This will go into the barnch gh-pages, checkout the content under /tmp
-and recreate the documentation. Than it will check it back into the
-branch and do a git push. If everything is normal (no errors occur)
-you wil see the new documentation. 
-
-Published Documentation
-^^^^^^^^^^^^^^^^^^^^
-
-The final documentation will be located at
-
-* http://cloudmesh.github.com/cloudmesh
-
-If you find something missing communicate with Gregor von Laszewski (laszewski@gmail.com) so
-he updates the gh-pages.
