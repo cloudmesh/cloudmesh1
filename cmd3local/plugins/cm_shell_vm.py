@@ -24,6 +24,14 @@ log = LOGGER(__file__)
 class cm_shell_vm:
     """opt_example class"""
 
+    def chkActivation(self, userId):
+        ret = False
+        userinfo = cm_user().info(userId)
+        if "activeclouds" in userinfo["defaults"] and\
+            len(userinfo["defaults"]["activeclouds"]) > 0:
+            ret = True
+        return ret
+
     def activate_cm_shell_vm(self):
         try:
             self.config = cm_config()
@@ -33,6 +41,9 @@ class cm_shell_vm:
             self.mongoClass.activate(cm_user_id=self.user)
             defaults = cm_shell_defaults()
             self.defDict = defaults.createDefaultDict()
+            if self.chkActivation(self.user) is False:
+                print "No Active clouds set! Please register and activate a cloud."
+
         except Exception:
             print 'Unexpected error at cmd VM: ', sys.exc_info()[0], sys.exc_info()[1]
             sys.exit()

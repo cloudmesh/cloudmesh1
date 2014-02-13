@@ -113,32 +113,7 @@ class cm_shell_defaults:
         if( cmType == 'ec2' ):
             defDict == self.awsDefs(dbDict)
         return defDict
-        '''
 
-        defDict['cloud'] = cloudName
-        #pprint(config.cloud(cloudName))
-        cloudDict = config.cloud(cloudName)
-        defDict['flavor'] = cloudDict['default']['flavor']
-        defDict['image']  = cloudDict['default']['image']
-        keys = config.userkeys()
-        defKeyName = keys['default']
-        defKey = keys['keylist'][defKeyName]
-        defDict['keyname'] = defKeyName
-        defDict['prefix'] = defKeyName
-        return defDict
-        '''
-    '''
-    def activate_cm_shell_defaults(self):
-        try:
-            print "shell_Def"
-            self.user = config.username()
-            self.mongoClass = cm_mongo()
-            self.mongoClass.activate(cm_user_id=self.user)
-        except Exception, e:
-            print e
-            print "Please check if mongo service is running."
-            sys.exit()
-    '''
     @command
     def do_defaults(self, args, arguments):
         """
