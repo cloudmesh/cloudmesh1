@@ -24,3 +24,11 @@ def gh():
     local("rm -f doc/source/modules/*")
     local("git checkout gh-pages")
     local("make pages")
+
+@task
+def man():
+    """deploy the documentation on gh-pages"""
+    #TODO: match on "Commands"
+    local("cm man | tail -n+21 > doc/source/man/man.rst")
+
+
