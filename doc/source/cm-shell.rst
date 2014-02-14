@@ -66,6 +66,7 @@ allow you to log into the cloud and use its resources.
 
 Register an AWS account
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ::
 
   cm register aws ...
@@ -138,7 +139,7 @@ Clouds can be activated with the following commands
 To select a specific cloud from a simple ascii menu you can use the
 command ::
 
-    cm activate <label> select
+    cm> activate <label> select
 
 
 Managing Projects
@@ -152,15 +153,17 @@ Project List
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
+
    cm> project list
 
 
-   lists the projects a user is in
+lists the projects a user is in
 
 
 Project Information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ::
+
    cm> project --info <number>
 
 * retrieves information about the project
@@ -170,6 +173,7 @@ Project Information
 Project Activation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ::
+
    cm> project --activate <number>
 
 * activates charging for this project
@@ -180,6 +184,7 @@ Project Deactivation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
+
    cm> project --deactivate
 
 
@@ -193,7 +198,7 @@ List images
 
 To list all images you do ::
 
-  cm image --list
+  cm> image --list
 
 To list a specfic image you can do::
 
@@ -212,6 +217,7 @@ Activating Images
 ----------------------------------------------------------------------
 
 ::
+
    cm> image --default <cloud> <label>
 
 Managing Flavors
@@ -236,28 +242,35 @@ Starting VMs
 	  we will use the approriate defaults from the last vm.
 
 ::
+
    cm> vm create <label>
 
 ::
+
    cm> vm destroy <label>
 
 
 ::
+
    cm> vm terminate <label>
 
 
 ::
+
    cm> vm suspend <label>
 
 
 ::
+
    cm> vm resume <label>
 
 
 ::
+
    cm> vm login <label>
 
 ::
+
    cm> ssh vm <label>
 
 
@@ -317,15 +330,19 @@ Managing Security Groups
 
 
 ::
+
    cm> seceurity group add <label> <parameters>
 
 ::
+
    cm> seceurity group delete
 
 ::
+
    cm> seceurity group default add <label> 
 
 ::
+
    cm> seceurity group default delete <label> 
 
 
@@ -350,6 +367,7 @@ TODO (most likely in cloud command and register command)
 ----------------------------------------------------------------------
 
 ::
+
    cm> manage initialize --user<name> --password <password>
 
 * connects to FG and retrieves important information for you to use
@@ -360,39 +378,42 @@ TODO (most likely in cloud command and register command)
 * if the command is called more than 10 times a day the account is disabled
 
 ::
+
    cm> resource --list
 
 * lists the resources available for the user
 
 ::   
-   cm service --list
+
+   cm> service --list
  
 * list the services in the cloud mesh
 
 ::
+
    cm> service register
 
 see fg-inventory
 
 ::
+
    cm> resource register
 
 see fg-inventory
 
 ::
+
    cm id --list
 
 
 * list all ids and their types
 
 ::
+
    cm label --id <id>
 
 * associates a human readable lable with an id
 
-
-Command Dictionary
-======================================================================
 
 .. warning:: The following commands are automatically created with
 
@@ -401,4 +422,4 @@ Command Dictionary
 	     If you like to update them, please donot do this in the man.rst file,
 	     but update the commands in the actual manual page in the code
 
-.. include:: doc/source/man/man.rst
+.. include:: man/man.rst

@@ -57,6 +57,14 @@ IV. Configuration
   
    configure
 
+V. Cloudmesh Commandshell
+======================================================================
+
+.. toctree::
+   :maxdepth: 2
+  
+   cm-shell
+   cm-manage
 
 
 TODO
@@ -65,8 +73,6 @@ TODO
 .. toctree::
    :maxdepth: 2
   
-   cm-shell
-   cm-manage
    deploy
    fg
    futuregrid
