@@ -1,18 +1,17 @@
 .. sectnum::
    :start: 5
-   
+
 
 Cloud Mesh
 ==========
 
-A project to interface easily with multiple clouds from the
-commandline and a command shell.
+A project to interface easily with multiple clouds from a command shell.
 
 Info
 ----------------------------------------------------------------------
 
 The info command is a standard command that is defined in cmd3 and
-displays some internal information related to the commandshell. It
+displays some internal information related to the command shell. It
 lists the cmd3 dict, as well as information about verions and
 scopeless commands. Commands with scops can be activated with the use
 command. For more information see::
@@ -29,33 +28,63 @@ list the variables with the command in the shell with::
 
   cm> var
 
+::
+
+  Usage:
+    var list
+    var delete NAME
+    var NAME=VALUE
+
 Defaults
 ----------------------------------------------------------------------
 
-::
-   
-   defaults
+This manages the defaults associated with the user. You can load, list and clean defaults associated with a user and a cloud. The default parameters include index, prefix, flavor and image.
 
 ::
 
-   default ...
+  cm> defaults
+
+Following options are available:
+
+::
+
+  Usage:
+   defaults clean
+   defaults load [CLOUD]
+   defaults list [--json] [CLOUD]
+
+Examples:
+
+- defaults load
+- defaults clean alamo
+- defaults list --json alamo
+
 
 Managing Users
 ----------------------------------------------------------------------
 
-Creating configuration files
+Administrative command to list information about the user, create configuration files and list the config details.
 
 ::
 
-   cm> generate me
+   cm> user
 
-   cm> generat yaml
-
-
+Following options are available:
 
 ::
-   cm-manage
 
+   Usage:
+     user list
+     user ID
+     user ID me
+     user ID yaml
+     user ID ldap
+     user ID new FORMAT [dict|yaml]
+
+Examples:
+- user list
+- user abcd
+- user abcd new dict
 
 
 Managing Clouds
@@ -69,58 +98,15 @@ Register an AWS account
 
 ::
 
-  cm register aws ...
+  cm> cloud reg <CloudName>
 
 Example:
 
 - Amazon AWS account
-
-Register an azure account
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-  cm register azure ...
-
-Example:
-
-- Microsoft azure Cloud
-
-Register an Eucalyptus account
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-  cm register eucalyptus ...
-
-- FutureGrid india (Eucalyptus)
-
-Register an OpenStack account
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-  cm register openstack ...
-
-
-Examples:
-
-- FutureGrid sierra
-- FutureGrid india (Openstack)
-- HP Cloud
-
-
-Register an EC2 account
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-  cm register ec2 ...
-
-Examples:
-
-- FutureGrid alamo
-- FutureGrid hotel
+- Microsoft Azure Cloud
+- FutureGrid India (Eucalyptus)
+- FutureGrid sierra_openstack_grizzly (OpenStack)
+- FutureGrid india_openstack_essex (OpenStack)
 
 Activate Clouds
 ----------------------------------------------------------------------
@@ -129,110 +115,57 @@ Clouds can be activated with the following commands
 
 ::
 
-   cm> cloud --on <label>
+   cm> cloud --on <CloudName>
 
 ::
 
-   cm> cloud --off <label>
-
-
-To select a specific cloud from a simple ascii menu you can use the
-command ::
-
-    cm> activate <label> select
+   cm> cloud --off <CloudName>
 
 
 Managing Projects
 ----------------------------------------------------------------------
 
-projects = tennnats in openstack
-
+Projects are equivalent to tenants in openstack
 
 
 Project List
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Lists the projects a user is in
 
 ::
 
    cm> project list
 
 
-lists the projects a user is in
+
 
 
 Project Information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-::
-
-   cm> project --info <number>
 
 * retrieves information about the project
 * if the user is the manager or lead it returns member information
 
+::
+
+   cm> project info <name>
+
+
 
 Project Activation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-::
-
-   cm> project --activate <number>
 
 * activates charging for this project
 * subsequent calls are charged against this project
 
-
-Project Deactivation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 ::
 
-   cm> project --deactivate
+   cm> project activate <name>
 
 
 
-
-Managaging Images
-----------------------------------------------------------------------
-
-List images
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-To list all images you do ::
-
-  cm> image --list
-
-To list a specfic image you can do::
-
-  the other
-
-To select an image you do::
-
-  cm> image --select <cloud> 
-
-If the cloud parameter is missing than also the cloud will be asked::
-
-  cm> image --select 
-
-
-Activating Images
-----------------------------------------------------------------------
-
-::
-
-   cm> image --default <cloud> <label>
-
-Managing Flavors
-----------------------------------------------------------------------
-
-see images and than complete the documentation here
-
-List Flavors
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Activating Flavors
-----------------------------------------------------------------------
-
-
-Manageing Virtual Machines
+Managing Virtual Machines
 ----------------------------------------------------------------------
 
 Starting VMs
@@ -241,33 +174,37 @@ Starting VMs
 .. note:: The label in the vm commands is optional, if not specified,
 	  we will use the approriate defaults from the last vm.
 
+Creates a new instance/VM on default cloud
+
 ::
 
    cm> vm create <label>
 
-::
-
-   cm> vm destroy <label>
-
+Deletes the specified or last default instance/VM on default cloud
 
 ::
 
-   cm> vm terminate <label>
+   cm> vm delete <label>
 
+Suspends the specified or last default instance/VM on default cloud
 
 ::
 
    cm> vm suspend <label>
 
+Resumes the specified or last suspended instance/VM on default cloud
 
 ::
 
    cm> vm resume <label>
 
+Login into the specified or last default instance/VM
 
 ::
 
    cm> vm login <label>
+
+SSH into the specified or last default instance/VM
 
 ::
 
@@ -284,10 +221,10 @@ returns a list of vms started in order. In contrast to the normal list
 command given by IaaS framework, this list command sorts the vms by
 the timestamp it was started in the shell. The history is maintained
 in ~/.futuregrid/cloudmesh/history::
- 
+
    cm> history [<label>]
 
-The history can be cleared with:: 
+The history can be cleared with::
 
    cm> history --clear
 
@@ -306,9 +243,9 @@ If you now type::
 
    cm> history $mylabel
 
-It will start the command associated with the 101 id in the 
+It will start the command associated with the 101 id in the
 
-   
+
 
 
 Manageing Security Groups
@@ -339,11 +276,11 @@ Managing Security Groups
 
 ::
 
-   cm> seceurity group default add <label> 
+   cm> seceurity group default add <label>
 
 ::
 
-   cm> seceurity group default delete <label> 
+   cm> seceurity group default delete <label>
 
 
 Examples
@@ -383,10 +320,10 @@ TODO (most likely in cloud command and register command)
 
 * lists the resources available for the user
 
-::   
+::
 
    cm> service --list
- 
+
 * list the services in the cloud mesh
 
 ::
