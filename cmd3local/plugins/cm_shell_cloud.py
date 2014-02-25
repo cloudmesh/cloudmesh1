@@ -21,14 +21,14 @@ class cm_shell_cloud:
     def do_cloud(self, args, arguments):
         """
         Usage:
-               cloud
+               cloud --on | --off <name>
                cloud set
                cloud NAME
                cloud info [NAME]
                cloud on NAME
                cloud off NAME
 
-               
+
         Manages the cloud
 
         Arguments:
@@ -39,6 +39,8 @@ class cm_shell_cloud:
         Options:
 
            -v       verbose mode
+           --on     Activate the cloud
+           --off    Deactivate the cloud
 
         """
         log.info(arguments)
@@ -48,11 +50,11 @@ class cm_shell_cloud:
             log.info ("set the cloud")
             return
 
-        if arguments["on"] and arguments["NAME"]:
+        if arguments["--on"] and arguments["NAME"]:
             log.info ("activatethe cloud")
             return
 
-        if arguments["off"] and arguments["NAME"]:
+        if arguments["--off"] and arguments["NAME"]:
             log.info ("activatethe cloud")
             return
 

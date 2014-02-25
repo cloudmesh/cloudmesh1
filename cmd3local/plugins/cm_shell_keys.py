@@ -29,10 +29,10 @@ class cm_shell_keys:
     def do_keys(self, args, arguments):
         """
         Usage:
-               keys info [NAME] 
-               keys default 
-               keys json info [NAME] 
-               
+               keys info [NAME]
+               keys default
+               keys show NAME
+
         Manages the keys
 
         Arguments:
@@ -54,7 +54,7 @@ class cm_shell_keys:
             log.info ("delete the keys")
             return
 
-        if arguments["info"] and arguments["NAME"]:
+        if arguments["show"] and arguments["NAME"]:
             try:
                 name = arguments["NAME"]
                 key = self.keys[name]

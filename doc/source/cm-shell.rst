@@ -82,6 +82,7 @@ Following options are available:
      user ID new FORMAT [dict|yaml]
 
 Examples:
+
 - user list
 - user abcd
 - user abcd new dict
@@ -93,23 +94,20 @@ Managing Clouds
 Before you can use a cloud you need to register it. Registration will
 allow you to log into the cloud and use its resources.
 
-Register an AWS account
+Register a cloud
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
   cm> cloud reg <CloudName>
 
-Example:
+Examples:
 
-- Amazon AWS account
-- Microsoft Azure Cloud
-- FutureGrid India (Eucalyptus)
-- FutureGrid sierra_openstack_grizzly (OpenStack)
-- FutureGrid india_openstack_essex (OpenStack)
+- cloud reg sierra_openstack_grizzly
+- cloud reg alamo
 
-Activate Clouds
-----------------------------------------------------------------------
+Activate cloud
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Clouds can be activated with the following commands
 
@@ -121,6 +119,10 @@ Clouds can be activated with the following commands
 
    cm> cloud --off <CloudName>
 
+Examples:
+
+- cloud --on sierra_openstack_grizzly
+- cloud --off alamo
 
 Managing Projects
 ----------------------------------------------------------------------
@@ -138,9 +140,6 @@ Lists the projects a user is in
    cm> project list
 
 
-
-
-
 Project Information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -151,7 +150,9 @@ Project Information
 
    cm> project info <name>
 
+Examples:
 
+- project info fg82
 
 Project Activation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -163,6 +164,92 @@ Project Activation
 
    cm> project activate <name>
 
+Managing Keys
+----------------------------------------------------------------------
+Retrieve your key information, get key fingerprint and view the key.
+
+::
+  cm> keys
+
+Following options are available
+
+::
+
+   Usage:
+     keys info [NAME]
+     keys default
+     keys show [NAME]
+
+Examples:
+
+- keys info default_key
+- keys show key1
+
+Managing Images
+----------------------------------------------------------------------
+
+Manage images for clouds
+
+List images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List all images for specified cloud. If cloud name is not specified,
+images for default cloud are displayed.
+
+::
+
+  cm> image list <name>
+
+Image information
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Get specific information about the image.
+
+::
+  cm> image info <name>
+
+Default image
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set an image as default image.
+
+::
+
+   cm> image --default <cloud> <label>
+
+
+Managing Flavors
+----------------------------------------------------------------------
+
+Manage flavors for clouds.
+
+List Flavors
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List all images for specified cloud. If cloud name is not specified,
+flavors for default cloud are displayed.
+
+::
+
+  cm> flavor list <name>
+
+Flavor information
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Get specific information about the flavor.
+
+::
+  cm> flavor info <name>
+
+
+Default Flavor
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set an image as default image.
+
+::
+
+   cm> image --default <cloud> <label>
 
 
 Managing Virtual Machines
@@ -174,41 +261,42 @@ Starting VMs
 .. note:: The label in the vm commands is optional, if not specified,
 	  we will use the approriate defaults from the last vm.
 
-Creates a new instance/VM on default cloud
-
 ::
 
    cm> vm create <label>
 
-Deletes the specified or last default instance/VM on default cloud
+* Creates a new instance/VM on default cloud
 
 ::
 
    cm> vm delete <label>
 
-Suspends the specified or last default instance/VM on default cloud
+* Deletes the specified or last default instance/VM on default cloud
 
 ::
 
    cm> vm suspend <label>
 
-Resumes the specified or last suspended instance/VM on default cloud
+* Suspends the specified or last default instance/VM on default cloud
+
 
 ::
 
    cm> vm resume <label>
 
-Login into the specified or last default instance/VM
+* Resumes the specified or last suspended instance/VM on default cloud
 
 ::
 
    cm> vm login <label>
 
-SSH into the specified or last default instance/VM
+* Login into the specified or last default instance/VM
 
 ::
 
    cm> ssh vm <label>
+
+* SSH into the specified or last default instance/VM
 
 
 VM History
@@ -244,8 +332,6 @@ If you now type::
    cm> history $mylabel
 
 It will start the command associated with the 101 id in the
-
-
 
 
 Manageing Security Groups
