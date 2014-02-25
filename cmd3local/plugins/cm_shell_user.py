@@ -38,8 +38,8 @@ class cm_shell_user:
                user ID yaml
                user ID ldap
                user ID new FORMAT [dict|yaml]
-               
-        Administrative command to lists the users from LDAP 
+
+        Administrative command to lists the users from LDAP
 
         Arguments:
 
@@ -49,10 +49,10 @@ class cm_shell_user:
           yaml       specifie to generate the cloudmesh.yaml file
           ldap       get the specifie to generate the cloudmesh.yaml file
           FORMAT     either me or cloudmesh
-          OUTPUT     either yaml or dict 
-          
+          OUTPUT     either yaml or dict
+
         Options:
-           
+
            -v       verbose mode
 
         """
@@ -80,10 +80,6 @@ class cm_shell_user:
 
             return out
         '''
-
-
-        log.info(arguments)
-        print "<", args, ">"
 
         user = cm_user()
 
@@ -187,12 +183,6 @@ class cm_shell_user:
 
             banner("yaml")
             print yaml.dump(out, default_flow_style=False)
-
-
-            pprint(arguments)
-            pprint (args)
-
-
 
         elif (arguments["list"]):
 
