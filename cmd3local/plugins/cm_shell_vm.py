@@ -233,14 +233,12 @@ class cm_shell_vm:
                     if flavor in cloudFlavors:
                         flavorId = flavor
                     else:
-                        print "\nFlavor not found for this cloud. Please choose one id from the following!\n"
-                        x
+                        print "\nFlavor not found for this cloud. Please choose one number from the following!\n"
                         for key, value in flavors[defCloud].items():
                             print key, value['name']
                         return
                 else:
-                    print "The default  cloud does not have images!"
-                    flavId = "NotNull"
+                    print "The default cloud does not have images!"
             try:
                 for i in range(numberOfVMs):
 
