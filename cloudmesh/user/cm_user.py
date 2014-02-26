@@ -172,7 +172,7 @@ class cm_user(object):
     
     def init_defaults(self, username):
         # ONLY for debug
-        # added by Heng Chen on Nov. 11, 2013 to test LDAP and user.mongo
+        # added by HC on Nov. 11, 2013 to test LDAP and user.mongo
         # BEGIN debug
         #log.debug("cm_user_init_defaults, I was called.........")
         # END debug
@@ -248,8 +248,8 @@ class cm_user(object):
 
         #
         # set default page status (Accordion open/close) for active clouds
-        # added by Heng Chen, Nov. 8, 2013
-        # to fix the bug 'UndefinedError: no attribute pagestatus' found by Hyungro Lee on Nov. 7, 2013
+        # added by HC, Nov. 8, 2013
+        # to fix the bug 'UndefinedError: no attribute pagestatus' found by HL on Nov. 7, 2013
         #
         str_pagestatus = 'pagestatus'
         if str_pagestatus not in defaults:
