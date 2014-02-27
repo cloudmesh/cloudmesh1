@@ -9,6 +9,7 @@ import cmd
 import docopt
 import yaml
 import subprocess
+import re
 from bson.json_util import dumps
 from cmd3.shell import command
 from cloudmesh.user.cm_user import cm_user
@@ -106,6 +107,14 @@ class cm_shell_vm:
            -img <imgName> --image=<imgName>     Name of the image for VM
            -f <FlavorId> --flavor=<FlavorId>    Flavor Id for VM
         '''
+        userParams = {}
+
+        for key, value in arguments.iteritems():
+            if re.findall(r'[--]', key):
+                #Check if its an option, if yes add it to userParam dict
+                arg = re.findall(r'[a-z]+', key)
+                userParams[arg[0]] = value
+
         if arguments["cloud"] and arguments["--name"]:
             log.info ("get the VM cloud")
             server = self.findVM(self.user, arguments["--name"])
@@ -196,56 +205,7 @@ class cm_shell_vm:
             return
 
         if arguments["create"]:
-            cloudName = self.defDict['cloud']
-            dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
-            dbIndex = int(dbDict['index'])
-            defCloud = self.config.default_cloud
-            if arguments['--count']:
-                numberOfVMs = int(arguments['--count'])
-            else:
-                numberOfVMs = 1
-            imgId = None
-            images = None
-            if arguments['--image']:
-                imgId = self.vmi.getImageId(arguments['--image'])
-                if not imgId:
-                    return
-
-            flavorId = None
-            if arguments['--flavor']:
-                if self.vmi.chkFlavor(arguments['--flavor']) == False:
-                    return
-                elif self.vmi.chkFlavor(arguments['--flavor']) == True:
-                    flavorId = arguments['--flavor']
-            try:
-                for i in range(numberOfVMs):
-
-                    if imgId == None: #implies default image to be used.
-                        imgId = self.defDict['image']
-                    if flavorId == None: #implies default flavor to be used.
-                        flavorId = 1
-
-                    result = self.mongoClass.vm_create(cloudName, self.defDict['prefix'], dbIndex, flavorId, imgId, self.defDict['keyname'], None, self.user)
-
-                    self.mongoClass.refresh(names=[cloudName], types=["servers"], cm_user_id=self.user)
-
-                    if ('server' not in result):
-                        badReq = 'badRequest'
-                        if(badReq in result):
-                            print result[badReq]['message']
-                        return
-                    #update the index for next VM
-                    print 'VM successfully launched!'
-                    pprint(result)
-                    dbIndex = unicode(int(dbIndex) + 1)
-                dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
-                dbIndex = int(dbDict['index'])
-                dbIndex = unicode(dbIndex + numberOfVMs)
-                self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': dbIndex}},upsert=False, multi=False)
-                time.sleep(5)
-            except:
-                print "Unexpected error:", sys.exc_info()[0]
-            return
+            self.vmi.launchVM(self.defDict, userParams)
 
         if arguments["delete"]:
             try:
