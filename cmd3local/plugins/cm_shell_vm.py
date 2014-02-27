@@ -18,6 +18,7 @@ from pprint import pprint
 from prettytable import PrettyTable
 from cloudmesh.util.logger import LOGGER
 from cm_shell_defaults import cm_shell_defaults
+from Interface.vmInterface import vmInterface
 
 log = LOGGER(__file__)
 
@@ -39,6 +40,7 @@ class cm_shell_vm:
             self.mongoClass = cm_mongo()
             print "activating!!"
             self.mongoClass.activate(cm_user_id=self.user)
+            self.vmi = vmInterface(self.user, self.config.default_cloud, self.mongoClass)
             defaults = cm_shell_defaults()
             self.defDict = defaults.createDefaultDict()
             if self.chkActivation(self.user) is False:
@@ -205,40 +207,16 @@ class cm_shell_vm:
             imgId = None
             images = None
             if arguments['--image']:
-                imgName = arguments['--image']
-                self.mongoClass.refresh(self.user, types=["images"])
-                images = self.mongoClass.images(cm_user_id=self.user)
-                if defCloud in images:
-                    cloudImages = images[defCloud]
-                    for key, value in cloudImages.iteritems():
-                        if value['name'] == imgName:
-                            imgId = key
-                            break
-                else:
-                    print "The default cloud does not have images!"
-                    imgId = 'NotNull'
-                if imgId == None:
-                    print "\nImage not found for this cloud. Please choose one of the following!\n"
-                    for key, value in images[defCloud].items():
-                        print value['name']
+                imgId = self.vmi.getImageId(arguments['--image'])
+                if not imgId:
                     return
 
             flavorId = None
             if arguments['--flavor']:
-                flavor = arguments['--flavor']
-                self.mongoClass.refresh(self.user, types=["flavors"])
-                flavors = self.mongoClass.flavors(cm_user_id=self.user)
-                if defCloud in flavors:
-                    cloudFlavors = flavors[defCloud]
-                    if flavor in cloudFlavors:
-                        flavorId = flavor
-                    else:
-                        print "\nFlavor not found for this cloud. Please choose one number from the following!\n"
-                        for key, value in flavors[defCloud].items():
-                            print key, value['name']
-                        return
-                else:
-                    print "The default cloud does not have images!"
+                if self.vmi.chkFlavor(arguments['--flavor']) == False:
+                    return
+                elif self.vmi.chkFlavor(arguments['--flavor']) == True:
+                    flavorId = arguments['--flavor']
             try:
                 for i in range(numberOfVMs):
 

@@ -25,10 +25,10 @@ log = LOGGER(__file__)
 
 class vmInterface:
 
-    def __init__(self, user, config, mongo):
+    def __init__(self, user, defCloud, mongo):
         self.user = user
         self.mongoClass = mongo
-        self.defCloud = config.default_cloud
+        self.defCloud = defCloud
 
     def chkActivation(self, userId):
         ret = False
@@ -87,7 +87,7 @@ class vmInterface:
         else:
             print "The default cloud does not have flavors listed!"
             return None
-    def chkImage(self, userImage):
+    def getImageId(self, userImage):
         imgName = userImage
         imgId = None
         self.mongoClass.refresh(self.user, types=["images"])
@@ -102,7 +102,7 @@ class vmInterface:
             print "The default cloud does not have images!"
             return None
         if imgId == None:
-            print "\nImage not found for this cloud. Please choose one of the following!\n"
+            print "\nImage not found for this cloud. Please use one of the following available images!\n"
             for key, value in images[self.defCloud].items():
                 print value['name']
             return False
@@ -113,7 +113,7 @@ def main():
     user = config.username()
     mongoClass = cm_mongo()
     mongoClass.activate(user)
-    vmi = vmInterface(user, config, mongoClass)
+    vmi = vmInterface(user, defCloud, mongoClass)
     flavor = raw_input("Input the test flavor for vm: ")
     assert vmi.chkFlavor(flavor)
     image = raw_input("Input the test image for vm: ")
