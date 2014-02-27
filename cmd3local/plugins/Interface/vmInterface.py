@@ -29,6 +29,7 @@ class vmInterface:
         self.user = user
         self.mongoClass = mongo
         self.defCloud = defCloud
+        self.dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
 
     def chkActivation(self, userId):
         ret = False
@@ -69,7 +70,7 @@ class vmInterface:
                 return -1
 
 
-    def chkFlavor(self, userFlavor):
+    def _chkFlavor(self, userFlavor):
         flavor = userFlavor
         flavorId = None
         self.mongoClass.refresh(self.user, types=["flavors"])
@@ -87,7 +88,8 @@ class vmInterface:
         else:
             print "The default cloud does not have flavors listed!"
             return None
-    def getImageId(self, userImage):
+
+    def _getImageId(self, userImage):
         imgName = userImage
         imgId = None
         self.mongoClass.refresh(self.user, types=["images"])
@@ -107,6 +109,67 @@ class vmInterface:
                 print value['name']
             return False
 
+
+    def testVM(self, **kwargs):
+        pprint(kwargs)
+        print kwargs['cnt']
+        if ('cnt' in kwargs):
+            print "HOLA!"
+
+    def launchVM(self, defDict, userParameters):
+        dbIndex = int(self.dbDict['index'])
+
+        if userParameters['count']:
+            numberOfVMs = int(userParameters['count'])
+        else:
+            numberOfVMs = 1
+
+        #Check for image and flavor, if specified by the user.
+        imgId = None
+        if userParameters['image']:
+            imgId = self._getImageId(userParameters['image'])
+            if not imgId:
+                return
+
+        flavorId = None
+        if userParameters['flavor']:
+            checkFlavor = self._chkFlavor(userParameters['flavor'])
+            if checkFlavor == False:
+                return
+            elif checkFlavor == True:
+                flavorId = userParameters['flavor']
+
+        try:
+            for i in range(numberOfVMs):
+
+                if imgId == None: #implies default image to be used.
+                    imgId = defDict['image']
+                if flavorId == None: #implies default flavor to be used.
+                    flavorId = 1
+
+                result = self.mongoClass.vm_create(self.defCloud, defDict['prefix'], dbIndex, flavorId, imgId, defDict['keyname'], None, self.user)
+
+                self.mongoClass.refresh(names=[self.defCloud], types=["servers"], cm_user_id=self.user)
+
+                if ('server' not in result):
+                    badReq = 'badRequest'
+                    if(badReq in result):
+                        print result[badReq]['message']
+                    return
+
+                #update the index for next VM
+                print 'VM successfully launched!'
+                pprint(result)
+                dbIndex = unicode(int(dbIndex) + 1)
+            dbIndex = int(self.dbDict['index'])
+            dbIndex = unicode(dbIndex + numberOfVMs)
+            self.mongoClass.db_defaults.update({'_id': self.dbDict['_id']}, {'$set':{'index': dbIndex}},upsert=False, multi=False)
+            time.sleep(5)
+        except:
+            print "Unexpected error:", sys.exc_info()[0], sys.exc_info()[1]
+        return
+
+
 def main():
     config = cm_config()
     defCloud = config.default_cloud
@@ -114,10 +177,16 @@ def main():
     mongoClass = cm_mongo()
     mongoClass.activate(user)
     vmi = vmInterface(user, defCloud, mongoClass)
+    #vmi.testVM(cnt='10')
+    """ Test the functions.
+    defDict = { 'prefix': 'psjoshi', 'keyname': 'fg_pro'}
+    userParameters = { 'image': 'futuregrid/sl-6', 'flavor': '2', 'count': 5}
+    vmi.launchVM(defDict, userParameters)
     flavor = raw_input("Input the test flavor for vm: ")
     assert vmi.chkFlavor(flavor)
     image = raw_input("Input the test image for vm: ")
     print vmi.chkImage(image)
+    """
 
 
 if __name__ == "__main__":
