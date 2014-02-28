@@ -29,7 +29,7 @@ class vmInterface:
         self.user = user
         self.mongoClass = mongo
         self.defCloud = defCloud
-        self.dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
+        #dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
 
     def chkActivation(self, userId):
         ret = False
@@ -51,7 +51,7 @@ class vmInterface:
         except:
             print "Unexpected error: ", sys.exc_info()[0]
 
-    def deleteVM(self, serverName):
+    def _destroy(self, serverName):
         print "deleting ", serverName
         server = self.findVM(self.user, serverName)
         if(server):
@@ -109,15 +109,44 @@ class vmInterface:
                 print value['name']
             return False
 
+    def deleteVM(self, defDict, userParameters):
+        try:
+            dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
+            nextIndex = int(dbDict['index'])
+            deletedVMs = 0
+            if userParameters['name']:
+                servName = userParameters['name']
+                retVal = self._destroy(servName)
+            else:
+                if userParameters['count']:
+                    numberOfVMs = int(userParameters['count'])
+                    if nextIndex < numberOfVMs:
+                        print "Number of VMs specified is greater than running VMs. Deleting all VMs."
+                        numberOfVMs = nextIndex - 1
+                else:
+                    if nextIndex == 1:
+                        print "No default VM to delete. Please specify a name for a VM to be deleted."
+                        return
+                    numberOfVMs = 1
+                for i in range(numberOfVMs):
+                    nextIndex = nextIndex - 1
+                    servName = "%s_%s" % (defDict['prefix'], nextIndex)
+                    retVal = self._destroy(servName)
+                    if retVal != 0:
+                        break
+                    deletedVMs = deletedVMs + 1
 
-    def testVM(self, **kwargs):
-        pprint(kwargs)
-        print kwargs['cnt']
-        if ('cnt' in kwargs):
-            print "HOLA!"
+            #update the index for db defaults
+            index = int(dbDict['index'])
+            #on deleting vm <prefix>_1 keep the index fixed to 1
+            index = unicode(index - deletedVMs)
+            self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': index}},upsert=False, multi=False)
+        except:
+            print "Unexpected error: ", sys.exc_info()[0], sys.exc_info()[1]
 
     def launchVM(self, defDict, userParameters):
-        dbIndex = int(self.dbDict['index'])
+        dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
+        dbIndex = int(dbDict['index'])
 
         if userParameters['count']:
             numberOfVMs = int(userParameters['count'])
@@ -147,7 +176,7 @@ class vmInterface:
                 if flavorId == None: #implies default flavor to be used.
                     flavorId = 1
 
-                result = self.mongoClass.vm_create(self.defCloud, defDict['prefix'], dbIndex, flavorId, imgId, defDict['keyname'], None, self.user)
+                result = self.mongoClass.vm_create(self.defCloud, defDict['prefix'], dbIndex, flavorId, imgId, 'psjoshiSierra', None, self.user)
 
                 self.mongoClass.refresh(names=[self.defCloud], types=["servers"], cm_user_id=self.user)
 
@@ -161,12 +190,37 @@ class vmInterface:
                 print 'VM successfully launched!'
                 pprint(result)
                 dbIndex = unicode(int(dbIndex) + 1)
-            dbIndex = int(self.dbDict['index'])
+            dbIndex = int(dbDict['index'])
             dbIndex = unicode(dbIndex + numberOfVMs)
-            self.mongoClass.db_defaults.update({'_id': self.dbDict['_id']}, {'$set':{'index': dbIndex}},upsert=False, multi=False)
+            self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': dbIndex}},upsert=False, multi=False)
             time.sleep(5)
         except:
             print "Unexpected error:", sys.exc_info()[0], sys.exc_info()[1]
+        return
+
+    def getImageOrFlavor(self, paramToSet, userParameters):
+        log.info ("get the VM ", paramToSet)
+        server = self.findVM(self.user, userParameters["name"])
+        if(server):
+            try:
+                paramId = server[paramToSet]['id']
+                if paramToSet is 'flavor':
+                    params = self.mongoClass.flavors(cm_user_id=self.user)
+                else:
+                    params = self.mongoClass.images(cm_user_id=self.user)
+
+                if len(params[server['cm_cloud']]) == 0:
+                    print paramToSet, 's not available anymore.'
+                    return
+                else:
+                    reqdParam = params[server['cm_cloud']][paramId]
+                    jsonObj = dumps(reqdParam, sys.stdout, sort_keys=True, indent=4, separators=(',',':'))
+                    print "--------------------------------------------------------------------------------\n"
+                    print "The %s for:"% (paramToSet), userParameters["name"]
+                    print jsonObj, "\n"
+                    return jsonObj
+            except:
+                print "Unexpected error: ", sys.exc_info()[0], sys.exc_info()[1]
         return
 
 
