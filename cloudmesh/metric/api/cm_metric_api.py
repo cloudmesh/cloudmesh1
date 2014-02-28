@@ -5,7 +5,7 @@ from pprint import pprint
 #from fgmetric.shell.FGInstances import FGInstances
 
 
-class MetricAPI:
+class CMMetricAPI:
     """ CloudMesh Metric Python API
 
     This API supports usage statistics in CM Metric way, but rely on database query.
