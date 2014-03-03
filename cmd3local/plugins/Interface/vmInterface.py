@@ -9,6 +9,9 @@ import cmd
 import docopt
 import yaml
 import subprocess
+import paramiko as pm
+import os
+
 from bson.json_util import dumps
 
 from pprint import pprint
@@ -22,6 +25,10 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
+
+class AllowAllKeys(pm.MissingHostKeyPolicy):
+    def missing_host_key(self, client, hostname, key):
+        return
 
 class vmInterface:
 
@@ -68,7 +75,6 @@ class vmInterface:
             except StandardError:
                 print "Error deleting the VM."
                 return -1
-
 
     def _chkFlavor(self, userFlavor):
         flavor = userFlavor
@@ -176,7 +182,7 @@ class vmInterface:
                 if flavorId == None: #implies default flavor to be used.
                     flavorId = 1
 
-                result = self.mongoClass.vm_create(self.defCloud, defDict['prefix'], dbIndex, flavorId, imgId, 'psjoshiSierra', None, self.user)
+                result = self.mongoClass.vm_create(self.defCloud, defDict['prefix'], dbIndex, flavorId, imgId, defDict['keyname'], None, self.user)
 
                 self.mongoClass.refresh(names=[self.defCloud], types=["servers"], cm_user_id=self.user)
 
@@ -223,14 +229,39 @@ class vmInterface:
                 print "Unexpected error: ", sys.exc_info()[0], sys.exc_info()[1]
         return
 
+    def sshVm(self):
+        print 'In SSH'
+        ssh = pm.SSHClient()
+        ssh.load_host_keys(os.path.expanduser('/Users/pushkarjoshi/.ssh/known_hosts'))
+        ssh.set_missing_host_key_policy(pm.AutoAddPolicy())
+        privKey = pm.RSAKey.from_private_key_file('/Users/pushkarjoshi/testKey.pem')
+        ssh.connect('198.202.120.7', username='psjoshi', pkey=privKey)
+        chan = ssh.invoke_shell()
+        print repr(ssh.get_transport())
+        print '*** Here we go!'
+        #cmd = raw_input("Enter the command")
+        chan.send('ls\n')
+        tCheck = 0
+        while not chan.recv_ready():
+            time.sleep(10)
+            tCheck += 1
+        out = chan.recv(1024)
+        print out
+
 
 def main():
+
     config = cm_config()
     defCloud = config.default_cloud
     user = config.username()
-    mongoClass = cm_mongo()
-    mongoClass.activate(user)
-    vmi = vmInterface(user, defCloud, mongoClass)
+    mongoClass = 'a' #cm_mongo()
+#    mongoClass.activate(user)
+    #vmi = vmInterface(user, defCloud, mongoClass)
+    #vm = vmi.findVM('psjoshi', 'gvonlasz_1')
+    vmi = vmInterface('a', 'b', 'c')
+    vmi.sshVm()
+
+
     #vmi.testVM(cnt='10')
     """ Test the functions.
     defDict = { 'prefix': 'psjoshi', 'keyname': 'fg_pro'}

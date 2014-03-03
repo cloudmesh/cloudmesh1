@@ -26,7 +26,18 @@ class cm_shell_defaults:
 
     defDict = {}
 
-    def openstackDefs(self, dbDict):
+    def createDefaultDict(self):
+        #image
+        #flavor
+        #keyname
+        #nodename
+        #number of nodes
+
+        dbDict = mongoClass.db_defaults.find_one({'cm_user_id': config.username()})
+
+        defCloud = config.default_cloud
+        cmType = config.cloud(defCloud)['cm_type']
+
         cloudName = config.default_cloud
         self.defDict['cloud'] = cloudName
         cloudDict = config.cloud(cloudName)
@@ -42,7 +53,7 @@ class cm_shell_defaults:
                 flavors[cloudName] = cloudDict['default']['flavor']
                 mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'flavors': flavors}},upsert=False, multi=False)
         else:
-            print 'Creating and saving default flavor to Mongo.'
+            print 'Reading and saving default flavor to Mongo.'
             flavors = {}
             flavors[cloudName] = cloudDict['default']['flavor']
             mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'flavors': flavors}},upsert=False, multi=False)
@@ -58,7 +69,7 @@ class cm_shell_defaults:
                 images[cloudName] = cloudDict['default']['image']
                 mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'images': images}},upsert=False, multi=False)
         else:
-            print 'Creating and saving default image to Mongo.'
+            print 'Reading and saving default image to Mongo.'
             images = {}
             images[cloudName] = cloudDict['default']['image']
             mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'images': images}},upsert=False, multi=False)
@@ -80,40 +91,6 @@ class cm_shell_defaults:
         else:
             self.defDict['index'] = 1
             mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': 1}},upsert=False, multi=False)
-        return self.defDict
-
-    # gvl: this is the wrong approach
-
-    def hpDefs(self):
-        return {}
-    def azureDefs(self):
-        return {}
-    def awsDefs(self):
-        return {}
-
-
-    def createDefaultDict(self):
-        #image
-        #flavor
-        #keyname
-        #nodename
-        #number of nodes
-
-        dbDict = mongoClass.db_defaults.find_one({'cm_user_id': config.username()})
-
-        defCloud = config.default_cloud
-        cmType = config.cloud(defCloud)['cm_type']
-
-        if( cmType == 'openstack' ):
-            self.defDict = self.openstackDefs(dbDict)
-        if( cmType == 'hp' ):
-            self.defDict = self.hpDefs(dbDict)
-        if( cmType == 'azure' ):
-            self.defDict = self.azureDefs(dbDict)
-        if( cmType == 'aws' ):
-            self.defDict = self.awsDefs(dbDict)
-        if( cmType == 'ec2' ):
-            self.defDict == self.awsDefs(dbDict)
         return self.defDict
 
     @command
@@ -155,5 +132,8 @@ class cm_shell_defaults:
 
 def main():
     print "test correct"
+    defaults = cm_shell_defaults()
+    defaults.createDefaultDict()
+    pprint(defaults.defDict)
 if __name__ == "__main__":
     main()
