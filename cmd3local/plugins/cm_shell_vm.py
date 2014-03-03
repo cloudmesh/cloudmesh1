@@ -51,36 +51,6 @@ class cm_shell_vm:
             print 'Unexpected error at cmd VM: ', sys.exc_info()[0], sys.exc_info()[1]
             sys.exit()
 
-    def findVM(self, user, server):
-        try:
-            clouds = self.mongoClass.servers(cm_user_id=user)
-            for key, value in clouds.items():
-                for k, v in value.items():
-                    if(v['name'] == server):
-                        return v
-            print "VM not found."
-            return None
-        except:
-            print "Unexpected error: ", sys.exc_info()[0]
-
-    def deleteVM(self, serverName):
-        print "deleting ", serverName
-        server = self.findVM(self.user, serverName)
-        if(server):
-            cloud = server['cm_cloud']
-            serverId = server['id']
-            try:
-                self.mongoClass.vm_delete(cloud, serverId, self.user)
-                time.sleep(5)
-                self.mongoClass.release_unused_public_ips(cloud, self.user)
-                self.mongoClass.refresh(names=[cloud], types=["servers"], cm_user_id=self.user)
-                print serverName, "deleted successfully!\n"
-                return 0
-
-            except StandardError:
-                print "Error deleting the VM."
-                return -1
-
     @command
     def do_vm(self, args, arguments):
         '''

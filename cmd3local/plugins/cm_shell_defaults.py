@@ -98,8 +98,8 @@ class cm_shell_defaults:
         """
         Usage:
                defaults clean
-               defaults load [CLOUD]
-               defaults list [--json] [CLOUD]
+               defaults load
+               defaults list [--json]
 
         This manages the defaults associated with the user.
         You can load, list and clean defaults associated with a user and a cloud.
