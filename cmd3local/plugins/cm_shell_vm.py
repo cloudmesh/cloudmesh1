@@ -74,7 +74,7 @@ class cm_shell_vm:
            -n <NAME> --name=<NAME>              Name of the VM
            -c <CloudName> --cloud=<CloudName>   Name of the Cloud
            -i <index> --index=<index>           Index for default VM Name
-           -img <imgName> --image=<imgName>     Name of the image for VM
+           --img=<imgName>                      Name of the image for VM
            -f <FlavorId> --flavor=<FlavorId>    Flavor Id for VM
         '''
         userParams = {}

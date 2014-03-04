@@ -28,11 +28,16 @@ class cm_shell_register:
     def do_reg(self, args, arguments):
         '''
         Usage:
-          reg NAME
+          reg [options] NAME
 
         Arguments:
           NAME      Name of the cloud to be registered
+
+        Options:
+          -a --act      Activate the cloud to be registered
+          -d --deact    Deactivate the cloud
         '''
+
         config = cm_config()
         cm_user_id = config.username()
         user_obj = cm_user()
@@ -47,7 +52,7 @@ class cm_shell_register:
         #check all the registered clouds.
         for cloud in user['defaults']['registered_clouds']:
             registered[cloud] = True
-            if cloud == cloudname:
+            if cloud == cloudname and not (arguments['--act'] or arguments['--deact']):
                 print "Cloud {0} is already registered.".format(cloud)
                 return
 
@@ -101,13 +106,34 @@ class cm_shell_register:
         cloud = mongoClass.get_cloud(cm_user_id=cm_user_id, cloud_name=cloudname, force=True)
         if cloud:
             registered[cloudname] = True
-            # pprint(cloud.user_token)
             if cloudname not in user['defaults']['registered_clouds']:
                 user['defaults']['registered_clouds'].append(cloudname)
                 user_obj.set_defaults(cm_user_id, user['defaults'])
         else:
             registered[cloudname] = False
             print "The cloud could not be registered."
+
+        if registered[cloudname] == True:
+            if arguments['--act']:
+                try:
+                    if cloudname not in user['defaults']['activeclouds']:
+                        (user['defaults']['activeclouds']).append(cloudname)
+                        user_obj.set_defaults(cm_user_id, user['defaults'])
+                        print "Cloud {0} set to active".format(cloudname)
+                except:
+                    # create_dict(user, "defaults", "activeclouds")
+                    log.info("ERROR user defaults activecloud does not exist")
+            if arguments['--deact']:
+                try:
+                    if cloudname in user['defaults']['activeclouds']:
+                        active = user['defaults']['activeclouds']
+                        active.remove(cloudname)
+                        user['defaults']['activeclouds'] = active
+                        user_obj.set_defaults(cm_user_id, user['defaults'])
+                        print "Cloud {0} deactived".format(cloudname)
+                except:
+                    # create_dict(user, "defaults", "activeclouds")
+                    log.info("ERROR user defaults activecloud does not exist")
 
         return
 

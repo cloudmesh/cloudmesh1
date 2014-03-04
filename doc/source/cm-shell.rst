@@ -99,12 +99,22 @@ Register a cloud
 
 ::
 
-  cm> cloud reg <CloudName>
+  cm> reg <CloudName>
+
+You can set the same cloud to active (activate a cloud) by using the switch '--activate'/'-a'
+Also, a cloud can be removed from active list by using the switch '--deact'/'-d'
+
+::
+
+  cm> reg --act <CloudName>
+  cm> reg --deact <CloudName>
+
 
 Examples:
 
-- cloud reg sierra_openstack_grizzly
-- cloud reg alamo
+- reg sierra_openstack_grizzly
+- reg -a alamo
+- reg --deact india_openstack_essex
 
 Activate cloud
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
