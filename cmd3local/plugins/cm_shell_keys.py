@@ -29,20 +29,21 @@ class cm_shell_keys:
     def do_keys(self, args, arguments):
         """
         Usage:
-               keys info [NAME]
-               keys default
+               keys info [--json] [NAME]
+               keys default NAME
                keys show NAME
 
         Manages the keys
 
         Arguments:
 
-          NAME           The name of a service or server
+          NAME           The name of a key
 
 
         Options:
 
-           -v       verbose mode
+           -v --verbose     verbose mode
+           -j --json        json output
 
         """
         # log.info(70 * "-")
@@ -51,7 +52,13 @@ class cm_shell_keys:
 
 
         if arguments["default"] and arguments["NAME"]:
-            log.info ("delete the keys")
+            if arguments["NAME"] in self.keys.names():
+                self.keys.setdefault(arguments["NAME"])
+                 #Update mongo db defaults with new default key
+                self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'key': arguments["NAME"]}},upsert=False, multi=False)
+                print 'The default key is set to: ', arguments['NAME']
+            else:
+                print "Specified key is not registered."
             return
 
         if arguments["show"] and arguments["NAME"]:
@@ -72,7 +79,7 @@ class cm_shell_keys:
 
         if arguments["info"] and arguments["NAME"] is None:
             # log.info ("keys info for all")
-            if arguments["json"]:
+            if arguments["--json"]:
                 pprint(self.keys["keys"])
                 return
             else:
