@@ -19,17 +19,46 @@ class cm_shell_list:
 
     """opt_example class"""
 
+
     def activate_cm_shell_list(self):
         pass
+
+    def _printList(self, parameter, fieldList, clouds):
+        mesh = cloudmesh.mesh()
+
+        x = PrettyTable()
+        x.field_names = fieldList
+        for field in fieldList:
+            x.align[field] = "c" #center aligned
+
+        try:
+            for cloud in clouds:
+                mesh.refresh(names=[cloud], types=[parameter])
+                if cloud in mesh.clouds and mesh.clouds[cloud]:
+                    params = mesh.clouds[cloud][parameter]
+                    if len(params)>0:
+                        print "\nCloud: ", cloud, "\n"
+                        for key, value in params.iteritems():
+                            # since value is a dictionary of multiple items,
+                            # we add to table only fields from the fieldList
+                            rowList = []
+                            for field in fieldList:
+                                rowList.append(value[field])
+                            x.add_row(rowList)
+                        print x.get_string(sortby=fieldList[0])
+                        print "\n\n"
+            return
+        except:
+            print "Unexpected error: ", sys.exc_info()[0], sys.exc_info()[1]
+
 
     @command
     def do_list(self, args, arguments):
         """
         Usage:
-               list flavors [CLOUD...]
-               list servers [CLOUD...]
-               list images [CLOUD...]
-               list [CLOUD...]
+               list flavors [CLOUD]
+               list servers [CLOUD]
+               list images [CLOUD]
 
         Arguments:
 
@@ -46,81 +75,33 @@ class cm_shell_list:
         user = config.username()
         dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': user})
         #log.info(args)
-        #pprint(arguments)
+        pprint(arguments)
         #log.info(arguments)
         all = False
-        if len(arguments["CLOUD"]) == 0:
-            print "get all active clouds"
+        if not arguments["CLOUD"]:
             all = True
             if 'activeclouds' in dbDict and dbDict['activeclouds']:
                 clouds = dbDict['activeclouds']
             else:
                 clouds = [config.default_cloud]
         else:
-            clouds = arguments['CLOUD']
+            clouds = [arguments["CLOUD"]]
 
         if arguments["flavors"]:
-            #log.info ("list images")
 
-            x = PrettyTable()
-            x.field_names = ["Id", "Name"]
-            x.align["Name"] = "l"
-            x.align["Id"] = "l"
-
-            for cloud in clouds:
-                mesh.refresh(names=[cloud], types=['flavor'])
-                print "\nCloud: ", cloud
-                if cloud in mesh.clouds and mesh.clouds[cloud]:
-                    flavors = mesh.clouds[cloud]['flavor']
-                    for key, value in flavors.iteritems():
-                        x.add_row([value['id'], key])
-                    print x.get_string(sortby="Id")
-                    print "\n\n"
-            return
+            fieldList = ['id', 'name']
+            self._printList('flavors', fieldList, clouds)
 
         if arguments["servers"]:
-#            log.info ("count servers")
 
-            x = PrettyTable()
-            x.field_names = ["Id", "Name", "Status"]
-            x.align["Name"] = "l"
-            x.align["Id"] = "l"
-            x.align["Status"] = "l"
-            try:
-                for cloud in clouds:
-                    mesh.refresh(names=[cloud], types=['server'])
-                    if cloud in mesh.clouds and mesh.clouds[cloud]:
-                        servers = mesh.clouds[cloud]['server']
-                        for key, value in servers.iteritems():
-                            x.add_row([key, value['name'], value['status']])
-                        print x.get_string(sortby="Id")
-                        print "\n\n"
-                    else:
-                        print "No results on servers for", cloud
-            except:
-                print "Unexpected error: ", sys.exc_info()[0]
+            fieldList = ["id", "name", "status"]
+            self._printList('server', fieldList, clouds)
 
         if arguments["images"]:
-            #log.info ("list images")
 
-            x = PrettyTable()
-            x.field_names = ["Id", "Name"]
-            x.align["Name"] = "l"
-            x.align["Id"] = "l"
+            fieldList = ["id", "name"]
+            self._printList('image', fieldList, clouds)
 
-            try:
-                for cloud in clouds:
-                    mesh.refresh(names=[cloud], types=['image'])
-                    print "\nCloud: ", cloud
-                    if cloud in mesh.clouds and mesh.clouds[cloud]:
-                        images = mesh.clouds[cloud]['image']
-                        for key, value in images.iteritems():
-                            x.add_row([value['id'], value['name']])
-                        print x.get_string(sortby="Name")
-                        print "\n\n"
-                return
-            except:
-                print "Unexpected error: ", sys.exc_info()[0]
 
     @command
     def do_count(self, args, arguments):
@@ -166,4 +147,15 @@ class cm_shell_list:
             log.info ("list images")
             for cloud in clouds:
                 print "cloud: images", cloud, None
+
+def main():
+    print "test correct"
+    clouds = ['sierra_openstack_grizzly']
+    fieldList = ["id", "name", "status"]
+
+    ls = cm_shell_list()
+    ls._printList('image', fieldList, clouds)
+
+if __name__ == "__main__":
+    main()
 
