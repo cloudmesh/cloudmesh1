@@ -240,7 +240,7 @@ class vmInterface:
         print repr(ssh.get_transport())
         print '*** Here we go!'
         #cmd = raw_input("Enter the command")
-        chan.send('ls\n')
+        chan.send(cmd+'\n')
         tCheck = 0
         while not chan.recv_ready():
             time.sleep(10)
