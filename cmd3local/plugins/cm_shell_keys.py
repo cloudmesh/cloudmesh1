@@ -8,6 +8,7 @@ import json
 from pprint import pprint
 
 from cmd3.shell import command
+from cloudmesh.cm_mongo import cm_mongo
 
 from cloudmesh.config.cm_keys import cm_keys
 from cloudmesh.util.logger import LOGGER
@@ -21,6 +22,7 @@ class cm_shell_keys:
     def activate_shell_keys(self):
         filename = "$HOME/.futuregrid/cloudmesh.yaml"
         self.keys = cm_keys(filename)
+        self.mongo = cm_mongo()
         if self.echo:
             log.info("Reading keys information from -> {0}".format(filename))
         pass
@@ -46,15 +48,12 @@ class cm_shell_keys:
            -j --json        json output
 
         """
-        # log.info(70 * "-")
-        # log.info(arguments)
-        # log.info(70 * "-")
-
 
         if arguments["default"] and arguments["NAME"]:
             if arguments["NAME"] in self.keys.names():
                 self.keys.setdefault(arguments["NAME"])
-                 #Update mongo db defaults with new default key
+                #Update mongo db defaults with new default key
+                dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
                 self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'key': arguments["NAME"]}},upsert=False, multi=False)
                 print 'The default key is set to: ', arguments['NAME']
             else:
@@ -69,8 +68,6 @@ class cm_shell_keys:
                 print "Key Information"
                 print "-------------------"
                 print
-                if name == "default":
-                    name = self.keys.get_default_key()
                 print "%15s:" % name, key
             except:
                 print "Could not find the key with the name", arguments["NAME"]
