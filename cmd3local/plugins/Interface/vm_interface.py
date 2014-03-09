@@ -26,17 +26,12 @@ from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
-class AllowAllKeys(pm.MissingHostKeyPolicy):
-    def missing_host_key(self, client, hostname, key):
-        return
-
-class vmInterface:
+class vm_interface:
 
     def __init__(self, user, defCloud, mongo):
         self.user = user
         self.mongoClass = mongo
         self.defCloud = defCloud
-        #dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': self.user})
 
     def chkActivation(self, userId):
         ret = False
@@ -256,9 +251,9 @@ def main():
     user = config.username()
     mongoClass = 'a' #cm_mongo()
 #    mongoClass.activate(user)
-    #vmi = vmInterface(user, defCloud, mongoClass)
+    #vmi = vm_interface(user, defCloud, mongoClass)
     #vm = vmi.findVM('psjoshi', 'gvonlasz_1')
-    vmi = vmInterface('a', 'b', 'c')
+    vmi = vm_interface('a', 'b', 'c')
     vmi.sshVm()
 
 
