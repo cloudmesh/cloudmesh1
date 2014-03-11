@@ -3,7 +3,7 @@
 #
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
 #
-
+import inspect
 from cloudmesh.util.util import banner
 import requests
 from requests.auth import AuthBase
@@ -35,6 +35,10 @@ from cloudmesh.util.logger import LOGGER
 
 # import novaclient
 # from novaclient.openstack.common import strutils
+
+def lineno():
+    """Returns the current line number in our program."""
+    return inspect.currentframe().f_back.f_lineno
 
 log = LOGGER(__file__)
 
@@ -95,10 +99,10 @@ class openstack(ComputeBaseType):
                     try:
                         self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(self.label))
                     except:
-                        log.error("No admin credential found! Please check your cloudmesh_server.yaml file.")
+                        log.error(str(lineno()) + " No admin credential found! Please check your cloudmesh_server.yaml file.")
                 else:
                     self.admin_credential = None
-                    log.info("The cloud {0} has no admin credential".format(self.label))
+                    log.info(str(lineno()) + ": The cloud {0} has no admin credential".format(self.label))
         return self.admin_credential
     #
     # initialize
@@ -125,7 +129,7 @@ class openstack(ComputeBaseType):
                 self.compute_config = cm_config()
                 self.user_credential = self.compute_config.credential(label)
             except:
-                log.error("No user credentail found! Please check your cloudmesh.yaml file.")
+                log.error(str(lineno()) + ": No user credentail found! Please check your cloudmesh.yaml file.")
                 # sys.exit(1)
 
         self._load_admin_credential()
@@ -150,37 +154,39 @@ class openstack(ComputeBaseType):
         """
         creates tokens for a connection
         """
-        log.info("Loading User Credentials")
+        log.info(str(lineno()) + ": Loading User Credentials")
         if self.user_credential is None:
-            log.error("error connecting to openstack compute, credential is None")
+            log.error(str(lineno()) + ": error connecting to openstack compute, credential is None")
         elif not self.user_token:
             self.user_token = self.get_token(self.user_credentials)
 
         # check if keystone is defined, and if failed print log msg
         #
-        log.info("Loading Admin Credentials")
+        log.info(str(lineno()) + ": Loading Admin Credentials")
 
         if (self.admin_credential is None) and (self.with_admin_credential):
-            log.error("error connecting to openstack compute, credential is None")
+            log.error(str(lineno()) + ":error connecting to openstack compute, credential is None")
         else:
             if self.with_admin_credential and (not self.admin_token):
                 self.admin_token = self.get_token(self.admin_credential)
 
 
-    def DEBUG(self, msg):
+    def DEBUG(self, msg, line_number=None):
+        if line_number == None:
+            line_number = ""
         if msg == "credential":
             debug_dict = dict(self.user_credential)
             debug_dict['OS_PASSWORD'] = "********"
-            log.debug("GET CRED {0}".format(debug_dict))
+            log.debug("{1} - GET CRED {0}".format(debug_dict,str(line_number)))
         else:
-            log.debug(str(msg))
+            log.debug("{0} - {1}", str(line_number), str(msg))
 
     def get_token(self, credential=None):
 
         if credential is None:
             credential = self.user_credential
 
-        self.DEBUG("credential")
+        self.DEBUG("credential", lineno())
 
         param = None
         if 'OS_TENANT_NAME' in credential:
@@ -201,13 +207,15 @@ class openstack(ComputeBaseType):
                  }
         url = "{0}/tokens".format(credential['OS_AUTH_URL'])
 
-        log.debug("URL {0}".format(url))
+        log.debug(str(lineno()) + ": URL {0}".format(url))
 
         headers = {'content-type': 'application/json'}
         verify = self._get_cacert(credential)
-        log.debug("PARAM {0}".format(json.dumps(param)))
-        log.debug("HEADER {0}".format(headers))
-        log.debug("VERIFY {0}".format(verify))
+        print_param = param
+        print_param["auth"]["passwordCredentials"]["password"] = "********"
+        log.debug(str(lineno()) + ":PARAM {0}".format(json.dumps(print_param)))
+        log.debug(str(lineno()) + ":HEADER {0}".format(headers))
+        log.debug(str(lineno()) + ":VERIFY {0}".format(verify))
 
         r = requests.post(url,
                           data=json.dumps(param),
@@ -317,7 +325,7 @@ class openstack(ComputeBaseType):
         return self._get(msg=apiurl)
 
     def keypair_add(self, keyname, keycontent):
-        log.debug("adding a keypair in cm_compute...")
+        log.debug(str(lineno()) + ":adding a keypair in cm_compute...")
         # keysnow = self.keypair_list()
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
@@ -331,7 +339,7 @@ class openstack(ComputeBaseType):
         return self._post(posturl, params)
 
     def keypair_remove(self, keyname):
-        log.debug("removing a keypair in cm_compute...")
+        log.debug(str(lineno()) + ":removing a keypair in cm_compute...")
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
 
@@ -399,7 +407,7 @@ class openstack(ComputeBaseType):
             safe_userdata = strutils.safe_encode(userdata)
             params["server"]["user_data"] = base64.b64encode(safe_userdata)
 
-        log.debug("POST PARAMS {0}".format(params))
+        log.debug(str(lineno()) + ":POST PARAMS {0}".format(params))
 
         return self._post(posturl, params)
 
@@ -502,12 +510,12 @@ class openstack(ComputeBaseType):
 
         url = "{0}/{1}".format(url, msg)
 
-        log.debug("AUTH URL {0}".format(url))
+        log.debug(str(lineno()) + ": AUTH URL {0}".format(url))
         headers = {'X-Auth-Token': token['access']['token']['id']}
 
         r = requests.get(url, headers=headers, verify=self._get_cacert(credential), params=payload)
 
-        log.debug("Response {0}".format(r))
+        log.debug(str(lineno()) + ": Response {0}".format(r))
 
         if json:
             return r.json()
