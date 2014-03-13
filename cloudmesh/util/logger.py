@@ -50,7 +50,12 @@ def LOGGER(filename):
 
 
     formatter = logging.Formatter(
-        'CM {0:>50}: %(levelname)6s - %(message)s'.format(name))
+        'CM {0:>50}:%(lineno)s: %(levelname)6s - %(message)s'.format(name))
+
+
+    #formatter = logging.Formatter(
+    #    'CM {0:>50}: %(levelname)6s - %(module)s:%(lineno)s %funcName)s: %(message)s'.format(name))
+    handler = logging.StreamHandler()
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
     log.addHandler(handler)
