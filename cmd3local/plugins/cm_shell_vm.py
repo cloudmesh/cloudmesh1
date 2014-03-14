@@ -19,13 +19,14 @@ from pprint import pprint
 from prettytable import PrettyTable
 from cloudmesh.util.logger import LOGGER
 from cm_shell_defaults import cm_shell_defaults
-from Interface.vmInterface import vmInterface
+from Interface.vm_interface import vm_interface
 
 log = LOGGER(__file__)
 
 class cm_shell_vm:
     """opt_example class"""
 
+    #Check if there are any active clouds for user
     def chkActivation(self, userId):
         ret = False
         userinfo = cm_user().info(userId)
@@ -41,7 +42,7 @@ class cm_shell_vm:
             self.mongoClass = cm_mongo()
             print "activating!!"
             self.mongoClass.activate(cm_user_id=self.user)
-            self.vmi = vmInterface(self.user, self.config.default_cloud, self.mongoClass)
+            self.vmi = vm_interface(self.user, self.config.default_cloud, self.mongoClass)
             defaults = cm_shell_defaults()
             self.defDict = defaults.createDefaultDict()
             if self.chkActivation(self.user) is False:
@@ -77,6 +78,7 @@ class cm_shell_vm:
            --img=<imgName>                      Name of the image for VM
            -f <FlavorId> --flavor=<FlavorId>    Flavor Id for VM
         '''
+        #prepare user parameters from the switch options from user
         userParams = {}
 
         for key, value in arguments.iteritems():
@@ -85,6 +87,7 @@ class cm_shell_vm:
                 arg = re.findall(r'[a-z]+', key)
                 userParams[arg[0]] = value
 
+        #Change default index for vm
         if arguments["index"]:
             setIndex = arguments["--index"]
             if int(setIndex) < 1:
@@ -94,7 +97,7 @@ class cm_shell_vm:
             self.mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': setIndex}},upsert=False, multi=False)
             print 'Next index value is set to: ', setIndex
 
-
+        #get the cloud which hosts the specified VM
         if arguments["cloud"] and arguments["--name"]:
             log.info ("get the VM cloud")
             server = self.vmi.findVM(self.user, arguments["--name"])
@@ -104,14 +107,17 @@ class cm_shell_vm:
                 print arguments["--name"],"is running on: ", vmCloud
             return
 
+        #Get the flavor of specified VM
         if arguments["flavor"] and arguments["--name"]:
             self.vmi.getImageOrFlavor('flavor', userParams)
             return
 
+        #Get the image of specified VM
         if arguments["image"] and arguments["--name"]:
             self.vmi.getImageOrFlavor('image', userParams)
             return
 
+        #Get the info of specified VM
         if arguments["info"] and arguments["--name"]:
             log.info ("vm info")
             reqdVM = self.findVM(self.user, arguments["--name"])
@@ -149,23 +155,16 @@ class cm_shell_vm:
                         print 'Unexpected error: ', sys.exc_info()[0]
             return
 
+        #Launch a new VM
         if arguments["create"]:
             self.vmi.launchVM(self.defDict, userParams)
 
+        #Delete a VM on cloud
         if arguments["delete"]:
             self.vmi.deleteVM(self.defDict, userParams)
             return
 
-
-        """
-        Currently presents list of following parameters for the VM
-            -- name
-            -- status
-            -- flavor
-            -- id
-            -- user_id
-        We can add parameters by taking them as args from user.
-        """
+        #List all running VMs on the cloud
         if arguments["list"]:
             currentCloud = None
             if arguments["--cloud"]:
