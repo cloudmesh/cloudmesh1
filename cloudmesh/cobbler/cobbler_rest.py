@@ -1,137 +1,111 @@
-#!/usr/bin/env python
-
-from flask import Flask, jsonify
-
+from flask import Flask, render_template, request, Response
+import json
+from functools import wraps
 from cobbler_provision import CobblerProvision
 
-app = Flask(__name__)
+app = Flask( __name__)
 
+SUPPORTED_OBJECTS = "distros profiles systems kickstarts".split()
 
+"""
+   NOT consider user authentication and authorization.
+"""
 
-@app.route('/cm/v1.0/cobbler/token', methods = ['GET'])
-def get_token():
-    """returns the token of user if user/password authentication is correct."""
-    user = request.args.get("user", "")
-    password = request.args.get("password", "")
-    if not user or not password:
-        return format_result_data("token", "token", None, "Please provide a valid pair of user and password.")
-    cp = CobblerProvision()
-    token = cp.get_token(user, password)
-    msg = "User authenticated {0}successfully.".format("" if token else "un")
-    return format_result_data("token", "token", token, msg)
+def format_result_data(flag_success, msg="", data=None):
+    return {
+             "result": flag_success,
+             "description": msg,
+             "data": data,
+            }
 
-@app.route('/cm/v1.0/cobbler/list/<item>', methods = ['GET'])
-def list_names(item):
-    """returns the names of all possible 'item', item in [distro, profile, system, and etc.]"""
-    items = "distro profile system".split()
-    if item not in items:
-        return format_not_support_operation("list", item)
-    token = request.args.get("token", "")
-    cp = CobblerProvision()
-    func_item = getattr(cp, "list_{0}_names".format(item))
-    result = func_item(token)
-    msg = "success" if result else "Failed to authentication user token."
-    return format_result_data("list", item, result, msg)
-
-@app.route('/cm/v1.0/cobbler/report/<item>/<name>', methods = ['GET'])
-def report_item(item, name):
-    """returns the report of a specific name in item, item is in [distro, profile, system, and etc.]"""
-    items = "distro profile system".split()
-    if item not in items:
-        return format_not_support_operation("report", item)
-    token = request.args.get("token", "")
-    cp = CobblerProvision()
-    func_item = getattr(cp, "get_{0}_report".format(item))
-    result = func_item(token)
-    msg = "success" if result else "Failed to authentication user token."
-    return format_result_data("report", item, result, msg)
-
-@app.route('/cm/v1.0/cobbler/add/<item>', methods = ['GET'])
-def add_item(item):
-    """add a specific name in item, item is in [distro, profile, system, and etc.]"""
-    items = "distro profile system".split()
-    if item not in items:
-        return format_not_support_operation("add", item)
-    token = request.args.get("token", "")
-    cp = CobblerProvision()
-    if item == "distro":
-        url = request.args.get("url", "")
-        name = request.args.get("name", "")
-        (result, msg) = cp.import_distro(token, url, name)
-    elif item == "profile":
-        profile = request.args.get("profile", "")
-        distro = request.args.get("distro", "")
-        kickstart = request.args.get("kickstart", "")
-        (result, msg) = cp.add_profile(token, profile, distro, kickstart)
-    elif item == "system":
-        system = request.args.get("system", "")
-        profile = request.args.get("profile", "")
-        contents = request.args.get("contents", "")
-        (result, msg) = cp.add_system(token, system, profile, contents)
-    return format_result_data("add", item, result, msg)
-
-@app.route('/cm/v1.0/cobbler/update/<item>', methods = ['GET'])
-def update_item(item):
-    """update a specific name in item, item is in [profile, system, and etc.]"""
-    items = "profile system".split()
-    if item not in items:
-        return format_not_support_operation("update", item)
-    token = request.args.get("token", "")
-    cp = CobblerProvision()
-    if item == "profile":
-        profile = request.args.get("profile", "")
-        kickstart = request.args.get("kickstart", "")
-        (result, msg) = cp.update_profile(token, profile, kickstart)
-    elif item == "system":
-        system = request.args.get("system", "")
-        contents = request.args.get("contents", "")
-        (result, msg) = cp.update_system(token, system, contents)
-    return format_result_data("update", item, result, msg)
-
-@app.route('/cm/v1.0/cobbler/remove/<item>', methods = ['GET'])
-def remove_item(item):
-    """remove a specific name in item, item is in [distro, profile, system, and etc.]"""
-    items = "distro profile system".split()
-    if item not in items:
-        return format_not_support_operation("remove", item)
-    token = request.args.get("token", "")
-    cp = CobblerProvision()
-    name = request.args.get("name", "")
-    func_item = getattr(cp, "remove_{0}".format(item))
-    (result, msg) = func_item(token, name)
-    return format_result_data("remove", item, result, msg)
-
-@app.route('/cm/v1.0/cobbler/deploy/<system>', methods = ['GET'])
-def deploy_item(system):
-    """deploy a specific system, """
-    token = request.args.get("token", "")
-    cp = CobblerProvision()
-    (result, msg) = cp.deploy_system(system)
-    return format_result_data("deploy", system, result, msg)
-
-@app.route('/cm/v1.0/cobbler/power/<system>', methods = ['GET'])
-def power_item(system):
-    """power on/off a specific system, """
-    token = request.args.get("token", "")
-    cp = CobblerProvision()
-    onoff = request.args.get("onoff", "off")
-    flag = True if onoff == "on" else False
-    (result, msg) = cp.power_system(system, flag)
-    return format_result_data("power", system, result, msg)
-
-def format_not_support_operation(type, item):
-    return format_result_data(type, item, None, "Operation {0} does NOT support {1}".format(type, item))
-
-def format_result_data(type, item, data, msg):
-    result_dict = {
-                     "type": type,
-                     "item": item,
-                     "data": data,
-                     "msg": msg,
-                   }
-    return jsonify({"cobbler": result_dict, })
+def not_supported_objects(func_name, object_type):
+    """
+      cobbler supports a lot of objects. However, this cobbler REST API only support part of them.
+      The supported object defined in SUPPORTED_OBJECTS. 
+    """
     
+    return format_result_data(False, "Object {0} dose NOT supported in currently REST API.".format(object_type))
 
+
+def response_json(func):
+    @wraps(func)
+    def wrap_response_json(*args, **kwargs):
+        print "hello ..."
+        result = {"cmrest": {
+                              "operation": "cobbler",
+                              "data": func(*args, **kwargs),
+                            }
+                  }
+        return Response(json.dumps(result), status=200, mimetype="application/json")
+    return wrap_response_json
+
+
+@app.route('/cm/v1/cobbler/<objects>', methods = ['GET'])
+@response_json
+def list_objects(objects):
+    """
+      returns the names of all possible 'objects', objects defined in SUPPORTED_OBJECTS
+      e.g. http://host:port/cm/v1/cobbler/distros
+    """
+    if objects not in SUPPORTED_OBJECTS:
+        return not_supported_objects(objects)
+    # MUST know how to get user token, empty token ONLY for debug
+    kwargs = {"user_token": ""}
+    item = objects[:-1]  # value of objects does NOT contain the last 's'
+    cp = CobblerProvision()
+    func = getattr(cp, "list_{0}_names".format(item))
+    return func(**kwargs)
+
+@app.route('/cm/v1/cobbler/<objects>/<name>', methods = ['GET', 'POST', 'PUT', 'DELETE'])
+@response_json
+def process_objects(objects, name):
+    """
+      returns the report of a specific name in 'objects', objects defined in SUPPORTED_OBJECTS
+      e.g. http://host:port/cm/v1/cobbler/distros/test-x86_64
+    """
+    if objects not in SUPPORTED_OBJECTS:
+        return not_supported_objects(objects)
+    item = objects[:-1]  # value of objects does NOT contain the last 's'
+    cp = CobblerProvision()
+    method = request.method
+    if method == "GET":
+        # MUST know how to get user token, empty token ONLY for debug
+        kwargs = {"user_token": ""}
+        func = getattr(cp, "get_{0}_report".format(item))
+        return func(name, **kwargs)
+    
+    data = request.json
+    if method == "POST":
+        if item == "distro":
+            url = data.get("url", "")
+            return cp.import_distro(name, url, **data)
+        if item == "profile":
+            distro = data.get("distro", "")
+            kickstart = data.get("kickstart", "")
+            return cp.add_profile(name, distro, kickstart, **data)
+        if item == "system":
+            return cp.add_system(name, data)
+    if method == "PUT":
+        if item == "profile":
+            kickstart = data.get("kickstart", "")
+            return cp.update_profile(name, kickstart, **data)
+        if item == "system":
+            return cp.update_system(name, data)
+    if method == "DELETE":
+        func = getattr(cp, "remove_{0}".format(item))
+        return func(name, **data)
+     
+@app.route('/cm/v1/cobbler/baremetal/<system>', methods = ['POST', 'PUT'])
+@response_json
+def baremetal_system(system):
+    data = request.json
+    cp = CobblerProvision()
+    # deploy system
+    if request.method == "POST":
+        return cp.deploy_system(system, **data)
+    # power system
+    if request.method == "PUT":
+        return cp.power_system(system, **data)
 
 if __name__ == '__main__':
     print "start"
