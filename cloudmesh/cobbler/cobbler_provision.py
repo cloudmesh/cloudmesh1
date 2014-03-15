@@ -1,11 +1,56 @@
 #!/usr/bin/python
 
-import cobbler.api as capi
-import subprocess
+from cobbler import api as capi
+from multiprocessing import Process, Queue
+from functools import wraps
 import os
 import sys
 import time
-import logging
+import subprocess
+
+
+def authorization(func):
+    """
+      decorator. authorizate the user's action according to his token and current accessing API. 
+    """
+    @wraps(func)
+    def wrap_authorization(self, *args, **kwargs):
+        """
+        user_token = kwargs.get("user_token", "")
+        if self.validate_token(func.__name__, user_token):
+            return func(self, *args, **kwargs)
+        else:
+            return self._simple_result_dict(False, "Authorization failed with token {0}".format(user_token))
+        """
+        # ONLY for debug
+        # currently, NO authorization
+        #print "[TEST ONLY] Authorizate function {0} ...".format(func.__name__)
+        return func(self, *args, **kwargs)
+    return wrap_authorization
+
+def cobbler_object_exist(object_type, ensure_exist=True):
+    """
+      decorator. check whether one object exist or not in cobble.
+      param ensure_exist is True means the object MUST exist, otherwise must NOT exist.
+    """
+    def _cobbler_object_exist(func):
+        @wraps(func)
+        def wrap_cobbler_object_exist(self, name, *args, **kwargs):
+            flag_exist = False
+            if name in self._list_item_names(object_type):
+                flag_exist = True
+            if ensure_exist:  # MUST exist
+                if flag_exist:
+                    return func(self, name, *args, **kwargs)
+                else:
+                    return self._simple_result_dict(False, "The name {0} in {1} does NOT exist.".format(name, object_type))
+            else:  # must NOT exist
+                if not flag_exist:
+                    return func(self, name, *args, **kwargs)
+                else:
+                    return self._simple_result_dict(False, "The name {0} in {1} already exists.".format(name, object_type))
+        return wrap_cobbler_object_exist
+    return _cobbler_object_exist
 
 class CobblerProvision:
     """ Stand on top of cobbler, provide simple and easy API for deploying new OS.
@@ -17,17 +62,12 @@ class CobblerProvision:
      through command line.
      
      The strategy used here is as follows:
-         (1) BootAPI can be used in reading only;
+         (1) BootAPI can be used in reading only, MUST use multiprocessing;
          (2) Add/Modify/Remove operations are operated by shell command.
     """
     
     def __init__(self):
-        self.handler = capi.BootAPI()
-        self.logger = logging.getLogger("Mycobbler")
-        self.logger.setLevel(logging.DEBUG)
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.DEBUG)
-        self.logger.addHandler(ch)
+        pass
     
     def get_token(self, username, password):
         """ validate user, generate a token representing his rights.
@@ -35,143 +75,183 @@ class CobblerProvision:
          """
         return "a random valid token"
     
-    def validate_token(self, user_token, access_api):
+    def validate_token(self, access_api, user_token):
         """ validate user's token, if it is not expired, then check whether the
         user has the right to access the specific api, that is access_api, 
         if yes, return True, otherwise return False
         """
+        print "user_token = {0}, access_api = {1}".format(user_token, access_api)
         return True
     
-    def list_distro_names(self, user_token):
+    @authorization
+    def list_distro_names(self, **kwargs):
         """ 
         ONLY list distribution names, 
         """
-        return self._list_item_names(user_token, "distro")
+        return self._simple_result_dict(True, data=self._list_item_names("distro"))
     
-    def list_profile_names(self, user_token):
+    @authorization
+    def list_profile_names(self, **kwargs):
         """ 
         ONLY list profile names, 
         """
-        return self._list_item_names(user_token, "profile")
+        return self._simple_result_dict(True, data=self._list_item_names("profile"))
     
-    def list_system_names(self, user_token):
+    @authorization
+    def list_system_names(self, **kwargs):
         """ 
         ONLY list system names, 
         """
-        return self._list_item_names(user_token, "system")
+        return self._simple_result_dict(True, data=self._list_item_names("system"))
     
-    def _list_item_names(self, user_token, func_name):
+    def _wrap_process_list_item_names(self, q, objects):
+        cobbler_handler = capi.BootAPI()
+        func = getattr(cobbler_handler, objects)
+        q.put([x.name for x in func()])
+    
+    def _call_cobbler_process(self, func_name, *args):
+        q = Queue()
+        p = Process(target=getattr(self, func_name), args=(q,) + args)
+        p.start()
+        result = q.get()
+        p.join()
+        return result
+    
+    def _list_item_names(self, object_type):
         """ 
         ONLY list item names, called by distro, profile, system, and etc.
-        return a list if token is valid, otherwise return None.
+        return a list of object_type
         """
-        if not self.validate_token(user_token, "list_{0}_names".format(func_name)):
-            return None
-        func_item = getattr(self.handler, "{0}s".format(func_name))
-        return [x.name for x in func_item()]
+        return self._call_cobbler_process("_wrap_process_list_item_names", "{0}s".format(object_type))
     
+    def _wrap_report_result(self, object_type, name):
+        data = self._get_item_report(object_type, name)
+        result = True if len(data) else False
+        msg = "Success" if result else "Object {0} does NOT exist in {1}s.".format(name, object_type)
+        return self._simple_result_dict(result, msg, data)
     
-    def get_distro_report(self, user_token, name):
+    @authorization
+    def get_distro_report(self, name, **kwargs):
         """ 
           report the detail of the distribution with name, 
         """
-        return self._get_item_report(user_token, "distro", name)
+        return self._wrap_report_result("distro", name)
     
-    def get_profile_report(self, user_token, name):
+    @authorization
+    def get_profile_report(self, name, **kwargs):
         """ 
           report the detail of the profile with name, 
         """
-        return self._get_item_report(user_token, "profile", name)
+        return self._wrap_report_result("profile", name)
     
-    def get_system_report(self, user_token, name):
+    @authorization
+    def get_system_report(self, name, **kwargs):
         """ 
           report the detail of the system with name, 
         """
-        return self._get_item_report(user_token, "system", name)
+        return self._wrap_report_result("system", name)
     
-    def _get_item_report(self, user_token, func_name, item_name):
-        """
-          report the specific item, called by distro, profile, system, etc.
-          if user authorization failed return None, otherwise return correct item dict.
-        """
-        if not self.validate_token(user_token, "get_{0}_report".format(func_name)):
-            return None
-        func_item = getattr(self.handler, "find_{0}".format(func_name))
+    def _wrap_process_get_item_report(self, q, object_type, name):
+        cobbler_handler = capi.BootAPI()
+        func = getattr(cobbler_handler, "find_{0}".format(object_type))
         result_list = []
-        for item in func_item(name=item_name, return_list=True):
+        for item in func(name=name, return_list=True):
             data = item.to_datastruct()
-            result_list.append({"type": func_name, 
+            result_list.append({"type": object_type, 
                                 "name": data["name"], 
                                 "data": data,
                                 })
-        return result_list
+        q.put(result_list)
     
-    def import_distro(self, user_token, url, name):
-        if not self.validate_token(user_token, "import_distro"):
-            return (False, "user token authorization failed.")
+    def _get_item_report(self, object_type, name):
+        """
+          report the specific item, called by distro, profile, system, etc.
+          return correct item dict.
+        """
+        return self._call_cobbler_process("_wrap_process_get_item_report", object_type, name)
+    
+    @authorization
+    def import_distro(self, name, url, **kwargs):
+        """
+          add a distribution to cobbler with import command.
+          The first step is to fetch image file given by parameter url with wget, the url MUST be http, ftp, https.
+          Then, moust the image, finally import image with cobbler import command
+        """
         dir_base = "/tmp"
         dir_iso = "{0}/iso".format(dir_base)
         dir_mount = "{0}/mnt/".format(dir_iso)
-        result = self.mkdir(dir_mount)
-        if not result:
-            return (False, "User does NOT have write permission in /tmp directory")
-        (result, msg) = self.wget(url, dir_iso)
-        if not result:
-            return (False, msg)
-        old_distro_names = self.list_distro_names(user_token)
+        flag_result = self.mkdir(dir_mount)
+        if not flag_result:
+            return self._simple_result_dict(False, "User does NOT have write permission in /tmp directory.")
+        # fetch image iso
+        (flag_result, msg) = self.wget(url, dir_iso)
+        if not flag_result:
+            return self._simple_result_dict(False, msg)
+        old_distro_names = self._list_item_names("distro")
+        # mount image
         if self.mount_image(msg, dir_mount):
-            args = ["cobbler", "import", "--path={0}".format(dir_mount), "--name={0}".format(name),]
-            result = self.shell_command(args)
+            cmd_args = ["cobbler", "import", "--path={0}".format(dir_mount), "--name={0}".format(name), ]
+            flag_result = self.shell_command(cmd_args)
             self.umount_image(dir_mount)
-            if not result:
-                return (False, "Failed to import distro [{0}] from [{1}]".format(name, url))
-            curr_distro_names = self.list_distro_names(user_token)
-            possible_names = [x for x in curr_distro_name if x not in old_distro_names]
-            distro_name = None
-            for pname in possible_names:
-                if pname.startswith(name):
-                    distro_name = pname
-                    break
-            return (True, distro_name) if distro_name else (False, "Failed to import distro, unknown error.")
-        return (False, "Failed to mount unsupported image [{0}].".format(url))
+            if not flag_result:
+                return self._simple_result_dict(False, "Failed to import distro [{0}] from [{1}]".format(name, url))
+            curr_distro_names = self._list_item_names("distro")
+            # double check the result of import distro
+            possible_names = [x for x in curr_distro_name if x not in old_distro_names and x.startswith(name)]
+            distro_name = possible_names[0] if len(possible_names) else None
+            return self._simple_result_dict(True if distro_name else False, "Add distro {0} {1}successfully.".format(name, "" if distro_name else "un"))
+        return self._simple_result_dict(False, "Failed to mount unsupported image [{0}] in add distro {1}.".format(url, name))
     
-    def add_profile(self, user_token, profile_name, distro_name, kickstart_file):
+    @cobbler_object_exist("profile", False)
+    @authorization
+    def add_profile(self, profile_name, *args, **kwargs):
         """
           add a new profile
         """
-        if not self.validate_token(user_token, "add_profile"):
-            return (False, "user token authorization failed.")
-        if profile_name in self.list_profile_names(user_token):
-            return (False, "Profile name [{0}] has already existed.")
-        if not (distro_name in self.list_distro_names(user_token)
-                and self.file_exist(kickstart_file)):
-            return (False, "Distro [{0}] or kickstart file [{1}] does NOT exist.".format(distro_name, kickstart_file))
-        args = ["cobbler", "profile", "add", 
-                "--name={0}".format(profile_name),
-                "--distro={0}".format(distro_name), 
-                "--kickstart={0}".format(kickstart_file),
-                ]
-        if self.shell_command(args):
-            return (True, profile_name)
-        return (False, "Failed to add profile [{0}] with distro [{1}] and kickstart file [{2}]".format(profile_name, distro_name, kickstart_file))
-    
-    def update_profile(self, user_token, profile_name, kickstart_file):
+        if len(args) >= 2 and args[0] in self._list_item_names("distro") and self.file_exist(args[1]):
+            distro_name = args[0]
+            kickstart_file = args[1]
+        else:
+            msg = "Must provide a distribution name and a kickstart file to add profile {0}.".format(profile_name)\
+                  if len(args) < 2 else "Distro {0} or kickstart file {1} to add profile {1} MUST exist.".format(args[0], args[1], profile_name)
+            return self._simple_result_dict(False, msg)
+        cmd_args = ["cobbler", "profile", "add", 
+                    "--name={0}".format(profile_name),
+                    "--distro={0}".format(distro_name), 
+                    "--kickstart={0}".format(kickstart_file),
+                    ]
+        flag_result = self.shell_command(cmd_args)
+        return self._simple_result_dict(flag_result, "Add profile {0} {1}successfully.".format(profile_name, "" if flag_result else "un"))
+        
+    @cobbler_object_exist("profile")
+    @authorization
+    def update_profile(self, profile_name, *args, **kwargs):
         """
           update the kickstart file in the profile
         """
-        if not self.validate_token(user_token, "update_profile"):
-            return (False, "user token authorization failed.")
-        if not (profile_name in self.list_profile_names(user_token)
-                and self.file_exist(kickstart_file)):
-            return (False, "Profile [{0}] or kickstart file [{1}] does NOT exist.".format(profile_name, kickstart_file))
-        args = ["cobbler", "profile", "edit", "--name={0}".format(profile_name), "--kickstart={0}".format(kickstart_file)]
-        if self.shell_command(args):
-            return (True, profile_name)
-        return (False, "Failed to update profile [{0}] with kickstart file [{1}]".format(profile_name, kickstart_file))
-    
-    def add_system(self, user_token, system_name, profile_name, contents):
+        if len(args) > 0 and self.file_exist(args[0]):
+            kickstart_file = args[0]
+        else:
+            msg = "Must provide a kickstart file to update profile {0}".format(profile_name) if len(args) == 0\
+                  else "kickstart file {0} to update profile {1} does NOT exist.".format(args[0], profile_name)
+            return self._simple_result_dict(False, msg)
+        cmd_args = ["cobbler", "profile", "edit", 
+                    "--name={0}".format(profile_name), 
+                    "--kickstart={0}".format(kickstart_file),
+                    ]
+        flag_result = self.shell_command(cmd_args)
+        return self._simple_result_dict(flag_result, 
+                                        "update profile [{0}] with kickstart file [{1}] {2}successfully."\
+                                        .format(profile_name, kickstart_file, "" if flag_result else "un")
+                                        )
+        
+    @cobbler_object_exist("system", False)
+    @authorization
+    def add_system(self, system_name, contents, **kwargs):
         """
-          add system to cobbler.
+          add system to cobbler with 2 steps.
+          The first step is to add a new system ONLY with system name and profile name.
+          The second step is to add other contents of system.
           param interfaces is a list, each of which is a dict that has the following format.
           contents has the following formation:
           {
@@ -203,33 +283,45 @@ class CobblerProvision:
             management: True | False,
           }
         """
-        if not self.validate_token(user_token, "add_system"):
-            return (False, "user token authorization failed.")
-        if system_name in self.list_system_names(user_token):
-            return (False, "System name [{0}] has already exist.".format(system_name))
-        if not (profile_name in self.list_profile_names(user_token)):
-            return (False, "Profile [{0}] does NOT exist.".format(profile_name))
-        args = ["cobbler", "system", "add", "--name={0}".format(system_name), "--profile={0}".format(profile_name), ]
-        result = self.shell_command(args)
-        if result:
-            result = self._edit_system(system_name, contents)
-        return (True, system_name) if result else (False, "Failed to add system, please check parameters.")
-    
-    def update_system(self, system_name, contents):
-        if not self.validate_token(user_token, "update_system"):
-            return (False, "user token authorization failed.")
-        if system_name not in self.list_system_names(user_token):
-            return (False, "System name [{0}] does NOT exist.".format(system_name))
+        # profile must be provided to add a system
+        flag_result = False
+        profile_name = None
         if "profile" in contents:
-            if not (contents["profile"] in self.list_profile_names(user_token)):
-                return (False, "Failed to update system, because profile [{0}] does NOT exist.".format(contents["profile"]))
-            args = ["cobbler", "system", "edit", "--name={0}".format(system_name)]
-            args += ["--profile={0}".format(contents["profile"])]
-            if not self.shell_command(args):
-                return (False, "Failed to update system [{0}] with unknown error.".format(system_name))
-        result = self._edit_system(system_name, contents)
-        return (True, system_name) if result else (False, "Failed to add system, please check parameters.")
+            profile_name = contents["profile"]
+            if profile_name in self._list_item_names("profile"):
+                flag_result = True
+        if not flag_result:
+            return self._simple_result_dict(False, "Profile [{0}] does NOT exist.".format(profile_name) if profile_name else "Must provide a profile to add system.")
+        cmd_args = ["cobbler", "system", "add", 
+                    "--name={0}".format(system_name), 
+                    "--profile={0}".format(profile_name), 
+                    ]
+        flag_result = self.shell_command(cmd_args)
+        if flag_result:
+            flag_result = self._edit_system(system_name, contents)
+            # add others of system failed, MUST remove the added new system completely
+            if not flag_result:
+                self._remove_item("system", system_name)
+        return self._simple_result_dict(flag_result, "Add system {0} {1}successfully.".format(system_name, "" if flag_result else "un"))
     
+    @cobbler_object_exist("system")
+    @authorization
+    def update_system(self, system_name, contents, **kwargs):
+        """
+          update system with 2 steps. The first step is updating profile if needed.
+          The second step is to update other objects in system.
+        """
+        # update profile firstly
+        if "profile" in contents:
+            if contents["profile"] not in self._list_item_names("profile"):
+                return self._simple_result_dict(False, "Failed to update system, because profile [{0}] does NOT exist.".format(contents["profile"]))
+            cmd_args = ["cobbler", "system", "edit", "--name={0}".format(system_name)]
+            cmd_args += ["--profile={0}".format(contents["profile"])]
+            if not self.shell_command(args):
+                return self._simple_result_dict(False, "Failed to update system [{0}] with unknown error.".format(system_name))
+        # update other objects in system
+        flag_result = self._edit_system(system_name, contents)
+        return self._simple_result_dict(flag_result, "Update system {0} {1}successfully.".format(system_name, "" if flag_result else "un"))
     
     def _edit_system(self, system_name, contents):
         """
@@ -238,107 +330,136 @@ class CobblerProvision:
         system_args = "gateway hostname kopts ksmeta name-servers owners".split()
         power_args = "power-type power-address power-user power-pass power-id".split()
         interface_args = "ip-address mac-address netmask static management".split()
-        args_edit = ["cobbler", "system", "edit", "--name={0}".format(system_name), ]
-        args = args_edit + self._merge_arg_list(system_args, contents)
-        # power
+        cmd_args_edit = ["cobbler", "system", "edit", "--name={0}".format(system_name), ]
+        # common system parameters
+        cmd_args = cmd_args_edit + self._merge_arg_list(system_args, contents)
+        # power parameters
         if "power" in contents.keys():
-            args += self._merge_arg_list(power_args, contents["power"])
+            cmd_args += self._merge_arg_list(power_args, contents["power"])
         all_interface_args = []
-        if "interfaces" in contents.keys():
+        if "interfaces" in contents:
             for interface in contents["interfaces"]:
                 temp_if_args = ["--interface={0}".format(interface["name"])]
                 temp_if_args += self._merge_arg_list(interface_args, interface)
                 all_interface_args += [temp_if_args]
-        result = True
+        flag_result = True
         if len(all_interface_args) > 0:
-            result = self.shell_command(args + all_interface_args[0])
-        elif len(args) > len(args_edit):
-            result = self.shell_command(args)
-        if result:
+            flag_result = self.shell_command(cmd_args + all_interface_args[0])
+        elif len(cmd_args) > len(cmd_args_edit):
+            flag_result = self.shell_command(args)
+        if flag_result:
             for interface in all_interface_args[1:]:
-                result = self.shell_command(args_edit + interface)
-                if not result:
+                flag_result = self.shell_command(cmd_args_edit + interface)
+                if not flag_result:
                     break
-        return result
+        return flag_result
     
-    def remove_distro(self, user_token, distro_name):
+    @authorization
+    def remove_distro(self, distro_name, **kwargs):
         """
           remove a distro
         """
-        return remove_item(user_token, "distro", distro_name)
+        return self._remove_item("distro", distro_name)
     
-    def remove_profile(self, user_token, profile_name):
+    @authorization
+    def remove_profile(self, profile_name, **kwargs):
         """
           remove a profile
         """
-        return remove_item(user_token, "profile", profile_name)
+        return self._remove_item("profile", profile_name)
     
-    def remove_system(self, user_token, system_name):
+    @authorization
+    def remove_system(self, system_name, **kwargs):
         """
           remove a system
         """
-        return remove_item(user_token, "system", system_name)
+        return self._remove_item("system", system_name)
     
-    def remove_item(self, user_token, item_name, object_name):
-        if not self.validate_token(user_token, "remove_{0}".format(item_name)):
-            return (False, "user token authorization failed.")
-        args = ["cobbler", item_name, "remove", "--name={0}".format(object_name)]
-        item_func = getattr(self, "get_{0}_names".format(item_name))
-        result = True
-        if object_name in item_func():
-            result = self.shell_command(args)
+    def _remove_item(self, object_type, name):
+        cmd_args = ["cobbler", object_type, "remove", "--name={0}".format(name)]
+        if name in self._list_item_names(object_type):
+            flag_result = self.shell_command(cmd_args)
+            return self._simple_result_dict(flag_result, "The object {0} in {1} removed {2}successfully.".format(name, object_type, "" if flag_result else "un"))
+        return self._simple_result_dict(True, "The name {0} in {1} does NOT exist. Not need to remove.".format(name, object_type))
+    
+    @cobbler_object_exist("system")
+    @authorization
+    def remove_system_interface(self, system_name, *args, **kwargs):
+        """
+         remove one or more interfaces from a system named system_name. 
+         If param args contains at lease one interface name, then each of which will be removed from system.
+         If param args is empty, all possible interfaces will be removed from this system.
+        """
+        report = self._get_item_report("system", system_name)
+        all_interfaces = [x for x in report[0]["data"]["interfaces"]]
+        user_delete_interfaces = list(args) if len(args) > 0 else all_interfaces
+        result = {}
+        if interface_name in user_delete_interfaces:
+            if interface_name in all_interfaces:
+                cmd_args = ["cobbler", "system", "edit", 
+                            "--name={0}".format(system_name), 
+                            "--interface={0}".format(interface_name), 
+                            "--delete-interface", 
+                            ]
+                flag_result = self.shell_command(cmd_args)
+                result[interface_name] = self._simple_result_dict(flag_result, 
+                                                                  "Interface {0} removed {1}succefully.".format(interface_name, "" if flag_result else "un"))
+            else:
+                result[interface_name] = self._simple_result_dict(True, "Interface {0} does NOT exist. Not need to remove.".format(interface_name))
         return result
     
-    def remove_system_interface(self, user_token, system_name, interface_name=None):
-        """
-         remove an interface from a system.
-        """
-        if not self.validate_token(user_token, "remove_system_interface"):
-            return (False, "user token authorization failed.")
-        result = True
-        if system_name in self.list_system_names(user_token):
-            report = self.get_system_report(user_token, system_name)
-            if interface_name in report[0]["data"]["interfaces"]:
-                args = ["cobbler", "system", "edit", "--name={0}".format(system_name), 
-                        "--interface={0}".format(interface_name), "--delete-interface", ]
-                result = self.shell_command(args)
-        return result
+    # find system and change the netboot value if needed
+    def _wrap_cobbler_find_system(self, q, name, flag_netboot):
+        cobbler_handler = capi.BootAPI()
+        func = getattr(cobbler_handler, "find_system")
+        system = func(name)
+        if flag_netboot != system.netboot_enabled:
+            system.netboot_enabled = flag_netboot
+            cobbler_handler.add_system(system)
+        q.put(system)
+        
+    # power system
+    def _wrap_cobbler_power_system(self, q, system, power_status):
+        options = {
+                    "on": "power_on",
+                    "off": "power_off",
+                    "reboot": "reboot",
+                   }
+        cobbler_handler = capi.BootAPI()
+        # default action is power_on
+        power_action = options.get(power_status.lower(), "power_on")
+        func = getattr(cobbler_handler, power_action)
+        func(system)
+        q.put(power_action)
     
-    def deploy_system(self, user_token, system_name):
+    @cobbler_object_exist("system")
+    @authorization
+    def deploy_system(self, system_name, **kwargs):
         """
          deploy a system.
         """
-        if not self.validate_token(user_token, "deploy_system"):
-            return (False, "user token authorization failed.")
-        result = True
-        if system_name not in self.list_system_names(user_token):
-            return (False, "System [{0}] dose NOT exist.".format(system_name))
-        system = self.handler.find_system(name=system_name)
-        if not system.netboot_enabled:
-            system.netboot_enabled = True
-            # save modified system
-            self.handler.add_system(system)
-        # monitor status
-        self.handler.reboot(system)
-        return (True, "deploy system")
-        
-    def power_system(self, user_token, system_name, power_on=True):
-        """
-         power on a system.
-        """
-        if not self.validate_token(user_token, "power_system"):
-            return (False, "user token authorization failed.")
-        result = True
-        if system_name not in self.list_system_names(user_token):
-            return (False, "System [{0}] dose NOT exist.".format(system_name))
-        system = self.handler.find_system(name=system_name)
-        if system.netboot_enabled:
-            system.netboot_enabled = False
-            # save modified system
-            self.handler.add_system(system)
-        self.handler.power_on(system) if power_on else self.handler.power_off(system)
-        return (True, "Power {0} system.".format("on" if power_on else "off"))
+        system = self._call_cobbler_process("_wrap_cobbler_find_system", system_name, True)
+        action = self._call_cobbler_process("_wrap_cobbler_power_system", system, "reboot")
+        # monitor deploy status
+        # to do ...
+        return self._simple_result_dict(True, "Start to deploy system ...")
     
+    @cobbler_object_exist("system")
+    @authorization
+    def power_system(self, system_name, **kwargs):
+        """
+         power on/off a system.
+        """
+        # get the value of 'power_on' set by user, default value is True or power ON
+        power_status = "on" if kwargs.get("power_on", True) else "off"
+        system = self._call_cobbler_process("_wrap_cobbler_find_system", system_name, False)
+        action = self._call_cobbler_process("_wrap_cobbler_power_system", system, power_status)
+        # monitor power on/off status
+        # to do ...
+        return self._simple_result_dict(True, "Start to power {0} system ...".format(power_status))
+    
+    def _simple_result_dict(self, result, msg="", data=None):
+        return {"result": result, "description": msg, "data": data,}
     
     def _merge_arg_list(self, arg_list, content_dict):
         result = []
@@ -380,44 +501,30 @@ class CobblerProvision:
         return result
     
     def shell_command(self, args):
-        print " ".join(args)
+        #print "==Command> ", " ".join(args)
         DEVNULL = open(os.devnull, "wb")
         return 0 == subprocess.call(args, stderr=DEVNULL, stdout=DEVNULL)
 
+# TEST TEST TEST
 if __name__ == "__main__":
-    cp = CobblerProvision()
-    user_token = cp.get_token("username", "password")
-    """
-    distro_names = cp.list_distro_names(token)
-    print "distros names: ", distro_names
-    profile_names = cp.list_profile_names(token)
-    print "profiles names: ", profile_names
-    system_names = cp.list_system_names(token)
-    print "systems names: ", system_names
-    name = "*x86_64"
-    distros = cp.get_profile_report(token, name)
-    if len(distros) > 0:
-        for distro in distros:
-            print "profile report: {0}".format( distro)
-    else:
-        print "Cannot find profile with name {0}".format(name)
-    url = "http://ftp.ussg.iu.edu/linux/ubuntu-releases/13.04/ubuntu-13.04-server-amd64.iso"
-    name = "test"
-    (result, msg) = cp.add_distro(token, url, name)
-    print "after add distro, result is {0}, msg is {1}".format(result, msg)
-    profile_name = "test-x86_64"
-    kickstart_file = "/var/lib/cobbler/kickstarts/ktanaka.ks"
-    result = cp.update_profile(user_token, profile_name, kickstart_file)
-    print result
-    profile_name = "abcdef_test"
-    distro_name = "test-x86_64"
-    kickstart_file = "/var/lib/cobbler/kickstarts/ktanaka.ks"
-    result = cp.add_profile(user_token, profile_name, distro_name, kickstart_file)
-    print result
-    """
+    debug_status = {
+                     "list_names": True,
+                     "report_distro": False,
+                     "report_profile": True,
+                     "report_system": False,
+                     "add_distro": False,
+                     "add_profile": True,
+                     "update_profile": True,
+                     "add_system": False,
+                     "update_system": False,
+                     "remove_system_interface": False,
+                     "remove_system": False,
+                     "remove_profile": False,
+                     "remove_distro": False,
+                    }
     my_sys = {
-               "name": "mytestsys",
-               "profile": "test-x86_64",
+               "name": "mysys140313",
+               "profile": "test-profile-140313",
                "power": {
                            "power-address": "1.2.3.4",
                            "power-user": "test",
@@ -444,7 +551,127 @@ if __name__ == "__main__":
                                 },
                               ],
               }
-    #(result, msg) = cp.add_system(user_token, my_sys["name"], my_sys["profile"], my_sys)
-    #print result, msg
-    result = cp.remove_system_interface(user_token, my_sys["name"], my_sys["interfaces"][0]["name"])
-    print result
+    my_sys_update = {
+               "name": "mysys140313",
+               "interfaces": [
+                               {
+                                 "name": "ee3",
+                                 "ip-address": "192.168.1.234",
+                                 "mac-address": "aa:bb:dd:dd:ee:ff",
+                                 "static": True,
+                                 "management": False,
+                                 "netmask": "255.255.255.0",
+                                },
+                              ],
+              }
+    cp = CobblerProvision()
+    user_token = cp.get_token("username", "password")
+    kwargs = {"user_token": user_token}
+    
+    # list objects
+    if debug_status["list_names"]:
+        distro_names = cp.list_distro_names(**kwargs)
+        print "distros names: ", distro_names["data"]
+        profile_names = cp.list_profile_names(**kwargs)
+        print "profiles names: ", profile_names["data"]
+        system_names = cp.list_system_names(**kwargs)
+        print "systems names: ", system_names["data"]
+    # get object reports
+    if debug_status["report_distro"]:
+        # distro
+        distro_name = "*x86_64"
+        reports = cp.get_distro_report(distro_name)
+        distros = reports["data"] if reports["result"] else []
+        if len(distros) > 0:
+            for distro in distros:
+                print "{0} {1} {0}".format("="*10, distro["name"])
+                print "distro report: {0}".format(distro)
+        else:
+            print "Cannot find distro with name {0}".format(distro_name)
+    if debug_status["report_system"]:
+        # system
+        system_name = "gra*"
+        reports = cp.get_system_report(system_name)
+        systems = reports["data"] if reports["result"] else []
+        if len(systems) > 0:
+            for system in systems:
+                print "{0} {1} {0}".format("="*10, system["name"])
+                print "system report: {0}".format(system)
+        else:
+            print "Cannot find system with name {0}".format(system_name)
+    
+    distro_name = "test-distro-140313"
+    profile_name = my_sys["profile"]
+    system_name = my_sys["name"]
+    # clean the test
+    #cp.remove_system(system_name)
+    #cp.remove_profile(profile_name)
+    #cp.remove_distro(distro_name)
+    
+    # following is a clean test  ...
+    
+    # add distro
+    if debug_status["add_distro"]:
+        #url = "http://ftp.ussg.iu.edu/linux/ubuntu-releases/13.04/ubuntu-13.04-server-amd64.iso"
+        # CentOS
+        url = "http://mirrors.usc.edu/pub/linux/distributions/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-bin-DVD1.iso"
+        result = cp.add_distro(distro_name, url)
+        print "add_distro result is: ", result
+    # add profile
+    if debug_status["add_profile"]:
+        distro_name = "test-x86_64"
+        kickstart_file = "/var/lib/cobbler/kickstarts/ktanaka.ks"
+        result = cp.add_profile(profile_name, distro_name, kickstart_file)
+        print "add profile, result is: ", result
+    # report profile
+    if debug_status["report_profile"]:
+        reports = cp.get_profile_report(profile_name)
+        profiles = reports["data"] if reports["result"] else []
+        if len(profiles) > 0:
+            for profile in profiles:
+                print "{0} {1} {0}".format("="*10, profile["name"])
+                print "profile report: {0}".format(profile)
+        else:
+            print "Cannot find profile with name {0}".format(profile_name)
+    # update profile
+    if debug_status["update_profile"]:
+        kickstart_file = "/var/lib/cobbler/kickstarts/sample.ks"
+        result = cp.update_profile(profile_name, kickstart_file)
+        print "update profile, result is: ", result
+    # report profile
+    if debug_status["report_profile"]:
+        reports = cp.get_profile_report(profile_name)
+        profiles = reports["data"] if reports["result"] else []
+        if len(profiles) > 0:
+            for profile in profiles:
+                print "{0} {1} {0}".format("="*10, profile["name"])
+                print "profile report: {0}".format(profile)
+        else:
+            print "Cannot find profile with name {0}".format(profile_name)
+    # add system
+    if debug_status["add_system"]:
+        result = cp.add_system(my_sys["name"], my_sys)
+        print "add system, result is: ", result
+    # update system
+    if debug_status["update_system"]:
+        result = cp.update_system(my_sys_update["name"], my_sys_update)
+        print "update system, result is: ", result
+    # remove a interface 
+    if debug_status["remove_system_interface"]:
+        system_name = my_sys_update["name"]
+        interface_name = my_sys_update["interfaces"][0]["name"]
+        result = cp.remove_system_interface(system_name, interface_name)
+        print "remove system interface, result is: ", result
+    # remove system
+    if debug_status["remove_system"]:
+        system_name = my_sys["name"]
+        result = cp.remove_system(system_name)
+        print "remove system, result is: ", result
+    # remove profile
+    if debug_status["remove_profile"]:
+        result = cp.remove_profile(profile_name)
+        print "remove profile, result is: ", result
+    # remove distro
+    if debug_status["remove_distro"]:
+        result = cp.remove_distro(distro_name)
+        print "remove distro, result is: ", result
