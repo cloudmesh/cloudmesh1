@@ -59,6 +59,7 @@ class cm_shell_list:
                list flavors [CLOUD]
                list servers [CLOUD]
                list images [CLOUD]
+               list
 
         Arguments:
 
@@ -75,7 +76,14 @@ class cm_shell_list:
         user = config.username()
         dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': user})
         #log.info(args)
-        pprint(arguments)
+        #pprint(arguments)
+        #chk if no args provided, to output the list of clouds.
+        print '\n\n'
+        noArg = None
+        for value in arguments.values():
+            if value:
+                noArg = False
+                break
         #log.info(arguments)
         all = False
         if not arguments["CLOUD"]:
@@ -86,6 +94,15 @@ class cm_shell_list:
                 clouds = [config.default_cloud]
         else:
             clouds = [arguments["CLOUD"]]
+
+        #no args provided, print the clouds.
+        if not noArg:
+            print "--------------------------------------------------------------------------------"
+            print 'List of Clouds:'
+            for cloud in clouds:
+                print cloud
+            print '\n'
+            return
 
         if arguments["flavors"]:
 
