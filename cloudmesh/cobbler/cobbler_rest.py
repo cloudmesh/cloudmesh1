@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Response
+from flask import Flask, request, Response
 import json
 from functools import wraps
 from cobbler_provision import CobblerProvision
@@ -6,6 +6,7 @@ from cobbler_provision import CobblerProvision
 app = Flask( __name__)
 
 SUPPORTED_OBJECTS = "distros profiles systems kickstarts".split()
+KICKSTART_LOCATION = "/var/lib/cobbler/kickstarts"
 
 """
    NOT consider user authentication and authorization.
@@ -18,7 +19,7 @@ def format_result_data(flag_success, msg="", data=None):
              "data": data,
             }
 
-def not_supported_objects(func_name, object_type):
+def not_supported_objects(object_type):
     """
       cobbler supports a lot of objects. However, this cobbler REST API only support part of them.
       The supported object defined in SUPPORTED_OBJECTS. 
@@ -30,7 +31,6 @@ def not_supported_objects(func_name, object_type):
 def response_json(func):
     @wraps(func)
     def wrap_response_json(*args, **kwargs):
-        print "hello ..."
         result = {"cmrest": {
                               "operation": "cobbler",
                               "data": func(*args, **kwargs),
@@ -77,29 +77,54 @@ def process_objects(objects, name):
     data = request.json
     if method == "POST":
         if item == "distro":
-            url = data.get("url", "")
-            return cp.import_distro(name, url, **data)
+            return cp.import_distro(name, **data)
         if item == "profile":
             distro = data.get("distro", "")
             kickstart = data.get("kickstart", "")
+            if not kickstart.startswith("/"):
+                kickstart = "{0}/{1}".format(KICKSTART_LOCATION, kickstart)
             return cp.add_profile(name, distro, kickstart, **data)
         if item == "system":
-            return cp.add_system(name, data)
+            return cp.add_system(name, **data)
+        if item == "kickstart":
+            lines = data.get("contents", [])
+            return cp.update_kickstart(name, lines, **data)
     if method == "PUT":
+        if item == "distro":
+            return cp._simple_result_dict(False, "Object type distro does NOT support PUT operation.")
         if item == "profile":
             kickstart = data.get("kickstart", "")
+            if not kickstart.startswith("/"):
+                kickstart = "{0}/{1}".format(KICKSTART_LOCATION, kickstart)
             return cp.update_profile(name, kickstart, **data)
         if item == "system":
-            return cp.update_system(name, data)
+            return cp.update_system(name, **data)
+        if item == "kickstart":
+            lines = data.get("contents", [])
+            return cp.update_kickstart(name, lines, **data)
     if method == "DELETE":
         func = getattr(cp, "remove_{0}".format(item))
         return func(name, **data)
      
-@app.route('/cm/v1/cobbler/baremetal/<system>', methods = ['POST', 'PUT'])
+@app.route('/cm/v1/cobbler/systems/<system_name>/<if_name>', methods = ['DELETE'])
+@response_json
+def process_system_interfaces(system_name, if_name):
+    cp = CobblerProvision()
+    data = request.json
+    func = getattr(cp, "remove_{0}".format("system_interface"))
+    return func(system_name, if_name, **data)
+
+
+@app.route('/cm/v1/cobbler/baremetal/<system>', methods = ['GET', 'POST', 'PUT'])
 @response_json
 def baremetal_system(system):
-    data = request.json
     cp = CobblerProvision()
+    # monitor system
+    if request.method == "GET":
+        # MUST know how to get user token, empty token ONLY for debug
+        kwargs = {"user_token": ""}
+        return cp.monitor_system(system, **kwargs)
+    data = request.json
     # deploy system
     if request.method == "POST":
         return cp.deploy_system(system, **data)
@@ -109,4 +134,4 @@ def baremetal_system(system):
 
 if __name__ == '__main__':
     print "start"
-    app.run(debug = True)
+    app.run(host="0.0.0.0", debug = True)

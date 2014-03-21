@@ -4,8 +4,6 @@ from cobbler import api as capi
 from multiprocessing import Process, Queue
 from functools import wraps
 import os
-import sys
-import time
 import subprocess
 
 
@@ -35,7 +33,10 @@ def cobbler_object_exist(object_type, ensure_exist=True):
     """
     def _cobbler_object_exist(func):
         @wraps(func)
-        def wrap_cobbler_object_exist(self, name, *args, **kwargs):
+        def wrap_cobbler_object_exist(self, object_name, *args, **kwargs):
+            #print "args is: ", args
+            #print "kwargs is: ", kwargs
+            name = object_name
             flag_exist = False
             if name in self._list_item_names(object_type):
                 flag_exist = True
@@ -65,6 +66,8 @@ class CobblerProvision:
          (1) BootAPI can be used in reading only, MUST use multiprocessing;
          (2) Add/Modify/Remove operations are operated by shell command.
     """
+    # default kickstart location
+    KICKSTART_LOCATION = "/var/lib/cobbler/kickstarts"
     
     def __init__(self):
         pass
@@ -103,6 +106,17 @@ class CobblerProvision:
         ONLY list system names, 
         """
         return self._simple_result_dict(True, data=self._list_item_names("system"))
+    
+    @authorization
+    def list_kickstart_names(self, **kwargs):
+        """ 
+        ONLY list kickstart filenames with extension, 
+        """
+        return self._simple_result_dict(True, data=self.list_kickstart_filenames(self.KICKSTART_LOCATION))
+    
+    def list_kickstart_filenames(self, dir_name):
+        files = self.list_dir_filenames(dir_name, False)
+        return [f for f in files if f.endswith(".ks") or f.endswith(".seed")]
     
     def _wrap_process_list_item_names(self, q, objects):
         cobbler_handler = capi.BootAPI()
@@ -151,16 +165,30 @@ class CobblerProvision:
         """
         return self._wrap_report_result("system", name)
     
+    @authorization
+    def get_kickstart_report(self, name, **kwargs):
+        """ 
+          report the detail of the kickstart with filename, 
+        """
+        return self._wrap_report_result("kickstart", name)
+    
     def _wrap_process_get_item_report(self, q, object_type, name):
-        cobbler_handler = capi.BootAPI()
-        func = getattr(cobbler_handler, "find_{0}".format(object_type))
         result_list = []
-        for item in func(name=name, return_list=True):
-            data = item.to_datastruct()
-            result_list.append({"type": object_type, 
-                                "name": data["name"], 
-                                "data": data,
-                                })
+        if object_type == "kickstart":
+            result_list.append({
+                                  "type": "kickstart",
+                                  "name": name,
+                                  "data": self.read_file_to_list("{0}/{1}".format(self.KICKSTART_LOCATION, name))
+                                 })
+        else:
+            cobbler_handler = capi.BootAPI()
+            func = getattr(cobbler_handler, "find_{0}".format(object_type))
+            for item in func(name=name, return_list=True):
+                data = item.to_datastruct()
+                result_list.append({"type": object_type, 
+                                    "name": data["name"], 
+                                    "data": data,
+                                    })
         q.put(result_list)
     
     def _get_item_report(self, object_type, name):
@@ -171,12 +199,13 @@ class CobblerProvision:
         return self._call_cobbler_process("_wrap_process_get_item_report", object_type, name)
     
     @authorization
-    def import_distro(self, name, url, **kwargs):
+    def import_distro(self, udistro_name, **kwargs):
         """
           add a distribution to cobbler with import command.
           The first step is to fetch image file given by parameter url with wget, the url MUST be http, ftp, https.
           Then, moust the image, finally import image with cobbler import command
         """
+        url = kwargs.get("url", "")
         dir_base = "/tmp"
         dir_iso = "{0}/iso".format(dir_base)
         dir_mount = "{0}/mnt/".format(dir_iso)
@@ -184,23 +213,29 @@ class CobblerProvision:
         if not flag_result:
             return self._simple_result_dict(False, "User does NOT have write permission in /tmp directory.")
         # fetch image iso
-        (flag_result, msg) = self.wget(url, dir_iso)
-        if not flag_result:
-            return self._simple_result_dict(False, msg)
+        (flag_result, iso_filename) = self.iso_exist(url, dir_iso)
+        if not flag_result:    # if has NOT downloaded, then do it now.
+            (flag_result, msg) = self.wget(url, dir_iso)
+            if not flag_result:
+                return self._simple_result_dict(False, msg)
+            iso_filename = msg
         old_distro_names = self._list_item_names("distro")
         # mount image
-        if self.mount_image(msg, dir_mount):
-            cmd_args = ["cobbler", "import", "--path={0}".format(dir_mount), "--name={0}".format(name), ]
+        # check mount location is idle or not
+        if len(os.listdir(dir_mount)) > 0:
+            self.umount_image(dir_mount)    # must umount first
+        if self.mount_image(iso_filename, dir_mount):
+            cmd_args = ["cobbler", "import", "--path={0}".format(dir_mount), "--name={0}".format(udistro_name), ]
             flag_result = self.shell_command(cmd_args)
             self.umount_image(dir_mount)
             if not flag_result:
-                return self._simple_result_dict(False, "Failed to import distro [{0}] from [{1}]".format(name, url))
+                return self._simple_result_dict(False, "Failed to import distro [{0}] from [{1}]".format(udistro_name, url))
             curr_distro_names = self._list_item_names("distro")
             # double check the result of import distro
-            possible_names = [x for x in curr_distro_name if x not in old_distro_names and x.startswith(name)]
+            possible_names = [x for x in curr_distro_names if x not in old_distro_names and x.startswith(udistro_name)]
             distro_name = possible_names[0] if len(possible_names) else None
-            return self._simple_result_dict(True if distro_name else False, "Add distro {0} {1}successfully.".format(name, "" if distro_name else "un"))
-        return self._simple_result_dict(False, "Failed to mount unsupported image [{0}] in add distro {1}.".format(url, name))
+            return self._simple_result_dict(True if distro_name else False, "Add distro {0} {1}successfully.".format(udistro_name, "" if distro_name else "un"))
+        return self._simple_result_dict(False, "Failed to mount unsupported image [{0}] in add distro {1}.".format(url, udistro_name))
     
     @cobbler_object_exist("profile", False)
     @authorization
@@ -247,7 +282,7 @@ class CobblerProvision:
         
     @cobbler_object_exist("system", False)
     @authorization
-    def add_system(self, system_name, contents, **kwargs):
+    def add_system(self, system_name, **kwargs):
         """
           add system to cobbler with 2 steps.
           The first step is to add a new system ONLY with system name and profile name.
@@ -283,6 +318,7 @@ class CobblerProvision:
             management: True | False,
           }
         """
+        contents = kwargs
         # profile must be provided to add a system
         flag_result = False
         profile_name = None
@@ -306,22 +342,33 @@ class CobblerProvision:
     
     @cobbler_object_exist("system")
     @authorization
-    def update_system(self, system_name, contents, **kwargs):
+    def update_system(self, system_name, **kwargs):
         """
           update system with 2 steps. The first step is updating profile if needed.
           The second step is to update other objects in system.
         """
+        contents = kwargs
         # update profile firstly
         if "profile" in contents:
             if contents["profile"] not in self._list_item_names("profile"):
                 return self._simple_result_dict(False, "Failed to update system, because profile [{0}] does NOT exist.".format(contents["profile"]))
             cmd_args = ["cobbler", "system", "edit", "--name={0}".format(system_name)]
             cmd_args += ["--profile={0}".format(contents["profile"])]
-            if not self.shell_command(args):
+            if not self.shell_command(cmd_args):
                 return self._simple_result_dict(False, "Failed to update system [{0}] with unknown error.".format(system_name))
         # update other objects in system
         flag_result = self._edit_system(system_name, contents)
         return self._simple_result_dict(flag_result, "Update system {0} {1}successfully.".format(system_name, "" if flag_result else "un"))
+    
+    @authorization
+    def update_kickstart(self, kickstart_name, lines, **kwargs):
+        """
+          update kickstart file with list of lines.
+        """
+        # update profile firstly
+        with open("{0}/{1}".format(self.KICKSTART_LOCATION, kickstart_name), "w") as f:
+            f.write("\n".join(lines))
+        return self._simple_result_dict(True, "Update kickstart {0} successfully.".format(kickstart_name))
     
     def _edit_system(self, system_name, contents):
         """
@@ -346,7 +393,7 @@ class CobblerProvision:
         if len(all_interface_args) > 0:
             flag_result = self.shell_command(cmd_args + all_interface_args[0])
         elif len(cmd_args) > len(cmd_args_edit):
-            flag_result = self.shell_command(args)
+            flag_result = self.shell_command(cmd_args)
         if flag_result:
             for interface in all_interface_args[1:]:
                 flag_result = self.shell_command(cmd_args_edit + interface)
@@ -375,6 +422,21 @@ class CobblerProvision:
         """
         return self._remove_item("system", system_name)
     
+    @authorization
+    def remove_kickstart(self, kickstart_name, **kwargs):
+        """
+          remove a kickstart file
+        """
+        filename = "{0}/{1}".format(self.KICKSTART_LOCATION, kickstart_name)
+        if self.file_exist(filename):
+            flag_result = True
+            try:
+                os.remove(filename)
+            except:
+                flag_result = False
+            self._simple_result_dict(flag_result, "The object {0} in kickstart removed {1}successfully.".format(kickstart_name, "" if flag_result else "un"))
+        return self._simple_result_dict(True, "The name {0} in kickstart does NOT exist. Not need to remove.".format(kickstart_name))
+    
     def _remove_item(self, object_type, name):
         cmd_args = ["cobbler", object_type, "remove", "--name={0}".format(name)]
         if name in self._list_item_names(object_type):
@@ -386,15 +448,16 @@ class CobblerProvision:
     @authorization
     def remove_system_interface(self, system_name, *args, **kwargs):
         """
-         remove one or more interfaces from a system named system_name. 
-         If param args contains at lease one interface name, then each of which will be removed from system.
-         If param args is empty, all possible interfaces will be removed from this system.
+         remove one interface from a system named system_name. 
+         If param args contains one interface name, then this interface will be removed from system.
         """
         report = self._get_item_report("system", system_name)
         all_interfaces = [x for x in report[0]["data"]["interfaces"]]
-        user_delete_interfaces = list(args) if len(args) > 0 else all_interfaces
+        user_delete_interfaces = list(args) if len(args) > 0 else []
+        if len(user_delete_interfaces) == 0:
+            return self._simple_result_dict(False, "To remove an interface, you MUST give the name of the interface.")
         result = {}
-        if interface_name in user_delete_interfaces:
+        for interface_name in user_delete_interfaces:
             if interface_name in all_interfaces:
                 cmd_args = ["cobbler", "system", "edit", 
                             "--name={0}".format(system_name), 
@@ -402,35 +465,44 @@ class CobblerProvision:
                             "--delete-interface", 
                             ]
                 flag_result = self.shell_command(cmd_args)
-                result[interface_name] = self._simple_result_dict(flag_result, 
-                                                                  "Interface {0} removed {1}succefully.".format(interface_name, "" if flag_result else "un"))
+                result = self._simple_result_dict(flag_result, 
+                                                    "Interface {0} removed {1}succefully.".format(interface_name, "" if flag_result else "un"))
             else:
-                result[interface_name] = self._simple_result_dict(True, "Interface {0} does NOT exist. Not need to remove.".format(interface_name))
+                result = self._simple_result_dict(True, "Interface {0} does NOT exist. Not need to remove.".format(interface_name))
+            break   # ONLY remove the first interface name
         return result
     
-    # find system and change the netboot value if needed
-    def _wrap_cobbler_find_system(self, q, name, flag_netboot):
+    # find system in cobbler
+    def _wrap_cobbler_find_system(self, q, name):
         cobbler_handler = capi.BootAPI()
         func = getattr(cobbler_handler, "find_system")
         system = func(name)
-        if flag_netboot != system.netboot_enabled:
-            system.netboot_enabled = flag_netboot
-            cobbler_handler.add_system(system)
-        q.put(system)
+        q.put(system.to_datastruct())
         
     # power system
-    def _wrap_cobbler_power_system(self, q, system, power_status):
+    def _wrap_cobbler_power_system(self, q, name, flag_netboot, power_status):
         options = {
                     "on": "power_on",
                     "off": "power_off",
                     "reboot": "reboot",
                    }
         cobbler_handler = capi.BootAPI()
+        func = getattr(cobbler_handler, "find_system")
+        system = func(name)
+        if flag_netboot != system.netboot_enabled:
+            system.netboot_enabled = flag_netboot
+            cobbler_handler.add_system(system)
         # default action is power_on
         power_action = options.get(power_status.lower(), "power_on")
         func = getattr(cobbler_handler, power_action)
         func(system)
         q.put(power_action)
+    
+    def cobbler_find_system(self, system_name):
+        return self._call_cobbler_process("_wrap_cobbler_find_system", system_name)
+    
+    def cobbler_power_system(self, name, flag_netboot, power_status):
+        return self._call_cobbler_process("_wrap_cobbler_power_system", name, flag_netboot, power_status)
     
     @cobbler_object_exist("system")
     @authorization
@@ -438,25 +510,40 @@ class CobblerProvision:
         """
          deploy a system.
         """
-        system = self._call_cobbler_process("_wrap_cobbler_find_system", system_name, True)
-        action = self._call_cobbler_process("_wrap_cobbler_power_system", system, "reboot")
+        self.cobbler_power_system(system_name, True, "reboot")
         # monitor deploy status
         # to do ...
         return self._simple_result_dict(True, "Start to deploy system ...")
     
     @cobbler_object_exist("system")
-    @authorization
     def power_system(self, system_name, **kwargs):
         """
          power on/off a system.
         """
         # get the value of 'power_on' set by user, default value is True or power ON
         power_status = "on" if kwargs.get("power_on", True) else "off"
-        system = self._call_cobbler_process("_wrap_cobbler_find_system", system_name, False)
-        action = self._call_cobbler_process("_wrap_cobbler_power_system", system, power_status)
+        self.cobbler_power_system(system_name, False, power_status)
         # monitor power on/off status
         # to do ...
         return self._simple_result_dict(True, "Start to power {0} system ...".format(power_status))
+    
+    @authorization
+    def monitor_system(self, system_name, **kwargs):
+        """
+          monitor server's status with Ping. True means the server is on, False means down.
+        """
+        system = self.cobbler_find_system(system_name)
+        interfaces = system["interfaces"]
+        manage_ip = interfaces[interfaces.keys()[0]]["ip_address"]
+        for if_name in interfaces:
+            if interfaces[if_name]["management"]:
+                manage_ip = interfaces[if_name]["ip_address"]
+                break
+        #print "manage ip is: ", manage_ip
+        cmd_args = ['ping', '-c', '1', '-W', '3', manage_ip]
+        result = self.shell_command(cmd_args)
+        #print "result is: ", result
+        return self._simple_result_dict(result, "Ping {0} {1}successfully.".format(system_name, "" if result else "un"))
     
     def _simple_result_dict(self, result, msg="", data=None):
         return {"result": result, "description": msg, "data": data,}
@@ -468,6 +555,20 @@ class CobblerProvision:
             if content_dict[arg]:
                 result += ["--{0}={1}".format(arg, content_dict[arg])]
         return result
+    
+    def iso_exist(self, url, dir_iso):
+        arr = url.split("/")
+        filename = "{0}/{1}".format(dir_iso, arr[-1])
+        return (self.file_exist(filename), filename)
+    
+    def read_file_to_list(self, name):
+        with open(name) as f:
+            lines = [line.rstrip("\n") for line in f]
+        return lines
+    
+    def list_dir_filenames(self, dir_name, flag_include_link=False):
+        home_dir, sub_dirs, files = os.walk(dir_name).next()
+        return files if flag_include_link else [f for f in files if not os.path.islink(os.path.join(home_dir, f))]
     
     def file_exist(self, filename):
         return os.path.isfile(filename)
@@ -481,7 +582,7 @@ class CobblerProvision:
         return self.shell_command(args)
     
     def umount_image(self, location):
-        args = ["umount", "-o", "loop", location]
+        args = ["umount", "-f", location]
         return self.shell_command(args)
     
     def wget(self, url, location):
