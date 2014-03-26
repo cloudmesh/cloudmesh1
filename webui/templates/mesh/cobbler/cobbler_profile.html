@@ -1,0 +1,139 @@
+{% extends "layout/layoutTable.html" %}
+{% from "_helper.html" import image_button, js_image_button %}
+
+{% block contentbox %}
+<h2> {{ image_button ("none", "365_restart", "/cobbler/profiles") }} Profiles </h2>
+{% endblock contentbox %}
+
+{% block content %}
+
+<script src="/static/js/accordion_plugin.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    var object_type = "profiles";
+    var status_save_url = "/cobbler/savestatus";
+    var status_object = {object_type: {}};
+    var bcreated_accordion = false;
+
+    function CallbackOnAccordionClicked(profile_name, status) {
+        //status_object[object_type][profile_name].open = status.toString();
+        //AjaxSaveObject(status_save_url, status_object, bcreated_accordion);
+    };
+
+    function CallbackAfterAccordionCreated() {
+        {% if result["result"] %}
+            {% set profiles = result["data"] %}
+            {% for profile in profiles %}
+                status_object[object_type]['{{profile["name"]}}'] = 'false';
+            {% endfor %}
+        {% endif %}
+        bcreated_accordion = true;
+    };
+
+</script>
+
+<script>
+    $(document).ready( function() {
+        CustomizeAccordionPlugin("#accordion", CallbackOnAccordionClicked, CallbackAfterAccordionCreated);
+        PreventClickEventPropagate(".inner_function_button");
+    });
+
+    function refresh_cobbler_object(profile_name) {
+        //alert("distro name is: " + profile_name);
+        PreventClickEventPropagate(".inner_function_button");
+    }
+
+    function reset_profile(profile_name) {
+        alert("reset");
+    }
+
+    function update_profile(profile_name) {
+        alert("update");
+    }
+
+    function delete_profile(profile_name) {
+        alert("delete");
+    }
+</script>
+
+
+<div id="accordion">
+    {% if result["result"] %}
+        {% set profiles = result["data"] %}
+        {% for profile in profiles %}
+            {% set data = profile['data'] %}
+            {% set UID = data['name'] %}
+            <h3 id="{{UID}}">
+                <span style="float:left; width:30%; white-space:nowrap;">
+                    <span class="inner_function_button">
+                        {{ js_image_button ("none", "365_restart", "refresh_cobbler_object('" + UID + "')") }}
+                    </span>
+                    {{UID}}
+                </span>
+                <span>
+                    <span class="badge"> 0 </span> Systems
+                </span>
+            </h3>
+            <div>
+                <table>
+                    {% for field in filter %}
+                        <tr>
+                        <td>{{ field[1] }}</td>
+                        <td colspan="2">
+                            {% if field[3] %}
+                                <span id="{{UID}}_{{field[0]}}">
+                                    {{', '.join(data[field[0]]) if field[2] == "list" else data[field[0]]}}
+                                </span>
+                            {% else %}
+                                {% if field[2] == "text" %}
+                                    <input type="text" id="{{UID}}_{{field[0]}}" value="{{', '.join(data[field[0]]) if field[2] == "list" else data[field[0]]}}" />
+                                {% elif field[2] == "select" %}
+                                    <select id="{{UID}}_{{field[0]}}">
+                                        {% set dst_value = data[field[0]].split("/")[-1] %}
+                                        {% if field[0] == "kickstart" %}
+                                            {% set options = kickstarts["data"] %}
+                                        {% else %}
+                                            {% set options = distros["data"] %}
+                                        {% endif %}
+                                        {% for o in options %}
+                                            <option value="{{o}}"
+                                                {% if o == dst_value %}
+                                                    selected
+                                                {% endif %}
+                                            >{{o}}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% else %}
+                                    <span id="{{UID}}_{{field[0]}}">{{data[field[0]]}}</span>
+                                {% endif %}
+                            {% endif %}
+                            <br>
+                        </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td align="center">
+                            <input type="button" id="{{UID}}_reset" onclick="reset_profile('{{UID}}')" value="Rest" />
+                        </td><td align="center">
+                            <input type="button" id="{{UID}}_update" onclick="update_profile('{{UID}}')" value="Update" />
+                        </td><td align="center">
+                            <input type="button" id="{{UID}}_delete" align="right" onclick="delete_profile('{{UID}}')" value="Delete" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h3 id="error">"Error. Click for details."</h3>
+        <div>
+            <table>
+                <tr>
+                    <td>Error Description</td>
+                    <td>{{result["description"]}}</td>
+                </tr>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

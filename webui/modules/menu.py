@@ -53,6 +53,13 @@ super_duper_sidebar_pages = [
             ["Form", "/provision/", None],
         ],
     ],
+    ["Admin - Cobbler", None, None, ['admin', 'rain'],
+        [
+            ["Distro", "/cobbler/distros", None],
+            ["Profile", "/cobbler/profiles", None],
+            ["System", "/cobbler/systems", None],
+        ],
+    ],
     ["Admin - Launcher", None, None, ['admin', 'rain'],
         [
             ["Launcher", "/cm/launch", None],
