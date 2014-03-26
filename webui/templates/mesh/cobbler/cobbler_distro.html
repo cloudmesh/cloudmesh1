@@ -1,0 +1,119 @@
+{% extends "layout/layoutTable.html" %}
+{% from "_helper.html" import image_button, js_image_button %}
+
+{% block contentbox %}
+<h2> {{ image_button ("none", "365_restart", "/cobbler/distros") }} Distros </h2>
+{% endblock contentbox %}
+
+{% block content %}
+
+<script src="/static/js/accordion_plugin.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    var object_type = "distros";
+    var status_save_url = "/cobbler/savestatus";
+    var status_object = {object_type: {}};
+    var bcreated_accordion = false;
+
+    function CallbackOnAccordionClicked(distro_name, status) {
+        //status_object[object_type][distro_name].open = status.toString();
+        //AjaxSaveObject(status_save_url, status_object, bcreated_accordion);
+    };
+
+    function CallbackAfterAccordionCreated() {
+        {% if result["result"] %}
+            {% set distros = result["data"] %}
+            {% for distro in distros %}
+                status_object[object_type]['{{distro["name"]}}'] = 'false';
+            {% endfor %}
+        {% endif %}
+        bcreated_accordion = true;
+    };
+
+</script>
+
+<script>
+    $(document).ready( function() {
+        CustomizeAccordionPlugin("#accordion", CallbackOnAccordionClicked, CallbackAfterAccordionCreated);
+        PreventClickEventPropagate(".inner_function_button");
+    });
+
+    function refresh_cobbler_object(distro_name) {
+        //alert("distro name is: " + distro_name);
+        PreventClickEventPropagate(".inner_function_button");
+    }
+
+</script>
+
+
+<div id="accordion">
+    {% if result["result"] %}
+        {% set distros = result["data"] %}
+        {% for distro in distros %}
+            {% set data = distro['data'] %}
+            {% set UID = data['name'] %}
+            <h3 id="{{UID}}">
+                <span style="float:left; width:30%; white-space:nowrap;">
+                    <span class="inner_function_button">
+                        {{ js_image_button ("none", "365_restart", "refresh_cobbler_object('" + UID + "')") }}
+                    </span>
+                    {{UID}}
+                </span>
+                <span>
+                    <span class="badge"> 0 </span> Profiles
+                </span>
+            </h3>
+            <div>
+                <table>
+                    {% for field in filter %}
+                        <tr>
+                        <td>{{ field[1] }}</td>
+                        <td>
+                            {% if field[3] %}
+                                <span id="{{UID}}_{{field[0]}}">
+                                    {{', '.join(data[field[0]]) if field[2] == "list" else data[field[0]]}}
+                                </span>
+                            {% else %}
+                                {% if field[2] == "text" %}
+                                    <input type="text" id="{{UID}}_{{field[0]}}" value="{{', '.join(data[field[0]]) if field[2] == "list" else data[field[0]]}}" />
+                                {% elif field[2] == "select" %}
+                                    <select id="{{UID}}_{{field[0]}}">
+                                        {% set dst_value = data[field[0]].split("/")[-1] %}
+                                        {% if field[0] == "kickstart" %}
+                                            {% set options = kickstarts %}
+                                        {% else %}
+                                            {% set options = distros %}
+                                        {% endif %}
+                                        {% for o in options %}
+                                            <option value="{{o}}"
+                                                {% if o == dst_value %}
+                                                    selected
+                                                {% endif %}
+                                            >{{o}}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% else %}
+                                    <span id="{{UID}}_{{field[0]}}">{{data[field[0]]}}</span>
+                                {% endif %}
+                            {% endif %}
+                            <br>
+                        </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h3 id="error">"Error. Click for details."</h3>
+        <div>
+            <table>
+                <tr>
+                    <td>Error Description</td>
+                    <td>{{result["description"]}}</td>
+                </tr>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

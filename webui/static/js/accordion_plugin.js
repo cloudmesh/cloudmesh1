@@ -32,6 +32,23 @@ function SavePageStatusToMongoDB(flag_save) {
     }
 };
 
+// params: surl and js_object MUST provided by user
+function AjaxSaveObject(surl, js_object, flag_save) {
+    flag_save = (typeof flag_save === 'undefined')? true : flag_save;
+    if (flag_save) {
+        $.ajax({
+            type: "PUT",
+            url:  surl,
+            headers: {
+                Accept: "application/json",
+                contentType: "application/json; charset=utf-8",
+            },
+            dataType: "json",
+            data: JSON.stringify(js_object),
+        });
+    }
+};
+
 function StopEventPropagation(e) {
     if (!e)
         e = window.event;
