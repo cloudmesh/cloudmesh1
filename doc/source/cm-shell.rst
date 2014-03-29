@@ -2,10 +2,45 @@
    :start: 5
 
 
-Cloud Mesh
-==========
+Cloudmesh Shell
+=================
 
-A project to interface easily with multiple clouds from a command shell.
+The ccloudmesh shell allows to interact with multiple clouds either
+through the commandline or through a command shell.
+
+Commandline
+--------------
+
+To start a command line simply type the command cm followed by the
+actual cloudmesh command. For example to invoke the `help` command
+type in::
+
+  $ cm help
+
+Note that $ indicates your command shell prompt.
+
+Shell Usage
+------------
+
+In many cases you like to invoke multiple commands and preserve some
+local state. This can easily be done whil starting cloudmesh as a
+shell via the `cm` command. Simply type in you command shell::
+
+  $ cm
+
+You will se enext a prompt such as::
+
+  cm> 
+
+In which you can type in multiple cloudmesh commands. Please not that
+each of the commands can be executed directly from the shell by
+preceeding the `cm` command.
+
+
+Command Overview
+=================
+
+
 
 Info
 ----------------------------------------------------------------------
