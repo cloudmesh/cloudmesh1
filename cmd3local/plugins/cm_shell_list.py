@@ -61,6 +61,11 @@ class cm_shell_list:
                list images [CLOUD]
                list
 
+               list NOTIMPLEMENTED flavors [CLOUD...]
+               list NOTIMPLEMENTED servers [CLOUD...]
+               list NOTIMPLEMENTED images [CLOUD...]
+               list NOTIMPLEMENTED [CLOUD...]
+               
         Arguments:
 
                 CLOUD    the name of the cloud
@@ -69,6 +74,12 @@ class cm_shell_list:
 
            -v       verbose mode
 
+        Description:
+
+           missing
+
+           This should be similar to the count command, e.g. multiple clouds could be specified.
+           
         """
         mesh = cloudmesh.mesh()
         mongo = cm_mongo()
@@ -124,10 +135,10 @@ class cm_shell_list:
     def do_count(self, args, arguments):
         """
         Usage:
-               count flavors [CLOUD...]
-               count servers [CLOUD...]
-               count images [CLOUD...]
-               count [CLOUD...]
+               count flavors [CLOUD...] NOTIMPLEMENTED
+               count servers [CLOUD...] NOTIMPLEMENTED
+               count images [CLOUD...] NOTIMPLEMENTED
+               count [CLOUD...] NOTIMPLEMENTED
 
         Arguments:
 
@@ -137,6 +148,12 @@ class cm_shell_list:
 
            -v       verbose mode
 
+        Description:
+
+          missing
+
+          Seems this has not been implemented.
+          
         """
         log.info(args)
 
