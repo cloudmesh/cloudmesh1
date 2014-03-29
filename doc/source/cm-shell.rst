@@ -5,7 +5,7 @@
 Cloudmesh Shell
 =================
 
-The ccloudmesh shell allows to interact with multiple clouds either
+The cloudmesh shell allows to interact with multiple clouds either
 through the commandline or through a command shell.
 
 Commandline
@@ -23,18 +23,23 @@ Shell Usage
 ------------
 
 In many cases you like to invoke multiple commands and preserve some
-local state. This can easily be done whil starting cloudmesh as a
+local state. This can easily be done while starting cloudmesh as a
 shell via the `cm` command. Simply type in you command shell::
 
   $ cm
 
-You will se enext a prompt such as::
+You will see next a prompt such as::
 
   cm> 
 
 In which you can type in multiple cloudmesh commands. Please not that
 each of the commands can be executed directly from the shell by
-preceeding the `cm` command.
+preceding the `cm` command.
+
+The command shell is based on cmd3 which is in more detail documented
+at:
+
+* http://cloudmesh.github.com/cmd3/
 
 
 Command Overview
@@ -42,13 +47,13 @@ Command Overview
 
 
 
-Info
+Help
 ----------------------------------------------------------------------
 
-The info command is a standard command that is defined in cmd3 and
+The help command is a standard command that is defined in cmd3 and
 displays some internal information related to the command shell. It
-lists the cmd3 dict, as well as information about verions and
-scopeless commands. Commands with scops can be activated with the use
+lists the cmd3 dict, as well as information about versions and
+scope-less commands. Commands with scopes can be activated with the use
 command. For more information see::
 
   cm> help use
@@ -56,7 +61,7 @@ command. For more information see::
 Variables
 ----------------------------------------------------------------------
 
-The shell allows you to set variables so it is easy for you to resuse
+The shell allows you to set variables so it is easy for you to reuse
 them at a later time two standard variables are defined as $date and
 $time which will provide you with the current date and time. You can
 list the variables with the command in the shell with::
@@ -304,51 +309,46 @@ Starting VMs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. note:: The label in the vm commands is optional, if not specified,
-	  we will use the approriate defaults from the last vm.
+	  we will use the appropriate defaults from the last vm.
 
-::
+Creates a new instance/VM on default cloud::
 
    cm> vm create <label>
 
-* Creates a new instance/VM on default cloud
 
-::
+Deletes the specified or last default instance/VM on default cloud::
 
    cm> vm delete <label>
 
-* Deletes the specified or last default instance/VM on default cloud
 
-::
+Suspends the specified or last default instance/VM on default cloud::
 
    cm> vm suspend <label>
 
-* Suspends the specified or last default instance/VM on default cloud
 
-
-::
+Resumes the specified or last suspended instance/VM on default cloud::
 
    cm> vm resume <label>
 
-* Resumes the specified or last suspended instance/VM on default cloud
 
-::
+Login into the specified or last default instance/VM::
 
    cm> vm login <label>
 
-* Login into the specified or last default instance/VM
 
-::
+
+SSH into the specified or last default instance/VM::
 
    cm> ssh vm <label>
 
-* SSH into the specified or last default instance/VM
+
 
 
 VM History
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To list the history of all previously started vms, please use the
-``history`` command. It will tell you whne the vm was started,
+``history`` command. It will tell you when the vm was started,
 launcched, and terminated. If no label is provided this information
 returns a list of vms started in order. In contrast to the normal list
 command given by IaaS framework, this list command sorts the vms by
@@ -361,8 +361,8 @@ The history can be cleared with::
 
    cm> history --clear
 
-Each command in the history is preceeded with an id. You can rerun the
-command by execuring the history command followed by the id::
+Each command in the history is preceded with an id. You can rerun the
+command by executing the history command followed by the id::
 
    cm> history 101
 
@@ -379,7 +379,7 @@ If you now type::
 It will start the command associated with the 101 id in the
 
 
-Manageing Security Groups
+Managing Security Groups
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Managing Volumes
@@ -399,19 +399,19 @@ Managing Security Groups
 
 ::
 
-   cm> seceurity group add <label> <parameters>
+   cm> security group add <label> <parameters>
 
 ::
 
-   cm> seceurity group delete
+   cm> security group delete
 
 ::
 
-   cm> seceurity group default add <label>
+   cm> security group default add <label>
 
 ::
 
-   cm> seceurity group default delete <label>
+   cm> security group default delete <label>
 
 
 Examples
@@ -424,9 +424,9 @@ configuration
 
 starting vms
 
-listng status of all started vmsd across all clouds
+listing status of all started vms across all clouds
 
-ssh login -> can not be don with pytho sha but must be done with os.system
+ssh login -> can not be done with python sha but must be done with os.system
 
 
 
@@ -434,7 +434,7 @@ ssh login -> can not be don with pytho sha but must be done with os.system
 TODO (most likely in cloud command and register command)
 ----------------------------------------------------------------------
 
-::
+What does this do?::
 
    cm> manage initialize --user<name> --password <password>
 
@@ -445,49 +445,35 @@ TODO (most likely in cloud command and register command)
 * account is disabled
 * if the command is called more than 10 times a day the account is disabled
 
-::
+Lists the resources available for the user::
 
    cm> resource --list
 
-* lists the resources available for the user
-
-::
+List the services in the cloud mesh::
 
    cm> service --list
 
-* list the services in the cloud mesh
-
-::
+See fg-inventory::
 
    cm> service register
 
-see fg-inventory
-
-::
+See fg-inventory::
 
    cm> resource register
 
-see fg-inventory
 
-::
+
+List all ids and their types::
 
    cm id --list
 
-
-* list all ids and their types
-
-::
+Associates a human readable lable with an id::
 
    cm label --id <id>
 
-* associates a human readable lable with an id
 
-
-.. warning:: The following commands are automatically created with
-
-	       fab doc.man
-
-	     If you like to update them, please donot do this in the man.rst file,
+.. warning:: The following commands are automatically created with `fab doc.man`
+	     If you like to update them, please do not do this in the man.rst file,
 	     but update the commands in the actual manual page in the code
 
 .. include:: man/man.rst
