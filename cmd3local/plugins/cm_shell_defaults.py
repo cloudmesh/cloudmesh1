@@ -100,19 +100,40 @@ class cm_shell_defaults:
                defaults clean
                defaults load
                defaults list [--json]
-
+               defaults set variable value NOTIMPLEMENTED
+               defaults variable  NOTIMPLEMENTED
+               defaults format (json|table)  NOTIMPLEMENTED
+                 
         This manages the defaults associated with the user.
         You can load, list and clean defaults associated with a user and a cloud.
         The default parameters include index, prefix, flavor and image.
 
         Arguments:
 
-          CLOUD          The name of Cloud
+          CLOUD          The name of Cloud - this has to be implemented
 
         Options:
 
            -j --json      json output
 
+        Description:
+
+          defaults set a hallo
+
+             sets the variable a to the value hallo
+             NOT YET IMPLEMENTED
+             
+          defaults a
+
+             returns the value of the variable
+             NOT YET IMPLEMENTED
+             
+          default format json
+          default format table
+
+             sets the default format how returns are printed. if set to json json is returned,
+             if set to table a pretty table is printed
+             NOT YET IMPLEMENTED
         """
 
         if arguments["clean"]:
