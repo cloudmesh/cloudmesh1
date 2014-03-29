@@ -120,7 +120,7 @@ class cm_shell_vm:
         #Get the info of specified VM
         if arguments["info"] and arguments["--name"]:
             log.info ("vm info")
-            reqdVM = self.findVM(self.user, arguments["--name"])
+            reqdVM = self.vmi.findVM(self.user, arguments["--name"])
 
             x = PrettyTable()
             x.field_names = ["Property", "Value"]
