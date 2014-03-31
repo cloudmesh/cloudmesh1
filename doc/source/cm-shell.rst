@@ -58,6 +58,26 @@ command. For more information see::
 
   cm> help use
 
+Info
+----------------------------------------------------------------------
+
+The `info` command provides the ability to print out a short
+information regarding a command specified via a plugin. This command
+will only work if an info is actually defined for that command.
+To optain the info for all commands specify::
+
+  cm> info
+
+To specify the info for a specific command please use the info command
+followded by the name of the command.
+
+
+  cm> info list
+
+.. note::
+
+   The info command has not been implemented for the shell yet. 
+
 Variables
 ----------------------------------------------------------------------
 
