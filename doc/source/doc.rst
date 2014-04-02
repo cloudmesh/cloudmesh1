@@ -25,34 +25,12 @@ You can check it out the code and the documentation with::
   git clone git@github.com:cloudmesh/cloudmesh.git
 
 A number of packages need to be installed on your machine. You can do
-this with 
+this with:: 
 
     $ cd cloudmesh
     $ fab -f install/fabfile.py deploy
     $ fab build.install
 
-(Deprecated) Requirements for the Documentation
-----------------------------------------------------------------------
-
-.. warning:: This stap has been deprecated and is part of the previous
-   setup step.
-
-We assume you have autodoc installed for sphinx (see previously) it is
-not in the requirements file, as I could not find it in pypi. Hence we
-install it before hand::
-
-    mkdir /tmp/install-cloudmesh
-    hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
-    cd sphinx-contrib/autorun
-    python setup.py install
-
-    cd /tmp/install-cloudmesh
-
-    git@github.com:cloudmesh/cloudmesh.git
-    cd cloudmesh
-    pip install -r requirements.txt
-
-If anything is missing, please let us know so we can update this documentation.
 
 Creating the Documentation
 ----------------------------------------------------------------------
@@ -105,5 +83,25 @@ To create a single html page you can say ::
    make singlehtml
    open build/singlehtml/index.html
 
-..
+
+(Deprecated) Old Requirements for the Documentation
+----------------------------------------------------------------------
+
+.. warning:: This stap has been deprecated and is part of the previous
+   setup step.
+
+We assume you have autodoc installed for sphinx (see previously) it is
+not in the requirements file, as I could not find it in pypi. Hence we
+install it before hand::
+
+    mkdir /tmp/install-cloudmesh
+    hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
+    cd sphinx-contrib/autorun
+    python setup.py install
+
+    cd /tmp/install-cloudmesh
+
+    git@github.com:cloudmesh/cloudmesh.git
+    cd cloudmesh
+    pip install -r requirements.txt
 

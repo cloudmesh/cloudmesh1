@@ -95,8 +95,8 @@ In case virtualenv is not installed, you can install it via pip::
 
     $ sudo pip install virtualenv
 
-Once that is accomplished you can create a virtual env as follows in the
-directory ENV:
+Once that is accomplished you can create a virtual env as follows in
+the directory ENV::
          
     $ virtualenv  --no-site-packages ~/ENV
 
@@ -420,7 +420,7 @@ services. To start them simply say::
    $ fab mq.start
 
 It will ask you for the system password as rabbitMQ runs system
-wide. Next start the queue service with
+wide. Next start the queue service with::
 
    $ fab queue.start:1
 
@@ -510,7 +510,7 @@ Once you have started cloudmesh, you will be able to see the page form that serv
 
       http://localhost:5001
 
-However, before you start the server with 
+However, before you start the server with::
 
     python setup.py install; fab server.start
 
@@ -616,7 +616,7 @@ Next you can start the webui with::
 	fab server.start    
 	
 	
-If you like to start with a particular route, you can pass it as parameter.
+If you like to start with a particular route, you can pass it as parameter::
 
     fab server.start:inventory
     
@@ -672,9 +672,8 @@ open a new terminal
     $ fab build.install
 
     
-HPC services 
+HPC services::
 
-::
    fab hpc.touch
 
    logs into
