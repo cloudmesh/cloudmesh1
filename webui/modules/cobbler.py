@@ -1,5 +1,5 @@
 from cloudmesh.config.cm_config import cm_config, cm_config_server
-from flask import Blueprint, g, render_template, request, redirect, url_for
+from flask import Blueprint, g, render_template, get_template_attribute, request, Response, redirect, url_for
 from flask.ext.login import login_required  # @UnresolvedImport
 from flask.ext.wtf import Form  # @UnresolvedImport
 from pprint import pprint
@@ -19,44 +19,220 @@ cobbler_module = Blueprint('cobbler_module', __name__)
 
 admin_permission = Permission(RoleNeed('admin'))
 
-#
-# ROUTE: cobbler
-#
-@cobbler_module.route('/cobbler/distros', methods=['GET'])
-@login_required
-def display_distros():
-    result = request_rest_api("get", "/cm/v1/cobbler/distros/*")
-    field_filter = [
-                     ("name", "Name", "text", True),
-                     ("arch", "Architecture", "text", True),
-                     ("breed", "Breed", "text", True),
-                     ("comment", "Comment", "text", False),
-                     ("initrd", "Initrd", "text", True),
-                     ("kernel", "Kernel", "text", True),
-                     ("os_version", "OS Version", "text", True),
-                     ("owners", "Owners", "list", True),
-                    ]
-    return render_template("mesh/cobbler/cobbler_distro.html", result=result, filter=field_filter)
+cobbler_default_data = {
+                         "distros": {},
+                         "profiles": {},
+                         "systems": {},
+                        }
 
-@cobbler_module.route('/cobbler/profiles', methods=['GET'])
+cobbler_default_data["distros"] = {
+    "flag_collection": False,
+    "get": "/cm/v1/cobbler/distros/*",
+    "field_filter": {
+        "normal": [
+            ("name", "Name", "text", True),
+            ("arch", "Architecture", "text", True),
+            ("breed", "Breed", "text", True),
+            ("comment", "Comment", "text", False),
+            ("initrd", "Initrd", "text", True),
+            ("kernel", "Kernel", "text", True),
+            ("os_version", "OS Version", "text", True),
+            ("owners", "Owners", "list", True),
+        ],
+        "add": [
+            ("name", "Name", "text", False),
+            ("url", "URL", "text", False),
+        ],
+    },
+    "select_data": {
+    },
+    "process_vars": {
+        "update": [ ],
+        "add": ["name", "url", ],
+    },
+    "button": {
+        "normal": [
+            ("reset", 1),
+            ("delete", 2),
+        ],
+        "add": [
+            ("add", 3),
+        ],
+    },
+}
+
+cobbler_default_data["profiles"] = {
+    "flag_collection": False,
+    "get": "/cm/v1/cobbler/profiles/*",
+    "field_filter": {
+        "normal": [
+            ("name", "Name", "text", True),
+            ("distro", "Distribution", "select", False),
+            ("kickstart", "Kickstart", "select", False),
+            ("comment", "Comment", "text", False),
+            ("owners", "Owners", "list", True),
+        ],
+        "add": [
+            ("name", "Name", "text", False),
+            ("distro", "Distribution", "select", False),
+            ("kickstart", "Kickstart", "select", False),
+        ],
+    },
+    "select_data": {
+        "kickstart": "/cm/v1/cobbler/kickstarts",
+        "distro": "/cm/v1/cobbler/distros",
+    },
+    "process_vars": {
+        "update": ["kickstart", ],
+        "add": ["name", "distro", "kickstart", ],
+    },
+    "button": {
+        "normal": [
+            ("reset", 1),
+            ("update", 1),
+            ("delete", 1),
+        ],
+        "add": [
+            ("add", 3),
+        ],
+    },
+}
+
+cobbler_default_data["systems"] = {
+    "flag_collection": True,
+    "get": "/cm/v1/cobbler/systems/*",
+    "field_filter": {
+        "normal": [
+            ("name", "Name", "text", True),
+            ("profile", "Profile", "select", False),
+            ("power_address", "Power Address", "text", False),
+            ("power_type", "Power Type", "text", False),
+            ("power_user", "Power User", "text", False),
+            ("power_pass", "Power Password", "text", False),
+            ("comment", "Comment", "text", False),
+            ("owners", "Owners", "list", True),
+        ],
+        "collection": {
+            "normal": [("interfaces", "Interface")],
+            "add": [("interfaces", "Interface")],
+        },
+        "interfaces": [
+            ("name", "Name", "text", False),
+            ("ip_address", "IP Address", "text", False),
+            ("netmask", "Subnet Mask", "text", False),
+            ("if_gateway", "Interface Gateway", "text", False),
+            ("mac_address", "MAC Address", "text", False),
+            ("management", "Management", "boolean", False),
+        ],
+        "add": [
+            ("name", "Name", "text", False),
+            ("profile", "Profile", "select", False),
+            ("power_address", "Power Address", "text", False),
+            ("power_type", "Power Type", "text", False),
+            ("power_user", "Power User", "text", False),
+            ("power_pass", "Power Password", "text", False),
+        ],
+    },
+    "select_data": {
+        "profile": "/cm/v1/cobbler/profiles",
+    },
+    "process_vars": {
+        "update": ["profile", "power_address", "power_type", "power_user", "power_pass", ],
+        "add": ["name", "profile", "power_address", "power_type", "power_user", "power_pass", ],
+    },
+    "button": {
+        "normal": [
+            ("reset", 1),
+            ("update", 1),
+            ("delete", 1),
+        ],
+        "add": [
+            ("add", 3),
+        ],
+    },
+}
+
+@cobbler_module.route('/cobbler/<objects>', methods=['GET'])
 @login_required
-def display_profiles():
-    result = request_rest_api("get", "/cm/v1/cobbler/profiles/*")
-    distros = request_rest_api("get", "/cm/v1/cobbler/distros")
-    kickstarts = request_rest_api("get", "/cm/v1/cobbler/kickstarts")
-    field_filter = [
-                     ("name", "Name", "text", True),
-                     ("distro", "Distribution", "select", False),
-                     ("kickstart", "Kickstart", "select", False),
-                     ("comment", "Comment", "text", False),
-                     ("owners", "Owners", "list", True),
-                    ]
-    return render_template("mesh/cobbler/cobbler_profile.html", result=result, filter=field_filter, distros=distros, kickstarts=kickstarts)
+def display_cobbler(objects):
+    predefined = cobbler_default_data[objects]
+    result = request_rest_api("get", predefined["get"])
+    append_select_data(objects, result)
+    add_data = get_add_data_dict(objects, result)
+    js_vars = {}
+    for k in predefined["process_vars"]:
+        js_vars[k] = ["'" + v + "'" for v in predefined["process_vars"][k]]
+    return render_template("mesh/cobbler/cobbler_main.html",
+                           object_type=objects, 
+                           result=result,
+                           js_vars=js_vars, 
+                           filter=predefined["field_filter"]["normal"], 
+                           buttons=predefined["button"]["normal"], 
+                           add_data=add_data,
+                           flag_collection=predefined["flag_collection"],
+                           filter_collection=predefined["field_filter"],
+                           )
+
+@cobbler_module.route('/cobbler/<objects>/<item_name>', methods=['GET', 'PUT', 'POST', 'DELETE'])
+@login_required
+def process_cobbler_object(objects, item_name):
+    if objects not in ["distros", "profiles", "systems", ]:
+        return 
+    predefined = cobbler_default_data[objects]
+    url_prefix = "/cm/v1/cobbler"
+    url = "{0}/{1}/{2}".format(url_prefix, objects, item_name)
+    method = request.method.lower()
+    template = ""
+    if method == "get":
+        result = request_rest_api(method, url)
+    else:
+        result = request_rest_api(method, url, request.json[objects])
+        if method == "post":
+            result = request_rest_api("get", url)
+    if result["result"] and method in ["get", "post"]:
+        append_select_data(objects, result)
+        accordion_panel = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL")
+        result["template"] = accordion_panel(objects, result["data"][0]["data"], predefined["field_filter"]["normal"], predefined["button"]["normal"])
+        if method == "post":
+            accordion_panel_add = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL_ADD")
+            add_data = get_add_data_dict(objects, result)
+            add_template = accordion_panel_add(objects, add_data)
+            result["template"] += add_template
+    return Response(json.dumps(result), status=200, mimetype="application/json")
+
+def append_select_data(objects, data):
+    predefined = cobbler_default_data[objects]
+    select_data = {}
+    for s in predefined["select_data"]:
+        s_result = request_rest_api("get", predefined["select_data"][s])
+        select_data[s] = s_result["data"]
+    for one_data in data["data"]:
+        one_data["data"]["select"] = select_data
+
+def get_add_data_dict(objects, data):
+    predefined = cobbler_default_data[objects]
+    add_data = {"data": {}}
+    for f in predefined["process_vars"]["add"]:
+        add_data["data"][f] = ""
+    add_data["data"]["select"] = data["data"][0]["data"]["select"]
+    add_data["filter"] = predefined["field_filter"]["add"]
+    add_data["button"] = predefined["button"]["add"]
+    add_data["name"] = "add_{0}".format(objects)
+    if "collection" in predefined["field_filter"]:
+        for (name, value) in predefined["field_filter"]["collection"]["add"]:
+            add_data["data"][name] = {}
+            for field_coll in predefined["field_filter"][name]:
+                add_data["data"][name][field_coll[0]] = ""
+    return add_data
 
 def get_server_url():
     # ONLY for test
     # MUST changed to read info from yml file before commit
-    return "http://gravel01.futuregrid.org:5000"
+    server_config = cm_config_server()
+    prot = server_config.get("cloudmesh.server.cobbler.prot")
+    host = server_config.get("cloudmesh.server.cobbler.host")
+    port = server_config.get("cloudmesh.server.cobbler.port")
+    return "{0}://{1}:{2}".format(prot, host, port)
 
 def request_rest_api(method, url, data=None):
     """
@@ -73,4 +249,5 @@ def request_rest_api(method, url, data=None):
         else:
             data = {"user_token": ""}
         r = req_api(req_url, data=json.dumps(data), headers=headers)
+        print r.json()
     return r.json()["cmrest"]["data"]
