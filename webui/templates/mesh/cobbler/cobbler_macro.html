@@ -1,0 +1,221 @@
+{% from "_helper.html" import image_button, js_image_button %}
+
+{%- macro CM_SELECT(uid, items, flag_selected=True) -%}
+    <select id='{{uid}}'>
+    {% for item in items %}
+        <option value='{{item}}' {{caller(item) if flag_selected }}>{{item}}</option>
+    {% endfor %}
+    </select>
+{% endmacro %}
+
+{%- macro CM_BOOLEAN(uid, flag) -%}
+    {% set dst_value = "True" if flag else "False" %}
+    {% set items = ["True", "False"] %}
+    {% call(item) CM_SELECT(uid, items) %}
+        {% if dst_value == item %}
+           selected
+        {% endif %}
+    {% endcall%}
+{% endmacro %}
+
+{%- macro CM_SPAN(uid, value) -%}
+    <span id='{{uid}}'>
+    {{value if value is string else value|join(", ")}}
+    </span>
+{% endmacro %}
+
+{%- macro CM_INPUT(uid, value, type='text', size=20, onclick='') -%}
+    <input type='{{type}}' id='{{uid}}'
+    value = '{{value if value is string else value|join(", ")}}'
+    {% if type == 'button' %}
+        onclick='{{onclick}}'
+    {% endif %}
+    size='{{size}}'/>
+{% endmacro %}
+
+{%- macro CM_IMAGE_BUTTON(value) -%}
+    {{ image_button ("none", "365_restart", "/cobbler/{0}".format(value)) }} {{value|title}}
+{% endmacro %}
+
+{%- macro CM_JS_IMAGE_BUTTON(value, uid, flag_add) -%}
+    {{ js_image_button ("none", "365_restart", "" if flag_add else "refresh_cobbler('{0}', '{1}')".format(value, uid)) }}
+{% endmacro %}
+
+{%- macro CM_COBBLER_CHILD(value) -%}
+    {% if value == "distros" %}
+        profiles
+    {% elif value == "profiles" %}
+        systems
+    {% elif value == "systems" %}
+        interfaces
+    {% else %}
+        &nbsp;
+    {% endif %}
+{% endmacro %}
+
+{%- macro CM_ACCORDION_H3(uid, value, child_count=0, flag_add=False) -%}
+    <h3 id="{{uid}}">
+        <span style="float:left; width:30%; white-space:nowrap;">
+            <span class="inner_function_button">
+                {{ CM_JS_IMAGE_BUTTON(value, uid, flag_add) }}
+            </span>
+            {% if flag_add %}
+                Add a New {{value[:-1]|title}}
+            {% else %}
+                {{uid}}
+            {% endif %}
+        </span>
+        <span>
+            {% if flag_add %}
+                &nbsp;
+            {% else %}
+                <span class="badge"> {{child_count}} </span> {{CM_COBBLER_CHILD(value)|title}}
+            {% endif %}
+        </span>
+    </h3>
+{% endmacro %}
+
+{%- macro CM_COBBLER_BUTTON(uid, value, action, colspan=1) -%}
+    <td style="text-align: center" colspan="{{colspan}}">
+        {% set com_uid = '{0}_{1}'.format(uid, action) %}
+        {{CM_INPUT( com_uid, action|title, type='button', onclick='{0}_cobbler("{1}", "{2}" )'.format(action, value, uid))}}
+    </td>
+{% endmacro %}
+
+{%- macro CM_COLLECTION_BUTTON(uid, value, action, flag_add=True) -%}
+    {% set com_uid = '{0}_{1}'.format(uid, action) %}
+    {{CM_INPUT( com_uid, action|title, type='button', onclick='{0}_cobbler_collection_{1}("{2}", "{3}" )'.format(action, value, uid, "true" if flag_add else "false"))}}
+{% endmacro %}
+
+{%- macro CM_ACCORDION_TABLE_BODY(uid, data, filter) -%}
+    {% for field in filter %}
+        <tr>
+            <td>{{ field[1] }}</td>
+            <td colspan="2">
+            {% set field_uid = "{0}_{1}".format(uid, field[0]) %}
+            {% if field[3] %}
+                {{CM_SPAN(field_uid, data[field[0]])}}
+            {% else %}
+                {% if field[2] == "text" %}
+                    {{CM_INPUT(field_uid, data[field[0]])}}
+                {% elif field[2] == "select" %}
+                    {% set items = data["select"][field[0]] %}
+                    {% set dst_value = data[field[0]].split("/")[-1] %}
+                    {% call(item) CM_SELECT(field_uid, items) %}
+                        {% if dst_value == item %}
+                            selected
+                        {% endif %}
+                    {% endcall%}
+                {% elif field[2] == "boolean" %}
+                    {{CM_BOOLEAN(field_uid, data[field[0]])}}
+                {% else %}
+                    {{CM_SPAN(field_uid, data[field[0]])}}
+                {% endif %}
+            {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+{% endmacro %}
+
+{%- macro CM_ACCORDION_H3_DIV_BUTTON(uid, value, buttons) -%}
+    <tr>
+        {%for button in buttons %}
+            {{CM_COBBLER_BUTTON(uid, value, button[0], colspan=button[1])}}
+        {% endfor %}
+    </tr>
+{% endmacro %}
+
+{%- macro CM_ACCORDION_H3_DIV(uid, value, data, filter, buttons) -%}
+    <div>
+        <table>
+            {{CM_ACCORDION_TABLE_BODY(uid, data, filter)}}
+            {{CM_ACCORDION_H3_DIV_BUTTON(uid, value, buttons)}}
+        </table>
+    </div>
+{% endmacro %}
+
+{%- macro CM_ACCORDION_PANEL(value, data, filter, buttons, flag_add=False) -%}
+    {% set uid = data.name %}
+    {{CM_ACCORDION_H3(uid, value, flag_add=flag_add)}}
+    {{CM_ACCORDION_H3_DIV(uid, value, data, filter, buttons)}}
+{% endmacro %}
+
+{%- macro CM_ACCORDION_PANEL_ADD(value, add_data) -%}
+    {% set add_uid = "add_{0}".format(value) %}
+    {{CM_ACCORDION_H3(add_uid, value, flag_add=True)}}
+    {{CM_ACCORDION_H3_DIV(add_uid, value, add_data["data"], add_data["filter"], add_data["button"])}}
+{% endmacro %}
+
+{%- macro CM_ACCORDION_TABLE_BODY_COLLECTION(uid, value, data) -%}
+    <tr>
+        <td>
+            {{value}}
+        </td>
+        <td colspan="2">
+            {% set items = [] %}
+            {% for k in data %}
+                {% set ttt = items.append(k) %}
+            {% endfor %}
+            {% set ttt = items.append("New...") %}
+            {%call(item) CM_SELECT(uid, items)%}
+                {% if items[0] == item %}
+                    selected
+                {% endif %}
+            {% endcall %}
+        </td>
+    </tr>
+{% endmacro %}
+
+{%- macro CM_COLLECTION_FILL_DATA(uid, name, filter, data) -%}
+    <script>
+        {% for sub_name in data %}
+            tmp_data = {};
+            {% for f in filter %}
+                {% if f[0] == "name" %}
+                    tmp_data["name"] = "{{sub_name}}";
+                {% else %}
+                    tmp_data["{{f[0]}}"] = "{{data[sub_name][f[0]]}}";
+                {% endif %}
+            {% endfor %}
+            cobbler_data["{{uid}}"]["{{name}}"]["{{sub_name}}"] = tmp_data;
+        {% endfor%}
+    </script>
+{% endmacro %}
+
+{%- macro CM_ACCORDION_PANEL_COLLECTION(value, data, filter, buttons, filter_collection, flag_add=False) -%}
+    {% set uid = data.name %}
+    {{CM_ACCORDION_H3(uid, value, flag_add=flag_add)}}
+    <div><table>
+        {{CM_ACCORDION_TABLE_BODY(uid, data, filter)}}
+        {% set panel_type = "add" if flag_add else "normal" %}
+    {% for (name, value) in filter_collection["collection"][panel_type] %}
+        {% set filter_coll = filter_collection[name] %}
+        {% set uid_coll = "{0}_{1}".format(uid, name) %}
+        <tr>
+            <td colspan="3">
+                <div><table>
+                    <tr><td colspan="3" style="text-align: center">
+                        {{value}}s:
+                        {% for action in ["Add", "Update", "Delete"] %}
+                            {{CM_COLLECTION_BUTTON(uid, name, action, flag_add)}}
+                        {% endfor %}
+                    </td></tr>
+                    <script>
+                        cobbler_data["{{uid}}"] = {"{{name}}": {}};
+                    </script>
+                    {{CM_ACCORDION_TABLE_BODY_COLLECTION(uid_coll, value, {} if flag_add else data[name])}}
+                    {{CM_COLLECTION_FILL_DATA(uid, name, filter_coll, data[name])}}
+                    {{CM_ACCORDION_TABLE_BODY(uid_coll, data[name], filter_coll)}}
+                    <script>
+                        init_collection("{{uid}}", "{{name}}");
+                        $("#{{uid}}_{{name}}").change(function(){
+                            init_collection("{{uid}}", "{{name}}");
+                        }).change();
+                    </script>
+                </table></div>
+            </td>
+        </tr>
+    {% endfor %}
+    {{CM_ACCORDION_H3_DIV_BUTTON(uid, value, buttons)}}
+    </table></div>
+{% endmacro %}

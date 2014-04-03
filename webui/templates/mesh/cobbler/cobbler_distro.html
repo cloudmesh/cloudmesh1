@@ -43,6 +43,22 @@
         PreventClickEventPropagate(".inner_function_button");
     }
 
+    function reset_distro(distro_name) {
+        refresh_cobbler_object(distro_name);
+    }
+
+    function delete_distro(distro_name) {
+        // delete this distro
+        $elem = $('#' + distro_name );
+        $elem.next('div').remove();
+        $elem.remove();
+        alert("removed.");
+    }
+
+    function add_distro() {
+        // add a new distro
+    }
+
 </script>
 
 
@@ -100,20 +116,57 @@
                         </td>
                         </tr>
                     {% endfor %}
+                    <tr>
+                        <td align="center">
+                            <input type="button" id="{{UID}}_reset" onclick="reset_distro('{{UID}}')" value="Reset" />
+                        </td>
+                        <td align="center">
+                            <input type="button" id="{{UID}}_delete" onclick="delete_distro('{{UID}}')" value="Delete" />
+                        </td>
+                    </tr>
                 </table>
             </div>
         {% endfor %}
-    {% else %}
-        <h3 id="error">"Error. Click for details."</h3>
-        <div>
+    {% endif %}
+    <h3 id="add_distro">
+        <span style="float:left; width:30%; white-space:nowrap;">
+            <span class="inner_function_button">
+                {{ js_image_button ("none", "365_restart", "") }}
+            </span>
+            Add A New Distro
+        </span>
+        <span>
+             &nbsp;
+        </span>
+    </h3>
+    <div>
             <table>
                 <tr>
-                    <td>Error Description</td>
-                    <td>{{result["description"]}}</td>
+                    <td>
+                        Name
+                    </td>
+                    <td>
+                        <input type="text" id="add_distro_name" value="" />
+                    </td>
                 </tr>
-            </table>
-        </div>
-    {% endif %}
+                <tr>
+                    <td>
+                       URL
+                    </td>
+                    <td>
+                        <input type="text" id="add_distro_url" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <input type="reset" id="add_distro_reset" value="Reset" />
+                    </td>
+                    <td align="center">
+                        <input type="button" id="add_distro_add" value="Add Distro" onclick="add_distro()" />
+                    </td>
+                </tr>
+
+    </div>
 </div>
 
 {% endblock %}
