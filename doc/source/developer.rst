@@ -68,10 +68,11 @@ Pip
 We typically do not use easy_install, but use pip instead. Please make
 sure that you install pip. THis can be done with::
 
-     easy_install pip 
+    $ sudo easy_install pip 
 
-Once installed we will typically not use easy_install any more.
+Once installed we will typically not use easy_install any more. If you do not have easy_install setup previously you might have to set it up. It can be done as follows::
 
+    $ sudo apt-get install python-setuptools
 
 Virtualenv
 ================
@@ -113,7 +114,7 @@ following command::
 
     $ source ~/ENV/bin/activate
 
-Please note that you have to do this every time you open a terminal or login on the computer you work. Often you may forget it, so we recommend that you put it in your .bash_profile page at the end. 
+Please note that you have to do this every time you open a terminal or login on the computer you work. Often you may forget it, so we recommend that you put it in your .bash_profile or .bashrc page at the end. 
     
 Modify your rc file (optional):
 ------------------------
@@ -147,19 +148,24 @@ This way if you type dev you cd into the development directory
 Install fabric
 ===========================================================
 
-Much of our setup scripts are using fabric which is a nice management tool and is for our purpose a fancy makefile like tool (with many additional feature). To install it, please say::
+Much of our setup scripts are using fabric which is a nice management tool and is for our purpose a fancy makefile like tool (with many additional feature). This tool(and several other packages) use the python-dev package. If you do not have it installed already you can get by doing the following::
 
-    pip install fabric
+    $ sudo apt-get install python-dev
+
+Fabric can now be installed as follows::
+
+    $ pip install fabric
 
 Github
 =======
 
 Next we need to make sure github is properly usable for you. First you need to get an account on github and make sure you have a gravatar. Without this you can not become a developer. Than please contact Gregor von Laszewski (laszewski@gmail.com) so you can be added to the github dev list.
 
-In order for you to participate in code development you also need to do the following steps on **ANY** machine from which you like toc check code back into github.
+In order for you to participate in code development you also need to do the following steps on **ANY** machine from which you like toc check code back into github. If you do not have git on your machine you can get by::
 
+    $ sudo apt-get install git
 
-GIthub ssh keys
+Github ssh keys
 ------------------
 
 If you are on a new machine you must create a new github ssh key for
@@ -169,7 +175,7 @@ it. This is nicely described at
 
 You must upload the key to github, either via a command, or simply via
 the github gui. Simply go to your setting and find the ssh key menu
-entry. Klick on it and upload your new key by pasting and copying the
+entry. Click on it and upload your new key by pasting and copying the
 public key. Make sure you do not copy the privat key. 
 
 
@@ -177,7 +183,7 @@ Git username and e-mail
 ------------------------------
 
 It is very important to set the git username and e-mail. This can be
-done with the following commands. you must use your full name and your
+done with the following commands. You must use your full name and your
 e-mail that you use with github as part of your registered
 account. Otherwise our commits will not properly work::
 
@@ -252,40 +258,8 @@ file that you may do does require an installation with::
 If you do not change the requirements file, this step will be
 automatically executed as part of the installation.
 
-Additional Installation for Documentation Generation
-======================================================================
-
-To create the documentation locally, a couple of additional steps are
-needed that have not yet been included into the install fab scripts.
-
-The documentation depends on the autorun package. This package can be
-downloaded and installed as follows::
-
-    $ cd /tmp
-    $ mkdir autorun
-    $ cd autorun
-    $ hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
-    $ cd sphinx-contrib/autorun
-    $ python setup.py install
-
-Blockdiag family
-------------------------------
-
-blockdiag uses TrueType Font to render text. blockdiag try to detect installed fonts but if nothing detected, You can specify fonts with -f (–font) option::
-
-    $ blockdiag -f /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf simple.diag
-
-If you always use same font, write $HOME/.blockdiagrc::
-
-    $ cat $HOME/.blockdiagrc
-    [blockdiag]
-    fontpath = /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf
-
-TODO: distribute a standard ttf font and use sh so that the -f font is included from the deployed package
-
 YAML files
 ---------------
-
 
 You will need a number of  yaml files. Samples can be found in the etc source directory. 
 More elaborate examples can be obtained from Gregor for the personel that work 
@@ -374,12 +348,8 @@ which will verify if you can log into the clouds with your credentials
 
 WARNING: fab user.verify, and    fab user.yaml,safe are not yet implemented
 
-
-
-
-
-Mongo
----------------
+Mongo - Commands Overview
+--------------------------
 
 Cloudmesh uses mongo for serving information to the different
 services.  To managing mongo db it is important that you use our
@@ -406,7 +376,32 @@ To create a cluster with user data base say (requires access to LDAP)::
 
 	fab mongo.cloud
 	
-Now you have data in the mongo db and you can use and test it
+Now you have data in the mongo db and you can use and test it.
+
+Mongo commands that need to be issued
+---------------------------------------
+
+In order for the everything to work right, please do the following mongo steps.::
+
+    fab mongo.start
+    fab mongo.boot
+    fab mongo.simple
+    fab user.mongo
+
+Starting the Web Service
+----------------------
+
+To start a service you can use::
+
+   fab server.start:/provision/summary/
+
+Which starts the server and goes to the provision summary page. If you
+just use::
+
+   fab server.start
+
+It will be just starting at the home page.
+
 
 Starting and testing the Queue Service
 ----------------------------------------------------------------------
@@ -429,19 +424,36 @@ This will start the necessary background services, but also will shut
 down existing services. Essentially it will start a clean development
 environment. 
 
-Starting the Web Service
-----------------------
+Additional Installation for Documentation Generation
+======================================================================
 
-To start a service you can use::
+To create the documentation locally, a couple of additional steps are
+needed that have not yet been included into the install fab scripts.
 
-   fab server.start:/provision/summary/
+The documentation depends on the autorun package. This package can be
+downloaded and installed as follows::
 
-Which starts the server and goes to the provision summary page. If you
-just use::
+    $ cd /tmp
+    $ mkdir autorun
+    $ cd autorun
+    $ hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
+    $ cd sphinx-contrib/autorun
+    $ python setup.py install
 
-   fab server.start
+Blockdiag family
+------------------------------
 
-It will be just starting at the home page.
+blockdiag uses TrueType Font to render text. blockdiag try to detect installed fonts but if nothing detected, You can specify fonts with -f (–font) option::
+
+    $ blockdiag -f /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf simple.diag
+
+If you always use same font, write $HOME/.blockdiagrc::
+
+    $ cat $HOME/.blockdiagrc
+    [blockdiag]
+    fontpath = /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf
+
+TODO: distribute a standard ttf font and use sh so that the -f font is included from the deployed package
 
 The t.py program
 ---------------
