@@ -43,6 +43,6 @@ blockdiagcontrib-class
 blockdiagcontrib-cisco
 nwdiag
 seqdiag
-pyzmq
 cmd3>=0.7.7
 azure
+simple-json

@@ -83,15 +83,14 @@ def ubuntu():
     install_packages(["git",
                       "mercurial",
                       "curl",
-                      "python-virtualenv",
                       "python-dev",
                       "libldap2-dev",
                       "libsasl2-dev",
-                      "python-matplotlib",
-                      "libpng-dev"])
-    install_mongodb()
+                      "libpng-dev",
+                      "mongodb-server"])    
     install_packages(["rabbitmq-server"])
     install()
+    install_mongodb()#important that mongo_db installation be done only after all we install all needed python packages(as per requiremnts.txt)
 
 def centos():
     install_packages (["git",
@@ -106,10 +105,11 @@ def centos():
                        "bzip2-devel",
                        "python-matplotlib",
                        "libpng-devel"])
-    install_mongodb()
+    
     install_packages(["rabbitmq-server"])
     local('sudo sh -c "chkconfig rabbitmq-server on && service rabbitmq-server start"')
     install()
+    install_mongodb() 
 
 def osx():
     local('brew install wget')
@@ -128,9 +128,9 @@ def osx():
         local ('LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib')
 
         # local('pip install matplotlib')
-    install_mongodb()
-    install()
     
+    install()
+    install_mongodb()
 
 def sphinx_updates():
     local('rm -rf /tmp/install-cloudmesh')
