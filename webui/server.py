@@ -62,7 +62,7 @@ all_modules = ['menu',
                'users',
                'status',
                # 'register',
-               'metric',
+               #'metric',
                'pie_chart_fg380'
                 ]
 
@@ -87,9 +87,12 @@ webbrowser.register("safari", None)
 
 with_rack = s_config.get("cloudmesh.server.rack.with_rack")
 
-if with_rack:
+try:
+    import matplotlib
     all_modules.append('rack')
-else:
+    all_modules.append('metric')
+    
+except:
     log.info("The Rack diagrams are not enabled")
 
 # exclude_modules = ['flatpages']
