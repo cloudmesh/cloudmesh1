@@ -109,6 +109,7 @@ cobbler_default_data["systems"] = {
             ("power_type", "Power Type", "text", False),
             ("power_user", "Power User", "text", False),
             ("power_pass", "Power Password", "text", False),
+            ("power_id", "Power ID", "text", False),
             ("comment", "Comment", "text", False),
             ("owners", "Owners", "list", True),
         ],
@@ -131,14 +132,15 @@ cobbler_default_data["systems"] = {
             ("power_type", "Power Type", "text", False),
             ("power_user", "Power User", "text", False),
             ("power_pass", "Power Password", "text", False),
+            ("power_id", "Power ID", "text", False),
         ],
     },
     "select_data": {
         "profile": "/cm/v1/cobbler/profiles",
     },
     "process_vars": {
-        "update": ["profile", "power_address", "power_type", "power_user", "power_pass", ],
-        "add": ["name", "profile", "power_address", "power_type", "power_user", "power_pass", ],
+        "update": ["profile", "power_address", "power_type", "power_user", "power_pass", "power_id", ],
+        "add": ["name", "profile", "power_address", "power_type", "power_user", "power_pass", "power_id", ],
     },
     "button": {
         "normal": [
@@ -157,6 +159,7 @@ cobbler_default_data["systems"] = {
 def display_cobbler(objects):
     predefined = cobbler_default_data[objects]
     result = request_rest_api("get", predefined["get"])
+    result["data"].sort(key=lambda x: x["data"]["name"])
     append_select_data(objects, result)
     add_data = get_add_data_dict(objects, result)
     js_vars = {}
@@ -186,19 +189,48 @@ def process_cobbler_object(objects, item_name):
     if method == "get":
         result = request_rest_api(method, url)
     else:
-        result = request_rest_api(method, url, request.json[objects])
-        if method == "post":
+        result = request_rest_api(method, url, request.json)
+        if result["result"] and method == "post":
             result = request_rest_api("get", url)
     if result["result"] and method in ["get", "post"]:
         append_select_data(objects, result)
-        accordion_panel = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL")
-        result["template"] = accordion_panel(objects, result["data"][0]["data"], predefined["field_filter"]["normal"], predefined["button"]["normal"])
+        if predefined["flag_collection"]:
+            accordion_panel = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL_COLLECTION")
+            result["template"] = accordion_panel(objects, result["data"][0]["data"], predefined["field_filter"]["normal"], predefined["button"]["normal"], predefined["field_filter"])
+        else:
+            accordion_panel = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL")
+            result["template"] = accordion_panel(objects, result["data"][0]["data"], predefined["field_filter"]["normal"], predefined["button"]["normal"])
         if method == "post":
-            accordion_panel_add = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL_ADD")
-            add_data = get_add_data_dict(objects, result)
-            add_template = accordion_panel_add(objects, add_data)
+            if predefined["flag_collection"]:
+                accordion_panel_add = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL_COLLECTION")
+                add_data = get_add_data_dict(objects, result)
+                add_template = accordion_panel_add(objects, add_data["data"], add_data["filter"], add_data["button"], predefined["field_filter"], True)
+            else:
+                accordion_panel_add = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL")
+                add_data = get_add_data_dict(objects, result)
+                add_template = accordion_panel_add(objects, add_data["data"], add_data["filter"], add_data["button"], True)
             result["template"] += add_template
     return Response(json.dumps(result), status=200, mimetype="application/json")
+
+@cobbler_module.route('/cobbler/<objects>/<item_name>/<if_name>', methods=['PUT', 'POST', 'DELETE'])
+@login_required
+def process_cobbler_object_collection(objects, item_name, if_name):
+    if objects not in ["systems", ]:
+        return 
+    predefined = cobbler_default_data[objects]
+    url_prefix = "/cm/v1/cobbler"
+    url = "{0}/{1}/{2}".format(url_prefix, objects, item_name)
+    method = request.method.lower()
+    if method in ["put", "post"]:
+        system_data = {"name": item_name,
+                       "interfaces": [request.json],
+                       }
+        result = request_rest_api("put", url, system_data)
+    elif method in ["delete"]:
+        url = "{0}/{1}".format(url, if_name)
+        result = request_rest_api(method, url, request.json)
+    return Response(json.dumps(result), status=200, mimetype="application/json")
+
 
 def append_select_data(objects, data):
     predefined = cobbler_default_data[objects]
@@ -217,7 +249,7 @@ def get_add_data_dict(objects, data):
     add_data["data"]["select"] = data["data"][0]["data"]["select"]
     add_data["filter"] = predefined["field_filter"]["add"]
     add_data["button"] = predefined["button"]["add"]
-    add_data["name"] = "add_{0}".format(objects)
+    add_data["data"]["name"] = "add_{0}".format(objects)
     if "collection" in predefined["field_filter"]:
         for (name, value) in predefined["field_filter"]["collection"]["add"]:
             add_data["data"][name] = {}
