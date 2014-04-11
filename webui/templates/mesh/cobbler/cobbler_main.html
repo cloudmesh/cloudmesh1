@@ -18,6 +18,14 @@
     {% endautoescape%}
     var cobbler_data = { '{{object_type}}': {}};
     var cobbler_url = "/cobbler/{{object_type}}";
+    {% if object_type == "systems" %}
+    var power_fields = ["power_address", "power_user", "power_pass", "power_type", "power_id"];
+    var interface_fields = ["name", "ip_address", "mac_address", "netmask", "static", "management", ];
+    {% endif %}
+
+    function sf(value) {
+        return value.replace("_", "-");
+    }
 
     // callback func after a section clicked
     // param object_uid is the id of the h3 element in accordion
@@ -45,61 +53,98 @@
         PreventClickEventPropagate(".inner_function_button");
     });
 
-    // fill cobbler data object with specified fields in the section (uid)
-    function fill_cobbler_data(fields, uid, flag_not_add) {
-        data = cobbler_data['{{object_type}}'];
-        for(i = 0; i < fields.length; i++) {
+    // get cobbler data object with specified fields in the section (uid)
+    function get_cobbler_data(fields, uid, flag_not_add) {
+        data = {};
+        for(i in fields) {
             field = fields[i];
-            field_uid = uid + "_" + field;
-            data[field] = $("#" + field_uid).val();
+            data[field] = $("#" + uid + "_" + field).val();
         }
         if (typeof flag_not_add == "boolean" && flag_not_add) {
             data["name"] = uid;
         }
-    }
+        return data;
+    };
 
-    function clear_cobbler_data() {
-        cobbler_data['{{object_type}}'] = {};
+    {% if object_type == "systems" %}
+    function convert_cobbler_system_data(data, flag_include_interface, if_data) {
+        dest_data = {power: {}};
+        for (f in data) {
+            if ($.inArray(f, power_fields) < 0) {
+                dest_data[sf(f)] = data[f];
+            }
+        }
+        for (i in power_fields) {
+            dest_data["power"][sf(power_fields[i])] = data[power_fields[i]];
+        }
+        if(typeof flag_include_interface == "boolean" && flag_include_interface) {
+            dest_data["interfaces"] = [];
+            for (name in if_data) {
+                temp_data = {};
+                for (f in if_data[name]) {
+                    temp_data[sf(f)] = if_data[name][f];
+                }
+                dest_data["interfaces"].push(temp_data);
+            }
+        }
+        return dest_data;
     }
+    {% endif %}
 
     // callback func after refresh/reset one section
-    function callback_get_cobbler(uid, data) {
-        $get_h3 = $("#" + uid);
+    function callback_get_cobbler(user_data, server_data) {
+        $get_h3 = $("#" + user_data["uid"]);
         $get_h3_div = $get_h3.next("div");
         $get_h3_div.remove();
-        $get_h3.replaceWith(data["template"]);
+        $get_h3.replaceWith(server_data["template"]);
         refresh_accordion();
-    }
+    };
 
     // refresh icon on each section of accordion
     function refresh_cobbler(cobbler_types, uid) {
         reset_cobbler(cobbler_types, uid);
         PreventClickEventPropagate(".inner_function_button");
-    }
+    };
 
     // reset button in each section of accordion
     function reset_cobbler(cobbler_types, uid) {
         url = cobbler_url + "/" + uid;
-        send_ajax_request(uid, url, "get", callback_get_cobbler);
-    }
+        callback_data = {
+            "__func__": callback_get_cobbler,
+            "uid": uid,
+        };
+        send_ajax_request(url, "get", callback_data, {});
+    };
 
     // callback func after update one section
-    function callback_update_cobbler(uid, data) {
-        // do nothing
-    }
+    function callback_update_cobbler(user_data, server_data) {
+        if (server_data["result"]) {
+            console.log("update cobbler " + user_data["uid"] + " succeed.");
+        }
+        else {
+            console.log("update cobbler " + user_data["uid"] + " failed.");
+        }
+    };
 
     // update button in each section of accordion
     function update_cobbler(cobbler_types, uid) {
-        // get/fill data object with the value of update fields
-        fill_cobbler_data(cobbler_update_fields, uid, true);
-        url = cobbler_url + "/" + cobbler_data['{{object_type}}']['name'];
-        send_ajax_request(uid, url, "put", callback_update_cobbler);
-        // clear data after submit
-        clear_cobbler_data();
-    }
+        data = get_cobbler_data(cobbler_update_fields, uid, true);
+        url = cobbler_url + "/" + data['name'];
+        callback_data = {
+            "__func__": callback_update_cobbler,
+            "uid": uid,
+            "data": data,
+        };
+        {% if object_type == "systems"%}
+        send_ajax_request(url, "put", callback_data, convert_cobbler_system_data(data));
+        {% else %}
+        send_ajax_request(url, "put", callback_data, data);
+        {% endif %}
+    };
 
     // callback func after delete one section
-    function callback_delete_cobbler(uid, data) {
+    function callback_delete_cobbler(user_data, server_data) {
+        uid = user_data["uid"];
         $delete_h3 = $("#" + uid);
         $delete_h3_div = $delete_h3.next("div");
         $delete_h3_div.remove();
@@ -108,13 +153,17 @@
         delete cobbler_data['{{object_type}}'][uid];
         delete status_object['{{object_type}}'][uid];
         //refresh_accordion();   // does not need refresh
-    }
+    };
 
     // delete button in each section of accordion
     function delete_cobbler(cobbler_types, uid) {
         url = cobbler_url + "/" + uid;
-        send_ajax_request(uid, url, "delete", callback_delete_cobbler);
-    }
+        callback_data = {
+            "__func__": callback_delete_cobbler,
+            "uid": uid,
+        };
+        send_ajax_request(url, "delete", callback_data, {});
+    };
 
     // refresh accordion after get/add operations
     function refresh_accordion() {
@@ -130,32 +179,60 @@
                 }
             }
         }
-    }
+    };
 
     // callback func after add a new section
-    function callback_add_cobbler(uid, data) {
-        $add_h3 = $("#" + uid);
+    function callback_add_cobbler(user_data, server_data) {
+        add_uid = user_data["add_uid"];
+        $add_h3 = $("#" + add_uid);
         $add_h3_div = $add_h3.next("div");
         $add_h3_div.remove();
-        $add_h3.replaceWith(data["template"]);
+        $add_h3.replaceWith(server_data["template"]);
         refresh_accordion();
-    }
+        {% if object_type == "system" %}
+            cobbler_data["{{object_type}}"][user_data["uid"]] = {"interfaces": user_data["data"]["interfaces"]};
+            cobbler_data["{{object_type}}"][add_uid] = {"interfaces": {}};
+        {% endif %}
+    };
 
     // add button in add new object section (last section) of accordion
     function add_cobbler(cobbler_types, uid) {
-        fill_cobbler_data(cobbler_add_fields, uid);
-        console.log("ready to call add cobbler: " + JSON.stringify(cobbler_data));
-        url = cobbler_url + "/" + cobbler_data['{{object_type}}']['name'];
-        send_ajax_request(uid, url, "post", callback_add_cobbler);
-        clear_cobbler_data();
-    }
+        data = get_cobbler_data(cobbler_add_fields, uid);
+        console.log("ready to call add cobbler: " + JSON.stringify(data));
+        new_uid = data['name'];
+        if (! (new_uid in cobbler_data["{{object_type}}"])) {
+            url = cobbler_url + "/" + new_uid;
+            {% if object_type == "systems" %}
+                submit_data = convert_cobbler_system_data(data, true, cobbler_data["{{object_type}}"][uid]["interfaces"]);
+                data["interfaces"] = cobbler_data["{{object_type}}"][uid]["interfaces"];
+            {% else %}
+                submit_data = data;
+            {% endif %}
+            callback_data = {
+                "__func__": callback_add_cobbler,
+                "uid": new_uid,
+                "add_uid": uid,
+                "data": data,
+            };
+            send_ajax_request(url, "post", callback_data, submit_data);
+        }
+        else {
+            console.log("Warning, the name '" + data["name"] + " is NOT unique in '{{object_type}}' ");
+        }
+    };
 
     // jquery ajax operation, call server asynchronously, support [get, post, put, delete]
-    function send_ajax_request(uid, url, method, callback_func) {
+    // callback_data is an object, including the following properties:
+    // __func__: the callback function
+    // the final callback function looks like, object["__func__"](object, data)
+    function send_ajax_request(url, method, callback_data, submit_data) {
         headers = {
                     Accept: "application/json",
                     "Content-Type": "application/json; charset=utf-8",
                   };
+        console.log("ajax called ...");
+        console.log("callback_data is: " + JSON.stringify(callback_data));
+        console.log("submit_data is: " + JSON.stringify(submit_data));
         if (method == "get") {
             $.ajax({
                 type: "get",
@@ -163,7 +240,7 @@
                 url: url,
                 dataType: 'json',
                 success: function(data) {
-                    callback_func(uid, data);
+                    callback_data["__func__"](callback_data, data);
                 }
             });
         }
@@ -173,44 +250,233 @@
                 headers: headers,
                 url: url,
                 dataType: 'json',
-                data: JSON.stringify(cobbler_data),
+                data: JSON.stringify(submit_data),
                 success: function(data) {
-                    callback_func(uid, data);
+                    callback_data["__func__"](callback_data, data);
                 }
             });
         }
-    }
+    };
 
 function process_cobbler_collection_data(action, coll_parent, coll_name, one_value) {
+    alert("process_cobbler collection data is called. FIXME!!!");
     if (action == "delete") {
         delete cobbler_data[coll_parent][coll_name][one_value["name"]];
     }
     else {
         cobbler_data[coll_parent][coll_name][one_value["name"]] = one_value;
     }
-}
+};
 
 function init_collection(uid, name) {
-    default_selected = $("#" + uid + "_" + name).val();
-    console.log("uid: " + uid + ", name: " + name + " init ...");
-    console.log(JSON.stringify(cobbler_data[uid][name]));
-    fill_collection_gui_data(uid, name, default_selected);
+    fill_collection_gui_data(uid, name, $("#" + uid + "_" + name).val());
+};
+
+function fill_collection_gui_data(uid, name, selected_value) {
+    pdata = cobbler_data["{{object_type}}"][uid][name];
+    if(selected_value != "New...") {
+        data = pdata[selected_value];
+        fields = get_cobbler_collection_fields(name);
+        for(i in fields) {
+            $("#" + uid + "_" + name + "_" + fields[i]).val(data[fields[i]]);
+        }
+    }
+    else {
+        clear_cobbler_collection_gui_data(uid, name);
+    }
+};
+
+function get_cobbler_collection_fields(name) {
+    fdata = {"interfaces": ["name", "ip_address", "netmask", "if_gateway", "mac_address", "management"],
+            };
+    if (name in fdata) {
+        return fdata[name];
+    }
+    return {};
+};
+
+function clear_cobbler_collection_gui_data(uid, name) {
+    fields = get_cobbler_collection_fields(name);
+    for(i in fields) {
+        $("#" + uid + "_" + name + "_" + fields[i]).val("");
+    }
+};
+
+function get_cobbler_collection_data(uid, name) {
+    temp_data = {};
+    fields = get_cobbler_collection_fields(name);
+    for(i in fields) {
+        temp_data[fields[i]] = $("#" + uid + "_" + name + "_" + fields[i]).val();
+    }
+    return temp_data;
+};
+
+function convert_server_data_format(data) {
+    submit_data = {};
+    for (f in data) {
+        submit_data[sf(f)] = data[f];
+    }
+    return submit_data;
 }
 
-function fill_collection_gui_data(uid, name, value_selected) {
-    sub_uid = uid + "_" + name;
-    if(value_selected != "New...") {
-        data = cobbler_data[uid][name][value_selected];
+function callback_add_cobbler_collection(user_data, server_data) {
+    if (server_data["result"]) {
+        client_add_cobbler_collection(user_data["uid"], user_data["coll_name"], user_data["data"]);
     }
-    for(p in data) {
-        if(data.hasOwnProperty(p)) {
-            if (value_selected == "New...") {
-                $("#" + sub_uid + "_" + p).val("");
+    else {
+        console.log("add collection failed. " + server_data["description"] );
+    }
+};
+
+function client_add_cobbler_collection(uid, coll_name, data) {
+    coll_uid = "#" + uid + "_" + coll_name;
+    cobbler_data["{{object_type}}"][uid][coll_name][data["name"]] = data;
+    new_option = $("<option value='" + data["name"] + "'>" + data["name"] + "</option>");
+    new_option.insertBefore(coll_uid + " option[value='New...']");
+    $(coll_uid).val(data["name"]);
+};
+
+// systems, add an interface
+function add_cobbler_collection(uid, coll_name, flag_add) {
+    console.log("add cobbler collection " + coll_name + ", in "+ uid + ", " + flag_add);
+    coll_uid = "#" + uid + "_" + coll_name;
+    if ($(coll_uid).val() == "New...") {
+        temp_data = get_cobbler_collection_data(uid, coll_name);
+        if (temp_data["name"] != "" && ! (temp_data["name"] in cobbler_data["{{object_type}}"][uid][coll_name])) {
+            if (flag_add) {
+                client_add_cobbler_collection(uid, coll_name, temp_data);
             }
-            else {
-                $("#" + sub_uid + "_" + p).val(data[p]);
+            else { // call ajax to add directly
+                callback_data = {
+                    "__func__": callback_add_cobbler_collection,
+                    "uid": uid,
+                    "coll_name": coll_name,
+                    "data": temp_data,
+                };
+                url = cobbler_url + "/" + uid + "/" + temp_data["name"];
+                send_ajax_request(url, "post", callback_data, convert_server_data_format(temp_data));
             }
         }
+        else {
+            console.log("Warning, add operation can ONLY use unique name. '" + temp_data["name"] + "'");
+        }
+    }
+    else {
+        console.log("Warning, add operation can only be used for 'New...'");
+    }
+}
+
+function callback_update_cobbler_collection(user_data, server_data) {
+    if (server_data["result"]) {
+        client_update_cobbler_collection(user_data["uid"], user_data["coll_name"], user_data["selected_value"], user_data["data"]);
+    }
+    else {
+        console.log("update collection failed. " + server_data["description"] );
+    }
+}
+
+function client_update_cobbler_collection(uid, coll_name, selected_value, data) {
+    cobbler_data["{{object_type}}"][uid][coll_name][data["name"]] = data;
+    coll_uid = "#" + uid + "_" + coll_name;
+    if (data["name"] != selected_value) {
+        delete cobbler_data["{{object_type}}"][uid][coll_name][selected_value];
+        $(coll_uid + " option").each(function() {
+            if ($(this).val() == selected_value) {
+                $(this).attr("value", data["name"]).text(data["name"]);
+                $(coll_uid).val(data["name"]);
+                return false;
+            }
+        });
+    }
+    $(coll_uid).change();
+}
+
+// systems, update an interface
+function update_cobbler_collection(uid, coll_name, flag_add) {
+    console.log("update cobbler collection " + coll_name + ", in "+ uid + ", " + flag_add);
+    coll_uid = "#" + uid + "_" + coll_name;
+    selected_value = $(coll_uid).val();
+    if (selected_value != "New...") {
+        temp_data = get_cobbler_collection_data(uid, coll_name);
+        if (temp_data["name"] != selected_value) {  // name is READONLY
+            console.log("Warning, do NOT support update the name attribute.");
+            temp_data["name"] = selected_value;
+        }
+        if (flag_add) {
+            client_update_cobbler_collection(uid, coll_name, selected_value, temp_data);
+        }
+        else { // call ajax to update directly
+            callback_data = {
+                "__func__": callback_update_cobbler_collection,
+                "uid": uid,
+                "coll_name": coll_name,
+                "selected_value": selected_value,
+                "data": temp_data,
+            };
+            url = cobbler_url + "/" + uid + "/" + temp_data["name"];
+            send_ajax_request(url, "put", callback_data, convert_server_data_format(temp_data));
+        }
+    }
+    else {
+        console.log("Warning, upate operation can only be used for NOT 'New...'");
+    }
+}
+
+function callback_delete_cobbler_collection(user_data, server_data) {
+    if (server_data["result"]) {
+        client_delete_cobbler_collection(user_data["uid"], user_data["coll_name"], user_data["selected_value"], user_data["data"]);
+    }
+    else {
+        console.log("delete collection failed. " + server_data["description"] );
+    }
+}
+
+function client_delete_cobbler_collection(uid, coll_name, selected_value) {
+    flag_deleted = false;
+    prev_value = "New...";
+    coll_uid = "#" + uid + "_" + coll_name;
+    $(coll_uid + " option").each(function() {
+        if (flag_deleted ) {
+            $(coll_uid).val($(this).val() == "New..."? prev_value: $(this).val()).change();
+            return false;
+        }
+        if ($(this).val() == selected_value) {
+            flag_deleted = true;
+            $(this).remove();
+        }
+        else {
+            prev_value = $(this).val();
+        }
+    });
+    delete cobbler_data["{{object_type}}"][uid][coll_name][selected_value];
+}
+
+function delete_cobbler_collection(uid, coll_name, flag_add) {
+    console.log("delete cobbler collection " + coll_name + ", in "+ uid + ", " + flag_add);
+    coll_uid = "#" + uid + "_" + coll_name;
+    selected_value = $(coll_uid).val();
+    if (selected_value != "New...") {
+        if (flag_add) {
+            client_delete_cobbler_collection(uid, coll_name, selected_value);
+        }
+        else { // call ajax to update directly
+            if ($(coll_uid + " option").length > 2) {
+                callback_data = {
+                    "__func__": callback_delete_cobbler_collection,
+                    "uid": uid,
+                    "coll_name": coll_name,
+                    "selected_value": selected_value,
+                };
+                url = cobbler_url + "/" + uid + "/" + selected_value;
+                send_ajax_request(url, "delete", callback_data, {});
+            }
+            else {
+                console.log("Warning, MUST keep one interface for a system.");
+            }
+        }
+    }
+    else {
+        console.log("Warning, delete operation can only be used for NOT 'New...'");
     }
 }
 

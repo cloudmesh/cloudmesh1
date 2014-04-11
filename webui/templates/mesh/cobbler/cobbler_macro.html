@@ -84,7 +84,7 @@
 
 {%- macro CM_COLLECTION_BUTTON(uid, value, action, flag_add=True) -%}
     {% set com_uid = '{0}_{1}'.format(uid, action) %}
-    {{CM_INPUT( com_uid, action|title, type='button', onclick='{0}_cobbler_collection_{1}("{2}", "{3}" )'.format(action, value, uid, "true" if flag_add else "false"))}}
+    {{CM_INPUT( com_uid, action|title, type='button', onclick='{0}_cobbler_collection("{1}", "{2}", {3} )'.format(action, uid, value, "true" if flag_add else "false"))}}
 {% endmacro %}
 
 {%- macro CM_ACCORDION_TABLE_BODY(uid, data, filter) -%}
@@ -137,6 +137,9 @@
 {%- macro CM_ACCORDION_PANEL(value, data, filter, buttons, flag_add=False) -%}
     {% set uid = data.name %}
     {{CM_ACCORDION_H3(uid, value, flag_add=flag_add)}}
+    {% if flag_add %}
+    {% set ttt = data.update({"name": ""}) %}
+    {% endif %}
     {{CM_ACCORDION_H3_DIV(uid, value, data, filter, buttons)}}
 {% endmacro %}
 
@@ -166,7 +169,7 @@
     </tr>
 {% endmacro %}
 
-{%- macro CM_COLLECTION_FILL_DATA(uid, name, filter, data) -%}
+{%- macro CM_COLLECTION_FILL_DATA(value, uid, name, filter, data) -%}
     <script>
         {% for sub_name in data %}
             tmp_data = {};
@@ -177,14 +180,17 @@
                     tmp_data["{{f[0]}}"] = "{{data[sub_name][f[0]]}}";
                 {% endif %}
             {% endfor %}
-            cobbler_data["{{uid}}"]["{{name}}"]["{{sub_name}}"] = tmp_data;
+            cobbler_data["{{value}}"]["{{uid}}"]["{{name}}"]["{{sub_name}}"] = tmp_data;
         {% endfor%}
     </script>
 {% endmacro %}
 
-{%- macro CM_ACCORDION_PANEL_COLLECTION(value, data, filter, buttons, filter_collection, flag_add=False) -%}
+{%- macro CM_ACCORDION_PANEL_COLLECTION(object_type, data, filter, buttons, filter_collection, flag_add=False) -%}
     {% set uid = data.name %}
-    {{CM_ACCORDION_H3(uid, value, flag_add=flag_add)}}
+    {% if flag_add %}
+    {% set ttt = data.update({"name": ""}) %}
+    {% endif %}
+    {{CM_ACCORDION_H3(uid, object_type, flag_add=flag_add)}}
     <div><table>
         {{CM_ACCORDION_TABLE_BODY(uid, data, filter)}}
         {% set panel_type = "add" if flag_add else "normal" %}
@@ -196,15 +202,15 @@
                 <div><table>
                     <tr><td colspan="3" style="text-align: center">
                         {{value}}s:
-                        {% for action in ["Add", "Update", "Delete"] %}
+                        {% for action in ["add", "update", "delete"] %}
                             {{CM_COLLECTION_BUTTON(uid, name, action, flag_add)}}
                         {% endfor %}
                     </td></tr>
                     <script>
-                        cobbler_data["{{uid}}"] = {"{{name}}": {}};
+                        cobbler_data["{{object_type}}"]["{{uid}}"] = {"{{name}}": {}};
                     </script>
                     {{CM_ACCORDION_TABLE_BODY_COLLECTION(uid_coll, value, {} if flag_add else data[name])}}
-                    {{CM_COLLECTION_FILL_DATA(uid, name, filter_coll, data[name])}}
+                    {{CM_COLLECTION_FILL_DATA(object_type, uid, name, filter_coll, {} if flag_add else data[name])}}
                     {{CM_ACCORDION_TABLE_BODY(uid_coll, data[name], filter_coll)}}
                     <script>
                         init_collection("{{uid}}", "{{name}}");
