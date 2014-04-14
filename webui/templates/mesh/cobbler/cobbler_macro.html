@@ -33,6 +33,14 @@
     size='{{size}}'/>
 {% endmacro %}
 
+{%- macro CM_TEXTAREA(uid, data, rows='16', cols='480') -%}
+    <div style="width:600px;">
+    <textarea id = '{{uid}}' rows='{{rows}}' style="width:98%; resize:none;">
+{{data|join("\n")}}
+    </textarea>
+    </div>
+{% endmacro %}
+
 {%- macro CM_IMAGE_BUTTON(value) -%}
     {{ image_button ("none", "365_restart", "/cobbler/{0}".format(value)) }} {{value|title}}
 {% endmacro %}
@@ -69,7 +77,11 @@
             {% if flag_add %}
                 &nbsp;
             {% else %}
+                {% if value == "kickstarts" %}
+                &nbsp;
+                {% else %}
                 <span class="badge"> {{child_count}} </span> {{CM_COBBLER_CHILD(value)|title}}
+                {% endif %}
             {% endif %}
         </span>
     </h3>
@@ -108,6 +120,8 @@
                     {% endcall%}
                 {% elif field[2] == "boolean" %}
                     {{CM_BOOLEAN(field_uid, data[field[0]])}}
+                {% elif field[2] == "textarea" %}
+                    {{CM_TEXTAREA(field_uid, data[field[0]])}}
                 {% else %}
                     {{CM_SPAN(field_uid, data[field[0]])}}
                 {% endif %}

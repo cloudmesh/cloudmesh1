@@ -3,6 +3,7 @@
 from cobbler import api as capi
 from multiprocessing import Process, Queue
 from functools import wraps
+import fnmatch
 import os
 import subprocess
 
@@ -175,10 +176,15 @@ class CobblerProvision:
     def _wrap_process_get_item_report(self, q, object_type, name):
         result_list = []
         if object_type == "kickstart":
-            result_list.append({
+            allfiles = self.list_kickstart_filenames(self.KICKSTART_LOCATION)
+            for filename in allfiles:
+                if fnmatch.fnmatch(filename, name):
+                    result_list.append({
                                   "type": "kickstart",
-                                  "name": name,
-                                  "data": self.read_file_to_list("{0}/{1}".format(self.KICKSTART_LOCATION, name))
+                                  "name": filename,
+                                  "data": { "name": filename,
+                                            "contents": self.read_file_to_list("{0}/{1}".format(self.KICKSTART_LOCATION, filename)),
+                                           },
                                  })
         else:
             cobbler_handler = capi.BootAPI()
@@ -434,7 +440,7 @@ class CobblerProvision:
                 os.remove(filename)
             except:
                 flag_result = False
-            self._simple_result_dict(flag_result, "The object {0} in kickstart removed {1}successfully.".format(kickstart_name, "" if flag_result else "un"))
+            return self._simple_result_dict(flag_result, "The object {0} in kickstart removed {1}successfully.".format(kickstart_name, "" if flag_result else "un"))
         return self._simple_result_dict(True, "The name {0} in kickstart does NOT exist. Not need to remove.".format(kickstart_name))
     
     def _remove_item(self, object_type, name):

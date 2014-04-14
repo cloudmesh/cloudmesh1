@@ -23,6 +23,7 @@ cobbler_default_data = {
                          "distros": {},
                          "profiles": {},
                          "systems": {},
+                         "kickstarts": {},
                         }
 
 cobbler_default_data["distros"] = {
@@ -154,6 +155,36 @@ cobbler_default_data["systems"] = {
     },
 }
 
+cobbler_default_data["kickstarts"] = {
+    "flag_collection": False,
+    "get": "/cm/v1/cobbler/kickstarts/*",
+    "field_filter": {
+        "normal": [
+            ("contents", "Content", "textarea", False),
+        ],
+        "add": [
+            ("name", "Name", "text", False),
+            ("contents", "Content", "textarea", False),
+        ],
+    },
+    "select_data": {
+    },
+    "process_vars": {
+        "update": ["contents" ],
+        "add": ["name", "contents", ],
+    },
+    "button": {
+        "normal": [
+            ("reset", 1),
+            ("update", 1),
+            ("delete", 1),
+        ],
+        "add": [
+            ("add", 3),
+        ],
+    },
+}
+
 @cobbler_module.route('/cobbler/<objects>', methods=['GET'])
 @login_required
 def display_cobbler(objects):
@@ -179,7 +210,7 @@ def display_cobbler(objects):
 @cobbler_module.route('/cobbler/<objects>/<item_name>', methods=['GET', 'PUT', 'POST', 'DELETE'])
 @login_required
 def process_cobbler_object(objects, item_name):
-    if objects not in ["distros", "profiles", "systems", ]:
+    if objects not in ["distros", "profiles", "systems", "kickstarts" ]:
         return 
     predefined = cobbler_default_data[objects]
     url_prefix = "/cm/v1/cobbler"
