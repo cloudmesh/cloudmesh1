@@ -58,6 +58,7 @@ super_duper_sidebar_pages = [
             ["Distro", "/cobbler/distros", None],
             ["Profile", "/cobbler/profiles", None],
             ["System", "/cobbler/systems", None],
+            ["Kickstart", "/cobbler/kickstarts", None],
         ],
     ],
     ["Admin - Launcher", None, None, ['admin', 'rain'],

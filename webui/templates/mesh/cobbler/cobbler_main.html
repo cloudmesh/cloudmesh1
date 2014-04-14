@@ -58,7 +58,17 @@
         data = {};
         for(i in fields) {
             field = fields[i];
-            data[field] = $("#" + uid + "_" + field).val();
+            data[field] = $("#" + filter_specific_uid(uid + "_" + field)).val();
+            {% if object_type == "kickstarts" %}
+                if (field == "contents") {
+                    data[field] = data[field].split("\n");
+                }
+                else if (field == "name") {
+                    if (! (data[field].endsWith(".ks") || data[field].endsWith(".seed"))) {
+                        data[field] += ".ks";
+                    }
+                }
+            {% endif %}
         }
         if (typeof flag_not_add == "boolean" && flag_not_add) {
             data["name"] = uid;
@@ -91,9 +101,13 @@
     }
     {% endif %}
 
+    function filter_specific_uid(uid) {
+        return (uid.indexOf(".") < 0)? uid: uid.replace(".", "\\.");
+    }
+
     // callback func after refresh/reset one section
     function callback_get_cobbler(user_data, server_data) {
-        $get_h3 = $("#" + user_data["uid"]);
+        $get_h3 = $("#" + filter_specific_uid(user_data["uid"]));
         $get_h3_div = $get_h3.next("div");
         $get_h3_div.remove();
         $get_h3.replaceWith(server_data["template"]);
@@ -145,7 +159,7 @@
     // callback func after delete one section
     function callback_delete_cobbler(user_data, server_data) {
         uid = user_data["uid"];
-        $delete_h3 = $("#" + uid);
+        $delete_h3 = $("#" + filter_specific_uid(uid));
         $delete_h3_div = $delete_h3.next("div");
         $delete_h3_div.remove();
         $delete_h3.remove();
@@ -173,9 +187,9 @@
         accordion_status = status_object['{{object_type}}'];
         for (p in accordion_status) {
             if (accordion_status.hasOwnProperty(p) && accordion_status[p]) {
-                $("#" + p).click();
+                $("#" + filter_specific_uid(p)).click();
                 if (! accordion_status[p] ) {
-                    $("#" + p).click();
+                    $("#" + filter_specific_uid(p)).click();
                 }
             }
         }
@@ -184,7 +198,7 @@
     // callback func after add a new section
     function callback_add_cobbler(user_data, server_data) {
         add_uid = user_data["add_uid"];
-        $add_h3 = $("#" + add_uid);
+        $add_h3 = $("#" + filter_specific_uid(add_uid));
         $add_h3_div = $add_h3.next("div");
         $add_h3_div.remove();
         $add_h3.replaceWith(server_data["template"]);
