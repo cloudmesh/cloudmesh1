@@ -539,18 +539,30 @@ class CobblerProvision:
           monitor server's status with Ping. True means the server is on, False means down.
         """
         system = self.cobbler_find_system(system_name)
+        """
         interfaces = system["interfaces"]
         manage_ip = interfaces[interfaces.keys()[0]]["ip_address"]
         for if_name in interfaces:
             if interfaces[if_name]["management"]:
                 manage_ip = interfaces[if_name]["ip_address"]
                 break
+        """
+        manage_ip = self.get_system_manage_ip(system)
         #print "manage ip is: ", manage_ip
         cmd_args = ['ping', '-c', '1', '-W', '3', manage_ip]
         result = self.shell_command(cmd_args)
         #print "result is: ", result
         return self._simple_result_dict(result, "Ping {0} {1}successfully.".format(system_name, "" if result else "un"))
     
+    def get_system_manage_ip(csystem, exclude_loop=True):
+        dict_interfaces = csystem.interfaces
+        list_ip = [(name, dict_interfaces[name]["ip_address"]) for name in dict_interfaces]
+        if exclude_loop:
+            list_ip = [(name, address) for (name, address) in list_ip if not address.startswith("127")]
+        # sort with name ascending
+        sorted_list_ip = sorted(list_ip, key=lambda ipp: ipp[0])
+        return sorted_list_ip[0][1]
+
     def _simple_result_dict(self, result, msg="", data=None):
         return {"result": result, "description": msg, "data": data,}
     
