@@ -20,6 +20,7 @@ import json
 import os
 from pprint import pprint
 from urlparse import urlparse
+import copy
 
 # from sh import fgrep
 # from sh import nova
@@ -211,7 +212,8 @@ class openstack(ComputeBaseType):
 
         headers = {'content-type': 'application/json'}
         verify = self._get_cacert(credential)
-        print_param = param
+
+        print_param = copy.deepcopy(param)
         print_param["auth"]["passwordCredentials"]["password"] = "********"
         log.debug(str(lineno()) + ":PARAM {0}".format(json.dumps(print_param)))
         log.debug(str(lineno()) + ":HEADER {0}".format(headers))
