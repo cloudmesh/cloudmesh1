@@ -49,13 +49,19 @@
     {{ js_image_button ("none", "365_restart", "" if flag_add else "refresh_cobbler('{0}', '{1}')".format(value, uid)) }}
 {% endmacro %}
 
-{%- macro CM_COBBLER_CHILD(value) -%}
-    {% if value == "distros" %}
-        profiles
-    {% elif value == "profiles" %}
-        systems
-    {% elif value == "systems" %}
-        interfaces
+{%- macro CM_COBBLER_CHILD(value, child_count) -%}
+    {% if value in ["distros", "profiles", "systems"] %}
+        {% if value == "distros" %}
+            {% set result = "profile" %}
+        {% elif value == "profiles" %}
+            {% set result = "system" %}
+        {% elif value == "systems" %}
+            {% set result = "interface" %}
+        {% endif %}
+        {% if child_count > 1 %}
+            {% set result = "{0}s".format(result) %}
+        {% endif %}
+        {{result}}
     {% else %}
         &nbsp;
     {% endif %}
@@ -80,7 +86,7 @@
                 {% if value == "kickstarts" %}
                 &nbsp;
                 {% else %}
-                <span class="badge"> {{child_count}} </span> {{CM_COBBLER_CHILD(value)|title}}
+                <span class="badge"> {{child_count}} </span> {{CM_COBBLER_CHILD(value, child_count)|title}}
                 {% endif %}
             {% endif %}
         </span>
@@ -150,7 +156,7 @@
 
 {%- macro CM_ACCORDION_PANEL(value, data, filter, buttons, flag_add=False) -%}
     {% set uid = data.name %}
-    {{CM_ACCORDION_H3(uid, value, flag_add=flag_add)}}
+    {{CM_ACCORDION_H3(uid, value, child_count=data["child_count"], flag_add=flag_add)}}
     {% if flag_add %}
     {% set ttt = data.update({"name": ""}) %}
     {% endif %}
@@ -204,7 +210,7 @@
     {% if flag_add %}
     {% set ttt = data.update({"name": ""}) %}
     {% endif %}
-    {{CM_ACCORDION_H3(uid, object_type, flag_add=flag_add)}}
+    {{CM_ACCORDION_H3(uid, object_type, child_count=data["child_count"], flag_add=flag_add)}}
     <div><table>
         {{CM_ACCORDION_TABLE_BODY(uid, data, filter)}}
         {% set panel_type = "add" if flag_add else "normal" %}
@@ -213,7 +219,12 @@
         {% set uid_coll = "{0}_{1}".format(uid, name) %}
         <tr>
             <td colspan="3">
-                <div><table>
+                <div id="{{uid_coll}}_showhide" style="font-weight: bolder; color: blue" onclick="show_hide_collection_details('{{uid_coll}}', '{{value|title}}')">&#x271a; Show {{value|title}} Details</div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div id="{{uid_coll}}_details" style="display:none"><table>
                     <tr><td colspan="3" style="text-align: center">
                         {{value}}s:
                         {% for action in ["add", "update", "delete"] %}

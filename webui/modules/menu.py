@@ -51,6 +51,8 @@ super_duper_sidebar_pages = [
             ["Policy", "/provision/policy", None],
             ["Overview", "/provision/summary/", None],
             ["Form", "/provision/", None],
+            ["Users", "/provision/baremetal/users", None],
+            ["Computers", "/provision/baremetal/computers", None],
         ],
     ],
     ["Admin - Cobbler", None, None, ['admin', 'rain'],
