@@ -494,6 +494,19 @@ function delete_cobbler_collection(uid, coll_name, flag_add) {
     }
 }
 
+function show_hide_collection_details(uid, name) {
+    $div_details = $("#" + uid + "_details");
+    $div_showhide = $("#" + uid + "_showhide");
+    if ($div_details.is(":visible")) {
+        $div_details.hide();
+        $div_showhide.html("&#x271a; Show " + name + " Details ...");
+    }
+    else {
+        $div_details.show();
+        $div_showhide.html("&#x2012; Hide " + name + " Details ...");
+    }
+}
+
 </script>
 
 <div id="accordion">

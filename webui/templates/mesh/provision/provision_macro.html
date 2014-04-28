@@ -1,0 +1,30 @@
+{% import "mesh/cobbler/cobbler_macro.html" as CMB %}
+
+{%- macro CM_USERS(uid, items) -%}
+    Users: {{CMB.CM_SELECT(uid, items, False)}}
+{% endmacro %}
+
+{%- macro CM_BAREMETAL_TABLE_TR(uid, cluster, items, flag_idle=True) -%}
+    <tr id="{{uid}}">
+        <td>{{cluster}}</td>
+        <td>
+            {% for bm_item in items %}
+                {% set btn_uid = "{0}_{1}".format(uid, bm_item) %}
+                {{CMB.CM_INPUT(btn_uid, bm_item, "button", 8 + bm_item|length, "bm_button_clicked('{0}', '{1}', '{2}', {3})".format(uid, cluster, bm_item, 'true' if flag_idle else 'false'))}}
+            {% endfor %}
+        </td>
+    </tr>
+{% endmacro %}
+
+{%- macro CM_BAREMETAL_TABLE(uid, dict_computers, flag_idle=True) -%}
+    <table id="{{uid}}">
+        <tr>
+            <th>Cluster Name</th>
+            <th>{{"Idle" if flag_idle else "Used"}} Computer List</th>
+        </tr>
+        {% for cluster in dict_computers %}
+            {% set c_uid = "{0}_{1}".format(uid, cluster) %}
+            {{CM_BAREMETAL_TABLE_TR(c_uid, cluster, dict_computers[cluster], flag_idle)}}
+        {% endfor %}
+    </table>
+{% endmacro %}

@@ -173,6 +173,19 @@ class CobblerProvision:
         """
         return self._wrap_report_result("kickstart", name)
     
+    def get_object_child_count(self, handler, object_type, name):
+        pobjects = {"distro": "profile", 
+                    "profile": "system",
+                    }
+        iresult = 0
+        if object_type in pobjects:
+            func = getattr(handler, "find_{0}".format(pobjects[object_type]))
+            kwargs = {}
+            kwargs[object_type] = name
+            child_list = func(return_list=True, **kwargs)
+            iresult = len(child_list)
+        return iresult
+    
     def _wrap_process_get_item_report(self, q, object_type, name):
         result_list = []
         if object_type == "kickstart":
@@ -191,6 +204,10 @@ class CobblerProvision:
             func = getattr(cobbler_handler, "find_{0}".format(object_type))
             for item in func(name=name, return_list=True):
                 data = item.to_datastruct()
+                if object_type == "system":
+                    data["child_count"] = len(data["interfaces"])
+                else:
+                    data["child_count"] = self.get_object_child_count(cobbler_handler, object_type, data["name"])
                 result_list.append({"type": object_type, 
                                     "name": data["name"], 
                                     "data": data,
