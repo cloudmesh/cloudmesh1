@@ -1,10 +1,9 @@
-
 Commands
 ======================================================================
 EOF
 ----------------------------------------------------------------------
 
-Commnad - EOF::
+Command - EOF::
 
     Usage:
         EOF
@@ -15,7 +14,7 @@ Commnad - EOF::
 clear
 ----------------------------------------------------------------------
 
-Commnad - clear::
+Command - clear::
 
     Usage:
         clear
@@ -25,10 +24,10 @@ Commnad - clear::
 cloud
 ----------------------------------------------------------------------
 
-Commnad - cloud::
+Command - cloud::
 
     Usage:
-           cloud
+           cloud --on | --off <name>
            cloud set
            cloud NAME
            cloud info [NAME]
@@ -46,19 +45,21 @@ Commnad - cloud::
     Options:
     
        -v       verbose mode
+       --on     Activate the cloud
+       --off    Deactivate the cloud
     
     
 
 count
 ----------------------------------------------------------------------
 
-Commnad - count::
+Command - count::
 
     Usage:
-           count flavors [CLOUD...]
-           count servers [CLOUD...]
-           count images [CLOUD...]
-           count [CLOUD...]
+           count flavors [CLOUD...] NOTIMPLEMENTED
+           count servers [CLOUD...] NOTIMPLEMENTED
+           count images [CLOUD...] NOTIMPLEMENTED
+           count [CLOUD...] NOTIMPLEMENTED
     
     Arguments:
     
@@ -68,38 +69,63 @@ Commnad - count::
     
        -v       verbose mode
     
+    Description:
+    
+      missing
+    
+      Seems this has not been implemented.
+    
     
 
 defaults
 ----------------------------------------------------------------------
 
-Commnad - defaults::
+Command - defaults::
 
     Usage:
-           defaults [-v] clean
-           defaults [-v] load [CLOUD]
-           defaults [options] info
-           defaults list [options] [CLOUD]
+           defaults clean
+           defaults load
+           defaults list [--json]
+           defaults set variable value NOTIMPLEMENTED
+           defaults variable  NOTIMPLEMENTED
+           defaults format (json|table)  NOTIMPLEMENTED
     
-    Manages the defaults
+    This manages the defaults associated with the user.
+    You can load, list and clean defaults associated with a user and a cloud.
+    The default parameters include index, prefix, flavor and image.
     
     Arguments:
     
-      NAME           The name of a service or server
-      N              The number of defaultss to be started
-      CLOUD          The name of Cloud
+      CLOUD          The name of Cloud - this has to be implemented
     
     Options:
     
-       -v             verbose mode
        -j --json      json output
     
+    Description:
+    
+      defaults set a hallo
+    
+         sets the variable a to the value hallo
+         NOT YET IMPLEMENTED
+    
+      defaults a
+    
+         returns the value of the variable
+         NOT YET IMPLEMENTED
+    
+      default format json
+      default format table
+    
+         sets the default format how returns are printed. if set to json json is returned,
+         if set to table a pretty table is printed
+         NOT YET IMPLEMENTED
     
 
 dot2
 ----------------------------------------------------------------------
 
-Commnad - dot2::
+Command - dot2::
 
     Usage:
            dot2 FILENAME FORMAT
@@ -115,25 +141,37 @@ Commnad - dot2::
 edit
 ----------------------------------------------------------------------
 
-Commnad - edit::
-Usage:
-                 edit FILENAME
+Command - edit::
+
+    Usage:
+            edit FILENAME
     
-            Arguments:
-                FILENAME  the file to edit
+    Edits the file with the given name
     
-            Edits a file.
+    Arguments:
+        FILENAME  the file to edit
+    
+    
 
 exec
 ----------------------------------------------------------------------
 
-Commnad - exec::
-Execute script file
+Command - exec::
+
+    Usage:
+       exec FILENAME
+    
+    executes the command sin the file. See also the script command.
+    
+    Arguments:
+      FILENAME   The name of the file
+    
+    
 
 exp
 ----------------------------------------------------------------------
 
-Commnad - exp::
+Command - exp::
 
     Usage:
            exp clean
@@ -163,7 +201,7 @@ Commnad - exp::
 graphviz
 ----------------------------------------------------------------------
 
-Commnad - graphviz::
+Command - graphviz::
 
     Usage:
            graphviz FILENAME
@@ -178,13 +216,13 @@ Commnad - graphviz::
 help
 ----------------------------------------------------------------------
 
-Commnad - help::
+Command - help::
 List available commands with "help" or detailed help with "help cmd".
 
 info
 ----------------------------------------------------------------------
 
-Commnad - info::
+Command - info::
 
     Usage:
            info
@@ -196,7 +234,7 @@ Commnad - info::
 init
 ----------------------------------------------------------------------
 
-Commnad - init::
+Command - init::
 
     Usage:
            init [force] generate yaml
@@ -230,36 +268,42 @@ Commnad - init::
 keys
 ----------------------------------------------------------------------
 
-Commnad - keys::
+Command - keys::
 
     Usage:
-           keys info [NAME] 
-           keys default 
-           keys json info [NAME] 
+           keys info [--json] [NAME]
+           keys default NAME
+           keys show NAME
     
     Manages the keys
     
     Arguments:
     
-      NAME           The name of a service or server
+      NAME           The name of a key
     
     
     Options:
     
-       -v       verbose mode
+       -v --verbose     verbose mode
+       -j --json        json output
     
     
 
 list
 ----------------------------------------------------------------------
 
-Commnad - list::
+Command - list::
 
     Usage:
-           list flavors [CLOUD...]
-           list servers [CLOUD...]
-           list images [CLOUD...]
-           list [CLOUD...]
+           list flavors [CLOUD]
+           list servers [CLOUD]
+           list images [CLOUD]
+           list
+    
+           list NOTIMPLEMENTED flavors [CLOUD...]
+           list NOTIMPLEMENTED servers [CLOUD...]
+           list NOTIMPLEMENTED images [CLOUD...]
+           list NOTIMPLEMENTED [CLOUD...]
     
     Arguments:
     
@@ -269,12 +313,18 @@ Commnad - list::
     
        -v       verbose mode
     
+    Description:
+    
+       missing
+    
+       This should be similar to the count command, e.g. multiple clouds could be specified.
+    
     
 
 man
 ----------------------------------------------------------------------
 
-Commnad - man::
+Command - man::
 
     Usage:
            man [--noheader]
@@ -288,22 +338,23 @@ Commnad - man::
 open
 ----------------------------------------------------------------------
 
-Commnad - open::
-Usage:
-                    open FILENAME
+Command - open::
+
+    Usage:
+            open FILENAME
     
-            ARGUMENTS:
-                FILNAME  the file to open in the cwd if . is
-                         specified. If file in in cwd
-                         you must specify it with ./FILENAME
+    ARGUMENTS:
+        FILNAME  the file to open in the cwd if . is
+                 specified. If file in in cwd
+                 you must specify it with ./FILENAME
     
-            Opens the given URL in a browser window.
+    Opens the given URL in a browser window.
     
 
 pause
 ----------------------------------------------------------------------
 
-Commnad - pause::
+Command - pause::
 
     Usage:
         pause [MESSAGE]
@@ -317,9 +368,9 @@ Commnad - pause::
 plugins
 ----------------------------------------------------------------------
 
-Commnad - plugins::
+Command - plugins::
 
-    Ussage:
+    Usage:
         plugins
     
     activates the plugins.
@@ -327,7 +378,7 @@ Commnad - plugins::
 project
 ----------------------------------------------------------------------
 
-Commnad - project::
+Command - project::
 
     Usage:
            project json info [NAME] 
@@ -351,7 +402,7 @@ Commnad - project::
 py
 ----------------------------------------------------------------------
 
-Commnad - py::
+Command - py::
 
     Usage:
         py
@@ -376,7 +427,7 @@ Commnad - py::
 q
 ----------------------------------------------------------------------
 
-Commnad - q::
+Command - q::
 
     Usage:
         quit
@@ -387,7 +438,7 @@ Commnad - q::
 quit
 ----------------------------------------------------------------------
 
-Commnad - quit::
+Command - quit::
 
     Usage:
         quit
@@ -395,22 +446,66 @@ Commnad - quit::
     Action to be performed whne quit is typed
     
 
+rain
+----------------------------------------------------------------------
+
+Command - rain::
+
+    Usage:
+           rain info
+           rain list NAME [IMAGE list]
+           rain add HOSTLIST IMAGE [LABEL]
+    
+    Provisioning of the images on 
+    
+    Arguments:
+    
+      NAME           The name of the server
+      IMAGE          The name of the image
+      HOSTLIST       The names of hosts
+    
+    Options:
+    
+       -v       verbose mode
+    
+    Description:
+    
+      rain info
+    
+           provides information about the images and servers on
+           which rain can be applied
+    
+      rain list india01
+    
+           list all images that can be provisioned on the server
+           with the name india01
+    
+      rain add [india01-02] precise64.aaa precise64
+    
+           adding the
+    
+    
+
 reg
 ----------------------------------------------------------------------
 
-Commnad - reg::
+Command - reg::
 
     Usage:
-      reg NAME
+      reg [options] NAME
     
     Arguments:
       NAME      Name of the cloud to be registered
+    
+    Options:
+      -a --act      Activate the cloud to be registered
+      -d --deact    Deactivate the cloud
     
 
 rst
 ----------------------------------------------------------------------
 
-Commnad - rst::
+Command - rst::
 
     Usage:
            rst COMMAND
@@ -425,7 +520,7 @@ Commnad - rst::
 script
 ----------------------------------------------------------------------
 
-Commnad - script::
+Command - script::
 
     Usage:
            script
@@ -457,9 +552,9 @@ Commnad - script::
 timer
 ----------------------------------------------------------------------
 
-Commnad - timer::
+Command - timer::
 
-    Ussage:
+    Usage:
         timer (on|off)
     
     switches timers on and off not yet implemented
@@ -468,7 +563,7 @@ Commnad - timer::
 use
 ----------------------------------------------------------------------
 
-Commnad - use::
+Command - use::
 
     USAGE:
     
@@ -497,7 +592,7 @@ Commnad - use::
 user
 ----------------------------------------------------------------------
 
-Commnad - user::
+Command - user::
 
     Usage:
            user list
@@ -507,7 +602,7 @@ Commnad - user::
            user ID ldap
            user ID new FORMAT [dict|yaml]
     
-    Administrative command to lists the users from LDAP 
+    Administrative command to lists the users from LDAP
     
     Arguments:
     
@@ -517,7 +612,7 @@ Commnad - user::
       yaml       specifie to generate the cloudmesh.yaml file
       ldap       get the specifie to generate the cloudmesh.yaml file
       FORMAT     either me or cloudmesh
-      OUTPUT     either yaml or dict 
+      OUTPUT     either yaml or dict
     
     Options:
     
@@ -528,7 +623,7 @@ Commnad - user::
 var
 ----------------------------------------------------------------------
 
-Commnad - var::
+Command - var::
 
     Usage:
         var list | var
@@ -545,7 +640,7 @@ Commnad - var::
 verbose
 ----------------------------------------------------------------------
 
-Commnad - verbose::
+Command - verbose::
 
     Usage:
         verbose (True | False)
@@ -560,7 +655,7 @@ Commnad - verbose::
 version
 ----------------------------------------------------------------------
 
-Commnad - version::
+Command - version::
 
     Usage:
        version
@@ -571,7 +666,7 @@ Commnad - version::
 vm
 ----------------------------------------------------------------------
 
-Commnad - vm::
+Command - vm::
 
     Usage:
       vm create [--count=<count>] [--image=<imgName>] [--flavor=<FlavorId>] [--cloud=<CloudName>]
@@ -579,7 +674,7 @@ Commnad - vm::
       vm cloud [--name=<NAME>]
       vm image [--name=<NAME>]
       vm flavor [--name=<NAME>]
-      vm index [--name=<NAME>]
+      vm index [--index=<index>]
       vm info [--verbose | --json] [--name=<NAME>]
       vm list [--verbose | --json] [--cloud=<CloudName>]
     
@@ -593,7 +688,6 @@ Commnad - vm::
        -n <NAME> --name=<NAME>              Name of the VM
        -c <CloudName> --cloud=<CloudName>   Name of the Cloud
        -i <index> --index=<index>           Index for default VM Name
-       -img <imgName> --image=<imgName>     Name of the image for VM
+       --img=<imgName>                      Name of the image for VM
        -f <FlavorId> --flavor=<FlavorId>    Flavor Id for VM
     
-
