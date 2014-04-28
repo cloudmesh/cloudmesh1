@@ -45,7 +45,7 @@ Type in a nova command to check whether the key was set properly::
 
     $ nova list
 
-You will see
+You will see::
 
     +--------------------------------------+--------------+--------+------------------------------------+
     | ID                                   | Name         | Status | Networks                           |
@@ -68,7 +68,7 @@ List the generated key pair::
 
     $ nova keypair-list
 
-You will see
+You will see::
 
     +--------+-------------------------------------------------+
     | Name   | Fingerprint                                     |
@@ -89,18 +89,18 @@ Refresh::
 
    $ cm r
 
-You will see
+You will see::
 
-    | Processing |................................| 10/10
-    | Done.
+    Processing |................................| 10/10
+    Done.
 
 Start VM::
 
     $ cm start:1
 
-You will see
+You will see::
 
-    | Launching VM gregor-001
+    Launching VM gregor-001
 
     +------------------------+-------------------------+
     | **Property**           | **Value**               |
@@ -112,35 +112,35 @@ You will see
     | metadata               | {}                      |
     +------------------------+-------------------------+
 
-    | Processing |................................| 10/10
-    | Done.
+    Processing |................................| 10/10
+    Done.
 
 Start 5 VMs in parallel::
 
     $ cm par:5
 
-You will see
+You will see::
 
-    | Launching VM gregor-000
-    | Launching VM gregor-001
-    | Launching VM gregor-003
-    | Launching VM gregor-004
-    | Launching VM gregor-002
-    | Done.
+    Launching VM gregor-000
+    Launching VM gregor-001
+    Launching VM gregor-003
+    Launching VM gregor-004
+    Launching VM gregor-002
+    Done.
 
 Reindex the already started VMs::
 
     $ cm reindex
 
-You will see
+You will see::
 
-    | Skipping gregor-000
-    | Skipping gregor-001
-    | Renameing gregor-001 -> gregor-002
-    | Renameing gregor-002 -> gregor-003
-    | Renameing gregor-003 -> gregor-004
-    | Renameing gregor-004 -> gregor-005
-    | Processing |................................| 10/10 
-    | Done.
+    Skipping gregor-000
+    Skipping gregor-001
+    Renameing gregor-001 -> gregor-002
+    Renameing gregor-002 -> gregor-003
+    Renameing gregor-003 -> gregor-004
+    Renameing gregor-004 -> gregor-005
+    Processing |................................| 10/10 
+    Done.
 
 
