@@ -69,8 +69,7 @@ To optain the info for all commands specify::
   cm> info
 
 To specify the info for a specific command please use the info command
-followded by the name of the command.
-
+followded by the name of the command::
 
   cm> info list
 
@@ -88,7 +87,7 @@ list the variables with the command in the shell with::
 
   cm> var
 
-::
+The following options are available:
 
   Usage:
     var list
@@ -104,7 +103,7 @@ This manages the defaults associated with the user. You can load, list and clean
 
   cm> defaults
 
-Following options are available:
+The following options are available:
 
 ::
 
@@ -129,7 +128,7 @@ Administrative command to list information about the user, create configuration 
 
    cm> user
 
-Following options are available:
+The following options are available:
 
 ::
 
@@ -264,26 +263,21 @@ List images
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 List all images for specified cloud. If cloud name is not specified,
-images for default cloud are displayed.
-
-::
+images for default cloud are displayed.::
 
   cm> image list <name>
 
 Image information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Get specific information about the image.
+Get specific information about the image.::
 
-::
   cm> image info <name>
 
 Default image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Set an image as default image.
-
-::
+Set an image as default image.::
 
    cm> image --default <cloud> <label>
 
@@ -297,27 +291,22 @@ List Flavors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 List all images for specified cloud. If cloud name is not specified,
-flavors for default cloud are displayed.
-
-::
+flavors for default cloud are displayed.::
 
   cm> flavor list <name>
 
 Flavor information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Get specific information about the flavor.
+Get specific information about the flavor.::
 
-::
   cm> flavor info <name>
 
 
 Default Flavor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Set an image as default image.
-
-::
+Set an image as default image.::
 
    cm> image --default <cloud> <label>
 
@@ -388,7 +377,7 @@ command by executing the history command followed by the id::
 
 You can also set a convenient variables so you do not have to remember
 the number and can introduce labels for the history id that you can
-easier remember
+easier remember::
 
    cm> var mylabel=101
 

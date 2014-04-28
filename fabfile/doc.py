@@ -13,6 +13,7 @@ def view():
 
 @task
 def html():
+    man()
     """build the doc locally and view"""
     local("cd doc; make html")
     view()
@@ -29,6 +30,7 @@ def gh():
 def man():
     """deploy the documentation on gh-pages"""
     #TODO: match on "Commands"
-    local("cm man | tail -n+21 > doc/source/man/man.rst")
+    local("cm man | grep -A10000 \"Commands\"  | sed \$d  > doc/source/man/man.rst")
 
+    
 
