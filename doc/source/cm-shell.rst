@@ -42,6 +42,38 @@ at:
 * http://cloudmesh.github.com/cmd3/
 
 
+After you start up the shell, you will be presented with a login
+message such as seen next::
+
+                FutureGrid - Cloud Mesh Shell
+  ------------------------------------------------------
+     ____ _                 _   __  __           _
+    / ___| | ___  _   _  __| | |  \/  | ___  ___| |__
+   | |   | |/ _ \| | | |/ _` | | |\/| |/ _ \/ __| '_ \ 
+   | |___| | (_) | |_| | (_| | | |  | |  __/\__ \ | | |
+    \____|_|\___/ \__,_|\__,_| |_|  |_|\___||___/_| |_|
+  ======================================================
+
+Additional debaug and logging information may be displayed.
+
+You can cahnge the verbosity of the logging while changing in the::
+
+  ~/.futuregrid/cloudmesh_server.yaml 
+
+file the loglevel variable. In that file you find::
+
+  meta:
+    yaml_version: 2.0
+    kind: server
+  cloudmesh:
+    server:
+      loglevel: DEBUG
+      production: False
+  ...
+
+You can set the loglevel for example to `DEBUG`, `INFO`, or `NONE`.
+
+
 Command Overview
 =================
 
@@ -87,7 +119,7 @@ list the variables with the command in the shell with::
 
   cm> var
 
-The following options are available:
+The following options are available::
 
   Usage:
     var list
@@ -140,11 +172,17 @@ The following options are available:
      user ID ldap
      user ID new FORMAT [dict|yaml]
 
-Examples:
+Examples::
 
-- user list
-- user abcd
-- user abcd new dict
+  cm> user list
+
+::
+
+  cm> user abcd
+
+::
+
+  cm> user abcd new dict
 
 
 Managing Clouds
@@ -161,26 +199,27 @@ Register a cloud
   cm> reg <CloudName>
 
 You can set the same cloud to active (activate a cloud) by using the switch '--activate'/'-a'
-Also, a cloud can be removed from active list by using the switch '--deact'/'-d'
-
-::
+Also, a cloud can be removed from active list by using the switch '--deact'/'-d'::
 
   cm> reg --act <CloudName>
   cm> reg --deact <CloudName>
 
 
-Examples:
+Examples::
 
-- reg sierra_openstack_grizzly
-- reg -a alamo
-- reg --deact india_openstack_essex
+  cm> reg sierra_openstack_grizzly
+
+::
+
+  cm> reg -a alamo
+
+::
+  cm> reg --deact india_openstack_essex
 
 Activate cloud
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Clouds can be activated with the following commands
-
-::
+Clouds can be activated with the following commands::
 
    cm> cloud --on <CloudName>
 
@@ -188,10 +227,13 @@ Clouds can be activated with the following commands
 
    cm> cloud --off <CloudName>
 
-Examples:
+Examples::
 
-- cloud --on sierra_openstack_grizzly
-- cloud --off alamo
+  cm> cloud --on sierra_openstack_grizzly
+
+::
+
+  cm> cloud --off alamo
 
 Managing Projects
 ----------------------------------------------------------------------
@@ -219,9 +261,9 @@ Project Information
 
    cm> project info <name>
 
-Examples:
+Examples::
 
-- project info fg82
+  cm> project info fg82
 
 Project Activation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -238,6 +280,7 @@ Managing Keys
 Retrieve your key information, get key fingerprint and view the key.
 
 ::
+
   cm> keys
 
 Following options are available
@@ -249,10 +292,13 @@ Following options are available
      keys default
      keys show [NAME]
 
-Examples:
+Examples::
 
-- keys info default_key
-- keys show key1
+  cm> keys info default_key
+
+::
+
+  cm> keys show key1
 
 Managing Images
 ----------------------------------------------------------------------
