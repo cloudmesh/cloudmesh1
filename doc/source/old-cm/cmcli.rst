@@ -2,7 +2,8 @@ cm config
 ------------
 Command to generate rc files from our cloudmesh configuration files.
 
-Usage:
+Usage::
+
   cm config [-f FILE] [-o OUT] NAME [-]
   cm config list
   cm --version
@@ -13,13 +14,12 @@ information for a cloud an rc file that can be used to later source
 it.
 
 Example:
-  we assume the yaml file has an entry india-openstack
+  we assume the yaml file has an entry india-openstack::
 
     cm config -o novarc india-openstack
     source novarc
 
-  This will create a novarc file and than you can source it.
-
+  This will create a novarc file and than you can source it.::
 
      cm config ? -
 
