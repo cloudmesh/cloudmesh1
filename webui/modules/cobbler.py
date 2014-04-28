@@ -2,6 +2,7 @@ from cloudmesh.config.cm_config import cm_config, cm_config_server
 from flask import Blueprint, g, render_template, get_template_attribute, request, Response, redirect, url_for
 from flask.ext.login import login_required  # @UnresolvedImport
 from flask.ext.wtf import Form  # @UnresolvedImport
+from cloudmesh.provisioner.baremetal_db import BaremetalDB
 from pprint import pprint
 from sh import pwd  # @UnresolvedImport
 from wtforms import SelectField
@@ -34,11 +35,11 @@ cobbler_default_data["distros"] = {
             ("name", "Name", "text", True),
             ("arch", "Architecture", "text", True),
             ("breed", "Breed", "text", True),
-            ("comment", "Comment", "text", False),
+            #("comment", "Comment", "text", False),
             ("initrd", "Initrd", "text", True),
             ("kernel", "Kernel", "text", True),
             ("os_version", "OS Version", "text", True),
-            ("owners", "Owners", "list", True),
+            #("owners", "Owners", "list", True),
         ],
         "add": [
             ("name", "Name", "text", False),
@@ -70,8 +71,8 @@ cobbler_default_data["profiles"] = {
             ("name", "Name", "text", True),
             ("distro", "Distribution", "select", False),
             ("kickstart", "Kickstart", "select", False),
-            ("comment", "Comment", "text", False),
-            ("owners", "Owners", "list", True),
+            #("comment", "Comment", "text", False),
+            #("owners", "Owners", "list", True),
         ],
         "add": [
             ("name", "Name", "text", False),
@@ -111,8 +112,8 @@ cobbler_default_data["systems"] = {
             ("power_user", "Power User", "text", False),
             ("power_pass", "Power Password", "text", False),
             ("power_id", "Power ID", "text", False),
-            ("comment", "Comment", "text", False),
-            ("owners", "Owners", "list", True),
+            #("comment", "Comment", "text", False),
+            #("owners", "Owners", "list", True),
         ],
         "collection": {
             "normal": [("interfaces", "Interface")],
@@ -262,6 +263,54 @@ def process_cobbler_object_collection(objects, item_name, if_name):
         result = request_rest_api(method, url, request.json)
     return Response(json.dumps(result), status=200, mimetype="application/json")
 
+def get_all_baremetal_request_users():
+    """
+      ONLY for test
+    """
+    return ["test"]
+
+
+@cobbler_module.route('/provision/baremetal/users', methods=['GET', 'PUT'])
+@login_required
+def provision_baremetal_allocation():
+    bmdb = BaremetalDB()
+    method = request.method.lower()
+    if method in ['get']:
+        request_users = get_all_baremetal_request_users()
+        baremetal_computers = bmdb.get_baremetal_computers()
+        print "baremetal computers: ", baremetal_computers
+        return render_template("mesh/provision/provision_main.html",
+                               users=request_users,
+                               computers=baremetal_computers["idle"],
+                               flag_idle=True,
+                           )
+    elif method in ['put']:
+        data = request.json
+        result = bmdb.assign_baremetal_to_user(data["computers"], data["user"])
+        return Response(json.dumps({"result": result}), status=200, mimetype="application/json")
+
+@cobbler_module.route('/provision/baremetal/computers', methods=['GET', 'PUT'])
+@login_required
+def provision_baremetal_withdraw():
+    bmdb = BaremetalDB()
+    method = request.method.lower()
+    if method in ['get']:
+        get_result = bmdb.get_baremetal_computers()
+        baremetal_computers = get_result["used"]
+        bm_computer_info = {}
+        for cluster in baremetal_computers:
+            bm_computer_info[cluster] = {}
+            for bm_comp in baremetal_computers[cluster]:
+                bm_computer_info[cluster][bm_comp] = bmdb.get_baremetal_computer_detail(bm_comp)
+        return render_template("mesh/provision/provision_main.html",
+                               computers=baremetal_computers,
+                               computer_info=bm_computer_info,
+                               flag_idle=False,
+                           )
+    elif method in ['put']:
+        data = request.json
+        result = bmdb.withdraw_baremetal_from_user(data["computers"])
+        return Response(json.dumps({"result": result}), status=200, mimetype="application/json")
 
 def append_select_data(objects, data):
     predefined = cobbler_default_data[objects]

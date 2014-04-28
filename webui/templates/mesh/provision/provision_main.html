@@ -1,0 +1,129 @@
+{% extends "layout/layoutTable.html" %}
+{% import "mesh/provision/provision_macro.html" as PMB %}
+{% block contentbox %}
+<h2> Baremetal Computers Management </h2>
+{% endblock contentbox %}
+
+{% block content %}
+
+<script>
+    // jquery ajax operation, call server asynchronously, support [get, post, put, delete]
+    // callback_data is an object, including the following properties:
+    // __func__: the callback function
+    // the final callback function looks like, object["__func__"](object, data)
+    function send_ajax_request(url, method, callback_data, submit_data) {
+        headers = {
+                    Accept: "application/json",
+                    "Content-Type": "application/json; charset=utf-8",
+                  };
+        console.log("ajax called ...");
+        console.log("callback_data is: " + JSON.stringify(callback_data));
+        console.log("submit_data is: " + JSON.stringify(submit_data));
+        if (method == "get") {
+            $.ajax({
+                type: "get",
+                headers: headers,
+                url: url,
+                dataType: 'json',
+                success: function(data) {
+                    callback_data["__func__"](callback_data, data);
+                }
+            });
+        }
+        else {
+            $.ajax({
+                type: method,
+                headers: headers,
+                url: url,
+                dataType: 'json',
+                data: JSON.stringify(submit_data),
+                success: function(data) {
+                    callback_data["__func__"](callback_data, data);
+                }
+            });
+        }
+    };
+var btn_selected = {};
+var selected_baremetal = 0;
+Array.prototype.remove = function(elem) {
+    while((match = $.inArray(elem, this)) > -1) {
+        this.splice(match, 1);
+    }
+};
+function bm_button_clicked(row_uid, cluster, bm_computer, flag_idle) {
+    if (! btn_selected.hasOwnProperty(cluster)) {
+        btn_selected[cluster] = [];
+    }
+    $btn = $("#" + row_uid + "_" + bm_computer);
+    if ($.inArray(bm_computer, btn_selected[cluster]) > -1) {
+        btn_selected[cluster].remove(bm_computer);
+        $btn.val(bm_computer);
+        selected_baremetal -= 1;
+    }
+    else {
+        prefix_str = flag_idle? "+ ": "- ";
+        $btn.val(prefix_str + bm_computer);
+        btn_selected[cluster].push(bm_computer);
+        selected_baremetal += 1;
+    }
+};
+
+function callback_user_baremetal_management(user_data, server_data) {
+    if (server_data["result"]) {
+        client_delete_baremetal(user_data["uid"]);
+    }
+    else {
+        console.log("user baremetal management failed. " + server_data["description"] );
+    }
+}
+
+function client_delete_baremetal(uid) {
+    table_uid = uid + "_table";
+    for (cluster in btn_selected) {
+        row_uid = table_uid + "_" + cluster;
+        for (btn_index = 0; btn_index < btn_selected[cluster].length; btn_index++) {
+            btn_uid = row_uid + "_" + btn_selected[cluster][btn_index];
+            $("#" + btn_uid).remove();
+        }
+        $row = $("#" + row_uid);
+        $td = $row.find("td").next();
+        if ($td.children().length < 1) {
+            $row.remove();
+        }
+    }
+    // reset vars
+    btn_selected = {};
+    selected_baremetal = 0;
+}
+
+function manage_user_baremetal(uid, flag_idle) {
+    if (selected_baremetal > 0) {
+        callback_data = {
+            "__func__": callback_user_baremetal_management,
+            "uid": uid,
+        };
+        submit_data = {
+            "computers": btn_selected,
+        };
+        if (flag_idle) {
+            submit_data["user"] = $("#" + uid + "_users").val();
+        }
+        dest_str = flag_idle? "users": "computers";
+        url = "/provision/baremetal/" + dest_str;
+        send_ajax_request(url, "put", callback_data, submit_data);
+    }
+    else {
+        console.log("Warning, MUST select one computer at least.");
+    }
+}
+
+
+</script>
+{% set uid = "test" %}
+{% if flag_idle %}
+{{PMB.CM_USERS("{0}_users".format(uid), users)}}
+{% endif %}
+{% set button_value = "Assign" if flag_idle else "Withdraw" %}
+{{PMB.CM_BAREMETAL_TABLE("{0}_table".format(uid), computers, flag_idle)}}
+<button onclick="manage_user_baremetal('{{uid}}', {{'true' if flag_idle else 'false'}})">{{button_value}}</button>
+{% endblock %}
