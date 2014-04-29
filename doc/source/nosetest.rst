@@ -9,18 +9,23 @@
 .. sectnum::
    :start: 4
    
-Nosetests
+Testing with nose
 ==========================================
+With Python nose testing tool, Cloudmesh performs tests easily to find problems and verify commands, functions and classes.
+*tests* directory contains test cases to check and nose produces captured output messages from failing test cases to help debugging.
 
 Install
 -------
 
 Due to a bug in nose-json plugin, we install it via::
 
-    $ fab nose.json
+..    $ fab nose.json
+        $ fab nose.install
 
 Run
 -----
+
+        $ fab nose.run
 
 If there is a file in tests/test_keys.py for example, you can call the test as
 
