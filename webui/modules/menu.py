@@ -31,7 +31,12 @@ super_duper_sidebar_pages = [
             ["Rack Diagram", "/inventory/rack", None],
         ]
     ],
-
+    ["Baremetal", None, None, ['all'],
+        [
+            ["Request", "/baremetal/user/request", None],
+            ["Provision", "/baremetal/user/provision", None],
+        ],
+    ],
     ["Admin", None, None, ['admin'],
         [
             ["Admin", "/admin", None],

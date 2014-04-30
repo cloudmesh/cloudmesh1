@@ -1,7 +1,7 @@
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.inventory import Inventory
 from cloudmesh.config.cm_config import get_mongo_db
-
+from datetime import datetime
 #
 # SETTING UP A LOGGER
 #
@@ -45,9 +45,9 @@ class BaremetalDB:
             "client_id": "i078",
             "user_id": "your_id",
             "client_status" : {
-                "status" : "unknown",
+                "status" : "unknown",     # "unknown", "deploy", "poweron", "poweroff"
                 "deploy" : {
-                    "result" : "unknown",
+                    "result" : "unknown",   # "unknown", "success", "failure"
                     "date" : ""
                 },
                 "poweron" : {
@@ -58,6 +58,22 @@ class BaremetalDB:
                     "result" : "unknown",
                     "date" : ""
                 }
+            },
+        }
+        The data structure of user request baremetal document in Mongodb is:
+        {
+            "cm_kind" : "baremetal",
+            "cm_type" : "bm_inventory",
+            "bm_type" : "user_request",
+            "request_date": "YYYYMMDD",
+            "request_sn": "nnn",
+            "user_id": "your_id",
+            "status" : "unknown",      # "unknown", "pending", "refused", "approved", "part-approved"
+            "request_content" : {
+                "number": number,
+                "date": {"from": "YYYYMMDD",
+                         "to": "YYYYMMDD",
+                        }
             },
         }
     """
@@ -299,8 +315,29 @@ class BaremetalDB:
             if len(used_list):
                 result["used"][cluster] = used_list
         return result
-            
-            
+    
+    def get_user_request_types(self):
+        return ["pending", "refused", "approved", "part-approved"]
+    
+    def get_user_requests(self, user_id, status=None):
+        query_elem = {"bm_type": "user_request", "user_id": user_id,}
+        if status and status in self.get_user_request_types():
+            query_elem["status"] = status
+        find_data = self.do_find(query_elem)
+        return find_data["data"] if find_data["result"] else None
+    
+    def insert_user_request(self, user_id, content):
+        insert_elem = {"status": "unknown", "request_content": content}
+        today = datetime.now()
+        request_date = ""
+    
+    def update_user_request(self, user_id, request_date, request_sn, status):
+        result = False
+        if status in self.get_user_request_types():
+            query_elem = {"user_id": user_id, "request_date": request_date, "request_sn": request_sn}
+            update_data = self.do_atom_update(query_elem, {"$set": {"status": status}}, False, flag_new)
+            result = update_data["result"]
+        return result
 # test
 if __name__ == "__main__":
     bmdb = BaremetalDB()
