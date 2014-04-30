@@ -312,6 +312,29 @@ def provision_baremetal_withdraw():
         result = bmdb.withdraw_baremetal_from_user(data["computers"])
         return Response(json.dumps({"result": result}), status=200, mimetype="application/json")
 
+@cobbler_module.route('/baremetal/user/request', methods=['GET', 'PUT'])
+@login_required
+def baremetal_user_requests():
+    bmdb = BaremetalDB()
+    method = request.method.lower()
+    if method in ['get']:
+        get_result = bmdb.get_baremetal_computers()
+        baremetal_computers = get_result["used"]
+        bm_computer_info = {}
+        for cluster in baremetal_computers:
+            bm_computer_info[cluster] = {}
+            for bm_comp in baremetal_computers[cluster]:
+                bm_computer_info[cluster][bm_comp] = bmdb.get_baremetal_computer_detail(bm_comp)
+        return render_template("mesh/provision/provision_main.html",
+                               computers=baremetal_computers,
+                               computer_info=bm_computer_info,
+                               flag_idle=False,
+                           )
+    elif method in ['put']:
+        data = request.json
+        result = bmdb.withdraw_baremetal_from_user(data["computers"])
+        return Response(json.dumps({"result": result}), status=200, mimetype="application/json")
+
 def append_select_data(objects, data):
     predefined = cobbler_default_data[objects]
     select_data = {}
