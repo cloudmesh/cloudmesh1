@@ -1,0 +1,1 @@
+.. include:: man/man.rst

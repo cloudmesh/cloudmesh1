@@ -64,7 +64,9 @@ V. Cloudmesh Commandshell
    :maxdepth: 2
   
    cm-shell
+   cm-shell-rain
    cm-manage
+   cm-shell-man
 
 V. Old Commandshell (will be integrated in new shell)
 ======================================================================

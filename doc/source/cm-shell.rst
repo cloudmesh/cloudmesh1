@@ -531,4 +531,4 @@ Associates a human readable lable with an id::
 	     If you like to update them, please do not do this in the man.rst file,
 	     but update the commands in the actual manual page in the code
 
-.. include:: man/man.rst
+
