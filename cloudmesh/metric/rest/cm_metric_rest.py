@@ -10,20 +10,22 @@ class CMMetricREST:
     """
 
     CMMetricREST
-    -----------
+    ============
+
     Command Line Interface for fg-metric.
 
     Usage: fg-metric-cli
 
     Description
-    ===========
+    ------------
+
     As a cli version of fg-metric, this module provides usage data with search options.
 
     - Excutable name is fg-metric-cli (defined by setup.py).
     - CM Cloud Mesh would be one of the examples using fg-metric-cli.
 
     Basic data structure
-    ====================
+    ---------------------
 
     {
         "start_date"    :   start date of search    (datetime),

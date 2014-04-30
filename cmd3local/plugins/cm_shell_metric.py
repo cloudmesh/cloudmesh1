@@ -17,67 +17,69 @@ log = LOGGER(__file__)
 
 class cm_shell_metric:
 
-    """opt_example class"""
-
+    """cm_shell_metric class"""
+    """IN DEVELOPMENT"""
 
     def activate_cm_shell_metric(self):
         pass
 
-
     @command
     def do_metric(self, args, arguments):
+
         """
-	Usage:
-	       metric -u USER
-	       metric [-s START] [-e END] [-u USER] [-metric (user|vm|runtime)] [-period (month|day|week)] 
+        Usage:
 
-	Arguments:
+            metric [CLOUD]
+            metric [-s START] [-e END] [-u USER] [-metric (user|vm|runtime)]
+            [-period (month|day|week)] [-c CLUSTER]
 
-	       USER      ....
-	       START     ....
-	       END       ....
+        Arguments:
 
-	Options:
+            CLOUD               Name of the IaaS cloud e.g. openstack, nimbus, Eucalyptus
+            START               First day of filter
+            END                 Last day of filter
+            USER                portal user id to filter
+            (user|vm|runtime)   Metric to view
+            (month|day|week)    Time period to view
+            CLUSTER             Name of cluster e.g. india, sierra, foxtrot,
+            hotel, alamo, lima
 
-	       -v       verbose mode
+        Options:
 
-	Description:
+           -h                   help message
 
-	   As a cli version of fg-metric, this module provides usage data with search options.
+        Description:
 
-	  - Excutable name is fg-metric-cli (defined by setup.py).
-	  - CM Cloud Mesh would be one of the examples using fg-metric-cli.
+           metric command provides usage data with filter options.
 
-	Result:
+        Result:
 
-	      The result of the method is a datastructure specified in a given format.
-	      If no format is specified, we return a JSON string of the following format:
+          The result of the method is a datastructure specified in a given format.
+          If no format is specified, we return a JSON string of the following format:
 
-	      Basic data structure
-	      ====================
+          Basic data structure
+          --------------------
 
-	     {
-	      "start_date"    :   start date of search    (datetime),
-	      "end_date"      :   end date of search      (datetime),
-	      "ownerid"       :   portal user id          (str),
-	      "metric"        :   selected metric name    (str),
-	      "period"        :   monthly, weekly, daily  (str),
-	      "clouds"        :   set of clouds           (list)
-				[
-				    { "service"     :   cloud service name  (str),
-				     "hostname"     :   hostname (str),
-				     "stats"        :   value (int) }
-				     ...
-				     ]
-	     }
+             {
+             "start_date"    :   start date of search    (datetime),
+             "end_date"      :   end date of search      (datetime),
+             "ownerid"       :   portal user id          (str),
+             "metric"        :   selected metric name    (str),
+             "period"        :   monthly, weekly, daily  (str),
+             "clouds"        :   set of clouds           (list)
+             [
+             { "service"     :   cloud service name  (str),
+             "hostname"     :   hostname (str),
+             "stats"        :   value (int) }
+             ...
+             ]
+             }
 
-        Example 1.:
+        Example :
 
-	    Get user statistics
+            Get user statistics
+            cm> $ metric openstack -c india -u hrlee        
 
-	    cm> $ metric -u hrlee        
-
-           
         """
         mesh = cloudmesh.mesh()
         mongo = cm_mongo()
@@ -86,9 +88,8 @@ class cm_shell_metric:
         dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': user})
 
                 print args, arguments
-        log.info(arguments)
-        log.info(args)
-        
+                log.info(arguments)
+                log.info(args)
 
 def main():
     print "test correct"
@@ -100,4 +101,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
