@@ -1,5 +1,6 @@
 d2to1>=0.2.10,<0.3
 pbr>=0.5.16,<0.6
+future
 pip
 sphinx
 sphinx_bootstrap_theme
@@ -46,3 +47,5 @@ seqdiag
 cmd3>=0.7.7
 azure
 simple-json
+pytimeparse
+timestring

@@ -48,13 +48,35 @@ Options:
 
 
 """
+#from __future__ import dict
 from docopt import docopt
 import hostlist
-from datetime import datetime
+from datetime import datetime, timedelta
+from pytimeparse.timeparse import timeparse
+# from timestring import Range
+# from timestring import Date
+from datetime import datetime, timedelta            
 
 def not_implemented():
     print "ERROR: not yet implemented"
 
+def parse_time_interval (time_start, time_end):
+    t_end = time_end
+    t_start = time_start
+
+    if t_start is not None:
+        if t_start in ["current_time","now"]:
+            t_start = str(datetime.now())
+
+    if t_end is not None:
+        if t_end.startswith("+"):
+            duration = t_end[1:]
+            delta = timeparse(duration)
+            t_start = datetime.strptime(t_start, "%Y-%m-%d %H:%M:%S.%f")
+            t_end = t_start + timedelta(seconds=delta)
+
+    return (str(t_start), str(t_end))
+    
 def rain_command(arguments):
 
     for list in ["HOSTS", "USERS", "PROJECTS","--project", "--user"]:
@@ -137,17 +159,12 @@ def rain_command(arguments):
             elif arguments["hosts"]:
                 print "list hosts"
                 not_implemented()
-                
-                if arguments["--start"] is not None:
-                    if arguments["--start"] in ["current_time","now"]:
-                        arguments["--start"] = str(datetime.now())
-                    print "start %s" % arguments["--start"]
 
-                if arguments["--end"] is not None:
-                    t_end = arguments["--end"]
-                    if t_end.startswith("+"):
-                        print "duration: %s" % t_end
-                    
+                (time_start, time_end) = parse_time_interval(arguments["--start"],
+                                                           arguments["--end"])
+                print "From:", time_start
+                print "To  :", time_end
+                
                 if ["--users"] is not None:
                     not_implemented()
                 elif arguments["--projects"] is not None:
@@ -182,10 +199,40 @@ if __name__ == '__main__':
     rain_command(arguments)
     
     """
+    timeparse('1.2 minutes')32m
 
-        --duration=DURATION   format. [default: +1d]
-
-
-
-
+2h32m
+3d2h32m
+1w3d2h32m
+1w 3d 2h 32m
+1 w 3 d 2 h 32 m
+4:13
+4:13:02
+4:13:02.266
+2:04:13:02.266
+2 days,  4:13:02 (uptime format)
+2 days,  4:13:02.266
+5hr34m56s
+5 hours, 34 minutes, 56 seconds
+5 hrs, 34 mins, 56 secs
+2 days, 5 hours, 34 minutes, 56 seconds
+1.2 m
+1.2 min
+1.2 mins
+1.2 minute
+1.2 minutes
+172 hours
+172 hr
+172 h
+172 hrs
+172 hour
+1.24 days
+5 d
+5 day
+5 days
+5.6 wk
+5.6 week
+5.6 weeks
 """
+
+    
