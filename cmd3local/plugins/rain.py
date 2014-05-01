@@ -181,10 +181,26 @@ def rain_command(arguments):
                                         
         elif arguments["policy"]:
             print "policy"
-            not_implemented()
+
+            (time_start, time_end) = parse_time_interval(arguments["--start"],
+                                                         arguments["--end"])
+
+            print "From:", time_start
+            print "To  :", time_end
+
+            if ["--users"] is not None:
+                not_implemented()
+            elif arguments["--projects"] is not None:
+                not_implemented()
+            elif arguments["--role"] is not None:
+                not_implemented()
+            else:
+                print ("all users, projects, roles")
+                not_implemented()
 
         elif arguments["list"]:
-            print "admin list"
+            print "list"
+
             not_implemented()
             
     elif arguments["status"]:
@@ -193,6 +209,13 @@ def rain_command(arguments):
             
     elif arguments["list"]:
             print "user list"
+
+            (time_start, time_end) = parse_time_interval(arguments["--start"],
+                                                         arguments["--end"])
+
+            print "From:", time_start
+            print "To  :", time_end
+
             not_implemented()
 
 
