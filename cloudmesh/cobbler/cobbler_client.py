@@ -39,12 +39,12 @@ Description:
         
   glow_client.py get object_type item_name
   
-      get the detail report of item_name in object_type
-      
+    get the detail report of item_name in object_type
+    
   glow_client.py add object_type data_file
   glow_client.py update object_type data_file
   
-      add the data object in data_file belongs to object_type to cobbler.
+    add the data object in data_file belongs to object_type to cobbler.
       examples:
         profile: data_file
         { "name": "test-profile-140318",
