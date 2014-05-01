@@ -38,13 +38,16 @@ Options:
     -f FILE, --file=FILE  file to be specified
     -i           interactive mode adds a yes/no 
                  question for each host specified
-    --role=ROLE                Specify predefined role
-    --start=TIME_START        Start time of the reservation, in 
+    --role=ROLE            Specify predefined role
+    --start=TIME_START     Start time of the reservation, in 
                            YYYY/MM/DD HH:MM:SS format. [default: current_time]
-    --end=TIME_END              End time of the reservation, in 
-                           YYYY/MM/DD HH:MM:SS format. [default: +1d]
-    --kind=KIND           Format of the output -png, jpg, pdf. [default:png]
-    --format=FORMAT  the format. [default:json]
+    --end=TIME_END         End time of the reservation, in 
+                           YYYY/MM/DD HH:MM:SS format. In addition a duration
+                           can be specified if the + sign is the first sign.
+                           The duration will than be added to
+                           the start time. [default: +1d]
+    --kind=KIND            Format of the output -png, jpg, pdf. [default:png]
+    --format=FORMAT        Format of the output json, cfg. [default:json]
 
 
 """
