@@ -18,21 +18,30 @@ For more info please contact Gregor von Laszewski, laszewski@gmail.com
   | `Gregor von Laszewski <http://gregor.cyberaide.org>`_
   | E-mail: laszewski@gmail.com
   | Indiana University
-  | Pervasive Technology Institute
-  | 2729 E 10th St.
-  | Bloomington IN 47408
-  | Phone (office): (812) 856 1311
-  | Fax: (812) 856 1537
-  | `Google Map <http://maps.google.com/maps?hl=en&source=hp&q=Indiana%20University%20Pervasive%20Technology%20Institute%202729%20E%2010th%20St.%20Bloomington%20IN%2047408&um=1&ie=UTF-8&sa=N&tab=wl>`_
+  | School of INformatics and Computing
+  | Informatics West [Map]
+  | 901 E. 10th St.
+  | Bloomington, IN 47408
+  | `Google Map <http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=901+E.+10th+St.,+Bloomington,+IN+47408&sll=39.165788,-86.523404&sspn=0.011895,0.027895&g=150+S.+Woodlawn+Ave.,+Bloomington,+IN+47405&ie=UTF8&ll=39.170796,-86.523321&spn=0.011894,0.027895&z=16&iwloc=addr>`_
+
+
 
 Contributors
 -------------
 
 * Gregor von Laszewski 
-* Fugang Wang 
+* Fugang Wang
+* Heng Chen 
+* Hyungro Lee
+* Sridhar Rajagopalan
+* Pushkar Joshi
 * Allen Streib
 * Koji Tanaka
-* Hyungro Lee
+* Jonathan Klinginsmith
+
+Alumni
+--------
+
 * Sneha Shekatar
 * Pushkar Newaskar 
 * Shweta Balkrishna Patil 

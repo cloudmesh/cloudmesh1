@@ -16,7 +16,7 @@ Usage Quickstart
 The following are the current steps to bring all services for
 cloudmesh up and running. After you have Installed the software (see
 ). Naturally we could have included them in the Section `ref:s-instalation`
-one script, which we will do at a later time. For now we want o keep
+one script, which we will do at a later time. For now we want to keep
 the services separate to simplify development and debugging of various
 parts. Naturally, if you can just pick the commands that you really
 need and do not have to execute all of them. Over time you will notice
@@ -214,16 +214,17 @@ you can say on the commandline::
 
   xcode-select --install
 
-.. note::
+This will opens a user interface dialog to request automatic
+installation of the command line developer tools which you will need
+if you like to conduct development on OSX. 
 
-  Can someone confirm if this works?
-
-::
+Additionally we recommend that you check if you have the freetype
+fonts installed and set the LDFLAG as follows (if you find the
+freetypes there)::
 
   LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib 
 
-
-Sine version 5.1 of XCode you may see the following error when
+Furthermore, since version 5.1 of XCode you may see the following error when
 installing pycrypto on OSX::
 
   clang: error: unknown argument: '-mno-fused-madd' [-Wunused-command-line-argument-hard-error-in-future]
@@ -258,8 +259,9 @@ development team as it is much faster.
 Aptana Studio
 --------------------------------------------------
 
-A good IDE for python development for Python is Aptana Studio (based
-on eclypse). It contains the ability to directly import packages from
+A good IDE for python development for Python is `Aptana Studio 
+<http://www.aptana.com/>`_, which is based
+on eclypse . It contains the ability to directly import packages from
 github by filling out a simple form. So instead of using the
 command line github tool you can use the Aptana Studio version. It
 also contains a very nice way of managing your commits while allowing
