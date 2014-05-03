@@ -8,24 +8,6 @@
    :start: 7
 
 
-**********************************************************************
-OSX Issues
-**********************************************************************
-
-Sine version 5.1 of XCode you may see the following error when
-installing pycrypto on OSX::
-
-  clang: error: unknown argument: '-mno-fused-madd' [-Wunused-command-line-argument-hard-error-in-future]
-
-  clang: note: this will be a hard error (cannot be downgraded to a warning) in the future
-
-  error: command 'cc' failed with exit status 1
-
-THis error can be fixed by ignoring the option with the following
-shell commands::
-
-  export CFLAGS=-Qunused-arguments
-  export CPPFLAGS
 
 **********************************************************************
 Usage Quickstart 
@@ -216,23 +198,48 @@ Please replace name and e-mail with the once you used in Github. Please make sur
 Quick deployment 
 ===========================
 
-This quick deployment is targeted for ubuntu. It can be achieved in several easy steps.
-First, obtain a vanilla ubuntu system. Make sure that git is installed, which is standard by now.
+This quick deployment is targeted for ubuntu. It can be achieved in
+several easy steps.  First, obtain a vanilla ubuntu system. Make sure
+that git is installed, which is standard by now.
 
-Note: that on osx we have to set the ldflags to get to the ttfonts
+
 
 
 OSX
+^^^^^^^^^^^^
 
-::
+Note: that on osx we have to set the ldflags to get to the ttfonts. To
+do this you must first have XCode downloaded and installed. After that
+you can say on the commandline::
 
   xcode-select --install
 
-  ??? does not work
+.. note::
+
+  Can someone confirm if this works?
 
 ::
 
   LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib 
+
+
+Sine version 5.1 of XCode you may see the following error when
+installing pycrypto on OSX::
+
+  clang: error: unknown argument: '-mno-fused-madd' [-Wunused-command-line-argument-hard-error-in-future]
+
+  clang: note: this will be a hard error (cannot be downgraded to a warning) in the future
+
+  error: command 'cc' failed with exit status 1
+
+This error can be fixed by ignoring the option with the following
+shell commands::
+
+  export CFLAGS=-Qunused-arguments
+  export CPPFLAGS
+
+Deployment
+^^^^^^^^^^^^^^
 
 Next execute the following commands ::
 
