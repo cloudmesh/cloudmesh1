@@ -7,6 +7,26 @@
 .. sectnum::
    :start: 7
 
+
+**********************************************************************
+OSX Issues
+**********************************************************************
+
+Sine version 5.1 of XCode you may see the following error when
+installing pycrypto on OSX::
+
+  clang: error: unknown argument: '-mno-fused-madd' [-Wunused-command-line-argument-hard-error-in-future]
+
+  clang: note: this will be a hard error (cannot be downgraded to a warning) in the future
+
+  error: command 'cc' failed with exit status 1
+
+THis error can be fixed by ignoring the option with the following
+shell commands::
+
+  export CFLAGS=-Qunused-arguments
+  export CPPFLAGS
+
 **********************************************************************
 Usage Quickstart 
 **********************************************************************

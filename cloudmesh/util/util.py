@@ -5,6 +5,25 @@ import os
 import uuid
 import functools
 import warnings
+from datetime import datetime, timedelta
+from pytimeparse.timeparse import timeparse
+
+def parse_time_interval (time_start, time_end):
+    t_end = time_end
+    t_start = time_start
+
+    if t_start is not None:
+        if t_start in ["current_time","now"]:
+            t_start = str(datetime.now())
+
+    if t_end is not None:
+        if t_end.startswith("+"):
+            duration = t_end[1:]
+            delta = timeparse(duration)
+            t_start = datetime.strptime(t_start, "%Y-%m-%d %H:%M:%S.%f")
+            t_end = t_start + timedelta(seconds=delta)
+
+    return (str(t_start), str(t_end))
 
 
 def cat(filename):
