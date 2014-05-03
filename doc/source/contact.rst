@@ -18,7 +18,7 @@ For more info please contact Gregor von Laszewski, laszewski@gmail.com
   | `Gregor von Laszewski <http://gregor.cyberaide.org>`_
   | E-mail: laszewski@gmail.com
   | Indiana University
-  | School of INformatics and Computing
+  | School of Informatics and Computing
   | Informatics West
   | 901 E. 10th St.
   | Bloomington, IN 47408
