@@ -13,6 +13,13 @@
 References
 ============
 
+We have written a number of articles that lead up to the development
+of cloudmesh. A paper at XSEDE14 which is forthcomming will summarize
+a number of selected features of cloudmesh that can be found in more
+detail in this documentation. However it also shows some ongoing
+developments. We will add a technical report that is a precursor to
+this article here soon.
+
 * General FutureGrid: [1]_ [5]_
 * Cloud Comparison: [3]_
 * Rain and Image Management: [2]_ [7]_ [8]_ [9]_
