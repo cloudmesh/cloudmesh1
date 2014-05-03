@@ -236,8 +236,9 @@ installing pycrypto on OSX::
 This error can be fixed by ignoring the option with the following
 shell commands::
 
-  export CFLAGS=-Qunused-arguments
-  export CPPFLAGS
+   export CFLAGS=-Qunused-arguments
+   export CPPFLAGS=-Qunused-arguments
+
 
 Deployment
 ^^^^^^^^^^^^^^
