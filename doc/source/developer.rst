@@ -8,13 +8,32 @@
    :start: 7
 
 
-***************
-vagrant
-***************
+**********************************************************************
+Cloudmesh Vagrant Developers Environment
+**********************************************************************
 
-checkout cloudmesh and say in the cloudmesh dir
+This section is for experts that like to deploy cloudmesh in a vagrant
+ubuntu 14.04 image under virtual box. We further assume you have
+checked out cloudmesh from github and are standing in the github
+directory::
 
-::
+    $ git clone git@github.com:cloudmesh/cloudmesh.git
+    $ cd cloudmesh
+
+We assume you have uploaded a box to vagarnt with the name:: 
+
+   ubuntu-14.04-server-amd64
+
+If you do not have such an image you can create it by::
+
+   $ bin/install-veewee.sh
+   $ bin/install-ubuntu64.sh
+
+You can verify the list of boxes with::
+
+   $ vagrant box list
+
+To create a vagrant image you simply can say::
   
    deploy vagrant
 
@@ -26,9 +45,16 @@ This will start a vagrant vm. In the vm say::
    . ~/ENV/bin/activate
    pip install fabric
 
+
 Than say::
 
+  cd /vagrant/cloudmesh
   deploy cloudmesh
+
+Please note that the changes in teh cloudmesh directory are synced
+with the directory::
+
+  /tmp/vagrant/cloudmesh
 
 
 
