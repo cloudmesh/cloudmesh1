@@ -184,7 +184,10 @@ def vagrant():
     local("rm -rf /tmp/vagrant")
     local("mkdir -p /tmp/vagrant")
     local("cd /tmp/vagrant; git clone git@github.com:cloudmesh/cloudmesh.git")
-        
+    local("cd /tmp/vagrant; vagrant init ubuntu-14.04-server-amd64")
+    local("vagrant up")
+    local("vagrant ssh")
+             
 if __name__ == '__main__':
     arguments = docopt(__doc__)
 
