@@ -112,6 +112,9 @@ def centos():
     install_mongodb() 
 
 def osx():
+    
+    local("export CFLAGS=-Qunused-arguments")
+    local("export CPPFLAGS=-Qunused-arguments")
     local('brew install wget')
     local('brew install mercurial')
     local('brew install freetype')
