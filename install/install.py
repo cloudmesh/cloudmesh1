@@ -5,6 +5,7 @@ Usage:
     install --version
     install deploy
     install query
+    install vagrant    
 """
 import sys
 if not hasattr(sys, 'real_prefix'):
@@ -176,7 +177,13 @@ def install_command(arguments):
         print "Platform:  ", platform.platform()        
         print "Python:    ", platform.python_version()
         print "Virtualenv:", hasattr(sys, 'real_prefix')
-    
+    elif arguments["vagrant"]:
+        vagrant()
+        
+def vagrant():
+    local("rm -rf /tmp/vagrant")
+    local("mkdir -p /tmp/vagrant")
+    local("cd /tmp/vagrant; git clone git@github.com:cloudmesh/cloudmesh.git")
         
 if __name__ == '__main__':
     arguments = docopt(__doc__)
