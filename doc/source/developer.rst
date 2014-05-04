@@ -419,13 +419,15 @@ In future we will have::
 
    fab user.yaml,safe
 
-which safes this into ~/.futuregrid/cloudmesh.yaml and
+which safes this into ~/.futuregrid/cloudmesh.yaml and::
 
    fab user.verify
 
 which will verify if you can log into the clouds with your credentials
 
-WARNING: fab user.verify, and    fab user.yaml,safe are not yet implemented
+.. note:
+
+   WARNING: fab user.verify, and fab user.yaml,safe are not yet implemented
 
 Mongo - Commands Overview
 --------------------------
