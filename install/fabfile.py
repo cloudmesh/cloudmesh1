@@ -23,6 +23,8 @@ def deploy():
     """deploys the system on supported distributions"""
     # download()
     (major, minor, micro, releaselevel, serial) = sys.version_info
+    print "version_info", sys.version_info
+    print "sys.prefix", sys.prefix
     if major != 2 or (major == 2 and minor < 7):
         print "Your version of python is not supported.  Please install python 2.7 for cloudmesh"
         sys.exit()
@@ -80,7 +82,8 @@ def ubuntu():
     needed packages before we install cloudmesch'''
 
     local ("sudo apt-get update")
-    install_packages(["git",
+    install_packages(["python-dev", 
+                      "git",
                       "mercurial",
                       "curl",
                       "python-dev",
