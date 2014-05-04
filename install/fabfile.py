@@ -1,6 +1,11 @@
 #!/usr/bin/env python
-from fabric.api import task, local
+
 import sys
+if not hasattr(sys, 'real_prefix'):
+    print "ERROR: You are runing this script not inside a virtual machine"
+    sys.exit()
+
+from fabric.api import task, local
 import platform
 import os
 
@@ -86,7 +91,6 @@ def ubuntu():
                       "git",
                       "mercurial",
                       "curl",
-                      "python-dev",
                       "libldap2-dev",
                       "libsasl2-dev",
                       "libpng-dev",
