@@ -28,7 +28,8 @@ This will start a vagrant vm. In the vm say::
 
 Than say::
 
-  ./install/install.py deploy
+  deploy cloudmesh
+
 
 
 **********************************************************************

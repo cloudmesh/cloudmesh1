@@ -3,7 +3,7 @@
 Usage:
     install -h | --help
     install --version
-    install deploy
+    install cloudmesh
     install query
     install vagrant    
 """
@@ -169,7 +169,7 @@ def sphinx_updates():
     local('~/ENV/bicd /tmp/install-cloudmesh/sphinx-contrib/autorun; python setup.py install')
 
 def install_command(arguments):
-    if arguments["deploy"]:
+    if arguments["cloudmesh"]:
         deploy()
     elif arguments["query"]:
         import platform
