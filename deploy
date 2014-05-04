@@ -1,2 +1,2 @@
 #! /bin/sh
-install/install.py $@
+python install/install.py $@

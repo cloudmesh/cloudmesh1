@@ -8,6 +8,28 @@
    :start: 7
 
 
+***************
+vagrant
+***************
+
+checkout cloudmesh and say in the cloudmesh dir
+
+::
+  
+   deploy vagrant
+
+This will start a vagrant vm. In the vm say::
+
+   sudo apt-get install python-dev
+   sudo apt-get install python-virtualenv
+   virtualenv ~/ENV
+   . ~/ENV/bin/activate
+   pip install fabric
+
+Than say::
+
+  ./install/install.py deploy
+
 
 **********************************************************************
 Usage Quickstart 

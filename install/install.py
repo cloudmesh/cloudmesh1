@@ -8,6 +8,8 @@ Usage:
     install vagrant    
 """
 import sys
+import os
+
 if not hasattr(sys, 'real_prefix'):
     print "ERROR: You are runing this script not inside a virtual machine"
     sys.exit()
@@ -185,8 +187,8 @@ def vagrant():
     local("mkdir -p /tmp/vagrant")
     local("cd /tmp/vagrant; git clone git@github.com:cloudmesh/cloudmesh.git")
     local("cd /tmp/vagrant; vagrant init ubuntu-14.04-server-amd64")
-    local("vagrant up")
-    local("vagrant ssh")
+    local("cd /tmp/vagrant; vagrant up")
+    local("cd /tmp/vagrant; vagrant ssh")
              
 if __name__ == '__main__':
     arguments = docopt(__doc__)
