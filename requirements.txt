@@ -4,7 +4,6 @@ future
 pip
 sphinx
 sphinx_bootstrap_theme
-sphinxjp.shibukawa
 sphinxcontrib-blockdiag
 paramiko
 blessings
@@ -18,8 +17,7 @@ docopt
 python-hostlist
 pyaml
 pycrypto
-Flask>=0.10
-Flask-FlatPages
+Flask>=0.10.1
 Flask-WTF>=0.8.4,<0.9
 Flask-AutoIndex
 Flask-Silk
@@ -44,7 +42,7 @@ blockdiagcontrib-class
 blockdiagcontrib-cisco
 nwdiag
 seqdiag
-cmd3>=0.7.7
+cmd3>=0.7.9
 azure
 simple-json
 pytimeparse
