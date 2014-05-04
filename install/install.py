@@ -1,5 +1,11 @@
 #!/usr/bin/env python
-
+"""
+Usage:
+    install -h | --help
+    install --version
+    install deploy
+    install query
+"""
 import sys
 if not hasattr(sys, 'real_prefix'):
     print "ERROR: You are runing this script not inside a virtual machine"
@@ -11,6 +17,12 @@ except:
     os.system("pip install fabric")
     from fabric.api import local, task
 
+try:
+    from docopt import docopt
+except:
+    os.system("pip install docopt")
+    from docopt import docopt
+    
 import platform
 import os
 
@@ -153,4 +165,21 @@ def sphinx_updates():
     local('cd /tmp/install-cloudmesh; hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/')
     local('~/ENV/bicd /tmp/install-cloudmesh/sphinx-contrib/autorun; python setup.py install')
 
-deploy()
+def install_command(arguments):
+    if arguments["deploy"]:
+        deploy()
+    elif arguments["query"]:
+        import platform
+        print "System:    ", platform.system()
+        #print "Uname:     ", platform.uname()                                          print "Machine:   ", platform.machine()                        
+        print "Processor: ", platform.processor()                
+        print "Platform:  ", platform.platform()        
+        print "Python:    ", platform.python_version()
+        print "Virtualenv:", hasattr(sys, 'real_prefix')
+    
+        
+if __name__ == '__main__':
+    arguments = docopt(__doc__)
+
+    install_command(arguments)
+
