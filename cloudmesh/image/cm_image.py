@@ -4,21 +4,23 @@ Usage:
     cm-image -h | --help
     cm-image --version
     cm-image info
-    cm-image create OS
+    cm-image build OS
+    cm-image register OS
 
     
 Arguments:
     OS        the OS you can find with cm-image list
+    GUI       yes or no
     
 Options:
     --format=FORMAT        Format of the output json, cfg. [default:json]
-
+    --gui                  switch on the gui
 
 """
 
 from docopt import docopt
 import hostlist
-from cloudmesh.util.util import path_expand
+from cloudmesh.util.util import path_expand, banner
 import os
 import sh
 
@@ -43,6 +45,8 @@ def cm_image_command(arguments):
     
     if arguments["info"]:
 
+        banner("info")
+        
         for definition in definitions:
             try:
                 path = path_expand(definition)
@@ -53,16 +57,33 @@ def cm_image_command(arguments):
             except KeyError, key:
                 print 'WARNING: no environment variable called', key, 'found'
                 
-        
+    elif arguments["build"]:
 
-    if arguments["create"]:
-
+        banner("build")        
         system_name = arguments["OS"]
-        print system_name, path
-        os.system("cd '%s' ; veewee vbox build '%s' --force" % (path, system_name))
+
+        print "System:", system_name
+        print "Path:  ", path
+        print "Gui:   ", arguments['gui']
+        if arguments['gui']:
+            gui = ""
+        else:
+            gui = '--nogui'
+        os.system("cd '%s' ; veewee vbox build '%s' --force %s" % (path, system_name, gui))
         # due to some bug the following does not work
         # os.system("veewee vbox build %s --workdir='%s' --force" % (path, system_name))        
 
+    elif arguments["register"]:
+
+        banner("register")
+        system_name = arguments["OS"]
+        print system_name, path
+
+        banner("export iamge", c="-")
+        os.system("cd '%s' ; veewee vbox export '%s'" % (path, system_name))
+
+        banner("add iamge", c="-")
+        os.system("cd '%s' ; vagrant box add '%s' '%s.box'" % (path, system_name, system_name))
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)

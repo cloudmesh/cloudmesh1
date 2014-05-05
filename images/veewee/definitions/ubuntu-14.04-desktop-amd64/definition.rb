@@ -9,7 +9,7 @@ Veewee::Session.declare({
 # ARGONNE MIRROR DESKTOP
   :iso_file => "ubuntu-14.04-desktop-amd64.iso",
   :iso_src => "http://mirror.mcs.anl.gov/pub/ubuntu-iso/CDs/14.04/ubuntu-14.04-desktop-amd64.iso",
-  :iso_md5 => '0bc7243aacd5f80f8110dcf3165dffd0',
+  :iso_md5 => 'dccff28314d9ae4ed262cfc6f35e5153',
 #
 #UBUNTU MIRROR Deskptop
 #
