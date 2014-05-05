@@ -34,8 +34,6 @@ def not_implemented():
 
 def cm_image_command(arguments):
 
-    print(arguments)
-
     """
     cm-image admin on HOSTS
     cm-image admin off HOSTS
