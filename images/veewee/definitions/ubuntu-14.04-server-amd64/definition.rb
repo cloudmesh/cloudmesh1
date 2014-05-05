@@ -9,7 +9,7 @@ Veewee::Session.declare({
 # ARGONNE MIRROR SERVER
   :iso_file => "ubuntu-14.04-server-amd64.iso",
   :iso_src => "http://mirror.mcs.anl.gov/pub/ubuntu-iso/CDs/14.04/ubuntu-14.04-server-amd64.iso",
-  :iso_md5 => '5174d847970b88e0749995b6525b4b7a',
+  :iso_md5 => '01545fa976c8367b4f0d59169ac4866c',
 #
 #UBUNTU MIRROR SERVER
 #
