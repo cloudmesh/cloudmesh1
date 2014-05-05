@@ -136,3 +136,5 @@ if __name__ == "__main__":
         print "ret code is ", ret_code
     else:
         print "Usage sudo ./deploy deploy|power"
+    print "test git"
+
