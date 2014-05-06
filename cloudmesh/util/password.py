@@ -21,13 +21,13 @@ def ask_for_input(label, init_function, echo=False):
 
 def get_host():
     '''
-    asks for a hostname and uses the platforms hostname as initial value
+    asks for a hostname and uses the platforms hostname as initial value.
     '''
     return ask_for_input("Hostname", platform.node)
 
 def get_user():
     '''
-    asks for a username and uses the username of the current system as the initial value
+    asks for a username and uses the username of the current system as the initial value.
     '''
     return ask_for_input("Username", getpass.getuser)
 
