@@ -84,6 +84,26 @@ To create a single html page you can say ::
    open build/singlehtml/index.html
 
 
+Documenting the code
+----------------------------------------------------------------------
+
+A sample code documentation is given bellow
+
+::
+
+    def my_method(attribute, value[, limit=None])
+       """
+       Format the exception with a traceback.
+
+       :param attribute: the name of the attribute
+       :param value: the value for the attribute
+       :param limit: maximum number of stack frames to show
+       :type limit: integer or None
+       :rtype: list of strings
+       """
+       ...	   
+       return ['a','b']
+
 (Deprecated) Old Requirements for the Documentation
 ----------------------------------------------------------------------
 
