@@ -27,19 +27,29 @@ class StopWatch(object):
 
     def start(self, name):
         '''
-        starts a timer with the given name
+        starts a timer with the given name.
+
+        :param name: the name of the timer
+        :type name: string
         '''
         self.timer_start[name] = time.time()
 
     def stop(self, name):
         '''
-        stops the timer with a given name
+        stops the timer with a given name.
+
+        :param name: the name of the timer
+        :type name: string
         '''
         self.timer_end[name] = time.time()
 
     def get(self, name):
         '''
-        returns the time of the timer
+        returns the time of the timer.
+
+        :param name: the name of the timer
+        :type name: string
+        :rtype: the elapsed time
         '''
         time_elapsed = self.timer_end[name] - \
             self.timer_start[name]
