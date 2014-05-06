@@ -13,11 +13,25 @@ class GitInfo:
     * the list of people contributing to the code
     * emails of the people contributing
     * a statistic about canged code by person
+
+    Example::
+
+        gitinfo = GitInfo()
+        print gitinfo.authors()
+        pprint(gitinfo.authors("dict"))
+        pprint(gitinfo.emails())
+        pprint(gitinfo.emails("dict"))
+        pprint(gitinfo.info())
+        print gitinfo.stat("laszewski@gmail.com")
+        stats = gitinfo.compute()
+        print stats
+
     """
 
     def version(self):
         '''
         retruns the verison of the code from github
+        :rtype: the git tags
         '''
         return str(git.describe("--tags"))[:-1]
 
@@ -27,6 +41,7 @@ class GitInfo:
         format is specified as an argument.
         
         :param format_arg: if "dict" is specified a dict will be returned
+        :rtype: dict or arry of e-mails dependent on format_arg
         '''
         if format_arg is None:
             format_string = "'%aN' <%cE>"
@@ -67,6 +82,7 @@ class GitInfo:
     def info(self):
         '''
         returns the information about authors, emails, and commits in a dict.
+        :rtype: a dict with the information
         '''
         authors = self.authors("dict")
         email = self.emails("dict")
@@ -81,9 +97,10 @@ class GitInfo:
 
     def stat(self, email):
         '''
-        returns a statistick of a git author with the given e_mail.
+        returns a statistic of a git author with the given e_mail.
         
         :param email: name of the author
+        :rtype: a dict with the statistics
         '''
         sums = [0, 0, 0]
         for line in git.log("--all", "--stat", '--author={0}'.format(email), _tty_in=True, _tty_out=False, _iter=True):
@@ -111,6 +128,7 @@ class GitInfo:
         '''
         computes the statistic of all authors in a git repository and returns
         the result as a dict.
+        :rtype: a dict with the values
         '''
         emails = set(gitinfo.emails("dict").values())
 
