@@ -36,7 +36,7 @@ def is_ubuntu():
 def is_centos():
     """test if the platform is centos"""
     (centos, version, release) = platform.dist()
-    if centos == "centos" and version != "6.4":
+    if centos == "centos" and version != "6.5":
         print "Warning: centos %s is not tested" % version
     return centos == "centos"
 
