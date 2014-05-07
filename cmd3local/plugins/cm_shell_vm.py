@@ -24,34 +24,51 @@ from Interface.vm_interface import vm_interface
 log = LOGGER(__file__)
 
 class cm_shell_vm:
-    """opt_example class"""
+    """CMD3 plugin to manage virtul machines in a multicloud environment."""
 
+    clouds_activated = False
+    
+    def activate_cm_shell_vm(self):
+        print "Activate vm shell commands"
+        self.clouds_activated = False
+        
     #Check if there are any active clouds for user
-    def chkActivation(self, userId):
+    def _check_activation(self, userId):
         ret = False
         userinfo = cm_user().info(userId)
-        if "activeclouds" in userinfo["defaults"] and\
+        if "activeclouds" in userinfo["defaults"] and \
             len(userinfo["defaults"]["activeclouds"]) > 0:
             ret = True
         return ret
 
-    def activate_cm_shell_vm(self):
+    def _the_clouds(self):
         try:
             self.config = cm_config()
             self.user = self.config.username()
             self.mongoClass = cm_mongo()
-            print "activating!!"
+
+            print "Activating clouds ..."
             self.mongoClass.activate(cm_user_id=self.user)
+            print "Activation done."
+            self.clouds_activated = True
+
             self.vmi = vm_interface(self.user, self.config.default_cloud, self.mongoClass)
             defaults = cm_shell_defaults()
             self.defDict = defaults.createDefaultDict()
-            if self.chkActivation(self.user) is False:
-                print "No Active clouds set! Please register and activate a cloud."
+            if self._check_activation(self.user) is False:
+                print "No active clouds found. Please register and activate a cloud."
 
         except Exception:
             print 'Unexpected error at cmd VM: ', sys.exc_info()[0], sys.exc_info()[1]
-            sys.exit()
 
+    @command
+    def do_login(self, args, arguments):
+        '''
+        Usage:
+           login
+        '''
+        self._the_clouds()
+                
     @command
     def do_vm(self, args, arguments):
         '''
@@ -79,6 +96,14 @@ class cm_shell_vm:
            -f <FlavorId> --flavor=<FlavorId>    Flavor Id for VM
         '''
         #prepare user parameters from the switch options from user
+
+        if not self.clouds_activated:
+            print "ERROR: you have not yet logged into the clouds"
+            print
+            print "use the command: login"
+            print
+            return
+        
         userParams = {}
 
         for key, value in arguments.iteritems():
@@ -103,7 +128,7 @@ class cm_shell_vm:
             server = self.vmi.findVM(self.user, arguments["--name"])
             if(server):
                 vmCloud = server['cm_cloud']
-                print "--------------------------------------------------------------------------------\n"
+                print 70 * "-"
                 print arguments["--name"],"is running on: ", vmCloud
             return
 
@@ -225,10 +250,5 @@ class cm_shell_vm:
                         print x.get_string(sortby="name")
             except:
                 print "Unexpected error:", sys.exc_info()[0]
-def main():
-    print "test correct"
-
-if __name__ == "__main__":
-    main()
 
 
