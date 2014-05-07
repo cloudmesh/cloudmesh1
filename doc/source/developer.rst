@@ -28,6 +28,9 @@ additional tools to make contributions easier.
 You will need to use **github** and **virtualenv**. We do **NOT**
 support any use of cloudmesh without `virtualenv`.
 
+Furthermore, we assume that you use **ubuntu 14.04** as your
+development environment.
+
 Github
 =======
 
@@ -51,10 +54,27 @@ to the github dev list.
 
 In order for you to participate in code development you also need to
 do the following steps on **ANY** machine from which you like toc
-check code back into github. If you do not have git on your machine
-you can get by::
+check code back into github. 
+
+If you do not have git on your machine
+you can get it as follows.
+
+ubuntu::
 
     $ sudo apt-get install git
+
+
+Centos/RHEL::
+
+    $ sudo yum install git
+
+OSX::
+
+    $ xcode-select --install
+
+If you use a different operating system, please consult how to install
+it there.
+
 
 Github ssh keys
 ------------------
