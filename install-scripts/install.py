@@ -47,27 +47,22 @@ def is_osx():
             print "Warning: %s %s is not tested" % ('OSX', os_version)
     return osx
 
+if not hasattr(sys, 'real_prefix'):
+    print "ERROR: You are runing this script not inside a virtual machine"
+    sys.exit()
 
-def install_basic_requirements():
-        
-    if not hasattr(sys, 'real_prefix'):
-        print "ERROR: You are runing this script not inside a virtual machine"
-        sys.exit()
+try:
+    from fabric.api import local,task 
+except:
+    os.system("pip install fabric")
+    from fabric.api import local, task
 
-    try:
-        from fabric.api import local,task 
-    except:
-        os.system("pip install fabric")
-        from fabric.api import local, task
+try:
+    from docopt import docopt
+except:
+    os.system("pip install docopt")
+    from docopt import docopt
 
-    try:
-        from docopt import docopt
-    except:
-        os.system("pip install docopt")
-        from docopt import docopt
-
-
-@task
 def deploy():
     """deploys the system on supported distributions"""
     # download()
@@ -87,18 +82,18 @@ def deploy():
 
     # install()
 
-@task
+
 def download():
     '''downloads cloudmesh'''
     local("git clone git@github.com:cloudmesh/cloudmesh.git")
 
-@task
+
 def install():
     sphinx_updates()
     local("pip install -r requirements.txt")
     local("python setup.py install")
 
-@task
+
 def install_mongodb():
     local("fab mongo.install")
 
@@ -115,12 +110,12 @@ def install_package(package):
         print "Use Linux instead"
         sys.exit()
 
-@task
+
 def install_packages(packages):
     for package in packages:
         install_package (package)
 
-@task
+
 def ubuntu():
     '''prepares an system and installs all 
     needed packages before we install cloudmesch'''
@@ -192,7 +187,7 @@ def sphinx_updates():
 
 def install_command(arguments):
     if arguments["cloudmesh"]:
-        install_basic_requirements():
+        install_basic_requirements()
         deploy()
 
     elif arguments["system"]:
@@ -203,7 +198,7 @@ def install_command(arguments):
             ubuntu()
         elif is_osx():
             osx()
-        elif is_centos()
+        elif is_centos():
             centos()
 
 
