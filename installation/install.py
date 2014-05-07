@@ -110,7 +110,7 @@ def ubuntu():
                       "mongodb-server"])    
     install_packages(["rabbitmq-server"])
     install()
-    install_mongodb()
+    # install_mongodb()
 
     # important that mongo_db installation be done only after all we
     # install all needed python packages(as per requiremnts.txt)
@@ -132,7 +132,7 @@ def centos():
     install_packages(["rabbitmq-server"])
     local('sudo sh -c "chkconfig rabbitmq-server on && service rabbitmq-server start"')
     install()
-    install_mongodb() 
+    # install_mongodb() 
 
 def osx():
     
@@ -156,7 +156,7 @@ def osx():
         # local('pip install matplotlib')
     
     install()
-    install_mongodb()
+    # install_mongodb()
 
 def sphinx_updates():
     local('rm -rf /tmp/install-cloudmesh')
