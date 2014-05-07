@@ -120,7 +120,7 @@ Github. Please make sure your name is spelled out properly. We do not
 accept pseudonyms. If you do not agree to this, you can not
 participate in the code development.
 
-Getting the CLoudmesh Source Code
+Getting the Cloudmesh Source Code
 ----------------------------------------------------------------------
 
 The code in github contains some convenient install scripts to prepare
@@ -157,80 +157,42 @@ cloudmesh directory. You can get there after cloning by ::
     
     $ cd cloudmesh
 
+Preparing the system
+----------------------------------------------------------------------
+
+On a vanilla operating system a couple of packages and tools need to
+be installed. For ubuntu and other OSes we have provided a smple
+script that prepare the system.
+
+
 For ubuntu systems there is a ready-made to get all the pre-requisites
 install. To run this script do ::
 
-    $ ./install cloudmesh
+    $ ./install system
 
 This will make sure all requirements are fulfilled and the cloudmesh
 programs are installed in your environment.
 
+After this you have to propare a virtual env 
+
 .. warning::
 
-   Please remember to activate your virtualenv. Out of caution not proceed or
-   execute this command in your environment.
+   Please remember to activate your virtualenv. Out of caution not
+   proceed or execute this command in your environment.
 
-
-Pip
-----------------------------------------------------------------------
-
-We use easy_install to get pip. Once installed we will typically not
-use easy_install any more. If you do not have easy_install setup
-previously you might have to set it up. It can be done as follows::
-
-    $ sudo apt-get install python-setuptools
-
-
-We typically do not use easy_install, but use pip instead. Please make
-sure that you install pip. THis can be done with::
-
-    $ sudo easy_install pip 
-
-
-Python-dev
-----------------------------------------------------------------------
-
-Python-dev is a development package which is used by a number of
-python-packages. If you do not have it already it can be obtained as
-follows::
-
-    $ sudo apt-get install python-dev
-
-
-Virtualenv
-----------------------------------------------------------------------
-
+After this you have to create and activate a virtual env. 
 As we like to have an isolated development environment we require that
 you use virtualenv. For simplicity our virtual env will be placed in
-the home directory under ~/ENV. If you already have such a directory
+the home directory under `~/ENV`. If you already have such a directory
 for other projects, we suggest that you find a new name for the
 virtualenv. However, for the rest of the manual we assume it is "ENV"
 
-Install virtualenv
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This is conducted with::
 
-This step is only needed if virtualenv is not installed. To
-test this say::
+the following command while assuming you install it in `~/ENV`::
 
-    $ which virtualenv
+  $ virtualenv  --no-site-packages ~/ENV
 
-In case virtualenv is not installed, you can install it via pip::
-
-
-    $ sudo pip install virtualenv
-
-Once that is accomplished you can create a virtual env as follows in
-the directory ENV::
-         
-    $ virtualenv  --no-site-packages ~/ENV
-
-If you do not have root access you can install it from source as
-documented at 
-
-* http://www.virtualenv.org/en/latest/
-          
-Activate virtualenv
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 After installation of virtualenv, you can activate virtualenv by
 following command::
@@ -282,6 +244,13 @@ This way if you type dev you cd into the development directory
 Cloudmesh deployment 
 ===========================
 
+yaml file first, than mongo
+
+:: 
+
+   fab mongo.install
+
+
 
 YAML files
 ---------------
@@ -304,7 +273,7 @@ developers when a change occurred so you can update yours:
 * `cloumesh_bootspec.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml>`_
 
 Generating a cloudmesh.yaml file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To generate a simple cloudmesh.yaml file, you may want to use place
 the following contents (with modifications applying to you), in a file
