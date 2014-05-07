@@ -358,10 +358,11 @@ class cm_mongo:
 
 
         for name in names:
+            print "*", name
             watch_name = "{0}-{1}".format(cm_user_id, name)
-            print "-"*80
-            print "retrieving for %s" % name
-            print "-"*80
+            log.info("-"*80)
+            log.info("Retrieving data for %s" % name)
+            log.info("-"*80)
             cloud = None
             for type in types:
                 # for identity management operations, use the keystone class
