@@ -9,116 +9,50 @@
 
 
 **********************************************************************
-Cloudmesh Vagrant Developers Environment
-**********************************************************************
-
-This section is for experts that like to deploy cloudmesh in a vagrant
-ubuntu 14.04 image under virtual box. We further assume you have
-checked out cloudmesh from github and are standing in the github
-directory::
-
-    $ git clone git@github.com:cloudmesh/cloudmesh.git
-    $ cd cloudmesh
-
-We assume you have uploaded a box to vagarnt with the name:: 
-
-   ubuntu-14.04-server-amd64
-
-If you do not have such an image you can create it by::
-
-   $ bin/install-veewee.sh
-   $ bin/install-ubuntu64.sh
-
-You can verify the list of boxes with::
-
-   $ vagrant box list
-
-To create a vagrant image you simply can say::
-  
-   deploy vagrant
-
-This will start a vagrant vm. In the vm say::
-
-   sudo apt-get install python-dev
-   sudo apt-get install python-virtualenv
-   virtualenv ~/ENV
-   . ~/ENV/bin/activate
-   pip install fabric
-
-
-Than say::
-
-  cd /vagrant/cloudmesh
-  deploy cloudmesh
-
-Please note that the changes in teh cloudmesh directory are synced
-with the directory::
-
-  /tmp/vagrant/cloudmesh
-
-
-
-**********************************************************************
-Usage Quickstart 
-**********************************************************************
-
-The following are the current steps to bring all services for
-cloudmesh up and running. After you have Installed the software (see
-). Naturally we could have included them in the Section `ref:s-instalation`
-one script, which we will do at a later time. For now we want to keep
-the services separate to simplify development and debugging of various
-parts. Naturally, if you can just pick the commands that you really
-need and do not have to execute all of them. Over time you will notice
-which commands are needed by you. An overview of available commands
-can be found with::
-
-   $ fab -l
-
-
-With access to LDAP 
-===============
-It is assumed that the machine has access to LDAP.
-
-::
-
-    fab build.install
-    fab mongo.start
-    fab mongo.cloud     
-    # fab mq.start
-    # fab queue.start:1
-    fab hpc.touch
-    fab server.start
-    
-Without access to LDAP
-===============
-
-::
-
-    fab build.install
-    fab mongo.start
-    fab mongo.simple
-    fab user.mongo
-    # fab mq.start
-    # fab queue.start:1
-    fab hpc.touch
-    fab server.start
-
-.. _s-instalation:
-
-**********************************************************************
 Installation
 **********************************************************************
 
 In this Section, we describe how to  deploy cloudmesh for
 **developers**. It is much the same as for those that want to deploy
-it. Please read the entire manual before starting.
+it as users, however we provide additional information and set up
+additional tools to make contributions easier. 
+
+.. warning::
+
+   Please read the entire manual before executing any of the commands
+   listed below. Only if you understand the workflow and have become
+   familiar with this manual you can follow the steps. If any step
+   needs correction or better explanation, please get in contagt with
+   us with your improvement suggestions.
+
+You will need to use **github** and **virtualenv**. We do **NOT**
+support any use of cloudmesh without `virtualenv`.
 
 Github
 =======
 
-Next we need to make sure github is properly usable for you. First you need to get an account on github and make sure you have a gravatar. Without this you can not become a developer. Than please contact Gregor von Laszewski (laszewski@gmail.com) so you can be added to the github dev list.
+This use of github assumes you are a development team member and have
+direct access to the github repository. To become a member please
+contact  Gregor von Laszewski at laszewski@gmial.com to discuss how
+you can contribute to cloudmesh and if a membership is approriate.
 
-In order for you to participate in code development you also need to do the following steps on **ANY** machine from which you like toc check code back into github. If you do not have git on your machine you can get by::
+.. note::
+
+   If you are not a member you still can check out the code from
+   github and further develop it whil communicating the changes to
+   us. Please contact Gregor von Laszewski at laszewski@gmial.com.
+
+
+First we need to make sure github is properly usable for you. First
+you need to get an account on github and make sure you have a
+gravatar. Without this you can not become a developer. Than please
+contact Gregor von Laszewski (laszewski@gmail.com) so you can be added
+to the github dev list.
+
+In order for you to participate in code development you also need to
+do the following steps on **ANY** machine from which you like toc
+check code back into github. If you do not have git on your machine
+you can get by::
 
     $ sudo apt-get install git
 
@@ -791,3 +725,100 @@ HPC services::
    hotel
 
    is neede fo the hpc commands
+**********************************************************************
+Cloudmesh Vagrant Developers Environment
+**********************************************************************
+
+This section is for experts that like to deploy cloudmesh in a vagrant
+ubuntu 14.04 image under virtual box. We further assume you have
+checked out cloudmesh from github and are standing in the github
+directory::
+
+    $ git clone git@github.com:cloudmesh/cloudmesh.git
+    $ cd cloudmesh
+
+We assume you have uploaded a box to vagarnt with the name:: 
+
+   ubuntu-14.04-server-amd64
+
+If you do not have such an image you can create it by::
+
+   $ bin/install-veewee.sh
+   $ bin/install-ubuntu64.sh
+
+You can verify the list of boxes with::
+
+   $ vagrant box list
+
+To create a vagrant image you simply can say::
+  
+   deploy vagrant
+
+This will start a vagrant vm. In the vm say::
+
+   sudo apt-get install python-dev
+   sudo apt-get install python-virtualenv
+   virtualenv ~/ENV
+   . ~/ENV/bin/activate
+   pip install fabric
+
+
+Than say::
+
+  cd /vagrant/cloudmesh
+  deploy cloudmesh
+
+Please note that the changes in teh cloudmesh directory are synced
+with the directory::
+
+  /tmp/vagrant/cloudmesh
+
+
+
+**********************************************************************
+Usage Quickstart 
+**********************************************************************
+
+The following are the current steps to bring all services for
+cloudmesh up and running. After you have Installed the software (see
+). Naturally we could have included them in the Section `ref:s-instalation`
+one script, which we will do at a later time. For now we want to keep
+the services separate to simplify development and debugging of various
+parts. Naturally, if you can just pick the commands that you really
+need and do not have to execute all of them. Over time you will notice
+which commands are needed by you. An overview of available commands
+can be found with::
+
+   $ fab -l
+
+
+With access to LDAP 
+===============
+It is assumed that the machine has access to LDAP.
+
+::
+
+    fab build.install
+    fab mongo.start
+    fab mongo.cloud     
+    # fab mq.start
+    # fab queue.start:1
+    fab hpc.touch
+    fab server.start
+    
+Without access to LDAP
+===============
+
+::
+
+    fab build.install
+    fab mongo.start
+    fab mongo.simple
+    fab user.mongo
+    # fab mq.start
+    # fab queue.start:1
+    fab hpc.touch
+    fab server.start
+
+.. _s-instalation:
+
