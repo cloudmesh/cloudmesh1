@@ -112,22 +112,24 @@ done with the following commands. You must use your full name and your
 e-mail that you use with github as part of your registered
 account. Otherwise our commits will not properly work::
 
-    git config --global user.name "Gregor von Laszewski"
-    git config --global user.email "laszewski@gmail.com"
+    $ git config --global user.name "Gregor von Laszewski"
+    $ git config --global user.email "laszewski@gmail.com"
 
 Please replace name and e-mail with the once you used in
 Github. Please make sure your name is spelled out properly. We do not
 accept pseudonyms. If you do not agree to this, you can not
 participate in the code development.
 
-Checking out the git repository
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Getting the CLoudmesh Source Code
+----------------------------------------------------------------------
 
-To have a uniform environment among all developers we prefer if you
-clone the cloudmesh code into `~/github`. Hence please do::
+The code in github contains some convenient install scripts to prepare
+your environment including the setup of the virtualenv. To have a
+uniform environment among all developers we prefer if you clone the
+cloudmesh code into `~/github`. Hence please do::
 
-   mkdir ~/github
-   cd ~/github
+   $ mkdir ~/github
+   $ cd ~/github
 
 If this directory exists already, make an assessment if you can reuse it
 for development.  Next the git repository needs to be cloned. It can
@@ -135,14 +137,38 @@ be done using::
 
     $ git clone git@github.com:cloudmesh/cloudmesh.git
 
-Some developers may prefer using https for accessing git. However the
-previous non https method is typically preferred::
+Some developers may prefer using https for accessing git. If you are
+not added in github with your github username to the project you will
+see the following error::
+
+  fatal: Could not read from remote repository.
+
+  Please make sure you have the correct access rights
+  and the repository exists.
+
+In this case you should clarify with Gregor if you are added to the
+github directory, or if you should checkout the code with the https
+method::
 
     $ git clone https://github.com/cloudmesh/cloudmesh.git
 
-We recommend that you use the non https version if you are part of the
-development team as it is much faster.
+For the rest of the section we will assume that you are working in the
+cloudmesh directory. You can get there after cloning by ::
+    
+    $ cd cloudmesh
 
+For ubuntu systems there is a ready-made to get all the pre-requisites
+install. To run this script do ::
+
+    $ ./install cloudmesh
+
+This will make sure all requirements are fulfilled and the cloudmesh
+programs are installed in your environment.
+
+.. warning::
+
+   Please remember to activate your virtualenv. Out of caution not proceed or
+   execute this command in your environment.
 
 
 Pip
@@ -256,23 +282,6 @@ This way if you type dev you cd into the development directory
 Cloudmesh deployment 
 ===========================
 
-For the rest of the section we will assume that you are working in the
-cloudmesh directory. You can get there after cloning by ::
-    
-    $ cd cloudmesh
-
-For ubuntu systems there is a ready-made to get all the pre-requisites
-install. To run this script do ::
-
-    $ ./install cloudmesh
-
-This will make sure all requirements are fulfilled and the cloudmesh
-programs are installed in your environment.
-
-.. warning::
-
-   Please remember to activate your virtualenv. Out of caution not proceed or
-   execute this command in your environment.
 
 YAML files
 ---------------
