@@ -1,32 +1,23 @@
 #! /bin/sh
 
-contains() {
-    string="$1"
-    substring="$2"
-    if test "${string#*$substring}" != "$string"
-    then
-        return 0    # $substring is in $string
-    else
-        return 1    # $substring is not in $string
-    fi
-}
-
 if [ $1="system" ]; then
    echo "deploy system"
    UNAME_INFO=`uname -a`
+
    echo $UNAME_INFO
-   if [ contains "$UNAME_INFO" "Ubuntu" ]
-   then
-       sh install-scripts/ubuntu.sh
-       exit 0
-   elif [ contains "$UNAME_INFO" "other" ]
-   then
-       echo "not implemented yet"
-       exit 1
-   else
-       echo "not implemented yet"
-       exit 1
-   fi
+   case "$UNAME_INFO" in 
+      *Ubuntu*) 
+	   sh install-scripts/ubuntu.sh
+	   exit 0
+	   ;;
+       *other*)
+	   echo "not implemented yet"
+	   exit 1
+	   ;;
+       *)  echo "else"
+	   exit 1
+	   ;;
+   esac
 fi
 
 python install-scripts/install.py $@
