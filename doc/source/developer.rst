@@ -111,101 +111,7 @@ Installation
 
 In this Section, we describe how to  deploy cloudmesh for
 **developers**. It is much the same as for those that want to deploy
-it. 
-
-Pip
-====
-
-We typically do not use easy_install, but use pip instead. Please make
-sure that you install pip. THis can be done with::
-
-    $ sudo easy_install pip 
-
-Once installed we will typically not use easy_install any more. If you do not have easy_install setup previously you might have to set it up. It can be done as follows::
-
-    $ sudo apt-get install python-setuptools
-
-Virtualenv
-================
-
-As we like to have an isolated development environment we require that
-you use virtualenv. For simplicity our virtual env will be placed in
-the home directory under ~/ENV. If you already have such a directory
-for other projects, we suggest that you find a new name for the
-virtualenv. However, for the rest of the manual we assume it is "ENV"
-
-Install virtualenv
-------------------------
-
-This step is only needed if virtualenv is not installed. To
-test this say::
-
-    $ which virtualenv
-
-In case virtualenv is not installed, you can install it via pip::
-
-
-    $ sudo pip install virtualenv
-
-Once that is accomplished you can create a virtual env as follows in
-the directory ENV::
-         
-    $ virtualenv  --no-site-packages ~/ENV
-
-If you do not have root access you can install it from source as
-documented at 
-
-* http://www.virtualenv.org/en/latest/
-          
-Activate virtualenv
-------------------------
-
-After installation of virtualenv, you can activate virtualenv by
-following command::
-
-    $ source ~/ENV/bin/activate
-
-Please note that you have to do this every time you open a terminal or login on the computer you work. Often you may forget it, so we recommend that you put it in your .bash_profile or .bashrc page at the end. 
-    
-Modify your rc file (optional):
-------------------------
-
-Go to your home directory, log in and change your .bash_profile, 
-.bashrc, or .bash_login file (e.g. whatever works best for you). ON my computer I added it to the .bash_profile which is a MAC OSX machine::
-
-    $ echo "source ~/ENV/bin/activate" >> .bash_profile
-
-On ubuntu, you can add it to::
-
-  $ echo "source ~/ENV/bin/activate" >> .bashrc
-
-If in doubt add it to both. It will be up to you to decide if you like
-to go into virtual env at login time. If you do it this way you do not
-forget. You can also add a ``cd`` command so that you go into the
-working directory immediately after you login. For example when you
-check out cloudmesh to ~/github/cloudmesh you can add::
-
-   cd ~/github/cloudmesh
-
-SO you jump into your working directory after you start a new
-terminal, which is quite handy. Alternatively, you may want to set an
-alias such as::
-
-   alias dev="cd ~/github/cloudmesh"
-
-This way if you type dev you cd into the development directory
-
-
-Install fabric
-===========================================================
-
-Much of our setup scripts are using fabric which is a nice management tool and is for our purpose a fancy makefile like tool (with many additional feature). This tool(and several other packages) use the python-dev package. If you do not have it installed already you can get by doing the following::
-
-    $ sudo apt-get install python-dev
-
-Fabric can now be installed as follows::
-
-    $ pip install fabric
+it. Please read the entire manual before starting.
 
 Github
 =======
@@ -243,61 +149,11 @@ account. Otherwise our commits will not properly work::
 
 Please replace name and e-mail with the once you used in Github. Please make sure your name is spelled out properly. We do not accept pseudonyms. If you do not agree to this, you can not participate in the code development.
 
-
-Quick deployment 
-===========================
-
-This quick deployment is targeted for ubuntu. It can be achieved in
-several easy steps.  First, obtain a vanilla ubuntu system. Make sure
-that git is installed, which is standard by now.
-
-
-
-
-OSX
-^^^^^^^^^^^^
-
-Note: that on osx we have to set the ldflags to get to the ttfonts. To
-do this you must first have XCode downloaded and installed. After that
-you can say on the commandline::
-
-  xcode-select --install
-
-This will opens a user interface dialog to request automatic
-installation of the command line developer tools which you will need
-if you like to conduct development on OSX. 
-
-Additionally we recommend that you check if you have the freetype
-fonts installed and set the LDFLAG as follows (if you find the
-freetypes there)::
-
-  LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib 
-
-Furthermore, since version 5.1 of XCode you may see the following error when
-installing pycrypto on OSX::
-
-  clang: error: unknown argument: '-mno-fused-madd' [-Wunused-command-line-argument-hard-error-in-future]
-
-  clang: note: this will be a hard error (cannot be downgraded to a warning) in the future
-
-  error: command 'cc' failed with exit status 1
-
-This error can be fixed by ignoring the option with the following
-shell commands::
-
-   export CFLAGS=-Qunused-arguments
-   export CPPFLAGS=-Qunused-arguments
-
-
-Deployment
-^^^^^^^^^^^^^^
-
-Next execute the following commands ::
+Checking out the git repository
+--------------------------------
+Next the git repository needs to be cloned. It can be done using.::
 
     $ git clone git@github.com:cloudmesh/cloudmesh.git
-    $ cd cloudmesh
-    $ fab -f install/fabfile.py deploy
-    $ fab build.install
 
 Some developers may prefer using https for accessing git::
 
@@ -306,36 +162,112 @@ Some developers may prefer using https for accessing git::
 We recommend that you use the non https version if you are part of the
 development team as it is much faster.
 
-Aptana Studio
---------------------------------------------------
+Setting up the environment
+===========================
+For the rest of the section we will assume that you are working in the cloudmesh directory. You can get there after cloning by ::
+    
+    $ cd cloudmesh
 
-A good IDE for python development for Python is `Aptana Studio 
-<http://www.aptana.com/>`_, which is based
-on eclypse . It contains the ability to directly import packages from
-github by filling out a simple form. So instead of using the
-command line github tool you can use the Aptana Studio version. It
-also contains a very nice way of managing your commits while allowing
-you to select via a GUI the files you have changed and commit them
-with a nice commit message. Pull and Push functions are also
-available. HAving said that there is some advantage of using the
-Aptana GUI tools for git as it makes it easier. Aptana Studio has also the
-ability to use emacs key mappings, which is a real nice
-feature. Naturally not all of emacs is supported.
+For ubuntu systems there is a ready-made to get all the pre-requisites install. To run this script do ::
 
-For those new to python an the project we recommend you use it for development.
+    $ ./install-scripts/ubuntu.sh
 
+If you are using ubuntu and have run the above script you can skip all steps until the section on activating virtualenv. These steps are relevant for osx and cent-os or if you want to do a manual installation instead of using the script on ubuntu.
 
-Requirements
+Pip
 ------------
+We use easy_install to get pip. Once installed we will typically not use easy_install any more. If you do not have easy_install setup previously you might have to set it up. It can be done as follows::
 
-Although the install contains the automatic installation of
-requirements, we like to point out that changes in the requirements.txt
-file that you may do does require an installation with::
+    $ sudo apt-get install python-setuptools
 
-    pip install -r requirements.txt
 
-If you do not change the requirements file, this step will be
-automatically executed as part of the installation.
+We typically do not use easy_install, but use pip instead. Please make
+sure that you install pip. THis can be done with::
+
+    $ sudo easy_install pip 
+
+
+Python-dev
+--------------------------
+Python-dev is a development package which is used by a number of python-packages. If you do not have it already it can be obtained as follows::
+
+    $ sudo apt-get install python-dev
+
+
+Virtualenv
+----------------
+
+As we like to have an isolated development environment we require that
+you use virtualenv. For simplicity our virtual env will be placed in
+the home directory under ~/ENV. If you already have such a directory
+for other projects, we suggest that you find a new name for the
+virtualenv. However, for the rest of the manual we assume it is "ENV"
+
+Install virtualenv
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This step is only needed if virtualenv is not installed. To
+test this say::
+
+    $ which virtualenv
+
+In case virtualenv is not installed, you can install it via pip::
+
+
+    $ sudo pip install virtualenv
+
+Once that is accomplished you can create a virtual env as follows in
+the directory ENV::
+         
+    $ virtualenv  --no-site-packages ~/ENV
+
+If you do not have root access you can install it from source as
+documented at 
+
+* http://www.virtualenv.org/en/latest/
+          
+Activate virtualenv
+------------------------
+
+After installation of virtualenv, you can activate virtualenv by
+following command::
+
+    $ source ~/ENV/bin/activate
+
+Please note that you have to do this every time you open a terminal or login on the computer you work. Often you may forget it, so we recommend that you put it in your .bash_profile or .bashrc page at the end. 
+    
+Modify your rc file (optional):
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Go to your home directory, log in and change your .bash_profile, 
+.bashrc, or .bash_login file (e.g. whatever works best for you). ON my computer I added it to the .bash_profile which is a MAC OSX machine::
+
+    $ echo "source ~/ENV/bin/activate" >> .bash_profile
+
+On ubuntu, you can add it to::
+
+  $ echo "source ~/ENV/bin/activate" >> .bashrc
+
+If in doubt add it to both. It will be up to you to decide if you like
+to go into virtual env at login time. If you do it this way you do not
+forget. You can also add a ``cd`` command so that you go into the
+working directory immediately after you login. For example when you
+check out cloudmesh to ~/github/cloudmesh you can add::
+
+   cd ~/github/cloudmesh
+
+SO you jump into your working directory after you start a new
+terminal, which is quite handy. Alternatively, you may want to set an
+alias such as::
+
+   alias dev="cd ~/github/cloudmesh"
+
+This way if you type dev you cd into the development directory
+
+
+Quick deployment 
+===========================
+Once you are ready with the envrionment you can start the deployment of cloudmesh. The steps for that are documented as follows
 
 YAML files
 ---------------
@@ -429,8 +361,88 @@ which will verify if you can log into the clouds with your credentials
 
    WARNING: fab user.verify, and fab user.yaml,safe are not yet implemented
 
-Mongo - Commands Overview
+Most of the commands which are described in the YAML section need cloudmesh to be fully installed. 
+
+OSX
+---------------------------------
+
+Note: that on osx we have to set the ldflags to get to the ttfonts. To
+do this you must first have XCode downloaded and installed. After that
+you can say on the commandline::
+
+  xcode-select --install
+
+This will opens a user interface dialog to request automatic
+installation of the command line developer tools which you will need
+if you like to conduct development on OSX. 
+
+Additionally we recommend that you check if you have the freetype
+fonts installed and set the LDFLAG as follows (if you find the
+freetypes there)::
+
+  LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib 
+
+Furthermore, since version 5.1 of XCode you may see the following error when
+installing pycrypto on OSX::
+
+  clang: error: unknown argument: '-mno-fused-madd' [-Wunused-command-line-argument-hard-error-in-future]
+
+  clang: note: this will be a hard error (cannot be downgraded to a warning) in the future
+
+  error: command 'cc' failed with exit status 1
+
+This error can be fixed by ignoring the option with the following
+shell commands::
+
+   export CFLAGS=-Qunused-arguments
+   export CPPFLAGS=-Qunused-arguments
+
+
+Deployment
+-----------------------
+
+Next execute the following commands ::
+
+    $ install cloudmesh
+    $ fab build.install
+
+Aptana Studio - Develpment Environment(optional)
+--------------------------------------------------
+
+A good IDE for python development for Python is `Aptana Studio 
+<http://www.aptana.com/>`_, which is based
+on eclypse . It contains the ability to directly import packages from
+github by filling out a simple form. So instead of using the
+command line github tool you can use the Aptana Studio version. It
+also contains a very nice way of managing your commits while allowing
+you to select via a GUI the files you have changed and commit them
+with a nice commit message. Pull and Push functions are also
+available. HAving said that there is some advantage of using the
+Aptana GUI tools for git as it makes it easier. Aptana Studio has also the
+ability to use emacs key mappings, which is a real nice
+feature. Naturally not all of emacs is supported.
+
+For those new to python an the project we recommend you use it for development.
+
+
+Requirements(Not required)
+------------------------------
+
+Although the install contains the automatic installation of
+requirements, we like to point out that changes in the requirements.txt
+file that you may do does require an installation with::
+
+    pip install -r requirements.txt
+
+If you do not change the requirements file, this step will be
+automatically executed as part of the installation.
+
+
+Mongo-Db
 --------------------------
+
+List of Commands(Optional)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Cloudmesh uses mongo for serving information to the different
 services.  To managing mongo db it is important that you use our
@@ -459,15 +471,17 @@ To create a cluster with user data base say (requires access to LDAP)::
 	
 Now you have data in the mongo db and you can use and test it.
 
-Mongo commands that need to be issued
----------------------------------------
+Mongo commands that need to be issued (Important)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In order for the everything to work right, please do the following mongo steps.::
 
     fab mongo.start
     fab mongo.boot
-    fab mongo.simple
     fab user.mongo
+    fab mongo.simple
+
+For some reason "fab mongo.boot" has to be issued twice for everyhting to work right. 
 
 Starting the Web Service
 ----------------------
