@@ -12,7 +12,7 @@ Usage:
 import os
 import getopt
 import sys
-from cloudmesh.util.util import banner
+from cloudmesh.util.banner import banner
 from cloudmesh.install.util import get_system
 
 def main():
