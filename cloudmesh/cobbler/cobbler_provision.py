@@ -9,8 +9,7 @@ import subprocess
 
 
 def authorization(func):
-    """
-      decorator. authorizate the user's action according to his token and current accessing API. 
+    """decorator. authorizate the user's action according to his token and current accessing API. 
     """
     @wraps(func)
     def wrap_authorization(self, *args, **kwargs):
@@ -28,9 +27,9 @@ def authorization(func):
     return wrap_authorization
 
 def cobbler_object_exist(object_type, ensure_exist=True):
-    """
-      decorator. check whether one object exist or not in cobble.
-      param ensure_exist is True means the object MUST exist, otherwise must NOT exist.
+    """decorator. check whether one object exist or not in cobble.
+    :param string object_type: a name in ["distro", "profile", "system"]
+    :param boolean ensure_exist: True means the object MUST exist, otherwise must NOT exist.
     """
     def _cobbler_object_exist(func):
         @wraps(func)
@@ -98,42 +97,44 @@ class CobblerProvision:
     
     @authorization
     def list_distro_names(self, **kwargs):
-        """ 
-        ONLY list distribution names, 
+        """list distribution names,
+        :return: a list of distro names 
         """
         return self._simple_result_dict(True, data=self._list_item_names("distro"))
     
     @authorization
     def list_profile_names(self, **kwargs):
-        """ 
-        ONLY list profile names, 
+        """list profile names, 
+        :return: a list of profile names 
         """
         return self._simple_result_dict(True, data=self._list_item_names("profile"))
     
     @authorization
     def list_system_names(self, **kwargs):
-        """ 
-        ONLY list system names, 
+        """list system names, 
+        :return: a list of system names 
         """
         return self._simple_result_dict(True, data=self._list_item_names("system"))
     
     @authorization
     def list_kickstart_names(self, **kwargs):
-        """ 
-        ONLY list kickstart filenames with extension, 
+        """list kickstart filenames with extension, 
+        :return: a list of kickstart filenames 
         """
         return self._simple_result_dict(True, data=self.list_kickstart_filenames(self.KICKSTART_LOCATION))
     
     def list_kickstart_filenames(self, dir_name):
+        """list the kickstart file under **dir_name** directory that has an extension **ks** or **seed**.
+        :param string dir_name: the directory that stores kickstart files
+        :return: a list of valid kickstart filename with path information
+        """
         files = self.list_dir_filenames(dir_name, False)
         return [f for f in files if f.endswith(".ks") or f.endswith(".seed")]
     
-    def _wrap_process_list_item_names(self, q, objects):
-        cobbler_handler = capi.BootAPI()
-        func = getattr(cobbler_handler, objects)
-        q.put([x.name for x in func()])
-    
     def _call_cobbler_process(self, func_name, *args):
+        """Provide multiple process support.
+        The cobbler REST service depends on this API **heavily** since the inherent characteristics of cobbler
+        """
         q = Queue()
         p = Process(target=getattr(self, func_name), args=(q,) + args)
         p.start()
@@ -141,14 +142,25 @@ class CobblerProvision:
         p.join()
         return result
     
+    def _wrap_process_list_item_names(self, q, objects):
+        """Call cobbler API **distros**, **profiles**, **systems** to get the corresponding objects
+        :return: a list of name of objects
+        """
+        cobbler_handler = capi.BootAPI()
+        func = getattr(cobbler_handler, objects)
+        q.put([x.name for x in func()])
+    
     def _list_item_names(self, object_type):
-        """ 
-        ONLY list item names, called by distro, profile, system, and etc.
-        return a list of object_type
+        """ONLY list item names
+        :param string object_type: an cobbler object type in distro, profile, system, and etc.
+        :return: a list of name of object_type
         """
         return self._call_cobbler_process("_wrap_process_list_item_names", "{0}s".format(object_type))
     
     def _wrap_report_result(self, object_type, name):
+        """get the detail report of *name* of cobbler object **object_type**
+        :return: the data field in result dict can refer :py:func:`._wrap_process_get_item_report`
+        """
         data = self._get_item_report(object_type, name)
         result = True if len(data) else False
         msg = "Success" if result else "Object {0} does NOT exist in {1}s.".format(name, object_type)
@@ -156,33 +168,37 @@ class CobblerProvision:
     
     @authorization
     def get_distro_report(self, name, **kwargs):
-        """ 
-          report the detail of the distribution with name, 
+        """report the detail of the distribution with name,
+        :return: refer the function :py:func:`._wrap_report_result` 
         """
         return self._wrap_report_result("distro", name)
     
     @authorization
     def get_profile_report(self, name, **kwargs):
-        """ 
-          report the detail of the profile with name, 
+        """report the detail of the profile with name, 
+        :return: refer the function :py:func:`._wrap_report_result` 
         """
         return self._wrap_report_result("profile", name)
     
     @authorization
     def get_system_report(self, name, **kwargs):
-        """ 
-          report the detail of the system with name, 
+        """report the detail of the system with name, 
+        :return: refer the function :py:func:`._wrap_report_result` 
         """
         return self._wrap_report_result("system", name)
     
     @authorization
     def get_kickstart_report(self, name, **kwargs):
-        """ 
-          report the detail of the kickstart with filename, 
+        """report the detail of the kickstart with filename, 
+        :return: refer the function :py:func:`._wrap_report_result` 
         """
         return self._wrap_report_result("kickstart", name)
     
     def get_object_child_count(self, object_type, name, handler):
+        """get the count of child list of a cobbler object
+        :return: the count of children
+        :rtype: int
+        """
         result = self.get_object_child_list(object_type, name, handler)
         return len(result) if result else 0 
     
@@ -210,6 +226,11 @@ class CobblerProvision:
         return result
     
     def _wrap_process_get_item_report(self, q, object_type, name):
+        """get the detail report of *name* of cobbler object **object_type**.
+        :param string object_type: a type in ['distro', 'profile', 'system', 'kickstart',]
+        :param string name: the name that user specified, it supports UNIX wildcard
+        :return: a list of report that has the formation [{"name": name, data": data,}, {}]
+        """
         result_list = []
         if object_type == "kickstart":
             allfiles = self.list_kickstart_filenames(self.KICKSTART_LOCATION)
@@ -238,20 +259,19 @@ class CobblerProvision:
         q.put(result_list)
     
     def _get_item_report(self, object_type, name):
-        """
-          report the specific item, called by distro, profile, system, etc.
-          return correct item dict.
+        """report the specific item, called by distro, profile, system, etc.
         """
         return self._call_cobbler_process("_wrap_process_get_item_report", object_type, name)
     
     @authorization
     def import_distro(self, udistro_name, **kwargs):
-        """Add a distribution to cobbler with import command.
+        """Add a distribution to cobbler with import command. The import distro will rename the udistro_name by adding suffix which is "-x86_64" in generall.
+        At the same time, the import also generate a profile with the same name automatically. Both of them can be obtained through **data** field in return dict.
         The first step is to fetch image file given by parameter url with wget, the url MUST be http, ftp, https.
         Then, moust the image, finally import iso with cobbler import command
         :param string udistro_name: the distro name that user specified
         :param dict kwargs: a dict contains the following {"url": "iso url",}
-        :returns: a dict defined in :py:func:`_simple_result_dict`
+        :returns: a dict defined in :py:func:`_simple_result_dict`, the data field in dict is {"distro":"name", "profile":"name"}
         """
         url = kwargs.get("url", "")
         dir_base = "/tmp"
@@ -355,6 +375,9 @@ class CobblerProvision:
         return self._simple_result_dict(flag_result, "Update profile {0} {1}successfully.".format(profile_name, "" if flag_result else "un"))
         
     def _edit_profile(self, profile_name, contents):
+        """edit a profile, a inner function called by add_profile and update_profile
+        :return: True means edit profile success, othewise failed.
+        """
         # fields that allow update, if a field is not state in common_args, just ignore it
         common_args = "distro kickstart comment owners".split()
         cmd_args_edit = ["cobbler", "profile", "edit", "--name={0}".format(profile_name), ]
@@ -363,12 +386,12 @@ class CobblerProvision:
         flag_result = True
         if len(cmd_args) > len(cmd_args_edit):
             flag_result = self.shell_command(cmd_args)
-        return self._simple_result_dict(flag_result, "Update profile {0} {1}successfully.".format(profile_name, "" if flag_result else "un"))
+        return flag_result
         
     @cobbler_object_exist("system", False)
     @authorization
     def add_system(self, system_name, **kwargs):
-        """
+        """Add a system
           add system to cobbler with 2 steps.
           1. add a new system ONLY with system name and profile name.
           2. add other contents of system.
@@ -385,6 +408,7 @@ class CobblerProvision:
                 kopts: kernel command-line arguments,
                 ksmeta: kickstart meta data,
                 name-servers: name servers,
+                comment: user comment,
                 owners: users and groups,
                 power: power_info,
                 interfaces: [interface],
@@ -480,8 +504,9 @@ class CobblerProvision:
     
     @authorization
     def update_kickstart(self, kickstart_name, lines, **kwargs):
-        """
-          update kickstart file with list of lines.
+        """update kickstart file with list of lines.
+        :param string kickstart_name: filename of kickstart file
+        :param list lines: contents of a kickstart file, each line of the file is a elment in list
         """
         # update profile firstly
         with open("{0}/{1}".format(self.KICKSTART_LOCATION, kickstart_name), "w") as f:
@@ -490,29 +515,25 @@ class CobblerProvision:
     
     @authorization
     def remove_distro(self, distro_name, **kwargs):
-        """
-          remove a distro
+        """remove a distro
         """
         return self._remove_item("distro", distro_name)
     
     @authorization
     def remove_profile(self, profile_name, **kwargs):
-        """
-          remove a profile
+        """remove a profile
         """
         return self._remove_item("profile", profile_name)
     
     @authorization
     def remove_system(self, system_name, **kwargs):
-        """
-          remove a system
+        """remove a system
         """
         return self._remove_item("system", system_name)
     
     @authorization
     def remove_kickstart(self, kickstart_name, **kwargs):
-        """
-          remove a kickstart file
+        """remove a kickstart file
         """
         filename = "{0}/{1}".format(self.KICKSTART_LOCATION, kickstart_name)
         if self.file_exist(filename):
@@ -525,6 +546,8 @@ class CobblerProvision:
         return self._simple_result_dict(True, "The name {0} in kickstart does NOT exist. Not need to remove.".format(kickstart_name))
     
     def _remove_item(self, object_type, name):
+        """remove a cobbler object
+        """
         cmd_args = ["cobbler", object_type, "remove", "--name={0}".format(name)]
         if name in self._list_item_names(object_type):
             flag_result = self.shell_command(cmd_args)
@@ -534,9 +557,8 @@ class CobblerProvision:
     @cobbler_object_exist("system")
     @authorization
     def remove_system_interface(self, system_name, *args, **kwargs):
-        """
-         remove one interface from a system named system_name. 
-         If param args contains one interface name, then this interface will be removed from system.
+        """remove one interface from a system named system_name. 
+        If param args contains one interface name, then this interface will be removed from system.
         """
         report = self._get_item_report("system", system_name)
         all_interfaces = [x for x in report[0]["data"]["interfaces"]]
@@ -568,6 +590,8 @@ class CobblerProvision:
         
     # power system
     def _wrap_cobbler_power_system(self, q, name, flag_netboot, power_status):
+        """wrap cobbler power action
+        """
         options = {
                     "on": "power_on",
                     "off": "power_off",
@@ -594,8 +618,7 @@ class CobblerProvision:
     @cobbler_object_exist("system")
     @authorization
     def deploy_system(self, system_name, **kwargs):
-        """
-         deploy a system.
+        """deploy a system.
         """
         self.cobbler_power_system(system_name, True, "reboot")
         # monitor deploy status
@@ -604,8 +627,7 @@ class CobblerProvision:
     
     @cobbler_object_exist("system")
     def power_system(self, system_name, **kwargs):
-        """
-         power on/off a system.
+        """power on/off a system.
         """
         # get the value of 'power_on' set by user, default value is True or power ON
         power_status = "on" if kwargs.get("power_on", True) else "off"
@@ -616,8 +638,7 @@ class CobblerProvision:
     
     @authorization
     def monitor_system(self, system_name, **kwargs):
-        """
-          monitor server's status with Ping. True means the server is on, False means down.
+        """monitor server's status with Ping. True means the server is on, False means down.
         """
         system = self.cobbler_find_system(system_name)
         """
@@ -636,6 +657,10 @@ class CobblerProvision:
         return self._simple_result_dict(result, "Ping {0} {1}successfully.".format(system_name, "" if result else "un"))
     
     def get_system_manage_ip(csystem, exclude_loop=True):
+        """get IP address of the management interface,
+        Currently, choose the management interface by the name that the lower name is management
+        FIXME, TODO, Maybe we can add a field in mongodb later
+        """
         dict_interfaces = csystem.interfaces
         list_ip = [(name, dict_interfaces[name]["ip_address"]) for name in dict_interfaces]
         if exclude_loop:
