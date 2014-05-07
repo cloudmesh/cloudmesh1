@@ -12,7 +12,7 @@ Usage:
 import os
 import getopt
 import sys
-from installation.banner import banner
+from installation.util import banner
 from installation.util import get_system
 
 def main():
@@ -30,7 +30,7 @@ def main():
     # parse for help
     for o, a in opts:
         if o in ("-h", "--help"):
-            os.system("cloudmesh/install/install.py help")
+            os.system("installation/install.py help")
             sys.exit(0)
 
     # 
@@ -50,7 +50,7 @@ def main():
     banner (arguments)
     try:
 
-        os.system('cloudmesh/install/install.py "%s"' % arguments)
+        os.system('installation/install.py "%s"' % arguments)
 
     except Exception, e:
         print "ERROR: Your environment may not be properly configured."

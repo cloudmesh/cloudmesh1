@@ -11,7 +11,7 @@ Usage:
 import sys
 import os
 import platform
-from cloudmesh.util.banner import banner
+from util import banner
 from util import is_ubuntu, is_centos, is_osx
 
 ######################################################################
