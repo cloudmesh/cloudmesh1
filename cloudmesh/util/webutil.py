@@ -21,17 +21,30 @@ else:
 
 
 # for supporting base64.js
-def base64_decode(string):
-    string = re.sub('-', '+', string)
-    string = re.sub('_', '/', string)
+def base64_decode(the_string):
+    """decode the string with base 64.
 
-    padding = len(string) % 4
+    :param the_string: the string
+    """
+    string = re.sub('-', '+', the_string)
+    string = re.sub('_', '/', the_string)
+
+    padding = len(the_string) % 4
     if padding > 0:
-        string += "=" * (4 - padding)
+        the_string += "=" * (4 - padding)
 
-    return base64.b64decode(string)
+    return base64.b64decode(the_string)
 
 def decode_source(source, encoding, compression):
+    """decoude a source with given encoding and compression.
+
+    :param source: the string
+    :type source: string
+    :param encoding: only base64 allowed
+    :type encoding: string
+    :param compression: only deflate allowed
+    :type defalte: string
+    """
     if encoding == 'base64':
         source = base64_decode(source)
 
@@ -44,6 +57,7 @@ def decode_source(source, encoding, compression):
     return source
 
 def get_hostname():
+    """get the hostname form environment variables HTTP_HOST or SERVER_NAME."""
     if os.environ.get('HTTP_HOST'):
         hostname = os.environ['HTTP_HOST']
     elif os.environ.get('SERVER_NAME'):

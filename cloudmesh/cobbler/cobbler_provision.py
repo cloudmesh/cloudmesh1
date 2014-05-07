@@ -74,15 +74,24 @@ class CobblerProvision:
         pass
     
     def get_token(self, username, password):
-        """ validate user, generate a token representing his rights.
+        """validate user, generate a token representing his rights.
         return None if user not exist or password is not correct.
-         """
+        :param username: the username
+        :type username: string
+        :param password: the password
+        :type password: string        
+        """
         return "a random valid token"
     
     def validate_token(self, access_api, user_token):
         """ validate user's token, if it is not expired, then check whether the
         user has the right to access the specific api, that is access_api, 
         if yes, return True, otherwise return False
+
+        :param access_api: the access_api
+        :type access_api: string
+        :param user_token: the user_token
+        :type user_token: string
         """
         print "user_token = {0}, access_api = {1}".format(user_token, access_api)
         return True
@@ -324,38 +333,41 @@ class CobblerProvision:
     def add_system(self, system_name, **kwargs):
         """
           add system to cobbler with 2 steps.
-          The first step is to add a new system ONLY with system name and profile name.
-          The second step is to add other contents of system.
-          param interfaces is a list, each of which is a dict that has the following format.
-          contents has the following formation:
-          {
-            name: system name,
-            profile: profile name,
-            gateway: default gateway,
-            hostname: host name of system,
-            kopts: kernel command-line arguments,
-            ksmeta: kickstart meta data,
-            name-servers: name servers,
-            owners: users and groups,
-            power: power_info,
-            interfaces: [interface],
-          }
-          power_info has the following formation:
-          {
-            power-address: power IP address,
-            power-type: ipmilan or etc...,
-            power-user: power user,
-            power-pass: power password,
-            power-id: power id,
-          }
-          interface has the following formation:
-          { name: eth0,
-            ip-address: ipv4 address,
-            mac-address: mac address,
-            static: True | False,
-            netmask: netmask of this interface,
-            management: True | False,
-          }
+          1. add a new system ONLY with system name and profile name.
+          2. add other contents of system.
+          param interfaces is a list, each of which is a dict that
+          has the following format.
+
+          ::
+
+            {
+                name: system name,
+                profile: profile name,
+                gateway: default gateway,
+                hostname: host name of system,
+                kopts: kernel command-line arguments,
+                ksmeta: kickstart meta data,
+                name-servers: name servers,
+                owners: users and groups,
+                power: power_info,
+                interfaces: [interface],
+              }
+              power_info has the following formation:
+              {
+                power-address: power IP address,
+                power-type: ipmilan or etc...,
+                power-user: power user,
+                power-pass: power password,
+                power-id: power id,
+              }
+              interface has the following formation:
+              { name: eth0,
+                ip-address: ipv4 address,
+                mac-address: mac address,
+                static: True | False,
+                netmask: netmask of this interface,
+                management: True | False,
+              }
         """
         contents = kwargs
         # profile must be provided to add a system
