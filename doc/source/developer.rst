@@ -37,12 +37,12 @@ Setting up the environment
 ===========================
 
 Github
-=======
+----------------------------------------------------------------------
 
 This use of github assumes you are a development team member and have
 direct access to the github repository. To become a member please
 contact  Gregor von Laszewski at laszewski@gmial.com to discuss how
-you can contribute to cloudmesh and if a membership is approriate.
+you can contribute to cloudmesh and if a membership is appropriate.
 
 .. note::
 
@@ -64,34 +64,34 @@ check code back into github.
 If you do not have git on your machine
 you can get it as follows.
 
-ubuntu:
-
-    ::
+**Ubuntu**::
 
       $ sudo apt-get install git
 
 
-Centos/RHEL:
-
-    ::
+**Centos/RHEL**::
 
        $ sudo yum install git
 
 
-OSX:
+**OSX**:
 
-    Please obtain and install xcode as documented in 
-      * https://developer.apple.com/xcode/downloads/
-    In a terminal windo, execute::
+Please obtain and install xcode as documented in 
+
+* https://developer.apple.com/xcode/downloads/
+
+In a terminal window execute::
     
-       $ xcode-select --install
+   $ xcode-select --install
+
+**Others**:
 
 If you use a different operating system, please consult how to install
 it there.
 
 
 Github ssh keys
-------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you are on a new machine you must create a new github ssh key for
 it. This is nicely described at
@@ -105,7 +105,7 @@ public key. Make sure you do not copy the privat key.
 
 
 Git username and e-mail
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is very important to set the git username and e-mail. This can be
 done with the following commands. You must use your full name and your
@@ -115,15 +115,20 @@ account. Otherwise our commits will not properly work::
     git config --global user.name "Gregor von Laszewski"
     git config --global user.email "laszewski@gmail.com"
 
-Please replace name and e-mail with the once you used in Github. Please make sure your name is spelled out properly. We do not accept pseudonyms. If you do not agree to this, you can not participate in the code development.
+Please replace name and e-mail with the once you used in
+Github. Please make sure your name is spelled out properly. We do not
+accept pseudonyms. If you do not agree to this, you can not
+participate in the code development.
 
 Checking out the git repository
---------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Next the git repository needs to be cloned. It can be done using.::
 
     $ git clone git@github.com:cloudmesh/cloudmesh.git
 
-Some developers may prefer using https for accessing git::
+Some developers may prefer using https for accessing git. However the
+previous non https method is typically preferred::
 
     $ git clone https://github.com/cloudmesh/cloudmesh.git
 
@@ -133,8 +138,11 @@ development team as it is much faster.
 
 
 Pip
-------------
-We use easy_install to get pip. Once installed we will typically not use easy_install any more. If you do not have easy_install setup previously you might have to set it up. It can be done as follows::
+----------------------------------------------------------------------
+
+We use easy_install to get pip. Once installed we will typically not
+use easy_install any more. If you do not have easy_install setup
+previously you might have to set it up. It can be done as follows::
 
     $ sudo apt-get install python-setuptools
 
@@ -146,14 +154,17 @@ sure that you install pip. THis can be done with::
 
 
 Python-dev
---------------------------
-Python-dev is a development package which is used by a number of python-packages. If you do not have it already it can be obtained as follows::
+----------------------------------------------------------------------
+
+Python-dev is a development package which is used by a number of
+python-packages. If you do not have it already it can be obtained as
+follows::
 
     $ sudo apt-get install python-dev
 
 
 Virtualenv
-----------------
+----------------------------------------------------------------------
 
 As we like to have an isolated development environment we require that
 you use virtualenv. For simplicity our virtual env will be placed in
@@ -162,7 +173,7 @@ for other projects, we suggest that you find a new name for the
 virtualenv. However, for the rest of the manual we assume it is "ENV"
 
 Install virtualenv
-^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This step is only needed if virtualenv is not installed. To
 test this say::
@@ -185,20 +196,30 @@ documented at
 * http://www.virtualenv.org/en/latest/
           
 Activate virtualenv
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 After installation of virtualenv, you can activate virtualenv by
 following command::
 
     $ source ~/ENV/bin/activate
 
-Please note that you have to do this every time you open a terminal or login on the computer you work. Often you may forget it, so we recommend that you put it in your .bash_profile or .bashrc page at the end. 
+Please note that you have to do this every time you open a terminal or
+login on the computer you work. Often you may forget it, so we
+recommend that you put it in your .bash_profile or .bashrc page at the
+end.
     
-Modify your rc file (optional):
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Modify your rc file:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Go to your home directory, log in and change your .bash_profile, 
-.bashrc, or .bash_login file (e.g. whatever works best for you). ON my computer I added it to the .bash_profile which is a MAC OSX machine::
+.. note::
+
+   Changing your rc files is optional, but may be useful if you do a
+   lot of development and you for example tend to forget to activate
+   the virtualenv.
+
+Go to your home directory, log in and change your .bash_profile,
+.bashrc, or .bash_login file (e.g. whatever works best for you). ON my
+computer I added it to the .bash_profile which is a MAC OSX machine::
 
     $ echo "source ~/ENV/bin/activate" >> .bash_profile
 
@@ -227,31 +248,37 @@ This way if you type dev you cd into the development directory
 Quick deployment 
 ===========================
 
-For the rest of the section we will assume that you are working in the cloudmesh directory. You can get there after cloning by ::
+For the rest of the section we will assume that you are working in the
+cloudmesh directory. You can get there after cloning by ::
     
     $ cd cloudmesh
 
-For ubuntu systems there is a ready-made to get all the pre-requisites install. To run this script do ::
+For ubuntu systems there is a ready-made to get all the pre-requisites
+install. To run this script do ::
 
     $ ./install-scripts/ubuntu.sh
 
-If you are using ubuntu and have run the above script you can skip all steps until the section on activating virtualenv. These steps are relevant for osx and cent-os or if you want to do a manual installation instead of using the script on ubuntu.
+If you are using ubuntu and have run the above script you can skip all
+steps until the section on activating virtualenv. These steps are
+relevant for osx and cent-os or if you want to do a manual
+installation instead of using the script on ubuntu.
 
-Once you are ready with the envrionment you can start the deployment of cloudmesh. The steps for that are documented as follows
+Once you are ready with the environment you can start the deployment
+of cloudmesh. The steps for that are documented as follows
 
 YAML files
 ---------------
 
-You will need a number of  yaml files. Samples can be found in the etc source directory. 
-More elaborate examples can be obtained from Gregor for the personel that work 
-directly with him on FutureGrid.
+You will need a number of yaml files. Samples can be found in the etc
+source directory.  More elaborate examples can be obtained from Gregor
+for the personel that work directly with him on FutureGrid.
 
 Configure the yaml files if changes need to be done.
 
-We to copy and modify the files in the .futuregrid directory. THis has
+We to copy and modify the files in the .futuregrid directory. This has
 to be done only once, but you maust make sure you keep the yaml files
 up to date in case we change them, typically we send an e-mail to all
-develpers when a change occured so you can update yours:
+developers when a change occurred so you can update yours:
 
 * `cloudmesh.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml>`_
 * `cloudmesh_server.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml>`_
@@ -265,7 +292,7 @@ Generating a cloudmesh.yaml file
 To generate a simple cloudmesh.yaml file, you may want to use place
 the following contents (with modifications applying to you), in a file
 called ~/.futuregrid/me.yaml. In that file, please replace the
-appropriate values with your cloud information. If you do not knwo the
+appropriate values with your cloud information. If you do not know the
 values you can just fill in a placeholder, such as None. With active
 we specify the clouds that we like to activate. Clouds not listed in
 activate will be ignored::
@@ -315,7 +342,7 @@ ERROR: not that this prints a Done. msg at the end so if you redirect
 it to ~/.futuregrid/cloudmesh.yaml you need to correct this.
 
 WARNING: If you have a working yaml file, than I suggest you copy this
-first into a backup before overwriting somthing that worked befor ;-)
+first into a backup before overwriting something that worked before ;-)
 
 In future we will have::
 
@@ -331,7 +358,8 @@ which will verify if you can log into the clouds with your credentials
 
    WARNING: fab user.verify, and fab user.yaml,safe are not yet implemented
 
-Most of the commands which are described in the YAML section need cloudmesh to be fully installed. 
+Most of the commands which are described in the YAML section need
+cloudmesh to be fully installed.
 
 OSX
 ---------------------------------
@@ -381,26 +409,28 @@ Aptana Studio - Develpment Environment(optional)
 
 A good IDE for python development for Python is `Aptana Studio 
 <http://www.aptana.com/>`_, which is based
-on eclypse . It contains the ability to directly import packages from
+on eclipse . It contains the ability to directly import packages from
 github by filling out a simple form. So instead of using the
 command line github tool you can use the Aptana Studio version. It
 also contains a very nice way of managing your commits while allowing
 you to select via a GUI the files you have changed and commit them
 with a nice commit message. Pull and Push functions are also
-available. HAving said that there is some advantage of using the
+available. Having said that there is some advantage of using the
 Aptana GUI tools for git as it makes it easier. Aptana Studio has also the
 ability to use emacs key mappings, which is a real nice
 feature. Naturally not all of emacs is supported.
 
-For those new to python an the project we recommend you use it for development.
+For those new to python an the project we recommend you use it for
+development.
 
 
 Requirements(Not required)
 ------------------------------
 
 Although the install contains the automatic installation of
-requirements, we like to point out that changes in the requirements.txt
-file that you may do does require an installation with::
+requirements, we like to point out that changes in the
+requirements.txt file that you may do does require an installation
+with::
 
     pip install -r requirements.txt
 
@@ -427,7 +457,8 @@ To stop mongod::
 
 	fab mongo.stop
 	
-To clean the entire data base (not just the data for cloudmesh, so be careful) say::
+To clean the entire data base (not just the data for cloudmesh, so be
+careful) say::
 
 	fab mongo.clean
 	
@@ -444,14 +475,16 @@ Now you have data in the mongo db and you can use and test it.
 Mongo commands that need to be issued (Important)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In order for the everything to work right, please do the following mongo steps.::
+In order for the everything to work right, please do the following
+mongo steps.::
 
     fab mongo.start
     fab mongo.boot
     fab user.mongo
     fab mongo.simple
 
-For some reason "fab mongo.boot" has to be issued twice for everyhting to work right. 
+For some reason "fab mongo.boot" has to be issued twice for everything
+to work right.
 
 Starting the Web Service
 ----------------------
@@ -508,7 +541,9 @@ downloaded and installed as follows::
 Blockdiag family
 ------------------------------
 
-blockdiag uses TrueType Font to render text. blockdiag try to detect installed fonts but if nothing detected, You can specify fonts with -f (–font) option::
+blockdiag uses TrueType Font to render text. blockdiag try to detect
+installed fonts but if nothing detected, You can specify fonts with -f
+(–font) option::
 
     $ blockdiag -f /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf simple.diag
 
@@ -518,7 +553,8 @@ If you always use same font, write $HOME/.blockdiagrc::
     [blockdiag]
     fontpath = /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf
 
-TODO: distribute a standard ttf font and use sh so that the -f font is included from the deployed package
+TODO: distribute a standard ttf font and use sh so that the -f font is
+included from the deployed package
 
 The t.py program
 ---------------
@@ -537,15 +573,25 @@ refresh of the web page automatically to other test programs.
 Developer Tests
 -----------------
 
-Python has a very good unit test framework called nosetests. As we have many different tests it is sometimes useful not to run all of them but to run a selected test. Running all of the tests would take simply to long during debugging. We are providing an easy to use test fabric command that can be used as follows. Assume that in your directory tests are located a number of tests. They can be listed with::
+Python has a very good unit test framework called nosetests. As we
+have many different tests it is sometimes useful not to run all of
+them but to run a selected test. Running all of the tests would take
+simply to long during debugging. We are providing an easy to use test
+fabric command that can be used as follows. Assume that in your
+directory tests are located a number of tests. They can be listed
+with::
 
     $ fab test.info 
 
-This will list the available test files/groups by name (the test_ prefix is omitted). To list the individual tests in a file/grou, you can use it as a parameter to info. Thus::
+This will list the available test files/groups by name (the test_
+prefix is omitted). To list the individual tests in a file/grou, you
+can use it as a parameter to info. Thus::
 
    fab test.info:compute 
 
-will list the tests in the file test_compute.py. To call an individual test, you can use the name of the file and a unique prefix of the test you like to call via test.start. Thus::
+will list the tests in the file test_compute.py. To call an individual
+test, you can use the name of the file and a unique prefix of the test
+you like to call via test.start. Thus::
 
 
      fab test.start:compute,label
@@ -568,7 +614,13 @@ After that you naturally need to do a new install.
 Convenient command shortcuts
 =================================
 
-We are providing a number of useful command that will make your development efforts easier.  These commands are build with fabfiles in the fabfile directory. in the cloudmesh directory, you will find a directory called fabfile that includes the agglomerated helper files. To access them you can use the name of the file, followed by a task that is defined within the file. Next we list the available commands:
+We are providing a number of useful command that will make your
+development efforts easier.  These commands are build with fabfiles in
+the fabfile directory. in the cloudmesh directory, you will find a
+directory called fabfile that includes the agglomerated helper
+files. To access them you can use the name of the file, followed by a
+task that is defined within the file. Next we list the available
+commands:
 
 .. runblock:: console
 
@@ -579,11 +631,17 @@ We are providing a number of useful command that will make your development effo
 Working with Cloudmesh on a remote server
 ==============================
 
-Sometimes it is desirable to work on cloudmesh on a remote server and use your laptop to connect to that server. This can be done for example via port forwarding. Let us assume you are running a cloudmesh server on the machine my.org. Than you can establish a port forwarding from port 5000 to 5001 as follows, where 5001 is the locally used port::
+Sometimes it is desirable to work on cloudmesh on a remote server and
+use your laptop to connect to that server. This can be done for
+example via port forwarding. Let us assume you are running a cloudmesh
+server on the machine my.org. Than you can establish a port forwarding
+from port 5000 to 5001 as follows, where 5001 is the locally used
+port::
 
      ssh -L 5001:localhost:5000 user@machine.edu
 
-Once you have started cloudmesh, you will be able to see the page form that server in the browser at::
+Once you have started cloudmesh, you will be able to see the page form
+that server in the browser at::
 
       http://localhost:5001
 
@@ -591,7 +649,10 @@ However, before you start the server with::
 
     python setup.py install; fab server.start
 
-it is best if you do an ssh agent so you can access some more sophisticated services that require authentication. To do so you can type in the following lines on the terminal in which you will start the server::
+it is best if you do an ssh agent so you can access some more
+sophisticated services that require authentication. To do so you can
+type in the following lines on the terminal in which you will start
+the server::
 
    $  eval `ssh-agent -s`
    $ ssh-add 
@@ -616,7 +677,8 @@ depend on it, so we will configure it to install in /opt/python::
 
     $ wget http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz
 
-Recommended: verify the md5 checksum, b4f01a1d0ba0b46b05c73b2ac909b1df for the above.::
+Recommended: verify the md5 checksum, b4f01a1d0ba0b46b05c73b2ac909b1df
+for the above.::
 
     $ tar xzf Python-2.7.5.tgz
     $ cd Python-2.7.5
@@ -642,14 +704,14 @@ values.
 Making the documentation
 ====================
 
-A simple way to creat ethe documentation is with::
+A simple way to create the documentation is with::
 
    fab doc.html
 
 
 However, some extensions may require additional packages for sphinx.
-These add ons are unfortunatly not included in the requirements.txt. 
-However, they can be installed with (on OSX hg is a prerequisit)::
+These add ons are unfortunately not included in the requirements.txt. 
+However, they can be installed with (on OSX hg is a prerequisite)::
 
    $ fab build.sphinx
 
@@ -672,8 +734,9 @@ Open a new terminal and type in::
 
    fab mongo.start
    
-Now you can either generate a simple cloud without user or a cloud with user information. 
-To generating a simple cloud do without user information do::
+Now you can either generate a simple cloud without user or a cloud
+with user information.  To generating a simple cloud do without user
+information do::
 
    fab mongo.simple
    
@@ -724,7 +787,7 @@ Example: HPC queue server
 
 In case you do not need to work with a cloud, you can also use our hpc
 queue server. That inspects certain queues. This can be done by
-specifing a specific server at startup called hpc::
+specifying a specific server at startup called hpc::
 
     $ fab server.start:server=hpc
 
@@ -804,7 +867,7 @@ Than say::
   cd /vagrant/cloudmesh
   deploy cloudmesh
 
-Please note that the changes in teh cloudmesh directory are synced
+Please note that the changes in the cloudmesh directory are synced
 with the directory::
 
   /tmp/vagrant/cloudmesh
