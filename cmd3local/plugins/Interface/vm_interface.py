@@ -225,11 +225,29 @@ class vm_interface:
         return
 
     def sshVm(self):
+        """this method contains bugs"""
+        
         print 'In SSH'
         ssh = pm.SSHClient()
+        #
+        # gvl:  this is a bug
+        #
+        
+
         ssh.load_host_keys(os.path.expanduser('/Users/pushkarjoshi/.ssh/known_hosts'))
         ssh.set_missing_host_key_policy(pm.AutoAddPolicy())
+
+        #
+        # gvl:  this is a bug
+        #
+
+
         privKey = pm.RSAKey.from_private_key_file('/Users/pushkarjoshi/testKey.pem')
+
+        #
+        # gvl:  this is a bug
+        #
+        
         ssh.connect('198.202.120.7', username='psjoshi', pkey=privKey)
         chan = ssh.invoke_shell()
         print repr(ssh.get_transport())

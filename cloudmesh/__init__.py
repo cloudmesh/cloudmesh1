@@ -19,6 +19,7 @@ __version__ = version.VersionInfo('cloudmesh')
 
 with_login = True
 
-
+def version():
+    return __version__
 
 
