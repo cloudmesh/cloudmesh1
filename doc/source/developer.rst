@@ -33,7 +33,7 @@ development environment. Although we started including information for
 other OS, we have not verified if they work.
 
 
-Setting up the environment
+Prepare the Environment
 ===========================
 
 Github
@@ -123,7 +123,15 @@ participate in the code development.
 Checking out the git repository
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Next the git repository needs to be cloned. It can be done using.::
+To have a uniform environment among all developers we prefer if you
+clone the cloudmesh code into `~/github`. Hence please do::
+
+   mkdir ~/github
+   cd ~/github
+
+If this directory exists already, make an assessment if you can reuse it
+for development.  Next the git repository needs to be cloned. It can
+be done using::
 
     $ git clone git@github.com:cloudmesh/cloudmesh.git
 
@@ -245,7 +253,7 @@ This way if you type dev you cd into the development directory
 
 
 
-Quick deployment 
+Cloudmesh deployment 
 ===========================
 
 For the rest of the section we will assume that you are working in the
@@ -256,15 +264,15 @@ cloudmesh directory. You can get there after cloning by ::
 For ubuntu systems there is a ready-made to get all the pre-requisites
 install. To run this script do ::
 
-    $ ./install-scripts/ubuntu.sh
+    $ ./install cloudmesh
 
-If you are using ubuntu and have run the above script you can skip all
-steps until the section on activating virtualenv. These steps are
-relevant for osx and cent-os or if you want to do a manual
-installation instead of using the script on ubuntu.
+This will make sure all requirements are fulfilled and the cloudmesh
+programs are installed in your environment.
 
-Once you are ready with the environment you can start the deployment
-of cloudmesh. The steps for that are documented as follows
+.. warning::
+
+   Please remember to activate your virtualenv. Out of caution not proceed or
+   execute this command in your environment.
 
 YAML files
 ---------------
