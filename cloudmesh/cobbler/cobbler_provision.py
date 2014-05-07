@@ -173,18 +173,32 @@ class CobblerProvision:
         """
         return self._wrap_report_result("kickstart", name)
     
-    def get_object_child_count(self, handler, object_type, name):
+    def get_object_child_count(self, object_type, name, handler):
+        result = self.get_object_child_list(object_type, name, handler)
+        return len(result) if result else 0 
+    
+    def get_object_child_list(self, object_type, name, handler=None):
+        """
+        get the child list of a cobbler object 'distro' and 'profile'
+        ..param:: object_type a type in ['distro', 'profile']
+        ..param:: name the specific name in an object_type
+        ..param:: handler the Cobbler API handler
+        ..return:: None if object_type is NOT in ['distro', 'profile'], empty list if there is no child, otherwise return ['child', 'child',]
+        """
         pobjects = {"distro": "profile", 
                     "profile": "system",
                     }
-        iresult = 0
+        result = None
         if object_type in pobjects:
+            if not handler:
+                handler = capi.BootAPI()
             func = getattr(handler, "find_{0}".format(pobjects[object_type]))
             kwargs = {}
             kwargs[object_type] = name
+            # find_profile(distro=distro_name)
             child_list = func(return_list=True, **kwargs)
-            iresult = len(child_list)
-        return iresult
+            result = [v.name for v in child_list]
+        return result
     
     def _wrap_process_get_item_report(self, q, object_type, name):
         result_list = []
@@ -207,7 +221,7 @@ class CobblerProvision:
                 if object_type == "system":
                     data["child_count"] = len(data["interfaces"])
                 else:
-                    data["child_count"] = self.get_object_child_count(cobbler_handler, object_type, data["name"])
+                    data["child_count"] = self.get_object_child_count(object_type, data["name"], cobbler_handler)
                 result_list.append({"type": object_type, 
                                     "name": data["name"], 
                                     "data": data,
@@ -257,7 +271,9 @@ class CobblerProvision:
             # double check the result of import distro
             possible_names = [x for x in curr_distro_names if x not in old_distro_names and x.startswith(udistro_name)]
             distro_name = possible_names[0] if len(possible_names) else None
-            return self._simple_result_dict(True if distro_name else False, "Add distro {0} {1}successfully.".format(udistro_name, "" if distro_name else "un"))
+            # import a distribution will generate a profile with the same name automatically
+            distro_return_data = {"distro": distro_name, "profile": distro_name,}
+            return self._simple_result_dict(True if distro_name else False, "Add distro {0} {1}successfully.".format(udistro_name, "" if distro_name else "un"), data=distro_return_data)
         return self._simple_result_dict(False, "Failed to mount unsupported image [{0}] in add distro {1}.".format(url, udistro_name))
     
     @cobbler_object_exist("profile", False)
@@ -397,7 +413,7 @@ class CobblerProvision:
         """
           edit system of system_name with contents
         """
-        system_args = "gateway hostname kopts ksmeta name-servers owners".split()
+        system_args = "gateway hostname kopts ksmeta name-servers name-servers-search owners comment".split()
         power_args = "power-type power-address power-user power-pass power-id".split()
         interface_args = "ip-address mac-address netmask static management".split()
         cmd_args_edit = ["cobbler", "system", "edit", "--name={0}".format(system_name), ]

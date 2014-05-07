@@ -3,6 +3,7 @@ from cloudmesh.util.config import read_yaml_config
 from cloudmesh.config.cm_config import cm_config_server
 from hostlist import expand_hostlist
 import requests
+import json
 from copy import deepcopy
 from cloudmesh.util.logger import LOGGER
 #
@@ -133,8 +134,8 @@ class BaremetalComputer:
     
     def update_cobbler_profile(self, data):
         """
-        update a profile to cobbler.
-        ..param: data a json data structure. The formation is {"name": "your profile name", "distro": "distro", "kickstart": "kickstart.file",}
+        update a profile to cobbler. ONLY kickstart can be updated. If you want to update distro, you MUST create/add a new profile based on this distro.
+        ..param: data a json data structure. The formation is {"name": "your profile name", "kickstart": "kickstart.file",}
         ..return: True means update profile operation success, otherwise Failed
         """
         return self.update_cobbler_object("profile", data)
@@ -197,7 +198,7 @@ class BaremetalComputer:
         ..param: name the name of the cobbler object.
         ..return: True means remove an object operation success, otherwise Failed
         """
-        url = "/cm/v1/cobbler/{0}s/{1}".format(cobbler_object, data["name"])
+        url = "/cm/v1/cobbler/{0}s/{1}".format(cobbler_object, name)
         rest_data = self.request_rest_api("delete", url)
         return rest_data["result"]
     
@@ -293,6 +294,7 @@ class BaremetalComputer:
         """
         Insert the mac address information including power config into inventory. 
         This API should be called **BEFORE** baremetal provision.
+        Currently, this API is called by `fab mongo.inventory`
         """
         data = self.read_data_from_yaml()
         result = False
@@ -446,8 +448,7 @@ class BaremetalComputer:
             else:
                 data = {"user_token": ""}
             r = req_api(req_url, data=json.dumps(data), headers=headers)
-            print r.json()
-        return r.json()["cmrest"]["data"]
+        return r.json()["cmrest"]["data"] if r.status_code == 200 else {"result": False}
 
     
 # test
@@ -463,17 +464,81 @@ if __name__ == "__main__":
     """
     """
     # get distros list
-    data = bmc.get_cobbler_distro_list()
-    pprint(data)
-    data = bmc.get_cobbler_profile_list()
-    pprint(data)
-    data = bmc.get_cobbler_system_list()
-    pprint(data)
-    data = bmc.get_cobbler_kickstart_list()
-    pprint(data)
-    data = bmc.get_cobbler_object_list("none")
-    pprint(data)
+    result = bmc.get_cobbler_distro_list()
+    """
     """
     # get cobbler report
-    data = bmc.get_cobbler_object_report("kickstart", "*")
-    pprint(data)
+    result = bmc.get_cobbler_object_report("kickstart", "*")
+    """
+    """
+    # add a distro, CentOS-6.5-x86_64-bin-DVD1.iso
+    data = {"name": "test_centos_1405023", "url": "http://mirrors.usc.edu/pub/linux/distributions/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-bin-DVD1.iso"}
+    result = bmc.add_cobbler_distro(data)
+    """
+    """
+    # add a profile, 
+    data = {"name": "test_profile_1405023", "distro": "test_centos_1405023-x86_64", "kickstart":"sample.ks",}
+    result = bmc.add_cobbler_profile(data)
+    """
+    """
+    # add a system
+    data = {"name": "test_system_1405023", "profile": "test_profile_1405023", 
+            "power": {"power-address": "1.2.3.4",
+                      "power-user": "onlytest",
+                      "power-pass": "onlytest",
+                      "power-type": "ipmilan",
+                      "power-id": 1,
+                      },
+            "interfaces": [
+                 {
+                   "name": "ee1",
+                   "ip-address": "192.168.11.23",
+                   "mac-address": "aa:11:cc:dd:ee:ff",
+                   "static": True,
+                   "netmask": "255.255.255.0"
+                 },
+                {
+                   "name": "ee2",
+                   "ip-address": "192.168.11.123",
+                   "mac-address": "aa:11:cc:dd:ff:ff",
+                   "static": True,
+                   "netmask": "255.255.255.0"
+                 },
+                ]
+            }
+    result = bmc.add_cobbler_system(data)
+    """
+    """
+    # update a profile
+    data = {"name": "test_profile_1405023", "kickstart": "default.ks",}
+    result = bmc.update_cobbler_profile(data)
+    """
+    """
+    # update a system
+    data = {"name": "test_system_1405023", "power": {"power-user": "hellouser"}}
+    result = bmc.update_cobbler_system(data)
+    """
+    """
+    # remove a interface of system
+    system_name="test_system_1405023"
+    if_name = "ee2"
+    result = bmc.remove_cobbler_system_interface(system_name, if_name)
+    """
+    """
+    # remove system
+    system_name="test_system_1405023"
+    result = bmc.remove_cobbler_system(system_name)
+    """
+    """
+    # remove a profile
+    profile_name="test_profile_1405023"
+    result = bmc.remove_cobbler_profile(profile_name)
+    """
+    # remove a distro
+    distro_name="test_centos_1405023-x86_64"
+    # MUST delete the default profile firstly
+    result = bmc.remove_cobbler_profile(distro_name)
+    result = bmc.remove_cobbler_distro(distro_name)
+    
+    pprint(result)
+    

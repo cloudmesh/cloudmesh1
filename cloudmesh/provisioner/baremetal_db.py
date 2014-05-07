@@ -1,5 +1,4 @@
 from cloudmesh.util.logger import LOGGER
-from cloudmesh.inventory import Inventory
 from cloudmesh.config.cm_config import get_mongo_db
 from datetime import datetime
 #
@@ -87,6 +86,22 @@ class BaremetalDB:
     def connect_db(self, coll_name):
         return get_mongo_db(coll_name)
     
+    def init_base_document_structure(self):
+        elem = {"cm_kind" : "baremetal",
+                "cm_type" : "bm_inventory",
+                "bm_type" : "inventory_summary",
+                }
+        flag_insert = True
+        result = self.do_find(elem)
+        print result
+        if result["result"]:
+            if result["data"] and len(result["data"]) > 0:
+                flag_insert = False
+        if flag_insert:
+            elem["data"] = {}
+            result = self.do_insert(elem)
+        return result["result"]
+    
     def get_default_query(self):
         return {"cm_type": self.cm_type,
                 "cm_kind": self.cm_kind,
@@ -114,7 +129,7 @@ class BaremetalDB:
             if not result_cursor:
                 result = False
             else:
-                data = result_cursor.toArray()
+                data = list(result_cursor)
         except:
             result = False
         return {"result": result, "data": data}
@@ -341,11 +356,18 @@ class BaremetalDB:
 # test
 if __name__ == "__main__":
     bmdb = BaremetalDB()
+    """
     dict_computers = {"gravel": ["g03", ], 
                       "india": ["i02", ]
                       }
     result = bmdb.update_baremetal_computers(dict_computers, False)
     print "append bm result is: ", result
     result = bmdb.get_baremetal_computers()
+    """
+    """
+    unexist_elem = {"chen": "chen"}
+    result = bmdb.do_find_one(unexist_elem)
+    """
+    result = bmdb.init_base_document_structure()
     print result
     #result = bmdb.assign_baremetal_to_user(dict_computers, "testXXX")

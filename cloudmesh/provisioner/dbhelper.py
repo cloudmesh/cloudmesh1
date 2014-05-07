@@ -26,7 +26,7 @@ class DBHelper:
             if not result_cursor:
                 result = False
             else:
-                data = result_cursor[:]
+                data = list(result_cursor)
         except:
             result = False
         return {"result": result, "data": data}
