@@ -12,8 +12,8 @@ Usage:
 import os
 import getopt
 import sys
-from cloudmesh.util.banner import banner
-from cloudmesh.install.util import get_system
+from installation.banner import banner
+from installation.util import get_system
 
 def main():
     try:
