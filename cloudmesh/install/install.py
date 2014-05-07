@@ -12,6 +12,7 @@ import sys
 import os
 import platform
 from cloudmesh.util.util import banner
+from util import is_ubuntu, is_centos, is_osx
 
 ######################################################################
 # STOP IF PYTHON VERSION IS NOT 2.7.x
@@ -24,33 +25,11 @@ if major != 2 or (major == 2 and minor < 7):
 # BUG we need to ignore this in centos and install python 2.7
 
 
-def is_ubuntu():
-    """test sif the platform is ubuntu"""
-    (dist, version, release) = platform.dist()
-    if dist == "ubuntu" and version != "14.04":
-        print "Warning: %s %s is not tested" % (dist, version)
-    return dist == 'Ubuntu'
-
-def is_centos():
-    """test if the platform is centos"""
-    (dist, version, release) = platform.dist()
-    if dist == "centos" and version != "6.5":
-        print "Warning: %s %s is not tested" % (dist, version)
-    return dist == "centos"
-
-def is_osx():
-    osx = platform.system().lower() == 'darwin'
-    if osx:
-        os_version = platform.mac_ver()[0]
-        if os_version != '10.9.2':
-            osx = False
-            print "Warning: %s %s is not tested" % ('OSX', os_version)
-    return osx
-
 if not hasattr(sys, 'real_prefix'):
     print "ERROR: You are runing this script not inside a virtual machine"
     sys.exit()
 
+    
 try:
     from fabric.api import local,task 
 except:
@@ -187,7 +166,6 @@ def sphinx_updates():
 
 def install_command(arguments):
     if arguments["cloudmesh"]:
-        install_basic_requirements()
         deploy()
 
     elif arguments["system"]:
