@@ -9,6 +9,8 @@ from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import get_mongo_db
 from cloudmesh.config.ConfigDict import ConfigDict
 from datetime import datetime, timedelta
+from cloudmesh.provisioner.baremetal_db import BaremetalDB
+from cloudmesh.provisioner.baremetal_computer import BaremetalComputer
 from copy import deepcopy
 
 # ----------------------------------------------------------------------
@@ -255,6 +257,12 @@ class Inventory:
         # added by HC
         # init rack status
         self.generate_rack_status()
+        # init baremetal computer managemnt, maybe will be deprecated later
+        bdb = BaremetalDB()
+        bdb.init_base_document_structure()
+        # insert necessary mac info of baremetal computers to inventory
+        bmc = BaremetalComputer()
+        bmc.insert_mac_data_to_inventory()
 
 
     def cluster (self, name):
