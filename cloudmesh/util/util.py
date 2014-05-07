@@ -7,6 +7,7 @@ import functools
 import warnings
 from datetime import datetime, timedelta
 from pytimeparse.timeparse import timeparse
+from cloudmesh.util.banner import banner
 
 def parse_time_interval (time_start, time_end):
     """created time values for time_start and time_end, while time_end
@@ -215,25 +216,6 @@ def HEADING(txt=None):
 
     banner(txt)
 
-
-def banner(txt=None, c="#"):
-    """prints a banner of the form with a frame of # arround the txt::
-
-      ############################
-      # txt
-      ############################
-
-    .
-    
-    :param txt: a text message to be printed
-    :type txt: string
-    :param c: thecharacter used instead of c
-    :type c: character 
-    """
-    print
-    print "#", 70 * c
-    print "#", txt
-    print "#", 70 * c
 
 
 
