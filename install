@@ -1,23 +1,54 @@
-#! /bin/sh
+#!/usr/bin/env python
+"""
+Usage:
+    install -h | --help
+    install --version
+    install system
+    install cloudmesh
+    install query
+    install vagrant    
+"""
 
-if [ $1=="system" ]; then
-   echo "deploy system"
-   UNAME_INFO=`uname -a`
+import os
+import getopt
+import sys
 
-   echo $UNAME_INFO
-   case "$UNAME_INFO" in 
-      *Ubuntu*) 
-	   sh install-scripts/ubuntu.sh
-	   exit 0
-	   ;;
-       *other*)
-	   echo "not implemented yet"
-	   exit 1
-	   ;;
-       *)  echo "else"
-	   exit 1
-	   ;;
-   esac
-fi
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "h", ["help"])
+        print opts, args
+        if (opts == [] and args == []):
+            print "ERROR: no parameter defined"
+            print __doc__
+            sys.exit(1)
+    except getopt.error, msg:
+        print msg
+        print "for help use --help"
+        sys.exit(2)
 
-python install-scripts/install.py $@
+    # parse for help
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            os.system("install-scripts/install.py help")
+            sys.exit(0)
+
+    # 
+    if "ubuntu" in args:
+        #os.system("install-scripts/ubuntu.sh")
+        print "OOOOO"
+        sys.exit(0)
+
+    arguments = ' '.join(args)
+    print arguments
+    try:
+
+        os.system('install-scripts/install.py "%s"' % arguments)
+
+    except Exception, e:
+        print "ERROR: Your environment may not be properly configured."
+        print "       Have you run the command"
+        print "         install ubuntu/centos/osx"
+        
+        
+if __name__ == "__main__":
+    main()
