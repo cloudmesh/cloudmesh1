@@ -12,37 +12,45 @@ Usage:
 import os
 import getopt
 import sys
+from cloudmesh.util.util import banner
+from cloudmesh.install.util import get_system
 
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "h", ["help"])
-        print opts, args
         if (opts == [] and args == []):
-            print "ERROR: no parameter defined"
+            banner( "ERROR: no parameter defined")
             print __doc__
             sys.exit(1)
     except getopt.error, msg:
         print msg
-        print "for help use --help"
+        banner( "for help use --help")
         sys.exit(2)
 
     # parse for help
     for o, a in opts:
         if o in ("-h", "--help"):
-            os.system("install-scripts/install.py help")
+            os.system("cloudmesh/install/install.py help")
             sys.exit(0)
 
     # 
-    if "ubuntu" in args:
-        #os.system("install-scripts/ubuntu.sh")
-        print "OOOOO"
+    if "system" in args:
+
+        os_system = get_system()
+
+        try:    
+            os.system("bin/prepare-%s.sh" % os_system)
+        except:
+            print "OS distribution not supported; please see documatation for manual installation instructions."
+            sys.exit(1)
+        
         sys.exit(0)
 
     arguments = ' '.join(args)
-    print arguments
+    banner (arguments)
     try:
 
-        os.system('install-scripts/install.py "%s"' % arguments)
+        os.system('cloudmesh/install/install.py "%s"' % arguments)
 
     except Exception, e:
         print "ERROR: Your environment may not be properly configured."
