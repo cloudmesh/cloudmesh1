@@ -3,59 +3,78 @@
 Usage:
     install -h | --help
     install --version
+    install system
     install cloudmesh
     install query
     install vagrant    
 """
 import sys
 import os
-
-if not hasattr(sys, 'real_prefix'):
-    print "ERROR: You are runing this script not inside a virtual machine"
-    sys.exit()
-
-try:
-    from fabric.api import local,task 
-except:
-    os.system("pip install fabric")
-    from fabric.api import local, task
-
-try:
-    from docopt import docopt
-except:
-    os.system("pip install docopt")
-    from docopt import docopt
-    
 import platform
-import os
+from cloudmesh.util.util import banner
+
+######################################################################
+# STOP IF PYTHON VERSION IS NOT 2.7.x
+######################################################################
+(major, minor, micro, releaselevel, serial) = sys.version_info
+if major != 2 or (major == 2 and minor < 7):
+        print "Your version of python is not supported.  Please install python 2.7 for cloudmesh"
+        sys.exit()
+
+# BUG we need to ignore this in centos and install python 2.7
+
 
 def is_ubuntu():
     """test sif the platform is ubuntu"""
-    return platform.dist()[0] == 'Ubuntu'
+    (dist, version, release) = platform.dist()
+    if dist == "ubuntu" and version != "14.04":
+        print "Warning: %s %s is not tested" % (dist, version)
+    return dist == 'Ubuntu'
 
 def is_centos():
     """test if the platform is centos"""
-    (centos, version, release) = platform.dist()
-    if centos == "centos" and version != "6.5":
-        print "Warning: centos %s is not tested" % version
-    return centos == "centos"
+    (dist, version, release) = platform.dist()
+    if dist == "centos" and version != "6.5":
+        print "Warning: %s %s is not tested" % (dist, version)
+    return dist == "centos"
 
 def is_osx():
-    return platform.system().lower() == 'darwin'
+    osx = platform.system().lower() == 'darwin'
+    if osx:
+        os_version = platform.mac_ver()[0]
+        if os_version != '10.9.2':
+            osx = False
+            print "Warning: %s %s is not tested" % ('OSX', os_version)
+    return osx
+
+
+def install_basic_requirements():
+        
+    if not hasattr(sys, 'real_prefix'):
+        print "ERROR: You are runing this script not inside a virtual machine"
+        sys.exit()
+
+    try:
+        from fabric.api import local,task 
+    except:
+        os.system("pip install fabric")
+        from fabric.api import local, task
+
+    try:
+        from docopt import docopt
+    except:
+        os.system("pip install docopt")
+        from docopt import docopt
+
 
 @task
 def deploy():
     """deploys the system on supported distributions"""
     # download()
-    (major, minor, micro, releaselevel, serial) = sys.version_info
+
     print "version_info", sys.version_info
     print "sys.prefix", sys.prefix
-    if major != 2 or (major == 2 and minor < 7):
-        print "Your version of python is not supported.  Please install python 2.7 for cloudmesh"
-        sys.exit()
-    if not hasattr(sys, 'real_prefix'):
-        print "You do not appear to be in a vitualenv.  Please create and/or activate a virtualenv for cloudmesh installation"
-        sys.exit()
+
     if is_ubuntu():
         ubuntu()
     elif is_centos():
@@ -117,7 +136,10 @@ def ubuntu():
                       "mongodb-server"])    
     install_packages(["rabbitmq-server"])
     install()
-    install_mongodb()#important that mongo_db installation be done only after all we install all needed python packages(as per requiremnts.txt)
+    install_mongodb()
+
+    # important that mongo_db installation be done only after all we
+    # install all needed python packages(as per requiremnts.txt)
 
 def centos():
     install_packages (["git",
@@ -170,8 +192,23 @@ def sphinx_updates():
 
 def install_command(arguments):
     if arguments["cloudmesh"]:
+        install_basic_requirements():
         deploy()
+
+    elif arguments["system"]:
+        
+        banner("Installing Ubuntu System Requirements")
+
+        if is_ubuntu():
+            ubuntu()
+        elif is_osx():
+            osx()
+        elif is_centos()
+            centos()
+
+
     elif arguments["query"]:
+
         import platform
         print "System:    ", platform.system()
         #print "Uname:     ", platform.uname()                                          print "Machine:   ", platform.machine()                        
