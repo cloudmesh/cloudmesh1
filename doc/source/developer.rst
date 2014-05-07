@@ -22,14 +22,19 @@ additional tools to make contributions easier.
    Please read the entire manual before executing any of the commands
    listed below. Only if you understand the workflow and have become
    familiar with this manual you can follow the steps. If any step
-   needs correction or better explanation, please get in contagt with
+   needs correction or better explanation, please get in contact with
    us with your improvement suggestions.
 
 You will need to use **github** and **virtualenv**. We do **NOT**
 support any use of cloudmesh without `virtualenv`.
 
 Furthermore, we assume that you use **ubuntu 14.04** as your
-development environment.
+development environment. Although we started including information for
+other OS, we have not verified if they work.
+
+
+Setting up the environment
+===========================
 
 Github
 =======
@@ -42,7 +47,7 @@ you can contribute to cloudmesh and if a membership is approriate.
 .. note::
 
    If you are not a member you still can check out the code from
-   github and further develop it whil communicating the changes to
+   github and further develop it and communicating the changes to
    us. Please contact Gregor von Laszewski at laszewski@gmial.com.
 
 
@@ -59,18 +64,27 @@ check code back into github.
 If you do not have git on your machine
 you can get it as follows.
 
-ubuntu::
+ubuntu:
 
-    $ sudo apt-get install git
+    ::
+
+      $ sudo apt-get install git
 
 
-Centos/RHEL::
+Centos/RHEL:
 
-    $ sudo yum install git
+    ::
 
-OSX::
+       $ sudo yum install git
 
-    $ xcode-select --install
+
+OSX:
+
+    Please obtain and install xcode as documented in 
+      * https://developer.apple.com/xcode/downloads/
+    In a terminal windo, execute::
+    
+       $ xcode-select --install
 
 If you use a different operating system, please consult how to install
 it there.
@@ -116,17 +130,7 @@ Some developers may prefer using https for accessing git::
 We recommend that you use the non https version if you are part of the
 development team as it is much faster.
 
-Setting up the environment
-===========================
-For the rest of the section we will assume that you are working in the cloudmesh directory. You can get there after cloning by ::
-    
-    $ cd cloudmesh
 
-For ubuntu systems there is a ready-made to get all the pre-requisites install. To run this script do ::
-
-    $ ./install-scripts/ubuntu.sh
-
-If you are using ubuntu and have run the above script you can skip all steps until the section on activating virtualenv. These steps are relevant for osx and cent-os or if you want to do a manual installation instead of using the script on ubuntu.
 
 Pip
 ------------
@@ -219,8 +223,20 @@ alias such as::
 This way if you type dev you cd into the development directory
 
 
+
 Quick deployment 
 ===========================
+
+For the rest of the section we will assume that you are working in the cloudmesh directory. You can get there after cloning by ::
+    
+    $ cd cloudmesh
+
+For ubuntu systems there is a ready-made to get all the pre-requisites install. To run this script do ::
+
+    $ ./install-scripts/ubuntu.sh
+
+If you are using ubuntu and have run the above script you can skip all steps until the section on activating virtualenv. These steps are relevant for osx and cent-os or if you want to do a manual installation instead of using the script on ubuntu.
+
 Once you are ready with the envrionment you can start the deployment of cloudmesh. The steps for that are documented as follows
 
 YAML files
