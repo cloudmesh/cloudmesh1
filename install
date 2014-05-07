@@ -1,6 +1,6 @@
 #! /bin/sh
 
-if [ $1="system" ]; then
+if [ $1=="system" ]; then
    echo "deploy system"
    UNAME_INFO=`uname -a`
 
