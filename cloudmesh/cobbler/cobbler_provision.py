@@ -187,12 +187,12 @@ class CobblerProvision:
         return len(result) if result else 0 
     
     def get_object_child_list(self, object_type, name, handler=None):
-        """
-        get the child list of a cobbler object 'distro' and 'profile'
-        ..param:: object_type a type in ['distro', 'profile']
-        ..param:: name the specific name in an object_type
-        ..param:: handler the Cobbler API handler
-        ..return:: None if object_type is NOT in ['distro', 'profile'], empty list if there is no child, otherwise return ['child', 'child',]
+        """get the child list of a cobbler object **distro** and **profile**
+        :param string object_type: a type in ['distro', 'profile']
+        :param string name: the specific name in an object_type
+        :param BootAPI handler: the Cobbler API handler
+        :returns: None if object_type is NOT in ['distro', 'profile'], empty list if there is no child, otherwise return ['child', 'child',]
+        :rtype: list
         """
         pobjects = {"distro": "profile", 
                     "profile": "system",
@@ -246,10 +246,12 @@ class CobblerProvision:
     
     @authorization
     def import_distro(self, udistro_name, **kwargs):
-        """
-          add a distribution to cobbler with import command.
-          The first step is to fetch image file given by parameter url with wget, the url MUST be http, ftp, https.
-          Then, moust the image, finally import image with cobbler import command
+        """Add a distribution to cobbler with import command.
+        The first step is to fetch image file given by parameter url with wget, the url MUST be http, ftp, https.
+        Then, moust the image, finally import iso with cobbler import command
+        :param string udistro_name: the distro name that user specified
+        :param dict kwargs: a dict contains the following {"url": "iso url",}
+        :returns: a dict defined in :py:func:`_simple_result_dict`
         """
         url = kwargs.get("url", "")
         dir_base = "/tmp"
@@ -285,48 +287,83 @@ class CobblerProvision:
             return self._simple_result_dict(True if distro_name else False, "Add distro {0} {1}successfully.".format(udistro_name, "" if distro_name else "un"), data=distro_return_data)
         return self._simple_result_dict(False, "Failed to mount unsupported image [{0}] in add distro {1}.".format(url, udistro_name))
     
+    @cobbler_object_exist("distro")
+    @authorization
+    def update_distro(self, distro_name, *args, **kwargs):
+        """update the distro, typical fields are comment, owners.
+        :param string distro_name: the name of a distro
+        :param dict kwargs: a sub dict of {"comment": "string", "owners":"string",}
+        :returns: a dict defined in :py:func:`_simple_result_dict`
+        """
+        # fields that allow update, if a field is not state in common_args, just ignore it
+        common_args = "comment owners".split()
+        cmd_args_edit = ["cobbler", "distro", "edit", "--name={0}".format(distro_name), ]
+        # common distro parameters
+        cmd_args = cmd_args_edit + self._merge_arg_list(common_args, kwargs)
+        flag_result = True
+        if len(cmd_args) > len(cmd_args_edit):
+            flag_result = self.shell_command(cmd_args)
+        return self._simple_result_dict(flag_result, "Update distro {0} {1}successfully.".format(distro_name, "" if flag_result else "un"))
+        
     @cobbler_object_exist("profile", False)
     @authorization
     def add_profile(self, profile_name, *args, **kwargs):
+        """Add a new profile
+        :param string profile_name: the profile name that user specified
+        :param dict kwargs: a sub dict of {"distro": "name", "kickstart":"filename","comment":"string", "owners":"string",}
+        :returns: a dict defined in :py:func:`_simple_result_dict`
         """
-          add a new profile
-        """
-        if len(args) >= 2 and args[0] in self._list_item_names("distro") and self.file_exist(args[1]):
-            distro_name = args[0]
-            kickstart_file = args[1]
-        else:
-            msg = "Must provide a distribution name and a kickstart file to add profile {0}.".format(profile_name)\
-                  if len(args) < 2 else "Distro {0} or kickstart file {1} to add profile {1} MUST exist.".format(args[0], args[1], profile_name)
-            return self._simple_result_dict(False, msg)
-        cmd_args = ["cobbler", "profile", "add", 
-                    "--name={0}".format(profile_name),
-                    "--distro={0}".format(distro_name), 
-                    "--kickstart={0}".format(kickstart_file),
-                    ]
-        flag_result = self.shell_command(cmd_args)
-        return self._simple_result_dict(flag_result, "Add profile {0} {1}successfully.".format(profile_name, "" if flag_result else "un"))
+        # check the validation of distro
+        distro_name = kwargs.get("distro", None)
+        if distro_name and distro_name in self._list_item_names("distro"):
+            # check the validation of kickstart file
+            kickstart_file = kwargs.get("kickstart", None)
+            if kickstart_file:
+                if not self.file_exist(kickstart_file):
+                    return self._simple_result_dict(False, "Must provide a valid kickstart file.")
+            cmd_args = ["cobbler", "profile", "add", 
+                        "--name={0}".format(profile_name),
+                        "--distro={0}".format(distro_name), 
+                        ]
+            flag_result = self.shell_command(cmd_args)
+            if flag_result:
+                kwargs.pop("distro")
+                flag_result = self._edit_profile(profile_name, kwargs)
+            return self._simple_result_dict(flag_result, "Add profile {0} {1}successfully.".format(profile_name, "" if flag_result else "un"))
+        return self._simple_result_dict(False, "Must provide a valid distro name.")
         
     @cobbler_object_exist("profile")
     @authorization
     def update_profile(self, profile_name, *args, **kwargs):
+        """update a profile
+        :param string profile_name: the profile name that user specified
+        :param dict kwargs: a sub dict of {"distro": "name", "kickstart":"filename","comment":"string", "owners":"string",}
+        :returns: a dict defined in :py:func:`_simple_result_dict`
         """
-          update the kickstart file in the profile
-        """
-        if len(args) > 0 and self.file_exist(args[0]):
-            kickstart_file = args[0]
-        else:
-            msg = "Must provide a kickstart file to update profile {0}".format(profile_name) if len(args) == 0\
-                  else "kickstart file {0} to update profile {1} does NOT exist.".format(args[0], profile_name)
-            return self._simple_result_dict(False, msg)
-        cmd_args = ["cobbler", "profile", "edit", 
-                    "--name={0}".format(profile_name), 
-                    "--kickstart={0}".format(kickstart_file),
-                    ]
-        flag_result = self.shell_command(cmd_args)
-        return self._simple_result_dict(flag_result, 
-                                        "update profile [{0}] with kickstart file [{1}] {2}successfully."\
-                                        .format(profile_name, kickstart_file, "" if flag_result else "un")
-                                        )
+        # check the validation of distro
+        distro_name = kwargs.get("distro", None)
+        if distro_name:
+            if distro_name not in self._list_item_names("distro"):
+                return self._simple_result_dict(False, "Must provide a valid distro name.")
+        # check the validation of kickstart file
+        kickstart_file = kwargs.get("kickstart", None)
+        if kickstart_file:
+            if not self.file_exist(kickstart_file):
+                return self._simple_result_dict(False, "Must provide a valid kickstart file.")
+            
+        flag_result = self._edit_profile(profile_name, kwargs)
+        return self._simple_result_dict(flag_result, "Update profile {0} {1}successfully.".format(profile_name, "" if flag_result else "un"))
+        
+    def _edit_profile(self, profile_name, contents):
+        # fields that allow update, if a field is not state in common_args, just ignore it
+        common_args = "distro kickstart comment owners".split()
+        cmd_args_edit = ["cobbler", "profile", "edit", "--name={0}".format(profile_name), ]
+        # common profile parameters
+        cmd_args = cmd_args_edit + self._merge_arg_list(common_args, contents)
+        flag_result = True
+        if len(cmd_args) > len(cmd_args_edit):
+            flag_result = self.shell_command(cmd_args)
+        return self._simple_result_dict(flag_result, "Update profile {0} {1}successfully.".format(profile_name, "" if flag_result else "un"))
         
     @cobbler_object_exist("system", False)
     @authorization
@@ -385,6 +422,7 @@ class CobblerProvision:
                     ]
         flag_result = self.shell_command(cmd_args)
         if flag_result:
+            contents.pop("profile")
             flag_result = self._edit_system(system_name, contents)
             # add others of system failed, MUST remove the added new system completely
             if not flag_result:
@@ -394,38 +432,26 @@ class CobblerProvision:
     @cobbler_object_exist("system")
     @authorization
     def update_system(self, system_name, **kwargs):
-        """
-          update system with 2 steps. The first step is updating profile if needed.
-          The second step is to update other objects in system.
+        """Update a system.
+        update system with 2 steps. The first step is checking the validation of profile if needed.
+        The second step is to update the attributes in system.
+        :param string system_name: the system name that user specified
+        :param dict kwargs: a sub dict of system dict
         """
         contents = kwargs
-        # update profile firstly
-        if "profile" in contents:
-            if contents["profile"] not in self._list_item_names("profile"):
-                return self._simple_result_dict(False, "Failed to update system, because profile [{0}] does NOT exist.".format(contents["profile"]))
-            cmd_args = ["cobbler", "system", "edit", "--name={0}".format(system_name)]
-            cmd_args += ["--profile={0}".format(contents["profile"])]
-            if not self.shell_command(cmd_args):
-                return self._simple_result_dict(False, "Failed to update system [{0}] with unknown error.".format(system_name))
+        profile_name = contents.get("profile", None)
+        if profile_name:
+            if profile_name not in self._list_item_names("profile"):
+                return self._simple_result_dict(False, "Failed to update system, because profile [{0}] does NOT exist.".format(profile_name))
         # update other objects in system
         flag_result = self._edit_system(system_name, contents)
         return self._simple_result_dict(flag_result, "Update system {0} {1}successfully.".format(system_name, "" if flag_result else "un"))
-    
-    @authorization
-    def update_kickstart(self, kickstart_name, lines, **kwargs):
-        """
-          update kickstart file with list of lines.
-        """
-        # update profile firstly
-        with open("{0}/{1}".format(self.KICKSTART_LOCATION, kickstart_name), "w") as f:
-            f.write("\n".join(lines))
-        return self._simple_result_dict(True, "Update kickstart {0} successfully.".format(kickstart_name))
     
     def _edit_system(self, system_name, contents):
         """
           edit system of system_name with contents
         """
-        system_args = "gateway hostname kopts ksmeta name-servers name-servers-search owners comment".split()
+        system_args = "profile gateway hostname kopts ksmeta name-servers name-servers-search owners comment".split()
         power_args = "power-type power-address power-user power-pass power-id".split()
         interface_args = "ip-address mac-address netmask static management".split()
         cmd_args_edit = ["cobbler", "system", "edit", "--name={0}".format(system_name), ]
@@ -451,6 +477,16 @@ class CobblerProvision:
                 if not flag_result:
                     break
         return flag_result
+    
+    @authorization
+    def update_kickstart(self, kickstart_name, lines, **kwargs):
+        """
+          update kickstart file with list of lines.
+        """
+        # update profile firstly
+        with open("{0}/{1}".format(self.KICKSTART_LOCATION, kickstart_name), "w") as f:
+            f.write("\n".join(lines))
+        return self._simple_result_dict(True, "Update kickstart {0} successfully.".format(kickstart_name))
     
     @authorization
     def remove_distro(self, distro_name, **kwargs):

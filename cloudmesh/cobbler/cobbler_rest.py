@@ -79,11 +79,11 @@ def process_objects(objects, name):
         if item == "distro":
             return cp.import_distro(name, **data)
         if item == "profile":
-            distro = data.get("distro", "")
-            kickstart = data.get("kickstart", "")
-            if not kickstart.startswith("/"):
-                kickstart = "{0}/{1}".format(KICKSTART_LOCATION, kickstart)
-            return cp.add_profile(name, distro, kickstart, **data)
+            kickstart_file = data.get("kickstart", None)
+            if kickstart_file:
+                if not kickstart_file.startswith("/"):
+                    data["kickstart"] = "{0}/{1}".format(KICKSTART_LOCATION, kickstart_file)
+            return cp.add_profile(name, **data)
         if item == "system":
             return cp.add_system(name, **data)
         if item == "kickstart":
@@ -91,12 +91,13 @@ def process_objects(objects, name):
             return cp.update_kickstart(name, lines, **data)
     if method == "PUT":
         if item == "distro":
-            return cp._simple_result_dict(False, "Object type distro does NOT support PUT operation.")
+            return cp.update_distro(name, **data)
         if item == "profile":
-            kickstart = data.get("kickstart", "")
-            if not kickstart.startswith("/"):
-                kickstart = "{0}/{1}".format(KICKSTART_LOCATION, kickstart)
-            return cp.update_profile(name, kickstart, **data)
+            kickstart_file = data.get("kickstart", None)
+            if kickstart_file:
+                if not kickstart_file.startswith("/"):
+                    data["kickstart"] = "{0}/{1}".format(KICKSTART_LOCATION, kickstart_file)
+            return cp.update_profile(name, **data)
         if item == "system":
             return cp.update_system(name, **data)
         if item == "kickstart":
