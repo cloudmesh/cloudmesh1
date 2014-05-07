@@ -41,7 +41,9 @@ II. Developers Documentation
    :maxdepth: -1
   
    developer
+   image
    celery   
+    
 
 III. Execution
 ========

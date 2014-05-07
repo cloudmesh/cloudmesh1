@@ -4,7 +4,10 @@ from sh import ping as sh_ping
 # from pprint import pprint
 
 def ping(host):
-    '''ping the specified host'''
+    '''ping the specified host.
+
+    :param host: the name or ip of the host
+    '''
     try:
         r = sh_ping("-o", "-c", "1", host).strip().split("\n")
     except:

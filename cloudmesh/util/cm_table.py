@@ -4,15 +4,21 @@ class cm_table:
     """
     Class to print a table in various formats.
 
-    format = HTML | ASCII | "%20s"
+    ::
+    
+      format = HTML | ASCII | "%20s"
     
     type is not used and wil be in future removed
 
-    columns = number of columns
+    ::
+    
+      columns = number of columns
 
     structure is an array of rows
 
-    header = True the firts row is a headline
+    ::
+
+      header = True the firts row is a headline
     """
 
     _content = ""
