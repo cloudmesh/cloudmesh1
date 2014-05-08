@@ -67,7 +67,7 @@ def rain_command(arguments):
 
 
     """
-    arguments = docopt(self.__doc__)
+
     for list in ["HOSTS", "USERS", "PROJECTS","--project", "--user"]:
         try:
             expanded_list = hostlist.expand_hostlist(arguments[list])
@@ -231,6 +231,7 @@ def rain_command(arguments):
                     print "now provision host: %s" % host
 
 if __name__ == '__main__':
+    arguments = docopt(rain_command.__doc__)
     rain_command(arguments)
     
     """
