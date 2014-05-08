@@ -21,27 +21,56 @@ class cm_shell_cloud:
     def do_cloud(self, args, arguments):
         """
         Usage:
-               cloud --on | --off <name>
-               cloud set
-               cloud NAME
-               cloud info [NAME]
-               cloud on NAME
-               cloud off NAME
-
-
-        Manages the cloud
+            cloud list 
+            cloud info [NAME|all]
+            cloud NAME
+            cloud select
+            cloud --on | --off NAME
+            cloud on NAME
+            cloud off NAME
+            cloud add [--format=FORMAT] CLOUD
+               
+        Manages the clouds
 
         Arguments:
 
           NAME           The name of a service or server
-
+          JSON           A JSON
+          CLOUD          The cloud to be added
 
         Options:
 
            -v       verbose mode
            --on     Activate the cloud
            --off    Deactivate the cloud
+           --format=FORMAT  The format of the activation description.
+                            [default: yaml]
+        Description:
 
+            cloud list
+                Lists the cloud names
+            
+            cloud info [NAME]
+                Provides the available information about the clouds
+                and their status. A cloud can be activated or deactivated.
+                If no name is specified the default cloud is used.
+                If the name all is used, all clouds are displayed
+            
+            cloud NAME
+                setst the cloud with the name to the default
+
+            cloud select
+                selects a cloud from the name of clouds
+                
+            cloud --on | --off NAME
+            cloud on NAME
+            cloud off NAME
+                activates or deactivates a cloud with a given name
+                            
+            cloud add [--format=FORMAT] CLOUD
+                adds a cloud to the list of clouds.
+                The format can either be `json` or `yaml`.
+        
         """
         log.info(arguments)
         print "<", args, ">"

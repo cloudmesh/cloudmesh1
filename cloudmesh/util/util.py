@@ -9,6 +9,10 @@ from datetime import datetime, timedelta
 from pytimeparse.timeparse import timeparse
 from cloudmesh.util.banner import banner
 
+def not_implemented():
+    print "ERROR: not yet implemented"
+
+
 def parse_time_interval (time_start, time_end):
     """created time values for time_start and time_end, while time_end
     will be replaced with time_start+ a duration if the duration is

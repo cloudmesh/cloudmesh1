@@ -29,7 +29,6 @@ class cm_shell_vm:
     clouds_activated = False
     
     def activate_cm_shell_vm(self):
-        print "Activate vm shell commands"
         self.clouds_activated = False
         
     #Check if there are any active clouds for user
