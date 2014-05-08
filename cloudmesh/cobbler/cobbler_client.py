@@ -33,16 +33,16 @@ Description:
 
   describe here what the commands do
    
-  glow_client.py list object_type
+  cobbler_client.py list object_type
     
     list names in object type ...
         
-  glow_client.py get object_type item_name
+  cobbler_client.py get object_type item_name
   
     get the detail report of item_name in object_type
     
-  glow_client.py add object_type data_file
-  glow_client.py update object_type data_file
+  cobbler_client.py add object_type data_file
+  cobbler_client.py update object_type data_file
   
     add the data object in data_file belongs to object_type to cobbler.
       examples:
@@ -81,11 +81,11 @@ Description:
                             }
                           ]
            }
-  glow_client.py remove object_type item_name
+  cobbler_client.py remove object_type item_name
   
       remove an item_name in object_type
       
-  glow_client.py remove interface system_name item_name
+  cobbler_client.py remove interface system_name item_name
   
       remove the interface item_name form system system_name
       
