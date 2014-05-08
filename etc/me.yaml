@@ -2,7 +2,9 @@ meta:
   kind: me
   yaml_version: 1.2
 
-portalname: {{portalname}}
+username:
+  portal: {{portalname}}
+  hp: None
 
 profile:
     firstname: {{profile.firstname}}
@@ -10,16 +12,26 @@ profile:
     email: {{profile.email}}
 
 password:
-  sierra_openstack_grizzly: {{ passwords.sierra_openstack_grizzly }}
-  hp: None
-  hp_east: None
+  sierra_openstack_grizzly: 
+      username: {{username.portal}}
+      credential:
+         OS_PASSWORD: {{ passwords.sierra_openstack_grizzly }}
+         OS_TENANT_NAME: {{ passwords.sierra_openstack_grizzly }}
+  hp: {{username.hp}}
+      credential:
+         OS_PASSWORD: {{ passwords.sierra_openstack_grizzly }}
+         OS_TENANT_NAME: {{ passwords.sierra_openstack_grizzly }}
+  hp_east:
+      username: {{username.hp}}
+      credential:
+         OS_PASSWORD: {{ passwords.sierra_openstack_grizzly }}
+         OS_TENANT_NAME: {{ passwords.sierra_openstack_grizzly }}
   alamo:
-    EC2_ACCESS_KEY: {{passwords.alamo.EC2_ACCESS_KEY}}
-    EC2_ACCESS_KEY: {{passwords.alamo.EC2_SECERET_KEY}}
+    username: {{username.portal}}
+    credential:
+        EC2_ACCESS_KEY: {{passwords.alamo.credential.EC2_ACCESS_KEY}}
+        EC2_ACCESS_KEY: {{passwords.alamo.credential.EC2_SECERET_KEY}}
 
-username:
-  hp: None
-  hp_east: None
 
 azure:
   subscriptionid: None
