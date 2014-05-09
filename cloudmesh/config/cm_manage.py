@@ -1,61 +1,4 @@
 #! /usr/bin/env python
-"""cm-manage config
-------------
-Command to generate rc files from our cloudmesh configuration files.
-
-Usage:
-  cm-manage config projects list
-  cm-manage config projects
-  cm-manage config [-f FILE] [-o OUT] [-p PROJECT] cloud NAME [-]
-  cm-manage config dump [--format=(yaml|dict)]
-  cm-manage config init [-o OUT] [-u USER]
-  cm-manage config list
-  cm-manage config password NAME
-  cm-manage config show passwords
-  cm-manage config fetch [-u USER] [-r HOST] 
-  cm-manage --version
-  cm-manage --help
-
-This program generates form a YAML file containing the login
-information for a cloud an rc file that can be used to later source
-it.
-
-Example:
-  we assume the yaml file has an entry india-openstack::
-
-    cm-manage config -o novarc india-openstack
-    source novarc
-
-  This will create a novarc file and than you can source it::
-
-     cm-manage config ? -
-
-  Presents a selction of cloud choices and writes the choice into a
-  file called ~/.futuregrid/novarc
-
-Arguments:
-  NAME                 name of the cloud
-  
-Options:
-  -h --help            show this help message and exit
-
-  -v --version         show version and exit
-
-  -f NAME --file=NAME  the Name of the cloud to be specified, if ? a selection is presented
-
-  -o OUT --out=OUT     writes the result in the specifide file
-
-  -p PROJECT --project=PROJECT   selects a project (e.g. for eucalyptus which has project-specific environments)
-
-  -u USER --user=USER  the user (login) name
-
-  -r HOST --remote=HOST  the host machine on which the yaml file is located in the ~/.futuregrid directory [default: sierra.futuregrid.org]
-
-  -d  --debug          debug
-
-  -                    this option is a - at the end of the command. If data is written to a file it is also put out to stdout
-
-"""
 from pprint import pprint
 import getpass
 import yaml
@@ -85,10 +28,73 @@ def DEBUG(label, var):
         print 70 * "-"
 
 
-def main():
+def cm_manage():
+    """Usage:
+      cm-manage config projects list
+      cm-manage config projects
+      cm-manage config [-f FILE] [-o OUT] [-p PROJECT] cloud NAME [-]
+      cm-manage config dump [--format=(yaml|dict)]
+      cm-manage config init [-o OUT] [-u USER]
+      cm-manage config list
+      cm-manage config password NAME
+      cm-manage config show passwords
+      cm-manage config fetch [-u USER] [-r HOST] 
+      cm-manage --version
+      cm-manage --help
+
+    Arguments:
+      NAME                 name of the cloud
+
+    Options:
+      -h --help            show this help message and exit
+
+      -v --version         show version and exit
+
+      -f NAME --file=NAME  the Name of the cloud to be specified,
+                           if ? a selection is presented
+
+      -o OUT --out=OUT     writes the result in the specifide file
+
+      -p PROJECT --project=PROJECT   selects a project (e.g. for eucalyptus
+                                     which has project-specific environments)
+
+      -u USER --user=USER  the user (login) name
+
+      -r HOST --remote=HOST  the host machine on which the yaml file is
+                             located in the ~/.futuregrid directory
+                             [default: sierra.futuregrid.org]
+
+      -d  --debug          debug
+
+      -                    this option is a - at the end of the command.
+                           If data is written to a file it is also put out to stdout
+
+    Description:
+
+       Command to generate rc files from our cloudmesh configuration files.
+
+        This program generates form a YAML file containing the login
+        information for a cloud an rc file that can be used to later source 
+        it.
+
+    Example:
+        we assume the yaml file has an entry india-openstack::
+
+        cm-manage config -o novarc india-openstack
+        source novarc
+
+      This will create a novarc file and than you can source it::
+
+         cm-manage config ? -
+
+      Presents a selction of cloud choices and writes the choice into a
+      file called ~/.futuregrid/novarc
+
+
+    """
 
     default_path = '.futuregrid/novarc'
-    arguments = docopt(__doc__, version='0.8')
+    arguments = docopt(cm_manage.__doc__)
 
     DEBUG("arguments", arguments)
 
@@ -361,4 +367,4 @@ def main():
     #
 
 if __name__ == '__main__':
-    main()
+    cm_manage(sys.argv)
