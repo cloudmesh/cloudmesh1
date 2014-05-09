@@ -72,7 +72,11 @@ def cm_metric_command(arguments):
     print arguments
     log.info(arguments)
 
-    
+def main():
+    arguments = docopt(cm_metric_command.__doc__)
+    cm_metric_command(arguments)
+
+        
 if __name__ == "__main__":
 #    print "test correct"
 #    clouds = ['sierra_openstack_grizzly']
@@ -81,5 +85,4 @@ if __name__ == "__main__":
 #    ls = cm_shell_metric()
 #    ls._printList('image', fieldList, clouds)
 #
-    arguments = docopt(cm_metric_command.__doc__)
-    cm_metric_command(arguments)
+    main()
