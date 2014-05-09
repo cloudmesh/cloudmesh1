@@ -230,9 +230,12 @@ def rain_command(arguments):
                 for host in hosts:
                     print "now provision host: %s" % host
 
-if __name__ == '__main__':
+def main():
     arguments = docopt(rain_command.__doc__)
     rain_command(arguments)
+    
+if __name__ == '__main__':
+    main()
     
     """
     timeparse('1.2 minutes')32m
