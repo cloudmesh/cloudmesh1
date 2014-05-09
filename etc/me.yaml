@@ -11,35 +11,41 @@ profile:
     lastname: {{profile.lastname}}
     email: {{profile.email}}
 
-password:
+clouds:
   sierra_openstack_grizzly: 
       username: {{username.portal}}
       credential:
-         OS_PASSWORD: {{ passwords.sierra_openstack_grizzly }}
-         OS_TENANT_NAME: {{ passwords.sierra_openstack_grizzly }}
-  hp: {{username.hp}}
+         OS_PASSWORD: {{ clouds.sierra_openstack_grizzly.credential.OS_PASSWORD }}
+         OS_TENANT_NAME: {{ clouds.sierra_openstack_grizzly.credential.OS_TENNANT_NAME }}
+  india_openstack_havana: 
+      username: {{username.portal}}
       credential:
-         OS_PASSWORD: {{ passwords.sierra_openstack_grizzly }}
-         OS_TENANT_NAME: {{ passwords.sierra_openstack_grizzly }}
-  hp_east:
-      username: {{username.hp}}
-      credential:
-         OS_PASSWORD: {{ passwords.sierra_openstack_grizzly }}
-         OS_TENANT_NAME: {{ passwords.sierra_openstack_grizzly }}
+         OS_PASSWORD: {{ clouds.india_openstack_havana.credential.OS_PASSWORD }}
+         OS_TENANT_NAME: {{ clouds.india_openstack_havana.credential.OS_TENNANT_NAME }}
   alamo:
     username: {{username.portal}}
     credential:
-        EC2_ACCESS_KEY: {{passwords.alamo.credential.EC2_ACCESS_KEY}}
-        EC2_ACCESS_KEY: {{passwords.alamo.credential.EC2_SECERET_KEY}}
-
+        EC2_ACCESS_KEY: {{clouds.alamo.credential.EC2_ACCESS_KEY}}
+        EC2_SECRET_KEY: {{clouds.alamo.credential.EC2_SECERET_KEY}}
+  hp: 
+      username: {{clouds.hp.username}}
+      credential:
+         OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
+         OS_TENANT_NAME: {{ clouds.credential.OS_TENNANT_NAME }}
+  hp_east:
+      username: {{clouds.hp.username}}
+      credential:
+         OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
+         OS_TENANT_NAME: {{ clouds.credential.OS_TENNANT_NAME }}
 
 azure:
   subscriptionid: None
 
 aws:
+  username: None
   access_key_id: None
   secret_access_key: None
-  userid: None
+
 
 projects:
     active:
