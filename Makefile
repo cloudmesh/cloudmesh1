@@ -1,7 +1,7 @@
 PATHNAME=$(shell pwd)
 BASENAME=$(shell basename $(PATHNAME))
 
-TAG=`cat VERSION.txt`
+TAG=`echo "print __version__" > v.py;  cat cloudmesh/__init__.py v.py > /tmp/v1.py; python /tmp/v1.py; rm /tmp/v1.py v.py`
 
 all:
 	make -f Makefile force
@@ -97,6 +97,7 @@ clean:
 	rm -rf build doc/build dist *.egg-info *~ #*
 	cd doc; make clean
 	rm -rf *.egg-info
+	rm -rf *.log *.pid
 
 uninstall:
 	yes | pip uninstall cloudmesh
@@ -121,8 +122,11 @@ gh-pages:
 # TAGGING
 ######################################################################
 
+print_tag:
+	@echo "VERSION: $(TAG)"
 
 tag:
+	@echo "VERSION: $(TAG)"
 	make clean
 	python bin/util/next_tag.py
 	git tag $(TAG)
