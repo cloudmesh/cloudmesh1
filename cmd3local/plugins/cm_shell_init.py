@@ -61,12 +61,17 @@ class cm_shell_init:
         if arguments["generate"]:
 
             new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
+            print "1aaaaaa"
             old_yaml = path_expand('~/.futuregrid/cloudmesh.yaml')
+            print "2aaaaaa"
             etc_filename = path_expand("~/.futuregrid/etc/cloudmesh.yaml")
-
+            print "3aaaaaa"
+            
             if arguments["generate"] and (arguments["me"] or arguments["yaml"]):
+                print "4aaaaaa"
                 me_filename = path_expand("~/.futuregrid/me.yaml")
-
+                print "5aaaaaa"
+                
             elif (args.strip() in ["generate none"]):
                 me_filename = path_expand("~/.futuregrid/etc/none.yaml")
 
@@ -76,9 +81,12 @@ class cm_shell_init:
             # print me_filename
             # print etc_filename
 
+            print "b"
             t = cm_template(etc_filename)
+            print "c"
             t.generate(me_filename, new_yaml)
-
+            print "d"
+            
             if not arguments["force"]:
                 if yn_choice("Review the new yaml file", default='n'):
                     os.system ("less -E {0}".format(new_yaml))
@@ -92,4 +100,5 @@ class cm_shell_init:
 
 
 
+        
 
