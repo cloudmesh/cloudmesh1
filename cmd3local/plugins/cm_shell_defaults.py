@@ -12,9 +12,10 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
 from pprint import pprint
-from prettytable import PrettyTable
 from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.util import two_column_table
 import docopt
+
 
 log = LOGGER(__file__)
 
@@ -28,6 +29,10 @@ log = LOGGER(__file__)
 # command is used that needs them. a logic needs to be defined so that
 # defaults are included in other methods after their first loading. a
 # boolean should help prevent constant reloading.
+
+# TODO: when printing flavors or images numbers are given instead of
+# user readable labels. in case of images the uuid is given
+
 
 try:
     config = cm_config()
@@ -44,16 +49,19 @@ class cm_shell_defaults:
 
     defDict = {}
 
+    default_loaded = False
+    
     def activate_cm_shell_defaults(self):
         self.register_command_topic('cloud','defaults')
+        self.default_loaded = False
         pass
     
-    def _default_update(attribute, value):
+    def _default_update(self,attribute, value):
         mongoClass.db_defaults.update(
             {'_id': dbDict['_id']},
             {'$set': {attribute: value}},
             upsert=False, multi=False)
-    
+
     def createDefaultDict(self):
         # image
         # flavor
@@ -130,7 +138,7 @@ class cm_shell_defaults:
         Usage:
                defaults clean
                defaults load
-               defaults list [--json]
+               defaults [list] [--json]
                defaults set variable value NOTIMPLEMENTED
                defaults variable  NOTIMPLEMENTED
                defaults format (json|table)  NOTIMPLEMENTED
@@ -168,20 +176,25 @@ class cm_shell_defaults:
              if set to table a pretty table is printed
              NOT YET IMPLEMENTED
         """
-
         if arguments["clean"]:
             self.defDict = {}
             return
 
         if arguments["load"]:
-            self.createDefaultDict()
+            if not self.default_loaded:
+                self.createDefaultDict()
+                self.default_loaded = True
             return
 
-        if arguments["list"]:
+        if (arguments["list"] or (args == '') or (args == '--json')):
+            self.do_defaults("load")
             if arguments["--json"]:
-                print json.dumps(self.defDict)
+                print json.dumps(self.defDict, indent=4)
                 return
-            pprint(self.defDict)
+            else:
+                print two_column_table(self.defDict)
+                return
+    
             return
 
 
