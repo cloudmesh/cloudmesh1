@@ -15,10 +15,10 @@ from prettytable import PrettyTable
 
 log = LOGGER(__file__)
 
+
 class cm_shell_list:
 
     """opt_example class"""
-
 
     def activate_cm_shell_list(self):
         pass
@@ -29,14 +29,14 @@ class cm_shell_list:
         x = PrettyTable()
         x.field_names = fieldList
         for field in fieldList:
-            x.align[field] = "c" #center aligned
+            x.align[field] = "c"  # center aligned
 
         try:
             for cloud in clouds:
                 mesh.refresh(names=[cloud], types=[parameter])
                 if cloud in mesh.clouds and mesh.clouds[cloud]:
                     params = mesh.clouds[cloud][parameter]
-                    if len(params)>0:
+                    if len(params) > 0:
                         print "\nCloud: ", cloud, "\n"
                         for key, value in params.iteritems():
                             # since value is a dictionary of multiple items,
@@ -51,7 +51,6 @@ class cm_shell_list:
         except:
             print "Unexpected error: ", sys.exc_info()[0], sys.exc_info()[1]
 
-
     @command
     def do_list(self, args, arguments):
         """
@@ -65,7 +64,7 @@ class cm_shell_list:
                list NOTIMPLEMENTED servers [CLOUD...]
                list NOTIMPLEMENTED images [CLOUD...]
                list NOTIMPLEMENTED [CLOUD...]
-               
+
         Arguments:
 
                 CLOUD    the name of the cloud
@@ -78,24 +77,25 @@ class cm_shell_list:
 
            missing
 
-           This should be similar to the count command, e.g. multiple clouds could be specified.
-           
+           This should be similar to the count command,
+           e.g. multiple clouds could be specified.
+
         """
         mesh = cloudmesh.mesh()
         mongo = cm_mongo()
         config = cm_config()
         user = config.username()
         dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': user})
-        #log.info(args)
-        #pprint(arguments)
-        #chk if no args provided, to output the list of clouds.
+        # log.info(args)
+        # pprint(arguments)
+        # chk if no args provided, to output the list of clouds.
         print '\n\n'
         noArg = None
         for value in arguments.values():
             if value:
                 noArg = False
                 break
-        #log.info(arguments)
+        # log.info(arguments)
         all = False
         if not arguments["CLOUD"]:
             all = True
@@ -106,9 +106,9 @@ class cm_shell_list:
         else:
             clouds = [arguments["CLOUD"]]
 
-        #no args provided, print the clouds.
+        # no args provided, print the clouds.
         if not noArg:
-            print "--------------------------------------------------------------------------------"
+            print 70*"-"
             print 'List of Clouds:'
             for cloud in clouds:
                 print cloud
@@ -129,7 +129,6 @@ class cm_shell_list:
 
             fieldList = ["id", "name"]
             self._printList('image', fieldList, clouds)
-
 
     @command
     def do_count(self, args, arguments):
@@ -153,7 +152,7 @@ class cm_shell_list:
           missing
 
           Seems this has not been implemented.
-          
+
         """
         log.info(args)
 
@@ -168,19 +167,20 @@ class cm_shell_list:
         print clouds
 
         if arguments["flavors"] or all:
-            log.info ("count flavors")
+            log.info("count flavors")
             for cloud in clouds:
                 print "cloud: flavors", cloud, None
 
         if arguments["servers"] or all:
-            log.info ("count servers")
+            log.info("count servers")
             for cloud in clouds:
                 print "cloud: servers", cloud, None
 
         if arguments["images"] or all:
-            log.info ("list images")
+            log.info("list images")
             for cloud in clouds:
                 print "cloud: images", cloud, None
+
 
 def main():
     print "test correct"
@@ -192,4 +192,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

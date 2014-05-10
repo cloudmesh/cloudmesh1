@@ -15,11 +15,13 @@ from sh import less
 import os
 from pprint import pprint
 import yaml
-import json, ast
+import json
+import ast
 
 from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
+
 
 class cm_shell_user:
 
@@ -70,7 +72,8 @@ class cm_shell_user:
             pprint (result)
 
 
-            etc_filename = path_expand("~/.futuregrid/etc/{0}.yaml".format(basename))
+            etc_filename =
+                path_expand("~/.futuregrid/etc/{0}.yaml".format(basename))
 
             print etc_filename
 
@@ -89,7 +92,6 @@ class cm_shell_user:
             print yaml.dump(out,
                             default_flow_style=False)
 
-
             # location = path_expand(out_file)
             # yaml_file = open(location, 'w+')
             # print >> yaml_file, yaml.dump(result, default_flow_style=False)
@@ -105,8 +107,6 @@ class cm_shell_user:
 
             out = user.generate_yaml(arguments["ID"], "cloudmesh")
 
-
-
             print yaml.dump(out,
                             default_flow_style=False)
 
@@ -116,13 +116,12 @@ class cm_shell_user:
             # yaml_file.close()
             # log.info("Written new yaml file in " + location)
 
-
         elif arguments["ID"] is not None and arguments["ldap"]:
 
             id = arguments["ID"]
             user = cm_user()
             result = user.info(id)
-            pprint (result)
+            pprint(result)
 
         elif arguments["ID"] is not None and arguments["new"]:
 
@@ -132,12 +131,10 @@ class cm_shell_user:
             user = cm_user()
             ldap = user.info(id)
 
-
             # read me dict
             me_from_ldap = user.generate_yaml(arguments["ID"], "me")
             banner("ME FROM LDAP")
-            pprint (me_from_ldap)
-
+            pprint(me_from_ldap)
 
             # banner("LDAP")
             # pprint (ldap)
@@ -146,30 +143,24 @@ class cm_shell_user:
             if os.path.isfile(me_local_yaml):
                 me = dict(ConfigDict(filename=me_local_yaml))
                 banner("ME")
-                pprint (me)
+                pprint(me)
             else:
                 print "WARNING: no file found", me_local_yaml
-
 
             new_me = dict(me_from_ldap)
 
             for key in ['password', 'aws', 'azure', 'username']:
-                new_me[key] = me [key]
-
+                new_me[key] = me[key]
 
             banner("NEW")
 
             new_me["projects"]["completed"] = "fg-None"
             pprint(new_me)
 
-
-
             basename = arguments["FORMAT"]
 
-
-            etc_filename = path_expand("~/.futuregrid/etc/{0}.yaml".format(basename))
-
-
+            etc_filename = path_expand(
+                "~/.futuregrid/etc/{0}.yaml".format(basename))
 
             print etc_filename
 
@@ -177,29 +168,23 @@ class cm_shell_user:
             print t
             out = t.replace(kind='dict', values=new_me)
 
-
             banner("{0} DATA".format(basename))
-            pprint (out)
+            pprint(out)
 
             banner("yaml")
             print yaml.dump(out, default_flow_style=False)
 
         elif (arguments["list"]):
 
-             user = cm_user()
-             list_of_users = user.list_users()
-             pprint (list_of_users)
-             print
-             print "========================="
-             num = len(list_of_users)
-             print str(num) + " users listed"
+            user = cm_user()
+            list_of_users = user.list_users()
+            pprint(list_of_users)
+            print
+            print "========================="
+            num = len(list_of_users)
+            print str(num) + " users listed"
 
         else:
             print "WRONG PARAMETERS"
 
         return
-
-
-
-
-

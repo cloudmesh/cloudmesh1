@@ -42,8 +42,8 @@ def init_comamnd(arguments):
      """
     # log.info(arguments)
     # print "<", args, ">"
-     if arguments["generate"]:
-         new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
+    if arguments["generate"]:
+        new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
         print "1aaaaaa"
         old_yaml = path_expand('~/.futuregrid/cloudmesh.yaml')
         print "2aaaaaa"
@@ -75,7 +75,10 @@ def init_comamnd(arguments):
         elif yn_choice("Move the new yaml file to {0}".format(old_yaml), default='y'):
             os.system ("mv {0} {1}".format(new_yaml, old_yaml))
          return
-        
-if __name__ == '__main__':
+
+def main():
     arguments = docopt(init_command.__doc__)
     init_command(arguments)
+    
+if __name__ == '__main__':
+    main()

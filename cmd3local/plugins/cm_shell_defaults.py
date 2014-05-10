@@ -27,13 +27,14 @@ class cm_shell_defaults:
     defDict = {}
 
     def createDefaultDict(self):
-        #image
-        #flavor
-        #keyname
-        #nodename
-        #number of nodes
+        # image
+        # flavor
+        # keyname
+        # nodename
+        # number of nodes
 
-        dbDict = mongoClass.db_defaults.find_one({'cm_user_id': config.username()})
+        dbDict = mongoClass.db_defaults.find_one(
+            {'cm_user_id': config.username()})
 
         defCloud = config.default_cloud
         cmType = config.cloud(defCloud)['cm_type']
@@ -42,7 +43,7 @@ class cm_shell_defaults:
         self.defDict['cloud'] = cloudName
         cloudDict = config.cloud(cloudName)
 
-        #check the flavor
+        # check the flavor
         if 'flavors' in dbDict:
             if cloudName in dbDict['flavors'] and dbDict['flavors'][cloudName]:
                 self.defDict['flavors'] = dbDict['flavors'][cloudName]
@@ -51,14 +52,20 @@ class cm_shell_defaults:
                 self.defDict['flavor'] = cloudDict['default']['flavor']
                 flavors = dbDict['flavors']
                 flavors[cloudName] = cloudDict['default']['flavor']
-                mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'flavors': flavors}},upsert=False, multi=False)
+                mongoClass.db_defaults.update(
+                    {'_id': dbDict['_id']},
+                    {'$set': {'flavors': flavors}},
+                    upsert=False, multi=False)
         else:
             print 'Reading and saving default flavor to Mongo.'
             flavors = {}
             flavors[cloudName] = cloudDict['default']['flavor']
-            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'flavors': flavors}},upsert=False, multi=False)
+            mongoClass.db_defaults.update(
+                {'_id': dbDict['_id']},
+                {'$set': {'flavors': flavors}},
+                upsert=False, multi=False)
 
-        #check the image
+        # check the image
         if 'images' in dbDict:
             if cloudName in dbDict['images'] and dbDict['images'][cloudName]:
                 self.defDict['image'] = dbDict['images'][cloudName]
@@ -67,30 +74,45 @@ class cm_shell_defaults:
                 self.defDict['image'] = cloudDict['default']['image']
                 images = dbDict['images']
                 images[cloudName] = cloudDict['default']['image']
-                mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'images': images}},upsert=False, multi=False)
+                mongoClass.db_defaults.update(
+                    {'_id': dbDict['_id']},
+                    {'$set': {'images': images}},
+                    upsert=False, multi=False)
         else:
             print 'Reading and saving default image to Mongo.'
             images = {}
             images[cloudName] = cloudDict['default']['image']
-            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'images': images}},upsert=False, multi=False)
+            mongoClass.db_defaults.update(
+                {'_id': dbDict['_id']},
+                {'$set': {'images': images}},
+                upsert=False, multi=False)
 
         if dbDict['key']:
             self.defDict['keyname'] = dbDict['key']
         else:
             self.defDict['keyname'] = config.userkeys()['default']
-            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'key': self.defDict['keyname']}},upsert=False, multi=False)
+            mongoClass.db_defaults.update(
+                {'_id': dbDict['_id']},
+                {'$set': {'key': self.defDict['keyname']}},
+                upsert=False, multi=False)
 
         if dbDict['prefix']:
             self.defDict['prefix'] = dbDict['prefix']
         else:
             self.defDict['prefix'] = config.username()
-            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'prefix': self.defDict['prefix']}},upsert=False, multi=False)
+            mongoClass.db_defaults.update(
+                {'_id': dbDict['_id']},
+                {'$set': {'prefix': self.defDict['prefix']}},
+                upsert=False, multi=False)
 
         if dbDict['index']:
             self.defDict['index'] = dbDict['index']
         else:
             self.defDict['index'] = 1
-            mongoClass.db_defaults.update({'_id': dbDict['_id']}, {'$set':{'index': 1}},upsert=False, multi=False)
+            mongoClass.db_defaults.update(
+                {'_id': dbDict['_id']},
+                {'$set': {'index': 1}},
+                upsert=False, multi=False)
         return self.defDict
 
     @command
@@ -103,10 +125,11 @@ class cm_shell_defaults:
                defaults set variable value NOTIMPLEMENTED
                defaults variable  NOTIMPLEMENTED
                defaults format (json|table)  NOTIMPLEMENTED
-                 
+
         This manages the defaults associated with the user.
-        You can load, list and clean defaults associated with a user and a cloud.
-        The default parameters include index, prefix, flavor and image.
+        You can load, list and clean defaults associated with
+        a user and a cloud. The default parameters include
+        index, prefix, flavor and image.
 
         Arguments:
 
@@ -122,16 +145,17 @@ class cm_shell_defaults:
 
              sets the variable a to the value hallo
              NOT YET IMPLEMENTED
-             
+
           defaults a
 
              returns the value of the variable
              NOT YET IMPLEMENTED
-             
+
           default format json
           default format table
 
-             sets the default format how returns are printed. if set to json json is returned,
+             sets the default format how returns are printed.
+             if set to json json is returned,
              if set to table a pretty table is printed
              NOT YET IMPLEMENTED
         """
@@ -150,6 +174,7 @@ class cm_shell_defaults:
                 return
             pprint(self.defDict)
             return
+
 
 def main():
     print "test correct"

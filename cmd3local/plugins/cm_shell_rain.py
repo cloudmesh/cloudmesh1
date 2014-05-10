@@ -11,6 +11,7 @@ from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
+
 class cm_shell_rain:
 
     """The command handler for rain"""
@@ -25,4 +26,3 @@ class cm_shell_rain:
 
         rain_command(arguments)
         pass
-

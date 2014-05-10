@@ -13,17 +13,17 @@ from mongoengine import *
 
 log = LOGGER(__file__)
 
+
 class cm_shell_inventory:
 
     """opt_example class"""
-
 
     def info_cm_shell_inventory(self):
         print "%20s =" % "DBNAME", self.inventory_name
 
     def activate_cm_shell_inventory(self):
         self.inventory_name = "test"
-        db = connect (self.inventory_name)
+        db = connect(self.inventory_name)
 
         self.inventory = Inventory()
         pass
@@ -33,17 +33,17 @@ class cm_shell_inventory:
         """
         Usage:
                inventory clean
-               inventory create image DESCRIPTION             
-               inventory create server [dynamic] DESCRIPTION  
-               inventory create service [dynamic] DESCRIPTION 
-               inventory exists server NAME                   
-               inventory exists service NAME                  
-               inventory                   
-               inventory print        
-               inventory info [CLUSTER] [SERVER] [v]     
-               inventory server NAME  
-               inventory service NAME 
-               
+               inventory create image DESCRIPTION
+               inventory create server [dynamic] DESCRIPTION
+               inventory create service [dynamic] DESCRIPTION
+               inventory exists server NAME
+               inventory exists service NAME
+               inventory
+               inventory print
+               inventory info [CLUSTER] [SERVER] [v]
+               inventory server NAME
+               inventory service NAME
+
         Manages the inventory
 
             clean       cleans the inventory
@@ -51,7 +51,7 @@ class cm_shell_inventory:
 
         Arguments:
 
-          DESCRIPTION    The hostlist "india[9-11].futuregrid.org,india[01-02].futuregrid.org"
+          DESCRIPTION    The hostlist"i[009-011],i[001-002]"
 
           NAME           The name of a service or server
 
@@ -66,15 +66,14 @@ class cm_shell_inventory:
             log.info(args)
 
         if args == "":
-            log.info ("print inventory")
-
+            log.info("print inventory")
 
         if arguments["clean"]:
-            log.info ("clean the inventory")
+            log.info("clean the inventory")
             return
 
         if arguments["print"]:
-            log.info ("print the inventory")
+            log.info("print the inventory")
             self.inventory.pprint()
             return
 
@@ -103,17 +102,15 @@ class cm_shell_inventory:
                 self.inventory.print_kind(serv, name)
                 return
 
-
         if arguments["create"] and arguments["server"]:
             hostlist = arguments["DESCRIPTION"]
-            log.info ("create servers" + hostlist)
+            log.info("create servers" + hostlist)
             return
 
         if arguments["create"] and arguments["service"]:
             hostlist = arguments["DESCRIPTION"]
-            log.info ("create services" + hostlist)
+            log.info("create services" + hostlist)
             return
-
 
         if arguments["exists"] and arguments["server"]:
             name = arguments["NAME"]
@@ -130,6 +127,3 @@ class cm_shell_inventory:
             else:
                 print "false"
             return
-
-
-
