@@ -10,6 +10,7 @@ from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
+
 class cm_shell_exp:
 
     """opt_example class"""
@@ -30,13 +31,13 @@ class cm_shell_exp:
                exp flavour NAME
                exp index NAME
                exp count N
-               
+
         Manages the vm
 
         Arguments:
 
           NAME           The name of a service or server
-          N              The number of VMs to be started          
+          N              The number of VMs to be started
 
 
         Options:
@@ -46,23 +47,18 @@ class cm_shell_exp:
         """
         log.info(arguments)
 
-
         if arguments["clean"]:
-            log.info ("clean the vm")
+            log.info("clean the vm")
             return
 
         if arguments["delete"] and arguments["NAME"]:
-            log.info ("delete the vm")
+            log.info("delete the vm")
             return
 
         if arguments["info"] and arguments["NAME"]:
-            log.info ("vm info")
+            log.info("vm info")
             return
 
         if arguments["create"] and arguments["NAME"]:
-            log.info ("vm info")
+            log.info("vm info")
             return
-
-
-
-

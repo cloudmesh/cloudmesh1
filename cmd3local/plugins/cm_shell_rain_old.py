@@ -10,6 +10,7 @@ from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
+
 class cm_shell_rain_old:
 
     """The command handler for rain_old"""
@@ -24,7 +25,7 @@ class cm_shell_rain_old:
                rain_old info
                rain_old list NAME [IMAGE list]
                rain_old add HOSTLIST IMAGE [LABEL]
-               
+
         Provisioning of the images on 
 
         Arguments:
@@ -32,7 +33,7 @@ class cm_shell_rain_old:
           NAME           The name of the server
           IMAGE          The name of the image
           HOSTLIST       The names of hosts
-          
+
         Options:
 
            -v       verbose mode
@@ -52,15 +53,10 @@ class cm_shell_rain_old:
           rain_old add [india01-02] precise64.aaa precise64
 
                adding the
-               
+
         """
         log.info(arguments)
 
-
         if arguments["info"]:
-            log.info ("rain_old info")
+            log.info("rain_old info")
             return
-
-
-
-

@@ -51,15 +51,16 @@ Options:
 
 
 """
-#from __future__ import dict
+# from __future__ import dict
 from docopt import docopt
 import hostlist
 from datetime import datetime, timedelta
 from pytimeparse.timeparse import timeparse
 # from timestring import Range
 # from timestring import Date
-from datetime import datetime, timedelta            
+from datetime import datetime, timedelta
 #from cloudmesh.util.util import parse_time_interval
+
 
 def not_implemented():
     print "ERROR: not yet implemented"
@@ -71,14 +72,14 @@ def yn_choice(message, default='y'):
     choice = raw_input("%s (%s) " % (message, choices))
     values = ('y', 'yes', '') if default == 'y' else ('y', 'yes')
     return True if choice.strip().lower() in values else False
-    
 
-def parse_time_interval (time_start, time_end):
+
+def parse_time_interval(time_start, time_end):
     t_end = time_end
     t_start = time_start
 
     if t_start is not None:
-        if t_start in ["current_time","now"]:
+        if t_start in ["current_time", "now"]:
             t_start = str(datetime.now())
 
     if t_end is not None:
@@ -90,15 +91,16 @@ def parse_time_interval (time_start, time_end):
 
     return (str(t_start), str(t_end))
 
+
 def rain_command(arguments):
 
-    for list in ["HOSTS", "USERS", "PROJECTS","--project", "--user"]:
+    for list in ["HOSTS", "USERS", "PROJECTS", "--project", "--user"]:
         try:
             expanded_list = hostlist.expand_hostlist(arguments[list])
-            arguments[list]=expanded_list
+            arguments[list] = expanded_list
         except:
             pass
-        
+
     print(arguments)
 
     """
@@ -106,49 +108,49 @@ def rain_command(arguments):
     rain admin off HOSTS
     """
     if arguments["admin"]:
-        
+
         if arguments["add"]:
             print "add"
 
             if arguments["LABEL"] is not None:
                 """admin add LABEL --file=FILE"""
-                
+
                 print(arguments["LABEL"])
                 print(arguments["--file"])
                 not_implemented()
-                
+
             else:
                 """admin add --file=FILE"""
 
                 print(arguments["--file"])
                 not_implemented()
 
-
         elif arguments["on"]:
             """rain admin on HOSTS"""
-            
+
             print "switch on"
             print (arguments["HOSTS"])
             not_implemented()
-            
+
         elif arguments["off"]:
             """rain admin off HOSTS"""
 
             print "switch off"
             print (arguments["HOSTS"])
             not_implemented()
-            
-        elif arguments["delete"] or arguments["rm"] :
+
+        elif arguments["delete"] or arguments["rm"]:
             """rain admin [-i] delete HOSTS"""
-            """rain admin [-i] rm HOSTS"""            
+            """rain admin [-i] rm HOSTS"""
 
             interactive = arguments["-i"]
-            
+
             print "delete", interactive
 
             for host in arguments["HOSTS"]:
                 if interactive:
-                    keep = yn_choice("Do you want to delete the host %s?" % host)
+                    keep = yn_choice(
+                        "Do you want to delete the host %s?" % host)
                     if keep:
                         print "delete %s" % host
                     else:
@@ -174,10 +176,10 @@ def rain_command(arguments):
                 not_implemented()
 
                 (time_start, time_end) = parse_time_interval(arguments["--start"],
-                                                           arguments["--end"])
+                                                             arguments["--end"])
                 print "From:", time_start
                 print "To  :", time_end
-                
+
                 if ["--users"] is not None:
                     not_implemented()
                 elif arguments["--projects"] is not None:
@@ -188,7 +190,6 @@ def rain_command(arguments):
                     print ("all users, projects, roles")
                     not_implemented()
 
-                                        
         elif arguments["policy"]:
             print "policy"
 
@@ -212,27 +213,24 @@ def rain_command(arguments):
             print "list"
 
             not_implemented()
-            
+
     elif arguments["status"]:
-            print "status"
-            not_implemented()
-            
+        print "status"
+        not_implemented()
+
     elif arguments["list"]:
-            print "user list"
+        print "user list"
 
-            (time_start, time_end) = parse_time_interval(arguments["--start"],
-                                                         arguments["--end"])
+        (time_start, time_end) = parse_time_interval(arguments["--start"],
+                                                     arguments["--end"])
 
-            print "From:", time_start
-            print "To  :", time_end
+        print "From:", time_start
+        print "To  :", time_end
 
-            not_implemented()
+        not_implemented()
 
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
 
     rain_command(arguments)
-    
-
-    

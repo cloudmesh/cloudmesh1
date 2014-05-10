@@ -11,6 +11,7 @@ from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
+
 class cm_shell_project:
 
     """opt_example class"""
@@ -19,18 +20,19 @@ class cm_shell_project:
         filename = "$HOME/.futuregrid/cloudmesh.yaml"
         self.projects = cm_projects(filename)
         if self.echo:
-            log.info("Reading project information from -> {0}".format(filename))
+            log.info(
+                "Reading project information from -> {0}".format(filename))
         pass
 
     @command
     def do_project(self, args, arguments):
         """
         Usage:
-               project json info [NAME] 
-               project info [NAME] 
+               project json info [NAME]
+               project info [NAME]
                project members
                project default NAME
-               
+
         Manages the project
 
         Arguments:
@@ -47,13 +49,12 @@ class cm_shell_project:
         # log.info(arguments)
         # log.info(70 * "-")
 
-
         if arguments["default"] and arguments["NAME"]:
-            log.info ("delete the project")
+            log.info("delete the project")
             return
 
         if arguments["info"] and arguments["NAME"]:
-            log.info ("project info for the NAMED one")
+            log.info("project info for the NAMED one")
             return
 
         if arguments["info"] and arguments["NAME"] is None:
@@ -70,19 +71,19 @@ class cm_shell_project:
                 if self.projects.names("default") is not "" and not []:
                     print "%10s:" % "default", self.projects.names("default")
                 else:
-                    print "%10s:" % "default", "default is not set, please set it"
+                    print "%10s:" % "default ", \
+                          "default is not set, please set it"
                 if len(self.projects.names("active")) > 0:
-                    print "%10s:" % "projects", ' '.join(self.projects.names("active"))
+                    print "%10s:" % "projects", ' '
+                    .join(self.projects.names("active"))
+
                 if len(self.projects.names("completed")) > 0:
-                    print "%10s:" % "completed", ' '.join(self.projects.names("completed"))
+                    print "%10s:" % "completed", ' '
+                    .join(self.projects.names("completed"))
                 print
 
             return
 
         if arguments["members"]:
-            log.info ("list the project members")
+            log.info("list the project members")
             return
-
-
-
-
