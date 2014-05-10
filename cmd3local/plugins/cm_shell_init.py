@@ -24,6 +24,7 @@ class cm_shell_init:
     """opt_example class"""
 
     def activate_cm_shell_init(self):
+        self.register_command_topic('cloud','init')
         pass
 
     @function_command(init_command)

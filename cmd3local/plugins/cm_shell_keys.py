@@ -24,6 +24,7 @@ class cm_shell_keys:
     def activate_shell_keys(self):
         self.mongo_loaded = False
         self.keys_loaded = False
+        self.register_command_topic('cloud','keys')
         pass
 
     def _load_mongo(self):

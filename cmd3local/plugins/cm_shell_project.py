@@ -17,6 +17,10 @@ class cm_shell_project:
     """opt_example class"""
 
     def activate_shell_project(self):
+        self.register_command_topic('cloud','project')
+        #
+        # BUG this should be done outside of the activate
+        #
         filename = "$HOME/.futuregrid/cloudmesh.yaml"
         self.projects = cm_projects(filename)
         if self.echo:

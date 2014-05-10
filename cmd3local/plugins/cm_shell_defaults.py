@@ -44,6 +44,10 @@ class cm_shell_defaults:
 
     defDict = {}
 
+    def activate_cm_shell_defaults(self):
+        self.register_command_topic('cloud','defaults')
+        pass
+    
     def _default_update(attribute, value):
         mongoClass.db_defaults.update(
             {'_id': dbDict['_id']},
