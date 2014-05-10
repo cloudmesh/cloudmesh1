@@ -10,6 +10,7 @@ from cmd3.shell import command
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_keys import cm_keys
 from cloudmesh.util.logger import LOGGER
+from cloudmesh.util.util import two_column_table
 
 log = LOGGER(__file__)
 
@@ -51,9 +52,9 @@ class cm_shell_keys:
     def do_keys(self, args, arguments):
         """
         Usage:
+               keys
                keys info [--json] [NAME]
                keys default NAME
-               keys show NAME
 
         Manages the keys
 
@@ -87,41 +88,20 @@ class cm_shell_keys:
                 print "Specified key is not registered."
             return
 
-        if arguments["show"] and arguments["NAME"]:
-            try:
-                self._load_mongo()
-                name = arguments["NAME"]
-                key = self.keys[name]
-                print
-                print "Key Information"
-                print "-------------------"
-                print
-                print "%15s:" % name, key
-            except:
-                print "Could not find the key with the name", arguments["NAME"]
-            print
-            return
-
-        if arguments["info"] and arguments["NAME"] is None:
-            # log.info ("keys info for all")
+        if (arguments["info"] and arguments["NAME"] is None) or (args==""):
             self._load_mongo()
             if arguments["--json"]:
-                pprint(self.keys["keys"])
+                print json.dumps(self.keys["keys"], indent=4)
                 return
             else:
-                print
-                print "Key Information"
-                print "-------------------"
-
-                print
+                mykeys = {}
+                header = ["Default", "Fingerprint"]
+                
                 if self.keys["default"] is not None:
-                    # print "%15s:" % "name", self.keys.default()
-                    print "%15s:" % "default", self.keys.get_default_key()
-                    for name in self.keys.names():
-                        print "%15s:" % name, self.keys.fingerprint(name)
-                    print
+                    mykeys["default"] = self.keys.get_default_key()
                 else:
-                    print "%10s:" % "default", \
-                          "default is not set, please set it"
-                print
+                    mykeys["default"] = "default is not set, please set it"
+                for name in self.keys.names():
+                    mykeys[name] = self.keys.fingerprint(name)
+                print two_column_table(mykeys)
                 return
