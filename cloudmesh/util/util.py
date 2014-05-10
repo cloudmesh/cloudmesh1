@@ -8,6 +8,18 @@ import warnings
 from datetime import datetime, timedelta
 from pytimeparse.timeparse import timeparse
 from cloudmesh.util.banner import banner
+from prettytable import PrettyTable
+
+
+def two_column_table(column_dict):
+    # header
+    header = ['Default','Value']
+    x = PrettyTable()
+    x.add_column('Default', column_dict.keys())
+    x.add_column('Value', column_dict.values())
+    x.align = "l"
+    return x
+        
 
 def not_implemented():
     print "ERROR: not yet implemented"
