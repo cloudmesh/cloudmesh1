@@ -21,6 +21,7 @@ class cm_shell_list:
     """opt_example class"""
 
     def activate_cm_shell_list(self):
+        self.register_command_topic('cloud','list')
         pass
 
     def _printList(self, parameter, fieldList, clouds):

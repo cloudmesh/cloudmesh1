@@ -22,6 +22,10 @@ class cm_shell_inventory:
         print "%20s =" % "DBNAME", self.inventory_name
 
     def activate_cm_shell_inventory(self):
+        self.register_command_topic('cloud','inventory')
+        #
+        # BUG this needs to be done not in activate
+        #
         self.inventory_name = "test"
         db = connect(self.inventory_name)
 

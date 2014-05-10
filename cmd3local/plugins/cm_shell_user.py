@@ -28,6 +28,7 @@ class cm_shell_user:
     """opt_example class"""
 
     def activate_cm_shell_user(self):
+        self.register_command_topic('cloud','user')        
         pass
 
     @command

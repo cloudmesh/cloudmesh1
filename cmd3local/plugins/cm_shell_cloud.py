@@ -15,6 +15,7 @@ class cm_shell_cloud:
     """opt_example class"""
 
     def activate_cm_shell_cloud(self):
+        self.register_command_topic('cloud','cloud')
         pass
 
     @command

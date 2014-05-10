@@ -14,6 +14,7 @@ class cm_shell_metric:
     """cm_shell_metric class"""
 
     def activate_cm_shell_metric(self):
+        self.register_command_topic('cloud','metric')
         pass
 
     @function_command(cm_metric_command)

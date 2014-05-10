@@ -25,6 +25,10 @@ log = LOGGER(__file__)
 
 class cm_shell_register:
 
+    def activate_cm_shell_register(self):
+        self.register_command_topic('cloud','register')
+        pass
+    
     @command
     def do_reg(self, args, arguments):
         '''
