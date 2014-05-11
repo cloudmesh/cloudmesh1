@@ -36,17 +36,17 @@ class cm_shell_inventory:
     def do_inventory(self, args, arguments):
         """
         Usage:
-               inventory clean
-               inventory create image DESCRIPTION
-               inventory create server [dynamic] DESCRIPTION
-               inventory create service [dynamic] DESCRIPTION
-               inventory exists server NAME
-               inventory exists service NAME
-               inventory
-               inventory print
-               inventory info [CLUSTER] [SERVER] [v]
-               inventory server NAME
-               inventory service NAME
+               inventory NOTIMPLEMENTED clean
+               inventory NOTIMPLEMENTED create image DESCRIPTION
+               inventory NOTIMPLEMENTED create server [dynamic] DESCRIPTION
+               inventory NOTIMPLEMENTED create service [dynamic] DESCRIPTION
+               inventory NOTIMPLEMENTED exists server NAME
+               inventory NOTIMPLEMENTED exists service NAME
+               inventory NOTIMPLEMENTED
+               inventory NOTIMPLEMENTED print
+               inventory NOTIMPLEMENTED info [CLUSTER] [SERVER] [v]
+               inventory NOTIMPLEMENTED server NAME
+               inventory NOTIMPLEMENTED service NAME
 
         Manages the inventory
 
