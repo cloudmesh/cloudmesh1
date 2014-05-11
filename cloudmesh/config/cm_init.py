@@ -5,9 +5,11 @@ from docopt import docopt
 import inspect
 import sys
 import importlib
+from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.util import path_expand
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.util.util import yn_choice
+from cloudmesh.util.util import column_table
 from sh import less
 import os
 
@@ -52,14 +54,17 @@ def init_shell_command(arguments):
     # log.info(arguments)
     # print "<", args, ">"
     if arguments["list"]:
-        print "HALLO"
-
         filename = arguments['FILENAME']
         if filename is None:
             filename = path_expand('~/.futuregrid/cloudmesh.yaml')
         config = cm_config(filename)
 
-        print config
+        data = {}
+        data['Clouds'] = config.cloudnames()
+        data['Labels'] = []
+        for cloud_key in data['Clouds']:
+            data['Labels'].append(config.cloud(cloud_key)['cm_label'])
+        print column_table(data, ['Labels','Clouds'])
 
     if arguments["generate"]:
         new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
