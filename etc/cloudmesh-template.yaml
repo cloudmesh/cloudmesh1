@@ -145,14 +145,15 @@ cloudmesh:
                 location: us-east-1
     projects:
         active:
-        {% for project in projects.active %}
+        {% for project in projects.active -%}
         - {{ project }}
-        {% endfor %}
+        {% endfor -%}
         completed:
-        {% for project in projects.completed %}
+        {% for project in projects.completed -%}
         - {{ project }}
-        {% endfor %}
-        default: {{ projects.default }}    security:
+        {% endfor -%}
+        default: {{ projects.default }}    
+    security:
         default: development
         rules:
             ping:
@@ -180,7 +181,6 @@ cloudmesh:
     keys:
         default: {{keys.default}}
         keylist:
-            {% for keyname, key in keys.keylist.iteritems() %}
-            {{ keyname }}: {{ key }}
+            {% for keyname, key in keys.keylist.iteritems() %}{{ keyname }}: {{ key }}
             {% endfor -%}
 
