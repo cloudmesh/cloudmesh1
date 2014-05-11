@@ -32,10 +32,10 @@ class cm_shell_project:
     def do_project(self, args, arguments):
         """
         Usage:
-               project json info [NAME]
-               project info [NAME]
-               project members
-               project default NAME
+               project NOTIMPLEMENTED json info [NAME]
+               project NOTIMPLEMENTED info [NAME]
+               project NOTIMPLEMENTED members
+               project NOTIMPLEMENTED default NAME
 
         Manages the project
 

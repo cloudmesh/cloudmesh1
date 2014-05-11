@@ -23,15 +23,15 @@ class cm_shell_exp:
     def do_exp(self, args, arguments):
         """
         Usage:
-               exp clean
-               exp delete NAME
-               exp create [NAME]
-               exp info [NAME]
-               exp cloud NAME
-               exp image NAME
-               exp flavour NAME
-               exp index NAME
-               exp count N
+               exp NOTIMPLEMENTED clean
+               exp NOTIMPLEMENTED delete NAME
+               exp NOTIMPLEMENTED create [NAME]
+               exp NOTIMPLEMENTED info [NAME]
+               exp NOTIMPLEMENTED cloud NAME
+               exp NOTIMPLEMENTED image NAME
+               exp NOTIMPLEMENTED flavour NAME
+               exp NOTIMPLEMENTED index NAME
+               exp NOTIMPLEMENTED count N
 
         Manages the vm
 
