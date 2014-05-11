@@ -190,18 +190,18 @@ def init_shell_command(arguments):
         if arguments["--force"]:
             shutil.copy(filename_out, filename_bak)
             os.rename(filename_tmp, filename_out)
-            print "Template: {0}".format(filename_template)
-            print "Values  : {0}".format(filename_values)
-            print "Backup  : {0}".format(filename_bak)            
-            print "Created : {0}".format(filename_out)
+            print "# Template: {0}".format(filename_template)
+            print "# Values  : {0}".format(filename_values)
+            print "# Backup  : {0}".format(filename_bak)            
+            print "# Created : {0}".format(filename_out)
         elif yn_choice("Move the new yaml file to {0}"
                        .format(filename_out), default='y'):
             shutil.copy(filename_out, filename_bak)
             os.rename(filename_tmp, filename_out)
-            print "Template: {0}".format(filename_template)
-            print "Values  : {0}".format(filename_values)
-            print "Backup : {0}".format(filename_bak)            
-            print "Created: {0}".format(filename_out)
+            print "# Template: {0}".format(filename_template)
+            print "# Values  : {0}".format(filename_values)
+            print "# Backup : {0}".format(filename_bak)            
+            print "# Created: {0}".format(filename_out)
         return
 
 def main():
