@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+import shutil
 from jinja2.runtime import Undefined
 from jinja2 import Template, FileSystemLoader
 from cloudmesh.config.ConfigDict import ConfigDict
@@ -14,6 +15,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.util import path_expand
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.util.util import yn_choice
+from cloudmesh.util.util import backup_name
 from cloudmesh.util.banner import banner
 from cloudmesh.util.util import column_table
 from sh import less
@@ -41,9 +43,9 @@ def init_shell_command(arguments):
            init [force] generate me
            init [force] generate none
            init [force] generate FILENAME
-           init list [-f FILENAME] [--json]
-           init inspect [-f FILENAME]
-           init fill [--in=FILENAME] [VALUES]
+           init list [--file=FILENAME] [--json]
+           init inspect --file=FILENAME
+           init fill --file=FILENAME [VALUES]
                       
     Initializes cloudmesh from a yaml file
 
@@ -62,21 +64,23 @@ def init_shell_command(arguments):
        VALUES     yaml file with the velues to be sed in the FILENAME
        
     Options:
+       --file=FILENAME  The file
        --json   make the output format json
        -v       verbose mode
 
+       
     Description:
 
-      init list [-f FILENAME]
+      init list [--file=FILENAME]
          Lists the available clouds in the configuration yaml file.
 
-      init inspect [-f FILENAME] [--json]
+      init inspect --file=FILENAME
          print the variables in the yaml template
     """
     # log.info(arguments)
     # print "<", args, ">"
     if arguments["inspect"]:
-        filename = arguments['FILENAME']
+        filename = arguments['--file']
         if filename is None:
             filename = path_expand('~/.futuregrid/cloudmesh.yaml')
 
@@ -95,7 +99,7 @@ def init_shell_command(arguments):
 
     
     if arguments["list"]:
-        filename = arguments['FILENAME']
+        filename = arguments['--file']
         if filename is None:
             filename = path_expand('~/.futuregrid/cloudmesh.yaml')
         config = cm_config(filename)
@@ -116,8 +120,7 @@ def init_shell_command(arguments):
 
     if arguments["fill"]:
             
-        print arguments
-        filename_template = arguments['--in']
+        filename_template = arguments['--file']
         if filename_template is None:
             filename_template = '~/.futuregrid/etc/a-cloudmesh-template.yaml'
         filename_template = path_expand(filename_template)
@@ -127,30 +130,20 @@ def init_shell_command(arguments):
         if filename_values is None:
             filename_values = path_expand('~/.futuregrid/me.yaml')
 
-        print "PPPPP", filename_template
         content = open(filename_template, 'r').read()
         
         t = cm_template(filename_template)
         sorted_vars = sorted(set(t.variables()))
-        print "\n".join(sorted_vars)
 
-        #print arguments
         try:
             values = ConfigDict(filename=filename_values)
         except Exception, e:
-            print "ERROR: There is an error in teh yaml file", e
-        #print value_dict
-
-
-
-        banner ("set dafault")
+            print "ERROR: There is an error in the yaml file", e
         
         for cloud in values['clouds']:
-            print cloud
             values['clouds'][cloud]['default'] = {}            
             values['clouds'][cloud]['default']['image'] = None
             values['clouds'][cloud]['default']['flavor'] = None            
-        print values
                     
         banner("%s -> %s" % (filename_values, filename_template))
         env = Environment(undefined=IgnoreUndefined)
@@ -158,55 +151,54 @@ def init_shell_command(arguments):
         result = template.render(values)
         print result
         
-        #        JINJA2_ENVIRONMENT_OPTIONS = { 'undefined' : Undefined }
-        #env = Environment(JINJA2_ENVIRONMENT_OPTIONS)
-        #print content
-        #ast = env.parse(content)
-        
-        #for v in meta.find_undeclared_variables(ast):
-        #    print v
-
-
-        #try:
-        #    
-        #    print t._generate_from_dict(values)
-        #except UndefinedError, e:
-        #    print "OOOO", e
-        #except Exception, e:
-        #    print "EEEE", e
     if arguments["generate"]:
-        new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
-        print "1aaaaaa"
-        old_yaml = path_expand('~/.futuregrid/cloudmesh.yaml')
-        print "2aaaaaa"
-        etc_filename = path_expand("~/.futuregrid/etc/cloudmesh.yaml")
-        print "3aaaaaa"
-
+        filename_tmp = path_expand('~/.futuregrid/cloudmesh-new.yaml')
+        filename_out = path_expand('~/.futuregrid/cloudmesh.yaml')
+        filename_bak = backup_name(filename_out)
+        filename_template = path_expand("~/.futuregrid/etc/cloudmesh-template.yaml")
         if arguments["generate"] and (arguments["me"] or arguments["yaml"]):
-            print "4aaaaaa"
-            me_filename = path_expand("~/.futuregrid/me.yaml")
-            print "5aaaaaa"
+            filename_values = path_expand("~/.futuregrid/me.yaml")
 
         elif (args.strip() in ["generate none"]):
-            me_filename = path_expand("~/.futuregrid/etc/none.yaml")
+            filename_values = path_expand("~/.futuregrid/etc/none.yaml")
         elif arguments["FILENAME"] is not None:
-            me_filename = path_expand(arguments["FILENAME"])
+            filename_values = path_expand(arguments["FILENAME"])
         # print me_filename
         # print etc_filename
-        print "b"
-        t = cm_template(etc_filename)
-        print "c"
-        t.generate(me_filename, new_yaml)
-        print "d"
+
+        try:
+            values = ConfigDict(filename=filename_values)
+        except Exception, e:
+            print "ERROR: There is an error in the yaml file", e
+        
+        for cloud in values['clouds']:
+            values['clouds'][cloud]['default'] = {}            
+            values['clouds'][cloud]['default']['image'] = None
+            values['clouds'][cloud]['default']['flavor'] = None            
+                    
+                
+        content = open(filename_template, 'r').read()
+        env = Environment(undefined=IgnoreUndefined)
+        template = env.from_string(content)
+        result = template.render(values)
+
+        print result
+        out_file=open(filename_tmp, 'w+')
+        out_file.write(result)
+        out_file.close()
+
 
         if not arguments["force"]:
             if yn_choice("Review the new yaml file", default='n'):
-                os.system("less -E {0}".format(new_yaml))
+                print filename_tmp
+                os.system('less -E {0}'.format(filename_tmp))
         if arguments["force"]:
-            os.system("mv {0} {1}".format(new_yaml, old_yaml))
+            shutilcopy(filename_out, filename_bak)
+            os.rename(filename_tmp, filename_out)
         elif yn_choice("Move the new yaml file to {0}"
-                       .format(old_yaml), default='y'):
-            os.system("mv {0} {1}".format(new_yaml, old_yaml))
+                       .format(filename_out), default='y'):
+            shutil.copy(filename_out, filename_bak)
+            os.rename(filename_tmp, filename_out)
         return
 
 def main():
