@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+from pprint import pprint
+import json
 import types
 import textwrap
 from docopt import docopt
@@ -24,7 +26,7 @@ def init_shell_command(arguments):
            init [force] generate me
            init [force] generate none
            init [force] generate FILENAME
-           init list [-f FILENAME]
+           init list [-f FILENAME] [--json]
 
     Initializes cloudmesh from a yaml file
 
@@ -42,7 +44,7 @@ def init_shell_command(arguments):
                   information
 
     Options:
-
+       --json   make the output format json
        -v       verbose mode
 
     Description:
@@ -62,9 +64,16 @@ def init_shell_command(arguments):
         data = {}
         data['Clouds'] = config.cloudnames()
         data['Labels'] = []
+        data['Type'] = []
+        data['Version'] = []                
         for cloud_key in data['Clouds']:
             data['Labels'].append(config.cloud(cloud_key)['cm_label'])
-        print column_table(data, ['Labels','Clouds'])
+            data['Type'].append(config.cloud(cloud_key)['cm_type'])
+            data['Version'].append(config.cloud(cloud_key)['cm_type_version'])
+        if arguments["--json"]:
+            print json.dumps(data, sort_keys=True, indent=4)
+        else:
+            print column_table(data, ['Labels','Clouds','Type','Version'])
 
     if arguments["generate"]:
         new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
