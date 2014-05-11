@@ -11,9 +11,13 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.util import path_expand
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.util.util import yn_choice
+from cloudmesh.util.banner import banner
 from cloudmesh.util.util import column_table
 from sh import less
 import os
+from sets import Set
+
+from jinja2 import Environment, meta
 
 from cloudmesh.util.logger import LOGGER
 
@@ -27,7 +31,8 @@ def init_shell_command(arguments):
            init [force] generate none
            init [force] generate FILENAME
            init list [-f FILENAME] [--json]
-
+           init inspect [-f FILENAME]
+           
     Initializes cloudmesh from a yaml file
 
     Arguments:
@@ -52,6 +57,8 @@ def init_shell_command(arguments):
       init list [-f FILENAME]
          Lists the available clouds in the configuration yaml file.
 
+      init inspect [-f FILENAME] [--json]
+         print the variables in the yaml template
     """
     # log.info(arguments)
     # print "<", args, ">"
@@ -74,6 +81,23 @@ def init_shell_command(arguments):
             print json.dumps(data, sort_keys=True, indent=4)
         else:
             print column_table(data, ['Labels','Clouds','Type','Version'])
+
+    if arguments["inspect"]:
+        filename = arguments['FILENAME']
+        if filename is None:
+            filename = path_expand('~/.futuregrid/cloudmesh.yaml')
+
+        content = open(filename, 'r').read()
+        
+        t = cm_template(filename)
+        sorted_vars = sorted(set(t.variables()))
+        print "\n".join(sorted_vars)
+
+        # banner("PARSER")
+        # env = Environment()
+        # ast = env.parse(content)
+        # for v in meta.find_undeclared_variables(ast):
+        #    print v
 
     if arguments["generate"]:
         new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
