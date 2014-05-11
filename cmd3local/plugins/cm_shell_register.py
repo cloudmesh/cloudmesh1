@@ -33,7 +33,7 @@ class cm_shell_register:
     def do_reg(self, args, arguments):
         '''
         Usage:
-          reg [options] NAME
+          reg NOTIMPLEMENTED [options] NAME
 
         Arguments:
           NAME      Name of the cloud to be registered
