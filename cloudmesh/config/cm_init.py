@@ -1,4 +1,7 @@
 #! /usr/bin/env python
+from jinja2.runtime import Undefined
+from jinja2 import Template, FileSystemLoader
+from cloudmesh.config.ConfigDict import ConfigDict
 from pprint import pprint
 import json
 import types
@@ -18,11 +21,19 @@ import os
 from sets import Set
 
 from jinja2 import Environment, meta
+from jinja2 import Undefined
+JINJA2_ENVIRONMENT_OPTIONS = { 'undefined' : Undefined }
+
 
 from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
+class IgnoreUndefined(Undefined):
+    def __int__(self):
+        return "None"
+
+    
 def init_shell_command(arguments):
     """
     Usage:
@@ -32,7 +43,8 @@ def init_shell_command(arguments):
            init [force] generate FILENAME
            init list [-f FILENAME] [--json]
            init inspect [-f FILENAME]
-           
+           init fill [--in=FILENAME] [VALUES]
+                      
     Initializes cloudmesh from a yaml file
 
     Arguments:
@@ -46,8 +58,9 @@ def init_shell_command(arguments):
        force      force mode does not ask. This may be dangerous as it
                   overwrites the ~/.futuregrid/cloudmesh.yaml file
        FILENAME   The filename to be generated or from which to read
-                  information
-
+                  information. 
+       VALUES     yaml file with the velues to be sed in the FILENAME
+       
     Options:
        --json   make the output format json
        -v       verbose mode
@@ -62,6 +75,25 @@ def init_shell_command(arguments):
     """
     # log.info(arguments)
     # print "<", args, ">"
+    if arguments["inspect"]:
+        filename = arguments['FILENAME']
+        if filename is None:
+            filename = path_expand('~/.futuregrid/cloudmesh.yaml')
+
+        content = open(filename, 'r').read()
+        
+        t = cm_template(filename)
+        sorted_vars = sorted(set(t.variables()))
+        print "\n".join(sorted_vars)
+        # banner("PARSER")
+        # env = Environment()
+        # ast = env.parse(content)
+        # for v in meta.find_undeclared_variables(ast):
+        #    print v
+
+
+
+    
     if arguments["list"]:
         filename = arguments['FILENAME']
         if filename is None:
@@ -82,23 +114,66 @@ def init_shell_command(arguments):
         else:
             print column_table(data, ['Labels','Clouds','Type','Version'])
 
-    if arguments["inspect"]:
-        filename = arguments['FILENAME']
-        if filename is None:
-            filename = path_expand('~/.futuregrid/cloudmesh.yaml')
-
-        content = open(filename, 'r').read()
+    if arguments["fill"]:
+            
+        print arguments
+        filename_template = arguments['--in']
+        if filename_template is None:
+            filename_template = '~/.futuregrid/etc/a-cloudmesh-template.yaml'
+        filename_template = path_expand(filename_template)
         
-        t = cm_template(filename)
+        filename_values = arguments['VALUES']
+
+        if filename_values is None:
+            filename_values = path_expand('~/.futuregrid/me.yaml')
+
+        print "PPPPP", filename_template
+        content = open(filename_template, 'r').read()
+        
+        t = cm_template(filename_template)
         sorted_vars = sorted(set(t.variables()))
         print "\n".join(sorted_vars)
 
-        # banner("PARSER")
-        # env = Environment()
-        # ast = env.parse(content)
-        # for v in meta.find_undeclared_variables(ast):
+        #print arguments
+        try:
+            values = ConfigDict(filename=filename_values)
+        except Exception, e:
+            print "ERROR: There is an error in teh yaml file", e
+        #print value_dict
+
+
+
+        banner ("set dafault")
+        
+        for cloud in values['clouds']:
+            print cloud
+            values['clouds'][cloud]['default'] = {}            
+            values['clouds'][cloud]['default']['image'] = None
+            values['clouds'][cloud]['default']['flavor'] = None            
+        print values
+                    
+        banner("%s -> %s" % (filename_values, filename_template))
+        env = Environment(undefined=IgnoreUndefined)
+        template = env.from_string(content)
+        result = template.render(values)
+        print result
+        
+        #        JINJA2_ENVIRONMENT_OPTIONS = { 'undefined' : Undefined }
+        #env = Environment(JINJA2_ENVIRONMENT_OPTIONS)
+        #print content
+        #ast = env.parse(content)
+        
+        #for v in meta.find_undeclared_variables(ast):
         #    print v
 
+
+        #try:
+        #    
+        #    print t._generate_from_dict(values)
+        #except UndefinedError, e:
+        #    print "OOOO", e
+        #except Exception, e:
+        #    print "EEEE", e
     if arguments["generate"]:
         new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
         print "1aaaaaa"
@@ -134,9 +209,9 @@ def init_shell_command(arguments):
             os.system("mv {0} {1}".format(new_yaml, old_yaml))
         return
 
-def init_shell_main():
+def main():
     arguments = docopt(init_shell_command.__doc__)
     init_shell_command(arguments)
 
 if __name__ == '__main__':
-    init_shell_main()
+    main()
