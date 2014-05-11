@@ -39,10 +39,10 @@ class IgnoreUndefined(Undefined):
 def init_shell_command(arguments):
     """
     Usage:
-           init [force] generate yaml
-           init [force] generate me
-           init [force] generate none
-           init [force] generate FILENAME
+           init [--force] generate yaml
+           init [--force] generate me
+           init [--force] generate none
+           init [--force] generate FILENAME
            init list [--file=FILENAME] [--json]
            init inspect --file=FILENAME
            init fill --file=FILENAME [VALUES]
@@ -57,13 +57,13 @@ def init_shell_command(arguments):
 
        none       specifies if a yaml file is used for generation
                   the file is located at ~/.futuregrid/etc/none.yaml
-       force      force mode does not ask. This may be dangerous as it
-                  overwrites the ~/.futuregrid/cloudmesh.yaml file
        FILENAME   The filename to be generated or from which to read
                   information. 
        VALUES     yaml file with the velues to be sed in the FILENAME
        
     Options:
+       --force  force mode does not ask. This may be dangerous as it
+                overwrites the ~/.futuregrid/cloudmesh.yaml file
        --file=FILENAME  The file
        --json   make the output format json
        -v       verbose mode
@@ -77,8 +77,7 @@ def init_shell_command(arguments):
       init inspect --file=FILENAME
          print the variables in the yaml template
     """
-    # log.info(arguments)
-    # print "<", args, ">"
+
     if arguments["inspect"]:
         filename = arguments['--file']
         if filename is None:
@@ -95,9 +94,6 @@ def init_shell_command(arguments):
         # for v in meta.find_undeclared_variables(ast):
         #    print v
 
-
-
-    
     if arguments["list"]:
         filename = arguments['--file']
         if filename is None:
@@ -182,23 +178,30 @@ def init_shell_command(arguments):
         template = env.from_string(content)
         result = template.render(values)
 
-        print result
         out_file=open(filename_tmp, 'w+')
         out_file.write(result)
         out_file.close()
 
 
-        if not arguments["force"]:
+        if not arguments["--force"]:
             if yn_choice("Review the new yaml file", default='n'):
                 print filename_tmp
                 os.system('less -E {0}'.format(filename_tmp))
-        if arguments["force"]:
-            shutilcopy(filename_out, filename_bak)
+        if arguments["--force"]:
+            shutil.copy(filename_out, filename_bak)
             os.rename(filename_tmp, filename_out)
+            print "Template: {0}".format(filename_template)
+            print "Values  : {0}".format(filename_values)
+            print "Backup  : {0}".format(filename_bak)            
+            print "Created : {0}".format(filename_out)
         elif yn_choice("Move the new yaml file to {0}"
                        .format(filename_out), default='y'):
             shutil.copy(filename_out, filename_bak)
             os.rename(filename_tmp, filename_out)
+            print "Template: {0}".format(filename_template)
+            print "Values  : {0}".format(filename_values)
+            print "Backup : {0}".format(filename_bak)            
+            print "Created: {0}".format(filename_out)
         return
 
 def main():
