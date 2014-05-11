@@ -794,7 +794,7 @@ open a new terminal
     $ pip install numpy matplotlib fabric
     $ git clone git@github.com:cloudmesh/cloudmesh.git
     $ cd cloudmesh
-    $ fab -f install/fabfile.py deploy
+    $ fab -f installation/install.py deploy
     $ fab build.install
 
     
