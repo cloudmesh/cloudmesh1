@@ -1,14 +1,20 @@
 from cloudmesh.config.cm_config import cm_config
 from string import Template
-from cloudmesh.util.keys import get_fingerprint, key_fingerprint, key_validate
+from cloudmesh.util.keys import get_fingerprint,
+from cloudmesh.util.keys import key_fingerprint, key_validate
 import os
+
 
 class cm_keys:
 
     filename = None
 
     def __init__(self, filename=None):
-        """initializes based on cm_config and returns pointer to the keys dict."""
+        """
+        initializes based on cm_config and returns pointer
+        to the keys dict.
+        """
+
         # Check if the file exists
         self.config = cm_config(filename)
 
@@ -87,7 +93,8 @@ class cm_keys:
         return result
 
     def _get_key_from_file(self, filename):
-        return open(self._path_expand(os.path.expanduser(filename)), "r").read()
+        return open(self._path_expand(os.path.expanduser(filename)),
+                    "r").read()
 
     def setdefault(self, name):
         """sets the default key"""
@@ -102,7 +109,10 @@ class cm_keys:
         return self.config.get("cloudmesh.keys.keylist").keys()
 
     def validate(self, line):
-        """validates if a default key os ok and follows 'keyencryptiontype keystring keyname'"""
+        """
+        validates if a default key os ok and follows
+        'keyencryptiontype keystring keyname'
+        """
 
     def __str__(self):
         """returns the dict in a string representing the project"""
@@ -114,7 +124,8 @@ class cm_keys:
 
     def fingerprint(self, name):
         value = self.__getitem__(name)
-        # maxsplit set to 2, which means extra blanks (in the comment field) are ignored
+        # maxsplit set to 2, which means extra blanks (in the comment
+        # field) are ignored
         t, keystring, comment = value.split(' ', 2)
         return key_fingerprint(keystring)
 
