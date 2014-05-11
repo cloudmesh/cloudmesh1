@@ -15,7 +15,7 @@ from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
-def init_shell_comamnd(arguments):
+def init_shell_command(arguments):
     """
     Usage:
            init [force] generate yaml
@@ -96,9 +96,9 @@ def init_shell_comamnd(arguments):
             os.system("mv {0} {1}".format(new_yaml, old_yaml))
         return
 
-def main():
+def init_shell_main():
     arguments = docopt(init_shell_command.__doc__)
     init_shell_command(arguments)
 
 if __name__ == '__main__':
-    main()
+    init_shell_main()
