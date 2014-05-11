@@ -10,6 +10,23 @@ from pytimeparse.timeparse import timeparse
 from cloudmesh.util.banner import banner
 from prettytable import PrettyTable
 
+def column_table(column_dict, order=None):
+    """prints a pretty table from data in the dict.
+    :param column_dict: A dict that has an array for each key in the dict.
+                        All arrays are of the same length.
+                        The keys are used as headers
+    :param order: The orde in which the columns are printed.
+                  The order is specified by the key names of the dict.
+    """
+    # header
+    header = column_dict.keys()
+    x = PrettyTable()
+    if order is None:
+        order = header
+    for key in order:
+        x.add_column(key, column_dict[key])
+    x.align = "l"
+    return x
 
 def two_column_table(column_dict):
     # header

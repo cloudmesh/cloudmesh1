@@ -22,14 +22,14 @@ class cm_shell_cloud:
     def do_cloud(self, args, arguments):
         """
         Usage:
-            cloud list
-            cloud info [NAME|all]
-            cloud NAME
-            cloud select
-            cloud --on | --off NAME
-            cloud on NAME
-            cloud off NAME
-            cloud add [--format=FORMAT] CLOUD
+            cloud NOTIMPLEMENTED list
+            cloud NOTIMPLEMENTED info [NAME|all]
+            cloud NOTIMPLEMENTED NAME
+            cloud NOTIMPLEMENTED select
+            cloud NOTIMPLEMENTED --on | --off NAME
+            cloud NOTIMPLEMENTED on NAME
+            cloud NOTIMPLEMENTED off NAME
+            cloud NOTIMPLEMENTED add [--format=FORMAT] CLOUD
 
         Manages the clouds
 

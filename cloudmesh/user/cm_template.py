@@ -41,7 +41,7 @@ class cm_template():
 
     def grep(self, strip=True):
         result = []
-        s = set(t.variables())
+        s = set(self.variables())
         for attribute in s:
             grep_result = _grep("-n", attribute, cloudmesh_yaml).split("\n")
             for r in grep_result:

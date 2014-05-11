@@ -35,12 +35,12 @@ class cm_shell_user:
     def do_user(self, args, arguments):
         """
         Usage:
-               user list
-               user ID
-               user ID me
-               user ID yaml
-               user ID ldap
-               user ID new FORMAT [dict|yaml]
+               user NOTIMPLEMENTED list
+               user NOTIMPLEMENTED ID
+               user NOTIMPLEMENTED ID me
+               user NOTIMPLEMENTED ID yaml
+               user NOTIMPLEMENTED ID ldap
+               user NOTIMPLEMENTED ID new FORMAT [dict|yaml]
 
         Administrative command to lists the users from LDAP
 
