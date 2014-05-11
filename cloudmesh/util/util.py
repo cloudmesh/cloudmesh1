@@ -11,6 +11,17 @@ from cloudmesh.util.banner import banner
 from prettytable import PrettyTable
 
 
+def column_table(column_dict, order=None):
+    # header
+    header = column_dict.keys()
+    x = PrettyTable()
+    if order is None:
+        order = header
+    for key in order:
+        x.add_column(key, column_dict[key])
+    x.align = "l"
+    return x
+
 def two_column_table(column_dict):
     # header
     header = ['Default','Value']
