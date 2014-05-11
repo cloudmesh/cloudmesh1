@@ -10,7 +10,6 @@ from pytimeparse.timeparse import timeparse
 from cloudmesh.util.banner import banner
 from prettytable import PrettyTable
 
-
 def column_table(column_dict, order=None):
     # header
     header = column_dict.keys()
