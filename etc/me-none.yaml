@@ -1,0 +1,65 @@
+meta:
+  kind: me
+  yaml_version: 2.1
+
+portalname: TBD
+
+profile:
+    firstname: TBD
+    lastname: TBD
+    email: TBD
+    phone: TBD
+    address: TBD
+
+defaults:
+  cloud: sierra_openstack_grizzly
+  
+clouds:
+  sierra_openstack_grizzly: 
+      credential:
+         OS_PASSWORD: TBD
+         OS_TENANT_NAME: TBD
+  india_openstack_havana:
+      credential:
+         OS_PASSWORD: TBD
+         OS_TENANT_NAME: TBD
+  hp: 
+      username: TBD
+      credential:
+         OS_PASSWORD: TBD
+         OS_TENANT_NAME: TBD
+  hp_east:
+      username: TBD
+      credential:
+         OS_PASSWORD: TBD
+         OS_TENANT_NAME: TBD
+  alamo:
+    username: TBD
+    credential:
+        EC2_ACCESS_KEY: TBD
+        EC2_SECRET_KEY: TBD
+  india_eucalyptus:
+    credential:
+        EC2_ACCESS_KEY: TBD
+        EC2_SECRET_KEY: TBD
+  azure:
+    subscriptionid: TBD
+  aws:
+    access_key_id: TBD
+    secret_access_key: TBD
+    userid: TBD
+
+projects:
+  default: fg1000
+  active:
+  - fg1000
+  - fg1001
+  completed:
+  - fg1003
+
+keys:
+  default: fg_key1
+  keylist:
+    fg_key1: ssh-rsa AAAABBBB... fg-key1
+    fg_key2: ssh-rsa AAAABBBB... fg-key2
+            
