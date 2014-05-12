@@ -37,15 +37,14 @@ clouds:
       credential:
          OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
          OS_TENANT_NAME: {{ clouds.credential.OS_TENNANT_NAME }}
-
-azure:
-  subscriptionid: None
-
-aws:
-  username: None
-  access_key_id: None
-  secret_access_key: None
-
+  azure:
+    credential:
+      subscriptionid: None
+  aws:
+    credential:
+      access_key_id: None
+      secret_access_key: None
+      userid: None
 
 projects:
     active:
