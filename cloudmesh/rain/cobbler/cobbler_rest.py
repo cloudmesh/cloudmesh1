@@ -44,10 +44,10 @@ def response_json(func):
 @response_json
 def list_objects(objects):
     """
-      returns the names of all possible 'objects', objects defined in SUPPORTED_OBJECTS
+      returns the names of all possible 'objects', objects defined in SUPPORTED_OBJECTS or "isos" means distribution iso file
       e.g. http://host:port/cm/v1/cobbler/distros
     """
-    if objects not in SUPPORTED_OBJECTS:
+    if objects not in SUPPORTED_OBJECTS and objects not in ["isos"]:
         return not_supported_objects(objects)
     # MUST know how to get user token, empty token ONLY for debug
     kwargs = {"user_token": ""}
@@ -133,6 +133,44 @@ def baremetal_system(system):
     if request.method == "PUT":
         return cp.power_system(system, **data)
 
+@app.route('/cm/v1/cobbler/<objects>/<name>/child', methods = ['GET'])
+@response_json
+def list_child_objects(objects, name):
+    """
+      returns the child list of a specific name in 'objects', objects defined in SUPPORTED_OBJECTS
+      e.g. http://host:port/cm/v1/cobbler/distros/test-x86_64/child
+    """
+    if objects not in SUPPORTED_OBJECTS:
+        return not_supported_objects(objects)
+    item = objects[:-1]  # value of objects does NOT contain the last 's'
+    cp = CobblerProvision()
+    method = request.method
+    if method == "GET":
+        # MUST know how to get user token, empty token ONLY for debug
+        kwargs = {"user_token": ""}
+        func = getattr(cp, "get_object_child_list")
+        return func(item, name)
+    return None
+
+@app.route('/cm/v1/cobbler/kickstarts/<name>/profile', methods = ['GET'])
+@response_json
+def list_kickstart_profiles(name):
+    """
+      returns the list of profile name matching the name of kickstart file
+      e.g. http://host:port/cm/v1/cobbler/kickstarts/default.ks/profile
+    """
+    cp = CobblerProvision()
+    method = request.method
+    if method == "GET":
+        # MUST know how to get user token, empty token ONLY for debug
+        kwargs = {"user_token": ""}
+        func = getattr(cp, "get_profile_match_kickstart")
+        return func(name)
+    return None
+
 if __name__ == '__main__':
     print "start"
     app.run(host="0.0.0.0", debug = True)
+    
+    
+    
