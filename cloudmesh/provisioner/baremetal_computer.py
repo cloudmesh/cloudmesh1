@@ -1,9 +1,12 @@
 from dbhelper import DBHelper
 from cloudmesh.util.config import read_yaml_config
 from cloudmesh.config.cm_config import cm_config_server
+from baremetal_status import BaremetalStatus
 from hostlist import expand_hostlist
 import requests
 import json
+from time import sleep
+import threading
 from copy import deepcopy
 from cloudmesh.util.logger import LOGGER
 #
@@ -22,6 +25,7 @@ class BaremetalComputer:
         coll_name = "inventory"
         self.yaml_file = "~/.futuregrid/cloudmesh_mac.yaml"
         self.db_client = DBHelper(coll_name)
+        self.bm_status = BaremetalStatus()
     
     def get_cobbler_distro_list(self):
         """
@@ -230,6 +234,10 @@ class BaremetalComputer:
         """
         url = "/cm/v1/cobbler/baremetal/{0}".format(name)
         rest_data = self.request_rest_api("post", url)
+        # init deploy status
+        self.bm_status.init_deploy_status(name)
+        # monitor status
+        monitor_deploy_power_status(name, "deploy")
         return rest_data["result"]
     
     def power_cobbler_system(self, name, flag_on=True):
@@ -242,7 +250,47 @@ class BaremetalComputer:
         url = "/cm/v1/cobbler/baremetal/{0}".format(name)
         data = {"power_on": flag_on, }
         rest_data = self.request_rest_api("put", url, data)
+        # init power status
+        self.bm_status.init_power_status(name, flag_on)
+        # monitor status
+        monitor_deploy_power_status(name, "power", flag_on)
         return rest_data["result"]
+    
+    def monitor_deploy_power_status(self, name, action, flag_on=True):
+        """monitor the deploy/power ON/OFF status of host name. 
+        :param string name: the unique ID of host
+        :param string action: action of "deploy" or "power"
+        :param boolean flag_on: ONLY valid when action is power, True means power ON, False means OFF
+        """
+        data = {"cm_id": name,
+                "action": action,
+                "flag_on": flag_on,
+                "time": 10,  # 10 seconds
+                }
+        t = threading.Thread(target=self.monitor_status_thread, args=[data])
+        t.start()
+        
+    def monitor_status_thread(self, data):
+        result = True
+        host = data["cm_id"]
+        while result:
+            status = "ON" if self.monitor_cobbler_system(host) else "OFF"
+            if data["action"] == "deploy":
+                result = self.bm_status.update_deploy_status(host, status)
+                if result:
+                    progress = self.bm_status.get_deploy_progress(host)
+            elif data["action"] == "power":
+                result = self.bm_status.update_power_status(host, status, data["flag_on"])
+                if result:
+                    progress = self.bm_status.get_power_progress(host, data["flag_on"])
+            if progress >= 100:
+                break
+            if progress < 0:
+                # error
+                log.error("Error when getting the progress of host {0} on {1}.".format(host, data["action"]))
+                break
+            sleep(data["time"])
+    
     
     def get_default_query(self):
         """
