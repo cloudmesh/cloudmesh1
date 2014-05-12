@@ -19,19 +19,20 @@ def metric_command(arguments):
     Usage:
 	cm-metric -h | --help
         cm-metric --version
-        cm-metric [CLOUD] [-s START] 
-                  [-e END] 
-                  [-u USER] 
+        cm-metric [CLOUD] 
+                  [-s|--start_date=START_DATE] 
+                  [-e|--end_date=END_DATE] 
+                  [-u|--user=USER] 
                   [-m|--metric=METRIC]
                   [-p|--period=PERIOD] 
-                  [-c CLUSTER]
+                  [-c|--cluster=CLUSTER]
 
    Options:
        -h                   help message
        -m, --metric METRIC  use either user|vm|runtime in METRIC
        -u, --user USER      use username in USER
-       -s, --start START    use YYYYMMDD datetime in START
-       -e, --end END        use YYYYMMDD datetime in END
+       -s, --start_date START    use YYYYMMDD datetime in START
+       -e, --end_date END        use YYYYMMDD datetime in END
        -c, --cluster CLUSTER    use cluster name e.g. india, sierra, etc
        -p, --period PERIOD  use either month|day|week
  
@@ -85,7 +86,7 @@ def metric_command(arguments):
     # select data with search options
     # return in table
     m = cm_metric()
-    m.set_date(arguments["--start"], arguments["--end"])
+    m.set_date(arguments["--start_date"], arguments["--end_date"])
     m.set_period(arguments["--period"])
     m.set_metric(arguments["--metric"])
     m.set_user(arguments["--user"])
