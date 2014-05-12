@@ -37,12 +37,12 @@ log = LOGGER(__file__)
 try:
     config = cm_config()
 except:
-    log.error("There si a problem with the configuration yaml files")
+    log.error("There is a problem with the configuration yaml files")
     
 try:
     mongoClass = cm_mongo()
 except:
-    log.error("There si a problem with the mongo server")
+    log.error("There is a problem with the mongo server")
 
 
 class cm_shell_defaults:
