@@ -688,28 +688,6 @@ Command - use::
     
     
 
-user
-----------------------------------------------------------------------
-
-Command - user::
-
-    Usage:
-           user list
-           user info [ID]
-    
-    Administrative command to lists the users from LDAP
-    
-    Arguments:
-    
-      list       list the users
-      ID         list the user with the given ID
-    
-    Options:
-    
-       -v       verbose mode
-    
-    
-
 var
 ----------------------------------------------------------------------
 
