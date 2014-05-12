@@ -123,6 +123,14 @@ class CobblerProvision:
         """
         return self._simple_result_dict(True, data=self.list_kickstart_filenames(self.KICKSTART_LOCATION))
     
+    @authorization
+    def list_iso_names(self, **kwargs):
+        """list iso filenames with extension **iso**, 
+        :return: a list of iso filenames 
+        """
+        filenames = self.list_dir_filenames(self.get_temp_dir_iso())
+        return self._simple_result_dict(True, data=[f for f in filenames if f.endswith(".iso")])
+    
     def list_kickstart_filenames(self, dir_name):
         """list the kickstart file under **dir_name** directory that has an extension **ks** or **seed**.
         :param string dir_name: the directory that stores kickstart files
@@ -199,10 +207,10 @@ class CobblerProvision:
         :return: the count of children
         :rtype: int
         """
-        result = self.get_object_child_list(object_type, name, handler)
+        result = self._get_object_child_list(object_type, name, handler)
         return len(result) if result else 0 
     
-    def get_object_child_list(self, object_type, name, handler=None):
+    def _get_object_child_list(self, object_type, name, handler=None):
         """get the child list of a cobbler object **distro** and **profile**
         :param string object_type: a type in ['distro', 'profile']
         :param string name: the specific name in an object_type
@@ -224,6 +232,33 @@ class CobblerProvision:
             child_list = func(return_list=True, **kwargs)
             result = [v.name for v in child_list]
         return result
+    
+    @authorization
+    def get_object_child_list(self, object_type, name, handler=None):
+        data = self._get_object_child_list(object_type, name, handler)
+        if data is not None:
+            return self._simple_result_dict(True, data=data)
+        return self._simple_result_dict(False, "NOT Supported Object {0}".format(object_type))
+    
+    @authorization
+    def get_profile_match_kickstart(self, name):
+        """get the profile matching the name of kickstart file
+        :param string name: the name of kickstart file, supports UNIX wildcard
+        :return: a list of profile name
+        """
+        profiles = self.get_profile_report("*")
+        result = None
+        if profiles:
+            result = []
+            for profile in profiles["data"]:
+                data = profile["data"]
+                kickstart = data["kickstart"]
+                filename_kickstart = kickstart.split("/")[-1]
+                if fnmatch.fnmatch(filename_kickstart, name):
+                    result.append(data["name"])
+        if result is not None:
+            return self._simple_result_dict(True, data=result)
+        return self._simple_result_dict(False, "Cannot find profiles mathching {0}".format(name))
     
     def _wrap_process_get_item_report(self, q, object_type, name):
         """get the detail report of *name* of cobbler object **object_type**.
@@ -263,6 +298,21 @@ class CobblerProvision:
         """
         return self._call_cobbler_process("_wrap_process_get_item_report", object_type, name)
     
+    def get_temp_dir_base(self):
+        """get the parent directory that stores iso files
+        """
+        return "/tmp"
+    
+    def get_temp_dir_iso(self):
+        """get the directory that stores iso files
+        """
+        return "{0}/iso".format(self.get_temp_dir_base())
+    
+    def get_temp_dir_mount(self):
+        """get the mount directory that mount iso files
+        """
+        return "{0}/mnt/".format(self.get_temp_dir_iso())
+    
     @authorization
     def import_distro(self, udistro_name, **kwargs):
         """Add a distribution to cobbler with import command. The import distro will rename the udistro_name by adding suffix which is "-x86_64" in generall.
@@ -270,13 +320,12 @@ class CobblerProvision:
         The first step is to fetch image file given by parameter url with wget, the url MUST be http, ftp, https.
         Then, moust the image, finally import iso with cobbler import command
         :param string udistro_name: the distro name that user specified
-        :param dict kwargs: a dict contains the following {"url": "iso url",}
+        :param dict kwargs: a dict contains the following {"url": "iso url",}, url can only have a filename
         :returns: a dict defined in :py:func:`_simple_result_dict`, the data field in dict is {"distro":"name", "profile":"name"}
         """
         url = kwargs.get("url", "")
-        dir_base = "/tmp"
-        dir_iso = "{0}/iso".format(dir_base)
-        dir_mount = "{0}/mnt/".format(dir_iso)
+        dir_iso = self.get_temp_dir_iso()
+        dir_mount = self.get_temp_dir_mount()
         flag_result = self.mkdir(dir_mount)
         if not flag_result:
             return self._simple_result_dict(False, "User does NOT have write permission in /tmp directory.")

@@ -6,6 +6,8 @@ Usage:
   cobbler_client.py list --object=OBJECT_TYPE
   cobbler_client.py get --object=OBJECT_TYPE --name=ITEM_NAME
   cobbler_client.py add --object=OBJECT_TYPE --data=DATA_FILE
+  cobbler_client.py child --object=OBJECT_TYPE --name=ITEM_NAME
+  cobbler_client.py profile --ks=ITEM_NAME
   cobbler_client.py update --object=OBJECT_TYPE --data=DATA_FILE
   cobbler_client.py remove --object=OBJECT_TYPE --name=ITEM_NAME
   cobbler_client.py remove interface --system=SYSTEM_NAME --name=ITEM_NAME
@@ -115,6 +117,10 @@ class CobblerClient:
             self.get_object(self.arg_dict["--object"], self.arg_dict["--name"])
         elif self.arg_dict["add"]:
             self.add_object(self.arg_dict["--object"], self.arg_dict["--data"])
+        elif self.arg_dict["child"]:
+            self.get_child(self.arg_dict["--object"], self.arg_dict["--name"])
+        elif self.arg_dict["profile"]:
+            self.get_ks_profile(self.arg_dict["--ks"])
         elif self.arg_dict["update"]:
             self.update_object(self.arg_dict["--object"], self.arg_dict["--data"])
         elif self.arg_dict["remove"]:
@@ -133,8 +139,8 @@ class CobblerClient:
         if data["result"]:
             datas = data["data"]
             print "[Succeed] {0}{1}.".format(slabel, ", description is: {0}".format(data["description"]) if data["description"] else "")
+            print "    There is {0} records satisfy query, data is: ".format(len(datas) if datas else 0)
             if datas:
-                print "    There is {0} records satisfy query, data is: ".format(len(datas))
                 count = 0
                 data_type = type(datas[0])
                 for single_data in datas:
@@ -190,6 +196,16 @@ class CobblerClient:
         surl = "/cm/v1/cobbler/{0}s/{1}".format(object_type, name)
         result_dict = self.request_rest_api("post", surl, data_dict)
         self.render_result("{0} {1} {2} with data file {3}".format("add", object_type, name, data), result_dict)
+    
+    def get_child(self, object_type, name):
+        surl = "/cm/v1/cobbler/{0}s/{1}/child".format(object_type, name)
+        result_dict = self.request_rest_api("get", surl)
+        self.render_result("{0} {1} {2}".format("child", object_type, name), result_dict)
+    
+    def get_ks_profile(self, name):
+        surl = "/cm/v1/cobbler/kickstarts/{0}/profile".format(name)
+        result_dict = self.request_rest_api("get", surl)
+        self.render_result("{0} {1} ".format("profile", name), result_dict)
     
     def update_object(self, object_type, data):
         data_dict = self.read_dict(data) if object_type != "kickstart" else self.read_kickstart_data(data)

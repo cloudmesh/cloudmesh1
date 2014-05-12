@@ -1,5 +1,5 @@
 from cmd3.shell import function_command
-from cloudmesh.cobbler.cobbler_rain import rain_command
+from cloudmesh.rain.cobbler.cobbler_rain import rain_command
 
 class cm_shell_rain:
 
