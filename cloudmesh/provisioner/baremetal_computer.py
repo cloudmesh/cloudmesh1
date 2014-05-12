@@ -13,9 +13,14 @@ from cloudmesh.util.logger import LOGGER
 log = LOGGER(__file__)
 
 class BaremetalComputer:
+    """Baremetal computer class.
+    First, this class provide the access to cobbler provision API via REST service. 
+    Second, this class also provide a easy API to initialize the cobbler baremetal computers in mongodb, e.g., mac and power info,
+    Third, this class have an API through which user can get the detail information to provision a cobbler baremetal computer 
+    """
     def __init__(self):
         coll_name = "inventory"
-        self.yaml_file = "~/.futuregrid/mac.yaml"
+        self.yaml_file = "~/.futuregrid/cloudmesh_mac.yaml"
         self.db_client = DBHelper(coll_name)
     
     def get_cobbler_distro_list(self):
@@ -43,10 +48,10 @@ class BaremetalComputer:
         return self.get_cobbler_object_list("kickstart")
     
     def get_cobbler_object_list(self, cobbler_object):
-        """
-        list the cobbler objects.
-        ..param: cobbler_object one of the cobbler objects, currently support four objects, 'distro', 'profile', 'system', 'kickstart'
-        ..return: a list of corresponding objects if cobbler_object is a valid object, otherwise None
+        """list the cobbler objects.
+        :param string cobbler_object: one of the cobbler objects, currently support four objects, 'distro', 'profile', 'system', 'kickstart'
+        :return: a list with the formation ['name1', 'name2', ] of corresponding objects if cobbler_object is a valid object, otherwise None
+        :rtype: list 
         """
         url = "/cm/v1/cobbler/{0}s".format(cobbler_object)
         rest_data = self.request_rest_api("get", url)
@@ -71,97 +76,94 @@ class BaremetalComputer:
         return self.get_cobbler_object_report("system", name)
     
     def get_cobbler_kickstart_report(self, name):
-        """
-        shortcut for get cobbler kickstart report
-        ..return: the result format is [{"name": "full name", "contents": [lines...]}, {}]
+        """shortcut for get cobbler kickstart report
+        :param string name: the filename of kickstart file, it supports UNIX wildcard
+        :return: a list of the format [{"name": "full name", "contents": [lines...]}, {}]
         """
         return self.get_cobbler_object_report("kickstart", name)
     
     def get_cobbler_object_report(self, cobbler_object, name):
-        """
-        get the detail report of cobbler object
-        ..param: cobbler_object one of the cobbler objects, currently support four objects, 'distro', 'profile', 'system', 'kickstart'
-        ..param: name the name of the cobbler object. It supports UNIX wildcards
-        ..return: a list of corresponding object with full name if cobbler_object is a valid object and named object exists, otherwise None
-        The formation of result is: [{"name": "full_name", }, {}]
+        """get the detail report of cobbler object
+        :param string cobbler_object: one of the cobbler objects, currently support four objects, 'distro', 'profile', 'system', 'kickstart'
+        :param string name: the name of the cobbler object. It supports UNIX wildcards
+        :return: a list of corresponding object with full name if cobbler_object is a valid object and named object exists, otherwise None
+        The formation of result is: [{"name": "full_name", "field1": "value1",}, {}]
         """
         url = "/cm/v1/cobbler/{0}s/{1}".format(cobbler_object, name)
         rest_data = self.request_rest_api("get", url)
         return [v["data"] for v in rest_data["data"]] if rest_data["result"] else None
     
     def add_cobbler_distro(self, data):
-        """
-        add a distribution to cobbler.
-        ..param: data a json data structure. The formation is {"name": "your distro name", "url": "full url of iso"}
-        ..return: True means add distro operation success, otherwise Failed
+        """add a distribution to cobbler.
+        :param dict data: a json data structure. The formation is {"name": "your distro name", "url": "full url of iso"}
+        :return: True means add distro operation success, otherwise Failed
         """
         return self.add_cobbler_object("distro", data)
     
     def add_cobbler_profile(self, data):
-        """
-        add a profile to cobbler.
-        ..param: data a json data structure. The formation is {"name": "your profile name", "distro": "distro", "kickstart": "kickstart.file",}
-        ..return: True means add profile operation success, otherwise Failed
+        """add a profile to cobbler.
+        :param dict data: a json data structure. The formation is {"name": "your profile name", "distro": "distro", "kickstart": "kickstart.file",}
+        :return: True means add profile operation success, otherwise Failed
         """
         return self.add_cobbler_object("profile", data)
     
     def add_cobbler_system(self, data):
-        """
-        add a system to cobbler.
-        ..param: data a json data structure. The formation is {"name": "your system name", "profile": "profile", "power": {}, "interfaces": [{}, {},]}
-        ..return: True means add system operation success, otherwise Failed
+        """add a system to cobbler.
+        :param dict data: a json data structure. The formation is {"name": "your system name", "profile": "profile", "power": {}, "interfaces": [{}, {},]}
+        :return: True means add system operation success, otherwise Failed
         """
         return self.add_cobbler_object("system", data)
     
     def add_cobbler_kickstart(self, data):
-        """
-        add a kickstart to cobbler.
-        ..param: data a json data structure. The formation is {"name": "your kickstart filename", "contents": [line, line,...]}
-        ..return: True means add kickstart operation success, otherwise Failed
+        """add a kickstart to cobbler.
+        :param dict data: a json data structure. The formation is {"name": "your kickstart filename", "contents": [line, line,...]}
+        :return: True means add kickstart operation success, otherwise Failed
         """
         return self.add_cobbler_object("kickstart", data)
         
     def add_cobbler_object(self, cobbler_object, data):
-        """
-        add a specific object to cobbler.
-        ..param: cobbler_object one of the cobbler objects, currently support four objects, 'distro', 'profile', 'system', 'kickstart'
-        ..param: data a json data structure. The formation is {"name": "your object name", ...}
-        ..return: True means add an object operation success, otherwise Failed
+        """add a specific object to cobbler.
+        :param string cobbler_object: one of the cobbler objects, currently support four objects, 'distro', 'profile', 'system', 'kickstart'
+        :param dict data: a json data structure. The formation is {"name": "your object name", ...}
+        :return: True means add an object operation success, otherwise Failed
         """
         url = "/cm/v1/cobbler/{0}s/{1}".format(cobbler_object, data["name"])
         rest_data = self.request_rest_api("post", url, data)
         return rest_data["result"]
     
-    def update_cobbler_profile(self, data):
+    def update_cobbler_distro(self, data):
+        """update a distro to cobbler. 
+        :param dict data: a json data structure. The formation is {"name": "your distro name", "comment": "your comment", "owners": "specified owners",}
+        :return: True means update distro operation success, otherwise Failed
         """
-        update a profile to cobbler. ONLY kickstart can be updated. If you want to update distro, you MUST create/add a new profile based on this distro.
-        ..param: data a json data structure. The formation is {"name": "your profile name", "kickstart": "kickstart.file",}
-        ..return: True means update profile operation success, otherwise Failed
+        return self.update_cobbler_object("profile", data)
+    
+    def update_cobbler_profile(self, data):
+        """update a profile to cobbler. 
+        :param dict data: a json data structure. The formation is {"name": "your profile name", "distro": "distro", "kickstart": "kickstart.file", }
+        :return: True means update profile operation success, otherwise Failed
         """
         return self.update_cobbler_object("profile", data)
     
     def update_cobbler_system(self, data):
-        """
-        update a system to cobbler.
-        ..param: data a json data structure. The formation is {"name": "your system name", "profile": "profile", "power": {}, "interfaces": [{}, {},]}
-        ..return: True means update system operation success, otherwise Failed
+        """update a system to cobbler.
+        :param dict data: a json data structure. The formation is {"name": "your system name", "profile": "profile", "power": {}, "interfaces": [{}, {},]}
+        :return: True means update system operation success, otherwise Failed
         """
         return self.update_cobbler_object("system", data)
     
     def update_cobbler_kickstart(self, data):
-        """
-        update a kickstart to cobbler.
-        ..param: data a json data structure. The formation is {"name": "your kickstart filename", "contents": [line, line,...]}
-        ..return: True means update kickstart operation success, otherwise Failed
+        """update a kickstart to cobbler.
+        :param dict data: a json data structure. The formation is {"name": "your kickstart filename", "contents": [line, line,...]}
+        :return: True means update kickstart operation success, otherwise Failed
         """
         return self.update_cobbler_object("kickstart", data)
         
     def update_cobbler_object(self, cobbler_object, data):
-        """
-        update a specific object to cobbler.
-        ..param: cobbler_object one of the cobbler objects, currently support THREE objects, 'profile', 'system', 'kickstart'
-        ..param: data a json data structure. The formation is {"name": "your object name", ...}
-        ..return: True means update an object operation success, otherwise Failed
+        """update a specific object to cobbler.
+        :param string cobbler_object: one of the cobbler objects, currently support THREE objects, 'profile', 'system', 'kickstart'
+        :param dict data: a json data structure. The formation is {"name": "your object name", ...}
+        :return: True means update an object operation success, otherwise Failed
         """
         url = "/cm/v1/cobbler/{0}s/{1}".format(cobbler_object, data["name"])
         rest_data = self.request_rest_api("put", url, data)
@@ -192,50 +194,50 @@ class BaremetalComputer:
         return self.remove_cobbler_object("kickstart", name)
     
     def remove_cobbler_object(self, cobbler_object, name):
-        """
-        remove a specific object to cobbler.
-        ..param: cobbler_object one of the cobbler objects, currently support FOUR objects, 'distro', 'profile', 'system', 'kickstart'
-        ..param: name the name of the cobbler object.
-        ..return: True means remove an object operation success, otherwise Failed
+        """remove a specific object to cobbler.
+        :param string cobbler_object: one of the cobbler objects, currently support FOUR objects, 'distro', 'profile', 'system', 'kickstart'
+        :param string name: the name of the cobbler object.
+        :return: True means remove an object operation success, otherwise Failed
         """
         url = "/cm/v1/cobbler/{0}s/{1}".format(cobbler_object, name)
         rest_data = self.request_rest_api("delete", url)
         return rest_data["result"]
     
     def remove_cobbler_system_interface(self, system_name, if_name):
-        """
-        remove a specific interface `if_name` from the cobbler system `system_name`.
-        ..param: system_name the name of a cobbler system
-        ..param: if_name the name of an interface on the cobbler system.
-        ..return: True means remove an interface operation success, otherwise Failed
+        """remove a specific interface *if_name* from the cobbler system *system_name*.
+        :param string system_name: the name of a cobbler system
+        :param string if_name: the name of an interface on the cobbler system.
+        :return: True means remove an interface operation success, otherwise Failed
         """
         url = "/cm/v1/cobbler/systems/{0}/{1}".format(system_name, if_name)
         rest_data = self.request_rest_api("delete", url)
         return rest_data["result"]
     
     def monitor_cobbler_system(self, name):
-        """
-        monitor the status of baremetal system `name` via ping service.
-        ..return: True means system is ON, otherwise OFF.
+        """monitor the status of baremetal system *name* via ping service.
+        :param string name: the name of a cobbler system or host
+        :return: True means system is ON, otherwise OFF.
         """
         url = "/cm/v1/cobbler/baremetal/{0}".format(name)
         rest_data = self.request_rest_api("get", url)
         return rest_data["result"]
     
     def deploy_cobbler_system(self, name):
-        """
-        deploy baremetal system `name`. The cycle of deply system status is False(OFF) --> True(ON) --> False(OFF).
-        ..return: Always return True, which ONLY means has sent deploy command through IPMI. You MUST call `monitor_cobbler_system` to get the status of the system `name`.
+        """deploy baremetal system *name*. 
+        The cycle of deply system status is False(OFF) --> True(ON) --> False(OFF).
+        :param string name: the name of a cobbler system or host
+        :return: Always return True, which ONLY means has sent deploy command through IPMI. You MUST call `monitor_cobbler_system` to get the status of the system `name`.
         """
         url = "/cm/v1/cobbler/baremetal/{0}".format(name)
         rest_data = self.request_rest_api("post", url)
         return rest_data["result"]
     
     def power_cobbler_system(self, name, flag_on=True):
-        """
-        power ON/OFF baremetal system `name`. The system is ON/OFF must be call `monitor_cobbler_system` and its result is True(ON)/False(OFF)
-        ..param: flag_on a boolean value. True means to power on the system, False means power off.
-        ..return: Always return True, which ONLY means has sent deploy command through IPMI. You MUST call `monitor_cobbler_system` to get the status of the system `name`.
+        """power ON/OFF baremetal system *name*. 
+        The system is ON/OFF must be call **monitor_cobbler_system** and its result is True(ON)/False(OFF)
+        :param string name: the name of a cobbler system or host
+        :param boolean flag_on: a boolean value. True means to power on the system, False means power off.
+        :return: Always return True, which ONLY means has sent deploy command through IPMI. You MUST call `monitor_cobbler_system` to get the status of the system `name`.
         """
         url = "/cm/v1/cobbler/baremetal/{0}".format(name)
         data = {"power_on": flag_on, }
@@ -245,7 +247,7 @@ class BaremetalComputer:
     def get_default_query(self):
         """
         query helper function.
-        return the default query field.
+        :return: the default query field.
         """
         return { "cm_type": "inventory",
                  "cm_kind": "server",
@@ -256,7 +258,7 @@ class BaremetalComputer:
     def get_full_query(self, query_elem=None):
         """
         merge the default query and user defined query.
-        return the full query dict
+        :return: the full query dict
         """
         result = self.get_default_query()
         if query_elem:
@@ -265,7 +267,7 @@ class BaremetalComputer:
     
     def read_data_from_yaml(self):
         """
-        read mac address and bmc configuration information from mac.yaml file.
+        read mac address and bmc configuration information from **mac.yaml** file.
         """
         data = read_yaml_config(self.yaml_file)
         result = None
@@ -294,7 +296,7 @@ class BaremetalComputer:
         """
         Insert the mac address information including power config into inventory. 
         This API should be called **BEFORE** baremetal provision.
-        Currently, this API is called by `fab mongo.inventory`
+        Currently, this API is called by **fab mongo.inventory**
         """
         data = self.read_data_from_yaml()
         result = False
@@ -304,15 +306,15 @@ class BaremetalComputer:
     
     def update_mac_address(self, mac_dict):
         """
-        update `inventory` db with mac address information.
-        param mac_dict a dict with the following formation. `label_name` is the `cm_id` defined in inventory.
-        `internal` or `public` is the type defined in inventory. 
+        update *inventory* db with mac address information.
+        :param dict mac_dict: a dict with the following formation. *label_name* is the *cm_id* defined in inventory.
+        *internal* or *public* is the type defined in inventory. 
         {"cluster_name":{
           "label_name": {"internal": {"name":"eth0", "macaddr": "aa:aa:aa:aa:aa:aa"}, 
                          "public": {"name":"eth1", "macaddr": "aa:aa:aa:aa:aa:ab"},
                          "bmc": {"user": "user_name", "pass": "password", "type": "type",},}
         }
-        return True means all the mac address in mac_dict updated successfully; False means failed.
+        :return: True means all the mac address in mac_dict updated successfully; False means failed.
         """
         result = True
         if mac_dict:
@@ -343,9 +345,9 @@ class BaremetalComputer:
     def get_host_info(self, host_id, info_format="cobbler"):
         """
         get the required host info for baremetal computer.
-        ..param: host_id the unique name/id of a node in cloudmesh
-        ..param: info_format the dest info format of general host info. To support a new formation, such as `xtest`, the API get_host_info_xtest MUST be provided. 
-        return a dict with the following formation.
+        :param string host_id: the unique name/id of a node in cloudmesh
+        :param string info_format: the dest info format of general host info. To support a new formation, such as *xtest*, the API get_host_info_xtest MUST be provided. 
+        :return: a dict with the following formation if info_format is None, otherwise return the use specified formation conerted from the default one.
         {
           "id": "unique ID",
           "power": {"ipaddr": ipaddr, "power_user": user, "power_pass": pass, "power_type": type,},
@@ -360,34 +362,59 @@ class BaremetalComputer:
             result = {"id": host_id, "power":{}}
             data = find_result["data"]
             interface_list = []
+            cluster_id = None
             for record in data:
-                if "macaddr" in record:
+                if "macaddr" in record:  # general network interface
                     interface_list.append({"name": record["ifname"], 
                                            "ipaddr": record["ipaddr"],
                                            "macaddr": record["macaddr"],
                                            })
-                elif "power_user" in record:
+                    if record["type"] == "public":
+                        result["hostname"] = record["label"]
+                        cluster_id = record["cm_cluster"]
+                elif "power_user" in record:  # ipmi network interface
                     power_key_list = ["ipaddr", "power_user", "power_pass", "power_type",]
                     for key in power_key_list:
                         result["power"][key] = record[key]
             # sort the inteface with ascending order
             result["interfaces"] = sorted(interface_list, key=lambda k: k["name"])
+            if cluster_id:
+                # try to find name server for the servers in this cluster
+                name_servers = self.get_cluster_name_server(cluster_id)
+                if name_servers:
+                    result["name_servers"] = name_servers
             if info_format:
                 getattr(self, "get_host_info_{0}".format(info_format))(result)
         return result
     
+    def get_cluster_name_server(self, cluster_id):
+        """find the name servers for a cluster
+        :param string cluster_id: the unique ID of a cluster
+        :return: None if not exist a name server for the cluster, otherwise a string represents the one or more name servers
+        """
+        query_elem = {"cm_id": cluster_id, "cm_key": "nameserver", "cm_attribute": "variable"}
+        full_query_elem = self.get_full_query(query_elem)
+        find_result = self.db_client.find(full_query_elem)
+        result = []
+        if find_result["result"]:
+            data = find_result["data"]
+            for record in data:
+                result.append(record["cm_value"])
+        return None if len(result) < 1 else " ".join(result)
+    
     def change_dict_key(self, data_dict, fields):
         """
         change the key in dict from old_key to new_key.
-        ..param: fields the projection from old_key to new_key. {"old_key": "new_key"}
+        :param dict fields: the projection from old_key to new_key. {"old_key": "new_key"}
         """
         for key in fields:
-            data_dict[fields[key]] = data_dict.pop(key)
+            if key in data_dict:
+                data_dict[fields[key]] = data_dict.pop(key)
     
     def fill_dict_default_key(self, data_dict, fields):
         """
         fill the dict with default key-value pair.
-        ..param: fields the default key-value pair. {"key": "default"}
+        :param dict fields: the default key-value pair. {"key": "default"}
         """
         for key in fields:
             if key not in data_dict:
@@ -399,7 +426,7 @@ class BaremetalComputer:
         convert general host info dict to the formation of cobbler host formation
         """
         # section 1, general fields
-        general_fields = {"id": "name"}
+        general_fields = {"id": "name", "name_servers": "name-servers",}
         self.change_dict_key(host_dict, general_fields)
         # section 2, power fields
         power_fields = {"ipaddr": "power-address", 
@@ -433,8 +460,8 @@ class BaremetalComputer:
     def request_rest_api(self, method, url, data=None):
         """
         Request a REST service through requests library.
-        ..param: method the operation in REST service, valid value in [get, post, put, delete]
-        ..return: {"result":True|False, "data": data}
+        :param string method: the operation in REST service, valid value in [get, post, put, delete]
+        :return: a dict with the formation {"result":True|False, "data": data}
         """
         method = method.lower()
         headers = {"content-type": "application/json", "accept": "application/json", }
@@ -534,11 +561,13 @@ if __name__ == "__main__":
     profile_name="test_profile_1405023"
     result = bmc.remove_cobbler_profile(profile_name)
     """
+    """
     # remove a distro
     distro_name="test_centos_1405023-x86_64"
     # MUST delete the default profile firstly
     result = bmc.remove_cobbler_profile(distro_name)
     result = bmc.remove_cobbler_distro(distro_name)
-    
+    """
+    result = bmc.get_host_info("i080")
     pprint(result)
     
