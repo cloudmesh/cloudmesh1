@@ -37,7 +37,6 @@ log = LOGGER(__file__)
 class IgnoreUndefined(Undefined):
     def __int__(self):
         return "None"
-
     
 def init_shell_command(arguments):
     """
