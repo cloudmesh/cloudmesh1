@@ -10,6 +10,16 @@ from pytimeparse.timeparse import timeparse
 from cloudmesh.util.banner import banner
 from prettytable import PrettyTable
 
+
+def backup_name(filename):
+    n = 0
+    found = True
+    while found:
+        n = n + 1
+        backup = "{0}.bak.{1}".format(filename, n)
+        found = os.path.isfile(backup)
+    return backup
+
 def column_table(column_dict, order=None):
     """prints a pretty table from data in the dict.
     :param column_dict: A dict that has an array for each key in the dict.

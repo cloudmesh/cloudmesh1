@@ -42,7 +42,7 @@ blockdiagcontrib-class
 blockdiagcontrib-cisco
 nwdiag
 seqdiag
-cmd3>=0.9.5
+cmd3>=0.9.6
 azure
 simple-json
 pytimeparse

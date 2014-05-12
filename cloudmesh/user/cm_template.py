@@ -1,3 +1,4 @@
+from jinja2 import UndefinedError
 import sys
 import yaml
 from jinja2 import Template
@@ -66,15 +67,30 @@ class cm_template():
                 log.error("kind='dict' or 'text' parameter missing in template replace")
                 raise RuntimeError
             return self.result
-        except:
+        except UndefinedError, e:
+            banner ("ERROR: Undefined variable in template")
+            print e
+        except Exception, e:
             banner ("ERROR")
+            print e
             print sys.exc_info()
             # return self.content
             return None
 
+    def _generate_from_dict(self, d):
+        cloudmesh_yaml = path_expand(self.filename)
+        try:
+            result = self.replace(kind="dict", values=d)
+        except Exception, e:
+            print "EEEE", e
+            
+        return yaml.dump(result, default_flow_style=False)
+
     def generate_from_dict(self, d, out_file):
         cloudmesh_yaml = path_expand(self.filename)
         t = cm_template(cloudmesh_yaml)
+
+
 
         result = t.replace(kind="dict", values=d)
         location = path_expand(out_file)
@@ -82,7 +98,7 @@ class cm_template():
         print >> yaml_file, yaml.dump(result, default_flow_style=False)
         yaml_file.close()
         log.info("Written new yaml file in " + location)
-
+        
     def generate(self,
                  me_file,
                  out_file):

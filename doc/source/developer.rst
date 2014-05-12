@@ -7,7 +7,7 @@
 .. sectnum::
    :start: 7
 
-
+.. _s-instalation:
 **********************************************************************
 Installation
 **********************************************************************
@@ -157,6 +157,22 @@ cloudmesh directory. You can get there after cloning by ::
     
     $ cd cloudmesh
 
+In some programs we do need the location of the cloudmesh source for
+development. Hence it is importnat to add the variable `CLOUDMESH` to
+your shell. In bash you can do this with (assuming you are in the
+cloudmesh directory)::
+
+  $ export CLOUDMESH=`pwd`
+
+Naturally, you can also add the location into your bashrc file so you
+do not have to add it everytime to your shell.
+
+To see if the `CLOUDMESH` variable has the correct value, you can
+simply say::
+
+  echo $CLOUDMESH
+
+
 Preparing the system
 ----------------------------------------------------------------------
 
@@ -241,15 +257,6 @@ This way if you type dev you cd into the development directory
 
 
 
-Cloudmesh deployment 
-===========================
-
-yaml file first, than mongo
-
-:: 
-
-   fab mongo.install
-
 
 
 YAML files
@@ -268,9 +275,15 @@ developers when a change occurred so you can update yours:
 
 * `cloudmesh.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml>`_
 * `cloudmesh_server.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml>`_
-* `cloumesh_cluster.yaml (ask Gregor)
+* `cloudmesh_cluster.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_cluster.yaml>`_
+For the one from FG please contact Gregor (only if you realy need
+it. Normal users will not get this file).
 * `cloumesh_launcher.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml>`_
-* `cloumesh_bootspec.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml>`_
+* `cloumesh_bootspec.yaml
+  <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml>`_
+* `cloumesh_mac.yaml
+  <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_mac.yaml>`_
+
 
 Generating a cloudmesh.yaml file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -281,21 +294,23 @@ called ~/.futuregrid/me.yaml. In that file, please replace the
 appropriate values with your cloud information. If you do not know the
 values you can just fill in a placeholder, such as None. With active
 we specify the clouds that we like to activate. Clouds not listed in
-activate will be ignored::
+activate will be ignored.
 
-    meta:
-      kind: me
-      yaml_version: 1.2
+.. comment::
 
-    portalname: gvonlasz
+     meta:
+      kind: me 
+      yaml_version: 1.2 
+
+    portalname: gvonlasz 
 
     profile:
-	firstname: Gregor
-	lastname: von Laszewski
+	firstname: Gregor 
+	lastname: von Laszewski 
 	e-mail: gvonlasz@gmail.com  
 
     active:
-    - sierra_openstack_grizzly
+    - sierra_openstack_grizzly 
 
     password:
       sierra_openstack_grizzly: mypassword
@@ -318,6 +333,44 @@ activate will be ignored::
     keys:
       fg_0: ssh-rsa ABCD .... fg-0
       fg_1: ssh-rsa VWXY .... fg-1
+
+In the file etc/me-none.yaml we provide a simple template on what a
+me.yaml file looks like. you can copy it to ~/.futuregrid/me.yaml
+with::
+
+  cp etc/me-none.yaml ~/.futuregrid/me.yaml
+
+Than you can edit this file with you favorite editor such as emacs and
+fill out the values. Please make sure yaml files do not contain
+tabs. The file contains TBD that you can fill with real values
+instead.
+
+.. include:: ../../etc/me-none.yaml
+   :literal:
+
+
+We have a number of programs and templates that make it easy for you
+to generate a new cloudmesh.yaml file. The command::
+
+  $ cm-init fill --file=etc/cloudmesh-template.yaml ~/.futuregrid/me.yaml
+
+will test if the me.yaml file can successfully create a cloudmesh.yaml
+file by printing its output. If no error occurs it will most likely be
+fine. Than you can use the command::
+
+  $ cm-init generate yaml
+
+To create the cloudmesh yaml file from `~/.futuregird/me.yaml` and
+write it to `~/.futuregird/cloudmesh.yaml`. Out of precaution we have
+included a couple of questions that could be surpressed with the
+`--force` option.
+
+
+
+
+
+THIS IS OUTDATED
+-----------------
 
 Than you can print the contents of the yaml file that this input
 generets to the stdout with::
@@ -542,19 +595,6 @@ If you always use same font, write $HOME/.blockdiagrc::
 TODO: distribute a standard ttf font and use sh so that the -f font is
 included from the deployed package
 
-The t.py program
----------------
-
-(May not work)
-
-There is also a program called t.py in the base dir, so if you say::
-
-    python t.py
-   
-and refresh quickly the /provision/summary page you will see some
-commands queued up. The commands have random state updates and are very
-short as to allow for a quick debugging simulation. One could add the
-refresh of the web page automatically to other test programs.
 
 Developer Tests
 -----------------
@@ -905,5 +945,14 @@ Without access to LDAP
     fab hpc.touch
     fab server.start
 
-.. _s-instalation:
+
+
+Cloudmesh deployment 
+===========================
+
+yaml file first, than mongo
+
+:: 
+
+   fab mongo.install
 
