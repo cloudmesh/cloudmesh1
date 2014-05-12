@@ -1,6 +1,6 @@
 meta:
   kind: me
-  yaml_version: 1.2
+  yaml_version: 2.1
 
 username:
   portal: {{portalname}}

@@ -1,4 +1,7 @@
 #! /usr/bin/env python
+from sh import head
+from sh import grep
+import glob
 import shutil
 from jinja2.runtime import Undefined
 from jinja2 import Template, FileSystemLoader
@@ -43,7 +46,8 @@ def init_shell_command(arguments):
            init [--force] generate me
            init [--force] generate none
            init [--force] generate FILENAME
-           init list [--file=FILENAME] [--json]
+           init list [KIND] [--json]           
+           init list clouds [--file=FILENAME] [--json]
            init inspect --file=FILENAME
            init fill --file=FILENAME [VALUES]
                       
@@ -60,6 +64,7 @@ def init_shell_command(arguments):
        FILENAME   The filename to be generated or from which to read
                   information. 
        VALUES     yaml file with the velues to be sed in the FILENAME
+       KIND       The kind of the yaml file.
        
     Options:
        --force  force mode does not ask. This may be dangerous as it
@@ -71,7 +76,11 @@ def init_shell_command(arguments):
        
     Description:
 
-      init list [--file=FILENAME]
+      init list [KIND] [--json]
+         list the versions and types of the yaml files in the ~/.futuregrid and ~/.futuregrid/etc
+         directories.
+
+      init list clouds [--file=FILENAME]
          Lists the available clouds in the configuration yaml file.
 
       init inspect --file=FILENAME
@@ -93,8 +102,40 @@ def init_shell_command(arguments):
         # ast = env.parse(content)
         # for v in meta.find_undeclared_variables(ast):
         #    print v
+    if arguments["list"] and not arguments["clouds"]:
+        dirs = [path_expand('~/.futuregrid/*.yaml'), path_expand('~/.futuregrid/etc/*.yaml')]
+        file_list = []
+        for dir in dirs:
+            file_list.extend(glob.glob(dir))
+        vector = {}
+        vector['kind'] = []
+        vector['yaml_version'] = []
+        vector['meta'] = []
+        vector['filename'] = []
+        for filename in file_list:
+            head_of_file = head("-n", "4", filename)
+            values = {'kind': "-", 'yaml_version': "-", 'meta': "-"}
+            for line in head_of_file:
+                if ":" in line:
+                    (attribute, value) = line.strip().split(":")
+                    if attribute in ["kind","yaml_version"]:
+                        values[attribute] = value.strip()
+                    if attribute in ["meta"]:
+                        values[attribute] = "+"
+            if arguments["KIND"] is None or values['kind'] == arguments['KIND']:
+                for attribute in values.keys():
+                    vector[attribute].append(values[attribute])
+                vector['filename'].append(filename)
 
-    if arguments["list"]:
+        vector['Kind'] = vector.pop('kind')
+        vector['Version'] = vector.pop('yaml_version')
+        vector['Meta'] = vector.pop('meta')
+        vector['Filename'] = vector.pop('filename')                        
+        print column_table(vector)
+        
+        #print filename, values["kind"], values["version"]
+                    
+    if arguments["list"] and arguments["clouds"]:
         filename = arguments['--file']
         if filename is None:
             filename = path_expand('~/.futuregrid/cloudmesh.yaml')
@@ -152,11 +193,11 @@ def init_shell_command(arguments):
         filename_out = path_expand('~/.futuregrid/cloudmesh.yaml')
         filename_bak = backup_name(filename_out)
         filename_template = path_expand("~/.futuregrid/etc/cloudmesh-template.yaml")
-        if arguments["generate"] and (arguments["me"] or arguments["yaml"]):
+        if arguments["generate"] and (arguments["me"]):
             filename_values = path_expand("~/.futuregrid/me.yaml")
 
         elif (args.strip() in ["generate none"]):
-            filename_values = path_expand("~/.futuregrid/etc/none.yaml")
+            filename_values = path_expand("~/.futuregrid/etc/me-none.yaml")
         elif arguments["FILENAME"] is not None:
             filename_values = path_expand(arguments["FILENAME"])
         # print me_filename

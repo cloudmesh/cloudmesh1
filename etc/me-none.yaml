@@ -43,11 +43,13 @@ clouds:
         EC2_ACCESS_KEY: TBD
         EC2_SECRET_KEY: TBD
   azure:
-    subscriptionid: TBD
+    credential:
+      subscriptionid: TBD
   aws:
-    access_key_id: TBD
-    secret_access_key: TBD
-    userid: TBD
+    credential:
+      access_key_id: TBD
+      secret_access_key: TBD
+      userid: TBD
 
 projects:
   default: fg1000
