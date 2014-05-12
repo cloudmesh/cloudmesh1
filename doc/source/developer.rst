@@ -7,7 +7,7 @@
 .. sectnum::
    :start: 7
 
-
+.. _s-instalation:
 **********************************************************************
 Installation
 **********************************************************************
@@ -157,6 +157,22 @@ cloudmesh directory. You can get there after cloning by ::
     
     $ cd cloudmesh
 
+In some programs we do need the location of the cloudmesh source for
+development. Hence it is importnat to add the variable `CLOUDMESH` to
+your shell. In bash you can do this with (assuming you are in the
+cloudmesh directory)::
+
+  $ export CLOUDMESH=`pwd`
+
+Naturally, you can also add the location into your bashrc file so you
+do not have to add it everytime to your shell.
+
+To see if the `CLOUDMESH` variable has the correct value, you can
+simply say::
+
+  echo $CLOUDMESH
+
+
 Preparing the system
 ----------------------------------------------------------------------
 
@@ -241,15 +257,6 @@ This way if you type dev you cd into the development directory
 
 
 
-Cloudmesh deployment 
-===========================
-
-yaml file first, than mongo
-
-:: 
-
-   fab mongo.install
-
 
 
 YAML files
@@ -268,9 +275,15 @@ developers when a change occurred so you can update yours:
 
 * `cloudmesh.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml>`_
 * `cloudmesh_server.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml>`_
-* `cloumesh_cluster.yaml (ask Gregor)
+* `cloudmesh_cluster.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_cluster.yaml>`_
+For the one from FG please contact Gregor (only if you realy need
+it. Normal users will not get this file).
 * `cloumesh_launcher.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml>`_
-* `cloumesh_bootspec.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml>`_
+* `cloumesh_bootspec.yaml
+  <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml>`_
+* `cloumesh_mac.yaml
+  <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_mac.yaml>`_
+
 
 Generating a cloudmesh.yaml file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -932,5 +945,14 @@ Without access to LDAP
     fab hpc.touch
     fab server.start
 
-.. _s-instalation:
+
+
+Cloudmesh deployment 
+===========================
+
+yaml file first, than mongo
+
+:: 
+
+   fab mongo.install
 

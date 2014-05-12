@@ -694,12 +694,8 @@ user
 Command - user::
 
     Usage:
-           user NOTIMPLEMENTED list
-           user NOTIMPLEMENTED ID
-           user NOTIMPLEMENTED ID me
-           user NOTIMPLEMENTED ID yaml
-           user NOTIMPLEMENTED ID ldap
-           user NOTIMPLEMENTED ID new FORMAT [dict|yaml]
+           user list
+           user info [ID]
     
     Administrative command to lists the users from LDAP
     
@@ -707,11 +703,6 @@ Command - user::
     
       list       list the users
       ID         list the user with the given ID
-      me         specifies to generate the me related yaml file
-      yaml       specifie to generate the cloudmesh.yaml file
-      ldap       get the specifie to generate the cloudmesh.yaml file
-      FORMAT     either me or cloudmesh
-      OUTPUT     either yaml or dict
     
     Options:
     
