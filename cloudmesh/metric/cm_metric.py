@@ -14,7 +14,7 @@ from prettytable import PrettyTable
 
 log = LOGGER(__file__)
 
-def metric_command(arguments):
+def shell_command_metric (arguments):
     """
     Usage:
 	cm-metric -h | --help
@@ -133,8 +133,8 @@ class cm_metric:
         return self.get_stats()
 
 def main():
-    arguments = docopt(metric_command.__doc__)
-    metric_command(arguments)
+    arguments = docopt(shell_command_metric.__doc__)
+    shell_command_metric(arguments)
         
 if __name__ == "__main__":
     main()
