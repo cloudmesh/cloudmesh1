@@ -19,45 +19,6 @@ import os.path
 import os
 
 @task
-def yaml():
-    """
-    creates a user from tempalte and a simplified version of the yaml file and
-    puts it into mongo as a profile
-    
-    """
-    #os.system ("cm init generate yaml")
-
-    new_yaml = path_expand('~/.futuregrid/cloudmesh-new.yaml')
-    # old_yaml = path_expand('~/.futuregrid/cloudmesh.yaml')
-
-    t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
-
-    t.generate("~/.futuregrid/me.yaml",
-               new_yaml)
-    if yn_choice("Review the new yaml file", default='n'):
-        os.system ("less -E {0}".format(new_yaml))
-        
-    # if yn_choice("Move the new yaml file to {0}".format(old_yaml), default='y'):
-    #    os.rename (new_yaml, old_yaml)
-
-@task
-def list():
-     user = cm_user()
-     list_of_users = user.list_users()
-     pprint (list_of_users)
-     print
-     print "========================="
-     num = len(list_of_users)
-     print str(num) + " users listed"
-
-@task
-def info(id):
-    banner("USER INFO IN MONGO")
-    user = cm_user()
-    res = user.info(id)
-    pprint (res)
-
-@task
 def password():
     user_config = cm_config(filename="~/.futuregrid/cloudmesh.yaml")
     user = user_config.cloud('sierra_openstack_grizzly')['credentials']

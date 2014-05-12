@@ -286,6 +286,57 @@ Command - info::
     
     
 
+init
+----------------------------------------------------------------------
+
+Command - init::
+
+    Usage:
+           init [--force] generate yaml
+           init [--force] generate me
+           init [--force] generate none
+           init [--force] generate FILENAME
+           init list [KIND] [--json]           
+           init list clouds [--file=FILENAME] [--json]
+           init inspect --file=FILENAME
+           init fill --file=FILENAME [VALUES]
+    
+    Initializes cloudmesh from a yaml file
+    
+    Arguments:
+       generate   generates a yaml file
+       yaml       specifies if a yaml file is used for generation
+                  the file is located at ~/.futuregrid/me.yaml
+       me         same as yaml
+    
+       none       specifies if a yaml file is used for generation
+                  the file is located at ~/.futuregrid/etc/none.yaml
+       FILENAME   The filename to be generated or from which to read
+                  information. 
+       VALUES     yaml file with the velues to be sed in the FILENAME
+       KIND       The kind of the yaml file.
+    
+    Options:
+       --force  force mode does not ask. This may be dangerous as it
+                overwrites the ~/.futuregrid/cloudmesh.yaml file
+       --file=FILENAME  The file
+       --json   make the output format json
+       -v       verbose mode
+    
+    
+    Description:
+    
+      init list [KIND] [--json]
+         list the versions and types of the yaml files in the ~/.futuregrid and ~/.futuregrid/etc
+         directories.
+    
+      init list clouds [--file=FILENAME]
+         Lists the available clouds in the configuration yaml file.
+    
+      init inspect --file=FILENAME
+         print the variables in the yaml template
+    
+
 keys
 ----------------------------------------------------------------------
 
