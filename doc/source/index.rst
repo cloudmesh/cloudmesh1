@@ -70,7 +70,16 @@ V. Cloudmesh Commandshell
    cm-manage
    cm-shell-man
 
-V. Old Commandshell (will be integrated in new shell)
+VI. Cloud Metrics
+======================================================================
+
+.. toctree::
+   :maxdepth: 2
+
+   metric
+
+
+VII. Old Commandshell (will be integrated in new shell)
 ======================================================================
 
 .. toctree::
