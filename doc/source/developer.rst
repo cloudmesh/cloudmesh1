@@ -281,21 +281,23 @@ called ~/.futuregrid/me.yaml. In that file, please replace the
 appropriate values with your cloud information. If you do not know the
 values you can just fill in a placeholder, such as None. With active
 we specify the clouds that we like to activate. Clouds not listed in
-activate will be ignored::
+activate will be ignored.
 
-    meta:
-      kind: me
-      yaml_version: 1.2
+.. comment::
 
-    portalname: gvonlasz
+     meta:
+      kind: me 
+      yaml_version: 1.2 
+
+    portalname: gvonlasz 
 
     profile:
-	firstname: Gregor
-	lastname: von Laszewski
+	firstname: Gregor 
+	lastname: von Laszewski 
 	e-mail: gvonlasz@gmail.com  
 
     active:
-    - sierra_openstack_grizzly
+    - sierra_openstack_grizzly 
 
     password:
       sierra_openstack_grizzly: mypassword
@@ -318,6 +320,44 @@ activate will be ignored::
     keys:
       fg_0: ssh-rsa ABCD .... fg-0
       fg_1: ssh-rsa VWXY .... fg-1
+
+In the file etc/me-none.yaml we provide a simple template on what a
+me.yaml file looks like. you can copy it to ~/.futuregrid/me.yaml
+with::
+
+  cp etc/me-none.yaml ~/.futuregrid/me.yaml
+
+Than you can edit this file with you favorite editor such as emacs and
+fill out the values. Please make sure yaml files do not contain
+tabs. The file contains TBD that you can fill with real values
+instead.
+
+.. include:: ../../etc/me-none.yaml
+   :literal:
+
+
+We have a number of programs and templates that make it easy for you
+to generate a new cloudmesh.yaml file. The command::
+
+  $ cm-init fill --file=etc/cloudmesh-template.yaml ~/.futuregrid/me.yaml
+
+will test if the me.yaml file can successfully create a cloudmesh.yaml
+file by printing its output. If no error occurs it will most likely be
+fine. Than you can use the command::
+
+  $ cm-init generate yaml
+
+To create the cloudmesh yaml file from `~/.futuregird/me.yaml` and
+write it to `~/.futuregird/cloudmesh.yaml`. Out of precaution we have
+included a couple of questions that could be surpressed with the
+`--force` option.
+
+
+
+
+
+THIS IS OUTDATED
+-----------------
 
 Than you can print the contents of the yaml file that this input
 generets to the stdout with::
@@ -542,19 +582,6 @@ If you always use same font, write $HOME/.blockdiagrc::
 TODO: distribute a standard ttf font and use sh so that the -f font is
 included from the deployed package
 
-The t.py program
----------------
-
-(May not work)
-
-There is also a program called t.py in the base dir, so if you say::
-
-    python t.py
-   
-and refresh quickly the /provision/summary page you will see some
-commands queued up. The commands have random state updates and are very
-short as to allow for a quick debugging simulation. One could add the
-refresh of the web page automatically to other test programs.
 
 Developer Tests
 -----------------
