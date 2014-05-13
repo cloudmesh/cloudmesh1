@@ -1,5 +1,5 @@
+from cloudmesh.rain.cobbler.cobbler_rest_api import CobblerRestAPI
 from hostlist import expand_hostlist
-from baremetal_computer import BaremetalComputer
 from cloudmesh.util.logger import LOGGER
 #
 # SETTING UP A LOGGER
@@ -12,7 +12,7 @@ class RainCobblerWrapper:
     provide API for CM command or Web Interface.
     """
     def __init__(self):
-        self.baremetal = BaremetalComputer()
+        self.rest_api = CobblerRestAPI()
         
     def provision_host_with_profile(self, profile, raw_hosts):
         """
@@ -74,6 +74,6 @@ class RainCobblerWrapper:
 # test
 if __name__ == "__main__":
     rcb = RainCobblerWrapper()
-    result_data = rcb.baremetal.get_cobbler_distro_list()
+    result_data = rcb.cra.get_cobbler_distro_list()
     print result_data
     
