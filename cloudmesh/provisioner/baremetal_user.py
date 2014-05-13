@@ -1,5 +1,4 @@
 from dbhelper import DBHelper
-from baremetal_computer import BaremetalComputer
 from hostlist import expand_hostlist
 from types import *
 from copy import deepcopy
@@ -17,7 +16,6 @@ class BaremetalUser:
         """Init function of class BaremetalUser
         :param string default: the default user added in cobbler owners if it is not None, otherwise, no default user will be added
         """
-        self.bmc = BaremetalComputer()
         self.default_user = default
         self.group_flag = "_grp__"
         self.seperator = ","
