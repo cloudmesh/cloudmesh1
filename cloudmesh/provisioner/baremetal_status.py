@@ -1,5 +1,4 @@
 from dbhelper import DBHelper
-from baremetal_computer import BaremetalComputer
 from hostlist import expand_hostlist
 from types import *
 from copy import deepcopy
@@ -16,7 +15,6 @@ class BaremetalStatus:
     def __init__(self):
         """Init function of class BaremetalStatus
         """
-        self.bmc = BaremetalComputer()
         self.db_client = DBHelper()
         
     def get_default_query(self):
