@@ -44,6 +44,45 @@ except:
     os.system("pip install docopt")
     from docopt import docopt
 
+def new_cloudmesh_yaml():
+
+    # create ~/.futuregrid dir
+    # 
+    filename_tmp = path_expand('~/.futuregrid/cloudmesh-new.yaml')
+    filename_out = path_expand('~/.futuregrid/cloudmesh.yaml')
+    filename_bak = backup_name(filename_out)
+    filename_template = path_expand("~/.futuregrid/etc/cloudmesh-template.yaml")
+    filename_values = path_expand("~/.futuregrid/me.yaml")
+
+    try:
+        # do simple yaml load
+        values = ConfigDict(filename=filename_values)
+    except Exception, e:
+        print "ERROR: There is an error in the yaml file", e
+
+    for cloud in values['clouds']:
+        values['clouds'][cloud]['default'] = {}            
+        values['clouds'][cloud]['default']['image'] = None
+        values['clouds'][cloud]['default']['flavor'] = None            
+
+    content = open(filename_template, 'r').read()
+    env = Environment(undefined=IgnoreUndefined)
+    template = env.from_string(content)
+    result = template.render(values)
+
+    out_file=open(filename_tmp, 'w+')
+    out_file.write(result)
+    out_file.close()
+    shutil.copy(filename_out, filename_bak)
+    os.rename(filename_tmp, filename_out)
+    
+    print "# Template: {0}".format(filename_template)
+    print "# Values  : {0}".format(filename_values)
+    print "# Backup : {0}".format(filename_bak)            
+    print "# Created: {0}".format(filename_out)
+
+    
+    
 def deploy():
     """deploys the system on supported distributions"""
     # download()
