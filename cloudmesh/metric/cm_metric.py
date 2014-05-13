@@ -91,7 +91,6 @@ def shell_command_metric(arguments):
     m.set_period(arguments["--period"])
     m.set_metric(arguments["--metric"])
     m.set_user(arguments["--user"])
-    print m
     
     res = m.get_stats()
 
