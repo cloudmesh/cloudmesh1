@@ -91,6 +91,7 @@ def shell_command_metric(arguments):
     m.set_period(arguments["--period"])
     m.set_metric(arguments["--metric"])
     m.set_user(arguments["--user"])
+    m.set_cloud(arguments["CLOUD"])
     
     res = m.get_stats()
 

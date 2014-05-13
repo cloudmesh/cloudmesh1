@@ -219,6 +219,11 @@ Please note that you have to do this every time you open a terminal or
 login on the computer you work. Often you may forget it, so we
 recommend that you put it in your .bash_profile or .bashrc page at the
 end.
+
+Next you install the basic cloudmesh code which you can do with::
+
+   $ ./install cloudmesh
+
     
 Modify your rc file:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -268,7 +273,17 @@ for the personel that work directly with him on FutureGrid.
 
 Configure the yaml files if changes need to be done.
 
-We to copy and modify the files in the .futuregrid directory. This has
+We to copy and modify the files in the `~/.futuregrid` directory. if the
+`~/.futuregrid` directory does not exoist you need to create it:
+
+  mkdir -p ~/.futurgerid
+  cp etc/*.yaml ~/.futurgerid
+
+   
+
+
+
+This has
 to be done only once, but you maust make sure you keep the yaml files
 up to date in case we change them, typically we send an e-mail to all
 developers when a change occurred so you can update yours:

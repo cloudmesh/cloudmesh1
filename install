@@ -5,6 +5,7 @@ Usage:
     install --version
     install system
     install cloudmesh
+    install delete_yaml
     install query
     install vagrant    
 """
@@ -46,6 +47,7 @@ def main():
         
         sys.exit(0)
 
+    
     arguments = ' '.join(args)
     banner (arguments)
     try:

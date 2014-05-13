@@ -5,15 +5,17 @@ Usage:
     install --version
     install system
     install cloudmesh
+    install delete_yaml    
     install query
     install vagrant    
 """
+from sh import cp
 import sys
 import os
 import platform
 from util import banner
 from util import is_ubuntu, is_centos, is_osx
-
+from cloudmesh.util.util import yn_choice
 ######################################################################
 # STOP IF PYTHON VERSION IS NOT 2.7.x
 ######################################################################
@@ -168,6 +170,17 @@ def install_command(arguments):
     if arguments["cloudmesh"]:
         deploy()
 
+    elif arguments["delete_yaml"]:
+
+        answer = yn_choice("THIS COMMAND IS REAL DANGEROUS AND WILL DELETE ALL YOUR YAML FILE. Proceed", default='y')
+
+        if answer:
+            print "You fool we just deleted your yaml files"
+            cp("etc/*.yaml", "~/.futuregrid/)
+        else:
+            print "puuh you interrupted"
+            pass
+        
     elif arguments["system"]:
         
         banner("Installing Ubuntu System Requirements")
