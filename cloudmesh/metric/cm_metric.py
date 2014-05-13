@@ -11,12 +11,13 @@ from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
 from prettytable import PrettyTable
+from cloudmesh.metric.api.metric import metric_api
 
 from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
-def shell_command_metric (arguments):
+def shell_command_metric(arguments):
     """
     Usage:
 	cm-metric -h | --help
@@ -33,8 +34,8 @@ def shell_command_metric (arguments):
        -h                   help message
        -m, --metric METRIC  use either user|vm|runtime in METRIC
        -u, --user USER      use username in USER
-       -s, --start START    use YYYYMMDD datetime in START
-       -e, --end END        use YYYYMMDD datetime in END
+       -s, --start_date START    use YYYYMMDD datetime in START
+       -e, --end_date END        use YYYYMMDD datetime in END
        -c, --cluster CLUSTER    use cluster name e.g. india, sierra, etc
        -p, --period PERIOD  use either month|day|week
  
@@ -71,9 +72,7 @@ def shell_command_metric (arguments):
         
     """
 
-    #print arguments
-    log.info(arguments)
-    print "starts metric"
+    #log.info(arguments)
 
     # stage 1
     # ----------
@@ -87,8 +86,8 @@ def shell_command_metric (arguments):
     # db access
     # select data with search options
     # return in table
-    m = cm_metric()
-    m.set_date(arguments["--start"], arguments["--end"])
+    m = metric_api()
+    m.set_date(arguments["--start_date"], arguments["--end_date"])
     m.set_period(arguments["--period"])
     m.set_metric(arguments["--metric"])
     m.set_user(arguments["--user"])
