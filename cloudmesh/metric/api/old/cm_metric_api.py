@@ -4,7 +4,6 @@ from pprint import pprint
 #from fgmetric.shell.FGSearch import FGSearch
 #from fgmetric.shell.FGInstances import FGInstances
 
-
 class CMMetricAPI:
     """ CloudMesh Metric Python API
 
