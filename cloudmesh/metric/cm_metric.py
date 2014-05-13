@@ -7,10 +7,12 @@ import sys
 import importlib
 import cloudmesh
 from pprint import pprint
-from cloudmesh.util.logger import LOGGER
+
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
 from prettytable import PrettyTable
+
+from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
@@ -19,11 +21,12 @@ def shell_command_metric (arguments):
     Usage:
 	cm-metric -h | --help
         cm-metric --version
-        cm-metric [CLOUD] [-s START] 
-                  [-e END] 
-                  [-u USER] 
-                  [-m|--metric=METRIC]
-                  [-p|--period=PERIOD] 
+        cm-metric [CLOUD]
+                  [-s START|--start=START] 
+                  [-e END|--end=END] 
+                  [-u USER|--user=USER] 
+                  [-m METRIC|--metric=METRIC]
+                  [-p PERIOD|--period=PERIOD] 
                   [-c CLUSTER]
 
    Options:
@@ -89,6 +92,8 @@ def shell_command_metric (arguments):
     m.set_period(arguments["--period"])
     m.set_metric(arguments["--metric"])
     m.set_user(arguments["--user"])
+    print m
+    
     res = m.get_stats()
 
 class cm_metric:
@@ -100,6 +105,27 @@ class cm_metric:
     iaas = None
     user = None
 
+    def __init__(self):
+        from_date = None
+        to_date = None
+        period = None
+        metric = None
+        cluster = None
+        iaas = None
+        user = None
+
+        
+    def __str__(self):
+        result = ""
+        result += "from_date: %s\n" % self.from_date
+        result += "to_date:   %s\n" % self.to_date
+        result += "period:    %s\n" % self.period
+        result += "metric:    %s\n" % self.metric
+        result += "cluster:   %s\n" % self.cluster
+        result += "iaas:      %s\n" % self.iaas
+        result += "user:      %s\n" % self.user
+        return result
+    
     def set_date(self, from_date, to_date):
         self.from_date = from_date
         self.to_date = to_date
@@ -137,4 +163,5 @@ def main():
     shell_command_metric(arguments)
         
 if __name__ == "__main__":
+    print sys.argv
     main()
