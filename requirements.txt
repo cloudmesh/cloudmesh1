@@ -47,3 +47,5 @@ azure
 simple-json
 pytimeparse
 timestring
+prettytable
+tabulate
