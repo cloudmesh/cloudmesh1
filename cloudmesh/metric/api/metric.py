@@ -2,14 +2,27 @@ import sys
 from tabulate import tabulate
 
 class metric_api:
-    from_date = None
-    to_date = None
-    period = None
-    metric = None
-    cluster = None
-    iaas = None
-    user = None
 
+    def __init__(self):
+        self.from_date = None
+        self.to_date = None
+        self.period = None
+        self.metric = None
+        self.cluster = None
+        self.iaas = None
+        self.user = None
+
+    def __str__(self):
+        result = ""
+        result += "from_date: %s\n" % self.from_date
+        result += "to_date:   %s\n" % self.to_date
+        result += "period:    %s\n" % self.period
+        result += "metric:    %s\n" % self.metric
+        result += "cluster:   %s\n" % self.cluster
+        result += "iaas:      %s\n" % self.iaas
+        result += "user:      %s\n" % self.user
+        return result
+    
     def set_date(self, from_date, to_date):
         self.from_date = from_date
         self.to_date = to_date
