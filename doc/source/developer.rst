@@ -219,6 +219,11 @@ Please note that you have to do this every time you open a terminal or
 login on the computer you work. Often you may forget it, so we
 recommend that you put it in your .bash_profile or .bashrc page at the
 end.
+
+Next you install the basic cloudmesh code which you can do with::
+
+   $ ./install cloudmesh
+
     
 Modify your rc file:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
