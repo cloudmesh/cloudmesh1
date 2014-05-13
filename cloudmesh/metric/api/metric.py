@@ -111,7 +111,7 @@ class metric_api:
             dictlist.append(row.values())
         self.raw_data = dictlist
 
-    def display(self, table_format="grid"):
+    def display(self, table_format="orgtbl"):
         # table_format = 
         # plain,
         # simple,
@@ -121,8 +121,12 @@ class metric_api:
         # rst,
         # mediawiki,
         # latex
-        self.table = tabulate (self.raw_data, headers="firstrow", tablefmt=table_format)
+        self.table = tabulate (self.raw_data, headers="firstrow", tablefmt="orgtbl")
+        seperator = self.table.split("\n")[1].replace("|", "+")
+        print seperator
         print self.table
+        print seperator        
+
         
     def get_stats(self):
         #print vars(self)
