@@ -429,59 +429,6 @@ Command - man::
     
     
 
-metric
-----------------------------------------------------------------------
-
-Command - metric::
-
-    Usage:
-        metric [CLOUD]
-        metric [-s START] [-e END] [-u USER] [-metric (user|vm|runtime)]
-               [-period (month|day|week)] [-c CLUSTER]
-    
-    Arguments:
-        CLOUD               Name of the IaaS cloud e.g. openstack, nimbus, Eucalyptus
-        START               First day of filter
-        END                 Last day of filter
-        USER                portal user id to filter
-        (user|vm|runtime)   Metric to view
-        (month|day|week)    Time period to view
-        CLUSTER             Name of cluster e.g. india, sierra, foxtrot,
-        hotel, alamo, lima
-    
-    Options:
-       -h                   help message
-    
-    Description:
-       metric command provides usage data with filter options.
-    
-    Result:
-      The result of the method is a datastructure specified in a given format.
-      If no format is specified, we return a JSON string of the following format:
-    
-         {
-            "start_date"    :   start date of search    (datetime),
-            "end_date"      :   end date of search      (datetime),
-            "ownerid"       :   portal user id          (str),
-            "metric"        :   selected metric name    (str),
-            "period"        :   monthly, weekly, daily  (str),
-            "clouds"        :   set of clouds           (list)
-            [
-               {"service"     :   cloud service name  (str),
-                "hostname"     :   hostname (str),
-                "stats"        :   value (int) }
-                ...
-            ]
-         }
-    
-    Examples:
-    
-        metric openstack -c india -u hrlee        
-            Get user statistics
-    
-    
-    
-
 open
 ----------------------------------------------------------------------
 
@@ -567,6 +514,67 @@ Command - quit::
         quit
     
     Action to be performed whne quit is typed
+    
+
+rain
+----------------------------------------------------------------------
+
+Command - rain::
+
+    Usage:
+        rain -h | --help
+        rain --version
+        rain admin add [LABEL] --file=FILE
+        rain admin on HOSTS
+        rain admin off HOSTS
+        rain admin [-i] delete HOSTS
+        rain admin [-i] rm HOSTS
+        rain admin list users
+        rain admin list projects
+        rain admin list roles
+        rain admin list hosts [--user=USERS|--project=PROJECTS|--role=ROLE]
+                              [--start=TIME_START]
+                              [--end=TIME_END]
+                              [--format=FORMAT]
+        rain admin policy [--user=USERS|--project=PROJECTS|--role=ROLE]
+                          (-l HOSTS|-n COUNT)
+                          [--start=TIME_START]
+                          [--end=TIME_END]
+        rain list [--project=PROJECTS] [HOSTS]    
+        rain list hosts [--start=TIME_START]
+                        [--end=TIME_END]
+                        [--format=FORMAT]
+        rain status [--short|--summary][--kind=KIND] [HOSTS]
+        rain provision --profile=PROFILE HOSTS
+        rain provision list (--distro=DISTRO|--kickstart=KICKSTART)
+        rain provision --distro=DITRO --kickstart=KICKSTART HOSTS
+        rain provision add (--distro=URL|--kickstart=KICk_CONTENT) NAME
+    
+    Arguments:
+        HOSTS     the list of hosts passed
+        LABEL     the label of a host
+        COUNT     the count of the bare metal provisioned hosts
+        KIND      the kind
+    
+    Options:
+        -n COUNT     count of teh bare metal hosts to be provisined
+        -p PROJECTS  --projects=PROJECTS  
+        -u USERS     --user=USERS        Specify users
+        -f FILE, --file=FILE  file to be specified
+        -i           interactive mode adds a yes/no 
+                     question for each host specified
+        --role=ROLE            Specify predefined role
+        --start=TIME_START     Start time of the reservation, in 
+                               YYYY/MM/DD HH:MM:SS format. [default: current_time]
+        --end=TIME_END         End time of the reservation, in 
+                               YYYY/MM/DD HH:MM:SS format. In addition a duration
+                               can be specified if the + sign is the first sign.
+                               The duration will than be added to
+                               the start time. [default: +1d]
+        --kind=KIND            Format of the output -png, jpg, pdf. [default:png]
+        --format=FORMAT        Format of the output json, cfg. [default:json]
+    
+    
     
 
 reg
@@ -716,6 +724,28 @@ Command - use::
         add          add a scope with a name
         delete       delete a named scope
         use          activate a scope
+    
+    
+
+user
+----------------------------------------------------------------------
+
+Command - user::
+
+    Usage:
+           user list
+           user info [ID]
+    
+    Administrative command to lists the users from LDAP
+    
+    Arguments:
+    
+      list       list the users
+      ID         list the user with the given ID
+    
+    Options:
+    
+       -v       verbose mode
     
     
 
