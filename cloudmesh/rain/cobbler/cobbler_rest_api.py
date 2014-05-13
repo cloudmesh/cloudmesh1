@@ -129,9 +129,9 @@ class CobblerRestAPI:
     def add_cobbler_distro(self, data):
         """add a distribution to cobbler.
         :param dict data: a json data structure. The formation is {"name": "your distro name", "url": "full url of iso"}
-        :return: True means add distro operation success, otherwise Failed
+        :return: a dict {"distro": "name", "profile": "name"} means add distro operation success, otherwise None means failed
         """
-        return self.add_cobbler_object("distro", data)
+        return self.add_cobbler_object("distro", data, flag_return_data=True)
     
     def add_cobbler_profile(self, data):
         """add a profile to cobbler.
@@ -154,7 +154,7 @@ class CobblerRestAPI:
         """
         return self.add_cobbler_object("kickstart", data)
         
-    def add_cobbler_object(self, cobbler_object, data):
+    def add_cobbler_object(self, cobbler_object, data, flag_return_data=False):
         """add a specific object to cobbler.
         :param string cobbler_object: one of the cobbler objects, currently support four objects, 'distro', 'profile', 'system', 'kickstart'
         :param dict data: a json data structure. The formation is {"name": "your object name", ...}
@@ -162,6 +162,8 @@ class CobblerRestAPI:
         """
         url = "/cm/v1/cobbler/{0}s/{1}".format(cobbler_object, data["name"])
         rest_data = self.request_rest_api("post", url, data)
+        if flag_return_data:
+            return rest_data["data"] if rest_data["result"] else None
         return rest_data["result"]
     
     def update_cobbler_distro(self, data):
@@ -429,6 +431,6 @@ if __name__ == "__main__":
     result = bmc.remove_cobbler_profile(distro_name)
     result = bmc.remove_cobbler_distro(distro_name)
     """
-    result = bmc.get_cobbler_profile_based_kickstart("*.seed")
+    result = bmc.get_cobbler_profile_based_kickstart("a.seed")
     print "result is: ", result
     
