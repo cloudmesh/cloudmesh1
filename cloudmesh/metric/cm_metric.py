@@ -11,6 +11,7 @@ from cloudmesh.util.logger import LOGGER
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
 from prettytable import PrettyTable
+from cloudmesh.metric.api.metric import metric_api
 
 log = LOGGER(__file__)
 
@@ -69,9 +70,7 @@ def shell_command_metric(arguments):
         
     """
 
-    #print arguments
-    log.info(arguments)
-    print "starts metric"
+    #log.info(arguments)
 
     # stage 1
     # ----------
@@ -85,57 +84,16 @@ def shell_command_metric(arguments):
     # db access
     # select data with search options
     # return in table
-    m = cm_metric()
+    m = metric_api()
     m.set_date(arguments["--start_date"], arguments["--end_date"])
     m.set_period(arguments["--period"])
     m.set_metric(arguments["--metric"])
     m.set_user(arguments["--user"])
     res = m.get_stats()
 
-class cm_metric:
-    from_date = None
-    to_date = None
-    period = None
-    metric = None
-    cluster = None
-    iaas = None
-    user = None
-
-    def set_date(self, from_date, to_date):
-        self.from_date = from_date
-        self.to_date = to_date
-
-    def set_period(self, period):
-        self.period = period
-
-    def set_metric(self, metric):
-        self.metric = metric
-
-    def set_cluster(self, cluster):
-        self.cluster = cluster
-
-    def set_iaas(self, cloud):
-        self.iaas = cloud
-
-    def set_cloud(self, cloud):
-        ''' link to set_iaas '''
-        self.set_iaas(cloud)
-
-    def set_user(self, user):
-        self.user = user
-
-    def get_stats(self):
-        print "get_stats called"
-        print vars(self)
-        return
-
-    def stats(self):
-        ''' link to get_stats '''
-        return self.get_stats()
-
 def main():
-    arguments = docopt(metric_command.__doc__)
-    metric_command(arguments)
+    arguments = docopt(shell_command_metric.__doc__)
+    shell_command_metric(arguments)
         
 if __name__ == "__main__":
     main()
