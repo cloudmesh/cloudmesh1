@@ -14,7 +14,7 @@ from prettytable import PrettyTable
 
 log = LOGGER(__file__)
 
-def metric_command(arguments):
+def shell_command_metric(arguments):
     """
     Usage:
 	cm-metric -h | --help
