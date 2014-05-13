@@ -7,31 +7,35 @@ import sys
 import importlib
 import cloudmesh
 from pprint import pprint
-from cloudmesh.util.logger import LOGGER
+
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
 from prettytable import PrettyTable
+from cloudmesh.metric.api.metric import metric_api
+
+from cloudmesh.util.logger import LOGGER
 
 log = LOGGER(__file__)
 
-def metric_command(arguments):
+def shell_command_metric(arguments):
     """
     Usage:
 	cm-metric -h | --help
         cm-metric --version
-        cm-metric [CLOUD] [-s START] 
-                  [-e END] 
-                  [-u USER] 
-                  [-m|--metric=METRIC]
-                  [-p|--period=PERIOD] 
+        cm-metric [CLOUD]
+                  [-s START|--start=START] 
+                  [-e END|--end=END] 
+                  [-u USER|--user=USER] 
+                  [-m METRIC|--metric=METRIC]
+                  [-p PERIOD|--period=PERIOD] 
                   [-c CLUSTER]
 
    Options:
        -h                   help message
        -m, --metric METRIC  use either user|vm|runtime in METRIC
        -u, --user USER      use username in USER
-       -s, --start START    use YYYYMMDD datetime in START
-       -e, --end END        use YYYYMMDD datetime in END
+       -s, --start_date START    use YYYYMMDD datetime in START
+       -e, --end_date END        use YYYYMMDD datetime in END
        -c, --cluster CLUSTER    use cluster name e.g. india, sierra, etc
        -p, --period PERIOD  use either month|day|week
  
@@ -68,9 +72,7 @@ def metric_command(arguments):
         
     """
 
-    #print arguments
-    log.info(arguments)
-    print "starts metric"
+    #log.info(arguments)
 
     # stage 1
     # ----------
@@ -84,11 +86,13 @@ def metric_command(arguments):
     # db access
     # select data with search options
     # return in table
-    m = cm_metric()
-    m.set_date(arguments["--start"], arguments["--end"])
+    m = metric_api()
+    m.set_date(arguments["--start_date"], arguments["--end_date"])
     m.set_period(arguments["--period"])
     m.set_metric(arguments["--metric"])
     m.set_user(arguments["--user"])
+    print m
+    
     res = m.get_stats()
 
 class cm_metric:
@@ -100,6 +104,27 @@ class cm_metric:
     iaas = None
     user = None
 
+    def __init__(self):
+        from_date = None
+        to_date = None
+        period = None
+        metric = None
+        cluster = None
+        iaas = None
+        user = None
+
+        
+    def __str__(self):
+        result = ""
+        result += "from_date: %s\n" % self.from_date
+        result += "to_date:   %s\n" % self.to_date
+        result += "period:    %s\n" % self.period
+        result += "metric:    %s\n" % self.metric
+        result += "cluster:   %s\n" % self.cluster
+        result += "iaas:      %s\n" % self.iaas
+        result += "user:      %s\n" % self.user
+        return result
+    
     def set_date(self, from_date, to_date):
         self.from_date = from_date
         self.to_date = to_date
@@ -133,8 +158,9 @@ class cm_metric:
         return self.get_stats()
 
 def main():
-    arguments = docopt(metric_command.__doc__)
-    metric_command(arguments)
+    arguments = docopt(shell_command_metric.__doc__)
+    shell_command_metric(arguments)
         
 if __name__ == "__main__":
+    print sys.argv
     main()

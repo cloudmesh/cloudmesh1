@@ -41,6 +41,7 @@ II. Developers Documentation
    :maxdepth: -1
   
    developer
+   cobbler
    image
    celery   
     
