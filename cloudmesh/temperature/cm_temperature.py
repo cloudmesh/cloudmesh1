@@ -5,7 +5,7 @@ from pprint import pprint
 from sh import ssh
 import re
 
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER

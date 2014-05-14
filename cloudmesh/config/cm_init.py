@@ -30,7 +30,7 @@ from jinja2 import Undefined
 JINJA2_ENVIRONMENT_OPTIONS = { 'undefined' : Undefined }
 
 
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 

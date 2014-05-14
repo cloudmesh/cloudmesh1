@@ -1,5 +1,5 @@
 from cloudmesh_common.util import path_expand
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh.util.config import read_yaml_config
 from collections import OrderedDict
 import simplejson

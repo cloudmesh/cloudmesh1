@@ -13,7 +13,7 @@ import time
 from cloudmesh.rack.rack_progress import get_temperature_progress, get_service_progress
 import json
 import sys
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 

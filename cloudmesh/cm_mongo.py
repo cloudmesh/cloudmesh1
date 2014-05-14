@@ -5,7 +5,7 @@ from cloudmesh.iaas.openstack.cm_compute import openstack
 from cloudmesh.iaas.ec2.cm_compute import ec2
 from cloudmesh.iaas.openstack.cm_idm import keystone
 from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh.util.stopwatch import StopWatch
 from cloudmesh_common.util import path_expand
 from pprint import pprint

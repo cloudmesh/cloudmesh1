@@ -32,7 +32,7 @@ from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
 # from cloudmesh.cm_profile import cm_profile
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 # import novaclient
 # from novaclient.openstack.common import strutils

@@ -8,7 +8,7 @@ from cloudmesh.config.ConfigDict import ConfigDict
 import yaml
 from sh import grep as _grep
 from pprint import pprint
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 
 # ----------------------------------------------------------------------

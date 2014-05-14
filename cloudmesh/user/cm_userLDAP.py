@@ -1,7 +1,7 @@
 from CMUserProviderBaseType import CMUserProviderBaseType
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config_server
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from pprint import pprint
 import ldap
 import sys

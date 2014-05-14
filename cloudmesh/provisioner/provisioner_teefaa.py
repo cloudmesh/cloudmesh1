@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from multiprocessing import Pool
 import logging
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 import time
 from random import randrange
 from cloudmesh.inventory import Inventory

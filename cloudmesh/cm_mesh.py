@@ -14,7 +14,7 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh_common.util import HEADING
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER

@@ -5,7 +5,7 @@ from flask import make_response
 
 from cloudmesh_common.util import cond_decorator
 from cloudmesh.cm_mongo import cm_mongo
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 from datetime import datetime
 import StringIO

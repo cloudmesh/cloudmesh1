@@ -4,7 +4,7 @@ from docopt import docopt
 #from cloudmesh.metric.cm_metric import shell_command_metric
 from cm_metric import shell_command_metric
 import sh
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 

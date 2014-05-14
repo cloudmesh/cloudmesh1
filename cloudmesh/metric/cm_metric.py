@@ -13,7 +13,7 @@ from cloudmesh.config.cm_config import cm_config
 from prettytable import PrettyTable
 from cloudmesh.metric.api.metric import metric_api
 
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 

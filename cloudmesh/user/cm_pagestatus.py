@@ -1,5 +1,5 @@
 
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh.cm_mongo import cm_MongoBase
 from cloudmesh.config.ConfigDict import ConfigDict
 import os

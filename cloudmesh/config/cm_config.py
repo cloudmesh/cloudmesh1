@@ -1,6 +1,6 @@
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.config import read_yaml_config
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import check_file_for_tabs, deprecated, path_expand
 from pprint import pprint
 from pymongo import MongoClient

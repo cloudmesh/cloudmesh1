@@ -1,4 +1,4 @@
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh.cm_mongo import cm_MongoBase
 
 # ----------------------------------------------------------------------

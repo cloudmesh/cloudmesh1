@@ -2,7 +2,7 @@ from dbhelper import DBHelper
 from baremetal_status import BaremetalStatus
 from hostlist import expand_hostlist
 from copy import deepcopy
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 #
 # SETTING UP A LOGGER
 #

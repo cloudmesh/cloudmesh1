@@ -13,7 +13,7 @@
 """
 from cloudmesh.config.cm_config import cm_config_server, get_mongo_db, cm_config
 from cloudmesh.util.encryptdata import encrypt, decrypt
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import deprecated
 from cloudmesh_common.util import path_expand
 from cloudmesh.user.cm_template import cm_template

@@ -12,7 +12,7 @@ import cloudmesh
 from flask.ext.login import login_required
 from flask.ext.principal import Permission, RoleNeed
 
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
