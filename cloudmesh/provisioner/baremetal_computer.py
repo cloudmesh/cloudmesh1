@@ -234,7 +234,13 @@ class BaremetalComputer:
         """insert a blank document of baremetal computers list into mongodb
         ONLY called ONCE by **fab mongo.inventory**
         """
-        elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory", "data": []}
+        elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory",}
+        result = self.db_client.find_one(elem)
+        flag_insert = True
+        if result["result"] and result["data"]:
+            flag_insert = False
+        if not flag_insert:
+            return True
         result = self.db_client.insert(elem)
         return result["result"]
     
@@ -243,11 +249,34 @@ class BaremetalComputer:
         :param list hosts: the list of hosts with the formation ["host1", "host2",]
         :return: True means enabled successfully, otherwise False
         """
+        if hosts:
+            query_elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory", }
+            update_elem = {"$addToSet":{"data": {"$each": hosts}}}
+            result = self.db_client.atom_update(query_elem, update_elem)
+            return result["result"]
+        return True
+    
+    def disable_baremetal_computers(self, hosts):
+        """remove the list of *hosts* from baremetal computers
+        :param list hosts: the list of hosts with the formation ["host1", "host2",]
+        :return: True means disabled successfully, otherwise False
+        """
+        if hosts:
+            query_elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory", }
+            update_elem = {"$pull":{"data": {"$in": hosts}}}
+            result = self.db_client.atom_update(query_elem, update_elem)
+            return result["result"]
+        return True
+    
+    def get_baremetal_computers(self):
+        """get the list of baremetal computers
+        :return: the list of hosts with the formation ["host1", "host2",] or None if failed
+        """
         query_elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory", }
-        update_elem = {"$addToSet":{"data": {"$each": hosts}}}
-        result = self.db_client.atom_update(query_elem, update_elem)
-        return result["result"]
+        result = self.db_client.find_one(query_elem)
+        return result["data"]["data"] if result["result"] else None
         
+    
 # test
 if __name__ == "__main__":
     from pprint import pprint
@@ -260,6 +289,9 @@ if __name__ == "__main__":
         pprint(data)
     """
     #result = bmc.get_host_info("i080")
-    result = bmc.insert_blank_baremetal_list()
+    #result = bmc.insert_blank_baremetal_list()
+    #result = bmc.enable_baremetal_computers(["i001", "i003", "i007", "i189"])
+    #result = bmc.disable_baremetal_computers(["i001", "i007",])
+    result = bmc.get_baremetal_computers()
     pprint(result)
     
