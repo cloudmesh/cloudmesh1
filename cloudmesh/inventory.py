@@ -1,5 +1,5 @@
 from cloudmesh.config.cm_config import cm_config_server
-
+from cloudmesh_install import config_file
 from cloudmesh_common.logger import LOGGER
 from hostlist import expand_hostlist
 from pprint import pprint
@@ -24,8 +24,8 @@ class Inventory:
 
     server_config = None
 
-    CONFIG_FILE = "~/.futuregrid/cloudmesh_cluster.yaml"
-    BOOTSPEC_FILE = "~/.futuregrid/cloudmesh_bootspec.yaml"
+    CONFIG_FILE = config_file("/cloudmesh_cluster.yaml")
+    BOOTSPEC_FILE = config_file(/cloudmesh_bootspec.yaml")
 
     def __init__(self):
 		# read the host file definition from cloudmesh_cluster.yaml

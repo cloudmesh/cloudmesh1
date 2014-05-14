@@ -1,3 +1,4 @@
+from cloudmesh_install import config_file
 from cloudmesh_common.util import path_expand
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.util.config import read_yaml_config
@@ -177,12 +178,12 @@ if __name__ == "__main__":
 
     print 70 * "="
     print "A =", config["a"]
-    config.write("~/.futuregrid/d.yaml", format="dict")
-    config.write("~/.futuregrid/j.yaml", format="json")
-    config.write("~/.futuregrid/y.yaml", format="yaml")
+    config.write(config_file("/d.yaml"), format="dict")
+    config.write(config_file("/j.yaml"), format="json")
+    config.write(config_file("/y.yaml"), format="yaml")
 
     # this does not work
-    # config.write("~/.futuregrid/print.yaml", format="print")
+    # config.write(config_file("/print.yaml"), format="print")
 
 
 

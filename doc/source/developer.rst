@@ -78,7 +78,7 @@ you can get it as follows.
 
 Please obtain and install xcode as documented in 
 
-* https://developer.apple.com/xcode/downloads/
+1. https://developer.apple.com/xcode/downloads/
 
 In a terminal window execute::
     
@@ -96,7 +96,7 @@ Github ssh keys
 If you are on a new machine you must create a new github ssh key for
 it. This is nicely described at
 
-* https://help.github.com/articles/generating-ssh-keys
+2. https://help.github.com/articles/generating-ssh-keys
 
 You must upload the key to github, either via a command, or simply via
 the github gui. Simply go to your setting and find the ssh key menu
@@ -261,9 +261,6 @@ alias such as::
 This way if you type dev you cd into the development directory
 
 
-
-
-
 YAML files
 ---------------
 
@@ -271,32 +268,52 @@ You will need a number of yaml files. Samples can be found in the etc
 source directory.  More elaborate examples can be obtained from Gregor
 for the personel that work directly with him on FutureGrid.
 
-Configure the yaml files if changes need to be done.
+As we asume you have initially no yaml files, you can create a default
+set with the command::
 
-We to copy and modify the files in the `~/.futuregrid` directory. if the
-`~/.futuregrid` directory does not exoist you need to create it:
+  ./install new
 
-  mkdir -p ~/.futurgerid
-  cp etc/*.yaml ~/.futurgerid
-
+This will create a ~/.futuregrid directory in which you can find and
+modify the yaml files. Important is that you modify the file called::
    
 
+  me.yaml
 
 
-This has
-to be done only once, but you maust make sure you keep the yaml files
-up to date in case we change them, typically we send an e-mail to all
-developers when a change occurred so you can update yours:
+You find the values for the clouds from your cloud provider. Simply
+add them and fill out your user information and you should be done.
 
-* `cloudmesh.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml>`_
-* `cloudmesh_server.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml>`_
-* `cloudmesh_cluster.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_cluster.yaml>`_
+.. Warning:: 
+
+   The next steps are probably not yet properly documented 
+
+Here is my guess::
+
+   1) cloudmesh.yaml file is not yet created
+
+
+After you fill out this file, you need to create a new file called
+cloudmesh.yaml with the following command::
+
+  cm init generate me
+
+
+
+
+This has to be done only once, but you maust make sure you keep the
+yaml files up to date in case we change them, typically we send an
+e-mail to all developers when a change occurred so you can update
+yours:
+
+3. `cloudmesh.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml>`_
+4. `cloudmesh_server.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml>`_
+5. `cloudmesh_cluster.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_cluster.yaml>`_
 For the one from FG please contact Gregor (only if you realy need
 it. Normal users will not get this file).
 * `cloumesh_launcher.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml>`_
-* `cloumesh_bootspec.yaml
+6. `cloumesh_bootspec.yaml
   <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml>`_
-* `cloumesh_mac.yaml
+8. `cloumesh_mac.yaml
   <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_mac.yaml>`_
 
 
@@ -803,7 +820,7 @@ If you like to start with a particular route, you can pass it as parameter::
     
 opens the page 
 
-*    http://localhost:5000/inventory 
+9.    http://localhost:5000/inventory 
 
 in your browser
 

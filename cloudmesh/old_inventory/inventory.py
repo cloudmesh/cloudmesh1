@@ -8,11 +8,11 @@ from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import check_file_for_tabs
 from cloudmesh_common.util import path_expand
 from cloudmesh.util.config import read_yaml_config
-
+from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
 
-inventory_config_filename = "~/.futuregrid/cloudmesh-db.yaml"
+inventory_config_filename = config_file("/cloudmesh-db.yaml")
 
 
 
