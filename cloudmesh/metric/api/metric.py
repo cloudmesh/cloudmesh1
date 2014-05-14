@@ -1,6 +1,7 @@
 import sys
 from tabulate import tabulate
 import requests
+from collections import OrderedDict
 
 class metric_api:
 
@@ -111,6 +112,49 @@ class metric_api:
             dictlist.append(row.values())
         self.raw_data = dictlist
 
+        self.comparison_table(res)
+
+    def comparison_table(self, res):
+        # Let's provide comparison table if there is no search option defined
+        if self.userid or self.iaas or self.cluster:
+            return
+
+        # New table for the comparison of IaaS
+        # ====================================
+        distlist_comparison = []
+        index = "YEAR MONTH"
+        column = "CLOUDNAME"
+        value = "VMCOUNT"
+
+        iaas = []
+        dates = []
+        for row in res["message"]:
+            try:
+                iaas.index(row[column])
+            except ValueError:
+                iaas.append(row[column])
+            try:
+                dates.index(row[index])
+            except ValueError:
+                dates.append(row[index])
+
+        # header for the new table
+        distlist_comparison.append(["DATE"] + iaas)
+        complist = OrderedDict()
+        for row in res["message"]:
+            # date | openstack | eucalyptus | nimbus
+            pos = iaas.index(row[column])
+            try:
+                complist[row[index]][pos] = row[value]
+            except KeyError:
+                complist[row[index]] = [0]*len(iaas)
+                complist[row[index]][pos] = row[value]
+
+        for k, v in complist.iteritems():
+            distlist_comparison.append([k]+v)
+
+        self.raw_data = distlist_comparison
+
     def display(self, table_format="orgtbl"):
         # table_format = 
         # plain,
@@ -121,17 +165,17 @@ class metric_api:
         # rst,
         # mediawiki,
         # latex
-        self.table = tabulate (self.raw_data, headers="firstrow", tablefmt="orgtbl")
+        self.table = tabulate (self.raw_data, headers="firstrow",
+                               tablefmt=table_format)
         seperator = self.table.split("\n")[1].replace("|", "+")
         print seperator
         print self.table
         print seperator        
-
         
     def get_stats(self):
         #print vars(self)
         self.get_raw_data()
-        self.display("grid")
+        self.display()
         return
 
     def stats(self):
