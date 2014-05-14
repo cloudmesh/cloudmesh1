@@ -47,7 +47,11 @@ def main():
             print_help()
             sys.exit(0)
 
-    # 
+    #
+    if "help" in args:
+            print_help()
+            sys.exit(0)
+        
     if "path" in args:
 
         banner ("sys.path", c="-")
@@ -81,7 +85,9 @@ def main():
         print "       Have you run the following command?"
         print
         print "         install system"
-        print
+        print 
+        print e
+
         
 if __name__ == "__main__":
     main()
