@@ -1,3 +1,4 @@
+from cloudmesh_install import config_file
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.rack.cluster_map_heat import HeatClusterMap
 from cloudmesh.rack.cluster_map_service import ServiceClusterMap
@@ -210,7 +211,7 @@ def display_rack_map():
         return redirect("/inventory/rack")
     
     # get location of configuration file, input diag, output image
-    dir_base = "~/.futuregrid"
+    dir_base = config_file("")
     server_config = cm_config_server()
     relative_dir_diag = server_config.get("cloudmesh.server.rack.input")
     relative_dir_image = server_config.get("cloudmesh.server.rack.diagrams.{0}".format(service))

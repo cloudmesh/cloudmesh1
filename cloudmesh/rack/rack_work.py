@@ -9,6 +9,7 @@ from cloudmesh.temperature.cm_temperature import cm_temperature
 from sh import pwd
 import time
 from cloudmesh_common.logger import LOGGER
+from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
 
@@ -41,7 +42,8 @@ class RackWork:
         self.get_map_progress(service)
         
         # get location of configuration file, input diag, output image
-        dir_base = "~/.futuregrid"
+        dir_base = config_file("")
+
         server_config = cm_config_server()
         relative_dir_diag = server_config.get("cloudmesh.server.rack.input")
         relative_dir_image = server_config.get("cloudmesh.server.rack.diagrams.{0}".format(service))

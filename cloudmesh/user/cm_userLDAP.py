@@ -1,3 +1,4 @@
+from cloudmesh_install import config_file
 from CMUserProviderBaseType import CMUserProviderBaseType
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config_server
@@ -13,7 +14,7 @@ import sys
 log = LOGGER(__file__)
 
 def get_ldap_user_from_yaml():
-    me = ConfigDict(filename="~/.futuregrid/me.yaml")
+    me = ConfigDict(filename=config_file("/me.yaml"))
     d = {}
     for element in ["firstname",
                     "lastname",
@@ -255,7 +256,7 @@ class cm_userLDAP (CMUserProviderBaseType):
             print "WRONG" + str(sys.exc_info())
 
     def _get_user_from_yaml(self, username):
-        me = ConfigDict("~/.futuregrid/me.yaml")
+        me = ConfigDict(config_file("/me.yaml"))
 
         print me
 

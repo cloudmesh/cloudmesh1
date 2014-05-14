@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from cloudmesh_install import config_file
 from pprint import pprint
 import getpass
 import yaml
@@ -145,7 +146,7 @@ def cm_manage():
                 var['user'] = getpass.getuser()
 
             from_location = "%(user)s@%(host)s:%(file)s" % var
-            to_location = os.path.expanduser("~/%(file)s" % var)
+            to_location = config_file("/%(file)s" % var)
 
             if os.path.isfile(to_location):
                 print "WARNING: The file %s exists" % to_location
@@ -255,7 +256,7 @@ def cm_manage():
             warning = "Your passwords will appear on the screen. Continue?"
             if yn_choice(warning, 'n'):
 
-                me = ConfigDict(filename=path_expand("~/.futuregrid/me.yaml"))
+                me = ConfigDict(filename=config_file("/.futuregrid/me.yaml"))
                 banner("PASSWORDS")
                 for name in me['password']:
                     print "{0}: {1}".format(name, me['password'][name])
