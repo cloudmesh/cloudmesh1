@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+import yaml
 from sh import head
 from sh import grep
 import glob
@@ -37,6 +38,17 @@ log = LOGGER(__file__)
 class IgnoreUndefined(Undefined):
     def __int__(self):
         return "None"
+
+def find_meta(filename):
+    file = open(filename, 'r')
+
+    found = []
+    for line in file:
+        if line.startswith("meta:"):
+            for i in range(0,4):
+                found.append(file.next())
+            return found
+    return found
     
 def init_shell_command(arguments):
     """
@@ -102,7 +114,7 @@ def init_shell_command(arguments):
         # for v in meta.find_undeclared_variables(ast):
         #    print v
     if arguments["list"] and not arguments["clouds"]:
-        dirs = [path_expand('~/.futuregrid/*.yaml'), path_expand('~/.futuregrid/etc/*.yaml')]
+        dirs = [path_expand('~/test-.futuregrid/*.yaml'), path_expand('~/test-.futuregrid/etc/*.yaml')]
         file_list = []
         for dir in dirs:
             file_list.extend(glob.glob(dir))
@@ -112,7 +124,8 @@ def init_shell_command(arguments):
         vector['meta'] = []
         vector['filename'] = []
         for filename in file_list:
-            head_of_file = head("-n", "4", filename)
+            values = {'kind': "-", 'yaml_version': "-", 'meta': "-"}
+            head_of_file = find_meta (filename)
             values = {'kind': "-", 'yaml_version': "-", 'meta': "-"}
             for line in head_of_file:
                 if ":" in line:
