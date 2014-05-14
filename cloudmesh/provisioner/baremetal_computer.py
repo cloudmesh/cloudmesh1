@@ -74,6 +74,9 @@ class BaremetalComputer:
         This API should be called **BEFORE** baremetal provision.
         Currently, this API is called by **fab mongo.inventory**
         """
+        # insert a document of baremetal computers list
+        self.insert_blank_baremetal_list()
+        # insert mac data
         data = self.read_data_from_yaml()
         result = False
         if data and len(data) > 0:
@@ -225,6 +228,24 @@ class BaremetalComputer:
             self.change_dict_key(one_interface, interface_fields)
             self.fill_dict_default_key(one_interface, interface_default)
     
+    
+    def insert_blank_baremetal_list(self):
+        """insert a blank document of baremetal computers list into mongodb
+        ONLY called ONCE by **fab mongo.inventory**
+        """
+        elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory", "data": []}
+        result = self.db_client.insert(elem)
+        return result["result"]
+    
+    def enable_baremetal_computers(self, hosts):
+        """add the list of *hosts* to be baremetal computers
+        :param list hosts: the list of hosts with the formation ["host1", "host2",]
+        :return: True means enabled successfully, otherwise False
+        """
+        query_elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory", }
+        update_elem = {"$addToSet":{"data": {"$each": hosts}}}
+        result = self.db_client.atom_update(query_elem, update_elem)
+        return result["result"]
         
 # test
 if __name__ == "__main__":
@@ -237,6 +258,7 @@ if __name__ == "__main__":
         data = bmc.get_host_info(host)
         pprint(data)
     """
-    result = bmc.get_host_info("i080")
+    #result = bmc.get_host_info("i080")
+    result = bmc.insert_blank_baremetal_list()
     pprint(result)
     
