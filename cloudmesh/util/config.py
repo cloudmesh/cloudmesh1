@@ -3,7 +3,7 @@
 import os
 import sys
 
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import check_file_for_tabs
 from cloudmesh_common.util import path_expand as cm_path_expand
 import yaml

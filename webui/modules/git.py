@@ -1,5 +1,5 @@
 from cloudmesh.util.gitinfo import GitInfo
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from flask import Blueprint, render_template
 from flask.ext.login import login_required
 from pprint import pprint, pprint

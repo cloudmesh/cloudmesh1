@@ -7,7 +7,7 @@ from pprint import pprint
 
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 

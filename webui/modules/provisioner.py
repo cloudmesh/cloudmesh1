@@ -5,7 +5,7 @@ from cloudmesh.old_inventory.inventory import Inventory as oldInventory, \
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.provisioner.queue.celery import celery
 from cloudmesh.provisioner.queue.tasks import provision
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import cond_decorator, path_expand
 from datetime import datetime
 from flask import Blueprint, render_template, redirect, flash

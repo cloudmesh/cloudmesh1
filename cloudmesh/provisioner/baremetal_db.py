@@ -1,4 +1,4 @@
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh.config.cm_config import get_mongo_db
 from datetime import datetime
 #

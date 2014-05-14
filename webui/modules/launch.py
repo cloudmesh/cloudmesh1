@@ -11,7 +11,7 @@ from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
     identity_changed, Permission, identity_loaded, RoleNeed, UserNeed
 
 
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 

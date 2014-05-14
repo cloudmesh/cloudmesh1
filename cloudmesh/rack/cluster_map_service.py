@@ -6,7 +6,7 @@ from copy import deepcopy
 from cloudmesh.rack.base_cluster_map import BaseClusterMap
 
 
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 

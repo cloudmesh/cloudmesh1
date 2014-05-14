@@ -3,7 +3,7 @@ from baremetal_computer import BaremetalComputer
 from baremetal_status import BaremetalStatus
 from hostlist import expand_hostlist
 from datetime import datetime
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 #
 # SETTING UP A LOGGER
 #

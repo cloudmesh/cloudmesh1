@@ -1,6 +1,6 @@
 from flask import Blueprint
 import flask
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import banner
 from pprint import pprint
 import cloudmesh

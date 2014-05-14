@@ -1,7 +1,7 @@
 from cloudmesh.config.cm_config import cm_config, \
                                        cm_config_server, \
                                        get_mongo_db
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import path_expand
 import yaml
 

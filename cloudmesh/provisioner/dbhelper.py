@@ -1,5 +1,5 @@
 from cloudmesh.config.cm_config import get_mongo_db
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from bson.objectid import ObjectId
 #
 # SETTING UP A LOGGER

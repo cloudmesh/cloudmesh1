@@ -2,7 +2,7 @@ from dbhelper import DBHelper
 from hostlist import expand_hostlist
 from types import *
 from copy import deepcopy
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 #
 # SETTING UP A LOGGER
 #

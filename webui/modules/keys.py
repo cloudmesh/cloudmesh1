@@ -5,7 +5,7 @@ from flask.ext.login import login_required
 import cloudmesh
 from pprint import pprint
 
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 

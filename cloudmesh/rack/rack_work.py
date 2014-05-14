@@ -8,7 +8,7 @@ from cloudmesh.rack.rack_data import RackData
 from cloudmesh.temperature.cm_temperature import cm_temperature
 from sh import pwd
 import time
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
