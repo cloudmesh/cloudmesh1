@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+import cloudmesh_install
 import yaml
 from sh import head
 from sh import grep
@@ -32,6 +33,8 @@ JINJA2_ENVIRONMENT_OPTIONS = { 'undefined' : Undefined }
 
 
 from cloudmesh_common.logger import LOGGER
+
+config_dir = cloudmesh_install.__config_dir__
 
 log = LOGGER(__file__)
 
@@ -101,7 +104,7 @@ def init_shell_command(arguments):
     if arguments["inspect"]:
         filename = arguments['--file']
         if filename is None:
-            filename = path_expand('~/.futuregrid/cloudmesh.yaml')
+            filename = path_expand(config_dir + '/cloudmesh.yaml')
 
         content = open(filename, 'r').read()
         
@@ -114,8 +117,8 @@ def init_shell_command(arguments):
         # for v in meta.find_undeclared_variables(ast):
         #    print v
     if arguments["list"] and not arguments["clouds"]:
-        dirs = [path_expand('~/.futuregrid/*.yaml'),
-                path_expand('~/.futuregrid/etc/*.yaml')]
+        dirs = [path_expand(config_dir + '/*.yaml'),
+                path_expand(config_dir + '/etc/*.yaml')]
         file_list = []
         for dir in dirs:
             file_list.extend(glob.glob(dir))
@@ -144,6 +147,8 @@ def init_shell_command(arguments):
         vector['Version'] = vector.pop('yaml_version')
         vector['Meta'] = vector.pop('meta')
         vector['Filename'] = vector.pop('filename')                        
+
+        banner("Configuration Directory: {0}".format(config_dir), c="-")
         print column_table(vector)
         
         #print filename, values["kind"], values["version"]
@@ -151,7 +156,7 @@ def init_shell_command(arguments):
     if arguments["list"] and arguments["clouds"]:
         filename = arguments['--file']
         if filename is None:
-            filename = path_expand('~/.futuregrid/cloudmesh.yaml')
+            filename = path_expand(config_dir + '/cloudmesh.yaml')
         config = cm_config(filename)
 
         data = {}
@@ -172,13 +177,13 @@ def init_shell_command(arguments):
             
         filename_template = arguments['--file']
         if filename_template is None:
-            filename_template = '~/.futuregrid/etc/a-cloudmesh-template.yaml'
+            filename_template = config_dir + '/etc/a-cloudmesh-template.yaml'
         filename_template = path_expand(filename_template)
         
         filename_values = arguments['VALUES']
 
         if filename_values is None:
-            filename_values = path_expand('~/.futuregrid/me.yaml')
+            filename_values = path_expand(config_dir + '/me.yaml')
 
         content = open(filename_template, 'r').read()
         
@@ -202,15 +207,15 @@ def init_shell_command(arguments):
         print result
         
     if arguments["generate"]:
-        filename_tmp = path_expand('~/.futuregrid/cloudmesh-new.yaml')
-        filename_out = path_expand('~/.futuregrid/cloudmesh.yaml')
+        filename_tmp = path_expand(config_dir + '/cloudmesh-new.yaml')
+        filename_out = path_expand(config_dir + '/cloudmesh.yaml')
         filename_bak = backup_name(filename_out)
-        filename_template = path_expand("~/.futuregrid/etc/cloudmesh-template.yaml")
+        filename_template = path_expand(config_dir + "/etc/cloudmesh-template.yaml")
         if arguments["generate"] and (arguments["me"]):
-            filename_values = path_expand("~/.futuregrid/me.yaml")
+            filename_values = path_expand(config_dir + "/me.yaml")
 
         elif (args.strip() in ["generate none"]):
-            filename_values = path_expand("~/.futuregrid/etc/me-none.yaml")
+            filename_values = path_expand(config_dir + "/etc/me-none.yaml")
         elif arguments["FILENAME"] is not None:
             filename_values = path_expand(arguments["FILENAME"])
         # print me_filename
