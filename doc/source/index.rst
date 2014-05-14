@@ -26,16 +26,9 @@ I. Introduction
    coding
 
 
-II. Generating the Documentation
-=============================
-
-.. toctree::
-   :maxdepth: 2
-
-   doc
 	  
 II. Developers Documentation
-====================
+======================================================================
 
 .. toctree::
    :maxdepth: -1
@@ -44,23 +37,31 @@ II. Developers Documentation
    cobbler
    image
    celery   
+
+III. Generating the Documentation
+======================================================================
+
+.. toctree::
+   :maxdepth: 2
+
+   doc
     
 
-III. Execution
-========
+IV. Execution
+======================================================================
 .. toctree::
    :maxdepth: 2
   
    nosetest
 
-IV. Configuration
-================
+V. Configuration
+======================================================================
 .. toctree::
    :maxdepth: -1
   
    configure
 
-V. Cloudmesh Commandshell
+VI. Cloudmesh Commandshell
 ======================================================================
 
 .. toctree::
@@ -71,7 +72,7 @@ V. Cloudmesh Commandshell
    cm-manage
    cm-shell-man
 
-VI. Cloud Metrics
+VII. Cloud Metrics
 ======================================================================
 
 .. toctree::
@@ -80,7 +81,7 @@ VI. Cloud Metrics
    metric
 
 
-VII. Old Commandshell (will be integrated in new shell)
+VIII. Old Commandshell (will be integrated in new shell)
 ======================================================================
 
 .. toctree::

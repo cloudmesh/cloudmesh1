@@ -257,6 +257,43 @@ alias such as::
 
 This way if you type dev you cd into the development directory
 
+Install the Requirements
+----------------------------------------------------------------------
+
+In addition to the system packages we will now install into the
+virtual env a number of python packages. Althouth this could be done
+with the command::
+
+  pip install -r requirements.txt
+
+our install program can also do this with::
+
+  ./install requirements
+
+For some reason on ubunti it installs the fabric package wrong. Hence
+you have to say in addition to the above command::
+
+  pip install fabric
+
+Initial Documentation
+----------------------------------------------------------------------
+
+An initial set of documentation can now be created with the command 
+
+  make sphinx
+
+The documentation is located in
+
+  doc/build/html/index.html
+
+please use your browser to open it. If you just run on ubuntu server,
+you also need to install the ubuntu-desktop.
+
+   sudo apt-get install ubuntu-desktop
+
+
+
+
 
 Initial YAML files
 ---------------
