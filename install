@@ -2,26 +2,39 @@
 """
 Usage:
     install -h | --help
-    install --version
     install system
-    install cloudmesh
-    install delete_yaml
-    install query
-    install vagrant    
-"""
+    install path
 
+Description:
+
+    install system
+        install some important packages that are essential for cloudmesh instalation.
+        This command has to be called first.
+        
+    install path
+        lists the available sys.path for debugging purposes.
+
+"""
+from textwrap import dedent
+from pprint import pprint 
 import os
 import getopt
 import sys
-from installation.util import banner
-from installation.util import get_system
+from cloudmesh_common.util import banner
+from cloudmesh_install.util import get_system
+from cloudmesh_install.install import install_command
+
+def print_help():
+    documentation = __doc__.split("\n") + dedent(install_command.__doc__).split("\n")
+    print "\n".join(documentation)
+    
 
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "h", ["help"])
         if (opts == [] and args == []):
             banner( "ERROR: no parameter defined")
-            print __doc__
+            print_help()
             sys.exit(1)
     except getopt.error, msg:
         print msg
@@ -31,12 +44,21 @@ def main():
     # parse for help
     for o, a in opts:
         if o in ("-h", "--help"):
-            os.system("installation/install.py help")
+            print_help()
             sys.exit(0)
 
     # 
+    if "path" in args:
+
+        banner ("sys.path", c="-")
+        pprint(sys.path)
+        banner("-")
+        sys.exit(0)
+                
     if "system" in args:
 
+        banner("system")
+        
         os_system = get_system()
 
         try:    
@@ -52,13 +74,14 @@ def main():
     banner (arguments)
     try:
 
-        os.system('installation/install.py "%s"' % arguments)
+        install_command(arguments)
 
     except Exception, e:
         print "ERROR: Your environment may not be properly configured."
-        print "       Have you run the command"
-        print "         install ubuntu/centos/osx"
-        
+        print "       Have you run the following command?"
+        print
+        print "         install system"
+        print
         
 if __name__ == "__main__":
     main()

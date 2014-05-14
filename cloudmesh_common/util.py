@@ -75,8 +75,9 @@ def banner(txt=None, c="#"):
     """
     print
     print "#", 70 * c
-    print "#", txt
-    print "#", 70 * c
+    if txt not in ["-", "="]:
+        print "#", txt
+        print "#", 70 * c
 
 
 def HEADING(txt=None):

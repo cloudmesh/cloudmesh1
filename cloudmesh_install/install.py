@@ -1,15 +1,8 @@
 #!/usr/bin/env python
-"""
-Usage:
-    install -h | --help
-    install --version
-    install system
-    install cloudmesh
-    install delete_yaml    
-    install query
-    install new    
-    install vagrant    
-"""
+import sys
+sys.path.append("..")
+sys.path.append(".")
+
 from jinja2.runtime import Undefined
 from jinja2 import Environment, meta
 import json
@@ -17,12 +10,15 @@ import yaml
 from string import Template
 from collections import OrderedDict
 from sh import cp
-import sys
+
 import os
 import platform
-from util import banner
+from cloudmesh_common.util import banner, path_expand, backup_name
 from util import is_ubuntu, is_centos, is_osx
-from cloudmesh.util.util import yn_choice
+from cloudmesh_common.util import yn_choice
+
+
+
 ######################################################################
 # STOP IF PYTHON VERSION IS NOT 2.7.x
 ######################################################################
@@ -55,26 +51,59 @@ class IgnoreUndefined(Undefined):
     def __int__(self):
         return "None"
 
-def path_expand(text):
-    """ returns a string with expanded variavble.
-
-    :param text: the path to be expanded, which can include ~ and $ variables
-    :param text: string
+def install_command(args):
+    """
+    Usage:
+        install -h | --help
+        install --version
+        install cloudmesh
+        install delete_yaml    
+        install query
+        install new    
+        install vagrant
     
     """
-    template = Template(text)
-    result = template.substitute(os.environ)
-    result = os.path.expanduser(result)
-    return result
+    arguments = docopt(install_command.__doc__,args)
+    if arguments["cloudmesh"]:
+        deploy()
 
-def backup_name(filename):
-    n = 0
-    found = True
-    while found:
-        n = n + 1
-        backup = "{0}.bak.{1}".format(filename, n)
-        found = os.path.isfile(backup)
-    return backup
+    elif arguments["new"]:
+        new_cloudmesh_yaml()
+        
+    elif arguments["delete_yaml"]:
+
+        answer = yn_choice("THIS COMMAND IS REAL DANGEROUS AND WILL DELETE ALL YOUR YAML FILE. Proceed", default='y')
+
+        if answer:
+            print "You fool we just deleted your yaml files"
+            cp("etc/*.yaml", "~/.futuregrid/")
+        else:
+            print "puuh you interrupted"
+            pass
+        
+    elif arguments["system"]:
+        
+        banner("Installing Ubuntu System Requirements")
+
+        if is_ubuntu():
+            ubuntu()
+        elif is_osx():
+            osx()
+        elif is_centos():
+            centos()
+
+
+    elif arguments["query"]:
+
+        import platform
+        print "System:    ", platform.system()
+        #print "Uname:     ", platform.uname()                                          print "Machine:   ", platform.machine()                        
+        print "Processor: ", platform.processor()                
+        print "Platform:  ", platform.platform()        
+        print "Python:    ", platform.python_version()
+        print "Virtualenv:", hasattr(sys, 'real_prefix')
+    elif arguments["vagrant"]:
+        vagrant()
 
 def new_cloudmesh_yaml():
 
@@ -245,47 +274,6 @@ def sphinx_updates():
     local('cd /tmp/install-cloudmesh; hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/')
     local('~/ENV/bicd /tmp/install-cloudmesh/sphinx-contrib/autorun; python setup.py install')
 
-def install_command(arguments):
-    if arguments["cloudmesh"]:
-        deploy()
-
-    elif arguments["new"]:
-        new_cloudmesh_yaml()
-        
-    elif arguments["delete_yaml"]:
-
-        answer = yn_choice("THIS COMMAND IS REAL DANGEROUS AND WILL DELETE ALL YOUR YAML FILE. Proceed", default='y')
-
-        if answer:
-            print "You fool we just deleted your yaml files"
-            cp("etc/*.yaml", "~/.futuregrid/")
-        else:
-            print "puuh you interrupted"
-            pass
-        
-    elif arguments["system"]:
-        
-        banner("Installing Ubuntu System Requirements")
-
-        if is_ubuntu():
-            ubuntu()
-        elif is_osx():
-            osx()
-        elif is_centos():
-            centos()
-
-
-    elif arguments["query"]:
-
-        import platform
-        print "System:    ", platform.system()
-        #print "Uname:     ", platform.uname()                                          print "Machine:   ", platform.machine()                        
-        print "Processor: ", platform.processor()                
-        print "Platform:  ", platform.platform()        
-        print "Python:    ", platform.python_version()
-        print "Virtualenv:", hasattr(sys, 'real_prefix')
-    elif arguments["vagrant"]:
-        vagrant()
         
 def vagrant():
     local("rm -rf /tmp/vagrant")
@@ -296,7 +284,5 @@ def vagrant():
     local("cd /tmp/vagrant; vagrant ssh")
              
 if __name__ == '__main__':
-    arguments = docopt(__doc__)
-
-    install_command(arguments)
+    install_command(sys.argv)
 
