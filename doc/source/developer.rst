@@ -220,9 +220,6 @@ login on the computer you work. Often you may forget it, so we
 recommend that you put it in your .bash_profile or .bashrc page at the
 end.
 
-Next you install the basic cloudmesh code which you can do with::
-
-   $ ./install cloudmesh
 
     
 Modify your rc file:
@@ -261,7 +258,7 @@ alias such as::
 This way if you type dev you cd into the development directory
 
 
-YAML files
+Initial YAML files
 ---------------
 
 You will need a number of yaml files. Samples can be found in the etc
@@ -279,17 +276,19 @@ modify the yaml files. Important is that you modify the file called::
 
   me.yaml
 
-
 You find the values for the clouds from your cloud provider. Simply
 add them and fill out your user information and you should be done.
+
+
+Next you install the basic cloudmesh code which you can do with::
+
+   $ ./install cloudmesh
+
+
 
 .. Warning:: 
 
    The next steps are probably not yet properly documented 
-
-Here is my guess::
-
-   1) cloudmesh.yaml file is not yet created
 
 
 After you fill out this file, you need to create a new file called
@@ -297,6 +296,7 @@ cloudmesh.yaml with the following command::
 
   cm init generate me
 
+This will create a cloudmesh.yaml file in the ~/.futuregrid directory
 
 
 
