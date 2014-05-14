@@ -113,7 +113,7 @@ def new_cloudmesh_yaml():
     # create ~/.futuregrid dir
     #
 
-    dir = path_expand("~/test-.futuregrid")
+    dir = path_expand("~/.futuregrid")
 
     # Make sure the directory does not exist    
     if os.path.exists(dir):

@@ -88,8 +88,8 @@ def init_shell_command(arguments):
     Description:
 
       init list [KIND] [--json]
-         list the versions and types of the yaml files in the ~/.futuregrid and ~/.futuregrid/etc
-         directories.
+         list the versions and types of the yaml files in the
+         ~/.futuregrid and ~/.futuregrid/etc directories.
 
       init list clouds [--file=FILENAME]
          Lists the available clouds in the configuration yaml file.
@@ -114,7 +114,8 @@ def init_shell_command(arguments):
         # for v in meta.find_undeclared_variables(ast):
         #    print v
     if arguments["list"] and not arguments["clouds"]:
-        dirs = [path_expand('~/test-.futuregrid/*.yaml'), path_expand('~/test-.futuregrid/etc/*.yaml')]
+        dirs = [path_expand('~/.futuregrid/*.yaml'),
+                path_expand('~/.futuregrid/etc/*.yaml')]
         file_list = []
         for dir in dirs:
             file_list.extend(glob.glob(dir))
