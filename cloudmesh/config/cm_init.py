@@ -185,7 +185,7 @@ def init_shell_command(arguments):
         filename_values = arguments['VALUES']
 
         if filename_values is None:
-            filename_values = (config_file('/me.yaml')
+            filename_values = config_file('/me.yaml')
 
         content = open(filename_template, 'r').read()
         
