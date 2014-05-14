@@ -9,11 +9,13 @@ class metric_api:
         self.from_date = None
         self.to_date = None
         self.period = None
+        self.timetype = None
         self.metric = None
         self.cluster = None
         self.iaas = None
         self.userid = None
 
+        self.set_default()
         self.load_server_info()
 
     def __str__(self):
@@ -21,11 +23,16 @@ class metric_api:
         result += "from_date: %s\n" % self.from_date
         result += "to_date:   %s\n" % self.to_date
         result += "period:    %s\n" % self.period
+        result += "timetype:    %s\n" % self.timetype
         result += "metric:    %s\n" % self.metric
         result += "cluster:   %s\n" % self.cluster
         result += "iaas:      %s\n" % self.iaas
         result += "userid:      %s\n" % self.userid
         return result
+
+    def set_default(self):
+        self.timetype = "hour"
+        self.metric = "vmcount"
 
     def load_server_info(self):
         # cloudmesh_server.yaml contains the api server info
@@ -74,7 +81,8 @@ class metric_api:
         self.period = period
 
     def set_metric(self, metric):
-        self.metric = metric
+        if metric:
+            self.metric = metric
 
     def set_cluster(self, cluster):
         self.cluster = cluster
@@ -114,6 +122,17 @@ class metric_api:
 
         self.comparison_table(res)
 
+    def translate_naming(self, name):
+        name = name.upper()
+
+        if name in ["WALLTIME", "WALLCLOCK", "RUNTIME"]:
+            timetype = self.translate_naming(self.timetype)
+            return "WallTime ("+timetype+")"
+        elif name == "HOUR":
+            return "Hrs"
+        else:
+            return name
+
     def comparison_table(self, res):
         # Let's provide comparison table if there is no search option defined
         if self.userid or self.iaas or self.cluster:
@@ -124,8 +143,8 @@ class metric_api:
         distlist_comparison = []
         index = "YEAR MONTH"
         column = "CLOUDNAME"
-        value = "VMCOUNT"
-
+        value = self.translate_naming(name = self.metric)#"VMCOUNT")
+       
         iaas = []
         dates = []
         for row in res["message"]:
