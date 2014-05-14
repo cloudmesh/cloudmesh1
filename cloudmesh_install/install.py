@@ -1,5 +1,8 @@
 #!/usr/bin/env python
+import glob
+import shutil
 import sys
+import stat
 sys.path.append("..")
 sys.path.append(".")
 
@@ -9,14 +12,12 @@ import json
 import yaml
 from string import Template
 from collections import OrderedDict
-from sh import cp
 
 import os
 import platform
 from cloudmesh_common.util import banner, path_expand, backup_name
 from util import is_ubuntu, is_centos, is_osx
 from cloudmesh_common.util import yn_choice
-
 
 
 ######################################################################
@@ -64,10 +65,12 @@ def install_command(args):
     
     """
     arguments = docopt(install_command.__doc__,args)
+    print arguments
     if arguments["cloudmesh"]:
         deploy()
 
     elif arguments["new"]:
+        print "NEW"
         new_cloudmesh_yaml()
         
     elif arguments["delete_yaml"]:
@@ -108,36 +111,71 @@ def install_command(args):
 def new_cloudmesh_yaml():
 
     # create ~/.futuregrid dir
-    # 
-    filename_tmp = path_expand('~/.futuregrid/cloudmesh-new.yaml')
-    filename_out = path_expand('~/.futuregrid/cloudmesh.yaml')
-    filename_bak = backup_name(filename_out)
-    filename_template = path_expand("~/.futuregrid/etc/cloudmesh-template.yaml")
-    filename_values = path_expand("~/.futuregrid/me.yaml")
+    #
+
+    dir = path_expand("~/test-.futuregrid")
+
+    # Make sure the directory does not exist    
+    if os.path.exists(dir):
+        print "ERROR: the directory '{0}' already exists.".format(dir)
+        print "       For the command new to work it must not exist."
+        print "       This is to prevent that we overwrite files."        
+        sys.exit(1)
+    else:
+        os.makedirs(dir, stat.S_IRWXU )
+        #os.makedirs(dir + "/etc" , stat.S_IRWXU )        
+
+    filename_tmp = dir + '/cloudmesh-new.yaml'
+    filename_out = dir + '/cloudmesh.yaml'
+    filename_bak = filename_out
+    filename_template = dir + "/etc/cloudmesh-template.yaml"
+    filename_values = dir + "/me.yaml"
+
+    # copy the yaml files
+
+    def cp_urw(file_from, file_to):
+        print "copy {0} -> {1}".format(file_from, file_to)
+        shutil.copy(file_from, file_to)
+        os.chmod(file_to, stat.S_IRWXU)
+        
+    
+    print "COPY"
+    for file_from in glob.glob("etc/*.yaml"):
+        file_to = dir + "/" + file_from.replace("etc/","")
+        cp_urw(file_from, file_to)
+    cp_urw(dir + "/me-none.yaml", dir + "/me.yaml")
+
+    me_values = "etc/me-none.yaml"
+    me_template = "etc/me-all.yaml"
+    me_file = dir 
 
     try:
         # do simple yaml load
         
-        result = open(filename_values, 'r').read()
+        result = open(me_values, 'r').read()
         values = yaml.safe_load(Template(result).substitute(os.environ))
+        #values = yaml.safe_load(Template(result).substitute(os.environ))
         print json.dumps(values, indent=4)
         
     except Exception, e:
         print "ERROR: There is an error in the yaml file", e
 
-
     for cloud in values['clouds']:
         values['clouds'][cloud]['default'] = {}            
         values['clouds'][cloud]['default']['image'] = None
         values['clouds'][cloud]['default']['flavor'] = None            
-
-    content = open(filename_template, 'r').read()
+            
+    content = open(me_template, 'r').read()
     env = Environment(undefined=IgnoreUndefined)
     template = env.from_string(content)
     result = template.render(values)
 
-    print json.dumps(values, indent=4)    
-
+    format = "yaml"
+    if format in ["json"]:
+        print json.dumps(values, indent=4)    
+    elif format in ["yaml", "yml"]:
+        print yaml.dump(values, default_flow_style=False)
+    banner("done")
     sys.exit()    
     out_file=open(filename_tmp, 'w+')
     out_file.write(result)

@@ -3,7 +3,7 @@ meta:
   yaml_version: 2.1
 
 username:
-  portal: {{portalname}}
+  portal: {{username.portal}}
   hp: None
 
 profile:
@@ -31,12 +31,12 @@ clouds:
       username: {{clouds.hp.username}}
       credential:
          OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
-         OS_TENANT_NAME: {{ clouds.credential.OS_TENNANT_NAME }}
+         OS_TENANT_NAME: {{ clouds.hp.credential.OS_TENNANT_NAME }}
   hp_east:
       username: {{clouds.hp.username}}
       credential:
          OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
-         OS_TENANT_NAME: {{ clouds.credential.OS_TENNANT_NAME }}
+         OS_TENANT_NAME: {{ clouds.hp.credential.OS_TENNANT_NAME }}
   azure:
     credential:
       subscriptionid: None

@@ -2,7 +2,9 @@ meta:
   kind: me
   yaml_version: 2.1
 
-portalname: TBD
+username:
+    portal: TBD
+    hp: TBD
 
 profile:
     firstname: TBD
