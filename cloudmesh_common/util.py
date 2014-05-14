@@ -27,6 +27,8 @@ from prettytable import PrettyTable
 import cloudmesh_common.bootstrap_util
 
 def path_expand(text):
+    # This function just wraps the bootstrap function to avoid
+    # breaking other code that imports "path_expand" from this module
     return cloudmesh_common.bootstrap_util.path_expand(text)
 
 def backup_name(filename):
@@ -50,6 +52,8 @@ def backup_name(filename):
     return backup
 
 def banner(txt=None, c="#"):
+    # This function just wraps the bootstrap function to avoid
+    # breaking other code that imports "banner" from this module
     cloudmesh_common.bootstrap_util.banner(text)
 
 def HEADING(txt=None):
@@ -67,6 +71,8 @@ def HEADING(txt=None):
 
         
 def yn_choice(message, default='y'):
+    # This function just wraps the bootstrap function to avoid
+    # breaking other code that imports "yn_choice" from this module
     return cloudmesh_common.bootstrap_util.yn_choice(message, default)
 
 
