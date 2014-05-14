@@ -279,6 +279,13 @@ modify the yaml files. Important is that you modify the file called::
 You find the values for the clouds from your cloud provider. Simply
 add them and fill out your user information and you should be done.
 
+.. warning::
+
+
+   not yet done. 
+
+
+
 
 Next you install the basic cloudmesh code which you can do with::
 
