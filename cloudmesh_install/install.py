@@ -127,9 +127,10 @@ def new_cloudmesh_yaml():
         #os.makedirs(dir + "/etc" , stat.S_IRWXU )        
 
     filename_tmp = dir + '/cloudmesh-new.yaml'
-    filename_out = dir + '/cloudmesh.yaml'
-    filename_bak = filename_out
-    filename_template = dir + "/etc/cloudmesh-template.yaml"
+    cloudmesh_out = dir + '/cloudmesh.yaml'
+    filename_bak = cloudmesh_out
+
+    cloudmesh_template = "etc/cloudmesh.yaml"
     filename_values = dir + "/me.yaml"
 
     # copy the yaml files
@@ -140,53 +141,62 @@ def new_cloudmesh_yaml():
         os.chmod(file_to, stat.S_IRWXU)
         
     
+    def file_from_template(file_template, file_out, values):
+        content = open(file_template, 'r').read()
+        env = Environment(undefined=IgnoreUndefined)
+        template = env.from_string(content)
+        result = template.render(values)
+        out_file=open(file_out, 'w+')
+        out_file.write(result)
+        out_file.close()
+
+
     for file_from in glob.glob("etc/*.yaml"):
         file_to = dir + "/" + file_from.replace("etc/","")
         cp_urw(file_from, file_to)
     cp_urw(dir + "/me-none.yaml", dir + "/me.yaml")
 
-    me_values = "etc/me-none.yaml"
-    me_template = "etc/me-all.yaml"
+    # me_values = "etc/me-none.yaml"
+    # me_template = "etc/me-all.yaml"
     me_file = dir + "/me.yaml"
 
     try:
         # do simple yaml load
         
-        result = open(me_values, 'r').read()
+        result = open(me_file, 'r').read()
         values = yaml.safe_load(Template(result).substitute(os.environ))
         #values = yaml.safe_load(Template(result).substitute(os.environ))
         #print json.dumps(values, indent=4)
         
     except Exception, e:
         print "ERROR: There is an error in the yaml file", e
+        sys.exit(1)
 
     for cloud in values['clouds']:
         values['clouds'][cloud]['default'] = {}            
         values['clouds'][cloud]['default']['image'] = None
         values['clouds'][cloud]['default']['flavor'] = None            
+
+    file_from_template(cloudmesh_template, cloudmesh_out, values)
+
+    print "# Created: {0}".format(me_file)
+    banner(c="-")
             
-    content = open(me_template, 'r').read()
-    env = Environment(undefined=IgnoreUndefined)
-    template = env.from_string(content)
-    result = template.render(values)
 
-    format = "yaml"
-    if format in ["json"]:
-        content=  json.dumps(values, indent=4)    
-    elif format in ["yaml", "yml"]:
-        content = yaml.dump(values, default_flow_style=False)
-    banner("done", c="-")
+    #sys.exit()
+    #
+    #format = "yaml"
+    #if format in ["json"]:
+    #    result =  json.dumps(values, indent=4)    
+    #elif format in ["yaml", "yml"]:
+    #    result = yaml.dump(values, default_flow_style=False)
+    #banner("done", c="-")
 
 
-    out_file=open(me_file, 'w+')
-    out_file.write(content)
-    out_file.close()
     
     #print "# Template: {0}".format(filename_template)
     #print "# Values  : {0}".format(filename_values)
     #print "# Backup : {0}".format(filename_bak)            
-    print "# Created: {0}".format(me_file)
-    banner(c="-")
     
     
 def deploy():
