@@ -8,9 +8,11 @@ Usage:
 Description:
 
     install system
-        install some important packages that are essential for cloudmesh instalation.
-        This command has to be called first.
-        
+        install some important packages that are essential for 
+        cloudmesh instalation. This command has to be called first.
+        Once you have installed the command more options will be 
+        available.
+
     install path
         lists the available sys.path for debugging purposes.
 
@@ -22,10 +24,17 @@ import getopt
 import sys
 from cloudmesh_common.util import banner
 from cloudmesh_install.util import get_system
-from cloudmesh_install.install import install_command
+
 
 def print_help():
-    documentation = __doc__.split("\n") + dedent(install_command.__doc__).split("\n")
+    
+    deep_commands = ""
+    try:
+        from cloudmesh_install.install import install_command
+        deep_commands = dedent(install_command.__doc__)
+    except:
+        deep_commands = ""
+    documentation = __doc__.split("\n") + deep_commands.split("\n")
     print "\n".join(documentation)
     
 
@@ -78,6 +87,7 @@ def main():
     banner (arguments)
     try:
 
+        from cloudmesh_install.install import install_command
         install_command(arguments)
 
     except Exception, e:
