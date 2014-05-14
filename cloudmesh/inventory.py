@@ -4,7 +4,7 @@ from cloudmesh.util.logger import LOGGER
 from hostlist import expand_hostlist
 from pprint import pprint
 import sys
-from cloudmesh.util.util import path_expand as cm_path_expand
+from cloudmesh_common.util import path_expand as cm_path_expand
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import get_mongo_db
 from cloudmesh.config.ConfigDict import ConfigDict

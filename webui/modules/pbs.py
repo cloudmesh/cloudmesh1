@@ -6,8 +6,8 @@ from cloudmesh.pbs.pbs import PBS
 from flask.ext.login import login_required
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from pprint import pprint
-from cloudmesh.util.util import cond_decorator
-from cloudmesh.util.util import cond_decorator
+from cloudmesh_common.util import cond_decorator
+from cloudmesh_common.util import cond_decorator
 import cloudmesh
 from flask.ext.login import login_required
 from flask.ext.principal import Permission, RoleNeed

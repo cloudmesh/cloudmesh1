@@ -4,8 +4,8 @@ import os
 import sys
 
 from cloudmesh.util.logger import LOGGER
-from cloudmesh.util.util import check_file_for_tabs
-from cloudmesh.util.util import path_expand as cm_path_expand
+from cloudmesh_common.util import check_file_for_tabs
+from cloudmesh_common.util import path_expand as cm_path_expand
 import yaml
 from string import Template
 import traceback

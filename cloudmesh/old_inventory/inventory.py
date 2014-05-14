@@ -5,8 +5,8 @@ from datetime import datetime
 from mongoengine import *
 from pprint import pprint
 from cloudmesh.util.logger import LOGGER
-from cloudmesh.util.util import check_file_for_tabs
-from cloudmesh.util.util import path_expand
+from cloudmesh_common.util import check_file_for_tabs
+from cloudmesh_common.util import path_expand
 from cloudmesh.util.config import read_yaml_config
 
 

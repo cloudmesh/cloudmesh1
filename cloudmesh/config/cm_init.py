@@ -15,12 +15,12 @@ import inspect
 import sys
 import importlib
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.util.util import path_expand
+from cloudmesh_common.util import path_expand
 from cloudmesh.user.cm_template import cm_template
-from cloudmesh.util.util import yn_choice
-from cloudmesh.util.util import backup_name
-from cloudmesh.util.banner import banner
-from cloudmesh.util.util import column_table
+from cloudmesh_common.util import yn_choice
+from cloudmesh_common.util import backup_name
+from cloudmesh_common.util import banner
+from cloudmesh_common.util import column_table
 from sh import less
 import os
 from sets import Set

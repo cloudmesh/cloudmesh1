@@ -1,5 +1,5 @@
 from cloudmesh.user.cm_user import cm_user
-from cloudmesh.util.util import cond_decorator
+from cloudmesh_common.util import cond_decorator
 from flask import Blueprint, g, render_template, request, redirect
 from flask.ext.login import login_required
 import cloudmesh

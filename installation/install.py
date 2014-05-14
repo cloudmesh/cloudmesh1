@@ -7,8 +7,15 @@ Usage:
     install cloudmesh
     install delete_yaml    
     install query
+    install new    
     install vagrant    
 """
+from jinja2.runtime import Undefined
+from jinja2 import Environment, meta
+import json
+import yaml
+from string import Template
+from collections import OrderedDict
 from sh import cp
 import sys
 import os
@@ -44,6 +51,31 @@ except:
     os.system("pip install docopt")
     from docopt import docopt
 
+class IgnoreUndefined(Undefined):
+    def __int__(self):
+        return "None"
+
+def path_expand(text):
+    """ returns a string with expanded variavble.
+
+    :param text: the path to be expanded, which can include ~ and $ variables
+    :param text: string
+    
+    """
+    template = Template(text)
+    result = template.substitute(os.environ)
+    result = os.path.expanduser(result)
+    return result
+
+def backup_name(filename):
+    n = 0
+    found = True
+    while found:
+        n = n + 1
+        backup = "{0}.bak.{1}".format(filename, n)
+        found = os.path.isfile(backup)
+    return backup
+
 def new_cloudmesh_yaml():
 
     # create ~/.futuregrid dir
@@ -56,9 +88,14 @@ def new_cloudmesh_yaml():
 
     try:
         # do simple yaml load
-        values = ConfigDict(filename=filename_values)
+        
+        result = open(filename_values, 'r').read()
+        values = yaml.safe_load(Template(result).substitute(os.environ))
+        print json.dumps(values, indent=4)
+        
     except Exception, e:
         print "ERROR: There is an error in the yaml file", e
+
 
     for cloud in values['clouds']:
         values['clouds'][cloud]['default'] = {}            
@@ -70,6 +107,9 @@ def new_cloudmesh_yaml():
     template = env.from_string(content)
     result = template.render(values)
 
+    print json.dumps(values, indent=4)    
+
+    sys.exit()    
     out_file=open(filename_tmp, 'w+')
     out_file.write(result)
     out_file.close()
@@ -209,13 +249,16 @@ def install_command(arguments):
     if arguments["cloudmesh"]:
         deploy()
 
+    elif arguments["new"]:
+        new_cloudmesh_yaml()
+        
     elif arguments["delete_yaml"]:
 
         answer = yn_choice("THIS COMMAND IS REAL DANGEROUS AND WILL DELETE ALL YOUR YAML FILE. Proceed", default='y')
 
         if answer:
             print "You fool we just deleted your yaml files"
-            cp("etc/*.yaml", "~/.futuregrid/)
+            cp("etc/*.yaml", "~/.futuregrid/")
         else:
             print "puuh you interrupted"
             pass

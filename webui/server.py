@@ -5,7 +5,7 @@ from cloudmesh.provisioner.provisioner import *
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.user.cm_userLDAP import cm_userLDAP, get_ldap_user_from_yaml
 from cloudmesh.user.roles import Roles
-from cloudmesh.util.util import banner, cond_decorator, path_expand
+from cloudmesh_common.util import banner, cond_decorator, path_expand
 from datetime import datetime
 from flask import Flask, current_app, request, session, Flask, render_template, \
     flash, send_from_directory, redirect, g

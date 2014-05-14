@@ -6,7 +6,7 @@ import platform
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.password import get_password, get_user, get_host
 from cloudmesh.util.menu import ascii_menu
-from cloudmesh.util.util import yn_choice
+from cloudmesh_common.util import yn_choice
 from pprint import pprint
 
 input = raw_input

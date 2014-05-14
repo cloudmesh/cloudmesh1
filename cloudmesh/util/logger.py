@@ -5,7 +5,7 @@ from sh import grep
 import logging
 import sys
 import os
-from cloudmesh.util.util import path_expand
+from cloudmesh_common.util import path_expand
 
 def LOGGER(filename):
     """creates a logger with the given name.

@@ -3,7 +3,7 @@ from flask import render_template, request
 from flask.ext.login import login_required
 from flask import make_response
 
-from cloudmesh.util.util import cond_decorator
+from cloudmesh_common.util import cond_decorator
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.util.logger import LOGGER
 
