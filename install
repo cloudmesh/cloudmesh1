@@ -3,6 +3,7 @@
 Usage:
     install -h | --help
     install system
+    install requirements
     install path
 
 Description:
@@ -59,6 +60,10 @@ def main():
     #
     if "help" in args:
             print_help()
+            sys.exit(0)
+
+    if "requirements" in args:
+            os.system("pip install -r requirements.txt")
             sys.exit(0)
         
     if "path" in args:
