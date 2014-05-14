@@ -3,6 +3,7 @@ from baremetal_status import BaremetalStatus
 from hostlist import expand_hostlist
 from copy import deepcopy
 from cloudmesh_common.logger import LOGGER
+from cloudmesh_install import config_file
 #
 # SETTING UP A LOGGER
 #
@@ -16,7 +17,7 @@ class BaremetalComputer:
     """
     def __init__(self):
         coll_name = "inventory"
-        self.yaml_file = "~/.futuregrid/cloudmesh_mac.yaml"
+        self.yaml_file = config_file("/cloudmesh_mac.yaml")
         self.db_client = DBHelper(coll_name)
         self.bm_status = BaremetalStatus()
     

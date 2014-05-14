@@ -11,6 +11,7 @@
     the unique identification in ldap and cloud.
 
 """
+from cloudmesh_install import config_file
 from cloudmesh.config.cm_config import cm_config_server, get_mongo_db, cm_config
 from cloudmesh.util.encryptdata import encrypt, decrypt
 from cloudmesh_common.logger import LOGGER
@@ -75,7 +76,7 @@ class cm_user(object):
         result = self.info(id)
         result['password'] = self.get_credentials(id)
 
-        etc_filename = path_expand("~/.futuregrid/etc/{0}.yaml".format(basename))
+        etc_filename = config_file("/etc/{0}.yaml".format(basename))
 
         t = cm_template(etc_filename)
         out = t.replace(kind='dict', values=result)

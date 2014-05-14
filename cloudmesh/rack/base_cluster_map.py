@@ -1,7 +1,7 @@
 """
 Base class for different .diag render with rackdiag
 """
-
+from cloudmesh_install import config_file
 import matplotlib
 #matplotlib.use("SVG")
 import matplotlib.pyplot as plt
@@ -34,7 +34,7 @@ log = LOGGER(__file__)
 
 class BaseClusterMap:
     # default location of yaml configuration file
-    default_home_yaml = "~/.futuregrid"
+    default_home_yaml = config_file("")
 
     # default location of cloudmesh_clusters.yaml
     default_clusters_yaml = "cloudmesh_cluster.yaml"

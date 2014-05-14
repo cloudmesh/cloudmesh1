@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+from cloudmesh_install import config_file
+
 import cloudmesh_install
 import yaml
 from sh import head
@@ -104,7 +106,7 @@ def init_shell_command(arguments):
     if arguments["inspect"]:
         filename = arguments['--file']
         if filename is None:
-            filename = path_expand(config_dir + '/cloudmesh.yaml')
+            filename = config_file('/cloudmesh.yaml')
 
         content = open(filename, 'r').read()
         
@@ -156,7 +158,7 @@ def init_shell_command(arguments):
     if arguments["list"] and arguments["clouds"]:
         filename = arguments['--file']
         if filename is None:
-            filename = path_expand(config_dir + '/cloudmesh.yaml')
+            filename = config_file('/cloudmesh.yaml')
         config = cm_config(filename)
 
         data = {}
@@ -177,13 +179,13 @@ def init_shell_command(arguments):
             
         filename_template = arguments['--file']
         if filename_template is None:
-            filename_template = config_dir + '/etc/a-cloudmesh-template.yaml'
+            filename_template = config_file('/etc/a-cloudmesh-template.yaml')
         filename_template = path_expand(filename_template)
         
         filename_values = arguments['VALUES']
 
         if filename_values is None:
-            filename_values = path_expand(config_dir + '/me.yaml')
+            filename_values = (config_file('/me.yaml')
 
         content = open(filename_template, 'r').read()
         
@@ -207,15 +209,15 @@ def init_shell_command(arguments):
         print result
         
     if arguments["generate"]:
-        filename_tmp = path_expand(config_dir + '/cloudmesh-new.yaml')
-        filename_out = path_expand(config_dir + '/cloudmesh.yaml')
+        filename_tmp = config_file('/cloudmesh-new.yaml')
+        filename_out = config_file('/cloudmesh.yaml')
         filename_bak = backup_name(filename_out)
-        filename_template = path_expand(config_dir + "/etc/cloudmesh-template.yaml")
+        filename_template = config_file("/etc/cloudmesh-template.yaml")
         if arguments["generate"] and (arguments["me"]):
-            filename_values = path_expand(config_dir + "/me.yaml")
+            filename_values = config_file("/me.yaml")
 
         elif (args.strip() in ["generate none"]):
-            filename_values = path_expand(config_dir + "/etc/me-none.yaml")
+            filename_values = config_file("/etc/me-none.yaml")
         elif arguments["FILENAME"] is not None:
             filename_values = path_expand(arguments["FILENAME"])
         # print me_filename
