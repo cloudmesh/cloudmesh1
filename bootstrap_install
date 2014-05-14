@@ -1,0 +1,80 @@
+#!/usr/bin/env python
+"""
+Usage:
+    bootstrap_install -h | --help
+    bootstrap_install system
+    bootstrap_install path
+
+Description:
+
+    bootstrap_install system
+        install some important packages that are essential for cloudmesh instalation.
+        This command has to be called first.
+        
+    bootstrap_install path
+        lists the available sys.path for debugging purposes.
+
+"""
+from textwrap import dedent
+from pprint import pprint 
+import os
+import getopt
+import sys
+from cloudmesh_common.bootstrap_util import banner
+from cloudmesh_install.util import get_system
+
+
+def print_help():
+    documentation = __doc__.split("\n")
+    print "\n".join(documentation)
+    
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "h", ["help"])
+        if (opts == [] and args == []):
+            banner( "ERROR: no parameter defined")
+            print_help()
+            sys.exit(1)
+    except getopt.error, msg:
+        print msg
+        banner( "for help use --help")
+        sys.exit(2)
+
+    # parse for help
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            print_help()
+            sys.exit(0)
+
+    #
+    if "help" in args:
+            print_help()
+            sys.exit(0)
+        
+    if "path" in args:
+
+        banner ("sys.path", c="-")
+        pprint(sys.path)
+        banner("-")
+        sys.exit(0)
+                
+    if "system" in args:
+
+        banner("system")
+        
+        os_system = get_system()
+
+        try:    
+            os.system("bin/prepare-%s.sh" % os_system)
+        except:
+            print "OS distribution not supported; please see documatation for manual installation instructions."
+            sys.exit(1)
+        
+        sys.exit(0)
+
+    arguments = ' '.join(args)
+    banner (arguments)
+        
+if __name__ == "__main__":
+    main()

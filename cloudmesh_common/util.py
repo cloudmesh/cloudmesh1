@@ -16,7 +16,6 @@ configuration files that are not yet present at the tome of the first
 instalation.
 """
 
-from string import Template
 import inspect
 import os
 import uuid
@@ -25,19 +24,10 @@ import warnings
 from datetime import datetime, timedelta
 from pytimeparse.timeparse import timeparse
 from prettytable import PrettyTable
+import cloudmesh_common.bootstrap_util
 
 def path_expand(text):
-    """ returns a string with expanded variavble.
-
-    :param text: the path to be expanded, which can include ~ and $ variables
-    :param text: string
-    
-    """
-    template = Template(text)
-    result = template.substitute(os.environ)
-    result = os.path.expanduser(result)
-    return result
-
+    return cloudmesh_common.bootstrap_util.path_expand(text)
 
 def backup_name(filename):
     """
@@ -60,25 +50,7 @@ def backup_name(filename):
     return backup
 
 def banner(txt=None, c="#"):
-    """prints a banner of the form with a frame of # arround the txt::
-
-      ############################
-      # txt
-      ############################
-
-    .
-    
-    :param txt: a text message to be printed
-    :type txt: string
-    :param c: thecharacter used instead of c
-    :type c: character 
-    """
-    print
-    print "#", 70 * c
-    if txt is not None:
-        print "#", txt
-        print "#", 70 * c
-
+    cloudmesh_common.bootstrap_util.banner(text)
 
 def HEADING(txt=None):
     """
@@ -95,15 +67,8 @@ def HEADING(txt=None):
 
         
 def yn_choice(message, default='y'):
-    """asks for a yes/no question.
-    :param message: the message containing the question
-    :param default: the default answer
-    """
-    # http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input"""
-    choices = 'Y/n' if default.lower() in ('y', 'yes') else 'y/N'
-    choice = raw_input("%s (%s) " % (message, choices))
-    values = ('y', 'yes', '') if default == 'y' else ('y', 'yes')
-    return True if choice.strip().lower() in values else False
+    return cloudmesh_common.bootstrap_util.yn_choice(message, default)
+
 
 def cat(filename):
     """prints the contents of a file with the given name.
