@@ -1008,3 +1008,18 @@ This is realy all you need for emacs to make it a useful editor for
 you. xemacs, aquaemacs, carbonemacs are GUI enhanced versions of
 emacs.
  
+Replace Text in many files from the commandline
+======================================================================
+
+Assume you have changed the location of an import eg yo like to change
+`import a.b.c` to `import a_b.c`. Editing the files with an editor an
+fisiting every file is too time consuming. instead you could use a
+perl one liner such as::
+
+  perl -pi -e 's/import a.b.c/import a_b.c/g' *.py
+  perl -pi -e 's/import a.b.c/import a_b.c/g' */*.py
+  perl -pi -e 's/import a.b.c/import a_b.c/g' */*/*.py
+
+to replace the statement in the given subdirs or a shorter form::
+
+  perl -pi -e 's/import a.b.c/import a_b.c/g' `find ./ -name *.py`
