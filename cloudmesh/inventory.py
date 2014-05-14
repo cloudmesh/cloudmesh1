@@ -25,7 +25,7 @@ class Inventory:
     server_config = None
 
     CONFIG_FILE = config_file("/cloudmesh_cluster.yaml")
-    BOOTSPEC_FILE = config_file(/cloudmesh_bootspec.yaml")
+    BOOTSPEC_FILE = config_file("/cloudmesh_bootspec.yaml")
 
     def __init__(self):
 		# read the host file definition from cloudmesh_cluster.yaml
