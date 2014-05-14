@@ -1,6 +1,7 @@
 '''
 A simple class to set up a custom logger for a class
 '''
+from cloudmesh_install import config_file
 from sh import grep
 import logging
 import sys
@@ -31,7 +32,7 @@ def LOGGER(filename):
 
     loglevel = logging.CRITICAL
     try:
-        level = grep("loglevel:", path_expand("~/.futuregrid/cloudmesh_server.yaml")).strip().split(":")[1].strip().lower()
+        level = grep("loglevel:", config_file("/cloudmesh_server.yaml")).strip().split(":")[1].strip().lower()
 
         if level == "debug":
             loglevel = logging.DEBUG

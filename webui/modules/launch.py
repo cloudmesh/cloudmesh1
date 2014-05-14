@@ -1,3 +1,4 @@
+from cloudmesh_install import config_file
 from flask import Blueprint
 from flask import render_template, request, redirect
 # from cloudmesh.provisioner.cm_launcher import cm_launcher
@@ -41,8 +42,8 @@ def launch_run ():
 def launch_servers():
 
 
-    launcher_config = ConfigDict(filename="~/.futuregrid/cloudmesh_launcher.yaml")
-    celery_config = ConfigDict(filename="~/.futuregrid/cloudmesh_celery.yaml")
+    launcher_config = ConfigDict(filename=config_file("/cloudmesh_launcher.yaml"))
+    celery_config = ConfigDict(filename=config_file("/cloudmesh_celery.yaml"))
     launch_recipies = launcher_config.get("cloudmesh.launcher.recipies")
 
     server = request.form.get("server")
@@ -72,7 +73,7 @@ def launch_servers():
 @login_required
 @rain_permission.require(http_exception=403)
 def display_launch_table():
-    launcher_config = ConfigDict(filename="~/.futuregrid/cloudmesh_launcher.yaml")
+    launcher_config = ConfigDict(filename=config_file("/cloudmesh_launcher.yaml"))
     launch_recipies = launcher_config.get("cloudmesh.launcher.recipies")
     columns = launcher_config.get("cloudmesh.launcher.columns")
     return render_template('mesh/mesh_launch.html',

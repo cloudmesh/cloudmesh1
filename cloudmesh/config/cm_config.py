@@ -10,6 +10,7 @@ import json
 import os
 import sys
 import yaml
+from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
 
@@ -42,7 +43,7 @@ class cm_config_server(ConfigDict):
     reads the information contained in the file
     ~/.futuregrid/cloudmesh_server.yaml
     """
-    filename = "~/.futuregrid/cloudmesh_server.yaml"
+    filename = config_file("/cloudmesh_server.yaml")
 
     def __init__(self, filename=None):
         if filename is None:
@@ -55,7 +56,7 @@ class cm_config_launcher(ConfigDict):
     reads the information contained in the file
     ~/.futuregrid/cloudmesh_launcher.yaml
     """
-    filename = os.path.expanduser("~/.futuregrid/cloudmesh_launcher.yaml")
+    filename = config_file("/cloudmesh_launcher.yaml")
 
     def __init__(self, filename=None):
         if filename is None:
@@ -69,7 +70,7 @@ class cm_config(ConfigDict):
     # global variables
     # ----------------------------------------------------------------------
 
-    filename = os.path.expanduser('~/.futuregrid/cloudmesh.yaml')
+    filename = config_file('/cloudmesh.yaml')
 
     # ----------------------------------------------------------------------
     # initialization methods
@@ -366,7 +367,7 @@ if __name__ == "__main__":
     print "= DEFAULT ================"
     print config.default
     print "= TO FILE ================"
-    outfile = path_expand("~/.futuregrid/junk.yaml")
+    outfile = config_file("/junk.yaml")
     print config.write(outfile)
     os.system("cat " + outfile)
     print "= AZURE ================"

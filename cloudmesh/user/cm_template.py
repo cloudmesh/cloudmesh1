@@ -1,3 +1,4 @@
+from cloudmesh_install import config_file
 from jinja2 import UndefinedError
 import sys
 import yaml
@@ -117,8 +118,8 @@ class cm_template():
 
 if __name__ == "__main__":
 
-    cloudmesh_yaml = path_expand("~/.futuregrid/etc/cloudmesh.yaml")
-    user_config = ConfigDict(filename="~/.futuregrid/me.yaml")
+    cloudmesh_yaml = config_file("/etc/cloudmesh.yaml")
+    user_config = ConfigDict(filename=config_file("/me.yaml"))
     t = cm_template(cloudmesh_yaml)
 
     banner("VARIABLES")
@@ -133,14 +134,14 @@ if __name__ == "__main__":
     # banner("YAML FILE")
     # result = t.replace(kind="dict", values=user_config)
     # print yaml.dump(result, default_flow_style=False)
-    # location = path_expand('~/.futuregrid/cloudmesh-new.yaml')
+    # location = config_file('/cloudmesh-new.yaml')
     # yaml_file = open(location, 'w+')
     # print >> yaml_file, yaml.dump(result, default_flow_style=False)
     # yaml_file.close()
     # print "Written new yaml file in " + location
 
-    t.generate("~/.futuregrid/me.yaml",
-               '~/.futuregrid/cloudmesh-new.yaml')
+    t.generate(config_file("/me.yaml"),
+               config_file('/cloudmesh-new.yaml'))
 
     # print t.replace(values=d)
 

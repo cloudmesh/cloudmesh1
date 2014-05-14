@@ -29,6 +29,7 @@ from hashlib import sha256
 from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
 import uuid
+from cloudmesh_install import config_file
 
 def pad(data, bs):
     """ Pad data to the given blocksize, PKCS-5 style.
@@ -100,6 +101,9 @@ def decrypt_file(content, filename=None):
     """
     file_contents = content.decode('base64')
     try:
+        #
+        # to do needs to be replace wit config_file
+        #
         uniq_filename = filename or "~/.futuregrid/" + str(uuid.uuid4())
         print uniq_filename
         with open(uniq_filename, 'w') as outf:

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from cloudmesh_install import config_file
 import glob
 import shutil
 import sys
@@ -113,7 +114,7 @@ def new_cloudmesh_yaml():
     # create ~/.futuregrid dir
     #
 
-    dir = path_expand("~/.futuregrid")
+    dir = config_file("")
 
     # Make sure the directory does not exist    
     if os.path.exists(dir):

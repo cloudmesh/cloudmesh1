@@ -10,6 +10,7 @@ from cloudmesh.provisioner.provisioner import BaremetalProvisinerABC
 from cloudmesh.util.config import read_yaml_config
 from sh import ssh
 import sys
+from cloudmesh_install import config_file
 #
 # SETTING UP A LOGGER
 #
@@ -42,7 +43,7 @@ class ProvisionerTeefaa(BaremetalProvisinerABC):
         """read config"""
         BaremetalProvisinerABC.__init__(self)
 
-        self.filename = "~/.futuregrid/cloudmesh_server.yaml"
+        self.filename = config_file("/cloudmesh_server.yaml")
         self.teefaa_config = read_yaml_config (self.filename, check=True)
 
 
