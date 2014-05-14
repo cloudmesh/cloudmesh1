@@ -8,7 +8,7 @@ from pytimeparse.timeparse import timeparse
 # from timestring import Date
 from datetime import datetime, timedelta            
 import sys
-from cloudmesh.util.util import parse_time_interval, not_implemented
+from cloudmesh_common.util import parse_time_interval, not_implemented
 
 def rain_command(arguments):
     """

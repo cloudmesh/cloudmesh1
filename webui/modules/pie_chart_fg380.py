@@ -1,5 +1,5 @@
 from cloudmesh.config.cm_config import cm_config, cm_config_server
-from cloudmesh.util.util import cond_decorator
+from cloudmesh_common.util import cond_decorator
 from flask import Blueprint, g, render_template, request
 import cloudmesh
 from pprint import pprint

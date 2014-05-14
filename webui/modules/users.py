@@ -4,10 +4,10 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import cm_config_server
 
 from datetime import datetime
-from cloudmesh.util.util import path_expand
+from cloudmesh_common.util import path_expand
 import yaml
 from cloudmesh.config.cm_config import get_mongo_db
-from cloudmesh.util.util import cond_decorator
+from cloudmesh_common.util import cond_decorator
 from flask.ext.login import login_required
 import cloudmesh
 from flask.ext.principal import Permission, RoleNeed

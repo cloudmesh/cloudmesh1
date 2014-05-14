@@ -3,7 +3,7 @@ from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.util.logger import LOGGER
-from cloudmesh.util.util import address_string, cond_decorator
+from cloudmesh_common.util import address_string, cond_decorator
 from datetime import datetime
 from flask import Blueprint, g, render_template, request, redirect
 from flask.ext.login import login_required
@@ -11,7 +11,7 @@ from pprint import pprint
 import cloudmesh
 from cloudmesh.user.cm_user import cm_user
 from flask.ext.principal import Permission, RoleNeed
-from cloudmesh.util.util import banner
+from cloudmesh_common.util import banner
 # from cloudmesh.experiment.cm_experiment_db import cm_experiment_db
 import json
 

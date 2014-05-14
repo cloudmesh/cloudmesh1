@@ -10,9 +10,9 @@ import stat
 # from cloudmesh_user import cloudmesh_user
 from sh import scp
 from getpass import getpass
-from cloudmesh.util.util import yn_choice
-from cloudmesh.util.util import path_expand
-from cloudmesh.util.util import banner
+from cloudmesh_common.util import yn_choice
+from cloudmesh_common.util import path_expand
+from cloudmesh_common.util import banner
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.ConfigDict import ConfigDict
 

@@ -11,7 +11,7 @@ from azure import *
 from azure.servicemanagement import *
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.util.util import get_unique_name
+from cloudmesh_common.util import get_unique_name
 
 class azure(ComputeBaseType):
 

@@ -2,16 +2,16 @@ from flask import Blueprint
 from flask import render_template, request, redirect, g, jsonify, session
 from cloudmesh.config.cm_config import cm_config
 #  from cloudmesh.cm_mesh import cloudmesh
-from cloudmesh.util.util import table_printer
+from cloudmesh_common.util import table_printer
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.user.cm_user import cm_user
 from datetime import datetime
 import time
-from cloudmesh.util.util import cond_decorator
+from cloudmesh_common.util import cond_decorator
 import cloudmesh
 from flask.ext.login import login_required
 import webbrowser
-from cloudmesh.util.util import address_string
+from cloudmesh_common.util import address_string
 from cloudmesh.util.logger import LOGGER
 from pprint import pprint
 from compiler.ast import Return

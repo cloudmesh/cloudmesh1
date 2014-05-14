@@ -1,6 +1,6 @@
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.config.cm_projects import cm_projects
-from cloudmesh.util.util import cond_decorator
+from cloudmesh_common.util import cond_decorator
 from datetime import datetime
 from flask import Blueprint, g, render_template, request
 from flask.ext.login import login_required

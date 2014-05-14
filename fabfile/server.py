@@ -2,7 +2,7 @@ from __future__ import with_statement
 
 import sys
 from cloudmesh.util.logger import LOGGER
-from cloudmesh.util.util import banner
+from cloudmesh_common.util import banner
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -37,7 +37,7 @@ import os
 import webbrowser
 import platform
 
-from cloudmesh.util.util import path_expand
+from cloudmesh_common.util import path_expand
 
 __all__ = ['start', 'stop', 'kill', 'view', 'clean', 'cleanmongo',
            'agent', 'quick', 'wsgi']

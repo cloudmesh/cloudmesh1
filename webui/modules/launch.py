@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import render_template, request, redirect
 # from cloudmesh.provisioner.cm_launcher import cm_launcher
-from cloudmesh.util.util import cond_decorator
+from cloudmesh_common.util import cond_decorator
 from flask.ext.login import login_required
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.launcher.queue.tasks import task_launch

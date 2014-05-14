@@ -1,7 +1,7 @@
 from flask import Blueprint
 import flask
 from cloudmesh.util.logger import LOGGER
-from cloudmesh.util.util import banner
+from cloudmesh_common.util import banner
 from pprint import pprint
 import cloudmesh
 log = LOGGER(__file__)

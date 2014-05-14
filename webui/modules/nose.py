@@ -3,7 +3,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.pbs.pbs import PBS
 from cloudmesh.util.logger import LOGGER
 from cloudmesh.util.ping import ping
-from cloudmesh.util.util import cond_decorator
+from cloudmesh_common.util import cond_decorator
 from datetime import datetime
 from flask import Blueprint, render_template, redirect
 from flask.ext.login import login_required

@@ -4,7 +4,7 @@
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
 #
 import inspect
-from cloudmesh.util.util import banner
+from cloudmesh_common.util import banner
 import requests
 from requests.auth import AuthBase
 

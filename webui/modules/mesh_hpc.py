@@ -4,7 +4,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.pbs import tasks
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.util.logger import LOGGER
-from cloudmesh.util.util import address_string, cond_decorator
+from cloudmesh_common.util import address_string, cond_decorator
 from datetime import datetime
 from flask import Blueprint, render_template, request, redirect
 from flask.ext.login import login_required
