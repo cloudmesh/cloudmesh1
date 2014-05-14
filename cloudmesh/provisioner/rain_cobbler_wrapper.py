@@ -19,6 +19,31 @@ class RainCobblerWrapper:
         self.baremetal = BaremetalComputer()
         self.status = BaremetalStatus()
     
+    def baremetal_computer_host_on(self, raw_hosts):
+        """Enable/ON computers for baremetal provisioning
+        provided for **rain admin on HOSTS**
+        :param string raw_hosts: ne or more hosts with the valid formation of hostlist
+        :return: True means successfully, otherwise False
+        """
+        hosts = expand_hostlist(raw_hosts) if raw_hosts else None
+        return self.baremetal.enable_baremetal_computers(hosts)
+    
+    def baremetal_computer_host_off(self, raw_hosts):
+        """Disable/OFF computers for baremetal provisioning
+        provided for **rain admin off HOSTS**
+        :param string raw_hosts: ne or more hosts with the valid formation of hostlist
+        :return: True means successfully, otherwise False
+        """
+        hosts = expand_hostlist(raw_hosts) if raw_hosts else None
+        return self.baremetal.disable_baremetal_computers(hosts)
+    
+    def list_all_user_hosts(self):
+        """list all baremetal computers that can be used by each user.
+        provided for **rain admin list users**
+        :return: a dict with the formation {"user1": "hostlist", "user2": "hostlist2"}
+        """
+        pass
+    
     def get_status_short(self, raw_hosts=None):
         """get status of baremetal computer
         provided for **rain status --short [HOSTS]**
