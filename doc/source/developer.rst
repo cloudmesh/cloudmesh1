@@ -971,3 +971,40 @@ yaml file first, than mongo
 
    fab mongo.install
 
+
+Imports in cloudmesh_common
+======================================================================
+
+The cloudmesh code contains a directory `cloudmesh_common` in which we
+collect useful common reusable code that must not depend on an import
+from cloudmesh. Thus no file in cloudmesh_common must include::
+
+   import cloudmesh. ...
+
+Emacs as editor
+======================================================================
+
+Emacs is a real good editor for development and has a very good
+interactive macro definition tool that you can use to create
+sophisticated searches and query replacements. This can safe a lot of
+time. 
+
+Query replace all ocurences::
+
+  ESC % <old text> RET <new text> RET !
+
+Instead of ! you can use RET followed by y/n question to selectively
+replace.
+
+To create a macro that you can reexecute which may include tabs,
+cursor movements or other fancy tricks you can do::
+
+   CTRL-x (  <do edit what yo need> CTRL x-)
+
+A good recource for emacs is the `Emacs Reference Card
+<http://www.gnu.org/software/emacs/refcards/pdf/refcard.pdf>`_
+
+This is realy all you need for emacs to make it a useful editor for
+you. xemacs, aquaemacs, carbonemacs are GUI enhanced versions of
+emacs.
+ 
