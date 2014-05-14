@@ -41,14 +41,14 @@ Github
 
 This use of github assumes you are a development team member and have
 direct access to the github repository. To become a member please
-contact  Gregor von Laszewski at laszewski@gmial.com to discuss how
+contact  Gregor von Laszewski at laszewski@gmail.com to discuss how
 you can contribute to cloudmesh and if a membership is appropriate.
 
 .. note::
 
    If you are not a member you still can check out the code from
-   github and further develop it and communicating the changes to
-   us. Please contact Gregor von Laszewski at laszewski@gmial.com.
+   github and further develop it and communicate the changes to
+   us. Please contact Gregor von Laszewski at laszewski@gmail.com.
 
 
 First we need to make sure github is properly usable for you. First
@@ -58,7 +58,7 @@ contact Gregor von Laszewski (laszewski@gmail.com) so you can be added
 to the github dev list.
 
 In order for you to participate in code development you also need to
-do the following steps on **ANY** machine from which you like toc
+do the following steps on **ANY** machine from which you will
 check code back into github. 
 
 If you do not have git on your machine
@@ -98,10 +98,10 @@ it. This is nicely described at
 
 2. https://help.github.com/articles/generating-ssh-keys
 
-You must upload the key to github, either via a command, or simply via
+You must upload the key to github, either via a command, or via
 the github gui. Simply go to your setting and find the ssh key menu
-entry. Click on it and upload your new key by pasting and copying the
-public key. Make sure you do not copy the privat key. 
+entry. Click on it and upload your new key by copying and pasting the
+public key. Make sure you do not copy the private key. 
 
 
 Git username and e-mail
@@ -157,10 +157,10 @@ cloudmesh directory. You can get there after cloning by ::
     
     $ cd cloudmesh
 
-In some programs we do need the location of the cloudmesh source for
-development. Hence it is importnat to add the variable `CLOUDMESH` to
-your shell. In bash you can do this with (assuming you are in the
-cloudmesh directory)::
+In some programs we need the location of the cloudmesh source for
+development. Hence it is important to add the environment variable
+`CLOUDMESH` to your shell. In bash you can do this with (assuming you
+are in the cloudmesh directory)::
 
   $ export CLOUDMESH=`pwd`
 
