@@ -75,7 +75,7 @@ def banner(txt=None, c="#"):
     """
     print
     print "#", 70 * c
-    if txt not in ["-", "="]:
+    if txt is not None:
         print "#", txt
         print "#", 70 * c
 

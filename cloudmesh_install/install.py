@@ -65,12 +65,12 @@ def install_command(args):
     
     """
     arguments = docopt(install_command.__doc__,args)
-    print arguments
+
     if arguments["cloudmesh"]:
         deploy()
 
     elif arguments["new"]:
-        print "NEW"
+
         new_cloudmesh_yaml()
         
     elif arguments["delete_yaml"]:
@@ -139,7 +139,6 @@ def new_cloudmesh_yaml():
         os.chmod(file_to, stat.S_IRWXU)
         
     
-    print "COPY"
     for file_from in glob.glob("etc/*.yaml"):
         file_to = dir + "/" + file_from.replace("etc/","")
         cp_urw(file_from, file_to)
@@ -147,7 +146,7 @@ def new_cloudmesh_yaml():
 
     me_values = "etc/me-none.yaml"
     me_template = "etc/me-all.yaml"
-    me_file = dir 
+    me_file = dir + "/me.yaml"
 
     try:
         # do simple yaml load
@@ -155,7 +154,7 @@ def new_cloudmesh_yaml():
         result = open(me_values, 'r').read()
         values = yaml.safe_load(Template(result).substitute(os.environ))
         #values = yaml.safe_load(Template(result).substitute(os.environ))
-        print json.dumps(values, indent=4)
+        #print json.dumps(values, indent=4)
         
     except Exception, e:
         print "ERROR: There is an error in the yaml file", e
@@ -172,22 +171,21 @@ def new_cloudmesh_yaml():
 
     format = "yaml"
     if format in ["json"]:
-        print json.dumps(values, indent=4)    
+        content=  json.dumps(values, indent=4)    
     elif format in ["yaml", "yml"]:
-        print yaml.dump(values, default_flow_style=False)
-    banner("done")
-    sys.exit()    
-    out_file=open(filename_tmp, 'w+')
-    out_file.write(result)
-    out_file.close()
-    shutil.copy(filename_out, filename_bak)
-    os.rename(filename_tmp, filename_out)
-    
-    print "# Template: {0}".format(filename_template)
-    print "# Values  : {0}".format(filename_values)
-    print "# Backup : {0}".format(filename_bak)            
-    print "# Created: {0}".format(filename_out)
+        content = yaml.dump(values, default_flow_style=False)
+    banner("done", c="-")
 
+
+    out_file=open(me_file, 'w+')
+    out_file.write(content)
+    out_file.close()
+    
+    #print "# Template: {0}".format(filename_template)
+    #print "# Values  : {0}".format(filename_values)
+    #print "# Backup : {0}".format(filename_bak)            
+    print "# Created: {0}".format(me_file)
+    banner(c="-")
     
     
 def deploy():
