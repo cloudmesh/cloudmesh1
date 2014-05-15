@@ -252,23 +252,15 @@ Install the Requirements
 ----------------------------------------------------------------------
 
 In addition to the system packages we will now install into the
-virtual env a number of python packages. Althouth this could be done
-with the command::
-
-  pip install -r requirements.txt
-
-our install program can also do this with::
+virtual env a number of python packages::
 
   ./install requirements
 
-.. warning:: Please remember to activate your virtualenv. Out of
-caution do not proceed or execute this command in your system
-environment.
+.. warning::
 
-For some reason on ubunti it installs the fabric package wrong. Hence
-you have to say in addition to the above command::
+  Please remember to activate your virtualenv. Out of caution do not
+  proceed or execute this command in your system environment.
 
-  pip install fabric
 
 Initial Documentation
 ----------------------------------------------------------------------
