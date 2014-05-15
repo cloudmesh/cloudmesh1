@@ -33,7 +33,7 @@ if major != 2 or (major == 2 and minor < 7):
 
 
 if not hasattr(sys, 'real_prefix'):
-    print "ERROR: You are runing this script not inside a virtual machine"
+    print "ERROR: You are not running this script inside a virtualenv."
     sys.exit()
 
     
@@ -227,7 +227,6 @@ def download():
 
 def install():
     sphinx_updates()
-    local("pip install -r requirements.txt")
     local("python setup.py install")
 
 
@@ -255,18 +254,11 @@ def install_packages(packages):
 
 def ubuntu():
     '''prepares an system and installs all 
-    needed packages before we install cloudmesch'''
+    needed packages before we install cloudmesh'''
 
-    local ("sudo apt-get update")
-    install_packages(["python-dev", 
-                      "git",
-                      "mercurial",
-                      "curl",
-                      "libldap2-dev",
-                      "libsasl2-dev",
-                      "libpng-dev",
-                      "mongodb-server"])    
-    install_packages(["rabbitmq-server"])
+    # Note: package installations (apt-get install) are now done in
+    # bin/prepare-ubuntu.sh
+
     install()
     # install_mongodb()
 
