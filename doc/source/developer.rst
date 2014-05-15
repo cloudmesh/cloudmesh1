@@ -251,30 +251,30 @@ This way if you type dev you cd into the development directory
 Install the Requirements
 ----------------------------------------------------------------------
 
-In addition to the system packages we will now install into the
-virtual env a number of python packages::
-
-  ./install requirements
-
 .. warning::
 
   Please remember to activate your virtualenv. Out of caution do not
   proceed or execute this command in your system environment.
 
+In addition to the system packages we will now install into the
+virtual env a number of python packages::
+
+  ./install requirements
+
 
 Initial Documentation
 ----------------------------------------------------------------------
 
-An initial set of documentation can now be created with the command 
+An initial set of documentation can now be created with the command::
 
   make sphinx
 
-The documentation is located in
+The documentation is located in::
 
   doc/build/html/index.html
 
 please use your browser to open it. If you just run on ubuntu server,
-you also need to install the ubuntu-desktop.
+you also need to install the ubuntu-desktop::
 
    sudo apt-get install ubuntu-desktop
 
@@ -287,16 +287,15 @@ provide you with a rough overview of the previous steps::
 
   git clone git@github.com:cloudmesh/cloudmesh.git
   cd cloudmesh
-  ./install system
+  ./bootstrap_install system
   virtualenv ~/ENV
   . ~/ENV/bin/activate
   ./install requirements
   ./install new
   fab doc.htnl
 
-Please remember to use the ./ infornt of the install as there could be
-other install commands in your system.
-
+Please remember to use the ./ infront of the install as there could be
+other install commands in your $PATH.
 
 
 WE GOT TILL HERE
