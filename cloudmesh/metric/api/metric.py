@@ -43,7 +43,6 @@ class metric_api:
  
     def connect(self):
         try:
-            print self.get_uri()
             r = requests.get(self.get_uri())
             return r.json()
         except requests.ConnectionError:
@@ -74,10 +73,6 @@ class metric_api:
         return self.uri
     
     def set_date(self, from_date, to_date):
-        # NOT IMPLEMENTED MESSAGE
-        if from_date:
-            self.na_message(sys._getframe().f_code.co_name, from_date, to_date)
-
         self.from_date = from_date
         self.to_date = to_date
 
@@ -191,6 +186,13 @@ class metric_api:
         self.raw_data = distlist_comparison
 
     def display(self, table_format="orgtbl"):
+
+        # display uri
+        print "uri: " + self.uri
+        # display search options
+        print "metric: " + self.metric
+        
+        # display table of contents
         # table_format = 
         # plain,
         # simple,
@@ -202,11 +204,14 @@ class metric_api:
         # latex
         self.table = tabulate (self.raw_data, headers="firstrow",
                                tablefmt=table_format)
-        seperator = self.table.split("\n")[1].replace("|", "+")
-        print seperator
-        print self.table
-        print seperator        
-        
+        try:
+            seperator = self.table.split("\n")[1].replace("|", "+")
+            print seperator
+            print self.table
+            print seperator        
+        except IndexError:
+            print "No results."
+       
     def get_stats(self):
         #print vars(self)
         self.get_raw_data()
