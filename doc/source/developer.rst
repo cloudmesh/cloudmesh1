@@ -184,7 +184,7 @@ script that prepare the system.
 For ubuntu systems there is a ready-made to get all the pre-requisites
 install. To run this script do ::
 
-    $ ./install system
+    $ ./bootstrap_install system
 
 This will make sure all requirements are fulfilled and the cloudmesh
 programs are installed in your environment.
