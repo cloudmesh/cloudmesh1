@@ -11,7 +11,7 @@ class metric_api:
         self.period = None
         self.timetype = None
         self.metric = None
-        self.cluster = None
+        self.host = None
         self.iaas = None
         self.userid = None
 
@@ -25,7 +25,7 @@ class metric_api:
         result += "period:    %s\n" % self.period
         result += "timetype:    %s\n" % self.timetype
         result += "metric:    %s\n" % self.metric
-        result += "cluster:   %s\n" % self.cluster
+        result += "host:   %s\n" % self.host
         result += "iaas:      %s\n" % self.iaas
         result += "userid:      %s\n" % self.userid
         return result
@@ -37,7 +37,7 @@ class metric_api:
     def load_server_info(self):
         # cloudmesh_server.yaml contains the api server info
         # this is only for test.
-        self.host = "156.56.93.202"
+        self.api_server = "156.56.93.202"
         self.port = 5001
         self.doc_url = "metric"
  
@@ -58,12 +58,12 @@ class metric_api:
             raise
 
     def get_uri(self):
-        # /metric/<cloudname>/<clustername>/<username>/<metric>/<timestart>/<timeend>/<period>
+        # /metric/<cloudname>/<hostname>/<username>/<metric>/<timestart>/<timeend>/<period>
         uri = ["http:/"]
-        uri.append(self.host + ":" + str(self.port))
+        uri.append(self.api_server + ":" + str(self.port))
         uri.append(self.doc_url)
         uri.append(self.iaas)
-        uri.append(self.cluster)
+        uri.append(self.host)
         uri.append(self.userid)
         uri.append(self.metric)
         uri.append(self.from_date)
@@ -87,12 +87,12 @@ class metric_api:
         if metric:
             self.metric = metric
 
-    def set_cluster(self, cluster):
+    def set_host(self, host):
         # NOT IMPLEMENTED MESSAGE
-        if cluster:
-            self.na_message(sys._getframe().f_code.co_name, cluster)
+        if host:
+            self.na_message(sys._getframe().f_code.co_name, host)
 
-        self.cluster = cluster
+        self.host = host
 
     def set_iaas(self, cloud):
         self.iaas = cloud
@@ -146,7 +146,7 @@ class metric_api:
 
     def comparison_table(self, res):
         # Let's provide comparison table if there is no search option defined
-        if self.userid or self.iaas or self.cluster:
+        if self.userid or self.iaas or self.host:
             return
 
         # New table for the comparison of IaaS
@@ -191,6 +191,12 @@ class metric_api:
         print "uri: " + self.uri
         # display search options
         print "metric: " + self.metric
+
+        if self.iaas:
+            print "iaas: " + self.iaas
+        if self.host:
+            print "host: " + self.host
+
         
         # display table of contents
         # table_format = 

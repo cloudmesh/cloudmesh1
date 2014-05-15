@@ -36,12 +36,12 @@ def shell_command_metric(arguments):
        -u, --user USER      use username in USER
        -s, --start_date START    use YYYYMMDD datetime in START
        -e, --end_date END        use YYYYMMDD datetime in END
-       -c, --cluster CLUSTER    use cluster name e.g. india, sierra, etc
+       -c, --host HOST      use host name e.g. india, sierra, etc
        -p, --period PERIOD  use either month|day|week
  
     Arguments:
         CLOUD               Name of the IaaS cloud e.g. openstack, nimbus, Eucalyptus
-        CLUSTER             Name of cluster e.g. india, sierra, foxtrot,
+        HOST                Name of host e.g. india, sierra, foxtrot,
                             hotel, alamo, lima
     
     Description:
@@ -91,6 +91,7 @@ def shell_command_metric(arguments):
     m.set_period(arguments["--period"])
     m.set_metric(arguments["--metric"])
     m.set_user(arguments["--user"])
+    m.set_host(arguments["--host"])
     m.set_cloud(arguments["CLOUD"])
   
     # Temp message for taking some time to produce result
