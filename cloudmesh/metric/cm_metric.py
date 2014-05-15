@@ -92,7 +92,11 @@ def shell_command_metric(arguments):
     m.set_metric(arguments["--metric"])
     m.set_user(arguments["--user"])
     m.set_cloud(arguments["CLOUD"])
-    
+  
+    # Temp message for taking some time to produce result
+    if arguments["--metric"] == "usercount":
+        print "Please wait, it takes about 10 to 30 seconds ..."
+
     res = m.get_stats()
 
 def main():
