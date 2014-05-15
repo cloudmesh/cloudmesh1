@@ -37,7 +37,7 @@ def shell_command_metric(arguments):
        -s, --start_date START    use YYYYMMDD datetime in START
        -e, --end_date END        use YYYYMMDD datetime in END
        -c, --host HOST      use host name e.g. india, sierra, etc
-       -p, --period PERIOD  use either month|day|week
+       -p, --period PERIOD  use either month|day|week (TBD)
  
     Arguments:
         CLOUD               Name of the IaaS cloud e.g. openstack, nimbus, Eucalyptus
