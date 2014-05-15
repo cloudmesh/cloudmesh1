@@ -18,7 +18,7 @@ def read_yaml_config (filename, check=True, osreplace=True):
     the code will faile if the file does not exist. However if it is set to
     false and the file does not exist, None is returned. 
     :param filename: the file name 
-    :param check: if True fails if the file does not exist, if False and the file does not exists return will be None
+    :param check: if True fails if the file does not exist, if False and the file does not exist return will be None
     '''
     location = filename
     if location is not None:
@@ -54,7 +54,7 @@ def read_yaml_config (filename, check=True, osreplace=True):
             sys.exit()
 
     else:
-        log.error("The file {0} does not exists".format(filename))
+        log.error("The file {0} does not exist.".format(filename))
         sys.exit()
 
 
