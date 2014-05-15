@@ -311,23 +311,32 @@ set with the command::
   ./install new
 
 This will create a ~/.futuregrid directory in which you can find and
-modify the yaml files. Important is that you modify the file called::
-
-  me.yaml
+modify the yaml files. Important is that you modify the file called
+``me.yaml``
 
 You find the values for the clouds from your cloud provider. Simply
 add them and fill out your user information and you should be done.
 
 .. note::
 
-   We strongly recommend that you use an editor with YAML
-   support. YAML syntax is not complicated but is sensitive to proper
-   indentation, and it is very helpful to have an editor that will
-   assist with proper formatting.
+   When editing YAML files we strongly recommend that you use an
+   editor with YAML support. YAML syntax is not complicated but is
+   sensitive to proper indentation, and it is very helpful to have an
+   editor that will assist with proper formatting.
 
-.. warning::
+This has to be done only once, but you must make sure you keep the
+yaml files up to date. Typically we send an e-mail to all developers
+when a change occurred so you can update yours:
 
-   not yet done. 
+#. `cloudmesh.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml>`_
+#. `cloudmesh_server.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml>`_
+#. `cloudmesh_cluster.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_cluster.yaml>`_
+   *For the one from FG please contact Gregor (only if you really need
+   it. Normal users will not get this file).*
+#. `cloumesh_launcher.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml>`_
+#. `cloumesh_bootspec.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml>`_
+#. `cloumesh_mac.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_mac.yaml>`_
+
 
 Install cloudmesh code
 ---------------
@@ -342,98 +351,11 @@ Next you install the basic cloudmesh code which you can do with::
    The next steps are probably not yet properly documented 
 
 
-After you fill out this file, you need to create a new file called
-cloudmesh.yaml with the following command::
-
-  cm init generate me
-
-This will create a cloudmesh.yaml file in the ~/.futuregrid directory
-
-
-
-This has to be done only once, but you maust make sure you keep the
-yaml files up to date in case we change them, typically we send an
-e-mail to all developers when a change occurred so you can update
-yours:
-
-3. `cloudmesh.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml>`_
-4. `cloudmesh_server.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml>`_
-5. `cloudmesh_cluster.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_cluster.yaml>`_
-For the one from FG please contact Gregor (only if you realy need
-it. Normal users will not get this file).
-* `cloumesh_launcher.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml>`_
-6. `cloumesh_bootspec.yaml
-  <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml>`_
-8. `cloumesh_mac.yaml
-  <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_mac.yaml>`_
-
-
-Generating a cloudmesh.yaml file
+The cloudmesh.yaml file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To generate a simple cloudmesh.yaml file, you may want to use place
-the following contents (with modifications applying to you), in a file
-called ~/.futuregrid/me.yaml. In that file, please replace the
-appropriate values with your cloud information. If you do not know the
-values you can just fill in a placeholder, such as None. With active
-we specify the clouds that we like to activate. Clouds not listed in
-activate will be ignored.
-
-.. comment::
-
-     meta:
-      kind: me 
-      yaml_version: 1.2 
-
-    portalname: gvonlasz 
-
-    profile:
-	firstname: Gregor 
-	lastname: von Laszewski 
-	e-mail: gvonlasz@gmail.com  
-
-    active:
-    - sierra_openstack_grizzly 
-
-    password:
-      sierra_openstack_grizzly: mypassword
-
-    azure:
-      subscriptionid: None
-
-    aws: 
-      access_key_id: None
-      secret_access_key: None
-      userid: None
-
-    projects:
-      default: fg82
-      active:
-      - fg82
-      - fg101
-      completed:
-      - fg130
-    keys:
-      fg_0: ssh-rsa ABCD .... fg-0
-      fg_1: ssh-rsa VWXY .... fg-1
-
-In the file etc/me-none.yaml we provide a simple template on what a
-me.yaml file looks like. you can copy it to ~/.futuregrid/me.yaml
-with::
-
-  cp etc/me-none.yaml ~/.futuregrid/me.yaml
-
-Than you can edit this file with you favorite editor such as emacs and
-fill out the values. Please make sure yaml files do not contain
-tabs. The file contains TBD that you can fill with real values
-instead.
-
-.. include:: ../../etc/me-none.yaml
-   :literal:
-
-
-We have a number of programs and templates that make it easy for you
-to generate a new cloudmesh.yaml file. The command::
+After updating the me.yaml file, you can generate a new cloudmesh.yaml
+file. The command::
 
   $ cm-init fill --file=etc/cloudmesh-template.yaml ~/.futuregrid/me.yaml
 
@@ -443,13 +365,10 @@ fine. Than you can use the command::
 
   $ cm-init generate yaml
 
-To create the cloudmesh yaml file from `~/.futuregird/me.yaml` and
+to create the cloudmesh yaml file from `~/.futuregird/me.yaml` and
 write it to `~/.futuregird/cloudmesh.yaml`. Out of precaution we have
 included a couple of questions that could be surpressed with the
 `--force` option.
-
-
-
 
 
 THIS IS OUTDATED
