@@ -108,7 +108,9 @@ uninstall:
 
 sphinx:
 	cd doc; make html
+ifeq ("$(shell uname)","Darwin")
 	open doc/build/html/index.html
+endif
 
 #############################################################################
 # PUBLISH GIT HUB PAGES
