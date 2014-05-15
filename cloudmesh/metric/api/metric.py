@@ -74,10 +74,18 @@ class metric_api:
         return self.uri
     
     def set_date(self, from_date, to_date):
+        # NOT IMPLEMENTED MESSAGE
+        if from_date:
+            self.na_message(sys._getframe().f_code.co_name, from_date, to_date)
+
         self.from_date = from_date
         self.to_date = to_date
 
     def set_period(self, period):
+        # NOT IMPLEMENTED MESSAGE
+        if period:
+            self.na_message(sys._getframe().f_code.co_name, period)
+
         self.period = period
 
     def set_metric(self, metric):
@@ -85,6 +93,10 @@ class metric_api:
             self.metric = metric
 
     def set_cluster(self, cluster):
+        # NOT IMPLEMENTED MESSAGE
+        if cluster:
+            self.na_message(sys._getframe().f_code.co_name, cluster)
+
         self.cluster = cluster
 
     def set_iaas(self, cloud):
@@ -95,6 +107,10 @@ class metric_api:
         self.set_iaas(cloud)
 
     def set_user(self, userid):
+        # NOT IMPLEMENTED MESSAGE
+        if userid:
+            self.na_message(sys._getframe().f_code.co_name, userid)
+
         self.userid = userid
 
     def test_raw_data(self):
@@ -200,3 +216,13 @@ class metric_api:
     def stats(self):
         ''' link to get_stats '''
         return self.get_stats()
+
+    def na_message(self, func_name, *args):
+        args = map(str,args)
+        msg = "%s is not implemented, '%s' ignored." % \
+                ( func_name, ', '.join(args))
+        print "=" * len(msg)
+        print msg
+        print "=" * len(msg)
+        print
+

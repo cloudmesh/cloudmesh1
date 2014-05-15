@@ -95,72 +95,10 @@ def shell_command_metric(arguments):
     
     res = m.get_stats()
 
-class cm_metric:
-    from_date = None
-    to_date = None
-    period = None
-    metric = None
-    cluster = None
-    iaas = None
-    user = None
-
-    def __init__(self):
-        from_date = None
-        to_date = None
-        period = None
-        metric = None
-        cluster = None
-        iaas = None
-        user = None
-
-        
-    def __str__(self):
-        result = ""
-        result += "from_date: %s\n" % self.from_date
-        result += "to_date:   %s\n" % self.to_date
-        result += "period:    %s\n" % self.period
-        result += "metric:    %s\n" % self.metric
-        result += "cluster:   %s\n" % self.cluster
-        result += "iaas:      %s\n" % self.iaas
-        result += "user:      %s\n" % self.user
-        return result
-    
-    def set_date(self, from_date, to_date):
-        self.from_date = from_date
-        self.to_date = to_date
-
-    def set_period(self, period):
-        self.period = period
-
-    def set_metric(self, metric):
-        self.metric = metric
-
-    def set_cluster(self, cluster):
-        self.cluster = cluster
-
-    def set_iaas(self, cloud):
-        self.iaas = cloud
-
-    def set_cloud(self, cloud):
-        ''' link to set_iaas '''
-        self.set_iaas(cloud)
-
-    def set_user(self, user):
-        self.user = user
-
-    def get_stats(self):
-        print "get_stats called"
-        print vars(self)
-        return
-
-    def stats(self):
-        ''' link to get_stats '''
-        return self.get_stats()
-
 def main():
     arguments = docopt(shell_command_metric.__doc__)
     shell_command_metric(arguments)
         
 if __name__ == "__main__":
-    print sys.argv
+    #print sys.argv
     main()
