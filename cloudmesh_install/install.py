@@ -116,15 +116,16 @@ def new_cloudmesh_yaml():
 
     dir = config_file("")
 
-    # Make sure the directory does not exist    
+    # Make sure we do not clobber existing non-empty yaml files.
+    # (installation may create empty yaml files to avoid errors)
     if os.path.exists(dir):
-        print "ERROR: the directory '{0}' already exists.".format(dir)
-        print "       For the command new to work it must not exist."
-        print "       This is to prevent that we overwrite files."        
-        sys.exit(1)
+        for f in glob.glob(dir + "/*.yaml"):
+            if (os.path.getsize(f) > 0):
+                print "ERROR: the (nonempty) yaml file '{0}' already exists.".format(f)
+                print "       The 'new' command will not overwrite files."
+                sys.exit(1)
     else:
         os.makedirs(dir, stat.S_IRWXU )
-        #os.makedirs(dir + "/etc" , stat.S_IRWXU )        
 
     filename_tmp = dir + '/cloudmesh-new.yaml'
     cloudmesh_out = dir + '/cloudmesh.yaml'
