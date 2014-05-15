@@ -68,13 +68,10 @@ def main():
         try:    
             os.system("bin/prepare-%s.sh" % os_system)
         except:
-            print "OS distribution not supported; please see documatation for manual installation instructions."
+            print "OS distribution not supported; please see documentation for manual installation instructions."
             sys.exit(1)
         
         sys.exit(0)
 
-    arguments = ' '.join(args)
-    banner (arguments)
-        
 if __name__ == "__main__":
     main()
