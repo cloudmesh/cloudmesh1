@@ -292,6 +292,28 @@ you also need to install the ubuntu-desktop.
    sudo apt-get install ubuntu-desktop
 
 
+Quickinstall
+======================================================================
+
+We do not recommend that you conduct this quickinstall, but it may
+provide you with a rough overview of the previous steps::
+
+  git clone git@github.com:cloudmesh/cloudmesh.git
+  cd cloudmesh
+  ./install system
+  virtualenv ~/ENV
+  . ~/ENV/bin/activate
+  ./install requirements
+  ./install new
+  fab doc.htnl
+
+Please remember to use the ./ infornt of the install as there could be
+other install commands in your system.
+
+
+
+WE GOT TILL HERE
+======================================================================
 
 
 
