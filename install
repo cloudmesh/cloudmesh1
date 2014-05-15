@@ -64,7 +64,19 @@ def main():
 
     if "requirements" in args:
             os.system("pip install -r requirements.txt")
+            # In some linux distributions (Ubuntu, others?)
+            # fabric does not install properly until the
+            # preceeding requirements are in place.
             os.system("pip install fabric")            
+
+            # To prevent errors building API docs, we need a
+            # cloudmesh.yaml and cloudmesh_server.yaml to exist.
+            # TODO: Why is this the case? Magic happening in imports?
+            # http://chrismorgan.info/blog/say-no-to-import-side-effects-in-python.html
+            os.system("bash -c 'mkdir -m 0700 -p ~/.futuregrid'")
+            os.system("bash -c 'test -f ~/.futuregrid/cloudmesh.yaml || touch ~/.futuregrid/cloudmesh.yaml'")
+            os.system("bash -c 'test -f ~/.futuregrid/cloudmesh_server.yaml || touch ~/.futuregrid/cloudmesh_server.yaml'")
+
             sys.exit(0)
         
     if "path" in args:
