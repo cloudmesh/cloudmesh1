@@ -172,7 +172,6 @@ simply say::
 
   echo $CLOUDMESH
 
-
 Preparing the system
 ----------------------------------------------------------------------
 
@@ -189,37 +188,29 @@ install. To run this script do ::
 This will make sure all requirements are fulfilled and the cloudmesh
 programs are installed in your environment.
 
-After this you have to propare a virtual env 
+After this you have to create and activate a virtual env.  As we like
+to have an isolated development environment we require that you use
+virtualenv. For simplicity our virtual env will be placed in the home
+directory under `~/ENV`. If you already have such a directory for
+other projects, you can use another name. However, for the rest of the
+manual we assume it is "ENV"
 
-.. warning::
-
-   Please remember to activate your virtualenv. Out of caution not
-   proceed or execute this command in your environment.
-
-After this you have to create and activate a virtual env. 
-As we like to have an isolated development environment we require that
-you use virtualenv. For simplicity our virtual env will be placed in
-the home directory under `~/ENV`. If you already have such a directory
-for other projects, we suggest that you find a new name for the
-virtualenv. However, for the rest of the manual we assume it is "ENV"
-
-This is conducted with::
-
-the following command while assuming you install it in `~/ENV`::
+To create the virtual env in `~/ENV`, run the following command ::
 
   $ virtualenv  --no-site-packages ~/ENV
 
-
-After installation of virtualenv, you can activate virtualenv by
-following command::
+After installation of virtualenv, you can activate the virtual env
+with the following command::
 
     $ source ~/ENV/bin/activate
 
 Please note that you have to do this every time you open a terminal or
-login on the computer you work. Often you may forget it, so we
-recommend that you put it in your .bash_profile or .bashrc page at the
-end.
+login. Since it is easy to forget to do it, we recommend that you activate 
+the virtualenv in your .bash_profile.
 
+If you ever need to deactivate the virtual env, you can run::
+
+    $ ~/ENV/bin/deactivate
 
     
 Modify your rc file:
@@ -269,6 +260,10 @@ with the command::
 our install program can also do this with::
 
   ./install requirements
+
+.. warning:: Please remember to activate your virtualenv. Out of
+caution do not proceed or execute this command in your system
+environment.
 
 For some reason on ubunti it installs the fabric package wrong. Hence
 you have to say in addition to the above command::
