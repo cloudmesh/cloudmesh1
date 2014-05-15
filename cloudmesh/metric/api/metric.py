@@ -88,10 +88,6 @@ class metric_api:
             self.metric = metric
 
     def set_host(self, host):
-        # NOT IMPLEMENTED MESSAGE
-        if host:
-            self.na_message(sys._getframe().f_code.co_name, host)
-
         self.host = host
 
     def set_iaas(self, cloud):
@@ -102,10 +98,6 @@ class metric_api:
         self.set_iaas(cloud)
 
     def set_user(self, userid):
-        # NOT IMPLEMENTED MESSAGE
-        if userid:
-            self.na_message(sys._getframe().f_code.co_name, userid)
-
         self.userid = userid
 
     def test_raw_data(self):
@@ -146,7 +138,7 @@ class metric_api:
 
     def comparison_table(self, res):
         # Let's provide comparison table if there is no search option defined
-        if self.userid or self.iaas or self.host:
+        if self.iaas or self.host:
             return
 
         # New table for the comparison of IaaS
@@ -189,14 +181,15 @@ class metric_api:
 
         # display uri
         print "uri: " + self.uri
+
         # display search options
         print "metric: " + self.metric
-
         if self.iaas:
             print "iaas: " + self.iaas
         if self.host:
             print "host: " + self.host
-
+        if self.userid:
+            print "userid: " + self.userid
         
         # display table of contents
         # table_format = 
