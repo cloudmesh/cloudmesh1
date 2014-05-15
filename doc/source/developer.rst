@@ -298,17 +298,12 @@ Please remember to use the ./ infront of the install as there could be
 other install commands in your $PATH.
 
 
-WE GOT TILL HERE
-======================================================================
-
-
-
 Initial YAML files
 ---------------
 
-You will need a number of yaml files. Samples can be found in the etc
+You will need a number of yaml files. Samples can be found in the etc/
 source directory.  More elaborate examples can be obtained from Gregor
-for the personel that work directly with him on FutureGrid.
+for the personnel that work directly with him on FutureGrid.
 
 As we asume you have initially no yaml files, you can create a default
 set with the command::
@@ -317,25 +312,29 @@ set with the command::
 
 This will create a ~/.futuregrid directory in which you can find and
 modify the yaml files. Important is that you modify the file called::
-   
 
   me.yaml
 
 You find the values for the clouds from your cloud provider. Simply
 add them and fill out your user information and you should be done.
 
-.. warning::
+.. note::
 
+   We strongly recommend that you use an editor with YAML
+   support. YAML syntax is not complicated but is sensitive to proper
+   indentation, and it is very helpful to have an editor that will
+   assist with proper formatting.
+
+.. warning::
 
    not yet done. 
 
-
-
+Install cloudmesh code
+---------------
 
 Next you install the basic cloudmesh code which you can do with::
 
    $ ./install cloudmesh
-
 
 
 .. Warning:: 
