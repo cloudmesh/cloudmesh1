@@ -1,40 +1,20 @@
+# ######################################################################
+# Basic environment
+# ######################################################################
+#
 d2to1>=0.2.10,<0.3
 pbr>=0.5.16,<0.6
 future
 pip
+#
+# ######################################################################
+# Sphinx
+# ######################################################################
+#
 sphinx
 sphinx_bootstrap_theme
-sphinxcontrib-blockdiag
-paramiko
-blessings
-fabric
-progress
-sh
-console
-envoy
-python-ldap
-docopt
-python-hostlist
-pyaml
-pycrypto
-Flask>=0.10.1
-Flask-WTF>=0.8.4,<0.9
-Flask-AutoIndex
-Flask-Silk
-flask_login
-Flask-OpenID
-flask-principal
-Flask-RSTPages
-pymongo
-mongoengine
-python-novaclient
-python-keystoneclient
-apache-libcloud>=0.14.1
-nose
-autopep8
-celery
-wtforms
 sphinxcontrib-autorun
+sphinxcontrib-blockdiag
 sphinxcontrib-exceltable
 actdiag
 blockdiag
@@ -44,8 +24,77 @@ blockdiagcontrib-class
 blockdiagcontrib-cisco
 nwdiag
 seqdiag
+#
+# ######################################################################
+# Packages which must be installed first
+# ######################################################################
+#
+paramiko
+pycrypto
+fabric
+#
+# ######################################################################
+# Console and commandline Related
+# ######################################################################
+#
+blessings
+progress
+sh
+console
+envoy
+python-hostlist
+docopt
 cmd3>=0.9.6
+#
+# ######################################################################
+# Databases and directories
+# ######################################################################
+#
+python-ldap
+pyaml
+pymongo
+mongoengine
+#
+# ######################################################################
+# Flask
+# ######################################################################
+#
+wtforms
+Flask>=0.10.1
+Flask-WTF>=0.8.4,<0.9
+Flask-AutoIndex
+Flask-Silk
+flask_login
+Flask-OpenID
+flask-principal
+Flask-RSTPages
+#
+# ######################################################################
+# Testing and formatting
+# ######################################################################
+#
+nose
+autopep8
+#
+# ######################################################################
+# OpenStack and cloud
+# ######################################################################
+#
+apache-libcloud>=0.14.1
+python-novaclient
+python-keystoneclient
 azure
+#
+# ######################################################################
+# Parallel tools
+# ######################################################################
+#
+celery
+#
+# ######################################################################
+# General Libraries
+# ######################################################################
+#
 simple-json
 pytimeparse
 timestring
