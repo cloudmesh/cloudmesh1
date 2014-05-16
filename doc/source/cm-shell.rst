@@ -1,9 +1,14 @@
-.. sectnum::
-   :start: 5
-
-
 Cloudmesh Shell
 =================
+
+.. sidebar:: 
+   . 
+
+  .. contents:: Table of Contents
+     :local:
+
+..
+
 
 The cloudmesh shell allows to interact with multiple clouds either
 through the commandline or through a command shell.
@@ -41,7 +46,7 @@ at:
 
 * http://cloudmesh.github.com/cmd3/
 
-
+  
 After you start up the shell, you will be presented with a login
 message such as seen next::
 

@@ -1,7 +1,3 @@
-.. sectnum::
-   :start: 4
-
-
 .. sidebar:: 
    . 
 
