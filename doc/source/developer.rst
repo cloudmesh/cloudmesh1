@@ -84,6 +84,11 @@ In a terminal window execute::
     
    $ xcode-select --install
 
+This will opens a user interface dialog to request automatic
+installation of the command line developer tools which you will need
+if you like to conduct development on OSX. 
+
+
 **Others**:
 
 If you use a different operating system, please consult how to install
@@ -240,7 +245,7 @@ check out cloudmesh to ~/github/cloudmesh you can add::
 
    cd ~/github/cloudmesh
 
-SO you jump into your working directory after you start a new
+So you jump into your working directory after you start a new
 terminal, which is quite handy. Alternatively, you may want to set an
 alias such as::
 
@@ -300,8 +305,8 @@ you also need to install the ubuntu-desktop::
    sudo apt-get install ubuntu-desktop
 
 
-Quickinstall
-======================================================================
+Quickinstall the Environment
+----------------------------------------------------------------------
 
 We do not recommend that you conduct this quickinstall, but it may
 provide you with a rough overview of the previous steps::
@@ -321,11 +326,13 @@ provide you with a rough overview of the previous steps::
 Please remember to use the ./ infront of the install as there could be
 other install commands in your $PATH.
 
+Configuration Details
+======================================================================
 
 Initial YAML files
 ----------------------------------------------------------------------
 
-You will need a number of yaml files. Samples can be found in the etc/
+ You will need a number of yaml files. Samples can be found in the etc/
 source directory.  More elaborate examples can be obtained from Gregor
 for the personnel that work directly with him on FutureGrid.
 
@@ -381,7 +388,7 @@ The cloudmesh.yaml file
 After updating the me.yaml file, you can generate a new cloudmesh.yaml
 file. The command::
 
-  $ cm-init fill --file=etc/cloudmesh-template.yaml ~/.futuregrid/me.yaml
+  $ cm-init fill --file=etc/cloudmesh.yaml ~/.futuregrid/me.yaml
 
 will test if the me.yaml file can successfully create a cloudmesh.yaml
 file by printing its output. If no error occurs it will most likely be
@@ -393,72 +400,6 @@ to create the cloudmesh yaml file from `~/.futuregird/me.yaml` and
 write it to `~/.futuregird/cloudmesh.yaml`. Out of precaution we have
 included a couple of questions that could be surpressed with the
 `--force` option.
-
-
-THIS IS OUTDATED
-----------------------------------------------------------------------
-
-Than you can print the contents of the yaml file that this input
-generets to the stdout with::
-
-    fab user.yaml
-
-ERROR: not that this prints a Done. msg at the end so if you redirect
-it to ~/.futuregrid/cloudmesh.yaml you need to correct this.
-
-WARNING: If you have a working yaml file, than I suggest you copy this
-first into a backup before overwriting something that worked before ;-)
-
-In future we will have::
-
-   fab user.yaml,safe
-
-which safes this into ~/.futuregrid/cloudmesh.yaml and::
-
-   fab user.verify
-
-which will verify if you can log into the clouds with your credentials
-
-.. note:
-
-   WARNING: fab user.verify, and fab user.yaml,safe are not yet implemented
-
-Most of the commands which are described in the YAML section need
-cloudmesh to be fully installed.
-
-OSX
-----------------------------------------------------------------------
-
-Note: that on osx we have to set the ldflags to get to the ttfonts. To
-do this you must first have XCode downloaded and installed. After that
-you can say on the commandline::
-
-  xcode-select --install
-
-This will opens a user interface dialog to request automatic
-installation of the command line developer tools which you will need
-if you like to conduct development on OSX. 
-
-Additionally we recommend that you check if you have the freetype
-fonts installed and set the LDFLAG as follows (if you find the
-freetypes there)::
-
-  LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib 
-
-Furthermore, since version 5.1 of XCode you may see the following error when
-installing pycrypto on OSX::
-
-  clang: error: unknown argument: '-mno-fused-madd' [-Wunused-command-line-argument-hard-error-in-future]
-
-  clang: note: this will be a hard error (cannot be downgraded to a warning) in the future
-
-  error: command 'cc' failed with exit status 1
-
-This error can be fixed by ignoring the option with the following
-shell commands::
-
-   export CFLAGS=-Qunused-arguments
-   export CPPFLAGS=-Qunused-arguments
 
 
 Deployment
@@ -645,7 +586,6 @@ After that you naturally need to do a new install.
 
 Convenient command shortcuts
 ======================================================================
-
 
 We are providing a number of useful command that will make your
 development efforts easier.  These commands are build with fabfiles in
@@ -924,3 +864,26 @@ from cloudmesh. Thus no file in cloudmesh_common must include::
 
    import cloudmesh. ...
 
+OSX System preparation Tips
+======================================================================
+
+On OSX we recommend that you check if you have the freetype
+fonts installed and set the LDFLAG as follows (if you find the
+freetypes there)::
+
+  LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib 
+
+Furthermore, since version 5.1 of XCode you may see the following error when
+installing pycrypto on OSX::
+
+  clang: error: unknown argument: '-mno-fused-madd' [-Wunused-command-line-argument-hard-error-in-future]
+
+  clang: note: this will be a hard error (cannot be downgraded to a warning) in the future
+
+  error: command 'cc' failed with exit status 1
+
+This error can be fixed by ignoring the option with the following
+shell commands::
+
+   export CFLAGS=-Qunused-arguments
+   export CPPFLAGS=-Qunused-arguments

@@ -23,10 +23,8 @@ I. Introduction
    bib
    contact 
 
-
-
 	  
-II. Developers Istallation Documentation
+II. Developers Installation Documentation
 ======================================================================
 
 .. toctree::
@@ -37,17 +35,6 @@ II. Developers Istallation Documentation
    image
    celery   
 
-III. Developers Guidelines
-======================================================================
-
-.. toctree::
-   :maxdepth: -1
-
-   tasks
-   coding  
-   hacking
-   vagrant
-
 III. Generating the Documentation
 ======================================================================
 
@@ -56,8 +43,7 @@ III. Generating the Documentation
 
    doc
     
-
-IV. Execution
+IV. Testing
 ======================================================================
 .. toctree::
    :maxdepth: 2
@@ -71,7 +57,7 @@ V. Configuration
   
    configure
 
-VI. Cloudmesh Commandshell
+VI. Cloudmesh Command Shell
 ======================================================================
 
 .. toctree::
@@ -91,8 +77,33 @@ VII. Cloud Metrics
    metric
 
 
-VIII. Old Commandshell (will be integrated in new shell)
+VIII. Developers Guidelines
 ======================================================================
+
+.. toctree::
+   :maxdepth: -1
+
+   tasks
+   coding  
+   hacking
+   vagrant
+
+
+
+Appendix - TODO
+======================================================================
+
+A. Integrate into documentation
+----------------------------------------------------------------------
+
+.. toctree::
+   :maxdepth: 2
+  
+   deploy
+   fg
+
+B. Old Commandshell
+----------------------------------------------------------------------
 
 .. toctree::
    :maxdepth: 2
@@ -101,16 +112,6 @@ VIII. Old Commandshell (will be integrated in new shell)
    old-cm/cm_cli
    old-cm/cmcli
    old-cm/intro
-
-
-TODO
-======================================================================
-
-.. toctree::
-   :maxdepth: 2
-  
-   deploy
-   fg
 
 
 .. comment::
