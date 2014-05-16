@@ -564,12 +564,11 @@ class CobblerProvision:
             flag_result = self.shell_command(cmd_args + all_interface_args[0])
         elif len(cmd_args) > len(cmd_args_edit):
             flag_result = self.shell_command(cmd_args)
-        say_info("Create system {0}, step 2 {1}".format(system_name, "success" if flag_result else "failed"))
+        say_info("_edit system {0}, step 1 {1}".format(system_name, "success" if flag_result else "failed"))
         if flag_result:
             for interface in all_interface_args[1:]:
-                say_debug("intefaces: edit: {0}, inteface: {1}".format(cmd_args_edit, interface))
                 flag_result = self.shell_command(cmd_args_edit + interface)
-                say_info("Create system {0}, step 3, interfaces {1}".format(system_name, "success" if flag_result else "failed"))
+                say_info("_edit system {0}, step 2, interfaces {1}".format(system_name, "success" if flag_result else "failed"))
                 if not flag_result:
                     break
         return flag_result
@@ -731,12 +730,12 @@ class CobblerProvision:
         #print "result is: ", result
         return self._simple_result_dict(result, "Ping {0} {1}successfully.".format(system_name, "" if result else "un"))
     
-    def get_system_manage_ip(csystem, exclude_loop=True):
+    def get_system_manage_ip(self, csystem, exclude_loop=True):
         """get IP address of the management interface,
         Currently, choose the management interface by the name that the lower name is management
         FIXME, TODO, Maybe we can add a field in mongodb later
         """
-        dict_interfaces = csystem.interfaces
+        dict_interfaces = csystem["interfaces"]
         list_ip = [(name, dict_interfaces[name]["ip_address"]) for name in dict_interfaces]
         if exclude_loop:
             list_ip = [(name, address) for (name, address) in list_ip if not address.startswith("127")]
@@ -802,7 +801,7 @@ class CobblerProvision:
     
     def shell_command(self, args):
         #print "==Command> ", " ".join(args)
-        say_debug("shell command: {0}".format(args))
+        say_debug("shell command: {0}".format(" ".join(args)))
         DEVNULL = open(os.devnull, "wb")
         return 0 == subprocess.call(args, stderr=DEVNULL, stdout=DEVNULL)
 

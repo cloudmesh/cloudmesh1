@@ -1,5 +1,6 @@
 from cloudmesh.util.config import read_yaml_config
 from cloudmesh.config.cm_config import cm_config_server
+from cloudmesh.provisioner.baremetal_status import BaremetalStatus
 import requests
 import json
 from time import sleep
@@ -17,6 +18,7 @@ class CobblerRestAPI:
     """
     def __init__(self):
         self.server_url = self.get_server_url()
+        self.bm_status = BaremetalStatus()
     
     def get_cobbler_distro_list(self):
         """
@@ -272,7 +274,7 @@ class CobblerRestAPI:
         self.bm_status.update_deploy_command_result(name, rest_data["result"])
         if rest_data["result"]:
             # monitor status
-            monitor_deploy_power_status(name, "deploy")
+            self.monitor_deploy_power_status(name, "deploy")
         return rest_data["result"]
     
     def power_cobbler_system(self, name, flag_on=True):
@@ -290,7 +292,7 @@ class CobblerRestAPI:
         rest_data = self.request_rest_api("put", url, data)
         if rest_data["result"]:
             # monitor status
-            monitor_deploy_power_status(name, "power", flag_on)
+            self.monitor_deploy_power_status(name, "power", flag_on)
         return rest_data["result"]
     
     def monitor_deploy_power_status(self, name, action, flag_on=True):

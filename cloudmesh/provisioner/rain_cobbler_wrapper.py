@@ -139,7 +139,7 @@ class RainCobblerWrapper:
                 # provision/deploy each host
                 for host in hosts:
                     log.info("call celery deploy_system on host {0} ...".format(host))
-                    deploy_system.apply_async((host), queue='rain')
+                    deploy_system.apply_async([host], queue='cobbler')
             result_data["result"] = result
         else:
             result_data[FIELD_DESC] = "profile {0} NOT exist in cobbler.".format(profile)
@@ -304,5 +304,6 @@ if __name__ == "__main__":
     #result_data = rcb.get_status_summary()
     #result_data = rcb.list_system_based_distro_kickstart()
     result_data = rcb.provision_host_with_profile("centos6-x86_64", "i072")
+    #result_data = rcb.rest_api.monitor_deploy_power_status("i072", "deploy")
     print result_data
     
