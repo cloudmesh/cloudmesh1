@@ -1,5 +1,5 @@
 from dbhelper import DBHelper
-from hostlist import expand_hostlist
+from hostlist import expand_hostlist, collect_hostlist
 from types import *
 from copy import deepcopy
 from cloudmesh_common.logger import LOGGER
@@ -68,48 +68,73 @@ class BaremetalPolicy:
     def get_policy_based_user(self, user):
         """get all the policies for a user
         :param string user: a username
-        :return: a list of policy with the formation ['policy1', 'policy2']
+        :return: a dict of user and policy with the formation {"name1": "hostlist", "name2": "hostlist2"}
         """
         policys = self.get_all_user_policy()
-        if user == "all":
-            return policys
-        users = user.split(",")
-        data = []
-        for puser in policys:
-            pusers = puser.split(",")
-            common_users = [u for u in pusers if u in users]
-            if common_users:
-                data.extend(policys[puser])
-        return data
+        return self.merge_policy_based_ug(policys) if user == "all" else self.merge_policy_based_ug(policys, True, user)
     
     def get_policy_based_group(self, group):
         """get all the policies for a group/project
         :param string user: a group/project
-        :return: a list of policy with the formation ['policy1', 'policy2']
+        :return: a dict of group and policy with the formation {"name1": "hostlist", "name2": "hostlist2"}
         """
         policys = self.get_all_group_policy()
-        if group == "all":
-            return policys
-        groups = expand_hostlist(group)
-        data = []
-        for pgroup in policys:
-            pgroups = expand_hostlist(pgroup)
-            common_groups = [u for u in pgroups if u in groups]
-            if common_groups:
-                data.extend(policys[pgroup])
-        return data
+        return self.merge_policy_based_ug(policys, False) if group == "all" else self.merge_policy_based_ug(policys, False, group)
     
-    def get_all_user_policy(self):
+    def merge_policy_based_ug(self, policys, flag_user=True, name=None):
+        """merge policy based the name of user/group
+        :param dict policys: all the possible policys for users/groups
+        :param boolean flag_user: True means user, False means group
+        :param string name: the name of one or more user/group, None means all user/groups
+        :return: a dict of user/group and policy with the formation {"name1": "hostlist", "name2": "hostlist2"}
+        """
+        if policys:
+            data = {}
+            names = expand_hostlist(name) if name else None
+            for puser in policys:
+                users = expand_hostlist(puser)
+                common_users = [u for u in users if u in names] if names else users
+                hosts = []
+                for policy in policys[puser]:
+                    hosts.extend(expand_hostlist(policy["policy"]))
+                for user in common_users:
+                    if user in data:
+                        data[user].extend(hosts)
+                    else:
+                        data[user] = hosts
+            for user in data:
+                data[user] = collect_hostlist(data[user])
+            # flip data, combine duplicate values
+            flipped_data = {}
+            for user in data:
+                if data[user] in flipped_data:
+                    flipped_data[data[user]].append(user)
+                else:
+                    flipped_data[data[user]] = [user]
+            # try to merge user with same hosts
+            data = {}
+            for value in flipped_data:
+                data[collect_hostlist(flipped_data[value])] = value
+            return data if data else None
+        return None
+    
+    def get_all_user_policy(self, flag_merge=False):
         """get all the policies for all user
-        :return: a dict of user and policy with the formation {"user1":['policy1', 'policy2'], "user2": [],}
+        :param boolean flag_merge: True meanse merge all possible user and policy into string
+        :return: flag_merge is False, result is a dict of user and policy with the formation {"user1":['policy1', 'policy2'], "user2": [],}
+        flag_merge is True, result is a dict of user/group and policy with the formation {"name1": "hostlist", "name2": "hostlist2"}
         """
-        return self.get_all_policy()["users"]
+        policys = self.get_all_policy()["users"]
+        return policys if not flag_merge else self.merge_policy_based_ug(policys)
     
-    def get_all_group_policy(self):
+    def get_all_group_policy(self, flag_merge=False):
         """get all the policies for all group/project
-        :return: a dict of group/project and policy with the formation {"group1":['policy1', 'policy2'], "group2": [],}
+        :param boolean flag_merge: True meanse merge all possible user and policy into string
+        :return: flag_merge is False, result is a dict of group/project and policy with the formation {"group1":['policy1', 'policy2'], "group2": [],}
+        flag_merge is True, result is a dict of user/group and policy with the formation {"name1": "hostlist", "name2": "hostlist2"}
         """
-        return self.get_all_policy()["groups"]
+        policys = self.get_all_policy()["groups"]
+        return policys if not flag_merge else self.merge_policy_based_ug(policys, False)
     
     def get_all_policy(self):
         """get all the policies for all users and group/project
@@ -163,5 +188,6 @@ if __name__ == "__main__":
     #result = bmp.add_user_policy("chen,fugang,heng", "i[101-103]")
     #result = bmp.get_all_policy()
     #result = bmp.get_policy_based_user("fugang")
-    result = bmp.get_policy_based_user("gregor")
+    #result = bmp.get_policy_based_user("gregor")
+    result = bmp.add_group_policy("fg[1-3]", "i[111-113]")
     print "result is: ", result
