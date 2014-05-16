@@ -18,60 +18,12 @@ Cloudmesh
 
    introduction
    installation
-
-
-III. Generating the Documentation
-======================================================================
-
-.. toctree::
-   :maxdepth: 2
-
-   doc
-    
-IV. Testing
-======================================================================
-.. toctree::
-   :maxdepth: 2
-  
-   nosetest
-
-V. Configuration
-======================================================================
-.. toctree::
-   :maxdepth: -1
-  
    configure
-
-VI. Cloudmesh Command Shell
-======================================================================
-
-.. toctree::
-   :maxdepth: 2
-  
-   cm-shell
-   cm-shell-rain
-   cm-manage
-   cm-shell-man
-
-VII. Cloud Metrics
-======================================================================
-
-.. toctree::
-   :maxdepth: 2
-
+   doc
+   nosetest
+   shell    
    metric
-
-
-VIII. Developers Guidelines
-======================================================================
-
-.. toctree::
-   :maxdepth: -1
-
-   tasks
-   coding  
-   hacking
-   vagrant
+   contributing
 
 
 

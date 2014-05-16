@@ -230,7 +230,7 @@ If you use the display option a nice image is create in the file with the given 
 It is similar to a gantt chart showing resrevations by users, projects, and groups.
 
 Time Format
-============
+----------------------------------------------------------------------
 
 Examples
 
