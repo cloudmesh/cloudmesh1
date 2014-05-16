@@ -46,7 +46,7 @@ extensions = [
 #    'sphinxcontrib.webmocks',
 #    'sphinxjp.shibukawa']
 
-#extensions.append('sphinxcontrib.autorun')
+extensions.append('sphinxcontrib.autorun')
 
 # 'sphinxcontrib.issuetracker']
 # issuetracker = 'none',
