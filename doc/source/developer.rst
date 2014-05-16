@@ -332,7 +332,7 @@ Configuration Details
 Initial YAML files
 ----------------------------------------------------------------------
 
- You will need a number of yaml files. Samples can be found in the etc/
+You will need a number of yaml files. Samples can be found in the etc/
 source directory.  More elaborate examples can be obtained from Gregor
 for the personnel that work directly with him on FutureGrid.
 
