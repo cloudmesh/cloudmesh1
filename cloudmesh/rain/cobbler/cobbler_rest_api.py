@@ -263,12 +263,16 @@ class CobblerRestAPI:
         :param string name: the name of a cobbler system or host
         :return: Always return True, which ONLY means has sent deploy command through IPMI. You MUST call `monitor_cobbler_system` to get the status of the system `name`.
         """
-        url = "/cm/v1/cobbler/baremetal/{0}".format(name)
-        rest_data = self.request_rest_api("post", url)
         # init deploy status
         self.bm_status.init_deploy_status(name)
-        # monitor status
-        monitor_deploy_power_status(name, "deploy")
+        # call deploy REST
+        url = "/cm/v1/cobbler/baremetal/{0}".format(name)
+        rest_data = self.request_rest_api("post", url)
+        # save deploy command result to mongodb 
+        self.bm_status.update_deploy_command_result(name, rest_data["result"])
+        if rest_data["result"]:
+            # monitor status
+            monitor_deploy_power_status(name, "deploy")
         return rest_data["result"]
     
     def power_cobbler_system(self, name, flag_on=True):
@@ -278,13 +282,15 @@ class CobblerRestAPI:
         :param boolean flag_on: a boolean value. True means to power on the system, False means power off.
         :return: Always return True, which ONLY means has sent deploy command through IPMI. You MUST call `monitor_cobbler_system` to get the status of the system `name`.
         """
+        # init power status
+        self.bm_status.init_power_status(name, flag_on)
+        # call power REST
         url = "/cm/v1/cobbler/baremetal/{0}".format(name)
         data = {"power_on": flag_on, }
         rest_data = self.request_rest_api("put", url, data)
-        # init power status
-        self.bm_status.init_power_status(name, flag_on)
-        # monitor status
-        monitor_deploy_power_status(name, "power", flag_on)
+        if rest_data["result"]:
+            # monitor status
+            monitor_deploy_power_status(name, "power", flag_on)
         return rest_data["result"]
     
     def monitor_deploy_power_status(self, name, action, flag_on=True):
