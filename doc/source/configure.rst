@@ -121,7 +121,7 @@ file") are provided as credentials. These credentials should be
 imported in cloudmesh.yaml.
 
 
-Automaticc rc file retrieval
+Retrieval of rc file by command
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
@@ -135,21 +135,24 @@ following format
    
    .futuregird/clouds
         india_openstack_havana
-	sierra_openstack_??? I assume its grizzly verify
+	sierra_openstack_grizzly
 
 In future we will also have the following directories:
 
         hotel_openstack_ ...
 	alamo_openstack_ ...
 
-At this time the credentials form hotel and alamo are not
+At this time the credentials from hotel and alamo are not
 automatically retrieved, you need to get them in the following way and
-fill them in to the following files:
+fill them into the cloudmesh.yaml file:
 
 * TBD
 
-Retrievla of rc files by Hand
+Retrieval of rc files by Hand
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+
+Location of rc files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ========= ================================== ====================================================
 Host      OpenStack (novarc)                 Eucalyptus (eucarc)
@@ -161,18 +164,15 @@ alamo     Download EC2 Credentials**          n/a
 foxtrot   n/a                                n/a
 ========= ================================== ====================================================
 
-
-
-
-* For Eucalyptus, compressed file is provided in the directory. Unzip it and load credentials are required like as follows. 
+** For Eucalyptus, compressed file is provided in the directory. Unzip it and load credentials 
+are required like as follows. 
 
     :: 
 
          unzip ineuca3-{username}-{cluster}-fgprojectnumber.zip
          source eucarc
 
-         
-* With OpenStack Horizon, EC2 credentials can be downloaded.
+\* With OpenStack Horizon, EC2 credentials can be downloaded.
 
   - login `OpenStack Havana on Hotel <https://openstack.uc.futuregrid.org/dashboard/>`_ or `OpenStack Folsom on Alamo <https://openstack.futuregrid.tacc.utexas.edu/horizon>`_
   - Click 'Access & Security'
