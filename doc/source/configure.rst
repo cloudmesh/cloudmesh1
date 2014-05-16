@@ -89,7 +89,37 @@ cm_type_version
   Besides the type we can have also a number of versions that specifies how we interact with the cloud.
 
   Example: grizzly
- 
+
+Configuration file (rc file)
+----------------------------
+
+In most IaaS platforms, configuration files (in the form of an "rc file") are provided as credentials. These credentials should be imported in cloudmesh.yaml.
+
+========= ================================== ====================================================
+Host      OpenStack (novarc)                 Eucalyptus (eucarc)
+--------- ---------------------------------- ----------------------------------------------------
+india     $HOME/.futuregrid/openstack/novarc $HOME/.futuregrid/eucalyptus/$fgprojectnumber/eucarc*
+sierra    $HOME/.futuregrid/novarc           $HOME/.futuregrid/eucalyptus/$fgprojectnumber/eucarc*
+hotel     Download EC2 Credentials**          n/a
+alamo     Download EC2 Credentials**          n/a
+foxtrot   n/a                                n/a
+========= ================================== ====================================================
+
+* For Eucalyptus, compressed file is provided in the directory. Unzip it and load credentials are required like as follows. 
+
+    :: 
+
+         unzip ineuca3-{username}-{cluster}-fgprojectnumber.zip
+         source eucarc
+
+         
+* With OpenStack Horizon, EC2 credentials can be downloaded.
+
+  - login `OpenStack Havana on Hotel <https://openstack.uc.futuregrid.org/dashboard/>`_ or `OpenStack Folsom on Alamo <https://openstack.futuregrid.tacc.utexas.edu/horizon>`_
+  - Click 'Access & Security'
+  - Select 'API Access' tab
+  - Click 'Download EC2 Credentials' (which is a direct link here for `Hotel <http://openstack.uc.futuregrid.org/horizon/project/access_and_security/api_access/ec2/>`_ or `Alamo <http://openstack.futuregrid.tacc.utexas.edu/horizon/project/access_and_security/api_access/ec2/>`_)
+
 Next we specify the credentials of the cloud. We can obtain them typically from the cloud provider. The mechnism to obtain them may vary and you will need to look it up. Often you will have an rc file or a GUI that allows you to export the needed information. We have strived to keep the same attributes that are provided by the supported cloud providors. Hence typically no change is needed and you can just paste and copy the values. However, if your cloud needs certificates, they may have to be specially dealt with and placed in special directories. For cloudmesn we provide them as part of the install and ainclude them in the::
 
   $HOME/.futuregrid/ 

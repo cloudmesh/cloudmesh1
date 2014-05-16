@@ -208,7 +208,9 @@ the virtualenv in your .bash_profile.
 
 If you ever need to deactivate the virtual env, you can run::
 
-    $ ~/ENV/bin/deactivate
+    $ deactivate
+
+from within the active virtualenv shell.
 
     
 Modify your rc file:
