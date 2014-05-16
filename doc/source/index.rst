@@ -12,31 +12,13 @@
 Cloudmesh 
 ######################################################################
 
-
-I. Introduction
-======================================================================
-
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
+   :numbered:
 
-   about 
-   contact 
-   news
-   screenshots
-   bib
-   faq
-    
-	  
-II. Developers Installation Documentation
-======================================================================
+   introduction
+   installation
 
-.. toctree::
-   :maxdepth: -1
-  
-   developer
-   cobbler
-   image
-   celery   
 
 III. Generating the Documentation
 ======================================================================

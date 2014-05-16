@@ -7,7 +7,7 @@
     alt="Fork me on GitHub"></a>
 
 .. sectnum::
-   :start: 4
+   :start: 11
    
 Testing with nose
 ==========================================
