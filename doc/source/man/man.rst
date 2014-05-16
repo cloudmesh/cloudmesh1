@@ -125,6 +125,57 @@ Command - info::
     
     
 
+init
+----------------------------------------------------------------------
+
+Command - init::
+
+    Usage:
+           init [--force] generate yaml
+           init [--force] generate me
+           init [--force] generate none
+           init [--force] generate FILENAME
+           init list [KIND] [--json]           
+           init list clouds [--file=FILENAME] [--json]
+           init inspect --file=FILENAME
+           init fill --file=FILENAME [VALUES]
+    
+    Initializes cloudmesh from a yaml file
+    
+    Arguments:
+       generate   generates a yaml file
+       yaml       specifies if a yaml file is used for generation
+                  the file is located at ~/.futuregrid/me.yaml
+       me         same as yaml
+    
+       none       specifies if a yaml file is used for generation
+                  the file is located at ~/.futuregrid/etc/none.yaml
+       FILENAME   The filename to be generated or from which to read
+                  information. 
+       VALUES     yaml file with the velues to be sed in the FILENAME
+       KIND       The kind of the yaml file.
+    
+    Options:
+       --force  force mode does not ask. This may be dangerous as it
+                overwrites the ~/.futuregrid/cloudmesh.yaml file
+       --file=FILENAME  The file
+       --json   make the output format json
+       -v       verbose mode
+    
+    
+    Description:
+    
+      init list [KIND] [--json]
+         list the versions and types of the yaml files in the
+         ~/.futuregrid and ~/.futuregrid/etc directories.
+    
+      init list clouds [--file=FILENAME]
+         Lists the available clouds in the configuration yaml file.
+    
+      init inspect --file=FILENAME
+         print the variables in the yaml template
+    
+
 man
 ----------------------------------------------------------------------
 
@@ -148,6 +199,64 @@ Command - man::
       man COMMAND
             Prints out the help page for a specific command
     
+    
+    
+
+metric
+----------------------------------------------------------------------
+
+Command - metric::
+
+        Usage:
+    	cm-metric -h | --help
+            cm-metric --version
+            cm-metric [CLOUD]
+                      [-s START|--start=START] 
+                      [-e END|--end=END] 
+                      [-u USER|--user=USER] 
+                      [-m METRIC|--metric=METRIC]
+                      [-p PERIOD|--period=PERIOD] 
+                      [-c CLUSTER]
+    
+       Options:
+           -h                   help message
+           -m, --metric METRIC  use either user|vm|runtime in METRIC
+           -u, --user USER      use username in USER
+           -s, --start_date START    use YYYYMMDD datetime in START
+           -e, --end_date END        use YYYYMMDD datetime in END
+           -c, --host HOST      use host name e.g. india, sierra, etc
+           -p, --period PERIOD  use either month|day|week
+    
+        Arguments:
+            CLOUD               Name of the IaaS cloud e.g. openstack, nimbus, Eucalyptus
+            HOST                Name of host e.g. india, sierra, foxtrot,
+                                hotel, alamo, lima
+    
+        Description:
+           metric command provides usage data with filter options.
+    
+        Result:
+          The result of the method is a datastructure specified in a given format.
+          If no format is specified, we return a JSON string of the following format:
+    
+             {
+                "start_date"    :   start date of search    (datetime),
+                "end_date"      :   end date of search      (datetime),
+                "ownerid"       :   portal user id          (str),
+                "metric"        :   selected metric name    (str),
+                "period"        :   monthly, weekly, daily  (str),
+                "clouds"        :   set of clouds           (list)
+                [
+                   {"service"     :   cloud service name  (str),
+                    "hostname"     :   hostname (str),
+                    "stats"        :   value (int) }
+                    ...
+                ]
+             }
+    
+        Examples:
+            $ cm-metric openstack -c india -u hrlee        
+            - Get user statistics
     
     
 
@@ -270,6 +379,37 @@ Command - script::
     
     
 
+storm
+----------------------------------------------------------------------
+
+Command - storm::
+
+    Usage:
+      storm list
+      storm ID
+      storm register ID [--kind=KIND] [ARGUMENTS...]
+    
+    Arguments:
+    
+      list       list the available high level services to be provisioned.
+      ID         list the user with the given ID
+      ARGUMENTS  The name of the arguments that need to be passed
+    
+    Options:
+      --kind=KIND  the kind of the storm. It can be chef, puppet, or other
+                   frameworks. At this time we will focus on chef [default: chef].
+    
+       -v          verbose mode
+    
+    Description:
+    
+      Command to invoce a provisioning of high level services such as
+      provided with chef, puppet, or other high level DevOps Tools. If
+      needed the machines can be provisioned prior to a storm with
+      rain. Together this forms a rain storm.
+    
+    
+
 timer
 ----------------------------------------------------------------------
 
@@ -338,6 +478,28 @@ Command - use::
         add          add a scope with a name
         delete       delete a named scope
         use          activate a scope
+    
+    
+
+user
+----------------------------------------------------------------------
+
+Command - user::
+
+    Usage:
+           user list
+           user info [ID]
+    
+    Administrative command to lists the users from LDAP
+    
+    Arguments:
+    
+      list       list the users
+      ID         list the user with the given ID
+    
+    Options:
+    
+       -v       verbose mode
     
     
 
