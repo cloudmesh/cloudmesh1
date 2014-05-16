@@ -8,13 +8,13 @@
 
 
 
-#################
+######################################################################
 Cloudmesh 
-#################
+######################################################################
 
 
 I. Introduction
-==============
+======================================================================
 
 .. toctree::
    :maxdepth: 1
@@ -22,12 +22,11 @@ I. Introduction
    about 
    bib
    contact 
-   tasks
-   coding
+
 
 
 	  
-II. Developers Documentation
+II. Developers Istallation Documentation
 ======================================================================
 
 .. toctree::
@@ -37,6 +36,17 @@ II. Developers Documentation
    cobbler
    image
    celery   
+
+III. Developers Guidelines
+======================================================================
+
+.. toctree::
+   :maxdepth: -1
+
+   tasks
+   coding  
+   hacking
+   vagrant
 
 III. Generating the Documentation
 ======================================================================
@@ -94,7 +104,7 @@ VIII. Old Commandshell (will be integrated in new shell)
 
 
 TODO
-=====
+======================================================================
 
 .. toctree::
    :maxdepth: 2
@@ -103,20 +113,21 @@ TODO
    fg
 
 
+.. comment::
 
-Plan
-======
+    Plan
+    ================================================================
 
-.. toctree::
-   :maxdepth: 2
-   
-   plan/plan
-   plan/design 
+    .. toctree::
+       :maxdepth: 2
 
-Test
-=======
-   plan/mock
-   plan/cal   
+       plan/plan
+       plan/design 
+
+    Test
+    =================================================================
+       plan/mock
+       plan/cal   
 
 
 Indices and tables
