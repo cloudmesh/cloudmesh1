@@ -127,6 +127,29 @@ def main():
 
         sys.exit(0)
 
+    if "gatherrc" in args:
+
+        banner("gatherrc")
+
+        # Task 1. list hostnames to get access. In Futuregrid, india, sierra are
+        # mandatory hosts to be included.
+        hostnames = ["india", "sierra"] #TEMPORARY
+        # Task 2. list portal user id, maybe user input is good
+        userid = "hrlee" #TEMPORARY
+
+        try:
+            # Task 3. Download credentials by scp
+            for hostname in hostnames:
+                os.system("mkdir -p ~/.futuregrid/clouds/%s" % hostname)
+                os.system("echo scp %s@%s.futuregrid.org:~/.futuregrid/novarc \
+                          ~/.futuregrid/clouds/%s/" % (userid, hostname))
+
+            # Task 4. write cloudmesh.yaml based on the credentials
+        except:
+            sys.exit(1)
+
+        sys.exit(0)
+
     arguments = ' '.join(args)
     banner(arguments)
     try:
