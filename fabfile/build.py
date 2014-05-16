@@ -1,12 +1,7 @@
 from fabric.api import task, local, execute
 import clean
 
-__all__ = ['req', 'sdist', 'install', 'sphinx']
-
-@task
-def req():
-    """install the requirements"""
-    local("pip install -r requirements.txt")
+__all__ = ['sdist', 'install', 'sphinx']
 
 @task
 def sdist():
@@ -17,7 +12,7 @@ def sdist():
 @task
 def install():
     """install cloudmesh"""
-    local("pip install -r requirements.txt")
+    local("./install requirements.txt")
     local("python setup.py install")
 
 @task
