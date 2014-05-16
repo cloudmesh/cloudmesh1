@@ -31,16 +31,19 @@ using various technologies.
    :scale: 75 %
    :alt: cloudmesh architecture
 
-   **Figure:** The cloudmesh architecture. Green = components available, under improvement. Yellow = components under development.
+   **Figure:** The cloudmesh architecture. Green = components
+    available, under improvement. Yellow = components under
+    development.
 
 A goal of Cloudmesh is to aggregate resources not only from
 FutureGrid, but also from OpenCirrus, Amazon, Microsoft Azure, and HP
 Cloud and GENI resources to name only a few. Cloudmesh was originally
 developed in order to simplify the execution of multiple concurrent
 experiments on a federated cloud infrastructure. In addition to
-virtual resources, FutureGrid exposes bare-metal provisioning to users, but
-also a subset of HPC monitoring infrastructure tools. Services will be
-available through command line, API, and Web interfaces.
+virtual resources, FutureGrid exposes bare-metal provisioning to
+users, but also a subset of HPC monitoring infrastructure
+tools. Services will be available through command line, API, and Web
+interfaces.
 
 The three layers of the Cloudmesh architecture include a Cloudmesh
 Management Framework for monitoring and operations, user and project
@@ -52,29 +55,29 @@ resources.
 System Monitoring and Operations
 ----------------------------------------------------------------------
 
-The management framework contains services to facilitate FutureGrid day-to-day
-operation, including federated or selective monitoring of the
-infrastructure. Cloudmesh leverages FutureGrid for the operational
+The management framework contains services to facilitate FutureGrid
+day-to-day operation, including federated or selective monitoring of
+the infrastructure. Cloudmesh leverages FutureGrid for the operational
 services and allows administrators to view ongoing system status and
 experiments, as well as interact with users through ticket systems and
 messaging queues to inform subscribed users on the status of the
 system.
 
 The cloudmesh management framework offers services that simplify
-integration of resources in the FutureGrid nucleus or through federation. This
-includes, for user management, access to predefined setup templates
-for services in enabling resource and service provisioning as well as
-experiment execution. To integrate IaaS frameworks cloudmesh offers
-two distinct services:
+integration of resources in the FutureGrid nucleus or through
+federation. This includes, for user management, access to predefined
+setup templates for services in enabling resource and service
+provisioning as well as experiment execution. To integrate IaaS
+frameworks cloudmesh offers two distinct services:
 
-* (a) a federated IaaS frameworks hosted on FutureGrid,
+1. a federated IaaS frameworks hosted on FutureGrid,
 
-* (b) the availability of a service that is hosted on FutureGrid allowing the
-  “integration” of IaaS frameworks through user credentials either
-  registered by the users or automatically obtained from our distributed
-  user directory. 
+2. the availability of a service that is hosted on FutureGrid allowing
+   the “integration” of IaaS frameworks through user credentials
+   either registered by the users or automatically obtained from our
+   distributed user directory.
 
-For (b) several toolkits exist to create user-based federations,
+For (2) several toolkits exist to create user-based federations,
 including our own abstraction level which supports interoperability
 via libcloud, but more importantly it supports directly the native
 OpenStack protocol and overcomes limitations of the EC2 protocol and
@@ -100,14 +103,14 @@ improvements of automation of cloud-shifting.
 User and Project Services
 ----------------------------------------------------------------------
 
-FutureGrid user and project services simplify the application processes needed
-to obtain user accounts and projects. We have demonstrated in FutureGrid the
-ability to create accounts in a very short time, including vetting
-projects and users – allowing fast turn-around times for the majority
-of FutureGrid projects with an initial startup allocation. Cloudmesh re-uses
-this infrastructure and also allows users to manage proxy accounts to
-federate to other IaaS services to provide an easy interface to
-integrate them.
+FutureGrid user and project services simplify the application
+processes needed to obtain user accounts and projects. We have
+demonstrated in FutureGrid the ability to create accounts in a very
+short time, including vetting projects and users – allowing fast
+turn-around times for the majority of FutureGrid projects with an
+initial startup allocation. Cloudmesh re-uses this infrastructure and
+also allows users to manage proxy accounts to federate to other IaaS
+services to provide an easy interface to integrate them.
 
 Accounting and App Store
 ----------------------------------------------------------------------
@@ -136,15 +139,15 @@ models. Benchmarks will be used to normalize the charge models.
 Networking 
 ----------------------------------------------------------------------
 
-We have a broad vision of resource integration in FutureGrid with systems
-offering different levels of control from "bare metal" to use of a
-portion of a resource. Likewise, we must utilize networks offering
-various levels of control, from standard IP connectivity to completely
-configurable SDNs as novel cloud architectures will almost certainly
-leverage NaaS and SDN alongside system software and middleware. FutureGrid
-resources will make use of SDN using OpenFlow whenever possible and
-the same level of networking control will not be available in every
-location.
+We have a broad vision of resource integration in FutureGrid with
+systems offering different levels of control from "bare metal" to use
+of a portion of a resource. Likewise, we must utilize networks
+offering various levels of control, from standard IP connectivity to
+completely configurable SDNs as novel cloud architectures will almost
+certainly leverage NaaS and SDN alongside system software and
+middleware. FutureGrid resources will make use of SDN using OpenFlow
+whenever possible and the same level of networking control will not be
+available in every location.
 
 
 
@@ -169,9 +172,9 @@ Role and Use of Standards and Open Source Software
 ----------------------------------------------------------------------
 
 Cloudmesh will use standards and open source software as part of its
-design principles towards sustainability. We will leverage
-efforts such as OCCI and CDMI and are already using community efforts
-on interoperability APIs as provided by Apache libcloud. However, as
+design principles towards sustainability. We will leverage efforts
+such as OCCI and CDMI and are already using community efforts on
+interoperability APIs as provided by Apache libcloud. However, as
 libcloud is feature limited Cloudmesh provides an additional
 abstraction layer that exposes cloud interfaces on the native-protocol
 level. Furthermore we interface to commercial Clouds such as Microsoft
@@ -236,11 +239,11 @@ experiment management functionality. It has been used at IU for about
 9 month.
 
 Originally cloudmesh was just a `command line tool
-<https://github.com/futuregrid/cm>`_ that was able to
-start hundreds of VMs on various clouds in order to conduct stress
-testing of cloud deployments. There was no comparable tool
-available. Our requirements were simple, but none of the tools
-fulfilled the following requirements:
+<https://github.com/futuregrid/cm>`_ that was able to start hundreds
+of VMs on various clouds in order to conduct stress testing of cloud
+deployments. There was no comparable tool available. Our requirements
+were simple, but none of the tools fulfilled the following
+requirements:
 
 * start hundreds of VMs from the command line with a simple command
 * delete the VMs from a user through the command line

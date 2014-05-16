@@ -8,13 +8,13 @@
 
 
 
-#################
+######################################################################
 Cloudmesh 
-#################
+######################################################################
 
 
 I. Introduction
-==============
+======================================================================
 
 .. toctree::
    :maxdepth: 1
@@ -22,12 +22,9 @@ I. Introduction
    about 
    bib
    contact 
-   tasks
-   coding
-
 
 	  
-II. Developers Documentation
+II. Developers Installation Documentation
 ======================================================================
 
 .. toctree::
@@ -46,8 +43,7 @@ III. Generating the Documentation
 
    doc
     
-
-IV. Execution
+IV. Testing
 ======================================================================
 .. toctree::
    :maxdepth: 2
@@ -61,7 +57,7 @@ V. Configuration
   
    configure
 
-VI. Cloudmesh Commandshell
+VI. Cloudmesh Command Shell
 ======================================================================
 
 .. toctree::
@@ -81,8 +77,33 @@ VII. Cloud Metrics
    metric
 
 
-VIII. Old Commandshell (will be integrated in new shell)
+VIII. Developers Guidelines
 ======================================================================
+
+.. toctree::
+   :maxdepth: -1
+
+   tasks
+   coding  
+   hacking
+   vagrant
+
+
+
+Appendix - TODO
+======================================================================
+
+A. Integrate into documentation
+----------------------------------------------------------------------
+
+.. toctree::
+   :maxdepth: 2
+  
+   deploy
+   fg
+
+B. Old Commandshell
+----------------------------------------------------------------------
 
 .. toctree::
    :maxdepth: 2
@@ -93,30 +114,21 @@ VIII. Old Commandshell (will be integrated in new shell)
    old-cm/intro
 
 
-TODO
-=====
+.. comment::
 
-.. toctree::
-   :maxdepth: 2
-  
-   deploy
-   fg
+    Plan
+    ================================================================
 
+    .. toctree::
+       :maxdepth: 2
 
+       plan/plan
+       plan/design 
 
-Plan
-======
-
-.. toctree::
-   :maxdepth: 2
-   
-   plan/plan
-   plan/design 
-
-Test
-=======
-   plan/mock
-   plan/cal   
+    Test
+    =================================================================
+       plan/mock
+       plan/cal   
 
 
 Indices and tables
