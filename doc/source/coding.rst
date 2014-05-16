@@ -193,16 +193,16 @@ At this time we have not worried much about internationalization.
 Python 3.x compatibility
 ------------------------
 Cloudmesh code should stay Python 3.x compatible. That means all Python 2.x-only
-constructs should be avoided. An example is
+constructs should be avoided. An example is::
 
     except x,y:
 
-Use
+Use::
 
     except x as y:
 
 instead. Other Python 3.x compatility issues, like e.g. print operator
-can be avoided in new code by using
+can be avoided in new code by using::
 
     from __future__ import print_function
 
@@ -258,7 +258,7 @@ or::
 
   fab test.start:keys,00
 
-would both execute the test in keys with the name
+would both execute the test in keys with the name::
 
   test00_file 
 
@@ -298,4 +298,4 @@ For further information on constructing high quality commit messages,
 and how to split up commits into a series of changes, consult the
 project wiki form the OpenStack project:
 
-   http://wiki.openstack.org/GitCommitMessages
+*   http://wiki.openstack.org/GitCommitMessages

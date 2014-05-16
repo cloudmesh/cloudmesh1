@@ -3,7 +3,7 @@
 Usage:
     install -h | --help
     install system
-    install requirements
+    install requirements [-u]
     install path
 
 Description:
@@ -14,12 +14,17 @@ Description:
         Once you have installed the command more options will be 
         available.
 
+    install requirements [-u]
+        Installs the requirements in the order as given in the requirements.txt file.
+        if the -u option is specified each package is also updated.
+        
     install path
         lists the available sys.path for debugging purposes.
 
 """
+import time
 from textwrap import dedent
-from pprint import pprint 
+from pprint import pprint
 import os
 import getopt
 import sys
@@ -28,7 +33,7 @@ from cloudmesh_install.util import get_system
 
 
 def print_help():
-    
+
     deep_commands = ""
     try:
         from cloudmesh_install.install import install_command
@@ -37,18 +42,18 @@ def print_help():
         deep_commands = ""
     documentation = __doc__.split("\n") + deep_commands.split("\n")
     print "\n".join(documentation)
-    
+
 
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "h", ["help"])
         if (opts == [] and args == []):
-            banner( "ERROR: no parameter defined")
+            banner("ERROR: no parameter defined")
             print_help()
             sys.exit(1)
     except getopt.error, msg:
         print msg
-        banner( "for help use --help")
+        banner("for help use --help")
         sys.exit(2)
 
     # parse for help
@@ -59,50 +64,71 @@ def main():
 
     #
     if "help" in args:
-            print_help()
-            sys.exit(0)
+        print_help()
+        sys.exit(0)
 
     if "requirements" in args:
-            os.system("pip install -r requirements.txt")
-            # In some linux distributions (Ubuntu, others?)
-            # fabric does not install properly until the
-            # preceeding requirements are in place.
-            os.system("pip install fabric")            
+        if "-u" in args or "--upgrade" in args:
+            upgrade = "--upgrade"
+        else:
+            upgrade = ""
+        try:
+            f = open('requirements.txt', 'rU') 
+            for line in f:
+                line = line.rstrip()
+                if line.startswith("#"):
+                    print line
+                else:
+                        banner (line, c="-")
+                        try:
+                            os.system("pip install '{0}' {1}".format(line, upgrade))
+                        except Exception, e:
+                            print e
+                            sys.exit(1)
+        except Exception, e:
+            print "ERROR: There is a problem"
+            print e
+            
+        # In some linux distributions (Ubuntu, others?)
+        # fabric does not install properly until the
+        # preceeding requirements are in place.
+        # os.system("pip install fabric")
 
-            # To prevent errors building API docs, we need a
-            # cloudmesh.yaml and cloudmesh_server.yaml to exist.
-            # TODO: Why is this the case? Magic happening in imports?
-            # http://chrismorgan.info/blog/say-no-to-import-side-effects-in-python.html
-            os.system("bash -c 'mkdir -m 0700 -p ~/.futuregrid'")
-            os.system("bash -c 'test -f ~/.futuregrid/cloudmesh.yaml || touch ~/.futuregrid/cloudmesh.yaml'")
-            os.system("bash -c 'test -f ~/.futuregrid/cloudmesh_server.yaml || touch ~/.futuregrid/cloudmesh_server.yaml'")
+        # To prevent errors building API docs, we need a
+        # cloudmesh.yaml and cloudmesh_server.yaml to exist.
+        # TODO: Why is this the case? Magic happening in imports?
+        # http://chrismorgan.info/blog/say-no-to-import-side-effects-in-python.html
+        os.system("bash -c 'mkdir -m 0700 -p ~/.futuregrid'")
+        os.system(
+            "bash -c 'test -f ~/.futuregrid/cloudmesh.yaml || touch ~/.futuregrid/cloudmesh.yaml'")
+        os.system(
+            "bash -c 'test -f ~/.futuregrid/cloudmesh_server.yaml || touch ~/.futuregrid/cloudmesh_server.yaml'")
 
-            sys.exit(0)
-        
+        sys.exit(0)
+
     if "path" in args:
 
-        banner ("sys.path", c="-")
+        banner("sys.path", c="-")
         pprint(sys.path)
         banner("-")
         sys.exit(0)
-                
+
     if "system" in args:
 
         banner("system")
-        
+
         os_system = get_system()
 
-        try:    
+        try:
             os.system("bin/prepare-%s.sh" % os_system)
         except:
             print "OS distribution not supported; please see documatation for manual installation instructions."
             sys.exit(1)
-        
+
         sys.exit(0)
 
-    
     arguments = ' '.join(args)
-    banner (arguments)
+    banner(arguments)
     try:
 
         from cloudmesh_install.install import install_command
@@ -113,9 +139,9 @@ def main():
         print "       Have you run the following command?"
         print
         print "         install system"
-        print 
+        print
         print e
 
-        
+
 if __name__ == "__main__":
     main()
