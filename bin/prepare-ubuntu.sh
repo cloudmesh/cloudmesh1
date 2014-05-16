@@ -22,7 +22,11 @@ for P in $PACKAGES; do
 done
 # http://stackoverflow.com/questions/226703/how-do-i-prompt-for-input-in-a-linux-shell-script
 while true; do
-    read -p "Do you wish to proceed? " yn
+    #
+    # we can not ask questions as this does not allow the automatic install to proceed 
+    #
+    # read -p "Do you wish to proceed? " yn
+    #
     case $yn in
         [Yy]* ) break;;
         [Nn]* ) echo "Exiting..."; exit;;
