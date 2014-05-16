@@ -59,7 +59,14 @@ A good recource for emacs is the `Emacs Reference Card
 This is realy all you need for emacs to make it a useful editor for
 you. xemacs, aquaemacs, carbonemacs are GUI enhanced versions of
 emacs.
+
+Often you may want to use a nice underline in an rst document with 70 characters in width. This is easy in emacs. You simply go to the beginning of the line and say::
+
+  ESC x 70 =
+
+IN cae you like another character simply replace the = with the character.
  
+
 Replace Text in many files from the commandline
 ======================================================================
 
