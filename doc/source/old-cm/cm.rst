@@ -1,37 +1,11 @@
 CM
-==
+======================================================================
 
 Setting-up the COmmandline version of Cloud Mesh
 
-Use virtualenv
-----------------------
-
-IF you have not yet done so, please install and use virtualenv. 
-
-Checkout Cloud Mesh::
-
-   git clone git://github.com/futuregrid/cm.git
-
-Activate virtualenv::
-
-   . ~/ENV/bin/activate
-
-Install nova-client if not available::
-
-   sudo easy_install pip
-   pip install python-novaclient
-
-For more information see
-
-* http://docs.openstack.org/cli/quick-start/content/install_openstack_nova_cli.html
-
-Install novaclient::
-
-    pip install nova
-
 Run make::
 
-    (ENV) make
+    make
 
 Set the key for Open Stack (You could get this key from your futuregrid account.)::
 
@@ -81,7 +55,7 @@ If you are getting something like above, then you are good (I have replaced my f
 
 
 Using Cloud Mesh
-----------------
+======================================================================
 
 You can use following commands to play around with Cloud Mesh.
 
