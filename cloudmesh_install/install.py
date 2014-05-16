@@ -33,7 +33,7 @@ if major != 2 or (major == 2 and minor < 7):
 
 
 if not hasattr(sys, 'real_prefix'):
-    print "ERROR: You are runing this script not inside a virtual machine"
+    print "ERROR: You are not running this script inside a virtualenv."
     sys.exit()
 
     
@@ -116,15 +116,16 @@ def new_cloudmesh_yaml():
 
     dir = config_file("")
 
-    # Make sure the directory does not exist    
+    # Make sure we do not clobber existing non-empty yaml files.
+    # (installation may create empty yaml files to avoid errors)
     if os.path.exists(dir):
-        print "ERROR: the directory '{0}' already exists.".format(dir)
-        print "       For the command new to work it must not exist."
-        print "       This is to prevent that we overwrite files."        
-        sys.exit(1)
+        for f in glob.glob(dir + "/*.yaml"):
+            if (os.path.getsize(f) > 0):
+                print "ERROR: the (nonempty) yaml file '{0}' already exists.".format(f)
+                print "       The 'new' command will not overwrite files."
+                sys.exit(1)
     else:
         os.makedirs(dir, stat.S_IRWXU )
-        #os.makedirs(dir + "/etc" , stat.S_IRWXU )        
 
     filename_tmp = dir + '/cloudmesh-new.yaml'
     cloudmesh_out = dir + '/cloudmesh.yaml'
@@ -226,7 +227,6 @@ def download():
 
 def install():
     sphinx_updates()
-    local("pip install -r requirements.txt")
     local("python setup.py install")
 
 
@@ -254,18 +254,11 @@ def install_packages(packages):
 
 def ubuntu():
     '''prepares an system and installs all 
-    needed packages before we install cloudmesch'''
+    needed packages before we install cloudmesh'''
 
-    local ("sudo apt-get update")
-    install_packages(["python-dev", 
-                      "git",
-                      "mercurial",
-                      "curl",
-                      "libldap2-dev",
-                      "libsasl2-dev",
-                      "libpng-dev",
-                      "mongodb-server"])    
-    install_packages(["rabbitmq-server"])
+    # Note: package installations (apt-get install) are now done in
+    # bin/prepare-ubuntu.sh
+
     install()
     # install_mongodb()
 

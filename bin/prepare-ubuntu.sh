@@ -1,14 +1,20 @@
 echo "# #####################################################################"
 echo "# preparing Ubuntu for cloudmesh" 
 echo "# ######################################################################"
-PACKAGES="emacs24
+PACKAGES="
+  curl
+  emacs24
   git
-  python-setuptools
-  python-dev
   libldap2-dev
   libsasl2-dev
   libssl-dev
+  libpng-dev
+  mercurial
+  mongodb-server
+  python-dev
+  python-setuptools
   python-virtualenv
+  rabbitmq-server
 "
 echo "This will install (if not already installed):"
 for P in $PACKAGES; do

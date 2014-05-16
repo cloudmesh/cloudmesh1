@@ -34,6 +34,8 @@ nose
 autopep8
 celery
 wtforms
+sphinxcontrib-autorun
+sphinxcontrib-exceltable
 actdiag
 blockdiag
 blockdiagcontrib-square
