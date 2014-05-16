@@ -2,6 +2,7 @@ from dbhelper import DBHelper
 from baremetal_status import BaremetalStatus
 from hostlist import expand_hostlist
 from copy import deepcopy
+from cloudmesh.util.config import read_yaml_config
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_install import config_file
 #
@@ -17,7 +18,7 @@ class BaremetalComputer:
     """
     def __init__(self):
         coll_name = "inventory"
-        self.yaml_file = config_file("/cloudmesh_mac.yaml")
+        self.yaml_file = config_file("/mac.yaml")
         self.db_client = DBHelper(coll_name)
         self.bm_status = BaremetalStatus()
     
@@ -214,7 +215,7 @@ class BaremetalComputer:
                         "power_pass": "power-pass",
                         "power_type": "power-type",
                         }
-        power_default = {"power-id": 1,
+        power_default = {"power-id": 2,
                          }
         self.change_dict_key(host_dict["power"], power_fields)
         self.fill_dict_default_key(host_dict["power"], power_default)
@@ -292,6 +293,6 @@ if __name__ == "__main__":
     #result = bmc.insert_blank_baremetal_list()
     #result = bmc.enable_baremetal_computers(["i001", "i003", "i007", "i189"])
     #result = bmc.disable_baremetal_computers(["i001", "i007",])
-    result = bmc.get_baremetal_computers()
+    result = bmc.insert_mac_data_to_inventory()
     pprint(result)
     

@@ -20,9 +20,12 @@ I. Introduction
    :maxdepth: 1
 
    about 
-   bib
    contact 
-
+   news
+   screenshots
+   bib
+   faq
+    
 	  
 II. Developers Installation Documentation
 ======================================================================
@@ -113,22 +116,14 @@ B. Old Commandshell
    old-cm/cmcli
    old-cm/intro
 
+C. OTHER FILES
+======================================================================
 
-.. comment::
+.. toctree::
+   :maxdepth: 2
 
-    Plan
-    ================================================================
+   index-other
 
-    .. toctree::
-       :maxdepth: 2
-
-       plan/plan
-       plan/design 
-
-    Test
-    =================================================================
-       plan/mock
-       plan/cal   
 
 
 Indices and tables

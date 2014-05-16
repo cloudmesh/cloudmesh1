@@ -1,7 +1,9 @@
 from cloudmesh.rain.cobbler.cobbler_rest_api import CobblerRestAPI
+from cloudmesh.rain.cobbler.queue.tasks import deploy_system, power_system 
 from baremetal_computer import BaremetalComputer
 from baremetal_status import BaremetalStatus
-from hostlist import expand_hostlist
+from baremetal_policy import BaremetalPolicy
+from hostlist import expand_hostlist, collect_hostlist
 from datetime import datetime
 from cloudmesh_common.logger import LOGGER
 #
@@ -18,6 +20,7 @@ class RainCobblerWrapper:
         self.rest_api = CobblerRestAPI()
         self.baremetal = BaremetalComputer()
         self.status = BaremetalStatus()
+        self.policy = BaremetalPolicy()
     
     def baremetal_computer_host_on(self, raw_hosts):
         """Enable/ON computers for baremetal provisioning
@@ -37,12 +40,51 @@ class RainCobblerWrapper:
         hosts = expand_hostlist(raw_hosts) if raw_hosts else None
         return self.baremetal.disable_baremetal_computers(hosts)
     
-    def list_all_user_hosts(self):
-        """list all baremetal computers that can be used by each user.
-        provided for **rain admin list users**
+    def list_all_user_group_hosts(self, flag_user=True):
+        """list all baremetal computers that can be used by each user/project.
+        provided for **rain admin list users/projects**
+        :param boolean flag_user: True means user, False means projects
         :return: a dict with the formation {"user1": "hostlist", "user2": "hostlist2"}
         """
-        pass
+        if flag_user:
+            return self.policy.get_all_user_policy(True)
+        return self.policy.get_all_group_policy(True)
+        
+    def list_user_hosts(self, raw_users):
+        """list all baremetal computers that can be used by each user.
+        provided for **rain admin list hosts --user=USERS**
+        :param string raw_users: one or more users with the valid formation of hostlist
+        :return: a dict with the formation {"user1": "hostlist", "user2": "hostlist2"}
+        """
+        return self.policy.get_policy_based_user(raw_users)
+        
+    def list_project_hosts(self, raw_projects):
+        """list all baremetal computers that can be used by each project/group.
+        provided for **rain admin list hosts --project=PROJECTS**
+        :param string raw_projects: one or more projects with the valid formation of hostlist
+        :return: a dict with the formation {"project1": "hostlist", "project2": "hostlist2"}
+        """
+        return self.policy.get_policy_based_group(raw_projects)
+        
+    def add_user_policy(self, raw_users, raw_hosts):
+        """add a new policy for user
+        provided for **rain admin policy --user=USERS -l HOSTS**
+        :param string raw_users: one or more users with the valid formation of hostlist
+        :param string raw_hosts: one or more hosts with the valid formation of hostlist
+        :return: None if add failed, otherwise the UUID of this policy
+        :rtype: string
+        """
+        return self.policy.add_user_policy(raw_users, raw_hosts)
+    
+    def add_project_policy(self, raw_projects, raw_hosts):
+        """add a new policy for project
+        provided for **rain admin policy --project=PROJECTS -l HOSTS**
+        :param string raw_projects: one or more projects with the valid formation of hostlist
+        :param string raw_hosts: one or more hosts with the valid formation of hostlist
+        :return: None if add failed, otherwise the UUID of this policy
+        :rtype: string
+        """
+        return self.policy.add_group_policy(raw_projects, raw_hosts)
     
     def get_status_short(self, raw_hosts=None):
         """get status of baremetal computer
@@ -76,7 +118,7 @@ class RainCobblerWrapper:
         profiles = self.rest_api.get_cobbler_profile_list()
         if profile in profiles:
             hosts = expand_hostlist(raw_hosts)
-            print "after expand, hosts is: ", hosts
+            log.debug("after expand, raw_hosts {0} is: {1}".format(raw_hosts, hosts))
             systems = self.rest_api.get_cobbler_system_list()
             # check the system named host exist in cobbler or not
             not_exist_hosts = [h for h in hosts if h not in systems]
@@ -96,7 +138,8 @@ class RainCobblerWrapper:
             if result:
                 # provision/deploy each host
                 for host in hosts:
-                    result = self.deploy_cobbler_system(host)
+                    log.info("call celery deploy_system on host {0} ...".format(host))
+                    deploy_system.apply_async((host), queue='rain')
             result_data["result"] = result
         else:
             result_data[FIELD_DESC] = "profile {0} NOT exist in cobbler.".format(profile)
@@ -140,7 +183,7 @@ class RainCobblerWrapper:
             profile = profile_name if result else None
         if profile:
             return self.provision_host_with_profile(profile, raw_hosts)
-        return False
+        return {"result": False, "description": "create profile with distro and kickstart failed.", }
     
     def add_profile_based_distro_kickstart(self, distro_url, kickstart, name):
         """add/create a new profile based a url of distro and a kickstart file
@@ -243,9 +286,23 @@ class RainCobblerWrapper:
         t = datetime.now()
         return t.strftime("%Y%m%d%H%M%S%f")
     
+    
+    
 # test
 if __name__ == "__main__":
     rcb = RainCobblerWrapper()
-    result_data = rcb.list_system_based_distro_kickstart()
+    #result_data = rcb.baremetal_computer_host_on("i003")
+    #result_data = rcb.baremetal_computer_host_on("i0[06-10]")
+    #result_data = rcb.baremetal_computer_host_off("i003,i189")
+    #result_data = rcb.list_all_user_group_hosts()
+    #result_data = rcb.list_all_user_group_hosts(False)
+    #result_data = rcb.list_user_hosts("chen")
+    #result_data = rcb.list_project_hosts("fg1")
+    #result_data = rcb.add_user_policy("chen", "i008")
+    #result_data = rcb.add_project_policy("fg1", "i008")
+    #result_data = rcb.get_status_short()
+    #result_data = rcb.get_status_summary()
+    #result_data = rcb.list_system_based_distro_kickstart()
+    result_data = rcb.provision_host_with_profile("centos6-x86_64", "i072")
     print result_data
     

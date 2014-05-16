@@ -43,7 +43,7 @@ def LOGGER(filename):
         else:
              level = logging.CRITICAL
     except:
-        print "LOGLEVEL NOT FOUND"
+        # print "LOGLEVEL NOT FOUND"
         loglevel = logging.DEBUG
 
     log = logging.getLogger(name)
