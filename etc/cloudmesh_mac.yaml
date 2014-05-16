@@ -8,7 +8,7 @@ inventory:
         range: i[001-003]
         power_user: your_username
         power_pass: your_password
-        power_type: impilan
+        power_type: ipmilan
     macaddr:
       i001:
         public:
@@ -27,7 +27,7 @@ inventory:
         bmc:
           power_user: your_username
           power_pass: your_password
-          power_type: impilan
+          power_type: ipmilan
       i003:
         public:
           name: eth0
