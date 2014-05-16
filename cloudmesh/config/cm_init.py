@@ -24,7 +24,7 @@ from cloudmesh.user.cm_template import cm_template
 from cloudmesh_common.util import yn_choice
 from cloudmesh_common.util import backup_name
 from cloudmesh_common.util import banner
-from cloudmesh_common.util import column_table
+from cloudmesh_common.tables import column_table
 from sh import less
 import os
 from sets import Set
