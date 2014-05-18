@@ -54,7 +54,18 @@ class BaremetalStatus:
                                      },
                        }
         if action == "deploy":
-            update_elem["status"] = "deploying"    # deploying, deployed, failed
+            update_elem["status"] = "unknown"    # unknown, deploying, deployed, failed
+        result = self.db_client.atom_update(query_elem, {"$set": update_elem})
+        return result["result"]
+    
+    def update_deploy_command_result(self, host, result):
+        """update the deploy result
+        :param string host: the unique name of host
+        :param boolean result: True means deploy command success, False means failed
+        :return: a flag, True means update mongodb success, otherwise failed. 
+        """
+        query_elem = self.get_full_query({"cm_id": host})
+        update_elem = {"status": "deploying" if result else "failed", }
         result = self.db_client.atom_update(query_elem, {"$set": update_elem})
         return result["result"]
     
@@ -100,7 +111,6 @@ class BaremetalStatus:
         result = False
         if hosts_status and hosts_status[0]["status"] == "deploying":
             host_status = hosts_status[0]
-            print "temp host status: ", host_status
             if host_status["transient"]["action"] == "deploy...":
                 result = True
                 trans_status = {}
@@ -108,18 +118,21 @@ class BaremetalStatus:
                 # phase 1, unknown --> OFF
                 if host_status["transient"]["status_1"] == "unknown":
                     if status == "OFF":
+                        log.debug("host {0} deploy monitor, step 1 ".format(host))
                         trans_status["transient.status_1"] = "OFF"
                         flag_update = True
                 elif host_status["transient"]["status_1"] == "OFF":
                     # phase 2, unknown --> ON
                     if host_status["transient"]["status_2"] == "unknown":
                         if status == "ON":
+                            log.debug("host {0} deploy monitor, step 2 ".format(host))
                             trans_status["transient.status_2"] = "ON"
                             flag_update = True
                     elif host_status["transient"]["status_2"] == "ON":
                         # phase 3, unknown --> OFF
                         if host_status["transient"]["status_3"] == "unknown":
                             if status == "OFF":
+                                log.debug("host {0} deploy monitor, step 3 ".format(host))
                                 trans_status["transient.status_3"] = "OFF"
                                 trans_status["transient.action"] = "deploy"
                                 trans_status["status"] = "deployed"

@@ -1,12 +1,8 @@
-.. sectnum::
-   :start: 3
-
-
 .. sidebar:: 
    . 
 
   .. contents:: Table of Contents
-     :depth: 5
+     :local: 
 
 ..
 

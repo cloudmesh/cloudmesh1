@@ -1,16 +1,14 @@
-.. raw:: html
+Testing
+======================================================================
 
- <a href="https://github.com/cloudmesh/cloudmesh"
-     class="visible-desktop"><img
-    style="position: absolute; top: 40px; right: 0; border: 0;"
-    src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"
-    alt="Fork me on GitHub"></a>
+.. sidebar:: 
+   . 
 
-.. sectnum::
-   :start: 4
-   
-Testing with nose
-==========================================
+  .. contents:: Table of Contents
+     :local:
+
+..
+
 With Python nose testing tool, Cloudmesh performs tests easily to find problems and verify commands, functions and classes.
 *tests* directory contains test cases to check and nose produces captured output messages from failing test cases to help debugging.
 
@@ -24,6 +22,8 @@ Due to a bug in nose-json plugin, we install it via::
 
 Run
 -----
+
+::
 
         $ fab nose.run
 

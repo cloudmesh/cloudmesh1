@@ -7,6 +7,25 @@ import fnmatch
 import os
 import subprocess
 
+# 1: debug, 2: info, 3: warn, 4: error
+MY_DEBUG_LEVEL = 1
+MY_DEBUG_STRING = ["", "DEBUG", "INFO", "WARN", "ERROR", ] 
+
+def mysay(msg, level):
+    if level >= MY_DEBUG_LEVEL:
+        print "[{0}] {1}".format(MY_DEBUG_STRING[level], msg)
+
+def say_debug(msg):
+    return mysay(msg, 1)
+
+def say_info(msg):
+    return mysay(msg, 2)
+
+def say_warn(msg):
+    return mysay(msg, 3)
+
+def say_error(msg):
+    return mysay(msg, 4)
 
 def authorization(func):
     """decorator. authorizate the user's action according to his token and current accessing API. 
@@ -494,12 +513,13 @@ class CobblerProvision:
                     "--profile={0}".format(profile_name), 
                     ]
         flag_result = self.shell_command(cmd_args)
+        say_info("Create system {0}, step 1 {1}".format(system_name, "success" if flag_result else "failed"))
         if flag_result:
             contents.pop("profile")
             flag_result = self._edit_system(system_name, contents)
-            # add others of system failed, MUST remove the added new system completely
-            if not flag_result:
-                self._remove_item("system", system_name)
+        # add others of system failed, MUST remove the added new system completely
+        if not flag_result:
+            self._remove_item("system", system_name)
         return self._simple_result_dict(flag_result, "Add system {0} {1}successfully.".format(system_name, "" if flag_result else "un"))
     
     @cobbler_object_exist("system")
@@ -544,9 +564,11 @@ class CobblerProvision:
             flag_result = self.shell_command(cmd_args + all_interface_args[0])
         elif len(cmd_args) > len(cmd_args_edit):
             flag_result = self.shell_command(cmd_args)
+        say_info("_edit system {0}, step 1 {1}".format(system_name, "success" if flag_result else "failed"))
         if flag_result:
             for interface in all_interface_args[1:]:
                 flag_result = self.shell_command(cmd_args_edit + interface)
+                say_info("_edit system {0}, step 2, interfaces {1}".format(system_name, "success" if flag_result else "failed"))
                 if not flag_result:
                     break
         return flag_result
@@ -655,7 +677,10 @@ class CobblerProvision:
         # default action is power_on
         power_action = options.get(power_status.lower(), "power_on")
         func = getattr(cobbler_handler, power_action)
-        func(system)
+        try:
+            func(system)
+        except:
+            power_action = "failed"
         q.put(power_action)
     
     def cobbler_find_system(self, system_name):
@@ -669,9 +694,9 @@ class CobblerProvision:
     def deploy_system(self, system_name, **kwargs):
         """deploy a system.
         """
-        self.cobbler_power_system(system_name, True, "reboot")
-        # monitor deploy status
-        # to do ...
+        result = self.cobbler_power_system(system_name, True, "reboot")
+        if result == "failed":
+            return self._simple_result_dict(False, "Deploy failed, contact your admin.")
         return self._simple_result_dict(True, "Start to deploy system ...")
     
     @cobbler_object_exist("system")
@@ -680,9 +705,9 @@ class CobblerProvision:
         """
         # get the value of 'power_on' set by user, default value is True or power ON
         power_status = "on" if kwargs.get("power_on", True) else "off"
-        self.cobbler_power_system(system_name, False, power_status)
-        # monitor power on/off status
-        # to do ...
+        result = self.cobbler_power_system(system_name, False, power_status)
+        if result == "failed":
+            return self._simple_result_dict(False, "Power failed, contact your admin.")
         return self._simple_result_dict(True, "Start to power {0} system ...".format(power_status))
     
     @authorization
@@ -705,12 +730,12 @@ class CobblerProvision:
         #print "result is: ", result
         return self._simple_result_dict(result, "Ping {0} {1}successfully.".format(system_name, "" if result else "un"))
     
-    def get_system_manage_ip(csystem, exclude_loop=True):
+    def get_system_manage_ip(self, csystem, exclude_loop=True):
         """get IP address of the management interface,
         Currently, choose the management interface by the name that the lower name is management
         FIXME, TODO, Maybe we can add a field in mongodb later
         """
-        dict_interfaces = csystem.interfaces
+        dict_interfaces = csystem["interfaces"]
         list_ip = [(name, dict_interfaces[name]["ip_address"]) for name in dict_interfaces]
         if exclude_loop:
             list_ip = [(name, address) for (name, address) in list_ip if not address.startswith("127")]
@@ -776,6 +801,7 @@ class CobblerProvision:
     
     def shell_command(self, args):
         #print "==Command> ", " ".join(args)
+        say_debug("shell command: {0}".format(" ".join(args)))
         DEVNULL = open(os.devnull, "wb")
         return 0 == subprocess.call(args, stderr=DEVNULL, stdout=DEVNULL)
 

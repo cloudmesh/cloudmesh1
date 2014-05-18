@@ -1,3 +1,12 @@
+.. sidebar:: 
+   . 
+
+  .. contents:: Table of Contents
+     :local:
+
+..
+
+
 Screenshots
 ==========================================
 
