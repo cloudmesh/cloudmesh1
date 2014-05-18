@@ -12,7 +12,7 @@ def sdist():
 @task
 def install():
     """install cloudmesh"""
-    local("./install requirements.txt")
+    local("./install requirements")
     local("python setup.py install")
 
 @task
