@@ -16,6 +16,7 @@ sphinx_bootstrap_theme
 sphinxcontrib-autorun
 sphinxcontrib-blockdiag
 sphinxcontrib-exceltable
+sphinxcontrib-webmocks
 actdiag
 blockdiag
 blockdiagcontrib-square

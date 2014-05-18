@@ -1,13 +1,10 @@
-sys.path.insert(0, '..')
-sys.path.insert(0, '.')
-
 from sh import gmkproject
 from sh import gchproject
 from sh import gchuser
 from sh import glusers
 from sh import gstatement
 
-from cloudmesh.accountin.AccountingBaseClass import AccountingBaseClass
+from cloudmesh.accounting.AccountingBaseClass import AccountingBaseClass
 
 class GoldAccounting(AccountingBaseClass):
     """The gold accounting implementation class"""

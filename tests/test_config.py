@@ -17,8 +17,8 @@ import os
 import warnings
 from pprint import pprint
 
-from cloudmesh.util.util import HEADING
-from cloudmesh.util.util import path_expand
+from cloudmesh_common.util import HEADING
+from cloudmesh_common.util import path_expand
 
 
 class Test_cloudmesh:

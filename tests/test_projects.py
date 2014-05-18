@@ -12,7 +12,7 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh.config.cm_projects import cm_projects
-from cloudmesh.util.util import HEADING
+from cloudmesh_common.util import HEADING
 
 
 class Test_cloudmesh:

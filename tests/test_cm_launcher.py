@@ -9,7 +9,7 @@ nosetests -v
 from cloudmesh.provisioner.cm_launcher import SimulatorLauncher
 from  pprint import pprint
 
-from cloudmesh.util.util import HEADING
+from cloudmesh_common.util import HEADING
 import sys
 
 

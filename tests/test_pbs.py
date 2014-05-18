@@ -24,7 +24,7 @@ from pprint import pprint
 
 from cloudmesh.pbs.pbs import PBS
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.util.util import HEADING, banner
+from cloudmesh_common.util import HEADING, banner
 
 class Test:
 
