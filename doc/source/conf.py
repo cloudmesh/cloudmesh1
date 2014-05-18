@@ -41,9 +41,10 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
+    'sphinxcontrib.webmocks',
     'sphinx.ext.viewcode']
 
-#    'sphinxcontrib.webmocks',
+
 #    'sphinxjp.shibukawa']
 
 extensions.append('sphinxcontrib.autorun')
