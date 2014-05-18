@@ -3,10 +3,11 @@
 
 
 Design: Blueprint
-========================================
+======================================================================
+
 
 Features
---------
+----------------------------------------------------------------------
 
 The features we envision include
 
@@ -24,12 +25,13 @@ Design requiremnts include
   * Eucalyptus worker nodes
 
 Difference to other efforts
----------------------
+----------------------------------------------------------------------
 
-This system is different form other efforts as it allows to run HPC, Eucalyptus and OpenStack services on the same cluster. 
+This system is different form other efforts as it allows to run HPC,
+Eucalyptus and OpenStack services on the same cluster.
 
 Component View
----------------
+----------------------------------------------------------------------
 
 Our design includes four different commonent portions:
 
@@ -63,7 +65,8 @@ Our design includes four different commonent portions:
   * OS provisioning
   * Service provisioning
 
-Our design focusses on satisfying our various user communities by providing four main categories of interfaces. This includes 
+Our design focusses on satisfying our various user communities by
+providing four main categories of interfaces. This includes
 
 
 .. figure:: images/Slide02.png
@@ -80,7 +83,7 @@ Our design focusses on satisfying our various user communities by providing four
    **Figure:** The subcomponents of the design
 
 Component User Management
--------------------------
+----------------------------------------------------------------------
 
 .. figure:: images/Slide05.png
    :align: center
@@ -89,9 +92,10 @@ Component User Management
    **Figure:** The subcomponent user management
 
 User Management
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------------------------------------
 
-We reused scripts from before that were not properly done, but carried us over. Limits of these scripts have been reached in regards to 
+We reused scripts from before that were not properly done, but carried
+us over. Limits of these scripts have been reached in regards to
 
 * Group management
 * Deactivation of accounts
@@ -132,7 +136,7 @@ Can be done as part of ongoing work, less than a day
      * This was actually suggested by Archit way back, but was rejected at that time.
 
 Accounting (Will not be worked on much)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------------------------------------
 
 * New development of accounting 
     * Cloud Metric (hyungro):
@@ -147,10 +151,10 @@ Accounting (Will not be worked on much)
 
 
 Component Resource Management (includes cloudshifting as part of reservation)
--------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 Resource Management
---------------------
+----------------------------------------------------------------------
 
 * Inventory
     * Requirements
@@ -171,7 +175,7 @@ Resource Management
         * Networking is abit fuzzy as we need real inventory of existing networks first before we can determine wht we should do to simplify access to it
 
 Scheduler
-----------
+----------------------------------------------------------------------
 
 * Approach via Torque/Maui
    * Advantage
@@ -198,7 +202,7 @@ Scheduler
 
 
 Interfaces
-----------
+----------------------------------------------------------------------
 
 * Portal
 * Freeze development as much as possible
