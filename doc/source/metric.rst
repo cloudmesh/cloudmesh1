@@ -1,5 +1,9 @@
-METRIC
-======
+Cloudmesh Metric
+======================================================================
+
+.. toctree::
+   :maxdepth: -1
+   
 
 Metric command: 
 

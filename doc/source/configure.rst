@@ -1,8 +1,24 @@
 Configuration
 ======================================================================
 
-cloudmesh comes with a set of convenient configuration files in the yaml format. Important is that you make sure that prior to saving the file, that the indentation is correct and that all tabs are replaced with spaces.
-Cloudmesh comes with two configuration files. One dedicated to interact as regular user. The other one allows you to interact with the backend system. In general it is sufficient to have just a cloudmesh.yaml file so you run cloudmesh in user mode.
+
+.. sidebar:: 
+   . 
+
+  .. contents:: Table of Contents
+     :local:
+
+..
+
+
+
+cloudmesh comes with a set of convenient configuration files in the
+yaml format. Important is that you make sure that prior to saving the
+file, that the indentation is correct and that all tabs are replaced
+with spaces.  Cloudmesh comes with two configuration files. One
+dedicated to interact as regular user. The other one allows you to
+interact with the backend system. In general it is sufficient to have
+just a cloudmesh.yaml file so you run cloudmesh in user mode.
 
 
 cloudmesh.yaml
@@ -35,50 +51,139 @@ file which looks like::
           flavor: m1.tiny
           image: 4199d988-0833-4497-a473-96fc456fac2f
 
-The file begins with the keyword cloudmesh and has all further information indented under it. An active: attribute allows you to specify clouds that you would like to use. This enables you to select from a large list of predefined clouds that may be given to you as template in a cloudmesh.yaml file those clouds you like to actually use. In our initial example we provide you with just one active cloud called. Hence you see under active: ::
+The file begins with the keyword cloudmesh and has all further
+information indented under it. An active: attribute allows you to
+specify clouds that you would like to use. This enables you to select
+from a large list of predefined clouds that may be given to you as
+template in a cloudmesh.yaml file those clouds you like to actually
+use. In our initial example we provide you with just one active cloud
+called. Hence you see under active: ::
 
   active:
   - sierra_openstack_grizzly
 
-If there are more than one cloud you would simply add the label of that cloud to the lit of active clouds such as ::
+If there are more than one cloud you would simply add the label of
+that cloud to the lit of active clouds such as ::
 
   active:
   - sierra_openstack_grizzly
   - india_openstack_havana
 
-Next, we need to define several attributes for the active clouds. This must be done carefully and you need to possibly check with your cloudprovider for the information that is filled in as part of a credential section. As we need to identify a cloud we use the same identifier that we used in the active cloud. This identifier is rather arbitrary, but from experience we use on FutureGrid the nameing scheme machinename_cloudtype_cloudversion. But one can naturally chose any name that follows the yaml conventions. Pleas eonly use characters in [A-Za-z0-9_]. Do not us a minus sign but use an underscor instead in any attribute name to avoid issues.
+Next, we need to define several attributes for the active clouds. This
+must be done carefully and you need to possibly check with your
+cloudprovider for the information that is filled in as part of a
+credential section. As we need to identify a cloud we use the same
+identifier that we used in the active cloud. This identifier is rather
+arbitrary, but from experience we use on FutureGrid the nameing scheme
+machinename_cloudtype_cloudversion. But one can naturally chose any
+name that follows the yaml conventions. Pleas eonly use characters in
+[A-Za-z0-9_]. Do not us a minus sign but use an underscor instead in
+any attribute name to avoid issues.
 
-Cloudmesh uses a number of convenient attributes that are starting with "cm_". These include
+Cloudmesh uses a number of convenient attributes that are starting
+with "cm_". These include
 
 cm_heading
-  Specifies a heading for the cloud that is used in several user interfaces when refering to this cloud
+  Specifies a heading for the cloud that is used in several user
+  interfaces when refering to this cloud
   
   Example: Sierra OpenStack, Grizzly
 
 cm_host
-  Specifies the hostname of the cloud that is used in some cases to connect to it. 
-  In many cases this value is not needed.
+  Specifies the hostname of the cloud that is used in some cases to
+  connect to it.  In many cases this value is not needed.
   
   Example: sierra.futuregrid.org
 
 cm_label
-  Specifies a simple very short abbreviation of the cloud that can 
-  be used with the commandline tools. Often it is inconvenient so specify for example    
-  sierra_openstack_grizzly. instead a user can specify an arbitrary label for that cloud 
-  such as sierra, or in our case we used sos.
+  Specifies a simple very short abbreviation of the cloud that can be
+  used with the commandline tools. Often it is inconvenient so specify
+  for example sierra_openstack_grizzly. instead a user can specify an
+  arbitrary label for that cloud such as sierra, or in our case we
+  used sos.
   
   Example: sos
 
 cm_type
-  The type of a cloud is very important as it will deterimine how we interact with it
+
+  The type of a cloud is very important as it will deterimine how we
+  interact with it
 
   Example: openstack
 
 cm_type_version
-  Besides the type we can have also a number of versions that specifies how we interact with the cloud.
+  Besides the type we can have also a number of versions that
+  specifies how we interact with the cloud.
 
   Example: grizzly
- 
+
+Configuration file (rc file)
+----------------------------------------------------------------------
+
+
+In most IaaS platforms, configuration files (in the form of an "rc
+file") are provided as credentials. These credentials should be
+imported in cloudmesh.yaml.
+
+
+Retrieval of rc file by command
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+   ./install gatherrc
+
+This will create for you in your ~/.futuregrid directory a tree of the
+following format
+
+::
+   
+   .futuregird/clouds
+        india_openstack_havana
+	sierra_openstack_grizzly
+
+In future we will also have the following directories:
+
+        hotel_openstack_ ...
+	alamo_openstack_ ...
+
+At this time the credentials from hotel and alamo are not
+automatically retrieved, you need to get them in the following way and
+fill them into the cloudmesh.yaml file:
+
+* TBD
+
+Retrieval of rc files by Hand
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+
+Location of rc files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+========= ================================== ====================================================
+Host      OpenStack (novarc)                 Eucalyptus (eucarc)
+--------- ---------------------------------- ----------------------------------------------------
+india     $HOME/.futuregrid/openstack/novarc $HOME/.futuregrid/eucalyptus/$fgprojectnumber/eucarc*
+sierra    $HOME/.futuregrid/novarc           $HOME/.futuregrid/eucalyptus/$fgprojectnumber/eucarc*
+hotel     Download EC2 Credentials**          n/a
+alamo     Download EC2 Credentials**          n/a
+foxtrot   n/a                                n/a
+========= ================================== ====================================================
+
+** For Eucalyptus, compressed file is provided in the directory. Unzip it and load credentials 
+are required like as follows. 
+
+    :: 
+
+         unzip ineuca3-{username}-{cluster}-fgprojectnumber.zip
+         source eucarc
+
+\* With OpenStack Horizon, EC2 credentials can be downloaded.
+
+  - login `OpenStack Havana on Hotel <https://openstack.uc.futuregrid.org/dashboard/>`_ or `OpenStack Folsom on Alamo <https://openstack.futuregrid.tacc.utexas.edu/horizon>`_
+  - Click 'Access & Security'
+  - Select 'API Access' tab
+  - Click 'Download EC2 Credentials' (which is a direct link here for `Hotel <http://openstack.uc.futuregrid.org/horizon/project/access_and_security/api_access/ec2/>`_ or `Alamo <http://openstack.futuregrid.tacc.utexas.edu/horizon/project/access_and_security/api_access/ec2/>`_)
+
 Next we specify the credentials of the cloud. We can obtain them typically from the cloud provider. The mechnism to obtain them may vary and you will need to look it up. Often you will have an rc file or a GUI that allows you to export the needed information. We have strived to keep the same attributes that are provided by the supported cloud providors. Hence typically no change is needed and you can just paste and copy the values. However, if your cloud needs certificates, they may have to be specially dealt with and placed in special directories. For cloudmesn we provide them as part of the install and ainclude them in the::
 
   $HOME/.futuregrid/ 

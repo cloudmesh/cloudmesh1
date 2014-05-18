@@ -3,13 +3,9 @@
    .. contents::
       :local:
 
-
-.. sectnum::
-   :start: 7
-
 .. _s-instalation:
 **********************************************************************
-Installation
+Prepare the Environment 
 **********************************************************************
 
 In this Section, we describe how to  deploy cloudmesh for
@@ -32,9 +28,6 @@ Furthermore, we assume that you use **ubuntu 14.04** as your
 development environment. Although we started including information for
 other OS, we have not verified if they work.
 
-
-Prepare the Environment
-===========================
 
 Github
 ----------------------------------------------------------------------
@@ -215,7 +208,9 @@ the virtualenv in your .bash_profile.
 
 If you ever need to deactivate the virtual env, you can run::
 
-    $ ~/ENV/bin/deactivate
+    $ deactivate
+
+from within the active virtualenv shell.
 
     
 Modify your rc file:
@@ -508,6 +503,25 @@ This will start the necessary background services, but also will shut
 down existing services. Essentially it will start a clean development
 environment. 
 
+Configure the HPC Environment 
+======================================================================
+
+To use the HPC environment, you need to make sure you can login from
+your machine to the various HPC login nodes. We have created a
+convenient script for you that you can call as follows::
+HPC services::
+
+   fab hpc.touch
+
+This script will log you into
+
+*   alamo
+*   india
+*   sierra
+*   foxtrot
+*   hotel
+
+
 Additional Installation for Documentation Generation
 ======================================================================
 
@@ -765,42 +779,10 @@ specifying a specific server at startup called hpc::
     $ fab server.start:server=hpc
 
 
-ENVIRONMENT
-======================================================================
 
-::
 
-    deactivate
-    cd
-    virtualenv --no-site-packages ENV
-
-open a new terminal 
-
-::
-
-    $ pip install numpy matplotlib fabric
-    $ git clone git@github.com:cloudmesh/cloudmesh.git
-    $ cd cloudmesh
-    $ fab -f installation/install.py deploy
-    $ fab build.install
-
-    
-HPC services::
-
-   fab hpc.touch
-
-   logs into
-   alamo
-   india
-   sierra
-   foxtrot
-   hotel
-
-   is neede fo the hpc commands
-
-**********************************************************************
 Usage Quickstart 
-**********************************************************************
+======================================================================
 
 The following are the current steps to bring all services for
 cloudmesh up and running. After you have Installed the software (see
@@ -816,7 +798,7 @@ can be found with::
 
 
 With access to LDAP 
-===============
+----------------------------------------------------------------------
 It is assumed that the machine has access to LDAP.
 
 ::
@@ -830,7 +812,7 @@ It is assumed that the machine has access to LDAP.
     fab server.start
     
 Without access to LDAP
-===============
+----------------------------------------------------------------------
 
 ::
 
@@ -846,7 +828,7 @@ Without access to LDAP
 
 
 Cloudmesh deployment 
-===========================
+----------------------------------------------------------------------
 
 yaml file first, than mongo
 
@@ -856,7 +838,8 @@ yaml file first, than mongo
 
 
 Imports in cloudmesh_common
-======================================================================
+----------------------------------------------------------------------
+
 
 The cloudmesh code contains a directory `cloudmesh_common` in which we
 collect useful common reusable code that must not depend on an import
@@ -865,7 +848,7 @@ from cloudmesh. Thus no file in cloudmesh_common must include::
    import cloudmesh. ...
 
 OSX System preparation Tips
-======================================================================
+----------------------------------------------------------------------
 
 On OSX we recommend that you check if you have the freetype
 fonts installed and set the LDFLAG as follows (if you find the

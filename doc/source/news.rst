@@ -1,3 +1,11 @@
+.. sidebar:: 
+   . 
+
+  .. contents:: Table of Contents
+     :local:
+
+..
+ 
 News
 ======================================================================
 
@@ -11,8 +19,11 @@ successfully demonstarted by our developers usage of
 * HP Cloud
 * Karlsruhe Institute of Technolgy Cloud
 
-At this time we only expose the FutuureGrid Sierra OpenStack cloud. We
-like to acknowledge all those that helped us developing Cloudmesh.
+We like to acknowledge all those that helped us developing Cloudmesh.
+
+The list of code contributors can be found at
+
+* https://github.com/cloudmesh/cloudmesh/graphs/contributors
 
 Thanks
 

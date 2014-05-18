@@ -12,81 +12,18 @@
 Cloudmesh 
 ######################################################################
 
-
-I. Introduction
-======================================================================
-
-.. toctree::
-   :maxdepth: 1
-
-   about 
-   bib
-   contact 
-
-	  
-II. Developers Installation Documentation
-======================================================================
-
-.. toctree::
-   :maxdepth: -1
-  
-   developer
-   cobbler
-   image
-   celery   
-
-III. Generating the Documentation
-======================================================================
-
 .. toctree::
    :maxdepth: 2
+   :numbered:
 
-   doc
-    
-IV. Testing
-======================================================================
-.. toctree::
-   :maxdepth: 2
-  
-   nosetest
-
-V. Configuration
-======================================================================
-.. toctree::
-   :maxdepth: -1
-  
+   introduction
+   installation
    configure
-
-VI. Cloudmesh Command Shell
-======================================================================
-
-.. toctree::
-   :maxdepth: 2
-  
-   cm-shell
-   cm-shell-rain
-   cm-manage
-   cm-shell-man
-
-VII. Cloud Metrics
-======================================================================
-
-.. toctree::
-   :maxdepth: 2
-
+   doc
+   nosetest
+   shell    
    metric
-
-
-VIII. Developers Guidelines
-======================================================================
-
-.. toctree::
-   :maxdepth: -1
-
-   tasks
-   coding  
-   hacking
-   vagrant
+   contributing
 
 
 
@@ -113,22 +50,14 @@ B. Old Commandshell
    old-cm/cmcli
    old-cm/intro
 
+C. OTHER FILES
+======================================================================
 
-.. comment::
+.. toctree::
+   :maxdepth: 2
 
-    Plan
-    ================================================================
+   index-other
 
-    .. toctree::
-       :maxdepth: 2
-
-       plan/plan
-       plan/design 
-
-    Test
-    =================================================================
-       plan/mock
-       plan/cal   
 
 
 Indices and tables
