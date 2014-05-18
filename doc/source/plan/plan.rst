@@ -11,7 +11,7 @@ Plan: Cloudmesh Service Shift
 .. contents:: Table of Content
 
 Project Objectives
--------------------
+----------------------------------------------------------------------
 
 |jira|
 
@@ -22,29 +22,41 @@ Project Objectives
 #FG-1418
 
 Currently the FG RAIN service contains a service shift mechanism. We
-like to further develop this mechnism by introducing an abstraction for bare
-metal provisioning so that teefaa as well as OpenStack bare metal
-provisioning can be used.  Services we target are Eucalyptus,
+like to further develop this mechnism by introducing an abstraction
+for bare metal provisioning so that teefaa as well as OpenStack bare
+metal provisioning can be used.  Services we target are Eucalyptus,
 OpenStack, and HPC via SLURM (or Moab).
 
 Development Objectives
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------------------------------------
 
-#. Develop a service that allows the reassignment of servers in a cluster to be used either as part of an HPC or  Cloud IaaS farmework. 
-#. Make the service as much as possible independent through abstractions from services such as XCAT and Moab (which is currently not the case)
-#. provide a simple Web based GUI for administrators to the service shift functionality
+#. Develop a service that allows the reassignment of servers in a
+   cluster to be used either as part of an HPC or Cloud IaaS
+   farmework.
+
+#. Make the service as much as possible independent through
+   abstractions from services such as XCAT and Moab (which is
+   currently not the case)
+
+#. provide a simple Web based GUI for administrators to the service
+   shift functionality
 
 Production Objectives
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #. Verify what is in production and what is not
-#. Continue the ongoing production of FG Move (it is unclear if it still in production) 
+
+#. Continue the ongoing production of FG Move (it is unclear if it
+   still in production)
+
 #. Clarify the position of Teefaa in the production software
+
 #. Introduce the new developments intop production
+
 #. Reuse DevOps as part of the development and production efforts
 
 Project Deliverables
--------------------
+----------------------------------------------------------------------
 
 Test
 
@@ -101,7 +113,7 @@ methodology. Once we agree on tasks they will be filed in jira
 
 
 Evolution of the Project
-----------------------
+----------------------------------------------------------------------
 
 The use of the outdated Moab and XCAT tools used in our production
 environment to support FG RAIN makes it necessary to generalize the
@@ -116,7 +128,7 @@ efforts. Furthermore, we hopw to leverage from existiong DevOps
 frameworks to simplify development and reduce the time for deployment.
 
 Refernce Materials
-------------------
+----------------------------------------------------------------------
 
 FG Move:
     http://futuregrid.github.io/rain-move/
@@ -137,7 +149,7 @@ Flask_cm:
 
 
 Definitions and Acronyms
--------------------------------
+----------------------------------------------------------------------
 
 FG Rain (in production?, Hardware Issues?):
    FutureGrid Rain is a tool that will allow users to place customized
