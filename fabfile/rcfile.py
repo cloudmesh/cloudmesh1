@@ -4,6 +4,7 @@ from fabric.contrib.console import confirm
 
 domain_name = "futuregrid.org"
 
+
 @task
 def download(host_ids):
     for host_id in host_ids:
@@ -17,4 +18,3 @@ def download(host_ids):
                         env.host.split("_")[0])
 
             # Task 4. write cloudmesh.yaml based on the credentials
-

@@ -7,7 +7,7 @@ nosetests -v
 """
 from datetime import datetime
 
-from cloudmesh.util.util import HEADING
+from cloudmesh_common.util import HEADING
 from cloudmesh.inventory import Inventory
 from  pprint import pprint
 
