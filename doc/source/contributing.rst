@@ -1,4 +1,4 @@
-Contributing and Developing
+Contributing
 ======================================================================
 
 .. toctree::
