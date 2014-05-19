@@ -18,31 +18,26 @@ overcome by introducing additional labels.
 Labels
 ----------------------------------------------------------------------
 
-**z-user**: 
-
+:z-user: 
     although github has assignees, its not easily possible to see to
     whom the issue is assigned as we could not figure out how to use
     usernames instead of the gravatar image. Additionally, sometimes
     an issue requires that two people work on it and with name labels
     we can do so.
 
-**active**: 
-
+:active: 
     the active label is to be set when we work on an issue
 
-**help**: 
-
+:help: 
     sometimes you may need help on an issue, if you do, you can use
     his label and put in the comment what you need help with. This is
     useful in case we are not all in the same building and need to
     move forward quickly
 
-**bug**: 
-
+:bug: 
     a simple bug that we know is wrong and needs fixing
 
-**review**: 
-
+:review: 
     sometimes a task needs a review before it is completed. This label
     will notify Gregor to conduct a review. It is less urgent than the
     **help** label.
