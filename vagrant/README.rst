@@ -11,6 +11,13 @@ Setup Vagrant on Ubuntu
 
   sudo dpkg -i vagrant_1.6.2_x86_64.deb
 
+Setup veewee
+===================
+
+::
+ 
+   sudo gem install veewee
+
 Setup
 ======================================================================
 
