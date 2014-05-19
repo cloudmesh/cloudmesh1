@@ -6,6 +6,9 @@ Introduction
    :numbered:
 
    about 
+   rain
+   hpc
+   cloud
    contact 
    news
    screenshots
