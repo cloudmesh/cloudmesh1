@@ -3,11 +3,15 @@ Cloudmesh Metric
 
 .. toctree::
    :maxdepth: -1
-   
 
-Metric command: 
+::   
 
-  TBD
+  cm-metric <cloud> -s <start>
+                  -e <end> 
+                  -u <user> 
+                  --metric=<metric>
+                  --period=<period> 
+                  [-c <cluster>]
 
 
 Routes
@@ -31,8 +35,10 @@ is eqal to ::
 
 
 ::
+
   metric/cluster/<cluster>/<user>/<metric>/<start>/<end>/<period>
 
+is equal to::
 
   cm-metric -s <start>
                   -e <end> 
