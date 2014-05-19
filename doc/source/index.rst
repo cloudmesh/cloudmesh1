@@ -16,34 +16,12 @@ Cloudmesh
    contributing
 
 
-Appendix - TODO
-======================================================================
-
-A. Integrate into documentation
-----------------------------------------------------------------------
-
-.. toctree::
-   :maxdepth: 2
-  
-   deploy
-   fg
-
-B. Old Commandshell
-----------------------------------------------------------------------
-
-.. toctree::
-   :maxdepth: 2
-  
-   old-cm/cm
-   old-cm/cm_cli
-   old-cm/cmcli
-   old-cm/intro
 
 C. OTHER FILES
 ======================================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    index-other
 
