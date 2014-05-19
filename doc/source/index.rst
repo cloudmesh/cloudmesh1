@@ -14,17 +14,7 @@ Cloudmesh
    shell    
    metric
    contributing
-
-
-
-C. OTHER FILES
-======================================================================
-
-.. toctree::
-   :maxdepth: 1
-
-   index-other
-
+   appendix
 
 
 Indices and tables
