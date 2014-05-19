@@ -1,3 +1,13 @@
+Install Virtualbox
+===================
+Checkout Google
+
+Setup Vagrant on Ubuntu
+==========================
+
+wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.2_x86_64.deb
+sudo dpkg -i vagrant_1.6.2_x86_64.deb
+
 Setup
 ======================================================================
 
