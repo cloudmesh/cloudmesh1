@@ -17,8 +17,8 @@ Install
 
 Due to a bug in nose-json plugin, we install it via::
 
-..    $ fab nose.json
-        $ fab nose.install
+  $ fab nose.json
+  $ fab nose.install
 
 Run
 -----
