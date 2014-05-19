@@ -2,8 +2,8 @@
 # Basic environment
 # ######################################################################
 #
-d2to1>=0.2.10,<0.3
-pbr>=0.5.16,<0.6
+d2to1
+pbr
 future
 pip
 #
@@ -60,9 +60,9 @@ mongoengine
 # Flask
 # ######################################################################
 #
-wtforms
+WTForms
 Flask>=0.10.1
-Flask-WTF>=0.8.4,<0.9
+Flask-WTF>=0.9.3
 Flask-AutoIndex
 Flask-Silk
 flask_login
