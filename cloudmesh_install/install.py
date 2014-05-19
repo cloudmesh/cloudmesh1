@@ -4,6 +4,7 @@ import glob
 import shutil
 import sys
 import stat
+import getpass
 sys.path.append("..")
 sys.path.append(".")
 
@@ -59,10 +60,12 @@ def install_command(args):
         install -h | --help
         install --version
         install cloudmesh
-        install delete_yaml    
+        install delete_yaml
+        install system
         install query
         install new    
         install vagrant
+        install fetchrc
     
     """
     arguments = docopt(install_command.__doc__,args)
@@ -108,6 +111,9 @@ def install_command(args):
         print "Virtualenv:", hasattr(sys, 'real_prefix')
     elif arguments["vagrant"]:
         vagrant()
+
+    elif arguments["fetchrc"]:
+        fetchrc()
 
 def new_cloudmesh_yaml():
 
@@ -322,7 +328,49 @@ def vagrant():
     local("cd /tmp/vagrant; vagrant init ubuntu-14.04-server-amd64")
     local("cd /tmp/vagrant; vagrant up")
     local("cd /tmp/vagrant; vagrant ssh")
-             
+
+def fetchrc():
+
+    banner("download rcfiles (novarc, eucarc, etc) from IaaS platforms")
+
+    print ""
+    # Task 1. list portal user id, maybe user input is good
+    userid = getpass.getuser()
+
+    userid = raw_input ("Please enter your portal user id [default: %s]: " %
+                       userid) or userid
+
+    # Task 2. list hostnames to get access. In Futuregrid, india, sierra are
+    # mandatory hosts to be included.
+    host_ids = ["india_openstack_havana", "sierra_openstack_grizzly"] #TEMPORARY
+  
+    # user input is disabled
+    #host_ids = raw_input("Please enter host identifications [default: %s]: "
+    #                     % ", ".join(host_ids)) or host_ids
+
+    if isinstance(host_ids, str):
+        host_ids = map(lambda x : x.strip(),host_ids.split(","))
+
+    domain_name = ".futuregrid.org"
+    hostnames = map(lambda x : x.split("_")[0] + domain_name, host_ids)
+    
+    key_path = "~/.ssh/id_rsa"
+    # private key path is disabled
+    #key_path = raw_input("Please enter a path of the ssh private key to" + \
+    #                     " login the hosts [default: %s]: " % key_path) or \
+    #                    key_path
+
+    try:
+        #cmd = "fab rcfile.download:userid='%s',host_ids='%s',key_path='%s'" \
+        cmd = "fab -H %s -u %s -i %s rcfile.download:'%s'" \
+                % (",".join(hostnames), userid, key_path,
+                   "\,".join(host_ids))
+        #print cmd
+        os.system(cmd)
+    except:
+        print sys.exc_info()
+        sys.exit(1)
+
 if __name__ == '__main__':
     install_command(sys.argv)
 
