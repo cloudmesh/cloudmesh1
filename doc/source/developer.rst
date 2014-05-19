@@ -257,7 +257,11 @@ Install the Requirements
   proceed or execute this command in your system environment.
 
 In addition to the system packages we will now install into the
-virtual env a number of python packages::
+virtual env a number of python packages.
+It is important to note that the requirements in requirements.txt must
+be installed in a particular order. As pip does not support this
+properly, we use the following command instead of simply calling `pip
+install -r requirements.txt`::
 
   ./install requirements
 
@@ -316,7 +320,7 @@ provide you with a rough overview of the previous steps::
   . ~/ENV/bin/activate
   ./install requirements
   ./install new
-  fab doc.htnl
+  fab doc.html
 
 Please remember to use the ./ infront of the install as there could be
 other install commands in your $PATH.
@@ -370,24 +374,22 @@ Install cloudmesh code
 Next you install the basic cloudmesh code which you can do with::
 
    $ ./install cloudmesh
-
-
-.. Warning:: 
-
-   The next steps are probably not yet properly documented 
-
+   $ fab build.install
 
 The cloudmesh.yaml file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 After updating the me.yaml file, you can generate a new cloudmesh.yaml
-file. The command::
+file. For this purpose you will need to copy the templates from cloudmesh to the ~/.futuregrid directory::
+  $ cp etc/*.yaml ~/.futuregrid/etc
+ 
+The command::
 
-  $ cm-init fill --file=etc/cloudmesh.yaml ~/.futuregrid/me.yaml
+  $ cm-init fill --file=~/.futuregrid/etc/cloudmesh.yaml ~/.futuregrid/me.yaml
 
 will test if the me.yaml file can successfully create a cloudmesh.yaml
 file by printing its output. If no error occurs it will most likely be
-fine. Than you can use the command::
+fine. Then you can use the command::
 
   $ cm-init generate yaml
 
@@ -395,26 +397,6 @@ to create the cloudmesh yaml file from `~/.futuregird/me.yaml` and
 write it to `~/.futuregird/cloudmesh.yaml`. Out of precaution we have
 included a couple of questions that could be surpressed with the
 `--force` option.
-
-
-Deployment
-----------------------------------------------------------------------
-
-Next execute the following commands ::
-
-    $ install cloudmesh
-    $ fab build.install
-
-
-Requirements
-----------------------------------------------------------------------
-
-It is important to note that the requirements in requirements.txt must
-be installed in a particular order. As pip does not support this
-properly, we use the following command instead of simply calling `pip
-install -r requirements.txt`::
-
-  ./install requirements
 
 
 Mongo-Db

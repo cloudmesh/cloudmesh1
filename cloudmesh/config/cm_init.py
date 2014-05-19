@@ -179,7 +179,7 @@ def init_shell_command(arguments):
             
         filename_template = arguments['--file']
         if filename_template is None:
-            filename_template = config_file('/etc/a-cloudmesh-template.yaml')
+            filename_template = config_file('/etc/cloudmesh.yaml')
         filename_template = path_expand(filename_template)
         
         filename_values = arguments['VALUES']
@@ -212,12 +212,13 @@ def init_shell_command(arguments):
         filename_tmp = config_file('/cloudmesh-new.yaml')
         filename_out = config_file('/cloudmesh.yaml')
         filename_bak = backup_name(filename_out)
-        filename_template = config_file("/etc/cloudmesh-template.yaml")
+        filename_template = config_file("/etc/cloudmesh.yaml")
         if arguments["generate"] and (arguments["me"]):
             filename_values = config_file("/me.yaml")
-
-        elif (args.strip() in ["generate none"]):
-            filename_values = config_file("/etc/me-none.yaml")
+	elif arguments["generate"] and (arguments["yaml"]):
+            filename_values = config_file("/me.yaml")
+        elif (arguments["generate"] and arguments["none"]):
+	    filename_values = config_file("/etc/me-none.yaml")
         elif arguments["FILENAME"] is not None:
             filename_values = path_expand(arguments["FILENAME"])
         # print me_filename
