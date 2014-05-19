@@ -22,10 +22,10 @@ from cloudmesh_common.util import yn_choice
 
 
 ######################################################################
-# STOP IF PYTHON VERSION IS NOT 2.7.x
+# STOP IF PYTHON VERSION IS NOT 2.7.5
 ######################################################################
 (major, minor, micro, releaselevel, serial) = sys.version_info
-if major != 2 or (major == 2 and minor < 7):
+if major != 2 or (major == 2 and minor <= 7):
         print "Your version of python is not supported.  Please install python 2.7 for cloudmesh"
         sys.exit()
 
