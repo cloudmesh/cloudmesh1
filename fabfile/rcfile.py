@@ -7,14 +7,19 @@ domain_name = "futuregrid.org"
 
 @task
 def download(host_ids):
-    for host_id in host_ids:
-        host = env.host.split(".")
-        host = host[0]
-        if host_id.split("_")[0] == host:
+    # host_ids = india_openstack_havana,sierra_openstack_grizzly
+    for host_id in host_ids.split(","):
+        host_from_env = env.host.split(".")[0]
+        host_from_input = host_id.split("_")[0]
+        if host_from_input == host_from_env:
+            local("mkdir -p ~/.futuregrid/clouds/%s/" % host_id)
             with settings(warn_only=True):
-                if get("~/.futuregrid/openstack/novarc", "~/.futuregrid/clouds/%s/" %
-                       env.host.split("_")[0]).failed:
-                    get("~/.futuregrid/novarc", "~/.futuregrid/clouds/%s/" %
-                        env.host.split("_")[0])
+                if get("~/.futuregrid/openstack/novarc",
+                       "~/.futuregrid/clouds/%s/novarc" %
+                       host_id).failed:
+                    get("~/.futuregrid/novarc", "~/.futuregrid/clouds/%s/novarc" %
+                        host_id)
+        else:
+            pass#print host_id.split("_")[0], host
 
             # Task 4. write cloudmesh.yaml based on the credentials

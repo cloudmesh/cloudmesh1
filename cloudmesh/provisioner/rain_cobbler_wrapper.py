@@ -22,6 +22,13 @@ class RainCobblerWrapper:
         self.status = BaremetalStatus()
         self.policy = BaremetalPolicy()
     
+    def baremetal_computer_host_list(self):
+        """list computers for baremetal provisioning
+        provided for **rain admin baremetals**
+        :return: a list of baremetal computers
+        """
+        return self.baremetal.get_baremetal_computers()
+    
     def baremetal_computer_host_on(self, raw_hosts):
         """Enable/ON computers for baremetal provisioning
         provided for **rain admin on HOSTS**
@@ -40,15 +47,15 @@ class RainCobblerWrapper:
         hosts = expand_hostlist(raw_hosts) if raw_hosts else None
         return self.baremetal.disable_baremetal_computers(hosts)
     
-    def list_all_user_group_hosts(self, flag_user=True):
+    def list_all_user_group_hosts(self, flag_user=True, flag_merge=False):
         """list all baremetal computers that can be used by each user/project.
         provided for **rain admin list users/projects**
         :param boolean flag_user: True means user, False means projects
         :return: a dict with the formation {"user1": "hostlist", "user2": "hostlist2"}
         """
         if flag_user:
-            return self.policy.get_all_user_policy(True)
-        return self.policy.get_all_group_policy(True)
+            return self.policy.get_all_user_policy(flag_merge)
+        return self.policy.get_all_group_policy(flag_merge)
         
     def list_user_hosts(self, raw_users):
         """list all baremetal computers that can be used by each user.
@@ -205,6 +212,37 @@ class RainCobblerWrapper:
                 if result:
                     # create a new profile
                     result = self.rest_api.add_cobbler_profile({"name": name, "distro": distro_data["distro"], "kickstart": ks_name,})
+        return result
+    
+    def power_host(self, raw_hosts, flag_on=True):
+        """power ON/OFF hosts
+        provided for **rain provision power [--off] HOSTS**
+        :param string raw_hosts: one or more hosts with the valid formation of hostlist
+        :param boolean flag_on: True means power ON, False means OFF
+        :return: a dict of {"host1": True, "host2": False}, in which True means send power command, False means hosts MUST deploy before power
+        """
+        result = {}
+        hosts = expand_hostlist(raw_hosts)
+        for host in hosts:
+            result[host] = False
+        hosts_status = self.status.get_status_short(hosts)
+        for host in hosts_status:
+            if hosts_status[host] == "deployed":
+                result[host] = True
+                #self.rest_api.power_cobbler_system(host, flag_on)
+                power_system.apply_async([host], queue='cobbler')
+        return result
+    
+    def monitor_host(self, raw_hosts):
+        """monitor the progress of deploying/powering ON/OFF of hosts
+        provided for **rain provision monitor HOSTS**
+        :param string raw_hosts: one or more hosts with the valid formation of hostlist
+        :return: a dict of {"host1": {"status": "deploying", "progress": 25, }, "host2": {"status": "poweron", "progress": 100,}, "host3": {"status": "poweroff", "progress": 10,},}
+        """
+        result = {}
+        hosts = expand_hostlist(raw_hosts)
+        for host in hosts:
+            result[host] = self.status.get_host_progress(host)
         return result
     
     def list_profile_based_distro_kickstart(self, distro=None, kickstart=None):
