@@ -20,6 +20,7 @@ import platform
 from cloudmesh_common.util import banner, path_expand, backup_name
 from util import is_ubuntu, is_centos, is_osx
 from cloudmesh_common.util import yn_choice
+from ConfigParser import SafeConfigParser
 
 
 ######################################################################
@@ -63,7 +64,7 @@ def install_command(args):
         install delete_yaml
         install system
         install query
-        install new    
+        install new
         install vagrant
         install fetchrc
     
@@ -117,8 +118,13 @@ def install_command(args):
 
 def new_cloudmesh_yaml():
 
-    # create ~/.futuregrid dir
-    #
+    """ Generate yaml files from the templates in etc directory
+        if yaml files exist, this function won't perform.
+
+        - check existance
+        - create ~/.futuregrid
+        - copy templates from etc/ to $HOME/.futuregrid
+    """
 
     dir = config_file("")
 
@@ -157,7 +163,6 @@ def new_cloudmesh_yaml():
         out_file.write(result)
         out_file.close()
 
-
     for file_from in glob.glob("etc/*.yaml"):
         file_to = dir + "/" + file_from.replace("etc/","")
         cp_urw(file_from, file_to)
@@ -166,6 +171,50 @@ def new_cloudmesh_yaml():
     # me_values = "etc/me-none.yaml"
     # me_template = "etc/me-all.yaml"
     me_file = dir + "/me.yaml"
+
+    ### Replace me.yaml with real values ###
+    class Readrcfile(object):
+        """ Read novarc, eucarc and store variables
+            with configparser
+
+            reference:
+            http://stackoverflow.com/questions/2819696/parsing-properties-file-in-python/2819788#2819788
+        """
+        def __init__(self, fp):
+           self.fp = fp
+           self.head = '[rcfile]\n'
+        def readline(self):
+            if self.head:
+                try: return self.head
+                finally: self.head = None
+            else: return self.fp.readline().replace("export ","")
+
+    def get_variables(fpath):
+        section_title = "rcfile"
+        read_values = ["OS_TENANT_NAME", "OS_PASSWORD"] # case-sensitive
+        result = {}
+
+        cp = SafeConfigParser()
+        try:
+            cp.readfp(Readrcfile(open(fpath)))
+            #cp.items(section_title)
+            for read_value in read_values:
+                result[read_value] = cp.get(section_title, read_value)
+            return result
+
+        except:
+            print "ERROR: Failed to read rc files. Please check you have valid \
+                    rcfiles in %s." % fpath
+            print sys.exc_info()
+            sys.exit(1)
+
+    # rcfile location
+    rcfile_path = dir + "/clouds/"
+    new_values = {}
+    for filepath in glob.glob(rcfile_path + "/*/*rc"):
+        filename = os.path.basename(filepath)
+        cloud_name = os.path.basename(os.path.normpath(filepath.replace(filename,"")))
+        new_values[cloud_name] = get_variables(filepath)
 
     try:
         # do simple yaml load
@@ -182,7 +231,14 @@ def new_cloudmesh_yaml():
     for cloud in values['clouds']:
         values['clouds'][cloud]['default'] = {}            
         values['clouds'][cloud]['default']['image'] = None
-        values['clouds'][cloud]['default']['flavor'] = None            
+        values['clouds'][cloud]['default']['flavor'] = None
+        # Fill in credentials with real values
+        # This does not update me.yaml file. This will be done soon.
+        try:
+            for k, v in new_values[cloud].iteritems():
+                values['clouds'][cloud]['credential'][k] = new_values[cloud][k]
+        except:
+            pass
 
     file_from_template(cloudmesh_template, cloudmesh_out, values)
 
