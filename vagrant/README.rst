@@ -7,20 +7,14 @@ cd images/veewee; veewee
 
 After you got your box into vagrant you can say
 
-mkdir ~/vagrant
-cp -r ../cloudmesh/vagrant ~/vagrant
-cp vagrant/Vagrantfile ~/vagrant 
-cd ~/vagrant
+mkdir vagrant
+cd vagrant
+git clone https://github.com/cloudmesh/cloudmesh.git
+
+cp -r cloudmesh/vagrant/Vagrantfile .
 
 Use
 ======================================================================
 
 vagrant up
 vagrant ssh
-
-Bugs
-we need to have a bashrc file with the virtual env activated 
-
-do by hand after login 
-
-. ~/ENV/bin/activate
