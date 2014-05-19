@@ -4,11 +4,33 @@ from docopt import docopt
 import hostlist
 from datetime import datetime, timedelta
 from pytimeparse.timeparse import timeparse
+from cloudmesh.provisioner.rain_cobbler_wrapper import RainCobblerWrapper
 # from timestring import Range
 # from timestring import Date
 from datetime import datetime, timedelta            
 import sys
-from cloudmesh_common.util import parse_time_interval, not_implemented
+from cloudmesh_common.tables import parse_time_interval
+from cloudmesh_common.util import not_implemented
+
+def print_policys(policys, flag_merge=True):
+    if flag_merge:
+        for user in policys:
+            print "{0}\t{1}".format(user, policys[user])
+    else:
+        for puser in policys:
+            policy = [(p["_id"], p["policy"]) for p in policys[puser]]
+            print "{0}\t{1}".format(puser, policy)
+
+def print_progress(label, hosts, data):
+    print "Status of host --{0}-- ({1}): ".format(label, len(hosts))
+    if len(hosts) == 0:
+        print "\tEmpty records."
+    else:
+        if label in ["failed", "unknown"]:
+            print "host list: ", hostlist.collect_hostlist(hosts)
+        else:
+            for host in hosts:
+                print "\t{0}\t{1}%".format(host, data[host]["progress"])
 
 def rain_command(arguments):
     """
@@ -16,12 +38,13 @@ def rain_command(arguments):
         rain -h | --help
         rain --version
         rain admin add [LABEL] --file=FILE
+        rain admin baremetals
         rain admin on HOSTS
         rain admin off HOSTS
         rain admin [-i] delete HOSTS
         rain admin [-i] rm HOSTS
-        rain admin list users
-        rain admin list projects
+        rain admin list users [--merge]
+        rain admin list projects [--merge]
         rain admin list roles
         rain admin list hosts [--user=USERS|--project=PROJECTS|--role=ROLE]
                               [--start=TIME_START]
@@ -40,6 +63,8 @@ def rain_command(arguments):
         rain provision list (--distro=DISTRO|--kickstart=KICKSTART)
         rain provision --distro=DITRO --kickstart=KICKSTART HOSTS
         rain provision add (--distro=URL|--kickstart=KICk_CONTENT) NAME
+        rain provision power [--off] HOSTS
+        rain provision monitor HOSTS
 
     Arguments:
         HOSTS     the list of hosts passed
@@ -68,14 +93,17 @@ def rain_command(arguments):
 
     """
 
+    # comment by H. C, we need the raw list for policy
+    """
     for list in ["HOSTS", "USERS", "PROJECTS","--project", "--user"]:
         try:
             expanded_list = hostlist.expand_hostlist(arguments[list])
             arguments[list]=expanded_list
         except:
             pass
-        
-    print(arguments)
+    """
+    #print(arguments)
+    wrapper = RainCobblerWrapper()
 
     """
     rain admin on HOSTS
@@ -100,19 +128,28 @@ def rain_command(arguments):
                 not_implemented()
 
 
+        elif arguments["baremetals"]:
+            """rain admin baremetals"""
+            
+            print "list all baremetals"
+            result = wrapper.baremetal_computer_host_list()
+            print result
+            
         elif arguments["on"]:
             """rain admin on HOSTS"""
             
             print "switch on"
             print (arguments["HOSTS"])
-            not_implemented()
+            result = wrapper.baremetal_computer_host_on(arguments["HOSTS"])
+            print "success" if result else "failed"
             
         elif arguments["off"]:
             """rain admin off HOSTS"""
 
             print "switch off"
             print (arguments["HOSTS"])
-            not_implemented()
+            result = wrapper.baremetal_computer_host_off(arguments["HOSTS"])
+            print "success" if result else "failed"
             
         elif arguments["delete"] or arguments["rm"] :
             """rain admin [-i] delete HOSTS"""
@@ -135,11 +172,16 @@ def rain_command(arguments):
 
             if arguments["users"]:
                 print "list users"
-                not_implemented()
+                flag_merge = arguments["--merge"]
+                policys = wrapper.list_all_user_group_hosts(True, flag_merge)
+                print_policys(policys, flag_merge)
+                
 
             elif arguments["projects"]:
                 print "list projects"
-                not_implemented()
+                flag_merge = arguments["--merge"]
+                policys = wrapper.list_all_user_group_hosts(False, flag_merge)
+                print_policys(policys, flag_merge)
 
             elif arguments["roles"]:
                 print "list roles"
@@ -147,17 +189,21 @@ def rain_command(arguments):
 
             elif arguments["hosts"]:
                 print "list hosts"
+                # comment by H. C
+                """
                 not_implemented()
 
                 (time_start, time_end) = parse_time_interval(arguments["--start"],
                                                            arguments["--end"])
                 print "From:", time_start
                 print "To  :", time_end
-                
-                if ["--users"] is not None:
-                    not_implemented()
+                """
+                if arguments["--users"] is not None:
+                    policys = wrapper.list_user_hosts(arguments["--users"])
+                    print_policys(policys)
                 elif arguments["--projects"] is not None:
-                    not_implemented()
+                    policys = wrapper.list_project_hosts(arguments["--projects"])
+                    print_policys(policys)
                 elif arguments["--role"] is not None:
                     not_implemented()
                 else:
@@ -167,17 +213,20 @@ def rain_command(arguments):
                                         
         elif arguments["policy"]:
             print "policy"
-
+            # comment by H. C
+            """
             (time_start, time_end) = parse_time_interval(arguments["--start"],
                                                          arguments["--end"])
 
             print "From:", time_start
             print "To  :", time_end
-
-            if ["--users"] is not None:
-                not_implemented()
+            """
+            if arguments["--users"] is not None:
+                policy_id = wrapper.add_user_policy(arguments["--users"], arguments["HOSTS"])
+                print "success" if policy_id else "failed"
             elif arguments["--projects"] is not None:
-                not_implemented()
+                policy_id = wrapper.add_project_policy(arguments["--projects"], arguments["HOSTS"])
+                print "success" if policy_id else "failed"
             elif arguments["--role"] is not None:
                 not_implemented()
             else:
@@ -191,8 +240,19 @@ def rain_command(arguments):
             
     elif arguments["status"]:
             print "status"
-            not_implemented()
-            
+            if arguments["--short"]:
+                status_dict = wrapper.get_status_short(arguments[HOSTS])
+                if status_dict:
+                    for host in sorted(status_dict.keys()):
+                        print "{0}\t{1}".format(host, status_dict[host])
+                else:
+                    print "Empty"
+            if arguments["--summary"]:
+                status_dict = wrapper.get_status_short(arguments[HOSTS])
+                if status_dict:
+                    for deploy_status in ["deployed", "deploying", "failed", "total", ]:
+                        print "{0}\t{1}".format(deploy_status, status_dict[deploy_status])
+                
     elif arguments["list"]:
             print "user list"
 
@@ -209,26 +269,38 @@ def rain_command(arguments):
     elif arguments["provision"]:
         print "provision a node..."
         if arguments["list"]:
-            print "this will list distro or kickstart info"
-            not_implemented()
+            #print "this will list distro or kickstart info"
+            print "this will servers based on distro or kickstart info"
+            servers = wrapper.list_system_based_distro_kickstart(arguments["DISTRO"], arguments["KICKSTART"])
+            print "matched servers: {0}".format(servers)
         elif arguments["add"]:
             print "add a new distro or kickstart"
             not_implemented()
+        elif arguments["power"]:
+            print "power ON/OFF a host..."
+            result = wrapper.power_host(arguments["HOSTS"], not arguments["--off"])
+            power_hosts = [h for h in sorted(result.keys()) if result[h]]
+            unknown_hosts = [h for h in sorted(result.keys()) if not result[h]]
+            print "power hosts: ", power_hosts
+            print "unknow hosts, must deploy first: ", unknow_hosts
+        elif arguments["monitor"]:
+            print "monitor progress of a host..."
+            result = wrapper.monitor_host(arguments["HOSTS"])
+            poweron_hosts = [h for h in sorted(result.keys()) if result[h]["status"] == "poweron"]
+            poweroff_hosts = [h for h in sorted(result.keys()) if result[h]["status"] == "poweroff"]
+            deploy_hosts = [h for h in sorted(result.keys()) if result[h]["status"] == "deploy"]
+            failed_hosts = [h for h in sorted(result.keys()) if result[h]["status"] == "failed"]
+            unknown_hosts = [h for h in sorted(result.keys()) if result[h]["status"] == "unknown"]
+            print_progress("deploy", deploy_hosts, result)
+            print_progress("poweron", poweron_hosts, result)
+            print_progress("poweroff", poweroff_hosts, result)
+            print_progress("failed", failed_hosts, result)
+            print_progress("unknown", unknown_hosts, result)
         else:
             if arguments["--profile"]:
-                profile = arguments["--profile"]
-                if arguments["HOSTS"]:
-                    #print arguments["HOSTS"]
-                    #hosts = hostlist.expand_hostlist(arguments["HOSTS"])
-                    hosts = arguments["HOSTS"]
-                # call Heng's rest service for implementation
-                # two steps:
-                # 1. check and modify the 'system' in cobbler
-                # 2. do the provision
-                not_implemented()
-                print "fake provision in progress..."
-                for host in hosts:
-                    print "now provision host: %s" % host
+                wrapper.provision_host_with_profile(arguments["PROFILE"], arguments["HOSTS"])
+            elif arguments["--distro"] and arguments["--kickstart"]:
+                wrapper.provision_host_with_distro_kickstart(arguments["DISTRO"], arguments["KICKSTART"], arguments["HOSTS"])
 
 def main():
     arguments = docopt(rain_command.__doc__)

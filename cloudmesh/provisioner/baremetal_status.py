@@ -145,7 +145,7 @@ class BaremetalStatus:
     def get_deploy_progress(self, host):
         """get the progress of deploy of host baremetal computer.
         :param string host: the unique ID of host
-        :return: an integer number. -1 means error. 10 means before phase 1, 35, 75, 100 means phase 1, 2, 3.
+        :return: an integer number. -1 means error. 10 means before phase 1, 25, 50, 100 means the end of phase 1, 2, 3.
         """
         result = -1
         status_list = self.get_status(host)
@@ -155,9 +155,9 @@ class BaremetalStatus:
                 if host_status["transient"]["status_1"] == "unknown":
                     result = 10
                 elif host_status["transient"]["status_1"] == "OFF":
-                    result = 35
+                    result = 25
                     if host_status["transient"]["status_2"] == "ON":
-                        result = 75
+                        result = 50
             elif host_status["status"] == "deployed":
                 result = 100
         return result 
@@ -178,6 +178,34 @@ class BaremetalStatus:
                     result = 100
         return result 
     
+    def get_host_progress(self, host):
+        """get the progress of host baremetal computer.
+        :param string host: the unique ID of host
+        :return: a dict of {"status": "deploy", "progress": 25, }, there are 5 status of host, namely deploy, poweron, poweroff, failed, unknown  
+        """
+        result = {"status": "unknown", "progress": -1, }
+        status_list = self.get_status(host)
+        if status_list:
+            host_status = status_list[0]
+            if host_status["status"] == "deployed":
+                # maybe any status in deploy, poweron, poweroff
+                action = host_status["transient"]["action"]
+                if action.startswith("on"):
+                    result["status"] = "poweron"
+                    result["progress"] = self.get_power_progress(host, True)
+                elif action.startswith("off"):
+                    result["status"] = "poweroff"
+                    result["progress"] = self.get_power_progress(host, False)
+                elif action.startswith("deploy"):
+                    result["status"] = "deploy"
+                    result["progress"] = self.get_deploy_progress(host)
+            elif host_status["status"] == "deploying":
+                result["status"] = "deploy"
+                result["progress"] = self.get_deploy_progress(host)
+            elif host_status["status"] == "failed":
+                result["status"] = "failed"
+        return result 
+    
     def get_status(self, host=None):
         """get the status of single or all baremetal computer(s)
         :param string host: the unique ID of host, None means get status of all hosts
@@ -191,7 +219,7 @@ class BaremetalStatus:
     def get_status_short(self, hosts=None):
         """get the short status of baremetal for hosts
         :param list hosts: a list of host or None means all hosts
-        :return: a dict with the formation {"host1":"deployed", "host2": "deploying", "host3": "failed"}
+        :return: a dict with the formation {"host1":"deployed", "host2": "deploying", "host3": "failed", "host4": "unknown", }
         """
         status_list = self.get_status()
         valid_hosts_status = [status for status in status_list if status["cm_id"] in hosts] if hosts else status_list
