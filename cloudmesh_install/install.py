@@ -4,6 +4,7 @@ import glob
 import shutil
 import sys
 import stat
+import getpass
 sys.path.append("..")
 sys.path.append(".")
 
@@ -19,6 +20,7 @@ import platform
 from cloudmesh_common.util import banner, path_expand, backup_name
 from util import is_ubuntu, is_centos, is_osx
 from cloudmesh_common.util import yn_choice
+from ConfigParser import SafeConfigParser
 
 
 ######################################################################
@@ -59,10 +61,12 @@ def install_command(args):
         install -h | --help
         install --version
         install cloudmesh
-        install delete_yaml    
+        install delete_yaml
+        install system
         install query
-        install new    
+        install new
         install vagrant
+        install fetchrc
     
     """
     arguments = docopt(install_command.__doc__,args)
@@ -109,10 +113,18 @@ def install_command(args):
     elif arguments["vagrant"]:
         vagrant()
 
+    elif arguments["fetchrc"]:
+        fetchrc()
+
 def new_cloudmesh_yaml():
 
-    # create ~/.futuregrid dir
-    #
+    """ Generate yaml files from the templates in etc directory
+        if yaml files exist, this function won't perform.
+
+        - check existance
+        - create ~/.futuregrid
+        - copy templates from etc/ to $HOME/.futuregrid
+    """
 
     dir = config_file("")
 
@@ -151,7 +163,6 @@ def new_cloudmesh_yaml():
         out_file.write(result)
         out_file.close()
 
-
     for file_from in glob.glob("etc/*.yaml"):
         file_to = dir + "/" + file_from.replace("etc/","")
         cp_urw(file_from, file_to)
@@ -160,6 +171,50 @@ def new_cloudmesh_yaml():
     # me_values = "etc/me-none.yaml"
     # me_template = "etc/me-all.yaml"
     me_file = dir + "/me.yaml"
+
+    ### Replace me.yaml with real values ###
+    class Readrcfile(object):
+        """ Read novarc, eucarc and store variables
+            with configparser
+
+            reference:
+            http://stackoverflow.com/questions/2819696/parsing-properties-file-in-python/2819788#2819788
+        """
+        def __init__(self, fp):
+           self.fp = fp
+           self.head = '[rcfile]\n'
+        def readline(self):
+            if self.head:
+                try: return self.head
+                finally: self.head = None
+            else: return self.fp.readline().replace("export ","")
+
+    def get_variables(fpath):
+        section_title = "rcfile"
+        read_values = ["OS_TENANT_NAME", "OS_PASSWORD"] # case-sensitive
+        result = {}
+
+        cp = SafeConfigParser()
+        try:
+            cp.readfp(Readrcfile(open(fpath)))
+            #cp.items(section_title)
+            for read_value in read_values:
+                result[read_value] = cp.get(section_title, read_value)
+            return result
+
+        except:
+            print "ERROR: Failed to read rc files. Please check you have valid \
+                    rcfiles in %s." % fpath
+            print sys.exc_info()
+            sys.exit(1)
+
+    # rcfile location
+    rcfile_path = dir + "/clouds/"
+    new_values = {}
+    for filepath in glob.glob(rcfile_path + "/*/*rc"):
+        filename = os.path.basename(filepath)
+        cloud_name = os.path.basename(os.path.normpath(filepath.replace(filename,"")))
+        new_values[cloud_name] = get_variables(filepath)
 
     try:
         # do simple yaml load
@@ -176,7 +231,14 @@ def new_cloudmesh_yaml():
     for cloud in values['clouds']:
         values['clouds'][cloud]['default'] = {}            
         values['clouds'][cloud]['default']['image'] = None
-        values['clouds'][cloud]['default']['flavor'] = None            
+        values['clouds'][cloud]['default']['flavor'] = None
+        # Fill in credentials with real values
+        # This does not update me.yaml file. This will be done soon.
+        try:
+            for k, v in new_values[cloud].iteritems():
+                values['clouds'][cloud]['credential'][k] = new_values[cloud][k]
+        except:
+            pass
 
     file_from_template(cloudmesh_template, cloudmesh_out, values)
 
@@ -322,7 +384,49 @@ def vagrant():
     local("cd /tmp/vagrant; vagrant init ubuntu-14.04-server-amd64")
     local("cd /tmp/vagrant; vagrant up")
     local("cd /tmp/vagrant; vagrant ssh")
-             
+
+def fetchrc():
+
+    banner("download rcfiles (novarc, eucarc, etc) from IaaS platforms")
+
+    print ""
+    # Task 1. list portal user id, maybe user input is good
+    userid = getpass.getuser()
+
+    userid = raw_input ("Please enter your portal user id [default: %s]: " %
+                       userid) or userid
+
+    # Task 2. list hostnames to get access. In Futuregrid, india, sierra are
+    # mandatory hosts to be included.
+    host_ids = ["india_openstack_havana", "sierra_openstack_grizzly"] #TEMPORARY
+  
+    # user input is disabled
+    #host_ids = raw_input("Please enter host identifications [default: %s]: "
+    #                     % ", ".join(host_ids)) or host_ids
+
+    if isinstance(host_ids, str):
+        host_ids = map(lambda x : x.strip(),host_ids.split(","))
+
+    domain_name = ".futuregrid.org"
+    hostnames = map(lambda x : x.split("_")[0] + domain_name, host_ids)
+    
+    key_path = "~/.ssh/id_rsa"
+    # private key path is disabled
+    #key_path = raw_input("Please enter a path of the ssh private key to" + \
+    #                     " login the hosts [default: %s]: " % key_path) or \
+    #                    key_path
+
+    try:
+        #cmd = "fab rcfile.download:userid='%s',host_ids='%s',key_path='%s'" \
+        cmd = "fab -H %s -u %s -i %s rcfile.download:'%s'" \
+                % (",".join(hostnames), userid, key_path,
+                   "\,".join(host_ids))
+        #print cmd
+        os.system(cmd)
+    except:
+        print sys.exc_info()
+        sys.exit(1)
+
 if __name__ == '__main__':
     install_command(sys.argv)
 
