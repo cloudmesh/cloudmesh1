@@ -83,19 +83,19 @@ any attribute name to avoid issues.
 Cloudmesh uses a number of convenient attributes that are starting
 with "cm_". These include
 
-cm_heading
+:cm_heading:
   Specifies a heading for the cloud that is used in several user
   interfaces when refering to this cloud
   
   Example: Sierra OpenStack, Grizzly
 
-cm_host
+:cm_host:
   Specifies the hostname of the cloud that is used in some cases to
   connect to it.  In many cases this value is not needed.
   
   Example: sierra.futuregrid.org
 
-cm_label
+:cm_label:
   Specifies a simple very short abbreviation of the cloud that can be
   used with the commandline tools. Often it is inconvenient so specify
   for example sierra_openstack_grizzly. instead a user can specify an
@@ -104,18 +104,17 @@ cm_label
   
   Example: sos
 
-cm_type
-
+:cm_type:
   The type of a cloud is very important as it will deterimine how we
   interact with it
 
   Example: openstack
 
-cm_type_version
+:cm_type_version:
   Besides the type we can have also a number of versions that
   specifies how we interact with the cloud.
 
-  Example: grizzly
+  Example: havana
 
 Configuration file (rc file)
 ----------------------------------------------------------------------
@@ -134,15 +133,13 @@ Retrieval of rc file by command
    ./install gatherrc
 
 This will create for you in your ~/.futuregrid directory a tree of the
-following format
-
-::
+following format::
    
    .futuregird/clouds
         india_openstack_havana
 	sierra_openstack_grizzly
 
-In future we will also have the following directories:
+In future we will also have the following directories::
 
         hotel_openstack_ ...
 	alamo_openstack_ ...
@@ -164,31 +161,52 @@ Host      OpenStack (novarc)                 Eucalyptus (eucarc)
 --------- ---------------------------------- ----------------------------------------------------
 india     $HOME/.futuregrid/openstack/novarc $HOME/.futuregrid/eucalyptus/$fgprojectnumber/eucarc*
 sierra    $HOME/.futuregrid/novarc           $HOME/.futuregrid/eucalyptus/$fgprojectnumber/eucarc*
-hotel     Download EC2 Credentials**          n/a
-alamo     Download EC2 Credentials**          n/a
+hotel     Download EC2 Credentials**         n/a
+alamo     Download EC2 Credentials**         n/a
 foxtrot   n/a                                n/a
 ========= ================================== ====================================================
 
-** For Eucalyptus, compressed file is provided in the directory. Unzip it and load credentials 
-are required like as follows. 
-
-    :: 
+:\*\*: 
+   For Eucalyptus, compressed file is provided in the directory. Unzip
+   it and load credentials are required like as follows::
 
          unzip ineuca3-{username}-{cluster}-fgprojectnumber.zip
          source eucarc
 
-\* With OpenStack Horizon, EC2 credentials can be downloaded.
+:\*:
+   With OpenStack Horizon, EC2 credentials can be downloaded.
 
-  - login `OpenStack Havana on Hotel <https://openstack.uc.futuregrid.org/dashboard/>`_ or `OpenStack Folsom on Alamo <https://openstack.futuregrid.tacc.utexas.edu/horizon>`_
-  - Click 'Access & Security'
-  - Select 'API Access' tab
-  - Click 'Download EC2 Credentials' (which is a direct link here for `Hotel <http://openstack.uc.futuregrid.org/horizon/project/access_and_security/api_access/ec2/>`_ or `Alamo <http://openstack.futuregrid.tacc.utexas.edu/horizon/project/access_and_security/api_access/ec2/>`_)
+   - login `OpenStack Havana on Hotel
+     <https://openstack.uc.futuregrid.org/dashboard/>`_ or `OpenStack
+     Folsom on Alamo
+     <https://openstack.futuregrid.tacc.utexas.edu/horizon>`_
 
-Next we specify the credentials of the cloud. We can obtain them typically from the cloud provider. The mechnism to obtain them may vary and you will need to look it up. Often you will have an rc file or a GUI that allows you to export the needed information. We have strived to keep the same attributes that are provided by the supported cloud providors. Hence typically no change is needed and you can just paste and copy the values. However, if your cloud needs certificates, they may have to be specially dealt with and placed in special directories. For cloudmesn we provide them as part of the install and ainclude them in the::
+   - Click 'Access & Security'
+
+   - Select 'API Access' tab
+   
+   - Click 'Download EC2 Credentials' (which is a direct link here for
+     `Hotel
+     <http://openstack.uc.futuregrid.org/horizon/project/access_and_security/api_access/ec2/>`_
+     or `Alamo
+     <http://openstack.futuregrid.tacc.utexas.edu/horizon/project/access_and_security/api_access/ec2/>`_)
+
+Next we specify the credentials of the cloud. We can obtain them
+typically from the cloud provider. The mechnism to obtain them may
+vary and you will need to look it up. Often you will have an rc file
+or a GUI that allows you to export the needed information. We have
+strived to keep the same attributes that are provided by the supported
+cloud providors. Hence typically no change is needed and you can just
+paste and copy the values. However, if your cloud needs certificates,
+they may have to be specially dealt with and placed in special
+directories. For cloudmesn we provide them as part of the install and
+ainclude them in the::
 
   $HOME/.futuregrid/ 
 
-directory. Naturally the attributes in credentials depend on the cloud type and are different between the different clouds. In our case we define the cloud on sierra which has the following credentials::
+directory. Naturally the attributes in credentials depend on the cloud
+type and are different between the different clouds. In our case we
+define the cloud on sierra which has the following credentials::
 
         credentials:
           OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
@@ -198,54 +216,72 @@ directory. Naturally the attributes in credentials depend on the cloud type and 
           OS_USERNAME: albert
           OS_VERSION: grizzly
 
-Only the last field OS_VERSION is not provided by the openstack rc file. We simply specify the version and must make sure it is the same as provided in cm_type_version. In future versions of cloudmesh we may remove this attribute and only work with cm_type_version, but it is very convenient to have the value also in credentials, so we left it there for now also. The rest of the attributes are regular attributes you find in the rc file. For Futuregrid Openstack clouds they will have the following meaning:
+Only the last field OS_VERSION is not provided by the openstack rc
+file. We simply specify the version and must make sure it is the same
+as provided in cm_type_version. In future versions of cloudmesh we may
+remove this attribute and only work with cm_type_version, but it is
+very convenient to have the value also in credentials, so we left it
+there for now also. The rest of the attributes are regular attributes
+you find in the rc file. For Futuregrid Openstack clouds they will
+have the following meaning:
 
-OS_AUTH_URL
+:OS_AUTH_URL:
   The endpount that is used to manage virtual machines   
 
   Example: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
 
-OS_CACERT
-  The location in which the certificate for the cloud is placed to interact with https in case your cloud is
-  properly protected. In case it does not use https please inform yourself about the security consequences.
+:OS_CACERT:
+  The location in which the certificate for the cloud is placed to
+  interact with https in case your cloud is properly protected. In
+  case it does not use https please inform yourself about the security
+  consequences.
 
   Example: $HOME/.futuregrid/sierra-cacert.pem
 
-OS_PASSWORD
+:OS_PASSWORD:
   The password you use for this cloud
 
   Example: jhdjaTYWUIYBY
 
-OS_TENANT_NAME
+:OS_TENANT_NAME:
   The fg project number. In case you have multiple projects, you need to define multiple clouds 
   with multiple credentials that are distinguished by different tennant names.
 
   Example: fg1000
 
-OS_USERNAME
+:OS_USERNAME:
   Your futuregrid portal name.
 
   Example: albert
 
-OS_VERSION
+:OS_VERSION:
   The version of openstack you use as described also by cm_type_version
 
   Example: grizzly
 
-As it is often the case that users have a default image or flavor and try to avoid remembering the values for them, such values can also be specified in the cloudmesh.yaml file. This comes especially handy in case of classes in which a teacher may provide the class with a custom image and give students hints for which flavor to use. Also users that deal with the instantiation of many VMs clearly benefit from this feature::
+As it is often the case that users have a default image or flavor and
+try to avoid remembering the values for them, such values can also be
+specified in the cloudmesh.yaml file. This comes especially handy in
+case of classes in which a teacher may provide the class with a custom
+image and give students hints for which flavor to use. Also users that
+deal with the instantiation of many VMs clearly benefit from this
+feature::
 
   default:
     flavor: m1.tiny
     image: 4199d988-0833-4497-a473-96fc456fac2f
 
-In our example above we have set the default to  m1.tine for the falvor and one of our default images available on the cloud. 
+In our example above we have set the default to m1.tine for the falvor
+and one of our default images available on the cloud.
 
-The next sections show examples for several clouds with ficticious account information. Please replace it with your own.
+The next sections show examples for several clouds with ficticious
+account information. Please replace it with your own.
 
 HP Cloud
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-HP provides multiple regions and they can be easily configured in cloudmesh. We provide examples for two regions::
+HP provides multiple regions and they can be easily configured in
+cloudmesh. We provide examples for two regions::
 
     hp:
       cm_heading: HP Openstack
@@ -374,7 +410,13 @@ Sierra
 
 Alamo
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Although Alamo on FG is an openstack grizzly cloud, it is not as sophisticated configured as the clouds on india and sierra. Instead is uses for horizon the username and password from the openstack portal, but does not expose its native cloud interfaces through the https protocol. Instead it only offers access with the limited EC2 cloud interfaces that are inferior in capabilities to the openstack interfaces. Here is an example::
+Although Alamo on FG is an openstack grizzly cloud, it is not as
+sophisticated configured as the clouds on india and sierra. Instead is
+uses for horizon the username and password from the openstack portal,
+but does not expose its native cloud interfaces through the https
+protocol. Instead it only offers access with the limited EC2 cloud
+interfaces that are inferior in capabilities to the openstack
+interfaces. Here is an example::
 
 
     alamo:
@@ -405,14 +447,21 @@ A more complete example of a cloudmesh.yaml file is available at
 
  * https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml
 
-Here you need to replace all varibles in brackets. However there is a more convenient way to do this with an additional yaml file that is called me.yaml
+Here you need to replace all varibles in brackets. However there is a
+more convenient way to do this with an additional yaml file that is
+called me.yaml
 
 
 
 cloudmesh-server.yaml
 ----------------------------------------------------------------------
 
-Cloudmesh contains also a configuration file which i used to interface with some server functionality. THis is only needed for some advanced concepts such as power and temperature management as wel as bare metal provisioning. As we at times modify the server yaml file and add new features we have added a meta attribute to the file to document the version and the type::
+Cloudmesh contains also a configuration file which i used to interface
+with some server functionality. THis is only needed for some advanced
+concepts such as power and temperature management as wel as bare metal
+provisioning. As we at times modify the server yaml file and add new
+features we have added a meta attribute to the file to document the
+version and the type::
 
   meta:
     yaml_version: 2.0
@@ -421,12 +470,16 @@ Cloudmesh contains also a configuration file which i used to interface with some
     server:
       ... all other text gis here ...
 
-In addition a file starts with the attributes cloudmesh and server. All other contents is indented under server.
+In addition a file starts with the attributes cloudmesh and
+server. All other contents is indented under server.
 
 Debugging
 ~~~~~~~~~~~~~
 
-cloudmesh allows to set the debug level conveniently via the loglevel attribute. Furthermore, one can disable the use of the production environment (which disables the use of LDAP) while setting the production attribute to False::
+cloudmesh allows to set the debug level conveniently via the loglevel
+attribute. Furthermore, one can disable the use of the production
+environment (which disables the use of LDAP) while setting the
+production attribute to False::
 
   server:
     loglevel: DEBUG
@@ -436,7 +489,13 @@ cloudmesh allows to set the debug level conveniently via the loglevel attribute.
 Web UI
 ~~~~~~~~~~~~
 
-Cloudmesh contains an optional Web UI interface that can be used to interface with various clouds similar to horizon. However in contrast to Horizopn it is not limited to OpenStack. It also provides access to temperature data and user interfaces to bare metal provisioning. These may be role based and not every user may be allowed to access them. Thus they may not see links in the user interface for them. Only priveleged users will. 
+Cloudmesh contains an optional Web UI interface that can be used to
+interface with various clouds similar to horizon. However in contrast
+to Horizopn it is not limited to OpenStack. It also provides access to
+temperature data and user interfaces to bare metal provisioning. These
+may be role based and not every user may be allowed to access
+them. Thus they may not see links in the user interface for them. Only
+priveleged users will.
 
 The userinterface can be configured as follows::
 
@@ -447,14 +506,27 @@ The userinterface can be configured as follows::
         browser: True
         page: ""
 
-The host on which the server is placeed is either specified by ip or hostname. A port on which the ui is started needs to be specified. In addition a secret key has to be specified to enable some security settings. It is best to use a key that is very difficult to crack.
+The host on which the server is placeed is either specified by ip or
+hostname. A port on which the ui is started needs to be specified. In
+addition a secret key has to be specified to enable some security
+settings. It is best to use a key that is very difficult to crack.
 
-If you set the browser variable to true, cloudmesh will automatically upon restart open a web page. The web page can be specified via the page attribute. If you specify "" it will go to the home page. This is useful if you like to develop cloudmesh and like to repeatedly open a particular page you work on. 
+If you set the browser variable to true, cloudmesh will automatically
+upon restart open a web page. The web page can be specified via the
+page attribute. If you specify "" it will go to the home page. This is
+useful if you like to develop cloudmesh and like to repeatedly open a
+particular page you work on.
 
 LDAP Integration
 ~~~~~~~~~~~~~~~~~
 
-Cloudmesh can be configured to read usernames from an LDAP server. On FutureGrid we use the server configured for our FG users. However you can certainly manage your own LDAP server. The configuration is done via a proxy server that allows you to execute ldap commands. This allows you to connect to the proxy server as other servers may not allow to access the LDAP server as it is behind a firewall. The dn location of the people and groups are also specifiable::
+Cloudmesh can be configured to read usernames from an LDAP server. On
+FutureGrid we use the server configured for our FG users. However you
+can certainly manage your own LDAP server. The configuration is done
+via a proxy server that allows you to execute ldap commands. This
+allows you to connect to the proxy server as other servers may not
+allow to access the LDAP server as it is behind a firewall. The dn
+location of the people and groups are also specifiable::
 
     ldap:
         with_ldap: False
@@ -469,11 +541,17 @@ Cloudmesh can be configured to read usernames from an LDAP server. On FutureGrid
 Baremetal provisioning with teefa
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We are in the process of integrating bare metal provisioning with teefaa which is part of cloudmesh and provides a very elementary mechnism of conducting bare metal provisioning. To do that you must specify a username that allows you to conduct bare metal provisioning. We assme that teefaa is installed in::
+We are in the process of integrating bare metal provisioning with
+teefaa which is part of cloudmesh and provides a very elementary
+mechnism of conducting bare metal provisioning. To do that you must
+specify a username that allows you to conduct bare metal
+provisioning. We assme that teefaa is installed in::
 
   username@hostname:~/teefaa
 
-Furthermore, it could be tha the ipp to the control network is separate from the hostname and if so it can be specified with the bmcname attribute::
+Furthermore, it could be tha the ipp to the control network is
+separate from the hostname and if so it can be specified with the
+bmcname attribute::
 
     teefaa:
         username: <username>
@@ -481,7 +559,10 @@ Furthermore, it could be tha the ipp to the control network is separate from the
         bmcname: <bmc-hostname>
         dir: teefaa
 
-In addition to setting up the teefaa environment, cloudmesh contains a role based policy management that enables the administrator to grant certain users bare metal access to a specified set of resources. This is controlled by the following configureation parameters::
+In addition to setting up the teefaa environment, cloudmesh contains a
+role based policy management that enables the administrator to grant
+certain users bare metal access to a specified set of resources. This
+is controlled by the following configureation parameters::
 
     provisioner:
         clusters:
@@ -497,12 +578,21 @@ In addition to setting up the teefaa environment, cloudmesh contains a role base
               - i[064-066,068]
 
 
-First we set up on which clusters it is allowed to conduct bare metal provisioning. Than we set a policy either for users or projects. For users we use simply the username (in our case the futuregrid username, currently we assume the same username on all machines) and the hostlist of all hosts that can be provisioned by that user. IN case we define it an a per project basis, we replace the username with the projectid. The information of projectid and username is found in the LDAP server as part of the people and group ids.
+First we set up on which clusters it is allowed to conduct bare metal
+provisioning. Than we set a policy either for users or projects. For
+users we use simply the username (in our case the futuregrid username,
+currently we assume the same username on all machines) and the
+hostlist of all hosts that can be provisioned by that user. IN case we
+define it an a per project basis, we replace the username with the
+projectid. The information of projectid and username is found in the
+LDAP server as part of the people and group ids.
 
 Clusters
 ~~~~~~~~~~~~
 
-To access the control network of the clusters you can specify a username and password for each cluster. This is done via the following configuration::
+To access the control network of the clusters you can specify a
+username and password for each cluster. This is done via the following
+configuration::
 
 
     clusters:
@@ -531,15 +621,25 @@ To access the control network of the clusters you can specify a username and pas
                    ip: <proxyip>
                    user: <proxyusername>
 
-Note that you have te ability to specify a proxy machine in case the access to the control network is behind a firewall. Also it is possible to specify different usernames for access to pxe and bmc.
+Note that you have te ability to specify a proxy machine in case the
+access to the control network is behind a firewall. Also it is
+possible to specify different usernames for access to pxe and bmc.
 
 Roles
 ~~~~~~~
 
-The portal framework can specify explicitly different roles and users and projects to restrict access to 
-specific web pages. Some of the information such as active users and projects are fetsched frm the LDAP server for the role "user".
+The portal framework can specify explicitly different roles and users
+and projects to restrict access to specific web pages. Some of the
+information such as active users and projects are fetsched frm the
+LDAP server for the role "user".
 
-However, two specific roles can be explicitly set, such as the admin and rain roles. Here it is possible to add usernames or project numbers and the specified user in the projects or the explicitly specified users will have the given role. This allows a fine grained control of users and roles. Additional roles could be added and become useful for customized plugins to cloudmesh to expose features seclectively.
+However, two specific roles can be explicitly set, such as the admin
+and rain roles. Here it is possible to add usernames or project
+numbers and the specified user in the projects or the explicitly
+specified users will have the given role. This allows a fine grained
+control of users and roles. Additional roles could be added and become
+useful for customized plugins to cloudmesh to expose features
+seclectively.
 
 todo::
 
@@ -564,7 +664,10 @@ todo::
 Keystone server
 ~~~~~~~~~~~~~~~~~~
 
-certain actions of a keystone server may not be executed by a regular user. in his case the server yaml file allows you to use an administrative account that can be configured under the keystone attribute::
+certain actions of a keystone server may not be executed by a regular
+user. in his case the server yaml file allows you to use an
+administrative account that can be configured under the keystone
+attribute::
 
     keystone:
         sierra_openstack_grizzly:    
@@ -580,12 +683,18 @@ certain actions of a keystone server may not be executed by a regular user. in h
             OS_USERNAME : <username>
             OS_CACERT : None
 
-please note that the names of the clouds need to be the exact names used as in cloudmesh.yaml. The username and password can be obtained from the cloud administrator if allowed.
+please note that the names of the clouds need to be the exact names
+used as in cloudmesh.yaml. The username and password can be obtained
+from the cloud administrator if allowed.
 
 Mongo
 ~~~~~~
 
-currently we use mongo to save the state of cloudmesh. We have created an easy schem to separate information and we simply recommend to reuse the mongo section from the server yaml example file. Simply change the valeus for username, password, and key to values you like if you set it up on your local machine::
+currently we use mongo to save the state of cloudmesh. We have created
+an easy schem to separate information and we simply recommend to reuse
+the mongo section from the server yaml example file. Simply change the
+valeus for username, password, and key to values you like if you set
+it up on your local machine::
 
     mongo:
         db: cloudmesh

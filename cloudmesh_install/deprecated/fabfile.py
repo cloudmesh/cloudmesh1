@@ -6,7 +6,7 @@ if not hasattr(sys, 'real_prefix'):
     sys.exit()
 
 try:
-    from fabric.api import local,task 
+    from fabric.api import local, task 
 except:
     os.system("pip install fabric")
     from fabric.api import local, task
@@ -92,7 +92,7 @@ def ubuntu():
     needed packages before we install cloudmesch'''
 
     local ("sudo apt-get update")
-    install_packages(["python-dev", 
+    install_packages(["python-dev",
                       "git",
                       "mercurial",
                       "curl",
@@ -102,7 +102,7 @@ def ubuntu():
                       "mongodb-server"])    
     install_packages(["rabbitmq-server"])
     install()
-    install_mongodb()#important that mongo_db installation be done only after all we install all needed python packages(as per requiremnts.txt)
+    install_mongodb()  # important that mongo_db installation be done only after all we install all needed python packages(as per requiremnts.txt)
 
 def centos():
     install_packages (["git",
