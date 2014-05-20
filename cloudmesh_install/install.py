@@ -66,6 +66,7 @@ def install_command(args):
         install system
         install query
         install new
+        install apply_credentials
         install vagrant
         install fetchrc
     
@@ -78,6 +79,10 @@ def install_command(args):
     elif arguments["new"]:
 
         new_cloudmesh_yaml()
+
+    elif arguments["apply_credentials"]:
+
+        get_fg_username_password_from_rcfiles()
         
     elif arguments["delete_yaml"]:
 
@@ -190,13 +195,6 @@ def new_cloudmesh_yaml():
         values['clouds'][cloud]['default'] = {}            
         values['clouds'][cloud]['default']['image'] = None
         values['clouds'][cloud]['default']['flavor'] = None
-        # Fill in credentials with real values
-        # This does not update me.yaml file. This will be done soon.
-        try:
-            for k, v in new_values[cloud].iteritems():
-                values['clouds'][cloud]['credential'][k] = new_values[cloud][k]
-        except:
-            pass
 
     file_from_template(cloudmesh_template, cloudmesh_out, values)
 
@@ -218,8 +216,90 @@ def new_cloudmesh_yaml():
     # print "# Template: {0}".format(filename_template)
     # print "# Values  : {0}".format(filename_values)
     # print "# Backup : {0}".format(filename_bak)            
+
+def get_fg_username_password_from_rcfiles():
+    rc_dir_location = {}
+    # (hostname, loaction of dir on remote host, location of dir on localhost)
+    rc_dir_location["india_openstack_havana"] = ("india.futuregird.org", "?", "?")
+    rc_dir_location["sierra_openstack_grizzly"] = ("sierra.futuregrid.org", "?", "?")
+
+    """
+    for label in rc_dir_location
+        (host,dir) = rc_rdilocation(label)
+        get rc file form the host and dir and copy to install_dir
+
+    me_dict = read current me.yaml
+
     
     
+    for label in rc_dir_location
+        (host,dir) = rc_rdilocation(label)
+
+        if label does not exist make it and also add the credentials for it,
+            fill out initially with TBD
+        
+        if openstack:
+           put values from local dir into dict
+
+        elif eucalyptus:
+           put values from local dir into dict
+
+    return me dict
+    """                
+
+    class Readrcfile(object):
+        """ Read novarc, eucarc and store variables
+            with configparser
+            reference:
+            http://stackoverflow.com/questions/2819696/parsing-properties-file-in-python/2819788#2819788
+        """
+        def __init__(self, fp):
+           self.fp = fp
+           self.head = '[rcfile]\n'
+
+        def readline(self):
+            if self.head:
+                try: return self.head
+                finally: self.head = None
+            else: return self.fp.readline().replace("export ", "")
+
+    def get_variables(fpath):
+        section_title = "rcfile"
+        read_values = ["OS_TENANT_NAME", "OS_PASSWORD"]  # case-sensitive
+        result = {}
+
+        cp = SafeConfigParser()
+        try:
+            cp.readfp(Readrcfile(open(fpath)))
+            # cp.items(section_title)
+            for read_value in read_values:
+                result[read_value] = cp.get(section_title, read_value)
+            return result
+
+        except:
+            print "ERROR: Failed to read rc files. Please check you have valid \
+                    rcfiles in %s." % fpath
+            print sys.exc_info()
+            sys.exit(1)
+
+    # rcfile location
+    rcfile_path = dir + "/clouds/"
+    new_values = {}
+    for filepath in glob.glob(rcfile_path + "/*/*rc"):
+        filename = os.path.basename(filepath)
+        cloud_name = os.path.basename(os.path.normpath(filepath.replace(filename, "")))
+        new_values[cloud_name] = get_variables(filepath)
+    
+    for cloud in values['clouds']:
+        values['clouds'][cloud]['default'] = {}            
+        # Fill in credentials with real values
+        # This does not update me.yaml file. This will be done soon.
+        try:
+            for k, v in new_values[cloud].iteritems():
+                values['clouds'][cloud]['credential'][k] = new_values[cloud][k]
+        except:
+            pass
+   
 def deploy():
     """deploys the system on supported distributions"""
     # download()
@@ -350,7 +430,7 @@ def fetchrc(out_dir=None):
     print ""
     # Task 1. list portal user id
 
-    try
+    try:
         from cloudmesh.config.ConfigDict import ConfigDict
     except Exception, e:
         print "ERROR: your have not yet configured cloudmesh completely. "
