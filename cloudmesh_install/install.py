@@ -328,8 +328,44 @@ def get_fg_username_password_from_rcfiles():
             pass
 
     cloudmesh_out = dir + '/cloudmesh.yaml'
- 
-    file_from_template(cloudmesh_out, cloudmesh_out, values)
+
+    # file_from_template
+    # ------------------
+    # This is only for replacing variables in Jinja2 template.
+
+    # For example, {{clouds.openstack.credential}} is going to be replaced with
+    # values['clouds']['openstack']['credential']
+
+    # file_from_template(cloudmesh_out, cloudmesh_out, values)
+
+
+    # replace TBD in yaml
+    # -------------------
+    # 'cm-init fill' might do same thing
+    #
+    # In case yaml file contains TBD values, this logic replaces it with real
+    # values
+    # Similar to file_from_template but replace with TBD
+    try:
+        result = open(cloudmesh_out, 'r').read()
+        data = yaml.safe_load(Template(result).substitute(os.environ))
+    except Exception, e:
+        print "ERROR: There is an error in the yaml file", e
+        sys.exit(1)
+
+    # Update yaml if a value is TBD
+    # -----------------------------
+    # 'cm-init fill' might do same thing
+    for cloud_name, value in new_values.iteritems():
+        clouds_in_yaml = data['cloudmesh']['clouds']
+        if cloud_name in clouds_in_yaml:
+            credentials = clouds_in_yaml[cloud_name]['credentials']
+            for k, v in value.items():
+                if k in credentials and credentials[k] == "TBD":
+                    credentials[k] = v
+    # Write yaml
+    with open(cloudmesh_out, 'w') as outfile:
+        outfile.write(yaml.dump(data, default_flow_style=False))
    
 def deploy():
     """deploys the system on supported distributions"""
