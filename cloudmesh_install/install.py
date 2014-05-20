@@ -166,10 +166,12 @@ def new_cloudmesh_yaml():
         shutil.copy(file_from, file_to)
         os.chmod(file_to, stat.S_IRWXU)
         
-    
+    # Copy yaml files from etc directoy to the destination 
     for file_from in glob.glob("etc/*.yaml"):
         file_to = dir + "/" + file_from.replace("etc/", "")
         cp_urw(file_from, file_to)
+
+    # Copy me-none.yaml to me.yaml which is filled with TBD 
     cp_urw(dir + "/me-none.yaml", dir + "/me.yaml")
 
     # me_values = "etc/me-none.yaml"
@@ -287,6 +289,15 @@ def get_fg_username_password_from_rcfiles():
                     rcfiles in %s." % fpath
             print sys.exc_info()
             sys.exit(1)
+
+    # #######################################################
+    # MISSING PART IS HERE
+    # WE HAVE TO FILL THE me.yaml FILE WITH A REAL VALUE HERE
+    # #######################################################
+    
+    # me-all.yaml is correct one instead me-none.yaml
+    # to fill variables with template
+    # -----------------------------------------------
 
     dir = config_file("")
     me_file = dir + "/me.yaml"
