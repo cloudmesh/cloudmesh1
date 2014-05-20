@@ -68,7 +68,9 @@ def install_command(args):
         install new
         install apply_credentials
         install vagrant
-        install fetchrc
+        install rc fetch
+        install rc fill
+        install rc login
     
     """
     arguments = docopt(install_command.__doc__, args)
@@ -80,10 +82,7 @@ def install_command(args):
 
         new_cloudmesh_yaml()
 
-    elif arguments["apply_credentials"]:
-
-        get_fg_username_password_from_rcfiles()
-        
+       
     elif arguments["delete_yaml"]:
 
         answer = yn_choice("THIS COMMAND IS REAL DANGEROUS AND WILL DELETE ALL YOUR YAML FILE. Proceed", default='y')
@@ -120,8 +119,11 @@ def install_command(args):
     elif arguments["vagrant"]:
         vagrant()
 
-    elif arguments["fetchrc"]:
+    elif arguments["rc"] and arguments["fetch"]:
         fetchrc()
+
+    elif arguments["rc"] and arguments["fill"]:
+        get_fg_username_password_from_rcfiles()
 
 def new_cloudmesh_yaml():
 
@@ -161,15 +163,6 @@ def new_cloudmesh_yaml():
         os.chmod(file_to, stat.S_IRWXU)
         
     
-    def file_from_template(file_template, file_out, values):
-        content = open(file_template, 'r').read()
-        env = Environment(undefined=IgnoreUndefined)
-        template = env.from_string(content)
-        result = template.render(values)
-        out_file = open(file_out, 'w+')
-        out_file.write(result)
-        out_file.close()
-
     for file_from in glob.glob("etc/*.yaml"):
         file_to = dir + "/" + file_from.replace("etc/", "")
         cp_urw(file_from, file_to)
@@ -217,13 +210,22 @@ def new_cloudmesh_yaml():
     # print "# Values  : {0}".format(filename_values)
     # print "# Backup : {0}".format(filename_bak)            
 
+def file_from_template(file_template, file_out, values):
+    content = open(file_template, 'r').read()
+    env = Environment(undefined=IgnoreUndefined)
+    template = env.from_string(content)
+    result = template.render(values)
+    out_file = open(file_out, 'w+')
+    out_file.write(result)
+    out_file.close()
+
 def get_fg_username_password_from_rcfiles():
+    """
     rc_dir_location = {}
     # (hostname, loaction of dir on remote host, location of dir on localhost)
     rc_dir_location["india_openstack_havana"] = ("india.futuregird.org", "?", "?")
     rc_dir_location["sierra_openstack_grizzly"] = ("sierra.futuregrid.org", "?", "?")
 
-    """
     for label in rc_dir_location
         (host,dir) = rc_rdilocation(label)
         get rc file form the host and dir and copy to install_dir
@@ -282,6 +284,16 @@ def get_fg_username_password_from_rcfiles():
             print sys.exc_info()
             sys.exit(1)
 
+    dir = config_file("")
+    me_file = dir + "/me.yaml"
+
+    try:
+        result = open(me_file, 'r').read()
+        values = yaml.safe_load(Template(result).substitute(os.environ))
+    except Exception, e:
+        print "ERROR: There is an error in the yaml file", e
+        sys.exit(1)
+
     # rcfile location
     rcfile_path = dir + "/clouds/"
     new_values = {}
@@ -299,6 +311,10 @@ def get_fg_username_password_from_rcfiles():
                 values['clouds'][cloud]['credential'][k] = new_values[cloud][k]
         except:
             pass
+
+    cloudmesh_out = dir + '/cloudmesh.yaml'
+ 
+    file_from_template(cloudmesh_out, cloudmesh_out, values)
    
 def deploy():
     """deploys the system on supported distributions"""
@@ -430,6 +446,7 @@ def fetchrc(out_dir=None):
     print ""
     # Task 1. list portal user id
 
+    '''
     try:
         from cloudmesh.config.ConfigDict import ConfigDict
     except Exception, e:
@@ -444,11 +461,12 @@ def fetchrc(out_dir=None):
 
     config = ConfigDict(dir + "/me.yaml")
     userid = config["portalname"]
+    '''
     
-    # userid = getpass.getuser()
+    userid = getpass.getuser()
 
-    # userid = raw_input ("Please enter your portal user id [default: %s]: " %
-    #                   userid) or userid
+    userid = raw_input ("Please enter your portal user id [default: %s]: " %
+                       userid) or userid
 
     # Task 2. list hostnames to get access. In Futuregrid, india, sierra are
     # mandatory hosts to be included.
