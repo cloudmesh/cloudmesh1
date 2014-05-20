@@ -128,5 +128,6 @@ def mongo():
     user_obj = cm_user()
     user_obj.init_defaults(username)
 
-
-    info(username)
+    # info disabled due to
+    # NameError: global name 'info' is not defined
+    #info(username)
