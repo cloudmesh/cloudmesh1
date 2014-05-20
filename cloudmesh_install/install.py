@@ -281,7 +281,10 @@ def get_fg_username_password_from_rcfiles():
             cp.readfp(Readrcfile(open(fpath)))
             # cp.items(section_title)
             for read_value in read_values:
-                result[read_value] = cp.get(section_title, read_value)
+                tmp = cp.get(section_title, read_value)
+                if tmp.startswith("$"):
+                    tmp = cp.get(section_title, tmp[1:]) # without $ sign
+                result[read_value] = tmp
             return result
 
         except:
@@ -316,6 +319,7 @@ def get_fg_username_password_from_rcfiles():
         filename = os.path.basename(filepath)
         cloud_name = os.path.basename(os.path.normpath(filepath.replace(filename, "")))
         new_values[cloud_name] = get_variables(filepath)
+        print "[%s] loaded" % filepath
     
     for cloud in values['clouds']:
         values['clouds'][cloud]['default'] = {}            
@@ -366,6 +370,7 @@ def get_fg_username_password_from_rcfiles():
     # Write yaml
     with open(cloudmesh_out, 'w') as outfile:
         outfile.write(yaml.dump(data, default_flow_style=False))
+        print "[%s] updated" % cloudmesh_out
    
 def deploy():
     """deploys the system on supported distributions"""
