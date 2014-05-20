@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import with_statement
 from cloudmesh_install import config_file
 import glob
 import shutil
@@ -40,10 +41,10 @@ if not hasattr(sys, 'real_prefix'):
 
     
 try:
-    from fabric.api import local,task 
+    from fabric.api import local, task, get, settings 
 except:
     os.system("pip install fabric")
-    from fabric.api import local, task
+    from fabric.api import local, task, get, settings 
 
 try:
     from docopt import docopt
@@ -69,7 +70,7 @@ def install_command(args):
         install fetchrc
     
     """
-    arguments = docopt(install_command.__doc__,args)
+    arguments = docopt(install_command.__doc__, args)
 
     if arguments["cloudmesh"]:
         deploy()
@@ -105,7 +106,8 @@ def install_command(args):
 
         import platform
         print "System:    ", platform.system()
-        #print "Uname:     ", platform.uname()                                          print "Machine:   ", platform.machine()                        
+        # print "Uname:     ", platform.uname()                                          
+        print "Machine:   ", platform.machine()                        
         print "Processor: ", platform.processor()                
         print "Platform:  ", platform.platform()        
         print "Python:    ", platform.python_version()
@@ -137,7 +139,7 @@ def new_cloudmesh_yaml():
                 print "       The 'new' command will not overwrite files."
                 sys.exit(1)
     else:
-        os.makedirs(dir, stat.S_IRWXU )
+        os.makedirs(dir, stat.S_IRWXU)
 
     filename_tmp = dir + '/cloudmesh-new.yaml'
     cloudmesh_out = dir + '/cloudmesh.yaml'
@@ -159,12 +161,12 @@ def new_cloudmesh_yaml():
         env = Environment(undefined=IgnoreUndefined)
         template = env.from_string(content)
         result = template.render(values)
-        out_file=open(file_out, 'w+')
+        out_file = open(file_out, 'w+')
         out_file.write(result)
         out_file.close()
 
     for file_from in glob.glob("etc/*.yaml"):
-        file_to = dir + "/" + file_from.replace("etc/","")
+        file_to = dir + "/" + file_from.replace("etc/", "")
         cp_urw(file_from, file_to)
     cp_urw(dir + "/me-none.yaml", dir + "/me.yaml")
 
@@ -172,57 +174,13 @@ def new_cloudmesh_yaml():
     # me_template = "etc/me-all.yaml"
     me_file = dir + "/me.yaml"
 
-    ### Replace me.yaml with real values ###
-    class Readrcfile(object):
-        """ Read novarc, eucarc and store variables
-            with configparser
-
-            reference:
-            http://stackoverflow.com/questions/2819696/parsing-properties-file-in-python/2819788#2819788
-        """
-        def __init__(self, fp):
-           self.fp = fp
-           self.head = '[rcfile]\n'
-        def readline(self):
-            if self.head:
-                try: return self.head
-                finally: self.head = None
-            else: return self.fp.readline().replace("export ","")
-
-    def get_variables(fpath):
-        section_title = "rcfile"
-        read_values = ["OS_TENANT_NAME", "OS_PASSWORD"] # case-sensitive
-        result = {}
-
-        cp = SafeConfigParser()
-        try:
-            cp.readfp(Readrcfile(open(fpath)))
-            #cp.items(section_title)
-            for read_value in read_values:
-                result[read_value] = cp.get(section_title, read_value)
-            return result
-
-        except:
-            print "ERROR: Failed to read rc files. Please check you have valid \
-                    rcfiles in %s." % fpath
-            print sys.exc_info()
-            sys.exit(1)
-
-    # rcfile location
-    rcfile_path = dir + "/clouds/"
-    new_values = {}
-    for filepath in glob.glob(rcfile_path + "/*/*rc"):
-        filename = os.path.basename(filepath)
-        cloud_name = os.path.basename(os.path.normpath(filepath.replace(filename,"")))
-        new_values[cloud_name] = get_variables(filepath)
-
     try:
         # do simple yaml load
         
         result = open(me_file, 'r').read()
         values = yaml.safe_load(Template(result).substitute(os.environ))
-        #values = yaml.safe_load(Template(result).substitute(os.environ))
-        #print json.dumps(values, indent=4)
+        # values = yaml.safe_load(Template(result).substitute(os.environ))
+        # print json.dumps(values, indent=4)
         
     except Exception, e:
         print "ERROR: There is an error in the yaml file", e
@@ -246,20 +204,20 @@ def new_cloudmesh_yaml():
     banner(c="-")
             
 
-    #sys.exit()
+    # sys.exit()
     #
-    #format = "yaml"
-    #if format in ["json"]:
+    # format = "yaml"
+    # if format in ["json"]:
     #    result =  json.dumps(values, indent=4)    
-    #elif format in ["yaml", "yml"]:
+    # elif format in ["yaml", "yml"]:
     #    result = yaml.dump(values, default_flow_style=False)
-    #banner("done", c="-")
+    # banner("done", c="-")
 
 
     
-    #print "# Template: {0}".format(filename_template)
-    #print "# Values  : {0}".format(filename_values)
-    #print "# Backup : {0}".format(filename_bak)            
+    # print "# Template: {0}".format(filename_template)
+    # print "# Values  : {0}".format(filename_values)
+    # print "# Backup : {0}".format(filename_bak)            
     
     
 def deploy():
@@ -385,43 +343,59 @@ def vagrant():
     local("cd /tmp/vagrant; vagrant up")
     local("cd /tmp/vagrant; vagrant ssh")
 
-def fetchrc():
-
+def fetchrc(out_dir=None):
+    
     banner("download rcfiles (novarc, eucarc, etc) from IaaS platforms")
 
     print ""
-    # Task 1. list portal user id, maybe user input is good
-    userid = getpass.getuser()
+    # Task 1. list portal user id
 
-    userid = raw_input ("Please enter your portal user id [default: %s]: " %
-                       userid) or userid
+    try
+        from cloudmesh.config.ConfigDict import ConfigDict
+    except Exception, e:
+        print "ERROR: your have not yet configured cloudmesh completely. "
+        print "       Have you called"
+        print
+        print "          ./install cloudmesh"
+        print
+        sys.exit(1)
+
+    dir = config_file("")
+
+    config = ConfigDict(dir + "/me.yaml")
+    userid = config["portalname"]
+    
+    # userid = getpass.getuser()
+
+    # userid = raw_input ("Please enter your portal user id [default: %s]: " %
+    #                   userid) or userid
 
     # Task 2. list hostnames to get access. In Futuregrid, india, sierra are
     # mandatory hosts to be included.
-    host_ids = ["india_openstack_havana", "sierra_openstack_grizzly"] #TEMPORARY
+    host_ids = ["india_openstack_havana", "sierra_openstack_grizzly"]  # TEMPORARY
   
     # user input is disabled
-    #host_ids = raw_input("Please enter host identifications [default: %s]: "
+    # host_ids = raw_input("Please enter host identifications [default: %s]: "
     #                     % ", ".join(host_ids)) or host_ids
 
     if isinstance(host_ids, str):
-        host_ids = map(lambda x : x.strip(),host_ids.split(","))
+        host_ids = map(lambda x : x.strip(), host_ids.split(","))
 
     domain_name = ".futuregrid.org"
     hostnames = map(lambda x : x.split("_")[0] + domain_name, host_ids)
     
     key_path = "~/.ssh/id_rsa"
     # private key path is disabled
-    #key_path = raw_input("Please enter a path of the ssh private key to" + \
+    # key_path = raw_input("Please enter a path of the ssh private key to" + \
     #                     " login the hosts [default: %s]: " % key_path) or \
     #                    key_path
 
     try:
-        #cmd = "fab rcfile.download:userid='%s',host_ids='%s',key_path='%s'" \
+        # cmd = "fab rcfile.download:userid='%s',host_ids='%s',key_path='%s'" \
         cmd = "fab -H %s -u %s -i %s rcfile.download:'%s'" \
                 % (",".join(hostnames), userid, key_path,
                    "\,".join(host_ids))
-        #print cmd
+        # print cmd
         os.system(cmd)
     except:
         print sys.exc_info()
