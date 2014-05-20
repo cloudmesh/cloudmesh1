@@ -22,7 +22,7 @@ from cloudmesh_common.util import banner, path_expand, backup_name
 from util import is_ubuntu, is_centos, is_osx
 from cloudmesh_common.util import yn_choice
 from ConfigParser import SafeConfigParser
-
+from paramiko import SSHClient, AutoAddPolicy, WarningPolicy, BadHostKeyException, AuthenticationException, SSHException
 
 ######################################################################
 # STOP IF PYTHON VERSION IS NOT 2.7.5
@@ -68,9 +68,9 @@ def install_command(args):
         install new
         install apply_credentials
         install vagrant
-        install rc fetch
+        install rc fetch [--username=<username>] [--outdir=<outdir>]
         install rc fill
-        install rc login
+        install rc login [--username=<username>]
     
     """
     arguments = docopt(install_command.__doc__, args)
@@ -116,14 +116,18 @@ def install_command(args):
         print "Platform:  ", platform.platform()        
         print "Python:    ", platform.python_version()
         print "Virtualenv:", hasattr(sys, 'real_prefix')
+
     elif arguments["vagrant"]:
         vagrant()
 
     elif arguments["rc"] and arguments["fetch"]:
-        fetchrc()
+        fetchrc(arguments["--username"], arguments["--outdir"])
 
     elif arguments["rc"] and arguments["fill"]:
         get_fg_username_password_from_rcfiles()
+    
+    elif arguments["rc"] and arguments["login"]:
+        verify_ssh_login(arguments["--username"])
 
 def new_cloudmesh_yaml():
 
@@ -439,7 +443,7 @@ def vagrant():
     local("cd /tmp/vagrant; vagrant up")
     local("cd /tmp/vagrant; vagrant ssh")
 
-def fetchrc(out_dir=None):
+def fetchrc(userid=None, outdir=None):
     
     banner("download rcfiles (novarc, eucarc, etc) from IaaS platforms")
 
@@ -462,11 +466,11 @@ def fetchrc(out_dir=None):
     config = ConfigDict(dir + "/me.yaml")
     userid = config["portalname"]
     '''
-    
-    userid = getpass.getuser()
-
-    userid = raw_input ("Please enter your portal user id [default: %s]: " %
-                       userid) or userid
+   
+    if not userid:
+        userid = getpass.getuser()
+        userid = raw_input ("Please enter your portal user id [default: %s]: " %
+                           userid) or userid
 
     # Task 2. list hostnames to get access. In Futuregrid, india, sierra are
     # mandatory hosts to be included.
@@ -490,14 +494,33 @@ def fetchrc(out_dir=None):
 
     try:
         # cmd = "fab rcfile.download:userid='%s',host_ids='%s',key_path='%s'" \
-        cmd = "fab -H %s -u %s -i %s rcfile.download:'%s'" \
+        cmd = "fab -H %s -u %s -i %s rcfile.download:'%s','%s'" \
                 % (",".join(hostnames), userid, key_path,
-                   "\,".join(host_ids))
+                   "\,".join(host_ids), outdir)
         # print cmd
         os.system(cmd)
     except:
         print sys.exc_info()
         sys.exit(1)
+
+def verify_ssh_login(userid):
+    client = SSHClient()
+    client.load_system_host_keys()
+    #client.set_missing_host_key_policy(WarningPolicy)
+    client.set_missing_host_key_policy(AutoAddPolicy())
+
+    # TEST ONLY
+    hosts = ["india.futuregrid.org", "sierra.futuregrid.org"]
+    key = os.path.expanduser(os.path.join("~", ".ssh", "id_rsa"))
+    print "[key: %s]" % key
+    for host in hosts:
+        try:
+            client.connect(host,username=userid,key_filename=key)
+            client.close()
+            print "[%s] succeeded with %s" % (host, userid)
+        except (BadHostKeyException, AuthenticationException, SSHException) as e:
+            print sys.exc_info()
+            print e
 
 if __name__ == '__main__':
     install_command(sys.argv)
