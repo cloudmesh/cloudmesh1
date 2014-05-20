@@ -6,7 +6,7 @@ domain_name = "futuregrid.org"
 
 @task
 def download(host_ids, outdir):
-    if not outdir:
+    if outdir == "None":
         outdir = "~/.futuregrid/clouds/"
     # host_ids = india_openstack_havana,sierra_openstack_grizzly
     for host_id in host_ids.split(","):
