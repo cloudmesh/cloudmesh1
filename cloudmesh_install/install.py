@@ -504,6 +504,7 @@ def fetchrc(userid=None, outdir=None):
         sys.exit(1)
 
 def verify_ssh_login(userid):
+
     client = SSHClient()
     client.load_system_host_keys()
     #client.set_missing_host_key_policy(WarningPolicy)
@@ -513,14 +514,19 @@ def verify_ssh_login(userid):
     hosts = ["india.futuregrid.org", "sierra.futuregrid.org"]
     key = os.path.expanduser(os.path.join("~", ".ssh", "id_rsa"))
     print "[key: %s]" % key
+
+    if not userid:
+        userid = getpass.getuser()
+
     for host in hosts:
         try:
             client.connect(host,username=userid,key_filename=key)
             client.close()
-            print "[%s] succeeded with %s" % (host, userid)
+            print "[%s] succeeded with %s." % (host, userid)
         except (BadHostKeyException, AuthenticationException, SSHException) as e:
-            print sys.exc_info()
-            print e
+            #print sys.exc_info()
+            print ("[%s] %s with %s. Please check your ssh setup (e.g. key " + \
+            "files, id, known_hosts)") % (host, e, userid)
 
 if __name__ == '__main__':
     install_command(sys.argv)
