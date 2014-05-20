@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import with_statement
 from cloudmesh_install import config_file
 import glob
 import shutil
@@ -40,10 +41,10 @@ if not hasattr(sys, 'real_prefix'):
 
     
 try:
-    from fabric.api import local,task 
+    from fabric.api import local, task, get, settings 
 except:
     os.system("pip install fabric")
-    from fabric.api import local, task
+    from fabric.api import local, task, get, settings 
 
 try:
     from docopt import docopt
@@ -385,16 +386,32 @@ def vagrant():
     local("cd /tmp/vagrant; vagrant up")
     local("cd /tmp/vagrant; vagrant ssh")
 
-def fetchrc():
-
+def fetchrc(out_dir=None):
+    
     banner("download rcfiles (novarc, eucarc, etc) from IaaS platforms")
 
     print ""
-    # Task 1. list portal user id, maybe user input is good
-    userid = getpass.getuser()
+    # Task 1. list portal user id
 
-    userid = raw_input ("Please enter your portal user id [default: %s]: " %
-                       userid) or userid
+    try
+        from cloudmesh.config.ConfigDict import ConfigDict
+    except Exception, e:
+        print "ERROR: your have not yet configured cloudmesh completely. "
+        print "       Have you called"
+        print
+        print "          ./install cloudmesh"
+        print
+        sys.exit(1)
+
+    dir = config_file("")
+
+    config = ConfigDict(dir + "/me.yaml")
+    userid = config["portalname"]
+    
+    # userid = getpass.getuser()
+
+    #userid = raw_input ("Please enter your portal user id [default: %s]: " %
+    #                   userid) or userid
 
     # Task 2. list hostnames to get access. In Futuregrid, india, sierra are
     # mandatory hosts to be included.
