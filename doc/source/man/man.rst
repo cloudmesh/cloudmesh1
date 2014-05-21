@@ -43,6 +43,137 @@ Command - clear::
     
     Clears the screen.
 
+cloud
+----------------------------------------------------------------------
+
+Command - cloud::
+
+    Usage:
+        cloud NOTIMPLEMENTED list
+        cloud NOTIMPLEMENTED info [NAME|all]
+        cloud NOTIMPLEMENTED NAME
+        cloud NOTIMPLEMENTED select
+        cloud NOTIMPLEMENTED --on | --off NAME
+        cloud NOTIMPLEMENTED on NAME
+        cloud NOTIMPLEMENTED off NAME
+        cloud NOTIMPLEMENTED add [--format=FORMAT] CLOUD
+    
+    Manages the clouds
+    
+    Arguments:
+    
+      NAME           The name of a service or server
+      JSON           A JSON
+      CLOUD          The cloud to be added
+    
+    Options:
+    
+       -v       verbose mode
+       --on     Activate the cloud
+       --off    Deactivate the cloud
+       --format=FORMAT  The format of the activation description.
+                        [default: yaml]
+    Description:
+    
+        cloud list
+            Lists the cloud names
+    
+        cloud info [NAME]
+            Provides the available information about the clouds
+            and their status. A cloud can be activated or deactivated.
+            If no name is specified the default cloud is used.
+            If the name all is used, all clouds are displayed
+    
+        cloud NAME
+            setst the cloud with the name to the default
+    
+        cloud select
+            selects a cloud from the name of clouds
+    
+        cloud --on | --off NAME
+        cloud on NAME
+        cloud off NAME
+            activates or deactivates a cloud with a given name
+    
+        cloud add [--format=FORMAT] CLOUD
+            adds a cloud to the list of clouds.
+            The format can either be `json` or `yaml`.
+    
+
+count
+----------------------------------------------------------------------
+
+Command - count::
+
+    Usage:
+           count flavors [CLOUD...] NOTIMPLEMENTED
+           count servers [CLOUD...] NOTIMPLEMENTED
+           count images [CLOUD...] NOTIMPLEMENTED
+           count [CLOUD...] NOTIMPLEMENTED
+    
+    Arguments:
+    
+            CLOUD    the name of the cloud
+    
+    Options:
+    
+       -v       verbose mode
+    
+    Description:
+    
+      missing
+    
+      Seems this has not been implemented.
+    
+    
+
+defaults
+----------------------------------------------------------------------
+
+Command - defaults::
+
+    Usage:
+           defaults clean
+           defaults load
+           defaults [list] [--json]
+           defaults set variable value NOTIMPLEMENTED
+           defaults variable  NOTIMPLEMENTED
+           defaults format (json|table)  NOTIMPLEMENTED
+    
+    This manages the defaults associated with the user.
+    You can load, list and clean defaults associated with
+    a user and a cloud. The default parameters include
+    index, prefix, flavor and image.
+    
+    Arguments:
+    
+      CLOUD          The name of Cloud - this has to be implemented
+    
+    Options:
+    
+       -j --json      json output
+    
+    Description:
+    
+      defaults set a hallo
+    
+         sets the variable a to the value hallo
+         NOT YET IMPLEMENTED
+    
+      defaults a
+    
+         returns the value of the variable
+         NOT YET IMPLEMENTED
+    
+      default format json
+      default format table
+    
+         sets the default format how returns are printed.
+         if set to json json is returned,
+         if set to table a pretty table is printed
+         NOT YET IMPLEMENTED
+    
+
 dot2
 ----------------------------------------------------------------------
 
@@ -86,6 +217,36 @@ Command - exec::
     
     Arguments:
       FILENAME   The name of the file
+    
+    
+
+exp
+----------------------------------------------------------------------
+
+Command - exp::
+
+    Usage:
+           exp NOTIMPLEMENTED clean
+           exp NOTIMPLEMENTED delete NAME
+           exp NOTIMPLEMENTED create [NAME]
+           exp NOTIMPLEMENTED info [NAME]
+           exp NOTIMPLEMENTED cloud NAME
+           exp NOTIMPLEMENTED image NAME
+           exp NOTIMPLEMENTED flavour NAME
+           exp NOTIMPLEMENTED index NAME
+           exp NOTIMPLEMENTED count N
+    
+    Manages the vm
+    
+    Arguments:
+    
+      NAME           The name of a service or server
+      N              The number of VMs to be started
+    
+    
+    Options:
+    
+       -v       verbose mode
     
     
 
@@ -174,6 +335,131 @@ Command - init::
     
       init inspect --file=FILENAME
          print the variables in the yaml template
+    
+
+inventory
+----------------------------------------------------------------------
+
+Command - inventory::
+
+    Usage:
+           inventory NOTIMPLEMENTED clean
+           inventory NOTIMPLEMENTED create image DESCRIPTION
+           inventory NOTIMPLEMENTED create server [dynamic] DESCRIPTION
+           inventory NOTIMPLEMENTED create service [dynamic] DESCRIPTION
+           inventory NOTIMPLEMENTED exists server NAME
+           inventory NOTIMPLEMENTED exists service NAME
+           inventory NOTIMPLEMENTED
+           inventory NOTIMPLEMENTED print
+           inventory NOTIMPLEMENTED info [CLUSTER] [SERVER] [v]
+           inventory NOTIMPLEMENTED server NAME
+           inventory NOTIMPLEMENTED service NAME
+    
+    Manages the inventory
+    
+        clean       cleans the inventory
+        server      define servers
+    
+    Arguments:
+    
+      DESCRIPTION    The hostlist"i[009-011],i[001-002]"
+    
+      NAME           The name of a service or server
+    
+    
+    Options:
+    
+       v       verbose mode
+    
+    
+
+keys
+----------------------------------------------------------------------
+
+Command - keys::
+
+    Usage:
+           keys
+           keys info [--json] [NAME]
+           keys default NAME
+    
+    Manages the keys
+    
+    Arguments:
+    
+      NAME           The name of a key
+    
+    
+    Options:
+    
+       -v --verbose     verbose mode
+       -j --json        json output
+    
+    
+
+label
+----------------------------------------------------------------------
+
+Command - label::
+
+    Usage:
+           label [--prefix=PREFIX] [--id=ID] [--width=WIDTH]
+    
+    A command to set the prefix and id for creating an automatic lable for VMs.
+    Without paremeter it prints the currect label.
+    
+    Arguments:
+    
+      PREFIX     The prefix for the label
+      ID         The start ID which is an integer
+      WIDTH      The width of the ID in teh label, padded with 0
+    
+    Options:
+    
+       -v       verbose mode
+    
+    
+
+list
+----------------------------------------------------------------------
+
+Command - list::
+
+    Usage:
+           list flavors [CLOUD]
+           list servers [CLOUD]
+           list images [CLOUD]
+           list
+    
+           list NOTIMPLEMENTED flavors [CLOUD...]
+           list NOTIMPLEMENTED servers [CLOUD...]
+           list NOTIMPLEMENTED images [CLOUD...]
+           list NOTIMPLEMENTED [CLOUD...]
+    
+    Arguments:
+    
+            CLOUD    the name of the cloud
+    
+    Options:
+    
+       -v       verbose mode
+    
+    Description:
+    
+       missing
+    
+       This should be similar to the count command,
+       e.g. multiple clouds could be specified.
+    
+    
+
+login
+----------------------------------------------------------------------
+
+Command - login::
+
+    Usage:
+       login
     
 
 man
@@ -300,6 +586,30 @@ Command - plugins::
     
     activates the plugins.
 
+project
+----------------------------------------------------------------------
+
+Command - project::
+
+    Usage:
+           project NOTIMPLEMENTED json info [NAME]
+           project NOTIMPLEMENTED info [NAME]
+           project NOTIMPLEMENTED members
+           project NOTIMPLEMENTED default NAME
+    
+    Manages the project
+    
+    Arguments:
+    
+      NAME           The name of a service or server
+    
+    
+    Options:
+    
+       -v       verbose mode
+    
+    
+
 py
 ----------------------------------------------------------------------
 
@@ -409,6 +719,22 @@ Command - rain::
         --format=FORMAT        Format of the output json, cfg. [default:json]
     
     
+    
+
+reg
+----------------------------------------------------------------------
+
+Command - reg::
+
+    Usage:
+      reg NOTIMPLEMENTED [options] NAME
+    
+    Arguments:
+      NAME      Name of the cloud to be registered
+    
+    Options:
+      -a --act      Activate the cloud to be registered
+      -d --deact    Deactivate the cloud
     
 
 script
@@ -615,4 +941,37 @@ Command - version::
        version
     
     Prints out the version number
+    
+
+vm
+----------------------------------------------------------------------
+
+Command - vm::
+
+    Usage:
+      vm create [--count=<count>]
+                [--image=<imgName>]
+                [--flavor=<FlavorId>]
+                [--cloud=<CloudName>]
+      vm delete [[--count=<count>] | [--name=<NAME>]]
+                [--cloud=<CloudName>]
+      vm cloud [--name=<NAME>]
+      vm image [--name=<NAME>]
+      vm flavor [--name=<NAME>]
+      vm index [--index=<index>]
+      vm info [--verbose | --json] [--name=<NAME>]
+      vm list [--verbose | --json] [--cloud=<CloudName>]
+    
+    Arguments:
+      NAME name of the VM
+    
+    Options:
+       -v --verbose                         verbose mode
+       -j --json                            json output
+       -x <count> --count=<count>           number of VMs
+       -n <NAME> --name=<NAME>              Name of the VM
+       -c <CloudName> --cloud=<CloudName>   Name of the Cloud
+       -i <index> --index=<index>           Index for default VM Name
+       --img=<imgName>                      Name of the image for VM
+       -f <FlavorId> --flavor=<FlavorId>    Flavor Id for VM
     
