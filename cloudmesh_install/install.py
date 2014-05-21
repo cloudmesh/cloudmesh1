@@ -501,7 +501,7 @@ def vagrant():
     dirname = local("mktemp", capture=True)
     dirname = dirname + "/vagrant"
     local("rm -rf %s" % dirname)
-    local("mkdir -p %s" % dirname
+    local("mkdir -p %s" % dirname)
     local("cd %s; git clone git@github.com:cloudmesh/cloudmesh.git" % dirname)
     local("cd %s; vagrant init ubuntu-14.04-server-amd64" % dirname)
     local("cd %s; vagrant up" % dirname)
