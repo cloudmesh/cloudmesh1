@@ -12,6 +12,7 @@ import sys
 from cloudmesh_common.tables import parse_time_interval
 from cloudmesh_common.util import not_implemented
 
+
 def print_policys(policys, flag_merge=True):
     if flag_merge:
         for user in policys:
@@ -27,11 +28,42 @@ def print_progress(label, hosts, data):
         print "\tEmpty records."
     else:
         if label in ["failed", "unknown"]:
-            print "host list: ", hostlist.collect_hostlist(hosts)
+            print "\thost list: ", hostlist.collect_hostlist(hosts)
         else:
             for host in hosts:
                 print "\t{0}\t{1}%".format(host, data[host]["progress"])
 
+def filtered_hosts_based_baremetal(raw_hosts):
+    """filtered hosts based on baremetal computers
+    """
+    # wrapper
+    wrapper = RainCobblerWrapper()
+    input_hosts = hostlist.expand_hostlist(raw_hosts)
+    bm_hosts = wrapper.baremetal_computer_host_list()
+    return [h for h in input_hosts if h in bm_hosts] if bm_hosts else []
+
+def filtered_hosts_based_policy(user, projects, hosts):
+    """filtered hosts based on policy of the user and his/her projects
+    """
+    # wrapper
+    wrapper = RainCobblerWrapper()
+    policy = wrapper.get_policy_based_user_or_its_projects(user, projects)
+    policy_hosts = hostlist.expand_hostlist(policy) if policy else None
+    return [h for h in hosts if h in policy_hosts] if policy_hosts else []
+    
+def filtered_access_hosts(raw_hosts):
+    """filter hosts that user can access
+    :return: a dict with the formation {"access": [], "unaccess": []}
+    """
+    valid_bm_hosts = filtered_hosts_based_baremetal(raw_hosts)
+    user = "XXX"  # FIXME, try to get username
+    projects = ["XXX"]  # FIXME, try to get projcts that user belongs to
+    #policy_hosts = filtered_hosts_based_policy(user, projects, valid_bm_hosts)
+    policy_hosts = valid_bm_hosts    # ONLY for test, MUST be replaced by the above line
+    all_hosts = hostlist.expand_hostlist(raw_hosts)
+    unaccess_hosts = [h for h in all_hosts if h not in policy_hosts]
+    return {"access": policy_hosts, "unaccess": unaccess_hosts,}
+    
 def rain_command(arguments):
     """
     Usage:
@@ -54,13 +86,13 @@ def rain_command(arguments):
                           (-l HOSTS|-n COUNT)
                           [--start=TIME_START]
                           [--end=TIME_END]
-        rain list [--project=PROJECTS] [HOSTS]    
-        rain list hosts [--start=TIME_START]
+        rain user list [--project=PROJECTS] [HOSTS]    
+        rain user list hosts [--start=TIME_START]
                         [--end=TIME_END]
                         [--format=FORMAT]
         rain status [--short|--summary][--kind=KIND] [HOSTS]
         rain provision --profile=PROFILE HOSTS
-        rain provision list (--distro=DISTRO|--kickstart=KICKSTART)
+        rain provision list [--type=TYPE] (--distro=DISTRO|--kickstart=KICKSTART)
         rain provision --distro=DITRO --kickstart=KICKSTART HOSTS
         rain provision add (--distro=URL|--kickstart=KICk_CONTENT) NAME
         rain provision power [--off] HOSTS
@@ -71,6 +103,7 @@ def rain_command(arguments):
         LABEL     the label of a host
         COUNT     the count of the bare metal provisioned hosts
         KIND      the kind
+        TYPE      the type of profile or server
 
     Options:
         -n COUNT     count of teh bare metal hosts to be provisined
@@ -89,6 +122,7 @@ def rain_command(arguments):
                                the start time. [default: +1d]
         --kind=KIND            Format of the output -png, jpg, pdf. [default:png]
         --format=FORMAT        Format of the output json, cfg. [default:json]
+        --type=TYPE            Format of the output profile, server. [default:server]
 
 
     """
@@ -102,9 +136,10 @@ def rain_command(arguments):
         except:
             pass
     """
-    #print(arguments)
+    print(arguments)
+    # wrapper
     wrapper = RainCobblerWrapper()
-
+    
     """
     rain admin on HOSTS
     rain admin off HOSTS
@@ -241,19 +276,20 @@ def rain_command(arguments):
     elif arguments["status"]:
             print "status"
             if arguments["--short"]:
-                status_dict = wrapper.get_status_short(arguments[HOSTS])
+                status_dict = wrapper.get_status_short(arguments["HOSTS"])
                 if status_dict:
                     for host in sorted(status_dict.keys()):
-                        print "{0}\t{1}".format(host, status_dict[host])
+                        print "{0:16}\t{1}".format(host, status_dict[host])
                 else:
                     print "Empty"
             if arguments["--summary"]:
-                status_dict = wrapper.get_status_short(arguments[HOSTS])
+                status_dict = wrapper.get_status_summary(arguments["HOSTS"])
                 if status_dict:
                     for deploy_status in ["deployed", "deploying", "failed", "total", ]:
-                        print "{0}\t{1}".format(deploy_status, status_dict[deploy_status])
+                        print "{0:16}\t{1}".format(deploy_status, status_dict[deploy_status])
                 
-    elif arguments["list"]:
+    elif arguments["user"]:
+        if arguments["list"]:
             print "user list"
 
             (time_start, time_end) = parse_time_interval(arguments["--start"],
@@ -270,22 +306,43 @@ def rain_command(arguments):
         print "provision a node..."
         if arguments["list"]:
             #print "this will list distro or kickstart info"
-            print "this will servers based on distro or kickstart info"
-            servers = wrapper.list_system_based_distro_kickstart(arguments["DISTRO"], arguments["KICKSTART"])
-            print "matched servers: {0}".format(servers)
+            if arguments["--type"] == "profile":
+                print "this will list profiles based on distro or kickstart info"
+                profiles = wrapper.list_profile_based_distro_kickstart(arguments["--distro"], arguments["--kickstart"])
+                print "matched profiles: {0}".format(profiles)
+            else:
+                print "this will list servers based on distro or kickstart info"
+                servers = wrapper.list_system_based_distro_kickstart(arguments["--distro"], arguments["--kickstart"])
+                print "matched servers: {0}".format(servers)
         elif arguments["add"]:
             print "add a new distro or kickstart"
             not_implemented()
         elif arguments["power"]:
             print "power ON/OFF a host..."
-            result = wrapper.power_host(arguments["HOSTS"], not arguments["--off"])
+            # pre-process hosts which user can access
+            if arguments["HOSTS"]:
+                all_hosts = filtered_access_hosts(arguments["HOSTS"])
+                access_hosts = all_hosts["access"]
+                unaccess_hosts = all_hosts["unaccess"]
+            if unaccess_hosts:
+                print "You can NOT access these hosts: {0}, please contact your admin.".format(hostlist.collect_hostlist(unaccess_hosts))
+            result = wrapper.power_host(access_hosts, not arguments["--off"])
             power_hosts = [h for h in sorted(result.keys()) if result[h]]
             unknown_hosts = [h for h in sorted(result.keys()) if not result[h]]
-            print "power hosts: ", power_hosts
-            print "unknow hosts, must deploy first: ", unknow_hosts
+            if unknown_hosts:
+                print "unknow hosts, must deploy first: ", hostlist.collect_hostlist(hostlist.collect_hostlist(unknown_hosts))
+            if power_hosts:
+                print "call [rain provision monitor {0}] to monitor power progress.".format(hostlist.collect_hostlist(power_hosts))
         elif arguments["monitor"]:
             print "monitor progress of a host..."
-            result = wrapper.monitor_host(arguments["HOSTS"])
+            # pre-process hosts which user can access
+            if arguments["HOSTS"]:
+                all_hosts = filtered_access_hosts(arguments["HOSTS"])
+                access_hosts = all_hosts["access"]
+                unaccess_hosts = all_hosts["unaccess"]
+            if unaccess_hosts:
+                print "You can NOT access these hosts: {0}, please contact your admin.".format(hostlist.collect_hostlist(unaccess_hosts))
+            result = wrapper.monitor_host(access_hosts)
             poweron_hosts = [h for h in sorted(result.keys()) if result[h]["status"] == "poweron"]
             poweroff_hosts = [h for h in sorted(result.keys()) if result[h]["status"] == "poweroff"]
             deploy_hosts = [h for h in sorted(result.keys()) if result[h]["status"] == "deploy"]
@@ -297,10 +354,21 @@ def rain_command(arguments):
             print_progress("failed", failed_hosts, result)
             print_progress("unknown", unknown_hosts, result)
         else:
+            # pre-process hosts which user can access
+            if arguments["HOSTS"]:
+                all_hosts = filtered_access_hosts(arguments["HOSTS"])
+                access_hosts = all_hosts["access"]
+                unaccess_hosts = all_hosts["unaccess"]
+            if unaccess_hosts:
+                    print "You can NOT access these hosts: {0}, please contact your admin.".format(hostlist.collect_hostlist(unaccess_hosts))
             if arguments["--profile"]:
-                wrapper.provision_host_with_profile(arguments["PROFILE"], arguments["HOSTS"])
+                if access_hosts:
+                    wrapper.provision_host_with_profile(arguments["--profile"], access_hosts)
+                    print "call [rain provision monitor {0}] to monitor depoy progress.".format(hostlist.collect_hostlist(access_hosts))
             elif arguments["--distro"] and arguments["--kickstart"]:
-                wrapper.provision_host_with_distro_kickstart(arguments["DISTRO"], arguments["KICKSTART"], arguments["HOSTS"])
+                if access_hosts:
+                    wrapper.provision_host_with_distro_kickstart(arguments["--distro"], arguments["--kickstart"], access_hosts)
+                    print "call [rain provision monitor {0}] to monitor deploy progress.".format(hostlist.collect_hostlist(access_hosts))
 
 def main():
     arguments = docopt(rain_command.__doc__)
