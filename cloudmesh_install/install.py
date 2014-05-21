@@ -481,19 +481,31 @@ def osx():
     # install_mongodb()
 
 def sphinx_updates():
-    local('rm -rf /tmp/install-cloudmesh')
-    local('mkdir -p /tmp/install-cloudmesh')
-    local('cd /tmp/install-cloudmesh; hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/')
-    local('~/ENV/bicd /tmp/install-cloudmesh/sphinx-contrib/autorun; python setup.py install')
+    # *mktemp* should be applied to get a unique directory name to a user
+    # who runs this function.
+    # Otherwise, if there are ohter users who run this command as well, 
+    # permission conflict will occur when it trys to write or delete 
+    # the directory
+    dirname = local("mktemp", capture=True)
+    dirname = dirname + "/install-cloudmesh"
+    local('rm -rf %s' % dirname)
+    local('mkdir -p %s' % dirname)
+    local('cd %s; hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/' %
+          dirname)
+    local('~/ENV/bicd %s/sphinx-contrib/autorun; python setup.py install' %
+          dirname)
 
         
 def vagrant():
-    local("rm -rf /tmp/vagrant")
-    local("mkdir -p /tmp/vagrant")
-    local("cd /tmp/vagrant; git clone git@github.com:cloudmesh/cloudmesh.git")
-    local("cd /tmp/vagrant; vagrant init ubuntu-14.04-server-amd64")
-    local("cd /tmp/vagrant; vagrant up")
-    local("cd /tmp/vagrant; vagrant ssh")
+    # applied mktemp like sphinx_updates
+    dirname = local("mktemp", capture=True)
+    dirname = dirname + "/vagrant"
+    local("rm -rf %s" % dirname)
+    local("mkdir -p %s" % dirname
+    local("cd %s; git clone git@github.com:cloudmesh/cloudmesh.git" % dirname)
+    local("cd %s; vagrant init ubuntu-14.04-server-amd64" % dirname)
+    local("cd %s; vagrant up" % dirname)
+    local("cd %s; vagrant ssh" % dirname)
 
 def fetchrc(userid=None, outdir=None):
     
