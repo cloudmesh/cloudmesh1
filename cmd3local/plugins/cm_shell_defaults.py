@@ -12,8 +12,8 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
 from pprint import pprint
-from cloudmesh.util.logger import LOGGER
-from cloudmesh.util.util import two_column_table
+from cloudmesh_common.logger import LOGGER
+from cloudmesh_common.tables import two_column_table
 import docopt
 
 

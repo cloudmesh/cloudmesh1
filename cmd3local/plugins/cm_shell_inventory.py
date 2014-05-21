@@ -6,11 +6,10 @@ import sys
 import importlib
 from cmd3.shell import command
 from pprint import pprint
-
-from cloudmesh.util.logger import LOGGER
 from cloudmesh.inventory.inventory import Inventory
 from mongoengine import *
 
+from cloudmesh_common.logger import LOGGER
 log = LOGGER(__file__)
 
 

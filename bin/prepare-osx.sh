@@ -1,7 +1,7 @@
 echo "# #####################################################################"
 echo "# preparing OSX for cloudmesh" 
 echo "# #####################################################################"
-echo "not yet implemented"
+echo "WARNING: not yet tested"
 
 echo "# ----------------------------------------------------------------------"
 echo "# set the ARCHFLAG to ignore non existing flags"

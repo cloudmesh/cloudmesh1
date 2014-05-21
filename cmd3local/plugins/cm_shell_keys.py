@@ -9,8 +9,9 @@ from pprint import pprint
 from cmd3.shell import command
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_keys import cm_keys
-from cloudmesh.util.logger import LOGGER
-from cloudmesh.util.util import two_column_table
+
+from cloudmesh_common.logger import LOGGER
+from cloudmesh_common.tables import two_column_table
 
 log = LOGGER(__file__)
 

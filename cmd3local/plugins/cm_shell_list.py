@@ -7,11 +7,12 @@ import importlib
 from cmd3.shell import command
 import cloudmesh
 from pprint import pprint
-from cloudmesh.util.logger import LOGGER
+
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
 from prettytable import PrettyTable
 
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 

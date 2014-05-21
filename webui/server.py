@@ -13,7 +13,15 @@ from flask.ext.login import LoginManager, login_user, logout_user, \
     login_required, current_user, UserMixin, login_required
 from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
     identity_changed, Permission, identity_loaded, RoleNeed, UserNeed
-from flask.ext.wtf import Form, TextField, PasswordField, Required, Email
+
+from flask.ext.wtf import Form
+from wtforms.fields import TextField, BooleanField, PasswordField
+from wtforms.validators import Required
+
+from cloudmesh_common.logger import LOGGER
+
+
+
 from flask.ext.principal import Permission, RoleNeed
 # from cloudmesh.experiment.cm_experiment_db import cm_experiment_db
 
