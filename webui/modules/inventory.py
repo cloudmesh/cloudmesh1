@@ -9,7 +9,7 @@ inventory_module = Blueprint('inventory_module', __name__)
 
 from cloudmesh.inventory import Inventory
 
-from cloudmesh_common.util import table_printer
+from cloudmesh_common.tables import table_printer
 from cloudmesh_common.util import cond_decorator
 from cloudmesh.config.cm_config import cm_config_server
 

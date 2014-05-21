@@ -131,6 +131,8 @@ The following options are available::
     var delete NAME
     var NAME=VALUE
 
+See also: :doc:`/man/man.html#var`
+
 Defaults
 ----------------------------------------------------------------------
 

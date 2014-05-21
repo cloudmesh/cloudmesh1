@@ -1,3 +1,4 @@
+from cloudmesh_common.logger import LOGGER
 import types
 import textwrap
 from docopt import docopt
@@ -5,7 +6,7 @@ import inspect
 import sys
 import importlib
 from cmd3.shell import command
-from cloudmesh.util.logger import LOGGER
+
 
 log = LOGGER(__file__)
 

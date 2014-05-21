@@ -6,7 +6,7 @@ import sys
 import importlib
 from cmd3.shell import command
 
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
