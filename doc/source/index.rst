@@ -18,19 +18,18 @@ Cloudmesh
    appendix
 
 
-.. comment::
 
-   Indices and tables
-   ==================
+Indices and tables
+==================
 
-   * :ref:`genindex`
-   * :ref:`modindex`
-   * :ref:`search`
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 
-   Modules
-   ======================================================================
+Modules
+======================================================================
 
-   .. toctree::
-      :maxdepth: -1
+.. toctree::
+   :maxdepth: -1
 
-     modules/modules
+   modules/modules
