@@ -174,14 +174,17 @@ Preparing the system
 ----------------------------------------------------------------------
 
 On a vanilla operating system a couple of packages and tools need to
-be installed. For ubuntu and other OSes we have provided a smple
-script that prepare the system.
+be installed. For ubuntu and other OSes we have provided a simple
+script that prepares the system.
 
 
-For ubuntu systems there is a ready-made to get all the pre-requisites
-install. To run this script do ::
+For ubuntu systems there is a ready-made script to get all the 
+pre-requisites install. To run this script do ::
 
     $ ./install system
+
+    Note. 
+    This command must be run as root or with superuser privileges. 
 
 This will make sure all requirements are fulfilled and the cloudmesh
 programs are installed in your environment.
