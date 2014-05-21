@@ -71,7 +71,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Cloudmesh'
-copyright = u'2013, Gregor von Laszewski for  FutureGrid'
+copyright = u'2014, 2013, Gregor von Laszewski for  FutureGrid'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -329,7 +329,7 @@ texinfo_documents = [
 epub_title = u'Cloudmesh Plan'
 epub_author = u'Gregor von Laszewski'
 epub_publisher = u'Gregor von Laszewski'
-epub_copyright = u'2013, Gregor von Laszewski'
+epub_copyright = u'2014, 2013, Gregor von Laszewski'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.
