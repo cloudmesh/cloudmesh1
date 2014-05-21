@@ -29,9 +29,17 @@ def get_mongo_db(mongo_collection):
     username = config["username"]
     password = config["password"]
 
-    uri = "mongodb://{0}:{1}@{2}:{3}/{4}".format(username, password, host, port, db_name)
+    if username and password:
+        uri = "mongodb://{0}:{1}@{2}:{3}/{4}".format(username, password, host, port, db_name)
+    else:
+        uri = "mongodb://{2}:{3}/{4}".format(username, password, host, port, db_name)
 
-    client = MongoClient(uri)
+    try:
+        client = MongoClient(uri)
+    except:
+        print uri
+        print sys.exc_info()
+        return
 
     db = client[db_name]
     return db[mongo_collection]

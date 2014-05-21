@@ -11,13 +11,13 @@ cloudmesh:
         uid: {{ profile.uid }}
         lastname: {{ profile.lastname }}
         phone: {{ profile.phone }}
-        username: {{ portalname }}
+        username: {{ username.portal }}
     active:
     - sierra_openstack_grizzly
     - hp
     - hp_east
     hpc:
-        username: {{ portalname }}
+        username: {{ username.portal }}
     clouds:
         alamo:
             cm_host: alamo.futuregrid.org
@@ -33,7 +33,7 @@ cloudmesh:
                 EC2_ACCESS_KEY: {{ clouds.alamo.credential.EC2_ACCESS_KEY }}
                 EC2_SECRET_KEY: {{ clouds.alamo.credential.EC2_SECRET_KEY }}
                 keyname: cloudmesh
-                userid: {{ portalname }}
+                userid: {{ username.portal }}
             default:
                 flavor: {{ clouds.alamo.default.flavor }}
                 image: {{ clouds.alamo.default.image }}
@@ -50,7 +50,7 @@ cloudmesh:
                 EC2_SECRET_KEY: {{ clouds.india_eucalyptus.credential.EC2_SECRET_KEY }}
                 EC2_PRIVATE_KEY: $HOME/.futuregrid/india/pk.pem
             keyname: cloudmesh
-            userid: {{ portalname }}
+            userid: {{ username.portal }}
             default:
                 flavor: {{ clouds.india_eucalyptus.default.flavor }}
                 image: {{ clouds.india_eucalyptus.default.image }}
@@ -65,7 +65,7 @@ cloudmesh:
                 OS_CACERT: /home/cloudmesh/.futuregrid/india-havana-cacert.pem
                 OS_PASSWORD: {{ clouds.india_openstack_havana.credential.OS_PASSWORD }}
                 OS_TENANT_NAME: {{ clouds.india_openstack_havana.credential.OS_TENANT_NAME }}
-                OS_USERNAME: {{ portalname }}
+                OS_USERNAME: {{ username.portal }}
                 OS_VERSION: havana
             default:
                 flavor: {{ clouds.india_openstack_havana.default.flavor }}
@@ -81,7 +81,7 @@ cloudmesh:
                 OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
                 OS_PASSWORD: {{ clouds.sierra_openstack_grizzly.credential.OS_PASSWORD }}
                 OS_TENANT_NAME: {{ clouds.sierra_openstack_grizzly.credential.OS_TENANT_NAME }}
-                OS_USERNAME: {{ portalname }}
+                OS_USERNAME: {{ username.portal }}
                 OS_VERSION: grizzly
             default:
                 flavor: {{ clouds.sierra_openstack_grizzly.default.flavor }}
@@ -137,7 +137,7 @@ cloudmesh:
                 EC2_ACCESS_KEY: {{ clouds.aws.credential.access_key_id }}
                 EC2_SECRET_KEY: {{ clouds.aws.credential.secret_access_key }}
                 keyname: cloudmesh
-                userid: {{ clouds.aws.userid }}
+                userid: {{ clouds.aws.credential.userid }}
                 EC2_PRIVATE_KEY: $HOME/.futuregrid/aws_pk.pem
             default:
                 flavor: {{ clouds.aws.default.flavor }}
