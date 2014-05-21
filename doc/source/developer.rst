@@ -455,16 +455,9 @@ to work right.
 Starting the Web Service
 ----------------------------------------------------------------------
 
-To start a service you can use::
-
-   fab server.start:/provision/summary/
-
-Which starts the server and goes to the provision summary page. If you
-just use::
+To start a service you can use. It will be just starting at the home page. ::
 
    fab server.start
-
-It will be just starting at the home page.
 
 
 Starting and testing the Queue Service
