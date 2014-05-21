@@ -22,7 +22,7 @@ from cloudmesh.user.cm_user import cm_user
 from cmd3.shell import command
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 

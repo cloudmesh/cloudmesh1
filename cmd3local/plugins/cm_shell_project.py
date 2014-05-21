@@ -79,12 +79,12 @@ class cm_shell_project:
                     print "%10s:" % "default ", \
                           "default is not set, please set it"
                 if len(self.projects.names("active")) > 0:
-                    print "%10s:" % "projects", ' '
-                    .join(self.projects.names("active"))
+                    print "%10s:" % "projects", 
+                    ' '.join(self.projects.names("active"))
 
                 if len(self.projects.names("completed")) > 0:
-                    print "%10s:" % "completed", ' '
-                    .join(self.projects.names("completed"))
+                    print "%10s:" % "completed", 
+                    ' '.join(self.projects.names("completed"))
                 print
 
             return
