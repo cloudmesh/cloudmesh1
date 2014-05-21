@@ -481,12 +481,12 @@ def osx():
     # install_mongodb()
 
 def sphinx_updates():
-    # *mktemp* should be applied to get a unique directory name to a user
+    # *mktemp -d* should be applied to get a unique directory name to a user
     # who runs this function.
     # Otherwise, if there are ohter users who run this command as well, 
     # permission conflict will occur when it trys to write or delete 
     # the directory
-    dirname = local("mktemp", capture=True)
+    dirname = local("mktemp -d", capture=True)
     dirname = dirname + "/install-cloudmesh"
     local('rm -rf %s' % dirname)
     local('mkdir -p %s' % dirname)
@@ -498,7 +498,7 @@ def sphinx_updates():
         
 def vagrant():
     # applied mktemp like sphinx_updates
-    dirname = local("mktemp", capture=True)
+    dirname = local("mktemp -d", capture=True)
     dirname = dirname + "/vagrant"
     local("rm -rf %s" % dirname)
     local("mkdir -p %s" % dirname)
