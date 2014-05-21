@@ -1,17 +1,3 @@
-.. raw:: html
-
-   <herounit> 
-	 Gregor 
-
-	 jfglkjdsafhk
-
-
-	 jhfsljkfdlkdjfhl
-
-
-	 dkhsfjdhdsfjlgkhdsjl
-
-   </herounit>
 
 ######################################################################
 Cloudmesh 
@@ -32,17 +18,19 @@ Cloudmesh
    appendix
 
 
-Indices and tables
-==================
+.. comment::
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   Indices and tables
+   ==================
 
-Modules
-======================================================================
+   * :ref:`genindex`
+   * :ref:`modindex`
+   * :ref:`search`
 
-.. toctree::
-   :maxdepth: -1
+   Modules
+   ======================================================================
 
-  modules/modules
+   .. toctree::
+      :maxdepth: -1
+
+     modules/modules
