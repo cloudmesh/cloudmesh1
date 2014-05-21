@@ -65,9 +65,31 @@ class BaremetalPolicy:
         result = self.db_client.remove(elem)
         return result["result"]
     
+    def get_policy_based_user_or_its_projects(self, user, projects):
+        """get the merged policy based on the username and his/her related projects
+        :param string user: only one valid username
+        :param list projects: a list of project
+        :return: a policy with hostlist string, or None if non-exist policy for user and its projects
+        """
+        user_policy = self.get_policy_based_user(user)
+        group_policy = self.get_policy_based_group(collect_hostlist(projects))
+        if user_policy or group_policy:
+            if user_policy:
+                valid_policy = user_policy
+                if group_policy:
+                    valid_policy.update(group_policy)
+            else:
+                valid_policy = group_policy
+        else:
+            return None
+        all_policys = []
+        for name in valid_policy:
+            all_policys.extend(expand_hostlist(valid_policy[name]))
+        return collect_hostlist(list(set(all_policys)))
+    
     def get_policy_based_user(self, user):
         """get all the policies for a user
-        :param string user: a username
+        :param string user: a username with hostlist formation
         :return: a dict of user and policy with the formation {"name1": "hostlist", "name2": "hostlist2"}
         """
         policys = self.get_all_user_policy()
@@ -75,7 +97,7 @@ class BaremetalPolicy:
     
     def get_policy_based_group(self, group):
         """get all the policies for a group/project
-        :param string user: a group/project
+        :param string group: a group/project with hostlist formation
         :return: a dict of group and policy with the formation {"name1": "hostlist", "name2": "hostlist2"}
         """
         policys = self.get_all_group_policy()

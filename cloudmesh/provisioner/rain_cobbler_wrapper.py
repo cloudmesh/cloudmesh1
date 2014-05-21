@@ -73,6 +73,11 @@ class RainCobblerWrapper:
         """
         return self.policy.get_policy_based_group(raw_projects)
         
+    def get_policy_based_user_or_its_projects(self, user, projects):
+        """get the merged policy based on the username and his/her related projects
+        """
+        return self.policy.get_policy_based_user_or_its_projects(user, projects)
+        
     def add_user_policy(self, raw_users, raw_hosts):
         """add a new policy for user
         provided for **rain admin policy --user=USERS -l HOSTS**
@@ -111,12 +116,12 @@ class RainCobblerWrapper:
         hosts = expand_hostlist(raw_hosts) if raw_hosts else None
         return self.status.get_status_summary(hosts)
     
-    def provision_host_with_profile(self, profile, raw_hosts):
+    def provision_host_with_profile(self, profile, hosts):
         """
         baremetal provision host in raw_hosts with profile defined in cobbler. 
         provided for **rain provision --profile=PROFILE HOSTS**
         :param string profile: the name of cobbler profile
-        :param string raw_hosts: one or more hosts with the valid formation of hostlist
+        :param list hosts: a list of host ["host1", "host2",]
         :return: a dict, formation is {"result": True|False, "description": "details"}
         """
         FIELD_DESC = "description"
@@ -124,12 +129,13 @@ class RainCobblerWrapper:
         # check the exist of the profile
         profiles = self.rest_api.get_cobbler_profile_list()
         if profile in profiles:
-            hosts = expand_hostlist(raw_hosts)
-            log.debug("after expand, raw_hosts {0} is: {1}".format(raw_hosts, hosts))
+            #hosts = expand_hostlist(raw_hosts)
+            #log.debug("after expand, raw_hosts {0} is: {1}".format(raw_hosts, hosts))
             systems = self.rest_api.get_cobbler_system_list()
             # check the system named host exist in cobbler or not
             not_exist_hosts = [h for h in hosts if h not in systems]
             already_exist_hosts = [h for h in hosts if h in systems]
+            log.debug("hosts is: {0}, systems is: {1}, not_exist_hosts is {2}, already_exist is {3}".format(hosts, systems, not_exist_hosts, already_exist_hosts))
             result = True
             # create system with profile for host in not_exist_hosts
             for host in not_exist_hosts:
@@ -168,13 +174,37 @@ class RainCobblerWrapper:
                     systems.extend(result)
         return systems
     
-    def provision_host_with_distro_kickstart(self, distro, kickstart, raw_hosts):
+    def list_profile_based_distro_kickstart(self, distro=None, kickstart=None):
+        """list all possible profiles based on distro and kickstart
+        provided for **rain provision list --type=profile (--distro=DISTRO|--kickstart=KICKSTART)**
+        :param string distro: the name of cobbler distro
+        :param string kickstart: the name of kickstart file (ONLY filename)
+        :return: a list of profiles name
         """
-        baremetal provision host in raw_hosts with distro defined in cobbler and kickstart file. 
+        profiles = None
+        if distro:
+            profiles_distro = self.rest_api.get_cobbler_distro_children(distro)
+            profiles_ks = None
+            if kickstart:
+                profiles_ks = self.rest_api.get_cobbler_profile_based_kickstart(kickstart)
+            if profiles_distro and profiles_ks:
+                profiles = [p for p in profiles_distro if p in profiles_ks]
+            else:
+                profiles = profiles_distro if profiles_distro else profiles_ks
+        else:
+            if kickstart:
+                profiles = self.rest_api.get_cobbler_profile_based_kickstart(kickstart)
+            else:
+                profiles = self.rest_api.get_cobbler_profile_list()
+        return profiles
+    
+    def provision_host_with_distro_kickstart(self, distro, kickstart, hosts):
+        """
+        baremetal provision host in hosts with distro defined in cobbler and kickstart file. 
         provided for **rain provision --distro=DITRO --kickstart=KICKSTART HOSTS**
         :param string distro: the name of cobbler distro
         :param string kickstart: the filename of kickstart
-        :param string raw_hosts: one or more hosts with the valid formation of hostlist
+        :param list hosts: a list of host ["host1", "host2",]
         :return: a dict, formation is {"result": True|False, "description": "details"}
         """
         # step 1, try to find an existed profile matching distro and kickstart
@@ -189,7 +219,7 @@ class RainCobblerWrapper:
             result = self.rest_api.add_cobbler_profile(data)
             profile = profile_name if result else None
         if profile:
-            return self.provision_host_with_profile(profile, raw_hosts)
+            return self.provision_host_with_profile(profile, hosts)
         return {"result": False, "description": "create profile with distro and kickstart failed.", }
     
     def add_profile_based_distro_kickstart(self, distro_url, kickstart, name):
@@ -214,15 +244,14 @@ class RainCobblerWrapper:
                     result = self.rest_api.add_cobbler_profile({"name": name, "distro": distro_data["distro"], "kickstart": ks_name,})
         return result
     
-    def power_host(self, raw_hosts, flag_on=True):
+    def power_host(self, hosts, flag_on=True):
         """power ON/OFF hosts
         provided for **rain provision power [--off] HOSTS**
-        :param string raw_hosts: one or more hosts with the valid formation of hostlist
+        :param list hosts: a list of host ["host1", "host2",]
         :param boolean flag_on: True means power ON, False means OFF
         :return: a dict of {"host1": True, "host2": False}, in which True means send power command, False means hosts MUST deploy before power
         """
         result = {}
-        hosts = expand_hostlist(raw_hosts)
         for host in hosts:
             result[host] = False
         hosts_status = self.status.get_status_short(hosts)
@@ -230,43 +259,19 @@ class RainCobblerWrapper:
             if hosts_status[host] == "deployed":
                 result[host] = True
                 #self.rest_api.power_cobbler_system(host, flag_on)
-                power_system.apply_async([host], queue='cobbler')
+                power_system.apply_async([host, flag_on], queue='cobbler')
         return result
     
-    def monitor_host(self, raw_hosts):
+    def monitor_host(self, hosts):
         """monitor the progress of deploying/powering ON/OFF of hosts
         provided for **rain provision monitor HOSTS**
-        :param string raw_hosts: one or more hosts with the valid formation of hostlist
+        :param list hosts: a list of host ["host1", "host2",]
         :return: a dict of {"host1": {"status": "deploying", "progress": 25, }, "host2": {"status": "poweron", "progress": 100,}, "host3": {"status": "poweroff", "progress": 10,},}
         """
         result = {}
-        hosts = expand_hostlist(raw_hosts)
         for host in hosts:
             result[host] = self.status.get_host_progress(host)
         return result
-    
-    def list_profile_based_distro_kickstart(self, distro=None, kickstart=None):
-        """list all possible profiles based on distro and kickstart
-        :param string distro: the name of cobbler distro
-        :param string kickstart: the name of kickstart file (ONLY filename)
-        :return: a list of profiles name
-        """
-        profiles = None
-        if distro:
-            profiles_distro = self.rest_api.get_cobbler_distro_children(distro)
-            profiles_ks = None
-            if kickstart:
-                profiles_ks = self.rest_api.get_cobbler_profile_based_kickstart(kickstart)
-            if profiles_distro and profiles_ks:
-                profiles = [p for p in profiles_distro if p in profiles_ks]
-            else:
-                profiles = profiles_distro if profiles_distro else profiles_ks
-        else:
-            if kickstart:
-                profiles = self.rest_api.get_cobbler_profile_based_kickstart(kickstart)
-            else:
-                profiles = self.rest_api.get_cobbler_profile_list()
-        return profiles
     
     def upload_kickstart_to_cobbler(self, filename, name=None):
         """add a local kickstart file to cobbler
@@ -341,7 +346,8 @@ if __name__ == "__main__":
     #result_data = rcb.get_status_short()
     #result_data = rcb.get_status_summary()
     #result_data = rcb.list_system_based_distro_kickstart()
-    result_data = rcb.provision_host_with_profile("centos6-x86_64", "i072")
+    #result_data = rcb.provision_host_with_profile("centos6-x86_64", "i072")
     #result_data = rcb.rest_api.monitor_deploy_power_status("i072", "deploy")
+    result_data = rcb.baremetal_computer_host_list()
     print result_data
     

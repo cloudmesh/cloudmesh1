@@ -229,7 +229,7 @@ class BaremetalStatus:
         :return: a dict with the formation {"host1":"deployed", "host2": "deploying", "host3": "failed", "host4": "unknown", }
         """
         status_list = self.get_status()
-        valid_hosts_status = [status for status in status_list if status["cm_id"] in hosts] if hosts else status_list
+        valid_hosts_status = [status for status in status_list if status["cm_id"] in hosts] if hosts is not None else status_list
         result = {}
         for host in valid_hosts_status:
             result[host["cm_id"]] = host["status"]
@@ -241,7 +241,7 @@ class BaremetalStatus:
         :return: a dict with the formation {"deployed": 1, "deploying":2, "failed":2, "total": 5}
         """
         status_list = self.get_status()
-        valid_hosts_status = [status for status in status_list if status["cm_id"] in hosts] if hosts else status_list
+        valid_hosts_status = [status for status in status_list if status["cm_id"] in hosts] if hosts is not None else status_list
         result = {"deployed": 0, "deploying": 0, "failed": 0, "total": 0}
         for host in valid_hosts_status:
             result["total"] += 1
