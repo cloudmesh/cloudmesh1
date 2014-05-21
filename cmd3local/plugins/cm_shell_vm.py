@@ -20,7 +20,7 @@ from prettytable import PrettyTable
 from cm_shell_defaults import cm_shell_defaults
 from Interface.vm_interface import vm_interface
 
-from cloudmesh.util.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 
 
 log = LOGGER(__file__)
