@@ -26,6 +26,8 @@ class cm_shell_inventory:
         # BUG this needs to be done not in activate
         #
         self.inventory_name = "test"
+        # port number is missing
+        # should be imported from cloudmesh_server.yaml
         db = connect(self.inventory_name)
 
         self.inventory = Inventory()
