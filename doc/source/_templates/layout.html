@@ -6,6 +6,45 @@
 {# Add github banner (from: https://github.com/blog/273-github-ribbons). #}
 {% block header %}
   {{ super() }}
+
+   {% if pagename in ["index"] %}
+   <div class="header" id="content">
+   <div id="this-carousel-id" class="carousel slide"><!-- class of slide for animation -->
+   <div class="carousel-inner">
+    <div class="item active"><!-- class of active since it's the first item -->
+      <img src="http://placehold.it/1200x240" alt="" />
+      <div class="carousel-caption">
+        <p>Caption A text here</p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="http://placehold.it/1200x240" alt="" />
+      <div class="carousel-caption">
+        <p>Caption B text here</p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="http://placehold.it/1200x240" alt="" />
+      <div class="carousel-caption">
+        <p>Caption C text here</p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="http://placehold.it/1200x240" alt="" />
+      <div class="carousel-caption">
+        <p>Caption D text here</p>
+      </div>
+    </div>
+   </div><!-- /.carousel-inner -->
+   <!--  Next and Previous controls below
+        href values must reference the id for this carousel -->
+    <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
+   </div><!-- /.carousel -->
+   </div>
+
+
+
   <a href="https://github.com/cloudmesh/cloudmesh.git
      class="visible-desktop hidden-xs"><img
     id="gh-banner"
@@ -19,5 +58,8 @@
       $("#gh-banner").css("top", navHeight);
     });
   </script>
+
+  {% endif %}   
+   
 {% endblock %}
 
