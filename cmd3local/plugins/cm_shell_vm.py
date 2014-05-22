@@ -52,9 +52,13 @@ class cm_shell_vm:
             self.mongoClass = cm_mongo()
 
             print "Activating clouds ..."
-            self.mongoClass.activate(cm_user_id=self.user)
-            print "Activation done."
-            self.clouds_activated = True
+            try:
+                self.mongoClass.activate(cm_user_id=self.user)
+                print "Activation done."
+                self.clouds_activated = True
+            except:
+                print "Activation failed"
+                self.clouds_activated = False
 
             self.vmi = vm_interface(
                 self.user, self.config.default_cloud, self.mongoClass)
