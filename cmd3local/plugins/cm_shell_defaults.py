@@ -56,7 +56,7 @@ class cm_shell_defaults:
         self.default_loaded = False
         pass
     
-    def _default_update(self,attribute, value):
+    def _default_update(self, dbDict, attribute, value):
         mongoClass.db_defaults.update(
             {'_id': dbDict['_id']},
             {'$set': {attribute: value}},
@@ -89,12 +89,12 @@ class cm_shell_defaults:
                 self.defDict['flavor'] = cloudDict['default']['flavor']
                 flavors = dbDict['flavors']
                 flavors[cloudName] = cloudDict['default']['flavor']
-                self._default_update('flavors', flavors)
+                self._default_update(dbDict, 'flavors', flavors)
         else:
             print 'Reading and saving default flavor to Mongo.'
             flavors = {}
             flavors[cloudName] = cloudDict['default']['flavor']
-            self._default_update('flavors', flavors)
+            self._default_update(dbDict, 'flavors', flavors)
 
         # check the image
         if 'images' in dbDict:
@@ -105,30 +105,37 @@ class cm_shell_defaults:
                 self.defDict['image'] = cloudDict['default']['image']
                 images = dbDict['images']
                 images[cloudName] = cloudDict['default']['image']
-                self._default_update('images', images)
+                self._default_update(dbDict, 'images', images)
         else:
             print 'Reading and saving default image to Mongo.'
             images = {}
             images[cloudName] = cloudDict['default']['image']
-            self._default_update('images', images)
+            self._default_update(dbDict, 'images', images)
 
         if dbDict['key']:
             self.defDict['keyname'] = dbDict['key']
         else:
             self.defDict['keyname'] = config.userkeys()['default']
-            self._default_update('key', self.defDict['keyname'])
+            self._default_update(dbDict, 'key', self.defDict['keyname'])
 
         if dbDict['prefix']:
             self.defDict['prefix'] = dbDict['prefix']
         else:
             self.defDict['prefix'] = config.username()
-            self._default_update('prefix', self.defDict['prefix'])
+            self._default_update(dbDict, 'prefix', self.defDict['prefix'])
 
         if dbDict['index']:
             self.defDict['index'] = dbDict['index']
         else:
             self.defDict['index'] = 1
-            self._default_update('index', 1)            
+            self._default_update(dbDict, 'index', 1)            
+
+        if dbDict['activeclouds']:
+            self.defDict['activeclouds'] = dbDict['activeclouds']
+        else:
+            self.defDict['activeclouds'] = config.active()
+            self._default_update(dbDict, 'activeclouds',
+                                 self.defDict['activeclouds'])
 
         return self.defDict
 
