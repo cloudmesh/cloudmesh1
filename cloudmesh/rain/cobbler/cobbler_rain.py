@@ -14,6 +14,9 @@ from cloudmesh_common.util import not_implemented
 
 
 def print_policys(policys, flag_merge=True):
+    if not policys:
+        print "Cannot find policy"
+        return
     if flag_merge:
         for user in policys:
             print "{0}\t{1}".format(user, policys[user])
@@ -136,7 +139,7 @@ def rain_command(arguments):
         except:
             pass
     """
-    print(arguments)
+    #print(arguments)
     # wrapper
     wrapper = RainCobblerWrapper()
     
@@ -168,7 +171,7 @@ def rain_command(arguments):
             
             print "list all baremetals"
             result = wrapper.baremetal_computer_host_list()
-            print result
+            print result if result else "No Baremetals"
             
         elif arguments["on"]:
             """rain admin on HOSTS"""
@@ -233,11 +236,11 @@ def rain_command(arguments):
                 print "From:", time_start
                 print "To  :", time_end
                 """
-                if arguments["--users"] is not None:
-                    policys = wrapper.list_user_hosts(arguments["--users"])
+                if arguments["--user"] is not None:
+                    policys = wrapper.list_user_hosts(arguments["--user"])
                     print_policys(policys)
-                elif arguments["--projects"] is not None:
-                    policys = wrapper.list_project_hosts(arguments["--projects"])
+                elif arguments["--project"] is not None:
+                    policys = wrapper.list_project_hosts(arguments["--project"])
                     print_policys(policys)
                 elif arguments["--role"] is not None:
                     not_implemented()
@@ -256,11 +259,11 @@ def rain_command(arguments):
             print "From:", time_start
             print "To  :", time_end
             """
-            if arguments["--users"] is not None:
-                policy_id = wrapper.add_user_policy(arguments["--users"], arguments["HOSTS"])
+            if arguments["--user"] is not None:
+                policy_id = wrapper.add_user_policy(arguments["--user"], arguments["HOSTS"])
                 print "success" if policy_id else "failed"
-            elif arguments["--projects"] is not None:
-                policy_id = wrapper.add_project_policy(arguments["--projects"], arguments["HOSTS"])
+            elif arguments["--project"] is not None:
+                policy_id = wrapper.add_project_policy(arguments["--project"], arguments["HOSTS"])
                 print "success" if policy_id else "failed"
             elif arguments["--role"] is not None:
                 not_implemented()
@@ -303,7 +306,7 @@ def rain_command(arguments):
     # provisioning
     ###
     elif arguments["provision"]:
-        print "provision a node..."
+        #print "provision a node..."
         if arguments["list"]:
             #print "this will list distro or kickstart info"
             if arguments["--type"] == "profile":

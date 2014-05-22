@@ -146,8 +146,11 @@ class BaremetalPolicy:
         :return: flag_merge is False, result is a dict of user and policy with the formation {"user1":['policy1', 'policy2'], "user2": [],}
         flag_merge is True, result is a dict of user/group and policy with the formation {"name1": "hostlist", "name2": "hostlist2"}
         """
-        policys = self.get_all_policy()["users"]
-        return policys if not flag_merge else self.merge_policy_based_ug(policys)
+        all_policys = self.get_all_policy()
+        if all_policys:
+            policys = all_policys.get("users", None)
+            return policys if not flag_merge else self.merge_policy_based_ug(policys)
+        return None
     
     def get_all_group_policy(self, flag_merge=False):
         """get all the policies for all group/project
@@ -155,9 +158,12 @@ class BaremetalPolicy:
         :return: flag_merge is False, result is a dict of group/project and policy with the formation {"group1":['policy1', 'policy2'], "group2": [],}
         flag_merge is True, result is a dict of user/group and policy with the formation {"name1": "hostlist", "name2": "hostlist2"}
         """
-        policys = self.get_all_policy()["groups"]
-        return policys if not flag_merge else self.merge_policy_based_ug(policys, False)
-    
+        all_policys = self.get_all_policy()
+        if all_policys:
+            policys = all_policys.get("groups", None)
+            return policys if not flag_merge else self.merge_policy_based_ug(policys, False)
+        return None
+        
     def get_all_policy(self):
         """get all the policies for all users and group/project
         :return: a dict of group/project and policy with the formation {"users": {"user1": [], "user2": []}, "groups":{"group1":['policy1', 'policy2'], "group2": [],}}

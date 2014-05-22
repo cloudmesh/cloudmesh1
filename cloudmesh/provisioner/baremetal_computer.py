@@ -275,7 +275,9 @@ class BaremetalComputer:
         """
         query_elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory", }
         result = self.db_client.find_one(query_elem)
-        return result["data"]["data"] if result["result"] else None
+        if result["result"]:
+            return result["data"]["data"] if "data" in result["data"] else []
+        return None
         
     
 # test
@@ -293,6 +295,6 @@ if __name__ == "__main__":
     #result = bmc.insert_blank_baremetal_list()
     #result = bmc.enable_baremetal_computers(["i001", "i003", "i007", "i189"])
     #result = bmc.disable_baremetal_computers(["i001", "i007",])
-    result = bmc.insert_mac_data_to_inventory()
+    result = bmc.get_baremetal_computers()
     pprint(result)
     
