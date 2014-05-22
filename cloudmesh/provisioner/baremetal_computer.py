@@ -18,7 +18,7 @@ class BaremetalComputer:
     """
     def __init__(self):
         coll_name = "inventory"
-        self.yaml_file = config_file("/mac.yaml")
+        self.yaml_file = config_file("/cloudmesh_mac.yaml")
         self.db_client = DBHelper(coll_name)
         self.bm_status = BaremetalStatus()
     
