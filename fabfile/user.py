@@ -90,7 +90,8 @@ def mongo():
                "gidNumber" : profile["gid"],
                "address" : profile["address"][0],
                "cm_user_id" : config.get("cloudmesh.hpc.username"),
-               "email" : profile["email"]
+               "email" : profile["email"],
+               "activeclouds" : config.get("cloudmesh.active")
     }
 
     projects = {}
