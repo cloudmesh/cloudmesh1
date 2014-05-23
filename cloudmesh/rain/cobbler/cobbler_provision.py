@@ -671,9 +671,8 @@ class CobblerProvision:
         cobbler_handler = capi.BootAPI()
         func = getattr(cobbler_handler, "find_system")
         system = func(name)
-        if flag_netboot != system.netboot_enabled:
-            system.netboot_enabled = flag_netboot
-            cobbler_handler.add_system(system)
+        system.netboot_enabled = flag_netboot
+        cobbler_handler.add_system(system)
         # default action is power_on
         power_action = options.get(power_status.lower(), "power_on")
         func = getattr(cobbler_handler, power_action)
