@@ -28,16 +28,13 @@ class PBS:
         self.host = host
 
         #
-        # hard codd for now should be in yaml file
+        # hard coded for now should be in yaml file
         #
         if host.startswith("india"):
             self.cluster_queues = {
                                    'india.futuregrid.org': [
-                                                            'ib',
-                                                            'fg40',
                                                             'batch',
                                                             'long',
-                                                            'provision',
                                                             'b534',
                                                             'systest',
                                                             'reserved',
