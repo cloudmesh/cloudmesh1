@@ -88,17 +88,17 @@ app_topbar = [
 app_externalbar = [
     ["FutureGrid", "https://portal.futuregrid.org"],
     ["-- Manual", "http://manual.futuregrid.org"],
+    ["Cloudmesh", "http://cloudmesh.futuregrid.org"],
+    ["-- Source", "https://github.com/cloudmesh/cloudmesh"],
     ["-- Bugs", "/bugs"],
     ["-- Git", "/git"],
-    ["Cloudmesh", "https://github.com/cloudmesh/cloudmesh"],
     ["Blog", "http://cloudmesh.blogspot.com"],
 ]
-
 
 topbar_pages = []
 for page in app_topbar:
     topbar_pages.append({'name': page[0], 'url': page[1]})
-
+    
 # registering topbar into the global g
 flask.Flask.app_ctx_globals_class.topbar_pages = topbar_pages
 
