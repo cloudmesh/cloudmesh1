@@ -80,3 +80,13 @@ to replace the statement in the given subdirs or a shorter form::
 
   perl -pi -e 's/import a.b.c/import a_b.c/g' `find ./ -name *.py`
 
+MongoDB Tools
+======================================================================
+
+Robomongo
+----------------------------------------------------------------------
+
+A nice tool to visualize and browse contents in mongodb is `Robomongo
+<http://robomongo.org>`_. It is available for OSX, Windows, and Linux.
+Wne using it, you will need to use the admin user and password that is
+defined in the cloudmesh_server.yaml file.
