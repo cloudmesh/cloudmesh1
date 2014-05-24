@@ -10,7 +10,8 @@ Links
 `CloudMesh <https://github.com/cloudmesh/cloudmesh>`_
 ------------------------------------------------------
 
+- `Source <https://github.com/cloudmesh/cloudmesh>`_
 - `Manual <http://cloudmesh.futuregrid.org/cloudmesh/>`__
 - `Blog <http://cloudmesh.blogspot.com>`_
-- `Bugs </bugs>`_
-- `Git </git>`__
+- `cloudmesh/cloudmesh issues </bugs>`_
+- `cloudmesh/cloudmesh contributors </git>`_
