@@ -29,7 +29,7 @@ mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 @mesh_hpc_module.route('/mesh/refresh/qstat/<host>')
 @login_required
 def display_mongo_qstat_refresh(host=None):
-    celery_config = ConfigDict(filename=config_dir("/cloudmesh_celery.yaml"))
+    celery_config = ConfigDict(filename=config_file("/cloudmesh_celery.yaml"))
     log.info ("qstat refresh request {0}".format(host))
 
     # timeout = 15;
