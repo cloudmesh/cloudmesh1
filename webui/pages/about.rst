@@ -12,7 +12,7 @@ cloudmesh:
 * portability library to access information in regards to images,
   flavors, and vms
 * management of hundreds/thousands of virtual machines
-* integration of non FutureGrid cLouds by users into cloudmesh so
+* integration of non FutureGrid clouds by users into cloudmesh so
   users can access them from cloudmesh
 * a command line shell 
 * a web interface
