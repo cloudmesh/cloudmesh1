@@ -123,7 +123,7 @@ class BaremetalPolicy:
                     if user in data:
                         data[user].extend(hosts)
                     else:
-                        data[user] = hosts
+                        data[user] = deepcopy(hosts)
             for user in data:
                 data[user] = collect_hostlist(data[user])
             # flip data, combine duplicate values
@@ -217,5 +217,6 @@ if __name__ == "__main__":
     #result = bmp.get_all_policy()
     #result = bmp.get_policy_based_user("fugang")
     #result = bmp.get_policy_based_user("gregor")
-    result = bmp.add_group_policy("fg[1-3]", "i[111-113]")
+    #result = bmp.add_group_policy("fg[1-3]", "i[111-113]")
+    result = bmp.get_all_group_policy(True)
     print "result is: ", result
