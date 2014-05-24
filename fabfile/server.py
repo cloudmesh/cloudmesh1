@@ -24,7 +24,8 @@ try:
 except Exception, e:
     print "ERROR: could not find package\n\n   cloudmesh\n"
     print "please run first\n"
-    print "     python setup.py install\n"
+    print 
+    print "     ./install cloudmesh\n"
     print
     print "Exception"
     print e
@@ -123,12 +124,14 @@ def start(server="server", browser='yes'):
     # view(link)
 
 @task
-def view(link="inventory"):
+def view(link=""):
     """run the browser"""
-    local("sleep 1")
+    from cloudmesh.config.ConfigDict import ConfigDict
 
-    host = s_config.get("cloudmesh.server.webui.host")
-    port = s_config.get("cloudmesh.server.webui.port")
+    server_config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")
+    
+    host = server_config.get("cloudmesh.server.webui.host")
+    port = server_config.get("cloudmesh.server.webui.port")
 
     url_link = "http://{0}:{1}/{2}".format(host, port, link)
 
