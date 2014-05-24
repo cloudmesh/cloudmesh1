@@ -78,7 +78,7 @@ General Questions
   different access technologies such as API, command line, or REST
   calls. Good examples are OpenStack which we communicate with in the
   native OpenStack REST calls, while we use command line interfaces
-  while communicating with tashi through a firewall.
+  while communicating with other clouds.
 
 
 Development Questions
@@ -112,9 +112,9 @@ Collaboration
 
   At IU you can get credit by enrolling in an independent
   study. Typically 3 credit hours result in 12 hours of work per
-  week. YOu get out of this independent study as much as you put
-  in. We us modern software negeneering tools so you do not just
-  contribute code, but you learn also about software negeneering
+  week. You get out of this independent study as much as you put
+  in. We us modern software engineering tools so you do not just
+  contribute code, but you learn also about software engineering
   aspects in a fast developing project.  We have lots of aspects you
   can work on dependent on your interest and background we can
   determine a project that interests you. Please contact
@@ -129,8 +129,8 @@ Collaboration
 
 :What is the time commitment for an independent study?:
 
-  Typically we requier you enrol fro 3 credit hours, The total commit
-  ment pper week is than between 12-20 hours. If you do below 12 hours
+  Typically we require you enroll fro 3 credit hours, The total commit
+  ment per week is than between 12-20 hours. If you do below 12 hours
   you will not get an A for sure.
 
   Furthermore we do not accept students that plan to take extensive
@@ -145,7 +145,7 @@ Collaboration
 Student Jobs
 ----------------------------------------------------------------------
 
-:Can I get a research assistentship at IU to work on cloudmesh?:
+:Can I get a research assistantship at IU to work on cloudmesh?:
 
   Yes, at this time we require you to take an independent study with
   us at IU so we can make sure you are up to the task. Exceptional
@@ -155,7 +155,7 @@ Student Jobs
   knowledge. For those that want to get started we have independent
   studies.
 
-:If I take an hourly job, what time commitement is this?:
+:If I take an hourly job, what time commitment is this?:
 
   International students can are required to work 20 hours per
   week. Payment is competitive and depends on background knowledge.
@@ -163,7 +163,7 @@ Student Jobs
 :What are we looking for?:
 
   It is helpful to be a proven expert in a
-  technolgy that is used in cloudmesh such as
+  technology that is used in cloudmesh such as
   
   * python
   * javascript including jquery
@@ -174,7 +174,7 @@ Student Jobs
 :But I am a super java developer and do not have any knowledge about the above can I not just get paid for learning the above technologies?:
   
   In case we would hire you, you are responsible to learn such
-  technologies in your freetime. It is a prerequisit for
+  technologies in your free time. It is a prerequisite for
   participation. We offer independent studies.
   
 :I am at a different university. Can I get a paid internship with you?:
