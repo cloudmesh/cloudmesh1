@@ -227,19 +227,14 @@ def mesh_register_clouds():
 
                 user_obj.set_credential(cm_user_id, cloudname, d)
 
+        elif cloudtypes[cloudname] == "azure":
+            error[cloudname] = ''
+            azureSubscriptionid = request.form['field-azure-subscriptionid-password']
 
-
-
-        '''
-
-        elif cloudtypes[cloud] == "azure":
-            azureSubscriptionid = request.form['field-azure-password']
-
-            user_obj.set_password(username, cloudname,
+            user_obj.set_credential(cm_user_id, cloudname,
                                   {"subscriptionid": azureSubscriptionid,
                                    "CM_CLOUD_TYPE": "azure" }
                                   )
-        '''
 
         if error[cloudname] == '':
             c = cm_mongo()
