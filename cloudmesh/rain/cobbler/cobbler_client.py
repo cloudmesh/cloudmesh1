@@ -3,6 +3,7 @@
 """Example of program with many options using docopt.
 
 Usage:
+  cobbler_client.py list --object=OBJECT_TYPE [--format=FORMAT]  
   cobbler_client.py list --object=OBJECT_TYPE
   cobbler_client.py get --object=OBJECT_TYPE --name=ITEM_NAME
   cobbler_client.py add --object=OBJECT_TYPE --data=DATA_FILE
@@ -30,7 +31,8 @@ Options:
   --data=DATA_FILE      specifies the filename containing the data
   --system=SYSTEM_NAME   specifies the name of system from which some interfaces will be deleted
   --onoff=ONOFF    specifies the power status, on or off
-
+  --format=FORMAT   the format of the table is either json, html, list,         
+                    or ascii [default: ascii]    
 Description:
 
   describe here what the commands do
@@ -93,7 +95,8 @@ Description:
       
   
 """
-
+from prettytable import PrettyTable
+from cloudmesh_common.tables import table_printer
 from docopt import docopt
 from multiprocessing.pool import ThreadPool
 from datetime import datetime
@@ -143,6 +146,18 @@ class CobblerClient:
 
     def render_result(self, slabel, data):
         if data["result"]:
+            if self.arg_dict["--format"] in ["json"]:
+                self.pp.pprint(data)
+            elif self.arg_dict["--format"] in ["list"]:
+                self.pp.pprint(data["data"])
+            elif self.arg_dict["--format"] in ["html"]:
+                print table_printer(data["data"])
+            elif self.arg_dict["--format"] in ["ascii"]:
+                x = PrettyTable()
+                x.add_column(slabel, data["data"])
+                x.align = "l"
+            print x
+            """
             datas = data["data"]
             print "[Succeed] {0}{1}.".format(slabel, ", description is: {0}".format(data["description"]) if data["description"] else "")
             print "    There is {0} records satisfy query, data is: ".format(len(datas) if datas else 0)
@@ -159,6 +174,7 @@ class CobblerClient:
                         self.pp.pprint(single_data)
                     else:
                         self.pp.pprint(single_data)
+            """
         else:
             print "[Failed] {0}, description is: {1}.".format(slabel, data["description"])
 
