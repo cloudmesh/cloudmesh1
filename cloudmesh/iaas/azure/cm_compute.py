@@ -6,6 +6,7 @@ cloudmesh.iaas.azure.cm_compute
 
 """
 import time
+import tempfile
 
 from azure import *
 from azure.servicemanagement import *
@@ -17,6 +18,9 @@ class azure(ComputeBaseType):
 
     DEFAULT_LABEL = "azure"
     name_prefix = "cm-"
+
+    linux_config = None
+    thumbprint = None
 
     def __init__(self, label=DEFAULT_LABEL, credential=None,
                  admin_credential=None):
@@ -186,6 +190,10 @@ class azure(ComputeBaseType):
 
         self.create_vm()
 
+    def set_linux_cfg(self, refresh=False):
+        if refresh or not self.linux_config:
+            self.linux_config = LinuxConfigurationSet(self.get_name(), self.userid, None, True)
+
     def create_vm(self):
         """Create a Window Azure Virtual Machine
 
@@ -200,7 +208,8 @@ class azure(ComputeBaseType):
         self.get_media_url()
 
         os_hd = OSVirtualHardDisk(self.os_image_name, self.media_url)
-        linux_config = LinuxConfigurationSet(self.get_name(), self.userid, None, True)
+        self.set_linux_cfg()
+        linux_config = self.linux_config#LinuxConfigurationSet(self.get_name(), self.userid, None, True)
         # self.userid, self.user_passwd, True)
 
         self.set_ssh_keys(linux_config)
@@ -468,6 +477,26 @@ class azure(ComputeBaseType):
 
         # reference:
         # http://www.sslshopper.com/article-most-common-openssl-commands.html
+
+    def keypair_list(self):
+        return []
+
+    def keypair_add(self, name, content):
+        self.load_thumbprint()
+        fp = tempfile.NamedTemporaryFile(delete=False)
+        fp.write(b'%s' % content)
+        fp.close()
+        publickey_path = fp.name
+        publickey = PublicKey(self.thumbprint, publickey_path)
+        # KeyPair is a SSH kay pair both a public and a private key to be stored
+        # on the virtual machine.
+        # http://msdn.microsoft.com/en-us/library/windowsazure/jj157194.aspx#SSH
+        self.set_linux_cfg()
+        self.linux_config.ssh.public_keys.public_keys.append(publickey)
+
+    def load_thumbprint(self):
+        if not self.thumbprint:
+            self.thumbprint = open(self.thumbprint_path, 'r').readline().split('\n')[0]
 
     def set_network(self):
         """Configure network for a virtual machine.
