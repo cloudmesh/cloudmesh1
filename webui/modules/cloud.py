@@ -457,6 +457,11 @@ def vm_login(cloud=None, server=None):
     #
     # BUG MESSAGE IS NOT PROPAGATED
     #
+    if cloud == "aws":
+        userid = "ubuntu" # temporary
+        public_dns = server['extra']['dns_name']
+        message = "ssh -i [your private key file] %s@%s" % (userid, public_dns)
+        return render_template('success.html', error=message)
 
     if len(server['addresses'][server['addresses'].keys()[0]]) < 2:
         message = 'Cannot Login Now, Public IP not assigned'
