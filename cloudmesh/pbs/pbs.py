@@ -12,6 +12,10 @@ import sys
 import re
 import csv
 
+from cloudmesh_common.logger import LOGGER
+
+log = LOGGER(__file__)
+
 class PBS:
 
     user = None
@@ -47,14 +51,14 @@ class PBS:
                                    }
         elif host.startswith("sierra"):
             self.cluster_queues = {
-                'sierra.futuregrid.org': [ 'batch'] }
+                'sierra.futuregrid.org': [ 'batch', 'long'] }
 
     def requister_joint_queues(self, cluster_queues):
         """allows the registration of queues for multiple clusters managed through the same queuing server
         
                 
         cluster_queues = {
-            'india.futuregrid.org': ['ib','fg40', 'batch', 'long', 'provision', 'b534', 'systest', 'reserved', 'interactive'],
+            'india.futuregrid.org': ['batch', 'long', 'b534', 'systest', 'reserved', 'interactive'],
             'delta.futuregrid.org': ['delta', 'delta-long'],
             'echo.futuregrid.org': ['echo'],
             'bravo.futuregrid.org': ['bravo', 'bravo-long'],
@@ -164,6 +168,8 @@ class PBS:
 
         self.pbs_qinfo_data = d
 
+        #pprint(self.qinfo_extract(self.cluster_queues, self.pbs_qinfo_data))
+        
         if self.cluster_queues is None:
             return {self.host: self.pbs_qinfo_data}
         else:
@@ -171,7 +177,6 @@ class PBS:
 
 
     def qinfo_extract(self, cluster_queues, qinfo_data):
-
 
         # initialize the queues
         queues = {}
@@ -181,8 +186,10 @@ class PBS:
         # separate the queues
         for cluster in cluster_queues:
             for q in cluster_queues[cluster]:
-                queues[cluster][q] = qinfo_data[q]
-
+                try:
+                    queues[cluster][q] = qinfo_data[q]
+                except:
+                    log.error("no data found for {0}".format(q)) 
         return queues
 
     def _qmgr(self, command):
@@ -292,8 +299,33 @@ class PBS:
             except:
                 pass
             self.pbs_qstat_data = info
-        return self.pbs_qstat_data
+        #return self.pbs_qstat_data
 
+        #pprint (self.pbs_qstat_data)
+
+        if self.cluster_queues is None:
+            return {self.host: self.pbs_qstat_data}
+        else:
+            return self.qstat_extract(self.cluster_queues, self.pbs_qstat_data)
+
+    def qstat_extract(self, cluster_queues, qstat_data):
+
+        # initialize the queues
+        queues = {}
+        for q in cluster_queues:
+            queues[q] = {}
+
+        # separate the queues
+        for job in qstat_data:
+            queue = qstat_data[job]['queue']
+
+            for cluster in cluster_queues:
+                if queue in cluster_queues[cluster]:
+                    queues[cluster][job] = qstat_data[job]
+            # log.error("no data found for {0}".format(q)) 
+        return queues
+
+    
     def get_uniq_users(self, refresh=False):
         if self.pbs_qstat_data is None or refresh:
             self.qstat()
@@ -376,6 +408,12 @@ class PBS:
 if __name__ == "__main__":
 
 
-    pbs = PBS("gvonlasz", "alamo")
-    pprint (pbs.qinfo())
+    pbs = PBS("gvonlasz", "echo.futuregrid.org")
+    #pprint (pbs.qinfo())
+    pprint (pbs.qstat())
+
+    pbs = PBS("gvonlasz", "alamo.futuregrid.org")
+    #pprint (pbs.qinfo())
+    pprint (pbs.qstat())
+
 
