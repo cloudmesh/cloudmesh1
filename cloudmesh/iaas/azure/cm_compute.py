@@ -20,6 +20,12 @@ class azure(ComputeBaseType):
     DEFAULT_LABEL = "azure"
     name_prefix = "cm-"
 
+    def_flavors = {u'ExtraSmall': {'id': "1", 'name':'ExtraSmall'},  \
+                   u'Small': {'id': "2", 'name': 'Small'}, \
+                   u'Medium': {'id': "3", 'name': 'Medium'}, \
+                   u'Large': {'id': "4", 'name': 'Large'}, \
+                   u'ExtraLarge': {'id': "5", 'name': 'ExtraLarge'} }
+
     linux_config = None
     thumbprint = None
 
@@ -188,6 +194,9 @@ class azure(ComputeBaseType):
         # Set a os image name
         os_image_name = image_id
         self.set_os_image(os_image_name)
+
+        # set a flavor
+        self.set_flavor_by_idx(flavor_name)
 
         self.create_vm()
 
@@ -558,6 +567,13 @@ class azure(ComputeBaseType):
 
         self.flavor = size
 
+    def set_flavor_by_idx(self, idx):
+        flavors = self.def_flavors
+        for i in flavors:
+            if flavors[i]['id'] == str(idx):
+                self.set_flavor(flavors[i]['name'])
+                return
+
     def get_flavor(self):
         """Return the image size to deploy
 
@@ -690,14 +706,8 @@ class azure(ComputeBaseType):
 
     def list_flavors(self):
 
-        res = {u'ExtraSmall': {'id': "1", 'name':'ExtraSmall'},  \
-               u'Small': {'id': "2", 'name': 'Small'}, \
-               u'Medium': {'id': "3", 'name': 'Medium'}, \
-               u'Large': {'id': "4", 'name': 'Large'}, \
-               u'ExtraLarge': {'id': "5", 'name': 'ExtraLarge'} }
-
-        self.flavors = res
-        return res
+        self.flavors = self.def_flavors
+        return self.flavors
 
 class oJSONEncoder(json.JSONEncoder):
     def default(self, o):
