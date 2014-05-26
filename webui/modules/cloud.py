@@ -464,7 +464,7 @@ def vm_login(cloud=None, server=None):
         return render_template('success.html', error=message)
     elif cloud == "azure":
         userid = "root"
-        public_dns = server["addresses"]["private"][0]["addr"] # temporary
+        public_dns = server["vip"] #["addresses"]["private"][0]["addr"] # temporary
         message = "ssh -i [your private key file] %s@%s" % (userid, public_dns)
         return render_template('success.html', error=message)
 

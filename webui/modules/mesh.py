@@ -656,7 +656,7 @@ def mongo_table(filters=None):
                   [
                       ['name','name'],
                       ['status','status'],
-                      ['addresses','addresses'],
+                      ['addresses','vip'],
                       ['flavor', 'flavor','id'],
                       ['id','id'],
                       ['image','image','id'],
