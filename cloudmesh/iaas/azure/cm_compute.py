@@ -634,8 +634,14 @@ class azure(ComputeBaseType):
             deployment = oJSONEncoder().encode(deployment)
             deployment = json.JSONDecoder().decode(deployment)
             '''
-            deployment.update({"role_list": None, \
-                               "role_instance_list": None})
+            deployment.update({"role_list": None})
+            try:
+                public_ip = \
+                deployment['role_instance_list'][0].__dict__['instance_endpoints'][0].__dict__['vip']
+            except:
+                public_ip = ""
+            deployment.update({"vip": public_ip})
+            deployment.update({"role_instance_list": None})
  
     def convert_states(self, state):
         if state == "Running":
