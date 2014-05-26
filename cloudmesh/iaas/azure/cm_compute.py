@@ -690,11 +690,11 @@ class azure(ComputeBaseType):
 
     def list_flavors(self):
 
-        res = {u'ExtraSmall': {'id': 1, 'name':'ExtraSmall'},  \
-               u'Small': {'id': 2, 'name': 'Small'}, \
-               u'Medium': {'id': 3, 'name': 'Medium'}, \
-               u'Large': {'id': 4, 'name': 'Large'}, \
-               u'ExtraLarge': {'id': 5, 'name': 'ExtraLarge'} }
+        res = {u'ExtraSmall': {'id': "1", 'name':'ExtraSmall'},  \
+               u'Small': {'id': "2", 'name': 'Small'}, \
+               u'Medium': {'id': "3", 'name': 'Medium'}, \
+               u'Large': {'id': "4", 'name': 'Large'}, \
+               u'ExtraLarge': {'id': "5", 'name': 'ExtraLarge'} }
 
         self.flavors = res
         return res
