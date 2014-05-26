@@ -36,23 +36,28 @@ def display_mongo_qstat_refresh(host=None):
 
     config = cm_config()
     user = config["cloudmesh"]["hpc"]["username"]
-    pbs = pbs_mongo()
     if host is None:
         hosts = ["india.futuregrid.org",
                  "lima.futuregrid.org",
                  "sierra.futuregrid.org",
                  "hotel.futuregrid.org",
                  "alamo.futuregrid.org"]
+    elif host in ['bravo.futuregrid.org',
+                  'echo.futuregrid.org',
+                  'delta.futuregrid.org']:
+        hosts = ['india.futuregrid.org']
     else:
         hosts = [host]
     error = ""
 
-    # queue = celery_config = celery_config.get("cloudmesh.workers.qstat.queue")
-    # res = tasks.refresh_qstat.apply_async(queue=queue, priority=0, args=[hosts])
 
 
 
     try:
+        pbs = pbs_mongo()
+
+        # queue = celery_config = celery_config.get("cloudmesh.workers.qstat.queue")
+        # res = tasks.refresh_qstat.apply_async(queue=queue, priority=0, args=[hosts])
         for host in hosts:
             pbs.activate(host, user)
             pbs.refresh_qstat(host)
@@ -83,27 +88,39 @@ def display_mongo_qstat_new():
 
     pbs = pbs_mongo()
     hosts = ["india.futuregrid.org",
-             "lima.futuregrid.org",
+             "echo.futuregrid.org",
+             "delta.futuregrid.org",
+             "bravo.futuregrid.org",
              "sierra.futuregrid.org",
              "hotel.futuregrid.org",
+             "lima.futuregrid.org",
              "alamo.futuregrid.org"]
-#    for host in hosts:
-#        pbs.activate(host,user)
+    #hosts = ["india.futuregrid.org",
+    #         "lima.futuregrid.org",
+    #         "sierra.futuregrid.org",
+    #         "hotel.futuregrid.org",
+    #         "alamo.futuregrid.org"]
+
+    #    for host in hosts:
+    #        pbs.activate(host,user)
 
 
     data = {}
     jobcount = {}
     timer = {}
     for host in hosts:
+        timer[host] = datetime.now()        
         try:
             data[host] = pbs.get_qstat(host)
         except:
+            log.error("get_qstat {0}".format(host))
             error += "get_qstat({0})".format(host)
         try:
             jobcount[host] = data[host].count()
         except:
             error += "jobcount {0}".format(host)
-
+            log.error("jobcount {0}".format(host))
+            
         if jobcount[host] > 0:
             timer[host] = data[host][0]["cm_refresh"]
             # pprint(data[host][0])
@@ -175,10 +192,24 @@ def display_mongo_qinfo_refresh(host=None):
     else:
         hosts = [host]
     error = ""
-    pbs = pbs_mongo()
-    for h in hosts:
-        pbs.activate(h, user)
-        res = pbs.refresh_qinfo(h)
+
+    try:
+        pbs = pbs_mongo()
+
+        
+        for host in hosts:
+            pbs.activate(host, user)
+            res = pbs.refresh_qinfo(host)
+    except Exception, e:
+
+        print traceback.format_exc()
+        error = "{0}".format(e)
+        log.error(error)
+        return render_template('error.html',
+                          error=error,
+                          type="Some error in qinfo",
+                          msg="")
+
 
     return redirect('mesh/qinfo')
 
