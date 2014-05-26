@@ -217,7 +217,7 @@ class azure(ComputeBaseType):
         self.set_network()
         self.set_service_certs()
         # can't find certificate right away.
-        time.sleep(5)
+        time.sleep(7)
 
         result = \
         self.sms.create_virtual_machine_deployment(service_name=self.get_name(), \
