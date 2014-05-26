@@ -2,7 +2,7 @@ import pymongo
 from pbs import PBS
 from pprint import pprint
 from bson.objectid import ObjectId
-from cloudmesh_common.util import path_expand
+from cloudmesh_common.util import path_expand, banner
 import yaml
 from cloudmesh.config.cm_config import get_mongo_db
 from datetime import datetime
@@ -79,27 +79,24 @@ class pbs_mongo:
         '''
         time_now = datetime.now()
         data = dict(self.hosts[host].qstat(refresh=True))
+
+        print "KKKKK", data.keys()
+        
         self.db_qstat.remove({"cm_host": host, "cm_kind" : "qstat"}, safe=True)
         for name in data:
-            # print "mongo: add {0}, {1}, {2}".format(host,
-             #                                       data[name]['Job_Id'],
-              #                                      data[name]['Job_Owner'],
-               #                                     data[name]['Job_Name'])
-
-            id = "{0}-{1}-qstat".format(host, name).replace(".", "-")
-            data[name]["cm_host"] = host
-            data[name]["cm_kind"] = "qstat"
-            data[name]["cm_id"] = id
-            data[name]["cm_refresh"] = time_now
-
-            # print "mongo: add {0}, {1}, {2}".format(host,
-                #                                    data[name]['Job_Id'],
-                 #                                   data[name]['Job_Owner'],
-                  #                                  data[name]['Job_Name'])
-
-            # print "IIIIII"
-            # pprint(data)
-            self.db_qstat.insert(data[name])
+            banner(name)
+            banner(data[name].keys())
+            for job in data[name]:
+                entry = data[name][job]
+                id = "{0}-{1}-qstat".format(host, name).replace(".", "-")
+                entry["cm_host"] = name
+                entry["cm_kind"] = "qstat"
+                entry["cm_id"] = id
+                entry["cm_qstat"] = host
+                entry["cm_refresh"] = time_now
+                print "Insert", job
+                self.db_qstat.insert(data[name][job])
+                
 
     def get(self, host, type):
         """refreshes the specified data from the given host"""
@@ -169,15 +166,17 @@ class pbs_mongo:
 
     def delete_qstat(self, host):
         '''
-        NOT IMPLEMENTED .deletes the qstat information from mongodb
+        Deletes the qstat information from mongodb
         :param host:
         '''
+        self.db_qstat.remove({"cm_host": host, "cm_kind" : "qstat"}, safe=True)
 
     def delete_pbsnodes(self, host):
         '''
-        NOT IMPLEMENTED. deletes the pbsnodes information from mongodb
+        Deletes the pbsnodes information from mongodb
         :param host:
         '''
+        self.db_qstat.remove({"cm_host": host, "cm_kind" : "qbsnodes"}, safe=True)        
 
     def clear(self):
         '''
@@ -187,22 +186,20 @@ class pbs_mongo:
 
 def main():
 
-    host = "alamo.futuregrid.org"
+    host = "india.futuregrid.org"    
     pbs = pbs_mongo()
     pbs.activate(host, "gvonlasz")
     print pbs.hosts
 
-    # d = pbs.refresh_qstat(host)
-    """
+    d = pbs.refresh_qstat(host)
     d = pbs.get_qstat(host)
     for e in d:
         pprint(e) 
-    """
 
-    d = pbs.refresh_pbsnodes(host)
-    d = pbs.get_pbsnodes(host)
-    for e in d:
-        pprint(e)
+    #d = pbs.refresh_pbsnodes(host)
+    #d = pbs.get_pbsnodes(host)
+    #for e in d:
+    #    pprint(e)
 
 if __name__ == "__main__":
     main()
