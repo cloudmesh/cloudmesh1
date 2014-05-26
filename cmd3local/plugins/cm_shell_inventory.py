@@ -37,17 +37,18 @@ class cm_shell_inventory:
     def do_inventory(self, args, arguments):
         """
         Usage:
-               inventory NOTIMPLEMENTED clean
-               inventory NOTIMPLEMENTED create image DESCRIPTION
-               inventory NOTIMPLEMENTED create server [dynamic] DESCRIPTION
-               inventory NOTIMPLEMENTED create service [dynamic] DESCRIPTION
-               inventory NOTIMPLEMENTED exists server NAME
-               inventory NOTIMPLEMENTED exists service NAME
-               inventory NOTIMPLEMENTED
-               inventory NOTIMPLEMENTED print
-               inventory NOTIMPLEMENTED info [CLUSTER] [SERVER] [v]
-               inventory NOTIMPLEMENTED server NAME
-               inventory NOTIMPLEMENTED service NAME
+               inventory clean
+               inventory create image DESCRIPTION
+               inventory create server [dynamic] DESCRIPTION
+               inventory create service [dynamic] DESCRIPTION
+               inventory exists server NAME
+               inventory exists service NAME
+               inventory
+               inventory print
+               inventory info [--cluster=CLUSTER] [--server=SERVER]
+               inventory list [--cluster=CLUSTER] [--server=SERVER]
+               inventory server NAME
+               inventory service NAME
 
         Manages the inventory
 
@@ -66,9 +67,9 @@ class cm_shell_inventory:
            v       verbose mode
 
         """
-        if arguments["v"]:
-            log.info(arguments)
-            log.info(args)
+        #if arguments["v"]:
+        log.info(arguments)
+        log.info(args)
 
         if args == "":
             log.info("print inventory")
@@ -79,7 +80,10 @@ class cm_shell_inventory:
 
         if arguments["print"]:
             log.info("print the inventory")
-            self.inventory.pprint()
+            r = self.inventory.find({})
+            for e in r:
+                pprint(e)
+
             return
 
         if arguments["info"]:
@@ -87,16 +91,17 @@ class cm_shell_inventory:
             print "Inventory Information"
             print "---------------------"
             print
-            if not (arguments["CLUSTER"] or arguments["SERVER"]):
+            if not (arguments["--cluster"] or arguments["--server"]):
 
-                print self.inventory.print_info()
+                print self.inventory.info()
                 print
 
-            if arguments["CLUSTER"] and not arguments["SERVER"]:
+            if arguments["--cluster"] and not arguments["--server"]:
 
-                name = arguments["CLUSTER"]
+                name = arguments["--cluster"]
 
-                self.inventory.print_cluster(name)
+                r = self.inventory.cluster(name)
+                pprint(r)
 
             return
 

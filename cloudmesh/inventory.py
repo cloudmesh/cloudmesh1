@@ -322,9 +322,10 @@ class Inventory:
 
         c2 = self.find({"cm_attribute": 'variable'})
 
-        for e in c2:
-            print "EEE", e
-            print
+        # DEBUG
+        #for e in c2:
+        #    print "EEE", e
+        #    print
 
         cursor_attributes = self.find ({"cm_id" : index, 'cm_attribute' : 'variable'})
         for element in cursor_attributes:
@@ -333,9 +334,11 @@ class Inventory:
 
         data['network'] = {}
         for result in cursor:
-            print 70 * "R"
-            pprint(result)
-            print 70 * "S"
+
+            # DEBUG
+            # print 70 * "R"
+            # pprint(result)
+            # print 70 * "S"
 
             n_id = result["cm_network_id"]
             n_name = result["network_name"]
@@ -519,8 +522,7 @@ class Inventory:
 
 def main():
     inventory = Inventory()
-
-
+    
     r = inventory.find ({})
     for e in r:
         print e
@@ -534,6 +536,7 @@ def main():
     print inventory.ipadr (name, "public")
     print inventory.ipadr (name, "internal")
 
+    inventory.info()    
 
 if  __name__ == '__main__':
     main()
