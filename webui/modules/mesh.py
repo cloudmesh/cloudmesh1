@@ -641,16 +641,29 @@ def mongo_table(filters=None):
                   ],
                   "aws":
                   [
-                      ["name", "id"],
+                      ["name", "name"],
                       ["status", "extra", "status"],
                       ["addresses", "public_ips"],
-                      ["flavor", "extra", "instancetype"],
+                      ["flavor", "extra", "instance_type"],
                       ['id','id'],
-                      ['image','extra', 'imageId'],
+                      ['image','extra', 'image_id'],
                       ["user_id","user_id"],
                       ["metadata", "metadata"],
-                      ["key_name", "extra", "keyname"],
-                      ["created", "extra", "launchdatetime"]
+                      ["key_name", "extra", "key_name"],
+                      ["created", "extra", "launch_time"]
+                  ],
+                  "azure":
+                  [
+                      ['name','name'],
+                      ['status','status'],
+                      ['addresses','addresses'],
+                      ['flavor', 'flavor','id'],
+                      ['id','id'],
+                      ['image','image','id'],
+                      ['user_id', 'user_id'],
+                      ['metadata','metadata'],
+                      ['key_name','key_name'],
+                      ['created','created'],
                   ]
                  }
                   

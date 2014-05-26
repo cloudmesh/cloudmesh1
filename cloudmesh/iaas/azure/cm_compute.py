@@ -7,6 +7,7 @@ cloudmesh.iaas.azure.cm_compute
 """
 import time
 import tempfile
+import json
 
 from azure import *
 from azure.servicemanagement import *
@@ -121,7 +122,7 @@ class azure(ComputeBaseType):
         :returns: dict.
         """
         deployments = self.list_deployments()
-        self.convert_to_openstack_style(deployments)
+        self.encode_output(deployments)
         return deployments
 
     def _get_services_dict(self):
@@ -216,7 +217,7 @@ class azure(ComputeBaseType):
         self.set_network()
         self.set_service_certs()
         # can't find certificate right away.
-        time.sleep(5)
+        time.sleep(7)
 
         result = \
         self.sms.create_virtual_machine_deployment(service_name=self.get_name(), \
@@ -579,7 +580,7 @@ class azure(ComputeBaseType):
         return self.sms.get_deployment_by_name(service_name=name,
                                                deployment_name=name)
 
-    def convert_to_openstack_style(self, deployments):
+    def encode_output(self, deployments):
         """Chance key names of the deployments to fit into openstack's list.
            name, status, addresses, flavor, id, user_id, metadata, key_name,
            created are required in openstack's list.
@@ -603,18 +604,23 @@ class azure(ComputeBaseType):
                                "created": deployment['created_time'] \
                               })
 
+            '''
             try:
                 # flattening class variables to the top level dict
                 deployment.update({"role_list":
                                    deployment['role_list'][0].__dict__, \
                                    "role_instance_list":
                                    deployment['role_instance_list'][0].__dict__})
-            except IndexError:
+            #except IndexError:
+            except:
                 deployment.update({"role_list": None, \
                                    "role_instance_list": None})
-            except:
-                pass
-
+            deployment = oJSONEncoder().encode(deployment)
+            deployment = json.JSONDecoder().decode(deployment)
+            '''
+            deployment.update({"role_list": None, \
+                               "role_instance_list": None})
+ 
     def convert_states(self, state):
         if state == "Running":
             return "ACTIVE"
@@ -684,11 +690,17 @@ class azure(ComputeBaseType):
 
     def list_flavors(self):
 
-        res = {u'ExtraSmall': {'id': 1, 'name':'ExtraSmall'},  \
-               u'Small': {'id': 2, 'name': 'Small'}, \
-               u'Medium': {'id': 3, 'name': 'Medium'}, \
-               u'Large': {'id': 4, 'name': 'Large'}, \
-               u'ExtraLarge': {'id': 5, 'name': 'ExtraLarge'} }
+        res = {u'ExtraSmall': {'id': "1", 'name':'ExtraSmall'},  \
+               u'Small': {'id': "2", 'name': 'Small'}, \
+               u'Medium': {'id': "3", 'name': 'Medium'}, \
+               u'Large': {'id': "4", 'name': 'Large'}, \
+               u'ExtraLarge': {'id': "5", 'name': 'ExtraLarge'} }
 
         self.flavors = res
         return res
+
+class oJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if not isinstance(o, dict):
+            return vars(o)
+        return json.JSONEncoder.default(self, o)
