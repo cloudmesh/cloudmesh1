@@ -651,6 +651,19 @@ def mongo_table(filters=None):
                       ["metadata", "metadata"],
                       ["key_name", "extra", "keyname"],
                       ["created", "extra", "launchdatetime"]
+                  ],
+                  "azure":
+                  [
+                      ['name','name'],
+                      ['status','status'],
+                      ['addresses','addresses'],
+                      ['flavor', 'flavor','id'],
+                      ['id','id'],
+                      ['image','image','id'],
+                      ['user_id', 'user_id'],
+                      ['metadata','metadata'],
+                      ['key_name','key_name'],
+                      ['created','created'],
                   ]
                  }
                   
