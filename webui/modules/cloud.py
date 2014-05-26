@@ -462,6 +462,11 @@ def vm_login(cloud=None, server=None):
         public_dns = server['extra']['dns_name']
         message = "ssh -i [your private key file] %s@%s" % (userid, public_dns)
         return render_template('success.html', error=message)
+    elif cloud == "azure":
+        userid = "root"
+        public_dns = server["addresses"]["private"][0]["addr"] # temporary
+        message = "ssh -i [your private key file] %s@%s" % (userid, public_dns)
+        return render_template('success.html', error=message)
 
     if len(server['addresses'][server['addresses'].keys()[0]]) < 2:
         message = 'Cannot Login Now, Public IP not assigned'
