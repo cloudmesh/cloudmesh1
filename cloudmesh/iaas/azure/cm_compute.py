@@ -187,8 +187,13 @@ class azure(ComputeBaseType):
                   meta={},
                   userdata=None):
 
+        # Azure Naming convention
+        # The name can contain only letters, numbers, and hyphens. The name must
+        # start with a letter and must end with a letter or a number.
+        # The hosted service name is invalid.
         # Set a name from uuid random string
-        vm_name = get_unique_name(name)
+        #vm_name = get_unique_name(name)
+        vm_name = name.replace("_","-")
         self.set_name(vm_name)
 
         # Set a os image name
