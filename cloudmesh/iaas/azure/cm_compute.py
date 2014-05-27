@@ -13,7 +13,7 @@ from azure import *
 from azure.servicemanagement import *
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh_common.util import get_unique_name
+from cloudmesh_common.util import get_unique_name, get_rand_string
 
 class azure(ComputeBaseType):
 
@@ -179,6 +179,17 @@ class azure(ComputeBaseType):
         self.servers = deployments
         return deployments
 
+    def azure_naming_convention(self, name):
+        # Azure Naming convention
+        # The name can contain only letters, numbers, and hyphens. The name must
+        # start with a letter and must end with a letter or a number.
+        # The hosted service name is invalid.
+        # Set a name from uuid random string
+        #vm_name = get_unique_name(name)
+        vm_name = name.replace("_","-")
+        vm_name = vm_name + "-" + get_rand_string()
+        return vm_name
+ 
     def vm_create(self, name,
                   flavor_name,
                   image_id,
@@ -187,13 +198,7 @@ class azure(ComputeBaseType):
                   meta={},
                   userdata=None):
 
-        # Azure Naming convention
-        # The name can contain only letters, numbers, and hyphens. The name must
-        # start with a letter and must end with a letter or a number.
-        # The hosted service name is invalid.
-        # Set a name from uuid random string
-        #vm_name = get_unique_name(name)
-        vm_name = name.replace("_","-")
+        vm_name = self.azure_naming_convention(name)
         self.set_name(vm_name)
 
         # Set a os image name
