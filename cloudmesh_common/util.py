@@ -23,6 +23,8 @@ import functools
 import warnings
 from datetime import datetime, timedelta
 import cloudmesh_common.bootstrap_util
+import string
+import random
 
 def path_expand(text):
     # This function just wraps the bootstrap function to avoid
@@ -180,8 +182,11 @@ def status_color(status):
         return "red"
     return "black"
 
-
-
+''' ref:
+    http://stackoverflow.com/questions/2257441/python-random-string-generation-with-upper-case-letters-and-digits
+'''
+def get_rand_string(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
 
 def get_unique_name(prefix="", **kargs):
     """Make a UUID without some characters such as '-', '_', ' ', '.'
