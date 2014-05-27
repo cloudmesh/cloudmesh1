@@ -631,13 +631,13 @@ def mongo_table(filters=None):
                       ["name", "id"],
                       ["status", "extra", "status"],
                       ["addresses", "public_ips"],
-                      ["flavor", "extra", "instancetype"],
+                      ["flavor", "extra", "instance_type"],
                       ['id','id'],
                       ['image','extra', 'imageId'],
                       ["user_id", 'user_id'],
                       ["metadata", "metadata"],
-                      ["key_name", "extra", "keyname"],
-                      ["created", "extra", "launchdatetime"]
+                      ["key_name", "extra", "key_name"],
+                      ["created", "extra", "launch_time"]
                   ],
                   "aws":
                   [

@@ -177,22 +177,22 @@ class ec2(ComputeBaseType):
 
     def _get_servers_dict(self):
         vm_list = self.list_vm()
-        self.convert_to_openstack_style(vm_list)
+        self.encode_output(vm_list)
         return vm_list
 
-    def convert_to_openstack_style(self, vmlist):
+    def encode_output(self, vmlist):
         for vmid in vmlist:
             vm = vmlist[vmid]
             vm.update({"name": unicode(vm['id']), \
                        "status": self.convert_states(vm['extra']['status']), \
                        "addresses": self.convert_ips(vm['public_ips']), \
                        "flavor":
-                       self.convert_flavors(vm['extra']['instancetype']), \
+                       self.convert_flavors(vm['extra']['instance_type']), \
                        # "id": exists
                        "user_id": unicode(""), \
                        "metadata": {}, \
-                       "key_name": unicode(vm['extra']['keyname']), \
-                       "created": unicode(vm['extra']['launchdatetime'])\
+                       "key_name": unicode(vm['extra']['key_name']), \
+                       "created": unicode(vm['extra']['launch_time'])\
                       })
             try:
                 # deleting object to avoid mongodb errors when inserts
