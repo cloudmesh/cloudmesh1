@@ -183,14 +183,20 @@ def status_color(status):
 
 
 
-def get_unique_name(prefix=""):
+def get_unique_name(prefix="", **kargs):
     """Make a UUID without some characters such as '-', '_', ' ', '.'
 
     :param prefix: a prefix added to the UUID
+    :param **kargs: keyword arguments for additional options
     """
     change = ['-', '_', ' ', '.']
+
     id = uuid.uuid1()
     text = str(id).replace("-", "")
+
+    if change in kargs:
+        change = kargs['change']
+
     for ch in change:
         if ch in prefix:
             prefix = prefix.replace(ch, "")
