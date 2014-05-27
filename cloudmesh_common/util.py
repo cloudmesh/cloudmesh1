@@ -199,7 +199,7 @@ def get_unique_name(prefix="", **kargs):
     id = uuid.uuid1()
     text = str(id).replace("-", "")
 
-    if change in kargs:
+    if 'change' in kargs:
         change = kargs['change']
 
     for ch in change:
