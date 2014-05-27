@@ -249,6 +249,7 @@ class azure(ComputeBaseType):
                                                    network_config=self.network, \
                                                    role_size=self.get_flavor())
 
+        time.sleep(7)
         self.result = result
         return result
 
