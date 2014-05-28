@@ -187,7 +187,7 @@ class azure(ComputeBaseType):
         # Set a name from uuid random string
         #vm_name = get_unique_name(name)
         vm_name = name.replace("_","-")
-        vm_name = vm_name + "-" + get_rand_string()
+        vm_name = vm_name #+ "-" + get_rand_string()
         return vm_name
  
     def vm_create(self, name,
