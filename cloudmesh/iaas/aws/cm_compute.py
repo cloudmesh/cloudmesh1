@@ -102,6 +102,7 @@ class aws(ComputeBaseType):
                   meta={},
                   userdata=None):
         self.set_keyname(key_name)
+        self.set_name(name)
         self.create_vm()
 
     def create_vm(self):
@@ -147,6 +148,9 @@ class aws(ComputeBaseType):
 
     def set_flavor(self, name):
         self.flavor = name
+
+    def set_name(self, name):
+        self.name = name
 
     def get_name(self):
         return self.name
