@@ -115,9 +115,10 @@ class cm_mongo:
 
         defaults_collection = 'defaults'
         passwd_collection = 'password'
+        user_collection = "user"
         self.userdb_passwd = get_mongo_db(passwd_collection)
         self.db_defaults = get_mongo_db(defaults_collection)
-
+        self.db_user = get_mongo_db(user_collection)
 
         self.db_clouds = get_mongo_db(collection)
 
