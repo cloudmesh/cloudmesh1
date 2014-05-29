@@ -63,15 +63,24 @@ class cm_shell_keys:
     def do_keys(self, args, arguments):
         """
         Usage:
-               keys
-               keys info [--json] [NAME]
+               keys info [--json] [NAME][--yaml][--mongo]
                keys mode MODENAME               
-               keys default NAME
-               keys add NAME KEY
-               keys delete NAME
+               keys default NAME [--yaml][--mongo]
+               keys add NAME KEY [--yaml][--mongo]
+               keys delete NAME [--yaml][--mongo]
                keys persist
     
         Manages the keys
+
+        Description
+        ============================
+ 
+        keys info : Prints list of keys. NAME of the key can be specified
+        keys mode MODENAME: Used to change default mode. Valid MODENAMES are yaml(default) and mongo mode. 
+        keys default NAME: Used to set a key from the key-list as the default key
+        keys add NAME KEY: adding/updating keys
+        keys delete NAME: deletes a key. In yaml mode it can delete only keys that are not persisted
+        keys persist: Saves the temporary yaml data structure to mongo
 
         Arguments:
 
@@ -83,6 +92,8 @@ class cm_shell_keys:
 
            -v --verbose     verbose mode
            -j --json        json output
+           -y --yaml        forcefully use yaml mode
+           -m --mongo       forcefully use mongo mode           
 
         """
         if arguments["mode"]:
@@ -97,6 +108,14 @@ class cm_shell_keys:
             else:
                 print "ERROR: Wrong MODENAME. only valid modes are 'mongo' and 'yaml'" 
                 return
+
+        if arguments["--yaml"] and ["--mongo"]:
+           print "ERROR: you can specify only one mode"
+           return
+        elif arguments["--yaml"]:
+           self.use_yaml = True
+        elif arguments["--mongo"]:     
+           self.use_yaml = False
 
         if self.use_yaml:
             print "Mode: yaml"
@@ -146,9 +165,16 @@ you should use mongo mode\n"
             key_mongo.setdefault(key_yaml.get_default_key())
             return
 
-        if (arguments["info"] and arguments["NAME"] is None) or (args==""):
+        if (arguments["info"]) or (args==""):
             if arguments["--json"]:
-                print json.dumps(key_container["keys"], indent=4)
+                if arguments["NAME"] is None:
+                    name = "keys"
+                else: 
+                    name = arguments["NAME"]
+                try:
+                    print json.dumps(key_container[name], indent=4)
+                except:
+                    print "ERROR: Something went wrong in looking up keys. Did u give the right name??"    
                 return
             else:
                 mykeys = {}
