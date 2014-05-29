@@ -7,9 +7,8 @@ import importlib
 import json
 from pprint import pprint
 from cmd3.shell import command
+from cloudmesh.config.cm_keys import cm_keys_yaml,cm_keys_mongo
 from cloudmesh.cm_mongo import cm_mongo
-from cloudmesh.config.cm_keys import cm_keys
-
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import two_column_table
 
@@ -20,34 +19,45 @@ class cm_shell_keys:
 
     """opt_example class."""
 
-    keys_loaded = False
-    mongo_loaded = False
-
     def activate_shell_keys(self):
+
         self.mongo_loaded = False
         self.keys_loaded = False
+        self.keys_loaded_mongo = False
+        self.use_yaml = True
+        from cloudmesh.config.cm_config import cm_config
+        config = cm_config()
+        self.user = config.get('cloudmesh.profile.username')
         self.register_command_topic('cloud','keys')
         pass
 
     def _load_mongo(self):
         if not self.mongo_loaded:
             try:
-                self.mongo = cm_mongo()
+                self.mongoClass = cm_mongo()
                 self.mongo_loaded = True
             except:
                 print "ERROR: could not access Mongodb. " \
                       "Have you started the mongo server?"
+    def _load_keys(self):
+        try:
+            filename = "$HOME/.futuregrid/cloudmesh.yaml"
+            if self.echo:
+                log.info("Reading keys information from -> {0}"
+                         .format(filename))
+            self.keys = cm_keys_yaml(filename)
+            self.keys_loaded = True
+        except:
+            print "ERROR: could not find the keys in %s" % filename
+    def _load_keys_mongo(self):
+        #try:
+        if self.echo:
+            log.info("Reading keys information from -> mongo")
+        self.keys_mongo = cm_keys_mongo(self.user)
+        self.keys_loaded_mongo = True
+        #except:
+        #   print "ERROR: could not find the keys in %s" % filename
 
-        if not self.keys_loaded:
-            try:
-                filename = "$HOME/.futuregrid/cloudmesh.yaml"
-                if self.echo:
-                    log.info("Reading keys information from -> {0}"
-                             .format(filename))
-                self.keys = cm_keys(filename)
-                self.keys_loaded = True
-            except:
-                print "ERROR: could not find the keys in %s" % filename
 
     @command
     def do_keys(self, args, arguments):
@@ -55,14 +65,19 @@ class cm_shell_keys:
         Usage:
                keys
                keys info [--json] [NAME]
+               keys mode MODENAME               
                keys default NAME
-
+               keys add NAME KEY
+               keys delete NAME
+               keys persist
+    
         Manages the keys
 
         Arguments:
 
           NAME           The name of a key
-
+          MODENAME       This is used to specify the mode name. Mode name can be either 'yaml' or 'mongo'
+          KEY            This is the actual key that has to added
 
         Options:
 
@@ -70,39 +85,86 @@ class cm_shell_keys:
            -j --json        json output
 
         """
+        if arguments["mode"]:
+            if arguments["MODENAME"] == "yaml":
+                self.use_yaml = True
+                print "SUCCESS: Set mode to yaml"
+                return
+            elif arguments["MODENAME"] == "mongo":
+                self.use_yaml = False
+                print "SUCCESS: Set mode to mongo"
+                return
+            else:
+                print "ERROR: Wrong MODENAME. only valid modes are 'mongo' and 'yaml'" 
+                return
 
-        if arguments["default"] and arguments["NAME"]:
-            if arguments["NAME"] in self.keys.names():
+        if self.use_yaml:
+            print "Mode: yaml"
+            if not self.keys_loaded:
+                self._load_keys()
+            key_container = self.keys
+        else:
+            print "Mode: mongo"
+            if not self.mongo_loaded:
                 self._load_mongo()
-                self.keys.setdefault(arguments["NAME"])
+            if not self.keys_loaded_mongo:
+                self._load_keys_mongo()
+            key_container = self.keys_mongo
+    
+        if arguments["default"] and arguments["NAME"]:     
+            if arguments["NAME"] in key_container.names():
+                key_container.setdefault(arguments["NAME"])
                 # Update mongo db defaults with new default key
-                dbDict = self.mongoClass.db_defaults.find_one(
-                    {'cm_user_id': self.user}
-                )
-                self.mongoClass.db_defaults.update(
-                    {'_id': dbDict['_id']},
-                    {'$set': {'key': arguments["NAME"]}},
-                    upsert=False,
-                    multi=False)
                 print 'The default key is set to: ', arguments['NAME']
             else:
-                print "Specified key is not registered."
+                print "ERROR: Specified key is not registered."
+            return
+
+        if arguments["add"]:
+            print "Attempting to add key..."
+            key_container.__setitem__(arguments["NAME"],arguments["KEY"])
+            return
+
+        if arguments["delete"]:
+            print "Attempting to delete key. {0}".format(arguments["NAME"])
+            if self.use_yaml:
+                print "WARNING: This will only remove the keys that have not been written to the databse\
+already when 'keys persist' is called. If your key is already in the database, \
+you should use mongo mode\n"
+            key_container.delete(arguments["NAME"])
+            return 
+        if arguments["persist"]:
+            if not self.mongo_loaded:
+                self._load_mongo()
+            if not self.keys_loaded_mongo:
+                self._load_keys_mongo()
+            key_mongo = self.keys_mongo
+            key_yaml = self.keys
+            names = key_yaml.names()    
+            for name in names:
+                key_mongo.__setitem__(name, key_yaml._getvalue(name),key_type="string")
+            key_mongo.setdefault(key_yaml.get_default_key())
             return
 
         if (arguments["info"] and arguments["NAME"] is None) or (args==""):
-            self._load_mongo()
             if arguments["--json"]:
-                print json.dumps(self.keys["keys"], indent=4)
+                print json.dumps(key_container["keys"], indent=4)
                 return
             else:
                 mykeys = {}
                 header = ["Default", "Fingerprint"]
-                
-                if self.keys["default"] is not None:
-                    mykeys["default"] = self.keys.get_default_key()
-                else:
+                try:
+                    mykeys["default"] = key_container.get_default_key()
+                except:
                     mykeys["default"] = "default is not set, please set it"
-                for name in self.keys.names():
-                    mykeys[name] = self.keys.fingerprint(name)
+                for name in key_container.names():
+                    mykeys[name] = key_container.fingerprint(name)
                 print two_column_table(mykeys)
                 return
+        
+
+if __name__ == '__main__':
+    arguments = {}
+    arguments['mode'] = True
+    arguments['MODENAME'] = "yaml"
+    
