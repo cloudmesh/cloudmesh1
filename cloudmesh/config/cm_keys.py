@@ -174,12 +174,12 @@ class cm_keys_mongo(cm_keys_base):
         returns value corresponding to the name of the key.
         """
         if name == 'keys':
-            return self.user_info["keys"]
+            return {"default": self.get_default_key(), "keylist":self.user_info["keys"]}
         if name == 'default':
             key = self.defaults_info["key"]
         else:
             key = name
-        value = self.user_info["keys"]["name"]
+        value = self.user_info["keys"][name]
         return value
 
     def get_default_key(self):
@@ -192,7 +192,7 @@ class cm_keys_mongo(cm_keys_base):
         """
         returns the value corresponding to the name of the key
         """        
-        return self.user_info["keys"][name]
+        return self._getvalue(name)
 
     def __setitem__(self, name, value, persist = True, key_type="file"):
         '''
