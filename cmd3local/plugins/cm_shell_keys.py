@@ -25,9 +25,6 @@ class cm_shell_keys:
         self.keys_loaded = False
         self.keys_loaded_mongo = False
         self.use_yaml = True
-        from cloudmesh.config.cm_config import cm_config
-        config = cm_config()
-        self.user = config.get('cloudmesh.profile.username')
         self.register_command_topic('cloud','keys')
         pass
 
@@ -51,6 +48,10 @@ class cm_shell_keys:
             print "ERROR: could not find the keys in %s" % filename
     def _load_keys_mongo(self):
         #try:
+        from cloudmesh.config.cm_config import cm_config
+        config = cm_config()
+        self.user = config.get('cloudmesh.profile.username')
+                
         if self.echo:
             log.info("Reading keys information from -> mongo")
         self.keys_mongo = cm_keys_mongo(self.user)
@@ -109,7 +110,7 @@ class cm_shell_keys:
                 print "ERROR: Wrong MODENAME. only valid modes are 'mongo' and 'yaml'" 
                 return
 
-        if arguments["--yaml"] and ["--mongo"]:
+        if arguments["--yaml"] and arguments["--mongo"]:
            print "ERROR: you can specify only one mode"
            return
         elif arguments["--yaml"]:
