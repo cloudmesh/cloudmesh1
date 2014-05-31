@@ -73,16 +73,6 @@ class cm_shell_keys:
     
         Manages the keys
 
-        Description
-        ============================
- 
-        keys info : Prints list of keys. NAME of the key can be specified
-        keys mode MODENAME: Used to change default mode. Valid MODENAMES are yaml(default) and mongo mode. 
-        keys default NAME: Used to set a key from the key-list as the default key
-        keys add NAME KEY: adding/updating keys. Please provide filename and not the actual key
-        keys delete NAME: deletes a key. In yaml mode it can delete only keys that are not persisted
-        keys persist: Saves the temporary yaml data structure to mongo
-
         Arguments:
 
           NAME           The name of a key
@@ -96,6 +86,34 @@ class cm_shell_keys:
            -y --yaml        forcefully use yaml mode
            -m --mongo       forcefully use mongo mode           
 
+        Description:
+ 
+        keys info 
+
+	     Prints list of keys. NAME of the key can be specified
+
+        keys mode MODENAME
+
+	     Used to change default mode. Valid MODENAMES are
+	     yaml(default) and mongo mode.
+
+        keys default NAME
+
+	     Used to set a key from the key-list as the default key
+
+        keys add NAME KEY
+
+	     adding/updating keys. Please provide filename and not the
+	     actual key
+
+        keys delete NAME
+
+	     deletes a key. In yaml mode it can delete only keys that
+	     are not persisted
+
+        keys persist
+
+	     Saves the temporary yaml data structure to mongo
         """
         if arguments["mode"]:
             if arguments["MODENAME"] == "yaml":
