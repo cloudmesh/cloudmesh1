@@ -76,7 +76,9 @@ class cm_shell_keys:
         Arguments:
 
           NAME           The name of a key
-          MODENAME       This is used to specify the mode name. Mode name can be either 'yaml' or 'mongo'
+          MODENAME       This is used to specify the mode name. Mode
+	  		 name can be either 'yaml' or 'mongo'
+
           KEY            This is the actual key that has to added
 
         Options:
