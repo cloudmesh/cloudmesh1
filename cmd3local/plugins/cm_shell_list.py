@@ -62,12 +62,7 @@ class cm_shell_list:
                list images [CLOUD]
                list
 
-               list NOTIMPLEMENTED flavors [CLOUD...]
-               list NOTIMPLEMENTED servers [CLOUD...]
-               list NOTIMPLEMENTED images [CLOUD...]
-               list NOTIMPLEMENTED [CLOUD...]
-
-        Arguments:
+         Arguments:
 
                 CLOUD    the name of the cloud
 
