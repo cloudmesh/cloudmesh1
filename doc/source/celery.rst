@@ -37,7 +37,7 @@ Celery workers can be stopped by the following command which stops celery and ki
 	$ fab queue.stop
 
 Celery can be cleaned by the following command kills all celery
-workers. It also deletesthe log files::
+workers. It also deletes the log files::
 
 	$ fab queue.clean
 
