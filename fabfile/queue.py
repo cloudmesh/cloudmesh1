@@ -72,6 +72,11 @@ def celery_command(command, app, workers, queue, concurrency=None):
 
     worker_str = " ".join(workers)
     exec_string = "celery multi {0} {1} -A {2} -l info -Q {3}".format(command, worker_str, app, queue)
+    # directories for log and pid file
+    celery_dir = "celery"
+    local("mkdir %s" % celery_dir)
+    exec_string += " --pidfile=\"{0}/%n.pid\" ".format(celery_dir)
+    exec_string += " --logfile=\"{0}/%n.log\" ".format(celery_dir)
     if concurrency != None:
         exec_string += " --concurrency={0}".format(concurrency)
     local(exec_string)
