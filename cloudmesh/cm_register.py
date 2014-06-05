@@ -6,15 +6,15 @@ class cm_register:
         self.db_clouds = get_mongo_db(collection)
 
 
-   cm_kind = "cloud" # look up if this exists in the collection "cloudmesh"
+   cm_kind = "clouds" # look up if this exists in the collection "cloudmesh"
 
    # if not we can use it, if it does we need a different one such as 
 
-   # cm_kind = "registered"
-
+   # cm_kind = "clouds"
+   # cm_id = "{0}-{1}".format(cloudname,cm_kind)
    # put the cloud info in that so you can find it 
 
-   clouds = db_clouds.find ({"cm_kind" : "cloud"})
+   clouds = db_clouds.find ({"cm_kind" : "clouds"})
 
    than you can iterate over clouds 
 
