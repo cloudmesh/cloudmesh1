@@ -421,6 +421,12 @@ def start_vm(cloud=None, server=None):
         keynamenew,
         meta=metadata,
         cm_user_id=g.user.id)
+    tmp = dict(result)
+    try:
+        tmp['server']['adminPass'] = "*******"
+    except:
+        pass
+
     log.info ("{0}".format(result))
     # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     # config.incr()
