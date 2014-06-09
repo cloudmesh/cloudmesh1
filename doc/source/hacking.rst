@@ -99,14 +99,14 @@ Python Tools
 * pep8 http://legacy.python.org/dev/peps/pep-0008/
 * autopep8 https://pypi.python.org/pypi/autopep8/
 
-Hot to Pull Request
+How to Pull Request
 ======================================================================
 
 Note that you should already have a github account before you can perform the following actions.
 
 Visit the site below::
 
-  `cloudmesh/cloudmesh <https://github.com/cloudmesh/cloudmesh>`_
+	https://github.com/cloudmesh/cloudmesh
 
 On the right hand side of the page click of "Fork"
 
