@@ -90,3 +90,11 @@ A nice tool to visualize and browse contents in mongodb is `Robomongo
 <http://robomongo.org>`_. It is available for OSX, Windows, and Linux.
 Wne using it, you will need to use the admin user and password that is
 defined in the cloudmesh_server.yaml file.
+
+Python Tools
+======================================================================
+
+* flake8
+* pylint
+* pep8
+* autopep8
