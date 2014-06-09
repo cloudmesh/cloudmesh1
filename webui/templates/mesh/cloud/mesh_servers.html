@@ -96,6 +96,15 @@ function toggle(source,select_list) {
         <span class="inner_function_button" style="margin-left: 32px;">
             {{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}
         </span>
+	<!--
+	# Comment:
+	../queue/ calls a function with a celery task queue to execute a process in the background
+	
+        <span class="inner_function_button" style="margin-left: 32px;">
+            {{ image_button ("none", "190_circle_plus", "/cm/start/queue/" + cloud +"/") }}
+        </span>
+	-->
+
         <span class="inner_function_button" style="padding: 5px 5px 1px; margin: 0px; vertical-align: middle;">
             <input type="text" name="{{cloud}}_vms" id="{{cloud}}_vms" value="1" style="width: 50px; height:15px; font-size:14pt; padding: 0px 5px;" />
         </span>
