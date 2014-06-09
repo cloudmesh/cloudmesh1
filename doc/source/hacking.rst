@@ -104,7 +104,7 @@ How to Pull Request
 
 Note that you should already have a github account before you can perform the following actions.
 
-Visit the site below:
+Visit the site below::
 
 	https://github.com/cloudmesh/cloudmesh
 
@@ -137,3 +137,13 @@ Again, on the right side of the web page click on::
 	"New pull request"
 
 This should take you to the page where the changes made are compared with the former document.
+
+Then, on the left side of the page click on::
+
+	"Create pull request"
+
+Fill in the "Title" and "Leave a comment" fields
+
+Finally, at the lower right of the comment field click on::
+
+	"Create pull request"
