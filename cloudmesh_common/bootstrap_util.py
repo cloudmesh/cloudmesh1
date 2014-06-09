@@ -54,14 +54,24 @@ def path_expand(text):
     return result
 
 
-def yn_choice(message, default='y'):
+def yn_choice(message, default='y', tries=None):
     """asks for a yes/no question.
     :param message: the message containing the question
     :param default: the default answer
     """
     # http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input"""
     choices = 'Y/n' if default.lower() in ('y', 'yes') else 'y/N'
-    choice = raw_input("%s (%s) " % (message, choices))
-    values = ('y', 'yes', '') if default == 'y' else ('y', 'yes')
-    return True if choice.strip().lower() in values else False
-
+    if tries == None:
+        choice = raw_input("%s (%s) " % (message, choices))
+        values = ('y', 'yes', '') if default == 'y' else ('y', 'yes')
+        return True if choice.strip().lower() in values else False
+    else:
+        while tries > 0:
+            choice = raw_input("%s (%s) " % (message, choices))
+            choice = choice.strip().lower()
+            if choice in ['y', 'yes']: return True
+            elif choice in ['n', 'no']: return False
+            else:
+                print "Invalid input..."
+                tries = tries-1
+        
