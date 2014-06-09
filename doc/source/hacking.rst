@@ -94,7 +94,7 @@ defined in the cloudmesh_server.yaml file.
 Python Tools
 ======================================================================
 
-* flake8
-* pylint
-* pep8
-* autopep8
+* flake8 https://flake8.readthedocs.org/en/2.1.0/
+* pylint http://docs.pylint.org/
+* pep8 http://legacy.python.org/dev/peps/pep-0008/
+* autopep8 https://pypi.python.org/pypi/autopep8/
