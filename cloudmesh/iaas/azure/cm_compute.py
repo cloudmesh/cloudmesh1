@@ -189,7 +189,7 @@ class azure(ComputeBaseType):
         vm_name = name.replace("_","-")
         vm_name = vm_name #+ "-" + get_rand_string()
         return vm_name
- 
+
     def vm_create(self, name,
                   flavor_name,
                   image_id,
