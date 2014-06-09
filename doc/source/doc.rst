@@ -30,6 +30,10 @@ The pages will be locally available to you under::
 
   doc/build/html/index.html 
 
+In some cases you can avoid using fab if you can also say::
+
+  make sphinx
+
 To view the documentation you can also say::
 
   fab doc.view
@@ -39,10 +43,13 @@ with the command::
 
    fab doc.gh
 
-.. warning:: Please note that the fab doc.gh should only be executed by
-Gregor von Laszewski (laszewski@gmail.com). Please notify him when you
-think that your documentation contribution justifies an update. This
-step will publish the page to gh-pages at
+.. warning:: 
+   
+   Please note that the fab doc.gh should only be executed by Gregor
+   von Laszewski (laszewski@gmail.com). Please notify him when you
+   think that your documentation contribution justifies an update.
+
+This step will publish the page to gh-pages at
 
 * http://cloudmesh.github.io/cloudmesh/
 
