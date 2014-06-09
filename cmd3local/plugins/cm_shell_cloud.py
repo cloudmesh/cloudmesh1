@@ -152,7 +152,8 @@ class cm_shell_cloud:
             cloud add CLOUD
                 adds cloud information to database. CLOUD is a yaml file
                 contains clouds information. Inside yaml, louds should be
-                contained in "cloudmesh: clouds: ..."
+                contained in "cloudmesh: clouds: ...", the yaml file have
+                to be placed in ~/.futuregrid
 
             cloud remove [NAME]
                 remove a cloud with a given name, if name is not specified,
