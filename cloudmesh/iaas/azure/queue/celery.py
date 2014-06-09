@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from celery import Celery
 
+# Celery app for azure cloud
 celery = Celery('cloudmesh.iaas.azure.queue',
                 broker='amqp://guest@localhost',
                 backend='amqp',#mongodb://guest:guest@localhost:27017/jobs')#,

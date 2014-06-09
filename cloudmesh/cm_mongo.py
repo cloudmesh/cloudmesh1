@@ -513,6 +513,13 @@ class cm_mongo:
         return cloudmanager.vm_create(name=name, flavor_name=vm_flavor, image_id=vm_image, key_name=key, meta=meta)
 
     def vm_create_queue(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id):
+        '''
+        same as vm_create but runs with a celery task queue
+        
+        apply_async places a function call in a specific queue named in 'queue='
+        parameter
+        '''
+        
         # cloud should be either openstack, ec2, azure, or aws
         package = "cloudmesh.iaas.%s.queue" % cloud
         package = "cloudmesh.iaas.azure.queue" # TEST

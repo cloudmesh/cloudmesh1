@@ -446,6 +446,15 @@ def start_vm(cloud=None, server=None):
 @cloud_module.route('/cm/start/queue/<cloud>/')
 @login_required
 def start_vm_with_queue(cloud=None, server=None):
+    ''' 
+    
+    same as start_vm function but runs with
+    celery task queue
+    
+    *vm_create_queue* function launches vm instances through
+    a celery queue
+
+    '''
     log.info("-> start {0}".format(cloud))
 
     config = cm_config()
