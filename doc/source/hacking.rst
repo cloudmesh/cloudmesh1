@@ -104,7 +104,7 @@ How to Pull Request
 
 Note that you should already have a github account before you can perform the following actions.
 
-Visit the site below::
+Visit the site below:
 
 	https://github.com/cloudmesh/cloudmesh
 
@@ -128,8 +128,12 @@ Then, paste the url clone into your linux machine's terminal using the code belo
 
 Make the change in the document which you want to update, then commit and push the repository to be up-to date with the master branch.
 
-Back on the right side of the web page click on "Pull Request"
+Back on the right side of the web page click on::
 
-Again, on the right side of the web page click on "New Pull request"
+	"Pull Requests"
+
+Again, on the right side of the web page click on:: 
+
+	"New pull request"
 
 This should take you to the page where the changes made are compared with the former document.
