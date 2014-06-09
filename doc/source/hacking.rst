@@ -99,10 +99,11 @@ Python Tools
 * pep8 http://legacy.python.org/dev/peps/pep-0008/
 * autopep8 https://pypi.python.org/pypi/autopep8/
 
-How to Pull Request
+Git Pull Request
 ======================================================================
 
-Note that you should already have a github account before you can perform the following actions.
+Note that you should already have a github account before you can
+perform the following actions.
 
 Visit the site below::
 
@@ -110,23 +111,27 @@ Visit the site below::
 
 On the right hand side of the page click of "Fork"
 
-A question of "where should we fork this repository" appears, hence click on your name/profile.
+A question of "where should we fork this repository" appears, hence
+click on your name/profile.
 
-A page with your account name/cloudmesh is loaded to your site, example::
+A page with your account name/cloudmesh is loaded to your site,
+example::
 
 	yourusername/cloudmesh
 
 On the lower right hand side of your machine, copy the clone url.
 
-In your linux machine, get into your github directory::	
+In your linux machine, get into your github directory::
 
 	cd github
 
-Then, paste the url clone into your linux machine's terminal using the code below::
+Then, paste the url clone into your linux machine's terminal using the
+code below::
 
 	git clone ".....clone url....."
 
-Make the change in the document which you want to update, then commit and push the repository to be up-to date with the master branch.
+Make the change in the document which you want to update, then commit
+and push the repository to be up-to date with the master branch.
 
 Back on the right side of the web page click on::
 
@@ -136,7 +141,8 @@ Again, on the right side of the web page click on::
 
 	"New pull request"
 
-This should take you to the page where the changes made are compared with the former document.
+This should take you to the page where the changes made are compared
+with the former document.
 
 Then, on the left side of the page click on::
 
