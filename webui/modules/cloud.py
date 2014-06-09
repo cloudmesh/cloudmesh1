@@ -421,6 +421,12 @@ def start_vm(cloud=None, server=None):
         keynamenew,
         meta=metadata,
         cm_user_id=g.user.id)
+    tmp = dict(result)
+    try:
+        tmp['server']['adminPass'] = "*******"
+    except:
+        pass
+
     log.info ("{0}".format(result))
     # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     # config.incr()
@@ -436,6 +442,97 @@ def start_vm(cloud=None, server=None):
 
     clouds.refresh(names=[cloud], types=["servers"], cm_user_id=g.user.id)
     return redirect('/mesh/servers')
+
+@cloud_module.route('/cm/start/queue/<cloud>/')
+@login_required
+def start_vm_with_queue(cloud=None, server=None):
+    ''' 
+    
+    same as start_vm function but runs with
+    celery task queue
+    
+    *vm_create_queue* function launches vm instances through
+    a celery queue
+
+    '''
+    log.info("-> start {0}".format(cloud))
+
+    config = cm_config()
+    clouds = cm_mongo()
+    clouds.activate(cm_user_id=g.user.id)
+
+    key = None
+    vm_image = None
+    vm_flavor = None
+    vm_flavor_id = None
+
+    userinfo = getCurrentUserinfo()
+
+    # print userinfo
+
+    error = ''
+
+    try:
+        vm_flavor_id = userinfo["defaults"]["flavors"][cloud]
+    except:
+        error = error + "Please specify a default flavor."
+
+    if vm_flavor_id in [None, 'none']:
+        error = error + "Please specify a default flavor."
+
+    try:
+        vm_image = userinfo["defaults"]["images"][cloud]
+    except:
+        error = error + "Please specify a default image."
+
+    if vm_image in [None, 'none']:
+        error = error + "Please specify a default image."
+
+    username = userinfo["cm_user_id"]
+    
+    if "key" in userinfo["defaults"]:
+        key = userinfo["defaults"]["key"]
+    elif len(userinfo["keys"]["keylist"].keys()) > 0:
+        key = userinfo["keys"]["keylist"].keys()[0]
+        
+    if key:
+        keycontent = userinfo["keys"]["keylist"][key]
+        if keycontent.startswith('key '):
+            keycontent = keycontent[4:]
+        check_register_key(cloud, key, keycontent)
+        keynamenew = _keyname_sanitation(username, key)
+    else:
+        error = error + "No sshkey found. Please <a href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"
+    
+    if error != '':
+        return render_template('error.html', error=error)
+
+    metadata = {'cm_owner': username}
+    prefix = userinfo["defaults"]["prefix"]
+    index = userinfo["defaults"]["index"]
+    
+    log.info("STARTING {0} {1}".format(prefix, index))
+    # log.info("FLAVOR {0} {1}".format(vm_flavor, vm_flavor_id))
+    log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image, vm_flavor_id, keynamenew))
+    result = clouds.vm_create_queue(
+        cloud,
+        prefix,
+        index,
+        vm_flavor_id,
+        vm_image,
+        keynamenew,
+        metadata,
+        g.user.id)
+    log.info ("{0}".format(result))
+    # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
+    # config.incr()
+    userstore = cm_user()
+    userstore.set_default_attribute(username, "index", int(index) + 1)
+    # config.write()
+
+    clouds.refresh(names=[cloud], types=["servers"], cm_user_id=g.user.id)
+    return redirect('/mesh/servers')
+
 
 # ============================================================
 # ROUTE: VM Login

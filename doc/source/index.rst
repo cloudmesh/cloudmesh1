@@ -11,6 +11,7 @@ Cloudmesh
    installation
    configure
    doc
+   hacking
    nosetest
    shell    
    metric
