@@ -31,10 +31,10 @@ class cm_shell_register:
         pass
     
     @command
-    def do_reg(self, args, arguments):
+    def do_register(self, args, arguments):
         '''
         Usage:
-          reg NOTIMPLEMENTED [options] NAME
+          register [options] NAME
 
         Arguments:
           NAME      Name of the cloud to be registered
