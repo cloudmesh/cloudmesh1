@@ -1,9 +1,9 @@
 {% extends "layout/layoutTable.html" %}
-{% from "_helper.html" import image_button, image_popup, href_image_button %}
+{% from "_helper.html" import image_popup, href_image_button %}
 {% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
-<h2> {{ href_image_button ("none", "365_restart", "/cm/refresh/servers") }} Servers </h2>
+<h2> {{ href_image_button ("none", "fa-repeat", "/cm/refresh/servers") }} Servers </h2>
 {% endblock contentbox %}
 
 {% block content %}
@@ -87,21 +87,21 @@ function toggle(source,select_list) {
     <h3 id="{{cloud}}">
         <span style="float:left; width:30%; white-space:nowrap;">
             <span class="inner_function_button">
-                {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
+                {{ href_image_button ("none", "fa-repeat", "/cm/refresh/" + cloud + "/servers") }}
             </span>
             {{ cloud }}
         </span>
         <span class="badge"> {{ clouds[cloud] |count }} </span> VMs
         &nbsp;
         <span class="inner_function_button" style="margin-left: 32px;">
-            {{ image_button ("none", "190_circle_plus", "/cm/start/" + cloud +"/") }}
+            {{ href_image_button ("none", "fa-plus-circle", "/cm/start/" + cloud +"/") }}
         </span>
 	<!--
 	# Comment:
 	../queue/ calls a function with a celery task queue to execute a process in the background
 	
         <span class="inner_function_button" style="margin-left: 32px;">
-            {{ image_button ("none", "190_circle_plus", "/cm/start/queue/" + cloud +"/") }}
+            {{ href_image_button ("none", "fa-plus-circle", "/cm/start/queue/" + cloud +"/") }}
         </span>
 	-->
 
@@ -114,7 +114,7 @@ function toggle(source,select_list) {
         </span>
         &nbsp;
         <span class="inner_function_button">
-            {{ image_button ("none", "044_keys", "/cm/keypairs/" + cloud + "/") }}
+            {{ href_image_button ("none", "044_keys", "/cm/keypairs/" + cloud + "/") }}
         </span>
         <span style="margin-left: 32px;">
             Project: <span class="badge"> {{user['defaults']['project']}} </span>
@@ -166,13 +166,35 @@ function toggle(source,select_list) {
                         <tr>
                             <td><input type="checkbox" name="selection_{{cloud}}" value = {{server}} /> </td>
                             <td>
-                                {% if not flag_production %}
-                                    {{ href_image_button ("none", "368_collapse", "/cm/login/" ~ cloud ~ "/" ~ s_id ~ "/") }}
-                                {% endif %}
-                                {{ href_image_button ("right", "195_circle_info", "/cm/info/" ~ cloud ~ "/" ~ s_id ~ "/") }}
-                                <a href="/cm/assignpubip/{{cloud}}/{{s_id}}/">  IP </a>
-                                {{ image_popup ("none", "041_charts", "/cm/stats/" ~ cloud ~ "/" ~ s_id ~ "/") }}
-                                {{ href_image_button ("right", "016_bin", "/cm/delete/" ~ cloud + "/" ~ s_id ~ "/") }}
+			      <div class="btn-group">
+
+				<a class="btn btn-default"
+   				   href="/cm/info/{{cloud}}/{{s_id}}/">
+				   <i class="fa fa-info-circle"></i>
+				</a>
+
+				<a class="btn btn-default"
+				   href="/cm/login/{{cloud}}/{{s_id}}/">
+				   <i class="fa fa-desktop"></i>
+				</a>
+
+                                <a class="btn btn-default"
+				   href="/cm/assignpubip/{{cloud}}/{{s_id}}/">  IP </a>				
+
+				<a class="btn btn-default"
+				   href="/cm/stats/{{cloud}}/{{s_id}}/">
+				   <i class="fa fa-bar-chart-o"></i>
+				</a>
+				
+				<a class="btn btn-default"
+				   href="/cm/delete/{{cloud}}/{{s_id}}/">
+				   <i class="fa fa-trash-o"></i>
+				</a>
+				
+			      </div>
+
+
+
                             </td>
                             <!-- for attribute in clouds[cloud][server] -->
 			    {% for attribute in attributes %}

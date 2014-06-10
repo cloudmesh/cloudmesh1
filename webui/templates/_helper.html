@@ -71,14 +71,13 @@ image_button("041_charts", "/table/")
          width="16" height="16">
 {% endmacro %}
 
-{% macro href_image_button(align, type, actionpath) %}
+{% macro href_image_button(align, kind, actionpath, text) %}
       <a href="{{ actionpath }}">
-      <img
-      	 {% if align != None %}
-      	 	align={{ align }}
+	 <i class="fa {{ kind }}"></i>
+      	 {% if text != None %}
+      	 	&nbsp; {{ text }}
       	 {% endif %}
-	 <i class="fa {{type}} fa-fw"></i>
-	  </a>
+       </a>
 {% endmacro %}
 
 {% macro image_popup(align, type, actionpath) %}
