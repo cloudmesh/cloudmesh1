@@ -31,7 +31,7 @@ $(function() {
 <table>
     <tr>
     	<th>
-    		{{ image_link ("right", "030_pencil", "https://portal.futuregrid.org/my/edit/Contact") }}
+    		<font="black">{{ image_link ("right", "fa-pencil-square-o", "https://portal.futuregrid.org/my/edit/Contact") }}</font>
 
     	</th>
     	<th colspan="3"><b> Personal Details </b></th>
@@ -87,7 +87,9 @@ $(function() {
 	<tr><th></th><th colspan="3"><b> Cloud Details</b></th></tr>
 
 	<tr>
-	  <td>{{  cm_image_input("right", "222_share") }}</td>
+	  
+	  <td>
+	    <input align="right" type="submit" value="&#xf0c7;" /> </td>
 	  <td> VM Name </td>
 	  <td colspan="2"><input type="text"
 	    name="field-prefix"
@@ -98,7 +100,7 @@ $(function() {
 	    name="field-index"
 	    value="{{ user.defaults.index }}"
 	    style="width:120px">
-	    <input type="submit" name="btnindex" value="Save VM Name">
+	    <input type="submit" name="btnindex" value="&#xf0c7; Save VM Name">
 	  </td>
 	</tr>
 	{% for cloud in user.clouds: %}
@@ -173,10 +175,15 @@ $(function() {
 
 	<tr><th></th><th colspan="3"><b> Security Groups </b></th></tr>
 
-	<tr><td>{{ image_button ("right", "030_pencil", "") }}</td><td>
-	<b> Default </b></td>
+	<tr>
+	  <td>
+	    <input align="right" type="submit" value="&#xf0c7;" /> 
+	  </td>
+	  <td>
+	    <b> Default </b>
+	  </td>
 
-	<td colspan="2">
+	  <td colspan="2">
 
 
 	{% for group in configuration['security']['security_groups'].keys() %}
@@ -257,7 +264,7 @@ $(function() {
 <!-- -------------- Keys ---------------------------------- -->
 	<tr>
 		<th>
-			{{ image_link ("right", "030_pencil", "https://portal.futuregrid.org/my/ssh-keys") }}
+			{{ image_link ("right", "fa-pencil-square-o", "https://portal.futuregrid.org/my/ssh-keys") }}
 		</th><th colspan="3"><b> Keys </b></th></tr>
 	<tr>
 	{% if (user["keys"] | count) > 0 %}
@@ -276,10 +283,14 @@ $(function() {
 			  		value="{{name}}" {{checked}}
 					 onclick="document.forms['profile'].submit()" title="select">
 		  		</td>
-		  		<td>{{name}}</td>
-		  		<td colspan="2">{{  user["keys"]["keylist"][name] | replace ("key ssh", "") |  filter_fingerprint  }}
-					<a href="delete/{{name}}/"><img src="/static/img/icons/png/glyphicons_016_bin.png" width="12" height="12" title="delete" align="right"></a>
-		  		</td>
+		  		<td>
+				  <a href="delete/{{name}}/"><i class="fa fa-trash-o"></i></a>&nbsp;
+				  {{name}}
+				</td>
+					
+				<td colspan="2">
+				  {{  user["keys"]["keylist"][name] | replace ("key ssh", "") |  filter_fingerprint  }}
+				</td>
 			</tr>
 		{% endfor %}
 

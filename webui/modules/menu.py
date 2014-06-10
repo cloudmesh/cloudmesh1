@@ -11,7 +11,7 @@ menu_module = Blueprint('menu_module', __name__)
 super_duper_sidebar_pages = [
     ["Cloudmesh", None, None, ['all'],
         [
-            ["Home", "/", None],
+            ['Home', "/", None],
             ["Status", "/status", None],
             ["Profile", "/profile/", None],
         ],
