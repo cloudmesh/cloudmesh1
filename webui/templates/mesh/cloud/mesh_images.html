@@ -1,9 +1,9 @@
 {% extends "layout/layoutTable.html" %}
-{% from "_helper.html" import image_button %}
+{% from "_helper.html" import href_image_button %}
 {% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
-<h2> {{ image_button ("none", "365_restart", "/cm/refresh/images/images") }} Images </h2>
+<h2> {{ image_button ("none", "fa-repeat", "/cm/refresh/images/images") }} Images </h2>
 {% endblock %}
 
 {% block content %}
@@ -78,7 +78,7 @@ $(function() {
         <h3 id="{{cloud}}">
             <span style="float:left; width:30%; white-space:nowrap;">
                 <span class="inner_function_button">
-                    {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/images") }}
+                    {{ href_image_button ("none", "fa-repeat", "/cm/refresh/" + cloud + "/images") }}
                 </span>
                 {{ cloud }}
             </span>
