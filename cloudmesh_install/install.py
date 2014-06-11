@@ -496,7 +496,7 @@ def osx():
         import numpy
         print "numpy already installed"
     except:
-        local('pip install numpy')
+        safe_install('pip install numpy')
     try:
         import matplotlib
         print "matplotlib already installed"
