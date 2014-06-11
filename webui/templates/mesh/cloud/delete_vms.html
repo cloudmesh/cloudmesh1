@@ -1,5 +1,5 @@
 {% extends "layout/layoutTable.html" %}
-{% from "_helper.html" import image_button, image_popup %}
+{% from "_helper.html" import href_image_button, image_popup %}
 {% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
@@ -78,7 +78,7 @@ $(function() {
   {% for cloud in clouds %}
   <div style="margin-bottom:1em;">
     <h3>
-    	{{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/servers") }}
+    	{{ href_image_button ("none", "fa-repeat", "/cm/refresh/" + cloud + "/servers") }}
       	&nbsp;
       	{{ cloud }}
         <span class="badge"> {{ clouds[cloud] |count }} VMS</span>
