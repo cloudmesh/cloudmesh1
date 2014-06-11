@@ -1,13 +1,7 @@
-'''
-A simple class to set up a custom logger for a class
-'''
 from cloudmesh_install import config_file
 import logging
-import sys
 import os
 from cloudmesh_common.bootstrap_util import grep
-from cloudmesh_common.bootstrap_util import path_expand
-
 
 def LOGGER(filename):
     """creates a logger with the given name.

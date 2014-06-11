@@ -1,5 +1,8 @@
+"""Convenient methods and classes to print tables"""
 from pytimeparse.timeparse import timeparse
 from prettytable import PrettyTable
+from datetime import datetime
+from datetime import timedelta
 
 
 def column_table(column_dict, order=None):
@@ -22,8 +25,12 @@ def column_table(column_dict, order=None):
 
 
 def two_column_table(column_dict):
-    # header
-    header = ['Default', 'Value']
+    """prints a table with two columns where the first column are the
+    attributes, and the second column are the values.
+
+    :param column_dic: the dictionary to be printed
+    """
+    # header = ['Default', 'Value']
     x = PrettyTable()
     x.add_column('Default', column_dict.keys())
     x.add_column('Value', column_dict.values())
@@ -75,7 +82,9 @@ def parse_time_interval(time_start, time_end):
     given in time_end. The format of the duration is intuitive through
     the timeparse module. YOu can specify values such as +1d, +1w10s.
 
-    :param time_start: the start time, if the string 'current_time' is passed it will be replaced by the current time
+    :param time_start: the start time, if the string 'current_time' is
+                       passed it will be replaced by the current time
+
     :param time_end: either a time or a duration
     """
     t_end = time_end
