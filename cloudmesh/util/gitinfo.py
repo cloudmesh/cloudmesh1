@@ -39,7 +39,7 @@ class GitInfo:
         '''
         returns the emails of the authors either as a text or as a dict. The
         format is specified as an argument.
-        
+
         :param format_arg: if "dict" is specified a dict will be returned
         :rtype: dict or arry of e-mails dependent on format_arg
         '''
@@ -65,7 +65,7 @@ class GitInfo:
         '''
         returns the authors of the authors either as a text or as a dict. The
         format is specified as an argument.
-        
+
         :param format_arg: if "dict" is specified a dict will be returned
         '''
         result = git.shortlog("-s", "-n", _tty_in=True, _tty_out=False)
@@ -98,7 +98,7 @@ class GitInfo:
     def stat(self, email):
         '''
         returns a statistic of a git author with the given e_mail.
-        
+
         :param email: name of the author
         :rtype: a dict with the statistics
         '''
@@ -187,4 +187,3 @@ if __name__ == "__main__":
     for email in stats:
         p = stats[email]["percentage"]
         print "{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%".format(email, p[0], p[1], p[2], p[3])
-
