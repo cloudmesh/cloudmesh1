@@ -25,15 +25,12 @@ class Inventory:
     server_config = None
 
     CONFIG_FILE = config_file("/cloudmesh_cluster.yaml")
-    BOOTSPEC_FILE = config_file("/cloudmesh_bootspec.yaml")
 
     def __init__(self):
 		# read the host file definition from cloudmesh_cluster.yaml
 		self.server_config = cm_config_server()
 
 		self.config = ConfigDict(filename=self.CONFIG_FILE)
-
-		self.bootspec_config = ConfigDict(filename=self.BOOTSPEC_FILE)
 
 		collection = "inventory"
 		self.db_inventory = get_mongo_db(collection)
@@ -219,7 +216,6 @@ class Inventory:
 
 
     def generate(self):
-        self.generate_bootspec()
         self._generate_globals()
 
         clusters = self.config.get("cloudmesh.inventory")
@@ -283,7 +279,6 @@ class Inventory:
         services = self.find({'cm_type' : 'inventory',
                               'cm_key' : 'image',
                               'cm_kind' : 'image'})
-        images = self.find({'cm_key' : 'bootspec'})
 
         # print "%15s:" % "dbname", self.inventory_name
         print "%15s:" % "clusters", clusters.count(), "->", ', '.join([c['cm_cluster'] for c in clusters])
@@ -452,72 +447,6 @@ class Inventory:
         self.update(query, element)
     
     # END rack inventory
-
-
-    def generate_bootspec(self):
-		bootspecs = self.bootspec_config.get("cloudmesh.bootspec")
-		for name in bootspecs:
-
-			log.info("Adding to inventory bootspec".format(name))
-			description = bootspecs[name]
-			# log.debug("{0}".format(description))
-			self.add_bootspec(name, description)
-
-    def add_bootspec(self, name, description):
-        '''
-        cm_type: inventory
-        cm_kind: bootspec
-        cm_key: bootspec
-        
-        cm_id: name
-        label: name
-        cm_refresh: now
-        
-        osimage: '/backup/snapshot/india_openstack-2013-07-01.squashfs'
-        os: 'ubuntu12'
-        extension: 'squashfs'
-        partition_scheme: 'gpt'
-        fstab_append: False
-        method: 'put'
-        boot:
-           kernel_type: kernel
-           bootloader: 'grub2'
-        rootpass: False
-        disk:
-           device: '/dev/sda'
-           partitions:
-               swap:
-                   size: '2'
-               system:
-                   size: '100'
-                   mount: '/'
-                   type: 'ext4'
-               data:
-                   size: '-1'
-                   mount: '/var/lib/nova'
-                   type: 'xfs'
-        '''
-        log.info("Adding bootspec {0}".format(name))
-        # log.debug("Adding bootspec {0}".format(description)
-
-        time = datetime.now()
-        element = dict(description)
-        element.update({'cm_type': "inventory",
-                        'cm_key': 'bootspec',
-                        'cm_kind': 'bootspec',
-                        'cm_label': name,
-                        'cm_id': name,
-                        'id': name,
-                        'label' : name,
-                        'cm_refresh': time})
-        self.update({'cm_key': 'bootspec', 'id': name}, element)
-
-    def get_bootspec (self, name):
-        spec = self.find_one ({'cm_type': "inventory",
-                               'cm_key': 'bootspec',
-                               'cm_kind': 'bootspec',
-                               'cm_id': name})
-        return spec
 
 
 def main():

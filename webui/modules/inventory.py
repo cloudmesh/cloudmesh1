@@ -197,29 +197,6 @@ def display_cluster_table(cluster):
 #                           cluster=inventory.get("cluster", cluster))
 
 
-@inventory_module.route('/inventory/images/')
-@login_required
-@admin_permission.require(http_exception=403)
-def display_inventory_images():
-
-    images = [i for i in inventory.find({'cm_key' : 'bootspec'})]
-
-    return render_template('mesh/inventory/images.html',
-                           images=images,
-                           inventory=inventory)
-
-
-@inventory_module.route('/inventory/image/<name>/')
-@login_required
-@admin_permission.require(http_exception=403)
-def display_inventory_image(name):
-    inventory.refresh()
-    if name is not None:
-        image = inventory.get('images', name)
-    return render_template('mesh/inventory/image.html',
-                           image=image)
-
-
 # ============================================================
 # ROUTE: INVENTORY ACTIONS
 # ============================================================

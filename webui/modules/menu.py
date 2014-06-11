@@ -48,7 +48,6 @@ super_duper_sidebar_pages = [
         [
             ["Overview", "/inventory/", None],
             ["Table", "/inventory/summary", None],
-            ["Images", "/inventory/images", None],
         ],
     ],
     ["Admin - Provision", None, None, ['admin', 'rain'],
