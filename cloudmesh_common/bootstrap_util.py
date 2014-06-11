@@ -1,4 +1,4 @@
-"""Bootstrap Cloudmesh finctions. 
+"""Bootstrap Cloudmesh finctions.
 
 This file contains basic utility functions that must not need any
 import from cloudmesh OR any other non-standard python
@@ -33,7 +33,7 @@ def banner(txt=None, c="#"):
     :param txt: a text message to be printed
     :type txt: string
     :param c: thecharacter used instead of c
-    :type c: character 
+    :type c: character
     """
     print
     print "#", 70 * c
