@@ -20,9 +20,9 @@ class AllowAllKeys(pm.MissingHostKeyPolicy):
 class ssh:
 
     def __init__(self, host, username, password=''):
-        self.host = host  # 'jedi000.cc.gatech.edu'
-        self.username = username  # 'hlee676'
-        self.password = password  # ''
+        self.host = host  
+        self.username = username  
+        self.password = password  
         self.setup()
 
     def setup(self):
