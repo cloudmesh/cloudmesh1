@@ -12,7 +12,8 @@ import traceback
 
 log = LOGGER(__file__)
 
-def read_yaml_config (filename, check=True, osreplace=True):
+
+def read_yaml_config(filename, check=True, osreplace=True):
     '''
     reads in a yaml file from the specified filename. If check is set to true
     the code will faile if the file does not exist. However if it is set to
@@ -25,7 +26,7 @@ def read_yaml_config (filename, check=True, osreplace=True):
         location = cm_path_expand(location)
 
     if not os.path.exists(location) and not check:
-       return None
+        return None
 
     if check and os.path.exists(location):
 
@@ -48,7 +49,8 @@ def read_yaml_config (filename, check=True, osreplace=True):
 
             return data
         except Exception, e:
-            log.error("The file {0} fails with a yaml read error".format(filename))
+            log.error(
+                "The file {0} fails with a yaml read error".format(filename))
             log.error(str(e))
             print traceback.format_exc()
             sys.exit()
@@ -56,6 +58,5 @@ def read_yaml_config (filename, check=True, osreplace=True):
     else:
         log.error("The file {0} does not exist.".format(filename))
         sys.exit()
-
 
     return None

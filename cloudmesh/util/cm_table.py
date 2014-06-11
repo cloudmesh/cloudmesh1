@@ -1,17 +1,19 @@
 """Prints tables in html, text, or with right alighned columns"""
 
+
 class cm_table:
+
     """
     Class to print a table in various formats.
 
     ::
-    
+
       format = HTML | ASCII | "%20s"
-    
+
     type is not used and wil be in future removed
 
     ::
-    
+
       columns = number of columns
 
     structure is an array of rows

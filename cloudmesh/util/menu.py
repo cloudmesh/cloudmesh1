@@ -1,5 +1,6 @@
 '''Ascii menu class'''
 
+
 def ascii_menu(title=None, menu_list=None):
     '''
     creates a simple ASCII menu from a list of tuples containing a label and a functions refernec. The function should not use parameters.
@@ -42,4 +43,3 @@ def ascii_menu(title=None, menu_list=None):
             except Exception, e:
                 print "ERROR: ", e
         display()
-

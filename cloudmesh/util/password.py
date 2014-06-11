@@ -5,6 +5,7 @@ import platform
 
 input = raw_input
 
+
 def ask_for_input(label, init_function, echo=False):
     '''
     A generic input function that asks for a string and returns it after typoing it in 
@@ -19,17 +20,20 @@ def ask_for_input(label, init_function, echo=False):
         print "{0}: {1}".format(label, result)
     return result
 
+
 def get_host():
     '''
     asks for a hostname and uses the platforms hostname as initial value.
     '''
     return ask_for_input("Hostname", platform.node)
 
+
 def get_user():
     '''
     asks for a username and uses the username of the current system as the initial value.
     '''
     return ask_for_input("Username", getpass.getuser)
+
 
 def _password_valid(password, repeat_password):
     '''
@@ -38,6 +42,7 @@ def _password_valid(password, repeat_password):
     :param repeat_password: second password
     '''
     return password == repeat_password and password != "" and password != None
+
 
 def get_password():
     '''
