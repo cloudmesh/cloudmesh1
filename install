@@ -121,8 +121,12 @@ def main():
         try:
             os.system("bin/prepare-%s.sh" % os_system)
         except:
-            print "OS distribution not supported; please see documatation for manual installation instructions."
-            sys.exit(1)
+            print "OS distribution not supported; please see documatation for manual installation instructions.", os_system
+            #sys.exit(1)
+
+        if sys.platform in ['darwin']:
+            from cloudmesh_install.install import osx
+            osx()
 
         sys.exit(0)
 
