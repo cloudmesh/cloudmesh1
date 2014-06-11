@@ -10,7 +10,7 @@ Example::
     print decrypted_text
 
     # Generate some password-like strings and verify encryption/decryption
-    
+
     import string, random
     chars = string.letters + string.digits
     for i in range(0,100):
@@ -29,7 +29,6 @@ from hashlib import sha256
 from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
 import uuid
-from cloudmesh_install import config_file
 
 
 def pad(data, bs):
@@ -55,12 +54,13 @@ def keydigest(key):
 
 def encrypt(data, password):
     """
-    Encrypts the given data using the password.  
+    Encrypts the given data using the password.
 
     :param data: the data
-    :param password: the password 
-    :rtype: Returns a concatenation of the initialiation vector and the encrypted data, base64 encoded so it can be easily stored as text
-
+    :param password: the password
+    :rtype: Returns a concatenation of the initialiation vector
+            and the encrypted data, base64 encoded so it can be
+            qeasily stored as text
     """
     iv = os.urandom(16)
     key = keydigest(password)
@@ -71,13 +71,14 @@ def encrypt(data, password):
 
 
 def decrypt(data64, password):
-    """
-    Decrypts the given data using the password.  
+    """Decrypts the given data using the password.
 
-    The data64 should be the base64 encoded encrypted value created by the encrypt function.
+    The data64 should be the base64 encoded encrypted value created
+    by the encrypt function.
+
     :param data64: the base64 encoded data
-    :param password: the password 
-    :rtype: Returns decrypted information in data64 
+    :param password: the password
+    :rtype: Returns decrypted information in data64
     """
     data = b64decode(data64)
     iv = data[:16]
