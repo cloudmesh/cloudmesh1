@@ -6,8 +6,10 @@ import shutil
 import sys
 import stat
 import getpass
+
 sys.path.append("..")
 sys.path.append(".")
+
 
 from jinja2.runtime import Undefined
 from jinja2 import Environment
@@ -473,15 +475,23 @@ def centos():
     install()
     # install_mongodb()
 
+def safe_install(what):
+    try:
+        local(what)
+    except:
+        print "Warning: could not install:", what
 
+
+    
 def osx():
 
     local("export CFLAGS=-Qunused-arguments")
     local("export CPPFLAGS=-Qunused-arguments")
-    local('brew install wget')
-    local('brew install mercurial')
-    local('brew install freetype')
-    local('brew install libpng')
+
+    safe_install('brew install wget')
+    safe_install('brew install mercurial')
+    safe_install('brew install freetype')
+    safe_install('brew install libpng')
     try:
         import numpy
         print "numpy already installed"
@@ -491,9 +501,11 @@ def osx():
         import matplotlib
         print "matplotlib already installed"
     except:
-        local(
-            'LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib')
-
+        try:
+            local(
+                'LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib')
+        except:
+            print "Warning: installing matplot lib"
         # local('pip install matplotlib')
 
     install()
@@ -506,7 +518,9 @@ def sphinx_updates():
     # Otherwise, if there are ohter users who run this command as well,
     # permission conflict will occur when it trys to write or delete
     # the directory
-    dirname = local("mktemp -d", capture=True)
+    # TODO: the use of mktemp was wrong as we need to pass a template
+    user = getpass.getuser()
+    dirname = local("mktemp -d /tmp/{0}_cloudmesh.XXXXX".format(user), capture=True)
     dirname = dirname + "/install-cloudmesh"
     local('rm -rf %s' % dirname)
     local('mkdir -p %s' % dirname)
