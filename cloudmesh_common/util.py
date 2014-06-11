@@ -26,10 +26,12 @@ import cloudmesh_common.bootstrap_util
 import string
 import random
 
+
 def path_expand(text):
     # This function just wraps the bootstrap function to avoid
     # breaking other code that imports "path_expand" from this module
     return cloudmesh_common.bootstrap_util.path_expand(text)
+
 
 def backup_name(filename):
     """
@@ -51,10 +53,12 @@ def backup_name(filename):
         found = os.path.isfile(backup)
     return backup
 
+
 def banner(txt=None, c="#"):
     # This function just wraps the bootstrap function to avoid
     # breaking other code that imports "banner" from this module
     cloudmesh_common.bootstrap_util.banner(txt, c)
+
 
 def HEADING(txt=None):
     """
@@ -69,7 +73,7 @@ def HEADING(txt=None):
 
     banner(txt)
 
-        
+
 def yn_choice(message, default='y'):
     # This function just wraps the bootstrap function to avoid
     # breaking other code that imports "yn_choice" from this module
@@ -82,7 +86,7 @@ def cat(filename):
     :param filename: name of the file, which can include ~ and $ environment variables 
     :type: string
     """
-    location = path_expand(filename) 
+    location = path_expand(filename)
     banner(filename)
     with open(location, 'r') as f:
         print f.read()
@@ -108,7 +112,8 @@ def check_file_for_tabs(filename, verbose=True):
     for line in lines:
         if "\t" in line:
             file_contains_tabs = True
-            location = [i for i in range(len(line)) if line.startswith('\t', i)]
+            location = [
+                i for i in range(len(line)) if line.startswith('\t', i)]
             if verbose:
                 print "Tab found in line", line_no, "and column(s)", location
         line_no = line_no + 1
@@ -116,41 +121,40 @@ def check_file_for_tabs(filename, verbose=True):
 
 
 def deprecated(func):
-     '''This is a decorator which can be used to mark functions
-     as deprecated. It will result in a warning being emitted
-     when the function is used. Just use @deprecated before
-     the definition.::
+    '''This is a decorator which can be used to mark functions
+    as deprecated. It will result in a warning being emitted
+    when the function is used. Just use @deprecated before
+    the definition.::
 
-         @deprecated
-         def my_func():
-           pass
+        @deprecated
+        def my_func():
+          pass
 
-         @other_decorators_must_be_before
-         @deprecated
-         def my_func():
-           pass
+        @other_decorators_must_be_before
+        @deprecated
+        def my_func():
+          pass
 
-     '''
-     @functools.wraps(func)
-     def new_func(*args, **kwargs):
-         '''
-         warnings.warn_explicit(
-             "Call to deprecated function {}.".format(func.__name__),
-             category=DeprecationWarning,
-             filename=func.func_code.co_filename,
-             lineno=func.func_code.co_firstlineno + 1
-         )
-         '''
-         print
-         print 70 * "-"
-         print("Warning: Call to deprecated function {}.".format(func.__name__))
-         print "         filename=", func.func_code.co_filename
-         print "         lineno=", func.func_code.co_firstlineno + 1
-         print 70 * "-"
+    '''
+    @functools.wraps(func)
+    def new_func(*args, **kwargs):
+        '''
+        warnings.warn_explicit(
+            "Call to deprecated function {}.".format(func.__name__),
+            category=DeprecationWarning,
+            filename=func.func_code.co_filename,
+            lineno=func.func_code.co_firstlineno + 1
+        )
+        '''
+        print
+        print 70 * "-"
+        print("Warning: Call to deprecated function {}.".format(func.__name__))
+        print "         filename=", func.func_code.co_filename
+        print "         lineno=", func.func_code.co_firstlineno + 1
+        print 70 * "-"
 
-         return func(*args, **kwargs)
-     return new_func
-
+        return func(*args, **kwargs)
+    return new_func
 
 
 def cond_decorator(flag, dec):
@@ -185,8 +189,11 @@ def status_color(status):
 ''' ref:
     http://stackoverflow.com/questions/2257441/python-random-string-generation-with-upper-case-letters-and-digits
 '''
+
+
 def get_rand_string(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
 
 def get_unique_name(prefix="", **kargs):
     """Make a UUID without some characters such as '-', '_', ' ', '.'
@@ -251,4 +258,3 @@ def address_string(content, labels=False):
         except:
             result = content
     return result
-

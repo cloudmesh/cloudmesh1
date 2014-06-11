@@ -1,6 +1,7 @@
 from pytimeparse.timeparse import timeparse
 from prettytable import PrettyTable
 
+
 def column_table(column_dict, order=None):
     """prints a pretty table from data in the dict.
     :param column_dict: A dict that has an array for each key in the dict.
@@ -19,14 +20,16 @@ def column_table(column_dict, order=None):
     x.align = "l"
     return x
 
+
 def two_column_table(column_dict):
     # header
-    header = ['Default','Value']
+    header = ['Default', 'Value']
     x = PrettyTable()
     x.add_column('Default', column_dict.keys())
     x.add_column('Value', column_dict.values())
     x.align = "l"
     return x
+
 
 def table_printer(the_dict, header_info=None):
     """
@@ -40,7 +43,7 @@ def table_printer(the_dict, header_info=None):
     # header_info ["attribute", "value"]
     if (header_info is not None) or (header_info == ""):
         result = '<tr><th>{0}</th><th>{1}</th></tr>'\
-                .format(header_info[0], header_info[1])
+            .format(header_info[0], header_info[1])
     else:
         result = ''
     if isinstance(the_dict, dict):
@@ -58,15 +61,15 @@ def table_printer(the_dict, header_info=None):
                         '<tr><td>{0}</td><td>{1}</td></tr>'\
                         .format(name.title(), str(table_printer(value)))
             except:
-                #If the element is not dict
+                # If the element is not dict
                 return str(element)
         result = '<table>' + result + '</table>'
         return result
     else:
         return the_dict
-        
 
-def parse_time_interval (time_start, time_end):
+
+def parse_time_interval(time_start, time_end):
     """created time values for time_start and time_end, while time_end
     will be replaced with time_start+ a duration if the duration is
     given in time_end. The format of the duration is intuitive through
@@ -74,12 +77,12 @@ def parse_time_interval (time_start, time_end):
 
     :param time_start: the start time, if the string 'current_time' is passed it will be replaced by the current time
     :param time_end: either a time or a duration
-    """ 
+    """
     t_end = time_end
     t_start = time_start
 
     if t_start is not None:
-        if t_start in ["current_time","now"]:
+        if t_start in ["current_time", "now"]:
             t_start = str(datetime.now())
 
     if t_end is not None:
@@ -90,5 +93,3 @@ def parse_time_interval (time_start, time_end):
             t_end = t_start + timedelta(seconds=delta)
 
     return (str(t_start), str(t_end))
-
-
