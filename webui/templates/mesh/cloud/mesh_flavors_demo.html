@@ -1,8 +1,8 @@
 {% extends "layout/layoutTable.html" %}
-{% from "_helper.html" import image_button %}
+{% from "_helper.html" import href_image_button %}
 
 {% block contentbox %}
-<h2> {{ image_button ("none", "365_restart", "/cm/refresh/flavors") }} Flavors - DEMO </h2>
+<h2> {{ href_image_button ("none", "fa-repeat", "/cm/refresh/flavors") }} Flavors - DEMO </h2>
 {% endblock contentbox %}
 
 
@@ -118,7 +118,7 @@ $(document).ready( function() {
     {% for cloud in clouds %}
         <h3 id="{{cloud}}">
             <span style="float:left; width:30%; white-space:nowrap;">
-                {{ image_button ("none", "365_restart", "/cm/refresh/" + cloud + "/flavors") }}
+                {{ href_image_button ("none", "fa-repeat", "/cm/refresh/" + cloud + "/flavors") }}
                 {{ cloud }}
             </span>
             <span>
