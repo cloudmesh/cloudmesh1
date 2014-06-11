@@ -1,7 +1,7 @@
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.inventory import Inventory
-from cloudmesh.old_inventory.inventory import Inventory as oldInventory, \
-    PROVISIONING_CHOICES
+#from cloudmesh.old_inventory.inventory import Inventory as oldInventory, \
+#    PROVISIONING_CHOICES
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.provisioner.queue.celery import celery
 from cloudmesh.provisioner.queue.tasks import provision
@@ -26,7 +26,7 @@ admin_permission = Permission(RoleNeed('admin'))
 provisioner_module = Blueprint('provisioner_module', __name__)
 
 
-inventory = oldInventory("nosetest")
+#inventory = oldInventory("nosetest")
 n_inventory = Inventory()
 
 # ============================================================
@@ -154,13 +154,13 @@ class ProvisionForm(Form):
     choices = zip(clusters, clusters)
     cluster = SelectField("Cluster", choices=choices)
     nodespec = TextField("Nodes")
-    provision_choices = zip(PROVISIONING_CHOICES, PROVISIONING_CHOICES)
-    service = SelectField("Service", choices=provision_choices)
+    # provision_choices = zip(PROVISIONING_CHOICES, PROVISIONING_CHOICES)
+    # service = SelectField("Service", choices=provision_choices)
 
 
 
     def validate(self):
-        cluster = inventory.get("cluster", self.cluster.data)
+        #cluster = inventory.get("cluster", self.cluster.data)
         posibilities = expand_hostlist(cluster.definition)
         choice = expand_hostlist(self.nodespec.data)
         if choice == []:
@@ -207,5 +207,5 @@ def display_provision_form():
 
     else:
         flash("Wrong submission")
-    inventory.refresh()
+    # inventory.refresh()
     return render_template("mesh/provision/provision.html", clusters=clusters, form=form)
