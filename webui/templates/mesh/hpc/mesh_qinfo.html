@@ -1,9 +1,10 @@
 {% extends "layout/layoutTable.html" %}
+{% from "_helper.html" import href_image_button %}
 {% from "_helper.html" import image_button %}
 {% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
-<h2> {{ image_button ("none", "365_restart", "/mesh/refresh/qinfo") }} qinfo </h2>
+<h2> {{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qinfo") }} qinfo </h2>
 {% endblock %}
 
 
@@ -19,8 +20,11 @@
         {% set host_loop = loop %}
         {% set version = 'pbs' %}
         <div style="margin-bottom:1em;">
-       <h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qinfo/" + host) }}
-         <span style="float:left; width:30%; white-space:nowrap;">
+       <h3>
+	 <span style="float:left; width:30%; white-space:nowrap;">
+            <span class="inner_function_button">
+	      {{ image_button ("none", "365_restart", "/mesh/refresh/qinfo/" + host) }}
+	    </span>
          {{ host }}
          </span>
          <span class="badge">
