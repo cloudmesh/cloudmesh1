@@ -1,5 +1,5 @@
 {% extends "layout/layout_title.html" %}
-{% from "_helper.html" import image_button %}
+{% from "_helper.html" import href_image_button %}
 
 {% block contentbox %}
 <h1> Inventory Cluster </h1>
@@ -82,7 +82,7 @@ $(function() {
 		    <input name="checkbox" value="{{ server }}" type="checkbox">
 		  </td>
 		  <td>
-		    {{ image_button ("right", "195_circle_info", "/inventory/cluster/" + cluster + "/"+  server) }}
+		    {{ href_image_button ("right", "fa-info-circle", "/inventory/cluster/" + cluster + "/"+  server) }}
 		  </td>
 		  <td> <a href="/inventory/cluster/{{ cluster }}/{{server}}">
 		    {{ server }}
