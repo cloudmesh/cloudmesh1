@@ -19,3 +19,16 @@ cloudmesh:
         count: 1
         queue: qstat
         concurrency: 1
+      azure-servers:
+        id: a
+        app: cloudmesh.iaas.azure.queue
+        count: 1
+        queue: azure-servers
+        concurrency: 1
+      aws-images:
+        id: w
+        app: cloudmesh.iaas.aws.queue
+        count: 1
+        queue: aws-images
+        concurrency: 1
+
