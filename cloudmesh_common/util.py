@@ -1,4 +1,4 @@
-""" Basic Clousmesh finctions. 
+""" Basic Clousmesh finctions.
 
 This file contains tome veri basic utility functions that must not
 need any import from cloudmesh. That is no statement such as
@@ -20,16 +20,21 @@ import inspect
 import os
 import uuid
 import functools
-import warnings
-from datetime import datetime, timedelta
+#import warnings
 import cloudmesh_common.bootstrap_util
 import string
 import random
 
+
 def path_expand(text):
-    # This function just wraps the bootstrap function to avoid
-    # breaking other code that imports "path_expand" from this module
+    """ returns a string with expanded variable.
+
+    :param text: the path to be expanded, which can include ~ and $ variables
+    :param text: string
+
+    """
     return cloudmesh_common.bootstrap_util.path_expand(text)
+
 
 def backup_name(filename):
     """
@@ -51,10 +56,23 @@ def backup_name(filename):
         found = os.path.isfile(backup)
     return backup
 
+
 def banner(txt=None, c="#"):
-    # This function just wraps the bootstrap function to avoid
-    # breaking other code that imports "banner" from this module
+    """prints a banner of the form with a frame of # arround the txt::
+
+      ############################
+      # txt
+      ############################
+
+    .
+
+    :param txt: a text message to be printed
+    :type txt: string
+    :param c: thecharacter used instead of c
+    :type c: character
+    """
     cloudmesh_common.bootstrap_util.banner(txt, c)
+
 
 def HEADING(txt=None):
     """
@@ -69,26 +87,32 @@ def HEADING(txt=None):
 
     banner(txt)
 
-        
+
 def yn_choice(message, default='y'):
-    # This function just wraps the bootstrap function to avoid
-    # breaking other code that imports "yn_choice" from this module
+    """asks for a yes/no question.
+    :param message: the message containing the question
+    :param default: the default answer
+    """
     return cloudmesh_common.bootstrap_util.yn_choice(message, default)
 
 
 def cat(filename):
     """prints the contents of a file with the given name.
 
-    :param filename: name of the file, which can include ~ and $ environment variables 
+    :param filename: name of the file, which can include ~ and $
+                     environment variables 
     :type: string
     """
-    location = path_expand(filename) 
+    location = path_expand(filename)
     banner(filename)
     with open(location, 'r') as f:
         print f.read()
 
 
 def not_implemented():
+    """prins simply an error that this is not implemented. This can be
+    used when you protortype things."""
+
     print "ERROR: not yet implemented"
 
 
@@ -98,7 +122,7 @@ def check_file_for_tabs(filename, verbose=True):
     verbose is set to False, the location is not printed.
 
     :param filename: the filename
-     :rtype: True if there are tabs in the file
+    :rtype: True if there are tabs in the file
     """
     file_contains_tabs = False
     with file(filename) as f:
@@ -108,7 +132,8 @@ def check_file_for_tabs(filename, verbose=True):
     for line in lines:
         if "\t" in line:
             file_contains_tabs = True
-            location = [i for i in range(len(line)) if line.startswith('\t', i)]
+            location = [
+                i for i in range(len(line)) if line.startswith('\t', i)]
             if verbose:
                 print "Tab found in line", line_no, "and column(s)", location
         line_no = line_no + 1
@@ -116,41 +141,40 @@ def check_file_for_tabs(filename, verbose=True):
 
 
 def deprecated(func):
-     '''This is a decorator which can be used to mark functions
-     as deprecated. It will result in a warning being emitted
-     when the function is used. Just use @deprecated before
-     the definition.::
+    '''This is a decorator which can be used to mark functions
+    as deprecated. It will result in a warning being emitted
+    when the function is used. Just use @deprecated before
+    the definition.::
 
-         @deprecated
-         def my_func():
-           pass
+        @deprecated
+        def my_func():
+          pass
 
-         @other_decorators_must_be_before
-         @deprecated
-         def my_func():
-           pass
+        @other_decorators_must_be_before
+        @deprecated
+        def my_func():
+          pass
 
-     '''
-     @functools.wraps(func)
-     def new_func(*args, **kwargs):
-         '''
-         warnings.warn_explicit(
-             "Call to deprecated function {}.".format(func.__name__),
-             category=DeprecationWarning,
-             filename=func.func_code.co_filename,
-             lineno=func.func_code.co_firstlineno + 1
-         )
-         '''
-         print
-         print 70 * "-"
-         print("Warning: Call to deprecated function {}.".format(func.__name__))
-         print "         filename=", func.func_code.co_filename
-         print "         lineno=", func.func_code.co_firstlineno + 1
-         print 70 * "-"
+    '''
+    @functools.wraps(func)
+    def new_func(*args, **kwargs):
+        '''
+        warnings.warn_explicit(
+            "Call to deprecated function {}.".format(func.__name__),
+            category=DeprecationWarning,
+            filename=func.func_code.co_filename,
+            lineno=func.func_code.co_firstlineno + 1
+        )
+        '''
+        print
+        print 70 * "-"
+        print "Warning: Call to deprecated function {}.".format(func.__name__)
+        print "         filename=", func.func_code.co_filename
+        print "         lineno=", func.func_code.co_firstlineno + 1
+        print 70 * "-"
 
-         return func(*args, **kwargs)
-     return new_func
-
+        return func(*args, **kwargs)
+    return new_func
 
 
 def cond_decorator(flag, dec):
@@ -160,6 +184,7 @@ def cond_decorator(flag, dec):
     :type flag: boolean
     """
     def decorate(fn):
+        """the internal decorator"""
         return dec(fn) if flag else fn
     return decorate
 
@@ -185,8 +210,15 @@ def status_color(status):
 ''' ref:
     http://stackoverflow.com/questions/2257441/python-random-string-generation-with-upper-case-letters-and-digits
 '''
+
+
 def get_rand_string(size=6, chars=string.ascii_uppercase + string.digits):
+    """generates a random string.
+    :param size: length of the string
+    :param chars: string of charaters to chese form, by default a-zA-Z0-9
+    """
     return ''.join(random.choice(chars) for _ in range(size))
+
 
 def get_unique_name(prefix="", **kargs):
     """Make a UUID without some characters such as '-', '_', ' ', '.'
@@ -202,9 +234,9 @@ def get_unique_name(prefix="", **kargs):
     if 'change' in kargs:
         change = kargs['change']
 
-    for ch in change:
-        if ch in prefix:
-            prefix = prefix.replace(ch, "")
+    for character in change:
+        if character in prefix:
+            prefix = prefix.replace(character, "")
 
     return str(prefix) + text
 
@@ -233,8 +265,8 @@ def address_string(content, labels=False):
         result = result[:-2]
     except:
         # THIS SEEMS WRONG
-        {u'vlan102': [{u'version': 4, u'addr': u'10.1.2.104'}, {
-            u'version': 4, u'addr': u'149.165.158.34'}]}
+        #{u'vlan102': [{u'version': 4, u'addr': u'10.1.2.104'}, {
+        #    u'version': 4, u'addr': u'149.165.158.34'}]}
         try:
             position = 0
             for address in content['vlan102']:
@@ -251,4 +283,3 @@ def address_string(content, labels=False):
         except:
             result = content
     return result
-

@@ -3,23 +3,24 @@ from sh import ping as sh_ping
 
 # from pprint import pprint
 
+
 def ping(host):
     '''ping the specified host.
 
     :param host: the name or ip of the host
     '''
     try:
-        r = sh_ping("-o", "-c", "1", host).strip().split("\n")
+        result = sh_ping("-o", "-c", "1", host).strip().split("\n")
     except:
-       pass
+        pass
 
     try:
-        (attributes, values) = r[-1].replace("round-trip", "").strip().split("=")
+        (attributes, values) = result[-1].replace("round-trip", "").strip().split("=")
         attributes = attributes.strip().split("/")
         values = values.strip().split("/")
 
         data = dict(zip(attributes, values))
-        data['loss'] = r[-2].split(",")[2].split("%")[0].strip() + "%"
+        data['loss'] = result[-2].split(",")[2].split("%")[0].strip() + "%"
     except:
         data = {}
 

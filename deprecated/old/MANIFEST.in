@@ -1,5 +1,0 @@
-include LICENSE.md
-include README.md
-recursive-include flask_cm/static *
-recursive-include flask_cm/templates *
-recursive-include flask_cm/cloudmesh *

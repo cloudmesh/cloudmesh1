@@ -4,10 +4,10 @@ from sh import git
 from sh import sort
 
 
-class GitInfo:
+class GitInfo(object):
 
     """This class can be used to return some elementary information
-    about the git hub directory.  This includes the: 
+    about the git hub directory.  This includes the:
 
     * version number of the code
     * the list of people contributing to the code
@@ -27,7 +27,10 @@ class GitInfo:
         print stats
 
     """
-
+    def __init__(self):
+        """init method"""
+        pass
+    
     def version(self):
         '''
         retruns the verison of the code from github
@@ -39,7 +42,7 @@ class GitInfo:
         '''
         returns the emails of the authors either as a text or as a dict. The
         format is specified as an argument.
-        
+
         :param format_arg: if "dict" is specified a dict will be returned
         :rtype: dict or arry of e-mails dependent on format_arg
         '''
@@ -54,9 +57,8 @@ class GitInfo:
         if format_arg is None:
             return result
         elif format_arg == "dict":
-            list = result.replace("\n", "\t").split("\t")[:-1]
-            it = iter(list)
-            emails = dict(zip(it, it))
+            result = iter(result.replace("\n", "\t").split("\t")[:-1])
+            emails = dict(zip(result, result))
             for name in emails:
                 emails[name] = emails[name]
             return emails
@@ -65,7 +67,7 @@ class GitInfo:
         '''
         returns the authors of the authors either as a text or as a dict. The
         format is specified as an argument.
-        
+
         :param format_arg: if "dict" is specified a dict will be returned
         '''
         result = git.shortlog("-s", "-n", _tty_in=True, _tty_out=False)
@@ -98,12 +100,15 @@ class GitInfo:
     def stat(self, email):
         '''
         returns a statistic of a git author with the given e_mail.
-        
+
         :param email: name of the author
         :rtype: a dict with the statistics
         '''
         sums = [0, 0, 0]
-        for line in git.log("--all", "--stat", '--author={0}'.format(email), _tty_in=True, _tty_out=False, _iter=True):
+        for line in git.log("--all", "--stat", '--author={0}'.format(email),
+                            _tty_in=True,
+                            _tty_out=False,
+                            _iter=True):
             line = line[:-1]
 
             if " files changed" in line:
@@ -121,13 +126,12 @@ class GitInfo:
                 "fileschanged": sums[0],
                 "inserted": sums[1],
                 "deleted": sums[2],
-                "lineschanged": sums[1] + sums[2],
-                }
+                "lineschanged": sums[1] + sums[2]}
 
     def compute(self):
         '''
-        computes the statistic of all authors in a git repository and returns
-        the result as a dict.
+        computes the statistic of all authors in a git repository and
+        returns the result as a dict.
         :rtype: a dict with the values
         '''
         emails = set(gitinfo.emails("dict").values())
@@ -149,9 +153,8 @@ class GitInfo:
                 stats[email]["fileschanged"] / float(sums["fileschanged"]),
                 stats[email]["inserted"] / float(sums["inserted"]),
                 stats[email]["deleted"] / float(sums["deleted"]),
-                stats[email]["lineschanged"] / float(sums["lineschanged"]),
-            ]
-            }
+                stats[email]["lineschanged"] / float(sums["lineschanged"])
+                ]}
 
         return stats
 
@@ -187,4 +190,3 @@ if __name__ == "__main__":
     for email in stats:
         p = stats[email]["percentage"]
         print "{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%".format(email, p[0], p[1], p[2], p[3])
-

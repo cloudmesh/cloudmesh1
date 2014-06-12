@@ -14,8 +14,4 @@ echo "# install brew"
 echo "# ----------------------------------------------------------------------"
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 
-echo "# ----------------------------------------------------------------------"
-echo "# install freetype"
-echo "# ----------------------------------------------------------------------"
-brew install freetype
-ln -s /usr/local/opt/freetype/include/freetype2 /usr/local/include/freetype
+

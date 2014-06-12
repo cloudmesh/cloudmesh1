@@ -35,6 +35,7 @@ def base64_decode(the_string):
 
     return base64.b64decode(the_string)
 
+
 def decode_source(source, encoding, compression):
     """decoude a source with given encoding and compression.
 
@@ -55,6 +56,7 @@ def decode_source(source, encoding, compression):
         source = unicode(source, 'UTF-8')
 
     return source
+
 
 def get_hostname():
     """get the hostname form environment variables HTTP_HOST or SERVER_NAME."""
