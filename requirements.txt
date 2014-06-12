@@ -45,7 +45,7 @@ console
 envoy
 python-hostlist
 docopt
-cmd3>=0.9.6
+cmd3>=0.9.8
 #
 # ######################################################################
 # Databases and directories
