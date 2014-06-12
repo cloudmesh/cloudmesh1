@@ -207,15 +207,16 @@ class cm_keys_mongo(cm_keys_base):
                 value = self._get_key_from_file(value)
             except:
                 print "ERROR: Could not read from file. Make sure everything about the file is alright"
-                return                
-        self.user_info["keys"][name] = value
+                return      
+        else:          
+            self.user_info["keys"][name] = value
         if persist:
             self.mongo.db_user.update({'_id': self.user_info['_id']},
             {'$set': {'keys': self.user_info["keys"]}},
             upsert=False,
             multi=False
             )
-        print "SUCCESS: key '{1}' was added".format(name)
+        print "SUCCESS: key '{0}' was added".format(name)
 
     def set(self, name, value, expand=False, persist = True):
         '''
