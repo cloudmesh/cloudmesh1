@@ -367,7 +367,6 @@ when a change occurred so you can update yours:
    *For the one from FG please contact Gregor (only if you really need
    it. Normal users will not get this file).*
 #. `cloumesh_launcher.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml>`_
-#. `cloumesh_bootspec.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_bootspec.yaml>`_
 #. `cloumesh_mac.yaml <https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_mac.yaml>`_
 
 

@@ -1,4 +1,4 @@
-"""Bootstrap Cloudmesh finctions. 
+"""Bootstrap Cloudmesh finctions.
 
 This file contains basic utility functions that must not need any
 import from cloudmesh OR any other non-standard python
@@ -8,6 +8,7 @@ environment.
 """
 from string import Template
 import os
+
 
 def grep(pattern, filename):
     """Very simple grep that returns the first matching line in a file.
@@ -28,11 +29,11 @@ def banner(txt=None, c="#"):
       ############################
 
     .
-    
+
     :param txt: a text message to be printed
     :type txt: string
     :param c: thecharacter used instead of c
-    :type c: character 
+    :type c: character
     """
     print
     print "#", 70 * c
@@ -46,7 +47,7 @@ def path_expand(text):
 
     :param text: the path to be expanded, which can include ~ and $ variables
     :param text: string
-    
+
     """
     template = Template(text)
     result = template.substitute(os.environ)
@@ -69,9 +70,10 @@ def yn_choice(message, default='y', tries=None):
         while tries > 0:
             choice = raw_input("%s (%s) " % (message, choices))
             choice = choice.strip().lower()
-            if choice in ['y', 'yes']: return True
-            elif choice in ['n', 'no']: return False
+            if choice in ['y', 'yes']:
+                return True
+            elif choice in ['n', 'no']:
+                return False
             else:
                 print "Invalid input..."
-                tries = tries-1
-        
+                tries = tries - 1

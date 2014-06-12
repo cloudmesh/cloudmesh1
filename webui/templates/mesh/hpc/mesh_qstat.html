@@ -1,9 +1,9 @@
 {% extends "layout/layoutTable.html" %}
-{% from "_helper.html" import image_button %}
+{% from "_helper.html" import href_image_button %}
 {% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
-<h2> {{ image_button ("none", "365_restart", "/mesh/refresh/qstat") }} QStat </h2>
+<h2> {{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat") }} QStat </h2>
 {% endblock %}
 
 
@@ -19,13 +19,17 @@
         {% set host_loop = loop %}
         {% set version = 'pbs' %}
         <div style="margin-bottom:1em;">
-       <h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + host) }}
-         <span style="float:left; width:30%; white-space:nowrap;">
-         {{ host }}
-         </span>
-         <span class="badge"> {{ jobcount[host] }} </span>
-         jobs,
-         {{ timer[host] | timesince(format="date") }}
+
+        <h3 id="{{host}}">
+            <span style="float:left; width:30%; white-space:nowrap;">
+                <span class="inner_function_button">
+                    {{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat/" + host) }}
+                </span>
+	       {{ host }}
+            </span>
+            <span class="badge"> {{ jobcount[host] }} </span>
+	    jobs,
+            {{ timer[host] | timesince(format="date") }}
         </h3>
        <div>
        <small>Last updated: {{updated | timesince(format="date")}}</small><br>

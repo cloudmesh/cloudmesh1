@@ -1,4 +1,4 @@
-{% from "_helper.html" import image_button, js_image_button %}
+{% from "_helper.html" import href_image_button, js_image_button %}
 
 {%- macro CM_SELECT(uid, items, flag_selected=True) -%}
     <select id='{{uid}}'>
@@ -42,7 +42,7 @@
 {% endmacro %}
 
 {%- macro CM_IMAGE_BUTTON(value) -%}
-    {{ image_button ("none", "365_restart", "/cobbler/{0}".format(value)) }} {{value|title}}
+    {{ href_image_button ("none", "fa-repeat", "/cobbler/{0}".format(value)) }} {{value|title}}
 {% endmacro %}
 
 {%- macro CM_JS_IMAGE_BUTTON(value, uid, flag_add) -%}

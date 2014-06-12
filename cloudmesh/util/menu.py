@@ -1,8 +1,10 @@
 '''Ascii menu class'''
 
+
 def ascii_menu(title=None, menu_list=None):
     '''
-    creates a simple ASCII menu from a list of tuples containing a label and a functions refernec. The function should not use parameters.
+    creates a simple ASCII menu from a list of tuples containing a label
+    and a functions refernec. The function should not use parameters.
     :param title: the title of the menu
     :param menu_list: an array of tuples [('label', f1), ...]
     '''
@@ -42,6 +44,7 @@ def ascii_menu(title=None, menu_list=None):
             except Exception, e:
                 print "ERROR: ", e
         display()
+
 
 
 def menu_return_num(title=None, menu_list=None, tries=1):
@@ -90,3 +93,4 @@ def menu_return_num(title=None, menu_list=None, tries=1):
                 print "ERROR: wrong selection"
                 
     return 'q'
+
