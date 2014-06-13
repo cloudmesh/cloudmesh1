@@ -1,8 +1,8 @@
 {% extends "layout/layoutTable.html" %}
-{% from "_helper.html" import image_button, js_image_button %}
+{% from "_helper.html" import href_image_button, js_image_button %}
 
 {% block contentbox %}
-<h2> {{ image_button ("none", "365_restart", "/cobbler/distros") }} Distros </h2>
+<h2> {{ href_image_button ("none", "fa-repeat", "/cobbler/distros") }} Distros </h2>
 {% endblock contentbox %}
 
 {% block content %}
