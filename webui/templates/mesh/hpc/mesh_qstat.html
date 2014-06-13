@@ -1,6 +1,5 @@
 {% extends "layout/layoutTable.html" %}
 {% from "_helper.html" import href_image_button %}
-{% from "_helper.html" import image_button %}
 {% from "_helper.html" import cm_state_color %}
 
 {% block contentbox %}
@@ -24,7 +23,7 @@
         <h3 id="{{host}}">
             <span style="float:left; width:30%; white-space:nowrap;">
                 <span class="inner_function_button">
-                    {{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + host) }}
+                    {{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat/" + host) }}
                 </span>
 	       {{ host }}
             </span>

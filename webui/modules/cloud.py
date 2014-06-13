@@ -90,9 +90,42 @@ def refresh(cloud=None, server=None, service_type=None):
                        types=[service_type])
         return redirect('/mesh/{0}'.format(service_type))
 
+# ============================================================
+# ROUTE: REFRESH by Celery task queue
+# ============================================================
 
+@cloud_module.route('/cm/refresh/q/')
+@cloud_module.route('/cm/refresh/q/<cloud>/')
+@cloud_module.route('/cm/refresh/q/<cloud>/<service_type>')
+@login_required
+def refresh_by_queue(cloud=None, service_type=None):
+    """ Similar to refresh but using Celery task queue"""
 
+    log.info("-> refresh by queue {0} {1}".format(cloud, service_type))
+    cloud_names = None
+    cm_user_id = g.user.id
+    clouds = cm_mongo()
 
+    if cloud is None or cloud in ['servers', 'flavors', 'images', 'users']:
+        userinfo = getCurrentUserinfo()
+        cloud_names = userinfo["defaults"]["activeclouds"]
+    else:
+        cloud_names = [cloud]
+
+    for cloud_entry in  cloud_names:
+        cm_type = clouds.get_cloud_info(cm_user_id, cloud_entry)['cm_type']
+        # Celery task queue
+        package = "cloudmesh.iaas.%s.queue" % cm_type
+        name = "tasks"
+        imported = getattr(__import__(package, fromlist=[name]), name)
+        queue_name = "%s-%s" % (cm_type, service_type)
+        imported.refresh.apply_async((cm_user_id, cloud_names,
+                                  [service_type]), queue=queue_name)
+ 
+    if service_type is None and cloud is None:
+        return redirect('/')
+    else:
+        return redirect('/mesh/{0}'.format(service_type))
 
 # ============================================================
 # ROUTE: DELETE

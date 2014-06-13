@@ -11,6 +11,9 @@ from cloudmesh.config.cm_keys import cm_keys_yaml,cm_keys_mongo
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import two_column_table
+from cloudmesh.util.menu import menu_return_num
+from os import listdir
+from os.path import isfile, join, expanduser
 
 log = LOGGER(__file__)
 
@@ -67,7 +70,7 @@ class cm_shell_keys:
                keys info [--json] [NAME][--yaml][--mongo]
                keys mode MODENAME               
                keys default NAME [--yaml][--mongo]
-               keys add NAME KEY [--yaml][--mongo]
+               keys add [--yaml][--mongo]
                keys delete NAME [--yaml][--mongo]
                keys persist
     
@@ -77,9 +80,7 @@ class cm_shell_keys:
 
           NAME           The name of a key
           MODENAME       This is used to specify the mode name. Mode
-	  		 name can be either 'yaml' or 'mongo'
-
-          KEY            This is the actual key that has to added
+	  		          name can be either 'yaml' or 'mongo'
 
         Options:
 
@@ -103,10 +104,10 @@ class cm_shell_keys:
 
 	     Used to set a key from the key-list as the default key
 
-        keys add NAME KEY
+        keys add
 
-	     adding/updating keys. Please provide filename and not the
-	     actual key
+	     adding/updating keys. There are options to add a way, such
+	     as add by file or key content
 
         keys delete NAME
 
@@ -161,8 +162,34 @@ class cm_shell_keys:
             return
 
         if arguments["add"]:
-            print "Attempting to add key..."
-            key_container.__setitem__(arguments["NAME"],arguments["KEY"])
+            def _input(str):
+                var = raw_input("{0} (press enter to discard):".format(str))
+                if var == '':
+                    sys.exit()
+                else:
+                    return var
+            options = ["add a key by file, full file path needed, for example: ~/.futuregrid/keyfile", \
+                       "select a key under ~/.ssh", \
+                       "add a key by paste or manually input"]
+            result = menu_return_num(title="Key add options", menu_list=options, tries=3)
+            if result == 'q':
+                return
+            elif result == 0:
+                name = _input("Input key name")
+                key_file = _input("Provide key file with full file path")
+                key_container.__setitem__(name, key_file)
+            elif result == 1:
+                name = _input("Input key name")
+                files = [ f for f in listdir(expanduser("~/.ssh")) if isfile(join(expanduser("~/.ssh"),f)) ]
+                result = menu_return_num(title="Select a public key", menu_list=files, tries=3)
+                if result == 'q':
+                    return
+                else:
+                    key_container.__setitem__(name, "~/.ssh/{0}".format(files[result]))
+            elif result == 2:
+                name = _input("Input key name")
+                key = _input("Input key content")
+                key_container.__setitem__(name, key, key_type="string")
             return
 
         if arguments["delete"]:

@@ -1,8 +1,8 @@
 {% extends "layout/layout_title.html" %}
-{% from "_helper.html" import image_button %}
+{% from "_helper.html" import href_image_button %}
 
 {% block contentbox %}
-<h2> {{ image_button ("none", "365_restart", "/mesh/refresh/qstat") }} Launcher </h2> {# change redirects. currently to qStat#}
+<h2> {{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat") }} Launcher </h2> {# change redirects. currently to qStat#}
 {% endblock %}
 
 {% block content %}
@@ -38,7 +38,7 @@ $(function() {
 
     	<div style="margin-bottom:1em;">
 
-       		<h3>{{ image_button ("none", "365_restart", "/mesh/refresh/qstat/" + server) }}
+       		<h3>{{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat/" + server) }}
        			{#make refresh changes. currently follows qstat#}
         		{{ server }}
         	</h3>
