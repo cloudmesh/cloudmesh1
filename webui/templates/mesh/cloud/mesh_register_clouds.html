@@ -207,8 +207,11 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
                     {% endif %}
                     <th></th><th></th>
                     <th style="text-align: right">
+			    <input id="submit{{cloud}}" type="submit" name="submit{{ cloud }}" value="&#xf0c7; Submit">
+			<!--
                         {{ submit_button ("submit" + cloud, "235_pen", "submit" + cloud) }}
                         Register {{ cloud }}
+-->
                     </th>
                 </tr>
             </table>
