@@ -29,6 +29,7 @@ import copy
 from cloudmesh.util.cm_table import cm_table
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import cm_config_server
+from cloudmesh.config.cm_config import cm_config_flavor
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
 # from cloudmesh.cm_profile import cm_profile
@@ -737,13 +738,20 @@ class openstack(ComputeBaseType):
         return result
 
     def _get_flavors_dict(self):
-        result = self.get_flavors()
-        return result
+        result = self.get_flavors_from_yaml()
+        if not result:
+            return self.get_flavors()
+        self.flavors = result
+        return self.flavors
+
+    def get_flavors_from_yaml(self):
+        obj =  cm_config_flavor()
+        flavors = obj.get('cloudmesh.flavor')
+        return flavors.get(self.label)
 
     def _get_servers_dict(self):
         result = self.get_servers()
         return result
-
 
     def limits(self):
         """ returns the limats of the tennant"""
