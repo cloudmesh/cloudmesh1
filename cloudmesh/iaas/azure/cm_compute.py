@@ -13,6 +13,7 @@ from azure import *
 from azure.servicemanagement import *
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config_flavor
 from cloudmesh_common.util import get_unique_name, get_rand_string
 
 class azure(ComputeBaseType):
@@ -92,6 +93,8 @@ class azure(ComputeBaseType):
         # Large, ExtraLarge
         flavor = self.compute_config.default(label)['flavor']
         self.set_flavor(flavor)
+        
+        self.label = label
 
     def connect(self):
         subscription_id = self.user_credential['subscriptionid']
@@ -99,7 +102,7 @@ class azure(ComputeBaseType):
 
         self.sms = ServiceManagementService(subscription_id,
                                             certificate_path)
-#
+
     # FOR refresh
     def _get_images_dict(self):
         return self.get_images()
@@ -719,7 +722,17 @@ class azure(ComputeBaseType):
         return
 
     def _get_flavors_dict(self):
-        return self.list_flavors()
+        result = self.get_flavors_from_yaml()
+        if not result:
+            return self.list_flavors()
+
+        self.flavors = result
+        return self.flavors
+
+    def get_flavors_from_yaml(self):
+        obj =  cm_config_flavor()
+        flavors = obj.get('cloudmesh.flavor')
+        return flavors.get(self.label)
 
     def list_flavors(self):
 

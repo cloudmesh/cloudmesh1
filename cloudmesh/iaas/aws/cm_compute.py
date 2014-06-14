@@ -6,6 +6,7 @@ cloudmesh.iaas.aws.cm_compute
 
 """
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config_flavor
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from libcloud.compute.base import NodeImage, NodeSize
 from libcloud.compute.providers import get_driver
@@ -68,6 +69,8 @@ class aws(ComputeBaseType):
         # set default location from yaml
         location = self.compute_config.default(label)['location']
         self.set_location(location)
+
+        self.label = label
 
     def connect(self):
         Driver = get_driver(Provider.EC2)
@@ -224,10 +227,17 @@ class aws(ComputeBaseType):
         return
 
     def _get_flavors_dict(self):
-        res = self.list_flavors()
-        res_dict = self.convert_to_dict(res)
-        self.flavors = res_dict
-        return res_dict
+        result = self.get_flavors_from_yaml()
+        if not result:
+            result_list = self.list_flavors()
+            result = self.convert_to_dict(result_list)
+        self.flavors = result
+        return self.flavors
+
+    def get_flavors_from_yaml(self):
+        obj =  cm_config_flavor()
+        flavors = obj.get('cloudmesh.flavor')
+        return flavors.get(self.label)
 
     def convert_to_dict(self, _list):
         res_dict = {}

@@ -6,6 +6,7 @@ cloudmesh.iaas.ec2.cm_compute
 
 """
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config_flavor
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from libcloud.compute.base import NodeImage, NodeSize
 from libcloud.compute.providers import get_driver
@@ -79,8 +80,6 @@ class ec2(ComputeBaseType):
         self.hostname, self.port, self.path, self.is_secure = \
                                                 self._urlparse(self.ec2_url)
 
-
-
         self.certfile = self.user_credential['EUCALYPTUS_CERT']
         libcloud.security.CA_CERTS_PATH.append(self.certfile)
 
@@ -92,6 +91,8 @@ class ec2(ComputeBaseType):
         # besides testing. You have been warned.
         libcloud.security.VERIFY_SSL_CERT = False
 
+        self.label = label
+        
     def connect(self):
         Driver = get_driver(Provider.EUCALYPTUS)
 
@@ -246,12 +247,20 @@ class ec2(ComputeBaseType):
 
         return host, port, path, is_secure
 
-
     def _get_flavors_dict(self):
-        res = self.list_flavors()
-        res_dict = self.convert_to_dict(res)
-        self.flavors = res_dict
+
+        result = self.get_flavors_from_yaml()
+        if not result:
+            result_list = self.list_flavors()
+            result = self.convert_to_dict(result_list)
+
+        self.flavors = result
         return self.flavors
+
+    def get_flavors_from_yaml(self):
+        obj =  cm_config_flavor()
+        flavors = obj.get('cloudmesh.flavor')
+        return flavors.get(self.label)
 
     def convert_to_dict(self, _list):
         res_dict = {}
