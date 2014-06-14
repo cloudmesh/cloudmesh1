@@ -71,6 +71,17 @@ class cm_config_launcher(ConfigDict):
             filename = self.filename
         ConfigDict.__init__(self, filename=filename, kind="launcher")
 
+class cm_config_flavor(ConfigDict):
+    """
+    reads the information contained in the file
+    ~/.futuregrid/cloudmesh_flavor.yaml
+    """
+    filename = config_file("/cloudmesh_flavor.yaml")
+
+    def __init__(self, filename=None):
+        if filename is None:
+            filename = self.filename
+        ConfigDict.__init__(self, filename=filename, kind="flavor")
 
 class cm_config(ConfigDict):
 
