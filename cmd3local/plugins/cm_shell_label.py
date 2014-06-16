@@ -4,7 +4,7 @@ from cloudmesh.shell.cm_label import shell_command_label
 class cm_shell_label:
     
     def activate_cm_shell_label(self):
-        self.register_command_topic('cloud','label')
+        # self.register_command_topic('cloud','label')
         pass
 
     @function_command(shell_command_label)

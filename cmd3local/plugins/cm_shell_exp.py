@@ -16,7 +16,7 @@ class cm_shell_exp:
     """opt_example class"""
 
     def activate_cm_shell_exp(self):
-        self.register_command_topic('cloud','exp')        
+        # self.register_command_topic('cloud','exp')        
         pass
 
     @command
