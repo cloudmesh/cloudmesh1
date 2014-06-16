@@ -82,6 +82,7 @@ class cm_shell_list:
         mongo = cm_mongo()
         config = cm_config()
         user = config.username()
+        self.mongoClass = mongo
         dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': user})
         # log.info(args)
         # pprint(arguments)
