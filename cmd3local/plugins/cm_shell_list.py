@@ -86,14 +86,8 @@ class cm_shell_list:
         dbDict = self.mongoClass.db_defaults.find_one({'cm_user_id': user})
         # log.info(args)
         # pprint(arguments)
-        # chk if no args provided, to output the list of clouds.
-        print '\n\n'
-        noArg = None
-        for value in arguments.values():
-            if value:
-                noArg = False
-                break
         # log.info(arguments)
+        print '\n\n'
         all = False
         if not arguments["CLOUD"]:
             all = True
@@ -104,29 +98,27 @@ class cm_shell_list:
         else:
             clouds = [arguments["CLOUD"]]
 
-        # no args provided, print the clouds.
-        if not noArg:
+        if arguments["flavors"]:
+
+            fieldList = ['id', 'name']
+            self._printList('flavors', fieldList, clouds)
+
+        elif arguments["servers"]:
+
+            fieldList = ["id", "name", "status"]
+            self._printList('server', fieldList, clouds)
+
+        elif arguments["images"]:
+
+            fieldList = ["id", "name"]
+            self._printList('image', fieldList, clouds)
+        else:
             print 70*"-"
             print 'List of Clouds:'
             for cloud in clouds:
                 print cloud
             print '\n'
             return
-
-        if arguments["flavors"]:
-
-            fieldList = ['id', 'name']
-            self._printList('flavors', fieldList, clouds)
-
-        if arguments["servers"]:
-
-            fieldList = ["id", "name", "status"]
-            self._printList('server', fieldList, clouds)
-
-        if arguments["images"]:
-
-            fieldList = ["id", "name"]
-            self._printList('image', fieldList, clouds)
 
     @command
     def do_count(self, args, arguments):
