@@ -18,7 +18,7 @@ from cloudmesh.config.cm_config import cm_config
 from pprint import pprint
 from prettytable import PrettyTable
 from cm_shell_defaults import cm_shell_defaults
-from Interface.vm_interface import vm_interface
+from cloudmesh.iaas.tmp_vm_interface import vm_interface
 
 from cloudmesh_common.logger import LOGGER
 
