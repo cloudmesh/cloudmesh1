@@ -6,6 +6,31 @@ from pprint import pprint
 
 
 class cm_cloudsinfo:
+    
+    def __init__(self):
+        self.db_clouds = get_mongo_db("cloudmesh")
+        
+    def get_clouds(self):
+        return self.db_clouds.find({'cm_kind': 'cloud'})
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     def _load(self, collection="cloudmesh"):
         self.clouds = None

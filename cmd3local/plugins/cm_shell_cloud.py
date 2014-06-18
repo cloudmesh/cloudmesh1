@@ -24,22 +24,38 @@ class cm_shell_cloud:
     # For now, a default cloud is just a randomly picked cloud in the db
     # [default: india_openstack_havana], once you restart cm, previous
     # selection will be erased
-    default_cloud = None
-
     def activate_cm_shell_cloud(self):
-        self._loaded = False
-        self._default_setted = False
         self.register_command_topic('cloud', 'cloud')
         pass
+    
+    def __init__(self):
+        self._db_loaded = False
+        self._requery = True
+        self._cloud_selected = False
+        self.selected_cloud = None
+        self.clouds = None
+        
 
-    def _load(self):
-        if not self._loaded:
+    def _load_mongodb(self):
+        if not self._db_loaded:
             try:
                 self.cloudsinfo = cm_cloudsinfo()
-                self._loaded = True
+                self._db_loaded = True
             except:
-                print "ERROR: could not access Mongodb. " \
-                      "Have you started the mongo server?"
+                print "ERROR: Could not load mongo, did you start the db?"
+                      
+    def _requery_db(self):
+        if self._requery:
+            self.clouds = self.cloudsinfo.get_clouds()
+            self._requery = False
+        else:
+            return
+        
+    def _check_empty(self):
+        if self.clouds.count() == 0:
+            return True
+        else:
+            return False
 
     def _print_dict(self, d, format):
         if format in ["table"]:
@@ -102,8 +118,8 @@ class cm_shell_cloud:
     def do_cloud(self, args, arguments):
         """
         Usage:
-            cloud list [--format=FORMAT]
-            cloud info [NAME]
+            cloud list [--column=COLUMN]
+            cloud info [NAME] [--format=FORMAT]
             cloud set NAME
             cloud select [NAME]
             cloud on [NAME]
@@ -115,56 +131,90 @@ class cm_shell_cloud:
 
         Arguments:
 
-          NAME           The name of a service or server
-          CLOUD          A yaml file contains cloud information
-
+          NAME           the name of a service or server
+          CLOUD          a yaml file contains cloud information
+          
         Options:
 
            -v       verbose model
            --format=FORMAT   the format of the output. Accepted values
                              are table, list, json, yaml, dict.
                              [default: table]
+           --column=COLUMN   specify what information to display. For
+                             example, --column=active, label. Available
+                             columns are active, label, host, type/version,
+                             type, heading, user, credentials, defaults
 
         Description:
 
-            cloud list [--format=FORMAT]
-                Lists the cloud names
+            cloud list [--column=COLUMN]
+                lists the cloud names, optionally, specify columns for more
+                cloud information
 
-            cloud info [NAME]
-                Provides the available information about the clouds
-                and their status. A cloud can be activated or deactivated.
-                If no name is specified the default cloud is used.
-                If the name all is used, all clouds are displayed
+            cloud info [NAME] [--format=FORMAT]
+                provides the available information about cloud and its status.
+                If no NAME is given, default or selected cloud is used. If the 
+                name all is used, all clouds are displayed
 
             cloud set NAME
-                set the cloud with the NAME to the default cloud or
-                selected cloud
+                sets a new name for selected or default cloud
 
             cloud select [NAME]
                 selects a cloud from a list of clouds if NAME not given
 
             cloud on [NAME]
             cloud off [NAME]
-                activates or deactivates a cloud with a given name, if name
-                is not specified, default or selected cloud will be activates
-                or deactivates
+                activates or deactivates a cloud, if name is not given, 
+                default or selected cloud will be activated or deactivated
 
             cloud add CLOUD
-                adds cloud information to database. CLOUD is a yaml file
-                contains clouds information. Inside yaml, louds should be
-                contained in "cloudmesh: clouds: ...", the yaml file have
-                to be placed in ~/.futuregrid
+                adds cloud information to database. CLOUD is a yaml file with 
+                full file path. Inside yaml, clouds should be contained in 
+                "cloudmesh: clouds: ..."
 
             cloud remove [NAME]
-                remove a cloud with a given name, if name is not specified,
-                default or selected cloud will be reomved.
+                remove a cloud from mongo, if name is not given, default or 
+                selected cloud will be reomved.
                 CAUTION: remove all is enabled
 
         """
 
-        # log.info(arguments)
-        # print "<", args, ">"
+        log.info(arguments)
+        print "<", args, ">"
 
+        if arguments["list"]:
+            self._load_mongodb()
+            self._requery_db()
+            if self._check_empty():
+                print "Can't preceed, no cloud in database"
+                return
+            else:
+                if arguments["--column"]:
+                    col_option = [x.strip() for x in arguments["--column"].split(',')]
+                    if set(col_option).issubset(set(['active', 'label', 'host', 'type/version',\
+                             'type', 'heading', 'user', 'credentials', 'defaults'])):
+                        col = {'cm_cloud':[]}
+                        for co in col_option:
+                            col[co] = []
+                    else:
+                        print "ERROR: one or more column type doesn't exist"
+                else:
+                    col = {'cm_cloud':[]}
+                for cloud in self.clouds:
+                    for key in col.keys():
+                        if cloud[key]:
+                            try:
+                                val = cloud[key].encode("ascii")
+                            except:
+                                val = cloud[key]
+                            col[key].append(val)
+                        else:
+                            col[key].append(" ")
+                print column_table(col)
+                    
+            
+
+'''
         if arguments["list"]:
             if arguments["--format"] not in ["json", "table", "dict", "list", "yaml"]:
                 print "ERROR: format {0} not supported.".format(arguments["--format"])
@@ -329,3 +379,4 @@ class cm_shell_cloud:
                         self._default_setted = False
                     else:
                         return
+'''
