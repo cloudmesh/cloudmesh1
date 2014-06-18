@@ -31,6 +31,8 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.openstack.cm_compute import openstack
 
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
+from cloudmesh.iaas.ec2.cm_compute import ec2 
+from cloudmesh.iaas.aws.cm_compute import aws 
 try:
     from cloudmesh.iaas.azure.cm_compute import azure
 except:
@@ -87,7 +89,7 @@ class cloudmesh:
                 credential = self.configuration.credential(cloud_name)
                 cloud_type = self.configuration.cloud(cloud_name)['cm_type']
 
-                if cloud_type in ['openstack', 'eucalyptus', 'azure', 'ec2']:
+                if cloud_type in ['openstack', 'eucalyptus', 'azure', 'aws', 'ec2']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cloud_type,
                                                'credential': credential}
@@ -199,6 +201,8 @@ class cloudmesh:
             provider = openstack
         elif type == 'eucalyptus':
             provider = eucalyptus
+        elif type == 'aws':
+            provider = aws
         elif type == 'azure':
             provider = azure
         elif type == 'ec2':
