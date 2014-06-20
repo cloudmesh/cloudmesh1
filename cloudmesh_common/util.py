@@ -283,3 +283,21 @@ def address_string(content, labels=False):
         except:
             result = content
     return result
+
+
+def dict_uni_to_ascii(d):
+    '''
+    convert mongodb document content from unicode to ascii
+    '''
+    d1 = {}
+    for k, v in d.iteritems():
+        k = k.encode("ascii")
+        if isinstance(v, dict) or isinstance(v, unicode):
+            try:
+                v = v.encode("ascii")
+            except:
+                v = dict_uni_to_ascii(v)
+        d1[k] = v
+    return d1
+        
+        
