@@ -68,11 +68,11 @@ def yn_choice(message, default='y', tries=None):
         return True if choice.strip().lower() in values else False
     else:
         while tries > 0:
-            choice = raw_input("%s (%s) " % (message, choices))
+            choice = raw_input("%s (%s) (%s)" % (message, choices, "'q' to discard"))
             choice = choice.strip().lower()
             if choice in ['y', 'yes']:
                 return True
-            elif choice in ['n', 'no']:
+            elif choice in ['n', 'no', 'q']:
                 return False
             else:
                 print "Invalid input..."
