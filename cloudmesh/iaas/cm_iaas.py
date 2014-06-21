@@ -38,6 +38,9 @@ def shell_command_flavor(arguments):
 
     #log.info(arguments)
     clouds_name = arguments['<cm_cloud>']
+    # clouds in c.flavors treats None value as a ALL clouds
+    if not clouds_name:
+        clouds_name = None
     config = cm_config()
     username = config.username()
     c = cm_mongo()
