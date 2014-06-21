@@ -14,9 +14,10 @@ log = LOGGER(__file__)
 def shell_command_flavor(arguments):
     """
     Usage:
+        flavor 
+        flavor <cm_cloud>...
 	flavor -h | --help
         flavor --version
-        flavor <cm_cloud>...
 
    Options:
        -h                   help message
