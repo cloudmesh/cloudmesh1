@@ -108,7 +108,7 @@ def _select_flavors(data, selected_keys, env=[]):
 def shell_command_image(arguments):
     """
     Usage:
-        image 
+        image
         image <cm_cloud>...
 	image -h | --help
         image --version
@@ -166,9 +166,9 @@ def shell_command_image(arguments):
                         [ "state" , "extra", "state"],
                         [ "name" , "name"],
                         [ "id" , "id"],
-                        [ "public" , "extra", "ispublic"],
-                        [ "ownerid" , "extra", "ownerid"],
-                        [ "imagetype" , "extra", "imagetype"]
+                        [ "public" , "extra", "is_public"],
+                        [ "ownerid" , "extra", "owner_id"],
+                        [ "imagetype" , "extra", "image_type"]
                     ],
                   "azure":
                     [
@@ -235,20 +235,43 @@ def _select_images(data, selected_keys, env=[]):
         OS-EXT-IMG-SIZE:size 876216320
         b99fa4c8-6b92-49e6-b53f-37e56f9383b6
     """
-    headers = ["cm_cloud"] + selected_keys['openstack']
-    images = [headers]
+    images = []
+
+    def _getFromDict(dataDict, mapList):
+        '''Get values of dataDict by mapList
+        mapList is a list of keys to find values in dict.
+        dataDict is a nested dict and will be searched by the list.
+
+        e.g.  Access to the value 5 in dataDict
+
+        dataDict = { "abc": {
+                        "def": 5 
+                        } 
+                    }
+        mapList = [ "abc", "def" ]
+
+        _getFromDict(dataDict, mapList) returns 5
+
+        ref: http://stackoverflow.com/questions/14692690/access-python-nested-dictionary-items-via-a-list-of-keys
+        '''
+        return reduce(lambda d, k: d[k], mapList, dataDict)
+
     for cm_cloud, _id in data.iteritems():
         for image_name, v in _id.iteritems():
             values = [cm_cloud]
             # cm_type is required to use a selected_keys for the cm_type
             cm_type = v['cm_type']
+            keys = []
             for k in selected_keys[cm_type]:
+                keys.append(k[0])
                 try:
-                    values.append(v[k])
+                    values.append(_getFromDict(v, k[1:]))
                 except:
+                    #print sys.exc_info()
                     values.append(0)
             images.append(values)
-    return images
+    headers = [keys]
+    return headers + images
 
 def main():
     arguments = docopt(shell_command_flavor.__doc__)
