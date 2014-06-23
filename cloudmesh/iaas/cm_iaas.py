@@ -252,7 +252,7 @@ def _select_images(data, selected_keys, env=[]):
 
 def main():
     arguments = docopt(shell_command_flavor.__doc__)
-    shell_command_flavor(arguments)
+    shell_command_image(arguments)
         
 if __name__ == "__main__":
     #print sys.argv
