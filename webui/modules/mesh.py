@@ -386,9 +386,9 @@ def mongo_images():
                         [ "state" , "extra", "state"],
                         [ "name" , "name"],
                         [ "id" , "id"],
-                        [ "public" , "extra", "ispublic"],
-                        [ "ownerid" , "extra", "ownerid"],
-                        [ "imagetype" , "extra", "imagetype"]
+                        [ "public" , "extra", "is_public"],
+                        [ "ownerid" , "extra", "owner_id"],
+                        [ "imagetype" , "extra", "image_type"]
                     ],
                   "azure":
                     [
