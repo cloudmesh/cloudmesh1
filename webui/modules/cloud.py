@@ -496,7 +496,6 @@ def start_vm_with_queue(cloud=None, server=None):
 
     key = None
     vm_image = None
-    vm_flavor = None
     vm_flavor_id = None
 
     userinfo = getCurrentUserinfo()
@@ -545,7 +544,7 @@ def start_vm_with_queue(cloud=None, server=None):
     index = userinfo["defaults"]["index"]
     
     log.info("STARTING {0} {1}".format(prefix, index))
-    # log.info("FLAVOR {0} {1}".format(vm_flavor, vm_flavor_id))
+    # log.info("FLAVOR {0}".format(vm_flavor_id))
     log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image, vm_flavor_id, keynamenew))
     result = clouds.vm_create_queue(
         cloud,

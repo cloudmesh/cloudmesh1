@@ -72,9 +72,15 @@ class ManageVM(object):
         # Preparing required parameters of the vm_create() function
         cloud = self.cloud
         error = ''
+        key = None
+        vm_image = None
+        vm_flavor_id = None
+        userinfo = self.userinfo
+        username = userinfo["cm_user_id"]
+
         try:
             vm_flavor_id = self.flavor \
-                    or self.userinfo["defaults"]["flavors"][cloud]
+                    or userinfo["defaults"]["flavors"][cloud]
         except:
             error = error + "Please specify a default flavor."
         if vm_flavor_id in [None, 'none']:        
@@ -87,9 +93,6 @@ class ManageVM(object):
             error = error + "Please specify a default image."
         if vm_image in [None, 'none']:
             error = error + "Please specify a default image."
-
-        userinfo = self.userinfo
-        username = userinfo["cm_user_id"]
 
         if "key" in userinfo["defaults"]:
             key = userinfo["defaults"]["key"]
@@ -118,7 +121,10 @@ class ManageVM(object):
 
         result = self.clouds.vm_create(cloud, prefix, index, vm_flavor_id, vm_image, keynamenew,
                                   meta=metadata, cm_user_id=username)
-        result['server']['adminPass'] = "*******"
+        try:
+            result['server']['adminPass'] = "*******"
+        except:
+            pass
         log.info("{0}".format(result))
 
         # Upon success of launching vm instance, an index of vm instance is increased.
