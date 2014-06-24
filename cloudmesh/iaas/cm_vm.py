@@ -4,6 +4,7 @@ import sys
 
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.user.cm_user import cm_user
 from prettytable import PrettyTable
 
 from cloudmesh_common.logger import LOGGER
@@ -42,47 +43,127 @@ def shell_command_vm(arguments):
         $ vm create --cloud=sierra_openstack_grizzly
         --image=futuregrid/ubuntu-14.04
     '''
+    vm = ManageVM(arguments)
+    vm.call_procedure()
 
+class ManageVM(object):
     #log.info(arguments)
+    config = cm_config()
+    clouds = cm_mongo()
+    user = cm_user()
+    key = None
 
-    call_function(arguments)
+    def __init__(self, args):
+        self.set_args(args)
+        self.parse_args()
+        self.username = self.config.username()
+        self.clouds.activate(cm_user_id=self.username)
+        self.userinfo = self.user.info(self.username)
 
-def _vm_create(arguments):
-    print sys._getframe().f_code.co_name
+    def set_args(self, args):
+        self.args = args
 
-def _vm_delete(arguments):
-    print sys._getframe().f_code.co_name
+    def parse_args(self):
+        self.cloud = self.args['--cloud']
+        self.flavor = self.args['--flavor']
+        self.image = self.args['--image']
 
-def _vm_info(arguments):
-    print sys._getframe().f_code.co_name
+    def _vm_create(self):
+        # Preparing required parameters of the vm_create() function
+        cloud = self.cloud
+        error = ''
+        try:
+            vm_flavor_id = self.flavor \
+                    or self.userinfo["defaults"]["flavors"][cloud]
+        except:
+            error = error + "Please specify a default flavor."
+        if vm_flavor_id in [None, 'none']:        
+            error = error + "Please specify a default flavor."
 
-def _vm_list(arguments):
-    print sys._getframe().f_code.co_name
+        try:
+            vm_image = self.image \
+                    or userinfo["defaults"]["images"][cloud]
+        except:
+            error = error + "Please specify a default image."
+        if vm_image in [None, 'none']:
+            error = error + "Please specify a default image."
+
+        userinfo = self.userinfo
+        username = userinfo["cm_user_id"]
+
+        if "key" in userinfo["defaults"]:
+            key = userinfo["defaults"]["key"]
+        elif len(userinfo["keys"]["keylist"].keys()) > 0:
+            key = userinfo["keys"]["keylist"].keys()[0]
 
 
-def call_function(arguments):
-    cmds = get_commands(arguments)
-    for cmd, tof in cmds.iteritems():
-        if tof:
-            func = globals()["_vm_"+cmd]
-            func(arguments)
-            break
+        if key:
+              keycontent = userinfo["keys"]["keylist"][key]
+              if keycontent.startswith('key '):
+                  keycontent = keycontent[4:]
+              #check_register_key(cloud, key, keycontent)
+              keynamenew = self._keyname_sanitation(username, key)
+        else:
+            error = error + "No sshkey found. Please <a \
+            href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"
 
-def get_commands(args):
-    '''Return commands only except options start with '--' from docopt
-    arguments
-    
-    Example:
-        get_commands({"info": True, "--count":None})
-        returns
-        {"info": True} 
-    '''
-    result = {}
-    for k,v in args.iteritems():
-        if k.startswith('--'):
-            continue
-        result[k] = v
-    return result
+        metadata = {'cm_owner': username}
+        prefix = userinfo["defaults"]["prefix"]
+        index = userinfo["defaults"]["index"]
+
+        log.info("STARTING {0} {1}".format(prefix, index))
+        log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image,
+                                                                        vm_flavor_id,
+                                                                        keynamenew))
+
+        result = self.clouds.vm_create(cloud, prefix, index, vm_flavor_id, vm_image, keynamenew,
+                                  meta=metadata, cm_user_id=username)
+        result['server']['adminPass'] = "*******"
+        log.info("{0}".format(result))
+
+        # Upon success of launching vm instance, an index of vm instance is increased.
+        userstore = cm_user()
+        userstore.set_default_attribute(username, "index", int(index) + 1)
+
+    def _vm_delete(self):
+        print sys._getframe().f_code.co_name
+
+    def _vm_info(self):
+        print sys._getframe().f_code.co_name
+
+    def _vm_list(self):
+        print sys._getframe().f_code.co_name
+
+
+    def _keyname_sanitation(self, username, keyname):
+        keynamenew = "%s_%s" % (username, keyname.replace('.', '_').replace('@',
+                                                                            '_'))
+        return keynamenew
+
+    def call_procedure(self):
+        cmds = self.get_commands()
+        for cmd, tof in cmds.iteritems():
+            if tof:
+                func = getattr(self, "_vm_"+cmd)
+                func()
+                break
+
+    def get_commands(self):
+        '''Return commands only except options start with '--' from docopt
+        arguments
+        
+        Example:
+            get_commands({"info": True, "--count":None})
+            returns
+            {"info": True} 
+        '''
+        args = self.args
+        result = {}
+        for k,v in args.iteritems():
+            if k.startswith('--'):
+                continue
+            result[k] = v
+        return result
 
 def main():
     arguments = docopt(shell_command_vm.__doc__)
