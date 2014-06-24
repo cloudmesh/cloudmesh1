@@ -310,7 +310,7 @@ Examples::
 Managing Images
 ----------------------------------------------------------------------
 
-Manage images for clouds
+Manage virtual machine images for clouds
 
 List images
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -359,9 +359,9 @@ Get specific information about the flavor.::
 Default Flavor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Set an image as default image.::
+Set a flavor as a default flavor.::
 
-   cm> image --default <cloud> <label>
+   cm> flavor --default <cloud> <label>
 
 
 Managing Virtual Machines
