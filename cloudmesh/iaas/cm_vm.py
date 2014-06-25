@@ -67,6 +67,7 @@ class ManageVM(object):
         self.cloud = self.args['--cloud']
         self.flavor = self.args['--flavor']
         self.image = self.args['--image']
+        self.server = self.args['--name']
 
     def _vm_create(self):
         # Preparing required parameters of the vm_create() function
@@ -132,7 +133,10 @@ class ManageVM(object):
         userstore.set_default_attribute(username, "index", int(index) + 1)
 
     def _vm_delete(self):
-        print sys._getframe().f_code.co_name
+        cloud = self.cloud
+        server = self.server
+        userid = self.userinfo['cm_user_id']
+        self.clouds.vm_delete(cloud, server, userid)
 
     def _vm_info(self):
         print sys._getframe().f_code.co_name
