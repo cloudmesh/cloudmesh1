@@ -242,7 +242,11 @@ class ManageVM(object):
         attributes = self.attributes
 
         userid = self.userinfo['cm_user_id']
-        data = self.clouds.servers(cm_user_id=userid)
+        if self.cloud:
+            cloud = self.cloud
+        else:
+            cloud = None
+        data = self.clouds.servers(cm_user_id=userid, clouds=cloud)
         result = self._select_servers(data, attributes)
         _display(result)
 
@@ -255,7 +259,7 @@ class ManageVM(object):
         cmds = self.get_commands()
         for cmd, tof in cmds.iteritems():
             if tof:
-                func = getattr(self, "_vm_"+cmd)
+                func = getattr(self, "_vm_" + cmd)
                 func()
                 break
 
@@ -291,7 +295,7 @@ class ManageVM(object):
                         values.append(str(_getFromDict(v, k[1:])))
                     except:
                         #print sys.exc_info()
-                        values.append(0)
+                        values.append('0')
                 servers.append(values)
         headers = [keys]
         return headers + servers
