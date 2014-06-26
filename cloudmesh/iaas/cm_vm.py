@@ -19,7 +19,9 @@ def shell_command_vm(arguments):
                 [--image=<imgName>]
                 [--flavor=<FlavorId>]
                 [--cloud=<CloudName>]
-      vm delete [[--count=<count>] | [--name=<NAME>]]
+                [--label=<LABEL>]
+      vm delete [--name=<NAME>]
+                [--label=<LABEL>]
                 [--cloud=<CloudName>]
       vm info [--verbose | --json] [--name=<NAME>]
       vm list [--verbose | --json] [--cloud=<CloudName>]
@@ -59,6 +61,7 @@ class ManageVM(object):
         self.username = self.config.username()
         self.clouds.activate(cm_user_id=self.username)
         self.userinfo = self.user.info(self.username)
+        self.set_attributes()
 
     def set_args(self, args):
         self.args = args
@@ -68,82 +71,10 @@ class ManageVM(object):
         self.flavor = self.args['--flavor']
         self.image = self.args['--image']
         self.server = self.args['--name']
+        self.server_label = self.args['--label']
 
-    def _vm_create(self):
-        # Preparing required parameters of the vm_create() function
-        cloud = self.cloud
-        error = ''
-        key = None
-        vm_image = None
-        vm_flavor_id = None
-        userinfo = self.userinfo
-        username = userinfo["cm_user_id"]
-
-        try:
-            vm_flavor_id = self.flavor \
-                    or userinfo["defaults"]["flavors"][cloud]
-        except:
-            error = error + "Please specify a default flavor."
-        if vm_flavor_id in [None, 'none']:        
-            error = error + "Please specify a default flavor."
-
-        try:
-            vm_image = self.image \
-                    or userinfo["defaults"]["images"][cloud]
-        except:
-            error = error + "Please specify a default image."
-        if vm_image in [None, 'none']:
-            error = error + "Please specify a default image."
-
-        if "key" in userinfo["defaults"]:
-            key = userinfo["defaults"]["key"]
-        elif len(userinfo["keys"]["keylist"].keys()) > 0:
-            key = userinfo["keys"]["keylist"].keys()[0]
-
-
-        if key:
-              keycontent = userinfo["keys"]["keylist"][key]
-              if keycontent.startswith('key '):
-                  keycontent = keycontent[4:]
-              #check_register_key(cloud, key, keycontent)
-              keynamenew = self._keyname_sanitation(username, key)
-        else:
-            error = error + "No sshkey found. Please <a \
-            href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"
-
-        metadata = {'cm_owner': username}
-        prefix = userinfo["defaults"]["prefix"]
-        index = userinfo["defaults"]["index"]
-
-        log.info("STARTING {0} {1}".format(prefix, index))
-        log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image,
-                                                                        vm_flavor_id,
-                                                                        keynamenew))
-
-        result = self.clouds.vm_create(cloud, prefix, index, vm_flavor_id, vm_image, keynamenew,
-                                  meta=metadata, cm_user_id=username)
-        try:
-            result['server']['adminPass'] = "*******"
-        except:
-            pass
-        log.info("{0}".format(result))
-
-        # Upon success of launching vm instance, an index of vm instance is increased.
-        userstore = cm_user()
-        userstore.set_default_attribute(username, "index", int(index) + 1)
-
-    def _vm_delete(self):
-        cloud = self.cloud
-        server = self.server
-        userid = self.userinfo['cm_user_id']
-        self.clouds.vm_delete(cloud, server, userid)
-
-    def _vm_info(self):
-        print sys._getframe().f_code.co_name
-
-    def _vm_list(self):
-
-        attributes = {"openstack":
+    def set_attributes(self):
+        self.attributes = {"openstack":
                       [
                           ['name','name'],
                           ['status','status'],
@@ -196,6 +127,105 @@ class ManageVM(object):
                           ['created','created'],
                       ]
                      }
+
+    def _vm_create(self):
+        # Preparing required parameters of the vm_create() function
+        cloud = self.cloud
+        error = ''
+        key = None
+        vm_image = None
+        vm_flavor_id = None
+        userinfo = self.userinfo
+        username = userinfo["cm_user_id"]
+
+        try:
+            vm_flavor_id = self.flavor \
+                    or userinfo["defaults"]["flavors"][cloud]
+        except:
+            error = error + "Please specify a default flavor."
+        if vm_flavor_id in [None, 'none']:        
+            error = error + "Please specify a default flavor."
+
+        try:
+            vm_image = self.image \
+                    or userinfo["defaults"]["images"][cloud]
+        except:
+            error = error + "Please specify a default image."
+        if vm_image in [None, 'none']:
+            error = error + "Please specify a default image."
+
+        if "key" in userinfo["defaults"]:
+            key = userinfo["defaults"]["key"]
+        elif len(userinfo["keys"]["keylist"].keys()) > 0:
+            key = userinfo["keys"]["keylist"].keys()[0]
+
+
+        if key:
+              keycontent = userinfo["keys"]["keylist"][key]
+              if keycontent.startswith('key '):
+                  keycontent = keycontent[4:]
+              #check_register_key(cloud, key, keycontent)
+              keynamenew = self._keyname_sanitation(username, key)
+        else:
+            error = error + "No sshkey found. Please <a \
+            href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"
+
+        metadata = {'cm_owner': username}
+        prefix = userinfo["defaults"]["prefix"]
+        index = userinfo["defaults"]["index"]
+
+        log.info("STARTING {0} {1}".format(prefix, index))
+        log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image,
+                                                                        vm_flavor_id,
+                                                                        keynamenew))
+
+        prefix = "%s_%s" % (self.server_label , prefix)
+
+        result = self.clouds.vm_create(cloud, prefix, index, vm_flavor_id, vm_image, keynamenew,
+                                  meta=metadata, cm_user_id=username)
+        try:
+            result['server']['adminPass'] = "*******"
+        except:
+            pass
+        log.info("{0}".format(result))
+
+        # Upon success of launching vm instance, an index of vm instance is increased.
+        userstore = cm_user()
+        userstore.set_default_attribute(username, "index", int(index) + 1)
+
+    def _vm_delete(self):
+        cloud = self.cloud
+        server = self.server
+        userid = self.userinfo['cm_user_id']
+        if not self.server_label:
+            self.clouds.vm_delete(cloud, server, userid)
+        else:
+            label = self.server_label
+            userid = self.userinfo['cm_user_id']
+            data = self.clouds.servers(cm_user_id=userid)
+            result = self._select_servers(data, self.attributes)
+            servers = []
+            for instance in result:
+                try:
+                    # if instance['name'].startswith(label):
+                    if instance[0].startswith(label):
+                        # servers.append(instance['id'])
+                        # servers.append(instance[4])
+                         server = instance[4]
+                        self.clouds.vm_delete(cloud, server, userid)
+                except:
+                    pass
+            print servers
+            print result
+            print label
+
+    def _vm_info(self):
+        print sys._getframe().f_code.co_name
+
+    def _vm_list(self):
+
+        attributes = self.attributes
+
         userid = self.userinfo['cm_user_id']
         data = self.clouds.servers(cm_user_id=userid)
         result = self._select_servers(data, attributes)
