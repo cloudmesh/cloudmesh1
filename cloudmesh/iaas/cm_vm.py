@@ -179,7 +179,8 @@ class ManageVM(object):
                                                                         vm_flavor_id,
                                                                         keynamenew))
 
-        prefix = "%s_%s" % (self.server_label , prefix)
+        if self.server_label:
+            prefix = "%s_%s" % (self.server_label , prefix)
 
         result = self.clouds.vm_create(cloud, prefix, index, vm_flavor_id, vm_image, keynamenew,
                                   meta=metadata, cm_user_id=username)
@@ -211,7 +212,7 @@ class ManageVM(object):
                     if instance[0].startswith(label):
                         # servers.append(instance['id'])
                         # servers.append(instance[4])
-                         server = instance[4]
+                        server = instance[4]
                         self.clouds.vm_delete(cloud, server, userid)
                 except:
                     pass
