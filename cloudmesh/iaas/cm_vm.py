@@ -142,8 +142,64 @@ class ManageVM(object):
         print sys._getframe().f_code.co_name
 
     def _vm_list(self):
-        print sys._getframe().f_code.co_name
 
+        attributes = {"openstack":
+                      [
+                          ['name','name'],
+                          ['status','status'],
+                          ['addresses','addresses'],
+                          ['flavor', 'flavor','id'],
+                          ['id','id'],
+                          ['image','image','id'],
+                          ['user_id', 'user_id'],
+                          ['metadata','metadata'],
+                          ['key_name','key_name'],
+                          ['created','created'],
+                      ],
+                      "ec2":
+                      [
+                          ["name", "id"],
+                          ["status", "extra", "status"],
+                          ["addresses", "public_ips"],
+                          ["flavor", "extra", "instance_type"],
+                          ['id','id'],
+                          ['image','extra', 'imageId'],
+                          ["user_id", 'user_id'],
+                          ["metadata", "metadata"],
+                          ["key_name", "extra", "key_name"],
+                          ["created", "extra", "launch_time"]
+                      ],
+                      "aws":
+                      [
+                          ["name", "name"],
+                          ["status", "extra", "status"],
+                          ["addresses", "public_ips"],
+                          ["flavor", "extra", "instance_type"],
+                          ['id','id'],
+                          ['image','extra', 'image_id'],
+                          ["user_id","user_id"],
+                          ["metadata", "metadata"],
+                          ["key_name", "extra", "key_name"],
+                          ["created", "extra", "launch_time"]
+                      ],
+                      "azure":
+                      [
+                          ['name','name'],
+                          ['status','status'],
+                          ['addresses','vip'],
+                          ['flavor', 'flavor','id'],
+                          ['id','id'],
+                          ['image','image','id'],
+                          ['user_id', 'user_id'],
+                          ['metadata','metadata'],
+                          ['key_name','key_name'],
+                          ['created','created'],
+                      ]
+                     }
+        userid = self.userinfo['cm_user_id']
+        data = self.clouds.servers(cm_user_id=userid)
+        result = self._select_servers(data, attributes)
+        _display(result)
 
     def _keyname_sanitation(self, username, keyname):
         keynamenew = "%s_%s" % (username, keyname.replace('.', '_').replace('@',
@@ -174,6 +230,55 @@ class ManageVM(object):
                 continue
             result[k] = v
         return result
+
+
+    def _select_servers(self, data, selected_keys): 
+        servers = []
+        for cm_cloud, _id in data.iteritems():
+            for server_name, v in _id.iteritems():
+                values = []
+                # cm_type is required to use a selected_keys for the cm_type
+                cm_type = v['cm_type']
+                keys = []
+                for k in selected_keys[cm_type]:
+                    keys.append(k[0])
+                    try:
+                        values.append(str(_getFromDict(v, k[1:])))
+                    except:
+                        #print sys.exc_info()
+                        values.append(0)
+                servers.append(values)
+        headers = [keys]
+        return headers + servers
+
+def _getFromDict(dataDict, mapList):
+    '''Get values of dataDict by mapList
+    mapList is a list of keys to find values in dict.
+    dataDict is a nested dict and will be searched by the list.
+
+    e.g.  Access to the value 5 in dataDict
+
+    dataDict = { "abc": {
+                    "def": 5 
+                    } 
+                }
+    mapList = [ "abc", "def" ]
+
+    _getFromDict(dataDict, mapList) returns 5
+
+    ref: http://stackoverflow.com/questions/14692690/access-python-nested-dictionary-items-via-a-list-of-keys
+    '''
+    return reduce(lambda d, k: d[k], mapList, dataDict)
+
+def _display(json_data, headers="firstrow", tablefmt="orgtbl"):
+    table = tabulate(json_data, headers, tablefmt)
+    try:
+        separator = table.split("\n")[1].replace("|", "+")
+    except:
+        separator = "-" * 50
+    print separator
+    print table
+    print separator
 
 def main():
     arguments = docopt(shell_command_vm.__doc__)

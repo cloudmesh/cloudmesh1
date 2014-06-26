@@ -180,6 +180,16 @@ def _select_images(data, selected_keys, env=[]):
     headers = [keys]
     return headers + images
 
+def _display(json_data, headers="firstrow", tablefmt="orgtbl"):
+    table = tabulate(json_data, headers, tablefmt)
+    try:
+        separator = table.split("\n")[1].replace("|", "+")
+    except:
+        separator = "-" * 50
+    print separator
+    print table
+    print separator
+
 def main():
     arguments = docopt(shell_command_image.__doc__)
     shell_command_image(arguments)
