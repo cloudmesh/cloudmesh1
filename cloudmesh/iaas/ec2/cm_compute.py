@@ -120,6 +120,7 @@ class ec2(ComputeBaseType):
                   key_name=None,
                   meta={},
                   userdata=None):
+        self.name = name
         self.create_vm(flavor_name, image_id, key_name)
 
     def create_vm(self, flavor_name, image_id, key_name):
