@@ -15,12 +15,13 @@ def shell_command_flavor(arguments):
     """
     Usage:
         flavor 
-        flavor <cm_cloud>...
+        flavor <cm_cloud>... [--refresh]
 	flavor -h | --help
         flavor --version
 
    Options:
        -h                   help message
+       --refresh            refresh flavors of IaaS
  
     Arguments:
         cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
@@ -37,15 +38,17 @@ def shell_command_flavor(arguments):
     """
 
     #log.info(arguments)
-    clouds_name = arguments['<cm_cloud>']
+    cloud_names = arguments['<cm_cloud>']
     # clouds in c.flavors treats None value as a ALL clouds
-    if not clouds_name:
-        clouds_name = None
+    if not cloud_names:
+        cloud_names = None
     config = cm_config()
     username = config.username()
     c = cm_mongo()
     c.activate(cm_user_id=username)
-    flavors_dict = c.flavors(cm_user_id=username, clouds=clouds_name)
+    if arguments['--refresh']:
+        c.refresh(cm_user_id=username, names=cloud_names, types=['flavors'])
+    flavors_dict = c.flavors(cm_user_id=username, clouds=cloud_names)
 
     your_keys = [
         'id',

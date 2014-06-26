@@ -15,12 +15,13 @@ def shell_command_image(arguments):
     """
     Usage:
         image
-        image <cm_cloud>...
+        image <cm_cloud>... [--refresh]
 	image -h | --help
         image --version
 
    Options:
        -h                   help message
+       --refresh            refresh images of IaaS
  
     Arguments:
         cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
@@ -37,16 +38,19 @@ def shell_command_image(arguments):
         
     """
 
-    #log.info(arguments)
-    clouds_name = arguments['<cm_cloud>']
-    # clouds in c.images treats None value as a ALL clouds
-    if not clouds_name:
-        clouds_name = None
+    # log.info(arguments)
+
+    cloud_names = arguments['<cm_cloud>']
+    # None value means ALL clouds in c.images() function
+    if not cloud_names:
+        cloud_names = None
     config = cm_config()
     username = config.username()
     c = cm_mongo()
     c.activate(cm_user_id=username)
-    images_dict = c.images(cm_user_id=username, clouds=clouds_name)
+    if arguments['--refresh']:
+        c.refresh(cm_user_id=username, names=cloud_names, types=['images'])
+    images_dict = c.images(cm_user_id=username, clouds=cloud_names)
     your_keys = {"openstack":
                     [
                         # [ "Metadata", "metadata"],
