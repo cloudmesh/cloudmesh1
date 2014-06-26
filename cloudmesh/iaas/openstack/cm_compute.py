@@ -639,6 +639,13 @@ class openstack(ComputeBaseType):
         self.images = self._list_to_dict(list, 'id', "image", time_stamp)
         return self.images
 
+    def get_security_groups(self):
+        time_stamp = self._now()
+        list = self.list_security_groups()['security_groups']
+        self.security_groups = self._list_to_dict(list, 'id', 'security_group',
+                                                  time_stamp)
+        return self.security_groups
+
     # new
     """
     def get_tenants(self, credential=None):
@@ -751,6 +758,10 @@ class openstack(ComputeBaseType):
 
     def _get_servers_dict(self):
         result = self.get_servers()
+        return result
+
+    def _get_security_groups_dict(self):
+        result = self.get_security_groups()
         return result
 
     def limits(self):

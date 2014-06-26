@@ -396,8 +396,8 @@ class cm_mongo:
                 for element in result:
                     id = "{0}-{1}-{2}".format(
                         name, type, result[element]['name']).replace(".", "-")
-                    # print "ID", id
-                    if type in ['servers']:
+                    # servers or security_groups is for each user.
+                    if type in ['servers', 'e_security_groups']:
                         result[element]['cm_user_id'] = cm_user_id
 
                     result[element]['cm_id'] = id
@@ -490,6 +490,18 @@ class cm_mongo:
         '''
         return self._get_kind('flavors', clouds, cm_user_id)
 
+    def images(self, clouds=None, cm_user_id=None):
+        '''
+        returns all the images from various clouds
+        '''
+        return self._get_kind('images', clouds, cm_user_id)
+
+    def security_groups(self, clouds=None, cm_user_id=None):
+        '''
+        returns all the security groups from various clouds
+        '''
+        return self._get_kind('e_security_groups', clouds, cm_user_id)
+
     # need to make sure other clouds have the same flavor dict as in openstack
     # otherwide will need to put this into the openstack iaas class
     def flavor_name_to_id(self, cloud, flavor_name):
@@ -500,12 +512,6 @@ class cm_mongo:
                 ret = id
                 break
         return ret
-
-    def images(self, clouds=None, cm_user_id=None):
-        '''
-        returns all the images from various clouds
-        '''
-        return self._get_kind('images', clouds, cm_user_id)
 
     def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id):
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]

@@ -20,6 +20,9 @@ class ComputeBaseType:
     # : the dict for the servers
     servers = {}
 
+    # : the dict for the security_groups
+    security_groups = {}
+
     # : the dict for the set_credentials
     credential = None
 
@@ -36,6 +39,7 @@ class ComputeBaseType:
         self.flavors = {}  # global var
         self.images = {}  # global var
         self.servers = {}  # global var
+        self.security_groups = {} # global var
         self.credential = None  # global var
         self.label = None  # global var
         self.type = None
@@ -49,6 +53,7 @@ class ComputeBaseType:
         print "Flavors:", len(self.flavors)
         print "Servers:", len(self.servers)
         print "Images:", len(self.images)
+        print "Security Groups:", len(self.security_groups)
         # print "Users:", len(self.users)
         # print "Tenants:", len(self.tenants)
 
@@ -76,6 +81,8 @@ class ComputeBaseType:
             d = self.flavors.copy()
         elif selection == 's':
             d = self.servers.copy()
+        elif selection == 'e':
+            d = self.security_groups.copy()
         elif type is not None:
             print "refresh type not supported"
             assert False
@@ -100,6 +107,8 @@ class ComputeBaseType:
             d = self.flavors
         elif selection == 's':
             d = self.servers
+        elif selection == 'e':
+            d = self.security_groups
         # elif selection == 'u':
         #    d = self.users
         # elif selection == 't':
@@ -125,6 +134,9 @@ class ComputeBaseType:
         raise NotImplementedError()
 
     def _get_servers_dict(self):
+        raise NotImplementedError()
+
+    def _get_security_groups_dict(self):
         raise NotImplementedError()
 
     def vm_create(self, name=None,
@@ -181,6 +193,7 @@ class ComputeBaseType:
             'flavors': self.flavors,
             'servers': self.servers,
             'images': self.images,
+            'security groups': self.security_groups,
             # 'users': self.users,
             # 'users': len(self.users),
             # 'tenants': self.tenants,
@@ -231,6 +244,9 @@ class ComputeBaseType:
         elif selection == 's':
             list_function = self._get_servers_dict
             d = self.servers
+        elif selection == 'e':
+            list_function = self._get_security_groups_dict
+            d = self.security_groups
         # elif selection == 'u':
         #    list_function = self._get_users_dict
         #    d = self.users
@@ -250,6 +266,8 @@ class ComputeBaseType:
                 self.flavors = {}
             elif selection == 's':
                 self.servers = {}
+            elif selection == 'e':
+                self.security_groups = {}
             # elif selection == 'u':
             #    self.users = {}
             # elif selection == 't':
