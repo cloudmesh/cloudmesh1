@@ -10,6 +10,8 @@ from prettytable import PrettyTable
 from cloudmesh_common.logger import LOGGER
 from tabulate import tabulate
 
+import threading
+
 log = LOGGER(__file__)
 
 def shell_command_vm(arguments):
@@ -129,6 +131,11 @@ class ManageVM(object):
                      }
 
     def _vm_create(self):
+        '''Create a vm instance of IaaS using cm_mongo class.
+        vm_create() procedure of cm_mongo object launches new instance.
+
+        Note. Most parts of codes are identical with start_vm() in webui/modules/cloud.py
+        '''
         # Preparing required parameters of the vm_create() function
         cloud = self.cloud
         error = ''
@@ -194,6 +201,11 @@ class ManageVM(object):
         userstore = cm_user()
         userstore.set_default_attribute(username, "index", int(index) + 1)
 
+        t = threading.Thread(target=self.clouds.refresh,
+                             kwargs={'cm_user_id':username, 'names':[cloud], \
+                                    'types':['servers']})
+        t.start()
+
     def _vm_delete(self):
         cloud = self.cloud
         server = self.server
@@ -216,9 +228,11 @@ class ManageVM(object):
                         self.clouds.vm_delete(cloud, server, userid)
                 except:
                     pass
-            print servers
-            print result
-            print label
+        
+        t = threading.Thread(target=self.clouds.refresh,
+                             kwargs={'cm_user_id':userid, 'names':[cloud], \
+                                    'types':['servers']})
+        t.start()
 
     def _vm_info(self):
         print sys._getframe().f_code.co_name
