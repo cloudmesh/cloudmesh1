@@ -22,7 +22,7 @@ def shell_command_vm(arguments):
                 [--flavor=<FlavorId>]
                 [--cloud=<CloudName>]
                 [--label=<LABEL>]
-      vm delete [--name=<NAME>]
+      vm delete <NAME>
                 [--label=<LABEL>]
                 [--cloud=<CloudName>]
       vm info [--verbose | --json] [--name=<NAME>]
@@ -51,13 +51,13 @@ def shell_command_vm(arguments):
     vm.call_procedure()
 
 class ManageVM(object):
-    #log.info(arguments)
     config = cm_config()
     clouds = cm_mongo()
     user = cm_user()
     key = None
 
     def __init__(self, args):
+        #log.info(args)
         self.set_args(args)
         self.parse_args()
         self.username = self.config.username()
@@ -72,7 +72,7 @@ class ManageVM(object):
         self.cloud = self.args['--cloud']
         self.flavor = self.args['--flavor']
         self.image = self.args['--image']
-        self.server = self.args['--name']
+        self.server = self.args['--name'] or self.args['<NAME>']
         self.server_label = self.args['--label']
 
     def set_attributes(self):
