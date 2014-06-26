@@ -127,6 +127,56 @@ def _select_images(data, selected_keys, env=[]):
                   u'instance_type_vcpus': u'1',
                   u'user_id': u'f603818711324203970ed1e3bb4b90ed',
                   u'instance_type_root_gb': u'20',
+    attributes = {"openstack":
+                  [
+                      ['name','name'],
+                      ['status','status'],
+                      ['addresses','addresses'],
+                      ['flavor', 'flavor','id'],
+                      ['id','id'],
+                      ['image','image','id'],
+                      ['user_id', 'user_id'],
+                      ['metadata','metadata'],
+                      ['key_name','key_name'],
+                      ['created','created'],
+                  ],
+                  "ec2":
+                  [
+                      ["name", "id"],
+                      ["status", "extra", "status"],
+                      ["addresses", "public_ips"],
+                      ["flavor", "extra", "instance_type"],
+                      ['id','id'],
+                      ['image','extra', 'imageId'],
+                      ["user_id", 'user_id'],
+                      ["metadata", "metadata"],
+                      ["key_name", "extra", "key_name"],
+                      ["created", "extra", "launch_time"]
+                  ],
+                  "aws":
+                  [
+                      ["name", "name"],
+                      ["status", "extra", "status"],
+                      ["addresses", "public_ips"],
+                      ["flavor", "extra", "instance_type"],
+                      ['id','id'],
+                      ['image','extra', 'image_id'],
+                      ["user_id","user_id"],
+                      ["metadata", "metadata"],
+                      ["key_name", "extra", "key_name"],
+                      ["created", "extra", "launch_time"]
+                  ],
+                  "azure":
+                  [
+                      ['name','name'],
+                      ['status','status'],
+                      ['addresses','vip'],
+                      ['flavor', 'flavor','id'],
+                      ['id','id'],
+                      ['image','image','id'],
+                      ['user_id', 'user_id'],
+                      ['metadata','metadata'],
+                      ['key_name','key_name'],
                   u'base_image_ref': u'1a5fd55e-79b9-4dd5-ae9b-ea10ef3156e9',
                   u'owner_id': u'1ae6813a3a6d4cebbeb1912f6d139ad0'}
         server {u'id': u'16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'links': [{u'href': u'http://198.202.120.83:8774/v1.1/1ae6813a3a6d4cebbeb1912f6d139ad0/servers/16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'rel': u'self'}, {u'href': u'http://198.202.120.83:8774/1ae6813a3a6d4cebbeb1912f6d139ad0/servers/16a5f5ac-7f39-4b01-a2c3-b2003beffb9d', u'rel': u'bookmark'}]}
@@ -143,6 +193,7 @@ def _select_images(data, selected_keys, env=[]):
         b99fa4c8-6b92-49e6-b53f-37e56f9383b6
     """
     images = []
+    keys = []
 
     def _getFromDict(dataDict, mapList):
         '''Get values of dataDict by mapList
