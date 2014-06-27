@@ -15,8 +15,8 @@ def shell_command_security_group(arguments):
     """
     Usage:
         security_group list <cm_cloud>...
-        security_group add <cm_cloud> <label> <parameters> 
-        security_group delete <cm_cloud> <label>
+        security_group add <cm_cloud> <label> <parameters>  [NOT IMPLEMENTED]
+        security_group delete <cm_cloud> <label>            [NOT IMPLEMENTED]
 	security_group -h | --help
         security_group --version
 
@@ -46,11 +46,17 @@ def shell_command_security_group(arguments):
     username = config.username()
     c = cm_mongo()
     c.activate(cm_user_id=username)
-    if arguments['--refresh']:
-        c.refresh(cm_user_id=username, names=cloud_names, types=['e_security_groups'])
     security_groups_dict = c.security_groups(cm_user_id=username, clouds=cloud_names)
+    your_keys = {"openstack": 
+                 [
+                     ['id', 'id'],
+                     ['name', 'name'],
+                     ['description', 'description'],
+                     ['cm_refresh', 'cm_refresh']
+                 ]
+                }
 
-    your_keys = []
+
     security_groups = _select_security_groups(security_groups_dict, your_keys)
 
     _display(security_groups)
