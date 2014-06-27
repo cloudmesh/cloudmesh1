@@ -454,8 +454,8 @@ def start_vm(cloud=None, server=None):
         keynamenew,
         meta=metadata,
         cm_user_id=g.user.id)
-    tmp = dict(result)
     try:
+        tmp = dict(result)
         tmp['server']['adminPass'] = "*******"
     except:
         pass
