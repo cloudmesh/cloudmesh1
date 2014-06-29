@@ -53,7 +53,8 @@ def shell_command_security_group(arguments):
                      ['name', 'name'],
                      ['description', 'description'],
                      ['cm_refresh', 'cm_refresh']
-                 ]
+                 ],
+                 "ec2":[]
                 }
 
 
