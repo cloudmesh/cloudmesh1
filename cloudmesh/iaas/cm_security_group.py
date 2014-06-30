@@ -55,6 +55,10 @@ def shell_command_security_group(arguments):
                      ['cm_refresh', 'cm_refresh']
                  ],
                  "ec2":[]
+                 ,
+                 "azure":[]
+                 ,
+                 "aws":[]
                 }
 
 
