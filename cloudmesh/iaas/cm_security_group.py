@@ -61,9 +61,7 @@ def shell_command_security_group(arguments):
                  "aws":[]
                 }
 
-
     security_groups = _select_security_groups(security_groups_dict, your_keys)
-
     _display(security_groups)
     
 def _select_security_groups(data, selected_keys, env=[]):
