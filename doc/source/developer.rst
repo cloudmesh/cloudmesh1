@@ -376,7 +376,9 @@ Install cloudmesh code
 Next you install the basic cloudmesh code which you can do with::
 
    $ ./install cloudmesh
-   $ fab build.install
+..   $ fab build.install
+..   "./install cloudmesh" -> deploy() -> ubuntu, centos, osx -> python install setup.py install
+..   "fab build.install" -> ./install requirements -> python setup.py install
 
 The cloudmesh.yaml file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
