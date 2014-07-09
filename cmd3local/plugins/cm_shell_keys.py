@@ -74,6 +74,7 @@ class cm_shell_keys:
                keys add NAME [KEY] [--yaml][--mongo]
                keys delete NAME [--yaml][--mongo]
                keys save
+               keys
     
         Manages the keys
 
