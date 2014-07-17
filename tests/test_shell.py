@@ -41,6 +41,31 @@ class Test:
         print r
         assert "vm" in r and "cloud" in r and "list" in r
 
+    def message(self,state, word):
+        if state:
+            return word + " passed"
+        else:
+            return word + " failed"
+        
+    def grep_command(self, command, valid, invalid):
+        ok = True
+        r = cm(command)
+        print r
+        if valid is not None:
+            for word in valid:
+                msg = "passed"
+                testing = word in r
+                print "Testing", command, self.message(testing, word)
+                ok = ok and testing
+        if invalid is not None:                
+            for word in invalid:
+                msg = "passed"
+                testing = not word in r
+                print "Testing", command, self.message(testing, word)
+                ok = ok and testing            
+        return ok
+
+    """
     def test_help_commands(self):
         HEADING()
         help_commands=[("cloud","cloud on",None),
@@ -73,4 +98,8 @@ class Test:
             print "TESTING help", command, msg            
             allok = allok and testing
         assert allok
+    """
 
+    def test_list(self):
+        print
+        a = self.grep_command("list", ["alamo", "india_openstack_havana"], None)
