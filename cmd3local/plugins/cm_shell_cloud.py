@@ -102,6 +102,7 @@ class cm_shell_cloud:
             cloud off [NAME]
             cloud add CLOUD
             cloud remove [NAME]
+            cloud
 
         Manages the clouds
 
@@ -160,7 +161,7 @@ class cm_shell_cloud:
         #log.info(arguments)
         #print "<", args, ">"
 
-        if arguments["list"]:
+        if arguments["list"] or args=="":
             self._load_mongodb()
             self._requery_db()
             if self._check_empty():
@@ -440,6 +441,6 @@ class cm_shell_cloud:
                             print "cloud '{0}' removed.".format(arguments["NAME"])
                             self._requery = True
                             self._cloud_selected = False
+              
                         
-            
-            
+       
