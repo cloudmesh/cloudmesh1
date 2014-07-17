@@ -15,7 +15,7 @@ def shell_command_flavor(arguments):
     """
     Usage:
         flavor 
-        flavor <cm_cloud>... [--refresh]
+        flavor CLOUD... [--refresh]
 	flavor -h | --help
         flavor --version
 
@@ -24,7 +24,7 @@ def shell_command_flavor(arguments):
        --refresh            refresh flavors of IaaS
  
     Arguments:
-        cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
+        CLOUD    Name of the IaaS cloud e.g. india_openstack_grizzly.
     
     Description:
        flavor command provides list of available flavors. Flavor describes
@@ -38,7 +38,7 @@ def shell_command_flavor(arguments):
     """
 
     #log.info(arguments)
-    cloud_names = arguments['<cm_cloud>']
+    cloud_names = arguments['CLOUD']
     # clouds in c.flavors treats None value as a ALL clouds
     if not cloud_names:
         cloud_names = None
@@ -95,7 +95,7 @@ def _select_flavors(data, selected_keys, env=[]):
         "rxtx_factor": 1.0, 
         "cm_kind": "flavors"}}}
     '''
-    headers = ["cm_cloud"] + selected_keys
+    headers = ["CLOUD"] + selected_keys
     flavors = [headers]
     for cm_cloud, _id in data.iteritems():
         for flavor_name, v in _id.iteritems():
