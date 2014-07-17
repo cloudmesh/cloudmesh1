@@ -119,7 +119,7 @@ class cm_shell_cloud:
                              columns are active, label, host, type/version,
                              type, heading, user, credentials, defaults
                              (all to diplay all, semiall to display all
-                             except credentials and defauts)
+                             except credentials and defaults)
 
         Description:
 
@@ -133,7 +133,9 @@ class cm_shell_cloud:
                 is used. If the name all is used, all clouds are displayed
 
             cloud set NAME
-                sets a new name for selected or default cloud
+                sets a new name for selected or default cloud, please select a
+                cloud to work with first, otherwise the default cloud will be 
+                used
 
             cloud select [NAME]
                 selects a cloud to work with from a list of clouds if NAME 
@@ -184,6 +186,8 @@ class cm_shell_cloud:
                     else:
                         print "ERROR: one or more column type doesn't exist, available columns are: active,label,host,type/version,type,heading,user,credentials,defaults  ('all' to diplay all, 'semiall' to display all except credentials and defauts)"
                         return
+                else:
+                    col['active'] = []
 
                 for cloud in self.clouds:
                     for key in col.keys():
