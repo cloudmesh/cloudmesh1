@@ -101,3 +101,7 @@ class Test:
     def test_list(self):
         print
         a = self.grep_command("list", ["alamo", "india_openstack_havana"], None)
+
+    def test_metrics(self):
+        a = self.grep_command("metric", ["india_openstack_havana"], None)
+ 
