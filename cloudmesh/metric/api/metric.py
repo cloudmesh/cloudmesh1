@@ -37,7 +37,7 @@ class metric_api:
     def load_server_info(self):
         # cloudmesh_server.yaml contains the api server info
         # this is only for test.
-        self.api_server = "156.56.93.202"
+        self.api_server = "129.79.135.80"
         self.port = 5001
         self.doc_url = "metric"
  
