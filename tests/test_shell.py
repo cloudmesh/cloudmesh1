@@ -1,0 +1,76 @@
+""" run with
+
+nosetests -v --nocapture
+
+or
+
+nosetests -v
+
+individual tests can be run with
+
+nosetests -v  --nocapture test_cm_compute.py:Test.test_06
+
+"""
+
+from sh import head
+from sh import fgrep
+import string
+import os
+import time
+from sh import cm
+
+from sh import ssh
+import json
+from pprint import pprint
+from cloudmesh_common.util import HEADING
+
+class Test:
+
+    def setup(self):
+        self.host = "india.futuregrid.org"
+
+
+        # pprint (_create_pbsinfo_dict(data))
+
+    def tearDown(self):
+        pass
+
+    def test_help(self):
+        HEADING()
+        r = cm("help")
+        print r
+        assert "vm" in r and "cloud" in r and "list" in r
+
+    def test_help_commands(self):
+        HEADING()
+        help_commands=[("cloud","cloud on",None),
+                       ("flavor","","<"),
+                       ("init","KIND",None),
+                       ("list","projects", None),
+                       ("rain","KIND", None),
+                       ("reservation","duration", None),
+                       ("storm","ID", None),
+                       ("vm", "CLOUD", "<"),
+                       ("defaults","clean", None),
+                       ("image","CLOUD", "<"),
+                       ("inventory","exists",None),
+                       ("metric","CLOUD", None),
+                       ("register","CLOUD", None),
+                       ("security_group", "CLOUD", "<"),
+                    ]
+        allok = True
+        for (command, valid, invalid) in help_commands:
+            r = cm("help " + command)
+            testing = True
+            if valid is not None:
+                testing = valid in r
+            if invalid is not None:
+                testing = testing and not invalid in r
+            if testing:
+                msg = "pass"
+            else:
+                msg = "fail"
+            print "TESTING help", command, msg            
+            allok = allok and testing
+        assert allok
+
