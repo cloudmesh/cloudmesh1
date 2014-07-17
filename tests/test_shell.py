@@ -65,7 +65,6 @@ class Test:
                 ok = ok and testing            
         return ok
 
-    """
     def test_help_commands(self):
         HEADING()
         help_commands=[("cloud","cloud on",None),
@@ -98,7 +97,6 @@ class Test:
             print "TESTING help", command, msg            
             allok = allok and testing
         assert allok
-    """
 
     def test_list(self):
         print
