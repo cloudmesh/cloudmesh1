@@ -22,9 +22,9 @@ https://cloudmesh.atlassian.net
 Developers Install
 ==================
 
-git clone git@github.com:cloudmesh/cloudmesh.git
-
-pip install -r requirements.txt
-
-python setup.py install 
+::
+  git clone git@github.com:cloudmesh/cloudmesh.git
+  pip install -r requirements.txt
+  python setup.py install 
  
+Note: you will still need to configure the environment which is documented in the manual
