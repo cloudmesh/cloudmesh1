@@ -2,15 +2,9 @@
 Cloudmesh
 ****************************************
 
-Documentation
-==============
+Documentation: http://cloudmesh.github.io/cloudmesh/
 
-* http://cloudmesh.github.io/cloudmesh/
-
-Code
-=====
-
-* https://github.com/cloudmesh/cloumesh
+Code:  https://github.com/cloudmesh/cloumesh
 
 
 Developers Install
