@@ -1,5 +1,5 @@
 from cmd3.shell import function_command
-from cloudmesh.iaas.cm_list import shell_command_list
+from cloudmesh.shell.cm_list import shell_command_list
 
 class cm_shell_list:
     
