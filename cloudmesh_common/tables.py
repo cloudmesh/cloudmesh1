@@ -4,6 +4,28 @@ from prettytable import PrettyTable
 from datetime import datetime
 from datetime import timedelta
 
+def array_dict_table_printer(array, order=None):
+    """prints a pretty table from an array of dicts
+    :param array: A an array with dicts of the same type.
+                  Each key will be a column
+    :param order: The orde in which the columns are printed.
+                  The order is specified by the key names of the dict.
+    """
+    # header
+    header = array[0].keys()
+    print "HEADER", header
+
+    if order is None:
+        order = header
+    x = PrettyTable(order)
+    for element in array:
+        values = []
+        for key in order:
+            values.append(element[key])
+        x.add_row(values)
+    x.align = "l"
+    return x
+
 
 def column_table(column_dict, order=None):
     """prints a pretty table from data in the dict.
