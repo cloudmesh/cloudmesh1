@@ -19,3 +19,5 @@ margin-left:50px;
 border-left:50px;
 position: relative;
 }
+
+span.strikethrough { text-decoration: line-through; }

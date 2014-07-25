@@ -1,14 +1,16 @@
 """ Basic Clousmesh finctions.
 
+.. role:: strikethrough
+
 This file contains tome veri basic utility functions that must not
 need any import from cloudmesh. That is no statement such as
 
-import cloudmesh. ....
+* :strikethrough:`import cloudmesh`
 
-must occur in the list of import. If functions are needed hat need
-thsi they need to go into
+must occur in the list of import. If functions are needed hat need to
+be used they must be decleard without dependencies in:: 
 
-import cloudmesh.util. ....
+  import cloudmesh.util
 
 The reasonong is that during th einitialization where cloudmesh is not
 yet installed, the __init__ function for cloudmesh may include some
