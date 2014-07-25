@@ -28,3 +28,5 @@ def sphinx():
     local("rm -rf  /tmp/sphinx-contrib")
     local("cd /tmp; hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/")
     local("cd /tmp/sphinx-contrib/autorun/; python setup.py install")
+
+    

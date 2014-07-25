@@ -27,3 +27,4 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 * :ref:`package_index`
+* :ref:`pylint_results`
