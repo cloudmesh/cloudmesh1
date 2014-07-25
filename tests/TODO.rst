@@ -274,3 +274,27 @@ CM                     ... site/cloudmesh/cm_mesh.pyc:268:   INFO - Refresh clou
 CM                     ... site/cloudmesh/cm_mesh.pyc:270:   INFO -     Refresh flavors
 CM                 ... site/cloudmesh/util/config.pyc:60:  ERROR - The file /Users/flat/.futuregrid/cloudmesh_flavor.yaml does not exist.
 Unexpected error:  <type 'exceptions.SystemExit'> 
+=======
+TODO
+====
+
+help
+----
+
+cloud
+-----
+
+list
+----
+
+- [cm image] bug: cm image prints superhuge table making it impossible to display nicely
+
+vm
+--
+
+defaults
+--------
+
+metrics
+--------
+

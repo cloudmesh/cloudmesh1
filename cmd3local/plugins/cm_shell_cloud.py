@@ -6,7 +6,7 @@ import inspect
 import sys
 import importlib
 from collections import OrderedDict
-from cloudmesh.cm_cloudsinfo import cm_cloudsinfo
+from cloudmesh.cm_mongo import cm_mongo
 from cmd3.shell import command
 from cloudmesh_common.tables import column_table
 from cloudmesh_common.bootstrap_util import yn_choice
@@ -45,7 +45,7 @@ class cm_shell_cloud:
     def _load_mongodb(self):
         if not self._db_loaded:
             try:
-                self.cloudsinfo = cm_cloudsinfo()
+                self.cloudsinfo = cm_mongo()
                 self._db_loaded = True
             except:
                 print "ERROR: Could not load db, did you start mongo?"
@@ -119,7 +119,7 @@ class cm_shell_cloud:
                              columns are active, label, host, type/version,
                              type, heading, user, credentials, defaults
                              (all to diplay all, semiall to display all
-                             except credentials and defauts)
+                             except credentials and defaults)
 
         Description:
 
@@ -133,7 +133,9 @@ class cm_shell_cloud:
                 is used. If the name all is used, all clouds are displayed
 
             cloud set NAME
-                sets a new name for selected or default cloud
+                sets a new name for selected or default cloud, please select a
+                cloud to work with first, otherwise the default cloud will be 
+                used
 
             cloud select [NAME]
                 selects a cloud to work with from a list of clouds if NAME 
@@ -184,6 +186,8 @@ class cm_shell_cloud:
                     else:
                         print "ERROR: one or more column type doesn't exist, available columns are: active,label,host,type/version,type,heading,user,credentials,defaults  ('all' to diplay all, 'semiall' to display all except credentials and defauts)"
                         return
+                else:
+                    col['active'] = []
 
                 for cloud in self.clouds:
                     for key in col.keys():
@@ -300,18 +304,24 @@ class cm_shell_cloud:
                 current_selected = self._get_selected_cloud()
                 if current_selected == None: return
                 current_selected = current_selected['cm_cloud'].encode("ascii")
-                self.cloudsinfo.activate(current_selected)
+                res = self.cloudsinfo.activate_one_cloud(current_selected)
                 self._cloud_selected = False
-                print "cloud '{0}' activated.".format(current_selected)
+                if res == 0:
+                    return
+                elif res == 1:
+                    print "cloud '{0}' activated.".format(current_selected)
             else:
                 def activating(cloud):
                     if cloud == None:
                         print "ERROR: Could not find '{0}' in database.".format(arguments["NAME"])
                         return
                     cloudname = cloud['cm_cloud'].encode("ascii")
-                    self.cloudsinfo.activate(cloudname)
+                    res = self.cloudsinfo.activate_one_cloud(cloudname)
                     self._cloud_selected = False
-                    print "cloud '{0}' activated.".format(cloudname)
+                    if res == 0:
+                        return
+                    elif res == 1:
+                        print "cloud '{0}' activated.".format(cloudname)
                         
                 if self._requery:
                     cloud = self.cloudsinfo.get_one_cloud(arguments["NAME"])
@@ -332,7 +342,7 @@ class cm_shell_cloud:
                 current_selected = self._get_selected_cloud()
                 if current_selected == None: return
                 current_selected = current_selected['cm_cloud'].encode("ascii")
-                self.cloudsinfo.deactivate(current_selected)
+                self.cloudsinfo.deactivate_one_cloud(current_selected)
                 self._cloud_selected = False
                 print "cloud '{0}' deactivated.".format(current_selected)
             else:
@@ -341,7 +351,7 @@ class cm_shell_cloud:
                         print "ERROR: Could not find '{0}' in database.".format(arguments["NAME"])
                         return
                     cloudname = cloud['cm_cloud'].encode("ascii")
-                    self.cloudsinfo.deactivate(cloudname)
+                    self.cloudsinfo.deactivate_one_cloud(cloudname)
                     self._cloud_selected = False
                     print "cloud '{0}' deactivated.".format(cloudname)
                         
@@ -369,10 +379,13 @@ class cm_shell_cloud:
             except:
                 print "ERROR: could not get clouds information from yaml file, please check you yaml file, clouds information must be under 'cloudmesh' -> 'clouds' -> cloud1..."
                 return
+            '''
+            #get cm_active information from yaml
             try:
                 active = config.get("cloudmesh")['active'] 
             except:
                 active = []
+            '''
             try:
                 user = config.get("cloudmesh")['profile']['username']
             except:
@@ -390,10 +403,14 @@ class cm_shell_cloud:
                 cloudsdict[key]['cm_cloud']=key
                 cloudsdict[key]['cm_kind']='cloud'
                 cloudsdict[key]['cm_user_id']=user
+                '''
+                #get cm_active information from yaml
                 if key in active:
                     cloudsdict[key]['cm_active']=True
                 else:
                     cloudsdict[key]['cm_active']=False
+                '''
+                cloudsdict[key]['cm_active']=False
                 try:
                     self.cloudsinfo.add(cloudsdict[key])
                 except:
