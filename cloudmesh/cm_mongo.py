@@ -1,5 +1,6 @@
 from bson.objectid import ObjectId
 from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
+from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
 from cloudmesh.iaas.openstack.cm_compute import openstack
 from cloudmesh.iaas.ec2.cm_compute import ec2
@@ -559,6 +560,100 @@ class cm_mongo:
     def vm_delete(self, cloud, server, cm_user_id):
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         return cloudmanager.vm_delete(server)
+    
+    
+    
+    # ----------------------------------------------------------------------
+    # following part is specifically for command cloud at this point
+    # ----------------------------------------------------------------------
+    def get_clouds(self):
+        return self.db_clouds.find({'cm_kind': 'cloud'})
+    
+    def db_name_map(self, name):
+        if name == "cloud":
+            return "cm_cloud"
+        elif name == "active":
+            return "cm_active"
+        elif name == "label":
+            return "cm_label"
+        elif name == "host":
+            return "cm_host"
+        elif name == "type/version":
+            return "cm_type_version"
+        elif name == "type":
+            return "cm_type"
+        elif name == "heading":
+            return "cm_heading"
+        elif name == "user":
+            return "cm_user_id"
+        elif name == "credentials":
+            return "credentials"
+        elif name == "defaults":
+            return "default"
+    
+    
+    def set_name(self, cloudname, newname):
+        self.db_clouds.update({'cm_kind': 'cloud', 'cm_cloud': cloudname}, {'$set': {'cm_cloud': newname}})
+
+    
+    def get_one_cloud(self, cloudname):
+        return self.db_clouds.find_one({'cm_kind': 'cloud', 'cm_cloud': cloudname})
+
+    
+    def activate_one_cloud(self, cloudname):
+        #bug: read user from cloud information, not good for multiple users, because
+        #no cloud name duplicate is allowed at this point
+        cm_user_id = self.get_one_cloud(cloudname)['cm_user_id']
+        cloud = self.get_cloud(cm_user_id=cm_user_id, cloud_name=cloudname, force=True)
+        if cloud == None:
+            return 0
+        else: 
+            defaults = self.db_defaults.find_one({'cm_user_id': cm_user_id})
+            if cloudname not in defaults['registered_clouds']:
+                defaults['registered_clouds'].append(cloudname)
+            if cloudname not in defaults['activeclouds']:
+                defaults['activeclouds'].append(cloudname)
+            self.db_defaults.update({'cm_user_id': cm_user_id}, defaults, upsert=True)
+            
+            self.db_clouds.update({'cm_kind': 'cloud', 'cm_cloud': cloudname}, {'$set': {'cm_active': True}})
+            return 1
+
+    def deactivate_one_cloud(self, cloudname):
+        cm_user_id = self.get_one_cloud(cloudname)['cm_user_id']
+        defaults = self.db_defaults.find_one({'cm_user_id': cm_user_id})
+        if cloudname in defaults['activeclouds']:
+            defaults['activeclouds'].remove(cloudname)
+        self.db_defaults.update({'cm_user_id': cm_user_id}, defaults, upsert=True)
+        
+        self.db_clouds.update({'cm_kind': 'cloud', 'cm_cloud': cloudname}, {'$set': {'cm_active': False}})
+
+    
+
+    def add(self, d):
+        if d['cm_type'] in ['openstack']:
+            if d['credentials']['OS_USERNAME']:
+                del d['credentials']['OS_USERNAME']
+            if d['credentials']['OS_PASSWORD']:
+                del d['credentials']['OS_PASSWORD']
+            if d['credentials']['OS_TENANT_NAME']:
+                del d['credentials']['OS_TENANT_NAME']
+        elif d['cm_type'] in ['ec2', 'aws']:
+            if d['credentials']['EC2_ACCESS_KEY']:
+                del d['credentials']['EC2_ACCESS_KEY']
+            if d['credentials']['EC2_SECRET_KEY']:
+                del d['credentials']['EC2_SECRET_KEY']
+        elif d['cm_type'] in ['azure']:
+            if d['credentials']['subscriptionid']:
+                del d['credentials']['subscriptionid']
+        self.db_clouds.insert(d)
+
+
+    def remove(self, cloudname):
+        self.db_clouds.remove({'cm_kind': 'cloud', 'cm_cloud': cloudname})
+    
+    
+    # ----------------------------------------------------------------------
+    
 
 '''
 def main():
