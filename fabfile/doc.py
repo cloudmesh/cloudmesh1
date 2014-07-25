@@ -13,6 +13,7 @@ def view():
 
 @task
 def html():
+    api()
     man()
     """build the doc locally and view"""
     local("cd doc; make html")
@@ -31,5 +32,13 @@ def man():
     #TODO: match on "Commands"
     local("cm man | grep -A10000 \"Commands\"  | sed \$d  > doc/source/man/man.rst")
 
-    
+@task
+def api():
+    for modulename in ["cloudmesh", "cloudmesh_common", "cloudmesh_install", "cmd3local", "webui"]:
+        print 70 * "="
+        print "Building API Doc:", modulename 
+        print 70 * "="        
+        local("sphinx-apidoc -f -o doc/source/api/{0} {0}".format(modulename))
+
+
 

@@ -1,3 +1,5 @@
+doc/source/api
+doc/source/modules/
 .DS_Store
 .settings*
 *.pid

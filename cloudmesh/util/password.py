@@ -7,8 +7,8 @@ input = raw_input
 
 
 def ask_for_input(label, init_function, echo=False):
-    '''
-    A generic input function that asks for a string and returns it after typoing it in 
+    ''' A generic input function that asks for a string and returns it after typoing it in 
+
     :param label: the label 
     :param init_function: a function that is used to initialize the value
     :param echo: if True, the typed in value is echoed. default is False
@@ -37,7 +37,8 @@ def get_user():
 
 def _password_valid(password, repeat_password):
     '''
-    internal function that checks if two passwords are the same 
+    internal function that checks if two passwords are the same
+    
     :param password: first password
     :param repeat_password: second password
     '''

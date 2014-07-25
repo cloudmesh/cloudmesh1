@@ -26,11 +26,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
-Modules
-======================================================================
-
-.. toctree::
-   :maxdepth: -1
-
-   modules/modules
+* :ref:`package_index`

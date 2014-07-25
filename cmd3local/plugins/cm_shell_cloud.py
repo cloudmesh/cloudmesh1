@@ -93,70 +93,72 @@ class cm_shell_cloud:
     @command
     def do_cloud(self, args, arguments):
         """
-        Usage:
-            cloud list [--column=COLUMN]
-            cloud info [NAME] 
-            cloud set NAME
-            cloud select [NAME]
-            cloud on [NAME]
-            cloud off [NAME]
-            cloud add CLOUD
-            cloud remove [NAME]
-            cloud
+        ::
 
-        Manages the clouds
+            Usage:
+                cloud list [--column=COLUMN]
+                cloud info [NAME] 
+                cloud set NAME
+                cloud select [NAME]
+                cloud on [NAME]
+                cloud off [NAME]
+                cloud add CLOUD
+                cloud remove [NAME]
+                cloud
 
-        Arguments:
+            Manages the clouds
 
-          NAME           the name of a service or server
-          CLOUD          a yaml file contains cloud information
-          
-        Options:
+            Arguments:
 
-           -v       verbose model
-           --column=COLUMN   specify what information to display. For
-                             example, --column=active,label. Available
-                             columns are active, label, host, type/version,
-                             type, heading, user, credentials, defaults
-                             (all to diplay all, semiall to display all
-                             except credentials and defaults)
+              NAME           the name of a service or server
+              CLOUD          a yaml file contains cloud information
 
-        Description:
+            Options:
 
-            cloud list [--column=COLUMN]
-                lists the cloud names, optionally, specify columns for more
-                cloud information
+               -v       verbose model
+               --column=COLUMN   specify what information to display. For
+                                 example, --column=active,label. Available
+                                 columns are active, label, host, type/version,
+                                 type, heading, user, credentials, defaults
+                                 (all to diplay all, semiall to display all
+                                 except credentials and defaults)
 
-            cloud info [NAME] 
-                provides the available information about cloud and its status 
-                in dict format. If no NAME is given, default or selected cloud
-                is used. If the name all is used, all clouds are displayed
+            Description:
 
-            cloud set NAME
-                sets a new name for selected or default cloud, please select a
-                cloud to work with first, otherwise the default cloud will be 
-                used
+                cloud list [--column=COLUMN]
+                    lists the cloud names, optionally, specify columns for more
+                    cloud information
 
-            cloud select [NAME]
-                selects a cloud to work with from a list of clouds if NAME 
-                not given
+                cloud info [NAME] 
+                    provides the available information about cloud and its status 
+                    in dict format. If no NAME is given, default or selected cloud
+                    is used. If the name all is used, all clouds are displayed
 
-            cloud on [NAME]
-            cloud off [NAME]
-                activates or deactivates a cloud, if name is not given, 
-                default or selected cloud will be activated or deactivated
+                cloud set NAME
+                    sets a new name for selected or default cloud, please select a
+                    cloud to work with first, otherwise the default cloud will be 
+                    used
 
-            cloud add CLOUD
-                adds cloud information to database. CLOUD is a yaml file with 
-                full file path. Inside yaml, clouds should be written in the
-                form: 
-                cloudmesh: clouds: cloud1...
-                                   cloud2...
+                cloud select [NAME]
+                    selects a cloud to work with from a list of clouds if NAME 
+                    not given
 
-            cloud remove [NAME]
-                remove a cloud from mongo, if name is not given, default or 
-                selected cloud will be reomved.
-                CAUTION: remove all is enabled
+                cloud on [NAME]
+                cloud off [NAME]
+                    activates or deactivates a cloud, if name is not given, 
+                    default or selected cloud will be activated or deactivated
+
+                cloud add CLOUD
+                    adds cloud information to database. CLOUD is a yaml file with 
+                    full file path. Inside yaml, clouds should be written in the
+                    form: 
+                    cloudmesh: clouds: cloud1...
+                                       cloud2...
+
+                cloud remove [NAME]
+                    remove a cloud from mongo, if name is not given, default or 
+                    selected cloud will be reomved.
+                    CAUTION: remove all is enabled
 
         """
 
