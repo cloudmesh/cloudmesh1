@@ -83,6 +83,9 @@ class ListInfo(object):
                     clouds = [self.cloud]
         return clouds
                 
+    # -------------------------------
+    # bug: no refresh before printing
+    # -------------------------------
     
     def _list_flavor(self):
         clouds = self.clouds_to_show()
