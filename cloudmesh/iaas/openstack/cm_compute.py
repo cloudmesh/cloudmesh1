@@ -745,7 +745,8 @@ class openstack(ComputeBaseType):
         return result
 
     def _get_flavors_dict(self):
-        result = self.get_flavors_from_yaml()
+        #result = self.get_flavors_from_yaml()
+        result = None
         if not result:
             return self.get_flavors()
         self.flavors = result
