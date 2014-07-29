@@ -23,8 +23,8 @@ Cloudmesh
 Indices and tables
 ==================
 
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-.. * :ref:`search`
-.. * :ref:`package_index`
-.. * :ref:`pylint_results`
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+* :ref:`package_index`
+* :ref:`pylint_results`

@@ -1,4 +1,4 @@
-{% from "_helper.html" import flexible_menu,super_duper_flexible_menu,super_duper_flexible_menu,loggedin_msg %}
+{% from "_helper.html" import loggedin_msg %}
 {% from "_helper.html" import nav_link %}
 
 <!DOCTYPE html>
@@ -119,8 +119,7 @@
 
                         </p>
 
-                        <ul class="nav">
-                            {{ flexible_menu(g.topbar_pages) }}
+			  {% include "menu-top.html" %}
                         </ul>
 
                     </div><!--/.nav-collapse -->
@@ -131,26 +130,19 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span3">
-                    <!--span for navigation -->
-                    <div class="well sidebar-nav">
-
-		      <ul class="nav nav-list one-edge-shadow">
-			
-
-			  {{ super_duper_flexible_menu() }}
-
-                        </ul>
-                    </div><!--/.well -->
-                    <footer>
-			    <hr>
-				<p align="right">
-				  &copy; 2013, Cloud Mesh {{ version }}<br>
-				  FutuerGrid, Indiana University<br>
-			  	  For more information on cloudmesh, <br>
-			 	  please contact Gregor von Laszewski <br>
-			      laszewski@gmail.com
-			   </p>
-		    </footer>
+		  <!--span for navigation -->
+		  
+		  {% include "menu.html" %}
+		  <footer>
+		  <hr>
+		  <p align="right">
+		  &copy; 2013, Cloud Mesh {{ version }}<br>
+		  FutuerGrid, Indiana University<br>
+		  For more information on cloudmesh, <br>
+		  please contact Gregor von Laszewski <br>
+		  laszewski@gmail.com
+		  </p>
+		  </footer>
                 </div><!--/span-->
 
                 <div class="span9">

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
 "http://www.w3.org/TR/html4/strict.dtd">
 
-{% from "_helper.html" import flexible_menu,super_duper_flexible_menu,loggedin_msg %}
+{% from "_helper.html" import loggedin_msg %}
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>
@@ -113,9 +113,7 @@
                             {{ loggedin_msg() }}
                         </p>
 
-                        <ul class="nav">
-                            {{ flexible_menu(g.topbar_pages) }}
-                        </ul>
+  		        {% include "menu-top.html" %} 
 
                     </div><!--/.nav-collapse -->
                 </div>
@@ -125,13 +123,8 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span3">
-                    <div class="well sidebar-nav one-edge-shadow">
-                        <ul class="nav nav-list">
 
-							{{ super_duper_flexible_menu() }}
-
-                        </ul>
-                    </div><!--/.well -->
+		    {% include "menu.html" %}
                     <footer>
 		    <hr>
 			<p align="right">
