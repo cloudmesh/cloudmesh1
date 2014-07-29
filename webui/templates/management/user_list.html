@@ -1,0 +1,110 @@
+{% extends "simple.html" %}
+
+{% block content %}
+<legend> <i class="fa fa-users"></i> Manage Users</legend>
+
+<form class="form-horizontal" method="post">
+{% csrf_token %}
+
+<table class="table table-condensed">
+  <thead>
+  <tr>
+    <th> </th>
+    <th> </th>
+    <th> </th>
+    <th> Status </th>
+    <th> Firstname </th>
+    <th> Lastname </th>
+    <th> Email </th>
+    <th> Username </th>            
+  </tr>
+  </thead>
+
+   <tbody>
+{% for user in users %}
+  <tr>
+    <td> <input id="{{ user.username }}" name="selectedusers" type="checkbox" value="{{ user.username }}"></td>
+    <td> <a href="/user/profile/{{ user.username }}"> view <i class="fa fa-user"></i> </a> </td>        
+      {% if user.status == 'approved' %}
+        <td>
+	  <font  color="green"> <i class="fa fa-check-square-o"></i> </font>	  
+	</td>
+	<td>  
+          <font  color="green"> {{ user.status|capfirst }} </font>
+	</td>
+	
+
+      {% elif user.status == 'denied' %}
+        <td>
+	  <font  color="red"> <i class="fa fa-ban"></i> </font>	  
+	</td>
+	<td>  
+          <font  color="red"> {{ user.status|capfirst }} </font>
+	</td>
+
+
+      {% elif user.status == 'pending' %}
+        <td>
+	  <font  color="grey"> <i class="fa fa-pause"></i> </font>	  
+	</td>
+	<td>  
+          <font  color="grey"> {{ user.status|capfirst }} </font>
+	</td>
+
+      {% elif user.status == 'blocked' %}
+        <td>
+	  <font  color="red"> <i class="fa fa-ban"></i> </font>	  
+	</td>
+	<td>  
+          <font  color="red"> {{ user.status|capfirst }} </font>
+	</td>
+
+      {% else %}
+        <td>
+	  <font  color="black"> <i class="fa fa-question-circle"></i> </font>	  
+	</td>
+	<td>  
+          <font  color="black"> {{ user.status|capfirst }} </font>
+	</td>
+
+
+      {% endif %}
+
+    <td>{{ user.firstname }}</td>
+    <td>{{ user.lastname }}</td>
+    <td>{{ user.email }}</td>
+    <td>{{ user.username }}</td>            
+  </tr>
+{% endfor %}
+  </tbody>
+</table>
+
+
+<div class="control-group">
+  <label class="control-label" for="button_submit"></label>
+  <div class="controls">
+
+    {% for state in states %}
+        <button id="button_{{ state }}" value="{{ state }}"
+            name="button"
+            {% if state == 'approved' %}
+               class="btn btn-success"
+            {% elif state == 'blocked' %}
+               class="btn btn-danger"
+            {% elif state == 'pending' %}
+               class="btn btn-default"
+            {% elif state == 'denied' %}
+               class="btn btn-danger"
+            {% else %}
+                class="btn"
+            {% endif %}
+         >{{ state|capfirst }}
+    </button>
+    {% endfor %}
+
+  </div>
+</div>
+
+</form>
+
+{% endblock %}

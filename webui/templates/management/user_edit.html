@@ -1,0 +1,102 @@
+{% extends "management/simple.html" %}
+
+{% block content %}
+
+<legend> {{ user.title }} {{ user.firstname }} {{ user.lastname }} </legend>
+<h3>  <i class="fa fa-user"></i> Profile </h3>
+
+<form method="POST">
+
+<table class="table table-condensed">
+  <tbody>
+    <tr> <th colspan="2" bgcolor="#CCCCCC"> Account Information </th></tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Username</i></td>
+      <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i> Projects </i></td>
+      <td>{{ user.projects }}</td>
+    </tr>
+    <tr> <th colspan="2" bgcolor="#CCCCCC"> Contact Information </th></tr>    
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Title</i></td>
+      <td><input type="text" name="title" value="{{ user.title }}"</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Firstname</i></td>
+      <td><input type="text" name="firstname" value="{{ user.firstname }}"</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Lastname</i></td>
+      <td><input type="text" name="lastname" value="{{ user.lastname }}"</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Address</i></td>
+      <td><input type="textarea" name="address" value="{{ user.address }}"</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Institution</i></td>
+      <td><input type="text" name="institution" value="{{ user.institution }}"</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Department</i></td>
+      <td><input type="text" name="department" value="{{ user.department }}"</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Advisor</i></td>
+      <td><input type="textarea" name="advisor" value="{{ user.advisor }}"</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Country</i></td>
+      <td><input type="text" name="country" value="{{ user.country }}"</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Email</i></td>
+      <td><input type="text" name="email" value="{{ user.email }}"</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Url</i></td>
+      <td><input type="text" name="url" value="{{ user.url }}"</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Citizenship</i></td>
+      <td><input type="text" name="citizenship" value="{{ user.citizenship }}"</td>
+    </tr>
+    <tr> 
+      <td bgcolor="#E6E6E6"><i>Bio</i></td>
+      <td><input type="textarea" name="bio" value="{{ user.bio }}"</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Phone</i></td>
+      <td><input type="text" name="phone" value="{{ user.phone }}"</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<div class="control-group">
+  <label class="control-label" for="button_submit"></label>
+  <div class="controls">
+
+    {% for state in states %}
+        <button id="button_{{ state }}" value="{{ state }}"
+            name="button"
+            {% if state == 'save' %}
+               class="btn btn-success"
+            {% elif state == 'cancel' %}
+               class="btn btn-danger"
+            {% else %}
+                class="btn"
+            {% endif %}
+         >{{ state|capitalize }}
+    </button>
+    {% endfor %}
+
+  </div>
+</div>
+
+
+</form>
+
+{% endblock %}

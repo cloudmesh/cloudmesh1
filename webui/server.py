@@ -72,8 +72,7 @@ sys.path.insert(0, '..')
 # DYNAMIC MODULE MANAGEMENT
 # ============================================================
 
-all_modules = ['menu',
-               'pbs',
+all_modules = ['pbs',
                'launch',
                'nose',
                'inventory',
@@ -82,6 +81,7 @@ all_modules = ['menu',
                'keys',
                'profile',
                'git',
+               'management',
                'cloud',
                # 'workflow',
                'mesh',
