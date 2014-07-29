@@ -250,6 +250,9 @@ class Projects(object):
         '''
         self.projects = Project.objects()
 
+    def find(self):
+        return self.objects()
+    
     def objects(self):
         '''
         returns the projects
@@ -288,7 +291,7 @@ class Projects(object):
         else:
             print "ERROR: The user `{0}` has not registered with FutureGrid".format(user_name)
 
-    def find_all(self, project, role):
+    def find_users(self, project, role):
         '''returns all the members of a particular project
         
         :param role: the role of the user
