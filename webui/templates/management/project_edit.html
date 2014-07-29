@@ -1,0 +1,231 @@
+{% extends "layout/layout.html" %}
+
+{% block content %}
+
+<legend> {{ project.title }} </legend>
+<h3> Project Profile </h3>
+
+
+<form method="POST">
+
+<table class="table table-condensed">
+  <tbody>
+
+    <tr>
+      <th colspan="2" bgcolor="#CCCCCC"> Project Information </th>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Id</i></td>
+      <td>{{ project.projectid }}</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Title</i></td>
+      <td><input type="text" name = "title" value="{{ project.title }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Active </i></td>
+      <td>{{ project.active }}</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Status </i></td>
+      <td>{{ project.status }}</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Created</i></td>
+      <td>{{ project.date_created }}, {{ project.date_created }}</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Modified</i></td>
+      <td>{{ project.date_modified }}, {{ project.date_modified }}</td>
+    </tr>
+
+    <tr>
+      <th colspan="2" bgcolor="#CCCCCC"> Contact Information </th>
+    </tr>    
+
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Abstract    </i></td>
+      <td><input type="text" name = "abstract" value="{{ project.abstract }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Broader impact  </i></td>
+      <td><input type="text" name = "broader_impact" value="{{ project.broader_impact }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Merit  </i></td>
+      <td><input type="text" name = "intellectual_merit" value="{{ project.intellectual_merit }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Use of FG  </i></td>
+      <td><input type="text" name = "use_of_fg" value="{{ project.use_of_fg }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Scale of_use  </i></td>
+      <td><input type="text" name = "scale_of_use" value="{{ project.scale_of_use }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Categories </i></td>
+      <td><input type="text" name = "categories |join(", ")" value="{{ project.categories | join(", ") }}"></td>
+    </tr>
+
+    
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Keywords  </i></td>
+      <td><input type="text" name = "keywords |join(", ")" value="{{ project.keywords |join(", ") }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Primary discipline </i></td>
+      <td><input type="text" name = "primary_discipline" value="{{ project.primary_discipline }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Orientation  </i></td>
+      <td><input type="text" name = "orientation" value="{{ project.orientation }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Contact  </i></td>
+      <td><input type="text" name = "contact" value="{{ project.contact }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Url </i></td>
+      <td><input type="text" name = "url" value="{{ project.url }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Comment </i></td>
+      <td><input type="text" name = "comment" value="{{ project.comment }}"></td>
+    </tr>
+      <tr> <th colspan="2" bgcolor="#CCCCCC"> Members </th>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Lead </i></td>
+      <td><input type="text" name = "lead" value="{{ project.lead }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Managers </i></td>
+      <td>{{ project.managers|join(", ") }}</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Members </i></td>
+      <td>{{ project.members|join(", ") }}</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Alumnis </i></td>
+      <td>{{ project.alumnis|join(", ") }}</td>
+    </tr>
+    
+    <tr> <th colspan="2" bgcolor="#CCCCCC"> Grants </th>
+    </tr>    
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Grant orgnization </i></td>
+      <td><input type="text" name = "grant_orgnization" value="{{ project.grant_orgnization }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Grant id </i></td>
+      <td>{{ project.grant_id }}</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Grant url </i></td>
+      <td><input type="text" name = "grant_url" value="{{ project.grant_url }}"></td>
+    </tr>
+    
+    <tr>
+      <th colspan="2" bgcolor="#CCCCCC"> Results </th>
+    </tr>    
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Results </i></td>
+      <td><input type="text" name = "results" value="{{ project.results }}"></td>
+    </tr>
+    
+    <tr>
+      <th colspan="2" bgcolor="#CCCCCC"> Agreements </th>
+    </tr>        
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Use </i></td>
+      <td><input type="text" name = "aggreement_use" value="{{ project.aggreement_use }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Slides </i></td>
+      <td><input type="text" name = "aggreement_slides" value="{{ project.aggreement_slides }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Support </i></td>
+      <td><input type="text" name = "aggreement_support" value="{{ project.aggreement_support }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Sotfware </i></td>
+      <td><input type="text" name = "aggreement_sotfware" value="{{ project.aggreement_sotfware }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Documentation </i></td>
+      <td><input type="text" name = "aggreement_documentation" value="{{ project.aggreement_documentation }}"></td>
+    </tr>
+    
+    <tr>
+      <th colspan="2" bgcolor="#CCCCCC"> Comments </th>
+    </tr>            
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Comments </i></td>
+      <td><input type="text" name = "comments" value="{{ project.comments }}"></td>
+    </tr>
+    
+    <tr>
+      <th colspan="2" bgcolor="#CCCCCC"> Join Management </th>
+    </tr>                
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Join open </i></td>
+      <td><input type="text" name = "join_open" value="{{ project.join_open }}"></td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Join notification </i></td>
+      <td>
+	<input type="text" name = "join_notification" value="{{ project.join_notification }}">
+      </td>
+    </tr>
+    
+    <tr>
+      <th colspan="2" bgcolor="#CCCCCC"> Resources </th>
+    </tr>                    
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Services </i></td>
+      <td>{{ project.resources_services|join(", ") }}</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Software </i></td>
+      <td>{{ project.resources_software|join(", ") }}</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Clusters </i></td>
+      <td>{{ project.resources_clusters|join(", ") }}</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E6E6E6"><i>Provisioning </i></td>
+      <td>{{ project.resources_provision|join(", ") }}</td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+<div class="control-group">
+  <label class="control-label" for="button_submit"></label>
+  <div class="controls">
+
+    {% for state in states %}
+        <button id="button_{{ state }}" value="{{ state }}"
+            name="button"
+            {% if state == 'save' %}
+               class="btn btn-success"
+            {% elif state == 'cancel' %}
+               class="btn btn-danger"
+            {% else %}
+                class="btn"
+            {% endif %}
+         >{{ state|capitalize }}
+    </button>
+    {% endfor %}
+
+  </div>
+</div>
+
+</form>
+
+{% endblock %}

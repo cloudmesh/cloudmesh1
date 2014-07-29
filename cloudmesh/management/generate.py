@@ -7,6 +7,7 @@ from cloudmesh.management.project import Project, Projects
 import sys
 from faker import Factory
 import uuid
+from pprint import pprint
 
 connect ('user', port=27777)
 
@@ -121,10 +122,12 @@ def main():
     print 70 * "="
     print users.find()
     print 70 * "="    
-    print projects.find()
-
     print 70* "&"
     print users.find()[0]
+
+    projects = Project.objects()
+    print projects.count()
+    pprint (projects[0])
         
 
 if __name__ == "__main__":

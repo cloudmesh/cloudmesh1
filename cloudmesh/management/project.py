@@ -8,7 +8,7 @@ from pprint import pprint
 from cloudmeshobject import CloudmeshObject
 
 port = 27777
-db_name = 'project'
+db_name = 'user'
 
 
 def IMPLEMENT():
@@ -244,21 +244,14 @@ class Projects(object):
         '''
         IMPLEMENT()
 
-    def update(self):
-        '''
-        updates the project
-        '''
-        self.projects = Project.objects()
-
     def find(self):
-        return self.objects()
+        return Project.objects()        
     
     def objects(self):
         '''
         returns the projects
         '''
-        self.update()
-        return self.projects
+        return Project.objects()                
 
     def save(self, project):
         '''adds a project to the database but only after it has been verifie
@@ -268,7 +261,7 @@ class Projects(object):
         '''
         project.save()
 
-    def add(self, user_name, project, role):
+    def add_user(self, user_name, project, role):
         '''
         Adds a member to the project. 
         

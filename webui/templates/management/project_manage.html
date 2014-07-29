@@ -1,0 +1,113 @@
+{% extends "layout/layout.html" %}
+
+{% block content %}
+<legend>Project Manage</legend>
+
+<form class="form-horizontal" method="post">
+
+<table class="table table-condensed">
+  <thead>
+  <tr>
+    <th> </th>
+    <th> </th>
+    <th> </th>    
+    <th> Status </th>
+    <th> </th>
+    <th> Title </th>
+    <th> Contact </th>
+    <th> Created </th>
+    <th> Modified </th>        
+  </tr>
+  </thead>
+
+   <tbody>
+{% for project in projects %}
+  <tr>
+    <td> <input id="{{ project.projectid }}" name="selectedprojects" type="checkbox" value="{{ project.projectid }}"></td>
+    <td> <a href="/project/profile/{{ project.projectid }}"> <i
+      class="fa fa-file-text-o"></i></a> </td>
+    <td> <a href="/project/edit/{{ project.projectid }}"> <i class="fa fa-edit"></i></a> </td>      
+
+
+      {% if project.status == 'approved' %}
+        <td>
+	  <font  color="green"> <i class="fa fa-check-square-o"></i> </font>	  
+	</td>
+	<td>  
+          <font  color="green"> {{ project.status|capitalize }} </font>
+	</td>
+	
+
+      {% elif project.status == 'completed' %}
+        <td>
+	  <font  color="blue"> <i class="fa fa-check-square"></i> </font>	  
+	</td>
+	<td>  
+          <font  color="blue"> {{ project.status|capitalize }} </font>
+	</td>
+
+
+      {% elif project.status == 'pending' %}
+        <td>
+	  <font  color="grey"> <i class="fa fa-pause"></i> </font>	  
+	</td>
+	<td>  
+          <font  color="grey"> {{ project.status|capitalize }} </font>
+	</td>
+
+      {% elif project.status == 'denied' %}
+        <td>
+	  <font  color="red"> <i class="fa fa-ban"></i> </font>	  
+	</td>
+	<td>  
+          <font  color="red"> {{ project.status|capitalize }} </font>
+	</td>
+
+      {% else %}
+        <td>
+	  <font  color="black"> <i class="fa fa-question-circle"></i> </font>	  
+	</td>
+	<td>  
+          <font  color="black"> {{ project.status|capitalize }} </font>
+	</td>
+
+
+      {% endif %}
+
+    <td>{{ project.title }}</td>    
+    <td>{{ project.contact }}</td>
+    <td>{{ project.date_created }}</td>
+    <td>{{ project.date_modified }}</td>        
+  </tr>
+{% endfor %}
+  </tbody>
+</table>
+
+
+<div class="control-group">
+  <label class="control-label" for="button_submit"></label>
+  <div class="controls">
+
+    {% for state in states %}
+        <button id="button_{{ state }}" value="{{ state }}"
+            name="button"
+            {% if state == 'approved' %}
+               class="btn btn-success"
+            {% elif state == 'completed' %}
+               class="btn btn-primary"
+            {% elif state == 'pending' %}
+               class="btn btn-default"
+            {% elif state == 'denied' %}
+               class="btn btn-danger"
+            {% else %}
+                class="btn"
+            {% endif %}
+         >{{ state|capitalize }}
+    </button>
+    {% endfor %}
+
+  </div>
+</div>
+</form>
+
+{% endblock %}
