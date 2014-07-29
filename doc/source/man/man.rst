@@ -48,83 +48,91 @@ cloud
 
 Command - cloud::
 
-    Usage:
-        cloud list [--format=FORMAT]
-        cloud info [NAME]
-        cloud set NAME
-        cloud select
-        cloud on NAME
-        cloud off NAME
-        cloud add [--json | --yaml] CLOUD
+    ::
     
-    Manages the clouds
+        Usage:
+            cloud
+            cloud list [--column=COLUMN]
+            cloud info [CLOUD|--all]
+            cloud alias <name> [CLOUD]
+            cloud select [CLOUD]
+            cloud on [CLOUD]
+            cloud off [CLOUD]
+            cloud add CLOUDFILE [--force]
+            cloud remove [CLOUD]
+            cloud default [CLOUD] [--flavorset|--imageset]
+            cloud default --all
     
-    Arguments:
+        Arguments:
     
-      NAME           The name of a service or server
-      CLOUD          The cloud to be added
+          CLOUD          the name of a cloud to work on
+          CLOUDFILE      a yaml file contains cloud information
+          name           new cloud name to set
     
-    Options:
+        Options:
     
-       -v       verbose mode
-       --json   The format of the activation description:jsos
-       --yaml   The format of the activation description:yaml
-       --format=FORMAT   the format of the input or output.
-                         Accepted values are table, list, json, dict. [default: table]
+           -v                verbose model
+           --column=COLUMN   specify what information to display. For
+                             example, --column=active,label. Available
+                             columns are active, label, host, type/version,
+                             type, heading, user, credentials, defaults
+                             (all to diplay all, semiall to display all
+                             except credentials and defaults)
+           --flavorset       set the default flavor of a cloud
+           --imageset        set the image flavor of a cloud
+           --all             provide information of all clouds
+           --force           if same cloud exists in database, it will be 
+                             overwritten
     
-    Description:
+        Description:
+            the place to manage clouds
     
-        cloud list
-            Lists the cloud names
+            cloud list [--column=COLUMN]
+                lists the stored clouds, optionally, specify columns for more
+                cloud information. For example, --column=active,label
     
-        cloud info [NAME]
-            Provides the available information about the clouds
-            and their status. A cloud can be activated or deactivated.
-            If no name is specified the default cloud is used.
-            If the name all is used, all clouds are displayed
+            cloud info [CLOUD|--all]  
+                provides the available information about the cloud in dict format 
+                options: specify CLOUD to display it, --all to display all,
+                         otherwise selected cloud will be used
     
-        cloud setname NAME
-            set the cloud with the NAME to the default cloud
+            cloud alias <name> [CLOUD]
+                sets a new name for a cloud
+                options: specify CLOUD to work with, otherwise selected cloud 
+                         will be used
     
-        cloud select
-            selects a cloud from the name of clouds
+            cloud select [CLOUD]
+                selects a cloud to work with from a list of clouds if CLOUD is
+                not given
     
-        cloud on [NAME]
-        cloud off [NAME]
-            activates or deactivates a cloud with a given name, if name
-            is not specified, default or selected cloud will be activates
-            or deactivates
+            cloud on [CLOUD]
+            cloud off [CLOUD]
+                activates or deactivates a cloud, if CLOUD is not given, 
+                selected cloud will be activated or deactivated
     
-        cloud add [--json | --yaml] CLOUD
-            adds a cloud to the list of clouds.
-            The format can either be `json` or `yaml`, default is yaml
+            cloud add CLOUDFILE [--force]
+                adds cloud information to database. CLOUDFILE is a yaml file with 
+                full file path. Inside the yaml, clouds should be written in the
+                form: 
+                cloudmesh: clouds: cloud1...
+                                   cloud2...
+                please check ~/.futuregrid/cloudmesh.yaml
+                options: --force, by default, existing cloud in database can't be
+                         overwirtten, enable --force to overwrite if same cloud 
+                         name encountered
     
+            cloud remove [CLOUD]
+                remove a cloud from mongo, if CLOUD is not given, selected cloud 
+                will be reomved.
+                CAUTION: remove all is enabled(remove all)
     
-
-count
-----------------------------------------------------------------------
-
-Command - count::
-
-    Usage:
-           count flavors [CLOUD...] NOTIMPLEMENTED
-           count servers [CLOUD...] NOTIMPLEMENTED
-           count images [CLOUD...] NOTIMPLEMENTED
-           count [CLOUD...] NOTIMPLEMENTED
-    
-    Arguments:
-    
-            CLOUD    the name of the cloud
-    
-    Options:
-    
-       -v       verbose mode
-    
-    Description:
-    
-      missing
-    
-      Seems this has not been implemented.
+            cloud default [CLOUD] [--flavorset|--imageset]
+            cloud default --all
+                view or manage cloud's default flavor and image
+                options: CLOUD, specify a cloud to work on, otherwise selected 
+                         cloud will be used, --all to display all clouds defaults
+                         --setflavor, set default flaovr
+                         --setimage, set default image
     
     
 
@@ -445,9 +453,10 @@ Command - keys::
                    keys info [--json] [NAME][--yaml][--mongo]
                    keys mode MODENAME               
                    keys default NAME [--yaml][--mongo]
-                   keys add NAME KEY [--yaml][--mongo]
+                   keys add NAME [KEY] [--yaml][--mongo]
                    keys delete NAME [--yaml][--mongo]
-                   keys persist
+                   keys save
+                   keys
     
             Manages the keys
     
@@ -455,9 +464,8 @@ Command - keys::
     
               NAME           The name of a key
               MODENAME       This is used to specify the mode name. Mode
-    	  		 name can be either 'yaml' or 'mongo'
-    
-              KEY            This is the actual key that has to added
+    	  		          name can be either 'yaml' or 'mongo'
+    	  	  KEY            This is the actual key that has to added
     
             Options:
     
@@ -481,17 +489,19 @@ Command - keys::
     
     	     Used to set a key from the key-list as the default key
     
-            keys add NAME KEY
+            keys add NAME [KEY]
     
-    	     adding/updating keys. Please provide filename and not the
-    	     actual key
+    	     adding/updating keys. KEY is the key file with full file 
+    	     path, if KEY is not provided, you can select a key among
+    	     the files with extension .pub under ~/.ssh. If NAME exists,
+    	     current key value will be overwritten
     
             keys delete NAME
     
     	     deletes a key. In yaml mode it can delete only keys that
-    	     are not persisted
+    	     are not saved in mongo
     
-            keys persist
+            keys save
     
     	     Saves the temporary yaml data structure to mongo
     
@@ -527,35 +537,40 @@ list
 Command - list::
 
     Usage:
-           list flavors [CLOUD]
-           list servers [CLOUD]
-           list images [CLOUD]
-           list
+        list flavor [CLOUD]
+        list server [CLOUD]
+        list image [CLOUD]
+        list project
+        list cloud
+        list
     
-     Arguments:
+    Arguments:
     
-            CLOUD    the name of the cloud
+        CLOUD    the name of the cloud, input 'all' instead to show requested
+                 information for all active clouds
     
     Options:
     
-       -v       verbose mode
+        -v       verbose mode
     
     Description:
     
-       missing
+        List clouds and projects information, if CLOUD argument is not given,
+        default or selected cloud will be used, please use command 'cloud select' 
+        to select the cloud to work with.([NOT IMPLEMENTED]for now, selected 
+        cloud information is not in the mongo)
     
-       This should be similar to the count command,
-       e.g. multiple clouds could be specified.
+        list flavor [CLOUD]
+            list the flavors
+        list server [CLOUD]
+            list the vms
+        list image [CLOUD]
+            list the images
+        list project
+            list the projects
+        list cloud
+            list active clouds
     
-    
-
-login
-----------------------------------------------------------------------
-
-Command - login::
-
-    Usage:
-       login
     
 
 man
@@ -819,13 +834,13 @@ Command - rain::
     
     
 
-reg
+register
 ----------------------------------------------------------------------
 
-Command - reg::
+Command - register::
 
     Usage:
-      reg NOTIMPLEMENTED [options] NAME
+      register [options] NAME
     
     Arguments:
       NAME      Name of the cloud to be registered
@@ -1145,14 +1160,15 @@ Command - vm::
                 [--image=<imgName>]
                 [--flavor=<FlavorId>]
                 [--cloud=<CloudName>]
-      vm delete [[--count=<count>] | [--name=<NAME>]]
+                [--label=<LABEL>]
+      vm delete <NAME>
+                [--label=<LABEL>]
                 [--cloud=<CloudName>]
-      vm cloud [--name=<NAME>]
-      vm image [--name=<NAME>]
-      vm flavor [--name=<NAME>]
-      vm index [--index=<index>]
       vm info [--verbose | --json] [--name=<NAME>]
       vm list [--verbose | --json] [--cloud=<CloudName>]
+    
+    Description:
+       vm command provides procedures to manage VM instances of selected IaaS. 
     
     Arguments:
       NAME name of the VM
@@ -1163,7 +1179,10 @@ Command - vm::
        -x <count> --count=<count>           number of VMs
        -n <NAME> --name=<NAME>              Name of the VM
        -c <CloudName> --cloud=<CloudName>   Name of the Cloud
-       -i <index> --index=<index>           Index for default VM Name
        --img=<imgName>                      Name of the image for VM
        -f <FlavorId> --flavor=<FlavorId>    Flavor Id for VM
+    
+    Examples:
+        $ vm create --cloud=sierra_openstack_grizzly
+        --image=futuregrid/ubuntu-14.04
     
