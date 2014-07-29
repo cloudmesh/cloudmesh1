@@ -40,6 +40,31 @@ class resource_requirement(Document):
         					    self.scale_of_use)
 
 class Project(Document):
+    '''
+    The project object contains a number of attributes.
+    
+    Attributes:
+        information 
+        requirements 
+        project_title
+        category 
+        keywords 
+        lead 
+        manager 
+        contact 
+        members 
+        alumni 
+        nsf_grant_number 
+        nsf_grant_url 
+        results 
+        nsf_Aggreement 
+        slide_collection_aggreement 
+        other 
+        project_join_buton 
+        join_notification 
+    
+    
+    '''
     information = ReferenceField(project_information)
     requirements = ReferenceField(resource_requirement)
     project_title = StringField()
@@ -61,6 +86,9 @@ class Project(Document):
     
     
     def to_json(self):
+        '''
+        returns a json representation of the projects
+        '''
         u = {"project_title":self.project_title,
              "information":self.information, 
              "requirements":self.requirements,
@@ -81,5 +109,8 @@ class Project(Document):
              "join_notification":self.join_notification}
              
     def __str__(self):
+        '''
+        returns a string representation of the projects.
+        '''
         u = self.to_json()
         return str(u)
