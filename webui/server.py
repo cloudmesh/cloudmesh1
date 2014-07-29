@@ -34,9 +34,9 @@ import os
 # disable RST PAGES dues to sphinx incompatibility
 #
 RSTPAGES=os.environ['RSTPAGES']
-RSTPAGES = (RSTPAGES == None) or RSTPAGES.tolower() == 'true' 
+RSTPAGES = (RSTPAGES == None) or RSTPAGES.lower() == 'true' 
 
-msg = 'RST PAGES ' + RSTPAGES
+msg = 'RST PAGES ' + str(RSTPAGES)
 banner(msg)
 
 if RSTPAGES:
