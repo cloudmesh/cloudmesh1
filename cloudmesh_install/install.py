@@ -408,6 +408,7 @@ def download():
 
 def install():
     sphinx_updates()
+    banner("cloudmesh python install")
     local("python setup.py install")
 
 
