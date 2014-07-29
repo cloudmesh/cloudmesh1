@@ -3,7 +3,7 @@ import datetime, time
 import hashlib, uuid
 from pprint import pprint
 #    mongod --noauth --dbpath . --port 27777
-from cloudmeshobject import CloudmeshObject
+from cloudmesh.management.cloudmeshobject import CloudmeshObject
 import yaml
 
 STATUS = ('pending', 'approved', 'blocked', 'denied')
@@ -237,8 +237,6 @@ class Users(object):
         :param user: the username
         :type user: String
         '''
-        """adds the specified user to mongodb, as well as activates the users' account
-        as well as set's the deactivation date"""
         user.username = self.get_unique_username(user.username)
         user.set_date_deactivate()
         if self.validate(user):
@@ -248,25 +246,25 @@ class Users(object):
             
     def validate(self, user):
         '''
-        verifies if the email of the user is not already in the users. Checks if the e-mail is unique. 
+        verifies if the email of the user is not already in the users. 
         
         :param user: user object
         :type user: User
         :rtype: Boolean
         '''
-        """
         user = User.objects(email=user.email)
         valid = user.count() == 0
         return valid
 
     def find(self, email=None):
         '''
-        returns the users based on the given query. If no email is speified all users are returned
+        returns the users based on the given query.
+        If no email is speified all users are returned.
+        If the email is specified we search for the user with the given e-mail.
         
         :param email: email
         :type email: email address
         '''
-        """
         if email == None:
             return User.objects()
     	else:
