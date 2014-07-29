@@ -26,9 +26,9 @@ def read_user(filename):
     :param filename: The file anme
     :type filename: String of the path
     '''
-        stream = open(filename, 'r')
-        data = yaml.load(stream)
-        user = User(
+    stream = open(filename, 'r')
+    data = yaml.load(stream)
+    user = User(
                 status = data["status"],            
                 username = data["username"],
                 title = data["title"],
@@ -48,8 +48,8 @@ def read_user(filename):
                 country = data["country"],
                 advisor = data["advisor"],
                 message = data["message"],
-        )
-        return user
+            )
+    return user
 
     
 class User(CloudmeshObject):
