@@ -10,7 +10,7 @@ def pylint():
                        "cloudmesh_install",
                        "cloudmesh",                       
                        "cmd3local",
-                       "webui"]:
+                       "cloudmesh_web"]:
         print 70 * "="
         print "Building Pylint:", modulename 
         print 70 * "="

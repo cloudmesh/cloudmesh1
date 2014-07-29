@@ -717,7 +717,7 @@ To generate a complete cloud including users (requires access to LDAP) do::
 
     fab mongo.cloud
 
-Next you can start the webui with::
+Next you can start the cloudmesh Web with::
 
 	fab server.start    
 	
