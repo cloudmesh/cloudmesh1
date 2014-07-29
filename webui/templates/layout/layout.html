@@ -1,4 +1,5 @@
 {% from "_helper.html" import flexible_menu,super_duper_flexible_menu,super_duper_flexible_menu,loggedin_msg %}
+{% from "_helper.html" import nav_link %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -132,9 +133,11 @@
                 <div class="span3">
                     <!--span for navigation -->
                     <div class="well sidebar-nav">
-                        <ul class="nav nav-list one-edge-shadow">
 
-							{{ super_duper_flexible_menu() }}
+		      <ul class="nav nav-list one-edge-shadow">
+			
+
+			  {{ super_duper_flexible_menu() }}
 
                         </ul>
                     </div><!--/.well -->
