@@ -6,7 +6,7 @@
     $ python rest.py
 
     terminal2>
-    $ curl "http://localhost:5000/v1.0/queue?user=gregor&resource=india.futuregrid.org"
+    $ curl "http://localhost:5000/v1.0/queue?resource=india.futuregrid.org"
     $ curl "http://localhost:5000/v1.0/queue?resource=india.futuregrid.org&id=1902410.i136"
     $ curl "http://localhost:5000/v1.0/queue/info?resource=india.futuregrid.org&queue=systest"
 
