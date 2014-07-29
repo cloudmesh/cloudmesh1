@@ -48,70 +48,91 @@ cloud
 
 Command - cloud::
 
-    Usage:
-        cloud list [--column=COLUMN]
-        cloud info [NAME] 
-        cloud set NAME
-        cloud select [NAME]
-        cloud on [NAME]
-        cloud off [NAME]
-        cloud add CLOUD
-        cloud remove [NAME]
-        cloud
+    ::
     
-    Manages the clouds
+        Usage:
+            cloud
+            cloud list [--column=COLUMN]
+            cloud info [CLOUD|--all]
+            cloud alias <name> [CLOUD]
+            cloud select [CLOUD]
+            cloud on [CLOUD]
+            cloud off [CLOUD]
+            cloud add CLOUDFILE [--force]
+            cloud remove [CLOUD]
+            cloud default [CLOUD] [--flavorset|--imageset]
+            cloud default --all
     
-    Arguments:
+        Arguments:
     
-      NAME           the name of a service or server
-      CLOUD          a yaml file contains cloud information
+          CLOUD          the name of a cloud to work on
+          CLOUDFILE      a yaml file contains cloud information
+          name           new cloud name to set
     
-    Options:
+        Options:
     
-       -v       verbose model
-       --column=COLUMN   specify what information to display. For
-                         example, --column=active,label. Available
-                         columns are active, label, host, type/version,
-                         type, heading, user, credentials, defaults
-                         (all to diplay all, semiall to display all
-                         except credentials and defaults)
+           -v                verbose model
+           --column=COLUMN   specify what information to display. For
+                             example, --column=active,label. Available
+                             columns are active, label, host, type/version,
+                             type, heading, user, credentials, defaults
+                             (all to diplay all, semiall to display all
+                             except credentials and defaults)
+           --flavorset       set the default flavor of a cloud
+           --imageset        set the image flavor of a cloud
+           --all             provide information of all clouds
+           --force           if same cloud exists in database, it will be 
+                             overwritten
     
-    Description:
+        Description:
+            the place to manage clouds
     
-        cloud list [--column=COLUMN]
-            lists the cloud names, optionally, specify columns for more
-            cloud information
+            cloud list [--column=COLUMN]
+                lists the stored clouds, optionally, specify columns for more
+                cloud information. For example, --column=active,label
     
-        cloud info [NAME] 
-            provides the available information about cloud and its status 
-            in dict format. If no NAME is given, default or selected cloud
-            is used. If the name all is used, all clouds are displayed
+            cloud info [CLOUD|--all]  
+                provides the available information about the cloud in dict format 
+                options: specify CLOUD to display it, --all to display all,
+                         otherwise selected cloud will be used
     
-        cloud set NAME
-            sets a new name for selected or default cloud, please select a
-            cloud to work with first, otherwise the default cloud will be 
-            used
+            cloud alias <name> [CLOUD]
+                sets a new name for a cloud
+                options: specify CLOUD to work with, otherwise selected cloud 
+                         will be used
     
-        cloud select [NAME]
-            selects a cloud to work with from a list of clouds if NAME 
-            not given
+            cloud select [CLOUD]
+                selects a cloud to work with from a list of clouds if CLOUD is
+                not given
     
-        cloud on [NAME]
-        cloud off [NAME]
-            activates or deactivates a cloud, if name is not given, 
-            default or selected cloud will be activated or deactivated
+            cloud on [CLOUD]
+            cloud off [CLOUD]
+                activates or deactivates a cloud, if CLOUD is not given, 
+                selected cloud will be activated or deactivated
     
-        cloud add CLOUD
-            adds cloud information to database. CLOUD is a yaml file with 
-            full file path. Inside yaml, clouds should be written in the
-            form: 
-            cloudmesh: clouds: cloud1...
-                               cloud2...
+            cloud add CLOUDFILE [--force]
+                adds cloud information to database. CLOUDFILE is a yaml file with 
+                full file path. Inside the yaml, clouds should be written in the
+                form: 
+                cloudmesh: clouds: cloud1...
+                                   cloud2...
+                please check ~/.futuregrid/cloudmesh.yaml
+                options: --force, by default, existing cloud in database can't be
+                         overwirtten, enable --force to overwrite if same cloud 
+                         name encountered
     
-        cloud remove [NAME]
-            remove a cloud from mongo, if name is not given, default or 
-            selected cloud will be reomved.
-            CAUTION: remove all is enabled
+            cloud remove [CLOUD]
+                remove a cloud from mongo, if CLOUD is not given, selected cloud 
+                will be reomved.
+                CAUTION: remove all is enabled(remove all)
+    
+            cloud default [CLOUD] [--flavorset|--imageset]
+            cloud default --all
+                view or manage cloud's default flavor and image
+                options: CLOUD, specify a cloud to work on, otherwise selected 
+                         cloud will be used, --all to display all clouds defaults
+                         --setflavor, set default flaovr
+                         --setimage, set default image
     
     
 
@@ -507,6 +528,48 @@ Command - label::
     Options:
     
        -v       verbose mode
+    
+    
+
+list
+----------------------------------------------------------------------
+
+Command - list::
+
+    Usage:
+        list flavor [CLOUD]
+        list server [CLOUD]
+        list image [CLOUD]
+        list project
+        list cloud
+        list
+    
+    Arguments:
+    
+        CLOUD    the name of the cloud, input 'all' instead to show requested
+                 information for all active clouds
+    
+    Options:
+    
+        -v       verbose mode
+    
+    Description:
+    
+        List clouds and projects information, if CLOUD argument is not given,
+        default or selected cloud will be used, please use command 'cloud select' 
+        to select the cloud to work with.([NOT IMPLEMENTED]for now, selected 
+        cloud information is not in the mongo)
+    
+        list flavor [CLOUD]
+            list the flavors
+        list server [CLOUD]
+            list the vms
+        list image [CLOUD]
+            list the images
+        list project
+            list the projects
+        list cloud
+            list active clouds
     
     
 
