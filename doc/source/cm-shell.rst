@@ -83,7 +83,6 @@ Command Overview
 =================
 
 
-
 Help
 ----------------------------------------------------------------------
 
@@ -151,11 +150,11 @@ The following options are available:
    defaults load [CLOUD]
    defaults list [--json] [CLOUD]
 
-Examples:
+Examples::
 
-- defaults load
-- defaults clean alamo
-- defaults list --json alamo
+  defaults load
+  defaults clean alamo
+  defaults list --json alamo
 
 
 Managing Users
@@ -524,7 +523,6 @@ See fg-inventory::
    cm> resource register
 
 
-
 List all ids and their types::
 
    cm id --list
@@ -534,8 +532,10 @@ Associates a human readable lable with an id::
    cm label --id <id>
 
 
-.. warning:: The following commands are automatically created with `fab doc.man`
-	     If you like to update them, please do not do this in the man.rst file,
-	     but update the commands in the actual manual page in the code
+.. warning:: 
+
+   The following commands are automatically created with `fab doc.man`
+   If you like to update them, please do not do this in the man.rst
+   file, but update the commands in the actual manual page in the code
 
 

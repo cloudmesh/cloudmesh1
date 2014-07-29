@@ -1,3 +1,7 @@
+#
+# Trick to deal with RST pages and sphinx incompatibility. set to false when building docs
+#
+
 from ConfigParser import SafeConfigParser
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.util.keys import get_fingerprint
@@ -21,11 +25,23 @@ from wtforms.validators import Required
 from cloudmesh_common.logger import LOGGER
 
 
-
 from flask.ext.principal import Permission, RoleNeed
 # from cloudmesh.experiment.cm_experiment_db import cm_experiment_db
 
-from flask.ext.rstpages import RSTPages
+import os
+
+#
+# disable RST PAGES dues to sphinx incompatibility
+#
+RSTPAGES=os.environ['RSTPAGES']
+RSTPAGES = (RSTPAGES == None) or RSTPAGES.tolower() == 'true' 
+
+msg = 'RST PAGES ' + RSTPAGES
+banner(msg)
+
+if RSTPAGES:
+    from flask.ext.rstpages import RSTPages
+
 from pprint import pprint
 import cloudmesh
 import os
@@ -155,7 +171,8 @@ app.debug = debug
 # Added for loop control; break, continue
 app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
-pages = RSTPages(app)
+if RSTPAGES:
+    pages = RSTPages(app)
 
 # dynamic app loading from defined modules
 # app.register_blueprint(keys_module, url_prefix='',)
