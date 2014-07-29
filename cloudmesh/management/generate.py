@@ -107,7 +107,7 @@ def generate_projects(n):
     for i in range(0,n):
         data = random_project()
         print data
-        projects.add(data)    
+        projects.save(data)    
     
 
 def main():
