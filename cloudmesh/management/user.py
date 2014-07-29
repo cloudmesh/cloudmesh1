@@ -20,6 +20,12 @@ def generate_password_hash(password)
     return hashed_password'''
 
 def read_user(filename):
+    '''
+    reads user data from a yaml file
+    
+    :param filename: The file anme
+    :type filename: String of the path
+    '''
         stream = open(filename, 'r')
         data = yaml.load(stream)
         user = User(
@@ -50,6 +56,9 @@ class User(CloudmeshObject):
     """This class is sued to represent a user"""
 
     def order(self):
+        '''
+        order of the attribute to be printed
+        '''
         try:
             return [
                 ("username", self.username),
@@ -78,6 +87,9 @@ class User(CloudmeshObject):
             return None
     
     def hidden(self):
+        '''
+        hiddeb attributes
+        '''
         return [
             "userid",
             "active",
@@ -125,19 +137,37 @@ class User(CloudmeshObject):
 
 
     def is_active(self):
+        '''
+        check if the user is active
+        '''
         """finds if a user is active or not"""
         d1 = datetime.datetime.now()
         return (self.active == True) and (datetime.datetime.now() < self.date_deactivate)
         
     def set_password(self, password):
+        '''
+        not implemented
+        
+        :param password:
+        :type password:
+        '''
         #self.password_hash = generate_password_hash(password)
         pass
         
     def check_password(self, password):
+        '''
+        not implemented
+        
+        :param password:
+        :type password:
+        '''
         #return check_password_hash(self.password_hash, password)
         pass
         
     def json(self):
+        '''
+        returns a json representation of the object
+        '''
         """prints the user as a json object"""
         d = {}
         for (field, value) in self.order():
@@ -148,6 +178,9 @@ class User(CloudmeshObject):
         return d
     
     def yaml(self):
+        '''
+        returns the yaml object of the object.
+        '''
         """prints the user as a json object"""
         return self.__str__(fields=True, all=True)
     """
@@ -165,6 +198,9 @@ class User(CloudmeshObject):
     """
     
 class Users(object):
+    '''
+    convenience object to manage several users
+    '''
 
     def __init__(self):
         db = connect('user', port=port)
@@ -173,25 +209,34 @@ class Users(object):
         meta = {"db_alias": "default"}
 
     def objects(self):
+        '''
+        returns the users
+        '''
         return self.users
     
     def get_unique_username(self, proposal):
-        """sets the username to the proposed username. if this name is taken, a
-        number is added and checked if this new name is tacken, the first name
-        with added number is used as a username
-        """
+        '''
+        gets a unique username form a proposal. This is achieved whil appending a number at the end. if the 
+        
+        :param proposal: the proposed username
+        :type proposal: String
+        '''
         proposal = proposal.lower()
-        num = 1
-        same = True
-        while (same == True):
-            _username = User.objects(username=proposal)
-            if _username.count() > 0:
-                proposal = proposal + str(num)
-                num = num + 1
-            else:
-                return proposal
+        num = 1 
+        username = User.objects(username=proposal)        
+        while username.count() > 0:
+            new_proposal = proposal + str(num)
+            username = User.objects(username=new_proposal)
+            num = num + 1
+        return proposal
                 
     def add(self, user):
+        '''
+        adds a user 
+        
+        :param user: the username
+        :type user: String
+        '''
         """adds the specified user to mongodb, as well as activates the users' account
         as well as set's the deactivation date"""
         user.username = self.get_unique_username(user.username)
@@ -202,13 +247,26 @@ class Users(object):
             print "ERROR: a user with the e-mail `{0}` already exists".format(user.email)
             
     def validate(self, user):
-        """verifies if the user can be added. Checks if the e-mail is unique. Returns true."""
+        '''
+        verifies if the email of the user is not already in the users. Checks if the e-mail is unique. 
+        
+        :param user: user object
+        :type user: User
+        :rtype: Boolean
+        '''
+        """
         user = User.objects(email=user.email)
         valid = user.count() == 0
         return valid
 
     def find(self, email=None):
-        """returns the users based on the given query"""
+        '''
+        returns the users based on the given query. If no email is speified all users are returned
+        
+        :param email: email
+        :type email: email address
+        '''
+        """
         if email == None:
             return User.objects()
     	else:
@@ -219,7 +277,12 @@ class Users(object):
                 return None
             
     def find_user(self, username):
-    	"""returns a user based on the username"""
+        '''
+        returns a user based on the username
+        
+        :param username:
+        :type username:
+        '''
         return User.object(username=username)
     	    	
     def clear(self):
@@ -228,7 +291,12 @@ class Users(object):
             user.delete()
 
 def verified_email_domain(email):
-
+    '''
+    not yet implemented. Returns true if the a-mail is in a specified domain.
+    
+    :param email:
+    :type email:
+    '''
     domains = ["indiana.edu"]
 
     for domain in domains:
