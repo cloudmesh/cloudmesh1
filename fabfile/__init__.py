@@ -17,3 +17,4 @@ import mooc
 import hpc
 import rcfile
 import qc
+import manage
