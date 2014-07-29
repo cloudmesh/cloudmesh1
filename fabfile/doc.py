@@ -1,5 +1,6 @@
 from fabric.api import task, local
 import sys
+import os
 
 browser = "firefox"
 
@@ -13,6 +14,8 @@ def view():
 
 @task
 def html():
+    # disable Flask RSTPAGES due to sphins incompatibility
+    os.environ['RSTPAGES'] = 'FALSE'
     api()
     man()
     """build the doc locally and view"""
