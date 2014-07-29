@@ -5,8 +5,9 @@ from tabulate import tabulate
 from cloudmesh_common.util import banner, dict_uni_to_ascii
 from pprint import pprint
 from cloudmesh.util.menu import menu_return_num
-from cloudmesh_common.bootstrap_util import yn_choice
+from cloudmesh_common.bootstrap_util import yn_choice, path_expand
 import sys
+from cloudmesh.config.ConfigDict import ConfigDict
 
 log = LOGGER(__file__)
 
@@ -23,14 +24,14 @@ def shell_command_cloud(arguments):
                 cloud on [CLOUD]
                 cloud off [CLOUD]
                 cloud add CLOUDFILE [--force]
-                cloud remove [CLOUD]
+                cloud remove [CLOUD|--all]
                 cloud default [CLOUD] [--flavorset|--imageset]
                 cloud default --all
 
             Arguments:
 
               CLOUD          the name of a cloud to work on
-              CLOUDFILE      a yaml file contains cloud information
+              CLOUDFILE      a yaml file(with full file path) contains cloud information
               name           new cloud name to set
 
             Options:
@@ -44,7 +45,7 @@ def shell_command_cloud(arguments):
                                  except credentials and defaults)
                --flavorset       set the default flavor of a cloud
                --imageset        set the image flavor of a cloud
-               --all             provide information of all clouds
+               --all             work on all clouds
                --force           if same cloud exists in database, it will be 
                                  overwritten
 
@@ -85,10 +86,10 @@ def shell_command_cloud(arguments):
                              overwirtten, enable --force to overwrite if same cloud 
                              name encountered
 
-                cloud remove [CLOUD]
+                cloud remove [CLOUD|--all]
                     remove a cloud from mongo, if CLOUD is not given, selected cloud 
                     will be reomved.
-                    CAUTION: remove all is enabled(remove all)
+                    CAUTION: remove all is enabled(remove --all)
                     
                 cloud default [CLOUD] [--flavorset|--imageset]
                 cloud default --all
@@ -103,18 +104,15 @@ def shell_command_cloud(arguments):
     call.call_procedure()
     
     
-class CloudManage(object):
-    try:
-        config = cm_config()
-    except:
-        log.error("There is a problem with the configuration yaml files")
-        
+class CloudManage(object): 
+    '''
+    a class provides funtions used to manage cloud info in the mongo
+    '''
     try:
         mongo = cm_mongo()
     except:
         log.error("There is a problem with the mongo server")
     
-    username = config['cloudmesh']['profile']['username']
     
     def get_clouds(self, username, admin=False, getone=False, cloudname=None):
         if getone:
@@ -188,8 +186,14 @@ class CloudManage(object):
             defaults['activeclouds'].remove(cloudname)
         self.mongo.db_defaults.update({'cm_user_id': username}, defaults, upsert=True)
         
-    #########doubt######################
-    def add(self, d):
+
+    def import_cloud_to_mongo(self, d, cloudname, username):
+        '''
+        insert a cloud to db_clouds
+        additionally, add values cm_cloud, cm_kind=cloud, cm_user_id
+        before use this function, check whether cloud exists in db_clouds
+        cloud name duplicate is not allowed
+        '''
         if d['cm_type'] in ['openstack']:
             if d['credentials']['OS_USERNAME']:
                 del d['credentials']['OS_USERNAME']
@@ -205,14 +209,40 @@ class CloudManage(object):
         elif d['cm_type'] in ['azure']:
             if d['credentials']['subscriptionid']:
                 del d['credentials']['subscriptionid']
-        self.db_clouds.insert(d)
+                
+        d['cm_cloud']=cloudname
+        d['cm_kind']='cloud'
+        d['cm_user_id']=username
+                
+        self.mongo.db_clouds.insert(d)
 
 
-    def remove(self, cloudname):
-        self.db_clouds.remove({'cm_kind': 'cloud', 'cm_cloud': cloudname})
-    ####################################
+    def remove_cloud(self, username, cloudname):
+        '''
+        remove selected_cloud value if such cloud is removed
+        [NOT IMPLEMENTED]default cloud, active cloud, register cloud too if necessary
+        '''
+        self.mongo.db_clouds.remove({'cm_kind': 'cloud', 'cm_user_id': username, 'cm_cloud': cloudname})
+        cloud = None
+        try:
+            cloud = self.mongo.db_user.find_one({'cm_user_id': username})['selected_cloud']
+        except:
+            pass
+        if cloudname == cloud:
+            self.mongo.db_user.update({'cm_user_id': username}, {'$unset': {'selected_cloud': ''}})
+
     
 class CloudCommand(CloudManage):
+    '''
+    a class provides cloud command functions
+    '''
+    try:
+        config = cm_config()
+    except:
+        log.error("There is a problem with the configuration yaml files")
+        
+    username = config['cloudmesh']['profile']['username']
+       
     def __init__(self, args):
         self.args = args
         
@@ -383,12 +413,64 @@ class CloudCommand(CloudManage):
         else:
             return
         
+    def _cloud_import(self):
+        try:
+            file = path_expand(self.args["CLOUDFILE"])
+            fileconfig = ConfigDict(filename=file)
+        except:
+            log.error("ERROR: could not load file, please check filename and its path")
+            return
+        
+        try:
+            cloudsdict = fileconfig.get("cloudmesh", "clouds")
+        except:
+            log.error("ERROR: could not get clouds information from yaml file, please check you yaml file, clouds information must be under 'cloudmesh' -> 'clouds' -> cloud1...")
+            return
+        cloud_names = []
+        clouds = self.get_clouds(self.username)
+        for cloud in clouds:
+            cloud_names.append(cloud['cm_cloud'].encode("ascii"))
+        
+        for key in cloudsdict:
+            if key in cloud_names:
+                if self.args['--force']:
+                    self.remove_cloud(self.username, key)
+                    self.import_cloud_to_mongo(cloudsdict[key], key, self.username)
+                    print "cloud '{0}' overwritten.".format(key)
+                else:
+                    print "ERROR: cloud '{0}' exists in database, please remove it from database first, or enable '--force' when add".format(key)
+            else:
+                self.import_cloud_to_mongo(cloudsdict[key], key, self.username)
+                print "cloud '{0}' added.".format(key)
+                
         
     def _cloud_remove(self):
-        '''
-        remove selected_cloud value if such cloud is removed
-        '''
-        pass
+        if self.args['--all']:
+            if yn_choice("!!!CAUTION!!! Remove all clouds from database?", default = 'n', tries = 3):
+                cloud_names = []
+                clouds = self.get_clouds(self.username)
+                for cloud in clouds:
+                    cloud_names.append(cloud['cm_cloud'].encode("ascii"))
+                for name in cloud_names:
+                    self.remove_cloud(self.username, name)
+                    print "cloud '{0}' removed.".format(name)
+                return
+            else:
+                return
+                    
+        if self.args['CLOUD']:
+            name = self.args['CLOUD']
+        else:
+            name = self.get_selected_cloud(self.username)
+        if self.get_clouds(self.username, getone=True, cloudname=name) == None:
+            log.error("no cloud information of '{0}' in database".format(name))
+            return
+        if yn_choice("remove cloud '{0}' from database?".format(name), default = 'n', tries = 3):
+            self.remove_cloud(self.username, name)
+            print "cloud '{0}' removed.".format(name)
+            return
+        else:
+            return
         
 
 
@@ -406,9 +488,9 @@ class CloudCommand(CloudManage):
         elif self.args['off'] == True:
             call = 'deactivate'
         elif self.args['add'] == True:
-            pass
+            call = 'import'
         elif self.args['remove'] == True:
-            pass
+            call = 'remove'
         elif self.args['default'] == True:
             pass
         else:
