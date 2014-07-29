@@ -134,7 +134,7 @@ class ManageVM(object):
         '''Create a vm instance of IaaS using cm_mongo class.
         vm_create() procedure of cm_mongo object launches new instance.
 
-        Note. Most parts of codes are identical with start_vm() in webui/modules/cloud.py
+        Note. Most parts of codes are identical with start_vm() in cloudmesh_web/modules/cloud.py
         '''
         # Preparing required parameters of the vm_create() function
         cloud = self.cloud

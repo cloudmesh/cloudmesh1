@@ -49,12 +49,12 @@ class RackWork:
         relative_dir_image = server_config.get("cloudmesh.server.rack.diagrams.{0}".format(service))
         # log.debug("relative dir image, {0}".format(relative_dir_image))
         flask_dir = "static"
-        # guess absolute path of webui
+        # guess absolute path of cloudmesh_web
         rack_py_dir = pwd().strip().split("/")
-        webui_dir = rack_py_dir
-        #log.debug("webui dir, {0}".format(webui_dir))
+        cloudmesh_web_dir = rack_py_dir
+        #log.debug("cloudmesh_web dir, {0}".format(cloudmesh_web_dir))
         list_image_dir = [ flask_dir ] + relative_dir_image.strip().split("/");
-        abs_dir_image = "/".join(webui_dir + list_image_dir)
+        abs_dir_image = "/".join(cloudmesh_web_dir + list_image_dir)
         abs_dir_diag = dir_base + "/" + relative_dir_diag
         # dynamic generate image
         map_class = service_options[service]["class"](self.username, rack_name, dir_base, abs_dir_diag, abs_dir_image)

@@ -23,8 +23,8 @@ Place a new function call to execute a process with a celery task queue
 Web GUI
 =======
 
-  - cloudmesh/webui/template/
-  - cloudmesh/webui/modules/
+  - cloudmesh/cloudmesh_web/template/
+  - cloudmesh/cloudmesh_web/modules/
 
 App & Tasks
 ===========

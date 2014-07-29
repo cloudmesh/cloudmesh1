@@ -515,8 +515,8 @@ class BaseClusterMap:
     def guessDefaultDiagramLocation(self):
         arr_dir_current = pwd().strip().split("/")
         # current py file: cloudmesh_home/cloudmesh/rack/*.py
-        # webui static dir: cloudmesh_home/webui/static
-        arr_dir_guess = arr_dir_current[0:-2] + ["webui", "static", "racks"]
+        # cloudmesh_web static dir: cloudmesh_home/cloudmesh_web/static
+        arr_dir_guess = arr_dir_current[0:-2] + ["cloudmesh_web", "static", "racks"]
         return "/".join(arr_dir_guess)
 
 

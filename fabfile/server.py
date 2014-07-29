@@ -100,7 +100,7 @@ def quick(server="server", browser='yes'):
     local("python setup.py install")
 
     banner("START WEB SERVER")
-    local("cd webui; python {0}.py &".format(server))
+    local("cd cloudmesh_web; python {0}.py &".format(server))
     # view(link)
 
 @task
@@ -120,7 +120,7 @@ def start(server="server", browser='yes'):
 
 
     banner("START WEB SERVER")
-    local("cd webui; python {0}.py &".format(server))
+    local("cd cloudmesh_web; python {0}.py &".format(server))
     # view(link)
 
 @task
@@ -170,7 +170,7 @@ def wsgi(action="start"):
       --daemonize={0} \
       --pidfile={1} \
       --chown-socket=cloudmesh:www-data \
-      --chdir=webui \
+      --chdir=cloudmesh_web \
       --module=server \
       --callable=app".format(user_logfile, user_pidfile)
    elif (action == "stop" or action == "kill"):

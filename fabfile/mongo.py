@@ -384,7 +384,7 @@ def ldap(username=None):
 def fg():
     """create a simple testbed"""
     start()
-    local("python webui/fg.py")    
+    local("python cloudmesh_web/fg.py")    
 '''
 
 @task
