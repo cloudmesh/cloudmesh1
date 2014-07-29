@@ -1,0 +1,16 @@
+User:
+    username: test
+    title: Dr.
+    firstname: Gregor
+    lastname: von Laszewski
+    email: laszewski@gmail.com
+    url: gregor.cyberaide.org
+    citizenship: TBD
+    bio: This is where the bio goes
+    password: TBD
+    phone: None
+    projects: None
+    institution: Indiana University, Bloomington
+    department: School of Informatics and Computing
+    address: 419 N Indiana Ave
+    advisor_contact: None

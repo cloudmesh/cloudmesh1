@@ -107,3 +107,9 @@ pytimeparse
 timestring
 prettytable
 tabulate
+# ######################################################################
+# General Libraries
+# ######################################################################
+#
+pip install flask-restful
+pip install flask-restful-swagger
