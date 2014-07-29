@@ -1,3 +1,5 @@
+# generates test users and projects
+
 from mongoengine import *
 #from other.user_dict import *
 from user import User, Users
@@ -21,6 +23,11 @@ projects = Projects()
 fake = Factory.create()
 
 def random_user():
+    '''
+    returns a random user in a dict
+    
+    :rtype: dict
+    '''
     firstname = fake.first_name()    
     data = User(
         status = "pending",
@@ -43,6 +50,13 @@ def random_user():
 
 
 def generate_users(n):
+    '''
+    generates n random users in an array containing dicts for users
+    
+    :param n: number of users
+    :type n: integer
+    :rtype: array of dicts
+    '''
     users.clear()
     for i in range(0,n):
         data = random_user()
@@ -51,7 +65,10 @@ def generate_users(n):
 
 
 def random_project():
-    """generates a random project"""
+    """generates a random project
+    
+    :rtype: dict
+    """
     data = Project(
     	    title = fake.sentence()[:-1],
             projectid = uuid.uuid4(),
@@ -79,6 +96,13 @@ def random_project():
 
 
 def generate_projects(n):
+    '''
+    generates n random projects in an array containing dicts for users
+    
+    :param n: number of projects
+    :type n: integer
+    :rtype: array of dicts
+    '''
     projects.clear()
     for i in range(0,n):
         data = random_project()
@@ -87,6 +111,9 @@ def generate_projects(n):
     
 
 def main():
+    '''
+    a test function to create 10 users and 3 projects
+    '''
 
     generate_users(10)
     generate_projects(3)    

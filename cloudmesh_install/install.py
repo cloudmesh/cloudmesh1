@@ -408,6 +408,7 @@ def download():
 
 def install():
     sphinx_updates()
+    banner("cloudmesh python install")
     local("python setup.py install")
 
 
@@ -519,6 +520,8 @@ def sphinx_updates():
     # permission conflict will occur when it trys to write or delete
     # the directory
     # TODO: the use of mktemp was wrong as we need to pass a template
+
+    banner("install sphinx autorun", c="-")
     user = getpass.getuser()
     dirname = local("mktemp -d /tmp/{0}_cloudmesh.XXXXX".format(user), capture=True)
     dirname = dirname + "/install-cloudmesh"
@@ -526,8 +529,9 @@ def sphinx_updates():
     local('mkdir -p %s' % dirname)
     local('cd %s; hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/' %
           dirname)
-    local('~/ENV/bicd %s/sphinx-contrib/autorun; python setup.py install' %
+    local('cd %s/sphinx-contrib/autorun; python setup.py install' %
           dirname)
+    banner("insall autorun ok")
 
 
 def vagrant():
