@@ -151,6 +151,6 @@ def sphinx_updates():
     local('rm -rf /tmp/install-cloudmesh')
     local('mkdir -p /tmp/install-cloudmesh')
     local('cd /tmp/install-cloudmesh; hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/')
-    local('~/ENV/bicd /tmp/install-cloudmesh/sphinx-contrib/autorun; python setup.py install')
+    local('/tmp/install-cloudmesh/sphinx-contrib/autorun; python setup.py install')
 
 deploy()
