@@ -2,6 +2,7 @@ import sys
 from tabulate import tabulate
 import requests
 from collections import OrderedDict
+from cloudmesh.config.cm_config import cm_config_server
 
 class metric_api:
 
@@ -36,9 +37,15 @@ class metric_api:
 
     def load_server_info(self):
         # cloudmesh_server.yaml contains the api server info
-        # this is only for test.
-        self.api_server = "129.79.135.80"
-        self.port = 5001
+        config_server = cm_config_server()
+        try:
+            self.api_server = config_server.get("cloudmesh.server.metric.host")
+        except:
+            self.api_server = "127.0.0.1"
+        try:
+            self.port = config_server.get("cloudmesh.server.metric.port")
+        except:
+            self.port = 5001
         self.doc_url = "metric"
  
     def connect(self):
