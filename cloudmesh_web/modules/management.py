@@ -1,4 +1,4 @@
-from cloudmesh_management.project import STATUS as ProjectSTATUS
+from cloudmesh.management.project import STATUS as ProjectSTATUS
 from cloudmesh_common.logger import LOGGER
 from flask import Blueprint, render_template, request
 from flask.ext.login import login_required
