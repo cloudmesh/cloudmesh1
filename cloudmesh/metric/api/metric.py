@@ -15,6 +15,7 @@ class metric_api:
         self.host = None
         self.iaas = None
         self.userid = None
+        self.projectid = None
 
         self.set_default()
         self.load_server_info()
@@ -29,6 +30,7 @@ class metric_api:
         result += "host:   %s\n" % self.host
         result += "iaas:      %s\n" % self.iaas
         result += "userid:      %s\n" % self.userid
+        result += "projectid:   %s\n" % self.projectid
         return result
 
     def set_default(self):
@@ -106,6 +108,9 @@ class metric_api:
 
     def set_user(self, userid):
         self.userid = userid
+
+    def set_project(self, name):
+        self.projectid = name
 
     def test_raw_data(self):
         # for test, dummy data is returned
@@ -197,6 +202,8 @@ class metric_api:
             print "host: " + self.host
         if self.userid:
             print "userid: " + self.userid
+        if self.projectid:
+            print "projectid: " + self.projectid
         
         # display table of contents
         # table_format = 
