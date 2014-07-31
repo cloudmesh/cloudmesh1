@@ -3,6 +3,10 @@ from wtforms.csrf.session import SessionCSRF
 import re
 from wtforms.validators import ValidationError
 from cloudmesh.management.project import STATUS as ProjectSTATUS
+from cloudmesh.management.project import SERVICES as ProjectSERVICES
+from cloudmesh.management.project import SOFTWARE as ProjectSOFTWARE
+from cloudmesh.management.project import PROVISIONING as ProjectPROVISIONING
+from cloudmesh.management.project import CLUSTERS as ProjectCLUSTERS
 from cloudmesh_common.logger import LOGGER
 from flask import Blueprint, render_template, request
 from flask.ext.login import login_required
@@ -12,6 +16,7 @@ from cloudmesh.management.user import User as MongoUser, Users
 from cloudmesh.management.project import Project as MongoProject, Projects
 from cloudmesh.management.cloudmeshobject import order, make_form_list
 
+import cloudmesh.management.project 
 
 log = LOGGER(__file__)
 
@@ -21,9 +26,19 @@ from flask_wtf import Form
 from wtforms import TextField
 from wtforms.validators import DataRequired
 
-from wtforms import Form, validators
-from wtforms.fields import BooleanField, TextField, TextAreaField, PasswordField, RadioField
+from wtforms import Form, validators, widgets
+from wtforms.fields import BooleanField, TextField, TextAreaField, PasswordField, RadioField, SelectField, SelectMultipleField
 from flask import flash,redirect
+
+class MultiCheckboxField(SelectMultipleField):
+    """
+    A multiple-select, except displays a list of checkboxes.
+
+    Iterating the field will produce subfields, allowing custom rendering of
+    the enclosed checkbox fields.
+    """
+    widget = widgets.TableWidget(with_table_tag=True)
+    option_widget = widgets.CheckboxInput()
 
 exclude_email_domains = ["@verizon.net","@123.com"]
 
@@ -31,13 +46,9 @@ exclude_email_domains = ["@verizon.net","@123.com"]
 @login_required
 def project_apply():
 
-    return "HALO"
-
-    '''
     form = ProjectRegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         
-        print "POSTING"
         data = dict(request.form)
         action = str(data['button'][0])
         
@@ -49,30 +60,25 @@ def project_apply():
             projects = Projects()            
             project = MongoProject()
             for d in data:
-                print d, ":", data[d]
                 project[d] = data[d]
             
             projects.add(project)
 
         flash('Thanks for registering')
         return redirect('/')
-    else:
-        if request.method == "POST":
-            print "ERROR POST"
-            print request.form
-            print form.validate()
-            print_errors(form)
-           
-        
             
-    print "RENDER"
     return render_template('management/project_apply.html',
                             title="Project Application",
                             states=['save', 'cancel'],                           
                             form=form,
                             fields=ProjectRegistrationForm.keys)
 
-    '''
+
+def get_choices_for_form(services):
+    choices = []
+    for service in services:
+        choices.append((service,service))
+    return choices
 
 class ProjectRegistrationForm(Form):
 
@@ -98,12 +104,12 @@ class ProjectRegistrationForm(Form):
           "scale_of_use", 
           # "categories", 
           # "keywords", 
-          "primary_discipline", 
+          # "primary_discipline", 
           "orientation",  
           "contact",  
           "url", 
           "comment", 
-          "active", 
+          # "active", 
           "projectid", 
           # "lead",       
           # "managers",   
@@ -121,47 +127,47 @@ class ProjectRegistrationForm(Form):
           "comments",
           "join_open", 
           "join_notification", 
-          # "resources_services",
+          "resources_services",
           # "resources_software", 
-          # "resources_clusters", 
-          #"resources_provision"
+          "resources_clusters", 
+          "resources_provision"
           ]
         
-    title = TextField('title')
-    abstract= TextField('abstract')
-    intellectual_merit  = TextField('intellectual_merit')
-    broader_impact  = TextField('broader_impact')
-    use_of_fg  = TextField('use_of_fg')
-    scale_of_use = TextField('scale_of_use')
-    categories = TextField('categories')
-    keywords = TextField('keywords')
-    primary_discipline = TextField('primary_discipline')
-    orientation  = TextField('orientation')
+    title = TextField('Title')
+    abstract= TextField('Abstract')
+    intellectual_merit  = TextAreaField('Intellectual merit')
+    broader_impact  = TextAreaField('Broader impact')
+    use_of_fg  = TextAreaField('Use of FG')
+    scale_of_use = TextAreaField('Scale of use')
+    categories = TextField('Categories')
+    keywords = TextField('Keywords')
+    primary_discipline = TextField('Primary discipline')
+    orientation  = TextField('Orientation')
     contact  = TextField('contact')
-    url = TextField('url', [validators.Length(min=6, max=50), validate_url_in_form])
-    comment = TextField('comment')
-    active = BooleanField('active')
-    projectid = TextField('projectid')
-    lead       = TextField('lead')
-    managers   = TextField('managers')
-    members    = TextField('members')
-    alumnis    = TextField('alumnis')
-    grant_orgnization = TextField('grant_orgnization')
-    grant_id = TextField('grant_id')
-    grant_url = TextField('grant_url')
-    results = TextField('results')
-    aggreement_use = BooleanField('aggreement_use')
-    aggreement_slides = BooleanField('aggreement_slides')
-    aggreement_support = BooleanField('aggreement_support')
-    aggreement_sotfware = BooleanField('aggreement_sotfware')
-    aggreement_documentation = BooleanField('aggreement_documentation')
-    comments= TextField('comments')
-    join_open = BooleanField('join_open')
-    join_notification = BooleanField('join_notification')
-    resources_services= TextField('resources_services')
-    resources_software = TextField('resources_software')
-    resources_clusters = TextField('resources_clusters')
-    resources_provision= TextField('resources_provision')
+    url = TextField('Url', [validators.Length(min=6, max=50), validate_url_in_form])
+    comment = TextField('Comment')
+    active = BooleanField('Active')
+    projectid = TextField('Projectid')
+    lead       = TextField('Lead')
+    managers   = TextField('Managers')
+    members    = TextField('Members')
+    alumnis    = TextField('Alumnis')
+    grant_orgnization = TextField('Grant Orgnization')
+    grant_id = TextField('Grant id')
+    grant_url = TextField('Grant url')
+    results = TextField('Results')
+    aggreement_use = BooleanField('Aggreement use')
+    aggreement_slides = BooleanField('Aggreement slides')
+    aggreement_support = BooleanField('Aggreement support')
+    aggreement_sotfware = BooleanField('Aggreement sotfware')
+    aggreement_documentation = BooleanField('Aggreement documentation')
+    comments= TextField('Comments')
+    join_open = BooleanField('Join open')
+    join_notification = BooleanField('Join notification')
+    resources_services = MultiCheckboxField('Resources services', choices=get_choices_for_form(ProjectSERVICES))
+    #resources_software = MultiCheckboxField('resources_software', choices=get_choices_for_form(ProjectSOFTWARE))
+    resources_clusters = MultiCheckboxField('Resources clusters', choices=get_choices_for_form(ProjectCLUSTERS))
+    resources_provision = MultiCheckboxField('Resources provision', choices=get_choices_for_form(ProjectPROVISIONING))        
 
 
 class UserRegistrationForm(Form):
@@ -264,7 +270,6 @@ class UserRegistrationForm(Form):
 def print_errors(form):
     """Flashes form errors"""
     for field, errors in form.errors.items():
-        print "HHHHHH", field
         for error in errors:
             print(u"Error in the %s field - %s" % (
                 getattr(form, field).label.text,
@@ -277,8 +282,6 @@ def user_apply():
 
     form = UserRegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
-        
-        print "POSTING"
         data = dict(request.form)
         action = str(data['button'][0])
         
@@ -291,23 +294,13 @@ def user_apply():
             user = MongoUser()
             del data['confirm']            
             for d in data:
-                print d, ":", data[d]
                 user[d] = data[d]
             
             users.add(user)
 
         flash('Thanks for registering')
         return redirect('/')
-    else:
-        if request.method == "POST":
-            print "ERROR POST"
-            print request.form
-            print form.validate()
-            print_errors(form)
-           
-        
-            
-    print "RENDER"
+
     return render_template('management/user_apply.html',
                             title="Project Application",
                             states=['save', 'cancel'],                           
@@ -331,7 +324,6 @@ def project_edit(projectid):
                                 error="The project does not exist")
 
     if request.method == 'GET':
-        print "GETTING"
 
         return render_template('management/project_edit.html',
                                 project=project[0], states=['save', 'cancel'],                
@@ -340,15 +332,12 @@ def project_edit(projectid):
         
     elif request.method == 'POST':
 
-        print "POSTING"
         data = dict(request.form)
         action = str(data['button'][0])
         #del data['button']
         for key in data:
             data[key] = data[key][0]
     
-        print ">>>>ACTION", action
-        #project = Project.objects(projectid=projectid)[0]
         project = project[0]        
             
         if action == 'save':
@@ -405,7 +394,6 @@ def project_edit(projectid):
                 project.resources_provision = data["resources_provision"]
                 """
                 project.save()                
-                print "SAVING"
                 
             except Exception, e:
                 print "ERROR",e 
@@ -420,7 +408,7 @@ def project_edit(projectid):
 @management_module.route('/project/profile/<projectid>', methods=['GET'])
 @login_required
 def project_profile(projectid):
-    print projectid 
+
     connect ('user', port=27777)
     try:
         project = MongoProject.objects(projectid=projectid)
@@ -441,7 +429,6 @@ def project_profile(projectid):
 @login_required
 def management_project_manage():
 
-    print "AAAA"
     connect ('user', port=27777)
     projects = MongoProject.objects()
 
@@ -452,11 +439,8 @@ def management_project_manage():
         #
         if 'selectedprojects' in request.form:
             data = dict(request.form)
-            print data
             project_ids = data['selectedprojects']
             action = str(data['button'][0])
-            print "ACTION", action, action in ProjectSTATUS, 'approved' in ProjectSTATUS
-            print "PROJECTS", project_ids
             
             for projectid in project_ids:
                 project = MongoProject.objects(projectid=projectid)[0]
@@ -465,12 +449,6 @@ def management_project_manage():
 
     connect ('user', port=27777)
     projects = MongoProject.objects()
-    print projects
-
-    print "PPP"    
-    print "COUNT", projects.count()
-    pprint(projects)
-
             
     return render_template('management/project_manage.html',
                            projects=projects, with_edit="True",
@@ -484,14 +462,9 @@ def management_project_manage():
 @login_required
 def management_project_list():
 
-    print "IIIII"
     connect ('user', port=27777)
     projects = MongoProject.objects()
 
-    print "PPP"    
-    print "COUNT", projects.count()
-    pprint(projects)
-    
     return render_template('management/project_list.html', projects=projects, with_edit="False", title="Project List")
 
 
@@ -501,7 +474,6 @@ def management_user_manage():
 
     connect ('user', port=27777)
     users = MongoUser.objects()
-    print "COUNT", users.count()
     return render_template('management/user_manage.html', users=users, with_edit="True", title="User Management")
 
 @management_module.route('/m/user/list')
@@ -510,7 +482,6 @@ def management_user_list():
 
     connect ('user', port=27777)
     users = MongoUser.objects()
-    print "COUNT", users.count()
         
     return render_template('management/user_manage.html', users=users, with_edit="False", title="User List")
 
@@ -519,8 +490,6 @@ def management_user_profile(username):
     connect ('user', port=27777)
     try:
         user = MongoUser.objects(username=username)
-        print user
-        print user.count()
         if user.count() == 1:
             pprint (user[0])
             print user[0].username
@@ -552,8 +521,6 @@ def management_user_edit(username):
 
     elif request.method == 'POST':
 
-        print request.form
-        
         data = dict(request.form)
         
         action = str(data['button'][0])

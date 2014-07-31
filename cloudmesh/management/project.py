@@ -45,9 +45,10 @@ SERVICES = ('eucalyptus',
             'hadoop',
             'mapreduce',
             'docker',
-            'other', 'None')
+            'other',
+            'None')
 
-SOFTWARE = ('other')
+SOFTWARE = ('HPC','other')
 
 PROVISIONING = ('vm',
                 'baremetal',
