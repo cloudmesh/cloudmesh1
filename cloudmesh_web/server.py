@@ -157,7 +157,8 @@ filename = "%s/%s" % (home, default_path)
 # ============================================================
 # global vars
 # ============================================================
-config = cm_config_server()
+#config = cm_config_server()
+config = s_config
 
 SECRET_KEY = config.get('cloudmesh.server.webui.secret')
 DEBUG = debug

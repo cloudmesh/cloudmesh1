@@ -2,6 +2,7 @@ import sys
 from tabulate import tabulate
 import requests
 from collections import OrderedDict
+from cloudmesh.config.cm_config import cm_config_server
 
 class metric_api:
 
@@ -14,6 +15,7 @@ class metric_api:
         self.host = None
         self.iaas = None
         self.userid = None
+        self.projectid = None
 
         self.set_default()
         self.load_server_info()
@@ -28,6 +30,7 @@ class metric_api:
         result += "host:   %s\n" % self.host
         result += "iaas:      %s\n" % self.iaas
         result += "userid:      %s\n" % self.userid
+        result += "projectid:   %s\n" % self.projectid
         return result
 
     def set_default(self):
@@ -36,9 +39,15 @@ class metric_api:
 
     def load_server_info(self):
         # cloudmesh_server.yaml contains the api server info
-        # this is only for test.
-        self.api_server = "129.79.135.80"
-        self.port = 5001
+        config_server = cm_config_server()
+        try:
+            self.api_server = config_server.get("cloudmesh.server.metric.host")
+        except:
+            self.api_server = "127.0.0.1"
+        try:
+            self.port = config_server.get("cloudmesh.server.metric.port")
+        except:
+            self.port = 5001
         self.doc_url = "metric"
  
     def connect(self):
@@ -100,6 +109,9 @@ class metric_api:
     def set_user(self, userid):
         self.userid = userid
 
+    def set_project(self, name):
+        self.projectid = name
+
     def test_raw_data(self):
         # for test, dummy data is returned
         res = [["HOST", "PROJECT", "cpu", "memory_mb", "disk_gb"],
@@ -116,7 +128,7 @@ class metric_api:
         # res is dict
         dictlist = []
         i = 0
-        for row in res["message"]:
+        for row in res["message"]['default']:
             if i == 0:
                 dictlist.append(row.keys())
             i=1
@@ -150,7 +162,7 @@ class metric_api:
        
         iaas = []
         dates = []
-        for row in res["message"]:
+        for row in res["message"]['default']:
             try:
                 iaas.index(row[column])
             except ValueError:
@@ -163,7 +175,7 @@ class metric_api:
         # header for the new table
         distlist_comparison.append(["DATE"] + iaas)
         complist = OrderedDict()
-        for row in res["message"]:
+        for row in res["message"]['default']:
             # date | openstack | eucalyptus | nimbus
             pos = iaas.index(row[column])
             try:
@@ -190,6 +202,8 @@ class metric_api:
             print "host: " + self.host
         if self.userid:
             print "userid: " + self.userid
+        if self.projectid:
+            print "projectid: " + self.projectid
         
         # display table of contents
         # table_format = 
