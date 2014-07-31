@@ -128,7 +128,7 @@ class metric_api:
         # res is dict
         dictlist = []
         i = 0
-        for row in res["message"]:
+        for row in res["message"]['default']:
             if i == 0:
                 dictlist.append(row.keys())
             i=1
@@ -162,7 +162,7 @@ class metric_api:
        
         iaas = []
         dates = []
-        for row in res["message"]:
+        for row in res["message"]['default']:
             try:
                 iaas.index(row[column])
             except ValueError:
@@ -175,7 +175,7 @@ class metric_api:
         # header for the new table
         distlist_comparison.append(["DATE"] + iaas)
         complist = OrderedDict()
-        for row in res["message"]:
+        for row in res["message"]['default']:
             # date | openstack | eucalyptus | nimbus
             pos = iaas.index(row[column])
             try:
