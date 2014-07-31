@@ -62,6 +62,9 @@ GRANT_ORG = ('NSF',
              'NIH',
              'other', 'None')
 
+
+REQUIRED=False
+    
 class Project(CloudmeshObject):
     '''
     The project object with its fields. The current fields include
@@ -110,25 +113,25 @@ class Project(CloudmeshObject):
     # -------------------------------------------------------------------
     # Project Information
     # -------------------------------------------------------------------
-    title = StringField(required=True)
-    abstract = StringField(required=True)
-    intellectual_merit = StringField(required=True)
-    broader_impact = StringField(required=True)
-    use_of_fg = StringField(required=True)
-    scale_of_use = StringField(required=True)
-    categories = ListField(StringField(choices=CATEGORY), required=True)
+    title = StringField(required=REQUIRED)
+    abstract = StringField(required=REQUIRED)
+    intellectual_merit = StringField(required=REQUIRED)
+    broader_impact = StringField(required=REQUIRED)
+    use_of_fg = StringField(required=REQUIRED)
+    scale_of_use = StringField(required=REQUIRED)
+    categories = ListField(StringField(choices=CATEGORY), required=REQUIRED)
     # example search in a list field
     # Project.objects(categories__contains='education')
-    keywords = ListField(StringField(), required=True)
-    primary_discipline = StringField(choices=DISCIPLINE, required=True)
-    orientation = StringField(required=True)
-    contact = StringField(required=True)
-    url = URLField(required=True)
+    keywords = ListField(StringField(), required=REQUIRED)
+    primary_discipline = StringField(choices=DISCIPLINE, required=REQUIRED)
+    orientation = StringField(required=REQUIRED)
+    contact = StringField(required=REQUIRED)
+    url = URLField(required=REQUIRED)
     comment = StringField()
-    active = BooleanField(required=True)
+    active = BooleanField(required=REQUIRED)
     projectid = UUIDField()
 
-    status = StringField(choices=STATUS, required=True)
+    status = StringField(choices=STATUS,required=REQUIRED)
     # maybe we do not need active as this may be covered in status
 
     # -------------------------------------------------------------------
@@ -140,7 +143,7 @@ class Project(CloudmeshObject):
     # Member Fields
     # -------------------------------------------------------------------
     lead = ReferenceField(User)
-    # lead_institutional_role =  StringField(choices=INSTITUTE_ROLE, required=True)
+    # lead_institutional_role =  StringField(choices=INSTITUTE_ROLE, required=REQUIRED)
     managers = ListField(StringField())
     members = ListField(ReferenceField(User))
     alumnis = ListField(StringField())
@@ -184,10 +187,10 @@ class Project(CloudmeshObject):
     # -------------------------------------------------------------------
     # Resources
     # -------------------------------------------------------------------
-    resources_services = ListField(StringField(choices=SERVICES), required=True)
-    resources_software = ListField(StringField(choices=SOFTWARE), required=True)
-    resources_clusters = ListField(StringField(choices=CLUSTERS), required=True)
-    resources_provision = ListField(StringField(choices=PROVISIONING), required=True)
+    resources_services = ListField(StringField(choices=SERVICES), required=REQUIRED)
+    resources_software = ListField(StringField(choices=SOFTWARE), required=REQUIRED)
+    resources_clusters = ListField(StringField(choices=CLUSTERS), required=REQUIRED)
+    resources_provision = ListField(StringField(choices=PROVISIONING), required=REQUIRED)
 
     # BUG how can we add also arbitray info in case of other, mabe ommit choices
 
@@ -341,6 +344,33 @@ class Projects(object):
             return found[0].to_json()
         else:
             return None
+
+    def add(self, project):
+        '''
+        adds a project
+        
+        :param project: the username
+        :type project: String
+        '''
+        print "PPPPPP", project
+        if not project.status:
+            project.status = 'pending'
+        if (project.projectid is None) or (project.projectid == "") :
+            found = False
+            proposedid = None
+
+            #while not found:
+            #    proposedid = uuid.uuid4()                
+            #    result = Project.objects(projectid=proposedid)
+            #    print "PPPPP", result
+            #    found = result.count() > 0 
+            #    print result.count()
+                
+            project.projectid = proposedid
+        else:
+            print "UUUUUU -{0}-".format(project.projectid)
+        print "UUID", project.projectid
+        project.save()
 
 
     def clear(self):

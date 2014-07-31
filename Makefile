@@ -107,10 +107,12 @@ uninstall:
 ###############################################################################
 
 sphinx:
-	cd doc; make html
-ifeq ("$(shell uname)","Darwin")
-	open doc/build/html/index.html
-endif
+	@echo "please use fab doc.html and fab doc.view instead"
+
+#	cd doc; make html
+#ifeq ("$(shell uname)","Darwin")
+#	open doc/build/html/index.html
+#endif
 
 #############################################################################
 # PUBLISH GIT HUB PAGES

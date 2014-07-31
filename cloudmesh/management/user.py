@@ -221,14 +221,14 @@ class Users(object):
         :param proposal: the proposed username
         :type proposal: String
         '''
-        proposal = proposal.lower()
+        new_proposal = proposal.lower()
         num = 1 
-        username = User.objects(username=proposal)        
+        username = User.objects(username=new_proposal)        
         while username.count() > 0:
             new_proposal = proposal + str(num)
             username = User.objects(username=new_proposal)
             num = num + 1
-        return proposal
+        return new_proposal
                 
     def add(self, user):
         '''
@@ -239,12 +239,12 @@ class Users(object):
         '''
         user.username = self.get_unique_username(user.username)
         user.set_date_deactivate()
-        if self.validate(user):
+        if self.validate_email(user.email):
             user.save()
         else:
             print "ERROR: a user with the e-mail `{0}` already exists".format(user.email)
             
-    def validate(self, user):
+    def validate_email(self, email):
         '''
         verifies if the email of the user is not already in the users. 
         
@@ -252,7 +252,7 @@ class Users(object):
         :type user: User
         :rtype: Boolean
         '''
-        user = User.objects(email=user.email)
+        user = User.objects(email=email)
         valid = user.count() == 0
         return valid
 

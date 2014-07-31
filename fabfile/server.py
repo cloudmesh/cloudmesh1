@@ -41,7 +41,7 @@ import platform
 from cloudmesh_common.util import path_expand
 
 __all__ = ['start', 'stop', 'kill', 'view', 'clean', 'cleanmongo',
-           'agent', 'quick', 'wsgi']
+           'agent', 'quick', 'wsgi', 'web']
 
 #
 # SETTING THE BROWSER BASED ON PLATFORM
@@ -123,6 +123,12 @@ def start(server="server", browser='yes'):
     local("cd cloudmesh_web; python {0}.py &".format(server))
     # view(link)
 
+@task
+def web(server="server", browser='yes'):
+    banner("START WEB SERVER")
+    local("cd cloudmesh_web; python {0}.py &".format(server))
+    # view(link)
+    
 @task
 def view(link=""):
     """run the browser"""
