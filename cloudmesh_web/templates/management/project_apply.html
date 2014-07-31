@@ -1,5 +1,61 @@
-{% extends "form.html" %}
+{% extends "layout/layout_blank.html" %}
 
-{% block title %}
-Project Application
+
+{% macro render_field(field) %}
+  <tr>
+  <td bgcolor="#CCCCCC"> <i>{{ field.label }}</i></td>
+  <td>{{ field(**kwargs)|safe }} 
+  <br>
+  {% if field.errors %}
+    <font color="red">
+    <dl class=errors>
+    {% for error in field.errors %}
+      <dd>  <i class="fa fa-exclamation-triangle"></i> {{ error }}</dd>
+    {% endfor %}
+    </dl>
+    </font>    
+  {% endif %}
+  </td>
+  </tr>
+{% endmacro %}
+
+{% block content %}  
+
+<legend> {{ title }} </legend>
+  
+<form method="post">
+
+  <table class="table table-condensed">
+    <tbody>
+      <tr>
+	<th colspan="2" bgcolor="#CCCCCC"> Profile </th>
+      </tr>    
+      {% for field in fields %}
+        {{ render_field(form[field]) }}
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <div class="control-group">
+  <label class="control-label" for="button_submit"></label>
+  <div class="controls">
+
+    {% for state in states %}
+        <button id="button_{{ state }}" value="{{ state }}"
+            name="button"
+            {% if state == 'save' %}
+               class="btn btn-success"
+            {% elif state == 'cancel' %}
+               class="btn btn-danger"
+            {% else %}
+                class="btn"
+            {% endif %}
+         >{{ state|capitalize }}
+    </button>
+    {% endfor %}
+
+  </div>
+</div>
+</div>
+</form>
 {% endblock %}

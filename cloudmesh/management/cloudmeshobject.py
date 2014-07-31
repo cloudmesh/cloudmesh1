@@ -1,10 +1,93 @@
 import datetime, time
 from mongoengine import Document
 from mongoengine import *
-
 from mongoengine import fields
+import mongoengine
 
 duration_in_weeks = 24
+
+def order(mongo_class, exclude=None, include=None, custom=None, kind=None):
+    class_fields = list(mongo_class.__dict__["_fields_ordered"])
+    if kind in ['required', 'optional']:
+        required = [k for k,v in mongo_class._fields.iteritems() if v.required]
+        fields = class_fields
+        optional = []
+        for key in class_fields:
+            if key not in required:
+                fields.remove(key)
+                optional.append(key)
+
+        return (fields, optional)
+    elif kind == "all":
+        fields = class_fields
+    else:
+        if include is not None:
+            fields = include
+            for key in fields:
+                if not key in class_fields:
+                    print "Error: {0} not in fields".format(class_fields)
+        else:
+            fields = class_fields
+
+        if exclude is not None:
+            for key in exclude:
+                fields.remove(key)
+
+    return fields
+
+def html_input_type(object, field):
+    map = {mongoengine.fields.StringField: 'text'}    
+    # checkbox
+    # textarea
+    kind = type(object._fields[field])
+    try:
+        html_type = map[kind]
+    except Exception,e:
+        print "ERROR: {0} not supported".format(kind)
+    return html_type
+
+def wtf_type(object, field):
+    return True
+
+
+def make_form_list(object, fields, title="Form", format="p", capital=True):
+    print title
+
+    if format =="p":
+        line_start="<p>"
+        line_end="</p>"
+        field_start=""
+        field_end=""                        
+    elif format =="table":
+        line_start="<tr>"
+        line_end="</tr>"
+        field_start="<td>"
+        field_end="</td>"                        
+
+    labels = {}
+    for label in fields:
+        if capital:
+            labels[label] = label.capitalize()
+        else:
+            labels[label] = label
+
+    form = ""
+    for key in fields:
+        kind = html_input_type(object, key)
+        form += '''
+            {line_start}
+                {field_start} <b>{label}</b> {field_end} 
+                {field_start} <input name="{key}" type="{input_type}"> {field_end} 
+            {line_end}'''.format(line_start=line_start,
+                                    line_end=line_end,
+                                    field_start=field_start,
+                                    field_end=field_end,                                   
+                                    key=key,
+                                    label=labels[key],
+                                    input_type=kind)
+    return form
+
+
 
 class CloudmeshObject(Document):
     '''

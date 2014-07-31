@@ -1,9 +1,11 @@
 from user import User, Users
+import mongoengine
+from cloudmeshobject import order, make_form_list
 
 def main():
 
-    users = Users()
-    users.clear()
+    # users = Users()
+    # users.clear()
     
     gregor = User(
         title = "",
@@ -21,13 +23,50 @@ def main():
         citizenship = "Germany",
         bio = "I work at Indiana University Bloomington",
     )
-
+    
+    
     from pprint import pprint 
     import sys
+    print 70 * "="    
+    print 70 * "="
+    pprint (User.__dict__.keys())    
+    print 70 * "="
+    pprint (User._db_field_map)
+    print 70 * "="
+    pprint (User._fields_ordered)        
     pprint (User.__dict__)
-    print gregor.fields()
-    print gregor.fields("optinal")
-    print gregor.fields("required")
+
+    print 70 * "="
+    pprint (User._fields)    
+    print 70 * "="
+    print type(User._fields["bio"])
+    print type(User._fields["bio"]) == mongoengine.fields.StringField
+    print type(User._fields["bio"]) == mongoengine.fields.URLField
+    print 70 * "x"
+
+
+        
+    
+    print order(User)
+    print order(User, include=['username'])
+    print order(User, exclude=['id'])        
+    print order(User, include=['username','lastname'], exclude=['lastname'])
+    print 70 * "o"
+    print User._fields
+    print 70 *  "p"
+    print order(User, kind="required")
+    print order(User, kind="all")
+
+
+
+        
+    make_form_list (User, ['username', 'firstname'], format="table", capital=False)
+       
+        
+    """
+    # print gregor.fields()
+    # print gregor.fields("optinal")
+    # print gregor.fields("required")
     print "\n".join(gregor._fields)
     print "ORDER", gregor.order
     print gregor.json()
@@ -55,7 +94,8 @@ def main():
     n = User()
     n.set_from_dict(d)
     print "NNNNN", n
-    n.save()
+    #n.save()
+
     sys.exit()
     
     users.add(gregor)
@@ -64,6 +104,7 @@ def main():
     print gregor.date_deactivate
 
 
+    
 
     sys.exit()
     print
@@ -93,7 +134,7 @@ def main():
     print users.find_user("gregvon12")
     
     #users.find()
-
+    """
 
 if __name__ == "__main__":
     main()
