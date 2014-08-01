@@ -25,9 +25,11 @@ def shell_command_cloud(arguments):
                 cloud off [CLOUD]
                 cloud add CLOUDFILE [--force]
                 cloud remove [CLOUD|--all]
-                cloud default [CLOUD] [--flavorset|--imageset]
-                cloud default --all
-
+                cloud default [CLOUD|--all]
+                cloud setflavor [CLOUD]
+                cloud setimage [CLOUD]
+                cloud setdefault [CLOUD]
+                
             Arguments:
 
               CLOUD          the name of a cloud to work on
@@ -43,8 +45,6 @@ def shell_command_cloud(arguments):
                                  type, heading, user, credentials, defaults
                                  (all to diplay all, semiall to display all
                                  except credentials and defaults)
-               --flavorset       set the default flavor of a cloud
-               --imageset        set the image flavor of a cloud
                --all             work on all clouds
                --force           if same cloud exists in database, it will be 
                                  overwritten
@@ -91,13 +91,19 @@ def shell_command_cloud(arguments):
                     will be reomved.
                     CAUTION: remove all is enabled(remove --all)
                     
-                cloud default [CLOUD] [--flavorset|--imageset]
-                cloud default --all
-                    view or manage cloud's default flavor and image
+                cloud default [CLOUD|--all]
+                cloud setflavor [CLOUD]
+                cloud setimage [CLOUD]
+                cloud setdefault [CLOUD]
+                    view or manage cloud's default flavor and image, and set default 
+                    cloud
                     options: CLOUD, specify a cloud to work on, otherwise selected 
-                             cloud will be used, --all to display all clouds defaults
-                             --setflavor, set default flaovr
-                             --setimage, set default image
+                             cloud will be used
+                             default, list default infomation of cloud, --all to 
+                                      display all clouds defaults
+                             setflavor, set default flaovr of a cloud
+                             setimage, set default image of a cloud
+                             setcloud, set default cloud
 
     """
     call = CloudCommand(arguments)
@@ -115,12 +121,16 @@ class CloudManage(object):
     
     
     def get_clouds(self, username, admin=False, getone=False, cloudname=None):
+        '''
+        retreive cloud information from db_clouds
+        '''
         if getone:
             return self.mongo.db_clouds.find_one({'cm_kind': 'cloud', 'cm_user_id': username, 'cm_cloud': cloudname})
         if admin: 
             return self.mongo.db_clouds.find({'cm_kind': 'cloud'})
         else:
             return self.mongo.db_clouds.find({'cm_kind': 'cloud', 'cm_user_id': username})
+        
         
     def get_selected_cloud(self, username):
         user = self.mongo.db_user.find_one({'cm_user_id': username})
@@ -135,13 +145,33 @@ class CloudManage(object):
                 sys.exit()
             self.mongo.db_user.update({'cm_user_id': username}, {'$set': {'selected_cloud': cloud}})
         
-        return cloud
+        return cloud.encode("ascii")
+    
     
     def update_selected_cloud(self, username, cloudname):
+        '''
+        set user selected cloud, which is current worked on cloud in the shell
+        '''
         self.mongo.db_user.update({'cm_user_id': username}, {'$set': {'selected_cloud': cloudname}})
     
+    
+    def get_default_cloud(self, username):
+        '''
+        get the default cloud, return None if not set
+        '''
+        try:
+            cloud = self.mongo.db_defaults.find_one({'cm_user_id': username})['cloud']
+        except:
+            cloud = None
+        return cloud
+    
+    
     def update_default_cloud(self, username, cloudname):
+        '''
+        set default cloud
+        '''
         self.mongo.db_defaults.update({'cm_user_id': username}, {'$set': {'cloud': cloudname}})
+    
     
     def update_cloud_name(self, username, cloudname, newname):
         '''
@@ -159,6 +189,7 @@ class CloudManage(object):
                 self.update_default_cloud(username, newname)
         except:
             pass    
+     
         
     def activate_cloud(self, username, cloudname):
         '''
@@ -175,6 +206,7 @@ class CloudManage(object):
                 defaults['activeclouds'].append(cloudname)
             self.mongo.db_defaults.update({'cm_user_id': username}, defaults, upsert=True)
             return 1
+    
     
     def deactivate_cloud(self, username, cloudname):
         '''
@@ -213,6 +245,10 @@ class CloudManage(object):
         d['cm_cloud']=cloudname
         d['cm_kind']='cloud'
         d['cm_user_id']=username
+        
+        #remove default part from yaml
+        if d['default']:
+            del d['default']
                 
         self.mongo.db_clouds.insert(d)
 
@@ -231,6 +267,232 @@ class CloudManage(object):
         if cloudname == cloud:
             self.mongo.db_user.update({'cm_user_id': username}, {'$unset': {'selected_cloud': ''}})
 
+
+    def get_cloud_defaultinfo(self, username, cloudname):
+        '''
+        return names of dfault flavor and image of a cloud, none if not exits
+        '''
+        res = {}
+        
+        flavor_id = self.get_default_flavor_id(username, cloudname)
+        if flavor_id == None:
+            flavorname = "none"
+        else:
+            try:
+                flavorname = self.get_flavors(cloudname=cloudname, getone=True, id=flavor_id)['name']
+            except:
+                log.error("problem in retriving flavor name")
+                flavorname = 'none'
+        res['flavor'] = flavorname
+        
+        image_id = self.get_default_image_id(username, cloudname)
+        if image_id == None:
+            imagename = "none"
+        else:
+            try:
+                imagename = self.get_images(cloudname=cloudname, getone=True, id=image_id)['name']
+            except:
+                log.error("problem in retriving image name")
+                imagename = 'none'
+        res['image'] = imagename
+        
+        return res
+        
+        
+        
+    def get_default_flavor_id(self, username, cloudname):
+        '''
+        return the id of the dafault flavor of a cloud
+        '''
+        flavor_id = None
+        try:
+            flavor_id = self.mongo.db_defaults.find_one({'cm_user_id': username})['flavors'][cloudname]
+        except:
+            pass
+        return flavor_id 
+    
+    
+    def update_default_flavor_id(self, username, cloudname, id):
+        '''
+        update the id of default flavor of a cloud
+        '''
+        self.mongo.db_defaults.update({'cm_user_id': username}, {'$set': {'flavors': {cloudname: id}}})
+    
+  
+        
+    def get_flavors(self, getall=False, cloudname=None, getone=False, id=None):
+        '''
+        retrieve flavor information from db_clouds
+        '''
+        if getone:
+            return self.mongo.db_clouds.find_one({'cm_kind': 'flavors', 'cm_cloud': cloudname, 'id': id})
+        elif getall:
+            return self.mongo.db_clouds.find({'cm_kind': 'flavors'})
+        else:
+            return self.mongo.db_clouds.find({'cm_kind': 'flavors', 'cm_cloud': cloudname})
+        
+    
+        
+    def get_default_image_id(self, username, cloudname):
+        '''
+        return the id of the dafault image of a cloud
+        '''
+        image_id = None
+        try:
+            image_id = self.mongo.db_defaults.find_one({'cm_user_id': username})['images'][cloudname]
+        except:
+            pass
+        return image_id 
+    
+    def update_default_image_id(self, username, cloudname, id):
+        '''
+        update the id of default image of a cloud
+        '''
+        self.mongo.db_defaults.update({'cm_user_id': username}, {'$set': {'images': {cloudname: id}}})
+    
+    
+        
+    def get_images(self, getall=False, cloudname=None, getone=False, id=None):
+        '''
+        retrieve image information from db_clouds
+        '''
+        if getone:
+            return self.mongo.db_clouds.find_one({'cm_kind': 'images', 'cm_cloud': cloudname, 'id': id})
+        elif getall:
+            return self.mongo.db_clouds.find({'cm_kind': 'images'})
+        else:
+            return self.mongo.db_clouds.find({'cm_kind': 'images', 'cm_cloud': cloudname})
+
+   
+    # ------------------------------------------------------------------------
+    # supporting functions for shell
+    # ------------------------------------------------------------------------
+    def print_cloud_flavors(self, username=None, cloudname=None, itemkeys=None, refresh=False, output=False):
+        '''
+        prints flavors of a cloud in shell
+        :param username: string user name
+        :param cloudname: string one cloud name
+        :param itemkesys: a list of lists, each list's first item will be used as header name, the folling ones
+        are the path to the value that user wants in the dict, for example:
+            itemkeys = [
+                         ['id', 'id'],
+                         ['name', 'name'],
+                         ['vcpus', 'vcpus'],
+                         ['ram', 'ram'],
+                         ['disk', 'disk'],
+                         ['refresh time', 'cm_refrsh']
+                       ]
+                       first id is the header name, second id is a path
+        :param refresh: refresh flavors of the cloud before printing
+        :param output: designed for shell command 'cloud setflavor', output flavor names
+        '''
+        if refresh:
+            self.mongo.activate(cm_user_id=username, names=[cloudname])
+            self.mongo.refresh(cm_user_id=username, names=[cloudname], types=['flavors'])
+            
+        flavors_dict = self.mongo.flavors(clouds=[cloudname], cm_user_id=username)
+        
+        if output:
+            flavor_names = []
+            flavor_ids = []
+            headers = ['index']
+        else:
+            headers = []
+            
+        index = 1
+        to_print = []
+        
+        def _getFromDict(dataDict, mapList):
+            #ref: http://stackoverflow.com/questions/14692690/access-python-nested-dictionary-items-via-a-list-of-keys
+            return reduce(lambda d, k: d[k], mapList, dataDict)
+        
+        for i, v in flavors_dict[cloudname].iteritems():
+            values = []
+            if output:
+                values.append(str(index))
+                flavor_names.append(v['name'])
+                flavor_ids.append(v['id'])
+                
+            for k in itemkeys:
+                headers.append(k[0])
+                try:
+                    values.append(str(_getFromDict(v, k[1:])))
+                except:
+                    #print sys.exc_info()
+                    values.append(None)
+            index = index + 1
+            to_print.append(values)
+        
+        count = index-1
+        
+        sentence =  "flavors of cloud '{0}'".format(cloudname)
+        print "+"+"-"*(len(sentence)-2)+"+"
+        print sentence
+        print tabulate(to_print, headers, tablefmt="grid")
+        sentence = "count: {0}".format(count)
+        print sentence
+        print "+"+"-"*(len(sentence)-2)+"+"
+        
+        if output:
+            return [flavor_names, flavor_ids]
+    
+    
+    def print_cloud_images(self, username=None, cloudname=None, itemkeys=None, refresh=False, output=False):
+        '''
+        refer to print_cloud_flavors
+        '''
+        if refresh:
+            self.mongo.activate(cm_user_id=username, names=[cloudname])
+            self.mongo.refresh(cm_user_id=username, names=[cloudname], types=['images'])
+            
+        images_dict = self.mongo.images(clouds=[cloudname], cm_user_id=username)
+        
+        if output:
+            image_names = []
+            image_ids = []
+            headers = ['index']
+        else:
+            headers = []
+            
+        index = 1
+        to_print = []
+        
+        def _getFromDict(dataDict, mapList):
+            #ref: http://stackoverflow.com/questions/14692690/access-python-nested-dictionary-items-via-a-list-of-keys
+            return reduce(lambda d, k: d[k], mapList, dataDict)
+        
+        for i, v in images_dict[cloudname].iteritems():
+            values = []
+            cm_type = v['cm_type']
+            if output:
+                values.append(str(index))
+                image_names.append(v['name'])
+                image_ids.append(v['id'])
+                
+            for k in itemkeys[cm_type]:
+                headers.append(k[0])
+                try:
+                    values.append(str(_getFromDict(v, k[1:])))
+                except:
+                    #print sys.exc_info()
+                    values.append(None)
+            index = index + 1
+            to_print.append(values)
+        
+        count = index-1
+            
+        sentence =  "images of cloud '{0}'".format(cloudname)
+        print "+"+"-"*(len(sentence)-2)+"+"
+        print sentence
+        print tabulate(to_print, headers, tablefmt="grid")
+        sentence = "count: {0}".format(count)
+        print sentence
+        print "+"+"-"*(len(sentence)-2)+"+"
+        
+        if output:
+            return [image_names, image_ids]
+    
+    # ------------------------------------------------------------------------
     
 class CloudCommand(CloudManage):
     '''
@@ -297,11 +559,18 @@ class CloudCommand(CloudManage):
         for cloud in clouds:
             res = []
             for key in standard_headers:
+                # -------------------------------------------------
+                # special informations from other place
+                # -------------------------------------------------
                 if key == "active":
                     if cloud['cm_cloud'] in activeclouds:
                         res.append('True')
                     else:
                         res.append(' ')
+                elif key == "default":
+                    defaultinfo = self.get_cloud_defaultinfo(self.username, cloud['cm_cloud'])
+                    res.append(str(defaultinfo))
+                # -------------------------------------------------
                 else:
                     try:
                         res.append(str(cloud[key]))
@@ -320,12 +589,20 @@ class CloudCommand(CloudManage):
             cloud = dict_uni_to_ascii(cloud)
             banner(cloud['cm_cloud'])
             pprint(cloud)
+            # -------------------------------------------------
+            # special informations from other place
+            # -------------------------------------------------
             print "#", 70 * "-"
             if cloud['cm_cloud'] in self.mongo.active_clouds(self.username):
                 print "active: True"
             else:
                 print "active: False"
+                
+            defaultinfo = self.get_cloud_defaultinfo(self.username, cloud['cm_cloud'])
+            print "default flavor: {0}".format(defaultinfo['flavor'])
+            print "default image: {0}".format(defaultinfo['image'])
             print "#", 70 * "#", "\n"
+            # -------------------------------------------------
             
         if self.args['CLOUD']:
             cloud = self.get_clouds(self.username, getone=True, cloudname=self.args['CLOUD'])
@@ -357,7 +634,7 @@ class CloudCommand(CloudManage):
                 log.warning("no cloud information of '{0}' in database, please import it by 'cloud add CLOUDFILE'".format(self.args['CLOUD']))
                 return
             self.update_selected_cloud(self.username, self.args['CLOUD'])
-            log.info("cloud '{0}' is selected".format(self.args['CLOUD']))
+            print "cloud '{0}' is selected".format(self.args['CLOUD'])
         else:
             clouds = self.get_clouds(self.username)
             cloud_names = []
@@ -367,7 +644,7 @@ class CloudCommand(CloudManage):
             res = menu_return_num(title="select a cloud", menu_list=cloud_names, tries=3)
             if res == 'q': return
             self.update_selected_cloud(self.username, cloud_names[res])
-            log.info("cloud '{0}' is selected".format(cloud_names[res]))
+            print "cloud '{0}' is selected".format(cloud_names[res])
             
     def _cloud_alias(self):
         if self.args['CLOUD']:
@@ -472,9 +749,159 @@ class CloudCommand(CloudManage):
         else:
             return
         
-
+    def _cloud_list_default(self):
+        '''
+        think: refresh before list?
+        '''
+        headers = ['cloud', 'default flavor', 'default image']
+        to_print = []
+        if self.args['--all']:
+            #list all clouds' default flavor and image, default cloud
+            
+            clouds = self.get_clouds(self.username)
+            clouds = clouds.sort([('cm_cloud', 1)])
+            for cloud in clouds:
+                defaultinfo = self.get_cloud_defaultinfo(self.username, cloud['cm_cloud'])
+                row = [cloud['cm_cloud'].encode("ascii"), defaultinfo['flavor'], defaultinfo['image']]
+                to_print.append(row)
+            print tabulate(to_print, headers, tablefmt="grid")
+            
+            current_default = self.get_default_cloud(self.username)
+            sentence =  "current default cloud '{0}'".format(current_default)
+            print "+"+"-"*(len(sentence)-2)+"+"
+            print sentence
+            print "+"+"-"*(len(sentence)-2)+"+"
+        else:
+            name = self.get_working_cloud_name()
+            if name:
+                defaultinfo = self.get_cloud_defaultinfo(self.username, name)
+                to_print = [[name, defaultinfo['flavor'], defaultinfo['image']]]
+                print tabulate(to_print, headers, tablefmt="grid")
+            else:
+                return
+    
+    def _cloud_set_default_cloud(self):
+        name = self.get_working_cloud_name()
+        if name:
+            current_default = self.get_default_cloud(self.username)
+            sentence =  "current default cloud '{0}'".format(current_default)
+            print "+"+"-"*(len(sentence)-2)+"+"
+            print sentence
+            print "+"+"-"*(len(sentence)-2)+"+"
+            if yn_choice("set default cloud to '{0}'?".format(name), default = 'n', tries = 3):
+                self.update_default_cloud(self.username, name)
+            else:
+                return
+        else:
+            return
+        
+        
+    def _cloud_set_flavor(self):
+        '''
+        refresh before actually select a flaovr of the cloud
+        '''
+        name = self.get_working_cloud_name()
+        if name:
+            itemkeys = [
+                     	['id', 'id'],
+                     	['name', 'name'],
+                     	['vcpus', 'vcpus'],
+                     	['ram', 'ram'],
+                     	['disk', 'disk'],
+                     	['refresh time', 'cm_refresh']
+                       ]
+            flavor_lists = self.print_cloud_flavors(username=self.username, cloudname=name, itemkeys=itemkeys, refresh=False, output=True)
+            res = menu_return_num(title="select a flavor by index", menu_list=flavor_lists[0], tries=3)
+            if res == 'q': return
+            self.update_default_flavor_id(self.username, name, flavor_lists[1][res])
+            print "'{0}' is selected".format(flavor_lists[0][res])
+        else:
+            return
+        
+        
+    def _cloud_set_image(self):
+        '''
+        refresh before actually select a image of the cloud
+        '''
+        name = self.get_working_cloud_name()
+        if name:
+            itemkeys = {"openstack":
+                        [
+                            # [ "Metadata", "metadata"],
+                            [ "name" , "name"],
+                            [ "status" , "status"],
+                            [ "id", "id"],
+                            [ "type_id" , "metadata", "instance_type_id"],
+                            [ "iname" , "metadata", "instance_type_name"],
+                            [ "location" , "metadata", "image_location"],
+                            [ "state" , "metadata", "image_state"],
+                            [ "updated" , "updated"],
+                            #[ "minDisk" , "minDisk"],
+                            [ "memory_mb" , "metadata", 'instance_type_memory_mb'],
+                            [ "fid" , "metadata", "instance_type_flavorid"],
+                            [ "vcpus" , "metadata", "instance_type_vcpus"],
+                            #[ "user_id" , "metadata", "user_id"],
+                            #[ "owner_id" , "metadata", "owner_id"],
+                            #[ "gb" , "metadata", "instance_type_root_gb"],
+                            #[ "arch", ""]
+                        ],
+                      "ec2":
+                        [
+                            # [ "Metadata", "metadata"],
+                            [ "state" , "extra", "state"],
+                            [ "name" , "name"],
+                            [ "id" , "id"],
+                            [ "public" , "extra", "is_public"],
+                            [ "ownerid" , "extra", "owner_id"],
+                            [ "imagetype" , "extra", "image_type"]
+                        ],
+                      "azure":
+                        [
+                            [ "name", "label"],
+                            [ "category", "category"],
+                            [ "id", "id"],
+                            [ "size", "logical_size_in_gb" ],
+                            [ "os", "os" ]
+                        ],
+                      "aws":
+                        [
+                            [ "state", "extra", "state"],
+                            [ "name" , "name"],
+                            [ "id" , "id"],
+                            [ "public" , "extra", "ispublic"],
+                            [ "ownerid" , "extra", "ownerid"],
+                            [ "imagetype" , "extra", "imagetype"]
+                        ]
+                     }
+            image_lists = self.print_cloud_images(username=self.username, cloudname=name, itemkeys=itemkeys, refresh=False, output=True)
+            res = menu_return_num(title="select a image by index", menu_list=image_lists[0], tries=3)
+            if res == 'q': return
+            self.update_default_image_id(self.username, name, image_lists[1][res])
+            print "'{0}' is selected".format(image_lists[0][res])
+        else:
+            return
+     
+        
+        
+        
+        
+    # --------------------------------------------------------------------------
+    def get_working_cloud_name(self):
+        '''
+        get the name of a cloud to be work on, if CLOUD not given, will pick the
+        elected cloud
+        '''
+        if self.args['CLOUD']:
+            name = self.args['CLOUD']
+        else:
+            name = self.get_selected_cloud(self.username)
+        if self.get_clouds(self.username, getone=True, cloudname=name) == None:
+            log.error("no cloud information of '{0}' in database".format(name))
+            return False
+        return name
 
     def call_procedure(self):
+        #print self.args ###########
         if self.args['list'] == True:
             call = 'list'
         elif self.args['info'] == True:
@@ -492,12 +919,23 @@ class CloudCommand(CloudManage):
         elif self.args['remove'] == True:
             call = 'remove'
         elif self.args['default'] == True:
-            pass
+            call = 'list_default'
+        elif self.args['setflavor'] == True:
+            call = 'set_flavor'
+        elif self.args['setimage'] == True:
+            call = 'set_image'
+        elif self.args['setdefault'] == True:
+            call = 'set_default_cloud'
         else:
             call = 'list'
         func = getattr(self, "_cloud_" + call)
         func()
     
     
-    
-    
+# ------------------------------------------------------------------------
+# supporting functions 
+# ------------------------------------------------------------------------
+  
+
+# ------------------------------------------------------------------------
+
