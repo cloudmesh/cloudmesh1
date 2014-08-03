@@ -316,7 +316,13 @@ class CloudManage(object):
         '''
         update the id of default flavor of a cloud
         '''
-        self.mongo.db_defaults.update({'cm_user_id': username}, {'$set': {'flavors': {cloudname: id}}})
+        flavors = {}
+        try:
+            flavors = self.mongo.db_defaults.find_one({'cm_user_id': username})['flavors']
+        except:
+            pass
+        flavors[cloudname] = id
+        self.mongo.db_defaults.update({'cm_user_id': username}, {'$set': {'flavors': flavors}})
     
   
         
@@ -348,7 +354,13 @@ class CloudManage(object):
         '''
         update the id of default image of a cloud
         '''
-        self.mongo.db_defaults.update({'cm_user_id': username}, {'$set': {'images': {cloudname: id}}})
+        images = {}
+        try:
+            images = self.mongo.db_defaults.find_one({'cm_user_id': username})['images']
+        except:
+            pass
+        images[cloudname] = id
+        self.mongo.db_defaults.update({'cm_user_id': username}, {'$set': {'images': images}})
     
     
         
@@ -492,6 +504,71 @@ class CloudManage(object):
         if output:
             return [image_names, image_ids]
     
+    
+    def print_cloud_servers(self, username=None, cloudname=None, itemkeys=None, refresh=False, output=False):
+        '''
+        refer to print_cloud_flavors
+        '''
+        if refresh:
+            self.mongo.activate(cm_user_id=username, names=[cloudname])
+            self.mongo.refresh(cm_user_id=username, names=[cloudname], types=['servers'])
+            
+        servers_dict = self.mongo.servers(clouds=[cloudname], cm_user_id=username)
+        
+        if output:
+            server_names = []
+            server_ids = []
+            headers = ['index']
+        else:
+            headers = []
+            
+        index = 1
+        to_print = []
+        
+        def _getFromDict(dataDict, mapList):
+            #ref: http://stackoverflow.com/questions/14692690/access-python-nested-dictionary-items-via-a-list-of-keys
+            return reduce(lambda d, k: d[k], mapList, dataDict)
+        
+        for i, v in servers_dict[cloudname].iteritems():
+            values = []
+            cm_type = v['cm_type']
+            if output:
+                values.append(str(index))
+                server_names.append(v['name'])
+                server_ids.append(v['id'])
+                
+            for k in itemkeys[cm_type]:
+                headers.append(k[0])
+                try:
+                    val = _getFromDict(v, k[1:])
+                    # ----------------------------------------
+                    # special handler
+                    # ----------------------------------------
+                    if cm_type == "openstack" and k[0] == 'addresses':
+                        tmp = ''
+                        for i in val['private']:
+                            tmp = tmp + i['addr'] + ', '
+                        val = tmp[:-2]
+                    # ----------------------------------------
+                    values.append(str(val))
+                except:
+                    #print sys.exc_info()
+                    values.append(None)
+            index = index + 1
+            to_print.append(values)
+        
+        count = index-1
+            
+        sentence =  "vms of cloud '{0}'".format(cloudname)
+        print "+"+"-"*(len(sentence)-2)+"+"
+        print sentence
+        print tabulate(to_print, headers, tablefmt="grid")
+        sentence = "count: {0}".format(count)
+        print sentence
+        print "+"+"-"*(len(sentence)-2)+"+"
+        
+        if output:
+            return [server_names, server_ids]
     # ------------------------------------------------------------------------
     
 class CloudCommand(CloudManage):
@@ -810,7 +887,7 @@ class CloudCommand(CloudManage):
                      	['disk', 'disk'],
                      	['refresh time', 'cm_refresh']
                        ]
-            flavor_lists = self.print_cloud_flavors(username=self.username, cloudname=name, itemkeys=itemkeys, refresh=False, output=True)
+            flavor_lists = self.print_cloud_flavors(username=self.username, cloudname=name, itemkeys=itemkeys, refresh=True, output=True)
             res = menu_return_num(title="select a flavor by index", menu_list=flavor_lists[0], tries=3)
             if res == 'q': return
             self.update_default_flavor_id(self.username, name, flavor_lists[1][res])
@@ -873,7 +950,7 @@ class CloudCommand(CloudManage):
                             [ "imagetype" , "extra", "imagetype"]
                         ]
                      }
-            image_lists = self.print_cloud_images(username=self.username, cloudname=name, itemkeys=itemkeys, refresh=False, output=True)
+            image_lists = self.print_cloud_images(username=self.username, cloudname=name, itemkeys=itemkeys, refresh=True, output=True)
             res = menu_return_num(title="select a image by index", menu_list=image_lists[0], tries=3)
             if res == 'q': return
             self.update_default_image_id(self.username, name, image_lists[1][res])
@@ -889,7 +966,7 @@ class CloudCommand(CloudManage):
     def get_working_cloud_name(self):
         '''
         get the name of a cloud to be work on, if CLOUD not given, will pick the
-        elected cloud
+        selected cloud
         '''
         if self.args['CLOUD']:
             name = self.args['CLOUD']
