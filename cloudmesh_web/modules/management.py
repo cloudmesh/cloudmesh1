@@ -468,13 +468,41 @@ def management_project_list():
     return render_template('management/project_list.html', projects=projects, with_edit="False", title="Project List")
 
 
-@management_module.route('/m/user/manage')
+@management_module.route('/m/user/manage', methods=['GET', 'POST'])
 @login_required
 def management_user_manage():
 
     connect ('user', port=27777)
     users = MongoUser.objects()
-    return render_template('management/user_manage.html', users=users, with_edit="True", title="User Management")
+
+    if request.method == 'POST':
+        #
+        # check for selection
+        #
+        if 'selectedusers' in request.form:
+            data = dict(request.form)
+            usernames = data['selectedusers']
+            action = str(data['button'][0])
+
+            if action == 'delete':
+
+                for username in usernames:
+                    user = MongoUser.objects(username=username)[0]                    
+                    user.delete()
+
+            else:
+
+                for username in usernames:
+                    user = MongoUser.objects(username=username)[0]
+                    user.status = action                
+                    user.save()
+
+
+    users = MongoUser.objects()    
+    return render_template('management/user_manage.html',
+                           users=users,
+                           with_edit="True",
+                           states=['approved', 'pending', 'denied', 'blocked', 'delete'],                                                        title="User Management")
 
 @management_module.route('/m/user/list')
 @login_required
