@@ -1,0 +1,85 @@
+{% extends 'layout/layout.html' %}
+
+
+{% macro render_field(field, with_add) %}
+
+  <tr>
+  <th>
+    <i>{{ field.label }}</i>
+  </th>
+
+
+    <td>
+      {% if field.type == 'FieldList' %}
+         {% for subfield in field.entires %}
+            {% if subfield.type == 'StringField' %}
+               {{ field }}
+          {% endif %}
+       {% endfor %}
+       <input id="{{ field.id}}-add" name="{{ field.id}}-add">
+          {% if field.type == 'FieldList' %}
+	<button id="button_{{ field.id }}" value="{{ field.id }}"
+	        name="button_{{ field.id }}"
+                class="btn btn-mini"> <i class="fa fa-lg fa-plus-circle"></i>  </button>
+    {% endif %}
+   
+
+      {% else %}
+        {{ field(**kwargs)|safe }}
+      {% endif %} 
+  <br>
+  {% if field.errors %}
+    <font color="red">
+    <dl class=errors>
+    {% for error in field.errors %}
+      <dd>  <i class="fa fa-exclamation-triangle"></i> {{ error }}</dd>
+    {% endfor %}
+    </dl>
+    </font>    
+  {% endif %}
+  </td>
+
+  </tr>
+{% endmacro %}
+
+{% block content %}  
+
+<legend> {{ title }} </legend>
+
+<form method="post">
+
+  <legend> Profile </legend>
+  <table class="table table-condensed">
+    <tbody>
+      <tr>
+	<th colspan="2" bgcolor="0066CC"> Profile </th>
+      </tr>    
+      {% for field in fields %}
+         {{ render_field(form[field]) }}
+      {% endfor %}
+
+      </tbody>
+  </table>
+  <div class="control-group">
+  <label class="control-label" for="button_submit"></label>
+  <div class="controls">
+
+    {% for state in states %}
+        <button id="button_{{ state }}" value="{{ state }}"
+            name="button"
+            {% if state == 'save' %}
+               class="btn btn-success"
+            {% elif state == 'cancel' %}
+               class="btn btn-danger"
+            {% else %}
+                class="btn"
+            {% endif %}
+         >{{ state|capitalize }}
+    </button>
+    {% endfor %}
+
+  </div>
+
+  </form>
+
+  {% endblock %}

@@ -163,7 +163,6 @@ config = s_config
 SECRET_KEY = config.get('cloudmesh.server.webui.secret')
 DEBUG = debug
 
-
 # ============================================================
 # STARTING THE FLASK APP
 # ============================================================
