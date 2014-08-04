@@ -24,7 +24,7 @@ Routes
   metric/cloud/<cloud>/<user>/<metric>/<start>/<end>/<period>
 
 
-is eqal to ::
+is equal to ::
 
   cm-metric <cloud> -s <start>
                   -e <end> 
