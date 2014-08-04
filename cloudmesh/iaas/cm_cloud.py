@@ -196,7 +196,8 @@ class CloudManage(object):
         activate a cloud 
         '''
         cloud = self.mongo.get_cloud(cm_user_id=username, cloud_name=cloudname, force=True)
-        if cloud == None:
+
+        if not cloud:
             return 0
         else: 
             defaults = self.mongo.db_defaults.find_one({'cm_user_id': username})
@@ -761,7 +762,7 @@ class CloudCommand(CloudManage):
         if self.get_clouds(self.username, getone=True, cloudname=name) == None:
             log.error("no cloud information of '{0}' in database".format(name))
             return
-        if yn_choice("activate cloud '{0}'?".format(name), default = 'n', tries = 3):
+        if yn_choice("deactivate cloud '{0}'?".format(name), default = 'n', tries = 3):
             self.deactivate_cloud(self.username, name)
             print "cloud '{0}' deactivated.".format(name)
         else:
