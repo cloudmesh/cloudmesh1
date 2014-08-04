@@ -1,9 +1,9 @@
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.cm_cloud import CloudManage
 from cloudmesh_common.logger import LOGGER
+from tabulate import tabulate
 
 from pprint import pprint
-from tabulate import tabulate
 from cloudmesh.cm_mongo import cm_mongo
 
 
@@ -15,8 +15,8 @@ def shell_command_list(arguments):
         list flavor [CLOUD|--all] [--refresh]
         list server [CLOUD|--all] [--refresh]
         list image [CLOUD|--all] [--refresh]
-        list project NOT IMPLEMENTED
-        list cloud NOT IMPLEMENTED
+        list project
+        list cloud
 
     Arguments:
 
@@ -210,6 +210,66 @@ class ListInfo(object):
         else:
             return
         
+        
+    def _list_project(self):
+        selected_project = None
+        try:
+            selected_project = self.cloudmanage.mongo.db_defaults.find_one({'cm_user_id': self.username})['project']
+        except:
+            log.error("clould not find selected project in the database")
+        
+        print tabulate([[selected_project]], ["selected project"], tablefmt="simple")
+        print "\n"
+        
+        active_projects = None
+        try:
+            active_projects = self.cloudmanage.mongo.db_user.find_one({'cm_user_id': self.username})['projects']['active']
+        except:
+            log.error("clould not find active projects in the database")
+        to_print = []
+        if active_projects == None:
+            to_print = [None]
+        else:
+            for project in active_projects:
+                to_print.append([str(project)])
+        print tabulate(to_print, ["active projects"], tablefmt="simple")
+        print "\n"
+        
+        completed_projects = None
+        try:
+            completed_projects = self.cloudmanage.mongo.db_user.find_one({'cm_user_id': self.username})['projects']['completed']
+        except:
+            log.error("clould not find completed projects in the database")
+        to_print = []
+        if completed_projects == None:
+            to_print = [None]
+        else:
+            for project in completed_projects:
+                to_print.append([str(project)])
+        print tabulate(to_print, ["completed projects"], tablefmt="simple")
+        print "\n"
+        
+        
+    def _list_cloud(self):
+        active_clouds = []
+        other_clouds = []
+        activeclouds = self.cloudmanage.mongo.active_clouds(self.username)
+        clouds = self.cloudmanage.get_clouds(self.username)
+        clouds = clouds.sort([('cm_cloud', 1)])
+        for cloud in clouds:
+            name = cloud['cm_cloud']
+            if name in activeclouds:
+                active_clouds.append([str(name)])
+            else:
+                other_clouds.append([str(name)])
+        if active_clouds == []: active_clouds = [None]
+        if other_clouds == []: other_clouds = [None]
+        print tabulate(active_clouds, ["active clouds"], tablefmt="simple")
+        print "\n"
+        print tabulate(other_clouds, ["other clouds"], tablefmt="simple")
+        print "\n"
+            
+    
     # --------------------------------------------------------------------------
     def get_working_cloud_name(self):
         '''
@@ -248,9 +308,9 @@ class ListInfo(object):
         elif self.args['image'] == True:
             call = 'image'
         elif self.args['project'] == True:
-            pass
+            call = 'project'
         elif self.args['cloud'] == True:
-            pass
+            call = 'cloud'
         func = getattr(self, "_list_" + call)
         func()
         
