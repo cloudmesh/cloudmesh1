@@ -60,8 +60,8 @@ class ListInfo(object):
     
     username = config['cloudmesh']['profile']['username']
     
-    def __init__(self, args):
-        self.args = args
+    def __init__(self, arguments):
+        self.arguments = arguments
         
         
     def _list_flavor(self):
@@ -75,7 +75,7 @@ class ListInfo(object):
                          ['disk', 'disk'],
                          ['refresh time', 'cm_refresh']
                        ]
-            if self.args['--refresh']:
+            if self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['flavors'])
             for cloud in clouds:
@@ -136,7 +136,7 @@ class ListInfo(object):
                             [ "imagetype" , "extra", "imagetype"]
                         ]
                      }
-            if self.args['--refresh']:
+            if self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['images'])
             for cloud in clouds:
@@ -202,7 +202,7 @@ class ListInfo(object):
                           ['created','created'],
                       ]
                      }
-            if self.args['--refresh']:
+            if self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['servers'])
             for cloud in clouds:
@@ -282,14 +282,14 @@ class ListInfo(object):
             activeclouds = self.cloudmanage.mongo.active_clouds(self.username)
         except:
             pass
-        if self.args['--all']:
+        if self.arguments['--all']:
             if activeclouds == None:
                 print "no active cloud, please activate a cloud by 'cloud on [CLOUD]'"
                 return False
             return activeclouds
         else:
-            if self.args['CLOUD']:
-                name = self.args['CLOUD']
+            if self.arguments['CLOUD']:
+                name = self.arguments['CLOUD']
             else:
                 name = self.cloudmanage.get_selected_cloud(self.username)
             if self.cloudmanage.get_clouds(self.username, getone=True, cloudname=name) == None:
@@ -302,15 +302,16 @@ class ListInfo(object):
         
         
     def call_procedure(self):
-        if self.args['flavor'] == True:
+
+        if self.arguments['flavor'] == True:
             call = 'flavor'
-        elif self.args['server'] == True:
+        elif self.arguments['server'] == True:
             call = 'server'
-        elif self.args['image'] == True:
+        elif self.arguments['image'] == True:
             call = 'image'
-        elif self.args['project'] == True:
+        elif self.arguments['project'] == True:
             call = 'project'
-        elif self.args['cloud'] == True:
+        elif self.arguments['cloud'] == True:
             call = 'cloud'
         func = getattr(self, "_list_" + call)
         func()
