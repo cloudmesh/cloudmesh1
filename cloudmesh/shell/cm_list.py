@@ -2,8 +2,10 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.cm_cloud import CloudManage
 from cloudmesh_common.logger import LOGGER
 from tabulate import tabulate
+from pprint import pprint
 
-
+#list_command_table_format = "simple"
+list_command_table_format = "grid"
 
 
 log = LOGGER(__file__)
@@ -213,41 +215,41 @@ class ListInfo(object):
     def _list_project(self):
         selected_project = None
         try:
-            selected_project = self.cloudmanage.mongo.db_defaults.find_one({'cm_user_id': self.username})['project']
-        except:
+            selected_project = self.cloudmanage.mongo.db_defaults.find_one({'cm_user_id': self.username + "OIO"})['project']
+        except Exception, NoneType:
             log.error("clould not find selected project in the database")
-        
-        print tabulate([[selected_project]], ["selected project"], tablefmt="simple")
+
+        except Exception, e:
+            log.error("clould not connect to the database")
+            print e
+            
         print "\n"
+        print tabulate([[selected_project]], ["selected project"], tablefmt=list_command_table_format)
+
+
+        #
+        # active projects
+        #
+
         
-        active_projects = None
-        try:
-            active_projects = self.cloudmanage.mongo.db_user.find_one({'cm_user_id': self.username})['projects']['active']
-        except:
-            log.error("clould not find active projects in the database")
-        to_print = []
-        if active_projects == None:
-            to_print = [None]
-        else:
-            for project in active_projects:
-                to_print.append([str(project)])
-        print tabulate(to_print, ["active projects"], tablefmt="simple")
-        print "\n"
-        
-        completed_projects = None
-        try:
-            completed_projects = self.cloudmanage.mongo.db_user.find_one({'cm_user_id': self.username})['projects']['completed']
-        except:
-            log.error("clould not find completed projects in the database")
-        to_print = []
-        if completed_projects == None:
-            to_print = [None]
-        else:
-            for project in completed_projects:
-                to_print.append([str(project)])
-        print tabulate(to_print, ["completed projects"], tablefmt="simple")
-        print "\n"
-        
+        projects = {}
+
+        for state in ["active", "completed"]:
+
+            projects[state] = None
+            try:
+                projects[state] = self.cloudmanage.mongo.db_user.find_one({'cm_user_id': self.username})['projects'][state]
+            except:
+                log.error("clould not find objects or connect to the database containing the projects")
+
+            to_print = []
+            if projects[state] == None:
+                to_print = [[None]]
+            else:
+                to_print = [[str(p)] for p in projects[state]]
+            print "\n"                
+            print tabulate(to_print, ["{0} projects".format(state)], tablefmt=list_command_table_format)
+
         
     def _list_cloud(self):
         active_clouds = []
@@ -263,9 +265,9 @@ class ListInfo(object):
                 other_clouds.append([str(name)])
         if active_clouds == []: active_clouds = [None]
         if other_clouds == []: other_clouds = [None]
-        print tabulate(active_clouds, ["active clouds"], tablefmt="simple")
+        print tabulate(active_clouds, ["active clouds"], tablefmt=list_command_table_format)
         print "\n"
-        print tabulate(other_clouds, ["other clouds"], tablefmt="simple")
+        print tabulate(other_clouds, ["other clouds"], tablefmt=list_command_table_format)
         print "\n"
             
     
