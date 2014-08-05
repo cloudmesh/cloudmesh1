@@ -17,20 +17,32 @@ class cm_shell_inventory:
 
     """opt_example class"""
 
+    inventory_connection = False
+    inventory_name = None
+    
     def info_cm_shell_inventory(self):
-        print "%20s =" % "DBNAME", self.inventory_name
+        print "%20s =" % "inventory_name", self.inventory_name
+        print "%20s =" % "inventory_connection", self.inventory_connection
 
+    def _connect_to_inventory(self):
+        """connects to the inventory and prints an error if not successfull"""
+        self.inventory_name = "test"
+        try:
+            # TODO: port number is missing
+            # TODO: should be imported from cloudmesh_server.yaml
+            db = connect(self.inventory_name)
+            self.inventory = Inventory()
+        except:
+            self.Inventory = None
+            raise Exception("ERROR: connection to inventory failed")
+
+        
     def activate_cm_shell_inventory(self):
         self.register_command_topic('cloud','inventory')
-        #
-        # BUG this needs to be done not in activate
-        #
-        self.inventory_name = "test"
-        # port number is missing
-        # should be imported from cloudmesh_server.yaml
-        db = connect(self.inventory_name)
-
-        self.inventory = Inventory()
+        try:
+            self._connect_to_inventory()
+        except Exception, e:
+            print e
         pass
 
     @command
@@ -79,12 +91,20 @@ class cm_shell_inventory:
             return
 
         if arguments["print"]:
-            log.info("print the inventory")
-            r = self.inventory.find({})
-            for e in r:
-                pprint(e)
+            try:
+                self._coonnect_to_inventory(self)
+                log.info("print the inventory")
+                try:
+                    r = self.inventory.find({})
+                    for e in r:
+                        pprint(e)
+                except:
+                    raise Exception("Error: problem searching the inventory")
 
-            return
+            except Exception, e:
+                print e
+
+            return                    
 
         if arguments["info"]:
             print
@@ -99,7 +119,7 @@ class cm_shell_inventory:
             if arguments["--cluster"] and not arguments["--server"]:
 
                 name = arguments["--cluster"]
-
+    
                 r = self.inventory.cluster(name)
                 pprint(r)
 
