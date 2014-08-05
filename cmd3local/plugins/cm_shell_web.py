@@ -8,7 +8,7 @@ class cm_shell_web:
         pass
 
     @function_command(shell_command_open_web)
-    def do_ggg(self, args, arguments):
+    def do_web(self, args, arguments):
         shell_command_open_web(arguments)
         pass
 
