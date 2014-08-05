@@ -5,6 +5,7 @@ import inspect
 import sys
 import importlib
 from cmd3.shell import command
+from pprint import pprint
 
 from cloudmesh.config.cm_projects import cm_projects
 
@@ -17,32 +18,36 @@ class cm_shell_project:
 
     """opt_example class"""
 
+    def _load_projects(self):
+        if not self.cm_shell_project_loaded :
+            filename = "$HOME/.futuregrid/cloudmesh.yaml"
+            self.projects = cm_projects(filename)
+            if self.echo:
+                log.info(
+                    "Reading project information from -> {0}".format(filename))
+            self.cm_shell_project_loaded = True
+        
     def activate_shell_project(self):
-        # self.register_command_topic('cloud','project')
+        self.register_command_topic('cloud','project')
         #
         # BUG this should be done outside of the activate
         #
-        filename = "$HOME/.futuregrid/cloudmesh.yaml"
-        self.projects = cm_projects(filename)
-        if self.echo:
-            log.info(
-                "Reading project information from -> {0}".format(filename))
+        self.cm_shell_project_loaded = False
         pass
 
     @command
     def do_project(self, args, arguments):
         """
         Usage:
-               project NOTIMPLEMENTED json info [NAME]
-               project NOTIMPLEMENTED info [NAME]
+               project info [--json]
+               project default NAME
                project NOTIMPLEMENTED members
-               project NOTIMPLEMENTED default NAME
-
+               
         Manages the project
 
         Arguments:
 
-          NAME           The name of a service or server
+          NAME           The name of the project
 
 
         Options:
@@ -55,23 +60,28 @@ class cm_shell_project:
         # log.info(70 * "-")
 
         if arguments["default"] and arguments["NAME"]:
-            log.info("delete the project")
-            return
+            log.info("sets the default project")
 
-        if arguments["info"] and arguments["NAME"]:
-            log.info("project info for the NAMED one")
-            return
+            self._load_projects()
+            project = arguments["NAME"]
+            #if project in self.projects.names("active"):
+            #    self.projects.default(project)
 
-        if arguments["info"] and arguments["NAME"] is None:
+            print project
+            return
+        
+        elif arguments["info"]:
+
+            self._load_projects()
+            
             # log.info ("project info for all")
-            if arguments["json"]:
+            if arguments["--json"]:
                 print self.projects.dump()
                 return
             else:
                 print
                 print "Project Information"
                 print "-------------------"
-
                 print
                 if self.projects.names("default") is not "" and not []:
                     print "%10s:" % "default", self.projects.names("default")
@@ -79,16 +89,22 @@ class cm_shell_project:
                     print "%10s:" % "default ", \
                           "default is not set, please set it"
                 if len(self.projects.names("active")) > 0:
-                    print "%10s:" % "projects", 
-                    ' '.join(self.projects.names("active"))
+                    print "%10s:" % "projects", \
+                        ', '.join(self.projects.names("active"))
+
 
                 if len(self.projects.names("completed")) > 0:
-                    print "%10s:" % "completed", 
-                    ' '.join(self.projects.names("completed"))
+                    print "%10s:" % "completed", \
+                        ', '.join(self.projects.names("completed"))
                 print
 
             return
 
-        if arguments["members"]:
+        elif arguments["members"]:
             log.info("list the project members")
             return
+
+        else:
+            log.info("NOT IMPLEMENTED")
+            return
+            

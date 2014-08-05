@@ -10,8 +10,6 @@ def shell_command_label(arguments):
     Usage:
            label [--prefix=PREFIX] [--id=ID] [--width=WIDTH]
 
-    NOT YET IMPLEMENTED
-    
     A command to set the prefix and id for creating an automatic lable for VMs.
     Without paremeter it prints the currect label.
     
