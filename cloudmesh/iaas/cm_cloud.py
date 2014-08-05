@@ -583,17 +583,17 @@ class CloudCommand(CloudManage):
         
     username = config['cloudmesh']['profile']['username']
        
-    def __init__(self, args):
-        self.args = args
+    def __init__(self, arguments):
+        self.arguments = arguments
         
     def _cloud_list(self):
-        if self.args["--column"]:
-            if self.args["--column"] == 'all':
+        if self.arguments["--column"]:
+            if self.arguments["--column"] == 'all':
                 col_option = ['active', 'user', 'label', 'host', 'type/version', 'type', 'heading', 'credentials', 'defaults']
-            elif self.args["--column"] == 'semiall':
+            elif self.arguments["--column"] == 'semiall':
                 col_option = ['active', 'user', 'label', 'host', 'type/version', 'type', 'heading']
             else:
-                col_option = [x.strip() for x in self.args["--column"].split(',')]
+                col_option = [x.strip() for x in self.arguments["--column"].split(',')]
 
             if not set(col_option).issubset(set(['active', 'label', 'host', 'type/version', 'type', 'heading', 'user', 'credentials', 'defaults'])):
                 log.warning("ERROR: one or more column type doesn't exist, available columns are: active,label,host,type/version,type,heading,user,credentials,defaults  ('all' to diplay all, 'semiall' to display all except credentials and defauts)")
@@ -682,13 +682,13 @@ class CloudCommand(CloudManage):
             print "#", 70 * "#", "\n"
             # -------------------------------------------------
             
-        if self.args['CLOUD']:
-            cloud = self.get_clouds(self.username, getone=True, cloudname=self.args['CLOUD'])
+        if self.arguments['CLOUD']:
+            cloud = self.get_clouds(self.username, getone=True, cloudname=self.arguments['CLOUD'])
             if cloud == None:
-                log.warning("ERROR: could not find cloud '{0}'".format(self.args['CLOUD']))
+                log.warning("ERROR: could not find cloud '{0}'".format(self.arguments['CLOUD']))
             else:
                 printing(cloud)
-        elif self.args['--all']:
+        elif self.arguments['--all']:
             clouds = self.get_clouds(self.username)
             clouds = clouds.sort([('cm_cloud', 1)])
             if clouds.count() == 0:
@@ -706,13 +706,13 @@ class CloudCommand(CloudManage):
         
         
     def _cloud_select(self):
-        if self.args['CLOUD']:
-            cloud = self.get_clouds(self.username, getone=True, cloudname=self.args['CLOUD'])
+        if self.arguments['CLOUD']:
+            cloud = self.get_clouds(self.username, getone=True, cloudname=self.arguments['CLOUD'])
             if cloud == None:
-                log.warning("no cloud information of '{0}' in database, please import it by 'cloud add CLOUDFILE'".format(self.args['CLOUD']))
+                log.warning("no cloud information of '{0}' in database, please import it by 'cloud add CLOUDFILE'".format(self.arguments['CLOUD']))
                 return
-            self.update_selected_cloud(self.username, self.args['CLOUD'])
-            print "cloud '{0}' is selected".format(self.args['CLOUD'])
+            self.update_selected_cloud(self.username, self.arguments['CLOUD'])
+            print "cloud '{0}' is selected".format(self.arguments['CLOUD'])
         else:
             clouds = self.get_clouds(self.username)
             cloud_names = []
@@ -725,21 +725,21 @@ class CloudCommand(CloudManage):
             print "cloud '{0}' is selected".format(cloud_names[res])
             
     def _cloud_alias(self):
-        if self.args['CLOUD']:
-            name = self.args['CLOUD']
+        if self.arguments['CLOUD']:
+            name = self.arguments['CLOUD']
         else:
             name = self.get_selected_cloud(self.username)
         if self.get_clouds(self.username, getone=True, cloudname=name) == None:
             log.error("no cloud information of '{0}' in database".format(name))
             return
-        if yn_choice("rename cloud '{0}' to '{1}'?".format(name, self.args['<name>']), default = 'n', tries = 3):
-            self.update_cloud_name(self.username, name, self.args['<name>'])
+        if yn_choice("rename cloud '{0}' to '{1}'?".format(name, self.arguments['<name>']), default = 'n', tries = 3):
+            self.update_cloud_name(self.username, name, self.arguments['<name>'])
         else:
             return
                 
     def _cloud_activate(self):
-        if self.args['CLOUD']:
-            name = self.args['CLOUD']
+        if self.arguments['CLOUD']:
+            name = self.arguments['CLOUD']
         else:
             name = self.get_selected_cloud(self.username)
         if self.get_clouds(self.username, getone=True, cloudname=name) == None:
@@ -755,8 +755,8 @@ class CloudCommand(CloudManage):
             return
         
     def _cloud_deactivate(self):
-        if self.args['CLOUD']:
-            name = self.args['CLOUD']
+        if self.arguments['CLOUD']:
+            name = self.arguments['CLOUD']
         else:
             name = self.get_selected_cloud(self.username)
         if self.get_clouds(self.username, getone=True, cloudname=name) == None:
@@ -770,7 +770,7 @@ class CloudCommand(CloudManage):
         
     def _cloud_import(self):
         try:
-            file = path_expand(self.args["CLOUDFILE"])
+            file = path_expand(self.arguments["CLOUDFILE"])
             fileconfig = ConfigDict(filename=file)
         except:
             log.error("ERROR: could not load file, please check filename and its path")
@@ -788,7 +788,7 @@ class CloudCommand(CloudManage):
         
         for key in cloudsdict:
             if key in cloud_names:
-                if self.args['--force']:
+                if self.arguments['--force']:
                     self.remove_cloud(self.username, key)
                     self.import_cloud_to_mongo(cloudsdict[key], key, self.username)
                     print "cloud '{0}' overwritten.".format(key)
@@ -800,7 +800,7 @@ class CloudCommand(CloudManage):
                 
         
     def _cloud_remove(self):
-        if self.args['--all']:
+        if self.arguments['--all']:
             if yn_choice("!!!CAUTION!!! Remove all clouds from database?", default = 'n', tries = 3):
                 cloud_names = []
                 clouds = self.get_clouds(self.username)
@@ -813,8 +813,8 @@ class CloudCommand(CloudManage):
             else:
                 return
                     
-        if self.args['CLOUD']:
-            name = self.args['CLOUD']
+        if self.arguments['CLOUD']:
+            name = self.arguments['CLOUD']
         else:
             name = self.get_selected_cloud(self.username)
         if self.get_clouds(self.username, getone=True, cloudname=name) == None:
@@ -833,7 +833,7 @@ class CloudCommand(CloudManage):
         '''
         headers = ['cloud', 'default flavor', 'default image']
         to_print = []
-        if self.args['--all']:
+        if self.arguments['--all']:
             #list all clouds' default flavor and image, default cloud
             
             clouds = self.get_clouds(self.username)
@@ -969,8 +969,8 @@ class CloudCommand(CloudManage):
         get the name of a cloud to be work on, if CLOUD not given, will pick the
         selected cloud
         '''
-        if self.args['CLOUD']:
-            name = self.args['CLOUD']
+        if self.arguments['CLOUD']:
+            name = self.arguments['CLOUD']
         else:
             name = self.get_selected_cloud(self.username)
         if self.get_clouds(self.username, getone=True, cloudname=name) == None:
@@ -979,30 +979,30 @@ class CloudCommand(CloudManage):
         return name
 
     def call_procedure(self):
-        #print self.args ###########
-        if self.args['list'] == True:
+        #print self.arguments ###########
+        if self.arguments['list'] == True:
             call = 'list'
-        elif self.args['info'] == True:
+        elif self.arguments['info'] == True:
             call = 'info'
-        elif self.args['alias'] == True:
+        elif self.arguments['alias'] == True:
             call = 'alias'
-        elif self.args['select'] == True:
+        elif self.arguments['select'] == True:
             call = 'select'
-        elif self.args['on'] == True:
+        elif self.arguments['on'] == True:
             call = 'activate'
-        elif self.args['off'] == True:
+        elif self.arguments['off'] == True:
             call = 'deactivate'
-        elif self.args['add'] == True:
+        elif self.arguments['add'] == True:
             call = 'import'
-        elif self.args['remove'] == True:
+        elif self.arguments['remove'] == True:
             call = 'remove'
-        elif self.args['default'] == True:
+        elif self.arguments['default'] == True:
             call = 'list_default'
-        elif self.args['setflavor'] == True:
+        elif self.arguments['setflavor'] == True:
             call = 'set_flavor'
-        elif self.args['setimage'] == True:
+        elif self.arguments['setimage'] == True:
             call = 'set_image'
-        elif self.args['setdefault'] == True:
+        elif self.arguments['setdefault'] == True:
             call = 'set_default_cloud'
         else:
             call = 'list'
