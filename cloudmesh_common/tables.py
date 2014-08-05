@@ -4,15 +4,19 @@ from prettytable import PrettyTable
 from datetime import datetime
 from datetime import timedelta
 
-def array_dict_table_printer(array, order=None):
+def array_dict_table_printer(array, order=None, header=None):
     """prints a pretty table from an array of dicts
     :param array: A an array with dicts of the same type.
                   Each key will be a column
-    :param order: The orde in which the columns are printed.
+    :param order: The order in which the columns are printed.
                   The order is specified by the key names of the dict.
+    :param header: The Header of each of the columns
+        
     """
     # header
-    header = array[0].keys()
+    if header is None:
+        header = array[0].keys()
+        
     print "HEADER", header
 
     if order is None:
