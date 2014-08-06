@@ -82,13 +82,6 @@ def install():
         print "       we found it in", where
 
 
-
-
-    """
-    # see above
-    # its better to just download from the mongo site for us
-    # TODO: not sure why this has been removed. it breaks the install on osx
-    
     if is_ubuntu():
         install_packages(["mongodb"])
     elif is_centos():
@@ -98,7 +91,6 @@ def install():
         local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
         local('brew update')
         local('brew install mongodb')
-    """
 
 
 @task
