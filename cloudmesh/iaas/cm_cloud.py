@@ -108,8 +108,8 @@ def shell_command_cloud(arguments):
 
     """
 
-    userinfo = cm_user().info("gvonlasz")
-    pprint (userinfo)
+    #userinfo = cm_user().info("gvonlasz")
+    #pprint (userinfo)
     
     call = CloudCommand(arguments)
     call.call_procedure()
