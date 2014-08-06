@@ -17,8 +17,6 @@ def array_dict_table_printer(array, order=None, header=None):
     if header is None:
         header = array[0].keys()
         
-    print "HEADER", header
-
     if order is None:
         order = header
     x = PrettyTable(order)
