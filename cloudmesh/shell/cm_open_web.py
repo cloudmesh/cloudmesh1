@@ -9,16 +9,18 @@ log = LOGGER(__file__)
 def shell_command_open_web(arguments):
     """
     Usage:
-        web [LINK]
+        web [--fg|--cm] [LINK]
 
     Arguments:
 
-        CLOUD    the link of the page to be opened
+        LINK    the link on the localhost cm server is opened.
 
     Options:
 
         -v         verbose mode
-
+        --fg       opens a link on the FG portal 
+        --cm       opens a link on the CM portal
+        
     Description:
         
         Opens a web page with the specified link
@@ -26,34 +28,39 @@ def shell_command_open_web(arguments):
     """
     
     link = arguments["LINK"]
-    if link is None:
+    if link is None or link == "/":
         link = ""
+
+    web_browser = "firefox"
+    if sys.platform == 'darwin':
+        web_browser = "open"
+
         
-    try:
-
-        web_browser = "firefox"
-
-        if sys.platform == 'darwin':
-            web_browser = "open"
-
+    if arguments["--fg"]:
+        location = "https://portal.futuregrid.org"
+    elif arguments["--cm"]:
+        location = "https://cloudmesh.futuregrid.org"        
+    else:
         try:
-
-            server_config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")
+            filename= "~/.futuregrid/cloudmesh_server.yaml"
+            server_config = ConfigDict(filename=filename)
 
             host = server_config.get("cloudmesh.server.webui.host")
             port = server_config.get("cloudmesh.server.webui.port")
-
+            location = "http://{0}:{1}".format(host,port)
         except Exception, e:
+            print  "ERROR: some error reading from the config file"
+            print e
+            return  
 
-            print  "some error reading from the config file"
-            print e   
+    
+    url_link = "{0}/{1}".format(location, link)
+    print "opening", url_link
 
-        url_link = "http://{0}:{1}/{2}".format(host, port, link)
-
+    try:
         os.system('%s "%s"' % (web_browser, url_link))
- 
     except:
-        raise Exception("ERROR: I could not view this page")
+        raise Exception("ERROR: I could not view this page {0} {1}".format(location, link))
 
 def main():
     arguments = docopt(shell_command_open_web.__doc__)
