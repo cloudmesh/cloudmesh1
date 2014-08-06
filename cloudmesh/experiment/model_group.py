@@ -2,16 +2,34 @@
 # terminal 1: fab manage.mongo
 # terminal 2: python model_group.py 
 #
-
-from mongoengine import *
+from cloudmesh.config.ConfigDict import ConfigDict
+from mongoengine import StringField, connect, Document
 from pprint import pprint
 from cloudmesh_common.tables import  array_dict_table_printer
 import json 
 
-db =  connect ('experiments', port=27777)
 
 
+#connect (
 
+config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")["cloudmesh"]["server"]["mongo"]
+
+pprint (config)
+
+connect (config["collections"]["experiment"]["db"],
+         port=config["port"],
+         username=config["username"],
+         password=config["password"])
+"""
+cloudmesh.server.mongo.
+
+   db
+   port
+   path
+   username
+   password
+   collections["experiment"]["db"]
+"""
 class ExperimentBase(Document):
     cm_kind = StringField(default="experiment")
     cm_label = StringField()
@@ -26,6 +44,7 @@ class ExperimentVM(ExperimentBase):
 class ExperimentGroup(object):
 
     def __init__(self, userid, label):
+
         self.userid = userid
         self.label = label
         
@@ -40,12 +59,19 @@ class ExperimentGroup(object):
         # ide was, but does not work, so we use solution by hardcoding
         # args = ExperimentVM._fields
         # vms = ExperimentVM.objects(userid=self.userid, label=self.label).only(*args)
-        
-        vms = ExperimentVM.objects(cm_userid=self.userid, cm_label=label).only(
-            'cm_userid',
-            'cm_label', 
-            'cloud',
-            'vmid')
+        if label in ["all"]:
+            vms = ExperimentVM.objects(cm_userid=self.userid).only(
+                'cm_userid',
+                'cm_label', 
+                'cloud',
+                'vmid')
+        else:
+            vms = ExperimentVM.objects(cm_userid=self.userid, cm_label=label).only(
+                'cm_userid',
+                'cm_label', 
+                'cloud',
+                'vmid')
+            
         return json.loads(vms.to_json())
 
     def delete(self,label):

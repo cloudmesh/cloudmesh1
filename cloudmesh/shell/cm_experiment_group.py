@@ -40,26 +40,41 @@ def shell_command_experiment_group(arguments):
     if arguments["info"]:
         
         print "Default experiment group:", user.get_defaults(username)["group"]
-    
+
     elif arguments["list"] and name is None:
         print "list"
 
+        try:
+            name = user.get_defaults(username)["group"]
+        except:
+            print "ERROR: no default experiment group set"
+            return
         
-    elif arguments["list"]:
-        print "list", name
+        experiment = ExperimentGroup (username, name)
+        print experiment.to_table(name)    
+        
+            
+    elif arguments["list"] and name in ["all"]:
+        print "list all"
 
         experiment = ExperimentGroup (username, name)
-        print experiment.to_table(label)    
+        print experiment.to_table(name)    
+        
+    elif arguments["list"]:
+        print "list", name, username
+        
+        experiment = ExperimentGroup (username, name)
+        print experiment.to_table(name)    
         
     elif arguments["set"]:
         print "sets the group to the given name, the group must exists"
 
-        user.set_default_attribute(username, "group", "exp-1")
+        user.set_default_attribute(username, "group", name)
                 
     elif arguments["add"]:
         print "adds the group to the given name, the group must not exist."
 
-        user.set_default_attribute(username, "group", "exp-1")
+        user.set_default_attribute(username, "group", name)
 
     elif arguments["delete"]:
         print "deletes the entries and ask if -i is specified"
