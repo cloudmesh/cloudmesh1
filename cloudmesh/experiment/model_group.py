@@ -63,7 +63,7 @@ class ExperimentGroup(object):
 
 def main():
 
-    username = "gregor"
+    username = "gvonlasz"
     label = "exp-a"
 
     experiment = ExperimentGroup(username, label)
