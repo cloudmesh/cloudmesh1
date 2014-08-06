@@ -13,8 +13,9 @@ db =  connect ('experiments', port=27777)
 
 
 class ExperimentBase(Document):
-    label = StringField()
-    userid = StringField()
+    cm_kind = StringField(default="experiment")
+    cm_label = StringField()
+    cm_userid = StringField()
     meta = {'allow_inheritance': True}
 
     
@@ -29,8 +30,8 @@ class ExperimentGroup(object):
         self.label = label
         
     def add(self, vm):
-        vm.label = self.label
-        vm.userid = self.userid
+        vm.cm_label = self.label
+        vm.cm_userid = self.userid
         vm.save()
 
     def get(self, label=None):
@@ -40,14 +41,15 @@ class ExperimentGroup(object):
         # args = ExperimentVM._fields
         # vms = ExperimentVM.objects(userid=self.userid, label=self.label).only(*args)
         
-        vms = ExperimentVM.objects(userid=self.userid, label=label).only('userid',
-                                                                         'label', 
-                                                                         'cloud',
-                                                                         'vmid')
+        vms = ExperimentVM.objects(cm_userid=self.userid, cm_label=label).only(
+            'cm_userid',
+            'cm_label', 
+            'cloud',
+            'vmid')
         return json.loads(vms.to_json())
 
     def delete(self,label):
-        vms = ExperimentVM.objects(userid=self.userid, label=self.label)
+        vms = ExperimentVM.objects(cm_userid=self.userid, cm_label=self.label)
         for vm in vms:
             vm.delete()        
         
@@ -64,26 +66,26 @@ def main():
     username = "gregor"
     label = "exp-a"
 
+    experiment = ExperimentGroup(username, label)
+        
+    experiment.delete(label)
+        
     for i in range(1,10):
         vm = ExperimentVM(
-            label = label,
-            userid = username,
+            cm_label = label,
+            cm_userid = username,
             cloud = "india_openstack_havana",
             vmid = "myid-{0}".format(i),
             )
-        vm.save()
+        experiment.add(vm)
 
     
     vms = ExperimentVM.objects()
     for vm in vms:
-        print vm.label, vm.userid, vm.vmid, vm.cloud
+        print vm.cm_label, vm.cm_userid, vm.vmid, vm.cloud
 
-    experiment = ExperimentGroup(username, label)
 
-    print experiment.to_table(label)
 
-    
-    experiment.delete(label)
     print experiment.to_table(label)    
     
     
