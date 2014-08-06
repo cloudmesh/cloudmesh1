@@ -49,6 +49,8 @@ cloudmesh:
                 db: inventory
             cloudmesh:
                 db: cloudmesh
+            experiment:
+                db: cloudmesh
             profile:
                 db: cloudmesh
             user:
