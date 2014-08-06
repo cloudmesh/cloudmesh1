@@ -13,9 +13,14 @@ def dir():
     local("rm -f *.dump")
 
 @task
+def cmd3():
+    local("rm -rf ~/.futuregrid/cmd3local")
+
+@task
 def all():
     """clean the dis and uninstall cloudmesh"""
     dir()
+    cmd3()
     r = int(local("pip freeze |fgrep cloudmesh | wc -l", capture=True))
     while r > 0:
         local('echo "y\n" | pip uninstall cloudmesh')
