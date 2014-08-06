@@ -8,6 +8,7 @@ from cloudmesh.util.menu import menu_return_num
 from cloudmesh_common.bootstrap_util import yn_choice, path_expand
 import sys
 from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh.user.cm_user import cm_user
 
 log = LOGGER(__file__)
 
@@ -106,6 +107,10 @@ def shell_command_cloud(arguments):
                              setcloud, set default cloud
 
     """
+
+    userinfo = cm_user().info("gvonlasz")
+    pprint (userinfo)
+    
     call = CloudCommand(arguments)
     call.call_procedure()
     

@@ -87,7 +87,7 @@ def install():
     """
     # see above
     # its better to just download from the mongo site for us
-
+    # TODO: not sure why this has been removed. it breaks the install on osx
     
     if is_ubuntu():
         install_packages(["mongodb"])
