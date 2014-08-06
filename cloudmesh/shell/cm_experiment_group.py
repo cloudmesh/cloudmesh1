@@ -3,6 +3,7 @@ from cloudmesh_common.logger import LOGGER
 from docopt import docopt
 from pprint import pprint
 from cloudmesh.user.cm_user import cm_user
+from cmd3.shell import cmd3_call
 
 log = LOGGER(__file__)
 
@@ -29,10 +30,7 @@ def shell_command_experiment_group(arguments):
         
     """
 
-    pprint(arguments)    
-
     name = arguments["NAME"]
-    print name
 
     username = "gvonlasz"
     user = cm_user()
@@ -42,7 +40,6 @@ def shell_command_experiment_group(arguments):
         print "Default experiment group:", user.get_defaults(username)["group"]
 
     elif arguments["list"] and name is None:
-        print "list"
 
         try:
             name = user.get_defaults(username)["group"]
@@ -55,35 +52,30 @@ def shell_command_experiment_group(arguments):
         
             
     elif arguments["list"] and name in ["all"]:
-        print "list all"
 
         experiment = ExperimentGroup (username, name)
         print experiment.to_table(name)    
         
     elif arguments["list"]:
-        print "list", name, username
         
         experiment = ExperimentGroup (username, name)
         print experiment.to_table(name)    
         
     elif arguments["set"]:
-        print "sets the group to the given name, the group must exists"
+        # "sets the group to the given name, the group must exists"
 
         user.set_default_attribute(username, "group", name)
                 
     elif arguments["add"]:
-        print "adds the group to the given name, the group must not exist."
+        # "adds the group to the given name, the group must not exist."
 
         user.set_default_attribute(username, "group", name)
 
     elif arguments["delete"]:
         print "deletes the entries and ask if -i is specified"
 
-    
-        
 def main():
-    arguments = docopt(shell_command_experiment_group.__doc__)
-    shell_command_experiment_group(arguments)
-
+    cmd3_call(shell_command_experiment_group)
+    
 if __name__ == '__main__':
     main()
