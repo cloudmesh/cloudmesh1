@@ -25,6 +25,7 @@ blockdiagcontrib-class
 blockdiagcontrib-cisco
 nwdiag
 seqdiag
+sphinxcontrib-httpdomain 
 #
 # ######################################################################
 # Packages which must be installed first
@@ -75,6 +76,8 @@ flask_login
 Flask-OpenID
 flask-principal
 Flask-RSTPages
+flask-restful
+flask-restful-swagger
 #
 # ######################################################################
 # Testing and formatting
@@ -108,8 +111,16 @@ timestring
 prettytable
 tabulate
 # ######################################################################
+# ipython
+# ######################################################################
+#
+ipython
+pyzmq
+tornado
+
+# ######################################################################
 # General Libraries
 # ######################################################################
 #
-flask-restful
-flask-restful-swagger
+fake-factory
+
