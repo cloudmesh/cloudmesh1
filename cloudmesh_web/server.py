@@ -257,7 +257,7 @@ def rain_index():
 @login_required
 @admin_permission.require(http_exception=403)
 def admin_index():
-    return render_template('admin/admin.html')
+    return render_template('admin/index.html')
 
 
 # ============================================================

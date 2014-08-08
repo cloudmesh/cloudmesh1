@@ -120,7 +120,8 @@
                         </p>
 
 			  {% include "menu-top.html" %}
-                        </ul>
+
+		        </ul>
 
                     </div><!--/.nav-collapse -->
                 </div>
@@ -131,8 +132,11 @@
             <div class="row-fluid">
                 <div class="span3">
 		  <!--span for navigation -->
-		  
+
+		  {% block menu %}
 		  {% include "menu.html" %}
+		  {% endblock %}
+
 		  <footer>
 		  <hr>
 		  <p align="right">
