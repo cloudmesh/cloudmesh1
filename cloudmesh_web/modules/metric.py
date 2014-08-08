@@ -20,12 +20,10 @@ metric_module = Blueprint('metric_module', __name__)
 @login_required
 def metric_index():
 
-    #render_template('/index.html')
-
+    metric = "metric-summary"
+    term = "last_3_months"
     config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")["cloudmesh"]["server"]["metric"]
-    
-    address="{0}:{1}/metric-summary".format(config["host"],config["port"])
-
+    address="{0}:{1}/{2}/{3}".format(config["host"],config["port"], metric, term)
     r= requests.get(address)
          
     return render_template('/metric/index.html', data=r.text)

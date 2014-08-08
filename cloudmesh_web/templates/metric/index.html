@@ -1,5 +1,9 @@
 {% extends "layout/layout.html" %}
 
+{% block contentbox %}
+<h2>Metric</h2>
+{% endblock %}
+
 {% block content %}
 
 <script type='text/javascript' src='/static/js/jquery.js'></script>
@@ -124,7 +128,7 @@ function requestData() {
 	cnt = source[key]['count'];
 	this1 = source[key]['projectid'];
 	this2 = source[key]['title'];
-	project_titles.push(this1 + "-" + this2);
+	project_titles.push(this2 + " (fg-" + this1 + ")");
 	count.push(cnt);
     }
     var series = { 
@@ -145,10 +149,8 @@ $(document).ready(function() {
 	global: { useUTC: false }
     });
     requestData();
-    setTimeout(function(){
-
 	var chart = new Highcharts.Chart(options);
-	var chart2 = new Highcharts.Chart(options2);}, 4000);
+	var chart2 = new Highcharts.Chart(options2);
 }); // end of ready()
 //]]>
 </script>
