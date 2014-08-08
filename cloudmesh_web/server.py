@@ -89,7 +89,7 @@ all_modules = ['pbs',
                'users',
                'status',
                # 'register',
-               #'metric',
+               'metric',
                'pie_chart_fg380'
                 ]
 
