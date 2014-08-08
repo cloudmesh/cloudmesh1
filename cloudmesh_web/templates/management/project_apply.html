@@ -4,7 +4,13 @@
 {% macro render_field(field) %}
   <tr>
   <td bgcolor="#CCCCCC"> <i>{{ field.label }}</i></td>
-  <td>{{ field(**kwargs)|safe }} 
+  {% if field.type == "TextAreaField" %}
+    <td>{{ field(cols="79", rows="10")|safe }}     
+  {% elif field.type == "TextField" %}
+    <td>{{ field(cols="79")|safe }}     
+  {% else %}
+    <td>{{ field(**kwargs)|safe }}
+  {% endif %}
   <br>
   {% if field.errors %}
     <font color="red">
@@ -25,16 +31,27 @@
   
 <form method="post">
 
+  {% for (panel, attributes) in fields %}
+
+      <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"> {{ panel | capitalize }} </h3>
+      </div>
+      <div class="panel-body">
+
+	
   <table class="table table-condensed">
-    <tbody>
+    <tbody>      
       <tr>
-	<th colspan="2" bgcolor="#CCCCCC"> Profile </th>
-      </tr>    
-      {% for field in fields %}
+	<th colspan="2" bgcolor="#CCCCCC"> {{ panel | capitalize }} </th>
+      </tr>
+      
+      {% for field in attributes %}
         {{ render_field(form[field]) }}
       {% endfor %}
     </tbody>
   </table>
+  {% endfor %}
   
   <div class="control-group">
   <label class="control-label" for="button_submit"></label>
@@ -53,7 +70,7 @@
          >{{ state|capitalize }}
     </button>
     {% endfor %}
-
+      </div>
   </div>
 </div>
 </div>
