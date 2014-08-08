@@ -96,43 +96,44 @@ class ProjectRegistrationForm(Form):
     # put this in the html form:  {{ form.csrf_token }}
     """
 
-    keys=["title",     
-          "abstract",
-          "intellectual_merit",  
-          "broader_impact",  
-          "use_of_fg",  
-          "scale_of_use", 
-          # "categories", 
-          # "keywords", 
-          # "primary_discipline", 
-          "orientation",  
-          "contact",  
-          "url", 
-          "comment", 
-          # "active", 
-          "projectid", 
-          # "lead",       
-          # "managers",   
-          # "members",    
-          # "alumnis",    
-          # "grant_orgnization", 
-          # "grant_id", 
-          # "grant_url", 
-          "results", 
-          "aggreement_use", 
-          "aggreement_slides", 
-          "aggreement_support", 
-          "aggreement_sotfware", 
-          "aggreement_documentation", 
-          "comments",
-          "join_open", 
-          "join_notification", 
-          "resources_services",
-          # "resources_software", 
-          "resources_clusters", 
-          "resources_provision"
-          ]
-        
+    
+    keys=[ ("profile", [ "title",     
+                        "abstract",
+                        "intellectual_merit",  
+                        "broader_impact",  
+                        "use_of_fg",  
+                        "scale_of_use", 
+                        # "categories", 
+                        # "keywords", 
+                        # "primary_discipline", 
+                        "orientation",  
+                        "contact",  
+                        "url", 
+                        "comment", 
+                        # "active", 
+                        # "projectid", 
+                        # "lead",       
+                        # "managers",   
+                        # "members",    
+                        # "alumnis",    
+                        # "grant_orgnization", 
+                        # "grant_id", 
+                        # "grant_url", 
+                        "results" ]),
+        ("agreements", [ "aggreement_use", 
+                        "aggreement_slides", 
+                        "aggreement_support", 
+                        "aggreement_sotfware", 
+                        "aggreement_documentation" ]),
+        ("other" , [ "comments",
+                    "join_open", 
+                    "join_notification", 
+                    "resources_services",
+                    # "resources_software", 
+                    "resources_clusters", 
+                    "resources_provision"
+                    ] )
+    ]        
     title = TextField('Title')
     abstract= TextField('Abstract')
     intellectual_merit  = TextAreaField('Intellectual merit')
@@ -156,11 +157,12 @@ class ProjectRegistrationForm(Form):
     grant_id = TextField('Grant id')
     grant_url = TextField('Grant url')
     results = TextField('Results')
-    aggreement_use = BooleanField('Aggreement use')
-    aggreement_slides = BooleanField('Aggreement slides')
-    aggreement_support = BooleanField('Aggreement support')
-    aggreement_sotfware = BooleanField('Aggreement sotfware')
-    aggreement_documentation = BooleanField('Aggreement documentation')
+    aggreement_use = BooleanField('Use')
+    aggreement_slides = BooleanField('Slides')
+    aggreement_support = BooleanField('Support')
+    aggreement_sotfware = BooleanField('Sotfware')
+    aggreement_documentation = BooleanField('Documentation')
+    aggreement_images = BooleanField('Images')    
     comments= TextField('Comments')
     join_open = BooleanField('Join open')
     join_notification = BooleanField('Join notification')
