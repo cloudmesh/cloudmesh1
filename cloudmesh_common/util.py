@@ -256,10 +256,16 @@ def address_string(content, labels=False):
     it will return::
 
         "fixed: 10.35.23.30, floating: 198.202.120.194'
+        
+    The 'private' could be any other string indicating the vlan.
+    E.g., HP_east cloud might return result which is not 'private'.
+    Not necessarilly vlan102 either.
+    For now we will assume an arbitry string exists as the name for vlan.
     """
     try:
         result = ""
-        for address in content['private']:
+        vlan = content.keys()[0]
+        for address in content[vlan]:
             if labels:
                 result = result + address['OS-EXT-IPS:kind'] + "="
             result = result + address['addr']
@@ -269,21 +275,21 @@ def address_string(content, labels=False):
         # THIS SEEMS WRONG
         #{u'vlan102': [{u'version': 4, u'addr': u'10.1.2.104'}, {
         #    u'version': 4, u'addr': u'149.165.158.34'}]}
-        try:
-            position = 0
-            for address in content['vlan102']:
-                if position == 0:
-                    kind = "fixed"
-                else:
-                    kind = "floating"
-                if labels:
-                    result = result + kind
-                result = result + address['addr']
-                result = result + ", "
-                position = +1
-            result = result[:-2]
-        except:
-            result = content
+        #try:
+        #    position = 0
+        #    for address in content['vlan102']:
+        #        if position == 0:
+        #            kind = "fixed"
+        #        else:
+        #            kind = "floating"
+        #        if labels:
+        #            result = result + kind
+        #        result = result + address['addr']
+        #        result = result + ", "
+        #        position = +1
+        #    result = result[:-2]
+        #except:
+        result = content
     return result
 
 
