@@ -1,0 +1,160 @@
+{% extends "layout/layout.html" %}
+
+{% block content %}
+
+
+
+<script type='text/javascript' src='/_static/js/jquery-1.9.1.js'></script>
+<script src="/_static/js/highcharts.js"></script>
+<script src="/_static/js/modules/exporting.js"></script>
+<script type='text/javascript'>//<![CDATA[
+	var cnt;
+	var hostname = [];
+	var platform = [];
+	var this1, this2;
+	var nested_data = {};
+
+var options = {
+chart: { renderTo: 'container',
+	  defaultSeriesType: 'spline',},
+title: { text: 'Summary of IaaS Platform Usage' },
+xAxis: { categories: []},
+yAxis: { title: { text: 'Units'}},
+labels: { items: [{ html: 'Total Usage', style: { left: '50px', top: '18px',
+color: (Highcharts.theme && Highcharts.theme.textColor) || 'black' }}]},
+series: []}; 
+
+var options2 = {
+chart: { renderTo: 'container2',
+	  defaultSeriesType: 'bar',},
+title: { text: 'Top 10 projects' },
+xAxis: { categories: []},
+yAxis: { min: 0, title: { text: 'Units', align: 'high'}, labels: { overflow: 'justify'}}, 
+tooltip: { valueSuffix: ' '},
+plotOptions: { bar: { dataLabels: { enabled: true }}},
+legend: {
+layout: 'vertical',
+	align: 'right',
+	verticalAlign: 'top',
+	x: -40,
+	y: 100,
+	floating: true,
+	borderWidth: 1,
+	backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+	shadow: true
+},
+credits: {
+enabled: false
+	 },
+series: []}; 
+
+function requestData() {
+	$.ajax({
+url: '/metric-summary/',
+success: function(point) {
+
+var source = point['message']['platform-summary']['objects'];
+var source2 = point['message']['10-projects']['objects'];
+var data = [];
+for (var key in source) {
+cnt = source[key]['count'];
+this1 = source[key]['hostname'];
+if (hostname.indexOf(this1) === -1) {
+hostname.push(this1);
+nested_data[this1] = {};
+}
+this2 = source[key]['platform'];
+if (platform.indexOf(this2) === -1)
+platform.push(this2);
+nested_data[this1][this2] = cnt;
+}
+
+var platform_data = {};
+for (var key1 in platform) {
+var tmp = [];
+for (var key2 in hostname) {
+	var p = platform[key1];
+	var h = hostname[key2];
+	if (p in nested_data[h])
+		value = nested_data[h][p];
+	else
+		value = 0;
+	tmp.push(value);
+} // end of the loop of hostname
+platform_data[p] = tmp;
+var series = { 
+data: []
+};
+series.type = 'column';
+series.name = p;
+series.data = tmp;
+options.series.push(series);
+
+var count = 0;
+for(var i = 0; i < tmp.length; i++)
+{
+	count = count + tmp[i];
+}
+
+data.push({name: p,
+		y: count,
+		color: Highcharts.getOptions().colors[key1]})
+
+} // end of the loop of platform
+options.xAxis.categories = hostname;
+series = { type: 'pie',
+	name: 'Total Usage',
+	data: data,
+	center: [100, 80],
+	size:100,
+	showInLegend: false,
+	dataLabels: {
+enabled: false}
+}
+options.series.push(series);
+//alert(point.toSource());
+
+//////////////////////
+// top 10 projects
+//////////////////////
+
+nested_data = {};
+var project_titles = [];
+var count = [];
+source = source2;
+for (var key in source) {
+cnt = source[key]['count'];
+this1 = source[key]['projectid'];
+this2 = source[key]['title'];
+project_titles.push(this1 + "-" + this2);
+count.push(cnt);
+}
+var series = { 
+data: []
+};
+series.name = "count";
+series.data = count;
+options2.series.push(series);
+options2.xAxis.categories = project_titles;
+
+//////////////////////
+
+}}); // end of ajax
+}; // end of requestData
+
+$(document).ready(function() {
+		Highcharts.setOptions({
+global: { useUTC: false }
+});
+		requestData();
+		setTimeout(function(){
+
+			var chart = new Highcharts.Chart(options);
+			var chart2 = new Highcharts.Chart(options2);}, 4000);
+		}); // end of ready()
+//]]>
+</script>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+{% endblock content %}
