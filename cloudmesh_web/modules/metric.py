@@ -20,7 +20,7 @@ metric_module = Blueprint('metric_module', __name__)
 @login_required
 def metric_index():
 
-    render_template('/index.html')
+    #render_template('/index.html')
 
     config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")["cloudmesh"]["server"]["metric"]
     
@@ -30,3 +30,7 @@ def metric_index():
          
     return render_template('/metric/index.html', data=r.text)
 
+@metric_module.route('/cm/metric/<cloud>/<instance_id>/')
+@login_required
+def metric_vm(cloud, instance_id):
+    return metric_index()
