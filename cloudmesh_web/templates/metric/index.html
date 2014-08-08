@@ -2,8 +2,6 @@
 
 {% block content %}
 
-please wait fetching {{data | safe}}
-
 <script type='text/javascript' src='/static/js/jquery.js'></script>
 <script src="/static/js/highcharts.js"></script>
 <script src="/static/js/modules/exporting.js"></script>
@@ -52,6 +50,7 @@ function requestData() {
     
     var point = {{ data | safe}};
     console.log(point);
+
     var source = point['message']['platform-summary']['objects'];
     var source2 = point['message']['10-projects']['objects'];
     var data = [];
