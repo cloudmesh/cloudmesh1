@@ -285,6 +285,7 @@ class cm_mongo:
                                                   % (cloud_name, cm_type, credentials['OS_TENANT_NAME']) )
                         
             except Exception, e:
+                cloud = None
                 log.error("Cannot activate cloud {0} for {1}\n{2}".format(cloud_name, cm_user_id, e))
                 print traceback.format_exc()
         return cloud
