@@ -5,6 +5,8 @@ import requests
 import yaml
 from cloudmesh_common.logger import LOGGER
 from pprint import pprint
+from cloudmesh.config.ConfigDict import ConfigDict
+
 log = LOGGER(__file__)
 
 metric_module = Blueprint('metric_module', __name__)
@@ -18,11 +20,13 @@ metric_module = Blueprint('metric_module', __name__)
 @login_required
 def metric_index():
 
-    address="http://129.79.135.80:5001/metric-summary"
+    render_template('/index.html')
 
-    r = requests.get(address)
-    pprint (r.json())
+    config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")["cloudmesh"]["server"]["metric"]
+    
+    address="{0}:{1}/metric-summary".format(config["host"],config["port"])
 
+    r= requests.get(address)
          
-    return render_template('/metric/index.html', data=r.json())
+    return render_template('/metric/index.html', data=r.text)
 
