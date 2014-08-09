@@ -27,9 +27,9 @@ def shell_command_cloud(arguments):
                 cloud add CLOUDFILE [--force]
                 cloud remove [CLOUD|--all]
                 cloud default [CLOUD|--all]
-                cloud setflavor [CLOUD]
-                cloud setimage [CLOUD]
-                cloud setdefault [CLOUD]
+                cloud set flavor [CLOUD]
+                cloud set image [CLOUD]
+                cloud set default [CLOUD]
                 
             Arguments:
 
@@ -93,22 +93,22 @@ def shell_command_cloud(arguments):
                     CAUTION: remove all is enabled(remove --all)
                     
                 cloud default [CLOUD|--all]
-                cloud setflavor [CLOUD]
-                cloud setimage [CLOUD]
-                cloud setdefault [CLOUD]
+                cloud set flavor [CLOUD]
+                cloud set image [CLOUD]
+                cloud set default [CLOUD]
                     view or manage cloud's default flavor and image, and set default 
                     cloud
                     options: CLOUD, specify a cloud to work on, otherwise selected 
                              cloud will be used
                              default, list default infomation of cloud, --all to 
                                       display all clouds defaults
-                             setflavor, set default flaovr of a cloud
-                             setimage, set default image of a cloud
-                             setcloud, set default cloud
+                             set flavor, set default flaovr of a cloud
+                             set image, set default image of a cloud
+                             set cloud, set default cloud
 
     """
 
-    #userinfo = cm_user().info("gvonlasz")
+    #userinfo = cm_user().info("xiaoyuk")
     #pprint (userinfo)
     
     call = CloudCommand(arguments)
@@ -1001,14 +1001,15 @@ class CloudCommand(CloudManage):
             call = 'import'
         elif self.arguments['remove'] == True:
             call = 'remove'
-        elif self.arguments['default'] == True:
+        elif self.arguments['default'] == True and self.arguments['set'] != True:
             call = 'list_default'
-        elif self.arguments['setflavor'] == True:
-            call = 'set_flavor'
-        elif self.arguments['setimage'] == True:
-            call = 'set_image'
-        elif self.arguments['setdefault'] == True:
-            call = 'set_default_cloud'
+        elif self.arguments['set'] == True:
+            if self.arguments['flavor'] == True:
+                call = 'set_flavor'
+            elif self.arguments['image'] == True:
+                call = 'set_image'
+            elif self.arguments['default'] == True:
+                call = 'set_default_cloud'
         else:
             call = 'list'
         func = getattr(self, "_cloud_" + call)
