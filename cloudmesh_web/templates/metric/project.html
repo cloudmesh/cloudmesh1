@@ -8,8 +8,14 @@
 
 <h3> Debug </h3>
 <hr>
-{{ data | safe}}
+{{ data | safe }}
 <hr>
+
+{% set project = data['project'][0] %}
+
+<h3> Project {{ project.projectid }}: {{ project.title }} </h3>
+
+Lead: {{ project.projectlead }} <br>
 
 <h3> VM break down </h3>
 
