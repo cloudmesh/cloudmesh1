@@ -1,0 +1,30 @@
+{% extends "layout/layout.html" %}
+
+{% block contentbox %}
+<h2>Metric</h2>
+{% endblock %}
+
+{% block content %}
+
+<h3> Debug </h3>
+<hr>
+{{ data | safe}}
+<hr>
+
+<h3> VM break down </h3>
+
+<table>
+{% for user in data["user-summary"]["objects"] %}
+
+  <tr>
+
+    <td> {{ user.first_name }} </td>
+    <td> {{ user.last_name }} </td>
+    <td> {{ user.count }} </td>
+    
+  </tr>
+
+{% endfor %}
+</table>
+
+{% endblock content %}

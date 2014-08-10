@@ -6,6 +6,7 @@ import yaml
 from cloudmesh_common.logger import LOGGER
 from pprint import pprint
 from cloudmesh.config.ConfigDict import ConfigDict
+import json
 
 log = LOGGER(__file__)
 
@@ -32,3 +33,23 @@ def metric_index():
 @login_required
 def metric_vm(cloud, instance_id):
     return metric_index()
+
+@metric_module.route('/cm/metric/project/<project_id>/')
+@login_required
+def metric_project(project_id):
+
+    config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")["cloudmesh"]["server"]["metric"]    
+    base_url = "project-summary"
+
+    address="{0}:{1}/{2}/{3}".format(config["host"],config["port"], base_url, project_id)
+    try:
+        r= requests.get(address)
+        pprint (r.json())
+        data = dict(json.loads(r.text))
+        data = data["message"]
+        return render_template('/metric/project.html', data=data)
+    except Exception, e:
+        print e
+        error = str(e)
+        return  render_template('error.html', error=error)
+        
