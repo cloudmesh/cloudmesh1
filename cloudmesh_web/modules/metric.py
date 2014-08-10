@@ -7,6 +7,7 @@ from cloudmesh_common.logger import LOGGER
 from pprint import pprint
 from cloudmesh.config.ConfigDict import ConfigDict
 import json
+import yaml
 
 log = LOGGER(__file__)
 
@@ -45,7 +46,7 @@ def metric_project(project_id):
     try:
         r= requests.get(address)
         pprint (r.json())
-        data = dict(json.loads(r.text))
+        data = dict(yaml.load(r.text))
         data = data["message"]
         return render_template('/metric/project.html', data=data)
     except Exception, e:
