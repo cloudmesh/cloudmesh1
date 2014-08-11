@@ -53,14 +53,14 @@
 
 
 	  {% with messages = get_flashed_messages(with_categories=true) %}
+	  {% set tmp = ("qstat-"+host) %}
 	  {% if messages %}
-
 	    {% for category, message in messages %}
-
-	       {% if categroy == ("qstat-" + host) %}
+	    {% set a = category|string %}
+	    {% if a == tmp %}
 	       {{ message}}
-	    {% endif %}
-
+   	       {% endif %}
+	    
 	    {% endfor %}
 
 	  {% endif %}
