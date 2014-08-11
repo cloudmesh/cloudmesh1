@@ -1,5 +1,4 @@
 import sys
-sys.path.insert(0, '..')
 from datetime import datetime
 import pprint
 pp = pprint.PrettyPrinter(indent=4)

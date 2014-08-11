@@ -1,5 +1,4 @@
 import sys
-sys.path.insert(0, '../..')
 
 import yaml
 from cloudmesh.config.cloudmesh_cloud import cloudmesh_cloud

@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '..')
+
 from datetime import datetime
 from pprint import pprint
 import json

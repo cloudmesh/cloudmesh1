@@ -7,19 +7,15 @@ import sys
 import stat
 import getpass
 
-sys.path.append("..")
-sys.path.append(".")
-
-
 from jinja2.runtime import Undefined
 from jinja2 import Environment
 import yaml
 from string import Template
 
 import os
-from cloudmesh_common.util import banner
+from ..cloudmesh_common.util import banner
 from util import is_ubuntu, is_centos, is_osx
-from cloudmesh_common.util import yn_choice
+from ..cloudmesh_common.util import yn_choice
 from ConfigParser import SafeConfigParser
 from paramiko import SSHClient, AutoAddPolicy, BadHostKeyException, AuthenticationException, SSHException
 

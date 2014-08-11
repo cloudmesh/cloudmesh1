@@ -1,7 +1,5 @@
 """Common methods and classes used at the intall time."""
 import sys
-sys.path.append("..")
-
 from cloudmesh_common.bootstrap_util import path_expand
 
 __config_dir__ = path_expand("~/.futuregrid")

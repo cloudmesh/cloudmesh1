@@ -1,5 +1,4 @@
 import server
-import queue
 import clean
 import build
 import git
@@ -18,3 +17,12 @@ import hpc
 import rcfile
 import qc
 import manage
+try:
+    import queue
+except Exception, e:
+    import sys, traceback
+    print "ERROR: failed to load qyue fabfile"
+    print e
+    print '-'*60
+    traceback.print_exc(file=sys.stdout)
+    print '-'*60
