@@ -1,10 +1,5 @@
 from __future__ import absolute_import
 
-import sys
-from pprint import pprint
-
-pprint(sys.path)
-
 from celery import Celery
 
 celery_provisiner_queue = Celery('cloudmesh.provisioner.queue.celery',
