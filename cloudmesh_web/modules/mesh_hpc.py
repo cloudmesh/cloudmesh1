@@ -25,6 +25,8 @@ mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 # ROUTE: /mesh/qstat
 # ============================================================
 
+error = ""
+
 @mesh_hpc_module.route('/mesh/refresh/qstat')
 @mesh_hpc_module.route('/mesh/refresh/qstat/<host>')
 @login_required
@@ -68,10 +70,10 @@ def display_mongo_qstat_refresh(host=None):
         print traceback.format_exc()
         error = "{0}".format(e)
         log.error(error)
-        return render_template('error.html',
-                          error=error,
-                          type="Some error in qstat",
-                          msg="")
+    #        return render_template('error.html',
+    #                               error=error,
+    #                      type="Some error in qstat",
+    #                      msg="")
 
     return redirect('mesh/qstat')
 
