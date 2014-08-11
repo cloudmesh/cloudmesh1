@@ -57,9 +57,8 @@
 
 	    {% for category, message in messages %}
 
-	       {{ category }} {{ message}}
-	    {% if categroy == "qstat-hotel.futuregrid.org" %}
-	    BAD
+	       {% if categroy == ("qstat-" + host) %}
+	       {{ message}}
 	    {% endif %}
 
 	    {% endfor %}
