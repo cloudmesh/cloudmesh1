@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 from celery import current_task
-from cloudmesh.provisioner.queue.celery import celery
+from cloudmesh.provisioner.queue.celery import celery_provisiner_queue
 from cloudmesh.provisioner.provisioner import ProvisionerSimulator as Provider
 
 import sys
@@ -15,7 +15,7 @@ logger = get_task_logger(__name__)
 provisioner = Provider()
 
 
-@celery.task(track_started=True)
+@celery_provisiner_queue.task(track_started=True)
 def provision(host, image):
     '''
     provisions on a specific host the image specified
@@ -25,7 +25,7 @@ def provision(host, image):
     provisioner.provision([host], image)
 
 
-@celery.task
+@celery_provisiner_queue.task
 def info():
     logger.info('executing info')
     request = current_task.request

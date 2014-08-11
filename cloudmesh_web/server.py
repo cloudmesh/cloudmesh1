@@ -57,15 +57,10 @@ import traceback
 import types
 import webbrowser
 
-
-
 admin_permission = Permission(RoleNeed('admin'))
 
 
 # from flask.ext.autoindex import AutoIndex
-
-sys.path.insert(0, '.')
-sys.path.insert(0, '..')
 
 
 # ============================================================

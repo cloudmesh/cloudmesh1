@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from celery import current_task
 from celery.utils.log import get_task_logger
-from cloudmesh.iaas.aws.queue.celery import celery
+from cloudmesh.iaas.aws.queue.celery import celery_aws_queue
 from cloudmesh.iaas.aws.cm_compute import aws as amazon_ec2
 from cloudmesh.cm_mongo import cm_mongo
 
@@ -9,7 +9,7 @@ from cloudmesh.cm_mongo import cm_mongo
 #logger = get_task_logger(__name__)
 #
 
-@celery.task(track_started=True)
+@celery_aws_queue.task(track_started=True)
 def refresh(cm_user_id=None, names=None, types=None):
 
     if isinstance(names, str):

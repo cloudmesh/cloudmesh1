@@ -2,13 +2,13 @@ from __future__ import absolute_import
 from celery import Celery
 
 # Celery app for azure cloud
-celery = Celery('cloudmesh.iaas.azure.queue',
-                broker='amqp://guest@localhost',
-                backend='amqp',#mongodb://guest:guest@localhost:27017/jobs')#,
-                include=['cloudmesh.iaas.azure.queue.tasks'])
+celery_azure_queue = Celery('cloudmesh.iaas.azure.queue',
+                    broker='amqp://guest@localhost',
+                    backend='amqp',#mongodb://guest:guest@localhost:27017/jobs')#,
+                    include=['cloudmesh.iaas.azure.queue.tasks'])
 
 # Optional configuration, see the application user guide.
-celery.conf.update(
+celery_azure_queue.conf.update(
     CELERY_TASK_RESULT_EXPIRES=3600,
     CELERY_DISABLE_RATE_LIMITS=True,
     CELERY_IGNORE_RESULT=False,
@@ -18,5 +18,5 @@ celery.conf.update(
     )
 
 if __name__ == '__main__':
-    celery.start()
+    celery_azure_queue.start()
 

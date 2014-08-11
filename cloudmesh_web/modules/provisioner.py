@@ -3,7 +3,7 @@ from cloudmesh.inventory import Inventory
 #from cloudmesh.old_inventory.inventory import Inventory as oldInventory, \
 #    PROVISIONING_CHOICES
 from cloudmesh.provisioner.provisioner import *
-from cloudmesh.provisioner.queue.celery import celery
+from cloudmesh.provisioner.queue.celery import celery_provisiner_queue
 from cloudmesh.provisioner.queue.tasks import provision
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import cond_decorator, path_expand
@@ -54,7 +54,7 @@ def display_provisioner_policy():
 @admin_permission.require(http_exception=403)
 def display_provisioner_summary():
 
-    queue = celery.control.inspect()
+    queue = celery_provisiner_queue.control.inspect()
 
     """
     for j in range(10):
@@ -81,7 +81,7 @@ def display_provision_host_summary(cluster, spec, service):
 
     time.sleep(1)
     hosts = expand_hostlist(spec)
-    queue = celery.control.inspect()
+    queue = celery_provisiner_queue.control.inspect()
 
     active = queue.active()
     scheduled = queue.scheduled()
