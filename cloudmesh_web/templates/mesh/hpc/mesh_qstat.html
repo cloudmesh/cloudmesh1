@@ -53,9 +53,10 @@
 
 
 	  {% with messages = get_flashed_messages(with_categories=true) %}
+	  {% set tmp = ("qstat-"+host) %}
 	  {% if messages %}
-
 	    {% for category, message in messages %}
+<<<<<<< HEAD
 
 	       {{ messages}} <br>
 	       {% if category  == "qstat-hotel.futuregrid.org" %}
@@ -72,6 +73,13 @@
 	       {% endif %}
 
 	 
+=======
+	    {% set a = category|string %}
+	    {% if a == tmp %}
+	       {{ message}}
+   	       {% endif %}
+	    
+>>>>>>> 6e367499f6a9b1cc6c81ed46c36d54649d27c6cf
 	    {% endfor %}
 
 	  {% endif %}
