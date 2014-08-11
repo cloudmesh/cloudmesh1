@@ -73,11 +73,6 @@ def display_mongo_qstat_refresh(host=None):
 
         category = "qstat-{0}".format(host)
         flash(error, category=str(category))
-        
-    #        return render_template('error.html',
-    #                               error=error,
-    #                      type="Some error in qstat",
-    #                      msg="")
 
     return redirect('mesh/qstat')
 
@@ -211,11 +206,9 @@ def display_mongo_qinfo_refresh(host=None):
         print traceback.format_exc()
         error = "{0}".format(e)
         log.error(error)
-        return render_template('error.html',
-                          error=error,
-                          type="Some error in qinfo",
-                          msg="")
 
+        category = "qinfo-{0}".format(host)
+        flash(error, category=str(category))
 
     return redirect('mesh/qinfo')
 

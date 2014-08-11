@@ -17,11 +17,13 @@
 
 {% with messages = get_flashed_messages() %}
   {% if messages %}
+    <font color="red">
     <ul class=flashes>
     {% for message in messages %}
-      <li>{{ message }}</li>
+      <li>Warning: {{ message }}</li>
     {% endfor %}
     </ul>
+    </font>
   {% endif %}
 {% endwith %}
 
@@ -47,44 +49,32 @@
                 </span>
 	       {{ host }}
             </span>
-            <span class="badge"> {{ jobcount[host] }} </span>
-	    jobs,
-            {{ timer[host] | timesince(format="date") }}
-
 
 	  {% with messages = get_flashed_messages(with_categories=true) %}
-	  {% set tmp = ("qstat-"+host) %}
+	  {% set qstathost = ("qstat-"+host) %}
 	  {% if messages %}
 	    {% for category, message in messages %}
-<<<<<<< HEAD
 
-	       {{ messages}} <br>
-	       {% if category  == "qstat-hotel.futuregrid.org" %}
-	           COOOOOOOOOOOOOL
-	       {% endif %}
+	    {% set categorystring = category | string %}
+	    {% if categorystring == qstathost %}
 
-	       <br>{{ category }}, {{ message}}<br>
-	       OOOO{{ category }}PPPP
-	  
-	       {% if (category | string) == "qstat-hotel.futuregrid.org" %}
-	       BADBADBADBAD <i class="fa fa-ban text-danger"></i> 
-               {% else %}
-	       OK <i class="fa fa-check-square-o"></i> 
-	       {% endif %}
+	      <font color="red"> <i class="fa fa-ban"></i> </font>
 
-	 
-=======
-	    {% set a = category|string %}
-	    {% if a == tmp %}
-	       {{ message}}
-   	       {% endif %}
-	    
->>>>>>> 6e367499f6a9b1cc6c81ed46c36d54649d27c6cf
+	    {% else %}
+                <font color="green"> <i class="fa fa-check-square-o"></i> </font>
+	    {% endif %}
+
 	    {% endfor %}
 
 	  {% endif %}
 	  {% endwith %}
 	  
+
+	    <span class="badge"> {{ jobcount[host] }} </span>
+	    jobs,
+            {{ timer[host] | timesince(format="date") }}
+
+
         </h3>
        <div>
        <small>Last updated: {{updated | timesince(format="date")}}</small><br>

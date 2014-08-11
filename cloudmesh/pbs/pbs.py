@@ -77,7 +77,7 @@ class PBS:
             try:
                 result = ssh("{0}@{1}".format(self.user, self.host), "qstat")
             except:
-                raise RuntimeError("can not execute pbs qstat via ssh")
+                raise RuntimeError("can not execute pbs qstat on host {0}".format(self.host))
 
             # sanitize block
             data = self.convert_into_json(result)
@@ -130,7 +130,7 @@ class PBS:
             try:
                 result = ssh("{0}@{1}".format(self.user, self.host), "qstat -Q -f")
             except:
-                raise RuntimeError("can not execute pbs qstat via ssh")
+                raise RuntimeError("can not execute pbs qstat on host {0}".format(self.host))
 
             d = {}
 
@@ -197,7 +197,7 @@ class PBS:
         try:
             result = ssh("{0}@{1}".format(self.user, self.host), command)
         except:
-            raise RuntimeError("can not execute qmgr via ssh {0}".format(command))
+            raise RuntimeError("can not execute qmgr on host {0}, command:".format(self.host, command))
         return result
 
     def create_node(self, name):
@@ -226,7 +226,7 @@ class PBS:
             try:
                 result = ssh("{0}@{1}".format(self.user, self.host), "pbsnodes", "-a")
             except:
-                raise RuntimeError("can not execute pbs nodes via ssh")
+                raise RuntimeError("can not execute pbs nodes on host {0}".format(self.host))
             pbsinfo = {}
             nodes = result.split("\n\n")
             for node in nodes:
@@ -278,7 +278,7 @@ class PBS:
             try:
                 xmldata = str(ssh("{0}@{1}".format(self.user, self.host), "qstat", "-x"))
             except:
-                raise RuntimeError("can not execute pbs qstat via ssh {0}".format(self.host))
+                raise RuntimeError("can not execute pbs qstat on host {0}".format(self.host))
             info = {}
 
             try:
