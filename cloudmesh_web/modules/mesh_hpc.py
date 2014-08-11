@@ -6,7 +6,7 @@ from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import address_string, cond_decorator
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, flash
 from flask.ext.login import login_required
 from pprint import pprint
 import cloudmesh
@@ -38,6 +38,8 @@ def display_mongo_qstat_refresh(host=None):
 
     config = cm_config()
     user = config["cloudmesh"]["hpc"]["username"]
+
+
     if host is None:
         hosts = ["india.futuregrid.org",
                  "lima.futuregrid.org",
@@ -52,15 +54,13 @@ def display_mongo_qstat_refresh(host=None):
         hosts = [host]
     error = ""
 
-
-
-
     try:
         pbs = pbs_mongo()
 
         # queue = celery_config = celery_config.get("cloudmesh.workers.qstat.queue")
         # res = tasks.refresh_qstat.apply_async(queue=queue, priority=0, args=[hosts])
         for host in hosts:
+
             pbs.activate(host, user)
             pbs.refresh_qstat(host)
 
@@ -70,6 +70,10 @@ def display_mongo_qstat_refresh(host=None):
         print traceback.format_exc()
         error = "{0}".format(e)
         log.error(error)
+
+        category = "qstat-{0}".format(host)
+        flash(error, category)
+        
     #        return render_template('error.html',
     #                               error=error,
     #                      type="Some error in qstat",
