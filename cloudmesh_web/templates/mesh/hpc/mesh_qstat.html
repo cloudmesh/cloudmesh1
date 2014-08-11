@@ -57,10 +57,15 @@
 
 	    {% for category, message in messages %}
 
-	       {{ category }} {{ message}}
-	    {% if categroy == "qstat-hotel.futuregrid.org" %}
-	    BAD
-	    {% endif %}
+	       {{ category }}, {{ message}}
+	       OOOO{{ category }}PPPP
+	       {% set qstat_error = ['qstat-hotel.futuregrid.org'] %}
+	       {{ qstat_error }}
+	       {% if categroy in qstat_error %}
+	       BADBADBADBAD
+               {% else %}
+	       OK
+	       {% endif %}
 
 	    {% endfor %}
 
