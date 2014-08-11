@@ -72,7 +72,7 @@ def display_mongo_qstat_refresh(host=None):
         log.error(error)
 
         category = "qstat-{0}".format(host)
-        flash(error, category)
+        flash(error, category=str(category))
         
     #        return render_template('error.html',
     #                               error=error,
