@@ -57,6 +57,7 @@
 
 	    {% for category, message in messages %}
 
+<<<<<<< HEAD
 	       {{ category }}, {{ message}}
 	       OOOO{{ category }}PPPP
 	       {% set qstat_error = ['qstat-hotel.futuregrid.org'] %}
@@ -66,6 +67,11 @@
                {% else %}
 	       OK
 	       {% endif %}
+=======
+	       {% if categroy == ("qstat-" + host) %}
+	       {{ message}}
+	    {% endif %}
+>>>>>>> ad03688f8f0a8bf46cb720eb238ecffaf1fc402a
 
 	    {% endfor %}
 
