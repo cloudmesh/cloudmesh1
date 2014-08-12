@@ -13,7 +13,7 @@ from cloudmesh.launcher.queue.celery import celery as l_queue
 from cloudmesh.pbs.celery import celery as pbs_queue
 from celery import Celery
 
-__all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill', 'ls', 'lspbs']
+__all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill', 'ls', 'lspbs', 'flower_server']
 
 celery_config = ConfigDict(filename="~/.futuregrid/cloudmesh_celery.yaml", kind="worker")
 workers = celery_config.get("cloudmesh.workers")
@@ -51,16 +51,45 @@ def kill():
             local("killall mongod")
             local("killall python")
 
+            
+@task
+def flower_server():
+    """start the flower celery gui"""
+    flower_port = 5556
+
+#    try:
+#        with settings(warn_only=True):
+#            with hide('output', 'running', 'warnings'):
+#                local("ps auxww | grep 'flower' | awk '{print $2}' | xargs kill -9")
+#    except:
+#        print "no flower running"
+
+
+    try:
+        with settings(warn_only=True):    
+            local("flower --port={0} &".format(flower_port))
+        time.sleep(1)
+    except:
+        print "could not start flower"
+
+@task
+def flower_gui():        
+    """start the flower celery gui"""
+    #server_config = cm_config_server()
+    #port = cm_config_server().get("cloudmesh.server.webui.port")
+    #host = cm_config_server().get("cloudmesh.server.webui.host")
+
+    #local("open http://{0}:{1}".format(host, port))
+
+    flower_port = 5556
+    flower_host = "localhost"        
+    local("open http://{0}:{1}".format(flower_host, flower_port))    
+
 @task
 def gui():
     """start the flower celery gui"""
-    local("celery flower &")
-    time.sleep(1)
-    server_config = cm_config_server()
-    port = cm_config_server().get("cloudmesh.server.webui.port")
-    host = cm_config_server().get("cloudmesh.server.webui.host")
-
-    local("open http://{0}:{1}".format(host, port))
+    flower_server()
+    flower_gui()
 
 @task
 def monitor():
