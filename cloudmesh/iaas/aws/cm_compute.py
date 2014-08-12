@@ -227,8 +227,9 @@ class aws(ComputeBaseType):
         return
 
     def _get_flavors_dict(self):
-        result = self.get_flavors_from_yaml()
-        if not result:
+        try:
+            result = self.get_flavors_from_yaml()
+        except:
             result_list = self.list_flavors()
             result = self.convert_to_dict(result_list)
         self.flavors = result
