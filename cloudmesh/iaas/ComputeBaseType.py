@@ -229,7 +229,7 @@ class ComputeBaseType:
 
         list_function = self._get_servers_dict
 
-        d = self.servers
+        data = self.servers
         if selection == 'a' or type is None:
             self.refresh("images")
             self.refresh("flavors")
@@ -237,16 +237,16 @@ class ComputeBaseType:
             return
         elif selection == 'i':
             list_function = self._get_images_dict
-            d = self.images
+            data = self.images
         elif selection == 'f':
             list_function = self._get_flavors_dict
-            d = self.flavors
+            data = self.flavors
         elif selection == 's':
             list_function = self._get_servers_dict
-            d = self.servers
+            data = self.servers
         elif selection == 'e':
             list_function = self._get_security_groups_dict
-            d = self.security_groups
+            data = self.security_groups
         # elif selection == 'u':
         #    list_function = self._get_users_dict
         #    d = self.users
@@ -257,9 +257,9 @@ class ComputeBaseType:
             print "refresh type not supported"
             assert False
 
-        list = list_function()
+        list_func = list_function()
 
-        if len(list) == 0:
+        if len(list_func) == 0:
             if selection == 'i':
                 self.images = {}
             elif selection == 'f':
@@ -274,8 +274,9 @@ class ComputeBaseType:
             #    self.tenants = {}
 
         else:
-            for key in list:
-                element = list[key]
+            data_updated = {}
+            for key in list_func:
+                element = list_func[key]
                 # id = list[element]['id']
                 # d[id] = list[element]
                 # d[id]['cm_refresh'] = time_stamp
@@ -283,9 +284,9 @@ class ComputeBaseType:
                 # element is a dictionary. It doesn't have to lookup the list
                 # like 'list[element]...'. element[...] simply works.
                 id = element['id']
-                d[id] = element
-                d[id]['cm_refresh'] = time_stamp
-
+                data_updated[id] = element
+                data_updated[id]['cm_refresh'] = time_stamp
+            data = data_updated
 
     def keypair_list(self):
         raise NotImplementedError()
