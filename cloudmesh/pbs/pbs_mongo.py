@@ -80,8 +80,6 @@ class pbs_mongo:
         time_now = datetime.now()
         data = dict(self.hosts[host].qstat(refresh=True))
 
-        print "KKKKK", data.keys()
-        
         self.db_qstat.remove({"cm_host": host, "cm_kind" : "qstat"}, safe=True)
         for name in data:
             banner(name)

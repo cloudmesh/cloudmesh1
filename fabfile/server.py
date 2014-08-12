@@ -115,10 +115,12 @@ def start(server="server", browser='yes'):
     banner("START MONGO")
     local("fab mongo.start")
 
-    banner("SATRT RABITMQ")
+    banner("START RABITMQ")
     local("fab queue.start")
 
-
+    banner("START FLOWER")
+    local("fab queue.flower_server")
+    
     banner("START WEB SERVER")
     local("cd cloudmesh_web; python {0}.py &".format(server))
     # view(link)
