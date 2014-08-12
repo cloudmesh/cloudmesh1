@@ -725,6 +725,8 @@ class azure(ComputeBaseType):
         try:
             result = self.get_flavors_from_yaml()
         except:
+            result = None
+        if not result:
             return self.list_flavors()
 
         self.flavors = result
