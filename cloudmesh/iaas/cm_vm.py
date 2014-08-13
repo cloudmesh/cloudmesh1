@@ -170,7 +170,7 @@ def start_vm(username,
     
     # -------------------------
     # flavor handler
-    if "flavors" in to_refresh:
+    if flavorname != None or flavorid != None:
         flavordata = mongo.flavors(clouds=[cloudname], cm_user_id=username)[cloudname]
         same_name_count = 0
         for k, v in flavordata.iteritems():
@@ -198,7 +198,7 @@ def start_vm(username,
             error = error + "Please specify a default flavor(command: cloud set flavor [CLOUD]). "
     # -------------------------
     # image handler
-    if "images" in to_refresh:
+    if imagename != None or imageid != None:
         imagedata = mongo.images(clouds=[cloudname], cm_user_id=username)[cloudname]
         same_name_count = 0
         for k, v in imagedata.iteritems():
@@ -254,17 +254,18 @@ def start_vm(username,
         prefix = ''
         index = ''
         givenvmname = servername
-        tmpname = servername
+        tmpnameser = servername
     else:
         prefix = userinfo["defaults"]["prefix"]
         index = userinfo["defaults"]["index"]
         givenvmname = None
-        tmpname = prefix+'_'+str(index)
+        tmpnameser = prefix+'_'+str(index)
     # ------------------------
     # vm start procedure
-    defaultsnames = cloudobj.get_cloud_defaultinfo(username, cloudname)
+    tmpnamefl = cloudobj.get_flavors(cloudname=cloudname, getone=True, id=vm_flavor_id)['name']
+    tmpnameim = cloudobj.get_images(cloudname=cloudname, getone=True, id=vm_image_id)['name']
     banner("Starting vm->{0} on cloud->{1} using image->{2}, flavor->{3}, key->{4}"\
-           .format(tmpname, cloudname, defaultsnames['image'], defaultsnames['flavor'], keynamenew))
+           .format(tmpnameser, cloudname, tmpnamefl, tmpnameim, keynamenew))
     result = mongo.vm_create(
         cloudname,
         prefix,
