@@ -19,5 +19,5 @@ def Parallel (execution_array, f, **kwargs):
     result = {}
     for element in execution_array:
         banner (element, c=".")      
-        task[element].get(propagate=False)
+        result[element] = task[element].get(propagate=False)
     return result

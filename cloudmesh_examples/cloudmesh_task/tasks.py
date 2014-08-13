@@ -10,6 +10,8 @@ def cm_ssh(host, username, command):
     error = None
     try:
         output = ssh("{0}@{1}".format(username, host), command)
+        banner(str(type(output)))
+        
     except Exception, e:
         error = dict({"host": host,
                     "username": username,
