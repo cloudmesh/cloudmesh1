@@ -44,7 +44,7 @@ in the first parameter. The second one executes it in parallel
 
 First start in one terminal the celery server::
 
-  cm-task.py start
+  cm-tasks.py start
 
 In a second version start the test program::
 
