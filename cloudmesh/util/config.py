@@ -58,6 +58,6 @@ def read_yaml_config(filename, check=True, osreplace=True):
 
     else:
         log.error("The file {0} does not exist.".format(filename))
-        sys.exit()
+        #sys.exit()
 
     return None
