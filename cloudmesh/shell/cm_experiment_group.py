@@ -3,7 +3,7 @@ from cloudmesh_common.logger import LOGGER
 from docopt import docopt
 from pprint import pprint
 from cloudmesh.user.cm_user import cm_user
-from cmd3.shell import cmd3_call
+#from cmd3.shell import cmd3_call
 
 log = LOGGER(__file__)
 
@@ -75,7 +75,8 @@ def shell_command_experiment_group(arguments):
         print "deletes the entries and ask if -i is specified"
 
 def main():
-    cmd3_call(shell_command_experiment_group)
+    #cmd3_call(shell_command_experiment_group)
+    pass
     
 if __name__ == '__main__':
     main()

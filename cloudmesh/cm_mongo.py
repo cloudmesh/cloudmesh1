@@ -306,10 +306,12 @@ class cm_mongo:
         #
 
         if cm_user_id is None:
+            cm_user_id = self.config.username() #added by Mark X on 8.12.2014
             if names is None:
                 names = self.config.active()
         else:
-             names = self.active_clouds(cm_user_id)
+            if names is None:     #added by Mark X on 8.12.2014
+                names = self.active_clouds(cm_user_id)
 
         for cloud_name in names:
             log.info("Activating -> {0}".format(cloud_name))
@@ -515,9 +517,12 @@ class cm_mongo:
                 break
         return ret
 
-    def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id):
+    def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id, givenvmname=None):
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
-        name = "%s_%s" % (prefix, index)
+        if givenvmname == None:
+            name = "%s_%s" % (prefix, index)
+        else:
+            name = givenvmname
         return cloudmanager.vm_create(name=name, flavor_name=vm_flavor, image_id=vm_image, key_name=key, meta=meta)
 
     def vm_create_queue(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id):
