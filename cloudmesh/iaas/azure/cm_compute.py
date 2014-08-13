@@ -722,7 +722,10 @@ class azure(ComputeBaseType):
         return
 
     def _get_flavors_dict(self):
-        result = self.get_flavors_from_yaml()
+        try:
+            result = self.get_flavors_from_yaml()
+        except:
+            result = None
         if not result:
             return self.list_flavors()
 
