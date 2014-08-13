@@ -14,7 +14,7 @@ import json
 
 config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")["cloudmesh"]["server"]["mongo"]
 
-pprint (config)
+#pprint (config)
 
 connect (config["collections"]["experiment"]["db"],
          port=config["port"],

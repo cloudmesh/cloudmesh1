@@ -356,7 +356,7 @@ def manage_keypairs(cloud=None):
 
 def check_register_key(cloud, keyname, keycontent):
     clouds = cm_mongo()
-    clouds.activate(cm_user_id=g.user.id)
+    clouds.activate(cm_user_id=g.user.id, names=[cloud])
     cloudmanager = clouds.clouds[g.user.id][cloud]['manager']
     
     keynamenew = _keyname_sanitation(g.user.id, keyname)
@@ -390,7 +390,7 @@ def start_vm(cloud=None, server=None):
 
     config = cm_config()
     clouds = cm_mongo()
-    clouds.activate(cm_user_id=g.user.id)
+    clouds.activate(cm_user_id=g.user.id, names=[cloud])
 
     key = None
     vm_image = None
