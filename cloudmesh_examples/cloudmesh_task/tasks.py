@@ -14,16 +14,18 @@ def cm_ssh(host, username=None, command=None):
         "username": username, 
         "output": "None",
         "error": "None",
-        "time": "None"
+        "time_start": "None",
+        "time_end": "None"
         })
 
-    now = datetime.datetime.now()
+    
     try:
-        
-        result["time"] = str(now)
+
+        result["time_start"] = str(datetime.datetime.now())
         result["output"] = str(ssh("{0}@{1}".format(username, host), "date; " + command))
         # result["output"] = "DEBUG {0} {1}".format(host, str(now))
-
+        result["time_end"] = str(datetime.datetime.now())
+        
     except Exception, e:
 
         result["error"] = str(e)
