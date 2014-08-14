@@ -20,6 +20,31 @@ task = {}
 
 watch = StopWatch()
 
+f = Sequential
+for execute in [Sequential, Parallel]:
+
+    name = execute.__name__
+
+    banner(name)
+    watch.start(name)
+
+    result = execute(hosts, cm_ssh, username=username, command="qstat")
+
+    watch.stop(name)
+
+    pprint(result)
+    
+    banner("PRINT")        
+    for host in result:
+        print result[host]["output"]
+    
+
+for timer in watch.keys():
+    print timer, watch.get(timer), "s"
+
+
+
+"""    
 ######################################################################
 banner("SEQUENTIAL")
 ######################################################################
@@ -50,19 +75,6 @@ watch.start("parallel")
 
 result = Parallel(hosts, cm_ssh, username=username, command="qstat")
 print "gather results"
-
-
-######################################################################
-banner("PRINT")
-######################################################################
 watch.stop("parallel")
 
-pprint(result)
-
-for host in result:
-    print result[host]["output"]
-
-for timer in ["parallel", "sequential"]:
-    print timer, watch.get(timer), "s"
-
-
+"""
