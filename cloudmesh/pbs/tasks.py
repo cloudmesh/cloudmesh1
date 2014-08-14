@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 from celery import current_task
-from cloudmesh.pbs.celery import celery
+from cloudmesh.pbs.celery import celery_pbs_queue
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 import datetime
@@ -12,7 +12,7 @@ import time
 from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
-@celery.task(track_started=True)
+@celery_pbs_queue.task(track_started=True)
 def refresh_qstat(hosts):  # checks the mongodb for last qstat refresh and if it is
     '''
     Launches the recipies on the server as per the task_dict. The task dict should the following properties

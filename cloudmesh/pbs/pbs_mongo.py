@@ -83,7 +83,6 @@ class pbs_mongo:
         self.db_qstat.remove({"cm_host": host, "cm_kind" : "qstat"}, safe=True)
         for name in data:
             banner(name)
-            banner(data[name].keys())
             for job in data[name]:
                 entry = data[name][job]
                 id = "{0}-{1}-qstat".format(host, name).replace(".", "-")
@@ -92,7 +91,6 @@ class pbs_mongo:
                 entry["cm_id"] = id
                 entry["cm_qstat"] = host
                 entry["cm_refresh"] = time_now
-                print "Insert", job
                 self.db_qstat.insert(data[name][job])
                 
 

@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 from celery import current_task
-from cloudmesh.rain.cobbler.queue.celery import celery
+from cloudmesh.rain.cobbler.queue.celery import celery_rain_queue
 
 from cloudmesh.rain.cobbler.cobbler_rest_api import CobblerRestAPI
 
@@ -9,7 +9,7 @@ from celery.utils.log import get_task_logger
 log = get_task_logger(__name__)
 
 
-@celery.task(track_started=True)
+@celery_rain_queue.task(track_started=True)
 def deploy_system(name):
     '''Deploy baremetal computer whose name is **name**
     :param string name: the unique name of baremetal computer
@@ -19,7 +19,7 @@ def deploy_system(name):
     result = rest_api.deploy_cobbler_system(name)
     log.info("deploy_system, deploy command result is: {0}".format(result))
     
-@celery.task(track_started=True)
+@celery_rain_queue.task(track_started=True)
 def power_system(name, flag_on):
     '''Power ON/OFF baremetal computer whose name is **name**
     :param string name: the unique name of baremetal computer

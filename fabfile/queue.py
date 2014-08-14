@@ -9,8 +9,8 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh_common.util import banner
 from cloudmesh.provisioner.queue.celery import celery_provisiner_queue as p_queue
-from cloudmesh.launcher.queue.celery import celery as l_queue
-from cloudmesh.pbs.celery import celery as pbs_queue
+from cloudmesh.launcher.queue.celery import celery_launcher_queue as l_queue
+from cloudmesh.pbs.celery import celery_pbs_queue as pbs_queue
 from celery import Celery
 
 __all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill', 'ls', 'lspbs', 'flower_server']
