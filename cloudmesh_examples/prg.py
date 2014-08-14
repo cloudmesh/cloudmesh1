@@ -12,7 +12,7 @@ print "USERNAME:", username
 hosts = []
 
 hosts.append("india.futuregrid.org")
-#hosts.append("hotel.futuregrid.org")
+hosts.append("hotel.futuregrid.org")
 hosts.append("sierra.futuregrid.org")
 hosts.append("alamo.futuregrid.org")        
 
