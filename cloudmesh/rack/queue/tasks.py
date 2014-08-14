@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 from celery import current_task
-from cloudmesh.rack.queue.celery import celery
+from cloudmesh.rack.queue.celery import celery_rack_queue_tasks
 
 from cloudmesh.temperature.cm_temperature import cm_temperature as Temperature
 from cloudmesh.rack.rack_data import RackData
@@ -16,7 +16,7 @@ import time
 log = get_task_logger(__name__)
 
 
-@celery.task(track_started=True)
+@celery_rack_queue_tasks.task(track_started=True)
 def temperature(host_name, rack_name, unit):
     '''
     get the temperature of 'host_name' with the help of ipmi API
@@ -28,7 +28,7 @@ def temperature(host_name, rack_name, unit):
     rackdata.server_refresh_update_temperature(rack_name, host_name, tdict)
 
 
-@celery.task(track_started=True)
+@celery_rack_queue_tasks.task(track_started=True)
 def pbs_service(rack_name):
     '''
     get all server type with the help of PBS

@@ -62,6 +62,7 @@ def display_mongo_qstat_refresh(host=None):
         for host in hosts:
 
             pbs.activate(host, user)
+            log.info("refresh qstat: {0} {1}".format(host, user))
             pbs.refresh_qstat(host)
 
     #    error = res.get(timeout=timeout)

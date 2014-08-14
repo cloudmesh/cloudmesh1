@@ -21,10 +21,10 @@ log = get_task_logger(__name__)
 ipmi_temp = Temperature()
 
 
-celery = Celery('cloudmesh.rack.tasks', backend='amqp', broker='amqp://guest@localhost//')
+celery_rack_queue = Celery('cloudmesh.rack.tasks', backend='amqp', broker='amqp://guest@localhost//')
 
 
-@celery.task
+@celery_rack_queue.task
 def temperature(host_name, rack_name, unit):
     '''
     get the temperature of 'host_name' with the help of ipmi API
@@ -35,7 +35,7 @@ def temperature(host_name, rack_name, unit):
     
 
 
-@celery.task
+@celery_rack_queue.task
 def task_sensors(dict_idip):
     dict_data = {}
     for cluster in dict_idip.keys():

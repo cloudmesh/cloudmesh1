@@ -3,7 +3,7 @@ meta:
   kind: flavor
 cloudmesh:
   flavor:
-          alamo_openstack_folsom:
+        alamo_openstack_folsom:
           m1.large:
             disk: 80
             id: m1.large
