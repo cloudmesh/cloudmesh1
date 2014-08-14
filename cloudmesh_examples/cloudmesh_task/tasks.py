@@ -12,10 +12,10 @@ def cm_ssh(host, username=None, command=None):
         "host": host,
         "command": command,
         "username": username, 
-        "output": "None",
-        "error": "None",
-        "time_start": "None",
-        "time_end": "None"
+        "output": None,
+        "error": None,
+        "time_start": None,
+        "time_end": None
         })
 
     
