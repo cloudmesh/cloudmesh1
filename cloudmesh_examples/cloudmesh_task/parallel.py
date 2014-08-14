@@ -27,5 +27,18 @@ def Parallel (execution_array, f, **kwargs):
         banner ("{0} {1}".format(element, task[element]), c=".")      
         result[element] = task[element].get(propagate=False)
         print "OOOO", result[element]
+        banner("info")
+        pprint (task[element].info())
+        banner("infoend")
 
+    import time
+    time.sleep(5)
+    
+    for element in execution_array:
+        
+        banner ("{0} {1}".format(element, task[element]), c=".")      
+        r = task[element].get(propagate=False)
+        print "YYYYYY", r["error"], r["output"]
+
+    sys.exit()
     return result
