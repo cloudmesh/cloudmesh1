@@ -50,3 +50,24 @@ In a second version start the test program::
 
   python prg.py
 
+Hostname
+----------------------------------------------------------------------
+
+As we use DHCP we get a random hostname. This can be changes as documented at:
+
+*
+http://celery.readthedocs.org/en/latest/getting-started/brokers/rabbitmq.html#configuring-the-system-host-name
+
+Monitoring
+----------------------------------------------------------------------
+
+::
+
+  $ flower celer 
+  $ open http://localhost:5555
+
+Rabitmq
+
+::
+
+  $ open http://localhost:15672/#/
