@@ -26,9 +26,12 @@ def Parallel (execution_array, f, **kwargs):
 
     for element in execution_array:
         print "getting -> {0}".format(element), str(task[element])
-        result[element] = task[element].get(propagate=False)
+        result[element] = task[element].get(propagate=False, no_ack=False)
+        banner("info")
         print "INFO", task[element].info
+        banner("result")
         print "RESULT", task[element].result
+        banner("backend")        
         print "BACKEND", task[element].backend        
         
         #print "OOOO", result[element]

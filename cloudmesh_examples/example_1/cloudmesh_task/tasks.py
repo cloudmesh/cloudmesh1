@@ -5,7 +5,7 @@ from sh import ssh
 from pprint import pprint
 import datetime
 
-@app.task
+@app.task(track_started=True)
 def cm_ssh(host, username=None, command=None):
 
     result = dict({
