@@ -27,15 +27,16 @@ def ascii_menu(title=None, menu_list=None):
         print
 
     display()
-    while True:
-        result = input("Select between {0} - {1}: ".format(1, n))
+    running = True
+    while running:
+        result = raw_input("Select between {0} - {1}: ".format(1, n))
         print "<{0}>".format(result)
-        if result == "q":
-            break
+        if result.strip() in ["q"]:
+            running = False
         else:
             try:
                 result = int(result) - 1
-                if result > 0 and result < n:
+                if result >= 0 and result < n:
                     (label, f) = menu_list[result]
                     print "EXECUTING:", label, f.__name__
                     f()
