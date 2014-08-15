@@ -6,6 +6,7 @@ def Sequential (execution_array, f, **kwargs):
     print "ARGS", kwargs
     result = {}
     for element in execution_array:
+        print "submitting -> {0}".format(element)
         result[element] = f(element, **kwargs)
     return result
 
@@ -14,31 +15,22 @@ def Sequential (execution_array, f, **kwargs):
 def Parallel (execution_array, f, **kwargs):
     task = {}
     for element in execution_array:
+        print "submitting -> {0}".format(element)        
         task[element] = f.apply_async(args=(element,),
                                       kwargs=kwargs,
-                                      expires=1)
+                                      expires=10)
 
     banner ("tasks", c=".")
     pprint (task)
     result = {}
 
     for element in execution_array:
-        
-        banner ("{0} {1}".format(element, task[element]), c=".")      
+        print "getting -> {0}".format(element), str(task[element])
         result[element] = task[element].get(propagate=False)
-        print "OOOO", result[element]
-        banner("info")
-        pprint (task[element].info())
-        banner("infoend")
-
-    import time
-    time.sleep(5)
-    
-    for element in execution_array:
+        print "INFO", task[element].info
+        print "RESULT", task[element].result
+        print "BACKEND", task[element].backend        
         
-        banner ("{0} {1}".format(element, task[element]), c=".")      
-        r = task[element].get(propagate=False)
-        print "YYYYYY", r["error"], r["output"]
+        #print "OOOO", result[element]
 
-    sys.exit()
     return result

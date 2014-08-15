@@ -4,23 +4,24 @@ from cloudmesh.util.stopwatch import StopWatch
 from cloudmesh_common.util import banner
 from pprint import pprint
 from cloudmesh.config.cm_config import cm_config
-
+import sys
 
 username = cm_config().get("cloudmesh.hpc.username")
 print "USERNAME:", username
 
 hosts = []
 
+#hosts.append("localhost")
 hosts.append("india.futuregrid.org")
-hosts.append("hotel.futuregrid.org")
-hosts.append("sierra.futuregrid.org")
+#hosts.append("hotel.futuregrid.org")
+#hosts.append("sierra.futuregrid.org")
 hosts.append("alamo.futuregrid.org")        
 
 task = {}
 
 watch = StopWatch()
 
-f = Sequential
+
 for execute in [Sequential, Parallel]:
 
     name = execute.__name__
