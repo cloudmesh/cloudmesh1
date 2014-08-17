@@ -18,6 +18,7 @@ from util import is_ubuntu, is_centos, is_osx
 from ..cloudmesh_common.util import yn_choice
 from ConfigParser import SafeConfigParser
 from paramiko import SSHClient, AutoAddPolicy, BadHostKeyException, AuthenticationException, SSHException
+from cloudmesh_install import config_file, config_file_prefix
 
 ######################################################################
 # STOP IF PYTHON VERSION IS NOT 2.7.5
@@ -88,7 +89,7 @@ def install_command(args):
 
         if answer:
             print "You fool we just deleted your yaml files"
-            cp("etc/*.yaml", "~/.futuregrid/")
+            cp("etc/*.yaml", config_file_prefix())
         else:
             print "puuh you interrupted"
             pass
@@ -133,8 +134,8 @@ def new_cloudmesh_yaml():
         if yaml files exist, this function won't perform.
 
         - check existance
-        - create ~/.futuregrid
-        - copy templates from etc/ to $HOME/.futuregrid
+        - create ~/CONFIG e.g. .cloudmesh
+        - copy templates from etc/ to $HOME/.cloudmesh
     """
 
     dirname = config_file("")

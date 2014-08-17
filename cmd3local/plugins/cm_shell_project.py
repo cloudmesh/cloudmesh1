@@ -8,6 +8,7 @@ from cmd3.shell import command
 from pprint import pprint
 
 from cloudmesh.config.cm_projects import cm_projects
+from cloudmesh_install import config_file
 
 from cloudmesh_common.logger import LOGGER
 
@@ -20,7 +21,7 @@ class cm_shell_project:
 
     def _load_projects(self):
         if not self.cm_shell_project_loaded :
-            filename = "$HOME/.futuregrid/cloudmesh.yaml"
+            filename = config_file("/cloudmesh.yaml")
             self.projects = cm_projects(filename)
             if self.echo:
                 log.info(

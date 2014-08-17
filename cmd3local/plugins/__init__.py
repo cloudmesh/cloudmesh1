@@ -1,10 +1,5 @@
-
-
-
-
-
 # ---------------------------------------------------------------------------
-# !!!unclear design!!!: import cloud info from ~/.futuregrid/cloudmesh.yaml 
+# import cloud info from config_file("/cloudmesh.yaml")
 # to mongo everytime cm startup:: wipe out all clouds then import
 # ---------------------------------------------------------------------------
 
@@ -12,7 +7,7 @@ from cloudmesh.iaas.cm_cloud import CloudManage
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh_common.bootstrap_util import path_expand
 from cloudmesh.config.ConfigDict import ConfigDict
-
+from cloudmesh_install import config_file
 
 config = cm_config()
 username = config['cloudmesh']['profile']['username']
@@ -27,8 +22,7 @@ for name in cloud_names:
     cloudmanage.remove_cloud(username, name)
     
 
-file = path_expand("~/.futuregrid/cloudmesh.yaml")
-fileconfig = ConfigDict(filename=file)
+fileconfig = ConfigDict(filename=config_file("/cloudmesh.yaml"))
 cloudsdict = fileconfig.get("cloudmesh", "clouds")
 
 for key in cloudsdict:

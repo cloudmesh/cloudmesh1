@@ -10,11 +10,12 @@ from cmd3.shell import command
 from cloudmesh.config.cm_keys import cm_keys_yaml,cm_keys_mongo
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh_common.logger import LOGGER
-from cloudmesh_common.tables import two_column_table
+from cloudmesh_common.tables import to_column_table
 from cloudmesh_common.bootstrap_util import yn_choice
 from cloudmesh.util.menu import menu_return_num
 from os import listdir
 from os.path import isfile, join, expanduser
+from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
 
@@ -42,7 +43,7 @@ class cm_shell_keys:
                       "Have you started the mongo server?"
     def _load_keys(self):
         try:
-            filename = "$HOME/.futuregrid/cloudmesh.yaml"
+            filename = config_file("/cloudmesh.yaml")
             if self.echo:
                 log.info("Reading keys information from -> {0}"
                          .format(filename))
