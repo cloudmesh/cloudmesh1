@@ -19,11 +19,11 @@ from pprint import pprint
 
 from cloudmesh_common.util import HEADING
 from cloudmesh_common.util import path_expand
-
+from cloudmesh_install import config_file
 
 class Test_cloudmesh:
 
-    filename = "~/.futuregrid/cloudmesh.yaml"
+    filename = config_file("/cloudmesh.yaml")
 
     project = 82
 
@@ -178,7 +178,7 @@ class Test_cloudmesh:
 
     def test_launcher(self):
         HEADING()
-        filename = "~/.futuregrid/cloudmesh_launcher.yaml"
+        filename = config_file("/cloudmesh_launcher.yaml")
         config = ConfigDict(filename=filename)
         print config
         existing = config.get("cloudmesh.launcher.recipies")
@@ -194,7 +194,7 @@ class Test_cloudmesh:
 
     def test_server(self):
         HEADING()
-        filename = "~/.futuregrid/cloudmesh_server.yaml"
+        filename = config_file("/cloudmesh_server.yaml")
         config = ConfigDict(filename=filename)
         # print config
         existing = config.get("cloudmesh.server.mongo.db")
@@ -210,7 +210,7 @@ class Test_cloudmesh:
 
     def test_getitem_server(self):
         HEADING()
-        filename = "~/.futuregrid/cloudmesh_server.yaml"
+        filename = config_file("/cloudmesh_server.yaml")
         config = ConfigDict(filename=filename)
         print config
         existing = config.get("cloudmesh.server.mongo.db")

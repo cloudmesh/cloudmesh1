@@ -18,6 +18,7 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from pprint import pprint
 import os
+from cloudmesh_install import config_file
 
 class Test_cloudmesh:
 
@@ -83,13 +84,13 @@ class Test_cloudmesh:
 
     def setup_inventory(self):
         banner("Read Dicts")
-        self.sample_user = ConfigDict(filename="~/.futuregrid/me.yaml")
+        self.sample_user = ConfigDict(filename=config_file("/me.yaml"))
         self.portalname = self.sample_user.get("portalname")
         print "PORTALNAME", self.portalname
         print "SAMPLE USER", self.sample_user
 
         banner("create user from template, duplicates cm init generate me")
-        t = cm_template("~/.futuregrid/etc/cloudmesh.yaml")
+        t = cm_template(config_file("/etc/cloudmesh.yaml"))
         pprint (set(t.variables()))
 
         self.config = t.replace(kind="dict", values=self.sample_user)
@@ -139,7 +140,7 @@ class Test_cloudmesh:
     def test_gregor(self):
 
         banner("ME")
-        id = ConfigDict(filename="~/.futuregrid/me.yaml").get("portalname")
+        id = ConfigDict(filename=config_file("/me.yaml")).get("portalname")
         user = cm_user()
         result = user.info(id)
         pprint (result)

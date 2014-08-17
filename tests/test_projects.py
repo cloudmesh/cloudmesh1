@@ -13,14 +13,14 @@ pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh.config.cm_projects import cm_projects
 from cloudmesh_common.util import HEADING
-
+from cloudmesh_install import config_file
 
 class Test_cloudmesh:
 
     # filename = None
     # filename = "credentials-example-keys.yaml"
-    # filename = "$HOME/.futuregrid/cloudmesh-new.yaml"
-    filename = "$HOME/.futuregrid/cloudmesh.yaml"
+    # filename = config_file("/cloudmesh-new.yaml")
+    filename = config_file("/cloudmesh.yaml")
 
     def setup(self):
         self.projects = cm_projects(self.filename)

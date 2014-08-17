@@ -16,10 +16,11 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_common.util import path_expand
 
 from pprint import pprint
+from cloudmesh_install import config_file
 
 class Test_cloudmesh:
 
-    username = ConfigDict(filename="~/.futuregrid/cloudmesh.yaml").get("cloudmesh.hpc.username")
+    username = ConfigDict(filename=config_file("/cloudmesh.yaml")).get("cloudmesh.hpc.username")
 
 
     filename = "etc/cloudmesh.yaml"

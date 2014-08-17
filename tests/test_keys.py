@@ -19,12 +19,13 @@ from cloudmesh.config.cm_keys import cm_keys
 from cloudmesh_common.util import HEADING
 from cloudmesh_common.util import path_expand
 
+from cloudmesh_install import config_file
 
 class Test_cloudmesh:
 
     # filename = None
     # filename = "credentials-example-keys.yaml"
-    filename = "$HOME/.futuregrid/cloudmesh.yaml"
+    filename = config_file("/cloudmesh.yaml")
 
     def setup(self):
         self.keys = cm_keys(self.filename)

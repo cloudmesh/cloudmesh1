@@ -17,6 +17,7 @@ import urlparse
 from cloudmesh.util.cm_table import cm_table
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
+from cloudmesh_install import config_file
 
 class eucalyptus(ComputeBaseType):
 
@@ -32,7 +33,7 @@ class eucalyptus(ComputeBaseType):
     cloudmesh:
 
         india-eucalyptus:
-            BASEDIR: ~/.futuregrid/india/eucalyptus
+            BASEDIR: ~/.cloudmesh/india/eucalyptus
             host: 127.127.127.127
             port: 8773
             fg-82:
@@ -47,10 +48,7 @@ class eucalyptus(ComputeBaseType):
     """
 
     # filename not yet used
-    filename = "%(home)s/%(location)s" % {
-        "home": os.environ['HOME'],
-        "location": ".futuregrid/cloudmesh.yaml"
-    }
+    filename = config_file("/cloudmesh.yaml")
 
     type = "eucalyptus"
     sizes = {}
@@ -190,7 +188,7 @@ class eucalyptus(ComputeBaseType):
     def activate_project(self, project):
         """ this routine is wrong and has been copied from a deprecated code"""
         self.credentials = credentials_rc("eucalyptus")
-        self.credentials.location = ".futuregrid/india/eucalyptus/" + \
+        self.credentials.location = config_file("/india/eucalyptus/") + \
             project + "/eucarc"
 
         self.credentials.type('eucalyptus')
@@ -207,7 +205,7 @@ class eucalyptus(ComputeBaseType):
                  secretKey=None):
         """
         initializes the openstack cloud from a defould novaRC file
-        locates at ~/.futuregrid.org/openstack. However if the
+        locates at CONFIG/openstack. However if the
         parameters are provided it will instead use them
         """
         self.clear()

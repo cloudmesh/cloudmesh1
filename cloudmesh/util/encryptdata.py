@@ -29,6 +29,7 @@ from hashlib import sha256
 from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
 import uuid
+from cloudmesh_install import config_file_prefix
 
 
 def pad(data, bs):
@@ -112,7 +113,7 @@ def decrypt_file(content, filename=None):
         #
         # to do needs to be replace wit config_file
         #
-        uniq_filename = filename or "~/.futuregrid/" + str(uuid.uuid4())
+        uniq_filename = filename or config_file_prefix()  + str(uuid.uuid4())
         print uniq_filename
         with open(uniq_filename, 'w') as outf:
             outf.write(file_contents)

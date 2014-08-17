@@ -12,7 +12,7 @@ import json
 
 #connect (
 
-config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")["cloudmesh"]["server"]["mongo"]
+config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))["cloudmesh"]["server"]["mongo"]
 
 #pprint (config)
 

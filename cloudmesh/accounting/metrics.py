@@ -19,6 +19,8 @@ from cloudmesh.iaas.openstack.cm_compute import openstack
 from cloudmesh.iaas.eucalyptus.eucalyptus_new import eucalyptus
 from cloudmesh.iaas.azure.cm_azure import cm_azure as azure
 
+from cloudmesh_install import config_file
+
 try:
     # from sh import fgmetric
     from fgmetric.FGMetricsAPI import FGMetricsAPI
@@ -447,7 +449,7 @@ if __name__ == "__main__":
         }
 
 
-    (attribute, passwd) = fgrep("OS_PASSWORD","%s/.futuregrid/openstack/novarc" % os.environ['HOME']).replace("\n","").split("=")
+    (attribute, passwd) = fgrep("OS_PASSWORD",config_file("openstack/novarc")).replace("\n","").split("=")
 
     india_os['OS_PASSWORD'] = passwd
 

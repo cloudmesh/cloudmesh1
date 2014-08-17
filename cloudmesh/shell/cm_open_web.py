@@ -3,6 +3,7 @@ from docopt import docopt
 from cloudmesh.config.ConfigDict import ConfigDict
 import os
 import sys
+from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
 
@@ -42,7 +43,7 @@ def shell_command_open_web(arguments):
         location = "https://cloudmesh.futuregrid.org"        
     else:
         try:
-            filename= "~/.futuregrid/cloudmesh_server.yaml"
+            filename= config_file("/cloudmesh_server.yaml")
             server_config = ConfigDict(filename=filename)
 
             host = server_config.get("cloudmesh.server.webui.host")

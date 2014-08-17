@@ -16,6 +16,8 @@ from cloudmesh_common.util import path_expand
 from cloudmesh_common.util import banner
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_install import config_file
+from cloudmesh_install import config_file_prefix
 
 debug = True
 
@@ -62,7 +64,7 @@ def cm_manage():
       -u USER --user=USER  the user (login) name
 
       -r HOST --remote=HOST  the host machine on which the yaml file is
-                             located in the ~/.futuregrid directory
+                             located in the CONFIG directory
                              [default: sierra.futuregrid.org]
 
       -d  --debug          debug
@@ -89,12 +91,12 @@ def cm_manage():
          cm-manage config ? -
 
       Presents a selction of cloud choices and writes the choice into a
-      file called ~/.futuregrid/novarc
+      file called CONFIG/novarc
 
 
     """
 
-    default_path = '.futuregrid/novarc'
+    default_path = config_file_prefix + '/novarc'
     arguments = docopt(cm_manage.__doc__)
 
     DEBUG("arguments", arguments)
@@ -141,7 +143,10 @@ def cm_manage():
             var = {}
             var['user'] = arguments['--user']
             var['host'] = arguments['--remote']
-            var['file'] = ".futuregrid/cloudmesh.yaml"
+            #
+            # BUG should be 
+            #
+            var['file'] = config_file_prefix() + "/cloudmesh.yaml"
             if var['user'] is None:
                 var['user'] = getpass.getuser()
 
@@ -256,7 +261,7 @@ def cm_manage():
             warning = "Your passwords will appear on the screen. Continue?"
             if yn_choice(warning, 'n'):
 
-                me = ConfigDict(filename=config_file("/.futuregrid/me.yaml"))
+                me = ConfigDict(filename=config_file("/me.yaml"))
                 banner("PASSWORDS")
                 for name in me['password']:
                     print "{0}: {1}".format(name, me['password'][name])

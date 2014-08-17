@@ -26,7 +26,7 @@ class keystone(object):
     def __init__(self, label, admin_credential=None):
         """
         initializes the keystone client from a file
-        located at ~/.futuregrid.org/cloudmesh_server.yaml.
+        located at cloudmesh_server.yaml.
         """
         self.clear()
         self.label = label

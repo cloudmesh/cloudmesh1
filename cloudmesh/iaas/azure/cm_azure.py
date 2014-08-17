@@ -15,7 +15,7 @@ import getpass
 from sh import azure as _azure
 from sh import fgrep as _fgrep
 import pprint
-
+from cloudmesh_install import config_file
 
 from multiprocessing import Pool as _Pool
 from cloudmesh.config.cm_config import cm_config
@@ -53,10 +53,7 @@ class cm_azure:
     credentials = {}
     type = "azure"  # global var
 
-    filename = "%(home)s/%(location)s" % {
-        "home": os.environ['HOME'],
-        "location": ".futuregrid/cloudmesh.yaml"
-    }
+    filename = config_file("/cloudmesh.yaml")
 
     #
     # initialize
@@ -68,7 +65,7 @@ class cm_azure:
                  default_image_name=None):
         """
         initializes the openstack cloud from a defould novaRC file
-        locates at ~/.futuregrid.org/openstack. However if the
+        locates at CONFIG/openstack. However if the
         parameters are provided it will instead use them
         """
 

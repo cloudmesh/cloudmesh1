@@ -11,11 +11,12 @@ from  pprint import pprint
 
 from cloudmesh_common.util import HEADING
 import sys
+from cloudmesh_install import config_file
 
 
 class Test_Launcher:
 
-    # filename = "$HOME/.futuregrid/cloudmesh-new.yaml"
+    # filename = config_file("/cloudmesh.yaml")
 
     def setup(self):
         provider = SimulatorLauncher
