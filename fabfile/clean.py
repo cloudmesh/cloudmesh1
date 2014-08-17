@@ -1,5 +1,6 @@
 from fabric.api import task, local
 from cloudmesh_common.util import banner
+from cloudmesh_install import config_file
 
 @task
 def dir():
@@ -17,7 +18,7 @@ def dir():
 @task
 def cmd3():
     banner("CLEAN CMD3")
-    local("rm -rf ~/.futuregrid/cmd3local")
+    local("rm -rf {0}".format(config_file("/cmd3local")))
 
 @task
 def all():

@@ -17,13 +17,14 @@ from  yaml import dump as yaml_dump
 import sys
 import os.path
 import os
+from cloudmesh_install import config_file
 
 @task
 def password():
-    user_config = cm_config(filename="~/.futuregrid/cloudmesh.yaml")
+    user_config = cm_config(filename=config_file("/cloudmesh.yaml"))
     user = user_config.cloud('sierra_openstack_grizzly')['credentials']
 
-    server_config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")
+    server_config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
     server = server_config.get('cloudmesh.server.keystone.sierra_openstack_grizzly')
 
     print(" ".join(["keystone", "--os-username", server['OS_USERNAME'],
@@ -44,7 +45,7 @@ def password():
 
 @task
 def delete_defaults():
-    filename = "~/.futuregrid/cloudmesh.yaml"
+    filename = config_file("/cloudmesh.yaml")
     banner("reding data from {0}".format(filename))
     config = cm_config(filename=filename)
     username = config.get("cloudmesh.hpc.username")
@@ -76,7 +77,7 @@ def register():
 def mongo():
     register()
 
-    filename = "~/.futuregrid/cloudmesh.yaml"
+    filename = config_file("/cloudmesh.yaml")
     banner("reding data from {0}".format(filename))
     config = cm_config(filename=filename)
 

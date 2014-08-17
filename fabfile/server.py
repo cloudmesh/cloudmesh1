@@ -3,6 +3,7 @@ from __future__ import with_statement
 import sys
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import banner
+from cloudmesh_install import config_file
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -136,7 +137,7 @@ def view(link=""):
     """run the browser"""
     from cloudmesh.config.ConfigDict import ConfigDict
 
-    server_config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")
+    server_config = ConfigDict(filename= config_file("/cloudmesh_server.yaml"))
     
     host = server_config.get("cloudmesh.server.webui.host")
     port = server_config.get("cloudmesh.server.webui.port")
@@ -162,8 +163,8 @@ def clean():
 # For production server
 @task
 def wsgi(action="start"):
-   pidfile = "~/.futuregrid/uwsgi/cloudmesh_uwsgi.pid"
-   logfile = "~/.futuregrid/uwsgi/cloudmesh_uwsgi.log"
+   pidfile = config_file("/uwsgi/cloudmesh_uwsgi.pid")
+   logfile = config_file("/uwsgi/cloudmesh_uwsgi.log")
    command = False
 
    user_pidfile = os.path.expanduser(pidfile)
