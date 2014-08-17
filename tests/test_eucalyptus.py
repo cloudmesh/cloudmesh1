@@ -27,14 +27,14 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh_common.util import HEADING
-
+from cloudmesh_install import config_file
 
 class Test:
 
     # assuming first - is the prefered cloud
-    print os.path.expandvars("$HOME/.futuregrid/cloudmesh.yaml")
+    print os.path.expandvars(cloudmesh_yaml = config_file("/cloudmesh.yaml"))
     cloud_label = head(
-        fgrep("-", os.path.expandvars("$HOME/.futuregrid/cloudmesh.yaml")), "-n", "1")
+        fgrep("-", cloudmesh_yaml = config_file("/cloudmesh.yaml"))), "-n", "1")
     cloud_label = cloud_label.replace(" - ", "").strip()
 
     def setup(self):

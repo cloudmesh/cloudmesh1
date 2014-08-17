@@ -116,7 +116,7 @@ class openstack(ComputeBaseType):
                  admin_credential=None):
         """
         initializes the openstack cloud from a file
-        located at ~/.futuregrid.org/cloudmesh.yaml.
+        located at cloudmesh.yaml.
         However if a credential dict is used it is used instead
         """
         self.clear()

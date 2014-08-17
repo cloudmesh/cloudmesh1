@@ -9,6 +9,7 @@ from cloudmesh_common.bootstrap_util import yn_choice, path_expand
 import sys
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.user.cm_user import cm_user
+from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
 
@@ -82,7 +83,7 @@ def shell_command_cloud(arguments):
                     form: 
                     cloudmesh: clouds: cloud1...
                                        cloud2...
-                    please check ~/.futuregrid/cloudmesh.yaml
+                    please check cloudmesh.yaml
                     options: --force, by default, existing cloud in database can't be
                              overwirtten, enable --force to overwrite if same cloud 
                              name encountered

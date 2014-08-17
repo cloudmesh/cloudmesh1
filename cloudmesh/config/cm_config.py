@@ -49,7 +49,7 @@ def get_mongo_db(mongo_collection):
 class cm_config_server(ConfigDict):
     """
     reads the information contained in the file
-    ~/.futuregrid/cloudmesh_server.yaml
+    cloudmesh_server.yaml
     """
     filename = config_file("/cloudmesh_server.yaml")
 
@@ -62,7 +62,7 @@ class cm_config_server(ConfigDict):
 class cm_config_launcher(ConfigDict):
     """
     reads the information contained in the file
-    ~/.futuregrid/cloudmesh_launcher.yaml
+    cloudmesh_launcher.yaml
     """
     filename = config_file("/cloudmesh_launcher.yaml")
 
@@ -74,7 +74,7 @@ class cm_config_launcher(ConfigDict):
 class cm_config_flavor(ConfigDict):
     """
     reads the information contained in the file
-    ~/.futuregrid/cloudmesh_flavor.yaml
+    cloudmesh_flavor.yaml
     """
     filename = config_file("/cloudmesh_flavor.yaml")
 

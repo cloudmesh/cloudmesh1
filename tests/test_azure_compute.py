@@ -18,12 +18,10 @@ import string
 import os
 import time
 
-
+from cloudmesh_install import config_file
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.cm_table import cm_table
 import json
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh_common.util import HEADING
 
@@ -31,7 +29,7 @@ from cloudmesh_common.util import HEADING
 class Test:
 
     # assuming first - is the prefered cloud
-    cloudmesh_yaml = os.path.expandvars("$HOME/.futuregrid/cloudmesh.yaml")
+    cloudmesh_yaml = config_file("/cloudmesh.yaml")
     print cloudmesh_yaml
     cloud_label = head(fgrep("-", cloudmesh_yaml), "-n", "1")
     cloud_label = cloud_label.replace(" - ", "").strip()

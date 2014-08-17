@@ -18,11 +18,10 @@ from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.config.ConfigDict import ConfigDict
 from pprint import pprint
 
-
-
 from flask import Flask, jsonify
 from flask.ext import restful
 from flask.ext.restful import reqparse
+from cloudmesh_install import config_file
 
 version = "v1.0"
 
@@ -42,7 +41,7 @@ queue_info_parser.add_argument('resource', type=str, required=True)
 #queue_info_parser.add_argument('user', type=str)
 queue_info_parser.add_argument('queue', type=str)
 
-config = ConfigDict(prefix="cloudmesh", filename="~/.futuregrid/cloudmesh.yaml")
+config = ConfigDict(prefix="cloudmesh", filename=config_file("/cloudmesh.yaml"))
 user = config.get("cloudmesh.profile.username")
 
 def versioned_url(url):

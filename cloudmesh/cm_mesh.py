@@ -13,6 +13,7 @@ pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh_common.util import HEADING
 from cloudmesh_common.logger import LOGGER
+from cloudmesh_install import config_file
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -639,7 +640,7 @@ if __name__ == "__main__":
         }
 
 
-    (attribute, passwd) = fgrep("OS_PASSWORD","%s/.futuregrid/openstack/novarc" % os.environ['HOME']).replace("\n","").split("=")
+    (attribute, passwd) = fgrep("OS_PASSWORD",config_file("openstack/novarc")).replace("\n","").split("=")
 
     india_os['OS_PASSWORD'] = passwd
 
