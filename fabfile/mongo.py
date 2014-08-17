@@ -12,6 +12,7 @@ from cloudmesh.user.cm_template import cm_template
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.user.cm_user import cm_user
 from sh import ls
+from cloudmesh_install import config_file
 
 import yaml
 import sys
@@ -218,7 +219,7 @@ def boot(auth=True):
 def start(auth=True):
     '''
     start the mongod service in the location as specified in
-    ~/.futuregrid/cloudmesh_server.yaml
+    cloudmesh_server.yaml
     '''
     banner("Starting mongod")
     config = cm_config_server().get("cloudmesh.server.mongo")
@@ -338,7 +339,7 @@ def users():
 @task
 def metric():
     """puts an example of a log file into the mongodb logfile"""
-    log_file = path_expand("~/.futuregrid/metric/sierra-sample.log")
+    log_file = path_expand(config_file("/metric/sierra-sample.log"))
     # create the mongo object
     # parse the log file
     # put each log information into the mongodb (or an obkject an than to mongodb)

@@ -3,12 +3,13 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config_server
 from sh import kill
 from sh import sudo
+from cloudmesh_install import config_file
 
 def get_server_config():
-    return ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")
+    return ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
 
 def get_user_config():
-    return ConfigDict(filename="~/.futuregrid/cloudmesh.yaml")
+    return ConfigDict(filename=config_file("/cloudmesh.yaml"))
 
 @task
 def open(user, host, port, proxyhost, proxyuse, sudo=True):

@@ -12,10 +12,11 @@ from cloudmesh.provisioner.queue.celery import celery_provisiner_queue as p_queu
 from cloudmesh.launcher.queue.celery import celery_launcher_queue as l_queue
 from cloudmesh.pbs.celery import celery_pbs_queue as pbs_queue
 from celery import Celery
+from cloudmesh_install import config_file
 
 __all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill', 'ls', 'lspbs', 'flower_server']
 
-celery_config = ConfigDict(filename="~/.futuregrid/cloudmesh_celery.yaml", kind="worker")
+celery_config = ConfigDict(filename=config_file("/cloudmesh_celery.yaml"), kind="worker")
 workers = celery_config.get("cloudmesh.workers")
 
 """
