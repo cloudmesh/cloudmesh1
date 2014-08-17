@@ -8,6 +8,7 @@ from pprint import pprint
 from cloudmesh.config.ConfigDict import ConfigDict
 import json
 import yaml
+from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
 
@@ -24,7 +25,7 @@ def metric_index():
 
     metric = "metric-summary"
     term = "last_3_months"
-    config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")["cloudmesh"]["server"]["metric"]
+    config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))["cloudmesh"]["server"]["metric"]
     address="{0}:{1}/{2}/{3}".format(config["host"],config["port"], metric, term)
     r= requests.get(address)
          
@@ -39,7 +40,7 @@ def metric_vm(cloud, instance_id):
 @login_required
 def metric_project(project_id):
 
-    config = ConfigDict(filename="~/.futuregrid/cloudmesh_server.yaml")["cloudmesh"]["server"]["metric"]    
+    config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))["cloudmesh"]["server"]["metric"]    
     base_url = "project-summary"
 
     address="{0}:{1}/{2}/{3}".format(config["host"],config["port"], base_url, project_id)
