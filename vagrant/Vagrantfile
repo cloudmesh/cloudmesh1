@@ -12,9 +12,7 @@ source /home/vagrant/ENV/bin/activate
 ./install new
 fab doc.html
 fab build.install
-echo "source /home/vagrant/ENV/bin/activate" >> $HOME/.bashrc
-echo $HOME
-echo ~
+echo "source /home/vagrant/ENV/bin/activate" >> /home/vagrant/.bashrc
 pwd
 whoami
 SCRIPT
