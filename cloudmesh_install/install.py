@@ -13,9 +13,9 @@ import yaml
 from string import Template
 
 import os
-from ..cloudmesh_common.util import banner
+from cloudmesh_common.util import banner
 from util import is_ubuntu, is_centos, is_osx
-from ..cloudmesh_common.util import yn_choice
+from cloudmesh_common.util import yn_choice
 from ConfigParser import SafeConfigParser
 from paramiko import SSHClient, AutoAddPolicy, BadHostKeyException, AuthenticationException, SSHException
 from cloudmesh_install import config_file, config_file_prefix
