@@ -34,7 +34,7 @@ from cloudmesh_common.util import HEADING
 class Test:
 
     # assuming first - is the prefered cloud
-    cloudmesh_yaml = onfig_file("/cloudmesh.yaml")
+    cloudmesh_yaml = config_file("/cloudmesh.yaml")
     print cloudmesh_yaml
     cloud_label = head(fgrep("-", cloudmesh_yaml), "-n", "1")
     cloud_label = cloud_label.replace(" - ", "").strip()
@@ -367,8 +367,8 @@ class Test:
         groupid = self.cloud.find_security_groupid_by_name(mygroup.name)
         # print groupid
         assert groupid is not None
-        #rule3 = Ec2SecurityGroup.Rule(5000, 5000)
-        rule3 = Ec2SecurityGroup.Rule(22,22)
+        rule3 = Ec2SecurityGroup.Rule(5000, 5000)
+        #rule3 = Ec2SecurityGroup.Rule(22,22)
         rule4 = Ec2SecurityGroup.Rule(-1,-1,'ICMP')
         print self.cloud.add_security_group_rules(groupid, [rule3,rule4])
         groupid = self.cloud.find_security_groupid_by_name("dummy_name_not_exist")
