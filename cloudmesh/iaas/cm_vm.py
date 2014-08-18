@@ -91,7 +91,7 @@ class VMcommand(object):
                  servername=self.arguments['NAME'])
         # ------------------------- 
         # starting mutiple vms
-        if self.arguments['--count']:
+        if self.arguments['--count'] and count > 1:
             while count > 1:
                 start_vm(self.username, 
                          cloudname,
@@ -103,6 +103,8 @@ class VMcommand(object):
                          groupname=self.arguments['--group'],
                          servername=None)
                 count = count - 1
+        
+        
         
         
     def _vm_delete(self):
