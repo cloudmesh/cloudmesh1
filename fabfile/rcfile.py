@@ -19,7 +19,7 @@ def download(host_ids, outdir):
                 if get(config_file("/openstack/novarc"),
                        "%s/%s/novarc" %
                        (outdir, host_id)).failed:
-                    get("config_file("/novarc"), "%s/%s/novarc" %
+                    get(config_file("/novarc"), "%s/%s/novarc" %
                         (outdir, host_id))
         else:
             pass#print host_id.split("_")[0], host
