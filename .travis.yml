@@ -6,7 +6,8 @@ install:
   - ./install system
   - ./install requirements
   - ./install cloudmesh
-  - fab build.fast
+  - ./install new
   - fab doc.html
+  - fab build.install
 # command to run tests
 # script: nosetests
