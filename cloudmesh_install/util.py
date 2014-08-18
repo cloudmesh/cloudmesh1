@@ -35,7 +35,7 @@ def is_osx():
     osx = platform.system().lower() == 'darwin'
     if osx:
         os_version = platform.mac_ver()[0]
-        if os_version not in ['10.9.3', '10.9.2', '10.9.4']:
+        if os_version not in ['10.9.4']:
             osx = False
             log.error("WARNING: %s %s is not tested" % ('OSX', os_version))
     return osx

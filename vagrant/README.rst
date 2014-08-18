@@ -42,3 +42,13 @@ Use
 
 vagrant up
 vagrant ssh
+
+This will install a new virtualbox, that contains the source code of
+clodmesh in::
+
+  /vagrant/cloudmesh
+
+It will also install a virtual env in ~/ENV and isntall cloudmesh into
+that virtual env.
+
+
