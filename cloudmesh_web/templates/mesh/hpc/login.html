@@ -7,7 +7,6 @@
 
 {% block content %}
 
-The following links only work on OSX safari:
 
   <table>
   <theader>
@@ -41,10 +40,20 @@ The following links only work on OSX safari:
   {% endfor %}
   </tbody>
  </table>
-{% endblock %}
 
- Limitations:
+Notes:
+<div class="alert alert-info" role="alert">
+OSX: The following links only works without plugins on OSX safari. On
+chrome you do have to launche the external application. If you use
+firefox, you need to install FireSSH.
+</div>
 
- THis program currently only uses a single usernmae passed along from
- the hpc configuration variables
- 
+<div class="alert alert-info" role="alert">
+Ubuntu: Please use firefox and use FireSSH.
+</div>
+
+<div class="alert alert-info" role="alert">
+User name Limitations: This program currently only uses a single usernmae passed along from the hpc coniguration variables
+</div>
+
+ {% endblock %}
