@@ -51,7 +51,7 @@ class VMcommand(object):
     
     def __init__(self, arguments):
         self.arguments = arguments
-        print self.arguments
+        #print self.arguments #######################
     
     def _vm_create(self):
         # ------------------------- 
@@ -145,8 +145,9 @@ def start_vm(username,
     unnescessary refresh
     :return 
     
-    TODO: what if fail, how to acknowledge it;
+    TODO: what if fail, how to acknowledge it; no return now as using celery
           input key 
+          missing security group
     '''
     mongo = cm_mongo()
     userobj = cm_user()
@@ -268,7 +269,9 @@ def start_vm(username,
     tmpnameim = cloudobj.get_images(cloudname=cloudname, getone=True, id=vm_image_id)['name']
     banner("Starting vm->{0} on cloud->{1} using image->{2}, flavor->{3}, key->{4}"\
            .format(tmpnameser, cloudname, tmpnamefl, tmpnameim, keynamenew))
-    result = mongo.vm_create(
+    #result = mongo.vm_create(
+    #using celery, to disable, call vm_create
+    result = mongo.vm_create_queue(
         cloudname,
         prefix,
         index,
@@ -284,7 +287,10 @@ def start_vm(username,
         userobj.set_default_attribute(username, "index", int(index) + 1)
     # ------------------------
     
-    #pprint(result) #################
+    pprint(result) #################
+    print result.failed()
+    print result.state
+    print result.traceback
     
     
 # ========================================================================   
