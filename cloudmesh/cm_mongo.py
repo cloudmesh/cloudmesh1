@@ -518,6 +518,9 @@ class cm_mongo:
         return ret
 
     def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id, givenvmname=None):
+        '''
+        BUG: missing security group
+        '''
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         if givenvmname == None:
             name = "%s_%s" % (prefix, index)
@@ -525,24 +528,32 @@ class cm_mongo:
             name = givenvmname
         return cloudmanager.vm_create(name=name, flavor_name=vm_flavor, image_id=vm_image, key_name=key, meta=meta)
 
-    def vm_create_queue(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id):
+    def vm_create_queue(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id, givenvmname=None):
         '''
         same as vm_create but runs with a celery task queue
         
         apply_async places a function call in a specific queue named in 'queue='
         parameter
-        '''
         
-        # cloud should be either openstack, ec2, azure, or aws
-        package = "cloudmesh.iaas.%s.queue" % cloud
-        package = "cloudmesh.iaas.azure.queue" # TEST
+        BUG: missing security group
+        '''
+        cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
+        cm_type = self.get_cloud_info(cm_user_id, cloud)['cm_type']
+        package = "cloudmesh.iaas.%s.queue" % cm_type
         name = "tasks"
         imported = getattr(__import__(package, fromlist=[name]), name)
-        name = "%s_%s" % (prefix, index)
-        return imported.vm_create.apply_async((name, vm_flavor,
-                                               vm_image, key,
-                                               meta),
-                                              queue='azure-servers')
+        queue_name = "%s-%s" % (cm_type, "servers")
+        if givenvmname == None:
+            name = "%s_%s" % (prefix, index)
+        else:
+            name = givenvmname
+        return imported.vm_create.apply_async((name, 
+                                               vm_flavor,
+                                               vm_image), 
+                                               {'key_name': key,
+                                                'meta': meta,
+                                                'manager': cloudmanager},
+                                              queue=queue_name)
 
     def assign_public_ip(self, cloud, server, cm_user_id):
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
