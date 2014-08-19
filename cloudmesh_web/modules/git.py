@@ -4,7 +4,8 @@ from flask import Blueprint, render_template
 from flask.ext.login import login_required
 from pprint import pprint, pprint
 from sh import git
-import envoy
+#import envoy
+#import subprocess
 import requests
 
 
@@ -28,8 +29,14 @@ def display_git_authors():
         except:
             print "error:", line
 
-    result = envoy.run('git log --all --format=\"%aN <%cE>\" | sort -u')
-    print result.std_out
+    #result = envoy.run('git log --all --format=\"%aN <%cE>\" | sort -u')
+    #print result.std_out
+    
+    # Replacement of envoy by subprocess
+    # git from sh does not respond due to unexpected issues.
+    #p=subprocess.Popen(['git','shortlog','-e','-s'],stdout=subprocess.PIPE)
+    #for line in p.stdout:
+    #    print line
 
     """
     gitinfo = GitInfo()
