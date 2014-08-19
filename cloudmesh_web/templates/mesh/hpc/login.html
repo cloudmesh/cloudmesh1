@@ -1,0 +1,50 @@
+{% extends "layout/layout_title.html" %}
+{% from "_helper.html" import image_button %}
+
+{% block contentbox %}
+<h2> Compute Node Login </h3>
+{% endblock %}
+
+{% block content %}
+
+The following links only work on OSX safari:
+
+  <table>
+  <theader>
+    <tr>
+      <th> </th>
+      <th> Host </th>
+      <th> Link </th>
+    </tr>
+  <theader>
+  <tbody>  
+  {% for host in ["india.futuregrid.org",
+                  "foxtrot.futuregrid.org",
+                  "bigred2.uits.iu.edu"] %}
+
+     <tr>
+       <td>
+	 <a href="ssh://{{ g.user.id }}@{{ host }}">
+	   <span class="fa-stack fa-lg">
+	   <i class="fa fa-square fa-stack-2x"></i>
+	   <i class="fa fa-terminal fa-stack-1x fa-inverse"></i>
+	   </span>
+	 </a>
+       </td>
+       <td> {{ host }} </td>
+       <td>
+	 <a href="ssh://{{ g.user.id }}@{{ host }}">
+	    ssh://{{ g.user.id }}@{{ host }}
+	 </a>
+       </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+ </table>
+{% endblock %}
+
+ Limitations:
+
+ THis program currently only uses a single usernmae passed along from
+ the hpc configuration variables
+ 
