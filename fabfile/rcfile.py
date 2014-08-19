@@ -1,7 +1,7 @@
 from __future__ import with_statement
 from fabric.api import *
 from fabric.contrib.console import confirm
-from cloudmesh_install import config_file
+from cloudmesh_install import config_file, config_file_raw
 
 domain_name = "futuregrid.org"
 
@@ -16,10 +16,10 @@ def download(host_ids, outdir):
         if host_from_input == host_from_env:
             local("mkdir -p %s/%s/" % (outdir, host_id))
             with settings(warn_only=True):
-                if get(config_file("/openstack/novarc"),
+                if get(config_file_raw("/openstack/novarc"),
                        "%s/%s/novarc" %
                        (outdir, host_id)).failed:
-                    get(config_file("/novarc"), "%s/%s/novarc" %
+                    get(config_file_raw("/novarc"), "%s/%s/novarc" %
                         (outdir, host_id))
         else:
             pass#print host_id.split("_")[0], host
