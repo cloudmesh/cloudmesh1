@@ -27,6 +27,12 @@ mesh_hpc_module = Blueprint('mesh_hpc_module', __name__)
 
 error = ""
 
+@mesh_hpc_module.route('/mesh/hpc/login')
+@login_required
+def hpc_login():
+    return render_template('/mesh/hpc/login.html')
+
+
 @mesh_hpc_module.route('/mesh/refresh/qstat')
 @mesh_hpc_module.route('/mesh/refresh/qstat/<host>')
 @login_required
