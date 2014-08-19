@@ -276,7 +276,7 @@ def get_fg_username_password_from_rcfiles():
 
     def get_variables(fpath):
         section_title = "rcfile"
-        read_values = ["OS_TENANT_NAME", "OS_PASSWORD"]  # case-sensitive
+        read_values = ["OS_TENANT_NAME", "OS_USERNAME", "OS_PASSWORD"]  # case-sensitive
         result = {}
 
         cp = SafeConfigParser()
