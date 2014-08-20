@@ -39,8 +39,9 @@ watch = StopWatch()
 
 
 for execute in [Sequential, Parallel]:
-#for execute in [Parallel]:    
-
+#for execute in [Sequential]:    
+#for execute in [Parallel]:
+    
     name = execute.__name__
 
     banner(name)

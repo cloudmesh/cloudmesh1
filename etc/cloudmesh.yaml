@@ -25,10 +25,10 @@ cloudmesh:
             cm_type: ec2
             cm_type_version: folsom
             credentials:
-                EC2_PRIVATE_KEY: $HOME/.futuregrid/alamo/pk.pem
-                EC2_CERT: $HOME/.futuregrid/alamo/cert.pem
-                NOVA_CERT: $HOME/.futuregrid/alamo/cacert.pem
-                EUCALYPTUS_CERT: $HOME/.futuregrid/alamo/cacert.pem
+                EC2_PRIVATE_KEY: $HOME/.cludmesh/alamo/pk.pem
+                EC2_CERT: $HOME/.cloudmesh/alamo/cert.pem
+                NOVA_CERT: $HOME/.cloudmesh/alamo/cacert.pem
+                EUCALYPTUS_CERT: $HOME/.cloudmesh/alamo/cacert.pem
                 EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
                 EC2_ACCESS_KEY: {{ clouds.alamo.credential.EC2_ACCESS_KEY }}
                 EC2_SECRET_KEY: {{ clouds.alamo.credential.EC2_SECRET_KEY }}
@@ -43,12 +43,12 @@ cloudmesh:
             cm_type: ec2
             cm_type_version: 3.1
             credentials:
-                EUCALYPTUS_CERT: $HOME/.futuregrid/india/cacert.pem
-                EC2_CERT: $HOME/.futuregrid/india/cert.pem
+                EUCALYPTUS_CERT: $HOME/.cloudmesh/india/cacert.pem
+                EC2_CERT: $HOME/.cloudmesh/india/cert.pem
                 EC2_URL: http://149.165.146.135:8773/services/Eucalyptus
                 EC2_ACCESS_KEY: {{ clouds.india_eucalyptus.credential.EC2_ACCESS_KEY }}
                 EC2_SECRET_KEY: {{ clouds.india_eucalyptus.credential.EC2_SECRET_KEY }}
-                EC2_PRIVATE_KEY: $HOME/.futuregrid/india/pk.pem
+                EC2_PRIVATE_KEY: $HOME/.cloudmesh/india/pk.pem
             keyname: cloudmesh
             userid: {{ username.portal }}
             default:
@@ -62,7 +62,7 @@ cloudmesh:
             cm_type_version: havana
             credentials:
                 OS_AUTH_URL: https://i57r.idp.iu.futuregrid.org:5000/v2.0
-                OS_CACERT: /home/cloudmesh/.futuregrid/india-havana-cacert.pem
+                OS_CACERT: $HOME/.cloudmesh/india-havana-cacert.pem
                 OS_PASSWORD: {{ clouds.india_openstack_havana.credential.OS_PASSWORD }}
                 OS_TENANT_NAME: {{ clouds.india_openstack_havana.credential.OS_TENANT_NAME }}
                 OS_USERNAME: {{ username.portal }}
@@ -78,7 +78,7 @@ cloudmesh:
             cm_type_version: grizzly
             credentials:
                 OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
-                OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
+                OS_CACERT: $HOME/.cloudmesh/sierra-cacert.pem
                 OS_PASSWORD: {{ clouds.sierra_openstack_grizzly.credential.OS_PASSWORD }}
                 OS_TENANT_NAME: {{ clouds.sierra_openstack_grizzly.credential.OS_TENANT_NAME }}
                 OS_USERNAME: {{ username.portal }}
@@ -121,9 +121,9 @@ cloudmesh:
             cm_type_version:
             credentials:
                 subscriptionid: {{ clouds.azure.credential.subscriptionid }}
-                managementcertfile: $HOME/.futuregrid/azure_managementCertificate.pem
-                thumbprint: $HOME/.futuregrid/azure_thumbprint
-                servicecertfile: $HOME/.futuregrid/azure_serviceCertificate.pfx
+                managementcertfile: $HOME/.cloudmesh/azure_managementCertificate.pem
+                thumbprint: $HOME/.cloudmesh/azure_thumbprint
+                servicecertfile: $HOME/.cloudmesh/azure_serviceCertificate.pfx
             default:
                 flavor: {{ clouds.azure.default.flavor }}
                 image: {{ clouds.azure.default.image }}
@@ -138,7 +138,7 @@ cloudmesh:
                 EC2_SECRET_KEY: {{ clouds.aws.credential.secret_access_key }}
                 keyname: cloudmesh
                 userid: {{ clouds.aws.credential.userid }}
-                EC2_PRIVATE_KEY: $HOME/.futuregrid/aws_pk.pem
+                EC2_PRIVATE_KEY: $HOME/.cloudmesh/aws_pk.pem
             default:
                 flavor: {{ clouds.aws.default.flavor }}
                 image: {{ clouds.aws.default.image }}

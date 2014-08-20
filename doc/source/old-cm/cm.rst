@@ -9,11 +9,11 @@ Run make::
 
 Set the key for Open Stack (You could get this key from your futuregrid account.)::
 
-    scp gregor@india.futuregrid.org:.futuregrid/openstack/novarc .  
+    scp gregor@india.futuregrid.org:.cloudmesh/openstack/novarc .  
     cat novarc  
-    mkdir -p ~/.futuregrid/openstack/  
-    cp novarc ~/.futuregrid/openstack/  
-    source ~/.futuregrid/openstack/novarc 
+    mkdir -p ~/.cloudmesh/openstack/  
+    cp novarc ~/.cloudmesh/openstack/  
+    source ~/.cloudmesh/openstack/novarc 
 
 Type in a nova command to check whether the key was set properly::
 

@@ -42,7 +42,7 @@ file which looks like::
         cm_type_version: grizzly
         credentials:
           OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
-          OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
+          OS_CACERT: $HOME/.cloudmesh/sierra-cacert.pem
           OS_PASSWORD: jhdjaTYWUIYBY
           OS_TENANT_NAME: fg1000
           OS_USERNAME: albert
@@ -132,10 +132,10 @@ Retrieval of rc file by command
 
    ./install gatherrc
 
-This will create for you in your ~/.futuregrid directory a tree of the
+This will create for you in your $HOME/.cloudmesh directory a tree of the
 following format::
    
-   .futuregird/clouds
+   .cloudmesh/clouds
         india_openstack_havana
 	sierra_openstack_grizzly
 
@@ -159,8 +159,8 @@ Location of rc files
 ========= ================================== ====================================================
 Host      OpenStack (novarc)                 Eucalyptus (eucarc)
 --------- ---------------------------------- ----------------------------------------------------
-india     $HOME/.futuregrid/openstack/novarc $HOME/.futuregrid/eucalyptus/$fgprojectnumber/eucarc*
-sierra    $HOME/.futuregrid/novarc           $HOME/.futuregrid/eucalyptus/$fgprojectnumber/eucarc*
+india     $HOME/.cloudmesh/openstack/novarc $HOME/.cloudmesh/eucalyptus/$fgprojectnumber/eucarc*
+sierra    $HOME/.cloudmesh/novarc           $HOME/.cloudmesh/eucalyptus/$fgprojectnumber/eucarc*
 hotel     Download EC2 Credentials**         n/a
 alamo     Download EC2 Credentials**         n/a
 foxtrot   n/a                                n/a
@@ -202,7 +202,7 @@ they may have to be specially dealt with and placed in special
 directories. For cloudmesn we provide them as part of the install and
 ainclude them in the::
 
-  $HOME/.futuregrid/ 
+  $HOME/.cloudmesh/ 
 
 directory. Naturally the attributes in credentials depend on the cloud
 type and are different between the different clouds. In our case we
@@ -210,7 +210,7 @@ define the cloud on sierra which has the following credentials::
 
         credentials:
           OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
-          OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
+          OS_CACERT: $HOME/.cloudmesh/sierra-cacert.pem
           OS_PASSWORD: jhdjaTYWUIYBY
           OS_TENANT_NAME: fg1000
           OS_USERNAME: albert
@@ -236,7 +236,7 @@ have the following meaning:
   case it does not use https please inform yourself about the security
   consequences.
 
-  Example: $HOME/.futuregrid/sierra-cacert.pem
+  Example: $HOME/.cloudmesh/sierra-cacert.pem
 
 :OS_PASSWORD:
   The password you use for this cloud
@@ -326,10 +326,10 @@ Azure
       cm_type: azure
       cm_type_version: null
       credentials:
-        managementcertfile: $HOME/.futuregrid/azure_managementCertificate.pem
-        servicecertfile: $HOME/.futuregrid/azure_serviceCertificate.pfx
+        managementcertfile: $HOME/.cloudmesh/azure_managementCertificate.pem
+        servicecertfile: $HOME/.cloudmesh/azure_serviceCertificate.pfx
         subscriptionid: 367367382-7687-6767-6767-6876dsa87ds
-        thumbprint: $HOME/.futuregrid/azure_thumbprint
+        thumbprint: $HOME/.cloudmesh/azure_thumbprint
       default:
         flavor: ExtraSmall
         image: b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-saucy-13_10-amd64-server-20130930-en-us-30GB
@@ -349,7 +349,7 @@ Amazon Web Services
       credentials:
         access_key_id: ABCDHJLKHLDKJHLDKJH
         keyname: cloudmesh
-        privatekeyfile: $HOME/.futuregrid/aws_pk.pem
+        privatekeyfile: $HOME/.cloudmesh/aws_pk.pem
         secret_access_key: abcgfiuegfiuesgfudsgfgdskjgfkdjsg
         userid: albert
       default:
@@ -373,7 +373,7 @@ Note the endpoint is wrong.
       cm_type_version: havana
       credentials:
         OS_AUTH_URL: https://i57r.idp.iu.futuregrid.org:5000/v2.0
-        OS_CACERT: $HOME/.futuregrid/india_cacert.pem
+        OS_CACERT: $HOME/.cloudmesh/india_cacert.pem
         OS_PASSWORD: uetruieiuf
         OS_TENANT_NAME: fg1000
         OS_USERNAME: albert
@@ -398,7 +398,7 @@ Sierra
       cm_type_version: grizzly
       credentials:
         OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
-        OS_CACERT: $HOME/.futuregrid/sierra-cacert.pem
+        OS_CACERT: $HOME/.cloudmesh/sierra-cacert.pem
         OS_PASSWORD: 63763876827
         OS_TENANT_NAME: fg1000
         OS_USERNAME: albert
@@ -425,10 +425,10 @@ interfaces. Here is an example::
       cm_type: ec2
       cm_type_version: null
       credentials:
-        EC2_PRIVATE_KEY: $HOME/.futuregrid/alamo/pk.pem
-        EC2_CERT: $HOME/.futuregrid/alamo/cert.pem
-        NOVA_CERT: $HOME/.futuregrid/alamo/cacert.pem
-        EUCALYPTUS_CERT: $HOME/.futuregrid/alamo/cacert.pem
+        EC2_PRIVATE_KEY: $HOME/.cloudmesh/alamo/pk.pem
+        EC2_CERT: $HOME/.cloudmesh/alamo/cert.pem
+        NOVA_CERT: $HOME/.cloudmesh/alamo/cacert.pem
+        EUCALYPTUS_CERT: $HOME/.cloudmesh/alamo/cacert.pem
         EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
         EC2_ACCESS_KEY: hfghfgejfhfdgjdhgjdhdgfjdhfgjhdg
         EC2_SECRET_KEY: utiutiueteyuieywiuywiuweyriuweyu
@@ -531,61 +531,12 @@ location of the people and groups are also specifiable::
     ldap:
         with_ldap: False
         hostname: localhost
-        cert: /Users/neu/.futuregrid/FGLdapCacert.pem
+        cert: $HOME/.cloudmesh/FGLdapCacert.pem
         proxyhost: <ip>
         proxyuser: <username>
         proxyldap: proxy.<yourdomain.org>
         personbase: "ou=People,dc=futuregrid,dc=org"
         projectbase: "ou=Groups,dc=futuregrid,dc=org"
-
-Baremetal provisioning with teefa
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-We are in the process of integrating bare metal provisioning with
-teefaa which is part of cloudmesh and provides a very elementary
-mechnism of conducting bare metal provisioning. To do that you must
-specify a username that allows you to conduct bare metal
-provisioning. We assme that teefaa is installed in::
-
-  username@hostname:~/teefaa
-
-Furthermore, it could be tha the ipp to the control network is
-separate from the hostname and if so it can be specified with the
-bmcname attribute::
-
-    teefaa:
-        username: <username>
-        hostname: <hostname>
-        bmcname: <bmc-hostname>
-        dir: teefaa
-
-In addition to setting up the teefaa environment, cloudmesh contains a
-role based policy management that enables the administrator to grant
-certain users bare metal access to a specified set of resources. This
-is controlled by the following configureation parameters::
-
-    provisioner:
-        clusters:
-        - india
-        - sierra
-        policy:
-          users:
-            albert:
-              - i[064-066,068]
-              - b[001-002]
-          projects:
-             fg1000:
-              - i[064-066,068]
-
-
-First we set up on which clusters it is allowed to conduct bare metal
-provisioning. Than we set a policy either for users or projects. For
-users we use simply the username (in our case the futuregrid username,
-currently we assume the same username on all machines) and the
-hostlist of all hosts that can be provisioned by that user. IN case we
-define it an a per project basis, we replace the username with the
-projectid. The information of projectid and username is found in the
-LDAP server as part of the people and group ids.
 
 Clusters
 ~~~~~~~~~~~~
@@ -672,7 +623,7 @@ attribute::
     keystone:
         sierra_openstack_grizzly:    
             OS_AUTH_URL : https://<ipsdsc>:35357/v2.0
-            OS_CACERT : $HOME/.futuregrid/sierra-cacert.pem
+            OS_CACERT : $HOME/.cloudmesh/sierra-cacert.pem
             OS_PASSWORD : <password>
             OS_TENANT_NAME : <tenant>
             OS_USERNAME : <username>
@@ -700,7 +651,7 @@ it up on your local machine::
         db: cloudmesh
         host: localhost
         port: 27017
-        path: ~/.futuregrid/mongodb
+        path: $HOME/.cloudmesh/mongodb
         username: <username>
         password: <password>
         collections:
@@ -779,9 +730,9 @@ A typical cloudmesh_cluster.yaml file looks as follows::
 	      nameserver: 123.123.1.1
 	      publickeys:
 	      - name: management
-		path: ~/.futuregrid/id_rsa_management.pub
+		path: $HOME/.cloudmesh/id_rsa_management.pub
 	      - name: storage
-		path: ~/.futuregrid/id_rsa_storage.pub
+		path: $HOME/.cloudmesh/id_rsa_storage.pub
 	      network:
 	      - name: eth0
 		type: internal
@@ -845,9 +796,9 @@ A Cluster
 	      nameserver: 123.123.1.1
 	      publickeys:
 	      - name: management
-		path: ~/.futuregrid/id_rsa_management.pub
+		path: $HOME/.cloudmesh/id_rsa_management.pub
 	      - name: storage
-		path: ~/.futuregrid/id_rsa_storage.pub
+		path: $HOME/.cloudmesh/id_rsa_storage.pub
 	      network:
               - name: eth0
                  ...                
