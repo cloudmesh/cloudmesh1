@@ -14,7 +14,6 @@ import tunnel
 import user
 import mooc
 import hpc
-import rcfile
 import qc
 import manage
 try:
