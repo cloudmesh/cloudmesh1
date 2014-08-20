@@ -45,7 +45,7 @@ sh
 console
 python-hostlist
 docopt
-cmd3>=0.9.8
+cmd3>=1.0
 #
 # ######################################################################
 # Databases and directories
