@@ -7,7 +7,7 @@ from mongoengine import StringField, connect, Document
 from pprint import pprint
 from cloudmesh_common.tables import  array_dict_table_printer
 import json 
-
+from cloudmesh_install import config_file
 
 
 #connect (
