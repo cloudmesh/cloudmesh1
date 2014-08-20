@@ -45,7 +45,7 @@ class CredentialFromYaml(CredentialBaseClass):
         if datasource != None:
             self.filename = datasource
         else:
-            self.filename = "~/.futuregrid/cloudmesh.yaml"
+            self.filename = "~/.cloudmesh/cloudmesh.yaml"
 
         self.config = ConfigDict(filename=self.filename)
 
@@ -61,11 +61,11 @@ class CredentialFromYaml(CredentialBaseClass):
 
         kind = self['cm']['kind']
         if kind == "clouds":
-            self['cm']['filename'] = "~/.futuregrid/cloudmesh.yaml"
+            self['cm']['filename'] = "~/.cloudmesh/cloudmesh.yaml"
             self.update(self.config.get("cloudmesh.clouds.{0}".format(cloud)))
 
         elif kind == "server":
-            self['cm']['filename'] = "~/.futuregrid/cloudmesh_server.yaml"
+            self['cm']['filename'] = "~/.cloudmesh/cloudmesh_server.yaml"
             self.update(self.config.get("cloudmesh.server.keystone.{0}".format(cloud)))
         else:
             log.error("kind wrong {0}".format(kind))
@@ -204,7 +204,7 @@ if __name__ == "__main__":
 
     banner("credentialstore")
     store = CredentialStore("gvonlasz",
-                            "~/.futuregrid/cloudmesh.yaml",
+                            "~/.cloudmesh/cloudmesh.yaml",
                             CredentialFromYaml,
                             style=3.0,
                             password="hallo")

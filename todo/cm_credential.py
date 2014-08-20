@@ -50,7 +50,7 @@ class UserFromYaml(dict):
         if datasource != None:
             self.filename = datasource
         else:
-            self.filename = "~/.futuregrid/cloudmesh.yaml"
+            self.filename = "~/.cloudmesh/cloudmesh.yaml"
 
         config = ConfigDict(filename=self.filename)
 
@@ -238,7 +238,7 @@ if __name__ == "__main__":
 
 
     store = UserDictStore(UserFromYaml, password="hallo")
-    store.set("gvonlasz", "~/.futuregrid/cloudmesh.yaml", password="Hallo")
+    store.set("gvonlasz", "~/.cloudmesh/cloudmesh.yaml", password="Hallo")
 
     banner("credentialstore")
     pprint (store)

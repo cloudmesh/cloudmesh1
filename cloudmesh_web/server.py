@@ -22,6 +22,7 @@ from flask.ext.wtf import Form
 from wtforms.fields import TextField, BooleanField, PasswordField
 from wtforms.validators import Required
 
+from cloudmesh_install import config_file
 from cloudmesh_common.logger import LOGGER
 
 
@@ -145,9 +146,7 @@ with_write = True
 # setting up reading path for the use of yaml
 # ============================================================
 
-default_path = '.futuregrid/cloudmesh.yaml'
-home = os.environ['HOME']
-filename = "%s/%s" % (home, default_path)
+filename = config_file("cloudmesh.yaml")
 
 # ============================================================
 # global vars

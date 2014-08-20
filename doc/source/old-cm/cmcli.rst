@@ -24,7 +24,7 @@ Example:
      cm config ? -
 
    Presents a selction of cloud choices and writes the choice into a
-   file called ~/.futuregrid/novarc
+   file called ~/.cloudmesh/novarc
 
 Arguments:
   NAME name of the cloud

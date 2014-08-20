@@ -24,9 +24,9 @@ cloudmesh:
             nameserver: 192.168.0.1
             publickeys:
             - name: im1
-              path: ~/.futuregrid/keys/id_rsa_im1.pub
+              path: $HOME/.cloudmesh/keys/id_rsa_im1.pub
             - name: fgstor02
-              path: ~/.futuregrid/keys/id_rsa_fgstor02.pub
+              path: $HOME/.cloudmesh/keys/id_rsa_fgstor02.pub
             network:
             - name: eth0
               type: internal

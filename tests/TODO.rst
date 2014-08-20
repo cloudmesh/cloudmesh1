@@ -251,29 +251,6 @@ or
 cm list image
 cm list falvors
 
-the command does not come easily back
-
-bug: cm list flavors
-
-
-
-CM                     ... site/cloudmesh/cm_mesh.pyc:279:  ERROR - u'india_openstack_havana'
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:159:   INFO - 159: Loading User Credentials
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:182:  DEBUG - 191 - GET CRED {'OS_VERSION': 'grizzly', 'OS_AUTH_URL': 'https://s77r.idp.sdsc.futuregrid.org:5000/v2.0', 'OS_USERNAME': 'gvonlasz', 'OS_PASSWORD': '********', 'OS_CACERT': '/Users/flat/.futuregrid/sierra-cacert.pem', 'OS_TENANT_NAME': 'fg82'}
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:212:  DEBUG - 212: URL https://s77r.idp.sdsc.futuregrid.org:5000/v2.0/tokens
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:219:  DEBUG - 219:PARAM {"auth": {"tenantName": "fg82", "passwordCredentials": {"username": "gvonlasz", "password": "********"}}}
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:220:  DEBUG - 220:HEADER {'content-type': 'application/json'}
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:221:  DEBUG - 221:VERIFY /Users/flat/.futuregrid/sierra-cacert.pem
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:167:   INFO - 167: Loading Admin Credentials
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:182:  DEBUG - 191 - GET CRED {'OS_VERSION': 'grizzly', 'OS_AUTH_URL': 'https://s77r.idp.sdsc.futuregrid.org:5000/v2.0', 'OS_USERNAME': 'gvonlasz', 'OS_PASSWORD': '********', 'OS_CACERT': '/Users/flat/.futuregrid/sierra-cacert.pem', 'OS_TENANT_NAME': 'fg82'}
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:212:  DEBUG - 212: URL https://s77r.idp.sdsc.futuregrid.org:35357/v2.0/tokens
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:219:  DEBUG - 219:PARAM {"auth": {"tenantName": "demo", "passwordCredentials": {"username": "admin", "password": "********"}}}
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:220:  DEBUG - 220:HEADER {'content-type': 'application/json'}
-CM   ... site/cloudmesh/iaas/openstack/cm_compute.pyc:221:  DEBUG - 221:VERIFY False
-CM                     ... site/cloudmesh/cm_mesh.pyc:268:   INFO - Refresh cloud sierra_openstack_grizzly
-CM                     ... site/cloudmesh/cm_mesh.pyc:270:   INFO -     Refresh flavors
-CM                 ... site/cloudmesh/util/config.pyc:60:  ERROR - The file /Users/flat/.futuregrid/cloudmesh_flavor.yaml does not exist.
-Unexpected error:  <type 'exceptions.SystemExit'> 
 =======
 TODO
 ====

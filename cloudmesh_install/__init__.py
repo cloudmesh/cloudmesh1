@@ -3,7 +3,7 @@ import sys
 from cloudmesh_common.bootstrap_util import path_expand
 
 
-__config_dir_prefix__ = "~/.futuregrid"
+__config_dir_prefix__ = "~/.cloudmesh"
 
 __config_dir__ = path_expand(__config_dir_prefix__)
 

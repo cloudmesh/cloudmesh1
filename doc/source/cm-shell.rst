@@ -63,7 +63,7 @@ Additional debaug and logging information may be displayed.
 
 You can cahnge the verbosity of the logging while changing in the::
 
-  ~/.futuregrid/cloudmesh_server.yaml 
+  ~/.cloudmesh/cloudmesh_server.yaml 
 
 file the loglevel variable. In that file you find::
 
@@ -414,7 +414,7 @@ launcched, and terminated. If no label is provided this information
 returns a list of vms started in order. In contrast to the normal list
 command given by IaaS framework, this list command sorts the vms by
 the timestamp it was started in the shell. The history is maintained
-in ~/.futuregrid/cloudmesh/history::
+in ~/.cloudmesh/cloudmesh/history::
 
    cm> history [<label>]
 

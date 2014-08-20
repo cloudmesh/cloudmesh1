@@ -343,7 +343,7 @@ set with the command::
 
   ./install new
 
-This will create a ~/.futuregrid directory in which you can find and
+This will create a ~/.cloudmesh directory in which you can find and
 modify the yaml files. Important is that you modify the file called
 ``me.yaml``
 
@@ -384,12 +384,12 @@ The cloudmesh.yaml file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 After updating the me.yaml file, you can generate a new cloudmesh.yaml
-file. For this purpose you will need to copy the templates from cloudmesh to the ~/.futuregrid directory::
-  $ cp etc/*.yaml ~/.futuregrid/etc
+file. For this purpose you will need to copy the templates from cloudmesh to the ~/.cloudmesh directory::
+  $ cp etc/*.yaml ~/.cloudmesh/etc
  
 The command::
 
-  $ cm-init fill --file=~/.futuregrid/etc/cloudmesh.yaml ~/.futuregrid/me.yaml
+  $ cm-init fill --file=~/.cloudmesh/etc/cloudmesh.yaml ~/.cloudmesh/me.yaml
 
 will test if the me.yaml file can successfully create a cloudmesh.yaml
 file by printing its output. If no error occurs it will most likely be

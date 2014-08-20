@@ -44,7 +44,7 @@ cloudmesh:
         db: cloudmesh
         host: localhost
         port: 27017
-        path: ~/.futuregrid/mongodb
+        path: $HOME/.cloudmesh/mongodb
         username: admin
         password: abc
         collections:
@@ -84,7 +84,7 @@ cloudmesh:
     keystone:
         sierra_openstack_grizzly:
             OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
-            OS_CACERT : /Users/neu/.futuregrid/sierra-cacert.pem
+            OS_CACERT : $HOME/.cloudmesh/sierra-cacert.pem
             OS_PASSWORD : mypassword
             OS_TENANT_NAME : mytennant
             OS_USERNAME : myusername
@@ -96,7 +96,7 @@ cloudmesh:
     ldap:
         with_ldap: False
         hostname: localhost
-        cert: /Users/neu/.futuregrid/FGLdapCacert.pem
+        cert: $HOME/.cloudmesh/FGLdapCacert.pem
         proxyhost: hostnameofproxy
         proxyuser: usernameofprxyhost
         proxyldap: hostnameofldap

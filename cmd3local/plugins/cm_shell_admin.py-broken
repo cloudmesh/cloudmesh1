@@ -86,7 +86,7 @@ class cm_shell_admin:
     def generate_me_yaml(self, username, values, configdir):
         cmu = self.get_cm_user()
         cm_passwords = cmu.get_passwords(username)
-        me_template_file = path_expand("~/.futuregrid/etc/me.yaml")
+        me_template_file = path_expand("~/.cloudmesh/etc/me.yaml")
         me_template = open(me_template_file, 'r').read()
         t = Template(me_template)
         render_result = t.render(passwords=cm_passwords, **values)

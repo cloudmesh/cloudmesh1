@@ -45,7 +45,7 @@ Queue Configuration
 
 Add a new property in a configuration file
 
- - .futuregrid/cloudmesh_celery.yaml
+ - .cloudmesh/cloudmesh_celery.yaml
    For example, adding azure-servers:
 
       azure-servers:

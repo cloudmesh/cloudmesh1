@@ -30,6 +30,7 @@ import getopt
 import sys
 from cloudmesh_common.util import banner
 from cloudmesh_install.util import get_system
+from cloudmesh_install import config_file_prefix
 
 def print_help():
 
@@ -95,13 +96,11 @@ def main():
 
         # To prevent errors building API docs, we need a
         # cloudmesh.yaml and cloudmesh_server.yaml to exist.
-        # TODO: Why is this the case? Magic happening in imports?
-        # http://chrismorgan.info/blog/say-no-to-import-side-effects-in-python.html
-        os.system("bash -c 'mkdir -m 0700 -p ~/.futuregrid'")
+        os.system("bash -c 'mkdir -m 0700 -p ~/{0}'".format(config_file_prefix()))
         os.system(
-            "bash -c 'test -f ~/.futuregrid/cloudmesh.yaml || touch ~/.futuregrid/cloudmesh.yaml'")
+            "bash -c 'test -f ~/{0}/cloudmesh.yaml || touch ~/{0}/cloudmesh.yaml'".format(config_file_prefix()))
         os.system(
-            "bash -c 'test -f ~/.futuregrid/cloudmesh_server.yaml || touch ~/.futuregrid/cloudmesh_server.yaml'")
+            "bash -c 'test -f ~/{0}/cloudmesh_server.yaml || touch ~/{0}/cloudmesh_server.yaml'".format(config_file_prefix()))
 
         sys.exit(0)
 
