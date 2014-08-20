@@ -43,7 +43,7 @@ blessings
 progress
 sh
 console
-envoy
+# envoy
 python-hostlist
 docopt
 cmd3>=0.9.8
