@@ -33,7 +33,7 @@ class BaseClassLauncher:
 class ChefLauncher(BaseClassLauncher):
     def register(self, yamlfilewithchefserverinfo):
         """
-        will be in cludmesh_server.yaml in .futuregrid. reade available as
+        will be in cludmesh_server.yaml in .cloudmesh. reade available as
         cm_config_server (If I am not mistaken )
         """
         raise NotImplementedError()

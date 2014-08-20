@@ -1,14 +1,14 @@
 FutureGrid Specific tips
 ======================================================================
 
-If you are a FutureGrid users, you may have several .futuregrid directories on 
+If you are a FutureGrid users, you may have several .cloudmesh directories on 
 several machines. To consolodate them you can do the following::
 
 
     PORTALNAME=<putyour portalname here>
 
     mkdir ~/.futuregird
-    cd ~/.futuregrid
+    cd ~/.cloudmesh
 
     scp -r $PORTALNAME@india.futuregrid.org:.futuregrid india
     scp -r $PORTALNAME@sierra.futuregrid.org:.futuregrid sierra
