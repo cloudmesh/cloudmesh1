@@ -14,8 +14,8 @@ def shell_command_list(arguments):
     """
     Usage:
         list flavor [CLOUD|--all] [--refresh]
-        list server [CLOUD|--all] [--refresh]
         list image [CLOUD|--all] [--refresh]
+        list vm [CLOUD|--all] [--refresh]
         list project
         list cloud
 
@@ -37,10 +37,10 @@ def shell_command_list(arguments):
     
         list flavor [CLOUD|--all] [--refresh]
             list the flavors
-        list server [CLOUD|--all] [--refresh]
-            list the vms
         list image [CLOUD|--all] [--refresh]
             list the images
+        list vm [CLOUD|--all] [--refresh]
+            list the vms
         list project
             list the projects
         list cloud
@@ -305,7 +305,7 @@ class ListInfo(object):
 
         if self.arguments['flavor'] == True:
             call = 'flavor'
-        elif self.arguments['server'] == True:
+        elif self.arguments['vm'] == True:
             call = 'server'
         elif self.arguments['image'] == True:
             call = 'image'

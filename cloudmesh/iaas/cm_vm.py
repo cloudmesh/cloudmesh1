@@ -13,7 +13,8 @@ def shell_command_vm(arguments):
         ::
         
             Usage:
-                vm start [NAME|--count=<count>]
+                vm start [NAME]
+                         [--count=<count>]
                          [--cloud=<CloudName>]
                          [--image=<imgName>|--imageid=<imgId>]
                          [--flavor=<flavorName>|--flavorid=<flavorId>]
@@ -51,13 +52,13 @@ class VMcommand(object):
     
     def __init__(self, arguments):
         self.arguments = arguments
-        #print self.arguments #######################
+        #print self.arguments ########
     
     def _vm_create(self):
         # ------------------------- 
         # check input
+        count = 1
         if self.arguments['--count']:
-            count = None
             try:
                 count = int(self.arguments['--count'])
             except:
@@ -66,6 +67,8 @@ class VMcommand(object):
             if count < 1:
                 log.warning("ERROR: --count must be assigned with an integer greater than 0")
                 return
+            import time
+            watch = time.time()
         # ------------------------- 
         # select cloud
         cloudobj = CloudManage()
@@ -82,7 +85,7 @@ class VMcommand(object):
         # starting vm
         start_vm(self.username, 
                  cloudname,
-                 refresh=True,
+                 count=count,
                  flavorname=self.arguments['--flavor'], 
                  flavorid=self.arguments['--flavorid'], 
                  imagename=self.arguments['--image'],
@@ -90,21 +93,13 @@ class VMcommand(object):
                  groupname=self.arguments['--group'],
                  servername=self.arguments['NAME'])
         # ------------------------- 
-        # starting mutiple vms
-        if self.arguments['--count'] and count > 1:
-            while count > 1:
-                start_vm(self.username, 
-                         cloudname,
-                         refresh=False,
-                         flavorname=self.arguments['--flavor'], 
-                         flavorid=self.arguments['--flavorid'], 
-                         imagename=self.arguments['--image'],
-                         imageid=self.arguments['--imageid'],
-                         groupname=self.arguments['--group'],
-                         servername=None)
-                count = count - 1
-        
-        
+       
+        if self.arguments['--count']:
+            watch = time.time() - watch
+            print ("time consumed: %.2f" % watch), "s"
+            
+        print "to check realtime vm status: list vm --refresh"
+
         
         
     def _vm_delete(self):
@@ -127,7 +122,7 @@ class VMcommand(object):
   
 def start_vm(username, 
              cloudname, 
-             refresh=True,
+             count=1,
              flavorname=None, 
              flavorid=None, 
              imagename=None,
@@ -141,14 +136,14 @@ def start_vm(username,
     will replace prefix+index as the vm name
     :param username: string
     :param cloudname: string
-    :param refresh: boolean, designed for starting more than one vm on a cloud, avoid
-    unnescessary refresh
+    :param count: number of vms to start
     :return 
     
     TODO: what if fail, how to acknowledge it; no return now as using celery
           input key 
           missing security group
     '''
+
     mongo = cm_mongo()
     userobj = cm_user()
     cloudobj = CloudManage()
@@ -161,15 +156,15 @@ def start_vm(username,
     error = ''
         
     # ------------------------- 
-    # refresh flavor or image if needed
+    # refresh flavor or image
     to_refresh = []
-    if refresh:
-        if flavorname != None or flavorid != None:
-            to_refresh.append("flavors")
-        if imagename != None or imageid != None:
-            to_refresh.append("images")
-        if to_refresh != []:
-            mongo.refresh(username, names=[cloudname], types=to_refresh)
+
+    if flavorname != None or flavorid != None:
+        to_refresh.append("flavors")
+    if imagename != None or imageid != None:
+        to_refresh.append("images")
+    if to_refresh != []:
+        mongo.refresh(username, names=[cloudname], types=to_refresh)
     
     # -------------------------
     # flavor handler
@@ -253,44 +248,49 @@ def start_vm(username,
     if groupname:
         metadata['cm_group'] = groupname
     
-    if servername:
-        prefix = ''
-        index = ''
-        givenvmname = servername
-        tmpnameser = servername
-    else:
-        prefix = userinfo["defaults"]["prefix"]
-        index = userinfo["defaults"]["index"]
-        givenvmname = None
-        tmpnameser = prefix+'_'+str(index)
-    # ------------------------
-    # vm start procedure
     tmpnamefl = cloudobj.get_flavors(cloudname=cloudname, getone=True, id=vm_flavor_id)['name']
     tmpnameim = cloudobj.get_images(cloudname=cloudname, getone=True, id=vm_image_id)['name']
-    banner("Starting vm->{0} on cloud->{1} using image->{2}, flavor->{3}, key->{4}"\
-           .format(tmpnameser, cloudname, tmpnamefl, tmpnameim, keynamenew))
-    #result = mongo.vm_create(
-    #using celery, to disable, call vm_create
-    result = mongo.vm_create_queue(
-        cloudname,
-        prefix,
-        index,
-        vm_flavor_id,
-        vm_image_id,
-        keynamenew,
-        meta=metadata,
-        cm_user_id=username,
-        givenvmname=givenvmname)
-    # ------------------------
-    # increase index if it is used
-    if not servername:
-        userobj.set_default_attribute(username, "index", int(index) + 1)
-    # ------------------------
     
-    pprint(result) #################
-    print result.failed()
-    print result.state
-    print result.traceback
+    while count > 0:
+        userinfo = userobj.info(username)
+        if servername:
+            prefix = ''
+            index = ''
+            givenvmname = servername
+            tmpnameser = servername
+        else:
+            prefix = userinfo["defaults"]["prefix"]
+            index = userinfo["defaults"]["index"]
+            givenvmname = None
+            tmpnameser = prefix+'_'+str(index)
+        # ------------------------
+        # vm start procedure
+        
+        banner("Starting vm->{0} on cloud->{1} using image->{2}, flavor->{3}, key->{4}"\
+               .format(tmpnameser, cloudname, tmpnamefl, tmpnameim, keynamenew))
+        #result = mongo.vm_create(
+        #using celery, to disable, call vm_create
+        result = mongo.vm_create_queue(
+            cloudname,
+            prefix,
+            index,
+            vm_flavor_id,
+            vm_image_id,
+            keynamenew,
+            meta=metadata,
+            cm_user_id=username,
+            givenvmname=givenvmname)
+        # ------------------------
+        # increase index if it is used
+        if not servername:
+            userobj.set_default_attribute(username, "index", int(index) + 1)
+        # ------------------------
+        
+        #pprint(result) 
+        #print result.failed()
+        print "job status:", result.state
+        #print result.traceback
+        count = count - 1
     
     
 # ========================================================================   
