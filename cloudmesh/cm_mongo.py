@@ -257,8 +257,9 @@ class cm_mongo:
 
                     log.debug("Created new cloud instance for cloud name: %s, type: %s" \
                               % (cloud_name, cm_type))
-                    if cm_type in ['openstack']:
-                        log.debug("\tfor tenant: %s" % credentials['OS_TENANT_NAME'])
+                    if cm_type in ['openstack', 'ec2']:
+                        if cm_type in ['openstack']:
+                            log.debug("\tfor tenant: %s" % credentials['OS_TENANT_NAME'])
                         if not cloud.auth():
                             cloud = None
                             log.error("Authentication Failed, cloud is not activated")

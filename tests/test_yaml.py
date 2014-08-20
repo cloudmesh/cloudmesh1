@@ -86,8 +86,9 @@ class Test_yaml:
                 #print credential
                 
                 cloud = globals()[cm_type](cloudname, credential)
-                if cm_type in ['openstack']:                
-                    print "\tfor tenant: %s" % credential['OS_TENANT_NAME'], 
+                if cm_type in ['openstack', 'ec2']:
+                    if cm_type in ['openstack']:               
+                        print "\tfor tenant: %s" % credential['OS_TENANT_NAME'], 
                     if cloud.auth():
                         succeeded.append(cloudname)
                         print "ok"
