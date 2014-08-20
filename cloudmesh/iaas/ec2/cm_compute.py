@@ -92,10 +92,14 @@ class ec2(ComputeBaseType):
         libcloud.security.VERIFY_SSL_CERT = False
 
         self.label = label
-        
+    
+    def auth(self):
+        return self.conn is not None
+            
     def connect(self):
         Driver = get_driver(Provider.EUCALYPTUS)
-
+        conn = None
+        
         #
         # BUG, make sure we use the cert, confirm with team ....
         #
