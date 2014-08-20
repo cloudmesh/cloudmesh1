@@ -10,4 +10,5 @@ install:
   - fab doc.html
   - fab build.install
 # command to run tests
-# script: nosetests
+script: 
+  - nosetests -v --nocapture test_pass.py
