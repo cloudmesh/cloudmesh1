@@ -11,4 +11,4 @@ install:
   - fab build.install
 # command to run tests
 script: 
-  - nosetests -v --nocapture test_pass.py
+  - nosetests -v --nocapture tests/test_pass.py
