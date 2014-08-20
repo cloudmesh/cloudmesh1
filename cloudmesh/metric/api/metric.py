@@ -68,7 +68,7 @@ class metric_api:
 
     def get_uri(self):
         # /metric/<cloudname>/<hostname>/<username>/<metric>/<timestart>/<timeend>/<period>
-        uri = ["http:/"]
+        uri = []
         uri.append(self.api_server + ":" + str(self.port))
         uri.append(self.doc_url)
         uri.append(self.iaas)
