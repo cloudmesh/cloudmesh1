@@ -89,7 +89,7 @@ autopep8
 # OpenStack and cloud
 # ######################################################################
 #
-apache-libcloud>=0.14.1
+apache-libcloud==0.14.1
 python-novaclient
 python-keystoneclient
 azure
