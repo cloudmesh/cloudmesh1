@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 from __future__ import with_statement
+
+from os.path import expanduser
 from cloudmesh_install import config_file
 import glob
 import shutil
@@ -54,6 +56,46 @@ class IgnoreUndefined(Undefined):
 
     def __int__(self):
         return "None"
+
+
+        
+rc_file_locations = {
+    'india': {
+        'hostname': 'india.futuregrid.org',
+        'source': '.futuregrid/openstack_havana/novarc',
+        'dest': "~/.cloudmesh/clouds/india",
+        },
+    'sierra': {
+        'hostname': 'sierra.futuregrid.org',
+        'source': '.futuregrid/novarc',
+        'dest': "~/.cloudmesh/clouds/sierra",
+        }
+    }
+
+
+def download_rc_files(userid):
+
+    for hostname in rc_file_locations:
+        host = rc_file_locations[hostname]
+        host["userid"] = userid
+        host["dest"]= expanduser(host["dest"])
+        
+        print "fetching from ", host["hostname"], host
+
+        print "creade dir"
+        
+        os.system ("mkdir -p ~/%(dest)s" % host)
+
+        copy_cmd = "scp %(userid)s@%(hostname)s:%(source)s %(dest)s" % host        
+        print "    <-", copy_cmd
+        print "    ",
+        result = None
+        try:
+            from sh import scp
+            result = scp("%(userid)s@%(hostname)s:%(source)s" % host, "%(dest)s" % host)
+            print "ok", result
+        except Exception, e:
+            print "failed", result, e
 
 
 def install_command(args):
@@ -594,15 +636,23 @@ def fetchrc(userid=None, outdir=None):
     #                    key_path
 
     try:
+
+        download_rc_files(userid)
+        
+        """
         # cmd = "fab rcfile.download:userid='%s',host_ids='%s',key_path='%s'" \
         cmd = "fab -H %s -u %s -i %s rcfile.download:'%s','%s'" \
             % (",".join(hostnames), userid, key_path,
                "\,".join(host_ids), outdir)
-        # print cmd
+        print "CMD", cmd
         os.system(cmd)
+        """
+        
     except:
         print sys.exc_info()
         sys.exit(1)
+
+
 
 
 def verify_ssh_login(userid):
