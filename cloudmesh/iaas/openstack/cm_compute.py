@@ -182,7 +182,10 @@ class openstack(ComputeBaseType):
             log.debug("{1} - GET CRED {0}".format(debug_dict,str(line_number)))
         else:
             log.debug("{0} - {1}", str(line_number), str(msg))
-
+    
+    def auth(self):
+        return 'access' in self.user_token
+        
     def get_token(self, credential=None):
 
         if credential is None:

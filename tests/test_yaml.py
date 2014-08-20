@@ -11,7 +11,19 @@ nosetests -v
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
+from cloudmesh.iaas.openstack.cm_compute import openstack
+from cloudmesh.iaas.ec2.cm_compute import ec2
+try:
+    from cloudmesh.iaas.azure.cm_compute import azure
+except:
+    log.warning("AZURE NOT ENABLED")
 
+try:
+    from cloudmesh.iaas.aws.cm_compute import aws
+except:
+    log.warning("Amazon NOT ENABLED")
+    
 import json
 import os
 import warnings
@@ -59,21 +71,39 @@ class Test_yaml:
         self.config = cm_config()
         cloudnames = self.config.cloudnames()
         print cloudnames
-
+        
         failed = []
-        for cloud in cloudnames:
-            print "authenticate -> ", cloud,
+        succeeded = []
+        for cloudname in cloudnames:
+            print "authenticate -> ", cloudname, 
             try:
-                assert False
+                # assert False
                 #
                 # to do put the authentication code here
-                #
-                print "ok"
+                cm_type = self.config['cloudmesh']['clouds'][cloudname]['cm_type']
+                credential = self.config['cloudmesh']['clouds'][cloudname]['credentials']
+                print cm_type, 
+                #print credential
+                
+                cloud = globals()[cm_type](cloudname, credential)
+                if cm_type in ['openstack']:                
+                    print "\tfor tenant: %s" % credential['OS_TENANT_NAME'], 
+                    if cloud.auth():
+                        succeeded.append(cloudname)
+                        print "ok"
+                    else:
+                        failed.append(cloudname)
+                        print "failed"
+                else:
+                    failed.append(cloudname)
+                    print "failed"
             except:
                 print "failed"
-                failed.append(cloud)
+                failed.append(cloudname)
+                
         if len(failed) > 0:
             print "Failed:", failed
+            print "Succeeded:", succeeded
             assert False 
         else:
             assert True

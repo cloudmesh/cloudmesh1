@@ -259,10 +259,9 @@ class cm_mongo:
                               % (cloud_name, cm_type))
                     if cm_type in ['openstack']:
                         log.debug("\tfor tenant: %s" % credentials['OS_TENANT_NAME'])
-                        tryauth = cloud.get_token()
-                        if 'access' not in tryauth:
+                        if not cloud.auth():
                             cloud = None
-                            log.error("Credential not working, cloud is not activated")
+                            log.error("Authentication Failed, cloud is not activated")
 
                     self.clouds[cm_user_id][cloud_name].update({'manager': cloud})
                     if cloud is not None:
