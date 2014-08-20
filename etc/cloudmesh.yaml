@@ -37,24 +37,24 @@ cloudmesh:
             default:
                 flavor: {{ clouds.alamo.default.flavor }}
                 image: {{ clouds.alamo.default.image }}
-        india_eucalyptus:
-            cm_host: india.futuregrid.org
-            cm_label: india
-            cm_type: ec2
-            cm_type_version: 3.1
-            credentials:
-                EUCALYPTUS_CERT: $HOME/.cloudmesh/india/cacert.pem
-                EC2_CERT: $HOME/.cloudmesh/india/cert.pem
-                EC2_URL: http://149.165.146.135:8773/services/Eucalyptus
-                EC2_ACCESS_KEY: {{ clouds.india_eucalyptus.credential.EC2_ACCESS_KEY }}
-                EC2_SECRET_KEY: {{ clouds.india_eucalyptus.credential.EC2_SECRET_KEY }}
-                EC2_PRIVATE_KEY: $HOME/.cloudmesh/india/pk.pem
-            keyname: cloudmesh
-            userid: {{ username.portal }}
-            default:
-                flavor: {{ clouds.india_eucalyptus.default.flavor }}
-                image: {{ clouds.india_eucalyptus.default.image }}
-        india_openstack_havana:
+#        india_eucalyptus:
+#            cm_host: india.futuregrid.org
+#            cm_label: india
+#            cm_type: ec2
+#            cm_type_version: 3.1
+#            credentials:
+#                EUCALYPTUS_CERT: $HOME/.cloudmesh/india/cacert.pem
+#                EC2_CERT: $HOME/.cloudmesh/india/cert.pem
+#                EC2_URL: http://149.165.146.135:8773/services/Eucalyptus
+#                EC2_ACCESS_KEY: {{ clouds.india_eucalyptus.credential.EC2_ACCESS_KEY }}
+#                EC2_SECRET_KEY: {{ clouds.india_eucalyptus.credential.EC2_SECRET_KEY }}
+#                EC2_PRIVATE_KEY: $HOME/.cloudmesh/india/pk.pem
+#            keyname: cloudmesh
+#            userid: {{ username.portal }}
+#            default:
+#                flavor: {{ clouds.india_eucalyptus.default.flavor }}
+#                image: {{ clouds.india_eucalyptus.default.image }}
+        india:
             cm_host: india.futuregrid.org
             cm_heading: India OpenStack, Havana
             cm_label: ios_havana
@@ -70,7 +70,7 @@ cloudmesh:
             default:
                 flavor: {{ clouds.india_openstack_havana.default.flavor }}
                 image: {{ clouds.india_openstack_havana.default.image }}
-        sierra_openstack_grizzly:
+        sierra:
             cm_host: sierra.futuregrid.org
             cm_heading: Sierra OpenStack, Grizzly
             cm_label: sos
