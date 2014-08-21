@@ -26,7 +26,15 @@ def all():
     dir()
     cmd3()
     banner("CLEAN PREVIOUS CLOUDMESH INSTALLS")
-    r = int(local("pip freeze |fgrep cloudmesh | wc -l", capture=True))
+    delete_package("cloudmesh")
+    delete_package("cloudmesh_cmd3")
+    delete_package("cloudmesh_common")
+    delete_package("cloudmesh_install")        
+
+
+def delete_package(name):
+    banner("CLEAN PREVIOUS {0} INSTALLS".format(name))
+    r = int(local("pip freeze |fgrep {0} | wc -l".format(name), capture=True))
     while r > 0:
-        local('echo "y\n" | pip uninstall cloudmesh')
-        r = int(local("pip freeze |fgrep cloudmesh | wc -l", capture=True))
+        local('echo "y\n" | pip uninstall {0}'.format(name))
+        r = int(local("pip freeze |fgrep {0} | wc -l".format(name), capture=True))
