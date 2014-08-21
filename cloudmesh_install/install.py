@@ -84,7 +84,7 @@ def download_rc_files(userid):
 
         print "creade dir"
         
-        os.system ("mkdir -p ~/%(dest)s" % host)
+        os.system ("mkdir -p %(dest)s" % host)
 
         copy_cmd = "scp %(userid)s@%(hostname)s:%(source)s %(dest)s" % host        
         print "    <-", copy_cmd
