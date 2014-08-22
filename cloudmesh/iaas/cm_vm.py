@@ -6,6 +6,7 @@ from cloudmesh.config.cm_config import cm_config
 from pprint import pprint
 from cloudmesh_common.util import banner
 from cloudmesh_common.bootstrap_util import yn_choice
+import time
 
 log = LOGGER(__file__)
 
@@ -53,7 +54,7 @@ class VMcommand(object):
     
     def __init__(self, arguments):
         self.arguments = arguments
-        print self.arguments ########
+        #print self.arguments ########
     
     def _vm_create(self):
         # ------------------------- 
@@ -68,7 +69,6 @@ class VMcommand(object):
             if count < 1:
                 log.warning("ERROR: --count must be assigned with an integer greater than 0")
                 return
-            import time
             watch = time.time()
         # ------------------------- 
         # select cloud
@@ -154,6 +154,7 @@ class VMcommand(object):
         else:
             cloudname = cloudobj.get_selected_cloud(self.username)
         # ------------------------- 
+        watch = time.time()   ##########
         delete_vm(self.username,
                   cloudname,
                   servername=self.arguments['NAME'],
@@ -164,6 +165,9 @@ class VMcommand(object):
                   rangeend=rangeend,
                   deleteAllCloudVMs=deleteAllCloudVMs,
                   preview=True)
+        
+        watch = time.time() - watch   ##########
+        print ("time consumed: %.2f" % watch), "s"   ##########
         
     
     # --------------------------------------------------------------------------
@@ -374,6 +378,8 @@ def delete_vm(username,
     TODO: what if fail, how to acknowledge it
           range search: now if prefix not given, all vms whose index are in the range will
           be deleted, regardless of its prefix
+          it looks like even though delete a vm and return {msg: seccess}, sometimes refresh
+          after 5 sec, it might be still there
     '''
     # -------------------------
     # simple input check
@@ -525,13 +531,44 @@ def delete_vm(username,
     # deleting
     if confirm_deletion:
         if res == []:
-            return
+                return
+            
+        useQueue = False
+        if useQueue:
+            # not functioning
+            cloudmanager = mongo.clouds[username][cloudname]["manager"]
+            cm_type = mongo.get_cloud_info(username, cloudname)['cm_type']
+            package = "cloudmesh.iaas.%s.queue" % cm_type
+            name = "tasks"
+            imported = getattr(__import__(package, fromlist=[name]), name)
+            queue_name = "%s-%s" % (cm_type, "servers")
+            for i in res:
+                tempservername = serverdata[i]['name'].encode("ascii")
+                banner("Deleting vm->{0} on cloud->{1}".format(tempservername, cloudname))
+                result = imported.vm_delete.apply_async((cloudname, i, username), queue=queue_name)
+                print "job status:", result.state
+                print result.traceback  #########
+            handleip = imported.release_unused_public_ips.apply_async((cloudname, username), queue=queue_name)
+            handlerefresh = imported.refresh.apply_async(args=None,
+                                         kwargs={'cm_user_id': username, 
+                                                 'names': [cloudname], 
+                                                 'types': ['servers']},
+                                         queue=queue_name)
+            
+            print handleip.state
+            print handleip.traceback
+            print handlerefresh.state
+            print handlerefresh.traceback
+            
+            if preview:
+                print "to check realtime vm status: list vm --refresh"
         else:
             for i in res:
                 tempservername = serverdata[i]['name'].encode("ascii")
                 banner("Deleting vm->{0} on cloud->{1}".format(tempservername, cloudname))
                 result = mongo.vm_delete(cloudname, i, username)
                 pprint(result) 
+            time.sleep(5)
             mongo.release_unused_public_ips(cloudname, username)
             mongo.refresh(username, names=[cloudname], types=['servers'])
             

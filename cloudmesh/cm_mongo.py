@@ -578,7 +578,7 @@ class cm_mongo:
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         return cloudmanager.vm_delete(server)
     
-    
+        
 
 '''
 def main():
