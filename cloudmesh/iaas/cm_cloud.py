@@ -549,9 +549,7 @@ class CloudManage(object):
         
         images_dict = self.mongo.images(clouds=[cloudname], cm_user_id=username)
         flavors_dict = self.mongo.flavors(clouds=[cloudname], cm_user_id=username)
-        
-        pprint(servers_dict) ##########
-        
+            
         if output:
             server_names = []
             server_ids = []
