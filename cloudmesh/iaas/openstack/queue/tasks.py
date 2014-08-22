@@ -17,7 +17,7 @@ def refresh(cm_user_id=None, names=None, types=None):
         types = [types]
 
     clouds = cm_mongo()
-    clouds.activate(cm_user_id=cm_user_id)
+    clouds.activate(cm_user_id=cm_user_id, names=names)
     clouds.refresh(cm_user_id=cm_user_id, names=names, types=types)
 
 
@@ -27,3 +27,17 @@ def vm_create(name, flavor_name, image_id, security_groups=None, key_name=None,
     obj = manager
     obj.vm_create(name, flavor_name, image_id ,security_groups, key_name, meta,
                   userdata)
+    
+    
+@celery_openstack_queue.task(track_started=True)
+def vm_delete(cloud, server, cm_user_id):
+    mongo = cm_mongo()
+    mongo.activate(cm_user_id=cm_user_id, names=[cloud])
+    mongo.vm_delete(cloud, server, cm_user_id)
+    
+    
+@celery_openstack_queue.task(track_started=True)
+def release_unused_public_ips(cloud, cm_user_id):
+    mongo = cm_mongo()
+    mongo.activate(cm_user_id=cm_user_id, names=[cloud])
+    mongo.release_unused_public_ips(cloud, cm_user_id)
