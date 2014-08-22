@@ -540,12 +540,17 @@ class CloudManage(object):
         '''
         if refresh:
             self.mongo.activate(cm_user_id=username, names=[cloudname])
-            self.mongo.refresh(cm_user_id=username, names=[cloudname], types=['servers'])
+            self.mongo.refresh(cm_user_id=username, names=[cloudname], types=['images', 'flavors', 'servers'])
             
         if serverdata:
             servers_dict = serverdata
         else:
             servers_dict = self.mongo.servers(clouds=[cloudname], cm_user_id=username)[cloudname]
+        
+        images_dict = self.mongo.images(clouds=[cloudname], cm_user_id=username)
+        flavors_dict = self.mongo.flavors(clouds=[cloudname], cm_user_id=username)
+        
+        pprint(servers_dict) ##########
         
         if output:
             server_names = []
@@ -576,6 +581,18 @@ class CloudManage(object):
                     # ----------------------------------------
                     # special handler
                     # ----------------------------------------
+                    if k[0] == 'flavor':
+                        if val in flavors_dict[cloudname]:
+                            val = flavors_dict[cloudname][val]['name']
+                        else:
+                            val = "flavor '{0}' not available anymore".format(val)
+                            
+                    if k[0] == 'image':
+                        if val in images_dict[cloudname]:
+                            val = images_dict[cloudname][val]['name']
+                        else:
+                            val = "image '{0}' not available anymore".format(val)
+                        
                     if cm_type == "openstack" and k[0] == 'addresses':
                         tmp = ''
                         for i in val['private']:
