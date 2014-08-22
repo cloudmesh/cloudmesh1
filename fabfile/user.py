@@ -78,7 +78,7 @@ def mongo():
     register()
 
     filename = config_file("/cloudmesh.yaml")
-    banner("reding data from {0}".format(filename))
+    banner("reading data from {0}".format(filename))
     config = cm_config(filename=filename)
 
     profile = config.profile()
