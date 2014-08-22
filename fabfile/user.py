@@ -46,7 +46,7 @@ def password():
 @task
 def delete_defaults():
     filename = config_file("/cloudmesh.yaml")
-    banner("reding data from {0}".format(filename))
+    banner("reading data from {0}".format(filename))
     config = cm_config(filename=filename)
     username = config.get("cloudmesh.hpc.username")
 
