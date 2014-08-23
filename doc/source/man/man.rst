@@ -16,21 +16,23 @@ banner
 
 Command - banner::
 
-    Usage:
-        banner [-c CHAR] [-n WIDTH] [-i INDENT] TEXT
+    ::
     
-    Arguments:
-        TEXT   The text message from which to create the banner
-        CHAR   The character for the frame. 
-        WIDTH  Width of the banner
-        INDENT indentation of the banner
+        Usage:
+            banner [-c CHAR] [-n WIDTH] [-i INDENT] TEXT
     
-    Options:
-        -c CHAR   The character for the frame. [default: #]
-        -n WIDTH  The width of the banner. [default: 70]
-        -i INDENT  The width of the banner. [default: 0]            
+        Arguments:
+            TEXT   The text message from which to create the banner
+            CHAR   The character for the frame. 
+            WIDTH  Width of the banner
+            INDENT indentation of the banner
     
-    Prints a banner form a one line text message.
+        Options:
+            -c CHAR   The character for the frame. [default: #]
+            -n WIDTH  The width of the banner. [default: 70]
+            -i INDENT  The width of the banner. [default: 0]            
+    
+        Prints a banner form a one line text message.
     
 
 clear
@@ -194,14 +196,16 @@ dot2
 
 Command - dot2::
 
-    Usage:
-           dot2 FILENAME FORMAT
+    ::
     
-    Export the data in cvs format to a file. Former cvs command
+        Usage:
+               dot2 FILENAME FORMAT
     
-    Arguments:
-        FILENAME   The filename
-        FORMAT     the export format, pdf, png, ...
+        Export the data in cvs format to a file. Former cvs command
+    
+        Arguments:
+            FILENAME   The filename
+            FORMAT     the export format, pdf, png, ...
     
     
 
@@ -210,13 +214,15 @@ edit
 
 Command - edit::
 
-    Usage:
-            edit FILENAME
+    ::
     
-    Edits the file with the given name
+        Usage:
+                edit FILENAME
     
-    Arguments:
-        FILENAME  the file to edit
+        Edits the file with the given name
+    
+        Arguments:
+            FILENAME  the file to edit
     
     
 
@@ -225,14 +231,15 @@ exec
 
 Command - exec::
 
-    Usage:
-       exec FILENAME
+    ::
     
-    executes the commands in the file. See also the script command.
+        Usage:
+           exec FILENAME
     
-    Arguments:
-      FILENAME   The name of the file
+        executes the commands in the file. See also the script command.
     
+        Arguments:
+          FILENAME   The name of the file
     
 
 exp
@@ -299,13 +306,41 @@ graphviz
 
 Command - graphviz::
 
-    Usage:
-           graphviz FILENAME
+    ::
     
-    Export the data in cvs format to a file. Former cvs command
+        Usage:
+               graphviz FILENAME
+    
+        Export the data in cvs format to a file. Former cvs command
+    
+        Arguments:
+            FILENAME   The filename
+    
+    
+
+group
+----------------------------------------------------------------------
+
+Command - group::
+
+    Usage:
+        group info
+        group list [NAME]
+        group set NAME
+        group add NAME
+        group [-i] delete NAME
     
     Arguments:
-        FILENAME   The filename
+    
+        NAME   the name of the group
+    
+    Options:
+    
+        -v         verbose mode
+    
+    Description:
+    
+       group NAME  lists in formation about the group
     
     
 
@@ -350,13 +385,15 @@ info
 
 Command - info::
 
-    Usage:
-           info [--all]
+    ::
     
-    Options:
-           --all  -a   more extensive information 
+        Usage:
+               info [--all]
     
-    Prints some internal information about the shell
+        Options:
+               --all  -a   more extensive information 
+    
+        Prints some internal information about the shell
     
     
 
@@ -450,6 +487,68 @@ Command - inventory::
     
     
 
+keys
+----------------------------------------------------------------------
+
+Command - keys::
+
+            Usage:
+                   keys info [--json] [NAME][--yaml][--mongo]
+                   keys mode MODENAME               
+                   keys default NAME [--yaml][--mongo]
+                   keys add NAME [KEY] [--yaml][--mongo]
+                   keys delete NAME [--yaml][--mongo]
+                   keys save
+                   keys
+    
+            Manages the keys
+    
+            Arguments:
+    
+              NAME           The name of a key
+              MODENAME       This is used to specify the mode name. Mode
+    	  		          name can be either 'yaml' or 'mongo'
+    	  	  KEY            This is the actual key that has to added
+    
+            Options:
+    
+               -v --verbose     verbose mode
+               -j --json        json output
+               -y --yaml        forcefully use yaml mode
+               -m --mongo       forcefully use mongo mode           
+    
+            Description:
+    
+            keys info 
+    
+    	     Prints list of keys. NAME of the key can be specified
+    
+            keys mode MODENAME
+    
+    	     Used to change default mode. Valid MODENAMES are
+    	     yaml(default) and mongo mode.
+    
+            keys default NAME
+    
+    	     Used to set a key from the key-list as the default key
+    
+            keys add NAME [KEY]
+    
+    	     adding/updating keys. KEY is the key file with full file 
+    	     path, if KEY is not provided, you can select a key among
+    	     the files with extension .pub under ~/.ssh. If NAME exists,
+    	     current key value will be overwritten
+    
+            keys delete NAME
+    
+    	     deletes a key. In yaml mode it can delete only keys that
+    	     are not saved in mongo
+    
+            keys save
+    
+    	     Saves the temporary yaml data structure to mongo
+    
+
 label
 ----------------------------------------------------------------------
 
@@ -480,8 +579,8 @@ Command - list::
 
     Usage:
         list flavor [CLOUD|--all] [--refresh]
-        list server [CLOUD|--all] [--refresh]
         list image [CLOUD|--all] [--refresh]
+        list vm [CLOUD|--all] [--refresh]
         list project
         list cloud
     
@@ -503,10 +602,10 @@ Command - list::
     
         list flavor [CLOUD|--all] [--refresh]
             list the flavors
-        list server [CLOUD|--all] [--refresh]
-            list the vms
         list image [CLOUD|--all] [--refresh]
             list the images
+        list vm [CLOUD|--all] [--refresh]
+            list the vms
         list project
             list the projects
         list cloud
@@ -519,25 +618,23 @@ man
 
 Command - man::
 
-    Usage:
-           man COMMAND
-           man [--noheader]
+    ::
     
-    Options:
-           --norule   no rst header
+        Usage:
+               man COMMAND
+               man [--noheader]
     
-    Arguments:
-           COMMAND   the command to be printed 
+        Options:
+               --norule   no rst header
     
-    Description:
+        Arguments:
+               COMMAND   the command to be printed 
     
-      man 
-            Prints out the help pages
-    
-      man COMMAND
-            Prints out the help page for a specific command
-    
-    
+        Description:
+            man 
+                Prints out the help pages
+            man COMMAND
+                Prints out the help page for a specific command
     
 
 metric
@@ -603,15 +700,17 @@ open
 
 Command - open::
 
-    Usage:
-            open FILENAME
+    ::
     
-    ARGUMENTS:
-        FILENAME  the file to open in the cwd if . is
-                  specified. If file in in cwd
-                  you must specify it with ./FILENAME
+        Usage:
+                open FILENAME
     
-    Opens the given URL in a browser window.
+        ARGUMENTS:
+            FILENAME  the file to open in the cwd if . is
+                      specified. If file in in cwd
+                      you must specify it with ./FILENAME
+    
+        Opens the given URL in a browser window.
     
 
 pause
@@ -619,13 +718,15 @@ pause
 
 Command - pause::
 
-    Usage:
-        pause [MESSAGE]
+    ::
     
-    Displays the specified text then waits for the user to press RETURN.
+        Usage:
+            pause [MESSAGE]
     
-    Arguments:
-       MESSAGE  message to be displayed
+        Displays the specified text then waits for the user to press RETURN.
+    
+        Arguments:
+           MESSAGE  message to be displayed
     
 
 plugins
@@ -666,24 +767,28 @@ py
 
 Command - py::
 
-    Usage:
-        py
-        py COMMAND
+    ::
     
-    Arguments:
-        COMMAND   the command to be executed
+        Usage:
+            py
+            py COMMAND
     
-    The command without a parameter will be extecuted and the
-    interactive python mode is entered. The python mode can be
-    ended with ``Ctrl-D`` (Unix) / ``Ctrl-Z`` (Windows),
-    ``quit()``,'`exit()``. Non-python commands can be issued with
-    ``cmd("your command")``.  If the python code is located in an
-    external file it can be run with ``run("filename.py")``.
+        Arguments:
+            COMMAND   the command to be executed
     
-    In case a COMMAND is provided it will be executed and the
-    python interpreter will return to the commandshell.
+        Description:
     
-    This code is copied from Cmd2.
+            The command without a parameter will be extecuted and the
+            interactive python mode is entered. The python mode can be
+            ended with ``Ctrl-D`` (Unix) / ``Ctrl-Z`` (Windows),
+            ``quit()``,'`exit()``. Non-python commands can be issued with
+            ``cmd("your command")``.  If the python code is located in an
+            external file it can be run with ``run("filename.py")``.
+    
+            In case a COMMAND is provided it will be executed and the
+            python interpreter will return to the commandshell.
+    
+            This code is copied from Cmd2.
     
 
 q
@@ -795,30 +900,32 @@ script
 
 Command - script::
 
-    Usage:
-           script
-           script load
+    ::
+    
+        Usage:
+               script
+               script load
+               script load LABEL FILENAME
+               script load REGEXP
+               script list
+               script LABEL
+    
+        Arguments:
+               load       indicates that we try to do actions toload files.
+                          Without parameters, loads scripts from default locations
+                NAME      specifies a label for a script
+                LABEL     a conveninet LABEL, it must be unique
+                FILENAME  the filename in which the script is located
+                REGEXP    Not supported yet.
+                          If specified looks for files identified by the REGEXP.
+    
+        NOT SUPPORTED YET
+    
            script load LABEL FILENAME
+           script load FILENAME
            script load REGEXP
-           script list
-           script LABEL
     
-    Arguments:
-           load       indicates that we try to do actions toload files.
-                      Without parameters, loads scripts from default locations
-            NAME      specifies a label for a script
-            LABEL     a conveninet LABEL, it must be unique
-            FILENAME  the filename in which the script is located
-            REGEXP    Not supported yet.
-                      If specified looks for files identified by the REGEXP.
-    
-    NOT SUPPORTED YET
-    
-       script load LABEL FILENAME
-       script load FILENAME
-       script load REGEXP
-    
-    Process FILE and optionally apply some options
+        Process FILE and optionally apply some options
     
     
 
@@ -886,41 +993,43 @@ timer
 
 Command - timer::
 
-    Usage:
-        timer on
-        timer off            
-        timer list
-        timer start NAME
-        timer stop NAME
-        timer resume NAME
-        timer reset [NAME]
+    ::
     
-    Description (NOT IMPLEMENTED YET):
+        Usage:
+            timer on
+            timer off            
+            timer list
+            timer start NAME
+            timer stop NAME
+            timer resume NAME
+            timer reset [NAME]
     
-         timer on | off
-             switches timers on and off not yet implemented.
-             If the timer is on each command will be timed and its
-             time is printed after the command. Please note that
-             background command times are not added.
+        Description (NOT IMPLEMENTED YET):
     
-        timer list
-            list all timers
+             timer on | off
+                 switches timers on and off not yet implemented.
+                 If the timer is on each command will be timed and its
+                 time is printed after the command. Please note that
+                 background command times are not added.
     
-        timer start NAME
-            starts the timer with the name. A start resets the timer to 0.
+            timer list
+                list all timers
     
-        timer stop NAME
-            stops the timer
+            timer start NAME
+                starts the timer with the name. A start resets the timer to 0.
     
-        timer resume NAME
-            resumes the timer
+            timer stop NAME
+                stops the timer
     
-        timer reset NAME
-            resets the named timer to 0. If no name is specified all
-            timers are reset
+            timer resume NAME
+                resumes the timer
     
-        Implementation note: we have a stopwatch in cloudmesh,
-                             that we could copy into cmd3
+            timer reset NAME
+                resets the named timer to 0. If no name is specified all
+                timers are reset
+    
+            Implementation note: we have a stopwatch in cloudmesh,
+                                 that we could copy into cmd3
     
 
 use
@@ -928,27 +1037,29 @@ use
 
 Command - use::
 
-    USAGE:
+    ::
     
-        use list           lists the available scopes
+        USAGE:
     
-        use add SCOPE      adds a scope <scope>
+            use list           lists the available scopes
     
-        use delete SCOPE   removes the <scope>
+            use add SCOPE      adds a scope <scope>
     
-        use                without parameters allows an
-                           interactive selection
+            use delete SCOPE   removes the <scope>
     
-    DESCRIPTION
-       often we have to type in a command multiple times. To save
-       us typng the name of the commonad, we have defined a simple
-       scope thatcan be activated with the use command
+            use                without parameters allows an
+                               interactive selection
     
-    ARGUMENTS:
-        list         list the available scopes
-        add          add a scope with a name
-        delete       delete a named scope
-        use          activate a scope
+        DESCRIPTION
+           often we have to type in a command multiple times. To save
+           us typng the name of the commonad, we have defined a simple
+           scope thatcan be activated with the use command
+    
+        ARGUMENTS:
+            list         list the available scopes
+            add          add a scope with a name
+            delete       delete a named scope
+            use          activate a scope
     
     
 
@@ -1032,7 +1143,8 @@ Command - vm::
     ::
     
         Usage:
-            vm start [NAME|--count=<count>]
+            vm start [NAME]
+                     [--count=<count>]
                      [--cloud=<CloudName>]
                      [--image=<imgName>|--imageid=<imgId>]
                      [--flavor=<flavorName>|--flavorid=<flavorId>]
