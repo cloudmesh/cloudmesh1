@@ -1148,12 +1148,12 @@ Command - vm::
                      [--cloud=<CloudName>]
                      [--image=<imgName>|--imageid=<imgId>]
                      [--flavor=<flavorName>|--flavorid=<flavorId>]
-                     [--group=<group>]
-            vm delete NAME
-            vm delete --group=<group>
-            vm delete --cloud=<CloudName>
-            vm delete --range=<range>
-            vm list [CLOUD|--all]
+                     [--group=<group>]                    
+            vm delete [NAME|--id=<id>]
+                      [--group=<group>]
+                      [--cloud=<CloudName>]
+                      [--prefix=<prefix>] 
+                      [--range=<range>]
     
         Arguments:
     
