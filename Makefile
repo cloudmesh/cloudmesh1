@@ -1,4 +1,4 @@
-PATHNAME=$(shell pwd)
+gh-ATHNAME=$(shell pwd)
 BASENAME=$(shell basename $(PATHNAME))
 
 TAG=`echo "print __version__" > v.py;  cat cloudmesh/__init__.py v.py > /tmp/v1.py; python /tmp/v1.py; rm /tmp/v1.py v.py`
@@ -139,32 +139,4 @@ tag:
 	git commit -m "adding version $(TAG)"
 	git push
 
-
-######################################################################
-# ONLY RUN ON GH-PAGES
-######################################################################
-
-PROJECT=`basename $(PWD)`
-DIR=/tmp/$(PROJECT)
-DOC=$(DIR)/docs
-
-pages: ghphtml ghpgit
-	echo done
-
-ghphtml:
-	cd /tmp
-	rm -rf $(DIR)
-	cd /tmp; git clone git://github.com/cloudmesh/$(PROJECT).git
-	cp $(DIR)/Makefile .
-	cd $(DOC); ls; make html
-	rm -fr _static
-	rm -fr _source
-	rm -fr *.html
-	cp -r $(DOC)/build/html/* .
-
-ghpgit:
-	git add . _sources _static   
-	git commit -a -m "updating the github pages"
-	git push
-	git checkout master
 
