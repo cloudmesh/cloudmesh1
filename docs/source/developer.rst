@@ -1,7 +1,3 @@
-.. sidebar:: Page Contents
-
-   .. contents::
-      :local:
 
 .. _s-instalation:
 **********************************************************************

@@ -1,14 +1,6 @@
 Proposed Commands
 ======================================================================
 
-.. sidebar:: 
-   . 
-
-  .. contents:: Table of Contents
-     :local:
-
-..
-
 This section contains proposed commands to be implemented.
 
 Label

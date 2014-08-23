@@ -1,12 +1,3 @@
-.. sidebar:: 
-   . 
-
-  .. contents:: Table of Contents
-     :local: 
-
-..
-
-
 Overview 
 ==========
 

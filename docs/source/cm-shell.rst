@@ -1,15 +1,6 @@
 Cloudmesh Shell
 =================
 
-.. sidebar:: 
-   . 
-
-  .. contents:: Table of Contents
-     :local:
-
-..
-
-
 The cloudmesh shell allows to interact with multiple clouds either
 through the commandline or through a command shell.
 

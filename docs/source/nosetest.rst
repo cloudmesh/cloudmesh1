@@ -1,14 +1,6 @@
 Testing
 ======================================================================
 
-.. sidebar:: 
-   . 
-
-  .. contents:: Table of Contents
-     :local:
-
-..
-
 With Python nose testing tool, Cloudmesh performs tests easily to find problems and verify commands, functions and classes.
 *tests* directory contains test cases to check and nose produces captured output messages from failing test cases to help debugging.
 
