@@ -10,7 +10,7 @@ if sys.platform == 'darwin':
 @task
 def view():
     """view the documentation in a browser"""
-    local("{browser} doc/build/html/index.html".format(browser=browser))
+    local("{browser} docs/build/html/index.html".format(browser=browser))
 
 @task
 def html():
@@ -18,8 +18,8 @@ def html():
     os.environ['RSTPAGES'] = 'FALSE'
     api()
     man()
-    """build the doc locally and view"""
-    local("cd doc; make html")
+    """build the docs locally and view"""
+    local("cd docs; make html")
 
 
 @task
@@ -34,15 +34,15 @@ def publish():
 def man():
     """deploy the documentation on gh-pages"""
     #TODO: match on "Commands"
-    local("cm man | grep -A10000 \"Commands\"  | sed \$d  > doc/source/man/man.rst")
+    local("cm man | grep -A10000 \"Commands\"  | sed \$d  > docs/source/man/man.rst")
 
 @task
 def api():
     for modulename in ["cloudmesh", "cloudmesh_common", "cloudmesh_install", "cloudmesh_cmd3", "cloudmesh_web"]:
         print 70 * "="
-        print "Building API Doc:", modulename 
+        print "Building API Docs:", modulename 
         print 70 * "="        
-        local("sphinx-apidoc -f -o doc/source/api/{0} {0}".format(modulename))
+        local("sphinx-apidoc -f -o docs/source/api/{0} {0}".format(modulename))
 
 
 
