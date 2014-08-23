@@ -7,7 +7,7 @@ install:
   - ./install requirements
   - ./install cloudmesh
   - ./install new
-  - fab doc.html
+#  - fab doc.html
   - fab build.install
 # command to run tests
 script: 
