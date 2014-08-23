@@ -27,7 +27,7 @@ def publish():
     """deploy the documentation on gh-pages"""
     html()
     local('cd docs/build/html && git add .  && git commit -m "site generated" && git push origin gh-pages')
-    local("git commit -a -m "build site")
+    local('git commit -a -m "build site"')
     local("git push origin master")
 
 @task
