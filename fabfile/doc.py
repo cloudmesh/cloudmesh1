@@ -37,7 +37,7 @@ def man():
 
 @task
 def api():
-    for modulename in ["cloudmesh", "cloudmesh_common", "cloudmesh_install", "cmd3local", "cloudmesh_web"]:
+    for modulename in ["cloudmesh", "cloudmesh_common", "cloudmesh_install", "cloudmesh_cmd3", "cloudmesh_web"]:
         print 70 * "="
         print "Building API Doc:", modulename 
         print 70 * "="        
