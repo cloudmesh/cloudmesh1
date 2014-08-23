@@ -512,16 +512,44 @@ class CloudManage(object):
             return [image_names, image_ids]
     
     
-    def print_cloud_servers(self, username=None, cloudname=None, itemkeys=None, refresh=False, output=False):
+    def print_cloud_servers(self, 
+                            username=None, 
+                            cloudname=None, 
+                            itemkeys=None, 
+                            refresh=False, 
+                            output=False,
+                            serverdata=None):
         '''
-        refer to print_cloud_flavors
+        prints a cloud's vms or a given list of vms
+        :param username: string user name
+        :param cloudname: string one cloud name
+        :param itemkesys: a list of lists, each list's first item will be used as header name, the folling ones
+        are the path to the value that user wants in the dict, for example:
+            itemkeys = [
+                         ['id', 'id'],
+                         ['name', 'name'],
+                         ['vcpus', 'vcpus'],
+                         ['ram', 'ram'],
+                         ['disk', 'disk'],
+                         ['refresh time', 'cm_refrsh']
+                       ]
+                       first id is the header name, second id is a path
+        :param refresh: refresh vms of the cloud before printing
+        :param output: designed for shell command for selection
+        :param serverdata: if provided, the function will print this data instead of vms of a cloud
         '''
         if refresh:
             self.mongo.activate(cm_user_id=username, names=[cloudname])
-            self.mongo.refresh(cm_user_id=username, names=[cloudname], types=['servers'])
+            self.mongo.refresh(cm_user_id=username, names=[cloudname], types=['images', 'flavors', 'servers'])
             
-        servers_dict = self.mongo.servers(clouds=[cloudname], cm_user_id=username)
+        if serverdata:
+            servers_dict = serverdata
+        else:
+            servers_dict = self.mongo.servers(clouds=[cloudname], cm_user_id=username)[cloudname]
         
+        images_dict = self.mongo.images(clouds=[cloudname], cm_user_id=username)
+        flavors_dict = self.mongo.flavors(clouds=[cloudname], cm_user_id=username)
+            
         if output:
             server_names = []
             server_ids = []
@@ -536,7 +564,7 @@ class CloudManage(object):
             #ref: http://stackoverflow.com/questions/14692690/access-python-nested-dictionary-items-via-a-list-of-keys
             return reduce(lambda d, k: d[k], mapList, dataDict)
         
-        for i, v in servers_dict[cloudname].iteritems():
+        for i, v in servers_dict.iteritems():
             values = []
             cm_type = v['cm_type']
             if output:
@@ -551,6 +579,18 @@ class CloudManage(object):
                     # ----------------------------------------
                     # special handler
                     # ----------------------------------------
+                    if k[0] == 'flavor':
+                        if val in flavors_dict[cloudname]:
+                            val = flavors_dict[cloudname][val]['name']
+                        else:
+                            val = "flavor '{0}' not available anymore".format(val)
+                            
+                    if k[0] == 'image':
+                        if val in images_dict[cloudname]:
+                            val = images_dict[cloudname][val]['name']
+                        else:
+                            val = "image '{0}' not available anymore".format(val)
+                        
                     if cm_type == "openstack" and k[0] == 'addresses':
                         tmp = ''
                         for i in val['private']:
@@ -566,7 +606,7 @@ class CloudManage(object):
         
         count = index-1
             
-        sentence =  "vms of cloud '{0}'".format(cloudname)
+        sentence =  "cloud '{0}'".format(cloudname)
         print "+"+"-"*(len(sentence)-2)+"+"
         print sentence
         print tabulate(to_print, headers, tablefmt="grid")
