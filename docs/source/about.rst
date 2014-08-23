@@ -3,7 +3,7 @@ Overview
 
 More information can also be found at 
 
-* http://cloudmesh.futuregrid.org
+* http://mycloudmesny.org
 
 Cloudmesh is an important component to deliver a software-defined
 system – encompassing virtualized and bare-metal infrastructure,
