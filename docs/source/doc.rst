@@ -1,19 +1,10 @@
 Documentation
 ======================================================================
 
-.. sidebar:: 
-   . 
-
-  .. contents:: Table of Contents
-     :local:
-
-..
-
-
 Creating the Documentation
 ----------------------------------------------------------------------
 
-The documentation to this project is kept in doc/sources in RST
+The documentation to this project is kept in docs/sources in RST
 format. Information about rst and sphinx can be found at 
 
 * http://sphinx-doc.org/rest.html
@@ -28,11 +19,7 @@ main cloudmesh directory with::
 
 The pages will be locally available to you under::
 
-  doc/build/html/index.html 
-
-In some cases you can avoid using fab if you can also say::
-
-  make sphinx
+  docs/build/html/index.html 
 
 To view the documentation you can also say::
 
@@ -41,13 +28,7 @@ To view the documentation you can also say::
 The pages will be regularly uploaded to github by Gregor von Laszewski. Make sure that the documentation do not contain any compile errors. Once that is done the pages can be uploaded.   
 with the command::   
 
-   fab doc.gh
-
-.. warning:: 
-   
-   Please note that the fab doc.gh should only be executed by Gregor
-   von Laszewski (laszewski@gmail.com). Please notify him when you
-   think that your documentation contribution justifies an update.
+   fab doc.publish
 
 This step will publish the page to gh-pages at
 
@@ -56,7 +37,7 @@ This step will publish the page to gh-pages at
 Sometimes it is necessary to clean the documentation and code before you build
 it. This is achieved with:: 
 
-    fab clean
+    fab clean.all
 
 
 Creating the documentation in a single page

@@ -1,17 +1,6 @@
 Configuration
 ======================================================================
 
-
-.. sidebar:: 
-   . 
-
-  .. contents:: Table of Contents
-     :local:
-
-..
-
-
-
 cloudmesh comes with a set of convenient configuration files in the
 yaml format. Important is that you make sure that prior to saving the
 file, that the indentation is correct and that all tabs are replaced
