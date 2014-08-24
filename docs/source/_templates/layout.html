@@ -8,41 +8,10 @@
    {{ super() }}
 
    {% if pagename in ["index"] %}
-   <div class="header" id="content">
-   <div id="this-carousel-id" class="carousel slide"><!-- class of slide for animation -->
-   <div class="carousel-inner">
-    <div class="item active"><!-- class of active since it's the first item -->
-      <img src="http://placehold.it/1200x240&text=Federated VM Management" alt="" />
-       <div class="carousel-caption">
-        <p>OpenStack, AWS, Azure, Eucalyptus, EC2</p>
-      </div>
-    </div>
-    <div class="item">
-      <img src="http://placehold.it/1200x240&text=Rain for Baremetal" alt="" />
-      <div class="carousel-caption">
-        <p>Role and user based provisioning</p>
-      </div>
 
-    </div>
-    <div class="item">
-      <img src="http://placehold.it/1200x240&text=Rain for PaaS" alt="" />
-      <div class="carousel-caption">
-        <p>Deploy Services easily</p>
-      </div>
-    </div>
-    <div class="item">
-      <img src="http://placehold.it/1200x240&text=Cloud Metrics" alt="" />
-      <div class="carousel-caption">
-        <p>Obtain federated Cloud usage information</p>
-      </div>
-    </div>
-   </div><!-- /.carousel-inner -->
-   <!--  Next and Previous controls below
-        href values must reference the id for this carousel -->
-    <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
-    <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
-   </div><!-- /.carousel -->
-   </div>
+  <div class="header" id="content">
+
+  {% include "carousel-1.html" %}
 
   <a href="https://github.com/cloudmesh/cloudmesh.git"
      class="visible-desktop hidden-xs"><img
