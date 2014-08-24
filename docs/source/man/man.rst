@@ -16,23 +16,21 @@ banner
 
 Command - banner::
 
-    ::
+    Usage:
+        banner [-c CHAR] [-n WIDTH] [-i INDENT] TEXT
     
-        Usage:
-            banner [-c CHAR] [-n WIDTH] [-i INDENT] TEXT
+    Arguments:
+        TEXT   The text message from which to create the banner
+        CHAR   The character for the frame. 
+        WIDTH  Width of the banner
+        INDENT indentation of the banner
     
-        Arguments:
-            TEXT   The text message from which to create the banner
-            CHAR   The character for the frame. 
-            WIDTH  Width of the banner
-            INDENT indentation of the banner
+    Options:
+        -c CHAR   The character for the frame. [default: #]
+        -n WIDTH  The width of the banner. [default: 70]
+        -i INDENT  The width of the banner. [default: 0]            
     
-        Options:
-            -c CHAR   The character for the frame. [default: #]
-            -n WIDTH  The width of the banner. [default: 70]
-            -i INDENT  The width of the banner. [default: 0]            
-    
-        Prints a banner form a one line text message.
+    Prints a banner form a one line text message.
     
 
 clear
@@ -50,97 +48,95 @@ cloud
 
 Command - cloud::
 
-    ::
+    Usage:
+        cloud
+        cloud list [--column=COLUMN]
+        cloud info [CLOUD|--all]
+        cloud alias <name> [CLOUD]
+        cloud select [CLOUD]
+        cloud on [CLOUD]
+        cloud off [CLOUD]
+        cloud add CLOUDFILE [--force]
+        cloud remove [CLOUD|--all]
+        cloud default [CLOUD|--all]
+        cloud set flavor [CLOUD]
+        cloud set image [CLOUD]
+        cloud set default [CLOUD]
     
-        Usage:
+    Arguments:
+    
+      CLOUD          the name of a cloud to work on
+      CLOUDFILE      a yaml file(with full file path) contains cloud information
+      name           new cloud name to set
+    
+    Options:
+    
+       -v                verbose model
+       --column=COLUMN   specify what information to display. For
+                         example, --column=active,label. Available
+                         columns are active, label, host, type/version,
+                         type, heading, user, credentials, defaults
+                         (all to diplay all, semiall to display all
+                         except credentials and defaults)
+       --all             work on all clouds
+       --force           if same cloud exists in database, it will be 
+                         overwritten
+    
+    Description:
+        the place to manage clouds
+    
+        cloud list [--column=COLUMN]
+            lists the stored clouds, optionally, specify columns for more
+            cloud information. For example, --column=active,label
+    
+        cloud info [CLOUD|--all]  
+            provides the available information about the cloud in dict format 
+            options: specify CLOUD to display it, --all to display all,
+                     otherwise selected cloud will be used
+    
+        cloud alias <name> [CLOUD]
+            sets a new name for a cloud
+            options: specify CLOUD to work with, otherwise selected cloud 
+                     will be used
+    
+        cloud select [CLOUD]
+            selects a cloud to work with from a list of clouds if CLOUD is
+            not given
+    
+        cloud on [CLOUD]
+        cloud off [CLOUD]
+            activates or deactivates a cloud, if CLOUD is not given, 
+            selected cloud will be activated or deactivated
+    
+        cloud add CLOUDFILE [--force]
+            adds cloud information to database. CLOUDFILE is a yaml file with 
+            full file path. Inside the yaml, clouds should be written in the
+            form: 
+            cloudmesh: clouds: cloud1...
+                               cloud2...
+            please check cloudmesh.yaml
+            options: --force, by default, existing cloud in database can't be
+                     overwirtten, enable --force to overwrite if same cloud 
+                     name encountered
+    
+        cloud remove [CLOUD|--all]
+            remove a cloud from mongo, if CLOUD is not given, selected cloud 
+            will be reomved.
+            CAUTION: remove all is enabled(remove --all)
+    
+        cloud default [CLOUD|--all]
+        cloud set flavor [CLOUD]
+        cloud set image [CLOUD]
+        cloud set default [CLOUD]
+            view or manage cloud's default flavor and image, and set default 
             cloud
-            cloud list [--column=COLUMN]
-            cloud info [CLOUD|--all]
-            cloud alias <name> [CLOUD]
-            cloud select [CLOUD]
-            cloud on [CLOUD]
-            cloud off [CLOUD]
-            cloud add CLOUDFILE [--force]
-            cloud remove [CLOUD|--all]
-            cloud default [CLOUD|--all]
-            cloud set flavor [CLOUD]
-            cloud set image [CLOUD]
-            cloud set default [CLOUD]
-    
-        Arguments:
-    
-          CLOUD          the name of a cloud to work on
-          CLOUDFILE      a yaml file(with full file path) contains cloud information
-          name           new cloud name to set
-    
-        Options:
-    
-           -v                verbose model
-           --column=COLUMN   specify what information to display. For
-                             example, --column=active,label. Available
-                             columns are active, label, host, type/version,
-                             type, heading, user, credentials, defaults
-                             (all to diplay all, semiall to display all
-                             except credentials and defaults)
-           --all             work on all clouds
-           --force           if same cloud exists in database, it will be 
-                             overwritten
-    
-        Description:
-            the place to manage clouds
-    
-            cloud list [--column=COLUMN]
-                lists the stored clouds, optionally, specify columns for more
-                cloud information. For example, --column=active,label
-    
-            cloud info [CLOUD|--all]  
-                provides the available information about the cloud in dict format 
-                options: specify CLOUD to display it, --all to display all,
-                         otherwise selected cloud will be used
-    
-            cloud alias <name> [CLOUD]
-                sets a new name for a cloud
-                options: specify CLOUD to work with, otherwise selected cloud 
-                         will be used
-    
-            cloud select [CLOUD]
-                selects a cloud to work with from a list of clouds if CLOUD is
-                not given
-    
-            cloud on [CLOUD]
-            cloud off [CLOUD]
-                activates or deactivates a cloud, if CLOUD is not given, 
-                selected cloud will be activated or deactivated
-    
-            cloud add CLOUDFILE [--force]
-                adds cloud information to database. CLOUDFILE is a yaml file with 
-                full file path. Inside the yaml, clouds should be written in the
-                form: 
-                cloudmesh: clouds: cloud1...
-                                   cloud2...
-                please check cloudmesh.yaml
-                options: --force, by default, existing cloud in database can't be
-                         overwirtten, enable --force to overwrite if same cloud 
-                         name encountered
-    
-            cloud remove [CLOUD|--all]
-                remove a cloud from mongo, if CLOUD is not given, selected cloud 
-                will be reomved.
-                CAUTION: remove all is enabled(remove --all)
-    
-            cloud default [CLOUD|--all]
-            cloud set flavor [CLOUD]
-            cloud set image [CLOUD]
-            cloud set default [CLOUD]
-                view or manage cloud's default flavor and image, and set default 
-                cloud
-                options: CLOUD, specify a cloud to work on, otherwise selected 
-                         cloud will be used
-                         default, list default infomation of cloud, --all to 
-                                  display all clouds defaults
-                         set flavor, set default flaovr of a cloud
-                         set image, set default image of a cloud
-                         set cloud, set default cloud
+            options: CLOUD, specify a cloud to work on, otherwise selected 
+                     cloud will be used
+                     default, list default infomation of cloud, --all to 
+                              display all clouds defaults
+                     set flavor, set default flaovr of a cloud
+                     set image, set default image of a cloud
+                     set cloud, set default cloud
     
     
 
@@ -196,16 +192,14 @@ dot2
 
 Command - dot2::
 
-    ::
+    Usage:
+           dot2 FILENAME FORMAT
     
-        Usage:
-               dot2 FILENAME FORMAT
+    Export the data in cvs format to a file. Former cvs command
     
-        Export the data in cvs format to a file. Former cvs command
-    
-        Arguments:
-            FILENAME   The filename
-            FORMAT     the export format, pdf, png, ...
+    Arguments:
+        FILENAME   The filename
+        FORMAT     the export format, pdf, png, ...
     
     
 
@@ -214,15 +208,13 @@ edit
 
 Command - edit::
 
-    ::
+    Usage:
+            edit FILENAME
     
-        Usage:
-                edit FILENAME
+    Edits the file with the given name
     
-        Edits the file with the given name
-    
-        Arguments:
-            FILENAME  the file to edit
+    Arguments:
+        FILENAME  the file to edit
     
     
 
@@ -231,15 +223,13 @@ exec
 
 Command - exec::
 
-    ::
+    Usage:
+       exec FILENAME
     
-        Usage:
-           exec FILENAME
+    executes the commands in the file. See also the script command.
     
-        executes the commands in the file. See also the script command.
-    
-        Arguments:
-          FILENAME   The name of the file
+    Arguments:
+      FILENAME   The name of the file
     
 
 exp
@@ -306,15 +296,13 @@ graphviz
 
 Command - graphviz::
 
-    ::
+    Usage:
+           graphviz FILENAME
     
-        Usage:
-               graphviz FILENAME
+    Export the data in cvs format to a file. Former cvs command
     
-        Export the data in cvs format to a file. Former cvs command
-    
-        Arguments:
-            FILENAME   The filename
+    Arguments:
+        FILENAME   The filename
     
     
 
@@ -385,15 +373,13 @@ info
 
 Command - info::
 
-    ::
+    Usage:
+           info [--all]
     
-        Usage:
-               info [--all]
+    Options:
+           --all  -a   more extensive information 
     
-        Options:
-               --all  -a   more extensive information 
-    
-        Prints some internal information about the shell
+    Prints some internal information about the shell
     
     
 
@@ -402,52 +388,50 @@ init
 
 Command - init::
 
-    ::
+    Usage:
+           init [--force] generate yaml
+           init [--force] generate me
+           init [--force] generate none
+           init [--force] generate FILENAME
+           init list [KIND] [--json]           
+           init list clouds [--file=FILENAME] [--json]
+           init inspect --file=FILENAME
+           init fill --file=FILENAME [VALUES]
     
-      Usage:
-             init [--force] generate yaml
-             init [--force] generate me
-             init [--force] generate none
-             init [--force] generate FILENAME
-             init list [KIND] [--json]           
-             init list clouds [--file=FILENAME] [--json]
-             init inspect --file=FILENAME
-             init fill --file=FILENAME [VALUES]
+    Initializes cloudmesh from a yaml file
     
-      Initializes cloudmesh from a yaml file
+    Arguments:
+       generate   generates a yaml file
+       yaml       specifies if a yaml file is used for generation
+                  the file is located at me.yaml
+       me         same as yaml
     
-      Arguments:
-         generate   generates a yaml file
-         yaml       specifies if a yaml file is used for generation
-                    the file is located at me.yaml
-         me         same as yaml
+       none       specifies if a yaml file is used for generation
+                  the file is located at CONFIG/etc/none.yaml
+       FILENAME   The filename to be generated or from which to read
+                  information. 
+       VALUES     yaml file with the velues to be sed in the FILENAME
+       KIND       The kind of the yaml file.
     
-         none       specifies if a yaml file is used for generation
-                    the file is located at CONFIG/etc/none.yaml
-         FILENAME   The filename to be generated or from which to read
-                    information. 
-         VALUES     yaml file with the velues to be sed in the FILENAME
-         KIND       The kind of the yaml file.
-    
-      Options:
-         --force  force mode does not ask. This may be dangerous as it
-                  overwrites the CONFIG/cloudmesh.yaml file
-         --file=FILENAME  The file
-         --json   make the output format json
-         -v       verbose mode
+    Options:
+       --force  force mode does not ask. This may be dangerous as it
+                overwrites the CONFIG/cloudmesh.yaml file
+       --file=FILENAME  The file
+       --json   make the output format json
+       -v       verbose mode
     
     
-      Description:
+    Description:
     
-        init list [KIND] [--json]
-           list the versions and types of the yaml files in the
-           CONFIG and CONFIG/etc directories.
+      init list [KIND] [--json]
+         list the versions and types of the yaml files in the
+         CONFIG and CONFIG/etc directories.
     
-        init list clouds [--file=FILENAME]
-           Lists the available clouds in the configuration yaml file.
+      init list clouds [--file=FILENAME]
+         Lists the available clouds in the configuration yaml file.
     
-        init inspect --file=FILENAME
-           print the variables in the yaml template
+      init inspect --file=FILENAME
+         print the variables in the yaml template
     
 
 inventory
@@ -618,23 +602,21 @@ man
 
 Command - man::
 
-    ::
+    Usage:
+           man COMMAND
+           man [--noheader]
     
-        Usage:
-               man COMMAND
-               man [--noheader]
+    Options:
+           --norule   no rst header
     
-        Options:
-               --norule   no rst header
+    Arguments:
+           COMMAND   the command to be printed 
     
-        Arguments:
-               COMMAND   the command to be printed 
-    
-        Description:
-            man 
-                Prints out the help pages
-            man COMMAND
-                Prints out the help page for a specific command
+    Description:
+        man 
+            Prints out the help pages
+        man COMMAND
+            Prints out the help page for a specific command
     
 
 metric
@@ -700,17 +682,15 @@ open
 
 Command - open::
 
-    ::
+    Usage:
+            open FILENAME
     
-        Usage:
-                open FILENAME
+    ARGUMENTS:
+        FILENAME  the file to open in the cwd if . is
+                  specified. If file in in cwd
+                  you must specify it with ./FILENAME
     
-        ARGUMENTS:
-            FILENAME  the file to open in the cwd if . is
-                      specified. If file in in cwd
-                      you must specify it with ./FILENAME
-    
-        Opens the given URL in a browser window.
+    Opens the given URL in a browser window.
     
 
 pause
@@ -718,15 +698,13 @@ pause
 
 Command - pause::
 
-    ::
+    Usage:
+        pause [MESSAGE]
     
-        Usage:
-            pause [MESSAGE]
+    Displays the specified text then waits for the user to press RETURN.
     
-        Displays the specified text then waits for the user to press RETURN.
-    
-        Arguments:
-           MESSAGE  message to be displayed
+    Arguments:
+       MESSAGE  message to be displayed
     
 
 plugins
@@ -767,28 +745,26 @@ py
 
 Command - py::
 
-    ::
+    Usage:
+        py
+        py COMMAND
     
-        Usage:
-            py
-            py COMMAND
+    Arguments:
+        COMMAND   the command to be executed
     
-        Arguments:
-            COMMAND   the command to be executed
+    Description:
     
-        Description:
+        The command without a parameter will be extecuted and the
+        interactive python mode is entered. The python mode can be
+        ended with ``Ctrl-D`` (Unix) / ``Ctrl-Z`` (Windows),
+        ``quit()``,'`exit()``. Non-python commands can be issued with
+        ``cmd("your command")``.  If the python code is located in an
+        external file it can be run with ``run("filename.py")``.
     
-            The command without a parameter will be extecuted and the
-            interactive python mode is entered. The python mode can be
-            ended with ``Ctrl-D`` (Unix) / ``Ctrl-Z`` (Windows),
-            ``quit()``,'`exit()``. Non-python commands can be issued with
-            ``cmd("your command")``.  If the python code is located in an
-            external file it can be run with ``run("filename.py")``.
+        In case a COMMAND is provided it will be executed and the
+        python interpreter will return to the commandshell.
     
-            In case a COMMAND is provided it will be executed and the
-            python interpreter will return to the commandshell.
-    
-            This code is copied from Cmd2.
+        This code is copied from Cmd2.
     
 
 q
@@ -900,32 +876,30 @@ script
 
 Command - script::
 
-    ::
-    
-        Usage:
-               script
-               script load
-               script load LABEL FILENAME
-               script load REGEXP
-               script list
-               script LABEL
-    
-        Arguments:
-               load       indicates that we try to do actions toload files.
-                          Without parameters, loads scripts from default locations
-                NAME      specifies a label for a script
-                LABEL     a conveninet LABEL, it must be unique
-                FILENAME  the filename in which the script is located
-                REGEXP    Not supported yet.
-                          If specified looks for files identified by the REGEXP.
-    
-        NOT SUPPORTED YET
-    
+    Usage:
+           script
+           script load
            script load LABEL FILENAME
-           script load FILENAME
            script load REGEXP
+           script list
+           script LABEL
     
-        Process FILE and optionally apply some options
+    Arguments:
+           load       indicates that we try to do actions toload files.
+                      Without parameters, loads scripts from default locations
+            NAME      specifies a label for a script
+            LABEL     a conveninet LABEL, it must be unique
+            FILENAME  the filename in which the script is located
+            REGEXP    Not supported yet.
+                      If specified looks for files identified by the REGEXP.
+    
+    NOT SUPPORTED YET
+    
+       script load LABEL FILENAME
+       script load FILENAME
+       script load REGEXP
+    
+    Process FILE and optionally apply some options
     
     
 
@@ -993,43 +967,41 @@ timer
 
 Command - timer::
 
-    ::
+    Usage:
+        timer on
+        timer off            
+        timer list
+        timer start NAME
+        timer stop NAME
+        timer resume NAME
+        timer reset [NAME]
     
-        Usage:
-            timer on
-            timer off            
-            timer list
-            timer start NAME
-            timer stop NAME
-            timer resume NAME
-            timer reset [NAME]
+    Description (NOT IMPLEMENTED YET):
     
-        Description (NOT IMPLEMENTED YET):
+         timer on | off
+             switches timers on and off not yet implemented.
+             If the timer is on each command will be timed and its
+             time is printed after the command. Please note that
+             background command times are not added.
     
-             timer on | off
-                 switches timers on and off not yet implemented.
-                 If the timer is on each command will be timed and its
-                 time is printed after the command. Please note that
-                 background command times are not added.
+        timer list
+            list all timers
     
-            timer list
-                list all timers
+        timer start NAME
+            starts the timer with the name. A start resets the timer to 0.
     
-            timer start NAME
-                starts the timer with the name. A start resets the timer to 0.
+        timer stop NAME
+            stops the timer
     
-            timer stop NAME
-                stops the timer
+        timer resume NAME
+            resumes the timer
     
-            timer resume NAME
-                resumes the timer
+        timer reset NAME
+            resets the named timer to 0. If no name is specified all
+            timers are reset
     
-            timer reset NAME
-                resets the named timer to 0. If no name is specified all
-                timers are reset
-    
-            Implementation note: we have a stopwatch in cloudmesh,
-                                 that we could copy into cmd3
+        Implementation note: we have a stopwatch in cloudmesh,
+                             that we could copy into cmd3
     
 
 use
@@ -1037,29 +1009,27 @@ use
 
 Command - use::
 
-    ::
+    USAGE:
     
-        USAGE:
+        use list           lists the available scopes
     
-            use list           lists the available scopes
+        use add SCOPE      adds a scope <scope>
     
-            use add SCOPE      adds a scope <scope>
+        use delete SCOPE   removes the <scope>
     
-            use delete SCOPE   removes the <scope>
+        use                without parameters allows an
+                           interactive selection
     
-            use                without parameters allows an
-                               interactive selection
+    DESCRIPTION
+       often we have to type in a command multiple times. To save
+       us typng the name of the commonad, we have defined a simple
+       scope thatcan be activated with the use command
     
-        DESCRIPTION
-           often we have to type in a command multiple times. To save
-           us typng the name of the commonad, we have defined a simple
-           scope thatcan be activated with the use command
-    
-        ARGUMENTS:
-            list         list the available scopes
-            add          add a scope with a name
-            delete       delete a named scope
-            use          activate a scope
+    ARGUMENTS:
+        list         list the available scopes
+        add          add a scope with a name
+        delete       delete a named scope
+        use          activate a scope
     
     
 
@@ -1140,28 +1110,26 @@ vm
 
 Command - vm::
 
-    ::
+    Usage:
+        vm start [NAME]
+                 [--count=<count>]
+                 [--cloud=<CloudName>]
+                 [--image=<imgName>|--imageid=<imgId>]
+                 [--flavor=<flavorName>|--flavorid=<flavorId>]
+                 [--group=<group>]                    
+        vm delete [NAME|--id=<id>]
+                  [--group=<group>]
+                  [--cloud=<CloudName>]
+                  [--prefix=<prefix>] 
+                  [--range=<range>]
     
-        Usage:
-            vm start [NAME]
-                     [--count=<count>]
-                     [--cloud=<CloudName>]
-                     [--image=<imgName>|--imageid=<imgId>]
-                     [--flavor=<flavorName>|--flavorid=<flavorId>]
-                     [--group=<group>]                    
-            vm delete [NAME|--id=<id>]
-                      [--group=<group>]
-                      [--cloud=<CloudName>]
-                      [--prefix=<prefix>] 
-                      [--range=<range>]
+    Arguments:
     
-        Arguments:
+    Options:
     
-        Options:
+    Description:
     
-        Description:
-    
-        Examples:   
+    Examples:   
     
     
 

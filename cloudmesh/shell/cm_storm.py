@@ -25,29 +25,31 @@ log = LOGGER(__file__)
 
 def shell_command_storm(arguments):
     """
-    Usage:
-      storm list
-      storm ID
-      storm register ID [--kind=KIND] [ARGUMENTS...]
+    ::
 
-    Arguments:
+        Usage:
+          storm list
+          storm ID
+          storm register ID [--kind=KIND] [ARGUMENTS...]
 
-      list       list the available high level services to be provisioned.
-      ID         list the user with the given ID
-      ARGUMENTS  The name of the arguments that need to be passed
+        Arguments:
 
-    Options:
-      --kind=KIND  the kind of the storm. It can be chef, puppet, or other
-                   frameworks. At this time we will focus on chef [default: chef].
+          list       list the available high level services to be provisioned.
+          ID         list the user with the given ID
+          ARGUMENTS  The name of the arguments that need to be passed
 
-       -v          verbose mode
+        Options:
 
-    Description:
-    
-      Command to invoce a provisioning of high level services such as
-      provided with chef, puppet, or other high level DevOps Tools. If
-      needed the machines can be provisioned prior to a storm with
-      rain. Together this forms a rain storm.
+          --kind=KIND  the kind of the storm. It can be chef, puppet, or other
+                       frameworks. At this time we will focus on chef [default: chef].
+           -v          verbose mode
+
+        Description:
+
+          Command to invoce a provisioning of high level services such as
+          provided with chef, puppet, or other high level DevOps Tools. If
+          needed the machines can be provisioned prior to a storm with
+          rain. Together this forms a rain storm.
 
     """
 

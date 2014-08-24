@@ -12,7 +12,7 @@ Cloudmesh
    configure
    doc
    hacking
-   nosetest
+   testing
    shell    
    metric
    contributing
