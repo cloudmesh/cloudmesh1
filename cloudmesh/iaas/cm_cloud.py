@@ -147,18 +147,24 @@ class CloudManage(object):
         mongo = cm_mongo()
     except:
         log.error("There is a problem with the mongo server")
-    
+
+
+    def _get_user(username):
+        return self.mongo.db_user.find_one({'cm_user_id': username})
     
     def get_clouds(self, username, admin=False, getone=False, cloudname=None):
         '''
         retreive cloud information from db_clouds
         '''
         if getone:
-            return self.mongo.db_clouds.find_one({'cm_kind': 'cloud', 'cm_user_id': username, 'cm_cloud': cloudname})
+            return self.mongo.db_clouds.find_one({'cm_kind': 'cloud',
+                                                  'cm_user_id': username,
+                                                  'cm_cloud': cloudname})
         if admin: 
             return self.mongo.db_clouds.find({'cm_kind': 'cloud'})
         else:
-            return self.mongo.db_clouds.find({'cm_kind': 'cloud', 'cm_user_id': username})
+            return self.mongo.db_clouds.find({'cm_kind': 'cloud',
+                                              'cm_user_id': username})
         
         
     def get_selected_cloud(self, username):
@@ -170,9 +176,11 @@ class CloudManage(object):
             try:
                 cloud = defaults['cloud']
             except:
-                log.warning("no selected cloud and no default cloud is setup, please use command 'cloud select [CLOUD]' to select a cloud")
+                log.warning("no selected cloud and no default cloud is setup, "\
+                            "please use command 'cloud select [CLOUD]' to select a cloud")
                 sys.exit()
-            self.mongo.db_user.update({'cm_user_id': username}, {'$set': {'selected_cloud': cloud}})
+            self.mongo.db_user.update({'cm_user_id': username},
+                                      {'$set': {'selected_cloud': cloud}})
         
         return cloud.encode("ascii")
     
@@ -181,7 +189,8 @@ class CloudManage(object):
         '''
         set user selected cloud, which is current worked on cloud in the shell
         '''
-        self.mongo.db_user.update({'cm_user_id': username}, {'$set': {'selected_cloud': cloudname}})
+        self.mongo.db_user.update({'cm_user_id': username},
+                                  {'$set': {'selected_cloud': cloudname}})
     
     
     def get_default_cloud(self, username):
@@ -199,7 +208,8 @@ class CloudManage(object):
         '''
         set default cloud
         '''
-        self.mongo.db_defaults.update({'cm_user_id': username}, {'$set': {'cloud': cloudname}})
+        self.mongo.db_defaults.update({'cm_user_id': username},
+                                      {'$set': {'cloud': cloudname}})
     
     
     def update_cloud_name(self, username, cloudname, newname):
@@ -207,7 +217,10 @@ class CloudManage(object):
         change the cloud name in db
         before use this function, check whether cloud exists in db_clouds
         '''
-        self.mongo.db_clouds.update({'cm_kind': 'cloud', 'cm_user_id': username, 'cm_cloud': cloudname}, {'$set': {'cm_cloud': newname}})
+        self.mongo.db_clouds.update({'cm_kind': 'cloud',
+                                     'cm_user_id': username,
+                                     'cm_cloud': cloudname},
+                                    {'$set': {'cm_cloud': newname}})
         try:
             if cloudname == self.mongo.db_user.find_one({'cm_user_id': username})['selected_cloud']:
                 self.update_selected_cloud(username, newname)
@@ -288,7 +301,9 @@ class CloudManage(object):
         remove selected_cloud value if such cloud is removed
         [NOT IMPLEMENTED]default cloud, active cloud, register cloud too if necessary
         '''
-        self.mongo.db_clouds.remove({'cm_kind': 'cloud', 'cm_user_id': username, 'cm_cloud': cloudname})
+        self.mongo.db_clouds.remove({'cm_kind': 'cloud',
+                                     'cm_user_id': username,
+                                     'cm_cloud': cloudname})
         cloud = None
         try:
             cloud = self.mongo.db_user.find_one({'cm_user_id': username})['selected_cloud']
@@ -352,7 +367,8 @@ class CloudManage(object):
         except:
             pass
         flavors[cloudname] = id
-        self.mongo.db_defaults.update({'cm_user_id': username}, {'$set': {'flavors': flavors}})
+        self.mongo.db_defaults.update({'cm_user_id': username},
+                                      {'$set': {'flavors': flavors}})
     
   
         
@@ -361,11 +377,14 @@ class CloudManage(object):
         retrieve flavor information from db_clouds
         '''
         if getone:
-            return self.mongo.db_clouds.find_one({'cm_kind': 'flavors', 'cm_cloud': cloudname, 'id': id})
+            return self.mongo.db_clouds.find_one({'cm_kind': 'flavors',
+                                                  'cm_cloud': cloudname,
+                                                  'id': id})
         elif getall:
             return self.mongo.db_clouds.find({'cm_kind': 'flavors'})
         else:
-            return self.mongo.db_clouds.find({'cm_kind': 'flavors', 'cm_cloud': cloudname})
+            return self.mongo.db_clouds.find({'cm_kind': 'flavors',
+                                              'cm_cloud': cloudname})
         
     
         
@@ -390,7 +409,8 @@ class CloudManage(object):
         except:
             pass
         images[cloudname] = id
-        self.mongo.db_defaults.update({'cm_user_id': username}, {'$set': {'images': images}})
+        self.mongo.db_defaults.update({'cm_user_id': username},
+                                      {'$set': {'images': images}})
     
     
         
@@ -662,8 +682,8 @@ class CloudCommand(CloudManage):
         if self.arguments["--column"]:
             col_option = ['active', 'user', 'label', 'host', 'type/version', 'type', 'heading']            
             if self.arguments["--column"] == 'all':
-                col_option.append('credentials']
-                col_option.append('defaults']                
+                col_option.append('credentials')
+                col_option.append('defaults')                
             elif self.arguments["--column"] == 'semiall':
                 pass
             else:
@@ -1083,34 +1103,48 @@ class CloudCommand(CloudManage):
     def call_procedure(self):
         #print self.arguments ###########
         if self.arguments['list'] == True:
-            call = 'list'
+            self._cloud_list()
+
         elif self.arguments['info'] == True:
-            call = 'info'
+            self._cloud_info()
+
         elif self.arguments['alias'] == True:
-            call = 'alias'
+            self._cloud_alias()
+
         elif self.arguments['select'] == True:
-            call = 'select'
+            self._cloud_select()
+
         elif self.arguments['on'] == True:
-            call = 'activate'
+            self._cloud_activate()
+
         elif self.arguments['off'] == True:
-            call = 'deactivate'
+            self._cloud_deactivate()
+
         elif self.arguments['add'] == True:
-            call = 'import'
+            self._cloud_import()
+
         elif self.arguments['remove'] == True:
-            call = 'remove'
+            self._cloud_remove()
+
         elif self.arguments['default'] == True and self.arguments['set'] != True:
-            call = 'list_default'
+            self._cloud_list_default()
+
         elif self.arguments['set'] == True:
+
             if self.arguments['flavor'] == True:
-                call = 'set_flavor'
+                self._cloud_set_flavor()
+
             elif self.arguments['image'] == True:
-                call = 'set_image'
+                self._cloud_set_image()
+
             elif self.arguments['default'] == True:
-                call = 'set_default_cloud'
+                self._cloud_set_default_cloud()
+
         else:
-            call = 'list'
-        func = getattr(self, "_cloud_" + call)
-        func()
+            self._cloud_list()
+
+        #func = getattr(self, "_cloud_" + call)
+        #func()
     
     
 # ------------------------------------------------------------------------
