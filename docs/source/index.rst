@@ -11,23 +11,30 @@ Cloudmesh
    installation
    configure
    doc
-   hacking
    testing
    shell    
    metric
    contributing
-   appendix
 
 ######################################################################
-FAQ
+FAQ 
 ######################################################################
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 2 
    :numbered:
 
    hpc-use
+
+######################################################################
+OLder Documents 
+######################################################################
+
+.. toctree::
+   :maxdepth: 2 
+   :numbered:
    
+   appendix
 
 Indices and tables
 ==================
