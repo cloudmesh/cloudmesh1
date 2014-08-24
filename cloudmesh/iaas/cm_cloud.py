@@ -15,97 +15,120 @@ log = LOGGER(__file__)
 
 def shell_command_cloud(arguments):
     """
-        ::
+    ::
 
-            Usage:
-                cloud
-                cloud list [--column=COLUMN]
-                cloud info [CLOUD|--all]
-                cloud alias <name> [CLOUD]
-                cloud select [CLOUD]
-                cloud on [CLOUD]
-                cloud off [CLOUD]
-                cloud add CLOUDFILE [--force]
-                cloud remove [CLOUD|--all]
-                cloud default [CLOUD|--all]
-                cloud set flavor [CLOUD]
-                cloud set image [CLOUD]
-                cloud set default [CLOUD]
-                
-            Arguments:
+        Usage:
+            cloud
+            cloud list [--column=COLUMN]
+            cloud info [CLOUD|--all]
+            cloud alias NAME [CLOUD]
+            cloud select [CLOUD]
+            cloud on [CLOUD]
+            cloud off [CLOUD]
+            cloud add CLOUDFILE [--force]
+            cloud remove [CLOUD|--all]
+            cloud default [CLOUD|--all]
+            cloud set flavor FLAVOR [CLOUD]
+            cloud set image IMAGE [CLOUD]
+            cloud set default [CLOUD]
 
-              CLOUD          the name of a cloud to work on
-              CLOUDFILE      a yaml file(with full file path) contains cloud information
-              <name>         new cloud name to set
+        Arguments:
 
-            Options:
+          CLOUD      the name of a cloud 
+          CLOUDFILE  a yaml file (with full file path) containing
+                     cloud information
+          NAME       a name for a cloud
 
-               -v                verbose model
-               --column=COLUMN   specify what information to display. For
-                                 example, --column=active,label. Available
-                                 columns are active, label, host, type/version,
-                                 type, heading, user, credentials, defaults
-                                 (all to diplay all, semiall to display all
-                                 except credentials and defaults)
-               --all             work on all clouds
-               --force           if same cloud exists in database, it will be 
-                                 overwritten
+        Options:
 
-            Description:
-                the place to manage clouds
+           -v                verbose model
 
-                cloud list [--column=COLUMN]
-                    lists the stored clouds, optionally, specify columns for more
-                    cloud information. For example, --column=active,label
+           --column=COLUMN   specify what information to display in
+                             the columns of the list command. For
+                             example, --column=active,label prints the
+                             columns active and label. Available
+                             columns are active, label, host,
+                             type/version, type, heading, user,
+                             credentials, defaults (all to diplay all,
+                             semiall to display all except credentials
+                             and defaults)
 
-                cloud info [CLOUD|--all]  
-                    provides the available information about the cloud in dict format 
-                    options: specify CLOUD to display it, --all to display all,
-                             otherwise selected cloud will be used
+           --all             display all available columns
 
-                cloud alias <name> [CLOUD]
-                    sets a new name for a cloud
-                    options: specify CLOUD to work with, otherwise selected cloud 
-                             will be used
+           --force           if same cloud exists in database, it will be 
+                             overwritten
 
-                cloud select [CLOUD]
-                    selects a cloud to work with from a list of clouds if CLOUD is
-                    not given
+        Description:
 
-                cloud on [CLOUD]
-                cloud off [CLOUD]
-                    activates or deactivates a cloud, if CLOUD is not given, 
-                    selected cloud will be activated or deactivated
+            The cloud command allows easy management of clouds in the
+            command shell. The following subcommands exist:
 
-                cloud add CLOUDFILE [--force]
-                    adds cloud information to database. CLOUDFILE is a yaml file with 
-                    full file path. Inside the yaml, clouds should be written in the
-                    form: 
-                    cloudmesh: clouds: cloud1...
-                                       cloud2...
-                    please check cloudmesh.yaml
-                    options: --force, by default, existing cloud in database can't be
-                             overwirtten, enable --force to overwrite if same cloud 
-                             name encountered
+            cloud list [--column=COLUMN]
+                lists the stored clouds, optionally, specify columns for more
+                cloud information. For example, --column=active,label
 
-                cloud remove [CLOUD|--all]
-                    remove a cloud from mongo, if CLOUD is not given, selected cloud 
-                    will be reomved.
-                    CAUTION: remove all is enabled(remove --all)
-                    
-                cloud default [CLOUD|--all]
-                cloud set flavor [CLOUD]
-                cloud set image [CLOUD]
-                cloud set default [CLOUD]
-                    view or manage cloud's default flavor and image, and set default 
-                    cloud
-                    options: CLOUD, specify a cloud to work on, otherwise selected 
-                             cloud will be used
-                             default, list default infomation of cloud, --all to 
-                                      display all clouds defaults
-                             set flavor, set default flaovr of a cloud
-                             set image, set default image of a cloud
-                             set default, set default cloud
+            cloud info [CLOUD|--all]  
+                provides the available information about the cloud in dict format 
+                options: specify CLOUD to display it, --all to display all,
+                         otherwise selected cloud will be used
+
+            cloud alias NAME [CLOUD]
+                sets a new name for a cloud
+                options: CLOUD is the original label of the cloud, if
+                         it is not specified the default cloud is used.
+
+
+            cloud select [CLOUD]
+                selects a cloud to work with from a list of clouds.If CLOUD is
+                is specified the default cloud will be set to that value.
+
+            cloud on [CLOUD]
+            cloud off [CLOUD]
+                activates or deactivates a cloud. if CLOUD is not
+                given, the default cloud will be used.
+
+
+            cloud add CLOUDFILE [--force]
+                adds the cloud information to database that is
+                specified in the CLOUDFILE. This file is a yaml. You
+                need to specify the full path. Inside the yaml, a
+                cloud is specified as follows:
+
+                cloudmesh: 
+                   clouds: 
+                     cloud1: ...
+                     cloud2: ...
+
+                For examples on how to specify the clouds, please see
+                cloudmesh.yaml
+
+                options: --force. By default, existing cloud in
+                         database cannot be overwirtten, the --force
+                         allows overwriting the database values.
+
+            cloud remove [CLOUD|--all]
+                remove a cloud from the database, The default cloud is
+                used if CLOUD is not specified.
+		This command should be used with caution. It is also
+                possible to remove all clouds with the option --all
+
+            cloud default [CLOUD|--all]
+
+	    	TODO
+  
+            cloud set flavor FLAVOR [CLOUD]
+
+                sets the default flavor for a cloud. If the cloud is
+                not specified, it used the default cloud.
+
+            cloud set image IMAGE [CLOUD]
+
+                sets the default flavor for a cloud. If the cloud is
+                not specified, it used the default cloud.
+
+            cloud set default [CLOUD]
+                sets the default cloud for a cloud. If the cloud is
+                not specified, it asks for the cloud interactively
 
     """
 
@@ -391,17 +414,20 @@ class CloudManage(object):
         prints flavors of a cloud in shell
         :param username: string user name
         :param cloudname: string one cloud name
-        :param itemkesys: a list of lists, each list's first item will be used as header name, the folling ones
-        are the path to the value that user wants in the dict, for example:
-            itemkeys = [
-                         ['id', 'id'],
-                         ['name', 'name'],
-                         ['vcpus', 'vcpus'],
-                         ['ram', 'ram'],
-                         ['disk', 'disk'],
-                         ['refresh time', 'cm_refrsh']
-                       ]
-                       first id is the header name, second id is a path
+        :param itemkesys: a list of lists, The first item in a sublist
+	                  is used as header name, the folling ones are
+			  the path to the value that user wants in the
+			  dict, for example:
+
+            		  itemkeys = [
+                          	   ['id', 'id'],
+				   ['name', 'name'],
+                         	   ['vcpus', 'vcpus'],
+                         	   ['ram', 'ram'],
+                         	   ['disk', 'disk'],
+                         	   ['refresh time', 'cm_refrsh']
+                       		 ]
+                       	  The first id is the header name, second id is a path.
         :param refresh: refresh flavors of the cloud before printing
         :param output: designed for shell command 'cloud setflavor', output flavor names
         '''
@@ -634,15 +660,27 @@ class CloudCommand(CloudManage):
         
     def _cloud_list(self):
         if self.arguments["--column"]:
+            col_option = ['active', 'user', 'label', 'host', 'type/version', 'type', 'heading']            
             if self.arguments["--column"] == 'all':
-                col_option = ['active', 'user', 'label', 'host', 'type/version', 'type', 'heading', 'credentials', 'defaults']
+                col_option.append('credentials']
+                col_option.append('defaults']                
             elif self.arguments["--column"] == 'semiall':
-                col_option = ['active', 'user', 'label', 'host', 'type/version', 'type', 'heading']
+                pass
             else:
                 col_option = [x.strip() for x in self.arguments["--column"].split(',')]
 
-            if not set(col_option).issubset(set(['active', 'label', 'host', 'type/version', 'type', 'heading', 'user', 'credentials', 'defaults'])):
-                log.warning("ERROR: one or more column type doesn't exist, available columns are: active,label,host,type/version,type,heading,user,credentials,defaults  ('all' to diplay all, 'semiall' to display all except credentials and defauts)")
+            if not set(col_option).issubset(set(['active', 
+                                                 'label',
+                                                 'host',
+                                                 'type/version',
+                                                 'type',
+                                                 'heading',
+                                                 'user',
+                                                 'credentials',
+                                                 'defaults'])):
+                log.warning("ERROR: one or more column type doesn't exist, available columns are: "\
+                            "active,label,host,type/version,type,heading,user,credentials,defaults  " \
+                            "('all' to diplay all, 'semiall' to display all except credentials and defauts)")
                 return       
         else:
             col_option = ['active']
@@ -778,8 +816,11 @@ class CloudCommand(CloudManage):
         if self.get_clouds(self.username, getone=True, cloudname=name) == None:
             log.error("no cloud information of '{0}' in database".format(name))
             return
-        if yn_choice("rename cloud '{0}' to '{1}'?".format(name, self.arguments['<name>']), default = 'n', tries = 3):
-            self.update_cloud_name(self.username, name, self.arguments['<name>'])
+        if yn_choice("rename cloud '{0}' to '{1}'?".format(name,
+                                                           self.arguments['NAME']),
+                                                           default = 'n',
+                                                           tries = 3):
+            self.update_cloud_name(self.username, name, self.arguments['NAME'])
         else:
             return
                 
@@ -825,7 +866,9 @@ class CloudCommand(CloudManage):
         try:
             cloudsdict = fileconfig.get("cloudmesh", "clouds")
         except:
-            log.error("ERROR: could not get clouds information from yaml file, please check you yaml file, clouds information must be under 'cloudmesh' -> 'clouds' -> cloud1...")
+            log.error("ERROR: could not get clouds information from yaml file, " \
+                      "please check you yaml file, clouds information must be " \
+                      "under 'cloudmesh' -> 'clouds' -> cloud1...")
             return
         cloud_names = []
         clouds = self.get_clouds(self.username)
@@ -847,7 +890,9 @@ class CloudCommand(CloudManage):
         
     def _cloud_remove(self):
         if self.arguments['--all']:
-            if yn_choice("!!!CAUTION!!! Remove all clouds from database?", default = 'n', tries = 3):
+            if yn_choice("CAUTION: Do you want to remove all clouds from database?",
+                         default = 'n',
+                         tries = 3):
                 cloud_names = []
                 clouds = self.get_clouds(self.username)
                 for cloud in clouds:
@@ -866,7 +911,9 @@ class CloudCommand(CloudManage):
         if self.get_clouds(self.username, getone=True, cloudname=name) == None:
             log.error("no cloud information of '{0}' in database".format(name))
             return
-        if yn_choice("remove cloud '{0}' from database?".format(name), default = 'n', tries = 3):
+        if yn_choice("remove cloud '{0}' from database?".format(name),
+                     default = 'n',
+                     tries = 3):
             self.remove_cloud(self.username, name)
             print "cloud '{0}' removed.".format(name)
             return
@@ -886,7 +933,9 @@ class CloudCommand(CloudManage):
             clouds = clouds.sort([('cm_cloud', 1)])
             for cloud in clouds:
                 defaultinfo = self.get_cloud_defaultinfo(self.username, cloud['cm_cloud'])
-                row = [cloud['cm_cloud'].encode("ascii"), defaultinfo['flavor'], defaultinfo['image']]
+                row = [cloud['cm_cloud'].encode("ascii"),
+                       defaultinfo['flavor'],
+                       defaultinfo['image']]
                 to_print.append(row)
             print tabulate(to_print, headers, tablefmt="grid")
             
@@ -912,7 +961,9 @@ class CloudCommand(CloudManage):
             print "+"+"-"*(len(sentence)-2)+"+"
             print sentence
             print "+"+"-"*(len(sentence)-2)+"+"
-            if yn_choice("set default cloud to '{0}'?".format(name), default = 'n', tries = 3):
+            if yn_choice("set default cloud to '{0}'?".format(name),
+                         default = 'n',
+                         tries = 3):
                 self.update_default_cloud(self.username, name)
             else:
                 return
@@ -934,7 +985,11 @@ class CloudCommand(CloudManage):
                      	['disk', 'disk'],
                      	['refresh time', 'cm_refresh']
                        ]
-            flavor_lists = self.print_cloud_flavors(username=self.username, cloudname=name, itemkeys=itemkeys, refresh=True, output=True)
+            flavor_lists = self.print_cloud_flavors(username=self.username,
+                                                    cloudname=name,
+                                                    itemkeys=itemkeys,
+                                                    refresh=True,
+                                                    output=True)
             res = menu_return_num(title="select a flavor by index", menu_list=flavor_lists[0], tries=3)
             if res == 'q': return
             self.update_default_flavor_id(self.username, name, flavor_lists[1][res])
@@ -997,7 +1052,11 @@ class CloudCommand(CloudManage):
                             [ "imagetype" , "extra", "imagetype"]
                         ]
                      }
-            image_lists = self.print_cloud_images(username=self.username, cloudname=name, itemkeys=itemkeys, refresh=True, output=True)
+            image_lists = self.print_cloud_images(username=self.username,
+                                                  cloudname=name,
+                                                  itemkeys=itemkeys,
+                                                  refresh=True,
+                                                  output=True)
             res = menu_return_num(title="select a image by index", menu_list=image_lists[0], tries=3)
             if res == 'q': return
             self.update_default_image_id(self.username, name, image_lists[1][res])
@@ -1005,9 +1064,6 @@ class CloudCommand(CloudManage):
         else:
             return
      
-        
-        
-        
         
     # --------------------------------------------------------------------------
     def get_working_cloud_name(self):
