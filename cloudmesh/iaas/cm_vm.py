@@ -28,13 +28,47 @@ def shell_command_vm(arguments):
                           [--range=<range>]
                                     
             Arguments:
-            
+                NAME  server name
+                
             Options:
+                --cloud=<CloudName>    give a cloud to work on, if not given, selected
+                                       or default cloud will be used
+                --count=<count>        give the number of servers to start
+                --flavor=<flavorName>  give the name of the flavor
+                --flavorid=<flavorId>  give the id of the flavor
+                --group=<group>        give the group name of server
+                --id=<id>              give the server id
+                --image=<imgName>      give the name of the image
+                --imageid=<imgId>      give the id of the image
+                --prefix=<prefix>      give the prefix of the server, standand server
+                                       name is in the form of prefix_index, e.g. abc_9
+                --range=<range>        give the range of the index of the servers
+                                       to delete, e.g. --range=3,6. standand server
+                                       name is in the form of prefix_index, e.g. abc_9
             
             Description:
-            
-            Examples:   
-                          
+                commands used to start or delete servers of a cloud
+                
+                vm start [options...]   start servers of a cloud, user may specify
+                                        flavor, image .etc, otherwise default values 
+                                        will be used, see how to set default values
+                                        of a cloud: cloud help
+                vm delete [options...]  delete servers of a cloud, user may delete 
+                                        a server by its name or id, delete servers
+                                        of a group or servers of a cloud, give prefix
+                                        and/or range to find servers by their names.
+                                        Or user may specify more options to narrow
+                                        the search
+                         
+            Examples:
+                vm start --count=5 --group=test --cloud=india_openstack_havana
+                        start 5 servers on india_openstack_havana and give them group 
+                        name: test
+                
+                vm delete --group=test --range=,9
+                        delete servers on selected or default cloud with search conditions:
+                        group name is test and index in the name of the servers is no greater
+                        than 9
     """
     
     call = VMcommand(arguments)

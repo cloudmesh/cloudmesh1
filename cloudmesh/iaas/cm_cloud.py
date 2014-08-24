@@ -36,7 +36,7 @@ def shell_command_cloud(arguments):
 
               CLOUD          the name of a cloud to work on
               CLOUDFILE      a yaml file(with full file path) contains cloud information
-              name           new cloud name to set
+              <name>         new cloud name to set
 
             Options:
 
@@ -105,7 +105,7 @@ def shell_command_cloud(arguments):
                                       display all clouds defaults
                              set flavor, set default flaovr of a cloud
                              set image, set default image of a cloud
-                             set cloud, set default cloud
+                             set default, set default cloud
 
     """
 
