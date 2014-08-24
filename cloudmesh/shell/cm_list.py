@@ -31,9 +31,9 @@ def shell_command_list(arguments):
 
     Description:
         
-        List clouds and projects information, if CLOUD argument is not given,
-        default or selected cloud will be used, you may use command 'cloud select' 
-        to select the cloud to work with.
+        List clouds and projects information, if the CLOUD argument is not specified, the 
+        selected default cloud will be used. You can interactively set the default cloud with the command
+        'cloud select'. 
     
         list flavor [CLOUD|--all] [--refresh]
             list the flavors
@@ -45,7 +45,11 @@ def shell_command_list(arguments):
             list the projects
         list cloud
             list active clouds
-        
+
+    See Also:
+
+        man cloud
+                    
     """
     call = ListInfo(arguments)
     call.call_procedure()

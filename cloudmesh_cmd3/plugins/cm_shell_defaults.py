@@ -150,10 +150,12 @@ class cm_shell_defaults:
                defaults variable  NOTIMPLEMENTED
                defaults format (json|table)  NOTIMPLEMENTED
 
-        This manages the defaults associated with the user.
-        You can load, list and clean defaults associated with
-        a user and a cloud. The default parameters include
-        index, prefix, flavor and image.
+        Cloudmesh allows to use a number of defaults to more easily
+        use the cloudmesh shell. defaults are managed by user and each
+        user can set its own defaults.  You can load, list and clean
+        defaults. Default parameters allow to store a prefix that is
+        prepended whne a vm is started, the default images and flavors
+        for each cloud.
 
         Arguments:
 
