@@ -8,3 +8,5 @@ echo "Futuregrid portal id? (def:$USER)"
 read userid
 echo "=================================="
 echo $userid >> .userid
+
+vagrant up
