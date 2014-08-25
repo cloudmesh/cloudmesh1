@@ -69,6 +69,7 @@ class ListInfo(object):
         
         
     def _list_flavor(self):
+        self.cloudmanage._connect_to_mongo()
         clouds = self.get_working_cloud_name()
         if clouds:
             itemkeys = [
@@ -90,6 +91,7 @@ class ListInfo(object):
         
         
     def _list_image(self):
+        self.cloudmanage._connect_to_mongo()
         clouds = self.get_working_cloud_name()
         if clouds:
             itemkeys = {"openstack":
@@ -151,6 +153,7 @@ class ListInfo(object):
         
         
     def _list_server(self):
+        self.cloudmanage._connect_to_mongo()
         clouds = self.get_working_cloud_name()
         if clouds:
             itemkeys = {"openstack":
@@ -217,6 +220,7 @@ class ListInfo(object):
         
         
     def _list_project(self):
+        self.cloudmanage._connect_to_mongo()
         selected_project = None
         try:
             selected_project = self.cloudmanage.mongo.db_defaults.find_one({'cm_user_id': self.username + "OIO"})['project']
@@ -256,6 +260,7 @@ class ListInfo(object):
 
         
     def _list_cloud(self):
+        self.cloudmanage._connect_to_mongo()
         active_clouds = []
         other_clouds = []
         activeclouds = self.cloudmanage.mongo.active_clouds(self.username)
@@ -281,6 +286,7 @@ class ListInfo(object):
         get the name of a cloud to be work on, if CLOUD not given, will pick the
         slected cloud, is --all, will return a list of active clouds
         '''
+        self.cloudmanage._connect_to_mongo()
         activeclouds = None
         try:
             activeclouds = self.cloudmanage.mongo.active_clouds(self.username)
@@ -308,18 +314,16 @@ class ListInfo(object):
     def call_procedure(self):
 
         if self.arguments['flavor'] == True:
-            call = 'flavor'
+            self._list_flavor()
         elif self.arguments['vm'] == True:
-            call = 'server'
+            self._list_server()
         elif self.arguments['image'] == True:
-            call = 'image'
+            self._list_image()
         elif self.arguments['project'] == True:
-            call = 'project'
+            self._list_project()
         elif self.arguments['cloud'] == True:
-            call = 'cloud'
-        func = getattr(self, "_list_" + call)
-        func()
-        
+            self._list_cloud()
+
         
         
         
