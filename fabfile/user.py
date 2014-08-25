@@ -133,3 +133,54 @@ def mongo():
     # info disabled due to
     # NameError: global name 'info' is not defined
     #info(username)
+    
+    #------------------------------------------------------------------------------
+    # added by Mark X. on Aug.25 2014
+    # add clouds information to mongo when initialize user iformation in mongo
+    
+    from cloudmesh.cm_mongo import cm_mongo
+    mongo = cm_mongo()
+    
+    def import_cloud_to_mongo(d, cloudname, username):
+        '''
+        insert a cloud to db_clouds
+        additionally, add values cm_cloud, cm_kind=cloud, cm_user_id
+        before use this function, check whether cloud exists in db_clouds
+        cloud name duplicate is not allowed
+        '''
+        if d['cm_type'] in ['openstack']:
+            if d['credentials']['OS_USERNAME']:
+                del d['credentials']['OS_USERNAME']
+            if d['credentials']['OS_PASSWORD']:
+                del d['credentials']['OS_PASSWORD']
+            if d['credentials']['OS_TENANT_NAME']:
+                del d['credentials']['OS_TENANT_NAME']
+        elif d['cm_type'] in ['ec2', 'aws']:
+            if d['credentials']['EC2_ACCESS_KEY']:
+                del d['credentials']['EC2_ACCESS_KEY']
+            if d['credentials']['EC2_SECRET_KEY']:
+                del d['credentials']['EC2_SECRET_KEY']
+        elif d['cm_type'] in ['azure']:
+            if d['credentials']['subscriptionid']:
+                del d['credentials']['subscriptionid']
+                
+        d['cm_cloud']=cloudname
+        d['cm_kind']='cloud'
+        d['cm_user_id']=username
+        
+        #remove default part from yaml
+        if d['default']:
+            del d['default']
+                
+        mongo.db_clouds.insert(d)
+        
+    cloudsdict = config.get("cloudmesh", "clouds")
+
+    for key in cloudsdict:
+        import_cloud_to_mongo(cloudsdict[key], key, username)
+        print "cloud '{0}' added.".format(key)
+    #------------------------------------------------------------------------------
+    
+    
+    
+    
