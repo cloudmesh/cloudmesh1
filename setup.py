@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+#from distutils.core import setup
+
+from setuptools import setup, find_packages
+import glob
+import os
+
+home = os.path.expanduser("~")
 
 setup(
     name = 'cloudmesh',
@@ -30,39 +36,32 @@ setup(
         'Framework :: Flask',
         'Environment :: OpenStack',
         ],
-    packages = [
-        'cloudmesh_cmd3',
-        'cloudmesh',
-        'cloudmesh_install',
-        'cloudmesh_common'
+    packages = find_packages(),
+    include_package_data = True,
+    data_files = [
+        (home + '/.cloudmesh', [
+            'etc/FGLdapCacert.pem',
+            'etc/sierra-cacert.pem',
+            'etc/cloudmesh_flavor.yaml']),
+        (home + '/.cloudmesh/etc', [
+            'etc/cloudmesh.yaml',
+            'etc/me-none.yaml',
+            'etc/cloudmesh.yaml',
+            'etc/cloudmesh_server.yaml',
+            'etc/cloudmesh_rack.yaml',
+            'etc/cloudmesh_celery.yaml',
+            'etc/cloudmesh_mac.yaml',
+            'etc/cloudmesh_flavor.yaml']),
+        (home + '/.cloudmesh/etc/racks/diag', glob.glob('etc/racks/*'))            
     ],
-  entry_points={'console_scripts': [
-    'cm-manage = cloudmesh.config.cm_manage:main',
-    'cm-init = cloudmesh.config.cm_init:main',
-    'cm-image  = cloudmesh.image.cm_image:main',
-    'cm-metric = cloudmesh.metric.cm_metric:main',
-    'cm-rain = cloudmesh.rain.cobbler.cobbler_rain:main',
+#               'cloudmesh/etc/racks/diag = etc/racks/*
+    entry_points={'console_scripts': [
+        'cm-manage = cloudmesh.config.cm_manage:main',
+        'cm-init = cloudmesh.config.cm_init:main',
+        'cm-image  = cloudmesh.image.cm_image:main',
+        'cm-metric = cloudmesh.metric.cm_metric:main',
+        'cm-rain = cloudmesh.rain.cobbler.cobbler_rain:main',
     ]},    
 
 )
 
-"""
-[install]
-install-data=$HOME
-
-
-data_files =
-    .cloudmesh = etc/FGLdapCacert.pem
-    .cloudmesh = etc/sierra-cacert.pem
-    .cloudmesh/etc/racks/diag = etc/racks/*
-    .cloudmesh/etc = etc/cloudmesh.yaml
-    .cloudmesh/etc = etc/me-none.yaml
-    .cloudmesh/etc = etc/cloudmesh.yaml
-    .cloudmesh/etc = etc/cloudmesh_server.yaml
-    .cloudmesh/etc = etc/cloudmesh_rack.yaml
-    .cloudmesh/etc = etc/cloudmesh_celery.yaml
-    .cloudmesh/etc = etc/cloudmesh_mac.yaml
-    .cloudmesh/etc = etc/cloudmesh_flavor.yaml
-    .cloudmesh = etc/cloudmesh_flavor.yaml
-
-"""
