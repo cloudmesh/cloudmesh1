@@ -86,13 +86,13 @@ def download_rc_files(userid):
         
         os.system ("mkdir -p %(dest)s" % host)
 
-        copy_cmd = "scp %(userid)s@%(hostname)s:%(source)s %(dest)s" % host        
+        copy_cmd = "scp -o StricthostKeyChecking=no %(userid)s@%(hostname)s:%(source)s %(dest)s" % host        
         print "    <-", copy_cmd
         print "    ",
         result = None
         try:
             from sh import scp
-            result = scp("%(userid)s@%(hostname)s:%(source)s" % host, "%(dest)s" % host)
+            result = scp("-o","StrictHostKeyChecking=no", "%(userid)s@%(hostname)s:%(source)s" % host, "%(dest)s" % host)
             print "ok", result
         except Exception, e:
             print "failed", result, e
