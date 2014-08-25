@@ -38,6 +38,7 @@ You install cloudmesh and mongodb database::
   $ ./install cloudmesh
   $ fab mongo.start
   $ fab mongo.boot
+  $ fab mongo.boot
   $ fab user.mongo
   $ fab mongo.simple
 
@@ -63,6 +64,7 @@ Commands only without description
   $ ssh [username]@sierra.futuregrid.org
   $ ./install cloudmesh
   $ fab mongo.start
+  $ fab mongo.boot
   $ fab mongo.boot
   $ fab user.mongo
   $ fab mongo.simple
