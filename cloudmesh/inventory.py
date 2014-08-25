@@ -284,7 +284,6 @@ class Inventory:
         print "%15s:" % "clusters", clusters.count(), "->", ', '.join([c['cm_cluster'] for c in clusters])
         print "%15s:" % "services", services.count()
         print "%15s:" % "servers", servers.count()
-        print "%15s:" % "images", images.count() , "->", ', '.join([c['cm_label'] for c in images])
         print
 
         print "Clusters"
