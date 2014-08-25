@@ -5,6 +5,7 @@ from tabulate import tabulate
 from cloudmesh_common.util import banner, dict_uni_to_ascii
 from pprint import pprint
 from cloudmesh.util.menu import menu_return_num
+from cloudmesh.util.console import Console
 from cloudmesh_common.bootstrap_util import yn_choice, path_expand
 import sys
 from cloudmesh.config.ConfigDict import ConfigDict
@@ -145,8 +146,13 @@ class CloudManage(object):
     '''
     connected_to_mongo = False
     mongo = None
-    
+
+    def __init__(self):
+        self._connect_to_mongo()
+
+        
     def _connect_to_mongo(self):
+        """connects to the mongo database with cm_mongo"""
         if self.connected_to_mongo == False:
             try:
                 self.mongo = cm_mongo()
@@ -162,7 +168,8 @@ class CloudManage(object):
     
     def get_clouds(self, username, admin=False, getone=False, cloudname=None):
         '''
-        retreive cloud information from db_clouds
+        retreive cloud information from db_clouds.
+        TODO: duplicates functionality from Mongobase class and cm_mongo
         '''
         self._connect_to_mongo()
         if getone:
@@ -695,14 +702,21 @@ class CloudCommand(CloudManage):
     '''
     a class provides cloud command functions
     '''
+
+    #
+    # TODO create init msg with flag if cm_congig is loaded
+    #
     try:
         config = cm_config()
     except:
         log.error("There is a problem with the configuration yaml files")
         
     username = config['cloudmesh']['profile']['username']
-       
+
+
+    
     def __init__(self, arguments):
+        self.console = Console()
         self.arguments = arguments
         
     def _cloud_list(self):
@@ -765,33 +779,36 @@ class CloudCommand(CloudManage):
         activeclouds = self.mongo.active_clouds(self.username)
         
         to_print = []
-        
-        for cloud in clouds:
-            res = []
-            for key in standard_headers:
-                # -------------------------------------------------
-                # special informations from other place
-                # -------------------------------------------------
-                if key == "active":
-                    if cloud['cm_cloud'] in activeclouds:
-                        res.append('True')
-                    else:
-                        res.append(' ')
-                elif key == "default":
-                    defaultinfo = self.get_cloud_defaultinfo(self.username, cloud['cm_cloud'])
-                    res.append(str(defaultinfo))
-                # -------------------------------------------------
-                else:
-                    try:
-                        res.append(str(cloud[key]))
-                    except:
-                        res.append(' ')
-            to_print.append(res)
-            
-        print tabulate(to_print, headers, tablefmt="grid")
-        
+
         if clouds.count() == 0:
-            log.info("no cloud in database, please import cloud information by 'cloud add CLOUDFILE'")
+            
+            console.warning("WARNING: no cloud in database, please import cloud information by 'cloud add CLOUDFILE'")
+
+        else:
+            for cloud in clouds:
+                res = []
+                for key in standard_headers:
+                    # -------------------------------------------------
+                    # special informations from other place
+                    # -------------------------------------------------
+                    if key == "active":
+                        if cloud['cm_cloud'] in activeclouds:
+                            res.append('True')
+                        else:
+                            res.append(' ')
+                    elif key == "default":
+                        defaultinfo = self.get_cloud_defaultinfo(self.username, cloud['cm_cloud'])
+                        res.append(str(defaultinfo))
+                    # -------------------------------------------------
+                    else:
+                        try:
+                            res.append(str(cloud[key]))
+                        except:
+                            res.append(' ')
+                to_print.append(res)
+
+            print tabulate(to_print, headers, tablefmt="grid")
+        
         
         
     def _cloud_info(self):
@@ -1172,14 +1189,4 @@ class CloudCommand(CloudManage):
         else:
             self._cloud_list()
 
-        #func = getattr(self, "_cloud_" + call)
-        #func()
-    
-    
-# ------------------------------------------------------------------------
-# supporting functions 
-# ------------------------------------------------------------------------
-  
-
-# ------------------------------------------------------------------------
 
