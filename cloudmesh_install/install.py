@@ -165,7 +165,7 @@ def install_command(args):
         fetchrc(arguments["--username"], arguments["--outdir"])
 
     elif arguments["rc"] and arguments["fill"]:
-        get_fg_username_password_from_rcfiles()
+        apply_credentials_to_yaml_file()
 
     elif arguments["rc"] and arguments["login"]:
         verify_ssh_login(arguments["--username"])
@@ -265,7 +265,7 @@ def file_from_template(file_template, file_out, values):
     out_file.close()
 
 
-def get_fg_username_password_from_rcfiles():
+def apply_credentials_to_yaml_file():
     """
     rc_dir_location = {}
     # (hostname, loaction of dir on remote host, location of dir on localhost)
@@ -412,6 +412,17 @@ def get_fg_username_password_from_rcfiles():
             for k, v in value.items():
                 if k in credentials and credentials[k] == "TBD":
                     credentials[k] = v
+
+    # replacing default project and username
+    data['cloudmesh']['hpc']['username'] = new_values[cloud_name]['OS_USERNAME']
+    data['cloudmesh']['projects']['default'] = \
+    new_values[cloud_name]['OS_TENANT_NAME']
+    # active projects can be multiple values
+    # it should be a list to stack unique project ids
+    # TBD
+    data['cloudmesh']['projects']['active'] = \
+    [new_values[cloud_name]['OS_TENANT_NAME']]
+
     # Write yaml
     with open(cloudmesh_out, 'w') as outfile:
         outfile.write(yaml.dump(data, default_flow_style=False))
