@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
 apt-get -y install git
-git clone https://github.com/cloudmesh/cloudmesh.git
 apt-get -y install python-pip
 pip install virtualenv
-su -- vagrant
-virtualenv ~/ENV
-source ~/ENV/bin/activate
+su --login vagrant
+cd /home/vagrant
+git clone https://github.com/cloudmesh/cloudmesh.git
+virtualenv /home/vagrant/ENV
+source /home/vagrant/ENV/bin/activate
 cd cloudmesh
 sudo ./install system
 ./install requirements
