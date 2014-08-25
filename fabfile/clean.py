@@ -38,5 +38,5 @@ def delete_package(name):
     banner("CLEAN PREVIOUS {0} INSTALLS".format(name))
     r = int(local("pip freeze |fgrep {0} | wc -l".format(name), capture=True))
     while r > 0:
-        local('echo "y\n" | pip uninstall {0}'.format(name))
+        local('yes | pip uninstall {0}'.format(name))
         r = int(local("pip freeze |fgrep {0} | wc -l".format(name), capture=True))
