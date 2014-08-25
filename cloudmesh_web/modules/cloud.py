@@ -152,7 +152,7 @@ def delete_vm(cloud=None, server=None):
 # ROUTE: DELETE Multiple VM CONFIRMATION AND DELETION
 # ============================================================
 @cloud_module.route('/cm/delete_vm_confirm', methods=('GET', 'POST'))
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def delete_vm_confirm():
 
 
@@ -213,7 +213,7 @@ def delete_vm_confirm():
 
 
 @cloud_module.route('/cm/delete_request_submit/<option>', methods=('GET', 'POST'))
-@cond_decorator(cloudmesh.with_login, login_required)
+@login_required
 def delete_vm_submit(option):
     config = cm_config()
     c = cm_mongo()
