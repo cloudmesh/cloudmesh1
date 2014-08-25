@@ -203,12 +203,10 @@ class VMcommand(object):
     # --------------------------------------------------------------------------
     def call_procedure(self):
         if self.arguments['start'] == True:
-            call = 'create'
+            self._vm_create()
         elif self.arguments['delete'] == True:
-            call = 'delete'
+            self._vm_delete()
             
-        func = getattr(self, "_vm_" + call)
-        func()
     # --------------------------------------------------------------------------
         
 # ------------------------------------------------------------------------
