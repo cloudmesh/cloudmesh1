@@ -26,7 +26,7 @@ def shell_command_cloud(arguments):
             cloud select [CLOUD]
             cloud on [CLOUD]
             cloud off [CLOUD]
-            cloud add CLOUDFILE [--force]
+            cloud add <cloudYAMLfile> [--force]
             cloud remove [CLOUD|--all]
             cloud default [CLOUD|--all]
             cloud set flavor FLAVOR [CLOUD]
@@ -35,10 +35,10 @@ def shell_command_cloud(arguments):
 
         Arguments:
 
-          CLOUD      the name of a cloud 
-          CLOUDFILE  a yaml file (with full file path) containing
-                     cloud information
-          NAME       a name for a cloud
+          CLOUD              the name of a cloud 
+          <cloudYAMLfile>    a yaml file (with full file path) containing
+                             cloud information
+          NAME               name for a cloud
 
         Options:
 
@@ -89,9 +89,9 @@ def shell_command_cloud(arguments):
                 given, the default cloud will be used.
 
 
-            cloud add CLOUDFILE [--force]
+            cloud add <cloudYAMLfile> [--force]
                 adds the cloud information to database that is
-                specified in the CLOUDFILE. This file is a yaml. You
+                specified in the <cloudYAMLfile>. This file is a yaml. You
                 need to specify the full path. Inside the yaml, a
                 cloud is specified as follows:
 
@@ -147,8 +147,8 @@ class CloudManage(object):
     connected_to_mongo = False
     mongo = None
 
-    def __init__(self):
-        self._connect_to_mongo()
+    #def __init__(self):
+        #self._connect_to_mongo()
 
         
     def _connect_to_mongo(self):
@@ -784,8 +784,7 @@ class CloudCommand(CloudManage):
 
             Console.msg("")            
             Console.warning("no cloud in database, please import cloud information using the command")
-            Console.warning("")
-            Console.warning("    cloud add CLOUDFILE")
+            Console.warning("cloud add <cloudYAMLfile>")
             Console.msg("")
 
         else:
@@ -846,7 +845,7 @@ class CloudCommand(CloudManage):
             clouds = self.get_clouds(self.username)
             clouds = clouds.sort([('cm_cloud', 1)])
             if clouds.count() == 0:
-                log.info("no cloud in database, please import cloud information by 'cloud add CLOUDFILE'")
+                log.info("no cloud in database, please import cloud information by 'cloud add <cloudYAMLfile>'")
                 return
             for cloud in clouds:
                 printing(cloud)
@@ -863,7 +862,7 @@ class CloudCommand(CloudManage):
         if self.arguments['CLOUD']:
             cloud = self.get_clouds(self.username, getone=True, cloudname=self.arguments['CLOUD'])
             if cloud == None:
-                log.warning("no cloud information of '{0}' in database, please import it by 'cloud add CLOUDFILE'".format(self.arguments['CLOUD']))
+                log.warning("no cloud information of '{0}' in database, please import it by 'cloud add <cloudYAMLfile>'".format(self.arguments['CLOUD']))
                 return
             self.update_selected_cloud(self.username, self.arguments['CLOUD'])
             print "cloud '{0}' is selected".format(self.arguments['CLOUD'])
@@ -927,7 +926,7 @@ class CloudCommand(CloudManage):
         
     def _cloud_import(self):
         try:
-            file = path_expand(self.arguments["CLOUDFILE"])
+            file = path_expand(self.arguments["<cloudYAMLfile>"])
             fileconfig = ConfigDict(filename=file)
         except:
             log.error("ERROR: could not load file, please check filename and its path")
