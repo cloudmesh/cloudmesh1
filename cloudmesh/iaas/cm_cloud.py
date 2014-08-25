@@ -143,19 +143,28 @@ class CloudManage(object):
     '''
     a class provides funtions used to manage cloud info in the mongo
     '''
-    try:
-        mongo = cm_mongo()
-    except:
-        log.error("There is a problem with the mongo server")
-
+    connected_to_mongo = False
+    mongo = None
+    
+    def _connect_to_mongo(self):
+        if self.connected_to_mongo == False:
+            try:
+                self.mongo = cm_mongo()
+            except:
+                log.error("There is a problem with the mongo server")
+                return
+            self.connected_to_mongo = True
+    
 
     def _get_user(username):
+        self._connect_to_mongo()
         return self.mongo.db_user.find_one({'cm_user_id': username})
     
     def get_clouds(self, username, admin=False, getone=False, cloudname=None):
         '''
         retreive cloud information from db_clouds
         '''
+        self._connect_to_mongo()
         if getone:
             return self.mongo.db_clouds.find_one({'cm_kind': 'cloud',
                                                   'cm_user_id': username,
@@ -168,6 +177,7 @@ class CloudManage(object):
         
         
     def get_selected_cloud(self, username):
+        self._connect_to_mongo()
         user = self.mongo.db_user.find_one({'cm_user_id': username})
         try:
             cloud = user['selected_cloud']
@@ -189,6 +199,7 @@ class CloudManage(object):
         '''
         set user selected cloud, which is current worked on cloud in the shell
         '''
+        self._connect_to_mongo()
         self.mongo.db_user.update({'cm_user_id': username},
                                   {'$set': {'selected_cloud': cloudname}})
     
@@ -197,6 +208,7 @@ class CloudManage(object):
         '''
         get the default cloud, return None if not set
         '''
+        self._connect_to_mongo()
         try:
             cloud = self.mongo.db_defaults.find_one({'cm_user_id': username})['cloud']
         except:
@@ -208,6 +220,7 @@ class CloudManage(object):
         '''
         set default cloud
         '''
+        self._connect_to_mongo()
         self.mongo.db_defaults.update({'cm_user_id': username},
                                       {'$set': {'cloud': cloudname}})
     
@@ -217,6 +230,7 @@ class CloudManage(object):
         change the cloud name in db
         before use this function, check whether cloud exists in db_clouds
         '''
+        self._connect_to_mongo()
         self.mongo.db_clouds.update({'cm_kind': 'cloud',
                                      'cm_user_id': username,
                                      'cm_cloud': cloudname},
@@ -237,6 +251,7 @@ class CloudManage(object):
         '''
         activate a cloud 
         '''
+        self._connect_to_mongo()
         cloud = self.mongo.get_cloud(cm_user_id=username, cloud_name=cloudname, force=True)
 
         if not cloud:
@@ -256,6 +271,7 @@ class CloudManage(object):
         deactivate a cloud
         simply delete the cloud name from activecloud in db_defaults
         '''
+        self._connect_to_mongo()
         defaults = self.mongo.db_defaults.find_one({'cm_user_id': username})
         if cloudname in defaults['activeclouds']:
             defaults['activeclouds'].remove(cloudname)
@@ -269,6 +285,7 @@ class CloudManage(object):
         before use this function, check whether cloud exists in db_clouds
         cloud name duplicate is not allowed
         '''
+        self._connect_to_mongo()
         if d['cm_type'] in ['openstack']:
             if d['credentials']['OS_USERNAME']:
                 del d['credentials']['OS_USERNAME']
@@ -301,6 +318,7 @@ class CloudManage(object):
         remove selected_cloud value if such cloud is removed
         [NOT IMPLEMENTED]default cloud, active cloud, register cloud too if necessary
         '''
+        self._connect_to_mongo()
         self.mongo.db_clouds.remove({'cm_kind': 'cloud',
                                      'cm_user_id': username,
                                      'cm_cloud': cloudname})
@@ -349,6 +367,7 @@ class CloudManage(object):
         '''
         return the id of the dafault flavor of a cloud
         '''
+        self._connect_to_mongo()
         flavor_id = None
         try:
             flavor_id = self.mongo.db_defaults.find_one({'cm_user_id': username})['flavors'][cloudname]
@@ -361,6 +380,7 @@ class CloudManage(object):
         '''
         update the id of default flavor of a cloud
         '''
+        self._connect_to_mongo()
         flavors = {}
         try:
             flavors = self.mongo.db_defaults.find_one({'cm_user_id': username})['flavors']
@@ -376,6 +396,7 @@ class CloudManage(object):
         '''
         retrieve flavor information from db_clouds
         '''
+        self._connect_to_mongo()
         if getone:
             return self.mongo.db_clouds.find_one({'cm_kind': 'flavors',
                                                   'cm_cloud': cloudname,
@@ -392,6 +413,7 @@ class CloudManage(object):
         '''
         return the id of the dafault image of a cloud
         '''
+        self._connect_to_mongo()
         image_id = None
         try:
             image_id = self.mongo.db_defaults.find_one({'cm_user_id': username})['images'][cloudname]
@@ -403,6 +425,7 @@ class CloudManage(object):
         '''
         update the id of default image of a cloud
         '''
+        self._connect_to_mongo()
         images = {}
         try:
             images = self.mongo.db_defaults.find_one({'cm_user_id': username})['images']
@@ -418,6 +441,7 @@ class CloudManage(object):
         '''
         retrieve image information from db_clouds
         '''
+        self._connect_to_mongo()
         if getone:
             return self.mongo.db_clouds.find_one({'cm_kind': 'images', 'cm_cloud': cloudname, 'id': id})
         elif getall:
@@ -451,6 +475,7 @@ class CloudManage(object):
         :param refresh: refresh flavors of the cloud before printing
         :param output: designed for shell command 'cloud setflavor', output flavor names
         '''
+        self._connect_to_mongo()
         if refresh:
             self.mongo.activate(cm_user_id=username, names=[cloudname])
             self.mongo.refresh(cm_user_id=username, names=[cloudname], types=['flavors'])
@@ -506,6 +531,7 @@ class CloudManage(object):
         '''
         refer to print_cloud_flavors
         '''
+        self._connect_to_mongo()
         if refresh:
             self.mongo.activate(cm_user_id=username, names=[cloudname])
             self.mongo.refresh(cm_user_id=username, names=[cloudname], types=['images'])
@@ -584,6 +610,7 @@ class CloudManage(object):
         :param output: designed for shell command for selection
         :param serverdata: if provided, the function will print this data instead of vms of a cloud
         '''
+        self._connect_to_mongo()
         if refresh:
             self.mongo.activate(cm_user_id=username, names=[cloudname])
             self.mongo.refresh(cm_user_id=username, names=[cloudname], types=['images', 'flavors', 'servers'])
@@ -734,6 +761,7 @@ class CloudCommand(CloudManage):
             
         clouds = self.get_clouds(self.username)
         clouds = clouds.sort([('cm_cloud', 1)])
+        self._connect_to_mongo()
         activeclouds = self.mongo.active_clouds(self.username)
         
         to_print = []
@@ -774,6 +802,7 @@ class CloudCommand(CloudManage):
             # -------------------------------------------------
             # special informations from other place
             # -------------------------------------------------
+            self._connect_to_mongo()
             print "#", 70 * "-"
             if cloud['cm_cloud'] in self.mongo.active_clouds(self.username):
                 print "active: True"
@@ -1088,7 +1117,7 @@ class CloudCommand(CloudManage):
     # --------------------------------------------------------------------------
     def get_working_cloud_name(self):
         '''
-        get the name of a cloud to be work on, if CLOUD not given, will pick the
+        get the name of a cloud to work on, if CLOUD not given, will pick the
         selected cloud
         '''
         if self.arguments['CLOUD']:
