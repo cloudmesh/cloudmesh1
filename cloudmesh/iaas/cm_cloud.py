@@ -5,7 +5,7 @@ from tabulate import tabulate
 from cloudmesh_common.util import banner, dict_uni_to_ascii
 from pprint import pprint
 from cloudmesh.util.menu import menu_return_num
-from cloudmesh.util.console import Console
+from cmd3.console import Console
 from cloudmesh_common.bootstrap_util import yn_choice, path_expand
 import sys
 from cloudmesh.config.ConfigDict import ConfigDict
@@ -781,8 +781,12 @@ class CloudCommand(CloudManage):
         to_print = []
 
         if clouds.count() == 0:
-            
-            console.warning("WARNING: no cloud in database, please import cloud information by 'cloud add CLOUDFILE'")
+
+            Console.msg("")            
+            Console.warning("no cloud in database, please import cloud information using the command")
+            Console.warning("")
+            Console.warning("    cloud add CLOUDFILE")
+            Console.msg("")
 
         else:
             for cloud in clouds:
