@@ -4,3 +4,4 @@ exclude .gitignore
 exclude .gitreview
 
 global-exclude *.pyc
+include etc/*.yaml
