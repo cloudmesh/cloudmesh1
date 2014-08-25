@@ -3,6 +3,7 @@ from celery import current_task
 from celery.utils.log import get_task_logger
 from cloudmesh.iaas.openstack.queue.celery import celery_openstack_queue
 from cloudmesh.cm_mongo import cm_mongo
+import time
 
 #
 #logger = get_task_logger(__name__)
@@ -41,3 +42,8 @@ def release_unused_public_ips(cloud, cm_user_id):
     mongo = cm_mongo()
     mongo.activate(cm_user_id=cm_user_id, names=[cloud])
     mongo.release_unused_public_ips(cloud, cm_user_id)
+    
+    
+@celery_openstack_queue.task(track_started=True)
+def wait(t=0):
+    time.sleep(t)

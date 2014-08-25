@@ -188,7 +188,6 @@ class VMcommand(object):
         else:
             cloudname = cloudobj.get_selected_cloud(self.username)
         # ------------------------- 
-        watch = time.time()   ##########
         delete_vm(self.username,
                   cloudname,
                   servername=self.arguments['NAME'],
@@ -199,9 +198,6 @@ class VMcommand(object):
                   rangeend=rangeend,
                   deleteAllCloudVMs=deleteAllCloudVMs,
                   preview=True)
-        
-        watch = time.time() - watch   ##########
-        print ("time consumed: %.2f" % watch), "s"   ##########
         
     
     # --------------------------------------------------------------------------
@@ -566,8 +562,10 @@ def delete_vm(username,
     if confirm_deletion:
         if res == []:
                 return
-            
-        useQueue = False
+        
+        watch = time.time()   ##########
+        
+        useQueue = True
         if useQueue:
             # not functioning
             cloudmanager = mongo.clouds[username][cloudname]["manager"]
@@ -581,7 +579,8 @@ def delete_vm(username,
                 banner("Deleting vm->{0} on cloud->{1}".format(tempservername, cloudname))
                 result = imported.vm_delete.apply_async((cloudname, i, username), queue=queue_name)
                 print "job status:", result.state
-                print result.traceback  #########
+                #print result.traceback  #########
+            imported.wait.apply_async(args=None, kwargs={'t': 10}, queue=queue_name)
             handleip = imported.release_unused_public_ips.apply_async((cloudname, username), queue=queue_name)
             handlerefresh = imported.refresh.apply_async(args=None,
                                          kwargs={'cm_user_id': username, 
@@ -589,11 +588,10 @@ def delete_vm(username,
                                                  'types': ['servers']},
                                          queue=queue_name)
             
-            print handleip.state
-            print handleip.traceback
-            print handlerefresh.state
-            print handlerefresh.traceback
-            
+            #print handleip.state
+            #print handleip.traceback
+            #print handlerefresh.state
+            #print handlerefresh.traceback
             if preview:
                 print "to check realtime vm status: list vm --refresh"
         else:
@@ -602,9 +600,12 @@ def delete_vm(username,
                 banner("Deleting vm->{0} on cloud->{1}".format(tempservername, cloudname))
                 result = mongo.vm_delete(cloudname, i, username)
                 pprint(result) 
-            time.sleep(5)
+            time.sleep(10)
             mongo.release_unused_public_ips(cloudname, username)
             mongo.refresh(username, names=[cloudname], types=['servers'])
+        
+        watch = time.time() - watch   ##########
+        print ("time consumed: %.2f" % watch), "s"   ##########
             
 
     
