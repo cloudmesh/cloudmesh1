@@ -262,7 +262,9 @@ class cm_user(object):
         
         if 'securitygroup' not in defaults:
             defaults['securitygroup'] = self.default_security_group
-
+        
+        if 'group' not in defaults:
+            defaults['group'] = None
 
         self.update_defaults(username, defaults)
 

@@ -29,8 +29,8 @@ def shell_command_cloud(arguments):
             cloud add <cloudYAMLfile> [--force]
             cloud remove [CLOUD|--all]
             cloud default [CLOUD|--all]
-            cloud set flavor FLAVOR [CLOUD]
-            cloud set image IMAGE [CLOUD]
+            cloud set flavor [CLOUD]
+            cloud set image [CLOUD]
             cloud set default [CLOUD]
 
         Arguments:
@@ -117,12 +117,12 @@ def shell_command_cloud(arguments):
 
 	    	TODO
   
-            cloud set flavor FLAVOR [CLOUD]
+            cloud set flavor [CLOUD]
 
                 sets the default flavor for a cloud. If the cloud is
                 not specified, it used the default cloud.
 
-            cloud set image IMAGE [CLOUD]
+            cloud set image [CLOUD]
 
                 sets the default flavor for a cloud. If the cloud is
                 not specified, it used the default cloud.
@@ -193,7 +193,7 @@ class CloudManage(object):
             try:
                 cloud = defaults['cloud']
             except:
-                log.warning("no selected cloud and no default cloud is setup, "\
+                Console.warning("no selected cloud and no default cloud is setup, "\
                             "please use command 'cloud select [CLOUD]' to select a cloud")
                 sys.exit()
             self.mongo.db_user.update({'cm_user_id': username},
@@ -716,7 +716,6 @@ class CloudCommand(CloudManage):
 
     
     def __init__(self, arguments):
-        self.console = Console()
         self.arguments = arguments
         
     def _cloud_list(self):
@@ -838,14 +837,14 @@ class CloudCommand(CloudManage):
         if self.arguments['CLOUD']:
             cloud = self.get_clouds(self.username, getone=True, cloudname=self.arguments['CLOUD'])
             if cloud == None:
-                log.warning("ERROR: could not find cloud '{0}'".format(self.arguments['CLOUD']))
+                Console.warning("ERROR: could not find cloud '{0}'".format(self.arguments['CLOUD']))
             else:
                 printing(cloud)
         elif self.arguments['--all']:
             clouds = self.get_clouds(self.username)
             clouds = clouds.sort([('cm_cloud', 1)])
             if clouds.count() == 0:
-                log.info("no cloud in database, please import cloud information by 'cloud add <cloudYAMLfile>'")
+                Console.info("no cloud in database, please import cloud information by 'cloud add <cloudYAMLfile>'")
                 return
             for cloud in clouds:
                 printing(cloud)
@@ -853,7 +852,7 @@ class CloudCommand(CloudManage):
             selected_cloud = self.get_selected_cloud(self.username)  
             cloud = self.get_clouds(self.username, getone=True, cloudname=selected_cloud)
             if cloud == None:
-                log.warning("no cloud information of '{0}' in database".format(selected_cloud))
+                Console.warning("no cloud information of '{0}' in database".format(selected_cloud))
                 return
             printing(cloud)
         
@@ -901,6 +900,8 @@ class CloudCommand(CloudManage):
         if self.get_clouds(self.username, getone=True, cloudname=name) == None:
             log.error("no cloud information of '{0}' in database".format(name))
             return
+        '''
+        # confirmation
         if yn_choice("activate cloud '{0}'?".format(name), default = 'n', tries = 3):
             res = self.activate_cloud(self.username, name)
             if res == 0:
@@ -909,6 +910,12 @@ class CloudCommand(CloudManage):
                 print "cloud '{0}' activated.".format(name)
         else:
             return
+        '''
+        res = self.activate_cloud(self.username, name)
+        if res == 0:
+            Console.warning("failed to activate cloud '{0}'".format(name))
+        elif res == 1:
+            Console.ok("cloud '{0}' activated.".format(name))
         
     def _cloud_deactivate(self):
         if self.arguments['CLOUD']:
@@ -918,11 +925,16 @@ class CloudCommand(CloudManage):
         if self.get_clouds(self.username, getone=True, cloudname=name) == None:
             log.error("no cloud information of '{0}' in database".format(name))
             return
+        '''
+        # confirmation
         if yn_choice("deactivate cloud '{0}'?".format(name), default = 'n', tries = 3):
             self.deactivate_cloud(self.username, name)
             print "cloud '{0}' deactivated.".format(name)
         else:
             return
+        '''
+        self.deactivate_cloud(self.username, name)
+        Console.ok("cloud '{0}' deactivated.".format(name))
         
     def _cloud_import(self):
         try:
