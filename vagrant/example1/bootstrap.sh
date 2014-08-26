@@ -10,12 +10,12 @@ source ~/ENV/bin/activate
 cd ~/cmd3
 python setup.py install
 cd ~/cloudmesh
-sudo ./install system
+./install system
 ./install requirements
 ./install new
 cp /vagrant/id_rsa ~/.ssh/id_rsa
-/install rc fetch --username=`cat /vagrant/.userid`
-/install rc fill
+./install rc fetch --username=`cat /vagrant/.userid`
+./install rc fill
 ./install cloudmesh
 fab mongo.start
 fab mongo.boot

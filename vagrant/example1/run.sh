@@ -7,7 +7,7 @@ echo "=================================="
 echo "Futuregrid portal id? (def:$USER)"
 read userid
 echo "=================================="
-echo $userid >> .userid
+echo $userid > .userid
 
 echo
 echo "=================================="
