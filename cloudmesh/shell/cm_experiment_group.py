@@ -3,6 +3,7 @@ from cloudmesh_common.logger import LOGGER
 from docopt import docopt
 from pprint import pprint
 from cloudmesh.user.cm_user import cm_user
+from cloudmesh.config.cm_config import cm_config
 #from cmd3.shell import cmd3_call
 
 log = LOGGER(__file__)
@@ -32,7 +33,9 @@ def shell_command_experiment_group(arguments):
 
     name = arguments["NAME"]
 
-    username = "gvonlasz"
+    config = cm_config()
+    username = config.username()
+    #print username
     user = cm_user()
 
     if arguments["info"]:
