@@ -4,6 +4,7 @@ from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import check_file_for_tabs, deprecated, path_expand
 from pprint import pprint
 from pymongo import MongoClient
+from mongoengine import connect, Document
 import collections
 import copy
 import json
@@ -14,8 +15,66 @@ from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
 
+MONGOCLIENT = 0
+MONGOENGINE = 1
+    
+class DBConnFactory(object):
+    connectors = {}
+    DBCONFIG = None
+    TYPE_MONGOCLIENT = MONGOCLIENT
+    TYPE_MONGOENGINE = MONGOENGINE
 
-def get_mongo_db(mongo_collection):
+    class DBKey(object):
+        def __init__(self, dbname, clientType=MONGOCLIENT):
+            self.clientType = clientType
+            self.dbname = dbname
+            
+    @classmethod
+    def getconn(cls, dbname, clientType=MONGOCLIENT):
+        dbkey = cls.DBKey(dbname, clientType)
+        if dbkey in cls.connectors:
+            return cls.connectors[dbkey]
+        else:
+            conn = None
+            if cls.DBCONFIG is None:
+                cls.DBCONFIG = {}
+                config = cm_config_server().get("cloudmesh.server.mongo")
+                cls.DBCONFIG["host"] = config["host"]
+                cls.DBCONFIG["port"] = int(config["port"])
+                cls.DBCONFIG["username"] = config["username"]
+                cls.DBCONFIG["password"] = config["password"]
+            
+            if clientType == MONGOCLIENT:
+                if cls.DBCONFIG["username"] and cls.DBCONFIG["password"]:
+                    uri = "mongodb://{0}:{1}@{2}:{3}/{4}".format(cls.DBCONFIG["username"],
+                                                                 cls.DBCONFIG["password"],
+                                                                 cls.DBCONFIG["host"],
+                                                                 cls.DBCONFIG["port"],
+                                                                 dbname)
+                else:
+                    uri = "mongodb://{2}:{3}/{4}".format(cls.DBCONFIG["username"],
+                                                                 cls.DBCONFIG["password"],
+                                                                 cls.DBCONFIG["host"],
+                                                                 cls.DBCONFIG["port"],
+                                                                 dbname)
+                try:
+                    conn = MongoClient(uri)[dbname]
+                except:
+                    print "Failed to connect to Mongoclient DB:\n\t%s" % uri
+            elif clientType == MONGOENGINE:
+                try:
+                    conn = connect (dbname,
+                         host = cls.DBCONFIG["host"],
+                         port = cls.DBCONFIG["port"],
+                         username = cls.DBCONFIG["username"],
+                         password = cls.DBCONFIG["password"])
+                except:
+                    print "Failed to connect to MongoEngine DB:\n\t%s" % dbname
+                    
+            cls.connectors[dbkey] = conn
+            return conn
+                
+def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     """
     Read in the mongo db information from the cloudmesh_server.yaml
     """
@@ -24,27 +83,11 @@ def get_mongo_db(mongo_collection):
 
     db_name = config["collections"][mongo_collection]['db']
 
-    host = config["host"]
-    port = int(config["port"])
-    username = config["username"]
-    password = config["password"]
-
-    if username and password:
-        uri = "mongodb://{0}:{1}@{2}:{3}/{4}".format(username, password, host, port, db_name)
-    else:
-        uri = "mongodb://{2}:{3}/{4}".format(username, password, host, port, db_name)
-
-    try:
-        client = MongoClient(uri)
-    except:
-        print uri
-        print sys.exc_info()
-        return
-
-    db = client[db_name]
-    return db[mongo_collection]
-
-
+    conn = None
+    db = DBConnFactory.getconn(db_name,clientType)
+    if db:
+        conn = db[mongo_collection]
+    return conn
 
 class cm_config_server(ConfigDict):
     """
