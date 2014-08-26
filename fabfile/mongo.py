@@ -175,11 +175,6 @@ def isyes(value):
 @task
 def boot(auth=True):
 
-    # kill mongo
-    kill()
-
-    time.sleep(1)
-
     # wipe mongo
     wipe()
 
@@ -188,14 +183,14 @@ def boot(auth=True):
     # start mongo without auth
     start(auth=False)
 
-    time.sleep(1)
+    time.sleep(2)
 
     if isyes(auth):
 
         # create users
         admin()
 
-        time.sleep(1)
+        time.sleep(2)
 
         # restart with auth
         kill()
