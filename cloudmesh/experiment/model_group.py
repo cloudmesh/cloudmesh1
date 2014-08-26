@@ -9,44 +9,27 @@ from cloudmesh_common.tables import  array_dict_table_printer
 import json 
 from cloudmesh_install import config_file
 
+from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
 
-#connect (
-
-config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))["cloudmesh"]["server"]["mongo"]
-
-#pprint (config)
-
-connect (config["collections"]["experiment"]["db"],
-         port=config["port"],
-         username=config["username"],
-         password=config["password"])
-"""
-cloudmesh.server.mongo.
-
-   db
-   port
-   path
-   username
-   password
-   collections["experiment"]["db"]
-"""
 class ExperimentBase(Document):
     cm_kind = StringField(default="experiment")
     cm_label = StringField()
     cm_userid = StringField()
     meta = {'allow_inheritance': True}
-
+    get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
     
 class ExperimentVM(ExperimentBase):
     cloud = StringField()
     vmid = StringField()
+    get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
         
 class ExperimentGroup(object):
-
+                
     def __init__(self, userid, label):
 
         self.userid = userid
         self.label = label
+        get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
         
     def add(self, vm):
         vm.cm_label = self.label
@@ -88,8 +71,7 @@ class ExperimentGroup(object):
             
 
 def main():
-
-    username = "gvonlasz"
+    username = "fuwang"
     label = "exp-a"
 
     experiment = ExperimentGroup(username, label)
