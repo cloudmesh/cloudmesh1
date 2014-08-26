@@ -18,8 +18,10 @@ cp /vagrant/id_rsa ~/.ssh/id_rsa
 ./install rc fill
 ./install cloudmesh
 fab mongo.start
+sleep 5
 fab mongo.boot
-fab mongo.boot
+#fab mongo.boot
+sleep 5
 fab user.mongo
 fab mongo.simple
 fab server.start
