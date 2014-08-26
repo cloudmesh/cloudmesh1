@@ -49,21 +49,19 @@ cloudmesh:
         password: abc
         collections:
             inventory:
-                db: inventory
-            cloudmesh:
                 db: cloudmesh
-            experiment:
+            cloudmesh:
                 db: cloudmesh
             profile:
                 db: cloudmesh
             user:
                 db: user
             userauth:
-                db: auth
+                db: user
             metric:
                 db: metric
             pbs:
-                db: pbs
+                db: hpc
             qstat:
                 db: hpc
             qinfo:
@@ -71,16 +69,16 @@ cloudmesh:
             pbsnodes:
                 db: hpc
             launcher:
-                db: launcher
+                db: cloudmesh
             pagestatus:
-                db: pagestatus
+                db: cloudmesh
             password:
                 db: hallo
                 key: change_me
             defaults:
-                db: defaults
-            store:
-                db: store
+                db: cloudmesh
+            experiment:
+                db: cloudmeshobj
     keystone:
         sierra_openstack_grizzly:
             OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
