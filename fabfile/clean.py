@@ -2,6 +2,8 @@ from fabric.api import task, local
 from cloudmesh_common.util import banner
 from cloudmesh_install import config_file
 
+import os
+
 @task
 def dir():
     """clean the dirs"""
@@ -38,5 +40,5 @@ def delete_package(name):
     banner("CLEAN PREVIOUS {0} INSTALLS".format(name))
     r = int(local("pip freeze |fgrep {0} | wc -l".format(name), capture=True))
     while r > 0:
-        local('echo "yes" | pip uninstall {0}'.format(name))
+        local('echo "yes" | /usr/bin/yes | pip uninstall {0}'.format(name))
         r = int(local("pip freeze |fgrep {0} | wc -l".format(name), capture=True))

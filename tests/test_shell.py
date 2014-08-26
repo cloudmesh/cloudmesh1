@@ -8,7 +8,7 @@ nosetests -v
 
 individual tests can be run with
 
-nosetests -v  --nocapture test_cm_compute.py:Test.test_06
+nosetests -v  --nocapture test_shell.py:Test.test_list
 
 """
 
