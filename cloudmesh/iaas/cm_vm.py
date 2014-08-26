@@ -165,13 +165,13 @@ class VMcommand(object):
                 except:
                     error = True
             if error:
-                print "ERROR: range option must be given as --range=int,int, for example:\
-                       --range=1,3"
+                print "ERROR: range option must be given as --range=int,int, for example:"\
+                       "--range=1,3"
                 return
             if rangestart and rangeend:
                 if rangestart > rangeend:
-                    print "ERROR: first number of range must be no greater than the second one,\
-                          for example: --range=1,3"
+                    print "ERROR: first number of range must be no greater than the second one,"\
+                          "for example: --range=1,3"
                     return
         # ------------------------- 
         # select cloud
@@ -276,9 +276,9 @@ def start_vm(username,
         if vm_flavor_id == None:
             error = error + "The flavor you provide doesn't exist. "
         if same_name_count > 1:
-            error = error + "There are more than one flavor with the name you provide \
-                            please use flavorid instead or select one by command cloud \
-                            set flavor [CLOUD]. "
+            error = error + "There are more than one flavor with the name you provide" \
+                            "please use flavorid instead or select one by command cloud" \
+                            "set flavor [CLOUD]. "
     else:
         try:
             vm_flavor_id = userinfo["defaults"]["flavors"][cloudname]
@@ -304,17 +304,17 @@ def start_vm(username,
         if vm_image_id == None:
             error = error + "The image you provide doesn't exist. "
         if same_name_count > 1:
-            error = error + "There are more than one image with the name you provide \
-                            please use imageid instead or select one by command cloud \
-                            set image [CLOUD]. "
+            error = error + "There are more than one image with the name you provide" \
+                            "please use imageid instead or select one by command cloud" \
+                            "set image [CLOUD]. "
     else:
         try:
             vm_image_id = userinfo["defaults"]["images"][cloudname]
         except:
-            error = error + "Please specify a default image. "
+            error = error + "Please specify a default image(command: cloud set flavor [CLOUD]). "
         
         if vm_image_id in [None, 'none']:
-            error = error + "Please specify a default image. "
+            error = error + "Please specify a default image(command: cloud set flavor [CLOUD]). "
     
     # -------------------------
     # key handler
