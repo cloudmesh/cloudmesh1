@@ -292,7 +292,13 @@ class cm_mongo:
 
     def active_clouds(self, cm_user_id):
         user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
-        return user['activeclouds']
+        try:
+            return user['activeclouds']
+        except:
+            # If activeclouds is empty in defaults, user collection will be
+            # looked up.
+            user = self.db_user.find_one({'cm_user_id': cm_user_id})
+            return user['activeclouds']
 
     def active_project(self, cm_user_id):
         user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
