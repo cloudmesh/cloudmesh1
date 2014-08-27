@@ -31,7 +31,7 @@ class DBConnFactory(object):
     def getconn(cls, dbname, clientType=MONGOCLIENT):
         dbkey = "%s_%s" % (dbname, clientType)
         if dbkey in cls.connectors:
-            print "RETURNING AN EXISTING DB CONNECTOR FROM FACTORY"
+            #print "RETURNING AN EXISTING DB CONNECTOR FROM FACTORY"
             return cls.connectors[dbkey]
         else:
             conn = None
@@ -77,11 +77,11 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     """
     Read in the mongo db information from the cloudmesh_server.yaml
     """
-    print "---------------"    
-    print "GET MONGO"
-    print WHERE()
-    print WHERE(1)
-    print "---------------"
+    #print "---------------"
+    #print "GET MONGO"
+    #print WHERE()
+    #print WHERE(1)
+    #print "---------------"
     config = cm_config_server().get("cloudmesh.server.mongo")
 
     db_name = config["collections"][mongo_collection]['db']
