@@ -141,6 +141,8 @@ def mongo():
     from cloudmesh.cm_mongo import cm_mongo
     mongo = cm_mongo()
     
+    mongo.db_clouds.remove({'cm_kind': 'cloud', 'cm_user_id': username})
+    
     def import_cloud_to_mongo(d, cloudname, username):
         '''
         insert a cloud to db_clouds
