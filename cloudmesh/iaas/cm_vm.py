@@ -7,6 +7,7 @@ from pprint import pprint
 from cloudmesh_common.util import banner
 from cloudmesh_common.bootstrap_util import yn_choice
 import time
+from cmd3.console import Console
 
 log = LOGGER(__file__)
 
@@ -107,6 +108,7 @@ class VMcommand(object):
         # ------------------------- 
         # select cloud
         cloudobj = CloudManage()
+        mongo = cm_mongo()
         if self.arguments['--cloud']:
             cloud = cloudobj.get_clouds(self.username, getone=True, cloudname=self.arguments['--cloud'])
             if cloud == None:
@@ -116,24 +118,27 @@ class VMcommand(object):
                 cloudname = self.arguments['--cloud']
         else:
             cloudname = cloudobj.get_selected_cloud(self.username)
+        if cloudname not in mongo.active_clouds(self.username):
+            Console.warning("cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname))
+            return
         # ------------------------- 
         # starting vm
-        start_vm(self.username, 
-                 cloudname,
-                 count=count,
-                 flavorname=self.arguments['--flavor'], 
-                 flavorid=self.arguments['--flavorid'], 
-                 imagename=self.arguments['--image'],
-                 imageid=self.arguments['--imageid'],
-                 groupname=self.arguments['--group'],
-                 servername=self.arguments['NAME'])
+        res = start_vm(self.username, 
+                         cloudname,
+                         count=count,
+                         flavorname=self.arguments['--flavor'], 
+                         flavorid=self.arguments['--flavorid'], 
+                         imagename=self.arguments['--image'],
+                         imageid=self.arguments['--imageid'],
+                         groupname=self.arguments['--group'],
+                         servername=self.arguments['NAME'])
         # ------------------------- 
-       
-        if self.arguments['--count']:
-            watch = time.time() - watch
-            print ("time consumed: %.2f" % watch), "s"
-            
-        print "to check realtime vm status: list vm --refresh"
+        if res != False:
+            if self.arguments['--count']:
+                watch = time.time() - watch
+                print ("time consumed: %.2f" % watch), "s"
+                
+            print "to check realtime vm status: list vm --refresh"
 
         
         
@@ -177,6 +182,7 @@ class VMcommand(object):
         # select cloud
         deleteAllCloudVMs = False
         cloudobj = CloudManage()
+        mongo = cm_mongo()
         if self.arguments['--cloud']:
             cloud = cloudobj.get_clouds(self.username, getone=True, cloudname=self.arguments['--cloud'])
             if cloud == None:
@@ -187,6 +193,9 @@ class VMcommand(object):
                 deleteAllCloudVMs = True
         else:
             cloudname = cloudobj.get_selected_cloud(self.username)
+        if cloudname not in mongo.active_clouds(self.username):
+            Console.warning("cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname))
+            return
         # ------------------------- 
         delete_vm(self.username,
                   cloudname,
@@ -227,10 +236,11 @@ def start_vm(username,
     will check flavor, image existence if provided
     user can specify groupname which will be written in metadata, servername which 
     will replace prefix+index as the vm name
+    it's better to check cloud active status before use this function
     :param username: string
     :param cloudname: string
     :param count: number of vms to start
-    :return 
+    :return False if error
     
     TODO: what if fail, how to acknowledge it; no return now as using celery
           input key 
@@ -283,8 +293,7 @@ def start_vm(username,
         try:
             vm_flavor_id = userinfo["defaults"]["flavors"][cloudname]
         except:
-            error = error + "Please specify a default flavor(command: cloud set flavor [CLOUD]). "
-    
+            pass
         if vm_flavor_id in [None, 'none']:
             error = error + "Please specify a default flavor(command: cloud set flavor [CLOUD]). "
     # -------------------------
@@ -311,8 +320,7 @@ def start_vm(username,
         try:
             vm_image_id = userinfo["defaults"]["images"][cloudname]
         except:
-            error = error + "Please specify a default image(command: cloud set flavor [CLOUD]). "
-        
+            pass  
         if vm_image_id in [None, 'none']:
             error = error + "Please specify a default image(command: cloud set flavor [CLOUD]). "
     
@@ -334,7 +342,7 @@ def start_vm(username,
     # -------------------------
     
     if error != '':
-        log.error(error)
+        Console.error(error)
         return False
     # -------------------------
     metadata = {'cm_owner': username}
