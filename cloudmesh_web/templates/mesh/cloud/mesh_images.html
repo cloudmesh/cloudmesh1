@@ -2,11 +2,14 @@
 {% from "_helper.html" import href_image_button %}
 {% from "_helper.html" import cm_state_color %}
 
-{% block contentbox %}
-<h2> {{ href_image_button ("none", "fa-repeat", "/cm/refresh/images/images") }} Images </h2>
-{% endblock %}
+
+
+
 
 {% block content %}
+
+<legend> {{ href_image_button ("none", "fa-repeat", "/cm/refresh/images/images") }} Images </legend>
+
 <script src="/static/js/accordion_plugin.js" type="text/javascript"></script>
 
 <script type="text/javascript">

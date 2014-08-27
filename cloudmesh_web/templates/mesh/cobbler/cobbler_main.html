@@ -1,10 +1,9 @@
 {% extends "layout/layoutTable.html" %}
 {% import "mesh/cobbler/cobbler_macro.html" as CMB %}
-{% block contentbox %}
-<h2> {{ CMB.CM_IMAGE_BUTTON(object_type) }} </h2>
-{% endblock contentbox %}
+
 
 {% block content %}
+<legend> {{ CMB.CM_IMAGE_BUTTON(object_type) }} </legend>
 
 <script src="/static/js/accordion_plugin.js" type="text/javascript"></script>
 

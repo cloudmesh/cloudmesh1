@@ -1,22 +1,21 @@
 {% extends "layout/layout_title.html" %}
 {% block title %}Rack Map{% endblock %}
 
-{% block contentbox %}
+{% block content %}
+
 {% if flag_home %}
-	<h2>Choose a Rack Cluster and a type of Service:</h2>
+	<legend>Choose a Rack Cluster and a type of Service:</legend>
 {% else %}
-	<h2>
+	<legend>
 		{{ service | capitalize }} Map of
 		{% if rack == "all" %}
 			{{ rack | capitalize }} Clusters
 		{% else %}
 			the {{ rack | capitalize }} Cluster
 		{% endif %}
-	</h2>
+	</legend>
 {% endif %}
-{% endblock %}
 
-{% block content %}
 
 {% if flag_home %}
     <script>

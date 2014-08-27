@@ -2,12 +2,10 @@
 {% from "_helper.html" import href_image_button %}
 {% from "_helper.html" import cm_state_color %}
 
-{% block contentbox %}
-<h2> {{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat") }} QStat </h2>
-{% endblock %}
-
-
 {% block content %}
+
+<legend> {{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat") }} QStat </legend>
+
 
 {% if error != "" %}
 <h2> error </h2>

@@ -9,12 +9,9 @@
    <img src="{{diagram}}" cache="no-cache"/>
 {% endmacro %}
 
-{% block contentbox %}
-<h2>Workflow Provision Form</h2>
-{% endblock %}
 
 {% block content %}
-
+<legend>Workflow Provision Form</legend>
 <form method="POST" action="">
 {{ form.csrf_token }}
 

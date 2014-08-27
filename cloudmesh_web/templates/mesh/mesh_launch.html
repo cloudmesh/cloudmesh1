@@ -1,11 +1,10 @@
 {% extends "layout/layout_title.html" %}
 {% from "_helper.html" import href_image_button %}
 
-{% block contentbox %}
-<h2> {{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat") }} Launcher </h2> {# change redirects. currently to qStat#}
-{% endblock %}
 
 {% block content %}
+<legend> {{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat") }} Launcher </legend> {# change redirects. currently to qStat#}
+
 <script type="text/javascript">
 
 /*

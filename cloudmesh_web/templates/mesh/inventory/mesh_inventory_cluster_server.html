@@ -1,12 +1,11 @@
 {% extends "layout/layout_title.html" %}
 
 
-{% block contentbox %}
-<h2> Inventory Server </h2>
- Details for server {{ server.cm_id }} @ {{ cluster }}
-{% endblock contentbox %}
 
 {% block content %}
+
+<legend> Inventory Server </legend>
+ Details for server {{ server.cm_id }} @ {{ cluster }}
 
 <script type="text/javascript">
 

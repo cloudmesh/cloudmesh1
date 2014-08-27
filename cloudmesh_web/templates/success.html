@@ -1,11 +1,8 @@
 {% extends "layout/layout_title.html" %}
 {% block title %}Error{% endblock %}
 
-{% block contentbox %}
-  <h2>Success: {{ type }}</h2>
-{% endblock %}
-
 {% block content %}
+  <hlegend>Success: {{ type }}</legend>
 
 <div class="alert alert-success">
 	{{ error }}
