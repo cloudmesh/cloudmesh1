@@ -1,9 +1,11 @@
-{% block contentbox %}
+{% block content %}
+<legend> Statistics </legend>
+
 <a href="/stats/table/count/{{ period }}/{{ cloud_name }}/">VM Count</a> / 
 <a href="/stats/table/usercount/{{ period }}/{{ cloud_name }}/">User Count</a> /
 <a href="/stats/table/walltime/{{ period }}/{{ cloud_name}}/">Walltime</a>
-{% endblock contentbox %}
+
 <img src="/stats/figure/{{ metric }}/{{ period }}/{{ cloud_name }}/">
-{% block content %}
+
 
 {% endblock %}
