@@ -1,4 +1,4 @@
-{% extends "layout/layout_title.html" %}
+{% extends "layout/layout.html" %}
 {% from "_helper.html" import href_image_button %}
 
 
@@ -37,7 +37,7 @@ $(function() {
 
     	<div style="margin-bottom:1em;">
 
-       		<h3>{{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat/" + server) }}
+       		<h3 class="ui-helper-reset">{{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat/" + server) }}
        			{#make refresh changes. currently follows qstat#}
         		{{ server }}
         	</h3>
