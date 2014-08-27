@@ -26,16 +26,12 @@ class DBConnFactory(object):
     DBCONFIG = None
     TYPE_MONGOCLIENT = MONGOCLIENT
     TYPE_MONGOENGINE = MONGOENGINE
-
-    class DBKey(object):
-        def __init__(self, dbname, clientType=MONGOCLIENT):
-            self.clientType = clientType
-            self.dbname = dbname
-            
+        
     @classmethod
     def getconn(cls, dbname, clientType=MONGOCLIENT):
-        dbkey = cls.DBKey(dbname, clientType)
+        dbkey = "%s_%s" % (dbname, clientType)
         if dbkey in cls.connectors:
+            print "RETURNING AN EXISTING DB CONNECTOR FROM FACTORY"
             return cls.connectors[dbkey]
         else:
             conn = None
