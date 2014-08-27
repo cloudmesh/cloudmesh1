@@ -5,7 +5,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Cloud Mesh for FutureGrid, OpenStack, Eucalyptus, Azure</title>
+        <title>Cloud Mesh for OpenStack, Eucalyptus, Azure</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
@@ -15,23 +15,41 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/input.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/datepicker.css') }}">
+        <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}">
+
+
+
         <link rel="stylesheet" href="{{ url_for('static', filename='library/jquery-ui/themes/base/minified/jquery-ui.min.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='library/DataTables/media/css/jquery.dataTables.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='library/DataTables/extras/ColVis/media/css/ColVis.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+       
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"> 
+        <link rel="stylesheet" href="//cdn.datatables.net/colvis/1.1.1/css/dataTables.colVis.css">
+        <link rel="stylesheet" href="//cdn.datatables.net/colreorder/1.1.2/css/dataTables.colReorder.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+
+        <!-- <link rel="stylesheet" href=""> -->
+
+
 
         {% include "custom-css.html" %}
 
         <!-- Placed at the top of the document so the certain onpage load functions work -->
-        <script src="/static/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/static/library/jquery-ui/ui/jquery-ui.js" type="text/javascript"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
+
+
         <script src="/static/js/jeditable.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/jquery.sparkline.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/static/library/DataTables/media/js/jquery.dataTables.min.js" type="text/javascript" charset="utf-8" ></script>
 
-        <script src="/static/library/DataTables/extras/ColViz/media/js/ColViz.min.js" type="text/javascript" charset="utf-8" ></script>
-        <script src="/static/library/DataTables/extras/ColReorder/media/js/ColReorder.min.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="//cdn.datatables.net/colreorder/1.1.2/js/dataTables.colReorder.min.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="//cdn.datatables.net/colvis/1.1.1/js/dataTables.colVis.min.js" type="text/javascript" charset="utf-8" ></script>
+
+
 
         <script type="text/javascript" src="/static/js/base64.js"></script>
         <script type="text/javascript" src="/static/js/interactive.js"></script>
@@ -85,7 +103,7 @@
 		  <hr>
 		  <p align="right">
 		  &copy; 2013, Cloud Mesh {{ version }}<br>
-		  FutuerGrid, Indiana University<br>
+		  Indiana University<br>
 		  For more information on cloudmesh, <br>
 		  please contact Gregor von Laszewski <br>
 		  laszewski@gmail.com
@@ -207,7 +225,10 @@
             <script src="/static/js/bootstrap-typeahead.js"></script>
             -->
             <script src="/static/js/bootstrap-datepicker.js"></script>
-            <script>
+
+	    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+	    <script>
 
 
 //Show progress using spinner
