@@ -34,6 +34,12 @@ def get_pid(command):
     return (pid, line)
 
 @task
+def reset():
+    local("fab mongo.boot")
+    local("fab user.mongo")
+    local("fab mongo.simple")
+
+@task
 def install():
     """installs mongo in ~/ENV/bin. Make sure your path is set correctly"""
     if sys.platform == "darwin":
