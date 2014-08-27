@@ -1,4 +1,4 @@
-{% extends "layout/layout.html" %}
+{% extends "layout/layoutTable.html" %}
 {% from "_helper.html" import href_image_button %}
 {% from "_helper.html" import cm_state_color %}
 
@@ -78,7 +78,7 @@ $(function() {
     {% set table_index = 0 %}
     {% for cloud in clouds %}
         {% set version = clouds[cloud]['cm_type_version'] %}
-        <h3 id="{{cloud}}">
+        <h3 class="ui-helper-reset" id="{{cloud}}">
             <span style="float:left; width:30%; white-space:nowrap;">
                 <span class="inner_function_button">
                     {{ href_image_button ("none", "fa-repeat", "/cm/refresh/" + cloud + "/images") }}
