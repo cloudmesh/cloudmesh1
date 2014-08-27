@@ -149,7 +149,7 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
 <div id="accordion">
     <div>
         {% for cloud in cloudList | sort  %}
-        <h3 id="example" style="white-space:nowrap">
+        <h3 class="ui-helper-reset" id="example" style="white-space:nowrap">
             {% if cloud|string == user['defaults']['cloud']|string %}
 	            <span style="color:green; float:left; width:30%; white-space:nowrap;">
 	          	&#x2713;
@@ -205,9 +205,9 @@ $('#field-{{cloudname}}-{{key}}-password').hideShowPassword({
                     {% endif %}
                     <th></th><th></th>
                     <th style="text-align: right">
-			    <input id="submit{{cloud}}" type="submit" name="submit{{ cloud }}" value="&#xf0c7; Submit">
+			    <input id="submit{{cloud}}" type="submit" name="submit{{ cloud }}" value="Submit">
 			<!--
-                        {{ submit_button ("submit" + cloud, "235_pen", "submit" + cloud) }}
+                        {{ submit_button ("submit" + cloud, "fa fa-pencil", "submit" + cloud) }}
                         Register {{ cloud }}
 -->
                     </th>

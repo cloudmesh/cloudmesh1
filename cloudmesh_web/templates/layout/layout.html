@@ -36,6 +36,8 @@
 <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/css/jquery-ui.min.css"> -->
         <link rel="stylesheet" href="{{ url_for('static', filename='library/jquery-ui/themes/base/minified/jquery-ui.min.css') }}" />
 
+        <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootswatch/3.2.0+2/spacelab/bootstrap.css"> -->
+
 
 
         <script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -78,34 +80,36 @@
 </head>
 
 <body>
+
+
+<nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+<div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">
+      <span style="font-size: 12px;" class="fa-stack fa-lg">
+      <i class="fa fa-cloud fa-stack-2x" style="color:white"></i>
+      <i class="fa fa-th fa-stack-1x" style="color:grey"></i>
+      </a>
+    </div>
+
+    <div class="navbar-text pull-right">
+
+      {{ loggedin_msg() }}
+
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+	{% include "menu-top.html" %}
+      </ul>
+
+    </div>
+</div>
+</nav>
+
 <div class="container-fluid">
 	<div class="row clearfix">
 		<div class="col-md-12 column">
-			<nav class="navbar navbar-default navbar-inverse" role="navigation">
-
-				<div class="navbar-header">
-				  
-
-				       <a class="navbar-brand" href="/">
-				         <span style="font-size: 12px;" class="fa-stack fa-lg">
-				         <i class="fa fa-cloud fa-stack-2x" style="color:white"></i>
-				         <i class="fa fa-th fa-stack-1x" style="color:grey"></i>
-				       </a>
-				</div>
-
-				<div class="navbar-text pull-right">
-								    
-				  {{ loggedin_msg() }}
-
-				</div>
-
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<ul class="nav navbar-nav">
-					  {% include "menu-top.html" %}
-					</ul>
-
-			     </div>
-			</nav>
 
 			<div class="row clearfix">
 				<div class="col-md-3 column">
