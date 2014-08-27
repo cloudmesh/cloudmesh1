@@ -6,10 +6,9 @@ from user import User, Users
 # from comittee import Committee
 from pprint import pprint
 from cloudmeshobject import CloudmeshObject
-
-port = 27777
-db_name = 'user'
-
+from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_install import config_file
+from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
 
 def IMPLEMENT():
     print "IMPLEMENT ME"
@@ -236,9 +235,8 @@ class Projects(object):
     '''
 
     def __init__(self):
-        db = connect(db_name, port=port)
+        get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)        
         self.projects = Project.objects()
-        db = connect('user', port=port)
         self.users = User.objects()
 
 
