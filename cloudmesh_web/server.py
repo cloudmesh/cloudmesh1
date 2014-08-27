@@ -52,7 +52,6 @@ import os
 import pkg_resources
 import requests
 import sys
-import sys
 import time
 import traceback
 import types
@@ -77,7 +76,7 @@ all_modules = ['pbs',
                'keys',
                'profile',
                'git',
-               'management',
+               #'management',
                'cloud',
                # 'workflow',
                'mesh',
