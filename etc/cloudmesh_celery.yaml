@@ -19,33 +19,27 @@ cloudmesh:
         count: 1
         queue: qstat
         concurrency: 1
-      azure-servers:
-        id: as
+      azure:
+        id: az
         app: cloudmesh.iaas.azure.queue
         count: 1
-        queue: azure-servers
+        queue: azure-servers,azure-images
         concurrency: 1
-      aws-images:
-        id: wi
+      aws:
+        id: aw
         app: cloudmesh.iaas.aws.queue
         count: 1
-        queue: aws-images
+        queue: aws-images,aws-servers
         concurrency: 1
-      azure-images:
-        id: ai
-        app: cloudmesh.iaas.azure.queue
-        count: 1
-        queue: azure-images
-        concurrency: 1
-      openstack-images:
-        id: oi
+      openstack:
+        id: op
         app: cloudmesh.iaas.openstack.queue
         count: 1
-        queue: openstack-images
+        queue: openstack-images,openstack-servers
         concurrency: 1
-      ec2-images:
-        id: ei
+      ec2:
+        id: ec
         app: cloudmesh.iaas.ec2.queue
         count: 1
-        queue: ec2-images
+        queue: ec2-images,ec2-servers
         concurrency: 1
