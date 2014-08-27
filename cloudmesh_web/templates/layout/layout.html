@@ -28,8 +28,9 @@
         <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
 
 
-        <link rel="stylesheet" href="//cdn.datatables.net/colvis/1.10.2/css/dataTables.colVis.css">
-        <link rel="stylesheet" href="//cdn.datatables.net/colreorder/1.10.2/css/dataTables.colReorder.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='library/DataTables-1.9.4/media/css/jquery.dataTables.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='library/DataTables-1.9.4/extras/ColVis/media/css/ColVis.css') }}" />
+
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 
 <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/css/jquery-ui.min.css"> -->
@@ -56,6 +57,8 @@
 
 
 	<link href="css/style.css" rel="stylesheet">
+
+       {% include "custom-css.html" %}
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
