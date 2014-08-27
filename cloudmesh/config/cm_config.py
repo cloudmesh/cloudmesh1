@@ -85,6 +85,10 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     print "GET MONGO"
     print WHERE()
     print WHERE(1)
+    try:
+        print WHERE(2)
+    except:
+        pass
     print "---------------"
     config = cm_config_server().get("cloudmesh.server.mongo")
 
