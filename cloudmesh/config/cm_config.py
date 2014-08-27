@@ -18,6 +18,10 @@ from cloudmesh.util.debug import WHERE
 
 log = LOGGER(__file__)
 
+# todo: rename get_mongo_db to connect_to_mongo ...
+
+# todo:
+# why not "pymongo" and "mongoengine"
 MONGOCLIENT = 0
 MONGOENGINE = 1
     
