@@ -9,7 +9,9 @@ from faker import Factory
 import uuid
 from pprint import pprint
 
-connect ('user', port=27777)
+from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
+get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
+
 
 #----------------------------------------------------------
 #	The generate class generates 10 random users

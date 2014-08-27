@@ -1,3 +1,5 @@
+from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_install import config_file
 from mongoengine import *
 import datetime, time
 import hashlib, uuid
@@ -5,10 +7,11 @@ from pprint import pprint
 #    mongod --noauth --dbpath . --port 27777
 from cloudmesh.management.cloudmeshobject import CloudmeshObject
 import yaml
+from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
 
 STATUS = ('pending', 'approved', 'blocked', 'denied')
 
-port=27777
+
 
 def IMPLEMENT():
     print "IMPLEMENT ME"
@@ -55,6 +58,8 @@ def read_user(filename):
 class User(CloudmeshObject):
     """This class is sued to represent a user"""
 
+    get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
+    
     def order(self):
         '''
         order of the attribute to be printed
@@ -203,9 +208,14 @@ class Users(object):
     '''
 
     def __init__(self):
-        db = connect('user', port=port)
+        config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
+        port = config['cloudmesh']['server']['mongo']['port']
+
+        get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
+        #db = connect('manage', port=port)
         self.users = User.objects()
-        
+
+        # thism may be wrong
         meta = {"db_alias": "default"}
 
     def objects(self):
