@@ -1,11 +1,10 @@
 {% extends "layout/layoutTable.html" %}
 {% from "_helper.html" import href_image_button %}
 
-{% block contentbox %}
-<h2> {{ href_image_button ("none", "fa-repeat", "/cm/refresh/flavors/flavors") }} Flavors </h2>
-{% endblock contentbox %}
 
 {% block content %}
+
+<legend> {{ href_image_button ("none", "fa-repeat","/cm/refresh/flavors/flavors") }} Flavors </legend>
 
 <script src="/static/js/accordion_plugin.js" type="text/javascript"></script>
 

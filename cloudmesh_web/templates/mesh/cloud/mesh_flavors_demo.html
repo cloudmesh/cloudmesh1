@@ -1,12 +1,10 @@
 {% extends "layout/layoutTable.html" %}
 {% from "_helper.html" import href_image_button %}
 
-{% block contentbox %}
-<h2> {{ href_image_button ("none", "fa-repeat", "/cm/refresh/flavors") }} Flavors - DEMO </h2>
-{% endblock contentbox %}
-
 
 {% block content %}
+<legend> {{ href_image_button ("none", "fa-repeat", "/cm/refresh/flavors") }} Flavors - DEMO </legend>
+
 <script type="text/javascript">
     var status_object = {};
 
