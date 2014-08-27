@@ -10,9 +10,13 @@ __version__ = '1.0'
 def version():
     return __version__
 
-from cloudmesh.util.helper import vm_name 
-from cloudmesh.sh.cm import shell
+from cloudmesh.util.helper import vm_name
 
+try:
+    from cloudmesh.sh.cm import shell
+except:
+    print "WARNING: cm not yet installed, skipping import"
+    
 from cloudmesh.config.cm_config import cm_config as load
 
 
