@@ -1,7 +1,8 @@
 from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh.util.config import read_yaml_config
+#from cloudmesh.util.config import read_yaml_config
 from cloudmesh_common.logger import LOGGER
-from cloudmesh_common.util import check_file_for_tabs, deprecated, path_expand
+#from cloudmesh_common.util import check_file_for_tabs, deprecated, path_expand
+from cloudmesh_common.util import deprecated, path_expand
 from pprint import pprint
 from pymongo import MongoClient
 from mongoengine import connect, Document
@@ -12,6 +13,8 @@ import os
 import sys
 import yaml
 from cloudmesh_install import config_file
+
+from cloudmesh.util.debug import WHERE
 
 log = LOGGER(__file__)
 
@@ -78,7 +81,11 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     """
     Read in the mongo db information from the cloudmesh_server.yaml
     """
-
+    print "---------------"    
+    print "GET MONGO"
+    print WHERE()
+    print WHERE(1)
+    print "---------------"
     config = cm_config_server().get("cloudmesh.server.mongo")
 
     db_name = config["collections"][mongo_collection]['db']
