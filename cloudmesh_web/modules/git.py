@@ -12,7 +12,6 @@ git_module = Blueprint('git_module', __name__)
 
 
 @git_module.route('/git')
-@login_required
 def display_git_authors():
     result = git("shortlog", "-s", "-n",
                  _tty_in=True, _tty_out=False).split("\n")
@@ -64,7 +63,6 @@ def display_git_authors():
 
 
 @git_module.route('/bugs')
-@login_required
 def display_git_bugs():
     issues_open = requests.get('https://api.github.com/repos/cloudmesh/cloudmesh/issues?state=closed').json()
     issues_closed = requests.get('https://api.github.com/repos/cloudmesh/cloudmesh/issues?state=open').json()
