@@ -62,8 +62,8 @@ projects:
   - fg1003
 
 keys:
-  default: fg_key1
+  default: cm_def_key
   keylist:
     fg_key1: ssh-rsa AAAABBBB... fg-key1
     fg_key2: ssh-rsa AAAABBBB... fg-key2
-            
+    cm_def_key: ssh-rsa AAAABBBB... username@hostname
