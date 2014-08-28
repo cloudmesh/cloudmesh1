@@ -19,8 +19,7 @@ def shell_command_cloud(arguments):
     ::
 
         Usage:
-            cloud
-            cloud list [--column=COLUMN]
+            cloud [list] [--column=COLUMN]
             cloud info [CLOUD|--all]
             cloud alias NAME [CLOUD]
             cloud select [CLOUD]
@@ -29,42 +28,48 @@ def shell_command_cloud(arguments):
             cloud add <cloudYAMLfile> [--force]
             cloud remove [CLOUD|--all]
             cloud default [CLOUD|--all]
-            cloud set flavor [CLOUD]
-            cloud set image [CLOUD]
+            cloud set flavor [CLOUD] [--flavor=flavorName|--flavorid=flavorID]
+            cloud set image [CLOUD] [--image=imageName|--imageid=imageID]
             cloud set default [CLOUD]
 
         Arguments:
 
-          CLOUD              the name of a cloud 
-          <cloudYAMLfile>    a yaml file (with full file path) containing
-                             cloud information
-          NAME               name for a cloud
+          CLOUD                  the name of a cloud 
+          <cloudYAMLfile>        a yaml file (with full file path) containing
+                                 cloud information
+          NAME                   name for a cloud
 
         Options:
 
-           -v                verbose model
-
-           --column=COLUMN   specify what information to display in
-                             the columns of the list command. For
-                             example, --column=active,label prints the
-                             columns active and label. Available
-                             columns are active, label, host,
-                             type/version, type, heading, user,
-                             credentials, defaults (all to diplay all,
-                             semiall to display all except credentials
-                             and defaults)
-
-           --all             display all available columns
-
-           --force           if same cloud exists in database, it will be 
-                             overwritten
+           --column=COLUMN       specify what information to display in
+                                 the columns of the list command. For
+                                 example, --column=active,label prints the
+                                 columns active and label. Available
+                                 columns are active, label, host,
+                                 type/version, type, heading, user,
+                                 credentials, defaults (all to diplay all,
+                                 emiall to display all except credentials
+                                 and defaults)
+                             
+           --all                 display all available columns
+           
+           --force               if same cloud exists in database, it will be 
+                                 overwritten
+                             
+           --flavor=flavorName   provide flavor name
+           
+           --flavorid=flavorID   provide flavor id
+           
+           --image=imageName     provide image name
+           
+           --imageid=imageID     provide image id
 
         Description:
 
             The cloud command allows easy management of clouds in the
             command shell. The following subcommands exist:
 
-            cloud list [--column=COLUMN]
+            cloud [list] [--column=COLUMN]
                 lists the stored clouds, optionally, specify columns for more
                 cloud information. For example, --column=active,label
 
@@ -117,12 +122,12 @@ def shell_command_cloud(arguments):
 
 	    	TODO
   
-            cloud set flavor [CLOUD]
+            cloud set flavor [CLOUD] [--flavor=flavorName|--flavorid=flavorID]
 
                 sets the default flavor for a cloud. If the cloud is
                 not specified, it used the default cloud.
 
-            cloud set image [CLOUD]
+            cloud set image [CLOUD] [--image=imageName|--imageid=imageID]
 
                 sets the default flavor for a cloud. If the cloud is
                 not specified, it used the default cloud.
@@ -1056,25 +1061,51 @@ class CloudCommand(CloudManage):
         '''
         refresh before actually select a flaovr of the cloud
         '''
-        name = self.get_working_cloud_name()
-        if name:
-            itemkeys = [
-                     	['id', 'id'],
-                     	['name', 'name'],
-                     	['vcpus', 'vcpus'],
-                     	['ram', 'ram'],
-                     	['disk', 'disk'],
-                     	['refresh time', 'cm_refresh']
-                       ]
-            flavor_lists = self.print_cloud_flavors(username=self.username,
-                                                    cloudname=name,
-                                                    itemkeys=itemkeys,
-                                                    refresh=True,
-                                                    output=True)
-            res = menu_return_num(title="select a flavor by index", menu_list=flavor_lists[0], tries=3)
-            if res == 'q': return
-            self.update_default_flavor_id(self.username, name, flavor_lists[1][res])
-            print "'{0}' is selected".format(flavor_lists[0][res])
+        cloudname = self.get_working_cloud_name()
+        if cloudname:
+            flavor_id = None
+            flavor_name = None
+            if self.arguments['--flavor'] or self.arguments['--flavorid']:
+                self._connect_to_mongo()
+                self.mongo.activate(cm_user_id=self.username, names=[cloudname])
+                self.mongo.refresh(cm_user_id=self.username, names=[cloudname], types=['flavors'])
+                flavor_dict = self.mongo.flavors(clouds=[cloudname], cm_user_id=self.username)[cloudname]
+                if self.arguments['--flavor']:
+                    for k, v in flavor_dict.iteritems():
+                        if v['name'] == self.arguments['--flavor']:
+                            flavor_name = self.arguments['--flavor']
+                            flavor_id = k
+                    if flavor_name == None:
+                        Console.warning("Cloud not find flavor name '{0}' on '{1}'".format(self.arguments['--flavor'], cloudname))
+                        return
+                elif self.arguments['--flavorid']:
+                    if self.arguments['--flavorid'] in flavor_dict.keys():
+                        flavor_name = flavor_dict[self.arguments['--flavorid']]['name']
+                        flavor_id = self.arguments['--flavorid']
+                    else: 
+                        Console.warning("Cloud not find flavor id '{0}' on '{1}'".format(self.arguments['--flavorid'], cloudname))
+                        return
+            else:
+                itemkeys = [
+                         	['id', 'id'],
+                         	['name', 'name'],
+                         	['vcpus', 'vcpus'],
+                         	['ram', 'ram'],
+                         	['disk', 'disk'],
+                         	['refresh time', 'cm_refresh']
+                           ]
+                flavor_lists = self.print_cloud_flavors(username=self.username,
+                                                        cloudname=cloudname,
+                                                        itemkeys=itemkeys,
+                                                        refresh=True,
+                                                        output=True)
+                res = menu_return_num(title="select a flavor by index", menu_list=flavor_lists[0], tries=3)
+                if res == 'q': return
+                flavor_id = flavor_lists[1][res]
+                flavor_name = flavor_lists[0][res]
+                
+            self.update_default_flavor_id(self.username, cloudname, flavor_id)
+            Console.ok("'{0}' is selected".format(flavor_name))
         else:
             return
         
@@ -1083,65 +1114,91 @@ class CloudCommand(CloudManage):
         '''
         refresh before actually select a image of the cloud
         '''
-        name = self.get_working_cloud_name()
-        if name:
-            itemkeys = {"openstack":
-                        [
-                            # [ "Metadata", "metadata"],
-                            [ "name" , "name"],
-                            [ "status" , "status"],
-                            [ "id", "id"],
-                            [ "type_id" , "metadata", "instance_type_id"],
-                            [ "iname" , "metadata", "instance_type_name"],
-                            [ "location" , "metadata", "image_location"],
-                            [ "state" , "metadata", "image_state"],
-                            [ "updated" , "updated"],
-                            #[ "minDisk" , "minDisk"],
-                            [ "memory_mb" , "metadata", 'instance_type_memory_mb'],
-                            [ "fid" , "metadata", "instance_type_flavorid"],
-                            [ "vcpus" , "metadata", "instance_type_vcpus"],
-                            #[ "user_id" , "metadata", "user_id"],
-                            #[ "owner_id" , "metadata", "owner_id"],
-                            #[ "gb" , "metadata", "instance_type_root_gb"],
-                            #[ "arch", ""]
-                        ],
-                      "ec2":
-                        [
-                            # [ "Metadata", "metadata"],
-                            [ "state" , "extra", "state"],
-                            [ "name" , "name"],
-                            [ "id" , "id"],
-                            [ "public" , "extra", "is_public"],
-                            [ "ownerid" , "extra", "owner_id"],
-                            [ "imagetype" , "extra", "image_type"]
-                        ],
-                      "azure":
-                        [
-                            [ "name", "label"],
-                            [ "category", "category"],
-                            [ "id", "id"],
-                            [ "size", "logical_size_in_gb" ],
-                            [ "os", "os" ]
-                        ],
-                      "aws":
-                        [
-                            [ "state", "extra", "state"],
-                            [ "name" , "name"],
-                            [ "id" , "id"],
-                            [ "public" , "extra", "ispublic"],
-                            [ "ownerid" , "extra", "ownerid"],
-                            [ "imagetype" , "extra", "imagetype"]
-                        ]
-                     }
-            image_lists = self.print_cloud_images(username=self.username,
-                                                  cloudname=name,
-                                                  itemkeys=itemkeys,
-                                                  refresh=True,
-                                                  output=True)
-            res = menu_return_num(title="select a image by index", menu_list=image_lists[0], tries=3)
-            if res == 'q': return
-            self.update_default_image_id(self.username, name, image_lists[1][res])
-            print "'{0}' is selected".format(image_lists[0][res])
+        cloudname = self.get_working_cloud_name()
+        if cloudname:
+            image_id = None
+            image_name = None
+            if self.arguments['--image'] or self.arguments['--imageid']:
+                self._connect_to_mongo()
+                self.mongo.activate(cm_user_id=self.username, names=[cloudname])
+                self.mongo.refresh(cm_user_id=self.username, names=[cloudname], types=['images'])
+                image_dict = self.mongo.images(clouds=[cloudname], cm_user_id=self.username)[cloudname]
+                if self.arguments['--image']:
+                    for k, v in image_dict.iteritems():
+                        if v['name'] == self.arguments['--image']:
+                            image_name = self.arguments['--image']
+                            image_id = k
+                    if image_name == None:
+                        Console.warning("Cloud not find image name '{0}' on '{1}'".format(self.arguments['--image'], cloudname))
+                        return
+                elif self.arguments['--imageid']:
+                    if self.arguments['--imageid'] in image_dict.keys():
+                        image_name = image_dict[self.arguments['--imageid']]['name']
+                        image_id = self.arguments['--imageid']
+                    else: 
+                        Console.warning("Cloud not find image id '{0}' on '{1}'".format(self.arguments['--imageid'], cloudname))
+                        return
+            else:
+                itemkeys = {"openstack":
+                            [
+                                # [ "Metadata", "metadata"],
+                                [ "name" , "name"],
+                                [ "status" , "status"],
+                                [ "id", "id"],
+                                [ "type_id" , "metadata", "instance_type_id"],
+                                [ "iname" , "metadata", "instance_type_name"],
+                                [ "location" , "metadata", "image_location"],
+                                [ "state" , "metadata", "image_state"],
+                                [ "updated" , "updated"],
+                                #[ "minDisk" , "minDisk"],
+                                [ "memory_mb" , "metadata", 'instance_type_memory_mb'],
+                                [ "fid" , "metadata", "instance_type_flavorid"],
+                                [ "vcpus" , "metadata", "instance_type_vcpus"],
+                                #[ "user_id" , "metadata", "user_id"],
+                                #[ "owner_id" , "metadata", "owner_id"],
+                                #[ "gb" , "metadata", "instance_type_root_gb"],
+                                #[ "arch", ""]
+                            ],
+                          "ec2":
+                            [
+                                # [ "Metadata", "metadata"],
+                                [ "state" , "extra", "state"],
+                                [ "name" , "name"],
+                                [ "id" , "id"],
+                                [ "public" , "extra", "is_public"],
+                                [ "ownerid" , "extra", "owner_id"],
+                                [ "imagetype" , "extra", "image_type"]
+                            ],
+                          "azure":
+                            [
+                                [ "name", "label"],
+                                [ "category", "category"],
+                                [ "id", "id"],
+                                [ "size", "logical_size_in_gb" ],
+                                [ "os", "os" ]
+                            ],
+                          "aws":
+                            [
+                                [ "state", "extra", "state"],
+                                [ "name" , "name"],
+                                [ "id" , "id"],
+                                [ "public" , "extra", "ispublic"],
+                                [ "ownerid" , "extra", "ownerid"],
+                                [ "imagetype" , "extra", "imagetype"]
+                            ]
+                         }
+                image_lists = self.print_cloud_images(username=self.username,
+                                                      cloudname=cloudname,
+                                                      itemkeys=itemkeys,
+                                                      refresh=True,
+                                                      output=True)
+                res = menu_return_num(title="select a image by index", menu_list=image_lists[0], tries=3)
+                if res == 'q': return
+                image_id = image_lists[1][res]
+                image_name = image_lists[0][res]
+        
+            self.update_default_image_id(self.username, cloudname, image_id)
+            Console.ok("'{0}' is selected".format(image_name))
         else:
             return
      
