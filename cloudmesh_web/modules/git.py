@@ -17,7 +17,6 @@ def display_git_authors():
                  _tty_in=True, _tty_out=False).split("\n")
     authors = {}
     for line in result:
-        print line
         try:
             (commits, name) = line.split("\t")
             authors[name] = {"name": name, "commits": commits}
