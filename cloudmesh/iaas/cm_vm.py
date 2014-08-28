@@ -27,6 +27,7 @@ def shell_command_vm(arguments):
                           [--cloud=<CloudName>]
                           [--prefix=<prefix>] 
                           [--range=<range>]
+                          [--force]
                                     
             Arguments:
                 NAME  server name
@@ -46,6 +47,7 @@ def shell_command_vm(arguments):
                 --range=<range>        give the range of the index of the servers
                                        to delete, e.g. --range=3,6. standand server
                                        name is in the form of prefix_index, e.g. abc_9
+                --force                delete vms without user's confirmation
             
             Description:
                 commands used to start or delete servers of a cloud
@@ -197,6 +199,11 @@ class VMcommand(object):
             Console.warning("cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname))
             return
         # ------------------------- 
+        if self.arguments['--force']:
+            preview = False
+        else:
+            preview = True
+        # ------------------------- 
         delete_vm(self.username,
                   cloudname,
                   servername=self.arguments['NAME'],
@@ -206,7 +213,7 @@ class VMcommand(object):
                   rangestart=rangestart,
                   rangeend=rangeend,
                   deleteAllCloudVMs=deleteAllCloudVMs,
-                  preview=True)
+                  preview=preview)
         
     
     # --------------------------------------------------------------------------
@@ -493,7 +500,7 @@ def delete_vm(username,
     confirm_deletion = True
     if preview:
         if res == []:
-            print "no vm meets the condition"
+            Console.warning("no vm meets the condition")
         else:
             resserverdata = {}
             for i in res:
