@@ -10,12 +10,12 @@ select_option() {
 	case $option in
 		"Ubuntu-Server-14.04-64bit") 
 			echo $option "selected"
-			ln -sf Vagrantfile64 Vagrantfile
+			ln -sf .Vagrantfile_ubuntu_trusty64 Vagrantfile
 			;;
 
 		"Ubuntu-Server-14.04-32bit") 
 			echo $option "selected"
-			ln -sf Vagrantfile32 Vagrantfile
+			ln -sf .Vagrantfile_ubuntu_trusty32 Vagrantfile
 			;;
 		quit)
 	esac
