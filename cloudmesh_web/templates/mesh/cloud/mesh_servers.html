@@ -165,29 +165,29 @@ function toggle(source,select_list) {
                         <tr>
                             <td><input type="checkbox" name="selection_{{cloud}}" value = {{server}} /> </td>
                             <td>
-			      <div class="btn-group">
+			      <div class="btn-group" style="font-size:8px">
 
-				<a class="btn btn-default"
+				<a class="btn-xs" title="Get detailed VM info"
    				   href="/cm/info/{{cloud}}/{{s_id}}/">
-				   <i class="fa fa-info-circle"></i>
+				   <i class="fa fa-info-circle fa-fw"></i>
 				</a>
 
-				<a class="btn btn-default"
+				<a class="btn-xs" title="Log into the VM"
 				   href="/cm/login/{{cloud}}/{{s_id}}/">
-				   <i class="fa fa-desktop"></i>
+				   <i class="fa fa-desktop fa-fw"></i>
 				</a>
 
-                                <a class="btn btn-default"
+                <a class="btn-xs" title="Associate a public IP"
 				   href="/cm/assignpubip/{{cloud}}/{{s_id}}/">  IP </a>				
 
-				<a class="btn btn-default"
+				<a class="btn-xs" title="Usage Metrics"
 				   href="/cm/metric/{{cloud}}/{{s_id}}/">
-				   <i class="fa fa-bar-chart-o"></i>
+				   <i class="fa fa-bar-chart-o fa-fw"></i>
 				</a>
 				
-				<a class="btn btn-default"
+				<a class="btn-xs" title="Delete the VM"
 				   href="/cm/delete/{{cloud}}/{{s_id}}/">
-				   <i class="fa fa-trash-o"></i>
+				   <i class="fa fa-trash-o fa-fw"></i>
 				</a>
 				
 			      </div>
