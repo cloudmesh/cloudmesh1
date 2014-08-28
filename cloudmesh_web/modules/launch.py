@@ -75,11 +75,8 @@ def launch_servers():
 def display_launch_table():
     launcher_config = ConfigDict(filename=config_file("/cloudmesh_launcher.yaml"))
     launch_recipies = launcher_config.get("cloudmesh.launcher.recipies")
-    columns = launcher_config.get("cloudmesh.launcher.columns")
     return render_template('mesh/mesh_launch.html',
-                           recipies=launch_recipies,
-                           columns=columns,
-                           )
+                           recipies=launch_recipies)
 
 @launch_module.route('/cm/launch/db_stats')
 @login_required

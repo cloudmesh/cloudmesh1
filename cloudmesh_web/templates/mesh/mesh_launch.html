@@ -1,114 +1,76 @@
+<!-- -*- mode: Org; auto-fill-mode 0 -*- -->
+
 {% extends "layout/layout.html" %}
 {% from "_helper.html" import href_image_button %}
 
 
 {% block content %}
-<legend> {{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat") }} Launcher </legend> {# change redirects. currently to qStat#}
-
-<script type="text/javascript">
-
-/*
-/* http://stackoverflow.com/a/10237915 */
-(function($) {
-    $(function() {
-        $("#launcher-accordion > div").accordion({ header: "h3",
-        										collapsible: true,
-        										heightStyle: "content",
-        										active: false });
-    });
-})(jQuery);
-
-
-$(function() {
-  {% for cloudnum in range(hosts|count) %}
-    $("#display-table-{{ cloudnum }}").dataTable({
-    	"sPaginationType": "full_numbers",
-        aaSorting: [[1,'asc']],
-        aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ]
-    });
-  {% endfor %}
-});
-
-</script>
-
-<div id="launcher-accordion">
-
-    {% for server in columns %}
-
-    	<div style="margin-bottom:1em;">
-
-       		<h3 class="ui-helper-reset">{{ href_image_button ("none", "fa-repeat", "/mesh/refresh/qstat/" + server) }}
-       			{#make refresh changes. currently follows qstat#}
-        		{{ server }}
-        	</h3>
-	        <div>
-
-	        	{%set attribute_list = columns[server]%}
-			    <table id="display-table-{{ loop.index0 }}">
-		       	<thead>
-		        <tr>
-		        <th> Select </th>
-
-		        {% for attribute in attribute_list %}
-		        	<th>
-		        		{{attribute|capitalize}}
-		        	</th>
-		        {% endfor %}
-		        </tr>
-				{% set name_index = 0 %}
-		        {% for recipie in recipies[server] %}
-
-		        <form action = "/cm/launch/launch_servers" method = "post">
-	        	<input type = hidden name = "server" value = {{server}}>
-
-	        	<input type = hidden name = "name_index" value = "{{name_index}}">
-		        <tr>
-
-		        	<td valign="top">
-		        		<input align="right"
-		        		       type="image"
-		        		       src="/static/img/icons/png/glyphicons_190_circle_plus.png"
-		        		       width="16" height="16"></td>
-
-		        	{% for a in attribute_list%}
-			        	<td valign="top">
-			        		{% if a == "description" %}
-				        		{{recipie[a]}}
-				        		<br>
-				        		<table>
-
-				        		{% for param in recipie['parameters'] %}
-				        		    <tr>
-				        		    <td>
-				        		    {{param|capitalize}}
-									</td>
-									<td>
-				        		    <input type = "text"
-				        		           name = "parameter_{{param}}"
-				        		           value = "{{recipie['parameters'][param]}}">
-									</td>
-									</tr>
-				        		{% endfor %}
-				        		</table>
-				        	{% elif a == "image" %}
-				        		<img src="{{recipie[a]}}" width="128">
-				        	{% else %}
-				      	       {{recipie[a]}}
-				      	    {% endif %}
-			        	</td>
-
-
-			        {%endfor%}
-		        </tr>
-		        {% set name_index = name_index+1 %}
-		        </form>
-		        {% endfor %}
-		        </table>
-	        </div>
-       </div>
-
-
-    {% endfor %}
+<div class="page-header">
+  <h1> <i class="fa fa-rocket"></i> Cloudmesh IaaS and PaaS Launcher</h1>
 </div>
+
+{% for name in recipies %}
+
+  {% set recipie = recipies[name] %}
+
+
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+         {{name | capitalize}}
+         <div class="pull-right">
+         <img src="{{recipie['image']}}" style="height:36px;">
+	 </div>
+      </h3>
+    </div>
+    <div class="panel-body">
+
+      {% set parameters = recipie['parameters'] %}
+      <legend> Description </legend>
+      {{ recipie['description'] }}
+      
+      <form class="form-horizontal">
+      <fieldset>
+      <legend>Parameters</legend>
+
+      {% for parameter in parameters %}
+	{% set key = parameter.keys()[0] %}
+	{% set value = parameter[key] %}
+         <div class="control-group">
+	   <label class="control-label" for="textinput"> {{ key | capitalize }} </label>
+
+	    <div class="controls">
+	      {% if value['type'] == 'integer' %}
+	         <input type="number" step="any" name={{key}} placeholder="{{value['value']}}" >
+	     
+	      {% elif value['type'] == 'float' %}
+	         <input type="number" step="0.1" name={{key}} placeholder="{{value['value']}}" >
+	   {% elif value['type'] == 'string' %}
+	      <input type="text" name={{key}} placeholder="{{value['value']}}" >	     	     
+	   {% elif value['type'] == 'selector' %}
+	    <div class="form-inline">
+	     {% for button in value['value'] %}
+	        <input class="form-control" type="radio" name="{{button}}} value="{{button}}" />
+	        <label> {{ button }} </label>
+	      {% endfor %}
+	     </div>
+	   {% endif %}
+	     </div>
+         </div>
+      {% endfor %}
+
+    </div>
+    <div class="panel-footer">
+         <a class="btn btn-success" href="#" style="color:white"> <i class="fa fa-rocket fa-lg"></i> Start </a>
+    </div>
+  </div>
+
+  <hr>
+
+</fieldset>
+</form>
+
+{% endfor %}
+
 
 {% endblock %}
