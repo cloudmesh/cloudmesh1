@@ -4,4 +4,3 @@ def shell(*args, **kwargs):
     return cm_sh(args, kwargs)
 
 
-xd
