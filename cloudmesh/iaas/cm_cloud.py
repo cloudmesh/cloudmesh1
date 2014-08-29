@@ -714,7 +714,7 @@ class CloudCommand(CloudManage):
     try:
         config = cm_config()
     except:
-        log.error("There is a problem with the configuration yaml files")
+        Console.error("There is a problem with the configuration yaml files")
         
     username = config['cloudmesh']['profile']['username']
 
