@@ -3,6 +3,7 @@ from cloudmesh.iaas.cm_cloud import CloudManage
 from cloudmesh_common.logger import LOGGER
 from tabulate import tabulate
 from pprint import pprint
+from cmd3.console import Console
 
 #list_command_table_format = "simple"
 list_command_table_format = "grid"
@@ -60,7 +61,7 @@ class ListInfo(object):
     try:
         config = cm_config()
     except:
-        log.error("There is a problem with the configuration yaml files")
+        Console.error("There is a problem with the configuration yaml files")
     
     username = config['cloudmesh']['profile']['username']
     
@@ -225,10 +226,10 @@ class ListInfo(object):
         try:
             selected_project = self.cloudmanage.mongo.db_defaults.find_one({'cm_user_id': self.username + "OIO"})['project']
         except Exception, NoneType:
-            log.error("clould not find selected project in the database")
+            Console.warning("could not find selected project in the database")
 
         except Exception, e:
-            log.error("clould not connect to the database")
+            Console.error("could not connect to the database")
             print e
             
         print "\n"
@@ -248,7 +249,7 @@ class ListInfo(object):
             try:
                 projects[state] = self.cloudmanage.mongo.db_user.find_one({'cm_user_id': self.username})['projects'][state]
             except:
-                log.error("clould not find objects or connect to the database containing the projects")
+                Console.error("could not find objects or connect to the database containing the projects")
 
             to_print = []
             if projects[state] == None:
@@ -303,10 +304,10 @@ class ListInfo(object):
             else:
                 name = self.cloudmanage.get_selected_cloud(self.username)
             if self.cloudmanage.get_clouds(self.username, getone=True, cloudname=name) == None:
-                log.error("no cloud information of '{0}' in database".format(name))
+                Console.error("no cloud information of '{0}' in database".format(name))
                 return False
             if name not in activeclouds:
-                log.error("cloud '{0} is active, please activate a cloud by 'cloud on [CLOUD]'".format(name))
+                Console.warning("cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(name))
                 return False
             return [name]
         
