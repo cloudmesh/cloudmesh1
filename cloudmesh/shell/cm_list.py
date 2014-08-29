@@ -4,6 +4,7 @@ from cloudmesh_common.logger import LOGGER
 from tabulate import tabulate
 from pprint import pprint
 from cmd3.console import Console
+from cloudmesh.iaas.cm_cloud import shell_command_cloud
 
 #list_command_table_format = "simple"
 list_command_table_format = "grid"
@@ -18,7 +19,7 @@ def shell_command_list(arguments):
         list image [CLOUD|--all] [--refresh]
         list vm [CLOUD|--all] [--refresh]
         list project
-        list cloud
+        list cloud [--column=COLUMN]
 
     Arguments:
 
@@ -30,6 +31,17 @@ def shell_command_list(arguments):
         --all      list information of all active clouds
         --refresh  refresh data before list
 
+        --column=COLUMN       specify what information to display in
+                               the columns of the list command. For
+                               example, --column=active,label prints
+                               the columns active and label. Available
+                               columns are active, label, host,
+                               type/version, type, heading, user,
+                               credentials, defaults (all to diplay
+                               all, emiall to display all except
+                               credentials and defaults)
+
+        
     Description:
         
         List clouds and projects information, if the CLOUD argument is not specified, the 
@@ -44,8 +56,8 @@ def shell_command_list(arguments):
             list the vms
         list project
             list the projects
-        list cloud
-            list active clouds
+        list cloud [--column=COLUMN]
+	     same as: cloud list
 
     See Also:
 
@@ -53,7 +65,7 @@ def shell_command_list(arguments):
                     
     """
     call = ListInfo(arguments)
-    call.call_procedure()
+    call.execute()
     
     
 class ListInfo(object):
@@ -261,6 +273,12 @@ class ListInfo(object):
 
         
     def _list_cloud(self):
+        """ same as the shell_command_cloud list"""
+        arguments = dict(self.arguments)
+        arguments["list"] = True
+        shell_command_cloud(arguments)
+
+        """
         self.cloudmanage._connect_to_mongo()
         active_clouds = []
         other_clouds = []
@@ -279,7 +297,7 @@ class ListInfo(object):
         print "\n"
         print tabulate(other_clouds, ["other clouds"], tablefmt=list_command_table_format)
         print "\n"
-            
+        """    
     
     # --------------------------------------------------------------------------
     def get_working_cloud_name(self):
@@ -312,7 +330,7 @@ class ListInfo(object):
             return [name]
         
         
-    def call_procedure(self):
+    def execute(self):
 
         if self.arguments['flavor'] == True:
             self._list_flavor()
