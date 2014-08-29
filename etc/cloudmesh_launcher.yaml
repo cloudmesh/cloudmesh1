@@ -35,7 +35,8 @@ cloudmesh:
                           - sierra
                   image: /static/img/launcher/mooc.png
                   script: 
-                  - echo "hello" 
+                    type: sh
+                    value: echo "hello" {{ selector }} -np {{ nodes }}
             slurm:
                   name: Slurm Cluster
                   description:

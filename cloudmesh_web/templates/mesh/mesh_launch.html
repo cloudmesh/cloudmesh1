@@ -29,7 +29,7 @@
       <legend> Description </legend>
       {{ recipie['description'] }}
       
-      <form class="form-horizontal">
+      <form class="form-horizontal" method="POST">
       <fieldset>
       <legend>Parameters</legend>
 
@@ -41,16 +41,16 @@
 
 	    <div class="controls">
 	      {% if value['type'] == 'integer' %}
-	         <input type="number" step="any" name={{key}} placeholder="{{value['value']}}" >
+	         <input type="number" step="any" name="{{name}}-{{key}}" placeholder="{{value['value']}}" value="{{value['value']}}" >
 	     
 	      {% elif value['type'] == 'float' %}
-	         <input type="number" step="0.1" name={{key}} placeholder="{{value['value']}}" >
+	         <input type="number" step="0.1" name="{{name}}-{{key}}" placeholder="{{value['value']}} value="{{value['value']}}" >
 	   {% elif value['type'] == 'string' %}
-	      <input type="text" name={{key}} placeholder="{{value['value']}}" >	     	     
+	      <input type="text" name="{{name}}-{{key}}" placeholder="{{value['value']}}" value="{{value['value']}}" >	     	     
 	   {% elif value['type'] == 'selector' %}
 	    <div class="form-inline">
 	     {% for button in value['value'] %}
-	        <input class="form-control" type="radio" name="{{button}}} value="{{button}}" />
+	        <input class="form-control" type="radio" name="{{name}}-{{key}}" value="{{button}}" />
 	        <label> {{ button }} </label>
 	      {% endfor %}
 	     </div>
@@ -61,7 +61,9 @@
 
     </div>
     <div class="panel-footer">
-         <a class="btn btn-success" href="#" style="color:white"> <i class="fa fa-rocket fa-lg"></i> Start </a>
+        
+
+         <button formaction="/cm/launch/"> <i class="fa fa-rocket fa-lg"></i> Start </button>
     </div>
   </div>
 

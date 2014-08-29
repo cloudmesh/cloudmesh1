@@ -27,20 +27,14 @@ rain_permission = Permission(RoleNeed('rain'))
 # list of recipies which we need to get from cm_launcher.yaml
 
 
-@launch_module.route('/cm/launch/<host>/<recipie>')
-@login_required
-@rain_permission.require(http_exception=403)
-def launch_run ():
-    log.error ("not yet implemented")
-    pass
 
 
+# @rain_permission.require(http_exception=403)
+# @login_required
 
-@launch_module.route('/cm/launch/launch_servers', methods=["POST"])
-@login_required
-@rain_permission.require(http_exception=403)
+@launch_module.route('/cm/launch/launch_servers/', methods=["POST"])
 def launch_servers():
-
+    """
 
     launcher_config = ConfigDict(filename=config_file("/cloudmesh_launcher.yaml"))
     celery_config = ConfigDict(filename=config_file("/cloudmesh_celery.yaml"))
@@ -62,21 +56,37 @@ def launch_servers():
     task_launch.apply_async(queue=queue, args=[return_dict])
     return "Task has been submitted to the queue.... <br/><br/>Data sent was:<br/>" + str(return_dict)
     # return "tasks have been submitted to the queue."
-
+    """
+    log.error ("not yet implemented")    
+    print "HALLO"
+    
 #     return_string = "in server " + server + "<br>" #+ str(resources)
 #     for r in resources:
 #         return_string += " start " + str(r) +" - " + str(request.form.get(r+"-select")) +"</br>"
 #     return return_string
 
 
-@launch_module.route('/cm/launch')
+@launch_module.route('/cm/launch/', methods=['POST', 'GET'])
 @login_required
 @rain_permission.require(http_exception=403)
 def display_launch_table():
+
+    if request.method == 'POST':
+        print "HHHHHHHHHHHHH"
+        print "HHHHHH", request.form.keys()
+        for key in request.form.keys():
+            print key, ":", request.form[key]
+
+    else:
+
+        print "HEY JUDE"
+        
     launcher_config = ConfigDict(filename=config_file("/cloudmesh_launcher.yaml"))
     launch_recipies = launcher_config.get("cloudmesh.launcher.recipies")
+        
     return render_template('mesh/mesh_launch.html',
                            recipies=launch_recipies)
+
 
 @launch_module.route('/cm/launch/db_stats')
 @login_required
@@ -101,3 +111,11 @@ def launch_clear():
     # BUG: this return value does not look right
     #
     return "jsdnklnkls"
+
+
+@launch_module.route('/cm/launch/run/<host>/<recipie>')
+@login_required
+@rain_permission.require(http_exception=403)
+def launch_run ():
+    log.error ("not yet implemented")
+    pass
