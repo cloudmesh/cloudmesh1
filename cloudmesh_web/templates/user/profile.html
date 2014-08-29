@@ -3,19 +3,44 @@
 {% from "_helper.html" import image_link %}
 {% from "_helper.html" import cm_image_input %}
 
+{% macro button_edit(label, url="#") -%}
+         <a class="btn btn-success" href="{{url}}" style="color:white"> <i class="fa fa-pencil-square-o fa-lg"></i> {{ label }} </a>
+{%- endmacro %}
+
+{% macro input_text(name, value='', type='text', size=20, disabled=False) -%}
+<div class="control-group">
+  <label class="control-label" for="textinput">{{ name |capitalize }}</label>
+  <div class="controls">
+      <input id='textinput-{{ name }}'
+           name="{{ name }}"
+           type="{{ name }}"
+           placeholder="{{ name }}"
+           value="{{ value|e }}"
+           size="{{ size }}"
+           {% if disabled %} disabled {% endif %}>
+    {% if disabled %} <i class="fa fa-ban text-danger"></i>  {% endif %}
+  </div>
+</div>
+{%- endmacro %}
+
+{% macro input_area(name, value='', type='text', size=20, disabled=False) -%}
+<div class="control-group">
+  <label class="control-label" for="textarea">{{ name |capitalize }}</label>
+  <div class="controls">
+      <textarea id='textarea-{{ name }}'
+           name="{{ id }}"
+           type="{{ name }}"
+           placeholder="{{ name }}"
+           {% if disabled %} disabled {% endif %} >{{value | e }}</textarea>
+        {% if disabled %} <i class="fa fa-ban text-danger"></i> {% endif %}
+  </div>
+</div>
+{%- endmacro %}
+
 
 {% block content %}
 
-<legend> <i class="fa fa-users"></i> Profile </legend>
-
-<script type="text/javascript" charset="utf-8">
-
-$(function() {
-
-  $('.edit').editable('/profile');
-
-});
-</script>
+<legend> <i class="fa fa-cloud"></i> Cloud Profile </legend>
 
     <ul>
       <li><a href="/mesh/images">Select Default Images</a></li>
@@ -23,107 +48,37 @@ $(function() {
     </ul>
 
 
-<form name="profile" action="/profile/" method="POST">
+<legend> <i class="fa fa-users"></i> Profile </legend>
+
+
+<form class="form-horizontal" name="profile" action="/profile/" method="POST">
+<fieldset>
+
+<!-- Form Name -->
+<legend>
+
+  <font="black">{{ image_link ("right", "fa-pencil-square-o", "https://portal.futuregrid.org/my/edit/Contact") }}</font>
+ Personal Details     
+</legend>
+
+{{ input_text('firstname', value=user.profile.firstname, disabled=True) }}
+{{ input_text('lastname', value=user.profile.lastname, disabled=True) }}
+{{ input_text('phone', value=user.profile.phone, disabled=True) }}
+{{ input_text('email', value=user.profile.email, disabled=True) }}
+{{ input_area('address', value=user.profile.address, disabled=True) }}
+
+    
+<legend> FutureGrid </legend>
+
+{{ input_text('username', value=user.portalname, disabled=True) }}
+
+<!-- -------------- Projects ---------------------------------- -->    
+<div class="control-group">
+  <label class="control-label" for="textarea">Projects</label>
+  <div class="controls">
 
 <table>
-    <tr>
-    	<th>
-    		<font="black">{{ image_link ("right", "fa-pencil-square-o", "https://portal.futuregrid.org/my/edit/Contact") }}</font>
-
-    	</th>
-    	<th colspan="3"><b> Personal Details </b></th>
-    </tr>
-	<tr>
-		<td></td><td>Firstname</td>
-		<td colspan="2"> {{ user.profile.firstname }}
-        </td>
-    </tr>
-    <tr>
-    	<td></td><td>Lastname</td>
-		<td colspan="2">{{ user.profile.lastname }}
-		</td>
-	</tr>
-	<tr><td></td><td>Phone</td>
-	<td colspan="2">{{ user.profile.phone }}
-	</td></tr>
-	<tr><td></td><td>e-mail</td>
-	<td colspan="2">{{ user.profile.email }}
-	</td></tr>
-	<tr><td></td><td>Address</td>
-	<td colspan="2">{{ user.profile.address }}
-	</tr>
-
-	<!-- -------------- CLOUDMESH DETAILS ---------------------------------- -->
-
-	<tr>
-     	<th></th><th colspan="3"><b> Cloudmesh  </b></th>
-	</tr>
-
-	<tr>
-	  <td>
-	  </td>
-	  <td>Roles</td>
-	  <td colspan="2">{{userdata.roles | join(', ')}}</td>
-	</tr>
-
-
-	<!-- -------------- HPC DETAILS ---------------------------------- -->
-
-	<tr>
-     	<th></th><th colspan="3"><b> HPC </b></th>
-	</tr>
-
-	<tr>
-	  <td>
-	  </td>
-	  <td>Username</td>
-	  <td colspan="2">{{user.portalname}}</td>
-	</tr>
-
-	<!-- -------------- CLOUD DETAILS ---------------------------------- -->
-	<tr><th></th><th colspan="3"><b> Cloud Details</b></th></tr>
-
-	<tr>
-	  
-	  <td>
-	    <input align="right" type="submit" value="&#xf0c7;" /> </td>
-	  <td> VM Name </td>
-	  <td colspan="2"><input type="text"
-	    name="field-prefix"
-	    value="{{ user.defaults.prefix }}"
-	    style="width:120px">
-	    -
-	    <input type="text"
-	    name="field-index"
-	    value="{{ user.defaults.index }}"
-	    style="width:120px">
-	    <input type="submit" name="btnindex" value="&#xf0c7; Save VM Name">
-	  </td>
-	</tr>
-	{% for cloud in user.clouds: %}
-
-	   <tr>
-	   	<td></td>
-	   	<th colspan="3">{{cloud}}</th>
-	   </tr>
-	   {% for a in ['name','enabled', 'cm_type_version', 'tenantId', 'id', 'cm_type', 'email'] %}
-		<tr>
-			<td></td>
-			<td>{{a }}</td>
-			<td colspan="2">{{user.clouds[cloud][a]}}</td>
-		</tr>
-
-	{% endfor %}
-	{% endfor %}
-
-
-
-
-<!-- -------------- Projects ---------------------------------- -->
-	<tr><th></th><th colspan="3"><b> Projects </b></th></tr>
-
-
-	     {% for projectname in user.projects["active"] %}
+  	     {% for projectname in user.projects["active"] %}
 		<tr>
 	 	<td>
 	 	<input type="radio"
@@ -166,55 +121,59 @@ $(function() {
 		{% endif %}
 	    {% endfor %}
 	</tr>
+</table>
+</div>
+</div>    
+    
+<legend> Cloudmesh </legend>
 
+{% set roles = userdata.roles | join(', ') %}
+{{ input_text('roles', value=roles, disabled=True) }}
 
-	<!-- -------------- Security Groups ---------------------------------- -->
+  	<!-- -------------- CLOUD DETAILS ---------------------------------- -->
 
-	<tr><th></th><th colspan="3"><b> Security Groups </b></th></tr>
+<div class="control-group">
+  <label class="control-label" for="textarea">VM Name</label>
+  <div class="controls">
+    
+	    <input type="text"
+	    name="field-prefix"
+	    value="{{ user.defaults.prefix }}"
+	    style="width:120px">
+	    -
+	    <input type="text"
+	    name="field-index"
+	    value="{{ user.defaults.index }}"
+	    style="width:120px">
+	    <input type="submit" class="btn btn-success" name="btnindex" value="&#xf0c7;&nbsp; Save">
+</div>
+</div>
+	<table>
+	{% for cloud in user.clouds: %}
 
-	<tr>
-	  <td>
-	    <input align="right" type="submit" value="&#xf0c7;" /> 
-	  </td>
-	  <td>
-	    <b> Default </b>
-	  </td>
+	   <tr>
+	   	<td></td>
+	   	<th colspan="3">{{cloud}}</th>
+	   </tr>
+	   {% for a in ['name','enabled', 'cm_type_version', 'tenantId', 'id', 'cm_type', 'email'] %}
+		<tr>
+			<td></td>
+			<td>{{a }}</td>
+			<td colspan="2">{{user.clouds[cloud][a]}}</td>
+		</tr>
 
-	  <td colspan="2">
-
-
-	{% for group in configuration['security']['security_groups'].keys() %}
-
-	  <input type="radio"
-	  name="field-securitygroup"
-	  value="{{ group }}"
-	  id="{{ group }}"
-	  {% if group ==  user.defaults.securitygroup %}
-	    checked="checked"
-	  {% endif %}
-	  onclick="document.forms['profile'].submit()"
-	  />
-
-
-	  {{ group }}
 	{% endfor %}
-
-
-	</td>
-	</tr>
-
+	{% endfor %}
+        </table>
 
 <!-- -------------- Clouds ---------------------------------- -->
 
-	<tr><th></th><th colspan="3"><b> Clouds </b></th></tr>
+<div class="control-group">
+  <label class="control-label" for="textarea">Activated Clouds</label>
+  <div class="controls">
 
-	<tr>
-		<td></td>
-		<td valign="top">
-			<a href="/mesh/register/clouds">
-				Registered Clouds
-			</a> - Check to Activate
-		</td><td colspan="2">
+
+
 	  {% if user.defaults.registered_clouds|count > 0 %}
     	  {% for cloudname in user.defaults.registered_clouds %}
     	  <input type="checkbox"
@@ -226,17 +185,20 @@ $(function() {
     	        {% endif %}
     	        onclick="document.forms['profile'].submit()"
     	        /> {{ cloudname}}
-    	        <br>
+
     	  {% endfor %}
+          &nbsp;&nbsp;
+          <a class="btn btn-success" href="/mesh/register/clouds"> <i class="fa fa-plus-circle"></i> Add </a>
 	  {% else %}
-	    No Registered Cloud. Go to <a href="/mesh/register/clouds"><b>Register Page</b></a> to Register.
+	    No Registered Cloud. 
 	  {% endif %}
-	</td></tr>
+</div>
+</div>
 
 
-	<tr>
-		<td></td><td>Default Cloud </td>
-		<td colspan="2">
+<div class="control-group">
+  <label class="control-label" for="textarea">Default Cloud</label>
+  <div class="controls">
             {% if user.defaults.activeclouds|count > 0 %}
     			{% for cloudname in user.defaults.activeclouds %}
     				{%  if cloudname in user.defaults.activeclouds %}
@@ -255,46 +217,74 @@ $(function() {
     		{% else %}
     		    Please Make Sure You Have <a href="/mesh/register/clouds"><b>Registered and Activated</b></a> Any Clouds!
     		{% endif %}
-		</td>
-	</tr>
+<div>
+</div>
+
+
+</fieldset>
+
 
 <!-- -------------- Keys ---------------------------------- -->
-	<tr>
-		<th>
-			{{ image_link ("right", "fa-pencil-square-o", "https://portal.futuregrid.org/my/ssh-keys") }}
-		</th><th colspan="3"><b> Keys </b></th></tr>
-	<tr>
+
+<legend> {{ image_link ("right", "fa-pencil-square-o", "https://portal.futuregrid.org/my/ssh-keys") }} Keys </legend>
+
+
+<fieldset>
+
+<!-- Multiple Radios -->
+<div class="control-group">
+  <label class="control-label" for="radios">Select the default key</label>
+  <div class="controls">
 	{% if (user["keys"] | count) > 0 %}
 		{% set defaultkey = user.defaults.key %}
 
+                <table bgcolor="white">
 		{% for name in user["keys"]["keylist"] %}
+                    <tr>
 		    {% set value = user["keys"]["keylist"][name] %}
 		    {% if name == defaultkey %}
 				{% set checked = 'checked' %}
 			{% else %}
 				{% set checked = '' %}
 			{% endif %}
-			<tr>
-			  	<td><input type="radio"
+		                 <td>
+                                 <label>
+				  <input type="radio"
 			  		name="field-key"
 			  		value="{{name}}" {{checked}}
-					 onclick="document.forms['profile'].submit()" title="select">
-		  		</td>
-		  		<td>
-				  <a href="delete/{{name}}/"><i class="fa fa-trash-o"></i></a>&nbsp;
-				  {{name}}
-				</td>
-					
-				<td colspan="2">
-				  {{  user["keys"]["keylist"][name] | replace ("key ssh", "") |  filter_fingerprint  }}
-				</td>
-			</tr>
-		{% endfor %}
+					onclick="document.forms['profile'].submit()" title="select">
 
+				  {{ name }}
+				   </td>
+				   <td>
+                                  <i> {{  user["keys"]["keylist"][name]| replace ("key ssh", "") | filter_fingerprint }} </i>
+                                  </label>
+				  </td>
+	              <td>
+		      <a href="delete/{{name}}/" class="btn btn-default" align="right"> Delete <i class="fa fa-trash-o"></i></a>
+		      </td>
+
+				  
+
+		      </tr>
+		{% endfor %}
+		</table>
 	{% else %}
-		There are no keys present, please add one.
+		      
+		<tr> There are no keys present, please add one.<tr>
 
 	{% endif %}
+        </table>
+
+  </div>
+</div>
+
+</fieldset>
+
+
+
+
+
 	<!--
 	<form action="" method=post enctype=multipart/form-data name = "addkeysform">
 
@@ -310,7 +300,48 @@ $(function() {
 	</form>
 	-->
 
-</table>
+
+
+
+<script type="text/javascript" charset="utf-8">
+
+$(function() {
+
+  $('.edit').editable('/profile');
+
+});
+</script>
+
+
+<legend> Security </legend>
+    
+<div class="control-group">
+  <label class="control-label" for="textarea">Default Security Groups</label>
+  <div class="controls">
+
+
+
+	<!-- -------------- Security Groups ---------------------------------- -->
+
+
+	{% for group in configuration['security']['security_groups'].keys() %}
+
+	  <input type="radio"
+	  name="field-securitygroup"
+	  value="{{ group }}"
+	  id="{{ group }}"
+	  {% if group ==  user.defaults.securitygroup %}
+	    checked="checked"
+	  {% endif %}
+	  onclick="document.forms['profile'].submit()"
+	  />
+
+
+	  {{ group }}
+	{% endfor %}
+
+</div>
+</div>
 </form>
 
 {{show}}
