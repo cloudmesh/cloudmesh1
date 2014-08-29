@@ -40,6 +40,10 @@
 
 {% block content %}
 
+ 
+
+
+
 <legend> <i class="fa fa-cloud"></i> Cloud Profile </legend>
 
     <ul>
@@ -135,13 +139,14 @@
 <div class="control-group">
   <label class="control-label" for="textarea">VM Name</label>
   <div class="controls">
-    
+
 	    <input type="text"
 	    name="field-prefix"
 	    value="{{ user.defaults.prefix }}"
 	    style="width:120px">
 	    -
-	    <input type="text"
+	    <input type="number"
+            step = "any"
 	    name="field-index"
 	    value="{{ user.defaults.index }}"
 	    style="width:120px">
