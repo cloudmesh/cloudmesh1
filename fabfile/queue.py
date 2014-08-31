@@ -13,6 +13,8 @@ from cloudmesh.launcher.queue.celery import celery_launcher_queue as l_queue
 from cloudmesh.pbs.celery import celery_pbs_queue as pbs_queue
 from celery import Celery
 from cloudmesh_install import config_file
+from cloudmesh_common.util import PROGRESS
+PROGRESS.set('Cloudmesh Services', 10)
 
 __all__ = ['start', 'stop', 'list', 'clean', 'gui', 'monitor', 'kill', 'ls', 'lspbs', 'flower_server']
 
@@ -99,7 +101,7 @@ def monitor():
 
 def celery_command(command, app, workers, queue, concurrency=None):
     """execute the celery command on the application and workers specified"""
-
+    PROGRESS.next()
     worker_str = " ".join(workers)
     exec_string = "celery multi {0} {1} -A {2} -l info -Q {3}".format(command, worker_str, app, queue)
     # directories for log and pid file
@@ -120,10 +122,14 @@ def start(view=None):
     with settings(warn_only=True):
         stop()
         time.sleep(2)
+        PROGRESS.next()
         mq.start()
+        PROGRESS.next()        
         time.sleep(2)
-
+        PROGRESS.next()
+        
         for worker in workers:
+            PROGRESS.next()            
             concurrency = None;
             if "concurrency" in workers[worker]:
                 concurrency = workers[worker]["concurrency"]
@@ -133,6 +139,7 @@ def start(view=None):
                            concurrency=concurrency)
 
     if view is None:
+        PROGRESS.next()        
         time.sleep(2)
         # local("celery worker --app={0} -l info".format(app))
         # local("celery worker -l info".format(app))

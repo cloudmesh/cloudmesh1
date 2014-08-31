@@ -21,7 +21,7 @@ def grep(pattern, filename):
         return ''
 
 
-def banner(txt=None, c="#"):
+def banner(txt=None, c="#", debug=True):
     """prints a banner of the form with a frame of # arround the txt::
 
       ############################
@@ -35,11 +35,12 @@ def banner(txt=None, c="#"):
     :param c: thecharacter used instead of c
     :type c: character
     """
-    print
-    print "#", 70 * c
-    if txt is not None:
-        print "#", txt
+    if debug:
+        print
         print "#", 70 * c
+        if txt is not None:
+            print "#", txt
+            print "#", 70 * c
 
 
 def path_expand(text):
