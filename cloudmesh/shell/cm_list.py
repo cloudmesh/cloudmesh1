@@ -31,7 +31,7 @@ def shell_command_list(arguments):
         --all      list information of all active clouds
         --refresh  refresh data before list
 
-        --column=COLUMN       specify what information to display in
+        --column=COLUMN        specify what information to display in
                                the columns of the list command. For
                                example, --column=active,label prints
                                the columns active and label. Available
@@ -57,7 +57,7 @@ def shell_command_list(arguments):
         list project
             list the projects
         list cloud [--column=COLUMN]
-	     same as: cloud list
+	        same as: cloud list
 
     See Also:
 
