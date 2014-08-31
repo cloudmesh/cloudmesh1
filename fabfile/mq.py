@@ -8,6 +8,9 @@ from cloudmesh.util.password import get_password, get_user, get_host
 from cloudmesh.util.menu import ascii_menu
 from cloudmesh_common.util import yn_choice
 from pprint import pprint
+from cloudmesh_common.util import PROGRESS
+PROGRESS.set('Cloudmesh Services', 10)
+
 
 input = raw_input
 
@@ -27,6 +30,8 @@ __all__ = ['user',
            "info"]
 
 PRODUCTION=cm_config_server().get('cloudmesh.server.production')
+
+
 
 def installed(name):
     """check if the command with the name is installed and return true if it is"""
@@ -138,6 +143,8 @@ def start(detached=None):
         while not yn_choice("Is rabbitmq running?", 'n'):
             print "Please start rabbitmq-server."
     else:
+        PROGRESS.next()
+        print 
         if detached is None:
             local("sudo rabbitmq-server -detached")
         else:
