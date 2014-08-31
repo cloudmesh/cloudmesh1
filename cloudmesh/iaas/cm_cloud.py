@@ -820,7 +820,7 @@ class CloudCommand(CloudManage):
         
     def _cloud_info(self):
         def printing(cloud):
-            #cloud = dict_uni_to_ascii(cloud)
+            cloud = dict_uni_to_ascii(cloud)
             banner(cloud['cm_cloud'])
             pprint(cloud)
             # -------------------------------------------------
