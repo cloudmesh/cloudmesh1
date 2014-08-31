@@ -4,6 +4,9 @@ import sys
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import banner
 from cloudmesh_install import config_file
+from cloudmesh_common.util import PROGRESS
+ 
+from pprint import pprint
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -33,11 +36,14 @@ except Exception, e:
     sys.exit()
 
 
-from fabric.api import task, local, execute, hide, settings
+import fabric
+from fabric.api import task, local, execute, hide, settings, run
 from fabric.contrib.console import confirm
 import os
 import webbrowser
 import platform
+
+
 
 from cloudmesh_common.util import path_expand
 
@@ -52,7 +58,15 @@ web_browser = "firefox"
 if sys.platform == 'darwin':
     web_browser = "open"
 
-
+def execute_command(msg, command, debug):
+    _capture = not debug
+    if debug:
+        banner(msg, debug=debug)
+    else:
+        PROGRESS.next()
+    local(command, capture=_capture)
+        
+    
 #
 # VERSION MANAGEMENT
 #
@@ -82,14 +96,15 @@ def stop(server="server"):
     kill(server)
 
 @task
-def kill(server="server"):
+def kill(server="server", debug=True):
     """kills all server processes """
     with settings(warn_only=True):
-        local("fab mongo.stop")
+        execute_command("STOP MONGO", "fab mongo.stop", debug=debug)
         result = local('ps -ax | fgrep "python {0}.py" | fgrep -v fgrep'.format(server), capture=True).split("\n")
         for line in result:
-            pid = line.split(" ")[0]
-            local("kill -9 {0}".format(pid))
+            if line is not '':
+                pid = line.split(" ")[0]
+                local("kill -9 {0}".format(pid))
 
         # local("fab queue.stop")
 
@@ -104,28 +119,68 @@ def quick(server="server", browser='yes'):
     local("cd cloudmesh_web; python {0}.py &".format(server))
     # view(link)
 
+
+
 @task
-def start(server="server", browser='yes'):
+def start(server="server", browser='yes', debug=False):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link"""
-    banner("KILL THE SERVER")
-    kill()
-
-    banner("INSTALL CLOUDMESH")
-    local("python setup.py install")
-
-    banner("START MONGO")
-    local("fab mongo.start")
-
-    banner("START RABITMQ")
-    local("fab queue.start")
-
-    banner("START FLOWER")
-    local("fab queue.flower_server")
     
-    banner("START WEB SERVER")
-    local("cd cloudmesh_web; python {0}.py &".format(server))
-    # view(link)
+    pprint (fabric.state.output)
 
+    debug = False
+    
+    fabric.state.output.debug  = debug
+    fabric.state.output.running  = debug
+    fabric.state.output.status  = debug
+    fabric.state.output.stdout  = debug
+    fabric.state.output.error  = debug
+    fabric.state.output.warnings  = debug
+    fabric.state.output.aborts  = debug            
+    
+    """
+        'aborts': True,
+        'debug': False,
+        'running': True,
+        'status': True,
+        'stderr': True,
+        'stdout': True,
+        'user': True,
+        'warnings': True
+        }
+    """
+
+    PROGRESS.set('Cloudmesh Services', 10)
+    banner(debug)
+
+    banner("KILL THE SERVER", debug=debug)
+    r = kill()
+    if debug:
+        print r
+    else:
+        PROGRESS.next()
+
+    execute_command("INSTALL CLOUDMESH",
+                "python setup.py install",
+                debug)
+
+
+    execute_command("START MONGO", 
+                "fab mongo.start",
+                debug)
+
+    execute_command("START RABITMQ", 
+            "fab queue.start", debug)
+
+    execute_command("START FLOWER",
+            "fab queue.flower_server",
+            debug)
+    
+    execute_command("START WEB SERVER",
+            "cd cloudmesh_web; python {0}.py &".format(server),
+            True)
+    # view(link)
+    PROGRESS.finish()
+    
 @task
 def web(server="server", browser='yes'):
     banner("START WEB SERVER")

@@ -27,6 +27,26 @@ import cloudmesh_common.bootstrap_util
 import string
 import random
 
+from progress.bar import Bar
+
+class PROGRESS(object):
+
+    defined = False
+    bar = None
+    
+    @classmethod
+    def set(cls, msg, limit):
+        if not cls.defined:
+            cls.bar = Bar(msg, max=limit)
+            cls.defined = True
+
+    @classmethod
+    def next(cls):
+        cls.bar.next()
+
+    @classmethod        
+    def finish(cls):
+        cls.bar.finish()        
 
 def path_expand(text):
     """ returns a string with expanded variable.
@@ -59,7 +79,7 @@ def backup_name(filename):
     return backup
 
 
-def banner(txt=None, c="#"):
+def banner(txt=None, c="#", debug=True):
     """prints a banner of the form with a frame of # arround the txt::
 
       ############################
@@ -73,7 +93,8 @@ def banner(txt=None, c="#"):
     :param c: thecharacter used instead of c
     :type c: character
     """
-    cloudmesh_common.bootstrap_util.banner(txt, c)
+    if debug:
+        cloudmesh_common.bootstrap_util.banner(txt, c, debug=True)
 
 
 def HEADING(txt=None):
