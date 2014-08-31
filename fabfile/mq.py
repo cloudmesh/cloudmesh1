@@ -6,12 +6,41 @@ import platform
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.password import get_password, get_user, get_host
 from cloudmesh.util.menu import ascii_menu
-from cloudmesh_common.util import yn_choice
+from cloudmesh_common.util import yn_choice, path_expand
 from pprint import pprint
+from sh import mkdir
 from cloudmesh_common.util import PROGRESS
+from cloudmesh_common.logger import LOGGER
+log = LOGGER(__file__)
+
 PROGRESS.set('Cloudmesh Services', 10)
 
+rabbit_env = {
+    'rabbitmq_server': "sudo rabbitmq-server",
+    'rabbitmqctl': "sudo rabbitmqctl",
+    'detached': ""
+    }
 
+def set_rabbitmq_env():
+
+    global RABBITMQ_SERVER
+    
+    location = path_expand("~/.cloudmesh/rabbitm")
+    
+    if sys.platform == "darwin":
+        mkdir("-p", location)
+        rabbit_env["RABBITMQ_MNESIA_BASE"] = location
+        rabbit_env["RABBITMQ_LOG_BASE"] = location        
+        os.environ["RABBITMQ_MNESIA_BASE"] = location
+        os.environ["RABBITMQ_LOG_BASE"] = location
+        rabbit_env["rabbitmq_server"]="/usr/local/opt/rabbitmq/sbin/rabbitmq-server"
+        rabbit_env["rabbitmqctl"]="/usr/local/opt/rabbitmq/sbin/rabbitmqctl"        
+    else:
+        print "WARNING: cloudmesh rabbitmq user install not supported, " \
+          "using system install"
+
+set_rabbitmq_env()        
+                
 input = raw_input
 
 __all__ = ['user',
@@ -43,7 +72,7 @@ def install():
     if PRODUCTION:
         print "Installation not enabled in production mode."
         sys.exit()
-    """install the rabitmq"""
+    """install the rabbitmq"""
     if sys.platform == "darwin":
         local("brew install rabbitmq")
         if not installed("rabbitmqctl"):
@@ -59,30 +88,28 @@ def install():
 
 @task
 def user(name=None):
-    ''' create a user in rabit mq
+    ''' create a user in rabbit mq
     
     :param name: if the name is ommited it will be queried for it.
     '''
     if name is None:
-        user = get_user()
-    password = get_password()
-    local("rabbitmqctl {0} {1}".format(name, password))
+        rabbit_env["user"] = get_user()
+    rabbit_env["password"] = get_password()
+    local("{rabbitmqctl} {user} {password}".format(**rabbit_env))
 
 @task
 def host():
-    """adding a host to rabitmq"""
-    host = get_host()
-    local("rabbitmqctl add_vhost {0}".format(host))
+    """adding a host to rabbitmq"""
+    rabbit_env["host"] = get_host()        
+    local("{rabbitmqctl} add_vhost {host}".format(**rabbit_env))
 
 @task
 def allow():
-    """allow a user to access the host in rabitmq"""
-    values = {
-        'host': get_host(),
-        'user': get_user()
-        }
-    # print('rabbitmqctl set_permissions -p {host} {user} ".*" ".*" ".*"'.format(**values))
-    local('rabbitmqctl set_permissions -p {host} {user} ".*" ".*" ".*"'.format(**values))
+    """allow a user to access the host in rabbitmq"""
+    # print('{rabbitmqctl} set_permissions -p {host} {user} ".*" ".*" ".*"'.format(**rabbit_env))
+    rabbit_env["host"] = get_host()
+    rabbit_env["user"] = get_user()    
+    local('{rabbitmqctl} set_permissions -p {host} {user} ".*" ".*" ".*"'.format(**rabbit_env))
 
 @task
 def check():
@@ -125,40 +152,42 @@ def status():
     if PRODUCTION:
         print "Run '/etc/init.d/rabbitmq-server status' to check status"
     else:
-        local("sudo rabbitmqctl status")
+        local("sudo {rabbitmqctl} status".format(**rabbitmq_env))
 
 def list_queues(parameters):
-    """list all queues available in rabitmq"""
+    """list all queues available in rabbitmq"""
     if PRODUCTION:
         print "Use 'rabbitmqctl list_queues' to list queues"
     else:
-        r = local("sudo  rabbitmqctl list_queues {0}".format(parameters), capture=True)
+        rabbit_env['parameters'] = parameters
+        r = local("{rabbitmqctl} list_queues {parameters}".format(**rabbit_env),
+                                                     capture=True)
     return r
 
 @task
 def start(detached=None):
-    """start the rabit mq server"""
+    """start the rabbit mq server"""
     if PRODUCTION:
         print "Run '/etc/init.d/rabbitmq-server start' to start server"
         while not yn_choice("Is rabbitmq running?", 'n'):
             print "Please start rabbitmq-server."
     else:
         PROGRESS.next()
-        print 
+        print
         if detached is None:
-            local("sudo rabbitmq-server -detached")
-        else:
-            local("sudo rabbitmq-server")
+            rabbit_env['detached'] = "-detached"
+        # log.info (rabbit_env)
+        local("{rabbitmq_server} {detached}".format(**rabbit_env))
 
 @task
 def stop():
-    """stop the rabit mq server"""
+    """stop the rabbit mq server"""
     if PRODUCTION:
         print "Run '/etc/init.d/rabbitmq-server stop' to stop server"
         while not yn_choice("Is rabbitmq stopped?", 'n'):
             print "Please stop rabbitmq-server."
     else:
-        local("sudo rabbitmqctl stop")
+        local("{rabbitmqctl} stop".format(**rabbit_env))
 
 
 menu_list = [
