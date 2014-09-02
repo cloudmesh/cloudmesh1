@@ -19,7 +19,7 @@ def shell_command_cloud(arguments):
     ::
 
         Usage:
-            cloud [list] [--column=COLUMN]
+            cloud [list] [--column=COLUMN] [--json|--table]
             cloud info [CLOUD|--all]
             cloud alias NAME [CLOUD]
             cloud select [CLOUD]
@@ -715,7 +715,7 @@ class CloudCommand(CloudManage):
         config = cm_config()
     except:
         Console.error("There is a problem with the configuration yaml files")
-        
+    
     username = config['cloudmesh']['profile']['username']
 
 
