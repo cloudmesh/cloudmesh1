@@ -108,7 +108,6 @@ def install_command(args):
         install system
         install query
         install new
-        install apply_credentials
         install vagrant
         install rc fetch [--username=<username>] [--outdir=<outdir>]
         install rc fill
