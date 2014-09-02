@@ -35,6 +35,14 @@ def set_rabbitmq_env():
         os.environ["RABBITMQ_LOG_BASE"] = location
         rabbit_env["rabbitmq_server"]="/usr/local/opt/rabbitmq/sbin/rabbitmq-server"
         rabbit_env["rabbitmqctl"]="/usr/local/opt/rabbitmq/sbin/rabbitmqctl"        
+    elif sys.platform == "linux2":
+        mkdir("-p", location)
+        rabbit_env["RABBITMQ_MNESIA_BASE"] = location
+        rabbit_env["RABBITMQ_LOG_BASE"] = location        
+        os.environ["RABBITMQ_MNESIA_BASE"] = location
+        os.environ["RABBITMQ_LOG_BASE"] = location
+        rabbit_env["rabbitmq_server"]="/usr/sbin/rabbitmq-server"
+        rabbit_env["rabbitmqctl"]="/usr/sbin/rabbitmqctl"        
     else:
         print "WARNING: cloudmesh rabbitmq user install not supported, " \
           "using system install"
