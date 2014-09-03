@@ -23,7 +23,11 @@ def array_dict_table_printer(array, order=None, header=None):
     for element in array:
         values = []
         for key in order:
-            values.append(element[key])
+            try:
+                tmp = str(element[key])
+            except:
+                tmp = ' '
+            values.append(tmp)
         x.add_row(values)
     x.align = "l"
     return x

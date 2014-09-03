@@ -5,6 +5,7 @@ from tabulate import tabulate
 from pprint import pprint
 from cmd3.console import Console
 from cloudmesh.iaas.cm_cloud import shell_command_cloud
+from docopt import docopt
 
 #list_command_table_format = "simple"
 list_command_table_format = "grid"
@@ -15,9 +16,10 @@ log = LOGGER(__file__)
 def shell_command_list(arguments):
     """
     Usage:
-        list flavor [CLOUD|--all] [--refresh]
-        list image [CLOUD|--all] [--refresh]
-        list vm [CLOUD|--all] [--refresh]
+        list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
+        [--column=COLUMN]
+        list image [CLOUD|--all] [--refresh] [--format=FORMAT]
+        list vm [CLOUD|--all] [--refresh] [--format=FORMAT]
         list project
         list cloud [--column=COLUMN]
 
@@ -37,11 +39,12 @@ def shell_command_list(arguments):
                                the columns active and label. Available
                                columns are active, label, host,
                                type/version, type, heading, user,
-                               credentials, defaults (all to diplay
-                               all, emiall to display all except
+                               credentials, defaults (all to display
+                               all, email to display all except
                                credentials and defaults)
 
-        
+        --format=FORMAT         output format: table, json, csv
+
     Description:
         
         List clouds and projects information, if the CLOUD argument is not specified, the 
@@ -96,9 +99,14 @@ class ListInfo(object):
             if self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['flavors'])
+            p_format = self.arguments['--format']
             for cloud in clouds:
-                self.cloudmanage.print_cloud_flavors(username=self.username, cloudname=cloud.encode("ascii"), itemkeys=itemkeys, refresh=False, output=False)
-        
+                self.cloudmanage.print_cloud_flavors(username=self.username,
+                                                     cloudname=cloud.encode("ascii"),
+                                                     itemkeys=itemkeys,
+                                                     refresh=False,
+                                                     output=False,
+                                                     print_format=p_format)
         else:
             return
         
@@ -158,8 +166,13 @@ class ListInfo(object):
             if self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['images'])
+            p_format = self.arguments['--format']
             for cloud in clouds:
-                self.cloudmanage.print_cloud_images(username=self.username, cloudname=cloud.encode("ascii"), itemkeys=itemkeys, refresh=False, output=False)
+                self.cloudmanage.print_cloud_images(username=self.username,
+                                                    cloudname=cloud.encode("ascii"),
+                                                    itemkeys=itemkeys,
+                                                    refresh=False, output=False,
+                                                   print_format=p_format)
         
         else:
             return
@@ -225,8 +238,14 @@ class ListInfo(object):
             if self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['servers'])
+            p_format = self.arguments['--format']
             for cloud in clouds:
-                self.cloudmanage.print_cloud_servers(username=self.username, cloudname=cloud.encode("ascii"), itemkeys=itemkeys, refresh=False, output=False)
+                self.cloudmanage.print_cloud_servers(username=self.username,
+                                                     cloudname=cloud.encode("ascii"),
+                                                     itemkeys=itemkeys,
+                                                     refresh=False,
+                                                     output=False,
+                                                     print_format=p_format)
         
         else:
             return
@@ -343,9 +362,9 @@ class ListInfo(object):
         elif self.arguments['cloud'] == True:
             self._list_cloud()
 
-        
-        
-        
-        
-        
-        
+def main():
+    arguments = docopt(shell_command_list.__doc__)
+    shell_command_list(arguments)
+
+if __name__ == '__main__':
+    main()
