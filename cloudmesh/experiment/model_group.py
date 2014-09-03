@@ -82,7 +82,7 @@ def main():
         vm = ExperimentVM(
             cm_label = label,
             cm_userid = username,
-            cloud = "india_openstack_havana",
+            cloud = "india",
             vmid = "myid-{0}".format(i),
             )
         experiment.add(vm)

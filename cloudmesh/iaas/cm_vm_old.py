@@ -44,7 +44,7 @@ def shell_command_vm(arguments):
        -f <FlavorId> --flavor=<FlavorId>    Flavor Id for VM
     
     Examples:
-        $ vm create --cloud=sierra_openstack_grizzly
+        $ vm create --cloud=sierra
         --image=futuregrid/ubuntu-14.04
     '''
     vm = ManageVM(arguments)

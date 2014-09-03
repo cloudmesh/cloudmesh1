@@ -409,7 +409,7 @@ def banner(header):
 # MAIN FOR TESTING
 #####
 if __name__ == "__main__":
-    label = 'sierra_openstack_grizzly'
+    label = 'sierra'
     idm = keystone(label)
     users = idm.get_users()
     tenants = idm.get_tenants()

@@ -188,7 +188,7 @@ class cm_config(ConfigDict):
 
     def get_default(self, cloudname=None, attribute=None):
         """
-        get_default('sierra_openstack_grizzly')
+        get_default('sierra')
         get_default('cloud')
         get_default('index')
         """
@@ -432,13 +432,13 @@ if __name__ == "__main__":
     print "= COMPLETED ================"
     print config.projects('completed')
     print "= SIERRA ================"
-    print config.cloud('sierra_openstack_grizzly')
+    print config.cloud('sierra')
     print "= PROFILE ================"
     print config.get("cloudmesh.profile")
     print "= CLOUDS ================"
     print config.cloudnames()
     print "= RC ================"
-    print config.rc('sierra_openstack_grizzly')
+    print config.rc('sierra')
     print "= DEFAULT ================"
     print config.default
     print "= TO FILE ================"

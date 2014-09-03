@@ -75,7 +75,7 @@ def _display(json_data, headers="firstrow", tablefmt="orgtbl"):
 
 def _select_flavors(data, selected_keys, env=[]):
     '''
-    {"india_openstack_havana": {"1": 
+    {"india": {"1": 
         {"cm_cloud_type": "openstack", 
         "disk": 0,
         "name": "m1.tiny", 
@@ -87,7 +87,7 @@ def _select_flavors(data, selected_keys, env=[]):
         "cm_type_version": "havana", 
         "id": "1",
         "OS-FLV-DISABLED:disabled": false, 
-        "cm_id": "india_openstack_havana-flavors-m1-tiny", 
+        "cm_id": "india-flavors-m1-tiny", 
         "vcpus": 1, 
         "cm_refresh": "2014-06-14T17-21-25Z", 
         "swap": "", 

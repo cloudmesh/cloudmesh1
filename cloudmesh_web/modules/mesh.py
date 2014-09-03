@@ -477,7 +477,7 @@ def mongo_flavors():
 
     # fake entry
 
-    # user['defaults']['pagestatus'] = {'sierra-openstack-grizzly': {"open": "false", "flavor": "3"}}
+    # user['defaults']['pagestatus'] = {'sierra': {"open": "false", "flavor": "3"}}
 
     # commented by HC on Nov. 8, 2013
     # The following check is repetive because these attributes are added
@@ -526,7 +526,7 @@ def mongo_users():
     clouds = {}
     clouds = c.users(usersinclouds)
     # print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
-    # print len(clouds['sierra_openstack_grizzly'])
+    # print len(clouds['sierra'])
 
 
     """

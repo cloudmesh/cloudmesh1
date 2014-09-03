@@ -82,13 +82,13 @@ cloudmesh:
             experiment:
                 db: cloudmeshobj
     keystone:
-        sierra_openstack_grizzly:
+        sierra:
             OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
             OS_CACERT : $HOME/.cloudmesh/sierra-cacert.pem
             OS_PASSWORD : mypassword
             OS_TENANT_NAME : mytennant
             OS_USERNAME : myusername
-        india_openstack_essex:
+        india:
             OS_AUTH_URL : http://computeiporhostname:5000/v2.0
             OS_PASSWORD : password
             OS_TENANT_NAME : tenantname
