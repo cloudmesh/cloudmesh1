@@ -18,8 +18,8 @@ def shell_command_list(arguments):
     Usage:
         list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
         [--column=COLUMN]
-        list image [CLOUD|--all] [--refresh]
-        list vm [CLOUD|--all] [--refresh]
+        list image [CLOUD|--all] [--refresh] [--format=FORMAT]
+        list vm [CLOUD|--all] [--refresh] [--format=FORMAT]
         list project
         list cloud [--column=COLUMN]
 
@@ -99,14 +99,14 @@ class ListInfo(object):
             if self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['flavors'])
-            d_format = self.arguments['--format']
+            p_format = self.arguments['--format']
             for cloud in clouds:
                 self.cloudmanage.print_cloud_flavors(username=self.username,
                                                      cloudname=cloud.encode("ascii"),
                                                      itemkeys=itemkeys,
                                                      refresh=False,
                                                      output=False,
-                                                     print_format=d_format)
+                                                     print_format=p_format)
         else:
             return
         
@@ -166,8 +166,13 @@ class ListInfo(object):
             if self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['images'])
+            p_format = self.arguments['--format']
             for cloud in clouds:
-                self.cloudmanage.print_cloud_images(username=self.username, cloudname=cloud.encode("ascii"), itemkeys=itemkeys, refresh=False, output=False)
+                self.cloudmanage.print_cloud_images(username=self.username,
+                                                    cloudname=cloud.encode("ascii"),
+                                                    itemkeys=itemkeys,
+                                                    refresh=False, output=False,
+                                                   print_format=p_format)
         
         else:
             return
@@ -233,8 +238,14 @@ class ListInfo(object):
             if self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['servers'])
+            p_format = self.arguments['--format']
             for cloud in clouds:
-                self.cloudmanage.print_cloud_servers(username=self.username, cloudname=cloud.encode("ascii"), itemkeys=itemkeys, refresh=False, output=False)
+                self.cloudmanage.print_cloud_servers(username=self.username,
+                                                     cloudname=cloud.encode("ascii"),
+                                                     itemkeys=itemkeys,
+                                                     refresh=False,
+                                                     output=False,
+                                                     print_format=p_format)
         
         else:
             return
