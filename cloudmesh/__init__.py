@@ -20,22 +20,19 @@ except:
 from cloudmesh.config.cm_config import load as load
 
 from cloudmesh.pbs.pbs import PBS 
+#from cloudmesh.cm_mongo import cm_mongo as mesh
+
+#from cloudmesh.cm_mongo import cm_mongo
+
+from cloudmesh.cm_mesh import cm_mesh
 
 """
-from cloudmesh.config.cm_config import cm_config_server
-
-
-
-from cloudmesh.config.cm_config import cm_config
-
-
-from cloudmesh.pbs.pbs import PBS
-
-    from cloudmesh.cm_mesh import cloudmesh as mesh
+def mesh(provider="yaml"):
+    if provider in ["yaml"]:
+        return cm_mesh()
+    elif provider in ["mongo"]:
+        return cm_mongo()
 """
-
-
-
 
 """
 # import sys

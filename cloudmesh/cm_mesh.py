@@ -1,15 +1,14 @@
 import sys
-
+import os
 import pickle
-from sh import fgrep
-from sh import nova
-from sh import tail
+# from sh import nova
+# from sh import tail
+# from sh import fgrep
 from datetime import datetime
 import json
 
-import os
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
+
+from pprint import pprint
 
 from cloudmesh_common.util import HEADING
 from cloudmesh_common.logger import LOGGER
@@ -38,7 +37,7 @@ except:
     log.warning("AZURE NOT ENABLED")
 
 
-class cloudmesh:
+class cm_mesh:
 
     # ----------------------------------------------------------------------
     # global variables that define the information managed by this class
@@ -78,7 +77,7 @@ class cloudmesh:
 
         self.configuration = cm_config()
 
-        # pp.pprint (configuration)
+        # pprint (configuration)
 
         active_clouds = self.configuration.active()
         # print active_clouds
@@ -606,7 +605,7 @@ class cloudmesh:
 
 if __name__ == "__main__":
 
-    c = cloudmesh()
+    c = cm_mesh()
     print c.clouds
     """
     c.config()
