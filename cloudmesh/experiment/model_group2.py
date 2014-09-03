@@ -9,7 +9,6 @@ from cloudmesh_common.tables import  array_dict_table_printer
 import json 
 from cloudmesh_install import config_file
 
-
 class ExperimentBase(Document):
     cm_kind = StringField(default="experiment")
     cm_label = StringField()
@@ -52,7 +51,6 @@ class ExperimentGroup(object):
                 print "Connection to experiment db failed"
                 
     def __init__(self, userid, label):
-
         self.userid = userid
         self.label = label
         ExperimentGroup._init_conn()

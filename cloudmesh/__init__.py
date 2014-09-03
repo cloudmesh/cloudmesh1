@@ -17,8 +17,9 @@ try:
 except:
     print "WARNING: cm not yet installed, skipping import"
     
-from cloudmesh.config.cm_config import cm_config as load
+from cloudmesh.config.cm_config import load as load
 
+from cloudmesh.pbs.pbs import PBS 
 
 """
 from cloudmesh.config.cm_config import cm_config_server
