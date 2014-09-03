@@ -103,7 +103,18 @@ class cm_config_server(ConfigDict):
             filename = self.filename
         ConfigDict.__init__(self, filename=filename, kind="server")
 
-
+def load(kind="user"):
+    if kind in ["launcher"]:
+        return cm_config_launcher()
+    elif kind in ["server"]:
+        return cm_config_server()
+    elif kind in ["flavor"]:
+        return cm_config_flavor()
+    elif kind in ["user"]: 
+        return cm_config()
+    else:
+        raise("kind not found")
+        
 class cm_config_launcher(ConfigDict):
     """
     reads the information contained in the file
