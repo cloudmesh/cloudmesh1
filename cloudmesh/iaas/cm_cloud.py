@@ -11,6 +11,8 @@ import sys
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh_install import config_file
+import json
+from cloudmesh.util.shellutil import shell_commands_dict_output
 
 log = LOGGER(__file__)
 
@@ -20,7 +22,7 @@ def shell_command_cloud(arguments):
 
         Usage:
             cloud [list] [--column=COLUMN] [--json|--table]
-            cloud info [CLOUD|--all]
+            cloud info [CLOUD|--all] [--json|--table]
             cloud alias NAME [CLOUD]
             cloud select [CLOUD]
             cloud on [CLOUD]
@@ -50,6 +52,10 @@ def shell_command_cloud(arguments):
                                  credentials, defaults (all to diplay all,
                                  emiall to display all except credentials
                                  and defaults)
+                                 
+            --json               print in json fomrat
+            
+            --table              print in table format
                              
            --all                 display all available columns
            
@@ -69,11 +75,11 @@ def shell_command_cloud(arguments):
             The cloud command allows easy management of clouds in the
             command shell. The following subcommands exist:
 
-            cloud [list] [--column=COLUMN]
+            cloud [list] [--column=COLUMN] [--json|--table]
                 lists the stored clouds, optionally, specify columns for more
                 cloud information. For example, --column=active,label
 
-            cloud info [CLOUD|--all]  
+            cloud info [CLOUD|--all] [--json|--table]
                 provides the available information about the cloud in dict format 
                 options: specify CLOUD to display it, --all to display all,
                          otherwise selected cloud will be used
@@ -820,24 +826,30 @@ class CloudCommand(CloudManage):
         
     def _cloud_info(self):
         def printing(cloud):
-            cloud = dict_uni_to_ascii(cloud)
-            banner(cloud['cm_cloud'])
-            pprint(cloud)
+            if '_id' in cloud:
+                del cloud['_id']
+            #cloud = dict_uni_to_ascii(cloud)
+            #banner(cloud['cm_cloud'])
             # -------------------------------------------------
             # special informations from other place
             # -------------------------------------------------
             self._connect_to_mongo()
-            print "#", 70 * "-"
+            #print "#", 70 * "-"
             if cloud['cm_cloud'] in self.mongo.active_clouds(self.username):
-                print "active: True"
+                cloud["active"] = "True"
             else:
-                print "active: False"
+                cloud["active"] = "False"
                 
             defaultinfo = self.get_cloud_defaultinfo(self.username, cloud['cm_cloud'])
-            print "default flavor: {0}".format(defaultinfo['flavor'])
-            print "default image: {0}".format(defaultinfo['image'])
-            print "#", 70 * "#", "\n"
+            cloud["default flavor"] = defaultinfo['flavor']
+            cloud["default image"] = defaultinfo['image']
+            #print "#", 70 * "#", "\n"
             # -------------------------------------------------
+            shell_commands_dict_output(cloud,
+                                       table=self.arguments['--table'],
+                                       jsonformat=self.arguments['--json'],
+                                       title="cloud '{0}' information".format(cloud['cm_cloud']),
+                                       oneitem=True)
             
         if self.arguments['CLOUD']:
             cloud = self.get_clouds(self.username, getone=True, cloudname=self.arguments['CLOUD'])
