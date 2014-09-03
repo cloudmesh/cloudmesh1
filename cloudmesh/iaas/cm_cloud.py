@@ -51,7 +51,7 @@ def shell_command_cloud(arguments):
                                  columns are active, label, host,
                                  type/version, type, heading, user,
                                  credentials, defaults (all to diplay all,
-                                 emiall to display all except credentials
+                                 semiall to display all except credentials
                                  and defaults)
                                  
             --json               print in json fomrat
@@ -363,7 +363,7 @@ class CloudManage(object):
             try:
                 flavorname = self.get_flavors(cloudname=cloudname, getone=True, id=flavor_id)['name']
             except:
-                log.error("problem in retriving flavor name")
+                Console.error("problem in retriving flavor name")
                 flavorname = 'none'
         res['flavor'] = flavorname
         
@@ -374,7 +374,7 @@ class CloudManage(object):
             try:
                 imagename = self.get_images(cloudname=cloudname, getone=True, id=image_id)['name']
             except:
-                log.error("problem in retriving image name")
+                Console.error("problem in retriving image name")
                 imagename = 'none'
         res['image'] = imagename
         
@@ -780,7 +780,7 @@ class CloudCommand(CloudManage):
                                                  'user',
                                                  'credentials',
                                                  'defaults'])):
-                log.warning("ERROR: one or more column type doesn't exist, available columns are: "\
+                Console.error("ERROR: one or more column type doesn't exist, available columns are: "\
                             "active,label,host,type/version,type,heading,user,credentials,defaults  " \
                             "('all' to diplay all, 'semiall' to display all except credentials and defauts)")
                 return       
@@ -788,6 +788,7 @@ class CloudCommand(CloudManage):
             col_option = ['active']
         headers = ['cloud'] + col_option
         standard_headers = []
+        combined_headers = []
         
         def attribute_name_map(name):
             if name == "cloud":
@@ -812,46 +813,49 @@ class CloudCommand(CloudManage):
                 return name
         
         for item in headers:
-            standard_headers.append(attribute_name_map(item))
+            temp = attribute_name_map(item)
+            standard_headers.append(temp)
+            combined_headers.append([item, temp])
+        
+        combined_headers.remove(['cloud', 'cm_cloud'])
             
         clouds = self.get_clouds(self.username)
         clouds = clouds.sort([('cm_cloud', 1)])
         self._connect_to_mongo()
         activeclouds = self.mongo.active_clouds(self.username)
         
-        to_print = []
-
         if clouds.count() == 0:
-
-            Console.msg("")            
             Console.warning("no cloud in database, please import cloud information using the command")
-            Console.warning("cloud add <cloudYAMLfile>")
-            Console.msg("")
-
         else:
+            dict = {}
             for cloud in clouds:
-                res = []
+                res = {}
                 for key in standard_headers:
                     # -------------------------------------------------
                     # special informations from other place
                     # -------------------------------------------------
                     if key == "active":
                         if cloud['cm_cloud'] in activeclouds:
-                            res.append('True')
-                        else:
-                            res.append(' ')
+                            res["active"] = 'True'
                     elif key == "default":
                         defaultinfo = self.get_cloud_defaultinfo(self.username, cloud['cm_cloud'])
-                        res.append(str(defaultinfo))
+                        res["default"] = str(defaultinfo)
                     # -------------------------------------------------
                     else:
                         try:
-                            res.append(str(cloud[key]))
+                            res[key] = str(cloud[key])
                         except:
-                            res.append(' ')
-                to_print.append(res)
-
-            print tabulate(to_print, headers, tablefmt="grid")
+                            pass
+                dict[cloud['cm_cloud']] = res
+                
+            shell_commands_dict_output(dict, 
+                                       jsonformat=self.arguments['--json'], 
+                                       table=self.arguments['--table'], 
+                                       firstheader="cloud",
+                                       header=combined_headers, 
+                                       oneitem=False,
+                                       title=None,
+                                       count=True)
         
         
         
