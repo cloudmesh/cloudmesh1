@@ -37,8 +37,8 @@ def shell_command_list(arguments):
                                the columns active and label. Available
                                columns are active, label, host,
                                type/version, type, heading, user,
-                               credentials, defaults (all to diplay
-                               all, emiall to display all except
+                               credentials, defaults (all to display
+                               all, email to display all except
                                credentials and defaults)
 
         
