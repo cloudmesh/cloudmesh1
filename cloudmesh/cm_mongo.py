@@ -129,21 +129,21 @@ class cm_mongo:
 
         self.config = cm_config()
 
-    def cloud_provider(self, type):
+    def cloud_provider(self, kind):
         '''
         returns the cloud provider based on the type
-        :param type: the type is openstack, eucalyptus, or azure (< is not yet supported)
+        :param kind: the kind is openstack, eucalyptus, or azure (< is not yet supported)
         '''
         provider = None
-        if type == 'openstack':
+        if kind == 'openstack':
             provider = openstack
-        elif type == 'eucalyptus':
+        elif kind == 'eucalyptus':
             provider = eucalyptus
-        elif type == 'azure':
+        elif kind == 'azure':
             provider = azure
-        elif type == 'aws':
+        elif kind == 'aws':
             provider = aws
-        elif type == 'ec2':
+        elif kind == 'ec2':
             provider = ec2
         return provider
 

@@ -11,11 +11,10 @@ nosetests -v
 # from cloudmesh.openstack.cm_table import table as cm_table
 # from cloudmesh.cm_config import cm_config
 # from cloudmesh.openstack.cm_compute import openstack
-from cloudmesh.cm_mesh import cloudmesh
+from cloudmesh.cm_mesh import cm_mesh
 
 import json
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
+from pprint import pprint
 
 from cloudmesh_common.util import HEADING
 
@@ -23,7 +22,7 @@ from cloudmesh_common.util import HEADING
 class Test_cloudmesh:
 
     def setup(self):
-        self.c = cloudmesh()
+        self.c = cm_mesh()
         self.c.config()
         self.name = self.c.active()[0]
 #        print self.c
