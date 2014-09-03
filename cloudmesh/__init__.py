@@ -26,13 +26,12 @@ from cloudmesh.pbs.pbs import PBS
 
 from cloudmesh.cm_mesh import cm_mesh
 
-"""
 def mesh(provider="yaml"):
     if provider in ["yaml"]:
         return cm_mesh()
     elif provider in ["mongo"]:
         return cm_mongo()
-"""
+
 
 """
 # import sys

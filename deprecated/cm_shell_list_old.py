@@ -174,7 +174,7 @@ class cm_shell_list:
 
 def main():
     print "test correct"
-    clouds = ['sierra_openstack_grizzly']
+    clouds = ['sierra']
     fieldList = ["id", "name", "status"]
 
     ls = cm_shell_list()

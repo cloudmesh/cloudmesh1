@@ -64,8 +64,8 @@ def shell_command_vm(arguments):
                                         the search
                          
             Examples:
-                vm start --count=5 --group=test --cloud=india_openstack_havana
-                        start 5 servers on india_openstack_havana and give them group 
+                vm start --count=5 --group=test --cloud=india
+                        start 5 servers on india and give them group 
                         name: test
                 
                 vm delete --group=test --range=,9

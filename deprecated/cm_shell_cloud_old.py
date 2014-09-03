@@ -24,7 +24,7 @@ class cm_shell_cloud:
     """opt_example class"""
 
     # For now, initial selected cloud is just a randomly picked cloud in the db
-    # [default: india_openstack_havana], once you restart cm, previous
+    # [default: india], once you restart cm, previous
     # selection will be erased, later on we may choose default cloud as the
     # initial selected cloud
     
@@ -83,7 +83,7 @@ class cm_shell_cloud:
                 return None
             else:
                 for cloud in self.clouds:
-                    if cloud['cm_cloud'] == 'india_openstack_havana':
+                    if cloud['cm_cloud'] == 'india':
                         self.selected_cloud = cloud
                         self._cloud_selected = True
                         self.clouds.rewind()

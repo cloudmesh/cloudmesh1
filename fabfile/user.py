@@ -22,10 +22,10 @@ from cloudmesh_install import config_file
 @task
 def password():
     user_config = cm_config(filename=config_file("/cloudmesh.yaml"))
-    user = user_config.cloud('sierra_openstack_grizzly')['credentials']
+    user = user_config.cloud('sierra')['credentials']
 
     server_config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
-    server = server_config.get('cloudmesh.server.keystone.sierra_openstack_grizzly')
+    server = server_config.get('cloudmesh.server.keystone.sierra')
 
     print(" ".join(["keystone", "--os-username", server['OS_USERNAME'],
              "--os-password", server['OS_PASSWORD'],
