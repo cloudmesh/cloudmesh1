@@ -556,7 +556,8 @@ class CloudManage(object):
             return [flavor_names, flavor_ids]
     
     
-    def print_cloud_images(self, username=None, cloudname=None, itemkeys=None, refresh=False, output=False):
+    def print_cloud_images(self, username=None, cloudname=None, itemkeys=None,
+                           refresh=False, output=False, print_format="table"):
         '''
         refer to print_cloud_flavors
         '''
@@ -600,15 +601,24 @@ class CloudManage(object):
             to_print.append(values)
         
         count = index-1
+         
+        # Output format supports json and plain text in a grid table.
+        if print_format == "json": 
+            pprint( images_dict[cloudname])
+        elif print_format == "csv":
+            with open(".temp.csv", "wb") as f:
+                w = csv.DictWriter(f, images_dict[cloudname].keys())
+                w.writeheader()
+                w.writerow(images_dict[cloudname])
+        else:
+            sentence =  "images of cloud '{0}'".format(cloudname)
+            print "+"+"-"*(len(sentence)-2)+"+"
+            print sentence
+            print tabulate(to_print, headers, tablefmt="grid")
+            sentence = "count: {0}".format(count)
+            print sentence
+            print "+"+"-"*(len(sentence)-2)+"+"
             
-        sentence =  "images of cloud '{0}'".format(cloudname)
-        print "+"+"-"*(len(sentence)-2)+"+"
-        print sentence
-        print tabulate(to_print, headers, tablefmt="grid")
-        sentence = "count: {0}".format(count)
-        print sentence
-        print "+"+"-"*(len(sentence)-2)+"+"
-        
         if output:
             return [image_names, image_ids]
     
@@ -619,7 +629,8 @@ class CloudManage(object):
                             itemkeys=None, 
                             refresh=False, 
                             output=False,
-                            serverdata=None):
+                            serverdata=None, 
+                            print_format="table"):
         '''
         prints a cloud's vms or a given list of vms
         :param username: string user name
@@ -707,15 +718,24 @@ class CloudManage(object):
             to_print.append(values)
         
         count = index-1
+           
+        # Output format supports json and plain text in a grid table.
+        if print_format == "json": 
+            pprint( servers_dict)
+        elif print_format == "csv":
+            with open(".temp.csv", "wb") as f:
+                w = csv.DictWriter(f, servers_dict.keys())
+                w.writeheader()
+                w.writerow(servers_dict)
+        else:
+            sentence =  "cloud '{0}'".format(cloudname)
+            print "+"+"-"*(len(sentence)-2)+"+"
+            print sentence
+            print tabulate(to_print, headers, tablefmt="grid")
+            sentence = "count: {0}".format(count)
+            print sentence
+            print "+"+"-"*(len(sentence)-2)+"+"
             
-        sentence =  "cloud '{0}'".format(cloudname)
-        print "+"+"-"*(len(sentence)-2)+"+"
-        print sentence
-        print tabulate(to_print, headers, tablefmt="grid")
-        sentence = "count: {0}".format(count)
-        print sentence
-        print "+"+"-"*(len(sentence)-2)+"+"
-        
         if output:
             return [server_names, server_ids]
     # ------------------------------------------------------------------------
