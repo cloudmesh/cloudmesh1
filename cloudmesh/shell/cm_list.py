@@ -5,6 +5,7 @@ from tabulate import tabulate
 from pprint import pprint
 from cmd3.console import Console
 from cloudmesh.iaas.cm_cloud import shell_command_cloud
+from docopt import docopt
 
 #list_command_table_format = "simple"
 list_command_table_format = "grid"
@@ -15,7 +16,8 @@ log = LOGGER(__file__)
 def shell_command_list(arguments):
     """
     Usage:
-        list flavor [CLOUD|--all] [--refresh]
+        list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
+        [--column=COLUMN]
         list image [CLOUD|--all] [--refresh]
         list vm [CLOUD|--all] [--refresh]
         list project
@@ -41,7 +43,8 @@ def shell_command_list(arguments):
                                all, email to display all except
                                credentials and defaults)
 
-        
+        --format=FORMAT         output format: table, json, csv
+
     Description:
         
         List clouds and projects information, if the CLOUD argument is not specified, the 
@@ -98,7 +101,6 @@ class ListInfo(object):
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['flavors'])
             for cloud in clouds:
                 self.cloudmanage.print_cloud_flavors(username=self.username, cloudname=cloud.encode("ascii"), itemkeys=itemkeys, refresh=False, output=False)
-        
         else:
             return
         
@@ -343,9 +345,9 @@ class ListInfo(object):
         elif self.arguments['cloud'] == True:
             self._list_cloud()
 
-        
-        
-        
-        
-        
-        
+def main():
+    arguments = docopt(shell_command_list.__doc__)
+    shell_command_list(arguments)
+
+if __name__ == '__main__':
+    main()
