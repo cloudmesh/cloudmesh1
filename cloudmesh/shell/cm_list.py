@@ -99,8 +99,14 @@ class ListInfo(object):
             if self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['flavors'])
+            d_format = self.arguments['--format']
             for cloud in clouds:
-                self.cloudmanage.print_cloud_flavors(username=self.username, cloudname=cloud.encode("ascii"), itemkeys=itemkeys, refresh=False, output=False)
+                self.cloudmanage.print_cloud_flavors(username=self.username,
+                                                     cloudname=cloud.encode("ascii"),
+                                                     itemkeys=itemkeys,
+                                                     refresh=False,
+                                                     output=False,
+                                                     print_format=d_format)
         else:
             return
         

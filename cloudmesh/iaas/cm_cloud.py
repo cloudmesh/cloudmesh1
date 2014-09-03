@@ -13,6 +13,7 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh_install import config_file
 import json
 from cloudmesh.util.shellutil import shell_commands_dict_output
+import csv
 
 log = LOGGER(__file__)
 
@@ -471,7 +472,8 @@ class CloudManage(object):
     # ------------------------------------------------------------------------
     # supporting functions for shell
     # ------------------------------------------------------------------------
-    def print_cloud_flavors(self, username=None, cloudname=None, itemkeys=None, refresh=False, output=False):
+    def print_cloud_flavors(self, username=None, cloudname=None, itemkeys=None,
+                            refresh=False, output=False, print_format="table"):
         '''
         prints flavors of a cloud in shell
         :param username: string user name
@@ -532,15 +534,24 @@ class CloudManage(object):
             to_print.append(values)
         
         count = index-1
-        
-        sentence =  "flavors of cloud '{0}'".format(cloudname)
-        print "+"+"-"*(len(sentence)-2)+"+"
-        print sentence
-        print tabulate(to_print, headers, tablefmt="grid")
-        sentence = "count: {0}".format(count)
-        print sentence
-        print "+"+"-"*(len(sentence)-2)+"+"
-        
+     
+        # Output format supports json and plain text in a grid table.
+        if print_format == "json": 
+            pprint( flavors_dict[cloudname])
+        elif print_format == "csv":
+            with open(".temp.csv", "wb") as f:
+                w = csv.DictWriter(f, flavors_dict[cloudname].keys())
+                w.writeheader()
+                w.writerow(flavors_dict[cloudname])
+        else:
+            sentence =  "flavors of cloud '{0}'".format(cloudname)
+            print "+"+"-"*(len(sentence)-2)+"+"
+            print sentence
+            print tabulate(to_print, headers, tablefmt="grid")
+            sentence = "count: {0}".format(count)
+            print sentence
+            print "+"+"-"*(len(sentence)-2)+"+"
+            
         if output:
             return [flavor_names, flavor_ids]
     
