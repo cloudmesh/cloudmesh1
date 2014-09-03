@@ -19,7 +19,7 @@ def shell_command_list(arguments):
         list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
         [--column=COLUMN]
         list image [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
-        list vm [CLOUD|--all] [--refresh] [--format=FORMAT]
+        list vm [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
         list project
         list cloud [--column=COLUMN]
 
@@ -273,6 +273,22 @@ class ListInfo(object):
                 self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['servers'])
             p_format = self.arguments['--format']
+
+            # --column
+            # available columns are: id, name, vcpus, ram, disk, refresh time,
+            # and all
+
+            if self.arguments['--column']:
+                if self.arguments['--column'] != "all":
+                    s_column = [x.strip() for x in
+                                self.arguments['--column'].split(',')]
+                    new_itemkeys = { x: [] for x in itemkeys.keys() }
+                    for cloud, items in itemkeys.iteritems():
+                        for item in items:
+                            if item[0] in s_column:
+                                new_itemkeys[cloud].append(item)
+                    itemkeys=new_itemkeys
+
             for cloud in clouds:
                 self.cloudmanage.print_cloud_servers(username=self.username,
                                                      cloudname=cloud.encode("ascii"),
