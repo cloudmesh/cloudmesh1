@@ -91,7 +91,7 @@ class cm_MongoBase(object):
 
 
 
-class cm_mongo:
+class cm_mongo2:
 
     clouds = {}
     client = None
