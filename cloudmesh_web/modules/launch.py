@@ -5,12 +5,13 @@ from flask import render_template, request, redirect
 from cloudmesh_common.util import cond_decorator
 from flask.ext.login import login_required
 from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh.config.cm_config import cm_config
 from cloudmesh.launcher.queue.tasks import task_launch
 from cloudmesh.launcher.cm_launcher_db import cm_launcher_db
 import cloudmesh
 from flask.ext.principal import Principal, Identity, AnonymousIdentity, \
     identity_changed, Permission, identity_loaded, RoleNeed, UserNeed
-
+import subprocess
 
 from cloudmesh_common.logger import LOGGER
 
@@ -30,9 +31,9 @@ rain_permission = Permission(RoleNeed('rain'))
 
 
 # @rain_permission.require(http_exception=403)
-# @login_required
-
-@launch_module.route('/cm/launch/launch_servers/', methods=["POST"])
+@login_required
+@rain_permission.require(http_exception=403)
+@launch_module.route('/cm/launch/launch_servers/', methods=["POST","GET"])
 def launch_servers():
     """
 
@@ -57,13 +58,21 @@ def launch_servers():
     return "Task has been submitted to the queue.... <br/><br/>Data sent was:<br/>" + str(return_dict)
     # return "tasks have been submitted to the queue."
     """
-    log.error ("not yet implemented")    
-    print "HALLO"
+    config = cm_config()
+    cloudname = request.form['cloud']
+    user = config["cloudmesh"]["clouds"][cloudname]["credentials"]["OS_USERNAME"]
+    hostname = config["cloudmesh"]["clouds"][cloudname]["cm_host"]
+
+    data = dict((key, request.form.getlist(key.encode("utf-8"))) for key in request.form.keys())
     
-#     return_string = "in server " + server + "<br>" #+ str(resources)
-#     for r in resources:
-#         return_string += " start " + str(r) +" - " + str(request.form.get(r+"-select")) +"</br>"
-#     return return_string
+    formatted_string = str("{name}{script}{selector}{other}{types}{nodes}{cloud}".format(**data))
+    
+    ssh_cmd = "ssh " + user + "@" + hostname + " \"" + request.form['script'] + "\" >> /home/cloudnaut/results.txt"
+
+    shell_cmd = request.form['script'] + " " + " >> /home/cloudnaut/results.txt"
+    
+    subprocess.Popen(ssh_cmd,shell="True")
+    return ssh_cmd
 
 
 @launch_module.route('/cm/launch/', methods=['POST', 'GET'])
@@ -72,13 +81,10 @@ def launch_servers():
 def display_launch_table():
 
     if request.method == 'POST':
-        print "HHHHHHHHHHHHH"
         print "HHHHHH", request.form.keys()
         for key in request.form.keys():
             print key, ":", request.form[key]
-
     else:
-
         print "HEY JUDE"
         
     launcher_config = ConfigDict(filename=config_file("/cloudmesh_launcher.yaml"))

@@ -29,41 +29,43 @@
       <legend> Description </legend>
       {{ recipie['description'] }}
       
-      <form class="form-horizontal" method="POST">
+      <form class="form-horizontal" role="form" method="POST">
       <fieldset>
       <legend>Parameters</legend>
-
+      <input type="hidden" name="name" value="{{ name }}">
+      {% set script_entry = recipie['script'] %}
+        {% for key in script_entry  %}
+            {% if key == 'value' %}
+                <input type="hidden" name="script" value="{{ script_entry[key] }}">
+            {% endif %}
+        {% endfor %}
       {% for parameter in parameters %}
-	{% set key = parameter.keys()[0] %}
-	{% set value = parameter[key] %}
-         <div class="control-group">
-	   <label class="control-label" for="textinput"> {{ key | capitalize }} </label>
-
-	    <div class="controls">
+      {% set key = parameter.keys()[0] %}
+      {% set value = parameter[key] %}
+      <div class="form-group form-group-sm">
+	   <label class="col-sm-2 control-label" for="textinput"> {{ key | capitalize }} </label>
+	    <div class="form-group-sm col-sm-6">
 	      {% if value['type'] == 'integer' %}
-	         <input type="number" step="any" name="{{name}}-{{key}}" placeholder="{{value['value']}}" value="{{value['value']}}" >
-	     
+	         <input class="form-control" type="number" step="any" name="{{key}}" placeholder="{{value['value']}}" value="{{value['value']}}" >
 	      {% elif value['type'] == 'float' %}
-	         <input type="number" step="0.1" name="{{name}}-{{key}}" placeholder="{{value['value']}} value="{{value['value']}}" >
-	   {% elif value['type'] == 'string' %}
-	      <input type="text" name="{{name}}-{{key}}" placeholder="{{value['value']}}" value="{{value['value']}}" >	     	     
-	   {% elif value['type'] == 'selector' %}
-	    <div class="form-inline">
-	     {% for button in value['value'] %}
-	        <input class="form-control" type="radio" name="{{name}}-{{key}}" value="{{button}}" />
-	        <label> {{ button }} </label>
-	      {% endfor %}
+	         <input class="form-control" type="number" step="0.1" name="{{key}}" placeholder="{{value['value']}}" value="{{value['value']}}" >
+          {% elif value['type'] == 'string' %}
+	        <input class="form-control" type="text" height="18px" name="{{key}}" placeholder="{{value['value']}}" value="{{value['value']}}" >	     	     
+	      {% elif value['type'] == 'selector' %}
+	        <div class="form-inline">
+	        {% for button in value['value'] %}
+                <label class="radio-inline">
+                    <input type="radio" name="{{key}}" value="{{button}}">{{button | capitalize}}</input>
+                </label>
+	        {% endfor %}
+	        </div>
+	      {% endif %}
 	     </div>
-	   {% endif %}
-	     </div>
-         </div>
+      </div>
       {% endfor %}
-
     </div>
     <div class="panel-footer">
-        
-
-         <button formaction="/cm/launch/" class="btn btn-success"> <i class="fa fa-rocket fa-lg"></i> Start </button>
+         <button formaction="/cm/launch/launch_servers/" class="btn btn-success"> <i class="fa fa-rocket fa-lg"></i> Start </button>
     </div>
   </div>
 
