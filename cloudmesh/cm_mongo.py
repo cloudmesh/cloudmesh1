@@ -128,7 +128,7 @@ class cm_mongo:
 
     def cloud_provider(self, kind):
         '''
-        returns the cloud provider based on the type
+        returns the cloud provider based on the kind
         :param kind: the kind is openstack, eucalyptus, or azure (< is not yet supported)
         '''
         provider = None
