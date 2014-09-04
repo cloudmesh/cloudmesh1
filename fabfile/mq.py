@@ -1,5 +1,4 @@
-from fabric.api import task, local, execute
-import clean
+from fabric.api import task, local
 import os
 import sys
 import platform
@@ -19,36 +18,38 @@ rabbit_env = {
     'rabbitmq_server': "sudo rabbitmq-server",
     'rabbitmqctl': "sudo rabbitmqctl",
     'detached': ""
-    }
+}
+
 
 def set_rabbitmq_env():
 
     global RABBITMQ_SERVER
-    
+
     location = path_expand("~/.cloudmesh/rabbitm")
-    
+
     if sys.platform == "darwin":
         mkdir("-p", location)
         rabbit_env["RABBITMQ_MNESIA_BASE"] = location
-        rabbit_env["RABBITMQ_LOG_BASE"] = location        
+        rabbit_env["RABBITMQ_LOG_BASE"] = location
         os.environ["RABBITMQ_MNESIA_BASE"] = location
         os.environ["RABBITMQ_LOG_BASE"] = location
-        rabbit_env["rabbitmq_server"]="/usr/local/opt/rabbitmq/sbin/rabbitmq-server"
-        rabbit_env["rabbitmqctl"]="/usr/local/opt/rabbitmq/sbin/rabbitmqctl"        
+        rabbit_env[
+            "rabbitmq_server"] = "/usr/local/opt/rabbitmq/sbin/rabbitmq-server"
+        rabbit_env["rabbitmqctl"] = "/usr/local/opt/rabbitmq/sbin/rabbitmqctl"
     elif sys.platform == "linux2":
         mkdir("-p", location)
         rabbit_env["RABBITMQ_MNESIA_BASE"] = location
-        rabbit_env["RABBITMQ_LOG_BASE"] = location        
+        rabbit_env["RABBITMQ_LOG_BASE"] = location
         os.environ["RABBITMQ_MNESIA_BASE"] = location
         os.environ["RABBITMQ_LOG_BASE"] = location
-        rabbit_env["rabbitmq_server"]="/usr/sbin/rabbitmq-server"
-        rabbit_env["rabbitmqctl"]="/usr/sbin/rabbitmqctl"        
+        rabbit_env["rabbitmq_server"] = "/usr/sbin/rabbitmq-server"
+        rabbit_env["rabbitmqctl"] = "/usr/sbin/rabbitmqctl"
     else:
         print "WARNING: cloudmesh rabbitmq user install not supported, " \
-          "using system install"
+            "using system install"
 
-set_rabbitmq_env()        
-                
+set_rabbitmq_env()
+
 input = raw_input
 
 __all__ = ['user',
@@ -61,19 +62,18 @@ __all__ = ['user',
            "start",
            "stop",
            "menu",
-           "memory",
-           "conumers",
-           "msg",
            "info"]
 
-PRODUCTION=cm_config_server().get('cloudmesh.server.production')
-
+PRODUCTION = cm_config_server().get('cloudmesh.server.production')
 
 
 def installed(name):
-    """check if the command with the name is installed and return true if it is"""
+    """check if the command with the name is installed and return
+       true if it is
+    """
     result = local("which {0} | wc -l".format(name), capture=True)
     return result > 0
+
 
 @task
 def install():
@@ -94,10 +94,11 @@ def install():
         print "ERROR: error no other install yet provided "
         sys.exit()
 
+
 @task
 def user(name=None):
     ''' create a user in rabbit mq
-    
+
     :param name: if the name is ommited it will be queried for it.
     '''
     if name is None:
@@ -105,19 +106,25 @@ def user(name=None):
     rabbit_env["password"] = get_password()
     local("{rabbitmqctl} {user} {password}".format(**rabbit_env))
 
+
 @task
 def host():
     """adding a host to rabbitmq"""
-    rabbit_env["host"] = get_host()        
+    rabbit_env["host"] = get_host()
     local("{rabbitmqctl} add_vhost {host}".format(**rabbit_env))
+
 
 @task
 def allow():
     """allow a user to access the host in rabbitmq"""
-    # print('{rabbitmqctl} set_permissions -p {host} {user} ".*" ".*" ".*"'.format(**rabbit_env))
+    # print('{rabbitmqctl} set_permissions -p {host} {user} ".*" ".*" ".*"'
+    #       .format(**rabbit_env))
     rabbit_env["host"] = get_host()
-    rabbit_env["user"] = get_user()    
-    local('{rabbitmqctl} set_permissions -p {host} {user} ".*" ".*" ".*"'.format(**rabbit_env))
+    rabbit_env["user"] = get_user()
+    local(
+        '{rabbitmqctl} set_permissions -p {host} {user} ".*" ".*" ".*"'
+        .format(**rabbit_env))
+
 
 @task
 def check():
@@ -126,33 +133,40 @@ def check():
         'host': platform.node(),
         'hostname': platform.node().replace(".local", ""),
         'file': '/etc/hosts'
-        }
-    result = int(local("fgrep {host} {file} | wc -l".format(**values), capture=True))
+    }
+    result = int(
+        local("fgrep {host} {file} | wc -l".format(**values), capture=True))
     if result == 0:
-        print ('ERROR: the etc file "{file}" does not contain the hostname "{host}"'.format(**values))
+        print ('ERROR: the etc file "{file}" does not contain '
+               'the hostname "{host}"'.format(**values))
         print
         print ("make sure to add a line such as")
         print
         print ("127.0.0.1       localhost {hostname} {host}".format(**values))
         print
-        print ("make sure to restart the dns server after you changed the etc host file")
+        print ("make sure to restart the dns server after you "
+               "changed the etc host file")
         print ("do this with fab mq.dns")
+
 
 @task
 def dns():
     """restart the dns server"""
     local("dscacheutil -flushcache")
 
+
 @task
 def info():
     """print some essential information about the messaging system"""
     status()
-    l = ["name", "memory", "consumers", "messages", "messages_ready", "messages_unacknowledged"]
+    l = ["name", "memory", "consumers", "messages",
+         "messages_ready", "messages_unacknowledged"]
     r = list_queues(" ".join(l)).split("\n")[1].split("\t")
     print r
 
     d = zip(l, r)
-    pprint (d)
+    pprint(d)
+
 
 @task
 def status():
@@ -160,7 +174,9 @@ def status():
     if PRODUCTION:
         print "Run '/etc/init.d/rabbitmq-server status' to check status"
     else:
+        # BUG rabbit_mqenv not defined
         local("sudo {rabbitmqctl} status".format(**rabbitmq_env))
+
 
 def list_queues(parameters):
     """list all queues available in rabbitmq"""
@@ -168,9 +184,11 @@ def list_queues(parameters):
         print "Use 'rabbitmqctl list_queues' to list queues"
     else:
         rabbit_env['parameters'] = parameters
-        r = local("{rabbitmqctl} list_queues {parameters}".format(**rabbit_env),
-                                                     capture=True)
+        r = local("{rabbitmqctl} list_queues {parameters}"
+                  .format(**rabbit_env),
+                  capture=True)
     return r
+
 
 @task
 def start(detached=None):
@@ -186,6 +204,7 @@ def start(detached=None):
             rabbit_env['detached'] = "-detached"
         # log.info (rabbit_env)
         local("{rabbitmq_server} {detached}".format(**rabbit_env))
+
 
 @task
 def stop():
@@ -208,10 +227,10 @@ menu_list = [
     ('status', status),
     ('start', start),
     ('stop', stop)
-    ]
+]
+
 
 @task
 def menu():
     """open a menu to start some commands with an ascii menu"""
     ascii_menu("RabbitMQ", menu_list)
-
