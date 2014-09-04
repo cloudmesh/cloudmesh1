@@ -14,7 +14,8 @@ list_command_table_format = "grid"
 log = LOGGER(__file__)
 
 def shell_command_list(arguments):
-    """
+    """List available flavors, images, vms, projects and clouds
+
     Usage:
         list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
         [--column=COLUMN]
@@ -25,7 +26,7 @@ def shell_command_list(arguments):
 
     Arguments:
 
-        CLOUD    the name of the cloud
+        CLOUD    the name of the cloud e.g. alamo, sierra, india
 
     Options:
 
@@ -51,17 +52,16 @@ def shell_command_list(arguments):
         selected default cloud will be used. You can interactively set the default cloud with the command
         'cloud select'. 
     
-        list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
-        [--column=COLUMN]
-            list the flavors
-        list image [CLOUD|--all] [--refresh]
-            list the images
-        list vm [CLOUD|--all] [--refresh]
-            list the vms
+        list flavor 
+        : list the flavors
+        list image 
+        : list the images
+        list vm 
+        : list the vms
         list project
-            list the projects
-        list cloud [--column=COLUMN]
-	        same as: cloud list
+        : list the projects
+        list cloud 
+        : same as cloud list
 
     See Also:
 
