@@ -16,7 +16,7 @@ class Database(object):
         self.user_obj = cm_user()
         self.profile = self.config.profile()
         self.mongo = cm_mongo()
-
+        
     def set_credentials(self):
         for cloudname in self.config.cloudnames():
             self.user_obj.set_credential(
@@ -93,7 +93,8 @@ class Database(object):
             self.import_cloud_to_mongo(cloudsdict[key], key, username)
             print "cloud '{0}' added.".format(key)
 
-    def import_cloud_to_mongo(self, d, cloudname, username):
+    @staticmethod
+    def import_cloud_to_mongo(d, cloudname, username):
         '''
         insert a cloud to db_clouds
         additionally, add values cm_cloud, cm_kind=cloud, cm_user_id
@@ -124,4 +125,5 @@ class Database(object):
         if d['default']:
             del d['default']
 
-        self.mongo.db_clouds.insert(d)
+        mongo = cm_mongo()
+        mongo.db_clouds.insert(d)
