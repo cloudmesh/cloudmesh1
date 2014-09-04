@@ -1,5 +1,5 @@
 from fabric.api import task, local
-import shutil
+
 
 @task
 def install():
@@ -14,10 +14,12 @@ def install():
     print ("INSTALLING")
     local("cd /tmp/nose-json; python setup.py install", capture=True)
 
+
 @task
 def run():
     """run the nosetests"""
     local('nosetests --with-json --json-file="nosetests.json"')
+
 
 @task
 def view():
