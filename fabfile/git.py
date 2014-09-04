@@ -1,21 +1,25 @@
 from fabric.api import task, local
 
+
 @task
 def push():
     """git push"""
     local("git commit -a ")
     local("git push")
 
+
 @task
 def pull():
     """git pull"""
     local("git pull ")
+
 
 @task
 def gregor():
     """git config of name and email for gregor"""
     local('git config --global user.name "Gregor von Laszewski"')
     local('git config --global user.email laszewski@gmail.com')
+
 
 def up():
     """upload the changes to git"""
@@ -82,8 +86,8 @@ def pypi():
 def install():
     """install Flask Frozen-Flask Flask-FlatPages"""
     local("pip install Flask Frozen-Flask Flask-FlatPages")
-    local(
-        "pip install --upgrade -e git://github.com/openstack/python-novaclient.git#egg=python-novaclient")
+    local('pip install --upgrade -e '
+          'git://github.com/openstack/python-novaclient.git#egg=python-novaclient')
 
 
 def installmongodb():
@@ -94,13 +98,13 @@ def installmongodb():
 
 def installmongodb_ubuntu():
     local('sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10')
-    local(
-        'sudo sh -c "echo \'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen\' > /etc/apt/sources.list.d/10gen.list"')
+    local('sudo sh -c '
+        '"echo \'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen\'
+        '> /etc/apt/sources.list.d/10gen.list"')
     local('sudo apt-get update')
     local('sudo apt-get install mongodb-10gen')
-'''
 
-"""
+    
 def _next_version(version):
     numbers = version.split(".")
     numbers[-1] = str(int(numbers[-1]) + 1)
@@ -112,13 +116,9 @@ def _write_version(version):
     file = open(filename, 'w')
     print >> file, version
     file.close()
-"""
+'''
+
 
 def deltag(tag):
     local("git tag -d %s" % tag)
     local("git push origin :refs/tags/%s" % tag)
-
-
-
-
-
