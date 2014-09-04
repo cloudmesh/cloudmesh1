@@ -36,9 +36,12 @@ from cloudmesh.config.cm_config import load as load
 from cloudmesh.pbs.pbs import PBS 
 
 from cloudmesh.cm_mongo import cm_mongo
+from cloudmesh.cm_mongo2 import cm_mongo2
 
 from cloudmesh.cm_mesh import cm_mesh
 from cloudmesh_common.util import banner
+
+from cloudmesh.user.cm_user import cm_user as cm_user
 
 def mesh(provider="yaml"):
     if provider in ["yaml"]:
