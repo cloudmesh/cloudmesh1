@@ -124,9 +124,6 @@ class cm_mongo:
         self.db_clouds = get_mongo_db(collection)
 
 
-
-
-
         self.config = cm_config()
 
     def cloud_provider(self, kind):
@@ -308,7 +305,6 @@ class cm_mongo:
     def activate(self, cm_user_id, names=None):
         #
         # bug must come form mongo
-        #
         #
 
         if cm_user_id is None:

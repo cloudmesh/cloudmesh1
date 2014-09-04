@@ -10,6 +10,20 @@ __version__ = '1.0'
 def version():
     return __version__
 
+import logging
+
+
+def logger(on):
+    logger = logging.getLogger()
+    logger.disabeld = not on
+    print logger.__dict__
+    
+    if on:
+        logging.disable(logging.NOTSET)
+    else:
+        logging.disable(logging.CRITICAL)        
+
+
 from cloudmesh.util.helper import vm_name
 
 try:
@@ -20,11 +34,11 @@ except:
 from cloudmesh.config.cm_config import load as load
 
 from cloudmesh.pbs.pbs import PBS 
-#from cloudmesh.cm_mongo import cm_mongo as mesh
 
-#from cloudmesh.cm_mongo import cm_mongo
+from cloudmesh.cm_mongo import cm_mongo
 
 from cloudmesh.cm_mesh import cm_mesh
+from cloudmesh_common.util import banner
 
 def mesh(provider="yaml"):
     if provider in ["yaml"]:
