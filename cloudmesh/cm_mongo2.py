@@ -1,6 +1,5 @@
-from bson.objectid import ObjectId
 from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
-from cloudmesh.config.ConfigDict import ConfigDict
+# from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
 from cloudmesh.iaas.openstack.cm_compute import openstack
 from cloudmesh.iaas.ec2.cm_compute import ec2
@@ -8,12 +7,8 @@ from cloudmesh.iaas.openstack.cm_idm import keystone
 from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.util.stopwatch import StopWatch
-from cloudmesh_common.util import path_expand
-from pprint import pprint
-import pymongo
-import sys
+# from pprint import pprint
 import traceback
-import yaml
 from cloudmesh.util.encryptdata import decrypt
 import traceback
 
@@ -47,7 +42,7 @@ class cm_MongoBase(object):
 
 
     def set(self, username, d):
-        element = dict (d)
+        element = dict(d)
         element["cm_id"] = username
         element["cm_type"] = self.cm_type
         self.update({"cm_id": username, "cm_type": self.cm_type}, element)
@@ -107,7 +102,7 @@ class cm_mongo:
     mongo_db_name = "cloudmesh"
     mongo_collection = "cloudmesh"
 
-    ssh_ec2_rule = Ec2SecurityGroup.Rule(22,22)
+    ssh_ec2_rule = Ec2SecurityGroup.Rule(22, 22)
     
     config = None
 
@@ -193,7 +188,10 @@ class cm_mongo:
             if key not in  cloud_config['credentials']:
                 cloud_config['credentials'][key] = credential[key]
 
-        if (cloud_config['cm_type'] in ['openstack']) and (cloud_config['cm_label'] in ['sos','ios_havana']):
+        #
+        # THIS SEEMS TO BE A BUG???? sos = sierra openstack, why only sierra?
+        #
+        if (cloud_config['cm_type'] in ['openstack']) and (cloud_config['cm_label'] in ['sos', 'ios_havana']):
             cloud_config['credentials']['OS_TENANT_NAME'] = self.active_project(cm_user_id)
 
         return cloud_config
@@ -246,9 +244,10 @@ class cm_mongo:
 
                 if cm_type in ['openstack', 'eucalyptus', 'azure', 'ec2', 'aws']:
 
-                    self.clouds[cm_user_id][cloud_name] = {'name': cloud_name,
-                                               'cm_type': cm_type,
-                                               'cm_type_version': cm_type_version}
+                    self.clouds[cm_user_id][cloud_name] = {
+                        'name': cloud_name,
+                        'cm_type': cm_type,
+                        'cm_type_version': cm_type_version}
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name, credentials)
 
@@ -263,23 +262,27 @@ class cm_mongo:
 
                     self.clouds[cm_user_id][cloud_name].update({'manager': cloud})
                     if cloud is not None:
-                        self.refresh(cm_user_id,[cloud_name],['servers'])
+                        self.refresh(cm_user_id, [cloud_name], ['servers'])
                         if cm_type in ['openstack']:
                             secgroups = cloud.list_security_groups()['security_groups']
                             for secgroup in secgroups:
                                 if secgroup['name'] == 'default':
                                     foundsshrule = False
                                     for rule in secgroup['rules']:
-                                        existRule = Ec2SecurityGroup.Rule(rule['from_port'],rule['to_port'])
+                                        existRule = Ec2SecurityGroup.Rule(
+                                            rule['from_port'],
+                                            rule['to_port']
+                                            )
                                         if existRule == self.ssh_ec2_rule:
                                             foundsshrule = True
                                             log.debug("Ec2 security group rule allowing ssh exists for cloud: %s, type: %s, tenant: %s" \
-                                                      % (cloud_name, cm_type, credentials['OS_TENANT_NAME']) )
+                                                      % (cloud_name, cm_type, credentials['OS_TENANT_NAME']))
                                     if not foundsshrule:
                                         iddefault = cloud.find_security_groupid_by_name('default')
-                                        cloud.add_security_group_rules(iddefault,[self.ssh_ec2_rule])
+                                        cloud.add_security_group_rules(iddefault,
+                                                                       [self.ssh_ec2_rule])
                                         log.debug("Added Ec2 security group rule to allow ssh for cloud: %s, type: %s, tenant: %s" \
-                                                  % (cloud_name, cm_type, credentials['OS_TENANT_NAME']) )
+                                                  % (cloud_name, cm_type, credentials['OS_TENANT_NAME']))
                         
             except Exception, e:
                 cloud = None
@@ -549,13 +552,18 @@ class cm_mongo:
             name = "%s_%s" % (prefix, index)
         else:
             name = givenvmname
-        return imported.vm_create.apply_async((name, 
-                                               vm_flavor,
-                                               vm_image), 
-                                               {'key_name': key,
-                                                'meta': meta,
-                                                'manager': cloudmanager},
-                                              queue=queue_name)
+        return imported.vm_create.apply_async(
+            (
+                name, 
+                vm_flavor,
+                vm_image
+            ), 
+            {
+                'key_name': key,
+                'meta': meta,
+                'manager': cloudmanager
+            },
+            queue=queue_name)
 
     def assign_public_ip(self, cloud, server, cm_user_id):
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
