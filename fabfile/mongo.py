@@ -1,4 +1,4 @@
-from fabric.api import task, local, settings, cd, run, hide
+from fabric.api import task, local, settings, hide
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
@@ -8,23 +8,20 @@ from cloudmesh_common.util import path_expand
 from cloudmesh_common.util import banner
 from cloudmesh_common.util import yn_choice
 from cloudmesh.inventory import Inventory
-from cloudmesh.user.cm_template import cm_template
-from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh.user.cm_user import cm_user
 from sh import ls
-from cloudmesh_install import config_file
-
-import yaml
 import sys
 import os
 import time
 
+
 def get_pid(command):
     with hide('output', 'running', 'warnings'):
-        lines = local("ps -ax |fgrep {0}".format(command), capture=True).split("\n")
+        lines = local(
+            "ps -ax |fgrep {0}".format(command), capture=True).split("\n")
     pid = None
+    line = None
     for line in lines:
-        if not "fgrep" in line:
+        if "fgrep" not in line:
             pid = line.split(" ")[0]
             break
     if pid is None:
@@ -33,11 +30,13 @@ def get_pid(command):
         print "SUCCESS: mongod PID", pid
     return (pid, line)
 
+
 @task
 def reset():
     local("fab mongo.boot")
     local("fab user.mongo")
     local("fab mongo.simple")
+
 
 @task
 def install():
@@ -50,11 +49,11 @@ def install():
         print "ERROR: Wrong opertaing system: Found", sys.platform
         sys.exit()
 
-
     ENV = os.environ['VIRTUAL_ENV'] + "/bin"
 
     if not ENV.endswith("ENV/bin"):
-        print "WARNING: You are using a non standrad development firtualenv location"
+        print "WARNING: You are using a non standrad development "\
+            "virtualenv location"
         print "         The standard location is", path_expand("~/ENV/bin")
         print "         You use", ENV
         if not yn_choice("Would you like to proceed", default="n"):
@@ -73,9 +72,13 @@ def install():
         print "         using", "/tmp/{0}".format(mongo_tar)
     else:
         if sys.platform == "darwin":
-            local("cd /tmp; curl -O http://fastdl.mongodb.org/{1}/{0}.tgz".format(mongo_version, os_version))
+            local(
+                "cd /tmp; curl -O http://fastdl.mongodb.org/{1}/{0}.tgz"
+                .format(mongo_version, os_version))
         else:
-            local("cd /tmp; wget http://fastdl.mongodb.org/{1}/{0}.tgz".format(mongo_version, os_version))
+            local(
+                "cd /tmp; wget http://fastdl.mongodb.org/{1}/{0}.tgz"
+                .format(mongo_version, os_version))
 
     local("cd /tmp; tar -xvf {0}.tgz".format(mongo_version))
     local("cd /tmp; cp {0}/bin/* {1}".format(mongo_version, ENV))
@@ -88,14 +91,14 @@ def install():
         print "       it should be in", ENV
         print "       we found it in", where
 
-
     if is_ubuntu():
         install_packages(["mongodb"])
     elif is_centos():
         install_packages(["mongodb",
                           "mongodb-server"])
     elif sys.platform == "darwin":
-        local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
+        local(
+            'ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
         local('brew update')
         local('brew install mongodb')
 
@@ -142,7 +145,7 @@ def admin():
     banner("Executing js")
     os.system(command)
 
-    banner ("Debugging reminder, remove in final version")
+    banner("Debugging reminder, remove in final version")
     print "USER", user
     print "PASSWORD", password
 
@@ -178,6 +181,7 @@ def isyes(value):
         print "found", value, check
         sys.exit()
 
+
 @task
 def boot(auth=True):
 
@@ -207,7 +211,6 @@ def boot(auth=True):
 
         time.sleep(1)
 
-
     config = cm_config_server().get("cloudmesh.server.mongo")
     path = path_expand(config["path"])
     banner(path)
@@ -215,6 +218,7 @@ def boot(auth=True):
     banner("PROCESS")
     with settings(warn_only=True):
         local("ps -ax | fgrep mongo")
+
 
 @task
 def start(auth=True):
@@ -234,26 +238,38 @@ def start(auth=True):
 
     with settings(warn_only=True):
         with hide('output', 'running', 'warnings'):
-            lines = local("ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True).split("\n")
+            lines = local(
+                "ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True)\
+                .split("\n")
 
     if lines != ['']:
         pid = lines[0].split(" ")[0]
-        print "NO ACTION: mongo already running in pid {0} for port {1}".format(pid, port)
+        print "NO ACTION: mongo already running in pid {0} for port {1}"\
+            .format(pid, port)
     else:
         print "ACTION: Starting mongod"
         with_auth = ""
         if isyes(auth):
             with_auth = "--auth"
 
-        local("mongod {2} --bind_ip 127.0.0.1 --fork --dbpath {0} --logpath {0}/mongodb.log --port {1}".format(path, port, with_auth))
+        local(
+            'mongod {2} --bind_ip 127.0.0.1 '
+            '--fork --dbpath {0} '
+            '--logpath {0}/mongodb.log '
+            '--port {1}'
+            .format(path, port, with_auth))
+
 
 @task
 def clean():
     port = cm_config_server().get("cloudmesh.server.mongo.port")
-    result = local('echo "show dbs" | mongo --quiet --port {0}'.format(port), capture=True).splitlines()
+    result = local(
+        'echo "show dbs" | mongo --quiet --port {0}'
+        .format(port), capture=True).splitlines()
     for line in result:
         name = line.split()[0]
-        local('mongo {0} --port {1} --eval "db.dropDatabase();"'.format(name, port))
+        local('mongo {0} --port {1} --eval "db.dropDatabase();"'
+              .format(name, port))
 
 
 @task
@@ -262,6 +278,7 @@ def inventory():
     mesh_inventory.clear()
     mesh_inventory.generate()
     mesh_inventory.info()
+
 
 @task
 def info():
@@ -273,6 +290,7 @@ def info():
 def kill():
     stop()
 
+
 @task
 def stop():
     '''
@@ -282,22 +300,22 @@ def stop():
     # local("mongod --shutdown")
     with settings(warn_only=True):
         with hide('output', 'running', 'warnings'):
-            local ("killall -15 mongod")
-    """
-    (pid, line) = get_pid("mongod")
-    if pid is None:
-        print "No mongod running"
-    else:
-        print "Kill mongod"
-        local ("killall -15 mongod")
-    """
+            local("killall -15 mongod")
+
+    # (pid, line) = get_pid("mongod")
+    # if pid is None:
+    #     print "No mongod running"
+    # else:
+    #     print "Kill mongod"
+    #     local ("killall -15 mongod")
+
 
 @task
 def vms_find():
     user = cm_config().get("cloudmesh.hpc.username")
     c = cm_mongo()
     c.activate(user)
-    pprint (c.servers())
+    pprint(c.servers())
 
 
 def refresh(types):
@@ -314,37 +332,27 @@ def cloud():
     '''
     puts a snapshot of users, servers, images, and flavors into mongo
     '''
-    user = cm_config().get("cloudmesh.hpc.username")
     refresh(types=['users', 'servers', 'images', 'flavors'])
     ldap()
     inventory()
+
 
 @task
 def simple():
     '''
     puts a snapshot of servers, images, and flavors into mongo (no users)
     '''
-    user = cm_config().get("cloudmesh.hpc.username")
     refresh(types=['servers', 'images', 'flavors'])
     inventory()
+
 
 @task
 def users():
     '''
     puts a snapshot of the users into mongo
     '''
-    user = cm_config().get("cloudmesh.hpc.username")
     refresh(types=['users'])
 
-
-@task
-def metric():
-    """puts an example of a log file into the mongodb logfile"""
-    log_file = path_expand(config_file("/metric/sierra-sample.log"))
-    # create the mongo object
-    # parse the log file
-    # put each log information into the mongodb (or an obkject an than to mongodb)
-    # maybe you do not need to parese log files for openstack but just read it from sql???
 
 @task
 def errormetric():
@@ -354,73 +362,71 @@ def errormetric():
     # put each error form the sql databse in toit
 
 
-
 @task
 def ldap(username=None):
     '''
     fetches a user list from ldap and displays it
     '''
 
-    idp = cm_userLDAP ()
+    idp = cm_userLDAP()
     idp.connect("fg-ldap", "ldap")
     if username:
         idp.refresh_one(username)
     else:
         idp.refresh()
-    users = idp.list()
+    _users = idp.list()
 
-    print users
-    print ("Fetching {0} Users from LDAP".format(len(users)))
+    print _users
+    print ("Fetching {0} Users from LDAP".format(len(_users)))
 
 
-'''
-@task
-def fg():
-    """create a simple testbed"""
-    start()
-    local("python cloudmesh_web/fg.py")    
-'''
+# @task
+# def fg():
+#     """create a simple testbed"""
+#     start()
+#     local("python cloudmesh_web/fg.py")
+
 
 @task
 def projects():
     print "NOT IMPLEMENTED YET"
-    print "this class will when finished be able to import project titles and description from the fg portal"
+    print "this class will when finished be able to import project titles" \
+        " and description from the fg portal"
 
 
 @task
-def pbs(host, type):
-    pbs = pbs_mongo()
+def pbs(host, kind):
+
+    _pbs = pbs_mongo()
 
     # get hpc user
 
     config = cm_config()
     user = config.get("cloudmesh.hpc.username")
 
+    _pbs.activate(host, user)
 
-    pbs.activate(host, user)
-
-    print "ACTIVE PBS HOSTS", pbs.hosts
+    print "ACTIVE PBS HOSTS", _pbs.hosts
 
     if host is None:
-        hosts = pbs.hosts
+        hosts = _pbs.hosts
     else:
         hosts = [host]
 
-    if type is None:
+    if kind is None:
         types = ['qstat', 'nodes']
     else:
-        types = [type]
+        types = [kind]
 
     d = []
 
     for host in hosts:
-        for type in types:
-            if type in  ["qstat", "queue", "q"]:
-                d = pbs.get_pbsnodes(host)
-            elif type in ["nodes"]:
-                d = pbs.refresh_pbsnodes(host)
+        for kind in types:
+            if kind in ["qstat", "queue", "q"]:
+                d = _pbs.get_pbsnodes(host)
+            elif kind in ["nodes"]:
+                d = _pbs.refresh_pbsnodes(host)
 
     for e in d:
         print "PBS -->"
         pprint(e)
-
