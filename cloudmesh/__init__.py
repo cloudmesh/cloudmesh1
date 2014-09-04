@@ -44,7 +44,7 @@ def mesh(provider="yaml"):
     if provider in ["yaml"]:
         return cm_mesh()
     elif provider in ["mongo"]:
-        return cm_mongo()
+        return cm_mongo2()
 
 
 """
