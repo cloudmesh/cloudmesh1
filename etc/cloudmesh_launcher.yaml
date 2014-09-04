@@ -36,7 +36,7 @@ cloudmesh:
                   image: /static/img/launcher/mooc.png
                   script: 
                     type: sh
-                    value: echo "hello" {{ selector }} -np {{ nodes }}
+                    value: ls -l
             slurm:
                   name: Slurm Cluster
                   description:
@@ -67,6 +67,9 @@ cloudmesh:
                           - india
                           - sierra
                   image: /static/img/launcher/slurm.png
+                  script: 
+                    type: sh
+                    value: ls -l
             hadoop:
                   name: Hadoop
                   description:
@@ -94,6 +97,9 @@ cloudmesh:
                           - india
                           - sierra
                   image: /static/img/launcher/hadoop.jpg
+                  script: 
+                    type: sh
+                    value: echo "Hello"
             ganglia:
                   name: Ganglia
                   description:
@@ -123,6 +129,9 @@ cloudmesh:
                           - india
                           - sierra
                   image: /static/img/launcher/ganglia.jpg
+                  script: 
+                    type: sh
+                    value: echo "Hello"
             nagios:
                   name: Nagios
                   description:
@@ -152,4 +161,7 @@ cloudmesh:
                           - india
                           - sierra
                   image: /static/img/launcher/nagios.png
+                  script: 
+                    type: sh
+                    value: echo "Hello"
 
