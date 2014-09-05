@@ -1,29 +1,30 @@
 import fabric
+from fabric.api import task
 
 @task
 def on():
 
-    debug = False
+    _debug = False
     
-    fabric.state.output.debug  = debug
-    fabric.state.output.running  = debug
-    fabric.state.output.status  = debug
-    fabric.state.output.stdout  = True
-    fabric.state.output.stderr  = debug
-    fabric.state.output.warnings  = debug
-    fabric.state.output.aborts  = debug
-    fabric.state.output.user  = debug
+    fabric.state.output._debug  = _debug
+    fabric.state.output.running  = _debug
+    fabric.state.output.status  = _debug
+    fabric.state.output.stdout  = _debug
+    fabric.state.output.stderr  = _debug
+    fabric.state.output.warnings  = _debug
+    fabric.state.output.aborts  = _debug
+    fabric.state.output.user  = _debug
 
 @task
 def off():
 
-    debug = True
+    _debug = True
     
-    fabric.state.output.debug  = debug
-    fabric.state.output.running  = debug
-    fabric.state.output.status  = debug
-    fabric.state.output.stdout  = True
-    fabric.state.output.stderr  = debug
-    fabric.state.output.warnings  = debug
-    fabric.state.output.aborts  = debug
-    fabric.state.output.user  = debug
+    fabric.state.output._debug  = _debug
+    fabric.state.output.running  = _debug
+    fabric.state.output.status  = _debug
+    fabric.state.output.stdout  = _debug
+    fabric.state.output.stderr  = _debug
+    fabric.state.output.warnings  = _debug
+    fabric.state.output.aborts  = _debug
+    fabric.state.output.user  = _debug

@@ -16,7 +16,9 @@ from cloudmesh_install import config_file
 from cloudmesh_common.util import PROGRESS
 from cloudmesh.config.cm_config import cm_config_server 
 
-progress_queue = PROGRESS('Cloudmesh Queue Services', 13)
+import progress
+
+PROGRESS.set('Cloudmesh Services', 50)
 
 __all__ = ['start', 'stop', 'list', 'clean', 'gui',
            'monitor', 'kill', 'ls', 'lspbs', 'flower_server']
@@ -31,15 +33,11 @@ try:
 except:
     pass
 
-fabric.state.output.debug  = debug
-fabric.state.output.running  = debug
-fabric.state.output.status  = debug
-fabric.state.output.stdout  = True
-fabric.state.output.stderr  = debug
-fabric.state.output.warnings  = debug
-fabric.state.output.aborts  = debug
-fabric.state.output.user  = debug
-
+if debug:
+    progress.off()
+else:
+    progress.on()
+    
 """
 for worker in workers:
     workers[worker] = {"app":"cloudmesh.launcher{0}.queue",
@@ -123,7 +121,7 @@ def monitor():
 
 def celery_command(command, app, workers, queue, concurrency=None):
     """execute the celery command on the application and workers specified"""
-    progress_queue.next()
+    PROGRESS.next()
     worker_str = " ".join(workers)
     exec_string = "celery multi {0} {1} -A {2} -l info -Q {3}".format(
         command, worker_str, app, queue)
@@ -150,14 +148,14 @@ def start(view=None):
     with settings(warn_only=True):
         stop()
         time.sleep(2)
-        progress_queue.next()
+        PROGRESS.next()
         mq.start()
-        progress_queue.next()
+        PROGRESS.next()
         time.sleep(2)
-        progress_queue.next()
+        PROGRESS.next()
 
         for worker in workers:
-            progress_queue.next()
+            PROGRESS.next()
             concurrency = None
             if "concurrency" in workers[worker]:
                 concurrency = workers[worker]["concurrency"]
@@ -168,7 +166,7 @@ def start(view=None):
                            concurrency=concurrency)
 
     if view is None:
-        progress_queue.next()
+        PROGRESS.next()
         time.sleep(2)
         print
         # local("celery worker --app={0} -l info".format(app))
