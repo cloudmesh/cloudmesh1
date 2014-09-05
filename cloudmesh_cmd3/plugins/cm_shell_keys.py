@@ -1,20 +1,13 @@
-import types
-import textwrap
-from docopt import docopt
-import inspect
-import sys
-import importlib
 import json
-from pprint import pprint
 from cmd3.shell import command
-from cloudmesh.config.cm_keys import cm_keys_yaml,cm_keys_mongo
+from cloudmesh.config.cm_keys import cm_keys_yaml, cm_keys_mongo
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import two_column_table
 from cloudmesh_common.bootstrap_util import yn_choice
 from cloudmesh.util.menu import menu_return_num
 from os import listdir
-from os.path import isfile, join, expanduser
+from os.path import expanduser
 from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
@@ -30,7 +23,7 @@ class cm_shell_keys:
         self.keys_loaded = False
         self.keys_loaded_mongo = False
         self.use_yaml = True
-        self.register_command_topic('cloud','keys')
+        self.register_command_topic('cloud', 'keys')
         pass
 
     def _load_mongo(self):
@@ -41,6 +34,7 @@ class cm_shell_keys:
             except:
                 print "ERROR: could not access Mongodb. " \
                       "Have you started the mongo server?"
+
     def _load_keys(self):
         try:
             filename = config_file("/cloudmesh.yaml")
@@ -51,78 +45,79 @@ class cm_shell_keys:
             self.keys_loaded = True
         except:
             print "ERROR: could not find the keys in %s" % filename
+
     def _load_keys_mongo(self):
-        #try:
+        # try:
         from cloudmesh.config.cm_config import cm_config
         config = cm_config()
         self.user = config.get('cloudmesh.profile.username')
-                
+
         if self.echo:
             log.info("Reading keys information from -> mongo")
         self.keys_mongo = cm_keys_mongo(self.user)
         self.keys_loaded_mongo = True
-        #except:
+        # except:
         #   print "ERROR: could not find the keys in %s" % filename
-
 
     @command
     def do_keys(self, args, arguments):
         """
         Usage:
                keys info [--json] [NAME][--yaml][--mongo]
-               keys mode MODENAME               
+               keys mode MODENAME
                keys default NAME [--yaml][--mongo]
                keys add NAME [KEY] [--yaml][--mongo]
                keys delete NAME [--yaml][--mongo]
                keys save
                keys
-    
+
         Manages the keys
 
         Arguments:
 
           NAME           The name of a key
           MODENAME       This is used to specify the mode name. Mode
-	  		          name can be either 'yaml' or 'mongo'
-	  	  KEY            This is the actual key that has to added
+                                  name can be either 'yaml' or 'mongo'
+                  KEY            This is the actual key that has to added
 
         Options:
 
            -v --verbose     verbose mode
            -j --json        json output
            -y --yaml        forcefully use yaml mode
-           -m --mongo       forcefully use mongo mode           
+           -m --mongo       forcefully use mongo mode
+
 
         Description:
- 
-        keys info 
 
-	     Prints list of keys. NAME of the key can be specified
+        keys info
+
+             Prints list of keys. NAME of the key can be specified
 
         keys mode MODENAME
 
-	     Used to change default mode. Valid MODENAMES are
-	     yaml(default) and mongo mode.
+             Used to change default mode. Valid MODENAMES are
+             yaml(default) and mongo mode.
 
         keys default NAME
 
-	     Used to set a key from the key-list as the default key
+             Used to set a key from the key-list as the default key
 
         keys add NAME [KEY]
 
-	     adding/updating keys. KEY is the key file with full file 
-	     path, if KEY is not provided, you can select a key among
-	     the files with extension .pub under ~/.ssh. If NAME exists,
-	     current key value will be overwritten
-	     
+             adding/updating keys. KEY is the key file with full file
+             path, if KEY is not provided, you can select a key among
+             the files with extension .pub under ~/.ssh. If NAME exists,
+             current key value will be overwritten
+
         keys delete NAME
 
-	     deletes a key. In yaml mode it can delete only keys that
-	     are not saved in mongo
+             deletes a key. In yaml mode it can delete only keys that
+             are not saved in mongo
 
         keys save
 
-	     Saves the temporary yaml data structure to mongo
+             Saves the temporary yaml data structure to mongo
         """
         if arguments["mode"]:
             if arguments["MODENAME"] == "yaml":
@@ -134,16 +129,16 @@ class cm_shell_keys:
                 print "SUCCESS: Set mode to mongo"
                 return
             else:
-                print "ERROR: Wrong MODENAME. only valid modes are 'mongo' and 'yaml'" 
+                print "ERROR: Wrong MODENAME. only valid modes are 'mongo' and 'yaml'"
                 return
 
         if arguments["--yaml"] and arguments["--mongo"]:
-           print "ERROR: you can specify only one mode"
-           return
+            print "ERROR: you can specify only one mode"
+            return
         elif arguments["--yaml"]:
-           self.use_yaml = True
-        elif arguments["--mongo"]:     
-           self.use_yaml = False
+            self.use_yaml = True
+        elif arguments["--mongo"]:
+            self.use_yaml = False
 
         if self.use_yaml:
             print "Mode: yaml"
@@ -157,8 +152,8 @@ class cm_shell_keys:
             if not self.keys_loaded_mongo:
                 self._load_keys_mongo()
             key_container = self.keys_mongo
-    
-        if arguments["default"] and arguments["NAME"]:     
+
+        if arguments["default"] and arguments["NAME"]:
             if arguments["NAME"] in key_container.names():
                 key_container.setdefault(arguments["NAME"])
                 # Update mongo db defaults with new default key
@@ -170,14 +165,18 @@ class cm_shell_keys:
         if arguments["add"] and arguments["NAME"]:
             def func():
                 if arguments["KEY"]:
-                    key_container.__setitem__(arguments["NAME"],arguments["KEY"])
+                    key_container.__setitem__(
+                        arguments["NAME"], arguments["KEY"])
                 else:
-                    files = [file for file in listdir(expanduser("~/.ssh")) if file.lower().endswith(".pub")]
-                    result = menu_return_num(title="Select a public key", menu_list=files, tries=3)
+                    files = [file for file in listdir(
+                        expanduser("~/.ssh")) if file.lower().endswith(".pub")]
+                    result = menu_return_num(
+                        title="Select a public key", menu_list=files, tries=3)
                     if result == 'q':
                         return
                     else:
-                        key_container.__setitem__(arguments["NAME"], "~/.ssh/{0}".format(files[result]))
+                        key_container.__setitem__(
+                            arguments["NAME"], "~/.ssh/{0}".format(files[result]))
             if arguments["NAME"] in key_container.names():
                 if yn_choice("key {0} exists, update?".format(arguments["NAME"]), default='n'):
                     print "Updating key {0} ...".format(arguments["NAME"])
@@ -187,8 +186,7 @@ class cm_shell_keys:
             else:
                 print "adding key {0} ...".format(arguments["NAME"])
                 func()
-            
-            
+
         if arguments["delete"]:
             print "Attempting to delete key. {0}".format(arguments["NAME"])
             if self.use_yaml:
@@ -196,7 +194,7 @@ class cm_shell_keys:
 already when 'keys save' is called. If your key is already in the database, \
 you should use mongo mode\n"
             key_container.delete(arguments["NAME"])
-            return 
+            return
         if arguments["save"]:
             if not self.mongo_loaded:
                 self._load_mongo()
@@ -204,22 +202,23 @@ you should use mongo mode\n"
                 self._load_keys_mongo()
             key_mongo = self.keys_mongo
             key_yaml = self.keys
-            names = key_yaml.names()    
+            names = key_yaml.names()
             for name in names:
-                key_mongo.__setitem__(name, key_yaml._getvalue(name),key_type="string")
+                key_mongo.__setitem__(
+                    name, key_yaml._getvalue(name), key_type="string")
             key_mongo.setdefault(key_yaml.get_default_key())
             return
 
-        if (arguments["info"]) or (args==""):
+        if (arguments["info"]) or (args == ""):
             if arguments["--json"]:
                 if arguments["NAME"] is None:
                     name = "keys"
-                else: 
+                else:
                     name = arguments["NAME"]
                 try:
                     print json.dumps(key_container[name], indent=4)
                 except:
-                    print "ERROR: Something went wrong in looking up keys. Did u give the right name??"    
+                    print "ERROR: Something went wrong in looking up keys. Did u give the right name??"
                 return
             else:
                 mykeys = {}
@@ -232,10 +231,9 @@ you should use mongo mode\n"
                     mykeys[name] = key_container.fingerprint(name)
                 print two_column_table(mykeys)
                 return
-        
+
 
 if __name__ == '__main__':
     arguments = {}
     arguments['mode'] = True
     arguments['MODENAME'] = "yaml"
-    
