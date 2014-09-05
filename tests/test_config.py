@@ -58,16 +58,20 @@ class Test_cloudmesh:
         result = self.config.projects('default')
         assert result == self.project
 
-    def test_sierra(self):
+    def test_sierra_version(self):
         HEADING()
-        result = self.config.cloud('sierra_openstack_grizzly')
+        result = self.config.cloud('sierra')
         pprint (result)
         assert result["credentials"]["OS_VERSION"] == 'grizzly'
 
+    def test_sierra_cloudnames(self):
+        HEADING()
+        keys = self.config.cloudnames()
+        assert 'sierra' in keys
 
     def test_expand(self):
         HEADING()
-        result = self.config.get('cloudmesh.clouds.sierra_openstack_grizzly')
+        result = self.config.get('cloudmesh.clouds.sierra')
         dir = result['credentials']['OS_CACERT']
         print dir
         assert dir.startswith("~")
@@ -76,11 +80,6 @@ class Test_cloudmesh:
         assert not dir.startswith("~")
 
 
-
-    def test_cloudnames_sierra_openstack(self):
-        HEADING()
-        keys = self.config.cloudnames()
-        assert 'sierra_openstack_grizzly' in keys
 
 
 
@@ -101,11 +100,11 @@ class Test_cloudmesh:
         HEADING()
         clouds = self.config.clouds()
         assert isinstance(clouds, dict)
-        assert 'sierra_openstack_grizzly' in clouds
+        assert 'sierra' in clouds
 
     def test_cloud(self):
         HEADING()
-        sierra_cloud = self.config.cloud('sierra_openstack_grizzly')
+        sierra_cloud = self.config.cloud('sierra')
         assert isinstance(sierra_cloud, dict)
         assert 'cm_host' in sierra_cloud
         assert sierra_cloud['cm_host'] == 'sierra.futuregrid.org'
@@ -113,9 +112,9 @@ class Test_cloudmesh:
     def test14_cloud_default(self):
         HEADING()
         assert self.config.cloud_default(
-            'sierra_openstack_grizzly', 'flavor') == 'm1.tiny'
+            'sierra', 'flavor') == 'm1.tiny'
         assert self.config.cloud_default(
-            'sierra_openstack_grizzly', 'not defined') is None
+            'sierra', 'not defined') is None
 
     def test15_project_default(self):
         HEADING()
@@ -173,7 +172,7 @@ class Test_cloudmesh:
     """
     def test22_filter(self):
         HEADING()
-        print self.config.get_filter('sierra_openstack_grizzly')
+        print self.config.get_filter('sierra')
     """
 
     def test_launcher(self):

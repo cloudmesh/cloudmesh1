@@ -26,9 +26,12 @@ import functools
 import cloudmesh_common.bootstrap_util
 import string
 import random
-
-from progress.bar import Bar
-
+try:
+    from progress.bar import Bar
+except:
+    os.system("pip install progress")    
+    from progress.bar import Bar    
+    
 class PROGRESS(object):
 
     defined = False

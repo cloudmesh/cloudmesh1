@@ -29,8 +29,8 @@ def shell_command_vm(arguments):
       vm list [--verbose | --json] [--cloud=<CloudName>]
 
     Description:
-       vm command provides procedures to manage VM instances of selected IaaS. 
- 
+       vm command provides procedures to manage VM instances of selected IaaS.
+
     Arguments:
       NAME name of the VM
 
@@ -42,9 +42,9 @@ def shell_command_vm(arguments):
        -c <CloudName> --cloud=<CloudName>   Name of the Cloud
        --img=<imgName>                      Name of the image for VM
        -f <FlavorId> --flavor=<FlavorId>    Flavor Id for VM
-    
+
     Examples:
-        $ vm create --cloud=sierra_openstack_grizzly
+        $ vm create --cloud=sierra
         --image=futuregrid/ubuntu-14.04
     '''
     vm = ManageVM(arguments)
@@ -150,7 +150,7 @@ class ManageVM(object):
                     or userinfo["defaults"]["flavors"][cloud]
         except:
             error = error + "Please specify a default flavor."
-        if vm_flavor_id in [None, 'none']:        
+        if vm_flavor_id in [None, 'none']:
             error = error + "Please specify a default flavor."
 
         try:
@@ -228,7 +228,7 @@ class ManageVM(object):
                         self.clouds.vm_delete(cloud, server, userid)
                 except:
                     pass
-        
+
         t = threading.Thread(target=self.clouds.refresh,
                              kwargs={'cm_user_id':userid, 'names':[cloud], \
                                     'types':['servers']})
@@ -266,11 +266,11 @@ class ManageVM(object):
     def get_commands(self):
         '''Return commands only except options start with '--' from docopt
         arguments
-        
+
         Example:
             get_commands({"info": True, "--count":None})
             returns
-            {"info": True} 
+            {"info": True}
         '''
         args = self.args
         result = {}
@@ -281,7 +281,7 @@ class ManageVM(object):
         return result
 
 
-    def _select_servers(self, data, selected_keys): 
+    def _select_servers(self, data, selected_keys):
         servers = []
         for cm_cloud, _id in data.iteritems():
             for server_name, v in _id.iteritems():
@@ -308,8 +308,8 @@ def _getFromDict(dataDict, mapList):
     e.g.  Access to the value 5 in dataDict
 
     dataDict = { "abc": {
-                    "def": 5 
-                    } 
+                    "def": 5
+                    }
                 }
     mapList = [ "abc", "def" ]
 
@@ -332,7 +332,7 @@ def _display(json_data, headers="firstrow", tablefmt="orgtbl"):
 def main():
     arguments = docopt(shell_command_vm.__doc__)
     shell_command_vm(arguments)
-        
+
 if __name__ == "__main__":
     #print sys.argv
     main()

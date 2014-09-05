@@ -108,11 +108,11 @@ def install_command(args):
         install system
         install query
         install new
-        install apply_credentials
         install vagrant
         install rc fetch [--username=<username>] [--outdir=<outdir>]
         install rc fill
         install rc login [--username=<username>]
+        install enable admin [--username=<username>]
 
     """
     arguments = docopt(install_command.__doc__, args)
@@ -170,6 +170,8 @@ def install_command(args):
     elif arguments["rc"] and arguments["login"]:
         verify_ssh_login(arguments["--username"])
 
+    elif arguments["enable"] and arguments["admin"]:
+        enable_admin_page(arguments['--username'])
 
 def new_cloudmesh_yaml():
     """ Generate yaml files from the templates in etc directory
@@ -664,9 +666,6 @@ def fetchrc(userid=None, outdir=None):
         print sys.exc_info()
         sys.exit(1)
 
-
-
-
 def verify_ssh_login(userid):
     client = SSHClient()
     client.load_system_host_keys()
@@ -690,6 +689,74 @@ def verify_ssh_login(userid):
             # print sys.exc_info()
             print ("[%s] %s with %s. Please check your ssh setup (e.g. key " +
                    "files, id, known_hosts)") % (host, e, userid)
+
+def enable_admin_page(userid):
+    if not userid:
+        userid=_get_username_from_profile()
+
+    _set_username_to_admin(userid)
+
+def _set_username_to_admin(userid):
+    server_yaml = _get_value_from_yaml("/cloudmesh_server.yaml",[])
+
+    updated_yaml = server_yaml
+    updated_yaml['cloudmesh']['server']['roles']['admin']['users']=[userid]
+
+
+    _set_value_to_yaml("/cloudmesh_server.yaml", updated_yaml)
+
+def _get_bak_filename(filename, postfix=0):
+    import os.path
+    bak_name = os.path.abspath(filename) + ".bak" + "." + str(postfix)
+    if os.path.isfile(bak_name):
+        return _get_bak_filename(filename, postfix + 1)
+    return bak_name
+
+def _make_a_backup(filename):
+    import shutil
+    dest = _get_bak_filename(filename)
+    shutil.copyfile(filename, dest)
+    return dest
+
+def _set_value_to_yaml(filepath, data):
+ 
+    dir = config_file("")
+    cm_file = dir + filepath
+
+    # make a backup
+    bak = _make_a_backup(cm_file)
+    print "[%s] backup made" % bak
+
+    # Write yaml
+    with open(cm_file, 'w') as outfile:
+        outfile.write(yaml.dump(data, default_flow_style=False))
+        print "[%s] updated" % cm_file
+
+def _get_username_from_profile():
+    return _get_value_from_yaml("/cloudmesh.yaml",
+                         ['cloudmesh', 'profile', 'username'])
+
+def _lookup(data, keys):
+    try:
+        if keys:
+            if keys[0] in data:
+                return _lookup(data[keys[0]], keys[1:])
+    except:
+        return data
+    return data
+
+def _get_value_from_yaml(filepath, column_keys):
+    dir = config_file("")
+    cm_file = dir + filepath
+
+    try:
+        result = open(cm_file, 'r').read()
+        values = yaml.safe_load(Template(result).substitute(os.environ))
+    except Exception, e:
+        print "ERROR: There is an error in the yaml file", e
+        sys.exit(1)
+
+    return _lookup(values, column_keys)
 
 if __name__ == '__main__':
     install_command(sys.argv)

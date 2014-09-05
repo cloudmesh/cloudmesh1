@@ -1,11 +1,4 @@
-import types
-import textwrap
-from docopt import docopt
-import inspect
-import sys
-import importlib
 from cmd3.shell import command
-
 from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
@@ -16,7 +9,7 @@ class cm_shell_exp:
     """opt_example class"""
 
     def activate_cm_shell_exp(self):
-        # self.register_command_topic('cloud','exp')        
+        # self.register_command_topic('cloud','exp')
         pass
 
     @command

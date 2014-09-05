@@ -10,7 +10,6 @@ from cloudmesh.util.stopwatch import StopWatch
 # from pprint import pprint
 import traceback
 from cloudmesh.util.encryptdata import decrypt
-import traceback
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -88,7 +87,7 @@ class cm_MongoBase(object):
         self.db_mongo.remove({})
 
 
-class cm_mongo:
+class cm_mongo2:
 
     clouds = {}
     client = None
@@ -209,10 +208,10 @@ class cm_mongo:
         if force:
             recreate = True
         # new user
-        elif not cm_user_id in self.clouds:
+        elif cm_user_id not in self.clouds:
             recreate = True
         # new cloud for that user
-        elif not cloud_name in self.clouds[cm_user_id]:
+        elif cloud_name not in self.clouds[cm_user_id]:
             recreate = True
         # manager pointer does not exist
         elif 'manager' not in self.clouds[cm_user_id][cloud_name]:
@@ -273,8 +272,11 @@ class cm_mongo:
                                         )
                                         if existRule == self.ssh_ec2_rule:
                                             foundsshrule = True
-                                            log.debug("Ec2 security group rule allowing ssh exists for cloud: %s, type: %s, tenant: %s"
-                                                      % (cloud_name, cm_type, credentials['OS_TENANT_NAME']))
+                                            log.debug("Ec2 security group rule allowing "
+                                                      "ssh exists for cloud: %s, type: %s, tenant: %s"
+                                                      % (cloud_name,
+                                                         cm_type,
+                                                         credentials['OS_TENANT_NAME']))
                                     if not foundsshrule:
                                         iddefault = cloud.find_security_groupid_by_name(
                                             'default')
@@ -527,13 +529,26 @@ class cm_mongo:
         BUG: missing security group
         '''
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
-        if givenvmname == None:
+        if givenvmname is None:
             name = "%s_%s" % (prefix, index)
         else:
             name = givenvmname
-        return cloudmanager.vm_create(name=name, flavor_name=vm_flavor, image_id=vm_image, key_name=key, meta=meta)
+        return cloudmanager.vm_create(name=name,
+                                      flavor_name=vm_flavor,
+                                      image_id=vm_image,
+                                      key_name=key,
+                                      meta=meta)
 
-    def vm_create_queue(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id, givenvmname=None):
+    def vm_create_queue(self,
+                        cloud,
+                        prefix,
+                        index,
+                        vm_flavor,
+                        vm_image,
+                        key,
+                        meta,
+                        cm_user_id,
+                        givenvmname=None):
         '''
         same as vm_create but runs with a celery task queue
 
@@ -548,7 +563,7 @@ class cm_mongo:
         name = "tasks"
         imported = getattr(__import__(package, fromlist=[name]), name)
         queue_name = "%s-%s" % (cm_type, "servers")
-        if givenvmname == None:
+        if givenvmname is None:
             name = "%s_%s" % (prefix, index)
         else:
             name = givenvmname

@@ -19,29 +19,29 @@ Usage:
                       (-l HOSTS|-n COUNT)
                       [--start=TIME_START]
                       [--end=TIME_END]
-    rain list [--project=PROJECTS] [HOSTS]    
+    rain list [--project=PROJECTS] [HOSTS]
     rain list hosts [--start=TIME_START]
                     [--end=TIME_END]
                     [--format=FORMAT]
     rain status [--short|--summary][--kind=KIND] [HOSTS]
-    
+
 Arguments:
     HOSTS     the list of hosts passed
     LABEL     the label of a host
     COUNT     the count of the bare metal provisioned hosts
     KIND      the kind
-    
+
 Options:
     -n COUNT     count of teh bare metal hosts to be provisined
-    -p PROJECTS  --projects=PROJECTS  
+    -p PROJECTS  --projects=PROJECTS
     -u USERS     --user=USERS        Specify users
     -f FILE, --file=FILE  file to be specified
-    -i           interactive mode adds a yes/no 
+    -i           interactive mode adds a yes/no
                  question for each host specified
     --role=ROLE            Specify predefined role
-    --start=TIME_START     Start time of the reservation, in 
+    --start=TIME_START     Start time of the reservation, in
                            YYYY/MM/DD HH:MM:SS format. [default: current_time]
-    --end=TIME_END         End time of the reservation, in 
+    --end=TIME_END         End time of the reservation, in
                            YYYY/MM/DD HH:MM:SS format. In addition a duration
                            can be specified if the + sign is the first sign.
                            The duration will than be added to
@@ -58,8 +58,7 @@ from datetime import datetime, timedelta
 from pytimeparse.timeparse import timeparse
 # from timestring import Range
 # from timestring import Date
-from datetime import datetime, timedelta
-#from cloudmesh.util.util import parse_time_interval
+# from cloudmesh.util.util import parse_time_interval
 
 
 def not_implemented():
