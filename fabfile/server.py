@@ -127,7 +127,7 @@ def start(server="server", browser='yes', debug=False):
     
     pprint (fabric.state.output)
 
-    debug = False
+    debug = True
     
     fabric.state.output.debug  = debug
     fabric.state.output.running  = debug
