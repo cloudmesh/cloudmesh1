@@ -22,10 +22,10 @@ from cloudmesh_install import config_file
 @task
 def password():
     user_config = cm_config(filename=config_file("/cloudmesh.yaml"))
-    user = user_config.cloud('sierra_openstack_grizzly')['credentials']
+    user = user_config.cloud('sierra')['credentials']
 
     server_config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
-    server = server_config.get('cloudmesh.server.keystone.sierra_openstack_grizzly')
+    server = server_config.get('cloudmesh.server.keystone.sierra')
 
     print(" ".join(["keystone", "--os-username", server['OS_USERNAME'],
              "--os-password", server['OS_PASSWORD'],
@@ -60,129 +60,15 @@ def delete_defaults():
 
 @task
 def register():
-
-    config = cm_config()
-    cm_user_id = config.get("cloudmesh.hpc.username")
-    clouds = config.get("cloudmesh.clouds")
-
-    user_obj = cm_user()
-
-    for cloudname in config.cloudnames():
-        user_obj.set_credential(cm_user_id,
-                                cloudname,
-                                clouds[cloudname]['credentials'])
+    database = Database()
+    database.set_credentials()
 
 
 @task
 def mongo():
-    register()
+    from cloudmesh.server.database import Database
 
-    filename = config_file("/cloudmesh.yaml")
-    banner("reading data from {0}".format(filename))
-    config = cm_config(filename=filename)
-
-    profile = config.profile()
-
-    element = {
-               "firstname" : profile["firstname"],
-               "lastname" : profile["lastname"],
-               "uidNumber" : profile["uid"],
-               "phone" : profile["phone"],
-               "gidNumber" : profile["gid"],
-               "address" : profile["address"][0],
-               "cm_user_id" : config.get("cloudmesh.hpc.username"),
-               "email" : profile["email"],
-               "activeclouds" : config.get("cloudmesh.active")
-    }
-
-    projects = {}
-
-    active = config.get("cloudmesh.projects.active")
-
-    if active != ['None']:
-        projects["active"] = active
-
-    completed = config.get("cloudmesh.projects.completed")
-    if completed != ['None']:
-        projects["completed"] = completed
-
-    if projects != {}:
-        element["projects"] = projects
-
-    # get keys and clean the key titles (replace '.' with '_' due to mongo restriction)
-    keys = config.get("cloudmesh.keys.keylist")
-    for keytitle in keys.keys():
-        if "." in keytitle:
-            keycontent = keys[keytitle]
-            newkeytitle = keytitle.replace(".", "_")
-            del keys[keytitle]
-            keys[newkeytitle] = keycontent
-    element['keys'] = keys
-
-    pprint (element)
-
-    # hpc username as key
-    username = element["cm_user_id"]
-    # populate the local userinfo into the same mongo as though it were from LDAP.
-    userstore = cm_userLDAP()
-    userstore.updates(username, element)
-
-    user_obj = cm_user()
-    user_obj.init_defaults(username)
-
-    # info disabled due to
-    # NameError: global name 'info' is not defined
-    #info(username)
-    
-    #------------------------------------------------------------------------------
-    # added by Mark X. on Aug.25 2014
-    # add clouds information to mongo when initialize user iformation in mongo
-    
-    from cloudmesh.cm_mongo import cm_mongo
-    mongo = cm_mongo()
-    
-    mongo.db_clouds.remove({'cm_kind': 'cloud', 'cm_user_id': username})
-    
-    def import_cloud_to_mongo(d, cloudname, username):
-        '''
-        insert a cloud to db_clouds
-        additionally, add values cm_cloud, cm_kind=cloud, cm_user_id
-        before use this function, check whether cloud exists in db_clouds
-        cloud name duplicate is not allowed
-        '''
-        if d['cm_type'] in ['openstack']:
-            if d['credentials']['OS_USERNAME']:
-                del d['credentials']['OS_USERNAME']
-            if d['credentials']['OS_PASSWORD']:
-                del d['credentials']['OS_PASSWORD']
-            if d['credentials']['OS_TENANT_NAME']:
-                del d['credentials']['OS_TENANT_NAME']
-        elif d['cm_type'] in ['ec2', 'aws']:
-            if d['credentials']['EC2_ACCESS_KEY']:
-                del d['credentials']['EC2_ACCESS_KEY']
-            if d['credentials']['EC2_SECRET_KEY']:
-                del d['credentials']['EC2_SECRET_KEY']
-        elif d['cm_type'] in ['azure']:
-            if d['credentials']['subscriptionid']:
-                del d['credentials']['subscriptionid']
-                
-        d['cm_cloud']=cloudname
-        d['cm_kind']='cloud'
-        d['cm_user_id']=username
-        
-        #remove default part from yaml
-        if d['default']:
-            del d['default']
-                
-        mongo.db_clouds.insert(d)
-        
-    cloudsdict = config.get("cloudmesh", "clouds")
-
-    for key in cloudsdict:
-        import_cloud_to_mongo(cloudsdict[key], key, username)
-        print "cloud '{0}' added.".format(key)
-    #------------------------------------------------------------------------------
-    
-    
-    
+    database = Database()
+    database.set_credentials()
+    database.initialize_user()
     

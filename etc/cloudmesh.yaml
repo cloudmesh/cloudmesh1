@@ -13,9 +13,8 @@ cloudmesh:
         phone: {{ profile.phone }}
         username: {{ username.portal }}
     active:
-    - sierra_openstack_grizzly
-    - hp
-    - hp_east
+    - sierra
+    - india
     hpc:
         username: {{ username.portal }}
     clouds:

@@ -47,7 +47,6 @@ def ascii_menu(title=None, menu_list=None):
         display()
 
 
-
 def menu_return_num(title=None, menu_list=None, tries=1):
     '''
     creates a simple ASCII menu from a list of labels
@@ -73,14 +72,14 @@ def menu_return_num(title=None, menu_list=None, tries=1):
         print "    q - quit"
         print
         print
-        
+
     display()
     while tries > 0:
-        #display()
+        # display()
         result = raw_input("Select between {0} - {1}: ".format(1, n))
         if result == "q":
             return 'q'
-        else: 
+        else:
             try:
                 result = int(result)
             except:
@@ -92,6 +91,5 @@ def menu_return_num(title=None, menu_list=None, tries=1):
                 return result-1
             else:
                 print "ERROR: wrong selection"
-                
-    return 'q'
 
+    return 'q'

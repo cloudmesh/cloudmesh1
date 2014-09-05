@@ -19,11 +19,20 @@ def array_dict_table_printer(array, order=None, header=None):
         
     if order is None:
         order = header
-    x = PrettyTable(order)
+        
+    if header is None:
+        x = PrettyTable(order)
+    else:
+        x = PrettyTable(header)
+        
     for element in array:
         values = []
         for key in order:
-            values.append(element[key])
+            try:
+                tmp = str(element[key])
+            except:
+                tmp = ' '
+            values.append(tmp)
         x.add_row(values)
     x.align = "l"
     return x

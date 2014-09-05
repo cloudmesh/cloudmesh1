@@ -15,7 +15,8 @@ def ping(host):
         pass
 
     try:
-        (attributes, values) = result[-1].replace("round-trip", "").strip().split("=")
+        (attributes, values) = result[-1].replace("round-trip", "")\
+            .strip().split("=")
         attributes = attributes.strip().split("/")
         values = values.strip().split("/")
 

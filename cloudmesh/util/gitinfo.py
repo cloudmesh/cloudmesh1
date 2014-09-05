@@ -30,7 +30,7 @@ class GitInfo(object):
     def __init__(self):
         """init method"""
         pass
-    
+
     def version(self):
         '''
         retruns the verison of the code from github
@@ -74,8 +74,8 @@ class GitInfo(object):
         if format_arg is None:
             return result
         elif format_arg == "dict":
-            list = result.replace("\n", "\t").split("\t")[:-1]
-            it = iter(list[::-1])
+            list_string = result.replace("\n", "\t").split("\t")[:-1]
+            it = iter(list_string[::-1])
             authors = dict(zip(it, it))
             for name in authors:
                 authors[name] = int(authors[name])
@@ -189,4 +189,5 @@ if __name__ == "__main__":
     print "h"
     for email in stats:
         p = stats[email]["percentage"]
-        print "{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%".format(email, p[0], p[1], p[2], p[3])
+        print ("{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%"
+               .format(email, p[0], p[1], p[2], p[3]))

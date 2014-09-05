@@ -1,20 +1,13 @@
 from cloudmesh.config.ConfigDict import ConfigDict
-#from cloudmesh.util.config import read_yaml_config
+# from cloudmesh.util.config import read_yaml_config
 from cloudmesh_common.logger import LOGGER
-#from cloudmesh_common.util import check_file_for_tabs, deprecated, path_expand
+# from cloudmesh_common.util import check_file_for_tabs, deprecated, path_expand
 from cloudmesh_common.util import deprecated, path_expand
-from pprint import pprint
 from pymongo import MongoClient
-from mongoengine import connect, Document
-import collections
-import copy
-import json
+from mongoengine import connect
 import os
-import sys
-import yaml
 from cloudmesh_install import config_file
 
-from cloudmesh.util.debug import WHERE
 
 log = LOGGER(__file__)
 
@@ -24,18 +17,19 @@ log = LOGGER(__file__)
 # why not "pymongo" and "mongoengine"
 MONGOCLIENT = 0
 MONGOENGINE = 1
-    
+
+
 class DBConnFactory(object):
     connectors = {}
     DBCONFIG = None
     TYPE_MONGOCLIENT = MONGOCLIENT
     TYPE_MONGOENGINE = MONGOENGINE
-        
+
     @classmethod
     def getconn(cls, dbname, clientType=MONGOCLIENT):
         dbkey = "%s_%s" % (dbname, clientType)
         if dbkey in cls.connectors:
-            #print "RETURNING AN EXISTING DB CONNECTOR FROM FACTORY"
+            # print "RETURNING AN EXISTING DB CONNECTOR FROM FACTORY"
             return cls.connectors[dbkey]
         else:
             conn = None
@@ -46,37 +40,42 @@ class DBConnFactory(object):
                 cls.DBCONFIG["port"] = int(config["port"])
                 cls.DBCONFIG["username"] = config["username"]
                 cls.DBCONFIG["password"] = config["password"]
-            
+
             if clientType == MONGOCLIENT:
                 if cls.DBCONFIG["username"] and cls.DBCONFIG["password"]:
                     uri = "mongodb://{0}:{1}@{2}:{3}/{4}".format(cls.DBCONFIG["username"],
-                                                                 cls.DBCONFIG["password"],
-                                                                 cls.DBCONFIG["host"],
-                                                                 cls.DBCONFIG["port"],
+                                                                 cls.DBCONFIG[
+                                                                     "password"],
+                                                                 cls.DBCONFIG[
+                                                                     "host"],
+                                                                 cls.DBCONFIG[
+                                                                     "port"],
                                                                  dbname)
                 else:
                     uri = "mongodb://{2}:{3}/{4}".format(cls.DBCONFIG["username"],
-                                                                 cls.DBCONFIG["password"],
-                                                                 cls.DBCONFIG["host"],
-                                                                 cls.DBCONFIG["port"],
-                                                                 dbname)
+                                                         cls.DBCONFIG[
+                                                             "password"],
+                                                         cls.DBCONFIG["host"],
+                                                         cls.DBCONFIG["port"],
+                                                         dbname)
                 try:
                     conn = MongoClient(uri)[dbname]
                 except:
                     print "Failed to connect to Mongoclient DB:\n\t%s" % uri
             elif clientType == MONGOENGINE:
                 try:
-                    conn = connect (dbname,
-                         host = cls.DBCONFIG["host"],
-                         port = cls.DBCONFIG["port"],
-                         username = cls.DBCONFIG["username"],
-                         password = cls.DBCONFIG["password"])
+                    conn = connect(dbname,
+                                   host=cls.DBCONFIG["host"],
+                                   port=cls.DBCONFIG["port"],
+                                   username=cls.DBCONFIG["username"],
+                                   password=cls.DBCONFIG["password"])
                 except:
                     print "Failed to connect to MongoEngine DB:\n\t%s" % dbname
-                    
+
             cls.connectors[dbkey] = conn
             return conn
-                
+
+
 def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     """
     Read in the mongo db information from the cloudmesh_server.yaml
@@ -86,12 +85,14 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     db_name = config["collections"][mongo_collection]['db']
 
     conn = None
-    db = DBConnFactory.getconn(db_name,clientType)
+    db = DBConnFactory.getconn(db_name, clientType)
     if db:
         conn = db[mongo_collection]
     return conn
 
+
 class cm_config_server(ConfigDict):
+
     """
     reads the information contained in the file
     cloudmesh_server.yaml
@@ -104,7 +105,21 @@ class cm_config_server(ConfigDict):
         ConfigDict.__init__(self, filename=filename, kind="server")
 
 
+def load(kind="user"):
+    if kind in ["launcher"]:
+        return cm_config_launcher()
+    elif kind in ["server"]:
+        return cm_config_server()
+    elif kind in ["flavor"]:
+        return cm_config_flavor()
+    elif kind in ["user"]:
+        return cm_config()
+    else:
+        raise("kind not found")
+
+
 class cm_config_launcher(ConfigDict):
+
     """
     reads the information contained in the file
     cloudmesh_launcher.yaml
@@ -116,7 +131,9 @@ class cm_config_launcher(ConfigDict):
             filename = self.filename
         ConfigDict.__init__(self, filename=filename, kind="launcher")
 
+
 class cm_config_flavor(ConfigDict):
+
     """
     reads the information contained in the file
     cloudmesh_flavor.yaml
@@ -127,6 +144,7 @@ class cm_config_flavor(ConfigDict):
         if filename is None:
             filename = self.filename
         ConfigDict.__init__(self, filename=filename, kind="flavor")
+
 
 class cm_config(ConfigDict):
 
@@ -139,7 +157,6 @@ class cm_config(ConfigDict):
     # ----------------------------------------------------------------------
     # initialization methods
     # ----------------------------------------------------------------------
-
 
     def __init__(self, filename=None):
         if filename is None:
@@ -177,7 +194,7 @@ class cm_config(ConfigDict):
 
     def get_default(self, cloudname=None, attribute=None):
         """
-        get_default('sierra_openstack_grizzly')
+        get_default('sierra')
         get_default('cloud')
         get_default('index')
         """
@@ -264,7 +281,6 @@ class cm_config(ConfigDict):
     # profile email
     # ----------------------------------------------------------------------
 
-
     @property
     def email(self):
         return self['cloudmesh']['profile']['email']
@@ -284,7 +300,6 @@ class cm_config(ConfigDict):
     @address.setter
     def address(self, value):
         self['cloudmesh']['profile']['address'] = str(value)
-
 
     # ----------------------------------------------------------------------
     # get methods
@@ -315,10 +330,8 @@ class cm_config(ConfigDict):
                 value = path_expand(value)
             return value
 
-
     def projects(self, status):
         return self['cloudmesh']['projects'][status]
-
 
     def clouds(self):
         return self['cloudmesh']['clouds']
@@ -335,13 +348,13 @@ class cm_config(ConfigDict):
         return defaults[defname] if defname in defaults else None
 
     def credential(self, name):
-        return self.get_data (key=name, expand=True)
+        return self.get_data(key=name, expand=True)
 
-    def get_credential (self, cloud=None, expand=False):
+    def get_credential(self, cloud=None, expand=False):
         if expand:
             d = self.get("cloudmesh.clouds.{0}.credentials".format(cloud))
             for key in d:
-               d[key] = path_expand(str(d[key]))
+                d[key] = path_expand(str(d[key]))
             return d
         else:
             return self.cloud(key)['credentials']
@@ -370,7 +383,6 @@ class cm_config(ConfigDict):
             avalue = value
         return 'export %s="%s"\n' % (attribute, avalue)
 
-
     def rc_openstack(self, name):
         """returns the lines that can be put in an rc file"""
         result = self.cloud(name)
@@ -383,7 +395,7 @@ class cm_config(ConfigDict):
                     lines += self.export_line(key, value[key])
         return lines
 
-    def rc (self, name):
+    def rc(self, name):
         kind = self.cloud(name)['cm_type']
         if kind == "openstack":
             return self.rc_openstack(name)
@@ -421,13 +433,13 @@ if __name__ == "__main__":
     print "= COMPLETED ================"
     print config.projects('completed')
     print "= SIERRA ================"
-    print config.cloud('sierra_openstack_grizzly')
+    print config.cloud('sierra')
     print "= PROFILE ================"
     print config.get("cloudmesh.profile")
     print "= CLOUDS ================"
     print config.cloudnames()
     print "= RC ================"
-    print config.rc('sierra_openstack_grizzly')
+    print config.rc('sierra')
     print "= DEFAULT ================"
     print config.default
     print "= TO FILE ================"
@@ -438,9 +450,6 @@ if __name__ == "__main__":
     configuration = config.credential('azure')
 
     print configuration['username']
-
-
-
 
     # print "================="
 

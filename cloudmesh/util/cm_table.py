@@ -32,6 +32,10 @@ class cm_table:
     def __str__(self):
         return self._content
 
+    #
+    # TODO: change format as it is predifined function
+    # TODO: change type as it is predefined function
+    #
     def create(self, structure, columns, format=None, type=None, header=True):
         """ creates a table from a list of rows, where the row is also
         a list. The format can be specified and may be HTML | ASCII |

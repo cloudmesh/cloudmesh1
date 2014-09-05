@@ -1,23 +1,14 @@
 '''some useful functions when working with web servers'''
 import re
 import os
-import sys
 import base64
 import zlib
-import blockdiag
-import blockdiag.imagedraw
-import blockdiag.noderenderer
-import blockdiagcontrib
-import actdiag.plugins
-import blockdiag.plugins
-
-if sys.version_info >= (2, 6):
-    import json as simplejson
-else:
-    try:
-        from django.utils import simplejson
-    except ImportError:
-        import simplejson
+# import blockdiag
+# import blockdiag.imagedraw
+# import blockdiag.noderenderer
+# import blockdiagcontrib
+# import actdiag.plugins
+# import blockdiag.plugins
 
 
 # for supporting base64.js
@@ -26,6 +17,9 @@ def base64_decode(the_string):
 
     :param the_string: the string
     """
+    #
+    # TODO: the string is not used
+    #
     string = re.sub('-', '+', the_string)
     string = re.sub('_', '/', the_string)
 
@@ -167,6 +161,6 @@ def setup_noderenderers():
     cisco.setup(cisco, 'http://%s/static/cisco_images' % get_hostname())
 
     import nationalflags
-    nationalflags.setup(nationalflags, 'http://%s/static/flag_images' % get_hostname())
-    
+    nationalflags.setup(nationalflags,
+                        'http://%s/static/flag_images' % get_hostname())
 """

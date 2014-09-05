@@ -1,12 +1,10 @@
 from cloudmesh.experiment.model_group import ExperimentGroup
 from cloudmesh_common.logger import LOGGER
-from docopt import docopt
-from pprint import pprint
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
-#from cmd3.shell import cmd3_call
 
 log = LOGGER(__file__)
+
 
 def shell_command_experiment_group(arguments):
     """
@@ -24,22 +22,22 @@ def shell_command_experiment_group(arguments):
     Options:
 
         -v         verbose mode
-        
+
     Description:
-        
+
        group NAME  lists in formation about the group
-        
+
     """
 
     name = arguments["NAME"]
 
     config = cm_config()
     username = config.username()
-    #print username
+    # print username
     user = cm_user()
 
     if arguments["info"]:
-        
+
         print "Default experiment group:", user.get_defaults(username)["group"]
 
     elif arguments["list"] and name is None:
@@ -49,26 +47,25 @@ def shell_command_experiment_group(arguments):
         except:
             print "ERROR: no default experiment group set"
             return
-        
-        experiment = ExperimentGroup (username, name)
-        print experiment.to_table(name)    
-        
-            
+
+        experiment = ExperimentGroup(username, name)
+        print experiment.to_table(name)
+
     elif arguments["list"] and name in ["all"]:
 
-        experiment = ExperimentGroup (username, name)
-        print experiment.to_table(name)    
-        
+        experiment = ExperimentGroup(username, name)
+        print experiment.to_table(name)
+
     elif arguments["list"]:
-        
-        experiment = ExperimentGroup (username, name)
-        print experiment.to_table(name)    
-        
+
+        experiment = ExperimentGroup(username, name)
+        print experiment.to_table(name)
+
     elif arguments["set"]:
         # "sets the group to the given name, the group must exists"
 
         user.set_default_attribute(username, "group", name)
-                
+
     elif arguments["add"]:
         # "adds the group to the given name, the group must not exist."
 
@@ -77,9 +74,10 @@ def shell_command_experiment_group(arguments):
     elif arguments["delete"]:
         print "deletes the entries and ask if -i is specified"
 
+
 def main():
-    #cmd3_call(shell_command_experiment_group)
+    # cmd3_call(shell_command_experiment_group)
     pass
-    
+
 if __name__ == '__main__':
     main()

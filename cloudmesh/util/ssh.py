@@ -2,12 +2,12 @@ import sys
 sys.stderr = open('/dev/null')       # Silence silly warnings from paramiko
 import paramiko as pm
 sys.stderr = sys.__stderr__
-#import os
-import ast
+# import os
 import re
 import os
 
-''' Contains the ssh class. Can be used in casews when you want the output of an ssh call but need to do steps before and after the call
+''' Contains the ssh class. Can be used in casews when you want the output of
+an ssh call but need to do steps before and after the call
 as part of the ssh session'''
 
 
@@ -20,9 +20,9 @@ class AllowAllKeys(pm.MissingHostKeyPolicy):
 class ssh:
 
     def __init__(self, host, username, password=''):
-        self.host = host  
-        self.username = username  
-        self.password = password  
+        self.host = host
+        self.username = username
+        self.password = password
         self.setup()
 
     def setup(self):
@@ -38,20 +38,20 @@ class ssh:
         stdin = channel.makefile('wb')
         stdout = channel.makefile('rb')
         query = ""
-        if init != None:
+        if init is not None:
             query += init + "\n"
         query += command
-        if exit != None:
+        if exit is not None:
             query += "\n" + exit + "\n"
         # bash\ncm list flavors jedi\nexit\nexit
         # print query
         stdin.write(query)
         output = stdout.read()
         # print output
-        if init != None:
+        if init is not None:
             output = re.split(command, output)
             output = output[1]
-        if exit != None:
+        if exit is not None:
             exit = exit.split("\n")
             exit = exit[0]
             output = re.split(".*" + exit, output)
