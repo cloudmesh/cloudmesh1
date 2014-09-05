@@ -20,7 +20,7 @@ def shell_command_open_web(arguments):
     Options:
 
         -v         verbose mode
-        --fg       opens a link on the FG portal 
+        --fg       opens a link on the FG portal
         --cm       opens a link on the CM portal
 
     Description:
