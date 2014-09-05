@@ -1,15 +1,9 @@
-from cloudmesh.config.cm_config import cm_config, cm_config_server
-from flask import Blueprint, g, render_template, get_template_attribute, request, Response, redirect, url_for
+from cloudmesh.config.cm_config import cm_config_server
+from flask import Blueprint, render_template, get_template_attribute, request, Response
 from flask.ext.login import login_required  # @UnresolvedImport
-from flask.ext.wtf import Form  # @UnresolvedImport
 from cloudmesh.provisioner.baremetal_db import BaremetalDB
-from pprint import pprint
-from sh import pwd  # @UnresolvedImport
-from wtforms import SelectField
 from flask.ext.principal import Permission, RoleNeed
-import time
 import json
-import sys
 import requests
 from cloudmesh_common.logger import LOGGER
 
@@ -21,11 +15,11 @@ cobbler_module = Blueprint('cobbler_module', __name__)
 admin_permission = Permission(RoleNeed('admin'))
 
 cobbler_default_data = {
-                         "distros": {},
-                         "profiles": {},
-                         "systems": {},
-                         "kickstarts": {},
-                        }
+    "distros": {},
+    "profiles": {},
+    "systems": {},
+    "kickstarts": {},
+}
 
 cobbler_default_data["distros"] = {
     "flag_collection": False,
@@ -35,11 +29,11 @@ cobbler_default_data["distros"] = {
             ("name", "Name", "text", True),
             ("arch", "Architecture", "text", True),
             ("breed", "Breed", "text", True),
-            #("comment", "Comment", "text", False),
+            # ("comment", "Comment", "text", False),
             ("initrd", "Initrd", "text", True),
             ("kernel", "Kernel", "text", True),
             ("os_version", "OS Version", "text", True),
-            #("owners", "Owners", "list", True),
+            # ("owners", "Owners", "list", True),
         ],
         "add": [
             ("name", "Name", "text", False),
@@ -49,7 +43,7 @@ cobbler_default_data["distros"] = {
     "select_data": {
     },
     "process_vars": {
-        "update": [ ],
+        "update": [],
         "add": ["name", "url", ],
     },
     "button": {
@@ -71,8 +65,8 @@ cobbler_default_data["profiles"] = {
             ("name", "Name", "text", True),
             ("distro", "Distribution", "select", False),
             ("kickstart", "Kickstart", "select", False),
-            #("comment", "Comment", "text", False),
-            #("owners", "Owners", "list", True),
+            # ("comment", "Comment", "text", False),
+            # ("owners", "Owners", "list", True),
         ],
         "add": [
             ("name", "Name", "text", False),
@@ -112,8 +106,8 @@ cobbler_default_data["systems"] = {
             ("power_user", "Power User", "text", False),
             ("power_pass", "Power Password", "text", False),
             ("power_id", "Power ID", "text", False),
-            #("comment", "Comment", "text", False),
-            #("owners", "Owners", "list", True),
+            # ("comment", "Comment", "text", False),
+            # ("owners", "Owners", "list", True),
         ],
         "collection": {
             "normal": [("interfaces", "Interface")],
@@ -171,7 +165,7 @@ cobbler_default_data["kickstarts"] = {
     "select_data": {
     },
     "process_vars": {
-        "update": ["contents" ],
+        "update": ["contents"],
         "add": ["name", "contents", ],
     },
     "button": {
@@ -186,6 +180,7 @@ cobbler_default_data["kickstarts"] = {
     },
 }
 
+
 @cobbler_module.route('/cobbler/<objects>', methods=['GET'])
 @login_required
 def display_cobbler(objects):
@@ -198,21 +193,22 @@ def display_cobbler(objects):
     for k in predefined["process_vars"]:
         js_vars[k] = ["'" + v + "'" for v in predefined["process_vars"][k]]
     return render_template("mesh/cobbler/cobbler_main.html",
-                           object_type=objects, 
+                           object_type=objects,
                            result=result,
-                           js_vars=js_vars, 
-                           filter=predefined["field_filter"]["normal"], 
-                           buttons=predefined["button"]["normal"], 
+                           js_vars=js_vars,
+                           filter=predefined["field_filter"]["normal"],
+                           buttons=predefined["button"]["normal"],
                            add_data=add_data,
                            flag_collection=predefined["flag_collection"],
                            filter_collection=predefined["field_filter"],
                            )
 
+
 @cobbler_module.route('/cobbler/<objects>/<item_name>', methods=['GET', 'PUT', 'POST', 'DELETE'])
 @login_required
 def process_cobbler_object(objects, item_name):
-    if objects not in ["distros", "profiles", "systems", "kickstarts" ]:
-        return 
+    if objects not in ["distros", "profiles", "systems", "kickstarts"]:
+        return
     predefined = cobbler_default_data[objects]
     url_prefix = "/cm/v1/cobbler"
     url = "{0}/{1}/{2}".format(url_prefix, objects, item_name)
@@ -227,28 +223,37 @@ def process_cobbler_object(objects, item_name):
     if result["result"] and method in ["get", "post"]:
         append_select_data(objects, result)
         if predefined["flag_collection"]:
-            accordion_panel = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL_COLLECTION")
-            result["template"] = accordion_panel(objects, result["data"][0]["data"], predefined["field_filter"]["normal"], predefined["button"]["normal"], predefined["field_filter"])
+            accordion_panel = get_template_attribute(
+                "mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL_COLLECTION")
+            result["template"] = accordion_panel(objects, result["data"][0]["data"], predefined[
+                                                 "field_filter"]["normal"], predefined["button"]["normal"], predefined["field_filter"])
         else:
-            accordion_panel = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL")
-            result["template"] = accordion_panel(objects, result["data"][0]["data"], predefined["field_filter"]["normal"], predefined["button"]["normal"])
+            accordion_panel = get_template_attribute(
+                "mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL")
+            result["template"] = accordion_panel(objects, result["data"][0][
+                                                 "data"], predefined["field_filter"]["normal"], predefined["button"]["normal"])
         if method == "post":
             if predefined["flag_collection"]:
-                accordion_panel_add = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL_COLLECTION")
+                accordion_panel_add = get_template_attribute(
+                    "mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL_COLLECTION")
                 add_data = get_add_data_dict(objects, result)
-                add_template = accordion_panel_add(objects, add_data["data"], add_data["filter"], add_data["button"], predefined["field_filter"], True)
+                add_template = accordion_panel_add(objects, add_data["data"], add_data[
+                                                   "filter"], add_data["button"], predefined["field_filter"], True)
             else:
-                accordion_panel_add = get_template_attribute("mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL")
+                accordion_panel_add = get_template_attribute(
+                    "mesh/cobbler/cobbler_macro.html", "CM_ACCORDION_PANEL")
                 add_data = get_add_data_dict(objects, result)
-                add_template = accordion_panel_add(objects, add_data["data"], add_data["filter"], add_data["button"], True)
+                add_template = accordion_panel_add(
+                    objects, add_data["data"], add_data["filter"], add_data["button"], True)
             result["template"] += add_template
     return Response(json.dumps(result), status=200, mimetype="application/json")
+
 
 @cobbler_module.route('/cobbler/<objects>/<item_name>/<if_name>', methods=['PUT', 'POST', 'DELETE'])
 @login_required
 def process_cobbler_object_collection(objects, item_name, if_name):
     if objects not in ["systems", ]:
-        return 
+        return
     predefined = cobbler_default_data[objects]
     url_prefix = "/cm/v1/cobbler"
     url = "{0}/{1}/{2}".format(url_prefix, objects, item_name)
@@ -262,6 +267,7 @@ def process_cobbler_object_collection(objects, item_name, if_name):
         url = "{0}/{1}".format(url, if_name)
         result = request_rest_api(method, url, request.json)
     return Response(json.dumps(result), status=200, mimetype="application/json")
+
 
 def get_all_baremetal_request_users():
     """
@@ -283,11 +289,12 @@ def provision_baremetal_allocation():
                                users=request_users,
                                computers=baremetal_computers["idle"],
                                flag_idle=True,
-                           )
+                               )
     elif method in ['put']:
         data = request.json
         result = bmdb.assign_baremetal_to_user(data["computers"], data["user"])
         return Response(json.dumps({"result": result}), status=200, mimetype="application/json")
+
 
 @cobbler_module.route('/provision/baremetal/computers', methods=['GET', 'PUT'])
 @login_required
@@ -301,16 +308,18 @@ def provision_baremetal_withdraw():
         for cluster in baremetal_computers:
             bm_computer_info[cluster] = {}
             for bm_comp in baremetal_computers[cluster]:
-                bm_computer_info[cluster][bm_comp] = bmdb.get_baremetal_computer_detail(bm_comp)
+                bm_computer_info[cluster][
+                    bm_comp] = bmdb.get_baremetal_computer_detail(bm_comp)
         return render_template("mesh/provision/provision_main.html",
                                computers=baremetal_computers,
                                computer_info=bm_computer_info,
                                flag_idle=False,
-                           )
+                               )
     elif method in ['put']:
         data = request.json
         result = bmdb.withdraw_baremetal_from_user(data["computers"])
         return Response(json.dumps({"result": result}), status=200, mimetype="application/json")
+
 
 @cobbler_module.route('/baremetal/user/request', methods=['GET', 'PUT'])
 @login_required
@@ -324,16 +333,18 @@ def baremetal_user_requests():
         for cluster in baremetal_computers:
             bm_computer_info[cluster] = {}
             for bm_comp in baremetal_computers[cluster]:
-                bm_computer_info[cluster][bm_comp] = bmdb.get_baremetal_computer_detail(bm_comp)
+                bm_computer_info[cluster][
+                    bm_comp] = bmdb.get_baremetal_computer_detail(bm_comp)
         return render_template("mesh/provision/provision_main.html",
                                computers=baremetal_computers,
                                computer_info=bm_computer_info,
                                flag_idle=False,
-                           )
+                               )
     elif method in ['put']:
         data = request.json
         result = bmdb.withdraw_baremetal_from_user(data["computers"])
         return Response(json.dumps({"result": result}), status=200, mimetype="application/json")
+
 
 def append_select_data(objects, data):
     predefined = cobbler_default_data[objects]
@@ -343,6 +354,7 @@ def append_select_data(objects, data):
         select_data[s] = s_result["data"]
     for one_data in data["data"]:
         one_data["data"]["select"] = select_data
+
 
 def get_add_data_dict(objects, data):
     predefined = cobbler_default_data[objects]
@@ -360,6 +372,7 @@ def get_add_data_dict(objects, data):
                 add_data["data"][name][field_coll[0]] = ""
     return add_data
 
+
 def get_server_url():
     # ONLY for test
     # MUST changed to read info from yml file before commit
@@ -369,11 +382,13 @@ def get_server_url():
     port = server_config.get("cloudmesh.server.cobbler.port")
     return "{0}://{1}:{2}".format(prot, host, port)
 
+
 def request_rest_api(method, url, data=None):
     """
       method = [get, post, put, delete]
     """
-    headers = {"content-type": "application/json", "accept": "application/json", }
+    headers = {"content-type": "application/json",
+               "accept": "application/json", }
     req_api = getattr(requests, method)
     req_url = get_server_url() + url
     if method == "get":

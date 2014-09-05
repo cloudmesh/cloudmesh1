@@ -59,5 +59,3 @@ def display_pbs_action(action, host):
                            updated=time_now,
                            host=host,
                            table_data=data)
-
-

@@ -25,15 +25,15 @@ def display_status():
     status = ""
 
     values = {
-              'india' : { 'jobs' : 0, 'users' : 0},
-              'bravo' : { 'jobs' : 0, 'users' : 0},
-              'echo' : { 'jobs' : 0, 'users' : 0},
-              'hotel' : { 'jobs' : 0, 'users' : 0},
-              'sierra' : { 'jobs' : 0, 'users' : 0},
-              'alamo' : { 'jobs' : 0, 'users' : 0},
-              'delta' : { 'jobs' : 0, 'users': 0},
-              'lima' : { 'jobs' : 0, 'users': 0}
-              }
+        'india': {'jobs': 0, 'users': 0},
+        'bravo': {'jobs': 0, 'users': 0},
+        'echo': {'jobs': 0, 'users': 0},
+        'hotel': {'jobs': 0, 'users': 0},
+        'sierra': {'jobs': 0, 'users': 0},
+        'alamo': {'jobs': 0, 'users': 0},
+        'delta': {'jobs': 0, 'users': 0},
+        'lima': {'jobs': 0, 'users': 0}
+    }
 
     config = cm_config()
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -53,7 +53,6 @@ def display_status():
         qstat[host] = pbs.qstat()
         qstat_uniq_users[host] = pbs.get_uniq_users()
 
-
     machines = services.keys()
 
     # print "FFF", machines
@@ -70,9 +69,9 @@ def display_status():
 
         # print "XXX", all_attributes
 
-    spider_services = {'machines' : machines,
-                       'categories' : list(all_attributes),
-                       'data' : {}}
+    spider_services = {'machines': machines,
+                       'categories': list(all_attributes),
+                       'data': {}}
 
     #
     # seeting all attributes to 0
@@ -103,9 +102,11 @@ def display_status():
             except:
                 hostname = ""
             for qname in qinfo[machine][qserver]:
-                total_jobs[qserver] += qinfo[machine][qserver][qname]['total_jobs']
+                total_jobs[
+                    qserver] += qinfo[machine][qserver][qname]['total_jobs']
                 try:
-                    unique_users[qserver] += len(qstat_uniq_users[machine][qserver])
+                    unique_users[
+                        qserver] += len(qstat_uniq_users[machine][qserver])
                 except KeyError:
                     pass
             values[hostname]['jobs'] = total_jobs[qserver]

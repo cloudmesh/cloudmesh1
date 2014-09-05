@@ -2,13 +2,11 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh_common.util import cond_decorator
 from flask import Blueprint, g, render_template, request, redirect
 from flask.ext.login import login_required
-import cloudmesh
 from pprint import pprint
 
 from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
-
 
 
 keys_module = Blueprint('keys_module', __name__)
@@ -22,19 +20,16 @@ keys_module = Blueprint('keys_module', __name__)
 @login_required
 def managekeys():
 
-
-    idp = cm_user ()
+    idp = cm_user()
     user_mongo = idp.info(g.user.id)
 
     # else:
     #    user_mongo = get_ldap_user_from_yaml()
 
-
     print 70 * "-"
-    pprint (user_mongo)
+    pprint(user_mongo)
     if 'defaults' not in user_mongo:
         user_mongo['defaults'] = {}
-
 
     msg = ''
     """
@@ -49,8 +44,12 @@ def managekeys():
         keyname = request.form['keyname']
         fileorstring = request.form['keyorpath']
 
+        #
+        # TODO: keys not defined
+        #
         if keys.defined(keyname):
-            msg = "Key name already exists. Please delete the key '{0}' before proceeding.".format(keyname)
+            msg = "Key name already exists. Please delete the key '{0}' before proceeding.".format(
+                keyname)
         else:
             try:
                 keys.set(keyname, fileorstring, expand=True)
@@ -61,8 +60,8 @@ def managekeys():
                 msg = e
 
     elif request.method == 'POST':
-            keys['default'] = request.form['selectkeys']
-            keys.write()
+        keys['default'] = request.form['selectkeys']
+        keys.write()
 
     return render_template('user/keys.html',
                            user=user_mongo,

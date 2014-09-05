@@ -47,9 +47,6 @@ def display_usres_ldap():
 
     # print data
 
-
     return render_template('user/users_ldap.html',
                            updated=time_now,
                            users=data)
-
-

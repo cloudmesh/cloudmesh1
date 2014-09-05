@@ -25,22 +25,24 @@ mesh_module = Blueprint('mesh_module', __name__)
 # ROUTE: /mesh/images
 # ============================================================
 
+
 def getCurrentUserinfo():
     userinfo = cm_user().info(g.user.id)
     return userinfo
+
 
 def with_active_clouds():
     ret = False
     userinfo = getCurrentUserinfo()
     if "activeclouds" in userinfo["defaults"] and\
-        len(userinfo["defaults"]["activeclouds"]) > 0:
+            len(userinfo["defaults"]["activeclouds"]) > 0:
         ret = True
     return ret
+
 
 @mesh_module.route('/mesh/register/clouds', methods=['GET', 'POST'])
 @login_required
 def mesh_register_clouds():
-
 
     config = cm_config()
     userdata = g.user
@@ -48,11 +50,9 @@ def mesh_register_clouds():
     user_obj = cm_user()
     user = user_obj.info(cm_user_id)
 
-
     cloudtypes = {}
     for cloud in config.get("cloudmesh.clouds"):
         cloudtypes[cloud] = config['cloudmesh']['clouds'][cloud]['cm_type']
-
 
     credentials = user_obj.get_credentials(cm_user_id)
     # pprint(credentials)
@@ -66,8 +66,6 @@ def mesh_register_clouds():
 
         cloudname = request.form['cloudInput']
 
-
-
         if cloudname in credentials:
             if 'credential' in credentials[cloudname]:
                 credential = credentials[cloudname]['credential']
@@ -76,22 +74,20 @@ def mesh_register_clouds():
         else:
             credentials[cloudname] = None
 
-
         if cloudtypes[cloudname] == "openstack":
 
             d = {}
             if credentials[cloudname] == None:
-                 d = {'OS_USERNAME' : cm_user_id,
-                      'OS_PASSWORD': '',
-                      'OS_TENANT_NAME': ''
-                }
+                d = {'OS_USERNAME': cm_user_id,
+                     'OS_PASSWORD': '',
+                     'OS_TENANT_NAME': ''
+                     }
 
             user_obj.set_credential(cm_user_id, cloudname, d)
 
             error[cloudname] = ''
 
             d = {"CM_CLOUD_TYPE": cloudtypes[cloudname]}
-
 
             cloudid = 'field-{0}-{1}-text'.format(cloudname, "OS_USERNAME")
 
@@ -100,7 +96,6 @@ def mesh_register_clouds():
             else:
                 username = cm_user_id
             d["OS_USERNAME"] = username
-
 
             fields = ["OS_PASSWORD", "OS_TENANT_NAME"]
 
@@ -111,7 +106,6 @@ def mesh_register_clouds():
                 else:
                     cloudid = 'field-{0}-{1}-text'.format(cloudname, key)
 
-
                 if cloudid in request.form:
                     content = request.form[cloudid]
                     d[key] = content
@@ -119,7 +113,8 @@ def mesh_register_clouds():
                     content = credential[key]
                     d[key] = content
                 if content == '':
-                    error[cloudname] = error[cloudname] + "Please set " + key + "."
+                    error[cloudname] = error[
+                        cloudname] + "Please set " + key + "."
 
             if error[cloudname] == '':
 
@@ -144,15 +139,13 @@ def mesh_register_clouds():
 
             d = {"CM_CLOUD_TYPE": cloudtypes[cloudname]}
 
-
             if credentials[cloudname] is None:
-                d = {'EC2_URL' : '',
-                      'EC2_ACCESS_KEY': '',
-                      'EC2_SECRET_KEY': '',
-                }
+                d = {'EC2_URL': '',
+                     'EC2_ACCESS_KEY': '',
+                     'EC2_SECRET_KEY': '',
+                     }
 
                 user_obj.set_credential(cm_user_id, cloudname, d)
-
 
             fields = ["EC2_ACCESS_KEY", "EC2_SECRET_KEY", "EC2_URL"]
 
@@ -173,11 +166,9 @@ def mesh_register_clouds():
                 if content == '':
                     error[cloudname] = error[cloudname] + "please set " + id
 
-
             if error[cloudname] == '':
 
                 user_obj.set_credential(cm_user_id, cloudname, d)
-
 
         elif cloudtypes[cloudname] == "aws":
 
@@ -185,16 +176,14 @@ def mesh_register_clouds():
 
             d = {"CM_CLOUD_TYPE": cloudtypes[cloudname]}
 
-
             if credentials[cloudname] is None:
                 d = {
-                      'OS_USERNAME': cm_user_id,
-                      'EC2_ACCESS_KEY': '',
-                      'EC2_SECRET_KEY': '',
+                    'OS_USERNAME': cm_user_id,
+                    'EC2_ACCESS_KEY': '',
+                    'EC2_SECRET_KEY': '',
                 }
 
                 user_obj.set_credential(cm_user_id, cloudname, d)
-
 
             fields = ["EC2_ACCESS_KEY", "EC2_SECRET_KEY"]
 
@@ -222,23 +211,24 @@ def mesh_register_clouds():
                 if content == '':
                     error[cloudname] = error[cloudname] + "please set " + id
 
-
             if error[cloudname] == '':
 
                 user_obj.set_credential(cm_user_id, cloudname, d)
 
         elif cloudtypes[cloudname] == "azure":
             error[cloudname] = ''
-            azureSubscriptionid = request.form['field-azure-subscriptionid-password']
+            azureSubscriptionid = request.form[
+                'field-azure-subscriptionid-password']
 
             user_obj.set_credential(cm_user_id, cloudname,
-                                  {"subscriptionid": azureSubscriptionid,
-                                   "CM_CLOUD_TYPE": "azure" }
-                                  )
+                                    {"subscriptionid": azureSubscriptionid,
+                                     "CM_CLOUD_TYPE": "azure"}
+                                    )
 
         if error[cloudname] == '':
             c = cm_mongo()
-            cloud = c.get_cloud(cm_user_id=cm_user_id, cloud_name=cloudname, force=True)
+            cloud = c.get_cloud(
+                cm_user_id=cm_user_id, cloud_name=cloudname, force=True)
             if cloud:
                 registered[cloudname] = True
                 # pprint(cloud.user_token)
@@ -267,7 +257,8 @@ def mesh_register_clouds():
                     # create_dict(user, "defaults", "activeclouds")
                     log.info("ERROR user defaults activecloud does not exist")
         else:
-            error[cloudname] = error[cloudname] + "Credential Verification Failed!"
+            error[cloudname] = error[cloudname] + \
+                "Credential Verification Failed!"
             if cloudname in user['defaults']['registered_clouds']:
                 (user['defaults']['registered_clouds']).remove(cloudname)
             if cloudname in user['defaults']['activeclouds']:
@@ -275,7 +266,6 @@ def mesh_register_clouds():
 
         user_obj.set_defaults(cm_user_id, user['defaults'])
     credentials = user_obj.get_credentials(cm_user_id)
-
 
     return render_template('mesh/cloud/mesh_register_clouds.html',
                            user=user,
@@ -285,6 +275,7 @@ def mesh_register_clouds():
                            cloudtypes=cloudtypes,
                            error=error,
                            verified=registered)
+
 
 @mesh_module.route('/mesh/images/', methods=['GET', 'POST'])
 @login_required
@@ -307,14 +298,10 @@ def mongo_images():
     user_obj = cm_user()
     user = user_obj.info(username)
 
-
-
     c = cm_mongo()
     c.activate(cm_user_id=username)
     # c.refresh(types=["images"])
     clouds = c.images(cm_user_id=username)
-
-
 
     """
 
@@ -362,51 +349,51 @@ def mongo_images():
                u'architecture':   u'x86_64'}
     """
     attributes = {"openstack":
-                    [
-                        # [ "Metadata", "metadata"],
-                        [ "status" , "status"],
-                        [ "name" , "name"],
-                        [ "type_id" , "metadata", "instance_type_id"],
-                        [ "iname" , "metadata", "instance_type_name"],
-                        [ "location" , "metadata", "image_location"],
-                        [ "state" , "metadata", "image_state"],
-                        [ "updated" , "updated"],
-                        [ "minDisk" , "minDisk"],
-                        [ "memory_mb" , "metadata", 'instance_type_memory_mb'],
-                        [ "fid" , "metadata", "instance_type_flavorid"],
-                        [ "vcpus" , "metadata", "instance_type_vcpus"],
-                        [ "user_id" , "metadata", "user_id"],
-                        [ "owner_id" , "metadata", "owner_id"],
-                        [ "gb" , "metadata", "instance_type_root_gb"],
-                        [ "arch", ""]
-                    ],
+                  [
+                      # [ "Metadata", "metadata"],
+                      ["status", "status"],
+                      ["name", "name"],
+                      ["type_id", "metadata", "instance_type_id"],
+                      ["iname", "metadata", "instance_type_name"],
+                      ["location", "metadata", "image_location"],
+                      ["state", "metadata", "image_state"],
+                      ["updated", "updated"],
+                      ["minDisk", "minDisk"],
+                      ["memory_mb", "metadata", 'instance_type_memory_mb'],
+                      ["fid", "metadata", "instance_type_flavorid"],
+                      ["vcpus", "metadata", "instance_type_vcpus"],
+                      ["user_id", "metadata", "user_id"],
+                      ["owner_id", "metadata", "owner_id"],
+                      ["gb", "metadata", "instance_type_root_gb"],
+                      ["arch", ""]
+                  ],
                   "ec2":
-                    [
-                        # [ "Metadata", "metadata"],
-                        [ "state" , "extra", "state"],
-                        [ "name" , "name"],
-                        [ "id" , "id"],
-                        [ "public" , "extra", "is_public"],
-                        [ "ownerid" , "extra", "owner_id"],
-                        [ "imagetype" , "extra", "image_type"]
-                    ],
+                  [
+                      # [ "Metadata", "metadata"],
+                      ["state", "extra", "state"],
+                      ["name", "name"],
+                      ["id", "id"],
+                      ["public", "extra", "is_public"],
+                      ["ownerid", "extra", "owner_id"],
+                      ["imagetype", "extra", "image_type"]
+                  ],
                   "azure":
-                    [
-                        [ "name", "label"],
-                        [ "category", "category"],
-                        [ "id", "id"],
-                        [ "size", "logical_size_in_gb" ],
-                        [ "os", "os" ]
-                    ],
+                  [
+                      ["name", "label"],
+                      ["category", "category"],
+                      ["id", "id"],
+                      ["size", "logical_size_in_gb"],
+                      ["os", "os"]
+                  ],
                   "aws":
-                    [
-                        [ "state", "extra", "state"],
-                        [ "name" , "name"],
-                        [ "id" , "id"],
-                        [ "public" , "extra", "ispublic"],
-                        [ "ownerid" , "extra", "ownerid"],
-                        [ "imagetype" , "extra", "imagetype"]
-                    ]
+                  [
+                      ["state", "extra", "state"],
+                      ["name", "name"],
+                      ["id", "id"],
+                      ["public", "extra", "ispublic"],
+                      ["ownerid", "extra", "ownerid"],
+                      ["imagetype", "extra", "imagetype"]
+                  ]
                   }
     """
     for cloud in clouds:
@@ -441,6 +428,7 @@ def mongo_images():
 # ROUTE: mongo
 # ============================================================
 
+
 @mesh_module.route('/mesh/flavors/', methods=['GET', 'POST'])
 @login_required
 def mongo_flavors():
@@ -467,13 +455,13 @@ def mongo_flavors():
     clouds = c.flavors(cm_user_id=username)
 
     os_attributes = [
-                     'id',
-                     'name',
-                     'vcpus',
-                     'ram',
-                     'disk',
-                     'cm_refresh',
-                     ]
+        'id',
+        'name',
+        'vcpus',
+        'ram',
+        'disk',
+        'cm_refresh',
+    ]
 
     # fake entry
 
@@ -500,6 +488,7 @@ def mongo_flavors():
 # ============================================================
 # ROUTE: mongo
 # ============================================================
+
 
 @mesh_module.route('/mesh/users/')
 @login_required
@@ -528,7 +517,6 @@ def mongo_users():
     # print "TYTYTYT", len(clouds), type(clouds), clouds.keys()
     # print len(clouds['sierra'])
 
-
     """
     for cloud in clouds:
         print cloud
@@ -539,16 +527,16 @@ def mongo_users():
     """
 
     attributes = {"grizzly":
-                    [
-                        [ "Name", "name"],
-                        [ "Firstname", "firstname"],
-                        [ "Lastname", "lastname"],
-                        [ "Id" , "id"],
-                        # [ "TenentId" , "tenantId"],
-                        [ "E-mail" , "email"],
-                        [ "Enabled" , "enabled"],
-                        [ "Refresh", "cm_refresh"]
-                    ]
+                  [
+                      ["Name", "name"],
+                      ["Firstname", "firstname"],
+                      ["Lastname", "lastname"],
+                      ["Id", "id"],
+                      # [ "TenentId" , "tenantId"],
+                      ["E-mail", "email"],
+                      ["Enabled", "enabled"],
+                      ["Refresh", "cm_refresh"]
+                  ]
                   }
 
     return render_template('mesh/mesh_users.html',
@@ -561,6 +549,7 @@ def mongo_users():
 # ============================================================
 # ROUTE: mongo/servers
 # ============================================================
+
 
 @mesh_module.route('/mesh/servers/', methods=['GET', 'POST'])
 @login_required
@@ -589,7 +578,6 @@ def mongo_table(filters=None):
     images = c.images(cm_user_id=username)
     flavors = c.flavors(cm_user_id=username)
 
-
     #
     # TODDO HACK for hp cloud to work as it has integer
     #
@@ -615,16 +603,16 @@ def mongo_table(filters=None):
 
     attributes = {"openstack":
                   [
-                      ['name','name'],
-                      ['status','status'],
-                      ['addresses','addresses'],
-                      ['flavor', 'flavor','id'],
-                      ['id','id'],
-                      ['image','image','id'],
+                      ['name', 'name'],
+                      ['status', 'status'],
+                      ['addresses', 'addresses'],
+                      ['flavor', 'flavor', 'id'],
+                      ['id', 'id'],
+                      ['image', 'image', 'id'],
                       ['user_id', 'user_id'],
-                      ['metadata','metadata'],
-                      ['key_name','key_name'],
-                      ['created','created'],
+                      ['metadata', 'metadata'],
+                      ['key_name', 'key_name'],
+                      ['created', 'created'],
                   ],
                   "ec2":
                   [
@@ -632,8 +620,8 @@ def mongo_table(filters=None):
                       ["status", "extra", "status"],
                       ["addresses", "public_ips"],
                       ["flavor", "extra", "instance_type"],
-                      ['id','id'],
-                      ['image','extra', 'imageId'],
+                      ['id', 'id'],
+                      ['image', 'extra', 'imageId'],
                       ["user_id", 'user_id'],
                       ["metadata", "metadata"],
                       ["key_name", "extra", "key_name"],
@@ -645,28 +633,28 @@ def mongo_table(filters=None):
                       ["status", "extra", "status"],
                       ["addresses", "public_ips"],
                       ["flavor", "extra", "instance_type"],
-                      ['id','id'],
-                      ['image','extra', 'image_id'],
-                      ["user_id","user_id"],
+                      ['id', 'id'],
+                      ['image', 'extra', 'image_id'],
+                      ["user_id", "user_id"],
                       ["metadata", "metadata"],
                       ["key_name", "extra", "key_name"],
                       ["created", "extra", "launch_time"]
                   ],
                   "azure":
                   [
-                      ['name','name'],
-                      ['status','status'],
-                      ['addresses','vip'],
-                      ['flavor', 'flavor','id'],
-                      ['id','id'],
-                      ['image','image','id'],
+                      ['name', 'name'],
+                      ['status', 'status'],
+                      ['addresses', 'vip'],
+                      ['flavor', 'flavor', 'id'],
+                      ['id', 'id'],
+                      ['image', 'image', 'id'],
                       ['user_id', 'user_id'],
-                      ['metadata','metadata'],
-                      ['key_name','key_name'],
-                      ['created','created'],
+                      ['metadata', 'metadata'],
+                      ['key_name', 'key_name'],
+                      ['created', 'created'],
                   ]
-                 }
-                  
+                  }
+
     # c.aggregate needs to be defined
     # def count_status(cloudname):
     #    result = c.aggregate( [ {$match: {"cm_kind":"servers","cm_cloud":cloudname}},
@@ -685,11 +673,11 @@ def mongo_table(filters=None):
 
     # ONLY for debug, if the Accordion does not work, please uncomment it
     #log.debug("mesh_servers, before render, user defaults: {0}".format(user['defaults']))
-    
+
     # added by HC on Nov. 15, 2013
     # control the display of 'run' button on a VM
     config_server = cm_config_server()
-    flag_production = config_server.get("cloudmesh.server.production");
+    flag_production = config_server.get("cloudmesh.server.production")
     return render_template('mesh/cloud/mesh_servers.html',
                            address_string=address_string,
                            attributes=os_attributes,
@@ -826,14 +814,15 @@ def mongo_save_pagestatus():
     #log.debug("request.json page status: {0}".format(request.json))
     current_page_status = request.json
     status_options = {
-                        "open":   "pagestatus",
-                        "flavor": "flavors",
-                        "image":  "images",
-                      }
+        "open":   "pagestatus",
+        "flavor": "flavors",
+        "image":  "images",
+    }
     for cloud_name in current_page_status:
         if cloud_name in user_cloud_list:
             for item in current_page_status[cloud_name]:
-                user["defaults"][status_options[item]][cloud_name] = current_page_status[cloud_name][item]
+                user["defaults"][status_options[item]][
+                    cloud_name] = current_page_status[cloud_name][item]
 
     # ONLY for debug, if the Accordion does not work, please uncomment it
     #log.debug("mesh_save_status, before save, user defaults: {0}".format(user['defaults']))
@@ -846,25 +835,27 @@ def mongo_save_pagestatus():
     # END debug
     return "ok"
 
-def prepJqTreeObj(data):
-        jsonList = []
 
-        if(type(data) is list):
-            for item in data:
-                jsonObject = {}
-                jsonObject['label'] = item
-                jsonList.append(jsonObject)
-        else:
-            for key, value in data.items():
-                jsonObject = {}
-                jsonObject['label'] = key
-                if type(value) is dict or type(value) is list:
-                    jsonChildObj = prepJqTreeObj(value)
-                    jsonObject['children'] = jsonChildObj
-                else:
-                    jsonObject['label'] += ": " + value
-                jsonList.append(jsonObject)
-        return jsonList
+def prepJqTreeObj(data):
+    jsonList = []
+
+    if(type(data) is list):
+        for item in data:
+            jsonObject = {}
+            jsonObject['label'] = item
+            jsonList.append(jsonObject)
+    else:
+        for key, value in data.items():
+            jsonObject = {}
+            jsonObject['label'] = key
+            if type(value) is dict or type(value) is list:
+                jsonChildObj = prepJqTreeObj(value)
+                jsonObject['children'] = jsonChildObj
+            else:
+                jsonObject['label'] += ": " + value
+            jsonList.append(jsonObject)
+    return jsonList
+
 
 @mesh_module.route('/mesh/test/', methods=['GET', 'POST'])
 @login_required
@@ -875,4 +866,3 @@ def test_experiment():
     jsonObj = prepJqTreeObj(exptData)
     return render_template('mesh/test.html',
                            user=json.dumps(jsonObj))
-
