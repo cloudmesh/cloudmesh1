@@ -7,6 +7,15 @@ username = cloudmesh.load().username()
 cloudmesh.banner("INIT MONGO")
 mesh = cloudmesh.mesh("mongo")
 
+#
+# authentication as a user - username is requried
+# On webgui side, this is achieved by the framework,
+# and the username is obtined from g.user.id
+#
+# On CLI side, a global user object or username variable
+# should be maintained upon the start of the shell
+# The username could be obtained from yaml file.
+
 cloudmesh.banner("ACTIVATE")
 mesh.activate(username)
 
