@@ -540,6 +540,29 @@ class cm_mongo:
                 break
         return ret
 
+    def start(self, cloud, cm_user_id):
+        """Launch a new VM instance with a default setting for flavor, image and
+        key name"""
+        
+        # Hyungro Lee - Sep 4th, 2014
+        from cloudmesh.user.cm_user import cm_user
+        userinfo = cm_user().info(cm_user_id)
+        prefix = userinfo['defaults']['prefix']
+        index = userinfo['defaults']['index']
+        flavor = userinfo['defaults']['flavors'][cloud] 
+        # or flavor = "2" small
+        image = userinfo['defaults']['images'][cloud] 
+        # or image = '02cf1545-dd83-493a-986e-583d53ee3728' # ubuntu-14.04 
+        key = "%s_%s" % (cm_user_id, userinfo['defaults']['key'])
+        meta = { 'cm_owner': cm_user_id }
+
+        result = self.vm_create(cloud, prefix, index, flavor, image, key, meta,
+                               cm_user_id)
+
+        # increase index after the completion of vm_create()
+        cm_user().set_default_attribute(cm_user_id, "index", int(index) + 1)
+        return result
+
     def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id, givenvmname=None):
         '''
         BUG: missing security group
@@ -601,6 +624,16 @@ class cm_mongo:
         else:
             ret = None
         return ret
+
+    def delete(self, cloud, server, cm_user_id):
+        """Delete vm instances and release unused public ips"""
+
+        # Hyungro Lee - Sep 4th, 2014
+        res1 = self.vm_delete(cloud, server, cm_user_id)
+        time.sleep(5)
+        res2 = self.release_unused_public_ips(cloud, cm_user_id)
+        res = { "vm_delete": res1, "release_unused_public_ips": res2 }
+        return res
 
     def vm_delete(self, cloud, server, cm_user_id):
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
