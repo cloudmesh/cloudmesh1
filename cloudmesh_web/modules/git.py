@@ -1,8 +1,6 @@
-from cloudmesh.util.gitinfo import GitInfo
+# from cloudmesh.util.gitinfo import GitInfo
 from cloudmesh_common.logger import LOGGER
 from flask import Blueprint, render_template
-from flask.ext.login import login_required
-from pprint import pprint, pprint
 from sh import git
 import requests
 
@@ -63,13 +61,12 @@ def display_git_authors():
 
 @git_module.route('/bugs')
 def display_git_bugs():
-    issues_open = requests.get('https://api.github.com/repos/cloudmesh/cloudmesh/issues?state=closed').json()
-    issues_closed = requests.get('https://api.github.com/repos/cloudmesh/cloudmesh/issues?state=open').json()
+    issues_open = requests.get(
+        'https://api.github.com/repos/cloudmesh/cloudmesh/issues?state=closed').json()
+    issues_closed = requests.get(
+        'https://api.github.com/repos/cloudmesh/cloudmesh/issues?state=open').json()
 
     issues = issues_closed + issues_open
 
     return render_template('general/bugs.html',
                            issues=issues)
-
-
-

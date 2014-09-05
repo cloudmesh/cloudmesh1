@@ -1,6 +1,6 @@
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.inventory import Inventory
-#from cloudmesh.old_inventory.inventory import Inventory as oldInventory, \
+# from cloudmesh.old_inventory.inventory import Inventory as oldInventory, \
 #    PROVISIONING_CHOICES
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.provisioner.queue.celery import celery_provisiner_queue
@@ -36,7 +36,6 @@ provisionerImpl = ProvisionerSimulator
 provisioner = provisionerImpl()
 
 
-
 @provisioner_module.route('/provision/policy')
 @login_required
 @admin_permission.require(http_exception=403)
@@ -46,7 +45,6 @@ def display_provisioner_policy():
 
     return render_template('mesh/provision/provision_policy.html',
                            policy=policy)
-
 
 
 @provisioner_module.route('/provision/summary/')
@@ -157,8 +155,6 @@ class ProvisionForm(Form):
     # provision_choices = zip(PROVISIONING_CHOICES, PROVISIONING_CHOICES)
     # service = SelectField("Service", choices=provision_choices)
 
-
-
     def validate(self):
         #cluster = inventory.get("cluster", self.cluster.data)
         posibilities = expand_hostlist(cluster.definition)
@@ -182,7 +178,6 @@ def display_provision_form():
 
     # servers = n_inventory.hostlist(cluster)
     # server = n_inventory.host(name,auth=False)
-
 
     form = ProvisionForm(csrf=False)
 

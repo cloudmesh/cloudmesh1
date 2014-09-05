@@ -23,6 +23,7 @@ nose_module = Blueprint('nose_module', __name__)
 
 admin_permission = Permission(RoleNeed('admin'))
 
+
 @nose_module.route('/test/ping')
 @login_required
 @admin_permission.require(http_exception=403)
@@ -55,8 +56,6 @@ def display_nosetest(test=None):
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-
-
     if test is None:
         filename = "/tmp/nosetests_all.json"
     else:
@@ -73,6 +72,7 @@ def display_nosetest(test=None):
                            tests=tests,
                            filename=filename,
                            name=test)
+
 
 @nose_module.route('/test/run')
 @nose_module.route('/test/run/<test>')
@@ -95,4 +95,3 @@ def run_nosetest(test=None):
         pass
     print "RRRR", result
     return redirect("/test/nose")
-
