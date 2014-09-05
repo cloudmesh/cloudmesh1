@@ -7,7 +7,7 @@ from cloudmesh.launcher.cm_launcher_db import cm_launcher_db
 from flask.ext.principal import Permission, RoleNeed
 from cloudmesh.config.cm_config import cm_config
 import subprocess
-
+from pprint import pprint
 from cloudmesh_common.logger import LOGGER
 
 LOG_MSG = LOGGER(__file__)
@@ -23,27 +23,37 @@ RAIN_PERMISSION = Permission(RoleNeed('rain'))
 # @RAIN_PERMISSION.require(http_exception=403)
 
 
-@login_required
-@RAIN_PERMISSION.require(http_exception=403)
+# @login_required
+# @RAIN_PERMISSION.require(http_exception=403)
 @launch_module.route('/cm/launch/launch_servers/', methods=["POST", "GET"])
 def launch_servers():
-    """ To satisfy Pylint. Will update with proper comments """
     config = cm_config()
-    cloudname = request.form['cloud']
+    data = {}
+    for key in request.form.keys():
+        data[key] = request.form[key]
+    cloudname = data['cloud']
+    
+    data['user'] = config["cloudmesh"]["clouds"][cloudname]["credentials"]["OS_USERNAME"]
+    data['hostname'] = config["cloudmesh"]["clouds"][cloudname]["cm_host"]
+
+    data['script'] = data['script'].format(**data)
+    
+
+    pprint(data)
     #
     # this seems wrong as the script is formulated in the yaml file, so you need to get the type
     # from the form and read the script from the yaml file
     #
-    data = {
-        'usr': config["cloudmesh"]["clouds"][cloudname]["credentials"]["OS_USERNAME"],
-        'hostname': config["cloudmesh"]["clouds"][cloudname]["cm_host"],
-        'script': request.form['script']
-    }
-    ssh_cmd = "ssh {usr}@{hostname}\"{script}\" >> /home/cloudnaut/results.txt".format(**data)
+
+        
+    print "HALLO"
+
+
+    ssh_cmd = "ssh {user}@{hostname} \"{script}\" >> /home/cloudnaut/results.txt".format(**data)
     #
     # use sh instead or use the "Sequential" API
     #
-    subprocess.Popen(ssh_cmd, shell="True")
+    # subprocess.Popen(ssh_cmd, shell="True")
     return ssh_cmd
 
 
