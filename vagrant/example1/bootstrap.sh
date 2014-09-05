@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+# runs as root
+
 # Requirements
+apt-get update
 apt-get -y install git
 apt-get -y install python-pip
 pip install virtualenv

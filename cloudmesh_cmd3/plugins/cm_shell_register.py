@@ -1,23 +1,8 @@
-import types
-import textwrap
-import inspect
-import sys
-import importlib
-import simplejson as json
-import time
-import cmd
-import docopt
-import yaml
-import subprocess
 import getpass
-from bson.json_util import dumps
 from cmd3.shell import command
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
-from pprint import pprint
-from prettytable import PrettyTable
-from cm_shell_defaults import cm_shell_defaults
 
 from cloudmesh_common.logger import LOGGER
 
@@ -27,9 +12,9 @@ log = LOGGER(__file__)
 class cm_shell_register:
 
     def activate_cm_shell_register(self):
-        self.register_command_topic('cloud','register')
+        self.register_command_topic('cloud', 'register')
         pass
-    
+
     @command
     def do_register(self, args, arguments):
         '''

@@ -1,11 +1,11 @@
 from docopt import docopt
-from cloudmesh_common.util import banner
 from cloudmesh_common.logger import LOGGER
 from cmd3.console import Console
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
 
 log = LOGGER(__file__)
+
 
 def shell_command_label(arguments):
     # TODO: [--width=WIDTH]
@@ -18,11 +18,11 @@ def shell_command_label(arguments):
 
       --prefix=PREFIX    provide the prefix for the label
       --id=ID            provide the start ID which is an integer
-      
+
     Description:
-    
-        A command to set the prefix and id for creating an automatic lable for VMs.
-        Without paremeter it prints the currect label.
+
+        A command to set the prefix and id for creating an automatic
+        lable for VMs. Without paremeter it prints the currect label.
 
     """
     try:
@@ -30,10 +30,10 @@ def shell_command_label(arguments):
     except:
         Console.error("There is a problem with the configuration yaml files")
         return
-        
+
     username = config['cloudmesh']['profile']['username']
 
-    #print arguments #######
+    # print arguments #######
     if arguments['--id'] or arguments['--prefix']:
         id = None
         if arguments['--id']:
@@ -55,22 +55,22 @@ def shell_command_label(arguments):
     else:
         print_label(username)
 
+
 def update_label(username, prefix=None, id=None):
     user_obj = cm_user()
     userdata = user_obj.info(username)
-    if prefix != None:
+    if prefix is not None:
         userdata['defaults']['prefix'] = prefix
-    if id != None:
+    if id is not None:
         userdata['defaults']['index'] = id
     user_obj.set_defaults(username, userdata['defaults'])
+
 
 def print_label(username):
     user_obj = cm_user()
     userdata = user_obj.info(username)
     print "prefix: ", userdata['defaults']['prefix']
     print "index: ", userdata['defaults']['index']
-
-
 
 
 def main():

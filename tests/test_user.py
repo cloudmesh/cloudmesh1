@@ -76,7 +76,7 @@ class Test_cloudmesh:
         print self.user.info("gvonlasz")
         print self.user.info("nonexistuser")
         print self.user.info("nova")
-        print self.user.info("fuwang", ["sierra_openstack_grizzly"])
+        print self.user.info("fuwang", ["sierra"])
         print self.user.info("fuwang", ["cloud-non-exist"])
         print "============================"
         pprint (self.user["gvonlasz"])

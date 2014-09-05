@@ -44,8 +44,6 @@ Usage:
   cm config ... take from cm_cli
 
 """
-from docopt import docopt
-
 
 if __name__ == '__main__':
 

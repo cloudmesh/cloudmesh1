@@ -16,7 +16,8 @@ Example::
     for i in range(0,100):
         length = random.randint(8,40)
         testdata = ''.join([random.choice(chars) for _ in range(length)])
-        if testdata == decrypt(encrypt(testdata, password_text), password_text):
+        if testdata == decrypt(encrypt(testdata, password_text),
+                               password_text):
             print i,
         else:
             print testdata, "failed!"
@@ -106,14 +107,15 @@ def encrypt_file(filepath):
 def decrypt_file(content, filename=None):
     """Write a file by descrypting the content and return a filepath.
     :param content: the content to be written
-    :param filename: the file name, if non is specified a unique name will be created
+    :param filename: the file name, if non is specified a unique
+                     name will be created
     """
     file_contents = content.decode('base64')
     try:
         #
         # to do needs to be replace wit config_file
         #
-        uniq_filename = filename or config_file_prefix()  + str(uuid.uuid4())
+        uniq_filename = filename or config_file_prefix() + str(uuid.uuid4())
         print uniq_filename
         with open(uniq_filename, 'w') as outf:
             outf.write(file_contents)
@@ -140,7 +142,8 @@ if __name__ == "__main__":
     for i in range(0, 100):
         length = random.randint(8, 40)
         testdata = ''.join([random.choice(chars) for _ in range(length)])
-        if testdata == decrypt(encrypt(testdata, password_text), password_text):
+        if testdata == decrypt(encrypt(testdata, password_text),
+                               password_text):
             print i,
         else:
             print testdata, "failed!"

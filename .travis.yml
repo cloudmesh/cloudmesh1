@@ -5,6 +5,7 @@ python:
   - "2.7"
 # command to install dependencies
 install:
+#  - pip install progress
   - ./install system
   - ./install requirements
   - ./install cloudmesh

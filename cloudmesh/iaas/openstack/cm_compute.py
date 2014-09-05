@@ -4,45 +4,34 @@
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
 #
 import inspect
-from cloudmesh_common.util import banner
 import requests
-from requests.auth import AuthBase
 
-from collections import OrderedDict
 from datetime import datetime, timedelta
 import iso8601
-import sys
-import time
 import base64
-import urllib
 import httplib
 import json
 import os
 from pprint import pprint
 from urlparse import urlparse
 import copy
-
-# from sh import fgrep
-# from sh import nova
-
-# from cm_credential import credentials
-from cloudmesh.util.cm_table import cm_table
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config_flavor
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
-from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
-# from cloudmesh.cm_profile import cm_profile
+
 from cloudmesh_common.logger import LOGGER
 
 # import novaclient
 # from novaclient.openstack.common import strutils
+
 
 def lineno():
     """Returns the current line number in our program."""
     return inspect.currentframe().f_back.f_lineno
 
 log = LOGGER(__file__)
+
 
 def donotchange(fn):
     return fn
@@ -70,10 +59,9 @@ class openstack(ComputeBaseType):
     user_credential = None  # global var
     admin_credential = None
     with_admin_credential = None
-    
+
     user_token = None
     admin_token = None
-
 
     # : a unique label for the clous
     label = None  # global var
@@ -90,26 +78,29 @@ class openstack(ComputeBaseType):
 
     # _nova = nova
 
-
-
     def _load_admin_credential(self):
         if self.admin_credential is None:
             if 'keystone' in cm_config_server().get('cloudmesh.server'):
-                self.idp_clouds = cm_config_server().get("cloudmesh.server.keystone").keys()
+                self.idp_clouds = cm_config_server().get(
+                    "cloudmesh.server.keystone").keys()
                 self.with_admin_credential = self.label in self.idp_clouds
                 if self.with_admin_credential:
                     try:
-                        self.admin_credential = cm_config_server().get("cloudmesh.server.keystone.{0}".format(self.label))
+                        self.admin_credential = cm_config_server().get(
+                            "cloudmesh.server.keystone.{0}".format(self.label))
                     except:
-                        log.error(str(lineno()) + " No admin credential found! Please check your cloudmesh_server.yaml file.")
+                        log.error(str(
+                            lineno()) + " No admin credential found! Please check your cloudmesh_server.yaml file.")
                 else:
                     self.admin_credential = None
-                    log.info(str(lineno()) + ": The cloud {0} has no admin credential".format(self.label))
+                    log.info(
+                        str(lineno()) + ": The cloud {0} has no admin credential".format(self.label))
         return self.admin_credential
     #
     # initialize
     #
     # possibly make connext seperate
+
     def __init__(self,
                  label,
                  credential=None,
@@ -131,7 +122,8 @@ class openstack(ComputeBaseType):
                 self.compute_config = cm_config()
                 self.user_credential = self.compute_config.credential(label)
             except:
-                log.error(str(lineno()) + ": No user credentail found! Please check your cloudmesh.yaml file.")
+                log.error(str(
+                    lineno()) + ": No user credentail found! Please check your cloudmesh.yaml file.")
                 # sys.exit(1)
 
         self._load_admin_credential()
@@ -158,7 +150,8 @@ class openstack(ComputeBaseType):
         """
         log.info(str(lineno()) + ": Loading User Credentials")
         if self.user_credential is None:
-            log.error(str(lineno()) + ": error connecting to openstack compute, credential is None")
+            log.error(
+                str(lineno()) + ": error connecting to openstack compute, credential is None")
         elif not self.user_token:
             self.user_token = self.get_token(self.user_credentials)
 
@@ -167,11 +160,11 @@ class openstack(ComputeBaseType):
         log.info(str(lineno()) + ": Loading Admin Credentials")
 
         if (self.admin_credential is None) and (self.with_admin_credential):
-            log.error(str(lineno()) + ":error connecting to openstack compute, credential is None")
+            log.error(
+                str(lineno()) + ":error connecting to openstack compute, credential is None")
         else:
             if self.with_admin_credential and (not self.admin_token):
                 self.admin_token = self.get_token(self.admin_credential)
-
 
     def DEBUG(self, msg, line_number=None):
         if line_number == None:
@@ -179,13 +172,14 @@ class openstack(ComputeBaseType):
         if msg == "credential":
             debug_dict = dict(self.user_credential)
             debug_dict['OS_PASSWORD'] = "********"
-            log.debug("{1} - GET CRED {0}".format(debug_dict,str(line_number)))
+            log.debug(
+                "{1} - GET CRED {0}".format(debug_dict, str(line_number)))
         else:
             log.debug("{0} - {1}", str(line_number), str(msg))
-    
+
     def auth(self):
         return 'access' in self.user_token
-        
+
     def get_token(self, credential=None):
 
         if credential is None:
@@ -195,21 +189,21 @@ class openstack(ComputeBaseType):
 
         param = None
         if 'OS_TENANT_NAME' in credential:
-            param = {"auth": { "passwordCredentials": {
-                                    "username": credential['OS_USERNAME'],
-                                    "password": credential['OS_PASSWORD'],
-                                },
-                               "tenantName":credential['OS_TENANT_NAME']
-                            }
-                 }
+            param = {"auth": {"passwordCredentials": {
+                "username": credential['OS_USERNAME'],
+                "password": credential['OS_PASSWORD'],
+            },
+                "tenantName": credential['OS_TENANT_NAME']
+            }
+            }
         elif 'OS_TENANT_ID' in credential:
-            param = {"auth": { "passwordCredentials": {
-                                    "username": credential['OS_USERNAME'],
-                                    "password": credential['OS_PASSWORD'],
-                                },
-                               "tenantId":credential['OS_TENANT_ID']
-                            }
-                 }
+            param = {"auth": {"passwordCredentials": {
+                "username": credential['OS_USERNAME'],
+                "password": credential['OS_PASSWORD'],
+            },
+                "tenantId": credential['OS_TENANT_ID']
+            }
+            }
         url = "{0}/tokens".format(credential['OS_AUTH_URL'])
 
         log.debug(str(lineno()) + ": URL {0}".format(url))
@@ -228,9 +222,7 @@ class openstack(ComputeBaseType):
                           headers=headers,
                           verify=verify)
 
-
         return r.json()
-
 
     #
     # FIND USER ID
@@ -300,7 +292,7 @@ class openstack(ComputeBaseType):
         r = requests.post(posturl, headers=headers,
                           data=json.dumps(params),
                           verify=self._get_cacert(credential))
-        ret = {"msg":"success"}
+        ret = {"msg": "success"}
         if r.text:
             ret = r.json()
         return ret
@@ -314,9 +306,9 @@ class openstack(ComputeBaseType):
                    'X-Auth-Token': '%s' % conf['token']}
         # print headers
         r = requests.put(posturl, headers=headers,
-                          data=json.dumps(params),
-                          verify=self._get_cacert(credential))
-        ret = {"msg":"success"}
+                         data=json.dumps(params),
+                         verify=self._get_cacert(credential))
+        ret = {"msg": "success"}
         if r.text:
             ret = r.json()
         return ret
@@ -340,7 +332,7 @@ class openstack(ComputeBaseType):
         params = {"keypair": {"name": "%s" % keyname,
                               "public_key": "%s" % keycontent
                               }
-                 }
+                  }
         # print params
         return self._post(posturl, params)
 
@@ -350,9 +342,10 @@ class openstack(ComputeBaseType):
         publicURL = conf['publicURL']
 
         url = "%s/os-keypairs/%s" % (publicURL, keyname)
-        headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
+        headers = {'content-type': 'application/json',
+                   'X-Auth-Token': '%s' % conf['token']}
         r = requests.delete(url, headers=headers, verify=self._get_cacert())
-        ret = {"msg":"success"}
+        ret = {"msg": "success"}
         if r.text:
             try:
                 ret = r.json()
@@ -374,13 +367,14 @@ class openstack(ComputeBaseType):
         # TODO: add logic for getting default image
 
         # if image_id is None:
-        #    get image id from profile information (default image for that cloud)
+        # get image id from profile information (default image for that cloud)
 
         # TODO: add logic for getting label of machine
         #
 
         # if flavor_name is None:
-        #    get flavorname from profile information (ther is a get label function ...)
+        # get flavorname from profile information (ther is a get label function
+        # ...)
 
         # if keyname is None:
         #    get the default key from the profile information
@@ -395,21 +389,24 @@ class openstack(ComputeBaseType):
             for secgroup in security_groups:
                 secgroups.append({"name": secgroup})
         else:
-            secgroups = [{"name":"default"}]
+            secgroups = [{"name": "default"}]
 
         params = {
-                    "server" : {
-                        "name" : "%s" % name,
-                        "imageRef" : "%s" % image_id,
-                        "flavorRef" : "%s" % flavor_name,
-                        "security_groups" : secgroups,
-                        "metadata" : meta,
-                        }
-                  }
+            "server": {
+                "name": "%s" % name,
+                        "imageRef": "%s" % image_id,
+                        "flavorRef": "%s" % flavor_name,
+                        "security_groups": secgroups,
+                        "metadata": meta,
+            }
+        }
         if key_name:
             params["server"]["key_name"] = key_name
 
         if userdata:
+            #
+            # TODO: strutils not defined
+            #
             safe_userdata = strutils.safe_encode(userdata)
             params["server"]["user_data"] = base64.b64encode(safe_userdata)
 
@@ -425,11 +422,12 @@ class openstack(ComputeBaseType):
         publicURL = conf['publicURL']
         url = "%s/servers/%s" % (publicURL, id)
 
-        headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
+        headers = {'content-type': 'application/json',
+                   'X-Auth-Token': '%s' % conf['token']}
         # print headers
         # no return from http delete via rest api
         r = requests.delete(url, headers=headers, verify=self._get_cacert())
-        ret = {"msg":"success"}
+        ret = {"msg": "success"}
         if r.text:
             ret = r.json()
         return ret
@@ -441,7 +439,7 @@ class openstack(ComputeBaseType):
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         posturl = "%s/os-floating-ips" % publicURL
-        ret = {"msg":"failed"}
+        ret = {"msg": "failed"}
         r = self._post(posturl)
         if r.has_key("floating_ip"):
             ret = r["floating_ip"]["ip"]
@@ -455,10 +453,10 @@ class openstack(ComputeBaseType):
         publicURL = conf['publicURL']
         posturl = "%s/servers/%s/action" % (publicURL, serverid)
         params = {"addFloatingIp": {
-                                    "address": "%s" % ip
-                                    }
-                  }
-        log.debug ("POST PARAMS {0}".format(params))
+            "address": "%s" % ip
+        }
+        }
+        log.debug("POST PARAMS {0}".format(params))
         return self._post(posturl, params)
 
     def delete_public_ip(self, idofip):
@@ -468,9 +466,10 @@ class openstack(ComputeBaseType):
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         url = "%s/os-floating-ips/%s" % (publicURL, idofip)
-        headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
+        headers = {'content-type': 'application/json',
+                   'X-Auth-Token': '%s' % conf['token']}
         r = requests.delete(url, headers=headers, verify=self._get_cacert())
-        ret = {"msg":"success"}
+        ret = {"msg": "success"}
         if r.text:
             ret = r.json()
         return ret
@@ -482,7 +481,8 @@ class openstack(ComputeBaseType):
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         url = "%s/os-floating-ips" % publicURL
-        headers = {'content-type': 'application/json', 'X-Auth-Token': '%s' % conf['token']}
+        headers = {'content-type': 'application/json',
+                   'X-Auth-Token': '%s' % conf['token']}
         r = requests.get(url, headers=headers, verify=self._get_cacert())
         return r.json()["floating_ips"]
 
@@ -502,7 +502,6 @@ class openstack(ComputeBaseType):
         # service = "publicURL, adminURL"
         # service=  "compute", "identity", ....
 
-
         # token=None, url=None, kind=None, urltype=None, json=True):
 
         credential = self.user_credential
@@ -519,7 +518,8 @@ class openstack(ComputeBaseType):
         log.debug(str(lineno()) + ": AUTH URL {0}".format(url))
         headers = {'X-Auth-Token': token['access']['token']['id']}
 
-        r = requests.get(url, headers=headers, verify=self._get_cacert(credential), params=payload)
+        r = requests.get(
+            url, headers=headers, verify=self._get_cacert(credential), params=payload)
 
         log.debug(str(lineno()) + ": Response {0}".format(r))
 
@@ -547,7 +547,7 @@ class openstack(ComputeBaseType):
             for endpoint in compute_service['endpoints']:
                 if endpoint['region'] == credential['OS_REGION']:
                     conf['publicURL'] = endpoint['publicURL']
-                    break;
+                    break
 
         conf['adminURL'] = None
         if 'adminURL' in compute_service['endpoints'][0]:
@@ -758,7 +758,7 @@ class openstack(ComputeBaseType):
         return self.flavors
 
     def get_flavors_from_yaml(self):
-        obj =  cm_config_flavor()
+        obj = cm_config_flavor()
         flavors = obj.get('cloudmesh.flavor')
         return flavors.get(self.label)
 
@@ -787,7 +787,8 @@ class openstack(ComputeBaseType):
 
         return list
 
-    # return the security groups for the current authenticated tenant, in dict format
+    # return the security groups for the current authenticated tenant, in dict
+    # format
     def list_security_groups(self):
         apiurl = "os-security-groups"
         return self._get(apiurl)
@@ -810,11 +811,11 @@ class openstack(ComputeBaseType):
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         posturl = "%s/os-security-groups" % publicURL
-        params = {"security_group":{
-                                    "name": secgroup.name,
-                                    "description": secgroup.description
-                                    }
-                  }
+        params = {"security_group": {
+            "name": secgroup.name,
+            "description": secgroup.description
+        }
+        }
         #         log.debug ("POST PARAMS {0}".format(params))
         ret = self._post(posturl, params)
         groupid = None
@@ -826,9 +827,11 @@ class openstack(ComputeBaseType):
         if len(secgroup.rules) > 0:
             self.add_security_group_rules(groupid, secgroup.rules)
 
-        # only trying to add the additional rules if the empty group has been created successfully
+        # only trying to add the additional rules if the empty group has been
+        # created successfully
         if not groupid:
-            log.error("Failed to create security group. Error message: '%s'" % ret)
+            log.error(
+                "Failed to create security group. Error message: '%s'" % ret)
         else:
             self.add_security_group_rules(groupid, rules)
         # return the groupid of the newly created group, or None if failed
@@ -841,18 +844,19 @@ class openstack(ComputeBaseType):
         posturl = "%s/os-security-group-rules" % publicURL
         ret = None
         for rule in rules:
-            params = {"security_group_rule":{
-                                            "ip_protocol": rule.ip_protocol,
-                                            "from_port": rule.from_port,
-                                            "to_port": rule.to_port,
-                                            "cidr": rule.cidr,
-                                            "parent_group_id": groupid
-                                            }
-                      }
+            params = {"security_group_rule": {
+                "ip_protocol": rule.ip_protocol,
+                "from_port": rule.from_port,
+                "to_port": rule.to_port,
+                "cidr": rule.cidr,
+                "parent_group_id": groupid
+            }
+            }
             #         log.debug ("POST PARAMS {0}".format(params))
             ret = self._post(posturl, params)
             if "security_group_rule" not in ret:
-                log.error("Failed to create security group rule(s). Error message: '%s'" % ret)
+                log.error(
+                    "Failed to create security group rule(s). Error message: '%s'" % ret)
                 break
         return ret
     #
@@ -929,7 +933,7 @@ class openstack(ComputeBaseType):
 
         else:
             return self.createSecurityGroup(default_security_group)
-    
+
     # GVL: review
     # how does this look for azure and euca? Should there be a general framework for this in the BaseCloud class
     # based on that analysis?
@@ -953,8 +957,8 @@ class openstack(ComputeBaseType):
         comment is missing
         """
         self.cloud.servers.add_floating_ip(serverid, ip)
-    
-    
+
+
     #
     # set vm meta
     #
@@ -1328,7 +1332,6 @@ class openstack(ComputeBaseType):
     #    conf = get_conf()
     #    return _get(conf, "%s/limits")
 
-
     '''
     def check_key_pairs(self, key_name):
         """simple check to see if a keyname is in the keypair list"""
@@ -1398,6 +1401,7 @@ class openstack(ComputeBaseType):
                 vm['cm_display'] = vm['cm_display'] and (
                     vm['user_id'] == userid)
     '''
+
     def display_regex(self, state_check, userid):
 
         print state_check
