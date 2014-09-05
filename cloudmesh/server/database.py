@@ -90,7 +90,7 @@ class Database(object):
         cloudsdict = self.config.get("cloudmesh", "clouds")
 
         for key in cloudsdict:
-            self.import_cloud_to_mongo(cloudsdict[key], key, username)
+            Database.import_cloud_to_mongo(cloudsdict[key], key, username)
             print "cloud '{0}' added.".format(key)
 
     @staticmethod

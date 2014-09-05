@@ -1,6 +1,5 @@
 import base64
 import hashlib
-import sys
 
 
 def get_fingerprint(entirekey):
@@ -22,7 +21,9 @@ def key_fingerprint(key_string):
     fp_plain = hashlib.md5(key).hexdigest()
     return ':'.join(a + b for a, b in zip(fp_plain[::2], fp_plain[1::2]))
 
-
+#
+# TODO: this function seems not to work?
+#
 def key_validate(keytype, filename):
     """reads the key string from a file. THIS FUNCTION HAS A BUG.
 
@@ -44,8 +45,8 @@ def key_validate(keytype, filename):
         keytype, key_string, comment = keystring.split()
         data = base64.decodestring(key_string)
         int_len = 4
-        str_len = struct.unpack('>I', data[:int_len])[
-            0]  # this should return 7
+        str_len = struct.unpack('>I', data[:int_len])[0]
+        # this should return 7
 
         if data[int_len:int_len + str_len] == keytype:
             return True

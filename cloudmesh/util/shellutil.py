@@ -6,35 +6,40 @@ import json
 from cloudmesh_common.tables import array_dict_table_printer
 from cloudmesh_common.util import banner
 
-def shell_commands_dict_output(dict, 
-                               jsonformat=False, 
-                               table=False, 
+
+#
+# TODO: Console is not imported
+#
+def shell_commands_dict_output(d,
+                               jsonformat=False,
+                               table=False,
                                firstheader=None,
-                               header=None, 
+                               header=None,
                                oneitem=False,
                                title=None,
                                count=False):
     '''
     some shell commands output a dict or table, this function should be
     called when commands are printing in such way.
-    if none of parameters json and table is given, the funtion will try 
+    if none of parameters json and table is given, the funtion will try
     to find the default printing form from db_defaults
     if db_defaults has no item 'shell_print_format', the function will
     set 'shell_print_format' = table
-    
-    param dict:: data to print
+
+    param d:: data to print
     param json:: force to print in json format
     param table:: force to print in table format
-    param firstheader:: designed for table, provide a attribute name for the first 
-                        item of each row, since the dict doesn't provide it
+    param firstheader:: designed for table, provide a attribute name for the
+                        first item of each row, since the dict doesn't provide
+                        it
     param header:: designed for table, a list of lists, provides column order, e.g.
                    [[a,b], [c, d], ...
                    where a is the printing column name and b is the attribute name
                    in the dict
-                   if you don't want to change the header name but want to keep the
-                   header order, for each item in the list you may provide a string 
+                   if you don't want to change the header name jsonbut want to keep the
+                   header order, for each item in the list you may provide a string
                    or a list with one item instead of a list of two items
-    param oneitem:: designed for table, normally the input dict should be in such 
+    param oneitem:: designed for table, normally the input dict should be in such
                     form:
                     {a: {...}, b:{...}}, where each subitem is a row
                     if there is only one item, input dict is the {...} of the subitem
@@ -42,42 +47,42 @@ def shell_commands_dict_output(dict,
     param title: provide a title for the table
     param count: provide count info at the end of the table
     '''
-    format = None
+    format_type = None
     if jsonformat:
-        format = "json"
+        format_type = "json"
     elif table:
-        format = "table"
+        format_type = "table"
     else:
         try:
             config = cm_config()
         except:
-            Console.error("There is a problem with the configuration yaml files") 
+            Console.error("There is a problem with the configuration yaml files")
         username = config['cloudmesh']['profile']['username']
         user_obj = cm_user()
         userdata = user_obj.info(username)
         try:
-            format = userdata['defaults']['shell_print_format']
+            format_type = userdata['defaults']['shell_print_format']
         except:
             pass
-        if format in [None, 'none']:
+        if format_type in [None, 'none']:
             userdata['defaults']['shell_print_format'] = "table"
             user_obj.set_defaults(username, userdata['defaults'])
             userdata = user_obj.info(username)
-            format = userdata['defaults']['shell_print_format']
-    
-    if format not in ['table', 'json']:
+            format_type = userdata['defaults']['shell_print_format']
+
+    if format_type not in ['table', 'json']:
         print "ERROR: something wrong while reading print format infomation"
         return False
-    
-    if format == "json":
+
+    if format_type == "json":
         if title:
             banner(title)
-        print json.dumps(dict, indent=4)
-    elif format == "table":
+        print json.dumps(d, indent=4)
+    elif format_type == "table":
         if title:
             print "+"+"-"*(len(title)-2)+"+"
             print title
-        
+
         if header:
             headers = []
             order = []
@@ -98,25 +103,23 @@ def shell_commands_dict_output(dict,
         else:
             headers = None
             order = None
-        
+
         print_data = []
         if oneitem:
-            print_data = [dict]
+            print_data = [d]
         else:
-            for k in sorted(dict):
-                dict[k][' '] = k
-                print_data.append(dict[k])
+            for k in sorted(d):
+                d[k][' '] = k
+                print_data.append(d[k])
             if header:
                 if firstheader:
                     headers = [firstheader] + headers
                 order = [' '] + order
-        
+
         print array_dict_table_printer(print_data, order=order, header=headers)
-        
+
         if count:
             c = len(print_data)
             sentence = "count: {0}".format(c)
             print sentence
             print "+"+"-"*(len(sentence)-2)+"+"
-            
-                
