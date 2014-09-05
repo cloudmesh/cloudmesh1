@@ -13,6 +13,7 @@ list_command_table_format = "grid"
 
 log = LOGGER(__file__)
 
+
 def shell_command_list(arguments):
     """List available flavors, images, vms, projects and clouds
 
@@ -47,11 +48,11 @@ def shell_command_list(arguments):
         --format=FORMAT         output format: table, json, csv
 
     Description:
-        
+
         List clouds and projects information, if the CLOUD argument is not specified, the 
         selected default cloud will be used. You can interactively set the default cloud with the command
         'cloud select'. 
-    
+
         list flavor 
         : list the flavors
         list image 
@@ -66,40 +67,41 @@ def shell_command_list(arguments):
     See Also:
 
         man cloud
-                    
+
     """
     call = ListInfo(arguments)
     call.execute()
-    
-    
+
+
 class ListInfo(object):
     cloudmanage = CloudManage()
     try:
         config = cm_config()
     except:
         Console.error("There is a problem with the configuration yaml files")
-    
+
     username = config['cloudmesh']['profile']['username']
-    
+
     def __init__(self, arguments):
         self.arguments = arguments
-        
-        
+
     def _list_flavor(self):
         self.cloudmanage._connect_to_mongo()
         clouds = self.get_working_cloud_name()
         if clouds:
             itemkeys = [
-                         ['id', 'id'],
-                         ['name', 'name'],
-                         ['vcpus', 'vcpus'],
-                         ['ram', 'ram'],
-                         ['disk', 'disk'],
-                         ['refresh time', 'cm_refresh']
-                       ]
+                ['id', 'id'],
+                ['name', 'name'],
+                ['vcpus', 'vcpus'],
+                ['ram', 'ram'],
+                ['disk', 'disk'],
+                ['refresh time', 'cm_refresh']
+            ]
             if self.arguments['--refresh']:
-                self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
-                self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['flavors'])
+                self.cloudmanage.mongo.activate(
+                    cm_user_id=self.username, names=clouds)
+                self.cloudmanage.mongo.refresh(
+                    cm_user_id=self.username, names=clouds, types=['flavors'])
 
             # --format
             p_format = self.arguments['--format']
@@ -116,19 +118,19 @@ class ListInfo(object):
                     for item in itemkeys:
                         if item[0] in s_column:
                             new_itemkeys.append(item)
-                    itemkeys=new_itemkeys
+                    itemkeys = new_itemkeys
 
             for cloud in clouds:
                 self.cloudmanage.print_cloud_flavors(username=self.username,
-                                                     cloudname=cloud.encode("ascii"),
+                                                     cloudname=cloud.encode(
+                                                         "ascii"),
                                                      itemkeys=itemkeys,
                                                      refresh=False,
                                                      output=False,
                                                      print_format=p_format)
         else:
             return
-        
-        
+
     def _list_image(self):
         self.cloudmanage._connect_to_mongo()
         clouds = self.get_working_cloud_name()
@@ -136,54 +138,57 @@ class ListInfo(object):
             itemkeys = {"openstack":
                         [
                             # [ "Metadata", "metadata"],
-                            [ "name" , "name"],
-                            [ "status" , "status"],
-                            [ "id", "id"],
-                            [ "type_id" , "metadata", "instance_type_id"],
-                            [ "iname" , "metadata", "instance_type_name"],
-                            [ "location" , "metadata", "image_location"],
-                            [ "state" , "metadata", "image_state"],
-                            [ "updated" , "updated"],
+                            ["name", "name"],
+                            ["status", "status"],
+                            ["id", "id"],
+                            ["type_id", "metadata", "instance_type_id"],
+                            ["iname", "metadata", "instance_type_name"],
+                            ["location", "metadata", "image_location"],
+                            ["state", "metadata", "image_state"],
+                            ["updated", "updated"],
                             #[ "minDisk" , "minDisk"],
-                            [ "memory_mb" , "metadata", 'instance_type_memory_mb'],
-                            [ "fid" , "metadata", "instance_type_flavorid"],
-                            [ "vcpus" , "metadata", "instance_type_vcpus"],
+                            ["memory_mb", "metadata",
+                                'instance_type_memory_mb'],
+                            ["fid", "metadata", "instance_type_flavorid"],
+                            ["vcpus", "metadata", "instance_type_vcpus"],
                             #[ "user_id" , "metadata", "user_id"],
                             #[ "owner_id" , "metadata", "owner_id"],
                             #[ "gb" , "metadata", "instance_type_root_gb"],
                             #[ "arch", ""]
                         ],
-                      "ec2":
+                        "ec2":
                         [
                             # [ "Metadata", "metadata"],
-                            [ "state" , "extra", "state"],
-                            [ "name" , "name"],
-                            [ "id" , "id"],
-                            [ "public" , "extra", "is_public"],
-                            [ "ownerid" , "extra", "owner_id"],
-                            [ "imagetype" , "extra", "image_type"]
+                            ["state", "extra", "state"],
+                            ["name", "name"],
+                            ["id", "id"],
+                            ["public", "extra", "is_public"],
+                            ["ownerid", "extra", "owner_id"],
+                            ["imagetype", "extra", "image_type"]
                         ],
-                      "azure":
+                        "azure":
                         [
-                            [ "name", "label"],
-                            [ "category", "category"],
-                            [ "id", "id"],
-                            [ "size", "logical_size_in_gb" ],
-                            [ "os", "os" ]
+                            ["name", "label"],
+                            ["category", "category"],
+                            ["id", "id"],
+                            ["size", "logical_size_in_gb"],
+                            ["os", "os"]
                         ],
-                      "aws":
+                        "aws":
                         [
-                            [ "state", "extra", "state"],
-                            [ "name" , "name"],
-                            [ "id" , "id"],
-                            [ "public" , "extra", "ispublic"],
-                            [ "ownerid" , "extra", "ownerid"],
-                            [ "imagetype" , "extra", "imagetype"]
+                            ["state", "extra", "state"],
+                            ["name", "name"],
+                            ["id", "id"],
+                            ["public", "extra", "ispublic"],
+                            ["ownerid", "extra", "ownerid"],
+                            ["imagetype", "extra", "imagetype"]
                         ]
-                     }
+                        }
             if self.arguments['--refresh']:
-                self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
-                self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['images'])
+                self.cloudmanage.mongo.activate(
+                    cm_user_id=self.username, names=clouds)
+                self.cloudmanage.mongo.refresh(
+                    cm_user_id=self.username, names=clouds, types=['images'])
             p_format = self.arguments['--format']
 
             # --column
@@ -194,84 +199,86 @@ class ListInfo(object):
                 if self.arguments['--column'] != "all":
                     s_column = [x.strip() for x in
                                 self.arguments['--column'].split(',')]
-                    new_itemkeys = { x: [] for x in itemkeys.keys() }
+                    new_itemkeys = {x: [] for x in itemkeys.keys()}
                     for cloud, items in itemkeys.iteritems():
                         for item in items:
                             if item[0] in s_column:
                                 new_itemkeys[cloud].append(item)
-                    itemkeys=new_itemkeys
+                    itemkeys = new_itemkeys
 
             for cloud in clouds:
                 self.cloudmanage.print_cloud_images(username=self.username,
-                                                    cloudname=cloud.encode("ascii"),
+                                                    cloudname=cloud.encode(
+                                                        "ascii"),
                                                     itemkeys=itemkeys,
                                                     refresh=False, output=False,
-                                                   print_format=p_format)
-        
+                                                    print_format=p_format)
+
         else:
             return
-        
-        
+
     def _list_server(self):
         self.cloudmanage._connect_to_mongo()
         clouds = self.get_working_cloud_name()
         if clouds:
             itemkeys = {"openstack":
-                      [
-                          ['name','name'],
-                          ['status','status'],
-                          ['addresses','addresses'],
-                          ['id','id'],
-                          ['flavor', 'flavor','id'],
-                          ['image','image','id'],
-                          ['user_id', 'cm_user_id'],
-                          ['metadata','metadata'],
-                          ['key_name','key_name'],
-                          ['created','created'],
-                      ],
-                      "ec2":
-                      [
-                          ["name", "id"],
-                          ["status", "extra", "status"],
-                          ["addresses", "public_ips"],
-                          ["flavor", "extra", "instance_type"],
-                          ['id','id'],
-                          ['image','extra', 'imageId'],
-                          ["user_id", 'user_id'],
-                          ["metadata", "metadata"],
-                          ["key_name", "extra", "key_name"],
-                          ["created", "extra", "launch_time"]
-                      ],
-                      "aws":
-                      [
-                          ["name", "name"],
-                          ["status", "extra", "status"],
-                          ["addresses", "public_ips"],
-                          ["flavor", "extra", "instance_type"],
-                          ['id','id'],
-                          ['image','extra', 'image_id'],
-                          ["user_id","user_id"],
-                          ["metadata", "metadata"],
-                          ["key_name", "extra", "key_name"],
-                          ["created", "extra", "launch_time"]
-                      ],
-                      "azure":
-                      [
-                          ['name','name'],
-                          ['status','status'],
-                          ['addresses','vip'],
-                          ['flavor', 'flavor','id'],
-                          ['id','id'],
-                          ['image','image','id'],
-                          ['user_id', 'user_id'],
-                          ['metadata','metadata'],
-                          ['key_name','key_name'],
-                          ['created','created'],
-                      ]
-                     }
+                        [
+                            ['name', 'name'],
+                            ['status', 'status'],
+                            ['addresses', 'addresses'],
+                            ['id', 'id'],
+                            ['flavor', 'flavor', 'id'],
+                            ['image', 'image', 'id'],
+                            ['user_id', 'cm_user_id'],
+                            ['metadata', 'metadata'],
+                            ['key_name', 'key_name'],
+                            ['created', 'created'],
+                        ],
+                        "ec2":
+                        [
+                            ["name", "id"],
+                            ["status", "extra", "status"],
+                            ["addresses", "public_ips"],
+                            ["flavor", "extra", "instance_type"],
+                            ['id', 'id'],
+                            ['image', 'extra', 'imageId'],
+                            ["user_id", 'user_id'],
+                            ["metadata", "metadata"],
+                            ["key_name", "extra", "key_name"],
+                            ["created", "extra", "launch_time"]
+                        ],
+                        "aws":
+                        [
+                            ["name", "name"],
+                            ["status", "extra", "status"],
+                            ["addresses", "public_ips"],
+                            ["flavor", "extra", "instance_type"],
+                            ['id', 'id'],
+                            ['image', 'extra', 'image_id'],
+                            ["user_id", "user_id"],
+                            ["metadata", "metadata"],
+                            ["key_name", "extra", "key_name"],
+                            ["created", "extra", "launch_time"]
+                        ],
+                        "azure":
+                        [
+                            ['name', 'name'],
+                            ['status', 'status'],
+                            ['addresses', 'vip'],
+                            ['flavor', 'flavor', 'id'],
+                            ['id', 'id'],
+                            ['image', 'image', 'id'],
+                            ['user_id', 'user_id'],
+                            ['metadata', 'metadata'],
+                            ['key_name', 'key_name'],
+                            ['created', 'created'],
+                        ]
+                        }
             if self.arguments['--refresh']:
-                self.cloudmanage.mongo.activate(cm_user_id=self.username, names=clouds)
-                self.cloudmanage.mongo.refresh(cm_user_id=self.username, names=clouds, types=['servers'])
+                self.cloudmanage.mongo.activate(
+                    cm_user_id=self.username, names=clouds)
+                self.cloudmanage.mongo.refresh(
+                    cm_user_id=self.username, names=clouds, types=['servers'])
             p_format = self.arguments['--format']
 
             # --column
@@ -282,65 +289,65 @@ class ListInfo(object):
                 if self.arguments['--column'] != "all":
                     s_column = [x.strip() for x in
                                 self.arguments['--column'].split(',')]
-                    new_itemkeys = { x: [] for x in itemkeys.keys() }
+                    new_itemkeys = {x: [] for x in itemkeys.keys()}
                     for cloud, items in itemkeys.iteritems():
                         for item in items:
                             if item[0] in s_column:
                                 new_itemkeys[cloud].append(item)
-                    itemkeys=new_itemkeys
+                    itemkeys = new_itemkeys
 
             for cloud in clouds:
                 self.cloudmanage.print_cloud_servers(username=self.username,
-                                                     cloudname=cloud.encode("ascii"),
+                                                     cloudname=cloud.encode(
+                                                         "ascii"),
                                                      itemkeys=itemkeys,
                                                      refresh=False,
                                                      output=False,
                                                      print_format=p_format)
-        
+
         else:
             return
-        
-        
+
     def _list_project(self):
         self.cloudmanage._connect_to_mongo()
         selected_project = None
         try:
-            selected_project = self.cloudmanage.mongo.db_defaults.find_one({'cm_user_id': self.username + "OIO"})['project']
+            selected_project = self.cloudmanage.mongo.db_defaults.find_one(
+                {'cm_user_id': self.username + "OIO"})['project']
         except Exception, NoneType:
             Console.warning("could not find selected project in the database")
 
         except Exception, e:
             Console.error("could not connect to the database")
             print e
-            
+
         print "\n"
         print tabulate([[selected_project]], ["selected project"], tablefmt=list_command_table_format)
-
 
         #
         # active projects
         #
 
-        
         projects = {}
 
         for state in ["active", "completed"]:
 
             projects[state] = None
             try:
-                projects[state] = self.cloudmanage.mongo.db_user.find_one({'cm_user_id': self.username})['projects'][state]
+                projects[state] = self.cloudmanage.mongo.db_user.find_one(
+                    {'cm_user_id': self.username})['projects'][state]
             except:
-                Console.error("could not find objects or connect to the database containing the projects")
+                Console.error(
+                    "could not find objects or connect to the database containing the projects")
 
             to_print = []
             if projects[state] == None:
                 to_print = [[None]]
             else:
                 to_print = [[str(p)] for p in projects[state]]
-            print "\n"                
+            print "\n"
             print tabulate(to_print, ["{0} projects".format(state)], tablefmt=list_command_table_format)
 
-        
     def _list_cloud(self):
         """ same as the shell_command_cloud list"""
         arguments = dict(self.arguments)
@@ -366,9 +373,10 @@ class ListInfo(object):
         print "\n"
         print tabulate(other_clouds, ["other clouds"], tablefmt=list_command_table_format)
         print "\n"
-        """    
-    
+        """
+
     # --------------------------------------------------------------------------
+
     def get_working_cloud_name(self):
         '''
         get the name of a cloud to be work on, if CLOUD not given, will pick the
@@ -391,14 +399,15 @@ class ListInfo(object):
             else:
                 name = self.cloudmanage.get_selected_cloud(self.username)
             if self.cloudmanage.get_clouds(self.username, getone=True, cloudname=name) == None:
-                Console.error("no cloud information of '{0}' in database".format(name))
+                Console.error(
+                    "no cloud information of '{0}' in database".format(name))
                 return False
             if name not in activeclouds:
-                Console.warning("cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(name))
+                Console.warning(
+                    "cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(name))
                 return False
             return [name]
-        
-        
+
     def execute(self):
 
         if self.arguments['flavor'] == True:
@@ -411,6 +420,7 @@ class ListInfo(object):
             self._list_project()
         elif self.arguments['cloud'] == True:
             self._list_cloud()
+
 
 def main():
     arguments = docopt(shell_command_list.__doc__)

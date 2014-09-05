@@ -23,6 +23,7 @@ from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
+
 def shell_command_storm(arguments):
     """
     ::
@@ -71,11 +72,11 @@ def shell_command_storm(arguments):
         kind = arguments['--kind']
         print arguments
 
-
     else:
         print "WRONG PARAMETERS"
 
     return
+
 
 def main():
     arguments = docopt(shell_command_storm.__doc__)
