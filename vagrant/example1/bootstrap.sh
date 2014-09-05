@@ -29,9 +29,11 @@ ssh-keygen -b 2048 -t rsa -f ~/.ssh/cloudmesh-default -q -N ""
 fab mongo.start
 # Waiting may not needed
 sleep 5
-fab mongo.boot
+#fab mongo.boot
 #fab mongo.boot
 sleep 5
-fab user.mongo
-fab mongo.simple
+#fab user.mongo
+#fab mongo.simple
+# fab mongo.reset is same as fab mongo.boot, user.mongo, mongo.simple
+fab mongo.reset
 fab server.start
