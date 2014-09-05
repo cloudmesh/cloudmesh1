@@ -10,19 +10,22 @@ import json
 import os
 import stat
 import sys
-import copy
 
 
 log = LOGGER(__file__)
 package_dir = os.path.dirname(os.path.abspath(__file__))
 
+
 class OrderedJsonEncoder(simplejson.JSONEncoder):
+
     indent = 4
+
     def encode(self, o, depth=0):
         if isinstance(o, OrderedDict):
-            return "{" + (",\n ").join([ self.encode(k) + ":" + self.encode(v, depth + 1) for (k, v) in o.iteritems() ]) + "}\n"
+            return "{" + (",\n ").join([self.encode(k) + ":" + self.encode(v, depth + 1) for (k, v) in o.iteritems()]) + "}\n"
         else:
             return simplejson.JSONEncoder.encode(self, o)
+
 
 def custom_print(data_structure, indent):
     for key, value in data_structure.items():
@@ -34,13 +37,14 @@ def custom_print(data_structure, indent):
         else:
             print "%s" % (str(value)),
 
+
 class ConfigDict (OrderedDict):
 
     def _set_filename(self, filename):
         self['filename'] = filename
         self['location'] = path_expand(self["filename"])
 
-    def __init__(self, *args, **kwargs) :
+    def __init__(self, *args, **kwargs):
         OrderedDict.__init__(self, *args, **kwargs)
 
         if 'filename' in kwargs:
@@ -59,7 +63,6 @@ class ConfigDict (OrderedDict):
 
         self._update_meta()
 
-
     def _update_meta(self):
         for v in ["filename", "location", "prefix"]:
             self["meta"][v] = self[v]
@@ -71,7 +74,7 @@ class ConfigDict (OrderedDict):
 
     def load(self, filename):
         self._set_filename(filename)
-        d = OrderedDict(read_yaml_config (self['location'], check=True))
+        d = OrderedDict(read_yaml_config(self['location'], check=True))
         self.update(d)
 
     def write(self, filename=None, format="dict"):
@@ -124,7 +127,7 @@ class ConfigDict (OrderedDict):
         print custom_print(self, 4)
 
     """
-    def __getitem__(self, *mykeys):        
+    def __getitem__(self, *mykeys):
         try:
             item = self.get(mykeys[0])
         except:
@@ -134,12 +137,13 @@ class ConfigDict (OrderedDict):
     """
     def get(self, *keys):
         """
-        returns the dict of the information as read from the yaml file. To
-        access the file safely, you can use the keys in the order of the access.
-        Example: get("provisiner","policy") will return the value of
-        config["provisiner"]["policy"] from the yaml file if it does not exists
-        an error will be printing that the value does not exists and we exit.
-        Alternatively you can use the . notation e.g. get("provisiner.policy")
+        returns the dict of the information as read from the yaml
+        file. To access the file safely, you can use the keys in the
+        order of the access.  Example: get("provisiner","policy") will
+        return the value of config["provisiner"]["policy"] from the
+        yaml file if it does not exists an error will be printing that
+        the value does not exists and we exit.  Alternatively you can
+        use the . notation e.g. get("provisiner.policy")
         """
         if keys is None:
             return self
@@ -149,7 +153,7 @@ class ConfigDict (OrderedDict):
         element = self
         for v in keys:
             try:
-               element = element[v]
+                element = element[v]
             except KeyError:
                 self.error_keys_not_found(keys)
                 sys.exit()
@@ -163,7 +167,7 @@ class ConfigDict (OrderedDict):
         return self.get(k)
 
 if __name__ == "__main__":
-    config = ConfigDict({"a":"1", "b" : {"c": 3}},
+    config = ConfigDict({"a": "1", "b": {"c": 3}},
                         prefix="cloudmesh.server",
                         filename="./etc/cloudmesh_server.yaml")
 
@@ -185,11 +189,8 @@ if __name__ == "__main__":
     # this does not work
     # config.write(config_file("/print.yaml"), format="print")
 
-
-
     print "mongo.path GET =", config.get("cloudmesh.server.mongo.path")
     print "mongo.path ATTIRBUTE =", config.attribute("mongo.path")
-
 
     print "get A =", config.get("a")
 
@@ -200,6 +201,3 @@ if __name__ == "__main__":
     # config["x"] = "2"
     # print config["x"]
     # print config.x
-
-
-
