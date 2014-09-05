@@ -5,7 +5,7 @@ from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import banner
 from cloudmesh_install import config_file
 from cloudmesh_common.util import PROGRESS
- 
+from cloudmesh.config.cm_config import cm_config_server 
 from pprint import pprint
 
 # ----------------------------------------------------------------------
@@ -55,6 +55,23 @@ __all__ = ['start', 'stop', 'kill', 'view', 'clean', 'cleanmongo',
 #
 web_browser = "firefox"
 
+debug = True
+try:
+    debug = cm_config_server().get("cloudmesh.server.debug")
+except:
+    pass
+
+fabric.state.output.debug  = debug
+fabric.state.output.running  = debug
+fabric.state.output.status  = debug
+fabric.state.output.stdout  = debug
+fabric.state.output.stderr  = debug
+fabric.state.output.warnings  = debug
+fabric.state.output.aborts  = debug
+fabric.state.output.user  = debug
+
+progress_server = PROGRESS('Cloudmesh Services', 6)
+    
 if sys.platform == 'darwin':
     web_browser = "open"
 
@@ -63,10 +80,10 @@ def execute_command(msg, command, debug):
     if debug:
         banner(msg, debug=debug)
     else:
-        PROGRESS.next()
+        progress_server.next()
     local(command, capture=_capture)
         
-    
+
 #
 # VERSION MANAGEMENT
 #
@@ -125,18 +142,8 @@ def quick(server="server", browser='yes'):
 def start(server="server", browser='yes', debug=False):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link"""
     
-    pprint (fabric.state.output)
+    #pprint (fabric.state.output)
 
-    debug = True
-    
-    fabric.state.output.debug  = debug
-    fabric.state.output.running  = debug
-    fabric.state.output.status  = debug
-    fabric.state.output.stdout  = debug
-    fabric.state.output.error  = debug
-    fabric.state.output.warnings  = debug
-    fabric.state.output.aborts  = debug            
-    
     """
         'aborts': True,
         'debug': False,
@@ -148,20 +155,18 @@ def start(server="server", browser='yes', debug=False):
         'warnings': True
         }
     """
-
-    PROGRESS.set('Cloudmesh Services', 10)
-    banner(debug)
+    #banner(debug)
 
     banner("KILL THE SERVER", debug=debug)
-    r = kill()
+    r = kill(debug=debug)
     if debug:
         print r
     else:
-        PROGRESS.next()
+        progress_server.next()
 
     execute_command("INSTALL CLOUDMESH",
                 "python setup.py install",
-                debug)
+                debug=debug)
 
 
     execute_command("START MONGO", 
@@ -179,7 +184,7 @@ def start(server="server", browser='yes', debug=False):
             "cd cloudmesh_web; python {0}.py &".format(server),
             True)
     # view(link)
-    PROGRESS.finish()
+    progress_server.finish()
     
 @task
 def web(server="server", browser='yes'):

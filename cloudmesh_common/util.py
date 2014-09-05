@@ -33,23 +33,21 @@ except:
     from progress.bar import Bar    
     
 class PROGRESS(object):
-
-    defined = False
-    bar = None
     
-    @classmethod
-    def set(cls, msg, limit):
-        if not cls.defined:
-            cls.bar = Bar(msg, max=limit)
-            cls.defined = True
+    def __init__(self,msg=None,limit=10):
+        if msg is None:
+            msg = "Cloudmesh Services"
+        self.msg = msg
+        self.bar = Bar(self.msg, max=limit)
+        
+    def set(self, msg, limit):
+        self.bar = Bar(msg, max=limit)
 
-    @classmethod
-    def next(cls):
-        cls.bar.next()
-
-    @classmethod        
-    def finish(cls):
-        cls.bar.finish()        
+    def next(self):
+        self.bar.next()
+      
+    def finish(self):
+        self.bar.finish()        
 
 def path_expand(text):
     """ returns a string with expanded variable.
