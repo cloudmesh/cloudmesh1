@@ -7,6 +7,7 @@ from cloudmesh.config.cm_config import cm_config
 
 log = LOGGER(__file__)
 
+
 def shell_command_label(arguments):
     # TODO: [--width=WIDTH]
     # WIDTH   The width of the ID in teh label, padded with 0
@@ -18,9 +19,9 @@ def shell_command_label(arguments):
 
       --prefix=PREFIX    provide the prefix for the label
       --id=ID            provide the start ID which is an integer
-      
+
     Description:
-    
+
         A command to set the prefix and id for creating an automatic lable for VMs.
         Without paremeter it prints the currect label.
 
@@ -30,7 +31,7 @@ def shell_command_label(arguments):
     except:
         Console.error("There is a problem with the configuration yaml files")
         return
-        
+
     username = config['cloudmesh']['profile']['username']
 
     #print arguments #######
@@ -55,6 +56,7 @@ def shell_command_label(arguments):
     else:
         print_label(username)
 
+
 def update_label(username, prefix=None, id=None):
     user_obj = cm_user()
     userdata = user_obj.info(username)
@@ -64,13 +66,12 @@ def update_label(username, prefix=None, id=None):
         userdata['defaults']['index'] = id
     user_obj.set_defaults(username, userdata['defaults'])
 
+
 def print_label(username):
     user_obj = cm_user()
     userdata = user_obj.info(username)
     print "prefix: ", userdata['defaults']['prefix']
     print "index: ", userdata['defaults']['index']
-
-
 
 
 def main():

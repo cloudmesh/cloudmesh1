@@ -23,6 +23,7 @@ from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
+
 def shell_command_user(arguments):
     """
     Usage:
@@ -45,7 +46,7 @@ def shell_command_user(arguments):
     user = cm_user()
 
     if (arguments["info"]):
-        
+
         id = arguments["ID"]
         if id is None:
             config = cm_config()
@@ -53,7 +54,7 @@ def shell_command_user(arguments):
         banner("User Information in Mongo for user: {0}".format(id))
         user = cm_user()
         result = user.info(id)
-        pprint (result)
+        pprint(result)
 
     elif (arguments["list"]):
 
@@ -69,6 +70,7 @@ def shell_command_user(arguments):
         print "WRONG PARAMETERS"
 
     return
+
 
 def main():
     arguments = docopt(shell_command_user.__doc__)
