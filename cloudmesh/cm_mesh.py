@@ -1,18 +1,6 @@
-import sys
-import os
-import pickle
-# from sh import nova
-# from sh import tail
-# from sh import fgrep
-from datetime import datetime
 import json
-
-
-from pprint import pprint
-
 from cloudmesh_common.util import HEADING
 from cloudmesh_common.logger import LOGGER
-from cloudmesh_install import config_file
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -29,8 +17,8 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.openstack.cm_compute import openstack
 
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
-from cloudmesh.iaas.ec2.cm_compute import ec2 
-from cloudmesh.iaas.aws.cm_compute import aws 
+from cloudmesh.iaas.ec2.cm_compute import ec2
+from cloudmesh.iaas.aws.cm_compute import aws
 try:
     from cloudmesh.iaas.azure.cm_compute import azure
 except:
@@ -284,7 +272,7 @@ class cm_mesh:
                 cloud_type = self.clouds[name]['cm_type']
                 provider = self.cloud_provider(cloud_type)
                 cloud = provider(name)
-                if not self.clouds[name].has_key('user_id'):
+                if 'user_id' not in self.clouds[name]:
                     self.clouds[name]['user_id'] = cloud.find_user_id()
         except Exception, e:
             log.error(str(e))
@@ -326,7 +314,6 @@ class cm_mesh:
     def save(self):
         log.error("save() not implemented")
 
-
     def load(self):
         log.error("load() not implemented")
 
@@ -348,9 +335,10 @@ class cm_mesh:
 
         '''
         activates a specific host by name. to be queried
-        :param names: the array with the names of the clouds in the yaml file to be activated.
-        '''
 
+        :param names: the array with the names of the clouds in the
+                      yaml file to be activated.
+        '''
         if cloud_names is None:
             names = self.config.active()
         else:
@@ -363,16 +351,22 @@ class cm_mesh:
                 credential = self.config.cloud(cloud_name)
                 cm_type = credential['cm_type']
                 cm_type_version = credential['cm_type_version']
-                if cm_type in ['openstack', 'eucalyptus', 'azure', 'aws', 'ec2']:
-                    self.clouds[cloud_name] = {'name': cloud_name,
-                                               'cm_type': cm_type,
-                                               'cm_type_version': cm_type_version}
-#                                               'credential': credential}
+                if cm_type in ['openstack',
+                               'eucalyptus',
+                               'azure',
+                               'aws',
+                               'ec2']:
+                    self.clouds[cloud_name] = {
+                        'name': cloud_name,
+                        'cm_type': cm_type,
+                        'cm_type_version': cm_type_version}
+    #                   'credential': credential}
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name)
-                    # try to see if the credential works
-                    # if so, update the 'manager' so the cloud is successfully activated
-                    # otherwise log error message and skip this cloud
+                    # try to see if the credential works if so, update
+                    # the 'manager' so the cloud is successfully
+                    # activated otherwise log error message and skip
+                    # this cloud
                     if not force_auth_verify:
                         self.clouds[cloud_name].update({'manager': cloud})
                     else:
@@ -380,15 +374,18 @@ class cm_mesh:
                         if 'access' in tryauth:
                             self.clouds[cloud_name].update({'manager': cloud})
                         else:
-                            log.error("Credential not working, cloud is not activated")
+                            log.error("Credential not working, "
+                                      "cloud is not activated")
 
                     if cm_type == 'openstack':
                         keys = self.config.userkeys()['keylist']
                         username = self.config.username()
                         for keyname, keycontent in keys.iteritems():
-                            keynamenew = "%s_%s" % (username, keyname.replace('.', '_').replace('@', '_'))
+                            keynamenew = "{0}_{1}".format(username,
+                                                          keyname.replace('.', '_').replace('@', '_'))
                             # print "Transformed key name: %s" % keynamenew
-                            log.info("Adding a key for user <%s> in cloud <%s>" % (username, cloud_name))
+                            log.info("Adding a key for user <%s> in cloud <%s>"
+                                     % (username, cloud_name))
                             keypart = keycontent.split(" ")
                             keycontent = "%s %s" % (keypart[0], keypart[1])
                             cloud.keypair_add(keynamenew, keycontent)
@@ -398,8 +395,6 @@ class cm_mesh:
                 print e
                 # print traceback.format_exc()
                 # sys.exit()
-
-
 
     def del_key_pairs(self, cloud_names=None):
         print "not implemented"
@@ -444,7 +439,11 @@ class cm_mesh:
         cloud.wait(serverid, 'ACTIVE')
         cloud.set_meta(serverid, meta)
 
-    def create(self, cloud_name, prefix, index, image_id, flavor_name, key=None, security_group=None):
+    def create(self, cloud_name, prefix, index,
+               image_id,
+               flavor_name,
+               key=None,
+               security_group=None):
 
         # print ">>>>>>",  cloud_name, prefix, index, image_id, flavor_name,
         # key
@@ -461,11 +460,21 @@ class cm_mesh:
         if security_group is None:
             security_group = cloud.checkSecurityGroups()
 
-        if not security_group is None:
+        #
+        # TODO: else
+        #
+        if security_group is not None:
             security_groups.append(security_group)
         else:
+            #
+            # TODO: this can never be reached
+            #
             security_groups = None
-        return cloud.vm_create(name, flavor_name, image_id, security_groups, key)
+        return cloud.vm_create(name,
+                               flavor_name,
+                               image_id,
+                               security_groups,
+                               key)
 
         """
         keyname = ''
@@ -482,7 +491,8 @@ class cm_mesh:
             provider = self.cloud_provider(cloud_type)
             cloud = provider(cloud_name)
             if cloud_name == "india-openstack":
-                flavor_name = "m1.tiny"  # this is a dummy and must be retrieved from flask
+                flavor_name = "m1.tiny"
+                # this is a dummy and must be retrieved from flask
                 image_id = "6d2bca76-8fff-4d57-9f29-50378539b4fa"
                 name = prefix + "-" + index
                 if (len(keyname) > 0) :
@@ -491,7 +501,8 @@ class cm_mesh:
                     cloud.vm_create(name, flavor_name, image_id)
                 # this is a dummy and must be retrieved from flask
         except Exception , e:
-            log.error("could not create {0} {1} {2} {3} {4}".format(cloud_name, prefix, index, image_id, e}
+            log.error("could not create {0} {1} {2} {3} {4}".format(cloud_name,
+                       prefix, index, image_id, e}
         """
 
     # ----------------------------------------------------------------------
@@ -639,7 +650,9 @@ if __name__ == "__main__":
         }
 
 
-    (attribute, passwd) = fgrep("OS_PASSWORD",config_file("openstack/novarc")).replace("\n","").split("=")
+    (attribute, passwd) = fgrep("OS_PASSWORD",
+                                config_file("openstack/novarc"))
+                                .replace("\n","").split("=")
 
     india_os['OS_PASSWORD'] = passwd
 

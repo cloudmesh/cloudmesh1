@@ -10,7 +10,6 @@ from cloudmesh.util.stopwatch import StopWatch
 # from pprint import pprint
 import traceback
 from cloudmesh.util.encryptdata import decrypt
-import traceback
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -28,6 +27,7 @@ try:
 except:
     log.warning("Amazon NOT ENABLED")
 
+
 class cm_MongoBase(object):
 
     def __init__(self):
@@ -39,7 +39,6 @@ class cm_MongoBase(object):
 
     def get(self, username):
         return self.find_one({"cm_id": username, "cm_type": self.cm_type})
-
 
     def set(self, username, d):
         element = dict(d)
@@ -56,7 +55,6 @@ class cm_MongoBase(object):
             return self.db_mongo.update(query, upsert=True)
         else:
             return self.db_mongo.update(query, values, upsert=True)
-
 
     def insert(self, element):
         self.db_mongo.insert(element)
@@ -83,12 +81,10 @@ class cm_MongoBase(object):
         return self.db_mongo.find_one(query)
 
     def clear(self):
-        self.db_mongo.remove({"cm_type" : self.cm_type})
-
+        self.db_mongo.remove({"cm_type": self.cm_type})
 
     def wipe(self):
         self.db_mongo.remove({})
-
 
 
 class cm_mongo2:
@@ -103,7 +99,7 @@ class cm_mongo2:
     mongo_collection = "cloudmesh"
 
     ssh_ec2_rule = Ec2SecurityGroup.Rule(22, 22)
-    
+
     config = None
 
     def __init__(self, collection="cloudmesh"):
@@ -117,7 +113,6 @@ class cm_mongo2:
         self.db_user = get_mongo_db(user_collection)
 
         self.db_clouds = get_mongo_db(collection)
-
 
         self.config = cm_config()
 
@@ -139,17 +134,16 @@ class cm_mongo2:
             provider = ec2
         return provider
 
-
     #
     #  BUG NO USER IS INVOLVED
     #
 
-
     def get_credential(self, cm_user_id, cloud):
         try:
-            password = cm_config_server().get("cloudmesh.server.mongo.collections.password.key")
-            safe_credential = (self.userdb_passwd.find_one({"cm_user_id": cm_user_id, "cloud":cloud}))["credential"]
-
+            password = cm_config_server().get(
+                "cloudmesh.server.mongo.collections.password.key")
+            safe_credential = (self.userdb_passwd.find_one(
+                {"cm_user_id": cm_user_id, "cloud": cloud}))["credential"]
 
             # print "SK", safe_credential
 
@@ -163,7 +157,6 @@ class cm_mongo2:
             print traceback.format_exc()
             return None
 
-
     def get_cloud_info(self, cm_user_id, cloudname):
         cloud_config = self.config.cloud(cloudname)
         if cloud_config['cm_type'] in ['openstack']:
@@ -171,8 +164,8 @@ class cm_mongo2:
             del cloud_config['credentials']['OS_PASSWORD']
             del cloud_config['credentials']['OS_TENANT_NAME']
         elif cloud_config['cm_type'] in ['ec2']:
-             del cloud_config['credentials']['EC2_ACCESS_KEY']
-             del cloud_config['credentials']['EC2_SECRET_KEY']
+            del cloud_config['credentials']['EC2_ACCESS_KEY']
+            del cloud_config['credentials']['EC2_SECRET_KEY']
         elif cloud_config['cm_type'] in ['aws']:
             if 'EC2_ACCESS_KEY' in cloud_config['credentials']:
                 del cloud_config['credentials']['EC2_ACCESS_KEY']
@@ -185,17 +178,17 @@ class cm_mongo2:
         # print "C", credential
 
         for key in credential:
-            if key not in  cloud_config['credentials']:
+            if key not in cloud_config['credentials']:
                 cloud_config['credentials'][key] = credential[key]
 
         #
         # THIS SEEMS TO BE A BUG???? sos = sierra openstack, why only sierra?
         #
         if (cloud_config['cm_type'] in ['openstack']) and (cloud_config['cm_label'] in ['sos', 'ios_havana']):
-            cloud_config['credentials']['OS_TENANT_NAME'] = self.active_project(cm_user_id)
+            cloud_config['credentials'][
+                'OS_TENANT_NAME'] = self.active_project(cm_user_id)
 
         return cloud_config
-
 
     def get_cloud(self, cm_user_id, cloud_name, force=False):
         cloud = None
@@ -210,15 +203,15 @@ class cm_mongo2:
 
         credentials = cloud_info['credentials']
         # print "D",credentials
-        
+
         # we can force an update
         if force:
             recreate = True
         # new user
-        elif not cm_user_id in self.clouds:
+        elif cm_user_id not in self.clouds:
             recreate = True
         # new cloud for that user
-        elif not cloud_name in self.clouds[cm_user_id]:
+        elif cloud_name not in self.clouds[cm_user_id]:
             recreate = True
         # manager pointer does not exist
         elif 'manager' not in self.clouds[cm_user_id][cloud_name]:
@@ -228,14 +221,14 @@ class cm_mongo2:
             recreate = True
         # for openstack, we check if tenant_name was recently changed
         elif 'OS_TENANT_NAME' in credentials and\
-              hasattr(self.clouds[cm_user_id][cloud_name]['manager'], 'user_token') and\
+            hasattr(self.clouds[cm_user_id][cloud_name]['manager'], 'user_token') and\
              'access' in self.clouds[cm_user_id][cloud_name]['manager'].user_token and\
              self.clouds[cm_user_id][cloud_name]['manager'].user_token['access']['token']['tenant']['name'] != credentials['OS_TENANT_NAME']:
-                recreate = True
+            recreate = True
         # in most case we return the existing object ref
         else:
             return self.clouds[cm_user_id][cloud_name]['manager']
-        
+
         # in case new object needs to be created
         if recreate:
             try:
@@ -251,20 +244,24 @@ class cm_mongo2:
                     provider = self.cloud_provider(cm_type)
                     cloud = provider(cloud_name, credentials)
 
-                    log.debug("Created new cloud instance for cloud name: %s, type: %s" \
+                    log.debug("Created new cloud instance for cloud name: %s, type: %s"
                               % (cloud_name, cm_type))
                     if cm_type in ['openstack', 'ec2']:
                         if cm_type in ['openstack']:
-                            log.debug("\tfor tenant: %s" % credentials['OS_TENANT_NAME'])
+                            log.debug("\tfor tenant: %s" %
+                                      credentials['OS_TENANT_NAME'])
                         if not cloud.auth():
                             cloud = None
-                            log.error("Authentication Failed, cloud is not activated")
+                            log.error(
+                                "Authentication Failed, cloud is not activated")
 
-                    self.clouds[cm_user_id][cloud_name].update({'manager': cloud})
+                    self.clouds[cm_user_id][
+                        cloud_name].update({'manager': cloud})
                     if cloud is not None:
                         self.refresh(cm_user_id, [cloud_name], ['servers'])
                         if cm_type in ['openstack']:
-                            secgroups = cloud.list_security_groups()['security_groups']
+                            secgroups = cloud.list_security_groups()[
+                                'security_groups']
                             for secgroup in secgroups:
                                 if secgroup['name'] == 'default':
                                     foundsshrule = False
@@ -272,21 +269,26 @@ class cm_mongo2:
                                         existRule = Ec2SecurityGroup.Rule(
                                             rule['from_port'],
                                             rule['to_port']
-                                            )
+                                        )
                                         if existRule == self.ssh_ec2_rule:
                                             foundsshrule = True
-                                            log.debug("Ec2 security group rule allowing ssh exists for cloud: %s, type: %s, tenant: %s" \
-                                                      % (cloud_name, cm_type, credentials['OS_TENANT_NAME']))
+                                            log.debug("Ec2 security group rule allowing "
+                                                      "ssh exists for cloud: %s, type: %s, tenant: %s"
+                                                      % (cloud_name,
+                                                         cm_type,
+                                                         credentials['OS_TENANT_NAME']))
                                     if not foundsshrule:
-                                        iddefault = cloud.find_security_groupid_by_name('default')
+                                        iddefault = cloud.find_security_groupid_by_name(
+                                            'default')
                                         cloud.add_security_group_rules(iddefault,
                                                                        [self.ssh_ec2_rule])
-                                        log.debug("Added Ec2 security group rule to allow ssh for cloud: %s, type: %s, tenant: %s" \
+                                        log.debug("Added Ec2 security group rule to allow ssh for cloud: %s, type: %s, tenant: %s"
                                                   % (cloud_name, cm_type, credentials['OS_TENANT_NAME']))
-                        
+
             except Exception, e:
                 cloud = None
-                log.error("Cannot activate cloud {0} for {1}\n{2}".format(cloud_name, cm_user_id, e))
+                log.error(
+                    "Cannot activate cloud {0} for {1}\n{2}".format(cloud_name, cm_user_id, e))
                 print traceback.format_exc()
         return cloud
 
@@ -304,29 +306,28 @@ class cm_mongo2:
         user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
         return user['project']
 
-
     def activate(self, cm_user_id, names=None):
         #
         # bug must come form mongo
         #
 
         if cm_user_id is None:
-            cm_user_id = self.config.username() #added by Mark X on 8.12.2014
+            cm_user_id = self.config.username()  # added by Mark X on 8.12.2014
             if names is None:
                 names = self.config.active()
         else:
-            if names is None:     #added by Mark X on 8.12.2014
+            if names is None:  # added by Mark X on 8.12.2014
                 names = self.active_clouds(cm_user_id)
 
         for cloud_name in names:
             log.info("Activating -> {0}".format(cloud_name))
             cloud = self.get_cloud(cm_user_id, cloud_name)
             if not cloud:
-                log.info("Activation of cloud {0} and user {1} Failed!".format(cloud_name, cm_user_id))
+                log.info(
+                    "Activation of cloud {0} and user {1} Failed!".format(cloud_name, cm_user_id))
             else:
-                log.info("Activation of cloud {0} and user {1} Succeeded!".format(cloud_name, cm_user_id))
-
-
+                log.info("Activation of cloud {0} and user {1} Succeeded!".format(
+                    cloud_name, cm_user_id))
 
     def refresh(self, cm_user_id, names=["all"], types=["all"]):
         """
@@ -365,14 +366,12 @@ class cm_mongo2:
 
         watch = StopWatch()
 
-
-
         for name in names:
             print "*", name
             watch_name = "{0}-{1}".format(cm_user_id, name)
-            log.info("-"*80)
+            log.info("-" * 80)
             log.info("Retrieving data for %s" % name)
-            log.info("-"*80)
+            log.info("-" * 80)
             cloud = None
             for type in types:
                 # for identity management operations, use the keystone class
@@ -383,8 +382,6 @@ class cm_mongo2:
                     cloud = self.clouds[cm_user_id][name]['manager']
 
                 print "Refreshing {0} {1} {2} ->".format(cm_user_id, type, name)
-
-
 
                 watch.start(watch_name)
                 cloud.refresh(type)
@@ -398,7 +395,8 @@ class cm_mongo2:
                 watch.start(watch_name)
 
                 if type in ['servers']:
-                    self.db_clouds.remove({"cm_user_id": cm_user_id, "cm_cloud": name, "cm_kind": type})
+                    self.db_clouds.remove(
+                        {"cm_user_id": cm_user_id, "cm_cloud": name, "cm_kind": type})
                 else:
                     self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
 
@@ -411,8 +409,10 @@ class cm_mongo2:
 
                     result[element]['cm_id'] = id
                     result[element]['cm_cloud'] = name
-                    result[element]['cm_type'] = self.clouds[cm_user_id][name]['cm_type']
-                    result[element]['cm_type_version'] = self.clouds[cm_user_id][name]['cm_type_version']
+                    result[element]['cm_type'] = self.clouds[
+                        cm_user_id][name]['cm_type']
+                    result[element]['cm_type_version'] = self.clouds[
+                        cm_user_id][name]['cm_type_version']
                     result[element]['cm_kind'] = type
                     # print "HPCLOUD_DEBUG", result[element]
                     for key in result[element]:
@@ -427,7 +427,8 @@ class cm_mongo2:
                                 value = result[element]['metadata'][key]
                                 del result[element]['metadata'][key]
                                 result[element]['metadata'][fixedkey] = value
-                    # print "HPCLOUD_DEBUG - AFTER DELETING PROBLEMATIC KEYS", result[element]
+                    # print "HPCLOUD_DEBUG - AFTER DELETING PROBLEMATIC KEYS",
+                    # result[element]
 
                     # exception.
                     if "_id" in result[element]:
@@ -467,7 +468,8 @@ class cm_mongo2:
             if kind in ['flavors', 'images', 'users', 'tenants']:
                 result = self.find({'cm_kind': kind, 'cm_cloud': name})
             else:
-                result = self.find({'cm_user_id': cm_user_id, 'cm_kind': kind, 'cm_cloud': name})
+                result = self.find(
+                    {'cm_user_id': cm_user_id, 'cm_kind': kind, 'cm_cloud': name})
             for entry in result:
                 data[name][entry['id']] = entry
         return data
@@ -527,19 +529,32 @@ class cm_mongo2:
         BUG: missing security group
         '''
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
-        if givenvmname == None:
+        if givenvmname is None:
             name = "%s_%s" % (prefix, index)
         else:
             name = givenvmname
-        return cloudmanager.vm_create(name=name, flavor_name=vm_flavor, image_id=vm_image, key_name=key, meta=meta)
+        return cloudmanager.vm_create(name=name,
+                                      flavor_name=vm_flavor,
+                                      image_id=vm_image,
+                                      key_name=key,
+                                      meta=meta)
 
-    def vm_create_queue(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id, givenvmname=None):
+    def vm_create_queue(self,
+                        cloud,
+                        prefix,
+                        index,
+                        vm_flavor,
+                        vm_image,
+                        key,
+                        meta,
+                        cm_user_id,
+                        givenvmname=None):
         '''
         same as vm_create but runs with a celery task queue
-        
+
         apply_async places a function call in a specific queue named in 'queue='
         parameter
-        
+
         BUG: missing security group
         '''
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
@@ -548,16 +563,16 @@ class cm_mongo2:
         name = "tasks"
         imported = getattr(__import__(package, fromlist=[name]), name)
         queue_name = "%s-%s" % (cm_type, "servers")
-        if givenvmname == None:
+        if givenvmname is None:
             name = "%s_%s" % (prefix, index)
         else:
             name = givenvmname
         return imported.vm_create.apply_async(
             (
-                name, 
+                name,
                 vm_flavor,
                 vm_image
-            ), 
+            ),
             {
                 'key_name': key,
                 'meta': meta,
@@ -587,8 +602,7 @@ class cm_mongo2:
     def vm_delete(self, cloud, server, cm_user_id):
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         return cloudmanager.vm_delete(server)
-    
-        
+
 
 '''
 def main():
