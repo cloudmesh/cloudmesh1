@@ -1,10 +1,7 @@
 from cloudmesh.experiment.model_group import ExperimentGroup
 from cloudmesh_common.logger import LOGGER
-from docopt import docopt
-from pprint import pprint
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
-#from cmd3.shell import cmd3_call
 
 log = LOGGER(__file__)
 
