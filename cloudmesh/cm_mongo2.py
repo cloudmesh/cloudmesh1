@@ -294,41 +294,59 @@ class cm_mongo2:
         return cloud
 
     def active_clouds(self, cm_user_id):
+        ret_clouds = None
+        
+        # If the user has registered and activated some clouds from the web gui,
+        # there will be entries in the db.
         user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
-        try:
-            return user['activeclouds']
-        except:
+        if 'activeclouds' in user:
+            ret_clouds = user['activeclouds']
+        else:
             # If activeclouds is empty in defaults, user collection will be
             # looked up.
+            # As part of the user initialization, before the start of either
+            # the web server or the command line shell, this should guarantee
+            # that it exists in the db
             user = self.db_user.find_one({'cm_user_id': cm_user_id})
-            return user['activeclouds']
+            if 'activeclouds' in user:
+                ret_clouds = user['activeclouds']
+        return ret_clouds
 
     def active_project(self, cm_user_id):
         user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
         return user['project']
 
     def activate(self, cm_user_id, names=None):
+        
+        # The cm_user_id should be ALWAYS set and passed through to this call
+        # On Web gui the g.user.id has the username
+        # On command line shell, we should maintain a global object/variable
+        # similar to this upon the start of the shell, as though the user is
+        # authenticated. However at this point we simply retrieve the name from
+        # yaml file.
+        # However for failsafe reason we do another check here.
         #
-        # bug must come form mongo
-        #
-
         if cm_user_id is None:
-            cm_user_id = self.config.username()  # added by Mark X on 8.12.2014
-            if names is None:
-                names = self.config.active()
+            cm_user_id = self.config.username()
+        
+        # the list of active clouds is always coming from Mongo.
+        # In case of web gui, it is from the defaults db/collection as the user
+        # will be required to register and activate some clouds before any
+        # further action could be done.
+        # In case of CLI, it could fail safe to the list from yaml file.
+        #
+        cloudnames = self.active_clouds(cm_user_id)
+        
+        if cloudnames:
+            for cloud_name in cloudnames:
+                log.info("Activating -> {0}".format(cloud_name))
+                cloud = self.get_cloud(cm_user_id, cloud_name)
+                if not cloud:
+                    log.info("Activation of cloud {0} and user {1} Failed!".format(cloud_name, cm_user_id))
+                else:
+                    log.info("Activation of cloud {0} and user {1} Succeeded!".format(cloud_name, cm_user_id))
         else:
-            if names is None:  # added by Mark X on 8.12.2014
-                names = self.active_clouds(cm_user_id)
-
-        for cloud_name in names:
-            log.info("Activating -> {0}".format(cloud_name))
-            cloud = self.get_cloud(cm_user_id, cloud_name)
-            if not cloud:
-                log.info(
-                    "Activation of cloud {0} and user {1} Failed!".format(cloud_name, cm_user_id))
-            else:
-                log.info("Activation of cloud {0} and user {1} Succeeded!".format(
-                    cloud_name, cm_user_id))
+            log.info("No active clouds entries found in database so no clouds were activated!")
 
     def refresh(self, cm_user_id, names=["all"], types=["all"]):
         """
@@ -525,7 +543,7 @@ class cm_mongo2:
                 break
         return ret
 
-    def vm_quick_launch(self, cloud, cm_user_id):
+    def start(self, cloud, cm_user_id):
         """Launch a new VM instance with a default setting for flavor, image and
         key name"""
         
@@ -623,7 +641,7 @@ class cm_mongo2:
             ret = None
         return ret
 
-    def vm_quick_delete(self, cloud, server, cm_user_id):
+    def delete(self, cloud, server, cm_user_id):
         """Delete vm instances and release unused public ips"""
 
         # Hyungro Lee - Sep 4th, 2014
