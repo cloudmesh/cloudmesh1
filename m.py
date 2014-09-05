@@ -32,9 +32,9 @@ mesh.refresh(username,types=['flavors'],names=["india"])
 #
 
 cloudmesh.banner("LAUNCH VM INSTANCE")
-result = mesh.vm_quick_launch(cloud, username)
+result = mesh.start(cloud, username)
 
 cloudmesh.banner("TERMINATE VM INSTANCE")
 server = result['server']['id']
-mesh.vm_quick_delete(cloud, server, username)
+mesh.delete(cloud, server, username)
 
