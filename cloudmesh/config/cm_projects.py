@@ -2,13 +2,13 @@ from cloudmesh.config.cm_config import cm_config
 from string import Template
 import os
 import json
-import sys
+
 
 class cm_projects:
     """A class to manage the project ids for the various clouds."""
 
     def _path_expand(self, text):
-        """ returns a string with expanded variavble 
+        """ returns a string with expanded variavble
 
         Parameters:
         -----------
@@ -19,7 +19,7 @@ class cm_projects:
         -------
         text
             returns the text with all path variables expanded in it.
-        
+
         """
         template = Template(text)
         result = template.substitute(os.environ)
@@ -27,7 +27,8 @@ class cm_projects:
         return result
 
     def __init__(self, filename=None):
-        """initializes based on cm_config and returns pointer to the projects dict."""
+        """initializes based on cm_config and returns pointer to
+           the projects dict."""
         # Check if the file exists
         self.config = cm_config(filename)
 

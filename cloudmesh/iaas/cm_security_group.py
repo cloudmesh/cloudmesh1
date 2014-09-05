@@ -1,15 +1,12 @@
 #!/usr/bin/env python
 from docopt import docopt
-import sys
-
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
-from prettytable import PrettyTable
-
 from cloudmesh_common.logger import LOGGER
 from tabulate import tabulate
 
 log = LOGGER(__file__)
+
 
 def shell_command_security_group(arguments):
     """
@@ -17,15 +14,15 @@ def shell_command_security_group(arguments):
         security_group list <cm_cloud>...
         security_group add <cm_cloud> <label> <parameters>  [NOT IMPLEMENTED]
         security_group delete <cm_cloud> <label>            [NOT IMPLEMENTED]
-	security_group -h | --help
+    security_group -h | --help
         security_group --version
 
    Options:
        -h                   help message
- 
+
     Arguments:
         cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
-    
+
     Description:
        security_group command provides list of available security_groups.
 
@@ -33,7 +30,7 @@ def shell_command_security_group(arguments):
 
     Examples:
         $ security_group list india_openstack_grizzly
-        
+
     """
 
     # log.info(arguments)
@@ -47,23 +44,22 @@ def shell_command_security_group(arguments):
     c = cm_mongo()
     c.activate(cm_user_id=username)
     security_groups_dict = c.security_groups(cm_user_id=username, clouds=cloud_names)
-    your_keys = {"openstack": 
+    your_keys = {"openstack":
                  [
-                     ['id', 'id'],
-                     ['name', 'name'],
-                     ['description', 'description'],
-                     ['cm_refresh', 'cm_refresh']
+                    ['id', 'id'],
+                    ['name', 'name'],
+                    ['description', 'description'],
+                    ['cm_refresh', 'cm_refresh']
                  ],
-                 "ec2":[]
-                 ,
-                 "azure":[]
-                 ,
-                 "aws":[]
+                 "ec2": [],
+                 "azure": [],
+                 "aws": []
                 }
 
     security_groups = _select_security_groups(security_groups_dict, your_keys)
     _display(security_groups)
-    
+
+
 def _select_security_groups(data, selected_keys, env=[]):
 
     security_groups = []
@@ -77,8 +73,8 @@ def _select_security_groups(data, selected_keys, env=[]):
         e.g.  Access to the value 5 in dataDict
 
         dataDict = { "abc": {
-                        "def": 5 
-                        } 
+                        "def": 5
+                        }
                     }
         mapList = [ "abc", "def" ]
 
@@ -99,11 +95,12 @@ def _select_security_groups(data, selected_keys, env=[]):
                 try:
                     values.append(_getFromDict(v, k[1:]))
                 except:
-                    #print sys.exc_info()
+                    # print sys.exc_info()
                     values.append(0)
             security_groups.append(values)
     headers = [keys]
     return headers + security_groups
+
 
 def _display(json_data, headers="firstrow", tablefmt="orgtbl"):
     table = tabulate(json_data, headers, tablefmt)
@@ -115,10 +112,11 @@ def _display(json_data, headers="firstrow", tablefmt="orgtbl"):
     print table
     print separator
 
+
 def main():
     arguments = docopt(shell_command_security_group.__doc__)
     shell_command_security_group(arguments)
-        
+
 if __name__ == "__main__":
-    #print sys.argv
+    # print sys.argv
     main()

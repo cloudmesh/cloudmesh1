@@ -1,41 +1,38 @@
 #!/usr/bin/env python
 from docopt import docopt
-import sys
-
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
-from prettytable import PrettyTable
-
 from cloudmesh_common.logger import LOGGER
 from tabulate import tabulate
 
 log = LOGGER(__file__)
+
 
 def shell_command_image(arguments):
     """
     Usage:
         image
         image <cm_cloud>... [--refresh]
-	image -h | --help
+    image -h | --help
         image --version
 
    Options:
        -h                   help message
        --refresh            refresh images of IaaS
- 
+
     Arguments:
         cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
-    
+
     Description:
        image command provides list of available images. Image describes
        pre-configured virtual machine image.
-       
+
 
     Result:
 
     Examples:
         $ image india_openstack_grizzly
-        
+
     """
 
     # log.info(arguments)
@@ -53,57 +50,58 @@ def shell_command_image(arguments):
     images_dict = c.images(cm_user_id=username, clouds=cloud_names)
     your_keys = {"openstack":
                     [
-                        # [ "Metadata", "metadata"],
-                        [ "status" , "status"],
-                        [ "name" , "name"],
-                        [ "id", "id"],
-                        [ "type_id" , "metadata", "instance_type_id"],
-                        [ "iname" , "metadata", "instance_type_name"],
-                        [ "location" , "metadata", "image_location"],
-                        [ "state" , "metadata", "image_state"],
-                        [ "updated" , "updated"],
-                        [ "minDisk" , "minDisk"],
-                        [ "memory_mb" , "metadata", 'instance_type_memory_mb'],
-                        [ "fid" , "metadata", "instance_type_flavorid"],
-                        [ "vcpus" , "metadata", "instance_type_vcpus"],
-                        [ "user_id" , "metadata", "user_id"],
-                        [ "owner_id" , "metadata", "owner_id"],
-                        [ "gb" , "metadata", "instance_type_root_gb"],
-                        [ "arch", ""]
-                    ],
+                        # ["Metadata", "metadata"],
+                        ["status", "status"],
+                        ["name", "name"],
+                        ["id", "id"],
+                        ["type_id", "metadata", "instance_type_id"],
+                        ["iname", "metadata", "instance_type_name"],
+                        ["location", "metadata", "image_location"],
+                        ["state", "metadata", "image_state"],
+                        ["updated", "updated"],
+                        ["minDisk", "minDisk"],
+                        ["memory_mb", "metadata", 'instance_type_memory_mb'],
+                        ["fid", "metadata", "instance_type_flavorid"],
+                        ["vcpus", "metadata", "instance_type_vcpus"],
+                        ["user_id", "metadata", "user_id"],
+                        ["owner_id", "metadata", "owner_id"],
+                        ["gb", "metadata", "instance_type_root_gb"],
+                        ["arch", ""]
+                   ],
                   "ec2":
                     [
-                        # [ "Metadata", "metadata"],
-                        [ "state" , "extra", "state"],
-                        [ "name" , "name"],
-                        [ "id" , "id"],
-                        [ "public" , "extra", "is_public"],
-                        [ "ownerid" , "extra", "owner_id"],
-                        [ "imagetype" , "extra", "image_type"]
-                    ],
+                        # ["Metadata", "metadata"],
+                        ["state", "extra", "state"],
+                        ["name", "name"],
+                        ["id", "id"],
+                        ["public", "extra", "is_public"],
+                        ["ownerid", "extra", "owner_id"],
+                        ["imagetype", "extra", "image_type"]
+                   ],
                   "azure":
                     [
-                        [ "name", "label"],
-                        [ "category", "category"],
-                        [ "id", "id"],
-                        [ "size", "logical_size_in_gb" ],
-                        [ "os", "os" ]
-                    ],
+                        ["name", "label"],
+                        ["category", "category"],
+                        ["id", "id"],
+                        ["size", "logical_size_in_gb"],
+                        ["os", "os"]
+                   ],
                   "aws":
                     [
-                        [ "state", "extra", "state"],
-                        [ "name" , "name"],
-                        [ "id" , "id"],
-                        [ "public" , "extra", "ispublic"],
-                        [ "ownerid" , "extra", "ownerid"],
-                        [ "imagetype" , "extra", "imagetype"]
-                    ]
+                        ["state", "extra", "state"],
+                        ["name", "name"],
+                        ["id", "id"],
+                        ["public", "extra", "ispublic"],
+                        ["ownerid", "extra", "ownerid"],
+                        ["imagetype", "extra", "imagetype"]
+                   ]
                   }
 
     images = _select_images(images_dict, your_keys)
 
     _display(images)
-    
+
+
 def _select_images(data, selected_keys, env=[]):
 
     """
@@ -143,7 +141,7 @@ def _select_images(data, selected_keys, env=[]):
                       ['metadata','metadata'],
                       ['key_name','key_name'],
                       ['created','created'],
-                  ],
+                 ],
                   "ec2":
                   [
                       ["name", "id"],
@@ -156,7 +154,7 @@ def _select_images(data, selected_keys, env=[]):
                       ["metadata", "metadata"],
                       ["key_name", "extra", "key_name"],
                       ["created", "extra", "launch_time"]
-                  ],
+                 ],
                   "aws":
                   [
                       ["name", "name"],
@@ -169,7 +167,7 @@ def _select_images(data, selected_keys, env=[]):
                       ["metadata", "metadata"],
                       ["key_name", "extra", "key_name"],
                       ["created", "extra", "launch_time"]
-                  ],
+                 ],
                   "azure":
                   [
                       ['name','name'],
@@ -207,10 +205,10 @@ def _select_images(data, selected_keys, env=[]):
         e.g.  Access to the value 5 in dataDict
 
         dataDict = { "abc": {
-                        "def": 5 
-                        } 
+                        "def": 5
+                        }
                     }
-        mapList = [ "abc", "def" ]
+        mapList = ["abc", "def"]
 
         _getFromDict(dataDict, mapList) returns 5
 
@@ -229,11 +227,12 @@ def _select_images(data, selected_keys, env=[]):
                 try:
                     values.append(_getFromDict(v, k[1:]))
                 except:
-                    #print sys.exc_info()
+                    # print sys.exc_info()
                     values.append(0)
             images.append(values)
     headers = [keys]
     return headers + images
+
 
 def _display(json_data, headers="firstrow", tablefmt="orgtbl"):
     table = tabulate(json_data, headers, tablefmt)
@@ -245,10 +244,11 @@ def _display(json_data, headers="firstrow", tablefmt="orgtbl"):
     print table
     print separator
 
+
 def main():
     arguments = docopt(shell_command_image.__doc__)
     shell_command_image(arguments)
-        
+
 if __name__ == "__main__":
-    #print sys.argv
+    # print sys.argv
     main()
