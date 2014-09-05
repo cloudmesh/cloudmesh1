@@ -1,12 +1,6 @@
-
-#from cloudmesh_common.logger import LOGGER
+from cloudmesh_common.logger import LOGGER
 from cloudmesh.cm_mongo import cm_MongoBase
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh.user.cm_user import cm_user
-import os
-from pprint import pprint
-import json
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -14,7 +8,9 @@ import json
 
 log = LOGGER(__file__)
 
+
 class cm_experiment_db(cm_MongoBase):
+
     """
     This methods holds some status information that is associated with a web
     page
@@ -23,13 +19,14 @@ class cm_experiment_db(cm_MongoBase):
     cm_kind = 'experiment'
 
     def __init__(self):
-        self.cm_kind = "experiment"        
+        self.cm_kind = "experiment"
         self.connect()
 
     def delete(self, user, experiment=None):
         '''
-        Deletes the state values associated with a experiment. If non is specified for
-        experiment all experiment state values are deleted
+        Deletes the state values associated with a experiment.
+        If non is specified for experiment all experiment state
+        values are deleted
 
         :param user: the user for which the state values are recorded
         :type user: string
@@ -38,10 +35,10 @@ class cm_experiment_db(cm_MongoBase):
         '''
 
         if experiment is None:
-            self.db_mongo.remove({"cm_kind" : self.cm_kind,
+            self.db_mongo.remove({"cm_kind": self.cm_kind,
                                   "cm_user_id": user})
         else:
-            self.db_mongo.remove({"cm_kind" : self.cm_kind,
+            self.db_mongo.remove({"cm_kind": self.cm_kind,
                                   "experiment": experiment,
                                   "cm_user_id": user})
 
@@ -60,16 +57,16 @@ class cm_experiment_db(cm_MongoBase):
         '''
 
         self.update({
-                     'cm_kind': self.cm_kind,
-                     'cm_user_id': user,
-                     'experiment': experiment,
-                     'attribute': attribute
-                    }, {
-                     'cm_kind': self.cm_kind,
-                     'cm_user_id': user,
-                     'experiment': experiment,
-                     'attribute': attribute,
-                     'value': value})
+            'cm_kind': self.cm_kind,
+            'cm_user_id': user,
+            'experiment': experiment,
+            'attribute': attribute
+        }, {
+            'cm_kind': self.cm_kind,
+            'cm_user_id': user,
+            'experiment': experiment,
+            'attribute': attribute,
+            'value': value})
 
     def get(self, user, experiment, attribute):
         '''
@@ -91,24 +88,18 @@ class cm_experiment_db(cm_MongoBase):
 
 if __name__ == "__main__":
 
-    
-    username = cm_config().username()   
+    username = cm_config().username()
     m = cm_experiment_db()
     m.clear()
-
 
     m.add(username, 'exp1', 'VMs', '100')
     m.add(username, 'exp1', 'images', '99')
 
     m.add(username, 'exp1', 'dict', {"a": 1, "b": {"c": 1}})
 
-
     cursor = m.find({})
 
-
-    
-
-    #pprint(configuration['cloudmesh']['experiment'])
+    # pprint(configuration['cloudmesh']['experiment'])
 
     '''
     for element in cursor:
@@ -121,5 +112,3 @@ if __name__ == "__main__":
 
     pprint(m.get(username, 'exp1', 'dict')['b'])
     '''
-
-
