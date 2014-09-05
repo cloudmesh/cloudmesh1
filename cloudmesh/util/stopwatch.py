@@ -29,7 +29,7 @@ class StopWatch(object):
     def keys(self):
         '''returns the names of the timers'''
         return self.timer_end.keys()
-        
+
     def start(self, name):
         '''
         starts a timer with the given name.
