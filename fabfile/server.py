@@ -61,16 +61,12 @@ try:
 except:
     pass
 
-fabric.state.output.debug  = debug
-fabric.state.output.running  = debug
-fabric.state.output.status  = debug
-fabric.state.output.stdout  = debug
-fabric.state.output.stderr  = debug
-fabric.state.output.warnings  = debug
-fabric.state.output.aborts  = debug
-fabric.state.output.user  = debug
-
-progress_server = PROGRESS('Cloudmesh Services', 6)
+if debug:
+    local("fab progress.off")
+else:
+    local("fab progress.on")
+        
+progress_server = PROGRESS('Cloudmesh Services', 50)
     
 if sys.platform == 'darwin':
     web_browser = "open"
