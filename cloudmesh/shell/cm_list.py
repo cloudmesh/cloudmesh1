@@ -2,12 +2,11 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.cm_cloud import CloudManage
 from cloudmesh_common.logger import LOGGER
 from tabulate import tabulate
-from pprint import pprint
 from cmd3.console import Console
 from cloudmesh.iaas.cm_cloud import shell_command_cloud
 from docopt import docopt
 
-#list_command_table_format = "simple"
+# list_command_table_format = "simple"
 list_command_table_format = "grid"
 
 
@@ -49,19 +48,19 @@ def shell_command_list(arguments):
 
     Description:
 
-        List clouds and projects information, if the CLOUD argument is not specified, the 
+        List clouds and projects information, if the CLOUD argument is not specified, the
         selected default cloud will be used. You can interactively set the default cloud with the command
-        'cloud select'. 
+        'cloud select'.
 
-        list flavor 
+        list flavor
         : list the flavors
-        list image 
+        list image
         : list the images
-        list vm 
+        list vm
         : list the vms
         list project
         : list the projects
-        list cloud 
+        list cloud
         : same as cloud list
 
     See Also:
@@ -146,15 +145,15 @@ class ListInfo(object):
                             ["location", "metadata", "image_location"],
                             ["state", "metadata", "image_state"],
                             ["updated", "updated"],
-                            #[ "minDisk" , "minDisk"],
+                            # [ "minDisk" , "minDisk"],
                             ["memory_mb", "metadata",
                                 'instance_type_memory_mb'],
                             ["fid", "metadata", "instance_type_flavorid"],
                             ["vcpus", "metadata", "instance_type_vcpus"],
-                            #[ "user_id" , "metadata", "user_id"],
-                            #[ "owner_id" , "metadata", "owner_id"],
-                            #[ "gb" , "metadata", "instance_type_root_gb"],
-                            #[ "arch", ""]
+                            # [ "user_id" , "metadata", "user_id"],
+                            # [ "owner_id" , "metadata", "owner_id"],
+                            # [ "gb" , "metadata", "instance_type_root_gb"],
+                            # [ "arch", ""]
                         ],
                         "ec2":
                         [
@@ -341,7 +340,7 @@ class ListInfo(object):
                     "could not find objects or connect to the database containing the projects")
 
             to_print = []
-            if projects[state] == None:
+            if projects[state] is None:
                 to_print = [[None]]
             else:
                 to_print = [[str(p)] for p in projects[state]]
@@ -389,7 +388,7 @@ class ListInfo(object):
         except:
             pass
         if self.arguments['--all']:
-            if activeclouds == None:
+            if activeclouds is None:
                 print "no active cloud, please activate a cloud by 'cloud on [CLOUD]'"
                 return False
             return activeclouds
@@ -398,7 +397,7 @@ class ListInfo(object):
                 name = self.arguments['CLOUD']
             else:
                 name = self.cloudmanage.get_selected_cloud(self.username)
-            if self.cloudmanage.get_clouds(self.username, getone=True, cloudname=name) == None:
+            if self.cloudmanage.get_clouds(self.username, getone=True, cloudname=name) is None:
                 Console.error(
                     "no cloud information of '{0}' in database".format(name))
                 return False
@@ -410,15 +409,15 @@ class ListInfo(object):
 
     def execute(self):
 
-        if self.arguments['flavor'] == True:
+        if self.arguments['flavor']:
             self._list_flavor()
-        elif self.arguments['vm'] == True:
+        elif self.arguments['vm']:
             self._list_server()
-        elif self.arguments['image'] == True:
+        elif self.arguments['image']:
             self._list_image()
-        elif self.arguments['project'] == True:
+        elif self.arguments['project']:
             self._list_project()
-        elif self.arguments['cloud'] == True:
+        elif self.arguments['cloud']:
             self._list_cloud()
 
 
