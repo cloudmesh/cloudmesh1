@@ -543,7 +543,7 @@ class cm_mongo2:
                 break
         return ret
 
-    def vm_quick_launch(self, cloud, cm_user_id):
+    def start(self, cloud, cm_user_id):
         """Launch a new VM instance with a default setting for flavor, image and
         key name"""
         
@@ -641,7 +641,7 @@ class cm_mongo2:
             ret = None
         return ret
 
-    def vm_quick_delete(self, cloud, server, cm_user_id):
+    def delete(self, cloud, server, cm_user_id):
         """Delete vm instances and release unused public ips"""
 
         # Hyungro Lee - Sep 4th, 2014
