@@ -32,7 +32,6 @@ inventory = Inventory()
 # inventory.generate()
 
 
-
 @inventory_module.route('/inventory/')
 @login_required
 @admin_permission.require(http_exception=403)
@@ -46,6 +45,7 @@ def display_inventory():
     return render_template('mesh/inventory/mesh_inventory.html',
                            updated=time_now,
                            clusters=clusters)
+
 
 @inventory_module.route('/inventory/summary/')
 @login_required
@@ -73,7 +73,6 @@ def old_display_summary():
 # ============================================================
 # ROUTE: INVENTORY TABLE
 # ============================================================
-
 
 
 @inventory_module.route('/inventory/cluster/<cluster>/<name>')
@@ -121,9 +120,10 @@ def display_cluster_for_user():
     cluster_data = get_servers_for_clusters(host_lists)
     # servers = inventory.hostlist(cluster)
     return render_template('mesh/inventory/mesh_inventory_cluster_limited.html',
-                            updated=time_now,
-                            cluster_data=cluster_data,
-                            services=['openstack', 'eucalyptus', 'hpc'])
+                           updated=time_now,
+                           cluster_data=cluster_data,
+                           services=['openstack', 'eucalyptus', 'hpc'])
+
 
 @inventory_module.route('/inventory/cluster-proj')
 @login_required
@@ -140,23 +140,27 @@ def display_cluster_for_proj():
 
     # servers = inventory.hostlist(cluster)
     return render_template('mesh/inventory/mesh_inventory_cluster_limited.html',
-                            updated=time_now,
-                            cluster_data=cluster_data,
-                            services=['openstack', 'eucalyptus', 'hpc'])
+                           updated=time_now,
+                           cluster_data=cluster_data,
+                           services=['openstack', 'eucalyptus', 'hpc'])
+
 
 def get_user_host_list(user):
     config = cm_config_server()
     host_lists = config.get("provisioner.policy.users." + user)
     return host_lists
 
+
 def get_proj_host_list(proj):
     config = cm_config_server()
     host_lists = config.get("provisioner.policy.projects." + proj)
     return host_lists
 
+
 def get_servers_for_clusters(host_lists):
     log.info("get server fo closyer")
-    cluster_dict = {"i":"india", "s":"sierra", "b":"bravo", "e":"echo", "d":"delta"}  # move to config at some point
+    cluster_dict = {"i": "india", "s": "sierra", "b": "bravo",
+                    "e": "echo", "d": "delta"}  # move to config at some point
     return_dict = {}
 
     for h in host_lists:
@@ -248,5 +252,3 @@ def set_attribute():
 def get_attribute(kind, name, attribute):
     s = inventory.get(kind, name)
     return s[attribute]
-
-

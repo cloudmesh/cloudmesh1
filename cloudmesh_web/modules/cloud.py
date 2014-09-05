@@ -44,6 +44,7 @@ for name in clouds.active():
         config.write()
 """
 
+
 def getCurrentUserinfo():
     userinfo = cm_user().info(g.user.id)
     return userinfo
@@ -94,6 +95,7 @@ def refresh(cloud=None, server=None, service_type=None):
 # ROUTE: REFRESH by Celery task queue
 # ============================================================
 
+
 @cloud_module.route('/cm/refresh/q/')
 @cloud_module.route('/cm/refresh/q/<cloud>/')
 @cloud_module.route('/cm/refresh/q/<cloud>/<service_type>')
@@ -112,7 +114,7 @@ def refresh_by_queue(cloud=None, service_type=None):
     else:
         cloud_names = [cloud]
 
-    for cloud_entry in  cloud_names:
+    for cloud_entry in cloud_names:
         cm_type = clouds.get_cloud_info(cm_user_id, cloud_entry)['cm_type']
         # Celery task queue
         package = "cloudmesh.iaas.%s.queue" % cm_type
@@ -120,8 +122,8 @@ def refresh_by_queue(cloud=None, service_type=None):
         imported = getattr(__import__(package, fromlist=[name]), name)
         queue_name = "%s-%s" % (cm_type, service_type)
         imported.refresh.apply_async((cm_user_id, cloud_names,
-                                  [service_type]), queue=queue_name)
- 
+                                      [service_type]), queue=queue_name)
+
     if service_type is None and cloud is None:
         return redirect('/')
     else:
@@ -135,7 +137,7 @@ def refresh_by_queue(cloud=None, service_type=None):
 @cloud_module.route('/cm/delete/<cloud>/<server>/')
 @login_required
 def delete_vm(cloud=None, server=None):
-    log.info ("-> delete {0} {1}".format(cloud, server))
+    log.info("-> delete {0} {1}".format(cloud, server))
 
     clouds = cm_mongo()
     clouds.activate(cm_user_id=g.user.id)
@@ -151,19 +153,17 @@ def delete_vm(cloud=None, server=None):
 # ============================================================
 # ROUTE: DELETE Multiple VM CONFIRMATION AND DELETION
 # ============================================================
+
+
 @cloud_module.route('/cm/delete_vm_confirm', methods=('GET', 'POST'))
 @login_required
 def delete_vm_confirm():
-
-
-
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
     # filter()
     config = cm_config()
     c = cm_mongo()
     c.activate(cm_user_id=g.user.id)
-
 
     userdata = g.user
     username = userdata.id
@@ -186,15 +186,16 @@ def delete_vm_confirm():
                      'created']
     cloud_filters = None
     filtered_clouds = clouds
-    cloud = request.form["cloud"]   
-    select = request.form.getlist("selection_"+cloud);
-    if select != None and cloud != None:
+    cloud = request.form["cloud"]
+    select = request.form.getlist("selection_" + cloud)
+    if select is not None and cloud is not None:
         session["delete_selection"] = (cloud, select)
     if "delete_selection" in session:
         print "writing selection to session"
         # print filtered_clouds
         selected_cloud_data = {}
-        selected_cloud_data[cloud] = get_selected_clouds(filtered_clouds[session["delete_selection"][0]], session["delete_selection"][1])
+        selected_cloud_data[cloud] = get_selected_clouds(
+            filtered_clouds[session["delete_selection"][0]], session["delete_selection"][1])
         return render_template('mesh/cloud/delete_vms.html',
                                address_string=address_string,
                                attributes=os_attributes,
@@ -238,7 +239,6 @@ def delete_vm_submit(option):
                                error="Deleting the VMs aborted. ")
 
 
-
 def get_selected_clouds(cloud, select_ids):
     selected_clouds = {}
     for id in select_ids:
@@ -256,11 +256,11 @@ def get_selected_clouds(cloud, select_ids):
 @login_required
 def delete_vms(cloud=None):
 
-
     clouds = cm_mongo()
     clouds.activate(cm_user_id=g.user.id)
 
-    # donot do refresh before delete, this will cause all the vms to get deleted
+    # donot do refresh before delete, this will cause all the vms to get
+    # deleted
     f_cloud = clouds.clouds[g.user.id][cloud]
     for id, server in f_cloud['servers'].iteritems():
         log.info("-> delete {0} {1}".format(cloud, id))
@@ -289,11 +289,15 @@ def assign_public_ip(cloud=None, server=None):
         clouds.refresh(names=[cloud], types=["servers"], cm_user_id=g.user.id)
         return redirect('/mesh/servers')
     # else:
-    #    return "Manual public ip assignment is not allowed for {0} cloud".format(cloud)
+    # return "Manual public ip assignment is not allowed for {0}
+    # cloud".format(cloud)
+
 
 def _keyname_sanitation(username, keyname):
-    keynamenew = "%s_%s" % (username, keyname.replace('.', '_').replace('@', '_'))
+    keynamenew = "%s_%s" % (
+        username, keyname.replace('.', '_').replace('@', '_'))
     return keynamenew
+
 
 @cloud_module.route('/cm/keypairs/<cloud>/', methods=['GET', 'POST'])
 @login_required
@@ -354,11 +358,12 @@ def manage_keypairs(cloud=None):
                                error="Setting keypairs for this cloud is not yet enabled")
         # return redirect('/mesh/servers')
 
+
 def check_register_key(cloud, keyname, keycontent):
     clouds = cm_mongo()
     clouds.activate(cm_user_id=g.user.id, names=[cloud])
     cloudmanager = clouds.clouds[g.user.id][cloud]['manager']
-    
+
     keynamenew = _keyname_sanitation(g.user.id, keyname)
     keysRegistered = cloudmanager.keypair_list()
     registered = False
@@ -372,16 +377,18 @@ def check_register_key(cloud, keyname, keycontent):
     else:
         if keynamenew in keysRegistered:
             registered = True
-    
+
     if not registered:
         cloudmanager.keypair_add(keynamenew, keycontent)
-        log.info("Automatically registered the default key <%s> for user <%s>" % (keyname, g.user.id))
+        log.info("Automatically registered the default key <%s> for user <%s>" % (
+            keyname, g.user.id))
 
 # ============================================================
 # ROUTE: START
 # ============================================================
 
 # @cloud_module.route('/cm/start/<cloud>/<count>')
+
 
 @cloud_module.route('/cm/start/<cloud>/')
 @login_required
@@ -420,12 +427,12 @@ def start_vm(cloud=None, server=None):
         error = error + "Please specify a default image."
 
     username = userinfo["cm_user_id"]
-    
+
     if "key" in userinfo["defaults"]:
         key = userinfo["defaults"]["key"]
     elif len(userinfo["keys"]["keylist"].keys()) > 0:
         key = userinfo["keys"]["keylist"].keys()[0]
-        
+
     if key:
         keycontent = userinfo["keys"]["keylist"][key]
         if keycontent.startswith('key '):
@@ -433,18 +440,20 @@ def start_vm(cloud=None, server=None):
         check_register_key(cloud, key, keycontent)
         keynamenew = _keyname_sanitation(username, key)
     else:
-        error = error + "No sshkey found. Please <a href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"
-    
+        error = error + \
+            "No sshkey found. Please <a href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"
+
     if error != '':
         return render_template('error.html', error=error)
 
     metadata = {'cm_owner': username}
     prefix = userinfo["defaults"]["prefix"]
     index = userinfo["defaults"]["index"]
-    
+
     log.info("STARTING {0} {1}".format(prefix, index))
     # log.info("FLAVOR {0} {1}".format(vm_flavor, vm_flavor_id))
-    log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image, vm_flavor_id, keynamenew))
+    log.debug("Starting vm using image->%s, flavor->%s, key->%s" %
+              (vm_image, vm_flavor_id, keynamenew))
     result = clouds.vm_create(
         cloud,
         prefix,
@@ -460,7 +469,7 @@ def start_vm(cloud=None, server=None):
     except:
         pass
 
-    log.info ("{0}".format(result))
+    log.info("{0}".format(result))
     # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     # config.incr()
     userstore = cm_user()
@@ -476,14 +485,14 @@ def start_vm(cloud=None, server=None):
     clouds.refresh(names=[cloud], types=["servers"], cm_user_id=g.user.id)
     return redirect('/mesh/servers')
 
+
 @cloud_module.route('/cm/start/queue/<cloud>/')
 @login_required
 def start_vm_with_queue(cloud=None, server=None):
-    ''' 
-    
+    '''
     same as start_vm function but runs with
     celery task queue
-    
+
     *vm_create_queue* function launches vm instances through
     a celery queue
 
@@ -521,12 +530,12 @@ def start_vm_with_queue(cloud=None, server=None):
         error = error + "Please specify a default image."
 
     username = userinfo["cm_user_id"]
-    
+
     if "key" in userinfo["defaults"]:
         key = userinfo["defaults"]["key"]
     elif len(userinfo["keys"]["keylist"].keys()) > 0:
         key = userinfo["keys"]["keylist"].keys()[0]
-        
+
     if key:
         keycontent = userinfo["keys"]["keylist"][key]
         if keycontent.startswith('key '):
@@ -534,18 +543,20 @@ def start_vm_with_queue(cloud=None, server=None):
         check_register_key(cloud, key, keycontent)
         keynamenew = _keyname_sanitation(username, key)
     else:
-        error = error + "No sshkey found. Please <a href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"
-    
+        error = error + \
+            "No sshkey found. Please <a href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"
+
     if error != '':
         return render_template('error.html', error=error)
 
     metadata = {'cm_owner': username}
     prefix = userinfo["defaults"]["prefix"]
     index = userinfo["defaults"]["index"]
-    
+
     log.info("STARTING {0} {1}".format(prefix, index))
     # log.info("FLAVOR {0}".format(vm_flavor_id))
-    log.debug("Starting vm using image->%s, flavor->%s, key->%s" % (vm_image, vm_flavor_id, keynamenew))
+    log.debug("Starting vm using image->%s, flavor->%s, key->%s" %
+              (vm_image, vm_flavor_id, keynamenew))
     result = clouds.vm_create_queue(
         cloud,
         prefix,
@@ -555,7 +566,7 @@ def start_vm_with_queue(cloud=None, server=None):
         keynamenew,
         metadata,
         g.user.id)
-    log.info ("{0}".format(result))
+    log.info("{0}".format(result))
     # clouds.vm_set_meta(cloud, result['id'], {'cm_owner': config.prefix})
     # config.incr()
     userstore = cm_user()
@@ -587,19 +598,20 @@ def vm_login(cloud=None, server=None):
     # BUG MESSAGE IS NOT PROPAGATED
     #
     if cloud == "aws":
-        userid = "ubuntu" # temporary
+        userid = "ubuntu"  # temporary
         public_dns = server['extra']['dns_name']
         message = "ssh -i [your private key file] %s@%s" % (userid, public_dns)
         return render_template('success.html', error=message)
     elif cloud == "azure":
         userid = "root"
-        public_dns = server["vip"] #["addresses"]["private"][0]["addr"] # temporary
+        # ["addresses"]["private"][0]["addr"] # temporary
+        public_dns = server["vip"]
         message = "ssh -i [your private key file] %s@%s" % (userid, public_dns)
         return render_template('success.html', error=message)
 
     if len(server['addresses'][server['addresses'].keys()[0]]) < 2:
         message = 'Cannot Login Now, Public IP not assigned'
-        log.info ("{0}".format(message))
+        log.info("{0}".format(message))
 
     else:
         message = 'Logged in Successfully'
@@ -635,6 +647,7 @@ def vm_login(cloud=None, server=None):
 # ROUTE: VM INFO
 # ============================================================
 
+
 @cloud_module.route('/cm/info/<cloud>/<server>/')
 @login_required
 def vm_info(cloud=None, server=None):
@@ -664,8 +677,8 @@ def vm_info(cloud=None, server=None):
     return render_template('mesh/cloud/vm_info.html',
                            updated=time_now,
                            keys="",
-                           server=clouds.servers(cm_user_id=g.user.id)[cloud][server],
+                           server=clouds.servers(
+                               cm_user_id=g.user.id)[cloud][server],
                            id=server,
                            cloudname=cloud,
                            table_printer=table_printer)
-

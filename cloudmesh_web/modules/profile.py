@@ -46,7 +46,8 @@ def profile():
             user['defaults']['project'] = request.form['field-project']
 
         if 'field-securitygroup' in request.form:
-            user['defaults']['securitygroup'] = request.form['field-securitygroup']
+            user['defaults']['securitygroup'] = request.form[
+                'field-securitygroup']
 
         if 'field-index' in request.form:
             user['defaults']['index'] = request.form['field-index']
@@ -60,7 +61,6 @@ def profile():
         if 'field-key' in request.form:
             user['defaults']['key'] = request.form['field-key']
 
-
         user['defaults']['activeclouds'] = []
         regclouds = user['defaults']['registered_clouds']
         for cloudname in regclouds:
@@ -68,9 +68,6 @@ def profile():
             if form_key in request.form:
                 print "ACTIVE IN FORM", cloudname
                 user['defaults']['activeclouds'].append(cloudname)
-
-
-
 
         '''
         user['profile']['firstname'] = request.form['field-firstname']
@@ -82,21 +79,21 @@ def profile():
         print "setting the values"
         user_obj.set_defaults(username, user['defaults'])
 
-        # # print request.form["field-cloud-activated-" + value]
+        # print request.form["field-cloud-activated-" + value]
         # print "setting the cloud values"
         # print config
         # config.write()
         # print "WRITING DONE"
 
-
         user = user_obj.info(username)
-        #print "UD", user["defaults"]["activeclouds"]
+        # print "UD", user["defaults"]["activeclouds"]
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     return render_template('user/profile.html',
                            updated=time_now,
-                           configuration=config['cloudmesh'],  # just to populate security groups
+                           # just to populate security groups
+                           configuration=config['cloudmesh'],
                            user=user,
                            userdata=userdata
                            )
