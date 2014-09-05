@@ -3,7 +3,8 @@ meta:
   kind: server
 cloudmesh:
   server:
-    loglevel: DEBUG
+    loglevel: error
+    debug: False
     production: False
     metric:
         host: http://???.???.???.???
