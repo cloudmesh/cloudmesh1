@@ -27,12 +27,14 @@ def LOGGER(filename):
         level = grep("loglevel:", config_file(
             "/cloudmesh_server.yaml")).strip().split(":")[1].strip().lower()
 
-        if level == "debug":
+        if level.upper() == "DEBUG":
             loglevel = logging.DEBUG
-        elif level == "info":
+        elif level.upper() == "INFO":
             loglevel = logging.INFO
-        elif level == "warning":
+        elif level.upper() == "WARNING":
             loglevel = logging.WARNING
+        elif level.upper() == "ERROR":
+            loglevel = logging.ERROR
         else:
             level = logging.CRITICAL
     except:
