@@ -396,6 +396,10 @@ class openstack(ComputeBaseType):
                 "name": "%s" % name,
                         "imageRef": "%s" % image_id,
                         "flavorRef": "%s" % flavor_name,
+                        # max_count is the number of instances to launch
+                        # If 3 specified, three vm instances will be launched
+                        #"max_count": 1,
+                        #"min_count": 1,
                         "security_groups": secgroups,
                         "metadata": meta,
             }
