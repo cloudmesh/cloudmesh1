@@ -26,6 +26,7 @@ import functools
 import cloudmesh_common.bootstrap_util
 import string
 import random
+
 try:
     from progress.bar import Bar
 except:
