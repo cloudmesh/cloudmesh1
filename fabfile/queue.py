@@ -1,4 +1,5 @@
 from __future__ import with_statement
+import fabric
 from fabric.api import task, local, hide, settings
 import clean
 import mq
@@ -13,7 +14,9 @@ from cloudmesh.pbs.celery import celery_pbs_queue as pbs_queue
 from celery import Celery
 from cloudmesh_install import config_file
 from cloudmesh_common.util import PROGRESS
-PROGRESS.set('Cloudmesh Services', 10)
+from cloudmesh.config.cm_config import cm_config_server 
+
+progress_queue = PROGRESS('Cloudmesh Queue Services', 13)
 
 __all__ = ['start', 'stop', 'list', 'clean', 'gui',
            'monitor', 'kill', 'ls', 'lspbs', 'flower_server']
@@ -21,6 +24,21 @@ __all__ = ['start', 'stop', 'list', 'clean', 'gui',
 celery_config = ConfigDict(
     filename=config_file("/cloudmesh_celery.yaml"), kind="worker")
 workers = celery_config.get("cloudmesh.workers")
+
+debug = True
+try:
+    debug = cm_config_server().get("cloudmesh.server.debug")
+except:
+    pass
+
+fabric.state.output.debug  = debug
+fabric.state.output.running  = debug
+fabric.state.output.status  = debug
+fabric.state.output.stdout  = debug
+fabric.state.output.stderr  = debug
+fabric.state.output.warnings  = debug
+fabric.state.output.aborts  = debug
+fabric.state.output.user  = debug
 
 """
 for worker in workers:
@@ -105,7 +123,7 @@ def monitor():
 
 def celery_command(command, app, workers, queue, concurrency=None):
     """execute the celery command on the application and workers specified"""
-    PROGRESS.next()
+    progress_queue.next()
     worker_str = " ".join(workers)
     exec_string = "celery multi {0} {1} -A {2} -l info -Q {3}".format(
         command, worker_str, app, queue)
@@ -116,7 +134,7 @@ def celery_command(command, app, workers, queue, concurrency=None):
     exec_string += " --logfile=\"{0}/%n.log\" ".format(celery_dir)
     if concurrency is not None:
         exec_string += " --concurrency={0}".format(concurrency)
-    local(exec_string)
+    local(exec_string, capture=not debug)
     # print "celery multi {0} {1} -A {2} -l info".format(command, worker_str,
     # app)
 
@@ -128,17 +146,18 @@ def start(view=None):
     :param: if view is set to any value start also rabit and attach
             to it so we can see the log
     """
+    #pprint (fabric.state.output)
     with settings(warn_only=True):
         stop()
         time.sleep(2)
-        PROGRESS.next()
+        progress_queue.next()
         mq.start()
-        PROGRESS.next()
+        progress_queue.next()
         time.sleep(2)
-        PROGRESS.next()
+        progress_queue.next()
 
         for worker in workers:
-            PROGRESS.next()
+            progress_queue.next()
             concurrency = None
             if "concurrency" in workers[worker]:
                 concurrency = workers[worker]["concurrency"]
@@ -149,8 +168,9 @@ def start(view=None):
                            concurrency=concurrency)
 
     if view is None:
-        PROGRESS.next()
+        progress_queue.next()
         time.sleep(2)
+        print
         # local("celery worker --app={0} -l info".format(app))
         # local("celery worker -l info".format(app))
 

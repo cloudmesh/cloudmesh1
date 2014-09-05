@@ -12,7 +12,13 @@ from cloudmesh_common.util import PROGRESS
 from cloudmesh_common.logger import LOGGER
 log = LOGGER(__file__)
 
-PROGRESS.set('Cloudmesh Services', 10)
+debug = True
+try:
+    debug = cm_config_server().get("cloudmesh.server.debug")
+except:
+    pass
+    
+progress_mq = PROGRESS('Cloudmesh Messaging Queue', 1)
 
 rabbit_env = {
     'rabbitmq_server': "sudo rabbitmq-server",
@@ -198,7 +204,7 @@ def start(detached=None):
         while not yn_choice("Is rabbitmq running?", 'n'):
             print "Please start rabbitmq-server."
     else:
-        PROGRESS.next()
+        progress_mq.next()
         print
         if detached is None:
             rabbit_env['detached'] = "-detached"
