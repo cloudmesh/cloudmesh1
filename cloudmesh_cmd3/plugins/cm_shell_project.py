@@ -1,12 +1,4 @@
-import types
-import textwrap
-from docopt import docopt
-import inspect
-import sys
-import importlib
 from cmd3.shell import command
-from pprint import pprint
-
 from cloudmesh.config.cm_projects import cm_projects
 from cloudmesh_install import config_file
 
@@ -20,16 +12,16 @@ class cm_shell_project:
     """opt_example class"""
 
     def _load_projects(self):
-        if not self.cm_shell_project_loaded :
+        if not self.cm_shell_project_loaded:
             filename = config_file("/cloudmesh.yaml")
             self.projects = cm_projects(filename)
             if self.echo:
                 log.info(
                     "Reading project information from -> {0}".format(filename))
             self.cm_shell_project_loaded = True
-        
+
     def activate_shell_project(self):
-        self.register_command_topic('cloud','project')
+        self.register_command_topic('cloud', 'project')
         #
         # BUG this should be done outside of the activate
         #
@@ -43,7 +35,7 @@ class cm_shell_project:
                project info [--json]
                project default NAME
                project NOTIMPLEMENTED members
-               
+
         Manages the project
 
         Arguments:
@@ -65,16 +57,16 @@ class cm_shell_project:
 
             self._load_projects()
             project = arguments["NAME"]
-            #if project in self.projects.names("active"):
+            # if project in self.projects.names("active"):
             #    self.projects.default(project)
 
             print project
             return
-        
+
         elif arguments["info"]:
 
             self._load_projects()
-            
+
             # log.info ("project info for all")
             if arguments["--json"]:
                 print self.projects.dump()
@@ -93,7 +85,6 @@ class cm_shell_project:
                     print "%10s:" % "projects", \
                         ', '.join(self.projects.names("active"))
 
-
                 if len(self.projects.names("completed")) > 0:
                     print "%10s:" % "completed", \
                         ', '.join(self.projects.names("completed"))
@@ -108,4 +99,3 @@ class cm_shell_project:
         else:
             log.info("NOT IMPLEMENTED")
             return
-            

@@ -1,14 +1,6 @@
-import types
-import textwrap
-from docopt import docopt
-import inspect
-import sys
-import importlib
 from cmd3.shell import command
 from pprint import pprint
 from cloudmesh.inventory import Inventory
-from mongoengine import *
-
 from cloudmesh_common.logger import LOGGER
 log = LOGGER(__file__)
 
@@ -19,7 +11,7 @@ class cm_shell_inventory:
 
     inventory_connection = False
     inventory_name = None
-    
+
     def info_cm_shell_inventory(self):
         print "%20s =" % "inventory_name", self.inventory_name
         print "%20s =" % "inventory_connection", self.inventory_connection
@@ -36,9 +28,8 @@ class cm_shell_inventory:
             self.Inventory = None
             raise Exception("ERROR: connection to inventory failed")
 
-        
     def activate_cm_shell_inventory(self):
-        self.register_command_topic('cloud','inventory')
+        self.register_command_topic('cloud', 'inventory')
         try:
             self._connect_to_inventory()
         except Exception, e:
@@ -79,7 +70,7 @@ class cm_shell_inventory:
            v       verbose mode
 
         """
-        #if arguments["v"]:
+        # if arguments["v"]:
         log.info(arguments)
         log.info(args)
 
@@ -104,7 +95,7 @@ class cm_shell_inventory:
             except Exception, e:
                 print e
 
-            return                    
+            return
 
         if arguments["info"]:
             print
@@ -119,7 +110,7 @@ class cm_shell_inventory:
             if arguments["--cluster"] and not arguments["--server"]:
 
                 name = arguments["--cluster"]
-    
+
                 r = self.inventory.cluster(name)
                 pprint(r)
 
