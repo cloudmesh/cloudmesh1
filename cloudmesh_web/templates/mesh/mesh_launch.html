@@ -46,16 +46,38 @@
 	   <label class="col-sm-2 control-label" for="textinput"> {{ key | capitalize }} </label>
 	    <div class="form-group-sm col-sm-6">
 	      {% if value['type'] == 'integer' %}
-	         <input class="form-control" type="number" step="any" name="{{key}}" placeholder="{{value['value']}}" value="{{value['value']}}" >
+	         <input class="form-control" 
+		        type="number" step="any"
+			name="{{key}}" 
+			placeholder="{{value['value']}}" 
+                        value="{{value['value']}}" 
+                        {%if value['required'] %} required {% endif %}>
 	      {% elif value['type'] == 'float' %}
-	         <input class="form-control" type="number" step="0.1" name="{{key}}" placeholder="{{value['value']}}" value="{{value['value']}}" >
+	         <input class="form-control" 
+                        type="number" 
+                        step="0.1" 
+			name="{{key}}" 
+			placeholder="{{value['value']}}" 
+                        value="{{value['value']}}" 
+                        {%if value['required'] %} required {% endif %}>
           {% elif value['type'] == 'string' %}
-	        <input class="form-control" type="text" height="18px" name="{{key}}" placeholder="{{value['value']}}" value="{{value['value']}}" >	     	     
+	        <input class="form-control" 
+		       type="text" 
+		       height="18px" 
+		       name="{{key}}" 
+		       placeholder="{{value['value']}}" 
+                       value="{{value['value']}}"                         
+                       {%if value['required'] %} required {% endif %}>
+  	     
 	      {% elif value['type'] == 'selector' %}
 	        <div class="form-inline">
 	        {% for button in value['value'] %}
                 <label class="radio-inline">
-                    <input type="radio" name="{{key}}" value="{{button}}">{{button | capitalize}}</input>
+                    <input type="radio" name="{{key}}"
+                           value="{{button}}" 
+			   {%if value['required'] %} required {% endif %}>
+			{{button | capitalize}}
+		    </input>
                 </label>
 	        {% endfor %}
 	        </div>

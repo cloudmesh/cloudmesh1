@@ -1,6 +1,5 @@
 from cloudmesh_install import config_file
-from flask import Blueprint
-from flask import render_template, request
+from flask import Blueprint, g, render_template, request
 from flask.ext.login import login_required
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.launcher.cm_launcher_db import cm_launcher_db
@@ -28,11 +27,17 @@ RAIN_PERMISSION = Permission(RoleNeed('rain'))
 @launch_module.route('/cm/launch/launch_servers/', methods=["POST", "GET"])
 def launch_servers():
     config = cm_config()
-    data = {}
+
+    data = {
+        'username': g.user.id,
+        'india': 'india.futuregrid.org',
+        'sierra': 'sierra.futuregrid.org'        
+    }
     for key in request.form.keys():
         data[key] = request.form[key]
     cloudname = data['cloud']
-    
+
+
     data['user'] = config["cloudmesh"]["clouds"][cloudname]["credentials"]["OS_USERNAME"]
     data['hostname'] = config["cloudmesh"]["clouds"][cloudname]["cm_host"]
 
