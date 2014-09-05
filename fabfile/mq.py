@@ -18,7 +18,7 @@ try:
 except:
     pass
     
-progress_mq = PROGRESS('Cloudmesh Messaging Queue', 1)
+PROGRESS.set('Cloudmesh Services', 50)
 
 rabbit_env = {
     'rabbitmq_server': "sudo rabbitmq-server",
@@ -204,7 +204,7 @@ def start(detached=None):
         while not yn_choice("Is rabbitmq running?", 'n'):
             print "Please start rabbitmq-server."
     else:
-        progress_mq.next()
+        PROGRESS.next()
         print
         if detached is None:
             rabbit_env['detached'] = "-detached"
