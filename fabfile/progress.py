@@ -3,7 +3,7 @@ import fabric
 @task
 def on():
 
-    debug = True
+    debug = False
     
     fabric.state.output.debug  = debug
     fabric.state.output.running  = debug
@@ -17,7 +17,7 @@ def on():
 @task
 def off():
 
-    debug = False
+    debug = True
     
     fabric.state.output.debug  = debug
     fabric.state.output.running  = debug
