@@ -182,6 +182,7 @@ def start(server="server", browser='yes', debug=False):
             True)
     # view(link)
     PROGRESS.finish()
+    progress.off()
     
 @task
 def web(server="server", browser='yes'):
