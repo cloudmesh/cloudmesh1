@@ -54,3 +54,17 @@ def LOGGER(filename):
     handler.setFormatter(formatter)
     log.addHandler(handler)
     return log
+
+def LOGGING_ON(log):
+    try:
+        log.setLevel(logging.DEBUG)
+        return True
+    except:
+        return False
+
+def LOGGING_OFF(log):
+    try:
+        log.setLevel(logging.CRITICAL)
+        return True
+    except:
+        return False
