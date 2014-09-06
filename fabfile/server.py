@@ -176,14 +176,15 @@ def start(server="server", browser='yes', debug=False):
     # execute_command("START FLOWER",
     #        "fab queue.flower_server",
     #        debug)
-    
+    fabric.state.output.stdout = True
+    fabric.state.output.stderr = True 
     execute_command("START WEB SERVER",
             "cd cloudmesh_web; python {0}.py &".format(server),
             True)
     # view(link)
     PROGRESS.finish()
-    progress.off()
-    
+    # pprint (fabric.state.output)
+
 @task
 def web(server="server", browser='yes'):
     banner("START WEB SERVER")
