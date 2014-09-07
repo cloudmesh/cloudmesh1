@@ -16,6 +16,7 @@ source ~/ENV/bin/activate
 cd ~/cmd3
 python setup.py install
 cd ~/cloudmesh
+echo -e "\nsource ~/ENV/bin/activate\ncd ~/cloudmesh\n" >> ~/.bashrc
 ./install system
 ./install requirements
 ./install new
