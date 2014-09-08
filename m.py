@@ -4,7 +4,8 @@ from pprint import pprint
 import sys
 
 
-def op1():
+
+
     cloudmesh.logger(False)
     username = cloudmesh.load().username()
     
@@ -56,42 +57,101 @@ def op1():
     cloudmesh.banner("TERMINATE VM INSTANCE")
     server = result['server']['id']
     mesh.delete(cloud, server, username)
+
+
+    cloud = "india"
+    
+    cloudmesh.banner("LAUNCH VM INSTANCE")
+    vm = {}
+    for i in range(1,3):
+        vm[i] = mesh.start(cloud, username)
     
     
+    cloudmesh.banner("TERMINATE VM INSTANCE")
+    for i ...:
+        server = vm[i]['server']['id']
+        mesh.delete(cloud, server, username)
+    # hoe do you arrase no the vms????
     
-def op2():
+    
     '''
     task :: start a VM on india, before starting, do various default setup actions
     '''
     print "NOT IMPLEMENTED"
     return
+
     
-    #set flavor
+    # flavor=mesh.flavor(cloudname="india", flavorname="m1.small") 
+    # image=mesh.flavor("india", "m1.small") 
+    
+    # print ???
+    
     
     #set image
+
+    # image=mesh.image(cloudname="india", imagename="futuregrid/ubuntu-14.04") 
+    # image=mesh.image("india", "futuregrid/ubuntu-14.04") 
+    # 
     
-    #set prefix
+    # print ???
     
-    #set index
+    # GET CURRENT VMNAME OR BETTER GET THE NEXT VM NAME????
     
-    #start vm
+    # vmname = mesh.vmname()
+    # vmname = mesh.vmname("next")
+    # vmname = mesh.vmname.next() # this is for sure not implemented
+    # vmname = mesh.vmname.rest("gregor", "00000000")
+    # vmname = mesh.vmname.format("gregor-[00000]") # hopstlist format ;-)
+    
+    
+    
+    # cloudmesh.print_label(username) 
+    # current name of vm
+    
+    #start vm1
+
+    # save default image and falvor ????
+    
+    mesh.default("iamage", image)
+    mesh.deafult("flavor", flavor)
+    
+    vm = mesh.start("india", userid)
 
 
-def main(argv):
-    if len(argv) == 1:
-        op1()
-    else:
-        argv = argv[1]
-        if argv == "1":
-            cloudmesh.banner("processing operation 1")
-            op1()
-        elif argv == "2":
-            cloudmesh.banner("processing operation 2")
-            op2()
-        else:
-            print "incorrect operation index"
+    #start vm2
+
+    # save default image and falvor ????
     
     
-if __name__ == "__main__":
-    main(sys.argv)
+    cloud = "india"
+    prefix = "gregor"
+    index = "10000"
+    vm_flavor = "???"
+    ...
+    
+    vm = vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id):
+
+    # vm where index is NOne ...
+    # ....
+
+
+
+
+
+
+    
+    
+    vm = mesh.start("india", image, flavor)
+    vm = mesh.assign_public_ip(...)
+    
+    vmname = vm['lable'/'name'] # prefix-id
+
+    result = mesh.ssh(vmname, "ls", ...)
+
+
+    mesh.delete(vmname)
+
+
+
+
 
