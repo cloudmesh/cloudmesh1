@@ -43,6 +43,15 @@ from cloudmesh_common.util import banner
 
 from cloudmesh.user.cm_user import cm_user as cm_user
 
+# -----------------------------------------------------
+# testing with m.py
+from cloudmesh.iaas.cm_cloud import CloudManage
+from cloudmesh.shell.cm_label import update_label, print_label
+from cloudmesh.config.cm_keys import cm_keys_mongo
+
+# -----------------------------------------------------
+
+
 def mesh(provider="yaml"):
     if provider in ["yaml"]:
         return cm_mesh()
