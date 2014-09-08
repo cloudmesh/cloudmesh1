@@ -29,6 +29,8 @@ def shell_command_vm(arguments):
                           [--prefix=<prefix>]
                           [--range=<range>]
                           [--force]
+                vm pip (NAME|--id=<id>) [--cloud=<CloudName>]
+                vm login (NAME|--id=<id>) [--cloud=<CloudName>]
 
             Arguments:
                 NAME  server name
@@ -216,12 +218,18 @@ class VMcommand(object):
                   deleteAllCloudVMs=deleteAllCloudVMs,
                   preview=preview)
 
+
+    def assign_public_ip(self):
+        print "NOT IMPLEMENTED"
+
     # --------------------------------------------------------------------------
     def call_procedure(self):
         if self.arguments['start']:
             self._vm_create()
         elif self.arguments['delete']:
             self._vm_delete()
+        elif self.arguments['pip']:
+            self.assign_public_ip()
 
     # --------------------------------------------------------------------------
 
@@ -634,6 +642,22 @@ def delete_vm(username,
         print ("time consumed: %.2f" % watch), "s"
 
 
+
+def assign_public_ip(username=None, cloudname=None, serverid=None):
+
+    config = cm_config()
+    mongo = cm_mongo()
+    mongo.activate(cm_user_id=username)
+
+    mycloud = config.cloud(cloudname)
+    if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
+        mongo.assign_public_ip(cloudname, serverid, username)
+        mongo.refresh(names=[cloudname], types=["servers"], cm_user_id=username)
+        return redirect('/mesh/servers')
+    # else:
+    # return "Manual public ip assignment is not allowed for {0}
+    # cloud".format(cloud)
+
 # ========================================================================
 def _keyname_sanitation(username, keyname):
     keynamenew = "%s_%s" % (
@@ -692,6 +716,7 @@ def server_name_analyzer(name):
     else:
         prefix = res[0]
         return [prefix, index]
+
 
 
 # ========================================================================
