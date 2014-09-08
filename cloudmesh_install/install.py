@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from __future__ import with_statement
 
-from os.path import expanduser
 from cloudmesh_install import config_file
 import glob
 import shutil
@@ -78,7 +77,7 @@ def download_rc_files(userid):
     for hostname in rc_file_locations:
         host = rc_file_locations[hostname]
         host["userid"] = userid
-        host["dest"]= expanduser(host["dest"])
+        host["dest"]= os.path.expanduser(host["dest"])
         
         print "fetching from ", host["hostname"], host
 
@@ -652,6 +651,7 @@ def fetchrc(userid=None, outdir=None):
     try:
 
         download_rc_files(userid)
+        update_permission("~/.cloudmesh/clouds")
         
         """
         # cmd = "fab rcfile.download:userid='%s',host_ids='%s',key_path='%s'" \
@@ -665,6 +665,14 @@ def fetchrc(userid=None, outdir=None):
     except:
         print sys.exc_info()
         sys.exit(1)
+
+def update_permission(path, mode=stat.S_IRWXU):
+    """Update file permissions on a given path."""
+    os.chmod(os.path.expanduser(path), mode)
+    for item in glob.glob(os.path.expanduser(path) + "/*"):
+        os.chmod(os.path.join(path, item), mode)
+        if os.path.isdir(item):
+            update_permission(os.path.join(path, item), mode)
 
 def verify_ssh_login(userid):
     client = SSHClient()
