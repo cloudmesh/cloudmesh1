@@ -22,7 +22,7 @@ class cm_shell_inventory:
         try:
             # TODO: port number is missing
             # TODO: should be imported from cloudmesh_server.yaml
-            db = connect(self.inventory_name)
+            # db = connect(self.inventory_name)
             self.inventory = Inventory()
         except:
             self.Inventory = None
