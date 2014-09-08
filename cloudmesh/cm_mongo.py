@@ -563,7 +563,16 @@ class cm_mongo:
         cm_user().set_default_attribute(cm_user_id, "index", int(index) + 1)
         return result
 
-    def vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id, givenvmname=None):
+    def vm_create(self, 
+                  cloud, 
+                  prefix, 
+                  index, 
+                  vm_flavor, 
+                  vm_image, 
+                  key, 
+                  meta, 
+                  cm_user_id, 
+                  givenvmname=None):
         '''
         BUG: missing security group
         '''
