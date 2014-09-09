@@ -610,6 +610,7 @@ class cm_mongo:
         result = self.vm_create(cloud, prefix, index, flavor, image, key, meta,
                                cm_user_id)
 
+        from cloudmesh.user.cm_user import cm_user
         # increase index after the completion of vm_create()
         cm_user().set_default_attribute(cm_user_id, "index", int(index) + 1)
         return result
