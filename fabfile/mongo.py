@@ -12,8 +12,22 @@ from sh import ls
 import sys
 import os
 import time
+from cloudmesh_common.util import PROGRESS
+import progress, user
 
+PROGRESS.set('Cloudmesh Services', 50)
 
+debug = True
+try:
+    debug = cm_config_server().get("cloudmesh.server.debug")
+except:
+    pass
+
+if debug:
+    progress.off()
+else:
+    progress.on()
+    
 def get_pid(command):
     with hide('output', 'running', 'warnings'):
         lines = local(
@@ -33,9 +47,14 @@ def get_pid(command):
 
 @task
 def reset():
-    local("fab mongo.boot")
-    local("fab user.mongo")
-    local("fab mongo.simple")
+    banner("initiating mongo")
+    boot()
+    banner("initiating user data to mongo")
+    PROGRESS.next()
+    print
+    user.mongo()
+    banner("refreshing cloud info")
+    simple()
 
 
 @task
@@ -189,28 +208,28 @@ def boot(auth=True):
     wipe()
 
     time.sleep(1)
-
+    PROGRESS.next()
     # start mongo without auth
     start(auth=False)
 
     time.sleep(2)
-
+    PROGRESS.next()
     if isyes(auth):
 
         # create users
         admin()
 
         time.sleep(2)
-
+        PROGRESS.next()
         # restart with auth
         kill()
 
         time.sleep(10)
-
+        PROGRESS.next()
         start(auth=auth)
 
         time.sleep(1)
-
+        PROGRESS.next()
     config = cm_config_server().get("cloudmesh.server.mongo")
     path = path_expand(config["path"])
     banner(path)
@@ -218,7 +237,7 @@ def boot(auth=True):
     banner("PROCESS")
     with settings(warn_only=True):
         local("ps -ax | fgrep mongo")
-
+    PROGRESS.next()
 
 @task
 def start(auth=True):
@@ -343,8 +362,11 @@ def simple():
     puts a snapshot of servers, images, and flavors into mongo (no users)
     '''
     refresh(types=['servers', 'images', 'flavors'])
+    PROGRESS.next()
+    print
     inventory()
-
+    PROGRESS.next()
+    print
 
 @task
 def users():
