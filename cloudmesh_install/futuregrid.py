@@ -17,7 +17,7 @@ import glob
 import yaml
 from string import Template
 from docopt import docopt
-
+from ConfigParser import SafeConfigParser
 
 rc_file_locations = {
     'india': {
