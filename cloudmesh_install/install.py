@@ -18,8 +18,8 @@ try:
     from jinja2.runtime import Undefined
     from jinja2 import Environment
 except:
-    print "WARNING: jinja2 not yet installed"    
-    
+    print "WARNING: jinja2 not yet installed"
+
 from string import Template
 
 import os
@@ -81,11 +81,11 @@ def install_command(args):
 
     """
     print "IIIII<" +args +">"
-    
+
     arguments = docopt(install_command.__doc__, args)
 
     print arguments
-    
+
     if arguments["cloudmesh"]:
         deploy()
 
@@ -268,7 +268,7 @@ def install_package(package):
     """installes the package.
     :param package: lthe package name
     """
-    
+
     if is_ubuntu():
         local("sudo apt-get -y install {0}".format(package))
     if is_centos():
@@ -331,7 +331,7 @@ def safe_install(what):
         print "Warning: could not install:", what
 
 
-    
+
 def osx():
 
     local("export CFLAGS=-Qunused-arguments")
@@ -423,7 +423,7 @@ def _make_a_backup(filename):
     return dest
 
 def _set_value_to_yaml(filepath, data):
- 
+
     dir = config_file("")
     cm_file = dir + filepath
 
