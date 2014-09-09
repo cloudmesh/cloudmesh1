@@ -7,9 +7,8 @@ from cloudmesh.iaas.openstack.cm_idm import keystone
 from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.util.stopwatch import StopWatch
-# from pprint import pprint
-import traceback
 from cloudmesh.util.encryptdata import decrypt
+import traceback
 import time
 
 # ----------------------------------------------------------------------
@@ -530,7 +529,7 @@ class cm_mongo:
         return self._get_kind('e_security_groups', clouds, cm_user_id)
 
     # need to make sure other clouds have the same flavor dict as in openstack
-    # otherwide will need to put this into the openstack iaas class
+    # otherwise will need to put this into the openstack iaas class
     def flavor_name_to_id(self, cloud, flavor_name):
         ret = -1
         flavor_of_the_cloud = self.flavors([cloud])[cloud]
@@ -539,6 +538,12 @@ class cm_mongo:
                 ret = id
                 break
         return ret
+
+    def flavor(self, cloudname, flavorname):
+        try:
+            return self.flavors([cloudname])[cloudname][flavorname]
+        except:
+            return -1
 
     def start(self, cloud, cm_user_id):
         """Launch a new VM instance with a default setting for flavor, image and
