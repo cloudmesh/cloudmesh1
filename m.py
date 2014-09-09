@@ -112,6 +112,6 @@ cloudmesh.banner("ASSIGN PUBLIC IP ADDRESS TO THE VM")
 ip = mesh.assign_public_ip(cloud, server, username)
 
 cloudmesh.banner("RUN A COMMAND VIA SSH TO THE VM")
-result = mesh.ssh(cloud, vmname, "ls")
+result = mesh.ssh_vm_with_command(ip, command="ls -al")
 
 mesh.delete(cloud, server, username)
