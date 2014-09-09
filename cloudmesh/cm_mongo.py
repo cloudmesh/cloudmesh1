@@ -704,17 +704,31 @@ class cm_mongo:
     
     def vmname(self, prefix=None, idx=None, cm_user_id=None):
         """Return a vm name to use next time. prefix or index can be
-        given to update a vm name (optional)"""
+        given to update a vm name (optional)
+        
+        Args:
+            prefix (str, optional): the name of prefix
+            idx (int, str, optional): the index to increment. This can be a
+            digit or arithmetic e.g. +5 or -3 can be used 
+            
+        """
         userinfo = self.userinfo
         cm_user_id = cm_user_id or self.userid
         userinfo['defaults']['prefix'] = prefix or \
                 userinfo['defaults']['prefix']
-        userinfo['defaults']['index'] = idx or \
-                userinfo['defaults']['index']
+        if idx:
+            if str(idx).isdigit():
+                userinfo['defaults']['index'] = idx
+            else:
+                userinfo['defaults']['index'] = \
+                eval(str(userinfo['defaults']['index']) + idx)
         self.cm_user.set_defaults(cm_user_id, userinfo['defaults'])
 
         self.userinfo = self.cm_user.info(cm_user_id)
         return "%(prefix)s_%(index)s" % self.userinfo['defaults']
+
+    def vmname_next(self):
+        return self.vmname(idx="+1")
 
 '''
 def main():
