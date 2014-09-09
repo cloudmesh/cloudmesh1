@@ -531,19 +531,22 @@ class cm_mongo:
     # need to make sure other clouds have the same flavor dict as in openstack
     # otherwise will need to put this into the openstack iaas class
     def flavor_name_to_id(self, cloud, flavor_name):
-        ret = -1
-        flavor_of_the_cloud = self.flavors([cloud])[cloud]
-        for id, details in flavor_of_the_cloud.iteritems():
-            if details["name"] == flavor_name:
-                ret = id
-                break
-        return ret
+        for key, value in self.flavors([cloud])[cloud].iteritems():
+            if value["name"] == flavor_name:
+                return key
+        return -1
 
     def flavor(self, cloudname, flavorname):
         try:
             return self.flavors([cloudname])[cloudname][flavorname]
         except:
             return -1
+
+    def image(self, cloudname, imagename):
+        for key, value in self.images([cloudname])[cloudname].iteritems():
+            if value['name'] == imagename:
+                return value
+        return -1
 
     def start(self, cloud, cm_user_id):
         """Launch a new VM instance with a default setting for flavor, image and
