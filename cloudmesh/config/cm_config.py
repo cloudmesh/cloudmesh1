@@ -2,7 +2,11 @@ from cloudmesh.config.ConfigDict import ConfigDict
 # from cloudmesh.util.config import read_yaml_config
 from cloudmesh_common.logger import LOGGER
 # from cloudmesh_common.util import check_file_for_tabs, deprecated, path_expand
-from cloudmesh_common.util import deprecated, path_expand
+
+from cloudmesh_common.util import deprecated
+
+from cloudmesh_install.util import path_expand
+
 from pymongo import MongoClient
 from mongoengine import connect
 import os

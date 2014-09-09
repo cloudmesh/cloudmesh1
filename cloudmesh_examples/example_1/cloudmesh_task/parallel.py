@@ -1,5 +1,5 @@
 from pprint import pprint
-from cloudmesh_common.util import banner
+from cloudmesh import banner
 from datetime import timedelta, datetime
 
 def Sequential (execution_array, f, **kwargs):

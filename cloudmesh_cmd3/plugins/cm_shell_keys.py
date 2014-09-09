@@ -4,7 +4,7 @@ from cloudmesh.config.cm_keys import cm_keys_yaml, cm_keys_mongo
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import two_column_table
-from cloudmesh_common.bootstrap_util import yn_choice
+from cloudmesh_install.util import yn_choice
 from cloudmesh.util.menu import menu_return_num
 from os import listdir
 from os.path import expanduser

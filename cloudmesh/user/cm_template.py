@@ -3,8 +3,8 @@ from jinja2 import UndefinedError
 import sys
 import yaml
 from jinja2 import Template
-from cloudmesh_common.util import path_expand
-from cloudmesh_common.util import banner
+from cloudmesh_install.util import path_expand
+from cloudmesh_install.util import banner
 from cloudmesh.config.ConfigDict import ConfigDict
 import yaml
 from sh import grep as _grep

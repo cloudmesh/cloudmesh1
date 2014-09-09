@@ -4,7 +4,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
 import json
 from cloudmesh_common.tables import array_dict_table_printer
-from cloudmesh_common.util import banner
+from cloudmesh import banner
 
 
 #

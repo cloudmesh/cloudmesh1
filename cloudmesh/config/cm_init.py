@@ -9,11 +9,11 @@ from cloudmesh.config.ConfigDict import ConfigDict
 import json
 from docopt import docopt
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh_common.util import path_expand
+from cloudmesh_install.util import path_expand
 from cloudmesh.user.cm_template import cm_template
-from cloudmesh_common.util import yn_choice
-from cloudmesh_common.util import backup_name
-from cloudmesh_common.util import banner
+from cloudmesh_install.util import yn_choice
+from cloudmesh_install.util import backup_name
+from cloudmesh_install.util import banner
 from cloudmesh_common.tables import column_table
 import os
 

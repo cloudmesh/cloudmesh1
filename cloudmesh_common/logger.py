@@ -1,7 +1,7 @@
 from cloudmesh_install import config_file
 import logging
 import os
-from cloudmesh_common.bootstrap_util import grep
+from cloudmesh_install.util import grep
 
 def LOGGER(filename):
     """creates a logger with the given name.

@@ -5,7 +5,7 @@ import platform
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.password import get_password, get_user, get_host
 from cloudmesh.util.menu import ascii_menu
-from cloudmesh_common.util import yn_choice, path_expand
+from cloudmesh_install.util import yn_choice, path_expand
 from pprint import pprint
 from sh import mkdir
 from cloudmesh_common.util import PROGRESS
