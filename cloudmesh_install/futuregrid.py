@@ -14,6 +14,7 @@ import os
 import stat
 import getpass
 import glob
+import yaml
 from docopt import docopt
 
 
