@@ -699,6 +699,12 @@ class cm_mongo:
     def vm_delete(self, cloud, server, cm_user_id):
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         return cloudmanager.vm_delete(server)
+    
+    
+    # ----------------------------------------------------------------------
+    # VM naming functions
+    from cloudmesh.shell.vm_label import print_label, update_label
+    # ----------------------------------------------------------------------
 
 
 '''
