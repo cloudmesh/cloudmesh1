@@ -18,13 +18,11 @@ class cm_shell_key:
     """opt_example class."""
 
     def activate_shell_key(self):
-
         self.mongo_loaded = False
         self.keys_loaded = False
         self.keys_loaded_mongo = False
         self.use_yaml = True
         self.register_command_topic('cloud', 'keys')
-        pass
 
     def _load_mongo(self):
         if not self.mongo_loaded:
@@ -33,6 +31,7 @@ class cm_shell_key:
                 self.mongo_loaded = True
             except:
                 print("ERROR: could not access Mongodb. "
+
                       "Have you started the mongo server?")
 
     def _load_keys(self):
@@ -50,6 +49,7 @@ class cm_shell_key:
         # try:
         from cloudmesh.config.cm_config import cm_config
         config = cm_config()
+
         self.user = config.get('cloudmesh.profile.username')
 
         if self.echo:
@@ -131,7 +131,8 @@ class cm_shell_key:
                 print "SUCCESS: Set mode to mongo"
                 return
             else:
-                print "ERROR: Wrong MODENAME. only valid modes are 'mongo' and 'yaml'"
+                print("ERROR: Wrong MODENAME. only valid modes are 'mongo' "
+                      "and 'yaml'")
                 return
 
         if arguments["--yaml"] and arguments["--mongo"]:
@@ -170,18 +171,18 @@ class cm_shell_key:
                     key_container.__setitem__(
                         arguments["NAME"], arguments["KEY"])
                 else:
-                    files = [file for file in listdir(
-                        expanduser("~/.ssh")) if file.lower().endswith(".pub")]
+                    files = [file for file in listdir(expanduser("~/.ssh")) if file.lower().endswith(".pub")]
                     result = menu_return_num(
                         title="Select a public key", menu_list=files, tries=3)
                     if result == 'q':
                         return
                     else:
-                        key_container.__setitem__(
-                            arguments["NAME"], "~/.ssh/{0}".format(files[result]))
+                        key_container.__setitem__(arguments["NAME"],
+                                                  "~/.ssh/{0}".format(files[result]))
 
             if arguments["NAME"] in key_container.names():
-                if yn_choice("key {0} exists, update?".format(arguments["NAME"]), default='n'):
+                if yn_choice("key {0} exists, update?"
+                             .format(arguments["NAME"]), default='n'):
                     print "Updating key {0} ...".format(arguments["NAME"])
                     func()
                 else:
@@ -195,9 +196,10 @@ class cm_shell_key:
             if self.use_yaml:
 
                 print("WARNING: This will only remove the keys that"
-                      "have not been written to the databse already when 'keys save' is"
-                      "called. If your key is already in the database, you should use mongo"
-                      "mode\n")
+                      "have not been written to the databse already when "
+                      "'keys save' is"
+                      "called. If your key is already in the database, "
+                      "you should use mongo mode\n")
 
             key_container.delete(arguments["NAME"])
             return
@@ -229,7 +231,7 @@ class cm_shell_key:
                 return
             else:
                 mykeys = {}
-                header = ["Default", "Fingerprint"]
+                # header = ["Default", "Fingerprint"]
                 try:
                     mykeys["default"] = key_container.get_default_key()
                 except:
