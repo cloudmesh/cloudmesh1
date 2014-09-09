@@ -3,6 +3,7 @@ import logging
 import os
 from cloudmesh_install.util import grep
 
+
 def LOGGER(filename):
     """creates a logger with the given name.
 
@@ -55,12 +56,14 @@ def LOGGER(filename):
     log.addHandler(handler)
     return log
 
+
 def LOGGING_ON(log):
     try:
         log.setLevel(logging.DEBUG)
         return True
     except:
         return False
+
 
 def LOGGING_OFF(log):
     try:

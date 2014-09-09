@@ -4,6 +4,7 @@ from prettytable import PrettyTable
 from datetime import datetime
 from datetime import timedelta
 
+
 def array_dict_table_printer(array, order=None, header=None):
     """prints a pretty table from an array of dicts
     :param array: A an array with dicts of the same type.
@@ -11,20 +12,20 @@ def array_dict_table_printer(array, order=None, header=None):
     :param order: The order in which the columns are printed.
                   The order is specified by the key names of the dict.
     :param header: The Header of each of the columns
-        
+
     """
     # header
     if header is None:
         header = array[0].keys()
-        
+
     if order is None:
         order = header
-        
+
     if header is None:
         x = PrettyTable(order)
     else:
         x = PrettyTable(header)
-        
+
     for element in array:
         values = []
         for key in order:
@@ -73,8 +74,8 @@ def two_column_table(column_dict):
 
 def table_printer(the_dict, header_info=None):
     """
-    prints recurseively a dict as an html. The header info is simpli a list with
-    collun names.
+    prints recurseively a dict as an html. The header info is simpli
+    a list with collun names.
 
     :param the_dict: the dictionary to be printed.
     :param header_info: an array of two values that are used in the header
