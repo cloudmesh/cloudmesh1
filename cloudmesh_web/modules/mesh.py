@@ -11,7 +11,7 @@ from pprint import pprint
 import cloudmesh
 from cloudmesh.user.cm_user import cm_user
 from flask.ext.principal import Permission, RoleNeed
-from cloudmesh_common.util import banner
+from cloudmesh import banner
 # from cloudmesh.experiment.cm_experiment_db import cm_experiment_db
 import json
 

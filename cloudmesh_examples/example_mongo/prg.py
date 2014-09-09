@@ -1,7 +1,7 @@
 from cloudmesh_task.tasks import cm_ssh
 from cloudmesh_task.parallel import Parallel, Sequential
 from cloudmesh.util.stopwatch import StopWatch
-from cloudmesh_common.util import banner
+from cloudmesh import banner
 from pprint import pprint
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.ConfigDict import ConfigDict
