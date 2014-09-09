@@ -101,6 +101,9 @@ class cm_mongo:
     ssh_ec2_rule = Ec2SecurityGroup.Rule(22, 22)
 
     config = None
+    userinfo = None
+    userid = None
+    activated = False
 
     def __init__(self, collection="cloudmesh"):
         """initializes the cloudmesh mongo db. The name of the collection os passed."""
@@ -344,6 +347,17 @@ class cm_mongo:
         else:
             log.info("No active clouds entries found in database so no clouds were activated!")
 
+        # Set userinfo
+        from cloudmesh.user.cm_user import cm_user
+        self.userinfo = cm_user().info(cm_user_id)
+        self.userid = cm_user_id
+        activated = True
+
+    def check_activated(self):
+        if not self.activated:
+            log.error("Activation first!")
+            return False
+
     def refresh(self, cm_user_id, names=["all"], types=["all"]):
         """
         This method obtains information about servers, images, and
@@ -536,25 +550,47 @@ class cm_mongo:
                 return key
         return -1
 
-    def flavor(self, cloudname, flavorname):
+    def flavor(self, cloudname, flavorname, cm_user_id=None):
+        """Get a single flavor on a given cloud"""
         try:
             return self.flavors([cloudname])[cloudname][flavorname]
         except:
             return -1
 
-    def image(self, cloudname, imagename):
+    def image(self, cloudname, imagename, cm_user_id=None):
+        """Get a single image on a given cloud"""
         for key, value in self.images([cloudname])[cloudname].iteritems():
             if value['name'] == imagename:
                 return value
         return -1
 
+    def default(self, cloudname, attribute, value, cm_user_id=None):
+        """Set a default value on a given type between 'image' or 'flavor'"""
+
+        from cloudmesh.user.cm_user import cm_user
+
+        if not cm_user_id:
+            cm_user_id = self.userid
+
+        defaults = cm_user().get_defaults(cm_user_id)
+        if attribute == "image":
+            defaults['images'][cloudname] = value['name'] 
+            cm_user().set_default_attribute(cm_user_id, "images",
+                                            defaults['images'])
+        elif attribute == "flavor":
+            defaults['flavors'][cloudname] = value['id'] 
+            cm_user().set_default_attribute(cm_user_id, "flavors",
+                                            defaults['flavors'])
+        return cm_user().get_defaults(cm_user_id)
+
     def start(self, cloud, cm_user_id):
         """Launch a new VM instance with a default setting for flavor, image and
         key name"""
-        
-        # Hyungro Lee - Sep 4th, 2014
-        from cloudmesh.user.cm_user import cm_user
-        userinfo = cm_user().info(cm_user_id)
+       
+        if not self.check_activated():
+            return None
+
+        userinfo = self.userinfo
         prefix = userinfo['defaults']['prefix']
         index = userinfo['defaults']['index']
         flavor = userinfo['defaults']['flavors'][cloud] 
