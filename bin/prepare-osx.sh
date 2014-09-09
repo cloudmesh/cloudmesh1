@@ -14,4 +14,6 @@ echo "# install brew"
 echo "# ----------------------------------------------------------------------"
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 
+sudo easy_install pip && sudo pip install virtualenv
+
 

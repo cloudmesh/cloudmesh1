@@ -7,7 +7,7 @@ import time
 import hostlist
 from pprint import pprint
 from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh_common.util import banner
+from cloudmesh_install.util import banner
 from cloudmesh.provisioner.queue.celery import celery_provisiner_queue as p_queue
 from cloudmesh.launcher.queue.celery import celery_launcher_queue as l_queue
 from cloudmesh.pbs.celery import celery_pbs_queue as pbs_queue

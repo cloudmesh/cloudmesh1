@@ -2,7 +2,7 @@ import pymongo
 from pbs import PBS
 from pprint import pprint
 from bson.objectid import ObjectId
-from cloudmesh_common.util import path_expand, banner
+from cloudmesh import path_expand, banner
 import yaml
 from cloudmesh.config.cm_config import get_mongo_db
 from datetime import datetime

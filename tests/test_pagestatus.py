@@ -17,7 +17,7 @@ pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh.config.cm_keys import cm_keys
 from cloudmesh_common.util import HEADING
-from cloudmesh_common.util import path_expand
+from cloudmesh_install.util import path_expand
 
 
 class Test_cloudmesh:

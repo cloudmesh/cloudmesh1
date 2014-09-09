@@ -12,7 +12,7 @@ import json
 import pprint
 
 from cloudmesh_common.util import HEADING
-from cloudmesh_common.util import path_expand
+from cloudmesh_install.util import path_expand
 from cloudmesh.provisioner.provisioner import ProvisionerSimulator
 from cloudmesh.provisioner.provisioner_teefaa import ProvisionerTeefaa
 from cloudmesh_install import config_file
