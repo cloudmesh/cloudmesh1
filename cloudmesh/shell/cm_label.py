@@ -69,8 +69,11 @@ def update_label(username, prefix=None, id=None):
 def print_label(username):
     user_obj = cm_user()
     userdata = user_obj.info(username)
-    print "prefix: ", userdata['defaults']['prefix']
-    print "index: ", userdata['defaults']['index']
+    prefix = userdata['defaults']['prefix']
+    index = userdata['defaults']['index']
+    print "prefix: ", prefix
+    print "index: ", index
+    print "next VM name: {0}_{1}".format(prefix, index)
 
 
 def main():
