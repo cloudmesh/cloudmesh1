@@ -20,18 +20,26 @@ instalation.
 
 import inspect
 import os
+import sys
 import uuid
 import functools
 #import warnings
-import cloudmesh_common.bootstrap_util
 import string
 import random
 
 try:
     from progress.bar import Bar
 except:
-    os.system("pip install progress")    
-    from progress.bar import Bar    
+    try:
+        os.system("pip install progress")
+        from progress.bar import Bar    
+    except Exception, e:
+        print "ERROR: can not install progress"
+        print e
+        print 70 * "="
+        print "please make sure that a virtualenv and pip are installed"
+        sys.exit()
+
     
 class PROGRESS(object):
 
@@ -51,16 +59,6 @@ class PROGRESS(object):
     @classmethod        
     def finish(cls):
         cls.bar.finish()       
-
-def path_expand(text):
-    """ returns a string with expanded variable.
-
-    :param text: the path to be expanded, which can include ~ and $ variables
-    :param text: string
-
-    """
-    return cloudmesh_common.bootstrap_util.path_expand(text)
-
 
 def backup_name(filename):
     """
@@ -83,24 +81,6 @@ def backup_name(filename):
     return backup
 
 
-def banner(txt=None, c="#", debug=True):
-    """prints a banner of the form with a frame of # arround the txt::
-
-      ############################
-      # txt
-      ############################
-
-    .
-
-    :param txt: a text message to be printed
-    :type txt: string
-    :param c: thecharacter used instead of c
-    :type c: character
-    """
-    if debug:
-        cloudmesh_common.bootstrap_util.banner(txt, c, debug=True)
-
-
 def HEADING(txt=None):
     """
     Prints a message to stdout with #### surrounding it. This is useful for
@@ -113,14 +93,6 @@ def HEADING(txt=None):
         txt = inspect.getouterframes(inspect.currentframe())[1][3]
 
     banner(txt)
-
-
-def yn_choice(message, default='y'):
-    """asks for a yes/no question.
-    :param message: the message containing the question
-    :param default: the default answer
-    """
-    return cloudmesh_common.bootstrap_util.yn_choice(message, default)
 
 
 def cat(filename):

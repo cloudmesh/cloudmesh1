@@ -4,13 +4,13 @@ from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
-from cloudmesh_common.util import path_expand as path_expand
-from cloudmesh_common.util import banner
+from cloudmesh_install.util import path_expand
+from cloudmesh_install.util import banner
 from cloudmesh.inventory import Inventory
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.user.cm_user import cm_user
-from cloudmesh_common.util import yn_choice
+from cloudmesh_install.util import yn_choice
 from sh import keystone
 from sh import less
 from  yaml import dump as yaml_dump

@@ -1,5 +1,5 @@
 from docopt import docopt
-from cloudmesh_common.util import banner
+from cloudmesh import banner
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
 from pprint import pprint

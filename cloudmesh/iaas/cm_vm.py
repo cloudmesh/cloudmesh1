@@ -4,8 +4,8 @@ from cloudmesh_common.logger import LOGGER
 from cloudmesh.iaas.cm_cloud import CloudManage
 from cloudmesh.config.cm_config import cm_config
 from pprint import pprint
-from cloudmesh_common.util import banner
-from cloudmesh_common.bootstrap_util import yn_choice
+from cloudmesh import banner
+from cloudmesh import yn_choice
 import time
 from cmd3.console import Console
 from sh import ssh

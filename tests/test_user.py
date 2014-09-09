@@ -11,8 +11,8 @@ import sys
 
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_common.util import HEADING
-from cloudmesh_common.util import banner
-from cloudmesh_common.util import path_expand
+from cloudmesh import banner
+from cloudmesh import path_expand
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
