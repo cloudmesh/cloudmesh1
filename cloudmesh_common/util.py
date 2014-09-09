@@ -8,7 +8,7 @@ need any import from cloudmesh. That is no statement such as
 * :strikethrough:`import cloudmesh`
 
 must occur in the list of import. If functions are needed hat need to
-be used they must be decleard without dependencies in:: 
+be used they must be decleard without dependencies in::
 
   import cloudmesh.util
 
@@ -17,13 +17,13 @@ yet installed, the __init__ function for cloudmesh may include some
 configuration files that are not yet present at the tome of the first
 instalation.
 """
-
+from cloudmesh_install.util import path_expand
 import inspect
 import os
 import sys
 import uuid
 import functools
-#import warnings
+# import warnings
 import string
 import random
 from cloudmesh_install.util import banner
@@ -33,7 +33,7 @@ try:
 except:
     try:
         os.system("pip install progress")
-        from progress.bar import Bar    
+        from progress.bar import Bar
     except Exception, e:
         print "ERROR: can not install progress"
         print e
@@ -41,12 +41,12 @@ except:
         print "please make sure that a virtualenv and pip are installed"
         sys.exit()
 
-    
+
 class PROGRESS(object):
 
     defined = False
     bar = None
-    
+
     @classmethod
     def set(cls, msg, limit):
         if not cls.defined:
@@ -57,9 +57,10 @@ class PROGRESS(object):
     def next(cls):
         cls.bar.next()
 
-    @classmethod        
+    @classmethod
     def finish(cls):
-        cls.bar.finish()       
+        cls.bar.finish()
+
 
 def backup_name(filename):
     """
@@ -100,7 +101,7 @@ def cat(filename):
     """prints the contents of a file with the given name.
 
     :param filename: name of the file, which can include ~ and $
-                     environment variables 
+                     environment variables
     :type: string
     """
     location = path_expand(filename)
@@ -254,7 +255,7 @@ def address_string(content, labels=False):
     it will return::
 
         "fixed: 10.35.23.30, floating: 198.202.120.194'
-        
+
     The 'private' could be any other string indicating the vlan.
     E.g., HP_east cloud might return result which is not 'private'.
     Not necessarilly vlan102 either.
@@ -271,9 +272,9 @@ def address_string(content, labels=False):
         result = result[:-2]
     except:
         # THIS SEEMS WRONG
-        #{u'vlan102': [{u'version': 4, u'addr': u'10.1.2.104'}, {
+        # {u'vlan102': [{u'version': 4, u'addr': u'10.1.2.104'}, {
         #    u'version': 4, u'addr': u'149.165.158.34'}]}
-        #try:
+        # try:
         #    position = 0
         #    for address in content['vlan102']:
         #        if position == 0:
@@ -286,7 +287,7 @@ def address_string(content, labels=False):
         #        result = result + ", "
         #        position = +1
         #    result = result[:-2]
-        #except:
+        # except:
         result = content
     return result
 
@@ -305,5 +306,3 @@ def dict_uni_to_ascii(d):
                 v = dict_uni_to_ascii(v)
         d1[k] = v
     return d1
-        
-        
