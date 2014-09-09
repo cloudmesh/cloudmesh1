@@ -4,7 +4,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import cm_config_server
 
 from datetime import datetime
-from cloudmesh_common.util import path_expand
+from cloudmesh_install.util import path_expand
 import yaml
 from cloudmesh.config.cm_config import get_mongo_db
 from cloudmesh_common.util import cond_decorator

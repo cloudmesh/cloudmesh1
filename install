@@ -28,9 +28,10 @@ from pprint import pprint
 import os
 import getopt
 import sys
-from cloudmesh_common.util import banner
+from cloudmesh_install.util import banner
 from cloudmesh_install.util import get_system
 from cloudmesh_install import config_file_prefix
+from cloudmesh_install.util import yn_choice
 
 def print_help():
 
@@ -123,9 +124,9 @@ def main():
             print "OS distribution not supported; please see documatation for manual installation instructions.", os_system
             #sys.exit(1)
 
-        if sys.platform in ['darwin']:
-            from cloudmesh_install.install import osx
-            osx()
+            #if sys.platform in ['darwin']:
+            # from cloudmesh_install.install import osx
+            #osx()
 
         sys.exit(0)
 

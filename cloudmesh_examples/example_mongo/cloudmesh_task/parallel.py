@@ -1,5 +1,5 @@
 from pprint import pprint
-from cloudmesh_common.util import banner
+from cloudmesh import banner
 from datetime import timedelta, datetime
 from pytimeparse.timeparse import timeparse
 from cloudmesh.management.cloudmeshobject import CloudmeshObject
