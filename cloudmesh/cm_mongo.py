@@ -587,7 +587,8 @@ class cm_mongo:
                                             defaults['flavors'])
         return cm_user().get_defaults(cm_user_id)
 
-    def start(self, cloud, cm_user_id):
+    def start(self, cloud, cm_user_id, prefix=None, index=None, flavor=None,
+              image=None, key=None, meta=None):
         """Launch a new VM instance with a default setting for flavor, image and
         key name"""
        
@@ -595,15 +596,16 @@ class cm_mongo:
             return None
 
         userinfo = self.userinfo
-        prefix = userinfo['defaults']['prefix']
-        index = userinfo['defaults']['index']
-        flavor = userinfo['defaults']['flavors'][cloud] 
+        prefix = prefix or userinfo['defaults']['prefix']
+        index = index or userinfo['defaults']['index']
+        flavor = flavor or userinfo['defaults']['flavors'][cloud] 
         # or flavor = "2" small
-        image = userinfo['defaults']['images'][cloud] 
+        image = image or userinfo['defaults']['images'][cloud] 
         # or image = '02cf1545-dd83-493a-986e-583d53ee3728' # ubuntu-14.04 
-        key = "%s_%s" % (cm_user_id, userinfo['defaults']['key'])
-        meta = { 'cm_owner': cm_user_id }
+        key = key or "%s_%s" % (cm_user_id, userinfo['defaults']['key'])
+        meta = meta or { 'cm_owner': cm_user_id }
 
+        # Launch a vm instance
         result = self.vm_create(cloud, prefix, index, flavor, image, key, meta,
                                cm_user_id)
 
