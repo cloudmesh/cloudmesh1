@@ -220,9 +220,76 @@ class VMcommand(object):
 
 
     def assign_public_ip(self):
-        print "NOT IMPLEMENTED"
+        cloudname = self.get_working_cloud_name()
+        if cloudname == False: return
+        serverid = self.get_working_server_id(cloudname)
+        if serverid == False: return
+        assign_public_ip(username=self.username, cloudname=cloudname, serverid=serverid)
+        
 
     # --------------------------------------------------------------------------
+    def get_working_cloud_name(self):
+        '''
+        get the name of a cloud to work on, if CLOUD not given, will pick the
+        selected or default cloud
+        '''
+        cloudname = None
+        cloudobj = CloudManage()
+        mongo = cm_mongo()
+        if self.arguments['--cloud']:
+            cloud = cloudobj.get_clouds(
+                self.username, getone=True, cloudname=self.arguments['--cloud'])
+            if cloud is None:
+                Console.error("could not find cloud '{0}'".format(self.arguments['--cloud']))
+                return False
+            else:
+                cloudname = self.arguments['--cloud']
+        else:
+            cloudname = cloudobj.get_selected_cloud(self.username)
+        if cloudname not in mongo.active_clouds(self.username):
+            Console.warning(
+                "cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname))
+            return False
+        else:
+            return cloudname
+        
+    def get_working_server_id(self, cloudname):
+        serverid = None
+        mongo = cm_mongo()
+        mongo.activate(cm_user_id=self.username, names=[cloudname])
+        mongo.refresh(self.username, names=[cloudname], types=['servers'])
+        serverdata = mongo.servers(
+            clouds=[cloudname], cm_user_id=self.username)[cloudname]
+        if self.arguments['NAME']:
+            ls = []
+            for k, v in serverdata.iteritems():
+                if self.arguments['NAME'] == v['name']:
+                    ls.append(k)
+            if len(ls) > 1:
+                Console.warning("There are more than one VM named {0}, please use VM id instead"
+                                .format(arguments['NAME']))
+                return False
+            elif len(ls) == 0:
+                Console.error("Could not find VM named {0}".format(arguments['NAME']))
+                return False
+            else:
+                serverid = ls[0]
+        elif self.arguments['--id']:
+            for k, v in serverdata.iteritems():
+                if self.arguments['--id'] == k:
+                    serverid = self.arguments['--id']
+                    break
+            if serverid == None:
+                Console.error("Could not find VM with id {0}".format(self.arguments['--id']))
+                return False
+        else:
+            Console.warning("Please pecify a VM name or id")
+            return False
+        return serverid
+
+                
+                
+    
     def call_procedure(self):
         if self.arguments['start']:
             self._vm_create()
@@ -653,7 +720,6 @@ def assign_public_ip(username=None, cloudname=None, serverid=None):
     if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
         mongo.assign_public_ip(cloudname, serverid, username)
         mongo.refresh(names=[cloudname], types=["servers"], cm_user_id=username)
-        return redirect('/mesh/servers')
     # else:
     # return "Manual public ip assignment is not allowed for {0}
     # cloud".format(cloud)
