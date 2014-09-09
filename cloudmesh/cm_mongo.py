@@ -8,6 +8,7 @@ from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.util.stopwatch import StopWatch
 from cloudmesh.util.encryptdata import decrypt
+from cloudmesh.util.ssh import ssh_vm_with_command
 import traceback
 import time
 
@@ -672,6 +673,7 @@ class cm_mongo:
         if type == 'openstack':
             ip = cloudmanager.get_public_ip()
             ret = cloudmanager.assign_public_ip(server, ip)
+            ret = ip
         else:
             ret = None
         return ret
@@ -726,6 +728,9 @@ class cm_mongo:
 
     def vmname_next(self):
         return self.vmname(idx="+1")
+
+    def ssh_vm_with_command(self, ipaddr, username="ubuntu", command="ls -al", pkey=None):
+        return ssh_vm_with_command(username, ipaddr, command, pkey)
 
 '''
 def main():
