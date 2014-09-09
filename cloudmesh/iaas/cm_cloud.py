@@ -5,7 +5,7 @@ from tabulate import tabulate
 from pprint import pprint
 from cloudmesh.util.menu import menu_return_num
 from cmd3.console import Console
-from cloudmesh_common.bootstrap_util import yn_choice, path_expand
+from cloudmesh_install.util import yn_choice, path_expand
 import sys
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.shellutil import shell_commands_dict_output

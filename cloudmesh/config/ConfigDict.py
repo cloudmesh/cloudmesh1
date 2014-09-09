@@ -1,5 +1,5 @@
 from cloudmesh_install import config_file
-from cloudmesh_common.util import path_expand
+from cloudmesh_install.util import path_expand
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.util.config import read_yaml_config
 from collections import OrderedDict

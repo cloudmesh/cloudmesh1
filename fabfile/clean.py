@@ -1,5 +1,5 @@
 from fabric.api import task, local
-from cloudmesh_common.util import banner
+from cloudmesh_install.util import banner
 from cloudmesh_install import config_file
 
 import os

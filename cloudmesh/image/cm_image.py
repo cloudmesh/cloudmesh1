@@ -20,7 +20,7 @@ Options:
 
 from docopt import docopt
 import hostlist
-from cloudmesh_common.util import path_expand, banner
+from cloudmesh import path_expand, banner
 import os
 import sh
 import cloudmesh
