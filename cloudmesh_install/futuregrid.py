@@ -15,6 +15,7 @@ import stat
 import getpass
 import glob
 import yaml
+from string import Template
 from docopt import docopt
 
 
