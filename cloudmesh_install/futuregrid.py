@@ -1,6 +1,7 @@
 from cloudmesh_install.util import banner
 from cloudmesh_install import config_file
-from paramiko import SSHClient, AutoAddPolicy, BadHostKeyException, AuthenticationException, SSHException
+from paramiko import SSHClient, AutoAddPolicy, BadHostKeyException
+from paramiko import AuthenticationException, SSHException
 import sys
 import os
 import stat
@@ -16,13 +17,14 @@ rc_file_locations = {
         'hostname': 'india.futuregrid.org',
         'source': '.futuregrid/openstack_havana/novarc',
         'dest': "~/.cloudmesh/clouds/india",
-        },
+    },
     'sierra': {
         'hostname': 'sierra.futuregrid.org',
         'source': '.futuregrid/novarc',
         'dest': "~/.cloudmesh/clouds/sierra",
-        }
     }
+}
+
 
 def iu_credential_fetch_command(args):
     """
@@ -36,7 +38,7 @@ def iu_credential_fetch_command(args):
 
     _args = ' '.join(args[1:])
     arguments = docopt(iu_credential_fetch_command.__doc__, _args)
-    
+
     if arguments["user"] and arguments["fetch"]:
         fetchrc(arguments["--username"], arguments["--outdir"])
 
@@ -47,27 +49,27 @@ def iu_credential_fetch_command(args):
         verify_ssh_login(arguments["--username"])
 
 
-
 def download_rc_files(userid):
 
     for hostname in rc_file_locations:
         host = rc_file_locations[hostname]
         host["userid"] = userid
-        host["dest"]= os.path.expanduser(host["dest"])
-        
+        host["dest"] = os.path.expanduser(host["dest"])
+
         print "fetching from ", host["hostname"], host
 
         print "creade dir"
-        
-        os.system ("mkdir -p %(dest)s" % host)
 
-        copy_cmd = "scp -o StricthostKeyChecking=no %(userid)s@%(hostname)s:%(source)s %(dest)s" % host        
+        os.system("mkdir -p %(dest)s" % host)
+
+        copy_cmd = "scp -o StricthostKeyChecking=no %(userid)s@%(hostname)s:%(source)s %(dest)s" % host
         print "    <-", copy_cmd
         print "    ",
         result = None
         try:
             from sh import scp
-            result = scp("-o","StrictHostKeyChecking=no", "%(userid)s@%(hostname)s:%(source)s" % host, "%(dest)s" % host)
+            result = scp("-o", "StrictHostKeyChecking=no",
+                         "%(userid)s@%(hostname)s:%(source)s" % host, "%(dest)s" % host)
             print "ok", result
         except Exception, e:
             print "failed", result, e
@@ -126,7 +128,8 @@ def apply_credentials_to_yaml_file():
 
     def get_variables(fpath):
         section_title = "rcfile"
-        read_values = ["OS_TENANT_NAME", "OS_USERNAME", "OS_PASSWORD"]  # case-sensitive
+        # case-sensitive
+        read_values = ["OS_TENANT_NAME", "OS_USERNAME", "OS_PASSWORD"]
         result = {}
 
         cp = SafeConfigParser()
@@ -222,20 +225,23 @@ def apply_credentials_to_yaml_file():
                     credentials[k] = v
 
     # replacing default project and username
-    data['cloudmesh']['hpc']['username'] = new_values[cloud_name]['OS_USERNAME']
-    data['cloudmesh']['profile']['username'] = new_values[cloud_name]['OS_USERNAME']
+    data['cloudmesh']['hpc']['username'] = new_values[
+        cloud_name]['OS_USERNAME']
+    data['cloudmesh']['profile']['username'] = new_values[
+        cloud_name]['OS_USERNAME']
     data['cloudmesh']['projects']['default'] = \
-    new_values[cloud_name]['OS_TENANT_NAME']
+        new_values[cloud_name]['OS_TENANT_NAME']
     # active projects can be multiple values
     # it should be a list to stack unique project ids
     # TBD
     data['cloudmesh']['projects']['active'] = \
-    [new_values[cloud_name]['OS_TENANT_NAME']]
+        [new_values[cloud_name]['OS_TENANT_NAME']]
 
     # Write yaml
     with open(cloudmesh_out, 'w') as outfile:
         outfile.write(yaml.dump(data, default_flow_style=False))
         print "Updating -> %s" % cloudmesh_out
+
 
 def fetchrc(userid=None, outdir=None):
 
@@ -278,10 +284,10 @@ def fetchrc(userid=None, outdir=None):
     if isinstance(host_ids, str):
         host_ids = map(lambda x: x.strip(), host_ids.split(","))
 
-    domain_name = ".futuregrid.org"
-    hostnames = map(lambda x: x.split("_")[0] + domain_name, host_ids)
+    # domain_name = ".futuregrid.org"
+    # hostnames = map(lambda x: x.split("_")[0] + domain_name, host_ids)
 
-    key_path = "~/.ssh/id_rsa"
+    # key_path = "~/.ssh/id_rsa"
     # private key path is disabled
     # key_path = raw_input("Please enter a path of the ssh private key to" + \
     #                     " login the hosts [default: %s]: " % key_path) or \
@@ -291,7 +297,7 @@ def fetchrc(userid=None, outdir=None):
 
         download_rc_files(userid)
         update_permission("~/.cloudmesh/clouds")
-        
+
         """
         # cmd = "fab rcfile.download:userid='%s',host_ids='%s',key_path='%s'" \
         cmd = "fab -H %s -u %s -i %s rcfile.download:'%s','%s'" \
@@ -300,10 +306,11 @@ def fetchrc(userid=None, outdir=None):
         print "CMD", cmd
         os.system(cmd)
         """
-        
+
     except:
         print sys.exc_info()
         sys.exit(1)
+
 
 def update_permission(path, mode=stat.S_IRWXU):
     """Update file permissions on a given path."""
@@ -312,6 +319,7 @@ def update_permission(path, mode=stat.S_IRWXU):
         os.chmod(os.path.join(path, item), mode)
         if os.path.isdir(item):
             update_permission(os.path.join(path, item), mode)
+
 
 def verify_ssh_login(userid):
     client = SSHClient()
@@ -332,14 +340,16 @@ def verify_ssh_login(userid):
             client.connect(host, username=userid, key_filename=key)
             client.close()
             print "[%s] succeeded with %s." % (host, userid)
-        except (BadHostKeyException, AuthenticationException, SSHException) as e:
+        except (BadHostKeyException,
+                AuthenticationException,
+                SSHException) as e:
             # print sys.exc_info()
             print ("[%s] %s with %s. Please check your ssh setup (e.g. key " +
                    "files, id, known_hosts)") % (host, e, userid)
+
 
 def main(args=sys.argv):
     iu_credential_fetch_command(args)
 
 if __name__ == '__main__':
     main(sys.argv)
-
