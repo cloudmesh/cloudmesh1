@@ -31,7 +31,7 @@ def shell_command_vm(arguments):
                           [--range=<range>]
                           [--force]
                 vm pip (NAME|--id=<id>) [--cloud=<CloudName>]
-                vm login (NAME|--id=<id>) [--cloud=<CloudName>]
+                vm login (NAME|--id=<id>) [--cloud=<CloudName>] [NOT IMPLEMENTED]
 
             Arguments:
                 NAME  server name
@@ -66,6 +66,7 @@ def shell_command_vm(arguments):
                                         and/or range to find servers by their names.
                                         Or user may specify more options to narrow
                                         the search
+                vm pip [options...]     assign a public ip to a VM of a cloud
 
             Examples:
                 vm start --count=5 --group=test --cloud=india
@@ -76,6 +77,7 @@ def shell_command_vm(arguments):
                         delete servers on selected or default cloud with search conditions:
                         group name is test and index in the name of the servers is no greater
                         than 9
+                    
     """
 
     call_proc = VMcommand(arguments)
@@ -229,7 +231,7 @@ class VMcommand(object):
         
         
     def _vm_login(self):
-        login_vm()
+        print "NOT WORKING"
         
 
     # --------------------------------------------------------------------------
@@ -732,9 +734,6 @@ def assign_public_ip(username=None, cloudname=None, serverid=None):
     # cloud".format(cloud)
     
 
-def ssh_vm(key, vmuser, addr):
-    pass
-    #call(['ssh', 'ubuntu@149.165.159.37'])
 
 # ========================================================================
 def _keyname_sanitation(username, keyname):
