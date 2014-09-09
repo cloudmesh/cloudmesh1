@@ -6,7 +6,7 @@ Usage:
         cm-iu user login [--username=USERNAME]
 
 """
- 
+from cloudmesh_install.util import banner
 from paramiko import SSHClient, AutoAddPolicy, BadHostKeyException, AuthenticationException, SSHException
 import sys
 import os
