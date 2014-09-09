@@ -58,33 +58,25 @@ import sys
     server = result['server']['id']
     mesh.delete(cloud, server, username)
 
-
-    cloud = "india"
-    
-    cloudmesh.banner("LAUNCH VM INSTANCE")
+    cloudmesh.banner("LAUNCH 3 VM INSTANCES")
     vm = {}
     for i in range(1,3):
         vm[i] = mesh.start(cloud, username)
     
     
-    cloudmesh.banner("TERMINATE VM INSTANCE")
-    for i ...:
+    cloudmesh.banner("TERMINATE 3 VM INSTANCES")
+    for i in vm: 
         server = vm[i]['server']['id']
         mesh.delete(cloud, server, username)
-    # hoe do you arrase no the vms????
-    
     
     '''
     task :: start a VM on india, before starting, do various default setup actions
     '''
     print "NOT IMPLEMENTED"
     return
-
     
     flavor=mesh.flavor(cloudname="india", flavorname="m1.small") 
     flavor=mesh.flavor("india", "m1.small") 
-    
-    # print ???
     
     
     #set image
@@ -93,20 +85,14 @@ import sys
     image=mesh.image("india", "futuregrid/ubuntu-14.04") 
     # 
     
-    # print ???
-    
     # GET CURRENT VMNAME OR BETTER GET THE NEXT VM NAME????
     
-    # vmname = mesh.vmname()
-    # vmname = mesh.vmname("next")
-    # vmname = mesh.vmname.next() # this is for sure not implemented
-    # vmname = mesh.vmname.rest("gregor", "00000000")
-    # vmname = mesh.vmname.format("gregor-[00000]") # hopstlist format ;-)
-    
-    
-    
-    # cloudmesh.print_label(username) 
-    # current name of vm
+    vmname = mesh.vmname()
+    print vmname
+    vmname = mesh.vmname(prefix="albert", idx=10)
+    print vmname
+    vmname = mesh.vmname("James", 50)
+    print vmname
     
     #start vm1
 
