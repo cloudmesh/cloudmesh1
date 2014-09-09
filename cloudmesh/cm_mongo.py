@@ -673,6 +673,7 @@ class cm_mongo:
         if type == 'openstack':
             ip = cloudmanager.get_public_ip()
             ret = cloudmanager.assign_public_ip(server, ip)
+            ret = ip
         else:
             ret = None
         return ret
