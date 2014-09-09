@@ -32,7 +32,7 @@ class cm_shell_key:
                 self.mongoClass = cm_mongo()
                 self.mongo_loaded = True
             except:
-                print("ERROR: could not access Mongodb. " \
+                print("ERROR: could not access Mongodb. "
                       "Have you started the mongo server?")
 
     def _load_keys(self):
@@ -179,7 +179,7 @@ class cm_shell_key:
                     else:
                         key_container.__setitem__(
                             arguments["NAME"], "~/.ssh/{0}".format(files[result]))
-                        
+
             if arguments["NAME"] in key_container.names():
                 if yn_choice("key {0} exists, update?".format(arguments["NAME"]), default='n'):
                     print "Updating key {0} ...".format(arguments["NAME"])
@@ -198,7 +198,7 @@ class cm_shell_key:
                       "have not been written to the databse already when 'keys save' is"
                       "called. If your key is already in the database, you should use mongo"
                       "mode\n")
-                
+
             key_container.delete(arguments["NAME"])
             return
         if arguments["save"]:
