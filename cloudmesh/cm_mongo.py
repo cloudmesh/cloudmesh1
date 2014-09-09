@@ -702,11 +702,19 @@ class cm_mongo:
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         return cloudmanager.vm_delete(server)
     
-    
-    # ----------------------------------------------------------------------
-    # VM naming functions
-    # ----------------------------------------------------------------------
+    def vmname(self, prefix=None, idx=None, cm_user_id=None):
+        """Return a vm name to use next time. prefix or index can be
+        given to update a vm name (optional)"""
+        userinfo = self.userinfo
+        cm_user_id = cm_user_id or self.userid
+        userinfo['defaults']['prefix'] = prefix or \
+                userinfo['defaults']['prefix']
+        userinfo['defaults']['index'] = idx or \
+                userinfo['defaults']['index']
+        self.cm_user.set_defaults(cm_user_id, userinfo['defaults'])
 
+        self.userinfo = self.cm_user.info(cm_user_id)
+        return "%(prefix)s_%(index)s" % self.userinfo['defaults']
 
 '''
 def main():
