@@ -24,9 +24,9 @@ echo -e "\nsource ~/ENV/bin/activate\ncd ~/cloudmesh\n" >> ~/.bashrc
 # Copy private key from shared directory to .ssh
 cp /vagrant/id_rsa ~/.ssh/id_rsa
 ssh-keygen -b 2048 -t rsa -f ~/.ssh/cloudmesh-default -q -N ""
-./install rc fetch --username=`cat /vagrant/.userid`
-./install rc fill
 ./install cloudmesh
+cm-iu user fetch --username=`cat /vagrant/.userid`
+cm-iu user create
 fab mongo.start
 # Waiting may not needed
 sleep 5
