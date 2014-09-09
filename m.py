@@ -81,16 +81,16 @@ import sys
     return
 
     
-    # flavor=mesh.flavor(cloudname="india", flavorname="m1.small") 
-    # image=mesh.flavor("india", "m1.small") 
+    flavor=mesh.flavor(cloudname="india", flavorname="m1.small") 
+    flavor=mesh.flavor("india", "m1.small") 
     
     # print ???
     
     
     #set image
 
-    # image=mesh.image(cloudname="india", imagename="futuregrid/ubuntu-14.04") 
-    # image=mesh.image("india", "futuregrid/ubuntu-14.04") 
+    image=mesh.image(cloudname="india", imagename="futuregrid/ubuntu-14.04") 
+    image=mesh.image("india", "futuregrid/ubuntu-14.04") 
     # 
     
     # print ???
@@ -112,8 +112,8 @@ import sys
 
     # save default image and falvor ????
     
-    mesh.default("iamage", image)
-    mesh.deafult("flavor", flavor)
+    mesh.default("india", "image", image)
+    mesh.deafult("india", "flavor", flavor)
     
     vm = mesh.start("india", userid)
 
