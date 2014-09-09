@@ -1,11 +1,3 @@
-"""
-Usage:
-        cm-iu -h | --help
-        cm-iu user fetch [--username=USERNAME] [--outdir=OUTDIR]
-        cm-iu user create
-        cm-iu user login [--username=USERNAME]
-
-"""
 from cloudmesh_install.util import banner
 from cloudmesh_install import config_file
 from paramiko import SSHClient, AutoAddPolicy, BadHostKeyException, AuthenticationException, SSHException
@@ -33,10 +25,17 @@ rc_file_locations = {
     }
 
 def iu_credential_fetch_command(args):
-    
-    arguments = docopt(__doc__)
+    """
+    Usage:
+            cm-iu -h | --help
+            cm-iu user fetch [--username=USERNAME] [--outdir=OUTDIR]
+            cm-iu user create
+            cm-iu user login [--username=USERNAME]
 
-    print arguments
+    """
+
+    _args = ' '.join(args[1:])
+    arguments = docopt(iu_credential_fetch_command.__doc__, _args)
     
     if arguments["user"] and arguments["fetch"]:
         fetchrc(arguments["--username"], arguments["--outdir"])
@@ -174,7 +173,7 @@ def apply_credentials_to_yaml_file():
         cloud_name = os.path.basename(
             os.path.normpath(filepath.replace(filename, "")))
         new_values[cloud_name] = get_variables(filepath)
-        print "[%s] loaded" % filepath
+        print "Reading  -> %s" % filepath
 
     for cloud in values['clouds']:
         values['clouds'][cloud]['default'] = {}
@@ -236,7 +235,7 @@ def apply_credentials_to_yaml_file():
     # Write yaml
     with open(cloudmesh_out, 'w') as outfile:
         outfile.write(yaml.dump(data, default_flow_style=False))
-        print "[%s] updated" % cloudmesh_out
+        print "Updating -> %s" % cloudmesh_out
 
 def fetchrc(userid=None, outdir=None):
 
