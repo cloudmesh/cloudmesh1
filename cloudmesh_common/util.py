@@ -26,6 +26,7 @@ import functools
 #import warnings
 import string
 import random
+from cloudmesh_install.util import banner
 
 try:
     from progress.bar import Bar
