@@ -579,7 +579,7 @@ class cm_mongo:
 
         defaults = cm_user().get_defaults(cm_user_id)
         if attribute == "image":
-            defaults['images'][cloudname] = value['name'] 
+            defaults['images'][cloudname] = value['id'] 
             cm_user().set_default_attribute(cm_user_id, "images",
                                             defaults['images'])
         elif attribute == "flavor":
