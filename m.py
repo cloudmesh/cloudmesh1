@@ -91,7 +91,11 @@ import sys
     print vmname
     vmname = mesh.vmname(prefix="albert", idx=10)
     print vmname
-    vmname = mesh.vmname("James", 50)
+    vmname = mesh.vmname("James", 20)
+    print vmname
+    vmname = mesh.vmname_next()
+    print vmname
+    vmname = mesh.vmname("Brian", "+2")
     print vmname
     
     #start vm1
@@ -112,22 +116,14 @@ import sys
     cloud = "india"
     prefix = "gregor"
     index = "10000"
-    vm_flavor = "???"
-    ...
+    flavor = mesh.flavor("india", "m1.small") 
+    image = mesh.image("india", "futuregrid/ubuntu-14.04") 
     
-    vm = vm_create(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id):
-
-    # vm where index is NOne ...
-    # ....
-
-
-
-
-
+    vm = mesh.start(cloud, username, prefix=prefix, index=index, flavor=flavor,
+                    image=image)
 
     
-    
-    vm = mesh.start("india", image, flavor)
+    vm = mesh.start("india", username, image=image, flavor=flavor)
     vm = mesh.assign_public_ip(...)
     
     vmname = vm['lable'/'name'] # prefix-id
