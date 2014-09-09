@@ -357,6 +357,7 @@ class cm_mongo:
         if not self.activated:
             log.error("Activation first!")
             return False
+        return True
 
     def refresh(self, cm_user_id, names=["all"], types=["all"]):
         """
