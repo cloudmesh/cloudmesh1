@@ -512,13 +512,13 @@ class CloudManage(object):
                 w.writeheader()
                 w.writerow(flavors_dict[cloudname])
         else:
-            sentence = "flavors of cloud '{0}'".format(cloudname)
-            print "+" + "-" * (len(sentence) - 2) + "+"
-            print sentence
+            #sentence = "flavors of cloud '{0}'".format(cloudname)
+            #print "+" + "-" * (len(sentence) - 2) + "+"
+            #print sentence
             print tabulate(to_print, headers, tablefmt="grid")
-            sentence = "count: {0}".format(count)
-            print sentence
-            print "+" + "-" * (len(sentence) - 2) + "+"
+            #sentence = "count: {0}".format(count)
+            #print sentence
+            #print "+" + "-" * (len(sentence) - 2) + "+"
 
         if output:
             return [flavor_names, flavor_ids]
@@ -581,13 +581,13 @@ class CloudManage(object):
                 w.writeheader()
                 w.writerow(images_dict[cloudname])
         else:
-            sentence = "images of cloud '{0}'".format(cloudname)
-            print "+" + "-" * (len(sentence) - 2) + "+"
-            print sentence
+            #sentence = "images of cloud '{0}'".format(cloudname)
+            #print "+" + "-" * (len(sentence) - 2) + "+"
+            #print sentence
             print tabulate(to_print, headers, tablefmt="grid")
-            sentence = "count: {0}".format(count)
-            print sentence
-            print "+" + "-" * (len(sentence) - 2) + "+"
+            #sentence = "count: {0}".format(count)
+            #print sentence
+            #print "+" + "-" * (len(sentence) - 2) + "+"
 
         if output:
             return [image_names, image_ids]
@@ -705,13 +705,13 @@ class CloudManage(object):
                 w.writeheader()
                 w.writerow(servers_dict)
         else:
-            sentence = "cloud '{0}'".format(cloudname)
-            print "+" + "-" * (len(sentence) - 2) + "+"
-            print sentence
+            #sentence = "cloud '{0}'".format(cloudname)
+            #print "+" + "-" * (len(sentence) - 2) + "+"
+            #print sentence
             print tabulate(to_print, headers, tablefmt="grid")
-            sentence = "count: {0}".format(count)
-            print sentence
-            print "+" + "-" * (len(sentence) - 2) + "+"
+            #sentence = "count: {0}".format(count)
+            #print sentence
+            #print "+" + "-" * (len(sentence) - 2) + "+"
 
         if output:
             return [server_names, server_ids]
@@ -837,7 +837,7 @@ class CloudCommand(CloudManage):
                                        header=combined_headers,
                                        oneitem=False,
                                        title=None,
-                                       count=True)
+                                       count=False)
 
     def _cloud_info(self):
         def printing(cloud):
@@ -864,8 +864,7 @@ class CloudCommand(CloudManage):
             shell_commands_dict_output(cloud,
                                        table=self.arguments['--table'],
                                        jsonformat=self.arguments['--json'],
-                                       title="cloud '{0}' information".format(
-                                           cloud['cm_cloud']),
+                                       title=None, #"cloud '{0}' information".format(cloud['cm_cloud']),
                                        oneitem=True)
 
         if self.arguments['CLOUD']:
