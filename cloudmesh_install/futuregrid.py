@@ -1,8 +1,23 @@
+"""
+Usage:
+        cm-iu -h | --help
+        cm-iu user fetch [--username=USERNAME] [--outdir=OUTDIR]
+        cm-iu user create
+        cm-iu user login [--username=USERNAME]
 
+"""
+from cloudmesh_install.util import banner
+from cloudmesh_install import config_file
 from paramiko import SSHClient, AutoAddPolicy, BadHostKeyException, AuthenticationException, SSHException
-
-"""
-"""
+import sys
+import os
+import stat
+import getpass
+import glob
+import yaml
+from string import Template
+from docopt import docopt
+from ConfigParser import SafeConfigParser
 
 rc_file_locations = {
     'india': {
@@ -18,15 +33,11 @@ rc_file_locations = {
     }
 
 def iu_credential_fetch_command(args):
-    """
-    Usage:
-        cm-fg -h | --help
-        cm-fg user fetch [--username=<username>] [--outdir=<outdir>]
-        cm-fg user create
-        cm-fg user login [--username=<username>]
-    """
-    arguments = docopt(install_command.__doc__, args)
+    
+    arguments = docopt(__doc__)
 
+    print arguments
+    
     if arguments["user"] and arguments["fetch"]:
         fetchrc(arguments["--username"], arguments["--outdir"])
 
@@ -327,7 +338,9 @@ def verify_ssh_login(userid):
             print ("[%s] %s with %s. Please check your ssh setup (e.g. key " +
                    "files, id, known_hosts)") % (host, e, userid)
 
+def main(args=sys.argv):
+    iu_credential_fetch_command(args)
 
 if __name__ == '__main__':
-    iu_credential_fetch_command(sys.argv)
+    main(sys.argv)
 

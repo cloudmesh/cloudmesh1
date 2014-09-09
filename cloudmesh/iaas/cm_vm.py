@@ -274,7 +274,7 @@ class VMcommand(object):
                     ls.append(k)
             if len(ls) > 1:
                 Console.warning("There are more than one VM named {0}, please use VM id instead"
-                                .format(self.rguments['NAME']))
+                                .format(self.arguments['NAME']))
                 return False
             elif len(ls) == 0:
                 Console.error("Could not find VM named {0}".format(self.arguments['NAME']))
