@@ -555,6 +555,10 @@ class cm_mongo:
         try:
             return self.flavors([cloudname])[cloudname][flavorname]
         except:
+            for key, value in
+            self.flavors([cloudname])[cloudname].iteritems():
+                if value['name'] == flavorname:
+                    return value
             return -1
 
     def image(self, cloudname, imagename, cm_user_id=None):
