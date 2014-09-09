@@ -101,6 +101,7 @@ class cm_mongo:
     ssh_ec2_rule = Ec2SecurityGroup.Rule(22, 22)
 
     config = None
+    cm_user = None
     userinfo = None
     userid = None
     activated = False
@@ -349,7 +350,8 @@ class cm_mongo:
 
         # Set userinfo
         from cloudmesh.user.cm_user import cm_user
-        self.userinfo = cm_user().info(cm_user_id)
+        self.cm_user = cm_user()
+        self.userinfo = self.cm_user.info(cm_user_id)
         self.userid = cm_user_id
         self.activated = True
 
@@ -357,6 +359,7 @@ class cm_mongo:
         if not self.activated:
             log.error("Activation first!")
             return False
+        return True
 
     def refresh(self, cm_user_id, names=["all"], types=["all"]):
         """
@@ -571,21 +574,19 @@ class cm_mongo:
     def default(self, cloudname, attribute, value, cm_user_id=None):
         """Set a default value on a given type between 'image' or 'flavor'"""
 
-        from cloudmesh.user.cm_user import cm_user
-
         if not cm_user_id:
             cm_user_id = self.userid
 
-        defaults = cm_user().get_defaults(cm_user_id)
+        defaults = self.cm_user.get_defaults(cm_user_id)
         if attribute == "image":
-            defaults['images'][cloudname] = value['name'] 
-            cm_user().set_default_attribute(cm_user_id, "images",
+            defaults['images'][cloudname] = value['id'] 
+            self.cm_user.set_default_attribute(cm_user_id, "images",
                                             defaults['images'])
         elif attribute == "flavor":
             defaults['flavors'][cloudname] = value['id'] 
-            cm_user().set_default_attribute(cm_user_id, "flavors",
+            self.cm_user.set_default_attribute(cm_user_id, "flavors",
                                             defaults['flavors'])
-        return cm_user().get_defaults(cm_user_id)
+        return self.cm_user.get_defaults(cm_user_id)
 
     def start(self, cloud, cm_user_id, prefix=None, index=None, flavor=None,
               image=None, key=None, meta=None):
@@ -610,7 +611,7 @@ class cm_mongo:
                                cm_user_id)
 
         # increase index after the completion of vm_create()
-        cm_user().set_default_attribute(cm_user_id, "index", int(index) + 1)
+        self.cm_user.set_default_attribute(cm_user_id, "index", int(index) + 1)
         return result
 
     def vm_create(self, 
@@ -697,7 +698,34 @@ class cm_mongo:
     def vm_delete(self, cloud, server, cm_user_id):
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         return cloudmanager.vm_delete(server)
+    
+    def vmname(self, prefix=None, idx=None, cm_user_id=None):
+        """Return a vm name to use next time. prefix or index can be
+        given to update a vm name (optional)
+        
+        Args:
+            prefix (str, optional): the name of prefix
+            idx (int, str, optional): the index to increment. This can be a
+            digit or arithmetic e.g. +5 or -3 can be used 
+            
+        """
+        userinfo = self.userinfo
+        cm_user_id = cm_user_id or self.userid
+        userinfo['defaults']['prefix'] = prefix or \
+                userinfo['defaults']['prefix']
+        if idx:
+            if str(idx).isdigit():
+                userinfo['defaults']['index'] = idx
+            else:
+                userinfo['defaults']['index'] = \
+                eval(str(userinfo['defaults']['index']) + idx)
+        self.cm_user.set_defaults(cm_user_id, userinfo['defaults'])
 
+        self.userinfo = self.cm_user.info(cm_user_id)
+        return "%(prefix)s_%(index)s" % self.userinfo['defaults']
+
+    def vmname_next(self):
+        return self.vmname(idx="+1")
 
 '''
 def main():
