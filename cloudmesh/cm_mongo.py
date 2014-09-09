@@ -351,7 +351,7 @@ class cm_mongo:
         from cloudmesh.user.cm_user import cm_user
         self.userinfo = cm_user().info(cm_user_id)
         self.userid = cm_user_id
-        activated = True
+        self.activated = True
 
     def check_activated(self):
         if not self.activated:
