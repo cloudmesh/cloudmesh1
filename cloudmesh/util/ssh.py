@@ -65,14 +65,22 @@ class ssh:
         
 # -----------------------------------------------------------------------
 def ssh_vm_with_command(hostuser, addr, cmd, key=None):
+    """Execute a command via SSH"""
+
     from sh import ssh # import
-    host = "{0}@{1}".format(hostuser, addr)
-    cmd = "{0}".format(cmd)
+
+    #disable SSH host key checking
+    option = "-o StrictHostKeyChecking=no "
+    host = " {0}@{1} ".format(hostuser, addr)
+    cmd = " {0} ".format(cmd)
     if key:
-        key = "-i {0}".format(key)
-        return ssh(host, key, cmd)
+        key = " -i {0} ".format(key)
     else:
-        return ssh(host, cmd)
+        key = ""
+
+    message = (option + key + host + cmd).split()
+
+    return ssh(message)
     
 # -----------------------------------------------------------------------
     
