@@ -13,11 +13,11 @@ from cloudmesh_install import config_file
 log = LOGGER(__file__)
 
 
-class cm_shell_keys:
+class cm_shell_key:
 
     """opt_example class."""
 
-    def activate_shell_keys(self):
+    def activate_shell_key(self):
 
         self.mongo_loaded = False
         self.keys_loaded = False
@@ -32,8 +32,8 @@ class cm_shell_keys:
                 self.mongoClass = cm_mongo()
                 self.mongo_loaded = True
             except:
-                print "ERROR: could not access Mongodb. " \
-                      "Have you started the mongo server?"
+                print("ERROR: could not access Mongodb. " \
+                      "Have you started the mongo server?")
 
     def _load_keys(self):
         try:
@@ -60,15 +60,16 @@ class cm_shell_keys:
         #   print "ERROR: could not find the keys in %s" % filename
 
     @command
-    def do_keys(self, args, arguments):
+    def do_key(self, args, arguments):
         """
         Usage:
-               keys info [--json] [NAME][--yaml][--mongo]
-               keys mode MODENAME
-               keys default NAME [--yaml][--mongo]
-               keys add NAME [KEY] [--yaml][--mongo]
-               keys delete NAME [--yaml][--mongo]
-               keys save
+               key list [--json] [NAME][--yaml][--mongo]
+               key info [--json] [NAME][--yaml][--mongo]
+               key mode MODENAME
+               key default NAME [--yaml][--mongo]
+               key add NAME [KEY] [--yaml][--mongo]
+               key delete NAME [--yaml][--mongo]
+               key save
                keys
 
         Manages the keys
@@ -90,32 +91,33 @@ class cm_shell_keys:
 
         Description:
 
-        keys info
+        key list
+        key info
 
              Prints list of keys. NAME of the key can be specified
 
-        keys mode MODENAME
+        key mode MODENAME
 
              Used to change default mode. Valid MODENAMES are
              yaml(default) and mongo mode.
 
-        keys default NAME
+        key default NAME
 
              Used to set a key from the key-list as the default key
 
-        keys add NAME [KEY]
+        key add NAME [KEY]
 
              adding/updating keys. KEY is the key file with full file
              path, if KEY is not provided, you can select a key among
              the files with extension .pub under ~/.ssh. If NAME exists,
              current key value will be overwritten
 
-        keys delete NAME
+        key delete NAME
 
-             deletes a key. In yaml mode it can delete only keys that
+             deletes a key. In yaml mode it can delete only key that
              are not saved in mongo
 
-        keys save
+        key save
 
              Saves the temporary yaml data structure to mongo
         """
@@ -141,12 +143,12 @@ class cm_shell_keys:
             self.use_yaml = False
 
         if self.use_yaml:
-            print "Mode: yaml"
+            # print "Mode: yaml"
             if not self.keys_loaded:
                 self._load_keys()
             key_container = self.keys
         else:
-            print "Mode: mongo"
+            # print "Mode: mongo"
             if not self.mongo_loaded:
                 self._load_mongo()
             if not self.keys_loaded_mongo:
@@ -177,6 +179,7 @@ class cm_shell_keys:
                     else:
                         key_container.__setitem__(
                             arguments["NAME"], "~/.ssh/{0}".format(files[result]))
+                        
             if arguments["NAME"] in key_container.names():
                 if yn_choice("key {0} exists, update?".format(arguments["NAME"]), default='n'):
                     print "Updating key {0} ...".format(arguments["NAME"])
@@ -190,9 +193,12 @@ class cm_shell_keys:
         if arguments["delete"]:
             print "Attempting to delete key. {0}".format(arguments["NAME"])
             if self.use_yaml:
-                print "WARNING: This will only remove the keys that have not been written to the databse\
-already when 'keys save' is called. If your key is already in the database, \
-you should use mongo mode\n"
+
+                print("WARNING: This will only remove the keys that"
+                      "have not been written to the databse already when 'keys save' is"
+                      "called. If your key is already in the database, you should use mongo"
+                      "mode\n")
+                
             key_container.delete(arguments["NAME"])
             return
         if arguments["save"]:
@@ -209,7 +215,7 @@ you should use mongo mode\n"
             key_mongo.setdefault(key_yaml.get_default_key())
             return
 
-        if (arguments["info"]) or (args == ""):
+        if arguments["info"] or arguments["list"] or (args == ""):
             if arguments["--json"]:
                 if arguments["NAME"] is None:
                     name = "keys"
@@ -218,7 +224,8 @@ you should use mongo mode\n"
                 try:
                     print json.dumps(key_container[name], indent=4)
                 except:
-                    print "ERROR: Something went wrong in looking up keys. Did u give the right name??"
+                    print("ERROR: Something went wrong in looking up keys. "
+                          "Did you give the correct key name?")
                 return
             else:
                 mykeys = {}
