@@ -32,13 +32,8 @@ data = mesh.images(cm_user_id=username, clouds=["india"])
 pprint (data)
 
 cloudmesh.banner("LIST KEYS")
-keyobj = cloudmesh.cm_keys_mongo(username)
-print keyobj.names()
-
-cloudmesh.banner("UPDATE LABELS")
-cloudmesh.print_label(username)
-print "setting labels .... prefix->test index->1"
-cloudmesh.update_label(username, prefix="test", id=1)
+#keyobj = cloudmesh.cm_keys_mongo(username)
+#print keyobj.names()
 
 #
 # PROPOSAL FOR NEW MESH API
@@ -108,7 +103,6 @@ image = mesh.image("india", "futuregrid/ubuntu-14.04")
 
 vm = mesh.start(cloud, username, prefix=prefix, index=index, flavor=flavor,
                 image=image)
-
 
 vm = mesh.start("india", username, image=image, flavor=flavor)
 server = vm['server']['id']
