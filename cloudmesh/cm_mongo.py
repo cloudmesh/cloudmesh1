@@ -8,6 +8,7 @@ from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.util.stopwatch import StopWatch
 from cloudmesh.util.encryptdata import decrypt
+from cloudmesh.util.ssh import ssh_vm_with_command as _ssh
 import traceback
 import time
 
@@ -726,6 +727,9 @@ class cm_mongo:
 
     def vmname_next(self):
         return self.vmname(idx="+1")
+
+    def ssh(self, ipaddr, username="ubuntu", command="ls -al", pkey=None):
+        return _ssh(username, ipaddr, command, pkey)
 
 '''
 def main():
