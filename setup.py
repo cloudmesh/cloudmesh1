@@ -57,11 +57,7 @@ setup(
 #               'cloudmesh/etc/racks/diag = etc/racks/*
     entry_points={'console_scripts': [
         'cm-manage = cloudmesh.config.cm_manage:main',
-<<<<<<< HEAD
-        'cm-iu = cloudmesh_install.futuregrid:main',
-=======
-        'cm-iu = cloudmesh_install:iu_credential_fetch_command',        
->>>>>>> cde9652a9578fd8c4fc1aaaa2ff78fe29693bb45
+        'cm-iu = cloudmesh_install.futuregrid:main',        
         'cm-init = cloudmesh.config.cm_init:main',
         'cm-image  = cloudmesh.image.cm_image:main',
         'cm-metric = cloudmesh.metric.cm_metric:main',
