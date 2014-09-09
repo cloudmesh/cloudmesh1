@@ -7,6 +7,7 @@ Usage:
 
 """
 from cloudmesh_install.util import banner
+from cloudmesh_install import config_file
 from paramiko import SSHClient, AutoAddPolicy, BadHostKeyException, AuthenticationException, SSHException
 import sys
 import os
