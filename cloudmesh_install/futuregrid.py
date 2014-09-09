@@ -12,6 +12,7 @@ import sys
 import os
 import stat
 import getpass
+import glob
 from docopt import docopt
 
 
