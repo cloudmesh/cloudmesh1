@@ -8,6 +8,7 @@ from cloudmesh_common.util import banner
 from cloudmesh_common.bootstrap_util import yn_choice
 import time
 from cmd3.console import Console
+from sh import ssh
 
 log = LOGGER(__file__)
 
@@ -77,8 +78,8 @@ def shell_command_vm(arguments):
                         than 9
     """
 
-    call = VMcommand(arguments)
-    call.call_procedure()
+    call_proc = VMcommand(arguments)
+    call_proc.call_procedure()
 
 
 class VMcommand(object):
@@ -219,12 +220,16 @@ class VMcommand(object):
                   preview=preview)
 
 
-    def assign_public_ip(self):
+    def _assign_public_ip(self):
         cloudname = self.get_working_cloud_name()
         if cloudname == False: return
         serverid = self.get_working_server_id(cloudname)
         if serverid == False: return
         assign_public_ip(username=self.username, cloudname=cloudname, serverid=serverid)
+        
+        
+    def _vm_login(self):
+        login_vm()
         
 
     # --------------------------------------------------------------------------
@@ -267,10 +272,10 @@ class VMcommand(object):
                     ls.append(k)
             if len(ls) > 1:
                 Console.warning("There are more than one VM named {0}, please use VM id instead"
-                                .format(arguments['NAME']))
+                                .format(self.rguments['NAME']))
                 return False
             elif len(ls) == 0:
-                Console.error("Could not find VM named {0}".format(arguments['NAME']))
+                Console.error("Could not find VM named {0}".format(self.arguments['NAME']))
                 return False
             else:
                 serverid = ls[0]
@@ -296,7 +301,9 @@ class VMcommand(object):
         elif self.arguments['delete']:
             self._vm_delete()
         elif self.arguments['pip']:
-            self.assign_public_ip()
+            self._assign_public_ip()
+        elif self.arguments['login']:
+            self._vm_login()
 
     # --------------------------------------------------------------------------
 
@@ -723,6 +730,11 @@ def assign_public_ip(username=None, cloudname=None, serverid=None):
     # else:
     # return "Manual public ip assignment is not allowed for {0}
     # cloud".format(cloud)
+    
+
+def ssh_vm(key, vmuser, addr):
+    pass
+    #call(['ssh', 'ubuntu@149.165.159.37'])
 
 # ========================================================================
 def _keyname_sanitation(username, keyname):
