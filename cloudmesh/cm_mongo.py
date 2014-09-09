@@ -101,6 +101,7 @@ class cm_mongo:
     ssh_ec2_rule = Ec2SecurityGroup.Rule(22, 22)
 
     config = None
+    cm_user = None
     userinfo = None
     userid = None
     activated = False
@@ -349,7 +350,8 @@ class cm_mongo:
 
         # Set userinfo
         from cloudmesh.user.cm_user import cm_user
-        self.userinfo = cm_user().info(cm_user_id)
+        self.cm_user = cm_user()
+        self.userinfo = self.cm_user.info(cm_user_id)
         self.userid = cm_user_id
         self.activated = True
 
@@ -577,16 +579,16 @@ class cm_mongo:
         if not cm_user_id:
             cm_user_id = self.userid
 
-        defaults = cm_user().get_defaults(cm_user_id)
+        defaults = self.cm_user.get_defaults(cm_user_id)
         if attribute == "image":
             defaults['images'][cloudname] = value['id'] 
-            cm_user().set_default_attribute(cm_user_id, "images",
+            self.cm_user.set_default_attribute(cm_user_id, "images",
                                             defaults['images'])
         elif attribute == "flavor":
             defaults['flavors'][cloudname] = value['id'] 
-            cm_user().set_default_attribute(cm_user_id, "flavors",
+            self.cm_user.set_default_attribute(cm_user_id, "flavors",
                                             defaults['flavors'])
-        return cm_user().get_defaults(cm_user_id)
+        return self.cm_user.get_defaults(cm_user_id)
 
     def start(self, cloud, cm_user_id, prefix=None, index=None, flavor=None,
               image=None, key=None, meta=None):
@@ -612,7 +614,7 @@ class cm_mongo:
 
         from cloudmesh.user.cm_user import cm_user
         # increase index after the completion of vm_create()
-        cm_user().set_default_attribute(cm_user_id, "index", int(index) + 1)
+        self.cm_user.set_default_attribute(cm_user_id, "index", int(index) + 1)
         return result
 
     def vm_create(self, 
@@ -703,7 +705,6 @@ class cm_mongo:
     
     # ----------------------------------------------------------------------
     # VM naming functions
-    from cloudmesh.shell.vm_label import print_label, update_label
     # ----------------------------------------------------------------------
 
 
