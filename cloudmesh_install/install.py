@@ -7,6 +7,7 @@ import shutil
 import sys
 import stat
 import getpass
+import os
 
 try:
     import yaml
@@ -79,8 +80,12 @@ def install_command(args):
         install enable admin [--username=<username>]
 
     """
+    print "IIIII<" +args +">"
+    
     arguments = docopt(install_command.__doc__, args)
 
+    print arguments
+    
     if arguments["cloudmesh"]:
         deploy()
 
