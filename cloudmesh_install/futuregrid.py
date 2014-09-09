@@ -17,7 +17,7 @@ rc_file_locations = {
         }
     }
 
-def fg_credential_fetch_command(args):
+def iu_credential_fetch_command(args):
     """
     Usage:
         cm-fg -h | --help
@@ -329,5 +329,5 @@ def verify_ssh_login(userid):
 
 
 if __name__ == '__main__':
-    fg_credential_fetch_command(sys.argv)
+    iu_credential_fetch_command(sys.argv)
 
