@@ -1,7 +1,23 @@
+"""
+Usage:
+        cm-iu -h | --help
+        cm-iu user fetch [--username=USERNAME] [--outdir=OUTDIR]
+        cm-iu user create
+        cm-iu user login [--username=USERNAME]
+
+"""
+from cloudmesh_install.util import banner
+from cloudmesh_install import config_file
 from paramiko import SSHClient, AutoAddPolicy, BadHostKeyException, AuthenticationException, SSHException
 import sys
+import os
 import stat
+import getpass
+import glob
+import yaml
+from string import Template
 from docopt import docopt
+from ConfigParser import SafeConfigParser
 
 rc_file_locations = {
     'india': {
@@ -17,18 +33,8 @@ rc_file_locations = {
     }
 
 def iu_credential_fetch_command(args):
-    """
-    Usage:
-        cm-iu -h | --help
-        cm-iu user fetch [--username=USERNAME] [--outdir=OUTDIR]
-        cm-iu user create
-        cm-iu user login [--username=USERNAME]
-    """
-    print args
-
-    print iu_credential_fetch_command.__doc__
     
-    arguments = docopt(iu_credential_fetch_command.__doc__, args)
+    arguments = docopt(__doc__)
 
     print arguments
     

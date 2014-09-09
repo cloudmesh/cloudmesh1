@@ -62,3 +62,17 @@ class ssh:
 
     def destroy(self):
         self.client.close()
+        
+# -----------------------------------------------------------------------
+def ssh_vm_with_command(hostuser, addr, cmd, key=None):
+    from sh import ssh # import
+    host = "{0}@{1}".format(hostuser, addr)
+    cmd = "{0}".format(cmd)
+    if key:
+        key = "-i {0}".format(key)
+        return ssh(host, key, cmd)
+    else:
+        return ssh(host, cmd)
+    
+# -----------------------------------------------------------------------
+    
