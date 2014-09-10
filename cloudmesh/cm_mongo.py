@@ -677,7 +677,21 @@ class cm_mongo:
         type = self.clouds[cm_user_id][cloud]["cm_type"]
         if type == 'openstack':
             ip = cloudmanager.get_public_ip()
-            ret = cloudmanager.assign_public_ip(server, ip)
+
+            # Retry 
+            _max = 5 # times
+            _interval = 3 # second
+            _expected = {'msg': 'success'}
+            for i in range(_max):
+                ret = cloudmanager.assign_public_ip(server, ip)
+                # ret is
+                # {u'badRequest': {u'message': u'No nw_info cache associated with
+                # instance', u'code': 400}}
+                # or 
+                # {'msg': 'success'}
+                if ret == _expected:
+                    break
+                time.sleep(_interval)
             ret = ip
         else:
             ret = None
