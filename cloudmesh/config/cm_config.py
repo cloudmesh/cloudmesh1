@@ -166,7 +166,7 @@ class cm_config(ConfigDict):
         if filename is None:
             filename = self.filename
         ConfigDict.__init__(self, filename=filename)
-
+    
     # ======================================================================
     # Properties
     # ======================================================================
@@ -457,7 +457,7 @@ if __name__ == "__main__":
 
     # print "================="
 
-    # configuration = config.get('india-eucalyptus')
+    # configuration = config.get('india')
     # print configuration
 
     # print configuration['host']
