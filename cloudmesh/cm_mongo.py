@@ -600,9 +600,14 @@ class cm_mongo:
         userinfo = self.userinfo
         prefix = prefix or userinfo['defaults']['prefix']
         index = index or userinfo['defaults']['index']
-        flavor = flavor or userinfo['defaults']['flavors'][cloud] 
-        # or flavor = "2" small
-        image = image or userinfo['defaults']['images'][cloud] 
+        try:
+            flavor = flavor['id']
+        except:
+            flavor = flavor or userinfo['defaults']['flavors'][cloud] 
+        try:
+            image = image['id']
+        except:
+            image = image or userinfo['defaults']['images'][cloud] 
         # or image = '02cf1545-dd83-493a-986e-583d53ee3728' # ubuntu-14.04 
         key = key or "%s_%s" % (cm_user_id, userinfo['defaults']['key'])
         meta = meta or { 'cm_owner': cm_user_id }
