@@ -109,6 +109,11 @@ server = vm['server']['id']
 cloudmesh.banner("ASSIGN PUBLIC IP ADDRESS TO THE VM")
 ip = mesh.assign_public_ip(cloud, server, username)
 
+import time
+
+# WAIT 10 SECONDS UNTIL THE VM IS READY
+time.sleep(10)
+
 cloudmesh.banner("RUN A COMMAND VIA SSH TO THE VM")
 result = mesh.ssh_vm_with_command(ip, command="ls -al")
 
