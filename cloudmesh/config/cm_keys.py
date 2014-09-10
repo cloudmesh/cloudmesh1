@@ -16,10 +16,9 @@ def keytype(name):
     except:
         return name
 
+
 def get_key_from_file(filename):
     return open(path_expand(filename), "r").read()
-
-    
 
         
 class cm_keys_base(object):
@@ -41,8 +40,6 @@ class cm_keys_base(object):
 
     def no_of_keys(self):
         return len(self.names())
-
-
 
     
 class cm_keys_yaml(cm_keys_base):

@@ -155,7 +155,12 @@ class cm_shell_key:
         #
             
         directory = path_expand(arguments["--dir"])
-            
+        source = arguments["--source"]
+
+        if source not in ["ssh", "yaml", "mongo"]:
+            print "ERROR: source is not defined"
+            return
+        
         #
         # PRINT DICT (OK)
         #
@@ -173,7 +178,7 @@ class cm_shell_key:
         # PRINT SYSTEM (OK)
         #
                             
-        if arguments["list"] and arguments["--system"]:
+        if arguments["list"] and source == "ssh":
 
             files = _find_keys(directory)
 
@@ -188,7 +193,7 @@ class cm_shell_key:
         # PRINT YAML (OK)
         #
 
-        if arguments["list"] and arguments["--yaml"]:
+        if arguments["list"] and source == "yaml":
 
             key_store = cm_keys_yaml()
             keynames = key_store.names()
@@ -205,7 +210,7 @@ class cm_shell_key:
         #
 
                 
-        if arguments["list"] and arguments["--mongo"]:
+        if arguments["list"] and source == "mongo":
 
             username = cm_config().username()
             key_store = cm_keys_mongo(username)
