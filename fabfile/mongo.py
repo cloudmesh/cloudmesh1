@@ -13,7 +13,7 @@ import sys
 import os
 import time
 from cloudmesh_common.util import PROGRESS
-import progress, user
+import progress
 
 PROGRESS.set('Cloudmesh Services', 50)
 
@@ -52,7 +52,8 @@ def reset():
     banner("initiating user data to mongo")
     PROGRESS.next()
     print
-    user.mongo()
+    local("user.mongo")
+    PROGRESS.next()
     banner("refreshing cloud info")
     simple()
 

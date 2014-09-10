@@ -4,7 +4,7 @@
 
 from ConfigParser import SafeConfigParser
 from cloudmesh.config.cm_config import cm_config, cm_config_server
-from cloudmesh.util.keys import get_fingerprint
+from cloudmesh.keys.util import get_fingerprint
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.user.cm_userLDAP import cm_userLDAP, get_ldap_user_from_yaml
