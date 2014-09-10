@@ -38,7 +38,6 @@ doc/source/api/*
 doc/build/*
 instances
 keeper
-keys
 local_settings.py
 MANIFEST
 
