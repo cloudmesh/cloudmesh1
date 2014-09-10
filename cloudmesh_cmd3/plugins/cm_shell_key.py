@@ -73,66 +73,59 @@ class cm_shell_key:
     def do_key(self, args, arguments):
         """
         Usage:
-               key list --system [--dir=DIR] [--format=FORMAT]
-               key list --yaml [--dir=DIR] [--format=FORMAT]
-               key list --mongo [--dir=DIR] [--format=FORMAT]                              
-               key add FILENAME [NAME] [--yaml | --mongo]               
-               key alist [NAME][--yaml | --mongo] [--json]
-               key ainfo [NAME][--yaml | --mongo] [--json]
-               key mode MODENAME
-               key default NAME [--yaml | --mongo]
-               key add NAME [KEY] [--yaml | --mongo]
-               key delete NAME [--yaml | --mongo]
-               key save
-               keys
+               key
+               key list [--source=SOURCE] [--dir=DIR] [--format=FORMAT]
+               key add [KEYNAME] FILENAME 
+               key default KEYNAME
+               key delete KEYNAME
 
         Manages the keys
 
         Arguments:
 
-          NAME           The name of a key
-          MODENAME       This is used to specify the mode name. Mode
-                         name can be either 'yaml' or 'mongo'
-          KEY            This is the actual key that has to added
+          SOURCE         mongo, yaml, ssh
+          KEYNAME        The name of a key
           FORMAT         The format of the output
+          FILENAME       The filename in which the key is located
           
         Options:
 
            -v --verbose     verbose mode
-           -j --json        json output
-           -y --yaml        forcefully use yaml mode
-           -m --mongo       forcefully use mongo mode
            --dir=DIR        the directory with keys [default: ~/.ssh]
            --format=FORMAT  the format of the output [default: table]
+           --source=SOURCE  the source for the keys [default: mongo]
            
         Description:
 
+        key list [--source=SOURCE] [--dir=DIR] [--format=FORMAT]
 
-        key list --system  [--dir=DIR] [--json]
+        key list --source=ssh  [--dir=DIR] [--format=FORMAT]
 
-           (new) lists all keys in the directory. If the directory is not
+           lists all keys in the directory. If the directory is not
            specified the defualt will be ~/.ssh
 
-        
-        key add FILENAME [NAME] [--yaml | --mongo]               
+        key list --source=yaml  [--dir=DIR] [--format=FORMAT]           
 
-            (new) adds the key specifid by the filename to either
+           lists all keys in cloudmesh.yaml file in the specified directory.
+            dir is by default ~/.cloudmesh
+           
+        key list --mongo
+
+            list the keys in mongo
+
+        key add [NAME] FILENAME 
+
+            adds the key specifid by the filename to either
             the yaml file or the mongodb
 
-        key add ? [--dir=DIR]
+        key add [--dir=DIR]
         key add select [--dir=DIR]
 
-             (new) interactively selct a key from the specified dir to be added
+             interactively selct a key from the specified dir to be added
         
         key list
-        key info
 
              Prints list of keys. NAME of the key can be specified
-
-        key mode MODENAME
-
-             Used to change default mode. Valid MODENAMES are
-             yaml(default) and mongo mode.
 
         key default NAME
 
@@ -150,9 +143,6 @@ class cm_shell_key:
              deletes a key. In yaml mode it can delete only key that
              are not saved in mongo
 
-        key save
-
-             Saves the temporary yaml data structure to mongo
         """
         print arguments
 
@@ -229,41 +219,9 @@ class cm_shell_key:
                         
             return
 
-        #
-        # MODE 
-        #
-        if arguments["mode"]:
-            if arguments["MODENAME"] == "yaml":
-                self.use_yaml = True
-                print "SUCCESS: Set mode to yaml"
-                return
-            elif arguments["MODENAME"] == "mongo":
-                self.use_yaml = False
-                print "SUCCESS: Set mode to mongo"
-                return
-            else:
-                print("ERROR: Wrong MODENAME. only valid modes are 'mongo' "
-                      "and 'yaml'")
-                return
-
-        elif arguments["--yaml"]:
-            self.use_yaml = True
-        elif arguments["--mongo"]:
-            self.use_yaml = False
-            
-
-        if self.use_yaml:
-            # print "Mode: yaml"
-            if not self.keys_loaded:
-                self._load_keys_from_yaml()
-            key_store = self.keys
-        else:
-            # print "Mode: mongo"
-            if not self.mongo_loaded:
-                self._load_mongo()
-            if not self.keys_loaded_mongo:
-                self._load_keys_mongo()
-            key_store = self.keys_mongo
+        # self._load_keys_from_yaml()
+        # self._load_mongo()
+        # self._load_keys_mongo()
 
         if arguments["default"] and arguments["NAME"]:
             if arguments["NAME"] in key_store.names():
@@ -313,6 +271,7 @@ class cm_shell_key:
 
             key_store.delete(arguments["NAME"])
             return
+
         if arguments["save"]:
             if not self.mongo_loaded:
                 self._load_mongo()
