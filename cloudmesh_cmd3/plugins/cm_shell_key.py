@@ -1,7 +1,9 @@
+import yaml
 from sh import cat
 import json
 from cmd3.shell import command
 from cloudmesh.config.cm_keys import cm_keys_yaml, cm_keys_mongo
+from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import two_column_table
@@ -71,10 +73,12 @@ class cm_shell_key:
     def do_key(self, args, arguments):
         """
         Usage:
-               key list --system  [--dir=DIR] [--json]
+               key list --system [--dir=DIR] [--format=FORMAT]
+               key list --yaml [--dir=DIR] [--format=FORMAT]
+               key list --mongo [--dir=DIR] [--format=FORMAT]                              
                key add FILENAME [NAME] [--yaml | --mongo]               
-               key list [NAME][--yaml | --mongo] [--json]
-               key info [NAME][--yaml | --mongo] [--json]
+               key alist [NAME][--yaml | --mongo] [--json]
+               key ainfo [NAME][--yaml | --mongo] [--json]
                key mode MODENAME
                key default NAME [--yaml | --mongo]
                key add NAME [KEY] [--yaml | --mongo]
@@ -90,7 +94,8 @@ class cm_shell_key:
           MODENAME       This is used to specify the mode name. Mode
                          name can be either 'yaml' or 'mongo'
           KEY            This is the actual key that has to added
-      
+          FORMAT         The format of the output
+          
         Options:
 
            -v --verbose     verbose mode
@@ -98,7 +103,8 @@ class cm_shell_key:
            -y --yaml        forcefully use yaml mode
            -m --mongo       forcefully use mongo mode
            --dir=DIR        the directory with keys [default: ~/.ssh]
-
+           --format=FORMAT  the format of the output [default: table]
+           
         Description:
 
 
@@ -153,8 +159,78 @@ class cm_shell_key:
         def _find_keys(directory):
             return [file for file in listdir(expanduser(directory)) if file.lower().endswith(".pub")]
 
+
         #
-        # MODE
+        # DIR (OK)
+        #
+            
+        directory = path_expand(arguments["--dir"])
+            
+        #
+        # PRINT DICT (OK)
+        #
+
+        def _print_dict(d, header=None):
+            print_format = arguments['--format']
+            if print_format == "json":
+                return json.dumps(d, indent=4)
+            elif print_format == "yaml":
+                return yaml.dump(d, default_flow_style=False)
+            else:
+                return two_column_table(keys,header)                                
+                
+        #
+        # PRINT SYSTEM (OK)
+        #
+                            
+        if arguments["list"] and arguments["--system"]:
+
+            files = _find_keys(directory)
+
+            keys = {}
+            for key in files:
+                keys[key] = directory + "/" + key
+            print _print_dict(keys,header=["Key","Location"])                
+
+            return            
+
+        #
+        # PRINT YAML (OK)
+        #
+
+        if arguments["list"] and arguments["--yaml"]:
+
+            key_store = cm_keys_yaml()
+            keynames = key_store.names()
+            keys = {}
+            for key in keynames:
+                keys[key] = get_fingerprint(key_store[key])
+
+            print _print_dict(keys,header=["Key","Fingerprint"])                                
+                        
+            return
+
+        #
+        # FROM HERE ON BROKEN
+        #
+
+                
+        if arguments["list"] and arguments["--mongo"]:
+
+            username = cm_config().username()
+            key_store = cm_keys_mongo(username)
+            
+            keynames = key_store.names()
+            keys = {}
+            for key in keynames:
+                keys[key] = get_fingerprint(key_store[key])
+
+            print _print_dict(keys,header=["Key","Fingerprint"])                                
+                        
+            return
+
+        #
+        # MODE 
         #
         if arguments["mode"]:
             if arguments["MODENAME"] == "yaml":
@@ -174,57 +250,24 @@ class cm_shell_key:
             self.use_yaml = True
         elif arguments["--mongo"]:
             self.use_yaml = False
-
-        #
-        # LIST SYSTEM
-        #
-        
-        directory = path_expand(arguments["--dir"])
-
-        if arguments["list"] and arguments["--system"]:
-
-            files = _find_keys(directory)
-
-            keys = {}
-            for key in files:
-                keys[key] = directory + "/" + key
-            print two_column_table(keys,header=["Key","Location"])                
-
-            """
-            config = cloudmesh.load("user")
-            print 70 *"A"
-            print type(config)
-            print 70 *"A"
-            print config
-            print 70 *"B"            
-            # print pyaml.dump(config, sys.stdout, vspacing=[2, 1])
-            print 70 *"A"
-            
-            config.write(filename="~/tmp.yaml", format="yaml")
-
-            print cat (path_expand("~/tmp.yaml"))
-            """
-            
-            return
-
             
 
         if self.use_yaml:
             # print "Mode: yaml"
             if not self.keys_loaded:
                 self._load_keys_from_yaml()
-            key_container = self.keys
+            key_store = self.keys
         else:
             # print "Mode: mongo"
             if not self.mongo_loaded:
                 self._load_mongo()
             if not self.keys_loaded_mongo:
                 self._load_keys_mongo()
-            key_container = self.keys_mongo
+            key_store = self.keys_mongo
 
         if arguments["default"] and arguments["NAME"]:
-            if arguments["NAME"] in key_container.names():
-                key_container.setdefault(arguments["NAME"])
+            if arguments["NAME"] in key_store.names():
+                key_store.setdefault(arguments["NAME"])
                 # Update mongo db defaults with new default key
                 print 'The default key is set to: ', arguments['NAME']
             else:
@@ -234,7 +277,7 @@ class cm_shell_key:
         if arguments["add"] and arguments["NAME"]:
             def func():
                 if arguments["KEY"]:
-                    key_container.__setitem__(
+                    key_store.__setitem__(
                         arguments["NAME"], arguments["KEY"])
                 else:
                     files = _find_keys(directory)
@@ -244,10 +287,10 @@ class cm_shell_key:
                     if result == 'q':
                         return
                     else:
-                        key_container.__setitem__(arguments["NAME"],
+                        key_store.__setitem__(arguments["NAME"],
                                                   "{0}/{1}".format(directory,files[result]))
 
-            if arguments["NAME"] in key_container.names():
+            if arguments["NAME"] in key_store.names():
                 if yn_choice("key {0} exists, update?"
                              .format(arguments["NAME"]), default='n'):
                     print "Updating key {0} ...".format(arguments["NAME"])
@@ -268,7 +311,7 @@ class cm_shell_key:
                       "called. If your key is already in the database, "
                       "you should use mongo mode\n")
 
-            key_container.delete(arguments["NAME"])
+            key_store.delete(arguments["NAME"])
             return
         if arguments["save"]:
             if not self.mongo_loaded:
@@ -291,7 +334,7 @@ class cm_shell_key:
                 else:
                     name = arguments["NAME"]
                 try:
-                    print json.dumps(key_container[name], indent=4)
+                    print json.dumps(key_store[name], indent=4)
                 except:
                     print("ERROR: Something went wrong in looking up keys. "
                           "Did you give the correct key name?")
@@ -300,11 +343,11 @@ class cm_shell_key:
                 mykeys = {}
                 # header = ["Default", "Fingerprint"]
                 try:
-                    mykeys["default"] = key_container.get_default_key()
+                    mykeys["default"] = key_store.get_default_key()
                 except:
                     mykeys["default"] = "default is not set, please set it"
-                for name in key_container.names():
-                    mykeys[name] = key_container.fingerprint(name)
+                for name in key_store.names():
+                    mykeys[name] = get_fingerprint(key_store[name])
                 print two_column_table(mykeys)
                 return
 
