@@ -118,7 +118,7 @@ import time, sys
 for i in range(_max):
     print str(i) + " try to ssh..."
     try:
-        result = mesh.ssh_vm_with_command(ip, command="ls -al")
+        result = mesh.ssh_vm_with_command(ipaddr=ip, command="ls -al")
         print result
         if result:
             print result
