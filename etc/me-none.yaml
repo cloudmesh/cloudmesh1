@@ -62,7 +62,7 @@ projects:
   - fg1003
 
 keys:
-  default: $USER
+  default: $USER-key
   keylist:
     $USER-key: ~/.ssh/id_rsa.pub
 
