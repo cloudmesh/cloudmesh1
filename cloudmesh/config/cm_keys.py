@@ -45,15 +45,6 @@ class cm_keys_base(object):
     def get_key_from_file(filename):
         return open(path_expand(filename), "r").read()
 
-    @staticmethod
-    def fingerprint(self, name):
-        value = self.__getitem__(name)
-        # maxsplit set to 2, which means extra blanks (in the comment
-        # field) are ignored
-        t, keystring, comment = value.split(' ', 2)
-        return key_fingerprint(keystring)
-
-
 class cm_keys_yaml(cm_keys_base):
 
     filename = None
