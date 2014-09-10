@@ -58,7 +58,7 @@ def column_table(column_dict, order=None):
     return x
 
 
-def two_column_table(column_dict):
+def two_column_table(column_dict, header=['Default','Value']):
     """prints a table with two columns where the first column are the
     attributes, and the second column are the values.
 
@@ -66,8 +66,19 @@ def two_column_table(column_dict):
     """
     # header = ['Default', 'Value']
     x = PrettyTable()
-    x.add_column('Default', column_dict.keys())
-    x.add_column('Value', column_dict.values())
+    x.add_column(header[0], column_dict.keys())
+    x.add_column(header[1], column_dict.values())
+    x.align = "l"
+    return x
+
+def one_column_table(column, header='Value'):
+    """prints a table with two columns where the first column are the
+    attributes, and the second column are the values.
+
+    :param column_dic: the dictionary to be printed
+    """
+    x = PrettyTable()
+    x.add_column(header, column)
     x.align = "l"
     return x
 

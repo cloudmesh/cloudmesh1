@@ -4,11 +4,16 @@ from cloudmesh.config.cm_keys import cm_keys_yaml, cm_keys_mongo
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import two_column_table
+from cloudmesh_common.tables import one_column_table
+from cloudmesh_common.tables import column_table
 from cloudmesh_install.util import yn_choice
 from cloudmesh.util.menu import menu_return_num
 from os import listdir
 from os.path import expanduser
 from cloudmesh_install import config_file
+from cloudmesh_install.util import path_expand
+from cloudmesh.util.keys import read_key
+from cloudmesh.util.keys import get_fingerprint
 
 log = LOGGER(__file__)
 
@@ -63,12 +68,14 @@ class cm_shell_key:
     def do_key(self, args, arguments):
         """
         Usage:
-               key list [--json] [NAME][--yaml][--mongo]
-               key info [--json] [NAME][--yaml][--mongo]
+               key list --system  [--dir=DIR] [--json]
+               key add FILENAME [NAME] [--yaml | --mongo]               
+               key list [NAME][--yaml | --mongo] [--json]
+               key info [NAME][--yaml | --mongo] [--json]
                key mode MODENAME
-               key default NAME [--yaml][--mongo]
-               key add NAME [KEY] [--yaml][--mongo]
-               key delete NAME [--yaml][--mongo]
+               key default NAME [--yaml | --mongo]
+               key add NAME [KEY] [--yaml | --mongo]
+               key delete NAME [--yaml | --mongo]
                key save
                keys
 
@@ -78,8 +85,8 @@ class cm_shell_key:
 
           NAME           The name of a key
           MODENAME       This is used to specify the mode name. Mode
-                                  name can be either 'yaml' or 'mongo'
-                  KEY            This is the actual key that has to added
+                         name can be either 'yaml' or 'mongo'
+          KEY            This is the actual key that has to added
 
         Options:
 
@@ -87,10 +94,27 @@ class cm_shell_key:
            -j --json        json output
            -y --yaml        forcefully use yaml mode
            -m --mongo       forcefully use mongo mode
-
+           DIR              the directory with keys [default: ~/.ssh]
 
         Description:
 
+
+        key list --system  [--dir=DIR] [--json]
+
+           (new) lists all keys in the directory. If the directory is not
+           specified the defualt will be ~/.ssh
+
+        
+        key add FILENAME [NAME] [--yaml | --mongo]               
+
+            (new) adds the key specifid by the filename to either
+            the yaml file or the mongodb
+
+        key add ? [--dir=DIR]
+        key add select [--dir=DIR]
+
+             (new) interactively selct a key from the specified dir to be added
+        
         key list
         key info
 
@@ -121,6 +145,30 @@ class cm_shell_key:
 
              Saves the temporary yaml data structure to mongo
         """
+        # print arguments
+        
+        if arguments["list"] and arguments["--system"]:
+
+            #directory = path_expand(arguments["--dir"])
+
+            directory = path_expand("~/.ssh")
+            files = [file for file in listdir(expanduser(directory)) if file.lower().endswith(".pub")]
+
+            print one_column_table(files,header="Key")                
+            
+
+            # keys = {}
+            # for f in files:
+            #    key = read_key("{0}/{1}".format(directory,f))
+            #    keys[f] = key['fingerprint']
+            # print two_column_table(keys,header=["Keyname", "Fingerprint"])
+
+                
+
+            
+            return
+
+            
         if arguments["mode"]:
             if arguments["MODENAME"] == "yaml":
                 self.use_yaml = True
@@ -135,9 +183,6 @@ class cm_shell_key:
                       "and 'yaml'")
                 return
 
-        if arguments["--yaml"] and arguments["--mongo"]:
-            print "ERROR: you can specify only one mode"
-            return
         elif arguments["--yaml"]:
             self.use_yaml = True
         elif arguments["--mongo"]:

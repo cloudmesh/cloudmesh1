@@ -1,7 +1,15 @@
 import base64
 import hashlib
+from cloudmesh_install.util import path_expand
 
-
+def read_key(filename):
+    key = {}
+    key['filename'] = path_expand(filename)
+    key['string'] = open(filename, "r").read()
+    key['fingerprint'] = get_fingerprint(key['string'])
+    return key
+    
+        
 def get_fingerprint(entirekey):
     """returns the fingerprint of a key.
     :param entireky: the key
