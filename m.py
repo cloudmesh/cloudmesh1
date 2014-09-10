@@ -112,7 +112,7 @@ ip = mesh.assign_public_ip(cloud, server, username)
 
 cloudmesh.banner("RUN A COMMAND VIA SSH TO THE VM")
 # RETRY
-_max = 5 # times
+_max = 10 # times
 _interval = 5 # second
 import time, sys
 for i in range(_max):
