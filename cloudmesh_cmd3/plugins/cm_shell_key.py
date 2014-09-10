@@ -1,3 +1,4 @@
+from sh import cat
 import json
 from cmd3.shell import command
 from cloudmesh.config.cm_keys import cm_keys_yaml, cm_keys_mongo
@@ -14,6 +15,9 @@ from cloudmesh_install import config_file
 from cloudmesh_install.util import path_expand
 from cloudmesh.util.keys import read_key
 from cloudmesh.util.keys import get_fingerprint
+import cloudmesh
+import pyaml
+import sys
 
 log = LOGGER(__file__)
 
@@ -36,10 +40,9 @@ class cm_shell_key:
                 self.mongo_loaded = True
             except:
                 print("ERROR: could not access Mongodb. "
-
                       "Have you started the mongo server?")
 
-    def _load_keys(self):
+    def _load_keys_from_yaml(self):
         try:
             filename = config_file("/cloudmesh.yaml")
             if self.echo:
@@ -87,14 +90,14 @@ class cm_shell_key:
           MODENAME       This is used to specify the mode name. Mode
                          name can be either 'yaml' or 'mongo'
           KEY            This is the actual key that has to added
-
+      
         Options:
 
            -v --verbose     verbose mode
            -j --json        json output
            -y --yaml        forcefully use yaml mode
            -m --mongo       forcefully use mongo mode
-           DIR              the directory with keys [default: ~/.ssh]
+           --dir=DIR        the directory with keys [default: ~/.ssh]
 
         Description:
 
@@ -145,30 +148,14 @@ class cm_shell_key:
 
              Saves the temporary yaml data structure to mongo
         """
-        # print arguments
-        
-        if arguments["list"] and arguments["--system"]:
+        print arguments
 
-            #directory = path_expand(arguments["--dir"])
+        def _find_keys(directory):
+            return [file for file in listdir(expanduser(directory)) if file.lower().endswith(".pub")]
 
-            directory = path_expand("~/.ssh")
-            files = [file for file in listdir(expanduser(directory)) if file.lower().endswith(".pub")]
-
-            print one_column_table(files,header="Key")                
-            
-
-            # keys = {}
-            # for f in files:
-            #    key = read_key("{0}/{1}".format(directory,f))
-            #    keys[f] = key['fingerprint']
-            # print two_column_table(keys,header=["Keyname", "Fingerprint"])
-
-                
-
-            
-            return
-
-            
+        #
+        # MODE
+        #
         if arguments["mode"]:
             if arguments["MODENAME"] == "yaml":
                 self.use_yaml = True
@@ -188,10 +175,44 @@ class cm_shell_key:
         elif arguments["--mongo"]:
             self.use_yaml = False
 
+        #
+        # LIST SYSTEM
+        #
+        
+        directory = path_expand(arguments["--dir"])
+
+        if arguments["list"] and arguments["--system"]:
+
+            files = _find_keys(directory)
+
+            keys = {}
+            for key in files:
+                keys[key] = directory + "/" + key
+            print two_column_table(keys,header=["Key","Location"])                
+
+            """
+            config = cloudmesh.load("user")
+            print 70 *"A"
+            print type(config)
+            print 70 *"A"
+            print config
+            print 70 *"B"            
+            # print pyaml.dump(config, sys.stdout, vspacing=[2, 1])
+            print 70 *"A"
+            
+            config.write(filename="~/tmp.yaml", format="yaml")
+
+            print cat (path_expand("~/tmp.yaml"))
+            """
+            
+            return
+
+            
+
         if self.use_yaml:
             # print "Mode: yaml"
             if not self.keys_loaded:
-                self._load_keys()
+                self._load_keys_from_yaml()
             key_container = self.keys
         else:
             # print "Mode: mongo"
@@ -216,14 +237,15 @@ class cm_shell_key:
                     key_container.__setitem__(
                         arguments["NAME"], arguments["KEY"])
                 else:
-                    files = [file for file in listdir(expanduser("~/.ssh")) if file.lower().endswith(".pub")]
+                    files = _find_keys(directory)
+                    
                     result = menu_return_num(
                         title="Select a public key", menu_list=files, tries=3)
                     if result == 'q':
                         return
                     else:
                         key_container.__setitem__(arguments["NAME"],
-                                                  "~/.ssh/{0}".format(files[result]))
+                                                  "{0}/{1}".format(directory,files[result]))
 
             if arguments["NAME"] in key_container.names():
                 if yn_choice("key {0} exists, update?"
