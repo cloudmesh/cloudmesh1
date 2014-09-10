@@ -163,6 +163,10 @@ class cm_keys_mongo(cm_keys_base):
                     {'cm_user_id': user}
         )
 
+    def write(self):
+        """writes the updated dict to the config"""
+        self.config.write()
+        
     def _getvalue(self, name):
         """
         returns value corresponding to the name of the key.
@@ -291,28 +295,6 @@ class cm_keys_mongo(cm_keys_base):
 
 class cm_keys(cm_keys_base):
 
-    filename = None
-
-    def __init__(self, filename=None):
-        """initializes based on cm_config and returns pointer
-        to the keys dict.
-        """
-
-        # Check if the file exists
-        self.config = cm_config(filename)
-
-    def _getvalue(self, name):
-        if name == 'keys':
-            return self.config.get("cloudmesh.keys")
-        elif name == 'default':
-            key = self.config.get("cloudmesh.keys.default")
-        else:
-            key = name
-        value = self.config.get("cloudmesh.keys.keylist")[key]
-        return value
-
-    def get_default_key(self):
-        return self.config.get("cloudmesh.keys.default")
 
     def __getitem__(self, name):
         value = self._getvalue(name)
@@ -355,24 +337,9 @@ class cm_keys(cm_keys_base):
         else:
             default = None
 
-    def setdefault(self, name):
-        """sets the default key"""
-        self.config["cloudmesh"]["keys"]["default"] = name
-
     def default(self):
         """sets the default key"""
         return self.config.userkeys('default')
 
-    def names(self):
-        """returns all key names in an array"""
-        return self.config.get("cloudmesh.keys.keylist").keys()
 
-        
-    def __str__(self):
-        """returns the dict in a string representing the project"""
-        return str(self.config)
-
-    def write(self):
-        """writes the updated dict to the config"""
-        self.config.write()
 
