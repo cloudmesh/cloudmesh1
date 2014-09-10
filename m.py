@@ -91,7 +91,7 @@ print vmname
 
 cloudmesh.banner("SET A DEFAULT IMAGE OR A DEFAULT FLAVOR")
 mesh.default("india", "image", image)
-mesh.deafult("india", "flavor", flavor)
+mesh.default("india", "flavor", flavor)
 
 
 cloudmesh.banner("START A VM WITH OPTIONS")
@@ -100,10 +100,8 @@ prefix = "gregor"
 index = "10000"
 flavor = mesh.flavor("india", "m1.small") 
 image = mesh.image("india", "futuregrid/ubuntu-14.04") 
-
 vm = mesh.start(cloud, username, prefix=prefix, index=index, flavor=flavor,
                 image=image)
-
 vm = mesh.start("india", username, image=image, flavor=flavor)
 server = vm['server']['id']
 
@@ -111,7 +109,23 @@ server = vm['server']['id']
 cloudmesh.banner("ASSIGN PUBLIC IP ADDRESS TO THE VM")
 ip = mesh.assign_public_ip(cloud, server, username)
 
-cloudmesh.banner("RUN A COMMAND VIA SSH TO THE VM")
-result = mesh.ssh_vm_with_command(ip, command="ls -al")
 
+cloudmesh.banner("RUN A COMMAND VIA SSH TO THE VM")
+# RETRY
+_max = 5 # times
+_interval = 5 # second
+import time, sys
+for i in range(_max):
+    print str(i) + " try to ssh..."
+    try:
+        result = mesh.ssh_vm_with_command(ipaddr=ip, command="ls -al")
+        print result
+        if result:
+            print result
+            break
+    except:
+        print sys.exc_info()[0]
+        time.sleep(_interval)
+
+cloudmesh.banner("DELETE THE VM: " + server)
 mesh.delete(cloud, server, username)
