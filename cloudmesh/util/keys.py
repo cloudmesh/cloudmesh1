@@ -32,11 +32,12 @@ def key_fingerprint(key_string):
 #
 # TODO: this function seems not to work?
 #
-def key_validate(keytype, filename):
+def key_validate(keytype, key):
     """reads the key string from a file. THIS FUNCTION HAS A BUG.
 
-    :param filename: the aname of the file
-    :param ketypye: it must be 'file' otherwise this method does not work.
+    :param key: either the name of  a file that contains the key, or the entire contents of such a file
+    :param ketypye: if 'file' the key is read form the file specified in key.
+                    if 'string' the key is passed as a string in key
     """
     keystring = "undefined"
     if keytype.lower() == "file":
@@ -44,9 +45,8 @@ def key_validate(keytype, filename):
             keystring = open(filename, "r").read()
         except:
             return False
-    else:
-        # TODO: BUG: what is file?
-        keystring = file
+    elif keytype.lower() == "string":
+        keystring = filename
 
     try:
 

@@ -4,9 +4,35 @@ from cloudmesh.util.keys import get_fingerprint
 from cloudmesh.util.keys import key_fingerprint, key_validate
 from cloudmesh.cm_mongo import cm_mongo
 import os
+from  cloudmesh_install.util import path_expand
 
-class cm_keys_base:
-    def type(self, name):
+class cm_keys_base(object):
+
+    def defined(self, name):
+        return name in self.names()
+
+    def __delitem__(self, name):
+        '''
+        deletes the key with the given name. Will not succeed if the key is the default key
+        '''    
+        self.delete(name)
+    
+    def __delitem__(self, name):
+        self.delete(name)
+    
+    def __len__(self):
+        return len(self.names())
+
+    def no_of_keys(self):
+        return len(self.names())
+
+    @staticmethod    
+    def validate(self, key):
+        """NOT IMPLEMENTED"""
+        pass 
+    
+    @staticmethod
+    def keytype(self, name):
         try:
             if name.startswith("ssh"):
                 return "string"
@@ -15,17 +41,11 @@ class cm_keys_base:
         except:
             return "keys"
 
-    def _get_key_from_file(self, filename):
-        return open(self._path_expand(os.path.expanduser(filename)),
-                    "r").read()
-    def _path_expand(self, text):
-        """ returns a string with expanded variavble """
-        template = Template(text)
-        result = template.substitute(os.environ)
-        result = os.path.expanduser(result)
-        return result
+    @staticmethod
+    def get_key_from_file(filename):
+        return open(path_expand(filename), "r").read()
 
-
+    @staticmethod
     def fingerprint(self, name):
         value = self.__getitem__(name)
         # maxsplit set to 2, which means extra blanks (in the comment
@@ -82,7 +102,7 @@ class cm_keys_yaml(cm_keys_base):
 
         if key_type == "file":
             try:
-                key_value = self._get_key_from_file(value)
+                key_value = cm_keys_yaml.get_key_from_file(value)
             except:
                 print "ERROR: Could not read from file. Make sure everything about the file is alright"
                 return        
@@ -100,12 +120,6 @@ class cm_keys_yaml(cm_keys_base):
 
         self.__setitem__(name, value, keytype = keytype)
         
-    def __delitem__(self, name):
-        '''
-        deletes the key with the given name. WIll not succeed if the key is the default key
-        '''    
-        self.delete(name)
-
     def delete(self, name):
         '''
         deletes the key with the given name. WIll not succeed if the key is the default key
@@ -139,19 +153,6 @@ class cm_keys_yaml(cm_keys_base):
     def __str__(self):
         """returns the dict in a string representing the project"""
         return str(self.config)
-
-    def fingerprint(self, name):
-        value = self.__getitem__(name)
-        # maxsplit set to 2, which means extra blanks (in the comment
-        # field) are ignored
-        t, keystring, comment = value.split(' ', 2)
-        return key_fingerprint(keystring)
-
-    def __len__(self):
-        return len(self.names())
-
-    def no_of_keys(self):
-        return len(self.names())
 
 
 class cm_keys_mongo(cm_keys_base):
@@ -204,7 +205,7 @@ class cm_keys_mongo(cm_keys_base):
         if key_type == "file":
             try:
                 print "Detected file. Will try to read from file"
-                value = self._get_key_from_file(value)
+                value = cm_keys_mongo.get_key_from_file(value)
             except:
                 print "ERROR: Could not read from file. Make sure everything about the file is alright"
                 return      
@@ -294,41 +295,18 @@ class cm_keys_mongo(cm_keys_base):
         """writes the updated dict to the config"""
         self.config.write()
 
-    def __len__(self):
-        return len(self.names())
 
-    def no_of_keys(self):
-        return len(self.names())
-
-
-
-
-##THIS PART OF THE CODE WAS ALREADY THERE WHEN I STARTED MODIYING IT. THIS IS THE ORIGINAL VERSION
-
-
-
-class cm_keys:
+class cm_keys(cm_keys_base):
 
     filename = None
 
     def __init__(self, filename=None):
+        """initializes based on cm_config and returns pointer
+        to the keys dict.
         """
-initializes based on cm_config and returns pointer
-to the keys dict.
-"""
 
         # Check if the file exists
         self.config = cm_config(filename)
-
-    def type(self, name):
-        try:
-            value = self._getvalue(name)
-            if value.startswith("ssh"):
-                return "string"
-            else:
-                return "file"
-        except:
-            return "keys"
 
     def _getvalue(self, name):
         if name == 'keys':
@@ -345,10 +323,10 @@ to the keys dict.
 
     def __getitem__(self, name):
         value = self._getvalue(name)
-        key_type = self.type(name)
+        key_type = cm_keys.keytype(name)
 
         if key_type == "file":
-            value = self._get_key_from_file(value)
+            value = cm_keys_mongo.get_key_from_file(value)
 
         return value
 
@@ -365,9 +343,6 @@ to the keys dict.
             expanded_value = self.__getitem__(name)
             self.__setitem__(name, expanded_value)
         print "EXPANDED", expanded_value
-
-    def __delitem__(self, name):
-        self.delete(name)
 
     def delete(self, name):
         """ not tested"""
@@ -387,17 +362,6 @@ to the keys dict.
         else:
             default = None
 
-    def _path_expand(self, text):
-        """ returns a string with expanded variavble """
-        template = Template(text)
-        result = template.substitute(os.environ)
-        result = os.path.expanduser(result)
-        return result
-
-    def _get_key_from_file(self, filename):
-        return open(self._path_expand(os.path.expanduser(filename)),
-                    "r").read()
-
     def setdefault(self, name):
         """sets the default key"""
         self.config["cloudmesh"]["keys"]["default"] = name
@@ -410,12 +374,7 @@ to the keys dict.
         """returns all key names in an array"""
         return self.config.get("cloudmesh.keys.keylist").keys()
 
-    def validate(self, line):
-        """
-validates if a default key os ok and follows
-'keyencryptiontype keystring keyname'
-"""
-
+        
     def __str__(self):
         """returns the dict in a string representing the project"""
         return str(self.config)
@@ -424,18 +383,3 @@ validates if a default key os ok and follows
         """writes the updated dict to the config"""
         self.config.write()
 
-    def fingerprint(self, name):
-        value = self.__getitem__(name)
-        # maxsplit set to 2, which means extra blanks (in the comment
-        # field) are ignored
-        t, keystring, comment = value.split(' ', 2)
-        return key_fingerprint(keystring)
-
-    def defined(self, name):
-        return name in self.names()
-
-    def __len__(self):
-        return len(self.names())
-
-    def no_of_keys(self):
-        return len(self.names())
