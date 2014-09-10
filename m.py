@@ -91,7 +91,7 @@ print vmname
 
 cloudmesh.banner("SET A DEFAULT IMAGE OR A DEFAULT FLAVOR")
 mesh.default("india", "image", image)
-mesh.deafult("india", "flavor", flavor)
+mesh.default("india", "flavor", flavor)
 
 
 cloudmesh.banner("START A VM WITH OPTIONS")
@@ -100,10 +100,8 @@ prefix = "gregor"
 index = "10000"
 flavor = mesh.flavor("india", "m1.small") 
 image = mesh.image("india", "futuregrid/ubuntu-14.04") 
-
 vm = mesh.start(cloud, username, prefix=prefix, index=index, flavor=flavor,
                 image=image)
-
 vm = mesh.start("india", username, image=image, flavor=flavor)
 server = vm['server']['id']
 
