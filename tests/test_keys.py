@@ -8,16 +8,16 @@ nosetests -v
 
 """
 import sys
-
+import os
 from sh import grep
 import json
 import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 
-from cloudmesh.config.cm_keys import cm_keys
+from cloudmesh.config.cm_keys import cm_keys_yaml, keytype
 from cloudmesh_common.util import HEADING
 from cloudmesh_install.util import path_expand
+from cloudmesh.util.keys import get_fingerprint
 
 from cloudmesh_install import config_file
 
@@ -28,8 +28,10 @@ class Test_cloudmesh:
     filename = config_file("/cloudmesh.yaml")
 
     def setup(self):
-        self.keys = cm_keys(self.filename)
-
+        self.key_store = cm_keys_yaml(self.filename)
+        self.username = os.environ['USER']
+        self.mykey = "{0}-key".format(self.username)
+                
     def tearDown(self):
         pass
 
@@ -37,85 +39,68 @@ class Test_cloudmesh:
     def test00_file(self):
         HEADING()
         try:
-            self.keys = cm_keys("wrong file")
+            self.key_store = cm_keys_yaml("wrong file")
         except:
             pass
 
 
     def test01_print(self):
         HEADING()
-        print self.keys
+        print self.key_store
         pass
 
     def test02_names(self):
         HEADING()
-        print self.keys.names()
-
-        names = []
-        lines = grep("ssh-", path_expand(self.filename))
-        for line in lines:
-            (name, rest) = line.strip().split(":")
-            if name not in self.keys.names():
-                print "Key", name, "not found"
-                assert false
-                return
-            else:
-                names.append(name)
-        print "keys found", names
-        assert len(names) == len(self.keys.names())
+        names = self.key_store.names()
+        print names
+        assert len(names) >0
 
     def test03_default(self):
         HEADING()
-        print self.keys.default()
+        print self.key_store.default()
 
     def test04_getvalue(self):
         HEADING()
-        for key in self.keys.names():
-            print self.keys._getvalue(key)
+        for key in self.key_store.names():
+            print self.key_store._getvalue(key)
 
     def test05_set(self):
         HEADING()
-        first_key = self.keys.names()[0]
-        self.keys.setdefault(first_key)
-        print self.keys.default()
+        first_key = self.key_store.names()[0]
+        self.key_store.setdefault(first_key)
+        print self.key_store.default()
 
     def test06_get(self):
         HEADING()
-        first_key = self.keys.names()[0]
-        print self.keys[first_key]
+        first_key = self.key_store.names()[0]
+        print self.key_store[first_key]
 
     def test07_get(self):
         HEADING()
-        print self.keys["default"]
+        print self.key_store["default"]
 
     def test08_set(self):
         HEADING()
 
-        print self.keys["keys"]
+        print self.key_store["keys"]
+        print self.key_store["default"]
 
-        self.keys["gregor"] = "~/.ssh/id_rsa.pub"
-        self.keys["hello"] = "~/.ssh/id_rsa"
-
-        print self.keys["keys"]
-
-        self.keys["default"] = "hello"
-        print self.keys["keys"]
-
-        # assert (self.keys._getvalue("default") == "hello") and
-        # (self.keys._getvalue("gregor") == "world")
+        assert type(self.key_store["keys"]) == dict
 
     def test09_type(self):
         HEADING()
-        print "Find key type of gregor:", self.keys.type("gregor")
-        for name in self.keys.names():
+        print "Find key type of {0}:".format(self.mykey), keytype(self.mykey)
+        for name in self.key_store.names():
             print name
-            value = self.keys[name]
-            print self.keys.type(name), name, value
+            value = self.key_store[name]
+            print keytype(name), name, value
 
         assert True
-        # assert (self.keys.type("gregor") == "file")
+        # assert (keytype(self.mykey) == "file")
 
     def test10_fingerprint(self):
         HEADING()
-        for name in self.keys.names():
-            print self.keys.fingerprint(name)
+        for name in self.key_store.names():
+            key = self.key_store[name]
+            print name, key
+            print get_fingerprint(key)

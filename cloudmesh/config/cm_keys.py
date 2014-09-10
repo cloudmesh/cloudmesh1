@@ -7,7 +7,21 @@ import os
 from  cloudmesh_install.util import path_expand
 
 
+def keytype(name):
+    try:
+        if name.startswith("ssh"):
+            return "string"
+        else:
+            return "file"
+    except:
+        return name
 
+def get_key_from_file(filename):
+    return open(path_expand(filename), "r").read()
+
+    
+
+        
 class cm_keys_base(object):
 
     def defined(self, name):
@@ -27,25 +41,6 @@ class cm_keys_base(object):
 
     def no_of_keys(self):
         return len(self.names())
-
-    @staticmethod    
-    def validate(self, key):
-        """NOT IMPLEMENTED"""
-        pass 
-    
-    @staticmethod
-    def keytype(self, name):
-        try:
-            if name.startswith("ssh"):
-                return "string"
-            else:
-                return "file"
-        except:
-            return name
-
-    @staticmethod
-    def get_key_from_file(filename):
-        return open(path_expand(filename), "r").read()
 
 
 
@@ -83,15 +78,16 @@ class cm_keys_yaml(cm_keys_base):
         gets key corrosponding to the name
         '''
         value = self._getvalue(name)
-        key_type = cm_keys.keytype(name)
+        if name != 'keys':
+            key_type = keytype(name)
 
-        if key_type == "file":
-            value = cm_keys_mongo.get_key_from_file(value)
+            if key_type == "file":
+                value = get_key_from_file(value)
 
         return value
 
 
-    def __setitem__(self, name, value)
+    def __setitem__(self, name, value):
 
         '''
         adds new key name and value. If name is already present the value is changed.
@@ -106,10 +102,10 @@ class cm_keys_yaml(cm_keys_base):
             return
                 
         key_value = value
-        key_type = cm_keys.keytype(key_value)
+        key_type = keytype(key_value)
         if key_type == "file":
             try: 
-                key_value = cm_keys_mongo.get_key_from_file(value)
+                key_value = get_key_from_file(value)
             except:
                 print "ERROR: reading key file {0}".format(value)
                 return        
@@ -151,7 +147,7 @@ class cm_keys_yaml(cm_keys_base):
                 print "ERROR: Key not found"
                 return
             
-    """
+    '''
     def delete(self, name):
         """ not tested"""
         newdefault = False
@@ -169,7 +165,7 @@ class cm_keys_yaml(cm_keys_base):
                 default = self.config.get("cloudmesh.keys.keylist")[0]
         else:
             default = None
-    """
+    '''
 
             
     def setdefault(self, name):
@@ -249,7 +245,7 @@ class cm_keys_mongo(cm_keys_base):
         if key_type == "file":
             try:
                 print "Detected file. Will try to read from file"
-                value = cm_keys_mongo.get_key_from_file(value)
+                value = get_key_from_file(value)
             except:
                 print "ERROR: Could not read from file. Make sure everything about the file is alright"
                 return      
