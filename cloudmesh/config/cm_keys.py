@@ -41,12 +41,15 @@ class cm_keys_base(object):
             else:
                 return "file"
         except:
-            return "keys"
+            return name
 
     @staticmethod
     def get_key_from_file(filename):
         return open(path_expand(filename), "r").read()
 
+
+
+    
 class cm_keys_yaml(cm_keys_base):
 
     filename = None
@@ -75,44 +78,61 @@ class cm_keys_yaml(cm_keys_base):
         value = self.config.get("cloudmesh.keys.keylist")[key]
         return value
 
-    def get_default_key(self):
-        '''
-        returns the default key
-        '''        
-        return self.config.get("cloudmesh.keys.default")
-
     def __getitem__(self, name):
         '''
         gets key corrosponding to the name
         '''
-        return self._getvalue(name)
-
-    def __setitem__(self, name, value, key_type = "file"):
-        '''
-        adds new key name and value. If name is already present the value is changed.
-        The parameter key_type should  be set to file if you want to read the key from a file.
-        '''
+        value = self._getvalue(name)
+        key_type = cm_keys.keytype(name)
 
         if key_type == "file":
-            try:
-                key_value = cm_keys_yaml.get_key_from_file(value)
-            except:
-                print "ERROR: Could not read from file. Make sure everything about the file is alright"
-                return        
-        else:
-            print "Detected key"
-            key_value = value
-        self.config["cloudmesh"]["keys"]["keylist"][name] = key_value
-        print "SUCCESS: key was added. name:{0}".format(name)
+            value = cm_keys_mongo.get_key_from_file(value)
 
-    def set(self, name, value, expand=False, key_type = "file"):
+        return value
+
+
+    def __setitem__(self, name, value)
+
         '''
         adds new key name and value. If name is already present the value is changed.
         The parameter key_type should  be set to file if you want to read the key from a file.
         '''
 
-        self.__setitem__(name, value, keytype = keytype)
+        if name == 'default':
+            #
+            # bug check if the key specified with value exists, otehrwise we can not set it.
+            #
+            self.config["cloudmesh"]["keys"]["default"] = value
+            return
+                
+        key_value = value
+        key_type = cm_keys.keytype(key_value)
+        if key_type == "file":
+            try: 
+                key_value = cm_keys_mongo.get_key_from_file(value)
+            except:
+                print "ERROR: reading key file {0}".format(value)
+                return        
+
+        self.config["cloudmesh"]["keys"]["keylist"][name] = key_value
         
+        
+
+    def set(self, name, value, expand=False):
+        '''
+        adds new key name and value. If name is already present the value is changed.
+        The parameter key_type should  be set to file if you want to read the key from a file.
+        '''
+        self.__setitem__(name, value)
+        if expand:
+            expanded_value = self.__getitem__(name)
+            self.__setitem__(name, expanded_value)
+
+    #
+    # logic is wrong
+    # * if default deleted than pick next key in the list as default. if no other key exists we can not delete
+    # * if we secify regular key it will be removed from yaml
+    #
     def delete(self, name):
         '''
         deletes the key with the given name. WIll not succeed if the key is the default key
@@ -130,7 +150,28 @@ class cm_keys_yaml(cm_keys_base):
             else:
                 print "ERROR: Key not found"
                 return
+            
+    """
+    def delete(self, name):
+        """ not tested"""
+        newdefault = False
+        if name == 'default':
+            key = self.config.get("cloudmesh.keys.default")
+            newdefault = True
+        else:
+            key = name
 
+        del self.config.get("cloudmesh.keys.keylist")[key]
+
+        # ERROR Defalut is not self?
+        if newdefault:
+            if len(self.config.get("cloudmesh.keys.keylist")) > 0:
+                default = self.config.get("cloudmesh.keys.keylist")[0]
+        else:
+            default = None
+    """
+
+            
     def setdefault(self, name):
         """
         sets the default key
@@ -147,6 +188,11 @@ class cm_keys_yaml(cm_keys_base):
         """returns the dict in a string representing the project"""
         return str(self.config)
 
+    def default(self):
+        """gets the default key"""
+        return self.config.get('cloudmesh.keys.default')
+
+    
 
 class cm_keys_mongo(cm_keys_base):
 
@@ -180,6 +226,7 @@ class cm_keys_mongo(cm_keys_base):
         value = self.user_info["keys"][name]
         return value
 
+    
     def get_default_key(self):
         """
         returns default key.
@@ -291,55 +338,5 @@ class cm_keys_mongo(cm_keys_base):
     def write(self):
         """writes the updated dict to the config"""
         self.config.write()
-
-
-class cm_keys(cm_keys_base):
-
-
-    def __getitem__(self, name):
-        value = self._getvalue(name)
-        key_type = cm_keys.keytype(name)
-
-        if key_type == "file":
-            value = cm_keys_mongo.get_key_from_file(value)
-
-        return value
-
-    def __setitem__(self, name, value):
-        if name == 'default':
-            self.config["cloudmesh"]["keys"]["default"] = value
-            return
-        else:
-            self.config["cloudmesh"]["keys"]["keylist"][name] = value
-
-    def set(self, name, value, expand=False):
-        self.__setitem__(name, value)
-        if expand:
-            expanded_value = self.__getitem__(name)
-            self.__setitem__(name, expanded_value)
-        print "EXPANDED", expanded_value
-
-    def delete(self, name):
-        """ not tested"""
-        newdefault = False
-        if name == 'default':
-            key = self.config.get("cloudmesh.keys.default")
-            newdefault = True
-        else:
-            key = name
-
-        del self.config.get("cloudmesh.keys.keylist")[key]
-
-        # ERROR Defalut is not self?
-        if newdefault:
-            if len(self.config.get("cloudmesh.keys.keylist")) > 0:
-                default = self.config.get("cloudmesh.keys.keylist")[0]
-        else:
-            default = None
-
-    def default(self):
-        """sets the default key"""
-        return self.config.userkeys('default')
-
 
 
