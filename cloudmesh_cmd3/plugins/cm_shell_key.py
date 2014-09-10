@@ -1,3 +1,4 @@
+from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
 import yaml
 from sh import cat
 import json
@@ -97,7 +98,6 @@ class cm_shell_key:
            
         Description:
 
-        key list [--source=SOURCE] [--dir=DIR] [--format=FORMAT]
 
         key list --source=ssh  [--dir=DIR] [--format=FORMAT]
 
@@ -109,7 +109,7 @@ class cm_shell_key:
            lists all keys in cloudmesh.yaml file in the specified directory.
             dir is by default ~/.cloudmesh
            
-        key list --mongo
+        key list [--format=FORMAT]
 
             list the keys in mongo
 
@@ -214,11 +214,13 @@ class cm_shell_key:
 
             username = cm_config().username()
             key_store = cm_keys_mongo(username)
-            
             keynames = key_store.names()
+            
             keys = {}
             for key in keynames:
-                keys[key] = get_fingerprint(key_store[key])
+
+                keys[key] = key_store[key]
+                #get_fingerprint(key_store[key])
 
             print _print_dict(keys,header=["Key","Fingerprint"])                                
                         
