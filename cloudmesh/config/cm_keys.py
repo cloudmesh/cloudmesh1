@@ -1,7 +1,7 @@
 from cloudmesh.config.cm_config import cm_config
 from string import Template
-from cloudmesh.util.keys import get_fingerprint
-from cloudmesh.util.keys import key_fingerprint, key_validate
+from cloudmesh.keys.util import get_fingerprint
+from cloudmesh.keys.util import key_fingerprint, key_validate
 from cloudmesh.cm_mongo import cm_mongo
 import os
 from  cloudmesh_install.util import path_expand
