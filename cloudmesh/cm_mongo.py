@@ -213,10 +213,10 @@ class cm_mongo:
         if force:
             recreate = True
         # new user
-        elif not cm_user_id in self.clouds:
+        elif cm_user_id not in self.clouds:
             recreate = True
         # new cloud for that user
-        elif not cloud_name in self.clouds[cm_user_id]:
+        elif cloud_name not in self.clouds[cm_user_id]:
             recreate = True
         # manager pointer does not exist
         elif 'manager' not in self.clouds[cm_user_id][cloud_name]:
@@ -296,7 +296,7 @@ class cm_mongo:
 
     def active_clouds(self, cm_user_id):
         ret_clouds = None
-        
+
         # If the user has registered and activated some clouds from the web gui,
         # there will be entries in the db.
         user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
@@ -318,7 +318,7 @@ class cm_mongo:
         return user['project']
 
     def activate(self, cm_user_id, names=None):
-        
+
         # The cm_user_id should be ALWAYS set and passed through to this call
         # On Web gui the g.user.id has the username
         # On command line shell, we should maintain a global object/variable
@@ -329,7 +329,7 @@ class cm_mongo:
         #
         if cm_user_id is None:
             cm_user_id = self.config.username()
-        
+
         # the list of active clouds is always coming from Mongo.
         # In case of web gui, it is from the defaults db/collection as the user
         # will be required to register and activate some clouds before any
@@ -337,17 +337,20 @@ class cm_mongo:
         # In case of CLI, it could fail safe to the list from yaml file.
         #
         cloudnames = self.active_clouds(cm_user_id)
-        
+
         if cloudnames:
             for cloud_name in cloudnames:
                 log.info("Activating -> {0}".format(cloud_name))
                 cloud = self.get_cloud(cm_user_id, cloud_name)
                 if not cloud:
-                    log.info("Activation of cloud {0} and user {1} Failed!".format(cloud_name, cm_user_id))
+                    log.info(
+                        "Activation of cloud {0} and user {1} Failed!".format(cloud_name, cm_user_id))
                 else:
-                    log.info("Activation of cloud {0} and user {1} Succeeded!".format(cloud_name, cm_user_id))
+                    log.info("Activation of cloud {0} and user {1} Succeeded!".format(
+                        cloud_name, cm_user_id))
         else:
-            log.info("No active clouds entries found in database so no clouds were activated!")
+            log.info(
+                "No active clouds entries found in database so no clouds were activated!")
 
         # Set userinfo
         from cloudmesh.user.cm_user import cm_user
@@ -560,7 +563,7 @@ class cm_mongo:
             return self.flavors([cloudname])[cloudname][flavorname]
         except:
             for key, value in \
-            self.flavors([cloudname])[cloudname].iteritems():
+                    self.flavors([cloudname])[cloudname].iteritems():
                 if value['name'] == flavorname:
                     return value
             return -1
@@ -580,20 +583,20 @@ class cm_mongo:
 
         defaults = self.cm_user.get_defaults(cm_user_id)
         if attribute == "image":
-            defaults['images'][cloudname] = value['id'] 
+            defaults['images'][cloudname] = value['id']
             self.cm_user.set_default_attribute(cm_user_id, "images",
-                                            defaults['images'])
+                                               defaults['images'])
         elif attribute == "flavor":
-            defaults['flavors'][cloudname] = value['id'] 
+            defaults['flavors'][cloudname] = value['id']
             self.cm_user.set_default_attribute(cm_user_id, "flavors",
-                                            defaults['flavors'])
+                                               defaults['flavors'])
         return self.cm_user.get_defaults(cm_user_id)
 
     def start(self, cloud, cm_user_id, prefix=None, index=None, flavor=None,
               image=None, key=None, meta=None):
         """Launch a new VM instance with a default setting for flavor, image and
         key name"""
-       
+
         if not self.check_activated():
             return None
 
@@ -603,38 +606,38 @@ class cm_mongo:
         try:
             flavor = flavor['id']
         except:
-            flavor = flavor or userinfo['defaults']['flavors'][cloud] 
+            flavor = flavor or userinfo['defaults']['flavors'][cloud]
         try:
             image = image['id']
         except:
-            image = image or userinfo['defaults']['images'][cloud] 
-        # or image = '02cf1545-dd83-493a-986e-583d53ee3728' # ubuntu-14.04 
+            image = image or userinfo['defaults']['images'][cloud]
+        # or image = '02cf1545-dd83-493a-986e-583d53ee3728' # ubuntu-14.04
         key = key or "%s_%s" % (cm_user_id, userinfo['defaults']['key'])
-        meta = meta or { 'cm_owner': cm_user_id }
+        meta = meta or {'cm_owner': cm_user_id}
 
         # Launch a vm instance
         result = self.vm_create(cloud, prefix, index, flavor, image, key, meta,
-                               cm_user_id)
+                                cm_user_id)
 
         # increase index after the completion of vm_create()
         self.cm_user.set_default_attribute(cm_user_id, "index", int(index) + 1)
         return result
 
-    def vm_create(self, 
-                  cloud, 
-                  prefix, 
-                  index, 
-                  vm_flavor, 
-                  vm_image, 
-                  key, 
-                  meta, 
-                  cm_user_id, 
+    def vm_create(self,
+                  cloud,
+                  prefix,
+                  index,
+                  vm_flavor,
+                  vm_image,
+                  key,
+                  meta,
+                  cm_user_id,
                   givenvmname=None):
         '''
         BUG: missing security group
         '''
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
-        if givenvmname == None:
+        if givenvmname is None:
             name = "%s_%s" % (prefix, index)
         else:
             name = givenvmname
@@ -655,7 +658,7 @@ class cm_mongo:
         name = "tasks"
         imported = getattr(__import__(package, fromlist=[name]), name)
         queue_name = "%s-%s" % (cm_type, "servers")
-        if givenvmname == None:
+        if givenvmname is None:
             name = "%s_%s" % (prefix, index)
         else:
             name = givenvmname
@@ -678,16 +681,16 @@ class cm_mongo:
         if type == 'openstack':
             ip = cloudmanager.get_public_ip()
 
-            # Retry 
-            _max = 5 # times
-            _interval = 3 # second
+            # Retry
+            _max = 5  # times
+            _interval = 3  # second
             _expected = {'msg': 'success'}
             for i in range(_max):
                 ret = cloudmanager.assign_public_ip(server, ip)
                 # ret is
                 # {u'badRequest': {u'message': u'No nw_info cache associated with
                 # instance', u'code': 400}}
-                # or 
+                # or
                 # {'msg': 'success'}
                 if ret == _expected:
                     break
@@ -713,33 +716,33 @@ class cm_mongo:
         res1 = self.vm_delete(cloud, server, cm_user_id)
         time.sleep(5)
         res2 = self.release_unused_public_ips(cloud, cm_user_id)
-        res = { "vm_delete": res1, "release_unused_public_ips": res2 }
+        res = {"vm_delete": res1, "release_unused_public_ips": res2}
         return res
 
     def vm_delete(self, cloud, server, cm_user_id):
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         return cloudmanager.vm_delete(server)
-    
+
     def vmname(self, prefix=None, idx=None, cm_user_id=None):
         """Return a vm name to use next time. prefix or index can be
         given to update a vm name (optional)
-        
+
         Args:
             prefix (str, optional): the name of prefix
             idx (int, str, optional): the index to increment. This can be a
-            digit or arithmetic e.g. +5 or -3 can be used 
-            
+            digit or arithmetic e.g. +5 or -3 can be used
+
         """
         userinfo = self.userinfo
         cm_user_id = cm_user_id or self.userid
         userinfo['defaults']['prefix'] = prefix or \
-                userinfo['defaults']['prefix']
+            userinfo['defaults']['prefix']
         if idx:
             if str(idx).isdigit():
                 userinfo['defaults']['index'] = idx
             else:
                 userinfo['defaults']['index'] = \
-                eval(str(userinfo['defaults']['index']) + idx)
+                    eval(str(userinfo['defaults']['index']) + idx)
         self.cm_user.set_defaults(cm_user_id, userinfo['defaults'])
 
         self.userinfo = self.cm_user.info(cm_user_id)
