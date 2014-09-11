@@ -47,7 +47,7 @@ class RackMapProgress(BaseProgress):
 
     # (x, y), x means the index in all_status_list; y means the value of this status
     value_list_dict = {
-        TYPE_LOAD_MAP:  [
+        TYPE_LOAD_MAP: [
             (0, 5),
             (1, 20),
             (5, 20),

@@ -209,12 +209,12 @@ class CMMetricAPI:
 
     def _set_dict_vars(self):
         self.result = {
-            "start_date":   self.start_date,
-            "end_date":   self.end_date,
-            "ownerid":   self.username,
-            "metric":   self.metric,
-            "period":   self.period or "All",
-            "clouds":   self.cloud or "All",
-            "hostname":   self.hostname or "All"
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "ownerid": self.username,
+            "metric": self.metric,
+            "period": self.period or "All",
+            "clouds": self.cloud or "All",
+            "hostname": self.hostname or "All"
         }
         return self.result

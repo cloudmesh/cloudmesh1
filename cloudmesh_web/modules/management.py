@@ -1,34 +1,25 @@
-from datetime import timedelta
-from wtforms.csrf.session import SessionCSRF
+from pprint import pprint
 import re
-from wtforms.validators import ValidationError
-from cloudmesh.management.project import STATUS as ProjectSTATUS
-from cloudmesh.management.project import SERVICES as ProjectSERVICES
-from cloudmesh.management.project import SOFTWARE as ProjectSOFTWARE
-from cloudmesh.management.project import PROVISIONING as ProjectPROVISIONING
-from cloudmesh.management.project import CLUSTERS as ProjectCLUSTERS
-from cloudmesh_common.logger import LOGGER
-from flask import Blueprint, render_template, request
-from flask.ext.login import login_required
-from pprint import pprint, pprint
-from mongoengine import connect
+from cloudmesh.management.project import CLUSTERS as ProjectCLUSTERS, \
+    PROVISIONING as ProjectPROVISIONING, Project as MongoProject, Projects, \
+    SERVICES as ProjectSERVICES, STATUS as ProjectSTATUS
 from cloudmesh.management.user import User as MongoUser, Users
-from cloudmesh.management.project import Project as MongoProject, Projects
-from cloudmesh.management.cloudmeshobject import order, make_form_list
+from cloudmesh_common.logger import LOGGER
+from flask import Blueprint, render_template, request, flash, redirect
+from mongoengine import connect
+from wtforms import Form, validators, widgets
+from wtforms.fields import BooleanField, TextField, TextAreaField, PasswordField, \
+    SelectMultipleField
+from wtforms.validators import ValidationError
 
-import cloudmesh.management.project
+from flask.ext.login import login_required
+
 
 log = LOGGER(__file__)
 
 management_module = Blueprint('management_module', __name__)
 
-from flask_wtf import Form
-from wtforms import TextField
-from wtforms.validators import DataRequired
 
-from wtforms import Form, validators, widgets
-from wtforms.fields import BooleanField, TextField, TextAreaField, PasswordField, RadioField, SelectField, SelectMultipleField
-from flask import flash, redirect
 
 
 class MultiCheckboxField(SelectMultipleField):
@@ -171,8 +162,10 @@ class ProjectRegistrationForm(Form):
     join_open = BooleanField('Join open')
     join_notification = BooleanField('Join notification')
     resources_services = MultiCheckboxField(
-        'Resources services', choices=get_choices_for_form(ProjectSERVICES))
-    #resources_software = MultiCheckboxField('resources_software', choices=get_choices_for_form(ProjectSOFTWARE))
+        'Resources services',
+        choices=get_choices_for_form(ProjectSERVICES))
+    # resources_software = MultiCheckboxField('resources_software',
+    #                         choices=get_choices_for_form(ProjectSOFTWARE))
     resources_clusters = MultiCheckboxField(
         'Resources clusters', choices=get_choices_for_form(ProjectCLUSTERS))
     resources_provision = MultiCheckboxField(
@@ -277,7 +270,7 @@ class UserRegistrationForm(Form):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Repeat Password')
-    #agreement = BooleanField('I accept the usage agreement', [validators.Required()])
+    # agreement = BooleanField('I accept the usage agreement', [validators.Required()])
     bio = TextAreaField('Bio', [validators.DataRequired()])
 
 
@@ -347,7 +340,7 @@ def project_edit(projectid):
 
         data = dict(request.form)
         action = str(data['button'][0])
-        #del data['button']
+        # del data['button']
         for key in data:
             data[key] = data[key][0]
 
@@ -509,7 +502,8 @@ def management_user_manage():
     return render_template('management/user_manage.html',
                            users=users,
                            with_edit="True",
-                           states=['approved', 'pending', 'denied', 'blocked', 'delete'],                                                        title="User Management")
+                           states=['approved', 'pending', 'denied', 'blocked', 'delete'],
+                           title="User Management")
 
 
 @management_module.route('/m/user/list')
@@ -539,7 +533,10 @@ def management_user_profile(username):
             raise Exception
     except:
         print "Error: Username not found"
-        return render_template('error.html', form=None, type="exists", msg="The user does not exist")
+        return render_template('error.html',
+                               form=None,
+                               type="exists",
+                               msg="The user does not exist")
 
 
 @management_module.route('/user/edit/<username>/', methods=['GET', 'POST'])
