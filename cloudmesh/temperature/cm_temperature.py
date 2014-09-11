@@ -90,12 +90,12 @@ class cm_temperature:
                 if m:
                     value = m.group(1)
                     unit = m.group(2)
-                dict_result[name] = {"name":    fields[0],
+                dict_result[name] = {"name": fields[0],
                                      "address": fields[1],
-                                     "status":  fields[2],
-                                     "entity":  fields[3],
-                                     "value":   value,
-                                     "unit":    unit
+                                     "status": fields[2],
+                                     "entity": fields[3],
+                                     "value": value,
+                                     "unit": unit
                                      }
         return dict_result
 

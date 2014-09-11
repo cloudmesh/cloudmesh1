@@ -20,8 +20,6 @@ log = LOGGER(__file__)
 management_module = Blueprint('management_module', __name__)
 
 
-
-
 class MultiCheckboxField(SelectMultipleField):
 
     """
