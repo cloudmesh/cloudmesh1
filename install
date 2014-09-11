@@ -22,6 +22,7 @@ Description:
         lists the available sys.path for debugging purposes.
 
 """
+import traceback
 import time
 from textwrap import dedent
 from pprint import pprint
@@ -30,7 +31,7 @@ import getopt
 import sys
 from cloudmesh_install.util import banner
 from cloudmesh_install.util import get_system
-from cloudmesh_install import config_file_prefix
+from cloudmesh_install import config_file_prefix, config_file
 from cloudmesh_install.util import yn_choice
 
 def print_help():
@@ -144,6 +145,7 @@ def main():
         print "         install system"
         print
         print e
+        print traceback.format_exc()
 
 
 if __name__ == "__main__":
