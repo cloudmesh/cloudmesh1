@@ -7,6 +7,7 @@ A package to manage virtual machines on various clouds infrastructures and bare 
 
 __version__ = '1.0'
 
+
 def version():
     return __version__
 
@@ -17,11 +18,11 @@ def logger(on):
     logger = logging.getLogger()
     logger.disabeld = not on
     print logger.__dict__
-    
+
     if on:
         logging.disable(logging.NOTSET)
     else:
-        logging.disable(logging.CRITICAL)        
+        logging.disable(logging.CRITICAL)
 
 
 from cloudmesh.util.helper import vm_name
@@ -30,10 +31,10 @@ try:
     from cloudmesh.sh.cm import shell
 except:
     print "WARNING: cm not yet installed, skipping import"
-    
+
 from cloudmesh.config.cm_config import load as load
 
-from cloudmesh.pbs.pbs import PBS 
+from cloudmesh.pbs.pbs import PBS
 
 from cloudmesh.cm_mongo import cm_mongo
 # from cloudmesh.cm_mongo2 import cm_mongo2

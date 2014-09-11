@@ -3,7 +3,7 @@ import json
 from functools import wraps
 from cobbler_provision import CobblerProvision
 
-app = Flask( __name__)
+app = Flask(__name__)
 
 SUPPORTED_OBJECTS = "distros profiles systems kickstarts".split()
 KICKSTART_LOCATION = "/var/lib/cobbler/kickstarts"

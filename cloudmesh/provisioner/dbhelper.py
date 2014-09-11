@@ -7,14 +7,16 @@ from bson.objectid import ObjectId
 
 log = LOGGER(__file__)
 
+
 class DBHelper:
+
     def __init__(self, coll_name="inventory"):
         """Construction 
         :param string coll_name: the collection name
         """
         self.coll_name = coll_name
         self.db_client = get_mongo_db(coll_name)
-        
+
     def find(self, query_elem):
         """
         Thin Wrap of the mongo find command.
@@ -35,7 +37,7 @@ class DBHelper:
         except:
             result = False
         return {"result": result, "data": data}
-        
+
     def find_one(self, query_elem):
         """
         Thin Wrap of the mongo find_one command.
@@ -52,7 +54,7 @@ class DBHelper:
         except:
             result = False
         return {"result": result, "data": data}
-        
+
     def insert(self, elem):
         """insert an element to mongodb
         :param dict elem: the element that will be inserted into mongodb, it can alse be the list of element, [elem]
@@ -66,7 +68,7 @@ class DBHelper:
         except:
             result = False
         return {"result": result, "data": data}
-    
+
     def update(self, query_elem, update_elem, flag_upsert=True, flag_multi=True):
         """update document(s)
         :param dict query_elem: the query dict, if you want to use "_id" in query_elem, you SHOULD call :py:func:`convert_str_to_objectid` to get the ObjectId for the "_id"
@@ -79,12 +81,12 @@ class DBHelper:
         result = True
         data = None
         try:
-            data = self.db_client.update(query_elem, update_elem, 
+            data = self.db_client.update(query_elem, update_elem,
                                          upsert=flag_upsert, multi=flag_multi)
         except:
             result = False
         return {"result": result, "data": data}
-        
+
     def remove(self, query_elem, flag_multi=True):
         """remove document(s)
         :param dict query_elem: the query dict, if you want to use "_id" in query_elem, you SHOULD call :py:func:`convert_str_to_objectid` to get the ObjectId for the "_id"
@@ -99,7 +101,7 @@ class DBHelper:
         except:
             result = False
         return {"result": result, "data": data}
-        
+
     def atom_update(self, query_elem, update_elem, flag_upsert=True, flag_new=True):
         """atom update one document
         :param dict query_elem: the query dict, if you want to use "_id" in query_elem, you SHOULD call :py:func:`convert_str_to_objectid` to get the ObjectId for the "_id"
@@ -113,11 +115,11 @@ class DBHelper:
         data = None
         try:
             data = self.db_client.find_and_modify(query_elem,
-                                                update=update_elem, upsert=flag_upsert, new=flag_new)
+                                                  update=update_elem, upsert=flag_upsert, new=flag_new)
         except:
             result = False
         return {"result": result, "data": data}
-    
+
     def convert_objectid_to_str(self, oid):
         """Helper fucntion, convert ObjectId to String
         :param ObjectId oid: a object of ObjectId
@@ -125,7 +127,7 @@ class DBHelper:
         :rtype: string
         """
         return str(oid) if type(oid) == ObjectId else None
-    
+
     def convert_str_to_objectid(self, sid):
         """Helper fucntion, convert string id to ObjectId object
         :param string sid: the string value of an ObjectId
@@ -142,23 +144,27 @@ if __name__ == "__main__":
     print "find result is: ", result
     result = dbc.find_one(query_elem)
     print "find_one result is: ", result
-    insert_elem = [{"cm_kind": "baremetal", "cm_id": "chen_test_insert", "data": {"test": "data",}},
-                   {"cm_kind": "baremetal", "cm_id": "chen_test_insert", "data": {"test": "data2",}},
-                   {"cm_kind": "baremetal", "cm_id": "chen_test_insert", "data": {"test": "data3",}}
+    insert_elem = [{"cm_kind": "baremetal", "cm_id": "chen_test_insert", "data": {"test": "data", }},
+                   {"cm_kind": "baremetal", "cm_id": "chen_test_insert",
+                       "data": {"test": "data2", }},
+                   {"cm_kind": "baremetal", "cm_id": "chen_test_insert",
+                       "data": {"test": "data3", }}
                    ]
     result = dbc.insert(insert_elem)
     print "insert result is: ", result
-    insert_elem = {"cm_kind": "baremetal", "cm_id": "chen_test_insert", "data": {"test": "data2",}}
+    insert_elem = {"cm_kind": "baremetal",
+                   "cm_id": "chen_test_insert", "data": {"test": "data2", }}
     result = dbc.insert(insert_elem)
     print "insert result is: ", result
-    insert_elem = {"cm_kind": "baremetal", "cm_id": "chen_test_insert", "data": {"test": "data3",}}
+    insert_elem = {"cm_kind": "baremetal",
+                   "cm_id": "chen_test_insert", "data": {"test": "data3", }}
     result = dbc.insert(insert_elem)
     print "insert result is: ", result
-    
+
     query_elem = {"cm_id": "chen_test_insert"}
     update_elem = {"$set": {"value3": "my value3"}}
     result = dbc.atom_update(query_elem, update_elem, flag_new=False)
     print "update result is: ", result
     #query_elem = {"cm_id": "chen_test_insert"}
     #result = dbc.remove(query_elem)
-    #print "remove result is: ", result
+    # print "remove result is: ", result

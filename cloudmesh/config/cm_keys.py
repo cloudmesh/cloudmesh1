@@ -31,10 +31,7 @@ class cm_keys_base(object):
         deletes the key with the given name. Will not succeed if the key is the default key
         '''    
         self.delete(name)
-    
-    def __delitem__(self, name):
-        self.delete(name)
-    
+        
     def __len__(self):
         return len(self.names())
 

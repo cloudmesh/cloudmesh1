@@ -51,7 +51,7 @@ class PBS:
                                    }
         elif host.startswith("sierra"):
             self.cluster_queues = {
-                'sierra.futuregrid.org': [ 'batch', 'long'] }
+                'sierra.futuregrid.org': ['batch', 'long'] }
 
     def requister_joint_queues(self, cluster_queues):
         """allows the registration of queues for multiple clusters managed through the same queuing server

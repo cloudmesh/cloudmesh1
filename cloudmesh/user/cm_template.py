@@ -22,6 +22,7 @@ log = LOGGER(__file__)
 # CM TEMPLATE
 # ----------------------------------------------------------------------
 
+
 class cm_template():
 
     def __init__(self, filename):
@@ -48,7 +49,8 @@ class cm_template():
             grep_result = _grep("-n", attribute, cloudmesh_yaml).split("\n")
             for r in grep_result:
                 if "{" in r:
-                    result.append(str(r).replace("  ", "").replace(":", ": ", 1))
+                    result.append(
+                        str(r).replace("  ", "").replace(":", ": ", 1))
         return result
 
     def _variables(self):
@@ -65,14 +67,15 @@ class cm_template():
             elif kind == "dict":
                 self.result = yaml.safe_load(template.render(**values))
             else:
-                log.error("kind='dict' or 'text' parameter missing in template replace")
+                log.error(
+                    "kind='dict' or 'text' parameter missing in template replace")
                 raise RuntimeError
             return self.result
         except UndefinedError, e:
-            banner ("ERROR: Undefined variable in template")
+            banner("ERROR: Undefined variable in template")
             print e
         except Exception, e:
-            banner ("ERROR")
+            banner("ERROR")
             print e
             print sys.exc_info()
             # return self.content
@@ -84,14 +87,12 @@ class cm_template():
             result = self.replace(kind="dict", values=d)
         except Exception, e:
             print "EEEE", e
-            
+
         return yaml.dump(result, default_flow_style=False)
 
     def generate_from_dict(self, d, out_file):
         cloudmesh_yaml = path_expand(self.filename)
         t = cm_template(cloudmesh_yaml)
-
-
 
         result = t.replace(kind="dict", values=d)
         location = path_expand(out_file)
@@ -99,7 +100,7 @@ class cm_template():
         print >> yaml_file, yaml.dump(result, default_flow_style=False)
         yaml_file.close()
         log.info("Written new yaml file in " + location)
-        
+
     def generate(self,
                  me_file,
                  out_file):
@@ -115,7 +116,6 @@ class cm_template():
         log.info("Written new yaml file in " + location)
 
 
-
 if __name__ == "__main__":
 
     cloudmesh_yaml = config_file("/etc/cloudmesh.yaml")
@@ -129,7 +129,6 @@ if __name__ == "__main__":
     banner("GREP")
     s = t.grep()
     print ("\n".join(s))
-
 
     # banner("YAML FILE")
     # result = t.replace(kind="dict", values=user_config)
@@ -148,6 +147,3 @@ if __name__ == "__main__":
 #    if not t.complete():
 #       print "ERROR: undefined variables"
 #       print t.variables()
-
-
-

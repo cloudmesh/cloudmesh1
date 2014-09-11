@@ -174,8 +174,8 @@ class eucalyptus(ComputeBaseType):
             for key in element.__dict__:
                 value = element.__dict__[key]
                 if key == 'extra':
-                  for e in value:
-                       vm[e] = value[e]
+                    for e in value:
+                        vm[e] = value[e]
                 else:
                     vm[key] = value
             for d in exclude:

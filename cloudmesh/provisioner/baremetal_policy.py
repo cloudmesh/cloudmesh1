@@ -9,7 +9,9 @@ from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
+
 class BaremetalPolicy:
+
     """Baremetal Policy. Get/Add/Delete user/group policy
     FIXME/TODO: It will add **permission access** that only admin can operate on poilicy later
     the formation of policy is 
@@ -21,11 +23,12 @@ class BaremetalPolicy:
     "cm_type" : "policy_inventory"
     }
     """
+
     def __init__(self):
         """Construction fucntion
         """
         self.db_client = DBHelper()
-        
+
     def add_user_policy(self, user, policy):
         """add a policy for an user.
         :param string user: a username
@@ -33,7 +36,7 @@ class BaremetalPolicy:
         :return: UUID means add policy success, otherwise None for failed 
         """
         return self.add_ug_policy("user", user, policy)
-    
+
     def add_group_policy(self, group, policy):
         """add a policy for a group.
         :param string group: a group/project name
@@ -41,7 +44,7 @@ class BaremetalPolicy:
         :return: UUID means add policy success, otherwise None for failed
         """
         return self.add_ug_policy("group", group, policy)
-    
+
     def add_ug_policy(self, type, name, policy):
         """add a policy for a specify *type*
         :param string type: the type of policy, currently supports **user** and **group**
@@ -54,7 +57,7 @@ class BaremetalPolicy:
         full_elem = self.get_full_query(add_elem)
         result = self.db_client.insert(full_elem)
         return None if not result["result"] else self.db_client.convert_objectid_to_str(result["data"])
-    
+
     def remove_policy(self, uuid):
         """remove a policy based on uuid.
         :param string uuid: an uuid of the removed policy
@@ -64,7 +67,7 @@ class BaremetalPolicy:
         elem = {"_id": object_uuid, }
         result = self.db_client.remove(elem)
         return result["result"]
-    
+
     def get_policy_based_user_or_its_projects(self, user, projects):
         """get the merged policy based on the username and his/her related projects
         :param string user: only one valid username
@@ -86,7 +89,7 @@ class BaremetalPolicy:
         for name in valid_policy:
             all_policys.extend(expand_hostlist(valid_policy[name]))
         return collect_hostlist(list(set(all_policys)))
-    
+
     def get_policy_based_user(self, user):
         """get all the policies for a user
         :param string user: a username with hostlist formation
@@ -94,7 +97,7 @@ class BaremetalPolicy:
         """
         policys = self.get_all_user_policy()
         return self.merge_policy_based_ug(policys) if user == "all" else self.merge_policy_based_ug(policys, True, user)
-    
+
     def get_policy_based_group(self, group):
         """get all the policies for a group/project
         :param string group: a group/project with hostlist formation
@@ -102,7 +105,7 @@ class BaremetalPolicy:
         """
         policys = self.get_all_group_policy()
         return self.merge_policy_based_ug(policys, False) if group == "all" else self.merge_policy_based_ug(policys, False, group)
-    
+
     def merge_policy_based_ug(self, policys, flag_user=True, name=None):
         """merge policy based the name of user/group
         :param dict policys: all the possible policys for users/groups
@@ -115,7 +118,8 @@ class BaremetalPolicy:
             names = expand_hostlist(name) if name else None
             for puser in policys:
                 users = expand_hostlist(puser)
-                common_users = [u for u in users if u in names] if names else users
+                common_users = [
+                    u for u in users if u in names] if names else users
                 hosts = []
                 for policy in policys[puser]:
                     hosts.extend(expand_hostlist(policy["policy"]))
@@ -139,7 +143,7 @@ class BaremetalPolicy:
                 data[collect_hostlist(flipped_data[value])] = value
             return data if data else None
         return None
-    
+
     def get_all_user_policy(self, flag_merge=False):
         """get all the policies for all user
         :param boolean flag_merge: True meanse merge all possible user and policy into string
@@ -151,7 +155,7 @@ class BaremetalPolicy:
             policys = all_policys.get("users", None)
             return policys if not flag_merge else self.merge_policy_based_ug(policys)
         return None
-    
+
     def get_all_group_policy(self, flag_merge=False):
         """get all the policies for all group/project
         :param boolean flag_merge: True meanse merge all possible user and policy into string
@@ -163,7 +167,7 @@ class BaremetalPolicy:
             policys = all_policys.get("groups", None)
             return policys if not flag_merge else self.merge_policy_based_ug(policys, False)
         return None
-        
+
     def get_all_policy(self):
         """get all the policies for all users and group/project
         :return: a dict of group/project and policy with the formation {"users": {"user1": [], "user2": []}, "groups":{"group1":['policy1', 'policy2'], "group2": [],}}
@@ -186,8 +190,7 @@ class BaremetalPolicy:
                 else:
                     data["groups"][name] = [policy]
         return data
-    
-    
+
     def _get_policy(self):
         """get all the records of policy
         :return: an ordered list of policy or None if failed
@@ -196,20 +199,21 @@ class BaremetalPolicy:
         if result["result"]:
             records = result["data"]
             for record in records:
-                record["_id"] = self.db_client.convert_objectid_to_str(record["_id"])
+                record["_id"] = self.db_client.convert_objectid_to_str(
+                    record["_id"])
             return sorted(records, key=lambda x: x["_id"])
         return None
-    
+
     def get_default_query(self):
         return {"cm_kind": "baremetal", "cm_type": "policy_inventory", }
-    
+
     def get_full_query(self, query_elem=None):
         elem = self.get_default_query()
         if query_elem:
             elem.update(query_elem)
         return elem
-    
-    
+
+
 if __name__ == "__main__":
     bmp = BaremetalPolicy()
     #result = bmp.add_user_policy("chen,heng", "i[001-003]")

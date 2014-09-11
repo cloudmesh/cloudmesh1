@@ -694,8 +694,11 @@ class azure(ComputeBaseType):
         # Openstack's type
         res = {  # u'private':[ {u'version':None, u'addr':None, \
                #              u'OS-EXT-IPS:type': None} ],
-               u'private':[ {u'version':ip_ver, u'addr':ip_address, \
-                            u'OS-EXT-IPS:type': ip_type } ] }
+               u'private':[
+                           {u'version':ip_ver, u'addr':ip_address, \
+                            u'OS-EXT-IPS:type': ip_type}
+                           ] 
+               }
         return res
 
     def convert_flavors(self, role_instance_list):
@@ -714,8 +717,8 @@ class azure(ComputeBaseType):
             flavor = ""
         res = {u'id': unicode(flavor), \
                u'links': \
-               [ {u'href':None, \
-                  u'rel':None}]}
+               [{u'href':None, \
+                 u'rel':None}]}
         return res
 
     def release_unused_public_ips(self):

@@ -29,14 +29,18 @@ PRODUCTION_CHAIN = "cm_production"
 PORTS_CHAIN = "cm_ports"
 PORT_RULE = "%s -p tcp -m state --state NEW -m tcp --dport %s -j ACCEPT"
 
+
 @task
 def info():
     """                                                                                                                             
     provides some info about the iptable rules set on this machine                                                                  
     """
-    results1 = local("sudo iptables --line-numbers -L %s" % PORTS_CHAIN, capture=True)
-    results2 = local("sudo iptables --line-numbers -L %s" % PRODUCTION_CHAIN, capture=True)
+    results1 = local("sudo iptables --line-numbers -L %s" %
+                     PORTS_CHAIN, capture=True)
+    results2 = local("sudo iptables --line-numbers -L %s" %
+                     PRODUCTION_CHAIN, capture=True)
     print "%s\n\n%s" % (results1, results2)
+
 
 @task
 def production(status="on"):
@@ -55,8 +59,9 @@ def production(status="on"):
     else:
         print usage
 
+
 @task
-def port (number, status="on"):
+def port(number, status="on"):
     """                                                                                                                             
     sets the ip table rule for a particular port. accepted values are 'on' and 'off'                                                
     """
@@ -72,4 +77,3 @@ def port (number, status="on"):
         local("sudo iptables -D " + PORT_RULE % (PORTS_CHAIN, number))
     else:
         print usage
-

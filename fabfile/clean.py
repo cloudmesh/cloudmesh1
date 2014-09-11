@@ -4,11 +4,12 @@ from cloudmesh_install import config_file
 
 import os
 
+
 @task
 def dir():
     """clean the dirs"""
     banner("STOPPING SERVER")
-    local ("fab server.stop")
+    local("fab server.stop")
     banner("CLEAN DIR")
     local("rm -rf *.egg")
     local('find . -name "*~" -exec rm {} \;  ')
@@ -19,10 +20,12 @@ def dir():
     local("rm -f celeryd@*")
     local("rm -f *.dump")
 
+
 @task
 def cmd3():
     banner("CLEAN CMD3")
     local("rm -rf {0}".format(config_file("/cmd3local")))
+
 
 @task
 def all():
@@ -33,7 +36,7 @@ def all():
     delete_package("cloudmesh")
     delete_package("cloudmesh_cmd3")
     delete_package("cloudmesh_common")
-    delete_package("cloudmesh_install")        
+    delete_package("cloudmesh_install")
 
 
 def delete_package(name):
@@ -41,4 +44,5 @@ def delete_package(name):
     r = int(local("pip freeze |fgrep {0} | wc -l".format(name), capture=True))
     while r > 0:
         local('echo "y" | pip uninstall {0}'.format(name))
-        r = int(local("pip freeze |fgrep {0} | wc -l".format(name), capture=True))
+        r = int(
+            local("pip freeze |fgrep {0} | wc -l".format(name), capture=True))

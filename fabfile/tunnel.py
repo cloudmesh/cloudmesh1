@@ -5,19 +5,25 @@ from sh import kill
 from sh import sudo
 from cloudmesh_install import config_file
 
+
 def get_server_config():
     return ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
 
+
 def get_user_config():
     return ConfigDict(filename=config_file("/cloudmesh.yaml"))
+
 
 @task
 def open(user, host, port, proxyhost, proxyuse, sudo=True):
     """clean the dirs"""
     if sudo:
-        local("sudo ssh -L {2}:{1}:{2} {4}@{3}".format(user, host, port, proxyhost, proxyuser))
+        local(
+            "sudo ssh -L {2}:{1}:{2} {4}@{3}".format(user, host, port, proxyhost, proxyuser))
     else:
-        local("ssh -L {2}:{1}:{2} {4}@{3}".format(user, host, port, proxyhost, proxyuser))
+        local(
+            "ssh -L {2}:{1}:{2} {4}@{3}".format(user, host, port, proxyhost, proxyuser))
+
 
 @task
 def ldap(host=None):
@@ -30,18 +36,21 @@ def ldap(host=None):
     proxyhost = config_server.get("cloudmesh.server.ldap.proxyhost")
     port = 389
 
-    command = "sudo ssh -f -N -L {1}:{0}:{1} {2}@{3}".format(ldapproxyhost, port, proxyuser, proxyhost)
+    command = "sudo ssh -f -N -L {1}:{0}:{1} {2}@{3}".format(
+        ldapproxyhost, port, proxyuser, proxyhost)
 
     print "STARTING LDAP TUNNEL"
     print "   ", command
 
-    local (command)
+    local(command)
+
 
 @task
 def kill():
     with settings(warn_only=True):
         with hide('output', 'running', 'warnings'):
-            procs = local('ps -j -ax -u root -o pid | fgrep ssh | fgrep 389', capture=True).split("\n")
+            procs = local(
+                'ps -j -ax -u root -o pid | fgrep ssh | fgrep 389', capture=True).split("\n")
 
     if procs != ['']:
 
@@ -53,6 +62,7 @@ def kill():
         print "SUCCESS. tunnel killed"
     else:
         print "WARNING: no tunnel were running"
+
 
 @task
 def flask():

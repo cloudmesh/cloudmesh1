@@ -1,8 +1,10 @@
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_install import config_file
 from mongoengine import *
-import datetime, time
-import hashlib, uuid
+import datetime
+import time
+import hashlib
+import uuid
 from pprint import pprint
 #    mongod --noauth --dbpath . --port 27777
 from cloudmesh.management.cloudmeshobject import CloudmeshObject
@@ -10,7 +12,6 @@ import yaml
 from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
 
 STATUS = ('pending', 'approved', 'blocked', 'denied')
-
 
 
 def IMPLEMENT():
@@ -22,44 +23,46 @@ def generate_password_hash(password)
     hashed_password = hashlib.sha512(password + salt).hexdigest()
     return hashed_password'''
 
+
 def read_user(filename):
     '''
     reads user data from a yaml file
-    
+
     :param filename: The file anme
     :type filename: String of the path
     '''
     stream = open(filename, 'r')
     data = yaml.load(stream)
     user = User(
-                status = data["status"],            
-                username = data["username"],
-                title = data["title"],
-                firstname = data["firstname"],
-                lastname = data["lastname"],
-                email = data["email"],
-                url = data["url"],
-                citizenship = data["citizenship"],
-                bio = data["bio"],
-                password = data["password"],
-                userid = data["userid"],
-                phone = data["phone"],
-                projects = data["projects"],
-                institution = data["institution"],
-                department = data["department"],
-                address = data["address"],
-                country = data["country"],
-                advisor = data["advisor"],
-                message = data["message"],
-            )
+        status=data["status"],
+        username=data["username"],
+        title=data["title"],
+        firstname=data["firstname"],
+        lastname=data["lastname"],
+        email=data["email"],
+        url=data["url"],
+        citizenship=data["citizenship"],
+        bio=data["bio"],
+        password=data["password"],
+        userid=data["userid"],
+        phone=data["phone"],
+        projects=data["projects"],
+        institution=data["institution"],
+        department=data["department"],
+        address=data["address"],
+        country=data["country"],
+        advisor=data["advisor"],
+        message=data["message"],
+    )
     return user
 
-    
+
 class User(CloudmeshObject):
+
     """This class is sued to represent a user"""
 
     get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
-    
+
     def order(self):
         '''
         order of the attribute to be printed
@@ -67,7 +70,7 @@ class User(CloudmeshObject):
         try:
             return [
                 ("username", self.username),
-                ("status", self.status),                
+                ("status", self.status),
                 ("title", self.title),
                 ("firstname", self.firstname),
                 ("lastname", self.lastname),
@@ -81,7 +84,7 @@ class User(CloudmeshObject):
                 ("institution", self.institution),
                 ("department", self.department),
                 ("address", self.address),
-                ("country", self.country),                
+                ("country", self.country),
                 ("advisor", self.advisor),
                 ("date_modified", self.date_modified),
                 ("date_created", self.date_created),
@@ -90,7 +93,7 @@ class User(CloudmeshObject):
             ]
         except:
             return None
-    
+
     def hidden(self):
         '''
         hiddeb attributes
@@ -99,7 +102,7 @@ class User(CloudmeshObject):
             "userid",
             "active",
             "message",
-            ]
+        ]
     #
     # User Information
     #
@@ -115,8 +118,8 @@ class User(CloudmeshObject):
     password = StringField(required=True)
     userid = UUIDField()
     phone = StringField(required=True)
-    
-    projects = StringField() 
+
+    projects = StringField()
     #
     # Affiliation
     #
@@ -126,20 +129,18 @@ class User(CloudmeshObject):
     country = StringField(required=True)
     advisor = StringField()
     # advisor = pointer to another user
-    
+
     #
-    # Message received from either reviewers, 
-    # committee or other users. It is a list because 
+    # Message received from either reviewers,
+    # committee or other users. It is a list because
     # there might be more than one message
     #
     message = ListField(StringField())
-    
 
     '''
     def save(self,db):
     	db.put({"firname":user.firname,...}_)
     '''
-
 
     def is_active(self):
         '''
@@ -148,27 +149,27 @@ class User(CloudmeshObject):
         """finds if a user is active or not"""
         d1 = datetime.datetime.now()
         return (self.active == True) and (datetime.datetime.now() < self.date_deactivate)
-        
+
     def set_password(self, password):
         '''
         not implemented
-        
+
         :param password:
         :type password:
         '''
         #self.password_hash = generate_password_hash(password)
         pass
-        
+
     def check_password(self, password):
         '''
         not implemented
-        
+
         :param password:
         :type password:
         '''
-        #return check_password_hash(self.password_hash, password)
+        # return check_password_hash(self.password_hash, password)
         pass
-        
+
     def json(self):
         '''
         returns a json representation of the object
@@ -181,7 +182,7 @@ class User(CloudmeshObject):
             except:
                 pass
         return d
-    
+
     def yaml(self):
         '''
         returns the yaml object of the object.
@@ -201,8 +202,10 @@ class User(CloudmeshObject):
                 pass
         return content
     """
-    
+
+
 class Users(object):
+
     '''
     convenience object to manage several users
     '''
@@ -223,27 +226,27 @@ class Users(object):
         returns the users
         '''
         return self.users
-    
+
     def get_unique_username(self, proposal):
         '''
         gets a unique username form a proposal. This is achieved whil appending a number at the end. if the 
-        
+
         :param proposal: the proposed username
         :type proposal: String
         '''
         new_proposal = proposal.lower()
-        num = 1 
-        username = User.objects(username=new_proposal)        
+        num = 1
+        username = User.objects(username=new_proposal)
         while username.count() > 0:
             new_proposal = proposal + str(num)
             username = User.objects(username=new_proposal)
             num = num + 1
         return new_proposal
-                
+
     def add(self, user):
         '''
         adds a user 
-        
+
         :param user: the username
         :type user: String
         '''
@@ -253,11 +256,11 @@ class Users(object):
             user.save()
         else:
             print "ERROR: a user with the e-mail `{0}` already exists".format(user.email)
-            
+
     def validate_email(self, email):
         '''
         verifies if the email of the user is not already in the users. 
-        
+
         :param user: user object
         :type user: User
         :rtype: Boolean
@@ -271,37 +274,38 @@ class Users(object):
         returns the users based on the given query.
         If no email is speified all users are returned.
         If the email is specified we search for the user with the given e-mail.
-        
+
         :param email: email
         :type email: email address
         '''
         if email == None:
             return User.objects()
-    	else:
+        else:
             found = User.objects(email=email)
             if found.count() > 0:
                 return User.objects()[0]
             else:
                 return None
-            
+
     def find_user(self, username):
         '''
         returns a user based on the username
-        
+
         :param username:
         :type username:
         '''
         return User.object(username=username)
-    	    	
+
     def clear(self):
         """removes all elements form the mongo db that are users"""
         for user in User.objects:
             user.delete()
 
+
 def verified_email_domain(email):
     '''
     not yet implemented. Returns true if the a-mail is in a specified domain.
-    
+
     :param email:
     :type email:
     '''
@@ -311,4 +315,3 @@ def verified_email_domain(email):
         if email.endswith():
             return True
     return False
-    

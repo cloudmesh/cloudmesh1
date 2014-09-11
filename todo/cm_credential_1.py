@@ -10,6 +10,7 @@ from cloudmesh.cm_mongo import cm_mongo
 
 log = LOGGER(__file__)
 
+
 class CredentialBaseClass (dict):
 
     def __init__(self, username, cloud, datasource):
@@ -22,8 +23,6 @@ class CredentialBaseClass (dict):
 
     def save(self):
         raise NotImplementedError()
-
-
 
 
 class CredentialFromYaml(CredentialBaseClass):
@@ -66,7 +65,8 @@ class CredentialFromYaml(CredentialBaseClass):
 
         elif kind == "server":
             self['cm']['filename'] = "~/.cloudmesh/cloudmesh_server.yaml"
-            self.update(self.config.get("cloudmesh.server.keystone.{0}".format(cloud)))
+            self.update(
+                self.config.get("cloudmesh.server.keystone.{0}".format(cloud)))
         else:
             log.error("kind wrong {0}".format(kind))
         self['cm']['username'] = username
@@ -106,10 +106,10 @@ class CredentialStore(dict):
         self[username] = {}
         for cloud in config.get("cloudmesh.clouds").keys():
             self[username][cloud] = Credential(username,
-                                     cloud,
-                                     filename,
-                                     style=style,
-                                     password=self.password)
+                                               cloud,
+                                               filename,
+                                               style=style,
+                                               password=self.password)
             self.encrypt(username, cloud, style)
 
     def encrypt_value(self, username, cloud, variable):
@@ -121,7 +121,6 @@ class CredentialStore(dict):
         user_password = self[username][cloud]['credentials'][variable]
         decrypted_value = cm_decrypt(user_password, self.password)
         return decrypted_value
-
 
     def encrypt(self, username, cloud, style):
         if style >= 2.0:
@@ -140,11 +139,14 @@ class CredentialStore(dict):
                 password = self.decrypt_value(username, cloud, 'OS_PASSWORD')
                 credential['OS_PASSWORD'] = password
             elif cloudtype == 'ec2' and self.password != None:
-                access_key = self.decrypt_value(username, cloud, 'EC2_ACCESS_KEY')
-                secrest_key = self.decrypt_value(username, cloud, 'EC2_SECRET_KEY')
+                access_key = self.decrypt_value(
+                    username, cloud, 'EC2_ACCESS_KEY')
+                secrest_key = self.decrypt_value(
+                    username, cloud, 'EC2_SECRET_KEY')
                 credential['EC2_ACCESS_KEY'] = access_key
                 credential['EC2_SECERT_KEY'] = secret_key
         return credential
+
 
 class CredentialFromMongo(CredentialBaseClass):
 
@@ -161,12 +163,13 @@ if __name__ == "__main__":
     banner("gvonlasz - sierra_openstack_grizzly - old")
     # -------------------------------------------------------------------------
     credential = CredentialFromYaml("gvonlasz", "sierra_openstack_grizzly")
-    pprint (credential)
+    pprint(credential)
 
     banner("gvonlasz - sierra_openstack_grizzly - new")
     # -------------------------------------------------------------------------
-    credential = CredentialFromYaml("gvonlasz", "sierra_openstack_grizzly", style=3.0)
-    pprint (credential)
+    credential = CredentialFromYaml(
+        "gvonlasz", "sierra_openstack_grizzly", style=3.0)
+    pprint(credential)
 
     print credential['credentials']['OS_USERNAME']
 
@@ -176,29 +179,28 @@ if __name__ == "__main__":
     # -------------------------------------------------------------------------
     credential.read("gvonlasz", "hp")
 
-    pprint (credential)
+    pprint(credential)
 
     banner("gvonlasz - hp - new")
     # -------------------------------------------------------------------------
     credential.read("gvonlasz", "hp", style=3.0)
 
-    pprint (credential)
+    pprint(credential)
 
     # -------------------------------------------------------------------------
-    banner ("testing gets")
+    banner("testing gets")
 
     try:
         print "credential cm.b", credential["cm"]["b"]
-        pprint (credential)
+        pprint(credential)
     except Exception, e:
         print e
         print traceback.format_exc()
 
-
     credential["cm"]["b"] = 'b content'
-    pprint (credential)
+    pprint(credential)
 
-    banner ("testing gets")
+    banner("testing gets")
 
     # ---------------------------------------------
 
@@ -209,7 +211,7 @@ if __name__ == "__main__":
                             style=3.0,
                             password="hallo")
 
-    pprint (store)
+    pprint(store)
 
     print store["gvonlasz"]["hp"]["credentials"]
     print store.credential("gvonlasz", "hp")
@@ -237,5 +239,3 @@ if __name__ == "__main__":
         pprint(e)
 
     print entries.count()
-
-

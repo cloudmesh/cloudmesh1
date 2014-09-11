@@ -1,9 +1,11 @@
 from fabric.api import *
 from fabric.context_managers import settings
 
+
 @task
 def memory_usage():
     run('free -m')
+
 
 def main():
     hosts = 'localhost,india.futuregrid.org'
@@ -11,7 +13,7 @@ def main():
         memory_usage()
 
 if __name__ == '__main__':
-   memory_usage()
+    memory_usage()
 
 '''
 class SystemInfo:
@@ -31,5 +33,3 @@ class SystemInfo:
         """gets the systme information from the machine with the given ip"""
         pass
 '''
-
-

@@ -14,7 +14,7 @@ class cm_projects():
         """
         returns the number of a probect. Input can be. 
         Assume number is 82
-        
+
         82, fg82, fg-82, FG82, FG-82
         fg can aslo be uppercase 
         """
@@ -42,7 +42,7 @@ class cm_projects():
            description
 
             other information may be added in future.
-            
+
             If no information is available it will return 
             description = "not available"
             title = "not available"

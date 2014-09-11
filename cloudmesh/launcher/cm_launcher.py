@@ -63,9 +63,9 @@ class SimulatorLauncher(BaseClassLauncher):
 
 
     def run(self, task_dict):
-         for t in task_dict:
-             sleep(randint(1,3))
-             print str(t) +": "+ str(task_dict[t])
+        for t in task_dict:
+            sleep(randint(1,3))
+            print str(t) +": "+ str(task_dict[t])
              
 #        print "launching on server {0}, host - {1}".format(task_dict["name"], task_dict["host_list"])
 #         for task in task_dict["recipies"]:

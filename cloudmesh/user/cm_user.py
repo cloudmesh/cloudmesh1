@@ -28,7 +28,9 @@ from pprint import pprint
 
 log = LOGGER(__file__)
 
+
 class cm_user(object):
+
     """cm_user provides user information including the ldap's and the clouds'.
     The ldap has a user profile such as a first name, last name and active
     project ids. In OpenStack Keystone, it has cloud-related information such as
@@ -37,21 +39,20 @@ class cm_user(object):
 
     config_server = None
 
-
     def __init__(self, from_yaml=False):
         self.from_yaml = from_yaml
         self.config_server = cm_config_server()
-        self.password_key = self.config_server.get("cloudmesh.server.mongo.collections.password.key")
-        self.with_ldap = cm_config_server().get("cloudmesh.server.ldap.with_ldap")
+        self.password_key = self.config_server.get(
+            "cloudmesh.server.mongo.collections.password.key")
+        self.with_ldap = cm_config_server().get(
+            "cloudmesh.server.ldap.with_ldap")
         self.connect_db()
-
-
 
     def authenticate(self, userId, password):
         if not self.with_ldap:
             return True
         try:
-            idp = cm_userLDAP ()
+            idp = cm_userLDAP()
             idp.connect("fg-ldap", "ldap")
             return idp.authenticate(userId, password)
         except Exception, e:
@@ -61,7 +62,7 @@ class cm_user(object):
     def generate_yaml(self, id, basename):
         '''
         Generates the content for a yaml file based on the passed parameters.
-        
+
         :param id: The username for which we want to create the yaml file
         :type id: String
         :param basename: The base name of the yaml file in the etc directory.
@@ -83,7 +84,6 @@ class cm_user(object):
 
         return out
 
-
     def connect_db(self):
         """ Connect to the mongo db."""
 
@@ -99,9 +99,6 @@ class cm_user(object):
             self.db_defaults = get_mongo_db(defaults_collection)
             self.userdb_passwd = get_mongo_db(passwd_collection)
 
-
-
-
     def info(self, portal_id, cloud_names=[]):
         """Return th<: the list of cloud names to search, e.g.
         sierra
@@ -116,7 +113,8 @@ class cm_user(object):
         else:
 
             ldap_info = self.db_users.find({"cm_user_id": portal_id})
-            cloud_info = self.db_clouds.find({"name": portal_id, "cm_kind": "users"})
+            cloud_info = self.db_clouds.find(
+                {"name": portal_id, "cm_kind": "users"})
             userinfo = {}
             # username is unique in ldap
             if ldap_info.count() > 0:
@@ -140,7 +138,6 @@ class cm_user(object):
 
                 del userinfo['profile']['keys']
                 del userinfo['profile']['projects']
-
 
                 userinfo['portalname'] = portal_id
                 userinfo['cm_user_id'] = portal_id
@@ -170,7 +167,7 @@ class cm_user(object):
     default_security_group = cm_config().get("cloudmesh.security.default")
     # default_cloud = 'sierra'
     default_cloud = None
-    
+
     def init_defaults(self, username):
         # ONLY for debug
         # added by HC on Nov. 11, 2013 to test LDAP and user.mongo
@@ -209,7 +206,7 @@ class cm_user(object):
                 defaults['activeclouds'] = [defaults['cloud']]
             else:
                 defaults['activeclouds'] = []
-                
+
         if 'registered_clouds' not in defaults:
             if 'activeclouds' in defaults:
                 defaults['registered_clouds'] = defaults['activeclouds']
@@ -258,11 +255,10 @@ class cm_user(object):
         for cloud in defaults['activeclouds']:
             if cloud not in defaults[str_pagestatus]:
                 defaults[str_pagestatus][cloud] = "false"
-        
-        
+
         if 'securitygroup' not in defaults:
             defaults['securitygroup'] = self.default_security_group
-        
+
         if 'group' not in defaults:
             defaults['group'] = None
 
@@ -283,7 +279,7 @@ class cm_user(object):
 
         :param cloud_names: the cloud name
         :type cloud_names: list
-        
+
         """
         if self.from_yaml:
             log.critical("NOT IMPLEMENTED")
@@ -334,10 +330,10 @@ class cm_user(object):
                 if cloud_names:
                     if cloud_user['cm_cloud'] in cloud_names:
                         usersinfo[portal_id]['clouds'][cloud_user['cm_cloud']] = \
-                        cloud_user
+                            cloud_user
                 else:
                     usersinfo[portal_id]['clouds'][cloud_user['cm_cloud']] = \
-                    cloud_user
+                        cloud_user
 
             return usersinfo
 
@@ -347,7 +343,7 @@ class cm_user(object):
     @deprecated
     def get_name(self, portal_id):
         """Return a user name in a tuple. (firstname, lastname)
-        
+
         :param portal_id: the unique portal id
         :type portal_id: str
         :returns: tuple
@@ -357,7 +353,8 @@ class cm_user(object):
         ldap_data = self.db_users.find({"cm_user_id": portal_id})
         if ldap_data.count() > 0:
             ldap_info = ldap_data[0]
-            (first_name, last_name) = (ldap_info['firstname'], ldap_info['lastname'])
+            (first_name, last_name) = (
+                ldap_info['firstname'], ldap_info['lastname'])
 
         return (first_name, last_name)
 
@@ -396,16 +393,16 @@ class cm_user(object):
         """credential is a dict"""
         safe_credential = {}
         for cred in credential:
-            safe_credential[cred] = encrypt(credential[cred], self.password_key)
-        self.userdb_passwd.update({"cm_user_id": username, "cloud": cloud }, \
-                                  {"cm_user_id":username, "credential":safe_credential, \
+            safe_credential[cred] = encrypt(
+                credential[cred], self.password_key)
+        self.userdb_passwd.update({"cm_user_id": username, "cloud": cloud},
+                                  {"cm_user_id": username, "credential": safe_credential,
                                    "cloud": cloud}, upsert=True)
-
-
 
     def get_credential(self, username, cloud):
         try:
-            safe_credential = self.userdb_passwd.find_one({"cm_user_id": username, "cloud":cloud})["credential"]
+            safe_credential = self.userdb_passwd.find_one(
+                {"cm_user_id": username, "cloud": cloud})["credential"]
 
             for cred in safe_credential:
                 t = safe_credential[cred]
@@ -414,15 +411,13 @@ class cm_user(object):
 
                 safe_credential[cred] = n
 
-
             return safe_credential
         except:
             return None
 
-
     def get_credentials(self, username):
         """Return all user passwords in the form of a dict, keyed by cloud name"""
-        credentials = self.userdb_passwd.find({ "cm_user_id": username })
+        credentials = self.userdb_passwd.find({"cm_user_id": username})
         d = {}
         """ bug multiple times same cloud ? """
         for c in credentials:
@@ -430,4 +425,3 @@ class cm_user(object):
             d[cloud] = {}
             d[cloud]["credential"] = self.get_credential(username, cloud)
         return d
-

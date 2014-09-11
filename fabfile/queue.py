@@ -14,7 +14,7 @@ from cloudmesh.pbs.celery import celery_pbs_queue as pbs_queue
 from celery import Celery
 from cloudmesh_install import config_file
 from cloudmesh_common.util import PROGRESS
-from cloudmesh.config.cm_config import cm_config_server 
+from cloudmesh.config.cm_config import cm_config_server
 
 import progress
 
@@ -37,7 +37,7 @@ if debug:
     progress.off()
 else:
     progress.on()
-    
+
 """
 for worker in workers:
     workers[worker] = {"app":"cloudmesh.launcher{0}.queue",

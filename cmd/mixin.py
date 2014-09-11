@@ -1,9 +1,9 @@
 def MixIn(pyClass, mixInClass, makeLast=False):
-  if mixInClass not in pyClass.__bases__:
-    if makeLast:
-      pyClass.__bases__ += (mixInClass,)
-    else:
-      pyClass.__bases__ = (mixInClass,) + pyClass.__bases__
+    if mixInClass not in pyClass.__bases__:
+        if makeLast:
+            pyClass.__bases__ += (mixInClass,)
+        else:
+            pyClass.__bases__ = (mixInClass,) + pyClass.__bases__
 
 def makeWithMixins(cls, mixins, verbose=False):
     for mixin in mixins:

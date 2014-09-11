@@ -17,7 +17,7 @@ try:
     debug = cm_config_server().get("cloudmesh.server.debug")
 except:
     pass
-    
+
 PROGRESS.set('Cloudmesh Services', 50)
 
 rabbit_env = {

@@ -2,67 +2,61 @@ from user import User, Users
 import mongoengine
 from cloudmeshobject import order, make_form_list
 
+
 def main():
 
     # users = Users()
     # users.clear()
-    
+
     gregor = User(
-        title = "",
-        firstname = "Hallo",
-        lastname = "von Laszewski",
-        email = "laszewski@gmail.com",
-        username = "gregvon",
-        active = True,
-        password = "none",
-        phone = "6625768900",
-        department = "School of Informatics and Computing",
-        institution = "Indiana University",
-        address = "Bloomington",
-        country = "USA",
-        citizenship = "Germany",
-        bio = "I work at Indiana University Bloomington",
+        title="",
+        firstname="Hallo",
+        lastname="von Laszewski",
+        email="laszewski@gmail.com",
+        username="gregvon",
+        active=True,
+        password="none",
+        phone="6625768900",
+        department="School of Informatics and Computing",
+        institution="Indiana University",
+        address="Bloomington",
+        country="USA",
+        citizenship="Germany",
+        bio="I work at Indiana University Bloomington",
     )
-    
-    
-    from pprint import pprint 
+
+    from pprint import pprint
     import sys
-    print 70 * "="    
     print 70 * "="
-    pprint (User.__dict__.keys())    
     print 70 * "="
-    pprint (User._db_field_map)
+    pprint(User.__dict__.keys())
     print 70 * "="
-    pprint (User._fields_ordered)        
-    pprint (User.__dict__)
+    pprint(User._db_field_map)
+    print 70 * "="
+    pprint(User._fields_ordered)
+    pprint(User.__dict__)
 
     print 70 * "="
-    pprint (User._fields)    
+    pprint(User._fields)
     print 70 * "="
     print type(User._fields["bio"])
     print type(User._fields["bio"]) == mongoengine.fields.StringField
     print type(User._fields["bio"]) == mongoengine.fields.URLField
     print 70 * "x"
 
-
-        
-    
     print order(User)
     print order(User, include=['username'])
-    print order(User, exclude=['id'])        
-    print order(User, include=['username','lastname'], exclude=['lastname'])
+    print order(User, exclude=['id'])
+    print order(User, include=['username', 'lastname'], exclude=['lastname'])
     print 70 * "o"
     print User._fields
-    print 70 *  "p"
+    print 70 * "p"
     print order(User, kind="required")
     print order(User, kind="all")
 
+    make_form_list(
+        User, ['username', 'firstname'], format="table", capital=False)
 
-
-        
-    make_form_list (User, ['username', 'firstname'], format="table", capital=False)
-       
-        
     """
     # print gregor.fields()
     # print gregor.fields("optinal")

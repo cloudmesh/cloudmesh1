@@ -8,14 +8,15 @@ from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
+
 class HeatClusterMap(BaseClusterMap):
 
     # maximum h, 240/360 = 2/3
     h_max = 2.0 / 3.0
-    
+
     # unit of temperature 'C' or 'F'
     temperature_unit = 'C'
-    
+
     # minimum temperature user defined
     temperature_min = 0
 
@@ -24,7 +25,7 @@ class HeatClusterMap(BaseClusterMap):
 
     # default temperature
     temperature_default = 0
-    
+
     # RGB for unknown temperature of host
     rgb_unknown_temperature = (211, 211, 211)
 
@@ -37,55 +38,61 @@ class HeatClusterMap(BaseClusterMap):
 
     # temperature marker dict
     dict_marker = {"min": None,  # minimum temperature displayed on color bar, <= temperature_min
-                   "max": None,  # maximum temperature displayed on color bar, >= temperature_max
+                   # maximum temperature displayed on color bar, >=
+                   # temperature_max
+                   "max": None,
                    "start": None,  # marker start displayed on color bar
                    "end": None,  # marker end displayed on color bar
                    "step": None,  # marker step
                    "round": None,  # temperarture precise
                    "range": None  # marker_max - marker_min
-                }
+                   }
 
     # color table, NOT used,
     #
     # instead of using a fixed color table, we use a dynamic color table from #0000FF to #FF0000
     # With the dynamic color table, we can have 240 different colors rather than 100
     # If possilbe, we can change the 240 colors to 2M (240 * 100 * 100) colors according to the HSV color space
-    # But, I think it is enough for us to denote the different status of clusters with 240 colors
+    # But, I think it is enough for us to denote the different status of
+    # clusters with 240 colors
 
     def __init__(self, username, name,
                  dir_yaml=None, dir_diag=None, dir_output=None, img_type=None,
                  min_temp=0, max_temp=100):
         self.setTemperatureMinMax(min_temp, max_temp)
         # call parent init function
-        BaseClusterMap.__init__(self, username, name, "temperature", dir_yaml, dir_diag, dir_output, img_type)
-        
+        BaseClusterMap.__init__(
+            self, username, name, "temperature", dir_yaml, dir_diag, dir_output, img_type)
+
     def get_temperature_unit(self):
-        return self.temperature_unit;
-    
+        return self.temperature_unit
+
     def set_temperature_unit(self, unit):
         upper_unit = "C" if not unit else unit.upper()
         if upper_unit in ['C', 'F']:
             self.temperature_unit = upper_unit
-    
+
     def set_optional_param(self, aparam):
         self.set_temperature_unit(aparam)
-    
+
     def get_optional_param(self):
         return self.get_temperature_unit()
-    
-    
+
     # set min/max temperature
     # adjust min/max and marker on color bar
     #
     def setTemperatureMinMax(self, tmin, tmax):
         self.temperature_min = float(tmin if tmin > 0 else 0)
-        self.temperature_max = float(tmax if self.temperature_min < tmax else self.temperature_min + 1)
+        self.temperature_max = float(
+            tmax if self.temperature_min < tmax else self.temperature_min + 1)
 
         # step of temperature marker
         marker_step = round(self.temperature_max - self.temperature_min) / 10
         # marker_step_half = 0.5 * marker_step
-        marker_list = [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 25, 50, 100, 200, 500]
-        marker_round_list = [0.01, 0.01, 0.01, 0.01, 0.1, 0.1, 0.1, 1, 1, 2, 5, 10, 20, 50, 100]
+        marker_list = [
+            0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 25, 50, 100, 200, 500]
+        marker_round_list = [
+            0.01, 0.01, 0.01, 0.01, 0.1, 0.1, 0.1, 1, 1, 2, 5, 10, 20, 50, 100]
         temp_round_list = [3, 3, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1]
         # guess the perfect step of color bar marker
         prev_index = 0
@@ -94,11 +101,13 @@ class HeatClusterMap(BaseClusterMap):
                 marker_step = marker_list[prev_index]
                 marker_round = marker_round_list[prev_index]
                 temp_round_precise = temp_round_list[prev_index]
-                break;
+                break
             prev_index += 1
         # marker start/end on color bar marker
-        marker_start = int(round(self.temperature_min / marker_step)) * marker_step
-        marker_end = int(round(self.temperature_max / marker_step)) * marker_step
+        marker_start = int(
+            round(self.temperature_min / marker_step)) * marker_step
+        marker_end = int(
+            round(self.temperature_max / marker_step)) * marker_step
         # min/max temperature on color bar
         marker_min = marker_start
         while marker_min > self.temperature_min:
@@ -126,35 +135,34 @@ class HeatClusterMap(BaseClusterMap):
                                  "step": marker_step,
                                  "round": temp_round_precise,
                                  "range": marker_max - marker_min
-                                })
-
-
+                                 })
 
     # get the RGB according to a specific temperature
-    # the MAX different colors is 240, from #0000FF to #FF0000 with temperature ascending
+    # the MAX different colors is 240, from #0000FF to #FF0000 with
+    # temperature ascending
     def getRGB(self, temp):
         rate = (self.dict_marker["max"] - temp) / self.dict_marker["range"]
         h = rate * self.h_max
         return self.getRGBWithH(h)
 
-
     # get proper temperature for cluster server
-    # formation is XXX.YYY, the precise (YYY) is controlled by self.dict_marker["round"]
+    # formation is XXX.YYY, the precise (YYY) is controlled by
+    # self.dict_marker["round"]
     def getProperTemperature(self, temp):
         # temperature unknown
-        round_temp = -1 if temp == -1 else round(temp, self.dict_marker["round"])
+        round_temp = -1 if temp == - \
+            1 else round(temp, self.dict_marker["round"])
         if round_temp not in self.dict_mapping.keys():
             temp_rgb = self.getRGB(round_temp)
-            self.dict_mapping.update({round_temp:temp_rgb})
+            self.dict_mapping.update({round_temp: temp_rgb})
 
         return round_temp
 
-
     # default temperature for cluster servers
     def getDefaultTemperature(self):
-        temp_default = self.temperature_min + (self.temperature_max - self.temperature_min) / 3.0
+        temp_default = self.temperature_min + \
+            (self.temperature_max - self.temperature_min) / 3.0
         return self.getProperTemperature(temp_default)
-
 
     # ======================================
     #           abstract function
@@ -165,8 +173,6 @@ class HeatClusterMap(BaseClusterMap):
     def getServersDefaultValue(self):
         self.temperature_default = self.getDefaultTemperature()
         return self.temperature_default
-
-
 
     # ======================================
     #           abstract function
@@ -179,7 +185,6 @@ class HeatClusterMap(BaseClusterMap):
     def getMappingDict(self):
         return deepcopy(self.dict_mapping)
 
-
     # ======================================
     #           abstract function
     #         sub-class MUST override
@@ -187,7 +192,8 @@ class HeatClusterMap(BaseClusterMap):
     #
     # get the current status of servers
     # params: dict_values means the data get from each server
-    # this function MUST be called before plot to refresh status of servers in memory
+    # this function MUST be called before plot to refresh status of servers in
+    # memory
     def update(self, dict_values):
         if dict_values is None:
             return
@@ -195,14 +201,14 @@ class HeatClusterMap(BaseClusterMap):
         self.dict_mapping.clear()
         # unknow temperature of host
         self.dict_mapping.update({-1: self.rgb_unknown_temperature})
-        arr_values = [value for value in sorted(dict_values.values()) if value >= 0]
+        arr_values = [
+            value for value in sorted(dict_values.values()) if value >= 0]
         self.setTemperatureMinMax(arr_values[0], arr_values[-1])
         self.resetDictServers(self.getServersDefaultValue())
 
         for server in dict_values:
             value = self.getProperTemperature(dict_values[server])
             self.updateServer(server, value)
-
 
     # ======================================
     #           abstract function
@@ -240,7 +246,8 @@ class HeatClusterMap(BaseClusterMap):
             rect = self.genDefaultRect()
             lb_x = xstart
             lb_y = ystart + ystep
-            rect.update({"verts":{"lb":(lb_x, lb_y), "rt":(lb_x + xwidth, lb_y + yheight)}})
+            rect.update(
+                {"verts": {"lb": (lb_x, lb_y), "rt": (lb_x + xwidth, lb_y + yheight)}})
             # color
             if i == 0:
                 rcolor = "#0000FF"
@@ -250,33 +257,35 @@ class HeatClusterMap(BaseClusterMap):
                 h = (color_bar_count - i) * hstep
                 rcolor = self.convertRGB2Hex(self.getRGBWithH(h))
 
-            rect.update({"facecolor_rect":rcolor, "edgecolor_rect":rcolor})
+            rect.update({"facecolor_rect": rcolor, "edgecolor_rect": rcolor})
 
             # label
             lb_x -= xstep
             if i == 0:
-                rect.update({"label":{"lb":(lb_x - 0.5 * xstep, ystart), "text": marker_min}})
+                rect.update(
+                    {"label": {"lb": (lb_x - 0.5 * xstep, ystart), "text": marker_min}})
             elif i == color_bar_count:
-                rect.update({"label":{"lb":(lb_x, ystart), "text": marker_max}})
+                rect.update(
+                    {"label": {"lb": (lb_x, ystart), "text": marker_max}})
             # marker
             elif abs(temp_current - marker_current) < tstep_half:
-                rect.update({"label":{"lb":(lb_x, ystart), "text": marker_current}})
+                rect.update(
+                    {"label": {"lb": (lb_x, ystart), "text": marker_current}})
                 rect.update({"marker": True})
                 marker_current += marker_step
 
             xstart += xstep
             temp_current += tstep
-            
+
             self.drawRectangle(ax, rect)
         # temperature unit
-        pos_unit = (xstart*0.4, 0)
+        pos_unit = (xstart * 0.4, 0)
         options = {
-                     "C": "Celsius",
-                     "F": "Fahrenheit",
-                   }
-        self.drawText(ax, pos_unit, "( Temperature unit: {0} )".format(options[self.temperature_unit]))
-
-
+            "C": "Celsius",
+            "F": "Fahrenheit",
+        }
+        self.drawText(ax, pos_unit, "( Temperature unit: {0} )".format(
+            options[self.temperature_unit]))
 
     # only for test
     def genRandomValues(self, flag_continue=True):
@@ -284,7 +293,6 @@ class HeatClusterMap(BaseClusterMap):
             return self.generateContinousTemperature()
         else:
             return self.generateRandomTemperature()
-
 
     # only for test
     # generate random temperature for cluster servers
@@ -295,11 +303,11 @@ class HeatClusterMap(BaseClusterMap):
         dict_data = {}
         for server in self.dict_servers:
             temp_rand = self.getRandom()
-            temp = self.getProperTemperature(self.temperature_min + temp_rand * (self.temperature_max - self.temperature_min))
+            temp = self.getProperTemperature(
+                self.temperature_min + temp_rand * (self.temperature_max - self.temperature_min))
             dict_data[server] = temp
 
         return dict_data
-
 
     # only for test, especially continuous colors
     def generateContinousTemperature(self):
@@ -323,8 +331,9 @@ class HeatClusterMap(BaseClusterMap):
 # test
 if __name__ == "__main__":
     mytest = HeatClusterMap("echo")
-    ddata = {'e010': 43.0, 'e016': 53.0, 'e011': 43.0, 'e012': 43.0, 'e003': 43.0, 'e002': 43.0, 'e001': 43.0, 'e013': 51.0, 'e007': 43.0, 'e006': 43.0, 'e005': 43.0, 'e004': 43.0, 'e014': 43.0, 'e009': 43.0, 'e008': 43.0, 'e015': 43.0}
-    #mytest.update(mytest.genRandomValues())
+    ddata = {'e010': 43.0, 'e016': 53.0, 'e011': 43.0, 'e012': 43.0, 'e003': 43.0, 'e002': 43.0, 'e001': 43.0, 'e013':
+             51.0, 'e007': 43.0, 'e006': 43.0, 'e005': 43.0, 'e004': 43.0, 'e014': 43.0, 'e009': 43.0, 'e008': 43.0, 'e015': 43.0}
+    # mytest.update(mytest.genRandomValues())
     legend_size = mytest.getImageLegendSize()
     print "legend size: ", legend_size
     mytest.update(ddata)
