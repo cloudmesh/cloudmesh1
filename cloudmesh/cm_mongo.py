@@ -754,20 +754,26 @@ class cm_mongo:
 
     def ssh_execute(self, ipaddr, username="ubuntu", command="ls -al", pkey=None):
 
-        # RETRY
-        _max = 10  # times
-        _interval = 5  # second
-        for i in range(_max):
+        try:
+            result = ssh_execute(username, ipaddr, command, pkey)
+            return result
+        except:
+            err = sys.exc_info()[0]
+            log.error("Can not execute ssh on {0}:{1}".format(ipaddr, err))
+            raise err
+
+    def wait(self, ipaddr, username="ubuntu", command="ls -al", pkey=None, interval=5, retry=10):
+
+        for i in range(retry):
             print str(i) + " try to execute via ssh..."
             try:
-                result = ssh_execute(username, ipaddr, command, pkey)
-                if result:
-                    break
+                result = self.ssh_execute(ipaddr, username=username,
+                                          command=command, pkey=pkey)
+                return result
             except:
                 err = sys.exc_info()[0]
-                time.sleep(_interval)
-
-        return result or err
+                time.sleep(interval)
+        raise err
 
 '''
 def main():

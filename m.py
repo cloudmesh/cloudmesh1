@@ -108,10 +108,15 @@ server = vm['server']['id']
 cloudmesh.banner("ASSIGN PUBLIC IP ADDRESS TO THE VM")
 ip = mesh.assign_public_ip(cloud, server, username)
 
-
-cloudmesh.banner("RUN A COMMAND VIA SSH TO THE VM")
-result = mesh.ssh_execute(ipaddr=ip, command="ls -al")
-print result
+cloudmesh.banner("WAIT")
+try:
+    result = mesh.wait(ipaddr=ip, command="uname -a", interval=10, retry=5)
+    cloudmesh.banner("RUN A COMMAND VIA SSH TO THE VM")
+    result = mesh.ssh_execute(ipaddr=ip, command="ls -al")
+    print result
+except:
+    import sys
+    print sys.exc_info()[0]
 
 cloudmesh.banner("DELETE THE VM: " + server)
 mesh.delete(cloud, server, username)
