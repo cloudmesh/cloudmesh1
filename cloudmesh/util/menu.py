@@ -84,11 +84,11 @@ def menu_return_num(title=None, menu_list=None, tries=1):
                 result = int(result)
             except:
                 print "invalid input..."
-                tries = tries-1
+                tries = tries - 1
                 continue
             if result > 0 and result <= n:
                 print "choice {0} selected.".format(result)
-                return result-1
+                return result - 1
             else:
                 print "ERROR: wrong selection"
 

@@ -221,7 +221,7 @@ class cm_shell_key:
             username = cm_config().username()
             key_store = cm_keys_mongo(username)
             filename = arguments["FILENAME"]
-            
+
             # file exists?
             # print filename
             if isfile(expanduser(filename)):
@@ -246,13 +246,10 @@ class cm_shell_key:
                 else:
                     print "ERROR: INVALID key. Please verify!"
             else:
-                print "ERROR: INVALID filename provided!"     
+                print "ERROR: INVALID filename provided!"
 
             return
 
-
-
-                    
             """
             def func():
                 if arguments["KEY"]:
@@ -312,7 +309,7 @@ class cm_shell_key:
 
             key_store.delete(arguments["KEYNAME"])
             return
-        
+
         # deprecating...
         """
         if arguments["save"]:

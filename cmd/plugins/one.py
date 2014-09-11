@@ -2,6 +2,7 @@
 
 from cmd import Cmd
 
+
 class CommandOne(Cmd):
 
     def do_one(self, args):
@@ -15,4 +16,4 @@ class CommandOne(Cmd):
 if __name__ == '__main__':
     prompt = CommandOne()
     prompt.prompt = '> '
-    prompt.cmdloop('Starting prompt...')        
+    prompt.cmdloop('Starting prompt...')

@@ -18,15 +18,16 @@ def deploy_system(name):
     rest_api = CobblerRestAPI()
     result = rest_api.deploy_cobbler_system(name)
     log.info("deploy_system, deploy command result is: {0}".format(result))
-    
+
+
 @celery_rain_queue.task(track_started=True)
 def power_system(name, flag_on):
     '''Power ON/OFF baremetal computer whose name is **name**
     :param string name: the unique name of baremetal computer
     :param boolean flag_on: True means power ON, False means OFF
     '''
-    log.debug("power_system_task recieved, host is {0}, flag is: {1}".format(name, "ON" if flag_on else "OFF"))
+    log.debug("power_system_task recieved, host is {0}, flag is: {1}".format(
+        name, "ON" if flag_on else "OFF"))
     rest_api = CobblerRestAPI()
     result = rest_api.power_cobbler_system(name, flag_on)
     log.info("power_system, power command result is: {0}".format(result))
-    

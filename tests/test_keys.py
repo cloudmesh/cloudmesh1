@@ -27,7 +27,7 @@ class Test_cloudmesh:
 
     def setup(self):
         pass
-    
+
     def tearDown(self):
         pass
 
@@ -54,31 +54,31 @@ class Test_cloudmesh:
         HEADING()
         print self.key_store.default()
         assert True
-        
+
     def test04_getvalue(self):
         HEADING()
         for key in self.key_store.names():
             print self.key_store._getvalue(key)
         assert True
-            
+
     def test05_set(self):
         HEADING()
         first_key = self.key_store.names()[0]
         self.key_store.setdefault(first_key)
         print self.key_store.default()
         assert True
-        
+
     def test06_get(self):
         HEADING()
         first_key = self.key_store.names()[0]
         print self.key_store[first_key]
         assert True
-        
+
     def test07_get(self):
         HEADING()
         print self.key_store["default"]
         assert True
-        
+
     def test08_set(self):
         HEADING()
 
@@ -105,4 +105,3 @@ class Test_cloudmesh:
             print name, key
             print get_fingerprint(key)
         assert True
-        

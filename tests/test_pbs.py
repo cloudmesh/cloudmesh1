@@ -27,6 +27,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh_common.util import HEADING
 from cloudmesh import banner
 
+
 class Test:
 
     hosts = ["india.futuregrid.org",
@@ -34,13 +35,11 @@ class Test:
              "hotel.futuregrid.org",
              "alamo.futuregrid.org"]
 
-
     def setup(self):
         # self.configuration = cm_config()
         # pprint (self.configuration.__dict__)
         self.user = "gvonlasz"
         self.host = "india.futuregrid.org"
-
 
         # pprint (_create_pbsinfo_dict(data))
 
@@ -53,7 +52,7 @@ class Test:
         results = self.pbs.qstat()
         for name in results:
             element = results[name]
-            pprint (element)
+            pprint(element)
 
     def get_qinfo(self, host):
         HEADING()
@@ -61,14 +60,13 @@ class Test:
         results = self.pbs.qinfo()
         for name in results:
             element = results[name]
-            pprint (element)
+            pprint(element)
 
     def test_all(self):
         HEADING()
         for host in self.hosts:
             banner(host)
             self.get_qstat(host)
-
 
     def test_info(self):
         HEADING()
@@ -83,6 +81,3 @@ class Test:
         for host in self.hosts:
             banner(host)
             self.get_qinfo(host)
-
-
-

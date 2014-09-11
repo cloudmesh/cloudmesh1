@@ -2,6 +2,7 @@ from datetime import datetime
 import time
 import json
 
+
 def donotchange(fn):
     return fn
 
@@ -39,7 +40,7 @@ class ComputeBaseType:
         self.flavors = {}  # global var
         self.images = {}  # global var
         self.servers = {}  # global var
-        self.security_groups = {} # global var
+        self.security_groups = {}  # global var
         self.credential = None  # global var
         self.label = None  # global var
         self.type = None
@@ -197,7 +198,7 @@ class ComputeBaseType:
             # 'users': self.users,
             # 'users': len(self.users),
             # 'tenants': self.tenants,
-            }
+        }
         return json.dumps(information, indent=4)
 
     #
@@ -210,7 +211,6 @@ class ComputeBaseType:
     def vms(self):
         """returns the dict of the servers. deprecated."""
         return self.servers
-
 
     def status(self, vm_id):
         """returns that status of a given virtual machine"""

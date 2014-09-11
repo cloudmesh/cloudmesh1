@@ -27,6 +27,7 @@ class GitInfo(object):
         print stats
 
     """
+
     def __init__(self):
         """init method"""
         pass
@@ -154,7 +155,7 @@ class GitInfo(object):
                 stats[email]["inserted"] / float(sums["inserted"]),
                 stats[email]["deleted"] / float(sums["deleted"]),
                 stats[email]["lineschanged"] / float(sums["lineschanged"])
-                ]}
+            ]}
 
         return stats
 

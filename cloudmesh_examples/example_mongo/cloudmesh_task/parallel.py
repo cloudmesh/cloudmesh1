@@ -5,18 +5,18 @@ from pytimeparse.timeparse import timeparse
 from cloudmesh.management.cloudmeshobject import CloudmeshObject
 
 from mongoengine import *
-connect ('cloudmesh', port=27777)
+connect('cloudmesh', port=27777)
 
 import numpy as np
 
 
-def welford_variance(value,n=0.0,mean=0.0,M2=0.0):
+def welford_variance(value, n=0.0, mean=0.0, M2=0.0):
     n += 1
     delta = value - mean
-    mean = mean + delta/n
-    M2 = M2 + delta * (value - mean)  
-    population_variance = M2 / n    
-    sample_variance = M2 / (n - 1)  
+    mean = mean + delta / n
+    M2 = M2 + delta * (value - mean)
+    population_variance = M2 / n
+    sample_variance = M2 / (n - 1)
     return population_variance, sample_variance, n, mean, M2
 
 
@@ -34,7 +34,7 @@ class Cache(CloudmeshObject):
         entry = Cache(id=id, value=value)
         print "KEYS", value.keys()
         entry.save()
-        
+
     @staticmethod
     def get(key, f):
         id = key + f.__name__
@@ -47,15 +47,17 @@ class Cache(CloudmeshObject):
 
     @staticmethod
     def get_id(key, f):
-        id = key + f.__name__            
+        id = key + f.__name__
         return id
+
 
 def time_expired(time, delta):
     time_valid = time + timedelta(seconds=delta)
     not_valid = datetime.now() > time_valid
     return not_valid
 
-def Sequential (credential, f, delta=4, **kwargs):
+
+def Sequential(credential, f, delta=4, **kwargs):
     result = {}
     for host in credential:
         entry = Cache.get(host, f)
@@ -69,11 +71,12 @@ def Sequential (credential, f, delta=4, **kwargs):
             result[host] = entry["value"]
     return result
 
-def Parallel (credential, f, delta=4, **kwargs):
+
+def Parallel(credential, f, delta=4, **kwargs):
     task = {}
     result = {}
     update = []
-    
+
     for host in credential:
         entry = Cache.get(host, f)
         time_stamp = entry["date_modified"]
@@ -85,16 +88,15 @@ def Parallel (credential, f, delta=4, **kwargs):
             id = Cache.get_id(host, f)
             print "submitting -> {0}@{1}".format(user, host)
             update.append(host)
-            task[host] = f.apply_async(args=(host,user),
-                                        kwargs=kwargs,
-                                        expires=10, task_id=id)
+            task[host] = f.apply_async(args=(host, user),
+                                       kwargs=kwargs,
+                                       expires=10, task_id=id)
         else:
             result[host] = entry["value"]
 
-    banner ("tasks", c=".")
-    pprint (task)
+    banner("tasks", c=".")
+    pprint(task)
     print update
-    
 
     for host in update:
         print "getting -> {0}".format(host), str(task[host])
@@ -103,8 +105,8 @@ def Parallel (credential, f, delta=4, **kwargs):
         print "INFO", task[host].info
         banner("result")
         print "RESULT", task[host].result
-        banner("backend")        
-        print "BACKEND", task[host].backend        
+        banner("backend")
+        print "BACKEND", task[host].backend
         Cache.update(host, f, result[host])
-                
+
     return result

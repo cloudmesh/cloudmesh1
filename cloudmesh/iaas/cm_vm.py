@@ -77,7 +77,7 @@ def shell_command_vm(arguments):
                         delete servers on selected or default cloud with search conditions:
                         group name is test and index in the name of the servers is no greater
                         than 9
-                    
+
     """
 
     call_proc = VMcommand(arguments)
@@ -221,18 +221,18 @@ class VMcommand(object):
                   deleteAllCloudVMs=deleteAllCloudVMs,
                   preview=preview)
 
-
     def _assign_public_ip(self):
         cloudname = self.get_working_cloud_name()
-        if cloudname == False: return
+        if cloudname == False:
+            return
         serverid = self.get_working_server_id(cloudname)
-        if serverid == False: return
-        assign_public_ip(username=self.username, cloudname=cloudname, serverid=serverid)
-        
-        
+        if serverid == False:
+            return
+        assign_public_ip(
+            username=self.username, cloudname=cloudname, serverid=serverid)
+
     def _vm_login(self):
         print "NOT WORKING"
-        
 
     # --------------------------------------------------------------------------
     def get_working_cloud_name(self):
@@ -247,7 +247,8 @@ class VMcommand(object):
             cloud = cloudobj.get_clouds(
                 self.username, getone=True, cloudname=self.arguments['--cloud'])
             if cloud is None:
-                Console.error("could not find cloud '{0}'".format(self.arguments['--cloud']))
+                Console.error(
+                    "could not find cloud '{0}'".format(self.arguments['--cloud']))
                 return False
             else:
                 cloudname = self.arguments['--cloud']
@@ -259,7 +260,7 @@ class VMcommand(object):
             return False
         else:
             return cloudname
-        
+
     def get_working_server_id(self, cloudname):
         serverid = None
         mongo = cm_mongo()
@@ -277,7 +278,8 @@ class VMcommand(object):
                                 .format(self.arguments['NAME']))
                 return False
             elif len(ls) == 0:
-                Console.error("Could not find VM named {0}".format(self.arguments['NAME']))
+                Console.error(
+                    "Could not find VM named {0}".format(self.arguments['NAME']))
                 return False
             else:
                 serverid = ls[0]
@@ -287,16 +289,14 @@ class VMcommand(object):
                     serverid = self.arguments['--id']
                     break
             if serverid == None:
-                Console.error("Could not find VM with id {0}".format(self.arguments['--id']))
+                Console.error(
+                    "Could not find VM with id {0}".format(self.arguments['--id']))
                 return False
         else:
             Console.warning("Please pecify a VM name or id")
             return False
         return serverid
 
-                
-                
-    
     def call_procedure(self):
         if self.arguments['start']:
             self._vm_create()
@@ -718,7 +718,6 @@ def delete_vm(username,
         print ("time consumed: %.2f" % watch), "s"
 
 
-
 def assign_public_ip(username=None, cloudname=None, serverid=None):
 
     config = cm_config()
@@ -728,11 +727,11 @@ def assign_public_ip(username=None, cloudname=None, serverid=None):
     mycloud = config.cloud(cloudname)
     if not mycloud.has_key('cm_automatic_ip') or mycloud['cm_automatic_ip'] is False:
         mongo.assign_public_ip(cloudname, serverid, username)
-        mongo.refresh(names=[cloudname], types=["servers"], cm_user_id=username)
+        mongo.refresh(
+            names=[cloudname], types=["servers"], cm_user_id=username)
     # else:
     # return "Manual public ip assignment is not allowed for {0}
     # cloud".format(cloud)
-    
 
 
 # ========================================================================
@@ -793,7 +792,6 @@ def server_name_analyzer(name):
     else:
         prefix = res[0]
         return [prefix, index]
-
 
 
 # ========================================================================

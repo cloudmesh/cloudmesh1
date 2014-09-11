@@ -18,16 +18,16 @@ from cloudmesh_install.util import path_expand
 from pprint import pprint
 from cloudmesh_install import config_file
 
+
 class Test_cloudmesh:
 
-    username = ConfigDict(filename=config_file("/cloudmesh.yaml")).get("cloudmesh.hpc.username")
-
+    username = ConfigDict(
+        filename=config_file("/cloudmesh.yaml")).get("cloudmesh.hpc.username")
 
     filename = "etc/cloudmesh.yaml"
 
-
     def setup(self):
-        self.idp = cm_userLDAP ()
+        self.idp = cm_userLDAP()
         self.idp.connect("fg-ldap", "ldap")
         self.idp.refresh()
 
@@ -39,12 +39,10 @@ class Test_cloudmesh:
         user = self.idp.find_one({'cm_user_id': self.username})
         print user
 
-
     def test_list(self):
         users = self.idp.list()
         pprint(users)
         pprint(self.idp.users)
-
 
     def test_auth(self):
         password = getpass.getpass()

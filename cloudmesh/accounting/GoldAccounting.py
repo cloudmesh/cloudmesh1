@@ -6,7 +6,9 @@ from sh import gstatement
 
 from cloudmesh.accounting.AccountingBaseClass import AccountingBaseClass
 
+
 class GoldAccounting(AccountingBaseClass):
+
     """The gold accounting implementation class"""
 
     def project_usage(self, project):

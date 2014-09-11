@@ -21,6 +21,7 @@ from cloudmesh_common.util import HEADING
 from cloudmesh_install.util import path_expand
 from cloudmesh_install import config_file
 
+
 class Test_pass:
 
     def setup(self):
@@ -32,5 +33,3 @@ class Test_pass:
     def test_dummy(self):
         HEADING()
         assert True
-
-

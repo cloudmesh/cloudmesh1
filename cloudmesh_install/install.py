@@ -80,7 +80,7 @@ def install_command(args):
         install enable admin [--username=<username>]
 
     """
-    print "IIIII<" +args +">"
+    print "IIIII<" + args + ">"
 
     arguments = docopt(install_command.__doc__, args)
 
@@ -132,6 +132,7 @@ def install_command(args):
 
     elif arguments["enable"] and arguments["admin"]:
         enable_admin_page(arguments['--username'])
+
 
 def new_cloudmesh_yaml():
     """ Generate yaml files from the templates in etc directory
@@ -324,12 +325,12 @@ def centos():
     install()
     # install_mongodb()
 
+
 def safe_install(what):
     try:
         local(what)
     except:
         print "Warning: could not install:", what
-
 
 
 def osx():
@@ -371,7 +372,8 @@ def sphinx_updates():
 
     banner("install sphinx autorun", c="-")
     user = getpass.getuser()
-    dirname = local("mktemp -d /tmp/{0}_cloudmesh.XXXXX".format(user), capture=True)
+    dirname = local(
+        "mktemp -d /tmp/{0}_cloudmesh.XXXXX".format(user), capture=True)
     dirname = dirname + "/install-cloudmesh"
     local('rm -rf %s' % dirname)
     local('mkdir -p %s' % dirname)
@@ -396,18 +398,19 @@ def vagrant():
 
 def enable_admin_page(userid):
     if not userid:
-        userid=_get_username_from_profile()
+        userid = _get_username_from_profile()
 
     _set_username_to_admin(userid)
 
+
 def _set_username_to_admin(userid):
-    server_yaml = _get_value_from_yaml("/cloudmesh_server.yaml",[])
+    server_yaml = _get_value_from_yaml("/cloudmesh_server.yaml", [])
 
     updated_yaml = server_yaml
-    updated_yaml['cloudmesh']['server']['roles']['admin']['users']=[userid]
-
+    updated_yaml['cloudmesh']['server']['roles']['admin']['users'] = [userid]
 
     _set_value_to_yaml("/cloudmesh_server.yaml", updated_yaml)
+
 
 def _get_bak_filename(filename, postfix=0):
     import os.path
@@ -416,11 +419,13 @@ def _get_bak_filename(filename, postfix=0):
         return _get_bak_filename(filename, postfix + 1)
     return bak_name
 
+
 def _make_a_backup(filename):
     import shutil
     dest = _get_bak_filename(filename)
     shutil.copyfile(filename, dest)
     return dest
+
 
 def _set_value_to_yaml(filepath, data):
 
@@ -436,9 +441,11 @@ def _set_value_to_yaml(filepath, data):
         outfile.write(yaml.dump(data, default_flow_style=False))
         print "[%s] updated" % cm_file
 
+
 def _get_username_from_profile():
     return _get_value_from_yaml("/cloudmesh.yaml",
-                         ['cloudmesh', 'profile', 'username'])
+                                ['cloudmesh', 'profile', 'username'])
+
 
 def _lookup(data, keys):
     try:
@@ -448,6 +455,7 @@ def _lookup(data, keys):
     except:
         return data
     return data
+
 
 def _get_value_from_yaml(filepath, column_keys):
     dir = config_file("")

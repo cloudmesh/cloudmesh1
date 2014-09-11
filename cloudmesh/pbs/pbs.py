@@ -16,6 +16,7 @@ from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
+
 class PBS:
 
     user = None
@@ -36,27 +37,27 @@ class PBS:
         #
         if host.startswith("india"):
             self.cluster_queues = {
-                                   'india.futuregrid.org': [
-                                                            'batch',
-                                                            'long',
-                                                            'b534',
-                                                            'systest',
-                                                            'reserved',
-                                                            'interactive'],
-                                   'delta.futuregrid.org': [
-                                                            'delta',
-                                                            'delta-long'],
-                                   'echo.futuregrid.org': ['echo'],
-                                   'bravo.futuregrid.org': ['bravo', 'bravo-long'],
-                                   }
+                'india.futuregrid.org': [
+                    'batch',
+                    'long',
+                    'b534',
+                    'systest',
+                    'reserved',
+                    'interactive'],
+                'delta.futuregrid.org': [
+                    'delta',
+                    'delta-long'],
+                'echo.futuregrid.org': ['echo'],
+                'bravo.futuregrid.org': ['bravo', 'bravo-long'],
+            }
         elif host.startswith("sierra"):
             self.cluster_queues = {
-                'sierra.futuregrid.org': ['batch', 'long'] }
+                'sierra.futuregrid.org': ['batch', 'long']}
 
     def requister_joint_queues(self, cluster_queues):
         """allows the registration of queues for multiple clusters managed through the same queuing server
-        
-                
+
+
         cluster_queues = {
             'india.futuregrid.org': ['batch', 'long', 'b534', 'systest', 'reserved', 'interactive'],
             'delta.futuregrid.org': ['delta', 'delta-long'],
@@ -68,7 +69,7 @@ class PBS:
 
     def qinfo_user(self, refresh=True):
         """Return the number of user from qstat
-        
+
             example line is:
             873664.i136 ...549.sh xcguser  0   Q long
             $3 indicates an user id
@@ -77,7 +78,8 @@ class PBS:
             try:
                 result = ssh("{0}@{1}".format(self.user, self.host), "qstat")
             except:
-                raise RuntimeError("can not execute pbs qstat on host {0}".format(self.host))
+                raise RuntimeError(
+                    "can not execute pbs qstat on host {0}".format(self.host))
 
             # sanitize block
             data = self.convert_into_json(result)
@@ -108,29 +110,31 @@ class PBS:
 
     def convert_into_json(self, qstat):
 
-            list_qstat = qstat.split("\n")
-            try:
+        list_qstat = qstat.split("\n")
+        try:
                 # delete a delimiter line between a header and contents looks
                 # like '-------- --- ---'
-                del(list_qstat[1])
-            except:
-                pass
-            pattern = re.compile(r'\s+')
-            tmp = []
-            for row in list_qstat:
-                tmp.append(re.sub(pattern, ',', row))
+            del(list_qstat[1])
+        except:
+            pass
+        pattern = re.compile(r'\s+')
+        tmp = []
+        for row in list_qstat:
+            tmp.append(re.sub(pattern, ',', row))
 
-            res = csv.DictReader(tmp, skipinitialspace=True)
-            return res
+        res = csv.DictReader(tmp, skipinitialspace=True)
+        return res
 
     def qinfo(self, refresh=True):
         """returns qstat -Q -f in dict format"""
 
         if self.pbs_qinfo_data is None or refresh:
             try:
-                result = ssh("{0}@{1}".format(self.user, self.host), "qstat -Q -f")
+                result = ssh(
+                    "{0}@{1}".format(self.user, self.host), "qstat -Q -f")
             except:
-                raise RuntimeError("can not execute pbs qstat on host {0}".format(self.host))
+                raise RuntimeError(
+                    "can not execute pbs qstat on host {0}".format(self.host))
 
             d = {}
 
@@ -138,10 +142,10 @@ class PBS:
 
             result = result.replace("\n\t", "")
 
-            result = result.replace('resources_assigned.', 'resources_assigned_')
+            result = result.replace(
+                'resources_assigned.', 'resources_assigned_')
             result = result.replace('resources_default.', 'resources_default_')
             result = result.replace('resources_max.', 'resources_max_')
-
 
             for block in result.split("\n\n")[:-1]:
                 block = [x.replace(" =", ":", 1) for x in block.split("\n")]
@@ -157,7 +161,8 @@ class PBS:
                 # end sanitize
 
                 if 'state_count' in d[queue]:
-                    values = [x.split(":") for x in d[queue]['state_count'].split(" ")]
+                    values = [x.split(":")
+                              for x in d[queue]['state_count'].split(" ")]
                     d[queue]['state_count'] = {}
                     for value in values:
                         d[queue]['state_count'][value[0]] = value[1]
@@ -169,12 +174,11 @@ class PBS:
         self.pbs_qinfo_data = d
 
         #pprint(self.qinfo_extract(self.cluster_queues, self.pbs_qinfo_data))
-        
+
         if self.cluster_queues is None:
             return {self.host: self.pbs_qinfo_data}
         else:
             return self.qinfo_extract(self.cluster_queues, self.pbs_qinfo_data)
-
 
     def qinfo_extract(self, cluster_queues, qinfo_data):
 
@@ -189,7 +193,7 @@ class PBS:
                 try:
                     queues[cluster][q] = qinfo_data[q]
                 except:
-                    log.error("no data found for {0}".format(q)) 
+                    log.error("no data found for {0}".format(q))
         return queues
 
     def _qmgr(self, command):
@@ -197,14 +201,14 @@ class PBS:
         try:
             result = ssh("{0}@{1}".format(self.user, self.host), command)
         except:
-            raise RuntimeError("can not execute qmgr on host {0}, command:".format(self.host, command))
+            raise RuntimeError(
+                "can not execute qmgr on host {0}, command:".format(self.host, command))
         return result
 
     def create_node(self, name):
         """create node"""
         result = qmgr("create node {0}".format(name))
         return result
-
 
     def set_np(self, name, np):
         """set node %name np %np | qmgr"""
@@ -215,7 +219,7 @@ class PBS:
         """set node % properties %"""
         result = qmgr("set node {0} properties {1}".format(name, properties))
 
-    def set_note (self, name, note):
+    def set_note(self, name, note):
         """set node % note %"""
         result = qmgr("set node {0} note {1}".format(name, note))
 
@@ -224,20 +228,22 @@ class PBS:
 
         if self.pbs_nodes_data is None or refresh:
             try:
-                result = ssh("{0}@{1}".format(self.user, self.host), "pbsnodes", "-a")
+                result = ssh(
+                    "{0}@{1}".format(self.user, self.host), "pbsnodes", "-a")
             except:
-                raise RuntimeError("can not execute pbs nodes on host {0}".format(self.host))
+                raise RuntimeError(
+                    "can not execute pbs nodes on host {0}".format(self.host))
             pbsinfo = {}
             nodes = result.split("\n\n")
             for node in nodes:
                 pbs_data = node.split("\n")
-                pbs_data = [e.strip()  for e in pbs_data]
+                pbs_data = [e.strip() for e in pbs_data]
                 name = pbs_data[0]
                 if name != "":
                     pbsinfo[name] = {u'name': name}
                     for element in pbs_data[1:]:
                         try:
-                            (attribute, value) = element.split (" = ")
+                            (attribute, value) = element.split(" = ")
                             if attribute == 'status':
                                 status_elements = value.split(",")
                                 pbsinfo[name][attribute] = {}
@@ -272,13 +278,14 @@ class PBS:
         """add an attribute for the specified hosts"""
         print "TODO: ALLAN"
 
-
     def qstat(self, refresh=True):
         if self.pbs_qstat_data is None or refresh:
             try:
-                xmldata = str(ssh("{0}@{1}".format(self.user, self.host), "qstat", "-x"))
+                xmldata = str(
+                    ssh("{0}@{1}".format(self.user, self.host), "qstat", "-x"))
             except:
-                raise RuntimeError("can not execute pbs qstat on host {0}".format(self.host))
+                raise RuntimeError(
+                    "can not execute pbs qstat on host {0}".format(self.host))
             info = {}
 
             try:
@@ -293,13 +300,14 @@ class PBS:
                         else:
                             job[attribute.nodeName] = {}
                             for subchild in attribute.childNodes:
-                                job[attribute.nodeName][subchild.nodeName] = subchild.firstChild.nodeValue
+                                job[attribute.nodeName][
+                                    subchild.nodeName] = subchild.firstChild.nodeValue
 
                     info[job['Job_Id']] = job
             except:
                 pass
             self.pbs_qstat_data = info
-        #return self.pbs_qstat_data
+        # return self.pbs_qstat_data
 
         #pprint (self.pbs_qstat_data)
 
@@ -322,10 +330,9 @@ class PBS:
             for cluster in cluster_queues:
                 if queue in cluster_queues[cluster]:
                     queues[cluster][job] = qstat_data[job]
-            # log.error("no data found for {0}".format(q)) 
+            # log.error("no data found for {0}".format(q))
         return queues
 
-    
     def get_uniq_users(self, refresh=False):
         if self.pbs_qstat_data is None or refresh:
             self.qstat()
@@ -359,7 +366,8 @@ class PBS:
 
         def pbsnodes_data(host):
 
-            result = str(ssh("{0}@{1}".format(self.user, host), "pbsnodes", "-l", "-n"))[:-1]
+            result = str(
+                ssh("{0}@{1}".format(self.user, host), "pbsnodes", "-l", "-n"))[:-1]
             return result
 
         empty = ["", "", ""]
@@ -380,8 +388,6 @@ class PBS:
         # just taking column 2
 
         x = [x[2] for x in r]
-
-
 
         # print "GFKHFJH ", x
         cnt = Counter(x)
@@ -407,13 +413,10 @@ class PBS:
 
 if __name__ == "__main__":
 
-
     pbs = PBS("gvonlasz", "echo.futuregrid.org")
     #pprint (pbs.qinfo())
-    pprint (pbs.qstat())
+    pprint(pbs.qstat())
 
     pbs = PBS("gvonlasz", "alamo.futuregrid.org")
     #pprint (pbs.qinfo())
-    pprint (pbs.qstat())
-
-
+    pprint(pbs.qstat())

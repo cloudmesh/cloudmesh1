@@ -8,6 +8,7 @@ from cloudmesh.cm_mongo import cm_mongo
 #logger = get_task_logger(__name__)
 #
 
+
 @celery_azure_queue.task(track_started=True)
 def vm_create(name, flavor_name, image_id, security_groups=None, key_name=None,
               meta={}, userdata=None):
@@ -19,7 +20,7 @@ def vm_create(name, flavor_name, image_id, security_groups=None, key_name=None,
 
     '''
     obj = windows_azure()
-    obj.vm_create(name, flavor_name, image_id ,security_groups, key_name, meta,
+    obj.vm_create(name, flavor_name, image_id, security_groups, key_name, meta,
                   userdata)
 
 

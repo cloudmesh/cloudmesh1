@@ -31,18 +31,17 @@ def launch_servers():
     data = {
         'username': g.user.id,
         'india': 'india.futuregrid.org',
-        'sierra': 'sierra.futuregrid.org'        
+        'sierra': 'sierra.futuregrid.org'
     }
     for key in request.form.keys():
         data[key] = request.form[key]
     cloudname = data['cloud']
 
-
-    data['user'] = config["cloudmesh"]["clouds"][cloudname]["credentials"]["OS_USERNAME"]
+    data['user'] = config["cloudmesh"]["clouds"][
+        cloudname]["credentials"]["OS_USERNAME"]
     data['hostname'] = config["cloudmesh"]["clouds"][cloudname]["cm_host"]
 
     data['script'] = data['script'].format(**data)
-    
 
     pprint(data)
     #
@@ -50,11 +49,10 @@ def launch_servers():
     # from the form and read the script from the yaml file
     #
 
-        
     print "HALLO"
 
-
-    ssh_cmd = "ssh {user}@{hostname} \"{script}\" >> /home/cloudnaut/results.txt".format(**data)
+    ssh_cmd = "ssh {user}@{hostname} \"{script}\" >> /home/cloudnaut/results.txt".format(
+        **data)
     #
     # use sh instead or use the "Sequential" API
     #

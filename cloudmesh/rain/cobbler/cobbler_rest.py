@@ -12,19 +12,21 @@ KICKSTART_LOCATION = "/var/lib/cobbler/kickstarts"
    NOT consider user authentication and authorization.
 """
 
+
 def format_result_data(flag_success, msg="", data=None):
     return {
-             "result": flag_success,
-             "description": msg,
-             "data": data,
-            }
+        "result": flag_success,
+        "description": msg,
+        "data": data,
+    }
+
 
 def not_supported_objects(object_type):
     """
       cobbler supports a lot of objects. However, this cobbler REST API only support part of them.
       The supported object defined in SUPPORTED_OBJECTS. 
     """
-    
+
     return format_result_data(False, "Object {0} dose NOT supported in currently REST API.".format(object_type))
 
 
@@ -32,15 +34,15 @@ def response_json(func):
     @wraps(func)
     def wrap_response_json(*args, **kwargs):
         result = {"cmrest": {
-                              "operation": "cobbler",
-                              "data": func(*args, **kwargs),
-                            }
-                  }
+            "operation": "cobbler",
+            "data": func(*args, **kwargs),
+        }
+        }
         return Response(json.dumps(result), status=200, mimetype="application/json")
     return wrap_response_json
 
 
-@app.route('/cm/v1/cobbler/<objects>', methods = ['GET'])
+@app.route('/cm/v1/cobbler/<objects>', methods=['GET'])
 @response_json
 def list_objects(objects):
     """
@@ -56,7 +58,8 @@ def list_objects(objects):
     func = getattr(cp, "list_{0}_names".format(item))
     return func(**kwargs)
 
-@app.route('/cm/v1/cobbler/<objects>/<name>', methods = ['GET', 'POST', 'PUT', 'DELETE'])
+
+@app.route('/cm/v1/cobbler/<objects>/<name>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @response_json
 def process_objects(objects, name):
     """
@@ -73,7 +76,7 @@ def process_objects(objects, name):
         kwargs = {"user_token": ""}
         func = getattr(cp, "get_{0}_report".format(item))
         return func(name, **kwargs)
-    
+
     data = request.json
     if method == "POST":
         if item == "distro":
@@ -82,7 +85,8 @@ def process_objects(objects, name):
             kickstart_file = data.get("kickstart", None)
             if kickstart_file:
                 if not kickstart_file.startswith("/"):
-                    data["kickstart"] = "{0}/{1}".format(KICKSTART_LOCATION, kickstart_file)
+                    data[
+                        "kickstart"] = "{0}/{1}".format(KICKSTART_LOCATION, kickstart_file)
             return cp.add_profile(name, **data)
         if item == "system":
             return cp.add_system(name, **data)
@@ -96,7 +100,8 @@ def process_objects(objects, name):
             kickstart_file = data.get("kickstart", None)
             if kickstart_file:
                 if not kickstart_file.startswith("/"):
-                    data["kickstart"] = "{0}/{1}".format(KICKSTART_LOCATION, kickstart_file)
+                    data[
+                        "kickstart"] = "{0}/{1}".format(KICKSTART_LOCATION, kickstart_file)
             return cp.update_profile(name, **data)
         if item == "system":
             return cp.update_system(name, **data)
@@ -106,8 +111,9 @@ def process_objects(objects, name):
     if method == "DELETE":
         func = getattr(cp, "remove_{0}".format(item))
         return func(name, **data)
-     
-@app.route('/cm/v1/cobbler/systems/<system_name>/<if_name>', methods = ['DELETE'])
+
+
+@app.route('/cm/v1/cobbler/systems/<system_name>/<if_name>', methods=['DELETE'])
 @response_json
 def process_system_interfaces(system_name, if_name):
     cp = CobblerProvision()
@@ -116,7 +122,7 @@ def process_system_interfaces(system_name, if_name):
     return func(system_name, if_name, **data)
 
 
-@app.route('/cm/v1/cobbler/baremetal/<system>', methods = ['GET', 'POST', 'PUT'])
+@app.route('/cm/v1/cobbler/baremetal/<system>', methods=['GET', 'POST', 'PUT'])
 @response_json
 def baremetal_system(system):
     cp = CobblerProvision()
@@ -133,7 +139,8 @@ def baremetal_system(system):
     if request.method == "PUT":
         return cp.power_system(system, **data)
 
-@app.route('/cm/v1/cobbler/<objects>/<name>/child', methods = ['GET'])
+
+@app.route('/cm/v1/cobbler/<objects>/<name>/child', methods=['GET'])
 @response_json
 def list_child_objects(objects, name):
     """
@@ -152,7 +159,8 @@ def list_child_objects(objects, name):
         return func(item, name)
     return None
 
-@app.route('/cm/v1/cobbler/kickstarts/<name>/profile', methods = ['GET'])
+
+@app.route('/cm/v1/cobbler/kickstarts/<name>/profile', methods=['GET'])
 @response_json
 def list_kickstart_profiles(name):
     """
@@ -170,7 +178,4 @@ def list_kickstart_profiles(name):
 
 if __name__ == '__main__':
     print "start"
-    app.run(host="0.0.0.0", debug = True)
-    
-    
-    
+    app.run(host="0.0.0.0", debug=True)

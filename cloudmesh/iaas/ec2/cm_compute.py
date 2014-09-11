@@ -19,6 +19,7 @@ import tempfile
 
 
 class ec2(ComputeBaseType):
+
     """ 
     ec2 service with the libcloud interface
     With libcloud interface, cloudmesh supports Amazon Web Services such as EC2, S3,
@@ -39,16 +40,16 @@ class ec2(ComputeBaseType):
             self.user_credential = cred
             self.access_key_id = self.user_credential['EC2_ACCESS_KEY']
             self.secret_access_key = \
-                    self.user_credential['EC2_SECRET_KEY']
+                self.user_credential['EC2_SECRET_KEY']
         if admin_cred:
             self.admin_credential = admin_cred
 
     def load_default(self, label):
         """Load default values and set them to the object
-        
+
         :param label: the section name to load from yaml
         :type label: str
-        
+
         """
 
         self.compute_config = cm_config()
@@ -57,7 +58,7 @@ class ec2(ComputeBaseType):
         # Service certificate
         self.access_key_id = self.user_credential['EC2_ACCESS_KEY']
         self.secret_access_key = \
-        self.user_credential['EC2_SECRET_KEY']
+            self.user_credential['EC2_SECRET_KEY']
 
         # SSH
         self.ssh_userid = self.user_credential['userid']
@@ -78,7 +79,7 @@ class ec2(ComputeBaseType):
         # Auth url
         self.ec2_url = self.user_credential['EC2_URL']
         self.hostname, self.port, self.path, self.is_secure = \
-                                                self._urlparse(self.ec2_url)
+            self._urlparse(self.ec2_url)
 
         self.certfile = self.user_credential['EUCALYPTUS_CERT']
         libcloud.security.CA_CERTS_PATH.append(self.certfile)
@@ -92,24 +93,24 @@ class ec2(ComputeBaseType):
         libcloud.security.VERIFY_SSL_CERT = False
 
         self.label = label
-    
+
     def auth(self):
         return self.conn is not None
-            
+
     def connect(self):
         Driver = get_driver(Provider.EUCALYPTUS)
         conn = None
-        
+
         #
         # BUG, make sure we use the cert, confirm with team ....
         #
         try:
             conn = Driver(key=self.access_key_id,
-                      secret=self.secret_access_key,
-                      secure=self.is_secure,
-                      host=self.hostname,
-                      path=self.path,
-                      port=self.port)
+                          secret=self.secret_access_key,
+                          secure=self.is_secure,
+                          host=self.hostname,
+                          path=self.path,
+                          port=self.port)
 
         except Exception, e:
             print e
@@ -189,20 +190,20 @@ class ec2(ComputeBaseType):
     def encode_output(self, vmlist):
         for vmid in vmlist:
             vm = vmlist[vmid]
-            vm.update({"name": unicode(vm['id']), \
-                       "status": self.convert_states(vm['extra']['status']), \
-                       "addresses": self.convert_ips(vm['public_ips']), \
+            vm.update({"name": unicode(vm['id']),
+                       "status": self.convert_states(vm['extra']['status']),
+                       "addresses": self.convert_ips(vm['public_ips']),
                        "flavor":
-                       self.convert_flavors(vm['extra']['instance_type']), \
+                       self.convert_flavors(vm['extra']['instance_type']),
                        # "id": exists
-                       "user_id": unicode(""), \
-                       "metadata": {}, \
-                       "key_name": unicode(vm['extra']['key_name']), \
-                       "created": unicode(vm['extra']['launch_time'])\
-                      })
+                       "user_id": unicode(""),
+                       "metadata": {},
+                       "key_name": unicode(vm['extra']['key_name']),
+                       "created": unicode(vm['extra']['launch_time'])
+                       })
             try:
                 # deleting object to avoid mongodb errors when inserts
-                vm.update({"driver":None})
+                vm.update({"driver": None})
             except:
                 pass
 
@@ -221,21 +222,21 @@ class ec2(ComputeBaseType):
             ip_address = ""
         ip_ver = 4
         ip_type = "fixed"
-        res = {u'private': [ 
-                            {u'version': ip_ver, 
-                             u'addr': ip_address, 
-                             u'OS-EXT-IPS:type': ip_type}
-                            ]
-               }
+        res = {u'private': [
+            {u'version': ip_ver,
+             u'addr': ip_address,
+             u'OS-EXT-IPS:type': ip_type}
+        ]
+        }
         return res
 
     def convert_flavors(self, flavor):
-        res = {u'id': unicode(flavor), 
+        res = {u'id': unicode(flavor),
                u'links': [
-                          {u'href':None,
-                           u'rel':None}
-                          ]
-               }
+            {u'href': None,
+             u'rel': None}
+        ]
+        }
         return res
 
     def release_unused_public_ips(self):
@@ -272,7 +273,7 @@ class ec2(ComputeBaseType):
         return self.flavors
 
     def get_flavors_from_yaml(self):
-        obj =  cm_config_flavor()
+        obj = cm_config_flavor()
         flavors = obj.get('cloudmesh.flavor')
         return flavors.get(self.label)
 
@@ -302,14 +303,14 @@ class ec2(ComputeBaseType):
 
     def keypair_list(self):
         """Return a keypair list. keypair_list() function name is fixed
-        
+
         :returns: dict
         """
 
         keylist = self.conn.ex_describe_all_keypairs()
-        res = { 'keypairs': [] }
+        res = {'keypairs': []}
         for keyname in keylist:
-            tmp = {'keypair':{'name': keyname}}
+            tmp = {'keypair': {'name': keyname}}
             res['keypairs'].append(tmp)
         return res
 
@@ -330,4 +331,4 @@ class ec2(ComputeBaseType):
     def keypair_remove(self, name):
         """Delete a keypair"""
         if self.conn.ex_delete_keypair(name):
-            return {"msg":"success"}
+            return {"msg": "success"}

@@ -7,9 +7,9 @@ render_html = lambda message: '<html><body>%s</body></html>' % str(message)
 render_txt = lambda message: message
 
 mimerender = FlaskMimeRender()(
-        default = "json",
-        html = render_html,
-        xml  = render_xml,
-        json = render_json,
-        txt  = render_txt
+    default="json",
+    html=render_html,
+    xml=render_xml,
+    json=render_json,
+    txt=render_txt
 )

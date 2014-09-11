@@ -3,8 +3,10 @@ from pprint import pprint
 import cloudmesh
 from cloudmesh.util.ssh import ssh
 
+
 class opencirrus(ComputeBaseType):
-    def __init__(self,host,user, password=''):
+
+    def __init__(self, host, user, password=''):
         self.host = host
         self.user = user
         self.password = password
@@ -24,19 +26,17 @@ class opencirrus(ComputeBaseType):
         self.user_id = "unkown"
         raise NotImplementedError()
 
-
     def _get_image_dict(self):
-        s = ssh(self.host,self.user,self.password)
-        return s.ssh_session('cm list images jedi','bash','exit\nexit')
+        s = ssh(self.host, self.user, self.password)
+        return s.ssh_session('cm list images jedi', 'bash', 'exit\nexit')
 
     def _get_flavors_dict(self):
-        s = ssh(self.host,self.user,self.password)
-        return s.ssh_session('cm list flavors jedi','bash','exit\nexit')
-    
+        s = ssh(self.host, self.user, self.password)
+        return s.ssh_session('cm list flavors jedi', 'bash', 'exit\nexit')
+
     def _get_servers_dict(self):
-        s = ssh(self.host,self.user,self.password)
-        return s.ssh_session('cm list servers jedi','bash','exit\nexit')
-        
+        s = ssh(self.host, self.user, self.password)
+        return s.ssh_session('cm list servers jedi', 'bash', 'exit\nexit')
 
     def vm_create(self, name=None,
                   flavor_name=None,
@@ -65,7 +65,6 @@ class opencirrus(ComputeBaseType):
     def limits(self):
         """returns a dict of limits that the cloud will maintain for a user and/or the project"""
         raise NotImplementedError()
-
 
     def keypair_list(self):
         raise NotImplementedError()

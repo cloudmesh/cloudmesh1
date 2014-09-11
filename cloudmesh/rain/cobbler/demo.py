@@ -5,13 +5,14 @@ import subprocess
 import sys
 import time
 
+
 def deploy_server(server_name):
     handle = capi.BootAPI()
     msystem = handle.find_system(name=server_name)
     #msystem = handle.systems().find(name=server_name)
-    #print "system {0} status: netboot_enabled {1}".format(msystem.name, msystem.netboot_enabled)
-    #print "*"*50
-    #pprint(msystem.to_datastruct())
+    # print "system {0} status: netboot_enabled {1}".format(msystem.name, msystem.netboot_enabled)
+    # print "*"*50
+    # pprint(msystem.to_datastruct())
     # enable Netboot
     if not msystem.netboot_enabled:
         msystem.netboot_enabled = True
@@ -26,29 +27,34 @@ def deploy_server(server_name):
     else:
         print "\nDeploy server {0} failed, please contact your administrator.".format(server_name)
 
+
 def get_interface_ip(csystem, exclude_loop=True):
     dict_interfaces = csystem.interfaces
-    list_ip = [(name, dict_interfaces[name]["ip_address"]) for name in dict_interfaces]
+    list_ip = [(name, dict_interfaces[name]["ip_address"])
+               for name in dict_interfaces]
     if exclude_loop:
-        list_ip = [(name, address) for (name, address) in list_ip if not address.startswith("127")]
+        list_ip = [(name, address)
+                   for (name, address) in list_ip if not address.startswith("127")]
     # sort with name ascending
     sorted_list_ip = sorted(list_ip, key=lambda ipp: ipp[0])
     return sorted_list_ip[0][1]
+
 
 def poweron_server(server_name):
     handle = capi.BootAPI()
     msystem = handle.find_system(name=server_name)
     #msystem = handle.systems().find(name=server_name)
-    #print "system {0} status: netboot_enabled {1}".format(msystem.name, msystem.netboot_enabled)
-    #print "*"*50
-    #pprint(msystem.to_datastruct())
+    # print "system {0} status: netboot_enabled {1}".format(msystem.name, msystem.netboot_enabled)
+    # print "*"*50
+    # pprint(msystem.to_datastruct())
     # disable Netboot
     if msystem.netboot_enabled:
         msystem.netboot_enabled = False
         # save modified system
         handle.add_system(msystem)
     #msystem = handle.find_system(name=server_name)
-    #print "system {0} status: netboot_enabled {1}".format(msystem.name, msystem.netboot_enabled)
+    # print "system {0} status: netboot_enabled {1}".format(msystem.name,
+    # msystem.netboot_enabled)
     server_ip = get_interface_ip(msystem)
     if is_server_on(server_ip, 1):
         print "INFO: server {0} is already ON.".format(server_name)
@@ -62,6 +68,7 @@ def poweron_server(server_name):
         else:
             print "\nError. Server {0} cannot power on, please contact your administrator.".format(server_name)
 
+
 def print_waiting_symbol(total, sym=".", line_count=10):
     str_sym = sym + " "
     if total % line_count == 0:
@@ -72,8 +79,10 @@ def print_waiting_symbol(total, sym=".", line_count=10):
     sys.stdout.flush()
     return total + 1
 
+
 def ping_server(ip_address):
     return subprocess.call(['ping', '-c', '1', '-W', '3', ip_address], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+
 
 def is_server_deployed(server_ip, prewait_num=100, max_num=1200, interval=6):
     count = 1
@@ -99,7 +108,8 @@ def is_server_deployed(server_ip, prewait_num=100, max_num=1200, interval=6):
             break
         time.sleep(interval)
     return True if count < max_num else False
-    
+
+
 def is_server_on(server_ip, max_num=300, interval=6):
     ret_code = ping_server(server_ip)
     if ret_code == 0:
@@ -112,7 +122,7 @@ def is_server_on(server_ip, max_num=300, interval=6):
         count = print_waiting_symbol(count)
         time.sleep(interval)
         ret_code = ping_server(server_ip)
-        
+
     return True if ret_code == 0 else False
 
 
@@ -120,7 +130,7 @@ if __name__ == "__main__":
     if len(sys.argv) < 3:
         print "\n  Usage: sudo ./demo deploy|power hostname\n"
         sys.exit(1)
-    #print sys.argv
+    # print sys.argv
     action = sys.argv[1]
     if action not in ["deploy", "power"]:
         print "\n  Usage: sudo ./demo deploy|power hostname\n"
@@ -137,4 +147,3 @@ if __name__ == "__main__":
     else:
         print "Usage sudo ./deploy deploy|power"
     print "test git"
-

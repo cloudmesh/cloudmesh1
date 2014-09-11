@@ -20,7 +20,6 @@ mooc_module = Blueprint('mooc_module', __name__)
 
 
 @mooc_module.route('/mooc')
-def display_mooc ():
+def display_mooc():
 
     return render_template('mooc.html')
-

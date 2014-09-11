@@ -9,15 +9,15 @@ import os
 home = os.path.expanduser("~")
 
 setup(
-    name = 'cloudmesh',
-    version = __import__('cloudmesh').version(),
-    description = 'A tool to simplify managing multiple clouds including bare metal provisioning',
-    #description-file =
+    name='cloudmesh',
+    version=__import__('cloudmesh').version(),
+    description='A tool to simplify managing multiple clouds including bare metal provisioning',
+    # description-file =
     #    README.rst
-    author = 'Cloudmesh Team',
-    author_email = 'laszewski@gmail.com',
-    url = 'http://github.org/cloudmesh/cloudmesh',
-    classifiers = [
+    author='Cloudmesh Team',
+    author_email='laszewski@gmail.com',
+    url='http://github.org/cloudmesh/cloudmesh',
+    classifiers=[
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
         'Intended Audience :: Science/Research',
@@ -35,10 +35,10 @@ setup(
         'Topic :: System :: Systems Administration',
         'Framework :: Flask',
         'Environment :: OpenStack',
-        ],
-    packages = find_packages(),
-    include_package_data = True,
-    data_files = [
+    ],
+    packages=find_packages(),
+    include_package_data=True,
+    data_files=[
         (home + '/.cloudmesh', [
             'etc/FGLdapCacert.pem',
             'etc/sierra-cacert.pem',
@@ -52,9 +52,9 @@ setup(
             'etc/cloudmesh_celery.yaml',
             'etc/cloudmesh_mac.yaml',
             'etc/cloudmesh_flavor.yaml']),
-        (home + '/.cloudmesh/etc/racks/diag', glob.glob('etc/racks/*'))            
+        (home + '/.cloudmesh/etc/racks/diag', glob.glob('etc/racks/*'))
     ],
-#               'cloudmesh/etc/racks/diag = etc/racks/*
+    #               'cloudmesh/etc/racks/diag = etc/racks/*
     entry_points={'console_scripts': [
         'cm-manage = cloudmesh.config.cm_manage:main',
         'cm-iu = cloudmesh_install.futuregrid:main',
@@ -62,7 +62,6 @@ setup(
         'cm-image  = cloudmesh.image.cm_image:main',
         'cm-metric = cloudmesh.metric.cm_metric:main',
         'cm-rain = cloudmesh.rain.cobbler.cobbler_rain:main',
-    ]},    
+    ]},
 
 )
-
