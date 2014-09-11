@@ -113,6 +113,7 @@ class cm_mesh:
     def default(self, cloudname):
         return self.configuration.default(cloudname)
 
+    '''
     def states(self, cloudname):
         cloud_type = self.clouds[cloudname]['cm_type']
         if cloud_type in ['openstack']:
@@ -132,6 +133,7 @@ class cm_mesh:
     def all_filter(self):
         for cloudname in self.active():
             self.state_filter(cloudname, self.states(cloudname))
+    '''
 
     # ----------------------------------------------------------------------
     # important print methods
@@ -340,6 +342,9 @@ class cm_mesh:
         :param names: the array with the names of the clouds in the
                       yaml file to be activated.
         '''
+
+        force_auth_verify = None
+
         if cloud_names is None:
             names = self.config.active()
         else:
@@ -400,6 +405,7 @@ class cm_mesh:
     def del_key_pairs(self, cloud_names=None):
         print "not implemented"
 
+    '''
     def add_key_pair(self, cloud_name, key, name):
         try:
             cloud_type = self.clouds[cloud_name]['cm_type']
@@ -417,6 +423,7 @@ class cm_mesh:
             return cloud.delete_key(name)
         except:
             log.error("could not delete keypair {0}".format(cloud_name))
+    '''
 
     def assign_public_ip(self, cloud_name, vm_id):
         cloud_type = self.clouds[cloud_name]['cm_type']
@@ -424,7 +431,7 @@ class cm_mesh:
         if cloud_type in "openstack":
             provider = self.cloud_provider(cloud_type)
             cloud = provider(cloud_name)
-            cloud.assign_public_ip(vm_id, cloud.get_public_ip().ip)
+            cloud.assign_public_ip(vm_id, cloud.get_public_ip())
         # code review: GVL
         # else:
         # print "BUG: assigning ip addresses from other clouds such as azure,
@@ -459,7 +466,9 @@ class cm_mesh:
         cloud = provider(cloud_name)
 
         if security_group is None:
-            security_group = cloud.checkSecurityGroups()
+            pass
+            # Not implemented
+            # security_group = cloud.checkSecurityGroups()
 
         #
         # TODO: else
@@ -558,7 +567,7 @@ class cm_mesh:
             log.error("TODO: not implemented yet")
             return
         else:
-            log.error("%s type does not exist".format(other.cm_type))
+            log.error("{0} type does not exist".format(other.cm_type))
             log.error("Error: Ignoring add")
             return
 
