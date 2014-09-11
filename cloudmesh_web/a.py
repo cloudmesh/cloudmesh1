@@ -16,7 +16,7 @@ view:
 from flask.ext.mongoengine.wtf import model_form
 from mongoengine import connect
 from mongoengine import *
-from flask import Flask, current_app, request, session, Flask, render_template
+from flask import Flask, request, render_template
 
 db = connect('tttt', port=27777)
 

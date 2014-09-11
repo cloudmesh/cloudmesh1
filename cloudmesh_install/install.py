@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 from __future__ import with_statement
-
-from cloudmesh_install import config_file
 import glob
 import shutil
 import sys
@@ -25,9 +23,7 @@ from string import Template
 from cloudmesh_install.util import banner
 from cloudmesh_install.util import is_ubuntu, is_centos, is_osx
 from cloudmesh_install.util import yn_choice
-from ConfigParser import SafeConfigParser
-
-from cloudmesh_install import config_file, config_file_prefix
+from cloudmesh_install import config_file_prefix
 
 ######################################################################
 # STOP IF PYTHON VERSION IS NOT 2.7.5
@@ -98,7 +94,8 @@ def install_command(args):
             "THIS COMMAND IS REAL DANGEROUS AND WILL DELETE ALL YOUR YAML FILE. Proceed", default='y')
 
         if answer:
-            print "You fool we just deleted your yaml files"
+            # TODO: cp is not imported, defined
+            print("You fool we just deleted your yaml files")
             cp("etc/*.yaml", config_file_prefix())
         else:
             print "puuh you interrupted"

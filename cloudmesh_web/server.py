@@ -48,11 +48,8 @@ if RSTPAGES:
 
 from pprint import pprint
 import cloudmesh
-import os
 import pkg_resources
 import requests
-import sys
-import time
 import traceback
 import types
 import webbrowser
