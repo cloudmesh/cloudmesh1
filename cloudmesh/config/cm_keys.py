@@ -232,46 +232,48 @@ class cm_keys_mongo(cm_keys_base):
         """        
         return self._getvalue(name)
 
-    def __setitem__(self, name, value, persist = True, key_type="file"):
+    def __setitem__(self, name, value):
         '''
         adds new key name and value. If name is already present the value is changed.
         The parameter key_type should  be set to file if you want to read the key from a file.
         The parameter persist being set to true will cause all of the changes made locally to be written to mongo.          
         '''
 
+        key_value = value
+        key_type = keytype(key_value)
         if key_type == "file":
-            try:
-                print "Detected file. Will try to read from file"
-                value = get_key_from_file(value)
+            try: 
+                key_value = get_key_from_file(value)
             except:
-                print "ERROR: Could not read from file. Make sure everything about the file is alright"
-                return      
-        else:          
-            self.user_info["keys"][name] = value
-        if persist:
-            self.mongo.db_user.update({'_id': self.user_info['_id']},
+                print "ERROR: reading key file {0}".format(value)
+                return        
+
+        self.user_info["keys"][name] = value
+
+        self.mongo.db_user.update(
+            {'_id': self.user_info['_id']},
             {'$set': {'keys': self.user_info["keys"]}},
             upsert=False,
             multi=False
             )
-        print "SUCCESS: key '{0}' was added".format(name)
 
-    def set(self, name, value, expand=False, persist = True):
+
+    def set(self, name, value):
         '''
         adds new key name and value. If name is already present the value is changed.
         The parameter key_type should  be set to file if you want to read the key from a file.
         The parameter persist being set to true will cause all of the changes made locally to be written to mongo.          
         '''        
-        self.__setitem__(name, value, persist= persist)
+        self.__setitem__(name, value)
 
-    def __delitem__(self, name, persist = True):
+    def __delitem__(self, name):
         '''
         deletes key with given name. Will fail if the key is the default key.
         The parameter persist being set to true will cause all of the changes made locally to be written to mongo.          
         '''
-        self.delete(name, persist)
+        self.delete(name)
 
-    def delete(self, name, persist = True):
+    def delete(self, name):
         '''
         adds new key name and value. If name is already present the value is changed.
         The parameter persist being set to true will cause all of the changes made locally to be written to mongo.          
@@ -287,15 +289,15 @@ class cm_keys_mongo(cm_keys_base):
             else:
                 print "ERROR: Key not found"
                 return
-            if persist:
-                self.mongo.db_user.update({'_id': self.user_info['_id']},
+
+            self.mongo.db_user.update(
+                {'_id': self.user_info['_id']},
                 {'$set': {'keys': self.user_info["keys"]}},
                 upsert=False,
                 multi=False
                 )                
-        print "SUCCESS: Key successfully deleted"
 
-    def setdefault(self, name, persist=True):
+    def setdefault(self, name):
         """
         sets the default key.
         The parameter persist being set to true will cause all of the changes made locally to be written to mongo.          
@@ -306,18 +308,20 @@ class cm_keys_mongo(cm_keys_base):
         else:
             print "ERROR: Key is not there in the key list"
             return
-        if persist:
-            self.mongo.db_user.update({'_id': self.user_info['_id']},
-                {'$set': {'keys': self.user_info["keys"]}},
-                upsert=False,
-                multi=False
+
+        self.mongo.db_user.update(
+            {'_id': self.user_info['_id']},
+            {'$set': {'keys': self.user_info["keys"]}},
+            upsert=False,
+            multi=False
             )
-            self.mongo.db_defaults.update({'_id': self.user_info['_id']},
-                {'$set': {'key': self.defaults_info["key"]}},
-                upsert=False,
-                multi=False
+        self.mongo.db_defaults.update(
+            {'_id': self.user_info['_id']},
+            {'$set': {'key': self.defaults_info["key"]}},
+            upsert=False,
+            multi=False
             )
-        print "SUCCESS: Defualt key modified."
+
 
     def default(self):
         """gets the default key"""
