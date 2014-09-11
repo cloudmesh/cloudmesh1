@@ -1,16 +1,5 @@
 #!/usr/bin/env python
-import types
-import textwrap
 from docopt import docopt
-import inspect
-import sys
-import importlib
-import cloudmesh
-from pprint import pprint
-
-from cloudmesh.cm_mongo import cm_mongo
-from cloudmesh.config.cm_config import cm_config
-from prettytable import PrettyTable
 from cloudmesh.metric.api.metric import metric_api
 
 from cloudmesh_common.logger import LOGGER

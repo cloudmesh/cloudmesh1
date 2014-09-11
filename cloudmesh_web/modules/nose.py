@@ -1,6 +1,4 @@
 from ast import literal_eval
-from cloudmesh.config.cm_config import cm_config
-from cloudmesh.pbs.pbs import PBS
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.util.ping import ping
 from cloudmesh_common.util import cond_decorator
@@ -9,8 +7,6 @@ from flask import Blueprint, render_template, redirect
 from flask.ext.login import login_required
 from flask.ext.principal import Permission, RoleNeed
 from sh import nosetests, pwd
-import cloudmesh
-
 
 log = LOGGER(__file__)
 
