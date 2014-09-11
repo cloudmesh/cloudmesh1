@@ -14,7 +14,7 @@ class BaremetalPolicy:
 
     """Baremetal Policy. Get/Add/Delete user/group policy
     FIXME/TODO: It will add **permission access** that only admin can operate on poilicy later
-    the formation of policy is 
+    the formation of policy is
     {"_id" : "53727f1c93f9d73e90520090",
     "name" : "user1,user2,user3",
     "policy_type" : "user", # or "group"
@@ -33,7 +33,7 @@ class BaremetalPolicy:
         """add a policy for an user.
         :param string user: a username
         :param string policy: one piece of policy, means user can access which baremetal servers, e.g. "i[001-004]"
-        :return: UUID means add policy success, otherwise None for failed 
+        :return: UUID means add policy success, otherwise None for failed
         """
         return self.add_ug_policy("user", user, policy)
 
@@ -61,7 +61,7 @@ class BaremetalPolicy:
     def remove_policy(self, uuid):
         """remove a policy based on uuid.
         :param string uuid: an uuid of the removed policy
-        :return: True means remove policy success, otherwise False 
+        :return: True means remove policy success, otherwise False
         """
         object_uuid = self.db_client.convert_str_to_objectid(uuid)
         elem = {"_id": object_uuid, }

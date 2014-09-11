@@ -34,7 +34,7 @@ def say_error(msg):
 
 
 def authorization(func):
-    """decorator. authorizate the user's action according to his token and current accessing API. 
+    """decorator. authorizate the user's action according to his token and current accessing API.
     """
     @wraps(func)
     def wrap_authorization(self, *args, **kwargs):
@@ -107,13 +107,13 @@ class CobblerProvision:
         :param username: the username
         :type username: string
         :param password: the password
-        :type password: string        
+        :type password: string
         """
         return "a random valid token"
 
     def validate_token(self, access_api, user_token):
         """ validate user's token, if it is not expired, then check whether the
-        user has the right to access the specific api, that is access_api, 
+        user has the right to access the specific api, that is access_api,
         if yes, return True, otherwise return False
 
         :param access_api: the access_api
@@ -127,35 +127,35 @@ class CobblerProvision:
     @authorization
     def list_distro_names(self, **kwargs):
         """list distribution names,
-        :return: a list of distro names 
+        :return: a list of distro names
         """
         return self._simple_result_dict(True, data=self._list_item_names("distro"))
 
     @authorization
     def list_profile_names(self, **kwargs):
-        """list profile names, 
-        :return: a list of profile names 
+        """list profile names,
+        :return: a list of profile names
         """
         return self._simple_result_dict(True, data=self._list_item_names("profile"))
 
     @authorization
     def list_system_names(self, **kwargs):
-        """list system names, 
-        :return: a list of system names 
+        """list system names,
+        :return: a list of system names
         """
         return self._simple_result_dict(True, data=self._list_item_names("system"))
 
     @authorization
     def list_kickstart_names(self, **kwargs):
-        """list kickstart filenames with extension, 
-        :return: a list of kickstart filenames 
+        """list kickstart filenames with extension,
+        :return: a list of kickstart filenames
         """
         return self._simple_result_dict(True, data=self.list_kickstart_filenames(self.KICKSTART_LOCATION))
 
     @authorization
     def list_iso_names(self, **kwargs):
-        """list iso filenames with extension **iso**, 
-        :return: a list of iso filenames 
+        """list iso filenames with extension **iso**,
+        :return: a list of iso filenames
         """
         filenames = self.list_dir_filenames(self.get_temp_dir_iso())
         return self._simple_result_dict(True, data=[f for f in filenames if f.endswith(".iso")])
@@ -207,28 +207,28 @@ class CobblerProvision:
     @authorization
     def get_distro_report(self, name, **kwargs):
         """report the detail of the distribution with name,
-        :return: refer the function :py:func:`._wrap_report_result` 
+        :return: refer the function :py:func:`._wrap_report_result`
         """
         return self._wrap_report_result("distro", name)
 
     @authorization
     def get_profile_report(self, name, **kwargs):
-        """report the detail of the profile with name, 
-        :return: refer the function :py:func:`._wrap_report_result` 
+        """report the detail of the profile with name,
+        :return: refer the function :py:func:`._wrap_report_result`
         """
         return self._wrap_report_result("profile", name)
 
     @authorization
     def get_system_report(self, name, **kwargs):
-        """report the detail of the system with name, 
-        :return: refer the function :py:func:`._wrap_report_result` 
+        """report the detail of the system with name,
+        :return: refer the function :py:func:`._wrap_report_result`
         """
         return self._wrap_report_result("system", name)
 
     @authorization
     def get_kickstart_report(self, name, **kwargs):
-        """report the detail of the kickstart with filename, 
-        :return: refer the function :py:func:`._wrap_report_result` 
+        """report the detail of the kickstart with filename,
+        :return: refer the function :py:func:`._wrap_report_result`
         """
         return self._wrap_report_result("kickstart", name)
 
@@ -654,7 +654,7 @@ class CobblerProvision:
     @cobbler_object_exist("system")
     @authorization
     def remove_system_interface(self, system_name, *args, **kwargs):
-        """remove one interface from a system named system_name. 
+        """remove one interface from a system named system_name.
         If param args contains one interface name, then this interface will be removed from system.
         """
         report = self._get_item_report("system", system_name)

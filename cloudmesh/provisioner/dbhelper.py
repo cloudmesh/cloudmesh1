@@ -11,7 +11,7 @@ log = LOGGER(__file__)
 class DBHelper:
 
     def __init__(self, coll_name="inventory"):
-        """Construction 
+        """Construction
         :param string coll_name: the collection name
         """
         self.coll_name = coll_name
@@ -21,7 +21,7 @@ class DBHelper:
         """
         Thin Wrap of the mongo find command.
         :param dict query_elem: the query dict, if you want to use "_id" in query_elem, you SHOULD call :py:func:`convert_str_to_objectid` to get the ObjectId for the "_id"
-        :return: result is a dict with the formation {"result": True, "data": []} or {"result":False, "data":None} 
+        :return: result is a dict with the formation {"result": True, "data": []} or {"result":False, "data":None}
         result is False if error occured,
         result is True means query success. the "data" contains the query result. empty "data" array means no document match the query
         If you want to use ObjectId attribute in data, you SHOULD call :py:func:`convert_objectid_to_str` to get a string of objectid.
@@ -42,7 +42,7 @@ class DBHelper:
         """
         Thin Wrap of the mongo find_one command.
         :param dict query_elem: the query dict, if you want to use "_id" in query_elem, you SHOULD call :py:func:`convert_str_to_objectid` to get the ObjectId for the "_id"
-        :return: result is a dict with the formation {"result": True, "data": {}} or {"result":False, "data":None} 
+        :return: result is a dict with the formation {"result": True, "data": {}} or {"result":False, "data":None}
         result is False if error occured,
         result is True means query success. the "data" contains the query result. empty "data" array means no document match the query
         If you want to use ObjectId attribute in data, you SHOULD call :py:func:`convert_objectid_to_str` to get a string of objectid.

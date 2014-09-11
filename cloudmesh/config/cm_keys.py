@@ -226,7 +226,7 @@ class cm_keys_mongo(cm_keys_base):
         '''
         adds new key name and value. If name is already present the value is changed.
         The parameter key_type should  be set to file if you want to read the key from a file.
-        The parameter persist being set to true will cause all of the changes made locally to be written to mongo.          
+        The parameter persist being set to true will cause all of the changes made locally to be written to mongo.
         '''
 
         key_value = value
@@ -251,21 +251,21 @@ class cm_keys_mongo(cm_keys_base):
         '''
         adds new key name and value. If name is already present the value is changed.
         The parameter key_type should  be set to file if you want to read the key from a file.
-        The parameter persist being set to true will cause all of the changes made locally to be written to mongo.          
+        The parameter persist being set to true will cause all of the changes made locally to be written to mongo.
         '''
         self.__setitem__(name, value)
 
     def __delitem__(self, name):
         '''
         deletes key with given name. Will fail if the key is the default key.
-        The parameter persist being set to true will cause all of the changes made locally to be written to mongo.          
+        The parameter persist being set to true will cause all of the changes made locally to be written to mongo.
         '''
         self.delete(name)
 
     def delete(self, name):
         '''
         adds new key name and value. If name is already present the value is changed.
-        The parameter persist being set to true will cause all of the changes made locally to be written to mongo.          
+        The parameter persist being set to true will cause all of the changes made locally to be written to mongo.
         '''
         default = self.get_default_key()
         if name == default:
@@ -288,7 +288,7 @@ class cm_keys_mongo(cm_keys_base):
 
     def setdefault(self, name):
         """
-        sets the default key.        
+        sets the default key.
 
         """
         if name in self.user_info["keys"]:

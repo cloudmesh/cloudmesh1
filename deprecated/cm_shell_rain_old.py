@@ -26,7 +26,7 @@ class cm_shell_rain_old:
                rain_old list NAME [IMAGE list]
                rain_old add HOSTLIST IMAGE [LABEL]
 
-        Provisioning of the images on 
+        Provisioning of the images on
 
         Arguments:
 

@@ -20,7 +20,7 @@ import tempfile
 
 class ec2(ComputeBaseType):
 
-    """ 
+    """
     ec2 service with the libcloud interface
     With libcloud interface, cloudmesh supports Amazon Web Services such as EC2, S3,
     EBS, etc.

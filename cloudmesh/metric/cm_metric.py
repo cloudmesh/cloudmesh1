@@ -24,11 +24,11 @@ def shell_command_metric(arguments):
         cm-metric -h | --help
         cm-metric --version
         cm-metric [CLOUD]
-                  [-s START|--start=START] 
-                  [-e END|--end=END] 
-                  [-u USER|--user=USER] 
+                  [-s START|--start=START]
+                  [-e END|--end=END]
+                  [-u USER|--user=USER]
                   [-m METRIC|--metric=METRIC]
-                  [-p PERIOD|--period=PERIOD] 
+                  [-p PERIOD|--period=PERIOD]
                   [-c CLUSTER]
 
    Options:
@@ -68,7 +68,7 @@ def shell_command_metric(arguments):
          }
 
     Examples:
-        $ cm-metric openstack -c india -u hrlee        
+        $ cm-metric openstack -c india -u hrlee
         - Get user statistics
 
     """

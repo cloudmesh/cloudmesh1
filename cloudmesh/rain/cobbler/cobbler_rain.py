@@ -95,7 +95,7 @@ def rain_command(arguments):
                           (-l HOSTS|-n COUNT)
                           [--start=TIME_START]
                           [--end=TIME_END]
-        rain user list [--project=PROJECTS] [HOSTS]    
+        rain user list [--project=PROJECTS] [HOSTS]
         rain user list hosts [--start=TIME_START]
                         [--end=TIME_END]
                         [--format=FORMAT]
@@ -116,15 +116,15 @@ def rain_command(arguments):
 
     Options:
         -n COUNT     count of teh bare metal hosts to be provisined
-        -p PROJECTS  --projects=PROJECTS  
+        -p PROJECTS  --projects=PROJECTS
         -u USERS     --user=USERS        Specify users
         -f FILE, --file=FILE  file to be specified
-        -i           interactive mode adds a yes/no 
+        -i           interactive mode adds a yes/no
                      question for each host specified
         --role=ROLE            Specify predefined role
-        --start=TIME_START     Start time of the reservation, in 
+        --start=TIME_START     Start time of the reservation, in
                                YYYY/MM/DD HH:MM:SS format. [default: current_time]
-        --end=TIME_END         End time of the reservation, in 
+        --end=TIME_END         End time of the reservation, in
                                YYYY/MM/DD HH:MM:SS format. In addition a duration
                                can be specified if the + sign is the first sign.
                                The duration will than be added to

@@ -33,7 +33,7 @@ def extract_state(attribute, value):
 
 
 def convert_to_dict(lines, token=":", converters=None):
-    """converts lines of the form 
+    """converts lines of the form
     attribute: value
     to a dict. The : can be changed to a token.
     and array of converter functions canbe passe to transform a specific attributes value.

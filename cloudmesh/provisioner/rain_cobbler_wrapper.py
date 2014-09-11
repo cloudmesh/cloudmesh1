@@ -121,7 +121,7 @@ class RainCobblerWrapper:
 
     def provision_host_with_profile(self, profile, hosts):
         """
-        baremetal provision host in raw_hosts with profile defined in cobbler. 
+        baremetal provision host in raw_hosts with profile defined in cobbler.
         provided for **rain provision --profile=PROFILE HOSTS**
         :param string profile: the name of cobbler profile
         :param list hosts: a list of host ["host1", "host2",]
@@ -210,7 +210,7 @@ class RainCobblerWrapper:
 
     def provision_host_with_distro_kickstart(self, distro, kickstart, hosts):
         """
-        baremetal provision host in hosts with distro defined in cobbler and kickstart file. 
+        baremetal provision host in hosts with distro defined in cobbler and kickstart file.
         provided for **rain provision --distro=DITRO --kickstart=KICKSTART HOSTS**
         :param string distro: the name of cobbler distro
         :param string kickstart: the filename of kickstart

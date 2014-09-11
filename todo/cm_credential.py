@@ -18,14 +18,14 @@ class UserStoreBaseClass (dict):
 
     def get(self, username, cloud, password=None):
         """
-        returns the information about a cloud for a user. 
+        returns the information about a cloud for a user.
         Certain fields are encrypted which will be decrypted by the password.
         """
         raise NotImplementedError()
 
     def set(self, username, cloud, password=None):
         """
-        Sets the information about a cloud for a user. 
+        Sets the information about a cloud for a user.
         Certain fields are encrypted by the password.
         """
         raise NotImplementedError()

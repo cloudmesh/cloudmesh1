@@ -30,7 +30,7 @@
 
         cm-account user update --filename=FILENAME --format=json
             updates the user information of all users defined in the filename that
-            contans the user data in the given format. format can be json or csv 
+            contans the user data in the given format. format can be json or csv
 
         ...
 
@@ -56,7 +56,7 @@
 
         cm-account project update --filename=FILENAME --format=json
             updates the project information of all projects defined in the filename that
-            contans the project data in the given format. format can be json or csv 
+            contans the project data in the given format. format can be json or csv
 
             ....
 

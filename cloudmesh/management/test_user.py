@@ -91,18 +91,18 @@ def main():
     #n.save()
 
     sys.exit()
-    
+
     users.add(gregor)
     print "Gregor username: ", gregor.username
     print gregor.date_created
     print gregor.date_deactivate
 
 
-    
+
 
     sys.exit()
     print
-    
+
     fugang = User(
         title = "",
         firstname = "Fungang",
@@ -117,16 +117,16 @@ def main():
         address = "Bloomington",
         country = "USA",
         citizenship = "China",
-        bio = "I work at Indiana University Bloomington"  
-        
+        bio = "I work at Indiana University Bloomington"
+
         # add the other fields
     )
     users.add(fugang)
-    print    
+    print
     print "Fugang username: "#, fugang.username
     print
     print users.find_user("gregvon12")
-    
+
     #users.find()
     """
 

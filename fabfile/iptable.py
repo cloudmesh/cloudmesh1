@@ -32,8 +32,8 @@ PORT_RULE = "%s -p tcp -m state --state NEW -m tcp --dport %s -j ACCEPT"
 
 @task
 def info():
-    """                                                                                                                             
-    provides some info about the iptable rules set on this machine                                                                  
+    """
+    provides some info about the iptable rules set on this machine
     """
     results1 = local("sudo iptables --line-numbers -L %s" %
                      PORTS_CHAIN, capture=True)
@@ -44,9 +44,9 @@ def info():
 
 @task
 def production(status="on"):
-    """                                                                                                                             
-    sets the ip table rules for production" vlues are 'on', 'off'. This defines                                                     
-    most likely just a small number of ports                                                                                        
+    """
+    sets the ip table rules for production" vlues are 'on', 'off'. This defines
+    most likely just a small number of ports
     """
     usage = "Usage: production:[on|off]"
     production_ports = [80]
@@ -62,8 +62,8 @@ def production(status="on"):
 
 @task
 def port(number, status="on"):
-    """                                                                                                                             
-    sets the ip table rule for a particular port. accepted values are 'on' and 'off'                                                
+    """
+    sets the ip table rule for a particular port. accepted values are 'on' and 'off'
     """
     usage = "Usage: port:number,[on|off]"
 

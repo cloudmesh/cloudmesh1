@@ -32,7 +32,7 @@ class cm_pagestatus(cm_MongoBase):
 
         :param user: the user for which the state values are recorded
         :type user: string
-        :param page: the page base url 
+        :param page: the page base url
         :type page: of the form /uri (string)
         '''
 
