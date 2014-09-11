@@ -137,10 +137,8 @@ class User(CloudmeshObject):
     #
     message = ListField(StringField())
 
-    '''
-    def save(self,db):
-    	db.put({"firname":user.firname,...}_)
-    '''
+    # def save(self,db):
+    # 	db.put({"firname":user.firname,...})
 
     def is_active(self):
         '''
@@ -229,7 +227,7 @@ class Users(object):
 
     def get_unique_username(self, proposal):
         '''
-        gets a unique username form a proposal. This is achieved whil appending a number at the end. if the 
+        gets a unique username form a proposal. This is achieved whil appending a number at the end. if the
 
         :param proposal: the proposed username
         :type proposal: String
@@ -245,7 +243,7 @@ class Users(object):
 
     def add(self, user):
         '''
-        adds a user 
+        adds a user
 
         :param user: the username
         :type user: String
@@ -259,7 +257,7 @@ class Users(object):
 
     def validate_email(self, email):
         '''
-        verifies if the email of the user is not already in the users. 
+        verifies if the email of the user is not already in the users.
 
         :param user: user object
         :type user: User

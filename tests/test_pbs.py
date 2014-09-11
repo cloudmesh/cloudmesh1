@@ -40,7 +40,6 @@ class Test:
         # pprint (self.configuration.__dict__)
         self.user = "gvonlasz"
         self.host = "india.futuregrid.org"
-
         # pprint (_create_pbsinfo_dict(data))
 
     def tearDown(self):

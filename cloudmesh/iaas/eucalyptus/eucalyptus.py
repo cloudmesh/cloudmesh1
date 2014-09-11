@@ -149,7 +149,7 @@ class eucalyptus(ComputeBaseType):
         Driver = get_driver(Provider.EUCALYPTUS)
         conn = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
 
-        images = retrief(conn.list_images, 
+        images = retrief(conn.list_images,
                       ['driver','ownerid','owneralias','platform','hypervisor','virtualizationtype','_uuid'])
         flavors = retrief(conn.list_sizes, ['_uuid'])
         vms = retrief(conn.list_nodes, ['private_dns','dns_name', 'instanceId', 'driver','_uuid'])

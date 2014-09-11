@@ -3,7 +3,7 @@
 """Example of program with many options using docopt.
 
 Usage:
-  cobbler_client.py list --object=OBJECT_TYPE [--format=FORMAT]  
+  cobbler_client.py list --object=OBJECT_TYPE [--format=FORMAT]
   cobbler_client.py list --object=OBJECT_TYPE
   cobbler_client.py get --object=OBJECT_TYPE --name=ITEM_NAME
   cobbler_client.py add --object=OBJECT_TYPE --data=DATA_FILE
@@ -15,7 +15,7 @@ Usage:
   cobbler_client.py deploy --name=SYSTEM_NAME [options]
   cobbler_client.py power --name=SYSTEM_NAME [options]
   cobbler_client.py test [options]
-  
+
 Arguments:
   PATH  destination path
 
@@ -31,23 +31,23 @@ Options:
   --data=DATA_FILE      specifies the filename containing the data
   --system=SYSTEM_NAME   specifies the name of system from which some interfaces will be deleted
   --onoff=ONOFF    specifies the power status, on or off
-  --format=FORMAT   the format of the table is either json, html, list,         
-                    or ascii [default: ascii]    
+  --format=FORMAT   the format of the table is either json, html, list,
+                    or ascii [default: ascii]
 Description:
 
   describe here what the commands do
-   
+
   cobbler_client.py list object_type
-    
+
     list names in object type ...
-        
+
   cobbler_client.py get object_type item_name
-  
+
     get the detail report of item_name in object_type
-    
+
   cobbler_client.py add object_type data_file
   cobbler_client.py update object_type data_file
-  
+
     add the data object in data_file belongs to object_type to cobbler.
       examples:
         profile: data_file
@@ -55,7 +55,7 @@ Description:
           "distro": "test-x86_64",
           "kickstart": "ktanaka.ks"
         }
-        
+
         system: data_file
         { "name": "test-sys-140318",
           "profile": "test-profile-140318",
@@ -86,14 +86,12 @@ Description:
                           ]
            }
   cobbler_client.py remove object_type item_name
-  
+
       remove an item_name in object_type
-      
+
   cobbler_client.py remove interface system_name item_name
-  
+
       remove the interface item_name form system system_name
-      
-  
 """
 from prettytable import PrettyTable
 from cloudmesh_common.tables import table_printer

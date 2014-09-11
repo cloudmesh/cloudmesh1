@@ -75,41 +75,41 @@ class Project(CloudmeshObject):
 
     Attributes:
 
-        title     
+        title
         abstract
-        intellectual_merit  
-        broader_impact  
-        use_of_fg  
-        scale_of_use 
-        categories 
-        keywords 
-        primary_discipline 
-        orientation  
-        contact  
-        url 
-        comment 
-        active 
-        projectid 
+        intellectual_merit
+        broader_impact
+        use_of_fg
+        scale_of_use
+        categories
+        keywords
+        primary_discipline
+        orientation
+        contact
+        url
+        comment
+        active
+        projectid
         status
-        lead       
-        managers   
-        members    
-        alumnis    
-        grant_orgnization 
-        grant_id 
-        grant_url 
-        results 
-        aggreement_use 
-        aggreement_slides 
-        aggreement_support 
-        aggreement_sotfware 
-        aggreement_documentation 
+        lead
+        managers
+        members
+        alumnis
+        grant_orgnization
+        grant_id
+        grant_url
+        results
+        aggreement_use
+        aggreement_slides
+        aggreement_support
+        aggreement_sotfware
+        aggreement_documentation
         comments
-        join_open 
-        join_notification 
+        join_open
+        join_notification
         resources_services
-        resources_software 
-        resources_clusters 
+        resources_software
+        resources_clusters
         resources_provision
 
     '''
@@ -273,7 +273,7 @@ class Projects(object):
 
     def add_user(self, user_name, project, role):
         '''
-        Adds a member to the project. 
+        Adds a member to the project.
 
         :param role: the role of the user
         :type role: String
@@ -311,7 +311,7 @@ class Projects(object):
 
     def find_by_id(self, id):
         '''
-        finds projects by if 
+        finds projects by if
 
         :param id: the project id
         :type id: uuid

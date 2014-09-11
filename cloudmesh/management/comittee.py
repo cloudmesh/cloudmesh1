@@ -43,8 +43,8 @@ class Committee(Document):
         _project = projects.find_by_title("Django")
 
     def get_reviewer(self, user_name):
-        """This function adds reviewers to the project committee. It first 
-        checks if the default attribute is 'Yes' or 'No', if 'Yes' it adds 
+        """This function adds reviewers to the project committee. It first
+        checks if the default attribute is 'Yes' or 'No', if 'Yes' it adds
         the default reviewers and if 'No' it does otherwise"""
         if self.default == 'Yes':
             for _username in DEFAULT_REVIEWERS:
@@ -61,13 +61,13 @@ class Committee(Document):
 
     def set_review(self, project, user, msg):
         """by set_review, do you mean to state whether
-        approved or not and what type of message am I meant to 
+        approved or not and what type of message am I meant to
         pass into this function"""
 
         IMPLEMENT()
 
     def delete_reviewer(self, project, user):
-        """This function accepts a user and removes the user 
+        """This function accepts a user and removes the user
         from the committee list"""
         self.reviewers.remove(user)
 

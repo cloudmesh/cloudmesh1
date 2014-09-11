@@ -72,7 +72,7 @@ with app.test_request_context():
                   metric="metric_test",
                   start_time="start_time_test",
                   end_time="end_time_test",
-                  period="period_test")                  
+                  period="period_test")
 
     print url_for('get_metric_cloud',
                   cloud="cloud_test",
@@ -80,7 +80,7 @@ with app.test_request_context():
                   metric="metric_test",
                   start_time="start_time_test",
                   end_time="end_time_test",
-                  period="period_test")                  
+                  period="period_test")
 """
 if __name__ == "__main__":
     app.run(debug=True)

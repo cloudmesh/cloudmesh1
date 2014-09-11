@@ -7,15 +7,15 @@ Usage:
     cm-image [--kind=KIND] [--gui] build OS
     cm-image [--kind=KIND] register OS
 
-    
+
 Arguments:
     OS        the OS you can find with cm-image list
     GUI       yes or no
-    
+
 Options:
     --gui                  switch on the gui. [default: False]
     --kind=KIND            the Kind of the image to be created. [default: vbox]
-    
+
 """
 
 from docopt import docopt

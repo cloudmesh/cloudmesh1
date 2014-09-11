@@ -266,7 +266,7 @@ class Inventory:
 
     def info(self):
         '''
-        print some elementary overview information 
+        print some elementary overview information
         '''
         clusters = self.find({'cm_type': 'inventory',
                               'cm_key': 'range',

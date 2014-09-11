@@ -12,7 +12,7 @@ log = LOGGER(__file__)
 
 class BaremetalStatus:
 
-    """Baremetal computer Status. 
+    """Baremetal computer Status.
     """
 
     def __init__(self):
@@ -66,7 +66,7 @@ class BaremetalStatus:
         """update the deploy result
         :param string host: the unique name of host
         :param boolean result: True means deploy command success, False means failed
-        :return: a flag, True means update mongodb success, otherwise failed. 
+        :return: a flag, True means update mongodb success, otherwise failed.
         """
         query_elem = self.get_full_query({"cm_id": host})
         update_elem = {"status": "deploying" if result else "failed", }
@@ -197,7 +197,7 @@ class BaremetalStatus:
     def get_host_progress(self, host):
         """get the progress of host baremetal computer.
         :param string host: the unique ID of host
-        :return: a dict of {"status": "deploy", "progress": 25, }, there are 5 status of host, namely deploy, poweron, poweroff, failed, unknown  
+        :return: a dict of {"status": "deploy", "progress": 25, }, there are 5 status of host, namely deploy, poweron, poweroff, failed, unknown
         """
         result = {"status": "unknown", "progress": -1, }
         status_list = self.get_status(host)

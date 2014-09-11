@@ -4,7 +4,7 @@ import sys
 
 __all__ = ["info", "start"]
 
-"""usage: fab t:inventory,01 
+"""usage: fab t:inventory,01
 
    executes the test specified in test_inventory.py that contains 01
 """
@@ -65,7 +65,7 @@ def start(f, name=None):
     executes a test with a given partial filename and partial name of the test
     class. the first function in the test file will be returned. for example :
 
-    fab t:inventoy,clean 
+    fab t:inventoy,clean
 
     will look in the file test_inventory.py for the first function that has
     'clean' in its name and execute that test. The program does not support

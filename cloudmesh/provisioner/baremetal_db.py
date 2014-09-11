@@ -19,19 +19,19 @@ class BaremetalDB:
             "bm_type" : "inventory_summary",
             "data" : {
                 "gravel" : {
-                    "idle_list" : [ 
+                    "idle_list" : [
                         "gravel02", "gravel03"
                     ]
                 },
                 "india" : {
-                    "idle_list" : [ 
-                        "i080", 
+                    "idle_list" : [
+                        "i080",
                         "i079"
                     ],
-                    "used_list" : [ 
-                        "i072", 
-                        "i073", 
-                        "i074", 
+                    "used_list" : [
+                        "i072",
+                        "i073",
+                        "i074",
                         "i078"
                     ]
                 }
@@ -120,9 +120,9 @@ class BaremetalDB:
     def do_find(self, query_elem):
         """
           Thin Wrap of the mongo find command.
-          return: {"result": True|False, "data": []} 
+          return: {"result": True|False, "data": []}
            result is False if error occured,
-           result is True means query success. the "data" contains the query result. 
+           result is True means query success. the "data" contains the query result.
           empty "data" array means no document match the query
         """
         result = True
@@ -369,7 +369,7 @@ class BaremetalDB:
 if __name__ == "__main__":
     bmdb = BaremetalDB()
     """
-    dict_computers = {"gravel": ["g03", ], 
+    dict_computers = {"gravel": ["g03", ],
                       "india": ["i02", ]
                       }
     result = bmdb.update_baremetal_computers(dict_computers, False)

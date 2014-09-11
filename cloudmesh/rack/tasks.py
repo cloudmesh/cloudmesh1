@@ -53,10 +53,8 @@ def task_sensors(dict_idip):
             dict_data[cluster][uid]["temp"] = temp[0]
 
     # write current temperature data to mongo db
-    # ....
 
-
-# get the highest cpu temperature throught parseing the output of 'sensors'
+    # get the highest cpu temperature throught parseing the output of 'sensors'
     # return is a list including 2 elems, [36.0, C] or [36.0, F]
     # C or F is the unit name of temperature
     def parseCpuTemperature(self, values):

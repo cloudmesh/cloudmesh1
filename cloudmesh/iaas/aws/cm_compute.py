@@ -15,7 +15,7 @@ from libcloud.compute.types import Provider
 
 class aws(ComputeBaseType):
 
-    """ 
+    """
     Amazon Cloud service with the libcloud interface
     With libcloud interface, cloudmesh supports Amazon Web Services such as EC2, S3,
     EBS, etc.

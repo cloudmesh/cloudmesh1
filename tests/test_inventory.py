@@ -68,15 +68,14 @@ class Test_Inventory:
 
         """
         data = self.inventory.find({'cm_id': self.name})
-        
+
         for e in data:
             pprint (e)
         """
         print 70 * '='
         """
         print "BEFORE"
-        
-        
+
         data = self.inventory.host(self.name)
         pprint(data)
         """
@@ -103,16 +102,16 @@ class Test_Inventory:
         data = self.inventory.get_attribute(name, attribute)
         print data
 
-    """    
+    """
         data = self.inventory.host(self.name)
         print "AFTER"
         pprint(data)
-    
-        
-               
+
+
+
     ef test_ipaddr(self):
         HEADING()
-        
+
         print self.inventory.ipadr (self.name, "public")
         print self.inventory.ipadr (self.name, "internal")
     """

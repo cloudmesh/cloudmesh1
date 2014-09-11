@@ -81,8 +81,8 @@ def make_form_list(object, fields, title="Form", format="p", capital=True):
         kind = html_input_type(object, key)
         form += '''
             {line_start}
-                {field_start} <b>{label}</b> {field_end} 
-                {field_start} <input name="{key}" type="{input_type}"> {field_end} 
+                {field_start} <b>{label}</b> {field_end}
+                {field_start} <input name="{key}" type="{input_type}"> {field_end}
             {line_end}'''.format(line_start=line_start,
                                  line_end=line_end,
                                  field_start=field_start,
@@ -158,7 +158,7 @@ class CloudmeshObject(Document):
 
     def deactivate(self):
         '''
-        deactivates an object.         
+        deactivates an object.
         '''
         self.activate(state=False)
 

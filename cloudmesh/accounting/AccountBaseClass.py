@@ -1,4 +1,5 @@
 
+
 class AccountingBaseClass:
 
     """all methods return some kind of id if possible or useful or the object"""

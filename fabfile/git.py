@@ -104,7 +104,7 @@ def installmongodb_ubuntu():
     local('sudo apt-get update')
     local('sudo apt-get install mongodb-10gen')
 
-    
+
 def _next_version(version):
     numbers = version.split(".")
     numbers[-1] = str(int(numbers[-1]) + 1)

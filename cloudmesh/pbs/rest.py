@@ -10,7 +10,7 @@
     $ curl "http://localhost:5000/v1.0/queue?resource=india.futuregrid.org&id=1902410.i136"
     $ curl "http://localhost:5000/v1.0/queue/info?resource=india.futuregrid.org&queue=systest"
 
-    
+
 """
 from cloudmesh.pbs.pbs import PBS
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
