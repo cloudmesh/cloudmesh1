@@ -64,7 +64,7 @@ class ssh:
         self.client.close()
         
 # -----------------------------------------------------------------------
-def ssh_vm_with_command(hostuser, addr, cmd, key=None):
+def ssh_execute(hostuser, addr, cmd, key=None):
     """Execute a command via SSH"""
 
     from sh import ssh # import
