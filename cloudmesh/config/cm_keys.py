@@ -249,7 +249,7 @@ class cm_keys_mongo(cm_keys_base):
                 print "ERROR: reading key file {0}".format(value)
                 return        
 
-        self.user_info["keys"][name] = value
+        self.user_info["keys"][name] = key_value
 
         self.mongo.db_user.update(
             {'_id': self.user_info['_id']},
