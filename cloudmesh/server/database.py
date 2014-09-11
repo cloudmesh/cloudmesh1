@@ -59,8 +59,15 @@ class Database(object):
         for keytitle in keys.keys():
             keycontent = keys[keytitle]
             if keytype(keycontent) == "file":
-                keycontent = get_key_from_file(keycontent).strip()
-                keys[keytitle] = keycontent
+                keycontent = get_key_from_file(keycontent)
+                if keycontent:
+                    keycontent = keycontent.strip()
+                    keys[keytitle] = keycontent
+                else:
+                    print "The specified key file does not exist and thus ingored!"
+                    print "You can run ssh-keygen to generate one key pair"
+                    del keys[keytitle]
+                    break
             if "." in keytitle:
                 newkeytitle = keytitle.replace(".", "_")
                 del keys[keytitle]
