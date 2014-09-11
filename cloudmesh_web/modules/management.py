@@ -380,7 +380,7 @@ def project_edit(projectid):
                 project.aggreement_support = data["aggreement_support"]
                 project.aggreement_sotfware = data["aggreement_sotfware"]
                 project.aggreement_documentation = data["aggreement_documentation"]
-                                                                
+
                 project.categories = data["categories"]
                 project.keywords = data["keywords"]
                 project.primary_discipline = data["primary_discipline"]

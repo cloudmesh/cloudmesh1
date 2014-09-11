@@ -121,7 +121,7 @@ if debug:
     provider = SimulaterLauncher
 else:
     provider = ChefLauncher
-    
+
 launcher = provider()
 
 launcher.run("A", "B")

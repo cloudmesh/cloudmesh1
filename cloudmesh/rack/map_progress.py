@@ -82,30 +82,30 @@ class RackMapProgress(BaseProgress):
     # {status_text: {"begin": value_begin, "range": value_range, "next": next_status}, ...}
     status_data_dict = {}
     """
-        load_map including: 1) 5%, send http request, 
-                            2) 20%, read data from db, 
-                            3) 20%, process data, 
-                            4) 25%, plot map, 
-                            5) 15%, plot legend, 
+        load_map including: 1) 5%, send http request,
+                            2) 20%, read data from db,
+                            3) 20%, process data,
+                            4) 25%, plot map,
+                            5) 15%, plot legend,
                             6) 15%, loading map, receive http response
-        
-        refresh_map including:  1) 5%, send http request, 
-                                2) 5%, check refresh condition, 
-                                3) 45%, async send refresh, 
-                                4) 5%, read data from db, 
-                                5) 10%, process data, 
-                                6) 10%, plot map, 
-                                7) 5%, plot legend, 
+
+        refresh_map including:  1) 5%, send http request,
+                                2) 5%, check refresh condition,
+                                3) 45%, async send refresh,
+                                4) 5%, read data from db,
+                                5) 10%, process data,
+                                6) 10%, plot map,
+                                7) 5%, plot legend,
                                 8) 15%, loading map, receive http response
         load_refresh_map including:
-                            1) 5%, send http request, 
-                            2) 5%, read data from db, 
-                            3) 5%, check refresh condition, 
-                            4) 40%, async send refresh, 
-                            5) 5%, read data from db, 
-                            6) 10%, process data, 
-                            7) 10%, plot map, 
-                            8) 5%, plot legend, 
+                            1) 5%, send http request,
+                            2) 5%, read data from db,
+                            3) 5%, check refresh condition,
+                            4) 40%, async send refresh,
+                            5) 5%, read data from db,
+                            6) 10%, process data,
+                            7) 10%, plot map,
+                            8) 5%, plot legend,
                             9) 15%, loading map, receive http response
     """
 

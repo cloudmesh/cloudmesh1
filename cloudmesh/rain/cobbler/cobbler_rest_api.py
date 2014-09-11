@@ -16,7 +16,7 @@ log = LOGGER(__file__)
 class CobblerRestAPI:
 
     """Cobbler REST Service API
-    This class provide the access to cobbler provision API via REST service. 
+    This class provide the access to cobbler provision API via REST service.
     """
 
     def __init__(self):
@@ -57,7 +57,7 @@ class CobblerRestAPI:
         """list the cobbler objects.
         :param string cobbler_object: one of the cobbler objects, currently support four objects, 'distro', 'profile', 'system', 'kickstart'
         :return: a list with the formation ['name1', 'name2', ] of corresponding objects if cobbler_object is a valid object, otherwise None
-        :rtype: list 
+        :rtype: list
         """
         url = "/cm/v1/cobbler/{0}s".format(cobbler_object)
         rest_data = self.request_rest_api("get", url)
@@ -79,7 +79,7 @@ class CobblerRestAPI:
         """list the children of cobbler objects.
         :param string cobbler_object: one of the cobbler objects, currently support four objects, 'distro', 'profile',
         :return: a list with the formation ['name1', 'name2', ] of corresponding objects if cobbler_object is a valid object, otherwise None
-        :rtype: list 
+        :rtype: list
         """
         if cobbler_object in ["distro", "profile"]:
             url = "/cm/v1/cobbler/{0}s/{1}/child".format(cobbler_object, name)
@@ -172,14 +172,14 @@ class CobblerRestAPI:
         return rest_data["result"]
 
     def update_cobbler_distro(self, data):
-        """update a distro to cobbler. 
+        """update a distro to cobbler.
         :param dict data: a json data structure. The formation is {"name": "your distro name", "comment": "your comment", "owners": "specified owners",}
         :return: True means update distro operation success, otherwise Failed
         """
         return self.update_cobbler_object("distro", data)
 
     def update_cobbler_profile(self, data):
-        """update a profile to cobbler. 
+        """update a profile to cobbler.
         :param dict data: a json data structure. The formation is {"name": "your profile name", "distro": "distro", "kickstart": "kickstart.file", "comment": "your comment", "owners": "specified owners",}
         :return: True means update profile operation success, otherwise Failed
         """
@@ -263,7 +263,7 @@ class CobblerRestAPI:
         return rest_data["result"]
 
     def deploy_cobbler_system(self, name):
-        """deploy baremetal system *name*. 
+        """deploy baremetal system *name*.
         The cycle of deply system status is False(OFF) --> True(ON) --> False(OFF).
         :param string name: the name of a cobbler system or host
         :return: Always return True, which ONLY means has sent deploy command through IPMI. You MUST call `monitor_cobbler_system` to get the status of the system `name`.
@@ -281,7 +281,7 @@ class CobblerRestAPI:
         return rest_data["result"]
 
     def power_cobbler_system(self, name, flag_on=True):
-        """power ON/OFF baremetal system *name*. 
+        """power ON/OFF baremetal system *name*.
         The system is ON/OFF must be call **monitor_cobbler_system** and its result is True(ON)/False(OFF)
         :param string name: the name of a cobbler system or host
         :param boolean flag_on: a boolean value. True means to power on the system, False means power off.
@@ -299,7 +299,7 @@ class CobblerRestAPI:
         return rest_data["result"]
 
     def monitor_deploy_power_status(self, name, action, flag_on=True):
-        """monitor the deploy/power ON/OFF status of host name. 
+        """monitor the deploy/power ON/OFF status of host name.
         :param string name: the unique ID of host
         :param string action: action of "deploy" or "power"
         :param boolean flag_on: ONLY valid when action is power, True means power ON, False means OFF
@@ -381,13 +381,13 @@ if __name__ == "__main__":
     result = bmc.add_cobbler_distro(data)
     """
     """
-    # add a profile, 
+    # add a profile,
     data = {"name": "test_profile_1405023", "distro": "test_centos_1405023-x86_64", "kickstart":"sample.ks",}
     result = bmc.add_cobbler_profile(data)
     """
     """
     # add a system
-    data = {"name": "test_system_1405023", "profile": "test_profile_1405023", 
+    data = {"name": "test_system_1405023", "profile": "test_profile_1405023",
             "power": {"power-address": "1.2.3.4",
                       "power-user": "onlytest",
                       "power-pass": "onlytest",

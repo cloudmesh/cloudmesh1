@@ -41,7 +41,7 @@ def cm_manage():
       cm-manage config list
       cm-manage config password NAME
       cm-manage config show passwords
-      cm-manage config fetch [-u USER] [-r HOST] 
+      cm-manage config fetch [-u USER] [-r HOST]
       cm-manage --version
       cm-manage --help
 
@@ -77,7 +77,7 @@ def cm_manage():
        Command to generate rc files from our cloudmesh configuration files.
 
         This program generates form a YAML file containing the login
-        information for a cloud an rc file that can be used to later source 
+        information for a cloud an rc file that can be used to later source
         it.
 
     Example:

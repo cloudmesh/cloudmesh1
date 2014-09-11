@@ -94,7 +94,7 @@ class cm_shell_cloud:
 
             Usage:
                 cloud list [--column=COLUMN]
-                cloud info [NAME] 
+                cloud info [NAME]
                 cloud set NAME
                 cloud select [NAME]
                 cloud on [NAME]
@@ -126,34 +126,34 @@ class cm_shell_cloud:
                     lists the cloud names, optionally, specify columns for more
                     cloud information
 
-                cloud info [NAME] 
-                    provides the available information about cloud and its status 
+                cloud info [NAME]
+                    provides the available information about cloud and its status
                     in dict format. If no NAME is given, default or selected cloud
                     is used. If the name all is used, all clouds are displayed
 
                 cloud set NAME
                     sets a new name for selected or default cloud, please select a
-                    cloud to work with first, otherwise the default cloud will be 
+                    cloud to work with first, otherwise the default cloud will be
                     used
 
                 cloud select [NAME]
-                    selects a cloud to work with from a list of clouds if NAME 
+                    selects a cloud to work with from a list of clouds if NAME
                     not given
 
                 cloud on [NAME]
                 cloud off [NAME]
-                    activates or deactivates a cloud, if name is not given, 
+                    activates or deactivates a cloud, if name is not given,
                     default or selected cloud will be activated or deactivated
 
                 cloud add CLOUD
-                    adds cloud information to database. CLOUD is a yaml file with 
+                    adds cloud information to database. CLOUD is a yaml file with
                     full file path. Inside yaml, clouds should be written in the
-                    form: 
+                    form:
                     cloudmesh: clouds: cloud1...
                                        cloud2...
 
                 cloud remove [NAME]
-                    remove a cloud from mongo, if name is not given, default or 
+                    remove a cloud from mongo, if name is not given, default or
                     selected cloud will be reomved.
                     CAUTION: remove all is enabled
 
@@ -387,7 +387,7 @@ class cm_shell_cloud:
             '''
             #get cm_active information from yaml
             try:
-                active = config.get("cloudmesh")['active'] 
+                active = config.get("cloudmesh")['active']
             except:
                 active = []
             '''

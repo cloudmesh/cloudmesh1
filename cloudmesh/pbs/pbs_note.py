@@ -1,6 +1,6 @@
 """
 A wrap python class of 'pbsnodes -N "note" node' command
-The purpose of this class is to provide a simple API 
+The purpose of this class is to provide a simple API
 to write some attribute and its value pairs to note attribute of cluster nodes.
 """
 

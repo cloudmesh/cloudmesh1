@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 """
     Usage:
-        cm-tasks menu    
+        cm-tasks menu
         cm-tasks queue
         cm-tasks start
         cm-tasks stop
         cm-tasks halt
-        cm-tasks kill                                
+        cm-tasks kill
 """
 
 from docopt import docopt

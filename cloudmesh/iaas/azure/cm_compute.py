@@ -320,7 +320,7 @@ class azure(ComputeBaseType):
         :param name: (optional) the name of a cloud service to use
         :type name: str.
         :param location: (optional) the name of a
-        location for the cloud service 
+        location for the cloud service
         :type location: str.
 
         """
@@ -386,7 +386,7 @@ class azure(ComputeBaseType):
         used where the image's located.
         Otherwise, the last storage account of the subscription will be used.
 
-        Note. 
+        Note.
         The disk's VHD must be in the same account as the VHD of the source
         image (source account: xxx.blob.core.windows.net, target
         account: xxx.blob.core.windows.net).
@@ -676,11 +676,11 @@ class azure(ComputeBaseType):
 
         role_instance_list is an azure class which contains, for example,
 
-        {'instance_upgrade_domain': 0, 'instance_size': u'ExtraSmall', 
-        'fqdn': u'', 'instance_fault_domain': 0, 
-        'instance_name': u'cm-e7a65a9e29dd11e39a290026b9852d93', 
-        'role_name': u'cm-e7a65a9e29dd11e39a290026b9852d93', 
-        'power_state': u'Started', 'instance_error_code': u'', 
+        {'instance_upgrade_domain': 0, 'instance_size': u'ExtraSmall',
+        'fqdn': u'', 'instance_fault_domain': 0,
+        'instance_name': u'cm-e7a65a9e29dd11e39a290026b9852d93',
+        'role_name': u'cm-e7a65a9e29dd11e39a290026b9852d93',
+        'power_state': u'Started', 'instance_error_code': u'',
         'ip_address': u'100.67.38.83', 'instance_status': u'ReadyRole',
         'instance_state_details': u''}
 

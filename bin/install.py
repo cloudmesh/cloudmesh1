@@ -5,11 +5,11 @@ Usage:
     cm-install --version
     cm-install create OS
     cm-install list
-    cm-install veewee    
-    
+    cm-install veewee
+
 Arguments:
     OS     The operating system. [default: ubuntu]
-    
+
 Options:
 
 Description:

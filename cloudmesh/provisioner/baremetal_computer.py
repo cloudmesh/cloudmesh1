@@ -16,7 +16,7 @@ class BaremetalComputer:
 
     """Baremetal computer class.
     First, this class also provide a easy API to initialize the cobbler baremetal computers in mongodb, e.g., mac and power info,
-    Second, this class have an API through which user can get the detail information to provision a cobbler baremetal computer 
+    Second, this class have an API through which user can get the detail information to provision a cobbler baremetal computer
     """
 
     def __init__(self):
@@ -76,7 +76,7 @@ class BaremetalComputer:
 
     def insert_mac_data_to_inventory(self):
         """
-        Insert the mac address information including power config into inventory. 
+        Insert the mac address information including power config into inventory.
         This API should be called **BEFORE** baremetal provision.
         Currently, this API is called by **fab mongo.inventory**
         """
@@ -93,9 +93,9 @@ class BaremetalComputer:
         """
         update *inventory* db with mac address information.
         :param dict mac_dict: a dict with the following formation. *label_name* is the *cm_id* defined in inventory.
-        *internal* or *public* is the type defined in inventory. 
+        *internal* or *public* is the type defined in inventory.
         {"cluster_name":{
-          "label_name": {"internal": {"name":"eth0", "macaddr": "aa:aa:aa:aa:aa:aa"}, 
+          "label_name": {"internal": {"name":"eth0", "macaddr": "aa:aa:aa:aa:aa:aa"},
                          "public": {"name":"eth1", "macaddr": "aa:aa:aa:aa:aa:ab"},
                          "bmc": {"user": "user_name", "pass": "password", "type": "type",},}
         }
@@ -132,7 +132,7 @@ class BaremetalComputer:
         """
         get the required host info for baremetal computer.
         :param string host_id: the unique name/id of a node in cloudmesh
-        :param string info_format: the dest info format of general host info. To support a new formation, such as *xtest*, the API get_host_info_xtest MUST be provided. 
+        :param string info_format: the dest info format of general host info. To support a new formation, such as *xtest*, the API get_host_info_xtest MUST be provided.
         :return: a dict with the following formation if info_format is None, otherwise return the use specified formation conerted from the default one.
         {
           "id": "unique ID",

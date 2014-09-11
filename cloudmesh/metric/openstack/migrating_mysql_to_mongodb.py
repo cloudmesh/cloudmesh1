@@ -52,10 +52,7 @@ class Migrate_MySQL_to_Mongo:
         # Then replace tab to ","
         # , add quote(") between new line
         # remove the last quote by [:-1] since \"\n\" adds dummy quote at last
-        output = "\"" + str(res_mysql) \
-            .replace("\t", "\",\"") \
-            .replace("\n", "\"\n\"") \
-            [:-1]
+        output = "\"" + str(res_mysql).replace("\t", "\",\"").replace("\n", "\"\n\"")[:-1]
 
         self.csv_data = output
         return output

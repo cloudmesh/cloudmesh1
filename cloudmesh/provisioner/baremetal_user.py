@@ -24,22 +24,22 @@ class BaremetalUser:
         self.seperator = ","
 
     def add_user_to_owners(self, user, owner_str):
-        """shortcut for add user to owners. 
+        """shortcut for add user to owners.
         """
         return self.edit_user_in_owners(user, owner_str, "users", "add")
 
     def remove_user_from_owners(self, user, owner_str):
-        """shortcut for remove user from owners. 
+        """shortcut for remove user from owners.
         """
         return self.edit_user_in_owners(user, owner_str, "users", "remove")
 
     def add_group_to_owners(self, user, owner_str):
-        """shortcut for add user to owners. 
+        """shortcut for add user to owners.
         """
         return self.edit_user_in_owners(user, owner_str, "groups", "add")
 
     def remove_group_from_owners(self, user, owner_str):
-        """shortcut for remove user from owners. 
+        """shortcut for remove user from owners.
         """
         return self.edit_user_in_owners(user, owner_str, "groups", "remove")
 
@@ -84,7 +84,7 @@ class BaremetalUser:
         return self.ug_exist_in_owners(user, owner_str, "groups")
 
     def ug_exist_in_owners(self, user, owner_str, item):
-        """user/group exist in owners or not. 
+        """user/group exist in owners or not.
         :param string user: user name or group name, It can ONLY be a single string, The example of user: "abc"
         :param string owner_str: the owner string
         :param string item: a value in ["users", "groups"]
@@ -123,7 +123,7 @@ class BaremetalUser:
     def merge_user(self, users=None):
         """merge a list of user into one user string.
         :param list users: a list of users with the formation ["user1", "user2",]
-        :return: a user string "admin,user1,user2" in which user is sperated by **seperator** 
+        :return: a user string "admin,user1,user2" in which user is sperated by **seperator**
         """
         users = self.get_valid_list(users)
         if users and len(users) > 0:

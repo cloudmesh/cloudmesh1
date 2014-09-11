@@ -24,7 +24,7 @@ def format_result_data(flag_success, msg="", data=None):
 def not_supported_objects(object_type):
     """
       cobbler supports a lot of objects. However, this cobbler REST API only support part of them.
-      The supported object defined in SUPPORTED_OBJECTS. 
+      The supported object defined in SUPPORTED_OBJECTS.
     """
 
     return format_result_data(False, "Object {0} dose NOT supported in currently REST API.".format(object_type))
