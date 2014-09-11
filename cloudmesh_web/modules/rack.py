@@ -34,9 +34,9 @@ class RackForm(Form):
     temperature_rack = SelectField()
 
     all_racks_dict = {
-        "all":   ('all', 'All Clusters'),
+        "all": ('all', 'All Clusters'),
         "india": ('india', 'India Cluster'),
-        "echo":  ('echo', 'Echo Cluster'),
+        "echo": ('echo', 'Echo Cluster'),
         "delta": ('delta', 'Delta Cluster'),
         "bravo": ('bravo', 'Bravo Cluster'),
     }
@@ -47,15 +47,15 @@ class RackForm(Form):
     # 'clusters' means the specific service can be used on some different clusters
     # 'select' means one attribute name of SelectField, typical name is "{service name}_rack"
     all_services_dict = {
-        "service":     {
+        "service": {
             "label": "Service Map",
             "clusters": ["all", "india", "echo", "delta", "bravo", ],
-            "select":   "service_rack",
+            "select": "service_rack",
         },
         "temperature": {
             "label": 'Heat Map',
             "clusters": ["echo", ],
-            "select":   "temperature_rack",
+            "select": "temperature_rack",
         },
     }
 
@@ -172,7 +172,7 @@ def rack_map_progress_status():
     map_progress = myfetch.get_map_progress(service)
     if map_progress:
         result = map_progress.get_status()
-        #log.debug("progress status: {0}".format(result))
+        # log.debug("progress status: {0}".format(result))
         if result["next"] == "loading map":
             result["data"] = map_progress.get_data("map_data")
 
