@@ -5,7 +5,7 @@ class cm_metric_openstack:
 
     def __init__(self, collection=None):
 
-        if collection is NOne:
+        if collection is None:
             collection = "metric"
 
         self.db_qstat = get_mongo_db(collections)
