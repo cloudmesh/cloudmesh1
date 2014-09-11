@@ -76,7 +76,7 @@ class cm_shell_key:
         Usage:
                key
                key list [--source=SOURCE] [--dir=DIR] [--format=FORMAT]
-               key add [KEYNAME] FILENAME 
+               key add [KEYNAME] FILENAME
                key default KEYNAME
                key delete KEYNAME
 
@@ -88,14 +88,14 @@ class cm_shell_key:
           KEYNAME        The name of a key
           FORMAT         The format of the output
           FILENAME       The filename in which the key is located
-          
+
         Options:
 
            -v --verbose     verbose mode
            --dir=DIR        the directory with keys [default: ~/.ssh]
            --format=FORMAT  the format of the output [default: table]
            --source=SOURCE  the source for the keys [default: mongo]
-           
+
         Description:
 
 
@@ -104,16 +104,16 @@ class cm_shell_key:
            lists all keys in the directory. If the directory is not
            specified the defualt will be ~/.ssh
 
-        key list --source=yaml  [--dir=DIR] [--format=FORMAT]           
+        key list --source=yaml  [--dir=DIR] [--format=FORMAT]
 
            lists all keys in cloudmesh.yaml file in the specified directory.
             dir is by default ~/.cloudmesh
-           
+
         key list [--format=FORMAT]
 
             list the keys in mongo
 
-        key add [NAME] FILENAME 
+        key add [KEYNAME] FILENAME
 
             adds the key specifid by the filename to either
             the yaml file or the mongodb
@@ -122,7 +122,7 @@ class cm_shell_key:
         key add select [--dir=DIR]
 
              interactively selct a key from the specified dir to be added
-        
+
         key list
 
              Prints list of keys. NAME of the key can be specified
@@ -149,18 +149,17 @@ class cm_shell_key:
         def _find_keys(directory):
             return [file for file in listdir(expanduser(directory)) if file.lower().endswith(".pub")]
 
-
         #
         # DIR (OK)
         #
-            
+
         directory = path_expand(arguments["--dir"])
         source = arguments["--source"]
 
         if source not in ["ssh", "yaml", "mongo"]:
             print "ERROR: source is not defined"
             return
-        
+
         #
         # PRINT DICT (OK)
         #
@@ -172,12 +171,12 @@ class cm_shell_key:
             elif print_format == "yaml":
                 return yaml.dump(d, default_flow_style=False)
             else:
-                return two_column_table(keys,header)                                
-                
+                return two_column_table(keys, header)
+
         #
         # PRINT SYSTEM (OK)
         #
-                            
+
         if arguments["list"] and source == "ssh":
 
             files = _find_keys(directory)
@@ -185,9 +184,9 @@ class cm_shell_key:
             keys = {}
             for key in files:
                 keys[key] = directory + "/" + key
-            print _print_dict(keys,header=["Key","Location"])                
+            print _print_dict(keys, header=["Key", "Location"])
 
-            return            
+            return
 
         #
         # PRINT YAML (OK)
@@ -201,52 +200,53 @@ class cm_shell_key:
             for key in keynames:
                 keys[key] = get_fingerprint(key_store[key])
 
-            print _print_dict(keys,header=["Key","Fingerprint"])                                
-                        
+            print _print_dict(keys, header=["Key", "Fingerprint"])
+
             return
 
         #
         # FROM HERE ON BROKEN
         #
 
-                
         if arguments["list"] and source == "mongo":
 
             username = cm_config().username()
             key_store = cm_keys_mongo(username)
             keynames = key_store.names()
-            
+
             keys = {}
             for key in keynames:
 
                 keys[key] = key_store[key]
-                #get_fingerprint(key_store[key])
+                # get_fingerprint(key_store[key])
 
-            print _print_dict(keys,header=["Key","Fingerprint"])                                
-                        
+            print _print_dict(keys, header=["Key", "Fingerprint"])
+
             return
 
         # self._load_keys_from_yaml()
         # self._load_mongo()
         # self._load_keys_mongo()
 
-        if arguments["default"] and arguments["NAME"]:
-            if arguments["NAME"] in key_store.names():
-                key_store.setdefault(arguments["NAME"])
-                # Update mongo db defaults with new default key
-                print 'The default key is set to: ', arguments['NAME']
-            else:
-                print "ERROR: Specified key is not registered."
-            return
+        if arguments["add"] and arguments["KEYNAME"]:
 
-        if arguments["add"] and arguments["NAME"]:
+            keyname = arguments["KEYNAME"]
+            filename = arguments["FILENAME"]
+
+            # check if file exists
+
+            # check if key is valid
+
+            key_store[keynme] = filename
+
+            """
             def func():
                 if arguments["KEY"]:
                     key_store.__setitem__(
                         arguments["NAME"], arguments["KEY"])
                 else:
                     files = _find_keys(directory)
-                    
+
                     result = menu_return_num(
                         title="Select a public key", menu_list=files, tries=3)
                     if result == 'q':
@@ -265,6 +265,16 @@ class cm_shell_key:
             else:
                 print "adding key {0} ...".format(arguments["NAME"])
                 func()
+            """
+
+        if arguments["default"] and arguments["NAME"]:
+            if arguments["NAME"] in key_store.names():
+                key_store.setdefault(arguments["NAME"])
+                # Update mongo db defaults with new default key
+                print 'The default key is set to: ', arguments['NAME']
+            else:
+                print "ERROR: Specified key is not registered."
+            return
 
         if arguments["delete"]:
             print "Attempting to delete key. {0}".format(arguments["NAME"])
