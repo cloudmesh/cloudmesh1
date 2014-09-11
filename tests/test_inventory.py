@@ -9,7 +9,7 @@ from datetime import datetime
 
 from cloudmesh_common.util import HEADING
 from cloudmesh.inventory import Inventory
-from  pprint import pprint
+from pprint import pprint
 
 
 class Test_Inventory:
@@ -22,10 +22,8 @@ class Test_Inventory:
         self.inventory.generate()
         print "GENERATION COMPLETE"
 
-
     def tearDown(self):
         pass
-
 
     def test_clear(self):
         HEADING()
@@ -33,7 +31,7 @@ class Test_Inventory:
 
     def test_find(self):
         HEADING()
-        r = self.inventory.find ({})
+        r = self.inventory.find({})
         print r.count()
         assert r.count > 0
 
@@ -65,8 +63,6 @@ class Test_Inventory:
         data = self.inventory.host(self.name)
         pprint(data)
 
-
-
     def test_set(self):
         HEADING()
 
@@ -94,12 +90,9 @@ class Test_Inventory:
         print 70 * '='
         print data
 
-
         print "GET ATTRIBUTE"
         data = self.inventory.get_attribute(self.name, attribute)
         print data
-
-
 
     def test_i066(self):
         HEADING()
@@ -109,10 +102,6 @@ class Test_Inventory:
         print "GET ATTRIBUTE"
         data = self.inventory.get_attribute(name, attribute)
         print data
-
-
-
-
 
     """    
         data = self.inventory.host(self.name)

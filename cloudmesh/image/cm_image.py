@@ -29,23 +29,23 @@ import cloudmesh
 #definitions = ["~/veewee", "$CLOUDMESH/images/veewee"]
 definitions = ["$CLOUDMESH/images/veewee"]
 
+
 def not_implemented():
     print "ERROR: not yet implemented"
 
 
 def cm_image_command(arguments):
-
     """
     cm-image admin on HOSTS
     cm-image admin off HOSTS
     """
 
     path = path_expand(definitions[0])
-    
+
     if arguments["version"]:
 
         print cloudmesh.__version__
-        
+
     elif arguments["info"]:
 
         banner("info")
@@ -56,7 +56,7 @@ def cm_image_command(arguments):
         print "Version:", cloudmesh.__version__
         banner("List of templates", c='-')
         system_name = None
-        
+
         for definition in definitions:
             try:
                 path = path_expand(definition)
@@ -78,10 +78,10 @@ def cm_image_command(arguments):
         print
         print "where OS is one of the labels listed above."
         print
-        
+
     elif arguments["build"]:
 
-        banner("build")        
+        banner("build")
         system_name = arguments["OS"]
 
         if arguments['--gui']:
@@ -91,12 +91,13 @@ def cm_image_command(arguments):
 
         if arguments['--kind'] == "vbox":
 
-            os.system("cd '%s' ; veewee vbox build '%s' --force %s" % (path, system_name, gui))
+            os.system("cd '%s' ; veewee vbox build '%s' --force %s" %
+                      (path, system_name, gui))
             # due to some bug the following does not work
-            # os.system("veewee vbox build %s --workdir='%s' --force" % (path, system_name)
+            # os.system("veewee vbox build %s --workdir='%s' --force" % (path,
+            # system_name)
         else:
             print "ERROR: wrong options"
-
 
     elif arguments["register"]:
 
@@ -107,18 +108,17 @@ def cm_image_command(arguments):
         banner("export iamge", c="-")
 
         if arguments['--kind'] is 'vbox':
-            os.system("cd '%s' ; veewee vbox export '%s'" % (path, system_name))
+            os.system("cd '%s' ; veewee vbox export '%s'" %
+                      (path, system_name))
 
             banner("add iamge", c="-")
-            os.system("cd '%s' ; vagrant box add '%s' '%s.box'" % (path, system_name, system_name))
-
+            os.system("cd '%s' ; vagrant box add '%s' '%s.box'" %
+                      (path, system_name, system_name))
 
 
 def main():
     arguments = docopt(__doc__)
     cm_image_command(arguments)
-    
+
 if __name__ == '__main__':
     main()
-
-    

@@ -7,7 +7,7 @@ nosetests -v
 """
 
 from cloudmesh.provisioner.cm_launcher import SimulatorLauncher
-from  pprint import pprint
+from pprint import pprint
 
 from cloudmesh_common.util import HEADING
 import sys
@@ -44,4 +44,5 @@ class Test_Launcher:
         for host in self.launcher.recipies:
             recipie_list = self.launcher.recipies[host]
             for recipie in recipie_list:
-                assert (self.launcher.run(host, recipie["name"]))  # assuming "name" to be the key in the dictionary
+                # assuming "name" to be the key in the dictionary
+                assert (self.launcher.run(host, recipie["name"]))

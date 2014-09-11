@@ -4,6 +4,7 @@ import requests
 from collections import OrderedDict
 from cloudmesh.config.cm_config import cm_config_server
 
+
 class metric_api:
 
     def __init__(self):
@@ -49,7 +50,7 @@ class metric_api:
         except:
             self.port = 5001
         self.doc_url = "metric"
- 
+
     def connect(self):
         try:
             r = requests.get(self.get_uri())
@@ -78,9 +79,9 @@ class metric_api:
         uri.append(self.from_date)
         uri.append(self.to_date)
         uri.append(self.period)
-        self.uri = "/".join(map(str,uri))
+        self.uri = "/".join(map(str, uri))
         return self.uri
-    
+
     def set_date(self, from_date, to_date):
         self.from_date = from_date
         self.to_date = to_date
@@ -115,13 +116,13 @@ class metric_api:
     def test_raw_data(self):
         # for test, dummy data is returned
         res = [["HOST", "PROJECT", "cpu", "memory_mb", "disk_gb"],
-               ["india","(total)",2, 4003,157],
-               ["india","(used_now)", 3, 5120, 40],
-               ["india","(used_max)",3,4608, 40],
-               ["india","b70d90d65e464582b6b2161cf3603ced",1,512,0],
-               ["india","66265572db174a7aa66eba661f58eb9e",2,4096,40]]
+               ["india", "(total)", 2, 4003, 157],
+               ["india", "(used_now)", 3, 5120, 40],
+               ["india", "(used_max)", 3, 4608, 40],
+               ["india", "b70d90d65e464582b6b2161cf3603ced", 1, 512, 0],
+               ["india", "66265572db174a7aa66eba661f58eb9e", 2, 4096, 40]]
         return res
- 
+
     def get_raw_data(self):
         # expect list variable
         res = self.connect()
@@ -131,7 +132,7 @@ class metric_api:
         for row in res["message"]['default']:
             if i == 0:
                 dictlist.append(row.keys())
-            i=1
+            i = 1
             dictlist.append(row.values())
         self.raw_data = dictlist
 
@@ -142,7 +143,7 @@ class metric_api:
 
         if name in ["WALLTIME", "WALLCLOCK", "RUNTIME"]:
             timetype = self.translate_naming(self.timetype)
-            return "WallTime ("+timetype+")"
+            return "WallTime (" + timetype + ")"
         elif name == "HOUR":
             return "Hrs"
         else:
@@ -158,8 +159,8 @@ class metric_api:
         distlist_comparison = []
         index = "YEAR MONTH"
         column = "CLOUDNAME"
-        value = self.translate_naming(name = self.metric)#"VMCOUNT")
-       
+        value = self.translate_naming(name=self.metric)  # "VMCOUNT")
+
         iaas = []
         dates = []
         for row in res["message"]['default']:
@@ -181,11 +182,11 @@ class metric_api:
             try:
                 complist[row[index]][pos] = row[value]
             except KeyError:
-                complist[row[index]] = [0]*len(iaas)
+                complist[row[index]] = [0] * len(iaas)
                 complist[row[index]][pos] = row[value]
 
         for k, v in complist.iteritems():
-            distlist_comparison.append([k]+v)
+            distlist_comparison.append([k] + v)
 
         self.raw_data = distlist_comparison
 
@@ -204,9 +205,9 @@ class metric_api:
             print "userid: " + self.userid
         if self.projectid:
             print "projectid: " + self.projectid
-        
+
         # display table of contents
-        # table_format = 
+        # table_format =
         # plain,
         # simple,
         # grid,
@@ -215,18 +216,18 @@ class metric_api:
         # rst,
         # mediawiki,
         # latex
-        self.table = tabulate (self.raw_data, headers="firstrow",
-                               tablefmt=table_format)
+        self.table = tabulate(self.raw_data, headers="firstrow",
+                              tablefmt=table_format)
         try:
             seperator = self.table.split("\n")[1].replace("|", "+")
             print seperator
             print self.table
-            print seperator        
+            print seperator
         except IndexError:
             print "No results."
-       
+
     def get_stats(self):
-        #print vars(self)
+        # print vars(self)
         self.get_raw_data()
         self.display()
         return
@@ -236,11 +237,10 @@ class metric_api:
         return self.get_stats()
 
     def na_message(self, func_name, *args):
-        args = map(str,args)
+        args = map(str, args)
         msg = "%s is not implemented, '%s' ignored." % \
-                (func_name, ', '.join(args))
+            (func_name, ', '.join(args))
         print "=" * len(msg)
         print msg
         print "=" * len(msg)
         print
-

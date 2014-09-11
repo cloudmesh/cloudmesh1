@@ -25,10 +25,12 @@ def filter_attributes(d, filterkeys=["name", "uuid", "state"]):
         f[m["name"]] = dict(zip(filterkeys, [m[k] for k in filterkeys]))
     return f
 
+
 def extract_state(attribute, value):
     if attribute == "state":
         value = value.split("(")[0]
     return value
+
 
 def convert_to_dict(lines, token=":", converters=None):
     """converts lines of the form 
@@ -44,10 +46,11 @@ def convert_to_dict(lines, token=":", converters=None):
             if converters is not None:
                 for converter in converters:
                     value = converter(attribute, value)
-            m.update ({attribute.lower() : value.strip()})
+            m.update({attribute.lower(): value.strip()})
         except:
             pass
     return m
+
 
 class virtualbox(ComputeBaseType):
 
@@ -108,7 +111,6 @@ class virtualbox(ComputeBaseType):
         f = filter_attributes(d, filterkeys)
         return f
 
-
     def _get_vminfo(name, filter=None):
         """returns the info of a named vm"""
         data = vbox_vminfo(name).split("\n\n")[0].split("\n")
@@ -138,7 +140,6 @@ class virtualbox(ComputeBaseType):
         """create a virtual machine with the given parameters"""
         raise NotImplementedError()
 
-
     def vm_start(self, name, mode="headless"):
         """
         mode = gui, headless
@@ -147,7 +148,8 @@ class virtualbox(ComputeBaseType):
         try:
             state = self._get_state(name)
         except:
-            log.error("can not stop VM. VM with the name {0} does not exist".format(name))
+            log.error(
+                "can not stop VM. VM with the name {0} does not exist".format(name))
             return
 
         if state != "running":
@@ -163,7 +165,6 @@ class virtualbox(ComputeBaseType):
             log.error("vm with the name {0} is already running".format(name))
             return False
 
-
     def vm_delete(self, id):
         """delete the virtual machine with the id"""
         """ here id is the same as name"""
@@ -173,7 +174,8 @@ class virtualbox(ComputeBaseType):
         try:
             state = self._get_state(name)
         except:
-            log.error("can not stop VM. VM with the name {0} does not exist".format(name))
+            log.error(
+                "can not stop VM. VM with the name {0} does not exist".format(name))
             return
         if state == "running":
             result = vbox_controlvm(name, action)
@@ -202,4 +204,3 @@ class virtualbox(ComputeBaseType):
 #
 #     print "STATE"
 #     print _get_state(name)
-

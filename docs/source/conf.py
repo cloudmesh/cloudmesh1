@@ -49,7 +49,7 @@ extensions = [
 
 #    'sphinxjp.shibukawa']
 
-#extensions.append('sphinxcontrib.autorun')
+# extensions.append('sphinxcontrib.autorun')
 
 # 'sphinxcontrib.issuetracker']
 # issuetracker = 'none',
@@ -143,7 +143,7 @@ html_theme_options = {
 
     # Global TOC depth for "site" navbar tab. (Default: 1)
     # Switching to -1 shows all levels.
-    'globaltoc_depth':-1,
+    'globaltoc_depth': -1,
 
     # Include hidden TOCs in Site navbar?
     #
@@ -212,20 +212,19 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
-   '**': ['menu.html',
-             'localtoc.html',
-             #'relations.html',
-             'searchbox.html',
-             'sourcelink.html',
-            ],
-   'index': ['menu.html',
-             'localtoc.html',
-             #'relations.html',
-             'searchbox.html',
-             'sourcelink.html',
-            ],
+    '**': ['menu.html',
+           'localtoc.html',
+           #'relations.html',
+           'searchbox.html',
+           'sourcelink.html',
+           ],
+    'index': ['menu.html',
+              'localtoc.html',
+              #'relations.html',
+              'searchbox.html',
+              'sourcelink.html',
+              ],
 }
-
 
 
 # Additional templates that should be rendered to pages, maps page names to

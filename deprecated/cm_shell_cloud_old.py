@@ -28,26 +28,20 @@ class cm_shell_cloud:
     # [default: india], once you restart cm, previous
     # selection will be erased, later on we may choose default cloud as the
     # initial selected cloud
-    
-    
+
     # ----------------------------------------------------------------------------------------
     # bug: active clouds should be read from default db, cloud info shouldn't keep active info
     # ----------------------------------------------------------------------------------------
-    
+
     selected_cloud = None
     clouds = None
-    
-    
+
     def activate_cm_shell_cloud(self):
         self.register_command_topic('cloud', 'cloud')
         self._db_loaded = False
         self._requery = True
         self._cloud_selected = False
         pass
-    
-        
-        
-        
 
     def _load_mongodb(self):
         if not self._db_loaded:
@@ -56,7 +50,7 @@ class cm_shell_cloud:
                 self._db_loaded = True
             except:
                 print "ERROR: Could not load db, did you start mongo?"
-                      
+
     def _requery_db(self):
         if self._requery:
             self.clouds = self.cloudsinfo.get_clouds()
@@ -64,15 +58,13 @@ class cm_shell_cloud:
             self._requery = False
         else:
             return
-        
+
     def _check_empty(self):
         if self.clouds.count() == 0:
             return True
         else:
             return False
-        
-        
-        
+
     def _get_selected_cloud(self):
         if self._cloud_selected:
             return self.selected_cloud
@@ -94,8 +86,6 @@ class cm_shell_cloud:
                 self.clouds.rewind()
                 self._cloud_selected = True
                 return self.selected_cloud
-        
-        
 
     @command
     def do_cloud(self, args, arguments):
@@ -169,10 +159,10 @@ class cm_shell_cloud:
 
         """
 
-        #log.info(arguments)
-        #print "<", args, ">"
+        # log.info(arguments)
+        # print "<", args, ">"
 
-        if arguments["list"] or args=="":
+        if arguments["list"] or args == "":
             self._load_mongodb()
             self._requery_db()
             if self._check_empty():
@@ -182,14 +172,17 @@ class cm_shell_cloud:
                 col = OrderedDict([('cloud', [])])
                 if arguments["--column"]:
                     if arguments["--column"] == 'all':
-                        col_option = ['active', 'user', 'label', 'host', 'type/version', 'type', 'heading', 'credentials', 'defaults']
+                        col_option = [
+                            'active', 'user', 'label', 'host', 'type/version', 'type', 'heading', 'credentials', 'defaults']
                     elif arguments["--column"] == 'semiall':
-                        col_option = ['active', 'user', 'label', 'host', 'type/version', 'type', 'heading']
+                        col_option = [
+                            'active', 'user', 'label', 'host', 'type/version', 'type', 'heading']
                     else:
-                        col_option = [x.strip() for x in arguments["--column"].split(',')]
+                        col_option = [x.strip()
+                                      for x in arguments["--column"].split(',')]
 
                     if set(col_option).issubset(set(['active', 'label', 'host', 'type/version', 'type', 'heading', 'user', 'credentials', 'defaults'])):
-                        
+
                         for co in col_option:
                             col[co] = []
                     else:
@@ -214,22 +207,24 @@ class cm_shell_cloud:
                                     val = dict_uni_to_ascii(val)
                                 pass
                         col[key].append(val)
-                self.clouds.rewind()     
+                self.clouds.rewind()
                 print column_table(col)
-             
 
         if arguments["info"]:
             self._load_mongodb()
+
             def printing(cloud):
                 cloud = dict_uni_to_ascii(cloud)
                 banner(cloud['cm_cloud'])
                 pprint(cloud)
                 print "#", 70 * "#", "\n"
-                
+
             if not arguments["NAME"]:
                 cloud = self._get_selected_cloud()
-                if cloud == None: return
-                else: printing(cloud)
+                if cloud == None:
+                    return
+                else:
+                    printing(cloud)
             else:
                 if arguments["NAME"] == 'all':
                     self._requery_db()
@@ -246,23 +241,23 @@ class cm_shell_cloud:
                     for cloud in self.clouds:
                         if cloud['cm_cloud'] == arguments["NAME"]:
                             res = cloud
-                    self.clouds.rewind() 
+                    self.clouds.rewind()
                     if res == None:
                         print "ERROR: could not find cloud '{0}'".format(arguments["NAME"])
                     else:
                         printing(res)
-                        
+
         if arguments["set"] and arguments["NAME"]:
             self._load_mongodb()
             cloud = self._get_selected_cloud()
-            if cloud == None: return
-            if yn_choice("rename cloud '{0}' to '{1}'?".format(cloud['cm_cloud'], arguments["NAME"]), default = 'n', tries = 3):
+            if cloud == None:
+                return
+            if yn_choice("rename cloud '{0}' to '{1}'?".format(cloud['cm_cloud'], arguments["NAME"]), default='n', tries=3):
                 self.cloudsinfo.set_name(cloud['cm_cloud'], arguments["NAME"])
                 self.selected_cloud['cm_cloud'] = arguments["NAME"]
             else:
                 return
-            
-            
+
         if arguments["select"]:
             self._load_mongodb()
             if arguments["NAME"]:
@@ -286,7 +281,8 @@ class cm_shell_cloud:
                     selecting(res)
             else:
                 current_selected = self._get_selected_cloud()
-                if current_selected == None: return
+                if current_selected == None:
+                    return
                 current_selected = current_selected['cm_cloud'].encode("ascii")
                 self._requery_db()
                 cloud_names = []
@@ -294,8 +290,10 @@ class cm_shell_cloud:
                     cloud_names.append(cloud['cm_cloud'].encode("ascii"))
                 self.clouds.rewind()
                 cloud_names.sort()
-                res = menu_return_num(title="select a cloud (current selected: {0})".format(current_selected), menu_list=cloud_names, tries=3)
-                if res == 'q': return
+                res = menu_return_num(title="select a cloud (current selected: {0})".format(
+                    current_selected), menu_list=cloud_names, tries=3)
+                if res == 'q':
+                    return
                 name = cloud_names[res]
                 res = None
                 for cloud in self.clouds:
@@ -305,13 +303,13 @@ class cm_shell_cloud:
                 self.selected_cloud = res
                 self._cloud_selected = True
                 print "cloud '{0}' is selected".format(name)
-            
-            
+
         if arguments["on"]:
             self._load_mongodb()
             if not arguments["NAME"]:
                 current_selected = self._get_selected_cloud()
-                if current_selected == None: return
+                if current_selected == None:
+                    return
                 current_selected = current_selected['cm_cloud'].encode("ascii")
                 res = self.cloudsinfo.activate_one_cloud(current_selected)
                 self._cloud_selected = False
@@ -331,7 +329,7 @@ class cm_shell_cloud:
                         return
                     elif res == 1:
                         print "cloud '{0}' activated.".format(cloudname)
-                        
+
                 if self._requery:
                     cloud = self.cloudsinfo.get_one_cloud(arguments["NAME"])
                     activating(cloud)
@@ -342,14 +340,13 @@ class cm_shell_cloud:
                             res = cloud
                     self.clouds.rewind()
                     activating(res)
-            
-        
 
         if arguments["off"]:
             self._load_mongodb()
             if not arguments["NAME"]:
                 current_selected = self._get_selected_cloud()
-                if current_selected == None: return
+                if current_selected == None:
+                    return
                 current_selected = current_selected['cm_cloud'].encode("ascii")
                 self.cloudsinfo.deactivate_one_cloud(current_selected)
                 self._cloud_selected = False
@@ -363,7 +360,7 @@ class cm_shell_cloud:
                     self.cloudsinfo.deactivate_one_cloud(cloudname)
                     self._cloud_selected = False
                     print "cloud '{0}' deactivated.".format(cloudname)
-                        
+
                 if self._requery:
                     cloud = self.cloudsinfo.get_one_cloud(arguments["NAME"])
                     deactivating(cloud)
@@ -374,7 +371,6 @@ class cm_shell_cloud:
                             res = cloud
                     self.clouds.rewind()
                     deactivating(res)
-
 
         if arguments["add"] and arguments["CLOUD"]:
             try:
@@ -409,9 +405,9 @@ class cm_shell_cloud:
                 if key in cloud_names:
                     print "ERROR: cloud '{0}' exists in database, please remove it from database first".format(key)
                     continue
-                cloudsdict[key]['cm_cloud']=key
-                cloudsdict[key]['cm_kind']='cloud'
-                cloudsdict[key]['cm_user_id']=user
+                cloudsdict[key]['cm_cloud'] = key
+                cloudsdict[key]['cm_kind'] = 'cloud'
+                cloudsdict[key]['cm_user_id'] = user
                 '''
                 #get cm_active information from yaml
                 if key in active:
@@ -419,7 +415,7 @@ class cm_shell_cloud:
                 else:
                     cloudsdict[key]['cm_active']=False
                 '''
-                cloudsdict[key]['cm_active']=False
+                cloudsdict[key]['cm_active'] = False
                 try:
                     self.cloudsinfo.add(cloudsdict[key])
                 except:
@@ -427,16 +423,17 @@ class cm_shell_cloud:
                     continue
                 print "cloud '{0}' added.".format(key)
             self._requery = True
-            
-            
+
         if arguments["remove"]:
             self._load_mongodb()
             self._requery_db()
             if not arguments["NAME"]:
                 current_selected = self._get_selected_cloud()
-                if current_selected == None: return
+                if current_selected == None:
+                    return
                 current_selected = current_selected['cm_cloud'].encode("ascii")
-                ans = yn_choice("Remove cloud '{0}' from database?".format(current_selected), default ='n', tries=3)
+                ans = yn_choice("Remove cloud '{0}' from database?".format(
+                    current_selected), default='n', tries=3)
                 if ans:
                     self.cloudsinfo.remove(current_selected)
                     print "cloud '{0}' removed.".format(current_selected)
@@ -444,14 +441,16 @@ class cm_shell_cloud:
                     self._cloud_selected = False
             else:
                 if arguments["NAME"] == 'all':
-                    ans = yn_choice("!!!CAUTION!!! Remove all clouds from database?", default ='n', tries=3)
+                    ans = yn_choice(
+                        "!!!CAUTION!!! Remove all clouds from database?", default='n', tries=3)
                     if ans:
                         for cloud in self.clouds:
                             self.cloudsinfo.remove(cloud['cm_cloud'])
                             print "cloud '{0}' removed.".format(cloud['cm_cloud'])
                         self._requery = True
                         self._cloud_selected = False
-                    else: return
+                    else:
+                        return
                 else:
                     cloud_names = []
                     for cloud in self.clouds:
@@ -461,12 +460,10 @@ class cm_shell_cloud:
                         print "ERROR: Could not find '{0}' in database".format(arguments["NAME"])
                         return
                     else:
-                        ans = yn_choice("Remove cloud '{0}' from database?".format(arguments["NAME"]), default ='n', tries=3)
+                        ans = yn_choice("Remove cloud '{0}' from database?".format(
+                            arguments["NAME"]), default='n', tries=3)
                         if ans:
                             self.cloudsinfo.remove(arguments["NAME"])
                             print "cloud '{0}' removed.".format(arguments["NAME"])
                             self._requery = True
                             self._cloud_selected = False
-              
-                        
-       

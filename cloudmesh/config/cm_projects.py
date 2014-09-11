@@ -5,6 +5,7 @@ import json
 
 
 class cm_projects:
+
     """A class to manage the project ids for the various clouds."""
 
     def _path_expand(self, text):

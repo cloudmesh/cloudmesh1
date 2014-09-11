@@ -15,8 +15,6 @@ vm_halt = vagrant.bake("halt")  # ?
 vm_destroy = vagrant.bake("destroy")  # ?
 
 
-
-
 class vagrant:
 
     _provider = None
@@ -43,7 +41,7 @@ class vagrant:
         """(host portid, guest_portid)*"""
         raise NotImplementedError()
 
-    def add_forward (self, host_port, guest_port):
+    def add_forward(self, host_port, guest_port):
         """adds a singgle host giest port forward"""
         raise NotImplementedError()
 
@@ -62,7 +60,5 @@ class vagrant:
             (name, kind) = line.split("(")
             name = name.strip()
             kind = kind.split(")")[0].strip()
-            images[name] = {"name":name, "kind" : kind}
+            images[name] = {"name": name, "kind": kind}
         return images
-
-

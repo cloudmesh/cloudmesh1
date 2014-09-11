@@ -2,7 +2,8 @@ from pprint import pprint
 from cloudmesh import banner
 from datetime import timedelta, datetime
 
-def Sequential (execution_array, f, **kwargs):
+
+def Sequential(execution_array, f, **kwargs):
     print "ARGS", kwargs
     result = {}
     for element in execution_array:
@@ -11,17 +12,16 @@ def Sequential (execution_array, f, **kwargs):
     return result
 
 
-                
-def Parallel (execution_array, f, **kwargs):
+def Parallel(execution_array, f, **kwargs):
     task = {}
     for element in execution_array:
-        print "submitting -> {0}".format(element)        
+        print "submitting -> {0}".format(element)
         task[element] = f.apply_async(args=(element,),
                                       kwargs=kwargs,
                                       expires=10)
 
-    banner ("tasks", c=".")
-    pprint (task)
+    banner("tasks", c=".")
+    pprint(task)
     result = {}
 
     for element in execution_array:
@@ -31,9 +31,9 @@ def Parallel (execution_array, f, **kwargs):
         print "INFO", task[element].info
         banner("result")
         print "RESULT", task[element].result
-        banner("backend")        
-        print "BACKEND", task[element].backend        
-        
-        #print "OOOO", result[element]
+        banner("backend")
+        print "BACKEND", task[element].backend
+
+        # print "OOOO", result[element]
 
     return result

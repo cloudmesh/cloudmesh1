@@ -36,9 +36,7 @@ class Test_cloudmesh:
         self.db.add('gregor', '/hello', 'VMs', '100')
         self.db.add('gregor', '/hello', 'images', '99')
 
-
         vms = self.db.get('gregor', '/hello', 'VMs')
         images = self.db.get('gregor', '/hello', 'images')
         assert vms == 100
         assert images == 99
-

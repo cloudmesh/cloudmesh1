@@ -166,7 +166,7 @@ class cm_config(ConfigDict):
         if filename is None:
             filename = self.filename
         ConfigDict.__init__(self, filename=filename)
-    
+
     # ======================================================================
     # Properties
     # ======================================================================

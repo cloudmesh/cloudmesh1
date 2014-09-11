@@ -19,6 +19,7 @@ log = LOGGER(__file__)
 def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
     class OrderedLoader(Loader):
         pass
+
     def construct_mapping(loader, node):
         loader.flatten_mapping(node)
         return object_pairs_hook(loader.construct_pairs(node))
@@ -30,9 +31,11 @@ def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
 # usage example:
 # ordered_load(stream, yaml.SafeLoader)
 
+
 def ordered_dump(data, stream=None, Dumper=yaml.Dumper, **kwds):
     class OrderedDumper(Dumper):
         pass
+
     def _dict_representer(dumper, data):
         return dumper.represent_mapping(
             yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
@@ -43,12 +46,13 @@ def ordered_dump(data, stream=None, Dumper=yaml.Dumper, **kwds):
 # usage:
 # ordered_dump(data, Dumper=yaml.SafeDumper)
 
+
 def read_yaml_config(filename, check=True, osreplace=True):
     '''
     reads in a yaml file from the specified filename. If check is set to true
     the code will faile if the file does not exist. However if it is set to
     false and the file does not exist, None is returned.
-    
+
     :param filename: the file name
     :param check: if True fails if the file does not exist,
                   if False and the file does not exist return will be None
@@ -73,15 +77,15 @@ def read_yaml_config(filename, check=True, osreplace=True):
                 result = open(location, 'r').read()
                 t = Template(result)
                 result = t.substitute(os.environ)
-                
+
                 data = yaml.safe_load(result)
                 # data = ordered_load(result, yaml.SafeLoader)
             else:
                 f = open(location, "r")
-                
+
                 data = yaml.safe_load(f)
 
-                # data = ordered_load(result, yaml.SafeLoader)               
+                # data = ordered_load(result, yaml.SafeLoader)
                 f.close()
 
             return data

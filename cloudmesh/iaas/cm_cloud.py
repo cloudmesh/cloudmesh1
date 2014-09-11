@@ -513,12 +513,12 @@ class CloudManage(object):
                 w.writerow(flavors_dict[cloudname])
         else:
             #sentence = "flavors of cloud '{0}'".format(cloudname)
-            #print "+" + "-" * (len(sentence) - 2) + "+"
-            #print sentence
+            # print "+" + "-" * (len(sentence) - 2) + "+"
+            # print sentence
             print tabulate(to_print, headers, tablefmt="grid")
             #sentence = "count: {0}".format(count)
-            #print sentence
-            #print "+" + "-" * (len(sentence) - 2) + "+"
+            # print sentence
+            # print "+" + "-" * (len(sentence) - 2) + "+"
 
         if output:
             return [flavor_names, flavor_ids]
@@ -582,12 +582,12 @@ class CloudManage(object):
                 w.writerow(images_dict[cloudname])
         else:
             #sentence = "images of cloud '{0}'".format(cloudname)
-            #print "+" + "-" * (len(sentence) - 2) + "+"
-            #print sentence
+            # print "+" + "-" * (len(sentence) - 2) + "+"
+            # print sentence
             print tabulate(to_print, headers, tablefmt="grid")
             #sentence = "count: {0}".format(count)
-            #print sentence
-            #print "+" + "-" * (len(sentence) - 2) + "+"
+            # print sentence
+            # print "+" + "-" * (len(sentence) - 2) + "+"
 
         if output:
             return [image_names, image_ids]
@@ -706,12 +706,12 @@ class CloudManage(object):
                 w.writerow(servers_dict)
         else:
             #sentence = "cloud '{0}'".format(cloudname)
-            #print "+" + "-" * (len(sentence) - 2) + "+"
-            #print sentence
+            # print "+" + "-" * (len(sentence) - 2) + "+"
+            # print sentence
             print tabulate(to_print, headers, tablefmt="grid")
             #sentence = "count: {0}".format(count)
-            #print sentence
-            #print "+" + "-" * (len(sentence) - 2) + "+"
+            # print sentence
+            # print "+" + "-" * (len(sentence) - 2) + "+"
 
         if output:
             return [server_names, server_ids]
@@ -864,7 +864,8 @@ class CloudCommand(CloudManage):
             shell_commands_dict_output(cloud,
                                        table=self.arguments['--table'],
                                        jsonformat=self.arguments['--json'],
-                                       title=None, #"cloud '{0}' information".format(cloud['cm_cloud']),
+                                       # "cloud '{0}' information".format(cloud['cm_cloud']),
+                                       title=None,
                                        oneitem=True)
 
         if self.arguments['CLOUD']:
@@ -942,7 +943,7 @@ class CloudCommand(CloudManage):
             log.error("no cloud information of '{0}' in database".format(name))
             return
 
-        # # confirmation
+        # confirmation
         # if yn_choice("activate cloud '{0}'?".format(name), default = 'n', tries = 3):
         #    res = self.activate_cloud(self.username, name)
         #    if res == 0:

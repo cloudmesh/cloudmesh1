@@ -11,7 +11,9 @@ import yaml
 from sh import mysql
 from sh import mongoimport
 
+
 class Migrate_MySQL_to_Mongo:
+
     """The Migrate_MySQL_to_Mongo exports mysql database tables in a csv format,
     and pour into mongodb using mongoimport command line tools. The database
     information is loaded from 'dbinfo.yaml' file which contains db access
@@ -36,7 +38,7 @@ class Migrate_MySQL_to_Mongo:
 
         :param tablename: table name to export
         :type tablename: str
-        
+
         """
         query = "select * from %s.%s" % (self.dbinfo["mysqldb_dbname"],
                                          tablename)
@@ -51,9 +53,9 @@ class Migrate_MySQL_to_Mongo:
         # , add quote(") between new line
         # remove the last quote by [:-1] since \"\n\" adds dummy quote at last
         output = "\"" + str(res_mysql) \
-                .replace("\t", "\",\"") \
-                .replace("\n", "\"\n\"") \
-                [:-1]
+            .replace("\t", "\",\"") \
+            .replace("\n", "\"\n\"") \
+            [:-1]
 
         self.csv_data = output
         return output

@@ -12,7 +12,6 @@ from string import Template
 import os
 
 
-
 def get_system():
     if is_ubuntu():
         return "ubuntu"
@@ -46,10 +45,10 @@ def is_osx():
         os_version = platform.mac_ver()[0]
         if os_version not in ['10.9.4']:
 
-
             osx = False
             log.error("WARNING: %s %s is not tested" % ('OSX', os_version))
     return osx
+
 
 def banner(txt=None, c="#", debug=True):
     """prints a banner of the form with a frame of # arround the txt::
@@ -99,7 +98,8 @@ def yn_choice(message, default='y', tries=None):
         return True if choice.strip().lower() in values else False
     else:
         while tries > 0:
-            choice = raw_input("%s (%s) (%s)" % (message, choices, "'q' to discard"))
+            choice = raw_input("%s (%s) (%s)" %
+                               (message, choices, "'q' to discard"))
             choice = choice.strip().lower()
             if choice in ['y', 'yes']:
                 return True
@@ -119,5 +119,3 @@ def grep(pattern, filename):
         return (L for L in open(filename) if L.find(pattern) >= 0).next()
     except StopIteration:
         return ''
-
-

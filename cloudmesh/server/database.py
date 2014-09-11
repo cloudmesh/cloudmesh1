@@ -6,6 +6,7 @@ from pprint import pprint
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.config.cm_keys import keytype, get_key_from_file
 
+
 class Database(object):
 
     def __init__(self):
@@ -16,7 +17,7 @@ class Database(object):
         self.user_obj = cm_user()
         self.profile = self.config.profile()
         self.mongo = cm_mongo()
-        
+
     def set_credentials(self):
         for cloudname in self.config.cloudnames():
             self.user_obj.set_credential(
@@ -88,7 +89,7 @@ class Database(object):
         self.mongo.db_clouds.remove({
             'cm_kind': 'cloud',
             'cm_user_id': username
-            })
+        })
 
         cloudsdict = self.config.get("cloudmesh", "clouds")
 

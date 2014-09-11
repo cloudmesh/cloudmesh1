@@ -5,6 +5,7 @@ from mixin import MixIn, makeWithMixins, makeWithMixinsFromString
 from plugins import *
 from plugins import get_plugins
 
+
 class Shell(Cmd):
 
     def do_hello(self, args):
@@ -24,4 +25,4 @@ if __name__ == '__main__':
     SuperShell = makeWithMixins(Shell, plugins)
     shell = SuperShell()
     shell.prompt = '> '
-    shell.cmdloop('Cloudmesh Shell...')        
+    shell.cmdloop('Cloudmesh Shell...')

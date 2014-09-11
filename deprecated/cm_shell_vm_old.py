@@ -33,7 +33,7 @@ class cm_shell_vm:
     clouds_activated = False
 
     def activate_cm_shell_vm(self):
-        self.register_command_topic('cloud','vm')        
+        self.register_command_topic('cloud', 'vm')
         self.clouds_activated = False
 
     # Check if there are any active clouds for user

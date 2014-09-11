@@ -14,6 +14,7 @@ import threading
 
 log = LOGGER(__file__)
 
+
 def shell_command_vm(arguments):
     '''
     Usage:
@@ -50,6 +51,7 @@ def shell_command_vm(arguments):
     vm = ManageVM(arguments)
     vm.call_procedure()
 
+
 class ManageVM(object):
     config = cm_config()
     clouds = cm_mongo()
@@ -57,7 +59,7 @@ class ManageVM(object):
     key = None
 
     def __init__(self, args):
-        #log.info(args)
+        # log.info(args)
         self.set_args(args)
         self.parse_args()
         self.username = self.config.username()
@@ -77,58 +79,58 @@ class ManageVM(object):
 
     def set_attributes(self):
         self.attributes = {"openstack":
-                      [
-                          ['name','name'],
-                          ['status','status'],
-                          ['addresses','addresses'],
-                          ['flavor', 'flavor','id'],
-                          ['id','id'],
-                          ['image','image','id'],
-                          ['user_id', 'user_id'],
-                          ['metadata','metadata'],
-                          ['key_name','key_name'],
-                          ['created','created'],
-                      ],
-                      "ec2":
-                      [
-                          ["name", "id"],
-                          ["status", "extra", "status"],
-                          ["addresses", "public_ips"],
-                          ["flavor", "extra", "instance_type"],
-                          ['id','id'],
-                          ['image','extra', 'imageId'],
-                          ["user_id", 'user_id'],
-                          ["metadata", "metadata"],
-                          ["key_name", "extra", "key_name"],
-                          ["created", "extra", "launch_time"]
-                      ],
-                      "aws":
-                      [
-                          ["name", "name"],
-                          ["status", "extra", "status"],
-                          ["addresses", "public_ips"],
-                          ["flavor", "extra", "instance_type"],
-                          ['id','id'],
-                          ['image','extra', 'image_id'],
-                          ["user_id","user_id"],
-                          ["metadata", "metadata"],
-                          ["key_name", "extra", "key_name"],
-                          ["created", "extra", "launch_time"]
-                      ],
-                      "azure":
-                      [
-                          ['name','name'],
-                          ['status','status'],
-                          ['addresses','vip'],
-                          ['flavor', 'flavor','id'],
-                          ['id','id'],
-                          ['image','image','id'],
-                          ['user_id', 'user_id'],
-                          ['metadata','metadata'],
-                          ['key_name','key_name'],
-                          ['created','created'],
-                      ]
-                     }
+                           [
+                               ['name', 'name'],
+                               ['status', 'status'],
+                               ['addresses', 'addresses'],
+                               ['flavor', 'flavor', 'id'],
+                               ['id', 'id'],
+                               ['image', 'image', 'id'],
+                               ['user_id', 'user_id'],
+                               ['metadata', 'metadata'],
+                               ['key_name', 'key_name'],
+                               ['created', 'created'],
+                           ],
+                           "ec2":
+                           [
+                               ["name", "id"],
+                               ["status", "extra", "status"],
+                               ["addresses", "public_ips"],
+                               ["flavor", "extra", "instance_type"],
+                               ['id', 'id'],
+                               ['image', 'extra', 'imageId'],
+                               ["user_id", 'user_id'],
+                               ["metadata", "metadata"],
+                               ["key_name", "extra", "key_name"],
+                               ["created", "extra", "launch_time"]
+                           ],
+                           "aws":
+                           [
+                               ["name", "name"],
+                               ["status", "extra", "status"],
+                               ["addresses", "public_ips"],
+                               ["flavor", "extra", "instance_type"],
+                               ['id', 'id'],
+                               ['image', 'extra', 'image_id'],
+                               ["user_id", "user_id"],
+                               ["metadata", "metadata"],
+                               ["key_name", "extra", "key_name"],
+                               ["created", "extra", "launch_time"]
+                           ],
+                           "azure":
+                           [
+                               ['name', 'name'],
+                               ['status', 'status'],
+                               ['addresses', 'vip'],
+                               ['flavor', 'flavor', 'id'],
+                               ['id', 'id'],
+                               ['image', 'image', 'id'],
+                               ['user_id', 'user_id'],
+                               ['metadata', 'metadata'],
+                               ['key_name', 'key_name'],
+                               ['created', 'created'],
+                           ]
+                           }
 
     def _vm_create(self):
         '''Create a vm instance of IaaS using cm_mongo class.
@@ -147,7 +149,7 @@ class ManageVM(object):
 
         try:
             vm_flavor_id = self.flavor \
-                    or userinfo["defaults"]["flavors"][cloud]
+                or userinfo["defaults"]["flavors"][cloud]
         except:
             error = error + "Please specify a default flavor."
         if vm_flavor_id in [None, 'none']:
@@ -155,7 +157,7 @@ class ManageVM(object):
 
         try:
             vm_image = self.image \
-                    or userinfo["defaults"]["images"][cloud]
+                or userinfo["defaults"]["images"][cloud]
         except:
             error = error + "Please specify a default image."
         if vm_image in [None, 'none']:
@@ -165,7 +167,6 @@ class ManageVM(object):
             key = userinfo["defaults"]["key"]
         elif len(userinfo["keys"]["keylist"].keys()) > 0:
             key = userinfo["keys"]["keylist"].keys()[0]
-
 
         if key:
             keycontent = userinfo["keys"]["keylist"][key]
@@ -187,23 +188,24 @@ class ManageVM(object):
                                                                         keynamenew))
 
         if self.server_label:
-            prefix = "%s_%s" % (self.server_label , prefix)
+            prefix = "%s_%s" % (self.server_label, prefix)
 
         result = self.clouds.vm_create(cloud, prefix, index, vm_flavor_id, vm_image, keynamenew,
-                                  meta=metadata, cm_user_id=username)
+                                       meta=metadata, cm_user_id=username)
         try:
             result['server']['adminPass'] = "*******"
         except:
             pass
         log.info("{0}".format(result))
 
-        # Upon success of launching vm instance, an index of vm instance is increased.
+        # Upon success of launching vm instance, an index of vm instance is
+        # increased.
         userstore = cm_user()
         userstore.set_default_attribute(username, "index", int(index) + 1)
 
         t = threading.Thread(target=self.clouds.refresh,
-                             kwargs={'cm_user_id':username, 'names':[cloud], \
-                                    'types':['servers']})
+                             kwargs={'cm_user_id': username, 'names': [cloud],
+                                     'types': ['servers']})
         t.start()
 
     def _vm_delete(self):
@@ -230,8 +232,8 @@ class ManageVM(object):
                     pass
 
         t = threading.Thread(target=self.clouds.refresh,
-                             kwargs={'cm_user_id':userid, 'names':[cloud], \
-                                    'types':['servers']})
+                             kwargs={'cm_user_id': userid, 'names': [cloud],
+                                     'types': ['servers']})
         t.start()
 
     def _vm_info(self):
@@ -274,12 +276,11 @@ class ManageVM(object):
         '''
         args = self.args
         result = {}
-        for k,v in args.iteritems():
+        for k, v in args.iteritems():
             if k.startswith('--'):
                 continue
             result[k] = v
         return result
-
 
     def _select_servers(self, data, selected_keys):
         servers = []
@@ -294,11 +295,12 @@ class ManageVM(object):
                     try:
                         values.append(str(_getFromDict(v, k[1:])))
                     except:
-                        #print sys.exc_info()
+                        # print sys.exc_info()
                         values.append('0')
                 servers.append(values)
         headers = [keys]
         return headers + servers
+
 
 def _getFromDict(dataDict, mapList):
     '''Get values of dataDict by mapList
@@ -319,6 +321,7 @@ def _getFromDict(dataDict, mapList):
     '''
     return reduce(lambda d, k: d[k], mapList, dataDict)
 
+
 def _display(json_data, headers="firstrow", tablefmt="orgtbl"):
     table = tabulate(json_data, headers, tablefmt)
     try:
@@ -329,10 +332,11 @@ def _display(json_data, headers="firstrow", tablefmt="orgtbl"):
     print table
     print separator
 
+
 def main():
     arguments = docopt(shell_command_vm.__doc__)
     shell_command_vm(arguments)
 
 if __name__ == "__main__":
-    #print sys.argv
+    # print sys.argv
     main()

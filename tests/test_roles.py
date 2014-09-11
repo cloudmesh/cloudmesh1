@@ -10,7 +10,7 @@ from datetime import datetime
 from cloudmesh.user.roles import Roles
 
 import json
-from  pprint import pprint
+from pprint import pprint
 
 from cloudmesh_common.util import HEADING
 import time
@@ -45,4 +45,3 @@ class Test_Roles:
         user = "gvonlasz"
         print "getting roles", user
         print self.roles.get(user)
-

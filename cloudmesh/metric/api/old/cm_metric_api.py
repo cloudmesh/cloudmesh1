@@ -4,7 +4,9 @@ from pprint import pprint
 #from fgmetric.shell.FGSearch import FGSearch
 #from fgmetric.shell.FGInstances import FGInstances
 
+
 class CMMetricAPI:
+
     """ CloudMesh Metric Python API
 
     This API supports usage statistics in CM Metric way, but rely on database query.
@@ -183,7 +185,8 @@ class CMMetricAPI:
         if self.userinfo:
             return self.userinfo
         try:
-            self.instances.read_userinfo_detail()#({}, " group by username ")
+            # ({}, " group by username ")
+            self.instances.read_userinfo_detail()
             self.userinfo = self.instances.get_userinfo()
             return self.userinfo
         except:
@@ -198,7 +201,7 @@ class CMMetricAPI:
             prj_info = self.instances.get_projectinfo()
             self.projectinfo = prj_info
             return self.projectinfo
-            #self.instances.read_projectinfo()
+            # self.instances.read_projectinfo()
             #self.projectinfo = self.instances.projectinfo
         except:
             print "failed to read project info %s" % sys.exc_info()

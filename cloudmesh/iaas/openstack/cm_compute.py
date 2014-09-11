@@ -167,7 +167,7 @@ class openstack(ComputeBaseType):
                 if self.with_admin_credential and (not self.admin_token):
                     self.admin_token = self.get_token(self.admin_credential)
             except:
-                log.error(str(lineno()) + ": error connecting to openstack " \
+                log.error(str(lineno()) + ": error connecting to openstack "
                           + "keystone, credential or server name is invalid")
 
     def DEBUG(self, msg, line_number=None):
@@ -1421,7 +1421,7 @@ class openstack(ComputeBaseType):
                     vm['user_id'] == userid)
 
 
-# 
+#
 # MAIN FOR TESTING
 #
 if __name__ == "__main__":

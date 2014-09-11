@@ -23,7 +23,7 @@ try:
     from cloudmesh.iaas.aws.cm_compute import aws
 except:
     log.warning("Amazon NOT ENABLED")
-    
+
 import json
 import os
 import warnings
@@ -34,6 +34,7 @@ from cloudmesh_install.util import path_expand
 from cloudmesh_install import config_file
 
 import os.path
+
 
 class Test_yaml:
 
@@ -47,23 +48,21 @@ class Test_yaml:
     def tearDown(self):
         pass
 
-
     def test_01_exists(self):
         HEADING()
         filenames = ["/cloudmesh.yaml",
-                 "/cloudmesh_celery.yaml",
-                 "/cloudmesh_cluster.yaml",
-                 "/cloudmesh_flavor.yaml",
-                 "/cloudmesh_hpc.yaml",
-                 "/cloudmesh_launcher.yaml",
-                 "/cloudmesh_mac.yaml",
-                 "/cloudmesh_rack.yaml",
-                 "/cloudmesh_server.yaml"]
-
+                     "/cloudmesh_celery.yaml",
+                     "/cloudmesh_cluster.yaml",
+                     "/cloudmesh_flavor.yaml",
+                     "/cloudmesh_hpc.yaml",
+                     "/cloudmesh_launcher.yaml",
+                     "/cloudmesh_mac.yaml",
+                     "/cloudmesh_rack.yaml",
+                     "/cloudmesh_server.yaml"]
 
         for file in filenames:
             filename = config_file(file)
-            print "testing if file exists ->", filename    
+            print "testing if file exists ->", filename
             assert os.path.isfile(filename)
 
     def test_02_authentication(self):
@@ -71,24 +70,26 @@ class Test_yaml:
         self.config = cm_config()
         cloudnames = self.config.cloudnames()
         print cloudnames
-        
+
         failed = []
         succeeded = []
         for cloudname in cloudnames:
-            print "authenticate -> ", cloudname, 
+            print "authenticate -> ", cloudname,
             try:
                 # assert False
                 #
                 # to do put the authentication code here
-                cm_type = self.config['cloudmesh']['clouds'][cloudname]['cm_type']
-                credential = self.config['cloudmesh']['clouds'][cloudname]['credentials']
-                print cm_type, 
-                #print credential
-                
+                cm_type = self.config['cloudmesh'][
+                    'clouds'][cloudname]['cm_type']
+                credential = self.config['cloudmesh'][
+                    'clouds'][cloudname]['credentials']
+                print cm_type,
+                # print credential
+
                 cloud = globals()[cm_type](cloudname, credential)
                 if cm_type in ['openstack', 'ec2']:
-                    if cm_type in ['openstack']:               
-                        print "\tfor tenant: %s" % credential['OS_TENANT_NAME'], 
+                    if cm_type in ['openstack']:
+                        print "\tfor tenant: %s" % credential['OS_TENANT_NAME'],
                     if cloud.auth():
                         succeeded.append(cloudname)
                         print "ok"
@@ -101,11 +102,10 @@ class Test_yaml:
             except:
                 print "failed"
                 failed.append(cloudname)
-                
+
         if len(failed) > 0:
             print "Failed:", failed
             print "Succeeded:", succeeded
-            assert False 
+            assert False
         else:
             assert True
-        

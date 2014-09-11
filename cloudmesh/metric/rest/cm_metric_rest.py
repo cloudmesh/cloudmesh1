@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 
 
 class CMMetricREST:
+
     """
 
     CMMetricREST

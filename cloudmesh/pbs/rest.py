@@ -41,19 +41,23 @@ queue_info_parser.add_argument('resource', type=str, required=True)
 #queue_info_parser.add_argument('user', type=str)
 queue_info_parser.add_argument('queue', type=str)
 
-config = ConfigDict(prefix="cloudmesh", filename=config_file("/cloudmesh.yaml"))
+config = ConfigDict(
+    prefix="cloudmesh", filename=config_file("/cloudmesh.yaml"))
 user = config.get("cloudmesh.profile.username")
 
+
 def versioned_url(url):
-    return "/" + version + url 
+    return "/" + version + url
 
 
 def simple_error(kind, attribute, help="does not exist"):
-        msg = {}
-        msg["error:"] = "{0} {1} {2}".format(kind, attribute, help)
-        return msg
+    msg = {}
+    msg["error:"] = "{0} {1} {2}".format(kind, attribute, help)
+    return msg
+
 
 class rest_queue_stat(restful.Resource):
+
     def get(self):
         args = queue_stat_parser.parse_args()
         resource = args['resource']
@@ -62,7 +66,8 @@ class rest_queue_stat(restful.Resource):
         try:
             result = pbs.qstat()
         except:
-            return simple_error("resource", resource, help="connection refused"), 200   # 404
+            # 404
+            return simple_error("resource", resource, help="connection refused"), 200
 
         if id is None:
             try:
@@ -74,8 +79,10 @@ class rest_queue_stat(restful.Resource):
                 return jsonify({id: result[resource][id]})
             except:
                 return simple_error("id", id), 200    # 404
-                            
+
+
 class rest_queue_info(restful.Resource):
+
     def get(self):
         args = queue_info_parser.parse_args()
         resource = args['resource']
@@ -84,23 +91,21 @@ class rest_queue_info(restful.Resource):
         try:
             result = pbs.qinfo()
         except:
-            return simple_error("resource", resource, help="connection refused"), 200   # 404
+            # 404
+            return simple_error("resource", resource, help="connection refused"), 200
 
-            
         if queue is None:
             try:
                 return jsonify({resource: result[resource]})
             except:
                 return simple_error("resource", resource), 200   # 404
         else:
-            print "ELSE"
-            pprint (result[resource])
-                    
+            pprint(result[resource])
+
             try:
                 return jsonify({queue: result[resource][queue]})
             except:
                 return simple_error("id", id), 200    # 404
-                            
 
 
 api.add_resource(rest_queue_stat, versioned_url('/queue'))
