@@ -10,6 +10,7 @@ from cloudmesh.cm_mongo import cm_mongo
 
 log = LOGGER(__file__)
 
+
 class UserStoreBaseClass (dict):
 
     def __init__(self, username, datasource):
@@ -28,8 +29,6 @@ class UserStoreBaseClass (dict):
         Certain fields are encrypted by the password.
         """
         raise NotImplementedError()
-
-
 
 
 class UserFromYaml(dict):
@@ -57,7 +56,6 @@ class UserFromYaml(dict):
         for key in config['cloudmesh']:
             self[key] = config['cloudmesh'][key]
         self['cm_user_id'] = username
-
 
 
 class UserDictStore(dict):
@@ -117,7 +115,6 @@ class UserDictStore(dict):
         self[username]['clouds'][cloud] = d
         self.encrypt(username, cloud, password)
 
-
     def encrypt(self, username, cloud, password):
         cloudtype = self[username]['clouds'][cloud]['cm_type']
         if cloudtype == 'openstack' and password != None:
@@ -127,28 +124,33 @@ class UserDictStore(dict):
             self.encrypt_value(username, cloud, 'EC2_SECRET_KEY', password)
 
     def encrypt_value(self, username, cloud, variable, password):
-        user_password = self[username]['clouds'][cloud]['credentials'][variable]
+        user_password = self[username]['clouds'][
+            cloud]['credentials'][variable]
         safe_value = cm_encrypt(user_password, password)
         self[username]['clouds'][cloud]['credentials'][variable] = safe_value
 
     def decrypt_value(self, username, cloud, variable, password):
-        user_password = self[username]['clouds'][cloud]['credentials'][variable]
+        user_password = self[username]['clouds'][
+            cloud]['credentials'][variable]
         decrypted_value = cm_decrypt(user_password, password)
         return decrypted_value
-
 
     def credential(self, username, cloud, password=None):
         credential = self[username]['clouds'][cloud]['credentials']
         cloudtype = self[username]['clouds'][cloud]['cm_type']
         if cloudtype == 'openstack' and self.password != None:
-            password = self.decrypt_value(username, cloud, 'OS_PASSWORD', password)
+            password = self.decrypt_value(
+                username, cloud, 'OS_PASSWORD', password)
             credential['OS_PASSWORD'] = password
         elif cloudtype == 'ec2' and self.password != None:
-            access_key = self.decrypt_value(username, cloud, 'EC2_ACCESS_KEY', password)
-            secrest_key = self.decrypt_value(username, cloud, 'EC2_SECRET_KEY', password)
+            access_key = self.decrypt_value(
+                username, cloud, 'EC2_ACCESS_KEY', password)
+            secrest_key = self.decrypt_value(
+                username, cloud, 'EC2_SECRET_KEY', password)
             credential['EC2_ACCESS_KEY'] = access_key
             credential['EC2_SECERT_KEY'] = secret_key
         return credential
+
 
 class UserMongoStore():
 
@@ -183,18 +185,18 @@ class UserMongoStore():
             password = self.decrypt_value(user, cloud, 'OS_PASSWORD', password)
             credential['OS_PASSWORD'] = password
         elif cloudtype == 'ec2' and self.password != None:
-            access_key = self.decrypt_value(user, cloud, 'EC2_ACCESS_KEY', password)
-            secrest_key = self.decrypt_value(user, cloud, 'EC2_SECRET_KEY', password)
+            access_key = self.decrypt_value(
+                user, cloud, 'EC2_ACCESS_KEY', password)
+            secrest_key = self.decrypt_value(
+                user, cloud, 'EC2_SECRET_KEY', password)
             credential['EC2_ACCESS_KEY'] = access_key
             credential['EC2_SECERT_KEY'] = secret_key
         return credential
-
 
     def encrypt_value(self, user, cloud, variable, password):
         user_password = user['clouds'][cloud]['credentials'][variable]
         safe_value = cm_encrypt(user_password, password)
         user['clouds'][cloud]['credentials'][variable] = safe_value
-
 
     def decrypt_value(self, user, cloud, variable, password):
         user_password = user['clouds'][cloud]['credentials'][variable]
@@ -217,7 +219,6 @@ class UserMongoStore():
         return self.db.find_one({'cm_user_id': username})
 
 
-
 '''
 
 class CredentialFromMongo(UserBaseClass):
@@ -234,21 +235,19 @@ if __name__ == "__main__":
     banner("YAML read test")
     # -------------------------------------------------------------------------
     user = UserFromYaml("gvonlasz")
-    pprint (user)
-
+    pprint(user)
 
     store = UserDictStore(UserFromYaml, password="hallo")
     store.set("gvonlasz", "~/.cloudmesh/cloudmesh.yaml", password="Hallo")
 
     banner("credentialstore")
-    pprint (store)
+    pprint(store)
 
     # banner("gvonlasz - hp")
     # -------------------------------------------------------------------------
     # cred = store.credential("gvonlasz", "hp", password="Hallo")
 
     # pprint (cred)
-
 
     #
     # experimenting to store yaml to mongo
@@ -260,16 +259,14 @@ if __name__ == "__main__":
 
     users = UserMongoStore(password="Hallo")
 
-
     banner("STORE")
     pprint(store[username])
-
 
     users.set(username, store[username])
 
     user = users.get(username)
 
-    pprint (user)
+    pprint(user)
 
     banner("MONGO HP")
 
@@ -281,7 +278,7 @@ if __name__ == "__main__":
     banner("mongo hp")
     hp = users.credential(username, cloudname, password="Hallo")
 
-    pprint (hp)
+    pprint(hp)
 
-    pprint (users.projects(username))
-    pprint (users.default(username, cloudname))
+    pprint(users.projects(username))
+    pprint(users.default(username, cloudname))

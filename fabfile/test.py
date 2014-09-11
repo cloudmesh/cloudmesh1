@@ -17,6 +17,7 @@ def get_filename(name):
     '''
     return "test_{0}.py".format(name)
 
+
 def find_tests(filename):
     '''
     finds all tests in a given file
@@ -27,6 +28,7 @@ def find_tests(filename):
         result = local('fgrep "def" {0} | fgrep ":" | fgrep test '.format(filename),
                        capture=True).replace("def ", "").replace("(self):", "").replace(" ", "")
     return result.split("\n")
+
 
 def find_classname(filename):
     '''
@@ -53,21 +55,23 @@ def test(name, classname, filename):
     with hide('output', 'running'):
         local("python setup.py install")
 
-    local("nosetests -v  --nocapture {0}:{1}.{2}".format(filename, classname, name))
+    local(
+        "nosetests -v  --nocapture {0}:{1}.{2}".format(filename, classname, name))
+
 
 @task
 def start(f, name=None):
     '''
     executes a test with a given partial filename and partial name of the test
     class. the first function in the test file will be returned. for example :
-    
+
     fab t:inventoy,clean 
-    
+
     will look in the file test_inventory.py for the first function that has
     'clean' in its name and execute that test. The program does not support
      looking  only for @task members.
-    
-    
+
+
     :param f: the partial filename
     :param name: the partial name of the test task
     '''
@@ -83,7 +87,8 @@ def start(f, name=None):
                 break
         tests = [element]
     for element in tests:
-        test (element, class_name, filename)
+        test(element, class_name, filename)
+
 
 @task
 def info(f=None):
@@ -95,7 +100,8 @@ def info(f=None):
     if f is None:
         print "ERROR: spefifiy a test from the following list"
         with hide('output', 'running'):
-            result = local("ls -1 tests/test_*.py", capture=True).replace("tests/test_", "   - ").replace(".py", "")
+            result = local(
+                "ls -1 tests/test_*.py", capture=True).replace("tests/test_", "   - ").replace(".py", "")
         print "use fab test.info:<name> for more information about available tests"
         print "use fab test.start:<name>,<test> for starting a test"
         print result
@@ -108,8 +114,3 @@ def info(f=None):
     print "test", class_name
     print
     print "\n".join(test_names)
-
-
-
-
-

@@ -1,6 +1,6 @@
 from cloudmesh.config.cm_config import cm_config, \
-                                       cm_config_server, \
-                                       get_mongo_db
+    cm_config_server, \
+    get_mongo_db
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_install.util import path_expand
 import yaml
@@ -11,18 +11,15 @@ log = LOGGER(__file__)
 
 class Roles:
 
-
     def get_config(self, **kwargs):
 
         if not kwargs.has_key('roles'):  # if kwargs['host'] is None:
             self.roles = cm_config_server().get("cloudmesh.server.roles")
 
-
     mongo_host = 'localhost'
     mongo_port = 27017
     mongo_db_name = "cloudmesh"
     mongo_collection = "cloudmesh"
-
 
     def __init__(self):
 
@@ -30,7 +27,6 @@ class Roles:
         self.db_clouds = get_mongo_db(collection)
 
         self.get_config()
-
 
     def _get_mongo(self):
 
@@ -41,7 +37,6 @@ class Roles:
             data[id] = entry
 
         print data
-
 
     def clear(self):
         self.roles = None
@@ -55,7 +50,7 @@ class Roles:
     def users(self, role):
         single_users = self.roles[role]['users']
         projects = self.roles[role]['projects']
-        result = self.db_clouds.find({'projects.active': { "$in": projects}})
+        result = self.db_clouds.find({'projects.active': {"$in": projects}})
         project_users = []
         for entry in result:
             project_users.append(entry['cm_user_id'])
@@ -69,8 +64,6 @@ class Roles:
             if user in us:
                 user_roles.append(r)
         return user_roles
-
-
 
     def __str__(self):
         return str(self.roles)

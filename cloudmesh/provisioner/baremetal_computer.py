@@ -11,28 +11,31 @@ from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
 
+
 class BaremetalComputer:
+
     """Baremetal computer class.
     First, this class also provide a easy API to initialize the cobbler baremetal computers in mongodb, e.g., mac and power info,
     Second, this class have an API through which user can get the detail information to provision a cobbler baremetal computer 
     """
+
     def __init__(self):
         coll_name = "inventory"
         self.yaml_file = config_file("/cloudmesh_mac.yaml")
         self.db_client = DBHelper(coll_name)
         self.bm_status = BaremetalStatus()
-    
+
     def get_default_query(self):
         """
         query helper function.
         :return: the default query field.
         """
-        return { "cm_type": "inventory",
-                 "cm_kind": "server",
-                 "cm_attribute": "network",
-                 "cm_key": "server",
+        return {"cm_type": "inventory",
+                "cm_kind": "server",
+                "cm_attribute": "network",
+                "cm_key": "server",
                 }
-    
+
     def get_full_query(self, query_elem=None):
         """
         merge the default query and user defined query.
@@ -42,7 +45,7 @@ class BaremetalComputer:
         if query_elem:
             result.update(query_elem)
         return result
-    
+
     def read_data_from_yaml(self):
         """
         read mac address and bmc configuration information from **mac.yaml** file.
@@ -64,12 +67,13 @@ class BaremetalComputer:
                     if host in hosts:
                         temp_common_bmc_data = deepcopy(common_bmc_data)
                         if "bmc" in mac_data[host]:
-                            # bmc config in individual host have a high priority than common config
+                            # bmc config in individual host have a high
+                            # priority than common config
                             temp_common_bmc_data.update(mac_data[host]["bmc"])
                         mac_data[host]["bmc"] = temp_common_bmc_data
                 result[cluster] = mac_data
         return result
-    
+
     def insert_mac_data_to_inventory(self):
         """
         Insert the mac address information including power config into inventory. 
@@ -84,7 +88,7 @@ class BaremetalComputer:
         if data and len(data) > 0:
             result = self.update_mac_address(data)
         return result
-    
+
     def update_mac_address(self, mac_dict):
         """
         update *inventory* db with mac address information.
@@ -103,16 +107,17 @@ class BaremetalComputer:
                 cluster_data = mac_dict[cluster]
                 for host_id in cluster_data:  # host
                     host_data = cluster_data[host_id]
-                    for network_type in host_data: # network
+                    for network_type in host_data:  # network
                         network_data = host_data[network_type]
-                        query_elem = {"cm_id": host_id, "type": network_type, "cm_cluster": cluster,}
-                        if network_type in ["bmc"]: # power config information
+                        query_elem = {
+                            "cm_id": host_id, "type": network_type, "cm_cluster": cluster, }
+                        if network_type in ["bmc"]:  # power config information
                             update_elem = network_data
                         else:
                             update_elem = {"ifname": network_data["name"],
-                                           "macaddr":network_data["macaddr"],
+                                           "macaddr": network_data["macaddr"],
                                            }
-                        update_result = self.db_client.atom_update(self.get_full_query(query_elem), 
+                        update_result = self.db_client.atom_update(self.get_full_query(query_elem),
                                                                    {"$set": update_elem}, False)
                         if not update_result["result"]:
                             result = False
@@ -122,7 +127,7 @@ class BaremetalComputer:
                 if not result:
                     break
         return result
-    
+
     def get_host_info(self, host_id, info_format="cobbler"):
         """
         get the required host info for baremetal computer.
@@ -140,13 +145,13 @@ class BaremetalComputer:
         find_result = self.db_client.find(full_query_elem)
         result = None
         if find_result["result"]:
-            result = {"id": host_id, "power":{}}
+            result = {"id": host_id, "power": {}}
             data = find_result["data"]
             interface_list = []
             cluster_id = None
             for record in data:
                 if "macaddr" in record:  # general network interface
-                    interface_list.append({"name": record["ifname"], 
+                    interface_list.append({"name": record["ifname"],
                                            "ipaddr": record["ipaddr"],
                                            "macaddr": record["macaddr"],
                                            })
@@ -154,11 +159,13 @@ class BaremetalComputer:
                         result["hostname"] = record["label"]
                         cluster_id = record["cm_cluster"]
                 elif "power_user" in record:  # ipmi network interface
-                    power_key_list = ["ipaddr", "power_user", "power_pass", "power_type",]
+                    power_key_list = [
+                        "ipaddr", "power_user", "power_pass", "power_type", ]
                     for key in power_key_list:
                         result["power"][key] = record[key]
             # sort the inteface with ascending order
-            result["interfaces"] = sorted(interface_list, key=lambda k: k["name"])
+            result["interfaces"] = sorted(
+                interface_list, key=lambda k: k["name"])
             if cluster_id:
                 # try to find name server for the servers in this cluster
                 name_servers = self.get_cluster_name_server(cluster_id)
@@ -167,13 +174,14 @@ class BaremetalComputer:
             if info_format:
                 getattr(self, "get_host_info_{0}".format(info_format))(result)
         return result
-    
+
     def get_cluster_name_server(self, cluster_id):
         """find the name servers for a cluster
         :param string cluster_id: the unique ID of a cluster
         :return: None if not exist a name server for the cluster, otherwise a string represents the one or more name servers
         """
-        query_elem = {"cm_id": cluster_id, "cm_key": "nameserver", "cm_attribute": "variable"}
+        query_elem = {
+            "cm_id": cluster_id, "cm_key": "nameserver", "cm_attribute": "variable"}
         full_query_elem = self.get_full_query(query_elem)
         find_result = self.db_client.find(full_query_elem)
         result = []
@@ -182,7 +190,7 @@ class BaremetalComputer:
             for record in data:
                 result.append(record["cm_value"])
         return None if len(result) < 1 else " ".join(result)
-    
+
     def change_dict_key(self, data_dict, fields):
         """
         change the key in dict from old_key to new_key.
@@ -191,7 +199,7 @@ class BaremetalComputer:
         for key in fields:
             if key in data_dict:
                 data_dict[fields[key]] = data_dict.pop(key)
-    
+
     def fill_dict_default_key(self, data_dict, fields):
         """
         fill the dict with default key-value pair.
@@ -200,17 +208,16 @@ class BaremetalComputer:
         for key in fields:
             if key not in data_dict:
                 data_dict[key] = fields[key]
-    
-    
+
     def get_host_info_cobbler(self, host_dict):
         """
         convert general host info dict to the formation of cobbler host formation
         """
         # section 1, general fields
-        general_fields = {"id": "name", "name_servers": "name-servers",}
+        general_fields = {"id": "name", "name_servers": "name-servers", }
         self.change_dict_key(host_dict, general_fields)
         # section 2, power fields
-        power_fields = {"ipaddr": "power-address", 
+        power_fields = {"ipaddr": "power-address",
                         "power_user": "power-user",
                         "power_pass": "power-pass",
                         "power_type": "power-type",
@@ -229,13 +236,12 @@ class BaremetalComputer:
         for one_interface in host_dict["interfaces"]:
             self.change_dict_key(one_interface, interface_fields)
             self.fill_dict_default_key(one_interface, interface_default)
-    
-    
+
     def insert_blank_baremetal_list(self):
         """insert a blank document of baremetal computers list into mongodb
         ONLY called ONCE by **fab mongo.inventory**
         """
-        elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory",}
+        elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory", }
         result = self.db_client.find_one(elem)
         flag_insert = True
         if result["result"] and result["data"]:
@@ -244,31 +250,33 @@ class BaremetalComputer:
             return True
         result = self.db_client.insert(elem)
         return result["result"]
-    
+
     def enable_baremetal_computers(self, hosts):
         """add the list of *hosts* to be baremetal computers
         :param list hosts: the list of hosts with the formation ["host1", "host2",]
         :return: True means enabled successfully, otherwise False
         """
         if hosts:
-            query_elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory", }
-            update_elem = {"$addToSet":{"data": {"$each": hosts}}}
+            query_elem = {
+                "cm_kind": "baremetal", "cm_type": "bm_list_inventory", }
+            update_elem = {"$addToSet": {"data": {"$each": hosts}}}
             result = self.db_client.atom_update(query_elem, update_elem)
             return result["result"]
         return True
-    
+
     def disable_baremetal_computers(self, hosts):
         """remove the list of *hosts* from baremetal computers
         :param list hosts: the list of hosts with the formation ["host1", "host2",]
         :return: True means disabled successfully, otherwise False
         """
         if hosts:
-            query_elem = {"cm_kind": "baremetal", "cm_type": "bm_list_inventory", }
-            update_elem = {"$pull":{"data": {"$in": hosts}}}
+            query_elem = {
+                "cm_kind": "baremetal", "cm_type": "bm_list_inventory", }
+            update_elem = {"$pull": {"data": {"$in": hosts}}}
             result = self.db_client.atom_update(query_elem, update_elem)
             return result["result"]
         return True
-    
+
     def get_baremetal_computers(self):
         """get the list of baremetal computers
         :return: the list of hosts with the formation ["host1", "host2",] or None if failed
@@ -278,8 +286,8 @@ class BaremetalComputer:
         if result["result"]:
             return result["data"]["data"] if "data" in result["data"] else []
         return None
-        
-    
+
+
 # test
 if __name__ == "__main__":
     from pprint import pprint
@@ -297,4 +305,3 @@ if __name__ == "__main__":
     #result = bmc.disable_baremetal_computers(["i001", "i007",])
     result = bmc.get_baremetal_computers()
     pprint(result)
-    

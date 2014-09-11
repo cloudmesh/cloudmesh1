@@ -13,7 +13,6 @@ from cloudmesh.inventory import Inventory
 log = LOGGER(__file__)
 
 
-
 class BaremetalProvisinerABC:
     __metaclass__ = ABCMeta
 
@@ -38,9 +37,7 @@ class BaremetalProvisinerABC:
         print "SIM ok setting", host_label, status
 
 
-
 class ProvisionerSimulator(BaremetalProvisinerABC):
-
 
     # needs Inventory
     # status = get_attribute(self, host_label, "cm_provision_status", attribute)
@@ -54,7 +51,6 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
 
             print "PROVISION", host, provisioned
             log.info("Provision {0}<-{1}".format(host, provisioned))
-
 
             self.set_status(host, "INITIATING")
             time.sleep(randrange(1, 3))
@@ -76,7 +72,6 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
             time.sleep(randrange(1, 3))
 
         return (True, None)
-
 
     def provision_image(self, hosts, image):
 

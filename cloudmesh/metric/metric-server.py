@@ -11,13 +11,15 @@ log = LOGGER(__file__)
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def get_index_page():
     print "The server is running"
     return "The server is running\n"
 
+
 @app.route('/metric/cloud/<cloudname>/<username>/<metric>/<timestart>/<timeend>/<period>')
-def get_metric_for_cloud(cloudname,username,metric,timestart,timeend,period):
+def get_metric_for_cloud(cloudname, username, metric, timestart, timeend, period):
     log.info("/metric/cloud/...")
 
     arguments = [
@@ -32,14 +34,15 @@ def get_metric_for_cloud(cloudname,username,metric,timestart,timeend,period):
     command = sh.Command("cm-metric")
     result = command(arguments)
     log.info(result)
-    print 70*"="
+    print 70 * "="
     print result
-    print 70*"="    
+    print 70 * "="
 
     return str(result)
 
+
 @app.route('/metric/cluster/<clustername>/<username>/<metric>/<timestart>/<timeend>/<period>')
-def get_metric_for_cluster(clustername,username,metric,timestart,timeend,period):
+def get_metric_for_cluster(clustername, username, metric, timestart, timeend, period):
     log.info("/metric/cluster/...")
 
     arguments = [
@@ -54,9 +57,9 @@ def get_metric_for_cluster(clustername,username,metric,timestart,timeend,period)
     command = sh.Command("cm-metric")
     result = command(arguments)
     log.info(result)
-    print 70*"="
+    print 70 * "="
     print result
-    print 70*"="    
+    print 70 * "="
 
     return str(result)
 

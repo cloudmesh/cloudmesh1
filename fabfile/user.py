@@ -13,11 +13,12 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh_install.util import yn_choice
 from sh import keystone
 from sh import less
-from  yaml import dump as yaml_dump
+from yaml import dump as yaml_dump
 import sys
 import os.path
 import os
 from cloudmesh_install import config_file
+
 
 @task
 def password():
@@ -28,12 +29,11 @@ def password():
     server = server_config.get('cloudmesh.server.keystone.sierra')
 
     print(" ".join(["keystone", "--os-username", server['OS_USERNAME'],
-             "--os-password", server['OS_PASSWORD'],
-             "--os-tenant-name", server['OS_TENANT_NAME'],
-             "--os-auth-url", server['OS_AUTH_URL'],
-             "user-password-update",
-             "--pass", user['OS_PASSWORD'], user['OS_USERNAME']]))
-
+                    "--os-password", server['OS_PASSWORD'],
+                    "--os-tenant-name", server['OS_TENANT_NAME'],
+                    "--os-auth-url", server['OS_AUTH_URL'],
+                    "user-password-update",
+                    "--pass", user['OS_PASSWORD'], user['OS_USERNAME']]))
 
     keystone("--os-username", server['OS_USERNAME'],
              "--os-password", server['OS_PASSWORD'],
@@ -58,6 +58,7 @@ def delete_defaults():
     # user.set_default_attribute(username, 'images', {})
     info(username)
 
+
 @task
 def register():
     database = Database()
@@ -71,4 +72,3 @@ def mongo():
     database = Database()
     database.set_credentials()
     database.initialize_user()
-    

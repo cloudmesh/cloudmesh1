@@ -5,7 +5,7 @@ from cloudmesh_common.logger import LOGGER
 from cloudmesh_install.util import banner
 from cloudmesh_install import config_file
 from cloudmesh_common.util import PROGRESS
-from cloudmesh.config.cm_config import cm_config_server 
+from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh_install.util import path_expand
 
 from pprint import pprint
@@ -17,7 +17,10 @@ import os
 import webbrowser
 import platform
 
-import queue, mq, progress, mongo
+import queue
+import mq
+import progress
+import mongo
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
@@ -30,15 +33,15 @@ log = LOGGER(__file__)
 # ----------------------------------------------------------------------
 
 try:
-   import cloudmesh
-   # print "Version", cloudmesh.__version__
-   # TODO: ful version does not work whne installed via setup.py install
-   # thus we simply do not print for now.
-   # print "Full Version", cloudmesh.__full_version__
+    import cloudmesh
+    # print "Version", cloudmesh.__version__
+    # TODO: ful version does not work whne installed via setup.py install
+    # thus we simply do not print for now.
+    # print "Full Version", cloudmesh.__full_version__
 except Exception, e:
     print "ERROR: could not find package\n\n   cloudmesh\n"
     print "please run first\n"
-    print 
+    print
     print "     ./install cloudmesh\n"
     print
     print "Exception"
@@ -64,11 +67,12 @@ if debug:
     progress.off()
 else:
     progress.on()
-        
+
 PROGRESS.set('Cloudmesh Services', 50)
-    
+
 if sys.platform == 'darwin':
     web_browser = "open"
+
 
 def execute_command(msg, command, debug):
     _capture = not debug
@@ -77,7 +81,7 @@ def execute_command(msg, command, debug):
     else:
         PROGRESS.next()
     local(command, capture=_capture)
-        
+
 
 #
 # VERSION MANAGEMENT
@@ -102,23 +106,27 @@ def agent():
     print ("eval `ssh-agent -s`")
     print("ssh-add")
 
+
 @task
 def stop(server="server"):
     """sma e as the kill command"""
     kill(server)
+
 
 @task
 def kill(server="server", debug=True):
     """kills all server processes """
     with settings(warn_only=True):
         execute_command("STOP MONGO", "fab mongo.stop", debug=debug)
-        result = local('ps -ax | fgrep "python {0}.py" | fgrep -v fgrep'.format(server), capture=True).split("\n")
+        result = local(
+            'ps -ax | fgrep "python {0}.py" | fgrep -v fgrep'.format(server), capture=True).split("\n")
         for line in result:
             if line is not '':
                 pid = line.split(" ")[0]
                 local("kill -9 {0}".format(pid))
 
         # local("fab queue.stop")
+
 
 @task
 def quick(server="server", browser='yes'):
@@ -132,11 +140,10 @@ def quick(server="server", browser='yes'):
     # view(link)
 
 
-
 @task
 def start(server="server", browser='yes', debug=False):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link"""
-    
+
     # pprint (fabric.state.output)
 
     """
@@ -160,16 +167,16 @@ def start(server="server", browser='yes', debug=False):
         PROGRESS.next()
 
     execute_command("INSTALL CLOUDMESH",
-                "python setup.py install",
-                debug=debug)
+                    "python setup.py install",
+                    debug=debug)
 
     mongo.start()
-    # execute_command("START MONGO", 
+    # execute_command("START MONGO",
     #            "fab mongo.start",
     #            debug)
-    
+
     queue.start()
-    # execute_command("START RABITMQ", 
+    # execute_command("START RABITMQ",
     #        "fab queue.start", debug)
 
     queue.flower_server()
@@ -177,32 +184,33 @@ def start(server="server", browser='yes', debug=False):
     #        "fab queue.flower_server",
     #        debug)
     fabric.state.output.stdout = True
-    fabric.state.output.stderr = True 
+    fabric.state.output.stderr = True
     execute_command("START WEB SERVER",
-            "cd cloudmesh_web; python {0}.py &".format(server),
-            True)
+                    "cd cloudmesh_web; python {0}.py &".format(server),
+                    True)
     # view(link)
     PROGRESS.finish()
     # pprint (fabric.state.output)
+
 
 @task
 def web(server="server", browser='yes'):
     banner("START WEB SERVER")
     local("cd cloudmesh_web; python {0}.py &".format(server))
     # view(link)
-    
+
+
 @task
 def view(link=""):
     """run the browser"""
     from cloudmesh.config.ConfigDict import ConfigDict
 
-    server_config = ConfigDict(filename= config_file("/cloudmesh_server.yaml"))
-    
+    server_config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
+
     host = server_config.get("cloudmesh.server.webui.host")
     port = server_config.get("cloudmesh.server.webui.port")
 
     url_link = "http://{0}:{1}/{2}".format(host, port, link)
-
 
     local("%s %s" % (web_browser, url_link))
     # if browser == 'yes':
@@ -222,28 +230,28 @@ def clean():
 # For production server
 @task
 def wsgi(action="start"):
-   pidfile = config_file("/uwsgi/cloudmesh_uwsgi.pid")
-   logfile = config_file("/uwsgi/cloudmesh_uwsgi.log")
-   command = False
+    pidfile = config_file("/uwsgi/cloudmesh_uwsgi.pid")
+    logfile = config_file("/uwsgi/cloudmesh_uwsgi.log")
+    command = False
 
-   user_pidfile = os.path.expanduser(pidfile)
-   user_logfile = os.path.expanduser(logfile)
+    user_pidfile = os.path.expanduser(pidfile)
+    user_logfile = os.path.expanduser(logfile)
 
-   if action == "restart":
-      wsgi("stop")
-      action="start"
+    if action == "restart":
+        wsgi("stop")
+        action = "start"
 
-   if action == "start":
-      command = "uwsgi -s /tmp/cloudmesh.sock -M -p 2 -t 10 \
+    if action == "start":
+        command = "uwsgi -s /tmp/cloudmesh.sock -M -p 2 -t 10 \
       --daemonize={0} \
       --pidfile={1} \
       --chown-socket=cloudmesh:www-data \
       --chdir=cloudmesh_web \
       --module=server \
       --callable=app".format(user_logfile, user_pidfile)
-   elif (action == "stop" or action == "kill"):
-      command = "kill -INT `cat {0}`".format(user_pidfile)
-   elif (action == "reload"):
-      command = "kill -HUP `cat {0}`".format(user_pidfile)
-   if (command):
-      local(command)
+    elif (action == "stop" or action == "kill"):
+        command = "kill -INT `cat {0}`".format(user_pidfile)
+    elif (action == "reload"):
+        command = "kill -HUP `cat {0}`".format(user_pidfile)
+    if (command):
+        local(command)
