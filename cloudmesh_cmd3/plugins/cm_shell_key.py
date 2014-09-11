@@ -10,12 +10,14 @@ from cloudmesh_common.tables import two_column_table
 # from cloudmesh_install.util import yn_choice
 # from cloudmesh.util.menu import menu_return_num
 from os import listdir
-from os.path import expanduser
+from os.path import expanduser, isfile, abspath
 from cloudmesh_install import config_file
 from cloudmesh_install.util import path_expand
 # from cloudmesh.util.keys import read_key
-from cloudmesh.util.keys import get_fingerprint
-from cloudmesh.config.cm_keys import keytype
+from cloudmesh.keys.util import get_fingerprint, key_parse, key_validate
+from cloudmesh.config.cm_keys import keytype, get_key_from_file
+from datetime import datetime
+import re
 
 log = LOGGER(__file__)
 
@@ -28,7 +30,7 @@ class cm_shell_key:
         self.mongo_loaded = False
         self.keys_loaded = False
         self.keys_loaded_mongo = False
-        self.use_yaml = True
+        self.use_yaml = False
         self.register_command_topic('cloud', 'keys')
 
     def _load_mongo(self):
@@ -69,10 +71,10 @@ class cm_shell_key:
     def do_key(self, args, arguments):
         """
         Usage:
-               key
+               key -h|--help
                key list [--source=SOURCE] [--dir=DIR] [--format=FORMAT]
-               key add [KEYNAME] FILENAME
-               key default KEYNAME
+               key add [--keyname=KEYNAME] FILENAME
+               key default [KEYNAME]
                key delete KEYNAME
 
         Manages the keys
@@ -81,15 +83,15 @@ class cm_shell_key:
 
           SOURCE         mongo, yaml, ssh
           KEYNAME        The name of a key
-          FORMAT         The format of the output
-          FILENAME       The filename in which the key is located
+          FORMAT         The format of the output (table, json, yaml)
+          FILENAME       The filename with full path in which the key is located
 
         Options:
 
-           -v --verbose     verbose mode
-           --dir=DIR        the directory with keys [default: ~/.ssh]
-           --format=FORMAT  the format of the output [default: table]
-           --source=SOURCE  the source for the keys [default: mongo]
+           --dir=DIR            the directory with keys [default: ~/.ssh]
+           --format=FORMAT      the format of the output [default: table]
+           --source=SOURCE      the source for the keys [default: mongo]
+           --keyname=KEYNAME    the name of the keys
 
         Description:
 
@@ -108,23 +110,19 @@ class cm_shell_key:
 
             list the keys in mongo
 
-        key add [KEYNAME] FILENAME
+        key add [--keyname=keyname] FILENAME
 
-            adds the key specifid by the filename to either
-            the yaml file or the mongodb
+            adds the key specifid by the filename to mongodb
 
-        key add [--dir=DIR]
-        key add select [--dir=DIR]
-
-             interactively selct a key from the specified dir to be added
 
         key list
 
              Prints list of keys. NAME of the key can be specified
 
-        key default NAME
+        key default [NAME]
 
-             Used to set a key from the key-list as the default key
+             Used to set a key from the key-list as the default key if NAME
+             is given. Otherwise print the current default key
 
         key delete NAME
 
@@ -132,7 +130,7 @@ class cm_shell_key:
              are not saved in mongo
 
         """
-        print arguments
+        # print arguments
 
         def _find_keys(directory):
             return [file for file in listdir(expanduser(directory))
@@ -222,21 +220,33 @@ class cm_shell_key:
 
             username = cm_config().username()
             key_store = cm_keys_mongo(username)
-
-            if arguments["KEYNAME"]:
-                keyname = arguments["KEYNAME"]
-            else:
-                # get keyname form file, e.g. comment of key
-                 key = get_key_from_file(filename):
-                 keyname = "TBD"
-                 
             filename = arguments["FILENAME"]
-
-            # check if file exists
-
-            # check if key is valid
-
-            key_store[keyname] = filename
+            
+            # file exists?
+            # print filename
+            if isfile(expanduser(filename)):
+                keystring = get_key_from_file(filename).strip()
+                keysegments = key_parse(keystring)
+                # key valid?
+                if key_validate("string", keystring):
+                    if arguments["--keyname"]:
+                        keyname = arguments["--keyname"]
+                    else:
+                        # get keyname from the comment field of key
+                        keyname = keysegments[2]
+                        # in case a comment field is really missing
+                        # use a timestamp for uniqueness
+                        if keyname is None:
+                            tstamp = datetime.now().strftime("%Y%m%d%H%M%S")
+                            keyname = tstamp
+                        # sanitize the key name for mongo use
+                        else:
+                            keyname = re.sub(r'@|-|\.', '_', keysegments[2])
+                    key_store[keyname] = keystring
+                else:
+                    print "ERROR: INVALID key. Please verify!"
+            else:
+                print "ERROR: INVALID filename provided!"     
 
             return
 
@@ -271,17 +281,27 @@ class cm_shell_key:
                 func()
             """
 
-        if arguments["default"] and arguments["NAME"]:
-            if arguments["NAME"] in key_store.names():
-                key_store.setdefault(arguments["NAME"])
+        if arguments["default"]:
+            username = cm_config().username()
+            key_store = cm_keys_mongo(username)
+            # print key_store.names()
+            # no name provided, will get current default key
+            if not arguments["KEYNAME"]:
+                defaultkey = key_store.default()
+                print "Current default key is: {0}".format(defaultkey)
+            # name provided, check if it exists in the db
+            elif arguments["KEYNAME"] in key_store.names():
+                key_store.setdefault(arguments["KEYNAME"])
                 # Update mongo db defaults with new default key
-                print 'The default key is set to: ', arguments['NAME']
+                print 'The default key was successfully set to: ', arguments['KEYNAME']
             else:
                 print "ERROR: Specified key is not registered."
             return
 
         if arguments["delete"]:
-            print "Attempting to delete key. {0}".format(arguments["NAME"])
+            username = cm_config().username()
+            key_store = cm_keys_mongo(username)
+            print "Attempting to delete key: {0}".format(arguments["KEYNAME"])
             if self.use_yaml:
 
                 print("WARNING: This will only remove the keys that"
@@ -290,9 +310,11 @@ class cm_shell_key:
                       "called. If your key is already in the database, "
                       "you should use mongo mode\n")
 
-            key_store.delete(arguments["NAME"])
+            key_store.delete(arguments["KEYNAME"])
             return
-
+        
+        # deprecating...
+        """
         if arguments["save"]:
             if not self.mongo_loaded:
                 self._load_mongo()
@@ -330,7 +352,7 @@ class cm_shell_key:
                     mykeys[name] = get_fingerprint(key_store[name])
                 print two_column_table(mykeys)
                 return
-
+        """
 
 if __name__ == '__main__':
     arguments = {}

@@ -1,5 +1,6 @@
 import base64
 import hashlib
+import struct
 from cloudmesh_install.util import path_expand
 
 def read_key(filename):
@@ -15,9 +16,11 @@ def get_fingerprint(entirekey):
     :param entireky: the key
     :type entirekey: string
     """
-    t, keystring, comment = entirekey.split(" ", 2)
-    return key_fingerprint(keystring)
-
+    t, keystring, comment = key_parse(entirekey)
+    if keystring is not None:
+        return key_fingerprint(keystring)
+    else:
+        return ''
 
 def key_fingerprint(key_string):
     """create the fingerprint form just the key.
@@ -29,9 +32,22 @@ def key_fingerprint(key_string):
     fp_plain = hashlib.md5(key).hexdigest()
     return ':'.join(a + b for a, b in zip(fp_plain[::2], fp_plain[1::2]))
 
-#
-# TODO: this function seems not to work?
-#
+def key_parse(keystring):
+    """
+    parse the keystring/keycontent into type,key,comment
+    :param keystring: the content of a key in string format
+    """
+    # comment section could have a space too
+    keysegments = keystring.split(" ", 2)
+    keystype = keysegments[0]
+    key = None
+    comment = None
+    if len(keysegments) > 1:
+        key = keysegments[1]
+        if len(keysegments) > 2:
+            comment = keysegments[2]
+    return (keystype, key, comment)
+    
 def key_validate(keytype, key):
     """reads the key string from a file. THIS FUNCTION HAS A BUG.
 
@@ -42,15 +58,15 @@ def key_validate(keytype, key):
     keystring = "undefined"
     if keytype.lower() == "file":
         try:
-            keystring = open(filename, "r").read()
+            keystring = open(key, "r").read()
         except:
             return False
     elif keytype.lower() == "string":
-        keystring = filename
+        keystring = key
 
     try:
 
-        keytype, key_string, comment = keystring.split()
+        keytype, key_string, comment = key_parse(keystring)
         data = base64.decodestring(key_string)
         int_len = 4
         str_len = struct.unpack('>I', data[:int_len])[0]
@@ -61,3 +77,16 @@ def key_validate(keytype, key):
     except Exception, e:
         print e
         return False
+
+# unit testing
+def main():
+    key1 = "ssh-rsa abcdefg comment"
+    key2 = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDD+NswLi/zjz7Vf575eo9iWWku5m4nVSPMgP13JbKCTVKtavAXt8UPZTkYVWiUSeXRqlf+EZM11U8Mq6C/P/ECJS868rn2KSwFosNPF0OOz8zmTvBQShtvBBBVd1kmZePxFGviZbKwe3z3iATLKE8h7pwcupqTin9m3FhQRsGSF7YTFcGXv0ZqxFA2j9+Ix7SVbN5IYxxgwc+mxOzYIy1SKEAOPJQFXKkiXxNdLSzGgjkurhPAIns8MNYL9usKMGzhgp656onGkSbQHZR3ZHsSsTXWP3SV5ih4QTTFunwB6C0TMQVsEGw1P49hhFktb3md+RC4DFP7ZOzfkd9nne2B mycomment"
+    print key_validate("string", key1)
+    print key_validate("string", key2)
+    print key_parse(key1)
+    print key_parse("abcdedfg")
+    print key_parse("ssh-rsa somestringhere")[2]
+    
+if __name__ == "__main__":
+    main()
