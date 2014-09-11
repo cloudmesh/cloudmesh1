@@ -22,7 +22,6 @@ except:
 
 from string import Template
 
-import os
 from cloudmesh_install.util import banner
 from cloudmesh_install.util import is_ubuntu, is_centos, is_osx
 from cloudmesh_install.util import yn_choice
@@ -421,7 +420,6 @@ def _get_bak_filename(filename, postfix=0):
 
 
 def _make_a_backup(filename):
-    import shutil
     dest = _get_bak_filename(filename)
     shutil.copyfile(filename, dest)
     return dest
