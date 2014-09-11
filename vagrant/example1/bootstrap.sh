@@ -23,6 +23,7 @@ echo -e "\nsource ~/ENV/bin/activate\ncd ~/cloudmesh\n" >> ~/.bashrc
 
 # Copy private key from shared directory to .ssh
 cp /vagrant/id_rsa ~/.ssh/id_rsa
+ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
 ssh-keygen -b 2048 -t rsa -f ~/.ssh/cloudmesh-default -q -N ""
 ./install cloudmesh
 cm-iu user fetch --username=`cat /vagrant/.userid`
@@ -38,3 +39,7 @@ sleep 5
 # fab mongo.reset is same as fab mongo.boot, user.mongo, mongo.simple
 fab mongo.reset
 fab server.start
+cm cloud on sierra
+cm cloud on india
+cm flavor sierra --refresh
+cm flavor india --refresh
