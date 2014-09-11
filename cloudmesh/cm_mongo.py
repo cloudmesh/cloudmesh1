@@ -11,6 +11,7 @@ from cloudmesh.util.encryptdata import decrypt
 from cloudmesh.util.ssh import ssh_execute
 import traceback
 import time
+import sys
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -751,8 +752,22 @@ class cm_mongo:
     def vmname_next(self):
         return self.vmname(idx="+1")
 
-    def ssh_vm_with_command(self, ipaddr, username="ubuntu", command="ls -al", pkey=None):
-        return ssh_vm_with_command(username, ipaddr, command, pkey)
+    def ssh_execute(self, ipaddr, username="ubuntu", command="ls -al", pkey=None):
+
+        # RETRY
+        _max = 10  # times
+        _interval = 5  # second
+        for i in range(_max):
+            print str(i) + " try to execute via ssh..."
+            try:
+                result = ssh_execute(username, ipaddr, command, pkey)
+                if result:
+                    break
+            except:
+                err = sys.exc_info()[0]
+                time.sleep(_interval)
+
+        return result or err
 
 '''
 def main():
