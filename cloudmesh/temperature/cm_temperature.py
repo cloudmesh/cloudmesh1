@@ -26,7 +26,8 @@ class cm_temperature:
     patt = re.compile("([0-9+.-]+?)\s+degrees\s+([A-Z])", re.I)
 
     def __init__(self):
-        self.config_server = cm_config_server().get("cloudmesh.server.clusters")
+        self.config_server = cm_config_server().get(
+            "cloudmesh.server.clusters")
         self.inventory = Inventory()
 
     # get sensor temperature with ipmitool
@@ -54,23 +55,27 @@ class cm_temperature:
         password = config['password']
         username = config['user']
 
-        command = "ipmitool -I lanplus -H {0} -U {1} -P {2} sdr type temperature".format(hostaddr, username, password)
+        command = "ipmitool -I lanplus -H {0} -U {1} -P {2} sdr type temperature".format(
+            hostaddr, username, password)
         # access ipmitool need a proxy server
         proxyaddr = config['proxy']['ip']
         proxyusername = config['proxy']['user']
 
-        log.debug("Get temperature for host '{2}' via proxy server '{0}@{1}'".format(proxyusername, proxyaddr, hostname))
+        log.debug("Get temperature for host '{2}' via proxy server '{0}@{1}'".format(
+            proxyusername, proxyaddr, hostname))
 
         try:
             result = ssh("{0}@{1}".format(proxyusername, proxyaddr), command)
         except:
             result = ""
-        
+
         dict_result = None
         if result == "":
-            log.warning("Cannot access to host '{0}' OR ipmitool failed on host '{0}'".format(hostname))
+            log.warning(
+                "Cannot access to host '{0}' OR ipmitool failed on host '{0}'".format(hostname))
         else:
-            log.debug("Temperature data retrieved from host '{0}' successfully.".format(hostname))
+            log.debug(
+                "Temperature data retrieved from host '{0}' successfully.".format(hostname))
             dict_result = {}
             lines = result.split("\n")
             for line in lines:
@@ -85,15 +90,14 @@ class cm_temperature:
                 if m:
                     value = m.group(1)
                     unit = m.group(2)
-                dict_result[name] = { "name":    fields[0],
-                                      "address": fields[1],
-                                      "status":  fields[2],
-                                      "entity":  fields[3],
-                                      "value":   value,
-                                      "unit":    unit
-                                    }
+                dict_result[name] = {"name":    fields[0],
+                                     "address": fields[1],
+                                     "status":  fields[2],
+                                     "entity":  fields[3],
+                                     "value":   value,
+                                     "unit":    unit
+                                     }
         return dict_result
-
 
     # get the max temperature on a server
     # params: tdict is the result from get_ipmi_temperature
@@ -103,9 +107,9 @@ class cm_temperature:
         unit_upper = unit.upper()
         max_temp = -1
         options = {
-                    "C": "convert_temp_C2F",
-                    "F": "convert_temp_F2C",
-                  }
+            "C": "convert_temp_C2F",
+            "F": "convert_temp_F2C",
+        }
         if tdict is not None:
             for name in tdict:
                 if tdict[name]["status"].lower() == "ok":
@@ -117,11 +121,9 @@ class cm_temperature:
 
         return {"unit": unit_upper, "value": max_temp}
 
-
     # convert temperature from Fahrenheit (F) to Celsius (C)
     def convert_temp_C2F(self, cvalue):
         return round(cvalue * 1.8 + 32, 1)
-
 
     # convert temperature from Celsius (C) to Fahrenheit (F)
     def convert_temp_F2C(self, fvalue):
@@ -134,7 +136,8 @@ if __name__ == "__main__":
     arrdict = {}
     # pprint (ct.get_ipmi_temperature(hostname))
     # echo clusters
-    arrname = ["e001", "e002", "e003", "e004", "e005", "e006", "e007", "e008", "e009", "e010", "e011", "e012", "e013", "e014", "e015", "e016"]
+    arrname = ["e001", "e002", "e003", "e004", "e005", "e006", "e007",
+               "e008", "e009", "e010", "e011", "e012", "e013", "e014", "e015", "e016"]
     for name in arrname:
         arrdict[name] = ct.get_ipmi_temperature(name)
 
@@ -144,5 +147,5 @@ if __name__ == "__main__":
         if arrdict[name] is None:
             print "Cannot access host {0}".format(name)
         else:
-            pprint (arrdict[name])
+            pprint(arrdict[name])
         print "-" * 40

@@ -56,7 +56,8 @@ def shell_commands_dict_output(d,
         try:
             config = cm_config()
         except:
-            Console.error("There is a problem with the configuration yaml files")
+            Console.error(
+                "There is a problem with the configuration yaml files")
         username = config['cloudmesh']['profile']['username']
         user_obj = cm_user()
         userdata = user_obj.info(username)
@@ -80,7 +81,7 @@ def shell_commands_dict_output(d,
         print json.dumps(d, indent=4)
     elif format_type == "table":
         if title:
-            print "+"+"-"*(len(title)-2)+"+"
+            print "+" + "-" * (len(title) - 2) + "+"
             print title
 
         if header:
@@ -122,4 +123,4 @@ def shell_commands_dict_output(d,
             c = len(print_data)
             sentence = "count: {0}".format(c)
             print sentence
-            print "+"+"-"*(len(sentence)-2)+"+"
+            print "+" + "-" * (len(sentence) - 2) + "+"

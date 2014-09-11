@@ -49,53 +49,53 @@ def shell_command_image(arguments):
         c.refresh(cm_user_id=username, names=cloud_names, types=['images'])
     images_dict = c.images(cm_user_id=username, clouds=cloud_names)
     your_keys = {"openstack":
-                    [
-                        # ["Metadata", "metadata"],
-                        ["status", "status"],
-                        ["name", "name"],
-                        ["id", "id"],
-                        ["type_id", "metadata", "instance_type_id"],
-                        ["iname", "metadata", "instance_type_name"],
-                        ["location", "metadata", "image_location"],
-                        ["state", "metadata", "image_state"],
-                        ["updated", "updated"],
-                        ["minDisk", "minDisk"],
-                        ["memory_mb", "metadata", 'instance_type_memory_mb'],
-                        ["fid", "metadata", "instance_type_flavorid"],
-                        ["vcpus", "metadata", "instance_type_vcpus"],
-                        ["user_id", "metadata", "user_id"],
-                        ["owner_id", "metadata", "owner_id"],
-                        ["gb", "metadata", "instance_type_root_gb"],
-                        ["arch", ""]
-                   ],
-                  "ec2":
-                    [
-                        # ["Metadata", "metadata"],
-                        ["state", "extra", "state"],
-                        ["name", "name"],
-                        ["id", "id"],
-                        ["public", "extra", "is_public"],
-                        ["ownerid", "extra", "owner_id"],
-                        ["imagetype", "extra", "image_type"]
-                   ],
-                  "azure":
-                    [
-                        ["name", "label"],
-                        ["category", "category"],
-                        ["id", "id"],
-                        ["size", "logical_size_in_gb"],
-                        ["os", "os"]
-                   ],
-                  "aws":
-                    [
-                        ["state", "extra", "state"],
-                        ["name", "name"],
-                        ["id", "id"],
-                        ["public", "extra", "ispublic"],
-                        ["ownerid", "extra", "ownerid"],
-                        ["imagetype", "extra", "imagetype"]
-                   ]
-                  }
+                 [
+                     # ["Metadata", "metadata"],
+                     ["status", "status"],
+                     ["name", "name"],
+                     ["id", "id"],
+                     ["type_id", "metadata", "instance_type_id"],
+                     ["iname", "metadata", "instance_type_name"],
+                     ["location", "metadata", "image_location"],
+                     ["state", "metadata", "image_state"],
+                     ["updated", "updated"],
+                     ["minDisk", "minDisk"],
+                     ["memory_mb", "metadata", 'instance_type_memory_mb'],
+                     ["fid", "metadata", "instance_type_flavorid"],
+                     ["vcpus", "metadata", "instance_type_vcpus"],
+                     ["user_id", "metadata", "user_id"],
+                     ["owner_id", "metadata", "owner_id"],
+                     ["gb", "metadata", "instance_type_root_gb"],
+                     ["arch", ""]
+                 ],
+                 "ec2":
+                 [
+                     # ["Metadata", "metadata"],
+                     ["state", "extra", "state"],
+                     ["name", "name"],
+                     ["id", "id"],
+                     ["public", "extra", "is_public"],
+                     ["ownerid", "extra", "owner_id"],
+                     ["imagetype", "extra", "image_type"]
+                 ],
+                 "azure":
+                 [
+                     ["name", "label"],
+                     ["category", "category"],
+                     ["id", "id"],
+                     ["size", "logical_size_in_gb"],
+                     ["os", "os"]
+                 ],
+                 "aws":
+                 [
+                     ["state", "extra", "state"],
+                     ["name", "name"],
+                     ["id", "id"],
+                     ["public", "extra", "ispublic"],
+                     ["ownerid", "extra", "ownerid"],
+                     ["imagetype", "extra", "imagetype"]
+                 ]
+                 }
 
     images = _select_images(images_dict, your_keys)
 
@@ -103,7 +103,6 @@ def shell_command_image(arguments):
 
 
 def _select_images(data, selected_keys, env=[]):
-
     """
 
         status ACTIVE

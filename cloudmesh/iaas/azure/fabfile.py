@@ -120,18 +120,18 @@ def _boot(index):
 
 
 def list():
-        result = vm_list()
-        print result
+    result = vm_list()
+    print result
 
 
 def show(name):
-        result = vm_show()
-        print result
+    result = vm_show()
+    print result
 
 
 def delete(name):
-        result = vm_delete()
-        print result
+    result = vm_delete()
+    print result
 
 
 def set(option, value=''):

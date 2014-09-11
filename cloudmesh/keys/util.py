@@ -3,14 +3,15 @@ import hashlib
 import struct
 from cloudmesh_install.util import path_expand
 
+
 def read_key(filename):
     key = {}
     key['filename'] = path_expand(filename)
     key['string'] = open(filename, "r").read()
     key['fingerprint'] = get_fingerprint(key['string'])
     return key
-    
-        
+
+
 def get_fingerprint(entirekey):
     """returns the fingerprint of a key.
     :param entireky: the key
@@ -22,6 +23,7 @@ def get_fingerprint(entirekey):
     else:
         return ''
 
+
 def key_fingerprint(key_string):
     """create the fingerprint form just the key.
 
@@ -31,6 +33,7 @@ def key_fingerprint(key_string):
     key = base64.decodestring(key_string)
     fp_plain = hashlib.md5(key).hexdigest()
     return ':'.join(a + b for a, b in zip(fp_plain[::2], fp_plain[1::2]))
+
 
 def key_parse(keystring):
     """
@@ -47,7 +50,8 @@ def key_parse(keystring):
         if len(keysegments) > 2:
             comment = keysegments[2]
     return (keystype, key, comment)
-    
+
+
 def key_validate(keytype, key):
     """reads the key string from a file. THIS FUNCTION HAS A BUG.
 
@@ -79,6 +83,8 @@ def key_validate(keytype, key):
         return False
 
 # unit testing
+
+
 def main():
     key1 = "ssh-rsa abcdefg comment"
     key2 = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDD+NswLi/zjz7Vf575eo9iWWku5m4nVSPMgP13JbKCTVKtavAXt8UPZTkYVWiUSeXRqlf+EZM11U8Mq6C/P/ECJS868rn2KSwFosNPF0OOz8zmTvBQShtvBBBVd1kmZePxFGviZbKwe3z3iATLKE8h7pwcupqTin9m3FhQRsGSF7YTFcGXv0ZqxFA2j9+Ix7SVbN5IYxxgwc+mxOzYIy1SKEAOPJQFXKkiXxNdLSzGgjkurhPAIns8MNYL9usKMGzhgp656onGkSbQHZR3ZHsSsTXWP3SV5ih4QTTFunwB6C0TMQVsEGw1P49hhFktb3md+RC4DFP7ZOzfkd9nne2B mycomment"
@@ -87,6 +93,6 @@ def main():
     print key_parse(key1)
     print key_parse("abcdedfg")
     print key_parse("ssh-rsa somestringhere")[2]
-    
+
 if __name__ == "__main__":
     main()

@@ -36,10 +36,12 @@ diagram_format = "svg"
 
 
 class ProvisionWorkflowForm(Form):
-    # print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",Form
+    # print
+    # "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",Form
     filename = "abc"
 
-    dir = path_expand(cm_config_server().get("cloudmesh.server.workflows.path"))
+    dir = path_expand(
+        cm_config_server().get("cloudmesh.server.workflows.path"))
 
     # not so nice cludge, ask for location of statcic instead
 
@@ -68,7 +70,6 @@ class ProvisionWorkflowForm(Form):
 # ============================================================
 
 
-
 @workflow_module.route('/workflows/<filename>')
 @login_required
 @admin_permission.require(http_exception=403)
@@ -84,7 +85,8 @@ def display_provision_workflow_form():
 
     form = ProvisionWorkflowForm(csrf=False)
 
-    dir = path_expand(cm_config_server().get("cloudmesh.server.workflows.path"))
+    dir = path_expand(
+        cm_config_server().get("cloudmesh.server.workflows.path"))
 
     filename = "abc"
 
@@ -108,7 +110,8 @@ def display_provision_workflow_form():
             f.write(form.workflow.data)
             f.write("\n}")
 
-            # print "########################################################################################"
+            # print
+            # "########################################################################################"
             print form.workflow
     except:
         print "file does not exists"

@@ -11,11 +11,11 @@ print "USERNAME:", username
 
 hosts = []
 
-#hosts.append("localhost")
+# hosts.append("localhost")
 hosts.append("india.futuregrid.org")
-#hosts.append("hotel.futuregrid.org")
-#hosts.append("sierra.futuregrid.org")
-hosts.append("alamo.futuregrid.org")        
+# hosts.append("hotel.futuregrid.org")
+# hosts.append("sierra.futuregrid.org")
+hosts.append("alamo.futuregrid.org")
 
 task = {}
 
@@ -34,15 +34,14 @@ for execute in [Sequential, Parallel]:
     watch.stop(name)
 
     pprint(result)
-    
-    banner("PRINT")        
+
+    banner("PRINT")
     for host in result:
         print result[host]["output"]
-    
+
 
 for timer in watch.keys():
     print timer, watch.get(timer), "s"
-
 
 
 """    

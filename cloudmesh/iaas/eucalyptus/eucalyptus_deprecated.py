@@ -21,10 +21,6 @@ from cloudmesh.config.cm_config import cm_config
 
 class eucalyptus:
 
-
-
-
-
     def config(self, label=None, project=None, accessKey=None, secretKey=None):
         """
         reads in the configuration file if specified, and does some
@@ -60,8 +56,6 @@ class eucalyptus:
             self.credentials['accessKey'] = accessKey
             self.credentials['secretkey'] = secretKey
 
-
-
     def getNodebyID(self, nodeid):
         nodes = self.cloud.list_nodes()
         for node in nodes:
@@ -70,7 +64,7 @@ class eucalyptus:
 
     def vm_delete(self, node):
         result = self.destroy_node(self, node)
-            # add result to internal cache
+        # add result to internal cache
         print ("vm Deleted")
         return result
 
@@ -85,7 +79,7 @@ class eucalyptus:
         create a vm
         """
         self.vm = self.cloud.create_node(
-        name=vm_name, image=vm_image, size=vm_flavour)
+            name=vm_name, image=vm_image, size=vm_flavour)
 
         while 1:
             time.sleep(15)
@@ -98,7 +92,8 @@ class eucalyptus:
                 break
             if updatedNode.state == 4:
                 print(self.vm.id, "Has Errored out")
-                # TODO: BUG clearly wrong, as remove also does not exist for a dict if we change to self.
+                # TODO: BUG clearly wrong, as remove also does not exist for a
+                # dict if we change to self.
                 nodes.remove(vm)
                 break
 
@@ -106,5 +101,3 @@ class eucalyptus:
         del data['driver']
         pp.pprint(data)
         return {}
-
-

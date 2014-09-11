@@ -269,7 +269,7 @@ def page_not_found(error):
 
 
 @app.errorhandler(403)
-def page_not_found(error):
+def page_not_found_403(error):
     error = 'Access denied {0}'.format(403)
     return render_template('error.html',
                            error=error,
@@ -282,7 +282,7 @@ def page_not_found(error):
 
 
 @app.errorhandler(401)
-def page_not_found_denied(error):
+def page_not_found_401(error):
     error = 'Access denied {0}'.format(401)
     return render_template('error.html',
                            error=error,

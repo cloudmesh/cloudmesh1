@@ -69,13 +69,10 @@ def filter(cloud=None):
     return redirect('/mesh/servers')
 
 
-
-
 @rack_module.route('/inventory/rack/<name>')
 @rack_module.route('/inventory/rack/<name>/<service>')
 @login_required
 def display_rack(name, service=None):
-
 
     if service is None:
         service = "temperature"
@@ -85,7 +82,6 @@ def display_rack(name, service=None):
 
     # diag_dir = path_expand(cm_config_server().get("rack.input"))
     # output_dir = path_expand(cm_config_server().get("rack.diagramms.{0}".format(service)))
-
 
     # not so nice cludge, ask for location of statcic instead
 
@@ -97,7 +93,6 @@ def display_rack(name, service=None):
     # .png
     # -legend.png
 
-
     #
     # CREATE YOU IMAGES NOW
     #
@@ -106,8 +101,6 @@ def display_rack(name, service=None):
     #    do this
     # else:
     #    do that
-
-
 
     return render_template('mesh/rack/rack.html',
                            service=service,

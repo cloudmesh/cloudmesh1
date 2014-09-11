@@ -7,11 +7,9 @@ from cloudmesh.cm_mongo import cm_MongoBase
 
 log = LOGGER(__file__)
 
+
 class cm_launcher_db(cm_MongoBase):
 
     def __init__(self):
         self.cm_type = "launcher"
         self.connect()
-
-
-

@@ -4,7 +4,7 @@ from cloudmesh.keys.util import get_fingerprint
 from cloudmesh.keys.util import key_fingerprint, key_validate
 from cloudmesh.cm_mongo import cm_mongo
 import os
-from  cloudmesh_install.util import path_expand
+from cloudmesh_install.util import path_expand
 
 
 def keytype(name):
@@ -20,7 +20,7 @@ def keytype(name):
 def get_key_from_file(filename):
     return open(path_expand(filename), "r").read()
 
-        
+
 class cm_keys_base(object):
 
     def defined(self, name):
@@ -29,16 +29,16 @@ class cm_keys_base(object):
     def __delitem__(self, name):
         '''
         deletes the key with the given name. Will not succeed if the key is the default key
-        '''    
+        '''
         self.delete(name)
-        
+
     def __len__(self):
         return len(self.names())
 
     def no_of_keys(self):
         return len(self.names())
 
-    
+
 class cm_keys_yaml(cm_keys_base):
 
     filename = None
@@ -51,7 +51,6 @@ class cm_keys_yaml(cm_keys_base):
 
         # Check if the file exists
         self.config = cm_config(filename)
-
 
     def _getvalue(self, name):
         '''
@@ -80,9 +79,7 @@ class cm_keys_yaml(cm_keys_base):
 
         return value
 
-
     def __setitem__(self, name, value):
-
         '''
         adds new key name and value. If name is already present the value is changed.
         The parameter key_type should  be set to file if you want to read the key from a file.
@@ -94,19 +91,17 @@ class cm_keys_yaml(cm_keys_base):
             #
             self.config["cloudmesh"]["keys"]["default"] = value
             return
-                
+
         key_value = value
         key_type = keytype(key_value)
         if key_type == "file":
-            try: 
+            try:
                 key_value = get_key_from_file(value)
             except:
                 print "ERROR: reading key file {0}".format(value)
-                return        
+                return
 
         self.config["cloudmesh"]["keys"]["keylist"][name] = key_value
-        
-        
 
     def set(self, name, value, expand=False):
         '''
@@ -126,7 +121,7 @@ class cm_keys_yaml(cm_keys_base):
     def delete(self, name):
         '''
         deletes the key with the given name. WIll not succeed if the key is the default key
-        '''    
+        '''
 
         default = self.config.get("cloudmesh.keys.default")
         if name == default:
@@ -140,7 +135,7 @@ class cm_keys_yaml(cm_keys_base):
             else:
                 print "ERROR: Key not found"
                 return
-            
+
     '''
     def delete(self, name):
         """ not tested"""
@@ -161,7 +156,6 @@ class cm_keys_yaml(cm_keys_base):
             default = None
     '''
 
-            
     def setdefault(self, name):
         """
         sets the default key
@@ -182,7 +176,6 @@ class cm_keys_yaml(cm_keys_base):
         """gets the default key"""
         return self.config.get('cloudmesh.keys.default')
 
-    
 
 class cm_keys_mongo(cm_keys_base):
 
@@ -193,23 +186,23 @@ class cm_keys_mongo(cm_keys_base):
         """
         self.mongo = cm_mongo()
         self.user_info = self.mongo.db_user.find_one(
-                    {'cm_user_id': user}
+            {'cm_user_id': user}
         )
         self.defaults_info = self.mongo.db_defaults.find_one(
-                    {'cm_user_id': user}
+            {'cm_user_id': user}
         )
 
     # operations are done directly on mongo
     # def write(self):
     #    """writes the updated dict to the config"""
     #    self.config.write()
-        
+
     def _getvalue(self, name):
         """
         returns value corresponding to the name of the key.
         """
         if name == 'keys':
-            return {"default": self.get_default_key(), "keylist":self.user_info["keys"]}
+            return {"default": self.get_default_key(), "keylist": self.user_info["keys"]}
         if name == 'default':
             key = self.defaults_info["key"]
         else:
@@ -217,7 +210,6 @@ class cm_keys_mongo(cm_keys_base):
         value = self.user_info["keys"][name]
         return value
 
-    
     def get_default_key(self):
         """
         returns default key.
@@ -227,7 +219,7 @@ class cm_keys_mongo(cm_keys_base):
     def __getitem__(self, name):
         """
         returns the value corresponding to the name of the key
-        """        
+        """
         return self._getvalue(name)
 
     def __setitem__(self, name, value):
@@ -240,11 +232,11 @@ class cm_keys_mongo(cm_keys_base):
         key_value = value
         key_type = keytype(key_value)
         if key_type == "file":
-            try: 
+            try:
                 key_value = get_key_from_file(value)
             except:
                 print "ERROR: reading key file {0}".format(value)
-                return        
+                return
 
         self.user_info["keys"][name] = key_value
 
@@ -253,15 +245,14 @@ class cm_keys_mongo(cm_keys_base):
             {'$set': {'keys': self.user_info["keys"]}},
             upsert=False,
             multi=False
-            )
-
+        )
 
     def set(self, name, value):
         '''
         adds new key name and value. If name is already present the value is changed.
         The parameter key_type should  be set to file if you want to read the key from a file.
         The parameter persist being set to true will cause all of the changes made locally to be written to mongo.          
-        '''        
+        '''
         self.__setitem__(name, value)
 
     def __delitem__(self, name):
@@ -293,12 +284,12 @@ class cm_keys_mongo(cm_keys_base):
                 {'$set': {'keys': self.user_info["keys"]}},
                 upsert=False,
                 multi=False
-                )                
+            )
 
     def setdefault(self, name):
         """
         sets the default key.        
-        
+
         """
         if name in self.user_info["keys"]:
             self.defaults_info["key"] = name
@@ -311,14 +302,13 @@ class cm_keys_mongo(cm_keys_base):
             {'$set': {'keys': self.user_info["keys"]}},
             upsert=False,
             multi=False
-            )
+        )
         self.mongo.db_defaults.update(
             {'_id': self.defaults_info['_id']},
             {'$set': {'key': self.defaults_info["key"]}},
             upsert=False,
             multi=False
-            )
-
+        )
 
     def default(self):
         """gets the default key"""
@@ -327,5 +317,3 @@ class cm_keys_mongo(cm_keys_base):
     def names(self):
         """returns all key names in an list."""
         return self.user_info["keys"].keys()
-
-

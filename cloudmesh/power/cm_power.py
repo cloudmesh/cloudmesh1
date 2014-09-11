@@ -1,8 +1,9 @@
 # see cm_temperature
 
-class cm_power:
-    """class to conveniently switch power on and of"""
 
+class cm_power:
+
+    """class to conveniently switch power on and of"""
 
     """the hostanme is the label of the host as defined in the inventory."""
 
@@ -20,5 +21,3 @@ class cm_power:
 
     def enabled(self, hostname):
         """returns true if the power can be set"""
-
-

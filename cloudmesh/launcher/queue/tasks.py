@@ -23,6 +23,3 @@ def task_launch(task_dict):
     '''
     print "task recieved"
     launcher.run(task_dict)
-
-
-

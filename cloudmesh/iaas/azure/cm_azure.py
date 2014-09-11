@@ -223,19 +223,19 @@ class cm_azure:
         print result
 
     def list(self):
-            result = vm_list()
-            # add result to internal cache
-            print result
+        result = vm_list()
+        # add result to internal cache
+        print result
 
     def show(self, name):
-            result = vm_show()
-            # add result to internal cache
-            print result
+        result = vm_show()
+        # add result to internal cache
+        print result
 
     def vm_delete(self, name):
-            result = vm_delete(name)
-            # add result to internal cache
-            return result
+        result = vm_delete(name)
+        # add result to internal cache
+        return result
 
     def vms_delete(self, names):
 
@@ -248,7 +248,7 @@ class cm_azure:
     def vms_find(self):
         ids = []
         for (id, vm) in self.servers.items():
-                ids.append(id)
+            ids.append(id)
 
         return ids
 
@@ -318,7 +318,8 @@ class cm_azure:
     #
 
     def _selectImage(self):
-        # BUG: I AHVE NO IDEA WHAT THIS IS DUE TO NON INFORMATIVE VARIABLE NAMEING
+        # BUG: I AHVE NO IDEA WHAT THIS IS DUE TO NON INFORMATIVE VARIABLE
+        # NAMEING
         images = self._buildAzureImageDict()
         print 'Please select Image'
 

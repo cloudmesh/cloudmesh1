@@ -144,7 +144,7 @@ def cm_manage():
             var['user'] = arguments['--user']
             var['host'] = arguments['--remote']
             #
-            # BUG should be 
+            # BUG should be
             #
             var['file'] = config_file_prefix() + "/cloudmesh.yaml"
             if var['user'] is None:
@@ -169,8 +169,6 @@ def cm_manage():
 
             sys.exit(0)
 
-
-
         #
         # ok
         #
@@ -180,7 +178,6 @@ def cm_manage():
             projects = config.get('cloudmesh.projects')
             print yaml.dump(projects, default_flow_style=False, indent=4)
             sys.exit(0)
-
 
         #
         # OK, needs setting
@@ -213,7 +210,6 @@ def cm_manage():
             print "ERROR: THIS JUST SELECTS A PROJECT ID BUT DOES NOT SET IT"
             sys.exit(0)
 
-
         if arguments['init'] or name == 'init':
             output = arguments['--out']
             username = arguments['--user'] or os.getenv('USER')
@@ -222,7 +218,8 @@ def cm_manage():
             new_yaml_file = open(location, 'w+')
 
             user_yaml = cm_user().generate_yaml(username, 'cloudmesh')
-            print >> new_yaml_file, yaml.dump(user_yaml, default_flow_style=False)
+            print >> new_yaml_file, yaml.dump(
+                user_yaml, default_flow_style=False)
             new_yaml_file.close()
             print "Written new yaml file in " + location
             sys.exit(0)
@@ -253,7 +250,6 @@ def cm_manage():
 
             sys.exit(0)
 
-
         #
         # OK, but does not display the username
         #
@@ -267,7 +263,6 @@ def cm_manage():
                     print "{0}: {1}".format(name, me['password'][name])
 
             sys.exit(0)
-
 
         #
         # OK

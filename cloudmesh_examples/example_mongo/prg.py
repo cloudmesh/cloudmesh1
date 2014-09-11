@@ -7,20 +7,21 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.ConfigDict import ConfigDict
 import sys
 
-config = ConfigDict(filename="~/.cloudmesh/cloudmesh_hpc.yaml")["cloudmesh"]["hpc"]
+config = ConfigDict(
+    filename="~/.cloudmesh/cloudmesh_hpc.yaml")["cloudmesh"]["hpc"]
 
 print config
 
 
 #hosts = []
-#hosts.append("localhost")
-#hosts.append("bigred2.uits.iu.edu")
-#hosts.append("india.futuregrid.org")
-#hosts.append("hotel.futuregrid.org")
-#hosts.append("sierra.futuregrid.org")
-#hosts.append("alamo.futuregrid.org")        
+# hosts.append("localhost")
+# hosts.append("bigred2.uits.iu.edu")
+# hosts.append("india.futuregrid.org")
+# hosts.append("hotel.futuregrid.org")
+# hosts.append("sierra.futuregrid.org")
+# hosts.append("alamo.futuregrid.org")
 
-def  get_credentials(hosts):
+def get_credentials(hosts):
     credential = {}
     for host in hosts:
         credential[host] = config[host]['username']
@@ -32,33 +33,30 @@ hosts = config.keys()
 credentials = get_credentials(hosts)
 
 
-
 task = {}
 
 watch = StopWatch()
 
 
 for execute in [Sequential, Parallel]:
-#for execute in [Sequential]:    
-#for execute in [Parallel]:
-    
+    # for execute in [Sequential]:
+    # for execute in [Parallel]:
+
     name = execute.__name__
 
     banner(name)
     watch.start(name)
-    
+
     result = execute(credentials, cm_ssh, command="qstat")
 
     watch.stop(name)
 
     pprint(result)
-    
-    banner("PRINT")        
+
+    banner("PRINT")
     for host in result:
         print result[host]["output"]
-    
+
 
 for timer in watch.keys():
     print timer, watch.get(timer), "s"
-
-

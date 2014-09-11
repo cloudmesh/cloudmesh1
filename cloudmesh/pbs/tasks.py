@@ -12,8 +12,10 @@ import time
 from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
+
 @celery_pbs_queue.task(track_started=True)
-def refresh_qstat(hosts):  # checks the mongodb for last qstat refresh and if it is
+# checks the mongodb for last qstat refresh and if it is
+def refresh_qstat(hosts):
     '''
     Launches the recipies on the server as per the task_dict. The task dict should the following properties
     name: name of the server
@@ -49,7 +51,3 @@ def refresh_qstat(hosts):  # checks the mongodb for last qstat refresh and if it
         else:
             print "No refresh needed for {0}".format(host)
     return error
-
-
-
-

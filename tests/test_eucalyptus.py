@@ -28,12 +28,13 @@ from pprint import pprint
 from cloudmesh_common.util import HEADING
 from cloudmesh_install import config_file
 
+
 class Test:
 
     # assuming first - is the prefered cloud
-    print os.path.expandvars(cloudmesh_yaml = config_file("/cloudmesh.yaml"))
+    print os.path.expandvars(cloudmesh_yaml=config_file("/cloudmesh.yaml"))
     cloud_label = head(
-        fgrep("-", cloudmesh_yaml = config_file("/cloudmesh.yaml")), "-n", "1")
+        fgrep("-", cloudmesh_yaml=config_file("/cloudmesh.yaml")), "-n", "1")
     cloud_label = cloud_label.replace(" - ", "").strip()
 
     def setup(self):
@@ -50,7 +51,6 @@ class Test:
     def tearDown(self):
         pass
 
-
     def start(self):
         HEADING()
         image = self.configuration.default(self.name)['image']
@@ -61,7 +61,6 @@ class Test:
         print "STARTING IMAGE", name, image, flavor
         result = self.cloud.vm_create(name, flavor, image)
         print result
-
 
     def test_label(self):
         HEADING()
@@ -115,8 +114,6 @@ class Test:
         # assert self.cloud.flavors['m1.small']['ram'] == 512
         assert True
 
-
-
     def test_start_vm(self):
         HEADING()
         configuration = cm_config()
@@ -134,10 +131,10 @@ class Test:
         print self.cloud.images_cache
 
         print "STARTING IMAGE", image, flavor
-        result = self.cloud.vm_create("gregor-test-001", flavor_name=flavor, image_id=image)
+        result = self.cloud.vm_create(
+            "gregor-test-001", flavor_name=flavor, image_id=image)
         print result
         assert len(result.keys()) > 0
-
 
     def test_delete_vm(self):
         HEADING()
@@ -156,18 +153,16 @@ class Test:
         # print self.cloud.images_cache
 
         print "STARTING VM", image, flavor
-        result = self.cloud.vm_create("gregor-test-del", flavor_name=flavor, image_id=image)
+        result = self.cloud.vm_create(
+            "gregor-test-del", flavor_name=flavor, image_id=image)
         print result
-
 
         print "DELETE VM", image, flavor
         self.cloud.refresh('servers')
         result = self.cloud.vm_delete("gregor-test-del")
         print result
 
-
         assert len(result.keys()) > 0
-
 
     def test_refresh(self):
         HEADING()
@@ -181,7 +176,6 @@ class Test:
         print json.dumps(self.cloud.dump('servers'), indent=4)
         # we assume that there are always images running
         assert len(self.cloud.servers) > 0
-
 
     """
     def test_0??_usage(self):

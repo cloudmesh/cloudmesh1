@@ -26,6 +26,7 @@ from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh_common.util import HEADING
 
+
 class Test:
 
     def setup(self):
@@ -36,7 +37,6 @@ class Test:
         self.pbs = pbs_mongo()
         self.pbs.activate(self.host, "gvonlasz")
         print "SETUP PBS HOSTS", self.pbs.hosts
-
 
     def tearDown(self):
         pass
@@ -75,5 +75,3 @@ class Test:
     def test_i_get_nodes(self):
         d = self.pbs.get_pbsnodes(self.host)
         self.dump("get nodes", d)
-
-

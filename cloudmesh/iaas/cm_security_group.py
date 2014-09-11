@@ -43,18 +43,19 @@ def shell_command_security_group(arguments):
     username = config.username()
     c = cm_mongo()
     c.activate(cm_user_id=username)
-    security_groups_dict = c.security_groups(cm_user_id=username, clouds=cloud_names)
+    security_groups_dict = c.security_groups(
+        cm_user_id=username, clouds=cloud_names)
     your_keys = {"openstack":
                  [
-                    ['id', 'id'],
-                    ['name', 'name'],
-                    ['description', 'description'],
-                    ['cm_refresh', 'cm_refresh']
+                     ['id', 'id'],
+                     ['name', 'name'],
+                     ['description', 'description'],
+                     ['cm_refresh', 'cm_refresh']
                  ],
                  "ec2": [],
                  "azure": [],
                  "aws": []
-                }
+                 }
 
     security_groups = _select_security_groups(security_groups_dict, your_keys)
     _display(security_groups)

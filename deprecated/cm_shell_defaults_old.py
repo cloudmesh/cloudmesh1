@@ -38,7 +38,7 @@ try:
     config = cm_config()
 except:
     log.error("There is a problem with the configuration yaml files")
-    
+
 try:
     mongoClass = cm_mongo()
 except:
@@ -50,12 +50,12 @@ class cm_shell_defaults:
     defDict = {}
 
     default_loaded = False
-    
+
     def activate_cm_shell_defaults(self):
-        self.register_command_topic('cloud','defaults')
+        self.register_command_topic('cloud', 'defaults')
         self.default_loaded = False
         pass
-    
+
     def _default_update(self, dbDict, attribute, value):
         mongoClass.db_defaults.update(
             {'_id': dbDict['_id']},
@@ -68,7 +68,6 @@ class cm_shell_defaults:
         # keyname
         # nodename
         # number of nodes
-
 
         dbDict = mongoClass.db_defaults.find_one(
             {'cm_user_id': config.username()})
@@ -128,7 +127,7 @@ class cm_shell_defaults:
             self.defDict['index'] = dbDict['index']
         else:
             self.defDict['index'] = 1
-            self._default_update(dbDict, 'index', 1)            
+            self._default_update(dbDict, 'index', 1)
 
         if dbDict['activeclouds']:
             self.defDict['activeclouds'] = dbDict['activeclouds']
@@ -203,7 +202,7 @@ class cm_shell_defaults:
             else:
                 print two_column_table(self.defDict)
                 return
-    
+
             return
 
 

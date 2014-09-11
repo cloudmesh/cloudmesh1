@@ -1,15 +1,14 @@
 from cloudmesh.config.cm_config import get_mongo_db
 
-class cm_metric_openstack:
 
+class cm_metric_openstack:
 
     def __init__(self, collection=None):
 
         if collection is NOne:
-                collection = "metric"
+            collection = "metric"
 
         self.db_qstat = get_mongo_db(collections)
-
 
     def update(self, query, values=None):
         '''
@@ -23,12 +22,11 @@ class cm_metric_openstack:
             print values
             return self.db_qstat.update(query, values, upsert=True)
 
-
     def insert(self, element):
         self.db_qstat.insert(element)
 
     def clear(self):
-        self.db_qstat.remove({"cm_type" : "metric"})
+        self.db_qstat.remove({"cm_type": "metric"})
 
     def find(self, query):
         '''
@@ -58,9 +56,9 @@ class cm_metric_openstack:
         vm = "pass me?"
         refresh = "time when the element was refreshed"
         element = element.upodate({'cm_cluster': name,
-                                    'cm_id': self.create(cluster, vm),
-                                        'cm_type': "metric",
-                                        'cm_kind': 'vm',
-                                        'cm_refersh': refresh,
-                                        })
+                                   'cm_id': self.create(cluster, vm),
+                                   'cm_type': "metric",
+                                   'cm_kind': 'vm',
+                                   'cm_refersh': refresh,
+                                   })
         return element

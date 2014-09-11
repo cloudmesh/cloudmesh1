@@ -14,6 +14,7 @@ from libcloud.compute.types import Provider
 
 
 class aws(ComputeBaseType):
+
     """ 
     Amazon Cloud service with the libcloud interface
     With libcloud interface, cloudmesh supports Amazon Web Services such as EC2, S3,
@@ -34,16 +35,16 @@ class aws(ComputeBaseType):
             self.user_credential = cred
             self.access_key_id = self.user_credential['EC2_ACCESS_KEY']
             self.secret_access_key = \
-                    self.user_credential['EC2_SECRET_KEY']
+                self.user_credential['EC2_SECRET_KEY']
         if admin_cred:
             self.admin_credential = admin_cred
 
     def load_default(self, label):
         """Load default values and set them to the object
-        
+
         :param label: the section name to load from yaml
         :type label: str
-        
+
         """
 
         self.compute_config = cm_config()
@@ -52,7 +53,7 @@ class aws(ComputeBaseType):
         # Service certificate
         self.access_key_id = self.user_credential['EC2_ACCESS_KEY']
         self.secret_access_key = \
-        self.user_credential['EC2_SECRET_KEY']
+            self.user_credential['EC2_SECRET_KEY']
 
         # SSH
         self.ssh_userid = self.user_credential['userid']
@@ -75,15 +76,14 @@ class aws(ComputeBaseType):
     def connect(self):
         Driver = get_driver(Provider.EC2)
 
-        # #self.credential = self.config.get(self.label, expand=True)
-        # #pprint(self.credential)
+        # self.credential = self.config.get(self.label, expand=True)
+        # pprint(self.credential)
 
-        #### libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
+        # libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
         #### libcloud.security.VERIFY_SSL_CERT = False
 
-        # #Driver = get_driver(Provider.EUCALYPTUS)
-        # #self.cloud = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
-
+        # Driver = get_driver(Provider.EUCALYPTUS)
+        # self.cloud = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
 
         # certfile = self.compute_config.get("cloudmesh.clouds.aws.privatekeyfile")
         # libcloud.security.CA_CERTS_PATH.append(certfile)
@@ -172,7 +172,7 @@ class aws(ComputeBaseType):
 
     def _get_servers_dict(self):
         vm_list = self.list_vm()
-        #self.convert_to_openstack_style(vm_list)
+        # self.convert_to_openstack_style(vm_list)
         return vm_list
 
     ''' Will be deprecated
@@ -238,7 +238,7 @@ class aws(ComputeBaseType):
         return self.flavors
 
     def get_flavors_from_yaml(self):
-        obj =  cm_config_flavor()
+        obj = cm_config_flavor()
         flavors = obj.get('cloudmesh.flavor')
         return flavors.get(self.label)
 
@@ -275,5 +275,4 @@ class aws(ComputeBaseType):
     def keypair_remove(self, name):
         """Delete a keypair"""
         if self.conn.ex_delete_keypair(name):
-            return {"msg":"success"}
-
+            return {"msg": "success"}

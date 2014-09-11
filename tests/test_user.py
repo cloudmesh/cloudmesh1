@@ -20,10 +20,11 @@ from pprint import pprint
 import os
 from cloudmesh_install import config_file
 
+
 class Test_cloudmesh:
 
     d = {
-      "portalname": "gvonlasz"
+        "portalname": "gvonlasz"
     }
     filename = "etc/cloudmesh.yaml"
 
@@ -55,12 +56,12 @@ class Test_cloudmesh:
 
     def test_user(self):
         d = {
-            "portalname" : "gvonlasz",
-            "sierra_openstack_password" : "sierra",
-            "project_default" : "fg82",
-            "india_openstack_password" : "india",
-            "projects" : "82, 83",  # this is still wrong
-            }
+            "portalname": "gvonlasz",
+            "sierra_openstack_password": "sierra",
+            "project_default": "fg82",
+            "india_openstack_password": "india",
+            "projects": "82, 83",  # this is still wrong
+        }
         print self.t.replace(d=d)
         # self.t.complete does not exist in cm_template?
         # assert self.t.complete
@@ -68,7 +69,6 @@ class Test_cloudmesh:
 #    if not t.complete():
 #       print "ERROR: undefined variables"
 #       print t.variables()
-
 
     def test_userinfo(self):
         HEADING()
@@ -79,7 +79,7 @@ class Test_cloudmesh:
         print self.user.info("fuwang", ["sierra"])
         print self.user.info("fuwang", ["cloud-non-exist"])
         print "============================"
-        pprint (self.user["gvonlasz"])
+        pprint(self.user["gvonlasz"])
         print self.user.get_name('gvonlasz')
 
     def setup_inventory(self):
@@ -91,7 +91,7 @@ class Test_cloudmesh:
 
         banner("create user from template, duplicates cm init generate me")
         t = cm_template(config_file("/etc/cloudmesh.yaml"))
-        pprint (set(t.variables()))
+        pprint(set(t.variables()))
 
         self.config = t.replace(kind="dict", values=self.sample_user)
 
@@ -101,7 +101,7 @@ class Test_cloudmesh:
         #
         # BUG?
         #
-        self.idp = cm_userLDAP ()
+        self.idp = cm_userLDAP()
         self.idp.connect("fg-ldap", "ldap")
         self.idp.refresh()
 
@@ -112,18 +112,18 @@ class Test_cloudmesh:
         self.config['cloudmesh']['projects'] = ldap_info['projects']
         self.config['cloudmesh']['keys'] = ldap_info['keys']
         try:
-            self.config['cloudmesh']['projects']['deafult'] = ldap_info['projects']['active'][0]
+            self.config['cloudmesh']['projects'][
+                'deafult'] = ldap_info['projects']['active'][0]
         except:
             print "ERROR: you have no projects"
 
     def test_print(self):
-        pprint (self.config)
+        pprint(self.config)
 
     def test_projects(self):
         projects = dict()
 
         keys = dict()
-
 
         # read the yaml
         # read projects info from ldap
@@ -143,25 +143,22 @@ class Test_cloudmesh:
         id = ConfigDict(filename=config_file("/me.yaml")).get("portalname")
         user = cm_user()
         result = user.info(id)
-        pprint (result)
+        pprint(result)
         pass
 
     def test_list(self):
         user = cm_user()
         list_of_users = user.list_users()
-        pprint (list_of_users)
+        pprint(list_of_users)
         print
         print "========================="
         num = len(list_of_users)
         print str(num) + " users listed"
 
-
-
     def test_mongo_credential(self):
 
-
         banner("USER")
-        pprint (self.user.info("gvonlasz"))
+        pprint(self.user.info("gvonlasz"))
 
         username = "gvonlasz"
         cloudname = "dummy"
@@ -170,11 +167,11 @@ class Test_cloudmesh:
         name = username
 
         self.user.set_credential(username, cloudname,
-                                  {"OS_USERNAME": name,
-                                   "OS_PASSWORD": password,
-                                   "OS_TENANT_NAME": tennant,
-                                   "CM_CLOUD_TYPE": "openstack" }
-                                  )
+                                 {"OS_USERNAME": name,
+                                  "OS_PASSWORD": password,
+                                  "OS_TENANT_NAME": tennant,
+                                  "CM_CLOUD_TYPE": "openstack"}
+                                 )
 
         cred = self.user.get_credential(username, cloudname)
 
@@ -184,13 +181,8 @@ class Test_cloudmesh:
         banner("credentials")
         pprint(self.user.get_credentials(username))
 
-
         banner("find")
 
         result = self.user.userdb_passwd.find({})
         for r in result:
-            pprint (r)
-
-
-
-
+            pprint(r)

@@ -8,6 +8,7 @@ from cloudmesh_common.logger import LOGGER, LOGGING_ON, LOGGING_OFF
 
 log = LOGGER(__file__)
 
+
 class Test:
 
     def setup(self):

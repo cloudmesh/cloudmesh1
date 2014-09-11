@@ -17,6 +17,7 @@ from cloudmesh.provisioner.provisioner import ProvisionerSimulator
 from cloudmesh.provisioner.provisioner_teefaa import ProvisionerTeefaa
 from cloudmesh_install import config_file
 
+
 class Test_cloudmesh:
 
     filename = config_file("/cloudmesh.yaml")
@@ -27,15 +28,12 @@ class Test_cloudmesh:
     def tearDown(self):
         pass
 
-
     def test_policy(self):
         HEADING()
         pass
 
-
     def test_simulator(self):
         HEADING()
-
 
         # hosts = ["1", "2", "3", "a1", "a2", "a3",
         #         "b1", "b2", "b3", "c1", "c2", "c3", ]
@@ -54,14 +52,10 @@ class Test_cloudmesh:
         print result
         print success
 
-
         pass
 
     def test_teefaa(self):
         HEADING()
-
-
-
 
         host = "i066"
         image = "ubuntu1304v2btsync"

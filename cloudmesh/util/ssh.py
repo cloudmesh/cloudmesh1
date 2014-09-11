@@ -62,14 +62,16 @@ class ssh:
 
     def destroy(self):
         self.client.close()
-        
+
 # -----------------------------------------------------------------------
+
+
 def ssh_execute(hostuser, addr, cmd, key=None):
     """Execute a command via SSH"""
 
-    from sh import ssh # import
+    from sh import ssh  # import
 
-    #disable SSH host key checking
+    # disable SSH host key checking
     option = "-o StrictHostKeyChecking=no "
     host = " {0}@{1} ".format(hostuser, addr)
     cmd = " {0} ".format(cmd)
@@ -81,6 +83,5 @@ def ssh_execute(hostuser, addr, cmd, key=None):
     message = (option + key + host + cmd).split()
 
     return ssh(message)
-    
+
 # -----------------------------------------------------------------------
-    

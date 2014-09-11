@@ -8,6 +8,7 @@ vbox_vminfo = VBoxManage.bake("showvminfo")
 # LIST
 #
 
+
 def convert_to_dict(lines):
     m = {}
     for line in lines:
@@ -15,10 +16,11 @@ def convert_to_dict(lines):
             attribute, value = line.split(':', 1)
             if attribute == "State":
                 value = value.split("(")[0]
-            m.update ({attribute : value.strip()})
+            m.update({attribute: value.strip()})
         except:
             pass
     return m
+
 
 def filter_attributes(d, filterkeys=["Name", "UUID", "State"]):
     f = {}
@@ -27,6 +29,7 @@ def filter_attributes(d, filterkeys=["Name", "UUID", "State"]):
 
         f[m["Name"]] = dict(zip(filterkeys, [m[k] for k in filterkeys]))
     return f
+
 
 def get_vms(filter=None):
     result = vbox_list()
@@ -54,14 +57,15 @@ print "ALL INFO"
 print 70 * "-"
 vms = get_vms()
 
-pprint (vms)
+pprint(vms)
 
 print "SMALL INFO"
 print 70 * "-"
 
 vms = get_vms("simple")
 
-pprint (vms)
+pprint(vms)
+
 
 def get_vminfo(name, filter=None):
     data = vbox_vminfo(name).split("\n\n")[0].split("\n")
@@ -77,6 +81,7 @@ def get_vminfo(name, filter=None):
     f = dict(zip(filterkeys, [m[k] for k in filterkeys]))
     return f
 
+
 def get_state(name):
     info = get_vminfo(name, filter=["State"])
     return info["State"]
@@ -84,11 +89,10 @@ def get_state(name):
 
 print "OOOO"
 name = "compute1.puppetlabs.lan"
-pprint (get_vminfo(name))
+pprint(get_vminfo(name))
 
 print "YYYYY"
-pprint (get_vminfo(name, "simple"))
+pprint(get_vminfo(name, "simple"))
 
 print "STATE"
 print get_state(name)
-

@@ -16,16 +16,17 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import cm_config_flavor
 from cloudmesh_common.util import get_unique_name, get_rand_string
 
+
 class azure(ComputeBaseType):
 
     DEFAULT_LABEL = "azure"
     name_prefix = "cm-"
 
-    def_flavors = {u'ExtraSmall': {'id': "1", 'name':'ExtraSmall'},  \
-                   u'Small': {'id': "2", 'name': 'Small'}, \
-                   u'Medium': {'id': "3", 'name': 'Medium'}, \
-                   u'Large': {'id': "4", 'name': 'Large'}, \
-                   u'ExtraLarge': {'id': "5", 'name': 'ExtraLarge'} }
+    def_flavors = {u'ExtraSmall': {'id': "1", 'name': 'ExtraSmall'},
+                   u'Small': {'id': "2", 'name': 'Small'},
+                   u'Medium': {'id': "3", 'name': 'Medium'},
+                   u'Large': {'id': "4", 'name': 'Large'},
+                   u'ExtraLarge': {'id': "5", 'name': 'ExtraLarge'}}
 
     linux_config = None
     thumbprint = None
@@ -51,7 +52,6 @@ class azure(ComputeBaseType):
         name = get_unique_name(self.name_prefix)
         self.set_name(name)
 
-
         self.blob_domain = "blob.core.windows.net"
         self.blob_ext = ""
         self.container = "os-image"
@@ -66,10 +66,10 @@ class azure(ComputeBaseType):
 
     def load_default(self, label):
         """Load default values and set them to the object
-        
+
         :param label: the section name to load from yaml
         :type label: str
-        
+
         """
 
         self.compute_config = cm_config()
@@ -93,7 +93,7 @@ class azure(ComputeBaseType):
         # Large, ExtraLarge
         flavor = self.compute_config.default(label)['flavor']
         self.set_flavor(flavor)
-        
+
         self.label = label
 
     def connect(self):
@@ -189,8 +189,8 @@ class azure(ComputeBaseType):
         # The hosted service name is invalid.
         # Set a name from uuid random string
         #vm_name = get_unique_name(name)
-        vm_name = name.replace("_","-")
-        vm_name = vm_name #+ "-" + get_rand_string()
+        vm_name = name.replace("_", "-")
+        vm_name = vm_name  # + "-" + get_rand_string()
         return vm_name
 
     def vm_create(self, name,
@@ -215,7 +215,8 @@ class azure(ComputeBaseType):
 
     def set_linux_cfg(self, refresh=False):
         if refresh or not self.linux_config:
-            self.linux_config = LinuxConfigurationSet(self.get_name(), self.userid, None, True)
+            self.linux_config = LinuxConfigurationSet(
+                self.get_name(), self.userid, None, True)
 
     def create_vm(self):
         """Create a Window Azure Virtual Machine
@@ -232,7 +233,8 @@ class azure(ComputeBaseType):
 
         os_hd = OSVirtualHardDisk(self.os_image_name, self.media_url)
         self.set_linux_cfg()
-        linux_config = self.linux_config#LinuxConfigurationSet(self.get_name(), self.userid, None, True)
+        # LinuxConfigurationSet(self.get_name(), self.userid, None, True)
+        linux_config = self.linux_config
         # self.userid, self.user_passwd, True)
 
         self.set_ssh_keys(linux_config)
@@ -242,15 +244,15 @@ class azure(ComputeBaseType):
         time.sleep(7)
 
         result = \
-        self.sms.create_virtual_machine_deployment(service_name=self.get_name(), \
-                                                   deployment_name=self.get_name(), \
-                                                   deployment_slot='production', \
-                                                   label=self.get_name(), \
-                                                   role_name=self.get_name(), \
-                                                   system_config=linux_config, \
-                                                   os_virtual_hard_disk=os_hd, \
-                                                   network_config=self.network, \
-                                                   role_size=self.get_flavor())
+            self.sms.create_virtual_machine_deployment(service_name=self.get_name(),
+                                                       deployment_name=self.get_name(),
+                                                       deployment_slot='production',
+                                                       label=self.get_name(),
+                                                       role_name=self.get_name(),
+                                                       system_config=linux_config,
+                                                       os_virtual_hard_disk=os_hd,
+                                                       network_config=self.network,
+                                                       role_size=self.get_flavor())
 
         time.sleep(7)
         self.result = result
@@ -320,7 +322,7 @@ class azure(ComputeBaseType):
         :param location: (optional) the name of a
         location for the cloud service 
         :type location: str.
-                                    
+
         """
 
         self.sms.create_hosted_service(service_name=self.name,
@@ -361,9 +363,9 @@ class azure(ComputeBaseType):
 
     def get_media_url(self):
         """Return a media url to create a http url for the blob file
-        
+
         :returns: str.
-        
+
         """
 
         storage_account = self.get_storage_account()
@@ -372,7 +374,7 @@ class azure(ComputeBaseType):
         container = self.get_container()
         blob_filename = blobname + self.blob_ext
         media_url = "http://" + storage_account + "." + blob_domain \
-                + "/" + container + "/" + blob_filename
+            + "/" + container + "/" + blob_filename
         self.media_url = media_url
 
         return media_url
@@ -403,7 +405,7 @@ class azure(ComputeBaseType):
 
     def get_last_storage_account(self):
         """Return the last storage account name of a subscription id
- 
+
         :returns: str.
 
         """
@@ -471,7 +473,8 @@ class azure(ComputeBaseType):
         # fingerprint captured by 'openssl x509 -in myCert.pem -fingerprint
         # -noout|cut -d"=" -f2|sed 's/://g'> thumbprint'
         # (Sample output) C453D10B808245E0730CD023E88C5EB8A785ED6B
-        self.thumbprint = open(self.thumbprint_path, 'r').readline().split('\n')[0]
+        self.thumbprint = open(
+            self.thumbprint_path, 'r').readline().split('\n')[0]
         publickey = PublicKey(self.thumbprint, self.get_authorized_keys_path())
         # KeyPair is a SSH kay pair both a public and a private key to be stored
         # on the virtual machine.
@@ -520,7 +523,8 @@ class azure(ComputeBaseType):
 
     def load_thumbprint(self):
         if not self.thumbprint:
-            self.thumbprint = open(self.thumbprint_path, 'r').readline().split('\n')[0]
+            self.thumbprint = open(
+                self.thumbprint_path, 'r').readline().split('\n')[0]
 
     def set_network(self):
         """Configure network for a virtual machine.
@@ -530,7 +534,8 @@ class azure(ComputeBaseType):
         """
         network = ConfigurationSet()
         network.configuration_set_type = 'NetworkConfiguration'
-        network.input_endpoints.input_endpoints.append(ConfigurationSetInputEndpoint('ssh', 'tcp', '22', '22'))
+        network.input_endpoints.input_endpoints.append(
+            ConfigurationSetInputEndpoint('ssh', 'tcp', '22', '22'))
         self.network = network
 
     def set_service_certs(self):
@@ -564,7 +569,7 @@ class azure(ComputeBaseType):
 
     def get_authorized_keys_path(self):
         self.authorized_keys_path = "/home/" + self.userid + \
-        "/.ssh/authorized_keys"
+            "/.ssh/authorized_keys"
 
         return self.authorized_keys_path
 
@@ -574,7 +579,7 @@ class azure(ComputeBaseType):
 
     def set_flavor(self, size):
         """Set role size (flavor)
-        
+
         :param size: ExtraSmall|Small|Medium|Large|ExtraLarge
         :type size: str
         """
@@ -622,17 +627,19 @@ class azure(ComputeBaseType):
         for deployment_id in deployments:
             deployment = deployments[deployment_id]
             deployment.update({  # "name": exist
-                               "status": self.convert_states(deployment['status']), \
-                               "addresses":
-                               self.convert_ips(deployment['role_instance_list']), \
-                               "flavor":
-                               self.convert_flavors(deployment['role_instance_list']), \
-                               "id": deployment['name'], \
-                               "user_id": unicode(""), \
-                               "metadata": {}, \
-                               "key_name": unicode(""), \
-                               "created": deployment['created_time'] \
-                              })
+                "status": self.convert_states(deployment['status']),
+                "addresses":
+                self.convert_ips(
+                    deployment['role_instance_list']),
+                "flavor":
+                self.convert_flavors(
+                    deployment['role_instance_list']),
+                "id": deployment['name'],
+                "user_id": unicode(""),
+                "metadata": {},
+                "key_name": unicode(""),
+                "created": deployment['created_time']
+            })
 
             '''
             try:
@@ -651,12 +658,13 @@ class azure(ComputeBaseType):
             deployment.update({"role_list": None})
             try:
                 public_ip = \
-                deployment['role_instance_list'][0].__dict__['instance_endpoints'][0].__dict__['vip']
+                    deployment['role_instance_list'][0].__dict__[
+                        'instance_endpoints'][0].__dict__['vip']
             except:
                 public_ip = ""
             deployment.update({"vip": public_ip})
             deployment.update({"role_instance_list": None})
- 
+
     def convert_states(self, state):
         if state == "Running":
             return "ACTIVE"
@@ -692,13 +700,13 @@ class azure(ComputeBaseType):
         ip_type = u'fixed'  # determine if it is a fixed address or a floating
 
         # Openstack's type
-        res = {  # u'private':[ {u'version':None, u'addr':None, \
-               #              u'OS-EXT-IPS:type': None} ],
-               u'private':[
-                           {u'version':ip_ver, u'addr':ip_address, \
-                            u'OS-EXT-IPS:type': ip_type}
-                           ] 
-               }
+        res = {  # u'private':[ {u'version':None, u'addr':None,
+            #              u'OS-EXT-IPS:type': None} ],
+            u'private': [
+                {u'version': ip_ver, u'addr': ip_address,
+                 u'OS-EXT-IPS:type': ip_type}
+            ]
+        }
         return res
 
     def convert_flavors(self, role_instance_list):
@@ -715,10 +723,10 @@ class azure(ComputeBaseType):
             flavor = ril.instance_size
         except IndexError:
             flavor = ""
-        res = {u'id': unicode(flavor), \
-               u'links': \
-               [{u'href':None, \
-                 u'rel':None}]}
+        res = {u'id': unicode(flavor),
+               u'links':
+               [{u'href': None,
+                 u'rel': None}]}
         return res
 
     def release_unused_public_ips(self):
@@ -736,7 +744,7 @@ class azure(ComputeBaseType):
         return self.flavors
 
     def get_flavors_from_yaml(self):
-        obj =  cm_config_flavor()
+        obj = cm_config_flavor()
         flavors = obj.get('cloudmesh.flavor')
         return flavors.get(self.label)
 
@@ -745,7 +753,9 @@ class azure(ComputeBaseType):
         self.flavors = self.def_flavors
         return self.flavors
 
+
 class oJSONEncoder(json.JSONEncoder):
+
     def default(self, o):
         if not isinstance(o, dict):
             return vars(o)

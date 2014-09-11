@@ -19,6 +19,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 from cloudmesh_install import config_file
 
+
 class eucalyptus(ComputeBaseType):
 
     """
@@ -75,8 +76,6 @@ class eucalyptus(ComputeBaseType):
         name = '%s-%s' % (prefix, number)
         return name
 
-
-
     def connect(self, label, project):
         """
         establishes a connection to the eucalyptus cloud,
@@ -89,8 +88,6 @@ class eucalyptus(ComputeBaseType):
         # self.credentials.location.replace("/eucarc", "")
         # os.environ['CA_CERTS_PATH'] = path
         #         libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
-
-
 
         self.label = label
         self.project = project
@@ -105,7 +102,6 @@ class eucalyptus(ComputeBaseType):
         Driver = get_driver(Provider.EUCALYPTUS)
 
         self.config = cm_config()
-
 
         cred = self.config.get(self.label, expand=True)
 
@@ -132,7 +128,8 @@ class eucalyptus(ComputeBaseType):
         # libcloud.security.VERIFY_SSL_CERT = False
 
         Driver = get_driver(Provider.EUCALYPTUS)
-        self.cloud = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
+        self.cloud = Driver(
+            key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
 
     """
     # url =
@@ -148,7 +145,7 @@ class eucalyptus(ComputeBaseType):
 
     def _retrief(self, type, f, exclude=[]):
         """ obtain information from libcloud, call with returns dicts.
-        
+
         Driver = get_driver(Provider.EUCALYPTUS)
         conn = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)
 
@@ -183,7 +180,6 @@ class eucalyptus(ComputeBaseType):
                     del vm[d]
             element_array.append(vm)
         return element_array
-
 
     def activate_project(self, project):
         """ this routine is wrong and has been copied from a deprecated code"""
@@ -229,7 +225,6 @@ class eucalyptus(ComputeBaseType):
         self.credential = None
         self.cloud = None
         self.user_id = None
-
 
     def __str__(self):
         """
@@ -327,7 +322,6 @@ class eucalyptus(ComputeBaseType):
         r = self.cloud.destroy_node(vm)
 
         return r.__dict__
-
 
 
 if __name__ == "__main__":

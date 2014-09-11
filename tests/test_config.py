@@ -21,6 +21,7 @@ from cloudmesh_common.util import HEADING
 from cloudmesh_install.util import path_expand
 from cloudmesh_install import config_file
 
+
 class Test_cloudmesh:
 
     filename = config_file("/cloudmesh.yaml")
@@ -36,7 +37,6 @@ class Test_cloudmesh:
 
     def tearDown(self):
         pass
-
 
     def test_print(self):
         HEADING()
@@ -61,7 +61,7 @@ class Test_cloudmesh:
     def test_sierra_version(self):
         HEADING()
         result = self.config.cloud('sierra')
-        pprint (result)
+        pprint(result)
         assert result["credentials"]["OS_VERSION"] == 'grizzly'
 
     def test_sierra_cloudnames(self):
@@ -78,10 +78,6 @@ class Test_cloudmesh:
         dir = path_expand(dir)
         print dir
         assert not dir.startswith("~")
-
-
-
-
 
     """
     def test07_keys_india_eucalyptus(self):
@@ -216,5 +212,3 @@ class Test_cloudmesh:
         test1 = existing is not None
         print "QUERY", existing
         print "Port", config.get("cloudmesh.server.mongo.port")
-
-

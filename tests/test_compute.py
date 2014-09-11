@@ -68,7 +68,6 @@ class Test:
             print "LOADED CLOUDS"
         """
 
-
     def test_00_label(self):
         """test the label"""
         HEADING()
@@ -99,9 +98,7 @@ class Test:
         HEADING()
         self.cloud.refresh('flavors')
 
-
         print json.dumps(self.cloud.dump('flavors'), indent=4)
-
 
         # doing a simple test as tiny is usually 512
         assert self.cloud.flavor('m1.tiny')['ram'] == 512
@@ -117,8 +114,9 @@ class Test:
         # print key_name
         # print key_content
         print "STARTING IMAGE", image
-        meta = {"cmtag":"testing tag from creation via rest api"}
-        result = self.cloud.vm_create("fw-test-by-post-003", "2", image, key_name="grizzlykey", meta=meta)
+        meta = {"cmtag": "testing tag from creation via rest api"}
+        result = self.cloud.vm_create(
+            "fw-test-by-post-003", "2", image, key_name="grizzlykey", meta=meta)
         # result = self.cloud.vm_create("fw-test-by-post-003", "100", image, meta=meta)
         pp.pprint(result)
         assert len(result.keys()) > 0
@@ -178,7 +176,6 @@ class Test:
         self.cloud.refresh()
         pp.pprint(self.cloud.get(self.name))
         assert self.cloud.images > 0
-
 
     def test_11_print_tables(self):
         """print a table"""
@@ -369,9 +366,10 @@ class Test:
         assert groupid is not None
         rule3 = Ec2SecurityGroup.Rule(5000, 5000)
         #rule3 = Ec2SecurityGroup.Rule(22,22)
-        rule4 = Ec2SecurityGroup.Rule(-1,-1,'ICMP')
-        print self.cloud.add_security_group_rules(groupid, [rule3,rule4])
-        groupid = self.cloud.find_security_groupid_by_name("dummy_name_not_exist")
+        rule4 = Ec2SecurityGroup.Rule(-1, -1, 'ICMP')
+        print self.cloud.add_security_group_rules(groupid, [rule3, rule4])
+        groupid = self.cloud.find_security_groupid_by_name(
+            "dummy_name_not_exist")
         print groupid
         assert groupid is None
 
@@ -437,7 +435,6 @@ class Test:
         print "vms", vm_ids
 
         assert vm_ids == []
-
 
     def test_24_get_extensions(self):
         """test geting the cloud extensions"""

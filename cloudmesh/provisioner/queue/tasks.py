@@ -33,4 +33,3 @@ def info():
         request.id, request.args, request.kwargs))
     time.sleep(5)
     return "info world"
-
