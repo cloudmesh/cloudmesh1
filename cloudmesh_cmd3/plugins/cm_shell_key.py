@@ -222,10 +222,12 @@ class cm_shell_key:
             key_store = cm_keys_mongo(username)
             filename = arguments["FILENAME"]
 
-            # file exists?
             # print filename
-            if isfile(expanduser(filename)):
-                keystring = get_key_from_file(filename).strip()
+            # file existence check moved to the util function
+            # if file does not exist it will return None
+            keystring = get_key_from_file(filename)
+            if keystring:
+                keystring = keystring.strip()
                 keysegments = key_parse(keystring)
                 # key valid?
                 if key_validate("string", keystring):
