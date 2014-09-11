@@ -105,7 +105,6 @@ vm = mesh.start(cloud, username, prefix=prefix, index=index, flavor=flavor,
 vm = mesh.start("india", username, image=image, flavor=flavor)
 server = vm['server']['id']
 
-
 cloudmesh.banner("ASSIGN PUBLIC IP ADDRESS TO THE VM")
 ip = mesh.assign_public_ip(cloud, server, username)
 
@@ -118,7 +117,7 @@ import time, sys
 for i in range(_max):
     print str(i) + " try to ssh..."
     try:
-        result = mesh.ssh_vm_with_command(ipaddr=ip, command="ls -al")
+        result = mesh.ssh_execute(ipaddr=ip, command="ls -al")
         print result
         if result:
             print result
