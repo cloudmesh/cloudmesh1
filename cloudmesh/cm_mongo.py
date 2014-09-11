@@ -8,7 +8,7 @@ from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.util.stopwatch import StopWatch
 from cloudmesh.util.encryptdata import decrypt
-from cloudmesh.util.ssh import ssh_vm_with_command
+from cloudmesh.util.ssh import ssh_execute
 import traceback
 import time
 
