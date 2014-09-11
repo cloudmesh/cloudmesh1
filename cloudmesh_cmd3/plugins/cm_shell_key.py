@@ -15,6 +15,7 @@ from cloudmesh_install import config_file
 from cloudmesh_install.util import path_expand
 # from cloudmesh.util.keys import read_key
 from cloudmesh.util.keys import get_fingerprint
+from cloudmesh.config.cm_keys import keytype
 
 log = LOGGER(__file__)
 
@@ -213,7 +214,8 @@ class cm_shell_key:
             for key in keynames:
 
                 keys[key] = key_store[key]
-                # get_fingerprint(key_store[key])
+                if keytype(keys[key]) == 'string':
+                    keys[key] = get_fingerprint(keys[key])
 
             print _print_dict(keys, header=["Key", "Fingerprint"])
 
@@ -225,6 +227,9 @@ class cm_shell_key:
 
         if arguments["add"] and arguments["KEYNAME"]:
 
+            username = cm_config().username()
+            key_store = cm_keys_mongo(username)
+            
             keyname = arguments["KEYNAME"]
             filename = arguments["FILENAME"]
 
@@ -234,6 +239,8 @@ class cm_shell_key:
 
             key_store[keyname] = filename
 
+            return
+            
             """
             def func():
                 if arguments["KEY"]:
