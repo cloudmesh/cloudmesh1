@@ -23,8 +23,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
 from cloudmesh.util.cm_table import cm_table
 import json
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
+from pprint import pprint
 
 from cloudmesh_common.util import HEADING
 from cloudmesh_install import config_file
@@ -41,8 +40,8 @@ class Test:
         self.configuration = cm_config()
         euca_clouds = []
         for name in self.configuration.config['cloudmesh']['clouds'].keys():
-           if self.configuration.config['cloudmesh']['clouds'][name]['cm_type'] == 'eucalyptus':
-               euca_clouds.append(name)
+            if self.configuration.config['cloudmesh']['clouds'][name]['cm_type'] == 'eucalyptus':
+                euca_clouds.append(name)
         self.name = euca_clouds[0]
         print "LOADING EUCA CLOUD", self.name
         self.cloud = eucalyptus(self.name)
@@ -78,8 +77,8 @@ class Test:
         HEADING()
         self.cloud.refresh('images')
         print json.dumps(self.cloud.dump('images'), indent=4)
-        # pp.pprint(self.cloud.dump('images', with_manager=True))
-        pp.pprint(self.cloud.images)
+        # pprint(self.cloud.dump('images', with_manager=True))
+        pprint(self.cloud.images)
         # doing a simple test as tiny is usually 512
         # assert self.cloud.flavors['m1.tiny']['ram'] == 512
         print "Currently running vms:", len(self.cloud.images)
@@ -173,7 +172,7 @@ class Test:
     def test_refresh(self):
         HEADING()
         self.cloud.refresh()
-        pp.pprint(self.cloud.get(self.name))
+        pprint(self.cloud.get(self.name))
         assert self.cloud.images > 0
 
     def test_05_print_vms(self):
@@ -218,7 +217,7 @@ class Test:
         name ="%s-%04d" % (self.cloud.credential["OS_USERNAME"], 1)
         out = self.cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
 
-        pp.pprint(out)
+        pprint(out)
         print json.dumps(out, indent=4)
 
         key = out.keys()[0]
@@ -296,7 +295,7 @@ class Test:
     def test_10_list_user_vms(self):
         HEADING()
         list = self.cloud.vms_user(refresh=True)
-        pp.pprint(list)
+        pprint(list)
 
     def test_11_refresh_all(self):
         HEADING()

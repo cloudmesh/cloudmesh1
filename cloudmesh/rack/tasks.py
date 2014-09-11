@@ -21,7 +21,8 @@ log = get_task_logger(__name__)
 ipmi_temp = Temperature()
 
 
-celery_rack_queue = Celery('cloudmesh.rack.tasks', backend='amqp', broker='amqp://guest@localhost//')
+celery_rack_queue = Celery(
+    'cloudmesh.rack.tasks', backend='amqp', broker='amqp://guest@localhost//')
 
 
 @celery_rack_queue.task
@@ -31,8 +32,8 @@ def temperature(host_name, rack_name, unit):
     '''
     tdict = ipmi_temp.get_ipmi_temperature(host_name)
     rack_inventory = rack_data()
-    rack_inventory.server_refresh_update_temperature(rack_name, host_name, tdict)
-    
+    rack_inventory.server_refresh_update_temperature(
+        rack_name, host_name, tdict)
 
 
 @celery_rack_queue.task
@@ -74,4 +75,3 @@ def task_sensors(dict_idip):
                 tmax = tnum
 
         return [tmax, tunit]
-

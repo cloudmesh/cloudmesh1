@@ -168,11 +168,11 @@ class ManageVM(object):
 
 
         if key:
-              keycontent = userinfo["keys"]["keylist"][key]
-              if keycontent.startswith('key '):
-                  keycontent = keycontent[4:]
-              #check_register_key(cloud, key, keycontent)
-              keynamenew = self._keyname_sanitation(username, key)
+            keycontent = userinfo["keys"]["keylist"][key]
+            if keycontent.startswith('key '):
+                keycontent = keycontent[4:]
+            #check_register_key(cloud, key, keycontent)
+            keynamenew = self._keyname_sanitation(username, key)
         else:
             error = error + "No sshkey found. Please <a \
             href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"

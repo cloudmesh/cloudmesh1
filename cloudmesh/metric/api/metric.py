@@ -238,7 +238,7 @@ class metric_api:
     def na_message(self, func_name, *args):
         args = map(str,args)
         msg = "%s is not implemented, '%s' ignored." % \
-                ( func_name, ', '.join(args))
+                (func_name, ', '.join(args))
         print "=" * len(msg)
         print msg
         print "=" * len(msg)

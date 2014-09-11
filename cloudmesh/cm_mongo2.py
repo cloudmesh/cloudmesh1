@@ -295,7 +295,7 @@ class cm_mongo2:
 
     def active_clouds(self, cm_user_id):
         ret_clouds = None
-        
+
         # If the user has registered and activated some clouds from the web gui,
         # there will be entries in the db.
         user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
@@ -317,7 +317,7 @@ class cm_mongo2:
         return user['project']
 
     def activate(self, cm_user_id, names=None):
-        
+
         # The cm_user_id should be ALWAYS set and passed through to this call
         # On Web gui the g.user.id has the username
         # On command line shell, we should maintain a global object/variable
@@ -328,7 +328,7 @@ class cm_mongo2:
         #
         if cm_user_id is None:
             cm_user_id = self.config.username()
-        
+
         # the list of active clouds is always coming from Mongo.
         # In case of web gui, it is from the defaults db/collection as the user
         # will be required to register and activate some clouds before any
@@ -336,17 +336,20 @@ class cm_mongo2:
         # In case of CLI, it could fail safe to the list from yaml file.
         #
         cloudnames = self.active_clouds(cm_user_id)
-        
+
         if cloudnames:
             for cloud_name in cloudnames:
                 log.info("Activating -> {0}".format(cloud_name))
                 cloud = self.get_cloud(cm_user_id, cloud_name)
                 if not cloud:
-                    log.info("Activation of cloud {0} and user {1} Failed!".format(cloud_name, cm_user_id))
+                    log.info(
+                        "Activation of cloud {0} and user {1} Failed!".format(cloud_name, cm_user_id))
                 else:
-                    log.info("Activation of cloud {0} and user {1} Succeeded!".format(cloud_name, cm_user_id))
+                    log.info("Activation of cloud {0} and user {1} Succeeded!".format(
+                        cloud_name, cm_user_id))
         else:
-            log.info("No active clouds entries found in database so no clouds were activated!")
+            log.info(
+                "No active clouds entries found in database so no clouds were activated!")
 
     def refresh(self, cm_user_id, names=["all"], types=["all"]):
         """
@@ -546,21 +549,21 @@ class cm_mongo2:
     def start(self, cloud, cm_user_id):
         """Launch a new VM instance with a default setting for flavor, image and
         key name"""
-        
+
         # Hyungro Lee - Sep 4th, 2014
         from cloudmesh.user.cm_user import cm_user
         userinfo = cm_user().info(cm_user_id)
         prefix = userinfo['defaults']['prefix']
         index = userinfo['defaults']['index']
-        flavor = userinfo['defaults']['flavors'][cloud] 
+        flavor = userinfo['defaults']['flavors'][cloud]
         # or flavor = "2" small
-        image = userinfo['defaults']['images'][cloud] 
-        # or image = '02cf1545-dd83-493a-986e-583d53ee3728' # ubuntu-14.04 
+        image = userinfo['defaults']['images'][cloud]
+        # or image = '02cf1545-dd83-493a-986e-583d53ee3728' # ubuntu-14.04
         key = "%s_%s" % (cm_user_id, userinfo['defaults']['key'])
-        meta = { 'cm_owner': cm_user_id }
+        meta = {'cm_owner': cm_user_id}
 
         result = self.vm_create(cloud, prefix, index, flavor, image, key, meta,
-                               cm_user_id)
+                                cm_user_id)
 
         # increase index after the completion of vm_create()
         cm_user().set_default_attribute(cm_user_id, "index", int(index) + 1)
@@ -648,7 +651,7 @@ class cm_mongo2:
         res1 = self.vm_delete(cloud, server, cm_user_id)
         time.sleep(5)
         res2 = self.release_unused_public_ips(cloud, cm_user_id)
-        res = { "vm_delete": res1, "release_unused_public_ips": res2 }
+        res = {"vm_delete": res1, "release_unused_public_ips": res2}
         return res
 
     def vm_delete(self, cloud, server, cm_user_id):

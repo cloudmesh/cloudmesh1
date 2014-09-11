@@ -1,8 +1,6 @@
 #
 # Trick to deal with RST pages and sphinx incompatibility. set to false when building docs
 #
-
-from ConfigParser import SafeConfigParser
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.keys.util import get_fingerprint
 from cloudmesh.provisioner.provisioner import *
@@ -37,11 +35,11 @@ import os
 # disable RST PAGES dues to sphinx incompatibility
 #
 try:
-    RSTPAGES=os.environ['RSTPAGES']
-    RSTPAGES = (RSTPAGES == None) or RSTPAGES.lower() == 'true' 
+    RSTPAGES = os.environ['RSTPAGES']
+    RSTPAGES = (RSTPAGES == None) or RSTPAGES.lower() == 'true'
 except:
     RSTPAGES = True
-    
+
 msg = 'RST PAGES ' + str(RSTPAGES)
 banner(msg)
 
@@ -88,7 +86,7 @@ all_modules = ['pbs',
                # 'register',
                'metric',
                'pie_chart_fg380'
-                ]
+               ]
 
 s_config = cm_config_server()
 
@@ -115,7 +113,7 @@ try:
     import matplotlib
     all_modules.append('rack')
     all_modules.append('metric')
-    
+
 except:
     log.info("The Rack diagrams are not enabled")
 
@@ -200,6 +198,7 @@ if not app.debug:
     mail_handler.setLevel(logging.ERROR)
     app.logger.addHandler(mail_handler)
 
+
 def flash_errors(form):
     for field, errors in form.errors.items():
         for error in errors:
@@ -220,6 +219,7 @@ def flash_errors(form):
 # ============================================================
 
 version = pkg_resources.get_distribution("cloudmesh").version
+
 
 @app.context_processor
 def inject_version():
@@ -267,6 +267,7 @@ def page_not_found(error):
                            type="Page not found",
                            msg="")
 
+
 @app.errorhandler(403)
 def page_not_found(error):
     error = 'Access denied {0}'.format(403)
@@ -278,15 +279,15 @@ def page_not_found(error):
                                "If you are not allowed to access this page\n"
                                "as you are not member of the proper role."
                            )
+
+
 @app.errorhandler(401)
-def page_not_found(error):
+def page_not_found_denied(error):
     error = 'Access denied {0}'.format(401)
     return render_template('error.html',
                            error=error,
                            type="Authentication Denied",
                            msg="You need to login first")
-
-
 
 
 # ============================================================
@@ -340,6 +341,7 @@ def timesince(dt, format="float", default="just now"):
 # FILTER: get_tuple element from string
 # ============================================================
 
+
 @app.template_filter()
 def get_tuple_element_from_string(obj, i):
     l = obj[1:-1].split(", ")
@@ -349,6 +351,7 @@ def get_tuple_element_from_string(obj, i):
 # FILTER: is list
 # ============================================================
 
+
 @app.template_filter()
 def is_list(obj):
     return isinstance(obj, types.ListType)
@@ -357,6 +360,7 @@ def is_list(obj):
 # FILTER: only numbers
 # ============================================================
 
+
 @app.template_filter()
 def only_numbers(str):
     return ''.join(c for c in str if c.isdigit())
@@ -364,6 +368,7 @@ def only_numbers(str):
 # ============================================================
 # FILTER: simple_data, cuts of microseconds
 # ============================================================
+
 
 @app.template_filter()
 def simple_date(d):
@@ -382,6 +387,7 @@ def filter_fingerprint(key):
 # FILTER: state color
 # ============================================================
 
+
 @app.template_filter()
 def state_color(state):
     s = state.lower()
@@ -394,6 +400,7 @@ def state_color(state):
 # ============================================================
 # FILTER: state style
 # ============================================================
+
 
 @app.template_filter()
 def state_style(state):
@@ -430,8 +437,6 @@ def page(path):
     return render_template('page.html', page=page)
 
 
-
-
 # ============================================================
 #  PRINCIPAL LOGIN
 # ============================================================
@@ -444,6 +449,7 @@ def page(path):
 @app.before_request
 def before_request():
     g.user = current_user
+
 
 @identity_loaded.connect_via(app)
 def on_identity_loaded(sender, identity):
@@ -467,6 +473,7 @@ def on_identity_loaded(sender, identity):
     identity.provides.add(RoleNeed("rain"))
     """
 
+
 @login_manager.user_loader
 def load_user(id):
     try:
@@ -477,6 +484,7 @@ def load_user(id):
     except:
         # TODO: this could bea bug
         return None
+
 
 class User(UserMixin):
 
@@ -512,6 +520,7 @@ class User(UserMixin):
     def cm_clouds(self):
         return self.cm_info()['clouds']
 
+
 class LoginForm(Form):
 
     username = TextField()
@@ -519,7 +528,6 @@ class LoginForm(Form):
 
     def validate_on_submit(self):
         return True
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -540,22 +548,18 @@ def login():
             # banner("LDAPUSER")
             # pprint (user)
 
-
             banner("CM_USER")
             user_obj = cm_user()
             user = user_obj.info(form.username.data)
-
 
         except Exception, e:
             print traceback.format_exc()
             error = "LDAP server not reachable"
             error += str(e)
             return render_template('error.html',
-                           form=form,
-                           type="Can not reach LDAP",
-                           msg="")
-
-
+                                   form=form,
+                                   type="Can not reach LDAP",
+                                   msg="")
 
         if user is None:
             form.error = 'Login Invalid'
@@ -568,7 +572,7 @@ def login():
             ret = login_user(g.user)
 
             identity_changed.send(current_app._get_current_object(),
-                                      identity=Identity(g.user.id))
+                                  identity=Identity(g.user.id))
 
             return redirect(request.args.get('next') or '/')
         else:
@@ -594,13 +598,11 @@ def logout():
     return redirect(request.args.get('next') or '/')
 
 
-
 if with_browser:
     log.debug("Web page update {0}".format(browser_page))
 
     webbrowser.register("safari", None)
     webbrowser.open(url_link, 2, autoraise=True)
-
 
 
 if __name__ == "__main__":

@@ -17,10 +17,11 @@ from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
+
 def shell_command_metric(arguments):
     """
     Usage:
-	cm-metric -h | --help
+        cm-metric -h | --help
         cm-metric --version
         cm-metric [CLOUD]
                   [-s START|--start=START] 
@@ -38,12 +39,12 @@ def shell_command_metric(arguments):
        -e, --end_date END        use YYYYMMDD datetime in END
        -c, --host HOST      use host name e.g. india, sierra, etc
        -p, --period PERIOD  use either month|day|week (TBD)
- 
+
     Arguments:
         CLOUD               Name of the IaaS cloud e.g. openstack, nimbus, Eucalyptus
         HOST                Name of host e.g. india, sierra, foxtrot,
                             hotel, alamo, lima
-    
+
     Description:
        metric command provides usage data with filter options.
 
@@ -69,10 +70,10 @@ def shell_command_metric(arguments):
     Examples:
         $ cm-metric openstack -c india -u hrlee        
         - Get user statistics
-        
+
     """
 
-    #log.info(arguments)
+    # log.info(arguments)
 
     # stage 1
     # ----------
@@ -93,17 +94,18 @@ def shell_command_metric(arguments):
     m.set_user(arguments["--user"])
     m.set_host(arguments["--host"])
     m.set_cloud(arguments["CLOUD"])
-  
+
     # Temp message for taking some time to produce result
     if arguments["--metric"] == "usercount":
         print "Please wait, it takes about 10 to 30 seconds ..."
 
     res = m.get_stats()
 
+
 def main():
     arguments = docopt(shell_command_metric.__doc__)
     shell_command_metric(arguments)
-        
+
 if __name__ == "__main__":
-    #print sys.argv
+    # print sys.argv
     main()

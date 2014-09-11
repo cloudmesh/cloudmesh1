@@ -19,9 +19,10 @@ import manage
 try:
     import queue
 except Exception, e:
-    import sys, traceback
+    import sys
+    import traceback
     print "ERROR: failed to load queue fabfile"
     print e
-    print '-'*60
+    print '-' * 60
     traceback.print_exc(file=sys.stdout)
-    print '-'*60
+    print '-' * 60

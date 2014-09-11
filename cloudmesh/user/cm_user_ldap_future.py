@@ -11,7 +11,6 @@ import sys
 log = LOGGER(__file__)
 
 
-
 class cm_user_ldap (CMUserProviderBaseType):
 
     providers = {}
@@ -21,18 +20,17 @@ class cm_user_ldap (CMUserProviderBaseType):
     def get_config(self, **kwargs):
 
         if not kwargs.has_key('host'):  # if kwargs['host'] is None:
-            self.host = cm_config_server().get("cloudmesh.server.ldap.hostname")
+            self.host = cm_config_server().get(
+                "cloudmesh.server.ldap.hostname")
 
         if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
             self.cert = cm_config_server().get("cloudmesh.server.ldap.cert")
-
 
     def authenticate(self, userId, password, **kwargs):
         ret = False
 
         # bug pass **kwargs
         self.get_config()
-
 
         # print "'" + userId + "':'" + authProvider + "':'" + authCred + "'"
 
@@ -51,11 +49,13 @@ class cm_user_ldap (CMUserProviderBaseType):
             log.info("Your username or password is incorrect. Cannot bind.")
             ret = False
         except ldap.LDAPError:
-            log.info("User '" + userId + "' failed to authenticate due to LDAP error. The user may not exist." + str(sys.exc_info()))
+            log.info(
+                "User '" + userId + "' failed to authenticate due to LDAP error. The user may not exist." + str(sys.exc_info()))
             ret = False
         except:
             ret = False
-            log.info("User '" + userId + "' failed to authenticate due to possible password encryption error." + str(sys.exc_info()))
+            log.info(
+                "User '" + userId + "' failed to authenticate due to possible password encryption error." + str(sys.exc_info()))
         finally:
             log.info("Unbinding from the LDAP.")
             ldapconn.unbind()
@@ -78,7 +78,7 @@ class cm_user_ldap (CMUserProviderBaseType):
     def connect(self, name, type, **kwargs):
         '''
         Register a provider with som parameters specified in the dict params
-        
+
         :param name: the name of the provider
         :param type: the type of the provider, overwrites a possibly given type in params
         :param params: a dictionary describing wht needs to be poassed to the service that provides user information
@@ -90,11 +90,11 @@ class cm_user_ldap (CMUserProviderBaseType):
             provider[k] = v
 
         if not kwargs.has_key('host'):  # if kwargs['host'] is None:
-            self.host = cm_config_server().get("cloudmesh.server.ldap.hostname")
+            self.host = cm_config_server().get(
+                "cloudmesh.server.ldap.hostname")
 
         if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
             self.cert = cm_config_server().get("cloudmesh.server.ldap.cert")
-
 
         ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, self.cert)
         # BUG IN FINAL VERSION MAKE SURE WE CHECK
@@ -111,7 +111,6 @@ class cm_user_ldap (CMUserProviderBaseType):
 
     def __del__(self):
         self.disconnect()
-
 
     def get(self, username):
         '''
@@ -130,7 +129,6 @@ class cm_user_ldap (CMUserProviderBaseType):
         self._getUsers()
         self._getProjects()
         return self.users
-
 
     def _getUsers(self, kind="flat"):
         # print "LDAP query..."
@@ -151,10 +149,12 @@ class cm_user_ldap (CMUserProviderBaseType):
                            'sshPublicKey']
 
             # retrieve all ldap users
-            ldapresults = list(self.ldapconn.search_s(ldapbasedn, ldapscope, ldapfilter, ldapattribs))
+            ldapresults = list(
+                self.ldapconn.search_s(ldapbasedn, ldapscope, ldapfilter, ldapattribs))
             for ldapresult in ldapresults:
                 # print ldapresult[1]
-                # a result may not have 'mail' attribute, but valid account must have
+                # a result may not have 'mail' attribute, but valid account
+                # must have
                 if ldapresult[1].has_key('mail'):
                     ldapmail = ldapresult[1]['mail'][0]
                     ldapuid = ldapresult[1]['uid'][0]
@@ -162,7 +162,8 @@ class cm_user_ldap (CMUserProviderBaseType):
                     ldapgidNumber = ldapresult[1]['gidNumber'][0]
                     firstname = ldapresult[1]['givenName'][0]
                     lastname = ldapresult[1]['sn'][0]
-                    phone = ldapresult[1]['telephoneNumber'][0] if 'telephoneNumber' in ldapresult[1] else None
+                    phone = ldapresult[1]['telephoneNumber'][
+                        0] if 'telephoneNumber' in ldapresult[1] else None
                     address = 'TBD'  # not currently in LDAP
 
                     keys = {}
@@ -171,30 +172,31 @@ class cm_user_ldap (CMUserProviderBaseType):
                             if sshkey.strip():
                                 (keytype, key, nickname) = (
                                     sshkey.strip().split(None, 2) + [''])[0:3]
-                                keys[nickname.translate(None, '.$')] = "key %s" % sshkey
+                                keys[
+                                    nickname.translate(None, '.$')] = "key %s" % sshkey
 
                     if kind == "flat":
-                        self.users[ldapuid] = {"firstname":firstname,
-                                               "lastname":lastname,
-                                               "uidNumber":ldapuidNumber,
-                                               "gidNumber":ldapgidNumber,
-                                               "phone":phone,
-                                               "email":ldapmail,
-                                               "address":address,
-                                               "projects":{"active":[]},
-                                               "keys":keys }
+                        self.users[ldapuid] = {"firstname": firstname,
+                                               "lastname": lastname,
+                                               "uidNumber": ldapuidNumber,
+                                               "gidNumber": ldapgidNumber,
+                                               "phone": phone,
+                                               "email": ldapmail,
+                                               "address": address,
+                                               "projects": {"active": []},
+                                               "keys": keys}
                     elif kind == "yaml":
-                        self.users[ldapuid] = {"profile":{
-                                                          "firstname":firstname,
-                                                          "lastname":lastname,
-                                                          "uidNumber":ldapuidNumber,
-                                                          "gidNumber":ldapgidNumber,
-                                                          "phone":phone,
-                                                          "email":ldapmail,
-                                                          "address":address,
-                                               },
-                                               "projects":{"active":[]},
-                                               "keys":keys }
+                        self.users[ldapuid] = {"profile": {
+                            "firstname": firstname,
+                            "lastname": lastname,
+                            "uidNumber": ldapuidNumber,
+                            "gidNumber": ldapgidNumber,
+                            "phone": phone,
+                            "email": ldapmail,
+                            "address": address,
+                        },
+                            "projects": {"active": []},
+                            "keys": keys}
 
         except:
             print "WRONG" + str(sys.exc_info())
@@ -205,7 +207,8 @@ class cm_user_ldap (CMUserProviderBaseType):
             ldapscope = ldap.SCOPE_SUBTREE
             ldapfilter = "(&(objectclass=posixGroup)(cn=fg*))"
             ldapattribs = ['cn', 'memberUid']
-            ldapresults = list(self.ldapconn.search_s(ldapbasedn, ldapscope, ldapfilter, ldapattribs))
+            ldapresults = list(
+                self.ldapconn.search_s(ldapbasedn, ldapscope, ldapfilter, ldapattribs))
             for ldapresult in ldapresults:
                 if ldapresult[1].has_key('cn'):
                     cn = ldapresult[1]['cn'][0]
@@ -214,16 +217,17 @@ class cm_user_ldap (CMUserProviderBaseType):
                         for auid in ldapresult[1]['memberUid']:
                             if self.users.has_key(auid):
                                 if self.users[auid]["projects"]["active"] is not None:
-                                    self.users[auid]["projects"]["active"].append(int(projid))
+                                    self.users[auid]["projects"][
+                                        "active"].append(int(projid))
                                 else:
-                                    self.users[auid]["projects"]["active"] = [int(projid)]
+                                    self.users[auid]["projects"][
+                                        "active"] = [int(projid)]
         except:
             print "WRONG" + str(sys.exc_info())
 
 
-
 def main():
-    idp = cm_userLDAP (CMUserProviderBaseType)
+    idp = cm_userLDAP(CMUserProviderBaseType)
     idp.connect("fg-ldap", "ldap")
     idp.refresh()
     users = idp.list()
@@ -233,7 +237,6 @@ def main():
     pprint(users)
 
     pprint(idp.users)
-
 
 
 if __name__ == "__main__":

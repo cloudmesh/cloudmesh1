@@ -1,9 +1,12 @@
 from fabric.api import task, local
 
+
 @task
 def stat():
     """create statistics for pep8"""
-    local("pep8 --statistics --filename *.py */*.py */*/*.py */*/*/*.py */*/*/*/*.py */*/*/*/*/*.py")
+    local(
+        "pep8 --statistics --filename *.py */*.py */*/*.py */*/*/*.py */*/*/*/*.py */*/*/*/*/*.py")
+
 
 @task
 def auto():
@@ -15,6 +18,7 @@ def auto():
     local("autopep8 -i */*/*/*/*/*.py")
     local("autopep8 -i */*/*/*/*/*/*.py")
 
+
 @task
 def install():
     """install pep8, autopep8, pylint"""
@@ -22,5 +26,3 @@ def install():
     local("pip install pep8 --upgrade")
     local("pip install pylint --upgrade")
     local("pip install pyflakes --opgrade")
-
-

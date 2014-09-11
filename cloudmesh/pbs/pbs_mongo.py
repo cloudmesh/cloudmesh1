@@ -1,11 +1,9 @@
-import pymongo
-from pbs import PBS
+from cloudmesh.pbs.pbs import PBS
 from pprint import pprint
-from bson.objectid import ObjectId
-from cloudmesh import path_expand, banner
-import yaml
+from cloudmesh import banner
 from cloudmesh.config.cm_config import get_mongo_db
 from datetime import datetime
+
 
 class pbs_mongo:
 
@@ -15,19 +13,15 @@ class pbs_mongo:
     client = None
     pbs_client = None
 
-
     config = None
 
-
     def __init__(self, collections=["qstat", "pbsnodes", "qinfo"]):
-
         self.db_qstat = get_mongo_db(collections[0])
         self.db_pbsnodes = get_mongo_db(collections[1])
         self.db_qinfo = get_mongo_db(collections[2])
 
     def activate(self, host, user):
         """activates a specific host to be queried"""
-
         self.pbs_client = PBS(user, host)
         self.hosts[host] = self.pbs_client
 
@@ -35,7 +29,7 @@ class pbs_mongo:
         """refreshes the specified data from the given host"""
         data = None
         if type.startswith("q"):
-           data = self.refresh_qstat(host)
+            data = self.refresh_qstat(host)
         elif type.startswith("n"):
             data = self.refresh_pbsnodes(host)
         elif type.startswith("i"):
@@ -55,14 +49,11 @@ class pbs_mongo:
         for host in host_data:
             self._update_qinfo(host, host_data[host])
 
-
-
     def _update_qinfo(self, host, data):
         time_now = datetime.now()
-        self.db_qinfo.remove({"cm_host": host, "cm_kind" : "qinfo"}, safe=True)
+        self.db_qinfo.remove({"cm_host": host, "cm_kind": "qinfo"}, safe=True)
 
         for name in data:
-
             id = "{0}-{1}-qinfo".format(host, name).replace(".", "-")
             data[name]["cm_host"] = host
             data[name]["cm_kind"] = "qinfo"
@@ -70,7 +61,6 @@ class pbs_mongo:
             data[name]["cm_refresh"] = time_now
 
             self.db_qinfo.insert(data[name])
-
 
     def refresh_qstat(self, host):
         '''
@@ -80,7 +70,7 @@ class pbs_mongo:
         time_now = datetime.now()
         data = dict(self.hosts[host].qstat(refresh=True))
 
-        self.db_qstat.remove({"cm_host": host, "cm_kind" : "qstat"}, safe=True)
+        self.db_qstat.remove({"cm_host": host, "cm_kind": "qstat"}, safe=True)
         for name in data:
             banner(name)
             for job in data[name]:
@@ -92,13 +82,12 @@ class pbs_mongo:
                 entry["cm_qstat"] = host
                 entry["cm_refresh"] = time_now
                 self.db_qstat.insert(data[name][job])
-                
 
     def get(self, host, type):
         """refreshes the specified data from the given host"""
         data = None
         if type.startswith("q"):
-           data = self.get_qstat(host)
+            data = self.get_qstat(host)
         elif type.startswith("n"):
             data = self.get_pbsnodes(host)
         elif type.startswith("i"):
@@ -137,7 +126,8 @@ class pbs_mongo:
         if host is None:
             data = self.db_pbsnodes.find({"cm_kind": "pbsnodes"})
         else:
-            data = self.db_pbsnodes.find({"cm_host": host, "cm_kind": "pbsnodes"})
+            data = self.db_pbsnodes.find(
+                {"cm_host": host, "cm_kind": "pbsnodes"})
         return data
 
     def refresh_pbsnodes(self, host):
@@ -159,20 +149,20 @@ class pbs_mongo:
             self.db_pbsnodes.remove({"cm_id": id}, safe=True)
             self.db_pbsnodes.insert(data[name])
 
-
     def delete_qstat(self, host):
         '''
         Deletes the qstat information from mongodb
         :param host:
         '''
-        self.db_qstat.remove({"cm_host": host, "cm_kind" : "qstat"}, safe=True)
+        self.db_qstat.remove({"cm_host": host, "cm_kind": "qstat"}, safe=True)
 
     def delete_pbsnodes(self, host):
         '''
         Deletes the pbsnodes information from mongodb
         :param host:
         '''
-        self.db_qstat.remove({"cm_host": host, "cm_kind" : "qbsnodes"}, safe=True)        
+        self.db_qstat.remove(
+            {"cm_host": host, "cm_kind": "qbsnodes"}, safe=True)
 
     def clear(self):
         '''
@@ -180,9 +170,10 @@ class pbs_mongo:
         '''
         """deletes the data in the collection"""
 
+
 def main():
 
-    host = "india.futuregrid.org"    
+    host = "india.futuregrid.org"
     pbs = pbs_mongo()
     pbs.activate(host, "gvonlasz")
     print pbs.hosts
@@ -190,11 +181,11 @@ def main():
     d = pbs.refresh_qstat(host)
     d = pbs.get_qstat(host)
     for e in d:
-        pprint(e) 
+        pprint(e)
 
     #d = pbs.refresh_pbsnodes(host)
     #d = pbs.get_pbsnodes(host)
-    #for e in d:
+    # for e in d:
     #    pprint(e)
 
 if __name__ == "__main__":

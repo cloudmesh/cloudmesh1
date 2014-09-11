@@ -221,15 +221,21 @@ class ec2(ComputeBaseType):
             ip_address = ""
         ip_ver = 4
         ip_type = "fixed"
-        res = {u'private':[ {u'version': ip_ver, u'addr': ip_address, \
-                             u'OS-EXT-IPS:type': ip_type}]}
+        res = {u'private': [ 
+                            {u'version': ip_ver, 
+                             u'addr': ip_address, 
+                             u'OS-EXT-IPS:type': ip_type}
+                            ]
+               }
         return res
 
     def convert_flavors(self, flavor):
-        res = {u'id': unicode(flavor), \
-               u'links':\
-               [ {u'href':None, \
-                  u'rel':None}]}
+        res = {u'id': unicode(flavor), 
+               u'links': [
+                          {u'href':None,
+                           u'rel':None}
+                          ]
+               }
         return res
 
     def release_unused_public_ips(self):
@@ -241,12 +247,12 @@ class ec2(ComputeBaseType):
         result = urlparse.urlparse(ec2_url)
         is_secure = (result.scheme == 'https')
         if ":" in result.netloc:
-           host_port_tuple = result.netloc.split(':')
-           host = host_port_tuple[0]
-           port = int(host_port_tuple[1])
+            host_port_tuple = result.netloc.split(':')
+            host = host_port_tuple[0]
+            port = int(host_port_tuple[1])
         else:
-           host = result.netloc
-           port = None
+            host = result.netloc
+            port = None
 
         path = result.path
 

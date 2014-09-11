@@ -27,7 +27,8 @@ if debug:
     progress.off()
 else:
     progress.on()
-    
+
+
 def get_pid(command):
     with hide('output', 'running', 'warnings'):
         lines = local(
@@ -240,6 +241,7 @@ def boot(auth=True):
         local("ps -ax | fgrep mongo")
     PROGRESS.next()
 
+
 @task
 def start(auth=True):
     '''
@@ -368,6 +370,7 @@ def simple():
     inventory()
     PROGRESS.next()
     print
+
 
 @task
 def users():

@@ -1421,7 +1421,7 @@ class openstack(ComputeBaseType):
                     vm['user_id'] == userid)
 
 
-#
+# 
 # MAIN FOR TESTING
 #
 if __name__ == "__main__":
