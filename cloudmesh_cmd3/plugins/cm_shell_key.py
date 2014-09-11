@@ -1,26 +1,20 @@
-from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
+from cloudmesh.config.cm_config import cm_config
+# cm_config_server, get_mongo_db
 import yaml
-from sh import cat
 import json
 from cmd3.shell import command
 from cloudmesh.config.cm_keys import cm_keys_yaml, cm_keys_mongo
-from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import two_column_table
-from cloudmesh_common.tables import one_column_table
-from cloudmesh_common.tables import column_table
-from cloudmesh_install.util import yn_choice
-from cloudmesh.util.menu import menu_return_num
+# from cloudmesh_install.util import yn_choice
+# from cloudmesh.util.menu import menu_return_num
 from os import listdir
 from os.path import expanduser
 from cloudmesh_install import config_file
 from cloudmesh_install.util import path_expand
-from cloudmesh.util.keys import read_key
+# from cloudmesh.util.keys import read_key
 from cloudmesh.util.keys import get_fingerprint
-import cloudmesh
-import pyaml
-import sys
 
 log = LOGGER(__file__)
 
@@ -147,7 +141,8 @@ class cm_shell_key:
         print arguments
 
         def _find_keys(directory):
-            return [file for file in listdir(expanduser(directory)) if file.lower().endswith(".pub")]
+            return [file for file in listdir(expanduser(directory))
+                    if file.lower().endswith(".pub")]
 
         #
         # DIR (OK)
@@ -237,7 +232,7 @@ class cm_shell_key:
 
             # check if key is valid
 
-            key_store[keynme] = filename
+            key_store[keyname] = filename
 
             """
             def func():
