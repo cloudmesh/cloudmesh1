@@ -27,6 +27,7 @@ class pbs_note_builder:
         self.hostname = host
         self.inventory = Inventory()
         self.fetch_pbs_nodes_info()
+        self.pbs_nodes_info = None
 
     # get recent pbsnodes info
     def fetch_pbs_nodes_info(self):

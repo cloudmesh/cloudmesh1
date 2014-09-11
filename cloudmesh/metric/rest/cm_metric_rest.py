@@ -107,13 +107,13 @@ class CMMetricREST:
 
     def _set_dict_vars(self):
         self.result = {
-            "start_date":   self.start_date,
-            "end_date":   self.end_date,
-            "ownerid":   self.args.user,
-            "metric":   self.args.metric.split(),
-            "period":   self.args.period or "All",
-            "clouds":   self.args.cloud or "All",
-            "hostname":   self.args.host or "All"
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "ownerid": self.args.user,
+            "metric": self.args.metric.split(),
+            "period": self.args.period or "All",
+            "clouds": self.args.cloud or "All",
+            "hostname": self.args.host or "All"
         }
 
     def get_stats(self):

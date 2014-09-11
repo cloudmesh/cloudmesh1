@@ -102,7 +102,7 @@ class Committee(Document):
     def completed_projects(self):
         return self.get_by_status("completed")
 
-    def get_by_status(self,  status):
+    def get_by_status(self, status):
         if status in STATUS:
             IMPLEMENT()
         else:

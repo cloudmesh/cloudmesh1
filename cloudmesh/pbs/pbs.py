@@ -10,7 +10,6 @@ from xml.dom import minidom
 import yaml
 import sys
 import re
-import csv
 
 from cloudmesh_common.logger import LOGGER
 
@@ -207,21 +206,21 @@ class PBS:
 
     def create_node(self, name):
         """create node"""
-        result = qmgr("create node {0}".format(name))
+        result = self._qmgr("create node {0}".format(name))
         return result
 
     def set_np(self, name, np):
         """set node %name np %np | qmgr"""
-        result = qmgr("set node {0} np {1}".format(name, np))
+        result = self._qmgr("set node {0} np {1}".format(name, np))
         return result
 
     def set_properties(self, name, properties):
         """set node % properties %"""
-        result = qmgr("set node {0} properties {1}".format(name, properties))
+        result = self._qmgr("set node {0} properties {1}".format(name, properties))
 
     def set_note(self, name, note):
         """set node % note %"""
-        result = qmgr("set node {0} note {1}".format(name, note))
+        result = self._qmgr("set node {0} note {1}".format(name, note))
 
     def pbsnodes(self, refresh=True):
         """returns the pbs node infor from an pbs_nodes_raw_data is a string see above for example"""

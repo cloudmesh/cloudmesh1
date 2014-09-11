@@ -24,6 +24,7 @@ class ssh:
         self.username = username
         self.password = password
         self.setup()
+        self.client = None
 
     def setup(self):
         self.client = pm.SSHClient()
