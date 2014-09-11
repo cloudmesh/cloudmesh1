@@ -126,13 +126,6 @@ class cm_shell_key:
 
              Used to set a key from the key-list as the default key
 
-        key add NAME [KEY]
-
-             adding/updating keys. KEY is the key file with full file
-             path, if KEY is not provided, you can select a key among
-             the files with extension .pub under ~/.ssh. If NAME exists,
-             current key value will be overwritten
-
         key delete NAME
 
              deletes a key. In yaml mode it can delete only key that
@@ -225,12 +218,18 @@ class cm_shell_key:
         # self._load_mongo()
         # self._load_keys_mongo()
 
-        if arguments["add"] and arguments["KEYNAME"]:
+        if arguments["add"] and arguments["FILENAME"]:
 
             username = cm_config().username()
             key_store = cm_keys_mongo(username)
-            
-            keyname = arguments["KEYNAME"]
+
+            if arguments["KEYNAME"]:
+                keyname = arguments["KEYNAME"]
+            else:
+                # get keyname form file, e.g. comment of key
+                 key = get_key_from_file(filename):
+                 keyname = "TBD"
+                 
             filename = arguments["FILENAME"]
 
             # check if file exists
@@ -240,7 +239,10 @@ class cm_shell_key:
             key_store[keyname] = filename
 
             return
-            
+
+
+
+                    
             """
             def func():
                 if arguments["KEY"]:
