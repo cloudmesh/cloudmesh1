@@ -4,7 +4,7 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
 from pprint import pprint
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
-
+from cloudmesh.config.cm_keys import keytype, get_key_from_file
 
 class Database(object):
 
@@ -56,8 +56,11 @@ class Database(object):
         # to mongo restriction)
         keys = self.config.get("cloudmesh.keys.keylist")
         for keytitle in keys.keys():
+            keycontent = keys[keytitle]
+            if keytype(keycontent) == "file":
+                keycontent = get_key_from_file(keycontent).strip()
+                keys[keytitle] = keycontent
             if "." in keytitle:
-                keycontent = keys[keytitle]
                 newkeytitle = keytitle.replace(".", "_")
                 del keys[keytitle]
                 keys[newkeytitle] = keycontent

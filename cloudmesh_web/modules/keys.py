@@ -3,7 +3,7 @@ from cloudmesh_common.util import cond_decorator
 from flask import Blueprint, g, render_template, request, redirect
 from flask.ext.login import login_required
 from pprint import pprint
-
+from cloudmesh.config.cm_keys import cm_keys_mongo
 from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
@@ -68,17 +68,19 @@ def managekeys():
                            show=msg)
 
 
-@keys_module.route('/keys/delete/<name>/')
+@keys_module.route('/keys/delete/<name>/', methods=['GET'])
 @login_required
 def deletekey(name):
     #
     #  BUG cm_keys reads from config file
     #
-    keys = cm_keys()
+    keys = cm_keys_mongo(g.user.id)
 
     try:
         keys.delete(name)
-        keys.write()
+        # delete from mongo directly
+        # no seperate write back needed
+        # keys.write()
     except:
         print "Error: deleting the key %s" % name
     return redirect("/keys/")

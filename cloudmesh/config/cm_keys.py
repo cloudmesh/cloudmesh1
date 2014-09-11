@@ -202,9 +202,10 @@ class cm_keys_mongo(cm_keys_base):
                     {'cm_user_id': user}
         )
 
-    def write(self):
-        """writes the updated dict to the config"""
-        self.config.write()
+    # operations are done directly on mongo
+    # def write(self):
+    #    """writes the updated dict to the config"""
+    #    self.config.write()
         
     def _getvalue(self, name):
         """
@@ -330,10 +331,5 @@ class cm_keys_mongo(cm_keys_base):
     def names(self):
         """returns all key names in an list."""
         return self.user_info["keys"].keys()
-
-
-    def write(self):
-        """writes the updated dict to the config"""
-        self.config.write()
 
 
