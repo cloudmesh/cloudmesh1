@@ -5,7 +5,7 @@ from ast import literal_eval
 from collections import Counter
 from hostlist import expand_hostlist
 from pprint import pprint
-from sh import ssh, ssh
+from sh import ssh
 from xml.dom import minidom
 import yaml
 import sys

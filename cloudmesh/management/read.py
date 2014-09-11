@@ -4,7 +4,6 @@ import datetime
 import time
 import hashlib
 import uuid
-import yaml
 from pprint import pprint
 from user import User, Users
 from cloudmesh_management.generate import random_user

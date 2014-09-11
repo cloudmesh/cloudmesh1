@@ -7,7 +7,6 @@ from cloudmesh_common.logger import LOGGER
 from pprint import pprint
 from cloudmesh.config.ConfigDict import ConfigDict
 import json
-import yaml
 from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
