@@ -137,7 +137,7 @@ class cm_keys_yaml(cm_keys_base):
             return
         else:
             if name in self.config.get("cloudmesh.keys.keylist"):
-                print "Proceeding to delete key", name
+                print "Proceeding to delete key:", name
                 del self.config.get("cloudmesh.keys.keylist")[name]
                 return "SUCCESS: Key successfully deleted"
             else:
@@ -285,7 +285,7 @@ class cm_keys_mongo(cm_keys_base):
             return
         else:
             if name in self.user_info["keys"]:
-                print "Proceeding to delete key", name
+                print "Proceeding to delete key:", name
                 del self.user_info["keys"][name]
             else:
                 print "ERROR: Key not found"
@@ -300,8 +300,7 @@ class cm_keys_mongo(cm_keys_base):
 
     def setdefault(self, name):
         """
-        sets the default key.
-        The parameter persist being set to true will cause all of the changes made locally to be written to mongo.          
+        sets the default key.        
         
         """
         if name in self.user_info["keys"]:
@@ -317,7 +316,7 @@ class cm_keys_mongo(cm_keys_base):
             multi=False
             )
         self.mongo.db_defaults.update(
-            {'_id': self.user_info['_id']},
+            {'_id': self.defaults_info['_id']},
             {'$set': {'key': self.defaults_info["key"]}},
             upsert=False,
             multi=False
