@@ -35,10 +35,17 @@ class cm_projects:
             if name not in self.names(status):
                 self.config['cloudmesh']['projects'][status].append(name)
 
-    def delete(self, name):
+    def delete(self, name, status='active'):
         """adds a project with given status"""
         # add the name to the following array (make sure it is an array ;-)
-        self.config['cloudmesh']['projects']['active'].remove(name)
+        try:
+            self.config['cloudmesh']['projects'][status].remove(name)
+        except AttributeError, e:
+            original = self.config['cloudmesh']['projects'][status]
+            if name == original:
+                # If it is a single value instead of a list, puts a empty string
+                # as an action of deleting the value
+                self.config['cloudmesh']['projects'][status] = ''
 
     def names(self, status="active"):
         """returns all projects in an array with a specified status"""
