@@ -64,7 +64,7 @@ def mongo(passwd=None):
     if passwd is None:
         database.set_password_local()
     else:
-        database.set_password_local(password=passwd)
+        database.set_password_local(passwd=passwd)
 
     database.set_credentials()
     database.initialize_user()
