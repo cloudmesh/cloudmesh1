@@ -1,11 +1,12 @@
-from fabric.api import task
+from fabric.api import task, local
 from util import yaml_file_replace
-
+import progress
 
 @task
 @task
 def create():
-    IPython.lib import passwd
+        
+    from IPython.lib import passwd
     from fabfile.util import yaml_file_replace
 
 
@@ -14,14 +15,18 @@ def create():
     result = passwd()
 
     
-    yaml_file_replace(filename='~/.ipython/profile_nbserver/ipython_notebook_config.py',
+    yaml_file_replace(filename='/../.ipython/profile_nbserver/ipython_notebook_config.py',
                       replacements={'SHAPASSWORD': result}
                       )
-    
-    local("openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout mycert.pem -out ~/.ipython/profile_nbserver/mycert.pem")
+
+
+    progress.off()
+    filename = "~/.ipython/profile_nbserver/mycert.pem"
+    local("openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout {0} -out {0}".format(filename))
     local("chmod go-rw ~/.ipython/profile_nbserver/mycert.pem")
 
 
 @task
 def start():
+    progress.off()
     local("ipython notebook --certfile=~/.ipython/profile_nbserver/mycert.pem --profile=nbserver")
