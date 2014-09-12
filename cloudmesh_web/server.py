@@ -560,6 +560,8 @@ def login():
 
         if user is None:
             form.error = 'Login Invalid'
+        elif 'cm_user_id' not in user:
+            form.error = 'Login Invalid'
         elif user['cm_user_id'] != form.username.data:
             form.error = 'Login Invalid'
         elif user_obj.authenticate(form.username.data, form.password.data):
