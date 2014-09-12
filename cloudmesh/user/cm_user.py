@@ -18,7 +18,7 @@ from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import deprecated
 from cloudmesh_install.util import path_expand
 from cloudmesh.user.cm_template import cm_template
-from cloudmesh.user.cm_userLDAP import cm_userLDAP
+from cloudmesh.user.cm_userLDAP import cm_userLDAP, get_ldap_user_from_yaml
 from cloudmesh.cm_mongo import cm_mongo
 import traceback
 from pprint import pprint
@@ -106,7 +106,7 @@ class cm_user(object):
             self.userdb_passwd = get_mongo_db(passwd_collection)
 
     def info(self, portal_id, cloud_names=[]):
-        """Return th<: the list of cloud names to search, e.g.
+        """Return the: the list of cloud names to search, e.g.
         sierra
         :type cloud_names: list
         :returns: dict
@@ -178,7 +178,7 @@ class cm_user(object):
         # ONLY for debug
         # added by HC on Nov. 11, 2013 to test LDAP and user.mongo
         # BEGIN debug
-        #log.debug("cm_user_init_defaults, I was called.........")
+        # log.debug("cm_user_init_defaults, I was called.........")
         # END debug
 
         user = self.info(username)
