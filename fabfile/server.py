@@ -42,7 +42,7 @@ except Exception, e:
     sys.exit()
 
 
-__all__ = ['start', 'stop', 'kill', 'view', 'clean', 'cleanmongo',
+__all__ = ['start', 'stop', 'kill', 'view', 'clean',
            'agent', 'quick', 'wsgi', 'web']
 
 #
@@ -117,8 +117,7 @@ def kill(server="server", debug=True):
             if line is not '':
                 pid = line.split(" ")[0]
                 local("kill -9 {0}".format(pid))
-
-        # local("fab queue.stop")
+    # local("fab queue.stop")
 
 
 @task
@@ -153,10 +152,8 @@ def start(server="server", browser='yes', debug=False):
     # banner(debug)
 
     banner("KILL THE SERVER", debug=debug)
-    r = kill(debug=debug)
-    if debug:
-        print r
-    else:
+    kill(debug=debug)
+    if not debug:
         PROGRESS.next()
 
     execute_command("INSTALL CLOUDMESH",
