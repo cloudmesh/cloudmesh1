@@ -11,8 +11,10 @@ from passlib.hash import sha256_crypt
 PASSWORD_LEN = 6
 LOCAL_PASS_KEY = "cm_password_local"
 
+
 def validate_password(password):
     return len(password) >= PASSWORD_LEN
+
 
 def getpassword(prompt):
     confirm_prompt = "Enter again to confirm:"
@@ -23,7 +25,8 @@ def getpassword(prompt):
         return getpassword(prompt)
     else:
         return passwd1
-                
+
+
 class Database(object):
 
     def __init__(self):
@@ -34,7 +37,7 @@ class Database(object):
         self.user_obj = cm_user()
         self.profile = self.config.profile()
         self.mongo = cm_mongo()
-    
+
     def set_password_local(self):
         prompt1st = "Please set a password to login to the portal later.\nPassword:"
         prompt_not_strong = "\nPassword not strong enough. Minimum length is 6. Please enter again.\nPassword:"
@@ -48,11 +51,11 @@ class Database(object):
         self.user_obj.set_credential(
                 self.cm_user_id,
                 LOCAL_PASS_KEY,
-                {'password':passhash}, # to be consistent
+                {'password': passhash},  # to be consistent
                 LOCAL_PASS_KEY
                 )
         print "password set successfully!"
-                      
+
     def set_credentials(self):
         for cloudname in self.config.cloudnames():
             self.user_obj.set_credential(
