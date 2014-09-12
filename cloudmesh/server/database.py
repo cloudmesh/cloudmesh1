@@ -38,14 +38,14 @@ class Database(object):
         self.profile = self.config.profile()
         self.mongo = cm_mongo()
 
-    def set_password_local(self, password=None):
-        if password is None:
+    def set_password_local(self, passwd=None):
+        if passwd is None:
             prompt1st = "Please set a password to login to the portal later.\nPassword:"
             prompt_not_strong = "\nPassword not strong enough. Minimum length is 6. Please enter again.\nPassword:"
             passwd = getpassword(prompt1st)
             if not validate_password(passwd):
                 passwd = getpassword(prompt_not_strong)
-    
+
         # print passwd
         passhash = sha256_crypt.encrypt(passwd)
         # to verify
