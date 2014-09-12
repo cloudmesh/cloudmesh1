@@ -395,6 +395,56 @@ class cm_user(object):
             user = {}
         return user
 
+    def set_user(self, username, d):
+        """ Sets the data for a user """
+        if type(d) is dict:
+            self.db_users.update({'cm_user_id': username}, d, upsert=True)
+
+        else:
+            raise TypeError, 'user data value must be a dict'
+
+    def set_user_attribute(self, username, attribute, value):
+        """will set a variable in mongo
+            ["user"][attribute]
+        """
+        d = self.get_user(username)
+        d[attribute] = value
+        self.set_user(username, d)
+
+    def get_user(self, username):
+        """returns the data for the user"""
+        user = self.db_users.find_one({'cm_user_id': username})
+
+        if user is None:
+            user = {}
+        return user
+
+    def delete_projects(self, username, project):
+        """Deletes the project from an active project list and a completed project list"""
+        for section_name in ["active", "completed"]:
+            self.update_projects(section_name, "delete",  username, project)
+
+    def add_active_projects(self, username, project):
+        """Adds the active project list on a given project"""
+        self.update_projects("active", "add",  username, project)
+
+    def add_completed_projects(self, username, project):
+        """Adds the completed project list on a given project"""
+        self.update_projects("completed", "add",  username, project)
+
+    def update_projects(self, section_name, action, username, project):
+        """Updates the project list on a ginve project"""
+        userinfo = self.get_user(username)
+        projects = userinfo['projects'][section_name]
+        if action == "add":
+            if project not in projects:
+                projects.append(project)
+        elif action == "delete":
+            if project in projects:
+                projects.remove(project)
+        userinfo['projects'][section_name] = projects
+        self.set_user(username, userinfo)
+
     def set_credential(self, username, cloud, credential, cred_type='cloud'):
         """credential is a dict"""
         safe_credential = {}
