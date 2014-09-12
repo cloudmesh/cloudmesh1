@@ -503,6 +503,22 @@ def start_vm(username,
         # print result.traceback
         count = count - 1
 
+#
+# TODO: Mark this is very complicated, think about what we want to do
+#
+
+#
+#  delete all
+#  delete [1-10]
+#  delete gvonlasz[1-10]
+#  delate --group=test [1-10]
+#  delete --cloud=india [1-10]
+#
+
+# l = search_vm("[1-10]")
+# l = search_vm("gregor[1-10]")
+
+# delete_vms(l, interactive=False, force=True)
 
 def delete_vm(username,
               cloudname,
