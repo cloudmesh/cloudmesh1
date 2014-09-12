@@ -51,7 +51,8 @@ setup(
             'etc/cloudmesh_rack.yaml',
             'etc/cloudmesh_celery.yaml',
             'etc/cloudmesh_mac.yaml',
-            'etc/cloudmesh_flavor.yaml']),
+            'etc/cloudmesh_flavor.yaml',
+            'etc/ipython_notebook_config.py']),
         (home + '/.cloudmesh/etc/racks/diag', glob.glob('etc/racks/*'))
     ],
     #               'cloudmesh/etc/racks/diag = etc/racks/*
