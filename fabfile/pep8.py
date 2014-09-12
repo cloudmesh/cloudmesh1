@@ -25,4 +25,4 @@ def install():
     local("pip install autopep8 --upgrade")
     local("pip install pep8 --upgrade")
     local("pip install pylint --upgrade")
-    local("pip install pyflakes --opgrade")
+    local("pip install pyflakes --upgrade")
