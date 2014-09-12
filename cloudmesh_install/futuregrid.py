@@ -33,7 +33,6 @@ def iu_credential_fetch_command(args):
             cm-iu user fetch [--username=USERNAME] [--outdir=OUTDIR]
             cm-iu user create
             cm-iu user login [--username=USERNAME]
-
     """
 
     _args = ' '.join(args[1:])
@@ -47,7 +46,6 @@ def iu_credential_fetch_command(args):
 
     elif arguments["user"] and arguments["login"]:
         verify_ssh_login(arguments["--username"])
-
 
 def download_rc_files(userid):
 
