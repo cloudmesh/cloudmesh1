@@ -5,8 +5,25 @@ from cloudmesh.config.cm_config import cm_config
 from pprint import pprint
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.config.cm_keys import keytype, get_key_from_file
+from getpass import getpass
+from passlib.hash import sha256_crypt
 
+PASSWORD_LEN = 6
+LOCAL_PASS_KEY = "cm_password_local"
 
+def validate_password(password):
+    return len(password) >= PASSWORD_LEN
+
+def getpassword(prompt):
+    confirm_prompt = "Enter again to confirm:"
+    passwd1 = getpass(prompt)
+    passwd2 = getpass(confirm_prompt)
+    if passwd1 != passwd2:
+        prompt = "\nPassword does not match. Please retry.\nPassword:"
+        return getpassword(prompt)
+    else:
+        return passwd1
+                
 class Database(object):
 
     def __init__(self):
@@ -17,7 +34,25 @@ class Database(object):
         self.user_obj = cm_user()
         self.profile = self.config.profile()
         self.mongo = cm_mongo()
-
+    
+    def set_password_local(self):
+        prompt1st = "Please set a password to login to the portal later.\nPassword:"
+        prompt_not_strong = "\nPassword not strong enough. Minimum length is 6. Please enter again.\nPassword:"
+        passwd = getpassword(prompt1st)
+        if not validate_password(passwd):
+            passwd = getpassword(prompt_not_strong)
+        # print passwd
+        passhash = sha256_crypt.encrypt(passwd)
+        # to verify
+        # sha256_crypt.verify(passwd, passhash)
+        self.user_obj.set_credential(
+                self.cm_user_id,
+                LOCAL_PASS_KEY,
+                {'password':passhash}, # to be consistent
+                LOCAL_PASS_KEY
+                )
+        print "password set successfully!"
+                      
     def set_credentials(self):
         for cloudname in self.config.cloudnames():
             self.user_obj.set_credential(
@@ -59,8 +94,15 @@ class Database(object):
         for keytitle in keys.keys():
             keycontent = keys[keytitle]
             if keytype(keycontent) == "file":
-                keycontent = get_key_from_file(keycontent).strip()
-                keys[keytitle] = keycontent
+                keycontent = get_key_from_file(keycontent)
+                if keycontent:
+                    keycontent = keycontent.strip()
+                    keys[keytitle] = keycontent
+                else:
+                    print "The specified key file does not exist and thus ingored!"
+                    print "You can run ssh-keygen to generate one key pair"
+                    del keys[keytitle]
+                    break
             if "." in keytitle:
                 newkeytitle = keytitle.replace(".", "_")
                 del keys[keytitle]

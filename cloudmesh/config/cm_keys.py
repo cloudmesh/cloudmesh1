@@ -18,7 +18,11 @@ def keytype(name):
 
 
 def get_key_from_file(filename):
-    return open(path_expand(filename), "r").read()
+    ret = None
+    # existence check
+    if os.path.isfile(os.path.expanduser(filename)):
+        ret = open(path_expand(filename), "r").read()
+    return ret
 
 
 class cm_keys_base(object):
