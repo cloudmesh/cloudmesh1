@@ -9,5 +9,4 @@ class cm_shell_vm:
 
     @function_command(shell_command_vm)
     def do_vm(self, args, arguments):
-
         shell_command_vm(arguments)
