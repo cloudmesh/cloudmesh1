@@ -424,12 +424,16 @@ class cm_user(object):
                 return None
 
     def get_credentials(self, username):
-        """Return all user passwords in the form of a dict, keyed by cloud name"""
+        """Return all user passwords for all clouds
+        in the form of a dict, keyed by cloud name"""
         credentials = self.userdb_passwd.find({"cm_user_id": username})
         d = {}
         """ bug multiple times same cloud ? """
         for c in credentials:
-            cloud = c["cloud"]
-            d[cloud] = {}
-            d[cloud]["credential"] = self.get_credential(username, cloud)
+            # we have a different credential type now - cm_password_local
+            # So the 'cloud' key might not exist
+            if 'cloud' in c:
+                cloud = c["cloud"]
+                d[cloud] = {}
+                d[cloud]["credential"] = self.get_credential(username, cloud)
         return d
