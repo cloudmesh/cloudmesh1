@@ -50,19 +50,20 @@ class cm_shell_project:
            -v       verbose mode
 
         """
+        self._load_projects()
+        self.cm_user = cm_user()
+        self.username = self.projects.config['cloudmesh']['profile']['username']
 
         if arguments["default"] and arguments["NAME"]:
             log.info("sets the default project")
 
-            self._load_projects()
             project = arguments["NAME"]
             self.projects.default(project)
             # WRITE TO YAML
             self.projects.write()
             # UPDATE MONGO DB
-            self.cm_user = cm_user()
-            username = self.projects.config['cloudmesh']['profile']['username']
-            self.cm_user.set_default_attribute(username, 'project', project)
+            self.cm_user.set_default_attribute(self.username, 'project', project)
+            self.cm_user.add_active_projects(self.username, project)
             self._load_projects()
 
             msg = '{0} project is a default project now'.format(project)
@@ -72,10 +73,10 @@ class cm_shell_project:
 
         elif arguments["active"] and arguments['NAME']:
             log.info("Sets the active project")
-            self._load_projects()
             project = arguments["NAME"]
             self.projects.add(project)
             self.projects.write()
+            self.cm_user.add_active_projects(self.username, project)
             self._load_projects()
 
             msg = '{0} project is an active project(s) now'.format(project)
@@ -85,7 +86,6 @@ class cm_shell_project:
 
         elif arguments['delete'] and arguments['NAME']:
             log.info('Deletes the project')
-            self._load_projects()
             project = arguments['NAME']
             try:
                 self.projects.delete(project,'active')
@@ -103,6 +103,7 @@ class cm_shell_project:
                 log.info('Skipped deleting the project {0} in the default\
                          list:{1}'.format(project, e))
             self.projects.write()
+            self.cm_user.delete_projects(self.username, project)
             self._load_projects()
 
             msg = '{0} project is deleted'.format(project)
@@ -112,12 +113,13 @@ class cm_shell_project:
 
         elif arguments['completed'] and arguments['NAME']:
             log.info('Sets a completed project')
-            self._load_projects()
             project = arguments['NAME']
             self.projects.delete(project,'active')
             self.projects.add(project,'completed')
             self.projects.delete(project,'default')
             self.projects.write()
+            self.cm_user.delete_projects(self.username, project)
+            self.cm_user.add_completed_projects(self.username, project)
             self._load_projects()
 
             msg = '{0} project is in a completed project(s)'.format(project)
@@ -127,7 +129,6 @@ class cm_shell_project:
         else: 
             #elif arguments["info"]:
 
-            self._load_projects()
 
             # log.info ("project info for all")
             if arguments["--json"]:
