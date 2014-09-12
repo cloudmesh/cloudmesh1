@@ -16,6 +16,8 @@ import mooc
 import hpc
 import qc
 import manage
+import india
+
 try:
     import queue
 except Exception, e:
