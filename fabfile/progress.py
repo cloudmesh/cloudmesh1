@@ -1,8 +1,6 @@
 import fabric
-from fabric.api import task
 
 
-@task
 def on():
 
     _debug = False
@@ -17,7 +15,6 @@ def on():
     fabric.state.output.user = _debug
 
 
-@task
 def off():
 
     _debug = True

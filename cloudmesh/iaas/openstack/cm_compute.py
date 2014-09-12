@@ -402,8 +402,8 @@ class openstack(ComputeBaseType):
                         "flavorRef": "%s" % flavor_name,
                         # max_count is the number of instances to launch
                         # If 3 specified, three vm instances will be launched
-                        #"max_count": 1,
-                        #"min_count": 1,
+                        # "max_count": 1,
+                        # "min_count": 1,
                         "security_groups": secgroups,
                         "metadata": meta,
             }
@@ -819,12 +819,13 @@ class openstack(ComputeBaseType):
         conf = self._get_service_endpoint("compute")
         publicURL = conf['publicURL']
         posturl = "%s/os-security-groups" % publicURL
-        params = {"security_group": {
-            "name": secgroup.name,
-            "description": secgroup.description
-        }
-        }
-        #         log.debug ("POST PARAMS {0}".format(params))
+        params = {"security_group":
+                    {
+                    "name": secgroup.name,
+                    "description": secgroup.description
+                    }
+                  }
+        # log.debug ("POST PARAMS {0}".format(params))
         ret = self._post(posturl, params)
         groupid = None
         # upon successful, it returns a dict keyed by 'security_group',
@@ -852,20 +853,24 @@ class openstack(ComputeBaseType):
         posturl = "%s/os-security-group-rules" % publicURL
         ret = None
         for rule in rules:
-            params = {"security_group_rule": {
-                "ip_protocol": rule.ip_protocol,
-                "from_port": rule.from_port,
-                "to_port": rule.to_port,
-                "cidr": rule.cidr,
-                "parent_group_id": groupid
-            }
-            }
-            #         log.debug ("POST PARAMS {0}".format(params))
+            params = {"security_group_rule":
+                        {
+                        "ip_protocol": rule.ip_protocol,
+                        "from_port": rule.from_port,
+                        "to_port": rule.to_port,
+                        "cidr": rule.cidr,
+                        "parent_group_id": groupid
+                        }
+                      }
+            # log.debug ("POST PARAMS {0}".format(params))
             ret = self._post(posturl, params)
             if "security_group_rule" not in ret:
-                log.error(
-                    "Failed to create security group rule(s). Error message: '%s'" % ret)
-                break
+                if 'badRequest' in ret and ret['badRequest']['message'].startswith('This rule already exists'):
+                    log.warning("The rule already exists")
+                else:
+                    log.error(
+                        "Failed to create security group rule(s). Error message: '%s'" % ret)
+                    break
         return ret
     #
     # security Groups of VMS
