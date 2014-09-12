@@ -3,29 +3,9 @@ from string import Template
 import os
 import json
 
-
 class cm_projects:
 
     """A class to manage the project ids for the various clouds."""
-
-    def _path_expand(self, text):
-        """ returns a string with expanded variavble
-
-        Parameters:
-        -----------
-        text:
-            the text taht contains path variables
-
-        Returns
-        -------
-        text
-            returns the text with all path variables expanded in it.
-
-        """
-        template = Template(text)
-        result = template.substitute(os.environ)
-        result = os.path.expanduser(result)
-        return result
 
     def __init__(self, filename=None):
         """initializes based on cm_config and returns pointer to
@@ -34,24 +14,26 @@ class cm_projects:
         self.config = cm_config(filename)
 
     @property
-    def default(self):
+    def get_default(self):
         """returns the default project"""
         return self.config.get('cloudmesh.projects.default')
 
-    @default.setter
+    #@default.setter
     def default(self, name):
         """sets the default project"""
         # check if name is in active projects
         # if it is, set the new default project.
         # if it is not through an exception and spit out a nice msg
         # explaining that the default project needs to be set
+        self.add(name)
         self.config['cloudmesh']['projects']['default'] = name
 
     def add(self, name, status="active"):
         """adds a project with given status"""
         # add the name to the following array (make sure it is an array ;-)
         if status != 'default':
-            self.config['cloudmesh']['projects'][status].append(name)
+            if name not in self.names(status):
+                self.config['cloudmesh']['projects'][status].append(name)
 
     def delete(self, name):
         """adds a project with given status"""
@@ -75,4 +57,4 @@ class cm_projects:
 
     def write(self):
         """writes the updated dict to the config"""
-        self.config.write()
+        self.config.write(self.config.filename, 'yaml')

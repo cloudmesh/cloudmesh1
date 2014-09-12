@@ -34,31 +34,30 @@ class cm_shell_project:
         Usage:
                project info [--json]
                project default NAME
-               project NOTIMPLEMENTED members
+               project active NAME
+               project delete NAME
+               project completed NAME
 
         Manages the project
 
         Arguments:
 
-          NAME           The name of the project
-
+          NAME           The project id
 
         Options:
 
            -v       verbose mode
 
         """
-        # log.info(70 * "-")
-        # log.info(arguments)
-        # log.info(70 * "-")
 
         if arguments["default"] and arguments["NAME"]:
             log.info("sets the default project")
 
             self._load_projects()
             project = arguments["NAME"]
-            # if project in self.projects.names("active"):
-            #    self.projects.default(project)
+            self.projects.default(project)
+            self.projects.write()
+            self._load_projects()
 
             print project
             return
@@ -92,8 +91,16 @@ class cm_shell_project:
 
             return
 
-        elif arguments["members"]:
-            log.info("list the project members")
+        elif arguments["active"] and arguments['NAME']:
+            log.info("sets the active project")
+            self._load_projects()
+            project = arguments["NAME"]
+            self.projects.add(project)
+            self.projects.write()
+            self._load_projects()
+
+            print project
+ 
             return
 
         else:
