@@ -6,7 +6,6 @@ from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
-
 class cm_shell_project:
 
     """opt_example class"""
@@ -32,6 +31,7 @@ class cm_shell_project:
     def do_project(self, args, arguments):
         """
         Usage:
+               project
                project info [--json]
                project default NAME
                project active NAME
@@ -60,34 +60,6 @@ class cm_shell_project:
             self._load_projects()
 
             print project
-            return
-
-        elif arguments["info"]:
-
-            self._load_projects()
-
-            # log.info ("project info for all")
-            if arguments["--json"]:
-                print self.projects.dump()
-                return
-            else:
-                print
-                print "Project Information"
-                print "-------------------"
-                print
-                if self.projects.names("default") is not "" and not []:
-                    print "%10s:" % "default", self.projects.names("default")
-                else:
-                    print "%10s:" % "default ", \
-                          "default is not set, please set it"
-                if len(self.projects.names("active")) > 0:
-                    print "%10s:" % "projects", \
-                        ', '.join(self.projects.names("active"))
-
-                if len(self.projects.names("completed")) > 0:
-                    print "%10s:" % "completed", \
-                        ', '.join(self.projects.names("completed"))
-                print
             return
 
         elif arguments["active"] and arguments['NAME']:
@@ -138,7 +110,31 @@ class cm_shell_project:
 
             print project
             return
+        else: 
+            #elif arguments["info"]:
 
-        else:
-            log.info("NOT IMPLEMENTED")
+            self._load_projects()
+
+            # log.info ("project info for all")
+            if arguments["--json"]:
+                print self.projects.dump()
+                return
+            else:
+                print
+                print "Project Information"
+                print "-------------------"
+                print
+                if self.projects.names("default") is not "" and not []:
+                    print "%10s:" % "default", self.projects.names("default")
+                else:
+                    print "%10s:" % "default ", \
+                          "default is not set, please set it"
+                if len(self.projects.names("active")) > 0:
+                    print "%10s:" % "projects", \
+                        ', '.join(self.projects.names("active"))
+
+                if len(self.projects.names("completed")) > 0:
+                    print "%10s:" % "completed", \
+                        ', '.join(self.projects.names("completed"))
+                print
             return
