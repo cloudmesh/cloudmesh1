@@ -56,7 +56,7 @@ def reset(password=None):
     if password is None:
         local("fab user.mongo")
     else:
-        local("fab user.mongo:password={0}".format(password))
+        local("fab user.mongo:passwd={0}".format(password))
     PROGRESS.next()
     banner("refreshing cloud info")
     simple()
