@@ -21,7 +21,6 @@ management_module = Blueprint('management_module', __name__)
 
 
 class MultiCheckboxField(SelectMultipleField):
-
     """
     A multiple-select, except displays a list of checkboxes.
 
