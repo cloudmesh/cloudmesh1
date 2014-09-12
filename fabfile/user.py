@@ -43,10 +43,8 @@ def delete_defaults():
 
     user.set_defaults(username, {})
     # user.set_default_attribute(username, 'images', {})
-    #
-    # TODO: info is undefined
-    #
-    info(username)
+
+    user.info(username)
 
 
 @task
