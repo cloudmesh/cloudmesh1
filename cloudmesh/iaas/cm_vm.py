@@ -163,6 +163,12 @@ class VMcommand(object):
         rangestart = None
         rangeend = None
         if self.arguments['--range']:
+            #
+            # TODO: MARK  [rangestart,rangeend] = int_split_2(',') # implement this
+            #       WHy not use hostlist instead of making it so complicated with range
+            #       hostlist just returns a list taht can than be managed.
+            #       one has to specify the prefix, but we could set this by
+            #       default and prepend if we like
             ranges = [x.strip() for x in self.arguments["--range"].split(',')]
             error = False
             if len(ranges) != 2:
@@ -190,6 +196,10 @@ class VMcommand(object):
         cloudobj = CloudManage()
         mongo = cm_mongo()
         if self.arguments['--cloud']:
+            #
+            # TODO: Mark why not move this in a general function and than just call
+            #     delete(self.arguments['--clouds'], ....)
+            #
             cloud = cloudobj.get_clouds(
                 self.username, getone=True, cloudname=self.arguments['--cloud'])
             if cloud is None:
@@ -210,6 +220,7 @@ class VMcommand(object):
         else:
             preview = True
         # -------------------------
+        
         delete_vm(self.username,
                   cloudname,
                   servername=self.arguments['NAME'],
