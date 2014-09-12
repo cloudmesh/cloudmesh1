@@ -1,4 +1,5 @@
 from cmd3.shell import command
+from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_projects import cm_projects
 from cloudmesh_install import config_file
 
@@ -56,7 +57,12 @@ class cm_shell_project:
             self._load_projects()
             project = arguments["NAME"]
             self.projects.default(project)
+            # WRITE TO YAML
             self.projects.write()
+            # UPDATE MONGO DB
+            self.cm_user = cm_user()
+            username = self.projects.config['cloudmesh']['profile']['username']
+            self.cm_user.set_default_attribute(username, 'project', project)
             self._load_projects()
 
             msg = '{0} project is a default project now'.format(project)
