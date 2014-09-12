@@ -144,9 +144,6 @@ def shell_command_cloud(arguments):
 
     """
 
-    # userinfo = cm_user().info("xiaoyuk")
-    # pprint (userinfo)
-
     call = CloudCommand(arguments)
     call.call_procedure()
 
@@ -164,6 +161,11 @@ class CloudManage(object):
 
     def _connect_to_mongo(self):
         """connects to the mongo database with cm_mongo"""
+
+        #
+        # TODO: Fugang i think that cm_mongo or the get function in cm_mongo should be used here
+        #
+        
         if not self.connected_to_mongo:
             try:
                 self.mongo = cm_mongo()
@@ -173,7 +175,7 @@ class CloudManage(object):
             self.connected_to_mongo = True
 
     def _get_user(self, username):
-        self._connect_to_mongo()
+        self._connect_to_mongo() # TODO: i think that cm_mongo does this?
         return self.mongo.db_user.find_one({'cm_user_id': username})
 
     def get_clouds(self, username, admin=False, getone=False, cloudname=None):
