@@ -794,6 +794,17 @@ def server_name_analyzer(name):
         return [prefix, index]
 
 
+    # TODO: Mark: this seems too complex why not look at the code bellow and make that work
+    # also this code should be moved to the place where we construct the name
+
+    # parts = name.split('_')
+    # length = len(parts)
+    # if length(parts) == 1:
+    #    return [name, None]
+    # else:
+    #    return ['_'.join(parts[:-1]),parts[length]]
+
+    
 # ========================================================================
 
 # ------------------------------------------------------------------------
