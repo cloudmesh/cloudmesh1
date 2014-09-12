@@ -1,22 +1,24 @@
 from __future__ import with_statement
-import fabric
-from fabric.api import task, local, hide, settings
-import clean
-import mq
-import time
-import hostlist
+
 from pprint import pprint
+import time
+
 from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh_install.util import banner
-from cloudmesh.provisioner.queue.celery import celery_provisiner_queue as p_queue
+from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.launcher.queue.celery import celery_launcher_queue as l_queue
 from cloudmesh.pbs.celery import celery_pbs_queue as pbs_queue
-from celery import Celery
-from cloudmesh_install import config_file
+from cloudmesh.provisioner.queue.celery import \
+    celery_provisiner_queue as p_queue
 from cloudmesh_common.util import PROGRESS
-from cloudmesh.config.cm_config import cm_config_server
-
+from cloudmesh_install import config_file
+from cloudmesh_install.util import banner
+from fabric.api import task, local, hide, settings
+import hostlist
 import progress
+
+import clean
+import mq
+
 
 PROGRESS.set('Cloudmesh Services', 50)
 
@@ -144,7 +146,7 @@ def start(view=None):
     :param: if view is set to any value start also rabit and attach
             to it so we can see the log
     """
-    #pprint (fabric.state.output)
+    # pprint (fabric.state.output)
     with settings(warn_only=True):
         stop()
         time.sleep(2)

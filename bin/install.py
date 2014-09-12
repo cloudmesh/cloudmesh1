@@ -28,12 +28,7 @@ Description:
 
 """
 from docopt import docopt
-import hostlist
-from datetime import datetime, timedelta
-from pytimeparse.timeparse import timeparse
-from datetime import datetime, timedelta
 import os
-import sys
 
 try:
     from sh import ls
@@ -91,7 +86,7 @@ def cm_install_command(arguments):
         exec_script('veewee')
 
     elif arguments["list"]:
-        """cm-install vagrant list"""
+        # cm-install vagrant list
         print "list"
         list_boxes()
 
