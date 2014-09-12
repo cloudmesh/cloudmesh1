@@ -88,11 +88,10 @@ class cm_shell_project:
                     print "%10s:" % "completed", \
                         ', '.join(self.projects.names("completed"))
                 print
-
             return
 
         elif arguments["active"] and arguments['NAME']:
-            log.info("sets the active project")
+            log.info("Sets the active project")
             self._load_projects()
             project = arguments["NAME"]
             self.projects.add(project)
@@ -100,7 +99,44 @@ class cm_shell_project:
             self._load_projects()
 
             print project
- 
+            return
+
+        elif arguments['delete'] and arguments['NAME']:
+            log.info('Deletes the project')
+            self._load_projects()
+            project = arguments['NAME']
+            try:
+                self.projects.delete(project,'active')
+            except ValueError, e:
+                log.info('Skipped deleting the project {0} in the active \
+                         list:{1}'.format(project, e))
+            try:
+                self.projects.delete(project,'completed')
+            except ValueError, e:
+                log.info('Skipped deleting the project {0} in the completed\
+                         list:{1}'.format(project, e))
+            try: 
+                self.projects.delete(project,'default')
+            except ValueError, e:
+                log.info('Skipped deleting the project {0} in the default\
+                         list:{1}'.format(project, e))
+            self.projects.write()
+            self._load_projects()
+
+            print project
+            return
+
+        elif arguments['completed'] and arguments['NAME']:
+            log.info('Sets a completed project')
+            self._load_projects()
+            project = arguments['NAME']
+            self.projects.delete(project,'active')
+            self.projects.add(project,'completed')
+            self.projects.delete(project,'default')
+            self.projects.write()
+            self._load_projects()
+
+            print project
             return
 
         else:
