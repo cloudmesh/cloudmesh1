@@ -70,5 +70,6 @@ def mongo():
     from cloudmesh.server.database import Database
 
     database = Database()
+    database.set_password_local()
     database.set_credentials()
     database.initialize_user()

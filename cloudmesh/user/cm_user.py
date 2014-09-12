@@ -22,6 +22,8 @@ from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.cm_mongo import cm_mongo
 import traceback
 from pprint import pprint
+from passlib.hash import sha256_crypt
+
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
@@ -50,7 +52,11 @@ class cm_user(object):
 
     def authenticate(self, userId, password):
         if not self.with_ldap:
-            return True
+            # return True
+            passhash = self.get_credential(userId,
+                            'cm_password_local',
+                            'cm_password_local')['password']
+            return sha256_crypt.verify(password, passhash)
         try:
             idp = cm_userLDAP()
             idp.connect("fg-ldap", "ldap")
@@ -389,31 +395,33 @@ class cm_user(object):
             user = {}
         return user
 
-    def set_credential(self, username, cloud, credential):
+    def set_credential(self, username, cloud, credential, cred_type='cloud'):
         """credential is a dict"""
         safe_credential = {}
-        for cred in credential:
-            safe_credential[cred] = encrypt(
-                credential[cred], self.password_key)
-        self.userdb_passwd.update({"cm_user_id": username, "cloud": cloud},
-                                  {"cm_user_id": username, "credential": safe_credential,
-                                   "cloud": cloud}, upsert=True)
+        if cred_type in ('cloud', 'cm_password_local'):
+            for cred in credential:
+                safe_credential[cred] = encrypt(
+                    credential[cred], self.password_key)
+            self.userdb_passwd.update({"cm_user_id": username, "%s" % cred_type: cloud},
+                                      {"cm_user_id": username, "credential": safe_credential,
+                                       "%s" % cred_type: cloud}, upsert=True)
 
-    def get_credential(self, username, cloud):
-        try:
-            safe_credential = self.userdb_passwd.find_one(
-                {"cm_user_id": username, "cloud": cloud})["credential"]
+    def get_credential(self, username, cloud, cred_type='cloud'):
+        if cred_type in ('cloud', 'cm_password_local'):
+            try:
+                safe_credential = self.userdb_passwd.find_one(
+                    {"cm_user_id": username, "%s" % cred_type: cloud})["credential"]
 
-            for cred in safe_credential:
-                t = safe_credential[cred]
+                for cred in safe_credential:
+                    t = safe_credential[cred]
 
-                n = decrypt(t, self.password_key)
+                    n = decrypt(t, self.password_key)
 
-                safe_credential[cred] = n
+                    safe_credential[cred] = n
 
-            return safe_credential
-        except:
-            return None
+                return safe_credential
+            except:
+                return None
 
     def get_credentials(self, username):
         """Return all user passwords in the form of a dict, keyed by cloud name"""
