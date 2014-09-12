@@ -13,7 +13,7 @@ class Roles:
 
     def get_config(self, **kwargs):
 
-        if not kwargs.has_key('roles'):  # if kwargs['host'] is None:
+        if 'roles' not in kwargs:  
             self.roles = cm_config_server().get("cloudmesh.server.roles")
 
     mongo_host = 'localhost'
