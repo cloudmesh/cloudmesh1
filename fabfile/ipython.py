@@ -16,7 +16,7 @@ def create():
 
     
     yaml_file_replace(filename='/../.ipython/profile_nbserver/ipython_notebook_config.py',
-                      replacements={'SHAPASSWORD': result}
+                      replacements={'SHAPASSWD': result}
                       )
 
 
@@ -29,4 +29,5 @@ def create():
 @task
 def start():
     progress.off()
-    local("ipython notebook --certfile=~/.ipython/profile_nbserver/mycert.pem --profile=nbserver")
+    local("mkdir -p ~/notebook/")
+    local("cd ~/notebook/ && ipython notebook --certfile=~/.ipython/profile_nbserver/mycert.pem --profile=nbserver")
