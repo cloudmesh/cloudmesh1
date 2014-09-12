@@ -623,9 +623,9 @@ class CloudManage(object):
         if refresh:
             self.mongo.activate(cm_user_id=username, names=[cloudname])
             self.mongo.refresh(
-                cm_user_id=username, names=[cloudname],
-d
-                                types=['images', 'flavors', 'servers'])
+                cm_user_id=username,
+                names=[cloudname],
+                types=['images', 'flavors', 'servers'])
 
         if serverdata:
             servers_dict = serverdata
