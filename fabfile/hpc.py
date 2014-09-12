@@ -15,12 +15,3 @@ def touch(username=None):
     for host in ["india", "sierra", "alamo", "hotel", "foxtrot"]:
         local("ssh %s@%s.futuregrid.org hostname -a" % (username, host))
 
-
-@task
-def all():
-    """clean the dis and uninstall cloudmesh"""
-    dir()
-    r = int(local("pip freeze |fgrep cloudmesh | wc -l", capture=True))
-    while r > 0:
-        local('echo "y\n" | pip uninstall cloudmesh')
-        r = int(local("pip freeze |fgrep cloudmesh | wc -l", capture=True))
