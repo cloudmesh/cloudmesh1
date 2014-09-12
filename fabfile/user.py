@@ -66,10 +66,16 @@ def register():
 
 
 @task
-def mongo():
+def mongo(password=None):
     from cloudmesh.server.database import Database
 
     database = Database()
-    database.set_password_local()
+    if password == None:
+        database.set_password_local()
+    else:
+        print "ERROR: SETTING PASSWORD FROM COMMANDLINE NOT YET SUPPORTED"
+        sys.exit()
+        database.set_password_local(password)
+        
     database.set_credentials()
     database.initialize_user()

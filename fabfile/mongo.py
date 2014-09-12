@@ -47,13 +47,16 @@ def get_pid(command):
 
 
 @task
-def reset():
+def reset(password=None):
     banner("initiating mongo")
     boot()
     banner("initiating user data to mongo")
     PROGRESS.next()
     print
-    local("user.mongo")
+    if password is None:
+        local("fab user.mongo")
+    else:
+        local("fab user.mongo:password={0}".format(password))
     PROGRESS.next()
     banner("refreshing cloud info")
     simple()
