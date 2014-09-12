@@ -1,22 +1,9 @@
-from fabric.api import task, local, settings, hide, run
-from pprint import pprint
-from cloudmesh.cm_mongo import cm_mongo
-from cloudmesh.config.cm_config import cm_config, cm_config_server
-from cloudmesh.user.cm_userLDAP import cm_userLDAP
-from cloudmesh.pbs.pbs_mongo import pbs_mongo
-from cloudmesh_install.util import path_expand
+from fabric.api import task
 from cloudmesh_install.util import banner
-from cloudmesh.inventory import Inventory
-from cloudmesh.user.cm_template import cm_template
 from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
-from cloudmesh_install.util import yn_choice
 from sh import keystone
-from sh import less
-from yaml import dump as yaml_dump
-import sys
-import os.path
-import os
 from cloudmesh_install import config_file
 
 
@@ -56,24 +43,28 @@ def delete_defaults():
 
     user.set_defaults(username, {})
     # user.set_default_attribute(username, 'images', {})
+    #
+    # TODO: info is undefined
+    #
     info(username)
 
 
 @task
 def register():
+    from cloudmesh.server.database import Database
     database = Database()
     database.set_credentials()
 
 
 @task
-def mongo(password=None):
+def mongo(passwd=None):
     from cloudmesh.server.database import Database
 
     database = Database()
-    if password == None:
+    if passwd is None:
         database.set_password_local()
     else:
-        database.set_password_local(password=password)
-        
+        database.set_password_local(password=passwd)
+
     database.set_credentials()
     database.initialize_user()
