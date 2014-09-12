@@ -9,5 +9,4 @@ class cm_shell_defaults:
 
     @function_command(shell_command_defaults)
     def do_defaults(self, args, arguments):
-
         shell_command_defaults(arguments)
