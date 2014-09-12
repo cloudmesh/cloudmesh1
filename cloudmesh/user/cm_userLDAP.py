@@ -50,11 +50,11 @@ class cm_userLDAP (CMUserProviderBaseType):
 
     def get_config(self, **kwargs):
 
-        if not kwargs.has_key('host'):  # if kwargs['host'] is None:
+        if 'host' not in kwargs:  
             self.host = cm_config_server().get(
                 "cloudmesh.server.ldap.hostname")
 
-        if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
+        if 'ldapcert' not in kwargs:  
             self.cert = cm_config_server().get("cloudmesh.server.ldap.cert")
 
     def authenticate(self, userId, password, **kwargs):
@@ -128,11 +128,11 @@ class cm_userLDAP (CMUserProviderBaseType):
         for k, v in kwargs.iteritems():
             provider[k] = v
 
-        if not kwargs.has_key('host'):  # if kwargs['host'] is None:
+        if 'host' not in kwargs:  
             self.host = cm_config_server().get(
                 "cloudmesh.server.ldap.hostname")
 
-        if not kwargs.has_key('ldapcert'):  # if kwargs['ldapcert'] is None:
+        if 'ldapcert' not in kwargs:  
             self.cert = cm_config_server().get("cloudmesh.server.ldap.cert")
 
         ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, self.cert)
@@ -203,7 +203,7 @@ class cm_userLDAP (CMUserProviderBaseType):
                 # print ldapresult[1]
                 # a result may not have 'mail' attribute, but valid account
                 # must have
-                if ldapresult[1].has_key('mail'):
+                if 'mail' in ldapresult[1]:
                     ldapmail = ldapresult[1]['mail'][0]
                     ldapuid = ldapresult[1]['uid'][0]
                     ldapuidNumber = ldapresult[1]['uidNumber'][0]
@@ -215,7 +215,7 @@ class cm_userLDAP (CMUserProviderBaseType):
                     address = 'TBD'  # not currently in LDAP
 
                     keys = {}
-                    if ldapresult[1].has_key('sshPublicKey'):
+                    if 'sshPublicKey' in ldapresult[1]:
                         for sshkey in ldapresult[1]['sshPublicKey']:
                             if sshkey.strip():
                                 (keytype, key, nickname) = (
@@ -248,12 +248,12 @@ class cm_userLDAP (CMUserProviderBaseType):
             ldapresults = list(
                 self.ldapconn.search_s(ldapbasedn, ldapscope, ldapfilter, ldapattribs))
             for ldapresult in ldapresults:
-                if ldapresult[1].has_key('cn'):
+                if 'cn' in ldapresult[1]:
                     cn = ldapresult[1]['cn'][0]
                     # projid = cn
-                    if ldapresult[1].has_key('memberUid'):
+                    if 'memberUid' in ldapresult[1]:
                         for auid in ldapresult[1]['memberUid']:
-                            if self.users.has_key(auid):
+                            if auid in self.users:
                                 if self.users[auid]["projects"]["active"] is not None:
                                     self.users[auid]["projects"][
                                         "active"].append(cn)
