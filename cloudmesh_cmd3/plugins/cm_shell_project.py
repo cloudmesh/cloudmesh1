@@ -6,7 +6,6 @@ from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
-
 class cm_shell_project:
 
     """opt_example class"""
@@ -32,6 +31,7 @@ class cm_shell_project:
     def do_project(self, args, arguments):
         """
         Usage:
+               project
                project info [--json]
                project default NAME
                project active NAME
@@ -59,10 +59,67 @@ class cm_shell_project:
             self.projects.write()
             self._load_projects()
 
-            print project
+            msg = '{0} project is a default project now'.format(project)
+            log.info(msg)
+            print msg
             return
 
-        elif arguments["info"]:
+        elif arguments["active"] and arguments['NAME']:
+            log.info("Sets the active project")
+            self._load_projects()
+            project = arguments["NAME"]
+            self.projects.add(project)
+            self.projects.write()
+            self._load_projects()
+
+            msg = '{0} project is an active project(s) now'.format(project)
+            log.info(msg)
+            print msg
+            return
+
+        elif arguments['delete'] and arguments['NAME']:
+            log.info('Deletes the project')
+            self._load_projects()
+            project = arguments['NAME']
+            try:
+                self.projects.delete(project,'active')
+            except ValueError, e:
+                log.info('Skipped deleting the project {0} in the active \
+                         list:{1}'.format(project, e))
+            try:
+                self.projects.delete(project,'completed')
+            except ValueError, e:
+                log.info('Skipped deleting the project {0} in the completed\
+                         list:{1}'.format(project, e))
+            try: 
+                self.projects.delete(project,'default')
+            except ValueError, e:
+                log.info('Skipped deleting the project {0} in the default\
+                         list:{1}'.format(project, e))
+            self.projects.write()
+            self._load_projects()
+
+            msg = '{0} project is deleted'.format(project)
+            log.info(msg)
+            print msg
+            return
+
+        elif arguments['completed'] and arguments['NAME']:
+            log.info('Sets a completed project')
+            self._load_projects()
+            project = arguments['NAME']
+            self.projects.delete(project,'active')
+            self.projects.add(project,'completed')
+            self.projects.delete(project,'default')
+            self.projects.write()
+            self._load_projects()
+
+            msg = '{0} project is in a completed project(s)'.format(project)
+            log.info(msg)
+            print msg
+            return
+        else: 
+            #elif arguments["info"]:
 
             self._load_projects()
 
@@ -88,57 +145,4 @@ class cm_shell_project:
                     print "%10s:" % "completed", \
                         ', '.join(self.projects.names("completed"))
                 print
-            return
-
-        elif arguments["active"] and arguments['NAME']:
-            log.info("Sets the active project")
-            self._load_projects()
-            project = arguments["NAME"]
-            self.projects.add(project)
-            self.projects.write()
-            self._load_projects()
-
-            print project
-            return
-
-        elif arguments['delete'] and arguments['NAME']:
-            log.info('Deletes the project')
-            self._load_projects()
-            project = arguments['NAME']
-            try:
-                self.projects.delete(project,'active')
-            except ValueError, e:
-                log.info('Skipped deleting the project {0} in the active \
-                         list:{1}'.format(project, e))
-            try:
-                self.projects.delete(project,'completed')
-            except ValueError, e:
-                log.info('Skipped deleting the project {0} in the completed\
-                         list:{1}'.format(project, e))
-            try: 
-                self.projects.delete(project,'default')
-            except ValueError, e:
-                log.info('Skipped deleting the project {0} in the default\
-                         list:{1}'.format(project, e))
-            self.projects.write()
-            self._load_projects()
-
-            print project
-            return
-
-        elif arguments['completed'] and arguments['NAME']:
-            log.info('Sets a completed project')
-            self._load_projects()
-            project = arguments['NAME']
-            self.projects.delete(project,'active')
-            self.projects.add(project,'completed')
-            self.projects.delete(project,'default')
-            self.projects.write()
-            self._load_projects()
-
-            print project
-            return
-
-        else:
-            log.info("NOT IMPLEMENTED")
             return
