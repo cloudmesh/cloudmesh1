@@ -61,7 +61,7 @@ def reset(password=None):
     banner("refreshing cloud info")
     simple()
 
-
+'''
 @task
 def install():
     """installs mongo in ~/ENV/bin. Make sure your path is set correctly"""
@@ -125,7 +125,7 @@ def install():
             'ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
         local('brew update')
         local('brew install mongodb')
-
+'''
 
 @task
 def admin():
