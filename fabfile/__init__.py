@@ -17,6 +17,7 @@ import hpc
 import qc
 import manage
 import india
+import ipython
 
 try:
     import queue
