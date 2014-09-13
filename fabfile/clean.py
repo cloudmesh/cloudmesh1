@@ -1,6 +1,7 @@
 from fabric.api import task, local
 from cloudmesh_install.util import banner
 from cloudmesh_install import config_file
+import server
 
 import os
 
@@ -9,7 +10,7 @@ import os
 def dir():
     """clean the dirs"""
     banner("STOPPING SERVER")
-    local("fab server.stop")
+    server.stop()
     banner("CLEAN DIR")
     local("rm -rf *.egg")
     local('find . -name "*~" -exec rm {} \;  ')

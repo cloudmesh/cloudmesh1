@@ -4,7 +4,7 @@ from cloudmesh_install import config_file
 
 
 @task
-def touch(username=None):
+def check(username=None):
     """clean the dirs"""
     if username is None:
         # bug for some reason the get method does not work

@@ -3,7 +3,6 @@ from util import yaml_file_replace
 import progress
 
 @task
-@task
 def create():
         
     from IPython.lib import passwd

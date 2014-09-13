@@ -9,7 +9,7 @@ __all__ = ['fast', 'sdist', 'install', 'sphinx']
 def sdist():
     """create the sdist"""
     fabric.state.output.stdout = True
-    execute(clean.all)
+    clean.all()
     local("python setup.py sdist --format=bztar,zip")
 
 
