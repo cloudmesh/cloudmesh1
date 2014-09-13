@@ -11,17 +11,9 @@ individual tests can be run with
 nosetests -v  --nocapture test_cm_compute.py:Test.test_06
 
 """
-
-from sh import head
-from sh import fgrep
-import string
-import os
-import time
-
 from cloudmesh_install import config_file
-from cloudmesh.config.cm_config import cm_config
-from cloudmesh.util.cm_table import cm_table
 import json
+import sh
 
 from cloudmesh_common.util import HEADING
 
@@ -31,7 +23,7 @@ class Test:
     # assuming first - is the prefered cloud
     cloudmesh_yaml = config_file("/cloudmesh.yaml")
     print cloudmesh_yaml
-    cloud_label = head(fgrep("-", cloudmesh_yaml), "-n", "1")
+    cloud_label = sh.head(sh.fgrep("-", cloudmesh_yaml), "-n", "1")
     cloud_label = cloud_label.replace(" - ", "").strip()
 
     def setup(self):

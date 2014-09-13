@@ -1,8 +1,7 @@
-import subprocess
+# import subprocess
 from cmd3.shell import command
 from cloudmesh_common.logger import LOGGER
 from IPython.lib import passwd
-from cloudmesh_install import config_file
 from shutil import copyfile
 from cloudmesh_install.util import path_expand
 import os
@@ -38,7 +37,7 @@ class notebook(object):
             self.data['notebook_dir'] = path_expand(path)
         try:
             os.makedirs("{notebook_dir}".format(**self.data), 0700)
-        except Exception, e:
+        except:
             pass
 
     def create(self):
@@ -48,7 +47,6 @@ class notebook(object):
             '{profile_nbserver_dir}/ipython_notebook_config.py'.format(**self.data)
         )
         result = passwd()
-
 
         self._yaml_file_replace(
             '{profile_nbserver_dir}/ipython_notebook_config.py'.format(**self.data),
@@ -60,11 +58,10 @@ class notebook(object):
     def start(self):
         self._create_dir()
         command = "cd {notebook_dir} && ipython notebook --certfile={cert} --profile=nbserver".format(**self.data)
-        #self.data['pid'] = subprocess.Popen(command.split(" "))
+        # self.data['pid'] = subprocess.Popen(command.split(" "))
         print "STARTING:", command
         os.system(command + " &")
 
-        
     def kill(self):
         #
         # this is not working, as we do not jet use subprocess
