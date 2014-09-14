@@ -422,6 +422,8 @@ def banner(header):
 # MAIN FOR TESTING
 #####
 if __name__ == "__main__":
+    # May not work properly
+    '''
     label = 'sierra'
     idm = keystone(label)
     users = idm.get_users()
@@ -447,6 +449,7 @@ if __name__ == "__main__":
     print rid
     print idm.get_user_by_name('fuwang')
     print idm.get_tenant_by_name('fg82')
+    '''
 
     """
     banner("Testing user creation")
