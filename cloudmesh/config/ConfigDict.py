@@ -83,7 +83,7 @@ class ConfigDict (OrderedDict):
         if filename is not None:
             location = path_expand(filename)
         else:
-            location = self.location
+            location = self['meta']['location']
 
         # with open('data.yml', 'w') as outfile:
             #    outfile.write( yaml.dump(data, default_flow_style=True) )
