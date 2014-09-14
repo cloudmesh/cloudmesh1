@@ -160,6 +160,28 @@ class ConfigDict (OrderedDict):
                 sys.exit()
         return element
 
+    def set(self, value, *keys):
+        element = self
+
+        if keys is None:
+            return self
+
+        if '.' in keys[0]:
+            keys = keys[0].split(".")
+
+        nested_str = ''.join([ "['{0}']".format(x) for x in keys ])
+        exec("self" + nested_str + "=" + "'" + str(value) + "'")
+        return element
+
+    def _update(self, keys, value):
+        """Updates the selected key with the value
+
+        Args:
+            keys (str): key names e.g. cloudmesh.server.loglevel
+            value (str): value to set
+        """
+        return self.set(value, keys)
+
     def attribute(self, keys):
         if self['meta']['prefix'] is None:
             k = keys
