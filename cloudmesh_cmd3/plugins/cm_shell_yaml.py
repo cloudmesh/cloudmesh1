@@ -12,7 +12,7 @@ class cm_shell_yaml:
             debug on
             debug off
         """
-        return
+        print arguments
 
     @command
     def do_loglevel(self, args, arguments):
@@ -23,13 +23,17 @@ class cm_shell_yaml:
             loglevel debug
             loglevel info
         """
-        return
+        print arguments
 
     @command
     def do_yaml(self, args, arguments):
         """
         Usage:
-               yaml replace REPLACEMENT [--filename=FILENAME] 
+            yaml [--filename=FILENAME]
+            yaml info [--filename=FILENAME]
+            yaml info-server
+            yaml replace REPLACEMENT [--filename=FILENAME] 
+            yaml replace-server REPLACEMENT
 
         Updates yaml on a given replacement
 
@@ -42,6 +46,9 @@ class cm_shell_yaml:
         """
         if arguments["replace"] and arguments["REPLACEMENT"]:
             log.info("")
+            print arguments
+            data=eval(arguments['REPLACEMENT'])
+            print data
             return
         return 
 
