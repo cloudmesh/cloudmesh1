@@ -1,9 +1,13 @@
 from cmd3.shell import command
+from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
 class cm_shell_yaml:
+
+    cm_config = cm_config()
+    cm_config_server = cm_config_server()
 
     @command
     def do_debug(self, args, arguments):
@@ -32,25 +36,27 @@ class cm_shell_yaml:
             yaml [--filename=FILENAME]
             yaml info [--filename=FILENAME]
             yaml info-server
-            yaml replace REPLACEMENT [--filename=FILENAME] 
-            yaml replace-server REPLACEMENT
+            yaml replace KEY VALUE [--filename=FILENAME] 
+            yaml replace-server KEY VALUE
 
-        Updates yaml on a given replacement
+        Provides yaml information or updates yaml on a given replacement
 
         Arguments:
-
-          REPLACEMENT   The pair of a key and a value (python dict)
-          FILENAME      cloudmesh.yaml or cloudmesh_server.yaml
-
+            KEY     Key name of the nested dict e.g. cloudmesh.server.loglevel
+            VALUE   Value to set on a given KEY
+            FILENAME      cloudmesh.yaml or cloudmesh_server.yaml
 
         """
-        if arguments["replace"] and arguments["REPLACEMENT"]:
-            log.info("")
-            print arguments
-            data=eval(arguments['REPLACEMENT'])
-            print data
-            return
-        return 
+
+        if arguments['info']:
+            self.cm_config.load(arguments['--filename'] or
+                                self.cm_config.filename)
+            self.cm_config.pprint()
+        elif arguments['info-server']:
+            self.cm_config_server.pprint()
+        elif arguments['replace-server']:
+            #self.cm_config.update(key, value)
+            pass
 
         '''
 
