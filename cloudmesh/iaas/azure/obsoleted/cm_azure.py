@@ -24,6 +24,9 @@ global maxparallel
 
 maxparallel = 5
 
+#####################################
+# OBSOLETED - cm_azure
+#####################################
 
 #
 # Baked sh azure functions to make azure client easier to use
