@@ -122,7 +122,7 @@ class Inventory:
             host = self.find_one({"cm_id": host_label,
                                   "cm_attribute": "network"})["cm_cluster"]
         except:
-            log.error("could not find host with the label".format(host_label))
+            log.error("could not find host with the label:{0}".format(host_label))
             sys.exit()
 
         cursor = self.update({"cm_id": host_label,
