@@ -117,7 +117,6 @@ class cm_mongo:
         self.userdb_passwd = get_mongo_db(passwd_collection)
         self.db_defaults = get_mongo_db(defaults_collection)
         self.db_user = get_mongo_db(user_collection)
-
         self.db_clouds = get_mongo_db(collection)
 
         self.config = cm_config()
@@ -476,6 +475,9 @@ class cm_mongo:
                 watch.stop(watch_name)
                 print 'Store time:', watch.get(watch_name)
 
+    """
+    # See pbs_mongo in pbs directory
+    # obsoleted in cm_mongo
     def get_pbsnodes(self, host):
         '''
         returns the data associated with pbsnodes from mongodb.
@@ -483,6 +485,7 @@ class cm_mongo:
         '''
         data = self.db_pbsnodes.find({"pbs_host": host})
         return data
+    """
 
     def find(self, query):
         '''
