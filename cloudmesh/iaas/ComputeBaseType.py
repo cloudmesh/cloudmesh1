@@ -128,7 +128,7 @@ class ComputeBaseType:
         raise NotImplementedError()
     """
 
-    def _get_image_dict(self):
+    def _get_images_dict(self):
         raise NotImplementedError()
 
     def _get_flavors_dict(self):
