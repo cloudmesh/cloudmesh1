@@ -51,7 +51,7 @@ class ConfigDict (OrderedDict):
             self._set_filename(kwargs['filename'])
         else:
             log.error("filename not specified")
-            sys.exit()
+            #sys.exit()
 
         self.load(self['location'])
 
@@ -143,7 +143,7 @@ class ConfigDict (OrderedDict):
         order of the access.  Example: get("provisiner","policy") will
         return the value of config["provisiner"]["policy"] from the
         yaml file if it does not exists an error will be printing that
-        the value does not exists and we exit.  Alternatively you can
+        the value does not exists.  Alternatively you can
         use the . notation e.g. get("provisiner.policy")
         """
         if keys is None:
@@ -157,7 +157,7 @@ class ConfigDict (OrderedDict):
                 element = element[v]
             except KeyError:
                 self.error_keys_not_found(keys)
-                sys.exit()
+                #sys.exit()
         return element
 
     def set(self, value, *keys):
