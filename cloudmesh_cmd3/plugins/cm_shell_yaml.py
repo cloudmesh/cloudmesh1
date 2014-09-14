@@ -16,7 +16,20 @@ class cm_shell_yaml:
             debug on
             debug off
         """
-        print arguments
+        if arguments['on']:
+            key = "cloudmesh.server.loglevel"
+            value = "DEBUG"
+            self.cm_config_server._update(key, value)
+            self.cm_config_server.write(format="yaml")
+            log.info("Debug mode is on.")
+            print ("Debug mode is on.")
+        elif arguments['off']:
+            key = "cloudmesh.server.loglevel"
+            value = "ERROR"
+            self.cm_config_server._update(key, value)
+            self.cm_config_server.write(format="yaml")
+            log.info("Debug mode is off.")
+            print ("Debug mode is off.")
 
     @command
     def do_loglevel(self, args, arguments):
@@ -27,7 +40,21 @@ class cm_shell_yaml:
             loglevel debug
             loglevel info
         """
-        print arguments
+        key = "cloudmesh.server.loglevel"
+        if arguments['debug']:
+            value = "DEBUG"
+        elif arguments['error']:
+            value = "ERROR"
+        elif arguments['info']:
+            value = "INFO"
+        else:
+            print self.cm_config_server.get(key)
+            return
+
+        self.cm_config_server._update(key, value)
+        self.cm_config_server.write(format="yaml")
+        log.info("{0} mode is set.".format(value))
+        print ("{0} mode is set.".format(value))
 
     @command
     def do_yaml(self, args, arguments):
