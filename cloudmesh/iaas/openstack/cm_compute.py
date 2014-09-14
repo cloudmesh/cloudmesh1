@@ -179,7 +179,7 @@ class openstack(ComputeBaseType):
             log.debug(
                 "{1} - GET CRED {0}".format(debug_dict, str(line_number)))
         else:
-            log.debug("{0} - {1}", str(line_number), str(msg))
+            log.debug("{0} - {1}".format( str(line_number), str(msg)))
 
     def auth(self):
         return 'access' in self.user_token
@@ -415,8 +415,9 @@ class openstack(ComputeBaseType):
             #
             # TODO: strutils not defined
             #
-            safe_userdata = strutils.safe_encode(userdata)
-            params["server"]["user_data"] = base64.b64encode(safe_userdata)
+            # safe_userdata = strutils.safe_encode(userdata)
+            # params["server"]["user_data"] = base64.b64encode(safe_userdata)
+            safe_userdata = None
 
         log.debug(str(lineno()) + ":POST PARAMS {0}".format(params))
 
@@ -592,7 +593,7 @@ class openstack(ComputeBaseType):
             log.error("extensions not available")
             return {}
         else:
-            list = r.json()
+            list = result.json()
         return self._list_to_dict(list, 'name', "extensions", time_stamp)
 
     def get_limits(self):
