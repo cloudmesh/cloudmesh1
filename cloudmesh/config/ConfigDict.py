@@ -161,6 +161,15 @@ class ConfigDict (OrderedDict):
         return element
 
     def set(self, value, *keys):
+        """
+        Sets the dict of the information as read from the yaml file. To access
+        the file safely, you can use the keys in the order of the access.
+        Example: set("{'project':{'fg82':[i0-i10]}}", "provisiner","policy")
+        will set the value of config["provisiner"]["policy"] in the yaml
+        file if it does not exists an error will be printing that the value does
+        not exists.  Alternatively you can use the . notation e.g.
+        set("{'project':{'fg82':[i0-i10]}}", "provisiner.policy")
+        """
         element = self
 
         if keys is None:
