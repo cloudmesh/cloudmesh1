@@ -8,6 +8,7 @@ cloudmesh.iaas.azure.cm_compute
 import time
 import tempfile
 import json
+from urlparse import urlparse
 
 from azure import *
 from azure.servicemanagement import *
@@ -753,10 +754,11 @@ class azure(ComputeBaseType):
         self.flavors = self.def_flavors
         return self.flavors
 
-
+'''
 class oJSONEncoder(json.JSONEncoder):
 
     def default(self, o):
         if not isinstance(o, dict):
             return vars(o)
         return json.JSONEncoder.default(self, o)
+'''
