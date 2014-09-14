@@ -33,7 +33,6 @@ class cm_shell_yaml:
     def do_yaml(self, args, arguments):
         """
         Usage:
-            yaml [KEY] [--filename=FILENAME]
             yaml info [KEY] [--filename=FILENAME]
             yaml info-server [KEY]
             yaml replace KEY VALUE [--filename=FILENAME] 
@@ -60,8 +59,13 @@ class cm_shell_yaml:
                 self.cm_config_server.pprint()
             else:
                 print self.cm_config_server.get(arguments['KEY'])
+        elif arguments['replace']:
+            self.cm_config._update(arguments['KEY'], arguments['VALUE'])
+            self.cm_config.write(format="yaml")
+            self.cm_config.pprint() 
         elif arguments['replace-server']:
             self.cm_config_server._update(arguments['KEY'], arguments['VALUE'])
+            self.cm_config_server.write(format="yaml")
             self.cm_config_server.pprint() 
 
         '''
