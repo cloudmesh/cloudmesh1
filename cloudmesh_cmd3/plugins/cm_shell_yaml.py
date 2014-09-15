@@ -20,6 +20,8 @@ class cm_shell_yaml:
         Usage:
             debug on
             debug off
+
+            Turns the debug log level on and off.
         """
         if arguments['on']:
             key = "cloudmesh.server.loglevel"
@@ -47,7 +49,7 @@ class cm_shell_yaml:
             loglevel info
             loglevel critical
 
-            Shows current log level or change it.
+            Shows current log level or changes it.
         """
         key = "cloudmesh.server.loglevel"
         if arguments['debug']:
