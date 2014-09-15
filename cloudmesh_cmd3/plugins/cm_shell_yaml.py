@@ -37,6 +37,33 @@ class cm_shell_yaml:
             self.cm_config_server.write(format="yaml")
             log.info("Debug mode is off.")
             print ("Debug mode is off.")
+            
+    
+    @command
+    def do_color(self, args, arguments):
+        """
+        Usage:
+            color on
+            color off
+            
+            Turns the shell color printing on or off
+        """
+        if arguments['on']:
+            key = "cloudmesh.server.shellcolor"
+            value = True
+            self.cm_config_server._update(key, value)
+            self.cm_config_server.write(format="yaml")
+            log.info("color on.")
+            print ("color on.")
+        elif arguments['off']:
+            key = "cloudmesh.server.shellcolor"
+            value = False
+            self.cm_config_server._update(key, value)
+            self.cm_config_server.write(format="yaml")
+            log.info("color off.")
+            print ("color off.")
+        
+  
 
     @command
     def do_loglevel(self, args, arguments):
