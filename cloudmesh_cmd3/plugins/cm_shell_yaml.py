@@ -40,6 +40,9 @@ class cm_shell_yaml:
             loglevel warning
             loglevel debug
             loglevel info
+            loglevel critical
+
+            Shows current log level or change it.
         """
         key = "cloudmesh.server.loglevel"
         if arguments['debug']:
@@ -50,6 +53,8 @@ class cm_shell_yaml:
             value = "WARNING"
         elif arguments['info']:
             value = "INFO"
+        elif arguments['critical']:
+            value = "CRITICAL"
         else:
             print self.cm_config_server.get(key)
             return
