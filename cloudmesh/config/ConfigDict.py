@@ -12,7 +12,7 @@ import json
 import os
 import stat
 import sys
-
+import ast
 
 log = LOGGER(__file__)
 package_dir = os.path.dirname(os.path.abspath(__file__))
@@ -197,12 +197,12 @@ class ConfigDict (OrderedDict):
             keys = keys[0].split(".")
 
         nested_str = ''.join([ "['{0}']".format(x) for x in keys ])
-        import ast
+        # Safely evaluate an expression to see if it is one of the PYthon
+        # literal structures: strings, numbers, tuples, lists, dicts, booleans,
+        # and None. Quoted string will be used if it is none of these types.
         try:
-            if isinstance(ast.literal_eval(str(value)), bool):
-                converted = str(value)
-            else:
-                converted = "'" + str(value) + "'"
+            ast.literal_eval(str(value))
+            converted = str(value)
         except ValueError:
             converted = "'" + str(value) + "'"
         exec("self" + nested_str + "=" + converted)
