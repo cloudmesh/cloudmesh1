@@ -37,6 +37,7 @@ class cm_shell_yaml:
         Usage:
             loglevel
             loglevel error
+            loglevel warning
             loglevel debug
             loglevel info
         """
@@ -45,6 +46,8 @@ class cm_shell_yaml:
             value = "DEBUG"
         elif arguments['error']:
             value = "ERROR"
+        elif arguments['warning']:
+            value = "WARNING"
         elif arguments['info']:
             value = "INFO"
         else:
