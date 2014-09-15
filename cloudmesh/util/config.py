@@ -79,13 +79,13 @@ def read_yaml_config(filename, check=True, osreplace=True):
                 result = t.substitute(os.environ)
 
                 data = yaml.safe_load(result)
-                # data = ordered_load(result, yaml.SafeLoader)
+                data = ordered_load(result, yaml.SafeLoader)
             else:
                 f = open(location, "r")
 
                 data = yaml.safe_load(f)
 
-                # data = ordered_load(result, yaml.SafeLoader)
+                data = ordered_load(result, yaml.SafeLoader)
                 f.close()
 
             return data
