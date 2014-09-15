@@ -1,6 +1,7 @@
 from cloudmesh_install import config_file
 from cloudmesh_install.util import path_expand
 from cloudmesh_common.logger import LOGGER
+from cloudmesh_common.util import backup_name
 from cloudmesh.util.config import read_yaml_config
 from cloudmesh.util.config import ordered_dump
 from collections import OrderedDict
@@ -81,6 +82,11 @@ class ConfigDict (OrderedDict):
         d = read_yaml_config(self['location'], check=True)
         self.update(d)
 
+    def make_a_copy(self, location=None):
+        import shutil
+        dest = backup_name(location)
+        shutil.copyfile(location, dest)
+
     def write(self, filename=None, format="dict"):
         """write the dict"""
 
@@ -91,6 +97,9 @@ class ConfigDict (OrderedDict):
 
         # with open('data.yml', 'w') as outfile:
             #    outfile.write( yaml.dump(data, default_flow_style=True) )
+
+        # Make a backup
+        self.make_a_copy(location)
 
         f = os.open(location, os.O_CREAT | os.O_TRUNC |
                     os.O_WRONLY, stat.S_IRUSR | stat.S_IWUSR)
