@@ -9,6 +9,11 @@ class cm_shell_yaml:
     cm_config = cm_config()
     cm_config_server = cm_config_server()
 
+    def activate_cm_shell_yaml(self):
+        self.register_command_topic('cloud', 'yaml')
+        self.register_command_topic('cloud', 'debug')
+        self.register_command_topic('cloud', 'loglevel')
+
     @command
     def do_debug(self, args, arguments):
         """
