@@ -98,11 +98,11 @@ def main():
 
         # To prevent errors building API docs, we need a
         # cloudmesh.yaml and cloudmesh_server.yaml to exist.
-        os.system("bash -c 'mkdir -m 0700 -p ~/{0}'".format(config_file_prefix()))
+        os.system("bash -c 'mkdir -m 0700 -p {0}'".format(config_file_prefix()))
         os.system(
-            "bash -c 'test -f ~/{0}/cloudmesh.yaml || touch ~/{0}/cloudmesh.yaml'".format(config_file_prefix()))
+            "bash -c 'test -f {0}/cloudmesh.yaml || touch {0}/cloudmesh.yaml'".format(config_file_prefix()))
         os.system(
-            "bash -c 'test -f ~/{0}/cloudmesh_server.yaml || touch ~/{0}/cloudmesh_server.yaml'".format(config_file_prefix()))
+            "bash -c 'test -f {0}/cloudmesh_server.yaml || touch {0}/cloudmesh_server.yaml'".format(config_file_prefix()))
 
         sys.exit(0)
 
