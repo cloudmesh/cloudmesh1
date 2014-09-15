@@ -117,7 +117,10 @@ class ConfigDict (OrderedDict):
         os.close(f)
 
     def error_keys_not_found(self, keys):
-        log.error("Filename: {0}".format(self['meta']['location']))
+        try:
+            log.error("Filename: {0}".format(self['meta']['location']))
+        except:
+            log.error("Filename: {0}".format(self['location']))
         log.error("Key '{0}' does not exist".format('.'.join(keys)))
         indent = ""
         last_index = len(keys) - 1

@@ -75,10 +75,10 @@ class cm_shell_yaml:
     def do_yaml(self, args, arguments):
         """
         Usage:
-            yaml info [KEY] [--filename=FILENAME]
-            yaml info-server [KEY]
-            yaml replace KEY VALUE [--filename=FILENAME] 
-            yaml replace-server KEY VALUE
+            yaml user [KEY] [--filename=FILENAME]
+            yaml server [KEY]
+            yaml user-replace KEY VALUE [--filename=FILENAME] 
+            yaml server-replace KEY VALUE
 
         Provides yaml information or updates yaml on a given replacement
 
@@ -89,23 +89,23 @@ class cm_shell_yaml:
 
         """
 
-        if arguments['info']:
+        if arguments['user']:
             self.cm_config.load(arguments['--filename'] or
                                 self.cm_config.filename)
             if not arguments['KEY']:
                 self.cm_config.pprint()
             else:
                 print self.cm_config.get(arguments['KEY'])
-        elif arguments['info-server']:
+        elif arguments['server']:
             if not arguments['KEY']:
                 self.cm_config_server.pprint()
             else:
                 print self.cm_config_server.get(arguments['KEY'])
-        elif arguments['replace']:
+        elif arguments['user-replace']:
             self.cm_config._update(arguments['KEY'], arguments['VALUE'])
             self.cm_config.write(format="yaml")
             self.cm_config.pprint() 
-        elif arguments['replace-server']:
+        elif arguments['server-replace']:
             self.cm_config_server._update(arguments['KEY'], arguments['VALUE'])
             self.cm_config_server.write(format="yaml")
             self.cm_config_server.pprint() 
