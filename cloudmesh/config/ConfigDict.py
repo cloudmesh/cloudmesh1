@@ -197,7 +197,12 @@ class ConfigDict (OrderedDict):
             keys = keys[0].split(".")
 
         nested_str = ''.join([ "['{0}']".format(x) for x in keys ])
-        exec("self" + nested_str + "=" + "'" + str(value) + "'")
+        import ast
+        if isinstance(ast.literal_eval(str(value)), bool):
+            converted = str(value)
+        else:
+            converted = "'" + str(value) + "'"
+        exec("self" + nested_str + "=" + converted)
         return element
 
     def _update(self, keys, value):
