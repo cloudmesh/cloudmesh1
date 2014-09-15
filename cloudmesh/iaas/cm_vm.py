@@ -7,11 +7,11 @@ from pprint import pprint
 from cloudmesh import banner
 from cloudmesh import yn_choice
 import time
-from cmd3.console import Console
+from cloudmesh_common.util import CONSOLE
 from sh import ssh
 
 log = LOGGER(__file__)
-
+Console = CONSOLE()
 
 def shell_command_vm(arguments):
     """
