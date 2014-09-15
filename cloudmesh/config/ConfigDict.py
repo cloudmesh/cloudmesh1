@@ -2,6 +2,7 @@ from cloudmesh_install import config_file
 from cloudmesh_install.util import path_expand
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.util.config import read_yaml_config
+from cloudmesh.util.config import ordered_dump
 from collections import OrderedDict
 import simplejson
 from pprint import pprint
@@ -22,7 +23,9 @@ class OrderedJsonEncoder(simplejson.JSONEncoder):
 
     def encode(self, o, depth=0):
         if isinstance(o, OrderedDict):
-            return "{" + (",\n ").join([self.encode(k) + ":" + self.encode(v, depth + 1) for (k, v) in o.iteritems()]) + "}\n"
+            return "{" + (",\n ").join([self.encode(k) + ":" + \
+                                        self.encode(v, depth + 1) \
+                                        for (k, v) in o.iteritems()]) + "}\n"
         else:
             return simplejson.JSONEncoder.encode(self, o)
 
@@ -74,7 +77,8 @@ class ConfigDict (OrderedDict):
 
     def load(self, filename):
         self._set_filename(filename)
-        d = OrderedDict(read_yaml_config(self['location'], check=True))
+        #d = OrderedDict(read_yaml_config(self['location'], check=True))
+        d = read_yaml_config(self['location'], check=True)
         self.update(d)
 
     def write(self, filename=None, format="dict"):
@@ -93,8 +97,10 @@ class ConfigDict (OrderedDict):
         if format == "json":
             os.write(f, self.json())
         elif format in ['yml', 'yaml']:
-            d = dict(self)
-            os.write(f, yaml.dump(d, default_flow_style=False))
+            #d = dict(self)
+            #os.write(f, yaml.dump(d, default_flow_style=False))
+            os.write(f, ordered_dump(OrderedDict(self), Dumper=yaml.SafeDumper,
+                                     default_flow_style=False))
         elif format == "print":
             os.write(f, custom_print(self, 4))
         else:
