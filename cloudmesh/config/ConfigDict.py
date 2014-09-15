@@ -198,9 +198,12 @@ class ConfigDict (OrderedDict):
 
         nested_str = ''.join([ "['{0}']".format(x) for x in keys ])
         import ast
-        if isinstance(ast.literal_eval(str(value)), bool):
-            converted = str(value)
-        else:
+        try:
+            if isinstance(ast.literal_eval(str(value)), bool):
+                converted = str(value)
+            else:
+                converted = "'" + str(value) + "'"
+        except ValueError:
             converted = "'" + str(value) + "'"
         exec("self" + nested_str + "=" + converted)
         return element
