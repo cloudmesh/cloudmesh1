@@ -1,10 +1,10 @@
 from cloudmesh_common.logger import LOGGER
+from cloudmesh_common.util import CONSOLE
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mongo import cm_mongo
 from tabulate import tabulate
 from pprint import pprint
 from cloudmesh.util.menu import menu_return_num
-from cmd3.console import Console
 from cloudmesh_install.util import yn_choice, path_expand
 import sys
 from cloudmesh.config.ConfigDict import ConfigDict
@@ -13,6 +13,8 @@ import csv
 from cloudmesh.server.database import Database
 
 log = LOGGER(__file__)
+
+Console = CONSOLE()
 
 
 def shell_command_cloud(arguments):

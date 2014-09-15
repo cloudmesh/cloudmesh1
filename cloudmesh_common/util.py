@@ -27,6 +27,8 @@ import functools
 import string
 import random
 from cloudmesh_install.util import banner
+from cloudmesh_install.util import grep
+from cloudmesh_install import config_file
 
 try:
     from progress.bar import Bar
@@ -306,3 +308,30 @@ def dict_uni_to_ascii(d):
                 v = dict_uni_to_ascii(v)
         d1[k] = v
     return d1
+
+
+def CONSOLE():
+    '''
+    log in color printing class initialization.  ::added by Mark X. on 9.15.2014
+    '''
+    from cmd3.console import Console
+    try:
+        switch = grep("shellcolor:", config_file(
+            "/cloudmesh_server.yaml")).strip().split(":")[1].strip().lower()
+    
+        if switch.upper() == "TRUE":
+            color_on = True
+        elif switch.upper() == "FALSE":
+            color_on = False
+        else:
+            color_on = False
+    except:
+        color_on = False
+    
+    try:
+        return Console(_color_on = color_on)
+    except:
+        return Console()
+    
+    
+    

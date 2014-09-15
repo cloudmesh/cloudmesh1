@@ -6,6 +6,7 @@ cloudmesh:
     loglevel: error
     debug: False
     production: False
+    shellcolor: true
     metric:
         host: http://???.???.???.???
         port: 5001
