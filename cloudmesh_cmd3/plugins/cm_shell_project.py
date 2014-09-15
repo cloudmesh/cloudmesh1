@@ -26,7 +26,6 @@ class cm_shell_project:
         # BUG this should be done outside of the activate
         #
         self.cm_shell_project_loaded = False
-        pass
 
     @command
     def do_project(self, args, arguments):
