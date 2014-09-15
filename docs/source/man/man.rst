@@ -49,94 +49,127 @@ cloud
 Command - cloud::
 
     Usage:
-        cloud
-        cloud list [--column=COLUMN]
-        cloud info [CLOUD|--all]
-        cloud alias <name> [CLOUD]
+        cloud [list] [--column=COLUMN] [--json|--table]
+        cloud info [CLOUD|--all] [--json|--table]
+        cloud alias NAME [CLOUD]
         cloud select [CLOUD]
         cloud on [CLOUD]
         cloud off [CLOUD]
-        cloud add CLOUDFILE [--force]
+        cloud add <cloudYAMLfile> [--force]
         cloud remove [CLOUD|--all]
         cloud default [CLOUD|--all]
-        cloud set flavor [CLOUD]
-        cloud set image [CLOUD]
+        cloud set flavor [CLOUD] [--flavor=flavorName|--flavorid=flavorID]
+        cloud set image [CLOUD] [--image=imageName|--imageid=imageID]
         cloud set default [CLOUD]
     
     Arguments:
     
-      CLOUD          the name of a cloud to work on
-      CLOUDFILE      a yaml file(with full file path) contains cloud information
-      name           new cloud name to set
+      CLOUD                  the name of a cloud
+      <cloudYAMLfile>        a yaml file (with full file path) containing
+                             cloud information
+      NAME                   name for a cloud
     
     Options:
     
-       -v                verbose model
-       --column=COLUMN   specify what information to display. For
-                         example, --column=active,label. Available
-                         columns are active, label, host, type/version,
-                         type, heading, user, credentials, defaults
-                         (all to diplay all, semiall to display all
-                         except credentials and defaults)
-       --all             work on all clouds
-       --force           if same cloud exists in database, it will be 
-                         overwritten
+       --column=COLUMN       specify what information to display in
+                             the columns of the list command. For
+                             example, --column=active,label prints the
+                             columns active and label. Available
+                             columns are active, label, host,
+                             type/version, type, heading, user,
+                             credentials, defaults (all to diplay all,
+                             semiall to display all except credentials
+                             and defaults)
+    
+        --json               print in json fomrat
+    
+        --table              print in table format
+    
+       --all                 display all available columns
+    
+       --force               if same cloud exists in database, it will be
+                             overwritten
+    
+       --flavor=flavorName   provide flavor name
+    
+       --flavorid=flavorID   provide flavor id
+    
+       --image=imageName     provide image name
+    
+       --imageid=imageID     provide image id
     
     Description:
-        the place to manage clouds
     
-        cloud list [--column=COLUMN]
+        The cloud command allows easy management of clouds in the
+        command shell. The following subcommands exist:
+    
+        cloud [list] [--column=COLUMN] [--json|--table]
             lists the stored clouds, optionally, specify columns for more
             cloud information. For example, --column=active,label
     
-        cloud info [CLOUD|--all]  
-            provides the available information about the cloud in dict format 
+        cloud info [CLOUD|--all] [--json|--table]
+            provides the available information about the cloud in dict
+            format
             options: specify CLOUD to display it, --all to display all,
                      otherwise selected cloud will be used
     
-        cloud alias <name> [CLOUD]
+        cloud alias NAME [CLOUD]
             sets a new name for a cloud
-            options: specify CLOUD to work with, otherwise selected cloud 
-                     will be used
+            options: CLOUD is the original label of the cloud, if
+                     it is not specified the default cloud is used.
+    
     
         cloud select [CLOUD]
-            selects a cloud to work with from a list of clouds if CLOUD is
-            not given
+            selects a cloud to work with from a list of clouds.If CLOUD is
+            is specified the default cloud will be set to that value.
     
         cloud on [CLOUD]
         cloud off [CLOUD]
-            activates or deactivates a cloud, if CLOUD is not given, 
-            selected cloud will be activated or deactivated
+            activates or deactivates a cloud. if CLOUD is not
+            given, the default cloud will be used.
     
-        cloud add CLOUDFILE [--force]
-            adds cloud information to database. CLOUDFILE is a yaml file with 
-            full file path. Inside the yaml, clouds should be written in the
-            form: 
-            cloudmesh: clouds: cloud1...
-                               cloud2...
-            please check cloudmesh.yaml
-            options: --force, by default, existing cloud in database can't be
-                     overwirtten, enable --force to overwrite if same cloud 
-                     name encountered
+    
+        cloud add <cloudYAMLfile> [--force]
+            adds the cloud information to database that is
+            specified in the <cloudYAMLfile>. This file is a yaml. You
+            need to specify the full path. Inside the yaml, a
+            cloud is specified as follows:
+    
+            cloudmesh:
+               clouds:
+                 cloud1: ...
+                 cloud2: ...
+    
+            For examples on how to specify the clouds, please see
+            cloudmesh.yaml
+    
+            options: --force. By default, existing cloud in
+                     database cannot be overwirtten, the --force
+                     allows overwriting the database values.
     
         cloud remove [CLOUD|--all]
-            remove a cloud from mongo, if CLOUD is not given, selected cloud 
-            will be reomved.
-            CAUTION: remove all is enabled(remove --all)
+            remove a cloud from the database, The default cloud is
+            used if CLOUD is not specified.
+            This command should be used with caution. It is also
+            possible to remove all clouds with the option --all
     
         cloud default [CLOUD|--all]
-        cloud set flavor [CLOUD]
-        cloud set image [CLOUD]
+    
+            TODO
+    
+        cloud set flavor [CLOUD] [--flavor=flavorName|--flavorid=flavorID]
+    
+            sets the default flavor for a cloud. If the cloud is
+            not specified, it used the default cloud.
+    
+        cloud set image [CLOUD] [--image=imageName|--imageid=imageID]
+    
+            sets the default flavor for a cloud. If the cloud is
+            not specified, it used the default cloud.
+    
         cloud set default [CLOUD]
-            view or manage cloud's default flavor and image, and set default 
-            cloud
-            options: CLOUD, specify a cloud to work on, otherwise selected 
-                     cloud will be used
-                     default, list default infomation of cloud, --all to 
-                              display all clouds defaults
-                     set flavor, set default flaovr of a cloud
-                     set image, set default image of a cloud
-                     set cloud, set default cloud
+            sets the default cloud for a cloud. If the cloud is
+            not specified, it asks for the cloud interactively
     
     
 
@@ -146,45 +179,20 @@ defaults
 Command - defaults::
 
     Usage:
-           defaults clean
-           defaults load
-           defaults [list] [--json]
-           defaults set variable value NOTIMPLEMENTED
-           defaults variable  NOTIMPLEMENTED
-           defaults format (json|table)  NOTIMPLEMENTED
-    
-    This manages the defaults associated with the user.
-    You can load, list and clean defaults associated with
-    a user and a cloud. The default parameters include
-    index, prefix, flavor and image.
+        defaults format [--json|--table]
     
     Arguments:
     
-      CLOUD          The name of Cloud - this has to be implemented
-    
     Options:
-    
-       -j --json      json output
     
     Description:
     
-      defaults set a hallo
+        defaults format [--json|--table]
+            some commands can output in json form or table form, this command
+            sets the default printing form, if no form is given, it shows the
+            current default form
     
-         sets the variable a to the value hallo
-         NOT YET IMPLEMENTED
     
-      defaults a
-    
-         returns the value of the variable
-         NOT YET IMPLEMENTED
-    
-      default format json
-      default format table
-    
-         sets the default format how returns are printed.
-         if set to json json is returned,
-         if set to table a pretty table is printed
-         NOT YET IMPLEMENTED
     
 
 dot2
@@ -267,27 +275,27 @@ flavor
 
 Command - flavor::
 
-        Usage:
-            flavor 
-            flavor CLOUD... [--refresh]
-    	flavor -h | --help
-            flavor --version
+     Usage:
+         flavor
+         flavor CLOUD... [--refresh]
+         flavor -h | --help
+         flavor --version
     
-       Options:
-           -h                   help message
-           --refresh            refresh flavors of IaaS
+    Options:
+        -h                   help message
+        --refresh            refresh flavors of IaaS
     
-        Arguments:
-            CLOUD    Name of the IaaS cloud e.g. india_openstack_grizzly.
+     Arguments:
+         CLOUD    Name of the IaaS cloud e.g. india_openstack_grizzly.
     
-        Description:
-           flavor command provides list of available flavors. Flavor describes
-           virtual hardware configurations such as size of memory, disk, cpu cores.
+     Description:
+        flavor command provides list of available flavors. Flavor describes
+        virtual hardware configurations such as size of memory, disk, cpu cores.
     
-        Result:
+     Result:
     
-        Examples:
-            $ flavor india_openstack_grizzly
+     Examples:
+         $ flavor india_openstack_grizzly
     
     
 
@@ -343,28 +351,28 @@ image
 
 Command - image::
 
-        Usage:
-            image
-            image <cm_cloud>... [--refresh]
-    	image -h | --help
-            image --version
+     Usage:
+         image
+         image <cm_cloud>... [--refresh]
+     image -h | --help
+         image --version
     
-       Options:
-           -h                   help message
-           --refresh            refresh images of IaaS
+    Options:
+        -h                   help message
+        --refresh            refresh images of IaaS
     
-        Arguments:
-            cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
+     Arguments:
+         cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
     
-        Description:
-           image command provides list of available images. Image describes
-           pre-configured virtual machine image.
+     Description:
+        image command provides list of available images. Image describes
+        pre-configured virtual machine image.
     
     
-        Result:
+     Result:
     
-        Examples:
-            $ image india_openstack_grizzly
+     Examples:
+         $ image india_openstack_grizzly
     
     
 
@@ -393,7 +401,7 @@ Command - init::
            init [--force] generate me
            init [--force] generate none
            init [--force] generate FILENAME
-           init list [KIND] [--json]           
+           init list [KIND] [--json]
            init list clouds [--file=FILENAME] [--json]
            init inspect --file=FILENAME
            init fill --file=FILENAME [VALUES]
@@ -409,7 +417,7 @@ Command - init::
        none       specifies if a yaml file is used for generation
                   the file is located at CONFIG/etc/none.yaml
        FILENAME   The filename to be generated or from which to read
-                  information. 
+                  information.
        VALUES     yaml file with the velues to be sed in the FILENAME
        KIND       The kind of the yaml file.
     
@@ -471,66 +479,70 @@ Command - inventory::
     
     
 
-keys
+key
 ----------------------------------------------------------------------
 
-Command - keys::
+Command - key::
 
-            Usage:
-                   keys info [--json] [NAME][--yaml][--mongo]
-                   keys mode MODENAME               
-                   keys default NAME [--yaml][--mongo]
-                   keys add NAME [KEY] [--yaml][--mongo]
-                   keys delete NAME [--yaml][--mongo]
-                   keys save
-                   keys
+    Usage:
+           key -h|--help
+           key list [--source=SOURCE] [--dir=DIR] [--format=FORMAT]
+           key add [--keyname=KEYNAME] FILENAME
+           key default [KEYNAME]
+           key delete KEYNAME
     
-            Manages the keys
+    Manages the keys
     
-            Arguments:
+    Arguments:
     
-              NAME           The name of a key
-              MODENAME       This is used to specify the mode name. Mode
-    	  		          name can be either 'yaml' or 'mongo'
-    	  	  KEY            This is the actual key that has to added
+      SOURCE         mongo, yaml, ssh
+      KEYNAME        The name of a key
+      FORMAT         The format of the output (table, json, yaml)
+      FILENAME       The filename with full path in which the key is located
     
-            Options:
+    Options:
     
-               -v --verbose     verbose mode
-               -j --json        json output
-               -y --yaml        forcefully use yaml mode
-               -m --mongo       forcefully use mongo mode           
+       --dir=DIR            the directory with keys [default: ~/.ssh]
+       --format=FORMAT      the format of the output [default: table]
+       --source=SOURCE      the source for the keys [default: mongo]
+       --keyname=KEYNAME    the name of the keys
     
-            Description:
+    Description:
     
-            keys info 
     
-    	     Prints list of keys. NAME of the key can be specified
+    key list --source=ssh  [--dir=DIR] [--format=FORMAT]
     
-            keys mode MODENAME
+       lists all keys in the directory. If the directory is not
+       specified the defualt will be ~/.ssh
     
-    	     Used to change default mode. Valid MODENAMES are
-    	     yaml(default) and mongo mode.
+    key list --source=yaml  [--dir=DIR] [--format=FORMAT]
     
-            keys default NAME
+       lists all keys in cloudmesh.yaml file in the specified directory.
+        dir is by default ~/.cloudmesh
     
-    	     Used to set a key from the key-list as the default key
+    key list [--format=FORMAT]
     
-            keys add NAME [KEY]
+        list the keys in mongo
     
-    	     adding/updating keys. KEY is the key file with full file 
-    	     path, if KEY is not provided, you can select a key among
-    	     the files with extension .pub under ~/.ssh. If NAME exists,
-    	     current key value will be overwritten
+    key add [--keyname=keyname] FILENAME
     
-            keys delete NAME
+        adds the key specifid by the filename to mongodb
     
-    	     deletes a key. In yaml mode it can delete only keys that
-    	     are not saved in mongo
     
-            keys save
+    key list
     
-    	     Saves the temporary yaml data structure to mongo
+         Prints list of keys. NAME of the key can be specified
+    
+    key default [NAME]
+    
+         Used to set a key from the key-list as the default key if NAME
+         is given. Otherwise print the current default key
+    
+    key delete NAME
+    
+         deletes a key. In yaml mode it can delete only key that
+         are not saved in mongo
+    
     
 
 label
@@ -539,20 +551,17 @@ label
 Command - label::
 
     Usage:
-           label [--prefix=PREFIX] [--id=ID] [--width=WIDTH]
-    
-    A command to set the prefix and id for creating an automatic lable for VMs.
-    Without paremeter it prints the currect label.
-    
-    Arguments:
-    
-      PREFIX     The prefix for the label
-      ID         The start ID which is an integer
-      WIDTH      The width of the ID in teh label, padded with 0
+           label [--prefix=PREFIX] [--id=ID]
     
     Options:
     
-       -v       verbose mode
+      --prefix=PREFIX    provide the prefix for the label
+      --id=ID            provide the start ID which is an integer
+    
+    Description:
+    
+        A command to set the prefix and id for creating an automatic
+        lable for VMs. Without paremeter it prints the currect label.
     
     
 
@@ -560,40 +569,58 @@ list
 ----------------------------------------------------------------------
 
 Command - list::
-
-    Usage:
-        list flavor [CLOUD|--all] [--refresh]
-        list image [CLOUD|--all] [--refresh]
-        list vm [CLOUD|--all] [--refresh]
-        list project
-        list cloud
+List available flavors, images, vms, projects and clouds
     
-    Arguments:
+        Usage:
+            list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
+            [--column=COLUMN]
+            list image [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
+            list vm [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
+            list project
+            list cloud [--column=COLUMN]
     
-        CLOUD    the name of the cloud
+        Arguments:
     
-    Options:
+            CLOUD    the name of the cloud e.g. alamo, sierra, india
     
-        -v         verbose mode
-        --all      list information of all active clouds
-        --refresh  refresh data before list
+        Options:
     
-    Description:
+            -v         verbose mode
+            --all      list information of all active clouds
+            --refresh  refresh data before list
     
-        List clouds and projects information, if CLOUD argument is not given,
-        default or selected cloud will be used, you may use command 'cloud select' 
-        to select the cloud to work with.
+            --column=COLUMN        specify what information to display in
+                                   the columns of the list command. For
+                                   example, --column=active,label prints
+                                   the columns active and label. Available
+                                   columns are active, label, host,
+                                   type/version, type, heading, user,
+                                   credentials, defaults (all to display
+                                   all, email to display all except
+                                   credentials and defaults)
     
-        list flavor [CLOUD|--all] [--refresh]
-            list the flavors
-        list image [CLOUD|--all] [--refresh]
-            list the images
-        list vm [CLOUD|--all] [--refresh]
-            list the vms
-        list project
-            list the projects
-        list cloud
-            list active clouds
+            --format=FORMAT         output format: table, json, csv
+    
+        Description:
+    
+            List clouds and projects information, if the CLOUD argument is not specified, the
+            selected default cloud will be used. You can interactively set the default cloud with the command
+            'cloud select'.
+    
+            list flavor
+            : list the flavors
+            list image
+            : list the images
+            list vm
+            : list the vms
+            list project
+            : list the projects
+            list cloud
+            : same as cloud list
+    
+        See Also:
+    
+            man cloud
     
     
 
@@ -624,56 +651,74 @@ metric
 
 Command - metric::
 
-        Usage:
-    	cm-metric -h | --help
-            cm-metric --version
-            cm-metric [CLOUD]
-                      [-s START|--start=START] 
-                      [-e END|--end=END] 
-                      [-u USER|--user=USER] 
-                      [-m METRIC|--metric=METRIC]
-                      [-p PERIOD|--period=PERIOD] 
-                      [-c CLUSTER]
+     Usage:
+         cm-metric -h | --help
+         cm-metric --version
+         cm-metric [CLOUD]
+                   [-s START|--start=START]
+                   [-e END|--end=END]
+                   [-u USER|--user=USER]
+                   [-m METRIC|--metric=METRIC]
+                   [-p PERIOD|--period=PERIOD]
+                   [-c CLUSTER]
     
-       Options:
-           -h                   help message
-           -m, --metric METRIC  use either user|vm|runtime in METRIC
-           -u, --user USER      use username in USER
-           -s, --start_date START    use YYYYMMDD datetime in START
-           -e, --end_date END        use YYYYMMDD datetime in END
-           -c, --host HOST      use host name e.g. india, sierra, etc
-           -p, --period PERIOD  use either month|day|week (TBD)
+    Options:
+        -h                   help message
+        -m, --metric METRIC  use either user|vm|runtime in METRIC
+        -u, --user USER      use username in USER
+        -s, --start_date START    use YYYYMMDD datetime in START
+        -e, --end_date END        use YYYYMMDD datetime in END
+        -c, --host HOST      use host name e.g. india, sierra, etc
+        -p, --period PERIOD  use either month|day|week (TBD)
     
-        Arguments:
-            CLOUD               Name of the IaaS cloud e.g. openstack, nimbus, Eucalyptus
-            HOST                Name of host e.g. india, sierra, foxtrot,
-                                hotel, alamo, lima
+     Arguments:
+         CLOUD               Name of the IaaS cloud e.g. openstack, nimbus, Eucalyptus
+         HOST                Name of host e.g. india, sierra, foxtrot,
+                             hotel, alamo, lima
     
-        Description:
-           metric command provides usage data with filter options.
+     Description:
+        metric command provides usage data with filter options.
     
-        Result:
-          The result of the method is a datastructure specified in a given format.
-          If no format is specified, we return a JSON string of the following format:
+     Result:
+       The result of the method is a datastructure specified in a given format.
+       If no format is specified, we return a JSON string of the following format:
     
-             {
-                "start_date"    :   start date of search    (datetime),
-                "end_date"      :   end date of search      (datetime),
-                "ownerid"       :   portal user id          (str),
-                "metric"        :   selected metric name    (str),
-                "period"        :   monthly, weekly, daily  (str),
-                "clouds"        :   set of clouds           (list)
-                [
-                   {"service"     :   cloud service name  (str),
-                    "hostname"     :   hostname (str),
-                    "stats"        :   value (int) }
-                    ...
-                ]
-             }
+          {
+             "start_date"    :   start date of search    (datetime),
+             "end_date"      :   end date of search      (datetime),
+             "ownerid"       :   portal user id          (str),
+             "metric"        :   selected metric name    (str),
+             "period"        :   monthly, weekly, daily  (str),
+             "clouds"        :   set of clouds           (list)
+             [
+                {"service"     :   cloud service name  (str),
+                 "hostname"     :   hostname (str),
+                 "stats"        :   value (int) }
+                 ...
+             ]
+          }
     
-        Examples:
-            $ cm-metric openstack -c india -u hrlee        
-            - Get user statistics
+     Examples:
+         $ cm-metric openstack -c india -u hrlee
+         - Get user statistics
+    
+    
+
+notebook
+----------------------------------------------------------------------
+
+Command - notebook::
+
+    Usage:
+        notebook create
+        notebook start
+        notebook kill
+    
+    Manages the ipython notebook server
+    
+    Options:
+    
+       -v       verbose mode
     
     
 
@@ -723,16 +768,18 @@ project
 Command - project::
 
     Usage:
+           project
            project info [--json]
            project default NAME
-           project NOTIMPLEMENTED members
+           project active NAME
+           project delete NAME
+           project completed NAME
     
     Manages the project
     
     Arguments:
     
-      NAME           The name of the project
-    
+      NAME           The project id
     
     Options:
     
@@ -814,7 +861,7 @@ Command - rain::
                           (-l HOSTS|-n COUNT)
                           [--start=TIME_START]
                           [--end=TIME_END]
-        rain user list [--project=PROJECTS] [HOSTS]    
+        rain user list [--project=PROJECTS] [HOSTS]
         rain user list hosts [--start=TIME_START]
                         [--end=TIME_END]
                         [--format=FORMAT]
@@ -835,15 +882,15 @@ Command - rain::
     
     Options:
         -n COUNT     count of teh bare metal hosts to be provisined
-        -p PROJECTS  --projects=PROJECTS  
+        -p PROJECTS  --projects=PROJECTS
         -u USERS     --user=USERS        Specify users
         -f FILE, --file=FILE  file to be specified
-        -i           interactive mode adds a yes/no 
+        -i           interactive mode adds a yes/no
                      question for each host specified
         --role=ROLE            Specify predefined role
-        --start=TIME_START     Start time of the reservation, in 
+        --start=TIME_START     Start time of the reservation, in
                                YYYY/MM/DD HH:MM:SS format. [default: current_time]
-        --end=TIME_END         End time of the reservation, in 
+        --end=TIME_END         End time of the reservation, in
                                YYYY/MM/DD HH:MM:SS format. In addition a duration
                                can be specified if the + sign is the first sign.
                                The duration will than be added to
@@ -908,26 +955,26 @@ security_group
 
 Command - security_group::
 
-        Usage:
-            security_group list <cm_cloud>...
-            security_group add <cm_cloud> <label> <parameters>  [NOT IMPLEMENTED]
-            security_group delete <cm_cloud> <label>            [NOT IMPLEMENTED]
-    	security_group -h | --help
-            security_group --version
+     Usage:
+         security_group list <cm_cloud>...
+         security_group add <cm_cloud> <label> <parameters>  [NOT IMPLEMENTED]
+         security_group delete <cm_cloud> <label>            [NOT IMPLEMENTED]
+     security_group -h | --help
+         security_group --version
     
-       Options:
-           -h                   help message
+    Options:
+        -h                   help message
     
-        Arguments:
-            cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
+     Arguments:
+         cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
     
-        Description:
-           security_group command provides list of available security_groups.
+     Description:
+        security_group command provides list of available security_groups.
     
-        Result:
+     Result:
     
-        Examples:
-            $ security_group list india_openstack_grizzly
+     Examples:
+         $ security_group list india_openstack_grizzly
     
     
 
@@ -948,9 +995,10 @@ Command - storm::
       ARGUMENTS  The name of the arguments that need to be passed
     
     Options:
-      --kind=KIND  the kind of the storm. It can be chef, puppet, or other
-                   frameworks. At this time we will focus on chef [default: chef].
     
+      --kind=KIND  the kind of the storm. It can be chef, puppet, or other
+                   frameworks. At this time we will focus on chef
+                   [default: chef].
        -v          verbose mode
     
     Description:
@@ -1116,20 +1164,60 @@ Command - vm::
                  [--cloud=<CloudName>]
                  [--image=<imgName>|--imageid=<imgId>]
                  [--flavor=<flavorName>|--flavorid=<flavorId>]
-                 [--group=<group>]                    
+                 [--group=<group>]
         vm delete [NAME|--id=<id>]
                   [--group=<group>]
                   [--cloud=<CloudName>]
-                  [--prefix=<prefix>] 
+                  [--prefix=<prefix>]
                   [--range=<range>]
+                  [--force]
+        vm pip (NAME|--id=<id>) [--cloud=<CloudName>]
+        vm login (NAME|--id=<id>) [--cloud=<CloudName>] [NOT IMPLEMENTED]
     
     Arguments:
+        NAME  server name
     
     Options:
+        --cloud=<CloudName>    give a cloud to work on, if not given, selected
+                               or default cloud will be used
+        --count=<count>        give the number of servers to start
+        --flavor=<flavorName>  give the name of the flavor
+        --flavorid=<flavorId>  give the id of the flavor
+        --group=<group>        give the group name of server
+        --id=<id>              give the server id
+        --image=<imgName>      give the name of the image
+        --imageid=<imgId>      give the id of the image
+        --prefix=<prefix>      give the prefix of the server, standand server
+                               name is in the form of prefix_index, e.g. abc_9
+        --range=<range>        give the range of the index of the servers
+                               to delete, e.g. --range=3,6. standand server
+                               name is in the form of prefix_index, e.g. abc_9
+        --force                delete vms without user's confirmation
     
     Description:
+        commands used to start or delete servers of a cloud
     
-    Examples:   
+        vm start [options...]   start servers of a cloud, user may specify
+                                flavor, image .etc, otherwise default values
+                                will be used, see how to set default values
+                                of a cloud: cloud help
+        vm delete [options...]  delete servers of a cloud, user may delete
+                                a server by its name or id, delete servers
+                                of a group or servers of a cloud, give prefix
+                                and/or range to find servers by their names.
+                                Or user may specify more options to narrow
+                                the search
+        vm pip [options...]     assign a public ip to a VM of a cloud
+    
+    Examples:
+        vm start --count=5 --group=test --cloud=india
+                start 5 servers on india and give them group
+                name: test
+    
+        vm delete --group=test --range=,9
+                delete servers on selected or default cloud with search conditions:
+                group name is test and index in the name of the servers is no greater
+                than 9
     
     
 
@@ -1148,7 +1236,7 @@ Command - web::
     Options:
     
         -v         verbose mode
-        --fg       opens a link on the FG portal 
+        --fg       opens a link on the FG portal
         --cm       opens a link on the CM portal
     
     Description:
