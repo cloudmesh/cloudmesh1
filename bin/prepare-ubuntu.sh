@@ -20,6 +20,7 @@ echo "This will install (if not already installed):"
 for P in $PACKAGES; do
   echo "    $P"
 done
+sudo apt-get update
 sudo apt-get -y install $PACKAGES
 
 
