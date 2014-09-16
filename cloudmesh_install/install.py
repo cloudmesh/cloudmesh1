@@ -75,7 +75,8 @@ def install_command(args):
         install enable admin [--username=<username>]
 
     """
-    print "IIIII<" + args + ">"
+    # This is a debuging message
+    # print "IIIII<" + args + ">"
 
     arguments = docopt(install_command.__doc__, args)
 
