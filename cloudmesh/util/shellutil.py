@@ -5,14 +5,14 @@ from cloudmesh.user.cm_user import cm_user
 import json
 from cloudmesh_common.tables import array_dict_table_printer
 from cloudmesh import banner
+import csv
 
 
 #
 # TODO: Console is not imported
 #
 def shell_commands_dict_output(d,
-                               jsonformat=False,
-                               table=False,
+                               print_format=None,
                                firstheader=None,
                                header=None,
                                oneitem=False,
@@ -27,8 +27,7 @@ def shell_commands_dict_output(d,
     set 'shell_print_format' = table
 
     param d:: data to print
-    param json:: force to print in json format
-    param table:: force to print in table format
+    param print_format:: print format: table, json, csv
     param firstheader:: designed for table, provide a attribute name for the
                         first item of each row, since the dict doesn't provide
                         it
@@ -48,10 +47,8 @@ def shell_commands_dict_output(d,
     param count: provide count info at the end of the table
     '''
     format_type = None
-    if jsonformat:
-        format_type = "json"
-    elif table:
-        format_type = "table"
+    if print_format:
+        format_type = print_format
     else:
         try:
             config = cm_config()
@@ -71,7 +68,7 @@ def shell_commands_dict_output(d,
             userdata = user_obj.info(username)
             format_type = userdata['defaults']['shell_print_format']
 
-    if format_type not in ['table', 'json']:
+    if format_type not in ['table', 'json', 'csv']:
         print "ERROR: something wrong while reading print format infomation"
         return False
 
@@ -79,6 +76,13 @@ def shell_commands_dict_output(d,
         if title:
             banner(title)
         print json.dumps(d, indent=4)
+        
+    elif format_type == "csv":
+        with open(".temp.csv", "wb") as f:
+            w = csv.DictWriter(f, d.keys())
+            w.writeheader()
+            w.writerow(d)
+        
     elif format_type == "table":
         if title:
             print "+" + "-" * (len(title) - 2) + "+"
