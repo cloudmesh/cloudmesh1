@@ -22,8 +22,8 @@ def shell_command_cloud(arguments):
     ::
 
         Usage:
-            cloud [list] [--column=COLUMN] [--json|--table]
-            cloud info [CLOUD|--all] [--json|--table]
+            cloud [list] [--column=COLUMN] [--format=FORMAT]
+            cloud info [CLOUD|--all] [--format=FORMAT]
             cloud alias NAME [CLOUD]
             cloud select [CLOUD]
             cloud on [CLOUD]
@@ -53,10 +53,8 @@ def shell_command_cloud(arguments):
                                  credentials, defaults (all to diplay all,
                                  semiall to display all except credentials
                                  and defaults)
-
-            --json               print in json fomrat
-
-            --table              print in table format
+                                 
+           --format=FORMAT       output format: table, json, csv
 
            --all                 display all available columns
 
@@ -834,10 +832,18 @@ class CloudCommand(CloudManage):
                         except:
                             pass
                 d[cloud['cm_cloud']] = res
+                
+            if self.arguments['--format']:
+                if self.arguments['--format'] not in ['table', 'json', 'csv']:
+                    Console.error("please select printing format among table, json and csv")
+                    return
+                else:
+                    p_format = self.arguments['--format']
+            else:
+                p_format = None
 
             shell_commands_dict_output(d,
-                                       jsonformat=self.arguments['--json'],
-                                       table=self.arguments['--table'],
+                                       print_format=p_format,
                                        firstheader="cloud",
                                        header=combined_headers,
                                        oneitem=False,
@@ -866,9 +872,18 @@ class CloudCommand(CloudManage):
             cloud["default image"] = defaultinfo['image']
             # print "#", 70 * "#", "\n"
             # -------------------------------------------------
+            
+            if self.arguments['--format']:
+                if self.arguments['--format'] not in ['table', 'json', 'csv']:
+                    Console.error("please select printing format among table, json and csv")
+                    return
+                else:
+                    p_format = self.arguments['--format']
+            else:
+                p_format = None
+            
             shell_commands_dict_output(cloud,
-                                       table=self.arguments['--table'],
-                                       jsonformat=self.arguments['--json'],
+                                       print_format=p_format,
                                        # "cloud '{0}' information".format(cloud['cm_cloud']),
                                        title=None,
                                        oneitem=True)
