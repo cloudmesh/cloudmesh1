@@ -13,7 +13,6 @@ cloudmesh:
         phone: {{ profile.phone }}
         username: {{ username.portal }}
     active:
-    - sierra
     - india
     hpc:
         username: {{ username.portal }}
