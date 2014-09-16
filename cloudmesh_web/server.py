@@ -600,8 +600,12 @@ def logout():
 if with_browser:
     log.debug("Web page update {0}".format(browser_page))
 
-    webbrowser.register("safari", None)
-    webbrowser.open(url_link, 2, autoraise=True)
+    try:
+        webbrowser.register("safari", None)
+        webbrowser.open(url_link, 2, autoraise=True)
+    except:
+        # webbrowser.Error: could not locate runnable browser
+        log.error("webbrowser open failed")
 
 
 if __name__ == "__main__":
