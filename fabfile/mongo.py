@@ -217,7 +217,7 @@ def boot(auth=True):
     # start mongo without auth
     start(auth=False)
 
-    time.sleep(2)
+    time.sleep(5)
     PROGRESS.next()
     if isyes(auth):
 
@@ -326,6 +326,10 @@ def stop():
     with settings(warn_only=True):
         with hide('output', 'running', 'warnings'):
             local("killall -15 mongod")
+
+    # Added to make sure the mongodb server is shutdown.
+    # - killall does not work if the server is running on root or mongodb
+    local("echo \"use admin\ndb.shutdownServer()\" | mongo")
 
     # (pid, line) = get_pid("mongod")
     # if pid is None:
