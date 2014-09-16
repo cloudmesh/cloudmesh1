@@ -17,11 +17,6 @@ rc_file_locations = {
         'hostname': 'india.futuregrid.org',
         'source': '.futuregrid/openstack_havana/novarc',
         'dest': "~/.cloudmesh/clouds/india",
-    },
-    'sierra': {
-        'hostname': 'sierra.futuregrid.org',
-        'source': '.futuregrid/novarc',
-        'dest': "~/.cloudmesh/clouds/sierra",
     }
 }
 
@@ -273,7 +268,7 @@ def fetchrc(userid=None, outdir=None):
     # Task 2. list hostnames to get access. In Futuregrid, india, sierra are
     # mandatory hosts to be included.
     # TEMPORARY
-    host_ids = ["india_openstack_havana", "sierra_openstack_grizzly"]
+    host_ids = ["india"]
 
     # user input is disabled
     # host_ids = raw_input("Please enter host identifications [default: %s]: "
@@ -326,7 +321,7 @@ def verify_ssh_login(userid):
     client.set_missing_host_key_policy(AutoAddPolicy())
 
     # TEST ONLY
-    hosts = ["india.futuregrid.org", "sierra.futuregrid.org"]
+    hosts = ["india.futuregrid.org"]
     key = os.path.expanduser(os.path.join("~", ".ssh", "id_rsa"))
     print "[key: %s]" % key
 
