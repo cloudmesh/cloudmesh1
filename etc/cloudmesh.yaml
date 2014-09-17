@@ -69,79 +69,96 @@ cloudmesh:
             default:
                 flavor: {{ clouds.india_openstack_havana.default.flavor }}
                 image: {{ clouds.india_openstack_havana.default.image }}
-        sierra:
-            cm_host: sierra.futuregrid.org
-            cm_heading: Sierra OpenStack, Grizzly
-            cm_label: sos
+        hp:
+            cm_heading: HP Openstack
+            cm_label: hpos
             cm_type: openstack
             cm_type_version: grizzly
             credentials:
-                OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
-                OS_CACERT: $HOME/.cloudmesh/sierra-cacert.pem
-                OS_PASSWORD: {{ clouds.sierra_openstack_grizzly.credential.OS_PASSWORD }}
-                OS_TENANT_NAME: {{ clouds.sierra_openstack_grizzly.credential.OS_TENANT_NAME }}
-                OS_USERNAME: {{ username.portal }}
-                OS_VERSION: grizzly
+                OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
+                OS_CACERT: None
+                OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
+                OS_TENANT_NAME: FutureGrid
+                OS_USERNAME: {{ clouds.hp.username }}
             default:
-                flavor: {{ clouds.sierra_openstack_grizzly.default.flavor }}
-                image: {{ clouds.sierra_openstack_grizzly.default.flavor }}
-#        hp:
-#            cm_heading: HP Openstack
-#            cm_label: hpos
-#            cm_type: openstack
-#            cm_type_version: grizzly
-#            credentials:
-#                OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
-#                OS_CACERT: None
-#                OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
-#                OS_TENANT_NAME: FutureGrid
-#                OS_USERNAME: {{ clouds.hp.username }}
-#            default:
-#                flavor: {{ clouds.hp.default.flavor }}
-#                image: {{ clouds.hp.default.image }}
-#        hp_east:
-#            cm_heading: HP Openstack East
-#            cm_label: hpeos
-#            cm_type: openstack
-#            cm_type_version: grizzly
-#            credentials:
-#                OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
-#                OS_CACERT: None
-#                OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
-#                OS_TENANT_NAME: FutureGrid
-#                OS_USERNAME: {{ clouds.hp_east.username }}
-#            default:
-#                flavor: {{ clouds.hp_east.default.flavor }}
-#                image: {{ clouds.hp_east.default.image }}
-#        azure:
-#            cm_host: windowsazure.com
-#            cm_label: waz
-#            cm_type: azure
-#            cm_type_version:
-#            credentials:
-#                subscriptionid: {{ clouds.azure.credential.subscriptionid }}
-#                managementcertfile: $HOME/.cloudmesh/azure_managementCertificate.pem
-#                thumbprint: $HOME/.cloudmesh/azure_thumbprint
-#                servicecertfile: $HOME/.cloudmesh/azure_serviceCertificate.pfx
-#            default:
-#                flavor: {{ clouds.azure.default.flavor }}
-#                image: {{ clouds.azure.default.image }}
-#                location: "East US"
-#        aws:
-#            cm_host: aws.amazon.com
-#            cm_label: aws
-#            cm_type: aws
-#            cm_type_version:
-#            credentials:
-#                EC2_ACCESS_KEY: {{ clouds.aws.credential.access_key_id }}
-#                EC2_SECRET_KEY: {{ clouds.aws.credential.secret_access_key }}
-#                keyname: cloudmesh
-#                userid: {{ clouds.aws.credential.userid }}
-#                EC2_PRIVATE_KEY: $HOME/.cloudmesh/aws_pk.pem
-#            default:
-#                flavor: {{ clouds.aws.default.flavor }}
-#                image: {{ clouds.aws.default.image }}
-#                location: us-east-1
+                flavor: {{ clouds.hp.default.flavor }}
+                image: {{ clouds.hp.default.image }}
+        hp_east:
+            cm_heading: HP Openstack East
+            cm_label: hpeos
+            cm_type: openstack
+            cm_type_version: grizzly
+            credentials:
+                OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
+                OS_CACERT: None
+                OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
+                OS_TENANT_NAME: FutureGrid
+                OS_USERNAME: {{ clouds.hp_east.username }}
+            default:
+                flavor: {{ clouds.hp_east.default.flavor }}
+                image: {{ clouds.hp_east.default.image }}
+        azure:
+            cm_host: windowsazure.com
+            cm_label: waz
+            cm_type: azure
+            cm_type_version:
+            credentials:
+                subscriptionid: {{ clouds.azure.credential.subscriptionid }}
+                managementcertfile: $HOME/.cloudmesh/azure_managementCertificate.pem
+                thumbprint: $HOME/.cloudmesh/azure_thumbprint
+                servicecertfile: $HOME/.cloudmesh/azure_serviceCertificate.pfx
+            default:
+                flavor: {{ clouds.azure.default.flavor }}
+                image: {{ clouds.azure.default.image }}
+                location: "East US"
+        aws:
+            cm_host: aws.amazon.com
+            cm_label: aws
+            cm_type: aws
+            cm_type_version:
+            credentials:
+                EC2_ACCESS_KEY: {{ clouds.aws.credential.access_key_id }}
+                EC2_SECRET_KEY: {{ clouds.aws.credential.secret_access_key }}
+                keyname: cloudmesh
+                userid: {{ clouds.aws.credential.userid }}
+                EC2_PRIVATE_KEY: $HOME/.cloudmesh/aws_pk.pem
+            default:
+                flavor: {{ clouds.aws.default.flavor }}
+                image: {{ clouds.aws.default.image }}
+                location: us-east-1
+            default:
+                flavor: None
+                image: None
+        dreamhost:
+            cm_heading: Dreamhost Openstack
+            cm_label: dreamhost
+            cm_type: openstack
+            cm_type_version: havana
+            credentials:
+                OS_AUTH_URL: https://keystone.dream.io/v2.0
+                OS_CACERT: None
+                OS_PASSWORD: TBD
+                OS_TENANT_NAME: TBD
+                OS_USERNAME: TBD
+            default:
+                flavor: subsonic
+                image: Ubuntu-14.04-Trusty
+        devstack:
+            cm_host: localhost
+            cm_heading: Localhost OpenStack, Icehouse
+            cm_label: localhost_icehouse
+            cm_type: openstack
+            cm_type_version: icehouse
+            credentials:
+                OS_AUTH_URL: http://10.0.2.15:5000/v2.0
+                OS_CACERT: None
+                OS_PASSWORD: labstack
+                OS_TENANT_NAME: admin
+                OS_USERNAME: admin
+                OS_VERSION: icehouse
+            default:
+                flavor: None
+                image: None
     projects:
         active:
         {% for project in projects.active -%}
