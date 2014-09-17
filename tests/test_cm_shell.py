@@ -1,6 +1,6 @@
 """ run with
 
-nosetests -v --nocapture test_cm_api.py
+nosetests -v --nocapture test_cm_shell.py
 
 """
 from cloudmesh_common.util import HEADING
@@ -76,9 +76,9 @@ class Test(unittest.TestCase):
 
     def test_12_start_3_vms(self):
         HEADING()
-        cloudmesh.shell("vm start --cloud=india --prefix=nosetests --count=3")
+        cloudmesh.shell("vm start --cloud=india --group=nosetests --count=3")
 
     def test_13_delete_3_vms(self):
         HEADING()
-        cloudmesh.shell("vm delete --cloud=india --prefix=nosetests --force")
+        cloudmesh.shell("vm delete --cloud=india --group=nosetests --force")
 
