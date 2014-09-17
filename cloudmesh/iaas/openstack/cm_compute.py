@@ -188,9 +188,30 @@ class openstack(ComputeBaseType):
             log.debug("{0} - {1}".format(str(line_number), str(msg)))
 
     def auth(self):
+
+        # DEBUG
+        try:
+            _args = locals()
+            if 'self' in _args: del(_args['self'])
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+            log.debug("user_token:{0}".format(str(self.user_token)))
+        except:
+            pass
+
         return 'access' in self.user_token
 
     def get_token(self, credential=None):
+
+        # DEBUG
+        try:
+            import sys
+            _args = locals()
+            if 'self' in _args: del(_args['self'])
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+        except:
+            pass
 
         if credential is None:
             credential = self.user_credential
@@ -232,6 +253,10 @@ class openstack(ComputeBaseType):
                           headers=headers,
                           verify=verify)
         # pprint (r.json())
+        try:
+            log.debug("{0}".format(str(r.json())))
+        except:
+            pass
         return r.json()
 
     #

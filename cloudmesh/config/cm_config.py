@@ -22,7 +22,6 @@ log = LOGGER(__file__)
 MONGOCLIENT = 0
 MONGOENGINE = 1
 
-
 class DBConnFactory(object):
     connectors = {}
     DBCONFIG = None
@@ -31,6 +30,16 @@ class DBConnFactory(object):
 
     @classmethod
     def getconn(cls, dbname, clientType=MONGOCLIENT):
+
+        # DEBUG
+        try:
+            import sys
+            _args = locals()
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+        except:
+            pass
+
         dbkey = "%s_%s" % (dbname, clientType)
         if dbkey in cls.connectors:
             # print "RETURNING AN EXISTING DB CONNECTOR FROM FACTORY"
@@ -65,7 +74,10 @@ class DBConnFactory(object):
                 try:
                     conn = MongoClient(uri)[dbname]
                 except:
-                    print "Failed to connect to Mongoclient DB:\n\t%s" % uri
+                    msg = "Failed to connect to Mongoclient DB:\n\t%s" % uri
+                    print msg
+                    log.error(msg)
+
             elif clientType == MONGOENGINE:
                 try:
                     conn = connect(dbname,
@@ -74,7 +86,9 @@ class DBConnFactory(object):
                                    username=cls.DBCONFIG["username"],
                                    password=cls.DBCONFIG["password"])
                 except:
-                    print "Failed to connect to MongoEngine DB:\n\t%s" % dbname
+                    msg = "Failed to connect to MongoEngine DB:\n\t%s" % dbname
+                    print msg
+                    log.error(msg)
 
             cls.connectors[dbkey] = conn
             return conn
@@ -84,6 +98,16 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     """
     Read in the mongo db information from the cloudmesh_server.yaml
     """
+    # DEBUG
+    try:
+        import sys
+        _args = locals()
+        del(_args['self'])
+        log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                        str(_args)))
+    except:
+        pass
+
     config = cm_config_server().get("cloudmesh.server.mongo")
 
     db_name = config["collections"][mongo_collection]['db']
@@ -92,6 +116,12 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     db = DBConnFactory.getconn(db_name, clientType)
     if db:
         conn = db[mongo_collection]
+    else:
+        try:
+            log.debug("connection failed to {0}".format(db_name))
+        except:
+            pass
+
     return conn
 
 
