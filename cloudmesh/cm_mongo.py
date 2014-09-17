@@ -205,7 +205,9 @@ class cm_mongo:
         # credential = self.config.cloud(cloud_name)
         cm_type = cloud_info['cm_type']
         cm_type_version = cloud_info['cm_type_version']
-
+        cm_service_url_type = 'publicURL'
+        if 'cm_service_url_type' in cloud_info:
+            cm_service_url_type = cloud_info['cm_service_url_type']
         credentials = cloud_info['credentials']
         # print "D",credentials
 
@@ -247,10 +249,12 @@ class cm_mongo:
                         'cm_type': cm_type,
                         'cm_type_version': cm_type_version}
                     provider = self.cloud_provider(cm_type)
-                    cloud = provider(cloud_name, credentials)
+                    cloud = provider(cloud_name, credentials, service_url_type=cm_service_url_type)
 
                     log.debug("Created new cloud instance for cloud name: %s, type: %s"
                               % (cloud_name, cm_type))
+                    if cm_service_url_type == 'internalURL':
+                        log.debug("The cloud is working in INTERNAL mode")
                     if cm_type in ['openstack', 'ec2']:
                         if cm_type in ['openstack']:
                             log.debug("\tfor tenant: %s" %

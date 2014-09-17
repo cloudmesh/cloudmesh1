@@ -104,7 +104,8 @@ class openstack(ComputeBaseType):
     def __init__(self,
                  label,
                  credential=None,
-                 admin_credential=None):
+                 admin_credential=None,
+                 service_url_type='publicURL'):
         """
         initializes the openstack cloud from a file
         located at cloudmesh.yaml.
@@ -116,7 +117,8 @@ class openstack(ComputeBaseType):
         user_credential = credential  # HACK to avoid changes in older code
         self.user_credential = user_credential
         self.admin_credential = admin_credential
-
+        self.service_url_type = service_url_type
+        
         if user_credential is None:
             try:
                 self.compute_config = cm_config()
@@ -225,7 +227,7 @@ class openstack(ComputeBaseType):
                           data=json.dumps(param),
                           headers=headers,
                           verify=verify)
-
+        pprint (r.json())
         return r.json()
 
     #
@@ -324,14 +326,14 @@ class openstack(ComputeBaseType):
 
     def keypair_list(self):
         apiurl = "os-keypairs"
-        return self._get(msg=apiurl)
+        return self._get(msg=apiurl, urltype=self.service_url_type)
 
     def keypair_add(self, keyname, keycontent):
         log.debug(str(lineno()) + ":adding a keypair in cm_compute...")
         # keysnow = self.keypair_list()
-        conf = self._get_service_endpoint("compute")
-        publicURL = conf['publicURL']
-        posturl = "%s/os-keypairs" % publicURL
+        url = self._get_service_endpoint("compute")[self.service_url_type]
+
+        posturl = "%s/os-keypairs" % url
 
         params = {"keypair": {"name": "%s" % keyname,
                               "public_key": "%s" % keycontent
@@ -342,10 +344,9 @@ class openstack(ComputeBaseType):
 
     def keypair_remove(self, keyname):
         log.debug(str(lineno()) + ":removing a keypair in cm_compute...")
-        conf = self._get_service_endpoint("compute")
-        publicURL = conf['publicURL']
+        url = self._get_service_endpoint("compute")[self.service_url_type]
 
-        url = "%s/os-keypairs/%s" % (publicURL, keyname)
+        url = "%s/os-keypairs/%s" % (url, keyname)
         headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
         r = requests.delete(url, headers=headers, verify=self._get_cacert())
@@ -383,9 +384,9 @@ class openstack(ComputeBaseType):
         # if keyname is None:
         #    get the default key from the profile information
 
-        conf = self._get_service_endpoint("compute")
-        publicURL = conf['publicURL']
-        posturl = "%s/servers" % publicURL
+        url = self._get_service_endpoint("compute")[self.service_url_type]
+
+        posturl = "%s/servers" % url
         # print posturl
         # keycontent = base64.b64encode(key_name)
         secgroups = []
@@ -427,9 +428,9 @@ class openstack(ComputeBaseType):
         """
         delete a single vm and returns the id
         """
-        conf = self._get_service_endpoint("compute")
-        publicURL = conf['publicURL']
-        url = "%s/servers/%s" % (publicURL, id)
+        url = self._get_service_endpoint("compute")[self.service_url_type]
+
+        url = "%s/servers/%s" % (url, id)
 
         headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
@@ -445,9 +446,9 @@ class openstack(ComputeBaseType):
         """
         Obtaining a floating ip from the pool via the rest api call
         """
-        conf = self._get_service_endpoint("compute")
-        publicURL = conf['publicURL']
-        posturl = "%s/os-floating-ips" % publicURL
+        url = self._get_service_endpoint("compute")[self.service_url_type]
+
+        posturl = "%s/os-floating-ips" % url
         ret = {"msg": "failed"}
         r = self._post(posturl)
         if r.has_key("floating_ip"):
@@ -458,13 +459,13 @@ class openstack(ComputeBaseType):
         """
         assigning public ip to an instance
         """
-        conf = self._get_service_endpoint("compute")
-        publicURL = conf['publicURL']
-        posturl = "%s/servers/%s/action" % (publicURL, serverid)
+        url = self._get_service_endpoint("compute")[self.service_url_type]
+            
+        posturl = "%s/servers/%s/action" % (url, serverid)
         params = {"addFloatingIp": {
-            "address": "%s" % ip
-        }
-        }
+                    "address": "%s" % ip
+                    }
+                }
         log.debug("POST PARAMS {0}".format(params))
         return self._post(posturl, params)
 
@@ -472,9 +473,9 @@ class openstack(ComputeBaseType):
         """
         delete a public ip that is assigned but not currently being used
         """
-        conf = self._get_service_endpoint("compute")
-        publicURL = conf['publicURL']
-        url = "%s/os-floating-ips/%s" % (publicURL, idofip)
+        url = self._get_service_endpoint("compute")[self.service_url_type]
+            
+        url = "%s/os-floating-ips/%s" % (url, idofip)
         headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
         r = requests.delete(url, headers=headers, verify=self._get_cacert())
@@ -487,9 +488,8 @@ class openstack(ComputeBaseType):
         """
         return list of ips allocated to current account
         """
-        conf = self._get_service_endpoint("compute")
-        publicURL = conf['publicURL']
-        url = "%s/os-floating-ips" % publicURL
+        url = self._get_service_endpoint("compute")[self.service_url_type]
+        url = "%s/os-floating-ips" % url
         headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
         r = requests.get(url, headers=headers, verify=self._get_cacert())
@@ -552,6 +552,7 @@ class openstack(ComputeBaseType):
         credential = self.user_credential
 
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
+        conf['internalURL'] = str(compute_service['endpoints'][0]['internalURL'])
         if 'OS_REGION' in credential:
             for endpoint in compute_service['endpoints']:
                 if endpoint['region'] == credential['OS_REGION']:
@@ -588,7 +589,7 @@ class openstack(ComputeBaseType):
         time_stamp = self._now()
         msg = "extensons"
         # list = self._get(msg)['extensions']
-        result = self._get(msg, json=False)
+        result = self._get(msg, urltype=self.service_url_type, json=False)
         if result.status_code == 404:
             log.error("extensions not available")
             return {}
@@ -599,14 +600,14 @@ class openstack(ComputeBaseType):
     def get_limits(self):
         time_stamp = self._now()
         msg = "limits"
-        list = self._get(msg)['limits']
+        list = self._get(msg, urltype=self.service_url_type)['limits']
         return list
 
     # new
     def get_servers(self):
         time_stamp = self._now()
         msg = "servers/detail"
-        list = self._get(msg)['servers']
+        list = self._get(msg, urltype=self.service_url_type)['servers']
         self.servers = self._list_to_dict(list, 'id', "server", time_stamp)
 
         #
@@ -621,7 +622,7 @@ class openstack(ComputeBaseType):
     def get_flavors(self):
         time_stamp = self._now()
         msg = "flavors/detail"
-        list = self._get(msg)['flavors']
+        list = self._get(msg, urltype=self.service_url_type)['flavors']
         self.flavors = self._list_to_dict(list, 'name', "flavor", time_stamp)
 
         #
@@ -647,7 +648,7 @@ class openstack(ComputeBaseType):
     def get_images(self):
         time_stamp = self._now()
         msg = "images/detail"
-        list = self._get(msg)['images']
+        list = self._get(msg, urltype=self.service_url_type)['images']
         self.images = self._list_to_dict(list, 'id', "image", time_stamp)
         return self.images
 
@@ -695,8 +696,8 @@ class openstack(ComputeBaseType):
 
     def get_meta(self, id):
         """get the metadata dict for the vm with the given id"""
-        msg = "/servers/%s/metadata" % (id)
-        return self._get("%s" + msg)
+        msg = "/servers/%s/metadata" % id
+        return self._get(msg, urltype=self.service_url_type)
 
     def set_meta(self, id, metadata, replace=False):
         """set the metadata for the given vm with the id"""
@@ -707,7 +708,7 @@ class openstack(ComputeBaseType):
         else:
             conf['set'] = "POST"
 
-        apiurlt = urlparse(conf['publicURL'])
+        apiurlt = urlparse(conf[self.service_url_type])
         url2 = apiurlt[1]
 
         params2 = '{"metadata":' + str(metadata).replace("'", '"') + '}'
@@ -800,7 +801,7 @@ class openstack(ComputeBaseType):
     # format
     def list_security_groups(self):
         apiurl = "os-security-groups"
-        return self._get(apiurl)
+        return self._get(apiurl, urltype=self.service_url_type)
 
     # return the security group id given a name, if it's defined in the current tenant
     # The id is used to identify a group when adding more rules to it
@@ -817,9 +818,8 @@ class openstack(ComputeBaseType):
     # for the current TENANT that it authenticated as
     # This implementation is based on the rest api
     def create_security_group(self, secgroup, rules=[]):
-        conf = self._get_service_endpoint("compute")
-        publicURL = conf['publicURL']
-        posturl = "%s/os-security-groups" % publicURL
+        url = self._get_service_endpoint("compute")[self.service_url_type]
+        posturl = "%s/os-security-groups" % url
         params = {"security_group":
                     {
                     "name": secgroup.name,
@@ -849,9 +849,8 @@ class openstack(ComputeBaseType):
 
     # add rules to an existing security group
     def add_security_group_rules(self, groupid, rules):
-        conf = self._get_service_endpoint("compute")
-        publicURL = conf['publicURL']
-        posturl = "%s/os-security-group-rules" % publicURL
+        url = self._get_service_endpoint("compute")[self.service_url_type]
+        posturl = "%s/os-security-group-rules" % url
         ret = None
         for rule in rules:
             params = {"security_group_rule":
@@ -1271,8 +1270,8 @@ class openstack(ComputeBaseType):
         """ returns the usage information of the tennant"""
         DEFAULT_STAT_DURATION = 30
         if not tenant_id:
-            computePubUrl = self._get_service_endpoint("compute")["publicURL"]
-            urlsplit = computePubUrl.split("/")
+            url = self._get_service_endpoint("compute")[self.service_url_type]
+            urlsplit = url.split("/")
             tenant_id = urlsplit[len(urlsplit) - 1]
 
         # print 70 * "-"
@@ -1299,7 +1298,7 @@ class openstack(ComputeBaseType):
 
         apiurl = "os-simple-tenant-usage/%s" % tenant_id
         payload = {'start': start, 'end': end}
-        result = self._get(apiurl, payload=payload)['tenant_usage']
+        result = self._get(apiurl, payload=payload, urltype=self.service_url_type)['tenant_usage']
         instances = result['server_usages']
         numInstances = len(instances)
         ramhours = result['total_memory_mb_usage']
