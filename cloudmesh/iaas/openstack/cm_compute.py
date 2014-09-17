@@ -344,7 +344,9 @@ class openstack(ComputeBaseType):
 
     def keypair_remove(self, keyname):
         log.debug(str(lineno()) + ":removing a keypair in cm_compute...")
-        url = self._get_service_endpoint("compute")[self.service_url_type]
+
+        conf = self._get_service_endpoint("compute")
+        url = conf[self.service_url_type]
 
         url = "%s/os-keypairs/%s" % (url, keyname)
         headers = {'content-type': 'application/json',
@@ -428,7 +430,9 @@ class openstack(ComputeBaseType):
         """
         delete a single vm and returns the id
         """
-        url = self._get_service_endpoint("compute")[self.service_url_type]
+        
+        conf = self._get_service_endpoint("compute")
+        url = conf[self.service_url_type]
 
         url = "%s/servers/%s" % (url, id)
 
@@ -473,7 +477,8 @@ class openstack(ComputeBaseType):
         """
         delete a public ip that is assigned but not currently being used
         """
-        url = self._get_service_endpoint("compute")[self.service_url_type]
+        conf = self._get_service_endpoint("compute")
+        url = conf[self.service_url_type]
             
         url = "%s/os-floating-ips/%s" % (url, idofip)
         headers = {'content-type': 'application/json',
@@ -488,7 +493,9 @@ class openstack(ComputeBaseType):
         """
         return list of ips allocated to current account
         """
-        url = self._get_service_endpoint("compute")[self.service_url_type]
+        conf = self._get_service_endpoint("compute")
+        url = conf[self.service_url_type]
+        
         url = "%s/os-floating-ips" % url
         headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
