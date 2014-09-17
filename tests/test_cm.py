@@ -13,12 +13,48 @@ import cloudmesh
 class Test:
 
     def setup(self):
-        pass
+        config = cm_config()
+        self.username = config.get()["hpc"]["username"]
+        self.project_id = "fg82"
 
     def tearDown(self):
         pass
 
-    def test_01_help(self):
+    def test_00_git(self):
+        os.system("git pull")
+                
+    def test_01_init(self):
+        HEADING()        
+        os.system("rm ~/.cloudmesh")
+        os.system("./install system")
+        os.system("./install requirements")
+
+    def test_02_user(self):
+        HEADING()        
+        os.system("./install new")
+
+    def test_03_cloudmesh_install(self):
+        HEADING()        
+        os.system("./install cloudmesh")
+
+    def test_04_fetch(self):
+        HEADING()        
+        os.system("cm-iu user fetch")
+        os.system("cm-iu user create")        
+
+    def test_05_mongo(self):
+        HEADING()
+        os.system("fab mongo.reset")
+        
+    def test_06_key(self):
+        HEADING()        
+        os.system('cm "key add --keyname={0}-key ~/.ssh/id_rsa.pub"'.format(self.username))
+
+    def test_07_project(self):
+        os.system("cm project default {0}".format(self.project_id))
+
+        
+    def test_08_help(self):
         HEADING()
 
         cloud_commands = [
@@ -60,3 +96,5 @@ class Test:
                 success = success 
                 print "ok"
         assert success 
+
+        
