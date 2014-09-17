@@ -329,7 +329,10 @@ def stop():
 
     # Added to make sure the mongodb server is shutdown.
     # - killall does not work if the server is running on root or mongodb
-    local("echo \"use admin\ndb.shutdownServer()\" | mongo")
+    try:
+        local("echo \"use admin\ndb.shutdownServer()\" | mongo")
+    except:
+        pass
 
     # (pid, line) = get_pid("mongod")
     # if pid is None:
