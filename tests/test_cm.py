@@ -20,9 +20,13 @@ if os.path.isdir(os.path.expanduser("~/.cloudmesh")):
 
 class Test:
 
-    def setup(self):
+    def get_user(self):
+        import cloudmesh    
         config = cloudmesh.load("user")
         self.username = config.get("cloudmesh.hpc.username")
+
+    
+    def setup(self):
         self.project_id = "fg82"
 
     def tearDown(self):
@@ -56,7 +60,8 @@ class Test:
         os.system("fab mongo.reset")
         
     def test_07_key(self):
-        HEADING()        
+        HEADING()
+        self.get_user() 
         os.system('cm "key add --keyname={0}-key ~/.ssh/id_rsa.pub"'.format(self.username))
 
     def test_08_project(self):
