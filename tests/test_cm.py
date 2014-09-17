@@ -8,55 +8,65 @@ from cloudmesh_common.logger import LOGGER, LOGGING_ON, LOGGING_OFF
 
 log = LOGGER(__file__)
 
-import cloudmesh
+import sys
+import os
+
+
+
+if os.path.isdir(os.path.expanduser("~/.cloudmesh")):
+    print "ERROR", "you must not have a .cloudmesh dir to run this test"
+    sys.exit()
+
 
 class Test:
 
     def setup(self):
-        config = cm_config()
-        self.username = config.get()["hpc"]["username"]
+        config = cloudmesh.load("user")
+        self.username = config.get("cloudmesh.hpc.username")
         self.project_id = "fg82"
 
     def tearDown(self):
         pass
 
-    def test_00_git(self):
+    
+    def test_01_git(self):
         os.system("git pull")
                 
-    def test_01_init(self):
+    def test_02_init(self):
         HEADING()        
-        os.system("rm ~/.cloudmesh")
+        #os.system("rm ~/.cloudmesh")
         os.system("./install system")
         os.system("./install requirements")
 
-    def test_02_user(self):
+    def test_03_user(self):
         HEADING()        
         os.system("./install new")
 
-    def test_03_cloudmesh_install(self):
+    def test_04_cloudmesh_install(self):
         HEADING()        
         os.system("./install cloudmesh")
-
-    def test_04_fetch(self):
+        
+    def test_05_fetch(self):
         HEADING()        
         os.system("cm-iu user fetch")
         os.system("cm-iu user create")        
 
-    def test_05_mongo(self):
+    def test_06_mongo(self):
         HEADING()
         os.system("fab mongo.reset")
         
-    def test_06_key(self):
+    def test_07_key(self):
         HEADING()        
         os.system('cm "key add --keyname={0}-key ~/.ssh/id_rsa.pub"'.format(self.username))
 
-    def test_07_project(self):
+    def test_08_project(self):
         os.system("cm project default {0}".format(self.project_id))
 
         
-    def test_08_help(self):
+    def test_09_help(self):
         HEADING()
 
+        import cloudmesh
         cloud_commands = [
             "cloud",
             "group",
@@ -98,6 +108,7 @@ class Test:
         assert success 
 
         
-    def test_09_git(self):
+    def test_10_cloud_on(self):
+        HEADING()
         os.system("cm cloud on india")
                 
