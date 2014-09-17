@@ -1,8 +1,6 @@
 '''Ping a machine'''
-from sh import ping as sh_ping
 
-# from pprint import pprint
-
+import sh 
 
 def ping(host):
     '''ping the specified host.
@@ -10,7 +8,7 @@ def ping(host):
     :param host: the name or ip of the host
     '''
     try:
-        result = sh_ping("-o", "-c", "1", host).strip().split("\n")
+        result = sh.ping("-o", "-c", "1", host).strip().split("\n")
     except:
         pass
 
