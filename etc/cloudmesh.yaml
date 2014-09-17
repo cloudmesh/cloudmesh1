@@ -58,6 +58,7 @@ cloudmesh:
             cm_label: ios_havana
             cm_type: openstack
             cm_type_version: havana
+            cm_service_url_type: publicURL
             credentials:
                 OS_AUTH_URL: https://i57r.idp.iu.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.cloudmesh/india-havana-cacert.pem
