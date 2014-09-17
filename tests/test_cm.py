@@ -98,3 +98,6 @@ class Test:
         assert success 
 
         
+    def test_09_git(self):
+        os.system("cm cloud on india")
+                
