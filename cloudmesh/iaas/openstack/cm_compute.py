@@ -118,7 +118,7 @@ class openstack(ComputeBaseType):
         self.user_credential = user_credential
         self.admin_credential = admin_credential
         self.service_url_type = service_url_type
-        
+
         if user_credential is None:
             try:
                 self.compute_config = cm_config()
@@ -181,7 +181,7 @@ class openstack(ComputeBaseType):
             log.debug(
                 "{1} - GET CRED {0}".format(debug_dict, str(line_number)))
         else:
-            log.debug("{0} - {1}".format( str(line_number), str(msg)))
+            log.debug("{0} - {1}".format(str(line_number), str(msg)))
 
     def auth(self):
         return 'access' in self.user_token
@@ -430,7 +430,7 @@ class openstack(ComputeBaseType):
         """
         delete a single vm and returns the id
         """
-        
+
         conf = self._get_service_endpoint("compute")
         url = conf[self.service_url_type]
 
@@ -464,7 +464,7 @@ class openstack(ComputeBaseType):
         assigning public ip to an instance
         """
         url = self._get_service_endpoint("compute")[self.service_url_type]
-            
+
         posturl = "%s/servers/%s/action" % (url, serverid)
         params = {"addFloatingIp": {
                     "address": "%s" % ip
@@ -479,7 +479,7 @@ class openstack(ComputeBaseType):
         """
         conf = self._get_service_endpoint("compute")
         url = conf[self.service_url_type]
-            
+
         url = "%s/os-floating-ips/%s" % (url, idofip)
         headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
@@ -495,7 +495,7 @@ class openstack(ComputeBaseType):
         """
         conf = self._get_service_endpoint("compute")
         url = conf[self.service_url_type]
-        
+
         url = "%s/os-floating-ips" % url
         headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
@@ -559,7 +559,9 @@ class openstack(ComputeBaseType):
         credential = self.user_credential
 
         conf['publicURL'] = str(compute_service['endpoints'][0]['publicURL'])
-        conf['internalURL'] = str(compute_service['endpoints'][0]['internalURL'])
+        # some cloud does not have this, e.g. HP cloud
+        if 'internalURL' in compute_service['endpoints'][0]:
+            conf['internalURL'] = str(compute_service['endpoints'][0]['internalURL'])
         if 'OS_REGION' in credential:
             for endpoint in compute_service['endpoints']:
                 if endpoint['region'] == credential['OS_REGION']:
