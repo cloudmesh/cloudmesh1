@@ -304,7 +304,10 @@ class openstack(ComputeBaseType):
                           verify=self._get_cacert(credential))
         ret = {"msg": "success"}
         if r.text:
-            ret = r.json()
+            try:
+                ret = r.json()
+            except:
+                pass
         return ret
 
     def _put(self, posturl, credential=None, params=None):
@@ -320,7 +323,10 @@ class openstack(ComputeBaseType):
                          verify=self._get_cacert(credential))
         ret = {"msg": "success"}
         if r.text:
-            ret = r.json()
+            try:
+                ret = r.json()
+            except:
+                pass
         return ret
 
     #
@@ -447,7 +453,10 @@ class openstack(ComputeBaseType):
         r = requests.delete(url, headers=headers, verify=self._get_cacert())
         ret = {"msg": "success"}
         if r.text:
-            ret = r.json()
+            try:
+                ret = r.json()
+            except:
+                pass
         return ret
 
     def get_public_ip(self):
@@ -459,7 +468,7 @@ class openstack(ComputeBaseType):
         posturl = "%s/os-floating-ips" % url
         ret = {"msg": "failed"}
         r = self._post(posturl)
-        if r.has_key("floating_ip"):
+        if "floating_ip" in r:
             ret = r["floating_ip"]["ip"]
         return ret
 
@@ -490,7 +499,10 @@ class openstack(ComputeBaseType):
         r = requests.delete(url, headers=headers, verify=self._get_cacert())
         ret = {"msg": "success"}
         if r.text:
-            ret = r.json()
+            try:
+                ret = r.json()
+            except:
+                pass
         return ret
 
     def list_allocated_ips(self):
