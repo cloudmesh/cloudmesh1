@@ -15,15 +15,6 @@ Cloudmesh
    shell    
    metric
    contributing
-
-######################################################################
-OLder Documents 
-######################################################################
-
-.. toctree::
-   :maxdepth: 2 
-   :numbered:
-   
    appendix
 
 Indices and tables
