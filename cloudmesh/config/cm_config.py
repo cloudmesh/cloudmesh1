@@ -463,6 +463,7 @@ def yaml_attribute_replace(filename='abc.yaml',
                 result += "{0}{1}: {2}".format(' ' * indent * 2, attribute, replacements[replacement])
             else:
                 result += line
+            result += '\n'
             
     #for _old, _new in replacements.iteritems():
     #    content = content.replace(_old, _new)
