@@ -32,7 +32,6 @@ class Test(unittest.TestCase):
         cls.username = cloudmesh.load().username()
 
     def test_03_activate(self):
-        print self.username
         HEADING()
         self.mesh.activate(self.username)
 
@@ -61,7 +60,6 @@ class Test(unittest.TestCase):
         cls.image = cls.mesh.image(cls.cloudname, "futuregrid/ubuntu-14.04")
 
     def test_09_set_default_flavor(self):
-        print self.flavor
         HEADING()
         self.mesh.default(self.cloudname, "flavor", self.flavor)
 
