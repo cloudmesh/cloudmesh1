@@ -31,14 +31,12 @@ class Test:
 
     def tearDown(self):
         pass
-
     
     def test_01_git(self):
         os.system("git pull")
                 
     def test_02_init(self):
         HEADING()        
-        #os.system("rm ~/.cloudmesh")
         os.system("./install system")
         os.system("./install requirements")
 
