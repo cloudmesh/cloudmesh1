@@ -111,6 +111,15 @@ class cm_mongo:
     def __init__(self, collection="cloudmesh"):
         """initializes the cloudmesh mongo db. The name of the collection os passed."""
 
+        # DEBUG
+        try:
+            _args = locals()
+            del(_args['self'])
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+        except:
+            pass
+
         defaults_collection = 'defaults'
         passwd_collection = 'password'
         user_collection = "user"
@@ -144,6 +153,16 @@ class cm_mongo:
     #
 
     def get_credential(self, cm_user_id, cloud):
+        # DEBUG
+        try:
+            _args = locals()
+            if 'self' in _args: del(_args['self'])
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+        except:
+            pass
+
+
         try:
             password = cm_config_server().get(
                 "cloudmesh.server.mongo.collections.password.key")
@@ -163,6 +182,16 @@ class cm_mongo:
             return None
 
     def get_cloud_info(self, cm_user_id, cloudname):
+
+        # DEBUG
+        try:
+            _args = locals()
+            if 'self' in _args: del(_args['self'])
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+        except:
+            pass
+
         cloud_config = self.config.cloud(cloudname)
         if cloud_config['cm_type'] in ['openstack']:
             del cloud_config['credentials']['OS_USERNAME']
@@ -196,6 +225,16 @@ class cm_mongo:
         return cloud_config
 
     def get_cloud(self, cm_user_id, cloud_name, force=False):
+
+        # DEBUG
+        try:
+            _args = locals()
+            if 'self' in _args: del(_args['self'])
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+        except:
+            pass
+
         cloud = None
         # do we recreate a cloud instance?
         # recreate only when user/tenant is changed for a certain cloud
@@ -318,6 +357,16 @@ class cm_mongo:
         return ret_clouds
 
     def active_project(self, cm_user_id):
+        # DEBUG
+        try:
+            _args = locals()
+            if 'self' in _args: del(_args['self'])
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+        except:
+            pass
+
+
         user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
         return user['project']
 

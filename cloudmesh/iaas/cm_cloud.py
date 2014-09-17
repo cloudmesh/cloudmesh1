@@ -183,6 +183,14 @@ class CloudManage(object):
         retreive cloud information from db_clouds.
         TODO: duplicates functionality from Mongobase class and cm_mongo
         '''
+        # DEBUG
+        try:
+            _args = locals()
+            del(_args['self'])
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+        except:
+            pass
         self._connect_to_mongo()
         if getone:
             return self.mongo.db_clouds.find_one({'cm_kind': 'cloud',
@@ -195,6 +203,15 @@ class CloudManage(object):
                                               'cm_user_id': username})
 
     def get_selected_cloud(self, username):
+        # DEBUG
+        try:
+            _args = locals()
+            del(_args['self'])
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+        except:
+            pass
+
         self._connect_to_mongo()
         user = self.mongo.db_user.find_one({'cm_user_id': username})
         try:
@@ -267,6 +284,15 @@ class CloudManage(object):
         '''
         activate a cloud
         '''
+        # DEBUG
+        try:
+            _args = locals()
+            del(_args['self'])
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+        except:
+            pass
+
         self._connect_to_mongo()
         cloud = self.mongo.get_cloud(
             cm_user_id=username, cloud_name=cloudname, force=True)
@@ -955,6 +981,15 @@ class CloudCommand(CloudManage):
             return
 
     def _cloud_activate(self):
+        # DEBUG
+        try:
+            _args = locals()
+            del(_args['self'])
+            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+                                            str(_args)))
+        except:
+            pass
+
         if self.arguments['CLOUD']:
             name = self.arguments['CLOUD']
         else:
