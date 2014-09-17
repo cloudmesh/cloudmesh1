@@ -640,11 +640,21 @@ class cm_mongo:
 
         defaults = self.cm_user.get_defaults(cm_user_id)
         if attribute == "image":
-            defaults['images'][cloudname] = value['id']
+            # If the value is a python dict contains image information,
+            # we use id in the dict, otherwise we treat it as a string.
+            try:
+                defaults['images'][cloudname] = value['id']
+            except:
+                defaults['images'][cloudname] = str(value)
+
             self.cm_user.set_default_attribute(cm_user_id, "images",
                                                defaults['images'])
         elif attribute == "flavor":
-            defaults['flavors'][cloudname] = value['id']
+            try:
+                defaults['flavors'][cloudname] = value['id']
+            except:
+                defaults['flavors'][cloudname] = str(value)
+
             self.cm_user.set_default_attribute(cm_user_id, "flavors",
                                                defaults['flavors'])
         return self.cm_user.get_defaults(cm_user_id)
