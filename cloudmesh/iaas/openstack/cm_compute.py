@@ -79,23 +79,27 @@ class openstack(ComputeBaseType):
     # _nova = nova
 
     def _load_admin_credential(self):
-        if self.admin_credential is None:
-            if 'keystone' in cm_config_server().get('cloudmesh.server'):
-                self.idp_clouds = cm_config_server().get(
-                    "cloudmesh.server.keystone").keys()
-                self.with_admin_credential = self.label in self.idp_clouds
-                if self.with_admin_credential:
-                    try:
-                        self.admin_credential = cm_config_server().get(
-                            "cloudmesh.server.keystone.{0}".format(self.label))
-                    except:
-                        log.error(str(
-                            lineno()) + " No admin credential found! Please check your cloudmesh_server.yaml file.")
-                else:
-                    self.admin_credential = None
-                    log.info(
-                        str(lineno()) + ": The cloud {0} has no admin credential".format(self.label))
-        return self.admin_credential
+        isproduction = cm_config_server().get('cloudmesh.server.production')
+        if isproduction:
+            if self.admin_credential is None:
+                if 'keystone' in cm_config_server().get('cloudmesh.server'):
+                    self.idp_clouds = cm_config_server().get(
+                        "cloudmesh.server.keystone").keys()
+                    self.with_admin_credential = self.label in self.idp_clouds
+                    if self.with_admin_credential:
+                        try:
+                            self.admin_credential = cm_config_server().get(
+                                "cloudmesh.server.keystone.{0}".format(self.label))
+                        except:
+                            log.error(str(
+                                lineno()) + " No admin credential found! Please check your cloudmesh_server.yaml file.")
+                    else:
+                        self.admin_credential = None
+                        log.info(
+                            str(lineno()) + ": The cloud {0} has no admin credential".format(self.label))
+            return self.admin_credential
+        else:
+            return None
     #
     # initialize
     #
