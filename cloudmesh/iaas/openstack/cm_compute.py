@@ -227,7 +227,7 @@ class openstack(ComputeBaseType):
                           data=json.dumps(param),
                           headers=headers,
                           verify=verify)
-        pprint (r.json())
+        # pprint (r.json())
         return r.json()
 
     #
