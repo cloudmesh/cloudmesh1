@@ -1,8 +1,8 @@
 from docopt import docopt
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import CONSOLE
-from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.cm_mongo import cm_mongo
 
 log = LOGGER(__file__)
 Console = CONSOLE()
@@ -51,29 +51,20 @@ def shell_command_label(arguments):
         prefix = None
         if arguments['--prefix']:
             prefix = arguments['--prefix']
-        update_label(username, prefix=prefix, id=id)
+        _helper(username, prefix=prefix, idx=id)
     else:
-        print_label(username)
+        _helper(username)
 
 
-def update_label(username, prefix=None, id=None):
-    user_obj = cm_user()
-    userdata = user_obj.info(username)
-    if prefix is not None:
-        userdata['defaults']['prefix'] = prefix
-    if id is not None:
-        userdata['defaults']['index'] = id
-    user_obj.set_defaults(username, userdata['defaults'])
-
-
-def print_label(username):
-    user_obj = cm_user()
-    userdata = user_obj.info(username)
-    prefix = userdata['defaults']['prefix']
-    index = userdata['defaults']['index']
-    print "prefix: ", prefix
-    print "index: ", index
-    print "next VM name: {0}_{1}".format(prefix, index)
+def _helper(username, prefix=None, idx=None):
+    mongo = cm_mongo()
+    mongo.activate(username)
+    if prefix or idx:
+        print "updating... next vm name:"
+    else:
+        print "next vm name:"
+    print mongo.vmname(prefix=prefix, idx=idx, cm_user_id=username)
+    
 
 
 def main():
