@@ -61,6 +61,12 @@ def reset(password=None):
     banner("refreshing cloud info")
     simple()
 
+@task
+def install_osx():
+    #local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
+    #local('brew update')
+    local('brew install mongodb')
+
 '''
 @task
 def install():
@@ -126,7 +132,7 @@ def install():
         local('brew update')
         local('brew install mongodb')
 '''
-
+    
 @task
 def admin():
     """creates a password protected user for mongo"""
