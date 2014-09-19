@@ -43,7 +43,7 @@ class Database(object):
             prompt1st = "Please set a password to login to the portal later.\nPassword:"
             prompt_not_strong = "\nPassword not strong enough. Minimum length is 6. Please enter again.\nPassword:"
             passwd = getpassword(prompt1st)
-            if not validate_password(passwd):
+            while not validate_password(passwd):
                 passwd = getpassword(prompt_not_strong)
 
         # print passwd
@@ -62,9 +62,9 @@ class Database(object):
         if passwd is None:
             prompt1st = "Please set a password to mongodb.\nMongo Password:"
             prompt_not_strong = "\nPassword not strong enough. Minimum " + \
-                    "length \is 6. Please enter again.\nMongo Password:"
+                    "length is 6. Please enter again.\nMongo Password:"
             passwd = getpassword(prompt1st)
-            if not validate_password(passwd):
+            while not validate_password(passwd):
                 passwd = getpassword(prompt_not_strong)
 
         from cloudmesh.config.cm_config import cm_config_server
