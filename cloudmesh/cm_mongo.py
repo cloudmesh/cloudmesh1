@@ -156,12 +156,12 @@ class cm_mongo:
         # DEBUG
         try:
             _args = locals()
-            if 'self' in _args: del(_args['self'])
+            if 'self' in _args:
+                del(_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
                                             str(_args)))
         except:
             pass
-
 
         try:
             password = cm_config_server().get(
@@ -186,7 +186,8 @@ class cm_mongo:
         # DEBUG
         try:
             _args = locals()
-            if 'self' in _args: del(_args['self'])
+            if 'self' in _args:
+                del(_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
                                             str(_args)))
         except:
@@ -229,7 +230,8 @@ class cm_mongo:
         # DEBUG
         try:
             _args = locals()
-            if 'self' in _args: del(_args['self'])
+            if 'self' in _args:
+                del(_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
                                             str(_args)))
         except:
@@ -360,12 +362,12 @@ class cm_mongo:
         # DEBUG
         try:
             _args = locals()
-            if 'self' in _args: del(_args['self'])
+            if 'self' in _args:
+                del(_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
                                             str(_args)))
         except:
             pass
-
 
         user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
         return user['project']
