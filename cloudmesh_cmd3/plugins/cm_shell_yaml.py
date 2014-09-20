@@ -173,7 +173,7 @@ class cm_shell_yaml:
         #
 
             config._update(arguments.key, arguments.value)
-            config.pprint()
+            # config.pprint()
             config['meta']['location'] = arguments.filename
             config.write(format="yaml")
 
