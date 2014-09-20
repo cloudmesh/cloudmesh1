@@ -17,10 +17,11 @@ import ast
 log = LOGGER(__file__)
 package_dir = os.path.dirname(os.path.abspath(__file__))
 
+attribute_indent = 4
 
 class OrderedJsonEncoder(simplejson.JSONEncoder):
 
-    indent = 4
+    indent = attribute_indent
 
     def encode(self, o, depth=0):
         if isinstance(o, OrderedDict):
@@ -33,7 +34,7 @@ class OrderedJsonEncoder(simplejson.JSONEncoder):
 
 def custom_print(data_structure, indent):
     for key, value in data_structure.items():
-        print "\n%s%s:" % ('    ' * indent, str(key)),
+        print "\n%s%s:" % (' ' * attribute_indent * indent, str(key)),
         if isinstance(value, OrderedDict):
             custom_print(value, indent + 1)
         elif isinstance(value, dict):
@@ -108,10 +109,11 @@ class ConfigDict (OrderedDict):
         elif format in ['yml', 'yaml']:
             #d = dict(self)
             #os.write(f, yaml.dump(d, default_flow_style=False))
-            os.write(f, ordered_dump(OrderedDict(self), Dumper=yaml.SafeDumper,
+            os.write(f, ordered_dump(OrderedDict(self),
+                                     Dumper=yaml.SafeDumper,
                                      default_flow_style=False))
         elif format == "print":
-            os.write(f, custom_print(self, 4))
+            os.write(f, custom_print(self, attribute_indent))
         else:
             os.write(f, self.dump())
         os.close(f)
@@ -135,7 +137,7 @@ class ConfigDict (OrderedDict):
         return self.json()
 
     def json(self):
-        return json.dumps(self, indent=4)
+        return json.dumps(self, indent=attribute_indent)
 
     def yaml(self):
         return ordered_dump(OrderedDict(self),
@@ -147,7 +149,7 @@ class ConfigDict (OrderedDict):
         return orderedPrinter.encode(self)
 
     def pprint(self):
-        print custom_print(self, 4)
+        print custom_print(self, attribute_indent)
 
     """
     def __getitem__(self, *mykeys):

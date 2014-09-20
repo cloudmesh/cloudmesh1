@@ -70,7 +70,7 @@ def install_command(args):
         install delete_yaml
         install system
         install query
-        install new
+        install new [--force]
         install vagrant
         install enable admin [--username=<username>]
 
@@ -87,7 +87,8 @@ def install_command(args):
 
     elif arguments["new"]:
 
-        new_cloudmesh_yaml()
+        force = arguments["--force"] 
+        new_cloudmesh_yaml(force)
 
     elif arguments["delete_yaml"]:
 
@@ -131,7 +132,7 @@ def install_command(args):
         enable_admin_page(arguments['--username'])
 
 
-def new_cloudmesh_yaml():
+def new_cloudmesh_yaml(force=False):
     """ Generate yaml files from the templates in etc directory
         if yaml files exist, this function won't perform.
 
@@ -148,8 +149,11 @@ def new_cloudmesh_yaml():
         for f in glob.glob(dirname + "/*.yaml"):
             if os.path.getsize(f) > 0:
                 print "ERROR: the (nonempty) yaml file '{0}' already exists.".format(f)
-                print "       The 'new' command will not overwrite files."
-                sys.exit(1)
+                if not force:
+                    print "       The 'new' command will not overwrite files."
+                    sys.exit(1)
+                else:
+                    print "WARNING: we are overwriting the yaml files"
     else:
         os.makedirs(dirname, stat.S_IRWXU)
 
