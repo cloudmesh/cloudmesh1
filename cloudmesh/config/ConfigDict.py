@@ -111,7 +111,8 @@ class ConfigDict (OrderedDict):
             #os.write(f, yaml.dump(d, default_flow_style=False))
             os.write(f, ordered_dump(OrderedDict(self),
                                      Dumper=yaml.SafeDumper,
-                                     default_flow_style=False))
+                                     default_flow_style=False,
+                                     indent=attribute_indent))
         elif format == "print":
             os.write(f, custom_print(self, attribute_indent))
         else:
