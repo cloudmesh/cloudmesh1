@@ -2,95 +2,95 @@ meta:
   yaml_version: 1.2
   kind: clusters
 cloudmesh:
-    inventory:
-        india:
-            id: i[001-136]
-            nameserver: 192.168.0.1
-            network:
-            - name: idpm
-              id: i[001-136]
-              label: i[1-136]
-              range: 192.168.1.[1-136]
-            - name: internal
-              id: i[001-136]
-              label: i[1-136]r
-              range: 192.168.2.[1-136]
-            - name: bmc
-              id: i[001-136]
-              label: bmc[1-136]
-              range: 192.168.3.[1-136]
-        bravo:
-            id: b[001-016]
-            nameserver: 192.168.0.1
-            publickeys:
-            - name: im1
-              path: $HOME/.cloudmesh/keys/id_rsa_im1.pub
-            - name: fgstor02
-              path: $HOME/.cloudmesh/keys/id_rsa_fgstor02.pub
-            network:
-            - name: eth0
-              type: internal
-              id: b[001-016]
-              label: b[001-016]i
-              range: 192.168.4.[11-26]
-              broadcast: 192.168.4.255
-              netmask: 255.255.252.0
-              bootproto: dhcp
-              onboot: yes
-            - name: eth1
-              koji: hallo
-              type: public
-              id: b[001-016]
-              label: b[001-016]
-              range: 192.168.5.[11-26]
-              broadcast: 192.168.5.255
-              netmask: 255.255.255.0
-              gateway: 192.168.5.254
-              bootproto: static
-              onboot: yes
-            - name: ib0
-              type: infiniband
-              id: b[001-016]
-              label: b[001-016]ib
-              range: 192.168.6.[11-26]
-              broadcast: 192.168.6.255
-              netmask: 255.255.255.0
-              bootproto: static
-              onboot: yes
-            - name: bmc
-              type: bmc
-              id: b[001-016]
-              label: bmc-b[001-016]
-              range: 192.168.7.[11-26]
-            - name: pxe
-              id: b[001-016]
-              label: b[001-016]pxe
-              range: na[001-016]
-              type: pxe
-              pxe_prefix: /tftpboot/pxelinux.cfg
-        echo:
-            id: e[001-016]
-            network:
-            - name: 0
-              id: e[001-016]
-              label: echo-[01-16]
-              range: 192.168.8.[71-86]
-            - name: internal
-              id: e[001-016]
-              label: echo-[01-16]i
-              range: 192.168.9.[11-26]
-            - name: bmc-echo
-              id: e[001-016]
-              label: bmc-echo-[01-16]
-              range: 192.168.10.[1-16]
-        delta:
-            id: d[001-016]
-            network:
-            - name: 0
-              id: d[001-016]
-              label: d[001-016]
-              range: 192.168.11.[51-67]
-            - name: bmc-d
-              id: d[001-016]
-              label: bmc-d[001-17]
-              range: 192.168.12.[151-167]
+  inventory:
+    india:
+      id: i[001-136]
+      nameserver: 192.168.0.1
+      network:
+      - name: idpm
+        id: i[001-136]
+        label: i[1-136]
+        range: 192.168.1.[1-136]
+      - name: internal
+        id: i[001-136]
+        label: i[1-136]r
+        range: 192.168.2.[1-136]
+      - name: bmc
+        id: i[001-136]
+        label: bmc[1-136]
+        range: 192.168.3.[1-136]
+    bravo:
+      id: b[001-016]
+      nameserver: 192.168.0.1
+      publickeys:
+      - name: im1
+        path: $HOME/.cloudmesh/keys/id_rsa_im1.pub
+      - name: fgstor02
+        path: $HOME/.cloudmesh/keys/id_rsa_fgstor02.pub
+      network:
+      - name: eth0
+        type: internal
+        id: b[001-016]
+        label: b[001-016]i
+        range: 192.168.4.[11-26]
+        broadcast: 192.168.4.255
+        netmask: 255.255.252.0
+        bootproto: dhcp
+        onboot: yes
+      - name: eth1
+        koji: hallo
+        type: public
+        id: b[001-016]
+        label: b[001-016]
+        range: 192.168.5.[11-26]
+        broadcast: 192.168.5.255
+        netmask: 255.255.255.0
+        gateway: 192.168.5.254
+        bootproto: static
+        onboot: yes
+      - name: ib0
+        type: infiniband
+        id: b[001-016]
+        label: b[001-016]ib
+        range: 192.168.6.[11-26]
+        broadcast: 192.168.6.255
+        netmask: 255.255.255.0
+        bootproto: static
+        onboot: yes
+      - name: bmc
+        type: bmc
+        id: b[001-016]
+        label: bmc-b[001-016]
+        range: 192.168.7.[11-26]
+      - name: pxe
+        id: b[001-016]
+        label: b[001-016]pxe
+        range: na[001-016]
+        type: pxe
+        pxe_prefix: /tftpboot/pxelinux.cfg
+    echo:
+      id: e[001-016]
+      network:
+      - name: 0
+        id: e[001-016]
+        label: echo-[01-16]
+        range: 192.168.8.[71-86]
+      - name: internal
+        id: e[001-016]
+        label: echo-[01-16]i
+        range: 192.168.9.[11-26]
+      - name: bmc-echo
+        id: e[001-016]
+        label: bmc-echo-[01-16]
+        range: 192.168.10.[1-16]
+    delta:
+      id: d[001-016]
+      network:
+      - name: 0
+        id: d[001-016]
+        label: d[001-016]
+        range: 192.168.11.[51-67]
+      - name: bmc-d
+        id: d[001-016]
+        label: bmc-d[001-17]
+        range: 192.168.12.[151-167]

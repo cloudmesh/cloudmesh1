@@ -6,138 +6,137 @@ cloudmesh:
     loglevel: error
     debug: False
     production: False
-    shellcolor: true
     metric:
-        host: http://???.???.???.???
-        port: 5001
+      host: http://???.???.???.???
+      port: 5001
     webui:
-        host: 127.0.0.1
-        port: 5000
-        secret: development key
-        browser: True
-        page:
+      host: 127.0.0.1
+      port: 5000
+      secret: development key
+      browser: True
+      page:
     teefaa:
-        username: name
-        hostname: iporhostname
-        bmcname: bmciporhostname
-        dir: directory
+      username: name
+      hostname: iporhostname
+      bmcname: bmciporhostname
+      dir: directory
     provisioner:
-        clusters:
-        - india
-        - sierra
-        policy:
-          users:
-            gvgv:
-              - i[0066-0068]
-              - s[01-16]
-          projects:
-             fg82:
-              - i[0066-0068]
-              - s[01-16]
+      clusters:
+      - india
+      - sierra
+      policy:
+        users:
+          gvgv:
+            - i[0066-0068]
+            - s[01-16]
+        projects:
+           fg82:
+            - i[0066-0068]
+            - s[01-16]
     workflows:
-        path: /static/workflows
+      path: /static/workflows
     rack:
-        with_rack: True
-        input: racks/diag
-        diagrams:
-            temperature: racks/temperature
-            service: racks/service
+      with_rack: True
+      input: racks/diag
+      diagrams:
+        temperature: racks/temperature
+        service: racks/service
     mongo:
-        db: cloudmesh
-        host: localhost
-        port: 27017
-        path: $HOME/.cloudmesh/mongodb
-        username: admin
-        password: abc
-        collections:
-            inventory:
-                db: cloudmesh
-            cloudmesh:
-                db: cloudmesh
-            profile:
-                db: cloudmesh
-            user:
-                db: user
-            manage:
-                db: manage
-            userauth:
-                db: user
-            metric:
-                db: metric
-            pbs:
-                db: hpc
-            qstat:
-                db: hpc
-            qinfo:
-                db: hpc
-            pbsnodes:
-                db: hpc
-            launcher:
-                db: cloudmesh
-            pagestatus:
-                db: cloudmesh
-            password:
-                db: hallo
-                key: change_me
-            defaults:
-                db: cloudmesh
-            experiment:
-                db: cloudmeshobj
-    keystone:
-        sierra:
-            OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
-            OS_CACERT : $HOME/.cloudmesh/sierra-cacert.pem
-            OS_PASSWORD : mypassword
-            OS_TENANT_NAME : mytennant
-            OS_USERNAME : myusername
-        india:
-            OS_AUTH_URL : http://computeiporhostname:5000/v2.0
-            OS_PASSWORD : password
-            OS_TENANT_NAME : tenantname
-            OS_USERNAME : username
-    ldap:
-        with_ldap: False
-        hostname: localhost
-        cert: $HOME/.cloudmesh/FGLdapCacert.pem
-        proxyhost: hostnameofproxy
-        proxyuser: usernameofprxyhost
-        proxyldap: hostnameofldap
-        personbase: "ou=People,dc=futuregrid,dc=org"
-        projectbase: "ou=Groups,dc=futuregrid,dc=org"
-    roles:
+      db: cloudmesh
+      host: localhost
+      port: 27017
+      path: $HOME/.cloudmesh/mongodb
+      username: admin
+      password: abc
+      collections:
+        inventory:
+          db: cloudmesh
+        cloudmesh:
+          db: cloudmesh
+        profile:
+          db: cloudmesh
         user:
-           users:
-           - active
-           projects:
-           - active
-        admin:
-           users:
-           - fufu
-           projects:
-           - 1
-           - 82
-        rain:
-            users:
-            - gvgv
-            projects:
-            - 82
+          db: user
+        manage:
+          db: manage
+        userauth:
+          db: user
+        metric:
+          db: metric
+        pbs:
+          db: hpc
+        qstat:
+          db: hpc
+        qinfo:
+          db: hpc
+        pbsnodes:
+          db: hpc
+        launcher:
+          db: cloudmesh
+        pagestatus:
+          db: cloudmesh
+        password:
+          db: hallo
+          key: change_me
+        defaults:
+          db: cloudmesh
+        experiment:
+          db: cloudmeshobj
+    keystone:
+      sierra:
+        OS_AUTH_URL : https://keystooneiporhostname:35357/v2.0
+        OS_CACERT : $HOME/.cloudmesh/sierra-cacert.pem
+        OS_PASSWORD : mypassword
+        OS_TENANT_NAME : mytennant
+        OS_USERNAME : myusername
+      india:
+        OS_AUTH_URL : http://computeiporhostname:5000/v2.0
+        OS_PASSWORD : password
+        OS_TENANT_NAME : tenantname
+        OS_USERNAME : username
+    ldap:
+      with_ldap: False
+      hostname: localhost
+      cert: $HOME/.cloudmesh/FGLdapCacert.pem
+      proxyhost: hostnameofproxy
+      proxyuser: usernameofprxyhost
+      proxyldap: hostnameofldap
+      personbase: "ou=People,dc=futuregrid,dc=org"
+      projectbase: "ou=Groups,dc=futuregrid,dc=org"
+    roles:
+      user:
+       users:
+       - active
+       projects:
+       - active
+      admin:
+        users:
+        - fufu
+        projects:
+        - 1
+        - 82
+      rain:
+        users:
+        - gvgv
+        projects:
+        - 82
     clusters:
-        india:
-            bmc:
-                user: abc
-                password: xyz
-        echo:
-            bmc:
-                user: abc
-                password: xyz
-        bravo:
-            pxe:
-                proxy:
-                   ip: ip
-                   user: abc
-            bmc:
-                user: abc
-                password: xyz
-                proxy:
-                   ip: ip
-                   user: abc
+      india:
+        bmc:
+          user: abc
+          password: xyz
+      echo:
+        bmc:
+          user: abc
+          password: xyz
+      bravo:
+        pxe:
+          proxy:
+            ip: ip
+            user: abc
+        bmc:
+            user: abc
+            password: xyz
+            proxy:
+              ip: ip
+              user: abc
