@@ -15,11 +15,6 @@ cloudmesh:
       secret: development key
       browser: True
       page:
-    teefaa:
-      username: name
-      hostname: iporhostname
-      bmcname: bmciporhostname
-      dir: directory
     provisioner:
       clusters:
       - india
@@ -135,8 +130,8 @@ cloudmesh:
             ip: ip
             user: abc
         bmc:
+          user: abc
+          password: xyz
+          proxy:
+            ip: ip
             user: abc
-            password: xyz
-            proxy:
-              ip: ip
-              user: abc

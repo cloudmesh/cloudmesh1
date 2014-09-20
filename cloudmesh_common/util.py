@@ -2,7 +2,7 @@
 
 .. role:: strikethrough
 
-This file contains tome veri basic utility functions that must not
+This file contains tome very basic utility functions that must not
 need any import from cloudmesh. That is no statement such as
 
 * :strikethrough:`import cloudmesh`
@@ -43,6 +43,16 @@ except:
         print "please make sure that a virtualenv and pip are installed"
         sys.exit()
 
+
+class dotdict(dict):
+    """dot.notation access to dictionary attributes"""
+
+    def __getattr__(self, attr):
+        return self.get(attr)
+
+    __setattr__= dict.__setitem__
+
+    __delattr__= dict.__delitem__
 
 class PROGRESS(object):
 
@@ -312,26 +322,21 @@ def dict_uni_to_ascii(d):
 
 def CONSOLE():
     '''
-    log in color printing class initialization.  ::added by Mark X. on 9.15.2014
+    initialize color in console.
     '''
     from cmd3.console import Console
-    try:
-        switch = grep("shellcolor:", config_file(
-            "/cloudmesh_server.yaml")).strip().split(":")[1].strip().lower()
     
-        if switch.upper() == "TRUE":
-            color_on = True
-        elif switch.upper() == "FALSE":
-            color_on = False
-        else:
-            color_on = False
-    except:
-        color_on = False
-    
+    color = True
     try:
-        return Console(_color_on = color_on)
+        #
+        # TODO: should this be repaced with .get("cloudmesh.shell.color")
+        #
+        line = grep("color:", config_file("/cloudmesh.yaml"))
+        color = (line.strip().split(":")[1].strip().lower()) == "true"
     except:
-        return Console()
+        pass
+    
+    return Console(color)
     
     
     
