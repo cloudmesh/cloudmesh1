@@ -5,41 +5,41 @@ cloudmesh:
   workers:
     launcher:
       id: l
-    app: cloudmesh.launcher.queue
-    count: 2
-    queue: launcher
-  provisioner:
-    id: p
-    app: cloudmesh.provisioner.queue
-    count: 2
-    queue: provisioner
-  qstat:
-    id: q
-    app: cloudmesh.pbs
-    count: 1
-    queue: qstat
-    concurrency: 1
-  azure:
-    id: az
-    app: cloudmesh.iaas.azure.queue
-    count: 1
-    queue: azure-servers,azure-images
-    concurrency: 1
-  aws:
-    id: aw
-    app: cloudmesh.iaas.aws.queue
-    count: 1
-    queue: aws-images,aws-servers
-    concurrency: 1
-  openstack:
-    id: op
-    app: cloudmesh.iaas.openstack.queue
-    count: 1
-    queue: openstack-images,openstack-servers
-    concurrency: 1
-  ec2:
-    id: ec
-    app: cloudmesh.iaas.ec2.queue
-    count: 1
-    queue: ec2-images,ec2-servers
-    concurrency: 1
+      app: cloudmesh.launcher.queue
+      count: 2
+      queue: launcher
+    provisioner:
+      id: p
+      app: cloudmesh.provisioner.queue
+      count: 2
+      queue: provisioner
+    qstat:
+      id: q
+      app: cloudmesh.pbs
+      count: 1
+      queue: qstat
+      concurrency: 1
+    azure:
+      id: az
+      app: cloudmesh.iaas.azure.queue
+      count: 1
+      queue: azure-servers,azure-images
+      concurrency: 1
+    aws:
+      id: aw
+      app: cloudmesh.iaas.aws.queue
+      count: 1
+      queue: aws-images,aws-servers
+      concurrency: 1
+    openstack:
+      id: op
+      app: cloudmesh.iaas.openstack.queue
+      count: 1
+      queue: openstack-images,openstack-servers
+      concurrency: 1
+    ec2:
+      id: ec
+      app: cloudmesh.iaas.ec2.queue
+      count: 1
+      queue: ec2-images,ec2-servers
+      concurrency: 1
