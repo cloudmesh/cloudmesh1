@@ -137,6 +137,11 @@ class ConfigDict (OrderedDict):
     def json(self):
         return json.dumps(self, indent=4)
 
+    def yaml(self):
+        return ordered_dump(OrderedDict(self),
+                            Dumper=yaml.SafeDumper,
+                            default_flow_style=False)
+    
     def dump(self):
         orderedPrinter = OrderedJsonEncoder()
         return orderedPrinter.encode(self)

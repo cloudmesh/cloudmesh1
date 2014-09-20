@@ -177,7 +177,6 @@ Scheduler
    * Advantage
        *  use existing HPC scheduler to allow bare metal just as any regular hpc job
        *  Originally suggested in 2010 and 11 
-       *  Some aspect of Teefaa uses this approach
    * Disadvantage
        *  Not all services we have are or should be integrated in HPC scheduling service
        *  Approach hierarchical scheduler
@@ -185,7 +184,7 @@ Scheduler
    * Provide integration with various monitoring tools so we can identify IMPORTANT status for shifting resources to services
    * Provide simple reservation interface
    * Have first a human scheduler using simple cloudmesh commands
-   * Provide abstraction to bare metal provisioning so we are independent from teefaa, openstack bare metal, moab, slurm, cobler bare metal provisioning. Provide only absolute necessary
+   * Provide abstraction to bare metal provisioning so we are independent from openstack bare metal, moab, slurm, cobler bare metal provisioning. Provide only absolute necessary
        *  Biggest issue is that we have ongoing production and that both ways require essentially a *vanilla* cluster
        *  Networking 
 

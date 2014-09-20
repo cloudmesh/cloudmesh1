@@ -327,7 +327,7 @@ def safe_install(what):
     try:
         local(what)
     except:
-        print "Warning: could not install:", what
+        print "WARNING: could not install:", what
 
 
 def osx():
@@ -339,6 +339,7 @@ def osx():
     safe_install('brew install mercurial')
     safe_install('brew install freetype')
     safe_install('brew install libpng')
+
     try:
         import numpy
         print "numpy already installed"
@@ -352,11 +353,12 @@ def osx():
             local(
                 'LDFLAGS="-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib" CPPFLAGS="-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2" pip install matplotlib')
         except:
-            print "Warning: installing matplot lib"
+            print "WARNING: installing matplot lib"
         # local('pip install matplotlib')
-
+    safe_install('brew install mongodb')
+        
     install()
-    # install_mongodb()
+    # 
 
 
 def sphinx_updates():
