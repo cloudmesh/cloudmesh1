@@ -1,192 +1,192 @@
 meta:
-    yaml_version: 2.0
-    kind: launcher
+  yaml_version: 2.0
+  kind: launcher
 cloudmesh:
-    launcher:
-        recipies:
-            mooc:
-                  name: Mooc
-                  description:
-                    >
-                      Deploys a Slurm cluster. One of the Vms is the Master,
-                      while the others register with the master as worker nodes.
-                      The master will be the first node in the list.
-                  label: slurm
-                  parameters:
-                      - nodes: 
-                          type: integer
-                          value: 1
-                          required: True
-                      - other: 
-                          type: float
-                          value: 5.0
-                          required: True
-                      - types: 
-                          type: string
-                          value: enter vm or bare metal
-                          required: True
-                      - selector:
-                          type: selector
-                          value:
-                          - vm
-                          - baremetal
-                          - xyz
-                          required: True
-                      - cloud:
-                          type: selector
-                          value:
-                          - india
-                          - sierra
-                          required: True
-                  image: /static/img/launcher/mooc.png
-                  script: 
-                    type: sh
-                    value: ssh {username}@{india} "ls -l"
-            slurm:
-                  name: Slurm Cluster
-                  description:
-                    >
-                      Deploys a Slurm cluster. One of the Vms is the Master,
-                      while the others register with the master as worker nodes.
-                      The master will be the first node in the list.
-                  label: slurm
-                  parameters:
-                      - nodes: 
-                          type: integer
-                          value: 1
-                          required: True
-                      - other: 
-                          type: float
-                          value: 5.0
-                          required: True
-                      - types: 
-                          type: string
-                          value: enter vm or bare metal
-                          required: True
-                      - selector:
-                          type: selector
-                          value:
-                          - vm
-                          - baremetal
-                          - xyz
-                          required: True
-                      - cloud:
-                          type: selector
-                          value:
-                          - india
-                          - sierra
-                          required: True
-                  image: /static/img/launcher/slurm.png
-                  script: 
-                    type: sh
-                    value: ls -l
-            hadoop:
-                  name: Hadoop
-                  description:
-                    >
-                      Deploys a haddop cluster on the VMs specified
-                  parameters:
-                      - nodes: 
-                          type: integer
-                          value: 1
-                          required: True
-                      - other: 
-                          type: float
-                          value: 5.0
-                          required: True
-                      - types: 
-                          type: string
-                          value: enter vm or bare metal
-                          required: True
-                      - selector:
-                          type: selector
-                          value:
-                          - vm
-                          - baremetal
-                          - xyz
-                          required: True
-                      - cloud:
-                          type: selector
-                          value:
-                          - india
-                          - sierra
-                          required: True
-                  image: /static/img/launcher/hadoop.jpg
-                  script: 
-                    type: sh
-                    value: echo "Hello"
-            ganglia:
-                  name: Ganglia
-                  description:
-                    >
-                      Deploys a Ganglia service for the vms specified.
-                      The ganglia server will be the first node in the list.
-                  label: ganglia
-                  parameters:
-                      - nodes: 
-                          type: integer
-                          value: 1
-                          required: True
-                      - other: 
-                          type: float
-                          value: 5.0
-                          required: True
-                      - types: 
-                          type: string
-                          value: enter vm or bare metal
-                          required: True
-                      - selector:
-                          type: selector
-                          value:
-                          - vm
-                          - baremetal
-                          - xyz
-                          required: True
-                      - cloud:
-                          type: selector
-                          value:
-                          - india
-                          - sierra
-                          required: True
-                  image: /static/img/launcher/ganglia.jpg
-                  script: 
-                    type: sh
-                    value: echo "Hello"
-            nagios:
-                  name: Nagios
-                  description:
-                    >
-                      Deploys a Nagios service for the vms specified.
-                      The ganglia server will be the first node in the list.
-                  label: nagios
-                  parameters:
-                      - nodes: 
-                          type: integer
-                          value: 1
-                          required: True
-                      - other: 
-                          type: float
-                          value: 5.0
-                          required: True
-                      - types: 
-                          type: string
-                          value: enter vm or bare metal
-                          required: True
-                      - selector:
-                          type: selector
-                          value:
-                          - vm
-                          - baremetal
-                          - xyz
-                          required: True
-                      - cloud:
-                          type: selector
-                          value:
-                          - india
-                          - sierra
-                          required: True
-                  image: /static/img/launcher/nagios.png
-                  script: 
-                    type: sh
-                    value: echo "Hello"
+  launcher:
+    recipies:
+      mooc:
+        name: Mooc
+        description:
+          >
+            Deploys a Slurm cluster. One of the Vms is the Master,
+            while the others register with the master as worker nodes.
+            The master will be the first node in the list.
+        label: slurm
+        parameters:
+          - nodes: 
+            type: integer
+            value: 1
+            required: True
+          - other: 
+            type: float
+            value: 5.0
+            required: True
+          - types: 
+            type: string
+            value: enter vm or bare metal
+            required: True
+          - selector:
+            type: selector
+            value:
+            - vm
+            - baremetal
+            - xyz
+            required: True
+          - cloud:
+            type: selector
+            value:
+            - india
+            - sierra
+            required: True
+        image: /static/img/launcher/mooc.png
+        script: 
+          type: sh
+          value: ssh {username}@{india} "ls -l"
+      slurm:
+        name: Slurm Cluster
+        description:
+          >
+            Deploys a Slurm cluster. One of the Vms is the Master,
+            while the others register with the master as worker nodes.
+            The master will be the first node in the list.
+        label: slurm
+        parameters:
+          - nodes: 
+            type: integer
+            value: 1
+            required: True
+          - other: 
+            type: float
+            value: 5.0
+            required: True
+          - types: 
+            type: string
+            value: enter vm or bare metal
+            required: True
+          - selector:
+            type: selector
+            value:
+            - vm
+            - baremetal
+            - xyz
+            required: True
+          - cloud:
+            type: selector
+            value:
+            - india
+            - sierra
+            required: True
+        image: /static/img/launcher/slurm.png
+        script: 
+          type: sh
+          value: ls -l
+      hadoop:
+        name: Hadoop
+        description:
+          >
+            Deploys a haddop cluster on the VMs specified
+        parameters:
+          - nodes: 
+            type: integer
+            value: 1
+            required: True
+          - other: 
+            type: float
+            value: 5.0
+            required: True
+          - types: 
+            type: string
+            value: enter vm or bare metal
+            required: True
+          - selector:
+            type: selector
+            value:
+            - vm
+            - baremetal
+            - xyz
+            required: True
+          - cloud:
+            type: selector
+            value:
+            - india
+            - sierra
+            required: True
+        image: /static/img/launcher/hadoop.jpg
+        script: 
+          type: sh
+          value: echo "Hello"
+      ganglia:
+        name: Ganglia
+        description:
+          >
+            Deploys a Ganglia service for the vms specified.
+            The ganglia server will be the first node in the list.
+        label: ganglia
+        parameters:
+          - nodes: 
+            type: integer
+            value: 1
+            required: True
+          - other: 
+            type: float
+            value: 5.0
+            required: True
+          - types: 
+            type: string
+            value: enter vm or bare metal
+            required: True
+          - selector:
+            type: selector
+            value:
+            - vm
+            - baremetal
+            - xyz
+            required: True
+          - cloud:
+            type: selector
+            value:
+            - india
+            - sierra
+            required: True
+        image: /static/img/launcher/ganglia.jpg
+        script: 
+          type: sh
+          value: echo "Hello"
+      nagios:
+        name: Nagios
+        description:
+          >
+            Deploys a Nagios service for the vms specified.
+            The ganglia server will be the first node in the list.
+        label: nagios
+        parameters:
+          - nodes: 
+            type: integer
+            value: 1
+            required: True
+          - other: 
+            type: float
+            value: 5.0
+            required: True
+          - types: 
+            type: string
+            value: enter vm or bare metal
+            required: True
+          - selector:
+            type: selector
+            value:
+            - vm
+            - baremetal
+            - xyz
+            required: True
+          - cloud:
+            type: selector
+            value:
+            - india
+            - sierra
+            required: True
+        image: /static/img/launcher/nagios.png
+        script: 
+          type: sh
+          value: echo "Hello"
 
