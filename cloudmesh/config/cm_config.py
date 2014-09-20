@@ -454,7 +454,7 @@ class cm_config(ConfigDict):
 
 
 def yaml_attribute_replace(filename='abc.yaml',
-                           replacements={}):
+                           replacements={}, indent_by=4):
     """ example::
 
         filename = config_file("/cloudmesh.yaml")
@@ -466,7 +466,7 @@ def yaml_attribute_replace(filename='abc.yaml',
 
     """
     result = ""
-    
+
     max_indent = 10
     
     with open(filename, 'r') as f:
@@ -479,7 +479,7 @@ def yaml_attribute_replace(filename='abc.yaml',
         
         for line in content.split('\n'):
             # find the indentation level
-            indent = (len(line) - len(line.lstrip(' '))) / 2
+            indent = (len(line) - len(line.lstrip(' '))) / indent_by
             # set all previously higher found indent to '' 
             for x in range(indent,max_indent):
                 found[x] = ''
@@ -490,7 +490,9 @@ def yaml_attribute_replace(filename='abc.yaml',
             # create the attribute name from teh indentation levels and remove the traiing .
             name = '.'.join(found).split('..')[0]
             if name == replacement:
-                result += "{0}{1}: {2}".format(' ' * indent * 2, attribute, replacements[replacement])
+                result += "{0}{1}: {2}".format(' ' * indent * indent_by,
+                                               attribute,
+                                               replacements[replacement])
             else:
                 result += line
             result += '\n'
