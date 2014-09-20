@@ -1,204 +1,204 @@
 meta:
-  yaml_version: 2.1
-  kind: clouds
+    yaml_version: 2.1
+    kind: clouds
 cloudmesh:
-  profile:
-    address:
-    - TBD
-    email: {{ profile.e_mail }}
-    firstname: {{ profile.firstname }}
-    gid: {{ profile.gid }}
-    uid: {{ profile.uid }}
-    lastname: {{ profile.lastname }}
-    phone: {{ profile.phone }}
-    username: {{ username.portal }}
-  active:
-  - india
-  hpc:
-    username: {{ username.portal }}
-  shell:
-    color: true
-  clouds:
-#    alamo:
-#      cm_host: alamo.futuregrid.org
-#      cm_label: alamo
-#      cm_type: ec2
-#      cm_type_version: folsom
-#      credentials:
-#        EC2_PRIVATE_KEY: $HOME/.cludmesh/alamo/pk.pem
-#        EC2_CERT: $HOME/.cloudmesh/alamo/cert.pem
-#        NOVA_CERT: $HOME/.cloudmesh/alamo/cacert.pem
-#        EUCALYPTUS_CERT: $HOME/.cloudmesh/alamo/cacert.pem
-#        EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
-#        EC2_ACCESS_KEY: {{ clouds.alamo.credential.EC2_ACCESS_KEY }}
-#        EC2_SECRET_KEY: {{ clouds.alamo.credential.EC2_SECRET_KEY }}
-#        keyname: cloudmesh
-#        userid: {{ username.portal }}
-#      default:
-#        flavor: {{ clouds.alamo.default.flavor }}
-#        image: {{ clouds.alamo.default.image }}
-#    india_eucalyptus:
-#      cm_host: india.futuregrid.org
-#      cm_label: india
-#      cm_type: ec2
-#      cm_type_version: 3.1
-#      credentials:
-#        EUCALYPTUS_CERT: $HOME/.cloudmesh/india/cacert.pem
-#        EC2_CERT: $HOME/.cloudmesh/india/cert.pem
-#        EC2_URL: http://149.165.146.135:8773/services/Eucalyptus
-#        EC2_ACCESS_KEY: {{ clouds.india_eucalyptus.credential.EC2_ACCESS_KEY }}
-#        EC2_SECRET_KEY: {{ clouds.india_eucalyptus.credential.EC2_SECRET_KEY }}
-#        EC2_PRIVATE_KEY: $HOME/.cloudmesh/india/pk.pem
-#      keyname: cloudmesh
-#      userid: {{ username.portal }}
-#      default:
-#        flavor: {{ clouds.india_eucalyptus.default.flavor }}
-#        image: {{ clouds.india_eucalyptus.default.image }}
-    india:
-      cm_host: india.futuregrid.org
-      cm_heading: India OpenStack, Havana
-      cm_label: ios_havana
-      cm_type: openstack
-      cm_type_version: havana
-      cm_service_url_type: publicURL
-      credentials:
-        OS_AUTH_URL: https://i57r.idp.iu.futuregrid.org:5000/v2.0
-        OS_CACERT: $HOME/.cloudmesh/india-havana-cacert.pem
-        OS_PASSWORD: {{ clouds.india_openstack_havana.credential.OS_PASSWORD }}
-        OS_TENANT_NAME: {{ clouds.india_openstack_havana.credential.OS_TENANT_NAME }}
-        OS_USERNAME: {{ username.portal }}
-        OS_VERSION: havana
-      default:
-        flavor: {{ clouds.india_openstack_havana.default.flavor }}
-        image: {{ clouds.india_openstack_havana.default.image }}
-    hp:
-      cm_heading: HP Openstack
-      cm_label: hpos
-      cm_type: openstack
-      cm_type_version: grizzly
-      credentials:
-        OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
-        OS_CACERT: None
-        OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
-        OS_TENANT_NAME: FutureGrid
-        OS_USERNAME: {{ clouds.hp.username }}
-      default:
-        flavor: {{ clouds.hp.default.flavor }}
-        image: {{ clouds.hp.default.image }}
-    hp_east:
-      cm_heading: HP Openstack East
-      cm_label: hpeos
-      cm_type: openstack
-      cm_type_version: grizzly
-      credentials:
-        OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
-        OS_CACERT: None
-        OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
-        OS_TENANT_NAME: FutureGrid
-        OS_USERNAME: {{ clouds.hp_east.username }}
-      default:
-        flavor: {{ clouds.hp_east.default.flavor }}
-        image: {{ clouds.hp_east.default.image }}
-    azure:
-      cm_host: windowsazure.com
-      cm_label: waz
-      cm_type: azure
-      cm_type_version:
-      credentials:
-        subscriptionid: {{ clouds.azure.credential.subscriptionid }}
-        managementcertfile: $HOME/.cloudmesh/azure_managementCertificate.pem
-        thumbprint: $HOME/.cloudmesh/azure_thumbprint
-        servicecertfile: $HOME/.cloudmesh/azure_serviceCertificate.pfx
-      default:
-        flavor: {{ clouds.azure.default.flavor }}
-        image: {{ clouds.azure.default.image }}
-        location: "East US"
-    aws:
-      cm_host: aws.amazon.com
-      cm_label: aws
-      cm_type: aws
-      cm_type_version:
-      credentials:
-        EC2_ACCESS_KEY: {{ clouds.aws.credential.access_key_id }}
-        EC2_SECRET_KEY: {{ clouds.aws.credential.secret_access_key }}
-        keyname: cloudmesh
-        userid: {{ clouds.aws.credential.userid }}
-        EC2_PRIVATE_KEY: $HOME/.cloudmesh/aws_pk.pem
-      default:
-        flavor: {{ clouds.aws.default.flavor }}
-        image: {{ clouds.aws.default.image }}
-        location: us-east-1
-      default:
-        flavor: None
-        image: None
-    dreamhost:
-      cm_heading: Dreamhost Openstack
-      cm_label: dreamhost
-      cm_type: openstack
-      cm_type_version: havana
-      credentials:
-        OS_AUTH_URL: https://keystone.dream.io/v2.0
-        OS_CACERT: None
-        OS_PASSWORD: TBD
-        OS_TENANT_NAME: TBD
-        OS_USERNAME: TBD
-      default:
-        flavor: subsonic
-        image: Ubuntu-14.04-Trusty
-    devstack:
-      cm_host: localhost
-      cm_heading: Localhost OpenStack, Icehouse
-      cm_label: localhost_icehouse
-      cm_type: openstack
-      cm_type_version: icehouse
-      credentials:
-        OS_AUTH_URL: http://10.0.2.15:5000/v2.0
-        OS_CACERT: None
-        OS_PASSWORD: labstack
-        OS_TENANT_NAME: admin
-        OS_USERNAME: admin
-        OS_VERSION: icehouse
-      default:
-        flavor: None
-        image: None
-  projects:
+    profile:
+        address:
+        - TBD
+        email: {{ profile.e_mail }}
+        firstname: {{ profile.firstname }}
+        gid: {{ profile.gid }}
+        uid: {{ profile.uid }}
+        lastname: {{ profile.lastname }}
+        phone: {{ profile.phone }}
+        username: {{ username.portal }}
     active:
-    {% for project in projects.active -%}
-    - {{ project }}
-    {% endfor -%}
-    completed:
-    {% for project in projects.completed -%}
-    - {{ project }}
-    {% endfor -%}
-    default: {{ projects.default }}  
-  security:
-    default: development
-    rules:
-      ping:
-        ip-address: 0.0.0.0/0
-        max_port: -1
-        min_port: -1
-        protocol: icmp
-      ssh:
-        ip-address: 0.0.0.0/0
-        max_port: 22
-        min_port: 22
-        protocol: tcp
-      web:
-        ip-address: 0.0.0.0/0
-        max_port: 80
-        min_port: 80
-        protocol: tcp
-    security_groups:
-      development:
-      - ssh
-      - ping
-      - web
-      webserver:
-      - web
-  keys:
-    default: {{keys.default}}
-    keylist:
-      {% for keyname, key in keys.keylist.iteritems() %}{{ keyname }}: {{ key }}
-      {% endfor -%}
+    - india
+    hpc:
+        username: {{ username.portal }}
+    shell:
+        color: true
+    clouds:
+#        alamo:
+#            cm_host: alamo.futuregrid.org
+#            cm_label: alamo
+#            cm_type: ec2
+#            cm_type_version: folsom
+#            credentials:
+#                EC2_PRIVATE_KEY: $HOME/.cludmesh/alamo/pk.pem
+#                EC2_CERT: $HOME/.cloudmesh/alamo/cert.pem
+#                NOVA_CERT: $HOME/.cloudmesh/alamo/cacert.pem
+#                EUCALYPTUS_CERT: $HOME/.cloudmesh/alamo/cacert.pem
+#                EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
+#                EC2_ACCESS_KEY: {{ clouds.alamo.credential.EC2_ACCESS_KEY }}
+#                EC2_SECRET_KEY: {{ clouds.alamo.credential.EC2_SECRET_KEY }}
+#                keyname: cloudmesh
+#                userid: {{ username.portal }}
+#            default:
+#                flavor: {{ clouds.alamo.default.flavor }}
+#                image: {{ clouds.alamo.default.image }}
+#        india_eucalyptus:
+#            cm_host: india.futuregrid.org
+#            cm_label: india
+#            cm_type: ec2
+#            cm_type_version: 3.1
+#            credentials:
+#                EUCALYPTUS_CERT: $HOME/.cloudmesh/india/cacert.pem
+#                EC2_CERT: $HOME/.cloudmesh/india/cert.pem
+#                EC2_URL: http://149.165.146.135:8773/services/Eucalyptus
+#                EC2_ACCESS_KEY: {{ clouds.india_eucalyptus.credential.EC2_ACCESS_KEY }}
+#                EC2_SECRET_KEY: {{ clouds.india_eucalyptus.credential.EC2_SECRET_KEY }}
+#                EC2_PRIVATE_KEY: $HOME/.cloudmesh/india/pk.pem
+#            keyname: cloudmesh
+#            userid: {{ username.portal }}
+#            default:
+#                flavor: {{ clouds.india_eucalyptus.default.flavor }}
+#                image: {{ clouds.india_eucalyptus.default.image }}
+        india:
+            cm_host: india.futuregrid.org
+            cm_heading: India OpenStack, Havana
+            cm_label: ios_havana
+            cm_type: openstack
+            cm_type_version: havana
+            cm_service_url_type: publicURL
+            credentials:
+                OS_AUTH_URL: https://i57r.idp.iu.futuregrid.org:5000/v2.0
+                OS_CACERT: $HOME/.cloudmesh/india-havana-cacert.pem
+                OS_PASSWORD: {{ clouds.india_openstack_havana.credential.OS_PASSWORD }}
+                OS_TENANT_NAME: {{ clouds.india_openstack_havana.credential.OS_TENANT_NAME }}
+                OS_USERNAME: {{ username.portal }}
+                OS_VERSION: havana
+            default:
+                flavor: {{ clouds.india_openstack_havana.default.flavor }}
+                image: {{ clouds.india_openstack_havana.default.image }}
+        hp:
+            cm_heading: HP Openstack
+            cm_label: hpos
+            cm_type: openstack
+            cm_type_version: grizzly
+            credentials:
+                OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
+                OS_CACERT: None
+                OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
+                OS_TENANT_NAME: FutureGrid
+                OS_USERNAME: {{ clouds.hp.username }}
+            default:
+                flavor: {{ clouds.hp.default.flavor }}
+                image: {{ clouds.hp.default.image }}
+        hp_east:
+            cm_heading: HP Openstack East
+            cm_label: hpeos
+            cm_type: openstack
+            cm_type_version: grizzly
+            credentials:
+                OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
+                OS_CACERT: None
+                OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
+                OS_TENANT_NAME: FutureGrid
+                OS_USERNAME: {{ clouds.hp_east.username }}
+            default:
+                flavor: {{ clouds.hp_east.default.flavor }}
+                image: {{ clouds.hp_east.default.image }}
+        azure:
+            cm_host: windowsazure.com
+            cm_label: waz
+            cm_type: azure
+            cm_type_version:
+            credentials:
+                subscriptionid: {{ clouds.azure.credential.subscriptionid }}
+                managementcertfile: $HOME/.cloudmesh/azure_managementCertificate.pem
+                thumbprint: $HOME/.cloudmesh/azure_thumbprint
+                servicecertfile: $HOME/.cloudmesh/azure_serviceCertificate.pfx
+            default:
+                flavor: {{ clouds.azure.default.flavor }}
+                image: {{ clouds.azure.default.image }}
+                location: "East US"
+        aws:
+            cm_host: aws.amazon.com
+            cm_label: aws
+            cm_type: aws
+            cm_type_version:
+            credentials:
+                EC2_ACCESS_KEY: {{ clouds.aws.credential.access_key_id }}
+                EC2_SECRET_KEY: {{ clouds.aws.credential.secret_access_key }}
+                keyname: cloudmesh
+                userid: {{ clouds.aws.credential.userid }}
+                EC2_PRIVATE_KEY: $HOME/.cloudmesh/aws_pk.pem
+            default:
+                flavor: {{ clouds.aws.default.flavor }}
+                image: {{ clouds.aws.default.image }}
+                location: us-east-1
+            default:
+                flavor: None
+                image: None
+        dreamhost:
+            cm_heading: Dreamhost Openstack
+            cm_label: dreamhost
+            cm_type: openstack
+            cm_type_version: havana
+            credentials:
+                OS_AUTH_URL: https://keystone.dream.io/v2.0
+                OS_CACERT: None
+                OS_PASSWORD: TBD
+                OS_TENANT_NAME: TBD
+                OS_USERNAME: TBD
+            default:
+                flavor: subsonic
+                image: Ubuntu-14.04-Trusty
+        devstack:
+            cm_host: localhost
+            cm_heading: Localhost OpenStack, Icehouse
+            cm_label: localhost_icehouse
+            cm_type: openstack
+            cm_type_version: icehouse
+            credentials:
+                OS_AUTH_URL: http://10.0.2.15:5000/v2.0
+                OS_CACERT: None
+                OS_PASSWORD: labstack
+                OS_TENANT_NAME: admin
+                OS_USERNAME: admin
+                OS_VERSION: icehouse
+            default:
+                flavor: None
+                image: None
+    projects:
+        active:
+        {% for project in projects.active -%}
+        - {{ project }}
+        {% endfor -%}
+        completed:
+        {% for project in projects.completed -%}
+        - {{ project }}
+        {% endfor -%}
+        default: {{ projects.default }}    
+    security:
+        default: development
+        rules:
+            ping:
+                ip-address: 0.0.0.0/0
+                max_port: -1
+                min_port: -1
+                protocol: icmp
+            ssh:
+                ip-address: 0.0.0.0/0
+                max_port: 22
+                min_port: 22
+                protocol: tcp
+            web:
+                ip-address: 0.0.0.0/0
+                max_port: 80
+                min_port: 80
+                protocol: tcp
+        security_groups:
+            development:
+            - ssh
+            - ping
+            - web
+            webserver:
+            - web
+    keys:
+        default: {{keys.default}}
+        keylist:
+            {% for keyname, key in keys.keylist.iteritems() %}{{ keyname }}: {{ key }}
+            {% endfor -%}
 

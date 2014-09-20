@@ -1,12 +1,12 @@
 meta:
-  yaml_version: 2.0
-  kind: metric
+    yaml_version: 2.1
+    kind: metric
 cloudmesh:
-   metric:
-     sierra_openstack_grizzly:
-        mysqldb_userid :
-        mysqldb_passwd :
-        mysqldb_hostname :
-        mysqldb_port : 3306
-        mysqldb_dbname :
-        mysqldb_tables : ["instance_faults"]
+    metric:
+        sierra_openstack_grizzly:
+            mysqldb_userid :
+            mysqldb_passwd :
+            mysqldb_hostname :
+            mysqldb_port : 3306
+            mysqldb_dbname :
+            mysqldb_tables : ["instance_faults"]

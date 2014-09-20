@@ -137,50 +137,45 @@ class cm_shell_yaml:
         #
         # List functions
         #
+
         if arguments.kind not in ['user','server']:
             Console.error("the specified kind does not exist")
             return
+        else:
+            if arguments.kind == 'user':
+                config = self.cm_config
+            elif arguments.kind == 'server':
+                config = self.cm_config_server
+            arguments.filename = arguments.filename or config.filename
+            config.load(arguments.filename)
+
         
-        if arguments.kind == 'user':
-            config = self.cm_config
-        elif arguments.kind == 'server':
-            config = self.cm_config_server
+        if not arguments.value:
 
-        arguments.filename = arguments.filename or config.filename
-        config.load(arguments.filename)
+            if not arguments.key and not arguments.value:
+                if arguments.format == "print":
+                    print config.pprint()
+                elif arguments.format == 'json':
+                    print config.json()
+                elif arguments.format == 'yaml':
+                    print config.yaml()
+                else:
+                    Console.error("format not supported")
+                return
+            elif arguments.key and not arguments.value:
+                print config.get(arguments.key)
 
-        if not arguments.key and not arguments.value:
-            if arguments.format == "print":
-                print config.pprint()
-            elif arguments.format == 'json':
-                print config.json()
-            elif arguments.format == 'yaml':
-                print config.yaml()
-            else:
-                Console.error("format not supported")
-            return
-        elif arguments.key and not arguments.value:
-            print config.get(arguments.key)
             return
 
+        else:
         #
-        # 
+        # SETTING VALUES
         #
-        print "HERE"
 
-        if arguments.kind == 'server':
-            if not arguments.key:
-                self.cm_config_server.pprint()
-            else:
-                print self.cm_config_server.get(arguments.key)
-        elif arguments['user'] and arguments.key and arguments.value:
-            self.cm_config._update(arguments.key, arguments['VALUE'])
-            self.cm_config.write(format="yaml")
-            self.cm_config.pprint() 
-        elif arguments['server'] and arguments.key and arguments.value:
-            self.cm_config_server._update(arguments.key, arguments.value)
-            self.cm_config_server.write(format="yaml")
-            self.cm_config_server.pprint() 
+            config._update(arguments.key, arguments.value)
+            #config.write(format="yaml")
+            print config.pprint()
+            #self.config = config
 
         '''
 

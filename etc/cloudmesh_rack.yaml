@@ -1,31 +1,31 @@
 meta:
-  yaml_version: 2.0
-  kind: rack
+    yaml_version: 2.1
+    kind: rack
 cloudmesh:
-  rack:
-    cluster:
-      all:
-        diag: rack.diag
-        count: 1
-      bravo:
-        diag: bravo.diag
-        count: 1
-      echo:
-        diag: echo.diag
-        count: 1
-      delta:
-        diag: delta.diag
-        count: 2
-      india:
-        diag: india.diag
-        count: 5
-      unknown:
-        diag: unknown.diag
-        count: 1
-    service:
-      hpc: HPC
-      openstack: OpenStack
-      hadoop: Hadoop
-      eucalyptus: Eucalyptus
-      nimbus: Nimbus
-      hardwareerror: HardwareError
+    rack:
+        cluster:
+            all:
+                diag: rack.diag
+                count: 1
+            bravo:
+                diag: bravo.diag
+                count: 1
+            echo:
+                diag: echo.diag
+                count: 1
+            delta:
+                diag: delta.diag
+                count: 2
+            india:
+                diag: india.diag
+                count: 5
+            unknown:
+                diag: unknown.diag
+                count: 1
+        service:
+            hpc: HPC
+            openstack: OpenStack
+            hadoop: Hadoop
+            eucalyptus: Eucalyptus
+            nimbus: Nimbus
+            hardwareerror: HardwareError
