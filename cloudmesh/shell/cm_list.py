@@ -2,7 +2,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.cm_cloud import CloudManage
 from cloudmesh_common.logger import LOGGER
 from tabulate import tabulate
-from cloudmesh_common.util import CONSOLE
+from cmd3.console import Console
 from cloudmesh.iaas.cm_cloud import shell_command_cloud
 from docopt import docopt
 
@@ -11,7 +11,6 @@ list_command_table_format = "grid"
 
 
 log = LOGGER(__file__)
-Console = CONSOLE()
 
 
 def shell_command_list(arguments):

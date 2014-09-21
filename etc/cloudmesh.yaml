@@ -17,7 +17,7 @@ cloudmesh:
     hpc:
         username: {{ username.portal }}
     shell:
-        color: true
+        color: True
     clouds:
 #        alamo:
 #            cm_host: alamo.futuregrid.org
