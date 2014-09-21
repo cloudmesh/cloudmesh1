@@ -1,6 +1,5 @@
 """Prints tables in html, text, or with right alighned columns"""
 
-
 class cm_table:
 
     """

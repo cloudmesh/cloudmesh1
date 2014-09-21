@@ -1,89 +1,89 @@
 meta:
-  yaml_version: 2.0
-  kind: flavor
+    yaml_version: 2.1
+    kind: flavor
 cloudmesh:
-  flavor:
+    flavor:
         alamo_openstack_folsom:
-          m1.large:
-            disk: 80
-            id: m1.large
-            name: Large Instance
-            ram: 8192
-            vcpus: 4
-          m1.medium:
-            disk: 40
-            id: m1.medium
-            name: Medium Instance
-            ram: 4096
-            vcpus: 2
-          m1.small:
-            disk: 20
-            id: m1.small
-            name: Small Instance
-            ram: 2048
-            vcpus: 1
-          m1.tiny:
-            disk: 0
-            id: m1.tiny
-            name: Tiny Instance
-            ram: 512
-            vcpus: 1
-          m1.xlarge:
-            disk: 160
-            id: m1.xlarge
-            name: Extra Large Instance
-            ram: 12288
-            vcpus: 8
+            m1.large:
+                disk: 80
+                id: m1.large
+                name: Large Instance
+                ram: 8192
+                vcpus: 4
+            m1.medium:
+                disk: 40
+                id: m1.medium
+                name: Medium Instance
+                ram: 4096
+                vcpus: 2
+            m1.small:
+                disk: 20
+                id: m1.small
+                name: Small Instance
+                ram: 2048
+                vcpus: 1
+            m1.tiny:
+                disk: 0
+                id: m1.tiny
+                name: Tiny Instance
+                ram: 512
+                vcpus: 1
+            m1.xlarge:
+                disk: 160
+                id: m1.xlarge
+                name: Extra Large Instance
+                ram: 12288
+                vcpus: 8
         azure:
-          ExtraLarge:
-            id: '5'
-            name: ExtraLarge
-          ExtraSmall:
-            id: '1'
-            name: ExtraSmall
-          Large:
-            id: '4'
-            name: Large
-          Medium:
-            id: '3'
-            name: Medium
-          Small:
-            id: '2'
-            name: Small
+            ExtraLarge:
+                id: '5'
+                name: ExtraLarge
+            ExtraSmall:
+                id: '1'
+                name: ExtraSmall
+            Large:
+                id: '4'
+                name: Large
+            Medium:
+                id: '3'
+                name: Medium
+            Small:
+                id: '2'
+                name: Small
         hotel_openstack_havana:
-          m1.large:
-            disk: 80
-            id: m1.large
-            name: Large Instance
-            ram: 8192
-            vcpus: 4
-          m1.medium:
-            disk: 40
-            id: m1.medium
-            name: Medium Instance
-            ram: 4096
-            vcpus: 2
-          m1.small:
-            disk: 20
-            id: m1.small
-            name: Small Instance
-            ram: 2048
-            vcpus: 1
-          m1.tiny:
-            disk: 0
-            id: m1.tiny
-            name: Tiny Instance
-            ram: 512
-            vcpus: 1
-          m1.xlarge:
-            disk: 160
-            id: m1.xlarge
-            name: Extra Large Instance
-            ram: 16384
-            vcpus: 8
-          m2.xlarge:
-            disk: 160
-            id: m2.xlarge
-            name: High-Memory Double Extra Large Instance
-            ram: 20480
-            vcpus: 8
+            m1.large:
+                disk: 80
+                id: m1.large
+                name: Large Instance
+                ram: 8192
+                vcpus: 4
+            m1.medium:
+                disk: 40
+                id: m1.medium
+                name: Medium Instance
+                ram: 4096
+                vcpus: 2
+            m1.small:
+                disk: 20
+                id: m1.small
+                name: Small Instance
+                ram: 2048
+                vcpus: 1
+            m1.tiny:
+                disk: 0
+                id: m1.tiny
+                name: Tiny Instance
+                ram: 512
+                vcpus: 1
+            m1.xlarge:
+                disk: 160
+                id: m1.xlarge
+                name: Extra Large Instance
+                ram: 16384
+                vcpus: 8
+            m2.xlarge:
+                disk: 160
+                id: m2.xlarge
+                name: High-Memory Double Extra Large Instance
+                ram: 20480
+                vcpus: 8

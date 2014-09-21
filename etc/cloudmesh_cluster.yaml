@@ -1,6 +1,6 @@
 meta:
-  yaml_version: 1.2
-  kind: clusters
+    yaml_version: 2.1
+    kind: clusters
 cloudmesh:
     inventory:
         india:

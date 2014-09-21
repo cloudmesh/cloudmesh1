@@ -1,41 +1,41 @@
 meta:
-  yaml_version: 2.0
-  kind: macaddress
+    yaml_version: 2.1
+    kind: macaddress
 inventory:
-  india:
-    bmc:
-      common:
-        range: i[001-003]
-        power_user: your_username
-        power_pass: your_password
-        power_type: ipmilan
-    macaddr:
-      i001:
-        public:
-          name: eth0
-          macaddr: AA:AA:AA:AA:AA:A8
-        internal:
-          name: eth1
-          macaddr: AA:AA:AA:AA:AA:A9
-      i002:
-        public:
-          name: eth0
-          macaddr: AA:AA:AA:AA:AA:AA
-        internal:
-          name: eth1
-          macaddr: AA:AA:AA:AA:AA:AB
+    india:
         bmc:
-          power_user: your_username
-          power_pass: your_password
-          power_type: ipmilan
-      i003:
-        public:
-          name: eth0
-          macaddr: AA:AA:AA:AA:AA:AC
-        internal:
-          name: eth1
-          macaddr: AA:AA:AA:AA:AA:AD
-        bmc:
-          power_user: your_username
+            common:
+                range: i[001-003]
+                power_user: your_username
+                power_pass: your_password
+                power_type: ipmilan
+        macaddr:
+            i001:
+                public:
+                    name: eth0
+                    macaddr: AA:AA:AA:AA:AA:A8
+                internal:
+                    name: eth1
+                    macaddr: AA:AA:AA:AA:AA:A9
+            i002:
+                public:
+                    name: eth0
+                    macaddr: AA:AA:AA:AA:AA:AA
+                internal:
+                    name: eth1
+                    macaddr: AA:AA:AA:AA:AA:AB
+                bmc:
+                    power_user: your_username
+                    power_pass: your_password
+                    power_type: ipmilan
+            i003:
+                public:
+                    name: eth0
+                    macaddr: AA:AA:AA:AA:AA:AC
+                internal:
+                    name: eth1
+                    macaddr: AA:AA:AA:AA:AA:AD
+                bmc:
+                    power_user: your_username
 
 
