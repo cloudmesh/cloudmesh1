@@ -533,7 +533,7 @@ def start_vm(username,
         # vm start procedure
 
         banner("Starting vm->{0} on cloud->{1} using image->{2}, flavor->{3}, key->{4}"
-               .format(tmpnameser, cloudname, tmpnamefl, tmpnameim, keynamenew))
+               .format(tmpnameser, cloudname, tmpnameim, tmpnamefl, keynamenew))
         # result = mongo.vm_create(
         # using celery, to disable, call vm_create
         result = mongo.vm_create_queue(
