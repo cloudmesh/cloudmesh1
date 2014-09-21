@@ -88,7 +88,7 @@ class ConfigDict (OrderedDict):
         dest = backup_name(location)
         shutil.copyfile(location, dest)
 
-    def write(self, filename=None, format="dict"):
+    def write(self, filename=None, format="dict", attribute_indent=attribute_indent):
         """write the dict"""
 
         if filename is not None:
