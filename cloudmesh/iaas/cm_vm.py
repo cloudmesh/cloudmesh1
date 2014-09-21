@@ -27,14 +27,21 @@ def shell_command_vm(arguments):
                          [--flavor=<flavorName>|--flavorid=<flavorId>]
                          [--group=<group>]
                 vm delete NAME 
-                          [--id=<id>]
                           [--group=<group>]
                           [--cloud=<CloudName>]
                           [--prefix=<prefix>]
                           [--range=<range>]
                           [--force]
+                vm delete [--name=<vmname>|--id=<id>]
+                          [--group=<group>]
+                          [--cloud=<CloudName>]
+                          [--prefix=<prefix>]
+                          [--range=<range>]
+                          [--force]
+                vm ip NAME
+                           [--cloud=<CloudName>]
                 vm ip (--name=<vmname>|--id=<id>) 
-                       [--cloud=<CloudName>]
+                           [--cloud=<CloudName>]
                 vm login --ln=<LoginName>
                          (--name=<vmname> | --id=<id> | --addr=<address>) 
                          [--cloud=<CloudName>]
@@ -171,6 +178,7 @@ class VMcommand(object):
         # -------------------------
         # check input
         if self.arguments['NAME'] is None and\
+           self.arguments['--name'] is None and\
            self.arguments['--id'] is None and\
            self.arguments['--group'] is None and\
            self.arguments['--cloud'] is None and\
@@ -242,7 +250,8 @@ class VMcommand(object):
         
         delete_vm(self.username,
                   cloudname,
-                  servername=self.arguments['NAME'],
+                  servername=(self.arguments['NAME'] or
+                              self.arguments['--name']),
                   serverid=self.arguments['--id'],
                   groupname=self.arguments['--group'],
                   prefix=self.arguments['--prefix'],
@@ -281,7 +290,7 @@ class VMcommand(object):
                     address = i['addr']
             if address == None:
                 Console.warning("Please assign a public ip to the VM first"\
-                                "(vm ip (NAME|--id=<id>))")
+                                "(vm ip (--name=<vmname>|--id=<id>))")
                 return
         if self.arguments['<command>']:
             commands = ' '.join(self.arguments['<command>'])
@@ -334,18 +343,19 @@ class VMcommand(object):
         mongo.refresh(self.username, names=[cloudname], types=['servers'])
         serverdata = mongo.servers(
             clouds=[cloudname], cm_user_id=self.username)[cloudname]
-        if self.arguments['--name']:
+        vmname = self.arguments['--name'] or self.arguments['NAME']
+        if vmname:
             ls = []
             for k, v in serverdata.iteritems():
-                if self.arguments['--name'] == v['name']:
+                if vmname == v['name']:
                     ls.append(k)
             if len(ls) > 1:
                 Console.warning("There are more than one VM named {0}, please use VM id instead"
-                                .format(self.arguments['--name']))
+                                .format(vmname))
                 return False
             elif len(ls) == 0:
                 Console.error(
-                    "Could not find VM named {0}".format(self.arguments['--name']))
+                    "Could not find VM named {0}".format(vmname))
                 return False
             else:
                 serverid = ls[0]
@@ -359,7 +369,7 @@ class VMcommand(object):
                     "Could not find VM with id {0}".format(self.arguments['--id']))
                 return False
         else:
-            Console.warning("Please pecify a VM name or id")
+            Console.warning("Please specify a VM name or id")
             return False
         return serverid
 
