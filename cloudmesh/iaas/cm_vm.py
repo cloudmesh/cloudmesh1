@@ -26,7 +26,8 @@ def shell_command_vm(arguments):
                          [--image=<imgName>|--imageid=<imgId>]
                          [--flavor=<flavorName>|--flavorid=<flavorId>]
                          [--group=<group>]
-                vm delete [--name=<vmname>|--id=<id>]
+                vm delete NAME 
+                          [--id=<id>]
                           [--group=<group>]
                           [--cloud=<CloudName>]
                           [--prefix=<prefix>]
@@ -169,7 +170,7 @@ class VMcommand(object):
     def _vm_delete(self):
         # -------------------------
         # check input
-        if self.arguments['--name'] is None and\
+        if self.arguments['NAME'] is None and\
            self.arguments['--id'] is None and\
            self.arguments['--group'] is None and\
            self.arguments['--cloud'] is None and\
@@ -241,7 +242,7 @@ class VMcommand(object):
         
         delete_vm(self.username,
                   cloudname,
-                  servername=self.arguments['--name'],
+                  servername=self.arguments['NAME'],
                   serverid=self.arguments['--id'],
                   groupname=self.arguments['--group'],
                   prefix=self.arguments['--prefix'],
