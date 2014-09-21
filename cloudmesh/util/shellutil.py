@@ -6,11 +6,9 @@ import json
 from cloudmesh_common.tables import array_dict_table_printer
 from cloudmesh import banner
 import csv
+from cmd3.console import Console
 
 
-#
-# TODO: Console is not imported
-#
 def shell_commands_dict_output(d,
                                print_format=None,
                                firstheader=None,

@@ -320,23 +320,6 @@ def dict_uni_to_ascii(d):
     return d1
 
 
-def CONSOLE():
-    '''
-    initialize color in console.
-    '''
-    from cmd3.console import Console
-    
-    color = True
-    try:
-        #
-        # TODO: should this be repaced with .get("cloudmesh.shell.color")
-        #
-        line = grep("color:", config_file("/cloudmesh.yaml"))
-        color = (line.strip().split(":")[1].strip().lower()) == "true"
-    except:
-        pass
-    
-    return Console(color)
     
     
     
