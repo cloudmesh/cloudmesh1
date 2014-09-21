@@ -9,6 +9,9 @@ from cloudmesh import yn_choice
 import time
 from cloudmesh_common.util import CONSOLE
 from sh import ssh
+from subprocess import call
+from cloudmesh.util.ssh import ssh_execute
+import sys
 
 log = LOGGER(__file__)
 Console = CONSOLE()
@@ -18,25 +21,35 @@ def shell_command_vm(arguments):
         ::
 
             Usage:
-                vm start [NAME]
+                vm start [--name=<vmname>]
                          [--count=<count>]
                          [--cloud=<CloudName>]
                          [--image=<imgName>|--imageid=<imgId>]
                          [--flavor=<flavorName>|--flavorid=<flavorId>]
                          [--group=<group>]
-                vm delete [NAME|--id=<id>]
+                vm delete [--name=<vmname>|--id=<id>]
                           [--group=<group>]
                           [--cloud=<CloudName>]
                           [--prefix=<prefix>]
                           [--range=<range>]
                           [--force]
-                vm pip (NAME|--id=<id>) [--cloud=<CloudName>]
-                vm login (NAME|--id=<id>) [--cloud=<CloudName>] [NOT IMPLEMENTED]
-
+                vm pip (--name=<vmname>|--id=<id>) 
+                       [--cloud=<CloudName>]
+                vm login --ln=<LoginName>
+                         (--name=<vmname> | --id=<id> | --addr=<address>) 
+                         [--cloud=<CloudName>]
+                         [--key=<key>]
+                         [--] [<command>...]
+                         
             Arguments:
-                NAME  server name
-
+                <command>              positional arguments, the commands you want to
+                                       execute on the server(e.g. ls -a), you will get 
+                                       a return of executing result instead of login to 
+                                       the server, note that type in -- is suggested before 
+                                       you input the commands
+                
             Options:
+                --addr=<address>       give the public ip of the server
                 --cloud=<CloudName>    give a cloud to work on, if not given, selected
                                        or default cloud will be used
                 --count=<count>        give the number of servers to start
@@ -46,6 +59,11 @@ def shell_command_vm(arguments):
                 --id=<id>              give the server id
                 --image=<imgName>      give the name of the image
                 --imageid=<imgId>      give the id of the image
+                --key=<key>            spicfy a private key to use, input a string which 
+                                       is the full path to the key file
+                --ln=<LoginName>       give the login name of the server that you want 
+                                       to login
+                --name=<vmname>        give the name of virtual machine
                 --prefix=<prefix>      give the prefix of the server, standand server
                                        name is in the form of prefix_index, e.g. abc_9
                 --range=<range>        give the range of the index of the servers
@@ -67,6 +85,7 @@ def shell_command_vm(arguments):
                                         Or user may specify more options to narrow
                                         the search
                 vm pip [options...]     assign a public ip to a VM of a cloud
+                vm login [options...]   login to a server or execute commands on it
 
             Examples:
                 vm start --count=5 --group=test --cloud=india
@@ -94,7 +113,7 @@ class VMcommand(object):
 
     def __init__(self, arguments):
         self.arguments = arguments
-        # print self.arguments ########
+        #print self.arguments ########
 
     def _vm_create(self):
         # -------------------------
@@ -139,7 +158,7 @@ class VMcommand(object):
                        imagename=self.arguments['--image'],
                        imageid=self.arguments['--imageid'],
                        groupname=self.arguments['--group'],
-                       servername=self.arguments['NAME'])
+                       servername=self.arguments['--name'])
         # -------------------------
         if res:
             if self.arguments['--count']:
@@ -151,7 +170,7 @@ class VMcommand(object):
     def _vm_delete(self):
         # -------------------------
         # check input
-        if self.arguments['NAME'] is None and\
+        if self.arguments['--name'] is None and\
            self.arguments['--id'] is None and\
            self.arguments['--group'] is None and\
            self.arguments['--cloud'] is None and\
@@ -223,7 +242,7 @@ class VMcommand(object):
         
         delete_vm(self.username,
                   cloudname,
-                  servername=self.arguments['NAME'],
+                  servername=self.arguments['--name'],
                   serverid=self.arguments['--id'],
                   groupname=self.arguments['--group'],
                   prefix=self.arguments['--prefix'],
@@ -243,7 +262,43 @@ class VMcommand(object):
             username=self.username, cloudname=cloudname, serverid=serverid)
 
     def _vm_login(self):
-        print "NOT WORKING"
+        cloudname = self.get_working_cloud_name()
+        if cloudname == False:
+            return
+        address = None
+        if self.arguments['--addr']:
+            address = self.arguments['--addr']
+        else:
+            serverid = self.get_working_server_id(cloudname)
+            if serverid == False:
+                return
+            mongo = cm_mongo()
+            serverdata = mongo.servers(clouds=[cloudname], 
+                                        cm_user_id=self.username)[cloudname]
+            serverdata = serverdata[serverid]['addresses']['private']
+            for i in serverdata:
+                if i['OS-EXT-IPS:type'] == "floating":
+                    address = i['addr']
+            if address == None:
+                Console.warning("Please assign a public ip to the VM first"\
+                                "(vm pip (NAME|--id=<id>))")
+                return
+        if self.arguments['<command>']:
+            commands = ' '.join(self.arguments['<command>'])
+            try:
+                print ">>>\n"
+                print ssh_execute(self.arguments['--ln'], address, 
+                                  commands, key=self.arguments['--key'])
+            except:
+                err = sys.exc_info()
+                Console.error("Can not execute ssh on {0}:{1}".format(address, err))
+        else:
+            host = "{0}@{1}".format(self.arguments['--ln'], address)
+            if self.arguments['--key']:
+                call(['ssh', '-i', self.arguments['--key'], host])
+            else:
+                call(['ssh', host])
+        
 
     # --------------------------------------------------------------------------
     def get_working_cloud_name(self):
@@ -279,18 +334,18 @@ class VMcommand(object):
         mongo.refresh(self.username, names=[cloudname], types=['servers'])
         serverdata = mongo.servers(
             clouds=[cloudname], cm_user_id=self.username)[cloudname]
-        if self.arguments['NAME']:
+        if self.arguments['--name']:
             ls = []
             for k, v in serverdata.iteritems():
-                if self.arguments['NAME'] == v['name']:
+                if self.arguments['--name'] == v['name']:
                     ls.append(k)
             if len(ls) > 1:
                 Console.warning("There are more than one VM named {0}, please use VM id instead"
-                                .format(self.arguments['NAME']))
+                                .format(self.arguments['--name']))
                 return False
             elif len(ls) == 0:
                 Console.error(
-                    "Could not find VM named {0}".format(self.arguments['NAME']))
+                    "Could not find VM named {0}".format(self.arguments['--name']))
                 return False
             else:
                 serverid = ls[0]

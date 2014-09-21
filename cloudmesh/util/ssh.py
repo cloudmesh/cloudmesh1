@@ -67,14 +67,14 @@ class ssh:
 # -----------------------------------------------------------------------
 
 
-def ssh_execute(hostuser, addr, cmd, key=None):
+def ssh_execute(loginuser, addr, cmd, key=None):
     """Execute a command via SSH"""
 
     from sh import ssh  # import
 
     # disable SSH host key checking
     option = "-o StrictHostKeyChecking=no "
-    host = " {0}@{1} ".format(hostuser, addr)
+    host = " {0}@{1} ".format(loginuser, addr)
     cmd = " {0} ".format(cmd)
     if key:
         key = " -i {0} ".format(key)
