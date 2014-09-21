@@ -2,8 +2,9 @@ from cmd3.shell import command
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_projects import cm_projects
 from cloudmesh_install import config_file
-
+from cloudmesh_common.tables import two_column_table, print_format_dict
 from cloudmesh_common.logger import LOGGER
+import json
 
 log = LOGGER(__file__)
 
@@ -32,7 +33,7 @@ class cm_shell_project:
         """
         Usage:
                project
-               project info [--json]
+               project info [--format=FORMAT]
                project default NAME
                project active NAME
                project delete NAME
@@ -43,6 +44,7 @@ class cm_shell_project:
         Arguments:
 
           NAME           The project id
+          FORMAT         The display format. (json, table)
 
         Options:
 
@@ -126,18 +128,20 @@ class cm_shell_project:
             print msg
             return
         else: 
-            #elif arguments["info"]:
-
-
             # log.info ("project info for all")
-            if arguments["--json"]:
-                print self.projects.dump()
+            if arguments["--format"] == "json":
+                a = json.loads(self.projects.dump())
+                print print_format_dict(a, kind='json')
                 return
             else:
+                a = json.loads(self.projects.dump())
+                print two_column_table(a)
+                '''
                 print
                 print "Project Information"
                 print "-------------------"
                 print
+ 
                 if self.projects.names("default") is not "" and not []:
                     print "%10s:" % "default", self.projects.names("default")
                 else:
@@ -151,4 +155,5 @@ class cm_shell_project:
                     print "%10s:" % "completed", \
                         ', '.join(self.projects.names("completed"))
                 print
+                '''
             return

@@ -16,8 +16,6 @@ def print_format_dict(d, header=None, kind='table'):
         return two_column_table(d.keys(), header)
 
 
-
-
 def array_dict_table_printer(array, order=None, header=None):
     """prints a pretty table from an array of dicts
     :param array: A an array with dicts of the same type.
@@ -77,7 +75,8 @@ def two_column_table(column_dict, header=['Default', 'Value']):
 
     :param column_dic: the dictionary to be printed
     """
-    # header = ['Default', 'Value']
+    if not header:
+        header = ['Default', 'Value']
     x = PrettyTable()
     x.add_column(header[0], column_dict.keys())
     x.add_column(header[1], column_dict.values())
