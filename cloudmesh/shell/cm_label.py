@@ -1,11 +1,11 @@
 from docopt import docopt
 from cloudmesh_common.logger import LOGGER
-from cloudmesh_common.util import CONSOLE
+from cmd3.console import Console
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mongo import cm_mongo
 
 log = LOGGER(__file__)
-Console = CONSOLE()
+
 
 def shell_command_label(arguments):
     # TODO: [--width=WIDTH]

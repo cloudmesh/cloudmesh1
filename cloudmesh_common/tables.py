@@ -3,6 +3,19 @@ from pytimeparse.timeparse import timeparse
 from prettytable import PrettyTable
 from datetime import datetime
 from datetime import timedelta
+import json
+import yaml
+
+def print_format_dict(d, header=None, kind='table'):
+    """kind = json, yaml, table, pprint"""
+    if kind == "json":
+        return json.dumps(d, indent=4)
+    elif kind == "yaml":
+        return yaml.dump(d, default_flow_style=False)
+    else:
+        return two_column_table(d.keys(), header)
+
+
 
 
 def array_dict_table_printer(array, order=None, header=None):

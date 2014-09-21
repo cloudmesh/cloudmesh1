@@ -1,6 +1,6 @@
 meta:
-  yaml_version: 2.1
-  kind: clouds
+    yaml_version: 2.1
+    kind: clouds
 cloudmesh:
     profile:
         address:
@@ -16,6 +16,8 @@ cloudmesh:
     - india
     hpc:
         username: {{ username.portal }}
+    shell:
+        color: True
     clouds:
 #        alamo:
 #            cm_host: alamo.futuregrid.org

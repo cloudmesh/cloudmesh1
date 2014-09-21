@@ -43,7 +43,7 @@ class Database(object):
             prompt1st = "Please set a password to login to the portal later.\nPassword:"
             prompt_not_strong = "\nPassword not strong enough. Minimum length is 6. Please enter again.\nPassword:"
             passwd = getpassword(prompt1st)
-            if not validate_password(passwd):
+            while not validate_password(passwd):
                 passwd = getpassword(prompt_not_strong)
 
         # print passwd
@@ -58,6 +58,22 @@ class Database(object):
                 )
         print "password set successfully!"
 
+    def set_password_local_mongodb(self, passwd=None):
+        if passwd is None:
+            prompt1st = "Please set a password to mongodb.\nMongo Password:"
+            prompt_not_strong = "\nPassword not strong enough. Minimum " + \
+                    "length is 6. Please enter again.\nMongo Password:"
+            passwd = getpassword(prompt1st)
+            while not validate_password(passwd):
+                passwd = getpassword(prompt_not_strong)
+
+        from cloudmesh.config.cm_config import cm_config_server
+        cm_config_server = cm_config_server()
+        key = "cloudmesh.server.mongo.password"
+        value = passwd
+        cm_config_server._update(key, value)
+        cm_config_server.write(format="yaml")
+ 
     def set_credentials(self):
         for cloudname in self.config.cloudnames():
             self.user_obj.set_credential(
