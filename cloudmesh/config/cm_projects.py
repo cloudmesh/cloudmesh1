@@ -52,7 +52,7 @@ class cm_projects:
         return self.config.get('cloudmesh.projects')[status]
 
     def __str__(self):
-        """returns the dict in a string representing the project"""
+        """returns the string representing the project"""
         # untested
         text = self.config.get('cloudmesh.projects')
         return str(text)
