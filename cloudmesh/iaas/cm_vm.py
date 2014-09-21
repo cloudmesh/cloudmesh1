@@ -32,7 +32,7 @@ def shell_command_vm(arguments):
                           [--prefix=<prefix>]
                           [--range=<range>]
                           [--force]
-                vm pip (--name=<vmname>|--id=<id>) 
+                vm ip (--name=<vmname>|--id=<id>) 
                        [--cloud=<CloudName>]
                 vm login --ln=<LoginName>
                          (--name=<vmname> | --id=<id> | --addr=<address>) 
@@ -83,7 +83,7 @@ def shell_command_vm(arguments):
                                         and/or range to find servers by their names.
                                         Or user may specify more options to narrow
                                         the search
-                vm pip [options...]     assign a public ip to a VM of a cloud
+                vm ip [options...]     assign a public ip to a VM of a cloud
                 vm login [options...]   login to a server or execute commands on it
 
             Examples:
@@ -280,7 +280,7 @@ class VMcommand(object):
                     address = i['addr']
             if address == None:
                 Console.warning("Please assign a public ip to the VM first"\
-                                "(vm pip (NAME|--id=<id>))")
+                                "(vm ip (NAME|--id=<id>))")
                 return
         if self.arguments['<command>']:
             commands = ' '.join(self.arguments['<command>'])
@@ -367,7 +367,7 @@ class VMcommand(object):
             self._vm_create()
         elif self.arguments['delete']:
             self._vm_delete()
-        elif self.arguments['pip']:
+        elif self.arguments['ip']:
             self._assign_public_ip()
         elif self.arguments['login']:
             self._vm_login()
