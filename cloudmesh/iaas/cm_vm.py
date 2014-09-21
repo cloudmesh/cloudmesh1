@@ -751,7 +751,7 @@ def delete_vm(username,
 
         watch = time.time()
 
-        useQueue = True
+        useQueue = False
         if useQueue:
             # not functioning
             cloudmanager = mongo.clouds[username][cloudname]["manager"]
