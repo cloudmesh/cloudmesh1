@@ -1,7 +1,7 @@
 from cmd3.shell import command
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh_common.logger import LOGGER
-from cloudmesh_common.util import CONSOLE
+from cmd3.console import Console
 from cloudmesh_common.util import dotdict
 from cloudmesh_common.tables import print_format_dict
 from pprint import pprint
@@ -14,6 +14,8 @@ class cm_shell_yaml:
     cm_config_server = cm_config_server()
 
     def activate_cm_shell_yaml(self):
+        Console.color = self.cm_config.get("cloudmesh.shell.color")
+
         self.register_command_topic('cloud', 'yaml')
         self.register_command_topic('cloud', 'debug')
         self.register_command_topic('cloud', 'loglevel')
@@ -47,23 +49,44 @@ class cm_shell_yaml:
         Usage:
             color on
             color off
+            color
             
             Turns the shell color printing on or off
+
+        Description:
+
+            color on   switched the color on
+
+            color off  switches the color off
+            
+            color      without parameters prints a test to display
+                       the various colored mesages. It is intended
+                       as a test to see if your terminal supports
+                       colors.
+                      
         """
         if arguments['on']:
             key = "cloudmesh.shell.color"
             value = True
-            self.cm_config_server._update(key, value)
-            self.cm_config_server.write(format="yaml")
+            self.cm_config._update(key, value)
+            self.cm_config.write(format="yaml")
+            Console.color = True
             print ("color on.")
         elif arguments['off']:
             key = "cloudmesh.shell.color"
             value = False
-            self.cm_config_server._update(key, value)
-            self.cm_config_server.write(format="yaml")
+            self.cm_config._update(key, value)
+            self.cm_config.write(format="yaml")
+            Console.color = False
             print ("color off.")
-        
-  
+        else:
+            print "Color:", Console.color
+            Console.warning("Warning")
+            Console.error("Error")
+            Console.info("Info")
+            Console.msg("Msg")
+            Console.ok("Success")
+
 
     @command
     def do_loglevel(self, args, arguments):
