@@ -1,6 +1,6 @@
 meta:
-  yaml_version: 2.0
-  kind: rack
+    yaml_version: 2.1
+    kind: rack
 cloudmesh:
     rack:
         cluster:

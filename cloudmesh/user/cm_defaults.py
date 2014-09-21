@@ -1,12 +1,11 @@
 from cloudmesh_common.logger import LOGGER
-from cloudmesh_common.util import CONSOLE
+from cmd3.console import Console
 from cloudmesh.user.cm_user import cm_user
 from pprint import pprint
 from cloudmesh.config.cm_config import cm_config
 
 
 log = LOGGER(__file__)
-Console = CONSOLE()
 
 
 def shell_command_defaults(arguments):

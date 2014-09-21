@@ -19,7 +19,6 @@ def fast():
     fabric.state.output.stdout = True
     local("python setup.py install")
 
-
 @task
 def install():
     """install cloudmesh"""

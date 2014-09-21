@@ -1,6 +1,10 @@
 from cmd3.shell import command
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh_common.logger import LOGGER
+from cmd3.console import Console
+from cloudmesh_common.util import dotdict
+from cloudmesh_common.tables import print_format_dict
+from pprint import pprint
 
 log = LOGGER(__file__)
 
@@ -10,6 +14,8 @@ class cm_shell_yaml:
     cm_config_server = cm_config_server()
 
     def activate_cm_shell_yaml(self):
+        Console.color = self.cm_config.get("cloudmesh.shell.color")
+
         self.register_command_topic('cloud', 'yaml')
         self.register_command_topic('cloud', 'debug')
         self.register_command_topic('cloud', 'loglevel')
@@ -28,14 +34,12 @@ class cm_shell_yaml:
             value = "DEBUG"
             self.cm_config_server._update(key, value)
             self.cm_config_server.write(format="yaml")
-            log.info("Debug mode is on.")
             print ("Debug mode is on.")
         elif arguments['off']:
             key = "cloudmesh.server.loglevel"
             value = "ERROR"
             self.cm_config_server._update(key, value)
             self.cm_config_server.write(format="yaml")
-            log.info("Debug mode is off.")
             print ("Debug mode is off.")
             
     
@@ -45,25 +49,44 @@ class cm_shell_yaml:
         Usage:
             color on
             color off
+            color
             
             Turns the shell color printing on or off
+
+        Description:
+
+            color on   switched the color on
+
+            color off  switches the color off
+            
+            color      without parameters prints a test to display
+                       the various colored mesages. It is intended
+                       as a test to see if your terminal supports
+                       colors.
+                      
         """
         if arguments['on']:
-            key = "cloudmesh.server.shellcolor"
+            key = "cloudmesh.shell.color"
             value = True
-            self.cm_config_server._update(key, value)
-            self.cm_config_server.write(format="yaml")
-            log.info("color on.")
+            self.cm_config._update(key, value)
+            self.cm_config.write(format="yaml")
+            Console.color = True
             print ("color on.")
         elif arguments['off']:
-            key = "cloudmesh.server.shellcolor"
+            key = "cloudmesh.shell.color"
             value = False
-            self.cm_config_server._update(key, value)
-            self.cm_config_server.write(format="yaml")
-            log.info("color off.")
+            self.cm_config._update(key, value)
+            self.cm_config.write(format="yaml")
+            Console.color = False
             print ("color off.")
-        
-  
+        else:
+            print "Color:", Console.color
+            Console.warning("Warning")
+            Console.error("Error")
+            Console.info("Info")
+            Console.msg("Msg")
+            Console.ok("Success")
+
 
     @command
     def do_loglevel(self, args, arguments):
@@ -102,40 +125,82 @@ class cm_shell_yaml:
     def do_yaml(self, args, arguments):
         """
         Usage:
-            yaml user [KEY] [--filename=FILENAME]
-            yaml server [KEY]
-            yaml user-replace KEY VALUE [--filename=FILENAME] 
-            yaml server-replace KEY VALUE
+            yaml KIND [KEY] [--filename=FILENAME] [--format=FORMAT]
+            yaml KIND KEY VALUE [--filename=FILENAME] 
 
         Provides yaml information or updates yaml on a given replacement
 
         Arguments:
+            KIND    The typye of the yaml file (server, user) 
             KEY     Key name of the nested dict e.g. cloudmesh.server.loglevel
             VALUE   Value to set on a given KEY
             FILENAME      cloudmesh.yaml or cloudmesh_server.yaml
+            FORMAT         The format of the output (table, json, yaml)
 
+        Options:
+            
+            --format=FORMAT      the format of the output [default: print]
+
+        Description:
+
+             Sets and gets values from a yaml configuration file
         """
+        
+        Console = CONSOLE()        
+        #
+        # use dot notation to make things better readable
+        #
+        arguments['value'] = arguments.pop('VALUE')                        
+        arguments['kind'] = arguments.pop('KIND')                
+        arguments['key'] = arguments.pop('KEY')        
+        arguments['format'] = arguments.pop('--format')
+        arguments['filename'] = arguments.pop('--filename')        
+        arguments = dotdict(arguments)
+        
+        #
+        # List functions
+        #
 
-        if arguments['user']:
-            self.cm_config.load(arguments['--filename'] or
-                                self.cm_config.filename)
-            if not arguments['KEY']:
-                self.cm_config.pprint()
-            else:
-                print self.cm_config.get(arguments['KEY'])
-        elif arguments['server']:
-            if not arguments['KEY']:
-                self.cm_config_server.pprint()
-            else:
-                print self.cm_config_server.get(arguments['KEY'])
-        elif arguments['user-replace']:
-            self.cm_config._update(arguments['KEY'], arguments['VALUE'])
-            self.cm_config.write(format="yaml")
-            self.cm_config.pprint() 
-        elif arguments['server-replace']:
-            self.cm_config_server._update(arguments['KEY'], arguments['VALUE'])
-            self.cm_config_server.write(format="yaml")
-            self.cm_config_server.pprint() 
+        if arguments.kind not in ['user','server']:
+            Console.error("the specified kind does not exist")
+            return
+        else:
+            if arguments.kind == 'user':
+                config = self.cm_config
+            elif arguments.kind == 'server':
+                config = self.cm_config_server
+            arguments.filename = arguments.filename or config.filename
+            config.load(arguments.filename)
+
+        
+        if not arguments.value:
+
+            if not arguments.key and not arguments.value:
+                if arguments.format == "print":
+                    print config.pprint()
+                elif arguments.format == 'json':
+                    print config.json()
+                elif arguments.format == 'yaml':
+                    print config.yaml()
+                else:
+                    Console.error("format not supported")
+                return
+            elif arguments.key and not arguments.value:
+                print config.get(arguments.key)
+
+            return
+
+        else:
+        #
+        # SETTING VALUES
+        #
+
+            config._update(arguments.key, arguments.value)
+            # config.pprint()
+            config['meta']['location'] = arguments.filename
+            config.write(format="yaml")
+
+            self.config = config
 
         '''
 
