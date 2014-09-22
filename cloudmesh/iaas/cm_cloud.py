@@ -541,7 +541,8 @@ class CloudManage(object):
             #sentence = "flavors of cloud '{0}'".format(cloudname)
             # print "+" + "-" * (len(sentence) - 2) + "+"
             # print sentence
-            print tabulate(to_print, headers, tablefmt="grid")
+            if to_print:
+                print tabulate(to_print, headers, tablefmt="grid")
             #sentence = "count: {0}".format(count)
             # print sentence
             # print "+" + "-" * (len(sentence) - 2) + "+"
@@ -610,7 +611,8 @@ class CloudManage(object):
             #sentence = "images of cloud '{0}'".format(cloudname)
             # print "+" + "-" * (len(sentence) - 2) + "+"
             # print sentence
-            print tabulate(to_print, headers, tablefmt="grid")
+            if to_print:
+                print tabulate(to_print, headers, tablefmt="grid")
             #sentence = "count: {0}".format(count)
             # print sentence
             # print "+" + "-" * (len(sentence) - 2) + "+"
@@ -735,7 +737,8 @@ class CloudManage(object):
             #sentence = "cloud '{0}'".format(cloudname)
             # print "+" + "-" * (len(sentence) - 2) + "+"
             # print sentence
-            print tabulate(to_print, headers, tablefmt="grid")
+            if to_print:
+                print tabulate(to_print, headers, tablefmt="grid")
             #sentence = "count: {0}".format(count)
             # print sentence
             # print "+" + "-" * (len(sentence) - 2) + "+"
