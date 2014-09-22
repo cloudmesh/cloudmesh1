@@ -45,7 +45,6 @@ class Test(unittest.TestCase):
                ' --flavor=m1.small"'.format(vmname))
 
         res = os.popen(cmd).read()
-        print cmd
         vm.append(vmname)
         assert ("job status: PENDING" in res 
                 or "job status: STARTED" in res) == True
