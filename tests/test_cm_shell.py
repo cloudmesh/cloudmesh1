@@ -27,7 +27,7 @@ class Test(unittest.TestCase):
 
     def test_03_select_default_cloud(self):
         HEADING()
-        cloudmesh.shell("cloud select india")
+        cloudmesh.shell("cloud set default india")
 
     @classmethod
     def test_04_start_a_vm(cls):
