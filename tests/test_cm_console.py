@@ -27,7 +27,7 @@ class Test(unittest.TestCase):
 
     def test_03_select_default_cloud(self):
         HEADING()
-        os.system("cm cloud select india")
+        os.system("cm cloud set default india")
 
     @classmethod
     def test_04_start_a_vm(cls):
