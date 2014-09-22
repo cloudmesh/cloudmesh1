@@ -71,11 +71,11 @@ class youtube:
 
     def __str__(self):
         content = [
-            self.title,
+            str(self.title),
             70 * '=',
-            self.content,
+            str(self.content),
             '',
-            'Updated: ' +  self.updated,
+            'Updated: {0}'.format(self.updated),
             ''
             ]
         return '\n'.join(content)
