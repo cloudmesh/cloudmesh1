@@ -14,7 +14,7 @@ profile:
     address: TBD
 
 defaults:
-  cloud: sierra_openstack_grizzly
+  cloud: india
   
 clouds:
   india:
@@ -23,7 +23,7 @@ clouds:
          OS_TENANT_NAME: TBD
       default:
          flavor: m1.small
-         image: futuregrid/ubuntu-14.04
+         image: ba327564-5969-4309-b3f3-b67764038e66
   hp: 
       username: TBD
       credential:
