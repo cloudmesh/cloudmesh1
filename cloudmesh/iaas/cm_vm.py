@@ -26,15 +26,13 @@ def shell_command_vm(arguments):
                          [--image=<imgName>|--imageid=<imgId>]
                          [--flavor=<flavorName>|--flavorid=<flavorId>]
                          [--group=<group>]
-                vm delete (NAME|[--name=<vmname>|--id=<id>])
+                vm delete (NAME|--name=<vmname>|--id=<id>)
                           [--group=<group>]
                           [--cloud=<CloudName>]
                           [--prefix=<prefix>]
                           [--range=<range>]
                           [--force]
-                vm ip NAME
-                           [--cloud=<CloudName>]
-                vm ip (--name=<vmname>|--id=<id>) 
+                vm ip (NAME|--name=<vmname>|--id=<id>)
                            [--cloud=<CloudName>]
                 vm login --ln=<LoginName>
                          (--name=<vmname> | --id=<id> | --addr=<address>) 
