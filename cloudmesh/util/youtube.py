@@ -72,7 +72,8 @@ class youtube:
     def __str__(self):
         content = [
             str(self.title),
-            70 * '=',
+            70 * '-',
+            '',
             str(self.content),
             '',
             'Updated: {0}'.format(self.updated),
