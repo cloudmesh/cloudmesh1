@@ -21,9 +21,6 @@ clouds:
       credential:
          OS_PASSWORD: TBD
          OS_TENANT_NAME: TBD
-      default:
-         flavor: m1.small
-         image: ba327564-5969-4309-b3f3-b67764038e66
   hp: 
       username: TBD
       credential:
