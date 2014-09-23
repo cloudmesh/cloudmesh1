@@ -8,6 +8,11 @@ def configure():
     """configure india environment for cloudmesh rapid deployment"""
     
     # running on server mode with external port listening
+
+    filename = config_file('/cloudmesh_server.yaml')
+
+    print "modify ->", filename
+        
     yaml_file_replace(filename='/cloudmesh_server.yaml',
                       replacements={
                                     'browser: True': 'browser: False',
