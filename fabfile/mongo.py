@@ -280,6 +280,13 @@ def start(auth=True):
             .format(pid, port)
     else:
         print "ACTION: Starting mongod"
+        print
+        print "NOTE: the preparation of mongo may take a few minutes"
+        print "      please do not interrupt this program."
+        print
+        print "      Please be patient!"
+        print        
+                
         with_auth = ""
         if isyes(auth):
             with_auth = "--auth"
