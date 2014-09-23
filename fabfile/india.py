@@ -28,6 +28,6 @@ def configure():
     replacements = {
         "cloudmesh.clouds.india.cm_service_url_type": "internalURL",
     }
-    yaml_attribute_replace(filename,replacements,indent_by=2)
+    yaml_attribute_replace(filename,replacements,indent_by=4)
     
     print "Configuration changes have been made successfully"
