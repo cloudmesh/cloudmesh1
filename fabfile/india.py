@@ -24,7 +24,10 @@ def configure():
     # now managed via nova before vm is started.
     
     # new way to replace an attribute in yaml
+
+
     filename = config_file("/cloudmesh.yaml")
+    print "modify ->", filename
     replacements = {
         "cloudmesh.clouds.india.cm_service_url_type": "internalURL",
     }
