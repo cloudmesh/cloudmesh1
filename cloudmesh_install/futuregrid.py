@@ -232,7 +232,11 @@ def apply_credentials_to_yaml_file():
 
     # Write yaml
     with open(cloudmesh_out, 'w') as outfile:
-        outfile.write(yaml.dump(data, default_flow_style=False))
+        #
+        # TODO: this is wrong as it should probably use cm_config and the write method in it
+        # to preserve order
+        #
+        outfile.write(yaml.dump(data, default_flow_style=False, indent=4))
         print "Updating -> %s" % cloudmesh_out
 
 
