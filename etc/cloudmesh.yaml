@@ -69,8 +69,11 @@ cloudmesh:
                 OS_USERNAME: {{ username.portal }}
                 OS_VERSION: havana
             default:
-                flavor: {{ clouds.india.default.flavor }}
-                image: {{ clouds.india.default.image }}
+                flavor: m1.small
+                image: ba327564-5969-4309-b3f3-b67764038e66
+#           default:
+#               flavor: {{ clouds.india.default.flavor }}
+#               image: {{ clouds.india.default.image }}
         hp:
             cm_heading: HP Openstack
             cm_label: hpos
