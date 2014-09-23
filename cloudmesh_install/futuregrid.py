@@ -72,7 +72,7 @@ def apply_credentials_to_yaml_file():
     """
     rc_dir_location = {}
     # (hostname, loaction of dir on remote host, location of dir on localhost)
-    rc_dir_location["india_openstack_havana"] = ("india.futuregird.org", "?", "?")
+    rc_dir_location["india"] = ("india.futuregird.org", "?", "?")
     rc_dir_location["sierra_openstack_grizzly"] = ("sierra.futuregrid.org", "?", "?")
 
     for label in rc_dir_location
