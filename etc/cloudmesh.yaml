@@ -64,13 +64,16 @@ cloudmesh:
             credentials:
                 OS_AUTH_URL: https://i57r.idp.iu.futuregrid.org:5000/v2.0
                 OS_CACERT: $HOME/.cloudmesh/india-havana-cacert.pem
-                OS_PASSWORD: {{ clouds.india_openstack_havana.credential.OS_PASSWORD }}
-                OS_TENANT_NAME: {{ clouds.india_openstack_havana.credential.OS_TENANT_NAME }}
+                OS_PASSWORD: {{ clouds.india.credential.OS_PASSWORD }}
+                OS_TENANT_NAME: {{ clouds.india.credential.OS_TENANT_NAME }}
                 OS_USERNAME: {{ username.portal }}
                 OS_VERSION: havana
             default:
-                flavor: {{ clouds.india_openstack_havana.default.flavor }}
-                image: {{ clouds.india_openstack_havana.default.image }}
+                flavor: m1.small
+                image: ba327564-5969-4309-b3f3-b67764038e66
+#           default:
+#               flavor: {{ clouds.india.default.flavor }}
+#               image: {{ clouds.india.default.image }}
         hp:
             cm_heading: HP Openstack
             cm_label: hpos

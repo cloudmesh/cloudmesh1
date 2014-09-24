@@ -49,14 +49,13 @@ use. In our initial example we provide you with just one active cloud
 called. Hence you see under active: ::
 
   active:
-  - sierra_openstack_grizzly
+  - india
 
 If there are more than one cloud you would simply add the label of
 that cloud to the lit of active clouds such as ::
 
   active:
-  - sierra_openstack_grizzly
-  - india_openstack_havana
+  - india
 
 Next, we need to define several attributes for the active clouds. This
 must be done carefully and you need to possibly check with your
@@ -119,25 +118,16 @@ Retrieval of rc file by command
 
 ::
 
-   ./install gatherrc
+   cm-iu user fetch
+   cm-iu user create
 
 This will create for you in your $HOME/.cloudmesh directory a tree of the
 following format::
    
    .cloudmesh/clouds
-        india_openstack_havana
-	sierra_openstack_grizzly
+        india
 
-In future we will also have the following directories::
 
-        hotel_openstack_ ...
-	alamo_openstack_ ...
-
-At this time the credentials from hotel and alamo are not
-automatically retrieved, you need to get them in the following way and
-fill them into the cloudmesh.yaml file:
-
-* TBD
 
 Retrieval of rc files by Hand
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
@@ -149,10 +139,8 @@ Location of rc files
 Host      OpenStack (novarc)                 Eucalyptus (eucarc)
 --------- ---------------------------------- ----------------------------------------------------
 india     $HOME/.cloudmesh/openstack/novarc $HOME/.cloudmesh/eucalyptus/$fgprojectnumber/eucarc*
-sierra    $HOME/.cloudmesh/novarc           $HOME/.cloudmesh/eucalyptus/$fgprojectnumber/eucarc*
 hotel     Download EC2 Credentials**         n/a
 alamo     Download EC2 Credentials**         n/a
-foxtrot   n/a                                n/a
 ========= ================================== ====================================================
 
 :\*\*: 
@@ -354,7 +342,7 @@ Note the endpoint is wrong.
 
 ::
 
-    india_openstack_havana:
+    india:
       cm_heading: Sierra OpenStack, Grizzly
       cm_host: india.futuregrid.org
       cm_label: iosh
