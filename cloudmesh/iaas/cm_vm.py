@@ -26,24 +26,16 @@ def shell_command_vm(arguments):
                          [--image=<imgName>|--imageid=<imgId>]
                          [--flavor=<flavorName>|--flavorid=<flavorId>]
                          [--group=<group>]
-                vm delete NAME 
+                vm delete [NAME|--id=<id>] 
                           [--group=<group>]
                           [--cloud=<CloudName>]
                           [--prefix=<prefix>]
                           [--range=<range>]
                           [--force]
-                vm delete [--name=<vmname>|--id=<id>]
-                          [--group=<group>]
-                          [--cloud=<CloudName>]
-                          [--prefix=<prefix>]
-                          [--range=<range>]
-                          [--force]
-                vm ip NAME
-                           [--cloud=<CloudName>]
-                vm ip (--name=<vmname>|--id=<id>) 
-                           [--cloud=<CloudName>]
+                vm ip (NAME|--id=<id>) 
+                      [--cloud=<CloudName>]
                 vm login --ln=<LoginName>
-                         (--name=<vmname> | --id=<id> | --addr=<address>) 
+                         (NAME | --id=<id> | --addr=<address>) 
                          [--cloud=<CloudName>]
                          [--key=<key>]
                          [--] [<command>...]
@@ -54,6 +46,7 @@ def shell_command_vm(arguments):
                                        a return of executing result instead of login to 
                                        the server, note that type in -- is suggested before 
                                        you input the commands
+                NAME                   server name
                 
             Options:
                 --addr=<address>       give the public ip of the server
@@ -70,7 +63,7 @@ def shell_command_vm(arguments):
                                        is the full path to the key file
                 --ln=<LoginName>       give the login name of the server that you want 
                                        to login
-                --name=<vmname>        give the name of virtual machine
+                --name=<vmname>        give the name of the virtual machine
                 --prefix=<prefix>      give the prefix of the server, standand server
                                        name is in the form of prefix_index, e.g. abc_9
                 --range=<range>        give the range of the index of the servers
@@ -178,7 +171,6 @@ class VMcommand(object):
         # -------------------------
         # check input
         if self.arguments['NAME'] is None and\
-           self.arguments['--name'] is None and\
            self.arguments['--id'] is None and\
            self.arguments['--group'] is None and\
            self.arguments['--cloud'] is None and\
@@ -250,8 +242,7 @@ class VMcommand(object):
         
         delete_vm(self.username,
                   cloudname,
-                  servername=(self.arguments['NAME'] or
-                              self.arguments['--name']),
+                  servername=self.arguments['NAME'],
                   serverid=self.arguments['--id'],
                   groupname=self.arguments['--group'],
                   prefix=self.arguments['--prefix'],
