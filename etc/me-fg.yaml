@@ -12,14 +12,10 @@ profile:
     email: {{profile.email}}
 
 clouds:
-  sierra_openstack_grizzly: 
+  india: 
      credential:
-       OS_PASSWORD: {{ clouds.sierra_openstack_grizzly.OS_PASSWORD }}
-       OS_TENANT_NAME: {{ clouds.sierra_openstack_grizzly.OS_TENNANT_NAME }}
-  india_openstack_havana: 
-     credential:
-       OS_PASSWORD: {{ clouds.india_openstack_havana.OS_PASSWORD }}
-       OS_TENANT_NAME: {{ clouds.india_openstack_havana.OS_TENNANT_NAME }}
+       OS_PASSWORD: {{ clouds.india.OS_PASSWORD }}
+       OS_TENANT_NAME: {{ clouds.india.OS_TENNANT_NAME }}
   alamo:
      credential:
        EC2_ACCESS_KEY: {{clouds.alamo.credential.EC2_ACCESS_KEY}}

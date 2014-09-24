@@ -3,15 +3,15 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.iaas.cm_cloud import CloudManage
 from cloudmesh.config.cm_config import cm_config
-from pprint import pprint
+from cloudmesh.util.ssh import ssh_execute
 from cloudmesh import banner
 from cloudmesh import yn_choice
-import time
 from cmd3.console import Console
 from sh import ssh
 from subprocess import call
-from cloudmesh.util.ssh import ssh_execute
+from pprint import pprint
 import sys
+import time
 
 log = LOGGER(__file__)
 
@@ -26,14 +26,23 @@ def shell_command_vm(arguments):
                          [--image=<imgName>|--imageid=<imgId>]
                          [--flavor=<flavorName>|--flavorid=<flavorId>]
                          [--group=<group>]
+<<<<<<< HEAD
                 vm delete [NAME|--id=<id>] 
+=======
+                vm delete (NAME|--name=<vmname>|--id=<id>)
+>>>>>>> d7e0f537c70cd565db46f7d5549f038584e65011
                           [--group=<group>]
                           [--cloud=<CloudName>]
                           [--prefix=<prefix>]
                           [--range=<range>]
                           [--force]
+<<<<<<< HEAD
                 vm ip (NAME|--id=<id>) 
                       [--cloud=<CloudName>]
+=======
+                vm ip (NAME|--name=<vmname>|--id=<id>)
+                           [--cloud=<CloudName>]
+>>>>>>> d7e0f537c70cd565db46f7d5549f038584e65011
                 vm login --ln=<LoginName>
                          (NAME | --id=<id> | --addr=<address>) 
                          [--cloud=<CloudName>]

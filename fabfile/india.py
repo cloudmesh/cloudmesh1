@@ -8,6 +8,11 @@ def configure():
     """configure india environment for cloudmesh rapid deployment"""
     
     # running on server mode with external port listening
+
+    filename = config_file('/cloudmesh_server.yaml')
+
+    print "modify ->", filename
+        
     yaml_file_replace(filename='/cloudmesh_server.yaml',
                       replacements={
                                     'browser: True': 'browser: False',
@@ -19,10 +24,13 @@ def configure():
     # now managed via nova before vm is started.
     
     # new way to replace an attribute in yaml
+
+
     filename = config_file("/cloudmesh.yaml")
+    print "modify ->", filename
     replacements = {
         "cloudmesh.clouds.india.cm_service_url_type": "internalURL",
     }
-    yaml_attribute_replace(filename,replacements)
+    yaml_attribute_replace(filename,replacements,indent_by=4)
     
     print "Configuration changes have been made successfully"

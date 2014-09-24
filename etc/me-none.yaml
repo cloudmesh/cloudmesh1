@@ -14,14 +14,10 @@ profile:
     address: TBD
 
 defaults:
-  cloud: sierra_openstack_grizzly
+  cloud: india
   
 clouds:
-  sierra_openstack_grizzly: 
-      credential:
-         OS_PASSWORD: TBD
-         OS_TENANT_NAME: TBD
-  india_openstack_havana:
+  india:
       credential:
          OS_PASSWORD: TBD
          OS_TENANT_NAME: TBD
