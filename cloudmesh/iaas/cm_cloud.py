@@ -12,6 +12,7 @@ from cloudmesh.util.shellutil import shell_commands_dict_output
 import csv
 from cloudmesh.server.database import Database
 
+Console = Console()
 log = LOGGER(__file__)
 
 
