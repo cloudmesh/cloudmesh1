@@ -13,7 +13,6 @@ from pprint import pprint
 import sys
 import time
 
-Console = Console()
 log = LOGGER(__file__)
 
 def shell_command_vm(arguments):
