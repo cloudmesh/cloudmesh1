@@ -1,4 +1,5 @@
 from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
+from cloudmesh.config.cm_config import DBConnFactory
 # from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
 from cloudmesh.iaas.openstack.cm_compute import openstack
@@ -842,6 +843,14 @@ class cm_mongo:
                 err = sys.exc_info()[0]
                 time.sleep(interval)
         raise err
+
+class cm_mongo_status(object):
+
+    def __init__(self):
+        self.conn = DBConnFactory.getconn("admin")
+
+    def serverStatus(self):
+        return self.conn.command("serverStatus")
 
 '''
 def main():
