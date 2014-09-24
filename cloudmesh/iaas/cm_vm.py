@@ -26,25 +26,21 @@ def shell_command_vm(arguments):
                          [--image=<imgName>|--imageid=<imgId>]
                          [--flavor=<flavorName>|--flavorid=<flavorId>]
                          [--group=<group>]
-<<<<<<< HEAD
                 vm delete [NAME|--id=<id>] 
-=======
-                vm delete (NAME|--name=<vmname>|--id=<id>)
->>>>>>> d7e0f537c70cd565db46f7d5549f038584e65011
                           [--group=<group>]
                           [--cloud=<CloudName>]
                           [--prefix=<prefix>]
                           [--range=<range>]
                           [--force]
-<<<<<<< HEAD
                 vm ip (NAME|--id=<id>) 
                       [--cloud=<CloudName>]
-=======
-                vm ip (NAME|--name=<vmname>|--id=<id>)
-                           [--cloud=<CloudName>]
->>>>>>> d7e0f537c70cd565db46f7d5549f038584e65011
-                vm login --ln=<LoginName>
-                         (NAME | --id=<id> | --addr=<address>) 
+                vm login (--name=<vmname>|--id=<id>|--addr=<address>)
+                         (--ln=<LoginName>)
+                         [--cloud=<CloudName>]
+                         [--key=<key>]
+                         [--] [<command>...]
+                vm login NAME
+                         (--ln=<LoginName>)
                          [--cloud=<CloudName>]
                          [--key=<key>]
                          [--] [<command>...]
@@ -122,7 +118,7 @@ class VMcommand(object):
 
     def __init__(self, arguments):
         self.arguments = arguments
-        #print self.arguments ########
+        print self.arguments ########
 
     def _vm_create(self):
         # -------------------------
