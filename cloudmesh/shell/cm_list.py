@@ -9,7 +9,7 @@ from docopt import docopt
 # list_command_table_format = "simple"
 list_command_table_format = "grid"
 
-
+Console = Console()
 log = LOGGER(__file__)
 
 

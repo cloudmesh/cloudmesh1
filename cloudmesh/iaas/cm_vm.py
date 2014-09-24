@@ -13,6 +13,7 @@ from pprint import pprint
 import sys
 import time
 
+Console = Console()
 log = LOGGER(__file__)
 
 def shell_command_vm(arguments):
@@ -118,7 +119,7 @@ class VMcommand(object):
 
     def __init__(self, arguments):
         self.arguments = arguments
-        print self.arguments ########
+        #print self.arguments ########
 
     def _vm_create(self):
         # -------------------------
