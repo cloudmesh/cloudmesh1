@@ -667,20 +667,37 @@ class cm_mongo:
         """Launch a new VM instance with a default setting for flavor, image and
         key name"""
 
+        
+
+        arg_flavor = flavor
+        arg_image = image
+        
         if not self.check_activated():
             return None
 
         userinfo = self.userinfo
         prefix = prefix or userinfo['defaults']['prefix']
         index = index or userinfo['defaults']['index']
+
+        
         try:
             flavor = flavor['id']
         except:
-            flavor = flavor or userinfo['defaults']['flavors'][cloud]
+            flavor = self.flavor(cloud, arg_flavor)
+            if flavor == -1:
+                flavor = arg_flavor or userinfo['defaults']['flavors'][cloud]
+            else:
+                flavor = flavor['id']
+                                                
         try:
             image = image['id']
         except:
-            image = image or userinfo['defaults']['images'][cloud]
+            image = self.image(cloud, arg_image)
+            if image == -1:
+                image = arg_image or userinfo['defaults']['images'][cloud]
+            else:
+                image = image['id']
+
         # or image = '02cf1545-dd83-493a-986e-583d53ee3728' # ubuntu-14.04
         key = key or "%s_%s" % (cm_user_id, userinfo['defaults']['key'])
         meta = meta or {'cm_owner': cm_user_id}
@@ -691,6 +708,12 @@ class cm_mongo:
 
         # increase index after the completion of vm_create()
         self.cm_user.set_default_attribute(cm_user_id, "index", int(index) + 1)
+        #
+        # BUG flavor name needs to be returned
+        #
+        result["flavor"] = self.flavors([cloud])[cloud][flavor]['name']
+        result["image"] = self.images([cloud])[cloud][image]['name']
+        
         return result
 
     def vm_create(self,
@@ -711,7 +734,15 @@ class cm_mongo:
             name = "%s_%s" % (prefix, index)
         else:
             name = givenvmname
-        return cloudmanager.vm_create(name=name, flavor_name=vm_flavor, image_id=vm_image, key_name=key, meta=meta)
+
+        result = cloudmanager.vm_create(name=name, flavor_name=vm_flavor, image_id=vm_image, key_name=key, meta=meta)
+        result["name"] = name
+        result["flavor_id"] = vm_flavor
+        result["image_id"] = vm_image
+        result["cm_user_id"] = cm_user_id
+        result["key"] = key
+        result["cloud"] = cloud
+        return result
 
     def vm_create_queue(self, cloud, prefix, index, vm_flavor, vm_image, key, meta, cm_user_id, givenvmname=None):
         '''
