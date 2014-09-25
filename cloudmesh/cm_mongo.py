@@ -707,8 +707,14 @@ class cm_mongo:
                                 cm_user_id)
 
         # increase index after the completion of vm_create()
-        self.cm_user.set_default_attribute(cm_user_id, "index", int(index) + 1)
+        #<<<<<<< HEAD
+        #self.cm_user.set_default_attribute(cm_user_id, "index", int(index) + 1)
         # self.vmname_next()
+        #=======
+        next_index = int(index) + 1
+        self.cm_user.set_default_attribute(cm_user_id, "index", next_index)
+        self.userinfo['defaults']['index'] = str(next_index)
+        #>>>>>>> b086124cc66673eefee5716cb9a748cbcbac437d
         #
         # BUG flavor name needs to be returned
         #
