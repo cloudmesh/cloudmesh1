@@ -318,7 +318,8 @@ def centos():
                       "openldap-devel",
                       "bzip2-devel",
                       "python-matplotlib",
-                      "libpng-devel"])
+                      "libpng-devel",
+                      "graphviz"])
 
     install_packages(["rabbitmq-server"])
     local(

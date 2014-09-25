@@ -15,6 +15,7 @@ PACKAGES="
   python-setuptools
   python-virtualenv
   rabbitmq-server
+  graphviz
 "
 echo "This will install (if not already installed):"
 for P in $PACKAGES; do
