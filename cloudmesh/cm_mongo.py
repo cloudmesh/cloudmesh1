@@ -708,6 +708,7 @@ class cm_mongo:
 
         # increase index after the completion of vm_create()
         self.cm_user.set_default_attribute(cm_user_id, "index", int(index) + 1)
+        # self.vmname_next()
         #
         # BUG flavor name needs to be returned
         #
@@ -784,7 +785,7 @@ class cm_mongo:
 
             # Retry
             _max = 5  # times
-            _interval = 3  # second
+            _interval = 1  # second
             _expected = {'msg': 'success'}
             for i in range(_max):
                 ret = cloudmanager.assign_public_ip(server, ip)
@@ -862,18 +863,25 @@ class cm_mongo:
             log.error("Can not execute ssh on {0}:{1}".format(ipaddr, err))
             raise err
 
-    def wait(self, ipaddr, username="ubuntu", command="ls -al", pkey=None, interval=5, retry=10):
+    def wait(self, ipaddr, username="ubuntu", command=None, pkey=None, interval=5, retry=10):
 
+        command = "echo $USER"
+        success = False
         for i in range(retry):
             print str(i) + " try to execute via ssh..."
             try:
                 result = self.ssh_execute(ipaddr, username=username,
                                           command=command, pkey=pkey)
-                return result
+                success = username in result
+                return success
             except:
                 err = sys.exc_info()[0]
                 time.sleep(interval)
         raise err
+        #
+        # TODO: not sure if we can get rid of the raise error function
+        #
+        return success
 
 class cm_mongo_status(object):
 
