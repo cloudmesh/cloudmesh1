@@ -343,6 +343,7 @@ def osx():
     safe_install('brew install mercurial')
     safe_install('brew install freetype')
     safe_install('brew install libpng')
+    safe_install('brew install graphviz')
 
     try:
         import numpy

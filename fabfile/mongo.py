@@ -176,10 +176,6 @@ def admin():
     banner("Executing js")
     os.system(command)
 
-    banner("Debugging reminder, remove in final version")
-    print "USER", user
-    print "PASSWORD", password
-
 
 @task
 def wipe():
