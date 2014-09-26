@@ -407,11 +407,10 @@ class ListInfo(object):
             return [name]
 
     def execute(self):
-
-        if self.arguments['flavor']:
-            self._list_flavor()
-        elif self.arguments['vm']:
+        if self.arguments['vm']:
             self._list_server()
+        elif self.arguments['flavor']:
+            self._list_flavor()
         elif self.arguments['image']:
             self._list_image()
         elif self.arguments['project']:
