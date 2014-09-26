@@ -408,12 +408,20 @@ class cm_mongo:
             log.info(
                 "No active clouds entries found in database so no clouds were activated!")
 
+        self.activate_userinfo(cm_user_id)
+        self.activated = True
+
+    def activate_userinfo(self, cm_user_id):
         # Set userinfo
         from cloudmesh.user.cm_user import cm_user
         self.cm_user = cm_user()
         self.userinfo = self.cm_user.info(cm_user_id)
         self.userid = cm_user_id
-        self.activated = True
+
+    def get_userinfo(self, cm_user_id):
+        if not self.userinfo:
+            self.activate_userinfo(cm_user_id)
+        return self.userinfo
 
     def check_activated(self):
         if not self.activated:
@@ -675,7 +683,7 @@ class cm_mongo:
         if not self.check_activated():
             return None
 
-        userinfo = self.userinfo
+        userinfo = self.get_userinfo(cm_user_id)
         prefix = prefix or userinfo['defaults']['prefix']
         index = index or userinfo['defaults']['index']
 
@@ -836,7 +844,7 @@ class cm_mongo:
             digit or arithmetic e.g. +5 or -3 can be used
 
         """
-        userinfo = self.userinfo
+        userinfo = self.get_userinfo(cm_user_id)
         cm_user_id = cm_user_id or self.userid
         userinfo['defaults']['prefix'] = prefix or \
             userinfo['defaults']['prefix']
