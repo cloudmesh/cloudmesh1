@@ -12,6 +12,7 @@ from subprocess import call
 from pprint import pprint
 import sys
 import time
+from cloudmesh.shell.cm_list import shell_command_list
 
 log = LOGGER(__file__)
 
@@ -44,6 +45,10 @@ def shell_command_vm(arguments):
                          [--cloud=<CloudName>]
                          [--key=<key>]
                          [--] [<command>...]
+                vm list [CLOUD|--all] 
+                        [--refresh] 
+                        [--format=FORMAT] 
+                        [--column=COLUMN]
                          
             Arguments:
                 <command>              positional arguments, the commands you want to
@@ -89,8 +94,9 @@ def shell_command_vm(arguments):
                                         and/or range to find servers by their names.
                                         Or user may specify more options to narrow
                                         the search
-                vm ip [options...]     assign a public ip to a VM of a cloud
+                vm ip [options...]      assign a public ip to a VM of a cloud
                 vm login [options...]   login to a server or execute commands on it
+                vm list [options...]    same as command "list vm", please refer to it
 
             Examples:
                 vm start --count=5 --group=test --cloud=india
@@ -303,7 +309,15 @@ class VMcommand(object):
                 call(['ssh', '-i', self.arguments['--key'], host])
             else:
                 call(['ssh', host])
-        
+                
+                
+    def _vm_list(self):
+        '''
+        same as command vm list
+        '''
+        arguments = dict(self.arguments)
+        arguments["vm"] = True
+        shell_command_list(arguments)
 
     # --------------------------------------------------------------------------
     def get_working_cloud_name(self):
@@ -378,6 +392,8 @@ class VMcommand(object):
             self._assign_public_ip()
         elif self.arguments['login']:
             self._vm_login()
+        elif self.arguments['list']:
+            self._vm_list()
 
     # --------------------------------------------------------------------------
 
@@ -540,28 +556,37 @@ def start_vm(username,
 
         banner("Starting vm->{0} on cloud->{1} using image->{2}, flavor->{3}, key->{4}"
                .format(tmpnameser, cloudname, tmpnameim, tmpnamefl, keynamenew))
-        # result = mongo.vm_create(
-        # using celery, to disable, call vm_create
-        result = mongo.vm_create_queue(
-            cloudname,
-            prefix,
-            index,
-            vm_flavor_id,
-            vm_image_id,
-            keynamenew,
-            meta=metadata,
-            cm_user_id=username,
-            givenvmname=givenvmname)
+        
+        useQueue = True
+        if useQueue:
+            result = mongo.vm_create_queue(cloudname,
+                                            prefix,
+                                            index,
+                                            vm_flavor_id,
+                                            vm_image_id,
+                                            keynamenew,
+                                            meta=metadata,
+                                            cm_user_id=username,
+                                            givenvmname=givenvmname)
+            print "job status:", result.state
+        else:
+            result = mongo.vm_create(cloudname,
+                                        prefix,
+                                        index,
+                                        vm_flavor_id,
+                                        vm_image_id,
+                                        keynamenew,
+                                        meta=metadata,
+                                        cm_user_id=username,
+                                        givenvmname=givenvmname)
+            pprint(result)
+
         # ------------------------
         # increase index if it is used
         if not servername:
             userobj.set_default_attribute(username, "index", int(index) + 1)
         # ------------------------
 
-        # pprint(result)
-        # print result.failed()
-        print "job status:", result.state
-        # print result.traceback
         count = count - 1
 
 #
@@ -798,7 +823,7 @@ def delete_vm(username,
                     "Deleting vm->{0} on cloud->{1}".format(tempservername, cloudname))
                 result = mongo.vm_delete(cloudname, i, username)
                 pprint(result)
-            time.sleep(10)
+            time.sleep(5)
             mongo.release_unused_public_ips(cloudname, username)
             mongo.refresh(username, names=[cloudname], types=['servers'])
 
