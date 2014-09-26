@@ -309,8 +309,7 @@ class VMcommand(object):
             if self.arguments['--key']:
                 call(['ssh', option, '-i', self.arguments['--key'], host])
             else:
-<<<<<<< HEAD
-                call(['ssh', host])
+                call(['ssh', option, host])
                 
                 
     def _vm_list(self):
@@ -320,10 +319,6 @@ class VMcommand(object):
         arguments = dict(self.arguments)
         arguments["vm"] = True
         shell_command_list(arguments)
-=======
-                call(['ssh', option, host])
-        
->>>>>>> f066508694661b2ed784d65e4144e306920248b4
 
     # --------------------------------------------------------------------------
     def get_working_cloud_name(self):
