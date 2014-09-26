@@ -299,10 +299,11 @@ class VMcommand(object):
                 Console.error("Can not execute ssh on {0}:{1}".format(address, err))
         else:
             host = "{0}@{1}".format(self.arguments['--ln'], address)
+            option = "-o StrictHostKeyChecking=no "
             if self.arguments['--key']:
-                call(['ssh', '-i', self.arguments['--key'], host])
+                call(['ssh', option, '-i', self.arguments['--key'], host])
             else:
-                call(['ssh', host])
+                call(['ssh', option, host])
         
 
     # --------------------------------------------------------------------------
