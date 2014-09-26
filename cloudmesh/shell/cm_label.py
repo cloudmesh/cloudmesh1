@@ -59,7 +59,9 @@ def shell_command_label(arguments):
 
 def _helper(username, prefix=None, idx=None, raw=False):
     mongo = cm_mongo()
-    mongo.activate(username)
+    # New activation for userinfo added to cm_mongo.
+    # mongo.activate is not required to use vmname() - Sep 25th, 2014
+    # mongo.activate(username)
     if not raw:
         if prefix or idx:
             print "updating... next vm name:"
