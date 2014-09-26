@@ -305,9 +305,11 @@ class VMcommand(object):
                 Console.error("Can not execute ssh on {0}:{1}".format(address, err))
         else:
             host = "{0}@{1}".format(self.arguments['--ln'], address)
+            option = "-o StrictHostKeyChecking=no "
             if self.arguments['--key']:
-                call(['ssh', '-i', self.arguments['--key'], host])
+                call(['ssh', option, '-i', self.arguments['--key'], host])
             else:
+<<<<<<< HEAD
                 call(['ssh', host])
                 
                 
@@ -318,6 +320,10 @@ class VMcommand(object):
         arguments = dict(self.arguments)
         arguments["vm"] = True
         shell_command_list(arguments)
+=======
+                call(['ssh', option, host])
+        
+>>>>>>> f066508694661b2ed784d65e4144e306920248b4
 
     # --------------------------------------------------------------------------
     def get_working_cloud_name(self):
