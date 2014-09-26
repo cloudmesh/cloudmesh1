@@ -31,7 +31,7 @@ def shell_command_cloud(arguments):
             cloud default [CLOUD|--all]
             cloud set flavor [CLOUD] [--flavor=flavorName|--flavorid=flavorID]
             cloud set image [CLOUD] [--image=imageName|--imageid=imageID]
-            cloud set default [CLOUD]
+            cloud set default [CLOUD] [--force]
 
         Arguments:
 
@@ -1144,7 +1144,8 @@ class CloudCommand(CloudManage):
             print "+" + "-" * (len(sentence) - 2) + "+"
             print sentence
             print "+" + "-" * (len(sentence) - 2) + "+"
-            if yn_choice("set default cloud to '{0}'?".format(name),
+            if self.arguments['--force'] or \
+               yn_choice("set default cloud to '{0}'?".format(name),
                          default='n',
                          tries=3):
                 self.update_default_cloud(self.username, name)
