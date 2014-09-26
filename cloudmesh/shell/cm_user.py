@@ -14,6 +14,7 @@ def shell_command_user(arguments):
     Usage:
            user list
            user info [ID]
+           user id
 
     Administrative command to lists the users from LDAP
 
@@ -51,6 +52,9 @@ def shell_command_user(arguments):
         num = len(list_of_users)
         print str(num) + " users listed"
 
+    elif arguments['id']:
+        config = cm_config()
+        print config.username()
     else:
         print "WRONG PARAMETERS"
 
