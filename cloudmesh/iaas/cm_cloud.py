@@ -31,7 +31,7 @@ def shell_command_cloud(arguments):
             cloud default [CLOUD|--all]
             cloud set flavor [CLOUD] [--flavor=flavorName|--flavorid=flavorID]
             cloud set image [CLOUD] [--image=imageName|--imageid=imageID]
-            cloud set default [CLOUD] [--force]
+            cloud set default [CLOUD]
 
         Arguments:
 
@@ -89,8 +89,8 @@ def shell_command_cloud(arguments):
 
 
             cloud select [CLOUD]
-                selects a cloud to work with from a list of clouds.If CLOUD is
-                is specified the default cloud will be set to that value.
+                selects a cloud to work with from a list of clouds.If the cloud 
+                is not specified, it asks for the cloud interactively
 
             cloud on [CLOUD]
             cloud off [CLOUD]
@@ -137,8 +137,8 @@ def shell_command_cloud(arguments):
                 not specified, it used the default cloud.
 
             cloud set default [CLOUD]
-                sets the default cloud for a cloud. If the cloud is
-                not specified, it asks for the cloud interactively
+                sets the default cloud. If the cloud is not specified, it asks 
+                for the cloud interactively
 
     """
 
@@ -947,11 +947,11 @@ class CloudCommand(CloudManage):
             cloud = self.get_clouds(
                 self.username, getone=True, cloudname=self.arguments['CLOUD'])
             if cloud is None:
-                log.warning("no cloud information of '{0}' in database, please import it by 'cloud add <cloudYAMLfile>'".format(
+                Console.warning("no cloud information of '{0}' in database, please import it by 'cloud add <cloudYAMLfile>'".format(
                     self.arguments['CLOUD']))
                 return
             self.update_selected_cloud(self.username, self.arguments['CLOUD'])
-            print "cloud '{0}' is selected".format(self.arguments['CLOUD'])
+            Console.ok("cloud '{0}' is selected".format(self.arguments['CLOUD']))
         else:
             clouds = self.get_clouds(self.username)
             cloud_names = []
@@ -963,7 +963,7 @@ class CloudCommand(CloudManage):
             if res == 'q':
                 return
             self.update_selected_cloud(self.username, cloud_names[res])
-            print "cloud '{0}' is selected".format(cloud_names[res])
+            Console.ok("cloud '{0}' is selected".format(cloud_names[res]))
 
     def _cloud_alias(self):
         if self.arguments['CLOUD']:
@@ -1137,23 +1137,29 @@ class CloudCommand(CloudManage):
                 return
 
     def _cloud_set_default_cloud(self):
-        name = self.get_working_cloud_name()
-        if name:
-            current_default = self.get_default_cloud(self.username)
-            sentence = "current default cloud '{0}'".format(current_default)
-            print "+" + "-" * (len(sentence) - 2) + "+"
-            print sentence
-            print "+" + "-" * (len(sentence) - 2) + "+"
-            if self.arguments['--force'] or \
-               yn_choice("set default cloud to '{0}'?".format(name),
-                         default='n',
-                         tries=3):
-                self.update_default_cloud(self.username, name)
-            else:
+        if self.arguments['CLOUD']:
+            cloud = self.get_clouds(
+                self.username, getone=True, cloudname=self.arguments['CLOUD'])
+            if cloud is None:
+                Console.warning("no cloud information of '{0}' in database, please import it by 'cloud add <cloudYAMLfile>'".format(
+                    self.arguments['CLOUD']))
                 return
+            self.update_default_cloud(self.username, self.arguments['CLOUD'])
+            Console.ok("cloud '{0}' is set as default".format(self.arguments['CLOUD']))
         else:
-            return
-
+            clouds = self.get_clouds(self.username)
+            cloud_names = []
+            for cloud in clouds:
+                cloud_names.append(cloud['cm_cloud'].encode("ascii"))
+            cloud_names.sort()
+            res = menu_return_num(
+                title="select a cloud as default", menu_list=cloud_names, tries=3)
+            if res == 'q':
+                return
+            self.update_default_cloud(self.username, cloud_names[res])
+            Console.ok("cloud '{0}' is set as default".format(cloud_names[res]))
+        
+    
     def _cloud_set_flavor(self):
         '''
         refresh before actually select a flaovr of the cloud
