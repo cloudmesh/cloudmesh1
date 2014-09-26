@@ -12,12 +12,13 @@ def shell_command_label(arguments):
     # WIDTH   The width of the ID in teh label, padded with 0
     """
     Usage:
-           label [--prefix=PREFIX] [--id=ID]
+           label [--prefix=PREFIX] [--id=ID] [--raw]
 
     Options:
 
       --prefix=PREFIX    provide the prefix for the label
       --id=ID            provide the start ID which is an integer
+      --raw              prints label only
 
     Description:
 
@@ -51,18 +52,19 @@ def shell_command_label(arguments):
         prefix = None
         if arguments['--prefix']:
             prefix = arguments['--prefix']
-        _helper(username, prefix=prefix, idx=id)
+        _helper(username, prefix=prefix, idx=id, raw=arguments['--raw'])
     else:
-        _helper(username)
+        _helper(username, raw=arguments['--raw'])
 
 
-def _helper(username, prefix=None, idx=None):
+def _helper(username, prefix=None, idx=None, raw=False):
     mongo = cm_mongo()
     mongo.activate(username)
-    if prefix or idx:
-        print "updating... next vm name:"
-    else:
-        print "next vm name:"
+    if not raw:
+        if prefix or idx:
+            print "updating... next vm name:"
+        else:
+            print "next vm name:"
     print mongo.vmname(prefix=prefix, idx=idx, cm_user_id=username)
     
 
