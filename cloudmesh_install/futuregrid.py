@@ -49,9 +49,9 @@ def download_rc_files(userid):
         host["userid"] = userid
         host["dest"] = os.path.expanduser(host["dest"])
 
-        print "fetching from ", host["hostname"], host
-
-        print "creade dir"
+        print "fetching from ", host["hostname"],
+        pprint (host)
+        print "create directory:", "%(dest)s" % host
 
         os.system("mkdir -p %(dest)s" % host)
 
