@@ -16,7 +16,7 @@ def dir():
     local('find . -name "*~" -exec rm {} \;  ')
     local('find . -name "*.pyc" -exec rm {} \;  ')
     local("rm -rf build dist *.egg-info *~ #*")
-    local("cd docs; make clean")
+    # local("cd docs; make clean")
     local("rm -rf *.egg-info")
     local("rm -f celeryd@*")
     local("rm -f *.dump")
