@@ -291,7 +291,7 @@ class cm_mongo:
                         'cm_type': cm_type,
                         'cm_type_version': cm_type_version}
                     provider = self.cloud_provider(cm_type)
-                    if cm_type in ['opensetack']:
+                    if cm_type in ['openstack']:
                         cloud = provider(cloud_name, credentials, service_url_type=cm_service_url_type)
                     else:
                         cloud = provider(cloud_name, credentials)
