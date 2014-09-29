@@ -85,6 +85,7 @@ cloudmesh:
                 OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
                 OS_TENANT_NAME: FutureGrid
                 OS_USERNAME: {{ clouds.hp.username }}
+                OS_REGION: az-1.region-a.geo-1
             default:
                 flavor: {{ clouds.hp.default.flavor }}
                 image: {{ clouds.hp.default.image }}
@@ -94,11 +95,12 @@ cloudmesh:
             cm_type: openstack
             cm_type_version: grizzly
             credentials:
-                OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
+                OS_AUTH_URL: https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/
                 OS_CACERT: None
                 OS_PASSWORD: {{ clouds.hp.credential.OS_PASSWORD }}
                 OS_TENANT_NAME: FutureGrid
                 OS_USERNAME: {{ clouds.hp_east.username }}
+                OS_REGION: region-b.geo-1
             default:
                 flavor: {{ clouds.hp_east.default.flavor }}
                 image: {{ clouds.hp_east.default.image }}
