@@ -106,7 +106,7 @@ class aws(ComputeBaseType):
                   userdata=None):
         self.set_keyname(key_name)
         self.set_name(name)
-        self.create_vm()
+        return self.create_vm()
 
     def create_vm(self):
         image = NodeImage(id=self.get_image_name(), name="", driver="")
