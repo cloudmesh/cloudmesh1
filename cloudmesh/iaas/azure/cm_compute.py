@@ -212,7 +212,7 @@ class azure(ComputeBaseType):
         # set a flavor
         self.set_flavor_by_idx(flavor_name)
 
-        self.create_vm()
+        return self.create_vm()
 
     def set_linux_cfg(self, refresh=False):
         if refresh or not self.linux_config:
