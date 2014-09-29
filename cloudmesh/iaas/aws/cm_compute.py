@@ -106,7 +106,14 @@ class aws(ComputeBaseType):
                   userdata=None):
         self.set_keyname(key_name)
         self.set_name(name)
-        return self.create_vm()
+        self.create_vm()
+        # BUG
+        # need to return an informative dict
+        # instead of the 'AsynchronousOperationResult'
+        # object
+        #
+        # return empty dict temporarily
+        return dict()
 
     def create_vm(self):
         image = NodeImage(id=self.get_image_name(), name="", driver="")
