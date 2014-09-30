@@ -107,7 +107,7 @@ class cm_user(object):
 
     def info(self, portal_id, cloud_names=[]):
         """Return the: the list of cloud names to search, e.g.
-        sierra
+        india
         :type cloud_names: list
         :returns: dict
 
@@ -171,7 +171,7 @@ class cm_user(object):
 
     cloud_names = cm_config().cloudnames()
     default_security_group = cm_config().get("cloudmesh.security.default")
-    # default_cloud = 'sierra'
+    # default_cloud = 'india'
     default_cloud = None
 
     def init_defaults(self, username):

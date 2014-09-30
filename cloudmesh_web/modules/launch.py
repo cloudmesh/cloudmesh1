@@ -31,7 +31,6 @@ def launch_servers():
     data = {
         'username': g.user.id,
         'india': 'india.futuregrid.org',
-        'sierra': 'sierra.futuregrid.org'
     }
     for key in request.form.keys():
         data[key] = request.form[key]

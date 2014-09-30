@@ -175,7 +175,7 @@ def display_provision_form():
 
     clusters = cm_config_server().get("cloudmesh.server.provisioner.clusters")
 
-    # clusters = ['india','bravo','sierra']
+    # clusters = ['india','bravo']
 
     # servers = n_inventory.hostlist(cluster)
     # server = n_inventory.host(name,auth=False)

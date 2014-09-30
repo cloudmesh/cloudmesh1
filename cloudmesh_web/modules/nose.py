@@ -29,9 +29,6 @@ def display_pingtest():
 
     hosts = ['alamo.futuregrid.org',
              'india.futuregrid.org',
-             'sierra.futuregrid.org',
-             'hotel.futuregrid.org',
-             'bravo.futuregrid.org',
              'echo.futuregrid.org']
     results = []
     for host in hosts:
