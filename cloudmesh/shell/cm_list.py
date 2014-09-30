@@ -25,7 +25,7 @@ def shell_command_list(arguments):
 
     Arguments:
 
-        CLOUD    the name of the cloud e.g. alamo, india
+        CLOUD    the name of the cloud e.g. india
 
     Options:
 
