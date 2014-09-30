@@ -65,7 +65,7 @@ def cm_manage():
 
       -r HOST --remote=HOST  the host machine on which the yaml file is
                              located in the CONFIG directory
-                             [default: sierra.futuregrid.org]
+                             [default: india.futuregrid.org]
 
       -d  --debug          debug
 

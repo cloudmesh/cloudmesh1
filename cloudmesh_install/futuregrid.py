@@ -73,7 +73,6 @@ def apply_credentials_to_yaml_file():
     rc_dir_location = {}
     # (hostname, loaction of dir on remote host, location of dir on localhost)
     rc_dir_location["india"] = ("india.futuregird.org", "?", "?")
-    rc_dir_location["sierra_openstack_grizzly"] = ("sierra.futuregrid.org", "?", "?")
 
     for label in rc_dir_location
         (host,dir) = rc_rdilocation(label)
@@ -269,8 +268,7 @@ def fetchrc(userid=None, outdir=None):
         userid = raw_input("Please enter your portal user id [default: %s]: " %
                            userid) or userid
 
-    # Task 2. list hostnames to get access. In Futuregrid, india, sierra are
-    # mandatory hosts to be included.
+    # Task 2. list hostnames to get access. In FutureSystems, india is default
     # TEMPORARY
     host_ids = ["india"]
 

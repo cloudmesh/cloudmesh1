@@ -228,7 +228,7 @@ class cm_config(ConfigDict):
 
     def get_default(self, cloudname=None, attribute=None):
         """
-        get_default('sierra')
+        get_default('india')
         get_default('cloud')
         get_default('index')
         """
@@ -518,14 +518,14 @@ if __name__ == "__main__":
     print config.projects('active')
     print "= COMPLETED ================"
     print config.projects('completed')
-    print "= SIERRA ================"
-    print config.cloud('sierra')
+    print "= INDIA ================"
+    print config.cloud('india')
     print "= PROFILE ================"
     print config.get("cloudmesh.profile")
     print "= CLOUDS ================"
     print config.cloudnames()
     print "= RC ================"
-    print config.rc('sierra')
+    print config.rc('india')
     print "= DEFAULT ================"
     print config.default
     print "= TO FILE ================"

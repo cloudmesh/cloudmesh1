@@ -49,9 +49,6 @@ class PBS:
                 'echo.futuregrid.org': ['echo'],
                 'bravo.futuregrid.org': ['bravo', 'bravo-long'],
             }
-        elif host.startswith("sierra"):
-            self.cluster_queues = {
-                'sierra.futuregrid.org': ['batch', 'long']}
 
     def requister_joint_queues(self, cluster_queues):
         """allows the registration of queues for multiple clusters managed through the same queuing server
@@ -416,6 +413,3 @@ if __name__ == "__main__":
     #pprint (pbs.qinfo())
     pprint(pbs.qstat())
 
-    pbs = PBS("gvonlasz", "alamo.futuregrid.org")
-    #pprint (pbs.qinfo())
-    pprint(pbs.qstat())
