@@ -29,7 +29,7 @@ class eucalyptus(ComputeBaseType):
     """
     requires a cloudmesh yaml file with the following structure:
 
-    default: sierra-openstack
+    default: india
 
     cloudmesh:
 

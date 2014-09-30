@@ -57,7 +57,7 @@ class Test:
 
         """
         # For multiple clouds
-        # e.g. india-essex and sierra-grizzly
+        # e.g. india
         self.names = self.configuration.active()
         if len(self.names) > 1:
             print "ACTIVE CLOUDS", ",".join(self.names)

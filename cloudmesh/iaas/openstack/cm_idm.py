@@ -424,7 +424,7 @@ def banner(header):
 if __name__ == "__main__":
     # May not work properly
     '''
-    label = 'sierra'
+    label = 'india'
     idm = keystone(label)
     users = idm.get_users()
     tenants = idm.get_tenants()

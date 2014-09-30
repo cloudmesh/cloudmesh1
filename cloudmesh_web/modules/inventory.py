@@ -40,7 +40,7 @@ def display_inventory():
 
     # inventory.refresh()
 
-    clusters = ["bravo", "india", "delta", "echo", "sierra"]
+    clusters = ["bravo", "india", "delta", "echo"]
 
     return render_template('mesh/inventory/mesh_inventory.html',
                            updated=time_now,
@@ -52,7 +52,6 @@ def display_inventory():
 @admin_permission.require(http_exception=403)
 def old_display_summary():
 
-    # clusters = ["bravo", "india", "delta", "echo", "sierra"]
     clusters = ["bravo", "india", "delta", "echo"]
 
     inv = {}
@@ -159,7 +158,7 @@ def get_proj_host_list(proj):
 
 def get_servers_for_clusters(host_lists):
     log.info("get server fo closyer")
-    cluster_dict = {"i": "india", "s": "sierra", "b": "bravo",
+    cluster_dict = {"i": "india", "b": "bravo",
                     "e": "echo", "d": "delta"}  # move to config at some point
     return_dict = {}
 
