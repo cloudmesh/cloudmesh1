@@ -100,7 +100,7 @@ class Test:
 
     def test_list(self):
         print
-        a = self.grep_command("list", ["alamo", "india"], None)
+        a = self.grep_command("list", ["india"], None)
 
     def test_metrics(self):
         a = self.grep_command(
