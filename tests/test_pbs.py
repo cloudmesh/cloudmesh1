@@ -30,10 +30,8 @@ from cloudmesh import banner
 
 class Test:
 
-    hosts = ["india.futuregrid.org",
-             "sierra.futuregrid.org",
-             "hotel.futuregrid.org",
-             "alamo.futuregrid.org"]
+    hosts = ["india.futuregrid.org"]
+    
 
     def setup(self):
         # self.configuration = cm_config()
