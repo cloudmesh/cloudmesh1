@@ -16,6 +16,7 @@ class cm_shell_status:
         """
         Usage:
             status mongo [--format=FORMAT]
+            status celery [--format=FORMAT] [-s|--simple]
 
             Shows system status
         """
@@ -23,6 +24,15 @@ class cm_shell_status:
             stat = cm_mongo_status()
             func = getattr(self, "_print_" + str(arguments['--format']))
             func(stat.serverStatus())
+        elif arguments['celery']:
+            import celery
+            if arguments['--simple'] or arguments['-s']:
+                res = celery.current_app.control.inspect().ping()
+            else: 
+                res = celery.current_app.control.inspect().stats()
+            func = getattr(self, "_print_" + str(arguments['--format']))
+            func(res)
+        
 
     def _print_None(self, data):
         self._print_table(data)
