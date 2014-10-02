@@ -26,4 +26,4 @@ def view():
 
 @task
 def test_activation():
-    local("nosetests ~/cloudmesh/tests/test_cm_for_cmmooc.py")
+    local("nosetests ~/cloudmesh/tests/test_cm_for_cmmooc.py:activate_cloud")
