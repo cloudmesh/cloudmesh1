@@ -15,7 +15,7 @@ def get_user_config():
 
 
 @task
-def open(user, host, port, proxyhost, proxyuse, sudo=True):
+def open(user, host, port, proxyhost, proxyuser, sudo=True):
     """clean the dirs"""
     if sudo:
         local(
@@ -61,7 +61,7 @@ def kill():
             sudo.kill("-9", "{0}".format(pid))
         print "SUCCESS. tunnel killed"
     else:
-        print "WARNING: no tunnel were running"
+q        print "WARNING: no tunnel were running"
 
 
 @task
