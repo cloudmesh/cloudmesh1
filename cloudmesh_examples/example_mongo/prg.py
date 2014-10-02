@@ -17,9 +17,6 @@ print config
 # hosts.append("localhost")
 # hosts.append("bigred2.uits.iu.edu")
 # hosts.append("india.futuregrid.org")
-# hosts.append("hotel.futuregrid.org")
-# hosts.append("sierra.futuregrid.org")
-# hosts.append("alamo.futuregrid.org")
 
 def get_credentials(hosts):
     credential = {}

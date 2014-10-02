@@ -428,7 +428,6 @@ if __name__ == "__main__":
 
     c.refresh()
     c.add('india', 'openstack')
-    c.add('sierra', 'openstack')
     c.refresh_keys()
     c.dump()
     c.save()

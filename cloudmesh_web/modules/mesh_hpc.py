@@ -47,11 +47,7 @@ def display_mongo_qstat_refresh(host=None):
     user = config["cloudmesh"]["hpc"]["username"]
 
     if host is None:
-        hosts = ["india.futuregrid.org",
-                 "lima.futuregrid.org",
-                 "sierra.futuregrid.org",
-                 "hotel.futuregrid.org",
-                 "alamo.futuregrid.org"]
+        hosts = ["india.futuregrid.org"]
     elif host in ['bravo.futuregrid.org',
                   'echo.futuregrid.org',
                   'delta.futuregrid.org']:
@@ -98,16 +94,7 @@ def display_mongo_qstat_new():
     hosts = ["india.futuregrid.org",
              "echo.futuregrid.org",
              "delta.futuregrid.org",
-             "bravo.futuregrid.org",
-             "sierra.futuregrid.org",
-             "hotel.futuregrid.org",
-             "lima.futuregrid.org",
-             "alamo.futuregrid.org"]
-    # hosts = ["india.futuregrid.org",
-    #         "lima.futuregrid.org",
-    #         "sierra.futuregrid.org",
-    #         "hotel.futuregrid.org",
-    #         "alamo.futuregrid.org"]
+             "bravo.futuregrid.org"]
 
     #    for host in hosts:
     #        pbs.activate(host,user)
@@ -185,11 +172,7 @@ def display_mongo_qinfo_refresh(host=None):
     user = config["cloudmesh"]["hpc"]["username"]
 
     if host is None:
-        hosts = ["india.futuregrid.org",
-                 "lima.futuregrid.org",
-                 "sierra.futuregrid.org",
-                 "hotel.futuregrid.org",
-                 "alamo.futuregrid.org"]
+        hosts = ["india.futuregrid.org"]
     elif host in ['bravo.futuregrid.org',
                   'echo.futuregrid.org',
                   'delta.futuregrid.org']:
@@ -230,11 +213,7 @@ def display_mongo_qinfo():
     hosts = ["india.futuregrid.org",
              "echo.futuregrid.org",
              "delta.futuregrid.org",
-             "bravo.futuregrid.org",
-             "sierra.futuregrid.org",
-             "hotel.futuregrid.org",
-             "lima.futuregrid.org",
-             "alamo.futuregrid.org"]
+             "bravo.futuregrid.org"]
 #    for host in hosts:
 #        pbs.activate(host,user)
 
