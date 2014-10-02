@@ -27,12 +27,7 @@ def display_pingtest():
 
     time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    hosts = ['alamo.futuregrid.org',
-             'india.futuregrid.org',
-             'sierra.futuregrid.org',
-             'hotel.futuregrid.org',
-             'bravo.futuregrid.org',
-             'echo.futuregrid.org']
+    hosts = ['india.futuregrid.org']
     results = []
     for host in hosts:
         results.append(ping(host))

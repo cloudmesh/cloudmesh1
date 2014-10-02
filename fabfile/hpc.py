@@ -12,6 +12,6 @@ def check(username=None):
         username = ConfigDict(
             filename=config_file("/cloudmesh.yaml"))["cloudmesh"]["hpc"]["username"]
         print "Username: ", username
-    for host in ["india", "sierra", "alamo", "hotel", "foxtrot"]:
+    for host in ["india"]:
         local("ssh %s@%s.futuregrid.org hostname -a" % (username, host))
 

@@ -1490,7 +1490,7 @@ if __name__ == "__main__":
 
     """
 
-    # cloud = openstack("sierra-grizzly-openstack")
+    # cloud = openstack("india")
     # flavors = cloud.get_flavors()
     # for flavor in flavors:
     #    print(flavor)

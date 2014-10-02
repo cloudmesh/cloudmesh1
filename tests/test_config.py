@@ -58,20 +58,20 @@ class Test_cloudmesh:
         result = self.config.projects('default')
         assert result == self.project
 
-    def test_sierra_version(self):
+    def test_india_version(self):
         HEADING()
-        result = self.config.cloud('sierra')
+        result = self.config.cloud('india')
         pprint(result)
-        assert result["credentials"]["OS_VERSION"] == 'grizzly'
+        assert result["credentials"]["OS_VERSION"] == 'havana'
 
-    def test_sierra_cloudnames(self):
+    def test_india_cloudnames(self):
         HEADING()
         keys = self.config.cloudnames()
-        assert 'sierra' in keys
+        assert 'india' in keys
 
     def test_expand(self):
         HEADING()
-        result = self.config.get('cloudmesh.clouds.sierra')
+        result = self.config.get('cloudmesh.clouds.india')
         dir = result['credentials']['OS_CACERT']
         print dir
         assert dir.startswith("~")
@@ -96,21 +96,21 @@ class Test_cloudmesh:
         HEADING()
         clouds = self.config.clouds()
         assert isinstance(clouds, dict)
-        assert 'sierra' in clouds
+        assert 'india' in clouds
 
     def test_cloud(self):
         HEADING()
-        sierra_cloud = self.config.cloud('sierra')
-        assert isinstance(sierra_cloud, dict)
-        assert 'cm_host' in sierra_cloud
-        assert sierra_cloud['cm_host'] == 'sierra.futuregrid.org'
+        india_cloud = self.config.cloud('india')
+        assert isinstance(india_cloud, dict)
+        assert 'cm_host' in india_cloud
+        assert india_cloud['cm_host'] == 'india.futuregrid.org'
 
     def test14_cloud_default(self):
         HEADING()
         assert self.config.cloud_default(
-            'sierra', 'flavor') == 'm1.tiny'
+            'india', 'flavor') == 'm1.tiny'
         assert self.config.cloud_default(
-            'sierra', 'not defined') is None
+            'india', 'not defined') is None
 
     def test15_project_default(self):
         HEADING()
@@ -168,7 +168,7 @@ class Test_cloudmesh:
     """
     def test22_filter(self):
         HEADING()
-        print self.config.get_filter('sierra')
+        print self.config.get_filter('india')
     """
 
     def test_launcher(self):
