@@ -14,6 +14,6 @@ import time
         
 log = LOGGER(__file__)
 
-def activate_cloud(self):
+def activate_cloud():
     res = os.popen("cm cloud on india").read()
     assert res.find("cloud 'india' activated.") != -1
