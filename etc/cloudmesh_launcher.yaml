@@ -5,38 +5,37 @@ cloudmesh:
     launcher:
         recipies:
             mooc:
-                name: Mooc
+                name: Big Data Class at IU
                 description:
                     >
-                        Deploys a Slurm cluster. One of the Vms is the Master,
-                        while the others register with the master as worker nodes.
-                        The master will be the first node in the list.
+                        Deploys an Image for a class taught on Big Data.
                 label: slurm
                 parameters:
                     - nodes: 
                         type: integer
                         value: 1
                         required: True
-                    - other: 
-                        type: float
-                        value: 5.0
-                        required: True
-                    - types: 
+                    - Application: 
                         type: string
-                        value: enter vm or bare metal
+                        value: genome_analysis
+                        required: True
+                    - parameters: 
+                        type: string
+                        value: --verbose
                         required: True
                     - selector:
                         type: selector
                         value:
-                        - vm
-                        - baremetal
-                        - xyz
+                        - VM
+                        - Baremetal
+                        - HPC
                         required: True
                     - cloud:
                         type: selector
                         value:
                         - india
-                        - sierra
+                        - bravo
+                        - echo
                         required: True
                 image: /static/img/launcher/mooc.png
                 script: 
