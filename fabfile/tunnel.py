@@ -61,7 +61,7 @@ def kill():
             sudo.kill("-9", "{0}".format(pid))
         print "SUCCESS. tunnel killed"
     else:
-q        print "WARNING: no tunnel were running"
+        print "WARNING: no tunnel were running"
 
 
 @task
