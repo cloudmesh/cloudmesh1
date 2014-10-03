@@ -11,6 +11,7 @@ import yaml
 from string import Template
 from docopt import docopt
 from ConfigParser import SafeConfigParser
+from pprint import pprint
 
 rc_file_locations = {
     'india': {
