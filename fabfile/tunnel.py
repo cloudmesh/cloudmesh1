@@ -15,7 +15,7 @@ def get_user_config():
 
 
 @task
-def open(user, host, port, proxyhost, proxyuse, sudo=True):
+def open(user, host, port, proxyhost, proxyuser, sudo=True):
     """clean the dirs"""
     if sudo:
         local(
