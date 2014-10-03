@@ -29,9 +29,8 @@ def shell_command_cloud(arguments):
             cloud add <cloudYAMLfile> [--force]
             cloud remove [CLOUD|--all]
             cloud default [CLOUD|--all]
-            cloud set flavor [CLOUD] [--flavor=flavorName|--flavorid=flavorID]
-            cloud set image [CLOUD] [--image=imageName|--imageid=imageID]
-            cloud set default [CLOUD]
+            cloud set flavor [CLOUD] [--flavor=<flavorName>|--flavorid=<flavorID>]
+            cloud set image [CLOUD] [--image=<imageName>|--imageid=<imageID>]
 
         Arguments:
 
@@ -59,13 +58,13 @@ def shell_command_cloud(arguments):
            --force               if same cloud exists in database, it will be
                                  overwritten
 
-           --flavor=flavorName   provide flavor name
+           --flavor=<flavorName>   provide flavor name
 
-           --flavorid=flavorID   provide flavor id
+           --flavorid=<flavorID>   provide flavor id
 
-           --image=imageName     provide image name
+           --image=<imageName>     provide image name
 
-           --imageid=imageID     provide image id
+           --imageid=<imageID>     provide image id
 
         Description:
 
@@ -126,19 +125,15 @@ def shell_command_cloud(arguments):
 
                 TODO
 
-            cloud set flavor [CLOUD] [--flavor=flavorName|--flavorid=flavorID]
+            cloud set flavor [CLOUD] [--flavor=<flavorName>|--flavorid=<flavorID>]
 
                 sets the default flavor for a cloud. If the cloud is
                 not specified, it used the default cloud.
 
-            cloud set image [CLOUD] [--image=imageName|--imageid=imageID]
+            cloud set image [CLOUD] [--image=<imageName>|--imageid=<imageID>]
 
                 sets the default flavor for a cloud. If the cloud is
                 not specified, it used the default cloud.
-
-            cloud set default [CLOUD]
-                sets the default cloud. If the cloud is not specified, it asks 
-                for the cloud interactively
 
     """
 
@@ -312,11 +307,14 @@ class CloudManage(object):
         '''
         deactivate a cloud
         simply delete the cloud name from activecloud in db_defaults
+        if the cloud is the current default cloud, it will be removed
         '''
         self._connect_to_mongo()
         defaults = self.mongo.db_defaults.find_one({'cm_user_id': username})
         if cloudname in defaults['activeclouds']:
             defaults['activeclouds'].remove(cloudname)
+        if "cloud" in defaults and defaults["cloud"] == cloudname:
+            del defaults["cloud"]
         self.mongo.db_defaults.update(
             {'cm_user_id': username}, defaults, upsert=True)
 
@@ -1136,29 +1134,6 @@ class CloudCommand(CloudManage):
             else:
                 return
 
-    def _cloud_set_default_cloud(self):
-        if self.arguments['CLOUD']:
-            cloud = self.get_clouds(
-                self.username, getone=True, cloudname=self.arguments['CLOUD'])
-            if cloud is None:
-                Console.warning("no cloud information of '{0}' in database, please import it by 'cloud add <cloudYAMLfile>'".format(
-                    self.arguments['CLOUD']))
-                return
-            self.update_default_cloud(self.username, self.arguments['CLOUD'])
-            Console.ok("cloud '{0}' is set as default".format(self.arguments['CLOUD']))
-        else:
-            clouds = self.get_clouds(self.username)
-            cloud_names = []
-            for cloud in clouds:
-                cloud_names.append(cloud['cm_cloud'].encode("ascii"))
-            cloud_names.sort()
-            res = menu_return_num(
-                title="select a cloud as default", menu_list=cloud_names, tries=3)
-            if res == 'q':
-                return
-            self.update_default_cloud(self.username, cloud_names[res])
-            Console.ok("cloud '{0}' is set as default".format(cloud_names[res]))
-        
     
     def _cloud_set_flavor(self):
         '''
@@ -1372,9 +1347,5 @@ class CloudCommand(CloudManage):
 
             elif self.arguments['image']:
                 self._cloud_set_image()
-
-            elif self.arguments['default']:
-                self._cloud_set_default_cloud()
-
         else:
             self._cloud_list()
