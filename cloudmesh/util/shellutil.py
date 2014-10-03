@@ -29,13 +29,15 @@ def shell_commands_dict_output(d,
     param firstheader:: designed for table, provide a attribute name for the
                         first item of each row, since the dict doesn't provide
                         it
-    param header:: designed for table, a list of lists, provides column order, e.g.
+    param header:: designed for table(and used to filter input dict), a list of lists, 
+                   provides column order, e.g.
                    [[a,b], [c, d], ...
-                   where a is the printing column name and b is the attribute name
+                   where 'a' is the printing column name and 'b' is the attribute name
                    in the dict
-                   if you don't want to change the header name jsonbut want to keep the
-                   header order, for each item in the list you may provide a string
-                   or a list with one item instead of a list of two items
+                   if you don't want to change the header name but want to keep the
+                   header order or filter the items to list, for each item in the list
+                   you may provide a string or a list with one item instead of a list of 
+                   two items
     param oneitem:: designed for table, normally the input dict should be in such
                     form:
                     {a: {...}, b:{...}}, where each subitem is a row
@@ -69,7 +71,45 @@ def shell_commands_dict_output(d,
     if format_type not in ['table', 'json', 'csv']:
         print "ERROR: something wrong while reading print format infomation"
         return False
-
+    
+    headers = None
+    order = None
+    if header:
+        headers = []
+        order = []
+        for i in header:
+            if isinstance(i, basestring):
+                headers.append(i)
+                order.append(i)
+            elif isinstance(i, list):
+                if len(i) == 1:
+                    headers.append(i[0])
+                    order.append(i[0])
+                else:
+                    headers.append(i[0])
+                    order.append(i[1])
+            else:
+                print "ERROR: header info is not correct"
+                return False
+    
+    # --------------------------------------------------------------------------       
+    # filter the input dict
+    # -------------------------------------------------------------------------- 
+    if order:
+        new_d = {}
+        if oneitem:
+            for item in order:
+                if item in d:
+                    new_d[item] = d[item]
+        else:
+            for i in d:
+                new_d[i] = {}
+                for item in order:
+                    if item in d[i]:
+                        new_d[i][item] = d[i][item]
+        d = new_d
+    # -------------------------------------------------------------------------- 
+ 
     if format_type == "json":
         if title:
             banner(title)
@@ -85,27 +125,6 @@ def shell_commands_dict_output(d,
         if title:
             print "+" + "-" * (len(title) - 2) + "+"
             print title
-
-        if header:
-            headers = []
-            order = []
-            for i in header:
-                if isinstance(i, basestring):
-                    headers.append(i)
-                    order.append(i)
-                elif isinstance(i, list):
-                    if len(i) == 1:
-                        headers.append(i[0])
-                        order.append(i[0])
-                    else:
-                        headers.append(i[0])
-                        order.append(i[1])
-                else:
-                    print "ERROR: header info is not correct"
-                    return False
-        else:
-            headers = None
-            order = None
 
         print_data = []
         if oneitem:
