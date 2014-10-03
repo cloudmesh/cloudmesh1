@@ -4,6 +4,7 @@ from cloudmesh.user.cm_user import cm_user
 from pprint import pprint
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.shellutil import shell_commands_dict_output
+from cloudmesh.iaas.cm_cloud import shell_command_cloud
 
 log = LOGGER(__file__)
 
@@ -16,13 +17,42 @@ def shell_command_default(arguments):
         default [--column=COLUMN] [--format=FORMAT]
         default cloud [VALUE]
         default format [VALUE]
+        default flavor [CLOUD] [--name=NAME|--id=ID]
+        default image [CLOUD] [--name=NAME|--id=ID]
 
     Arguments:
+        
+        VALUE    provide a value to update default setting
+        CLOUD    provide a cloud name to work with, if not specified, the default cloud or a 
+                 selected cloud will be used
 
     Options:
-
+    
+        --column=COLUMN       specify what information to display. For example, --column=cloud,format
+        --format=FORMAT       output format: table, json, csv
+        --name=NAME           provide flavor or image name
+        --id=ID               provide flavor or image id
+        
     Description:
+    
+        default [--column=COLUMN] [--format=FORMAT]
+            print user defaults settings
+            
+        default cloud [VALUE]
+            print or change (if VALUE provided) default cloud. To set a cloud as default, it must be 
+            registered and active (to list clouds: cloud [list]; to activate a cloud: cloud on [CLOUD])
 
+        default format [VALUE]
+            print or change(if VALUE provided) default print format, available formats are table, json,
+            csv
+        
+        default flavor [CLOUD] [--name=NAME|--id=ID]
+            set default flavor for a cloud, same as command: cloud set flavor [CLOUD] [--name=NAME|--id=ID]
+            (to check a cloud's default settings: cloud default [CLOUD|--all])
+            
+        default image [CLOUD] [--name=NAME|--id=ID]
+            set default image for a cloud, same as command: cloud set image [CLOUD] [--name=NAME|--id=ID]
+            (to check a cloud's default settings: cloud default [CLOUD|--all])
 
     """
     call = DefaultCommand(arguments)
@@ -71,12 +101,12 @@ class DefaultCommand(object):
             except:
                 pass
             if format not in [None, 'none']:
-                print "default print format: ", defaults_data['shell_print_format']
+                print defaults_data['shell_print_format']
             else:
                 defaults_data['shell_print_format'] = "table"
                 self.user_obj.set_defaults(self.username, defaults_data)
                 defaults_data = self.user_obj.info(self.username)
-                print "default print format: ", defaults_data['shell_print_format']
+                print defaults_data['shell_print_format']
     
     
     def get_defaults(self):
@@ -133,15 +163,37 @@ class DefaultCommand(object):
                                 "active, to register and activate a CLOUD: cloud on [CLOUD]")
         else:
             if "cloud" in defaults_data:
-                print "default cloud: ", defaults_data['cloud']
+                print defaults_data['cloud']
             else:
                 print "default cloud not set"
+    
+    def _default_flavor(self):
+        '''
+        same as command: cloud set flavor [CLOUD] [--name=NAME|--id=ID]
+        '''
+        arguments = dict(self.arguments)
+        arguments["cloud"] = True
+        arguments["set"] = True
+        shell_command_cloud(arguments)
+        
+    def _default_image(self):
+        '''
+        same as command: cloud set image [CLOUD] [--name=NAME|--id=ID]
+        '''
+        arguments = dict(self.arguments)
+        arguments["cloud"] = True
+        arguments["set"] = True
+        shell_command_cloud(arguments)
     
     def execute(self):
         if self.arguments['format'] == True:
             self._default_format()
         elif self.arguments['cloud'] == True:
             self._default_cloud()
+        elif self.arguments['flavor'] == True:
+            self._default_flavor()
+        elif self.arguments['image'] == True:
+            self._default_image()
         else:
             self._print_default()
         

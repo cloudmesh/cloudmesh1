@@ -29,15 +29,15 @@ def shell_command_cloud(arguments):
             cloud add <cloudYAMLfile> [--force]
             cloud remove [CLOUD|--all]
             cloud default [CLOUD|--all]
-            cloud set flavor [CLOUD] [--flavor=<flavorName>|--flavorid=<flavorID>]
-            cloud set image [CLOUD] [--image=<imageName>|--imageid=<imageID>]
+            cloud set flavor [CLOUD] [--name=NAME|--id=ID]
+            cloud set image [CLOUD] [--name=NAME|--id=ID]
 
         Arguments:
 
           CLOUD                  the name of a cloud
           <cloudYAMLfile>        a yaml file (with full file path) containing
                                  cloud information
-          NAME                   name for a cloud
+          NAME                   name for a cloud (or flavor and image)
 
         Options:
 
@@ -58,13 +58,10 @@ def shell_command_cloud(arguments):
            --force               if same cloud exists in database, it will be
                                  overwritten
 
-           --flavor=<flavorName>   provide flavor name
+           --name=NAME           provide flavor or image name
 
-           --flavorid=<flavorID>   provide flavor id
+           --id=ID               provide flavor or image id
 
-           --image=<imageName>     provide image name
-
-           --imageid=<imageID>     provide image id
 
         Description:
 
@@ -123,14 +120,14 @@ def shell_command_cloud(arguments):
 
             cloud default [CLOUD|--all]
 
-                TODO
+                show default settings of a cloud, --all to show all clouds
 
-            cloud set flavor [CLOUD] [--flavor=<flavorName>|--flavorid=<flavorID>]
+            cloud set flavor [CLOUD] [--name=NAME|--id=ID]
 
                 sets the default flavor for a cloud. If the cloud is
                 not specified, it used the default cloud.
 
-            cloud set image [CLOUD] [--image=<imageName>|--imageid=<imageID>]
+            cloud set image [CLOUD] [--name=NAME|--id=ID]
 
                 sets the default flavor for a cloud. If the cloud is
                 not specified, it used the default cloud.
@@ -344,7 +341,7 @@ class CloudManage(object):
         res = {}
 
         flavor_id = self.get_default_flavor_id(username, cloudname)
-        if flavor_id is None:
+        if flavor_id in [None, 'none']:
             flavorname = "none"
         else:
             try:
@@ -356,7 +353,7 @@ class CloudManage(object):
         res['flavor'] = flavorname
 
         image_id = self.get_default_image_id(username, cloudname)
-        if image_id is None:
+        if image_id in [None, 'none']:
             imagename = "none"
         else:
             try:
@@ -1143,7 +1140,7 @@ class CloudCommand(CloudManage):
         if cloudname:
             flavor_id = None
             flavor_name = None
-            if self.arguments['--flavor'] or self.arguments['--flavorid']:
+            if self.arguments['--name'] or self.arguments['--id']:
                 self._connect_to_mongo()
                 self.mongo.activate(
                     cm_user_id=self.username, names=[cloudname])
@@ -1151,23 +1148,23 @@ class CloudCommand(CloudManage):
                     cm_user_id=self.username, names=[cloudname], types=['flavors'])
                 flavor_dict = self.mongo.flavors(
                     clouds=[cloudname], cm_user_id=self.username)[cloudname]
-                if self.arguments['--flavor']:
+                if self.arguments['--name']:
                     for k, v in flavor_dict.iteritems():
-                        if v['name'] == self.arguments['--flavor']:
-                            flavor_name = self.arguments['--flavor']
+                        if v['name'] == self.arguments['--name']:
+                            flavor_name = self.arguments['--name']
                             flavor_id = k
                     if flavor_name is None:
-                        Console.warning("Cloud not find flavor name '{0}' on '{1}'".format(
-                            self.arguments['--flavor'], cloudname))
+                        Console.warning("Could not find flavor name '{0}' on '{1}'".format(
+                            self.arguments['--name'], cloudname))
                         return
-                elif self.arguments['--flavorid']:
-                    if self.arguments['--flavorid'] in flavor_dict.keys():
+                elif self.arguments['--id']:
+                    if self.arguments['--id'] in flavor_dict.keys():
                         flavor_name = flavor_dict[
-                            self.arguments['--flavorid']]['name']
-                        flavor_id = self.arguments['--flavorid']
+                            self.arguments['--id']]['name']
+                        flavor_id = self.arguments['--id']
                     else:
-                        Console.warning("Cloud not find flavor id '{0}' on '{1}'".format(
-                            self.arguments['--flavorid'], cloudname))
+                        Console.warning("Could not find flavor id '{0}' on '{1}'".format(
+                            self.arguments['--id'], cloudname))
                         return
             else:
                 itemkeys = [
@@ -1183,8 +1180,13 @@ class CloudCommand(CloudManage):
                                                         itemkeys=itemkeys,
                                                         refresh=True,
                                                         output=True)
+                
+                current_default_flavor = self.get_cloud_defaultinfo(self.username, 
+                                                                   cloudname)['flavor']
+                
                 res = menu_return_num(
-                    title="select a flavor by index", menu_list=flavor_lists[0], tries=3)
+                    title="select a flavor by index (current default: {0})".format(current_default_flavor), 
+                    menu_list=flavor_lists[0], tries=3)
                 if res == 'q':
                     return
                 flavor_id = flavor_lists[1][res]
@@ -1203,7 +1205,7 @@ class CloudCommand(CloudManage):
         if cloudname:
             image_id = None
             image_name = None
-            if self.arguments['--image'] or self.arguments['--imageid']:
+            if self.arguments['--name'] or self.arguments['--id']:
                 self._connect_to_mongo()
                 self.mongo.activate(
                     cm_user_id=self.username, names=[cloudname])
@@ -1211,23 +1213,23 @@ class CloudCommand(CloudManage):
                     cm_user_id=self.username, names=[cloudname], types=['images'])
                 image_dict = self.mongo.images(
                     clouds=[cloudname], cm_user_id=self.username)[cloudname]
-                if self.arguments['--image']:
+                if self.arguments['--name']:
                     for k, v in image_dict.iteritems():
-                        if v['name'] == self.arguments['--image']:
-                            image_name = self.arguments['--image']
+                        if v['name'] == self.arguments['--name']:
+                            image_name = self.arguments['--name']
                             image_id = k
                     if image_name is None:
-                        Console.warning("Cloud not find image name '{0}' on '{1}'".format(
-                            self.arguments['--image'], cloudname))
+                        Console.warning("Could not find image name '{0}' on '{1}'".format(
+                            self.arguments['--name'], cloudname))
                         return
-                elif self.arguments['--imageid']:
-                    if self.arguments['--imageid'] in image_dict.keys():
+                elif self.arguments['--id']:
+                    if self.arguments['--id'] in image_dict.keys():
                         image_name = image_dict[
-                            self.arguments['--imageid']]['name']
-                        image_id = self.arguments['--imageid']
+                            self.arguments['--id']]['name']
+                        image_id = self.arguments['--id']
                     else:
-                        Console.warning("Cloud not find image id '{0}' on '{1}'".format(
-                            self.arguments['--imageid'], cloudname))
+                        Console.warning("Could not find image id '{0}' on '{1}'".format(
+                            self.arguments['--id'], cloudname))
                         return
             else:
                 itemkeys = {"openstack":
@@ -1284,8 +1286,11 @@ class CloudCommand(CloudManage):
                                                       itemkeys=itemkeys,
                                                       refresh=True,
                                                       output=True)
+                current_default_image = self.get_cloud_defaultinfo(self.username, 
+                                                                   cloudname)['image']
                 res = menu_return_num(
-                    title="select a image by index", menu_list=image_lists[0], tries=3)
+                    title="select a image by index (current default: {0})".format(current_default_image), 
+                    menu_list=image_lists[0], tries=3)
                 if res == 'q':
                     return
                 image_id = image_lists[1][res]
@@ -1307,45 +1312,45 @@ class CloudCommand(CloudManage):
         else:
             name = self.get_selected_cloud(self.username)
         if self.get_clouds(self.username, getone=True, cloudname=name) is None:
-            log.error("no cloud information of '{0}' in database".format(name))
+            Console.error("no cloud information of '{0}' in database".format(name))
             return False
         return name
 
     def call_procedure(self):
         # print self.arguments ###########
-        if self.arguments['list']:
+        if 'list' in self.arguments and self.arguments['list']:
             self._cloud_list()
 
-        elif self.arguments['info']:
+        elif 'info' in self.arguments and self.arguments['info']:
             self._cloud_info()
 
-        elif self.arguments['alias']:
+        elif 'alias' in self.arguments and self.arguments['alias']:
             self._cloud_alias()
 
-        elif self.arguments['select']:
+        elif 'select' in self.arguments and self.arguments['select']:
             self._cloud_select()
 
-        elif self.arguments['on']:
+        elif 'on' in self.arguments and self.arguments['on']:
             self._cloud_activate()
 
-        elif self.arguments['off']:
+        elif 'off' in self.arguments and self.arguments['off']:
             self._cloud_deactivate()
 
-        elif self.arguments['add']:
+        elif 'add' in self.arguments and self.arguments['add']:
             self._cloud_import()
 
-        elif self.arguments['remove']:
+        elif 'remove' in self.arguments and self.arguments['remove']:
             self._cloud_remove()
 
-        elif self.arguments['default'] and not self.arguments['set']:
+        elif 'default' in self.arguments and self.arguments['default']:
             self._cloud_list_default()
 
-        elif self.arguments['set']:
+        elif 'set' in self.arguments and self.arguments['set']:
 
-            if self.arguments['flavor']:
+            if 'flavor' in self.arguments and self.arguments['flavor']:
                 self._cloud_set_flavor()
 
-            elif self.arguments['image']:
+            elif 'image' in self.arguments and self.arguments['image']:
                 self._cloud_set_image()
         else:
             self._cloud_list()
