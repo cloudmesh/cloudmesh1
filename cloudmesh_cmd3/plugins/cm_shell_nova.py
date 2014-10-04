@@ -18,7 +18,7 @@ class cm_shell_nova:
     def do_nova(self, args, arguments):
         """
         Usage:
-               nova login
+               nova set
                nova info               
                nova help
                nova ARGUMENTS               
@@ -29,7 +29,7 @@ class cm_shell_nova:
 
           ARGUMENTS      The arguments passed to nova
           help           Prints the nova manual
-          login          reads the information from the current cloud
+          set            reads the information from the current cloud
                          and updates the environment variables if
                          the cloud is an openstack cloud
           info           the environment values for OS
@@ -63,7 +63,7 @@ class cm_shell_nova:
                     d[attribute] = None
             print row_table(d, order=None, labels=["Variable", "Value"])
             return
-        elif arguments["login"]:
+        elif arguments["set"]:
             print "Not yet implemented"
             #
             # TODO: implemet
