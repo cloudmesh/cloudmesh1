@@ -1,4 +1,5 @@
 from cloudmesh_common.logger import LOGGER
+from cloudmesh_common.tables import row_table
 from cmd3.console import Console
 from cloudmesh.user.cm_user import cm_user
 from pprint import pprint
@@ -23,15 +24,16 @@ def shell_command_default(arguments):
     Arguments:
         
         VALUE    provide a value to update default setting
-        CLOUD    provide a cloud name to work with, if not specified, the default cloud or a 
-                 selected cloud will be used
+        CLOUD   provide a cloud name to work with, if not
+                      specified, the default cloud or a selected
+                      cloud will be used
 
     Options:
     
-        --column=COLUMN       specify what information to display. For example, --column=cloud,format
-        --format=FORMAT       output format: table, json, csv
-        --name=NAME           provide flavor or image name
-        --id=ID               provide flavor or image id
+        --column=COLUMN  specify what information to display. For example, --column=cloud,format
+        --format=FORMAT  output format: table, json, csv
+        --name=NAME      provide flavor or image name
+        --id=ID          provide flavor or image id
         
     Description:
     
@@ -39,20 +41,30 @@ def shell_command_default(arguments):
             print user defaults settings
             
         default cloud [VALUE]
-            print or change (if VALUE provided) default cloud. To set a cloud as default, it must be 
-            registered and active (to list clouds: cloud [list]; to activate a cloud: cloud on [CLOUD])
+            print or change (if VALUE provided) default cloud. To set
+            a cloud as default, it must be registered and active (to
+            list clouds: cloud [list]; to activate a cloud: cloud on
+            [CLOUD])
 
         default format [VALUE]
-            print or change(if VALUE provided) default print format, available formats are table, json,
-            csv
+	    print or change(if VALUE provided) default print format,
+            available formats are table, json, csv
         
         default flavor [CLOUD] [--name=NAME|--id=ID]
-            set default flavor for a cloud, same as command: cloud set flavor [CLOUD] [--name=NAME|--id=ID]
-            (to check a cloud's default settings: cloud default [CLOUD|--all])
+            set default flavor for a cloud, same as command:
+ 
+                cloud set flavor [CLOUD] [--name=NAME|--id=ID]
+
+            (to check a cloud's default settings: 
+             cloud default [CLOUD|--all])
             
         default image [CLOUD] [--name=NAME|--id=ID]
-            set default image for a cloud, same as command: cloud set image [CLOUD] [--name=NAME|--id=ID]
-            (to check a cloud's default settings: cloud default [CLOUD|--all])
+            set default image for a cloud, same as command: 
+
+	         cloud set image [CLOUD] [--name=NAME|--id=ID]
+
+            (to check a cloud's default settings: 
+             cloud default [CLOUD|--all])
 
     """
     call = DefaultCommand(arguments)
@@ -143,11 +155,16 @@ class DefaultCommand(object):
                 p_format = self.arguments['--format']
         else:
             p_format = None
-        
-        shell_commands_dict_output(to_print,
-                                   print_format=p_format,
-                                   header=columns,
-                                   oneitem=True)
+
+        if p_format == 'table' or p_format == None:
+
+	   print row_table(to_print, order=None, labels=["Default", "Value"])
+
+	else:
+	   shell_commands_dict_output(to_print,
+		                      print_format=p_format,
+                		      header=columns,
+                                      oneitem=True)
     
     def _default_cloud(self):
         self._start_cm_user()
