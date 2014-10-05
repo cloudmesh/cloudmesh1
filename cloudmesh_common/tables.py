@@ -16,7 +16,7 @@ def print_format_dict(d, header=None, kind='table'):
         return two_column_table(d.keys(), header)
 
 
-def array_dict_table_printer(array, order=None, header=None):
+def array_dict_table_printer(array, order=None, header=None, vertical=False):
     """prints a pretty table from an array of dicts
     :param array: A an array with dicts of the same type.
                   Each key will be a column
@@ -33,9 +33,18 @@ def array_dict_table_printer(array, order=None, header=None):
         order = header
 
     if header is None:
-        x = PrettyTable(order)
+        if vertical:
+            
+            x = PrettyTable()
+            x.add_column("Item", order)
+        else:
+            x = PrettyTable(order)
     else:
-        x = PrettyTable(header)
+        if vertical:
+            x = PrettyTable()
+            x.add_column("Item", header)
+        else:
+            x = PrettyTable(header)
 
     for element in array:
         values = []
@@ -45,7 +54,10 @@ def array_dict_table_printer(array, order=None, header=None):
             except:
                 tmp = ' '
             values.append(tmp)
-        x.add_row(values)
+        if vertical:
+            x.add_column(" ", values)
+        else:
+            x.add_row(values)
     x.align = "l"
     return x
 
@@ -55,7 +67,7 @@ def column_table(column_dict, order=None):
     :param column_dict: A dict that has an array for each key in the dict.
                         All arrays are of the same length.
                         The keys are used as headers
-    :param order: The orde in which the columns are printed.XS
+    :param order: The order in which the columns are printed.XS
                   The order is specified by the key names of the dict.
     """
     # header
@@ -65,6 +77,37 @@ def column_table(column_dict, order=None):
         order = header
     for key in order:
         x.add_column(key, column_dict[key])
+    x.align = "l"
+    return x
+
+def row_table(d, order=None, labels=None):
+    """prints a pretty table from data in the dict.
+    :param d: A dict to be printed
+    :param order: The order in which the columns are printed.XS
+                  The order is specified by the key names of the dict.
+    """
+    # header
+    header = d.keys()
+    x = PrettyTable(labels)
+    if order is None:
+        order = header
+    for key in order:
+        value = d[key]
+        if type(value) == list:
+            x.add_row([key, value[0]])            
+            for element in value[1:]:
+                x.add_row(["", element])
+        elif type(value) == dict:
+            value_keys = value.keys()
+            first_key = value_keys[0]
+            rest_keys = value_keys[1:]
+            x.add_row([key, "{0} : {1}".format(first_key,value[first_key])])            
+            for element in rest_keys:
+                x.add_row(["", "{0} : {1}".format(element,value[element])])
+        else: 
+            x.add_row([key, value])
+
+        
     x.align = "l"
     return x
 
