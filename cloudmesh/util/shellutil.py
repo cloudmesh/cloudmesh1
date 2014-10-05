@@ -14,6 +14,7 @@ def shell_commands_dict_output(d,
                                firstheader=None,
                                header=None,
                                oneitem=False,
+                               vertical_table=False,
                                title=None,
                                count=False):
     '''
@@ -137,8 +138,14 @@ def shell_commands_dict_output(d,
                 if firstheader:
                     headers = [firstheader] + headers
                 order = [' '] + order
-
-        print array_dict_table_printer(print_data, order=order, header=headers)
+        
+        if vertical_table:
+            print array_dict_table_printer(print_data, 
+                                           order=order, 
+                                           header=headers,
+                                           vertical=True)
+        else:
+            print array_dict_table_printer(print_data, order=order, header=headers)
 
         if count:
             c = len(print_data)
