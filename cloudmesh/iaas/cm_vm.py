@@ -671,7 +671,7 @@ def delete_vm(username,
                 ls[2].append(k)
         if prefix or rangestart or rangeend:
             nametemp = server_name_analyzer(v['name'])
-        if prefi and prefix == nametemp[0]:
+        if prefix and prefix == nametemp[0]:
             ls[3].append(k)
         if rangestart and nametemp[1] and rangestart <= nametemp[1]:
             ls[4].append(k)

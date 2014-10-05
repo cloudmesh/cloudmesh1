@@ -16,7 +16,7 @@ def print_format_dict(d, header=None, kind='table'):
         return two_column_table(d.keys(), header)
 
 
-def array_dict_table_printer(array, order=None, header=None):
+def array_dict_table_printer(array, order=None, header=None, vertical=False):
     """prints a pretty table from an array of dicts
     :param array: A an array with dicts of the same type.
                   Each key will be a column
@@ -33,9 +33,18 @@ def array_dict_table_printer(array, order=None, header=None):
         order = header
 
     if header is None:
-        x = PrettyTable(order)
+        if vertical:
+            
+            x = PrettyTable()
+            x.add_column("Item", order)
+        else:
+            x = PrettyTable(order)
     else:
-        x = PrettyTable(header)
+        if vertical:
+            x = PrettyTable()
+            x.add_column("Item", header)
+        else:
+            x = PrettyTable(header)
 
     for element in array:
         values = []
@@ -45,7 +54,10 @@ def array_dict_table_printer(array, order=None, header=None):
             except:
                 tmp = ' '
             values.append(tmp)
-        x.add_row(values)
+        if vertical:
+            x.add_column(" ", values)
+        else:
+            x.add_row(values)
     x.align = "l"
     return x
 
