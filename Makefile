@@ -63,8 +63,7 @@ install:
 # PYPI
 ######################################################################
 
-upload:
-	make -f Makefile pip
+upload: sdist
 #	python setup.py register
 	python setup.py sdist upload
 
@@ -91,13 +90,7 @@ qc:
 
 
 clean:
-	rm -rf *.egg
-	find . -name "*~" -exec rm {} \;  
-	find . -name "*.pyc" -exec rm {} \;  
-	rm -rf build doc/build dist *.egg-info *~ #*
-	cd doc; make clean
-	rm -rf *.egg-info
-	rm -rf *.log *.pid
+	fab clean.all
 
 uninstall:
 	yes | pip uninstall cloudmesh

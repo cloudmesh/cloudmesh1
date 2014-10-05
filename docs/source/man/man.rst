@@ -49,8 +49,8 @@ cloud
 Command - cloud::
 
     Usage:
-        cloud [list] [--column=COLUMN] [--json|--table]
-        cloud info [CLOUD|--all] [--json|--table]
+        cloud [list] [--column=COLUMN] [--format=FORMAT]
+        cloud info [CLOUD|--all] [--format=FORMAT]
         cloud alias NAME [CLOUD]
         cloud select [CLOUD]
         cloud on [CLOUD]
@@ -58,16 +58,15 @@ Command - cloud::
         cloud add <cloudYAMLfile> [--force]
         cloud remove [CLOUD|--all]
         cloud default [CLOUD|--all]
-        cloud set flavor [CLOUD] [--flavor=flavorName|--flavorid=flavorID]
-        cloud set image [CLOUD] [--image=imageName|--imageid=imageID]
-        cloud set default [CLOUD]
+        cloud set flavor [CLOUD] [--name=NAME|--id=ID]
+        cloud set image [CLOUD] [--name=NAME|--id=ID]
     
     Arguments:
     
       CLOUD                  the name of a cloud
       <cloudYAMLfile>        a yaml file (with full file path) containing
                              cloud information
-      NAME                   name for a cloud
+      NAME                   name for a cloud (or flavor and image)
     
     Options:
     
@@ -81,22 +80,17 @@ Command - cloud::
                              semiall to display all except credentials
                              and defaults)
     
-        --json               print in json fomrat
-    
-        --table              print in table format
+       --format=FORMAT       output format: table, json, csv
     
        --all                 display all available columns
     
        --force               if same cloud exists in database, it will be
                              overwritten
     
-       --flavor=flavorName   provide flavor name
+       --name=NAME           provide flavor or image name
     
-       --flavorid=flavorID   provide flavor id
+       --id=ID               provide flavor or image id
     
-       --image=imageName     provide image name
-    
-       --imageid=imageID     provide image id
     
     Description:
     
@@ -120,8 +114,8 @@ Command - cloud::
     
     
         cloud select [CLOUD]
-            selects a cloud to work with from a list of clouds.If CLOUD is
-            is specified the default cloud will be set to that value.
+            selects a cloud to work with from a list of clouds.If the cloud 
+            is not specified, it asks for the cloud interactively
     
         cloud on [CLOUD]
         cloud off [CLOUD]
@@ -155,21 +149,115 @@ Command - cloud::
     
         cloud default [CLOUD|--all]
     
-            TODO
+            show default settings of a cloud, --all to show all clouds
     
-        cloud set flavor [CLOUD] [--flavor=flavorName|--flavorid=flavorID]
-    
-            sets the default flavor for a cloud. If the cloud is
-            not specified, it used the default cloud.
-    
-        cloud set image [CLOUD] [--image=imageName|--imageid=imageID]
+        cloud set flavor [CLOUD] [--name=NAME|--id=ID]
     
             sets the default flavor for a cloud. If the cloud is
             not specified, it used the default cloud.
     
-        cloud set default [CLOUD]
-            sets the default cloud for a cloud. If the cloud is
-            not specified, it asks for the cloud interactively
+        cloud set image [CLOUD] [--name=NAME|--id=ID]
+    
+            sets the default flavor for a cloud. If the cloud is
+            not specified, it used the default cloud.
+    
+    
+
+color
+----------------------------------------------------------------------
+
+Command - color::
+
+    Usage:
+        color on
+        color off
+        color
+    
+        Turns the shell color printing on or off
+    
+    Description:
+    
+        color on   switched the color on
+    
+        color off  switches the color off
+    
+        color      without parameters prints a test to display
+                   the various colored mesages. It is intended
+                   as a test to see if your terminal supports
+                   colors.
+    
+    
+
+debug
+----------------------------------------------------------------------
+
+Command - debug::
+
+    Usage:
+        debug on
+        debug off
+    
+        Turns the debug log level on and off.
+    
+
+default
+----------------------------------------------------------------------
+
+Command - default::
+
+    Usage:
+        default [--column=COLUMN] [--format=FORMAT]
+        default cloud [VALUE]
+        default format [VALUE]
+        default flavor [CLOUD] [--name=NAME|--id=ID]
+        default image [CLOUD] [--name=NAME|--id=ID]
+    
+    Arguments:
+    
+        VALUE    provide a value to update default setting
+        CLOUD   provide a cloud name to work with, if not
+                      specified, the default cloud or a selected
+                      cloud will be used
+    
+    Options:
+    
+        --column=COLUMN  specify what information to display.
+                         The columns are specified as a comma
+                         separated list. For example: cloud,format
+        --format=FORMAT  output format: table, json, csv
+        --name=NAME      provide flavor or image name
+        --id=ID          provide flavor or image id
+    
+    Description:
+    
+        default [--column=COLUMN] [--format=FORMAT]
+            print user defaults settings
+    
+        default cloud [VALUE]
+            print or change (if VALUE provided) default cloud. To set
+            a cloud as default, it must be registered and active (to
+            list clouds: cloud [list]; to activate a cloud: cloud on
+            [CLOUD])
+    
+        default format [VALUE]
+            print or change(if VALUE provided) default print format,
+            available formats are table, json, csv
+    
+        default flavor [CLOUD] [--name=NAME|--id=ID]
+            set default flavor for a cloud, same as command:
+    
+                cloud set flavor [CLOUD] [--name=NAME|--id=ID]
+    
+            (to check a cloud's default settings:
+             cloud default [CLOUD|--all])
+    
+        default image [CLOUD] [--name=NAME|--id=ID]
+            set default image for a cloud, same as command:
+    
+             cloud set image [CLOUD] [--name=NAME|--id=ID]
+    
+            (to check a cloud's default settings:
+             cloud default [CLOUD|--all])
     
     
 
@@ -551,12 +639,13 @@ label
 Command - label::
 
     Usage:
-           label [--prefix=PREFIX] [--id=ID]
+           label [--prefix=PREFIX] [--id=ID] [--raw]
     
     Options:
     
       --prefix=PREFIX    provide the prefix for the label
       --id=ID            provide the start ID which is an integer
+      --raw              prints label only
     
     Description:
     
@@ -581,7 +670,7 @@ List available flavors, images, vms, projects and clouds
     
         Arguments:
     
-            CLOUD    the name of the cloud e.g. alamo, sierra, india
+            CLOUD    the name of the cloud e.g. india
     
         Options:
     
@@ -622,6 +711,22 @@ List available flavors, images, vms, projects and clouds
     
             man cloud
     
+    
+
+loglevel
+----------------------------------------------------------------------
+
+Command - loglevel::
+
+    Usage:
+        loglevel
+        loglevel error
+        loglevel warning
+        loglevel debug
+        loglevel info
+        loglevel critical
+    
+        Shows current log level or changes it.
     
 
 man
@@ -722,6 +827,34 @@ Command - notebook::
     
     
 
+nova
+----------------------------------------------------------------------
+
+Command - nova::
+
+    Usage:
+           nova set
+           nova info               
+           nova help
+           nova ARGUMENTS               
+    
+    A simple wrapper for the openstack nova command
+    
+    Arguments:
+    
+      ARGUMENTS      The arguments passed to nova
+      help           Prints the nova manual
+      set            reads the information from the current cloud
+                     and updates the environment variables if
+                     the cloud is an openstack cloud
+      info           the environment values for OS
+    
+    Options:
+    
+       -v       verbose mode
+    
+    
+
 open
 ----------------------------------------------------------------------
 
@@ -769,7 +902,7 @@ Command - project::
 
     Usage:
            project
-           project info [--json]
+           project info [--format=FORMAT]
            project default NAME
            project active NAME
            project delete NAME
@@ -780,6 +913,7 @@ Command - project::
     Arguments:
     
       NAME           The project id
+      FORMAT         The display format. (json, table)
     
     Options:
     
@@ -978,6 +1112,19 @@ Command - security_group::
     
     
 
+status
+----------------------------------------------------------------------
+
+Command - status::
+
+    Usage:
+        status mongo 
+        status celery 
+        status rabbitmq
+    
+        Shows system status
+    
+
 storm
 ----------------------------------------------------------------------
 
@@ -1089,6 +1236,7 @@ Command - user::
     Usage:
            user list
            user info [ID]
+           user id
     
     Administrative command to lists the users from LDAP
     
@@ -1159,25 +1307,45 @@ vm
 Command - vm::
 
     Usage:
-        vm start [NAME]
+        vm start [--name=<vmname>]
                  [--count=<count>]
                  [--cloud=<CloudName>]
                  [--image=<imgName>|--imageid=<imgId>]
                  [--flavor=<flavorName>|--flavorid=<flavorId>]
                  [--group=<group>]
-        vm delete [NAME|--id=<id>]
+        vm delete [NAME|--id=<id>] 
                   [--group=<group>]
                   [--cloud=<CloudName>]
                   [--prefix=<prefix>]
                   [--range=<range>]
                   [--force]
-        vm pip (NAME|--id=<id>) [--cloud=<CloudName>]
-        vm login (NAME|--id=<id>) [--cloud=<CloudName>] [NOT IMPLEMENTED]
+        vm ip (NAME|--id=<id>) 
+              [--cloud=<CloudName>]
+        vm login (--name=<vmname>|--id=<id>|--addr=<address>)
+                 (--ln=<LoginName>)
+                 [--cloud=<CloudName>]
+                 [--key=<key>]
+                 [--] [<command>...]
+        vm login NAME
+                 (--ln=<LoginName>)
+                 [--cloud=<CloudName>]
+                 [--key=<key>]
+                 [--] [<command>...]
+        vm list [CLOUD|--all] 
+                [--refresh] 
+                [--format=FORMAT] 
+                [--column=COLUMN]
     
     Arguments:
-        NAME  server name
+        <command>              positional arguments, the commands you want to
+                               execute on the server(e.g. ls -a), you will get 
+                               a return of executing result instead of login to 
+                               the server, note that type in -- is suggested before 
+                               you input the commands
+        NAME                   server name
     
     Options:
+        --addr=<address>       give the public ip of the server
         --cloud=<CloudName>    give a cloud to work on, if not given, selected
                                or default cloud will be used
         --count=<count>        give the number of servers to start
@@ -1187,6 +1355,11 @@ Command - vm::
         --id=<id>              give the server id
         --image=<imgName>      give the name of the image
         --imageid=<imgId>      give the id of the image
+        --key=<key>            spicfy a private key to use, input a string which 
+                               is the full path to the key file
+        --ln=<LoginName>       give the login name of the server that you want 
+                               to login
+        --name=<vmname>        give the name of the virtual machine
         --prefix=<prefix>      give the prefix of the server, standand server
                                name is in the form of prefix_index, e.g. abc_9
         --range=<range>        give the range of the index of the servers
@@ -1207,7 +1380,9 @@ Command - vm::
                                 and/or range to find servers by their names.
                                 Or user may specify more options to narrow
                                 the search
-        vm pip [options...]     assign a public ip to a VM of a cloud
+        vm ip [options...]      assign a public ip to a VM of a cloud
+        vm login [options...]   login to a server or execute commands on it
+        vm list [options...]    same as command "list vm", please refer to it
     
     Examples:
         vm start --count=5 --group=test --cloud=india
@@ -1243,4 +1418,31 @@ Command - web::
     
         Opens a web page with the specified link
     
+    
+
+yaml
+----------------------------------------------------------------------
+
+Command - yaml::
+
+    Usage:
+        yaml KIND [KEY] [--filename=FILENAME] [--format=FORMAT]
+        yaml KIND KEY VALUE [--filename=FILENAME] 
+    
+    Provides yaml information or updates yaml on a given replacement
+    
+    Arguments:
+        KIND    The typye of the yaml file (server, user) 
+        KEY     Key name of the nested dict e.g. cloudmesh.server.loglevel
+        VALUE   Value to set on a given KEY
+        FILENAME      cloudmesh.yaml or cloudmesh_server.yaml
+        FORMAT         The format of the output (table, json, yaml)
+    
+    Options:
+    
+        --format=FORMAT      the format of the output [default: print]
+    
+    Description:
+    
+         Sets and gets values from a yaml configuration file
     
