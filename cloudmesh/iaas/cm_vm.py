@@ -657,15 +657,13 @@ def delete_vm(username,
         []  # 6 deleteAllCloudVMs
     ]
     for k, v in serverdata.iteritems():
-        if servername:
-            if servername == v['name']:
-                ls[0].append(k)
-        if serverid:
-            if serverid == k:
-                ls[1].append(k)
+        if servername and servername == v['name']:
+            ls[0].append(k)
+        if serverid and serverid == k:
+            ls[1].append(k)
         if groupname:
-            grouptemp = None
             try:
+                grouptemp = None
                 grouptemp = v['metadata']['cm_group']
             except:
                 pass
@@ -673,20 +671,14 @@ def delete_vm(username,
                 ls[2].append(k)
         if prefix or rangestart or rangeend:
             nametemp = server_name_analyzer(v['name'])
-        if prefix:
-            if prefix == nametemp[0]:
-                ls[3].append(k)
-        if rangestart:
-            if nametemp[1]:
-                if rangestart <= nametemp[1]:
-                    ls[4].append(k)
-        if rangeend:
-            if nametemp[1]:
-                if rangeend >= nametemp[1]:
-                    ls[5].append(k)
-        if deleteAllCloudVMs:
-            if v['cm_cloud'] == cloudname:
-                ls[6].append(k)
+        if prefix and prefix == nametemp[0]:
+            ls[3].append(k)
+        if rangestart and nametemp[1] and rangestart <= nametemp[1]:
+            ls[4].append(k)
+        if rangeend and nametemp[1] and rangeend >= nametemp[1]:
+            ls[5].append(k)
+        if deleteAllCloudVMs and v['cm_cloud'] == cloudname:
+            ls[6].append(k)
     # -------------------------
     # intersect the results
     ls = [x for x in ls if x != []]

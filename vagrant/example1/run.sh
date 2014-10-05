@@ -25,7 +25,26 @@ images=("Ubuntu-Server-14.04-64bit" "Ubuntu-Server-14.04-32bit")
 debug=0
 
 # copy private key to synced folders
-cp ~/.ssh/id_rsa `pwd`
+if [ -f ~/.ssh/id_rsa ]; then
+	cp ~/.ssh/id_rsa `pwd`
+else
+	echo "=================================="
+	echo "SSH Key file (id_rsa) is missing"
+	echo "May be you need to generate one."
+	echo "=================================="
+	exit
+fi
+
+if [ -f ~/.ssh/id_rsa ]; then
+	cp ~/.ssh/id_rsa.pub `pwd`
+else
+	echo "=================================="
+	echo "SSH Key file (id_rsa) is missing"
+	echo "May be you need to generate one."
+	echo "=================================="
+	exit
+fi
+
 if [ $# -eq 2 ]
 then
 	userid=$1
