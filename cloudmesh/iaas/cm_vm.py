@@ -237,7 +237,7 @@ class VMcommand(object):
                 return
             else:
                 cloudname = self.arguments['--cloud']
-                deleteAllCloudVMs = True
+                # deleteAllCloudVMs = True
         else:
             cloudname = cloudobj.get_selected_cloud(self.username)
         if cloudname not in mongo.active_clouds(self.username):
