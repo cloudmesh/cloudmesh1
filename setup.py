@@ -11,7 +11,7 @@ home = os.path.expanduser("~")
 setup(
     name='cloudmesh',
     version=__import__('cloudmesh').version(),
-    description='A tool to simplify managing multiple clouds including bare metal provisioning',
+    description='A tool to simplify managing multiple clouds',
     # description-file =
     #    README.rst
     author='Cloudmesh Team',
