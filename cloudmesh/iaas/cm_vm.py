@@ -237,7 +237,12 @@ class VMcommand(object):
                 return
             else:
                 cloudname = self.arguments['--cloud']
-                # deleteAllCloudVMs = True
+                if self.arguments['NAME'] is None and\
+                    self.arguments['--id'] is None and\
+                    self.arguments['--group'] is None and\
+                    self.arguments['--prefix'] is None and\
+                    self.arguments['--range'] is None:
+                    deleteAllCloudVMs = True
         else:
             cloudname = cloudobj.get_selected_cloud(self.username)
         if cloudname not in mongo.active_clouds(self.username):
@@ -716,6 +721,7 @@ def delete_vm(username,
                             ['metadata', 'metadata'],
                             ['key_name', 'key_name'],
                             ['created', 'created'],
+                            ['cloud', 'cm_cloud']
                         ],
                         "ec2":
                         [
@@ -757,6 +763,7 @@ def delete_vm(username,
                             ['created', 'created'],
                         ]
                         }
+            
             cloudobj.print_cloud_servers(username=username,
                                          cloudname=cloudname,
                                          itemkeys=itemkeys,

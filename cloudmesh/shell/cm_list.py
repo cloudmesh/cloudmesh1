@@ -231,6 +231,7 @@ class ListInfo(object):
                             ['metadata', 'metadata'],
                             ['key_name', 'key_name'],
                             ['created', 'created'],
+                            ['cloud', 'cm_cloud']
                         ],
                         "ec2":
                         [
