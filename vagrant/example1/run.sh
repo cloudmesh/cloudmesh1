@@ -29,8 +29,8 @@ if [ -f ~/.ssh/id_rsa ]; then
 	cp ~/.ssh/id_rsa `pwd`
 else
 	echo "=================================="
-	echo "SSH Key file (id_rsa) is missing"
-	echo "May be you need to generate one."
+	echo "SSH Key file (id_rsa) is missing."
+	echo "You can generate by ssh-keygen."
 	echo "=================================="
 	exit
 fi
@@ -40,7 +40,7 @@ if [ -f ~/.ssh/id_rsa ]; then
 else
 	echo "=================================="
 	echo "SSH Key file (id_rsa) is missing"
-	echo "May be you need to generate one."
+	echo "You can generate by ssh-keygen."
 	echo "=================================="
 	exit
 fi
