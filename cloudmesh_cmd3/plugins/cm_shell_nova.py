@@ -7,7 +7,6 @@ from cloudmesh_common.tables import row_table
 
 log = LOGGER(__file__)
 
-
 class cm_shell_nova:
 
     """opt_example class"""
@@ -24,8 +23,13 @@ class cm_shell_nova:
                 os.environ[k] = v
                 # TEMP CODE FOR CACERT
                 if k == "OS_CACERT":
-                    os.environ[k] = \
-                    "{0}/.cloudmesh/india-havana-cacert.pem".format(os.environ['HOME'])
+                    if cloudname == "india":
+                        os.environ[k] = \
+                                "{0}/.cloudmesh/india-havana-cacert.pem".format(os.environ['HOME'])
+                    elif cloudname == "icehouse":
+                        os.environ[k] = \
+                                "{0}/.cloudmesh/clouds/icehouse/cacert.pem".format(os.environ['HOME'])
+
         except:
             log.warning(sys.exc_info())
 
