@@ -65,7 +65,7 @@ class cm_shell_nova:
                     # d[attribute] = os.environ[attribute]
                     d[attribute] = rcfiles[cloud][attribute]
                 except:
-                    log.error(sys.exc_info())
+                    log.warning(sys.exc_info())
                     d[attribute] = None
             print row_table(d, order=None, labels=["Variable", "Value"])
             return
