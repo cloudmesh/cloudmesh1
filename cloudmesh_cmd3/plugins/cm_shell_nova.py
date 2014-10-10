@@ -16,16 +16,18 @@ class cm_shell_nova:
         self.register_command_topic('cloud','nova')
         pass
 
-    def set_os_environ(cloudname):
+    def set_os_environ(self, cloudname):
         '''Set os environment variables on a given cloudname'''
         try:
-            novars = self.rcfile[cloudname]
-            for novar in novars:
-                os.environ[novar] = novar
+            novars = self.rcfiles[cloudname]
+            for k, v in novars.iteritems():
+                os.environ[k] = v
                 # TEMP CODE FOR CACERT
-                if novar == "OS_CACERT":
-                    os.environ[novar] =
+                if k == "OS_CACERT":
+                    os.environ[k] = \
                     "{0}/.cloudmesh/india-havana-cacert.pem".format(os.environ['HOME'])
+        except:
+            log.warning(sys.exc_info())
 
     @command
     def do_nova(self, args, arguments):
