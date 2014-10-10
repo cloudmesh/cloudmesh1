@@ -248,6 +248,30 @@ class CloudManage(object):
         self.mongo.db_defaults.update({'cm_user_id': username},
                                       {'$set': {'cloud': cloudname}})
 
+    def get_default_cloud_for_nova(self, username):
+        '''
+        Gets the default cloud for nova command, return None if not set.
+
+        Related to cloudmesh_cmd3/plugins/cm_shell_nova.py
+        '''
+        self._connect_to_mongo()
+        try:
+            cloud = self.mongo.db_defaults.find_one(
+                {'cm_user_id': username})['nova-cloud']
+        except:
+            cloud = None
+        return cloud
+
+    def update_default_cloud_for_nova(self, username, cloudname):
+        '''
+        Sets default cloud for nova command.
+
+        Related to cloudmesh_cmd3/plugins/cm_shell_nova.py
+        '''
+        self._connect_to_mongo()
+        self.mongo.db_defaults.update({'cm_user_id': username},
+                                      {'$set': {'nova-cloud': cloudname}})
+
     def update_cloud_name(self, username, cloudname, newname):
         '''
         change the cloud name in db
