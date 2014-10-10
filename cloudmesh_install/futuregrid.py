@@ -19,6 +19,13 @@ rc_file_locations = {
         'source': '.futuregrid/openstack_havana/novarc',
         'dest': "~/.cloudmesh/clouds/india",
     }
+    # NEW ICEHOUSE
+    # ,
+    # 'india-icehouse': {
+    # 'hostname': 'india.futuregrid.org',
+    # 'source': '.cloudmesh/clouds/india/icehouse/novarc',
+    # 'dest': "~/.cloudmesh/clouds/india-icehouse",
+    # }
 }
 
 
