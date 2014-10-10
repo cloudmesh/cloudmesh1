@@ -2,6 +2,8 @@ import os
 import sys
 from cmd3.shell import command
 from cloudmesh.user import cm_rc
+from cloudmesh.iaas.cm_cloud import CloudManage
+from cloudmesh.config.cm_config import cm_config
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import row_table
 
@@ -89,7 +91,14 @@ class cm_shell_nova:
                 self.cloud = cloud
 
                 self.rcfiles = cm_rc.get_rcfiles()
-                self.set_os_environ(cloud)
+                self.set_os_environ(self.cloud)
+
+                # Get cm_user_id
+                config = cm_config()
+                cm_user_id = config.username()
+                # Store to mongodb
+                mongodb = CloudManage()
+                mongodb.update_default_cloud_for_nova(cm_user_id, self.cloud)
 
                 msg = "{0} is set".format(self.cloud)
                 log.info(msg)
