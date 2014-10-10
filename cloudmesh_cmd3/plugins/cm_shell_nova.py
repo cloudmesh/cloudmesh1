@@ -18,8 +18,8 @@ class cm_shell_nova:
     def do_nova(self, args, arguments):
         """
         Usage:
-               nova set
-               nova info               
+               nova set     [CLOUD]
+               nova info    [CLOUD]          
                nova help
                nova ARGUMENTS               
 
