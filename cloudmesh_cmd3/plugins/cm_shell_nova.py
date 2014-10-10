@@ -42,6 +42,7 @@ class cm_shell_nova:
 
         """
         # log.info(arguments)
+        cloud = arguments['CLOUD']
 
         if arguments["help"]:
             os.system("nova help")
@@ -51,7 +52,6 @@ class cm_shell_nova:
             # prints the current os env variables for nova
             #
             d = {}
-            cloud = arguments['CLOUD']
             rcfiles = cm_rc.get_rcfiles()
 
             for attribute in ['OS_USER_ID',
@@ -70,7 +70,13 @@ class cm_shell_nova:
             print row_table(d, order=None, labels=["Variable", "Value"])
             return
         elif arguments["set"]:
-            print "Not yet implemented"
+            if cloud:   
+                self.cloud = cloud
+                msg = "{0} is set".format(self.cloud)
+                log.info(msg)
+                print msg
+            else:
+                print "CLOUD is required"
             #
             # TODO: implemet
             #
