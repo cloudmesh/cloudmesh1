@@ -16,6 +16,17 @@ class cm_shell_nova:
         self.register_command_topic('cloud','nova')
         pass
 
+    def set_os_environ(cloudname):
+        '''Set os environment variables on a given cloudname'''
+        try:
+            novars = self.rcfile[cloudname]
+            for novar in novars:
+                os.environ[novar] = novar
+                # TEMP CODE FOR CACERT
+                if novar == "OS_CACERT":
+                    os.environ[novar] =
+                    "{0}/.cloudmesh/india-havana-cacert.pem".format(os.environ['HOME'])
+
     @command
     def do_nova(self, args, arguments):
         """
@@ -52,7 +63,6 @@ class cm_shell_nova:
             # prints the current os env variables for nova
             #
             d = {}
-            rcfiles = cm_rc.get_rcfiles()
 
             for attribute in ['OS_USER_ID',
                               'OS_USERNAME',
@@ -62,8 +72,8 @@ class cm_shell_nova:
                               'OS_PASSWORD',
                               'OS_REGION']:
                 try:
-                    # d[attribute] = os.environ[attribute]
-                    d[attribute] = rcfiles[cloud][attribute]
+                    d[attribute] = os.environ[attribute]
+                    # d[attribute] = self.rcfiles[cloud or self.cloud][attribute]
                 except:
                     log.warning(sys.exc_info())
                     d[attribute] = None
@@ -72,6 +82,10 @@ class cm_shell_nova:
         elif arguments["set"]:
             if cloud:   
                 self.cloud = cloud
+
+                self.rcfiles = cm_rc.get_rcfiles()
+                self.set_os_environ(cloud)
+
                 msg = "{0} is set".format(self.cloud)
                 log.info(msg)
                 print msg
