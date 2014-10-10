@@ -3,12 +3,12 @@ import sys
 import glob
 from pprint import pprint
 from cloudmesh_install import config_file
-from ConfigParser import SafeConfigParser
+from ConfigParser import SafeConfigParser, NoOptionError
 
 def get_rcfiles(fpath=None):
     dir = config_file("")
     read_values = ["OS_TENANT_NAME", "OS_USERNAME", "OS_PASSWORD",
-                   "OS_AUTH_URL", "OS_CACERT"]
+                   "OS_AUTH_URL"] #, "OS_CACERT"]
 
     rcfile_path = dir + "/clouds/"
     new_values = {}
@@ -61,7 +61,7 @@ def get_variables(fpath, read_values=["OS_TENANT_NAME", "OS_USERNAME",
             # Exception for missing key
             # e.g. OS_CACERT is only available after openstack havana
             #      Old openstack has it as NOVA_CACERT.
-            except ConfigParser.NoOptionError:
+            except NoOptionError:
                 tmp = ""
             if tmp.startswith("$"):
                 tmp = cp.get(section_title, tmp[1:])  # without $ sign
