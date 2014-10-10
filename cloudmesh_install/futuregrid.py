@@ -21,10 +21,11 @@ rc_file_locations = {
     }
     # NEW ICEHOUSE
     # ,
-    # 'india-icehouse': {
+    # 'icehouse': {
     # 'hostname': 'india.futuregrid.org',
-    # 'source': '.cloudmesh/clouds/india/icehouse/novarc',
-    # 'dest': "~/.cloudmesh/clouds/india-icehouse",
+    # 'source': '.cloudmesh/clouds/india/icehouse/novarc'
+    # ' .cloudmesh/clouds/india/icehouse/cacert.pem',
+    # 'dest': "~/.cloudmesh/clouds/icehouse",
     # }
 }
 
