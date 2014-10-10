@@ -1,6 +1,8 @@
-from cmd3.shell import command
-from cloudmesh_common.logger import LOGGER
 import os
+import sys
+from cmd3.shell import command
+from cloudmesh.user import cm_rc
+from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import row_table
 
 log = LOGGER(__file__)
@@ -49,6 +51,8 @@ class cm_shell_nova:
             # prints the current os env variables for nova
             #
             d = {}
+            cloud = arguments['CLOUD']
+            rcfiles = cm_rc.get_rcfiles()
 
             for attribute in ['OS_USER_ID',
                               'OS_USERNAME',
@@ -58,8 +62,10 @@ class cm_shell_nova:
                               'OS_PASSWORD',
                               'OS_REGION']:
                 try:
-                    d[attribute] = os.environ[attribute]
+                    # d[attribute] = os.environ[attribute]
+                    d[attribute] = rcfiles[cloud][attribute]
                 except:
+                    log.error(sys.exc_info())
                     d[attribute] = None
             print row_table(d, order=None, labels=["Variable", "Value"])
             return
