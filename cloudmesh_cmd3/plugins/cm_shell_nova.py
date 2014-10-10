@@ -11,6 +11,10 @@ log = LOGGER(__file__)
 
 class cm_shell_nova:
 
+    config = None
+    cm_user_id = None
+    mongodb = None
+
     """opt_example class"""
 
     def activate_cm_shell_nova(self):
@@ -38,8 +42,8 @@ class cm_shell_nova:
     def do_nova(self, args, arguments):
         """
         Usage:
-               nova set     [CLOUD]
-               nova info    [CLOUD]          
+               nova set   CLOUD
+               nova info  [CLOUD]          
                nova help
                nova ARGUMENTS               
 
@@ -61,6 +65,11 @@ class cm_shell_nova:
         """
         # log.info(arguments)
         cloud = arguments['CLOUD']
+        if not self.config:
+            self.config = cm_config()
+            self.cm_user_id = self.config.username()
+        if not self.mongodb:
+            self.mongodb = CloudManage()
 
         if arguments["help"]:
             os.system("nova help")
@@ -70,6 +79,10 @@ class cm_shell_nova:
             # prints the current os env variables for nova
             #
             d = {}
+            # Get default cloud from mongodb
+            self.cloud = self.mongodb.get_default_cloud_for_nova(self.cm_user_id)
+            self.rcfiles = cm_rc.get_rcfiles()
+            self.set_os_environ(self.cloud)
 
             for attribute in ['OS_USER_ID',
                               'OS_USERNAME',
@@ -92,13 +105,9 @@ class cm_shell_nova:
 
                 self.rcfiles = cm_rc.get_rcfiles()
                 self.set_os_environ(self.cloud)
-
-                # Get cm_user_id
-                config = cm_config()
-                cm_user_id = config.username()
+                
                 # Store to mongodb
-                mongodb = CloudManage()
-                mongodb.update_default_cloud_for_nova(cm_user_id, self.cloud)
+                self.mongodb.update_default_cloud_for_nova(self.cm_user_id, self.cloud)
 
                 msg = "{0} is set".format(self.cloud)
                 log.info(msg)
