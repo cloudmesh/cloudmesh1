@@ -56,12 +56,17 @@ def get_variables(fpath, read_values=["OS_TENANT_NAME", "OS_USERNAME",
         cp.readfp(_Readrcfile(open(fpath)))
         # cp.items(section_title)
         for read_value in read_values:
-            tmp = cp.get(section_title, read_value)
+            try:
+                tmp = cp.get(section_title, read_value)
+            # Exception for missing key
+            # e.g. OS_CACERT is only available after openstack havana
+            #      Old openstack has it as NOVA_CACERT.
+            except ConfigParser.NoOptionError:
+                tmp = ""
             if tmp.startswith("$"):
                 tmp = cp.get(section_title, tmp[1:])  # without $ sign
             result[read_value] = tmp
         return result
-
     except:
         print "ERROR: Failed to read rc files. Please check you have valid \
                 rcfiles in %s." % fpath
