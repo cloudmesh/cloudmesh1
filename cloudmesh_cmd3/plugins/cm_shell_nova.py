@@ -29,10 +29,10 @@ class cm_shell_nova:
                 os.environ[k] = v
             # TEMP CODE FOR CACERT
             if cloudname == "india" or cloudname == "india_openstack_havana":
-                os.environ[k] = \
+                os.environ['OS_CACERT'] = \
                 "{0}/.cloudmesh/india-havana-cacert.pem".format(os.environ['HOME'])
             elif cloudname == "icehouse":
-                os.environ[k] = \
+                os.environ['OS_CACERT'] = \
                 "{0}/.cloudmesh/clouds/icehouse/cacert.pem".format(os.environ['HOME'])
 
         except:
