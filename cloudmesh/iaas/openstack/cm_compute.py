@@ -484,6 +484,46 @@ class openstack(ComputeBaseType):
                 pass
         return ret
 
+    def stack_create(self, name, template_url, parameters, timeout_mins):
+        """
+        Create a stack by OpenStack Heat Orchestration
+        """
+        url = self._get_service_endpoint("orchestration")[self.service_url_type]
+        posturl = "%s/stacks" % url
+
+        params = {
+            "stack_name": "%s" % name,
+            "template_url": "%s" % template_url,
+            "parameters": parameters,
+            "timeout_mins": "%s" % timeout_mins 
+        }
+
+        log.debug(str(lineno()) + ":POST PARAMS {0}".format(params))
+
+        return self._post(posturl, params)
+
+    def stack_delete(self, stack_name, stack_id):
+        """
+        delete a specified stack and returns the id
+        """
+
+        conf = self._get_service_endpoint("orchestration")
+        url = conf[self.service_url_type]
+
+        url = "%s/stacks/%s/%s" % (url, stack_name, stack_id)
+
+        headers = {'content-type': 'application/json',
+                   'X-Auth-Token': '%s' % conf['token']}
+        # no return from http delete via rest api
+        r = requests.delete(url, headers=headers, verify=self._get_cacert())
+        ret = {"msg": "success"}
+        if r.text:
+            try:
+                ret = r.json()
+            except:
+                pass
+        return ret
+
     def get_public_ip(self):
         """
         Obtaining a floating ip from the pool via the rest api call
