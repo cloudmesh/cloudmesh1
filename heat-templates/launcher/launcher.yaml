@@ -32,7 +32,9 @@ resources:
           template: |
             #!/bin/sh
             yum -y install git
-            yum -y install chef
+            #yum -y install chef
+            rpm -Uvh https://opscode-omnitruck-release.s3.amazonaws.com/el/6/x86_64/chef-server-11.0.4-1.el6.x86_64.rpm
+            
 
             mkdir -p /var
             mkdir -p /etc/chef
