@@ -32,9 +32,11 @@ resources:
           template: |
             #!/bin/sh
             yum -y install git
-            #yum -y install chef
-            rpm -Uvh https://opscode-omnitruck-release.s3.amazonaws.com/el/6/x86_64/chef-server-11.0.4-1.el6.x86_64.rpm
-            
+            # yum -y install chef
+            # chef-server
+            # rpm -Uvh https://opscode-omnitruck-release.s3.amazonaws.com/el/6/x86_64/chef-server-11.0.4-1.el6.x86_64.rpm
+            # chef-client
+            rpm -Uvh https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-11.4.0-1.el6.x86_64.rpm
 
             mkdir -p /var
             mkdir -p /etc/chef
@@ -52,7 +54,10 @@ resources:
             EOL
 
             cat << EOL > /etc/chef/run_list.json
-            { "run_list": ["role[" { get_param: Cookbook } "]"], "ipython": { "notebook_password": { get_param: PasswdHash } } }
+            { "run_list": ["role[$Cookbook]"], "ipython": { "notebook_password": "$PasswdHash" } }
             EOL
 
             chef-solo -j /etc/chef/run_list.json
+         params:
+            $Cookbook: { get_param: Cookbook }
+            $PasswdHash: { get_param: PasswdHash }
