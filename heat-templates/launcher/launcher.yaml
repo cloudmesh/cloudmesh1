@@ -1,0 +1,56 @@
+heat_template_version: 2014-10-15
+
+description: Cloudmesh Launcher with OpenStack Heat
+
+parameters:
+  Cookbook:
+    type: string
+    description: Cookbook name to use
+  KeyName:
+    type: string
+    description: Key name for logging in to instance
+  PasswdHash:
+    type: string
+    description: Password for IPython
+
+resources:
+
+  floating_ip:
+    type: AWS::EC2::EIP
+    properties:
+      InstanceId: { get_resource: server }
+
+  server:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: KeyName }
+      image: "futuregrid/centos-7"
+      flavor: "m1.small"
+      security_groups: [ "default" ]
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/sh
+            yum -y install git
+            yum -y install chef
+
+            mkdir -p /var
+            mkdir -p /etc/chef
+
+            cd ~ && git clone https://github.com/cloudmesh/chef.git
+            ln -s ~/chef/cookbooks /var/chef/cookbooks
+            ln -s ~/chef/roles /var/chef/roles
+
+            cat << EOL > /etc/chef/solo.rb
+            log_location       STDOUT
+            file_cache_path    "/var/chef"
+            cookbook_path      [ "/var/chef/cookbooks" ]
+            role_path          [ "/var/chef/roles" ]
+            Mixlib::Log::Formatter.show_time = true
+            EOL
+
+            cat << EOL > /etc/chef/run_list.json
+            { "run_list": ["role[" { get_param: Cookbook } "]"], "ipython": { "notebook_password": { get_param: PasswdHash } } }
+            EOL
+
+            chef-solo -j /etc/chef/run_list.json
