@@ -709,6 +709,12 @@ class openstack(ComputeBaseType):
                                                   time_stamp)
         return self.security_groups
 
+    def get_stacks(self):
+        msg = "stacks"
+        service = "orchestration"
+        return self._get(msg, service=service,
+                         urltype=self.service_url_type)['stacks']
+
     # new
     """
     def get_tenants(self, credential=None):
