@@ -1058,14 +1058,14 @@ class CloudCommand(CloudManage):
             filename = path_expand(self.arguments["<cloudYAMLfile>"])
             fileconfig = ConfigDict(filename=filename)
         except:
-            log.error(
+            Console.error(
                 "ERROR: could not load file, please check filename and its path")
             return
 
         try:
             cloudsdict = fileconfig.get("cloudmesh", "clouds")
         except:
-            log.error("ERROR: could not get clouds information from yaml file, "
+            Console.error("ERROR: could not get clouds information from yaml file, "
                       "please check you yaml file, clouds information must be "
                       "under 'cloudmesh' -> 'clouds' -> cloud1...")
             return
