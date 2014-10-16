@@ -31,22 +31,20 @@ resources:
         str_replace:
           template: |
             #!/bin/sh
+            rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-2.noarch.rpm
             yum -y install git
-            rpm -Uvh https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-11.4.0-1.el6.x86_64.rpm
+            yum -y install chef
 
-
-            mkdir -p /var
+            mkdir -p /var/chef
             mkdir -p /etc/chef
 
-            cd ~ && git clone https://github.com/cloudmesh/chef.git
-            ln -s ~/chef/cookbooks /var/chef/cookbooks
-            ln -s ~/chef/roles /var/chef/roles
+            git clone https://github.com/cloudmesh/chef.git /var/chef/cloudmesh-chef
 
             cat << EOL > /etc/chef/solo.rb
             log_location       STDOUT
             file_cache_path    "/var/chef"
-            cookbook_path      [ "/var/chef/cookbooks" ]
-            role_path          [ "/var/chef/roles" ]
+            cookbook_path      [ "/var/chef/cloudmesh-chef/cookbooks" ]
+            role_path          [ "/var/chef/cloudmesh-chef/roles" ]
             Mixlib::Log::Formatter.show_time = true
             EOL
 
