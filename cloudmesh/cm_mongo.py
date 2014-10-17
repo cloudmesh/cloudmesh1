@@ -28,7 +28,7 @@ except:
 try:
     from cloudmesh.iaas.aws.cm_compute import aws
 except:
-    log.warning("Amazon NOT ENABLED")
+    log.warning("AWS NOT ENABLED")
 
 
 class cm_MongoBase(object):
@@ -376,7 +376,7 @@ class cm_mongo:
         user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
         return user['project']
 
-    def activate(self, cm_user_id, names=None):
+    def activate(self, cm_user_id, cloudnames=None):
 
         # The cm_user_id should be ALWAYS set and passed through to this call
         # On Web gui the g.user.id has the username
@@ -395,7 +395,7 @@ class cm_mongo:
         # further action could be done.
         # In case of CLI, it could fail safe to the list from yaml file.
         #
-        cloudnames = self.active_clouds(cm_user_id)
+        cloudnames = cloudnames or self.active_clouds(cm_user_id)
 
         if cloudnames:
             for cloud_name in cloudnames:
@@ -504,10 +504,16 @@ class cm_mongo:
                     self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
 
                 for element in result:
+                    # Stacks has different key name 'stack_name'
+                    if type in ['t_stacks']:
+                        t_name = 'stack_name'
+                    else:
+                        t_name = 'name'
                     id = "{0}-{1}-{2}".format(
-                        name, type, result[element]['name']).replace(".", "-")
+                        name, type, result[element][t_name]).replace(".", "-")
                     # servers or security_groups is for each user.
-                    if type in ['servers', 'e_security_groups']:
+                    # Stacks as well (10/17/2014)
+                    if type in ['servers', 'e_security_groups', 't_stacks']:
                         result[element]['cm_user_id'] = cm_user_id
 
                     result[element]['cm_id'] = id
@@ -619,6 +625,12 @@ class cm_mongo:
         returns all the security groups from various clouds
         '''
         return self._get_kind('e_security_groups', clouds, cm_user_id)
+
+    def stacks(self, clouds=None, cm_user_id=None):
+        '''
+        returns all stacks from clouds
+        '''
+        return self._get_kind('t_stacks', clouds, cm_user_id)
 
     # need to make sure other clouds have the same flavor dict as in openstack
     # otherwise will need to put this into the openstack iaas class
