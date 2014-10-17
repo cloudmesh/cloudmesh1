@@ -484,7 +484,7 @@ class openstack(ComputeBaseType):
                 pass
         return ret
 
-    def stack_create(self, name, template_url, parameters, timeout_mins):
+    def stack_create(self, name, template_url, parameters, timeout_mins=60):
         """
         Create a stack by OpenStack Heat Orchestration
         """

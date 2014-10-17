@@ -849,6 +849,11 @@ class cm_mongo:
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         return cloudmanager.vm_delete(server)
 
+    def stack_create(self, cloud, cm_user_id, servername, template_url,
+                     parameters):
+        cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+        return cloudmanager.stack_create(servername, template_url, parameters)
+
     def vmname(self, prefix=None, idx=None, cm_user_id=None):
         """Return a vm name to use next time. prefix or index can be
         given to update a vm name (optional)
