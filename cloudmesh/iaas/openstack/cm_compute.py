@@ -750,10 +750,13 @@ class openstack(ComputeBaseType):
         return self.security_groups
 
     def get_stacks(self):
+        time_stamp = self._now()
         msg = "stacks"
         service = "orchestration"
-        return self._get(msg, service=service,
+        list = self._get(msg, service=service,
                          urltype=self.service_url_type)['stacks']
+        self.stacks = self._list_to_dict(list, 'id', 'stacks', time_stamp)
+        return self.stacks
 
     # new
     """
@@ -874,6 +877,10 @@ class openstack(ComputeBaseType):
 
     def _get_security_groups_dict(self):
         result = self.get_security_groups()
+        return result
+
+    def _get_stacks_dict(self):
+        result = self.get_stacks()
         return result
 
     def limits(self):
