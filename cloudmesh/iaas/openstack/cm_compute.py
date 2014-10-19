@@ -487,6 +487,8 @@ class openstack(ComputeBaseType):
     def stack_create(self, name, template_url, parameters, timeout_mins=60):
         """
         Create a stack by OpenStack Heat Orchestration
+        
+        ref: http://developer.openstack.org/api-ref-orchestration-v1.html
         """
         url = self._get_service_endpoint("orchestration")[self.service_url_type]
         posturl = "%s/stacks" % url
@@ -502,18 +504,33 @@ class openstack(ComputeBaseType):
 
         return self._post(posturl, params)
 
-    def stack_delete(self, stack_name, stack_id):
+    def stack_delete(self, stack_name):
         """
         delete a specified stack and returns the id
+
+        ref: http://developer.openstack.org/api-ref-orchestration-v1.html
         """
 
         conf = self._get_service_endpoint("orchestration")
         url = conf[self.service_url_type]
 
-        url = "%s/stacks/%s/%s" % (url, stack_name, stack_id)
-
         headers = {'content-type': 'application/json',
                    'X-Auth-Token': '%s' % conf['token']}
+
+        # Find stacks
+        msg = "stacks/%s" % stack_name
+        service = "orchestration"
+        r1 = self._get(msg, service=service,
+                      urltype=self.service_url_type)
+        try:
+            stack_id = r1['stack']['id']
+        except KeyError:
+            log.warning("stack does not exist ({0})".format(stack_name))
+            ret = {"msg": "failed"}
+            return ret
+ 
+        url = "%s/stacks/%s/%s" % (url, stack_name, stack_id)
+
         # no return from http delete via rest api
         r = requests.delete(url, headers=headers, verify=self._get_cacert())
         ret = {"msg": "success"}

@@ -25,7 +25,7 @@ class cm_shell_stack:
         """
         Usage:
             stack start NAME [--template=TEMPLATE] [--param=PARAM]
-            stack stop STACK_ID
+            stack stop NAME
             stack list
             stack help | -h
 
@@ -33,7 +33,7 @@ class cm_shell_stack:
 
         Arguments:
 
-          STACK_ID       ID of a stack
+          NAME           stack name
           help           Prints this message
           
         Options:
@@ -56,6 +56,16 @@ class cm_shell_stack:
                                              servername=s_name,
                                              template_url=t_url, parameters=param)
             print res
+            return res
+
+        elif arguments['stop'] and arguments['NAME']:
+            def_cloud = self.cm_config.get_default(attribute='cloud')
+            userid = self.cm_config.username()
+            s_name = arguments['NAME']
+            self.cm_mongo.activate(userid)
+            res = self.cm_mongo.stack_delete(cloud=def_cloud, cm_user_id=userid,
+                                       server=s_name)
+
             return res
 
         elif arguments['list']:
