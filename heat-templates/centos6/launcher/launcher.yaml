@@ -24,7 +24,7 @@ resources:
     type: OS::Nova::Server
     properties:
       key_name: { get_param: KeyName }
-      image: "futuregrid/centos-7"
+      image: "futuregrid/centos-6"
       flavor: "m1.small"
       security_groups: [ "default" ]
       user_data:
