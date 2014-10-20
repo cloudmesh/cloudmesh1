@@ -13,6 +13,8 @@ log = LOGGER(__file__)
 class cm_shell_stack:
 
     """opt_example class"""
+    name = "stack"
+    _id = "t_stacks"
     cm_mongo = cm_mongo()
     cm_config = cm_config()
 
@@ -26,7 +28,7 @@ class cm_shell_stack:
         Usage:
             stack start NAME [--template=TEMPLATE] [--param=PARAM]
             stack stop NAME
-            stack list
+            stack list [--refresh]
             stack help | -h
 
         An orchestration tool (OpenStack Heat)
@@ -70,6 +72,9 @@ class cm_shell_stack:
 
         elif arguments['list']:
             userid = self.cm_config.username()
+            if arguments['--refresh']:
+                self.cm_mongo.activate(userid)
+                self.cm_mongo.refresh(cm_user_id=userid, types=[self._id])
             d = self.cm_mongo.stacks(cm_user_id=userid)
             '''
             Default             | Value
