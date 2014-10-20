@@ -56,7 +56,8 @@ class cm_shell_stack:
             self.cm_mongo.activate(userid)
             res = self.cm_mongo.stack_create(cloud=def_cloud, cm_user_id=userid,
                                              servername=s_name,
-                                             template_url=t_url, parameters=param)
+                                             template_url=t_url,
+                                             parameters=param)
             print res
             return res
 

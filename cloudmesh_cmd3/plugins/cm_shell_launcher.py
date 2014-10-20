@@ -1,12 +1,16 @@
 import os
 import sys
-from cmd3.shell import command
+from pprint import pprint
+from cloudmesh_install.util import path_expand
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import row_table
-from cmd3.console import Console
+from cloudmesh_common.util import get_rand_string
 from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh_install.util import path_expand
-from pprint import pprint
+from cloudmesh.config.cm_config import cm_config
+from cloudmesh.user.cm_user import cm_user
+from cloudmesh.cm_mongo import cm_mongo
+from cmd3.shell import command
+from cmd3.console import Console
 
 log = LOGGER(__file__)
 
@@ -45,10 +49,38 @@ class cm_shell_launcher:
 
         """
         log.info(arguments)
+        self.cm_mongo = cm_mongo()
+        self.cm_config = cm_config()
+        self.user = cm_user()
 
         if arguments["help"] or arguments["-h"]:
             print self.do_launcher.__doc__
-        
+
+        elif arguments['list'] and arguments['cookbooks']:
+            print "big_data_mooc"
+            print "..."
+
+        elif arguments['start'] and arguments['COOKBOOK']:
+            def_cloud = self.cm_config.get_default(attribute='cloud')
+            userid = self.cm_config.username()
+            self.cm_mongo.activate(userid)
+            keyname = self.user.get_defaults(userid)['key']
+            s_name = "launcher-{0}-{1}".format(userid, get_rand_string())
+            cookbook = arguments['COOKBOOK']
+            passwdHash = "123"
+            t_url = \
+            "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev/heat-templates/centos6/launcher/launcher.yaml"
+            param = {'KeyName': keyname,
+                     'Cookbook': cookbook,
+                     'PasswdHash': passwdHash}
+            log.debug(def_cloud, userid, s_name, t_url, param)
+            res = self.cm_mongo.stack_create(cloud=def_cloud, cm_user_id=userid,
+                                             servername=s_name,
+                                             template_url=t_url,
+                                             parameters=param)
+            log.debug(res)
+            return res
+
         elif arguments['import']:
             filepath = "~/.cloudmesh/cloudmesh_launcher.yaml"
             if arguments['FILEPATH']:

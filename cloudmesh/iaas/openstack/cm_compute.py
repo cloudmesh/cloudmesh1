@@ -12,6 +12,7 @@ import base64
 import httplib
 import json
 import os
+import ast
 from pprint import pprint
 from urlparse import urlparse
 import copy
@@ -492,11 +493,14 @@ class openstack(ComputeBaseType):
         """
         url = self._get_service_endpoint("orchestration")[self.service_url_type]
         posturl = "%s/stacks" % url
-
+        try:
+            param = ast.literal_eval(parameters)
+        except ValueError:
+            param = parameters
         params = {
             "stack_name": "%s" % name,
             "template_url": "%s" % template_url,
-            "parameters": parameters,
+            "parameters": param,
             "timeout_mins": "%s" % timeout_mins 
         }
 
