@@ -857,6 +857,30 @@ class cm_mongo:
     def stack_delete(self, cloud, cm_user_id, server):
         cloudmanager = self.clouds[cm_user_id][cloud]['manager']
         return cloudmanager.stack_delete(server)
+    
+    def launcher_import(self, d, launcher_name, username):
+        '''
+        insert a launcher/recipe into db_clouds
+        '''
+        d['cm_launcher'] = launcher_name
+        d['cm_kind'] = 'launcher'
+        d['cm_user_id'] = username
+        self.db_clouds.insert(d)
+        
+    def launcher_get(self, username, getone=False, launcher_name=None):
+        if getone:
+            return self.db_clouds.find_one({'cm_kind': 'launcher',
+                                            'cm_user_id': username,
+                                            'cm_cloud': launcher_name})
+        else:
+            return self.db_clouds.find({'cm_kind': 'launcher',
+                                        'cm_user_id': username})
+            
+    def launcher_remove(self, username, launcher_name):
+        self.db_clouds.remove({'cm_kind': 'launcher',
+                               'cm_user_id': username,
+                               'cm_launcher': launcher_name})
+        
 
     def vmname(self, prefix=None, idx=None, cm_user_id=None):
         """Return a vm name to use next time. prefix or index can be

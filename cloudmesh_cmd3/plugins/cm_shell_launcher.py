@@ -59,6 +59,21 @@ class cm_shell_launcher:
         elif arguments['list'] and arguments['cookbooks']:
             print "big_data_mooc"
             print "..."
+            
+        elif arguments['list']:
+            userid = self.cm_config.username()
+            launchers = self.cm_mongo.launcher_get(userid)
+            
+            
+            if launchers.count() == 0:
+                Console.warning("no launcher in database, please import launcher first"
+                                "(launcher import [FILEPATH] [--force])")
+            else:
+                d = {}
+                for launcher in launchers:
+                    d[launcher['cm_launcher']] = str(launcher)
+                    
+                pprint(d)
 
         elif arguments['start'] and arguments['COOKBOOK']:
             def_cloud = self.cm_config.get_default(attribute='cloud')
@@ -93,8 +108,29 @@ class cm_shell_launcher:
                     "error while loading '{0}', please check".format(filepath))
                 return
             try:
-                recipis_dict = fileconfig.get("cloudmesh", "launcher", "recipies")
+                recipes_dict = fileconfig.get("cloudmesh", "launcher", "recipies")
             except:
                 Console.error("error while loading recipies from the file")
                 
+            #print recipes_dict
+            userid = self.cm_config.username()
+            launcher_names = []
+            launchers = self.cm_mongo.launcher_get(userid)
+            for launcher in launchers:
+                launcher_names.append(launcher['cm_launcher'].encode("ascii"))
+            
+            for key in recipes_dict:
+                if key in launcher_names:
+                    if arguments['--force']:
+                        self.cm_mongo.launcher_remove(userid, key)
+                        self.cm_mongo.launcher_import(
+                            recipes_dict[key], key, userid)
+                        print "launcher '{0}' overwritten.".format(key)
+                    else:
+                        print "ERROR: launcher '{0}' exists in database, please remove it from database first, or enable '--force' when add".format(key)
+                else:
+                    self.cm_mongo.launcher_import(
+                        recipes_dict[key], key, userid)
+                    print "launcher '{0}' added.".format(key)
+                    
         
