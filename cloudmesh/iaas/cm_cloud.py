@@ -855,7 +855,8 @@ class CloudCommand(CloudManage):
 
         if clouds.count() == 0:
             Console.warning(
-                "no cloud in database, please import cloud information using the command")
+                "no cloud in database, please import cloud first"
+                "(cloud add <cloudYAMLfile> [--force])")
         else:
             d = {}
             for cloud in clouds:
