@@ -14,6 +14,19 @@ parameters:
     description: Password for IPython
 
 resources:
+  security_group:
+    type: AWS::EC2::SecurityGroup
+    properties:
+      GroupDescription: "SSH(22), HTTP(80)"
+      SecurityGroupIngress:
+      - IpProtocol: "tcp"
+        FromPort: "22"
+        ToPort : "22"
+        CidrIp : "0.0.0.0/0"
+      - IpProtocol: "tcp"
+        FromPort: "80"
+        ToPort: "80"
+        CidrIp: "0.0.0.0/0"
 
   floating_ip:
     type: AWS::EC2::EIP
@@ -26,12 +39,18 @@ resources:
       key_name: { get_param: KeyName }
       image: "futuregrid/centos-6"
       flavor: "m1.small"
-      security_groups: [ "default" ]
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
       user_data:
         str_replace:
           template: |
             #!/bin/sh
-            rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/e/epel-release-6-8.noarch.rpm
+            service iptables save
+            service iptables stop
+            chkconfig iptables off
+            
+            rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
             yum -y install git
             rpm -Uvh https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-11.4.0-1.el6.x86_64.rpm
 
