@@ -14,6 +14,19 @@ parameters:
     description: Password for IPython
 
 resources:
+  security_group:
+    type: AWS::EC2::SecurityGroup
+    properties:
+      GroupDescription: "SSH(22), HTTP(80)"
+      SecurityGroupIngress:
+      - IpProtocol: "tcp"
+        FromPort: "22"
+        ToPort : "22"
+        CidrIp : "0.0.0.0/0"
+      - IpProtocol: "tcp"
+        FromPort: "80"
+        ToPort: "80"
+        CidrIp: "0.0.0.0/0"
 
   floating_ip:
     type: AWS::EC2::EIP
@@ -26,7 +39,9 @@ resources:
       key_name: { get_param: KeyName }
       image: "futuregrid/centos-6"
       flavor: "m1.small"
-      security_groups: [ "default" ]
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
       user_data:
         str_replace:
           template: |
