@@ -1,5 +1,6 @@
 import os
 import sys
+import traceback
 from pprint import pprint
 from cloudmesh_install.util import path_expand
 from cloudmesh_common.logger import LOGGER
@@ -11,6 +12,9 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
 from cmd3.shell import command
 from cmd3.console import Console
+from cloudmesh.util.shellutil import shell_commands_dict_output
+from cloudmesh.util.config import ordered_dump
+from cloudmesh_common.util import dict_uni_to_ascii
 
 log = LOGGER(__file__)
 
@@ -28,8 +32,7 @@ class cm_shell_launcher:
         Usage:
             launcher start COOKBOOK
             launcher stop LAUNCHER_ID
-            launcher list
-            launcher cookbooks list
+            launcher cookbook list [--column=COLUMN] [--format=FORMAT]
             launcher import [FILEPATH] [--force]
             launcher export FILEPATH
             launcher help | -h
@@ -55,12 +58,8 @@ class cm_shell_launcher:
 
         if arguments["help"] or arguments["-h"]:
             print self.do_launcher.__doc__
-
-        elif arguments['list'] and arguments['cookbooks']:
-            print "big_data_mooc"
-            print "..."
-            
-        elif arguments['list']:
+         
+        elif arguments['list'] and arguments['cookbook']:
             userid = self.cm_config.username()
             launchers = self.cm_mongo.launcher_get(userid)
             
@@ -71,9 +70,29 @@ class cm_shell_launcher:
             else:
                 d = {}
                 for launcher in launchers:
-                    d[launcher['cm_launcher']] = str(launcher)
+                    d[launcher['cm_launcher']] = launcher
+                    if "_id" in d[launcher['cm_launcher']]:
+                        del d[launcher['cm_launcher']]['_id']
                     
-                pprint(d)
+            columns = None
+            if arguments['--column'] and arguments['--column'] != "all":
+                columns = [x.strip() for x in arguments['--column'].split(',')]
+                
+            if arguments['--format']:
+                if arguments['--format'] not in ['table', 'json', 'csv']:
+                    Console.error("please select printing format among table, json and csv")
+                    return
+                else:
+                    p_format = arguments['--format']
+            else:
+                p_format = None
+                
+            shell_commands_dict_output(d,
+                                       print_format=p_format,
+                                       firstheader="launcher",
+                                       header=columns
+                                       #vertical_table=True
+                                       )
 
         elif arguments['start'] and arguments['COOKBOOK']:
             def_cloud = self.cm_config.get_default(attribute='cloud')
@@ -95,6 +114,7 @@ class cm_shell_launcher:
                                              parameters=param)
             log.debug(res)
             return res
+
 
         elif arguments['import']:
             filepath = "~/.cloudmesh/cloudmesh_launcher.yaml"
@@ -132,5 +152,45 @@ class cm_shell_launcher:
                     self.cm_mongo.launcher_import(
                         recipes_dict[key], key, userid)
                     print "launcher '{0}' added.".format(key)
+              
+                    
+        elif arguments['export']:
+            userid = self.cm_config.username()
+            launchers = self.cm_mongo.launcher_get(userid)
+            
+            
+            if launchers.count() == 0:
+                Console.warning("no launcher in database, please import launcher first"
+                                "(launcher import [FILEPATH] [--force])")
+            else:
+                d = {}
+                for launcher in launchers:
+                    key = launcher['cm_launcher']
+                    d[key] = launcher
+                    if "_id" in d[key]:
+                        del d[key]['_id']
+                    if "cm_launcher" in d[key]:
+                        del d[key]['cm_launcher']
+                    if "cm_kind" in d[key]:
+                        del d[key]['cm_kind']
+                    if "cm_user_id" in d[key]:
+                        del d[key]['cm_user_id']
+                        
+                d = dict_uni_to_ascii(d)
+                
+                pprint(d)
+                
+                print "exporting to {0}...".format(arguments['FILEPATH'])
+                
+                try:
+                    filename = path_expand(arguments['FILEPATH'])
+                    stream = file(filename, 'w')
+                    ordered_dump(d, stream=stream)
+                    Console.ok("done")
+                except Exception, err:
+                    Console.error("failed exporting to {0}".format(arguments['FILEPATH']))
+                    print traceback.format_exc()
+                    print sys.exc_info()[0]
+                        
                     
         

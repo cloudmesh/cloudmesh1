@@ -867,8 +867,8 @@ class cm_mongo:
         d['cm_user_id'] = username
         self.db_clouds.insert(d)
         
-    def launcher_get(self, username, getone=False, launcher_name=None):
-        if getone:
+    def launcher_get(self, username, launcher_name=None):
+        if launcher_name:
             return self.db_clouds.find_one({'cm_kind': 'launcher',
                                             'cm_user_id': username,
                                             'cm_cloud': launcher_name})
