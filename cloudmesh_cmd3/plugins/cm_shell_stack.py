@@ -7,6 +7,7 @@ from cmd3.console import Console
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.util.shellutil import shell_commands_dict_output
 
 log = LOGGER(__file__)
 
@@ -28,7 +29,7 @@ class cm_shell_stack:
         Usage:
             stack start NAME [--template=TEMPLATE] [--param=PARAM]
             stack stop NAME
-            stack list [--refresh]
+            stack list [--refresh] [--column=COLUMN] [--format=FORMAT]
             stack help | -h
 
         An orchestration tool (OpenStack Heat)
@@ -119,6 +120,7 @@ class cm_shell_stack:
                 |
                 +---------------------+
             '''
+            '''
             table = []
             def_row = { 'host-cloud-type': None,
                      'description': None,
@@ -129,3 +131,36 @@ class cm_shell_stack:
 
             pprint (d)
             #print row_table(d, order=None) #, labels=["Variable", "Value"])
+            '''
+            
+            columns = None
+            if arguments['--column'] and arguments['--column'] != "all":
+                columns = [x.strip() for x in arguments['--column'].split(',')]
+                
+            if arguments['--format']:
+                if arguments['--format'] not in ['table', 'json', 'csv']:
+                    Console.error("please select printing format among table, json and csv")
+                    return
+                else:
+                    p_format = arguments['--format']
+            else:
+                p_format = None
+            
+            for k, v in d.iteritems():
+                print "cloud: {0}".format(k)
+                
+                for k0, v0 in v.iteritems():
+                    if '_id' in v0:
+                        del v0['_id']
+                    if 'id' in v0:
+                        del v0['id']
+                
+                shell_commands_dict_output(v,
+                                           print_format=p_format,
+                                           firstheader="id",
+                                           header=columns)
+            
+            
+            
+            
+            
