@@ -32,7 +32,7 @@ class cm_shell_launcher:
         """
         Usage:
             launcher start COOKBOOK
-            launcher stop LAUNCHER_ID
+            launcher stop STACK_NAME
             launcher list
             launcher cookbook [--column=COLUMN] [--format=FORMAT]
             launcher import [FILEPATH] [--force]
@@ -44,7 +44,7 @@ class cm_shell_launcher:
         Arguments:
 
           COOKBOOK       Name of a cookbook
-          LAUNCHER_ID    ID of a launcher
+          STACK_NAME     Name of a launcher
           FILEPATH       Filepath
           COLUMN         column name to display
           FORMAT         display format (json, table)
@@ -129,7 +129,7 @@ class cm_shell_launcher:
                 
             shell_commands_dict_output(d,
                                        print_format=p_format,
-                                       firstheader="id",
+                                       firstheader="launcher_id",
                                        header=columns
                                        #vertical_table=True
                                        )
@@ -156,6 +156,15 @@ class cm_shell_launcher:
             log.debug(res)
             return res
 
+        elif arguments['stop'] and arguments['STACK_NAME']:
+            def_cloud = self.cm_config.get_default(attribute='cloud')
+            userid = self.cm_config.username()
+            s_id = arguments['STACK_NAME']
+            self.cm_mongo.activate(userid)
+            res = self.cm_mongo.stack_delete(cloud=def_cloud, cm_user_id=userid,
+                                             server=s_id)
+            log.debug(res)
+            return res
 
         elif arguments['import']:
             filepath = "~/.cloudmesh/cloudmesh_launcher.yaml"
