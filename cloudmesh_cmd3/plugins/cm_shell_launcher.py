@@ -107,7 +107,33 @@ class cm_shell_launcher:
             launchers = self.filter_launcher(stacks, {"search": "contain", \
                                                       "key": "stack_name", \
                                                       "value" : "launcher"})
-            pprint (launchers)
+            log.debug(launchers)
+
+            d = {}
+            for k0, v0 in launchers.iteritems():
+                for k1, v1 in launchers[k0].iteritems():
+                    d[v1['id']] = v1
+            columns = ['stack_name', 'description', 'stack_status',
+                       'creation_time', 'cm_cloud']
+            if arguments['--column'] and arguments['--column'] != "all":
+                columns = [x.strip() for x in arguments['--column'].split(',')]
+                
+            if arguments['--format']:
+                if arguments['--format'] not in ['table', 'json', 'csv']:
+                    Console.error("please select printing format among table, json and csv")
+                    return
+                else:
+                    p_format = arguments['--format']
+            else:
+                p_format = None
+                
+            shell_commands_dict_output(d,
+                                       print_format=p_format,
+                                       firstheader="id",
+                                       header=columns
+                                       #vertical_table=True
+                                       )
+
 
         elif arguments['start'] and arguments['COOKBOOK']:
             def_cloud = self.cm_config.get_default(attribute='cloud')
