@@ -4,7 +4,7 @@ meta:
 cloudmesh:
     launcher:
         recipies:
-            mooc:
+            bigdata_mooc:
                 name: Big Data Class at IU
                 description:
                     >
