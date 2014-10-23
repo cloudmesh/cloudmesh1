@@ -21,6 +21,7 @@ log = LOGGER(__file__)
 class cm_shell_launcher:
 
     """opt_example class"""
+    _id = "t_stacks" # id for stack in cm_mongo
 
     def activate_cm_shell_launcher(self):
         self.register_command_topic('cloud','launcher')
@@ -32,7 +33,8 @@ class cm_shell_launcher:
         Usage:
             launcher start COOKBOOK
             launcher stop LAUNCHER_ID
-            launcher cookbook list [--column=COLUMN] [--format=FORMAT]
+            launcher list
+            launcher cookbook [--column=COLUMN] [--format=FORMAT]
             launcher import [FILEPATH] [--force]
             launcher export FILEPATH
             launcher help | -h
@@ -44,6 +46,8 @@ class cm_shell_launcher:
           COOKBOOK       Name of a cookbook
           LAUNCHER_ID    ID of a launcher
           FILEPATH       Filepath
+          COLUMN         column name to display
+          FORMAT         display format (json, table)
           help           Prints this message
           
         Options:
@@ -59,7 +63,7 @@ class cm_shell_launcher:
         if arguments["help"] or arguments["-h"]:
             print self.do_launcher.__doc__
          
-        elif arguments['list'] and arguments['cookbook']:
+        elif arguments['cookbook']:
             userid = self.cm_config.username()
             launchers = self.cm_mongo.launcher_get(userid)
             
@@ -67,6 +71,7 @@ class cm_shell_launcher:
             if launchers.count() == 0:
                 Console.warning("no launcher in database, please import launcher first"
                                 "(launcher import [FILEPATH] [--force])")
+                return
             else:
                 d = {}
                 for launcher in launchers:
@@ -74,7 +79,7 @@ class cm_shell_launcher:
                     if "_id" in d[launcher['cm_launcher']]:
                         del d[launcher['cm_launcher']]['_id']
                     
-            columns = None
+            columns = ['name', 'description']
             if arguments['--column'] and arguments['--column'] != "all":
                 columns = [x.strip() for x in arguments['--column'].split(',')]
                 
@@ -93,6 +98,16 @@ class cm_shell_launcher:
                                        header=columns
                                        #vertical_table=True
                                        )
+
+        elif arguments['list']:
+            userid = self.cm_config.username()
+            self.cm_mongo.activate(userid)
+            self.cm_mongo.refresh(cm_user_id=userid, types=[self._id])
+            stacks = self.cm_mongo.stacks(cm_user_id=userid)
+            launchers = self.filter_launcher(stacks, {"search": "contain", \
+                                                      "key": "stack_name", \
+                                                      "value" : "launcher"})
+            pprint (launchers)
 
         elif arguments['start'] and arguments['COOKBOOK']:
             def_cloud = self.cm_config.get_default(attribute='cloud')
@@ -191,6 +206,29 @@ class cm_shell_launcher:
                     Console.error("failed exporting to {0}".format(arguments['FILEPATH']))
                     print traceback.format_exc()
                     print sys.exc_info()[0]
-                        
-                    
-        
+
+    def filter_launcher(self, stacks, _filter):
+        """Returns if it satisfies the condition of the filter.
+
+        Description:
+            This is being used to filter out other stacks not related to launcher.
+            Launcher should starts with 'launcher-xxx' in its stack_name.
+            This way, we can separate general stacks and launcher stacks.
+
+        parameter:
+            stacks (dict): all stacks
+            _filter (dict): key, value, search 
+        """
+        new_stacks = {}
+        for k0, v0 in stacks.iteritems():
+            new_stacks[k0] = {}
+            for k1, v1 in stacks[k0].iteritems():
+                try:
+                    value = stacks[k0][k1][_filter['key']]
+                    if _filter['search'] == "contain":
+                        if _filter['value'] in value:
+                            new_stacks[k0][k1] = v1
+                except KeyError:
+                    pass
+        return new_stacks
+
