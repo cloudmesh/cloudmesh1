@@ -78,10 +78,14 @@ class cm_shell_stack:
                 self.cm_mongo.activate(userid)
                 self.cm_mongo.refresh(cm_user_id=userid, types=[self._id])
             d = self.cm_mongo.stacks(cm_user_id=userid)
-            columns = ['stack_name','description', 'stack_status',
+            
+            columns = None
+            if arguments['--column']:
+                if arguments['--column'] != "all":
+                    columns = [x.strip() for x in arguments['--column'].split(',')]
+            else:
+                columns = ['stack_name','description', 'stack_status',
                        'creation_time', 'cm_cloud']
-            if arguments['--column'] and arguments['--column'] != "all":
-                columns = [x.strip() for x in arguments['--column'].split(',')]
                 
             if arguments['--format']:
                 if arguments['--format'] not in ['table', 'json', 'csv']:

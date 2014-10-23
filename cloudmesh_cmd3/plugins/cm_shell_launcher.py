@@ -79,9 +79,12 @@ class cm_shell_launcher:
                     if "_id" in d[launcher['cm_launcher']]:
                         del d[launcher['cm_launcher']]['_id']
                     
-            columns = ['name', 'description']
-            if arguments['--column'] and arguments['--column'] != "all":
-                columns = [x.strip() for x in arguments['--column'].split(',')]
+            columns = None
+            if arguments['--column']:
+                if arguments['--column'] != "all":
+                    columns = [x.strip() for x in arguments['--column'].split(',')]
+            else:
+                columns = ['name', 'description']
                 
             if arguments['--format']:
                 if arguments['--format'] not in ['table', 'json', 'csv']:
@@ -173,9 +176,11 @@ class cm_shell_launcher:
             try:
                 filename = path_expand(filepath)
                 fileconfig = ConfigDict(filename=filename)
-            except:
+            except Exception, err:
                 Console.error(
                     "error while loading '{0}', please check".format(filepath))
+                print traceback.format_exc()
+                print sys.exc_info()[0]
                 return
             try:
                 recipes_dict = fileconfig.get("cloudmesh", "launcher", "recipies")
@@ -227,6 +232,10 @@ class cm_shell_launcher:
                         del d[key]['cm_user_id']
                         
                 d = dict_uni_to_ascii(d)
+                
+                d = {"meta": {"yaml_version": "2.1",
+                              "kind": "launcher"},
+                     "cloudmesh": {"launcher": {"recipies": d}}}
                 
                 pprint(d)
                 
