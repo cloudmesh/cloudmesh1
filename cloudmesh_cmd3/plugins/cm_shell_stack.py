@@ -78,62 +78,8 @@ class cm_shell_stack:
                 self.cm_mongo.activate(userid)
                 self.cm_mongo.refresh(cm_user_id=userid, types=[self._id])
             d = self.cm_mongo.stacks(cm_user_id=userid)
-            '''
-            Default             | Value
-            |
-            +---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
-            | cm_cloud_type       | openstack
-            |
-            | description         | Deploy big data MOOC Cloudmesh with IPython
-            notebook I590
-            |
-            | links               | [{u'href':
-                u'http://149.165.146.57:8004/v1/3e6eaf1d913a48f694a7bc0fbb027507/stacks/hrlee/05c1b262-59e4-41d6-895f-d620db451c9a',
-                u'rel': u'self'}] |
-                | stack_status_reason | Stack create completed successfully
-                |
-                | stack_name          | hrlee
-                |
-                | creation_time       | 2014-10-07T23:00:26Z
-                |
-                | cm_type_version     | havana
-                |
-                | updated_time        | 2014-10-07T23:04:02Z
-                |
-                | cm_id               | india-t_stacks-hrlee
-                |
-                | cm_refresh          | 2014-10-16T23-43-33Z
-                |
-                | cm_cloud            | india
-                |
-                | cm_user_id          | hrlee
-                |
-                | stack_status        | CREATE_COMPLETE
-                |
-                | cm_kind             | t_stacks
-                |
-                | _id                 | 5440906503a123799785cc5d
-                |
-                | cm_type             | openstack
-                |
-                | id                  | 05c1b262-59e4-41d6-895f-d620db451c9a
-                |
-                +---------------------+
-            '''
-            '''
-            table = []
-            def_row = { 'host-cloud-type': None,
-                     'description': None,
-                     'stack_name': None,
-                     'creation_time': None,
-                     'stack_status': None,
-                     'id': None }
-
-            pprint (d)
-            #print row_table(d, order=None) #, labels=["Variable", "Value"])
-            '''
-            
-            columns = None
+            columns = ['stack_name','description', 'stack_status',
+                       'creation_time', 'cm_cloud']
             if arguments['--column'] and arguments['--column'] != "all":
                 columns = [x.strip() for x in arguments['--column'].split(',')]
                 
@@ -147,20 +93,11 @@ class cm_shell_stack:
                 p_format = None
             
             for k, v in d.iteritems():
-                print "cloud: {0}".format(k)
-                
                 for k0, v0 in v.iteritems():
                     if '_id' in v0:
                         del v0['_id']
-                    if 'id' in v0:
-                        del v0['id']
                 
                 shell_commands_dict_output(v,
                                            print_format=p_format,
-                                           firstheader="id",
+                                           firstheader="stack_id",
                                            header=columns)
-            
-            
-            
-            
-            
