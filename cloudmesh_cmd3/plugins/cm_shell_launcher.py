@@ -153,9 +153,9 @@ class cm_shell_launcher:
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
             keyname = self.user.get_defaults(userid)['key']
-            s_name = "launcher-{0}-{1}".format(userid, get_rand_string())
             cookbook = arguments['COOKBOOK']
-            passwdHash = "123"
+            s_name = "launcher-{0}-{1}-{2}".format(userid, cookbook, get_rand_string())
+            passwdHash = "123456789" # doing nothing. just for test
             t_url = \
             "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev/heat-templates/centos6/launcher/launcher.yaml"
             param = {'KeyName': keyname,
