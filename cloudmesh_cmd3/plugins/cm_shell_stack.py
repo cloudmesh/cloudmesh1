@@ -7,6 +7,7 @@ from cmd3.console import Console
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.user.cm_user import cm_user
 from cloudmesh.util.shellutil import shell_commands_dict_output
 
 log = LOGGER(__file__)
@@ -18,10 +19,21 @@ class cm_shell_stack:
     _id = "t_stacks"
     cm_mongo = cm_mongo()
     cm_config = cm_config()
+    cm_user = cm_user()
 
     def activate_cm_shell_stack(self):
         self.register_command_topic('cloud','stack')
         pass
+
+    def get_cloud_name(self):
+        """Returns a default cloud name if exists
+        """
+        try:
+            return self.cm_user.get_defaults(userid)['cloud']
+        except KeyError:
+            log.error('set a default cloud with openstack. "stack" works on'
+                      ' openstack platform only')
+            return None
 
     @command
     def do_stack(self, args, arguments):
@@ -49,8 +61,8 @@ class cm_shell_stack:
         if arguments["help"] or arguments["-h"]:
             print self.do_stack.__doc__
         elif arguments['start'] and arguments['NAME']:
-            def_cloud = self.cm_config.get_default(attribute='cloud')
             userid = self.cm_config.username()
+            def_cloud = self.get_cloud_name()
             t_url = arguments['--template']
             param = arguments['--param']
             s_name = arguments['NAME']
@@ -63,8 +75,8 @@ class cm_shell_stack:
             return res
 
         elif arguments['stop'] and arguments['NAME']:
-            def_cloud = self.cm_config.get_default(attribute='cloud')
             userid = self.cm_config.username()
+            def_cloud = self.get_cloud_name()
             s_name = arguments['NAME']
             self.cm_mongo.activate(userid)
             res = self.cm_mongo.stack_delete(cloud=def_cloud, cm_user_id=userid,
