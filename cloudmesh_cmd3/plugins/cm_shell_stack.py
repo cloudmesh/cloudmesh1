@@ -25,11 +25,11 @@ class cm_shell_stack:
         self.register_command_topic('cloud','stack')
         pass
 
-    def get_cloud_name(self):
+    def get_cloud_name(self, cm_user_id):
         """Returns a default cloud name if exists
         """
         try:
-            return self.cm_user.get_defaults(userid)['cloud']
+            return self.cm_user.get_defaults(cm_user_id)['cloud']
         except KeyError:
             log.error('set a default cloud with openstack. "stack" works on'
                       ' openstack platform only')
@@ -62,7 +62,7 @@ class cm_shell_stack:
             print self.do_stack.__doc__
         elif arguments['start'] and arguments['NAME']:
             userid = self.cm_config.username()
-            def_cloud = self.get_cloud_name()
+            def_cloud = self.get_cloud_name(userid)
             t_url = arguments['--template']
             param = arguments['--param']
             s_name = arguments['NAME']
@@ -76,7 +76,7 @@ class cm_shell_stack:
 
         elif arguments['stop'] and arguments['NAME']:
             userid = self.cm_config.username()
-            def_cloud = self.get_cloud_name()
+            def_cloud = self.get_cloud_name(userid)
             s_name = arguments['NAME']
             self.cm_mongo.activate(userid)
             res = self.cm_mongo.stack_delete(cloud=def_cloud, cm_user_id=userid,
