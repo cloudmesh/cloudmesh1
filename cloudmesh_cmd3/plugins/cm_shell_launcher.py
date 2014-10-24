@@ -27,6 +27,16 @@ class cm_shell_launcher:
         self.register_command_topic('cloud','launcher')
         pass
 
+    def get_cloud_name(self, cm_user_id):
+        """Returns a default cloud name if exists
+        """
+        try:
+            return self.cm_user.get_defaults(cm_user_id)['cloud']
+        except KeyError:
+            log.error('set a default cloud with openstack. "stack" works on'
+                      ' openstack platform only')
+            return None
+
     @command
     def do_launcher(self, args, arguments):
         """
@@ -139,8 +149,8 @@ class cm_shell_launcher:
 
 
         elif arguments['start'] and arguments['COOKBOOK']:
-            def_cloud = self.cm_config.get_default(attribute='cloud')
             userid = self.cm_config.username()
+            def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
             keyname = self.user.get_defaults(userid)['key']
             s_name = "launcher-{0}-{1}".format(userid, get_rand_string())
@@ -160,8 +170,8 @@ class cm_shell_launcher:
             return res
 
         elif arguments['stop'] and arguments['STACK_NAME']:
-            def_cloud = self.cm_config.get_default(attribute='cloud')
             userid = self.cm_config.username()
+            def_cloud = self.get_cloud_name(userid)
             s_id = arguments['STACK_NAME']
             self.cm_mongo.activate(userid)
             res = self.cm_mongo.stack_delete(cloud=def_cloud, cm_user_id=userid,
