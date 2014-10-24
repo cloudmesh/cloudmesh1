@@ -851,12 +851,18 @@ class cm_mongo:
 
     def stack_create(self, cloud, cm_user_id, servername, template_url,
                      parameters):
-        cloudmanager = self.clouds[cm_user_id][cloud]['manager']
-        return cloudmanager.stack_create(servername, template_url, parameters)
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.stack_create(servername, template_url, parameters)
+        except KeyError:
+            return None
 
     def stack_delete(self, cloud, cm_user_id, server):
-        cloudmanager = self.clouds[cm_user_id][cloud]['manager']
-        return cloudmanager.stack_delete(server)
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.stack_delete(server)
+        except KeyError:
+            return None
     
     def launcher_import(self, d, launcher_name, username):
         '''
