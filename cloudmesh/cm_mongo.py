@@ -376,7 +376,7 @@ class cm_mongo:
         user = self.db_defaults.find_one({'cm_user_id': cm_user_id})
         return user['project']
 
-    def activate(self, cm_user_id, cloudnames=None):
+    def activate(self, cm_user_id, names=None):
 
         # The cm_user_id should be ALWAYS set and passed through to this call
         # On Web gui the g.user.id has the username
