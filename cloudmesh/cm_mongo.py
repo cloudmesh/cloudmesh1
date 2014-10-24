@@ -395,7 +395,7 @@ class cm_mongo:
         # further action could be done.
         # In case of CLI, it could fail safe to the list from yaml file.
         #
-        cloudnames = cloudnames or self.active_clouds(cm_user_id)
+        cloudnames = names or self.active_clouds(cm_user_id)
 
         if cloudnames:
             for cloud_name in cloudnames:
