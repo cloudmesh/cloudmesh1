@@ -59,7 +59,7 @@ def read_user(filename):
 
 class User(CloudmeshObject):
 
-    """This class is sued to represent a user"""
+    """This class is used to represent a user"""
 
     get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
 
@@ -96,7 +96,7 @@ class User(CloudmeshObject):
 
     def hidden(self):
         '''
-        hiddeb attributes
+        hidden attributes
         '''
         return [
             "userid",
@@ -129,6 +129,14 @@ class User(CloudmeshObject):
     country = StringField(required=True)
     advisor = StringField()
     # advisor = pointer to another user
+
+
+    '''
+    OpenID oAuth, Google ID, FacebookID, LinkedIn ID, 
+    Bibliography ID, Researcher ID, ScopeUS ID, IEEE ID, Google Scholar ID
+
+    Previous names, Previous Organizations, Optional Dates, Current Advisor Names & Emails 
+    '''
 
     #
     # Message received from either reviewers,

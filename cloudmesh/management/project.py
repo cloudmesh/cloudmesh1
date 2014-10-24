@@ -27,7 +27,7 @@ DISCIPLINE = ('other')
 # put in discipline.txt and initialize from there through reading the file and codes
 #
 
-INSTITUTE_ROLE = ('gaduate student',
+INSTITUTE_ROLE = ('graduate student',
                   'undergraduate student',
                   'staff',
                   'faculty',
@@ -158,14 +158,14 @@ class Project(CloudmeshObject):
     # -------------------------------------------------------------------
     # Grant Information
     # -------------------------------------------------------------------
-    grant_orgnization = StringField(choices=GRANT_ORG)
+    grant_orgnization = StringField(choices=GRANT_ORG) # Should be a list of grants
     grant_id = StringField()
     grant_url = URLField()
 
     # -------------------------------------------------------------------
     # Results
     # -------------------------------------------------------------------
-    results = StringField()
+    results = StringField() # Should be a list of string fields
 
     # -------------------------------------------------------------------
     # Aggrements

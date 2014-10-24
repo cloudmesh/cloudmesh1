@@ -9,7 +9,7 @@ from flask import Blueprint, render_template, request, flash, redirect
 from mongoengine import connect
 from wtforms import Form, validators, widgets
 from wtforms.fields import BooleanField, TextField, TextAreaField, PasswordField, \
-    SelectMultipleField
+    SelectMultipleField, StringField
 from wtforms.validators import ValidationError
 
 from flask.ext.login import login_required
@@ -247,23 +247,23 @@ class UserRegistrationForm(Form):
             raise ValidationError(
                 'A user with name already exists. Suggestion: {0}'.format(proposal))
 
-    username = TextField(
+    username = StringField(
         'Username', [validators.Length(min=6, max=25), validate_username_in_form])
-    title = TextField('Title', [validators.Length(min=6, max=40)])
-    firstname = TextField('Firstname', [validators.Length(min=1, max=35)])
-    lastname = TextField('Lastname', [validators.Length(min=1, max=35)])
-    email = TextField(
+    title = StringField('Title', [validators.Length(min=6, max=40)])
+    firstname = StringField('Firstname', [validators.Length(min=1, max=35)])
+    lastname = StringField('Lastname', [validators.Length(min=1, max=35)])
+    email = StringField(
         'Email', [validators.Length(min=6, max=35), validate_email_in_form])
-    phone = TextField('Phone', [validators.Length(min=6, max=35)])
-    url = TextField('Url', [validators.DataRequired()])
-    citizenship = TextField('citizenship', [validators.DataRequired()])
+    phone = StringField('Phone', [validators.Length(min=6, max=35)])
+    url = StringField('Url', [validators.DataRequired()])
+    citizenship = StringField('citizenship', [validators.DataRequired()])
     institution = TextAreaField('Institution')
     department = TextAreaField('Department')
     address = TextAreaField('Address', [validators.DataRequired()])
-    country = TextField('Country', [validators.DataRequired()])
+    country = StringField('Country', [validators.DataRequired()])
     advisor = TextAreaField('Advisor')
     password = PasswordField('New Password', [
-        validators.Required(),
+        validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Repeat Password')
