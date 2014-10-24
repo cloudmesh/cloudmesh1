@@ -1,0 +1,13 @@
+Version 1.1 
+===================================================
+
+* addition of a `cm-admin` command that also allows password reset of the mongo db
+* addition of `cm status`
+* new row table printer for `cm default`
+* new `cm nova` command
+* new `cm volume command`
+* addition of IUs icehouse cloud as part of `cm-iu`
+* improvements to the parameters of `cloud set` command
+* disable the deletion of all vms in a tennent in openstack even though the OS policy
+   allows it.
+* update the pypi information
