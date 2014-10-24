@@ -1,6 +1,6 @@
 heat_template_version: 2014-10-15
 
-description: Cloudmesh Launcher with OpenStack Heat - { get_param: Cookbook }
+description: Cloudmesh Launcher with OpenStack Heat
 
 parameters:
   Cookbook:
