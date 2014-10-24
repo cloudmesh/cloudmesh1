@@ -355,7 +355,7 @@ class VMcommand(object):
     def get_working_server_id(self, cloudname):
         serverid = None
         mongo = cm_mongo()
-        mongo.activate(cm_user_id=self.username, cloudnames=[cloudname])
+        mongo.activate(cm_user_id=self.username, names=[cloudname])
         mongo.refresh(self.username, names=[cloudname], types=['servers'])
         serverdata = mongo.servers(
             clouds=[cloudname], cm_user_id=self.username)[cloudname]
@@ -436,7 +436,7 @@ def start_vm(username,
     mongo = cm_mongo()
     userobj = cm_user()
     cloudobj = CloudManage()
-    mongo.activate(cm_user_id=username, cloudnames=[cloudname])
+    mongo.activate(cm_user_id=username, names=[cloudname])
     userinfo = userobj.info(username)
     key = None
     vm_image_id = None
@@ -645,7 +645,7 @@ def delete_vm(username,
             return False
     # -------------------------
     mongo = cm_mongo()
-    mongo.activate(cm_user_id=username, cloudnames=[cloudname])
+    mongo.activate(cm_user_id=username, names=[cloudname])
     mongo.refresh(username, names=[cloudname], types=['servers'])
     serverdata = mongo.servers(
         clouds=[cloudname], cm_user_id=username)[cloudname]
@@ -856,7 +856,7 @@ def _keyname_sanitation(username, keyname):
 
 def check_register_key(username, cloudname, keyname, keycontent):
     mongo = cm_mongo()
-    mongo.activate(cm_user_id=username, cloudnames=[cloudname])
+    mongo.activate(cm_user_id=username, names=[cloudname])
     cloudmanager = mongo.clouds[username][cloudname]['manager']
 
     keynamenew = _keyname_sanitation(username, keyname)

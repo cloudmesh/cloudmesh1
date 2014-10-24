@@ -275,7 +275,7 @@ class ListInfo(object):
                         }
             if self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(
-                    cm_user_id=self.username, cloudnames=clouds)
+                    cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(
                     cm_user_id=self.username, names=clouds, types=['servers'])
             p_format = self.arguments['--format']
