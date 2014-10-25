@@ -1,10 +1,10 @@
-import os
+# import os
 import sys
 import traceback
 from pprint import pprint
 from cloudmesh_install.util import path_expand
 from cloudmesh_common.logger import LOGGER
-from cloudmesh_common.tables import row_table
+# from cloudmesh_common.tables import row_table
 from cloudmesh_common.util import get_rand_string
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config
@@ -18,13 +18,14 @@ from cloudmesh_common.util import dict_uni_to_ascii
 
 log = LOGGER(__file__)
 
+
 class cm_shell_launcher:
 
     """opt_example class"""
-    _id = "t_stacks" # id for stack in cm_mongo
+    _id = "t_stacks"  # id for stack in cm_mongo
 
     def activate_cm_shell_launcher(self):
-        self.register_command_topic('cloud','launcher')
+        self.register_command_topic('cloud', 'launcher')
         pass
 
     def get_cloud_name(self, cm_user_id):
@@ -59,7 +60,7 @@ class cm_shell_launcher:
           COLUMN         column name to display
           FORMAT         display format (json, table)
           help           Prints this message
-          
+
         Options:
 
            -v       verbose mode
@@ -72,12 +73,11 @@ class cm_shell_launcher:
 
         if arguments["help"] or arguments["-h"]:
             print self.do_launcher.__doc__
-         
+
         elif arguments['cookbook']:
             userid = self.cm_config.username()
             launchers = self.cm_mongo.launcher_get(userid)
-            
-            
+
             if launchers.count() == 0:
                 Console.warning("no launcher in database, please import launcher first"
                                 "(launcher import [FILEPATH] [--force])")
@@ -88,28 +88,29 @@ class cm_shell_launcher:
                     d[launcher['cm_launcher']] = launcher
                     if "_id" in d[launcher['cm_launcher']]:
                         del d[launcher['cm_launcher']]['_id']
-                    
+
             columns = None
             if arguments['--column']:
                 if arguments['--column'] != "all":
                     columns = [x.strip() for x in arguments['--column'].split(',')]
             else:
                 columns = ['name', 'description']
-                
+
             if arguments['--format']:
                 if arguments['--format'] not in ['table', 'json', 'csv']:
-                    Console.error("please select printing format among table, json and csv")
+                    Console.error("please select printing format ",
+                                  "among table, json and csv")
                     return
                 else:
                     p_format = arguments['--format']
             else:
                 p_format = None
-                
+
             shell_commands_dict_output(d,
                                        print_format=p_format,
                                        firstheader="launcher",
                                        header=columns
-                                       #vertical_table=True
+                                       # vertical_table=True
                                        )
 
         elif arguments['list']:
@@ -117,9 +118,12 @@ class cm_shell_launcher:
             self.cm_mongo.activate(userid)
             self.cm_mongo.refresh(cm_user_id=userid, types=[self._id])
             stacks = self.cm_mongo.stacks(cm_user_id=userid)
-            launchers = self.filter_launcher(stacks, {"search": "contain", \
-                                                      "key": "stack_name", \
-                                                      "value" : "launcher"})
+            launchers = self.filter_launcher(
+                stacks,
+                {"search": "contain",
+                 "key": "stack_name",
+                 "value": "launcher"}
+                )
             log.debug(launchers)
 
             d = {}
@@ -130,7 +134,7 @@ class cm_shell_launcher:
                        'creation_time', 'cm_cloud']
             if arguments['--column'] and arguments['--column'] != "all":
                 columns = [x.strip() for x in arguments['--column'].split(',')]
-                
+
             if arguments['--format']:
                 if arguments['--format'] not in ['table', 'json', 'csv']:
                     Console.error("please select printing format among table, json and csv")
@@ -139,14 +143,13 @@ class cm_shell_launcher:
                     p_format = arguments['--format']
             else:
                 p_format = None
-                
+
             shell_commands_dict_output(d,
                                        print_format=p_format,
                                        firstheader="launcher_id",
                                        header=columns
-                                       #vertical_table=True
+                                       # vertical_table=True
                                        )
-
 
         elif arguments['start'] and arguments['COOKBOOK']:
             userid = self.cm_config.username()
@@ -155,9 +158,8 @@ class cm_shell_launcher:
             keyname = self.user.get_defaults(userid)['key']
             cookbook = arguments['COOKBOOK']
             s_name = "launcher-{0}-{1}-{2}".format(userid, cookbook, get_rand_string())
-            passwdHash = "123456789" # doing nothing. just for test
-            t_url = \
-            "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev/heat-templates/centos6/launcher/launcher.yaml"
+            passwdHash = "123456789"  # doing nothing. just for test
+            t_url = "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev/heat-templates/centos6/launcher/launcher.yaml"
             param = {'KeyName': keyname,
                      'Cookbook': cookbook,
                      'PasswdHash': passwdHash}
@@ -174,7 +176,8 @@ class cm_shell_launcher:
             def_cloud = self.get_cloud_name(userid)
             s_id = arguments['STACK_NAME']
             self.cm_mongo.activate(userid)
-            res = self.cm_mongo.stack_delete(cloud=def_cloud, cm_user_id=userid,
+            res = self.cm_mongo.stack_delete(cloud=def_cloud,
+                                             cm_user_id=userid,
                                              server=s_id)
             log.debug(res)
             return res
@@ -196,14 +199,14 @@ class cm_shell_launcher:
                 recipes_dict = fileconfig.get("cloudmesh", "launcher", "recipies")
             except:
                 Console.error("error while loading recipies from the file")
-                
-            #print recipes_dict
+
+            # print recipes_dict
             userid = self.cm_config.username()
             launcher_names = []
             launchers = self.cm_mongo.launcher_get(userid)
             for launcher in launchers:
                 launcher_names.append(launcher['cm_launcher'].encode("ascii"))
-            
+
             for key in recipes_dict:
                 if key in launcher_names:
                     if arguments['--force']:
@@ -217,16 +220,16 @@ class cm_shell_launcher:
                     self.cm_mongo.launcher_import(
                         recipes_dict[key], key, userid)
                     print "launcher '{0}' added.".format(key)
-              
-                    
+
         elif arguments['export']:
             userid = self.cm_config.username()
             launchers = self.cm_mongo.launcher_get(userid)
-            
-            
+
             if launchers.count() == 0:
-                Console.warning("no launcher in database, please import launcher first"
-                                "(launcher import [FILEPATH] [--force])")
+                Console.warning(
+                    "no launcher in database, "
+                    "please import launcher first"
+                    "(launcher import [FILEPATH] [--force])")
             else:
                 d = {}
                 for launcher in launchers:
@@ -240,24 +243,25 @@ class cm_shell_launcher:
                         del d[key]['cm_kind']
                     if "cm_user_id" in d[key]:
                         del d[key]['cm_user_id']
-                        
+
                 d = dict_uni_to_ascii(d)
-                
+
                 d = {"meta": {"yaml_version": "2.1",
                               "kind": "launcher"},
                      "cloudmesh": {"launcher": {"recipies": d}}}
-                
+
                 pprint(d)
-                
+
                 print "exporting to {0}...".format(arguments['FILEPATH'])
-                
+
                 try:
                     filename = path_expand(arguments['FILEPATH'])
                     stream = file(filename, 'w')
                     ordered_dump(d, stream=stream)
                     Console.ok("done")
                 except Exception, err:
-                    Console.error("failed exporting to {0}".format(arguments['FILEPATH']))
+                    Console.error("failed exporting to {0}"
+                                  .format(arguments['FILEPATH']))
                     print traceback.format_exc()
                     print sys.exc_info()[0]
 
@@ -265,13 +269,14 @@ class cm_shell_launcher:
         """Returns if it satisfies the condition of the filter.
 
         Description:
-            This is being used to filter out other stacks not related to launcher.
-            Launcher should starts with 'launcher-xxx' in its stack_name.
-            This way, we can separate general stacks and launcher stacks.
+            This is being used to filter out other stacks not related
+            to launcher.  Launcher should starts with 'launcher-xxx'
+            in its stack_name.  This way, we can separate general
+            stacks and launcher stacks.
 
         parameter:
             stacks (dict): all stacks
-            _filter (dict): key, value, search 
+            _filter (dict): key, value, search
         """
         new_stacks = {}
         for k0, v0 in stacks.iteritems():
@@ -285,4 +290,3 @@ class cm_shell_launcher:
                 except KeyError:
                     pass
         return new_stacks
-
