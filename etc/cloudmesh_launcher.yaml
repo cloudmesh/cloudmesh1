@@ -4,13 +4,13 @@ meta:
 cloudmesh:
     launcher:
         recipies:
-            bigdata_mooc:
+            mooc:
                 name: Big Data Class at IU
 		shortdescription: Deploys an Image for a class taught on Big Data.
 		description:
                     >
                         Deploys an Image for a class taught on Big Data.
-                label: slurm
+                label: mooc
                 parameters:
                     - nodes: 
                         type: integer
@@ -82,6 +82,7 @@ cloudmesh:
                     type: sh
                     value: ls -l
             hadoop:
+	        label: hadoop
                 name: Hadoop
 		shortdescription: Deploys a haddop cluster on the VMs specified.
                 description:
