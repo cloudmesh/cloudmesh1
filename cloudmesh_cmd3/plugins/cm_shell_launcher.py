@@ -1,4 +1,5 @@
 # import os
+from __future__ import print_function
 import sys
 import traceback
 from pprint import pprint
@@ -72,7 +73,7 @@ class cm_shell_launcher:
         self.user = cm_user()
 
         if arguments["help"] or arguments["-h"]:
-            print self.do_launcher.__doc__
+            print (self.do_launcher.__doc__)
 
         elif arguments['cookbook']:
             userid = self.cm_config.username()
@@ -192,8 +193,8 @@ class cm_shell_launcher:
             except Exception, err:
                 Console.error(
                     "error while loading '{0}', please check".format(filepath))
-                print traceback.format_exc()
-                print sys.exc_info()[0]
+                print (traceback.format_exc())
+                print (sys.exc_info()[0])
                 return
             try:
                 recipes_dict = fileconfig.get("cloudmesh", "launcher", "recipies")
@@ -213,13 +214,15 @@ class cm_shell_launcher:
                         self.cm_mongo.launcher_remove(userid, key)
                         self.cm_mongo.launcher_import(
                             recipes_dict[key], key, userid)
-                        print "launcher '{0}' overwritten.".format(key)
+                        print ("launcher '{0}' overwritten.".format(key))
                     else:
-                        print "ERROR: launcher '{0}' exists, please remove it first, or use '--force' when adding".format(key)
+                        print ("ERROR: launcher '{0}' exists, "
+                               "please remove it first, or use "
+                               "'--force' when adding".format(key))
                 else:
                     self.cm_mongo.launcher_import(
                         recipes_dict[key], key, userid)
-                    print "launcher '{0}' added.".format(key)
+                    print ("launcher '{0}' added.".format(key))
 
         elif arguments['export']:
             userid = self.cm_config.username()
@@ -252,7 +255,7 @@ class cm_shell_launcher:
 
                 pprint(d)
 
-                print "exporting to {0}...".format(arguments['FILEPATH'])
+                print ("exporting to {0}...".format(arguments['FILEPATH']))
 
                 try:
                     filename = path_expand(arguments['FILEPATH'])
@@ -262,8 +265,8 @@ class cm_shell_launcher:
                 except Exception, err:
                     Console.error("failed exporting to {0}"
                                   .format(arguments['FILEPATH']))
-                    print traceback.format_exc()
-                    print sys.exc_info()[0]
+                    print (traceback.format_exc())
+                    print (sys.exc_info()[0])
 
     def filter_launcher(self, stacks, _filter):
         """Returns if it satisfies the condition of the filter.
