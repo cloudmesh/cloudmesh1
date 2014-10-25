@@ -212,7 +212,7 @@ class cm_shell_launcher:
                             recipes_dict[key], key, userid)
                         print "launcher '{0}' overwritten.".format(key)
                     else:
-                        print "ERROR: launcher '{0}' exists in database, please remove it from database first, or enable '--force' when add".format(key)
+                        print "ERROR: launcher '{0}' exists, please remove it first, or use '--force' when adding".format(key)
                 else:
                     self.cm_mongo.launcher_import(
                         recipes_dict[key], key, userid)

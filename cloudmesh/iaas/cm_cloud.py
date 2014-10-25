@@ -1083,7 +1083,7 @@ class CloudCommand(CloudManage):
                         cloudsdict[key], key, self.username)
                     print "cloud '{0}' overwritten.".format(key)
                 else:
-                    print "ERROR: cloud '{0}' exists in database, please remove it from database first, or enable '--force' when add".format(key)
+                    print "ERROR: cloud '{0}' exists in database, please remove it from database first, or use '--force' when adding".format(key)
             else:
                 Database.import_cloud_to_mongo(
                     cloudsdict[key], key, self.username)
