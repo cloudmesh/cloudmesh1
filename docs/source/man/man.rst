@@ -261,28 +261,6 @@ Command - default::
     
     
 
-defaults
-----------------------------------------------------------------------
-
-Command - defaults::
-
-    Usage:
-        defaults format [--json|--table]
-    
-    Arguments:
-    
-    Options:
-    
-    Description:
-    
-        defaults format [--json|--table]
-            some commands can output in json form or table form, this command
-            sets the default printing form, if no form is given, it shows the
-            current default form
-    
-    
-    
-
 dot2
 ----------------------------------------------------------------------
 
@@ -711,6 +689,20 @@ List available flavors, images, vms, projects and clouds
     
             man cloud
     
+    
+
+load
+----------------------------------------------------------------------
+
+Command - load::
+
+    Usage:
+        load MODULE
+    
+    Loads the plugin given a specific module name. The plugin must be ina plugin directory.
+    
+    Arguments:
+       MODULE  The name of the module.
     
 
 loglevel

@@ -10,10 +10,11 @@ log = LOGGER(__file__)
 
 class cm_shell_yaml:
 
-    cm_config = cm_config()
-    cm_config_server = cm_config_server()
 
     def activate_cm_shell_yaml(self):
+        self.cm_config = cm_config()
+        self.cm_config_server = cm_config_server()
+
         Console.color = self.cm_config.get("cloudmesh.shell.color")
 
         self.register_command_topic('cloud', 'yaml')
