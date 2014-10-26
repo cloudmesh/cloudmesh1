@@ -43,10 +43,10 @@ class cm_shell_launcher:
     def do_launcher(self, args, arguments):
         """
         Usage:
-            launcher start COOKBOOK
+            launcher start MENU
             launcher stop STACK_NAME
             launcher list
-            launcher cookbook [--column=COLUMN] [--format=FORMAT]
+            launcher menu [--column=COLUMN] [--format=FORMAT]
             launcher import [FILEPATH] [--force]
             launcher export FILEPATH
             launcher help | -h
@@ -55,7 +55,7 @@ class cm_shell_launcher:
 
         Arguments:
 
-          COOKBOOK       Name of a cookbook
+          MENU           Name of a cookbook
           STACK_NAME     Name of a launcher
           FILEPATH       Filepath
           COLUMN         column name to display
@@ -75,7 +75,7 @@ class cm_shell_launcher:
         if arguments["help"] or arguments["-h"]:
             print (self.do_launcher.__doc__)
 
-        elif arguments['cookbook']:
+        elif arguments['menu']:
             userid = self.cm_config.username()
             launchers = self.cm_mongo.launcher_get(userid)
 
@@ -157,7 +157,7 @@ class cm_shell_launcher:
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
             keyname = self.user.get_defaults(userid)['key']
-            cookbook = arguments['COOKBOOK']
+            cookbook = arguments['MENU']
             s_name = "launcher-{0}-{1}-{2}".format(userid, cookbook, get_rand_string())
             passwdHash = "123456789"  # doing nothing. just for test
             t_url = "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev/heat-templates/centos6/launcher/launcher.yaml"
