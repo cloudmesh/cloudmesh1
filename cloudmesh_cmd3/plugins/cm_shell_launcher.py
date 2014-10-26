@@ -16,6 +16,7 @@ from cmd3.console import Console
 from cloudmesh.util.shellutil import shell_commands_dict_output
 from cloudmesh.util.config import ordered_dump
 from cloudmesh_common.util import dict_uni_to_ascii
+from cloudmesh_install import config_file
 
 log = LOGGER(__file__)
 
@@ -185,7 +186,8 @@ class cm_shell_launcher:
             return res
 
         elif arguments['import']:
-            filepath = "~/.cloudmesh/cloudmesh_launcher.yaml"
+            filepath = config_file("/cloudmesh_launcher.yaml")
+
             if arguments['FILEPATH']:
                 filepath = arguments['FILEPATH']
             try:
