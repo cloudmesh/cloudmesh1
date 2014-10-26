@@ -170,6 +170,7 @@ class cm_shell_launcher:
                                              template_url=t_url,
                                              parameters=param)
             log.debug(res)
+            print res
             return res
 
         elif arguments['stop'] and arguments['STACK_NAME']:
