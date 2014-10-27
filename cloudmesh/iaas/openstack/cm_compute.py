@@ -3,6 +3,7 @@
 #
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
 #
+from __future__ import print_function
 import inspect
 import requests
 
@@ -836,16 +837,16 @@ class openstack(ComputeBaseType):
         headers2 = {"X-Auth-Token": conf[
             'token'], "Accept": "application/json", "Content-type": "application/json"}
 
-        print "%%%%%%%%%%%%%%%%%%"
+        print("%%%%%%%%%%%%%%%%%%")
         pprint(conf)
-        print "%%%%%%%%%%%%%%%%%%"
-        print "PARAMS", params2
-        print "HEADERS", headers2
-        print "API2", apiurlt[2]
-        print "API1", apiurlt[1]
-        print "ACTIVITY", conf['set']
-        print "ID", conf['serverid']
-        print "####################"
+        print("%%%%%%%%%%%%%%%%%%")
+        print("PARAMS", params2)
+        print("HEADERS", headers2)
+        print("API2", apiurlt[2])
+        print("API1", apiurlt[1])
+        print("ACTIVITY", conf['set'])
+        print("ID", conf['serverid'])
+        print("####################")
 
         conn2 = httplib.HTTPConnection(url2)
 
@@ -913,11 +914,11 @@ class openstack(ComputeBaseType):
 
         for rate in info['rate']:
             limit_set = rate['limit']
-            print limit_set
+            print(limit_set)
             for limit in limit_set:
                 list.append(limit)
 
-        print list
+        print(list)
 
         return list
 
@@ -1541,7 +1542,7 @@ class openstack(ComputeBaseType):
 
     def display_regex(self, state_check, userid):
 
-        print state_check
+        print(state_check)
         for (id, vm) in self.servers.items():
             vm['cm_display'] = eval(state_check)
             #            vm['cm_display'] = vm['status'] in states

@@ -1,3 +1,4 @@
+from __future__ import print_function
 from docopt import docopt
 from cloudmesh_common.logger import LOGGER
 from cmd3.console import Console
@@ -64,10 +65,10 @@ def _helper(username, prefix=None, idx=None, raw=False):
     # mongo.activate(username)
     if not raw:
         if prefix or idx:
-            print "updating... next vm name:"
+            print("updating... next vm name:")
         else:
-            print "next vm name:"
-    print mongo.vmname(prefix=prefix, idx=idx, cm_user_id=username)
+            print("next vm name:")
+    print(mongo.vmname(prefix=prefix, idx=idx, cm_user_id=username))
     
 
 

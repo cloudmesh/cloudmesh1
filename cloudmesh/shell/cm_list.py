@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.cm_cloud import CloudManage
 from cloudmesh_common.logger import LOGGER
@@ -318,10 +319,10 @@ class ListInfo(object):
 
         except Exception, e:
             Console.error("could not connect to the database")
-            print e
+            print(e)
 
-        print "\n"
-        print tabulate([[selected_project]], ["selected project"], tablefmt=list_command_table_format)
+        print("\n")
+        print(tabulate([[selected_project]], ["selected project"], tablefmt=list_command_table_format))
 
         #
         # active projects
@@ -344,8 +345,8 @@ class ListInfo(object):
                 to_print = [[None]]
             else:
                 to_print = [[str(p)] for p in projects[state]]
-            print "\n"
-            print tabulate(to_print, ["{0} projects".format(state)], tablefmt=list_command_table_format)
+            print("\n")
+            print(tabulate(to_print, ["{0} projects".format(state)], tablefmt=list_command_table_format))
 
     def _list_cloud(self):
         """ same as the shell_command_cloud list"""
@@ -389,7 +390,7 @@ class ListInfo(object):
             pass
         if self.arguments['--all']:
             if activeclouds is None:
-                print "no active cloud, please activate a cloud by 'cloud on [CLOUD]'"
+                print("no active cloud, please activate a cloud by 'cloud on [CLOUD]'")
                 return False
             return activeclouds
         else:

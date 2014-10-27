@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh_common.logger import LOGGER
 from docopt import docopt
 from cloudmesh.config.ConfigDict import ConfigDict
@@ -50,12 +51,12 @@ def shell_command_open_web(arguments):
             port = server_config.get("cloudmesh.server.webui.port")
             location = "http://{0}:{1}".format(host, port)
         except Exception, e:
-            print "ERROR: some error reading from the config file"
-            print e
+            print("ERROR: some error reading from the config file")
+            print(e)
             return
 
     url_link = "{0}/{1}".format(location, link)
-    print "opening", url_link
+    print("opening", url_link)
 
     try:
         os.system('%s "%s"' % (web_browser, url_link))

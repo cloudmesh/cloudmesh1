@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh_install import config_file
 from jinja2 import UndefinedError
 import sys
@@ -56,7 +57,7 @@ class cm_template():
     def _variables(self):
         env = Environment()
         parsed_content = env.parse(self.content)
-        print meta.find_undeclared_variables(parsed_content)
+        print(meta.find_undeclared_variables(parsed_content))
 
     def replace(self, kind='text', values=None):
 
@@ -73,11 +74,11 @@ class cm_template():
             return self.result
         except UndefinedError, e:
             banner("ERROR: Undefined variable in template")
-            print e
+            print(e)
         except Exception, e:
             banner("ERROR")
-            print e
-            print sys.exc_info()
+            print(e)
+            print(sys.exc_info())
             # return self.content
             return None
 
@@ -86,7 +87,7 @@ class cm_template():
         try:
             result = self.replace(kind="dict", values=d)
         except Exception, e:
-            print "EEEE", e
+            print("EEEE", e)
 
         return yaml.dump(result, default_flow_style=False)
 
@@ -97,7 +98,7 @@ class cm_template():
         result = t.replace(kind="dict", values=d)
         location = path_expand(out_file)
         yaml_file = open(location, 'w+')
-        print >> yaml_file, yaml.dump(result, default_flow_style=False)
+        print(yaml.dump(result, default_flow_style=False), file=yaml_file)
         yaml_file.close()
         log.info("Written new yaml file in " + location)
 
@@ -111,7 +112,7 @@ class cm_template():
         result = t.replace(kind="dict", values=user_config)
         location = path_expand(out_file)
         yaml_file = open(location, 'w+')
-        print >> yaml_file, yaml.dump(result, default_flow_style=False)
+        print(yaml.dump(result, default_flow_style=False), file=yaml_file)
         yaml_file.close()
         log.info("Written new yaml file in " + location)
 
@@ -124,11 +125,11 @@ if __name__ == "__main__":
 
     banner("VARIABLES")
     s = set(t.variables())
-    print ("\n".join(s))
+    print(("\n".join(s)))
 
     banner("GREP")
     s = t.grep()
-    print ("\n".join(s))
+    print(("\n".join(s)))
 
     # banner("YAML FILE")
     # result = t.replace(kind="dict", values=user_config)

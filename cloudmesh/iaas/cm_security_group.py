@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from docopt import docopt
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
@@ -109,9 +110,9 @@ def _display(json_data, headers="firstrow", tablefmt="orgtbl"):
         separator = table.split("\n")[1].replace("|", "+")
     except:
         separator = "-" * 50
-    print separator
-    print table
-    print separator
+    print(separator)
+    print(table)
+    print(separator)
 
 
 def main():

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from cloudmesh.util.config import read_yaml_config
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.provisioner.baremetal_status import BaremetalStatus
@@ -447,4 +449,4 @@ if __name__ == "__main__":
     result = bmc.remove_cobbler_distro(distro_name)
     """
     result = bmc.get_cobbler_profile_based_kickstart("a.seed")
-    print "result is: ", result
+    print("result is: ", result)

@@ -11,6 +11,7 @@
     the unique identification in ldap and cloud.
 
 """
+from __future__ import print_function
 from cloudmesh_install import config_file
 from cloudmesh.config.cm_config import cm_config_server, get_mongo_db, cm_config
 from cloudmesh.util.encryptdata import encrypt, decrypt
@@ -325,7 +326,7 @@ class cm_user(object):
                 try:
                     usersinfo[portal_id]
                 except KeyError:
-                    print portal_id + " doesn't exist in the ldap, skip to search"
+                    print(portal_id + " doesn't exist in the ldap, skip to search")
                     continue
 
                 try:

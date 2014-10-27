@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh_common.logger import LOGGER
 from cmd3.console import Console
 from cloudmesh.config.cm_config import cm_config
@@ -561,7 +562,7 @@ class CloudManage(object):
             # print "+" + "-" * (len(sentence) - 2) + "+"
             # print sentence
             if to_print:
-                print tabulate(to_print, headers, tablefmt="grid")
+                print(tabulate(to_print, headers, tablefmt="grid"))
             #sentence = "count: {0}".format(count)
             # print sentence
             # print "+" + "-" * (len(sentence) - 2) + "+"
@@ -631,7 +632,7 @@ class CloudManage(object):
             # print "+" + "-" * (len(sentence) - 2) + "+"
             # print sentence
             if to_print:
-                print tabulate(to_print, headers, tablefmt="grid")
+                print(tabulate(to_print, headers, tablefmt="grid"))
             #sentence = "count: {0}".format(count)
             # print sentence
             # print "+" + "-" * (len(sentence) - 2) + "+"
@@ -757,7 +758,7 @@ class CloudManage(object):
             # print "+" + "-" * (len(sentence) - 2) + "+"
             # print sentence
             if to_print:
-                print tabulate(to_print, headers, tablefmt="grid")
+                print(tabulate(to_print, headers, tablefmt="grid"))
             #sentence = "count: {0}".format(count)
             # print sentence
             # print "+" + "-" * (len(sentence) - 2) + "+"
@@ -1081,13 +1082,13 @@ class CloudCommand(CloudManage):
                     self.remove_cloud(self.username, key)
                     Database.import_cloud_to_mongo(
                         cloudsdict[key], key, self.username)
-                    print "cloud '{0}' overwritten.".format(key)
+                    print("cloud '{0}' overwritten.".format(key))
                 else:
-                    print "ERROR: cloud '{0}' exists in database, please remove it from database first, or use '--force' when adding".format(key)
+                    print("ERROR: cloud '{0}' exists in database, please remove it from database first, or use '--force' when adding".format(key))
             else:
                 Database.import_cloud_to_mongo(
                     cloudsdict[key], key, self.username)
-                print "cloud '{0}' added.".format(key)
+                print("cloud '{0}' added.".format(key))
 
     def _cloud_remove(self):
         if self.arguments['--all']:
@@ -1100,7 +1101,7 @@ class CloudCommand(CloudManage):
                     cloud_names.append(cloud['cm_cloud'].encode("ascii"))
                 for name in cloud_names:
                     self.remove_cloud(self.username, name)
-                    print "cloud '{0}' removed.".format(name)
+                    print("cloud '{0}' removed.".format(name))
                 return
             else:
                 return
@@ -1116,7 +1117,7 @@ class CloudCommand(CloudManage):
                      default='n',
                      tries=3):
             self.remove_cloud(self.username, name)
-            print "cloud '{0}' removed.".format(name)
+            print("cloud '{0}' removed.".format(name))
             return
         else:
             return
@@ -1139,20 +1140,20 @@ class CloudCommand(CloudManage):
                        defaultinfo['flavor'],
                        defaultinfo['image']]
                 to_print.append(row)
-            print tabulate(to_print, headers, tablefmt="grid")
+            print(tabulate(to_print, headers, tablefmt="grid"))
 
             current_default = self.get_default_cloud(self.username)
             sentence = "current default cloud '{0}'".format(current_default)
-            print "+" + "-" * (len(sentence) - 2) + "+"
-            print sentence
-            print "+" + "-" * (len(sentence) - 2) + "+"
+            print("+" + "-" * (len(sentence) - 2) + "+")
+            print(sentence)
+            print("+" + "-" * (len(sentence) - 2) + "+")
         else:
             name = self.get_working_cloud_name()
             if name:
                 defaultinfo = self.get_cloud_defaultinfo(self.username, name)
                 to_print = [
                     [name, defaultinfo['flavor'], defaultinfo['image']]]
-                print tabulate(to_print, headers, tablefmt="grid")
+                print(tabulate(to_print, headers, tablefmt="grid"))
             else:
                 return
 

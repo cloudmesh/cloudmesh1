@@ -1,3 +1,4 @@
+from __future__ import print_function
 from mongoengine import *
 from mongoengine.context_managers import switch_db
 from datetime import datetime
@@ -13,7 +14,7 @@ from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
 
 
 def IMPLEMENT():
-    print "IMPLEMENT ME"
+    print("IMPLEMENT ME")
 
 STATUS = ('pending',
           'approved',
@@ -292,7 +293,7 @@ class Projects(object):
             elif role == "lead":
                 project.alumni.append(user)
         else:
-            print "ERROR: The user `{0}` has not registered with FutureGrid".format(user_name)
+            print("ERROR: The user `{0}` has not registered with FutureGrid".format(user_name))
 
     def find_users(self, project, role):
         '''returns all the members of a particular project
@@ -359,7 +360,7 @@ class Projects(object):
         :param project: the username
         :type project: String
         '''
-        print "PPPPPP", project
+        print("PPPPPP", project)
         if not project.status:
             project.status = 'pending'
         if (project.projectid is None) or (project.projectid == ""):
@@ -375,8 +376,8 @@ class Projects(object):
 
             project.projectid = proposedid
         else:
-            print "UUUUUU -{0}-".format(project.projectid)
-        print "UUID", project.projectid
+            print("UUUUUU -{0}-".format(project.projectid))
+        print("UUID", project.projectid)
         project.save()
 
     def clear(self):

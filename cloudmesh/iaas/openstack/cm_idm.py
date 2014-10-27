@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 import os
 import json
 from datetime import datetime
@@ -414,9 +415,9 @@ class keystone(object):
 
 
 def banner(header):
-    print "#" * 80
-    print "#\t%s" % header
-    print "#" * 80
+    print("#" * 80)
+    print("#\t%s" % header)
+    print("#" * 80)
 
 #####
 # MAIN FOR TESTING

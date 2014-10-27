@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import row_table
 from cmd3.console import Console
@@ -115,12 +116,12 @@ class DefaultCommand(object):
             except:
                 pass
             if format not in [None, 'none']:
-                print defaults_data['shell_print_format']
+                print(defaults_data['shell_print_format'])
             else:
                 defaults_data['shell_print_format'] = "table"
                 self.user_obj.set_defaults(self.username, defaults_data)
                 defaults_data = self.user_obj.info(self.username)
-                print defaults_data['shell_print_format']
+                print(defaults_data['shell_print_format'])
 
     def get_defaults(self):
         '''
@@ -157,7 +158,7 @@ class DefaultCommand(object):
             p_format = None
 
         if p_format == 'table' or p_format is None:
-            print row_table(to_print, order=None, labels=["Default", "Value"])
+            print(row_table(to_print, order=None, labels=["Default", "Value"]))
         else:
             shell_commands_dict_output(to_print,
                                        print_format=p_format,
@@ -180,9 +181,9 @@ class DefaultCommand(object):
                                 "active, to register and activate a CLOUD: cloud on [CLOUD]")
         else:
             if "cloud" in defaults_data:
-                print defaults_data['cloud']
+                print(defaults_data['cloud'])
             else:
-                print "default cloud not set"
+                print("default cloud not set")
 
     def _default_flavor(self):
         '''

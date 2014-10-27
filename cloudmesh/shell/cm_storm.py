@@ -1,3 +1,4 @@
+from __future__ import print_function
 from docopt import docopt
 from cloudmesh.user.cm_user import cm_user
 
@@ -41,22 +42,22 @@ def shell_command_storm(arguments):
 
     if (arguments["list"]):
 
-        print "not implemented"
-        print "list"
+        print("not implemented")
+        print("list")
 
     elif not (arguments["list"] or arguments["register"]):
 
         id = arguments["ID"]
-        print "ID", id
+        print("ID", id)
 
     elif (arguments["register"]):
 
         id = arguments["ID"]
         kind = arguments['--kind']
-        print arguments
+        print(arguments)
 
     else:
-        print "WRONG PARAMETERS"
+        print("WRONG PARAMETERS")
 
     return
 

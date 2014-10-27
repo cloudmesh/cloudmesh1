@@ -1,4 +1,5 @@
 # generates test users and projects
+from __future__ import print_function
 
 from mongoengine import *
 #from other.user_dict import *
@@ -64,7 +65,7 @@ def generate_users(n):
     users.clear()
     for i in range(0, n):
         data = random_user()
-        print data
+        print(data)
         users.add(data)
 
 
@@ -109,7 +110,7 @@ def generate_projects(n):
     projects.clear()
     for i in range(0, n):
         data = random_project()
-        print data
+        print(data)
         projects.save(data)
 
 
@@ -121,14 +122,14 @@ def main():
     generate_users(10)
     generate_projects(3)
 
-    print 70 * "="
-    print users.find()
-    print 70 * "="
-    print 70 * "&"
-    print users.find()[0]
+    print(70 * "=")
+    print(users.find())
+    print(70 * "=")
+    print(70 * "&")
+    print(users.find()[0])
 
     projects = Project.objects()
-    print projects.count()
+    print(projects.count())
     pprint(projects[0])
 
 

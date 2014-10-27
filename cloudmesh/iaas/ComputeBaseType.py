@@ -1,3 +1,4 @@
+from __future__ import print_function
 from datetime import datetime
 import time
 import json
@@ -53,13 +54,13 @@ class ComputeBaseType:
 
     def info(self):
         """obtain some basic information about the cloud"""
-        print "Label:", self.label
-        print "Type:", self.type
-        print "Flavors:", len(self.flavors)
-        print "Servers:", len(self.servers)
-        print "Images:", len(self.images)
-        print "Security Groups:", len(self.security_groups)
-        print "Stacks:", len(self.stacks)
+        print("Label:", self.label)
+        print("Type:", self.type)
+        print("Flavors:", len(self.flavors))
+        print("Servers:", len(self.servers))
+        print("Images:", len(self.images))
+        print("Security Groups:", len(self.security_groups))
+        print("Stacks:", len(self.stacks))
         # print "Users:", len(self.users)
         # print "Tenants:", len(self.tenants)
 
@@ -92,7 +93,7 @@ class ComputeBaseType:
         elif selection == 't':
             d = self.stacks.copy()
         elif type is not None:
-            print "refresh type not supported"
+            print("refresh type not supported")
             assert False
         else:
             d = {}
@@ -124,7 +125,7 @@ class ComputeBaseType:
         # elif selection == 't':
         #    d = self.tenants
         elif type is not None:
-            print "refresh type not supported"
+            print("refresh type not supported")
             assert False
         return d
 
@@ -179,11 +180,11 @@ class ComputeBaseType:
 
     def wait(self, vm_id, vm_status, seconds=2):
         """waits a number of seconds and than refreshes information form the cloud"""
-        print 'refersh', vm_id
+        print('refersh', vm_id)
         self.refresh()
 
         new_status = self.status(vm_id)
-        print new_status
+        print(new_status)
         while str(new_status) != str(vm_status):
             time.sleep(seconds)
             self.refresh()
@@ -267,7 +268,7 @@ class ComputeBaseType:
         #    list_function = self._get_tenants_dict
         #    d = self.tenants
         elif type is not None:
-            print "refresh type not supported"
+            print("refresh type not supported")
             assert False
 
         list_func = list_function()
