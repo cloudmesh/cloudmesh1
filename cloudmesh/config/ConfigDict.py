@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh_install import config_file
 from cloudmesh_install.util import path_expand
 from cloudmesh_common.logger import LOGGER
@@ -34,13 +35,13 @@ class OrderedJsonEncoder(simplejson.JSONEncoder):
 
 def custom_print(data_structure, indent):
     for key, value in data_structure.items():
-        print "\n%s%s:" % (' ' * attribute_indent * indent, str(key)),
+        print("\n%s%s:" % (' ' * attribute_indent * indent, str(key)), end=' ')
         if isinstance(value, OrderedDict):
             custom_print(value, indent + 1)
         elif isinstance(value, dict):
             custom_print(value, indent + 1)
         else:
-            print "%s" % (str(value)),
+            print("%s" % (str(value)), end=' ')
 
 
 class ConfigDict (OrderedDict):
@@ -150,7 +151,7 @@ class ConfigDict (OrderedDict):
         return orderedPrinter.encode(self)
 
     def pprint(self):
-        print custom_print(self, attribute_indent)
+        print(custom_print(self, attribute_indent))
 
     """
     def __getitem__(self, *mykeys):
@@ -237,17 +238,17 @@ if __name__ == "__main__":
                         prefix="cloudmesh.server",
                         filename="./etc/cloudmesh_server.yaml")
 
-    print "PPRINT"
-    print 70 * "="
+    print("PPRINT")
+    print(70 * "=")
     pprint(config)
 
-    print "PRINT"
-    print 70 * "="
-    print config.pprint()
-    print config.json()
+    print("PRINT")
+    print(70 * "=")
+    print(config.pprint())
+    print(config.json())
 
-    print 70 * "="
-    print "A =", config["a"]
+    print(70 * "=")
+    print("A =", config["a"])
     config.write(config_file("/d.yaml"), format="dict")
     config.write(config_file("/j.yaml"), format="json")
     config.write(config_file("/y.yaml"), format="yaml")
@@ -255,13 +256,13 @@ if __name__ == "__main__":
     # this does not work
     # config.write(config_file("/print.yaml"), format="print")
 
-    print "mongo.path GET =", config.get("cloudmesh.server.mongo.path")
-    print "mongo.path ATTIRBUTE =", config.attribute("mongo.path")
+    print("mongo.path GET =", config.get("cloudmesh.server.mongo.path"))
+    print("mongo.path ATTIRBUTE =", config.attribute("mongo.path"))
 
-    print "get A =", config.get("a")
+    print("get A =", config.get("a"))
 
-    print "wrong mongo.path ATTRIBUTE =", config.attribute("mongo.path.wrong")
-    print "wrong mongo.path GET =", config.get("cloudmesh.server.mongo.path.wrong")
+    print("wrong mongo.path ATTRIBUTE =", config.attribute("mongo.path.wrong"))
+    print("wrong mongo.path GET =", config.get("cloudmesh.server.mongo.path.wrong"))
 
     # print config["dummy"]
     # config["x"] = "2"

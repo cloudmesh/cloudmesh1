@@ -1,3 +1,4 @@
+from __future__ import print_function
 import re
 import cloudmesh
 from cloudmesh_install import config_file
@@ -36,7 +37,7 @@ class YAML(object):
                     if spaces > 0:
                         return spaces
                 except Exception, e:
-                    print "ERROR(", no, ")", e
+                    print("ERROR(", no, ")", e)
             no = no +1
         return 0
 
@@ -52,7 +53,7 @@ class YAML(object):
                                  "Specified {0}, found {1}"
                                  .format(indent, _indent))
         except Exception, e:
-            print "ERROR(indent)", e
+            print("ERROR(indent)", e)
             return False
                 
         with open(filename, 'r') as f:
@@ -71,7 +72,7 @@ class YAML(object):
                                         .format(no, indent, spaces, line))
                 except Exception, e:
                     success = False
-                    print "ERROR(indent)", e
+                    print("ERROR(indent)", e)
             no = no +1
         return success
     
