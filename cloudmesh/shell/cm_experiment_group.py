@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.experiment.model_group import ExperimentGroup
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.user.cm_user import cm_user
