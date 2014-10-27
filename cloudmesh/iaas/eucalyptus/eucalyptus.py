@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 
 from datetime import datetime
@@ -98,7 +99,7 @@ class eucalyptus(ComputeBaseType):
         # else:
         #    self.activate_project(project)
 
-        print "Loading", self.label, self.project
+        print("Loading", self.label, self.project)
         Driver = get_driver(Provider.EUCALYPTUS)
 
         self.config = cm_config()
@@ -192,8 +193,8 @@ class eucalyptus(ComputeBaseType):
         self.access_key = self.credentials._get_rc_variable("accesskey")
         self.secret_key = self.credentials._get_rc_variable("secretkey")
 
-        print self.access_key
-        print self.secret_key
+        print(self.access_key)
+        print(self.secret_key)
 
     def __init__(self, label,
                  project=None,
@@ -300,7 +301,7 @@ class eucalyptus(ComputeBaseType):
         if key_name is None and security_groups is None:
             vm = self.cloud.create_node(name=name, image=image, size=size)
         else:
-            print "not yet implemented"
+            print("not yet implemented")
             # bug would passing None just work?
             # vm = self.cloud.servers.create(name,
             #                               flavor=vm_flavor,
@@ -316,7 +317,7 @@ class eucalyptus(ComputeBaseType):
         """
         delete a single vm and returns the id
         """
-        print "self.servers_cachec", self.servers_cache
+        print("self.servers_cachec", self.servers_cache)
         vm = [i for i in self.servers_cache if i.id == id][0]
 
         r = self.cloud.destroy_node(vm)
@@ -360,7 +361,7 @@ if __name__ == "__main__":
     """
     if image_test:
         cloud.refresh('images')
-        print json.dumps(cloud.images, indent=4)
+        print(json.dumps(cloud.images, indent=4))
 # -      pp.pprint (cloud.images)
     """
     if vm_test:

@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from __future__ import print_function
 
 from cobbler import api as capi
 from multiprocessing import Process, Queue
@@ -14,7 +15,7 @@ MY_DEBUG_STRING = ["", "DEBUG", "INFO", "WARN", "ERROR", ]
 
 def mysay(msg, level):
     if level >= MY_DEBUG_LEVEL:
-        print "[{0}] {1}".format(MY_DEBUG_STRING[level], msg)
+        print("[{0}] {1}".format(MY_DEBUG_STRING[level], msg))
 
 
 def say_debug(msg):
@@ -121,7 +122,7 @@ class CobblerProvision:
         :param user_token: the user_token
         :type user_token: string
         """
-        print "user_token = {0}, access_api = {1}".format(user_token, access_api)
+        print("user_token = {0}, access_api = {1}".format(user_token, access_api))
         return True
 
     @authorization
@@ -902,11 +903,11 @@ if __name__ == "__main__":
     # list objects
     if debug_status["list_names"]:
         distro_names = cp.list_distro_names(**kwargs)
-        print "distros names: ", distro_names["data"]
+        print("distros names: ", distro_names["data"])
         profile_names = cp.list_profile_names(**kwargs)
-        print "profiles names: ", profile_names["data"]
+        print("profiles names: ", profile_names["data"])
         system_names = cp.list_system_names(**kwargs)
-        print "systems names: ", system_names["data"]
+        print("systems names: ", system_names["data"])
     # get object reports
     if debug_status["report_distro"]:
         # distro
@@ -915,10 +916,10 @@ if __name__ == "__main__":
         distros = reports["data"] if reports["result"] else []
         if len(distros) > 0:
             for distro in distros:
-                print "{0} {1} {0}".format("=" * 10, distro["name"])
-                print "distro report: {0}".format(distro)
+                print("{0} {1} {0}".format("=" * 10, distro["name"]))
+                print("distro report: {0}".format(distro))
         else:
-            print "Cannot find distro with name {0}".format(distro_name)
+            print("Cannot find distro with name {0}".format(distro_name))
     if debug_status["report_system"]:
         # system
         system_name = "gra*"
@@ -926,10 +927,10 @@ if __name__ == "__main__":
         systems = reports["data"] if reports["result"] else []
         if len(systems) > 0:
             for system in systems:
-                print "{0} {1} {0}".format("=" * 10, system["name"])
-                print "system report: {0}".format(system)
+                print("{0} {1} {0}".format("=" * 10, system["name"]))
+                print("system report: {0}".format(system))
         else:
-            print "Cannot find system with name {0}".format(system_name)
+            print("Cannot find system with name {0}".format(system_name))
 
     distro_name = "test-distro-140313"
     profile_name = my_sys["profile"]
@@ -947,62 +948,62 @@ if __name__ == "__main__":
         # CentOS
         url = "http://mirrors.usc.edu/pub/linux/distributions/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-bin-DVD1.iso"
         result = cp.add_distro(distro_name, url)
-        print "add_distro result is: ", result
+        print("add_distro result is: ", result)
     # add profile
     if debug_status["add_profile"]:
         distro_name = "test-x86_64"
         kickstart_file = "/var/lib/cobbler/kickstarts/ktanaka.ks"
         result = cp.add_profile(profile_name, distro_name, kickstart_file)
-        print "add profile, result is: ", result
+        print("add profile, result is: ", result)
     # report profile
     if debug_status["report_profile"]:
         reports = cp.get_profile_report(profile_name)
         profiles = reports["data"] if reports["result"] else []
         if len(profiles) > 0:
             for profile in profiles:
-                print "{0} {1} {0}".format("=" * 10, profile["name"])
-                print "profile report: {0}".format(profile)
+                print("{0} {1} {0}".format("=" * 10, profile["name"]))
+                print("profile report: {0}".format(profile))
         else:
-            print "Cannot find profile with name {0}".format(profile_name)
+            print("Cannot find profile with name {0}".format(profile_name))
     # update profile
     if debug_status["update_profile"]:
         kickstart_file = "/var/lib/cobbler/kickstarts/sample.ks"
         result = cp.update_profile(profile_name, kickstart_file)
-        print "update profile, result is: ", result
+        print("update profile, result is: ", result)
     # report profile
     if debug_status["report_profile"]:
         reports = cp.get_profile_report(profile_name)
         profiles = reports["data"] if reports["result"] else []
         if len(profiles) > 0:
             for profile in profiles:
-                print "{0} {1} {0}".format("=" * 10, profile["name"])
-                print "profile report: {0}".format(profile)
+                print("{0} {1} {0}".format("=" * 10, profile["name"]))
+                print("profile report: {0}".format(profile))
         else:
-            print "Cannot find profile with name {0}".format(profile_name)
+            print("Cannot find profile with name {0}".format(profile_name))
     # add system
     if debug_status["add_system"]:
         result = cp.add_system(my_sys["name"], my_sys)
-        print "add system, result is: ", result
+        print("add system, result is: ", result)
     # update system
     if debug_status["update_system"]:
         result = cp.update_system(my_sys_update["name"], my_sys_update)
-        print "update system, result is: ", result
+        print("update system, result is: ", result)
     # remove a interface
     if debug_status["remove_system_interface"]:
         system_name = my_sys_update["name"]
         interface_name = my_sys_update["interfaces"][0]["name"]
         result = cp.remove_system_interface(system_name, interface_name)
-        print "remove system interface, result is: ", result
+        print("remove system interface, result is: ", result)
     # remove system
     if debug_status["remove_system"]:
         system_name = my_sys["name"]
         result = cp.remove_system(system_name)
-        print "remove system, result is: ", result
+        print("remove system, result is: ", result)
     # remove profile
     if debug_status["remove_profile"]:
         result = cp.remove_profile(profile_name)
-        print "remove profile, result is: ", result
+        print("remove profile, result is: ", result)
     # remove distro
     if debug_status["remove_distro"]:
         result = cp.remove_distro(distro_name)
-        print "remove distro, result is: ", result
+        print("remove distro, result is: ", result)

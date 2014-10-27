@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.cm_config import get_mongo_db
 from cloudmesh_common.logger import LOGGER
 from bson.objectid import ObjectId
@@ -141,9 +142,9 @@ if __name__ == "__main__":
     obj_id = dbc.convert_str_to_objectid(None)
     query_elem = {"_id": obj_id}
     result = dbc.find(query_elem)
-    print "find result is: ", result
+    print("find result is: ", result)
     result = dbc.find_one(query_elem)
-    print "find_one result is: ", result
+    print("find_one result is: ", result)
     insert_elem = [{"cm_kind": "baremetal", "cm_id": "chen_test_insert", "data": {"test": "data", }},
                    {"cm_kind": "baremetal", "cm_id": "chen_test_insert",
                        "data": {"test": "data2", }},
@@ -151,20 +152,20 @@ if __name__ == "__main__":
                        "data": {"test": "data3", }}
                    ]
     result = dbc.insert(insert_elem)
-    print "insert result is: ", result
+    print("insert result is: ", result)
     insert_elem = {"cm_kind": "baremetal",
                    "cm_id": "chen_test_insert", "data": {"test": "data2", }}
     result = dbc.insert(insert_elem)
-    print "insert result is: ", result
+    print("insert result is: ", result)
     insert_elem = {"cm_kind": "baremetal",
                    "cm_id": "chen_test_insert", "data": {"test": "data3", }}
     result = dbc.insert(insert_elem)
-    print "insert result is: ", result
+    print("insert result is: ", result)
 
     query_elem = {"cm_id": "chen_test_insert"}
     update_elem = {"$set": {"value3": "my value3"}}
     result = dbc.atom_update(query_elem, update_elem, flag_new=False)
-    print "update result is: ", result
+    print("update result is: ", result)
     #query_elem = {"cm_id": "chen_test_insert"}
     #result = dbc.remove(query_elem)
     # print "remove result is: ", result

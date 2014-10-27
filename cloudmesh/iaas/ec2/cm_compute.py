@@ -5,6 +5,7 @@ cloudmesh.iaas.ec2.cm_compute
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_config import cm_config_flavor
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
@@ -113,7 +114,7 @@ class ec2(ComputeBaseType):
                           port=self.port)
 
         except Exception, e:
-            print e
+            print(e)
             sys.exit()
 
         self.conn = conn

@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh_common.logger import LOGGER
@@ -149,7 +150,7 @@ class VMcommand(object):
             cloud = cloudobj.get_clouds(
                 self.username, getone=True, cloudname=self.arguments['--cloud'])
             if cloud is None:
-                print "ERROR: could not find cloud '{0}'".format(self.arguments['--cloud'])
+                print("ERROR: could not find cloud '{0}'".format(self.arguments['--cloud']))
                 return
             else:
                 cloudname = self.arguments['--cloud']
@@ -174,9 +175,9 @@ class VMcommand(object):
         if res:
             if self.arguments['--count']:
                 watch = time.time() - watch
-                print ("time consumed: %.2f" % watch), "s"
+                print(("time consumed: %.2f" % watch), "s")
 
-            print "to check realtime vm status: list vm --refresh"
+            print("to check realtime vm status: list vm --refresh")
 
     def _vm_delete(self):
         # -------------------------
@@ -187,7 +188,7 @@ class VMcommand(object):
            self.arguments['--cloud'] is None and\
            self.arguments['--prefix'] is None and\
            self.arguments['--range'] is None:
-            print "Please specify at least one option, to get more information: vm help"
+            print("Please specify at least one option, to get more information: vm help")
             return
 
         rangestart = None
@@ -212,13 +213,13 @@ class VMcommand(object):
                 except:
                     error = True
             if error:
-                print "ERROR: range option must be given as --range=int,int, for example:"\
-                    "--range=1,3"
+                print("ERROR: range option must be given as --range=int,int, for example:"\
+                    "--range=1,3")
                 return
             if rangestart and rangeend:
                 if rangestart > rangeend:
-                    print "ERROR: first number of range must be no greater than the second one,"\
-                          "for example: --range=1,3"
+                    print("ERROR: first number of range must be no greater than the second one,"\
+                          "for example: --range=1,3")
                     return
         # -------------------------
         # select cloud
@@ -233,7 +234,7 @@ class VMcommand(object):
             cloud = cloudobj.get_clouds(
                 self.username, getone=True, cloudname=self.arguments['--cloud'])
             if cloud is None:
-                print "ERROR: could not find cloud '{0}'".format(self.arguments['--cloud'])
+                print("ERROR: could not find cloud '{0}'".format(self.arguments['--cloud']))
                 return
             else:
                 cloudname = self.arguments['--cloud']
@@ -302,9 +303,9 @@ class VMcommand(object):
         if self.arguments['<command>']:
             commands = ' '.join(self.arguments['<command>'])
             try:
-                print ">>>\n"
-                print ssh_execute(self.arguments['--ln'], address, 
-                                  commands, key=self.arguments['--key'])
+                print(">>>\n")
+                print(ssh_execute(self.arguments['--ln'], address, 
+                                  commands, key=self.arguments['--key']))
             except:
                 err = sys.exc_info()
                 Console.error("Can not execute ssh on {0}:{1}".format(address, err))
@@ -574,7 +575,7 @@ def start_vm(username,
                                             meta=metadata,
                                             cm_user_id=username,
                                             givenvmname=givenvmname)
-            print "job status:", result.state
+            print("job status:", result.state)
         else:
             result = mongo.vm_create(cloudname,
                                         prefix,
@@ -637,11 +638,11 @@ def delete_vm(username,
     # -------------------------
     # simple input check
     if servername and serverid:
-        print "ERROR: server name and server id can't be both provided"
+        print("ERROR: server name and server id can't be both provided")
         return False
     if rangestart and rangeend:
         if rangestart > rangeend:
-            print "ERROR: rangestart > rangeend"
+            print("ERROR: rangestart > rangeend")
             return False
     # -------------------------
     mongo = cm_mongo()
@@ -798,7 +799,7 @@ def delete_vm(username,
                     "Deleting vm->{0} on cloud->{1}".format(tempservername, cloudname))
                 result = imported.vm_delete.apply_async(
                     (cloudname, i, username), queue=queue_name)
-                print "job status:", result.state
+                print("job status:", result.state)
                 # print result.traceback  #########
             imported.wait.apply_async(
                 args=None, kwargs={'t': 10}, queue=queue_name)
@@ -815,7 +816,7 @@ def delete_vm(username,
             # print handlerefresh.state
             # print handlerefresh.traceback
             if preview:
-                print "to check realtime vm status: list vm --refresh"
+                print("to check realtime vm status: list vm --refresh")
         else:
             for i in res:
                 tempservername = serverdata[i]['name'].encode("ascii")
@@ -828,7 +829,7 @@ def delete_vm(username,
             mongo.refresh(username, names=[cloudname], types=['servers'])
 
         watch = time.time() - watch
-        print ("time consumed: %.2f" % watch), "s"
+        print(("time consumed: %.2f" % watch), "s")
 
 
 def assign_public_ip(username=None, cloudname=None, serverid=None):

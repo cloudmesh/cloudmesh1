@@ -1,3 +1,4 @@
+from __future__ import print_function
 from docopt import docopt
 from cloudmesh import banner
 from cloudmesh.user.cm_user import cm_user
@@ -47,16 +48,16 @@ def shell_command_user(arguments):
         user = cm_user()
         list_of_users = user.list_users()
         pprint(list_of_users)
-        print
-        print "========================="
+        print()
+        print("=========================")
         num = len(list_of_users)
-        print str(num) + " users listed"
+        print(str(num) + " users listed")
 
     elif arguments['id']:
         config = cm_config()
-        print config.username()
+        print(config.username())
     else:
-        print "WRONG PARAMETERS"
+        print("WRONG PARAMETERS")
 
     return
 
