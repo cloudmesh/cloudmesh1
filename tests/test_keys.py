@@ -7,6 +7,7 @@ or
 nosetests -v tests/test_keys.py
 
 """
+from __future__ import print_function
 import os
 from cloudmesh.config.cm_keys import cm_keys_yaml, keytype
 from cloudmesh_common.util import HEADING
@@ -41,59 +42,59 @@ class Test_cloudmesh:
 
     def test01_print(self):
         HEADING()
-        print self.key_store
+        print(self.key_store)
         assert True
 
     def test02_names(self):
         HEADING()
         names = self.key_store.names()
-        print names
+        print(names)
         assert len(names) > 0
 
     def test03_default(self):
         HEADING()
-        print self.key_store.default()
+        print(self.key_store.default())
         assert True
 
     def test04_getvalue(self):
         HEADING()
         for key in self.key_store.names():
-            print self.key_store._getvalue(key)
+            print(self.key_store._getvalue(key))
         assert True
 
     def test05_set(self):
         HEADING()
         first_key = self.key_store.names()[0]
         self.key_store.setdefault(first_key)
-        print self.key_store.default()
+        print(self.key_store.default())
         assert True
 
     def test06_get(self):
         HEADING()
         first_key = self.key_store.names()[0]
-        print self.key_store[first_key]
+        print(self.key_store[first_key])
         assert True
 
     def test07_get(self):
         HEADING()
-        print self.key_store["default"]
+        print(self.key_store["default"])
         assert True
 
     def test08_set(self):
         HEADING()
 
-        print self.key_store["keys"]
-        print self.key_store["default"]
+        print(self.key_store["keys"])
+        print(self.key_store["default"])
 
         assert type(self.key_store["keys"]) == dict
 
     def test09_type(self):
         HEADING()
-        print "Find key type of {0}:".format(self.mykey), keytype(self.mykey)
+        print("Find key type of {0}:".format(self.mykey), keytype(self.mykey))
         for name in self.key_store.names():
-            print name
+            print(name)
             value = self.key_store[name]
-            print keytype(name), name, value
+            print(keytype(name), name, value)
 
         assert True
         # assert (keytype(self.mykey) == "file")
@@ -102,6 +103,6 @@ class Test_cloudmesh:
         HEADING()
         for name in self.key_store.names():
             key = self.key_store[name]
-            print name, key
-            print get_fingerprint(key)
+            print(name, key)
+            print(get_fingerprint(key))
         assert True

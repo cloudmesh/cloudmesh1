@@ -11,7 +11,7 @@ individual tests can be run with
 nosetests -v  --nocapture test_shell.py:Test.test_list
 
 """
-
+from __future__ import print_function
 from sh import head
 from sh import fgrep
 import string
@@ -38,7 +38,7 @@ class Test:
     def test_help(self):
         HEADING()
         r = cm("help")
-        print r
+        print(r)
         assert "vm" in r and "cloud" in r and "list" in r
 
     def message(self, state, word):
@@ -50,18 +50,18 @@ class Test:
     def grep_command(self, command, valid, invalid):
         ok = True
         r = cm(command)
-        print r
+        print(r)
         if valid is not None:
             for word in valid:
                 msg = "passed"
                 testing = word in r
-                print "Testing", command, self.message(testing, word)
+                print("Testing", command, self.message(testing, word))
                 ok = ok and testing
         if invalid is not None:
             for word in invalid:
                 msg = "passed"
                 testing = not word in r
-                print "Testing", command, self.message(testing, word)
+                print("Testing", command, self.message(testing, word))
                 ok = ok and testing
         return ok
 
@@ -94,12 +94,12 @@ class Test:
                 msg = "pass"
             else:
                 msg = "fail"
-            print "TESTING help", command, msg
+            print("TESTING help", command, msg)
             allok = allok and testing
         assert allok
 
     def test_list(self):
-        print
+        print()
         a = self.grep_command("list", ["india"], None)
 
     def test_metrics(self):

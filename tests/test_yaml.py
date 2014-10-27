@@ -7,7 +7,7 @@ or
 nosetests -v
 
 """
-
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.ConfigDict import ConfigDict
@@ -62,19 +62,19 @@ class Test_yaml:
 
         for file in filenames:
             filename = config_file(file)
-            print "testing if file exists ->", filename
+            print("testing if file exists ->", filename)
             assert os.path.isfile(filename)
 
     def test_02_authentication(self):
         HEADING()
         self.config = cm_config()
         cloudnames = self.config.cloudnames()
-        print cloudnames
+        print(cloudnames)
 
         failed = []
         succeeded = []
         for cloudname in cloudnames:
-            print "authenticate -> ", cloudname,
+            print("authenticate -> ", cloudname, end=' ')
             try:
                 # assert False
                 #
@@ -83,29 +83,29 @@ class Test_yaml:
                     'clouds'][cloudname]['cm_type']
                 credential = self.config['cloudmesh'][
                     'clouds'][cloudname]['credentials']
-                print cm_type,
+                print(cm_type, end=' ')
                 # print credential
 
                 cloud = globals()[cm_type](cloudname, credential)
                 if cm_type in ['openstack', 'ec2']:
                     if cm_type in ['openstack']:
-                        print "\tfor tenant: %s" % credential['OS_TENANT_NAME'],
+                        print("\tfor tenant: %s" % credential['OS_TENANT_NAME'], end=' ')
                     if cloud.auth():
                         succeeded.append(cloudname)
-                        print "ok"
+                        print("ok")
                     else:
                         failed.append(cloudname)
-                        print "failed"
+                        print("failed")
                 else:
                     failed.append(cloudname)
-                    print "failed"
+                    print("failed")
             except:
-                print "failed"
+                print("failed")
                 failed.append(cloudname)
 
         if len(failed) > 0:
-            print "Failed:", failed
-            print "Succeeded:", succeeded
+            print("Failed:", failed)
+            print("Succeeded:", succeeded)
             assert False
         else:
             assert True

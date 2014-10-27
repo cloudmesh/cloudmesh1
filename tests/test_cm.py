@@ -3,6 +3,7 @@
 nosetests -v --nocapture test_cm.py
 
 """
+from __future__ import print_function
 from cloudmesh_common.util import HEADING
 from cloudmesh_common.logger import LOGGER, LOGGING_ON, LOGGING_OFF
 
@@ -14,7 +15,7 @@ import os
 
 
 if os.path.isdir(os.path.expanduser("~/.cloudmesh")):
-    print "ERROR", "you must not have a .cloudmesh dir to run this test"
+    print("ERROR", "you must not have a .cloudmesh dir to run this test")
     sys.exit()
 
 
@@ -96,18 +97,18 @@ class Test:
         success = True
         for command in cloud_commands:
             execution = "help {0}".format(command)
-            print "testing", execution,
+            print("testing", execution, end=' ')
             try:
                 result = cloudmesh.shell(execution)
             except Exception, e:
                 success = False
-                print e
+                print(e)
             if "Usage" not in result:
-                print command, "ERROR", result
+                print(command, "ERROR", result)
                 success = False
             else:
                 success = success 
-                print "ok"
+                print("ok")
         assert success 
 
         

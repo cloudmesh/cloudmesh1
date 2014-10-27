@@ -7,6 +7,7 @@ or
 nosetests -v
 
 """
+from __future__ import print_function
 import sys
 import json
 import pprint
@@ -48,8 +49,8 @@ class Test_cloudmesh:
         p = Provisioner()
         (success, result) = p.provision(hosts, image)
 
-        print result
-        print success
+        print(result)
+        print(success)
 
         pass
 

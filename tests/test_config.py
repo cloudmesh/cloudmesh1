@@ -7,7 +7,7 @@ or
 nosetests -v
 
 """
-
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.ConfigDict import ConfigDict
@@ -29,7 +29,7 @@ class Test_cloudmesh:
     project = 82
 
     def setup(self):
-        print "READING THE FILE", self.filename
+        print("READING THE FILE", self.filename)
         if self.filename is None:
             self.config = cm_config()
         else:
@@ -40,12 +40,12 @@ class Test_cloudmesh:
 
     def test_print(self):
         HEADING()
-        print self.config
+        print(self.config)
 
     def test_active(self):
         HEADING()
         result = self.config.projects('active')
-        print self.project, result, type(self.project)
+        print(self.project, result, type(self.project))
         assert self.project in result
 
     def test_completed(self):
@@ -73,10 +73,10 @@ class Test_cloudmesh:
         HEADING()
         result = self.config.get('cloudmesh.clouds.india')
         dir = result['credentials']['OS_CACERT']
-        print dir
+        print(dir)
         assert dir.startswith("~")
         dir = path_expand(dir)
-        print dir
+        print(dir)
         assert not dir.startswith("~")
 
     """
@@ -136,34 +136,34 @@ class Test_cloudmesh:
         # print "DEFAULT>", self.config.userkeys('default')
         # print "TEST>", self.config.userkeys('test')
 
-        print keys, keys['default'], keys['keylist'][keys['default']]
+        print(keys, keys['default'], keys['keylist'][keys['default']])
         assert ('default' in keys) and (keys['default'] in keys['keylist'])
 
     def test20_set_index_and_prefix(self):
         HEADING()
-        print
-        print "INDEX:", self.config.index
-        print "PREFIX:", self.config.prefix
+        print()
+        print("INDEX:", self.config.index)
+        print("PREFIX:", self.config.prefix)
 
         self.config.prefix = "hallo"
         self.config.index = "3"
 
-        print "INDEX:", self.config.index
-        print "PREFIX:", self.config.prefix
-        print "NAME:", self.config.vmname
+        print("INDEX:", self.config.index)
+        print("PREFIX:", self.config.prefix)
+        print("NAME:", self.config.vmname)
 
         self.config.incr()
 
-        print "INDEX:", self.config.index
-        print "PREFIX:", self.config.prefix
-        print "NAME:", self.config.vmname
+        print("INDEX:", self.config.index)
+        print("PREFIX:", self.config.prefix)
+        print("NAME:", self.config.vmname)
 
         assert self.config.index == 4 and self.config.prefix == "hallo"
 
     def test21_default(self):
         HEADING()
         self.config.default = "hallo"
-        print self.config.default
+        print(self.config.default)
         assert self.config.default == "hallo"
     """
     def test22_filter(self):
@@ -175,15 +175,15 @@ class Test_cloudmesh:
         HEADING()
         filename = config_file("/cloudmesh_launcher.yaml")
         config = ConfigDict(filename=filename)
-        print config
+        print(config)
         existing = config.get("cloudmesh.launcher.recipies")
         test1 = existing is not None
-        print existing
+        print(existing)
         try:
             none_existing = config.get("cloudmesh.launcher.recipies.xyz")
             test2 = False
         except:
-            print "Error"
+            print("Error")
             test2 = True
         assert test1 and test2
 
@@ -194,12 +194,12 @@ class Test_cloudmesh:
         # print config
         existing = config.get("cloudmesh.server.mongo.db")
         test1 = existing is not None
-        print "mongo.db =", existing
+        print("mongo.db =", existing)
         try:
             none_existing = config.get("cloudmesh.server.mongo.xyz")
             test2 = False
         except:
-            print "Error"
+            print("Error")
             test2 = True
         assert test1 and test2
 
@@ -207,8 +207,8 @@ class Test_cloudmesh:
         HEADING()
         filename = config_file("/cloudmesh_server.yaml")
         config = ConfigDict(filename=filename)
-        print config
+        print(config)
         existing = config.get("cloudmesh.server.mongo.db")
         test1 = existing is not None
-        print "QUERY", existing
-        print "Port", config.get("cloudmesh.server.mongo.port")
+        print("QUERY", existing)
+        print("Port", config.get("cloudmesh.server.mongo.port"))
