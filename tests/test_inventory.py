@@ -5,6 +5,7 @@ nosetests -v  --nocapture test_inventory.py:Test_Inventory.test_06
 nosetests -v
 
 """
+from __future__ import print_function
 from datetime import datetime
 
 from cloudmesh_common.util import HEADING
@@ -20,7 +21,7 @@ class Test_Inventory:
         self.inventory = Inventory()
         self.inventory.clear()
         self.inventory.generate()
-        print "GENERATION COMPLETE"
+        print("GENERATION COMPLETE")
 
     def tearDown(self):
         pass
@@ -32,7 +33,7 @@ class Test_Inventory:
     def test_find(self):
         HEADING()
         r = self.inventory.find({})
-        print r.count()
+        print(r.count())
         assert r.count > 0
 
     def test_host(self):
@@ -50,15 +51,15 @@ class Test_Inventory:
         attribute = "cm_temp"
         value = "32"
 
-        print "SET ATTRIBUTE"
-        print 70 * '='
+        print("SET ATTRIBUTE")
+        print(70 * '=')
         data = self.inventory.set_attribute(self.name, attribute, value)
-        print 70 * '='
-        print data
+        print(70 * '=')
+        print(data)
 
-        print "GET ATTRIBUTE"
+        print("GET ATTRIBUTE")
         data = self.inventory.get_attribute(self.name, attribute)
-        print data
+        print(data)
 
         data = self.inventory.host(self.name)
         pprint(data)
@@ -72,7 +73,7 @@ class Test_Inventory:
         for e in data:
             pprint (e)
         """
-        print 70 * '='
+        print(70 * '=')
         """
         print "BEFORE"
 
@@ -83,24 +84,24 @@ class Test_Inventory:
         attribute = "cm_temp"
         value = "32"
 
-        print "SET ATTRIBUTE"
-        print 70 * '='
+        print("SET ATTRIBUTE")
+        print(70 * '=')
         data = self.inventory.set_attribute(self.name, attribute, value)
-        print 70 * '='
-        print data
+        print(70 * '=')
+        print(data)
 
-        print "GET ATTRIBUTE"
+        print("GET ATTRIBUTE")
         data = self.inventory.get_attribute(self.name, attribute)
-        print data
+        print(data)
 
     def test_i066(self):
         HEADING()
 
         name = "i066"
         attribute = "cm_doesnotexist"
-        print "GET ATTRIBUTE"
+        print("GET ATTRIBUTE")
         data = self.inventory.get_attribute(name, attribute)
-        print data
+        print(data)
 
     """
         data = self.inventory.host(self.name)

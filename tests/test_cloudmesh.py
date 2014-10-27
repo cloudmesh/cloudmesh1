@@ -7,7 +7,7 @@ or
 nosetests -v
 
 """
-
+from __future__ import print_function
 # from cloudmesh.openstack.cm_table import table as cm_table
 # from cloudmesh.cm_config import cm_config
 # from cloudmesh.openstack.cm_compute import openstack
@@ -33,7 +33,7 @@ class Test_cloudmesh:
 
     def test_100_print(self):
         HEADING()
-        print self.c
+        print(self.c)
 
     def test_101_refresh(self):
         HEADING()
@@ -42,29 +42,29 @@ class Test_cloudmesh:
 
     def test_102_refresh_all(self):
         HEADING()
-        print self.c.refresh()
+        print(self.c.refresh())
 
     def test_104_dump(self):
         HEADING()
-        print self.c.dump()
+        print(self.c.dump())
 
     def test_105_info(self):
         HEADING()
         self.c.refresh()
-        print self.c.info()
+        print(self.c.info())
 
     def test_106_active(self):
         HEADING()
-        print self.c.active()
+        print(self.c.active())
 
     def test_107_profile(self):
         HEADING()
-        print self.c.profile()
+        print(self.c.profile())
 
     def test_108_prefix(self):
         HEADING()
-        print self.c.prefix()
+        print(self.c.prefix())
 
     def test_109_findall(self):
         HEADING()
-        print self.c.find()
+        print(self.c.find())
