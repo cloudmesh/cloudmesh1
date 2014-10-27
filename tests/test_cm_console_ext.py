@@ -88,7 +88,7 @@ class Test(unittest.TestCase):
     def test_09_default_image(self):
         HEADING()
         res = os.popen('cm "cloud set image india'
-                 ' --image=futuregrid/ubuntu-14.04"').read()
+                 ' --name=futuregrid/ubuntu-14.04"').read()
         assert res.find("'futuregrid/ubuntu-14.04' is selected") != -1
 
     def test_10_validate_default_image(self):
