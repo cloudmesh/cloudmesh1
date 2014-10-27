@@ -77,7 +77,7 @@ class Test(unittest.TestCase):
 
     def test_07_default_flavor(self):
         HEADING()
-        res = os.popen('cm "cloud set flavor india --flavorid=2"').read()
+        res = os.popen('cm "cloud set flavor india --id=2"').read()
         assert res.find("'m1.small' is selected") != -1
 
     def test_08_validate_default_flavor(self):

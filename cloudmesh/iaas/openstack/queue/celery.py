@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from celery import Celery
 
-# Celery app for azure cloud
+# Celery app for openstack cloud
 celery_openstack_queue = Celery('cloudmesh.iaas.openstack.queue',
                                 broker='amqp://guest@localhost',
                                 # mongodb://guest:guest@localhost:27017/jobs')#,
