@@ -27,7 +27,7 @@ class Test(unittest.TestCase):
 
     def test_03_select_default_cloud(self):
         HEADING()
-        os.system("cm cloud set default india")
+        os.system("cm default cloud india")
 
     @classmethod
     def test_04_start_a_vm(cls):
@@ -41,11 +41,11 @@ class Test(unittest.TestCase):
 
     def test_05_default_flavor(self):
         HEADING()
-        os.system("cm \"cloud set flavor india --flavorid=2\"")
+        os.system("cm \"cloud set flavor india --id=2\"")
 
     def test_06_default_image(self):
         HEADING()
-        os.system("cm \"cloud set image india --image=futuregrid/ubuntu-14.04\"")
+        os.system("cm \"cloud set image india --name=futuregrid/ubuntu-14.04\"")
 
     def test_07_list_flavors(self):
         HEADING()
