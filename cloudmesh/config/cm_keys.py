@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config
 from string import Template
 from cloudmesh.keys.util import get_fingerprint
@@ -102,7 +103,7 @@ class cm_keys_yaml(cm_keys_base):
             try:
                 key_value = get_key_from_file(value)
             except:
-                print "ERROR: reading key file {0}".format(value)
+                print("ERROR: reading key file {0}".format(value))
                 return
 
         self.config["cloudmesh"]["keys"]["keylist"][name] = key_value
@@ -129,15 +130,15 @@ class cm_keys_yaml(cm_keys_base):
 
         default = self.config.get("cloudmesh.keys.default")
         if name == default:
-            print "ERROR: You are trying to delete the default key. Change the default key first"
+            print("ERROR: You are trying to delete the default key. Change the default key first")
             return
         else:
             if name in self.config.get("cloudmesh.keys.keylist"):
-                print "Proceeding to delete key:", name
+                print("Proceeding to delete key:", name)
                 del self.config.get("cloudmesh.keys.keylist")[name]
                 return "SUCCESS: Key successfully deleted"
             else:
-                print "ERROR: Key not found"
+                print("ERROR: Key not found")
                 return
 
     '''
@@ -239,7 +240,7 @@ class cm_keys_mongo(cm_keys_base):
             try:
                 key_value = get_key_from_file(value)
             except:
-                print "ERROR: reading key file {0}".format(value)
+                print("ERROR: reading key file {0}".format(value))
                 return
 
         self.user_info["keys"][name] = key_value
@@ -273,14 +274,14 @@ class cm_keys_mongo(cm_keys_base):
         '''
         default = self.get_default_key()
         if name == default:
-            print "ERROR: You are trying to delete the default key. Change the default key first"
+            print("ERROR: You are trying to delete the default key. Change the default key first")
             return
         else:
             if name in self.user_info["keys"]:
-                print "Proceeding to delete key:", name
+                print("Proceeding to delete key:", name)
                 del self.user_info["keys"][name]
             else:
-                print "ERROR: Key not found"
+                print("ERROR: Key not found")
                 return
 
             self.mongo.db_user.update(
@@ -298,7 +299,7 @@ class cm_keys_mongo(cm_keys_base):
         if name in self.user_info["keys"]:
             self.defaults_info["key"] = name
         else:
-            print "ERROR: Key is not there in the key list"
+            print("ERROR: Key is not there in the key list")
             return
 
         self.mongo.db_user.update(
