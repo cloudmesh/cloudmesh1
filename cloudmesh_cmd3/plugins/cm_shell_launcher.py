@@ -153,18 +153,18 @@ class cm_shell_launcher:
                                        # vertical_table=True
                                        )
 
-        elif arguments['start'] and arguments['COOKBOOK']:
+        elif arguments['start'] and arguments['MENU']:
             userid = self.cm_config.username()
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
             keyname = self.user.get_defaults(userid)['key']
             cookbook = arguments['MENU']
             s_name = "launcher-{0}-{1}-{2}".format(userid, cookbook, get_rand_string())
-            passwdHash = "123456789"  # doing nothing. just for test
+            dummy = "123456789"  # doing nothing. just for test
             t_url = "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev/heat-templates/centos6/launcher/launcher.yaml"
             param = {'KeyName': keyname,
                      'Cookbook': cookbook,
-                     'PasswdHash': passwdHash}
+                     'dummy': dummy}
             log.debug(def_cloud, userid, s_name, t_url, param)
             res = self.cm_mongo.stack_create(cloud=def_cloud, cm_user_id=userid,
                                              servername=s_name,
