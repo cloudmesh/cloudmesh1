@@ -9,9 +9,9 @@ parameters:
   KeyName:
     type: string
     description: Key name for logging in to instance
-  PasswdHash:
+  dummy:
     type: string
-    description: Password for IPython
+    description: dummy parameter
 
 resources:
   security_group:
@@ -68,10 +68,10 @@ resources:
             EOL
 
             cat << EOL > /etc/chef/run_list.json
-            { "run_list": ["role[$Cookbook]"], "ipython": { "notebook_password": "$PasswdHash" } }
+            { "run_list": ["role[$Cookbook]"] }
             EOL
 
             chef-solo -j /etc/chef/run_list.json
           params:
             $Cookbook: { get_param: Cookbook }
-            $PasswdHash: { get_param: PasswdHash }
+            $dummy: { get_param: dummy }
