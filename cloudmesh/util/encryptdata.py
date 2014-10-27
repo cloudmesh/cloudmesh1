@@ -25,6 +25,7 @@ Example::
 
 
 '''
+from __future__ import print_function
 import os
 from hashlib import sha256
 from Crypto.Cipher import AES
@@ -116,7 +117,7 @@ def decrypt_file(content, filename=None):
         # to do needs to be replace wit config_file
         #
         uniq_filename = filename or config_file_prefix() + str(uuid.uuid4())
-        print uniq_filename
+        print(uniq_filename)
         with open(uniq_filename, 'w') as outf:
             outf.write(file_contents)
         outf.close()
@@ -125,14 +126,14 @@ def decrypt_file(content, filename=None):
         pass
 
 if __name__ == "__main__":
-    print "Easy to use data encryption functions"
+    print("Easy to use data encryption functions")
 
     password_text = 'super secret'
     plain_text = 'Hello, world'
     encrypted_text = encrypt(plain_text, password_text)
-    print plain_text, encrypted_text
+    print(plain_text, encrypted_text)
     decrypted_text = decrypt(encrypted_text, password_text)
-    print decrypted_text
+    print(decrypted_text)
 
     # Generate some password-like strings and verify that
     # encryption/decryption works
@@ -144,7 +145,7 @@ if __name__ == "__main__":
         testdata = ''.join([random.choice(chars) for _ in range(length)])
         if testdata == decrypt(encrypt(testdata, password_text),
                                password_text):
-            print i,
+            print(i, end=' ')
         else:
-            print testdata, "failed!"
+            print(testdata, "failed!")
             break

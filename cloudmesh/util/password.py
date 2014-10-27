@@ -1,5 +1,5 @@
 '''simplifing password management'''
-
+from __future__ import print_function
 import getpass
 import platform
 
@@ -18,7 +18,7 @@ def ask_for_input(label, init_function, echo=False):
     if not result:
         result = init_function()
     if echo:
-        print "{0}: {1}".format(label, result)
+        print("{0}: {1}".format(label, result))
     return result
 
 
