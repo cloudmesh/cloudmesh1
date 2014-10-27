@@ -1,5 +1,5 @@
 '''some useful functions while working with shell'''
-
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
 import json
@@ -70,7 +70,7 @@ def shell_commands_dict_output(d,
             format_type = userdata['defaults']['shell_print_format']
 
     if format_type not in ['table', 'json', 'csv']:
-        print "ERROR: something wrong while reading print format infomation"
+        print("ERROR: something wrong while reading print format infomation")
         return False
     
     headers = None
@@ -90,7 +90,7 @@ def shell_commands_dict_output(d,
                     headers.append(i[0])
                     order.append(i[1])
             else:
-                print "ERROR: header info is not correct"
+                print("ERROR: header info is not correct")
                 return False
     
     # --------------------------------------------------------------------------       
@@ -114,7 +114,7 @@ def shell_commands_dict_output(d,
     if format_type == "json":
         if title:
             banner(title)
-        print json.dumps(d, indent=4)
+        print(json.dumps(d, indent=4))
         
     elif format_type == "csv":
         with open(".temp.csv", "wb") as f:
@@ -124,8 +124,8 @@ def shell_commands_dict_output(d,
         
     elif format_type == "table":
         if title:
-            print "+" + "-" * (len(title) - 2) + "+"
-            print title
+            print("+" + "-" * (len(title) - 2) + "+")
+            print(title)
 
         print_data = []
         if oneitem:
@@ -140,15 +140,15 @@ def shell_commands_dict_output(d,
                 order = [' '] + order
         
         if vertical_table:
-            print array_dict_table_printer(print_data, 
+            print(array_dict_table_printer(print_data, 
                                            order=order, 
                                            header=headers,
-                                           vertical=True)
+                                           vertical=True))
         else:
-            print array_dict_table_printer(print_data, order=order, header=headers)
+            print(array_dict_table_printer(print_data, order=order, header=headers))
 
         if count:
             c = len(print_data)
             sentence = "count: {0}".format(c)
-            print sentence
-            print "+" + "-" * (len(sentence) - 2) + "+"
+            print(sentence)
+            print("+" + "-" * (len(sentence) - 2) + "+")
