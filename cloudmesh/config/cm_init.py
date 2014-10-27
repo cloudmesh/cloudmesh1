@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 from cloudmesh_install import config_file
 
 import cloudmesh_install
@@ -107,7 +108,7 @@ def init_shell_command(arguments):
 
         t = cm_template(filename)
         sorted_vars = sorted(set(t.variables()))
-        print "\n".join(sorted_vars)
+        print("\n".join(sorted_vars))
         # banner("PARSER")
         # env = Environment()
         # ast = env.parse(content)
@@ -147,7 +148,7 @@ def init_shell_command(arguments):
         vector['Filename'] = vector.pop('filename')
 
         banner("Configuration Directory: {0}".format(config_dir), c="-")
-        print column_table(vector)
+        print(column_table(vector))
 
         # print filename, values["kind"], values["version"]
 
@@ -167,9 +168,9 @@ def init_shell_command(arguments):
             data['Type'].append(config.cloud(cloud_key)['cm_type'])
             data['Version'].append(config.cloud(cloud_key)['cm_type_version'])
         if arguments["--json"]:
-            print json.dumps(data, sort_keys=True, indent=4)
+            print(json.dumps(data, sort_keys=True, indent=4))
         else:
-            print column_table(data, ['Labels', 'Clouds', 'Type', 'Version'])
+            print(column_table(data, ['Labels', 'Clouds', 'Type', 'Version']))
 
     if arguments["fill"]:
 
@@ -191,7 +192,7 @@ def init_shell_command(arguments):
         try:
             values = ConfigDict(filename=filename_values)
         except Exception, e:
-            print "ERROR: There is an error in the yaml file", e
+            print("ERROR: There is an error in the yaml file", e)
 
         for cloud in values['clouds']:
             values['clouds'][cloud]['default'] = {}
@@ -202,7 +203,7 @@ def init_shell_command(arguments):
         env = Environment(undefined=IgnoreUndefined)
         template = env.from_string(content)
         result = template.render(values)
-        print result
+        print(result)
 
     if arguments["generate"]:
         filename_tmp = config_file('/cloudmesh-new.yaml')
@@ -223,7 +224,7 @@ def init_shell_command(arguments):
         try:
             values = ConfigDict(filename=filename_values)
         except Exception, e:
-            print "ERROR: There is an error in the yaml file", e
+            print("ERROR: There is an error in the yaml file", e)
 
         for cloud in values['clouds']:
             values['clouds'][cloud]['default'] = {}
@@ -241,23 +242,23 @@ def init_shell_command(arguments):
 
         if not arguments["--force"]:
             if yn_choice("Review the new yaml file", default='n'):
-                print filename_tmp
+                print(filename_tmp)
                 os.system('less -E {0}'.format(filename_tmp))
         if arguments["--force"]:
             shutil.copy(filename_out, filename_bak)
             os.rename(filename_tmp, filename_out)
-            print "# Template: {0}".format(filename_template)
-            print "# Values  : {0}".format(filename_values)
-            print "# Backup  : {0}".format(filename_bak)
-            print "# Created : {0}".format(filename_out)
+            print("# Template: {0}".format(filename_template))
+            print("# Values  : {0}".format(filename_values))
+            print("# Backup  : {0}".format(filename_bak))
+            print("# Created : {0}".format(filename_out))
         elif yn_choice("Move the new yaml file to {0}"
                        .format(filename_out), default='y'):
             shutil.copy(filename_out, filename_bak)
             os.rename(filename_tmp, filename_out)
-            print "# Template: {0}".format(filename_template)
-            print "# Values  : {0}".format(filename_values)
-            print "# Backup : {0}".format(filename_bak)
-            print "# Created: {0}".format(filename_out)
+            print("# Template: {0}".format(filename_template))
+            print("# Values  : {0}".format(filename_values))
+            print("# Backup : {0}".format(filename_bak))
+            print("# Created: {0}".format(filename_out))
         return
 
 
