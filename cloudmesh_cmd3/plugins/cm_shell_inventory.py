@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cmd3.shell import command
 from pprint import pprint
 from cloudmesh.inventory import Inventory
@@ -13,8 +14,8 @@ class cm_shell_inventory:
     inventory_name = None
 
     def info_cm_shell_inventory(self):
-        print "%20s =" % "inventory_name", self.inventory_name
-        print "%20s =" % "inventory_connection", self.inventory_connection
+        print("%20s =" % "inventory_name", self.inventory_name)
+        print("%20s =" % "inventory_connection", self.inventory_connection)
 
     def _connect_to_inventory(self):
         """connects to the inventory and prints an error if not successfull"""
@@ -33,7 +34,7 @@ class cm_shell_inventory:
         try:
             self._connect_to_inventory()
         except Exception, e:
-            print e
+            print(e)
         pass
 
     @command
@@ -93,19 +94,19 @@ class cm_shell_inventory:
                     raise Exception("Error: problem searching the inventory")
 
             except Exception, e:
-                print e
+                print(e)
 
             return
 
         if arguments["info"]:
-            print
-            print "Inventory Information"
-            print "---------------------"
-            print
+            print()
+            print("Inventory Information")
+            print("---------------------")
+            print()
             if not (arguments["--cluster"] or arguments["--server"]):
 
-                print self.inventory.info()
-                print
+                print(self.inventory.info())
+                print()
 
             if arguments["--cluster"] and not arguments["--server"]:
 
@@ -136,15 +137,15 @@ class cm_shell_inventory:
         if arguments["exists"] and arguments["server"]:
             name = arguments["NAME"]
             if self.inventory.exists("server", name):
-                print "true"
+                print("true")
             else:
-                print "false"
+                print("false")
             return
 
         if arguments["exists"] and arguments["service"]:
             name = arguments["NAME"]
             if self.inventory.exists("service", name):
-                print "true"
+                print("true")
             else:
-                print "false"
+                print("false")
             return

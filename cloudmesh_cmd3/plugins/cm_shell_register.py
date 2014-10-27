@@ -1,3 +1,4 @@
+from __future__ import print_function
 import getpass
 from cmd3.shell import command
 from cloudmesh.user.cm_user import cm_user
@@ -45,7 +46,7 @@ class cm_shell_register:
             registered[cloud] = True
             if (cloud == cloudname and not (arguments['--act'] or
                                             arguments['--deact'])):
-                print "Cloud {0} is already registered.".format(cloud)
+                print("Cloud {0} is already registered.".format(cloud))
                 return
 
         for cloud in config.get("cloudmesh.clouds"):
@@ -64,14 +65,14 @@ class cm_shell_register:
                 # Credentials not present in files
                 credentials[cloudname] = None
         else:
-            print 'Please specify the right cloud name.'
+            print('Please specify the right cloud name.')
 
         error[cloudname] = ''
         if cloudtypes[cloudname] == "openstack":
             d = {}
             # credentials not present in files.
             if credentials[cloudname] is None:
-                print 'This will set credentials.'
+                print('This will set credentials.')
                 d = {'OS_USERNAME': cm_user_id,
                      'OS_PASSWORD': '',
                      'OS_TENANT_NAME': ''
@@ -105,7 +106,7 @@ class cm_shell_register:
                 user_obj.set_defaults(cm_user_id, user['defaults'])
         else:
             registered[cloudname] = False
-            print "The cloud could not be registered."
+            print("The cloud could not be registered.")
 
         if registered[cloudname] is True:
             if arguments['--act']:
@@ -113,7 +114,7 @@ class cm_shell_register:
                     if cloudname not in user['defaults']['activeclouds']:
                         (user['defaults']['activeclouds']).append(cloudname)
                         user_obj.set_defaults(cm_user_id, user['defaults'])
-                        print "Cloud {0} set to active".format(cloudname)
+                        print("Cloud {0} set to active".format(cloudname))
                 except:
                     # create_dict(user, "defaults", "activeclouds")
                     log.info("ERROR user defaults activecloud does not exist")
@@ -124,7 +125,7 @@ class cm_shell_register:
                         active.remove(cloudname)
                         user['defaults']['activeclouds'] = active
                         user_obj.set_defaults(cm_user_id, user['defaults'])
-                        print "Cloud {0} deactived".format(cloudname)
+                        print("Cloud {0} deactived".format(cloudname))
                 except:
                     # create_dict(user, "defaults", "activeclouds")
                     log.info("ERROR user defaults activecloud does not exist")
@@ -133,7 +134,7 @@ class cm_shell_register:
 
 
 def main():
-    print "test correct"
+    print("test correct")
 
 if __name__ == "__main__":
     main()

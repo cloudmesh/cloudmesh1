@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import sys
 from cmd3.shell import command
@@ -59,7 +60,7 @@ class cm_shell_stack:
         log.info(arguments)
 
         if arguments["help"] or arguments["-h"]:
-            print self.do_stack.__doc__
+            print(self.do_stack.__doc__)
         elif arguments['start'] and arguments['NAME']:
             userid = self.cm_config.username()
             def_cloud = self.get_cloud_name(userid)
@@ -71,7 +72,7 @@ class cm_shell_stack:
                                              servername=s_name,
                                              template_url=t_url,
                                              parameters=param)
-            print res
+            print(res)
             return res
 
         elif arguments['stop'] and arguments['NAME']:

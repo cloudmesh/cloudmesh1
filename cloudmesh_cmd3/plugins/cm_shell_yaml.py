@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cmd3.shell import command
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh_common.logger import LOGGER
@@ -80,7 +81,7 @@ class cm_shell_yaml:
             Console.color = False
             print ("color off.")
         else:
-            print "Color:", Console.color
+            print("Color:", Console.color)
             Console.warning("Warning")
             Console.error("Error")
             Console.info("Info")
@@ -113,13 +114,13 @@ class cm_shell_yaml:
         elif arguments['critical']:
             value = "CRITICAL"
         else:
-            print self.cm_config_server.get(key)
+            print(self.cm_config_server.get(key))
             return
 
         self.cm_config_server._update(key, value)
         self.cm_config_server.write(format="yaml")
         log.info("{0} mode is set.".format(value))
-        print ("{0} mode is set.".format(value))
+        print(("{0} mode is set.".format(value)))
 
     @command
     def do_yaml(self, args, arguments):
@@ -177,16 +178,16 @@ class cm_shell_yaml:
 
             if not arguments.key and not arguments.value:
                 if arguments.format == "print":
-                    print config.pprint()
+                    print(config.pprint())
                 elif arguments.format == 'json':
-                    print config.json()
+                    print(config.json())
                 elif arguments.format == 'yaml':
-                    print config.yaml()
+                    print(config.yaml())
                 else:
                     Console.error("format not supported")
                 return
             elif arguments.key and not arguments.value:
-                print config.get(arguments.key)
+                print(config.get(arguments.key))
 
             return
 

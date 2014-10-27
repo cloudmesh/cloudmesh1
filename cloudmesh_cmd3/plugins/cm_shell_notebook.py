@@ -1,3 +1,4 @@
+from __future__ import print_function
 # import subprocess
 from cmd3.shell import command
 from cloudmesh_common.logger import LOGGER
@@ -59,7 +60,7 @@ class notebook(object):
         self._create_dir()
         command = "cd {notebook_dir} && ipython notebook --certfile={cert} --profile=nbserver".format(**self.data)
         # self.data['pid'] = subprocess.Popen(command.split(" "))
-        print "STARTING:", command
+        print("STARTING:", command)
         os.system(command + " &")
 
     def kill(self):
@@ -78,7 +79,7 @@ class notebook(object):
             if "notebook" in line and "ipython" in line:
                 attributes = line.strip().split(' ')
                 pid = attributes[0]
-                print "TERMINATING", pid
+                print("TERMINATING", pid)
                 sh.kill("-9", pid)
 
 

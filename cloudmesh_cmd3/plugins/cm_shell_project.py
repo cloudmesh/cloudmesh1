@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cmd3.shell import command
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_projects import cm_projects
@@ -69,7 +70,7 @@ class cm_shell_project:
 
             msg = '{0} project is a default project now'.format(project)
             log.info(msg)
-            print msg
+            print(msg)
             return
 
         elif arguments["active"] and arguments['NAME']:
@@ -82,7 +83,7 @@ class cm_shell_project:
 
             msg = '{0} project is an active project(s) now'.format(project)
             log.info(msg)
-            print msg
+            print(msg)
             return
 
         elif arguments['delete'] and arguments['NAME']:
@@ -109,7 +110,7 @@ class cm_shell_project:
 
             msg = '{0} project is deleted'.format(project)
             log.info(msg)
-            print msg
+            print(msg)
             return
 
         elif arguments['completed'] and arguments['NAME']:
@@ -125,17 +126,17 @@ class cm_shell_project:
 
             msg = '{0} project is in a completed project(s)'.format(project)
             log.info(msg)
-            print msg
+            print(msg)
             return
         else: 
             # log.info ("project info for all")
             if arguments["--format"] == "json":
                 a = json.loads(self.projects.dump())
-                print print_format_dict(a, kind='json')
+                print(print_format_dict(a, kind='json'))
                 return
             else:
                 a = json.loads(self.projects.dump())
-                print two_column_table(a)
+                print(two_column_table(a))
                 '''
                 print
                 print "Project Information"

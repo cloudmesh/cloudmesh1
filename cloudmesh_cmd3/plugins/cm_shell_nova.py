@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import sys
 from cmd3.shell import command
@@ -97,7 +98,7 @@ class cm_shell_nova:
                 except:
                     log.warning(sys.exc_info())
                     d[attribute] = None
-            print row_table(d, order=None, labels=["Variable", "Value"])
+            print(row_table(d, order=None, labels=["Variable", "Value"]))
             return
         elif arguments["set"]:
             if cloud:   
@@ -111,9 +112,9 @@ class cm_shell_nova:
 
                 msg = "{0} is set".format(self.cloud)
                 log.info(msg)
-                print msg
+                print(msg)
             else:
-                print "CLOUD is required"
+                print("CLOUD is required")
             #
             # TODO: implemet
             #
