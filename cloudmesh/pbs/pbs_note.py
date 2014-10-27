@@ -3,7 +3,7 @@ A wrap python class of 'pbsnodes -N "note" node' command
 The purpose of this class is to provide a simple API
 to write some attribute and its value pairs to note attribute of cluster nodes.
 """
-
+from __future__ import print_function
 from sh import ssh
 from ast import literal_eval
 from types import *
@@ -55,7 +55,7 @@ class pbs_note_builder:
 
     def get_note(self, node):
         (node_id, node_label) = self.check_node_validation(node)
-        print "{0}-note: {1}".format(node_id, self.pbs_nodes_info[node_label]["note"])
+        print("{0}-note: {1}".format(node_id, self.pbs_nodes_info[node_label]["note"]))
 
     # node is the server name, e.g., i129, i15
     # note is a dict, {"attr1": "value1", "attr2": "value2"}
@@ -124,5 +124,5 @@ if __name__ == "__main__":
                 "temperature": "-100.12", "test": "debug", 0: 12}
         pbsnote.set_note(hostname, note)
     except NameError, ne:
-        print "My exception info: "
-        print str(ne)
+        print("My exception info: ")
+        print(str(ne))

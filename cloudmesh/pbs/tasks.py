@@ -1,3 +1,4 @@
+from __future__ import print_function
 from __future__ import absolute_import
 from celery import current_task
 from cloudmesh.pbs.celery import celery_pbs_queue
@@ -27,7 +28,7 @@ def refresh_qstat(hosts):
     user = config["cloudmesh"]["hpc"]["username"]
     pbs = pbs_mongo()
     error = ""
-    print "task recieved"
+    print("task recieved")
     for host in hosts:
         time = datetime.datetime.now()
         datetime.datetime.now()
@@ -42,12 +43,12 @@ def refresh_qstat(hosts):
         else:
             perform_refresh = True
         if perform_refresh:
-            print "Beginning refresh for {0}".format(host)
+            print("Beginning refresh for {0}".format(host))
             pbs.activate(host, user)
             try:
                 d = pbs.refresh_qstat(host)
             except Exception, e:
                 error += "error {0} {1}".format(str(host), str(e))
         else:
-            print "No refresh needed for {0}".format(host)
+            print("No refresh needed for {0}".format(host))
     return error
