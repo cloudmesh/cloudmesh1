@@ -12,7 +12,6 @@ from mongoengine import connect
 import os
 from cloudmesh_install import config_file
 
-
 log = LOGGER(__file__)
 
 # todo: rename get_mongo_db to connect_to_mongo ...
@@ -37,7 +36,7 @@ class DBConnFactory(object):
             import sys
             _args = locals()
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                                         str(_args)))
+                                            str(_args)))
         except:
             pass
 
@@ -105,7 +104,7 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
         _args = locals()
         del(_args['self'])
         log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                                     str(_args)))
+                                        str(_args)))
     except:
         pass
 
@@ -469,21 +468,22 @@ def yaml_attribute_replace(filename='abc.yaml',
     result = ""
 
     max_indent = 10
-
+    
     with open(filename, 'r') as f:
         content = f.read()
 
+        
     for replacement in replacements:
         attributes = replacement.split('.')
-        found = [''] * max_indent  # just a high number
-
+        found = [''] * max_indent # just a high number
+        
         for line in content.split('\n'):
             # find the indentation level
             indent = (len(line) - len(line.lstrip(' '))) / indent_by
-            # set all previously higher found indent to ''
-            for x in range(indent, max_indent):
+            # set all previously higher found indent to '' 
+            for x in range(indent,max_indent):
                 found[x] = ''
-            # get the attribute name
+            # get the attribute name    
             attribute = line.split(":")[0].strip()
             # set the attribute name for the indentation level
             found[indent] = attribute

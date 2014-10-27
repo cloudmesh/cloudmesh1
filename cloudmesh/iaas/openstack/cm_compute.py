@@ -12,6 +12,7 @@ import base64
 import httplib
 import json
 import os
+import ast
 from pprint import pprint
 from urlparse import urlparse
 import copy
@@ -484,6 +485,66 @@ class openstack(ComputeBaseType):
                 pass
         return ret
 
+    def stack_create(self, name, template_url, parameters, timeout_mins=60):
+        """
+        Create a stack by OpenStack Heat Orchestration
+        
+        ref: http://developer.openstack.org/api-ref-orchestration-v1.html
+        """
+        url = self._get_service_endpoint("orchestration")[self.service_url_type]
+        posturl = "%s/stacks" % url
+        try:
+            param = ast.literal_eval(parameters)
+        except ValueError:
+            param = parameters
+        params = {
+            "stack_name": "%s" % name,
+            "template_url": "%s" % template_url,
+            "parameters": param,
+            "timeout_mins": "%s" % timeout_mins 
+        }
+
+        log.debug(str(lineno()) + ":POST PARAMS {0}".format(params))
+
+        return self._post(posturl, params)
+
+    def stack_delete(self, stack_name):
+        """
+        delete a specified stack and returns the id
+
+        ref: http://developer.openstack.org/api-ref-orchestration-v1.html
+        """
+
+        conf = self._get_service_endpoint("orchestration")
+        url = conf[self.service_url_type]
+
+        headers = {'content-type': 'application/json',
+                   'X-Auth-Token': '%s' % conf['token']}
+
+        # Find stacks
+        msg = "stacks/%s" % stack_name
+        service = "orchestration"
+        r1 = self._get(msg, service=service,
+                      urltype=self.service_url_type)
+        try:
+            stack_id = r1['stack']['id']
+        except KeyError:
+            log.warning("stack does not exist ({0})".format(stack_name))
+            ret = {"msg": "failed"}
+            return ret
+ 
+        url = "%s/stacks/%s/%s" % (url, stack_name, stack_id)
+
+        # no return from http delete via rest api
+        r = requests.delete(url, headers=headers, verify=self._get_cacert())
+        ret = {"msg": "success"}
+        if r.text:
+            try:
+                ret = r.json()
+            except:
+                pass
+        return ret
+
     def get_public_ip(self):
         """
         Obtaining a floating ip from the pool via the rest api call
@@ -709,6 +770,16 @@ class openstack(ComputeBaseType):
                                                   time_stamp)
         return self.security_groups
 
+    def get_stacks(self):
+        time_stamp = self._now()
+        msg = "stacks"
+        service = "orchestration"
+        list = self._get(msg, service=service,
+                         urltype=self.service_url_type)['stacks']
+        self.stacks = self._list_to_dict(list, 'id', 'stacks', time_stamp)
+        return self.stacks
+
+
     # new
     """
     def get_tenants(self, credential=None):
@@ -828,6 +899,10 @@ class openstack(ComputeBaseType):
 
     def _get_security_groups_dict(self):
         result = self.get_security_groups()
+        return result
+
+    def _get_stacks_dict(self):
+        result = self.get_stacks()
         return result
 
     def limits(self):

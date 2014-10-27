@@ -261,6 +261,28 @@ Command - default::
     
     
 
+defaults
+----------------------------------------------------------------------
+
+Command - defaults::
+
+    Usage:
+        defaults format [--json|--table]
+    
+    Arguments:
+    
+    Options:
+    
+    Description:
+    
+        defaults format [--json|--table]
+            some commands can output in json form or table form, this command
+            sets the default printing form, if no form is given, it shows the
+            current default form
+    
+    
+    
+
 dot2
 ----------------------------------------------------------------------
 

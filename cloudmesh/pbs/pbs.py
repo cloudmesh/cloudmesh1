@@ -412,4 +412,3 @@ if __name__ == "__main__":
     pbs = PBS("gvonlasz", "echo.futuregrid.org")
     #pprint (pbs.qinfo())
     pprint(pbs.qstat())
-

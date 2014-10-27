@@ -248,6 +248,30 @@ class CloudManage(object):
         self.mongo.db_defaults.update({'cm_user_id': username},
                                       {'$set': {'cloud': cloudname}})
 
+    def get_default_cloud_for_nova(self, username):
+        '''
+        Gets the default cloud for nova command, return None if not set.
+
+        Related to cloudmesh_cmd3/plugins/cm_shell_nova.py
+        '''
+        self._connect_to_mongo()
+        try:
+            cloud = self.mongo.db_defaults.find_one(
+                {'cm_user_id': username})['nova-cloud']
+        except:
+            cloud = None
+        return cloud
+
+    def update_default_cloud_for_nova(self, username, cloudname):
+        '''
+        Sets default cloud for nova command.
+
+        Related to cloudmesh_cmd3/plugins/cm_shell_nova.py
+        '''
+        self._connect_to_mongo()
+        self.mongo.db_defaults.update({'cm_user_id': username},
+                                      {'$set': {'nova-cloud': cloudname}})
+
     def update_cloud_name(self, username, cloudname, newname):
         '''
         change the cloud name in db
@@ -749,7 +773,6 @@ class CloudCommand(CloudManage):
     a class provides cloud command functions
     '''
 
-
     def __init__(self, arguments):
         #
         # TODO create init msg with flag if cm_congig is loaded
@@ -832,7 +855,8 @@ class CloudCommand(CloudManage):
 
         if clouds.count() == 0:
             Console.warning(
-                "no cloud in database, please import cloud information using the command")
+                "no cloud in database, please import cloud first"
+                "(cloud add <cloudYAMLfile> [--force])")
         else:
             d = {}
             for cloud in clouds:
@@ -1035,14 +1059,14 @@ class CloudCommand(CloudManage):
             filename = path_expand(self.arguments["<cloudYAMLfile>"])
             fileconfig = ConfigDict(filename=filename)
         except:
-            log.error(
+            Console.error(
                 "ERROR: could not load file, please check filename and its path")
             return
 
         try:
             cloudsdict = fileconfig.get("cloudmesh", "clouds")
         except:
-            log.error("ERROR: could not get clouds information from yaml file, "
+            Console.error("ERROR: could not get clouds information from yaml file, "
                       "please check you yaml file, clouds information must be "
                       "under 'cloudmesh' -> 'clouds' -> cloud1...")
             return
@@ -1059,7 +1083,7 @@ class CloudCommand(CloudManage):
                         cloudsdict[key], key, self.username)
                     print "cloud '{0}' overwritten.".format(key)
                 else:
-                    print "ERROR: cloud '{0}' exists in database, please remove it from database first, or enable '--force' when add".format(key)
+                    print "ERROR: cloud '{0}' exists in database, please remove it from database first, or use '--force' when adding".format(key)
             else:
                 Database.import_cloud_to_mongo(
                     cloudsdict[key], key, self.username)

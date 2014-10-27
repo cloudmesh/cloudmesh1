@@ -74,6 +74,8 @@ def shell_command_default(arguments):
 
 class DefaultCommand(object):
 
+
+
     def _start_cm_user(self):
         if not self.started_cm_user:
             try:

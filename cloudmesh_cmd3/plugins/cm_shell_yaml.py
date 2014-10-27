@@ -10,7 +10,6 @@ log = LOGGER(__file__)
 
 class cm_shell_yaml:
 
-
     def activate_cm_shell_yaml(self):
         self.cm_config = cm_config()
         self.cm_config_server = cm_config_server()

@@ -28,7 +28,8 @@ except:
 try:
     from cloudmesh.iaas.aws.cm_compute import aws
 except:
-    log.warning("Amazon NOT ENABLED")
+    log.warning("AWS NOT ENABLED")
+
 
 
 class cm_MongoBase(object):
@@ -296,7 +297,6 @@ class cm_mongo:
                     else:
                         cloud = provider(cloud_name, credentials)
                         
-
                     log.debug("Created new cloud instance for cloud name: %s, type: %s"
                               % (cloud_name, cm_type))
                     if cm_service_url_type == 'internalURL':
@@ -396,7 +396,7 @@ class cm_mongo:
         # further action could be done.
         # In case of CLI, it could fail safe to the list from yaml file.
         #
-        cloudnames = self.active_clouds(cm_user_id)
+        cloudnames = names or self.active_clouds(cm_user_id)
 
         if cloudnames:
             for cloud_name in cloudnames:
@@ -505,10 +505,16 @@ class cm_mongo:
                     self.db_clouds.remove({"cm_cloud": name, "cm_kind": type})
 
                 for element in result:
+                    # Stacks has different key name 'stack_name'
+                    if type in ['t_stacks']:
+                        t_name = 'stack_name'
+                    else:
+                        t_name = 'name'
                     id = "{0}-{1}-{2}".format(
-                        name, type, result[element]['name']).replace(".", "-")
+                        name, type, result[element][t_name]).replace(".", "-")
                     # servers or security_groups is for each user.
-                    if type in ['servers', 'e_security_groups']:
+                    # Stacks as well (10/17/2014)
+                    if type in ['servers', 'e_security_groups', 't_stacks']:
                         result[element]['cm_user_id'] = cm_user_id
 
                     result[element]['cm_id'] = id
@@ -620,6 +626,12 @@ class cm_mongo:
         returns all the security groups from various clouds
         '''
         return self._get_kind('e_security_groups', clouds, cm_user_id)
+
+    def stacks(self, clouds=None, cm_user_id=None):
+        '''
+        returns all stacks from clouds
+        '''
+        return self._get_kind('t_stacks', clouds, cm_user_id)
 
     # need to make sure other clouds have the same flavor dict as in openstack
     # otherwise will need to put this into the openstack iaas class
@@ -837,6 +849,45 @@ class cm_mongo:
     def vm_delete(self, cloud, server, cm_user_id):
         cloudmanager = self.clouds[cm_user_id][cloud]["manager"]
         return cloudmanager.vm_delete(server)
+
+    def stack_create(self, cloud, cm_user_id, servername, template_url,
+                     parameters):
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.stack_create(servername, template_url, parameters)
+        except KeyError:
+            return None
+
+    def stack_delete(self, cloud, cm_user_id, server):
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.stack_delete(server)
+        except KeyError:
+            return None
+    
+    def launcher_import(self, d, launcher_name, username):
+        '''
+        insert a launcher/recipe into db_clouds
+        '''
+        d['cm_launcher'] = launcher_name
+        d['cm_kind'] = 'launcher'
+        d['cm_user_id'] = username
+        self.db_clouds.insert(d)
+        
+    def launcher_get(self, username, launcher_name=None):
+        if launcher_name:
+            return self.db_clouds.find_one({'cm_kind': 'launcher',
+                                            'cm_user_id': username,
+                                            'cm_cloud': launcher_name})
+        else:
+            return self.db_clouds.find({'cm_kind': 'launcher',
+                                        'cm_user_id': username})
+            
+    def launcher_remove(self, username, launcher_name):
+        self.db_clouds.remove({'cm_kind': 'launcher',
+                               'cm_user_id': username,
+                               'cm_launcher': launcher_name})
+        
 
     def vmname(self, prefix=None, idx=None, cm_user_id=None):
         """Return a vm name to use next time. prefix or index can be

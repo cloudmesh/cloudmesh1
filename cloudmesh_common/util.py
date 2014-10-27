@@ -308,6 +308,7 @@ def dict_uni_to_ascii(d):
     '''
     convert mongodb document content from unicode to ascii
     '''
+<<<<<<< HEAD
     d1 = {}
     for k, v in d.iteritems():
         k = k.encode("ascii")
@@ -318,6 +319,38 @@ def dict_uni_to_ascii(d):
                 v = dict_uni_to_ascii(v)
         d1[k] = v
     return d1
+=======
+    if isinstance(d, dict):
+        d1 = {}
+        for k, v in d.iteritems():
+            k = k.encode("ascii")
+            if isinstance(v, dict):
+                v = dict_uni_to_ascii(v)
+                
+            elif type(v) is list and v != []:
+                v1 = []
+                for item in v:
+                    v1.append(dict_uni_to_ascii(item))
+                v = v1
+                    
+            elif isinstance(v, unicode):
+                v = v.encode("ascii")
+            d1[k] = v
+        return d1
+    elif type(d) is list:
+        if d == []:
+            return []
+        else:
+            d1 = []
+            for item in d:
+                d1.append(dict_uni_to_ascii(item))
+            return d1
+    else:
+        try:
+            return d.encode("ascii")
+        except:
+            return d
+>>>>>>> dev
 
 
     
