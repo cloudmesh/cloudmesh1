@@ -15,16 +15,23 @@ import time
 log = LOGGER(__file__)
 
 vm = []
+
+
 class Test(unittest.TestCase):
 
-    def setUp(self):    
+    def setUp(self):
+
+        self.cloudname = sys.argv[-1:][0]
+
+        print ("CLOUDNAME", self.cloudname)
+        
         self.config = cloudmesh.load("user")
         self.username = self.config.get("cloudmesh.hpc.username")
     
     def test_01_activate_cloud(self):
         HEADING()
-        res = os.popen("cm cloud on india").read()
-        assert res.find("cloud 'india' activated.") != -1
+        res = os.popen("cm cloud on {0}".format(self.cloudname)).read()
+        assert res.find("cloud '{0}' activated.".format(self.cloudname)) != -1
 
     def test_02_validate_activation(self):
         HEADING()
