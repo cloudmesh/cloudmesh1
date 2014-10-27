@@ -34,7 +34,7 @@ class Test(unittest.TestCase):
         HEADING()
         import random
         vm_name = "nosetests_"+str(random.randint(1,100))
-        os.system("cm \"vm start {0} --cloud=india \
+        os.system("cm \"vm start --name={0} --cloud=india \
                         --image=futuregrid/ubuntu-14.04 \
                         --flavor=m1.small\"".format(vm_name))
         cls.vm.append(vm_name)
@@ -60,7 +60,7 @@ class Test(unittest.TestCase):
         HEADING()
         import random
         vm_name = "nosetests_"+str(random.randint(1,100))
-        os.system("cm \"vm start {0} --cloud=india\"".format(vm_name))
+        os.system("cm \"vm start --name={0} --cloud=india\"".format(vm_name))
         cls.vm.append(vm_name)
 
     def test_10_refresh_vms(self):
