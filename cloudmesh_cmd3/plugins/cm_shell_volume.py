@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import sys
 from cmd3.shell import command
@@ -158,6 +159,6 @@ class cm_shell_volume:
             os.system("nova volume-snapshot-show {0}".format(arguments['<snapshot>']))
             
         else:
-            print arguments
+            print(arguments)
             return
 

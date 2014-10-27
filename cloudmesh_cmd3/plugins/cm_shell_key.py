@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config
 # cm_config_server, get_mongo_db
 import yaml
@@ -51,7 +52,7 @@ class cm_shell_key:
             self.keys = cm_keys_yaml(filename)
             self.keys_loaded = True
         except:
-            print "ERROR: could not find the keys in %s" % filename
+            print("ERROR: could not find the keys in %s" % filename)
 
     def _load_keys_mongo(self):
         # try:
@@ -144,7 +145,7 @@ class cm_shell_key:
         source = arguments["--source"]
 
         if source not in ["ssh", "yaml", "mongo"]:
-            print "ERROR: source is not defined"
+            print("ERROR: source is not defined")
             return
 
         #
@@ -171,7 +172,7 @@ class cm_shell_key:
             keys = {}
             for key in files:
                 keys[key] = directory + "/" + key
-            print _print_dict(keys, header=["Key", "Location"])
+            print(_print_dict(keys, header=["Key", "Location"]))
 
             return
 
@@ -187,7 +188,7 @@ class cm_shell_key:
             for key in keynames:
                 keys[key] = get_fingerprint(key_store[key])
 
-            print _print_dict(keys, header=["Key", "Fingerprint"])
+            print(_print_dict(keys, header=["Key", "Fingerprint"]))
 
             return
 
@@ -208,7 +209,7 @@ class cm_shell_key:
                 if keytype(keys[key]) == 'string':
                     keys[key] = get_fingerprint(keys[key])
 
-            print _print_dict(keys, header=["Key", "Fingerprint"])
+            print(_print_dict(keys, header=["Key", "Fingerprint"]))
 
             return
 
@@ -246,9 +247,9 @@ class cm_shell_key:
                             keyname = re.sub(r'@|-|\.', '_', keysegments[2])
                     key_store[keyname] = keystring
                 else:
-                    print "ERROR: INVALID key. Please verify!"
+                    print("ERROR: INVALID key. Please verify!")
             else:
-                print "ERROR: INVALID filename provided!"
+                print("ERROR: INVALID filename provided!")
 
             return
 
@@ -287,20 +288,20 @@ class cm_shell_key:
             # no name provided, will get current default key
             if not arguments["KEYNAME"]:
                 defaultkey = key_store.default()
-                print "Current default key is: {0}".format(defaultkey)
+                print("Current default key is: {0}".format(defaultkey))
             # name provided, check if it exists in the db
             elif arguments["KEYNAME"] in key_store.names():
                 key_store.setdefault(arguments["KEYNAME"])
                 # Update mongo db defaults with new default key
-                print 'The default key was successfully set to: ', arguments['KEYNAME']
+                print('The default key was successfully set to: ', arguments['KEYNAME'])
             else:
-                print "ERROR: Specified key is not registered."
+                print("ERROR: Specified key is not registered.")
             return
 
         if arguments["delete"]:
             username = cm_config().username()
             key_store = cm_keys_mongo(username)
-            print "Attempting to delete key: {0}".format(arguments["KEYNAME"])
+            print("Attempting to delete key: {0}".format(arguments["KEYNAME"]))
             if self.use_yaml:
 
                 print("WARNING: This will only remove the keys that"
