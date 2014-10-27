@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
 # from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
@@ -155,7 +156,7 @@ class cm_mongo2:
 
             return safe_credential
         except:
-            print traceback.format_exc()
+            print(traceback.format_exc())
             return None
 
     def get_cloud_info(self, cm_user_id, cloudname):
@@ -290,7 +291,7 @@ class cm_mongo2:
                 cloud = None
                 log.error(
                     "Cannot activate cloud {0} for {1}\n{2}".format(cloud_name, cm_user_id, e))
-                print traceback.format_exc()
+                print(traceback.format_exc())
         return cloud
 
     def active_clouds(self, cm_user_id):
@@ -389,7 +390,7 @@ class cm_mongo2:
         watch = StopWatch()
 
         for name in names:
-            print "*", name
+            print("*", name)
             watch_name = "{0}-{1}".format(cm_user_id, name)
             log.info("-" * 80)
             log.info("Retrieving data for %s" % name)
@@ -403,7 +404,7 @@ class cm_mongo2:
                 elif 'manager' in self.clouds[cm_user_id][name]:
                     cloud = self.clouds[cm_user_id][name]['manager']
 
-                print "Refreshing {0} {1} {2} ->".format(cm_user_id, type, name)
+                print("Refreshing {0} {1} {2} ->".format(cm_user_id, type, name))
 
                 watch.start(watch_name)
                 cloud.refresh(type)
@@ -412,7 +413,7 @@ class cm_mongo2:
                 # pprint(result)
                 # add result to db,
                 watch.stop(watch_name)
-                print 'Refresh time:', watch.get(watch_name)
+                print('Refresh time:', watch.get(watch_name))
 
                 watch.start(watch_name)
 
@@ -459,7 +460,7 @@ class cm_mongo2:
                     self.db_clouds.insert(result[element])
 
                 watch.stop(watch_name)
-                print 'Store time:', watch.get(watch_name)
+                print('Store time:', watch.get(watch_name))
 
     def get_pbsnodes(self, host):
         '''

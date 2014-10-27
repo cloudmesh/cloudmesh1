@@ -4,6 +4,7 @@ A package to manage virtual machines on various clouds infrastructures and bare 
 
 #import pkg_resources
 #__version_full__  = pkg_resources.get_distribution("cloudmesh").version
+from __future__ import print_function
 
 __version__ = '1.0'
 
@@ -17,7 +18,7 @@ import logging
 def logger(on):
     logger = logging.getLogger()
     logger.disabeld = not on
-    print logger.__dict__
+    print(logger.__dict__)
 
     if on:
         logging.disable(logging.NOTSET)
@@ -30,7 +31,7 @@ from cloudmesh.util.helper import vm_name
 try:
     from cloudmesh.sh.cm import shell
 except:
-    print "WARNING: cm not yet installed, skipping import"
+    print("WARNING: cm not yet installed, skipping import")
 
 from cloudmesh.config.cm_config import load as load
 
