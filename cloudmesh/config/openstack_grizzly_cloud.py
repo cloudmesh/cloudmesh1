@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 
 
@@ -6,8 +7,8 @@ from cloudmesh.config.cloudmesh_cloud import cloudmesh_cloud
 try:
     from keystoneclient.v2_0 import client
 except:
-    print "ERROR: keystoneclient is not installed"
-    print "       Please see http://docs.openstack.org/developer/python-keystoneclient/"
+    print("ERROR: keystoneclient is not installed")
+    print("       Please see http://docs.openstack.org/developer/python-keystoneclient/")
     sys.exit(1)
 
 
@@ -49,13 +50,13 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
                 self._keystone = self._client(**client_creds)
             except (client.exceptions.AuthorizationFailure,
                     client.exceptions.Unauthorized) as authz_err:
-                print >> sys.stderr, ('\n'.join(
+                print(('\n'.join(
                     ["Error: %s" % authz_err,
                      "Hint: check cloud configuration data; problems can occur if you",
                      "changed your password outside of cloudmesh.  If you need an",
                      "administrative password reset, email help@futuregrid.org."]
                 )
-                )
+                ), file=sys.stderr)
                 sys.exit(1)
         return self._keystone
 
@@ -109,7 +110,7 @@ class openstack_grizzly_cloud(cloudmesh_cloud):
         if cloudmesh_cloud.change_own_password(self, oldpass, newpass):
             self.keystone.users.update_own_password(oldpass, newpass)
             self.credentials['OS_PASSWORD'] = newpass
-            print "Changed password for user %s in %s." % (self.username, self.cloudname)
+            print("Changed password for user %s in %s." % (self.username, self.cloudname))
 
     def get_own_password(self):
         return self.credentials['OS_PASSWORD']

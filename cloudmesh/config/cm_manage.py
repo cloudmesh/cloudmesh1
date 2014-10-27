@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 from cloudmesh_install import config_file
 from pprint import pprint
 import getpass
@@ -24,11 +25,11 @@ debug = True
 
 def DEBUG(label, var):
     if debug:
-        print 70 * "-"
-        print label
-        print 70 * " "
-        print str(var)
-        print 70 * "-"
+        print(70 * "-")
+        print(label)
+        print(70 * " ")
+        print(str(var))
+        print(70 * "-")
 
 
 def cm_manage():
@@ -120,13 +121,13 @@ def cm_manage():
             config = cm_config(file)
             # DEBUG("config", config)
         except IOError:
-            print "{0}: Configuration file '{1}' not found".format("CM ERROR", file)
+            print("{0}: Configuration file '{1}' not found".format("CM ERROR", file))
             sys.exit(1)
         except (yaml.scanner.ScannerError, yaml.parser.ParserError) as yamlerror:
-            print "{0}: YAML error: {1}, in configuration file '{2}'".format("CM ERROR", yamlerror, file)
+            print("{0}: YAML error: {1}, in configuration file '{2}'".format("CM ERROR", yamlerror, file))
             sys.exit(1)
         except:
-            print "Unexpected error:", sys.exc_info()[0]
+            print("Unexpected error:", sys.exc_info()[0])
             sys.exit(1)
 
         name = arguments['NAME']
@@ -154,18 +155,18 @@ def cm_manage():
             to_location = config_file("/%(file)s" % var)
 
             if os.path.isfile(to_location):
-                print "WARNING: The file %s exists" % to_location
+                print("WARNING: The file %s exists" % to_location)
                 if not yn_choice("Would you like to replace the file", default='y'):
                     sys.exit(1)
 
-            print from_location
-            print to_location
+            print(from_location)
+            print(to_location)
 
-            print "Copy cloudmesh file from %s to %s" % (from_location, to_location)
+            print("Copy cloudmesh file from %s to %s" % (from_location, to_location))
 
             result = scp(from_location, to_location)
 
-            print result
+            print(result)
 
             sys.exit(0)
 
@@ -176,7 +177,7 @@ def cm_manage():
         if arguments['projects'] and arguments['list']:
 
             projects = config.get('cloudmesh.projects')
-            print yaml.dump(projects, default_flow_style=False, indent=4)
+            print(yaml.dump(projects, default_flow_style=False, indent=4))
             sys.exit(0)
 
         #
@@ -187,27 +188,27 @@ def cm_manage():
 
             projects = config.projects('active')
 
-            print "Please select from the following:"
-            print "0 - Cancel"
+            print("Please select from the following:")
+            print("0 - Cancel")
             selected = False
             choices = []
             while not selected:
                 counter = 1
                 for name in projects:
-                    print counter, "-" "%20s" % name
+                    print(counter, "-" "%20s" % name)
                     choices.append(name)
                     counter += 1
-                print "Please select:"
+                print("Please select:")
                 input = int(sys.stdin.readline())
                 if input == 0:
-                    print "Selection terminated"
+                    print("Selection terminated")
                     sys.exit(0)
                 selected = (input > 0) and (input < counter)
-            print "Selected: ", input
+            print("Selected: ", input)
             name = choices[input - 1]
-            print name
+            print(name)
 
-            print "ERROR: THIS JUST SELECTS A PROJECT ID BUT DOES NOT SET IT"
+            print("ERROR: THIS JUST SELECTS A PROJECT ID BUT DOES NOT SET IT")
             sys.exit(0)
 
         if arguments['init'] or name == 'init':
@@ -218,10 +219,10 @@ def cm_manage():
             new_yaml_file = open(location, 'w+')
 
             user_yaml = cm_user().generate_yaml(username, 'cloudmesh')
-            print >> new_yaml_file, yaml.dump(
-                user_yaml, default_flow_style=False)
+            print(yaml.dump(
+                user_yaml, default_flow_style=False), file=new_yaml_file)
             new_yaml_file.close()
-            print "Written new yaml file in " + location
+            print("Written new yaml file in " + location)
             sys.exit(0)
 
         #
@@ -231,7 +232,7 @@ def cm_manage():
         if arguments['list'] or name == 'list':
             for name in config.cloudnames():
                 if 'cm_type' in config.cloud(name):
-                    print name, "(%s)" % config.cloud(name)['cm_type']
+                    print(name, "(%s)" % config.cloud(name)['cm_type'])
             sys.exit(0)
 
         #
@@ -246,7 +247,7 @@ def cm_manage():
             if newpass1 == newpass2:
                 config.change_own_password(name, oldpass, newpass1)
             else:
-                print "New passwords did not match; password not changed."
+                print("New passwords did not match; password not changed.")
 
             sys.exit(0)
 
@@ -260,7 +261,7 @@ def cm_manage():
                 me = ConfigDict(filename=config_file("/me.yaml"))
                 banner("PASSWORDS")
                 for name in me['password']:
-                    print "{0}: {1}".format(name, me['password'][name])
+                    print("{0}: {1}".format(name, me['password'][name]))
 
             sys.exit(0)
 
@@ -271,9 +272,9 @@ def cm_manage():
             format = arguments['--format']
             if format == 'yaml':
                 d = dict(config)
-                print yaml.dump(d, default_flow_style=False)
+                print(yaml.dump(d, default_flow_style=False))
             elif format == 'dict' or format is None:
-                print config
+                print(config)
             sys.exit(0)
 
         #
@@ -282,24 +283,24 @@ def cm_manage():
         if name in ['?', 'x']:
             if file is None:
                 arguments['--out'] = "%s/%s" % (home, default_path)
-            print "Please select from the following:"
-            print "0 - Cancel"
+            print("Please select from the following:")
+            print("0 - Cancel")
             selected = False
             choices = []
             while not selected:
                 counter = 1
                 for name in config.cloudnames():
                     if 'cm_type' in config.cloud(name):
-                        print "{0} - {1:<30} ({2})".format(counter, name, config.cloud(name)['cm_type'])
+                        print("{0} - {1:<30} ({2})".format(counter, name, config.cloud(name)['cm_type']))
                         choices.append(name)
                         counter += 1
-                print "Please select:"
+                print("Please select:")
                 input = int(sys.stdin.readline())
                 if input == 0:
-                    print "Selection terminated"
+                    print("Selection terminated")
                     sys.exit(0)
                 selected = (input > 0) and (input < counter)
-            print "Selected: ", input
+            print("Selected: ", input)
             name = choices[input - 1]
 
         output = arguments['--out']
@@ -310,23 +311,23 @@ def cm_manage():
         if name is not None:
             cloud = config.cloud(name)
             if not cloud:
-                print "%s: The cloud '%s' is not defined." % ("CM ERROR", name)
-                print "Try instead:"
+                print("%s: The cloud '%s' is not defined." % ("CM ERROR", name))
+                print("Try instead:")
                 for keyname in config.cloudnames():
-                    print "    ", keyname
+                    print("    ", keyname)
                 sys.exit(1)
 
             if cloud['cm_type'] == 'eucalyptus':
                 if arguments['--project']:
                     project = arguments['--project']
                     if not project in cloud:
-                        print "No such project %s defined in cloud %s." % (project, name)
+                        print("No such project %s defined in cloud %s." % (project, name))
                         sys.exit(1)
                 else:
                     project = config.cloud_default(
                         name, 'project') or config.projects('default')
                     if not project in cloud:
-                        print "Default project %s not defined in cloud %s." % (project, name)
+                        print("Default project %s not defined in cloud %s." % (project, name))
                         sys.exit(1)
                 rc_func = lambda name: config.rc_euca(name, project)
             else:
@@ -338,7 +339,7 @@ def cm_manage():
             # OK
             #
             if arguments["-"]:
-                print result
+                print(result)
             else:
                 if output is None:
                     arguments['--out'] = "%s/%s" % (home, default_path)
@@ -346,8 +347,8 @@ def cm_manage():
                 out = False
                 if yn_choice("Would you like to review the information", default="y"):
                     banner("WARNING: FIle will be written to " + output)
-                    print result
-                    print banner("")
+                    print(result)
+                    print(banner(""))
                 try:
                     # First we try to open the file assuming it doesn't exist
                     out = os.open(
