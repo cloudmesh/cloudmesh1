@@ -47,6 +47,7 @@ class cm_shell_launcher:
             launcher start MENU
             launcher stop STACK_NAME
             launcher list
+            launcher show STACK_NAME
             launcher menu [--column=COLUMN] [--format=FORMAT]
             launcher import [FILEPATH] [--force]
             launcher export FILEPATH
@@ -75,7 +76,9 @@ class cm_shell_launcher:
 
         if arguments["help"] or arguments["-h"]:
             print (self.do_launcher.__doc__)
-
+        elif arguments['show'] and arguments['STACK_NAME']:
+            print "NOT IMPLEMENTED"
+            return
         elif arguments['menu']:
             userid = self.cm_config.username()
             launchers = self.cm_mongo.launcher_get(userid)
