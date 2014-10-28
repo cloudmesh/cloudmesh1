@@ -14,6 +14,8 @@ from pprint import pprint
 import sys
 import time
 from cloudmesh.shell.cm_list import shell_command_list
+from cloudmesh.keys.util import _keyname_sanitation
+from cloudmesh.config.cm_keys import cm_keys_mongo
 
 log = LOGGER(__file__)
 
@@ -526,11 +528,11 @@ def start_vm(username,
         keycontent = userinfo["keys"]["keylist"][key]
         if keycontent.startswith('key '):
             keycontent = keycontent[4:]
-        check_register_key(username, cloudname, key, keycontent)
+        cm_keys_mongo(username).check_register_key(username, cloudname, key, keycontent)
         keynamenew = _keyname_sanitation(username, key)
     else:
         error = error + \
-            "No sshkey found. Please <a href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"
+            "No sshkey found. Please Upload one"
     # -------------------------
 
     if error != '':
@@ -849,35 +851,6 @@ def assign_public_ip(username=None, cloudname=None, serverid=None):
 
 
 # ========================================================================
-def _keyname_sanitation(username, keyname):
-    keynamenew = "%s_%s" % (
-        username, keyname.replace('.', '_').replace('@', '_'))
-    return keynamenew
-
-
-def check_register_key(username, cloudname, keyname, keycontent):
-    mongo = cm_mongo()
-    mongo.activate(cm_user_id=username, names=[cloudname])
-    cloudmanager = mongo.clouds[username][cloudname]['manager']
-
-    keynamenew = _keyname_sanitation(username, keyname)
-    keysRegistered = cloudmanager.keypair_list()
-    registered = False
-    # Openstack & Eucalyptus
-    if 'keypairs' in keysRegistered:
-        keypairsRegistered = keysRegistered["keypairs"]
-        for akeypair in keypairsRegistered:
-            if keynamenew == akeypair['keypair']['name']:
-                registered = True
-                break
-    else:
-        if keynamenew in keysRegistered:
-            registered = True
-
-    if not registered:
-        cloudmanager.keypair_add(keynamenew, keycontent)
-        log.info("Automatically registered the default key <%s> for user <%s>" % (
-            keyname, username))
 
 
 def server_name_analyzer(name):

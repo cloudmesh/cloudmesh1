@@ -1,8 +1,7 @@
 from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config
 from string import Template
-from cloudmesh.keys.util import get_fingerprint
-from cloudmesh.keys.util import key_fingerprint, key_validate
+from cloudmesh.keys.util import get_fingerprint, key_fingerprint, key_validate, _keyname_sanitation
 from cloudmesh.cm_mongo import cm_mongo
 import os
 from cloudmesh_install.util import path_expand
@@ -322,3 +321,27 @@ class cm_keys_mongo(cm_keys_base):
     def names(self):
         """returns all key names in an list."""
         return self.user_info["keys"].keys()
+    
+    
+    def check_register_key(self, username, cloudname, keyname, keycontent):
+        self.mongo.activate(cm_user_id=username, names=[cloudname])
+        cloudmanager = self.mongo.clouds[username][cloudname]['manager']
+    
+        keynamenew = _keyname_sanitation(username, keyname)
+        keysRegistered = cloudmanager.keypair_list()
+        registered = False
+        # Openstack & Eucalyptus
+        if 'keypairs' in keysRegistered:
+            keypairsRegistered = keysRegistered["keypairs"]
+            for akeypair in keypairsRegistered:
+                if keynamenew == akeypair['keypair']['name']:
+                    registered = True
+                    break
+        else:
+            if keynamenew in keysRegistered:
+                registered = True
+    
+        if not registered:
+            cloudmanager.keypair_add(keynamenew, keycontent)
+            log.info("Automatically registered the default key <%s> for user <%s>" % (
+                keyname, username))
