@@ -22,9 +22,6 @@ class Test(unittest.TestCase):
     def setUp(self):
 
         self.cloudname = sys.argv[-1:][0]
-
-        print ("CLOUDNAME", self.cloudname)
-        
         self.config = cloudmesh.load("user")
         self.username = self.config.get("cloudmesh.hpc.username")
     
