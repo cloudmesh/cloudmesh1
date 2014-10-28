@@ -63,7 +63,7 @@ class cm_shell_stack:
         if arguments["help"] or arguments["-h"]:
             print(self.do_stack.__doc__)
         elif arguments['show'] and arguments['NAME']:
-            print "NOT IMPLEMENTED"
+            print ("NOT IMPLEMENTED")
             return
         elif arguments['start'] and arguments['NAME']:
             userid = self.cm_config.username()
