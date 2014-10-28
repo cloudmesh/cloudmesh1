@@ -4,7 +4,6 @@ from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh_common.logger import LOGGER
 from cmd3.console import Console
 from cloudmesh_common.util import dotdict
-from cloudmesh_common.tables import print_format_dict
 from pprint import pprint
 
 log = LOGGER(__file__)
@@ -13,6 +12,7 @@ class cm_shell_yaml:
 
     def activate_cm_shell_yaml(self):
         self.cm_config = cm_config()
+        Console.color = self.cm_config.get("cloudmesh.shell.color")
         self.cm_config_server = cm_config_server()
         self.register_command_topic('cloud', 'yaml')
 
@@ -41,7 +41,6 @@ class cm_shell_yaml:
              Sets and gets values from a yaml configuration file
         """
         
-        Console = CONSOLE()        
         #
         # use dot notation to make things better readable
         #
