@@ -17,13 +17,21 @@ class cm_shell_loglevel:
         """
         Usage:
             loglevel
+            loglevel critical
             loglevel error
             loglevel warning
-            loglevel debug
             loglevel info
-            loglevel critical
+            loglevel debug
 
             Shows current log level or changes it.
+            
+            loglevel - shows current log level
+            critical - shows log message in critical level
+            error    - shows log message in error level including critical
+            warning  - shows log message in warning level including error
+            info     - shows log message in info level including warning
+            debug    - shows log message in debug level including info
+            
         """
         key = "cloudmesh.server.loglevel"
         if arguments['debug']:
@@ -37,9 +45,10 @@ class cm_shell_loglevel:
         elif arguments['critical']:
             value = "CRITICAL"
         else:
-            print(self.cm_config_server.get(key))
+            loglevel = self.cm_config_server.get(key)
+            print "Log level: {0}".format(loglevel)
             return
 
         self.cm_config_server._update(key, value)
         self.cm_config_server.write(format="yaml")
-        log.info("{0} mode is set.".format(value))
+        print "Log level: {0} is set".format(value)
