@@ -82,6 +82,12 @@ def key_validate(keytype, key):
     except Exception, e:
         print(e)
         return False
+    
+    
+def _keyname_sanitation(username, keyname):
+    keynamenew = "%s_%s" % (
+        username, keyname.replace('.', '_').replace('@', '_'))
+    return keynamenew
 
 # unit testing
 

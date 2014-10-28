@@ -17,5 +17,7 @@ class Test(unittest.TestCase):
         
         self.cloudname = "india"
         
-        print 
+        print ("CLOUD: ", self.cloudname)
+        
+    def test
         
