@@ -42,6 +42,7 @@ class cm_shell_stack:
         Usage:
             stack start NAME [--template=TEMPLATE] [--param=PARAM]
             stack stop NAME
+            stack show NAME
             stack list [--refresh] [--column=COLUMN] [--format=FORMAT]
             stack help | -h
 
@@ -61,6 +62,9 @@ class cm_shell_stack:
 
         if arguments["help"] or arguments["-h"]:
             print(self.do_stack.__doc__)
+        elif arguments['show'] and arguments['NAME']:
+            print "NOT IMPLEMENTED"
+            return
         elif arguments['start'] and arguments['NAME']:
             userid = self.cm_config.username()
             def_cloud = self.get_cloud_name(userid)
