@@ -46,9 +46,9 @@ class cm_shell_loglevel:
             value = "CRITICAL"
         else:
             loglevel = self.cm_config_server.get(key)
-            print "Log level: {0}".format(loglevel)
+            print ("Log level: {0}".format(loglevel))
             return
 
         self.cm_config_server._update(key, value)
         self.cm_config_server.write(format="yaml")
-        print "Log level: {0} is set".format(value)
+        print ("Log level: {0} is set".format(value))
