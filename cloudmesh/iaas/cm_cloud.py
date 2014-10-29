@@ -777,15 +777,16 @@ class CloudCommand(CloudManage):
     #
     # TODO create init msg with flag if cm_congig is loaded
     #
-    try:
-        config = cm_config()
-    except:
-        Console.error("There is a problem with the configuration yaml files")
-
-    username = config['cloudmesh']['profile']['username']
 
     def __init__(self, arguments):
         self.arguments = arguments
+        
+        try:
+            self.config = cm_config()
+        except:
+            Console.error("There is a problem with the configuration yaml files")
+    
+        self.username = self.config['cloudmesh']['profile']['username']
 
     def _cloud_list(self):
         if self.arguments["--column"]:
