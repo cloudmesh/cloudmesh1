@@ -73,16 +73,17 @@ def shell_command_list(arguments):
 
 
 class ListInfo(object):
-    cloudmanage = CloudManage()
-    try:
-        config = cm_config()
-    except:
-        Console.error("There is a problem with the configuration yaml files")
-
-    username = config['cloudmesh']['profile']['username']
 
     def __init__(self, arguments):
         self.arguments = arguments
+        
+        self.cloudmanage = CloudManage()
+        try:
+            self.config = cm_config()
+        except:
+            Console.error("There is a problem with the configuration yaml files")
+    
+        self.username = self.config['cloudmesh']['profile']['username']
 
     def _list_flavor(self):
         self.cloudmanage._connect_to_mongo()

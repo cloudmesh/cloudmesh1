@@ -118,16 +118,17 @@ def shell_command_vm(arguments):
 
 
 class VMcommand(object):
-    try:
-        config = cm_config()
-    except:
-        log.error("There is a problem with the configuration yaml files")
-
-    username = config['cloudmesh']['profile']['username']
 
     def __init__(self, arguments):
         self.arguments = arguments
         #print self.arguments ########
+        
+        try:
+            self.config = cm_config()
+        except:
+            log.error("There is a problem with the configuration yaml files")
+    
+        self.username = self.config['cloudmesh']['profile']['username']
 
     def _vm_create(self):
         # -------------------------
