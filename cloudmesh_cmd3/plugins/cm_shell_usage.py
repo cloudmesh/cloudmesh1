@@ -6,6 +6,8 @@ from cloudmesh_common.util import get_rand_string
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
+from cloudmesh_common.tables import row_table
+
 from cmd3.shell import command
 
 log = LOGGER(__file__)
@@ -37,7 +39,7 @@ class cm_shell_usage:
         """
         Usage:
             usage [CLOUD] [--start=START] [--end=END]
-            launcher help | -h
+            usage help | -h
 
         Usage data on a current project (tenant)
 
@@ -59,6 +61,8 @@ class cm_shell_usage:
         else:
             userid = self.cm_config.username()
             def_cloud = self.get_cloud_name(userid)
+            self.cm_mongo.activate(userid)
             usage = self.cm_mongo.usage(def_cloud, userid)
-            print usage
+            print(row_table(usage, order=None, labels=["Variable", "Value"]))
+
             return usage
