@@ -18,11 +18,12 @@ class cm_shell_stack:
     """opt_example class"""
     name = "stack"
     _id = "t_stacks"
-    cm_mongo = cm_mongo()
-    cm_config = cm_config()
-    cm_user = cm_user()
 
     def activate_cm_shell_stack(self):
+        self.cm_mongo = cm_mongo()
+        self.cm_config = cm_config()
+        self.cm_user = cm_user()
+
         self.register_command_topic('cloud','stack')
         pass
 
