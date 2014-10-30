@@ -28,6 +28,9 @@ class ComputeBaseType:
     # : the dict for the stacks
     stacks = {}
 
+    # : the dict for usage data
+    usage = {}
+
     # : the dict for the set_credentials
     credential = None
 
@@ -46,6 +49,7 @@ class ComputeBaseType:
         self.servers = {}  # global var
         self.security_groups = {}  # global var
         self.stacks = {}
+        self.usage = {}
         self.credential = None  # global var
         self.label = None  # global var
         self.type = None
@@ -61,6 +65,7 @@ class ComputeBaseType:
         print("Images:", len(self.images))
         print("Security Groups:", len(self.security_groups))
         print("Stacks:", len(self.stacks))
+        print("Usage:", self.usage)
         # print "Users:", len(self.users)
         # print "Tenants:", len(self.tenants)
 
@@ -92,6 +97,8 @@ class ComputeBaseType:
             d = self.security_groups.copy()
         elif selection == 't':
             d = self.stacks.copy()
+        elif selection == 'u':
+            d = self.usage.copy()
         elif type is not None:
             print("refresh type not supported")
             assert False
@@ -120,6 +127,8 @@ class ComputeBaseType:
             d = self.security_groups
         elif selection == 't':
             d = self.stacks
+        elif selection == 'u':
+            d = self.usage
         # elif selection == 'u':
         #    d = self.users
         # elif selection == 't':
@@ -206,6 +215,7 @@ class ComputeBaseType:
             'images': self.images,
             'security groups': self.security_groups,
             'stacks': self.stacks,
+            'usage': self.usage,
             # 'users': self.users,
             # 'users': len(self.users),
             # 'tenants': self.tenants,
@@ -261,6 +271,9 @@ class ComputeBaseType:
         elif selection == 't':
             list_function = self._get_stacks_dict
             data = self.stacks
+        elif selection == 'u':
+            list_function = self._get_usage_dict
+            data = self.usage
         # elif selection == 'u':
         #    list_function = self._get_users_dict
         #    d = self.users
@@ -284,6 +297,8 @@ class ComputeBaseType:
                 self.security_groups = {}
             elif selection == 't':
                 self.stacks = {}
+            elif selection == 'u':
+                self.usage = {}
             # elif selection == 'u':
             #    self.users = {}
             # elif selection == 't':

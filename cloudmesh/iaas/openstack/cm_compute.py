@@ -780,6 +780,18 @@ class openstack(ComputeBaseType):
         self.stacks = self._list_to_dict(list, 'id', 'stacks', time_stamp)
         return self.stacks
 
+    def get_usage(self):
+        time_stamp = self._now()
+        tenant_id = self.user_token['access']['token']['tenant']['id']
+        msg = "os-simple-tenant-usage/{0}".format(tenant_id)
+        param = { "start": datetime.now() - timedelta(hours=24),
+                 "end": datetime.now() }
+        list = self._get(msg, urltype=self.service_url_type,
+                         payload=param)['tenant_usage']
+        log.debug(list)
+        # self.usage = self._list_to_dict(list, 'id', 'usage', time_stamp)
+        return list # self.usage
+
     # new
     """
     def get_tenants(self, credential=None):
@@ -903,6 +915,10 @@ class openstack(ComputeBaseType):
 
     def _get_stacks_dict(self):
         result = self.get_stacks()
+        return result
+
+    def _get_usage_dict(self):
+        result = self.get_usage()
         return result
 
     def limits(self):
