@@ -872,6 +872,13 @@ class cm_mongo:
         except KeyError:
             return None
 
+    def quota(self, cloud, cm_user_id):
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.get_quota()
+        except:
+            return None
+
     def launcher_import(self, d, launcher_name, username):
         '''
         insert a launcher/recipe into db_clouds

@@ -187,6 +187,18 @@ class ComputeBaseType:
         """returns a dict of limits that the cloud will maintain for a user and/or the project"""
         raise NotImplementedError()
 
+    def get_usage(self):
+        raise NotImplementedError()
+
+    def get_quota(self):
+        raise NotImplementedError()
+
+    def stack_create(self):
+        raise NotImplementedError()
+
+    def stack_delete(self):
+        raise NotImplementedError()
+
     def wait(self, vm_id, vm_status, seconds=2):
         """waits a number of seconds and than refreshes information form the cloud"""
         print('refersh', vm_id)

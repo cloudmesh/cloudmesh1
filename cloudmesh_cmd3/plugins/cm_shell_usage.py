@@ -2,7 +2,6 @@
 from __future__ import print_function
 import sys
 from cloudmesh_common.logger import LOGGER
-from cloudmesh_common.util import get_rand_string
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo

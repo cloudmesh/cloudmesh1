@@ -792,6 +792,14 @@ class openstack(ComputeBaseType):
         # self.usage = self._list_to_dict(list, 'id', 'usage', time_stamp)
         return list # self.usage
 
+    def get_quota(self):
+        time_stamp = self._now()
+        tenant_id = self.user_token['access']['token']['tenant']['id']
+        msg = "os-quota-sets/{0}".format(tenant_id)
+        list = self._get(msg, urltype=self.service_url_type)['quota_set']
+        log.debug(list)
+        return list
+
     # new
     """
     def get_tenants(self, credential=None):
