@@ -1,4 +1,4 @@
-{% extends "layout/layout.html" %}
+{% extends "management/simple.html" %}
 
 
 {% macro render_field(field) %}
@@ -25,18 +25,18 @@
   
 <form method="post">
 
-  <legend> Profile </legend>
+{#  <legend> Profile </legend>#}
   <table class="table table-condensed">
     <tbody>
       <tr>
-	<th colspan="2" bgcolor="0066CC"> Profile </th>
+	    <th colspan="2" bgcolor="0066CC"> Profile </th>
       </tr>    
       {% for field in profile_fields %}
       {{ render_field(form[field]) }}
       {% endfor %}
 
       <tr>
-	<th colspan="2" bgcolor="0066CC">Organisation </th>
+	    <th colspan="2" bgcolor="0066CC">Organisation </th>
       </tr>    
 
       {% for field in organization_fields %}

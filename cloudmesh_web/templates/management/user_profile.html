@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<legend> {{ user.title }} {{ user.firstname }} {{ user.firstname }} </legend>
+<legend> {{ user.title }} {{ user.firstname }} {{ user.lastname }} </legend>
 <h3>  <i class="fa fa-user"></i> Profile </h3>
 <table class="table table-condensed">
   <tbody>
@@ -13,15 +13,22 @@
     <tr> <td bgcolor="#E6E6E6"><i>Title</i></td><td>{{ user.title }}</td></tr>
     <tr> <td bgcolor="#E6E6E6"><i>Firstname</i></td><td>{{ user.firstname }}</td></tr>
     <tr> <td bgcolor="#E6E6E6"><i>Lastname</i></td><td>{{ user.lastname }}</td></tr>
-    <tr> <td bgcolor="#E6E6E6"><i>Address</i></td><td>{{ user.address }}</td></tr>
+    <tr> <td bgcolor="#E6E6E6"><i>Address</i></td>
+         <td><pre style="font-family:Arial, Helvetica, sans-serif;
+                color:#666;
+                font-size:12px;">{{ user.address }}</pre></td></tr>
     <tr> <td bgcolor="#E6E6E6"><i>Institution</i></td><td>{{ user.institution }}</td></tr>
+    <tr> <td bgcolor="#E6E6E6"><i>Institution Role</i></td><td>{{ user.institutionrole }}</td></tr>
     <tr> <td bgcolor="#E6E6E6"><i>Department</i></td><td>{{ user.department }}</td></tr>
     <tr> <td bgcolor="#E6E6E6"><i>Advisor</i></td><td>{{ user.advisor }}</td></tr>
     <tr> <td bgcolor="#E6E6E6"><i>Country</i></td><td>{{ user.country }}</td></tr>
     <tr> <td bgcolor="#E6E6E6"><i>Email</i></td><td>{{ user.email }}</td></tr>
-    <tr> <td bgcolor="#E6E6E6"><i>Url</i></td><td>{{ user.url }}</td></tr>
+    <tr> <td bgcolor="#E6E6E6"><i>URL</i></td><td>{{ user.url }}</td></tr>
     <tr> <td bgcolor="#E6E6E6"><i>Citizenship</i></td><td>{{ user.citizenship }}</td></tr>
-    <tr> <td bgcolor="#E6E6E6"><i>Bio</i></td><td>{{ user.bio }}</td></tr>
+    <tr> <td bgcolor="#E6E6E6"><i>Bio</i></td>
+         <td><pre style="font-family:Arial, Helvetica, sans-serif;
+                color:#666;
+                font-size:12px;">{{ user.bio }}</pre></td></tr>
     <tr> <td bgcolor="#E6E6E6"><i>Phone</i></td><td>{{ user.phone }}</td></tr>
   </tbody>
 </table>
