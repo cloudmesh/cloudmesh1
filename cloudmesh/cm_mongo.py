@@ -864,7 +864,14 @@ class cm_mongo:
             return cloudmanager.stack_delete(server)
         except KeyError:
             return None
-    
+   
+    def usage(self, cloud, cm_user_id):
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.get_usage()
+        except KeyError:
+            return None
+
     def launcher_import(self, d, launcher_name, username):
         '''
         insert a launcher/recipe into db_clouds
