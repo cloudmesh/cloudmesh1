@@ -52,6 +52,7 @@ def shell_command_vm(arguments):
                         [--refresh] 
                         [--format=FORMAT] 
                         [--column=COLUMN]
+                        [--group=<group>]
                          
             Arguments:
                 <command>              positional arguments, the commands you want to

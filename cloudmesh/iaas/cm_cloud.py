@@ -12,6 +12,7 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.util.shellutil import shell_commands_dict_output
 import csv
 from cloudmesh.server.database import Database
+import json
 
 log = LOGGER(__file__)
 
@@ -647,7 +648,8 @@ class CloudManage(object):
                             refresh=False,
                             output=False,
                             serverdata=None,
-                            print_format="table"):
+                            print_format="table",
+                            group=None):   #specify the group of the VM
         '''
         prints a cloud's vms or a given list of vms
         :param username: string user name
@@ -680,6 +682,19 @@ class CloudManage(object):
         else:
             servers_dict = self.mongo.servers(
                 clouds=[cloudname], cm_user_id=username)[cloudname]
+                
+        for k, v in servers_dict.iteritems():
+            if '_id' in v:
+                del v['_id']        
+        
+        if group:
+            temp = {}
+            for k, v in servers_dict.iteritems():
+                if 'metadata' in v and \
+                   'cm_group' in v['metadata'] and \
+                   v['metadata']['cm_group'] == group:
+                    temp[k] = v
+            servers_dict = temp
 
         images_dict = self.mongo.images(
             clouds=[cloudname], cm_user_id=username)
@@ -747,7 +762,7 @@ class CloudManage(object):
 
         # Output format supports json and plain text in a grid table.
         if print_format == "json":
-            pprint(servers_dict)
+            print(json.dumps(servers_dict, indent=4))
         elif print_format == "csv":
             with open(".temp.csv", "wb") as f:
                 w = csv.DictWriter(f, servers_dict.keys())

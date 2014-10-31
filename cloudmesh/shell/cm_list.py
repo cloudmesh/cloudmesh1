@@ -20,7 +20,7 @@ def shell_command_list(arguments):
         list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
         [--column=COLUMN]
         list image [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
-        list vm [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
+        list vm [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN] [--group=<group>]
         list project
         list cloud [--column=COLUMN]
 
@@ -304,7 +304,8 @@ class ListInfo(object):
                                                      itemkeys=itemkeys,
                                                      refresh=False,
                                                      output=False,
-                                                     print_format=p_format)
+                                                     print_format=p_format,
+                                                     group=self.arguments['--group'])
 
         else:
             return
