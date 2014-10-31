@@ -187,6 +187,14 @@ class ComputeBaseType:
         """returns a dict of limits that the cloud will maintain for a user and/or the project"""
         raise NotImplementedError()
 
+    def get_limits(self):
+        """returns a dict of limits that the cloud will maintain for a user and/or the project"""
+        raise NotImplementedError()
+
+    def get_absolute_limits(self):
+        """returns a dict of absolute limits with current usage information"""
+        raise NotImplementedError()
+
     def get_usage(self):
         raise NotImplementedError()
 

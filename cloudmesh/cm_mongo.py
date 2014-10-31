@@ -866,6 +866,7 @@ class cm_mongo:
             return None
    
     def usage(self, cloud, cm_user_id):
+        '''Gets usage reports'''
         try:
             cloudmanager = self.clouds[cm_user_id][cloud]['manager']
             return cloudmanager.get_usage()
@@ -873,9 +874,26 @@ class cm_mongo:
             return None
 
     def quota(self, cloud, cm_user_id):
+        '''Gets current settings for project quota'''
         try:
             cloudmanager = self.clouds[cm_user_id][cloud]['manager']
             return cloudmanager.get_quota()
+        except:
+            return None
+
+    def limits(self, cloud, cm_user_id):
+        '''Gets limits information'''
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.get_limits()
+        except:
+            return None
+
+    def usage_with_limits(self, cloud, cm_user_id):
+        '''Gets limits with usage information'''
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.get_absolute_limits('fraction')
         except:
             return None
 
