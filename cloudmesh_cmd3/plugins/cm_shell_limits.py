@@ -61,7 +61,7 @@ class cm_shell_limits:
             self.cm_mongo.activate(userid)
             usage_with_limits = self.cm_mongo.usage_with_limits(def_cloud, userid)
 
-            print(row_table(usage_with_limits, order=None, labels=["Variable",
+            print(row_table(usage_with_limits, order=None, labels=["Limits",
                                                                    "(Used/Max)"]))
 
             return usage_with_limits
