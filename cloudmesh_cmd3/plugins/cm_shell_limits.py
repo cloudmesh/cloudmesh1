@@ -11,12 +11,12 @@ from cmd3.shell import command
 
 log = LOGGER(__file__)
 
-class cm_shell_usage:
+class cm_shell_limits:
 
     """opt_example class"""
-    _id = "usage"  # id for usage in cm_mongo
+    _id = "limits"  # id for usage in cm_mongo
 
-    def activate_cm_shell_usage(self):
+    def activate_cm_shell_limits(self):
         self.cm_mongo = cm_mongo()
         self.cm_config = cm_config()
         self.cm_user = cm_user()
@@ -34,19 +34,17 @@ class cm_shell_usage:
             return None
 
     @command
-    def do_usage(self, args, arguments):
+    def do_limits(self, args, arguments):
         """
         Usage:
-            usage [CLOUD] [--start=START] [--end=END]
-            usage help | -h
+            limits [CLOUD]
+            limits help | -h
 
-        Usage data on a current project (tenant)
+        Current usage data with limits on a selected project (tenant)
 
         Arguments:
           
           CLOUD          Cloud name to see the usage
-          START          start date of usage (YYYY-MM-DD)
-          END            end date of usage (YYYY-MM-DD)
           help           Prints this message
 
         Options:
@@ -56,25 +54,14 @@ class cm_shell_usage:
         """
 
         if arguments["help"] or arguments["-h"]:
-            print (self.do_usage.__doc__)
+            print (self.do_limits.__doc__)
         else:
             userid = self.cm_config.username()
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
-            usage = self.cm_mongo.usage(def_cloud, userid)
-            # server usages need to be supressed.
-            # e.g. {u'hours': 24.00000006388889, u'uptime': 1960234,
-            # u'started_at': u'2014-10-07T23:03:57.000000', u'ended_at': None,
-            # u'name': u'hrlee-server-2zuvke4wujud', u'tenant_id':
-            # u'3e6eaf1d913a48f694a7bc0fbb027507', u'instance_id':
-            # u'2c9d24e0-7453-4f83-84b7-f8c0254a574f', u'state':
-            # u'active', u'memory_mb': 2048, u'vcpus': 1, u'flavor':
-            # u'm1.small', u'local_gb': 20} 
-            try:
-                usage['server_usages'] = str(len(usage['server_usages'])) + " vms"
-            except:
-                pass
+            usage_with_limits = self.cm_mongo.usage_with_limits(def_cloud, userid)
 
-            print(row_table(usage, order=None, labels=["Variable", "Value"]))
+            print(row_table(usage_with_limits, order=None, labels=["Variable",
+                                                                   "(Used/Max)"]))
 
-            return usage
+            return usage_with_limits
