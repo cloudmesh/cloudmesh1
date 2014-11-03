@@ -134,17 +134,23 @@ class VMcommand(object):
     def _vm_create(self):
         # -------------------------
         # check input
+        class TempException(Exception):
+            def __init__(self, msg):
+                self.msg = msg
+            def __str__(self):
+                return self.msg
         count = 1
         if self.arguments['--count']:
             try:
                 count = int(self.arguments['--count'])
             except:
-                log.warning("ERROR: --count must be assigned with an integer")
-                return
+                Console.error("--count must be assigned with an integer")
+                return 
+                
             if count < 1:
-                log.warning(
-                    "ERROR: --count must be assigned with an integer greater than 0")
-                return
+                Console.error(
+                    "--count must be assigned with an integer greater than 0")
+                return 
             watch = time.time()
         # -------------------------
         # select cloud
@@ -154,7 +160,7 @@ class VMcommand(object):
             cloud = cloudobj.get_clouds(
                 self.username, getone=True, cloudname=self.arguments['--cloud'])
             if cloud is None:
-                print("ERROR: could not find cloud '{0}'".format(self.arguments['--cloud']))
+                Console.error("ERROR: could not find cloud '{0}'".format(self.arguments['--cloud']))
                 return
             else:
                 cloudname = self.arguments['--cloud']
@@ -395,15 +401,15 @@ class VMcommand(object):
         return serverid
 
     def call_procedure(self):
-        if self.arguments['start']:
+        if 'start' in self.arguments and self.arguments['start']:
             self._vm_create()
-        elif self.arguments['delete']:
+        elif 'delete' in self.arguments and self.arguments['delete']:
             self._vm_delete()
-        elif self.arguments['ip']:
+        elif 'ip' in self.arguments and self.arguments['ip']:
             self._assign_public_ip()
-        elif self.arguments['login']:
+        elif 'login' in self.arguments and self.arguments['login']:
             self._vm_login()
-        elif self.arguments['list']:
+        elif 'list' in self.arguments and self.arguments['list']:
             self._vm_list()
 
     # --------------------------------------------------------------------------
