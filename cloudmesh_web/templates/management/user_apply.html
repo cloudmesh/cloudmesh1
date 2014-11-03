@@ -1,10 +1,9 @@
 {% extends "management/simple.html" %}
 
-
 {% macro render_field(field) %}
   <tr>
   <th> <i>{{ field.label }}</i></th>
-  <td>{{ field(**kwargs)|safe }} 
+  <td>{{ field(**kwargs)|safe }}
   <br>
   {% if field.errors %}
     <font color="red">

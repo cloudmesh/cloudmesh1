@@ -1,13 +1,12 @@
-{% extends "layout/layout.html" %}
-
+{% extends "management/simple.html" %}
 
 {% macro render_field(field) %}
   <tr>
   <td bgcolor="#CCCCCC"> <i>{{ field.label }}</i></td>
   {% if field.type == "TextAreaField" %}
-    <td>{{ field(cols="79", rows="10")|safe }}     
+    <td>{{ field(cols="200", rows="3")|safe }}
   {% elif field.type == "TextField" %}
-    <td>{{ field(cols="79")|safe }}     
+    <td>{{ field(cols="100")|safe }}
   {% else %}
     <td>{{ field(**kwargs)|safe }}
   {% endif %}
@@ -43,7 +42,7 @@
   <table class="table table-condensed">
     <tbody>      
       <tr>
-	<th colspan="2" bgcolor="#CCCCCC"> {{ panel | capitalize }} </th>
+{#	<th colspan="2" bgcolor="#CCCCCC"> {{ panel | capitalize }} </th>#}
       </tr>
       
       {% for field in attributes %}

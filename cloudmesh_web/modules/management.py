@@ -111,11 +111,11 @@ class ProjectRegistrationForm(Form):
                          # "grant_id",
                          # "grant_url",
                          "results"]),
-            ("agreements", ["aggreement_use",
-                            "aggreement_slides",
-                            "aggreement_support",
-                            "aggreement_sotfware",
-                            "aggreement_documentation"]),
+            ("agreements", ["agreement_use",
+                            "agreement_slides",
+                            "agreement_support",
+                            "agreement_sotfware",
+                            "agreement_documentation"]),
             ("other", ["comments",
                        "join_open",
                        "join_notification",
@@ -125,37 +125,37 @@ class ProjectRegistrationForm(Form):
                        "resources_provision"
                        ])
             ]
-    title = TextField('Title')
-    abstract = TextField('Abstract')
+    title = StringField('Title')
+    abstract = TextAreaField('Abstract')
     intellectual_merit = TextAreaField('Intellectual merit')
     broader_impact = TextAreaField('Broader impact')
     use_of_fg = TextAreaField('Use of FG')
     scale_of_use = TextAreaField('Scale of use')
-    categories = TextField('Categories')
-    keywords = TextField('Keywords')
+    categories = StringField('Categories')
+    keywords = StringField('Keywords')
     primary_discipline = TextField('Primary discipline')
-    orientation = TextField('Orientation')
-    contact = TextField('contact')
-    url = TextField(
+    orientation = StringField('Orientation')
+    contact = StringField('contact')
+    url = StringField(
         'Url', [validators.Length(min=6, max=50), validate_url_in_form])
-    comment = TextField('Comment')
+    comment = TextAreaField('Comment')
     active = BooleanField('Active')
-    projectid = TextField('Projectid')
-    lead = TextField('Lead')
-    managers = TextField('Managers')
-    members = TextField('Members')
-    alumnis = TextField('Alumnis')
-    grant_orgnization = TextField('Grant Orgnization')
-    grant_id = TextField('Grant id')
-    grant_url = TextField('Grant url')
-    results = TextField('Results')
-    aggreement_use = BooleanField('Use')
-    aggreement_slides = BooleanField('Slides')
-    aggreement_support = BooleanField('Support')
-    aggreement_sotfware = BooleanField('Sotfware')
-    aggreement_documentation = BooleanField('Documentation')
-    aggreement_images = BooleanField('Images')
-    comments = TextField('Comments')
+    projectid = StringField('Projectid')
+    lead = StringField('Lead')
+    managers = TextAreaField('Managers')
+    members = TextAreaField('Members')
+    alumnis = TextAreaField('Alumnis')
+    grant_orgnization = StringField('Grant Orgnization')
+    grant_id = StringField('Grant id')
+    grant_url = StringField('Grant url')
+    results = TextAreaField('Results')
+    agreement_use = BooleanField('Use')
+    agreement_slides = BooleanField('Slides')
+    agreement_support = BooleanField('Support')
+    agreement_sotfware = BooleanField('Sotfware')
+    agreement_documentation = BooleanField('Documentation')
+    agreement_images = BooleanField('Images')
+    comments = TextAreaField('Comments')
     join_open = BooleanField('Join open')
     join_notification = BooleanField('Join notification')
     resources_services = MultiCheckboxField(
@@ -313,7 +313,7 @@ def user_apply():
         return redirect('/')
 
     return render_template('management/user_apply.html',
-                           title="Project Application",
+                           title="User Application",
                            states=['save', 'cancel'],
                            form=form,
                            fields=UserRegistrationForm.keys,
@@ -372,11 +372,11 @@ def project_edit(projectid):
                 #
                 # after apoproval this should not be changed either
                 #
-                project.aggreement_use = data["aggreement_use"]
-                project.aggreement_slides = data["aggreement_slides"]
-                project.aggreement_support = data["aggreement_support"]
-                project.aggreement_sotfware = data["aggreement_sotfware"]
-                project.aggreement_documentation = data["aggreement_documentation"]
+                project.agreement_use = data["agreement_use"]
+                project.agreement_slides = data["agreement_slides"]
+                project.agreement_support = data["agreement_support"]
+                project.agreement_sotfware = data["agreement_sotfware"]
+                project.agreement_documentation = data["agreement_documentation"]
 
                 project.categories = data["categories"]
                 project.keywords = data["keywords"]

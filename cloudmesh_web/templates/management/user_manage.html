@@ -4,90 +4,114 @@
 
 {% block content %}
 <legend>{{ title }}</legend>
+<script type="text/javascript">
+    $(function() {
+      {% for usernum in range(users|count) %}
+        $("#user-table").dataTable({
+            "aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
+            "iDisplayLength": 25,
+            "sPaginationType": "full_numbers",
+            "sDom": 'CR<"clear">lftipr',
+            "oColVis": {
+                "aiExclude": [ 0 ],
+                "sAlign": "center"
+            },
+            "fnDrawCallback": function(o) {
+                var nColVis = $('div.ColVis', o.nTableWrapper)[0];
+                nColVis.align = "right";
+                nColVis.style.paddingBottom = "15px";
+            },
+            aaSorting: [[1,'asc']],
+            aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ],
+            destroy: true
+        });
+      {% endfor %}
+    });
+
+    function toggle(source,select_list) {
+      checkboxes = document.getElementsByName(select_list);
+      for(var i=0, n=checkboxes.length;i<n;i++) {
+        checkboxes[i].checked = source.checked;
+      }
+    }
+</script>
 
 <form method="POST">
+    <table id="user-table" >
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                {% if with_edit == "True" %}
+                    <th></th>
+                {% endif %}
+                <th></th>
+                <th> Status</th>
+                <th> Firstname</th>
+                <th> Lastname</th>
+                <th> Email</th>
+                <th> Username</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>
+                    <input id="{{ user.username }}" name="selectedusers" type="checkbox" value="{{ user.username }}">
+                </td>
+                <td>
+                    <a href="/user/profile/{{ user.username }}">view <i class="fa fa-user"></i></a>
+                </td>
 
-<table class="table table-condensed">
-  <thead>
-  <tr>
-    <th> </th>
-    <th> </th>
-    <th> </th>    
-    <th> Status </th>    
-    <th> Firstname </th>
-    <th> Lastname </th>
-    <th> Email </th>
-    <th> Username </th>            
-  </tr>
-  </thead>
-
-   <tbody>
-{% for user in users %}
-  <tr>
-    <td> <input id="{{ user.username }}" name="selectedusers" type="checkbox" value="{{ user.username }}"></td>    
-    <td> <a href="/user/profile/{{ user.username }}">
-      view <i class="fa fa-user"></i> </a> </td>        
-
-   <td>
-     {% if with_edit == "True" %}
-        <a href="/user/edit/{{ user.username }}"> edit <i class="fa fa-user"></i> </a>
-     {% endif %}
-   </td>        
-
-      {% if user.status == 'approved' %}
-        <td>
-	  <font  color="green"> <i class="fa fa-check-square-o"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="green"> {{ user.status|capitalize }} </font>
-	</td>
-	
-
-      {% elif user.status == 'denied' %}
-        <td>
-	  <font  color="red"> <i class="fa fa-ban"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="red"> {{ user.status|capitalize }} </font>
-	</td>
-
-
-      {% elif user.status == 'pending' %}
-        <td>
-	  <font  color="grey"> <i class="fa fa-pause"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="grey"> {{ user.status|capitalize }} </font>
-	</td>
-
-      {% elif user.status == 'blocked' %}
-        <td>
-	  <font  color="red"> <i class="fa fa-ban"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="red"> {{ user.status|capitalize }} </font>
-	</td>
-
-      {% else %}
-        <td>
-	  <font  color="black"> <i class="fa fa-question-circle"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="black"> {{ user.status|capitalize }} </font>
-	</td>
-
-
-      {% endif %}
-
-    <td>{{ user.firstname }}</td>
-    <td>{{ user.lastname }}</td>
-    <td>{{ user.email }}</td>
-    <td>{{ user.username }}</td>            
-  </tr>
-{% endfor %}
-  </tbody>
-</table>
-
+                 {% if with_edit == "True" %}
+                    <td>
+                        <a href="/user/edit/{{ user.username }}"> edit <i class="fa fa-user"></i> </a>
+                    </td>
+                 {% endif %}
+                {% if user.status == 'approved' %}
+                    <td>
+                        <font color="green"> <i class="fa fa-check-square-o"></i> </font>
+                    </td>
+                    <td>
+                        <font color="green"> {{ user.status|capitalize }} </font>
+                    </td>
+                {% elif user.status == 'denied' %}
+                    <td>
+                        <font color="red"> <i class="fa fa-ban"></i> </font>
+                    </td>
+                    <td>
+                        <font color="red"> {{ user.status|capitalize }} </font>
+                    </td>
+                {% elif user.status == 'pending' %}
+                    <td>
+                        <font color="grey"> <i class="fa fa-pause"></i> </font>
+                    </td>
+                    <td>
+                        <font color="grey"> {{ user.status|capitalize }} </font>
+                    </td>
+                {% elif user.status == 'blocked' %}
+                    <td>
+                        <font color="red"> <i class="fa fa-ban"></i> </font>
+                    </td>
+                    <td>
+                        <font color="red"> {{ user.status|capitalize }} </font>
+                    </td>
+                {% else %}
+                    <td>
+                        <font color="black"> <i class="fa fa-question-circle"></i> </font>
+                    </td>
+                    <td>
+                        <font color="black"> {{ user.status|capitalize }} </font>
+                    </td>
+                {% endif %}
+                <td>{{ user.firstname }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.username }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 <div class="control-group">
   <label class="control-label" for="button_submit"></label>
