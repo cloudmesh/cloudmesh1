@@ -10,6 +10,9 @@ from sh import cm
 import sh
 from cloudmesh.iaas.cm_vm import VMcommand
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.config.cm_keys import cm_keys_mongo
+from cloudmesh.user.cm_user import cm_user
+from cloudmesh.iaas.cm_cloud import CloudManage
 
 
 class cm_shell_cluster:
@@ -60,6 +63,7 @@ class cm_shell_cluster:
         # -----------------------------
         # TODO::
         # key management
+        # add VMs to cluster
         # -----------------------------
         
         if arguments['create']:
@@ -69,12 +73,15 @@ class cm_shell_cluster:
                 Console.error("There is a problem with the configuration yaml files")
                 return
             username = config['cloudmesh']['profile']['username']
-            dir_name = "temp_" + username
+            cloudname = arguments['--cloud'] or CloudManage().get_selected_cloud(username)
+            dir_name = ".temp_cluster_create_" + username
             
             #NumOfVM = None
             GroupName = None
             vm_login_name = None
-            _key = ''
+            
+            temp_key_name = "sshkey_temp"
+            _key = "-i ./{0}/{1}".format(dir_name, temp_key_name)
             StrictHostKeyChecking = "-o StrictHostKeyChecking=no"
             
             res = None
@@ -166,11 +173,36 @@ class cm_shell_cluster:
                         continue
                 proceed = True
             
+            # -------------------------
+            # key handler
+            userinfo = cm_user().info(username)
+            key = None
+            if "key" in userinfo["defaults"]:
+                key = userinfo["defaults"]["key"]
+            elif len(userinfo["keys"]["keylist"].keys()) > 0:
+                key = userinfo["keys"]["keylist"].keys()[0]
+                Console.warning("default key is not set, trying to use a key in the database...")
+        
+            if key:
+                keycontent = userinfo["keys"]["keylist"][key]
+                if keycontent.startswith('key '):
+                    keycontent = keycontent[4:]
+                cm_keys_mongo(username).check_register_key(username, cloudname, key, keycontent)
+            else:
+                Console.error("No sshkey found. Please Upload one")
+                return
+            # -------------------------
+            
+            
             # generate ssh keys for VMs and prepare two files: authorized_keys and hosts
             print ("generating ssh keys...")
             sh.mkdir("{0}".format(dir_name))
             fa = open("./{0}/authorized_keys_temp".format(dir_name), "w")
             fh = open("./{0}/hosts_temp".format(dir_name), "w")
+            fk = open("./{0}/{1}".format(dir_name, temp_key_name), "w")
+            
+            fk.write(keycontent)
+            fk.close()
             
             for k, v in res.iteritems():
                 address_floating = get_ip(v)
@@ -201,7 +233,7 @@ class cm_shell_cluster:
                          .format(vm_login_name,address_floating, _key, StrictHostKeyChecking, dir_name))
                 os.popen("ssh {2} {3} {0}@{1} \"sudo mv authorized_keys ~/.ssh/\""\
                          .format(vm_login_name,address_floating, _key, StrictHostKeyChecking))
-                os.popen("rm ./{0}/oops/authorized_keys".format(dir_name))
+                os.popen("rm ./{0}/authorized_keys".format(dir_name))
                 
                 os.popen("cp ./{0}/hosts_temp ./{0}/oops/".format(dir_name))
                 os.popen("mv ./{0}/oops/hosts_temp ./{0}/oops/hosts".format(dir_name))
