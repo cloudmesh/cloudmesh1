@@ -30,20 +30,20 @@ class cm_shell_cluster:
                            [--flavor=<flavorName>|--flavorid=<flavorId>]
                            
         Options:
-            --count=<count>        specify amount of VMs in the cluster
-            --group=<group>        specify a group name of the cluster, make sure it's unique
-            --ln=<LoginName>       login name for VMs, e.g. ubuntu
-            --cloud=<CloudName>    give a cloud to work on
-            --flavor=<flavorName>  give the name of the flavor
-            --flavorid=<flavorId>  give the id of the flavor
-            --image=<imgName>      give the name of the image
-            --imageid=<imgId>      give the id of the image
+            --count=<count>            specify amount of VMs in the cluster
+            --cluster=<ClusterName>    specify a group name of the cluster, make sure it's unique
+            --login=<LoginName>        login name for VMs, e.g. ubuntu
+            --cloud=<CloudName>        give a cloud to work on
+            --flavor=<flavorName>      give the name of the flavor
+            --flavorid=<flavorId>      give the id of the flavor
+            --image=<imgName>          give the name of the image
+            --imageid=<imgId>          give the id of the image
 
                            
         Description:
             Cluster Management
             
-            cluster create --count=<count> --group=<group> --ln=<LoginName> [options...]
+            cluster create --count=<count> --cluster=<ClusterName> --login=<LoginName> [options...]
                 Start a cluster of VMs, and each of them can log into all others.
                 CAUTION: you sould do some default setting before using this command:
                 1. select cloud to work on, e.g. cloud select india
@@ -86,7 +86,7 @@ class cm_shell_cluster:
                 return
             '''
             if arguments['--cluster'] == '':
-                Console.error("<group> cannot be empty")
+                Console.error("<ClusterName> cannot be empty")
                 return
             else:
                 GroupName = arguments['--cluster']
