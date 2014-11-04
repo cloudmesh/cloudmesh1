@@ -23,27 +23,19 @@ class cm_shell_cluster:
         """
         Usage:
             cluster create --count=<count>
-                           --cluster=<ClusterName>
-                           --login=<LoginName>
+                           --group=<group>
+                           --ln=<LoginName>
                            [--cloud=<CloudName>]
                            [--image=<imgName>|--imageid=<imgId>]
                            [--flavor=<flavorName>|--flavorid=<flavorId>]
-                           
-        Options:
-            --count=<count>            specify amount of VMs in the cluster
-            --cluster=<ClusterName>    specify a group name of the cluster, make sure it's unique
-            --login=<LoginName>        login name for VMs, e.g. ubuntu
-            --cloud=<CloudName>        give a cloud to work on
-            --flavor=<flavorName>      give the name of the flavor
-            --flavorid=<flavorId>      give the id of the flavor
-            --image=<imgName>          give the name of the image
-            --imageid=<imgId>          give the id of the image
-
-                           
+                                    
         Description:
             Cluster Management
             
             cluster create --count=<count> --cluster=<ClusterName> --login=<LoginName> [options...]
+            --count=<count>            specify amount of VMs in the cluster
+            --group=<group>            specify a group name of the cluster, make sure it's unique
+            --ln=<LoginName>           login name for VMs, e.g. ubuntu
                 Start a cluster of VMs, and each of them can log into all others.
                 CAUTION: you sould do some default setting before using this command:
                 1. select cloud to work on, e.g. cloud select india
@@ -53,11 +45,20 @@ class cm_shell_cluster:
                 5. set image of VMs, e.g. default image
                 6. set flavor of VMs, e.g. default flavor
                 Also, please make sure the group name of the cluster is unique
+                
+        Options:
+            --cloud=<CloudName>        give a cloud to work on
+            --flavor=<flavorName>      give the name of the flavor
+            --flavorid=<flavorId>      give the id of the flavor
+            --image=<imgName>          give the name of the image
+            --imageid=<imgId>          give the id of the image
+
 
         """
-        pprint(arguments)
+        #pprint(arguments)
         
         # -----------------------------
+        # TODO::
         # key management
         # -----------------------------
         
@@ -85,24 +86,22 @@ class cm_shell_cluster:
                 Console.error("<count> must be an integer")
                 return
             '''
-            if arguments['--cluster'] == '':
-                Console.error("<ClusterName> cannot be empty")
+            if arguments['--group'] == '':
+                Console.error("<group> cannot be empty")
                 return
             else:
-                GroupName = arguments['--cluster']
-            if arguments['--login'] == '':
+                GroupName = arguments['--group']
+            if arguments['--ln'] == '':
                 Console.error("<LoginName> cannot be empty")
                 return
             else:
-                vm_login_name = arguments['--login']
+                vm_login_name = arguments['--ln']
             
             # start VMs 
             print ("starting VMs...")
             arguments_temp = arguments
             arguments_temp['start'] = True
             arguments_temp['--name'] = None
-            arguments_temp['--ln'] = arguments['--login']
-            arguments_temp['--group'] = arguments['--cluster']
             
             vmclass = VMcommand(arguments_temp)
             res = vmclass.call_procedure()
