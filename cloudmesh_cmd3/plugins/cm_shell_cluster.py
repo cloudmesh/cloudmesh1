@@ -33,9 +33,9 @@ class cm_shell_cluster:
             Cluster Management
             
             cluster create --count=<count> --cluster=<ClusterName> --login=<LoginName> [options...]
-            --count=<count>            specify amount of VMs in the cluster
-            --group=<group>            specify a group name of the cluster, make sure it's unique
-            --ln=<LoginName>           login name for VMs, e.g. ubuntu
+            <count>            specify amount of VMs in the cluster
+            <group>            specify a group name of the cluster, make sure it's unique
+            <LoginName>        login name for VMs, e.g. ubuntu
                 Start a cluster of VMs, and each of them can log into all others.
                 CAUTION: you sould do some default setting before using this command:
                 1. select cloud to work on, e.g. cloud select india
