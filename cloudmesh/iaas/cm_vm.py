@@ -115,7 +115,7 @@ def shell_command_vm(arguments):
     """
 
     call_proc = VMcommand(arguments)
-    call_proc.call_procedure()
+    return call_proc.call_procedure()
 
 
 class VMcommand(object):
@@ -134,23 +134,17 @@ class VMcommand(object):
     def _vm_create(self):
         # -------------------------
         # check input
-        class TempException(Exception):
-            def __init__(self, msg):
-                self.msg = msg
-            def __str__(self):
-                return self.msg
         count = 1
         if self.arguments['--count']:
             try:
                 count = int(self.arguments['--count'])
             except:
                 Console.error("--count must be assigned with an integer")
-                return 
-                
+                return False
             if count < 1:
                 Console.error(
                     "--count must be assigned with an integer greater than 0")
-                return 
+                return False
             watch = time.time()
         # -------------------------
         # select cloud
@@ -161,7 +155,7 @@ class VMcommand(object):
                 self.username, getone=True, cloudname=self.arguments['--cloud'])
             if cloud is None:
                 Console.error("ERROR: could not find cloud '{0}'".format(self.arguments['--cloud']))
-                return
+                return False
             else:
                 cloudname = self.arguments['--cloud']
         else:
@@ -169,7 +163,7 @@ class VMcommand(object):
         if cloudname not in mongo.active_clouds(self.username):
             Console.warning(
                 "cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname))
-            return
+            return False
         # -------------------------
         # starting vm
         res = start_vm(self.username,
@@ -402,7 +396,7 @@ class VMcommand(object):
 
     def call_procedure(self):
         if 'start' in self.arguments and self.arguments['start']:
-            self._vm_create()
+            return self._vm_create()
         elif 'delete' in self.arguments and self.arguments['delete']:
             self._vm_delete()
         elif 'ip' in self.arguments and self.arguments['ip']:
