@@ -35,7 +35,7 @@ class cm_shell_cluster:
         Description:
             Cluster Management
             
-            cluster create --count=<count> --cluster=<ClusterName> --login=<LoginName> [options...]
+            cluster create --count=<count> --group=<group> --ln=<LoginName> [options...]
             <count>            specify amount of VMs in the cluster
             <group>            specify a group name of the cluster, make sure it's unique
             <LoginName>        login name for VMs, e.g. ubuntu
@@ -62,7 +62,6 @@ class cm_shell_cluster:
         
         # -----------------------------
         # TODO::
-        # key management
         # add VMs to cluster
         # -----------------------------
         
@@ -121,6 +120,12 @@ class cm_shell_cluster:
             
             # check all VMs are active
             command_refresh = "vm list --refresh --group={0} --format=json".format(GroupName)
+            def _help0(d):
+                for k, v in d.iteritems():
+                    if v['status'] != 'ACTIVE':
+                        return False
+                return True
+                
             proceed = False
             repeat_index = 1
             while proceed != True:
@@ -131,11 +136,11 @@ class cm_shell_cluster:
                 time.sleep(5)
                 res = str(cm(command_refresh))
                 res = string_to_dict(res)
-                for k, v in res.iteritems():
-                    if v['status'] != 'ACTIVE':
-                        repeat_index = repeat_index + 1
-                        continue
-                proceed = True
+                if _help0(res):
+                    proceed = True
+                else:
+                    repeat_index = repeat_index + 1
+                    continue
             
             # assign ip to all VMs
             print ("assigning public ips...")
@@ -156,6 +161,12 @@ class cm_shell_cluster:
                         return item['addr']#.encode('ascii')
                 return "FAIL: doesn't exist"
             
+            def _help(d):
+                for k, v in d.iteritems():
+                    if check_public_ip_existence(v) != True:
+                        return False
+                return True
+            
             # make sure all VMs have been assigned a public ip
             proceed = False
             repeat_index = 1
@@ -167,11 +178,12 @@ class cm_shell_cluster:
                 time.sleep(5)
                 res = str(cm(command_refresh))
                 res = string_to_dict(res)
-                for k, v in res.iteritems():
-                    if check_public_ip_existence(v) != True:
-                        repeat_index = repeat_index + 1
-                        continue
-                proceed = True
+                if _help(res):
+                    proceed = True
+                else:
+                    repeat_index = repeat_index + 1
+                    continue
+                
             
             # -------------------------
             # key handler
