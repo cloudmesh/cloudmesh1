@@ -2,6 +2,7 @@
 # terminal 1: fab manage.mongo
 # terminal 2: python model_group.py
 #
+from __future__ import print_function
 from mongoengine import StringField, Document
 from cloudmesh_common.tables import array_dict_table_printer
 import json
@@ -91,9 +92,9 @@ def main():
 
     vms = ExperimentVM.objects()
     for vm in vms:
-        print vm.cm_label, vm.cm_userid, vm.vmid, vm.cloud
+        print(vm.cm_label, vm.cm_userid, vm.vmid, vm.cloud)
 
-    print experiment.to_table(label)
+    print(experiment.to_table(label))
 
 
 if __name__ == "__main__":

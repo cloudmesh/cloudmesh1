@@ -1,4 +1,4 @@
-
+from __future__ import print_function
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.cm_mongo import cm_MongoBase
 from cloudmesh.config.ConfigDict import ConfigDict
@@ -98,10 +98,10 @@ if __name__ == "__main__":
 
     cursor = m.find({})
     for element in cursor:
-        print 'element', element
+        print('element', element)
 
-    print m.get('gregor', '/hello', 'VMs')
-    print m.get('gregor', '/hello', 'images')
-    print m.get('gregor', '/hello', 'dict')
+    print(m.get('gregor', '/hello', 'VMs'))
+    print(m.get('gregor', '/hello', 'images'))
+    print(m.get('gregor', '/hello', 'dict'))
 
     pprint(m.get('gregor', '/hello', 'dict')['b'])

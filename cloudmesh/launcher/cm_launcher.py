@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config_launcher
 from time import sleep
 from random import randint
@@ -61,15 +62,15 @@ class SimulatorLauncher(BaseClassLauncher):
         status_dict = {"status": status, "error": error_message}
         # print "query, dict", query, status_dict
         self.db.update(query, status_dict)
-        print "After Update"
+        print("After Update")
         res = self.db.find(query)
         for r in res:
-            print r
+            print(r)
 
     def run(self, task_dict):
         for t in task_dict:
             sleep(randint(1, 3))
-            print str(t) + ": " + str(task_dict[t])
+            print(str(t) + ": " + str(task_dict[t]))
 
 #        print "launching on server {0}, host - {1}".format(task_dict["name"], task_dict["host_list"])
 #         for task in task_dict["recipies"]:

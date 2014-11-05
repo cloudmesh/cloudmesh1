@@ -93,6 +93,8 @@ Description:
 
       remove the interface item_name form system system_name
 """
+from __future__ import print_function
+
 from prettytable import PrettyTable
 from cloudmesh_common.tables import table_printer
 from docopt import docopt
@@ -140,7 +142,7 @@ class CobblerClient:
             self.power_system(
                 self.arg_dict["--name"], self.arg_dict["--off"], self.arg_dict["--verbose"])
         elif self.arg_dict["test"]:
-            print "test is: {0}, force is: {1}, verbose is: {2}".format(self.arg_dict["test"], self.arg_dict["--force"], self.arg_dict["--verbose"])
+            print("test is: {0}, force is: {1}, verbose is: {2}".format(self.arg_dict["test"], self.arg_dict["--force"], self.arg_dict["--verbose"]))
 
     def render_result(self, slabel, data):
         if data["result"]:
@@ -149,12 +151,12 @@ class CobblerClient:
             elif self.arg_dict["--format"] in ["list"]:
                 self.pp.pprint(data["data"])
             elif self.arg_dict["--format"] in ["html"]:
-                print table_printer(data["data"])
+                print(table_printer(data["data"]))
             elif self.arg_dict["--format"] in ["ascii"]:
                 x = PrettyTable()
                 x.add_column(slabel, data["data"])
                 x.align = "l"
-            print x
+            print(x)
             """
             datas = data["data"]
             print "[Succeed] {0}{1}.".format(slabel, ", description is: {0}".format(data["description"]) if data["description"] else "")
@@ -174,7 +176,7 @@ class CobblerClient:
                         self.pp.pprint(single_data)
             """
         else:
-            print "[Failed] {0}, description is: {1}.".format(slabel, data["description"])
+            print("[Failed] {0}, description is: {1}.".format(slabel, data["description"]))
 
     def read_dict(self, filename):
         s = ""
@@ -212,7 +214,7 @@ class CobblerClient:
         data_dict = self.read_dict(
             data) if object_type != "kickstart" else self.read_kickstart_data(data)
         if data_dict is None:
-            print "Error. File {0} is NOT a valid json formation data file.".format(data)
+            print("Error. File {0} is NOT a valid json formation data file.".format(data))
             return 1
         name = data_dict["name"]
         surl = "/cm/v1/cobbler/{0}s/{1}".format(object_type, name)
@@ -235,7 +237,7 @@ class CobblerClient:
         data_dict = self.read_dict(
             data) if object_type != "kickstart" else self.read_kickstart_data(data)
         if data_dict is None:
-            print "Error. File {0} is NOT a valid json formation data file.".format(data)
+            print("Error. File {0} is NOT a valid json formation data file.".format(data))
             return 1
         name = data_dict["name"]
         surl = "/cm/v1/cobbler/{0}s/{1}".format(object_type, name)
@@ -256,7 +258,7 @@ class CobblerClient:
             "{0} {1} {2}".format("remove interface", system_name, if_name), result_dict)
 
     def deploy_system(self, name, flag_monitor):
-        print "  Send command [deploy] to {0}, please wait ...".format(name)
+        print("  Send command [deploy] to {0}, please wait ...".format(name))
         surl = "/cm/v1/cobbler/baremetal/{0}".format(name)
         result_dict = self.request_rest_api("post", surl)
         self.render_result("{0} {1}".format("deploy", name), result_dict)
@@ -264,7 +266,7 @@ class CobblerClient:
             self.monitor_deploy(name)
 
     def power_system(self, name, flag_off, flag_monitor):
-        print "  Send command [power {1}] to {0}, please wait ...".format(name, "off" if flag_off else "on")
+        print("  Send command [power {1}] to {0}, please wait ...".format(name, "off" if flag_off else "on"))
         surl = "/cm/v1/cobbler/baremetal/{0}".format(name)
         data = {"power_on": not flag_off}
         result_dict = self.request_rest_api("put", surl, data)
@@ -338,12 +340,12 @@ class CobblerClient:
     def monitor_deploy(self, name):
         server_status_pattern = [False, True, False]
         self.waiting_server(name, server_status_pattern)
-        print "\nServer {0} deployed successfully.".format(name)
+        print("\nServer {0} deployed successfully.".format(name))
 
     def monitor_power(self, name, flag_on):
         server_status_pattern = [True if flag_on else False]
         self.waiting_server(name, server_status_pattern)
-        print "\nServer {0} power {1} successfully.".format(name, "on" if flag_on else "off")
+        print("\nServer {0} power {1} successfully.".format(name, "on" if flag_on else "off"))
 
     def get_data(self, req_json):
         return req_json["cmrest"]["data"]

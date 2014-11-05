@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh_install import config_file
 from CMUserProviderBaseType import CMUserProviderBaseType
 from cloudmesh.config.ConfigDict import ConfigDict
@@ -233,7 +234,7 @@ class cm_userLDAP (CMUserProviderBaseType):
                                            "projects": {"active": [], "completed": []},
                                            "keys": keys}
         except:
-            print "WRONG" + str(sys.exc_info())
+            print("WRONG" + str(sys.exc_info()))
 
     def _getProjects(self, user_cn=None):
         ldap_filter = "(&(objectclass=posixGroup)(cn=fg*))"
@@ -261,12 +262,12 @@ class cm_userLDAP (CMUserProviderBaseType):
                                     self.users[auid]["projects"][
                                         "active"] = [cn]
         except:
-            print "WRONG" + str(sys.exc_info())
+            print("WRONG" + str(sys.exc_info()))
 
     def _get_user_from_yaml(self, username):
         me = ConfigDict(config_file("/me.yaml"))
 
-        print me
+        print(me)
 
 
 def main():

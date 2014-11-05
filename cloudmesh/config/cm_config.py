@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.ConfigDict import ConfigDict
 # from cloudmesh.util.config import read_yaml_config
 from cloudmesh_common.logger import LOGGER
@@ -75,7 +76,7 @@ class DBConnFactory(object):
                     conn = MongoClient(uri)[dbname]
                 except:
                     msg = "Failed to connect to Mongoclient DB:\n\t%s" % uri
-                    print msg
+                    print(msg)
                     log.error(msg)
 
             elif clientType == MONGOENGINE:
@@ -87,7 +88,7 @@ class DBConnFactory(object):
                                    password=cls.DBCONFIG["password"])
                 except:
                     msg = "Failed to connect to MongoEngine DB:\n\t%s" % dbname
-                    print msg
+                    print(msg)
                     log.error(msg)
 
             cls.connectors[dbkey] = conn
@@ -404,7 +405,7 @@ class cm_config(ConfigDict):
 
     @deprecated
     def keys(self):
-        print "please user the function cloudnames()"
+        print("please user the function cloudnames()")
         return self.cloudnames()
 
     def cloudnames(self):
@@ -434,7 +435,7 @@ class cm_config(ConfigDict):
         if kind == "openstack":
             return self.rc_openstack(name)
         else:
-            print "CLOUDTYPE not supported:", kind
+            print("CLOUDTYPE not supported:", kind)
 
     @deprecated
     def rc_euca(self, name, project):
@@ -512,30 +513,30 @@ def yaml_attribute_replace(filename='abc.yaml',
 if __name__ == "__main__":
     config = cm_config()
 
-    print config
+    print(config)
 
-    print "= ACTIVE ================"
-    print config.projects('active')
-    print "= COMPLETED ================"
-    print config.projects('completed')
-    print "= INDIA ================"
-    print config.cloud('india')
-    print "= PROFILE ================"
-    print config.get("cloudmesh.profile")
-    print "= CLOUDS ================"
-    print config.cloudnames()
-    print "= RC ================"
-    print config.rc('india')
-    print "= DEFAULT ================"
-    print config.default
-    print "= TO FILE ================"
+    print("= ACTIVE ================")
+    print(config.projects('active'))
+    print("= COMPLETED ================")
+    print(config.projects('completed'))
+    print("= INDIA ================")
+    print(config.cloud('india'))
+    print("= PROFILE ================")
+    print(config.get("cloudmesh.profile"))
+    print("= CLOUDS ================")
+    print(config.cloudnames())
+    print("= RC ================")
+    print(config.rc('india'))
+    print("= DEFAULT ================")
+    print(config.default)
+    print("= TO FILE ================")
     outfile = config_file("/junk.yaml")
-    print config.write(outfile)
+    print(config.write(outfile))
     os.system("cat " + outfile)
-    print "= AZURE ================"
+    print("= AZURE ================")
     configuration = config.credential('azure')
 
-    print configuration['username']
+    print(configuration['username'])
 
     # print "================="
 

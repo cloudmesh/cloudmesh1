@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import row_table
 from cmd3.console import Console
@@ -5,6 +6,7 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.shellutil import shell_commands_dict_output
 from cloudmesh.iaas.cm_cloud import shell_command_cloud
+from cloudmesh.config.cm_keys import cm_keys_mongo
 
 log = LOGGER(__file__)
 
@@ -17,15 +19,16 @@ def shell_command_default(arguments):
         default [--column=COLUMN] [--format=FORMAT]
         default cloud [VALUE]
         default format [VALUE]
+        default key [VALUE]
         default flavor [CLOUD] [--name=NAME|--id=ID]
         default image [CLOUD] [--name=NAME|--id=ID]
 
     Arguments:
 
         VALUE    provide a value to update default setting
-        CLOUD   provide a cloud name to work with, if not
-                      specified, the default cloud or a selected
-                      cloud will be used
+        CLOUD    provide a cloud name to work with, if not
+                 specified, the default cloud or a selected
+                 cloud will be used
 
     Options:
 
@@ -50,6 +53,9 @@ def shell_command_default(arguments):
         default format [VALUE]
             print or change(if VALUE provided) default print format,
             available formats are table, json, csv
+            
+        default key [VALUE]
+            print or change (if VALUE provided) default key.
 
         default flavor [CLOUD] [--name=NAME|--id=ID]
             set default flavor for a cloud, same as command:
@@ -74,18 +80,6 @@ def shell_command_default(arguments):
 
 class DefaultCommand(object):
 
-
-
-    def _start_cm_user(self):
-        if not self.started_cm_user:
-            try:
-                self.user_obj = cm_user()
-            except:
-                Console.error("There is a problem with "
-                              "cm_user object initialization")
-                return
-            self.started_cm_user = True
-
     def __init__(self, arguments):
         try:
             self.config = cm_config()
@@ -98,6 +92,16 @@ class DefaultCommand(object):
         self.user_obj = None
 
         self.arguments = arguments
+        
+    def _start_cm_user(self):
+        if not self.started_cm_user:
+            try:
+                self.user_obj = cm_user()
+            except:
+                Console.error("There is a problem with "
+                              "cm_user object initialization")
+                return
+            self.started_cm_user = True
 
     def _default_format(self):
         self._start_cm_user()
@@ -118,12 +122,12 @@ class DefaultCommand(object):
             except:
                 pass
             if format not in [None, 'none']:
-                print defaults_data['shell_print_format']
+                print(defaults_data['shell_print_format'])
             else:
                 defaults_data['shell_print_format'] = "table"
                 self.user_obj.set_defaults(self.username, defaults_data)
                 defaults_data = self.user_obj.info(self.username)
-                print defaults_data['shell_print_format']
+                print(defaults_data['shell_print_format'])
 
     def get_defaults(self):
         '''
@@ -160,7 +164,7 @@ class DefaultCommand(object):
             p_format = None
 
         if p_format == 'table' or p_format is None:
-            print row_table(to_print, order=None, labels=["Default", "Value"])
+            print(row_table(to_print, order=None, labels=["Default", "Value"]))
         else:
             shell_commands_dict_output(to_print,
                                        print_format=p_format,
@@ -183,9 +187,9 @@ class DefaultCommand(object):
                                 "active, to register and activate a CLOUD: cloud on [CLOUD]")
         else:
             if "cloud" in defaults_data:
-                print defaults_data['cloud']
+                print(defaults_data['cloud'])
             else:
-                print "default cloud not set"
+                print("default cloud not set")
 
     def _default_flavor(self):
         '''
@@ -204,6 +208,22 @@ class DefaultCommand(object):
         arguments["cloud"] = True
         arguments["set"] = True
         shell_command_cloud(arguments)
+        
+    def _default_key(self):
+        key_store = cm_keys_mongo(self.username)
+        # print key_store.names()
+        # no name provided, will get current default key
+        if not self.arguments["VALUE"]:
+            defaultkey = key_store.default()
+            print("Current default key is: {0}".format(defaultkey))
+        # name provided, check if it exists in the db
+        elif self.arguments["VALUE"] in key_store.names():
+            key_store.setdefault(self.arguments["VALUE"])
+            # Update mongo db defaults with new default key
+            print('The default key was successfully set to: ', self.arguments['VALUE'])
+        else:
+            print("ERROR: Specified key is not registered.")
+        return
 
     def execute(self):
         if self.arguments['format']:
@@ -214,5 +234,7 @@ class DefaultCommand(object):
             self._default_flavor()
         elif self.arguments['image']:
             self._default_image()
+        elif self.arguments['key']:
+            self._default_key()
         else:
             self._print_default()

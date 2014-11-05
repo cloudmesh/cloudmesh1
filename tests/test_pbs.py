@@ -11,7 +11,7 @@ individual tests can be run with
 nosetests -v  --nocapture test_cm_compute.py:Test.test_06
 
 """
-
+from __future__ import print_function
 from sh import head
 from sh import fgrep
 import string
@@ -72,7 +72,7 @@ class Test:
             self.pbs = PBS(self.user, host)
             results = self.pbs.qstat()
 
-            print host, " =", len(results), "jobs"
+            print(host, " =", len(results), "jobs")
 
     def test_qinfo(self):
         for host in self.hosts:

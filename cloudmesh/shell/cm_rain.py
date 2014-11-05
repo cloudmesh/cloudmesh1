@@ -52,6 +52,7 @@ Options:
 
 """
 # from __future__ import dict
+from __future__ import print_function
 from docopt import docopt
 import hostlist
 from datetime import datetime, timedelta
@@ -62,7 +63,7 @@ from pytimeparse.timeparse import timeparse
 
 
 def not_implemented():
-    print "ERROR: not yet implemented"
+    print("ERROR: not yet implemented")
 
 
 def yn_choice(message, default='y'):
@@ -109,33 +110,33 @@ def rain_command(arguments):
     if arguments["admin"]:
 
         if arguments["add"]:
-            print "add"
+            print("add")
 
             if arguments["LABEL"] is not None:
                 """admin add LABEL --file=FILE"""
 
-                print(arguments["LABEL"])
-                print(arguments["--file"])
+                print((arguments["LABEL"]))
+                print((arguments["--file"]))
                 not_implemented()
 
             else:
                 """admin add --file=FILE"""
 
-                print(arguments["--file"])
+                print((arguments["--file"]))
                 not_implemented()
 
         elif arguments["on"]:
             """rain admin on HOSTS"""
 
-            print "switch on"
-            print (arguments["HOSTS"])
+            print("switch on")
+            print((arguments["HOSTS"]))
             not_implemented()
 
         elif arguments["off"]:
             """rain admin off HOSTS"""
 
-            print "switch off"
-            print (arguments["HOSTS"])
+            print("switch off")
+            print((arguments["HOSTS"]))
             not_implemented()
 
         elif arguments["delete"] or arguments["rm"]:
@@ -144,40 +145,40 @@ def rain_command(arguments):
 
             interactive = arguments["-i"]
 
-            print "delete", interactive
+            print("delete", interactive)
 
             for host in arguments["HOSTS"]:
                 if interactive:
                     keep = yn_choice(
                         "Do you want to delete the host %s?" % host)
                     if keep:
-                        print "delete %s" % host
+                        print("delete %s" % host)
                     else:
-                        print "keeping %s" % host
+                        print("keeping %s" % host)
             not_implemented()
 
         elif arguments["list"]:
 
             if arguments["users"]:
-                print "list users"
+                print("list users")
                 not_implemented()
 
             elif arguments["projects"]:
-                print "list projects"
+                print("list projects")
                 not_implemented()
 
             elif arguments["roles"]:
-                print "list roles"
+                print("list roles")
                 not_implemented()
 
             elif arguments["hosts"]:
-                print "list hosts"
+                print("list hosts")
                 not_implemented()
 
                 (time_start, time_end) = parse_time_interval(arguments["--start"],
                                                              arguments["--end"])
-                print "From:", time_start
-                print "To  :", time_end
+                print("From:", time_start)
+                print("To  :", time_end)
 
                 if ["--users"] is not None:
                     not_implemented()
@@ -190,13 +191,13 @@ def rain_command(arguments):
                     not_implemented()
 
         elif arguments["policy"]:
-            print "policy"
+            print("policy")
 
             (time_start, time_end) = parse_time_interval(arguments["--start"],
                                                          arguments["--end"])
 
-            print "From:", time_start
-            print "To  :", time_end
+            print("From:", time_start)
+            print("To  :", time_end)
 
             if ["--users"] is not None:
                 not_implemented()
@@ -209,22 +210,22 @@ def rain_command(arguments):
                 not_implemented()
 
         elif arguments["list"]:
-            print "list"
+            print("list")
 
             not_implemented()
 
     elif arguments["status"]:
-        print "status"
+        print("status")
         not_implemented()
 
     elif arguments["list"]:
-        print "user list"
+        print("user list")
 
         (time_start, time_end) = parse_time_interval(arguments["--start"],
                                                      arguments["--end"])
 
-        print "From:", time_start
-        print "To  :", time_end
+        print("From:", time_start)
+        print("To  :", time_end)
 
         not_implemented()
 

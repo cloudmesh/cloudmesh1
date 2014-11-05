@@ -11,7 +11,7 @@ individual tests can be run with
 nosetests -v  --nocapture tests/test_compute.py:Test.test_06
 
 """
-
+from __future__ import print_function
 from sh import head
 from sh import fgrep
 import string
@@ -35,25 +35,25 @@ class Test:
 
     # assuming first - is the prefered cloud
     cloudmesh_yaml = config_file("/cloudmesh.yaml")
-    print cloudmesh_yaml
+    print(cloudmesh_yaml)
     cloud_label = head(fgrep("-", cloudmesh_yaml), "-n", "1")
     cloud_label = cloud_label.replace(" - ", "").strip()
 
     def setup(self):
         """setup the test"""
-        print "CONFIG"
+        print("CONFIG")
         self.configuration = cm_config()
-        print "OK"
+        print("OK")
 
         self.name = self.configuration.active()[3]
-        print "ACTIVE CLOUD", self.name
+        print("ACTIVE CLOUD", self.name)
 
         self.cloud = openstack(self.name)
-        print "PPPP"
+        print("PPPP")
 
         self.cloud.get_token()
         pp.pprint(self.cloud.user_token)
-        print "LOADED CLOUD"
+        print("LOADED CLOUD")
 
         """
         # For multiple clouds
@@ -71,24 +71,24 @@ class Test:
     def test_00_label(self):
         """test the label"""
         HEADING()
-        print self.cloud_label
+        print(self.cloud_label)
         assert self.cloud.label == self.cloud_label
 
     def test_01_limit(self):
         """different way to get limits"""
         HEADING()
-        print json.dumps(self.cloud.limits(), indent=4)
+        print(json.dumps(self.cloud.limits(), indent=4))
 
     def test_02_info(self):
         """get some infor about the cloud"""
         HEADING()
         self.cloud.refresh('images')
-        print json.dumps(self.cloud.dump('images'), indent=4)
+        print(json.dumps(self.cloud.dump('images'), indent=4))
         # pp.pprint(self.cloud.dump('images', with_manager=True))
         pp.pprint(self.cloud.images)
         # doing a simple test as tiny is usually 512
         # assert self.cloud.flavors['m1.tiny']['ram'] == 512
-        print "Currently running vms:", len(self.cloud.images)
+        print("Currently running vms:", len(self.cloud.images))
         # we assume cloud is always busy which may actually not true
         # we shoudl start our own vm and than probe for it for now > 0 will do
         assert self.cloud.images > 0
@@ -98,7 +98,7 @@ class Test:
         HEADING()
         self.cloud.refresh('flavors')
 
-        print json.dumps(self.cloud.dump('flavors'), indent=4)
+        print(json.dumps(self.cloud.dump('flavors'), indent=4))
 
         # doing a simple test as tiny is usually 512
         assert self.cloud.flavor('m1.tiny')['ram'] == 512
@@ -113,7 +113,7 @@ class Test:
         key_content = keys[key_name]
         # print key_name
         # print key_content
-        print "STARTING IMAGE", image
+        print("STARTING IMAGE", image)
         meta = {"cmtag": "testing tag from creation via rest api"}
         result = self.cloud.vm_create(
             "fw-test-by-post-003", "2", image, key_name="grizzlykey", meta=meta)
@@ -124,49 +124,49 @@ class Test:
     def test_05_get_public_ip(self):
         """get an ip"""
         HEADING()
-        print "Obtaining public ip......"
+        print("Obtaining public ip......")
         ip = self.cloud.get_public_ip()
-        print "this is the ip returned:--->%s<---" % ip
+        print("this is the ip returned:--->%s<---" % ip)
 
     def test_06_assign_public_ip(self):
         """assign an ip"""
         HEADING()
-        print "Associate a public ip to an running instance......"
+        print("Associate a public ip to an running instance......")
         # serverid = "cc9bd86b-babf-4760-a5cd-c1f28df7506b"
         # ip = "fakeip" # {u'itemNotFound': {u'message': u'floating ip not found', u'code': 404}}
         # ip = "198.202.120.175"
         serverid = "b088e764-681c-4448-b487-9028b23a729e"
-        print "In process of obtaining a new ip..."
+        print("In process of obtaining a new ip...")
         ip = self.cloud.get_public_ip()
-        print "Got a new ip as: %s, now associating the ip..." % ip
-        print self.cloud.assign_public_ip(serverid, ip)
+        print("Got a new ip as: %s, now associating the ip..." % ip)
+        print(self.cloud.assign_public_ip(serverid, ip))
 
     def test_07_list_public_ips(self):
         """list the ips"""
         HEADING()
-        print "List all public ips allocated to the current account..."
+        print("List all public ips allocated to the current account...")
         ips = self.cloud.list_allocated_ips()
         ips_id_to_instance = {}
         for ip in ips:
             ips_id_to_instance[ip['id']] = ip['instance_id']
-        print ips_id_to_instance
+        print(ips_id_to_instance)
 
     def test_08_release_public_ips(self):
         """release the ips"""
         HEADING()
-        print "Release all public ips allocated to the current account but not being used..."
-        print "Before releasing, we have..."
+        print("Release all public ips allocated to the current account but not being used...")
+        print("Before releasing, we have...")
         self.test04_list_public_ips()
-        print "releasing..."
+        print("releasing...")
         self.cloud.release_unused_public_ips()
-        print "after releasing..."
+        print("after releasing...")
         self.test04_list_public_ips()
 
     def test_09_print_vms(self):
         """print the servers"""
         HEADING()
         self.cloud.refresh('servers')
-        print json.dumps(self.cloud.dump('servers'), indent=4)
+        print(json.dumps(self.cloud.dump('servers'), indent=4))
         # we assume that there are always images running
         assert len(self.cloud.servers) > 0
 
@@ -185,25 +185,25 @@ class Test:
         columns = ["id", "name", "ram", "vcpus"]
 
         table.create(self.cloud.flavors, columns, header=True)
-        print table
+        print(table)
 
         table = cm_table()
         columns = ["id", "name", "ram", "vcpus"]
 
         table.create(self.cloud.flavors, columns, format='HTML', header=True)
-        print table
+        print(table)
 
         table = cm_table()
         columns = ["id", "name", "ram", "vcpus"]
 
         table.create(self.cloud.flavors, columns, format='%12s', header=True)
-        print table
+        print(table)
 
         assert table is not None
 
     def test_12_start_delete_vm(self):
         """delete a vm"""
-        print "no test was being done"
+        print("no test was being done")
         '''
         name ="%s-%04d" % (self.cloud.credential["OS_USERNAME"], 1)
         out = self.cloud.vm_create(name, "m1.tiny", "6d2bca76-8fff-4d57-9f29-50378539b4fa")
@@ -231,7 +231,7 @@ class Test:
 
         user_id = self.cloud.find_user_id(force=True)
         vm_ids = self.cloud.find('user_id', user_id)
-        print "userid", user_id
+        print("userid", user_id)
         config = cm_config()
         config.data['cloudmesh']['clouds'][self.name][
             'credentials']['OS_USER_ID'] = user_id
@@ -241,7 +241,7 @@ class Test:
         # delete all vms of the user
         #
         servers = self.cloud.servers
-        print servers
+        print(servers)
 
         list = self.cloud.vms_delete_user()
 
@@ -261,7 +261,7 @@ class Test:
             self.cloud.info()
             time.sleep(1)
 
-        print "vms", vm_ids
+        print("vms", vm_ids)
 
         assert vm_ids == []
 
@@ -270,7 +270,7 @@ class Test:
         HEADING()
         configuration = cm_config()
         image = configuration.default(self.name)['image']
-        print "STARTING IMAGE", image
+        print("STARTING IMAGE", image)
         result = self.cloud.vm_create("gregor-test-001", "m1.tiny", image)
         # print result
         result = self.cloud.vm_create("gregor-test-002", "m1.tiny", image)
@@ -279,13 +279,13 @@ class Test:
         self.cloud.info()
 
         config = cm_config()
-        print "CONFIG"
+        print("CONFIG")
         user_id = config.data['cloudmesh']['clouds'][
             self.name]['credentials']['OS_USER_ID']
-        print user_id
+        print(user_id)
 
         vm_ids = self.cloud.find('user_id', user_id)
-        print vm_ids
+        print(vm_ids)
 
         assert len(vm_ids) == 2
 
@@ -305,14 +305,14 @@ class Test:
         """print states"""
         HEADING()
         self.cloud.refresh()
-        print self.cloud.states
+        print(self.cloud.states)
 
         search_states = ('ACTIVE', 'PAUSED')
 
         state = 'ACTIVE'
         userid = None
 
-        print state in search_states
+        print(state in search_states)
 
         # self.cloud.display(search_states, userid)
 
@@ -320,7 +320,7 @@ class Test:
 
         self.cloud.display_regex("vm['status'] in ['ACTIVE']", userid)
 
-        print json.dumps(self.cloud.dump('servers'), indent=4)
+        print(json.dumps(self.cloud.dump('servers'), indent=4))
 
         #        self.cloud.display_regex("vm['status'] in ['ERROR']", userid)
 
@@ -335,15 +335,15 @@ class Test:
         self.configuration.prefix = "gvonlasz-test"
         self.configuration.incr()
         name = self.configuration.vmname
-        print name
+        print(name)
         result = self.cloud.vm_create(name, flavor, image)
         id = result['id']
-        print id
+        print(id)
         result = self.cloud.wait(id, 'ACTIVE')
         result = self.cloud.set_meta(id, {"owner": "gregor"})
-        print "RESULT", result
+        print("RESULT", result)
         meta = self.cloud.get_meta(id)
-        print meta
+        print(meta)
 
     def test_19_list_secgroup(self):
         """list security group"""
@@ -367,10 +367,10 @@ class Test:
         rule3 = Ec2SecurityGroup.Rule(5000, 5000)
         #rule3 = Ec2SecurityGroup.Rule(22,22)
         rule4 = Ec2SecurityGroup.Rule(-1, -1, 'ICMP')
-        print self.cloud.add_security_group_rules(groupid, [rule3, rule4])
+        print(self.cloud.add_security_group_rules(groupid, [rule3, rule4]))
         groupid = self.cloud.find_security_groupid_by_name(
             "dummy_name_not_exist")
-        print groupid
+        print(groupid)
         assert groupid is None
 
     def test_21_usage(self):
@@ -402,9 +402,9 @@ class Test:
         self.configuration.prefix = "gvonlasz-test"
         self.configuration.incr()
         name = self.configuration.vmname
-        print "STARTING IMAGE", name, image, flavor
+        print("STARTING IMAGE", name, image, flavor)
         result = self.cloud.vm_create(name, flavor, image)
-        print result
+        print(result)
 
     def info(self):
         """info"""
@@ -420,10 +420,10 @@ class Test:
         self.cloud.info()
 
         user_id = self.cloud.find_user_id()
-        print "Cleaning", user_id
+        print("Cleaning", user_id)
 
         list = self.cloud.vms_delete_user()
-        print "Cleaning", list
+        print("Cleaning", list)
 
         vm_ids = self.cloud.find('user_id', user_id)
         while len(vm_ids) > 0:
@@ -432,7 +432,7 @@ class Test:
             self.cloud.info()
             time.sleep(1)
 
-        print "vms", vm_ids
+        print("vms", vm_ids)
 
         assert vm_ids == []
 
@@ -440,7 +440,7 @@ class Test:
         """test geting the cloud extensions"""
         HEADING()
 
-        print json.dumps(self.cloud.get_extensions(), indent=4)
+        print(json.dumps(self.cloud.get_extensions(), indent=4))
         assert True
 
     def test_25_get_users(self):
@@ -450,7 +450,7 @@ class Test:
         self.cloud.refresh("users")
 
         #        print json.dumps(self.cloud.get_users(), indent=4)
-        print json.dumps(self.cloud.users, indent=4)
+        print(json.dumps(self.cloud.users, indent=4))
 
         assert True
 
@@ -461,21 +461,21 @@ class Test:
             HEADING()
             cloud = openstack(name)
             cloud.refresh("users")
-            print json.dumps(cloud.users, indent=4)
+            print(json.dumps(cloud.users, indent=4))
 
         assert True
 
     def test_27_get_limits(self):
         """test to get the limits"""
         HEADING()
-        print json.dumps(self.cloud.get_limits(), indent=4)
+        print(json.dumps(self.cloud.get_limits(), indent=4))
         assert True
 
     def test_28_get_servers(self):
         """test to get the servers"""
         HEADING()
 
-        print json.dumps(self.cloud.get_servers(), indent=4)
+        print(json.dumps(self.cloud.get_servers(), indent=4))
         assert True
 
     def test_29_get_flavors(self):
@@ -484,16 +484,16 @@ class Test:
         # self.cloud.refresh('flavors')
         # print json.dumps(self.cloud.dump('flavors'), indent=4)
 
-        print json.dumps(self.cloud.get_flavors(), indent=4)
+        print(json.dumps(self.cloud.get_flavors(), indent=4))
         assert True
 
     def test_30_get_images(self):
         """test to get the images"""
         HEADING()
         self.cloud.refresh('images')
-        print json.dumps(self.cloud.dump('images'), indent=4)
+        print(json.dumps(self.cloud.dump('images'), indent=4))
 
-        print json.dumps(self.cloud.get_images(), indent=4)
+        print(json.dumps(self.cloud.get_images(), indent=4))
         assert True
 
     """

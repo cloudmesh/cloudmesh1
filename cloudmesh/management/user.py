@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_install import config_file
 from mongoengine import *
@@ -15,7 +16,7 @@ STATUS = ('pending', 'approved', 'blocked', 'denied')
 
 
 def IMPLEMENT():
-    print "IMPLEMENT ME"
+    print("IMPLEMENT ME")
 '''
 def generate_password_hash(password)
     # maybe using passlib https://pypi.python.org/pypi/passlib
@@ -253,7 +254,7 @@ class Users(object):
         if self.validate_email(user.email):
             user.save()
         else:
-            print "ERROR: a user with the e-mail `{0}` already exists".format(user.email)
+            print("ERROR: a user with the e-mail `{0}` already exists".format(user.email))
 
     def validate_email(self, email):
         '''

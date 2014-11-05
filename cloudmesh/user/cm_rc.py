@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import sys
 import glob
@@ -68,8 +69,8 @@ def get_variables(fpath, read_values=["OS_TENANT_NAME", "OS_USERNAME",
             result[read_value] = tmp
         return result
     except:
-        print "ERROR: Failed to read rc files. Please check you have valid \
-                rcfiles in %s." % fpath
-        print sys.exc_info()
+        print("ERROR: Failed to read rc files. Please check you have valid \
+                rcfiles in %s." % fpath)
+        print(sys.exc_info())
 
 

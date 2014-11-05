@@ -1,6 +1,6 @@
 # with open ("pbs_nodes_data.txt", "r") as myfile:
 #    pbs_nodes_data=myfile.readlines()
-
+from __future__ import print_function
 from ast import literal_eval
 from collections import Counter
 from hostlist import expand_hostlist
@@ -272,7 +272,7 @@ class PBS:
 
     def _set(self, host, attribute):
         """add an attribute for the specified hosts"""
-        print "TODO: ALLAN"
+        print("TODO: ALLAN")
 
     def qstat(self, refresh=True):
         if self.pbs_qstat_data is None or refresh:

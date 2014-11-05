@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 class cm_projects():
 
     cm_kind = "fg_project"

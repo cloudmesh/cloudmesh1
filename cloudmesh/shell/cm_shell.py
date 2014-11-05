@@ -44,7 +44,8 @@ Usage:
   cm config ... take from cm_cli
 
 """
+from __future__ import print_function
 
 if __name__ == '__main__':
 
-    print "not yet implemented"
+    print("not yet implemented")

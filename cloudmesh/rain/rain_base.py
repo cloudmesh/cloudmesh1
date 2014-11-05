@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 
 class RainBase:
@@ -10,7 +11,7 @@ class RainBase:
         pass
 
     def not_implemented(self):
-        print "NOT Implemented"
+        print("NOT Implemented")
 
     def provision(self, host, *args, **kwargs):
         """baremtal provision

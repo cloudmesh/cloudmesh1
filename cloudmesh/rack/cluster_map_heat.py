@@ -1,6 +1,7 @@
 """
 Heat map of cluster servers, use HSV color space
 """
+from __future__ import print_function
 from copy import deepcopy
 from cloudmesh.rack.base_cluster_map import BaseClusterMap
 
@@ -367,6 +368,6 @@ if __name__ == "__main__":
              'e015': 43.0}
     # mytest.update(mytest.genRandomValues())
     legend_size = mytest.getImageLegendSize()
-    print "legend size: ", legend_size
+    print("legend size: ", legend_size)
     mytest.update(ddata)
     mytest.plot()

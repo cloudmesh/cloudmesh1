@@ -1,3 +1,4 @@
+from __future__ import print_function
 from sh import VBoxManage
 from collections import OrderedDict
 from pprint import pprint
@@ -53,14 +54,14 @@ def get_vms(filter=None):
     f = filter_attributes(d, filterkeys)
     return f
 
-print "ALL INFO"
-print 70 * "-"
+print("ALL INFO")
+print(70 * "-")
 vms = get_vms()
 
 pprint(vms)
 
-print "SMALL INFO"
-print 70 * "-"
+print("SMALL INFO")
+print(70 * "-")
 
 vms = get_vms("simple")
 
@@ -87,12 +88,12 @@ def get_state(name):
     return info["State"]
 
 
-print "OOOO"
+print("OOOO")
 name = "compute1.puppetlabs.lan"
 pprint(get_vminfo(name))
 
-print "YYYYY"
+print("YYYYY")
 pprint(get_vminfo(name, "simple"))
 
-print "STATE"
-print get_state(name)
+print("STATE")
+print(get_state(name))

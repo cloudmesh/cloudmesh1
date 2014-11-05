@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.rain.cobbler.cobbler_rest_api import CobblerRestAPI
 from cloudmesh.rain.cobbler.queue.tasks import deploy_system, power_system
 from baremetal_computer import BaremetalComputer
@@ -362,4 +363,4 @@ if __name__ == "__main__":
     #result_data = rcb.provision_host_with_profile("centos6-x86_64", "i072")
     #result_data = rcb.rest_api.monitor_deploy_power_status("i072", "deploy")
     result_data = rcb.baremetal_computer_host_list()
-    print result_data
+    print(result_data)

@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh_install import config_file
 from cloudmesh.user.cm_user import cm_user
@@ -56,7 +57,7 @@ class Database(object):
                 {'password': passhash},  # to be consistent
                 LOCAL_PASS_KEY
                 )
-        print "password set successfully!"
+        print("password set successfully!")
 
     def set_password_local_mongodb(self, passwd=None):
         if passwd is None:
@@ -120,8 +121,8 @@ class Database(object):
                     keycontent = keycontent.strip()
                     keys[keytitle] = keycontent
                 else:
-                    print "The specified key file does not exist and thus ingored!"
-                    print "You can run ssh-keygen to generate one key pair"
+                    print("The specified key file does not exist and thus ingored!")
+                    print("You can run ssh-keygen to generate one key pair")
                     del keys[keytitle]
                     break
             if "." in keytitle:
@@ -158,7 +159,7 @@ class Database(object):
 
         for key in cloudsdict:
             Database.import_cloud_to_mongo(cloudsdict[key], key, username)
-            print "cloud '{0}' added.".format(key)
+            print("cloud '{0}' added.".format(key))
 
     @staticmethod
     def import_cloud_to_mongo(d, cloudname, username):

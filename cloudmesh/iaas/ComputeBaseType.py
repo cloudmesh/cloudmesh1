@@ -1,3 +1,4 @@
+from __future__ import print_function
 from datetime import datetime
 import time
 import json
@@ -24,6 +25,12 @@ class ComputeBaseType:
     # : the dict for the security_groups
     security_groups = {}
 
+    # : the dict for the stacks
+    stacks = {}
+
+    # : the dict for usage data
+    usage = {}
+
     # : the dict for the set_credentials
     credential = None
 
@@ -42,6 +49,7 @@ class ComputeBaseType:
         self.servers = {}  # global var
         self.security_groups = {}  # global var
         self.stacks = {}
+        self.usage = {}
         self.credential = None  # global var
         self.label = None  # global var
         self.type = None
@@ -50,13 +58,14 @@ class ComputeBaseType:
 
     def info(self):
         """obtain some basic information about the cloud"""
-        print "Label:", self.label
-        print "Type:", self.type
-        print "Flavors:", len(self.flavors)
-        print "Servers:", len(self.servers)
-        print "Images:", len(self.images)
-        print "Security Groups:", len(self.security_groups)
-        print "Stacks:", len(self.stacks)
+        print("Label:", self.label)
+        print("Type:", self.type)
+        print("Flavors:", len(self.flavors))
+        print("Servers:", len(self.servers))
+        print("Images:", len(self.images))
+        print("Security Groups:", len(self.security_groups))
+        print("Stacks:", len(self.stacks))
+        print("Usage:", self.usage)
         # print "Users:", len(self.users)
         # print "Tenants:", len(self.tenants)
 
@@ -88,8 +97,10 @@ class ComputeBaseType:
             d = self.security_groups.copy()
         elif selection == 't':
             d = self.stacks.copy()
+        elif selection == 'u':
+            d = self.usage.copy()
         elif type is not None:
-            print "refresh type not supported"
+            print("refresh type not supported")
             assert False
         else:
             d = {}
@@ -116,12 +127,14 @@ class ComputeBaseType:
             d = self.security_groups
         elif selection == 't':
             d = self.stacks
+        elif selection == 'u':
+            d = self.usage
         # elif selection == 'u':
         #    d = self.users
         # elif selection == 't':
         #    d = self.tenants
         elif type is not None:
-            print "refresh type not supported"
+            print("refresh type not supported")
             assert False
         return d
 
@@ -174,13 +187,33 @@ class ComputeBaseType:
         """returns a dict of limits that the cloud will maintain for a user and/or the project"""
         raise NotImplementedError()
 
+    def get_limits(self):
+        """returns a dict of limits that the cloud will maintain for a user and/or the project"""
+        raise NotImplementedError()
+
+    def get_absolute_limits(self):
+        """returns a dict of absolute limits with current usage information"""
+        raise NotImplementedError()
+
+    def get_usage(self):
+        raise NotImplementedError()
+
+    def get_quota(self):
+        raise NotImplementedError()
+
+    def stack_create(self):
+        raise NotImplementedError()
+
+    def stack_delete(self):
+        raise NotImplementedError()
+
     def wait(self, vm_id, vm_status, seconds=2):
         """waits a number of seconds and than refreshes information form the cloud"""
-        print 'refersh', vm_id
+        print('refersh', vm_id)
         self.refresh()
 
         new_status = self.status(vm_id)
-        print new_status
+        print(new_status)
         while str(new_status) != str(vm_status):
             time.sleep(seconds)
             self.refresh()
@@ -202,6 +235,7 @@ class ComputeBaseType:
             'images': self.images,
             'security groups': self.security_groups,
             'stacks': self.stacks,
+            'usage': self.usage,
             # 'users': self.users,
             # 'users': len(self.users),
             # 'tenants': self.tenants,
@@ -257,6 +291,9 @@ class ComputeBaseType:
         elif selection == 't':
             list_function = self._get_stacks_dict
             data = self.stacks
+        elif selection == 'u':
+            list_function = self._get_usage_dict
+            data = self.usage
         # elif selection == 'u':
         #    list_function = self._get_users_dict
         #    d = self.users
@@ -264,7 +301,7 @@ class ComputeBaseType:
         #    list_function = self._get_tenants_dict
         #    d = self.tenants
         elif type is not None:
-            print "refresh type not supported"
+            print("refresh type not supported")
             assert False
 
         list_func = list_function()
@@ -280,6 +317,8 @@ class ComputeBaseType:
                 self.security_groups = {}
             elif selection == 't':
                 self.stacks = {}
+            elif selection == 'u':
+                self.usage = {}
             # elif selection == 'u':
             #    self.users = {}
             # elif selection == 't':

@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.config.cm_config import get_mongo_db
 from datetime import datetime
@@ -96,7 +97,7 @@ class BaremetalDB:
                 }
         flag_insert = True
         result = self.do_find(elem)
-        print result
+        print(result)
         if result["result"]:
             if result["data"] and len(result["data"]) > 0:
                 flag_insert = False
@@ -381,5 +382,5 @@ if __name__ == "__main__":
     result = bmdb.do_find_one(unexist_elem)
     """
     result = bmdb.init_base_document_structure()
-    print result
+    print(result)
     #result = bmdb.assign_baremetal_to_user(dict_computers, "testXXX")

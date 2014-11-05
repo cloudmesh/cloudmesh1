@@ -17,6 +17,7 @@ yet installed, the __init__ function for cloudmesh may include some
 configuration files that are not yet present at the tome of the first
 instalation.
 """
+from __future__ import print_function
 from cloudmesh_install.util import path_expand
 import inspect
 import os
@@ -37,10 +38,10 @@ except:
         os.system("pip install progress")
         from progress.bar import Bar
     except Exception, e:
-        print "ERROR: can not install progress"
-        print e
-        print 70 * "="
-        print "please make sure that a virtualenv and pip are installed"
+        print("ERROR: can not install progress")
+        print(e)
+        print(70 * "=")
+        print("please make sure that a virtualenv and pip are installed")
         sys.exit()
 
 
@@ -119,14 +120,14 @@ def cat(filename):
     location = path_expand(filename)
     banner(filename)
     with open(location, 'r') as f:
-        print f.read()
+        print(f.read())
 
 
 def not_implemented():
     """prins simply an error that this is not implemented. This can be
     used when you protortype things."""
 
-    print "ERROR: not yet implemented"
+    print("ERROR: not yet implemented")
 
 
 def check_file_for_tabs(filename, verbose=True):
@@ -148,7 +149,7 @@ def check_file_for_tabs(filename, verbose=True):
             location = [
                 i for i in range(len(line)) if line.startswith('\t', i)]
             if verbose:
-                print "Tab found in line", line_no, "and column(s)", location
+                print("Tab found in line", line_no, "and column(s)", location)
         line_no = line_no + 1
     return file_contains_tabs
 
@@ -179,12 +180,12 @@ def deprecated(func):
             lineno=func.func_code.co_firstlineno + 1
         )
         '''
-        print
-        print 70 * "-"
-        print "Warning: Call to deprecated function {}.".format(func.__name__)
-        print "         filename=", func.func_code.co_filename
-        print "         lineno=", func.func_code.co_firstlineno + 1
-        print 70 * "-"
+        print()
+        print(70 * "-")
+        print("Warning: Call to deprecated function {}.".format(func.__name__))
+        print("         filename=", func.func_code.co_filename)
+        print("         lineno=", func.func_code.co_firstlineno + 1)
+        print(70 * "-")
 
         return func(*args, **kwargs)
     return new_func

@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cmd3.shell import function_command
 from cloudmesh.shell.cm_label import shell_command_label
 

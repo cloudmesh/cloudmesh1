@@ -1,3 +1,4 @@
+from __future__ import print_function
 from dbhelper import DBHelper
 from hostlist import expand_hostlist, collect_hostlist
 from types import *
@@ -223,4 +224,4 @@ if __name__ == "__main__":
     #result = bmp.get_policy_based_user("gregor")
     #result = bmp.add_group_policy("fg[1-3]", "i[111-113]")
     result = bmp.get_all_group_policy(True)
-    print "result is: ", result
+    print("result is: ", result)

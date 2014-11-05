@@ -1,4 +1,4 @@
-
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.inventory import Inventory
 from pprint import pprint
@@ -143,9 +143,9 @@ if __name__ == "__main__":
 
     # output information
     for name in arrname:
-        print "host [{0}] information:".format(name)
+        print("host [{0}] information:".format(name))
         if arrdict[name] is None:
-            print "Cannot access host {0}".format(name)
+            print("Cannot access host {0}".format(name))
         else:
             pprint(arrdict[name])
-        print "-" * 40
+        print("-" * 40)
