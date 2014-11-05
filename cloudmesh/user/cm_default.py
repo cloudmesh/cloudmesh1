@@ -73,15 +73,8 @@ def shell_command_default(arguments):
 
 
 class DefaultCommand(object):
-    try:
-        config = cm_config()
-    except:
-        Console.error("There is a problem with the configuration yaml files")
 
-    username = config['cloudmesh']['profile']['username']
 
-    started_cm_user = False
-    user_obj = None
 
     def _start_cm_user(self):
         if not self.started_cm_user:
@@ -94,6 +87,16 @@ class DefaultCommand(object):
             self.started_cm_user = True
 
     def __init__(self, arguments):
+        try:
+            self.config = cm_config()
+        except:
+            Console.error("There is a problem with the configuration yaml files")
+
+        self.username = self.config['cloudmesh']['profile']['username']
+
+        self.started_cm_user = False
+        self.user_obj = None
+
         self.arguments = arguments
 
     def _default_format(self):

@@ -12,7 +12,6 @@ from mongoengine import connect
 import os
 from cloudmesh_install import config_file
 
-
 log = LOGGER(__file__)
 
 # todo: rename get_mongo_db to connect_to_mongo ...
@@ -21,6 +20,7 @@ log = LOGGER(__file__)
 # why not "pymongo" and "mongoengine"
 MONGOCLIENT = 0
 MONGOENGINE = 1
+
 
 class DBConnFactory(object):
     connectors = {}
@@ -496,8 +496,8 @@ def yaml_attribute_replace(filename='abc.yaml',
             else:
                 result += line
             result += '\n'
-            
-    #for _old, _new in replacements.iteritems():
+
+    # for _old, _new in replacements.iteritems():
     #    content = content.replace(_old, _new)
 
     outfile = open(filename, 'w')

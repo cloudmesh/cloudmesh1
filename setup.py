@@ -3,15 +3,29 @@
 #from distutils.core import setup
 
 from setuptools import setup, find_packages
+from setuptools.command.install import install
 import glob
 import os
 
+# try:
+#     from fabric.api import local
+# except:
+#     os.system("pip install fabric")
+#     from fabric.api import local
+
 home = os.path.expanduser("~")
+
+class InstallTest(install):
+    """Test of a custom install."""
+    def run(self):
+        print "Install Test"
+        #install.run(self)
+
 
 setup(
     name='cloudmesh',
     version=__import__('cloudmesh').version(),
-    description='A tool to simplify managing multiple clouds',
+    description='A tool to enable federated management of multiple clouds including Azure, AWS, Eucalyptus, OpenStack',
     # description-file =
     #    README.rst
     author='Cloudmesh Team',
@@ -64,6 +78,10 @@ setup(
         'cm-image  = cloudmesh.image.cm_image:main',
         'cm-metric = cloudmesh.metric.cm_metric:main',
         'cm-rain = cloudmesh.rain.cobbler.cobbler_rain:main',
+        'cm-admin = cloudmesh_admin.admin:main',        
     ]},
+    cmdclass={
+        'custom': InstallTest,
+        },
 
 )

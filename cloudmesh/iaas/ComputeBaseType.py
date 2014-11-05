@@ -41,6 +41,7 @@ class ComputeBaseType:
         self.images = {}  # global var
         self.servers = {}  # global var
         self.security_groups = {}  # global var
+        self.stacks = {}
         self.credential = None  # global var
         self.label = None  # global var
         self.type = None
@@ -55,6 +56,7 @@ class ComputeBaseType:
         print "Servers:", len(self.servers)
         print "Images:", len(self.images)
         print "Security Groups:", len(self.security_groups)
+        print "Stacks:", len(self.stacks)
         # print "Users:", len(self.users)
         # print "Tenants:", len(self.tenants)
 
@@ -84,6 +86,8 @@ class ComputeBaseType:
             d = self.servers.copy()
         elif selection == 'e':
             d = self.security_groups.copy()
+        elif selection == 't':
+            d = self.stacks.copy()
         elif type is not None:
             print "refresh type not supported"
             assert False
@@ -110,6 +114,8 @@ class ComputeBaseType:
             d = self.servers
         elif selection == 'e':
             d = self.security_groups
+        elif selection == 't':
+            d = self.stacks
         # elif selection == 'u':
         #    d = self.users
         # elif selection == 't':
@@ -195,6 +201,7 @@ class ComputeBaseType:
             'servers': self.servers,
             'images': self.images,
             'security groups': self.security_groups,
+            'stacks': self.stacks,
             # 'users': self.users,
             # 'users': len(self.users),
             # 'tenants': self.tenants,
@@ -247,6 +254,9 @@ class ComputeBaseType:
         elif selection == 'e':
             list_function = self._get_security_groups_dict
             data = self.security_groups
+        elif selection == 't':
+            list_function = self._get_stacks_dict
+            data = self.stacks
         # elif selection == 'u':
         #    list_function = self._get_users_dict
         #    d = self.users
@@ -268,6 +278,8 @@ class ComputeBaseType:
                 self.servers = {}
             elif selection == 'e':
                 self.security_groups = {}
+            elif selection == 't':
+                self.stacks = {}
             # elif selection == 'u':
             #    self.users = {}
             # elif selection == 't':

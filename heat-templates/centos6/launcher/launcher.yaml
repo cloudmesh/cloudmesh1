@@ -1,0 +1,77 @@
+heat_template_version: 2014-10-15
+
+description: Cloudmesh Launcher with OpenStack Heat
+
+parameters:
+  Cookbook:
+    type: string
+    description: Cookbook name to use
+  KeyName:
+    type: string
+    description: Key name for logging in to instance
+  dummy:
+    type: string
+    description: dummy parameter
+
+resources:
+  security_group:
+    type: AWS::EC2::SecurityGroup
+    properties:
+      GroupDescription: "SSH(22), HTTP(80)"
+      SecurityGroupIngress:
+      - IpProtocol: "tcp"
+        FromPort: "22"
+        ToPort : "22"
+        CidrIp : "0.0.0.0/0"
+      - IpProtocol: "tcp"
+        FromPort: "80"
+        ToPort: "80"
+        CidrIp: "0.0.0.0/0"
+
+  floating_ip:
+    type: AWS::EC2::EIP
+    properties:
+      InstanceId: { get_resource: server }
+
+  server:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: KeyName }
+      image: "futuregrid/centos-6"
+      flavor: "m1.small"
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/sh
+            service iptables save
+            service iptables stop
+            chkconfig iptables off
+            
+            rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+            yum -y install git
+            rpm -Uvh https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-11.4.0-1.el6.x86_64.rpm
+
+            mkdir -p /var/chef
+            mkdir -p /etc/chef
+
+            git clone https://github.com/cloudmesh/chef.git /var/chef/cloudmesh-chef
+
+            cat << EOL > /etc/chef/solo.rb
+            log_location       STDOUT
+            file_cache_path    "/var/chef"
+            cookbook_path      [ "/var/chef/cloudmesh-chef/cookbooks" ]
+            role_path          [ "/var/chef/cloudmesh-chef/roles" ]
+            Mixlib::Log::Formatter.show_time = true
+            EOL
+
+            cat << EOL > /etc/chef/run_list.json
+            { "run_list": ["role[$Cookbook]"] }
+            EOL
+
+            chef-solo -j /etc/chef/run_list.json
+          params:
+            $Cookbook: { get_param: Cookbook }
+            $dummy: { get_param: dummy }

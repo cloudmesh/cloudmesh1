@@ -115,16 +115,17 @@ def shell_command_vm(arguments):
 
 
 class VMcommand(object):
-    try:
-        config = cm_config()
-    except:
-        log.error("There is a problem with the configuration yaml files")
-
-    username = config['cloudmesh']['profile']['username']
 
     def __init__(self, arguments):
         self.arguments = arguments
-        #print self.arguments ########
+        try:
+            self.config = cm_config()
+        except:
+            log.error("There is a problem with the configuration yaml files")
+
+        self.username = self.config['cloudmesh']['profile']['username']
+
+        # print self.arguments ########
 
     def _vm_create(self):
         # -------------------------
@@ -237,7 +238,12 @@ class VMcommand(object):
                 return
             else:
                 cloudname = self.arguments['--cloud']
-                # deleteAllCloudVMs = True
+                if self.arguments['NAME'] is None and\
+                    self.arguments['--id'] is None and\
+                    self.arguments['--group'] is None and\
+                    self.arguments['--prefix'] is None and\
+                    self.arguments['--range'] is None:
+                    deleteAllCloudVMs = True
         else:
             cloudname = cloudobj.get_selected_cloud(self.username)
         if cloudname not in mongo.active_clouds(self.username):
@@ -716,6 +722,7 @@ def delete_vm(username,
                             ['metadata', 'metadata'],
                             ['key_name', 'key_name'],
                             ['created', 'created'],
+                            ['cloud', 'cm_cloud']
                         ],
                         "ec2":
                         [

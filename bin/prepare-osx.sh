@@ -12,7 +12,8 @@ export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
 echo "# ----------------------------------------------------------------------"
 echo "# install brew"
 echo "# ----------------------------------------------------------------------"
-ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+#ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 sudo easy_install pip && sudo pip install virtualenv
 

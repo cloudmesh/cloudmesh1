@@ -19,7 +19,7 @@ def html():
     # disable Flask RSTPAGES due to sphins incompatibility
     os.environ['RSTPAGES'] = 'FALSE'
     api()
-    man()
+    # man()
     # build the docs locally and view
     local("cd docs; make html")
 
@@ -55,3 +55,5 @@ def api():
         print "Building API Docs:", modulename
         print 70 * "="
         local("sphinx-apidoc -f -o docs/source/api/{0} {0}".format(modulename))
+
+        print "done"

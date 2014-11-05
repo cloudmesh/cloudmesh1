@@ -713,6 +713,20 @@ List available flavors, images, vms, projects and clouds
     
     
 
+load
+----------------------------------------------------------------------
+
+Command - load::
+
+    Usage:
+        load MODULE
+    
+    Loads the plugin given a specific module name. The plugin must be ina plugin directory.
+    
+    Arguments:
+       MODULE  The name of the module.
+    
+
 loglevel
 ----------------------------------------------------------------------
 
