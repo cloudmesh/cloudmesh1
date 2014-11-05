@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from flask import Flask, request, Response
 import json
 from functools import wraps
@@ -177,5 +179,5 @@ def list_kickstart_profiles(name):
     return None
 
 if __name__ == '__main__':
-    print "start"
+    print("start")
     app.run(host="0.0.0.0", debug=True)

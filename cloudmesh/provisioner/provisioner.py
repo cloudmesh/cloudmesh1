@@ -1,3 +1,4 @@
+from __future__ import print_function
 from abc import ABCMeta, abstractmethod
 from multiprocessing import Pool
 import logging
@@ -32,9 +33,9 @@ class BaremetalProvisinerABC:
         pass
 
     def set_status(self, host_label, status):
-        print "SIM setting", host_label, status
+        print("SIM setting", host_label, status)
         self.inventory.set_attribute(host_label, "cm_provision_status", status)
-        print "SIM ok setting", host_label, status
+        print("SIM ok setting", host_label, status)
 
 
 class ProvisionerSimulator(BaremetalProvisinerABC):
@@ -49,7 +50,7 @@ class ProvisionerSimulator(BaremetalProvisinerABC):
         self.hosts = hosts
         for host in hosts:
 
-            print "PROVISION", host, provisioned
+            print("PROVISION", host, provisioned)
             log.info("Provision {0}<-{1}".format(host, provisioned))
 
             self.set_status(host, "INITIATING")

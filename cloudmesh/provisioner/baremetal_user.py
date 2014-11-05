@@ -1,3 +1,4 @@
+from __future__ import print_function
 from dbhelper import DBHelper
 from hostlist import expand_hostlist
 from types import *
@@ -170,4 +171,4 @@ if __name__ == "__main__":
     owner_str = result
     result = bmu.remove_group_from_owners("gba", owner_str)
     result = bmu.group_exist_in_owners("ga", owner_str)
-    print "result is:{0}".format(result)
+    print("result is:{0}".format(result))

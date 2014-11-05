@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
 from cloudmesh.config.cm_config import DBConnFactory
 # from cloudmesh.config.ConfigDict import ConfigDict
@@ -180,7 +181,7 @@ class cm_mongo:
 
             return safe_credential
         except:
-            print traceback.format_exc()
+            print(traceback.format_exc())
             return None
 
     def get_cloud_info(self, cm_user_id, cloudname):
@@ -342,7 +343,7 @@ class cm_mongo:
                 cloud = None
                 log.error(
                     "Cannot activate cloud {0} for {1}\n{2}".format(cloud_name, cm_user_id, e))
-                print traceback.format_exc()
+                print(traceback.format_exc())
         return cloud
 
     def active_clouds(self, cm_user_id):
@@ -472,7 +473,7 @@ class cm_mongo:
         watch = StopWatch()
 
         for name in names:
-            print "*", name
+            print("*", name)
             watch_name = "{0}-{1}".format(cm_user_id, name)
             log.info("-" * 80)
             log.info("Retrieving data for %s" % name)
@@ -486,7 +487,7 @@ class cm_mongo:
                 elif 'manager' in self.clouds[cm_user_id][name]:
                     cloud = self.clouds[cm_user_id][name]['manager']
 
-                print "Refreshing {0} {1} {2} ->".format(cm_user_id, type, name)
+                print("Refreshing {0} {1} {2} ->".format(cm_user_id, type, name))
 
                 watch.start(watch_name)
                 cloud.refresh(type)
@@ -495,7 +496,7 @@ class cm_mongo:
                 # pprint(result)
                 # add result to db,
                 watch.stop(watch_name)
-                print 'Refresh time:', watch.get(watch_name)
+                print('Refresh time:', watch.get(watch_name))
 
                 watch.start(watch_name)
 
@@ -548,7 +549,7 @@ class cm_mongo:
                     self.db_clouds.insert(result[element])
 
                 watch.stop(watch_name)
-                print 'Store time:', watch.get(watch_name)
+                print('Store time:', watch.get(watch_name))
 
     """
     # See pbs_mongo in pbs directory
@@ -865,7 +866,39 @@ class cm_mongo:
             return cloudmanager.stack_delete(server)
         except KeyError:
             return None
-    
+   
+    def usage(self, cloud, cm_user_id):
+        '''Gets usage reports'''
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.get_usage()
+        except KeyError:
+            return None
+
+    def quota(self, cloud, cm_user_id):
+        '''Gets current settings for project quota'''
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.get_quota()
+        except:
+            return None
+
+    def limits(self, cloud, cm_user_id):
+        '''Gets limits information'''
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.get_limits()
+        except:
+            return None
+
+    def usage_with_limits(self, cloud, cm_user_id):
+        '''Gets limits with usage information'''
+        try:
+            cloudmanager = self.clouds[cm_user_id][cloud]['manager']
+            return cloudmanager.get_absolute_limits('fraction')
+        except:
+            return None
+
     def launcher_import(self, d, launcher_name, username):
         '''
         insert a launcher/recipe into db_clouds
@@ -933,7 +966,7 @@ class cm_mongo:
         command = "echo $USER"
         success = False
         for i in range(retry):
-            print str(i) + " try to execute via ssh..."
+            print(str(i) + " try to execute via ssh...")
             try:
                 result = self.ssh_execute(ipaddr, username=username,
                                           command=command, pkey=pkey)

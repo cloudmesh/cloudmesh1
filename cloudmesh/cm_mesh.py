@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 from cloudmesh_common.util import HEADING
 from cloudmesh_common.logger import LOGGER
@@ -143,7 +144,7 @@ class cm_mesh:
         return str(self.clouds)
 
     def dump(self):
-        print json.dumps(self.clouds, indent=4)
+        print(json.dumps(self.clouds, indent=4))
 
     # ----------------------------------------------------------------------
     # find
@@ -334,7 +335,7 @@ class cm_mesh:
             log.error("could not delete {0} {1}".format(cloud_name, server_id))
 
     def add_key_pairs(self, cloud_names=None):
-        print "not implemented"
+        print("not implemented")
 
         '''
         activates a specific host by name. to be queried
@@ -351,7 +352,7 @@ class cm_mesh:
             names = cloud_names
 
         for cloud_name in names:
-            print "Uploading keys to ->", cloud_name
+            print("Uploading keys to ->", cloud_name)
 
             try:
                 credential = self.config.cloud(cloud_name)
@@ -397,13 +398,13 @@ class cm_mesh:
                             cloud.keypair_add(keynamenew, keycontent)
                         # pprint(keys)
             except Exception, e:
-                print "ERROR: can not activate cloud", cloud_name
-                print e
+                print("ERROR: can not activate cloud", cloud_name)
+                print(e)
                 # print traceback.format_exc()
                 # sys.exit()
 
     def del_key_pairs(self, cloud_names=None):
-        print "not implemented"
+        print("not implemented")
 
     '''
     def add_key_pair(self, cloud_name, key, name):
@@ -627,7 +628,7 @@ class cm_mesh:
 if __name__ == "__main__":
 
     c = cm_mesh()
-    print c.clouds
+    print(c.clouds)
     """
     c.config()
 

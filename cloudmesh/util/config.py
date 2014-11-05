@@ -1,4 +1,5 @@
 """Some simple yaml file reader"""
+from __future__ import print_function
 from pprint import pprint
 import os
 import sys
@@ -93,7 +94,7 @@ def read_yaml_config(filename, check=True, osreplace=True):
             log.error(
                 "The file {0} fails with a yaml read error".format(filename))
             log.error(str(e))
-            print traceback.format_exc()
+            print(traceback.format_exc())
             sys.exit()
 
     else:

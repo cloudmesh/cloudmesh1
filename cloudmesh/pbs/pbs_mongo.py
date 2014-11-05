@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.pbs.pbs import PBS
 from pprint import pprint
 from cloudmesh import banner
@@ -35,7 +36,7 @@ class pbs_mongo:
         elif type.startswith("i"):
             data = self.refresh_qinfo(host)
         else:
-            print "type not suported"
+            print("type not suported")
         return data
 
     def refresh_qinfo(self, host):
@@ -93,7 +94,7 @@ class pbs_mongo:
         elif type.startswith("i"):
             data = self.get_qinfo(host)
         else:
-            print "type not suported"
+            print("type not suported")
         return data
 
     def get_qstat(self, host=None):
@@ -138,8 +139,8 @@ class pbs_mongo:
         time_now = datetime.now()
         data = self.hosts[host].pbsnodes(refresh=True)
         for name in data:
-            print "mongo: add {0}, {1}".format(host,
-                                               name)
+            print("mongo: add {0}, {1}".format(host,
+                                               name))
 
             id = "{0}-{1}".format(host, name).replace(".", "-")
             data[name]["cm_host"] = host
@@ -176,7 +177,7 @@ def main():
     host = "india.futuregrid.org"
     pbs = pbs_mongo()
     pbs.activate(host, "gvonlasz")
-    print pbs.hosts
+    print(pbs.hosts)
 
     d = pbs.refresh_qstat(host)
     d = pbs.get_qstat(host)

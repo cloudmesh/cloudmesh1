@@ -1,3 +1,4 @@
+from __future__ import print_function
 from management import User
 from management import Account
 from projects import project_information
@@ -48,7 +49,7 @@ class user_project():
                           slide_collection_aggreement=self.slide_collection_aggreement,
                           other=self.other)
         project.save()
-        print project.project_title
+        print(project.project_title)
 
         # account.project = self.title refernce and list field
 
@@ -61,9 +62,9 @@ class user_project():
     def list_project(self):
         project = Project.objects()
         for project in Project.objects():
-            print
-            print project.project_title, ":", project
-            print
+            print()
+            print(project.project_title, ":", project)
+            print()
 
     def del_project(self):
         user_name = raw_input("User name: ")

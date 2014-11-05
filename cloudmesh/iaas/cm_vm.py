@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh_common.logger import LOGGER
@@ -13,6 +14,8 @@ from pprint import pprint
 import sys
 import time
 from cloudmesh.shell.cm_list import shell_command_list
+from cloudmesh.keys.util import _keyname_sanitation
+from cloudmesh.config.cm_keys import cm_keys_mongo
 
 log = LOGGER(__file__)
 
@@ -49,6 +52,7 @@ def shell_command_vm(arguments):
                         [--refresh] 
                         [--format=FORMAT] 
                         [--column=COLUMN]
+                        [--group=<group>]
                          
             Arguments:
                 <command>              positional arguments, the commands you want to
@@ -111,21 +115,20 @@ def shell_command_vm(arguments):
     """
 
     call_proc = VMcommand(arguments)
-    call_proc.call_procedure()
+    return call_proc.call_procedure()
 
 
 class VMcommand(object):
 
     def __init__(self, arguments):
         self.arguments = arguments
+
         try:
             self.config = cm_config()
         except:
             log.error("There is a problem with the configuration yaml files")
-
+    
         self.username = self.config['cloudmesh']['profile']['username']
-
-        # print self.arguments ########
 
     def _vm_create(self):
         # -------------------------
@@ -135,12 +138,12 @@ class VMcommand(object):
             try:
                 count = int(self.arguments['--count'])
             except:
-                log.warning("ERROR: --count must be assigned with an integer")
-                return
+                Console.error("--count must be assigned with an integer")
+                return False
             if count < 1:
-                log.warning(
-                    "ERROR: --count must be assigned with an integer greater than 0")
-                return
+                Console.error(
+                    "--count must be assigned with an integer greater than 0")
+                return False
             watch = time.time()
         # -------------------------
         # select cloud
@@ -150,8 +153,8 @@ class VMcommand(object):
             cloud = cloudobj.get_clouds(
                 self.username, getone=True, cloudname=self.arguments['--cloud'])
             if cloud is None:
-                print "ERROR: could not find cloud '{0}'".format(self.arguments['--cloud'])
-                return
+                Console.error("ERROR: could not find cloud '{0}'".format(self.arguments['--cloud']))
+                return False
             else:
                 cloudname = self.arguments['--cloud']
         else:
@@ -159,7 +162,7 @@ class VMcommand(object):
         if cloudname not in mongo.active_clouds(self.username):
             Console.warning(
                 "cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname))
-            return
+            return False
         # -------------------------
         # starting vm
         res = start_vm(self.username,
@@ -175,9 +178,9 @@ class VMcommand(object):
         if res:
             if self.arguments['--count']:
                 watch = time.time() - watch
-                print ("time consumed: %.2f" % watch), "s"
+                print(("time consumed: %.2f" % watch), "s")
 
-            print "to check realtime vm status: list vm --refresh"
+            print("to check realtime vm status: list vm --refresh")
 
     def _vm_delete(self):
         # -------------------------
@@ -188,7 +191,7 @@ class VMcommand(object):
            self.arguments['--cloud'] is None and\
            self.arguments['--prefix'] is None and\
            self.arguments['--range'] is None:
-            print "Please specify at least one option, to get more information: vm help"
+            print("Please specify at least one option, to get more information: vm help")
             return
 
         rangestart = None
@@ -213,13 +216,13 @@ class VMcommand(object):
                 except:
                     error = True
             if error:
-                print "ERROR: range option must be given as --range=int,int, for example:"\
-                    "--range=1,3"
+                print("ERROR: range option must be given as --range=int,int, for example:"\
+                    "--range=1,3")
                 return
             if rangestart and rangeend:
                 if rangestart > rangeend:
-                    print "ERROR: first number of range must be no greater than the second one,"\
-                          "for example: --range=1,3"
+                    print("ERROR: first number of range must be no greater than the second one,"\
+                          "for example: --range=1,3")
                     return
         # -------------------------
         # select cloud
@@ -234,7 +237,7 @@ class VMcommand(object):
             cloud = cloudobj.get_clouds(
                 self.username, getone=True, cloudname=self.arguments['--cloud'])
             if cloud is None:
-                print "ERROR: could not find cloud '{0}'".format(self.arguments['--cloud'])
+                print("ERROR: could not find cloud '{0}'".format(self.arguments['--cloud']))
                 return
             else:
                 cloudname = self.arguments['--cloud']
@@ -303,9 +306,9 @@ class VMcommand(object):
         if self.arguments['<command>']:
             commands = ' '.join(self.arguments['<command>'])
             try:
-                print ">>>\n"
-                print ssh_execute(self.arguments['--ln'], address, 
-                                  commands, key=self.arguments['--key'])
+                print(">>>\n")
+                print(ssh_execute(self.arguments['--ln'], address, 
+                                  commands, key=self.arguments['--key']))
             except:
                 err = sys.exc_info()
                 Console.error("Can not execute ssh on {0}:{1}".format(address, err))
@@ -391,15 +394,15 @@ class VMcommand(object):
         return serverid
 
     def call_procedure(self):
-        if self.arguments['start']:
-            self._vm_create()
-        elif self.arguments['delete']:
+        if 'start' in self.arguments and self.arguments['start']:
+            return self._vm_create()
+        elif 'delete' in self.arguments and self.arguments['delete']:
             self._vm_delete()
-        elif self.arguments['ip']:
+        elif 'ip' in self.arguments and self.arguments['ip']:
             self._assign_public_ip()
-        elif self.arguments['login']:
+        elif 'login' in self.arguments and self.arguments['login']:
             self._vm_login()
-        elif self.arguments['list']:
+        elif 'list' in self.arguments and self.arguments['list']:
             self._vm_list()
 
     # --------------------------------------------------------------------------
@@ -526,11 +529,11 @@ def start_vm(username,
         keycontent = userinfo["keys"]["keylist"][key]
         if keycontent.startswith('key '):
             keycontent = keycontent[4:]
-        check_register_key(username, cloudname, key, keycontent)
+        cm_keys_mongo(username).check_register_key(username, cloudname, key, keycontent)
         keynamenew = _keyname_sanitation(username, key)
     else:
         error = error + \
-            "No sshkey found. Please <a href='https://portal.futuregrid.org/my/ssh-keys'>Upload one</a>"
+            "No sshkey found. Please Upload one"
     # -------------------------
 
     if error != '':
@@ -575,7 +578,7 @@ def start_vm(username,
                                             meta=metadata,
                                             cm_user_id=username,
                                             givenvmname=givenvmname)
-            print "job status:", result.state
+            print("job status:", result.state)
         else:
             result = mongo.vm_create(cloudname,
                                         prefix,
@@ -638,11 +641,11 @@ def delete_vm(username,
     # -------------------------
     # simple input check
     if servername and serverid:
-        print "ERROR: server name and server id can't be both provided"
+        print("ERROR: server name and server id can't be both provided")
         return False
     if rangestart and rangeend:
         if rangestart > rangeend:
-            print "ERROR: rangestart > rangeend"
+            print("ERROR: rangestart > rangeend")
             return False
     # -------------------------
     mongo = cm_mongo()
@@ -798,7 +801,7 @@ def delete_vm(username,
                     "Deleting vm->{0} on cloud->{1}".format(tempservername, cloudname))
                 result = imported.vm_delete.apply_async(
                     (cloudname, i, username), queue=queue_name)
-                print "job status:", result.state
+                print("job status:", result.state)
                 # print result.traceback  #########
             imported.wait.apply_async(
                 args=None, kwargs={'t': 10}, queue=queue_name)
@@ -815,7 +818,7 @@ def delete_vm(username,
             # print handlerefresh.state
             # print handlerefresh.traceback
             if preview:
-                print "to check realtime vm status: list vm --refresh"
+                print("to check realtime vm status: list vm --refresh")
         else:
             for i in res:
                 tempservername = serverdata[i]['name'].encode("ascii")
@@ -828,7 +831,7 @@ def delete_vm(username,
             mongo.refresh(username, names=[cloudname], types=['servers'])
 
         watch = time.time() - watch
-        print ("time consumed: %.2f" % watch), "s"
+        print(("time consumed: %.2f" % watch), "s")
 
 
 def assign_public_ip(username=None, cloudname=None, serverid=None):
@@ -848,35 +851,6 @@ def assign_public_ip(username=None, cloudname=None, serverid=None):
 
 
 # ========================================================================
-def _keyname_sanitation(username, keyname):
-    keynamenew = "%s_%s" % (
-        username, keyname.replace('.', '_').replace('@', '_'))
-    return keynamenew
-
-
-def check_register_key(username, cloudname, keyname, keycontent):
-    mongo = cm_mongo()
-    mongo.activate(cm_user_id=username, names=[cloudname])
-    cloudmanager = mongo.clouds[username][cloudname]['manager']
-
-    keynamenew = _keyname_sanitation(username, keyname)
-    keysRegistered = cloudmanager.keypair_list()
-    registered = False
-    # Openstack & Eucalyptus
-    if 'keypairs' in keysRegistered:
-        keypairsRegistered = keysRegistered["keypairs"]
-        for akeypair in keypairsRegistered:
-            if keynamenew == akeypair['keypair']['name']:
-                registered = True
-                break
-    else:
-        if keynamenew in keysRegistered:
-            registered = True
-
-    if not registered:
-        cloudmanager.keypair_add(keynamenew, keycontent)
-        log.info("Automatically registered the default key <%s> for user <%s>" % (
-            keyname, username))
 
 
 def server_name_analyzer(name):

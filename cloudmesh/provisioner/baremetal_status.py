@@ -1,3 +1,4 @@
+from __future__ import print_function
 from dbhelper import DBHelper
 from hostlist import expand_hostlist
 from types import *
@@ -267,20 +268,20 @@ if __name__ == "__main__":
     bms = BaremetalStatus()
     result = bms.init_deploy_status("i072")
     result = bms.get_status("i072")
-    print "result is: ", result
+    print("result is: ", result)
     result = bms.update_deploy_status("i072", "OFF")
-    print "deploy result is: ", result
+    print("deploy result is: ", result)
     result = bms.update_deploy_status("i072", "ON")
-    print "deploy result is: ", result
+    print("deploy result is: ", result)
     result = bms.update_deploy_status("i072", "OFF")
-    print "deploy result is: ", result
+    print("deploy result is: ", result)
     result = bms.init_power_status("i072", True)
     result = bms.update_power_status("i072", "ON", True)
-    print "power on result is: ", result
+    print("power on result is: ", result)
     result = bms.init_power_status("i072", False)
     result = bms.update_power_status("i072", "ON", False)
-    print "power off result is: ", result
+    print("power off result is: ", result)
     result = bms.update_power_status("i072", "OFF", False)
-    print "power off result is: ", result
+    print("power off result is: ", result)
     result = bms.get_status_short()
-    print "result is: ", result
+    print("result is: ", result)

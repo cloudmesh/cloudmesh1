@@ -15,16 +15,20 @@ import time
 log = LOGGER(__file__)
 
 vm = []
+
+
 class Test(unittest.TestCase):
 
-    def setUp(self):    
+    def setUp(self):
+
+        self.cloudname = sys.argv[-1:][0]
         self.config = cloudmesh.load("user")
         self.username = self.config.get("cloudmesh.hpc.username")
     
     def test_01_activate_cloud(self):
         HEADING()
-        res = os.popen("cm cloud on india").read()
-        assert res.find("cloud 'india' activated.") != -1
+        res = os.popen("cm cloud on {0}".format(self.cloudname)).read()
+        assert res.find("cloud '{0}' activated.".format(self.cloudname)) != -1
 
     def test_02_validate_activation(self):
         HEADING()
@@ -77,7 +81,7 @@ class Test(unittest.TestCase):
 
     def test_07_default_flavor(self):
         HEADING()
-        res = os.popen('cm "cloud set flavor india --flavorid=2"').read()
+        res = os.popen('cm "cloud set flavor india --id=2"').read()
         assert res.find("'m1.small' is selected") != -1
 
     def test_08_validate_default_flavor(self):
@@ -88,7 +92,7 @@ class Test(unittest.TestCase):
     def test_09_default_image(self):
         HEADING()
         res = os.popen('cm "cloud set image india'
-                 ' --image=futuregrid/ubuntu-14.04"').read()
+                 ' --name=futuregrid/ubuntu-14.04"').read()
         assert res.find("'futuregrid/ubuntu-14.04' is selected") != -1
 
     def test_10_validate_default_image(self):

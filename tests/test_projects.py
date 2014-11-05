@@ -7,6 +7,7 @@ or
 nosetests -v
 
 """
+from __future__ import print_function
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
@@ -38,47 +39,47 @@ class Test_cloudmesh:
 
     def test01_print(self):
         HEADING()
-        print self.projects
+        print(self.projects)
         pass
 
     def test02_dump(self):
         HEADING()
-        print self.projects.dump()
+        print(self.projects.dump())
         pass
 
     def test03_active(self):
         HEADING()
-        print self.projects.names("active")
+        print(self.projects.names("active"))
         pass
 
     def test04_default(self):
         HEADING()
-        print self.projects.names("default")
+        print(self.projects.names("default"))
         pass
 
     def test05_default(self):
         HEADING()
-        print self.projects.names("completed")
+        print(self.projects.names("completed"))
         pass
 
     def test06_wrong_status(self):
         HEADING()
         try:
-            print self.projects.names("wrong")
+            print(self.projects.names("wrong"))
         except Exception, e:
-            print e
+            print(e)
             pass
 
     def test07_add(self):
         HEADING()
-        print self.projects.add("gregor")
-        print self.projects.dump()
+        print(self.projects.add("gregor"))
+        print(self.projects.dump())
         pass
 
     def test07_delete(self):
         HEADING()
-        print self.projects.add("gregor")
-        print self.projects.dump()
-        print self.projects.delete("gregor")
-        print self.projects.dump()
+        print(self.projects.add("gregor"))
+        print(self.projects.dump())
+        print(self.projects.delete("gregor"))
+        print(self.projects.dump())
         pass

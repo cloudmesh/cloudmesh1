@@ -1,3 +1,4 @@
+from __future__ import print_function
 from user import User, Users
 import mongoengine
 from cloudmeshobject import order, make_form_list
@@ -27,32 +28,32 @@ def main():
 
     from pprint import pprint
     import sys
-    print 70 * "="
-    print 70 * "="
+    print(70 * "=")
+    print(70 * "=")
     pprint(User.__dict__.keys())
-    print 70 * "="
+    print(70 * "=")
     pprint(User._db_field_map)
-    print 70 * "="
+    print(70 * "=")
     pprint(User._fields_ordered)
     pprint(User.__dict__)
 
-    print 70 * "="
+    print(70 * "=")
     pprint(User._fields)
-    print 70 * "="
-    print type(User._fields["bio"])
-    print type(User._fields["bio"]) == mongoengine.fields.StringField
-    print type(User._fields["bio"]) == mongoengine.fields.URLField
-    print 70 * "x"
+    print(70 * "=")
+    print(type(User._fields["bio"]))
+    print(type(User._fields["bio"]) == mongoengine.fields.StringField)
+    print(type(User._fields["bio"]) == mongoengine.fields.URLField)
+    print(70 * "x")
 
-    print order(User)
-    print order(User, include=['username'])
-    print order(User, exclude=['id'])
-    print order(User, include=['username', 'lastname'], exclude=['lastname'])
-    print 70 * "o"
-    print User._fields
-    print 70 * "p"
-    print order(User, kind="required")
-    print order(User, kind="all")
+    print(order(User))
+    print(order(User, include=['username']))
+    print(order(User, exclude=['id']))
+    print(order(User, include=['username', 'lastname'], exclude=['lastname']))
+    print(70 * "o")
+    print(User._fields)
+    print(70 * "p")
+    print(order(User, kind="required"))
+    print(order(User, kind="all"))
 
     make_form_list(
         User, ['username', 'firstname'], format="table", capital=False)

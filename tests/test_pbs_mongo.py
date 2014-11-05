@@ -11,7 +11,7 @@ individual tests can be run with
 nosetests -v  --nocapture test_cm_compute.py:Test.test_06
 
 """
-
+from __future__ import print_function
 from sh import head
 from sh import fgrep
 import string
@@ -36,15 +36,15 @@ class Test:
         self.host = "india.futuregrid.org"
         self.pbs = pbs_mongo()
         self.pbs.activate(self.host, "gvonlasz")
-        print "SETUP PBS HOSTS", self.pbs.hosts
+        print("SETUP PBS HOSTS", self.pbs.hosts)
 
     def tearDown(self):
         pass
 
     def dump(self, msg, action):
-        print 70 * "="
-        print msg, self.user, self.host
-        print 70 * "="
+        print(70 * "=")
+        print(msg, self.user, self.host)
+        print(70 * "=")
         if action == "qstat":
             d = self.pbs.get_qstat(self.host)
             for e in d:

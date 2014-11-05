@@ -27,25 +27,25 @@ class Test(unittest.TestCase):
 
     def test_03_select_default_cloud(self):
         HEADING()
-        cloudmesh.shell("cloud set default india")
+        cloudmesh.shell("default cloud india")
 
     @classmethod
     def test_04_start_a_vm(cls):
         HEADING()
         import random
         vm_name = "nosetests_"+str(random.randint(1,100))
-        cloudmesh.shell("vm start {0} --cloud=india \
+        cloudmesh.shell("vm start --name={0} --cloud=india \
                         --image=futuregrid/ubuntu-14.04 \
                         --flavor=m1.small".format(vm_name))
         cls.vm.append(vm_name)
 
     def test_05_default_flavor(self):
         HEADING()
-        cloudmesh.shell("cloud set flavor india --flavorid=2")
+        cloudmesh.shell("cloud set flavor india --id=2")
 
     def test_06_default_image(self):
         HEADING()
-        cloudmesh.shell("cloud set image india --image=futuregrid/ubuntu-14.04")
+        cloudmesh.shell("cloud set image india --name=futuregrid/ubuntu-14.04")
 
     def test_07_list_flavors(self):
         HEADING()
@@ -60,7 +60,7 @@ class Test(unittest.TestCase):
         HEADING()
         import random
         vm_name = "nosetests_"+str(random.randint(1,100))
-        cloudmesh.shell("vm start {0} --cloud=india".format(vm_name))
+        cloudmesh.shell("vm start --name={0} --cloud=india".format(vm_name))
         cls.vm.append(vm_name)
 
     def test_10_refresh_vms(self):

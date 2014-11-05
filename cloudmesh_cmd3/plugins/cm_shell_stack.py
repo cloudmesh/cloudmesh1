@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import sys
 from cmd3.shell import command
@@ -17,11 +18,12 @@ class cm_shell_stack:
     """opt_example class"""
     name = "stack"
     _id = "t_stacks"
-    cm_mongo = cm_mongo()
-    cm_config = cm_config()
-    cm_user = cm_user()
 
     def activate_cm_shell_stack(self):
+        self.cm_mongo = cm_mongo()
+        self.cm_config = cm_config()
+        self.cm_user = cm_user()
+
         self.register_command_topic('cloud','stack')
         pass
 
@@ -41,6 +43,7 @@ class cm_shell_stack:
         Usage:
             stack start NAME [--template=TEMPLATE] [--param=PARAM]
             stack stop NAME
+            stack show NAME
             stack list [--refresh] [--column=COLUMN] [--format=FORMAT]
             stack help | -h
 
@@ -59,7 +62,10 @@ class cm_shell_stack:
         log.info(arguments)
 
         if arguments["help"] or arguments["-h"]:
-            print self.do_stack.__doc__
+            print(self.do_stack.__doc__)
+        elif arguments['show'] and arguments['NAME']:
+            print ("NOT IMPLEMENTED")
+            return
         elif arguments['start'] and arguments['NAME']:
             userid = self.cm_config.username()
             def_cloud = self.get_cloud_name(userid)
@@ -71,7 +77,7 @@ class cm_shell_stack:
                                              servername=s_name,
                                              template_url=t_url,
                                              parameters=param)
-            print res
+            print(res)
             return res
 
         elif arguments['stop'] and arguments['NAME']:

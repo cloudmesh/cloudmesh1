@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cmd3.shell import command
 from cloudmesh_common.logger import LOGGER
 from pprint import pprint
@@ -36,7 +37,7 @@ class cm_shell_status:
 
             import celery
             res = celery.current_app.control.inspect().ping()
-            print res
+            print(res)
 
         elif arguments['celery'] and arguments['stats']:
 

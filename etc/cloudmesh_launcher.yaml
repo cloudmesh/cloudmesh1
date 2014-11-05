@@ -6,8 +6,8 @@ cloudmesh:
         recipies:
             bigdata_mooc:
                 name: Big Data Class at IU
-		shortdescription: Deploys an Image for a class taught on Big Data.
-		description:
+                shortdescription: Deploys an Image for a class taught on Big Data.
+                description:
                     >
                         Deploys an Image for a class taught on Big Data.
                 label: mooc
@@ -44,7 +44,7 @@ cloudmesh:
                     value: ssh {username}@{india} "ls -l"
             slurm:
                 name: Slurm Cluster
-		shortdescription: Deploys a Slurm cluster.
+                shortdescription: Deploys a Slurm cluster.
                 description:
                     >
                         Deploys a Slurm cluster. One of the Vms is the Master,
@@ -82,9 +82,9 @@ cloudmesh:
                     type: sh
                     value: ls -l
             hadoop:
-	        label: hadoop
+                label: hadoop
                 name: Hadoop
-		shortdescription: Deploys a haddop cluster on the VMs specified.
+                shortdescription: Deploys a haddop cluster on the VMs specified.
                 description:
                     >
                         Deploys a haddop cluster on the VMs specified
@@ -120,7 +120,7 @@ cloudmesh:
                     value: echo "Hello"
             ganglia:
                 name: Ganglia
-		shortdescription: Deploys a Ganglia service for the vms specified.		
+                shortdescription: Deploys a Ganglia service for the vms specified.    
                 description:
                     >
                         Deploys a Ganglia service for the vms specified.
@@ -158,7 +158,7 @@ cloudmesh:
                     value: echo "Hello"
             nagios:
                 name: Nagios
-		shortdescription: Deploys a Nagios service for the vms specified.
+                shortdescription: Deploys a Nagios service for the vms specified.
                 description:
                     >
                         Deploys a Nagios service for the vms specified.

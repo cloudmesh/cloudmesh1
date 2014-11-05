@@ -3,6 +3,7 @@
 #
 # see also http://docs.openstack.org/cli/quick-start/content/nova-cli-reference.html
 #
+from __future__ import print_function
 import inspect
 import requests
 
@@ -709,10 +710,48 @@ class openstack(ComputeBaseType):
         return self._list_to_dict(list, 'name', "extensions", time_stamp)
 
     def get_limits(self):
+        '''Gets absolute and rate limit information, including information on
+        currently used absolute limits.'''
         time_stamp = self._now()
         msg = "limits"
-        list = self._get(msg, urltype=self.service_url_type)['limits']
-        return list
+        _dict = self._get(msg, urltype=self.service_url_type)['limits']
+        return _dict
+
+    def get_absolute_limits(self, view="original"):
+        '''Gets absolute limit information
+        
+            Args:
+                view (str) : two types of output available
+                            * original - returns integer value in a key and
+                              value pair
+                            * fraction - returns xx / xx fraction value
+        '''
+
+        limits = self.get_limits()
+        if view == "fraction":
+            new_limits = { "Cores": None, 
+                          "Instances": None, 
+                          "RAM": None,
+                          "SecurityGroups": None,
+                          "FloatingIps": None }
+
+            new_limits['Cores'] = str(limits['absolute']['totalCoresUsed']) + \
+                    " / " + str(limits['absolute']['maxTotalCores'])
+            new_limits['Instances'] = \
+                    str(limits['absolute']['totalInstancesUsed']) + " / " + \
+                    str(limits['absolute']['maxTotalInstances'])
+            new_limits['RAM'] = str(limits['absolute']['totalRAMUsed']) + \
+            " / " + str(limits['absolute']['maxTotalRAMSize'])
+            new_limits['SecurityGroups'] = \
+                    str(limits['absolute']['totalSecurityGroupsUsed']) + " / " + \
+                    str(limits['absolute']['maxSecurityGroups'])
+            new_limits['FloatingIps'] = \
+                    str(limits['absolute']['totalFloatingIpsUsed']) + " / " + \
+                    str(limits['absolute']['maxTotalFloatingIps'])
+
+            return new_limits
+        else:
+            return limits['absolute']
 
     # new
     def get_servers(self):
@@ -757,6 +796,7 @@ class openstack(ComputeBaseType):
 
     # new
     def get_images(self):
+        '''List images'''
         time_stamp = self._now()
         msg = "images/detail"
         list = self._get(msg, urltype=self.service_url_type)['images']
@@ -764,6 +804,7 @@ class openstack(ComputeBaseType):
         return self.images
 
     def get_security_groups(self):
+        '''Lists security groups. '''
         time_stamp = self._now()
         list = self.list_security_groups()['security_groups']
         self.security_groups = self._list_to_dict(list, 'id', 'security_group',
@@ -771,6 +812,7 @@ class openstack(ComputeBaseType):
         return self.security_groups
 
     def get_stacks(self):
+        '''Lists active stacks.'''
         time_stamp = self._now()
         msg = "stacks"
         service = "orchestration"
@@ -779,6 +821,28 @@ class openstack(ComputeBaseType):
         self.stacks = self._list_to_dict(list, 'id', 'stacks', time_stamp)
         return self.stacks
 
+    def get_usage(self):
+        '''Report usage statistics on compute and storage resources.'''
+        time_stamp = self._now()
+        tenant_id = self.user_token['access']['token']['tenant']['id']
+        msg = "os-simple-tenant-usage/{0}".format(tenant_id)
+        param = { "start": datetime.now() - timedelta(hours=24),
+                 "end": datetime.now() }
+        _dict = self._get(msg, urltype=self.service_url_type,
+                         payload=param)['tenant_usage']
+        log.debug(_dict)
+        self.usage = _dict
+        return _dict
+
+    def get_quota(self):
+        ''' View quotas for a tenant (project). Administrators only, depending
+        on policy settings. '''
+        time_stamp = self._now()
+        tenant_id = self.user_token['access']['token']['tenant']['id']
+        msg = "os-quota-sets/{0}".format(tenant_id)
+        _dict = self._get(msg, urltype=self.service_url_type)['quota_set']
+        log.debug(_dict)
+        return _dict
 
     # new
     """
@@ -837,16 +901,16 @@ class openstack(ComputeBaseType):
         headers2 = {"X-Auth-Token": conf[
             'token'], "Accept": "application/json", "Content-type": "application/json"}
 
-        print "%%%%%%%%%%%%%%%%%%"
+        print("%%%%%%%%%%%%%%%%%%")
         pprint(conf)
-        print "%%%%%%%%%%%%%%%%%%"
-        print "PARAMS", params2
-        print "HEADERS", headers2
-        print "API2", apiurlt[2]
-        print "API1", apiurlt[1]
-        print "ACTIVITY", conf['set']
-        print "ID", conf['serverid']
-        print "####################"
+        print("%%%%%%%%%%%%%%%%%%")
+        print("PARAMS", params2)
+        print("HEADERS", headers2)
+        print("API2", apiurlt[2])
+        print("API1", apiurlt[1])
+        print("ACTIVITY", conf['set'])
+        print("ID", conf['serverid'])
+        print("####################")
 
         conn2 = httplib.HTTPConnection(url2)
 
@@ -905,8 +969,12 @@ class openstack(ComputeBaseType):
         result = self.get_stacks()
         return result
 
+    def _get_usage_dict(self):
+        result = self.get_usage()
+        return result
+
     def limits(self):
-        """ returns the limats of the tennant"""
+        """ returns the limits of a tenant"""
 
         list = []
 
@@ -914,11 +982,11 @@ class openstack(ComputeBaseType):
 
         for rate in info['rate']:
             limit_set = rate['limit']
-            print limit_set
+            print(limit_set)
             for limit in limit_set:
                 list.append(limit)
 
-        print list
+        print(list)
 
         return list
 
@@ -1542,7 +1610,7 @@ class openstack(ComputeBaseType):
 
     def display_regex(self, state_check, userid):
 
-        print state_check
+        print(state_check)
         for (id, vm) in self.servers.items():
             vm['cm_display'] = eval(state_check)
             #            vm['cm_display'] = vm['status'] in states

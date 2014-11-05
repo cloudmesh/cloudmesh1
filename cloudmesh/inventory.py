@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh_install import config_file
 from cloudmesh_common.logger import LOGGER
@@ -112,7 +113,7 @@ class Inventory:
     # END host info
 
     def set_attribute(self, host_label, attribute, value, time=None):
-        print "SETTING", host_label, attribute, value
+        print("SETTING", host_label, attribute, value)
 
         if time is None:
             time = datetime.now()
@@ -279,17 +280,17 @@ class Inventory:
                               'cm_kind': 'image'})
 
         # print "%15s:" % "dbname", self.inventory_name
-        print "%15s:" % "clusters", clusters.count(), "->", ', '.join([c['cm_cluster'] for c in clusters])
-        print "%15s:" % "services", services.count()
-        print "%15s:" % "servers", servers.count()
-        print
+        print("%15s:" % "clusters", clusters.count(), "->", ', '.join([c['cm_cluster'] for c in clusters]))
+        print("%15s:" % "services", services.count())
+        print("%15s:" % "servers", servers.count())
+        print()
 
-        print "Clusters"
-        print 30 * "="
+        print("Clusters")
+        print(30 * "=")
         for host in clusters:
-            print "    ", host['cm_cluster'], "->", host['cm_hostlist']
+            print("    ", host['cm_cluster'], "->", host['cm_hostlist'])
 
-        print
+        print()
 
     def hostlist(self, name):
         # print "NAME", name
@@ -451,16 +452,16 @@ def main():
 
     r = inventory.find({})
     for e in r:
-        print e
+        print(e)
 
-    print r.count()
+    print(r.count())
 
     name = "b010"
     data = inventory.host(name)
     pprint(data)
 
-    print inventory.ipadr(name, "public")
-    print inventory.ipadr(name, "internal")
+    print(inventory.ipadr(name, "public"))
+    print(inventory.ipadr(name, "internal"))
 
     inventory.info()
 

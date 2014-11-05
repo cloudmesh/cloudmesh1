@@ -17,7 +17,7 @@ Options:
     --kind=KIND            the Kind of the image to be created. [default: vbox]
 
 """
-
+from __future__ import print_function
 from docopt import docopt
 import hostlist
 from cloudmesh import path_expand, banner
@@ -31,7 +31,7 @@ definitions = ["$CLOUDMESH/images/veewee"]
 
 
 def not_implemented():
-    print "ERROR: not yet implemented"
+    print("ERROR: not yet implemented")
 
 
 def cm_image_command(arguments):
@@ -44,16 +44,16 @@ def cm_image_command(arguments):
 
     if arguments["version"]:
 
-        print cloudmesh.__version__
+        print(cloudmesh.__version__)
 
     elif arguments["info"]:
 
         banner("info")
 
         banner("System", c='-')
-        print "Kind:   ", arguments['--kind']
-        print "Path:   ", path
-        print "Version:", cloudmesh.__version__
+        print("Kind:   ", arguments['--kind'])
+        print("Path:   ", path)
+        print("Version:", cloudmesh.__version__)
         banner("List of templates", c='-')
         system_name = None
 
@@ -63,21 +63,21 @@ def cm_image_command(arguments):
                 if os.path.exists(path):
                     os.system("cd '%s' ; veewee vbox list" % path)
                 else:
-                    print "WARNING: path", path, "does not exist"
+                    print("WARNING: path", path, "does not exist")
             except KeyError, key:
-                print 'WARNING: no environment variable called', key, 'found'
+                print('WARNING: no environment variable called', key, 'found')
 
-        print
-        print "To build one, please use one of the"
-        print
-        print "    cm-image build OS"
-        print
-        print "Next you need to register the image"
-        print
-        print "    cm-image register OS"
-        print
-        print "where OS is one of the labels listed above."
-        print
+        print()
+        print("To build one, please use one of the")
+        print()
+        print("    cm-image build OS")
+        print()
+        print("Next you need to register the image")
+        print()
+        print("    cm-image register OS")
+        print()
+        print("where OS is one of the labels listed above.")
+        print()
 
     elif arguments["build"]:
 
@@ -97,13 +97,13 @@ def cm_image_command(arguments):
             # os.system("veewee vbox build %s --workdir='%s' --force" % (path,
             # system_name)
         else:
-            print "ERROR: wrong options"
+            print("ERROR: wrong options")
 
     elif arguments["register"]:
 
         banner("register")
         system_name = arguments["OS"]
-        print system_name, path
+        print(system_name, path)
 
         banner("export iamge", c="-")
 

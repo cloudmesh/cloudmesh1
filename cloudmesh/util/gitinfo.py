@@ -1,4 +1,5 @@
 """managing information from GIT"""
+from __future__ import print_function
 from pprint import pprint
 from sh import git
 from sh import sort
@@ -141,7 +142,7 @@ class GitInfo(object):
         sums = {"fileschanged": 0, "inserted":
                 0, "deleted": 0, "lineschanged": 0}
         for email in emails:
-            print "Calculating stats for", email
+            print("Calculating stats for", email)
             stats[email] = gitinfo.stat(email)
 
             sums["fileschanged"] += stats[email]["fileschanged"]
@@ -164,31 +165,31 @@ if __name__ == "__main__":
 
     # print gitinfo.version()
 
-    print "A"
-    print gitinfo.authors()
+    print("A")
+    print(gitinfo.authors())
 
-    print "b"
+    print("b")
     pprint(gitinfo.authors("dict"))
 
-    print "c"
+    print("c")
     pprint(gitinfo.emails())
 
-    print "d"
+    print("d")
     pprint(gitinfo.emails("dict"))
 
-    print "e"
+    print("e")
     pprint(gitinfo.info())
 
-    print "f"
-    print gitinfo.stat("laszewski@gmail.com")
+    print("f")
+    print(gitinfo.stat("laszewski@gmail.com"))
 
-    print "g"
+    print("g")
     stats = gitinfo.compute()
 
-    print stats
+    print(stats)
 
-    print "h"
+    print("h")
     for email in stats:
         p = stats[email]["percentage"]
-        print ("{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%"
-               .format(email, p[0], p[1], p[2], p[3]))
+        print(("{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%"
+               .format(email, p[0], p[1], p[2], p[3])))

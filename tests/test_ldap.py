@@ -7,6 +7,7 @@ or
 nosetests -v
 
 """
+from __future__ import print_function
 import sys
 import getpass
 
@@ -35,9 +36,9 @@ class Test_cloudmesh:
         pass
 
     def test_me(self):
-        print "USERNAME", self.username
+        print("USERNAME", self.username)
         user = self.idp.find_one({'cm_user_id': self.username})
-        print user
+        print(user)
 
     def test_list(self):
         users = self.idp.list()
@@ -47,6 +48,6 @@ class Test_cloudmesh:
     def test_auth(self):
         password = getpass.getpass()
         if self.idp.authenticate(self.username, password):
-            print "SUCCESS"
+            print("SUCCESS")
         else:
-            print "FAILED"
+            print("FAILED")

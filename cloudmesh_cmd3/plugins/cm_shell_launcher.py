@@ -17,6 +17,8 @@ from cloudmesh.util.shellutil import shell_commands_dict_output
 from cloudmesh.util.config import ordered_dump
 from cloudmesh_common.util import dict_uni_to_ascii
 from cloudmesh_install import config_file
+from cloudmesh.keys.util import _keyname_sanitation
+from cloudmesh.config.cm_keys import cm_keys_mongo
 
 log = LOGGER(__file__)
 
@@ -47,6 +49,7 @@ class cm_shell_launcher:
             launcher start MENU
             launcher stop STACK_NAME
             launcher list
+            launcher show STACK_NAME
             launcher menu [--column=COLUMN] [--format=FORMAT]
             launcher import [FILEPATH] [--force]
             launcher export FILEPATH
@@ -75,7 +78,9 @@ class cm_shell_launcher:
 
         if arguments["help"] or arguments["-h"]:
             print (self.do_launcher.__doc__)
-
+        elif arguments['show'] and arguments['STACK_NAME']:
+            print ("NOT IMPLEMENTED")
+            return
         elif arguments['menu']:
             userid = self.cm_config.username()
             launchers = self.cm_mongo.launcher_get(userid)
@@ -157,12 +162,27 @@ class cm_shell_launcher:
             userid = self.cm_config.username()
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
-            keyname = self.user.get_defaults(userid)['key']
+            
+            userinfo = self.user.info(userid)
+            if "key" in userinfo["defaults"]:
+                key = userinfo["defaults"]["key"]
+            elif len(userinfo["keys"]["keylist"].keys()) > 0:
+                key = userinfo["keys"]["keylist"].keys()[0]
+        
+            if key:
+                keycontent = userinfo["keys"]["keylist"][key]
+                if keycontent.startswith('key '):
+                    keycontent = keycontent[4:]
+                cm_keys_mongo(userid).check_register_key(userid, def_cloud, key, keycontent)
+                keynamenew = _keyname_sanitation(userid, key)
+            else:
+                Console.warning("No sshkey found. Please Upload one")
+            
             cookbook = arguments['MENU']
             s_name = "launcher-{0}-{1}-{2}".format(userid, cookbook, get_rand_string())
             dummy = "123456789"  # doing nothing. just for test
             t_url = "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev/heat-templates/centos6/launcher/launcher.yaml"
-            param = {'KeyName': keyname,
+            param = {'KeyName': keynamenew,
                      'Cookbook': cookbook,
                      'dummy': dummy}
             log.debug(def_cloud, userid, s_name, t_url, param)

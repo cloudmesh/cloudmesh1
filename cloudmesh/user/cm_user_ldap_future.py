@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh_common.logger import LOGGER
 from CMUserProviderBaseType import CMUserProviderBaseType
@@ -199,7 +200,7 @@ class cm_user_ldap (CMUserProviderBaseType):
                             "keys": keys}
 
         except:
-            print "WRONG" + str(sys.exc_info())
+            print("WRONG" + str(sys.exc_info()))
 
     def _getProjects(self):
         try:
@@ -223,7 +224,7 @@ class cm_user_ldap (CMUserProviderBaseType):
                                     self.users[auid]["projects"][
                                         "active"] = [int(projid)]
         except:
-            print "WRONG" + str(sys.exc_info())
+            print("WRONG" + str(sys.exc_info()))
 
 
 def main():

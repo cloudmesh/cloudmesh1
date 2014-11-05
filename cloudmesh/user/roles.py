@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config, \
     cm_config_server, \
     get_mongo_db
@@ -36,7 +37,7 @@ class Roles:
             id = entry['cm_user_id']
             data[id] = entry
 
-        print data
+        print(data)
 
     def clear(self):
         self.roles = None
