@@ -27,7 +27,7 @@ class cm_shell_cluster:
         Usage:
             cluster create --count=<count>
                            --group=<group>
-                           --ln=<LoginName>
+                           [--ln=<LoginName>]
                            [--cloud=<CloudName>]
                            [--image=<imgName>|--imageid=<imgId>]
                            [--flavor=<flavorName>|--flavorid=<flavorId>]
@@ -38,7 +38,6 @@ class cm_shell_cluster:
             cluster create --count=<count> --group=<group> --ln=<LoginName> [options...]
             <count>            specify amount of VMs in the cluster
             <group>            specify a group name of the cluster, make sure it's unique
-            <LoginName>        login name for VMs, e.g. ubuntu
                 Start a cluster of VMs, and each of them can log into all others.
                 CAUTION: you sould do some default setting before using this command:
                 1. select cloud to work on, e.g. cloud select india
@@ -50,6 +49,7 @@ class cm_shell_cluster:
                 Also, please make sure the group name of the cluster is unique
                 
         Options:
+            --ln=<LoginName>           give a login name for VMs, e.g. ubuntu
             --cloud=<CloudName>        give a cloud to work on
             --flavor=<flavorName>      give the name of the flavor
             --flavorid=<flavorId>      give the id of the flavor
@@ -77,7 +77,7 @@ class cm_shell_cluster:
             
             #NumOfVM = None
             GroupName = None
-            vm_login_name = None
+            vm_login_name = "ubuntu"
             
             temp_key_name = "sshkey_temp"
             _key = "-i ./{0}/{1}".format(dir_name, temp_key_name)
@@ -97,11 +97,13 @@ class cm_shell_cluster:
                 return
             else:
                 GroupName = arguments['--group']
-            if arguments['--ln'] == '':
-                Console.error("<LoginName> cannot be empty")
-                return
-            else:
-                vm_login_name = arguments['--ln']
+            
+            if arguments['--ln']:
+                if arguments['--ln'] == '':
+                    Console.error("<LoginName> cannot be empty")
+                    return
+                else:
+                    vm_login_name = arguments['--ln']
             
             # start VMs 
             print ("starting VMs...")
@@ -129,7 +131,7 @@ class cm_shell_cluster:
             proceed = False
             repeat_index = 1
             while proceed != True:
-                if repeat_index > 5:
+                if repeat_index > 10:
                     Console.warning("Please check the network")
                     return
                 print ("checking({0})...".format(repeat_index))
@@ -208,7 +210,7 @@ class cm_shell_cluster:
             
             # generate ssh keys for VMs and prepare two files: authorized_keys and hosts
             print ("generating ssh keys...")
-            sh.mkdir("{0}".format(dir_name))
+            os.popen("mkdir {0}".format(dir_name))
             fa = open("./{0}/authorized_keys_temp".format(dir_name), "w")
             fh = open("./{0}/hosts_temp".format(dir_name), "w")
             fk = open("./{0}/{1}".format(dir_name, temp_key_name), "w")
@@ -234,7 +236,7 @@ class cm_shell_cluster:
             
             # copy the files to VMs
             print ("copying the files...")
-            sh.mkdir("./{0}/oops".format(dir_name))
+            os.popen("mkdir ./{0}/oops".format(dir_name))
             for k, v in res.iteritems():
                 address_floating = get_ip(v)
                 os.popen("scp {2} {3} {0}@{1}:~/.ssh/authorized_keys ./{4}/"\
