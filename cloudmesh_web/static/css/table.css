@@ -2000,6 +2000,7 @@ table {
 
 .table th {
   font-weight: bold;
+  font-size: 16px;
 }
 
 .table thead th {

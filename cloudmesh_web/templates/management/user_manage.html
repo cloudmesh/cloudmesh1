@@ -3,42 +3,42 @@
 {% from "_helper.html" import cm_state_color %}
 
 {% block content %}
-<legend>{{ title }}</legend>
-<script type="text/javascript">
-    $(function() {
-      {% for usernum in range(users|count) %}
-        $("#user-table").dataTable({
-            "aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
-            "iDisplayLength": 25,
-            "sPaginationType": "full_numbers",
-            "sDom": 'CR<"clear">lftipr',
-            "oColVis": {
-                "aiExclude": [ 0 ],
-                "sAlign": "center"
-            },
-            "fnDrawCallback": function(o) {
-                var nColVis = $('div.ColVis', o.nTableWrapper)[0];
-                nColVis.align = "right";
-                nColVis.style.paddingBottom = "15px";
-            },
-            aaSorting: [[1,'asc']],
-            aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ],
-            destroy: true
+    <legend>{{ title }}</legend>
+    <script type="text/javascript">
+        $(function() {
+            {% for usernum in range(users|count) %}
+                $("#user-table").dataTable({
+                    "aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
+                    "iDisplayLength": 25,
+                    "sPaginationType": "full_numbers",
+                    "sDom": 'CR<"clear">lftipr',
+                    "oColVis": {
+                        "aiExclude": [ 0 ],
+                        "sAlign": "center"
+                    },
+                    "fnDrawCallback": function(o) {
+                        var nColVis = $('div.ColVis', o.nTableWrapper)[0];
+                        nColVis.align = "right";
+                        nColVis.style.paddingBottom = "15px";
+                    },
+                    aaSorting: [[1,'asc']],
+                    aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ],
+                    destroy: true
+                });
+            {% endfor %}
         });
-      {% endfor %}
-    });
 
-    function toggle(source,select_list) {
-      checkboxes = document.getElementsByName(select_list);
-      for(var i=0, n=checkboxes.length;i<n;i++) {
-        checkboxes[i].checked = source.checked;
-      }
-    }
-</script>
+        function toggle(source,select_list) {
+            checkboxes = document.getElementsByName(select_list);
+            for(var i=0, n=checkboxes.length;i<n;i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
 
-<form method="POST">
-    <table id="user-table" >
-        <thead>
+    <form method="POST">
+        <table id="user-table" >
+            <thead>
             <tr>
                 <th></th>
                 <th></th>
@@ -52,89 +52,89 @@
                 <th> Email</th>
                 <th> Username</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>
-                    <input id="{{ user.username }}" name="selectedusers" type="checkbox" value="{{ user.username }}">
-                </td>
-                <td>
-                    <a href="/user/profile/{{ user.username }}">view <i class="fa fa-user"></i></a>
-                </td>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>
+                        <input id="{{ user.username }}" name="selectedusers" type="checkbox" value="{{ user.username }}">
+                    </td>
+                    <td>
+                        <a href="/user/profile/{{ user.username }}">view <i class="fa fa-user"></i></a>
+                    </td>
 
-                 {% if with_edit == "True" %}
-                    <td>
-                        <a href="/user/edit/{{ user.username }}"> edit <i class="fa fa-user"></i> </a>
-                    </td>
-                 {% endif %}
-                {% if user.status == 'approved' %}
-                    <td>
-                        <font color="green"> <i class="fa fa-check-square-o"></i> </font>
-                    </td>
-                    <td>
-                        <font color="green"> {{ user.status|capitalize }} </font>
-                    </td>
-                {% elif user.status == 'denied' %}
-                    <td>
-                        <font color="red"> <i class="fa fa-ban"></i> </font>
-                    </td>
-                    <td>
-                        <font color="red"> {{ user.status|capitalize }} </font>
-                    </td>
-                {% elif user.status == 'pending' %}
-                    <td>
-                        <font color="grey"> <i class="fa fa-pause"></i> </font>
-                    </td>
-                    <td>
-                        <font color="grey"> {{ user.status|capitalize }} </font>
-                    </td>
-                {% elif user.status == 'blocked' %}
-                    <td>
-                        <font color="red"> <i class="fa fa-ban"></i> </font>
-                    </td>
-                    <td>
-                        <font color="red"> {{ user.status|capitalize }} </font>
-                    </td>
-                {% else %}
-                    <td>
-                        <font color="black"> <i class="fa fa-question-circle"></i> </font>
-                    </td>
-                    <td>
-                        <font color="black"> {{ user.status|capitalize }} </font>
-                    </td>
-                {% endif %}
-                <td>{{ user.firstname }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.username }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                    {% if with_edit == "True" %}
+                        <td>
+                            <a href="/user/edit/{{ user.username }}"> edit <i class="fa fa-user"></i> </a>
+                        </td>
+                    {% endif %}
+                    {% if user.status == 'approved' %}
+                        <td>
+                            <font color="green"> <i class="fa fa-check-square-o"></i> </font>
+                        </td>
+                        <td>
+                            <font color="green"> {{ user.status|capitalize }} </font>
+                        </td>
+                    {% elif user.status == 'denied' %}
+                        <td>
+                            <font color="red"> <i class="fa fa-ban"></i> </font>
+                        </td>
+                        <td>
+                            <font color="red"> {{ user.status|capitalize }} </font>
+                        </td>
+                    {% elif user.status == 'pending' %}
+                        <td>
+                            <font color="grey"> <i class="fa fa-pause"></i> </font>
+                        </td>
+                        <td>
+                            <font color="grey"> {{ user.status|capitalize }} </font>
+                        </td>
+                    {% elif user.status == 'blocked' %}
+                        <td>
+                            <font color="red"> <i class="fa fa-ban"></i> </font>
+                        </td>
+                        <td>
+                            <font color="red"> {{ user.status|capitalize }} </font>
+                        </td>
+                    {% else %}
+                        <td>
+                            <font color="black"> <i class="fa fa-question-circle"></i> </font>
+                        </td>
+                        <td>
+                            <font color="black"> {{ user.status|capitalize }} </font>
+                        </td>
+                    {% endif %}
+                    <td>{{ user.firstname }}</td>
+                    <td>{{ user.lastname }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.username }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-<div class="control-group">
-  <label class="control-label" for="button_submit"></label>
-  <div class="controls">
+        <div class="control-group">
+            <label class="control-label" for="button_submit"></label>
+            <div class="controls">
 
-    {% for state in states %}
-        <button id="button_{{ state }}" value="{{ state }}"
-            name="button"
-            {% if state == 'approved' %}
-               class="btn btn-success"
-            {% elif state == 'pending' %}
-               class="btn btn-default"
-            {% elif state in ['denied', 'blocked', 'delete'] %}
-               class="btn btn-danger"
-            {% else %}
-                class="btn"
-            {% endif %}
-         >{{ state|capitalize }}
-    </button>
-    {% endfor %}
+                {% for state in states %}
+                    <button id="button_{{ state }}" value="{{ state }}"
+                            name="button"
+                            {% if state == 'approved' %}
+                            class="btn btn-success"
+                            {% elif state == 'pending' %}
+                            class="btn btn-default"
+                            {% elif state in ['denied', 'blocked', 'delete'] %}
+                            class="btn btn-danger"
+                            {% else %}
+                            class="btn"
+                            {% endif %}
+                            >{{ state|capitalize }}
+                    </button>
+                {% endfor %}
 
-  </div>
-</div>
+            </div>
+        </div>
 
-</form>
+    </form>
 {% endblock %}

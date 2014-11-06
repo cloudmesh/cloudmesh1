@@ -3,15 +3,12 @@
 {% from "_helper.html" import cm_state_color %}
 
 {% block content %}
-<legend>Project List</legend>
+    <legend>Project List</legend>
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             {% for projectnum in range(projects|count) %}
                 $("#project-table").dataTable({
-                    "aLengthMenu": [
-                        [-1, 10, 25, 50, 100],
-                        ["All", 10, 25, 50, 100]
-                    ],
+                    "aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
                     "iDisplayLength": 25,
                     "sPaginationType": "full_numbers",
                     "sDom": 'CR<"clear">lftipr',
@@ -19,92 +16,96 @@
                         "aiExclude": [ 0 ],
                         "sAlign": "center"
                     },
-                    "fnDrawCallback": function (o) {
+                    "fnDrawCallback": function(o) {
                         var nColVis = $('div.ColVis', o.nTableWrapper)[0];
                         nColVis.align = "right";
                         nColVis.style.paddingBottom = "15px";
                     },
-                    aaSorting: [
-                        [1, 'asc']
-                    ],
-                    aoColumnDefs: [
-                        {"bSortable": false, "aTargets": [0]}
-                    ]
+                    aaSorting: [[1,'asc']],
+                    aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ],
+                    destroy: true
                 });
             {% endfor %}
         });
 
-        function toggle(source, select_list) {
+        function toggle(source,select_list) {
             checkboxes = document.getElementsByName(select_list);
-            for (var i = 0, n = checkboxes.length; i < n; i++) {
+            for(var i=0, n=checkboxes.length;i<n;i++) {
                 checkboxes[i].checked = source.checked;
             }
         }
     </script>
-    <form method="POST">
-        <table id="project-table">
-            <tr>
-                <th></th>
-                <th></th>
-                <th> Status</th>
-                <th> Title</th>
-                <th> Contact</th>
-            </tr>
 
+    <form method="post">
+
+        <table id="project-table">
+            <thead>
+            <tr>
+                <th> </th>
+                <th> </th>
+                <th> </th>
+                <th> Status </th>
+                <th> Title </th>
+                <th> Contact </th>
+                <th> Created </th>
+            </tr>
+            </thead>
+
+            <tbody>
             {% for project in projects %}
                 <tr>
-                    <td><a href="/project/profile/{{ project.projectid }}">view <i class="fa fa-file-text-o"></i> </a></td>
+                    <td> <input id="{{ project.projectid }}" name="selectedprojects" type="checkbox" value="{{ project.projectid }}"></td>
+                    <td> <a href="/project/profile/{{ project.projectid }}"> <i
+                            class="fa fa-file-text-o"></i></a> </td>
                     {% if project.status == 'approved' %}
                         <td>
-                            <font color="green"> <i class="fa fa-check-square-o"></i> </font>
+                            <font  color="green"> <i class="fa fa-check-square-o"></i> </font>
                         </td>
                         <td>
-                            <font color="green"> {{ project.status|capitalize }} </font>
+                            <font  color="green"> {{ project.status|capitalize }} </font>
                         </td>
 
 
                     {% elif project.status == 'completed' %}
                         <td>
-                            <font color="blue"> <i class="fa fa-check-square"></i> </font>
+                            <font  color="blue"> <i class="fa fa-check-square"></i> </font>
                         </td>
                         <td>
-                            <font color="blue"> {{ project.status|capitalize }} </font>
+                            <font  color="blue"> {{ project.status|capitalize }} </font>
                         </td>
 
 
                     {% elif project.status == 'pending' %}
                         <td>
-                            <font color="grey"> <i class="fa fa-pause"></i> </font>
+                            <font  color="grey"> <i class="fa fa-pause"></i> </font>
                         </td>
                         <td>
-                            <font color="grey"> {{ project.status|capitalize }} </font>
+                            <font  color="grey"> {{ project.status|capitalize }} </font>
                         </td>
 
                     {% elif project.status == 'denied' %}
                         <td>
-                            <font color="red"> <i class="fa fa-ban"></i> </font>
+                            <font  color="red"> <i class="fa fa-ban"></i> </font>
                         </td>
                         <td>
-                            <font color="red"> {{ project.status|capitalize }} </font>
+                            <font  color="red"> {{ project.status|capitalize }} </font>
                         </td>
 
                     {% else %}
                         <td>
-                            <font color="black"> <i class="fa fa-question-circle"></i> </font>
+                            <font  color="black"> <i class="fa fa-question-circle"></i> </font>
                         </td>
                         <td>
-                            <font color="black"> {{ project.status|capitalize }} </font>
+                            <font  color="black"> {{ project.status|capitalize }} </font>
                         </td>
-
-
                     {% endif %}
-
 
                     <td>{{ project.title }}</td>
                     <td>{{ project.contact }}</td>
+                    <td>{{ project.date_created }}</td>
                 </tr>
             {% endfor %}
+            </tbody>
         </table>
     </form>
-  
 {% endblock %}

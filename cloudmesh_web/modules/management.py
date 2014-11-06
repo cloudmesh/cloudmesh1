@@ -123,21 +123,21 @@ class ProjectRegistrationForm(Form):
                        # "resources_software",
                        "resources_clusters",
                        "resources_provision"
-                       ])
-            ]
+            ])
+    ]
     title = StringField('Title')
     abstract = TextAreaField('Abstract')
     intellectual_merit = TextAreaField('Intellectual merit')
     broader_impact = TextAreaField('Broader impact')
-    use_of_fg = TextAreaField('Use of FG')
+    use_of_fg = TextAreaField('Use of Future Systems')
     scale_of_use = TextAreaField('Scale of use')
     categories = StringField('Categories')
     keywords = StringField('Keywords')
     primary_discipline = TextField('Primary discipline')
     orientation = StringField('Orientation')
-    contact = StringField('contact')
+    contact = StringField('Contact')
     url = StringField(
-        'Url', [validators.Length(min=6, max=50), validate_url_in_form])
+        'URL', [validators.Length(min=6, max=50), validate_url_in_form])
     comment = TextAreaField('Comment')
     active = BooleanField('Active')
     projectid = StringField('Projectid')
@@ -147,7 +147,7 @@ class ProjectRegistrationForm(Form):
     alumnis = TextAreaField('Alumnis')
     grant_orgnization = StringField('Grant Orgnization')
     grant_id = StringField('Grant id')
-    grant_url = StringField('Grant url')
+    grant_url = StringField('Grant URL')
     results = TextAreaField('Results')
     agreement_use = BooleanField('Use')
     agreement_slides = BooleanField('Slides')
@@ -159,14 +159,14 @@ class ProjectRegistrationForm(Form):
     join_open = BooleanField('Join open')
     join_notification = BooleanField('Join notification')
     resources_services = MultiCheckboxField(
-        'Resources services',
+        'Resource Services',
         choices=get_choices_for_form(ProjectSERVICES))
     # resources_software = MultiCheckboxField('resources_software',
     #                         choices=get_choices_for_form(ProjectSOFTWARE))
     resources_clusters = MultiCheckboxField(
-        'Resources clusters', choices=get_choices_for_form(ProjectCLUSTERS))
+        'Resource Clusters', choices=get_choices_for_form(ProjectCLUSTERS))
     resources_provision = MultiCheckboxField(
-        'Resources provision', choices=get_choices_for_form(ProjectPROVISIONING))
+        'Resource Provisioning', choices=get_choices_for_form(ProjectPROVISIONING))
 
 
 class UserRegistrationForm(Form):
@@ -203,9 +203,9 @@ class UserRegistrationForm(Form):
         ["institution",
          "institutionrole",
          "department",
-            "address",
-            "advisor",
-            "country"]
+         "address",
+         "advisor",
+         "country"]
 
     profile_keys = \
         ["username",
@@ -552,7 +552,10 @@ def management_user_edit(username):
         user = MongoUser.objects(username=username)
     except:
         print "Error: Username not found"
-        return render(request, 'error.html', {"error": "The user does not exist"})
+        return render_template('error.html',
+                               form=None,
+                               type="exists",
+                               msg="The user does not exist")
 
     if request.method == 'GET':
 

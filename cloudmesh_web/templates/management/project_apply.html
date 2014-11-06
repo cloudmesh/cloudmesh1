@@ -1,77 +1,77 @@
 {% extends "management/simple.html" %}
 
 {% macro render_field(field) %}
-  <tr>
-  <td bgcolor="#CCCCCC"> <i>{{ field.label }}</i></td>
-  {% if field.type == "TextAreaField" %}
-    <td>{{ field(cols="200", rows="3")|safe }}
-  {% elif field.type == "TextField" %}
-    <td>{{ field(cols="100")|safe }}
-  {% else %}
-    <td>{{ field(**kwargs)|safe }}
-  {% endif %}
-  <br>
-  {% if field.errors %}
-    <font color="red">
-    <dl class=errors>
-    {% for error in field.errors %}
-      <dd>  <i class="fa fa-exclamation-triangle"></i> {{ error }}</dd>
-    {% endfor %}
-    </dl>
-    </font>    
-  {% endif %}
-  </td>
-  </tr>
+    <tr>
+        <td bgcolor="#CCCCCC"> <i>{{ field.label }}</i></td>
+        {% if field.type == "TextAreaField" %}
+            <td>{{ field(cols="200", rows="3")|safe }}
+                {% elif field.type == "TextField" %}
+            <td>{{ field(cols="100")|safe }}
+                {% else %}
+            <td>{{ field(**kwargs)|safe }}
+        {% endif %}
+        <br>
+        {% if field.errors %}
+            <font color="red">
+                <dl class=errors>
+                    {% for error in field.errors %}
+                        <dd>  <i class="fa fa-exclamation-triangle"></i> {{ error }}</dd>
+                    {% endfor %}
+                </dl>
+            </font>
+        {% endif %}
+        </td>
+    </tr>
 {% endmacro %}
 
-{% block content %}  
+{% block content %}
 
-<legend> {{ title }} </legend>
-  
-<form method="post">
+    <legend> {{ title }} </legend>
 
-  {% for (panel, attributes) in fields %}
+    <form method="post">
 
-      <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title"> {{ panel | capitalize }} </h3>
-      </div>
-      <div class="panel-body">
+        {% for (panel, attributes) in fields %}
 
-	
-  <table class="table table-condensed">
-    <tbody>      
-      <tr>
-{#	<th colspan="2" bgcolor="#CCCCCC"> {{ panel | capitalize }} </th>#}
-      </tr>
-      
-      {% for field in attributes %}
-        {{ render_field(form[field]) }}
-      {% endfor %}
-    </tbody>
-  </table>
-  {% endfor %}
-  
-  <div class="control-group">
-  <label class="control-label" for="button_submit"></label>
-  <div class="controls">
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> {{ panel | capitalize }} </h3>
+            </div>
+            <div class="panel-body">
 
-    {% for state in states %}
-        <button id="button_{{ state }}" value="{{ state }}"
-            name="button"
-            {% if state == 'save' %}
-               class="btn btn-success"
-            {% elif state == 'cancel' %}
-               class="btn btn-danger"
-            {% else %}
-                class="btn"
-            {% endif %}
-         >{{ state|capitalize }}
-    </button>
-    {% endfor %}
-      </div>
-  </div>
-</div>
-</div>
-</form>
+
+            <table class="table table-condensed">
+                <tbody>
+                <tr>
+                    {#	<th colspan="2" bgcolor="#CCCCCC"> {{ panel | capitalize }} </th>#}
+                </tr>
+
+                {% for field in attributes %}
+                    {{ render_field(form[field]) }}
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+
+        <div class="control-group">
+            <label class="control-label" for="button_submit"></label>
+            <div class="controls">
+
+                {% for state in states %}
+                    <button id="button_{{ state }}" value="{{ state }}"
+                            name="button"
+                            {% if state == 'save' %}
+                            class="btn btn-success"
+                            {% elif state == 'cancel' %}
+                            class="btn btn-danger"
+                            {% else %}
+                            class="btn"
+                            {% endif %}
+                            >{{ state|capitalize }}
+                    </button>
+                {% endfor %}
+            </div>
+        </div>
+        </div>
+        </div>
+    </form>
 {% endblock %}
