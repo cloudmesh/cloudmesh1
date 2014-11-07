@@ -49,6 +49,7 @@ class cm_shell_cluster:
                 Also, please make sure the group name of the cluster is unique
                 
         Options:
+            --ln=<LoginName>           give a login name for the VMs, e.g. ubuntu
             --cloud=<CloudName>        give a cloud to work on
             --flavor=<flavorName>      give the name of the flavor
             --flavorid=<flavorId>      give the id of the flavor
