@@ -3,7 +3,7 @@
 
 {% macro render_field(field) %}
     <tr>
-        <td style="width:30%">{{ field.label }}</td>
+        <td style="width:30%"><i>{{ field.label }}</i></td>
         <td style="width:70%">{{ field(**kwargs)|safe }}
             <br>
             {% if field.errors %}

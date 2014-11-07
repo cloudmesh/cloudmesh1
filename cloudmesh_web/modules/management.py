@@ -20,6 +20,87 @@ log = LOGGER(__file__)
 
 management_module = Blueprint('management_module', __name__)
 
+discipline_choices=[
+    ('Aerospace Engineering (101)', 'Aerospace Engineering (101)'),
+    ('Agricultural Economics (901)', 'Agricultural Economics (901)'),
+    ('Agricultural Engineering (102)', 'Agricultural Engineering (102)'),
+    ('Agricultural Sciences (501)', 'Agricultural Sciences (501)'),
+    ('Anatomy (601)', 'Anatomy (601)'),
+    ('Anesthesiology (701)', 'Anesthesiology (701)'),
+    ('Anthropology (902)', 'Anthropology (902)'),
+    ('Astronomy (201)', 'Astronomy (201)'),
+    ('Atmospheric Sciences (301)', 'Atmospheric Sciences (301)'),
+    ('Biochemistry (602)', 'Biochemistry (602)'),
+    ('Biology (603)', 'Biology (603)'),
+    ('Biomedical Engineering (103)', 'Biomedical Engineering (103)'),
+    ('Biometry and Epidemiology (604)', 'Biometry and Epidemiology (604)'),
+    ('Biophysics (605)', 'Biophysics (605)'),
+    ('Biosciences, n.e.c. (617)', 'Biosciences, n.e.c. (617)'),
+    ('Botany (606)', 'Botany (606)'),
+    ('Cardiology (702)', 'Cardiology (702)'),
+    ('Cell and Molecular Biology (607)', 'Cell and Molecular Biology (607)'),
+    ('Chemical and Related Engineering (104)', 'Chemical and Related Engineering (104)'),
+    ('Chemistry (202)', 'Chemistry (202)'),
+    ('Civil and Related Engineering (105)', 'Civil and Related Engineering (105)'),
+    ('Clinical Medicine, n.e.c. (717)', 'Clinical Medicine, n.e.c. (717)'),
+    ('Communication Disorders Sciences (723)', 'Communication Disorders Sciences (723)'),
+    ('Computer Science (401)', 'Computer Science (401)'),
+    ('Dental Sciences (718)', 'Dental Sciences (718)'),
+    ('Earth, Atmospheric, and Ocean Sciences, n.e.c. (304)', 'Earth, Atmospheric, and Ocean Sciences, n.e.c. (304)'),
+    ('Ecology (608)', 'Ecology (608)'),
+    ('Economics (903)', 'Economics (903)'),
+    ('Electrical and Related Engineering (106)', 'Electrical and Related Engineering (106)'),
+    ('Endocrinology (704)', 'Endocrinology (704)'),
+    ('Engineering Science and Engineering Physics (107)', 'Engineering Science and Engineering Physics (107)'),
+    ('Engineering, n.e.c. (114)', 'Engineering, n.e.c. (114)'),
+    ('Entomology and Parasitology (609)', 'Entomology and Parasitology (609)'),
+    ('Gastroenterology (705)', 'Gastroenterology (705)'),
+    ('Genetics (610)', 'Genetics (610)'),
+    ('Geography (904)', 'Geography (904)'),
+    ('Geosciences (302)', 'Geosciences (302)'),
+    ('Health-related, n.e.c. (722)', 'Health-related, n.e.c. (722)'),
+    ('Hematology (706)', 'Hematology (706)'),
+    ('History and Philosophy of Science (905)', 'History and Philosophy of Science (905)'),
+    ('Industrial/Manufacturing Engineering (108)', 'Industrial/Manufacturing Engineering (108)'),
+    ('Linguistics (906)', 'Linguistics (906)'),
+    ('Mathematics and Applied Mathematics (402)', 'Mathematics and Applied Mathematics (402)'),
+    ('Mechanical and Related Engineering (109)', 'Mechanical and Related Engineering (109)'),
+    ('Metallurgical and Materials Engineering (110)', 'Metallurgical and Materials Engineering (110)'),
+    ('Microbiology, Immunology, and Virology (611)', 'Microbiology, Immunology, and Virology (611)'),
+    ('Mining and Related Engineering (111)', 'Mining and Related Engineering (111)'),
+    ('Neurology (707)', 'Neurology (707)'),
+    ('Nuclear Engineering (112)', 'Nuclear Engineering (112)'),
+    ('Nursing (719)', 'Nursing (719)'),
+    ('Nutrition (612)', 'Nutrition (612)'),
+    ('Obstetrics and Gynecology (708)', 'Obstetrics and Gynecology (708)'),
+    ('Ocean Sciences (303)', 'Ocean Sciences (303)'),
+    ('Oncology/Cancer Research (703)', 'Oncology/Cancer Research (703)'),
+    ('Ophthalmology (709)', 'Ophthalmology (709)'),
+    ('Otorhinolaryngology (710)', 'Otorhinolaryngology (710)'),
+    ('Pathology (613)', 'Pathology (613)'),
+    ('Pediatrics (711)', 'Pediatrics (711)'),
+    ('Petroleum Engineering (113)', 'Petroleum Engineering (113)'),
+    ('Pharmaceutical Sciences (720)', 'Pharmaceutical Sciences (720)'),
+    ('Pharmacology (614)', 'Pharmacology (614)'),
+    ('Physical Sciences, n.e.c. (204)', 'Physical Sciences, n.e.c. (204)'),
+    ('Physics (203)', 'Physics (203)'),
+    ('Physiology (615)', 'Physiology (615)'),
+    ('Political Science/Public Administration (907)', 'Political Science/Public Administration (907)'),
+    ('Preventive Medicine and Community Health (712)', 'Preventive Medicine and Community Health (712)'),
+    ('Psychiatry (713)', 'Psychiatry (713)'),
+    ('Psychology (except Clinical) (802)', 'Psychology (except Clinical) (802)'),
+    ('Psychology, Clinical (803)', 'Psychology, Clinical (803)'),
+    ('Psychology, Combined (801)', 'Psychology, Combined (801)'),
+    ('Pulmonary Disease (714)', 'Pulmonary Disease (714)'),
+    ('Radiology (715)', 'Radiology (715)'),
+    ('Social Sciences, n.e.c. (910)', 'Social Sciences, n.e.c. (910)'),
+    ('Sociology (908)', 'Sociology (908)'),
+    ('Sociology and Anthropology (909)', 'Sociology and Anthropology (909)'),
+    ('Statistics (403)', 'Statistics (403)'),
+    ('Surgery (716)', 'Surgery (716)'),
+    ('Veterinary Sciences (721)', 'Veterinary Sciences (721)'),
+    ('Zoology (616)', 'Zoology (616)')
+]
 
 institutionrole_choices=[
     ('Undergraduate','Undergraduate'),
@@ -347,11 +428,20 @@ def project_apply():
         flash('Thanks for registering')
         return redirect('/')
 
+    # return render_template('management/project_apply.html',
+    #                        title="Project Application",
+    #                        states=['save', 'cancel'],
+    #                        form=form,
+    #                        fields=ProjectRegistrationForm.keys)
+
     return render_template('management/project_apply.html',
                            title="Project Application",
                            states=['save', 'cancel'],
                            form=form,
-                           fields=ProjectRegistrationForm.keys)
+                           fields=ProjectRegistrationForm.keys,
+                           profile_fields=ProjectRegistrationForm.profile_keys,
+                           agreements_fields=ProjectRegistrationForm.agreements_keys,
+                           other_fields=ProjectRegistrationForm.other_keys)
 
 
 def get_choices_for_form(services):
@@ -377,44 +467,122 @@ class ProjectRegistrationForm(Form):
     # put this in the html form:  {{ form.csrf_token }}
     """
 
-    keys = [("profile", ["title",
-                         "abstract",
-                         "intellectual_merit",
-                         "broader_impact",
-                         "use_of_fg",
-                         "scale_of_use",
-                         # "categories",
-                         # "keywords",
-                         # "primary_discipline",
-                         "orientation",
-                         "contact",
-                         "url",
-                         "comment",
-                         # "active",
-                         # "projectid",
-                         # "lead",
-                         # "managers",
-                         # "members",
-                         # "alumnis",
-                         # "grant_orgnization",
-                         # "grant_id",
-                         # "grant_url",
-                         "results"]),
-            ("agreements", ["agreement_use",
-                            "agreement_slides",
-                            "agreement_support",
-                            "agreement_software",
-                            "agreement_documentation"]),
-            ("other", ["comments",
-                       "join_open",
-                       "join_notification",
-                       "resources_services",
-                       # "resources_software",
-                       "resources_clusters",
-                       "resources_provision"
-            ])
-    ]
+    # keys = [("profile", ["title",
+    #                      "abstract",
+    #                      "intellectual_merit",
+    #                      "broader_impact",
+    #                      "use_of_fg",
+    #                      "scale_of_use",
+    #                      # "categories",
+    #                      # "keywords",
+    #                      # "primary_discipline",
+    #                      "orientation",
+    #                      "contact",
+    #                      "url",
+    #                      "comment",
+    #                      # "active",
+    #                      # "projectid",
+    #                      # "lead",
+    #                      # "managers",
+    #                      # "members",
+    #                      # "alumnis",
+    #                      # "grant_orgnization",
+    #                      # "grant_id",
+    #                      # "grant_url",
+    #                      "results"]),
+    #         ("agreements", ["agreement_use",
+    #                         "agreement_slides",
+    #                         "agreement_support",
+    #                         "agreement_software",
+    #                         "agreement_documentation"]),
+    #         ("other", ["comments",
+    #                    "join_open",
+    #                    "join_notification",
+    #                    "resources_services",
+    #                    # "resources_software",
+    #                    "resources_clusters",
+    #                    "resources_provision"
+    #         ])
+    # ]
+
+    keys = [\
+        "title",
+        "category",
+        "keywords",
+        "contact",
+        "primary_discipline"
+        "orientation",
+        "abstract",
+        "intellectual_merit",
+        "broader_impact",
+        "use_of_fg",
+        "scale_of_use",
+        "url",
+        "comment",
+        "results",
+        "agreement_use",
+        "agreement_slides",
+        "agreement_support",
+        "agreement_software",
+        "agreement_documentation",
+        "comments",
+        "join_open",
+        "join_notification",
+        "resources_services",
+        # "resources_software",
+        "resources_clusters",
+        "resources_provision"]
+
+    profile_keys = [\
+        "title",
+        "category",
+        "keywords",
+        "contact",
+        "orientation",
+        "primary_discipline",
+        "abstract",
+        "intellectual_merit",
+        "broader_impact",
+        "use_of_fg",
+        "scale_of_use",
+        "url",
+        "comment",
+        # "active",
+        # "projectid",
+        # "lead",
+        # "managers",
+        # "members",
+        # "alumnis",
+        # "grant_orgnization",
+        # "grant_id",
+        # "grant_url",
+        "results"]
+
+    agreements_keys= [\
+        "agreement_use",
+        "agreement_slides",
+        "agreement_support",
+        "agreement_software",
+        "agreement_documentation"]
+
+    other_keys = [\
+        "comments",
+        "join_open",
+        "join_notification",
+        "resources_services",
+        # "resources_software",
+        "resources_clusters",
+        "resources_provision"]
+
     title = StringField('Title')
+    category = RadioSelectField('Project Category', choices=[('None','None'),('Computer Science','Computer Science'),\
+                                                             ('Education','Education'),\
+                                                             ('Interoperability','Interoperability'),\
+                                                             ('Life Sciences','Life Sciences'),\
+                                                             ('Non Life Sciences','Non Life Sciences'),\
+                                                             ('Technology Development','Technology Development'),\
+                                                             ('Technology Evaluation','Technology Evaluation')])
+    keywords = StringField('Project Keywords')
     abstract = TextAreaField('Abstract')
     intellectual_merit = TextAreaField('Intellectual merit')
     broader_impact = TextAreaField('Broader impact')
@@ -422,10 +590,10 @@ class ProjectRegistrationForm(Form):
     scale_of_use = TextAreaField('Scale of use')
     categories = StringField('Categories')
     keywords = StringField('Keywords')
-    primary_discipline = TextField('Primary discipline')
-
     # orientation = StringField('Orientation')
-    orientation = RadioSelectField('Orientation', choices=[('research','Research'),('education','Education'),('industry','Industry'),('government','Government')])
+    orientation = RadioSelectField('Orientation', choices=[('research','Research'),('education','Education'),\
+                                                           ('industry','Industry'),('government','Government')])
+    primary_discipline = RadioSelectField('Primary discipline', choices=discipline_choices)
     contact = StringField('Contact')
     url = StringField(
         'URL', [validators.Length(min=6, max=50), validate_url_in_form])

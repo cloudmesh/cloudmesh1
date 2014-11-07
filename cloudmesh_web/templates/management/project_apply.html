@@ -3,7 +3,7 @@
 
 {% macro render_field(field) %}
     <tr>
-        <td bgcolor="#CCCCCC"> <i>{{ field.label }}</i></td>
+        <td bgcolor="#CCCCCC" style="width:30%"> <i>{{ field.label }}</i></td>
         {% if field.type == "TextAreaField" %}
             <td>{{ field(cols="200", rows="3")|safe }}
                 {% elif field.type == "TextField" %}
@@ -30,28 +30,54 @@
     <legend> {{ title }} </legend>
 
     <form method="post">
+         <table class="table table-condensed">
+            <tbody>
+            <tr>
+                <th colspan="2" bgcolor="#CCCCCC"> Project Profile </th>
+            </tr>
+{% for field in profile_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
 
-        {% for (panel, attributes) in fields %}
+            <tr>
+                <th colspan="2" bgcolor="#CCCCCC">Agreements </th>
+            </tr>
 
-            <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title"> {{ panel | capitalize }} </h3>
-            </div>
-            <div class="panel-body">
+            {% for field in agreements_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
 
+            <tr>
+                <th colspan="2" bgcolor="#CCCCCC">Others </th>
+            </tr>
 
-            <table class="table table-condensed">
-                <tbody>
-                <tr>
+            {% for field in other_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
+            </tbody>
+        </table>
+
+{#        {% for (panel, attributes) in fields %}#}
+{##}
+{#            <div class="panel panel-default">#}
+{#            <div class="panel-heading">#}
+{#                <h3 class="panel-title"> {{ panel | capitalize }} </h3>#}
+{#            </div>#}
+{#            <div class="panel-body">#}
+{##}
+{##}
+{#            <table class="table table-condensed">#}
+{#                <tbody>#}
+{#                <tr>#}
                     {#	<th colspan="2" bgcolor="#CCCCCC"> {{ panel | capitalize }} </th>#}
-                </tr>
-
-                {% for field in attributes %}
-                    {{ render_field(form[field]) }}
-                {% endfor %}
-                </tbody>
-            </table>
-        {% endfor %}
+{#                </tr>#}
+{##}
+{#                {% for field in attributes %}#}
+{#                    {{ render_field(form[field]) }}#}
+{#                {% endfor %}#}
+{#                </tbody>#}
+{#            </table>#}
+{#        {% endfor %}#}
 
         <div class="control-group">
             <label class="control-label" for="button_submit"></label>
