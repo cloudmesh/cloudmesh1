@@ -37,26 +37,27 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
-            cd /home/ubuntu
             curl -L https://www.opscode.com/chef/install.sh | bash
             wget http://github.com/opscode/chef-repo/tarball/master
             tar -zxf master
-            mv opscode-chef-repo* chef-repo
+            mv opscode-chef-repo* /home/ubuntu/chef-repo
             rm master
-            cd chef-repo/
-            mkdir .chef
-            echo "cookbook_path [ '/home/ubuntu/chef-repo/cookbooks' ]" > .chef/knife.rb
-            cd cookbooks
+            mkdir /home/ubuntu/chef-repo/.chef
+            echo "cookbook_path [ '/home/ubuntu/chef-repo/cookbooks' ]" > /home/ubuntu/chef-repo/.chef/knife.rb
             knife cookbook site download java
             knife cookbook site download apt
             knife cookbook site download yum
             knife cookbook site download hadoop
-            tar -zxf java*
-            tar -zxf apt*
-            tar -zxf yum*
-            tar -zxf hadoop*
-            rm *.tar.gz
+            tar -zxf java* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf apt* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf yum* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf hadoop* -C /home/ubuntu/chef-repo/cookbooks
+            rm -rf java*.tar.gz
+            rm -rf apt*.tar.gz
+            rm -rf yum*.tar.gz
+            rm -rf hadoop*.tar.gz
 
+            echo "$hadoop2 hadoop2" >> /etc/hosts
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
             description "Install Oracle Java"
@@ -112,6 +113,8 @@ resources:
             /etc/init.d/hadoop-hdfs-namenode init
             /usr/lib/hadoop/libexec/init-hdfs.sh
 
+          params:
+            $hadoop2: { get_attr: [hadoop2, first_address] }
   hadoop2:
     type: OS::Nova::Server
     properties:
@@ -126,25 +129,27 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
-            cd /home/ubuntu
             curl -L https://www.opscode.com/chef/install.sh | bash
             wget http://github.com/opscode/chef-repo/tarball/master
             tar -zxf master
-            mv opscode-chef-repo* chef-repo
+            mv opscode-chef-repo* /home/ubuntu/chef-repo
             rm master
-            cd chef-repo/
-            mkdir .chef
-            echo "cookbook_path [ '/home/ubuntu/chef-repo/cookbooks' ]" > .chef/knife.rb
-            cd cookbooks
+            mkdir /home/ubuntu/chef-repo/.chef
+            echo "cookbook_path [ '/home/ubuntu/chef-repo/cookbooks' ]" > /home/ubuntu/chef-repo/.chef/knife.rb
             knife cookbook site download java
             knife cookbook site download apt
             knife cookbook site download yum
             knife cookbook site download hadoop
-            tar -zxf java*
-            tar -zxf apt*
-            tar -zxf yum*
-            tar -zxf hadoop*
-            rm *.tar.gz
+            tar -zxf java* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf apt* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf yum* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf hadoop* -C /home/ubuntu/chef-repo/cookbooks
+            rm -rf java*.tar.gz
+            rm -rf apt*.tar.gz
+            rm -rf yum*.tar.gz
+            rm -rf hadoop*.tar.gz
+
+            echo "$hadoop1 hadoop1" >> /etc/hosts
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -198,4 +203,5 @@ resources:
 
             chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
 
-
+          params:
+            $hadoop1: { get_attr: [ hadoop1, first_address ] }
