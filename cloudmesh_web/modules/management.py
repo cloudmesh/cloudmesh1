@@ -9,7 +9,7 @@ from flask import Blueprint, render_template, request, flash, redirect
 from mongoengine import connect
 from wtforms import Form, validators, widgets
 from wtforms.fields import BooleanField, TextField, TextAreaField, PasswordField, \
-    SelectMultipleField
+    SelectMultipleField, StringField, RadioField
 from wtforms.validators import ValidationError
 
 from flask.ext.login import login_required
@@ -19,6 +19,293 @@ log = LOGGER(__file__)
 
 management_module = Blueprint('management_module', __name__)
 
+institutionrole_choices=[
+    ('Undergraduate','Undergraduate'),
+    ('Graduate Masters','Graduate Masters'),
+    ("Graduate PhD",'Graduate PhD'),
+    ('Student Other', 'Student Other'),
+    ('Faculty','Faculty'),
+    ('Staff','Staff'),
+    ('Other','Other')
+]
+
+prefered_country_choices=[
+    ('GB','United Kingdom'),
+    ('US','United States'),
+    ('DE','Germany')
+    ]
+
+all_country_choices=[
+    ('AF','Afghanistan'),
+    ('AL','Albania'),
+    ('DZ','Algeria'),
+    ('AS','American Samoa'),
+    ('AD','Andorra'),
+    ('AO','Angola'),
+    ('AI','Anguilla'),
+    ('AQ','Antarctica'),
+    ('AG','Antigua and Barbuda'),
+    ('AR','Argentina'),
+    ('AM','Armenia'),
+    ('AW','Aruba'),
+    ('AU','Australia'),
+    ('AT','Austria'),
+    ('AZ','Azerbaijan'),
+    ('BS','Bahamas'),
+    ('BH','Bahrain'),
+    ('BD','Bangladesh'),
+    ('BB','Barbados'),
+    ('BY','Belarus'),
+    ('BE','Belgium'),
+    ('BZ','Belize'),
+    ('BJ','Benin'),
+    ('BM','Bermuda'),
+    ('BT','Bhutan'),
+    ('BO','Bolivia'),
+    ('BA','Bosnia and Herzegovina'),
+    ('BW','Botswana'),
+    ('BV','Bouvet Island'),
+    ('BR','Brazil'),
+    ('BQ','British Antarctic Territory'),
+    ('IO','British Indian Ocean Territory'),
+    ('VG','British Virgin Islands'),
+    ('BN','Brunei'),
+    ('BG','Bulgaria'),
+    ('BF','Burkina Faso'),
+    ('BI','Burundi'),
+    ('KH','Cambodia'),
+    ('CM','Cameroon'),
+    ('CA','Canada'),
+    ('CT','Canton and Enderbury Islands'),
+    ('CV','Cape Verde'),
+    ('KY','Cayman Islands'),
+    ('CF','Central African Republic'),
+    ('TD','Chad'),
+    ('CL','Chile'),
+    ('CN','China'),
+    ('CX','Christmas Island'),
+    ('CC','Cocos [Keeling] Islands'),
+    ('CO','Colombia'),
+    ('KM','Comoros'),
+    ('CG','Congo - Brazzaville'),
+    ('CD','Congo - Kinshasa'),
+    ('CK','Cook Islands'),
+    ('CR','Costa Rica'),
+    ('HR','Croatia'),
+    ('CU','Cuba'),
+    ('CY','Cyprus'),
+    ('CZ','Czech Republic'),
+    ('CI','C\u00f4te d\u2019Ivoire'),
+    ('DK','Denmark'),
+    ('DJ','Djibouti'),
+    ('DM','Dominica'),
+    ('DO','Dominican Republic'),
+    ('NQ','Dronning Maud Land'),
+    ('DD','East Germany'),
+    ('EC','Ecuador'),
+    ('EG','Egypt'),
+    ('SV','El Salvador'),
+    ('GQ','Equatorial Guinea'),
+    ('ER','Eritrea'),
+    ('EE','Estonia'),
+    ('ET','Ethiopia'),
+    ('FK','Falkland Islands'),
+    ('FO','Faroe Islands'),
+    ('FJ','Fiji'),
+    ('FI','Finland'),
+    ('FR','France'),
+    ('GF','French Guiana'),
+    ('PF','French Polynesia'),
+    ('TF','French Southern Territories'),
+    ('FQ','French Southern and Antarctic Territories'),
+    ('GA','Gabon'),
+    ('GM','Gambia'),
+    ('GE','Georgia'),
+    ('DE','Germany'),
+    ('GH','Ghana'),
+    ('GI','Gibraltar'),
+    ('GR','Greece'),
+    ('GL','Greenland'),
+    ('GD','Grenada'),
+    ('GP','Guadeloupe'),
+    ('GU','Guam'),
+    ('GT','Guatemala'),
+    ('GG','Guernsey'),
+    ('GN','Guinea'),
+    ('GW','Guinea-Bissau'),
+    ('GY','Guyana'),
+    ('HT','Haiti'),
+    ('HM','Heard Island and McDonald Islands'),
+    ('HN','Honduras'),
+    ('HK','Hong Kong SAR China'),
+    ('HU','Hungary'),
+    ('IS','Iceland'),
+    ('IN','India'),
+    ('ID','Indonesia'),
+    ('IR','Iran'),
+    ('IQ','Iraq'),
+    ('IE','Ireland'),
+    ('IM','Isle of Man'),
+    ('IL','Israel'),
+    ('IT','Italy'),
+    ('JM','Jamaica'),
+    ('JP','Japan'),
+    ('JE','Jersey'),
+    ('JT','Johnston Island'),
+    ('JO','Jordan'),
+    ('KZ','Kazakhstan'),
+    ('KE','Kenya'),
+    ('KI','Kiribati'),
+    ('KW','Kuwait'),
+    ('KG','Kyrgyzstan'),
+    ('LA','Laos'),
+    ('LV','Latvia'),
+    ('LB','Lebanon'),
+    ('LS','Lesotho'),
+    ('LR','Liberia'),
+    ('LY','Libya'),
+    ('LI','Liechtenstein'),
+    ('LT','Lithuania'),
+    ('LU','Luxembourg'),
+    ('MO','Macau SAR China'),
+    ('MK','Macedonia'),
+    ('MG','Madagascar'),
+    ('MW','Malawi'),
+    ('MY','Malaysia'),
+    ('MV','Maldives'),
+    ('ML','Mali'),
+    ('MT','Malta'),
+    ('MH','Marshall Islands'),
+    ('MQ','Martinique'),
+    ('MR','Mauritania'),
+    ('MU','Mauritius'),
+    ('YT','Mayotte'),
+    ('FX','Metropolitan France'),
+    ('MX','Mexico'),
+    ('FM','Micronesia'),
+    ('MI','Midway Islands'),
+    ('MD','Moldova'),
+    ('MC','Monaco'),
+    ('MN','Mongolia'),
+    ('ME','Montenegro'),
+    ('MS','Montserrat'),
+    ('MA','Morocco'),
+    ('MZ','Mozambique'),
+    ('MM','Myanmar [Burma]'),
+    ('NA','Namibia'),
+    ('NR','Nauru'),
+    ('NP','Nepal'),
+    ('NL','Netherlands'),
+    ('AN','Netherlands Antilles'),
+    ('NT','Neutral Zone'),
+    ('NC','New Caledonia'),
+    ('NZ','New Zealand'),
+    ('NI','Nicaragua'),
+    ('NE','Niger'),
+    ('NG','Nigeria'),
+    ('NU','Niue'),
+    ('NF','Norfolk Island'),
+    ('KP','North Korea'),
+    ('VD','North Vietnam'),
+    ('MP','Northern Mariana Islands'),
+    ('NO','Norway'),
+    ('OM','Oman'),
+    ('PC','Pacific Islands Trust Territory'),
+    ('PK','Pakistan'),
+    ('PW','Palau'),
+    ('PS','Palestinian Territories'),
+    ('PA','Panama'),
+    ('PZ','Panama Canal Zone'),
+    ('PG','Papua New Guinea'),
+    ('PY','Paraguay'),
+    ('YD','People\'s Democratic Republic of Yemen'),
+    ('PE','Peru'),
+    ('PH','Philippines'),
+    ('PN','Pitcairn Islands'),
+    ('PL','Poland'),
+    ('PT','Portugal'),
+    ('PR','Puerto Rico'),
+    ('QA','Qatar'),
+    ('RO','Romania'),
+    ('RU','Russia'),
+    ('RW','Rwanda'),
+    ('RE','R\u00e9union'),
+    ('BL','Saint Barth\u00e9lemy'),
+    ('SH','Saint Helena'),
+    ('KN','Saint Kitts and Nevis'),
+    ('LC','Saint Lucia'),
+    ('MF','Saint Martin'),
+    ('PM','Saint Pierre and Miquelon'),
+    ('VC','Saint Vincent and the Grenadines'),
+    ('WS','Samoa'),
+    ('SM','San Marino'),
+    ('SA','Saudi Arabia'),
+    ('SN','Senegal'),
+    ('RS','Serbia'),
+    ('CS','Serbia and Montenegro'),
+    ('SC','Seychelles'),
+    ('SL','Sierra Leone'),
+    ('SG','Singapore'),
+    ('SK','Slovakia'),
+    ('SI','Slovenia'),
+    ('SB','Solomon Islands'),
+    ('SO','Somalia'),
+    ('ZA','South Africa'),
+    ('GS','South Georgia and the South Sandwich Islands'),
+    ('KR','South Korea'),
+    ('ES','Spain'),
+    ('LK','Sri Lanka'),
+    ('SD','Sudan'),
+    ('SR','Suriname'),
+    ('SJ','Svalbard and Jan Mayen'),
+    ('SZ','Swaziland'),
+    ('SE','Sweden'),
+    ('CH','Switzerland'),
+    ('SY','Syria'),
+    ('ST','Sao Tom and Principe'),
+    ('TW','Taiwan'),
+    ('TJ','Tajikistan'),
+    ('TZ','Tanzania'),
+    ('TH','Thailand'),
+    ('TL','Timor-Leste'),
+    ('TG','Togo'),
+    ('TK','Tokelau'),
+    ('TO','Tonga'),
+    ('TT','Trinidad and Tobago'),
+    ('TN','Tunisia'),
+    ('TR','Turkey'),
+    ('TM','Turkmenistan'),
+    ('TC','Turks and Caicos Islands'),
+    ('TV','Tuvalu'),
+    ('UM','U.S. Minor Outlying Islands'),
+    ('PU','U.S. Miscellaneous Pacific Islands'),
+    ('VI','U.S. Virgin Islands'),
+    ('UG','Uganda'),
+    ('UA','Ukraine'),
+    ('SU','Union of Soviet Socialist Republics'),
+    ('AE','United Arab Emirates'),
+    ('GB','United Kingdom'),
+    ('US','United States'),
+    ('ZZ','Unknown or Invalid Region'),
+    ('UY','Uruguay'),
+    ('UZ','Uzbekistan'),
+    ('VU','Vanuatu'),
+    ('VA','Vatican City'),
+    ('VE','Venezuela'),
+    ('VN','Vietnam'),
+    ('WK','Wake Island'),
+    ('WF','Wallis and Futuna'),
+    ('EH','Western Sahara'),
+    ('YE','Yemen'),
+    ('ZM','Zambia'),
+    ('ZW','Zimbabwe'),
+    ('AX','Aland Islands')]
+
+country_choices=prefered_country_choices + all_country_choices 
+
+class RadioSelectField(RadioField):
+    widget = widgets.Select(multiple=False)
+    option_widget = widgets.Select
 
 class MultiCheckboxField(SelectMultipleField):
     """
@@ -111,11 +398,11 @@ class ProjectRegistrationForm(Form):
                          # "grant_id",
                          # "grant_url",
                          "results"]),
-            ("agreements", ["aggreement_use",
-                            "aggreement_slides",
-                            "aggreement_support",
-                            "aggreement_sotfware",
-                            "aggreement_documentation"]),
+            ("agreements", ["agreement_use",
+                            "agreement_slides",
+                            "agreement_support",
+                            "agreement_software",
+                            "agreement_documentation"]),
             ("other", ["comments",
                        "join_open",
                        "join_notification",
@@ -123,50 +410,51 @@ class ProjectRegistrationForm(Form):
                        # "resources_software",
                        "resources_clusters",
                        "resources_provision"
-                       ])
-            ]
-    title = TextField('Title')
-    abstract = TextField('Abstract')
+            ])
+    ]
+    title = StringField('Title')
+    abstract = TextAreaField('Abstract')
     intellectual_merit = TextAreaField('Intellectual merit')
     broader_impact = TextAreaField('Broader impact')
-    use_of_fg = TextAreaField('Use of FG')
+    use_of_fg = TextAreaField('Use of Future Systems')
     scale_of_use = TextAreaField('Scale of use')
-    categories = TextField('Categories')
-    keywords = TextField('Keywords')
+    categories = StringField('Categories')
+    keywords = StringField('Keywords')
     primary_discipline = TextField('Primary discipline')
-    orientation = TextField('Orientation')
-    contact = TextField('contact')
-    url = TextField(
-        'Url', [validators.Length(min=6, max=50), validate_url_in_form])
-    comment = TextField('Comment')
+    # orientation = StringField('Orientation')
+    orientation = RadioSelectField('Orientation', choices=[('research','Research'),('education','Education'),('industry','Industry'),('government','Government')])
+    contact = StringField('Contact')
+    url = StringField(
+        'URL', [validators.Length(min=6, max=50), validate_url_in_form])
+    comment = TextAreaField('Comment')
     active = BooleanField('Active')
-    projectid = TextField('Projectid')
-    lead = TextField('Lead')
-    managers = TextField('Managers')
-    members = TextField('Members')
-    alumnis = TextField('Alumnis')
-    grant_orgnization = TextField('Grant Orgnization')
-    grant_id = TextField('Grant id')
-    grant_url = TextField('Grant url')
-    results = TextField('Results')
-    aggreement_use = BooleanField('Use')
-    aggreement_slides = BooleanField('Slides')
-    aggreement_support = BooleanField('Support')
-    aggreement_sotfware = BooleanField('Sotfware')
-    aggreement_documentation = BooleanField('Documentation')
-    aggreement_images = BooleanField('Images')
-    comments = TextField('Comments')
+    projectid = StringField('Projectid')
+    lead = StringField('Lead')
+    managers = TextAreaField('Managers')
+    members = TextAreaField('Members')
+    alumnis = TextAreaField('Alumnis')
+    grant_orgnization = StringField('Grant Orgnization')
+    grant_id = StringField('Grant id')
+    grant_url = StringField('Grant URL')
+    results = TextAreaField('Results')
+    agreement_use = BooleanField('NSF Agreement to use Future Systems')
+    agreement_slides = BooleanField('Slide Collection')
+    agreement_support = BooleanField('Support')
+    agreement_software = BooleanField('Software Contributions')
+    agreement_documentation = BooleanField('Documentation Contributions')
+    agreement_images = BooleanField('Images')
+    comments = TextAreaField('Comments')
     join_open = BooleanField('Join open')
     join_notification = BooleanField('Join notification')
     resources_services = MultiCheckboxField(
-        'Resources services',
+        'Resource Services',
         choices=get_choices_for_form(ProjectSERVICES))
     # resources_software = MultiCheckboxField('resources_software',
     #                         choices=get_choices_for_form(ProjectSOFTWARE))
     resources_clusters = MultiCheckboxField(
-        'Resources clusters', choices=get_choices_for_form(ProjectCLUSTERS))
+        'Resource Clusters', choices=get_choices_for_form(ProjectCLUSTERS))
     resources_provision = MultiCheckboxField(
-        'Resources provision', choices=get_choices_for_form(ProjectPROVISIONING))
+        'Resource Provisioning', choices=get_choices_for_form(ProjectPROVISIONING))
 
 
 class UserRegistrationForm(Form):
@@ -181,17 +469,18 @@ class UserRegistrationForm(Form):
     # put this in the html form:  {{ form.csrf_token }}
     """
     keys = ["username",
+            "email",
+            "password",
+            "confirm",
             "title",
             "firstname",
             "lastname",
             "phone",
-            "email",
             "url",
             "citizenship",
             "bio",
-            "password",
-            "confirm",
             "institution",
+            "institutionrole",
             "department",
             "address",
             "advisor",
@@ -200,23 +489,27 @@ class UserRegistrationForm(Form):
 
     organization_keys = \
         ["institution",
+         "institutionrole",
          "department",
-            "address",
-            "advisor",
-            "country"]
+         "address",
+         "advisor",
+         "country"]
 
     profile_keys = \
         ["username",
+         "email",
+         "password",
+         "confirm",
          "title",
-            "firstname",
-            "lastname",
-            "phone",
-            "email",
-            "url",
-            "citizenship",
-            "bio",
-            "password",
-            "confirm"]
+         "firstname",
+         "lastname",
+         "phone",
+         "url",
+         "citizenship",
+         "bio"]
+
+    # countries = \
+    #     {"AF":"Afghanistan","AL":"Albania","DZ":"Algeria","AS":"American Samoa","AD":"Andorra","AO":"Angola","AI":"Anguilla","AQ":"Antarctica","AG":"Antigua and Barbuda","AR":"Argentina","AM":"Armenia","AW":"Aruba","AU":"Australia","AT":"Austria","AZ":"Azerbaijan","BS":"Bahamas","BH":"Bahrain","BD":"Bangladesh","BB":"Barbados","BY":"Belarus","BE":"Belgium","BZ":"Belize","BJ":"Benin","BM":"Bermuda","BT":"Bhutan","BO":"Bolivia","BA":"Bosnia and Herzegovina","BW":"Botswana","BV":"Bouvet Island","BR":"Brazil","BQ":"British Antarctic Territory","IO":"British Indian Ocean Territory","VG":"British Virgin Islands","BN":"Brunei","BG":"Bulgaria","BF":"Burkina Faso","BI":"Burundi","KH":"Cambodia","CM":"Cameroon","CA":"Canada","CT":"Canton and Enderbury Islands","CV":"Cape Verde","KY":"Cayman Islands","CF":"Central African Republic","TD":"Chad","CL":"Chile","CN":"China","CX":"Christmas Island","CC":"Cocos [Keeling] Islands","CO":"Colombia","KM":"Comoros","CG":"Congo - Brazzaville","CD":"Congo - Kinshasa","CK":"Cook Islands","CR":"Costa Rica","HR":"Croatia","CU":"Cuba","CY":"Cyprus","CZ":"Czech Republic","CI":"C\u00f4te d\u2019Ivoire","DK":"Denmark","DJ":"Djibouti","DM":"Dominica","DO":"Dominican Republic","NQ":"Dronning Maud Land","DD":"East Germany","EC":"Ecuador","EG":"Egypt","SV":"El Salvador","GQ":"Equatorial Guinea","ER":"Eritrea","EE":"Estonia","ET":"Ethiopia","FK":"Falkland Islands","FO":"Faroe Islands","FJ":"Fiji","FI":"Finland","FR":"France","GF":"French Guiana","PF":"French Polynesia","TF":"French Southern Territories","FQ":"French Southern and Antarctic Territories","GA":"Gabon","GM":"Gambia","GE":"Georgia","DE":"Germany","GH":"Ghana","GI":"Gibraltar","GR":"Greece","GL":"Greenland","GD":"Grenada","GP":"Guadeloupe","GU":"Guam","GT":"Guatemala","GG":"Guernsey","GN":"Guinea","GW":"Guinea-Bissau","GY":"Guyana","HT":"Haiti","HM":"Heard Island and McDonald Islands","HN":"Honduras","HK":"Hong Kong SAR China","HU":"Hungary","IS":"Iceland","IN":"India","ID":"Indonesia","IR":"Iran","IQ":"Iraq","IE":"Ireland","IM":"Isle of Man","IL":"Israel","IT":"Italy","JM":"Jamaica","JP":"Japan","JE":"Jersey","JT":"Johnston Island","JO":"Jordan","KZ":"Kazakhstan","KE":"Kenya","KI":"Kiribati","KW":"Kuwait","KG":"Kyrgyzstan","LA":"Laos","LV":"Latvia","LB":"Lebanon","LS":"Lesotho","LR":"Liberia","LY":"Libya","LI":"Liechtenstein","LT":"Lithuania","LU":"Luxembourg","MO":"Macau SAR China","MK":"Macedonia","MG":"Madagascar","MW":"Malawi","MY":"Malaysia","MV":"Maldives","ML":"Mali","MT":"Malta","MH":"Marshall Islands","MQ":"Martinique","MR":"Mauritania","MU":"Mauritius","YT":"Mayotte","FX":"Metropolitan France","MX":"Mexico","FM":"Micronesia","MI":"Midway Islands","MD":"Moldova","MC":"Monaco","MN":"Mongolia","ME":"Montenegro","MS":"Montserrat","MA":"Morocco","MZ":"Mozambique","MM":"Myanmar [Burma]","NA":"Namibia","NR":"Nauru","NP":"Nepal","NL":"Netherlands","AN":"Netherlands Antilles","NT":"Neutral Zone","NC":"New Caledonia","NZ":"New Zealand","NI":"Nicaragua","NE":"Niger","NG":"Nigeria","NU":"Niue","NF":"Norfolk Island","KP":"North Korea","VD":"North Vietnam","MP":"Northern Mariana Islands","NO":"Norway","OM":"Oman","PC":"Pacific Islands Trust Territory","PK":"Pakistan","PW":"Palau","PS":"Palestinian Territories","PA":"Panama","PZ":"Panama Canal Zone","PG":"Papua New Guinea","PY":"Paraguay","YD":"People's Democratic Republic of Yemen","PE":"Peru","PH":"Philippines","PN":"Pitcairn Islands","PL":"Poland","PT":"Portugal","PR":"Puerto Rico","QA":"Qatar","RO":"Romania","RU":"Russia","RW":"Rwanda","RE":"R\u00e9union","BL":"Saint Barth\u00e9lemy","SH":"Saint Helena","KN":"Saint Kitts and Nevis","LC":"Saint Lucia","MF":"Saint Martin","PM":"Saint Pierre and Miquelon","VC":"Saint Vincent and the Grenadines","WS":"Samoa","SM":"San Marino","SA":"Saudi Arabia","SN":"Senegal","RS":"Serbia","CS":"Serbia and Montenegro","SC":"Seychelles","SL":"Sierra Leone","SG":"Singapore","SK":"Slovakia","SI":"Slovenia","SB":"Solomon Islands","SO":"Somalia","ZA":"South Africa","GS":"South Georgia and the South Sandwich Islands","KR":"South Korea","ES":"Spain","LK":"Sri Lanka","SD":"Sudan","SR":"Suriname","SJ":"Svalbard and Jan Mayen","SZ":"Swaziland","SE":"Sweden","CH":"Switzerland","SY":"Syria","ST":"S\u00e3o Tom\u00e9 and Pr\u00edncipe","TW":"Taiwan","TJ":"Tajikistan","TZ":"Tanzania","TH":"Thailand","TL":"Timor-Leste","TG":"Togo","TK":"Tokelau","TO":"Tonga","TT":"Trinidad and Tobago","TN":"Tunisia","TR":"Turkey","TM":"Turkmenistan","TC":"Turks and Caicos Islands","TV":"Tuvalu","UM":"U.S. Minor Outlying Islands","PU":"U.S. Miscellaneous Pacific Islands","VI":"U.S. Virgin Islands","UG":"Uganda","UA":"Ukraine","SU":"Union of Soviet Socialist Republics","AE":"United Arab Emirates","GB":"United Kingdom","US":"United States","ZZ":"Unknown or Invalid Region","UY":"Uruguay","UZ":"Uzbekistan","VU":"Vanuatu","VA":"Vatican City","VE":"Venezuela","VN":"Vietnam","WK":"Wake Island","WF":"Wallis and Futuna","EH":"Western Sahara","YE":"Yemen","ZM":"Zambia","ZW":"Zimbabwe","AX":"\u00c5land Islands"}
 
     def validate_email_in_form(form, field):
         if ("@" not in field.data) or ("." not in field.data):
@@ -247,28 +540,31 @@ class UserRegistrationForm(Form):
             raise ValidationError(
                 'A user with name already exists. Suggestion: {0}'.format(proposal))
 
-    username = TextField(
+    username = StringField(
         'Username', [validators.Length(min=6, max=25), validate_username_in_form])
-    title = TextField('Title', [validators.Length(min=6, max=40)])
-    firstname = TextField('Firstname', [validators.Length(min=1, max=35)])
-    lastname = TextField('Lastname', [validators.Length(min=1, max=35)])
-    email = TextField(
+    title = StringField('Title', [validators.Length(min=2, max=40)])
+    firstname = StringField('Firstname', [validators.Length(min=1, max=35)])
+    lastname = StringField('Lastname', [validators.Length(min=1, max=35)])
+    email = StringField(
         'Email', [validators.Length(min=6, max=35), validate_email_in_form])
-    phone = TextField('Phone', [validators.Length(min=6, max=35)])
-    url = TextField('Url', [validators.DataRequired()])
-    citizenship = TextField('citizenship', [validators.DataRequired()])
+    phone = StringField('Phone', [validators.Length(min=6, max=35)])
+    url = StringField('URL')
+    citizenship = RadioSelectField("Citizenship", [validators.DataRequired()], choices=country_choices)
     institution = TextAreaField('Institution')
+    institutionrole = RadioSelectField("Institution Role", [validators.DataRequired()], choices=institutionrole_choices)
+    # institutionrole = StringField('Institution role')
     department = TextAreaField('Department')
-    address = TextAreaField('Address', [validators.DataRequired()])
-    country = TextField('Country', [validators.DataRequired()])
+    address = TextAreaField('Address', [validators.DataRequired(message="Address required")])
+    country = RadioSelectField("Country", [validators.DataRequired()], choices=country_choices)
     advisor = TextAreaField('Advisor')
     password = PasswordField('New Password', [
-        validators.Required(),
+        validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')
     ])
-    confirm = PasswordField('Repeat Password')
+    confirm = PasswordField('Confirm Password')
     # agreement = BooleanField('I accept the usage agreement', [validators.Required()])
     bio = TextAreaField('Bio', [validators.DataRequired()])
+
 
 
 def print_errors(form):
@@ -286,6 +582,7 @@ def print_errors(form):
 def user_apply():
 
     form = UserRegistrationForm(request.form)
+
     if request.method == 'POST' and form.validate():
         data = dict(request.form)
         action = str(data['button'][0])
@@ -307,7 +604,7 @@ def user_apply():
         return redirect('/')
 
     return render_template('management/user_apply.html',
-                           title="Project Application",
+                           title="User Application",
                            states=['save', 'cancel'],
                            form=form,
                            fields=UserRegistrationForm.keys,
@@ -365,11 +662,11 @@ def project_edit(projectid):
                 #
                 # after apoproval this should not be changed either
                 #
-                project.aggreement_use = data["aggreement_use"]
-                project.aggreement_slides = data["aggreement_slides"]
-                project.aggreement_support = data["aggreement_support"]
-                project.aggreement_sotfware = data["aggreement_sotfware"]
-                project.aggreement_documentation = data["aggreement_documentation"]
+                project.agreement_use = data["agreement_use"]
+                project.agreement_slides = data["agreement_slides"]
+                project.agreement_support = data["agreement_support"]
+                project.agreement_software = data["agreement_software"]
+                project.agreement_documentation = data["agreement_documentation"]
 
                 project.categories = data["categories"]
                 project.keywords = data["keywords"]
@@ -545,7 +842,10 @@ def management_user_edit(username):
         user = MongoUser.objects(username=username)
     except:
         print "Error: Username not found"
-        return render(request, 'error.html', {"error": "The user does not exist"})
+        return render_template('error.html',
+                               form=None,
+                               type="exists",
+                               msg="The user does not exist")
 
     if request.method == 'GET':
 

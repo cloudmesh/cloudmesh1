@@ -1,70 +1,70 @@
 {% extends "layout/layout.html" %}
 
-
 {% macro render_field(field) %}
-  <tr>
-  <th> <i>{{ field.label }}</i></th>
-  <td>{{ field(**kwargs)|safe }} 
-  <br>
-  {% if field.errors %}
-    <font color="red">
-    <dl class=errors>
-    {% for error in field.errors %}
-      <dd>  <i class="fa fa-exclamation-triangle"></i> {{ error }}</dd>
-    {% endfor %}
-    </dl>
-    </font>    
-  {% endif %}
-  </td>
-  </tr>
+    <tr>
+        <td style="width:30%">{{ field.label }}</td>
+        <td style="width:70%">{{ field(**kwargs)|safe }}
+            <br>
+            {% if field.errors %}
+                <font color="red">
+                    <dl class=errors>
+                        {% for error in field.errors %}
+                            <dd>  <i class="fa fa-exclamation-triangle"></i> {{ error }}</dd>
+                        {% endfor %}
+                    </dl>
+                </font>
+            {% endif %}
+        </td>
+    </tr>
 {% endmacro %}
 
-{% block content %}  
+{% block content %}
 
-<legend> {{ title }} </legend>
-  
-<form method="post">
+    <legend> {{ title }} </legend>
 
-  <legend> Profile </legend>
-  <table class="table table-condensed">
-    <tbody>
-      <tr>
-	<th colspan="2" bgcolor="0066CC"> Profile </th>
-      </tr>    
-      {% for field in profile_fields %}
-      {{ render_field(form[field]) }}
-      {% endfor %}
+    <form method="post">
 
-      <tr>
-	<th colspan="2" bgcolor="0066CC">Organisation </th>
-      </tr>    
+        {#  <legend> Profile </legend>#}
+{#        <table class="table table-condensed">#}
+         <table class="table table-condensed">
+            <tbody>
+            <tr>
+                <th colspan="2" bgcolor="#CCCCCC"> Profile </th>
+            </tr>
+            {% for field in profile_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
 
-      {% for field in organization_fields %}
-      {{ render_field(form[field]) }}
-      {% endfor %}
-      </tbody>
-  </table>
-  
-  <div class="control-group">
-  <label class="control-label" for="button_submit"></label>
-  <div class="controls">
+            <tr>
+                <th colspan="2" bgcolor="#CCCCCC">Organisation </th>
+            </tr>
 
-    {% for state in states %}
-        <button id="button_{{ state }}" value="{{ state }}"
-            name="button"
-            {% if state == 'save' %}
-               class="btn btn-success"
-            {% elif state == 'cancel' %}
-               class="btn btn-danger"
-            {% else %}
-                class="btn"
-            {% endif %}
-         >{{ state|capitalize }}
-    </button>
-    {% endfor %}
+            {% for field in organization_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
+            </tbody>
+        </table>
 
-  </div>
-</div>
-</div>
-</form>
+        <div class="control-group">
+            <label class="control-label" for="button_submit"></label>
+            <div class="controls">
+
+                {% for state in states %}
+                    <button id="button_{{ state }}" value="{{ state }}"
+                            name="button"
+                            {% if state == 'save' %}
+                            class="btn btn-success"
+                            {% elif state == 'cancel' %}
+                            class="btn btn-danger"
+                            {% else %}
+                            class="btn"
+                            {% endif %}
+                            >{{ state|capitalize }}
+                    </button>
+                {% endfor %}
+
+            </div>
+        </div>
+        </div>
+    </form>
 {% endblock %}

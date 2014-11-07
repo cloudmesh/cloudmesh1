@@ -9,9 +9,10 @@
 <table class="table table-condensed">
   <thead>
   <tr>
-    <th> </th>
-    <th> </th>
-    <th> </th>
+    <th> 1 </th>
+    <th> 2 </th>
+    <th> 3 </th>
+    <th> 4 </th>
     <th> Status </th>
     <th> Firstname </th>
     <th> Lastname </th>
@@ -21,61 +22,60 @@
   </thead>
 
    <tbody>
-{% for user in users %}
-  <tr>
-    <td> <input id="{{ user.username }}" name="selectedusers" type="checkbox" value="{{ user.username }}"></td>
-    <td> <a href="/user/profile/{{ user.username }}"> view <i class="fa fa-user"></i> </a> </td>        
-      {% if user.status == 'approved' %}
-        <td>
-	  <font  color="green"> <i class="fa fa-check-square-o"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="green"> {{ user.status|capfirst }} </font>
-	</td>
-	
-
-      {% elif user.status == 'denied' %}
-        <td>
-	  <font  color="red"> <i class="fa fa-ban"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="red"> {{ user.status|capfirst }} </font>
-	</td>
+    {% for user in users %}
+      <tr>
+        <td> <input id="{{ user.username }}" name="selectedusers" type="checkbox" value="{{ user.username }}"></td>
+        <td> <input id="{{ user.username }}" name="selectedusers" type="checkbox" value="{{ user.username }}"></td>
+        <td> <a href="/user/profile/{{ user.username }}"> view <i class="fa fa-user"></i> </a> </td>
+          {% if user.status == 'approved' %}
+            <td>
+                <font  color="green"> <i class="fa fa-check-square-o"></i> </font>
+            </td>
+            <td>
+                <font  color="green"> {{ user.status|capfirst }} </font>
+            </td>
 
 
-      {% elif user.status == 'pending' %}
-        <td>
-	  <font  color="grey"> <i class="fa fa-pause"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="grey"> {{ user.status|capfirst }} </font>
-	</td>
-
-      {% elif user.status == 'blocked' %}
-        <td>
-	  <font  color="red"> <i class="fa fa-ban"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="red"> {{ user.status|capfirst }} </font>
-	</td>
-
-      {% else %}
-        <td>
-	  <font  color="black"> <i class="fa fa-question-circle"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="black"> {{ user.status|capfirst }} </font>
-	</td>
+          {% elif user.status == 'denied' %}
+            <td>
+                <font  color="red"> <i class="fa fa-ban"></i> </font>
+            </td>
+            <td>
+                <font  color="red"> {{ user.status|capfirst }} </font>
+            </td>
 
 
-      {% endif %}
+          {% elif user.status == 'pending' %}
+            <td>
+                <font  color="grey"> <i class="fa fa-pause"></i> </font>
+            </td>
+            <td>
+                <font  color="grey"> {{ user.status|capfirst }} </font>
+            </td>
 
-    <td>{{ user.firstname }}</td>
-    <td>{{ user.lastname }}</td>
-    <td>{{ user.email }}</td>
-    <td>{{ user.username }}</td>            
-  </tr>
-{% endfor %}
+          {% elif user.status == 'blocked' %}
+            <td>
+                <font  color="red"> <i class="fa fa-ban"></i> </font>
+            </td>
+            <td>
+                <font  color="red"> {{ user.status|capfirst }} </font>
+            </td>
+
+          {% else %}
+            <td>
+                <font  color="black"> <i class="fa fa-question-circle"></i> </font>
+            </td>
+            <td>
+                <font  color="black"> {{ user.status|capfirst }} </font>
+            </td>
+          {% endif %}
+
+        <td>{{ user.firstname }}</td>
+        <td>{{ user.lastname }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.username }}</td>
+      </tr>
+    {% endfor %}
   </tbody>
 </table>
 

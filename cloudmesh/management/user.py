@@ -60,7 +60,7 @@ def read_user(filename):
 
 class User(CloudmeshObject):
 
-    """This class is sued to represent a user"""
+    """This class is used to represent a user"""
 
     get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
 
@@ -83,6 +83,7 @@ class User(CloudmeshObject):
                 ("phone", self.phone),
                 ("projects", self.projects),
                 ("institution", self.institution),
+                ("institutionrole",self.institutionrole)
                 ("department", self.department),
                 ("address", self.address),
                 ("country", self.country),
@@ -97,7 +98,7 @@ class User(CloudmeshObject):
 
     def hidden(self):
         '''
-        hiddeb attributes
+        hidden attributes
         '''
         return [
             "userid",
@@ -109,27 +110,39 @@ class User(CloudmeshObject):
     #
     status = StringField(required=True, default='pending')
     username = StringField(required=True)
+    password = StringField(required=True)
+    #confirmpassword = StringField(required=True)
     title = StringField()
     firstname = StringField(required=True)
     lastname = StringField(required=True)
     email = EmailField(required=True)
+    phone = StringField(required=True)
     url = StringField()
     citizenship = StringField(required=True)
     bio = StringField(required=True)
-    password = StringField(required=True)
+
     userid = UUIDField()
-    phone = StringField(required=True)
+
 
     projects = StringField()
     #
     # Affiliation
     #
     institution = StringField(required=True)
+    institutionrole = StringField(required=True)
     department = StringField(required=True)
     address = StringField(required=True)
     country = StringField(required=True)
     advisor = StringField()
     # advisor = pointer to another user
+
+
+    '''
+    OpenID oAuth, Google ID, FacebookID, LinkedIn ID, 
+    Bibliography ID, Researcher ID, ScopeUS ID, IEEE ID, Google Scholar ID
+
+    Previous names, Previous Organizations, Optional Dates, Current Advisor Names & Emails 
+    '''
 
     #
     # Message received from either reviewers,

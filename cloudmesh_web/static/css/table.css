@@ -1045,7 +1045,7 @@ select,
 textarea {
   font-size: 14px;
   font-weight: normal;
-  line-height: 20px;
+  line-height: 28px;
 }
 
 input,
@@ -1078,22 +1078,23 @@ input[type="tel"],
 input[type="color"],
 .uneditable-input {
   display: inline-block;
-  height: 25px;
+  height: 28px;
   padding: 4px 6px;
-  margin-bottom: 10px;
+  margin-top: 3px;
+  margin-bottom: 3px;
   font-size: 14px;
-  line-height: 20px;
+  line-height: 24px;
   color: #555555;
   vertical-align: middle;
-  -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
+  -webkit-border-radius: 0px;
+     -moz-border-radius: 0px;
+          border-radius: 0px;
 }
 
 input,
 textarea,
 .uneditable-input {
-  width: 206px;
+  width: 60%;
 }
 
 textarea {
@@ -1985,21 +1986,22 @@ table {
 }
 
 .table {
-  width: 100%;
+  width: 95%;
   margin-bottom: 20px;
 }
 
 .table th,
 .table td {
-  padding: 8px;
+  /*padding: 8px;*/
   line-height: 20px;
   text-align: left;
-  vertical-align: top;
+  vertical-align: middle;
   border-top: 1px solid #dddddd;
 }
 
 .table th {
   font-weight: bold;
+  font-size: 16px;
 }
 
 .table thead th {
@@ -6098,7 +6100,7 @@ a.badge:hover {
                 font-size:12px;
                 text-shadow: 1px 1px 0px #fff;
                 background:#eaebec;
-                margin:20px;
+                /*margin:20px;*/
                 border:#ccc 1px solid;
 
                 -moz-border-radius:3px;

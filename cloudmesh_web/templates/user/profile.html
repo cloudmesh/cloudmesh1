@@ -40,10 +40,6 @@
 
 {% block content %}
 
- 
-
-
-
 <legend> <i class="fa fa-cloud"></i> Cloud Profile </legend>
 
     <ul>
@@ -60,9 +56,7 @@
 
 <!-- Form Name -->
 <legend>
-
-  <font="black">{{ image_link ("right", "fa-pencil-square-o", "https://portal.futuregrid.org/my/edit/Contact") }}</font>
- Personal Details     
+  {{ image_link ("right", "fa-pencil-square-o", "https://portal.futuregrid.org/my/edit/Contact") }}Personal Details
 </legend>
 
 {{ input_text('firstname', value=user.profile.firstname, disabled=True) }}

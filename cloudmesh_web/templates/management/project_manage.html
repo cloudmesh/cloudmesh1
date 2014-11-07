@@ -1,113 +1,146 @@
 {% extends "layout/layout.html" %}
+{% from "_helper.html" import image_popup, href_image_button %}
+{% from "_helper.html" import cm_state_color %}
 
 {% block content %}
-<legend>Project Manage</legend>
+    <legend>Manage Projects</legend>
+    <script type="text/javascript">
+        $(function() {
+            {% for projectnum in range(projects|count) %}
+                $("#project-table").dataTable({
+                    "aLengthMenu": [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
+                    "iDisplayLength": 25,
+                    "sPaginationType": "full_numbers",
+                    "sDom": 'CR<"clear">lftipr',
+                    "oColVis": {
+                        "aiExclude": [ 0 ],
+                        "sAlign": "center"
+                    },
+                    "fnDrawCallback": function(o) {
+                        var nColVis = $('div.ColVis', o.nTableWrapper)[0];
+                        nColVis.align = "right";
+                        nColVis.style.paddingBottom = "15px";
+                    },
+                    aaSorting: [[1,'asc']],
+                    aoColumnDefs: [ {"bSortable": false, "aTargets": [0]} ],
+                    destroy: true
+                });
+            {% endfor %}
+        });
 
-<form class="form-horizontal" method="post">
+        function toggle(source,select_list) {
+            checkboxes = document.getElementsByName(select_list);
+            for(var i=0, n=checkboxes.length;i<n;i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
 
-<table class="table table-condensed">
-  <thead>
-  <tr>
-    <th> </th>
-    <th> </th>
-    <th> </th>    
-    <th> Status </th>
-    <th> </th>
-    <th> Title </th>
-    <th> Contact </th>
-    <th> Created </th>
-    <th> Modified </th>        
-  </tr>
-  </thead>
+    <form method="post">
 
-   <tbody>
-{% for project in projects %}
-  <tr>
-    <td> <input id="{{ project.projectid }}" name="selectedprojects" type="checkbox" value="{{ project.projectid }}"></td>
-    <td> <a href="/project/profile/{{ project.projectid }}"> <i
-      class="fa fa-file-text-o"></i></a> </td>
-    <td> <a href="/project/edit/{{ project.projectid }}"> <i class="fa fa-edit"></i></a> </td>      
+        <table id="project-table">
+            <thead>
+            <tr>
+                <th> </th>
+                <th> </th>
+                <th> </th>
+                <th> </th>
+                <th> Status </th>
+                <th> Title </th>
+                <th> Contact </th>
+                <th> Created </th>
+                <th> Modified </th>
+            </tr>
+            </thead>
 
-
-      {% if project.status == 'approved' %}
-        <td>
-	  <font  color="green"> <i class="fa fa-check-square-o"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="green"> {{ project.status|capitalize }} </font>
-	</td>
-	
-
-      {% elif project.status == 'completed' %}
-        <td>
-	  <font  color="blue"> <i class="fa fa-check-square"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="blue"> {{ project.status|capitalize }} </font>
-	</td>
-
-
-      {% elif project.status == 'pending' %}
-        <td>
-	  <font  color="grey"> <i class="fa fa-pause"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="grey"> {{ project.status|capitalize }} </font>
-	</td>
-
-      {% elif project.status == 'denied' %}
-        <td>
-	  <font  color="red"> <i class="fa fa-ban"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="red"> {{ project.status|capitalize }} </font>
-	</td>
-
-      {% else %}
-        <td>
-	  <font  color="black"> <i class="fa fa-question-circle"></i> </font>	  
-	</td>
-	<td>  
-          <font  color="black"> {{ project.status|capitalize }} </font>
-	</td>
+            <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td> <input id="{{ project.projectid }}" name="selectedprojects" type="checkbox" value="{{ project.projectid }}"></td>
+                    <td> <a href="/project/profile/{{ project.projectid }}"> <i
+                            class="fa fa-file-text-o"></i></a> </td>
+                    <td> <a href="/project/edit/{{ project.projectid }}"> <i class="fa fa-edit"></i></a> </td>
 
 
-      {% endif %}
-
-    <td>{{ project.title }}</td>    
-    <td>{{ project.contact }}</td>
-    <td>{{ project.date_created }}</td>
-    <td>{{ project.date_modified }}</td>        
-  </tr>
-{% endfor %}
-  </tbody>
-</table>
+                    {% if project.status == 'approved' %}
+                        <td>
+                            <font  color="green"> <i class="fa fa-check-square-o"></i> </font>
+                        </td>
+                        <td>
+                            <font  color="green"> {{ project.status|capitalize }} </font>
+                        </td>
 
 
-<div class="control-group">
-  <label class="control-label" for="button_submit"></label>
-  <div class="controls">
+                    {% elif project.status == 'completed' %}
+                        <td>
+                            <font  color="blue"> <i class="fa fa-check-square"></i> </font>
+                        </td>
+                        <td>
+                            <font  color="blue"> {{ project.status|capitalize }} </font>
+                        </td>
 
-    {% for state in states %}
-        <button id="button_{{ state }}" value="{{ state }}"
-            name="button"
-            {% if state == 'approved' %}
-               class="btn btn-success"
-            {% elif state == 'completed' %}
-               class="btn btn-primary"
-            {% elif state == 'pending' %}
-               class="btn btn-default"
-            {% elif state == 'denied' %}
-               class="btn btn-danger"
-            {% else %}
-                class="btn"
-            {% endif %}
-         >{{ state|capitalize }}
-    </button>
-    {% endfor %}
 
-  </div>
-</div>
-</form>
+                    {% elif project.status == 'pending' %}
+                        <td>
+                            <font  color="grey"> <i class="fa fa-pause"></i> </font>
+                        </td>
+                        <td>
+                            <font  color="grey"> {{ project.status|capitalize }} </font>
+                        </td>
+
+                    {% elif project.status == 'denied' %}
+                        <td>
+                            <font  color="red"> <i class="fa fa-ban"></i> </font>
+                        </td>
+                        <td>
+                            <font  color="red"> {{ project.status|capitalize }} </font>
+                        </td>
+
+                    {% else %}
+                        <td>
+                            <font  color="black"> <i class="fa fa-question-circle"></i> </font>
+                        </td>
+                        <td>
+                            <font  color="black"> {{ project.status|capitalize }} </font>
+                        </td>
+
+
+                    {% endif %}
+
+                    <td>{{ project.title }}</td>
+                    <td>{{ project.contact }}</td>
+                    <td>{{ project.date_created }}</td>
+                    <td>{{ project.date_modified }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+        <div class="control-group">
+            <label class="control-label" for="button_submit"></label>
+            <div class="controls">
+
+                {% for state in states %}
+                    <button id="button_{{ state }}" value="{{ state }}"
+                            name="button"
+                            {% if state == 'approved' %}
+                            class="btn btn-success"
+                            {% elif state == 'completed' %}
+                            class="btn btn-primary"
+                            {% elif state == 'pending' %}
+                            class="btn btn-default"
+                            {% elif state == 'denied' %}
+                            class="btn btn-danger"
+                            {% else %}
+                            class="btn"
+                            {% endif %}
+                            >{{ state|capitalize }}
+                    </button>
+                {% endfor %}
+
+            </div>
+        </div>
+    </form>
 
 {% endblock %}

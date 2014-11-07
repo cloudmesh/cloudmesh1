@@ -1,4 +1,4 @@
-{% extends "management/simple.html" %}
+    {% extends "management/simple.html" %}
 
 {% block content %}
 
@@ -33,7 +33,7 @@
     </tr>
     <tr>
       <td bgcolor="#E6E6E6"><i>Address</i></td>
-      <td><input type="textarea" name="address" value="{{ user.address }}"</td>
+        <td><textarea name="address" rows="3" cols="70">{{ user.address }}</textarea></td>
     </tr>
     <tr>
       <td bgcolor="#E6E6E6"><i>Institution</i></td>
@@ -65,7 +65,7 @@
     </tr>
     <tr> 
       <td bgcolor="#E6E6E6"><i>Bio</i></td>
-      <td><input type="textarea" name="bio" value="{{ user.bio }}"</td>
+        <td><textarea name="bio" rows="3" cols="70">{{ user.bio }}</textarea></td>
     </tr>
     <tr>
       <td bgcolor="#E6E6E6"><i>Phone</i></td>
