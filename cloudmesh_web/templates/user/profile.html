@@ -40,6 +40,7 @@
 
 {% block content %}
 
+
 <legend> <i class="fa fa-cloud"></i> Cloud Profile </legend>
 
     <ul>
@@ -56,7 +57,9 @@
 
 <!-- Form Name -->
 <legend>
-  {{ image_link ("right", "fa-pencil-square-o", "https://portal.futuregrid.org/my/edit/Contact") }}Personal Details
+
+  <font="black">{{ image_link ("right", "fa-pencil-square-o", "https://portal.futuregrid.org/my/edit/Contact") }}</font>
+ Personal Details     
 </legend>
 
 {{ input_text('firstname', value=user.profile.firstname, disabled=True) }}
@@ -262,9 +265,6 @@
 	              <td>
 		      <a href="delete/{{name}}/" class="btn btn-default" align="right"> Delete <i class="fa fa-trash-o"></i></a>
 		      </td>
-
-				  
-
 		      </tr>
 		{% endfor %}
 		</table>

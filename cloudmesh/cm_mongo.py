@@ -32,7 +32,6 @@ except:
     log.warning("AWS NOT ENABLED")
 
 
-
 class cm_MongoBase(object):
 
     def __init__(self):
@@ -298,7 +297,6 @@ class cm_mongo:
                     else:
                         cloud = provider(cloud_name, credentials)
                         
-
                     log.debug("Created new cloud instance for cloud name: %s, type: %s"
                               % (cloud_name, cm_type))
                     if cm_service_url_type == 'internalURL':

@@ -784,7 +784,6 @@ class CloudManage(object):
 
 
 class CloudCommand(CloudManage):
-
     '''
     a class provides cloud command functions
     '''

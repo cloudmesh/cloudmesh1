@@ -123,6 +123,8 @@ class VMcommand(object):
     def __init__(self, arguments):
         self.arguments = arguments
 
+        # print self.arguments ########
+
         try:
             self.config = cm_config()
         except:
@@ -767,6 +769,7 @@ def delete_vm(username,
                             ['created', 'created'],
                         ]
                         }
+
             cloudobj.print_cloud_servers(username=username,
                                          cloudname=cloudname,
                                          itemkeys=itemkeys,

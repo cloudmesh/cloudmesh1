@@ -59,8 +59,7 @@ def read_user(filename):
 
 
 class User(CloudmeshObject):
-
-    """This class is used to represent a user"""
+    """This class is sued to represent a user"""
 
     get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
 
@@ -122,7 +121,11 @@ class User(CloudmeshObject):
     bio = StringField(required=True)
 
     userid = UUIDField()
+<<<<<<< HEAD
 
+=======
+    phone = StringField(required=True)
+>>>>>>> dev
 
     projects = StringField()
     #
@@ -136,6 +139,7 @@ class User(CloudmeshObject):
     advisor = StringField()
     # advisor = pointer to another user
 
+<<<<<<< HEAD
 
     '''
     OpenID oAuth, Google ID, FacebookID, LinkedIn ID, 
@@ -144,6 +148,8 @@ class User(CloudmeshObject):
     Previous names, Previous Organizations, Optional Dates, Current Advisor Names & Emails 
     '''
 
+=======
+>>>>>>> dev
     #
     # Message received from either reviewers,
     # committee or other users. It is a list because

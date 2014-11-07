@@ -76,4 +76,3 @@ class cm_shell_status:
     def _print_table(self, data):
         print two_column_table(data)
     '''
-

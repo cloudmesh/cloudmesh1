@@ -55,5 +55,4 @@ def api():
         print "Building API Docs:", modulename
         print 70 * "="
         local("sphinx-apidoc -f -o docs/source/api/{0} {0}".format(modulename))
-
         print "done"

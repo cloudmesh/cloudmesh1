@@ -19,8 +19,7 @@ rc_file_locations = {
         'source': '.futuregrid/openstack_havana/novarc',
         'dest': "~/.cloudmesh/clouds/india",
     }
-<<<<<<< HEAD
-=======
+
     # NEW ICEHOUSE
     # ,
     # 'icehouse': {
@@ -29,7 +28,6 @@ rc_file_locations = {
     # ' .cloudmesh/clouds/india/icehouse/cacert.pem',
     # 'dest': "~/.cloudmesh/clouds/icehouse",
     # }
->>>>>>> dev
 }
 
 

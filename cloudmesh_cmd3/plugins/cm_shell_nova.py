@@ -11,8 +11,6 @@ from cloudmesh_common.tables import row_table
 log = LOGGER(__file__)
 
 class cm_shell_nova:
-
-
     """opt_example class"""
 
     def activate_cm_shell_nova(self):
@@ -39,7 +37,6 @@ class cm_shell_nova:
 
         except:
             log.warning(sys.exc_info())
-
 
     @command
     def do_nova(self, args, arguments):
