@@ -411,10 +411,6 @@ resources:
             chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
 
           params:
-            $hadoop1: { get_attr: [ hadoop1, first_address ] }
-            $hadoop2: { get_attr: [ hadoop2, first_address ] }
-            $hadoop3: { get_attr: [ hadoop3, first_address ] }
-            $hadoop4: { get_attr: [ hadoop4, first_address ] }
             $publickey: { get_param: PublicKeyString }
             $privatekey: { get_param: PrivateKeyString }
 
