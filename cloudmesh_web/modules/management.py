@@ -19,6 +19,16 @@ log = LOGGER(__file__)
 
 management_module = Blueprint('management_module', __name__)
 
+institutionrole_choices=[
+    ('Undergraduate','Undergraduate'),
+    ('Graduate Masters','Graduate Masters'),
+    ("Graduate PhD",'Graduate PhD'),
+    ('Student Other', 'Student Other'),
+    ('Faculty','Faculty'),
+    ('Staff','Staff'),
+    ('Other','Other')
+]
+
 prefered_country_choices=[
     ('GB','United Kingdom'),
     ('US','United States'),
@@ -430,7 +440,7 @@ class ProjectRegistrationForm(Form):
     agreement_use = BooleanField('NSF Agreement to use Future Systems')
     agreement_slides = BooleanField('Slide Collection')
     agreement_support = BooleanField('Support')
-    agreement_sotfware = BooleanField('Software Contributions')
+    agreement_software = BooleanField('Software Contributions')
     agreement_documentation = BooleanField('Documentation Contributions')
     agreement_images = BooleanField('Images')
     comments = TextAreaField('Comments')
@@ -539,12 +549,12 @@ class UserRegistrationForm(Form):
         'Email', [validators.Length(min=6, max=35), validate_email_in_form])
     phone = StringField('Phone', [validators.Length(min=6, max=35)])
     url = StringField('URL')
-    #citizenship = StringField('Citizenship', [validators.DataRequired()])
     citizenship = RadioSelectField("Citizenship", [validators.DataRequired()], choices=country_choices)
     institution = TextAreaField('Institution')
-    institutionrole = StringField('Institution role')
+    institutionrole = RadioSelectField("Institution Role", [validators.DataRequired()], choices=institutionrole_choices)
+    # institutionrole = StringField('Institution role')
     department = TextAreaField('Department')
-    address = TextAreaField('Address', [validators.DataRequired()])
+    address = TextAreaField('Address', [validators.DataRequired(message="Address required")])
     country = RadioSelectField("Country", [validators.DataRequired()], choices=country_choices)
     advisor = TextAreaField('Advisor')
     password = PasswordField('New Password', [
@@ -554,6 +564,7 @@ class UserRegistrationForm(Form):
     confirm = PasswordField('Confirm Password')
     # agreement = BooleanField('I accept the usage agreement', [validators.Required()])
     bio = TextAreaField('Bio', [validators.DataRequired()])
+
 
 
 def print_errors(form):
@@ -571,6 +582,7 @@ def print_errors(form):
 def user_apply():
 
     form = UserRegistrationForm(request.form)
+
     if request.method == 'POST' and form.validate():
         data = dict(request.form)
         action = str(data['button'][0])
@@ -653,7 +665,7 @@ def project_edit(projectid):
                 project.agreement_use = data["agreement_use"]
                 project.agreement_slides = data["agreement_slides"]
                 project.agreement_support = data["agreement_support"]
-                project.agreement_sotfware = data["agreement_sotfware"]
+                project.agreement_software = data["agreement_software"]
                 project.agreement_documentation = data["agreement_documentation"]
 
                 project.categories = data["categories"]

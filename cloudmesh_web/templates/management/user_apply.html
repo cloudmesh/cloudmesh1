@@ -1,9 +1,9 @@
-{% extends "management/simple.html" %}
+{% extends "layout/layout.html" %}
 
 {% macro render_field(field) %}
     <tr>
-        <th> <i>{{ field.label }}</i></th>
-        <td>{{ field(**kwargs)|safe }}
+        <td style="width:30%">{{ field.label }}</td>
+        <td style="width:70%">{{ field(**kwargs)|safe }}
             <br>
             {% if field.errors %}
                 <font color="red">
@@ -25,17 +25,18 @@
     <form method="post">
 
         {#  <legend> Profile </legend>#}
-        <table class="table table-condensed">
+{#        <table class="table table-condensed">#}
+         <table class="table table-condensed">
             <tbody>
             <tr>
-                <th colspan="2" bgcolor="0066CC"> Profile </th>
+                <th colspan="2" bgcolor="#CCCCCC"> Profile </th>
             </tr>
             {% for field in profile_fields %}
                 {{ render_field(form[field]) }}
             {% endfor %}
 
             <tr>
-                <th colspan="2" bgcolor="0066CC">Organisation </th>
+                <th colspan="2" bgcolor="#CCCCCC">Organisation </th>
             </tr>
 
             {% for field in organization_fields %}
