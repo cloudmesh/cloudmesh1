@@ -2,6 +2,10 @@
 
 nosetests -v --nocapture test_cm_console_ext.py
 
+or
+
+nosetests -v --nocapture test_cm_console_ext.py -s CLOUD_NAME e.g. india
+
 """
 from cloudmesh_common.util import HEADING
 from cloudmesh_common.logger import LOGGER, LOGGING_ON, LOGGING_OFF
@@ -21,7 +25,10 @@ class Test(unittest.TestCase):
 
     def setUp(self):
 
-        self.cloudname = sys.argv[-1:][0]
+        self.cloudname = "india"
+        if "-s" in sys.argv:
+            self.cloudname = sys.argv[-1:][0]
+
         self.config = cloudmesh.load("user")
         self.username = self.config.get("cloudmesh.hpc.username")
     
