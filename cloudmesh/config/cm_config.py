@@ -28,7 +28,7 @@ class DBConnFactory(object):
     DBCONFIG = None
     TYPE_MONGOCLIENT = MONGOCLIENT
     TYPE_MONGOENGINE = MONGOENGINE
->
+
     @classmethod
     def getconn(cls, dbname, clientType=MONGOCLIENT):
 
