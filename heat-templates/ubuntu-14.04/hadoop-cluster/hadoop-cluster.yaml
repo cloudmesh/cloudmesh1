@@ -18,11 +18,6 @@ resources:
         ToPort : "22"
         CidrIp : "0.0.0.0/0"
 
-  floating_ip:
-    type: AWS::EC2::EIP
-    properties:
-      InstanceId: { get_resource: server }
-
   hadoop1:
     type: OS::Nova::Server
     properties:
