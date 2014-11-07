@@ -6,6 +6,12 @@ parameters:
   KeyName:
     type: string
     description: Key name for logging in to instance
+  PublicKeyString:
+    type: string
+    description: a public key string
+  PrivateKeyString:
+    type: string
+    description: a private key string
 
 resources:
   security_group:
@@ -32,6 +38,9 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
+            useradd -m ubuntu
+            echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
+
             curl -L https://www.opscode.com/chef/install.sh | bash
             wget http://github.com/opscode/chef-repo/tarball/master
             tar -zxf master
@@ -52,7 +61,10 @@ resources:
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
 
-            echo "$hadoop2 hadoop2" >> /etc/hosts
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
             description "Install Oracle Java"
@@ -109,7 +121,8 @@ resources:
             /usr/lib/hadoop/libexec/init-hdfs.sh
 
           params:
-            $hadoop2: { get_attr: [hadoop2, first_address] }
+            $publickey: { get_param: PublicKeyString }
+            $privatekey: { get_param: PrivateKeyString }
   hadoop2:
     type: OS::Nova::Server
     properties:
@@ -124,6 +137,9 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
+            useradd -m ubuntu
+            echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
+
             curl -L https://www.opscode.com/chef/install.sh | bash
             wget http://github.com/opscode/chef-repo/tarball/master
             tar -zxf master
@@ -144,7 +160,203 @@ resources:
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
 
-            echo "$hadoop1 hadoop1" >> /etc/hosts
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
+            cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
+            name "java"
+            description "Install Oracle Java"
+            default_attributes(
+            "java" => {
+                    "install_flavor" => "oracle",
+                    "jdk_version" => "6",
+                    "set_etc_environment" => true,
+                    "oracle" => {
+                            "accept_oracle_download_terms" => true
+                            }
+                     }
+                     )
+            run_list(
+            "recipe[java]"
+            )
+            EOL
+
+            cat << EOL > /home/ubuntu/chef-repo/roles/hadoop.rb
+            name "hadoop"
+            description "set Hadoop attributes"
+            default_attributes(
+            "hadoop" => {
+                    "distribution" => "bigtop",
+                    "core_site" => {
+                            "fs.defaultFS" => "hdfs://hadoop1"
+                            },
+                            "yarn_site" => {
+                                    "yarn.resourcemanager.hostname" => "hadoop1"
+                                    }
+                        }
+                        )
+            run_list(
+            "recipe[hadoop]"
+            )
+            EOL
+
+            cat << EOL > /home/ubuntu/chef-repo/solo.rb
+            file_cache_path "/home/ubuntu/chef-solo"
+            cookbook_path "/home/ubuntu/chef-repo/cookbooks"
+            role_path "/home/ubuntu/chef-repo/roles"
+            verify_api_cert true
+            EOL
+
+            cat << EOL > /home/ubuntu/chef-repo/solo.json
+            {
+                      "run_list": [ "role[java]", "recipe[java]", "role[hadoop]",  "recipe[hadoop::hadoop_hdfs_datanode]" ]
+            }
+            EOL
+
+            chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
+
+          params:
+            $publickey: { get_param: PublicKeyString }
+            $privatekey: { get_param: PrivateKeyString }
+
+  hadoop3:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: KeyName }
+      image: "futuregrid/ubuntu-14.04"
+      flavor: "m1.small"
+      name: hadoop3
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            useradd -m ubuntu
+            echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
+
+            curl -L https://www.opscode.com/chef/install.sh | bash
+            wget http://github.com/opscode/chef-repo/tarball/master
+            tar -zxf master
+            mv opscode-chef-repo* /home/ubuntu/chef-repo
+            rm master
+            mkdir /home/ubuntu/chef-repo/.chef
+            echo "cookbook_path [ '/home/ubuntu/chef-repo/cookbooks' ]" > /home/ubuntu/chef-repo/.chef/knife.rb
+            knife cookbook site download java
+            knife cookbook site download apt
+            knife cookbook site download yum
+            knife cookbook site download hadoop
+            tar -zxf java* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf apt* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf yum* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf hadoop* -C /home/ubuntu/chef-repo/cookbooks
+            rm -rf java*.tar.gz
+            rm -rf apt*.tar.gz
+            rm -rf yum*.tar.gz
+            rm -rf hadoop*.tar.gz
+
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
+            cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
+            name "java"
+            description "Install Oracle Java"
+            default_attributes(
+            "java" => {
+                    "install_flavor" => "oracle",
+                    "jdk_version" => "6",
+                    "set_etc_environment" => true,
+                    "oracle" => {
+                            "accept_oracle_download_terms" => true
+                            }
+                     }
+                     )
+            run_list(
+            "recipe[java]"
+            )
+            EOL
+
+            cat << EOL > /home/ubuntu/chef-repo/roles/hadoop.rb
+            name "hadoop"
+            description "set Hadoop attributes"
+            default_attributes(
+            "hadoop" => {
+                    "distribution" => "bigtop",
+                    "core_site" => {
+                            "fs.defaultFS" => "hdfs://hadoop1"
+                            },
+                            "yarn_site" => {
+                                    "yarn.resourcemanager.hostname" => "hadoop1"
+                                    }
+                        }
+                        )
+            run_list(
+            "recipe[hadoop]"
+            )
+            EOL
+
+            cat << EOL > /home/ubuntu/chef-repo/solo.rb
+            file_cache_path "/home/ubuntu/chef-solo"
+            cookbook_path "/home/ubuntu/chef-repo/cookbooks"
+            role_path "/home/ubuntu/chef-repo/roles"
+            verify_api_cert true
+            EOL
+
+            cat << EOL > /home/ubuntu/chef-repo/solo.json
+            {
+                      "run_list": [ "role[java]", "recipe[java]", "role[hadoop]",  "recipe[hadoop::hadoop_hdfs_datanode]" ]
+            }
+            EOL
+
+            chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
+
+          params:
+            $publickey: { get_param: PublicKeyString }
+            $privatekey: { get_param: PrivateKeyString }
+
+  hadoop4:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: KeyName }
+      image: "futuregrid/ubuntu-14.04"
+      flavor: "m1.small"
+      name: hadoop4
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            useradd -m ubuntu
+            echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
+
+            curl -L https://www.opscode.com/chef/install.sh | bash
+            wget http://github.com/opscode/chef-repo/tarball/master
+            tar -zxf master
+            mv opscode-chef-repo* /home/ubuntu/chef-repo
+            rm master
+            mkdir /home/ubuntu/chef-repo/.chef
+            echo "cookbook_path [ '/home/ubuntu/chef-repo/cookbooks' ]" > /home/ubuntu/chef-repo/.chef/knife.rb
+            knife cookbook site download java
+            knife cookbook site download apt
+            knife cookbook site download yum
+            knife cookbook site download hadoop
+            tar -zxf java* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf apt* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf yum* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf hadoop* -C /home/ubuntu/chef-repo/cookbooks
+            rm -rf java*.tar.gz
+            rm -rf apt*.tar.gz
+            rm -rf yum*.tar.gz
+            rm -rf hadoop*.tar.gz
+
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -200,3 +412,130 @@ resources:
 
           params:
             $hadoop1: { get_attr: [ hadoop1, first_address ] }
+            $hadoop2: { get_attr: [ hadoop2, first_address ] }
+            $hadoop3: { get_attr: [ hadoop3, first_address ] }
+            $hadoop4: { get_attr: [ hadoop4, first_address ] }
+            $publickey: { get_param: PublicKeyString }
+            $privatekey: { get_param: PrivateKeyString }
+
+  hadoop5:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: KeyName }
+      image: "futuregrid/ubuntu-14.04"
+      flavor: "m1.small"
+      name: hadoop5
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            useradd -m ubuntu
+            echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
+
+            curl -L https://www.opscode.com/chef/install.sh | bash
+            wget http://github.com/opscode/chef-repo/tarball/master
+            tar -zxf master
+            mv opscode-chef-repo* /home/ubuntu/chef-repo
+            rm master
+            mkdir /home/ubuntu/chef-repo/.chef
+            echo "cookbook_path [ '/home/ubuntu/chef-repo/cookbooks' ]" > /home/ubuntu/chef-repo/.chef/knife.rb
+            knife cookbook site download java
+            knife cookbook site download apt
+            knife cookbook site download yum
+            knife cookbook site download hadoop
+            tar -zxf java* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf apt* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf yum* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf hadoop* -C /home/ubuntu/chef-repo/cookbooks
+            rm -rf java*.tar.gz
+            rm -rf apt*.tar.gz
+            rm -rf yum*.tar.gz
+            rm -rf hadoop*.tar.gz
+
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
+            hadoop5=$(ifconfig eth0 | awk -F':' '/inet addr/{split($2,_," ");print _[1]}')
+            cat << EOF > /etc/hosts.hadoop
+            $hadoop1 hadoop1
+            $hadoop2 hadoop2
+            $hadoop3 hadoop3
+            $hadoop4 hadoop4
+            $hadoop5 hadoop5
+            EOF
+
+            cat /etc/hosts.hadoop >> /etc/hosts
+
+            scp /etc/hosts.hadoop $hadoop1:/etc/hosts.hadoop
+            scp /etc/hosts.hadoop $hadoop2:/etc/hosts.hadoop
+            scp /etc/hosts.hadoop $hadoop3:/etc/hosts.hadoop
+            scp /etc/hosts.hadoop $hadoop4:/etc/hosts.hadoop
+            ssh $hadoop1 "cat /etc/hosts.hadoop >> /etc/hosts"
+            ssh $hadoop2 "cat /etc/hosts.hadoop >> /etc/hosts"
+            ssh $hadoop3 "cat /etc/hosts.hadoop >> /etc/hosts"
+            ssh $hadoop4 "cat /etc/hosts.hadoop >> /etc/hosts"
+
+            cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
+            name "java"
+            description "Install Oracle Java"
+            default_attributes(
+            "java" => {
+                    "install_flavor" => "oracle",
+                    "jdk_version" => "6",
+                    "set_etc_environment" => true,
+                    "oracle" => {
+                            "accept_oracle_download_terms" => true
+                            }
+                     }
+                     )
+            run_list(
+            "recipe[java]"
+            )
+            EOL
+
+            cat << EOL > /home/ubuntu/chef-repo/roles/hadoop.rb
+            name "hadoop"
+            description "set Hadoop attributes"
+            default_attributes(
+            "hadoop" => {
+                    "distribution" => "bigtop",
+                    "core_site" => {
+                            "fs.defaultFS" => "hdfs://hadoop1"
+                            },
+                            "yarn_site" => {
+                                    "yarn.resourcemanager.hostname" => "hadoop1"
+                                    }
+                        }
+                        )
+            run_list(
+            "recipe[hadoop]"
+            )
+            EOL
+
+            cat << EOL > /home/ubuntu/chef-repo/solo.rb
+            file_cache_path "/home/ubuntu/chef-solo"
+            cookbook_path "/home/ubuntu/chef-repo/cookbooks"
+            role_path "/home/ubuntu/chef-repo/roles"
+            verify_api_cert true
+            EOL
+
+            cat << EOL > /home/ubuntu/chef-repo/solo.json
+            {
+                      "run_list": [ "role[java]", "recipe[java]", "role[hadoop]",  "recipe[hadoop::hadoop_hdfs_datanode]" ]
+            }
+            EOL
+
+            chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
+
+          params:
+            $hadoop1: { get_attr: [ hadoop1, first_address ] }
+            $hadoop2: { get_attr: [ hadoop2, first_address ] }
+            $hadoop3: { get_attr: [ hadoop3, first_address ] }
+            $hadoop4: { get_attr: [ hadoop4, first_address ] }
+            $publickey: { get_param: PublicKeyString }
+            $privatekey: { get_param: PrivateKeyString }
+
