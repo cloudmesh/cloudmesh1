@@ -9,6 +9,7 @@ from pprint import pprint
 from sh import cm
 import sh
 from cloudmesh.iaas.cm_vm import VMcommand
+from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_keys import cm_keys_mongo
 from cloudmesh.user.cm_user import cm_user
@@ -20,11 +21,15 @@ class cm_shell_cluster:
     def activate_cm_shell_cluster(self):
 
         self.register_command_topic('cloud', 'cluster')
+        self.cm_config = cm_config()
+        self.cm_mongo = cm_mongo()
+        self.user = cm_user()
 
     @command
     def do_cluster(self, args, arguments):
         """
         Usage:
+            cluster start CLUSTER_NAME
             cluster create --count=<count>
                            --group=<group>
                            [--ln=<LoginName>]
@@ -64,8 +69,49 @@ class cm_shell_cluster:
         # TODO::
         # add VMs to cluster
         # -----------------------------
+       
+        if arguments['start'] and arguments['CLUSTER_NAME']:
+            '''Starts a cluster'''
+
+            # Initialize default variables. e.g. userid, default cloud and
+            # default keypair
+            userid = self.cm_config.username()
+            def_cloud = self.get_cloud_name(userid)
+            self.cm_mongo.activate(userid)
+            
+            userinfo = self.user.info(userid)
+            if "key" in userinfo["defaults"]:
+                key = userinfo["defaults"]["key"]
+            elif len(userinfo["keys"]["keylist"].keys()) > 0:
+                key = userinfo["keys"]["keylist"].keys()[0]
         
-        if arguments['create']:
+            if key:
+                keycontent = userinfo["keys"]["keylist"][key]
+                if keycontent.startswith('key '):
+                    keycontent = keycontent[4:]
+                cm_keys_mongo(userid).check_register_key(userid, def_cloud, key, keycontent)
+                keynamenew = _keyname_sanitation(userid, key)
+            else:
+                Console.warning("No sshkey found. Please Upload one")
+            
+            clustername = arguments['CLUSTER_NAME']
+            s_name = "launcher-{0}-{1}-{2}".format(userid, clustername, get_rand_string())
+            t_url = \
+            "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev1.3/heat-templates/ubuntu-14.04/hadoop-cluster/hadoop-cluster.yaml"
+            param = {'KeyName': keynamenew,
+                     'PublicKeyString': publickey,
+                     'PrivateKeyString': privatekey}
+            log.debug(def_cloud, userid, s_name, t_url, param)
+            res = self.cm_mongo.stack_create(cloud=def_cloud, cm_user_id=userid,
+                                             servername=s_name,
+                                             template_url=t_url,
+                                             parameters=param)
+            log.debug(res)
+            if 'error' in res:
+                print (res['error']['message'])
+            return res
+
+        elif arguments['create']:
             try:
                 config = cm_config()
             except:

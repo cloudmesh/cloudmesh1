@@ -181,7 +181,8 @@ class cm_shell_launcher:
             cookbook = arguments['MENU']
             s_name = "launcher-{0}-{1}-{2}".format(userid, cookbook, get_rand_string())
             dummy = "123456789"  # doing nothing. just for test
-            t_url = "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev/heat-templates/centos6/launcher/launcher.yaml"
+            t_url = \
+            "https://raw.githubusercontent.com/cloudmesh/cloudmesh/master/heat-templates/centos6/launcher/launcher.yaml"
             param = {'KeyName': keynamenew,
                      'Cookbook': cookbook,
                      'dummy': dummy}
