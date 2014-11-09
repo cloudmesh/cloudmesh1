@@ -15,6 +15,11 @@ from cloudmesh.config.cm_keys import cm_keys_mongo
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.iaas.cm_cloud import CloudManage
 from cloudmesh.util.ssh import generate_keypair
+from cloudmesh.keys.util import _keyname_sanitation
+from cloudmesh_common.util import get_rand_string
+from cloudmesh_common.logger import LOGGER
+
+log = LOGGER(__file__)
 
 class cm_shell_cluster:
 
