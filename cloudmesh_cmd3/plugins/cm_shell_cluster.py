@@ -14,7 +14,7 @@ from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_keys import cm_keys_mongo
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.iaas.cm_cloud import CloudManage
-
+from cloudmesh.util.ssh import generate_keypair
 
 class cm_shell_cluster:
 
@@ -96,12 +96,17 @@ class cm_shell_cluster:
             
             clustername = arguments['CLUSTER_NAME']
             s_name = "launcher-{0}-{1}-{2}".format(userid, clustername, get_rand_string())
+            # TEMP FOR HADOOP CLUSTER
+            
+            # 1. keypair for the communication between master and worker nodes
+            publickey, privatekey = generate_keypair()
             t_url = \
             "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev1.3/heat-templates/ubuntu-14.04/hadoop-cluster/hadoop-cluster.yaml"
             param = {'KeyName': keynamenew,
                      'PublicKeyString': publickey,
                      'PrivateKeyString': privatekey}
-            log.debug(def_cloud, userid, s_name, t_url, param)
+            log.debug(def_cloud, userid, s_name, t_url, param, publickey,
+                      privatekey)
             res = self.cm_mongo.stack_create(cloud=def_cloud, cm_user_id=userid,
                                              servername=s_name,
                                              template_url=t_url,
