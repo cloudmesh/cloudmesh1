@@ -5,6 +5,7 @@ sys.stderr = sys.__stderr__
 # import os
 import re
 import os
+from Crypto.PublicKey import RSA 
 
 ''' Contains the ssh class. Can be used in casews when you want the output of
 an ssh call but need to do steps before and after the call
@@ -63,6 +64,25 @@ class ssh:
 
     def destroy(self):
         self.client.close()
+
+def generate_keypair(type="rsa", bits=2048):
+    '''
+    Generate a keypair
+
+    param: 
+        type (str): the type of key (e.g. rsa, dsa)
+        bits (int): the key length in bits
+    Return: private key and public key
+    '''
+    if type == "rsa":
+        new_key = RSA.generate(bits, os.urandom)
+        public_key = new_key.publickey().exportKey("OpenSSH") 
+        private_key = new_key.exportKey("PEM") 
+    elif type == "dsa":
+        # NOT IMPLEMENTED
+        pass
+
+    return private_key, public_key
 
 # -----------------------------------------------------------------------
 
