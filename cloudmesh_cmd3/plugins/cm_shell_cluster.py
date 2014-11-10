@@ -104,7 +104,7 @@ class cm_shell_cluster:
             # TEMP FOR HADOOP CLUSTER
             
             # 1. keypair for the communication between master and worker nodes
-            publickey, privatekey = generate_keypair()
+            privatekey, publickey = generate_keypair()
             t_url = \
             "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev1.3/heat-templates/ubuntu-14.04/hadoop-cluster/hadoop-cluster.yaml"
             param = {'KeyName': keynamenew,
