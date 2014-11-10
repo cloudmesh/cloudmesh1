@@ -118,8 +118,8 @@ resources:
 
             chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
             /etc/init.d/hadoop-hdfs-namenode init
-            /usr/lib/hadoop/libexec/init-hdfs.sh
             service hadoop-hdfs-namenode start
+            /usr/lib/hadoop/libexec/init-hdfs.sh
 
           params:
             $publickey: { get_param: PublicKeyString }
