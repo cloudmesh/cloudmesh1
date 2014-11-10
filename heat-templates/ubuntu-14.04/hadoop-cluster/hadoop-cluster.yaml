@@ -38,6 +38,10 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
             useradd -m ubuntu
             echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
 
@@ -60,10 +64,6 @@ resources:
             rm -rf apt*.tar.gz
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
-
-            echo $publickey >> /root/.ssh/authorized_keys
-            echo "$privatekey" > /root/.ssh/id_rsa
-            chmod 600 /root/.ssh/id_rsa
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -137,6 +137,10 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
             useradd -m ubuntu
             echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
 
@@ -159,10 +163,6 @@ resources:
             rm -rf apt*.tar.gz
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
-
-            echo $publickey >> /root/.ssh/authorized_keys
-            echo "$privatekey" > /root/.ssh/id_rsa
-            chmod 600 /root/.ssh/id_rsa
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -234,6 +234,10 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
             useradd -m ubuntu
             echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
 
@@ -256,10 +260,6 @@ resources:
             rm -rf apt*.tar.gz
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
-
-            echo $publickey >> /root/.ssh/authorized_keys
-            echo "$privatekey" > /root/.ssh/id_rsa
-            chmod 600 /root/.ssh/id_rsa
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -331,6 +331,10 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
             useradd -m ubuntu
             echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
 
@@ -353,10 +357,6 @@ resources:
             rm -rf apt*.tar.gz
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
-
-            echo $publickey >> /root/.ssh/authorized_keys
-            echo "$privatekey" > /root/.ssh/id_rsa
-            chmod 600 /root/.ssh/id_rsa
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -428,6 +428,10 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
             useradd -m ubuntu
             echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
 
@@ -450,10 +454,6 @@ resources:
             rm -rf apt*.tar.gz
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
-
-            echo $publickey >> /root/.ssh/authorized_keys
-            echo "$privatekey" > /root/.ssh/id_rsa
-            chmod 600 /root/.ssh/id_rsa
 
             hadoop5=$(ifconfig eth0 | awk -F':' '/inet addr/{split($2,_," ");print _[1]}')
             cat << EOF > /etc/hosts.hadoop
