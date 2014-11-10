@@ -102,6 +102,8 @@ class cm_shell_cluster:
             clustername = arguments['CLUSTER_NAME']
             s_name = "launcher-{0}-{1}-{2}".format(userid, clustername, get_rand_string())
             # TEMP FOR HADOOP CLUSTER
+            if clustername != "hadoop":
+                Console.warning('hadoop is only available cluster')
             
             # 1. keypair for the communication between master and worker nodes
             privatekey, publickey = generate_keypair()
