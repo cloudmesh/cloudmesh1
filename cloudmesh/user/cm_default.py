@@ -163,10 +163,10 @@ class DefaultCommand(object):
         else:
             p_format = None
 
-        if p_format == 'table' or p_format is None:
-            print(row_table(to_print, order=None, labels=["Default", "Value"]))
-        else:
-            shell_commands_dict_output(to_print,
+        #if p_format == 'table' or p_format is None:
+            #print(row_table(to_print, order=None, labels=["Default", "Value"]))
+        #else:
+        shell_commands_dict_output(to_print,
                                        print_format=p_format,
                                        header=columns,
                                        oneitem=True,
