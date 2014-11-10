@@ -456,28 +456,6 @@ resources:
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
 
-            hadoop5=$(ifconfig eth0 | awk -F':' '/inet addr/{split($2,_," ");print _[1]}')
-            cat << EOF > /etc/hosts.hadoop
-            
-            # internal network addresses for hadoop cluster
-            $hadoop1 hadoop1
-            $hadoop2 hadoop2
-            $hadoop3 hadoop3
-            $hadoop4 hadoop4
-            $hadoop5 hadoop5
-            EOF
-
-            cat /etc/hosts.hadoop >> /etc/hosts
-
-            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.hadoop $hadoop1:/etc/hosts.hadoop
-            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.hadoop $hadoop2:/etc/hosts.hadoop
-            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.hadoop $hadoop3:/etc/hosts.hadoop
-            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.hadoop $hadoop4:/etc/hosts.hadoop
-            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hadoop1 "cat /etc/hosts.hadoop >> /etc/hosts"
-            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hadoop2 "cat /etc/hosts.hadoop >> /etc/hosts"
-            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hadoop3 "cat /etc/hosts.hadoop >> /etc/hosts"
-            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hadoop4 "cat /etc/hosts.hadoop >> /etc/hosts"
-
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
             description "Install Oracle Java"
@@ -527,6 +505,28 @@ resources:
                       "run_list": [ "role[java]", "recipe[java]", "role[hadoop]",  "recipe[hadoop::hadoop_hdfs_datanode]" ]
             }
             EOL
+
+            hadoop5=$(ifconfig eth0 | awk -F':' '/inet addr/{split($2,_," ");print _[1]}')
+            cat << EOF > /etc/hosts.hadoop
+            
+            # internal network addresses for hadoop cluster
+            $hadoop1 hadoop1
+            $hadoop2 hadoop2
+            $hadoop3 hadoop3
+            $hadoop4 hadoop4
+            $hadoop5 hadoop5
+            EOF
+
+            cat /etc/hosts.hadoop >> /etc/hosts
+
+            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.hadoop $hadoop1:/etc/hosts.hadoop
+            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.hadoop $hadoop2:/etc/hosts.hadoop
+            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.hadoop $hadoop3:/etc/hosts.hadoop
+            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.hadoop $hadoop4:/etc/hosts.hadoop
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hadoop1 "cat /etc/hosts.hadoop >> /etc/hosts"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hadoop2 "cat /etc/hosts.hadoop >> /etc/hosts"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hadoop3 "cat /etc/hosts.hadoop >> /etc/hosts"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hadoop4 "cat /etc/hosts.hadoop >> /etc/hosts"
 
             chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
 
