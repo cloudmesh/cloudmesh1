@@ -23,6 +23,8 @@ log = LOGGER(__file__)
 
 class cm_shell_cluster:
 
+    _id = "t_stacks"
+
     def activate_cm_shell_cluster(self):
 
         self.register_command_topic('cloud', 'cluster')
@@ -35,6 +37,9 @@ class cm_shell_cluster:
         """
         Usage:
             cluster start CLUSTER_NAME
+            cluster list
+            cluster login CLUSTER_NAME
+            cluster stop CLUSTER_NAME
             cluster create --count=<count>
                            --group=<group>
                            [--ln=<LoginName>]
@@ -123,6 +128,59 @@ class cm_shell_cluster:
             log.debug(res)
             if 'error' in res:
                 print (res['error']['message'])
+            return res
+
+        elif arguments['list']:
+            userid = self.cm_config.username()
+            self.cm_mongo.activate(userid)
+            self.cm_mongo.refresh(cm_user_id=userid, types=[self._id])
+            stacks = self.cm_mongo.stacks(cm_user_id=userid)
+            launchers = self.filter_launcher(
+                stacks,
+                {"search": "contain",
+                 "key": "stack_name",
+                 "value": "launcher"}
+                )
+            log.debug(launchers)
+
+            d = {}
+            for k0, v0 in launchers.iteritems():
+                for k1, v1 in launchers[k0].iteritems():
+                    d[v1['id']] = v1
+            columns = ['stack_name', 'description', 'stack_status',
+                       'creation_time', 'cm_cloud']
+            if arguments['--column'] and arguments['--column'] != "all":
+                columns = [x.strip() for x in arguments['--column'].split(',')]
+
+            if arguments['--format']:
+                if arguments['--format'] not in ['table', 'json', 'csv']:
+                    Console.error("please select printing format among table, json and csv")
+                    return
+                else:
+                    p_format = arguments['--format']
+            else:
+                p_format = None
+
+            shell_commands_dict_output(d,
+                                       print_format=p_format,
+                                       firstheader="launcher_id",
+                                       header=columns
+                                       # vertical_table=True
+                                       )
+
+        elif arguments['login']:
+            Console.error("Not implemented")
+            return
+
+        elif arguments['stop'] and arguments['CLUSTER_NAME']:
+            userid = self.cm_config.username()
+            def_cloud = self.get_cloud_name(userid)
+            c_id = arguments['CLUSTER_NAME']
+            self.cm_mongo.activate(userid)
+            res = self.cm_mongo.stack_delete(cloud=def_cloud,
+                                             cm_user_id=userid,
+                                             server=c_id)
+            log.debug(res)
             return res
 
         elif arguments['create']:
