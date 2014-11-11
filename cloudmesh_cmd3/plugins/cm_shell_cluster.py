@@ -191,7 +191,10 @@ class cm_shell_cluster:
                 return
             username = config['cloudmesh']['profile']['username']
             cloudname = arguments['--cloud'] or CloudManage().get_selected_cloud(username)
-            dir_name = ".temp_cluster_create_" + username
+            temp_dir_name = ".temp_cluster_create_" + username + "_0"
+            while os.path.isdir("./{0}".format(temp_dir_name)):
+                temp_dir_name = temp_dir_name[:-1] + str(int(temp_dir_name[-1]) + 1)
+            dir_name = temp_dir_name
             
             #NumOfVM = None
             GroupName = None
@@ -389,7 +392,7 @@ class cm_shell_cluster:
             
             
             print ("finishing...")
-            os.popen("rm -r {0}".format(dir_name))
+            os.popen("rm -rf {0}".format(dir_name))
             print ("DONE.")
             
             print ("cluster group: ", GroupName)
