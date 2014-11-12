@@ -157,6 +157,10 @@ def shell_commands_dict_output(d,
 
 
 def get_command_list_refresh_default_setting(username):
+    '''
+    value to define the default behaviour of command list, if True, then refresh
+    before list as default
+    '''
     try:
         user_obj = cm_user()
     except:

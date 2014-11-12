@@ -22,7 +22,7 @@ def shell_command_default(arguments):
         default key [VALUE]
         default flavor [CLOUD] [--name=NAME|--id=ID]
         default image [CLOUD] [--name=NAME|--id=ID]
-        default list_refresh [--on|--off]
+        default list refresh [--on|--off]
 
     Arguments:
 
@@ -76,7 +76,7 @@ def shell_command_default(arguments):
             (to check a cloud's default settings:
              cloud default [CLOUD|--all])
              
-        default list_refresh [--on|--off]
+        default list refresh [--on|--off]
             set the default behaviour of the list commands, if the default
             value is on, then the program will always refresh before listing
 
@@ -258,7 +258,7 @@ class DefaultCommand(object):
             self._default_image()
         elif self.arguments['key']:
             self._default_key()
-        elif self.arguments['list_refresh']:
+        elif self.arguments['list'] and self.arguments['refresh']:
             self._default_list_refresh()
         else:
             self._print_default()
