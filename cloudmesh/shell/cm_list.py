@@ -6,6 +6,7 @@ from tabulate import tabulate
 from cmd3.console import Console
 from cloudmesh.iaas.cm_cloud import shell_command_cloud
 from docopt import docopt
+from cloudmesh.util.shellutil import shell_commands_dict_output, get_command_list_refresh_default_setting
 
 # list_command_table_format = "simple"
 list_command_table_format = "grid"
@@ -92,6 +93,7 @@ class ListInfo(object):
             Console.error("There is a problem with the configuration yaml files")
     
         self.username = self.config['cloudmesh']['profile']['username']
+        self.refresh_default_setting = get_command_list_refresh_default_setting(self.username)
 
     def _list_flavor(self):
         self.cloudmanage._connect_to_mongo()
@@ -105,7 +107,7 @@ class ListInfo(object):
                 ['disk', 'disk'],
                 ['refresh time', 'cm_refresh']
             ]
-            if self.arguments['--refresh']:
+            if self.refresh_default_setting or self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(
                     cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(
@@ -192,7 +194,7 @@ class ListInfo(object):
                             ["imagetype", "extra", "imagetype"]
                         ]
                         }
-            if self.arguments['--refresh']:
+            if self.refresh_default_setting or self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(
                     cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(
@@ -283,7 +285,7 @@ class ListInfo(object):
                             ['created', 'created'],
                         ]
                         }
-            if self.arguments['--refresh']:
+            if self.refresh_default_setting or self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(
                     cm_user_id=self.username, names=clouds)
                 self.cloudmanage.mongo.refresh(

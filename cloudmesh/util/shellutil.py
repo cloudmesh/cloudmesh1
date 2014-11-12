@@ -152,3 +152,24 @@ def shell_commands_dict_output(d,
             sentence = "count: {0}".format(c)
             print(sentence)
             print("+" + "-" * (len(sentence) - 2) + "+")
+
+
+
+
+def get_command_list_refresh_default_setting(username):
+    try:
+        user_obj = cm_user()
+    except:
+        Console.error("There is a problem with "
+                              "cm_user object initialization")
+        return False
+    defaults_data = user_obj.info(username)['defaults']
+    if "shell_command_list_refresh_default_setting" not in defaults_data or\
+    defaults_data["shell_command_list_refresh_default_setting"] in [None, 'none']:
+        defaults_data["shell_command_list_refresh_default_setting"] = True
+        user_obj.set_defaults(username, defaults_data)
+        return defaults_data["shell_command_list_refresh_default_setting"]
+    else:
+        return defaults_data["shell_command_list_refresh_default_setting"]
+    
+    
