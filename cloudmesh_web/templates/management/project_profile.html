@@ -163,6 +163,13 @@
             <td>{{ project.aggreement_documentation }}</td>
         </tr>
         <tr>
+            <th colspan="2" bgcolor="#CCCCCC"> Other </th>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Comments </i></td>
+            <td>{{ project.comments }}</td>
+        </tr>
+        <tr>
             <th colspan="2" bgcolor="#CCCCCC"> Project Membership Management </th>
         </tr>
         <tr>
@@ -174,14 +181,28 @@
             <td>{{ project.join_notification }}</td>
         </tr>
         <tr>
-            <th colspan="2" bgcolor="#CCCCCC"> Other </th>
+            <th colspan="2" bgcolor="#CCCCCC">Location </th>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6" style="width:20%"><i>Comments </i></td>
-            <td>{{ project.comments }}</td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Name </i></td>
+            <td>{{ project.loc_name }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Street </i></td>
+            <td>{{ project.loc_street }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Additional </i></td>
+            <td>{{ project.loc_additonal }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>State </i></td>
+            <td>{{ project.loc_state }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Country </i></td>
+            <td>{{ project.loc_country }}</td>
         </tr>
         </tbody>
     </table>
-
-
 {% endblock %}

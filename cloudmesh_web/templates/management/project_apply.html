@@ -72,7 +72,7 @@
                 <th colspan="2" bgcolor="#CCCCCC">Related Grant </th>
             </tr>
 
-            {% for field in nsf_fields %}
+            {% for field in grant_fields %}
                 {{ render_field(form[field]) }}
             {% endfor %}
 
@@ -85,18 +85,25 @@
             {% endfor %}
 
             <tr>
+                <th colspan="2" bgcolor="#CCCCCC">Other </th>
+            </tr>
+
+            {% for field in other_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
+
+            <tr>
                 <th colspan="2" bgcolor="#CCCCCC">Project Membership Management </th>
             </tr>
 
             {% for field in membership_fields %}
                 {{ render_field(form[field]) }}
             {% endfor %}
-
             <tr>
-                <th colspan="2" bgcolor="#CCCCCC">Other </th>
+                <th colspan="2" bgcolor="#CCCCCC">Location </th>
             </tr>
 
-            {% for field in other_fields %}
+            {% for field in loc_fields %}
                 {{ render_field(form[field]) }}
             {% endfor %}
             </tbody>

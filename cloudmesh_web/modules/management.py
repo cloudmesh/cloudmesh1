@@ -444,10 +444,11 @@ def project_apply():
                            contact_fields=ProjectRegistrationForm.project_contact_keys,
                            project_details_fields=ProjectRegistrationForm.project_details_keys,
                            agreements_fields=ProjectRegistrationForm.agreements_keys,
-                           nsf_fields=ProjectRegistrationForm.nsf_keys,
+                           grant_fields=ProjectRegistrationForm.grant_keys,
                            resource_fields=ProjectRegistrationForm.resource_keys,
                            membership_fields=ProjectRegistrationForm.membership_keys,
-                           other_fields=ProjectRegistrationForm.other_keys)
+                           other_fields=ProjectRegistrationForm.other_keys,
+                           loc_fields=ProjectRegistrationForm.loc_keys)
 
 
 def get_choices_for_form(services):
@@ -540,7 +541,12 @@ class ProjectRegistrationForm(Form):
         "resources_provision",
         "grant_organization",
         "grant_id",
-        "grant_url"]
+        "grant_url",
+        "loc_name",
+        "loc_street",
+        "loc_additional",
+        "loc_state",
+        "loc_country"]
 
     profile_keys = [\
         "title"]
@@ -579,12 +585,18 @@ class ProjectRegistrationForm(Form):
         "agreement_software",
         "agreement_documentation"]
 
-    nsf_keys = [\
+    grant_keys = [\
         "grant_organization",
         "grant_id",
         "grant_url"
         ]
 
+    loc_keys = [\
+        "loc_name",
+        "loc_street",
+        "loc_additional",
+        "loc_state",
+        "loc_country"]
 
     resource_keys = [\
         "resources_services",
@@ -656,7 +668,11 @@ class ProjectRegistrationForm(Form):
         'Resource Clusters', choices=get_choices_for_form(ProjectCLUSTERS))
     resources_provision = MultiCheckboxField(
         'Resource Provisioning', choices=get_choices_for_form(ProjectPROVISIONING))
-
+    loc_name = StringField('Name')
+    loc_street = StringField('Street')
+    loc_additional = StringField('Additional')
+    loc_state= StringField('State')
+    loc_country = RadioSelectField("Country", [validators.DataRequired()], choices=country_choices)
 
 class UserRegistrationForm(Form):
 
