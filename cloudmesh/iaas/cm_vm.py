@@ -16,6 +16,8 @@ import time
 from cloudmesh.shell.cm_list import shell_command_list
 from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh.config.cm_keys import cm_keys_mongo
+from cloudmesh.util.shellutil import get_vms_look_for, shell_commands_dict_output\
+                                    ,get_command_list_refresh_default_setting
 
 log = LOGGER(__file__)
 
@@ -33,18 +35,21 @@ def shell_command_vm(arguments):
                 vm delete [NAME|--id=<id>] 
                           [--group=<group>]
                           [--cloud=<CloudName>]
-                          [--prefix=<prefix>]
-                          [--range=<range>]
+                          [--prefix=<prefix>|--hostlist=<hostlist>]
                           [--force]
-                vm ip (NAME|--id=<id>) 
-                      [--cloud=<CloudName>]
-                vm login (--name=<vmname>|--id=<id>|--addr=<address>)
-                         (--ln=<LoginName>)
+                vm ip assign (NAME|--id=<id>) 
+                             [--cloud=<CloudName>]
+                vm ip show [NAME|--id=<id>] 
+                           [--group=<group>]
+                           [--cloud=<CloudName>]
+                           [--prefix=<prefix>|--hostlist=<hostlist>]
+                           [--format=FORMAT] 
+                           [--refresh] 
+                vm login (--name=<vmname>|--id=<id>|--addr=<address>) --ln=<LoginName>
                          [--cloud=<CloudName>]
                          [--key=<key>]
                          [--] [<command>...]
-                vm login NAME
-                         (--ln=<LoginName>)
+                vm login NAME --ln=<LoginName>
                          [--cloud=<CloudName>]
                          [--key=<key>]
                          [--] [<command>...]
@@ -70,6 +75,8 @@ def shell_command_vm(arguments):
                 --flavor=<flavorName>  give the name of the flavor
                 --flavorid=<flavorId>  give the id of the flavor
                 --group=<group>        give the group name of server
+                --hostlist=<hostlist>  e.g. sample[1-3] => ['sample1', 'sample2', 'sample3']
+                                       sample[1-3,18] => ['sample1', 'sample2', 'sample3', 'sample18']
                 --id=<id>              give the server id
                 --image=<imgName>      give the name of the image
                 --imageid=<imgId>      give the id of the image
@@ -80,27 +87,25 @@ def shell_command_vm(arguments):
                 --name=<vmname>        give the name of the virtual machine
                 --prefix=<prefix>      give the prefix of the server, standand server
                                        name is in the form of prefix_index, e.g. abc_9
-                --range=<range>        give the range of the index of the servers
-                                       to delete, e.g. --range=3,6. standand server
-                                       name is in the form of prefix_index, e.g. abc_9
                 --force                delete vms without user's confirmation
 
             Description:
                 commands used to start or delete servers of a cloud
 
-                vm start [options...]   start servers of a cloud, user may specify
-                                        flavor, image .etc, otherwise default values
-                                        will be used, see how to set default values
-                                        of a cloud: cloud help
-                vm delete [options...]  delete servers of a cloud, user may delete
-                                        a server by its name or id, delete servers
-                                        of a group or servers of a cloud, give prefix
-                                        and/or range to find servers by their names.
-                                        Or user may specify more options to narrow
-                                        the search
-                vm ip [options...]      assign a public ip to a VM of a cloud
-                vm login [options...]   login to a server or execute commands on it
-                vm list [options...]    same as command "list vm", please refer to it
+                vm start [options...]       start servers of a cloud, user may specify
+                                            flavor, image .etc, otherwise default values
+                                            will be used, see how to set default values
+                                            of a cloud: cloud help
+                vm delete [options...]      delete servers of a cloud, user may delete
+                                            a server by its name or id, delete servers
+                                            of a group or servers of a cloud, give prefix
+                                            and/or range to find servers by their names.
+                                            Or user may specify more options to narrow
+                                            the search
+                vm ip assign [options...]   assign a public ip to a VM of a cloud
+                vm ip show [options...]     show the ips of VMs
+                vm login [options...]       login to a server or execute commands on it
+                vm list [options...]        same as command "list vm", please refer to it
 
             Examples:
                 vm start --count=5 --group=test --cloud=india
@@ -149,22 +154,8 @@ class VMcommand(object):
             watch = time.time()
         # -------------------------
         # select cloud
-        cloudobj = CloudManage()
-        mongo = cm_mongo()
-        if self.arguments['--cloud']:
-            cloud = cloudobj.get_clouds(
-                self.username, getone=True, cloudname=self.arguments['--cloud'])
-            if cloud is None:
-                Console.error("ERROR: could not find cloud '{0}'".format(self.arguments['--cloud']))
-                return False
-            else:
-                cloudname = self.arguments['--cloud']
-        else:
-            cloudname = cloudobj.get_selected_cloud(self.username)
-        if cloudname not in mongo.active_clouds(self.username):
-            Console.warning(
-                "cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname))
-            return False
+        cloudname = self.get_working_cloud_name()
+        if cloudname == False: return
         # -------------------------
         # starting vm
         res = start_vm(self.username,
@@ -192,86 +183,42 @@ class VMcommand(object):
            self.arguments['--group'] is None and\
            self.arguments['--cloud'] is None and\
            self.arguments['--prefix'] is None and\
-           self.arguments['--range'] is None:
+           self.arguments['--hostlist'] is None:
             print("Please specify at least one option, to get more information: vm help")
             return
+        
+        cloudname = self.get_working_cloud_name()
+        if cloudname == False: return
 
-        rangestart = None
-        rangeend = None
-        if self.arguments['--range']:
-            #
-            # TODO: MARK  [rangestart,rangeend] = int_split_2(',') # implement this
-            #       WHy not use hostlist instead of making it so complicated with range
-            #       hostlist just returns a list taht can than be managed.
-            #       one has to specify the prefix, but we could set this by
-            #       default and prepend if we like
-            ranges = [x.strip() for x in self.arguments["--range"].split(',')]
-            error = False
-            if len(ranges) != 2:
-                error = True
-            else:
-                try:
-                    if ranges[0] != '':
-                        rangestart = int(ranges[0])
-                    if ranges[1] != '':
-                        rangeend = int(ranges[1])
-                except:
-                    error = True
-            if error:
-                print("ERROR: range option must be given as --range=int,int, for example:"\
-                    "--range=1,3")
-                return
-            if rangestart and rangeend:
-                if rangestart > rangeend:
-                    print("ERROR: first number of range must be no greater than the second one,"\
-                          "for example: --range=1,3")
-                    return
-        # -------------------------
-        # select cloud
         deleteAllCloudVMs = False
-        cloudobj = CloudManage()
-        mongo = cm_mongo()
-        if self.arguments['--cloud']:
-            #
-            # TODO: Mark why not move this in a general function and than just call
-            #     delete(self.arguments['--clouds'], ....)
-            #
-            cloud = cloudobj.get_clouds(
-                self.username, getone=True, cloudname=self.arguments['--cloud'])
-            if cloud is None:
-                print("ERROR: could not find cloud '{0}'".format(self.arguments['--cloud']))
-                return
-            else:
-                cloudname = self.arguments['--cloud']
-                if self.arguments['NAME'] is None and\
-                    self.arguments['--id'] is None and\
-                    self.arguments['--group'] is None and\
-                    self.arguments['--prefix'] is None and\
-                    self.arguments['--range'] is None:
-                    deleteAllCloudVMs = True
-        else:
-            cloudname = cloudobj.get_selected_cloud(self.username)
-        if cloudname not in mongo.active_clouds(self.username):
-            Console.warning(
-                "cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname))
-            return
-        # -------------------------
+        if self.arguments['--cloud'] and\
+        self.arguments['NAME'] is None and\
+        self.arguments['--id'] is None and\
+        self.arguments['--group'] is None and\
+        self.arguments['--prefix'] is None and\
+        self.arguments['--hostlist'] is None:
+            deleteAllCloudVMs = True
+
         if self.arguments['--force']:
             preview = False
         else:
             preview = True
-        # -------------------------
-        
+
+        server_id_list = get_vms_look_for(self.username,
+                                          cloudname,
+                                          servername=self.arguments['NAME'],
+                                          serverid=self.arguments['--id'],
+                                          groupname=self.arguments['--group'],
+                                          prefix=self.arguments['--prefix'],
+                                          hostls=self.arguments['--hostlist'],
+                                          getAll=deleteAllCloudVMs,
+                                          refresh=True)
+        if server_id_list == False: return
         delete_vm(self.username,
                   cloudname,
-                  servername=self.arguments['NAME'],
-                  serverid=self.arguments['--id'],
-                  groupname=self.arguments['--group'],
-                  prefix=self.arguments['--prefix'],
-                  rangestart=rangestart,
-                  rangeend=rangeend,
-                  deleteAllCloudVMs=deleteAllCloudVMs,
-                  preview=preview)
+                  server_id_list=server_id_list,
+                  preview=preview,
+                  refresh=False)
 
     def _assign_public_ip(self):
         cloudname = self.get_working_cloud_name()
@@ -285,8 +232,7 @@ class VMcommand(object):
 
     def _vm_login(self):
         cloudname = self.get_working_cloud_name()
-        if cloudname == False:
-            return
+        if cloudname == False: return
         address = None
         if self.arguments['--addr']:
             address = self.arguments['--addr']
@@ -330,6 +276,82 @@ class VMcommand(object):
         arguments = dict(self.arguments)
         arguments["vm"] = True
         shell_command_list(arguments)
+        
+    def _show_ip(self):
+        '''
+        list the ips of VMs
+        '''
+        mongo = cm_mongo()
+        cloudname = self.get_working_cloud_name()
+        if cloudname == False: return
+        if get_command_list_refresh_default_setting(self.username) or self.arguments['--refresh']:
+            mongo.activate(cm_user_id=self.username, names=[cloudname])
+            mongo.refresh(cm_user_id=self.username,
+                          names=[cloudname],
+                          types=['servers'])
+            
+        servers_dict = mongo.servers(
+                    clouds=[cloudname], cm_user_id=self.username)[cloudname]
+                    
+        AllCloudVMs = False
+        if self.arguments['--cloud'] and\
+        self.arguments['NAME'] is None and\
+        self.arguments['--id'] is None and\
+        self.arguments['--group'] is None and\
+        self.arguments['--prefix'] is None and\
+        self.arguments['--hostlist'] is None:
+            AllCloudVMs = True
+                    
+        server_id_list = get_vms_look_for(self.username,
+                                          cloudname,
+                                          servername=self.arguments['NAME'],
+                                          serverid=self.arguments['--id'],
+                                          groupname=self.arguments['--group'],
+                                          prefix=self.arguments['--prefix'],
+                                          hostls=self.arguments['--hostlist'],
+                                          getAll=AllCloudVMs,
+                                          refresh=False)
+        if server_id_list == False: return
+        if server_id_list == []:
+            Console.warning("no vm meets the condition")
+            return
+        
+        res = {}
+        for item in server_id_list:
+            temp = servers_dict[item]['addresses']['private']
+            fixed = ""
+            floating = ""
+            for item0 in temp:
+                if item0['OS-EXT-IPS:type'] == 'fixed':
+                    fixed = fixed + item0['addr'] + ", "
+                elif item0['OS-EXT-IPS:type'] == 'floating':
+                    floating = floating + item0['addr'] + ", "
+            if fixed != "": fixed = fixed[:-2]
+            if floating != "": floating = floating[:-2]
+            temp0 = {}
+            temp0['name'] = servers_dict[item]['name']
+            temp0['fixed'] = fixed
+            temp0['floating'] = floating
+            res[item] = temp0
+            
+        if self.arguments['--format']:
+            if self.arguments['--format'] not in ['table', 'json', 'csv']:
+                Console.error("please select printing format among table, json and csv")
+                return
+            else:
+                p_format = self.arguments['--format']
+        else:
+            p_format = None
+        
+        header = ['name', 'fixed', 'floating']
+        
+        shell_commands_dict_output(res,
+                                   print_format=p_format,
+                                   firstheader="id",
+                                   header=header)
+            
+        
+        
 
     # --------------------------------------------------------------------------
     def get_working_cloud_name(self):
@@ -400,12 +422,16 @@ class VMcommand(object):
             return self._vm_create()
         elif 'delete' in self.arguments and self.arguments['delete']:
             self._vm_delete()
-        elif 'ip' in self.arguments and self.arguments['ip']:
+        elif 'ip' in self.arguments and self.arguments['ip'] and\
+        'assign' in self.arguments and self.arguments['assign']:
             self._assign_public_ip()
         elif 'login' in self.arguments and self.arguments['login']:
             self._vm_login()
         elif 'list' in self.arguments and self.arguments['list']:
             self._vm_list()
+        elif 'ip' in self.arguments and self.arguments['ip'] and\
+        'show' in self.arguments and self.arguments['show']:
+            self._show_ip()
 
     # --------------------------------------------------------------------------
 
@@ -620,19 +646,14 @@ def start_vm(username,
 
 def delete_vm(username,
               cloudname,
-              servername=None,
-              serverid=None,
-              groupname=None,
-              prefix=None,
-              rangestart=None,
-              rangeend=None,
-              deleteAllCloudVMs=False,
-              preview=False):
+              server_id_list=None,
+              preview=False,
+              refresh=False):
     '''
     delete vms of a cloud of a user, this function provides several ways to find and
     delete vms
-    :param deleteAllCloudVMs: True to enable condition that find all vms of the cloud
-    :param preview: True if the user wants to preview and confirm before start to delete
+    :param server_id_list:: the list of VMs(id) to delete
+    :param preview:: True if the user wants to preview and confirm before start to delete
 
     TODO: what if fail, how to acknowledge it
           range search: now if prefix not given, all vms whose index are in the range will
@@ -640,79 +661,28 @@ def delete_vm(username,
           it looks like even though delete a vm and return {msg: seccess}, sometimes refresh
           after 5 sec, it might be still there
     '''
-    # -------------------------
-    # simple input check
-    if servername and serverid:
-        print("ERROR: server name and server id can't be both provided")
+    try:
+        mongo = cm_mongo()
+    except:
+        Console.error("There is a problem with the mongo server")
         return False
-    if rangestart and rangeend:
-        if rangestart > rangeend:
-            print("ERROR: rangestart > rangeend")
-            return False
-    # -------------------------
-    mongo = cm_mongo()
-    mongo.activate(cm_user_id=username, names=[cloudname])
-    mongo.refresh(username, names=[cloudname], types=['servers'])
+    if refresh:
+        mongo.activate(cm_user_id=username, names=[cloudname])
+        mongo.refresh(cm_user_id=username,
+                        names=[cloudname],
+                        types=['servers'])
     serverdata = mongo.servers(
-        clouds=[cloudname], cm_user_id=username)[cloudname]
-    # pprint(serverdata)  ##########
-    # -------------------------
-    # search for qualified vms for each critera
-    ls = [
-        [],  # 0 servername
-        [],  # 1 serverid
-        [],  # 2 groupname
-        [],  # 3 prefix
-        [],  # 4 rangestart
-        [],  # 5 rangeend
-        []  # 6 deleteAllCloudVMs
-    ]
-    for k, v in serverdata.iteritems():
-        if servername and servername == v['name']:
-            ls[0].append(k)
-        if serverid and serverid == k:
-            ls[1].append(k)
-        if groupname:
-            try:
-                grouptemp = None
-                grouptemp = v['metadata']['cm_group']
-            except:
-                pass
-            if groupname == grouptemp:
-                ls[2].append(k)
-        if prefix or rangestart or rangeend:
-            nametemp = server_name_analyzer(v['name'])
-        if prefix and prefix == nametemp[0]:
-            ls[3].append(k)
-        if rangestart and nametemp[1] and rangestart <= nametemp[1]:
-            ls[4].append(k)
-        if rangeend and nametemp[1] and rangeend >= nametemp[1]:
-            ls[5].append(k)
-        if deleteAllCloudVMs and v['cm_cloud'] == cloudname:
-            ls[6].append(k)
-    # -------------------------
-    # intersect the results
-    ls = [x for x in ls if x != []]
-    l = len(ls)
-    if l == 0:
-        res = []
-    elif l == 1:
-        res = ls[0]
-    else:
-        res = ls[0]
-        del ls[0]
-        for i in ls:
-            res = set(res) & set(i)
-        res = list(res)
+                        clouds=[cloudname], cm_user_id=username)[cloudname]
     # -------------------------
     # preview and confirm
     confirm_deletion = True
     if preview:
-        if res == []:
+        if server_id_list == []:
             Console.warning("no vm meets the condition")
-        else:
+            return False
+        else:    
             resserverdata = {}
-            for i in res:
+            for i in server_id_list:
                 resserverdata[i] = serverdata[i]
             cloudobj = CloudManage()
             itemkeys = {"openstack":
@@ -784,7 +754,7 @@ def delete_vm(username,
     # -------------------------
     # deleting
     if confirm_deletion:
-        if res == []:
+        if server_id_list == []:
             return
 
         watch = time.time()
@@ -798,7 +768,7 @@ def delete_vm(username,
             name = "tasks"
             imported = getattr(__import__(package, fromlist=[name]), name)
             queue_name = "%s-%s" % (cm_type, "servers")
-            for i in res:
+            for i in server_id_list:
                 tempservername = serverdata[i]['name'].encode("ascii")
                 banner(
                     "Deleting vm->{0} on cloud->{1}".format(tempservername, cloudname))
@@ -823,7 +793,7 @@ def delete_vm(username,
             if preview:
                 print("to check realtime vm status: list vm --refresh")
         else:
-            for i in res:
+            for i in server_id_list:
                 tempservername = serverdata[i]['name'].encode("ascii")
                 banner(
                     "Deleting vm->{0} on cloud->{1}".format(tempservername, cloudname))
@@ -853,44 +823,5 @@ def assign_public_ip(username=None, cloudname=None, serverid=None):
     # cloud".format(cloud)
 
 
-# ========================================================================
 
-
-def server_name_analyzer(name):
-    '''
-    standard vm name, unless user gives the name, is prefix_index such as abc_11, this
-    function returns vm name's prefix and index [prefix, index], if the name is not in
-    standard form, returns [input, None]
-    '''
-    res = [x for x in name.split('_')]
-    l = len(res)
-    if l == 1:
-        return [name, None]
-
-    index = None
-    try:
-        index = int(res[-1])
-    except:
-        pass
-    if index is None:
-        return [name, None]
-
-    prefix = None
-    if l > 2:
-        del res[-1]
-        prefix = "_".join(res)
-    else:
-        prefix = res[0]
-        return [prefix, index]
-
-
-    # TODO: Mark: this seems too complex why not look at the code bellow and make that work
-    # also this code should be moved to the place where we construct the name
-
-    # parts = name.split('_')
-    # length = len(parts)
-    # if length(parts) == 1:
-    #    return [name, None]
-    # else:
-    #    return ['_'.join(parts[:-1]),parts[length]]
 
