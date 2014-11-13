@@ -7,6 +7,9 @@ from cloudmesh_common.tables import array_dict_table_printer
 from cloudmesh import banner
 import csv
 from cmd3.console import Console
+import hostlist
+from cloudmesh.cm_mongo import cm_mongo
+from cloudmesh.util.naming import server_name_analyzer
 
 
 def shell_commands_dict_output(d,
@@ -176,4 +179,101 @@ def get_command_list_refresh_default_setting(username):
     else:
         return defaults_data["shell_command_list_refresh_default_setting"]
     
+    
+def get_vms_look_for(username,
+                     cloudname,
+                     servername=None,
+                     serverid=None,
+                     groupname=None,
+                     prefix=None,
+                     hostls=None,
+                     getAll=False,
+                     refresh=False): 
+    '''
+    work as a filter to find the VMs you are looking for. Input the seaching conditions,
+    and returns a list of server ids that meet the condition
+    
+    you cannot provide servername and serverid at the same time
+    you cannot provide prefix and hostlist at the same time
+    param hostls:: e.g. sample[1-3,18] => ['sample1', 'sample2', 'sample3', 'sample18']
+    param refresh:: refresh before filtering
+    param getAll:: if True, the function consider all VMs are selected before filtering.
+                   if False, then none are selected before filtering
+    '''
+    # input checking 
+    if servername and serverid:
+        Console.error("you cannot provide servername and serverid at the same time")
+        return False
+    if prefix and hostls:
+        Console.error("you cannot provide prefix and hostlist at the same time")
+        return False
+    if hostls:
+        try:
+            hostls_list = hostlist.expand_hostlist(hostls)
+        except:
+            Console.error("please check your hostlist input, right format e.g. sample[1-9,18]")
+            return False
+    
+    # get server data
+    try:
+        mongo = cm_mongo()
+    except:
+        Console.error("There is a problem with the mongo server")
+        return False
+    
+    if refresh:
+        mongo.activate(cm_user_id=username, names=[cloudname])
+        mongo.refresh(cm_user_id=username,
+                      names=[cloudname],
+                      types=['servers'])
+        
+    servers_dict = mongo.servers(
+                clouds=[cloudname], cm_user_id=username)[cloudname]
+                
+    # search for qualified vms for each critera
+    ls = [
+            [],  # 0 servername
+            [],  # 1 serverid
+            [],  # 2 groupname
+            [],  # 3 prefix
+            [],  # 4 hostls
+            []   # 5 getAll
+         ]
+    for k, v in servers_dict.iteritems():
+        if servername and servername == v['name']:
+            ls[0].append(k)
+        if serverid and serverid == k:
+            ls[1].append(k)
+        if groupname:
+            try:
+                grouptemp = None
+                grouptemp = v['metadata']['cm_group']
+            except:
+                pass
+            if groupname == grouptemp:
+                ls[2].append(k)
+        if prefix:
+            nametemp = server_name_analyzer(v['name'])
+        if prefix and prefix == nametemp[0]:
+            ls[3].append(k)
+        if hostls and v['name'] in hostls_list:
+            ls[4].append(k)
+        if getAll and v['cm_cloud'] == cloudname:
+            ls[5].append(k)
+    # -------------------------
+    # intersect the results
+    ls = [x for x in ls if x != []]
+    l = len(ls)
+    if l == 0:
+        res = []
+    elif l == 1:
+        res = ls[0]
+    else:
+        res = ls[0]
+        del ls[0]
+        for i in ls:
+            res = set(res) & set(i)
+        res = list(res)
+    
+    return res
     

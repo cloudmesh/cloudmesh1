@@ -26,7 +26,7 @@ def logger(on):
         logging.disable(logging.CRITICAL)
 
 
-from cloudmesh.util.helper import vm_name
+from cloudmesh.util.naming import vm_name
 
 try:
     from cloudmesh.sh.cm import shell
