@@ -10,178 +10,176 @@
             <th colspan="2" bgcolor="#CCCCCC"> Project Information </th>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Id</i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Id</i></td>
             <td>{{ project.projectid }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Created</i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Created</i></td>
             <td>{{ project.date_created }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Modified</i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Modified</i></td>
             <td>{{ project.date_modified }}</td>
         </tr>
         <tr>
-            <th colspan="2" bgcolor="#CCCCCC"> Contact Information </th>
-        </tr>
-
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Abstract    </i></td>
-            <td>{{ project.abstract    }}</td>
+            <th colspan="2" bgcolor="#CCCCCC"> Project Vocabulary </th>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Broader impact  </i></td>
-            <td>{{ project.broader_impact  }}</td>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Use of Future Systems  </i></td>
-            <td>{{ project.use_of_fg  }}</td>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Scale of_use  </i></td>
-            <td>{{ project.scale_of_use  }}</td>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Categories </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Categories </i></td>
             <td>{{ project.categories | join(", ") }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Keywords  </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Keywords  </i></td>
             <td>{{ project.keywords |join(", ") }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Primary discipline </i></td>
-            <td>{{ project.primary_discipline }}</td>
+            <th colspan="2" bgcolor="#CCCCCC">Project Contact</th>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Orientation  </i></td>
-            <td>{{ project.orientation  }}</td>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Contact  </i></td>
-            <td>{{ project.contact  }}</td>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Url </i></td>
-            <td>{{ project.url }}</td>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Comment </i></td>
-            <td>{{ project.comment }}</td>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Active </i></td>
-            <td>{{ project.active }}</td>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Status </i></td>
-            <td>{{ project.status }}</td>
-        </tr>
-        <tr> <th colspan="2" bgcolor="#CCCCCC"> Members </th>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Lead </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Lead </i></td>
             <td>{{ project.lead }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Managers </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Managers </i></td>
             <td>{{ project.managers|join(", ") }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Members </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Contact </i></td>
+            <td>{{ project.contact }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Members </i></td>
             <td>{{ project.members|join(", ") }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Alumnis </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Alumnis </i></td>
             <td>{{ project.alumnis|join(", ") }}</td>
         </tr>
-
-        <tr> <th colspan="2" bgcolor="#CCCCCC"> Grants </th>
+        <tr>
+            <th colspan="2" bgcolor="#CCCCCC">Project Details </th>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Grant orgnization </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Orientation  </i></td>
+            <td>{{ project.orientation  }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Primary discipline </i></td>
+            <td>{{ project.primary_discipline }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Abstract    </i></td>
+            <td>{{ project.abstract    }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Intellectual Merit    </i></td>
+            <td>{{ project.intellectual_merit    }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Broader impact  </i></td>
+            <td>{{ project.broader_impact  }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Url </i></td>
+            <td>{{ project.url }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Results </i></td>
+            <td>{{ project.results }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Active </i></td>
+            <td>{{ project.active }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Status </i></td>
+            <td>{{ project.status }}</td>
+        </tr>
+        <tr> <th colspan="2" bgcolor="#CCCCCC"> Related Grant </th>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Grant organization </i></td>
             <td>{{ project.grant_orgnization }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Grant id </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Grant ID </i></td>
             <td>{{ project.grant_id }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Grant url </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Grant url </i></td>
             <td>{{ project.grant_url }}</td>
         </tr>
         <tr>
-            <th colspan="2" bgcolor="#CCCCCC"> Results </th>
+            <th colspan="2" bgcolor="#CCCCCC"> Resource Requirements </th>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Results </i></td>
-            <td>{{ project.results }}</td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Resources services </i></td>
+            <td>{{ project.resources_services|join(", ") }}</td>
         </tr>
-
+{#        <tr>#}
+{#            <td bgcolor="#E6E6E6" style="width:20%"><i>Resources software </i></td>#}
+{#            <td>{{ project.resources_software|join(", ") }}</td>#}
+{#        </tr>#}
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Resources clusters </i></td>
+            <td>{{ project.resources_clusters|join(", ") }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Resources provision </i></td>
+            <td>{{ project.resources_provision|join(", ") }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Comment </i></td>
+            <td>{{ project.comment }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Use of Future Systems  </i></td>
+            <td>{{ project.use_of_fg  }}</td>
+        </tr>
+        <tr>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Scale of_use  </i></td>
+            <td>{{ project.scale_of_use  }}</td>
+        </tr>
         <tr>
             <th colspan="2" bgcolor="#CCCCCC"> Agreements </th>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Agreement use </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>NSF Agreement to use Future Systems </i></td>
             <td>{{ project.aggreement_use }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Agreement slides </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Slide Collection </i></td>
             <td>{{ project.aggreement_slides }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Agreement support </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Support </i></td>
             <td>{{ project.aggreement_support }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Agreement sotfware </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Software Contributions </i></td>
             <td>{{ project.aggreement_sotfware }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Agreement documentation </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Documentation Contributions </i></td>
             <td>{{ project.aggreement_documentation }}</td>
         </tr>
-
         <tr>
-            <th colspan="2" bgcolor="#CCCCCC"> Comments </th>
+            <th colspan="2" bgcolor="#CCCCCC"> Project Membership Management </th>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Comments </i></td>
-            <td>{{ project.comments }}</td>
-        </tr>
-
-        <tr>
-            <th colspan="2" bgcolor="#CCCCCC"> Join Management </th>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Join open </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Allow users to request to join </i></td>
             <td>{{ project.join_open }}</td>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Join notification </i></td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Send an email notification when a user joins </i></td>
             <td>{{ project.join_notification }}</td>
         </tr>
-
         <tr>
-            <th colspan="2" bgcolor="#CCCCCC"> Resources </th>
+            <th colspan="2" bgcolor="#CCCCCC"> Other </th>
         </tr>
         <tr>
-            <td bgcolor="#E6E6E6"><i>Resources services </i></td>
-            <td>{{ project.resources_services|join(", ") }}</td>
+            <td bgcolor="#E6E6E6" style="width:20%"><i>Comments </i></td>
+            <td>{{ project.comments }}</td>
         </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Resources software </i></td>
-            <td>{{ project.resources_software|join(", ") }}</td>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Resources clusters </i></td>
-            <td>{{ project.resources_clusters|join(", ") }}</td>
-        </tr>
-        <tr>
-            <td bgcolor="#E6E6E6"><i>Resources provision </i></td>
-            <td>{{ project.resources_provision|join(", ") }}</td>
-        </tr>
-
         </tbody>
     </table>
 

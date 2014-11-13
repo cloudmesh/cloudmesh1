@@ -440,7 +440,13 @@ def project_apply():
                            form=form,
                            fields=ProjectRegistrationForm.keys,
                            profile_fields=ProjectRegistrationForm.profile_keys,
+                           vocab_fields=ProjectRegistrationForm.vocab_keys,
+                           contact_fields=ProjectRegistrationForm.project_contact_keys,
+                           project_details_fields=ProjectRegistrationForm.project_details_keys,
                            agreements_fields=ProjectRegistrationForm.agreements_keys,
+                           nsf_fields=ProjectRegistrationForm.nsf_keys,
+                           resource_fields=ProjectRegistrationForm.resource_keys,
+                           membership_fields=ProjectRegistrationForm.membership_keys,
                            other_fields=ProjectRegistrationForm.other_keys)
 
 
@@ -531,31 +537,39 @@ class ProjectRegistrationForm(Form):
         "resources_services",
         # "resources_software",
         "resources_clusters",
-        "resources_provision"]
+        "resources_provision",
+        "grant_organization",
+        "grant_id",
+        "grant_url"]
 
     profile_keys = [\
-        "title",
+        "title"]
+
+
+    vocab_keys = [\
         "category",
-        "keywords",
-        "contact",
+        "keywords"]
+
+    project_contact_keys = [\
+        "lead",
+        "managers",
+        "members",
+        "alumnis",
+        "contact"]
+
+    project_details_keys = [\
         "orientation",
         "primary_discipline",
         "abstract",
         "intellectual_merit",
         "broader_impact",
-        "use_of_fg",
-        "scale_of_use",
         "url",
-        "comment",
         # "active",
         # "projectid",
         # "lead",
         # "managers",
         # "members",
         # "alumnis",
-        # "grant_orgnization",
-        # "grant_id",
-        # "grant_url",
         "results"]
 
     agreements_keys= [\
@@ -565,14 +579,29 @@ class ProjectRegistrationForm(Form):
         "agreement_software",
         "agreement_documentation"]
 
-    other_keys = [\
-        "comments",
-        "join_open",
-        "join_notification",
+    nsf_keys = [\
+        "grant_organization",
+        "grant_id",
+        "grant_url"
+        ]
+
+
+    resource_keys = [\
         "resources_services",
         # "resources_software",
         "resources_clusters",
-        "resources_provision"]
+        "resources_provision",
+        "comment",
+        "use_of_fg",
+        "scale_of_use"]
+
+    other_keys = [\
+        "comments"]
+
+    membership_keys = [\
+        "join_open",
+        "join_notification"
+        ]
 
     title = StringField('Title')
     category = RadioSelectField('Project Category', choices=[('None','None'),('Computer Science','Computer Science'),\
@@ -594,18 +623,18 @@ class ProjectRegistrationForm(Form):
     orientation = RadioSelectField('Orientation', choices=[('research','Research'),('education','Education'),\
                                                            ('industry','Industry'),('government','Government')])
     primary_discipline = RadioSelectField('Primary discipline', choices=discipline_choices)
-    contact = StringField('Contact')
     url = StringField(
         'URL', [validators.Length(min=6, max=50), validate_url_in_form])
     comment = TextAreaField('Comment')
     active = BooleanField('Active')
     projectid = StringField('Projectid')
-    lead = StringField('Lead')
-    managers = TextAreaField('Managers')
-    members = TextAreaField('Members')
-    alumnis = TextAreaField('Alumnis')
-    grant_orgnization = StringField('Grant Orgnization')
-    grant_id = StringField('Grant id')
+    contact = StringField('Contact')
+    lead = StringField('Project Lead')
+    managers = TextAreaField('Project Managers')
+    members = TextAreaField('Project Members')
+    alumnis = TextAreaField('Project Alumni')
+    grant_organization = StringField('Grant Organization')
+    grant_id = StringField('Grant ID')
     grant_url = StringField('Grant URL')
     results = TextAreaField('Results')
     agreement_use = BooleanField('NSF Agreement to use Future Systems')
@@ -615,8 +644,8 @@ class ProjectRegistrationForm(Form):
     agreement_documentation = BooleanField('Documentation Contributions')
     agreement_images = BooleanField('Images')
     comments = TextAreaField('Comments')
-    join_open = BooleanField('Join open')
-    join_notification = BooleanField('Join notification')
+    join_open = BooleanField('Allow users to request to join')
+    join_notification = BooleanField('Send an email notification when a user joins')
     resources_services = MultiCheckboxField(
         'Resource Services',
         choices=get_choices_for_form(ProjectSERVICES))

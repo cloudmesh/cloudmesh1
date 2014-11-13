@@ -3,7 +3,7 @@
 
 {% macro render_field(field) %}
     <tr>
-        <td bgcolor="#CCCCCC" style="width:30%"> <i>{{ field.label }}</i></td>
+        <td bgcolor="#CCCCCC" style="width:35%"> <i>{{ field.label }}</i></td>
         {% if field.type == "TextAreaField" %}
             <td>{{ field(cols="200", rows="3")|safe }}
                 {% elif field.type == "TextField" %}
@@ -33,9 +33,30 @@
          <table class="table table-condensed">
             <tbody>
             <tr>
-                <th colspan="2" bgcolor="#CCCCCC"> Project Profile </th>
+                <th colspan="2" bgcolor="#CCCCCC"> Project Information </th>
             </tr>
-{% for field in profile_fields %}
+            {% for field in profile_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
+
+            <tr>
+                <th colspan="2" bgcolor="#CCCCCC"> Project Vocabulary </th>
+            </tr>
+            {% for field in vocab_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
+
+            <tr>
+                <th colspan="2" bgcolor="#CCCCCC"> Project Contact </th>
+            </tr>
+            {% for field in contact_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
+
+                        <tr>
+                <th colspan="2" bgcolor="#CCCCCC"> Project Details </th>
+            </tr>
+            {% for field in project_details_fields %}
                 {{ render_field(form[field]) }}
             {% endfor %}
 
@@ -48,7 +69,31 @@
             {% endfor %}
 
             <tr>
-                <th colspan="2" bgcolor="#CCCCCC">Others </th>
+                <th colspan="2" bgcolor="#CCCCCC">Related Grant </th>
+            </tr>
+
+            {% for field in nsf_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
+
+            <tr>
+                <th colspan="2" bgcolor="#CCCCCC">Resource Requirements </th>
+            </tr>
+
+            {% for field in resource_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
+
+            <tr>
+                <th colspan="2" bgcolor="#CCCCCC">Project Membership Management </th>
+            </tr>
+
+            {% for field in membership_fields %}
+                {{ render_field(form[field]) }}
+            {% endfor %}
+
+            <tr>
+                <th colspan="2" bgcolor="#CCCCCC">Other </th>
             </tr>
 
             {% for field in other_fields %}
