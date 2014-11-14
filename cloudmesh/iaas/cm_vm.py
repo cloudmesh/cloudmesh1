@@ -35,14 +35,14 @@ def shell_command_vm(arguments):
                 vm delete [NAME|--id=<id>] 
                           [--group=<group>]
                           [--cloud=<CloudName>]
-                          [--prefix=<prefix>|--hostlist=<hostlist>]
+                          [--prefix=<prefix>|--nameh=<hostlist>]
                           [--force]
                 vm ip assign (NAME|--id=<id>) 
                              [--cloud=<CloudName>]
                 vm ip show [NAME|--id=<id>] 
                            [--group=<group>]
                            [--cloud=<CloudName>]
-                           [--prefix=<prefix>|--hostlist=<hostlist>]
+                           [--prefix=<prefix>|--nameh=<hostlist>]
                            [--format=FORMAT] 
                            [--refresh] 
                 vm login (--name=<vmname>|--id=<id>|--addr=<address>) --ln=<LoginName>
@@ -75,8 +75,6 @@ def shell_command_vm(arguments):
                 --flavor=<flavorName>  give the name of the flavor
                 --flavorid=<flavorId>  give the id of the flavor
                 --group=<group>        give the group name of server
-                --hostlist=<hostlist>  e.g. sample[1-3] => ['sample1', 'sample2', 'sample3']
-                                       sample[1-3,18] => ['sample1', 'sample2', 'sample3', 'sample18']
                 --id=<id>              give the server id
                 --image=<imgName>      give the name of the image
                 --imageid=<imgId>      give the id of the image
@@ -85,6 +83,10 @@ def shell_command_vm(arguments):
                 --ln=<LoginName>       give the login name of the server that you want 
                                        to login
                 --name=<vmname>        give the name of the virtual machine
+                --nameh=<hostlist>     give the VM name, but in a hostlist style, which is very 
+                                       convenient when you need a range of VMs e.g. sample[1-3] 
+                                       => ['sample1', 'sample2', 'sample3']
+                                       sample[1-3,18] => ['sample1', 'sample2', 'sample3', 'sample18']
                 --prefix=<prefix>      give the prefix of the server, standand server
                                        name is in the form of prefix_index, e.g. abc_9
                 --force                delete vms without user's confirmation
@@ -112,10 +114,13 @@ def shell_command_vm(arguments):
                         start 5 servers on india and give them group
                         name: test
 
-                vm delete --group=test --range=,9
+                vm delete --group=test --nameh=sample_[1-9]
                         delete servers on selected or default cloud with search conditions:
-                        group name is test and index in the name of the servers is no greater
-                        than 9
+                        group name is test and the VM names are among sample_1 ... sample_9
+                
+                vm ip show --nameh=sample_[1-5,9] --format=json
+                        show the ips of VM names among sample_1 ... sample_5 and sample_9 in 
+                        json format
 
     """
 
@@ -183,7 +188,7 @@ class VMcommand(object):
            self.arguments['--group'] is None and\
            self.arguments['--cloud'] is None and\
            self.arguments['--prefix'] is None and\
-           self.arguments['--hostlist'] is None:
+           self.arguments['--nameh'] is None:
             print("Please specify at least one option, to get more information: vm help")
             return
         
@@ -196,7 +201,7 @@ class VMcommand(object):
         self.arguments['--id'] is None and\
         self.arguments['--group'] is None and\
         self.arguments['--prefix'] is None and\
-        self.arguments['--hostlist'] is None:
+        self.arguments['--nameh'] is None:
             deleteAllCloudVMs = True
 
         if self.arguments['--force']:
@@ -210,7 +215,7 @@ class VMcommand(object):
                                           serverid=self.arguments['--id'],
                                           groupname=self.arguments['--group'],
                                           prefix=self.arguments['--prefix'],
-                                          hostls=self.arguments['--hostlist'],
+                                          hostls=self.arguments['--nameh'],
                                           getAll=deleteAllCloudVMs,
                                           refresh=True)
         if server_id_list == False: return
@@ -299,7 +304,7 @@ class VMcommand(object):
         self.arguments['--id'] is None and\
         self.arguments['--group'] is None and\
         self.arguments['--prefix'] is None and\
-        self.arguments['--hostlist'] is None:
+        self.arguments['--nameh'] is None:
             AllCloudVMs = True
                     
         server_id_list = get_vms_look_for(self.username,
@@ -308,7 +313,7 @@ class VMcommand(object):
                                           serverid=self.arguments['--id'],
                                           groupname=self.arguments['--group'],
                                           prefix=self.arguments['--prefix'],
-                                          hostls=self.arguments['--hostlist'],
+                                          hostls=self.arguments['--nameh'],
                                           getAll=AllCloudVMs,
                                           refresh=False)
         if server_id_list == False: return

@@ -271,7 +271,7 @@ class cm_shell_cluster:
             # assign ip to all VMs
             print ("assigning public ips...")
             for item in res.keys():
-                cm("vm ip --id={0}".format(item.encode('ascii')))
+                cm("vm ip assign --id={0}".format(item.encode('ascii')))
                 
             def check_public_ip_existence(d):
                 temp = d['addresses']['private']
@@ -297,7 +297,7 @@ class cm_shell_cluster:
             proceed = False
             repeat_index = 1
             while proceed != True:
-                if repeat_index > 5:
+                if repeat_index > 10:
                     Console.warning("Please check the network")
                     return
                 print ("checking({0})...".format(repeat_index))
