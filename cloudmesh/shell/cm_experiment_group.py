@@ -3,6 +3,7 @@ from cloudmesh.experiment.model_group import ExperimentGroup
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.cm_mongo import cm_mongo
 
 log = LOGGER(__file__)
 
@@ -74,6 +75,32 @@ def shell_command_experiment_group(arguments):
 
     elif arguments["delete"]:
         print("deletes the entries and ask if -i is specified")
+
+
+def get_group_names_list(username, cloudname, refresh=False):
+    '''
+    loops through all VMs of a cloud of a user, returns a list of all unique group 
+    names accorrding to the metadata
+    '''
+    mongo = cm_mongo()
+    if refresh:
+        mongo.activate(cm_user_id=username, names=[cloudname])
+        mongo.refresh(cm_user_id=username,
+                      names=[cloudname],
+                      types=['servers'])
+    servers_dict = mongo.servers(
+                clouds=[cloudname], cm_user_id=username)[cloudname]
+                
+    res = []
+    for k, v in servers_dict.iteritems():
+        if 'cm_group' in v['metadata']:
+            temp = v['metadata']['cm_group']
+            if temp not in res:
+                res.append(temp)
+    
+    return res
+        
+    
 
 
 def main():
