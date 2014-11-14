@@ -22,5 +22,5 @@ Code
 
 The code is located at
 
-Code:  https://github.com/cloudmesh/cloumesh
+Code:  https://github.com/cloudmesh/cloudmesh
 
