@@ -24,3 +24,13 @@ The code is located at
 
 Code:  https://github.com/cloudmesh/cloumesh
 
+Git Notifications
+----------------------------------------------------------------------
+
+cloudmesh-git@googlegroups.com
+
+Mailinglist
+----------------------------------------------------------------------
+
+cloudmesh@googlegroups.com
+
