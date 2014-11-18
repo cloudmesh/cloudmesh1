@@ -471,7 +471,6 @@ class cm_mongo:
         watch = StopWatch()
 
         for name in names:
-            print("*", name)
             watch_name = "{0}-{1}".format(cm_user_id, name)
             log.info("-" * 80)
             log.info("Retrieving data for %s" % name)
@@ -485,7 +484,7 @@ class cm_mongo:
                 elif 'manager' in self.clouds[cm_user_id][name]:
                     cloud = self.clouds[cm_user_id][name]['manager']
 
-                print("Refreshing {0} {1} {2} ->".format(cm_user_id, type, name))
+                log.info("Refreshing {0} {1} {2} ->".format(cm_user_id, type, name))
 
                 watch.start(watch_name)
                 cloud.refresh(type)
@@ -494,7 +493,7 @@ class cm_mongo:
                 # pprint(result)
                 # add result to db,
                 watch.stop(watch_name)
-                print('Refresh time:', watch.get(watch_name))
+                log.info('Refresh time: %s' % watch.get(watch_name))
 
                 watch.start(watch_name)
 
@@ -547,7 +546,7 @@ class cm_mongo:
                     self.db_clouds.insert(result[element])
 
                 watch.stop(watch_name)
-                print('Store time:', watch.get(watch_name))
+                log.info('Store time: %s' % watch.get(watch_name))
 
     """
     # See pbs_mongo in pbs directory
