@@ -255,10 +255,10 @@ class openstack(ComputeBaseType):
                           headers=headers,
                           verify=verify)
         # pprint (r.json())
-        try:
-            log.debug("{0}".format(str(r.json())))
-        except:
-            pass
+        # try:
+        #    log.debug("{0}".format(str(r.json())))
+        # except:
+        #    pass
         return r.json()
 
     #
