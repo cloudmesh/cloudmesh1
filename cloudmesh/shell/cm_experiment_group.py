@@ -56,22 +56,33 @@ def shell_command_experiment_group(arguments):
     '''
     if arguments["list"]:
 
+        first = True
         for group in ExperimentGroup.objects(userid__exact=username):
+            if first:
+                print ("Groups")
+                print ("======")
+                first = False
             print (group.name)
 
     elif arguments["create"]:
         # "sets the group to the given name, the group must exists"
         test = ExperimentGroup(name=name, userid=username).save()
-        print (test)
+        print ("{0} created.".format(test))
+
+    elif arguments['remove']:
+        for group in ExperimentGroup.objects(name=name, userid=username):
+            name = group.name
+            group.delete()
+            print ("{0} deleted.".format(name))
 
     elif arguments["add"]:
         # "adds the group to the given name, the group must not exist."
 
         # __exact is the string field exactly matches value
         # ref: http://docs.mongoengine.org/en/latest/guide/querying.html#query-operators
-        groups = ExperimentGroup.objects(name__exact=name)
+        groups = ExperimentGroup.objects(name__exact=name, userid=username)
         if len(groups) == 0:
-            print ("{0} group does not exist".format(name))
+            print ("{0} does not exist.".format(name))
             return
 
         # select the first value in the list
@@ -86,34 +97,54 @@ def shell_command_experiment_group(arguments):
             post.ip_public = value
             post.ip_private = value
         else:
-            print ("invalid type")
+            print ("invalid type ({0})".format(type))
             return
 
         post.tags = ['experiment', 'group', type]
         post.save()
+        print ("{0} added to {1}.".format(value, name))
 
     elif arguments['show']:
-        groups = ExperimentGroup.objects(name__exact=name)
+        groups = ExperimentGroup.objects(name__exact=name, userid=username)
         if len(groups) == 0:
-            print ("{0} group does not exist".format(name))
+            print ("{0} does not exist.".format(name))
             return
         group = groups[0]
 
+        first = True
         for item in GroupItem.objects(group_name__exact=group):
-            print (item.group_name.name)
-            print ("=" * len(item.group_name.name))
+            if first:
+                print (item.group_name.name)
+                print ("=" * len(item.group_name.name))
+                first = False
 
             if isinstance(item, VM):
-                print ("vm_name:", item.vm_name)
-
+                print ("vm_name:    ", item.vm_name)
             if isinstance(item, IP):
-                print ('ip:', item.ip)
+                print ('ip:     ', item.ip)
 
-            print ("")
 
     elif arguments["delete"]:
-        pass
+        # Check if group exists
+        groups = ExperimentGroup.objects(name__exact=name, userid=username)
+        if len(groups) == 0:
+            print ("{0} does not exist.".format(name))
+            return
+        group = groups[0]
 
+        # Check if value exists on a given type
+        if type == "vm":
+            items = VM.objects(vm_name=value, group_name=group)
+        elif type == "ip":
+            items = IP.objects(ip=value, group_name=group)
+        else:
+            print ("invalid type ({0})".format(type))
+            return
+
+        # Delete the value if exists
+        for item in items:
+            item.delete()
+            print ("{0} deleted in {1}.".format(value, name))
 
 def get_group_names_list(username, cloudname, refresh=False):
     '''

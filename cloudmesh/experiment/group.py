@@ -36,5 +36,3 @@ class IP(GroupItem):
 
 class VOLUME(GroupItem):
     volume_name = StringField()
-
-
