@@ -5,18 +5,21 @@ from cloudmesh_common.logger import LOGGER
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mongo import cm_mongo
+from cloudmesh.util.shellutil import shell_commands_dict_output
+from cmd3.console import Console
+from pprint import pprint
 
 log = LOGGER(__file__)
 
 def shell_command_experiment_group(arguments):
     """
     Usage:
-        group list
+        group list [--format=FORMAT]
         group create NAME
         group remove NAME
         group add NAME TYPE VALUE
         group delete NAME TYPE VALUE
-        group show NAME
+        group show NAME [--format=FORMAT]
 
     Arguments:
 
@@ -26,7 +29,8 @@ def shell_command_experiment_group(arguments):
 
     Options:
 
-        -v         verbose mode
+        -v               verbose mode
+        --format=FORMAT  output format: table, json, csv
 
     Description:
 
@@ -55,14 +59,28 @@ def shell_command_experiment_group(arguments):
 
     '''
     if arguments["list"]:
-
-        first = True
+        res = {}
+        index = 1
         for group in ExperimentGroup.objects(userid__exact=username):
-            if first:
-                print ("Groups")
-                print ("======")
-                first = False
-            print (group.name)
+            res[str(index)] = {}
+            res[str(index)]["name"] = group.to_mongo().to_dict()["name"]
+            index = index + 1
+            
+        if arguments['--format']:
+            if arguments['--format'] not in ['table', 'json', 'csv']:
+                Console.error("please select printing format among table, json and csv")
+                return
+            else:
+                p_format = arguments['--format']
+        else:
+            p_format = None
+            
+        shell_commands_dict_output(res,
+                                   print_format=p_format,
+                                   firstheader="index",
+                                   header=["name"])
+
+        
 
     elif arguments["create"]:
         # "sets the group to the given name, the group must exists"
@@ -111,19 +129,32 @@ def shell_command_experiment_group(arguments):
             return
         group = groups[0]
 
-        first = True
-        for item in GroupItem.objects(group_name__exact=group):
-            if first:
-                print (item.group_name.name)
-                print ("=" * len(item.group_name.name))
-                first = False
-
+        res = {}
+        index = 1
+        for item in GroupItem.objects(group_name__exact=group):             
+            temp = None
             if isinstance(item, VM):
-                print ("vm_name:    ", item.vm_name)
+                temp = "vm_name: " + item.vm_name
             if isinstance(item, IP):
-                print ('ip:     ', item.ip)
-
-
+                temp = 'ip: ' + item.ip
+            res[str(index)] = {}
+            res[str(index)]["item"] = temp
+            index = index + 1
+            
+        if arguments['--format']:
+            if arguments['--format'] not in ['table', 'json', 'csv']:
+                Console.error("please select printing format among table, json and csv")
+                return
+            else:
+                p_format = arguments['--format']
+        else:
+            p_format = None
+            
+        shell_commands_dict_output(res,
+                                   print_format=p_format,
+                                   firstheader="group: " + group.name,
+                                   header=["item"])
+            
     elif arguments["delete"]:
         # Check if group exists
         groups = ExperimentGroup.objects(name__exact=name, userid=username)
