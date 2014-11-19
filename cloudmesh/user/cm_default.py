@@ -174,7 +174,8 @@ class DefaultCommand(object):
         #if p_format == 'table' or p_format is None:
             #print(row_table(to_print, order=None, labels=["Default", "Value"]))
         #else:
-        shell_commands_dict_output(to_print,
+        shell_commands_dict_output(self.username,
+                                   to_print,
                                        print_format=p_format,
                                        header=columns,
                                        oneitem=True,

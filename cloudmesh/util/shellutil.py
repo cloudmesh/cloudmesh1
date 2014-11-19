@@ -1,9 +1,8 @@
 '''some useful functions while working with shell'''
 from __future__ import print_function
-from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
 import json
-from cloudmesh_common.tables import array_dict_table_printer
+from cloudmesh_common.tables import array_dict_table_printer, dict_key_list_table_printer
 from cloudmesh import banner
 import csv
 from cmd3.console import Console
@@ -12,8 +11,40 @@ from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.util.naming import server_name_analyzer
 
 
-def shell_commands_dict_output(d,
+ALLOWED_PRINT_FORMAT = ['table', 'json', 'csv']
+
+def get_default_print_format(username):
+    '''
+    the funtion will try to find the default printing form from db_defaults
+    if db_defaults has no item 'shell_print_format', the function will
+    set 'shell_print_format' = table
+    '''
+    format_type = None
+    user_obj = cm_user()
+    userdata = user_obj.info(username)
+    try:
+        format_type = userdata['defaults']['shell_print_format']
+    except:
+        pass
+    if format_type in [None, 'none']:
+        userdata['defaults']['shell_print_format'] = "table"
+        user_obj.set_defaults(username, userdata['defaults'])
+        userdata = user_obj.info(username)
+        format_type = userdata['defaults']['shell_print_format']
+    return format_type
+    
+
+def shell_commands_dict_output(username,
+                               d,
+                               # choose format manually
                                print_format=None,
+                               # choose table format if needed
+                               table_format=None,
+                               # more specific table arguments
+                               # --------------------------
+                               # for table format: "key_list"
+                               indexed=False,
+                               # --------------------------
                                firstheader=None,
                                header=None,
                                oneitem=False,
@@ -27,9 +58,28 @@ def shell_commands_dict_output(d,
     to find the default printing form from db_defaults
     if db_defaults has no item 'shell_print_format', the function will
     set 'shell_print_format' = table
-
+    
+    param username:: user id
     param d:: data to print
     param print_format:: print format: table, json, csv
+    
+    param table_format:: choose table format if needed, DESCRIPTIONS:
+    
+    type1: key_list: 
+                    
+    accept a dict in the form:
+    {key1: [list1],
+     key2: [list2],
+     .......
+     =>
+     | key1 | key2 |
+     | l
+     | i
+     | s
+     | t
+    
+    acceptable args: indexed: provide index
+    
     param firstheader:: designed for table, provide a attribute name for the
                         first item of each row, since the dict doesn't provide
                         it
@@ -54,26 +104,11 @@ def shell_commands_dict_output(d,
     if print_format:
         format_type = print_format
     else:
-        try:
-            config = cm_config()
-        except:
-            Console.error(
-                "There is a problem with the configuration yaml files")
-        username = config['cloudmesh']['profile']['username']
-        user_obj = cm_user()
-        userdata = user_obj.info(username)
-        try:
-            format_type = userdata['defaults']['shell_print_format']
-        except:
-            pass
-        if format_type in [None, 'none']:
-            userdata['defaults']['shell_print_format'] = "table"
-            user_obj.set_defaults(username, userdata['defaults'])
-            userdata = user_obj.info(username)
-            format_type = userdata['defaults']['shell_print_format']
+        format_type = get_default_print_format(username)
 
-    if format_type not in ['table', 'json', 'csv']:
-        print("ERROR: something wrong while reading print format infomation")
+    if format_type not in ALLOWED_PRINT_FORMAT:
+        Console.error("wrong print format: {0}. (allowed print format: {1})".format(format_type,
+                                ", ".join(ALLOWED_PRINT_FORMAT)))
         return False
     
     headers = None
@@ -126,6 +161,10 @@ def shell_commands_dict_output(d,
             w.writerow(d)
         
     elif format_type == "table":
+        if table_format == "key_list":
+            print (dict_key_list_table_printer(d, indexed=indexed))
+            return
+        
         if title:
             print("+" + "-" * (len(title) - 2) + "+")
             print(title)

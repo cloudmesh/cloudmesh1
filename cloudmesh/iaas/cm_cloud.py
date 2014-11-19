@@ -904,7 +904,8 @@ class CloudCommand(CloudManage):
             else:
                 p_format = None
 
-            shell_commands_dict_output(d,
+            shell_commands_dict_output(self.username,
+                                       d,
                                        print_format=p_format,
                                        firstheader="cloud",
                                        header=combined_headers,
@@ -944,7 +945,8 @@ class CloudCommand(CloudManage):
             else:
                 p_format = None
             
-            shell_commands_dict_output(cloud,
+            shell_commands_dict_output(self.username,
+                                       cloud,
                                        print_format=p_format,
                                        # "cloud '{0}' information".format(cloud['cm_cloud']),
                                        title=None,

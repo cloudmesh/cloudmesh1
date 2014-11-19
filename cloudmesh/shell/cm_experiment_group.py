@@ -1,6 +1,6 @@
 from __future__ import print_function
 # from cloudmesh.experiment.model_group import ExperimentGroup
-from cloudmesh.experiment.group import *
+from cloudmesh.experiment.group import GroupManagement
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
@@ -51,6 +51,8 @@ def shell_command_experiment_group(arguments):
     username = config.username()
     # print username
     user = cm_user()
+    
+    GroupManage = GroupManagement(username)
 
     '''
     if arguments["info"]:
@@ -59,39 +61,36 @@ def shell_command_experiment_group(arguments):
 
     '''
     if arguments["list"]:
-        res = {}
-        index = 1
-        for group in ExperimentGroup.objects(userid__exact=username):
-            res[str(index)] = {}
-            res[str(index)]["name"] = group.to_mongo().to_dict()["name"]
-            index = index + 1
-            
+        res = GroupManage.get_groups_names_list()
+        d = {}
+        d["groups"] = res
+        
         if arguments['--format']:
-            if arguments['--format'] not in ['table', 'json', 'csv']:
-                Console.error("please select printing format among table, json and csv")
-                return
-            else:
-                p_format = arguments['--format']
+            p_format = arguments['--format']
         else:
             p_format = None
             
-        shell_commands_dict_output(res,
+        shell_commands_dict_output(username,
+                                   d,
                                    print_format=p_format,
-                                   firstheader="index",
-                                   header=["name"])
+                                   table_format="key_list",
+                                   indexed=True)
 
         
 
     elif arguments["create"]:
-        # "sets the group to the given name, the group must exists"
-        test = ExperimentGroup(name=name, userid=username).save()
-        print ("{0} created.".format(test))
+        res = GroupManage.create_group(name)
+        if isinstance(res, tuple) and res[0] == False:
+            Console.error(res[1])
+        else:
+            Console.ok("group {0} created".format(name))
 
     elif arguments['remove']:
-        for group in ExperimentGroup.objects(name=name, userid=username):
-            name = group.name
-            group.delete()
-            print ("{0} deleted.".format(name))
+        res = GroupManage.delete_group(name)
+        if isinstance(res, tuple) and res[0] == False:
+            Console.error(res[1])
+        else:
+            Console.ok("group {0} removed".format(name))
 
     elif arguments["add"]:
         # "adds the group to the given name, the group must not exist."
@@ -177,29 +176,7 @@ def shell_command_experiment_group(arguments):
             item.delete()
             print ("{0} deleted in {1}.".format(value, name))
 
-def get_group_names_list(username, cloudname, refresh=False):
-    '''
-    loops through all VMs of a cloud of a user, returns a list of all unique group 
-    names accorrding to the metadata
-    '''
-    mongo = cm_mongo()
-    if refresh:
-        mongo.activate(cm_user_id=username, names=[cloudname])
-        mongo.refresh(cm_user_id=username,
-                      names=[cloudname],
-                      types=['servers'])
-    servers_dict = mongo.servers(
-                clouds=[cloudname], cm_user_id=username)[cloudname]
-                
-    res = []
-    for k, v in servers_dict.iteritems():
-        if 'cm_group' in v['metadata']:
-            temp = v['metadata']['cm_group']
-            if temp not in res:
-                res.append(temp)
-    
-    return res
-        
+
     
 
 

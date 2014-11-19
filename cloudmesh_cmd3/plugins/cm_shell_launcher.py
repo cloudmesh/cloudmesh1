@@ -113,7 +113,8 @@ class cm_shell_launcher:
             else:
                 p_format = None
 
-            shell_commands_dict_output(d,
+            shell_commands_dict_output(userid,
+                                       d,
                                        print_format=p_format,
                                        firstheader="launcher",
                                        header=columns
@@ -151,7 +152,8 @@ class cm_shell_launcher:
             else:
                 p_format = None
 
-            shell_commands_dict_output(d,
+            shell_commands_dict_output(userid,
+                                       d,
                                        print_format=p_format,
                                        firstheader="launcher_id",
                                        header=columns

@@ -119,7 +119,8 @@ class cm_shell_stack:
                     if '_id' in v0:
                         del v0['_id']
                 
-                shell_commands_dict_output(v,
+                shell_commands_dict_output(userid,
+                                           v,
                                            print_format=p_format,
                                            firstheader="stack_id",
                                            header=columns)
