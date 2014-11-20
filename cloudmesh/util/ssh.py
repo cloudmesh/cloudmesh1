@@ -6,6 +6,7 @@ sys.stderr = sys.__stderr__
 import re
 import os
 from Crypto.PublicKey import RSA 
+from sh import ssh as sh_ssh # import
 
 ''' Contains the ssh class. Can be used in casews when you want the output of
 an ssh call but need to do steps before and after the call
@@ -90,7 +91,6 @@ def generate_keypair(type="rsa", bits=2048):
 def ssh_execute(loginuser, addr, cmd, key=None):
     """Execute a command via SSH"""
 
-    from sh import ssh  # import
 
     # disable SSH host key checking
     option = "-o StrictHostKeyChecking=no "
@@ -103,6 +103,6 @@ def ssh_execute(loginuser, addr, cmd, key=None):
 
     message = (option + key + host + cmd).split()
 
-    return ssh(message)
+    return sh_ssh(message)
 
 # -----------------------------------------------------------------------
