@@ -2,13 +2,17 @@ from __future__ import print_function
 from mongoengine import *
 from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
 from cloudmesh_common.logger import LOGGER
-from cloudmesh.cm_mongo import cm_mongo
-
+from pprint import pprint
 
 
 log = LOGGER(__file__)
 
 get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
+
+
+TYPES_OF_ITEMS_IN_GROUP = ['VM', 'VOLUME']
+TYPES_IDENTITY_VALUE = {"VM": "vm_name",
+                        "VOLUME": "volume_name"}
 
 class ExperimentGroup(Document):
     name = StringField(required=True)
@@ -20,7 +24,7 @@ class Comment(EmbeddedDocument):
     name = StringField(max_length=120)
 
 class GroupItem(Document):
-    group_name = ReferenceField(ExperimentGroup, reverse_delete_rule=CASCADE)
+    group = ReferenceField(ExperimentGroup, reverse_delete_rule=CASCADE)
     tags = ListField(StringField(max_length=30))
     comments = ListField(EmbeddedDocumentField(Comment))
     meta = {'allow_inheritance': True}
@@ -32,13 +36,9 @@ class VM(GroupItem):
     vm_accessIPv6 = StringField()
     vm_created = StringField()
     vm_flavor = StringField()
-    vm_metadata = StringField()
+    vm_metadata = DictField()
     vm_status = StringField()
 
-class IP(GroupItem):
-    ip = StringField()
-    ip_public = StringField()
-    ip_private = StringField()
 
 class VOLUME(GroupItem):
     volume_name = StringField()
@@ -50,9 +50,15 @@ class GroupManagement(object):
     def __init__(self, username):
         self.username = username
         
+    def check_type(self, _type):
+        if _type.upper() not in TYPES_OF_ITEMS_IN_GROUP:
+            raise Exception("item type '{0}' not acceptable, allowed item types in group are: {1}".format(
+                                    _type, ", ".join(TYPES_OF_ITEMS_IN_GROUP)))
+            
+        
     def get_groups(self, groupname=None):
         if groupname:
-            return ExperimentGroup.objects(userid__exact=self.username, name=groupname)
+            return ExperimentGroup.objects.get(userid__exact=self.username, name=groupname)
         else:
             return ExperimentGroup.objects(userid__exact=self.username)
            
@@ -66,49 +72,100 @@ class GroupManagement(object):
     def create_group(self, groupname):
         groups_names_list = self.get_groups_names_list()
         if groupname in groups_names_list:
-            return False, "group name '{0}' is used".format(groupname)
+            raise Exception("group name '{0}' is used".format(groupname))
         else:
             try:
                 ExperimentGroup(name=groupname, userid=self.username).save()
             except:
-                return False, "failed to create group"
+                raise Exception("failed to create group")
             
     def delete_group(self, groupname):
         group = self.get_groups(groupname=groupname)
-        if len(group) == 0:
-            return False, "group '{0}' doesn't exist".format(groupname)
-        else:
-            try:
-                group[0].delete()
-            except:
-                return False, "failed to delete group '{0}'".format(groupname)
+        group.delete()
             
-
-
-# -----------------------------------------------------------------------------------------        
-def get_group_names_list_by_vms_metadata(username, cloudname, refresh=False):
-    '''
-    loops through all VMs of a cloud of a user, returns a list of all unique group 
-    names accorrding to the metadata
-    '''
-    mongo = cm_mongo()
-    if refresh:
-        mongo.activate(cm_user_id=username, names=[cloudname])
-        mongo.refresh(cm_user_id=username,
-                      names=[cloudname],
-                      types=['servers'])
-    servers_dict = mongo.servers(
-                clouds=[cloudname], cm_user_id=username)[cloudname]
-                
-    res = []
-    for k, v in servers_dict.iteritems():
-        if 'cm_group' in v['metadata']:
-            temp = v['metadata']['cm_group']
-            if temp not in res:
-                res.append(temp)
+    def update_vm_of_group(self, 
+                           groupname,
+                           vmname,
+                           tags=None,
+                           comments=None,
+                           vm_name=None,
+                           vm_id=None,
+                           vm_accessIPv4=None,
+                           vm_accessIPv6=None,
+                           vm_created=None,
+                           vm_flavor=None,
+                           vm_metadata=None,
+                           vm_status=None):
+        raise Exception("NOT IMPLEMENTED")
+       
+        
+    def get_item_of_group(self, groupname, _type, value):
+        self.check_type(_type)
+        group = self.get_groups(groupname=groupname)  
+        v = TYPES_IDENTITY_VALUE[_type.upper()]
+        temp = {"group": group,
+                v: value}
+        return globals()[_type.upper()].objects.get(**temp)
+          
     
-    return res
+    def add_item_to_group(self, groupname, _type, value):
+        self.check_type(_type)
+        group = self.get_groups(groupname=groupname)
+        
+        # check item existence
+        temp = None   
+        try:
+            self.get_item_of_group(groupname,_type,value)
+        except Exception as ex:
+            temp = type(ex).__name__
+            if temp != "DoesNotExist":
+                raise ex
+        if temp == None:
+            raise Exception("item '{0}' of type '{1}' exists in group '{2}'".format(
+                                                value, _type, groupname))
+        elif temp == "DoesNotExist":
+            v = TYPES_IDENTITY_VALUE[_type.upper()]
+            a = {"group": group,
+                v: value}
+            globals()[_type.upper()](**a).save()
             
+    def delete_item_of_group(self, groupname, _type, value):
+        item = self.get_item_of_group(groupname, _type, value)
+        item.delete()
+        
+    def list_items_of_group(self, groupname, _type=None):
+        '''
+        returns a dict in which the key is the type and value is a list of items of this type
+        if _type is not provided, will return all items in the group
+        '''
+        group = self.get_groups(groupname=groupname)  
+        res = {}
+        if _type:
+            self.check_type(_type)
+            query_res = globals()[_type.upper()].objects(group=group)
+        else:
+            query_res = GroupItem.objects(group=group)
             
+        for item in query_res:
+            cls_name = type(item).__name__
+            assert cls_name in TYPES_OF_ITEMS_IN_GROUP
+            if cls_name not in res:
+                res[cls_name] = []
+            temp = getattr(item, TYPES_IDENTITY_VALUE[cls_name])
+            res[cls_name].append(temp)
             
+        return res
+    
+    def get_same_items_from_all_groups(self, _type, value):
+        '''
+        returns all items with same identity value and type from all groups
+        '''
+        self.check_type(_type)
+        v = TYPES_IDENTITY_VALUE[_type.upper()]
+        a = {v: value}
+        return globals()[_type.upper()].objects(**a)
+    
+
+
+          
             

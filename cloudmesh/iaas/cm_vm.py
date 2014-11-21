@@ -18,6 +18,9 @@ from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh.config.cm_keys import cm_keys_mongo
 from cloudmesh.util.shellutil import get_vms_look_for, shell_commands_dict_output\
                                     ,get_command_list_refresh_default_setting
+from cloudmesh.experiment.group_usage import add_vm_to_group_while_creating\
+                                            ,remove_vm_from_group_while_deleting
+                                            
 
 log = LOGGER(__file__)
 
@@ -623,7 +626,16 @@ def start_vm(username,
                                         cm_user_id=username,
                                         givenvmname=givenvmname)
             pprint(result)
-
+        
+        # ------------------------
+        # add it to the group in database if groupname provided
+        if groupname:
+            try:
+                add_vm_to_group_while_creating(username, groupname, tmpnameser)
+            except Exception, err:
+                Console.error(str(err))
+                return
+            
         # ------------------------
         # increase index if it is used
         if not servername:
@@ -780,6 +792,11 @@ def delete_vm(username,
                 result = imported.vm_delete.apply_async(
                     (cloudname, i, username), queue=queue_name)
                 print("job status:", result.state)
+                try:
+                    remove_vm_from_group_while_deleting(username, tempservername)
+                except Exception, err:
+                    Console.error(str(err))
+                    return
                 # print result.traceback  #########
             imported.wait.apply_async(
                 args=None, kwargs={'t': 10}, queue=queue_name)
@@ -804,12 +821,18 @@ def delete_vm(username,
                     "Deleting vm->{0} on cloud->{1}".format(tempservername, cloudname))
                 result = mongo.vm_delete(cloudname, i, username)
                 pprint(result)
+                try:
+                    remove_vm_from_group_while_deleting(username, tempservername)
+                except Exception, err:
+                    Console.error(str(err))
+                    return
             time.sleep(5)
             mongo.release_unused_public_ips(cloudname, username)
             mongo.refresh(username, names=[cloudname], types=['servers'])
 
         watch = time.time() - watch
         print(("time consumed: %.2f" % watch), "s")
+
 
 
 def assign_public_ip(username=None, cloudname=None, serverid=None):

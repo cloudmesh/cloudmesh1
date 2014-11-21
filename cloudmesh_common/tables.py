@@ -228,7 +228,10 @@ def dict_key_list_table_printer(d, indexed=False):
             l = l0
             
     if indexed:
-        index_list = hostlist.expand_hostlist("[1-{0}]".format(str(l)))
+        if l == 0:
+            index_list = []
+        else:
+            index_list = hostlist.expand_hostlist("[1-{0}]".format(str(l)))
         x.add_column("index", index_list)
         
     for k,v in d.iteritems():

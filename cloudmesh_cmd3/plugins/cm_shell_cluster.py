@@ -18,6 +18,7 @@ from cloudmesh.util.ssh import generate_keypair
 from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh_common.util import get_rand_string
 from cloudmesh_common.logger import LOGGER
+from cloudmesh.experiment.group import GroupManagement
 
 log = LOGGER(__file__)
 
@@ -46,6 +47,7 @@ class cm_shell_cluster:
                            [--cloud=<CloudName>]
                            [--image=<imgName>|--imageid=<imgId>]
                            [--flavor=<flavorName>|--flavorid=<flavorId>]
+                           [--force]
                                     
         Description:
             Cluster Management
@@ -70,6 +72,10 @@ class cm_shell_cluster:
             --flavorid=<flavorId>      give the id of the flavor
             --image=<imgName>          give the name of the image
             --imageid=<imgId>          give the id of the image
+            --force                    if a group exists and there are VMs in it, the program will
+                                       ask user to proceed or not, use this flag to say yes as default
+                                       (if there are VMs in the group before creating this cluster,
+                                       the program will include the exist VMs into the cluster)
 
 
         """
@@ -227,8 +233,7 @@ class cm_shell_cluster:
                     return
                 else:
                     vm_login_name = arguments['--ln']
-
-            
+                    
             # start VMs 
             print ("starting VMs...")
             arguments_temp = arguments
@@ -270,8 +275,9 @@ class cm_shell_cluster:
             
             # assign ip to all VMs
             print ("assigning public ips...")
-            for item in res.keys():
-                cm("vm ip assign --id={0}".format(item.encode('ascii')))
+            for k, v in res.iteritems():
+                if not check_public_ip_existence(v):
+                    cm("vm ip assign --id={0}".format(k.encode('ascii')))
                 
             def check_public_ip_existence(d):
                 temp = d['addresses']['private']

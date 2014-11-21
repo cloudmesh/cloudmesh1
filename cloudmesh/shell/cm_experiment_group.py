@@ -17,15 +17,15 @@ def shell_command_experiment_group(arguments):
         group list [--format=FORMAT]
         group create NAME
         group remove NAME
-        group add NAME TYPE VALUE
-        group delete NAME TYPE VALUE
-        group show NAME [--format=FORMAT]
+        group add item NAME TYPE VALUE
+        group remove item NAME TYPE VALUE
+        group show NAME [TYPE] [--format=FORMAT]
 
     Arguments:
 
         NAME    name of the group
-        TYPE    type of the value
-        VALUE   value
+        TYPE    type of the item in the group
+        VALUE   value of item to add, e.g. vm name
 
     Options:
 
@@ -34,12 +34,19 @@ def shell_command_experiment_group(arguments):
 
     Description:
 
-       group list       lists in formation about the group
-       group create     creates a new group
-       group remove     removes a group
-       group add        addes an item in a group
-       group delete     deletes an item in a group
-       group show       views a group
+       group list           lists the groups
+       group create         creates a new group
+       group remove         removes a group
+       group add item       addes an item of a type to a group
+       group remove item    removes an item of a type from a group
+       group show           lists items of a group
+       
+    Examples:
+        group add item sample vm samplevm
+            add vm named samplevm to group sample
+            
+        group show sample vm --format=json
+            list all VMs of group sample in json format
 
     """
 
@@ -61,7 +68,11 @@ def shell_command_experiment_group(arguments):
 
     '''
     if arguments["list"]:
-        res = GroupManage.get_groups_names_list()
+        try:
+            res = GroupManage.get_groups_names_list()
+        except Exception, err:
+            Console.error(str(err))
+            return
         d = {}
         d["groups"] = res
         
@@ -77,104 +88,58 @@ def shell_command_experiment_group(arguments):
                                    indexed=True)
 
         
-
     elif arguments["create"]:
-        res = GroupManage.create_group(name)
-        if isinstance(res, tuple) and res[0] == False:
-            Console.error(res[1])
-        else:
-            Console.ok("group {0} created".format(name))
-
-    elif arguments['remove']:
-        res = GroupManage.delete_group(name)
-        if isinstance(res, tuple) and res[0] == False:
-            Console.error(res[1])
-        else:
-            Console.ok("group {0} removed".format(name))
-
-    elif arguments["add"]:
-        # "adds the group to the given name, the group must not exist."
-
-        # __exact is the string field exactly matches value
-        # ref: http://docs.mongoengine.org/en/latest/guide/querying.html#query-operators
-        groups = ExperimentGroup.objects(name__exact=name, userid=username)
-        if len(groups) == 0:
-            print ("{0} does not exist.".format(name))
+        try:
+            GroupManage.create_group(name)
+        except Exception, err:
+            Console.error(str(err))
             return
+        Console.ok("group {0} created".format(name))
 
-        # select the first value in the list
-        group = groups[0]
-
-        if type == "vm":
-            post = VM(group_name=group)
-            post.vm_name = value
-        elif type == "ip":
-            post = IP(group_name=group)
-            post.ip = value
-            post.ip_public = value
-            post.ip_private = value
-        else:
-            print ("invalid type ({0})".format(type))
+    elif arguments['remove'] and not arguments['item']:
+        try:
+            GroupManage.delete_group(name)
+        except Exception, err:
+            Console.error(str(err))
             return
+        Console.ok("group {0} removed".format(name))
 
-        post.tags = ['experiment', 'group', type]
-        post.save()
-        print ("{0} added to {1}.".format(value, name))
 
-    elif arguments['show']:
-        groups = ExperimentGroup.objects(name__exact=name, userid=username)
-        if len(groups) == 0:
-            print ("{0} does not exist.".format(name))
+    elif arguments["add"] and arguments['item']:
+        try:
+            GroupManage.add_item_to_group(name, type, value)
+        except Exception, err:
+            Console.error(str(err))
             return
-        group = groups[0]
-
-        res = {}
-        index = 1
-        for item in GroupItem.objects(group_name__exact=group):             
-            temp = None
-            if isinstance(item, VM):
-                temp = "vm_name: " + item.vm_name
-            if isinstance(item, IP):
-                temp = 'ip: ' + item.ip
-            res[str(index)] = {}
-            res[str(index)]["item"] = temp
-            index = index + 1
+        Console.ok("item '{0}' of type '{1}' added to group '{2}'".format(
+                                                value, type, name))
             
+    elif arguments['show']:
+        try:
+            res = GroupManage.list_items_of_group(name, _type=type)
+        except Exception, err:
+            Console.error(str(err))
+            return
+
         if arguments['--format']:
-            if arguments['--format'] not in ['table', 'json', 'csv']:
-                Console.error("please select printing format among table, json and csv")
-                return
-            else:
-                p_format = arguments['--format']
+            p_format = arguments['--format']
         else:
             p_format = None
             
-        shell_commands_dict_output(res,
+        shell_commands_dict_output(username,
+                                   res,
                                    print_format=p_format,
-                                   firstheader="group: " + group.name,
-                                   header=["item"])
+                                   table_format="key_list",
+                                   indexed=True)
             
-    elif arguments["delete"]:
-        # Check if group exists
-        groups = ExperimentGroup.objects(name__exact=name, userid=username)
-        if len(groups) == 0:
-            print ("{0} does not exist.".format(name))
+    elif arguments["remove"] and arguments['item']:
+        try:
+            GroupManage.delete_item_of_group(name, type, value)
+        except Exception, err:
+            Console.error(str(err))
             return
-        group = groups[0]
-
-        # Check if value exists on a given type
-        if type == "vm":
-            items = VM.objects(vm_name=value, group_name=group)
-        elif type == "ip":
-            items = IP.objects(ip=value, group_name=group)
-        else:
-            print ("invalid type ({0})".format(type))
-            return
-
-        # Delete the value if exists
-        for item in items:
-            item.delete()
-            print ("{0} deleted in {1}.".format(value, name))
+        Console.ok("item '{0}' of type '{1}' removed from group '{2}'".format(
+                                                value, type, name))
 
 
     
