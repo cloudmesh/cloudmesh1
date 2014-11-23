@@ -193,7 +193,7 @@ class cm_shell_cluster:
             try:
                 config = cm_config()
             except:
-                Console.error("There is a problem with the configuration yaml files")
+                Console.error("Failed to load the cloudmesh yaml file"
                 return
             username = config['cloudmesh']['profile']['username']
             cloudname = arguments['--cloud'] or CloudManage().get_selected_cloud(username)
@@ -272,13 +272,7 @@ class cm_shell_cluster:
                 else:
                     repeat_index = repeat_index + 1
                     continue
-            
-            # assign ip to all VMs
-            print ("assigning public ips...")
-            for k, v in res.iteritems():
-                if not check_public_ip_existence(v):
-                    cm("vm ip assign --id={0}".format(k.encode('ascii')))
-                
+ 
             def check_public_ip_existence(d):
                 temp = d['addresses']['private']
                 for item in temp:
@@ -286,6 +280,12 @@ class cm_shell_cluster:
                         return True
                 return False
             
+            # assign ip to all VMs
+            print ("assigning public ips...")
+            for k, v in res.iteritems():
+                if not check_public_ip_existence(v):
+                    cm("vm ip assign --id={0}".format(k.encode('ascii')))
+           
             def get_ip(d, kind="floating"): # kind is either floating or fixed
                 temp = d['addresses']['private']
                 for item in temp:
