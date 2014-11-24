@@ -485,8 +485,8 @@ def start_vm(username,
     error = ''
 
     # -------------------------
-    # refresh flavor or image
-    to_refresh = []
+    # refresh server flavor or image
+    to_refresh = ["servers"]
 
     if flavorname is not None or flavorid is not None:
         to_refresh.append("flavors")
@@ -494,6 +494,14 @@ def start_vm(username,
         to_refresh.append("images")
     if to_refresh != []:
         mongo.refresh(username, names=[cloudname], types=to_refresh)
+        
+    # -------------------------
+    # get exist VM names list, to prevent names duplicate
+    serverdata = mongo.servers(
+                        clouds=[cloudname], cm_user_id=username)[cloudname]
+    servers_names_list = []
+    for k,v in serverdata.iteritems():
+        servers_names_list.append(v['name'])
 
     # -------------------------
     # flavor handler
@@ -597,13 +605,23 @@ def start_vm(username,
             index = userinfo["defaults"]["index"]
             givenvmname = None
             tmpnameser = prefix + '_' + str(index)
+            
+        # ------------------------
+        # do not allow server name duplicate
+        if tmpnameser in servers_names_list:
+            Console.error("vm name '{0}' exists, please use other names or delete it first".format(
+                                                                                tmpnameser))
+            if not servername:
+                userobj.set_default_attribute(username, "index", int(index) + 1)
+            count = count - 1
+            continue
         # ------------------------
         # vm start procedure
 
         banner("Starting vm->{0} on cloud->{1} using image->{2}, flavor->{3}, key->{4}"
                .format(tmpnameser, cloudname, tmpnameim, tmpnamefl, keynamenew))
         
-        useQueue = True
+        useQueue = False
         if useQueue:
             result = mongo.vm_create_queue(cloudname,
                                             prefix,
@@ -625,6 +643,8 @@ def start_vm(username,
                                         meta=metadata,
                                         cm_user_id=username,
                                         givenvmname=givenvmname)
+            if "server" in result and "adminPass" in result["server"]:
+                result["server"]["adminPass"] = "******"
             pprint(result)
         
         # ------------------------
@@ -641,6 +661,7 @@ def start_vm(username,
         if not servername:
             userobj.set_default_attribute(username, "index", int(index) + 1)
         # ------------------------
+        servers_names_list.append(tmpnameser)
 
         count = count - 1
 

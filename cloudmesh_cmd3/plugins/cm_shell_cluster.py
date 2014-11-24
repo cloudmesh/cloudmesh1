@@ -19,6 +19,7 @@ from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh_common.util import get_rand_string
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.experiment.group import GroupManagement
+from cloudmesh_install.util import yn_choice
 
 log = LOGGER(__file__)
 
@@ -73,9 +74,9 @@ class cm_shell_cluster:
             --image=<imgName>          give the name of the image
             --imageid=<imgId>          give the id of the image
             --force                    if a group exists and there are VMs in it, the program will
-                                       ask user to proceed or not, use this flag to say yes as default
-                                       (if there are VMs in the group before creating this cluster,
-                                       the program will include the exist VMs into the cluster)
+                                       ask user to proceed or not, use this flag to respond yes as 
+                                       default(if there are VMs in the group before creating this 
+                                       cluster, the program will include the exist VMs into the cluster)
 
 
         """
@@ -193,7 +194,7 @@ class cm_shell_cluster:
             try:
                 config = cm_config()
             except:
-                Console.error("Failed to load the cloudmesh yaml file"
+                Console.error("Failed to load the cloudmesh yaml file")
                 return
             username = config['cloudmesh']['profile']['username']
             cloudname = arguments['--cloud'] or CloudManage().get_selected_cloud(username)
@@ -233,7 +234,23 @@ class cm_shell_cluster:
                     return
                 else:
                     vm_login_name = arguments['--ln']
-                    
+            
+            if not arguments['--force']:
+                GroupManage = GroupManagement(username)
+                groups_list = GroupManage.get_groups_names_list()
+                if GroupName in groups_list:
+                    vms_in_group_list = GroupManage.list_items_of_group(GroupName, _type="VM")["VM"]
+                    if len(vms_in_group_list) != 0:
+                        if yn_choice("The group you provide exists and it has VMs in it, " + \
+                                     "do you want to proceed? (if you choose yes, these exist " +\
+                                     "VMs will be included in the cluster, this could also " +\
+                                     "rewrite the key on the exist VMs)",
+                                     default='n',
+                                     tries=3):
+                            pass
+                        else:
+                            return
+                
             # start VMs 
             print ("starting VMs...")
             arguments_temp = arguments
@@ -248,6 +265,20 @@ class cm_shell_cluster:
                 h = s.find("{")
                 t = s.rfind("}")
                 return json.loads(s[h:t+1])
+            
+            def check_public_ip_existence(d):
+                temp = d['addresses']['private']
+                for item in temp:
+                    if item["OS-EXT-IPS:type"] == "floating":
+                        return True
+                return False
+            
+            def get_ip(d, kind="floating"): # kind is either floating or fixed
+                temp = d['addresses']['private']
+                for item in temp:
+                    if item["OS-EXT-IPS:type"] == kind:
+                        return item['addr']#.encode('ascii')
+                return "FAIL: doesn't exist"
             
             # check all VMs are active
             command_refresh = "vm list --refresh --group={0} --format=json".format(GroupName)
@@ -272,26 +303,12 @@ class cm_shell_cluster:
                 else:
                     repeat_index = repeat_index + 1
                     continue
- 
-            def check_public_ip_existence(d):
-                temp = d['addresses']['private']
-                for item in temp:
-                    if item["OS-EXT-IPS:type"] == "floating":
-                        return True
-                return False
             
             # assign ip to all VMs
             print ("assigning public ips...")
             for k, v in res.iteritems():
                 if not check_public_ip_existence(v):
                     cm("vm ip assign --id={0}".format(k.encode('ascii')))
-           
-            def get_ip(d, kind="floating"): # kind is either floating or fixed
-                temp = d['addresses']['private']
-                for item in temp:
-                    if item["OS-EXT-IPS:type"] == kind:
-                        return item['addr']#.encode('ascii')
-                return "FAIL: doesn't exist"
             
             def _help(d):
                 for k, v in d.iteritems():
@@ -348,6 +365,7 @@ class cm_shell_cluster:
             
             fk.write(keycontent)
             fk.close()
+            os.popen("chmod 644 ./{0}/{1}".format(dir_name, temp_key_name))
             
             for k, v in res.iteritems():
                 address_floating = get_ip(v)

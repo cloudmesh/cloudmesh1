@@ -13,6 +13,7 @@ from cloudmesh.util.shellutil import shell_commands_dict_output
 import csv
 from cloudmesh.server.database import Database
 import json
+from cloudmesh.experiment.group import GroupManagement
 
 log = LOGGER(__file__)
 
@@ -688,13 +689,17 @@ class CloudManage(object):
                 del v['_id']        
         
         if group:
-            temp = {}
-            for k, v in servers_dict.iteritems():
-                if 'metadata' in v and \
-                   'cm_group' in v['metadata'] and \
-                   v['metadata']['cm_group'] == group:
-                    temp[k] = v
-            servers_dict = temp
+            GroupManage = GroupManagement(username)
+            groups_list = GroupManage.get_groups_names_list()
+            if group not in groups_list:
+                servers_dict = {}
+            else:
+                vms_in_group_list = GroupManage.list_items_of_group(group, _type="VM")["VM"]
+                temp = {}
+                for k, v in servers_dict.iteritems():
+                    if v['name'] in vms_in_group_list:
+                        temp[k] = v
+                servers_dict = temp
 
         images_dict = self.mongo.images(
             clouds=[cloudname], cm_user_id=username)

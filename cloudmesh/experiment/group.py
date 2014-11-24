@@ -143,6 +143,7 @@ class GroupManagement(object):
         if _type:
             self.check_type(_type)
             query_res = globals()[_type.upper()].objects(group=group)
+            res[_type.upper()] = []
         else:
             query_res = GroupItem.objects(group=group)
             

@@ -9,6 +9,7 @@ from cmd3.console import Console
 import hostlist
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.util.naming import server_name_analyzer
+from cloudmesh.experiment.group import GroupManagement
 
 
 ALLOWED_PRINT_FORMAT = ['table', 'json', 'csv']
@@ -266,42 +267,52 @@ def get_vms_look_for(username,
                       names=[cloudname],
                       types=['servers'])
         
+    if groupname:
+        vms_in_group_list = []
+        GroupManage = GroupManagement(username)
+        groups_list = GroupManage.get_groups_names_list()
+        if groupname not in groups_list:
+            return []
+        else:
+            vms_in_group_list = GroupManage.list_items_of_group(groupname, _type="VM")["VM"]
+        
     servers_dict = mongo.servers(
                 clouds=[cloudname], cm_user_id=username)[cloudname]
                 
     # search for qualified vms for each critera
-    ls = [
-            [],  # 0 servername
-            [],  # 1 serverid
-            [],  # 2 groupname
-            [],  # 3 prefix
-            [],  # 4 hostls
-            []   # 5 getAll
-         ]
+    res_d = {}
+    if servername:
+        res_d['servername'] = []
+    if serverid:
+        res_d['serverid'] = []
+    if groupname:
+        res_d['groupname'] = []
+    if prefix:
+        res_d['prefix'] = []
+    if hostls:
+        res_d['hostls'] = []
+    if getAll:
+        res_d['getAll'] = []
+    
     for k, v in servers_dict.iteritems():
         if servername and servername == v['name']:
-            ls[0].append(k)
+            res_d['servername'].append(k)
         if serverid and serverid == k:
-            ls[1].append(k)
+            res_d['serverid'].append(k)
         if groupname:
-            try:
-                grouptemp = None
-                grouptemp = v['metadata']['cm_group']
-            except:
-                pass
-            if groupname == grouptemp:
-                ls[2].append(k)
+            if v['name'] in vms_in_group_list:
+                res_d['groupname'].append(k)
         if prefix:
             nametemp = server_name_analyzer(v['name'])
         if prefix and prefix == nametemp[0]:
-            ls[3].append(k)
+            res_d['prefix'].append(k)
         if hostls and v['name'] in hostls_list:
-            ls[4].append(k)
+            res_d['hostls'].append(k)
         if getAll and v['cm_cloud'] == cloudname:
-            ls[5].append(k)
+            res_d['getAll'].append(k)
     # -------------------------
     # intersect the results
-    ls = [x for x in ls if x != []]
+    ls = res_d.values()
     l = len(ls)
     if l == 0:
         res = []
