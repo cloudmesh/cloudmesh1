@@ -25,7 +25,7 @@ def shell_command_experiment_group(arguments):
     Arguments:
 
         NAME    name of the group
-        TYPE    type of the item in the group
+        TYPE    type of the item in the group, e.g. vm 
         VALUE   value of item to add, e.g. vm name
 
     Options:
