@@ -1,6 +1,7 @@
 from __future__ import print_function
 # from cloudmesh.experiment.model_group import ExperimentGroup
 from cloudmesh.experiment.group import GroupManagement
+from cloudmesh.experiment.group_usage import add_item_to_group
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
@@ -24,7 +25,7 @@ def shell_command_experiment_group(arguments):
     Arguments:
 
         NAME    name of the group
-        TYPE    type of the item in the group
+        TYPE    type of the item in the group, e.g. vm 
         VALUE   value of item to add, e.g. vm name
 
     Options:
@@ -107,7 +108,7 @@ def shell_command_experiment_group(arguments):
 
     elif arguments["add"] and arguments['item']:
         try:
-            GroupManage.add_item_to_group(name, type, value)
+            add_item_to_group(username, name, type, value, refresh=True)
         except Exception, err:
             Console.error(str(err))
             return

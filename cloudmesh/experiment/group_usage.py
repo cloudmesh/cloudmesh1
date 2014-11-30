@@ -3,12 +3,13 @@ supporting functions about database side group management
 '''
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.experiment.group import GroupManagement
-
+from cloudmesh.cm_mongo import cm_mongo
 
 
 def add_vm_to_group_while_creating(username, groupname, vmname):
     '''
-    add a vm to a group, if the group doesn't exist, this will create one
+    add a vm to a group while the vm is being created, if the group doesn't exist, 
+    this will create one
     '''
     GroupManage = GroupManagement(username)
     groups_list = GroupManage.get_groups_names_list()
@@ -50,3 +51,31 @@ def get_group_names_list_by_vms_metadata(username, cloudname, refresh=False):
                 res.append(temp)
     
     return res
+
+def add_item_to_group(username, groupname, _type, value, refresh=False):
+    '''
+    this is a more spicific function to add items to groups, e.g. using command group add item
+    NAME VM VALUE, check whether vm exists before add it to group
+    '''
+    GroupManage = GroupManagement(username)
+    # if type is VM, check whether the VM exists, in this case, value is the VM name
+    if _type.upper() == "VM":
+        mongo = cm_mongo()
+        if refresh:
+            mongo.activate(cm_user_id=username)
+            mongo.refresh(cm_user_id=username, types=['servers'])
+        servers_dict = mongo.servers(cm_user_id=username)
+        _vm_exists = False
+        for k, v in servers_dict.iteritems():
+            for k0, v0 in v.iteritems():
+                if 'name' in v0 and v0['name'] == value:
+                    _vm_exists = True
+                    break
+            if _vm_exists: break
+        if _vm_exists:
+            GroupManage.add_item_to_group(groupname, _type, value)
+        else:
+            raise Exception("VM '{0}' doesn't exist".format(value))
+    else:
+        GroupManage.add_item_to_group(groupname, _type, value)
+        
