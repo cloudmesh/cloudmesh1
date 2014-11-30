@@ -76,7 +76,12 @@ class cm_mesh:
                 credential = self.configuration.credential(cloud_name)
                 cloud_type = self.configuration.cloud(cloud_name)['cm_type']
 
-                if cloud_type in ['openstack', 'eucalyptus', 'azure', 'aws', 'ec2']:
+                if cloud_type in ['openstack',
+                                  'eucalyptus',
+                                  'azure',
+                                  'aws',
+                                  'ec2',
+                                  'docker']:
                     self.clouds[cloud_name] = {'name': cloud_name,
                                                'cm_type': cloud_type,
                                                'credential': credential}
@@ -362,7 +367,8 @@ class cm_mesh:
                                'eucalyptus',
                                'azure',
                                'aws',
-                               'ec2']:
+                               'ec2',
+                               'docker']:
                     self.clouds[cloud_name] = {
                         'name': cloud_name,
                         'cm_type': cm_type,
