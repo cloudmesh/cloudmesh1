@@ -353,7 +353,8 @@ class VMcommand(object):
         
         header = ['name', 'fixed', 'floating']
         
-        shell_commands_dict_output(res,
+        shell_commands_dict_output(self.username,
+                                   res,
                                    print_format=p_format,
                                    firstheader="id",
                                    header=header)
