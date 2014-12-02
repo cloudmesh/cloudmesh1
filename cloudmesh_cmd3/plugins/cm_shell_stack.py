@@ -20,10 +20,6 @@ class cm_shell_stack:
     _id = "t_stacks"
 
     def activate_cm_shell_stack(self):
-        self.cm_mongo = cm_mongo()
-        self.cm_config = cm_config()
-        self.cm_user = cm_user()
-
         self.register_command_topic('cloud','stack')
         pass
 
@@ -59,6 +55,10 @@ class cm_shell_stack:
            -v       verbose mode
 
         """
+        self.cm_mongo = cm_mongo()
+        self.cm_config = cm_config()
+        self.cm_user = cm_user()
+
         log.info(arguments)
 
         if arguments["help"] or arguments["-h"]:

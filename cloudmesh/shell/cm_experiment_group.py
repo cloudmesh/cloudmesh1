@@ -1,7 +1,5 @@
 from __future__ import print_function
 # from cloudmesh.experiment.model_group import ExperimentGroup
-from cloudmesh.experiment.group import GroupManagement
-from cloudmesh.experiment.group_usage import add_item_to_group
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
@@ -50,6 +48,9 @@ def shell_command_experiment_group(arguments):
             list all VMs of group sample in json format
 
     """
+    # Changed the scope of this import.
+    from cloudmesh.experiment.group import GroupManagement
+    from cloudmesh.experiment.group_usage import add_item_to_group
 
     name = arguments["NAME"]
     type = arguments["TYPE"]

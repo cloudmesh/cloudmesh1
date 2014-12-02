@@ -4,11 +4,10 @@ from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
 from cloudmesh_common.logger import LOGGER
 from pprint import pprint
 
-
 log = LOGGER(__file__)
 
+# Anyone who imports this file will have db connection automatically
 get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
-
 
 TYPES_OF_ITEMS_IN_GROUP = ['VM', 'VOLUME']
 TYPES_IDENTITY_VALUE = {"VM": "vm_name",

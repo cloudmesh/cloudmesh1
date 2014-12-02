@@ -13,7 +13,6 @@ from cloudmesh.util.shellutil import shell_commands_dict_output
 import csv
 from cloudmesh.server.database import Database
 import json
-from cloudmesh.experiment.group import GroupManagement
 
 log = LOGGER(__file__)
 
@@ -670,6 +669,12 @@ class CloudManage(object):
         :param output: designed for shell command for selection
         :param serverdata: if provided, the function will print this data instead of vms of a cloud
         '''
+       
+        # GroupManagement loads Mongodb connections automatically by import.
+        # I moved this import inside of this function which is limiting import
+        # scope, so that other functions in this file can freely be used without
+        # loading the db connection. hyungro lee 12/01/2014
+        from cloudmesh.experiment.group import GroupManagement
         self._connect_to_mongo()
         if refresh:
             self.mongo.activate(cm_user_id=username, names=[cloudname])
