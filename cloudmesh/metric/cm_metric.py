@@ -57,7 +57,7 @@ def shell_command_metric(arguments):
          }
 
     Examples:
-        $ cm-metric openstack -c india -u hrlee
+        $ cm-metric openstack -c india -u albert
         - Get user statistics
 
     """
