@@ -1,0 +1,22 @@
+cloudmesh_admin package
+=======================
+
+Submodules
+----------
+
+cloudmesh_admin.admin module
+----------------------------
+
+.. automodule:: cloudmesh_admin.admin
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: cloudmesh_admin
+    :members:
+    :undoc-members:
+    :show-inheritance:

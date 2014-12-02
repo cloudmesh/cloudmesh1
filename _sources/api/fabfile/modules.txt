@@ -1,0 +1,7 @@
+fabfile
+=======
+
+.. toctree::
+   :maxdepth: 4
+
+   fabfile

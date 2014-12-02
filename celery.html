@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Cloudmesh &mdash; my Cloudmesh Core documentation</title>
+    <title>2.3. Celery Setup &mdash; my Cloudmesh Core documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -32,8 +32,10 @@
     <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="my Cloudmesh Core documentation" href="#" />
-    <link rel="next" title="1. Introduction" href="introduction.html" />
+    <link rel="top" title="my Cloudmesh Core documentation" href="index.html" />
+    <link rel="up" title="2. Installation" href="installation.html" />
+    <link rel="next" title="3. Configuration" href="configure.html" />
+    <link rel="prev" title="2.2. Cloudmesh Installation wit Cobbler Integration" href="cobbler.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -44,33 +46,7 @@
 
    
 
-   
-
-  <div class="header" id="content">
-
-  <a href="https://github.com/cloudmesh/cloudmesh.git"
-     class="visible-desktop hidden-xs"><img
-    id="gh-banner"
-    style="position: absolute; top: 50px; right: 0; border: 0;"
-    src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"
-    alt="Fork me on GitHub"></a>
-  <script>
-    // Adjust banner height.
-    $(function () {
-      var navHeight = $(".navbar .container").css("height");
-      $("#gh-banner").css("top", navHeight);
-    });
-  </script>
-  <script>
-    // Adjust banner height.
-    $(function () {
-      var navHeight = $(".navbar .container").css("height");
-      $("#gh-banner").css("top", navHeight);
-    });
-  </script>
-
-  </div>
-     
+      
    
 
 
@@ -83,7 +59,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="_static/fg-logo-white-24x36.png">
+        <a class="navbar-brand" href="index.html"><img src="_static/fg-logo-white-24x36.png">
           Cloudmesh</a>
         <span class="navbar-text navbar-version pull-left"><b>Core</b></span>
       </div>
@@ -98,10 +74,10 @@
      id="dLabelGlobalToc"
      data-toggle="dropdown"
      data-target="#"
-     href="#">Site <b class="caret"></b></a>
+     href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="about.html">1.1. Overview</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="about.html#system-monitoring-and-operations">1.1.1. System Monitoring and Operations</a></li>
@@ -159,7 +135,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="installation.html">2. Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="developer.html">2.1. Prepare the Environment</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="developer.html#github">2.1.1. Github</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="developer.html#github-ssh-keys">2.1.1.1. Github ssh keys</a></li>
@@ -206,15 +182,15 @@
 <li class="toctree-l3"><a class="reference internal" href="cobbler.html#cobbler">2.2.4. Cobbler</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="celery.html">2.3. Celery Setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="celery.html#starting-and-stopping-celery">2.3.1. Starting and Stopping Celery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="celery.html#log-and-pid-files">2.3.2. Log and Pid Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="celery.html#current-celery-based-tasks-under-development">2.3.3. Current Celery Based Tasks (Under Development)</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="celery.html#launcher-simulation">2.3.3.1. Launcher (Simulation)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="celery.html#provisioner">2.3.3.2. Provisioner</a></li>
-<li class="toctree-l4"><a class="reference internal" href="celery.html#pbs-qstat">2.3.3.3. pbs (qstat)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="celery.html#rain-bare-metal-provisioning-with-cobbler-and-rain">2.3.3.4. rain (bare-metal provisioning with cobbler and rain)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="celery.html#rack-system-temperatures">2.3.3.5. rack (system temperatures)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">2.3. Celery Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#starting-and-stopping-celery">2.3.1. Starting and Stopping Celery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#log-and-pid-files">2.3.2. Log and Pid Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#current-celery-based-tasks-under-development">2.3.3. Current Celery Based Tasks (Under Development)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#launcher-simulation">2.3.3.1. Launcher (Simulation)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#provisioner">2.3.3.2. Provisioner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pbs-qstat">2.3.3.3. pbs (qstat)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rain-bare-metal-provisioning-with-cobbler-and-rain">2.3.3.4. rain (bare-metal provisioning with cobbler and rain)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rack-system-temperatures">2.3.3.5. rack (system temperatures)</a></li>
 </ul>
 </li>
 </ul>
@@ -500,8 +476,17 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Cloudmesh</a><ul>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#">2.3. Celery Setup</a><ul>
+<li><a class="reference internal" href="#starting-and-stopping-celery">2.3.1. Starting and Stopping Celery</a></li>
+<li><a class="reference internal" href="#log-and-pid-files">2.3.2. Log and Pid Files</a></li>
+<li><a class="reference internal" href="#current-celery-based-tasks-under-development">2.3.3. Current Celery Based Tasks (Under Development)</a><ul>
+<li><a class="reference internal" href="#launcher-simulation">2.3.3.1. Launcher (Simulation)</a></li>
+<li><a class="reference internal" href="#provisioner">2.3.3.2. Provisioner</a></li>
+<li><a class="reference internal" href="#pbs-qstat">2.3.3.3. pbs (qstat)</a></li>
+<li><a class="reference internal" href="#rain-bare-metal-provisioning-with-cobbler-and-rain">2.3.3.4. rain (bare-metal provisioning with cobbler and rain)</a></li>
+<li><a class="reference internal" href="#rack-system-temperatures">2.3.3.5. rack (system temperatures)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -513,7 +498,11 @@
               
                 
   <li>
-    <a href="introduction.html" title="Next Chapter: 1. Introduction"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">1. Introduction &raquo;</span>
+    <a href="cobbler.html" title="Previous Chapter: 2.2. Cloudmesh Installation wit Cobbler Integration"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; 2.2. Cloudmesh I...</span>
+    </a>
+  </li>
+  <li>
+    <a href="configure.html" title="Next Chapter: 3. Configuration"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">3. Configuration &raquo;</span>
     </a>
   </li>
               
@@ -523,7 +512,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/celery.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -549,9 +538,9 @@
         <div id="sidebar" class="bs-sidenav" role="complementary"><h4>Site Contents</h4>
 
 <ul>
-  <ul>
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="installation.html">2. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configure.html">3. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="doc.html">4. Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="shell.html">5. Cloudmesh Shell</a></li>
@@ -565,8 +554,17 @@
 <hr>
 
 <h4>Page Contents</h4><ul>
-<li><a class="reference internal" href="#">Cloudmesh</a><ul>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#">2.3. Celery Setup</a><ul>
+<li><a class="reference internal" href="#starting-and-stopping-celery">2.3.1. Starting and Stopping Celery</a></li>
+<li><a class="reference internal" href="#log-and-pid-files">2.3.2. Log and Pid Files</a></li>
+<li><a class="reference internal" href="#current-celery-based-tasks-under-development">2.3.3. Current Celery Based Tasks (Under Development)</a><ul>
+<li><a class="reference internal" href="#launcher-simulation">2.3.3.1. Launcher (Simulation)</a></li>
+<li><a class="reference internal" href="#provisioner">2.3.3.2. Provisioner</a></li>
+<li><a class="reference internal" href="#pbs-qstat">2.3.3.3. pbs (qstat)</a></li>
+<li><a class="reference internal" href="#rain-bare-metal-provisioning-with-cobbler-and-rain">2.3.3.4. rain (bare-metal provisioning with cobbler and rain)</a></li>
+<li><a class="reference internal" href="#rack-system-temperatures">2.3.3.5. rack (system temperatures)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -579,98 +577,153 @@
   <input type="hidden" name="area" value="default" />
 </form>
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/celery.txt"
      rel="nofollow">Source</a>
 </div>
         </div>
       </div>
     <div class="col-md-9">
       
-  <div class="section" id="cloudmesh">
-<h1>Cloudmesh<a class="headerlink" href="#cloudmesh" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="about.html">1.1. Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rain.html">1.2. Rain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hpc.html">1.3. HPC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cloud.html">1.4. IaaS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contact.html">1.5. Contact</a></li>
-<li class="toctree-l2"><a class="reference internal" href="news.html">1.6. News</a></li>
-<li class="toctree-l2"><a class="reference internal" href="screenshots.html">1.7. Screenshots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bib.html">1.8. References</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html">1.9. FAQ</a></li>
+  <div class="section" id="celery-setup">
+<h1>2.3. Celery Setup<a class="headerlink" href="#celery-setup" title="Permalink to this headline">¶</a></h1>
+<p>For running celery you will need the celery package. This is a python package for asynchronus message passing and queuing. If you dont already have it, you can get that by:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ pip install celery
+</pre></div>
+</div>
+<p>You will also need RabbitMQ whihc is the celery broker we use. If you dont already have it you cna get it by:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo apt-get install rabbitmq-server
+</pre></div>
+</div>
+<p>To find out more information about celery you can visit the <a class="reference external" href="http://docs.celeryproject.org/en/latest/getting-started/first-steps-with-celery.html">Celery Documentation</a></p>
+<div class="section" id="starting-and-stopping-celery">
+<h2>2.3.1. Starting and Stopping Celery<a class="headerlink" href="#starting-and-stopping-celery" title="Permalink to this headline">¶</a></h2>
+<p>Within cloudmesh the use of celery is very simple as we have
+introduced a number of easy to use commands. Celery server can be started by the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab queue.start
+</pre></div>
+</div>
+<p>For our test implementation we start workers for the queues</p>
+<ul class="simple">
+<li>rack</li>
+<li>pbs (called q1)</li>
+<li>rain</li>
+<li>provisioner (called p1,p2)</li>
+<li>launcher (called l1,l2)</li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="developer.html">2.1. Prepare the Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobbler.html">2.2. Cloudmesh Installation wit Cobbler Integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="celery.html">2.3. Celery Setup</a></li>
+<p>Celery workers can be stopped by the following command which stops celery and kills all celery workers:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab queue.stop
+</pre></div>
+</div>
+<p>Celery can be cleaned by the following command kills all celery
+workers. It also deletes the log files:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab queue.clean
+</pre></div>
+</div>
+<p>Please note that the way we deployed celery it uses rabitmq which is
+installed via sudo. Thus the commands will ask you for the sudo
+password to controll the workers.</p>
+</div>
+<div class="section" id="log-and-pid-files">
+<h2>2.3.2. Log and Pid Files<a class="headerlink" href="#log-and-pid-files" title="Permalink to this headline">¶</a></h2>
+<p>Celery produces log files for the workers and pid files containing the
+the pid information for the processes running. One log and pid file is
+created for each worker. All information written to the standard
+output in the celery tasks will be found in log files.  If the name of
+the worker is abc, we will have <a class="reference external" href="mailto:celery&#37;&#52;&#48;abc&#46;log">celery<span>&#64;</span>abc<span>&#46;</span>log</a> and <a class="reference external" href="mailto:celery&#37;&#52;&#48;abc&#46;pid">celery<span>&#64;</span>abc<span>&#46;</span>pid</a>.  If
+there are more than one worker for any task, the task can be performed
+by any of the worker associated to it. The log will be in .log file
+which actually did the task.  Make sure you check .log files of all
+asoociated workers in case of issues. The default location is:</p>
+<p>$HOME/cloudmesh/celery</p>
+</div>
+<div class="section" id="current-celery-based-tasks-under-development">
+<h2>2.3.3. Current Celery Based Tasks (Under Development)<a class="headerlink" href="#current-celery-based-tasks-under-development" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>launcher (called l1,l2)</li>
+<li>provisioner (called p1,p2)</li>
+<li>pbs (called q1)</li>
+<li>rain</li>
+<li>rack</li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="configure.html">3. Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-yaml">3.1. cloudmesh.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#configuration-file-rc-file">3.2. Configuration file (rc file)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#amazon-web-services">3.3. Amazon Web Services</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-server-yaml">3.4. cloudmesh-server.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-cluster-yaml">3.5. cloudmesh_cluster.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#other-yaml-files">3.6. Other Yaml files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#me-sample">3.7. Me Sample</a></li>
+<div class="section" id="launcher-simulation">
+<h3>2.3.3.1. Launcher (Simulation)<a class="headerlink" href="#launcher-simulation" title="Permalink to this headline">¶</a></h3>
+<p>The launcher can be run from the web browser with:</p>
+<div class="highlight-python"><div class="highlight"><pre>* http://127.0.0.1:5000/cm/launch
+</pre></div>
+</div>
+<p>You can select the server, and recipie and press the</p>
+<span class="label label-default">press to launch</span><p>button. This will submit the jobs to celery.
+The status of all of the jobs can be viewed at</p>
+<ul class="simple">
+<li><a class="reference external" href="http://127.0.0.1:5000/cm/launch/db_stats">http://127.0.0.1:5000/cm/launch/db_stats</a></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="doc.html">4. Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="doc.html#creating-the-documentation">4.1. Creating the Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="doc.html#creating-the-documentation-in-a-single-page">4.2. Creating the documentation in a single page</a></li>
-<li class="toctree-l2"><a class="reference internal" href="doc.html#documenting-the-code">4.3. Documenting the code</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="shell.html">5. Cloudmesh Shell</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell.html">5.1. Cloudmesh Shell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell.html#command-overview">5.2. Command Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell-rain.html">5.3. Cloudmesh Shell Rain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cm-manage.html">5.4. cm-manage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="man/man.html">5.5. Commands</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="metric.html">6. Cloudmesh Metric</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="metric.html#routes">6.1. Routes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">7. Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html">7.1. Issue Management</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coding.html">7.2. Cloudmesh Style Guide</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hacking.html">7.3. Tips for Editing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vagrant.html">7.4. Cloudmesh Vagrant Developers Environment</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="appendix.html">8. Appendix</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell-new.html">1. Proposed Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html">2. Production Deployment Server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fg.html">3. FutureGrid Specific tips</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cm.html">4. CM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cm.html#using-cloud-mesh">5. Using Cloud Mesh</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cm_cli.html">6. cloudmesh command</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cmcli.html">7. cm config</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/intro.html">8. Cloud Mesh</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cloudmesh.html">9. Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="futuregrid.html">10. FutureGrid</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plan/design.html">11. Design: Blueprint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plan/mock.html">12. Mockup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plan/plan.html">13. Plan: Cloudmesh Service Shift</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user.html">14. Cloudmesh Shell</a></li>
-</ul>
-</li>
+<p>You can clean the stats at</p>
+<ul class="simple">
+<li><a class="reference external" href="http://127.0.0.1:5000/cm/launch/db_stats/cm/db_reset**">http://127.0.0.1:5000/cm/launch/db_stats/cm/db_reset**</a>.</li>
 </ul>
 </div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-<li><a class="reference internal" href="package_index.html#package-index"><em>Packege Index</em></a></li>
-<li><a class="reference internal" href="pylint.html#pylint-results"><em>Quality Control</em></a></li>
+<div class="section" id="provisioner">
+<h3>2.3.3.2. Provisioner<a class="headerlink" href="#provisioner" title="Permalink to this headline">¶</a></h3>
+<p>Bare-metal provisioning is done through Celery Distributed Task Queue.</p>
+<p>The main function is found at provision in
+<em>cloudmesh/provisioner/provisioner.py</em>.</p>
+</div>
+<div class="section" id="pbs-qstat">
+<h3>2.3.3.3. pbs (qstat)<a class="headerlink" href="#pbs-qstat" title="Permalink to this headline">¶</a></h3>
+<p>Status of all jobs and queues across multiple clusters is being
+collected through Celery Distributed Task Queue.</p>
+<p>In FutureGrid Project, the queues are following as of May 2014:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;india.futuregrid.org&#8217;</li>
 </ul>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;batch&#8217;</li>
+<li>&#8216;long&#8217;</li>
+<li>&#8216;b534&#8217;</li>
+<li>&#8216;systest&#8217;</li>
+<li>&#8216;reserved&#8217;</li>
+<li>&#8216;interactive&#8217;</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>&#8216;delta.futuregrid.org&#8217;</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;delta&#8217;</li>
+<li>&#8216;delta-long&#8217;</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>&#8216;echo.futuregrid.org&#8217;
+- &#8216;echo&#8217;</li>
+<li>&#8216;bravo.futuregrid.org&#8217;</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;bravo&#8217;</li>
+<li>&#8216;bravo-long&#8217;</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p>The main function of calling &#8216;qstat&#8217; command is</p>
+<p>qinfo() at <em>cloudmesh/pbs/pbs.py</em>. This is done by qstat command line tool
+via ssh.</p>
+</div>
+<div class="section" id="rain-bare-metal-provisioning-with-cobbler-and-rain">
+<h3>2.3.3.4. rain (bare-metal provisioning with cobbler and rain)<a class="headerlink" href="#rain-bare-metal-provisioning-with-cobbler-and-rain" title="Permalink to this headline">¶</a></h3>
+<p>With cobbler API, deploying bare-metal system or powering on/off a
+system is enabled.</p>
+<p>The main tasks are at <em>cloudmesh/rain/cobbler/queue/tasks.py</em></p>
+</div>
+<div class="section" id="rack-system-temperatures">
+<h3>2.3.3.5. rack (system temperatures)<a class="headerlink" href="#rack-system-temperatures" title="Permalink to this headline">¶</a></h3>
+<p>With IPMI sensor, hardware status can be monitored such as system
+temperatures, voltages, fan speeds, and power consumption.</p>
+<p>The main function is <em>cloudmesh/temperature/cm_temperature.py</em>.</p>
+</div>
 </div>
 </div>
 

@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2.1. Prepare the Environment &mdash; my Cloudmesh Core documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/my-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'Core',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="my Cloudmesh Core documentation" href="index.html" />
+    <link rel="up" title="2. Installation" href="installation.html" />
+    <link rel="next" title="2.2. Cloudmesh Installation wit Cobbler Integration" href="cobbler.html" />
+    <link rel="prev" title="2. Installation" href="installation.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+   
+
+      
+   
+
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><img src="_static/fg-logo-white-24x36.png">
+          Cloudmesh</a>
+        <span class="navbar-text navbar-version pull-left"><b>Core</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about.html">1.1. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="about.html#system-monitoring-and-operations">1.1.1. System Monitoring and Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#user-and-project-services">1.1.2. User and Project Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#accounting-and-app-store">1.1.3. Accounting and App Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#networking">1.1.4. Networking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#monitoring">1.1.5. Monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#role-and-use-of-standards-and-open-source-software">1.1.6. Role and Use of Standards and Open Source Software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#features">1.1.7. Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#bugs">1.1.8. Bugs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#project-contributors">1.1.9. Project Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#history">1.1.10. History</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="about.html#cloudmesh-0-1">1.1.10.1. Cloudmesh 0.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="about.html#cloudmesh-0-2">1.1.10.2. Cloudmesh 0.2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="about.html#cloudmesh-0-3">1.1.10.3. Cloudmesh 0.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="about.html#cloudmesh-0-4">1.1.10.4. Cloudmesh 0.4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="about.html#cloudmesh-0-5-0-7">1.1.10.5. Cloudmesh 0.5 - 0.7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rain.html">1.2. Rain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpc.html">1.3. HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloud.html">1.4. IaaS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloud.html#interfaces">1.4.1. Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cloud.html#integration-of-external-clouds">1.4.2. Integration of External Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cloud.html#open-source">1.4.3. Open Source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contact.html">1.5. Contact</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contact.html#contributors">1.5.1. Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contact.html#alumni">1.5.2. Alumni</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contact.html#blog">1.5.3. Blog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contact.html#repository">1.5.4. Repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contact.html#support">1.5.5. Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="news.html">1.6. News</a></li>
+<li class="toctree-l2"><a class="reference internal" href="screenshots.html">1.7. Screenshots</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="screenshots.html#cloud-management">1.7.1. Cloud Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="screenshots.html#provisioning-raining-not-yet-released">1.7.2. Provisioning/Raining (Not yet released)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="screenshots.html#batch-queues">1.7.3. Batch Queues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="screenshots.html#status">1.7.4. Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="screenshots.html#inventory">1.7.5. Inventory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bib.html">1.8. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html">1.9. FAQ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="faq.html#are-there-any-screenshots">1.9.1. Are there any screenshots?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq.html#setup-register-cloud-in-the-cloudmesh-futuregrid-org-service">1.9.2. Setup - Register cloud in the cloudmesh.futuregrid.org service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq.html#setup-local-deploy">1.9.3. Setup - Local deploy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq.html#general-questions">1.9.4. General Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq.html#development-questions">1.9.5. Development Questions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="installation.html">2. Installation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">2.1. Prepare the Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#github">2.1.1. Github</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#github-ssh-keys">2.1.1.1. Github ssh keys</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#git-username-and-e-mail">2.1.1.2. Git username and e-mail</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#getting-the-cloudmesh-source-code">2.1.2. Getting the Cloudmesh Source Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-the-system">2.1.3. Preparing the system</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#modify-your-rc-file">2.1.3.1. Modify your rc file:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#install-the-requirements">2.1.4. Install the Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-an-initial-user">2.1.5. Creating an initial user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initial-documentation">2.1.6. Initial Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quickinstall-the-environment">2.1.7. Quickinstall the Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initial-yaml-files">2.1.8. Initial YAML files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-cloudmesh-code">2.1.9. Install cloudmesh code</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-cloudmesh-yaml-file">2.1.9.1. The cloudmesh.yaml file</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mongo-db">2.1.10. Mongo-Db</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#list-of-commands-optional">2.1.10.1. List of Commands(Optional)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mongo-commands-that-need-to-be-issued-important">2.1.10.2. Mongo commands that need to be issued (Important)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-the-web-service">2.1.11. Starting the Web Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-and-testing-the-queue-service">2.1.12. Starting and testing the Queue Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#blockdiag-family">2.1.13. Blockdiag family</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#developer-tests">2.1.14. Developer Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-python">2.1.15. Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-the-rabbitmq-service">2.1.16. Starting the  RabbitMQ service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-start-the-gui-for-development">2.1.17. Example: Start the GUI for development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#with-access-to-ldap">2.1.18. With access to LDAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#without-access-to-ldap">2.1.19. Without access to LDAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cloudmesh-deployment">2.1.20. Cloudmesh deployment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imports-in-cloudmesh-common">2.1.21. Imports in cloudmesh_common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#osx-system-preparation-tips">2.1.22. OSX System preparation Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html">2.2. Cloudmesh Installation wit Cobbler Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.html#install-ubuntu-14-04">2.2.1. Install Ubuntu 14.04</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.html#prepare-the-system">2.2.2. Prepare the system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.html#install-cloudmesh">2.2.3. Install Cloudmesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.html#cobbler">2.2.4. Cobbler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="celery.html">2.3. Celery Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="celery.html#starting-and-stopping-celery">2.3.1. Starting and Stopping Celery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="celery.html#log-and-pid-files">2.3.2. Log and Pid Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="celery.html#current-celery-based-tasks-under-development">2.3.3. Current Celery Based Tasks (Under Development)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="celery.html#launcher-simulation">2.3.3.1. Launcher (Simulation)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="celery.html#provisioner">2.3.3.2. Provisioner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="celery.html#pbs-qstat">2.3.3.3. pbs (qstat)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="celery.html#rain-bare-metal-provisioning-with-cobbler-and-rain">2.3.3.4. rain (bare-metal provisioning with cobbler and rain)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="celery.html#rack-system-temperatures">2.3.3.5. rack (system temperatures)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configure.html">3. Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-yaml">3.1. cloudmesh.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configure.html#configuration-file-rc-file">3.2. Configuration file (rc file)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configure.html#retrieval-of-rc-file-by-command">3.2.1. Retrieval of rc file by command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configure.html#retrieval-of-rc-files-by-hand">3.2.2. Retrieval of rc files by Hand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configure.html#location-of-rc-files">3.2.3. Location of rc files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="configure.html#hp-cloud">3.2.3.1. HP Cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="configure.html#azure">3.2.3.2. Azure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configure.html#amazon-web-services">3.3. Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-server-yaml">3.4. cloudmesh-server.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-cluster-yaml">3.5. cloudmesh_cluster.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configure.html#other-yaml-files">3.6. Other Yaml files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configure.html#me-sample">3.7. Me Sample</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doc.html">4. Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="doc.html#creating-the-documentation">4.1. Creating the Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc.html#creating-the-documentation-in-a-single-page">4.2. Creating the documentation in a single page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc.html#documenting-the-code">4.3. Documenting the code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shell.html">5. Cloudmesh Shell</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cm-shell.html">5.1. Cloudmesh Shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#commandline">5.1.1. Commandline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#shell-usage">5.1.2. Shell Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cm-shell.html#command-overview">5.2. Command Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#help">5.2.1. Help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#info">5.2.2. Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#variables">5.2.3. Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#defaults">5.2.4. Defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-users">5.2.5. Managing Users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-clouds">5.2.6. Managing Clouds</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#register-a-cloud">5.2.6.1. Register a cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#activate-cloud">5.2.6.2. Activate cloud</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-projects">5.2.7. Managing Projects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#project-list">5.2.7.1. Project List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#project-information">5.2.7.2. Project Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#project-activation">5.2.7.3. Project Activation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-keys">5.2.8. Managing Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-images">5.2.9. Managing Images</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#list-images">5.2.9.1. List images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#image-information">5.2.9.2. Image information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#default-image">5.2.9.3. Default image</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-flavors">5.2.10. Managing Flavors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#list-flavors">5.2.10.1. List Flavors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#flavor-information">5.2.10.2. Flavor information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#default-flavor">5.2.10.3. Default Flavor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-virtual-machines">5.2.11. Managing Virtual Machines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#starting-vms">5.2.11.1. Starting VMs</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cm-shell.html#vm-history">5.2.11.1.1. VM History</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#managing-security-groups">5.2.11.2. Managing Security Groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#managing-volumes">5.2.11.3. Managing Volumes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#managing-heat-s-for-openstack">5.2.11.4. Managing heat&#8217;s for OpenStack</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#id1">5.2.12. Managing Security Groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#examples">5.2.13. Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#todo-most-likely-in-cloud-command-and-register-command">5.2.14. TODO (most likely in cloud command and register command)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cm-shell-rain.html">5.3. Cloudmesh Shell Rain</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#managing-servers-hosts">5.3.1. Managing Servers/hosts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#user-project-and-role-policies">5.3.2. User, Project and Role Policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#information">5.3.3. Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#provisioning">5.3.4. Provisioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#status">5.3.5. Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#reservation-interface-extension">5.3.6. Reservation Interface (extension)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#time-format">5.3.7. Time Format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cm-manage.html">5.4. cm-manage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="man/man.html">5.5. Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#eof">5.5.1. EOF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#admin">5.5.2. admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#banner">5.5.3. banner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#clear">5.5.4. clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#cloud">5.5.5. cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#cluster">5.5.6. cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#color">5.5.7. color</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#debug">5.5.8. debug</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#default">5.5.9. default</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#deploy">5.5.10. deploy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#dot2">5.5.11. dot2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#edit">5.5.12. edit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#exec">5.5.13. exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#exp">5.5.14. exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#flavor">5.5.15. flavor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#graphviz">5.5.16. graphviz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#group">5.5.17. group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#hadoop">5.5.18. hadoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#help">5.5.19. help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#image">5.5.20. image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#info">5.5.21. info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#init">5.5.22. init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#inventory">5.5.23. inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#key">5.5.24. key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#label">5.5.25. label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#launcher">5.5.26. launcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#limits">5.5.27. limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#list">5.5.28. list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#load">5.5.29. load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#loglevel">5.5.30. loglevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#man">5.5.31. man</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#metric">5.5.32. metric</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#notebook">5.5.33. notebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#nova">5.5.34. nova</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#open">5.5.35. open</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#pause">5.5.36. pause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#plugins">5.5.37. plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#project">5.5.38. project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#py">5.5.39. py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#q">5.5.40. q</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#quit">5.5.41. quit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#quota">5.5.42. quota</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#rain">5.5.43. rain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#register">5.5.44. register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#script">5.5.45. script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#security-group">5.5.46. security_group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#slurm">5.5.47. slurm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#stack">5.5.48. stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#status">5.5.49. status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#storm">5.5.50. storm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#timer">5.5.51. timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#usage">5.5.52. usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#use">5.5.53. use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#user">5.5.54. user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#var">5.5.55. var</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#verbose">5.5.56. verbose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#version">5.5.57. version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#vm">5.5.58. vm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#volume">5.5.59. volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#web">5.5.60. web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#yaml">5.5.61. yaml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metric.html">6. Cloudmesh Metric</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metric.html#routes">6.1. Routes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">7. Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html">7.1. Issue Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tasks.html#labels">7.1.1. Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tasks.html#priority">7.1.2. Priority</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tasks.html#inactivity">7.1.3. Inactivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tasks.html#shortcuts">7.1.4. Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="coding.html">7.2. Cloudmesh Style Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#information">7.2.1. Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#general">7.2.2. General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#imports">7.2.3. Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#human-alphabetical-order-examples">7.2.4. Human Alphabetical Order Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#docstrings">7.2.5. Docstrings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#dictionaries-lists">7.2.6. Dictionaries/Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#calling-methods">7.2.7. Calling Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#internationalization-i18n-strings">7.2.8. Internationalization (i18n) Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#python-3-x-compatibility">7.2.9. Python 3.x compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#creating-unit-tests">7.2.10. Creating Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#running-tests">7.2.11. Running Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#commit-messages">7.2.12. Commit Messages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html">7.3. Tips for Editing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#aptana-studio-develpment-environment-optional">7.3.1. Aptana Studio - Develpment Environment(optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#emacs-as-editor">7.3.2. Emacs as editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#replace-text-in-many-files-from-the-commandline">7.3.3. Replace Text in many files from the commandline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#mongodb-tools">7.3.4. MongoDB Tools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hacking.html#robomongo">7.3.4.1. Robomongo</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#python-tools">7.3.5. Python Tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#git-pull-request">7.3.6. Git Pull Request</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vagrant.html">7.4. Cloudmesh Vagrant Developers Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vagrant.html#vagrant">7.4.1. Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vagrant.html#veewee">7.4.2. Veewee</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vagrant.html#creating-a-cloudmesh-test">7.4.3. Creating a cloudmesh test</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">8. Appendix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cm-shell-new.html">1. Proposed Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-new.html#label">1.1. Label</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html">2. Production Deployment Server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#instalation">2.1. Instalation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#starting-the-deployed-server">2.2. Starting the deployed server</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fg.html">3. FutureGrid Specific tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="old-cm/cm.html">4. CM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="old-cm/cm.html#using-cloud-mesh">5. Using Cloud Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="old-cm/cm_cli.html">6. cloudmesh command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="old-cm/cmcli.html">7. cm config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="old-cm/intro.html">8. Cloud Mesh</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="old-cm/intro.html#commands">8.1. Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.html">9. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.html#system-monitoring-and-operations">9.1. System Monitoring and Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.html#user-and-project-services">9.2. User and Project Services</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.html#accounting-and-app-store">9.2.1. Accounting and App Store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.html#networking">9.2.2. Networking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.html#monitoring">9.2.3. Monitoring</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.html#role-and-use-of-standards-and-open-source-software">9.2.4. Role and Use of Standards and Open Source Software</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="futuregrid.html">10. FutureGrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plan/design.html">11. Design: Blueprint</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#features">11.1. Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#difference-to-other-efforts">11.2. Difference to other efforts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#component-view">11.3. Component View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#component-user-management">11.4. Component User Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#user-management">11.5. User Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#accounting-will-not-be-worked-on-much">11.6. Accounting (Will not be worked on much)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#component-resource-management-includes-cloudshifting-as-part-of-reservation">11.7. Component Resource Management (includes cloudshifting as part of reservation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#resource-management">11.8. Resource Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#scheduler">11.9. Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#interfaces">11.10. Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plan/mock.html">12. Mockup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plan/mock.html#create-user">12.1. create_user</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plan/plan.html">13. Plan: Cloudmesh Service Shift</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#project-objectives">13.1. Project Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#development-objectives">13.2. Development Objectives</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plan/plan.html#production-objectives">13.2.1. Production Objectives</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#project-deliverables">13.3. Project Deliverables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#evolution-of-the-project">13.4. Evolution of the Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#refernce-materials">13.5. Refernce Materials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#definitions-and-acronyms">13.6. Definitions and Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user.html">14. Cloudmesh Shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user.html#user-commands">14.1. User Commands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">2.1. Prepare the Environment</a><ul>
+<li><a class="reference internal" href="#github">2.1.1. Github</a><ul>
+<li><a class="reference internal" href="#github-ssh-keys">2.1.1.1. Github ssh keys</a></li>
+<li><a class="reference internal" href="#git-username-and-e-mail">2.1.1.2. Git username and e-mail</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-the-cloudmesh-source-code">2.1.2. Getting the Cloudmesh Source Code</a></li>
+<li><a class="reference internal" href="#preparing-the-system">2.1.3. Preparing the system</a><ul>
+<li><a class="reference internal" href="#modify-your-rc-file">2.1.3.1. Modify your rc file:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#install-the-requirements">2.1.4. Install the Requirements</a></li>
+<li><a class="reference internal" href="#creating-an-initial-user">2.1.5. Creating an initial user</a></li>
+<li><a class="reference internal" href="#initial-documentation">2.1.6. Initial Documentation</a></li>
+<li><a class="reference internal" href="#quickinstall-the-environment">2.1.7. Quickinstall the Environment</a></li>
+<li><a class="reference internal" href="#initial-yaml-files">2.1.8. Initial YAML files</a></li>
+<li><a class="reference internal" href="#install-cloudmesh-code">2.1.9. Install cloudmesh code</a><ul>
+<li><a class="reference internal" href="#the-cloudmesh-yaml-file">2.1.9.1. The cloudmesh.yaml file</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mongo-db">2.1.10. Mongo-Db</a><ul>
+<li><a class="reference internal" href="#list-of-commands-optional">2.1.10.1. List of Commands(Optional)</a></li>
+<li><a class="reference internal" href="#mongo-commands-that-need-to-be-issued-important">2.1.10.2. Mongo commands that need to be issued (Important)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#starting-the-web-service">2.1.11. Starting the Web Service</a></li>
+<li><a class="reference internal" href="#starting-and-testing-the-queue-service">2.1.12. Starting and testing the Queue Service</a></li>
+<li><a class="reference internal" href="#blockdiag-family">2.1.13. Blockdiag family</a></li>
+<li><a class="reference internal" href="#developer-tests">2.1.14. Developer Tests</a></li>
+<li><a class="reference internal" href="#install-python">2.1.15. Install Python</a></li>
+<li><a class="reference internal" href="#starting-the-rabbitmq-service">2.1.16. Starting the  RabbitMQ service</a></li>
+<li><a class="reference internal" href="#example-start-the-gui-for-development">2.1.17. Example: Start the GUI for development</a></li>
+<li><a class="reference internal" href="#with-access-to-ldap">2.1.18. With access to LDAP</a></li>
+<li><a class="reference internal" href="#without-access-to-ldap">2.1.19. Without access to LDAP</a></li>
+<li><a class="reference internal" href="#cloudmesh-deployment">2.1.20. Cloudmesh deployment</a></li>
+<li><a class="reference internal" href="#imports-in-cloudmesh-common">2.1.21. Imports in cloudmesh_common</a></li>
+<li><a class="reference internal" href="#osx-system-preparation-tips">2.1.22. OSX System preparation Tips</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="installation.html" title="Previous Chapter: 2. Installation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; 2. Installation</span>
+    </a>
+  </li>
+  <li>
+    <a href="cobbler.html" title="Next Chapter: 2.2. Cloudmesh Installation wit Cobbler Integration"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">2.2. Cloudmesh I... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/developer.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><h4>Site Contents</h4>
+
+<ul>
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="installation.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configure.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.html">4. Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shell.html">5. Cloudmesh Shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metric.html">6. Cloudmesh Metric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">7. Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">8. Appendix</a></li>
+</ul>
+
+</ul>
+
+<hr>
+
+<h4>Page Contents</h4><ul>
+<li><a class="reference internal" href="#">2.1. Prepare the Environment</a><ul>
+<li><a class="reference internal" href="#github">2.1.1. Github</a><ul>
+<li><a class="reference internal" href="#github-ssh-keys">2.1.1.1. Github ssh keys</a></li>
+<li><a class="reference internal" href="#git-username-and-e-mail">2.1.1.2. Git username and e-mail</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-the-cloudmesh-source-code">2.1.2. Getting the Cloudmesh Source Code</a></li>
+<li><a class="reference internal" href="#preparing-the-system">2.1.3. Preparing the system</a><ul>
+<li><a class="reference internal" href="#modify-your-rc-file">2.1.3.1. Modify your rc file:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#install-the-requirements">2.1.4. Install the Requirements</a></li>
+<li><a class="reference internal" href="#creating-an-initial-user">2.1.5. Creating an initial user</a></li>
+<li><a class="reference internal" href="#initial-documentation">2.1.6. Initial Documentation</a></li>
+<li><a class="reference internal" href="#quickinstall-the-environment">2.1.7. Quickinstall the Environment</a></li>
+<li><a class="reference internal" href="#initial-yaml-files">2.1.8. Initial YAML files</a></li>
+<li><a class="reference internal" href="#install-cloudmesh-code">2.1.9. Install cloudmesh code</a><ul>
+<li><a class="reference internal" href="#the-cloudmesh-yaml-file">2.1.9.1. The cloudmesh.yaml file</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mongo-db">2.1.10. Mongo-Db</a><ul>
+<li><a class="reference internal" href="#list-of-commands-optional">2.1.10.1. List of Commands(Optional)</a></li>
+<li><a class="reference internal" href="#mongo-commands-that-need-to-be-issued-important">2.1.10.2. Mongo commands that need to be issued (Important)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#starting-the-web-service">2.1.11. Starting the Web Service</a></li>
+<li><a class="reference internal" href="#starting-and-testing-the-queue-service">2.1.12. Starting and testing the Queue Service</a></li>
+<li><a class="reference internal" href="#blockdiag-family">2.1.13. Blockdiag family</a></li>
+<li><a class="reference internal" href="#developer-tests">2.1.14. Developer Tests</a></li>
+<li><a class="reference internal" href="#install-python">2.1.15. Install Python</a></li>
+<li><a class="reference internal" href="#starting-the-rabbitmq-service">2.1.16. Starting the  RabbitMQ service</a></li>
+<li><a class="reference internal" href="#example-start-the-gui-for-development">2.1.17. Example: Start the GUI for development</a></li>
+<li><a class="reference internal" href="#with-access-to-ldap">2.1.18. With access to LDAP</a></li>
+<li><a class="reference internal" href="#without-access-to-ldap">2.1.19. Without access to LDAP</a></li>
+<li><a class="reference internal" href="#cloudmesh-deployment">2.1.20. Cloudmesh deployment</a></li>
+<li><a class="reference internal" href="#imports-in-cloudmesh-common">2.1.21. Imports in cloudmesh_common</a></li>
+<li><a class="reference internal" href="#osx-system-preparation-tips">2.1.22. OSX System preparation Tips</a></li>
+</ul>
+</li>
+</ul>
+
+<form action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+<div id="sourcelink">
+  <a href="_sources/developer.txt"
+     rel="nofollow">Source</a>
+</div>
+        </div>
+      </div>
+    <div class="col-md-9">
+      
+  <div class="section" id="prepare-the-environment">
+<h1>2.1. Prepare the Environment<a class="headerlink" href="#prepare-the-environment" title="Permalink to this headline">¶</a></h1>
+<p>In this Section, we describe how to  deploy cloudmesh for
+<strong>developers</strong>. It is much the same as for those that want to deploy
+it as users, however we provide additional information and set up
+additional tools to make contributions easier.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Please read the entire manual before executing any of the commands
+listed below. Only if you understand the workflow and have become
+familiar with this manual you can follow the steps. If any step
+needs correction or better explanation, please get in contact with
+us with your improvement suggestions.</p>
+</div>
+<p>You will need to use <strong>github</strong> and <strong>virtualenv</strong>. We do <strong>NOT</strong>
+support any use of cloudmesh without <cite>virtualenv</cite>.</p>
+<p>Furthermore, we assume that you use <strong>ubuntu 14.04</strong> as your
+development environment. Although we started including information for
+other OS, we have not verified if they work.</p>
+<div class="section" id="github">
+<h2>2.1.1. Github<a class="headerlink" href="#github" title="Permalink to this headline">¶</a></h2>
+<p>This use of github assumes you are a development team member and have
+direct access to the github repository. To become a member please
+contact  Gregor von Laszewski at <a class="reference external" href="mailto:laszewski&#37;&#52;&#48;gmail&#46;com">laszewski<span>&#64;</span>gmail<span>&#46;</span>com</a> to discuss how
+you can contribute to cloudmesh and if a membership is appropriate.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are not a member you still can check out the code from
+github and further develop it and communicate the changes to
+us. Please contact Gregor von Laszewski at <a class="reference external" href="mailto:laszewski&#37;&#52;&#48;gmail&#46;com">laszewski<span>&#64;</span>gmail<span>&#46;</span>com</a>.</p>
+</div>
+<p>First we need to make sure github is properly usable for you. First
+you need to get an account on github and make sure you have a
+gravatar. Without this you can not become a developer. Than please
+contact Gregor von Laszewski (<a class="reference external" href="mailto:laszewski&#37;&#52;&#48;gmail&#46;com">laszewski<span>&#64;</span>gmail<span>&#46;</span>com</a>) so you can be added
+to the github dev list.</p>
+<p>In order for you to participate in code development you also need to
+do the following steps on <strong>ANY</strong> machine from which you will
+check code back into github.</p>
+<p>If you do not have git on your machine
+you can get it as follows.</p>
+<p><strong>Ubuntu</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo apt-get install git
+</pre></div>
+</div>
+<p><strong>Centos/RHEL</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo yum install git
+</pre></div>
+</div>
+<p><strong>OSX</strong>:</p>
+<p>Please obtain and install xcode as documented in</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://developer.apple.com/xcode/downloads/">https://developer.apple.com/xcode/downloads/</a></li>
+</ol>
+<p>In a terminal window execute:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ xcode-select --install
+</pre></div>
+</div>
+<p>This will opens a user interface dialog to request automatic
+installation of the command line developer tools which you will need
+if you like to conduct development on OSX.</p>
+<p><strong>Others</strong>:</p>
+<p>If you use a different operating system, please consult how to install
+it there.</p>
+<div class="section" id="github-ssh-keys">
+<h3>2.1.1.1. Github ssh keys<a class="headerlink" href="#github-ssh-keys" title="Permalink to this headline">¶</a></h3>
+<p>If you are on a new machine you must create a new github ssh key for
+it. This is nicely described at</p>
+<ol class="arabic simple" start="2">
+<li><a class="reference external" href="https://help.github.com/articles/generating-ssh-keys">https://help.github.com/articles/generating-ssh-keys</a></li>
+</ol>
+<p>You must upload the key to github, either via a command, or via
+the github gui. Simply go to your setting and find the ssh key menu
+entry. Click on it and upload your new key by copying and pasting the
+public key. Make sure you do not copy the private key.</p>
+</div>
+<div class="section" id="git-username-and-e-mail">
+<h3>2.1.1.2. Git username and e-mail<a class="headerlink" href="#git-username-and-e-mail" title="Permalink to this headline">¶</a></h3>
+<p>It is very important to set the git username and e-mail. This can be
+done with the following commands. You must use your full name and your
+e-mail that you use with github as part of your registered
+account. Otherwise our commits will not properly work:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git config --global user.name &quot;Gregor von Laszewski&quot;
+$ git config --global user.email &quot;laszewski@gmail.com&quot;
+</pre></div>
+</div>
+<p>Please replace name and e-mail with the once you used in
+Github. Please make sure your name is spelled out properly. We do not
+accept pseudonyms. If you do not agree to this, you can not
+participate in the code development.</p>
+</div>
+</div>
+<div class="section" id="getting-the-cloudmesh-source-code">
+<h2>2.1.2. Getting the Cloudmesh Source Code<a class="headerlink" href="#getting-the-cloudmesh-source-code" title="Permalink to this headline">¶</a></h2>
+<p>The code in github contains some convenient install scripts to prepare
+your environment including the setup of the virtualenv. To have a
+uniform environment among all developers we prefer if you clone the
+cloudmesh code into <cite>~/github</cite>. Hence please do:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ mkdir ~/github
+$ cd ~/github
+</pre></div>
+</div>
+<p>If this directory exists already, make an assessment if you can reuse it
+for development.  Next the git repository needs to be cloned. It can
+be done using:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git clone git@github.com:cloudmesh/cloudmesh.git
+</pre></div>
+</div>
+<p>Some developers may prefer using https for accessing git. If you are
+not added in github with your github username to the project you will
+see the following error:</p>
+<div class="highlight-python"><div class="highlight"><pre>fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+</pre></div>
+</div>
+<p>In this case you should clarify with Gregor if you are added to the
+github directory, or if you should checkout the code with the https
+method:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git clone https://github.com/cloudmesh/cloudmesh.git
+</pre></div>
+</div>
+<p>For the rest of the section we will assume that you are working in the
+cloudmesh directory. You can get there after cloning by</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd cloudmesh
+</pre></div>
+</div>
+<p>In some programs we need the location of the cloudmesh source for
+development. Hence it is important to add the environment variable
+<cite>CLOUDMESH</cite> to your shell. In bash you can do this with (assuming you
+are in the cloudmesh directory):</p>
+<div class="highlight-python"><div class="highlight"><pre>$ export CLOUDMESH=`pwd`
+</pre></div>
+</div>
+<p>Naturally, you can also add the location into your bashrc file so you
+do not have to add it everytime to your shell.</p>
+<p>To see if the <cite>CLOUDMESH</cite> variable has the correct value, you can
+simply say:</p>
+<div class="highlight-python"><div class="highlight"><pre>echo $CLOUDMESH
+</pre></div>
+</div>
+</div>
+<div class="section" id="preparing-the-system">
+<h2>2.1.3. Preparing the system<a class="headerlink" href="#preparing-the-system" title="Permalink to this headline">¶</a></h2>
+<p>On a vanilla operating system a couple of packages and tools need to
+be installed. For ubuntu and other OSes we have provided a simple
+script that prepares the system.</p>
+<p>For ubuntu systems there is a ready-made script to get all the
+pre-requisites install. To run this script do</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ./install system
+
+Note.
+This command must be run as root or with superuser privileges.
+</pre></div>
+</div>
+<p>This will make sure all requirements are fulfilled and the cloudmesh
+programs are installed in your environment.</p>
+<p>After this you have to create and activate a virtual env.  As we like
+to have an isolated development environment we require that you use
+virtualenv. For simplicity our virtual env will be placed in the home
+directory under <cite>~/ENV</cite>. If you already have such a directory for
+other projects, you can use another name. However, for the rest of the
+manual we assume it is &#8220;ENV&#8221;</p>
+<p>To create the virtual env in <cite>~/ENV</cite>, run the following command</p>
+<div class="highlight-python"><div class="highlight"><pre>$ virtualenv  --no-site-packages ~/ENV
+</pre></div>
+</div>
+<p>After installation of virtualenv, you can activate the virtual env
+with the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ source ~/ENV/bin/activate
+</pre></div>
+</div>
+<p>Please note that you have to do this every time you open a terminal or
+login. Since it is easy to forget to do it, we recommend that you activate
+the virtualenv in your .bash_profile.</p>
+<p>If you ever need to deactivate the virtual env, you can run:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ deactivate
+</pre></div>
+</div>
+<p>from within the active virtualenv shell.</p>
+<div class="section" id="modify-your-rc-file">
+<h3>2.1.3.1. Modify your rc file:<a class="headerlink" href="#modify-your-rc-file" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Changing your rc files is optional, but may be useful if you do a
+lot of development and you for example tend to forget to activate
+the virtualenv.</p>
+</div>
+<p>Go to your home directory, log in and change your .bash_profile,
+.bashrc, or .bash_login file (e.g. whatever works best for you). ON my
+computer I added it to the .bash_profile which is a MAC OSX machine:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ echo &quot;source ~/ENV/bin/activate&quot; &gt;&gt; .bash_profile
+</pre></div>
+</div>
+<p>On ubuntu, you can add it to:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ echo &quot;source ~/ENV/bin/activate&quot; &gt;&gt; .bashrc
+</pre></div>
+</div>
+<p>If in doubt add it to both. It will be up to you to decide if you like
+to go into virtual env at login time. If you do it this way you do not
+forget. You can also add a <tt class="docutils literal"><span class="pre">cd</span></tt> command so that you go into the
+working directory immediately after you login. For example when you
+check out cloudmesh to ~/github/cloudmesh you can add:</p>
+<div class="highlight-python"><div class="highlight"><pre>cd ~/github/cloudmesh
+</pre></div>
+</div>
+<p>So you jump into your working directory after you start a new
+terminal, which is quite handy. Alternatively, you may want to set an
+alias such as:</p>
+<div class="highlight-python"><div class="highlight"><pre>alias dev=&quot;cd ~/github/cloudmesh&quot;
+</pre></div>
+</div>
+<p>This way if you type dev you cd into the development directory</p>
+</div>
+</div>
+<div class="section" id="install-the-requirements">
+<h2>2.1.4. Install the Requirements<a class="headerlink" href="#install-the-requirements" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Please remember to activate your virtualenv. Out of caution do not
+proceed or execute this command in your system environment.</p>
+</div>
+<p>In addition to the system packages we will now install into the
+virtual env a number of python packages.
+It is important to note that the requirements in requirements.txt must
+be installed in a particular order. As pip does not support this
+properly, we use the following command instead of simply calling <cite>pip
+install -r requirements.txt</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre>./install requirements
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-an-initial-user">
+<h2>2.1.5. Creating an initial user<a class="headerlink" href="#creating-an-initial-user" title="Permalink to this headline">¶</a></h2>
+<p>To create the initial user and cloudmesh yaml files you can use the
+command:</p>
+<div class="highlight-python"><div class="highlight"><pre>./install new
+</pre></div>
+</div>
+<p>From this point on you should be able to create the user manual
+locally. IF this does not work you may have some error on your system
+and you may carefully revisit the above instruction and locate the
+error.</p>
+</div>
+<div class="section" id="initial-documentation">
+<h2>2.1.6. Initial Documentation<a class="headerlink" href="#initial-documentation" title="Permalink to this headline">¶</a></h2>
+<p>An initial set of documentation can now be created with the command:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab doc.html
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If this does not yet work you can do</p>
+<div class="last highlight-python"><div class="highlight"><pre>make sphinx
+</pre></div>
+</div>
+</div>
+<p>The documentation is located in:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">doc</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">html</span>
+</pre></div>
+</div>
+<p>please use your browser to open it. If you just run on ubuntu server,
+you also need to install the ubuntu-desktop:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo apt-get install ubuntu-desktop
+</pre></div>
+</div>
+</div>
+<div class="section" id="quickinstall-the-environment">
+<h2>2.1.7. Quickinstall the Environment<a class="headerlink" href="#quickinstall-the-environment" title="Permalink to this headline">¶</a></h2>
+<p>We do not recommend that you conduct this quickinstall, but it may
+provide you with a rough overview of the previous steps:</p>
+<div class="highlight-python"><div class="highlight"><pre>git config --global user.name &quot;yourname&quot;
+git config --global user.email &quot;youremail@example.com&quot;
+
+git clone git@github.com:cloudmesh/cloudmesh.git
+cd cloudmesh
+./install system
+virtualenv ~/ENV
+. ~/ENV/bin/activate
+./install requirements
+./install new
+fab doc.html
+</pre></div>
+</div>
+<p>Please remember to use the ./ infront of the install as there could be
+other install commands in your $PATH.</p>
+</div>
+<div class="section" id="initial-yaml-files">
+<h2>2.1.8. Initial YAML files<a class="headerlink" href="#initial-yaml-files" title="Permalink to this headline">¶</a></h2>
+<p>You will need a number of yaml files. Samples can be found in the etc/
+source directory.  More elaborate examples can be obtained from Gregor
+for the personnel that work directly with him on FutureGrid.</p>
+<p>As we asume you have initially no yaml files, you can create a default
+set with the command:</p>
+<div class="highlight-python"><div class="highlight"><pre>./install new
+</pre></div>
+</div>
+<p>This will create a ~/.cloudmesh directory in which you can find and
+modify the yaml files. Important is that you modify the file called
+<tt class="docutils literal"><span class="pre">me.yaml</span></tt></p>
+<p>You find the values for the clouds from your cloud provider. Simply
+add them and fill out your user information and you should be done.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When editing YAML files we strongly recommend that you use an
+editor with YAML support. YAML syntax is not complicated but is
+sensitive to proper indentation, and it is very helpful to have an
+editor that will assist with proper formatting.</p>
+</div>
+<p>This has to be done only once, but you must make sure you keep the
+yaml files up to date. Typically we send an e-mail to all developers
+when a change occurred so you can update yours:</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml">cloudmesh.yaml</a></li>
+<li><a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml">cloudmesh_server.yaml</a></li>
+<li><a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_cluster.yaml">cloudmesh_cluster.yaml</a>
+<em>For the one from FG please contact Gregor (only if you really need
+it. Normal users will not get this file).</em></li>
+<li><a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml">cloumesh_launcher.yaml</a></li>
+<li><a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_mac.yaml">cloumesh_mac.yaml</a></li>
+</ol>
+</div>
+<div class="section" id="install-cloudmesh-code">
+<h2>2.1.9. Install cloudmesh code<a class="headerlink" href="#install-cloudmesh-code" title="Permalink to this headline">¶</a></h2>
+<p>Next you install the basic cloudmesh code which you can do with:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ./install cloudmesh
+</pre></div>
+</div>
+<div class="section" id="the-cloudmesh-yaml-file">
+<h3>2.1.9.1. The cloudmesh.yaml file<a class="headerlink" href="#the-cloudmesh-yaml-file" title="Permalink to this headline">¶</a></h3>
+<p>After updating the me.yaml file, you can generate a new cloudmesh.yaml
+file. For this purpose you will need to copy the templates from cloudmesh to the ~/.cloudmesh directory:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cp etc/*.yaml ~/.cloudmesh/etc
+</pre></div>
+</div>
+<p>The command:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cm-init fill --file=~/.cloudmesh/etc/cloudmesh.yaml ~/.cloudmesh/me.yaml
+</pre></div>
+</div>
+<p>will test if the me.yaml file can successfully create a cloudmesh.yaml
+file by printing its output. If no error occurs it will most likely be
+fine. Then you can use the command:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cm-init generate yaml
+</pre></div>
+</div>
+<p>to create the cloudmesh yaml file from <cite>~/.futuregird/me.yaml</cite> and
+write it to <cite>~/.futuregird/cloudmesh.yaml</cite>. Out of precaution we have
+included a couple of questions that could be surpressed with the
+<cite>&#8211;force</cite> option.</p>
+</div>
+</div>
+<div class="section" id="mongo-db">
+<h2>2.1.10. Mongo-Db<a class="headerlink" href="#mongo-db" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="list-of-commands-optional">
+<h3>2.1.10.1. List of Commands(Optional)<a class="headerlink" href="#list-of-commands-optional" title="Permalink to this headline">¶</a></h3>
+<p>Cloudmesh uses mongo for serving information to the different
+services.  To managing mongo db it is important that you use our
+special fabric commands in order to make sure that the database is
+properly initialized and managed. We make this real simple:</p>
+<p>To start mongod do:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab mongo.start
+</pre></div>
+</div>
+<p>To stop mongod:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab mongo.stop
+</pre></div>
+</div>
+<p>To clean the entire data base (not just the data for cloudmesh, so be
+careful) say:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab mongo.clean
+</pre></div>
+</div>
+<p>To create a simple cluster without usernames, say:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab mongo.simple
+</pre></div>
+</div>
+<p>To create a cluster with user data base say (requires access to LDAP):</p>
+<div class="highlight-python"><div class="highlight"><pre>fab mongo.cloud
+</pre></div>
+</div>
+<p>Now you have data in the mongo db and you can use and test it.</p>
+</div>
+<div class="section" id="mongo-commands-that-need-to-be-issued-important">
+<h3>2.1.10.2. Mongo commands that need to be issued (Important)<a class="headerlink" href="#mongo-commands-that-need-to-be-issued-important" title="Permalink to this headline">¶</a></h3>
+<p>In order for the everything to work right, please do the following
+mongo steps.:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab mongo.start
+fab mongo.boot
+fab user.mongo
+fab mongo.simple
+</pre></div>
+</div>
+<p>For some reason &#8220;fab mongo.boot&#8221; has to be issued twice for everything
+to work right.</p>
+</div>
+</div>
+<div class="section" id="starting-the-web-service">
+<h2>2.1.11. Starting the Web Service<a class="headerlink" href="#starting-the-web-service" title="Permalink to this headline">¶</a></h2>
+<p>To start a service you can use. It will be just starting at the home page.</p>
+<div class="highlight-python"><div class="highlight"><pre>fab server.start
+</pre></div>
+</div>
+</div>
+<div class="section" id="starting-and-testing-the-queue-service">
+<h2>2.1.12. Starting and testing the Queue Service<a class="headerlink" href="#starting-and-testing-the-queue-service" title="Permalink to this headline">¶</a></h2>
+<p>Our framework uses rabbitMQ and Celery for managing asynchronous
+processes. They require that additional services are running. This is
+only important if you conduct development for dynamic provisioning and
+our launcher framework. All others, probably do not need these
+services. To start them simply say:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab mq.start
+</pre></div>
+</div>
+<p>It will ask you for the system password as rabbitMQ runs system
+wide. Next start the queue service with:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab queue.start:1
+</pre></div>
+</div>
+<p>Now you are all set. and can access even the asynchronous queue services.
+This will start the necessary background services, but also will shut
+down existing services. Essentially it will start a clean development
+environment.</p>
+<p>To use the HPC environment, you need to make sure you can login from
+your machine to the various HPC login nodes. We have created a
+convenient script for you that you can call as follows::
+HPC services:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab hpc.touch
+</pre></div>
+</div>
+<p>This script will log you into</p>
+<ul class="simple">
+<li>alamo</li>
+<li>india</li>
+<li>sierra</li>
+<li>foxtrot</li>
+<li>hotel</li>
+</ul>
+<p>To create the documentation locally, a couple of additional steps are
+needed that have not yet been included into the install fab scripts.</p>
+<p>The documentation depends on the autorun package. This package can be
+downloaded and installed as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd /tmp
+$ mkdir autorun
+$ cd autorun
+$ hg clone http://bitbucket.org/birkenfeld/sphinx-contrib/
+$ cd sphinx-contrib/autorun
+$ python setup.py install
+</pre></div>
+</div>
+</div>
+<div class="section" id="blockdiag-family">
+<h2>2.1.13. Blockdiag family<a class="headerlink" href="#blockdiag-family" title="Permalink to this headline">¶</a></h2>
+<p>blockdiag uses TrueType Font to render text. blockdiag try to detect
+installed fonts but if nothing detected, You can specify fonts with -f
+(–font) option:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ blockdiag -f /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf simple.diag
+</pre></div>
+</div>
+<p>If you always use same font, write $HOME/.blockdiagrc:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cat $HOME/.blockdiagrc
+[blockdiag]
+fontpath = /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf
+</pre></div>
+</div>
+<p>TODO: distribute a standard ttf font and use sh so that the -f font is
+included from the deployed package</p>
+</div>
+<div class="section" id="developer-tests">
+<h2>2.1.14. Developer Tests<a class="headerlink" href="#developer-tests" title="Permalink to this headline">¶</a></h2>
+<p>Python has a very good unit test framework called nosetests. As we
+have many different tests it is sometimes useful not to run all of
+them but to run a selected test. Running all of the tests would take
+simply to long during debugging. We are providing an easy to use test
+fabric command that can be used as follows. Assume that in your
+directory tests are located a number of tests. They can be listed
+with:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab test.info
+</pre></div>
+</div>
+<p>This will list the available test files/groups by name (the <a href="#id1"><span class="problematic" id="id2">test_</span></a>
+prefix is omitted). To list the individual tests in a file/grou, you
+can use it as a parameter to info. Thus:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab test.info:compute
+</pre></div>
+</div>
+<p>will list the tests in the file test_compute.py. To call an individual
+test, you can use the name of the file and a unique prefix of the test
+you like to call via test.start. Thus:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab test.start:compute,label
+</pre></div>
+</div>
+<p>will execute the test which has label in its method name first</p>
+<p>sometimes it is important to clean things and start new. This can be done by</p>
+<div class="highlight-python"><div class="highlight"><pre>fab clean.all
+</pre></div>
+</div>
+<p>After that you naturally need to do a new install.
+<tt class="docutils literal"><span class="pre">fab</span> <span class="pre">server.start</span></tt> automatically does such an install for you.</p>
+<p>We are providing a number of useful command that will make your
+development efforts easier.  These commands are build with fabfiles in
+the fabfile directory. in the cloudmesh directory, you will find a
+directory called fabfile that includes the agglomerated helper
+files. To access them you can use the name of the file, followed by a
+task that is defined within the file. Next we list the available
+commands:</p>
+<p>Sometimes it is desirable to work on cloudmesh on a remote server and
+use your laptop to connect to that server. This can be done for
+example via port forwarding. Let us assume you are running a cloudmesh
+server on the machine my.org. Than you can establish a port forwarding
+from port 5000 to 5001 as follows, where 5001 is the locally used
+port:</p>
+<div class="highlight-python"><div class="highlight"><pre>ssh -L 5001:localhost:5000 user@machine.edu
+</pre></div>
+</div>
+<p>Once you have started cloudmesh, you will be able to see the page form
+that server in the browser at:</p>
+<div class="highlight-python"><div class="highlight"><pre>http://localhost:5001
+</pre></div>
+</div>
+<p>However, before you start the server with:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py install; fab server.start
+</pre></div>
+</div>
+<p>it is best if you do an ssh agent so you can access some more
+sophisticated services that require authentication. To do so you can
+type in the following lines on the terminal in which you will start
+the server:</p>
+<div class="highlight-python"><div class="highlight"><pre>$  eval `ssh-agent -s`
+$ ssh-add
+</pre></div>
+</div>
+<p>Minimal initial requirements, git, python2.7, and virtualenv
+installed.  If you don&#8217;t have python2.7, see the manual installation
+steps below.  The system will also need to be configure to use the
+EPEL repo (for mongodb and rabbitmq).</p>
+</div>
+<div class="section" id="install-python">
+<h2>2.1.15. Install Python<a class="headerlink" href="#install-python" title="Permalink to this headline">¶</a></h2>
+<p>Cloudmesh requires python 2.7, and CentOS comes with Python 2.6.
+However we cannot replace the system python as yum and other tools
+depend on it, so we will configure it to install in /opt/python:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ wget http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz
+</pre></div>
+</div>
+<p>Recommended: verify the md5 checksum, b4f01a1d0ba0b46b05c73b2ac909b1df
+for the above.:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ tar xzf Python-2.7.5.tgz
+$ cd Python-2.7.5
+$ configure --prefix=/opt/python &amp;&amp; make
+$ sudo make install
+</pre></div>
+</div>
+<p>Edit your ~/.bash_profile to add /opt/python/bin to the start of your
+PATH, then log out and back in.</p>
+</div>
+<div class="section" id="starting-the-rabbitmq-service">
+<h2>2.1.16. Starting the  RabbitMQ service<a class="headerlink" href="#starting-the-rabbitmq-service" title="Permalink to this headline">¶</a></h2>
+<p>On centos rabbit mq can be started as a service with as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo service rabbitmq-server start
+</pre></div>
+</div>
+<p>Note: I am not yet sure if this is needed for development, this is
+probably good at deployment. I am not sure about default
+values.</p>
+<p>A simple way to create the documentation is with:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab doc.html
+</pre></div>
+</div>
+<p>However, some extensions may require additional packages for sphinx.
+These add ons are unfortunately not included in the requirements.txt.
+However, they can be installed with (on OSX hg is a prerequisite):</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab build.sphinx
+</pre></div>
+</div>
+<p>After that you can create the newest documentation with:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab doc.html
+</pre></div>
+</div>
+<p>To view it just say:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab doc.view
+</pre></div>
+</div>
+<p>To publish to github:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab doc.gh
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-start-the-gui-for-development">
+<h2>2.1.17. Example: Start the GUI for development<a class="headerlink" href="#example-start-the-gui-for-development" title="Permalink to this headline">¶</a></h2>
+<p>Open a new terminal and type in:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab mongo.start
+</pre></div>
+</div>
+<p>Now you can either generate a simple cloud without user or a cloud
+with user information.  To generating a simple cloud do without user
+information do:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab mongo.simple
+</pre></div>
+</div>
+<p>This will print something like (if everything is ok) at the end:</p>
+<div class="highlight-python"><div class="highlight"><pre>clusters: 5 -&gt; bravo, delta, gamma, india, sierra
+services: 0
+servers: 304
+images: 2 -&gt; centos6, ubuntu
+</pre></div>
+</div>
+<p>To generate a complete cloud including users (requires access to LDAP) do:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab mongo.cloud
+</pre></div>
+</div>
+<p>Next you can start the cloudmesh Web with:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab server.start
+</pre></div>
+</div>
+<p>If you like to start with a particular route, you can pass it as parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab server.start:inventory
+</pre></div>
+</div>
+<p>opens the page</p>
+<ol class="arabic simple" start="9">
+<li><a class="reference external" href="http://localhost:5000/inventory">http://localhost:5000/inventory</a></li>
+</ol>
+<p>in your browser</p>
+<p>You can repeatedly issue that command and it will shut down the server.
+If you want to do thia by hand you can do this with:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab server.stop
+</pre></div>
+</div>
+<p>Sometimes you may want to say:</p>
+<div class="highlight-python"><div class="highlight"><pre>killall python
+</pre></div>
+</div>
+<p>before you start the server. On ubuntu we found::</p>
+<div class="highlight-python"><div class="highlight"><pre>killall python;  server.start
+</pre></div>
+</div>
+<p>works well</p>
+<p>In case you do not need to work with a cloud, you can also use our hpc
+queue server. That inspects certain queues. This can be done by
+specifying a specific server at startup called hpc:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab server.start:server=hpc
+</pre></div>
+</div>
+<p>The following are the current steps to bring all services for
+cloudmesh up and running. After you have Installed the software (see
+). Naturally we could have included them in the Section <cite>ref:s-instalation</cite>
+one script, which we will do at a later time. For now we want to keep
+the services separate to simplify development and debugging of various
+parts. Naturally, if you can just pick the commands that you really
+need and do not have to execute all of them. Over time you will notice
+which commands are needed by you. An overview of available commands
+can be found with:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ fab -l
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-access-to-ldap">
+<h2>2.1.18. With access to LDAP<a class="headerlink" href="#with-access-to-ldap" title="Permalink to this headline">¶</a></h2>
+<p>It is assumed that the machine has access to LDAP.</p>
+<div class="highlight-python"><div class="highlight"><pre>fab build.install
+fab mongo.start
+fab mongo.cloud
+# fab mq.start
+# fab queue.start:1
+fab hpc.touch
+fab server.start
+</pre></div>
+</div>
+</div>
+<div class="section" id="without-access-to-ldap">
+<h2>2.1.19. Without access to LDAP<a class="headerlink" href="#without-access-to-ldap" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>fab build.install
+fab mongo.start
+fab mongo.simple
+fab user.mongo
+# fab mq.start
+# fab queue.start:1
+fab hpc.touch
+fab server.start
+</pre></div>
+</div>
+</div>
+<div class="section" id="cloudmesh-deployment">
+<h2>2.1.20. Cloudmesh deployment<a class="headerlink" href="#cloudmesh-deployment" title="Permalink to this headline">¶</a></h2>
+<p>yaml file first, than mongo</p>
+<div class="highlight-python"><div class="highlight"><pre>fab mongo.install
+</pre></div>
+</div>
+</div>
+<div class="section" id="imports-in-cloudmesh-common">
+<h2>2.1.21. Imports in cloudmesh_common<a class="headerlink" href="#imports-in-cloudmesh-common" title="Permalink to this headline">¶</a></h2>
+<p>The cloudmesh code contains a directory <cite>cloudmesh_common</cite> in which we
+collect useful common reusable code that must not depend on an import
+from cloudmesh. Thus no file in cloudmesh_common must include:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">cloudmesh.</span> <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="osx-system-preparation-tips">
+<h2>2.1.22. OSX System preparation Tips<a class="headerlink" href="#osx-system-preparation-tips" title="Permalink to this headline">¶</a></h2>
+<p>On OSX we recommend that you check if you have the freetype
+fonts installed and set the LDFLAG as follows (if you find the
+freetypes there):</p>
+<div class="highlight-python"><div class="highlight"><pre>LDFLAGS=&quot;-L/usr/local/opt/freetype/lib -L/usr/local/opt/libpng/lib&quot; CPPFLAGS=&quot;-I/usr/local/opt/freetype/include -I/usr/local/opt/libpng/include -I/usr/local/opt/freetype/include/freetype2&quot; pip install matplotlib
+</pre></div>
+</div>
+<p>Furthermore, since version 5.1 of XCode you may see the following error when
+installing pycrypto on OSX:</p>
+<div class="highlight-python"><div class="highlight"><pre>clang: error: unknown argument: &#39;-mno-fused-madd&#39; [-Wunused-command-line-argument-hard-error-in-future]
+
+clang: note: this will be a hard error (cannot be downgraded to a warning) in the future
+
+error: command &#39;cc&#39; failed with exit status 1
+</pre></div>
+</div>
+<p>This error can be fixed by ignoring the option with the following
+shell commands:</p>
+<div class="highlight-python"><div class="highlight"><pre>export CFLAGS=-Qunused-arguments
+export CPPFLAGS=-Qunused-arguments
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, 2013, Gregor von Laszewski for  FutureGrid.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

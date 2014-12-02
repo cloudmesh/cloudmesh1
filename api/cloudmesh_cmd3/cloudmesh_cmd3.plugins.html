@@ -1,0 +1,2922 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cloudmesh_cmd3.plugins package &mdash; my Cloudmesh Core documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/my-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'Core',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="my Cloudmesh Core documentation" href="../../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+   
+
+      
+   
+
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html"><img src="../../_static/fg-logo-white-24x36.png">
+          Cloudmesh</a>
+        <span class="navbar-text navbar-version pull-left"><b>Core</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html">1.1. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../about.html#system-monitoring-and-operations">1.1.1. System Monitoring and Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../about.html#user-and-project-services">1.1.2. User and Project Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../about.html#accounting-and-app-store">1.1.3. Accounting and App Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../about.html#networking">1.1.4. Networking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../about.html#monitoring">1.1.5. Monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../about.html#role-and-use-of-standards-and-open-source-software">1.1.6. Role and Use of Standards and Open Source Software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../about.html#features">1.1.7. Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../about.html#bugs">1.1.8. Bugs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../about.html#project-contributors">1.1.9. Project Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../about.html#history">1.1.10. History</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../about.html#cloudmesh-0-1">1.1.10.1. Cloudmesh 0.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../about.html#cloudmesh-0-2">1.1.10.2. Cloudmesh 0.2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../about.html#cloudmesh-0-3">1.1.10.3. Cloudmesh 0.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../about.html#cloudmesh-0-4">1.1.10.4. Cloudmesh 0.4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../about.html#cloudmesh-0-5-0-7">1.1.10.5. Cloudmesh 0.5 - 0.7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../rain.html">1.2. Rain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hpc.html">1.3. HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloud.html">1.4. IaaS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cloud.html#interfaces">1.4.1. Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cloud.html#integration-of-external-clouds">1.4.2. Integration of External Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cloud.html#open-source">1.4.3. Open Source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../contact.html">1.5. Contact</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../contact.html#contributors">1.5.1. Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../contact.html#alumni">1.5.2. Alumni</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../contact.html#blog">1.5.3. Blog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../contact.html#repository">1.5.4. Repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../contact.html#support">1.5.5. Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../news.html">1.6. News</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../screenshots.html">1.7. Screenshots</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../screenshots.html#cloud-management">1.7.1. Cloud Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../screenshots.html#provisioning-raining-not-yet-released">1.7.2. Provisioning/Raining (Not yet released)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../screenshots.html#batch-queues">1.7.3. Batch Queues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../screenshots.html#status">1.7.4. Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../screenshots.html#inventory">1.7.5. Inventory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../bib.html">1.8. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html">1.9. FAQ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../faq.html#are-there-any-screenshots">1.9.1. Are there any screenshots?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../faq.html#setup-register-cloud-in-the-cloudmesh-futuregrid-org-service">1.9.2. Setup - Register cloud in the cloudmesh.futuregrid.org service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../faq.html#setup-local-deploy">1.9.3. Setup - Local deploy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../faq.html#general-questions">1.9.4. General Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../faq.html#development-questions">1.9.5. Development Questions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">2. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developer.html">2.1. Prepare the Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#github">2.1.1. Github</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../developer.html#github-ssh-keys">2.1.1.1. Github ssh keys</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../developer.html#git-username-and-e-mail">2.1.1.2. Git username and e-mail</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#getting-the-cloudmesh-source-code">2.1.2. Getting the Cloudmesh Source Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#preparing-the-system">2.1.3. Preparing the system</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../developer.html#modify-your-rc-file">2.1.3.1. Modify your rc file:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#install-the-requirements">2.1.4. Install the Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#creating-an-initial-user">2.1.5. Creating an initial user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#initial-documentation">2.1.6. Initial Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#quickinstall-the-environment">2.1.7. Quickinstall the Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#initial-yaml-files">2.1.8. Initial YAML files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#install-cloudmesh-code">2.1.9. Install cloudmesh code</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../developer.html#the-cloudmesh-yaml-file">2.1.9.1. The cloudmesh.yaml file</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#mongo-db">2.1.10. Mongo-Db</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../developer.html#list-of-commands-optional">2.1.10.1. List of Commands(Optional)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../developer.html#mongo-commands-that-need-to-be-issued-important">2.1.10.2. Mongo commands that need to be issued (Important)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#starting-the-web-service">2.1.11. Starting the Web Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#starting-and-testing-the-queue-service">2.1.12. Starting and testing the Queue Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#blockdiag-family">2.1.13. Blockdiag family</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#developer-tests">2.1.14. Developer Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#install-python">2.1.15. Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#starting-the-rabbitmq-service">2.1.16. Starting the  RabbitMQ service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#example-start-the-gui-for-development">2.1.17. Example: Start the GUI for development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#with-access-to-ldap">2.1.18. With access to LDAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#without-access-to-ldap">2.1.19. Without access to LDAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#cloudmesh-deployment">2.1.20. Cloudmesh deployment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#imports-in-cloudmesh-common">2.1.21. Imports in cloudmesh_common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developer.html#osx-system-preparation-tips">2.1.22. OSX System preparation Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../cobbler.html">2.2. Cloudmesh Installation wit Cobbler Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cobbler.html#install-ubuntu-14-04">2.2.1. Install Ubuntu 14.04</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cobbler.html#prepare-the-system">2.2.2. Prepare the system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cobbler.html#install-cloudmesh">2.2.3. Install Cloudmesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cobbler.html#cobbler">2.2.4. Cobbler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../celery.html">2.3. Celery Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../celery.html#starting-and-stopping-celery">2.3.1. Starting and Stopping Celery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../celery.html#log-and-pid-files">2.3.2. Log and Pid Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../celery.html#current-celery-based-tasks-under-development">2.3.3. Current Celery Based Tasks (Under Development)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../celery.html#launcher-simulation">2.3.3.1. Launcher (Simulation)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../celery.html#provisioner">2.3.3.2. Provisioner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../celery.html#pbs-qstat">2.3.3.3. pbs (qstat)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../celery.html#rain-bare-metal-provisioning-with-cobbler-and-rain">2.3.3.4. rain (bare-metal provisioning with cobbler and rain)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../celery.html#rack-system-temperatures">2.3.3.5. rack (system temperatures)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../configure.html">3. Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#cloudmesh-yaml">3.1. cloudmesh.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#configuration-file-rc-file">3.2. Configuration file (rc file)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../configure.html#retrieval-of-rc-file-by-command">3.2.1. Retrieval of rc file by command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configure.html#retrieval-of-rc-files-by-hand">3.2.2. Retrieval of rc files by Hand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configure.html#location-of-rc-files">3.2.3. Location of rc files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../configure.html#hp-cloud">3.2.3.1. HP Cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../configure.html#azure">3.2.3.2. Azure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#amazon-web-services">3.3. Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#cloudmesh-server-yaml">3.4. cloudmesh-server.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#cloudmesh-cluster-yaml">3.5. cloudmesh_cluster.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#other-yaml-files">3.6. Other Yaml files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#me-sample">3.7. Me Sample</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../doc.html">4. Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../doc.html#creating-the-documentation">4.1. Creating the Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../doc.html#creating-the-documentation-in-a-single-page">4.2. Creating the documentation in a single page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../doc.html#documenting-the-code">4.3. Documenting the code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../shell.html">5. Cloudmesh Shell</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cm-shell.html">5.1. Cloudmesh Shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#commandline">5.1.1. Commandline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#shell-usage">5.1.2. Shell Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../cm-shell.html#command-overview">5.2. Command Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#help">5.2.1. Help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#info">5.2.2. Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#variables">5.2.3. Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#defaults">5.2.4. Defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#managing-users">5.2.5. Managing Users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#managing-clouds">5.2.6. Managing Clouds</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#register-a-cloud">5.2.6.1. Register a cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#activate-cloud">5.2.6.2. Activate cloud</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#managing-projects">5.2.7. Managing Projects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#project-list">5.2.7.1. Project List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#project-information">5.2.7.2. Project Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#project-activation">5.2.7.3. Project Activation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#managing-keys">5.2.8. Managing Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#managing-images">5.2.9. Managing Images</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#list-images">5.2.9.1. List images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#image-information">5.2.9.2. Image information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#default-image">5.2.9.3. Default image</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#managing-flavors">5.2.10. Managing Flavors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#list-flavors">5.2.10.1. List Flavors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#flavor-information">5.2.10.2. Flavor information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#default-flavor">5.2.10.3. Default Flavor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#managing-virtual-machines">5.2.11. Managing Virtual Machines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#starting-vms">5.2.11.1. Starting VMs</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../cm-shell.html#vm-history">5.2.11.1.1. VM History</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#managing-security-groups">5.2.11.2. Managing Security Groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#managing-volumes">5.2.11.3. Managing Volumes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cm-shell.html#managing-heat-s-for-openstack">5.2.11.4. Managing heat&#8217;s for OpenStack</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#id1">5.2.12. Managing Security Groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#examples">5.2.13. Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell.html#todo-most-likely-in-cloud-command-and-register-command">5.2.14. TODO (most likely in cloud command and register command)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../cm-shell-rain.html">5.3. Cloudmesh Shell Rain</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell-rain.html#managing-servers-hosts">5.3.1. Managing Servers/hosts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell-rain.html#user-project-and-role-policies">5.3.2. User, Project and Role Policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell-rain.html#information">5.3.3. Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell-rain.html#provisioning">5.3.4. Provisioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell-rain.html#status">5.3.5. Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell-rain.html#reservation-interface-extension">5.3.6. Reservation Interface (extension)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell-rain.html#time-format">5.3.7. Time Format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../cm-manage.html">5.4. cm-manage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../man/man.html">5.5. Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#eof">5.5.1. EOF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#admin">5.5.2. admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#banner">5.5.3. banner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#clear">5.5.4. clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#cloud">5.5.5. cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#cluster">5.5.6. cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#color">5.5.7. color</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#debug">5.5.8. debug</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#default">5.5.9. default</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#deploy">5.5.10. deploy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#dot2">5.5.11. dot2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#edit">5.5.12. edit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#exec">5.5.13. exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#exp">5.5.14. exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#flavor">5.5.15. flavor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#graphviz">5.5.16. graphviz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#group">5.5.17. group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#hadoop">5.5.18. hadoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#help">5.5.19. help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#image">5.5.20. image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#info">5.5.21. info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#init">5.5.22. init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#inventory">5.5.23. inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#key">5.5.24. key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#label">5.5.25. label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#launcher">5.5.26. launcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#limits">5.5.27. limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#list">5.5.28. list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#load">5.5.29. load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#loglevel">5.5.30. loglevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#man">5.5.31. man</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#metric">5.5.32. metric</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#notebook">5.5.33. notebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#nova">5.5.34. nova</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#open">5.5.35. open</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#pause">5.5.36. pause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#plugins">5.5.37. plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#project">5.5.38. project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#py">5.5.39. py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#q">5.5.40. q</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#quit">5.5.41. quit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#quota">5.5.42. quota</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#rain">5.5.43. rain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#register">5.5.44. register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#script">5.5.45. script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#security-group">5.5.46. security_group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#slurm">5.5.47. slurm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#stack">5.5.48. stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#status">5.5.49. status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#storm">5.5.50. storm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#timer">5.5.51. timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#usage">5.5.52. usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#use">5.5.53. use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#user">5.5.54. user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#var">5.5.55. var</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#verbose">5.5.56. verbose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#version">5.5.57. version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#vm">5.5.58. vm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#volume">5.5.59. volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#web">5.5.60. web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../man/man.html#yaml">5.5.61. yaml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../metric.html">6. Cloudmesh Metric</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../metric.html#routes">6.1. Routes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">7. Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tasks.html">7.1. Issue Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tasks.html#labels">7.1.1. Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tasks.html#priority">7.1.2. Priority</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tasks.html#inactivity">7.1.3. Inactivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tasks.html#shortcuts">7.1.4. Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../coding.html">7.2. Cloudmesh Style Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#information">7.2.1. Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#general">7.2.2. General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#imports">7.2.3. Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#human-alphabetical-order-examples">7.2.4. Human Alphabetical Order Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#docstrings">7.2.5. Docstrings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#dictionaries-lists">7.2.6. Dictionaries/Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#calling-methods">7.2.7. Calling Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#internationalization-i18n-strings">7.2.8. Internationalization (i18n) Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#python-3-x-compatibility">7.2.9. Python 3.x compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#creating-unit-tests">7.2.10. Creating Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#running-tests">7.2.11. Running Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coding.html#commit-messages">7.2.12. Commit Messages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../hacking.html">7.3. Tips for Editing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../hacking.html#aptana-studio-develpment-environment-optional">7.3.1. Aptana Studio - Develpment Environment(optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../hacking.html#emacs-as-editor">7.3.2. Emacs as editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../hacking.html#replace-text-in-many-files-from-the-commandline">7.3.3. Replace Text in many files from the commandline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../hacking.html#mongodb-tools">7.3.4. MongoDB Tools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../hacking.html#robomongo">7.3.4.1. Robomongo</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../hacking.html#python-tools">7.3.5. Python Tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../hacking.html#git-pull-request">7.3.6. Git Pull Request</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../vagrant.html">7.4. Cloudmesh Vagrant Developers Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../vagrant.html#vagrant">7.4.1. Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../vagrant.html#veewee">7.4.2. Veewee</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../vagrant.html#creating-a-cloudmesh-test">7.4.3. Creating a cloudmesh test</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../appendix.html">8. Appendix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cm-shell-new.html">1. Proposed Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cm-shell-new.html#label">1.1. Label</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../deploy.html">2. Production Deployment Server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../deploy.html#instalation">2.1. Instalation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../deploy.html#starting-the-deployed-server">2.2. Starting the deployed server</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../fg.html">3. FutureGrid Specific tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../old-cm/cm.html">4. CM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../old-cm/cm.html#using-cloud-mesh">5. Using Cloud Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../old-cm/cm_cli.html">6. cloudmesh command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../old-cm/cmcli.html">7. cm config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../old-cm/intro.html">8. Cloud Mesh</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../old-cm/intro.html#commands">8.1. Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloudmesh.html">9. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cloudmesh.html#system-monitoring-and-operations">9.1. System Monitoring and Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cloudmesh.html#user-and-project-services">9.2. User and Project Services</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cloudmesh.html#accounting-and-app-store">9.2.1. Accounting and App Store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cloudmesh.html#networking">9.2.2. Networking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cloudmesh.html#monitoring">9.2.3. Monitoring</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cloudmesh.html#role-and-use-of-standards-and-open-source-software">9.2.4. Role and Use of Standards and Open Source Software</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../futuregrid.html">10. FutureGrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../plan/design.html">11. Design: Blueprint</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/design.html#features">11.1. Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/design.html#difference-to-other-efforts">11.2. Difference to other efforts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/design.html#component-view">11.3. Component View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/design.html#component-user-management">11.4. Component User Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/design.html#user-management">11.5. User Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/design.html#accounting-will-not-be-worked-on-much">11.6. Accounting (Will not be worked on much)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/design.html#component-resource-management-includes-cloudshifting-as-part-of-reservation">11.7. Component Resource Management (includes cloudshifting as part of reservation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/design.html#resource-management">11.8. Resource Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/design.html#scheduler">11.9. Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/design.html#interfaces">11.10. Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../plan/mock.html">12. Mockup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/mock.html#create-user">12.1. create_user</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../plan/plan.html">13. Plan: Cloudmesh Service Shift</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/plan.html#project-objectives">13.1. Project Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/plan.html#development-objectives">13.2. Development Objectives</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../plan/plan.html#production-objectives">13.2.1. Production Objectives</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/plan.html#project-deliverables">13.3. Project Deliverables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/plan.html#evolution-of-the-project">13.4. Evolution of the Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/plan.html#refernce-materials">13.5. Refernce Materials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../plan/plan.html#definitions-and-acronyms">13.6. Definitions and Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user.html">14. Cloudmesh Shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user.html#user-commands">14.1. User Commands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">cloudmesh_cmd3.plugins package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_admin">cloudmesh_cmd3.plugins.cm_shell_admin module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_cloud">cloudmesh_cmd3.plugins.cm_shell_cloud module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_cluster">cloudmesh_cmd3.plugins.cm_shell_cluster module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_color">cloudmesh_cmd3.plugins.cm_shell_color module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_debug">cloudmesh_cmd3.plugins.cm_shell_debug module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_default">cloudmesh_cmd3.plugins.cm_shell_default module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_exp">cloudmesh_cmd3.plugins.cm_shell_exp module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_flavor">cloudmesh_cmd3.plugins.cm_shell_flavor module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_group">cloudmesh_cmd3.plugins.cm_shell_group module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_image">cloudmesh_cmd3.plugins.cm_shell_image module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_init">cloudmesh_cmd3.plugins.cm_shell_init module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_inventory">cloudmesh_cmd3.plugins.cm_shell_inventory module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_key">cloudmesh_cmd3.plugins.cm_shell_key module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_label">cloudmesh_cmd3.plugins.cm_shell_label module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_launcher">cloudmesh_cmd3.plugins.cm_shell_launcher module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_limits">cloudmesh_cmd3.plugins.cm_shell_limits module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_list">cloudmesh_cmd3.plugins.cm_shell_list module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_loglevel">cloudmesh_cmd3.plugins.cm_shell_loglevel module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_metric">cloudmesh_cmd3.plugins.cm_shell_metric module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_notebook">cloudmesh_cmd3.plugins.cm_shell_notebook module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_nova">cloudmesh_cmd3.plugins.cm_shell_nova module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_project">cloudmesh_cmd3.plugins.cm_shell_project module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_quota">cloudmesh_cmd3.plugins.cm_shell_quota module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_rain">cloudmesh_cmd3.plugins.cm_shell_rain module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_register">cloudmesh_cmd3.plugins.cm_shell_register module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_security_group">cloudmesh_cmd3.plugins.cm_shell_security_group module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_stack">cloudmesh_cmd3.plugins.cm_shell_stack module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_status">cloudmesh_cmd3.plugins.cm_shell_status module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_storm">cloudmesh_cmd3.plugins.cm_shell_storm module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_usage">cloudmesh_cmd3.plugins.cm_shell_usage module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_user">cloudmesh_cmd3.plugins.cm_shell_user module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_vm">cloudmesh_cmd3.plugins.cm_shell_vm module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_volume">cloudmesh_cmd3.plugins.cm_shell_volume module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_web">cloudmesh_cmd3.plugins.cm_shell_web module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_yaml">cloudmesh_cmd3.plugins.cm_shell_yaml module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../../_sources/api/cloudmesh_cmd3/cloudmesh_cmd3.plugins.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><h4>Site Contents</h4>
+
+<ul>
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configure.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doc.html">4. Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../shell.html">5. Cloudmesh Shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../metric.html">6. Cloudmesh Metric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">7. Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../appendix.html">8. Appendix</a></li>
+</ul>
+
+</ul>
+
+<hr>
+
+<h4>Page Contents</h4><ul>
+<li><a class="reference internal" href="#">cloudmesh_cmd3.plugins package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_admin">cloudmesh_cmd3.plugins.cm_shell_admin module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_cloud">cloudmesh_cmd3.plugins.cm_shell_cloud module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_cluster">cloudmesh_cmd3.plugins.cm_shell_cluster module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_color">cloudmesh_cmd3.plugins.cm_shell_color module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_debug">cloudmesh_cmd3.plugins.cm_shell_debug module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_default">cloudmesh_cmd3.plugins.cm_shell_default module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_exp">cloudmesh_cmd3.plugins.cm_shell_exp module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_flavor">cloudmesh_cmd3.plugins.cm_shell_flavor module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_group">cloudmesh_cmd3.plugins.cm_shell_group module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_image">cloudmesh_cmd3.plugins.cm_shell_image module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_init">cloudmesh_cmd3.plugins.cm_shell_init module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_inventory">cloudmesh_cmd3.plugins.cm_shell_inventory module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_key">cloudmesh_cmd3.plugins.cm_shell_key module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_label">cloudmesh_cmd3.plugins.cm_shell_label module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_launcher">cloudmesh_cmd3.plugins.cm_shell_launcher module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_limits">cloudmesh_cmd3.plugins.cm_shell_limits module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_list">cloudmesh_cmd3.plugins.cm_shell_list module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_loglevel">cloudmesh_cmd3.plugins.cm_shell_loglevel module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_metric">cloudmesh_cmd3.plugins.cm_shell_metric module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_notebook">cloudmesh_cmd3.plugins.cm_shell_notebook module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_nova">cloudmesh_cmd3.plugins.cm_shell_nova module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_project">cloudmesh_cmd3.plugins.cm_shell_project module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_quota">cloudmesh_cmd3.plugins.cm_shell_quota module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_rain">cloudmesh_cmd3.plugins.cm_shell_rain module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_register">cloudmesh_cmd3.plugins.cm_shell_register module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_security_group">cloudmesh_cmd3.plugins.cm_shell_security_group module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_stack">cloudmesh_cmd3.plugins.cm_shell_stack module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_status">cloudmesh_cmd3.plugins.cm_shell_status module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_storm">cloudmesh_cmd3.plugins.cm_shell_storm module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_usage">cloudmesh_cmd3.plugins.cm_shell_usage module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_user">cloudmesh_cmd3.plugins.cm_shell_user module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_vm">cloudmesh_cmd3.plugins.cm_shell_vm module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_volume">cloudmesh_cmd3.plugins.cm_shell_volume module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_web">cloudmesh_cmd3.plugins.cm_shell_web module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins.cm_shell_yaml">cloudmesh_cmd3.plugins.cm_shell_yaml module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh_cmd3.plugins">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<form action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+<div id="sourcelink">
+  <a href="../../_sources/api/cloudmesh_cmd3/cloudmesh_cmd3.plugins.txt"
+     rel="nofollow">Source</a>
+</div>
+        </div>
+      </div>
+    <div class="col-md-9">
+      
+  <div class="section" id="cloudmesh-cmd3-plugins-package">
+<h1>cloudmesh_cmd3.plugins package<a class="headerlink" href="#cloudmesh-cmd3-plugins-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_admin">
+<span id="cloudmesh-cmd3-plugins-cm-shell-admin-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_admin module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_admin.cm_shell_admin">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_admin.</tt><tt class="descname">cm_shell_admin</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_admin.html#cm_shell_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_admin.cm_shell_admin" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_admin.cm_shell_admin.activate_cm_shell_admin">
+<tt class="descname">activate_cm_shell_admin</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_admin.html#cm_shell_admin.activate_cm_shell_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_admin.cm_shell_admin.activate_cm_shell_admin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_admin.cm_shell_admin.do_admin">
+<tt class="descname">do_admin</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_admin.html#cm_shell_admin.do_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_admin.cm_shell_admin.do_admin" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>admin password reset</dd>
+<dt>Description:</dt>
+<dd><dl class="first last docutils">
+<dt>admin password reset</dt>
+<dd>reset portal password</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_cloud">
+<span id="cloudmesh-cmd3-plugins-cm-shell-cloud-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_cloud module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_cloud" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_cloud.cm_shell_cloud">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_cloud.</tt><tt class="descname">cm_shell_cloud</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_cloud.html#cm_shell_cloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_cloud.cm_shell_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_cloud.cm_shell_cloud.activate_cm_shell_cloud">
+<tt class="descname">activate_cm_shell_cloud</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_cloud.html#cm_shell_cloud.activate_cm_shell_cloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_cloud.cm_shell_cloud.activate_cm_shell_cloud" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_cloud.cm_shell_cloud.do_cloud">
+<tt class="descname">do_cloud</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_cloud.html#cm_shell_cloud.do_cloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_cloud.cm_shell_cloud.do_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-python"><div class="highlight"><pre>Usage:
+    cloud [list] [--column=COLUMN] [--format=FORMAT]
+    cloud info [CLOUD|--all] [--format=FORMAT]
+    cloud alias NAME [CLOUD]
+    cloud select [CLOUD]
+    cloud on [CLOUD]
+    cloud off [CLOUD]
+    cloud add &lt;cloudYAMLfile&gt; [--force]
+    cloud remove [CLOUD|--all]
+    cloud default [CLOUD|--all]
+    cloud set flavor [CLOUD] [--name=NAME|--id=ID]
+    cloud set image [CLOUD] [--name=NAME|--id=ID]
+
+Arguments:
+
+  CLOUD                  the name of a cloud
+  &lt;cloudYAMLfile&gt;        a yaml file (with full file path) containing
+                         cloud information
+  NAME                   name for a cloud (or flavor and image)
+
+Options:
+
+   --column=COLUMN       specify what information to display in
+                         the columns of the list command. For
+                         example, --column=active,label prints the
+                         columns active and label. Available
+                         columns are active, label, host,
+                         type/version, type, heading, user,
+                         credentials, defaults (all to diplay all,
+                         semiall to display all except credentials
+                         and defaults)
+
+   --format=FORMAT       output format: table, json, csv
+
+   --all                 display all available columns
+
+   --force               if same cloud exists in database, it will be
+                         overwritten
+
+   --name=NAME           provide flavor or image name
+
+   --id=ID               provide flavor or image id
+
+
+Description:
+
+    The cloud command allows easy management of clouds in the
+    command shell. The following subcommands exist:
+
+    cloud [list] [--column=COLUMN] [--json|--table]
+        lists the stored clouds, optionally, specify columns for more
+        cloud information. For example, --column=active,label
+
+    cloud info [CLOUD|--all] [--json|--table]
+        provides the available information about the cloud in dict
+        format
+        options: specify CLOUD to display it, --all to display all,
+                 otherwise selected cloud will be used
+
+    cloud alias NAME [CLOUD]
+        sets a new name for a cloud
+        options: CLOUD is the original label of the cloud, if
+                 it is not specified the default cloud is used.
+
+
+    cloud select [CLOUD]
+        selects a cloud to work with from a list of clouds.If the cloud 
+        is not specified, it asks for the cloud interactively
+
+    cloud on [CLOUD]
+    cloud off [CLOUD]
+        activates or deactivates a cloud. if CLOUD is not
+        given, the default cloud will be used.
+
+
+    cloud add &lt;cloudYAMLfile&gt; [--force]
+        adds the cloud information to database that is
+        specified in the &lt;cloudYAMLfile&gt;. This file is a yaml. You
+        need to specify the full path. Inside the yaml, a
+        cloud is specified as follows:
+
+        cloudmesh:
+           clouds:
+             cloud1: ...
+             cloud2: ...
+
+        For examples on how to specify the clouds, please see
+        cloudmesh.yaml
+
+        options: --force. By default, existing cloud in
+                 database cannot be overwirtten, the --force
+                 allows overwriting the database values.
+
+    cloud remove [CLOUD|--all]
+        remove a cloud from the database, The default cloud is
+        used if CLOUD is not specified.
+        This command should be used with caution. It is also
+        possible to remove all clouds with the option --all
+
+    cloud default [CLOUD|--all]
+
+        show default settings of a cloud, --all to show all clouds
+
+    cloud set flavor [CLOUD] [--name=NAME|--id=ID]
+
+        sets the default flavor for a cloud. If the cloud is
+        not specified, it used the default cloud.
+
+    cloud set image [CLOUD] [--name=NAME|--id=ID]
+
+        sets the default flavor for a cloud. If the cloud is
+        not specified, it used the default cloud.
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_cluster">
+<span id="cloudmesh-cmd3-plugins-cm-shell-cluster-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_cluster module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_cluster" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_cluster.cm_shell_cluster">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_cluster.</tt><tt class="descname">cm_shell_cluster</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_cluster.html#cm_shell_cluster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_cluster.cm_shell_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_cluster.cm_shell_cluster.activate_cm_shell_cluster">
+<tt class="descname">activate_cm_shell_cluster</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_cluster.html#cm_shell_cluster.activate_cm_shell_cluster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_cluster.cm_shell_cluster.activate_cm_shell_cluster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_cluster.cm_shell_cluster.do_cluster">
+<tt class="descname">do_cluster</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_cluster.html#cm_shell_cluster.do_cluster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_cluster.cm_shell_cluster.do_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd><p class="first">cluster start CLUSTER_NAME
+cluster list
+cluster login CLUSTER_NAME
+cluster stop CLUSTER_NAME
+cluster create &#8211;count=&lt;count&gt;</p>
+<blockquote class="last">
+<div>&#8211;group=&lt;group&gt;
+[&#8211;ln=&lt;LoginName&gt;]
+[&#8211;cloud=&lt;CloudName&gt;]
+[&#8211;image=&lt;imgName&gt;|&#8211;imageid=&lt;imgId&gt;]
+[&#8211;flavor=&lt;flavorName&gt;|&#8211;flavorid=&lt;flavorId&gt;]
+[&#8211;force]</div></blockquote>
+</dd>
+<dt>Description:</dt>
+<dd><p class="first">Cluster Management</p>
+<p>cluster create &#8211;count=&lt;count&gt; &#8211;group=&lt;group&gt; &#8211;ln=&lt;LoginName&gt; [options...]
+&lt;count&gt;            specify amount of VMs in the cluster
+&lt;group&gt;            specify a group name of the cluster, make sure it&#8217;s unique</p>
+<blockquote class="last">
+<div>Start a cluster of VMs, and each of them can log into all others.
+CAUTION: you sould do some default setting before using this command:
+1. select cloud to work on, e.g. cloud select india
+2. activate the cloud, e.g. cloud on india
+3. set the default key to start VMs, e.g. key default [NAME]
+4. set the start name of VMs, which is prefix and index, e.g. label &#8211;prefix=test &#8211;id=1
+5. set image of VMs, e.g. default image
+6. set flavor of VMs, e.g. default flavor
+Also, please make sure the group name of the cluster is unique</div></blockquote>
+</dd>
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--ln=<var>&lt;LoginName&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>give a login name for the VMs, e.g. ubuntu</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--cloud=<var>&lt;CloudName&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>give a cloud to work on</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--flavor=<var>&lt;flavorName&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>give the name of the flavor</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--flavorid=<var>&lt;flavorId&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>give the id of the flavor</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--image=<var>&lt;imgName&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>give the name of the image</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--imageid=<var>&lt;imgId&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>give the id of the image</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--force</span></kbd></td>
+<td>if a group exists and there are VMs in it, the program will
+ask user to proceed or not, use this flag to respond yes as 
+default(if there are VMs in the group before creating this 
+cluster, the program will include the exist VMs into the cluster)</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_color">
+<span id="cloudmesh-cmd3-plugins-cm-shell-color-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_color module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_color" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_color.cm_shell_color">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_color.</tt><tt class="descname">cm_shell_color</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_color.html#cm_shell_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_color.cm_shell_color" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_color.cm_shell_color.activate_cm_shell_yaml">
+<tt class="descname">activate_cm_shell_yaml</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_color.html#cm_shell_color.activate_cm_shell_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_color.cm_shell_color.activate_cm_shell_yaml" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_color.cm_shell_color.do_color">
+<tt class="descname">do_color</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_color.html#cm_shell_color.do_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_color.cm_shell_color.do_color" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd><p class="first">color on
+color off
+color</p>
+<p class="last">Turns the shell color printing on or off</p>
+</dd>
+</dl>
+<p>Description:</p>
+<blockquote>
+<div><p>color on   switched the color on</p>
+<p>color off  switches the color off</p>
+<dl class="docutils">
+<dt>color      without parameters prints a test to display</dt>
+<dd>the various colored mesages. It is intended
+as a test to see if your terminal supports
+colors.</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_debug">
+<span id="cloudmesh-cmd3-plugins-cm-shell-debug-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_debug module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_debug" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_debug.cm_shell_debug">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_debug.</tt><tt class="descname">cm_shell_debug</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_debug.html#cm_shell_debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_debug.cm_shell_debug" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_debug.cm_shell_debug.activate_cm_shell_debug">
+<tt class="descname">activate_cm_shell_debug</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_debug.html#cm_shell_debug.activate_cm_shell_debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_debug.cm_shell_debug.activate_cm_shell_debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_debug.cm_shell_debug.do_debug">
+<tt class="descname">do_debug</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_debug.html#cm_shell_debug.do_debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_debug.cm_shell_debug.do_debug" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd><p class="first">debug on
+debug off</p>
+<p class="last">Turns the debug log level on and off.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_default">
+<span id="cloudmesh-cmd3-plugins-cm-shell-default-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_default module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_default" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_default.cm_shell_default">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_default.</tt><tt class="descname">cm_shell_default</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_default.html#cm_shell_default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_default.cm_shell_default" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_default.cm_shell_default.activate_cm_shell_default">
+<tt class="descname">activate_cm_shell_default</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_default.html#cm_shell_default.activate_cm_shell_default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_default.cm_shell_default.activate_cm_shell_default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_default.cm_shell_default.do_default">
+<tt class="descname">do_default</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_default.html#cm_shell_default.do_default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_default.cm_shell_default.do_default" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>default [&#8211;column=COLUMN] [&#8211;format=FORMAT]
+default cloud [VALUE]
+default format [VALUE]
+default key [VALUE]
+default flavor [CLOUD] [&#8211;name=NAME|&#8211;id=ID]
+default image [CLOUD] [&#8211;name=NAME|&#8211;id=ID]
+default list refresh [&#8211;on|&#8211;off]</dd>
+</dl>
+<p>Arguments:</p>
+<blockquote>
+<div><p>VALUE    provide a value to update default setting
+CLOUD    provide a cloud name to work with, if not</p>
+<blockquote>
+<div>specified, the default cloud or a selected
+cloud will be used</div></blockquote>
+</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--column=<var>COLUMN</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>specify what information to display.
+The columns are specified as a comma
+separated list. For example: cloud,format</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--format=<var>FORMAT</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>output format: table, json, csv</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--name=<var>NAME</var></span></kbd></td>
+<td>provide flavor or image name</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--id=<var>ID</var></span></kbd></td>
+<td>provide flavor or image id</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--on</span></kbd></td>
+<td>turn on</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--off</span></kbd></td>
+<td>turn off</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Description:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>default [&#8211;column=COLUMN] [&#8211;format=FORMAT]</dt>
+<dd>print user defaults settings</dd>
+<dt>default cloud [VALUE]</dt>
+<dd>print or change (if VALUE provided) default cloud. To set
+a cloud as default, it must be registered and active (to
+list clouds: cloud [list]; to activate a cloud: cloud on
+[CLOUD])</dd>
+<dt>default format [VALUE]</dt>
+<dd>print or change(if VALUE provided) default print format,
+available formats are table, json, csv</dd>
+<dt>default key [VALUE]</dt>
+<dd>print or change (if VALUE provided) default key.</dd>
+<dt>default flavor [CLOUD] [&#8211;name=NAME|&#8211;id=ID]</dt>
+<dd><p class="first">set default flavor for a cloud, same as command:</p>
+<blockquote>
+<div>cloud set flavor [CLOUD] [&#8211;name=NAME|&#8211;id=ID]</div></blockquote>
+<dl class="last docutils">
+<dt>(to check a cloud&#8217;s default settings:</dt>
+<dd>cloud default [CLOUD|&#8211;all])</dd>
+</dl>
+</dd>
+<dt>default image [CLOUD] [&#8211;name=NAME|&#8211;id=ID]</dt>
+<dd><p class="first">set default image for a cloud, same as command:</p>
+<blockquote>
+<div>cloud set image [CLOUD] [&#8211;name=NAME|&#8211;id=ID]</div></blockquote>
+<dl class="last docutils">
+<dt>(to check a cloud&#8217;s default settings:</dt>
+<dd>cloud default [CLOUD|&#8211;all])</dd>
+</dl>
+</dd>
+<dt>default list refresh [&#8211;on|&#8211;off]</dt>
+<dd>set the default behaviour of the list commands, if the default
+value is on, then the program will always refresh before listing</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_exp">
+<span id="cloudmesh-cmd3-plugins-cm-shell-exp-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_exp module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_exp" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_exp.cm_shell_exp">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_exp.</tt><tt class="descname">cm_shell_exp</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_exp.html#cm_shell_exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_exp.cm_shell_exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_exp.cm_shell_exp.activate_cm_shell_exp">
+<tt class="descname">activate_cm_shell_exp</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_exp.html#cm_shell_exp.activate_cm_shell_exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_exp.cm_shell_exp.activate_cm_shell_exp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_exp.cm_shell_exp.do_exp">
+<tt class="descname">do_exp</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_exp.html#cm_shell_exp.do_exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_exp.cm_shell_exp.do_exp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>exp NOTIMPLEMENTED clean
+exp NOTIMPLEMENTED delete NAME
+exp NOTIMPLEMENTED create [NAME]
+exp NOTIMPLEMENTED info [NAME]
+exp NOTIMPLEMENTED cloud NAME
+exp NOTIMPLEMENTED image NAME
+exp NOTIMPLEMENTED flavour NAME
+exp NOTIMPLEMENTED index NAME
+exp NOTIMPLEMENTED count N</dd>
+</dl>
+<p>Manages the vm</p>
+<p>Arguments:</p>
+<blockquote>
+<div>NAME           The name of a service or server
+N              The number of VMs to be started</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_flavor">
+<span id="cloudmesh-cmd3-plugins-cm-shell-flavor-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_flavor module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_flavor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_flavor.cm_shell_flavor">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_flavor.</tt><tt class="descname">cm_shell_flavor</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_flavor.html#cm_shell_flavor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_flavor.cm_shell_flavor" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_flavor.cm_shell_flavor.activate_cm_shell_flavor">
+<tt class="descname">activate_cm_shell_flavor</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_flavor.html#cm_shell_flavor.activate_cm_shell_flavor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_flavor.cm_shell_flavor.activate_cm_shell_flavor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_flavor.cm_shell_flavor.do_flavor">
+<tt class="descname">do_flavor</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_flavor.html#cm_shell_flavor.do_flavor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_flavor.cm_shell_flavor.do_flavor" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl class="docutils">
+<dt>Usage:</dt>
+<dd>flavor
+flavor CLOUD... [&#8211;refresh]
+flavor -h | &#8211;help
+flavor &#8211;version</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><blockquote class="first">
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-h</span></kbd></td>
+<td>help message</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--refresh</span></kbd></td>
+<td>refresh flavors of IaaS</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>CLOUD    Name of the IaaS cloud e.g. india_openstack_grizzly.</dd>
+<dt>Description:</dt>
+<dd>flavor command provides list of available flavors. Flavor describes
+virtual hardware configurations such as size of memory, disk, cpu cores.</dd>
+</dl>
+<p>Result:</p>
+<dl class="last docutils">
+<dt>Examples:</dt>
+<dd>$ flavor india_openstack_grizzly</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_group">
+<span id="cloudmesh-cmd3-plugins-cm-shell-group-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_group module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_group" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_group.cm_shell_group">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_group.</tt><tt class="descname">cm_shell_group</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_group.html#cm_shell_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_group.cm_shell_group" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_group.cm_shell_group.activate_cm_shell_group">
+<tt class="descname">activate_cm_shell_group</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_group.html#cm_shell_group.activate_cm_shell_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_group.cm_shell_group.activate_cm_shell_group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_group.cm_shell_group.do_group">
+<tt class="descname">do_group</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_group.html#cm_shell_group.do_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_group.cm_shell_group.do_group" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>group list [&#8211;format=FORMAT]
+group create NAME
+group remove NAME
+group add item NAME TYPE VALUE
+group remove item NAME TYPE VALUE
+group show NAME [TYPE] [&#8211;format=FORMAT]</dd>
+</dl>
+<p>Arguments:</p>
+<blockquote>
+<div>NAME    name of the group
+TYPE    type of the item in the group, e.g. vm 
+VALUE   value of item to add, e.g. vm name</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--format=<var>FORMAT</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>output format: table, json, csv</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Description:</p>
+<blockquote>
+<div>group list           lists the groups
+group create         creates a new group
+group remove         removes a group
+group add item       addes an item of a type to a group
+group remove item    removes an item of a type from a group
+group show           lists items of a group</div></blockquote>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><dl class="first last docutils">
+<dt>group add item sample vm samplevm</dt>
+<dd>add vm named samplevm to group sample</dd>
+<dt>group show sample vm &#8211;format=json</dt>
+<dd>list all VMs of group sample in json format</dd>
+</dl>
+</dd>
+</dl>
+<p>Example:</p>
+<blockquote>
+<div><p>group create experiment_1
+vm start
+last = vm label
+group add experiment_1 vm last</p>
+<p>group create experiment_2
+vm start
+last = vm info label  # prints the vm label /prefix + number
+ipno = vm info ip # prints the ip of the last vm
+ipno = vm info ip gvonlasz_1  # get ip of vm with label gvonlasz_1</p>
+<p>group add expermiment_2 ip ipno</p>
+<p>groups are just tuples</p>
+<p>i can have multiple Kinds in the tuple</p>
+</div></blockquote>
+<p>mongoengine</p>
+<p>class groupObject</p>
+<blockquote>
+<div>def add (... name, kind, attribute ...)
+def printer ( ... kind, printfunction, name...)
+def getter ( .... kind, name)</div></blockquote>
+<p>def getter ( .... kind, name ...)</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>if kind == &#8220;vm&#8221;:</dt>
+<dd>vm = get vm from mongo
+return vm</dd>
+<dt>elif kind = &#8220;image&#8221;</dt>
+<dd>iamge = get image from mongo
+return iamge</dd>
+</dl>
+</div></blockquote>
+<p>def vmPrinter ( .... vm ...)</p>
+<blockquote>
+<div>print vm.ip
+print vm.name
+....</div></blockquote>
+<p>def imagePrinter ( .... image ...)</p>
+<blockquote>
+<div>print image.size
+print image.name
+....</div></blockquote>
+<p>g = groupObject()
+g.printer(&#8220;vm&#8221;, cmPrinter)
+g.printer(&#8220;image&#8221;, imagePrinter)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_image">
+<span id="cloudmesh-cmd3-plugins-cm-shell-image-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_image module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_image" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_image.cm_shell_image">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_image.</tt><tt class="descname">cm_shell_image</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_image.html#cm_shell_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_image.cm_shell_image" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_image.cm_shell_image.activate_cm_shell_image">
+<tt class="descname">activate_cm_shell_image</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_image.html#cm_shell_image.activate_cm_shell_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_image.cm_shell_image.activate_cm_shell_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_image.cm_shell_image.do_image">
+<tt class="descname">do_image</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_image.html#cm_shell_image.do_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_image.cm_shell_image.do_image" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl class="docutils">
+<dt>Usage:</dt>
+<dd>image
+image &lt;cm_cloud&gt;... [&#8211;refresh]</dd>
+<dt>image -h | &#8211;help</dt>
+<dd>image &#8211;version</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><blockquote class="first">
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-h</span></kbd></td>
+<td>help message</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--refresh</span></kbd></td>
+<td>refresh images of IaaS</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.</dd>
+<dt>Description:</dt>
+<dd>image command provides list of available images. Image describes
+pre-configured virtual machine image.</dd>
+</dl>
+<p>Result:</p>
+<dl class="last docutils">
+<dt>Examples:</dt>
+<dd>$ image india_openstack_grizzly</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_init">
+<span id="cloudmesh-cmd3-plugins-cm-shell-init-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_init module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_init" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_init.cm_shell_init">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_init.</tt><tt class="descname">cm_shell_init</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_init.html#cm_shell_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_init.cm_shell_init" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_init.cm_shell_init.activate_cm_shell_init">
+<tt class="descname">activate_cm_shell_init</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_init.html#cm_shell_init.activate_cm_shell_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_init.cm_shell_init.activate_cm_shell_init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_init.cm_shell_init.do_init">
+<tt class="descname">do_init</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_init.html#cm_shell_init.do_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_init.cm_shell_init.do_init" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-python"><div class="highlight"><pre>Usage:
+       init [--force] generate yaml
+       init [--force] generate me
+       init [--force] generate none
+       init [--force] generate FILENAME
+       init list [KIND] [--json]
+       init list clouds [--file=FILENAME] [--json]
+       init inspect --file=FILENAME
+       init fill --file=FILENAME [VALUES]
+
+Initializes cloudmesh from a yaml file
+
+Arguments:
+   generate   generates a yaml file
+   yaml       specifies if a yaml file is used for generation
+              the file is located at me.yaml
+   me         same as yaml
+
+   none       specifies if a yaml file is used for generation
+              the file is located at CONFIG/etc/none.yaml
+   FILENAME   The filename to be generated or from which to read
+              information.
+   VALUES     yaml file with the velues to be sed in the FILENAME
+   KIND       The kind of the yaml file.
+
+Options:
+   --force  force mode does not ask. This may be dangerous as it
+            overwrites the CONFIG/cloudmesh.yaml file
+   --file=FILENAME  The file
+   --json   make the output format json
+   -v       verbose mode
+
+
+Description:
+
+  init list [KIND] [--json]
+     list the versions and types of the yaml files in the
+     CONFIG and CONFIG/etc directories.
+
+  init list clouds [--file=FILENAME]
+     Lists the available clouds in the configuration yaml file.
+
+  init inspect --file=FILENAME
+     print the variables in the yaml template
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_inventory">
+<span id="cloudmesh-cmd3-plugins-cm-shell-inventory-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_inventory module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_inventory" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_inventory.</tt><tt class="descname">cm_shell_inventory</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_inventory.html#cm_shell_inventory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory.activate_cm_shell_inventory">
+<tt class="descname">activate_cm_shell_inventory</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_inventory.html#cm_shell_inventory.activate_cm_shell_inventory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory.activate_cm_shell_inventory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory.do_inventory">
+<tt class="descname">do_inventory</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_inventory.html#cm_shell_inventory.do_inventory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory.do_inventory" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>inventory clean
+inventory create image DESCRIPTION
+inventory create server [dynamic] DESCRIPTION
+inventory create service [dynamic] DESCRIPTION
+inventory exists server NAME
+inventory exists service NAME
+inventory
+inventory print
+inventory info [&#8211;cluster=CLUSTER] [&#8211;server=SERVER]
+inventory list [&#8211;cluster=CLUSTER] [&#8211;server=SERVER]
+inventory server NAME
+inventory service NAME</dd>
+</dl>
+<p>Manages the inventory</p>
+<blockquote>
+<div>clean       cleans the inventory
+server      define servers</div></blockquote>
+<p>Arguments:</p>
+<blockquote>
+<div><p>DESCRIPTION    The hostlist&#8221;i[009-011],i[001-002]&#8221;</p>
+<p>NAME           The name of a service or server</p>
+</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div>v       verbose mode</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory.info_cm_shell_inventory">
+<tt class="descname">info_cm_shell_inventory</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_inventory.html#cm_shell_inventory.info_cm_shell_inventory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory.info_cm_shell_inventory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory.inventory_connection">
+<tt class="descname">inventory_connection</tt><em class="property"> = False</em><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory.inventory_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory.inventory_name">
+<tt class="descname">inventory_name</tt><em class="property"> = None</em><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_inventory.cm_shell_inventory.inventory_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_key">
+<span id="cloudmesh-cmd3-plugins-cm-shell-key-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_key module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_key" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_key.cm_shell_key">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_key.</tt><tt class="descname">cm_shell_key</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_key.html#cm_shell_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_key.cm_shell_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class.</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_key.cm_shell_key.activate_shell_key">
+<tt class="descname">activate_shell_key</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_key.html#cm_shell_key.activate_shell_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_key.cm_shell_key.activate_shell_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_key.cm_shell_key.do_key">
+<tt class="descname">do_key</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_key.html#cm_shell_key.do_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_key.cm_shell_key.do_key" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>key -h|&#8211;help
+key list [&#8211;source=SOURCE] [&#8211;dir=DIR] [&#8211;format=FORMAT]
+key add [&#8211;keyname=KEYNAME] FILENAME
+key default [KEYNAME]
+key delete KEYNAME</dd>
+</dl>
+<p>Manages the keys</p>
+<p>Arguments:</p>
+<blockquote>
+<div>SOURCE         mongo, yaml, ssh
+KEYNAME        The name of a key
+FORMAT         The format of the output (table, json, yaml)
+FILENAME       The filename with full path in which the key is located</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--dir=<var>DIR</var></span></kbd></td>
+<td>the directory with keys [default: ~/.ssh]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--format=<var>FORMAT</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>the format of the output [default: table]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--source=<var>SOURCE</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>the source for the keys [default: mongo]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--keyname=<var>KEYNAME</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>the name of the keys</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Description:</p>
+<p>key list &#8211;source=ssh  [&#8211;dir=DIR] [&#8211;format=FORMAT]</p>
+<blockquote>
+<div>lists all keys in the directory. If the directory is not
+specified the defualt will be ~/.ssh</div></blockquote>
+<p>key list &#8211;source=yaml  [&#8211;dir=DIR] [&#8211;format=FORMAT]</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>lists all keys in cloudmesh.yaml file in the specified directory.</dt>
+<dd>dir is by default ~/.cloudmesh</dd>
+</dl>
+</div></blockquote>
+<p>key list [&#8211;format=FORMAT]</p>
+<blockquote>
+<div>list the keys in mongo</div></blockquote>
+<p>key add [&#8211;keyname=keyname] FILENAME</p>
+<blockquote>
+<div>adds the key specifid by the filename to mongodb</div></blockquote>
+<p>key list</p>
+<blockquote>
+<div>Prints list of keys. NAME of the key can be specified</div></blockquote>
+<p>key default [NAME]</p>
+<blockquote>
+<div>Used to set a key from the key-list as the default key if NAME
+is given. Otherwise print the current default key</div></blockquote>
+<p>key delete NAME</p>
+<blockquote>
+<div>deletes a key. In yaml mode it can delete only key that
+are not saved in mongo</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_label">
+<span id="cloudmesh-cmd3-plugins-cm-shell-label-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_label module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_label" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_label.cm_shell_label">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_label.</tt><tt class="descname">cm_shell_label</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_label.html#cm_shell_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_label.cm_shell_label" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_label.cm_shell_label.activate_cm_shell_label">
+<tt class="descname">activate_cm_shell_label</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_label.html#cm_shell_label.activate_cm_shell_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_label.cm_shell_label.activate_cm_shell_label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_label.cm_shell_label.do_label">
+<tt class="descname">do_label</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_label.html#cm_shell_label.do_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_label.cm_shell_label.do_label" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>label [&#8211;prefix=PREFIX] [&#8211;id=ID] [&#8211;raw]</dd>
+</dl>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--prefix=<var>PREFIX</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>provide the prefix for the label</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--id=<var>ID</var></span></kbd></td>
+<td>provide the start ID which is an integer</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--raw</span></kbd></td>
+<td>prints label only</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Description:</p>
+<blockquote>
+<div>A command to set the prefix and id for creating an automatic
+lable for VMs. Without paremeter it prints the currect label.</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_launcher">
+<span id="cloudmesh-cmd3-plugins-cm-shell-launcher-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_launcher module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_launcher" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_launcher.cm_shell_launcher">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_launcher.</tt><tt class="descname">cm_shell_launcher</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_launcher.html#cm_shell_launcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_launcher.cm_shell_launcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_launcher.cm_shell_launcher.activate_cm_shell_launcher">
+<tt class="descname">activate_cm_shell_launcher</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_launcher.html#cm_shell_launcher.activate_cm_shell_launcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_launcher.cm_shell_launcher.activate_cm_shell_launcher" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_launcher.cm_shell_launcher.do_launcher">
+<tt class="descname">do_launcher</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_launcher.html#cm_shell_launcher.do_launcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_launcher.cm_shell_launcher.do_launcher" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>launcher start MENU
+launcher stop STACK_NAME
+launcher list
+launcher show STACK_NAME
+launcher menu [&#8211;column=COLUMN] [&#8211;format=FORMAT]
+launcher import [FILEPATH] [&#8211;force]
+launcher export FILEPATH
+launcher help | -h</dd>
+</dl>
+<p>An orchestration tool with Chef Cookbooks</p>
+<p>Arguments:</p>
+<blockquote>
+<div>MENU           Name of a cookbook
+STACK_NAME     Name of a launcher
+FILEPATH       Filepath
+COLUMN         column name to display
+FORMAT         display format (json, table)
+help           Prints this message</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_launcher.cm_shell_launcher.filter_launcher">
+<tt class="descname">filter_launcher</tt><big>(</big><em>stacks</em>, <em>_filter</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_launcher.html#cm_shell_launcher.filter_launcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_launcher.cm_shell_launcher.filter_launcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns if it satisfies the condition of the filter.</p>
+<dl class="docutils">
+<dt>Description:</dt>
+<dd>This is being used to filter out other stacks not related
+to launcher.  Launcher should starts with &#8216;launcher-xxx&#8217;
+in its stack_name.  This way, we can separate general
+stacks and launcher stacks.</dd>
+<dt>parameter:</dt>
+<dd>stacks (dict): all stacks
+_filter (dict): key, value, search</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_launcher.cm_shell_launcher.get_cloud_name">
+<tt class="descname">get_cloud_name</tt><big>(</big><em>cm_user_id</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_launcher.html#cm_shell_launcher.get_cloud_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_launcher.cm_shell_launcher.get_cloud_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a default cloud name if exists</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_limits">
+<span id="cloudmesh-cmd3-plugins-cm-shell-limits-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_limits module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_limits" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_limits.cm_shell_limits">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_limits.</tt><tt class="descname">cm_shell_limits</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_limits.html#cm_shell_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_limits.cm_shell_limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_limits.cm_shell_limits.activate_cm_shell_limits">
+<tt class="descname">activate_cm_shell_limits</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_limits.html#cm_shell_limits.activate_cm_shell_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_limits.cm_shell_limits.activate_cm_shell_limits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_limits.cm_shell_limits.do_limits">
+<tt class="descname">do_limits</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_limits.html#cm_shell_limits.do_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_limits.cm_shell_limits.do_limits" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>limits [CLOUD]
+limits help | -h</dd>
+</dl>
+<p>Current usage data with limits on a selected project (tenant)</p>
+<p>Arguments:</p>
+<blockquote>
+<div>CLOUD          Cloud name to see the usage
+help           Prints this message</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_limits.cm_shell_limits.get_cloud_name">
+<tt class="descname">get_cloud_name</tt><big>(</big><em>cm_user_id</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_limits.html#cm_shell_limits.get_cloud_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_limits.cm_shell_limits.get_cloud_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a default cloud name if exists</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_list">
+<span id="cloudmesh-cmd3-plugins-cm-shell-list-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_list module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_list" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_list.cm_shell_list">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_list.</tt><tt class="descname">cm_shell_list</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_list.html#cm_shell_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_list.cm_shell_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_list.cm_shell_list.activate_cm_shell_list">
+<tt class="descname">activate_cm_shell_list</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_list.html#cm_shell_list.activate_cm_shell_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_list.cm_shell_list.activate_cm_shell_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_list.cm_shell_list.do_list">
+<tt class="descname">do_list</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_list.html#cm_shell_list.do_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_list.cm_shell_list.do_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>List available flavors, images, vms, projects and clouds</p>
+<dl class="docutils">
+<dt>Usage:</dt>
+<dd>list flavor [CLOUD|&#8211;all] [&#8211;refresh] [&#8211;format=FORMAT]
+[&#8211;column=COLUMN]
+list image [CLOUD|&#8211;all] [&#8211;refresh] [&#8211;format=FORMAT] [&#8211;column=COLUMN]
+list vm [CLOUD|&#8211;all] [&#8211;refresh] [&#8211;format=FORMAT] [&#8211;column=COLUMN] [&#8211;group=&lt;group&gt;]
+list project
+list cloud [&#8211;column=COLUMN]</dd>
+</dl>
+<p>Arguments:</p>
+<blockquote>
+<div>CLOUD    the name of the cloud e.g. india</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--all</span></kbd></td>
+<td>list information of all active clouds</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--refresh</span></kbd></td>
+<td>refresh data before list</td></tr>
+</tbody>
+</table>
+<p class="attribution">&mdash;column=COLUMN        specify what information to display in
+the columns of the list command. For
+example, &#8211;column=active,label prints
+the columns active and label. Available
+columns are active, label, host,
+type/version, type, heading, user,
+credentials, defaults (all to display
+all, email to display all except
+credentials and defaults)</p>
+</div></blockquote>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--format=<var>FORMAT</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>output format: table, json, csv</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Description:</p>
+<blockquote>
+<div><p>List clouds and projects information, if the CLOUD argument is not specified, the
+selected default cloud will be used. You can interactively set the default cloud with the command
+&#8216;cloud select&#8217;.</p>
+<p>list flavor
+: list the flavors
+list image
+: list the images
+list vm
+: list the vms
+list project
+: list the projects
+list cloud
+: same as cloud list</p>
+</div></blockquote>
+<p>See Also:</p>
+<blockquote>
+<div>man cloud</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_loglevel">
+<span id="cloudmesh-cmd3-plugins-cm-shell-loglevel-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_loglevel module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_loglevel" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_loglevel.cm_shell_loglevel">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_loglevel.</tt><tt class="descname">cm_shell_loglevel</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_loglevel.html#cm_shell_loglevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_loglevel.cm_shell_loglevel" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_loglevel.cm_shell_loglevel.activate_cm_shell_loglevel">
+<tt class="descname">activate_cm_shell_loglevel</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_loglevel.html#cm_shell_loglevel.activate_cm_shell_loglevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_loglevel.cm_shell_loglevel.activate_cm_shell_loglevel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_loglevel.cm_shell_loglevel.do_loglevel">
+<tt class="descname">do_loglevel</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_loglevel.html#cm_shell_loglevel.do_loglevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_loglevel.cm_shell_loglevel.do_loglevel" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd><p class="first">loglevel
+loglevel critical
+loglevel error
+loglevel warning
+loglevel info
+loglevel debug</p>
+<p>Shows current log level or changes it.</p>
+<p class="last">loglevel - shows current log level
+critical - shows log message in critical level
+error    - shows log message in error level including critical
+warning  - shows log message in warning level including error
+info     - shows log message in info level including warning
+debug    - shows log message in debug level including info</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_metric">
+<span id="cloudmesh-cmd3-plugins-cm-shell-metric-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_metric module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_metric" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_metric.cm_shell_metric">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_metric.</tt><tt class="descname">cm_shell_metric</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_metric.html#cm_shell_metric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_metric.cm_shell_metric" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_metric.cm_shell_metric.activate_cm_shell_metric">
+<tt class="descname">activate_cm_shell_metric</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_metric.html#cm_shell_metric.activate_cm_shell_metric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_metric.cm_shell_metric.activate_cm_shell_metric" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_metric.cm_shell_metric.do_metric">
+<tt class="descname">do_metric</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_metric.html#cm_shell_metric.do_metric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_metric.cm_shell_metric.do_metric" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl class="docutils">
+<dt>Usage:</dt>
+<dd><p class="first">cm-metric -h | &#8211;help
+cm-metric &#8211;version
+cm-metric [CLOUD]</p>
+<blockquote class="last">
+<div>[-s START|&#8211;start=START]
+[-e END|&#8211;end=END]
+[-u USER|&#8211;user=USER]
+[-m METRIC|&#8211;metric=METRIC]
+[-p PERIOD|&#8211;period=PERIOD]
+[-c CLUSTER]</div></blockquote>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><blockquote class="first">
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-h</span></kbd></td>
+<td>help message</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-m</span>, <span class="option">--metric <var>METRIC</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>use either user|vm|runtime in METRIC</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-u</span>, <span class="option">--user <var>USER</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>use username in USER</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-s</span>, <span class="option">--start_date <var>START</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>use YYYYMMDD datetime in START</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-e</span>, <span class="option">--end_date <var>END</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>use YYYYMMDD datetime in END</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-c</span>, <span class="option">--host <var>HOST</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>use host name e.g. india, sierra, etc</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--period <var>PERIOD</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>use either month|day|week (TBD)</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="last docutils">
+<dt>Arguments:</dt>
+<dd><p class="first">CLOUD               Name of the IaaS cloud e.g. openstack, nimbus, Eucalyptus
+HOST                Name of host e.g. india, sierra, foxtrot,</p>
+<blockquote class="last">
+<div>hotel, alamo, lima</div></blockquote>
+</dd>
+<dt>Description:</dt>
+<dd>metric command provides usage data with filter options.</dd>
+<dt>Result:</dt>
+<dd><p class="first">The result of the method is a datastructure specified in a given format.
+If no format is specified, we return a JSON string of the following format:</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>{</dt>
+<dd><p class="first">&#8220;start_date&#8221;    :   start date of search    (datetime),
+&#8220;end_date&#8221;      :   end date of search      (datetime),
+&#8220;ownerid&#8221;       :   portal user id          (str),
+&#8220;metric&#8221;        :   selected metric name    (str),
+&#8220;period&#8221;        :   monthly, weekly, daily  (str),
+&#8220;clouds&#8221;        :   set of clouds           (list)
+[</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>{&#8220;service&#8221; <span class="classifier-delimiter">:</span> <span class="classifier">cloud service name  (str),</span></dt>
+<dd>&#8220;hostname&#8221;     :   hostname (str),
+&#8220;stats&#8221;        :   value (int) }
+...</dd>
+</dl>
+</div></blockquote>
+<p class="last">]</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+</dd>
+<dt>Examples:</dt>
+<dd>$ cm-metric openstack -c india -u hrlee
+- Get user statistics</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_notebook">
+<span id="cloudmesh-cmd3-plugins-cm-shell-notebook-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_notebook module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_notebook" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_notebook.cm_shell_notebook">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_notebook.</tt><tt class="descname">cm_shell_notebook</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_notebook.html#cm_shell_notebook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_notebook.cm_shell_notebook" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_notebook.cm_shell_notebook.activate_cm_shell_notebook">
+<tt class="descname">activate_cm_shell_notebook</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_notebook.html#cm_shell_notebook.activate_cm_shell_notebook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_notebook.cm_shell_notebook.activate_cm_shell_notebook" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_notebook.cm_shell_notebook.do_notebook">
+<tt class="descname">do_notebook</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_notebook.html#cm_shell_notebook.do_notebook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_notebook.cm_shell_notebook.do_notebook" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>notebook create
+notebook start
+notebook kill</dd>
+</dl>
+<p>Manages the ipython notebook server</p>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_notebook.notebook">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_notebook.</tt><tt class="descname">notebook</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_notebook.html#notebook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_notebook.notebook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_notebook.notebook.create">
+<tt class="descname">create</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_notebook.html#notebook.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_notebook.notebook.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_notebook.notebook.kill">
+<tt class="descname">kill</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_notebook.html#notebook.kill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_notebook.notebook.kill" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_notebook.notebook.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_notebook.html#notebook.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_notebook.notebook.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_nova">
+<span id="cloudmesh-cmd3-plugins-cm-shell-nova-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_nova module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_nova" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_nova.cm_shell_nova">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_nova.</tt><tt class="descname">cm_shell_nova</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_nova.html#cm_shell_nova"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_nova.cm_shell_nova" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_nova.cm_shell_nova.activate_cm_shell_nova">
+<tt class="descname">activate_cm_shell_nova</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_nova.html#cm_shell_nova.activate_cm_shell_nova"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_nova.cm_shell_nova.activate_cm_shell_nova" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_nova.cm_shell_nova.do_nova">
+<tt class="descname">do_nova</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_nova.html#cm_shell_nova.do_nova"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_nova.cm_shell_nova.do_nova" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>nova set CLOUD
+nova info [CLOUD]          
+nova help
+nova ARGUMENTS</dd>
+</dl>
+<p>A simple wrapper for the openstack nova command</p>
+<p>Arguments:</p>
+<blockquote>
+<div><p>ARGUMENTS      The arguments passed to nova
+help           Prints the nova manual
+set            reads the information from the current cloud</p>
+<blockquote>
+<div>and updates the environment variables if
+the cloud is an openstack cloud</div></blockquote>
+<p>info           the environment values for OS</p>
+</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_nova.cm_shell_nova.set_os_environ">
+<tt class="descname">set_os_environ</tt><big>(</big><em>cloudname</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_nova.html#cm_shell_nova.set_os_environ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_nova.cm_shell_nova.set_os_environ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set os environment variables on a given cloudname</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_project">
+<span id="cloudmesh-cmd3-plugins-cm-shell-project-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_project module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_project" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_project.cm_shell_project">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_project.</tt><tt class="descname">cm_shell_project</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_project.html#cm_shell_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_project.cm_shell_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_project.cm_shell_project.activate_shell_project">
+<tt class="descname">activate_shell_project</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_project.html#cm_shell_project.activate_shell_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_project.cm_shell_project.activate_shell_project" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_project.cm_shell_project.do_project">
+<tt class="descname">do_project</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_project.html#cm_shell_project.do_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_project.cm_shell_project.do_project" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>project
+project info [&#8211;format=FORMAT]
+project default NAME
+project active NAME
+project delete NAME
+project completed NAME</dd>
+</dl>
+<p>Manages the project</p>
+<p>Arguments:</p>
+<blockquote>
+<div>NAME           The project id
+FORMAT         The display format. (json, table)</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_quota">
+<span id="cloudmesh-cmd3-plugins-cm-shell-quota-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_quota module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_quota" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_quota.cm_shell_quota">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_quota.</tt><tt class="descname">cm_shell_quota</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_quota.html#cm_shell_quota"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_quota.cm_shell_quota" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_quota.cm_shell_quota.activate_cm_shell_quota">
+<tt class="descname">activate_cm_shell_quota</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_quota.html#cm_shell_quota.activate_cm_shell_quota"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_quota.cm_shell_quota.activate_cm_shell_quota" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_quota.cm_shell_quota.do_quota">
+<tt class="descname">do_quota</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_quota.html#cm_shell_quota.do_quota"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_quota.cm_shell_quota.do_quota" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>quota [CLOUD]
+quota help | -h</dd>
+</dl>
+<p>quota limit on a current project (tenant)</p>
+<p>Arguments:</p>
+<blockquote>
+<div>CLOUD          Cloud name to see the usage
+help           Prints this message</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_quota.cm_shell_quota.get_cloud_name">
+<tt class="descname">get_cloud_name</tt><big>(</big><em>cm_user_id</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_quota.html#cm_shell_quota.get_cloud_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_quota.cm_shell_quota.get_cloud_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a default cloud name if exists</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_rain">
+<span id="cloudmesh-cmd3-plugins-cm-shell-rain-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_rain module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_rain" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_rain.cm_shell_rain">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_rain.</tt><tt class="descname">cm_shell_rain</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_rain.html#cm_shell_rain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_rain.cm_shell_rain" title="Permalink to this definition">¶</a></dt>
+<dd><p>The command handler for rain</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_rain.cm_shell_rain.activate_cm_shell_rain">
+<tt class="descname">activate_cm_shell_rain</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_rain.html#cm_shell_rain.activate_cm_shell_rain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_rain.cm_shell_rain.activate_cm_shell_rain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_rain.cm_shell_rain.do_rain">
+<tt class="descname">do_rain</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_rain.html#cm_shell_rain.do_rain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_rain.cm_shell_rain.do_rain" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd><p class="first">rain -h | &#8211;help
+rain &#8211;version
+rain admin add [LABEL] &#8211;file=FILE
+rain admin baremetals
+rain admin on HOSTS
+rain admin off HOSTS
+rain admin [-i] delete HOSTS
+rain admin [-i] rm HOSTS
+rain admin list users [&#8211;merge]
+rain admin list projects [&#8211;merge]
+rain admin list roles
+rain admin list hosts [&#8211;user=USERS|&#8211;project=PROJECTS|&#8211;role=ROLE]</p>
+<blockquote>
+<div>[&#8211;start=TIME_START]
+[&#8211;end=TIME_END]
+[&#8211;format=FORMAT]</div></blockquote>
+<dl class="docutils">
+<dt>rain admin policy [&#8211;user=USERS|&#8211;project=PROJECTS|&#8211;role=ROLE]</dt>
+<dd>(-l HOSTS|-n COUNT)
+[&#8211;start=TIME_START]
+[&#8211;end=TIME_END]</dd>
+</dl>
+<p>rain user list [&#8211;project=PROJECTS] [HOSTS]
+rain user list hosts [&#8211;start=TIME_START]</p>
+<blockquote>
+<div>[&#8211;end=TIME_END]
+[&#8211;format=FORMAT]</div></blockquote>
+<p class="last">rain status [&#8211;short|&#8211;summary][&#8211;kind=KIND] [HOSTS]
+rain provision &#8211;profile=PROFILE HOSTS
+rain provision list [&#8211;type=TYPE] (&#8211;distro=DISTRO|&#8211;kickstart=KICKSTART)
+rain provision &#8211;distro=DITRO &#8211;kickstart=KICKSTART HOSTS
+rain provision add (&#8211;distro=URL|&#8211;kickstart=KICk_CONTENT) NAME
+rain provision power [&#8211;off] HOSTS
+rain provision monitor HOSTS</p>
+</dd>
+<dt>Arguments:</dt>
+<dd>HOSTS     the list of hosts passed
+LABEL     the label of a host
+COUNT     the count of the bare metal provisioned hosts
+KIND      the kind
+TYPE      the type of profile or server</dd>
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-n <var>COUNT</var></span></kbd></td>
+<td>count of teh bare metal hosts to be provisined</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-p <var>PROJECTS</var></span></kbd></td>
+<td>&#8211;projects=PROJECTS</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-u <var>USERS</var></span></kbd></td>
+<td><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--user=<var>USERS</var></span></kbd></td>
+<td>Specify users</td></tr>
+</tbody>
+</table>
+</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-f <var>FILE</var></span>, <span class="option">--file=<var>FILE</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>file to be specified</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-i</span></kbd></td>
+<td>interactive mode adds a yes/no
+question for each host specified</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--role=<var>ROLE</var></span></kbd></td>
+<td>Specify predefined role</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--start=<var>TIME_START</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Start time of the reservation, in
+YYYY/MM/DD HH:MM:SS format. [default: current_time]</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--end=<var>TIME_END</var></span></kbd></td>
+<td>End time of the reservation, in
+YYYY/MM/DD HH:MM:SS format. In addition a duration
+can be specified if the + sign is the first sign.
+The duration will than be added to
+the start time. [default: +1d]</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--kind=<var>KIND</var></span></kbd></td>
+<td>Format of the output -png, jpg, pdf. [default:png]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--format=<var>FORMAT</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Format of the output json, cfg. [default:json]</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--type=<var>TYPE</var></span></kbd></td>
+<td>Format of the output profile, server. [default:server]</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_register">
+<span id="cloudmesh-cmd3-plugins-cm-shell-register-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_register module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_register" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_register.cm_shell_register">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_register.</tt><tt class="descname">cm_shell_register</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_register.html#cm_shell_register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_register.cm_shell_register" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_register.cm_shell_register.activate_cm_shell_register">
+<tt class="descname">activate_cm_shell_register</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_register.html#cm_shell_register.activate_cm_shell_register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_register.cm_shell_register.activate_cm_shell_register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_register.cm_shell_register.do_register">
+<tt class="descname">do_register</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_register.html#cm_shell_register.do_register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_register.cm_shell_register.do_register" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>register [options] NAME</dd>
+<dt>Arguments:</dt>
+<dd>NAME      Name of the cloud to be registered</dd>
+<dt>Options:</dt>
+<dd>-a &#8211;act      Activate the cloud to be registered
+-d &#8211;deact    Deactivate the cloud</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_register.main">
+<tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_register.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_register.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_register.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_security_group">
+<span id="cloudmesh-cmd3-plugins-cm-shell-security-group-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_security_group module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_security_group" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_security_group.cm_shell_security_group">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_security_group.</tt><tt class="descname">cm_shell_security_group</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_security_group.html#cm_shell_security_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_security_group.cm_shell_security_group" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_security_group.cm_shell_security_group.activate_cm_shell_security_group">
+<tt class="descname">activate_cm_shell_security_group</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_security_group.html#cm_shell_security_group.activate_cm_shell_security_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_security_group.cm_shell_security_group.activate_cm_shell_security_group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_security_group.cm_shell_security_group.do_security_group">
+<tt class="descname">do_security_group</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_security_group.html#cm_shell_security_group.do_security_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_security_group.cm_shell_security_group.do_security_group" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><dl class="docutils">
+<dt>Usage:</dt>
+<dd>security_group list &lt;cm_cloud&gt;...
+security_group add &lt;cm_cloud&gt; &lt;label&gt; &lt;parameters&gt;  [NOT IMPLEMENTED]
+security_group delete &lt;cm_cloud&gt; &lt;label&gt;            [NOT IMPLEMENTED]</dd>
+<dt>security_group -h | &#8211;help</dt>
+<dd>security_group &#8211;version</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><blockquote class="first">
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-h</span></kbd></td>
+<td>help message</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.</dd>
+<dt>Description:</dt>
+<dd>security_group command provides list of available security_groups.</dd>
+</dl>
+<p>Result:</p>
+<dl class="last docutils">
+<dt>Examples:</dt>
+<dd>$ security_group list india_openstack_grizzly</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_stack">
+<span id="cloudmesh-cmd3-plugins-cm-shell-stack-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_stack module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_stack" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_stack.cm_shell_stack">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_stack.</tt><tt class="descname">cm_shell_stack</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_stack.html#cm_shell_stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_stack.cm_shell_stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_stack.cm_shell_stack.activate_cm_shell_stack">
+<tt class="descname">activate_cm_shell_stack</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_stack.html#cm_shell_stack.activate_cm_shell_stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_stack.cm_shell_stack.activate_cm_shell_stack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_stack.cm_shell_stack.do_stack">
+<tt class="descname">do_stack</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_stack.html#cm_shell_stack.do_stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_stack.cm_shell_stack.do_stack" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>stack start NAME [&#8211;template=TEMPLATE] [&#8211;param=PARAM]
+stack stop NAME
+stack show NAME
+stack list [&#8211;refresh] [&#8211;column=COLUMN] [&#8211;format=FORMAT]
+stack help | -h</dd>
+</dl>
+<p>An orchestration tool (OpenStack Heat)</p>
+<p>Arguments:</p>
+<blockquote>
+<div>NAME           stack name
+help           Prints this message</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_stack.cm_shell_stack.get_cloud_name">
+<tt class="descname">get_cloud_name</tt><big>(</big><em>cm_user_id</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_stack.html#cm_shell_stack.get_cloud_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_stack.cm_shell_stack.get_cloud_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a default cloud name if exists</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_stack.cm_shell_stack.name">
+<tt class="descname">name</tt><em class="property"> = 'stack'</em><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_stack.cm_shell_stack.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_status">
+<span id="cloudmesh-cmd3-plugins-cm-shell-status-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_status module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_status" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_status.cm_shell_status">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_status.</tt><tt class="descname">cm_shell_status</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_status.html#cm_shell_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_status.cm_shell_status" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_status.cm_shell_status.activate_cm_shell_status">
+<tt class="descname">activate_cm_shell_status</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_status.html#cm_shell_status.activate_cm_shell_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_status.cm_shell_status.activate_cm_shell_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_status.cm_shell_status.do_status">
+<tt class="descname">do_status</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_status.html#cm_shell_status.do_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_status.cm_shell_status.do_status" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd><p class="first">status mongo
+status celery
+status celery ping
+status celery stats
+status rabbitmq</p>
+<p class="last">Shows system status</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_storm">
+<span id="cloudmesh-cmd3-plugins-cm-shell-storm-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_storm module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_storm" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_storm.cm_shell_storm">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_storm.</tt><tt class="descname">cm_shell_storm</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_storm.html#cm_shell_storm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_storm.cm_shell_storm" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_storm.cm_shell_storm.activate_cm_shell_storm">
+<tt class="descname">activate_cm_shell_storm</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_storm.html#cm_shell_storm.activate_cm_shell_storm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_storm.cm_shell_storm.activate_cm_shell_storm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_storm.cm_shell_storm.do_storm">
+<tt class="descname">do_storm</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_storm.html#cm_shell_storm.do_storm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_storm.cm_shell_storm.do_storm" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-python"><div class="highlight"><pre>Usage:
+  storm list
+  storm ID
+  storm register ID [--kind=KIND] [ARGUMENTS...]
+
+Arguments:
+
+  list       list the available high level services to be provisioned.
+  ID         list the user with the given ID
+  ARGUMENTS  The name of the arguments that need to be passed
+
+Options:
+
+  --kind=KIND  the kind of the storm. It can be chef, puppet, or other
+               frameworks. At this time we will focus on chef
+               [default: chef].
+   -v          verbose mode
+
+Description:
+
+  Command to invoce a provisioning of high level services such as
+  provided with chef, puppet, or other high level DevOps Tools. If
+  needed the machines can be provisioned prior to a storm with
+  rain. Together this forms a rain storm.
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_usage">
+<span id="cloudmesh-cmd3-plugins-cm-shell-usage-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_usage module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_usage" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_usage.cm_shell_usage">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_usage.</tt><tt class="descname">cm_shell_usage</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_usage.html#cm_shell_usage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_usage.cm_shell_usage" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_usage.cm_shell_usage.activate_cm_shell_usage">
+<tt class="descname">activate_cm_shell_usage</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_usage.html#cm_shell_usage.activate_cm_shell_usage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_usage.cm_shell_usage.activate_cm_shell_usage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_usage.cm_shell_usage.do_usage">
+<tt class="descname">do_usage</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_usage.html#cm_shell_usage.do_usage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_usage.cm_shell_usage.do_usage" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>usage [CLOUD] [&#8211;start=START] [&#8211;end=END]
+usage help | -h</dd>
+</dl>
+<p>Usage data on a current project (tenant)</p>
+<p>Arguments:</p>
+<blockquote>
+<div>CLOUD          Cloud name to see the usage
+START          start date of usage (YYYY-MM-DD)
+END            end date of usage (YYYY-MM-DD)
+help           Prints this message</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_usage.cm_shell_usage.get_cloud_name">
+<tt class="descname">get_cloud_name</tt><big>(</big><em>cm_user_id</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_usage.html#cm_shell_usage.get_cloud_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_usage.cm_shell_usage.get_cloud_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a default cloud name if exists</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_user">
+<span id="cloudmesh-cmd3-plugins-cm-shell-user-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_user module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_user" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_user.cm_shell_user">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_user.</tt><tt class="descname">cm_shell_user</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_user.html#cm_shell_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_user.cm_shell_user" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_user.cm_shell_user.activate_cm_shell_user">
+<tt class="descname">activate_cm_shell_user</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_user.html#cm_shell_user.activate_cm_shell_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_user.cm_shell_user.activate_cm_shell_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_user.cm_shell_user.do_user">
+<tt class="descname">do_user</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_user.html#cm_shell_user.do_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_user.cm_shell_user.do_user" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>user list
+user info [ID]
+user id</dd>
+</dl>
+<p>Administrative command to lists the users from LDAP</p>
+<p>Arguments:</p>
+<blockquote>
+<div>list       list the users
+ID         list the user with the given ID</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_vm">
+<span id="cloudmesh-cmd3-plugins-cm-shell-vm-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_vm module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_vm" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_vm.cm_shell_vm">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_vm.</tt><tt class="descname">cm_shell_vm</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_vm.html#cm_shell_vm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_vm.cm_shell_vm" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_vm.cm_shell_vm.activate_cm_shell_vm">
+<tt class="descname">activate_cm_shell_vm</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_vm.html#cm_shell_vm.activate_cm_shell_vm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_vm.cm_shell_vm.activate_cm_shell_vm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_vm.cm_shell_vm.do_vm">
+<tt class="descname">do_vm</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_vm.html#cm_shell_vm.do_vm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_vm.cm_shell_vm.do_vm" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-python"><div class="highlight"><pre>Usage:
+    vm start [--name=&lt;vmname&gt;]
+             [--count=&lt;count&gt;]
+             [--cloud=&lt;CloudName&gt;]
+             [--image=&lt;imgName&gt;|--imageid=&lt;imgId&gt;]
+             [--flavor=&lt;flavorName&gt;|--flavorid=&lt;flavorId&gt;]
+             [--group=&lt;group&gt;]
+    vm delete [NAME|--id=&lt;id&gt;] 
+              [--group=&lt;group&gt;]
+              [--cloud=&lt;CloudName&gt;]
+              [--prefix=&lt;prefix&gt;|--names=&lt;hostlist&gt;]
+              [--force]
+    vm ip assign (NAME|--id=&lt;id&gt;) 
+                 [--cloud=&lt;CloudName&gt;]
+    vm ip show [NAME|--id=&lt;id&gt;] 
+               [--group=&lt;group&gt;]
+               [--cloud=&lt;CloudName&gt;]
+               [--prefix=&lt;prefix&gt;|--names=&lt;hostlist&gt;]
+               [--format=FORMAT] 
+               [--refresh] 
+    vm login (--name=&lt;vmname&gt;|--id=&lt;id&gt;|--addr=&lt;address&gt;) --ln=&lt;LoginName&gt;
+             [--cloud=&lt;CloudName&gt;]
+             [--key=&lt;key&gt;]
+             [--] [&lt;command&gt;...]
+    vm login NAME --ln=&lt;LoginName&gt;
+             [--cloud=&lt;CloudName&gt;]
+             [--key=&lt;key&gt;]
+             [--] [&lt;command&gt;...]
+    vm list [CLOUD|--all] 
+            [--refresh] 
+            [--format=FORMAT] 
+            [--column=COLUMN]
+            [--group=&lt;group&gt;]
+
+Arguments:
+    &lt;command&gt;              positional arguments, the commands you want to
+                           execute on the server(e.g. ls -a), you will get 
+                           a return of executing result instead of login to 
+                           the server, note that type in -- is suggested before 
+                           you input the commands
+    NAME                   server name
+
+Options:
+    --addr=&lt;address&gt;       give the public ip of the server
+    --cloud=&lt;CloudName&gt;    give a cloud to work on, if not given, selected
+                           or default cloud will be used
+    --count=&lt;count&gt;        give the number of servers to start
+    --flavor=&lt;flavorName&gt;  give the name of the flavor
+    --flavorid=&lt;flavorId&gt;  give the id of the flavor
+    --group=&lt;group&gt;        give the group name of server
+    --id=&lt;id&gt;              give the server id
+    --image=&lt;imgName&gt;      give the name of the image
+    --imageid=&lt;imgId&gt;      give the id of the image
+    --key=&lt;key&gt;            spicfy a private key to use, input a string which 
+                           is the full path to the key file
+    --ln=&lt;LoginName&gt;       give the login name of the server that you want 
+                           to login
+    --name=&lt;vmname&gt;        give the name of the virtual machine
+    --names=&lt;hostlist&gt;     give the VM name, but in a hostlist style, which is very 
+                           convenient when you need a range of VMs e.g. sample[1-3] 
+                           =&gt; [&#39;sample1&#39;, &#39;sample2&#39;, &#39;sample3&#39;]
+                           sample[1-3,18] =&gt; [&#39;sample1&#39;, &#39;sample2&#39;, &#39;sample3&#39;, &#39;sample18&#39;]
+    --prefix=&lt;prefix&gt;      give the prefix of the server, standand server
+                           name is in the form of prefix_index, e.g. abc_9
+    --force                delete vms without user&#39;s confirmation
+
+Description:
+    commands used to start or delete servers of a cloud
+
+    vm start [options...]       start servers of a cloud, user may specify
+                                flavor, image .etc, otherwise default values
+                                will be used, see how to set default values
+                                of a cloud: cloud help
+    vm delete [options...]      delete servers of a cloud, user may delete
+                                a server by its name or id, delete servers
+                                of a group or servers of a cloud, give prefix
+                                and/or range to find servers by their names.
+                                Or user may specify more options to narrow
+                                the search
+    vm ip assign [options...]   assign a public ip to a VM of a cloud
+    vm ip show [options...]     show the ips of VMs
+    vm login [options...]       login to a server or execute commands on it
+    vm list [options...]        same as command &quot;list vm&quot;, please refer to it
+
+Examples:
+    vm start --count=5 --group=test --cloud=india
+            start 5 servers on india and give them group
+            name: test
+
+    vm delete --group=test --names=sample_[1-9]
+            delete servers on selected or default cloud with search conditions:
+            group name is test and the VM names are among sample_1 ... sample_9
+
+    vm ip show --names=sample_[1-5,9] --format=json
+            show the ips of VM names among sample_1 ... sample_5 and sample_9 in 
+            json format
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_volume">
+<span id="cloudmesh-cmd3-plugins-cm-shell-volume-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_volume module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_volume" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_volume.cm_shell_volume">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_volume.</tt><tt class="descname">cm_shell_volume</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_volume.html#cm_shell_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_volume.cm_shell_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>opt_example class</p>
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_volume.cm_shell_volume.activate_cm_shell_volume">
+<tt class="descname">activate_cm_shell_volume</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_volume.html#cm_shell_volume.activate_cm_shell_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_volume.cm_shell_volume.activate_cm_shell_volume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_volume.cm_shell_volume.do_volume">
+<tt class="descname">do_volume</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_volume.html#cm_shell_volume.do_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_volume.cm_shell_volume.do_volume" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd><p class="first">volume list
+volume create &lt;size&gt;</p>
+<blockquote>
+<div>[&#8211;snapshot-id=&lt;snapshot-id&gt;]
+[&#8211;image-id=&lt;image-id&gt;]
+[&#8211;display-name=&lt;display-name&gt;]
+[&#8211;display-description=&lt;display-description&gt;]
+[&#8211;volume-type=&lt;volume-type&gt;]
+[&#8211;availability-zone=&lt;availability-zone&gt;]</div></blockquote>
+<p>volume delete &lt;volume&gt;
+volume attach &lt;server&gt; &lt;volume&gt; &lt;device&gt;
+volume detach &lt;server&gt; &lt;volume&gt;
+volume show &lt;volume&gt;
+volume snapshot-list
+volume snapshot-create &lt;volume-id&gt;</p>
+<blockquote>
+<div>[&#8211;force]
+[&#8211;display-name=&lt;display-name&gt;]
+[&#8211;display-description=&lt;display-description&gt;]</div></blockquote>
+<p class="last">volume snapshot-delete &lt;snapshot&gt;
+volume snapshot-show &lt;snapshot&gt;
+volume help</p>
+</dd>
+</dl>
+<p>volume management</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd><p class="first">&lt;size&gt;            Size of volume in GB
+&lt;volume&gt;          Name or ID of the volume to delete
+&lt;volume-id&gt;       ID of the volume to snapshot
+&lt;server&gt;          Name or ID of server(VM).
+&lt;device&gt;          Name of the device e.g. /dev/vdb. Use &#8220;auto&#8221; for</p>
+<blockquote>
+<div>autoassign (if supported)</div></blockquote>
+<p class="last">&lt;snapshot&gt;        Name or ID of the snapshot</p>
+</dd>
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--snapshot-id <var>&lt;snapshot-id&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Optional snapshot id to create the volume from.
+(Default=None)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--image-id <var>&lt;image-id&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Optional image id to create the volume from.
+(Default=None)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--display-name <var>&lt;display-name&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Optional volume name. (Default=None)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--display-description <var>&lt;display-description&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Optional volume description. (Default=None)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--volume-type <var>&lt;volume-type&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Optional volume type. (Default=None)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--availability-zone <var>&lt;availability-zone&gt;</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Optional Availability Zone for volume. (Default=None)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--force</span></kbd></td>
+<td>Optional flag to indicate whether to snapshot a volume
+even if its attached to an instance. (Default=False)</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Description:</dt>
+<dd><dl class="first last docutils">
+<dt>volume list</dt>
+<dd>List all the volumes</dd>
+<dt>volume create &lt;size&gt; [options...]</dt>
+<dd>Add a new volume</dd>
+<dt>volume delete &lt;volume&gt;</dt>
+<dd>Remove a volume</dd>
+<dt>volume attach &lt;server&gt; &lt;volume&gt; &lt;device&gt;</dt>
+<dd>Attach a volume to a server</dd>
+<dt>volume-detach &lt;server&gt; &lt;volume&gt;</dt>
+<dd>Detach a volume from a server</dd>
+<dt>volume show &lt;volume&gt;        </dt>
+<dd>Show details about a volume</dd>
+<dt>volume snapshot-list</dt>
+<dd>List all the snapshots</dd>
+<dt>volume snapshot-create &lt;volume-id&gt; [options...]</dt>
+<dd>Add a new snapshot</dd>
+<dt>volume snapshot-delete &lt;snapshot&gt;</dt>
+<dd>Remove a snapshot</dd>
+<dt>volume-snapshot-show &lt;snapshot&gt;</dt>
+<dd>Show details about a snapshot</dd>
+<dt>volume help </dt>
+<dd>Prints the nova manual</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_web">
+<span id="cloudmesh-cmd3-plugins-cm-shell-web-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_web module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_web" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_web.cm_shell_web">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_web.</tt><tt class="descname">cm_shell_web</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_web.html#cm_shell_web"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_web.cm_shell_web" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_web.cm_shell_web.activate_cm_shell_web">
+<tt class="descname">activate_cm_shell_web</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_web.html#cm_shell_web.activate_cm_shell_web"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_web.cm_shell_web.activate_cm_shell_web" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_web.cm_shell_web.do_web">
+<tt class="descname">do_web</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_web.html#cm_shell_web.do_web"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_web.cm_shell_web.do_web" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>web [&#8211;fg|&#8211;cm] [LINK]</dd>
+</dl>
+<p>Arguments:</p>
+<blockquote>
+<div>LINK    the link on the localhost cm server is opened.</div></blockquote>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-v</span></kbd></td>
+<td>verbose mode</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--fg</span></kbd></td>
+<td>opens a link on the FG portal</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--cm</span></kbd></td>
+<td>opens a link on the CM portal</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Description:</p>
+<blockquote>
+<div>Opens a web page with the specified link</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins.cm_shell_yaml">
+<span id="cloudmesh-cmd3-plugins-cm-shell-yaml-module"></span><h2>cloudmesh_cmd3.plugins.cm_shell_yaml module<a class="headerlink" href="#module-cloudmesh_cmd3.plugins.cm_shell_yaml" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_yaml.cm_shell_yaml">
+<em class="property">class </em><tt class="descclassname">cloudmesh_cmd3.plugins.cm_shell_yaml.</tt><tt class="descname">cm_shell_yaml</tt><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_yaml.html#cm_shell_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_yaml.cm_shell_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_yaml.cm_shell_yaml.activate_cm_shell_yaml">
+<tt class="descname">activate_cm_shell_yaml</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_yaml.html#cm_shell_yaml.activate_cm_shell_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_yaml.cm_shell_yaml.activate_cm_shell_yaml" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh_cmd3.plugins.cm_shell_yaml.cm_shell_yaml.do_yaml">
+<tt class="descname">do_yaml</tt><big>(</big><em>instance</em>, <em>args</em><big>)</big><a class="reference internal" href="../../_modules/cloudmesh_cmd3/plugins/cm_shell_yaml.html#cm_shell_yaml.do_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh_cmd3.plugins.cm_shell_yaml.cm_shell_yaml.do_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Usage:</dt>
+<dd>yaml KIND [KEY] [&#8211;filename=FILENAME] [&#8211;format=FORMAT]
+yaml KIND KEY VALUE [&#8211;filename=FILENAME]</dd>
+</dl>
+<p>Provides yaml information or updates yaml on a given replacement</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>KIND    The typye of the yaml file (server, user) 
+KEY     Key name of the nested dict e.g. cloudmesh.server.loglevel
+VALUE   Value to set on a given KEY
+FILENAME      cloudmesh.yaml or cloudmesh_server.yaml
+FORMAT         The format of the output (table, json, yaml)</dd>
+</dl>
+<p>Options:</p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--format=<var>FORMAT</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>the format of the output [default: print]</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Description:</p>
+<blockquote>
+<div>Sets and gets values from a yaml configuration file</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh_cmd3.plugins">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cloudmesh_cmd3.plugins" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, 2013, Gregor von Laszewski for  FutureGrid.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

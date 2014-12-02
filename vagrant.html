@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Cloudmesh &mdash; my Cloudmesh Core documentation</title>
+    <title>7.4. Cloudmesh Vagrant Developers Environment &mdash; my Cloudmesh Core documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -32,8 +32,10 @@
     <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="my Cloudmesh Core documentation" href="#" />
-    <link rel="next" title="1. Introduction" href="introduction.html" />
+    <link rel="top" title="my Cloudmesh Core documentation" href="index.html" />
+    <link rel="up" title="7. Contributing" href="contributing.html" />
+    <link rel="next" title="8. Appendix" href="appendix.html" />
+    <link rel="prev" title="7.3. Tips for Editing" href="hacking.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -44,33 +46,7 @@
 
    
 
-   
-
-  <div class="header" id="content">
-
-  <a href="https://github.com/cloudmesh/cloudmesh.git"
-     class="visible-desktop hidden-xs"><img
-    id="gh-banner"
-    style="position: absolute; top: 50px; right: 0; border: 0;"
-    src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"
-    alt="Fork me on GitHub"></a>
-  <script>
-    // Adjust banner height.
-    $(function () {
-      var navHeight = $(".navbar .container").css("height");
-      $("#gh-banner").css("top", navHeight);
-    });
-  </script>
-  <script>
-    // Adjust banner height.
-    $(function () {
-      var navHeight = $(".navbar .container").css("height");
-      $("#gh-banner").css("top", navHeight);
-    });
-  </script>
-
-  </div>
-     
+      
    
 
 
@@ -83,7 +59,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="_static/fg-logo-white-24x36.png">
+        <a class="navbar-brand" href="index.html"><img src="_static/fg-logo-white-24x36.png">
           Cloudmesh</a>
         <span class="navbar-text navbar-version pull-left"><b>Core</b></span>
       </div>
@@ -98,10 +74,10 @@
      id="dLabelGlobalToc"
      data-toggle="dropdown"
      data-target="#"
-     href="#">Site <b class="caret"></b></a>
+     href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="about.html">1.1. Overview</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="about.html#system-monitoring-and-operations">1.1.1. System Monitoring and Operations</a></li>
@@ -378,7 +354,7 @@
 <li class="toctree-l2"><a class="reference internal" href="metric.html#routes">6.1. Routes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">7. Contributing</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="contributing.html">7. Contributing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">7.1. Issue Management</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tasks.html#labels">7.1.1. Labels</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tasks.html#priority">7.1.2. Priority</a></li>
@@ -413,10 +389,10 @@
 <li class="toctree-l3"><a class="reference internal" href="hacking.html#git-pull-request">7.3.6. Git Pull Request</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="vagrant.html">7.4. Cloudmesh Vagrant Developers Environment</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="vagrant.html#vagrant">7.4.1. Vagrant</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vagrant.html#veewee">7.4.2. Veewee</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vagrant.html#creating-a-cloudmesh-test">7.4.3. Creating a cloudmesh test</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">7.4. Cloudmesh Vagrant Developers Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">7.4.1. Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#veewee">7.4.2. Veewee</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-cloudmesh-test">7.4.3. Creating a cloudmesh test</a></li>
 </ul>
 </li>
 </ul>
@@ -500,8 +476,10 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Cloudmesh</a><ul>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#">7.4. Cloudmesh Vagrant Developers Environment</a><ul>
+<li><a class="reference internal" href="#vagrant">7.4.1. Vagrant</a></li>
+<li><a class="reference internal" href="#veewee">7.4.2. Veewee</a></li>
+<li><a class="reference internal" href="#creating-a-cloudmesh-test">7.4.3. Creating a cloudmesh test</a></li>
 </ul>
 </li>
 </ul>
@@ -513,7 +491,11 @@
               
                 
   <li>
-    <a href="introduction.html" title="Next Chapter: 1. Introduction"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">1. Introduction &raquo;</span>
+    <a href="hacking.html" title="Previous Chapter: 7.3. Tips for Editing"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; 7.3. Tips for Ed...</span>
+    </a>
+  </li>
+  <li>
+    <a href="appendix.html" title="Next Chapter: 8. Appendix"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">8. Appendix &raquo;</span>
     </a>
   </li>
               
@@ -523,7 +505,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/vagrant.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -549,14 +531,14 @@
         <div id="sidebar" class="bs-sidenav" role="complementary"><h4>Site Contents</h4>
 
 <ul>
-  <ul>
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configure.html">3. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="doc.html">4. Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="shell.html">5. Cloudmesh Shell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metric.html">6. Cloudmesh Metric</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">7. Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="contributing.html">7. Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="appendix.html">8. Appendix</a></li>
 </ul>
 
@@ -565,8 +547,10 @@
 <hr>
 
 <h4>Page Contents</h4><ul>
-<li><a class="reference internal" href="#">Cloudmesh</a><ul>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#">7.4. Cloudmesh Vagrant Developers Environment</a><ul>
+<li><a class="reference internal" href="#vagrant">7.4.1. Vagrant</a></li>
+<li><a class="reference internal" href="#veewee">7.4.2. Veewee</a></li>
+<li><a class="reference internal" href="#creating-a-cloudmesh-test">7.4.3. Creating a cloudmesh test</a></li>
 </ul>
 </li>
 </ul>
@@ -579,98 +563,142 @@
   <input type="hidden" name="area" value="default" />
 </form>
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/vagrant.txt"
      rel="nofollow">Source</a>
 </div>
         </div>
       </div>
     <div class="col-md-9">
       
-  <div class="section" id="cloudmesh">
-<h1>Cloudmesh<a class="headerlink" href="#cloudmesh" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="about.html">1.1. Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rain.html">1.2. Rain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hpc.html">1.3. HPC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cloud.html">1.4. IaaS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contact.html">1.5. Contact</a></li>
-<li class="toctree-l2"><a class="reference internal" href="news.html">1.6. News</a></li>
-<li class="toctree-l2"><a class="reference internal" href="screenshots.html">1.7. Screenshots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bib.html">1.8. References</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html">1.9. FAQ</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="developer.html">2.1. Prepare the Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobbler.html">2.2. Cloudmesh Installation wit Cobbler Integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="celery.html">2.3. Celery Setup</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="configure.html">3. Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-yaml">3.1. cloudmesh.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#configuration-file-rc-file">3.2. Configuration file (rc file)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#amazon-web-services">3.3. Amazon Web Services</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-server-yaml">3.4. cloudmesh-server.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-cluster-yaml">3.5. cloudmesh_cluster.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#other-yaml-files">3.6. Other Yaml files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#me-sample">3.7. Me Sample</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="doc.html">4. Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="doc.html#creating-the-documentation">4.1. Creating the Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="doc.html#creating-the-documentation-in-a-single-page">4.2. Creating the documentation in a single page</a></li>
-<li class="toctree-l2"><a class="reference internal" href="doc.html#documenting-the-code">4.3. Documenting the code</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="shell.html">5. Cloudmesh Shell</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell.html">5.1. Cloudmesh Shell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell.html#command-overview">5.2. Command Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell-rain.html">5.3. Cloudmesh Shell Rain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cm-manage.html">5.4. cm-manage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="man/man.html">5.5. Commands</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="metric.html">6. Cloudmesh Metric</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="metric.html#routes">6.1. Routes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">7. Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html">7.1. Issue Management</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coding.html">7.2. Cloudmesh Style Guide</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hacking.html">7.3. Tips for Editing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vagrant.html">7.4. Cloudmesh Vagrant Developers Environment</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="appendix.html">8. Appendix</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell-new.html">1. Proposed Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html">2. Production Deployment Server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fg.html">3. FutureGrid Specific tips</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cm.html">4. CM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cm.html#using-cloud-mesh">5. Using Cloud Mesh</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cm_cli.html">6. cloudmesh command</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cmcli.html">7. cm config</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/intro.html">8. Cloud Mesh</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cloudmesh.html">9. Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="futuregrid.html">10. FutureGrid</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plan/design.html">11. Design: Blueprint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plan/mock.html">12. Mockup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plan/plan.html">13. Plan: Cloudmesh Service Shift</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user.html">14. Cloudmesh Shell</a></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="cloudmesh-vagrant-developers-environment">
+<h1>7.4. Cloudmesh Vagrant Developers Environment<a class="headerlink" href="#cloudmesh-vagrant-developers-environment" title="Permalink to this headline">¶</a></h1>
+<p>This section is for experts that like to deploy cloudmesh in a vagrant
+ubuntu 14.04 image under virtual box. We further assume you have
+checked out cloudmesh from github and are standing in the github
+directory:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git clone git@github.com:cloudmesh/cloudmesh.git
+$ cd cloudmesh
+</pre></div>
 </div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<p>We assume you have uploaded a box to vagarnt with the name:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ubuntu</span><span class="o">-</span><span class="mf">14.04</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="n">amd64</span>
+</pre></div>
+</div>
+<p>If you do not have such an image you can create it by:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ bin/install-veewee.sh
+$ bin/install-ubuntu64.sh
+</pre></div>
+</div>
+<p>You can verify the list of boxes with:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ vagrant box list
+</pre></div>
+</div>
+<p>To create a vagrant image you simply can say:</p>
+<div class="highlight-python"><div class="highlight"><pre>deploy vagrant
+</pre></div>
+</div>
+<p>This will start a vagrant vm. In the vm say:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo apt-get install python-dev
+sudo apt-get install python-virtualenv
+virtualenv ~/ENV
+. ~/ENV/bin/activate
+pip install fabric
+</pre></div>
+</div>
+<p>Than say:</p>
+<div class="highlight-python"><div class="highlight"><pre>cd /vagrant/cloudmesh
+deploy cloudmesh
+</pre></div>
+</div>
+<p>Please note that the changes in the cloudmesh directory are synced
+with the directory:</p>
+<div class="highlight-python"><div class="highlight"><pre>/tmp/vagrant/cloudmesh
+</pre></div>
+</div>
+<div class="section" id="vagrant">
+<h2>7.4.1. Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this headline">¶</a></h2>
+<p>Issues with vagrant</p>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-<li><a class="reference internal" href="package_index.html#package-index"><em>Packege Index</em></a></li>
-<li><a class="reference internal" href="pylint.html#pylint-results"><em>Quality Control</em></a></li>
+<li>default passwords</li>
+<li>insecure keys</li>
 </ul>
+<p>Do not put your vagrant vm publicly on the net.</p>
+</div>
+<div class="section" id="veewee">
+<h2>7.4.2. Veewee<a class="headerlink" href="#veewee" title="Permalink to this headline">¶</a></h2>
+<p>Creating a base box for ubuntu 14.04:</p>
+<div class="highlight-python"><div class="highlight"><pre>mkdir github
+cd github
+git clone git@github.com:jedi4ever/veewee.git
+cd veewee
+bundle install
+bundle exec veewee vbox define &#39;ubuntu-14.04-server-amd64&#39; &#39;ubuntu-14.04-server-amd64&#39;
+bundle exec veewee vbox build &#39;ubuntu-14.04-server-amd64&#39;
+</pre></div>
+</div>
+<p>Now you could logging into the image:</p>
+<div class="highlight-python"><div class="highlight"><pre>ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p 7222 -l vagrant 127.0.0.1
+</pre></div>
+</div>
+<p>Exporting:</p>
+<div class="highlight-python"><div class="highlight"><pre>bundle exec veewee vbox export &#39;ubuntu-14.04-server-amd64&#39;
+</pre></div>
+</div>
+<p>Adding:</p>
+<div class="highlight-python"><div class="highlight"><pre>vagrant box add ubuntu-14.04-server-amd64 ubuntu-14.04-server-amd64.box
+</pre></div>
+</div>
+<p>To see if the box is in vagrant you can say:</p>
+<div class="highlight-python"><div class="highlight"><pre>vagrant box list
+</pre></div>
+</div>
+<p>To create a new virtual macchine for ubuntu you should first create a new directory for your image. Let us call it <cite>mytest</cite>. You need to cd into the dirctory and than create a vagrantfile:</p>
+<div class="highlight-python"><div class="highlight"><pre>mkdir my_test
+cd my_test
+vagrant init &#39;ubuntu-14.04-server-amd64&#39;
+vagrant up
+vagrant ssh
+</pre></div>
+</div>
+<p>If you like to find other boxes you can find some with the command:</p>
+<div class="highlight-python"><div class="highlight"><pre>bundle exec veewee vbox templates | grep -i ubuntu
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-cloudmesh-test">
+<h2>7.4.3. Creating a cloudmesh test<a class="headerlink" href="#creating-a-cloudmesh-test" title="Permalink to this headline">¶</a></h2>
+<p>TBD</p>
+<div class="highlight-python"><div class="highlight"><pre>mkdir test_cloudmesh
+cd my_test
+
+checkout the cloudmesh from git
+checkout a vagrantinit file from git
+
+the vagrant init file contains the cloudmesh as a shared folder
+
+vargant up
+vagrant ssh
+
+vagrant&gt; cd cloudmesh
+vagrant&gt; python install.py
+</pre></div>
+</div>
+<p>install.py includes</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>deployment of::</dt>
+<dd>pip
+virtualenv</dd>
+</dl>
+<p>than we start the virtualenv
+than we install fabric</p>
+<p>than we do:</p>
+<div class="highlight-python"><div class="highlight"><pre>fab -f install/fabric.py deploy
+</pre></div>
+</div>
+<p>the fab is actually part of the install.py script</p>
+</div></blockquote>
+<p>Goal is that install.py is all we need to get cloudmesh installed on ubuntu</p>
 </div>
 </div>
 

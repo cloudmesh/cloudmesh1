@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cloudmesh_web.modules.management__ &mdash; my Cloudmesh Core documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/my-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     'Core',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="top" title="my Cloudmesh Core documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+   
+
+      
+   
+
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fg-logo-white-24x36.png">
+          Cloudmesh</a>
+        <span class="navbar-text navbar-version pull-left"><b>Core</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html">1.1. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../about.html#system-monitoring-and-operations">1.1.1. System Monitoring and Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../about.html#user-and-project-services">1.1.2. User and Project Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../about.html#accounting-and-app-store">1.1.3. Accounting and App Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../about.html#networking">1.1.4. Networking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../about.html#monitoring">1.1.5. Monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../about.html#role-and-use-of-standards-and-open-source-software">1.1.6. Role and Use of Standards and Open Source Software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../about.html#features">1.1.7. Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../about.html#bugs">1.1.8. Bugs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../about.html#project-contributors">1.1.9. Project Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../about.html#history">1.1.10. History</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../about.html#cloudmesh-0-1">1.1.10.1. Cloudmesh 0.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../about.html#cloudmesh-0-2">1.1.10.2. Cloudmesh 0.2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../about.html#cloudmesh-0-3">1.1.10.3. Cloudmesh 0.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../about.html#cloudmesh-0-4">1.1.10.4. Cloudmesh 0.4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../about.html#cloudmesh-0-5-0-7">1.1.10.5. Cloudmesh 0.5 - 0.7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../rain.html">1.2. Rain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../hpc.html">1.3. HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cloud.html">1.4. IaaS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cloud.html#interfaces">1.4.1. Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cloud.html#integration-of-external-clouds">1.4.2. Integration of External Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cloud.html#open-source">1.4.3. Open Source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contact.html">1.5. Contact</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../contact.html#contributors">1.5.1. Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../contact.html#alumni">1.5.2. Alumni</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../contact.html#blog">1.5.3. Blog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../contact.html#repository">1.5.4. Repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../contact.html#support">1.5.5. Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../news.html">1.6. News</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../screenshots.html">1.7. Screenshots</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../screenshots.html#cloud-management">1.7.1. Cloud Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../screenshots.html#provisioning-raining-not-yet-released">1.7.2. Provisioning/Raining (Not yet released)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../screenshots.html#batch-queues">1.7.3. Batch Queues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../screenshots.html#status">1.7.4. Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../screenshots.html#inventory">1.7.5. Inventory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../bib.html">1.8. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../faq.html">1.9. FAQ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../faq.html#are-there-any-screenshots">1.9.1. Are there any screenshots?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../faq.html#setup-register-cloud-in-the-cloudmesh-futuregrid-org-service">1.9.2. Setup - Register cloud in the cloudmesh.futuregrid.org service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../faq.html#setup-local-deploy">1.9.3. Setup - Local deploy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../faq.html#general-questions">1.9.4. General Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../faq.html#development-questions">1.9.5. Development Questions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">2. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../developer.html">2.1. Prepare the Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#github">2.1.1. Github</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../developer.html#github-ssh-keys">2.1.1.1. Github ssh keys</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../developer.html#git-username-and-e-mail">2.1.1.2. Git username and e-mail</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#getting-the-cloudmesh-source-code">2.1.2. Getting the Cloudmesh Source Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#preparing-the-system">2.1.3. Preparing the system</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../developer.html#modify-your-rc-file">2.1.3.1. Modify your rc file:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#install-the-requirements">2.1.4. Install the Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#creating-an-initial-user">2.1.5. Creating an initial user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#initial-documentation">2.1.6. Initial Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#quickinstall-the-environment">2.1.7. Quickinstall the Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#initial-yaml-files">2.1.8. Initial YAML files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#install-cloudmesh-code">2.1.9. Install cloudmesh code</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../developer.html#the-cloudmesh-yaml-file">2.1.9.1. The cloudmesh.yaml file</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#mongo-db">2.1.10. Mongo-Db</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../developer.html#list-of-commands-optional">2.1.10.1. List of Commands(Optional)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../developer.html#mongo-commands-that-need-to-be-issued-important">2.1.10.2. Mongo commands that need to be issued (Important)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#starting-the-web-service">2.1.11. Starting the Web Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#starting-and-testing-the-queue-service">2.1.12. Starting and testing the Queue Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#blockdiag-family">2.1.13. Blockdiag family</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#developer-tests">2.1.14. Developer Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#install-python">2.1.15. Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#starting-the-rabbitmq-service">2.1.16. Starting the  RabbitMQ service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#example-start-the-gui-for-development">2.1.17. Example: Start the GUI for development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#with-access-to-ldap">2.1.18. With access to LDAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#without-access-to-ldap">2.1.19. Without access to LDAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#cloudmesh-deployment">2.1.20. Cloudmesh deployment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#imports-in-cloudmesh-common">2.1.21. Imports in cloudmesh_common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../developer.html#osx-system-preparation-tips">2.1.22. OSX System preparation Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cobbler.html">2.2. Cloudmesh Installation wit Cobbler Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cobbler.html#install-ubuntu-14-04">2.2.1. Install Ubuntu 14.04</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cobbler.html#prepare-the-system">2.2.2. Prepare the system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cobbler.html#install-cloudmesh">2.2.3. Install Cloudmesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cobbler.html#cobbler">2.2.4. Cobbler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../celery.html">2.3. Celery Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../celery.html#starting-and-stopping-celery">2.3.1. Starting and Stopping Celery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../celery.html#log-and-pid-files">2.3.2. Log and Pid Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../celery.html#current-celery-based-tasks-under-development">2.3.3. Current Celery Based Tasks (Under Development)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../celery.html#launcher-simulation">2.3.3.1. Launcher (Simulation)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../celery.html#provisioner">2.3.3.2. Provisioner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../celery.html#pbs-qstat">2.3.3.3. pbs (qstat)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../celery.html#rain-bare-metal-provisioning-with-cobbler-and-rain">2.3.3.4. rain (bare-metal provisioning with cobbler and rain)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../celery.html#rack-system-temperatures">2.3.3.5. rack (system temperatures)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configure.html">3. Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-yaml">3.1. cloudmesh.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#configuration-file-rc-file">3.2. Configuration file (rc file)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#retrieval-of-rc-file-by-command">3.2.1. Retrieval of rc file by command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#retrieval-of-rc-files-by-hand">3.2.2. Retrieval of rc files by Hand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#location-of-rc-files">3.2.3. Location of rc files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../configure.html#hp-cloud">3.2.3.1. HP Cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../configure.html#azure">3.2.3.2. Azure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#amazon-web-services">3.3. Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-server-yaml">3.4. cloudmesh-server.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-cluster-yaml">3.5. cloudmesh_cluster.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#other-yaml-files">3.6. Other Yaml files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#me-sample">3.7. Me Sample</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.html">4. Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../doc.html#creating-the-documentation">4.1. Creating the Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../doc.html#creating-the-documentation-in-a-single-page">4.2. Creating the documentation in a single page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../doc.html#documenting-the-code">4.3. Documenting the code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../shell.html">5. Cloudmesh Shell</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cm-shell.html">5.1. Cloudmesh Shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#commandline">5.1.1. Commandline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#shell-usage">5.1.2. Shell Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cm-shell.html#command-overview">5.2. Command Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#help">5.2.1. Help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#info">5.2.2. Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#variables">5.2.3. Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#defaults">5.2.4. Defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#managing-users">5.2.5. Managing Users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#managing-clouds">5.2.6. Managing Clouds</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#register-a-cloud">5.2.6.1. Register a cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#activate-cloud">5.2.6.2. Activate cloud</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#managing-projects">5.2.7. Managing Projects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#project-list">5.2.7.1. Project List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#project-information">5.2.7.2. Project Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#project-activation">5.2.7.3. Project Activation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#managing-keys">5.2.8. Managing Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#managing-images">5.2.9. Managing Images</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#list-images">5.2.9.1. List images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#image-information">5.2.9.2. Image information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#default-image">5.2.9.3. Default image</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#managing-flavors">5.2.10. Managing Flavors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#list-flavors">5.2.10.1. List Flavors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#flavor-information">5.2.10.2. Flavor information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#default-flavor">5.2.10.3. Default Flavor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#managing-virtual-machines">5.2.11. Managing Virtual Machines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#starting-vms">5.2.11.1. Starting VMs</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../../cm-shell.html#vm-history">5.2.11.1.1. VM History</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#managing-security-groups">5.2.11.2. Managing Security Groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#managing-volumes">5.2.11.3. Managing Volumes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cm-shell.html#managing-heat-s-for-openstack">5.2.11.4. Managing heat&#8217;s for OpenStack</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#id1">5.2.12. Managing Security Groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#examples">5.2.13. Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell.html#todo-most-likely-in-cloud-command-and-register-command">5.2.14. TODO (most likely in cloud command and register command)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cm-shell-rain.html">5.3. Cloudmesh Shell Rain</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell-rain.html#managing-servers-hosts">5.3.1. Managing Servers/hosts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell-rain.html#user-project-and-role-policies">5.3.2. User, Project and Role Policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell-rain.html#information">5.3.3. Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell-rain.html#provisioning">5.3.4. Provisioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell-rain.html#status">5.3.5. Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell-rain.html#reservation-interface-extension">5.3.6. Reservation Interface (extension)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell-rain.html#time-format">5.3.7. Time Format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cm-manage.html">5.4. cm-manage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../man/man.html">5.5. Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#eof">5.5.1. EOF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#admin">5.5.2. admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#banner">5.5.3. banner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#clear">5.5.4. clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#cloud">5.5.5. cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#cluster">5.5.6. cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#color">5.5.7. color</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#debug">5.5.8. debug</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#default">5.5.9. default</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#deploy">5.5.10. deploy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#dot2">5.5.11. dot2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#edit">5.5.12. edit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#exec">5.5.13. exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#exp">5.5.14. exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#flavor">5.5.15. flavor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#graphviz">5.5.16. graphviz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#group">5.5.17. group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#hadoop">5.5.18. hadoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#help">5.5.19. help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#image">5.5.20. image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#info">5.5.21. info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#init">5.5.22. init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#inventory">5.5.23. inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#key">5.5.24. key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#label">5.5.25. label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#launcher">5.5.26. launcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#limits">5.5.27. limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#list">5.5.28. list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#load">5.5.29. load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#loglevel">5.5.30. loglevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#man">5.5.31. man</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#metric">5.5.32. metric</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#notebook">5.5.33. notebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#nova">5.5.34. nova</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#open">5.5.35. open</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#pause">5.5.36. pause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#plugins">5.5.37. plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#project">5.5.38. project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#py">5.5.39. py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#q">5.5.40. q</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#quit">5.5.41. quit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#quota">5.5.42. quota</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#rain">5.5.43. rain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#register">5.5.44. register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#script">5.5.45. script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#security-group">5.5.46. security_group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#slurm">5.5.47. slurm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#stack">5.5.48. stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#status">5.5.49. status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#storm">5.5.50. storm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#timer">5.5.51. timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#usage">5.5.52. usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#use">5.5.53. use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#user">5.5.54. user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#var">5.5.55. var</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#verbose">5.5.56. verbose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#version">5.5.57. version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#vm">5.5.58. vm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#volume">5.5.59. volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#web">5.5.60. web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../man/man.html#yaml">5.5.61. yaml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../metric.html">6. Cloudmesh Metric</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../metric.html#routes">6.1. Routes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">7. Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tasks.html">7.1. Issue Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tasks.html#labels">7.1.1. Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tasks.html#priority">7.1.2. Priority</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tasks.html#inactivity">7.1.3. Inactivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tasks.html#shortcuts">7.1.4. Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../coding.html">7.2. Cloudmesh Style Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#information">7.2.1. Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#general">7.2.2. General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#imports">7.2.3. Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#human-alphabetical-order-examples">7.2.4. Human Alphabetical Order Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#docstrings">7.2.5. Docstrings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#dictionaries-lists">7.2.6. Dictionaries/Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#calling-methods">7.2.7. Calling Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#internationalization-i18n-strings">7.2.8. Internationalization (i18n) Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#python-3-x-compatibility">7.2.9. Python 3.x compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#creating-unit-tests">7.2.10. Creating Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#running-tests">7.2.11. Running Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../coding.html#commit-messages">7.2.12. Commit Messages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../hacking.html">7.3. Tips for Editing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../hacking.html#aptana-studio-develpment-environment-optional">7.3.1. Aptana Studio - Develpment Environment(optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../hacking.html#emacs-as-editor">7.3.2. Emacs as editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../hacking.html#replace-text-in-many-files-from-the-commandline">7.3.3. Replace Text in many files from the commandline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../hacking.html#mongodb-tools">7.3.4. MongoDB Tools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../hacking.html#robomongo">7.3.4.1. Robomongo</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../hacking.html#python-tools">7.3.5. Python Tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../hacking.html#git-pull-request">7.3.6. Git Pull Request</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../vagrant.html">7.4. Cloudmesh Vagrant Developers Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../vagrant.html#vagrant">7.4.1. Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../vagrant.html#veewee">7.4.2. Veewee</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../vagrant.html#creating-a-cloudmesh-test">7.4.3. Creating a cloudmesh test</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../appendix.html">8. Appendix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cm-shell-new.html">1. Proposed Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cm-shell-new.html#label">1.1. Label</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../deploy.html">2. Production Deployment Server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../deploy.html#instalation">2.1. Instalation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deploy.html#starting-the-deployed-server">2.2. Starting the deployed server</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fg.html">3. FutureGrid Specific tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../old-cm/cm.html">4. CM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../old-cm/cm.html#using-cloud-mesh">5. Using Cloud Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../old-cm/cm_cli.html">6. cloudmesh command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../old-cm/cmcli.html">7. cm config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../old-cm/intro.html">8. Cloud Mesh</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../old-cm/intro.html#commands">8.1. Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cloudmesh.html">9. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cloudmesh.html#system-monitoring-and-operations">9.1. System Monitoring and Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cloudmesh.html#user-and-project-services">9.2. User and Project Services</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cloudmesh.html#accounting-and-app-store">9.2.1. Accounting and App Store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cloudmesh.html#networking">9.2.2. Networking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cloudmesh.html#monitoring">9.2.3. Monitoring</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cloudmesh.html#role-and-use-of-standards-and-open-source-software">9.2.4. Role and Use of Standards and Open Source Software</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../futuregrid.html">10. FutureGrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../plan/design.html">11. Design: Blueprint</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/design.html#features">11.1. Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/design.html#difference-to-other-efforts">11.2. Difference to other efforts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/design.html#component-view">11.3. Component View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/design.html#component-user-management">11.4. Component User Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/design.html#user-management">11.5. User Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/design.html#accounting-will-not-be-worked-on-much">11.6. Accounting (Will not be worked on much)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/design.html#component-resource-management-includes-cloudshifting-as-part-of-reservation">11.7. Component Resource Management (includes cloudshifting as part of reservation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/design.html#resource-management">11.8. Resource Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/design.html#scheduler">11.9. Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/design.html#interfaces">11.10. Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../plan/mock.html">12. Mockup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/mock.html#create-user">12.1. create_user</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../plan/plan.html">13. Plan: Cloudmesh Service Shift</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/plan.html#project-objectives">13.1. Project Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/plan.html#development-objectives">13.2. Development Objectives</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../plan/plan.html#production-objectives">13.2.1. Production Objectives</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/plan.html#project-deliverables">13.3. Project Deliverables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/plan.html#evolution-of-the-project">13.4. Evolution of the Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/plan.html#refernce-materials">13.5. Refernce Materials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plan/plan.html#definitions-and-acronyms">13.6. Definitions and Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user.html">14. Cloudmesh Shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../user.html#user-commands">14.1. User Commands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><h4>Site Contents</h4>
+
+<ul>
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configure.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.html">4. Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../shell.html">5. Cloudmesh Shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../metric.html">6. Cloudmesh Metric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">7. Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../appendix.html">8. Appendix</a></li>
+</ul>
+
+</ul>
+
+<hr>
+
+<h4>Page Contents</h4>
+<form action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="col-md-9">
+      
+  <h1>Source code for cloudmesh_web.modules.management__</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">cloudmesh.management.project</span> <span class="kn">import</span> <span class="n">CLUSTERS</span> <span class="k">as</span> <span class="n">ProjectCLUSTERS</span><span class="p">,</span> \
+    <span class="n">PROVISIONING</span> <span class="k">as</span> <span class="n">ProjectPROVISIONING</span><span class="p">,</span> <span class="n">Project</span> <span class="k">as</span> <span class="n">MongoProject</span><span class="p">,</span> <span class="n">Projects</span><span class="p">,</span> \
+    <span class="n">SERVICES</span> <span class="k">as</span> <span class="n">ProjectSERVICES</span><span class="p">,</span> <span class="n">STATUS</span> <span class="k">as</span> <span class="n">ProjectSTATUS</span>
+<span class="kn">from</span> <span class="nn">cloudmesh.management.user</span> <span class="kn">import</span> <span class="n">User</span> <span class="k">as</span> <span class="n">MongoUser</span><span class="p">,</span> <span class="n">Users</span>
+<span class="kn">from</span> <span class="nn">cloudmesh_common.logger</span> <span class="kn">import</span> <span class="n">LOGGER</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Blueprint</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">flash</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">mongoengine</span> <span class="kn">import</span> <span class="n">connect</span>
+<span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">Form</span><span class="p">,</span> <span class="n">validators</span><span class="p">,</span> <span class="n">widgets</span>
+<span class="kn">from</span> <span class="nn">wtforms.fields</span> <span class="kn">import</span> <span class="n">BooleanField</span><span class="p">,</span> <span class="n">TextField</span><span class="p">,</span> <span class="n">TextAreaField</span><span class="p">,</span> <span class="n">PasswordField</span><span class="p">,</span> \
+    <span class="n">SelectMultipleField</span><span class="p">,</span> <span class="n">StringField</span><span class="p">,</span> <span class="n">RadioField</span>
+
+<span class="kn">from</span> <span class="nn">wtforms.validators</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+
+<span class="kn">from</span> <span class="nn">flask.ext.login</span> <span class="kn">import</span> <span class="n">login_required</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">LOGGER</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+
+<span class="n">management_module</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s">&#39;management_module&#39;</span><span class="p">,</span> <span class="n">__name__</span><span class="p">)</span>
+
+<span class="n">discipline_choices</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s">&#39;Aerospace Engineering (101)&#39;</span><span class="p">,</span> <span class="s">&#39;Aerospace Engineering (101)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Agricultural Economics (901)&#39;</span><span class="p">,</span> <span class="s">&#39;Agricultural Economics (901)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Agricultural Engineering (102)&#39;</span><span class="p">,</span> <span class="s">&#39;Agricultural Engineering (102)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Agricultural Sciences (501)&#39;</span><span class="p">,</span> <span class="s">&#39;Agricultural Sciences (501)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Anatomy (601)&#39;</span><span class="p">,</span> <span class="s">&#39;Anatomy (601)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Anesthesiology (701)&#39;</span><span class="p">,</span> <span class="s">&#39;Anesthesiology (701)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Anthropology (902)&#39;</span><span class="p">,</span> <span class="s">&#39;Anthropology (902)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Astronomy (201)&#39;</span><span class="p">,</span> <span class="s">&#39;Astronomy (201)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Atmospheric Sciences (301)&#39;</span><span class="p">,</span> <span class="s">&#39;Atmospheric Sciences (301)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Biochemistry (602)&#39;</span><span class="p">,</span> <span class="s">&#39;Biochemistry (602)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Biology (603)&#39;</span><span class="p">,</span> <span class="s">&#39;Biology (603)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Biomedical Engineering (103)&#39;</span><span class="p">,</span> <span class="s">&#39;Biomedical Engineering (103)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Biometry and Epidemiology (604)&#39;</span><span class="p">,</span> <span class="s">&#39;Biometry and Epidemiology (604)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Biophysics (605)&#39;</span><span class="p">,</span> <span class="s">&#39;Biophysics (605)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Biosciences, n.e.c. (617)&#39;</span><span class="p">,</span> <span class="s">&#39;Biosciences, n.e.c. (617)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Botany (606)&#39;</span><span class="p">,</span> <span class="s">&#39;Botany (606)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Cardiology (702)&#39;</span><span class="p">,</span> <span class="s">&#39;Cardiology (702)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Cell and Molecular Biology (607)&#39;</span><span class="p">,</span> <span class="s">&#39;Cell and Molecular Biology (607)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Chemical and Related Engineering (104)&#39;</span><span class="p">,</span> <span class="s">&#39;Chemical and Related Engineering (104)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Chemistry (202)&#39;</span><span class="p">,</span> <span class="s">&#39;Chemistry (202)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Civil and Related Engineering (105)&#39;</span><span class="p">,</span> <span class="s">&#39;Civil and Related Engineering (105)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Clinical Medicine, n.e.c. (717)&#39;</span><span class="p">,</span> <span class="s">&#39;Clinical Medicine, n.e.c. (717)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Communication Disorders Sciences (723)&#39;</span><span class="p">,</span> <span class="s">&#39;Communication Disorders Sciences (723)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Computer Science (401)&#39;</span><span class="p">,</span> <span class="s">&#39;Computer Science (401)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Dental Sciences (718)&#39;</span><span class="p">,</span> <span class="s">&#39;Dental Sciences (718)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Earth, Atmospheric, and Ocean Sciences, n.e.c. (304)&#39;</span><span class="p">,</span> <span class="s">&#39;Earth, Atmospheric, and Ocean Sciences, n.e.c. (304)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Ecology (608)&#39;</span><span class="p">,</span> <span class="s">&#39;Ecology (608)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Economics (903)&#39;</span><span class="p">,</span> <span class="s">&#39;Economics (903)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Electrical and Related Engineering (106)&#39;</span><span class="p">,</span> <span class="s">&#39;Electrical and Related Engineering (106)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Endocrinology (704)&#39;</span><span class="p">,</span> <span class="s">&#39;Endocrinology (704)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Engineering Science and Engineering Physics (107)&#39;</span><span class="p">,</span> <span class="s">&#39;Engineering Science and Engineering Physics (107)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Engineering, n.e.c. (114)&#39;</span><span class="p">,</span> <span class="s">&#39;Engineering, n.e.c. (114)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Entomology and Parasitology (609)&#39;</span><span class="p">,</span> <span class="s">&#39;Entomology and Parasitology (609)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Gastroenterology (705)&#39;</span><span class="p">,</span> <span class="s">&#39;Gastroenterology (705)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Genetics (610)&#39;</span><span class="p">,</span> <span class="s">&#39;Genetics (610)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Geography (904)&#39;</span><span class="p">,</span> <span class="s">&#39;Geography (904)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Geosciences (302)&#39;</span><span class="p">,</span> <span class="s">&#39;Geosciences (302)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Health-related, n.e.c. (722)&#39;</span><span class="p">,</span> <span class="s">&#39;Health-related, n.e.c. (722)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Hematology (706)&#39;</span><span class="p">,</span> <span class="s">&#39;Hematology (706)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;History and Philosophy of Science (905)&#39;</span><span class="p">,</span> <span class="s">&#39;History and Philosophy of Science (905)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Industrial/Manufacturing Engineering (108)&#39;</span><span class="p">,</span> <span class="s">&#39;Industrial/Manufacturing Engineering (108)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Linguistics (906)&#39;</span><span class="p">,</span> <span class="s">&#39;Linguistics (906)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Mathematics and Applied Mathematics (402)&#39;</span><span class="p">,</span> <span class="s">&#39;Mathematics and Applied Mathematics (402)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Mechanical and Related Engineering (109)&#39;</span><span class="p">,</span> <span class="s">&#39;Mechanical and Related Engineering (109)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Metallurgical and Materials Engineering (110)&#39;</span><span class="p">,</span> <span class="s">&#39;Metallurgical and Materials Engineering (110)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Microbiology, Immunology, and Virology (611)&#39;</span><span class="p">,</span> <span class="s">&#39;Microbiology, Immunology, and Virology (611)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Mining and Related Engineering (111)&#39;</span><span class="p">,</span> <span class="s">&#39;Mining and Related Engineering (111)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Neurology (707)&#39;</span><span class="p">,</span> <span class="s">&#39;Neurology (707)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Nuclear Engineering (112)&#39;</span><span class="p">,</span> <span class="s">&#39;Nuclear Engineering (112)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Nursing (719)&#39;</span><span class="p">,</span> <span class="s">&#39;Nursing (719)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Nutrition (612)&#39;</span><span class="p">,</span> <span class="s">&#39;Nutrition (612)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Obstetrics and Gynecology (708)&#39;</span><span class="p">,</span> <span class="s">&#39;Obstetrics and Gynecology (708)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Ocean Sciences (303)&#39;</span><span class="p">,</span> <span class="s">&#39;Ocean Sciences (303)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Oncology/Cancer Research (703)&#39;</span><span class="p">,</span> <span class="s">&#39;Oncology/Cancer Research (703)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Ophthalmology (709)&#39;</span><span class="p">,</span> <span class="s">&#39;Ophthalmology (709)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Otorhinolaryngology (710)&#39;</span><span class="p">,</span> <span class="s">&#39;Otorhinolaryngology (710)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Pathology (613)&#39;</span><span class="p">,</span> <span class="s">&#39;Pathology (613)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Pediatrics (711)&#39;</span><span class="p">,</span> <span class="s">&#39;Pediatrics (711)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Petroleum Engineering (113)&#39;</span><span class="p">,</span> <span class="s">&#39;Petroleum Engineering (113)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Pharmaceutical Sciences (720)&#39;</span><span class="p">,</span> <span class="s">&#39;Pharmaceutical Sciences (720)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Pharmacology (614)&#39;</span><span class="p">,</span> <span class="s">&#39;Pharmacology (614)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Physical Sciences, n.e.c. (204)&#39;</span><span class="p">,</span> <span class="s">&#39;Physical Sciences, n.e.c. (204)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Physics (203)&#39;</span><span class="p">,</span> <span class="s">&#39;Physics (203)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Physiology (615)&#39;</span><span class="p">,</span> <span class="s">&#39;Physiology (615)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Political Science/Public Administration (907)&#39;</span><span class="p">,</span> <span class="s">&#39;Political Science/Public Administration (907)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Preventive Medicine and Community Health (712)&#39;</span><span class="p">,</span> <span class="s">&#39;Preventive Medicine and Community Health (712)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Psychiatry (713)&#39;</span><span class="p">,</span> <span class="s">&#39;Psychiatry (713)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Psychology (except Clinical) (802)&#39;</span><span class="p">,</span> <span class="s">&#39;Psychology (except Clinical) (802)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Psychology, Clinical (803)&#39;</span><span class="p">,</span> <span class="s">&#39;Psychology, Clinical (803)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Psychology, Combined (801)&#39;</span><span class="p">,</span> <span class="s">&#39;Psychology, Combined (801)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Pulmonary Disease (714)&#39;</span><span class="p">,</span> <span class="s">&#39;Pulmonary Disease (714)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Radiology (715)&#39;</span><span class="p">,</span> <span class="s">&#39;Radiology (715)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Social Sciences, n.e.c. (910)&#39;</span><span class="p">,</span> <span class="s">&#39;Social Sciences, n.e.c. (910)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Sociology (908)&#39;</span><span class="p">,</span> <span class="s">&#39;Sociology (908)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Sociology and Anthropology (909)&#39;</span><span class="p">,</span> <span class="s">&#39;Sociology and Anthropology (909)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Statistics (403)&#39;</span><span class="p">,</span> <span class="s">&#39;Statistics (403)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Surgery (716)&#39;</span><span class="p">,</span> <span class="s">&#39;Surgery (716)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Veterinary Sciences (721)&#39;</span><span class="p">,</span> <span class="s">&#39;Veterinary Sciences (721)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Zoology (616)&#39;</span><span class="p">,</span> <span class="s">&#39;Zoology (616)&#39;</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="n">institutionrole_choices</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s">&#39;Undergraduate&#39;</span><span class="p">,</span><span class="s">&#39;Undergraduate&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Graduate Masters&#39;</span><span class="p">,</span><span class="s">&#39;Graduate Masters&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&quot;Graduate PhD&quot;</span><span class="p">,</span><span class="s">&#39;Graduate PhD&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Student Other&#39;</span><span class="p">,</span> <span class="s">&#39;Student Other&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Faculty&#39;</span><span class="p">,</span><span class="s">&#39;Faculty&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Staff&#39;</span><span class="p">,</span><span class="s">&#39;Staff&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Other&#39;</span><span class="p">,</span><span class="s">&#39;Other&#39;</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="n">prefered_country_choices</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s">&#39;GB&#39;</span><span class="p">,</span><span class="s">&#39;United Kingdom&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;US&#39;</span><span class="p">,</span><span class="s">&#39;United States&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;DE&#39;</span><span class="p">,</span><span class="s">&#39;Germany&#39;</span><span class="p">)</span>
+    <span class="p">]</span>
+
+<span class="n">all_country_choices</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s">&#39;AF&#39;</span><span class="p">,</span><span class="s">&#39;Afghanistan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AL&#39;</span><span class="p">,</span><span class="s">&#39;Albania&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;DZ&#39;</span><span class="p">,</span><span class="s">&#39;Algeria&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AS&#39;</span><span class="p">,</span><span class="s">&#39;American Samoa&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AD&#39;</span><span class="p">,</span><span class="s">&#39;Andorra&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AO&#39;</span><span class="p">,</span><span class="s">&#39;Angola&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AI&#39;</span><span class="p">,</span><span class="s">&#39;Anguilla&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AQ&#39;</span><span class="p">,</span><span class="s">&#39;Antarctica&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AG&#39;</span><span class="p">,</span><span class="s">&#39;Antigua and Barbuda&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AR&#39;</span><span class="p">,</span><span class="s">&#39;Argentina&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AM&#39;</span><span class="p">,</span><span class="s">&#39;Armenia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AW&#39;</span><span class="p">,</span><span class="s">&#39;Aruba&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AU&#39;</span><span class="p">,</span><span class="s">&#39;Australia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AT&#39;</span><span class="p">,</span><span class="s">&#39;Austria&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AZ&#39;</span><span class="p">,</span><span class="s">&#39;Azerbaijan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BS&#39;</span><span class="p">,</span><span class="s">&#39;Bahamas&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BH&#39;</span><span class="p">,</span><span class="s">&#39;Bahrain&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BD&#39;</span><span class="p">,</span><span class="s">&#39;Bangladesh&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BB&#39;</span><span class="p">,</span><span class="s">&#39;Barbados&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BY&#39;</span><span class="p">,</span><span class="s">&#39;Belarus&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BE&#39;</span><span class="p">,</span><span class="s">&#39;Belgium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BZ&#39;</span><span class="p">,</span><span class="s">&#39;Belize&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BJ&#39;</span><span class="p">,</span><span class="s">&#39;Benin&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BM&#39;</span><span class="p">,</span><span class="s">&#39;Bermuda&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BT&#39;</span><span class="p">,</span><span class="s">&#39;Bhutan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BO&#39;</span><span class="p">,</span><span class="s">&#39;Bolivia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BA&#39;</span><span class="p">,</span><span class="s">&#39;Bosnia and Herzegovina&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BW&#39;</span><span class="p">,</span><span class="s">&#39;Botswana&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BV&#39;</span><span class="p">,</span><span class="s">&#39;Bouvet Island&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BR&#39;</span><span class="p">,</span><span class="s">&#39;Brazil&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BQ&#39;</span><span class="p">,</span><span class="s">&#39;British Antarctic Territory&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;IO&#39;</span><span class="p">,</span><span class="s">&#39;British Indian Ocean Territory&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;VG&#39;</span><span class="p">,</span><span class="s">&#39;British Virgin Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BN&#39;</span><span class="p">,</span><span class="s">&#39;Brunei&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BG&#39;</span><span class="p">,</span><span class="s">&#39;Bulgaria&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BF&#39;</span><span class="p">,</span><span class="s">&#39;Burkina Faso&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BI&#39;</span><span class="p">,</span><span class="s">&#39;Burundi&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;KH&#39;</span><span class="p">,</span><span class="s">&#39;Cambodia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CM&#39;</span><span class="p">,</span><span class="s">&#39;Cameroon&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CA&#39;</span><span class="p">,</span><span class="s">&#39;Canada&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CT&#39;</span><span class="p">,</span><span class="s">&#39;Canton and Enderbury Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CV&#39;</span><span class="p">,</span><span class="s">&#39;Cape Verde&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;KY&#39;</span><span class="p">,</span><span class="s">&#39;Cayman Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CF&#39;</span><span class="p">,</span><span class="s">&#39;Central African Republic&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TD&#39;</span><span class="p">,</span><span class="s">&#39;Chad&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CL&#39;</span><span class="p">,</span><span class="s">&#39;Chile&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CN&#39;</span><span class="p">,</span><span class="s">&#39;China&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CX&#39;</span><span class="p">,</span><span class="s">&#39;Christmas Island&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CC&#39;</span><span class="p">,</span><span class="s">&#39;Cocos [Keeling] Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CO&#39;</span><span class="p">,</span><span class="s">&#39;Colombia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;KM&#39;</span><span class="p">,</span><span class="s">&#39;Comoros&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CG&#39;</span><span class="p">,</span><span class="s">&#39;Congo - Brazzaville&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CD&#39;</span><span class="p">,</span><span class="s">&#39;Congo - Kinshasa&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CK&#39;</span><span class="p">,</span><span class="s">&#39;Cook Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CR&#39;</span><span class="p">,</span><span class="s">&#39;Costa Rica&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;HR&#39;</span><span class="p">,</span><span class="s">&#39;Croatia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CU&#39;</span><span class="p">,</span><span class="s">&#39;Cuba&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CY&#39;</span><span class="p">,</span><span class="s">&#39;Cyprus&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CZ&#39;</span><span class="p">,</span><span class="s">&#39;Czech Republic&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CI&#39;</span><span class="p">,</span><span class="s">&#39;C</span><span class="se">\u00f4</span><span class="s">te d</span><span class="se">\u2019</span><span class="s">Ivoire&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;DK&#39;</span><span class="p">,</span><span class="s">&#39;Denmark&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;DJ&#39;</span><span class="p">,</span><span class="s">&#39;Djibouti&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;DM&#39;</span><span class="p">,</span><span class="s">&#39;Dominica&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;DO&#39;</span><span class="p">,</span><span class="s">&#39;Dominican Republic&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NQ&#39;</span><span class="p">,</span><span class="s">&#39;Dronning Maud Land&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;DD&#39;</span><span class="p">,</span><span class="s">&#39;East Germany&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;EC&#39;</span><span class="p">,</span><span class="s">&#39;Ecuador&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;EG&#39;</span><span class="p">,</span><span class="s">&#39;Egypt&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SV&#39;</span><span class="p">,</span><span class="s">&#39;El Salvador&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GQ&#39;</span><span class="p">,</span><span class="s">&#39;Equatorial Guinea&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;ER&#39;</span><span class="p">,</span><span class="s">&#39;Eritrea&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;EE&#39;</span><span class="p">,</span><span class="s">&#39;Estonia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;ET&#39;</span><span class="p">,</span><span class="s">&#39;Ethiopia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;FK&#39;</span><span class="p">,</span><span class="s">&#39;Falkland Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;FO&#39;</span><span class="p">,</span><span class="s">&#39;Faroe Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;FJ&#39;</span><span class="p">,</span><span class="s">&#39;Fiji&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;FI&#39;</span><span class="p">,</span><span class="s">&#39;Finland&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;FR&#39;</span><span class="p">,</span><span class="s">&#39;France&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GF&#39;</span><span class="p">,</span><span class="s">&#39;French Guiana&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PF&#39;</span><span class="p">,</span><span class="s">&#39;French Polynesia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TF&#39;</span><span class="p">,</span><span class="s">&#39;French Southern Territories&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;FQ&#39;</span><span class="p">,</span><span class="s">&#39;French Southern and Antarctic Territories&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GA&#39;</span><span class="p">,</span><span class="s">&#39;Gabon&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GM&#39;</span><span class="p">,</span><span class="s">&#39;Gambia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GE&#39;</span><span class="p">,</span><span class="s">&#39;Georgia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;DE&#39;</span><span class="p">,</span><span class="s">&#39;Germany&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GH&#39;</span><span class="p">,</span><span class="s">&#39;Ghana&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GI&#39;</span><span class="p">,</span><span class="s">&#39;Gibraltar&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GR&#39;</span><span class="p">,</span><span class="s">&#39;Greece&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GL&#39;</span><span class="p">,</span><span class="s">&#39;Greenland&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GD&#39;</span><span class="p">,</span><span class="s">&#39;Grenada&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GP&#39;</span><span class="p">,</span><span class="s">&#39;Guadeloupe&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GU&#39;</span><span class="p">,</span><span class="s">&#39;Guam&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GT&#39;</span><span class="p">,</span><span class="s">&#39;Guatemala&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GG&#39;</span><span class="p">,</span><span class="s">&#39;Guernsey&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GN&#39;</span><span class="p">,</span><span class="s">&#39;Guinea&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GW&#39;</span><span class="p">,</span><span class="s">&#39;Guinea-Bissau&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GY&#39;</span><span class="p">,</span><span class="s">&#39;Guyana&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;HT&#39;</span><span class="p">,</span><span class="s">&#39;Haiti&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;HM&#39;</span><span class="p">,</span><span class="s">&#39;Heard Island and McDonald Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;HN&#39;</span><span class="p">,</span><span class="s">&#39;Honduras&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;HK&#39;</span><span class="p">,</span><span class="s">&#39;Hong Kong SAR China&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;HU&#39;</span><span class="p">,</span><span class="s">&#39;Hungary&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;IS&#39;</span><span class="p">,</span><span class="s">&#39;Iceland&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;IN&#39;</span><span class="p">,</span><span class="s">&#39;India&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;ID&#39;</span><span class="p">,</span><span class="s">&#39;Indonesia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;IR&#39;</span><span class="p">,</span><span class="s">&#39;Iran&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;IQ&#39;</span><span class="p">,</span><span class="s">&#39;Iraq&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;IE&#39;</span><span class="p">,</span><span class="s">&#39;Ireland&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;IM&#39;</span><span class="p">,</span><span class="s">&#39;Isle of Man&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;IL&#39;</span><span class="p">,</span><span class="s">&#39;Israel&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;IT&#39;</span><span class="p">,</span><span class="s">&#39;Italy&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;JM&#39;</span><span class="p">,</span><span class="s">&#39;Jamaica&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;JP&#39;</span><span class="p">,</span><span class="s">&#39;Japan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;JE&#39;</span><span class="p">,</span><span class="s">&#39;Jersey&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;JT&#39;</span><span class="p">,</span><span class="s">&#39;Johnston Island&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;JO&#39;</span><span class="p">,</span><span class="s">&#39;Jordan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;KZ&#39;</span><span class="p">,</span><span class="s">&#39;Kazakhstan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;KE&#39;</span><span class="p">,</span><span class="s">&#39;Kenya&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;KI&#39;</span><span class="p">,</span><span class="s">&#39;Kiribati&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;KW&#39;</span><span class="p">,</span><span class="s">&#39;Kuwait&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;KG&#39;</span><span class="p">,</span><span class="s">&#39;Kyrgyzstan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;LA&#39;</span><span class="p">,</span><span class="s">&#39;Laos&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;LV&#39;</span><span class="p">,</span><span class="s">&#39;Latvia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;LB&#39;</span><span class="p">,</span><span class="s">&#39;Lebanon&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;LS&#39;</span><span class="p">,</span><span class="s">&#39;Lesotho&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;LR&#39;</span><span class="p">,</span><span class="s">&#39;Liberia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;LY&#39;</span><span class="p">,</span><span class="s">&#39;Libya&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;LI&#39;</span><span class="p">,</span><span class="s">&#39;Liechtenstein&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;LT&#39;</span><span class="p">,</span><span class="s">&#39;Lithuania&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;LU&#39;</span><span class="p">,</span><span class="s">&#39;Luxembourg&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MO&#39;</span><span class="p">,</span><span class="s">&#39;Macau SAR China&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MK&#39;</span><span class="p">,</span><span class="s">&#39;Macedonia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MG&#39;</span><span class="p">,</span><span class="s">&#39;Madagascar&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MW&#39;</span><span class="p">,</span><span class="s">&#39;Malawi&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MY&#39;</span><span class="p">,</span><span class="s">&#39;Malaysia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MV&#39;</span><span class="p">,</span><span class="s">&#39;Maldives&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="s">&#39;Mali&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MT&#39;</span><span class="p">,</span><span class="s">&#39;Malta&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MH&#39;</span><span class="p">,</span><span class="s">&#39;Marshall Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MQ&#39;</span><span class="p">,</span><span class="s">&#39;Martinique&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MR&#39;</span><span class="p">,</span><span class="s">&#39;Mauritania&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MU&#39;</span><span class="p">,</span><span class="s">&#39;Mauritius&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;YT&#39;</span><span class="p">,</span><span class="s">&#39;Mayotte&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;FX&#39;</span><span class="p">,</span><span class="s">&#39;Metropolitan France&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MX&#39;</span><span class="p">,</span><span class="s">&#39;Mexico&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;FM&#39;</span><span class="p">,</span><span class="s">&#39;Micronesia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MI&#39;</span><span class="p">,</span><span class="s">&#39;Midway Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MD&#39;</span><span class="p">,</span><span class="s">&#39;Moldova&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MC&#39;</span><span class="p">,</span><span class="s">&#39;Monaco&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MN&#39;</span><span class="p">,</span><span class="s">&#39;Mongolia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;ME&#39;</span><span class="p">,</span><span class="s">&#39;Montenegro&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MS&#39;</span><span class="p">,</span><span class="s">&#39;Montserrat&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MA&#39;</span><span class="p">,</span><span class="s">&#39;Morocco&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MZ&#39;</span><span class="p">,</span><span class="s">&#39;Mozambique&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MM&#39;</span><span class="p">,</span><span class="s">&#39;Myanmar [Burma]&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NA&#39;</span><span class="p">,</span><span class="s">&#39;Namibia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NR&#39;</span><span class="p">,</span><span class="s">&#39;Nauru&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NP&#39;</span><span class="p">,</span><span class="s">&#39;Nepal&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NL&#39;</span><span class="p">,</span><span class="s">&#39;Netherlands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AN&#39;</span><span class="p">,</span><span class="s">&#39;Netherlands Antilles&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NT&#39;</span><span class="p">,</span><span class="s">&#39;Neutral Zone&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NC&#39;</span><span class="p">,</span><span class="s">&#39;New Caledonia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NZ&#39;</span><span class="p">,</span><span class="s">&#39;New Zealand&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NI&#39;</span><span class="p">,</span><span class="s">&#39;Nicaragua&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NE&#39;</span><span class="p">,</span><span class="s">&#39;Niger&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NG&#39;</span><span class="p">,</span><span class="s">&#39;Nigeria&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NU&#39;</span><span class="p">,</span><span class="s">&#39;Niue&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NF&#39;</span><span class="p">,</span><span class="s">&#39;Norfolk Island&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;KP&#39;</span><span class="p">,</span><span class="s">&#39;North Korea&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;VD&#39;</span><span class="p">,</span><span class="s">&#39;North Vietnam&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MP&#39;</span><span class="p">,</span><span class="s">&#39;Northern Mariana Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;NO&#39;</span><span class="p">,</span><span class="s">&#39;Norway&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;OM&#39;</span><span class="p">,</span><span class="s">&#39;Oman&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PC&#39;</span><span class="p">,</span><span class="s">&#39;Pacific Islands Trust Territory&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PK&#39;</span><span class="p">,</span><span class="s">&#39;Pakistan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PW&#39;</span><span class="p">,</span><span class="s">&#39;Palau&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PS&#39;</span><span class="p">,</span><span class="s">&#39;Palestinian Territories&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PA&#39;</span><span class="p">,</span><span class="s">&#39;Panama&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PZ&#39;</span><span class="p">,</span><span class="s">&#39;Panama Canal Zone&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PG&#39;</span><span class="p">,</span><span class="s">&#39;Papua New Guinea&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PY&#39;</span><span class="p">,</span><span class="s">&#39;Paraguay&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;YD&#39;</span><span class="p">,</span><span class="s">&#39;People</span><span class="se">\&#39;</span><span class="s">s Democratic Republic of Yemen&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PE&#39;</span><span class="p">,</span><span class="s">&#39;Peru&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PH&#39;</span><span class="p">,</span><span class="s">&#39;Philippines&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PN&#39;</span><span class="p">,</span><span class="s">&#39;Pitcairn Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PL&#39;</span><span class="p">,</span><span class="s">&#39;Poland&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PT&#39;</span><span class="p">,</span><span class="s">&#39;Portugal&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PR&#39;</span><span class="p">,</span><span class="s">&#39;Puerto Rico&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;QA&#39;</span><span class="p">,</span><span class="s">&#39;Qatar&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;RO&#39;</span><span class="p">,</span><span class="s">&#39;Romania&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;RU&#39;</span><span class="p">,</span><span class="s">&#39;Russia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;RW&#39;</span><span class="p">,</span><span class="s">&#39;Rwanda&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;RE&#39;</span><span class="p">,</span><span class="s">&#39;R</span><span class="se">\u00e9</span><span class="s">union&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;BL&#39;</span><span class="p">,</span><span class="s">&#39;Saint Barth</span><span class="se">\u00e9</span><span class="s">lemy&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SH&#39;</span><span class="p">,</span><span class="s">&#39;Saint Helena&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;KN&#39;</span><span class="p">,</span><span class="s">&#39;Saint Kitts and Nevis&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;LC&#39;</span><span class="p">,</span><span class="s">&#39;Saint Lucia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;MF&#39;</span><span class="p">,</span><span class="s">&#39;Saint Martin&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PM&#39;</span><span class="p">,</span><span class="s">&#39;Saint Pierre and Miquelon&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;VC&#39;</span><span class="p">,</span><span class="s">&#39;Saint Vincent and the Grenadines&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;WS&#39;</span><span class="p">,</span><span class="s">&#39;Samoa&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SM&#39;</span><span class="p">,</span><span class="s">&#39;San Marino&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SA&#39;</span><span class="p">,</span><span class="s">&#39;Saudi Arabia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SN&#39;</span><span class="p">,</span><span class="s">&#39;Senegal&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;RS&#39;</span><span class="p">,</span><span class="s">&#39;Serbia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CS&#39;</span><span class="p">,</span><span class="s">&#39;Serbia and Montenegro&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SC&#39;</span><span class="p">,</span><span class="s">&#39;Seychelles&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SL&#39;</span><span class="p">,</span><span class="s">&#39;Sierra Leone&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SG&#39;</span><span class="p">,</span><span class="s">&#39;Singapore&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SK&#39;</span><span class="p">,</span><span class="s">&#39;Slovakia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SI&#39;</span><span class="p">,</span><span class="s">&#39;Slovenia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SB&#39;</span><span class="p">,</span><span class="s">&#39;Solomon Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SO&#39;</span><span class="p">,</span><span class="s">&#39;Somalia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;ZA&#39;</span><span class="p">,</span><span class="s">&#39;South Africa&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GS&#39;</span><span class="p">,</span><span class="s">&#39;South Georgia and the South Sandwich Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;KR&#39;</span><span class="p">,</span><span class="s">&#39;South Korea&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;ES&#39;</span><span class="p">,</span><span class="s">&#39;Spain&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;LK&#39;</span><span class="p">,</span><span class="s">&#39;Sri Lanka&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SD&#39;</span><span class="p">,</span><span class="s">&#39;Sudan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SR&#39;</span><span class="p">,</span><span class="s">&#39;Suriname&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SJ&#39;</span><span class="p">,</span><span class="s">&#39;Svalbard and Jan Mayen&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SZ&#39;</span><span class="p">,</span><span class="s">&#39;Swaziland&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SE&#39;</span><span class="p">,</span><span class="s">&#39;Sweden&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;CH&#39;</span><span class="p">,</span><span class="s">&#39;Switzerland&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SY&#39;</span><span class="p">,</span><span class="s">&#39;Syria&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;ST&#39;</span><span class="p">,</span><span class="s">&#39;Sao Tom and Principe&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TW&#39;</span><span class="p">,</span><span class="s">&#39;Taiwan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TJ&#39;</span><span class="p">,</span><span class="s">&#39;Tajikistan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TZ&#39;</span><span class="p">,</span><span class="s">&#39;Tanzania&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TH&#39;</span><span class="p">,</span><span class="s">&#39;Thailand&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TL&#39;</span><span class="p">,</span><span class="s">&#39;Timor-Leste&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TG&#39;</span><span class="p">,</span><span class="s">&#39;Togo&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TK&#39;</span><span class="p">,</span><span class="s">&#39;Tokelau&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TO&#39;</span><span class="p">,</span><span class="s">&#39;Tonga&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TT&#39;</span><span class="p">,</span><span class="s">&#39;Trinidad and Tobago&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TN&#39;</span><span class="p">,</span><span class="s">&#39;Tunisia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TR&#39;</span><span class="p">,</span><span class="s">&#39;Turkey&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TM&#39;</span><span class="p">,</span><span class="s">&#39;Turkmenistan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TC&#39;</span><span class="p">,</span><span class="s">&#39;Turks and Caicos Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;TV&#39;</span><span class="p">,</span><span class="s">&#39;Tuvalu&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;UM&#39;</span><span class="p">,</span><span class="s">&#39;U.S. Minor Outlying Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;PU&#39;</span><span class="p">,</span><span class="s">&#39;U.S. Miscellaneous Pacific Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;VI&#39;</span><span class="p">,</span><span class="s">&#39;U.S. Virgin Islands&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;UG&#39;</span><span class="p">,</span><span class="s">&#39;Uganda&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;UA&#39;</span><span class="p">,</span><span class="s">&#39;Ukraine&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;SU&#39;</span><span class="p">,</span><span class="s">&#39;Union of Soviet Socialist Republics&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AE&#39;</span><span class="p">,</span><span class="s">&#39;United Arab Emirates&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;GB&#39;</span><span class="p">,</span><span class="s">&#39;United Kingdom&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;US&#39;</span><span class="p">,</span><span class="s">&#39;United States&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;ZZ&#39;</span><span class="p">,</span><span class="s">&#39;Unknown or Invalid Region&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;UY&#39;</span><span class="p">,</span><span class="s">&#39;Uruguay&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;UZ&#39;</span><span class="p">,</span><span class="s">&#39;Uzbekistan&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;VU&#39;</span><span class="p">,</span><span class="s">&#39;Vanuatu&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;VA&#39;</span><span class="p">,</span><span class="s">&#39;Vatican City&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;VE&#39;</span><span class="p">,</span><span class="s">&#39;Venezuela&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;VN&#39;</span><span class="p">,</span><span class="s">&#39;Vietnam&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;WK&#39;</span><span class="p">,</span><span class="s">&#39;Wake Island&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;WF&#39;</span><span class="p">,</span><span class="s">&#39;Wallis and Futuna&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;EH&#39;</span><span class="p">,</span><span class="s">&#39;Western Sahara&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;YE&#39;</span><span class="p">,</span><span class="s">&#39;Yemen&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;ZM&#39;</span><span class="p">,</span><span class="s">&#39;Zambia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;ZW&#39;</span><span class="p">,</span><span class="s">&#39;Zimbabwe&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;AX&#39;</span><span class="p">,</span><span class="s">&#39;Aland Islands&#39;</span><span class="p">)]</span>
+
+<span class="n">country_choices</span><span class="o">=</span><span class="n">prefered_country_choices</span> <span class="o">+</span> <span class="n">all_country_choices</span> 
+
+<div class="viewcode-block" id="RadioSelectField"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.RadioSelectField">[docs]</a><span class="k">class</span> <span class="nc">RadioSelectField</span><span class="p">(</span><span class="n">RadioField</span><span class="p">):</span>
+    <span class="n">widget</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="n">multiple</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">option_widget</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Select</span>
+
+</div>
+<div class="viewcode-block" id="MultiCheckboxField"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.MultiCheckboxField">[docs]</a><span class="k">class</span> <span class="nc">MultiCheckboxField</span><span class="p">(</span><span class="n">SelectMultipleField</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A multiple-select, except displays a list of checkboxes.</span>
+
+<span class="sd">    Iterating the field will produce subfields, allowing custom rendering of</span>
+<span class="sd">    the enclosed checkbox fields.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">widget</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">TableWidget</span><span class="p">(</span><span class="n">with_table_tag</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">option_widget</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">CheckboxInput</span><span class="p">()</span>
+</div>
+<span class="n">exclude_email_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;@verizon.net&quot;</span><span class="p">,</span> <span class="s">&quot;@123.com&quot;</span><span class="p">]</span>
+
+<span class="nd">@management_module.route</span><span class="p">(</span><span class="s">&#39;/m/project/apply&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<div class="viewcode-block" id="project_apply"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.project_apply">[docs]</a><span class="k">def</span> <span class="nf">project_apply</span><span class="p">():</span>
+
+    <span class="n">form</span> <span class="o">=</span> <span class="n">ProjectRegistrationForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span> <span class="ow">and</span> <span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">():</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;button&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;button&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;save&#39;</span><span class="p">:</span>
+            <span class="n">projects</span> <span class="o">=</span> <span class="n">Projects</span><span class="p">()</span>
+            <span class="n">project</span> <span class="o">=</span> <span class="n">MongoProject</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">project</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+
+            <span class="n">projects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+
+        <span class="n">flash</span><span class="p">(</span><span class="s">&#39;Thanks for registering&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+
+    <span class="c"># return render_template(&#39;management/project_apply.html&#39;,</span>
+    <span class="c">#                        title=&quot;Project Application&quot;,</span>
+    <span class="c">#                        states=[&#39;save&#39;, &#39;cancel&#39;],</span>
+    <span class="c">#                        form=form,</span>
+    <span class="c">#                        fields=ProjectRegistrationForm.keys)</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/project_apply.html&#39;</span><span class="p">,</span>
+                           <span class="n">title</span><span class="o">=</span><span class="s">&quot;Project Application&quot;</span><span class="p">,</span>
+                           <span class="n">states</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">,</span> <span class="s">&#39;cancel&#39;</span><span class="p">],</span>
+                           <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span>
+                           <span class="n">fields</span><span class="o">=</span><span class="n">ProjectRegistrationForm</span><span class="o">.</span><span class="n">keys</span><span class="p">,</span>
+                           <span class="n">profile_fields</span><span class="o">=</span><span class="n">ProjectRegistrationForm</span><span class="o">.</span><span class="n">profile_keys</span><span class="p">,</span>
+                           <span class="n">agreements_fields</span><span class="o">=</span><span class="n">ProjectRegistrationForm</span><span class="o">.</span><span class="n">agreements_keys</span><span class="p">,</span>
+                           <span class="n">other_fields</span><span class="o">=</span><span class="n">ProjectRegistrationForm</span><span class="o">.</span><span class="n">other_keys</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="get_choices_for_form"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.get_choices_for_form">[docs]</a><span class="k">def</span> <span class="nf">get_choices_for_form</span><span class="p">(</span><span class="n">services</span><span class="p">):</span>
+    <span class="n">choices</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">services</span><span class="p">:</span>
+        <span class="n">choices</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">service</span><span class="p">,</span> <span class="n">service</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">choices</span>
+
+</div>
+<div class="viewcode-block" id="ProjectRegistrationForm"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.ProjectRegistrationForm">[docs]</a><span class="k">class</span> <span class="nc">ProjectRegistrationForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProjectRegistrationForm.validate_url_in_form"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.ProjectRegistrationForm.validate_url_in_form">[docs]</a>    <span class="k">def</span> <span class="nf">validate_url_in_form</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;http&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s">&#39;The url is not valid&#39;</span><span class="p">)</span>
+</div>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    class Meta:</span>
+<span class="sd">        csrf = True</span>
+<span class="sd">        csrf_class = SessionCSRF</span>
+<span class="sd">        csrf_secret = b&#39;REPLACE ME WITH A SECRET&#39;</span>
+<span class="sd">        csrf_time_limit = timedelta(minutes=20)</span>
+
+<span class="sd">    # put this in the html form:  {{ form.csrf_token }}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># keys = [(&quot;profile&quot;, [&quot;title&quot;,</span>
+    <span class="c">#                      &quot;abstract&quot;,</span>
+    <span class="c">#                      &quot;intellectual_merit&quot;,</span>
+    <span class="c">#                      &quot;broader_impact&quot;,</span>
+    <span class="c">#                      &quot;use_of_fg&quot;,</span>
+    <span class="c">#                      &quot;scale_of_use&quot;,</span>
+    <span class="c">#                      # &quot;categories&quot;,</span>
+    <span class="c">#                      # &quot;keywords&quot;,</span>
+    <span class="c">#                      # &quot;primary_discipline&quot;,</span>
+    <span class="c">#                      &quot;orientation&quot;,</span>
+    <span class="c">#                      &quot;contact&quot;,</span>
+    <span class="c">#                      &quot;url&quot;,</span>
+    <span class="c">#                      &quot;comment&quot;,</span>
+    <span class="c">#                      # &quot;active&quot;,</span>
+    <span class="c">#                      # &quot;projectid&quot;,</span>
+    <span class="c">#                      # &quot;lead&quot;,</span>
+    <span class="c">#                      # &quot;managers&quot;,</span>
+    <span class="c">#                      # &quot;members&quot;,</span>
+    <span class="c">#                      # &quot;alumnis&quot;,</span>
+    <span class="c">#                      # &quot;grant_orgnization&quot;,</span>
+    <span class="c">#                      # &quot;grant_id&quot;,</span>
+    <span class="c">#                      # &quot;grant_url&quot;,</span>
+    <span class="c">#                      &quot;results&quot;]),</span>
+    <span class="c">#         (&quot;agreements&quot;, [&quot;agreement_use&quot;,</span>
+    <span class="c">#                         &quot;agreement_slides&quot;,</span>
+    <span class="c">#                         &quot;agreement_support&quot;,</span>
+    <span class="c">#                         &quot;agreement_software&quot;,</span>
+    <span class="c">#                         &quot;agreement_documentation&quot;]),</span>
+    <span class="c">#         (&quot;other&quot;, [&quot;comments&quot;,</span>
+    <span class="c">#                    &quot;join_open&quot;,</span>
+    <span class="c">#                    &quot;join_notification&quot;,</span>
+    <span class="c">#                    &quot;resources_services&quot;,</span>
+    <span class="c">#                    # &quot;resources_software&quot;,</span>
+    <span class="c">#                    &quot;resources_clusters&quot;,</span>
+    <span class="c">#                    &quot;resources_provision&quot;</span>
+    <span class="c">#         ])</span>
+    <span class="c"># ]</span>
+
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span>\
+        <span class="s">&quot;title&quot;</span><span class="p">,</span>
+        <span class="s">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s">&quot;keywords&quot;</span><span class="p">,</span>
+        <span class="s">&quot;contact&quot;</span><span class="p">,</span>
+        <span class="s">&quot;primary_discipline&quot;</span>
+        <span class="s">&quot;orientation&quot;</span><span class="p">,</span>
+        <span class="s">&quot;abstract&quot;</span><span class="p">,</span>
+        <span class="s">&quot;intellectual_merit&quot;</span><span class="p">,</span>
+        <span class="s">&quot;broader_impact&quot;</span><span class="p">,</span>
+        <span class="s">&quot;use_of_fg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;scale_of_use&quot;</span><span class="p">,</span>
+        <span class="s">&quot;url&quot;</span><span class="p">,</span>
+        <span class="s">&quot;comment&quot;</span><span class="p">,</span>
+        <span class="s">&quot;results&quot;</span><span class="p">,</span>
+        <span class="s">&quot;agreement_use&quot;</span><span class="p">,</span>
+        <span class="s">&quot;agreement_slides&quot;</span><span class="p">,</span>
+        <span class="s">&quot;agreement_support&quot;</span><span class="p">,</span>
+        <span class="s">&quot;agreement_software&quot;</span><span class="p">,</span>
+        <span class="s">&quot;agreement_documentation&quot;</span><span class="p">,</span>
+        <span class="s">&quot;comments&quot;</span><span class="p">,</span>
+        <span class="s">&quot;join_open&quot;</span><span class="p">,</span>
+        <span class="s">&quot;join_notification&quot;</span><span class="p">,</span>
+        <span class="s">&quot;resources_services&quot;</span><span class="p">,</span>
+        <span class="c"># &quot;resources_software&quot;,</span>
+        <span class="s">&quot;resources_clusters&quot;</span><span class="p">,</span>
+        <span class="s">&quot;resources_provision&quot;</span><span class="p">]</span>
+
+    <span class="n">profile_keys</span> <span class="o">=</span> <span class="p">[</span>\
+        <span class="s">&quot;title&quot;</span><span class="p">,</span>
+        <span class="s">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s">&quot;keywords&quot;</span><span class="p">,</span>
+        <span class="s">&quot;contact&quot;</span><span class="p">,</span>
+        <span class="s">&quot;orientation&quot;</span><span class="p">,</span>
+        <span class="s">&quot;primary_discipline&quot;</span><span class="p">,</span>
+        <span class="s">&quot;abstract&quot;</span><span class="p">,</span>
+        <span class="s">&quot;intellectual_merit&quot;</span><span class="p">,</span>
+        <span class="s">&quot;broader_impact&quot;</span><span class="p">,</span>
+        <span class="s">&quot;use_of_fg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;scale_of_use&quot;</span><span class="p">,</span>
+        <span class="s">&quot;url&quot;</span><span class="p">,</span>
+        <span class="s">&quot;comment&quot;</span><span class="p">,</span>
+        <span class="c"># &quot;active&quot;,</span>
+        <span class="c"># &quot;projectid&quot;,</span>
+        <span class="c"># &quot;lead&quot;,</span>
+        <span class="c"># &quot;managers&quot;,</span>
+        <span class="c"># &quot;members&quot;,</span>
+        <span class="c"># &quot;alumnis&quot;,</span>
+        <span class="c"># &quot;grant_orgnization&quot;,</span>
+        <span class="c"># &quot;grant_id&quot;,</span>
+        <span class="c"># &quot;grant_url&quot;,</span>
+        <span class="s">&quot;results&quot;</span><span class="p">]</span>
+
+    <span class="n">agreements_keys</span><span class="o">=</span> <span class="p">[</span>\
+        <span class="s">&quot;agreement_use&quot;</span><span class="p">,</span>
+        <span class="s">&quot;agreement_slides&quot;</span><span class="p">,</span>
+        <span class="s">&quot;agreement_support&quot;</span><span class="p">,</span>
+        <span class="s">&quot;agreement_software&quot;</span><span class="p">,</span>
+        <span class="s">&quot;agreement_documentation&quot;</span><span class="p">]</span>
+
+    <span class="n">other_keys</span> <span class="o">=</span> <span class="p">[</span>\
+        <span class="s">&quot;comments&quot;</span><span class="p">,</span>
+        <span class="s">&quot;join_open&quot;</span><span class="p">,</span>
+        <span class="s">&quot;join_notification&quot;</span><span class="p">,</span>
+        <span class="s">&quot;resources_services&quot;</span><span class="p">,</span>
+        <span class="c"># &quot;resources_software&quot;,</span>
+        <span class="s">&quot;resources_clusters&quot;</span><span class="p">,</span>
+        <span class="s">&quot;resources_provision&quot;</span><span class="p">]</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Title&#39;</span><span class="p">)</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">RadioSelectField</span><span class="p">(</span><span class="s">&#39;Project Category&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;None&#39;</span><span class="p">,</span><span class="s">&#39;None&#39;</span><span class="p">),(</span><span class="s">&#39;Computer Science&#39;</span><span class="p">,</span><span class="s">&#39;Computer Science&#39;</span><span class="p">),</span>\
+                                                             <span class="p">(</span><span class="s">&#39;Education&#39;</span><span class="p">,</span><span class="s">&#39;Education&#39;</span><span class="p">),</span>\
+                                                             <span class="p">(</span><span class="s">&#39;Interoperability&#39;</span><span class="p">,</span><span class="s">&#39;Interoperability&#39;</span><span class="p">),</span>\
+                                                             <span class="p">(</span><span class="s">&#39;Life Sciences&#39;</span><span class="p">,</span><span class="s">&#39;Life Sciences&#39;</span><span class="p">),</span>\
+                                                             <span class="p">(</span><span class="s">&#39;Non Life Sciences&#39;</span><span class="p">,</span><span class="s">&#39;Non Life Sciences&#39;</span><span class="p">),</span>\
+                                                             <span class="p">(</span><span class="s">&#39;Technology Development&#39;</span><span class="p">,</span><span class="s">&#39;Technology Development&#39;</span><span class="p">),</span>\
+                                                             <span class="p">(</span><span class="s">&#39;Technology Evaluation&#39;</span><span class="p">,</span><span class="s">&#39;Technology Evaluation&#39;</span><span class="p">)])</span>
+    <span class="n">keywords</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Project Keywords&#39;</span><span class="p">)</span>
+    <span class="n">abstract</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Abstract&#39;</span><span class="p">)</span>
+    <span class="n">intellectual_merit</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Intellectual merit&#39;</span><span class="p">)</span>
+    <span class="n">broader_impact</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Broader impact&#39;</span><span class="p">)</span>
+    <span class="n">use_of_fg</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Use of Future Systems&#39;</span><span class="p">)</span>
+    <span class="n">scale_of_use</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Scale of use&#39;</span><span class="p">)</span>
+    <span class="n">categories</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Categories&#39;</span><span class="p">)</span>
+    <span class="n">keywords</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Keywords&#39;</span><span class="p">)</span>
+    <span class="c"># orientation = StringField(&#39;Orientation&#39;)</span>
+    <span class="n">orientation</span> <span class="o">=</span> <span class="n">RadioSelectField</span><span class="p">(</span><span class="s">&#39;Orientation&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;research&#39;</span><span class="p">,</span><span class="s">&#39;Research&#39;</span><span class="p">),(</span><span class="s">&#39;education&#39;</span><span class="p">,</span><span class="s">&#39;Education&#39;</span><span class="p">),</span>\
+                                                           <span class="p">(</span><span class="s">&#39;industry&#39;</span><span class="p">,</span><span class="s">&#39;Industry&#39;</span><span class="p">),(</span><span class="s">&#39;government&#39;</span><span class="p">,</span><span class="s">&#39;Government&#39;</span><span class="p">)])</span>
+    <span class="n">primary_discipline</span> <span class="o">=</span> <span class="n">RadioSelectField</span><span class="p">(</span><span class="s">&#39;Primary discipline&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">discipline_choices</span><span class="p">)</span>
+    <span class="n">contact</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Contact&#39;</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span>
+        <span class="s">&#39;URL&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">Length</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span> <span class="n">validate_url_in_form</span><span class="p">])</span>
+    <span class="n">comment</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Comment&#39;</span><span class="p">)</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="s">&#39;Active&#39;</span><span class="p">)</span>
+    <span class="n">projectid</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Projectid&#39;</span><span class="p">)</span>
+    <span class="n">lead</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Lead&#39;</span><span class="p">)</span>
+    <span class="n">managers</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Managers&#39;</span><span class="p">)</span>
+    <span class="n">members</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Members&#39;</span><span class="p">)</span>
+    <span class="n">alumnis</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Alumnis&#39;</span><span class="p">)</span>
+    <span class="n">grant_orgnization</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Grant Orgnization&#39;</span><span class="p">)</span>
+    <span class="n">grant_id</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Grant id&#39;</span><span class="p">)</span>
+    <span class="n">grant_url</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Grant URL&#39;</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Results&#39;</span><span class="p">)</span>
+    <span class="n">agreement_use</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="s">&#39;NSF Agreement to use Future Systems&#39;</span><span class="p">)</span>
+    <span class="n">agreement_slides</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="s">&#39;Slide Collection&#39;</span><span class="p">)</span>
+    <span class="n">agreement_support</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="s">&#39;Support&#39;</span><span class="p">)</span>
+    <span class="n">agreement_software</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="s">&#39;Software Contributions&#39;</span><span class="p">)</span>
+    <span class="n">agreement_documentation</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="s">&#39;Documentation Contributions&#39;</span><span class="p">)</span>
+    <span class="n">agreement_images</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="s">&#39;Images&#39;</span><span class="p">)</span>
+    <span class="n">comments</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Comments&#39;</span><span class="p">)</span>
+    <span class="n">join_open</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="s">&#39;Join open&#39;</span><span class="p">)</span>
+    <span class="n">join_notification</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="s">&#39;Join notification&#39;</span><span class="p">)</span>
+    <span class="n">resources_services</span> <span class="o">=</span> <span class="n">MultiCheckboxField</span><span class="p">(</span>
+        <span class="s">&#39;Resource Services&#39;</span><span class="p">,</span>
+        <span class="n">choices</span><span class="o">=</span><span class="n">get_choices_for_form</span><span class="p">(</span><span class="n">ProjectSERVICES</span><span class="p">))</span>
+    <span class="c"># resources_software = MultiCheckboxField(&#39;resources_software&#39;,</span>
+    <span class="c">#                         choices=get_choices_for_form(ProjectSOFTWARE))</span>
+    <span class="n">resources_clusters</span> <span class="o">=</span> <span class="n">MultiCheckboxField</span><span class="p">(</span>
+
+        <span class="s">&#39;Resource Clusters&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">get_choices_for_form</span><span class="p">(</span><span class="n">ProjectCLUSTERS</span><span class="p">))</span>
+    <span class="n">resources_provision</span> <span class="o">=</span> <span class="n">MultiCheckboxField</span><span class="p">(</span>
+        <span class="s">&#39;Resource Provisioning&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">get_choices_for_form</span><span class="p">(</span><span class="n">ProjectPROVISIONING</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="UserRegistrationForm"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.UserRegistrationForm">[docs]</a><span class="k">class</span> <span class="nc">UserRegistrationForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    class Meta:</span>
+<span class="sd">        csrf = True</span>
+<span class="sd">        csrf_class = SessionCSRF</span>
+<span class="sd">        csrf_secret = b&#39;REPLACE ME WITH A SECRET&#39;</span>
+<span class="sd">        csrf_time_limit = timedelta(minutes=20)</span>
+
+<span class="sd">    # put this in the html form:  {{ form.csrf_token }}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;username&quot;</span><span class="p">,</span>
+            <span class="s">&quot;email&quot;</span><span class="p">,</span>
+            <span class="s">&quot;password&quot;</span><span class="p">,</span>
+            <span class="s">&quot;confirm&quot;</span><span class="p">,</span>
+            <span class="s">&quot;title&quot;</span><span class="p">,</span>
+            <span class="s">&quot;firstname&quot;</span><span class="p">,</span>
+            <span class="s">&quot;lastname&quot;</span><span class="p">,</span>
+            <span class="s">&quot;phone&quot;</span><span class="p">,</span>
+            <span class="s">&quot;url&quot;</span><span class="p">,</span>
+            <span class="s">&quot;citizenship&quot;</span><span class="p">,</span>
+            <span class="s">&quot;bio&quot;</span><span class="p">,</span>
+            <span class="s">&quot;institution&quot;</span><span class="p">,</span>
+            <span class="s">&quot;institutionrole&quot;</span><span class="p">,</span>
+            <span class="s">&quot;department&quot;</span><span class="p">,</span>
+            <span class="s">&quot;address&quot;</span><span class="p">,</span>
+            <span class="s">&quot;advisor&quot;</span><span class="p">,</span>
+            <span class="s">&quot;country&quot;</span><span class="p">,</span>
+            <span class="s">&quot;confirm&quot;</span><span class="p">]</span>
+
+    <span class="n">organization_keys</span> <span class="o">=</span> \
+        <span class="p">[</span><span class="s">&quot;institution&quot;</span><span class="p">,</span>
+         <span class="s">&quot;institutionrole&quot;</span><span class="p">,</span>
+         <span class="s">&quot;department&quot;</span><span class="p">,</span>
+         <span class="s">&quot;address&quot;</span><span class="p">,</span>
+         <span class="s">&quot;advisor&quot;</span><span class="p">,</span>
+         <span class="s">&quot;country&quot;</span><span class="p">]</span>
+
+    <span class="n">profile_keys</span> <span class="o">=</span> \
+        <span class="p">[</span><span class="s">&quot;username&quot;</span><span class="p">,</span>
+         <span class="s">&quot;email&quot;</span><span class="p">,</span>
+         <span class="s">&quot;password&quot;</span><span class="p">,</span>
+         <span class="s">&quot;confirm&quot;</span><span class="p">,</span>
+         <span class="s">&quot;title&quot;</span><span class="p">,</span>
+         <span class="s">&quot;firstname&quot;</span><span class="p">,</span>
+         <span class="s">&quot;lastname&quot;</span><span class="p">,</span>
+         <span class="s">&quot;phone&quot;</span><span class="p">,</span>
+         <span class="s">&quot;url&quot;</span><span class="p">,</span>
+         <span class="s">&quot;citizenship&quot;</span><span class="p">,</span>
+         <span class="s">&quot;bio&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="UserRegistrationForm.validate_email_in_form"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.UserRegistrationForm.validate_email_in_form">[docs]</a>    <span class="k">def</span> <span class="nf">validate_email_in_form</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s">&quot;@&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&quot;.&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s">&#39;The email address is not valid&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">domain</span> <span class="ow">in</span> <span class="n">exclude_email_domains</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">domain</span> <span class="ow">in</span> <span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+                    <span class="s">&#39;Email form the domain {0} are not alloed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+        <span class="n">connect</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">27777</span><span class="p">)</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="n">Users</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">users</span><span class="o">.</span><span class="n">validate_email</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s">&#39;A user with this email already exists&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="UserRegistrationForm.validate_username_in_form"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.UserRegistrationForm.validate_username_in_form">[docs]</a>    <span class="k">def</span> <span class="nf">validate_username_in_form</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">&quot;^[a-z0-9]*$&quot;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+                <span class="s">&#39;Only lower case characters a-z and numbers 0-9 allowed.&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">islower</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s">&#39;The username must be lower case&#39;</span><span class="p">)</span>
+
+        <span class="n">connect</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">27777</span><span class="p">)</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">MongoUser</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">username</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">users</span> <span class="o">=</span> <span class="n">Users</span><span class="p">()</span>
+            <span class="n">proposal</span> <span class="o">=</span> <span class="n">users</span><span class="o">.</span><span class="n">get_unique_username</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+                <span class="s">&#39;A user with name already exists. Suggestion: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proposal</span><span class="p">))</span>
+</div>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span>
+        <span class="s">&#39;Username&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">Length</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">25</span><span class="p">),</span> <span class="n">validate_username_in_form</span><span class="p">])</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Title&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">Length</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">40</span><span class="p">)])</span>
+    <span class="n">firstname</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Firstname&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">Length</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">35</span><span class="p">)])</span>
+    <span class="n">lastname</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Lastname&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">Length</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">35</span><span class="p">)])</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span>
+        <span class="s">&#39;Email&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">Length</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">35</span><span class="p">),</span> <span class="n">validate_email_in_form</span><span class="p">])</span>
+    <span class="n">phone</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;Phone&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">Length</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">35</span><span class="p">)])</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s">&#39;URL&#39;</span><span class="p">)</span>
+    <span class="n">citizenship</span> <span class="o">=</span> <span class="n">RadioSelectField</span><span class="p">(</span><span class="s">&quot;Citizenship&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">DataRequired</span><span class="p">()],</span> <span class="n">choices</span><span class="o">=</span><span class="n">country_choices</span><span class="p">)</span>
+    <span class="n">institution</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Institution&#39;</span><span class="p">)</span>
+    <span class="n">institutionrole</span> <span class="o">=</span> <span class="n">RadioSelectField</span><span class="p">(</span><span class="s">&quot;Institution Role&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">DataRequired</span><span class="p">()],</span> <span class="n">choices</span><span class="o">=</span><span class="n">institutionrole_choices</span><span class="p">)</span>
+    <span class="c"># institutionrole = StringField(&#39;Institution role&#39;)</span>
+    <span class="n">department</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Department&#39;</span><span class="p">)</span>
+    <span class="n">address</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Address&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">DataRequired</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s">&quot;Address required&quot;</span><span class="p">)])</span>
+    <span class="n">country</span> <span class="o">=</span> <span class="n">RadioSelectField</span><span class="p">(</span><span class="s">&quot;Country&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">DataRequired</span><span class="p">()],</span> <span class="n">choices</span><span class="o">=</span><span class="n">country_choices</span><span class="p">)</span>
+    <span class="n">advisor</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Advisor&#39;</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">PasswordField</span><span class="p">(</span><span class="s">&#39;New Password&#39;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="n">validators</span><span class="o">.</span><span class="n">DataRequired</span><span class="p">(),</span>
+        <span class="n">validators</span><span class="o">.</span><span class="n">EqualTo</span><span class="p">(</span><span class="s">&#39;confirm&#39;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">&#39;Passwords must match&#39;</span><span class="p">)</span>
+    <span class="p">])</span>
+
+    <span class="n">confirm</span> <span class="o">=</span> <span class="n">PasswordField</span><span class="p">(</span><span class="s">&#39;Confirm Password&#39;</span><span class="p">)</span>
+    <span class="c"># agreement = BooleanField(&#39;I accept the usage agreement&#39;, [validators.Required()])</span>
+    <span class="n">bio</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="s">&#39;Bio&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">DataRequired</span><span class="p">()])</span>
+
+</div>
+<div class="viewcode-block" id="print_errors"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.print_errors">[docs]</a><span class="k">def</span> <span class="nf">print_errors</span><span class="p">(</span><span class="n">form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Flashes form errors&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">errors</span> <span class="ow">in</span> <span class="n">form</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">u&quot;Error in the </span><span class="si">%s</span><span class="s"> field - </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+                <span class="n">error</span>
+            <span class="p">),</span> <span class="s">&#39;error&#39;</span><span class="p">)</span>
+
+</div>
+<span class="nd">@management_module.route</span><span class="p">(</span><span class="s">&#39;/m/user/apply&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<div class="viewcode-block" id="user_apply"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.user_apply">[docs]</a><span class="k">def</span> <span class="nf">user_apply</span><span class="p">():</span>
+
+    <span class="n">form</span> <span class="o">=</span> <span class="n">UserRegistrationForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span> <span class="ow">and</span> <span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">():</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;button&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;button&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;save&#39;</span><span class="p">:</span>
+            <span class="n">users</span> <span class="o">=</span> <span class="n">Users</span><span class="p">()</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">MongoUser</span><span class="p">()</span>
+            <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;confirm&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">user</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+
+            <span class="n">users</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+
+        <span class="n">flash</span><span class="p">(</span><span class="s">&#39;Thanks for registering&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/user_apply.html&#39;</span><span class="p">,</span>
+                           <span class="n">title</span><span class="o">=</span><span class="s">&quot;User Application&quot;</span><span class="p">,</span>
+                           <span class="n">states</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">,</span> <span class="s">&#39;cancel&#39;</span><span class="p">],</span>
+                           <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span>
+                           <span class="n">fields</span><span class="o">=</span><span class="n">UserRegistrationForm</span><span class="o">.</span><span class="n">keys</span><span class="p">,</span>
+                           <span class="n">profile_fields</span><span class="o">=</span><span class="n">UserRegistrationForm</span><span class="o">.</span><span class="n">profile_keys</span><span class="p">,</span>
+                           <span class="n">organization_fields</span><span class="o">=</span><span class="n">UserRegistrationForm</span><span class="o">.</span><span class="n">organization_keys</span><span class="p">)</span>
+
+</div>
+<span class="nd">@management_module.route</span><span class="p">(</span><span class="s">&#39;/project/edit/&lt;projectid&gt;/&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<div class="viewcode-block" id="project_edit"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.project_edit">[docs]</a><span class="k">def</span> <span class="nf">project_edit</span><span class="p">(</span><span class="n">projectid</span><span class="p">):</span>
+    <span class="n">connect</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">27777</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">project</span> <span class="o">=</span> <span class="n">MongoProject</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">projectid</span><span class="o">=</span><span class="n">projectid</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Error: pojectid not found&quot;</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/error.html&#39;</span><span class="p">,</span>
+                               <span class="n">error</span><span class="o">=</span><span class="s">&quot;The project does not exist&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/project_edit.html&#39;</span><span class="p">,</span>
+                               <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">states</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">,</span> <span class="s">&#39;cancel&#39;</span><span class="p">],</span>
+                               <span class="n">title</span><span class="o">=</span><span class="s">&quot;Project Management&quot;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;button&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c"># del data[&#39;button&#39;]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">project</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;save&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">print</span> <span class="n">d</span><span class="p">,</span> <span class="s">&quot;:&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">project</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&quot;title&quot;</span><span class="p">]</span>
+                <span class="n">project</span><span class="o">.</span><span class="n">abstract</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&quot;abstract&quot;</span><span class="p">]</span>
+                <span class="n">project</span><span class="o">.</span><span class="n">intellectual_merit</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&quot;intellectual_merit&quot;</span><span class="p">]</span>
+                <span class="n">project</span><span class="o">.</span><span class="n">broader_impact</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&quot;broader_impact&quot;</span><span class="p">]</span>
+                <span class="n">project</span><span class="o">.</span><span class="n">use_of_fg</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&quot;use_of_fg&quot;</span><span class="p">]</span>
+                <span class="n">project</span><span class="o">.</span><span class="n">scale_of_use</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&quot;scale_of_use&quot;</span><span class="p">]</span>
+                <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">                #</span>
+<span class="sd">                # things that should not be changed</span>
+<span class="sd">                #</span>
+<span class="sd">                #project.active = data[&quot;active&quot;]</span>
+<span class="sd">                #project.status = data[&quot;status&quot;]</span>
+<span class="sd">                #project.projectid = data[&quot;projectid&quot;]</span>
+
+<span class="sd">                #</span>
+<span class="sd">                # after apoproval this should not be changed either</span>
+<span class="sd">                #</span>
+<span class="sd">                project.agreement_use = data[&quot;agreement_use&quot;]</span>
+<span class="sd">                project.agreement_slides = data[&quot;agreement_slides&quot;]</span>
+<span class="sd">                project.agreement_support = data[&quot;agreement_support&quot;]</span>
+<span class="sd">                project.agreement_software = data[&quot;agreement_software&quot;]</span>
+<span class="sd">                project.agreement_documentation = data[&quot;agreement_documentation&quot;]</span>
+
+<span class="sd">                project.categories = data[&quot;categories&quot;]</span>
+<span class="sd">                project.keywords = data[&quot;keywords&quot;]</span>
+<span class="sd">                project.primary_discipline = data[&quot;primary_discipline&quot;]</span>
+<span class="sd">                project.orientation = data[&quot;orientation&quot;]</span>
+<span class="sd">                project.contact = data[&quot;contact&quot;]</span>
+<span class="sd">                project.url = data[&quot;url&quot;]</span>
+<span class="sd">                project.comment = data[&quot;comment&quot;]</span>
+
+
+<span class="sd">                project.lead = data[&quot;lead&quot;]</span>
+<span class="sd">                project.managers = data[&quot;managers&quot;]</span>
+<span class="sd">                project.members = data[&quot;members&quot;]</span>
+<span class="sd">                project.alumnis = data[&quot;alumnis&quot;]</span>
+<span class="sd">                project.grant_orgnization = data[&quot;grant_orgnization&quot;]</span>
+<span class="sd">                project.grant_id = data[&quot;grant_id&quot;]</span>
+<span class="sd">                project.grant_url = data[&quot;grant_url&quot;]</span>
+<span class="sd">                project.results = data[&quot;results&quot;]</span>
+<span class="sd">                project.comments = data[&quot;comments&quot;]</span>
+<span class="sd">                project.join_open = data[&quot;join_open&quot;]</span>
+<span class="sd">                project.join_notification = data[&quot;join_notification&quot;]</span>
+<span class="sd">                project.resources_services = data[&quot;resources_services&quot;]</span>
+<span class="sd">                project.resources_software = data[&quot;resources_software&quot;]</span>
+<span class="sd">                project.resources_clusters = data[&quot;resources_clusters&quot;]</span>
+<span class="sd">                project.resources_provision = data[&quot;resources_provision&quot;]</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="n">project</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;ERROR&quot;</span><span class="p">,</span> <span class="n">e</span>
+
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/project_edit.html&#39;</span><span class="p">,</span>
+                               <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">states</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">,</span> <span class="s">&#39;cancel&#39;</span><span class="p">],</span>
+                               <span class="n">title</span><span class="o">=</span><span class="s">&quot;Project Management&quot;</span><span class="p">)</span>
+
+</div>
+<span class="nd">@management_module.route</span><span class="p">(</span><span class="s">&#39;/project/profile/&lt;projectid&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<div class="viewcode-block" id="project_profile"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.project_profile">[docs]</a><span class="k">def</span> <span class="nf">project_profile</span><span class="p">(</span><span class="n">projectid</span><span class="p">):</span>
+
+    <span class="n">connect</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">27777</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">project</span> <span class="o">=</span> <span class="n">MongoProject</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">projectid</span><span class="o">=</span><span class="n">projectid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/project_profile.html&#39;</span><span class="p">,</span>
+                                   <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                   <span class="n">title</span><span class="o">=</span><span class="s">&quot;Project Management&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Error: Project not found&quot;</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/error.html&#39;</span><span class="p">,</span>
+                               <span class="n">error</span><span class="o">=</span><span class="s">&quot;The project does not exist&quot;</span><span class="p">)</span>
+
+</div>
+<span class="nd">@management_module.route</span><span class="p">(</span><span class="s">&#39;/m/project/manage&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<div class="viewcode-block" id="management_project_manage"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.management_project_manage">[docs]</a><span class="k">def</span> <span class="nf">management_project_manage</span><span class="p">():</span>
+
+    <span class="n">connect</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">27777</span><span class="p">)</span>
+    <span class="n">projects</span> <span class="o">=</span> <span class="n">MongoProject</span><span class="o">.</span><span class="n">objects</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="c">#</span>
+        <span class="c"># check for selection</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="s">&#39;selectedprojects&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+            <span class="n">project_ids</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;selectedprojects&#39;</span><span class="p">]</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;button&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">projectid</span> <span class="ow">in</span> <span class="n">project_ids</span><span class="p">:</span>
+                <span class="n">project</span> <span class="o">=</span> <span class="n">MongoProject</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">projectid</span><span class="o">=</span><span class="n">projectid</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">project</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">action</span>
+                <span class="n">project</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="n">connect</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">27777</span><span class="p">)</span>
+    <span class="n">projects</span> <span class="o">=</span> <span class="n">MongoProject</span><span class="o">.</span><span class="n">objects</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/project_manage.html&#39;</span><span class="p">,</span>
+                           <span class="n">projects</span><span class="o">=</span><span class="n">projects</span><span class="p">,</span> <span class="n">with_edit</span><span class="o">=</span><span class="s">&quot;True&quot;</span><span class="p">,</span>
+                           <span class="n">title</span><span class="o">=</span><span class="s">&quot;Project Management&quot;</span><span class="p">,</span>
+                           <span class="n">states</span><span class="o">=</span><span class="n">ProjectSTATUS</span><span class="p">)</span>
+
+</div>
+<span class="nd">@management_module.route</span><span class="p">(</span><span class="s">&#39;/m/project/list&#39;</span><span class="p">)</span>
+<span class="nd">@login_required</span>
+<div class="viewcode-block" id="management_project_list"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.management_project_list">[docs]</a><span class="k">def</span> <span class="nf">management_project_list</span><span class="p">():</span>
+
+    <span class="n">connect</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">27777</span><span class="p">)</span>
+    <span class="n">projects</span> <span class="o">=</span> <span class="n">MongoProject</span><span class="o">.</span><span class="n">objects</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/project_list.html&#39;</span><span class="p">,</span> <span class="n">projects</span><span class="o">=</span><span class="n">projects</span><span class="p">,</span> <span class="n">with_edit</span><span class="o">=</span><span class="s">&quot;False&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Project List&quot;</span><span class="p">)</span>
+
+</div>
+<span class="nd">@management_module.route</span><span class="p">(</span><span class="s">&#39;/m/user/manage&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<div class="viewcode-block" id="management_user_manage"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.management_user_manage">[docs]</a><span class="k">def</span> <span class="nf">management_user_manage</span><span class="p">():</span>
+
+    <span class="n">connect</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">27777</span><span class="p">)</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">MongoUser</span><span class="o">.</span><span class="n">objects</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="c">#</span>
+        <span class="c"># check for selection</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="s">&#39;selectedusers&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+            <span class="n">usernames</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;selectedusers&#39;</span><span class="p">]</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;button&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;delete&#39;</span><span class="p">:</span>
+
+                <span class="k">for</span> <span class="n">username</span> <span class="ow">in</span> <span class="n">usernames</span><span class="p">:</span>
+                    <span class="n">user</span> <span class="o">=</span> <span class="n">MongoUser</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">user</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="k">for</span> <span class="n">username</span> <span class="ow">in</span> <span class="n">usernames</span><span class="p">:</span>
+                    <span class="n">user</span> <span class="o">=</span> <span class="n">MongoUser</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">user</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">action</span>
+                    <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="n">users</span> <span class="o">=</span> <span class="n">MongoUser</span><span class="o">.</span><span class="n">objects</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/user_manage.html&#39;</span><span class="p">,</span>
+                           <span class="n">users</span><span class="o">=</span><span class="n">users</span><span class="p">,</span>
+                           <span class="n">with_edit</span><span class="o">=</span><span class="s">&quot;True&quot;</span><span class="p">,</span>
+                           <span class="n">states</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;approved&#39;</span><span class="p">,</span> <span class="s">&#39;pending&#39;</span><span class="p">,</span> <span class="s">&#39;denied&#39;</span><span class="p">,</span> <span class="s">&#39;blocked&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
+                           <span class="n">title</span><span class="o">=</span><span class="s">&quot;User Management&quot;</span><span class="p">)</span>
+
+</div>
+<span class="nd">@management_module.route</span><span class="p">(</span><span class="s">&#39;/m/user/list&#39;</span><span class="p">)</span>
+<span class="nd">@login_required</span>
+<div class="viewcode-block" id="management_user_list"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.management_user_list">[docs]</a><span class="k">def</span> <span class="nf">management_user_list</span><span class="p">():</span>
+
+    <span class="n">connect</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">27777</span><span class="p">)</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">MongoUser</span><span class="o">.</span><span class="n">objects</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/user_manage.html&#39;</span><span class="p">,</span> <span class="n">users</span><span class="o">=</span><span class="n">users</span><span class="p">,</span> <span class="n">with_edit</span><span class="o">=</span><span class="s">&quot;False&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;User List&quot;</span><span class="p">)</span>
+
+</div>
+<span class="nd">@management_module.route</span><span class="p">(</span><span class="s">&#39;/user/profile/&lt;username&gt;&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="management_user_profile"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.management_user_profile">[docs]</a><span class="k">def</span> <span class="nf">management_user_profile</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="n">connect</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">27777</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">MongoUser</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">user</span><span class="p">:</span>
+                <span class="k">print</span> <span class="n">item</span>
+            <span class="n">pprint</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">print</span> <span class="n">user</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">username</span>
+            <span class="k">print</span> <span class="n">user</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">firstname</span>
+            <span class="k">print</span> <span class="n">user</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lastname</span>
+            <span class="k">print</span> <span class="n">user</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">country</span>
+
+            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/user_profile.html&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Error: Username not found&quot;</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;error.html&#39;</span><span class="p">,</span>
+                               <span class="n">form</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                               <span class="nb">type</span><span class="o">=</span><span class="s">&quot;exists&quot;</span><span class="p">,</span>
+                               <span class="n">msg</span><span class="o">=</span><span class="s">&quot;The user does not exist&quot;</span><span class="p">)</span>
+
+</div>
+<span class="nd">@management_module.route</span><span class="p">(</span><span class="s">&#39;/user/edit/&lt;username&gt;/&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<div class="viewcode-block" id="management_user_edit"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.management__.management_user_edit">[docs]</a><span class="k">def</span> <span class="nf">management_user_edit</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="n">connect</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">27777</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">MongoUser</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Error: Username not found&quot;</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;error.html&#39;</span><span class="p">,</span>
+                               <span class="n">form</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                               <span class="nb">type</span><span class="o">=</span><span class="s">&quot;exists&quot;</span><span class="p">,</span>
+                               <span class="n">msg</span><span class="o">=</span><span class="s">&quot;The user does not exist&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/user_edit.html&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">states</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">,</span> <span class="s">&#39;cancel&#39;</span><span class="p">])</span>
+
+    <span class="k">elif</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+
+        <span class="n">action</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;button&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;button&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">user</span> <span class="o">=</span> <span class="n">MongoUser</span><span class="o">.</span><span class="n">objects</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;save&#39;</span><span class="p">:</span>
+
+            <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;bio&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;citizenship&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;firstname&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;lastname&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;title&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;url&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;address&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;institution&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;phone&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;advisor&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;department&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;country&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;email&quot;</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">user</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+            <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;management/user_edit.html&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">states</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">,</span> <span class="s">&#39;cancel&#39;</span><span class="p">])</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, 2013, Gregor von Laszewski for  FutureGrid.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+cloudmesh.shell package
+=======================
+
+Submodules
+----------
+
+cloudmesh.shell.cm_experiment_group module
+------------------------------------------
+
+.. automodule:: cloudmesh.shell.cm_experiment_group
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cloudmesh.shell.cm_label module
+-------------------------------
+
+.. automodule:: cloudmesh.shell.cm_label
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cloudmesh.shell.cm_list module
+------------------------------
+
+.. automodule:: cloudmesh.shell.cm_list
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cloudmesh.shell.cm_open_web module
+----------------------------------
+
+.. automodule:: cloudmesh.shell.cm_open_web
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cloudmesh.shell.cm_rain module
+------------------------------
+
+.. automodule:: cloudmesh.shell.cm_rain
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cloudmesh.shell.cm_shell module
+-------------------------------
+
+.. automodule:: cloudmesh.shell.cm_shell
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cloudmesh.shell.cm_storm module
+-------------------------------
+
+.. automodule:: cloudmesh.shell.cm_storm
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cloudmesh.shell.cm_user module
+------------------------------
+
+.. automodule:: cloudmesh.shell.cm_user
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: cloudmesh.shell
+    :members:
+    :undoc-members:
+    :show-inheritance:

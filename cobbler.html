@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Cloudmesh &mdash; my Cloudmesh Core documentation</title>
+    <title>2.2. Cloudmesh Installation wit Cobbler Integration &mdash; my Cloudmesh Core documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -32,8 +32,10 @@
     <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="my Cloudmesh Core documentation" href="#" />
-    <link rel="next" title="1. Introduction" href="introduction.html" />
+    <link rel="top" title="my Cloudmesh Core documentation" href="index.html" />
+    <link rel="up" title="2. Installation" href="installation.html" />
+    <link rel="next" title="2.3. Celery Setup" href="celery.html" />
+    <link rel="prev" title="2.1. Prepare the Environment" href="developer.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -44,33 +46,7 @@
 
    
 
-   
-
-  <div class="header" id="content">
-
-  <a href="https://github.com/cloudmesh/cloudmesh.git"
-     class="visible-desktop hidden-xs"><img
-    id="gh-banner"
-    style="position: absolute; top: 50px; right: 0; border: 0;"
-    src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"
-    alt="Fork me on GitHub"></a>
-  <script>
-    // Adjust banner height.
-    $(function () {
-      var navHeight = $(".navbar .container").css("height");
-      $("#gh-banner").css("top", navHeight);
-    });
-  </script>
-  <script>
-    // Adjust banner height.
-    $(function () {
-      var navHeight = $(".navbar .container").css("height");
-      $("#gh-banner").css("top", navHeight);
-    });
-  </script>
-
-  </div>
-     
+      
    
 
 
@@ -83,7 +59,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="_static/fg-logo-white-24x36.png">
+        <a class="navbar-brand" href="index.html"><img src="_static/fg-logo-white-24x36.png">
           Cloudmesh</a>
         <span class="navbar-text navbar-version pull-left"><b>Core</b></span>
       </div>
@@ -98,10 +74,10 @@
      id="dLabelGlobalToc"
      data-toggle="dropdown"
      data-target="#"
-     href="#">Site <b class="caret"></b></a>
+     href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="about.html">1.1. Overview</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="about.html#system-monitoring-and-operations">1.1.1. System Monitoring and Operations</a></li>
@@ -159,7 +135,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="installation.html">2. Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="developer.html">2.1. Prepare the Environment</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="developer.html#github">2.1.1. Github</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="developer.html#github-ssh-keys">2.1.1.1. Github ssh keys</a></li>
@@ -199,11 +175,11 @@
 <li class="toctree-l3"><a class="reference internal" href="developer.html#osx-system-preparation-tips">2.1.22. OSX System preparation Tips</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="cobbler.html">2.2. Cloudmesh Installation wit Cobbler Integration</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="cobbler.html#install-ubuntu-14-04">2.2.1. Install Ubuntu 14.04</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cobbler.html#prepare-the-system">2.2.2. Prepare the system</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cobbler.html#install-cloudmesh">2.2.3. Install Cloudmesh</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cobbler.html#cobbler">2.2.4. Cobbler</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">2.2. Cloudmesh Installation wit Cobbler Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-ubuntu-14-04">2.2.1. Install Ubuntu 14.04</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prepare-the-system">2.2.2. Prepare the system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-cloudmesh">2.2.3. Install Cloudmesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobbler">2.2.4. Cobbler</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="celery.html">2.3. Celery Setup</a><ul>
@@ -500,8 +476,11 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Cloudmesh</a><ul>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#">2.2. Cloudmesh Installation wit Cobbler Integration</a><ul>
+<li><a class="reference internal" href="#install-ubuntu-14-04">2.2.1. Install Ubuntu 14.04</a></li>
+<li><a class="reference internal" href="#prepare-the-system">2.2.2. Prepare the system</a></li>
+<li><a class="reference internal" href="#install-cloudmesh">2.2.3. Install Cloudmesh</a></li>
+<li><a class="reference internal" href="#cobbler">2.2.4. Cobbler</a></li>
 </ul>
 </li>
 </ul>
@@ -513,7 +492,11 @@
               
                 
   <li>
-    <a href="introduction.html" title="Next Chapter: 1. Introduction"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">1. Introduction &raquo;</span>
+    <a href="developer.html" title="Previous Chapter: 2.1. Prepare the Environment"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; 2.1. Prepare the...</span>
+    </a>
+  </li>
+  <li>
+    <a href="celery.html" title="Next Chapter: 2.3. Celery Setup"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">2.3. Celery Setu... &raquo;</span>
     </a>
   </li>
               
@@ -523,7 +506,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/cobbler.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -549,9 +532,9 @@
         <div id="sidebar" class="bs-sidenav" role="complementary"><h4>Site Contents</h4>
 
 <ul>
-  <ul>
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="installation.html">2. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configure.html">3. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="doc.html">4. Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="shell.html">5. Cloudmesh Shell</a></li>
@@ -565,8 +548,11 @@
 <hr>
 
 <h4>Page Contents</h4><ul>
-<li><a class="reference internal" href="#">Cloudmesh</a><ul>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#">2.2. Cloudmesh Installation wit Cobbler Integration</a><ul>
+<li><a class="reference internal" href="#install-ubuntu-14-04">2.2.1. Install Ubuntu 14.04</a></li>
+<li><a class="reference internal" href="#prepare-the-system">2.2.2. Prepare the system</a></li>
+<li><a class="reference internal" href="#install-cloudmesh">2.2.3. Install Cloudmesh</a></li>
+<li><a class="reference internal" href="#cobbler">2.2.4. Cobbler</a></li>
 </ul>
 </li>
 </ul>
@@ -579,98 +565,149 @@
   <input type="hidden" name="area" value="default" />
 </form>
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/cobbler.txt"
      rel="nofollow">Source</a>
 </div>
         </div>
       </div>
     <div class="col-md-9">
       
-  <div class="section" id="cloudmesh">
-<h1>Cloudmesh<a class="headerlink" href="#cloudmesh" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="about.html">1.1. Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rain.html">1.2. Rain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hpc.html">1.3. HPC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cloud.html">1.4. IaaS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contact.html">1.5. Contact</a></li>
-<li class="toctree-l2"><a class="reference internal" href="news.html">1.6. News</a></li>
-<li class="toctree-l2"><a class="reference internal" href="screenshots.html">1.7. Screenshots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bib.html">1.8. References</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html">1.9. FAQ</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="developer.html">2.1. Prepare the Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobbler.html">2.2. Cloudmesh Installation wit Cobbler Integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="celery.html">2.3. Celery Setup</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="configure.html">3. Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-yaml">3.1. cloudmesh.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#configuration-file-rc-file">3.2. Configuration file (rc file)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#amazon-web-services">3.3. Amazon Web Services</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-server-yaml">3.4. cloudmesh-server.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#cloudmesh-cluster-yaml">3.5. cloudmesh_cluster.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#other-yaml-files">3.6. Other Yaml files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configure.html#me-sample">3.7. Me Sample</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="doc.html">4. Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="doc.html#creating-the-documentation">4.1. Creating the Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="doc.html#creating-the-documentation-in-a-single-page">4.2. Creating the documentation in a single page</a></li>
-<li class="toctree-l2"><a class="reference internal" href="doc.html#documenting-the-code">4.3. Documenting the code</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="shell.html">5. Cloudmesh Shell</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell.html">5.1. Cloudmesh Shell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell.html#command-overview">5.2. Command Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell-rain.html">5.3. Cloudmesh Shell Rain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cm-manage.html">5.4. cm-manage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="man/man.html">5.5. Commands</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="metric.html">6. Cloudmesh Metric</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="metric.html#routes">6.1. Routes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">7. Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html">7.1. Issue Management</a></li>
-<li class="toctree-l2"><a class="reference internal" href="coding.html">7.2. Cloudmesh Style Guide</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hacking.html">7.3. Tips for Editing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vagrant.html">7.4. Cloudmesh Vagrant Developers Environment</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="appendix.html">8. Appendix</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cm-shell-new.html">1. Proposed Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html">2. Production Deployment Server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fg.html">3. FutureGrid Specific tips</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cm.html">4. CM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cm.html#using-cloud-mesh">5. Using Cloud Mesh</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cm_cli.html">6. cloudmesh command</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/cmcli.html">7. cm config</a></li>
-<li class="toctree-l2"><a class="reference internal" href="old-cm/intro.html">8. Cloud Mesh</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cloudmesh.html">9. Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="futuregrid.html">10. FutureGrid</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plan/design.html">11. Design: Blueprint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plan/mock.html">12. Mockup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plan/plan.html">13. Plan: Cloudmesh Service Shift</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user.html">14. Cloudmesh Shell</a></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="cloudmesh-installation-wit-cobbler-integration">
+<h1>2.2. Cloudmesh Installation wit Cobbler Integration<a class="headerlink" href="#cloudmesh-installation-wit-cobbler-integration" title="Permalink to this headline">¶</a></h1>
+<p>This section is not yet complete and is only intended for an expert. Regular users will not do this.</p>
+<div class="section" id="install-ubuntu-14-04">
+<h2>2.2.1. Install Ubuntu 14.04<a class="headerlink" href="#install-ubuntu-14-04" title="Permalink to this headline">¶</a></h2>
+<p>When use Dell Server, please use the eth1 interface which is the top port generally. If you make a wrong choice, after install finished you can config it manually:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; vi /etc/network/interfaces
+edit&gt; change eth0 to eth1
+edit&gt; save and quit the file
+command&gt; reboot the computer
+</pre></div>
 </div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-<li><a class="reference internal" href="package_index.html#package-index"><em>Packege Index</em></a></li>
-<li><a class="reference internal" href="pylint.html#pylint-results"><em>Quality Control</em></a></li>
-</ul>
+<p>Refresh Ubuntu update sources:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo apt-get update
+</pre></div>
+</div>
+</div>
+<div class="section" id="prepare-the-system">
+<h2>2.2.2. Prepare the system<a class="headerlink" href="#prepare-the-system" title="Permalink to this headline">¶</a></h2>
+<p>Install and configure git:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo apt-get install git
+command&gt; git config --global user.name &quot;your full name&quot;
+command&gt; git config --global user.email &quot;your email address&quot;
+</pre></div>
+</div>
+<p>Install openssh-server:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo apt-get install openssh-server
+</pre></div>
+</div>
+<p>Config openssh-server.</p>
+<p>Create the .ssh directory:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; mkdir -p ~/.ssh
+command&gt; chmod 700 ~/.ssh
+</pre></div>
+</div>
+<p>Add user public key to .ssh/authorized_keys:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; cat your_id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys
+command&gt; chmod 600 ~/.ssh/authorized_keys
+</pre></div>
+</div>
+<p>Disable password authentication:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.factory-defaults
+command&gt; sudo vi /etc/ssh/sshd_config
+edit&gt; change the line &quot;#PasswordAuthentication yes&quot; to &quot;PasswordAuthentication no&quot;
+edit&gt; save and quit the file
+command&gt; sudo restart ssh
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-cloudmesh">
+<h2>2.2.3. Install Cloudmesh<a class="headerlink" href="#install-cloudmesh" title="Permalink to this headline">¶</a></h2>
+<p>Get Cloudmesh:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; git clone https://github.com/cloudmesh/cloudmesh.git
+</pre></div>
+</div>
+<p>Test git push, modify a file:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; vi ~/cloudmesh/cloudmesh/cobbler/demo.py
+edit&gt; add a simple print statement on the end of the file
+edit&gt; save and quit
+command&gt; git add cloudmesh/cobbler/demo.py
+command&gt; git commit -m &quot;only for test git&quot;
+command&gt; git push
+command&gt; you need to input your username and password on github.com
+</pre></div>
+</div>
+<p>Install pip:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo apt-get install python-setuptools
+command&gt; sudo easy_install pip
+</pre></div>
+</div>
+<p>Install virtualenv and configure virtualenv:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo pip install virtualenv
+command&gt; virtualenv --no-site-packages ~/ENV
+command&gt; source ~/ENV/bin/activate
+command&gt; echo &quot;source ~/ENV/bin/activate&quot; &gt;&gt; ~/.bashrc
+</pre></div>
+</div>
+<p>Install Fabric:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo apt-get install python-dev
+command&gt; pip install fabric
+</pre></div>
+</div>
+<p>Install requirements.txt:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo apt-get install libldap2-dev
+command&gt; sudo apt-get install libsasl2-dev
+command&gt; pip install -r requirements.txt
+</pre></div>
+</div>
+<p>Install mongodb:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo apt-get install mongodb-server
+</pre></div>
+</div>
+<p>Install PIL (zip decoder for rackdiag) [optional]:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo apt-get build-dep python-imaging
+command&gt; apt-get install libjpeg8 libjpeg8-dev libpng3
+command&gt; apt-get install libfreetype6-dev
+command&gt; sudo ln -s /usr/include/freetype2 /usr/include/freetype
+</pre></div>
+</div>
+<p>Install rackdiag or nwdiag [optional]:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; pip install nwdiag
+</pre></div>
+</div>
+<p>Install pika [optional]:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; pip install pika
+</pre></div>
+</div>
+<p>Install matplotlib [optional]:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo apt-get build-dep python-matplotlib
+command&gt; pip install -f http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.3.0/matplotlib-1.3.0.tar.gz matplotlib
+</pre></div>
+</div>
+</div>
+<div class="section" id="cobbler">
+<h2>2.2.4. Cobbler<a class="headerlink" href="#cobbler" title="Permalink to this headline">¶</a></h2>
+<p>FIX cobbler installation on i71 [optional]</p>
+<p>Install debmirror, because sudo cobbler check cannot pass:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; sudo yum install debmirror
+</pre></div>
+</div>
+<p>comment out dists and arches in /etc/debmirror.conf</p>
+<p>Install and configure Cloudmesh:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; fab build.install
+command&gt; fab mongo.boot
+command&gt; fab mongo.admin
+command&gt; fab mongo.start
+command&gt; fab mongo.inventory
+command&gt; fab user.mongo
+command&gt; fab mongo.stop
+</pre></div>
+</div>
+<p>Start Cloudmesh:</p>
+<div class="highlight-python"><div class="highlight"><pre>command&gt; fab server.agent
+command&gt; fab server.start
+</pre></div>
+</div>
 </div>
 </div>
 

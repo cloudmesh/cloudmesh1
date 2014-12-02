@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cloudmesh package &mdash; my Cloudmesh Core documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/my-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'Core',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="top" title="my Cloudmesh Core documentation" href="../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+   
+
+      
+   
+
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fg-logo-white-24x36.png">
+          Cloudmesh</a>
+        <span class="navbar-text navbar-version pull-left"><b>Core</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html">1.1. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../about.html#system-monitoring-and-operations">1.1.1. System Monitoring and Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about.html#user-and-project-services">1.1.2. User and Project Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about.html#accounting-and-app-store">1.1.3. Accounting and App Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about.html#networking">1.1.4. Networking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about.html#monitoring">1.1.5. Monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about.html#role-and-use-of-standards-and-open-source-software">1.1.6. Role and Use of Standards and Open Source Software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about.html#features">1.1.7. Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about.html#bugs">1.1.8. Bugs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about.html#project-contributors">1.1.9. Project Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../about.html#history">1.1.10. History</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../about.html#cloudmesh-0-1">1.1.10.1. Cloudmesh 0.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../about.html#cloudmesh-0-2">1.1.10.2. Cloudmesh 0.2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../about.html#cloudmesh-0-3">1.1.10.3. Cloudmesh 0.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../about.html#cloudmesh-0-4">1.1.10.4. Cloudmesh 0.4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../about.html#cloudmesh-0-5-0-7">1.1.10.5. Cloudmesh 0.5 - 0.7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../rain.html">1.2. Rain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hpc.html">1.3. HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cloud.html">1.4. IaaS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cloud.html#interfaces">1.4.1. Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cloud.html#integration-of-external-clouds">1.4.2. Integration of External Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cloud.html#open-source">1.4.3. Open Source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../contact.html">1.5. Contact</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contact.html#contributors">1.5.1. Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contact.html#alumni">1.5.2. Alumni</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contact.html#blog">1.5.3. Blog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contact.html#repository">1.5.4. Repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contact.html#support">1.5.5. Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../news.html">1.6. News</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../screenshots.html">1.7. Screenshots</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../screenshots.html#cloud-management">1.7.1. Cloud Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../screenshots.html#provisioning-raining-not-yet-released">1.7.2. Provisioning/Raining (Not yet released)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../screenshots.html#batch-queues">1.7.3. Batch Queues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../screenshots.html#status">1.7.4. Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../screenshots.html#inventory">1.7.5. Inventory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../bib.html">1.8. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html">1.9. FAQ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../faq.html#are-there-any-screenshots">1.9.1. Are there any screenshots?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../faq.html#setup-register-cloud-in-the-cloudmesh-futuregrid-org-service">1.9.2. Setup - Register cloud in the cloudmesh.futuregrid.org service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../faq.html#setup-local-deploy">1.9.3. Setup - Local deploy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../faq.html#general-questions">1.9.4. General Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../faq.html#development-questions">1.9.5. Development Questions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">2. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../developer.html">2.1. Prepare the Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#github">2.1.1. Github</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../developer.html#github-ssh-keys">2.1.1.1. Github ssh keys</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../developer.html#git-username-and-e-mail">2.1.1.2. Git username and e-mail</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#getting-the-cloudmesh-source-code">2.1.2. Getting the Cloudmesh Source Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#preparing-the-system">2.1.3. Preparing the system</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../developer.html#modify-your-rc-file">2.1.3.1. Modify your rc file:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#install-the-requirements">2.1.4. Install the Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#creating-an-initial-user">2.1.5. Creating an initial user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#initial-documentation">2.1.6. Initial Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#quickinstall-the-environment">2.1.7. Quickinstall the Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#initial-yaml-files">2.1.8. Initial YAML files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#install-cloudmesh-code">2.1.9. Install cloudmesh code</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../developer.html#the-cloudmesh-yaml-file">2.1.9.1. The cloudmesh.yaml file</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#mongo-db">2.1.10. Mongo-Db</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../developer.html#list-of-commands-optional">2.1.10.1. List of Commands(Optional)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../developer.html#mongo-commands-that-need-to-be-issued-important">2.1.10.2. Mongo commands that need to be issued (Important)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#starting-the-web-service">2.1.11. Starting the Web Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#starting-and-testing-the-queue-service">2.1.12. Starting and testing the Queue Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#blockdiag-family">2.1.13. Blockdiag family</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#developer-tests">2.1.14. Developer Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#install-python">2.1.15. Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#starting-the-rabbitmq-service">2.1.16. Starting the  RabbitMQ service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#example-start-the-gui-for-development">2.1.17. Example: Start the GUI for development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#with-access-to-ldap">2.1.18. With access to LDAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#without-access-to-ldap">2.1.19. Without access to LDAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#cloudmesh-deployment">2.1.20. Cloudmesh deployment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#imports-in-cloudmesh-common">2.1.21. Imports in cloudmesh_common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developer.html#osx-system-preparation-tips">2.1.22. OSX System preparation Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cobbler.html">2.2. Cloudmesh Installation wit Cobbler Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cobbler.html#install-ubuntu-14-04">2.2.1. Install Ubuntu 14.04</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cobbler.html#prepare-the-system">2.2.2. Prepare the system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cobbler.html#install-cloudmesh">2.2.3. Install Cloudmesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cobbler.html#cobbler">2.2.4. Cobbler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../celery.html">2.3. Celery Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../celery.html#starting-and-stopping-celery">2.3.1. Starting and Stopping Celery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../celery.html#log-and-pid-files">2.3.2. Log and Pid Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../celery.html#current-celery-based-tasks-under-development">2.3.3. Current Celery Based Tasks (Under Development)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../celery.html#launcher-simulation">2.3.3.1. Launcher (Simulation)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../celery.html#provisioner">2.3.3.2. Provisioner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../celery.html#pbs-qstat">2.3.3.3. pbs (qstat)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../celery.html#rain-bare-metal-provisioning-with-cobbler-and-rain">2.3.3.4. rain (bare-metal provisioning with cobbler and rain)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../celery.html#rack-system-temperatures">2.3.3.5. rack (system temperatures)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configure.html">3. Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configure.html#cloudmesh-yaml">3.1. cloudmesh.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configure.html#configuration-file-rc-file">3.2. Configuration file (rc file)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configure.html#retrieval-of-rc-file-by-command">3.2.1. Retrieval of rc file by command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configure.html#retrieval-of-rc-files-by-hand">3.2.2. Retrieval of rc files by Hand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configure.html#location-of-rc-files">3.2.3. Location of rc files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../configure.html#hp-cloud">3.2.3.1. HP Cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../configure.html#azure">3.2.3.2. Azure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configure.html#amazon-web-services">3.3. Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configure.html#cloudmesh-server-yaml">3.4. cloudmesh-server.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configure.html#cloudmesh-cluster-yaml">3.5. cloudmesh_cluster.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configure.html#other-yaml-files">3.6. Other Yaml files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configure.html#me-sample">3.7. Me Sample</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../doc.html">4. Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../doc.html#creating-the-documentation">4.1. Creating the Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../doc.html#creating-the-documentation-in-a-single-page">4.2. Creating the documentation in a single page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../doc.html#documenting-the-code">4.3. Documenting the code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../shell.html">5. Cloudmesh Shell</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cm-shell.html">5.1. Cloudmesh Shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#commandline">5.1.1. Commandline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#shell-usage">5.1.2. Shell Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cm-shell.html#command-overview">5.2. Command Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#help">5.2.1. Help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#info">5.2.2. Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#variables">5.2.3. Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#defaults">5.2.4. Defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#managing-users">5.2.5. Managing Users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#managing-clouds">5.2.6. Managing Clouds</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#register-a-cloud">5.2.6.1. Register a cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#activate-cloud">5.2.6.2. Activate cloud</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#managing-projects">5.2.7. Managing Projects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#project-list">5.2.7.1. Project List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#project-information">5.2.7.2. Project Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#project-activation">5.2.7.3. Project Activation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#managing-keys">5.2.8. Managing Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#managing-images">5.2.9. Managing Images</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#list-images">5.2.9.1. List images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#image-information">5.2.9.2. Image information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#default-image">5.2.9.3. Default image</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#managing-flavors">5.2.10. Managing Flavors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#list-flavors">5.2.10.1. List Flavors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#flavor-information">5.2.10.2. Flavor information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#default-flavor">5.2.10.3. Default Flavor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#managing-virtual-machines">5.2.11. Managing Virtual Machines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#starting-vms">5.2.11.1. Starting VMs</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../cm-shell.html#vm-history">5.2.11.1.1. VM History</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#managing-security-groups">5.2.11.2. Managing Security Groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#managing-volumes">5.2.11.3. Managing Volumes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cm-shell.html#managing-heat-s-for-openstack">5.2.11.4. Managing heat&#8217;s for OpenStack</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#id1">5.2.12. Managing Security Groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#examples">5.2.13. Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell.html#todo-most-likely-in-cloud-command-and-register-command">5.2.14. TODO (most likely in cloud command and register command)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cm-shell-rain.html">5.3. Cloudmesh Shell Rain</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell-rain.html#managing-servers-hosts">5.3.1. Managing Servers/hosts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell-rain.html#user-project-and-role-policies">5.3.2. User, Project and Role Policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell-rain.html#information">5.3.3. Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell-rain.html#provisioning">5.3.4. Provisioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell-rain.html#status">5.3.5. Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell-rain.html#reservation-interface-extension">5.3.6. Reservation Interface (extension)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell-rain.html#time-format">5.3.7. Time Format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cm-manage.html">5.4. cm-manage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../man/man.html">5.5. Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#eof">5.5.1. EOF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#admin">5.5.2. admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#banner">5.5.3. banner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#clear">5.5.4. clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#cloud">5.5.5. cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#cluster">5.5.6. cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#color">5.5.7. color</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#debug">5.5.8. debug</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#default">5.5.9. default</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#deploy">5.5.10. deploy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#dot2">5.5.11. dot2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#edit">5.5.12. edit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#exec">5.5.13. exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#exp">5.5.14. exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#flavor">5.5.15. flavor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#graphviz">5.5.16. graphviz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#group">5.5.17. group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#hadoop">5.5.18. hadoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#help">5.5.19. help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#image">5.5.20. image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#info">5.5.21. info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#init">5.5.22. init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#inventory">5.5.23. inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#key">5.5.24. key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#label">5.5.25. label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#launcher">5.5.26. launcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#limits">5.5.27. limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#list">5.5.28. list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#load">5.5.29. load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#loglevel">5.5.30. loglevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#man">5.5.31. man</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#metric">5.5.32. metric</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#notebook">5.5.33. notebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#nova">5.5.34. nova</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#open">5.5.35. open</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#pause">5.5.36. pause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#plugins">5.5.37. plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#project">5.5.38. project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#py">5.5.39. py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#q">5.5.40. q</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#quit">5.5.41. quit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#quota">5.5.42. quota</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#rain">5.5.43. rain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#register">5.5.44. register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#script">5.5.45. script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#security-group">5.5.46. security_group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#slurm">5.5.47. slurm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#stack">5.5.48. stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#status">5.5.49. status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#storm">5.5.50. storm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#timer">5.5.51. timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#usage">5.5.52. usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#use">5.5.53. use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#user">5.5.54. user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#var">5.5.55. var</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#verbose">5.5.56. verbose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#version">5.5.57. version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#vm">5.5.58. vm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#volume">5.5.59. volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#web">5.5.60. web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../man/man.html#yaml">5.5.61. yaml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../metric.html">6. Cloudmesh Metric</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../metric.html#routes">6.1. Routes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">7. Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tasks.html">7.1. Issue Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tasks.html#labels">7.1.1. Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tasks.html#priority">7.1.2. Priority</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tasks.html#inactivity">7.1.3. Inactivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tasks.html#shortcuts">7.1.4. Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../coding.html">7.2. Cloudmesh Style Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#information">7.2.1. Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#general">7.2.2. General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#imports">7.2.3. Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#human-alphabetical-order-examples">7.2.4. Human Alphabetical Order Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#docstrings">7.2.5. Docstrings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#dictionaries-lists">7.2.6. Dictionaries/Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#calling-methods">7.2.7. Calling Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#internationalization-i18n-strings">7.2.8. Internationalization (i18n) Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#python-3-x-compatibility">7.2.9. Python 3.x compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#creating-unit-tests">7.2.10. Creating Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#running-tests">7.2.11. Running Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coding.html#commit-messages">7.2.12. Commit Messages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../hacking.html">7.3. Tips for Editing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../hacking.html#aptana-studio-develpment-environment-optional">7.3.1. Aptana Studio - Develpment Environment(optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hacking.html#emacs-as-editor">7.3.2. Emacs as editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hacking.html#replace-text-in-many-files-from-the-commandline">7.3.3. Replace Text in many files from the commandline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hacking.html#mongodb-tools">7.3.4. MongoDB Tools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../hacking.html#robomongo">7.3.4.1. Robomongo</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../hacking.html#python-tools">7.3.5. Python Tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hacking.html#git-pull-request">7.3.6. Git Pull Request</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../vagrant.html">7.4. Cloudmesh Vagrant Developers Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../vagrant.html#vagrant">7.4.1. Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vagrant.html#veewee">7.4.2. Veewee</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vagrant.html#creating-a-cloudmesh-test">7.4.3. Creating a cloudmesh test</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">8. Appendix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cm-shell-new.html">1. Proposed Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cm-shell-new.html#label">1.1. Label</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../deploy.html">2. Production Deployment Server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../deploy.html#instalation">2.1. Instalation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deploy.html#starting-the-deployed-server">2.2. Starting the deployed server</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../fg.html">3. FutureGrid Specific tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../old-cm/cm.html">4. CM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../old-cm/cm.html#using-cloud-mesh">5. Using Cloud Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../old-cm/cm_cli.html">6. cloudmesh command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../old-cm/cmcli.html">7. cm config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../old-cm/intro.html">8. Cloud Mesh</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../old-cm/intro.html#commands">8.1. Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cloudmesh.html">9. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cloudmesh.html#system-monitoring-and-operations">9.1. System Monitoring and Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cloudmesh.html#user-and-project-services">9.2. User and Project Services</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../cloudmesh.html#accounting-and-app-store">9.2.1. Accounting and App Store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cloudmesh.html#networking">9.2.2. Networking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cloudmesh.html#monitoring">9.2.3. Monitoring</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cloudmesh.html#role-and-use-of-standards-and-open-source-software">9.2.4. Role and Use of Standards and Open Source Software</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../futuregrid.html">10. FutureGrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plan/design.html">11. Design: Blueprint</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plan/design.html#features">11.1. Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/design.html#difference-to-other-efforts">11.2. Difference to other efforts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/design.html#component-view">11.3. Component View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/design.html#component-user-management">11.4. Component User Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/design.html#user-management">11.5. User Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/design.html#accounting-will-not-be-worked-on-much">11.6. Accounting (Will not be worked on much)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/design.html#component-resource-management-includes-cloudshifting-as-part-of-reservation">11.7. Component Resource Management (includes cloudshifting as part of reservation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/design.html#resource-management">11.8. Resource Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/design.html#scheduler">11.9. Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/design.html#interfaces">11.10. Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plan/mock.html">12. Mockup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plan/mock.html#create-user">12.1. create_user</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plan/plan.html">13. Plan: Cloudmesh Service Shift</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plan/plan.html#project-objectives">13.1. Project Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/plan.html#development-objectives">13.2. Development Objectives</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../plan/plan.html#production-objectives">13.2.1. Production Objectives</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/plan.html#project-deliverables">13.3. Project Deliverables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/plan.html#evolution-of-the-project">13.4. Evolution of the Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/plan.html#refernce-materials">13.5. Refernce Materials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plan/plan.html#definitions-and-acronyms">13.6. Definitions and Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user.html">14. Cloudmesh Shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user.html#user-commands">14.1. User Commands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">cloudmesh package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-cloudmesh.cm_mesh">cloudmesh.cm_mesh module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh.cm_mongo">cloudmesh.cm_mongo module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh.cm_mongo2">cloudmesh.cm_mongo2 module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh.inventory">cloudmesh.inventory module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/modules/cloudmesh.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><h4>Site Contents</h4>
+
+<ul>
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configure.html">3. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doc.html">4. Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shell.html">5. Cloudmesh Shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metric.html">6. Cloudmesh Metric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">7. Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix.html">8. Appendix</a></li>
+</ul>
+
+</ul>
+
+<hr>
+
+<h4>Page Contents</h4><ul>
+<li><a class="reference internal" href="#">cloudmesh package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-cloudmesh.cm_mesh">cloudmesh.cm_mesh module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh.cm_mongo">cloudmesh.cm_mongo module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh.cm_mongo2">cloudmesh.cm_mongo2 module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh.inventory">cloudmesh.inventory module</a></li>
+<li><a class="reference internal" href="#module-cloudmesh">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+<div id="sourcelink">
+  <a href="../_sources/modules/cloudmesh.txt"
+     rel="nofollow">Source</a>
+</div>
+        </div>
+      </div>
+    <div class="col-md-9">
+      
+  <div class="section" id="cloudmesh-package">
+<h1>cloudmesh package<a class="headerlink" href="#cloudmesh-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.accounting.html">cloudmesh.accounting package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.accounting.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.accounting.html#module-cloudmesh.accounting.AccountBaseClass">cloudmesh.accounting.AccountBaseClass module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.accounting.html#cloudmesh-accounting-goldaccounting-module">cloudmesh.accounting.GoldAccounting module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.accounting.html#cloudmesh-accounting-metrics-module">cloudmesh.accounting.metrics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.accounting.html#module-cloudmesh.accounting">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.config.html">cloudmesh.config package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.config.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.config.html#module-cloudmesh.config.ConfigDict">cloudmesh.config.ConfigDict module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.config.html#module-cloudmesh.config.YAML">cloudmesh.config.YAML module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.config.html#module-cloudmesh.config.cm_config">cloudmesh.config.cm_config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.config.html#module-cloudmesh.config.cm_init">cloudmesh.config.cm_init module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.config.html#module-cloudmesh.config.cm_keys">cloudmesh.config.cm_keys module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.config.html#module-cloudmesh.config.cm_manage">cloudmesh.config.cm_manage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.config.html#module-cloudmesh.config.cm_me">cloudmesh.config.cm_me module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.config.html#module-cloudmesh.config.cm_projects">cloudmesh.config.cm_projects module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.config.html#cloudmesh-config-openstack-grizzly-cloud-module">cloudmesh.config.openstack_grizzly_cloud module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.config.html#module-cloudmesh.config">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.experiment.html">cloudmesh.experiment package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.experiment.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.experiment.html#module-cloudmesh.experiment.cm_experiment_db">cloudmesh.experiment.cm_experiment_db module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.experiment.html#module-cloudmesh.experiment.group">cloudmesh.experiment.group module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.experiment.html#module-cloudmesh.experiment.group_usage">cloudmesh.experiment.group_usage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.experiment.html#module-cloudmesh.experiment.model_group">cloudmesh.experiment.model_group module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.experiment.html#module-cloudmesh.experiment">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.iaas.html">cloudmesh.iaas package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.iaas.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.iaas.aws.html">cloudmesh.iaas.aws package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.aws.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cloudmesh.iaas.aws.queue.html">cloudmesh.iaas.aws.queue package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.aws.queue.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.aws.queue.html#module-cloudmesh.iaas.aws.queue.celery">cloudmesh.iaas.aws.queue.celery module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.aws.queue.html#module-cloudmesh.iaas.aws.queue.tasks">cloudmesh.iaas.aws.queue.tasks module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.aws.queue.html#module-cloudmesh.iaas.aws.queue">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.aws.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.aws.html#module-cloudmesh.iaas.aws.cm_compute">cloudmesh.iaas.aws.cm_compute module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cloudmesh.iaas.aws.html#cloudmesh-iaas-aws-cm-compute">cloudmesh.iaas.aws.cm_compute</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.aws.html#module-cloudmesh.iaas.aws">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.iaas.azure.html">cloudmesh.iaas.azure package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.azure.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cloudmesh.iaas.azure.queue.html">cloudmesh.iaas.azure.queue package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.azure.queue.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.azure.queue.html#module-cloudmesh.iaas.azure.queue.celery">cloudmesh.iaas.azure.queue.celery module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.azure.queue.html#module-cloudmesh.iaas.azure.queue.tasks">cloudmesh.iaas.azure.queue.tasks module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.azure.queue.html#module-cloudmesh.iaas.azure.queue">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.azure.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.azure.html#module-cloudmesh.iaas.azure.cm_compute">cloudmesh.iaas.azure.cm_compute module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cloudmesh.iaas.azure.html#cloudmesh-iaas-azure-cm-compute">cloudmesh.iaas.azure.cm_compute</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.azure.html#module-cloudmesh.iaas.azure">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.iaas.docker.html">cloudmesh.iaas.docker package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.docker.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.docker.html#module-cloudmesh.iaas.docker">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.iaas.ec2.html">cloudmesh.iaas.ec2 package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.ec2.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cloudmesh.iaas.ec2.queue.html">cloudmesh.iaas.ec2.queue package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.ec2.queue.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.ec2.queue.html#module-cloudmesh.iaas.ec2.queue.celery">cloudmesh.iaas.ec2.queue.celery module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.ec2.queue.html#module-cloudmesh.iaas.ec2.queue.tasks">cloudmesh.iaas.ec2.queue.tasks module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.ec2.queue.html#module-cloudmesh.iaas.ec2.queue">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.ec2.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.ec2.html#module-cloudmesh.iaas.ec2.cm_compute">cloudmesh.iaas.ec2.cm_compute module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cloudmesh.iaas.ec2.html#cloudmesh-iaas-ec2-cm-compute">cloudmesh.iaas.ec2.cm_compute</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.ec2.html#module-cloudmesh.iaas.ec2">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.iaas.eucalyptus.html">cloudmesh.iaas.eucalyptus package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.eucalyptus.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.eucalyptus.html#module-cloudmesh.iaas.eucalyptus.eucalyptus">cloudmesh.iaas.eucalyptus.eucalyptus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.eucalyptus.html#module-cloudmesh.iaas.eucalyptus">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.iaas.opencirrus.html">cloudmesh.iaas.opencirrus package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.opencirrus.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.opencirrus.html#module-cloudmesh.iaas.opencirrus.opencirrus">cloudmesh.iaas.opencirrus.opencirrus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.opencirrus.html#module-cloudmesh.iaas.opencirrus">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.iaas.openstack.html">cloudmesh.iaas.openstack package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.openstack.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cloudmesh.iaas.openstack.queue.html">cloudmesh.iaas.openstack.queue package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.openstack.queue.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.openstack.queue.html#module-cloudmesh.iaas.openstack.queue.celery">cloudmesh.iaas.openstack.queue.celery module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.openstack.queue.html#module-cloudmesh.iaas.openstack.queue.tasks">cloudmesh.iaas.openstack.queue.tasks module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.iaas.openstack.queue.html#module-cloudmesh.iaas.openstack.queue">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.openstack.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.openstack.html#module-cloudmesh.iaas.openstack.cm_compute">cloudmesh.iaas.openstack.cm_compute module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.openstack.html#module-cloudmesh.iaas.openstack.cm_idm">cloudmesh.iaas.openstack.cm_idm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.openstack.html#module-cloudmesh.iaas.openstack">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.iaas.vagrant.html">cloudmesh.iaas.vagrant package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.vagrant.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.vagrant.html#module-cloudmesh.iaas.vagrant.cm_vagrant">cloudmesh.iaas.vagrant.cm_vagrant module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.iaas.vagrant.html#module-cloudmesh.iaas.vagrant">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.iaas.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.iaas.html#module-cloudmesh.iaas.ComputeBaseType">cloudmesh.iaas.ComputeBaseType module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.iaas.html#module-cloudmesh.iaas.Ec2SecurityGroup">cloudmesh.iaas.Ec2SecurityGroup module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.iaas.html#module-cloudmesh.iaas.cm_cloud">cloudmesh.iaas.cm_cloud module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.iaas.html#module-cloudmesh.iaas.cm_flavor">cloudmesh.iaas.cm_flavor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.iaas.html#module-cloudmesh.iaas.cm_image">cloudmesh.iaas.cm_image module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.iaas.html#module-cloudmesh.iaas.cm_security_group">cloudmesh.iaas.cm_security_group module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.iaas.html#module-cloudmesh.iaas.cm_vm">cloudmesh.iaas.cm_vm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.iaas.html#module-cloudmesh.iaas">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.image.html">cloudmesh.image package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.image.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.image.html#module-cloudmesh.image.cm_image">cloudmesh.image.cm_image module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.image.html#module-cloudmesh.image">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.keys.html">cloudmesh.keys package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.keys.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.keys.html#module-cloudmesh.keys.util">cloudmesh.keys.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.keys.html#module-cloudmesh.keys">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.launcher.html">cloudmesh.launcher package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.launcher.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.launcher.queue.html">cloudmesh.launcher.queue package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.launcher.queue.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.launcher.queue.html#module-cloudmesh.launcher.queue.celery">cloudmesh.launcher.queue.celery module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.launcher.queue.html#module-cloudmesh.launcher.queue.tasks">cloudmesh.launcher.queue.tasks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.launcher.queue.html#module-cloudmesh.launcher.queue">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.launcher.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.launcher.html#module-cloudmesh.launcher.cm_launcher">cloudmesh.launcher.cm_launcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.launcher.html#module-cloudmesh.launcher.cm_launcher_db">cloudmesh.launcher.cm_launcher_db module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.launcher.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.management.html">cloudmesh.management package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.management.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.management.html#module-cloudmesh.management.cloudmeshobject">cloudmesh.management.cloudmeshobject module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.management.html#module-cloudmesh.management.cm_account">cloudmesh.management.cm_account module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.management.html#module-cloudmesh.management.comittee">cloudmesh.management.comittee module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.management.html#module-cloudmesh.management.generate">cloudmesh.management.generate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.management.html#module-cloudmesh.management.project">cloudmesh.management.project module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.management.html#cloudmesh-management-read-module">cloudmesh.management.read module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.management.html#cloudmesh-management-test-project-module">cloudmesh.management.test_project module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.management.html#module-cloudmesh.management.test_user">cloudmesh.management.test_user module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.management.html#module-cloudmesh.management.user">cloudmesh.management.user module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.management.html#module-cloudmesh.management">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.metric.html">cloudmesh.metric package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.metric.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.metric.api.html">cloudmesh.metric.api package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.api.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.api.html#module-cloudmesh.metric.api.metric">cloudmesh.metric.api.metric module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.api.html#module-cloudmesh.metric.api">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.metric.eucalyptus.html">cloudmesh.metric.eucalyptus package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.eucalyptus.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.eucalyptus.html#module-cloudmesh.metric.eucalyptus.cm_metric_eucalyptus">cloudmesh.metric.eucalyptus.cm_metric_eucalyptus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.eucalyptus.html#module-cloudmesh.metric.eucalyptus">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.metric.openstack.html">cloudmesh.metric.openstack package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.openstack.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.openstack.html#module-cloudmesh.metric.openstack.cm_metric_openstack">cloudmesh.metric.openstack.cm_metric_openstack module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.openstack.html#module-cloudmesh.metric.openstack.migrating_mysql_to_mongodb">cloudmesh.metric.openstack.migrating_mysql_to_mongodb module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cloudmesh.metric.openstack.html#cloudmesh-metric-openstack-migrating-mysql-to-mongodb">cloudmesh.metric.openstack.migrating_mysql_to_mongodb</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.openstack.html#module-cloudmesh.metric.openstack">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.metric.rest.html">cloudmesh.metric.rest package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.rest.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.rest.html#module-cloudmesh.metric.rest.cm_metric_rest">cloudmesh.metric.rest.cm_metric_rest module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.rest.html#cloudmesh-metric-rest-cm-mimerender-module">cloudmesh.metric.rest.cm_mimerender module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.rest.html#cloudmesh-metric-rest-cm-wsapps-module">cloudmesh.metric.rest.cm_wsapps module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.rest.html#cloudmesh-metric-rest-cm-wsmain-module">cloudmesh.metric.rest.cm_wsmain module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.metric.rest.html#module-cloudmesh.metric.rest">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.metric.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.metric.html#module-cloudmesh.metric.cm_metric">cloudmesh.metric.cm_metric module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.metric.html#cloudmesh-metric-metric-server-module">cloudmesh.metric.metric-server module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.metric.html#module-cloudmesh.metric">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.pbs.html">cloudmesh.pbs package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.pbs.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.pbs.html#module-cloudmesh.pbs.celery">cloudmesh.pbs.celery module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.pbs.html#module-cloudmesh.pbs.pbs">cloudmesh.pbs.pbs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.pbs.html#module-cloudmesh.pbs.pbs_mongo">cloudmesh.pbs.pbs_mongo module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.pbs.html#module-cloudmesh.pbs.pbs_note">cloudmesh.pbs.pbs_note module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.pbs.html#module-cloudmesh.pbs.rest">cloudmesh.pbs.rest module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.pbs.html#module-cloudmesh.pbs.tasks">cloudmesh.pbs.tasks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.pbs.html#module-cloudmesh.pbs">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.provisioner.html">cloudmesh.provisioner package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.provisioner.queue.html">cloudmesh.provisioner.queue package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.provisioner.queue.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.provisioner.queue.html#module-cloudmesh.provisioner.queue.celery">cloudmesh.provisioner.queue.celery module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.provisioner.queue.html#module-cloudmesh.provisioner.queue.tasks">cloudmesh.provisioner.queue.tasks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.provisioner.queue.html#module-cloudmesh.provisioner.queue">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#module-cloudmesh.provisioner.baremetal_computer">cloudmesh.provisioner.baremetal_computer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#module-cloudmesh.provisioner.baremetal_db">cloudmesh.provisioner.baremetal_db module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#module-cloudmesh.provisioner.baremetal_policy">cloudmesh.provisioner.baremetal_policy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#module-cloudmesh.provisioner.baremetal_status">cloudmesh.provisioner.baremetal_status module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#module-cloudmesh.provisioner.baremetal_user">cloudmesh.provisioner.baremetal_user module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#module-cloudmesh.provisioner.dbhelper">cloudmesh.provisioner.dbhelper module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#module-cloudmesh.provisioner.provisioner">cloudmesh.provisioner.provisioner module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#module-cloudmesh.provisioner.rain_cobbler_wrapper">cloudmesh.provisioner.rain_cobbler_wrapper module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#module-cloudmesh.provisioner.system_info">cloudmesh.provisioner.system_info module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.provisioner.html#module-cloudmesh.provisioner">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.rack.html">cloudmesh.rack package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.rack.queue.html">cloudmesh.rack.queue package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rack.queue.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rack.queue.html#module-cloudmesh.rack.queue.celery">cloudmesh.rack.queue.celery module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rack.queue.html#module-cloudmesh.rack.queue.tasks">cloudmesh.rack.queue.tasks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rack.queue.html#module-cloudmesh.rack.queue">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#module-cloudmesh.rack.base_cluster_map">cloudmesh.rack.base_cluster_map module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#module-cloudmesh.rack.base_progress">cloudmesh.rack.base_progress module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#module-cloudmesh.rack.cluster_map_heat">cloudmesh.rack.cluster_map_heat module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#module-cloudmesh.rack.cluster_map_service">cloudmesh.rack.cluster_map_service module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#module-cloudmesh.rack.fetch_cluster_info">cloudmesh.rack.fetch_cluster_info module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#module-cloudmesh.rack.map_progress">cloudmesh.rack.map_progress module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#module-cloudmesh.rack.rack_data">cloudmesh.rack.rack_data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#module-cloudmesh.rack.rack_progress">cloudmesh.rack.rack_progress module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#module-cloudmesh.rack.rack_work">cloudmesh.rack.rack_work module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#cloudmesh-rack-tasks-module">cloudmesh.rack.tasks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rack.html#module-cloudmesh.rack">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.rain.html">cloudmesh.rain package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rain.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.rain.cobbler.html">cloudmesh.rain.cobbler package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rain.cobbler.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cloudmesh.rain.cobbler.queue.html">cloudmesh.rain.cobbler.queue package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.rain.cobbler.queue.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.rain.cobbler.queue.html#module-cloudmesh.rain.cobbler.queue.celery">cloudmesh.rain.cobbler.queue.celery module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.rain.cobbler.queue.html#module-cloudmesh.rain.cobbler.queue.tasks">cloudmesh.rain.cobbler.queue.tasks module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="cloudmesh.rain.cobbler.queue.html#module-cloudmesh.rain.cobbler.queue">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rain.cobbler.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rain.cobbler.html#module-cloudmesh.rain.cobbler.cobbler_client">cloudmesh.rain.cobbler.cobbler_client module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rain.cobbler.html#cloudmesh-rain-cobbler-cobbler-provision-module">cloudmesh.rain.cobbler.cobbler_provision module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rain.cobbler.html#module-cloudmesh.rain.cobbler.cobbler_rain">cloudmesh.rain.cobbler.cobbler_rain module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rain.cobbler.html#cloudmesh-rain-cobbler-cobbler-rest-module">cloudmesh.rain.cobbler.cobbler_rest module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rain.cobbler.html#module-cloudmesh.rain.cobbler.cobbler_rest_api">cloudmesh.rain.cobbler.cobbler_rest_api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rain.cobbler.html#cloudmesh-rain-cobbler-demo-module">cloudmesh.rain.cobbler.demo module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.rain.cobbler.html#module-cloudmesh.rain.cobbler">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rain.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rain.html#module-cloudmesh.rain.rain_base">cloudmesh.rain.rain_base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.rain.html#module-cloudmesh.rain">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.server.html">cloudmesh.server package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.server.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.server.html#module-cloudmesh.server.database">cloudmesh.server.database module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.server.html#module-cloudmesh.server">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.sh.html">cloudmesh.sh package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.sh.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.sh.html#module-cloudmesh.sh.cm">cloudmesh.sh.cm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.sh.html#module-cloudmesh.sh.openstack">cloudmesh.sh.openstack module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.sh.html#module-cloudmesh.sh">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.shell.html">cloudmesh.shell package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.shell.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.shell.html#module-cloudmesh.shell.cm_experiment_group">cloudmesh.shell.cm_experiment_group module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.shell.html#module-cloudmesh.shell.cm_label">cloudmesh.shell.cm_label module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.shell.html#module-cloudmesh.shell.cm_list">cloudmesh.shell.cm_list module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.shell.html#module-cloudmesh.shell.cm_open_web">cloudmesh.shell.cm_open_web module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.shell.html#module-cloudmesh.shell.cm_rain">cloudmesh.shell.cm_rain module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.shell.html#module-cloudmesh.shell.cm_shell">cloudmesh.shell.cm_shell module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.shell.html#cm-config">cm config</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.shell.html#module-cloudmesh.shell.cm_storm">cloudmesh.shell.cm_storm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.shell.html#module-cloudmesh.shell.cm_user">cloudmesh.shell.cm_user module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.shell.html#module-cloudmesh.shell">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.temperature.html">cloudmesh.temperature package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.temperature.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.temperature.html#module-cloudmesh.temperature.cm_temperature">cloudmesh.temperature.cm_temperature module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.temperature.html#module-cloudmesh.temperature">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.user.html">cloudmesh.user package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#module-cloudmesh.user.CMUserProviderBaseType">cloudmesh.user.CMUserProviderBaseType module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#module-cloudmesh.user.cm_default">cloudmesh.user.cm_default module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#module-cloudmesh.user.cm_pagestatus">cloudmesh.user.cm_pagestatus module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#module-cloudmesh.user.cm_projects">cloudmesh.user.cm_projects module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#module-cloudmesh.user.cm_rc">cloudmesh.user.cm_rc module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#module-cloudmesh.user.cm_template">cloudmesh.user.cm_template module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#module-cloudmesh.user.cm_user">cloudmesh.user.cm_user module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.user.html#cloudmesh-user-cm-user">cloudmesh.user.cm_user</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#module-cloudmesh.user.cm_userLDAP">cloudmesh.user.cm_userLDAP module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#module-cloudmesh.user.cm_user_ldap_future">cloudmesh.user.cm_user_ldap_future module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#module-cloudmesh.user.roles">cloudmesh.user.roles module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.user.html#module-cloudmesh.user">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cloudmesh.util.html">cloudmesh.util package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.cm_table">cloudmesh.util.cm_table module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.config">cloudmesh.util.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.debug">cloudmesh.util.debug module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.encryptdata">cloudmesh.util.encryptdata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.gitinfo">cloudmesh.util.gitinfo module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.menu">cloudmesh.util.menu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.naming">cloudmesh.util.naming module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.password">cloudmesh.util.password module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.ping">cloudmesh.util.ping module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.shellutil">cloudmesh.util.shellutil module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.ssh">cloudmesh.util.ssh module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.stopwatch">cloudmesh.util.stopwatch module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.webutil">cloudmesh.util.webutil module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util.youtube">cloudmesh.util.youtube module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.util.html#module-cloudmesh.util">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cloudmesh.cm_mesh">
+<span id="cloudmesh-cm-mesh-module"></span><h2>cloudmesh.cm_mesh module<a class="headerlink" href="#module-cloudmesh.cm_mesh" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh.cm_mesh.cm_mesh">
+<em class="property">class </em><tt class="descclassname">cloudmesh.cm_mesh.</tt><tt class="descname">cm_mesh</tt><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.active">
+<tt class="descname">active</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.active"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.add">
+<tt class="descname">add</tt><big>(</big><em>name</em>, <em>type</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.add_key_pairs">
+<tt class="descname">add_key_pairs</tt><big>(</big><em>cloud_names=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.add_key_pairs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.add_key_pairs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.address_string">
+<tt class="descname">address_string</tt><big>(</big><em>content</em>, <em>labels=False</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.address_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.address_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>content is a dict of the form {u&#8217;private&#8217;: [{u&#8217;version&#8217;:
+4,u&#8217;addr&#8217;: u&#8216;10.35.23.30&#8217;,u&#8217;OS-EXT-IPS:type&#8217;:u&#8217;fixed&#8217;},
+{u&#8217;version&#8217;: 4, u&#8217;addr&#8217;: u&#8216;198.202.120.194&#8217;,
+u&#8217;OS-EXT-IPS:type&#8217;: u&#8217;floating&#8217;}]}</p>
+<p>it will return</p>
+<blockquote>
+<div>&#8220;fixed: 10.35.23.30, floating: 198.202.120.194&#8217;</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.assign_public_ip">
+<tt class="descname">assign_public_ip</tt><big>(</big><em>cloud_name</em>, <em>vm_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.assign_public_ip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.assign_public_ip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.cloud_provider">
+<tt class="descname">cloud_provider</tt><big>(</big><em>type</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.cloud_provider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.cloud_provider" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mesh.cm_mesh.clouds">
+<tt class="descname">clouds</tt><em class="property"> = {}</em><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.clouds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.config">
+<tt class="descname">config</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads the cloudmesh yaml file that defines which clouds build
+the cloudmesh</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mesh.cm_mesh.configuration">
+<tt class="descname">configuration</tt><em class="property"> = {}</em><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.create">
+<tt class="descname">create</tt><big>(</big><em>cloud_name</em>, <em>prefix</em>, <em>index</em>, <em>image_id</em>, <em>flavor_name</em>, <em>key=None</em>, <em>security_group=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.default">
+<tt class="descname">default</tt><big>(</big><em>cloudname</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.del_key_pairs">
+<tt class="descname">del_key_pairs</tt><big>(</big><em>cloud_names=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.del_key_pairs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.del_key_pairs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.delete">
+<tt class="descname">delete</tt><big>(</big><em>cloud_name</em>, <em>server_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.dump">
+<tt class="descname">dump</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.find">
+<tt class="descname">find</tt><big>(</big><em>cloud=['all'], type='servers', project=['all']</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dict with matching elements</p>
+<p>cloud = specifies an array of cloud names that are defined in
+our configuration and returns matching elements in a dict. The
+first level in the dict is the cloud, the second level are the
+elements. If all is specified we serach in all clouds</p>
+<p>type = &#8220;servers&#8221;, &#8220;images&#8221;, &#8220;flavors&#8221;</p>
+<p>The type specifies the kind of element that we look for
+(we only look for the first character e.g. s, i, f)</p>
+<p>project = an array of projects we search for. This only
+applies for servers for now. Till we have introduced the
+profile that restricts available images and flavors for a
+project.</p>
+<p>In all cases None can be used as an alternative to [&#8220;all&#8221;]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.get">
+<tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the dict that contains all the information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.index">
+<tt class="descname">index</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mesh.cm_mesh.keys">
+<tt class="descname">keys</tt><em class="property"> = []</em><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.load">
+<tt class="descname">load</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.prefix">
+<tt class="descname">prefix</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.prefix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.prefix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.profile">
+<tt class="descname">profile</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.refresh">
+<tt class="descname">refresh</tt><big>(</big><em>names=['all'], types=['all']</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method obtians information about servers, images, and
+flavours that build the cloudmesh. The information is held
+internally after a refresh. Than the find method can be used
+to query form this information. To pull new information into
+this data structure a new refresh needs to be called.</p>
+<p>Usage is defined through arrays that are passed along.</p>
+<p>type = &#8220;servers&#8221;, &#8220;images&#8221;, &#8220;flavors&#8221;</p>
+<p>The type specifies the kind of element that we look for
+(we only look for the first character e.g. s, i, f)</p>
+<p>In all cases None can be used as an alternative to [&#8220;all&#8221;]</p>
+<p>if cloud name  is None and type = none update everything</p>
+<p>if cloud name !=None and type = none update everything in the
+specified clouds</p>
+<dl class="docutils">
+<dt>if cloud name != None and type != none</dt>
+<dd>refresh the given types for the given clouds</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.refresh_user_id">
+<tt class="descname">refresh_user_id</tt><big>(</big><em>names=['all']</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.refresh_user_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.refresh_user_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.save">
+<tt class="descname">save</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.status_color">
+<tt class="descname">status_color</tt><big>(</big><em>status</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.status_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.status_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mesh.cm_mesh.vm_set_meta">
+<tt class="descname">vm_set_meta</tt><big>(</big><em>cloud_name</em>, <em>serverid</em>, <em>meta</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mesh.html#cm_mesh.vm_set_meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mesh.cm_mesh.vm_set_meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh.cm_mongo">
+<span id="cloudmesh-cm-mongo-module"></span><h2>cloudmesh.cm_mongo module<a class="headerlink" href="#module-cloudmesh.cm_mongo" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh.cm_mongo.cm_MongoBase">
+<em class="property">class </em><tt class="descclassname">cloudmesh.cm_mongo.</tt><tt class="descname">cm_MongoBase</tt><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_MongoBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_MongoBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_MongoBase.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_MongoBase.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_MongoBase.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_MongoBase.connect">
+<tt class="descname">connect</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_MongoBase.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_MongoBase.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_MongoBase.find">
+<tt class="descname">find</tt><big>(</big><em>query</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_MongoBase.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_MongoBase.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and returns the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_MongoBase.find_one">
+<tt class="descname">find_one</tt><big>(</big><em>query</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_MongoBase.find_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_MongoBase.find_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and returns the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_MongoBase.get">
+<tt class="descname">get</tt><big>(</big><em>username</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_MongoBase.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_MongoBase.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_MongoBase.insert">
+<tt class="descname">insert</tt><big>(</big><em>element</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_MongoBase.insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_MongoBase.insert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_MongoBase.remove">
+<tt class="descname">remove</tt><big>(</big><em>query</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_MongoBase.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_MongoBase.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and removes the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_MongoBase.set">
+<tt class="descname">set</tt><big>(</big><em>username</em>, <em>d</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_MongoBase.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_MongoBase.set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_MongoBase.update">
+<tt class="descname">update</tt><big>(</big><em>query</em>, <em>values=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_MongoBase.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_MongoBase.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and updates the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_MongoBase.wipe">
+<tt class="descname">wipe</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_MongoBase.wipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_MongoBase.wipe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudmesh.cm_mongo.cm_mongo">
+<em class="property">class </em><tt class="descclassname">cloudmesh.cm_mongo.</tt><tt class="descname">cm_mongo</tt><big>(</big><em>collection='cloudmesh'</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.activate">
+<tt class="descname">activate</tt><big>(</big><em>cm_user_id</em>, <em>names=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.activate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.activate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.activate_userinfo">
+<tt class="descname">activate_userinfo</tt><big>(</big><em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.activate_userinfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.activate_userinfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.activated">
+<tt class="descname">activated</tt><em class="property"> = False</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.activated" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.active_clouds">
+<tt class="descname">active_clouds</tt><big>(</big><em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.active_clouds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.active_clouds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.active_project">
+<tt class="descname">active_project</tt><big>(</big><em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.active_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.active_project" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.assign_public_ip">
+<tt class="descname">assign_public_ip</tt><big>(</big><em>cloud</em>, <em>server</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.assign_public_ip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.assign_public_ip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.check_activated">
+<tt class="descname">check_activated</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.check_activated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.check_activated" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.client">
+<tt class="descname">client</tt><em class="property"> = None</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.client" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.cloud_provider">
+<tt class="descname">cloud_provider</tt><big>(</big><em>kind</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.cloud_provider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.cloud_provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the cloud provider based on the kind
+:param kind: the kind is openstack, eucalyptus, or azure (&lt; is not yet supported)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.clouds">
+<tt class="descname">clouds</tt><em class="property"> = {}</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.clouds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.cm_user">
+<tt class="descname">cm_user</tt><em class="property"> = None</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.cm_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.config">
+<tt class="descname">config</tt><em class="property"> = None</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.db_clouds">
+<tt class="descname">db_clouds</tt><em class="property"> = None</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.db_clouds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.default">
+<tt class="descname">default</tt><big>(</big><em>cloudname</em>, <em>attribute</em>, <em>value</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a default value on a given type between &#8216;image&#8217; or &#8216;flavor&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.delete">
+<tt class="descname">delete</tt><big>(</big><em>cloud</em>, <em>server</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete vm instances and release unused public ips</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.find">
+<tt class="descname">find</tt><big>(</big><em>query</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and returns the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.flavor">
+<tt class="descname">flavor</tt><big>(</big><em>cloudname</em>, <em>flavorname</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.flavor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.flavor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a single flavor on a given cloud</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.flavor_name_to_id">
+<tt class="descname">flavor_name_to_id</tt><big>(</big><em>cloud</em>, <em>flavor_name</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.flavor_name_to_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.flavor_name_to_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.flavors">
+<tt class="descname">flavors</tt><big>(</big><em>clouds=None</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.flavors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.flavors" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the flavors from the various clouds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.get_cloud">
+<tt class="descname">get_cloud</tt><big>(</big><em>cm_user_id</em>, <em>cloud_name</em>, <em>force=False</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.get_cloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.get_cloud" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.get_cloud_info">
+<tt class="descname">get_cloud_info</tt><big>(</big><em>cm_user_id</em>, <em>cloudname</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.get_cloud_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.get_cloud_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.get_credential">
+<tt class="descname">get_credential</tt><big>(</big><em>cm_user_id</em>, <em>cloud</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.get_credential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.get_credential" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.get_userinfo">
+<tt class="descname">get_userinfo</tt><big>(</big><em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.get_userinfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.get_userinfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.image">
+<tt class="descname">image</tt><big>(</big><em>cloudname</em>, <em>imagename</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a single image on a given cloud</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.images">
+<tt class="descname">images</tt><big>(</big><em>clouds=None</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.images" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the images from various clouds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.launcher_get">
+<tt class="descname">launcher_get</tt><big>(</big><em>username</em>, <em>launcher_name=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.launcher_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.launcher_get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.launcher_import">
+<tt class="descname">launcher_import</tt><big>(</big><em>d</em>, <em>launcher_name</em>, <em>username</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.launcher_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.launcher_import" title="Permalink to this definition">¶</a></dt>
+<dd><p>insert a launcher/recipe into db_clouds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.launcher_remove">
+<tt class="descname">launcher_remove</tt><big>(</big><em>username</em>, <em>launcher_name</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.launcher_remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.launcher_remove" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.limits">
+<tt class="descname">limits</tt><big>(</big><em>cloud</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets limits information</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.mongo_collection">
+<tt class="descname">mongo_collection</tt><em class="property"> = 'cloudmesh'</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.mongo_collection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.mongo_db_name">
+<tt class="descname">mongo_db_name</tt><em class="property"> = 'cloudmesh'</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.mongo_db_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.mongo_host">
+<tt class="descname">mongo_host</tt><em class="property"> = 'localhost'</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.mongo_host" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.mongo_port">
+<tt class="descname">mongo_port</tt><em class="property"> = 27017</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.mongo_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.quota">
+<tt class="descname">quota</tt><big>(</big><em>cloud</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.quota"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.quota" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets current settings for project quota</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.refresh">
+<tt class="descname">refresh</tt><big>(</big><em>cm_user_id, names=['all'], types=['all']</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method obtains information about servers, images, and
+flavors that build the cloudmesh. The information is held
+internally after a refresh. Than the find method can be used
+to query form this information. To pull new information into
+this data structure a new refresh needs to be called.</p>
+<p>Usage is defined through arrays that are passed along.</p>
+<p>type = &#8220;servers&#8221;, &#8220;images&#8221;, &#8220;flavors&#8221;</p>
+<p>The type specifies the kind of element that we look for
+(we only look for the first character e.g. s, i, f)</p>
+<p>In all cases None can be used as an alternative to [&#8220;all&#8221;]</p>
+<p>if cloud name  is None and type = none update everything</p>
+<p>if cloud name !=None and type = none update everything in the
+specified clouds</p>
+<dl class="docutils">
+<dt>if cloud name != None and type != none</dt>
+<dd>refresh the given types for the given clouds</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.release_unused_public_ips">
+<tt class="descname">release_unused_public_ips</tt><big>(</big><em>cloud</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.release_unused_public_ips"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.release_unused_public_ips" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.security_groups">
+<tt class="descname">security_groups</tt><big>(</big><em>clouds=None</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.security_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.security_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the security groups from various clouds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.servers">
+<tt class="descname">servers</tt><big>(</big><em>clouds=None</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.servers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.servers" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the servers from all clouds</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.ssh_ec2_rule">
+<tt class="descname">ssh_ec2_rule</tt><em class="property"> = &lt;cloudmesh.iaas.Ec2SecurityGroup.Rule object at 0x1071cbf10&gt;</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.ssh_ec2_rule" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.ssh_execute">
+<tt class="descname">ssh_execute</tt><big>(</big><em>ipaddr</em>, <em>username='ubuntu'</em>, <em>command='ls -al'</em>, <em>pkey=None</em>, <em>raise_err=False</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.ssh_execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.ssh_execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.stack_create">
+<tt class="descname">stack_create</tt><big>(</big><em>cloud</em>, <em>cm_user_id</em>, <em>servername</em>, <em>template_url</em>, <em>parameters</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.stack_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.stack_create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.stack_delete">
+<tt class="descname">stack_delete</tt><big>(</big><em>cloud</em>, <em>cm_user_id</em>, <em>server</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.stack_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.stack_delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.stacks">
+<tt class="descname">stacks</tt><big>(</big><em>clouds=None</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.stacks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.stacks" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all stacks from clouds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.start">
+<tt class="descname">start</tt><big>(</big><em>cloud</em>, <em>cm_user_id</em>, <em>prefix=None</em>, <em>index=None</em>, <em>flavor=None</em>, <em>image=None</em>, <em>key=None</em>, <em>meta=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launch a new VM instance with a default setting for flavor, image and
+key name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.tenants">
+<tt class="descname">tenants</tt><big>(</big><em>clouds=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.tenants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.tenants" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the servers from all clouds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.usage">
+<tt class="descname">usage</tt><big>(</big><em>cloud</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.usage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.usage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets usage reports</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.usage_with_limits">
+<tt class="descname">usage_with_limits</tt><big>(</big><em>cloud</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.usage_with_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.usage_with_limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets limits with usage information</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.userid">
+<tt class="descname">userid</tt><em class="property"> = None</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.userid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo.cm_mongo.userinfo">
+<tt class="descname">userinfo</tt><em class="property"> = None</em><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.userinfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.users">
+<tt class="descname">users</tt><big>(</big><em>clouds=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.users"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.users" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the servers from all clouds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.vm_create">
+<tt class="descname">vm_create</tt><big>(</big><em>cloud</em>, <em>prefix</em>, <em>index</em>, <em>vm_flavor</em>, <em>vm_image</em>, <em>key</em>, <em>meta</em>, <em>cm_user_id</em>, <em>givenvmname=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.vm_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.vm_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>BUG: missing security group</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.vm_create_queue">
+<tt class="descname">vm_create_queue</tt><big>(</big><em>cloud</em>, <em>prefix</em>, <em>index</em>, <em>vm_flavor</em>, <em>vm_image</em>, <em>key</em>, <em>meta</em>, <em>cm_user_id</em>, <em>givenvmname=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.vm_create_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.vm_create_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>same as vm_create but runs with a celery task queue</p>
+<p>apply_async places a function call in a specific queue named in &#8216;queue=&#8217;
+parameter</p>
+<p>BUG: missing security group</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.vm_delete">
+<tt class="descname">vm_delete</tt><big>(</big><em>cloud</em>, <em>server</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.vm_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.vm_delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.vmname">
+<tt class="descname">vmname</tt><big>(</big><em>prefix=None</em>, <em>idx=None</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.vmname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.vmname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a vm name to use next time. prefix or index can be
+given to update a vm name (optional)</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>prefix (str, optional): the name of prefix
+idx (int, str, optional): the index to increment. This can be a
+digit or arithmetic e.g. +5 or -3 can be used</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.vmname_next">
+<tt class="descname">vmname_next</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.vmname_next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.vmname_next" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo.wait">
+<tt class="descname">wait</tt><big>(</big><em>ipaddr</em>, <em>username='ubuntu'</em>, <em>command=None</em>, <em>pkey=None</em>, <em>interval=5</em>, <em>retry=10</em>, <em>raise_err=False</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo.wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo.wait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudmesh.cm_mongo.cm_mongo_status">
+<em class="property">class </em><tt class="descclassname">cloudmesh.cm_mongo.</tt><tt class="descname">cm_mongo_status</tt><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
+<dl class="method">
+<dt id="cloudmesh.cm_mongo.cm_mongo_status.serverStatus">
+<tt class="descname">serverStatus</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo.html#cm_mongo_status.serverStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo.cm_mongo_status.serverStatus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh.cm_mongo2">
+<span id="cloudmesh-cm-mongo2-module"></span><h2>cloudmesh.cm_mongo2 module<a class="headerlink" href="#module-cloudmesh.cm_mongo2" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh.cm_mongo2.cm_MongoBase">
+<em class="property">class </em><tt class="descclassname">cloudmesh.cm_mongo2.</tt><tt class="descname">cm_MongoBase</tt><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_MongoBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_MongoBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_MongoBase.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_MongoBase.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_MongoBase.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_MongoBase.connect">
+<tt class="descname">connect</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_MongoBase.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_MongoBase.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_MongoBase.find">
+<tt class="descname">find</tt><big>(</big><em>query</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_MongoBase.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_MongoBase.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and returns the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_MongoBase.find_one">
+<tt class="descname">find_one</tt><big>(</big><em>query</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_MongoBase.find_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_MongoBase.find_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and returns the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_MongoBase.get">
+<tt class="descname">get</tt><big>(</big><em>username</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_MongoBase.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_MongoBase.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_MongoBase.insert">
+<tt class="descname">insert</tt><big>(</big><em>element</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_MongoBase.insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_MongoBase.insert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_MongoBase.remove">
+<tt class="descname">remove</tt><big>(</big><em>query</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_MongoBase.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_MongoBase.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and removes the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_MongoBase.set">
+<tt class="descname">set</tt><big>(</big><em>username</em>, <em>d</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_MongoBase.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_MongoBase.set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_MongoBase.update">
+<tt class="descname">update</tt><big>(</big><em>query</em>, <em>values=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_MongoBase.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_MongoBase.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and updates the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_MongoBase.wipe">
+<tt class="descname">wipe</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_MongoBase.wipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_MongoBase.wipe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2">
+<em class="property">class </em><tt class="descclassname">cloudmesh.cm_mongo2.</tt><tt class="descname">cm_mongo2</tt><big>(</big><em>collection='cloudmesh'</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.activate">
+<tt class="descname">activate</tt><big>(</big><em>cm_user_id</em>, <em>names=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.activate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.activate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.active_clouds">
+<tt class="descname">active_clouds</tt><big>(</big><em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.active_clouds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.active_clouds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.active_project">
+<tt class="descname">active_project</tt><big>(</big><em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.active_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.active_project" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.assign_public_ip">
+<tt class="descname">assign_public_ip</tt><big>(</big><em>cloud</em>, <em>server</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.assign_public_ip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.assign_public_ip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.client">
+<tt class="descname">client</tt><em class="property"> = None</em><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.client" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.cloud_provider">
+<tt class="descname">cloud_provider</tt><big>(</big><em>kind</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.cloud_provider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.cloud_provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the cloud provider based on the kind
+:param kind: the kind is openstack, eucalyptus, or azure (&lt; is not yet supported)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.clouds">
+<tt class="descname">clouds</tt><em class="property"> = {}</em><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.clouds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.config">
+<tt class="descname">config</tt><em class="property"> = None</em><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.db_clouds">
+<tt class="descname">db_clouds</tt><em class="property"> = None</em><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.db_clouds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.delete">
+<tt class="descname">delete</tt><big>(</big><em>cloud</em>, <em>server</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete vm instances and release unused public ips</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.find">
+<tt class="descname">find</tt><big>(</big><em>query</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and returns the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.flavor_name_to_id">
+<tt class="descname">flavor_name_to_id</tt><big>(</big><em>cloud</em>, <em>flavor_name</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.flavor_name_to_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.flavor_name_to_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.flavors">
+<tt class="descname">flavors</tt><big>(</big><em>clouds=None</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.flavors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.flavors" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the flavors from the various clouds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.get_cloud">
+<tt class="descname">get_cloud</tt><big>(</big><em>cm_user_id</em>, <em>cloud_name</em>, <em>force=False</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.get_cloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.get_cloud" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.get_cloud_info">
+<tt class="descname">get_cloud_info</tt><big>(</big><em>cm_user_id</em>, <em>cloudname</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.get_cloud_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.get_cloud_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.get_credential">
+<tt class="descname">get_credential</tt><big>(</big><em>cm_user_id</em>, <em>cloud</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.get_credential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.get_credential" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.get_pbsnodes">
+<tt class="descname">get_pbsnodes</tt><big>(</big><em>host</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.get_pbsnodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.get_pbsnodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the data associated with pbsnodes from mongodb.
+:param host:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.images">
+<tt class="descname">images</tt><big>(</big><em>clouds=None</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.images" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the images from various clouds</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.mongo_collection">
+<tt class="descname">mongo_collection</tt><em class="property"> = 'cloudmesh'</em><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.mongo_collection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.mongo_db_name">
+<tt class="descname">mongo_db_name</tt><em class="property"> = 'cloudmesh'</em><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.mongo_db_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.mongo_host">
+<tt class="descname">mongo_host</tt><em class="property"> = 'localhost'</em><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.mongo_host" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.mongo_port">
+<tt class="descname">mongo_port</tt><em class="property"> = 27017</em><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.mongo_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.refresh">
+<tt class="descname">refresh</tt><big>(</big><em>cm_user_id, names=['all'], types=['all']</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method obtains information about servers, images, and
+flavors that build the cloudmesh. The information is held
+internally after a refresh. Than the find method can be used
+to query form this information. To pull new information into
+this data structure a new refresh needs to be called.</p>
+<p>Usage is defined through arrays that are passed along.</p>
+<p>type = &#8220;servers&#8221;, &#8220;images&#8221;, &#8220;flavors&#8221;</p>
+<p>The type specifies the kind of element that we look for
+(we only look for the first character e.g. s, i, f)</p>
+<p>In all cases None can be used as an alternative to [&#8220;all&#8221;]</p>
+<p>if cloud name  is None and type = none update everything</p>
+<p>if cloud name !=None and type = none update everything in the
+specified clouds</p>
+<dl class="docutils">
+<dt>if cloud name != None and type != none</dt>
+<dd>refresh the given types for the given clouds</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.release_unused_public_ips">
+<tt class="descname">release_unused_public_ips</tt><big>(</big><em>cloud</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.release_unused_public_ips"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.release_unused_public_ips" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.security_groups">
+<tt class="descname">security_groups</tt><big>(</big><em>clouds=None</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.security_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.security_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the security groups from various clouds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.servers">
+<tt class="descname">servers</tt><big>(</big><em>clouds=None</em>, <em>cm_user_id=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.servers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.servers" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the servers from all clouds</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.ssh_ec2_rule">
+<tt class="descname">ssh_ec2_rule</tt><em class="property"> = &lt;cloudmesh.iaas.Ec2SecurityGroup.Rule object at 0x107dfd050&gt;</em><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.ssh_ec2_rule" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.start">
+<tt class="descname">start</tt><big>(</big><em>cloud</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launch a new VM instance with a default setting for flavor, image and
+key name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.tenants">
+<tt class="descname">tenants</tt><big>(</big><em>clouds=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.tenants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.tenants" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the servers from all clouds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.users">
+<tt class="descname">users</tt><big>(</big><em>clouds=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.users"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.users" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the servers from all clouds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.vm_create">
+<tt class="descname">vm_create</tt><big>(</big><em>cloud</em>, <em>prefix</em>, <em>index</em>, <em>vm_flavor</em>, <em>vm_image</em>, <em>key</em>, <em>meta</em>, <em>cm_user_id</em>, <em>givenvmname=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.vm_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.vm_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>BUG: missing security group</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.vm_create_queue">
+<tt class="descname">vm_create_queue</tt><big>(</big><em>cloud</em>, <em>prefix</em>, <em>index</em>, <em>vm_flavor</em>, <em>vm_image</em>, <em>key</em>, <em>meta</em>, <em>cm_user_id</em>, <em>givenvmname=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.vm_create_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.vm_create_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>same as vm_create but runs with a celery task queue</p>
+<p>apply_async places a function call in a specific queue named in &#8216;queue=&#8217;
+parameter</p>
+<p>BUG: missing security group</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.cm_mongo2.cm_mongo2.vm_delete">
+<tt class="descname">vm_delete</tt><big>(</big><em>cloud</em>, <em>server</em>, <em>cm_user_id</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/cm_mongo2.html#cm_mongo2.vm_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.cm_mongo2.cm_mongo2.vm_delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh.inventory">
+<span id="cloudmesh-inventory-module"></span><h2>cloudmesh.inventory module<a class="headerlink" href="#module-cloudmesh.inventory" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cloudmesh.inventory.Inventory">
+<em class="property">class </em><tt class="descclassname">cloudmesh.inventory.</tt><tt class="descname">Inventory</tt><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="cloudmesh.inventory.Inventory.CONFIG_FILE">
+<tt class="descname">CONFIG_FILE</tt><em class="property"> = '/Users/flat/.cloudmesh/cloudmesh_cluster.yaml'</em><a class="headerlink" href="#cloudmesh.inventory.Inventory.CONFIG_FILE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.cluster">
+<tt class="descname">cluster</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.cluster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns cluster data in dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.find">
+<tt class="descname">find</tt><big>(</big><em>query</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and returns the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.find_one">
+<tt class="descname">find_one</tt><big>(</big><em>query</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.find_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.find_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and returns the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.generate">
+<tt class="descname">generate</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.generate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.generate_rack_status">
+<tt class="descname">generate_rack_status</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.generate_rack_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.generate_rack_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.get">
+<tt class="descname">get</tt><big>(</big><em>cm_kind</em>, <em>id_kind</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.get_attribute">
+<tt class="descname">get_attribute</tt><big>(</big><em>host_label</em>, <em>attribute</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.get_attribute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.get_attribute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.get_clusters">
+<tt class="descname">get_clusters</tt><big>(</big><em>rack_name=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.get_clusters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.get_clusters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.get_host_id_label">
+<tt class="descname">get_host_id_label</tt><big>(</big><em>id_label</em>, <em>network_type=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.get_host_id_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.get_host_id_label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.get_host_info">
+<tt class="descname">get_host_info</tt><big>(</big><em>id_label</em>, <em>network_type=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.get_host_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.get_host_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.host">
+<tt class="descname">host</tt><big>(</big><em>index</em>, <em>auth=True</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.host"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.host" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.hostlist">
+<tt class="descname">hostlist</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.hostlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.hostlist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>print some elementary overview information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.init_rack_status">
+<tt class="descname">init_rack_status</tt><big>(</big><em>service_type</em>, <em>rack</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.init_rack_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.init_rack_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.init_rack_temp_status">
+<tt class="descname">init_rack_temp_status</tt><big>(</big><em>service_type</em>, <em>rack</em>, <em>status='not_ready'</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.init_rack_temp_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.init_rack_temp_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.insert">
+<tt class="descname">insert</tt><big>(</big><em>element</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.insert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.ipadr">
+<tt class="descname">ipadr</tt><big>(</big><em>index</em>, <em>iptype</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.ipadr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.ipadr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.ipadr_cluster">
+<tt class="descname">ipadr_cluster</tt><big>(</big><em>index</em>, <em>iptype</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.ipadr_cluster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.ipadr_cluster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudmesh.inventory.Inventory.server_config">
+<tt class="descname">server_config</tt><em class="property"> = None</em><a class="headerlink" href="#cloudmesh.inventory.Inventory.server_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.set_attribute">
+<tt class="descname">set_attribute</tt><big>(</big><em>host_label</em>, <em>attribute</em>, <em>value</em>, <em>time=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.set_attribute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.set_attribute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudmesh.inventory.Inventory.update">
+<tt class="descname">update</tt><big>(</big><em>query</em>, <em>values=None</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#Inventory.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.Inventory.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes a query and updates the results from mongo db.
+:param query:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudmesh.inventory.main">
+<tt class="descclassname">cloudmesh.inventory.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh/inventory.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.inventory.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudmesh">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cloudmesh" title="Permalink to this headline">¶</a></h2>
+<p>A package to manage virtual machines on various clouds infrastructures and bare metal images.</p>
+<dl class="function">
+<dt id="cloudmesh.logger">
+<tt class="descclassname">cloudmesh.</tt><tt class="descname">logger</tt><big>(</big><em>on</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh.html#logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudmesh.mesh">
+<tt class="descclassname">cloudmesh.</tt><tt class="descname">mesh</tt><big>(</big><em>provider='yaml'</em><big>)</big><a class="reference internal" href="../_modules/cloudmesh.html#mesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.mesh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudmesh.version">
+<tt class="descclassname">cloudmesh.</tt><tt class="descname">version</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cloudmesh.html#version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, 2013, Gregor von Laszewski for  FutureGrid.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
