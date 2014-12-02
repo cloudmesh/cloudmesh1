@@ -26,11 +26,11 @@ class cm_shell_yaml:
         Provides yaml information or updates yaml on a given replacement
 
         Arguments:
-            KIND    The typye of the yaml file (server, user) 
-            KEY     Key name of the nested dict e.g. cloudmesh.server.loglevel
-            VALUE   Value to set on a given KEY
-            FILENAME      cloudmesh.yaml or cloudmesh_server.yaml
-            FORMAT         The format of the output (table, json, yaml)
+            KIND        The type of the yaml file (server, user) 
+            KEY         Key name of the nested dict e.g. cloudmesh.server.loglevel
+            VALUE       Value to set on a given KEY
+            FILENAME    cloudmesh.yaml or cloudmesh_server.yaml
+            FORMAT      The format of the output (table, json, yaml)
 
         Options:
             

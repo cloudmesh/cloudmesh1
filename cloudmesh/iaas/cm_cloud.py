@@ -49,7 +49,7 @@ def shell_command_cloud(arguments):
                                  columns active and label. Available
                                  columns are active, label, host,
                                  type/version, type, heading, user,
-                                 credentials, defaults (all to diplay all,
+                                 credentials, defaults (all to display all,
                                  semiall to display all except credentials
                                  and defaults)
                                  

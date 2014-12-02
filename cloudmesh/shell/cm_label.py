@@ -23,8 +23,8 @@ def shell_command_label(arguments):
 
     Description:
 
-        A command to set the prefix and id for creating an automatic
-        lable for VMs. Without paremeter it prints the currect label.
+        A command to set a prefix and an id for a name of VM. 
+        Without a paremeter, it prints a current label.
 
     """
     try:
