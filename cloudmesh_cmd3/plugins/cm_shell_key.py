@@ -100,7 +100,7 @@ class cm_shell_key:
         key list --source=ssh  [--dir=DIR] [--format=FORMAT]
 
            lists all keys in the directory. If the directory is not
-           specified the defualt will be ~/.ssh
+           specified the default will be ~/.ssh
 
         key list --source=yaml  [--dir=DIR] [--format=FORMAT]
 
