@@ -26,11 +26,21 @@ class cm_shell_debug:
             key = "cloudmesh.server.loglevel"
             value = "DEBUG"
             self.cm_config_server._update(key, value)
+
+            key = "cloudmesh.server.debug"
+            value = True
+            self.cm_config_server._update(key, value)
+
             self.cm_config_server.write(format="yaml")
             print ("Debug mode is on.")
         elif arguments['off']:
             key = "cloudmesh.server.loglevel"
             value = "ERROR"
             self.cm_config_server._update(key, value)
+
+            key = "cloudmesh.server.debug"
+            value = False
+            self.cm_config_server._update(key, value)
+
             self.cm_config_server.write(format="yaml")
             print ("Debug mode is off.")
