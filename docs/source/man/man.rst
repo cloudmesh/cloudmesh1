@@ -11,6 +11,19 @@ Command - EOF::
     Action to be performed at the` end of a file. If true it terminates reating the file.
     
 
+admin
+----------------------------------------------------------------------
+
+Command - admin::
+
+    Usage:
+        admin password reset
+    
+    Description:
+        admin password reset
+            reset portal password
+    
+
 banner
 ----------------------------------------------------------------------
 
@@ -163,6 +176,55 @@ Command - cloud::
     
     
 
+cluster
+----------------------------------------------------------------------
+
+Command - cluster::
+
+    Usage:
+        cluster start CLUSTER_NAME
+        cluster list
+        cluster login CLUSTER_NAME
+        cluster stop CLUSTER_NAME
+        cluster create --count=<count>
+                       --group=<group>
+                       [--ln=<LoginName>]
+                       [--cloud=<CloudName>]
+                       [--image=<imgName>|--imageid=<imgId>]
+                       [--flavor=<flavorName>|--flavorid=<flavorId>]
+                       [--force]
+    
+    Description:
+        Cluster Management
+    
+        cluster create --count=<count> --group=<group> --ln=<LoginName> [options...]
+        <count>            specify amount of VMs in the cluster
+        <group>            specify a group name of the cluster, make sure it's unique
+            Start a cluster of VMs, and each of them can log into all others.
+            CAUTION: you sould do some default setting before using this command:
+            1. select cloud to work on, e.g. cloud select india
+            2. activate the cloud, e.g. cloud on india
+            3. set the default key to start VMs, e.g. key default [NAME]
+            4. set the start name of VMs, which is prefix and index, e.g. label --prefix=test --id=1
+            5. set image of VMs, e.g. default image
+            6. set flavor of VMs, e.g. default flavor
+            Also, please make sure the group name of the cluster is unique
+    
+    Options:
+        --ln=<LoginName>           give a login name for the VMs, e.g. ubuntu
+        --cloud=<CloudName>        give a cloud to work on
+        --flavor=<flavorName>      give the name of the flavor
+        --flavorid=<flavorId>      give the id of the flavor
+        --image=<imgName>          give the name of the image
+        --imageid=<imgId>          give the id of the image
+        --force                    if a group exists and there are VMs in it, the program will
+                                   ask user to proceed or not, use this flag to respond yes as 
+                                   default(if there are VMs in the group before creating this 
+                                   cluster, the program will include the exist VMs into the cluster)
+    
+    
+    
+
 color
 ----------------------------------------------------------------------
 
@@ -209,15 +271,17 @@ Command - default::
         default [--column=COLUMN] [--format=FORMAT]
         default cloud [VALUE]
         default format [VALUE]
+        default key [VALUE]
         default flavor [CLOUD] [--name=NAME|--id=ID]
         default image [CLOUD] [--name=NAME|--id=ID]
+        default list refresh [--on|--off]
     
     Arguments:
     
         VALUE    provide a value to update default setting
-        CLOUD   provide a cloud name to work with, if not
-                      specified, the default cloud or a selected
-                      cloud will be used
+        CLOUD    provide a cloud name to work with, if not
+                 specified, the default cloud or a selected
+                 cloud will be used
     
     Options:
     
@@ -227,6 +291,8 @@ Command - default::
         --format=FORMAT  output format: table, json, csv
         --name=NAME      provide flavor or image name
         --id=ID          provide flavor or image id
+        --on             turn on
+        --off            turn off
     
     Description:
     
@@ -242,6 +308,9 @@ Command - default::
         default format [VALUE]
             print or change(if VALUE provided) default print format,
             available formats are table, json, csv
+    
+        default key [VALUE]
+            print or change (if VALUE provided) default key.
     
         default flavor [CLOUD] [--name=NAME|--id=ID]
             set default flavor for a cloud, same as command:
@@ -259,27 +328,31 @@ Command - default::
             (to check a cloud's default settings:
              cloud default [CLOUD|--all])
     
+        default list refresh [--on|--off]
+            set the default behaviour of the list commands, if the default
+            value is on, then the program will always refresh before listing
+    
     
 
-defaults
+deploy
 ----------------------------------------------------------------------
 
-Command - defaults::
+Command - deploy::
 
     Usage:
-        defaults format [--json|--table]
+        deploy hadoop NAMES
+        deploy cloudera NAMES
+        deploy mongodb NAMES
+    
+    Manages the deployment of 
     
     Arguments:
     
+      NAMES    The names of the labels of the VMs gvonlasz_[0-10]
+    
     Options:
     
-    Description:
-    
-        defaults format [--json|--table]
-            some commands can output in json form or table form, this command
-            sets the default printing form, if no form is given, it shows the
-            current default form
-    
+       -v       verbose mode
     
     
 
@@ -408,23 +481,62 @@ group
 Command - group::
 
     Usage:
-        group info
-        group list [NAME]
-        group set NAME
-        group add NAME
-        group [-i] delete NAME
+        group list [--format=FORMAT]
+        group create NAME
+        group remove NAME
+        group add item NAME TYPE VALUE
+        group remove item NAME TYPE VALUE
+        group show NAME [TYPE] [--format=FORMAT]
     
     Arguments:
     
-        NAME   the name of the group
+        NAME    name of the group
+        TYPE    type of the item in the group, e.g. vm 
+        VALUE   value of item to add, e.g. vm name
     
     Options:
     
-        -v         verbose mode
+        -v               verbose mode
+        --format=FORMAT  output format: table, json, csv
     
     Description:
     
-       group NAME  lists in formation about the group
+       group list           lists the groups
+       group create         creates a new group
+       group remove         removes a group
+       group add item       addes an item of a type to a group
+       group remove item    removes an item of a type from a group
+       group show           lists items of a group
+    
+    Examples:
+        group add item sample vm samplevm
+            add vm named samplevm to group sample
+    
+        group show sample vm --format=json
+            list all VMs of group sample in json format
+    
+    
+
+hadoop
+----------------------------------------------------------------------
+
+Command - hadoop::
+
+    Usage:
+        hadoop create NAME DATANODES
+        hadoop info [NAME]
+    
+    Manages a hadoop cluster on a cloud
+    
+    Arguments:
+    
+      NAME       The name of the hadoop cluster
+      DATANODES  The number of datanodes in the hadoop cluster
+    
+    
+    Options:
+    
+       -v       verbose mode
     
     
 
@@ -654,6 +766,60 @@ Command - label::
     
     
 
+launcher
+----------------------------------------------------------------------
+
+Command - launcher::
+
+    Usage:
+        launcher start MENU
+        launcher stop STACK_NAME
+        launcher list
+        launcher show STACK_NAME
+        launcher menu [--column=COLUMN] [--format=FORMAT]
+        launcher import [FILEPATH] [--force]
+        launcher export FILEPATH
+        launcher help | -h
+    
+    An orchestration tool with Chef Cookbooks
+    
+    Arguments:
+    
+      MENU           Name of a cookbook
+      STACK_NAME     Name of a launcher
+      FILEPATH       Filepath
+      COLUMN         column name to display
+      FORMAT         display format (json, table)
+      help           Prints this message
+    
+    Options:
+    
+       -v       verbose mode
+    
+    
+
+limits
+----------------------------------------------------------------------
+
+Command - limits::
+
+    Usage:
+        limits [CLOUD]
+        limits help | -h
+    
+    Current usage data with limits on a selected project (tenant)
+    
+    Arguments:
+    
+      CLOUD          Cloud name to see the usage
+      help           Prints this message
+    
+    Options:
+    
+       -v       verbose mode
+    
+    
+
 list
 ----------------------------------------------------------------------
 
@@ -664,7 +830,7 @@ List available flavors, images, vms, projects and clouds
             list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
             [--column=COLUMN]
             list image [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
-            list vm [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
+            list vm [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN] [--group=<group>]
             list project
             list cloud [--column=COLUMN]
     
@@ -727,7 +893,6 @@ Command - load::
        MODULE  The name of the module.
     
 
-
 loglevel
 ----------------------------------------------------------------------
 
@@ -735,13 +900,21 @@ Command - loglevel::
 
     Usage:
         loglevel
+        loglevel critical
         loglevel error
         loglevel warning
-        loglevel debug
         loglevel info
-        loglevel critical
+        loglevel debug
     
         Shows current log level or changes it.
+    
+        loglevel - shows current log level
+        critical - shows log message in critical level
+        error    - shows log message in error level including critical
+        warning  - shows log message in warning level including error
+        info     - shows log message in info level including warning
+        debug    - shows log message in debug level including info
+    
     
 
 man
@@ -848,8 +1021,8 @@ nova
 Command - nova::
 
     Usage:
-           nova set
-           nova info               
+           nova set CLOUD
+           nova info [CLOUD]          
            nova help
            nova ARGUMENTS               
     
@@ -983,6 +1156,28 @@ Command - quit::
         quit
     
     Action to be performed whne quit is typed
+    
+
+quota
+----------------------------------------------------------------------
+
+Command - quota::
+
+    Usage:
+        quota [CLOUD]
+        quota help | -h
+    
+    quota limit on a current project (tenant)
+    
+    Arguments:
+    
+      CLOUD          Cloud name to see the usage
+      help           Prints this message
+    
+    Options:
+    
+       -v       verbose mode
+    
     
 
 rain
@@ -1127,14 +1322,72 @@ Command - security_group::
     
     
 
+slurm
+----------------------------------------------------------------------
+
+Command - slurm::
+
+    Usage:
+        slurm create NAME WORKERS CLOUD [--image=IMAGE] [--flavor=FLAVOR]
+        slurm info [NAME]
+        slurm status [NAME]            
+        slurm delete [-f] [NAME]
+        slurm clean
+        slurm checkpoint NAME
+        slurm restore NAME
+        slurm list
+        slurm default NAME WORKERS CLOUD [--image=IMAGE] [--flavor=FLAVOR]
+    
+    Manages a virtual slurm cluster on a cloud
+    
+    Arguments:
+    
+      NAME     The name of the slurm cluster
+      WORKERS  The number of workers in the virtual slurm cluster
+      CLOUD    The name of the cloud on which the virtual slurm cluster
+               is to be deployed
+    
+    Options:
+    
+       -v       verbose mode
+    
+    
+
+stack
+----------------------------------------------------------------------
+
+Command - stack::
+
+    Usage:
+        stack start NAME [--template=TEMPLATE] [--param=PARAM]
+        stack stop NAME
+        stack show NAME
+        stack list [--refresh] [--column=COLUMN] [--format=FORMAT]
+        stack help | -h
+    
+    An orchestration tool (OpenStack Heat)
+    
+    Arguments:
+    
+      NAME           stack name
+      help           Prints this message
+    
+    Options:
+    
+       -v       verbose mode
+    
+    
+
 status
 ----------------------------------------------------------------------
 
 Command - status::
 
     Usage:
-        status mongo 
-        status celery 
+        status mongo
+        status celery
+        status celery ping
+        status celery stats
         status rabbitmq
     
         Shows system status
@@ -1212,6 +1465,30 @@ Command - timer::
     
         Implementation note: we have a stopwatch in cloudmesh,
                              that we could copy into cmd3
+    
+
+usage
+----------------------------------------------------------------------
+
+Command - usage::
+
+    Usage:
+        usage [CLOUD] [--start=START] [--end=END]
+        usage help | -h
+    
+    Usage data on a current project (tenant)
+    
+    Arguments:
+    
+      CLOUD          Cloud name to see the usage
+      START          start date of usage (YYYY-MM-DD)
+      END            end date of usage (YYYY-MM-DD)
+      help           Prints this message
+    
+    Options:
+    
+       -v       verbose mode
+    
     
 
 use
@@ -1331,18 +1608,21 @@ Command - vm::
         vm delete [NAME|--id=<id>] 
                   [--group=<group>]
                   [--cloud=<CloudName>]
-                  [--prefix=<prefix>]
-                  [--range=<range>]
+                  [--prefix=<prefix>|--names=<hostlist>]
                   [--force]
-        vm ip (NAME|--id=<id>) 
-              [--cloud=<CloudName>]
-        vm login (--name=<vmname>|--id=<id>|--addr=<address>)
-                 (--ln=<LoginName>)
+        vm ip assign (NAME|--id=<id>) 
+                     [--cloud=<CloudName>]
+        vm ip show [NAME|--id=<id>] 
+                   [--group=<group>]
+                   [--cloud=<CloudName>]
+                   [--prefix=<prefix>|--names=<hostlist>]
+                   [--format=FORMAT] 
+                   [--refresh] 
+        vm login (--name=<vmname>|--id=<id>|--addr=<address>) --ln=<LoginName>
                  [--cloud=<CloudName>]
                  [--key=<key>]
                  [--] [<command>...]
-        vm login NAME
-                 (--ln=<LoginName>)
+        vm login NAME --ln=<LoginName>
                  [--cloud=<CloudName>]
                  [--key=<key>]
                  [--] [<command>...]
@@ -1350,6 +1630,7 @@ Command - vm::
                 [--refresh] 
                 [--format=FORMAT] 
                 [--column=COLUMN]
+                [--group=<group>]
     
     Arguments:
         <command>              positional arguments, the commands you want to
@@ -1375,39 +1656,127 @@ Command - vm::
         --ln=<LoginName>       give the login name of the server that you want 
                                to login
         --name=<vmname>        give the name of the virtual machine
+        --names=<hostlist>     give the VM name, but in a hostlist style, which is very 
+                               convenient when you need a range of VMs e.g. sample[1-3] 
+                               => ['sample1', 'sample2', 'sample3']
+                               sample[1-3,18] => ['sample1', 'sample2', 'sample3', 'sample18']
         --prefix=<prefix>      give the prefix of the server, standand server
-                               name is in the form of prefix_index, e.g. abc_9
-        --range=<range>        give the range of the index of the servers
-                               to delete, e.g. --range=3,6. standand server
                                name is in the form of prefix_index, e.g. abc_9
         --force                delete vms without user's confirmation
     
     Description:
         commands used to start or delete servers of a cloud
     
-        vm start [options...]   start servers of a cloud, user may specify
-                                flavor, image .etc, otherwise default values
-                                will be used, see how to set default values
-                                of a cloud: cloud help
-        vm delete [options...]  delete servers of a cloud, user may delete
-                                a server by its name or id, delete servers
-                                of a group or servers of a cloud, give prefix
-                                and/or range to find servers by their names.
-                                Or user may specify more options to narrow
-                                the search
-        vm ip [options...]      assign a public ip to a VM of a cloud
-        vm login [options...]   login to a server or execute commands on it
-        vm list [options...]    same as command "list vm", please refer to it
+        vm start [options...]       start servers of a cloud, user may specify
+                                    flavor, image .etc, otherwise default values
+                                    will be used, see how to set default values
+                                    of a cloud: cloud help
+        vm delete [options...]      delete servers of a cloud, user may delete
+                                    a server by its name or id, delete servers
+                                    of a group or servers of a cloud, give prefix
+                                    and/or range to find servers by their names.
+                                    Or user may specify more options to narrow
+                                    the search
+        vm ip assign [options...]   assign a public ip to a VM of a cloud
+        vm ip show [options...]     show the ips of VMs
+        vm login [options...]       login to a server or execute commands on it
+        vm list [options...]        same as command "list vm", please refer to it
     
     Examples:
         vm start --count=5 --group=test --cloud=india
                 start 5 servers on india and give them group
                 name: test
     
-        vm delete --group=test --range=,9
+        vm delete --group=test --names=sample_[1-9]
                 delete servers on selected or default cloud with search conditions:
-                group name is test and index in the name of the servers is no greater
-                than 9
+                group name is test and the VM names are among sample_1 ... sample_9
+    
+        vm ip show --names=sample_[1-5,9] --format=json
+                show the ips of VM names among sample_1 ... sample_5 and sample_9 in 
+                json format
+    
+    
+
+volume
+----------------------------------------------------------------------
+
+Command - volume::
+
+    Usage:
+        volume list
+        volume create <size>
+                      [--snapshot-id=<snapshot-id>]
+                      [--image-id=<image-id>]
+                      [--display-name=<display-name>]
+                      [--display-description=<display-description>]
+                      [--volume-type=<volume-type>]
+                      [--availability-zone=<availability-zone>]
+        volume delete <volume>
+        volume attach <server> <volume> <device>
+        volume detach <server> <volume>
+        volume show <volume>
+        volume snapshot-list
+        volume snapshot-create <volume-id>
+                               [--force]
+                               [--display-name=<display-name>]
+                               [--display-description=<display-description>]
+        volume snapshot-delete <snapshot>
+        volume snapshot-show <snapshot>
+        volume help
+    
+    
+    volume management
+    
+    Arguments:
+        <size>            Size of volume in GB
+        <volume>          Name or ID of the volume to delete
+        <volume-id>       ID of the volume to snapshot
+        <server>          Name or ID of server(VM).
+        <device>          Name of the device e.g. /dev/vdb. Use "auto" for 
+                          autoassign (if supported)
+        <snapshot>        Name or ID of the snapshot
+    
+    Options:
+        --snapshot-id <snapshot-id>
+                                Optional snapshot id to create the volume from.
+                                (Default=None)
+        --image-id <image-id>
+                                Optional image id to create the volume from.
+                                (Default=None)
+        --display-name <display-name>
+                                Optional volume name. (Default=None)
+        --display-description <display-description>
+                                Optional volume description. (Default=None)
+        --volume-type <volume-type>
+                                Optional volume type. (Default=None)
+        --availability-zone <availability-zone>
+                                Optional Availability Zone for volume. (Default=None)
+        --force                 Optional flag to indicate whether to snapshot a volume
+                                even if its attached to an instance. (Default=False)
+    
+    Description:
+        volume list
+            List all the volumes
+        volume create <size> [options...]
+            Add a new volume
+        volume delete <volume>
+            Remove a volume   
+        volume attach <server> <volume> <device>
+            Attach a volume to a server    
+        volume-detach <server> <volume>
+            Detach a volume from a server
+        volume show <volume>        
+            Show details about a volume
+        volume snapshot-list
+            List all the snapshots
+        volume snapshot-create <volume-id> [options...]
+            Add a new snapshot
+        volume snapshot-delete <snapshot>
+            Remove a snapshot
+        volume-snapshot-show <snapshot>
+            Show details about a snapshot
+        volume help 
+            Prints the nova manual
     
     
 
