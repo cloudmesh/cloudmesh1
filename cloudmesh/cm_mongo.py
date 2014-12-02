@@ -471,7 +471,6 @@ class cm_mongo:
         watch = StopWatch()
 
         for name in names:
-            print("*", name)
             watch_name = "{0}-{1}".format(cm_user_id, name)
             log.info("-" * 80)
             log.info("Retrieving data for %s" % name)
@@ -485,7 +484,7 @@ class cm_mongo:
                 elif 'manager' in self.clouds[cm_user_id][name]:
                     cloud = self.clouds[cm_user_id][name]['manager']
 
-                print("Refreshing {0} {1} {2} ->".format(cm_user_id, type, name))
+                log.info("Refreshing {0} {1} {2} ->".format(cm_user_id, type, name))
 
                 watch.start(watch_name)
                 cloud.refresh(type)
@@ -494,7 +493,7 @@ class cm_mongo:
                 # pprint(result)
                 # add result to db,
                 watch.stop(watch_name)
-                print('Refresh time:', watch.get(watch_name))
+                log.info('Refresh time: %s' % watch.get(watch_name))
 
                 watch.start(watch_name)
 
@@ -547,7 +546,7 @@ class cm_mongo:
                     self.db_clouds.insert(result[element])
 
                 watch.stop(watch_name)
-                print('Store time:', watch.get(watch_name))
+                log.info('Store time: %s' % watch.get(watch_name))
 
     """
     # See pbs_mongo in pbs directory
@@ -949,17 +948,19 @@ class cm_mongo:
     def vmname_next(self):
         return self.vmname(idx="+1")
 
-    def ssh_execute(self, ipaddr, username="ubuntu", command="ls -al", pkey=None):
+    def ssh_execute(self, ipaddr, username="ubuntu", command="ls -al",
+                    pkey=None, raise_err=False):
 
         try:
             result = ssh_execute(username, ipaddr, command, pkey)
             return result
-        except:
-            err = sys.exc_info()[0]
-            log.error("Can not execute ssh on {0}:{1}".format(ipaddr, err))
-            raise err
+        except Exception, e:
+            log.error("Can not execute ssh on {0}:{1}".format(ipaddr, e))
+            if raise_err:
+                raise e
 
-    def wait(self, ipaddr, username="ubuntu", command=None, pkey=None, interval=5, retry=10):
+    def wait(self, ipaddr, username="ubuntu", command=None, pkey=None,
+             interval=5, retry=10, raise_err=False):
 
         command = "echo $USER"
         success = False
@@ -970,10 +971,11 @@ class cm_mongo:
                                           command=command, pkey=pkey)
                 success = username in result
                 return success
-            except:
-                err = sys.exc_info()[0]
+            except Exception, e:
+                log.error("Can not execute ssh on {0}:{1}".format(ipaddr, e))
                 time.sleep(interval)
-        raise err
+        if raise_err:
+            raise e
         #
         # TODO: not sure if we can get rid of the raise error function
         #

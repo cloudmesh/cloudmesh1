@@ -5,6 +5,7 @@ from datetime import datetime
 from datetime import timedelta
 import json
 import yaml
+import hostlist
 
 def print_format_dict(d, header=None, kind='table'):
     """kind = json, yaml, table, pprint"""
@@ -203,3 +204,38 @@ def parse_time_interval(time_start, time_end):
             t_end = t_start + timedelta(seconds=delta)
 
     return (str(t_start), str(t_end))
+
+
+def dict_key_list_table_printer(d, indexed=False):
+    '''
+    accept a dict in the form:
+    {key1: [list1],
+     key2: [list2],
+     .......
+     =>
+     | key1 | key2 |
+     | l
+     | i
+     | s
+     | t
+    '''
+    x = PrettyTable()
+    temp = d.values()
+    l = 0
+    for item in temp:
+        l0 = len(item)
+        if l0 > l:
+            l = l0
+            
+    if indexed:
+        if l == 0:
+            index_list = []
+        else:
+            index_list = hostlist.expand_hostlist("[1-{0}]".format(str(l)))
+        x.add_column("index", index_list)
+        
+    for k,v in d.iteritems():
+        v0 = v + [" "]*(l - len(v))
+        x.add_column(k, v0)
+    x.align = "l"
+    return x

@@ -256,7 +256,12 @@ class openstack(ComputeBaseType):
                           verify=verify)
         # pprint (r.json())
         try:
-            log.debug("{0}".format(str(r.json())))
+            sanitized_r = copy.deepcopy(r.json())
+            if 'access' in sanitized_r:
+                if 'token' in sanitized_r['access']:
+                    if 'id' in sanitized_r['access']['token']:
+                        sanitized_r['access']['token']['id'] = '******'
+            log.debug("{0}".format(str(sanitized_r)))
         except:
             pass
         return r.json()

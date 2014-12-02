@@ -9,28 +9,41 @@ from pprint import pprint
 from sh import cm
 import sh
 from cloudmesh.iaas.cm_vm import VMcommand
+from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_keys import cm_keys_mongo
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.iaas.cm_cloud import CloudManage
+from cloudmesh.util.ssh import generate_keypair
+from cloudmesh.keys.util import _keyname_sanitation
+from cloudmesh_common.util import get_rand_string
+from cloudmesh_common.logger import LOGGER
+from cloudmesh_install.util import yn_choice
 
+log = LOGGER(__file__)
 
 class cm_shell_cluster:
 
-    def activate_cm_shell_cluster(self):
+    _id = "t_stacks"
 
+    def activate_cm_shell_cluster(self):
         self.register_command_topic('cloud', 'cluster')
 
     @command
     def do_cluster(self, args, arguments):
         """
         Usage:
+            cluster start CLUSTER_NAME
+            cluster list
+            cluster login CLUSTER_NAME
+            cluster stop CLUSTER_NAME
             cluster create --count=<count>
                            --group=<group>
                            [--ln=<LoginName>]
                            [--cloud=<CloudName>]
                            [--image=<imgName>|--imageid=<imgId>]
                            [--flavor=<flavorName>|--flavorid=<flavorId>]
+                           [--force]
                                     
         Description:
             Cluster Management
@@ -55,25 +68,138 @@ class cm_shell_cluster:
             --flavorid=<flavorId>      give the id of the flavor
             --image=<imgName>          give the name of the image
             --imageid=<imgId>          give the id of the image
+            --force                    if a group exists and there are VMs in it, the program will
+                                       ask user to proceed or not, use this flag to respond yes as 
+                                       default(if there are VMs in the group before creating this 
+                                       cluster, the program will include the exist VMs into the cluster)
 
 
         """
         #pprint(arguments)
-        
+        self.cm_config = cm_config()
+        self.cm_mongo = cm_mongo()
+        self.user = cm_user()
+       
         # -----------------------------
         # TODO::
         # add VMs to cluster
         # -----------------------------
+       
+        if arguments['start'] and arguments['CLUSTER_NAME']:
+            '''Starts a cluster'''
+
+            # Initialize default variables. e.g. userid, default cloud and
+            # default keypair
+            userid = self.cm_config.username()
+            def_cloud = self.get_cloud_name(userid)
+            self.cm_mongo.activate(userid)
+            
+            userinfo = self.user.info(userid)
+            if "key" in userinfo["defaults"]:
+                key = userinfo["defaults"]["key"]
+            elif len(userinfo["keys"]["keylist"].keys()) > 0:
+                key = userinfo["keys"]["keylist"].keys()[0]
         
-        if arguments['create']:
+            if key:
+                keycontent = userinfo["keys"]["keylist"][key]
+                if keycontent.startswith('key '):
+                    keycontent = keycontent[4:]
+                cm_keys_mongo(userid).check_register_key(userid, def_cloud, key, keycontent)
+                keynamenew = _keyname_sanitation(userid, key)
+            else:
+                Console.warning("No sshkey found. Please Upload one")
+                return
+            
+            clustername = arguments['CLUSTER_NAME']
+            s_name = "cluster-{0}-{1}-{2}".format(userid, clustername, get_rand_string())
+            # TEMP FOR HADOOP CLUSTER
+            if clustername != "hadoop":
+                Console.warning('hadoop is only available cluster')
+                return
+            
+            # 1. keypair for the communication between master and worker nodes
+            privatekey, publickey = generate_keypair()
+            t_url = \
+            "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev1.3/heat-templates/ubuntu-14.04/hadoop-cluster/hadoop-cluster.yaml"
+            param = {'KeyName': keynamenew,
+                     'PublicKeyString': publickey,
+                     'PrivateKeyString': privatekey}
+            log.debug(def_cloud, userid, s_name, t_url, param, publickey,
+                      privatekey)
+            res = self.cm_mongo.stack_create(cloud=def_cloud, cm_user_id=userid,
+                                             servername=s_name,
+                                             template_url=t_url,
+                                             parameters=param)
+            log.debug(res)
+            if 'error' in res:
+                print (res['error']['message'])
+            return res
+
+        elif arguments['list']:
+            userid = self.cm_config.username()
+            self.cm_mongo.activate(userid)
+            self.cm_mongo.refresh(cm_user_id=userid, types=[self._id])
+            stacks = self.cm_mongo.stacks(cm_user_id=userid)
+            launchers = self.filter_launcher(
+                stacks,
+                {"search": "contain",
+                 "key": "stack_name",
+                 "value": "launcher"}
+                )
+            log.debug(launchers)
+
+            d = {}
+            for k0, v0 in launchers.iteritems():
+                for k1, v1 in launchers[k0].iteritems():
+                    d[v1['id']] = v1
+            columns = ['stack_name', 'description', 'stack_status',
+                       'creation_time', 'cm_cloud']
+            if arguments['--column'] and arguments['--column'] != "all":
+                columns = [x.strip() for x in arguments['--column'].split(',')]
+
+            if arguments['--format']:
+                if arguments['--format'] not in ['table', 'json', 'csv']:
+                    Console.error("please select printing format among table, json and csv")
+                    return
+                else:
+                    p_format = arguments['--format']
+            else:
+                p_format = None
+
+            shell_commands_dict_output(d,
+                                       print_format=p_format,
+                                       firstheader="launcher_id",
+                                       header=columns
+                                       # vertical_table=True
+                                       )
+
+        elif arguments['login']:
+            Console.error("Not implemented")
+            return
+
+        elif arguments['stop'] and arguments['CLUSTER_NAME']:
+            userid = self.cm_config.username()
+            def_cloud = self.get_cloud_name(userid)
+            c_id = arguments['CLUSTER_NAME']
+            self.cm_mongo.activate(userid)
+            res = self.cm_mongo.stack_delete(cloud=def_cloud,
+                                             cm_user_id=userid,
+                                             server=c_id)
+            log.debug(res)
+            return res
+
+        elif arguments['create']:
             try:
                 config = cm_config()
             except:
-                Console.error("There is a problem with the configuration yaml files")
+                Console.error("Failed to load the cloudmesh yaml file")
                 return
             username = config['cloudmesh']['profile']['username']
             cloudname = arguments['--cloud'] or CloudManage().get_selected_cloud(username)
-            dir_name = ".temp_cluster_create_" + username
+            temp_dir_name = ".temp_cluster_create_" + username + "_0"
+            while os.path.isdir("./{0}".format(temp_dir_name)):
+                temp_dir_name = temp_dir_name[:-1] + str(int(temp_dir_name[-1]) + 1)
+            dir_name = temp_dir_name
             
             #NumOfVM = None
             GroupName = None
@@ -106,8 +232,28 @@ class cm_shell_cluster:
                     return
                 else:
                     vm_login_name = arguments['--ln']
-
             
+            if not arguments['--force']:
+                # Moved the import inside of this function
+                # If this import goes up to the top, monodb connection will be
+                # estabilished. Due to that reason, this import stays here
+                # Hyungro Lee 12/01/2014
+                from cloudmesh.experiment.group import GroupManagement
+                GroupManage = GroupManagement(username)
+                groups_list = GroupManage.get_groups_names_list()
+                if GroupName in groups_list:
+                    vms_in_group_list = GroupManage.list_items_of_group(GroupName, _type="VM")["VM"]
+                    if len(vms_in_group_list) != 0:
+                        if yn_choice("The group you provide exists and it has VMs in it, " + \
+                                     "do you want to proceed? (if you choose yes, these exist " +\
+                                     "VMs will be included in the cluster, this could also " +\
+                                     "rewrite the key on the exist VMs)",
+                                     default='n',
+                                     tries=3):
+                            pass
+                        else:
+                            return
+                
             # start VMs 
             print ("starting VMs...")
             arguments_temp = arguments
@@ -122,6 +268,20 @@ class cm_shell_cluster:
                 h = s.find("{")
                 t = s.rfind("}")
                 return json.loads(s[h:t+1])
+            
+            def check_public_ip_existence(d):
+                temp = d['addresses']['private']
+                for item in temp:
+                    if item["OS-EXT-IPS:type"] == "floating":
+                        return True
+                return False
+            
+            def get_ip(d, kind="floating"): # kind is either floating or fixed
+                temp = d['addresses']['private']
+                for item in temp:
+                    if item["OS-EXT-IPS:type"] == kind:
+                        return item['addr']#.encode('ascii')
+                return "FAIL: doesn't exist"
             
             # check all VMs are active
             command_refresh = "vm list --refresh --group={0} --format=json".format(GroupName)
@@ -149,22 +309,9 @@ class cm_shell_cluster:
             
             # assign ip to all VMs
             print ("assigning public ips...")
-            for item in res.keys():
-                cm("vm ip --id={0}".format(item.encode('ascii')))
-                
-            def check_public_ip_existence(d):
-                temp = d['addresses']['private']
-                for item in temp:
-                    if item["OS-EXT-IPS:type"] == "floating":
-                        return True
-                return False
-            
-            def get_ip(d, kind="floating"): # kind is either floating or fixed
-                temp = d['addresses']['private']
-                for item in temp:
-                    if item["OS-EXT-IPS:type"] == kind:
-                        return item['addr']#.encode('ascii')
-                return "FAIL: doesn't exist"
+            for k, v in res.iteritems():
+                if not check_public_ip_existence(v):
+                    cm("vm ip assign --id={0}".format(k.encode('ascii')))
             
             def _help(d):
                 for k, v in d.iteritems():
@@ -176,7 +323,7 @@ class cm_shell_cluster:
             proceed = False
             repeat_index = 1
             while proceed != True:
-                if repeat_index > 5:
+                if repeat_index > 10:
                     Console.warning("Please check the network")
                     return
                 print ("checking({0})...".format(repeat_index))
@@ -221,6 +368,7 @@ class cm_shell_cluster:
             
             fk.write(keycontent)
             fk.close()
+            os.popen("chmod 644 ./{0}/{1}".format(dir_name, temp_key_name))
             
             for k, v in res.iteritems():
                 address_floating = get_ip(v)
@@ -271,7 +419,7 @@ class cm_shell_cluster:
             
             
             print ("finishing...")
-            os.popen("rm -r {0}".format(dir_name))
+            os.popen("rm -rf {0}".format(dir_name))
             print ("DONE.")
             
             print ("cluster group: ", GroupName)
@@ -280,12 +428,5 @@ class cm_shell_cluster:
             print ("(host name for private ips will have -i at the end of VM name, e.g. testVM -> testVM-i)")
 
 
-
-            
-        
-        
         #if arguments['delete']:
             #print(cm("help"))
-
-            
-

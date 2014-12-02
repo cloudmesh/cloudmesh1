@@ -12,7 +12,7 @@ from pymongo import MongoClient
 from mongoengine import connect
 import os
 from cloudmesh_install import config_file
-
+import traceback
 
 log = LOGGER(__file__)
 
@@ -33,13 +33,13 @@ class DBConnFactory(object):
     def getconn(cls, dbname, clientType=MONGOCLIENT):
 
         # DEBUG
-        try:
-            import sys
-            _args = locals()
-            log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
-        except:
-            pass
+        # try:
+        #     import sys
+        #     _args = locals()
+        #     log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+        #                                      str(_args)))
+        # except:
+        #     pass
 
         dbkey = "%s_%s" % (dbname, clientType)
         if dbkey in cls.connectors:
@@ -90,7 +90,8 @@ class DBConnFactory(object):
                     msg = "Failed to connect to MongoEngine DB:\n\t%s" % dbname
                     print(msg)
                     log.error(msg)
-
+                    log.error(traceback.format_exc())
+                    
             cls.connectors[dbkey] = conn
             return conn
 
@@ -100,14 +101,14 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     Read in the mongo db information from the cloudmesh_server.yaml
     """
     # DEBUG
-    try:
-        import sys
-        _args = locals()
-        del(_args['self'])
-        log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                        str(_args)))
-    except:
-        pass
+    # try:
+    #    import sys
+    #    _args = locals()
+    #    del(_args['self'])
+    #    log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
+    #                                    str(_args)))
+    #except:
+    #    pass
 
     config = cm_config_server().get("cloudmesh.server.mongo")
 

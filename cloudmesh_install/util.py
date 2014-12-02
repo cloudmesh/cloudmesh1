@@ -12,6 +12,8 @@ from string import Template
 import os
 import sys
 
+
+
 def get_system():
     if is_ubuntu():
         return "ubuntu"
@@ -111,7 +113,6 @@ def yn_choice(message, default='y', tries=None):
 
 def grep(pattern, filename):
     """Very simple grep that returns the first matching line in a file.
-
     String matching only, does not do REs as currently implemented.
     """
     try:

@@ -11,7 +11,7 @@ at
 * http://mycloudmesh.org/learning
 
 This documentation contains an extensive set of information and
-tutorial like setups for cloudmesh. This woudl eb a good start.
+tutorial like setups for cloudmesh. This would be a good start.
 
 Some older doecumentation and the Python API can be found at 
 
@@ -23,4 +23,14 @@ Code
 The code is located at
 
 Code:  https://github.com/cloudmesh/cloudmesh
+
+Git Notifications
+----------------------------------------------------------------------
+
+cloudmesh-git@googlegroups.com
+
+Mailinglist
+----------------------------------------------------------------------
+
+cloudmesh@googlegroups.com
 

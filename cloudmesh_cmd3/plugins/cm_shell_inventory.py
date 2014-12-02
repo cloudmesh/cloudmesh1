@@ -31,11 +31,6 @@ class cm_shell_inventory:
 
     def activate_cm_shell_inventory(self):
         self.register_command_topic('cloud', 'inventory')
-        try:
-            self._connect_to_inventory()
-        except Exception, e:
-            print(e)
-        pass
 
     @command
     def do_inventory(self, args, arguments):
@@ -71,6 +66,12 @@ class cm_shell_inventory:
            v       verbose mode
 
         """
+        try:
+            self._connect_to_inventory()
+        except Exception, e:
+            print(e)
+        pass
+
         # if arguments["v"]:
         log.info(arguments)
         log.info(args)

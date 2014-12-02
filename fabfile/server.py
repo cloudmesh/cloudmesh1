@@ -14,6 +14,8 @@ import os
 import queue
 import progress
 import mongo
+from build import cursor_on
+
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
@@ -104,7 +106,7 @@ def agent():
 def stop(server="server"):
     """sma e as the kill command"""
     kill(server)
-
+    cursor_on()
 
 @task
 def kill(server="server", debug=True):

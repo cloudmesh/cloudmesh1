@@ -669,6 +669,12 @@ class CloudManage(object):
         :param output: designed for shell command for selection
         :param serverdata: if provided, the function will print this data instead of vms of a cloud
         '''
+       
+        # GroupManagement loads Mongodb connections automatically by import.
+        # I moved this import inside of this function which is limiting import
+        # scope, so that other functions in this file can freely be used without
+        # loading the db connection. hyungro lee 12/01/2014
+        from cloudmesh.experiment.group import GroupManagement
         self._connect_to_mongo()
         if refresh:
             self.mongo.activate(cm_user_id=username, names=[cloudname])
@@ -688,13 +694,17 @@ class CloudManage(object):
                 del v['_id']        
         
         if group:
-            temp = {}
-            for k, v in servers_dict.iteritems():
-                if 'metadata' in v and \
-                   'cm_group' in v['metadata'] and \
-                   v['metadata']['cm_group'] == group:
-                    temp[k] = v
-            servers_dict = temp
+            GroupManage = GroupManagement(username)
+            groups_list = GroupManage.get_groups_names_list()
+            if group not in groups_list:
+                servers_dict = {}
+            else:
+                vms_in_group_list = GroupManage.list_items_of_group(group, _type="VM")["VM"]
+                temp = {}
+                for k, v in servers_dict.iteritems():
+                    if v['name'] in vms_in_group_list:
+                        temp[k] = v
+                servers_dict = temp
 
         images_dict = self.mongo.images(
             clouds=[cloudname], cm_user_id=username)
@@ -904,7 +914,8 @@ class CloudCommand(CloudManage):
             else:
                 p_format = None
 
-            shell_commands_dict_output(d,
+            shell_commands_dict_output(self.username,
+                                       d,
                                        print_format=p_format,
                                        firstheader="cloud",
                                        header=combined_headers,
@@ -944,7 +955,8 @@ class CloudCommand(CloudManage):
             else:
                 p_format = None
             
-            shell_commands_dict_output(cloud,
+            shell_commands_dict_output(self.username,
+                                       cloud,
                                        print_format=p_format,
                                        # "cloud '{0}' information".format(cloud['cm_cloud']),
                                        title=None,

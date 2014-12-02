@@ -1,33 +1,51 @@
 from __future__ import print_function
-from cloudmesh.experiment.model_group import ExperimentGroup
+# from cloudmesh.experiment.model_group import ExperimentGroup
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.cm_mongo import cm_mongo
+from cloudmesh.util.shellutil import shell_commands_dict_output
+from cmd3.console import Console
+from pprint import pprint
 
 log = LOGGER(__file__)
-
 
 def shell_command_experiment_group(arguments):
     """
     Usage:
-        group info
-        group list [NAME] [ATTRIBUTES] [--foramt=TABLEFORMAT]
-        group set NAME
+        group list [--format=FORMAT]
         group create NAME
-        group [-i] delete NAME
-        group add [--name=NAME] KIND LABEL         
-        
+        group remove NAME
+        group add item NAME TYPE VALUE
+        group remove item NAME TYPE VALUE
+        group show NAME [TYPE] [--format=FORMAT]
+
     Arguments:
 
-        NAME   the name of the group
+        NAME    name of the group
+        TYPE    type of the item in the group, e.g. vm 
+        VALUE   value of item to add, e.g. vm name
 
     Options:
 
-        -v         verbose mode
+        -v               verbose mode
+        --format=FORMAT  output format: table, json, csv
 
     Description:
 
-       group NAME  lists in formation about the group
+       group list           lists the groups
+       group create         creates a new group
+       group remove         removes a group
+       group add item       addes an item of a type to a group
+       group remove item    removes an item of a type from a group
+       group show           lists items of a group
+       
+    Examples:
+        group add item sample vm samplevm
+            add vm named samplevm to group sample
+            
+        group show sample vm --format=json
+            list all VMs of group sample in json format
 
     Example:
 
@@ -88,51 +106,103 @@ def shell_command_experiment_group(arguments):
        
        
     """
+    # Changed the scope of this import.
+    from cloudmesh.experiment.group import GroupManagement
+    from cloudmesh.experiment.group_usage import add_item_to_group
 
     name = arguments["NAME"]
+    type = arguments["TYPE"]
+    value = arguments["VALUE"]
 
     config = cm_config()
     username = config.username()
     # print username
     user = cm_user()
+    
+    GroupManage = GroupManagement(username)
 
+    '''
     if arguments["info"]:
 
         print("Default experiment group:", user.get_defaults(username)["group"])
 
-    elif arguments["list"] and name is None:
-
+    '''
+    if arguments["list"]:
         try:
-            name = user.get_defaults(username)["group"]
-        except:
-            print("ERROR: no default experiment group set")
+            res = GroupManage.get_groups_names_list()
+        except Exception, err:
+            Console.error(str(err))
+            return
+        d = {}
+        d["groups"] = res
+        
+        if arguments['--format']:
+            p_format = arguments['--format']
+        else:
+            p_format = None
+            
+        shell_commands_dict_output(username,
+                                   d,
+                                   print_format=p_format,
+                                   table_format="key_list",
+                                   indexed=True)
+
+        
+    elif arguments["create"]:
+        try:
+            GroupManage.create_group(name)
+        except Exception, err:
+            Console.error(str(err))
+            return
+        Console.ok("group {0} created".format(name))
+
+    elif arguments['remove'] and not arguments['item']:
+        try:
+            GroupManage.delete_group(name)
+        except Exception, err:
+            Console.error(str(err))
+            return
+        Console.ok("group {0} removed".format(name))
+
+
+    elif arguments["add"] and arguments['item']:
+        try:
+            add_item_to_group(username, name, type, value, refresh=True)
+        except Exception, err:
+            Console.error(str(err))
+            return
+        Console.ok("item '{0}' of type '{1}' added to group '{2}'".format(
+                                                value, type, name))
+            
+    elif arguments['show']:
+        try:
+            res = GroupManage.list_items_of_group(name, _type=type)
+        except Exception, err:
+            Console.error(str(err))
             return
 
-        experiment = ExperimentGroup(username, name)
-        print(experiment.to_table(name))
+        if arguments['--format']:
+            p_format = arguments['--format']
+        else:
+            p_format = None
+            
+        shell_commands_dict_output(username,
+                                   res,
+                                   print_format=p_format,
+                                   table_format="key_list",
+                                   indexed=True)
+            
+    elif arguments["remove"] and arguments['item']:
+        try:
+            GroupManage.delete_item_of_group(name, type, value)
+        except Exception, err:
+            Console.error(str(err))
+            return
+        Console.ok("item '{0}' of type '{1}' removed from group '{2}'".format(
+                                                value, type, name))
 
-    elif arguments["list"] and name in ["all"]:
 
-        experiment = ExperimentGroup(username, name)
-        print(experiment.to_table(name))
-
-    elif arguments["list"]:
-
-        experiment = ExperimentGroup(username, name)
-        print(experiment.to_table(name))
-
-    elif arguments["set"]:
-        # "sets the group to the given name, the group must exists"
-
-        user.set_default_attribute(username, "group", name)
-
-    elif arguments["add"]:
-        # "adds the group to the given name, the group must not exist."
-
-        user.set_default_attribute(username, "group", name)
-
-    elif arguments["delete"]:
-        print("deletes the entries and ask if -i is specified")
+    
 
 
 def main():

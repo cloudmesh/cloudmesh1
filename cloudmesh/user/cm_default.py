@@ -4,7 +4,7 @@ from cloudmesh_common.tables import row_table
 from cmd3.console import Console
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.util.shellutil import shell_commands_dict_output
+from cloudmesh.util.shellutil import shell_commands_dict_output, get_command_list_refresh_default_setting
 from cloudmesh.iaas.cm_cloud import shell_command_cloud
 from cloudmesh.config.cm_keys import cm_keys_mongo
 
@@ -22,6 +22,7 @@ def shell_command_default(arguments):
         default key [VALUE]
         default flavor [CLOUD] [--name=NAME|--id=ID]
         default image [CLOUD] [--name=NAME|--id=ID]
+        default list refresh [--on|--off]
 
     Arguments:
 
@@ -38,6 +39,8 @@ def shell_command_default(arguments):
         --format=FORMAT  output format: table, json, csv
         --name=NAME      provide flavor or image name
         --id=ID          provide flavor or image id
+        --on             turn on
+        --off            turn off
 
     Description:
 
@@ -72,6 +75,10 @@ def shell_command_default(arguments):
 
             (to check a cloud's default settings:
              cloud default [CLOUD|--all])
+             
+        default list refresh [--on|--off]
+            set the default behaviour of the list commands, if the default
+            value is on, then the program will always refresh before listing
 
     """
     call = DefaultCommand(arguments)
@@ -82,6 +89,7 @@ class DefaultCommand(object):
     
     def __init__(self, arguments):
         self.arguments = arguments
+        #print (self.arguments)
         try:
             self.config = cm_config()
         except:
@@ -166,7 +174,8 @@ class DefaultCommand(object):
         #if p_format == 'table' or p_format is None:
             #print(row_table(to_print, order=None, labels=["Default", "Value"]))
         #else:
-        shell_commands_dict_output(to_print,
+        shell_commands_dict_output(self.username,
+                                   to_print,
                                        print_format=p_format,
                                        header=columns,
                                        oneitem=True,
@@ -224,6 +233,20 @@ class DefaultCommand(object):
         else:
             print("ERROR: Specified key is not registered.")
         return
+    
+    def _default_list_refresh(self):
+        if self.arguments['--on']:
+            self._start_cm_user()
+            defaults_data = self.user_obj.info(self.username)['defaults']
+            defaults_data["shell_command_list_refresh_default_setting"] = True
+            self.user_obj.set_defaults(self.username, defaults_data)
+        elif self.arguments['--off']:
+            self._start_cm_user()
+            defaults_data = self.user_obj.info(self.username)['defaults']
+            defaults_data["shell_command_list_refresh_default_setting"] = False
+            self.user_obj.set_defaults(self.username, defaults_data)
+        else:
+            print ("refresh as default: ", get_command_list_refresh_default_setting(self.username))
 
     def execute(self):
         if self.arguments['format']:
@@ -236,5 +259,7 @@ class DefaultCommand(object):
             self._default_image()
         elif self.arguments['key']:
             self._default_key()
+        elif self.arguments['list'] and self.arguments['refresh']:
+            self._default_list_refresh()
         else:
             self._print_default()

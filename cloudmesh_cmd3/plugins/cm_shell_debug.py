@@ -8,8 +8,6 @@ log = LOGGER(__file__)
 class cm_shell_debug:
 
     def activate_cm_shell_debug(self):
-
-        self.cm_config_server = cm_config_server()
         self.register_command_topic('cloud', 'debug')
 
     @command
@@ -21,15 +19,28 @@ class cm_shell_debug:
 
             Turns the debug log level on and off.
         """
+
+        self.cm_config_server = cm_config_server()
+
         if arguments['on']:
             key = "cloudmesh.server.loglevel"
             value = "DEBUG"
             self.cm_config_server._update(key, value)
+
+            key = "cloudmesh.server.debug"
+            value = True
+            self.cm_config_server._update(key, value)
+
             self.cm_config_server.write(format="yaml")
             print ("Debug mode is on.")
         elif arguments['off']:
             key = "cloudmesh.server.loglevel"
             value = "ERROR"
             self.cm_config_server._update(key, value)
+
+            key = "cloudmesh.server.debug"
+            value = False
+            self.cm_config_server._update(key, value)
+
             self.cm_config_server.write(format="yaml")
             print ("Debug mode is off.")
