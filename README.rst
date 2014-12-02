@@ -10,6 +10,10 @@ at
 
 * http://mycloudmesh.org/learning
 
+additional information is published at 
+
+* http://cloudmesh.github.io/cloudmesh/
+
 This documentation contains an extensive set of information and
 tutorial like setups for cloudmesh. This would be a good start.
 
