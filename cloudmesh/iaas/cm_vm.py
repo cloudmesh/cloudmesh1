@@ -18,9 +18,7 @@ from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh.config.cm_keys import cm_keys_mongo
 from cloudmesh.util.shellutil import get_vms_look_for, shell_commands_dict_output\
                                     ,get_command_list_refresh_default_setting
-from cloudmesh.experiment.group_usage import add_vm_to_group_while_creating\
-                                            ,remove_vm_from_group_while_deleting
-                                            
+                                           
 
 log = LOGGER(__file__)
 
@@ -473,6 +471,8 @@ def start_vm(username,
           input key
           missing security group
     '''
+    # Changed scope of this import - hyungro lee 12/01/2014
+    from cloudmesh.experiment.group_usage import add_vm_to_group_while_creating
 
     mongo = cm_mongo()
     userobj = cm_user()
@@ -700,6 +700,12 @@ def delete_vm(username,
           it looks like even though delete a vm and return {msg: seccess}, sometimes refresh
           after 5 sec, it might be still there
     '''
+    # changed the scope of this import
+    # Benefit: other functions are not affected with this import
+    # drawback: hard to see which module is being loaded in this file
+    # Hyungro Lee 12/01/2014
+    from cloudmesh.experiment.group_usage import remove_vm_from_group_while_deleting
+ 
     try:
         mongo = cm_mongo()
     except:

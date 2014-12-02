@@ -17,9 +17,6 @@ class cm_shell_usage:
     _id = "usage"  # id for usage in cm_mongo
 
     def activate_cm_shell_usage(self):
-        self.cm_mongo = cm_mongo()
-        self.cm_config = cm_config()
-        self.cm_user = cm_user()
         self.register_command_topic('cloud', 'usage')
         pass
 
@@ -54,6 +51,9 @@ class cm_shell_usage:
            -v       verbose mode
 
         """
+        self.cm_mongo = cm_mongo()
+        self.cm_config = cm_config()
+        self.cm_user = cm_user()
 
         if arguments["help"] or arguments["-h"]:
             print (self.do_usage.__doc__)

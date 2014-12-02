@@ -18,7 +18,6 @@ from cloudmesh.util.ssh import generate_keypair
 from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh_common.util import get_rand_string
 from cloudmesh_common.logger import LOGGER
-from cloudmesh.experiment.group import GroupManagement
 from cloudmesh_install.util import yn_choice
 
 log = LOGGER(__file__)
@@ -28,11 +27,7 @@ class cm_shell_cluster:
     _id = "t_stacks"
 
     def activate_cm_shell_cluster(self):
-
         self.register_command_topic('cloud', 'cluster')
-        self.cm_config = cm_config()
-        self.cm_mongo = cm_mongo()
-        self.user = cm_user()
 
     @command
     def do_cluster(self, args, arguments):
@@ -81,7 +76,10 @@ class cm_shell_cluster:
 
         """
         #pprint(arguments)
-        
+        self.cm_config = cm_config()
+        self.cm_mongo = cm_mongo()
+        self.user = cm_user()
+       
         # -----------------------------
         # TODO::
         # add VMs to cluster
@@ -236,6 +234,11 @@ class cm_shell_cluster:
                     vm_login_name = arguments['--ln']
             
             if not arguments['--force']:
+                # Moved the import inside of this function
+                # If this import goes up to the top, monodb connection will be
+                # estabilished. Due to that reason, this import stays here
+                # Hyungro Lee 12/01/2014
+                from cloudmesh.experiment.group import GroupManagement
                 GroupManage = GroupManagement(username)
                 groups_list = GroupManage.get_groups_names_list()
                 if GroupName in groups_list:
@@ -425,12 +428,5 @@ class cm_shell_cluster:
             print ("(host name for private ips will have -i at the end of VM name, e.g. testVM -> testVM-i)")
 
 
-
-            
-        
-        
         #if arguments['delete']:
             #print(cm("help"))
-
-            
-

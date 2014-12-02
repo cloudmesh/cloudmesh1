@@ -3,7 +3,6 @@ from cloudmesh_common.logger import LOGGER
 
 log = LOGGER(__file__)
 
-
 class cm_shell_exp:
 
     """opt_example class"""

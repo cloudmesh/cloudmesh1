@@ -9,7 +9,6 @@ from cmd3.console import Console
 import hostlist
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.util.naming import server_name_analyzer
-from cloudmesh.experiment.group import GroupManagement
 
 
 ALLOWED_PRINT_FORMAT = ['table', 'json', 'csv']
@@ -240,6 +239,12 @@ def get_vms_look_for(username,
     param getAll:: if True, the function consider all VMs are selected before filtering.
                    if False, then none are selected before filtering
     '''
+    # GroupManagement automatically loads mongodb connection.
+    # To avoid creating db connection by import, we moved this import inside of
+    # the function. This way allows us to use GroupManagement class only in this
+    # function. Other functions in this file won't load db connection by import.
+    # Hyungro Lee - 12/1/2014
+    from cloudmesh.experiment.group import GroupManagement
     # input checking 
     if servername and serverid:
         Console.error("you cannot provide servername and serverid at the same time")
