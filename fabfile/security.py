@@ -12,7 +12,8 @@ def check(search=""):
         platform = pair[0]
         _search = pair[1]
         _grep(_search, platform)
-
+    if search:
+        _grep(search, 'CUSTOMIZED_SEARCH')
     cursor_on()
     
 def _grep(search, platform):
