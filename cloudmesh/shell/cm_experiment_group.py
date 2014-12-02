@@ -47,6 +47,64 @@ def shell_command_experiment_group(arguments):
         group show sample vm --format=json
             list all VMs of group sample in json format
 
+    Example:
+
+       group create experiment_1
+       vm start
+       last = vm label
+       group add experiment_1 vm last
+
+       group create experiment_2
+       vm start
+       last = vm info label  # prints the vm label /prefix + number
+       ipno = vm info ip # prints the ip of the last vm
+       ipno = vm info ip gvonlasz_1  # get ip of vm with label gvonlasz_1
+
+       group add expermiment_2 ip ipno
+
+       groups are just tuples
+
+       i can have multiple Kinds in the tuple
+
+    mongoengine
+
+    class groupObject
+
+        def add (... name, kind, attribute ...)
+        def printer ( ... kind, printfunction, name...)
+        def getter ( .... kind, name)
+        
+    def getter ( .... kind, name ...)
+
+       if kind == "vm":
+          vm = get vm from mongo
+          return vm
+       elif kind = "image"
+          iamge = get image from mongo
+          return iamge
+       ....
+
+    def vmPrinter ( .... vm ...)
+
+       print vm.ip
+       print vm.name
+       ....
+
+    def imagePrinter ( .... image ...)
+
+       print image.size
+       print image.name
+       ....
+
+       
+
+    g = groupObject()
+    g.printer("vm", cmPrinter)
+    g.printer("image", imagePrinter)
+
+    
+       
+       
     """
     # Changed the scope of this import.
     from cloudmesh.experiment.group import GroupManagement

@@ -110,20 +110,23 @@ A question of "where should we fork this repository" appears, hence
 click on your name/profile.
 
 A page with your account name/cloudmesh is loaded to your site,
-example::
+for example::
 
-	yourusername/cloudmesh
+	<yourusername>/cloudmesh
 
-On the lower right hand side of your machine, copy the clone url.
+On the lower right hand side of your machine, copy the clone url. The 
+url might look like::
+
+    https://github.com/<yourusername>/cloudmesh
 
 In your linux machine, get into your github directory::
 
 	cd github
 
-Then, paste the url clone into your linux machine's terminal using the
-code below::
+Then, paste the previously obtained clone url into your linux machine's 
+terminal, e.g.::
 
-	git clone ".....clone url....."
+	git clone https://github.com/<yourusername>/cloudmesh
 
 Make the change in the document which you want to update, then commit
 and push the repository to be up-to date with the master branch.

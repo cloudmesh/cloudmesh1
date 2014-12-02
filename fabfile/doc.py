@@ -1,6 +1,7 @@
 from fabric.api import task, local
 import sys
 import os
+from build import cursor_on
 
 browser = "firefox"
 
@@ -19,10 +20,10 @@ def html():
     # disable Flask RSTPAGES due to sphins incompatibility
     os.environ['RSTPAGES'] = 'FALSE'
     api()
-    # man()
+    man()
     # build the docs locally and view
     local("cd docs; make html")
-
+    cursor_on()
 
 @task
 def publish():
@@ -40,6 +41,7 @@ def publish():
 def man():
     """deploy the documentation on gh-pages"""
     # TODO: match on "Commands"
+    local('cm debug off')
     local('cm man | grep -A10000 \"Commands\"  |'
           ' sed \$d  > docs/source/man/man.rst')
 
@@ -47,10 +49,12 @@ def man():
 @task
 def api():
     for modulename in ["cloudmesh",
+                       "cloudmesh_admin",                       
                        "cloudmesh_common",
                        "cloudmesh_install",
                        "cloudmesh_cmd3",
-                       "cloudmesh_web"]:
+                       "cloudmesh_web",
+                       "fabfile"]:
         print 70 * "="
         print "Building API Docs:", modulename
         print 70 * "="
