@@ -12,7 +12,7 @@ from pymongo import MongoClient
 from mongoengine import connect
 import os
 from cloudmesh_install import config_file
-
+import traceback
 
 log = LOGGER(__file__)
 
@@ -90,7 +90,8 @@ class DBConnFactory(object):
                     msg = "Failed to connect to MongoEngine DB:\n\t%s" % dbname
                     print(msg)
                     log.error(msg)
-
+                    log.error(traceback.format_exc())
+                    
             cls.connectors[dbkey] = conn
             return conn
 
