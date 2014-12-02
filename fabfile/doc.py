@@ -1,6 +1,7 @@
 from fabric.api import task, local
 import sys
 import os
+from build import cursor_on
 
 browser = "firefox"
 
@@ -22,7 +23,7 @@ def html():
     man()
     # build the docs locally and view
     local("cd docs; make html")
-
+    cursor_on()
 
 @task
 def publish():
