@@ -8,18 +8,17 @@ Tips for Editing
 Aptana Studio - Develpment Environment(optional)
 ======================================================================
 
-A good IDE for python development for Python is `Aptana Studio 
-<http://www.aptana.com/>`_, which is based
-on eclipse . It contains the ability to directly import packages from
-github by filling out a simple form. So instead of using the
-command line github tool you can use the Aptana Studio version. It
-also contains a very nice way of managing your commits while allowing
-you to select via a GUI the files you have changed and commit them
-with a nice commit message. Pull and Push functions are also
-available. Having said that there is some advantage of using the
-Aptana GUI tools for git as it makes it easier. Aptana Studio has also the
-ability to use emacs key mappings, which is a real nice
-feature. Naturally not all of emacs is supported.
+A good IDE for python development for Python is `Aptana Studio
+<http://www.aptana.com/>`_, which is based on eclipse . It contains
+the ability to directly import packages from github by filling out a
+simple form. So instead of using the command line github tool you can
+use the Aptana Studio version. It also contains a very nice way of
+managing your commits while allowing you to select via a GUI the files
+you have changed and commit them with a nice commit message. Pull and
+Push functions are also available. Having said that there is some
+advantage of using the Aptana GUI tools for git as it makes it
+easier. Aptana Studio has also the ability to use emacs key mappings,
+which is a real nice feature. Naturally not all of emacs is supported.
 
 For those new to python an the project we recommend you use it for
 development.
@@ -97,20 +96,17 @@ Python Tools
 Git Pull Request
 ======================================================================
 
-Note that you should already have a github account before you can
-perform the following actions.
-
-Visit the site below::
+To contribute to cloudmesh you need to have a github acoount while
+using git pull requests. To nitiate a pull request please go to::
 
 	https://github.com/cloudmesh/cloudmesh
 
-On the right hand side of the page click of "Fork"
+On the right hand side of the page click of "Fork".
 
-A question of "where should we fork this repository" appears, hence
-click on your name/profile.
+A question of "where should we fork this repository" appears. You can
+now click on your name/profile.
 
-A page with your account name/cloudmesh is loaded to your site,
-for example::
+A page with your account name/cloudmesh is loaded to your site::
 
 	<yourusername>/cloudmesh
 
@@ -119,28 +115,38 @@ url might look like::
 
     https://github.com/<yourusername>/cloudmesh
 
-In your linux machine, get into your github directory::
-
+To work locally on this cloned copy, you can download it while
+creating first a github directory in which you checkout the cloudmesh
+code. We recommend to use it this way because many cloudmesh core
+developers do manage their similar. Hence, if you have not created a
+github directory you can do it with::
+    
 	cd github
 
-Then, paste the previously obtained clone url into your linux machine's 
-terminal, e.g.::
+Now paste the url for the clone and do a git cone. Replace the
+<yourusername> with the github username that you used to fork the
+cloudmesh code::
 
 	git clone https://github.com/<yourusername>/cloudmesh
 
-Make the change in the document which you want to update, then commit
-and push the repository to be up-to date with the master branch.
+Make the change in the local copy of the code and than commit and push
+the repository back. We recommend that you use the master branch. In
+some cases it may be better to use the current development
+branch. Please coordinate with the team which one is more appropriate.
 
-Back on the right side of the web page click on::
+Now you need to tell the cloudmesh team about your proposed
+changes. This is done with a pull request. E.g. you tell the team to
+include your changes into the main master. Back on the right side of
+the web page click on::
 
 	"Pull Requests"
 
-Again, on the right side of the web page click on:: 
+And initiate a:: 
 
 	"New pull request"
 
-This should take you to the page where the changes made are compared
-with the former document.
+This will take you to the page where your changes are contrasted with
+the main repository.
 
 Then, on the left side of the page click on::
 
@@ -151,3 +157,11 @@ Fill in the "Title" and "Leave a comment" fields
 Finally, at the lower right of the comment field click on::
 
 	"Create pull request"
+
+A team member will review your changes and integrate them
+accordingly. You will probably get an e-mail with more
+information. Furthermore you can see in the contributors graph your
+contribution to cloudmesh assureing that you are properly
+acknowledged.
+
+	
