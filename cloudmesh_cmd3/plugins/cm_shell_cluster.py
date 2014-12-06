@@ -19,12 +19,13 @@ from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh_common.util import get_rand_string
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_install.util import yn_choice
+from cloudmesh.util.shellutil import shell_commands_dict_output
 
 log = LOGGER(__file__)
 
 class cm_shell_cluster:
 
-    _id = "t_stacks"
+    _refreshid = "t_stacks"
 
     def activate_cm_shell_cluster(self):
         self.register_command_topic('cloud', 'cluster')
@@ -138,7 +139,7 @@ class cm_shell_cluster:
         elif arguments['list']:
             userid = self.cm_config.username()
             self.cm_mongo.activate(userid)
-            self.cm_mongo.refresh(cm_user_id=userid, types=[self._id])
+            self.cm_mongo.refresh(cm_user_id=userid, types=[self._refreshid])
             stacks = self.cm_mongo.stacks(cm_user_id=userid)
             launchers = self.filter_launcher(
                 stacks,
@@ -154,10 +155,10 @@ class cm_shell_cluster:
                     d[v1['id']] = v1
             columns = ['stack_name', 'description', 'stack_status',
                        'creation_time', 'cm_cloud']
-            if arguments['--column'] and arguments['--column'] != "all":
+            if '--column' in arguments and arguments['--column'] != "all":
                 columns = [x.strip() for x in arguments['--column'].split(',')]
 
-            if arguments['--format']:
+            if '--format' in arguments:
                 if arguments['--format'] not in ['table', 'json', 'csv']:
                     Console.error("please select printing format among table, json and csv")
                     return
@@ -166,11 +167,10 @@ class cm_shell_cluster:
             else:
                 p_format = None
 
-            shell_commands_dict_output(d,
+            shell_commands_dict_output(userid, d,
                                        print_format=p_format,
                                        firstheader="launcher_id",
                                        header=columns
-                                       # vertical_table=True
                                        )
 
         elif arguments['login']:
@@ -208,7 +208,8 @@ class cm_shell_cluster:
 
             
             temp_key_name = "sshkey_temp"
-            _key = "-i ./{0}/{1}".format(dir_name, temp_key_name)
+            _key = ""
+            #_key = "-i ./{0}/{1}".format(dir_name, temp_key_name)
             StrictHostKeyChecking = "-o StrictHostKeyChecking=no"
             
             res = None
