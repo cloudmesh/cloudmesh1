@@ -15,6 +15,7 @@ from cloudmesh.config.cm_config import cm_config_server
 
 log = LOGGER(__file__)
 
+
 def isyes(value):
     check = str(value).lower()
     if check in ['true', 'false', 'y', 'n', 'yes', 'no']:
@@ -23,14 +24,15 @@ def isyes(value):
         print ("parameter not in", ['true', 'false', 'y', 'n', 'yes', 'no'])
         print ("found", value, check)
         sys.exit()
-    
+
+
 class cloudmesh_server(object):
 
     def __init__(self):
 
         self.server_env = {
-            "name" : "server"
-            }
+            "name": "server"
+        }
 
         self.rabbit_env = {
             'rabbitmq_server': "sudo rabbitmq-server",
@@ -49,17 +51,16 @@ class cloudmesh_server(object):
         import cloudmesh_web
         # self.server_env['location'] = os.path.dirname(cloudmesh_web.__file__)
         self.server_env['location'] = "./cloudmesh_web"
-        
 
     def info(self):
         print (self.server_env)
-        
+
     def start(self, server="server", browser='yes', debug=False):
         """starts in dir webgui the program server.py and displays a browser on the
             given port and link
         """
         self._start_web_server()
-        self._start_mongo()        
+        self._start_mongo()
         # banner("KILL THE SERVER", debug=debug)
         # kill(debug=debug)
 
@@ -77,21 +78,18 @@ class cloudmesh_server(object):
         #        "fab queue.flower_server",
         #        debug)
 
-        
         pass
 
     def stop(self):
         self._stop_web_server()
-        self._stop_mongo()    
+        self._stop_mongo()
 
-
-    
     def status(self):
         pass
 
     # ######################################################################
     # WEB SERVER
-    # ######################################################################    
+    # ######################################################################
 
     def _stop_web_server(self):
         # stop web server
@@ -99,10 +97,10 @@ class cloudmesh_server(object):
         try:
             result = sh.fgrep(
                 sh.fgrep(
-                    sh.ps("-ax"),"python {name}.py".format(**self.server_env)),
-                    "-v", "fgrep").split("\n")[:-1]
+                    sh.ps("-ax"), "python {name}.py".format(**self.server_env)),
+                "-v", "fgrep").split("\n")[:-1]
             print (result)
-            
+
             for line in result:
                 if line is not '':
                     pid = line.split(" ")[0]
@@ -118,7 +116,7 @@ class cloudmesh_server(object):
             print ("INFO: cloudmesh web server not running")
 
     def _start_web_server(self):
-        #from cloudmesh_web import server as cloudmesh_web_server_start
+        # from cloudmesh_web import server as cloudmesh_web_server_start
         banner("start the web server")
         cwd = sh.pwd()
         sh.cd(self.server_env['location'])
@@ -127,7 +125,7 @@ class cloudmesh_server(object):
 
     # ######################################################################
     # MONGO SERVER
-    # ######################################################################    
+    # ######################################################################
 
     def _start_mongo(auth=True):
         """
@@ -142,18 +140,18 @@ class cloudmesh_server(object):
         if not os.path.exists(path):
             print ("Creating mongodb directory in {0}".format(path))
             sh.mkdir("-p", path)
-        try:    
-            lines = sh.grep(sh.ps("-ax"), "'[m]ongod.*port {0}'".format(port)).split("\n")[:-1]
+        try:
+            lines = sh.grep(
+                sh.ps("-ax"), "'[m]ongod.*port {0}'".format(port)).split("\n")[:-1]
             if lines != ['']:
                 pid = lines[0].split(" ")[0]
                 print ("NO ACTION: mongo already running in pid {0} for port {1}"
-                    .format(pid, port))
+                       .format(pid, port))
             return
-                        
+
         except Exception, e:
             print ("INFO: No cloudmesh mongo server running")
 
-            
         print ("ACTION: Starting mongod")
         print
         print ("NOTE: the preparation of mongo may take a few minutes")
@@ -170,7 +168,6 @@ class cloudmesh_server(object):
                   "--port",  port,
                   _bg=True)
 
-
     def _stop_mongo(self, server="server", browser='yes', debug=False):
         """starts in dir webgui the program server.py and displays a browser on the
             given port and link
@@ -180,8 +177,8 @@ class cloudmesh_server(object):
         except:
             print ("INFO: cloudmesh mongo server not running")
 
-            
-'''        
+
+'''
         banner("KILL THE SERVER", debug=debug)
         kill(debug=debug)
 
@@ -189,7 +186,7 @@ class cloudmesh_server(object):
                         "python setup.py install",
                         debug=debug)
 
-        
+
         mongo.start()
         # execute_command("START MONGO",
         #            "fab mongo.start",
@@ -254,9 +251,10 @@ class cloudmesh_server(object):
             rabbit_env["RABBITMQ_LOG_BASE"] = location
             os.environ["RABBITMQ_MNESIA_BASE"] = location
             os.environ["RABBITMQ_LOG_BASE"] = location
-            rabbit_env[
-                "rabbitmq_server"] = "/usr/local/opt/rabbitmq/sbin/rabbitmq-server"
-            rabbit_env["rabbitmqctl"] = "/usr/local/opt/rabbitmq/sbin/rabbitmqctl"
+            rabbit_env["rabbitmq_server"] = \
+                "/usr/local/opt/rabbitmq/sbin/rabbitmq-server"
+            rabbit_env["rabbitmqctl"] = \
+                "/usr/local/opt/rabbitmq/sbin/rabbitmqctl"
         elif sys.platform == "linux2":
             mkdir("-p", location)
             rabbit_env["RABBITMQ_MNESIA_BASE"] = location
@@ -266,11 +264,11 @@ class cloudmesh_server(object):
             rabbit_env["rabbitmq_server"] = "/usr/sbin/rabbitmq-server"
             rabbit_env["rabbitmqctl"] = "/usr/sbin/rabbitmqctl"
         else:
-            print("WARNING: cloudmesh rabbitmq user install not supported, " 
+            print("WARNING: cloudmesh rabbitmq user install not supported, "
                   "using system install")
 
 '''
- 
+
 if __name__ == '__main__':
     server = cloudmesh_server()
     server.info()
@@ -278,4 +276,3 @@ if __name__ == '__main__':
     # server.stop()
     # server._start_mongo()
     server.stop()
-    
