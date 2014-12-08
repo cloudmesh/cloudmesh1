@@ -28,6 +28,9 @@ def isyes(value):
 
 class cloudmesh_server(object):
 
+    def _ps(self):
+        return sh.ps("-ax",_tty_out=False)
+    
     def __init__(self):
 
         self.server_env = {
@@ -54,7 +57,11 @@ class cloudmesh_server(object):
 
     def info(self):
         print (self.server_env)
-
+        d = {}
+        d['mongo'] = self._info_mongo()['pid']
+        
+        print ("Mongo", mongo_server['pid'])
+        
     def start(self):
         """starts in dir webgui the program server.py and displays a browser on the
             given port and link
@@ -87,6 +94,7 @@ class cloudmesh_server(object):
     def status(self):
         pass
 
+    
     # ######################################################################
     # WEB SERVER
     # ######################################################################
@@ -96,7 +104,7 @@ class cloudmesh_server(object):
         banner("stop the web server")
         try:
             result = sh.fgrep(
-                sh.fgrep(sh.ps("-ax"),
+                sh.fgrep(self._ps(),
                 "python {name}.py".format(**self.server_env)),
                 "-v", "fgrep"
             ).split("\n")[:-1]
@@ -126,6 +134,31 @@ class cloudmesh_server(object):
     # MONGO SERVER
     # ######################################################################
 
+    def _info_mongo(self):
+        config = cm_config_server().get("cloudmesh.server.mongo")
+        path = path_expand(config["path"])
+        port = config["port"]
+        print (config)
+        print(port, path)
+        
+        d = {
+            'pid': None,
+            'port': None,
+            'command': None
+        }
+
+        try:
+            lines = sh.grep(sh.grep(self._ps(), "mongod"), "log").split("\n")[:-1]
+            if lines != ['']:
+                (pid) = lines[0].split(" ")[0]
+                d = {'pid': pid,
+                    'port': port,
+                    'command': lines}
+        except:
+            pass
+        return d
+
+                
     def _start_mongo(self):
         """
         start the mongod service in the location as specified in
@@ -136,14 +169,15 @@ class cloudmesh_server(object):
         path = path_expand(config["path"])
         port = config["port"]
 
+        banner("creating dir")
         if not os.path.exists(path):
             print ("Creating mongodb directory in {0}".format(path))
             sh.mkdir("-p", path)
+        banner ("check")
         try:
-            lines = sh.grep(
-                sh.ps("-ax"),
-                "'[m]ongod.*port {0}'".format(port)
-            ).split("\n")[:-1]
+            lines = sh.grep(sh.grep(sh.ps("-ax"), "mongod"), "log")
+            banner("LINES")
+            print (lines)
             if lines != ['']:
                 pid = lines[0].split(" ")[0]
                 print ("NO ACTION: mongo already running in pid "
@@ -153,6 +187,9 @@ class cloudmesh_server(object):
         except Exception, e:
             print ("INFO: No cloudmesh mongo server running")
 
+        banner("LLLLLL")
+        print (lines)
+            
         print ("ACTION: Starting mongod")
         print
         print ("NOTE: the preparation of mongo may take a few minutes")
@@ -180,19 +217,6 @@ class cloudmesh_server(object):
 
 
 '''
-        banner("KILL THE SERVER", debug=debug)
-        kill(debug=debug)
-
-        execute_command("INSTALL CLOUDMESH",
-                        "python setup.py install",
-                        debug=debug)
-
-
-        mongo.start()
-        # execute_command("START MONGO",
-        #            "fab mongo.start",
-        #            debug)
-
         queue.start()
         # execute_command("START RABITMQ",
         #        "fab queue.start", debug)
@@ -267,13 +291,14 @@ class cloudmesh_server(object):
         else:
             print("WARNING: cloudmesh rabbitmq user install not supported, "
                   "using system install")
-
 '''
 
 if __name__ == '__main__':
     server = cloudmesh_server()
     server.info()
+  
     # server.start()
     # server.stop()
-    # server._start_mongo()
-    server.stop()
+    #server._start_mongo()
+    # server.stop()
+
