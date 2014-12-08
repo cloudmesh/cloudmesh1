@@ -48,14 +48,14 @@ class cloudmesh_server(object):
             banner()
             print (e)
             banner()
-        import cloudmesh_web
+        # import cloudmesh_web
         # self.server_env['location'] = os.path.dirname(cloudmesh_web.__file__)
         self.server_env['location'] = "./cloudmesh_web"
 
     def info(self):
         print (self.server_env)
 
-    def start(self, server="server", browser='yes', debug=False):
+    def start(self):
         """starts in dir webgui the program server.py and displays a browser on the
             given port and link
         """
@@ -96,9 +96,10 @@ class cloudmesh_server(object):
         banner("stop the web server")
         try:
             result = sh.fgrep(
-                sh.fgrep(
-                    sh.ps("-ax"), "python {name}.py".format(**self.server_env)),
-                "-v", "fgrep").split("\n")[:-1]
+                sh.fgrep(sh.ps("-ax"),
+                "python {name}.py".format(**self.server_env)),
+                "-v", "fgrep"
+            ).split("\n")[:-1]
             print (result)
 
             for line in result:
@@ -118,8 +119,6 @@ class cloudmesh_server(object):
     def _start_web_server(self):
         # from cloudmesh_web import server as cloudmesh_web_server_start
         banner("start the web server")
-        cwd = sh.pwd()
-        sh.cd(self.server_env['location'])
         os.system("cd cloudmesh_web; python server.py &")
         time.sleep(4)
 
@@ -127,7 +126,7 @@ class cloudmesh_server(object):
     # MONGO SERVER
     # ######################################################################
 
-    def _start_mongo(auth=True):
+    def _start_mongo(self):
         """
         start the mongod service in the location as specified in
         cloudmesh_server.yaml
@@ -142,11 +141,13 @@ class cloudmesh_server(object):
             sh.mkdir("-p", path)
         try:
             lines = sh.grep(
-                sh.ps("-ax"), "'[m]ongod.*port {0}'".format(port)).split("\n")[:-1]
+                sh.ps("-ax"),
+                "'[m]ongod.*port {0}'".format(port)
+            ).split("\n")[:-1]
             if lines != ['']:
                 pid = lines[0].split(" ")[0]
-                print ("NO ACTION: mongo already running in pid {0} for port {1}"
-                       .format(pid, port))
+                print ("NO ACTION: mongo already running in pid "
+                       "{0} for port {1}".format(pid, port))
             return
 
         except Exception, e:
@@ -168,7 +169,7 @@ class cloudmesh_server(object):
                   "--port",  port,
                   _bg=True)
 
-    def _stop_mongo(self, server="server", browser='yes', debug=False):
+    def _stop_mongo(self):
         """starts in dir webgui the program server.py and displays a browser on the
             given port and link
         """
