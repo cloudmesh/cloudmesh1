@@ -12,7 +12,7 @@ class Clusters(object):
     def __init__(self):
         self.config = cm_config()
         self.mongodb = cm_mongo()
-        self.user = cm_user()
+        self.user = self.config.username()
         pass
 
     def defaults(self, default_dict):
