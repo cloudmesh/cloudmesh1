@@ -1,5 +1,10 @@
 from __future__ import print_function
 
+import subprocess
+import json
+import hostlist
+from cloudmesh_install import config_file
+from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_install.util import banner
 import sys
@@ -8,6 +13,7 @@ import sh
 import time
 from cloudmesh_install.util import path_expand
 from cloudmesh.config.cm_config import cm_config_server
+from pprint import pprint
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -54,13 +60,32 @@ class cloudmesh_server(object):
         # import cloudmesh_web
         # self.server_env['location'] = os.path.dirname(cloudmesh_web.__file__)
         self.server_env['location'] = "./cloudmesh_web"
+        celery_config = ConfigDict(
+            filename=config_file("/cloudmesh_celery.yaml"),
+            kind="worker")
+        self.workers = celery_config.get("cloudmesh.workers")
 
+        for worker in self.workers:
+            self.workers[worker]["hostlist"] = hostlist.expand_hostlist(
+                "{0}[1-{1}]".format(self.workers[worker]["id"], self.workers[worker]["count"]))
+        print(json.dumps(self.workers,indent=4))
+
+        self.celery_cmd = sh.which("celery")
+        #print ("CCCC", self.celery_cmd)
+        #sys.exit()
+                    
     def info(self):
-        print (self.server_env)
+        #
+        # getting the basic mongo info
+        #
+        banner("mongo info")
         d = {}
-        d['mongo'] = self._info_mongo()['pid']
-        
-        print ("Mongo", mongo_server['pid'])
+        d['mongo'] = self._info_mongo()
+        print ("Mongo pid", d['mongo']['pid'])
+        print ("Mongo port", d['mongo']['port'])        
+
+        d['celery'] = self._info_celery()
+        pprint(d)
         
     def start(self):
         """starts in dir webgui the program server.py and displays a browser on the
@@ -131,6 +156,73 @@ class cloudmesh_server(object):
         time.sleep(4)
 
     # ######################################################################
+    # CELERY SERVER
+    # ######################################################################
+        
+    def _info_celery(self):
+        d = {}
+
+        try:
+            lines = sh.grep(sh.grep(self._ps(), "celery"), "worker").split("\n")[:-1]
+            for line in lines:
+                (pid, command) = line.lstrip().split(" ", 1)
+                d[pid] = line
+        except:
+            pass
+        return d
+
+
+    def _stop_celery(self):
+        processes = self._info_celery()
+        print (processes.keys())
+        for pid in processes:
+            try:
+                sh.kill("-9", str(pid))
+            except Exception, e:
+                print (pid, " process already deleted")
+
+    def _celery_command(self, command, app, workers, queue, concurrency=None):
+        """execute the celery command on the application and workers specified"""
+        worker_str = " ".join(workers)
+        parameter_string = "celery multi {0} {1} -A {2} -l info -Q {3}".format(
+            command, worker_str, app, queue)
+        # directories for log and pid file
+        celery_dir = path_expand("~/.cloudmesh/celery")
+        sh.mkdir("-p", celery_dir)
+        parameter_string += " --pidfile=\"{0}/%n.pid\" ".format(celery_dir)
+        parameter_string += " --logfile=\"{0}/%n.log\" ".format(celery_dir)
+        if concurrency is not None:
+            parameter_string += " --concurrency={0}".format(concurrency)
+        print(parameter_string)
+        proc = subprocess.Popen(parameter_string,
+                                shell=True,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                                )
+        stdout_value, stderr_value = proc.communicate()
+        
+        #print (stdout_value)
+        #print (stderr_value)        
+
+
+    def _start_celery(self):
+        # mq.start()
+
+        for worker in self.workers:
+            print (worker)
+            print (json.dumps(self.workers[worker]))
+            concurrency = None
+            if "concurrency" in self.workers[worker]:
+                concurrency = self.workers[worker]["concurrency"]
+            self._celery_command(
+                "start",
+                self.workers[worker]["app"],
+                self.workers[worker]["hostlist"],
+                self.workers[worker]["queue"],
+                concurrency=concurrency)
+
+        
+    # ######################################################################
     # MONGO SERVER
     # ######################################################################
 
@@ -138,8 +230,8 @@ class cloudmesh_server(object):
         config = cm_config_server().get("cloudmesh.server.mongo")
         path = path_expand(config["path"])
         port = config["port"]
-        print (config)
-        print(port, path)
+        # print (config)
+        # print(port, path)
         
         d = {
             'pid': None,
@@ -150,7 +242,7 @@ class cloudmesh_server(object):
         try:
             lines = sh.grep(sh.grep(self._ps(), "mongod"), "log").split("\n")[:-1]
             if lines != ['']:
-                (pid) = lines[0].split(" ")[0]
+                (pid) = lines[0].lstrip().split(" ")[0]
                 d = {'pid': pid,
                     'port': port,
                     'command': lines}
@@ -299,6 +391,8 @@ if __name__ == '__main__':
   
     # server.start()
     # server.stop()
-    #server._start_mongo()
+    # server._start_mongo()
     # server.stop()
 
+    server._stop_celery()
+    server._start_celery()    
