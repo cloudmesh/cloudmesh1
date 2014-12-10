@@ -1,13 +1,12 @@
 from __future__ import print_function
-from cmd3.shell import command
 import sys
 import os
 import time
 import json
-from cmd3.console import Console
-from pprint import pprint
 from sh import cm
-import sh
+from pprint import pprint
+from cmd3.console import Console
+from cmd3.shell import command
 from cloudmesh.iaas.cm_vm import VMcommand
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
@@ -29,6 +28,16 @@ class cm_shell_cluster:
 
     def activate_cm_shell_cluster(self):
         self.register_command_topic('cloud', 'cluster')
+
+    def get_cloud_name(self, cm_user_id):
+        """Returns a default cloud name if exists
+        """
+        try:
+            return self.cm_user.get_defaults(cm_user_id)['nova-cloud']
+        except KeyError:
+            log.error('Set OpenStack as a default cloud. '
+                      '"stack" ONLY works with openstack platform.')
+            return None
 
     @command
     def do_cluster(self, args, arguments):
@@ -79,7 +88,7 @@ class cm_shell_cluster:
         #pprint(arguments)
         self.cm_config = cm_config()
         self.cm_mongo = cm_mongo()
-        self.user = cm_user()
+        self.cm_user = cm_user()
        
         # -----------------------------
         # TODO::
@@ -95,7 +104,7 @@ class cm_shell_cluster:
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
             
-            userinfo = self.user.info(userid)
+            userinfo = self.cm_user.info(userid)
             if "key" in userinfo["defaults"]:
                 key = userinfo["defaults"]["key"]
             elif len(userinfo["keys"]["keylist"].keys()) > 0:
