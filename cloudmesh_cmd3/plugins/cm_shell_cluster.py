@@ -242,28 +242,32 @@ class cm_shell_cluster:
                     return
                 else:
                     vm_login_name = arguments['--ln']
+            # Moved the import inside of this function
+            # If this import goes up to the top, monodb connection will be
+            # estabilished. Due to that reason, this import stays here
+            # Hyungro Lee 12/01/2014
+            from cloudmesh.experiment.group import GroupManagement
+            GroupManage = GroupManagement(username)
+            groups_list = GroupManage.get_groups_names_list()
+            vms_in_group_list = {}
+            if GroupName in groups_list:
+                vms_in_group_list = GroupManage.list_items_of_group(GroupName, _type="VM")["VM"]
+
+            if not arguments['--force'] and len(vms_in_group_list) != 0:
+                if yn_choice("The group you provide exists and it has VMs in it, " + \
+                             "do you want to proceed? (if you choose yes, these exist " +\
+                             "VMs will be included in the cluster, this could also " +\
+                             "rewrite the key on the exist VMs)",
+                             default='n',
+                             tries=3):
+                    pass
+                else:
+                    return
             
-            if not arguments['--force']:
-                # Moved the import inside of this function
-                # If this import goes up to the top, monodb connection will be
-                # estabilished. Due to that reason, this import stays here
-                # Hyungro Lee 12/01/2014
-                from cloudmesh.experiment.group import GroupManagement
-                GroupManage = GroupManagement(username)
-                groups_list = GroupManage.get_groups_names_list()
-                if GroupName in groups_list:
-                    vms_in_group_list = GroupManage.list_items_of_group(GroupName, _type="VM")["VM"]
-                    if len(vms_in_group_list) != 0:
-                        if yn_choice("The group you provide exists and it has VMs in it, " + \
-                                     "do you want to proceed? (if you choose yes, these exist " +\
-                                     "VMs will be included in the cluster, this could also " +\
-                                     "rewrite the key on the exist VMs)",
-                                     default='n',
-                                     tries=3):
-                            pass
-                        else:
-                            return
-                
+            if GroupName not in groups_list:
+                GroupManage.create_group(GroupName)
+            GroupManage.add_tag_to_group(GroupName, "cluster")
+
             # start VMs 
             print ("starting VMs...")
             arguments_temp = arguments
