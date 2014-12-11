@@ -25,6 +25,7 @@ log = LOGGER(__file__)
 class cm_shell_cluster:
 
     _refreshid = "t_stacks"
+    cluster_tag = "cluster" # tag name
 
     def activate_cm_shell_cluster(self):
         self.register_command_topic('cloud', 'cluster')
@@ -121,7 +122,7 @@ class cm_shell_cluster:
                 return
             
             clustername = arguments['CLUSTER_NAME']
-            s_name = "cluster-{0}-{1}-{2}".format(userid, clustername, get_rand_string())
+            s_name = "{0}-{1}-{2}-{3}".format(self.cluster_tag, userid, clustername, get_rand_string())
             # TEMP FOR HADOOP CLUSTER
             if clustername != "hadoop":
                 Console.warning('hadoop is only available cluster')
@@ -154,7 +155,7 @@ class cm_shell_cluster:
                 stacks,
                 {"search": "contain",
                  "key": "stack_name",
-                 "value": "launcher"}
+                 "value": self.cluster_tag }
                 )
             log.debug(launchers)
 
@@ -178,7 +179,7 @@ class cm_shell_cluster:
 
             shell_commands_dict_output(userid, d,
                                        print_format=p_format,
-                                       firstheader="launcher_id",
+                                       firstheader="id",
                                        header=columns
                                        )
 
