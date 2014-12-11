@@ -47,7 +47,7 @@ class cm_shell_cluster:
             cluster start CLUSTER_NAME
             cluster list
             cluster login CLUSTER_NAME
-            cluster stop CLUSTER_NAME
+            cluster stop STACK_NAME
             cluster create --count=<count>
                            --group=<group>
                            [--ln=<LoginName>]
