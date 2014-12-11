@@ -26,8 +26,12 @@ resources:
   floating_ip:
     type: AWS::EC2::EIP
     properties:
-       InstanceId: { get_resource: hadoop1 }
-       InstanceId: { get_resource: hadoop2 }
+       InstanceId: { get_resource: 'hadoop1' }
+  floating_ip:
+    type: AWS::EC2::EIP
+    properties:
+       InstanceId: { get_resource: 'hadoop2' }
+
 
   hadoop1:
     type: OS::Nova::Server
