@@ -7,12 +7,12 @@ from sh import cm
 from pprint import pprint
 from cmd3.console import Console
 from cmd3.shell import command
-from cloudmesh.iaas.cm_vm import VMcommand
+from cloudmesh.shell.cm_vm import VMcommand
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_keys import cm_keys_mongo
 from cloudmesh.user.cm_user import cm_user
-from cloudmesh.iaas.cm_cloud import CloudManage
+from cloudmesh.shell.cm_cloud import CloudManage
 from cloudmesh.util.ssh import generate_keypair
 from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh_common.util import get_rand_string

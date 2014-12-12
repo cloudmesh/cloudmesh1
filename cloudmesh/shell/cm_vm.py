@@ -2,7 +2,7 @@ from __future__ import print_function
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh_common.logger import LOGGER
-from cloudmesh.iaas.cm_cloud import CloudManage
+from cloudmesh.shell.cm_cloud import CloudManage
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.ssh import ssh_execute
 from cloudmesh import banner

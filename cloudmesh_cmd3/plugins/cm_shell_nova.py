@@ -3,7 +3,7 @@ import os
 import sys
 from cmd3.shell import command
 from cloudmesh.user import cm_rc
-from cloudmesh.iaas.cm_cloud import CloudManage
+from cloudmesh.shell.cm_cloud import CloudManage
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.tables import row_table
