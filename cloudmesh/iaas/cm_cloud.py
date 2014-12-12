@@ -17,6 +17,7 @@ import json
 log = LOGGER(__file__)
 
 
+
 def shell_command_cloud(arguments):
     """
     ::

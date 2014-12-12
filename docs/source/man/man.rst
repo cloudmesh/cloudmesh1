@@ -89,7 +89,7 @@ Command - cloud::
                              columns active and label. Available
                              columns are active, label, host,
                              type/version, type, heading, user,
-                             credentials, defaults (all to diplay all,
+                             credentials, defaults (all to display all,
                              semiall to display all except credentials
                              and defaults)
     
@@ -356,6 +356,40 @@ Command - deploy::
     
     
 
+docker
+----------------------------------------------------------------------
+
+Command - docker::
+
+    Usage:
+        docker service start CLOUD
+        docker service cloud list
+        docker service cloud delete
+        docker container create NAME IMAGE
+        docker container start NAME
+        docker container stop NAME
+        docker container list
+        docker container delete NAME
+        docker container attach NAME
+        docker container pause NAME
+        docker container unpause NAME
+        docker images list
+    
+    Manages a virtual docker on a cloud
+    
+    Arguments:
+    
+      NAME     The name of the docker
+      WORKERS  The number of workers in the virtual docker
+      CLOUD    The name of the cloud on which the virtual docker
+               is to be deployed
+    
+    Options:
+    
+       -v       verbose mode
+    
+    
+
 dot2
 ----------------------------------------------------------------------
 
@@ -514,6 +548,64 @@ Command - group::
     
         group show sample vm --format=json
             list all VMs of group sample in json format
+    
+    Example:
+    
+       group create experiment_1
+       vm start
+       last = vm label
+       group add experiment_1 vm last
+    
+       group create experiment_2
+       vm start
+       last = vm info label  # prints the vm label /prefix + number
+       ipno = vm info ip # prints the ip of the last vm
+       ipno = vm info ip gvonlasz_1  # get ip of vm with label gvonlasz_1
+    
+       group add expermiment_2 ip ipno
+    
+       groups are just tuples
+    
+       i can have multiple Kinds in the tuple
+    
+    mongoengine
+    
+    class groupObject
+    
+        def add (... name, kind, attribute ...)
+        def printer ( ... kind, printfunction, name...)
+        def getter ( .... kind, name)
+    
+    def getter ( .... kind, name ...)
+    
+       if kind == "vm":
+          vm = get vm from mongo
+          return vm
+       elif kind = "image"
+          iamge = get image from mongo
+          return iamge
+       ....
+    
+    def vmPrinter ( .... vm ...)
+    
+       print vm.ip
+       print vm.name
+       ....
+    
+    def imagePrinter ( .... image ...)
+    
+       print image.size
+       print image.name
+       ....
+    
+    
+    
+    g = groupObject()
+    g.printer("vm", cmPrinter)
+    g.printer("image", imagePrinter)
+    
+    
+    
     
     
 
@@ -713,7 +805,7 @@ Command - key::
     key list --source=ssh  [--dir=DIR] [--format=FORMAT]
     
        lists all keys in the directory. If the directory is not
-       specified the defualt will be ~/.ssh
+       specified the default will be ~/.ssh
     
     key list --source=yaml  [--dir=DIR] [--format=FORMAT]
     
@@ -761,8 +853,8 @@ Command - label::
     
     Description:
     
-        A command to set the prefix and id for creating an automatic
-        lable for VMs. Without paremeter it prints the currect label.
+        A command to set a prefix and an id for a name of VM. 
+        Without a paremeter, it prints a current label.
     
     
 
@@ -992,7 +1084,7 @@ Command - metric::
           }
     
      Examples:
-         $ cm-metric openstack -c india -u hrlee
+         $ cm-metric openstack -c india -u albert
          - Get user statistics
     
     
@@ -1605,19 +1697,19 @@ Command - vm::
                  [--image=<imgName>|--imageid=<imgId>]
                  [--flavor=<flavorName>|--flavorid=<flavorId>]
                  [--group=<group>]
-        vm delete [NAME|--id=<id>] 
+        vm delete [NAME|--id=<id>]
                   [--group=<group>]
                   [--cloud=<CloudName>]
                   [--prefix=<prefix>|--names=<hostlist>]
                   [--force]
-        vm ip assign (NAME|--id=<id>) 
+        vm ip assign (NAME|--id=<id>)
                      [--cloud=<CloudName>]
-        vm ip show [NAME|--id=<id>] 
+        vm ip show [NAME|--id=<id>]
                    [--group=<group>]
                    [--cloud=<CloudName>]
                    [--prefix=<prefix>|--names=<hostlist>]
-                   [--format=FORMAT] 
-                   [--refresh] 
+                   [--format=FORMAT]
+                   [--refresh]
         vm login (--name=<vmname>|--id=<id>|--addr=<address>) --ln=<LoginName>
                  [--cloud=<CloudName>]
                  [--key=<key>]
@@ -1626,17 +1718,17 @@ Command - vm::
                  [--cloud=<CloudName>]
                  [--key=<key>]
                  [--] [<command>...]
-        vm list [CLOUD|--all] 
-                [--refresh] 
-                [--format=FORMAT] 
+        vm list [CLOUD|--all]
+                [--refresh]
+                [--format=FORMAT]
                 [--column=COLUMN]
                 [--group=<group>]
     
     Arguments:
         <command>              positional arguments, the commands you want to
-                               execute on the server(e.g. ls -a), you will get 
-                               a return of executing result instead of login to 
-                               the server, note that type in -- is suggested before 
+                               execute on the server(e.g. ls -a), you will get
+                               a return of executing result instead of login to
+                               the server, note that type in -- is suggested before
                                you input the commands
         NAME                   server name
     
@@ -1651,13 +1743,13 @@ Command - vm::
         --id=<id>              give the server id
         --image=<imgName>      give the name of the image
         --imageid=<imgId>      give the id of the image
-        --key=<key>            spicfy a private key to use, input a string which 
+        --key=<key>            spicfy a private key to use, input a string which
                                is the full path to the key file
-        --ln=<LoginName>       give the login name of the server that you want 
+        --ln=<LoginName>       give the login name of the server that you want
                                to login
         --name=<vmname>        give the name of the virtual machine
-        --names=<hostlist>     give the VM name, but in a hostlist style, which is very 
-                               convenient when you need a range of VMs e.g. sample[1-3] 
+        --names=<hostlist>     give the VM name, but in a hostlist style, which is very
+                               convenient when you need a range of VMs e.g. sample[1-3]
                                => ['sample1', 'sample2', 'sample3']
                                sample[1-3,18] => ['sample1', 'sample2', 'sample3', 'sample18']
         --prefix=<prefix>      give the prefix of the server, standand server
@@ -1692,7 +1784,7 @@ Command - vm::
                 group name is test and the VM names are among sample_1 ... sample_9
     
         vm ip show --names=sample_[1-5,9] --format=json
-                show the ips of VM names among sample_1 ... sample_5 and sample_9 in 
+                show the ips of VM names among sample_1 ... sample_5 and sample_9 in
                 json format
     
     
@@ -1816,11 +1908,11 @@ Command - yaml::
     Provides yaml information or updates yaml on a given replacement
     
     Arguments:
-        KIND    The typye of the yaml file (server, user) 
-        KEY     Key name of the nested dict e.g. cloudmesh.server.loglevel
-        VALUE   Value to set on a given KEY
-        FILENAME      cloudmesh.yaml or cloudmesh_server.yaml
-        FORMAT         The format of the output (table, json, yaml)
+        KIND        The type of the yaml file (server, user) 
+        KEY         Key name of the nested dict e.g. cloudmesh.server.loglevel
+        VALUE       Value to set on a given KEY
+        FILENAME    cloudmesh.yaml or cloudmesh_server.yaml
+        FORMAT      The format of the output (table, json, yaml)
     
     Options:
     

@@ -35,8 +35,8 @@ def isyes(value):
 class cloudmesh_server(object):
 
     def _ps(self):
-        return sh.ps("-ax",_tty_out=False)
-    
+        return sh.ps("-ax", _tty_out=False)
+
     def __init__(self):
 
         self.server_env = {
@@ -67,13 +67,14 @@ class cloudmesh_server(object):
 
         for worker in self.workers:
             self.workers[worker]["hostlist"] = hostlist.expand_hostlist(
-                "{0}[1-{1}]".format(self.workers[worker]["id"], self.workers[worker]["count"]))
-        print(json.dumps(self.workers,indent=4))
+                "{0}[1-{1}]".format(self.workers[worker]["id"],
+                                    self.workers[worker]["count"]))
+        print(json.dumps(self.workers, indent=4))
 
         self.celery_cmd = sh.which("celery")
-        #print ("CCCC", self.celery_cmd)
-        #sys.exit()
-                    
+        # print ("CCCC", self.celery_cmd)
+        # sys.exit()
+
     def info(self):
         #
         # getting the basic mongo info
@@ -82,11 +83,11 @@ class cloudmesh_server(object):
         d = {}
         d['mongo'] = self._info_mongo()
         print ("Mongo pid", d['mongo']['pid'])
-        print ("Mongo port", d['mongo']['port'])        
+        print ("Mongo port", d['mongo']['port'])
 
         d['celery'] = self._info_celery()
         pprint(d)
-        
+
     def start(self):
         """starts in dir webgui the program server.py and displays a browser on the
             given port and link
@@ -119,7 +120,6 @@ class cloudmesh_server(object):
     def status(self):
         pass
 
-    
     # ######################################################################
     # WEB SERVER
     # ######################################################################
@@ -130,7 +130,7 @@ class cloudmesh_server(object):
         try:
             result = sh.fgrep(
                 sh.fgrep(self._ps(),
-                "python {name}.py".format(**self.server_env)),
+                         "python {name}.py".format(**self.server_env)),
                 "-v", "fgrep"
             ).split("\n")[:-1]
             print (result)
@@ -158,12 +158,13 @@ class cloudmesh_server(object):
     # ######################################################################
     # CELERY SERVER
     # ######################################################################
-        
+
     def _info_celery(self):
         d = {}
 
         try:
-            lines = sh.grep(sh.grep(self._ps(), "celery"), "worker").split("\n")[:-1]
+            lines = sh.grep(
+                sh.grep(self._ps(), "celery"), "worker").split("\n")[:-1]
             for line in lines:
                 (pid, command) = line.lstrip().split(" ", 1)
                 d[pid] = line
@@ -171,18 +172,18 @@ class cloudmesh_server(object):
             pass
         return d
 
-
     def _stop_celery(self):
         processes = self._info_celery()
         print (processes.keys())
         for pid in processes:
             try:
                 sh.kill("-9", str(pid))
-            except Exception, e:
+            except:
                 print (pid, " process already deleted")
 
     def _celery_command(self, command, app, workers, queue, concurrency=None):
-        """execute the celery command on the application and workers specified"""
+        """execute the celery command on the application and workers
+        specified"""
         worker_str = " ".join(workers)
         parameter_string = "celery multi {0} {1} -A {2} -l info -Q {3}".format(
             command, worker_str, app, queue)
@@ -200,10 +201,9 @@ class cloudmesh_server(object):
                                 stderr=subprocess.PIPE,
                                 )
         stdout_value, stderr_value = proc.communicate()
-        
-        #print (stdout_value)
-        #print (stderr_value)        
 
+        # print (stdout_value)
+        # print (stderr_value)
 
     def _start_celery(self):
         # mq.start()
@@ -221,7 +221,6 @@ class cloudmesh_server(object):
                 self.workers[worker]["queue"],
                 concurrency=concurrency)
 
-        
     # ######################################################################
     # MONGO SERVER
     # ######################################################################
@@ -232,25 +231,27 @@ class cloudmesh_server(object):
         port = config["port"]
         # print (config)
         # print(port, path)
-        
+
         d = {
             'pid': None,
             'port': None,
+            'path': None,
             'command': None
         }
 
         try:
-            lines = sh.grep(sh.grep(self._ps(), "mongod"), "log").split("\n")[:-1]
+            lines = sh.grep(
+                sh.grep(self._ps(), "mongod"), "log").split("\n")[:-1]
             if lines != ['']:
                 (pid) = lines[0].lstrip().split(" ")[0]
                 d = {'pid': pid,
-                    'port': port,
-                    'command': lines}
+                     'port': port,
+                     'path': path,
+                     'command': lines}
         except:
             pass
         return d
 
-                
     def _start_mongo(self):
         """
         start the mongod service in the location as specified in
@@ -265,7 +266,7 @@ class cloudmesh_server(object):
         if not os.path.exists(path):
             print ("Creating mongodb directory in {0}".format(path))
             sh.mkdir("-p", path)
-        banner ("check")
+        banner("check")
         try:
             lines = sh.grep(sh.grep(sh.ps("-ax"), "mongod"), "log")
             banner("LINES")
@@ -281,7 +282,7 @@ class cloudmesh_server(object):
 
         banner("LLLLLL")
         print (lines)
-            
+
         print ("ACTION: Starting mongod")
         print
         print ("NOTE: the preparation of mongo may take a few minutes")
@@ -299,9 +300,8 @@ class cloudmesh_server(object):
                   _bg=True)
 
     def _stop_mongo(self):
-        """starts in dir webgui the program server.py and displays a browser on the
-            given port and link
-        """
+        """starts in dir webgui the program server.py and displays a
+            browser on the given port and link """
         try:
             sh.killall("-15", "mongod")
         except:
@@ -388,11 +388,11 @@ class cloudmesh_server(object):
 if __name__ == '__main__':
     server = cloudmesh_server()
     server.info()
-  
+
     # server.start()
     # server.stop()
     # server._start_mongo()
     # server.stop()
 
     server._stop_celery()
-    server._start_celery()    
+    server._start_celery()
