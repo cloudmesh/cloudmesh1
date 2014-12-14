@@ -17,6 +17,7 @@ class ExperimentGroup(Document):
     name = StringField(required=True)
     userid = StringField(required=True)
     description = StringField(max_length=50)
+    tags = ListField(StringField(max_length=30))
 
 class Comment(EmbeddedDocument):
     content = StringField()
@@ -166,6 +167,11 @@ class GroupManagement(object):
         return globals()[_type.upper()].objects(**a)
     
 
-
+    def add_tag_to_group(self, groupname, tag):
+        group = self.get_groups(groupname=groupname)
+        tags = group.tags
+        if tag not in tags:
+            tags.append(tag)
+            group.update(set__tags=tags)
           
             

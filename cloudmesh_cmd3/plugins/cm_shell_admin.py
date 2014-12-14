@@ -12,12 +12,12 @@ class cm_shell_admin:
         """
         Usage:
             admin password reset
-        
+
         Description:
             admin password reset
                 reset portal password
         """
-        
+
         if arguments['password'] and arguments['reset']:
             db = Database()
             db.set_password_local()

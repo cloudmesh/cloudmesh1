@@ -1,5 +1,5 @@
 from cmd3.shell import function_command
-from cloudmesh.iaas.cm_vm import shell_command_vm
+from cloudmesh.shell.cm_vm import shell_command_vm
 
 
 class cm_shell_vm:

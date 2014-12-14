@@ -1,5 +1,5 @@
 from cmd3.shell import function_command
-from cloudmesh.iaas.cm_image import shell_command_image
+from cloudmesh.shell.cm_image import shell_command_image
 
 
 class cm_shell_image:

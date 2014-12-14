@@ -1,12 +1,13 @@
 from __future__ import print_function
+from cmd3.shell import command
 import sys
 import os
 import time
 import json
-from sh import cm
-from pprint import pprint
 from cmd3.console import Console
-from cmd3.shell import command
+from pprint import pprint
+from sh import cm
+import sh
 from cloudmesh.shell.cm_vm import VMcommand
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
@@ -18,27 +19,17 @@ from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh_common.util import get_rand_string
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_install.util import yn_choice
-from cloudmesh.util.shellutil import shell_commands_dict_output
 
 log = LOGGER(__file__)
 
 class cm_shell_cluster:
 
-    _refreshid = "t_stacks"
-    cluster_tag = "cluster" # tag name
+    #BUG nothing should be declared here. This must be in activate
+    #BUG _id must not be used
+    _id = "t_stacks"
 
     def activate_cm_shell_cluster(self):
         self.register_command_topic('cloud', 'cluster')
-
-    def get_cloud_name(self, cm_user_id):
-        """Returns a default cloud name if exists
-        """
-        try:
-            return self.cm_user.get_defaults(cm_user_id)['nova-cloud']
-        except KeyError:
-            log.error('Set OpenStack as a default cloud. '
-                      '"stack" ONLY works with openstack platform.')
-            return None
 
     @command
     def do_cluster(self, args, arguments):
@@ -47,7 +38,7 @@ class cm_shell_cluster:
             cluster start CLUSTER_NAME
             cluster list
             cluster login CLUSTER_NAME
-            cluster stop STACK_NAME
+            cluster stop CLUSTER_NAME
             cluster create --count=<count>
                            --group=<group>
                            [--ln=<LoginName>]
@@ -86,10 +77,11 @@ class cm_shell_cluster:
 
 
         """
+        # BUG this des not follow the key command that introduces booleans for loading
         #pprint(arguments)
         self.cm_config = cm_config()
         self.cm_mongo = cm_mongo()
-        self.cm_user = cm_user()
+        self.user = cm_user()
        
         # -----------------------------
         # TODO::
@@ -105,7 +97,7 @@ class cm_shell_cluster:
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
             
-            userinfo = self.cm_user.info(userid)
+            userinfo = self.user.info(userid)
             if "key" in userinfo["defaults"]:
                 key = userinfo["defaults"]["key"]
             elif len(userinfo["keys"]["keylist"].keys()) > 0:
@@ -122,14 +114,16 @@ class cm_shell_cluster:
                 return
             
             clustername = arguments['CLUSTER_NAME']
-            s_name = "{0}-{1}-{2}-{3}".format(self.cluster_tag, userid, clustername, get_rand_string())
+            s_name = "cluster-{0}-{1}-{2}".format(userid, clustername, get_rand_string())
             # TEMP FOR HADOOP CLUSTER
             if clustername != "hadoop":
                 Console.warning('hadoop is only available cluster')
                 return
             
             # 1. keypair for the communication between master and worker nodes
+            # bug why generate a keypair if we can reuse one, what does generate do, wrong name?
             privatekey, publickey = generate_keypair()
+            # BUG no hard code.
             t_url = \
             "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev1.3/heat-templates/ubuntu-14.04/hadoop-cluster/hadoop-cluster.yaml"
             param = {'KeyName': keynamenew,
@@ -137,7 +131,8 @@ class cm_shell_cluster:
                      'PrivateKeyString': privatekey}
             log.debug(def_cloud, userid, s_name, t_url, param, publickey,
                       privatekey)
-            res = self.cm_mongo.stack_create(cloud=def_cloud, cm_user_id=userid,
+            res = self.cm_mongo.stack_create(cloud=def_cloud,
+                                             cm_user_id=userid,
                                              servername=s_name,
                                              template_url=t_url,
                                              parameters=param)
@@ -147,48 +142,55 @@ class cm_shell_cluster:
             return res
 
         elif arguments['list']:
+            #BUG command has no -- format=
             userid = self.cm_config.username()
             self.cm_mongo.activate(userid)
-            self.cm_mongo.refresh(cm_user_id=userid, types=[self._refreshid])
+            self.cm_mongo.refresh(cm_user_id=userid, types=[self._id])
             stacks = self.cm_mongo.stacks(cm_user_id=userid)
             launchers = self.filter_launcher(
                 stacks,
                 {"search": "contain",
                  "key": "stack_name",
-                 "value": self.cluster_tag }
+                 "value": "launcher"}
                 )
             log.debug(launchers)
 
             d = {}
+            # BUG please use real variable names not v0, k0, k1, v1
             for k0, v0 in launchers.iteritems():
                 for k1, v1 in launchers[k0].iteritems():
                     d[v1['id']] = v1
             columns = ['stack_name', 'description', 'stack_status',
                        'creation_time', 'cm_cloud']
-            if '--column' in arguments and arguments['--column'] != "all":
+            if arguments['--column'] and arguments['--column'] != "all":
                 columns = [x.strip() for x in arguments['--column'].split(',')]
 
-            if '--format' in arguments:
+            # BUG format not in docopts
+            if arguments['--format']:
                 if arguments['--format'] not in ['table', 'json', 'csv']:
                     Console.error("please select printing format among table, json and csv")
                     return
                 else:
+                    # bug why not print_format instead of p_format makes it more readble
                     p_format = arguments['--format']
             else:
                 p_format = None
 
-            shell_commands_dict_output(userid, d,
+            shell_commands_dict_output(d,
                                        print_format=p_format,
-                                       firstheader="id",
+                                       firstheader="launcher_id",
                                        header=columns
+                                       # vertical_table=True
                                        )
 
         elif arguments['login']:
+            # what is this, why not implemented
             Console.error("Not implemented")
             return
 
         elif arguments['stop'] and arguments['CLUSTER_NAME']:
             userid = self.cm_config.username()
+            # BUG def_cloud is bad name
             def_cloud = self.get_cloud_name(userid)
             c_id = arguments['CLUSTER_NAME']
             self.cm_mongo.activate(userid)
@@ -205,7 +207,10 @@ class cm_shell_cluster:
                 Console.error("Failed to load the cloudmesh yaml file")
                 return
             username = config['cloudmesh']['profile']['username']
+            # BUG what is cloudmanage, should that not be part of cm_mongo, is this dupliaction of code?
             cloudname = arguments['--cloud'] or CloudManage().get_selected_cloud(username)
+
+            # BUG waht is this tmp dir for? if we collect ome kesy why is it not done in memory, why are we not using users .ssh key dir?
             temp_dir_name = ".temp_cluster_create_" + username + "_0"
             while os.path.isdir("./{0}".format(temp_dir_name)):
                 temp_dir_name = temp_dir_name[:-1] + str(int(temp_dir_name[-1]) + 1)
@@ -215,11 +220,9 @@ class cm_shell_cluster:
             GroupName = None
 
             vm_login_name = "ubuntu"
-
             
             temp_key_name = "sshkey_temp"
-            _key = ""
-            #_key = "-i ./{0}/{1}".format(dir_name, temp_key_name)
+            _key = "-i ./{0}/{1}".format(dir_name, temp_key_name)
             StrictHostKeyChecking = "-o StrictHostKeyChecking=no"
             
             res = None
@@ -243,32 +246,28 @@ class cm_shell_cluster:
                     return
                 else:
                     vm_login_name = arguments['--ln']
-            # Moved the import inside of this function
-            # If this import goes up to the top, monodb connection will be
-            # estabilished. Due to that reason, this import stays here
-            # Hyungro Lee 12/01/2014
-            from cloudmesh.experiment.group import GroupManagement
-            GroupManage = GroupManagement(username)
-            groups_list = GroupManage.get_groups_names_list()
-            vms_in_group_list = {}
-            if GroupName in groups_list:
-                vms_in_group_list = GroupManage.list_items_of_group(GroupName, _type="VM")["VM"]
-
-            if not arguments['--force'] and len(vms_in_group_list) != 0:
-                if yn_choice("The group you provide exists and it has VMs in it, " + \
-                             "do you want to proceed? (if you choose yes, these exist " +\
-                             "VMs will be included in the cluster, this could also " +\
-                             "rewrite the key on the exist VMs)",
-                             default='n',
-                             tries=3):
-                    pass
-                else:
-                    return
             
-            if GroupName not in groups_list:
-                GroupManage.create_group(GroupName)
-            GroupManage.add_tag_to_group(GroupName, "cluster")
-
+            if not arguments['--force']:
+                # Moved the import inside of this function
+                # If this import goes up to the top, monodb connection will be
+                # estabilished. Due to that reason, this import stays here
+                # Hyungro Lee 12/01/2014
+                from cloudmesh.experiment.group import GroupManagement
+                GroupManage = GroupManagement(username)
+                groups_list = GroupManage.get_groups_names_list()
+                if GroupName in groups_list:
+                    vms_in_group_list = GroupManage.list_items_of_group(GroupName, _type="VM")["VM"]
+                    if len(vms_in_group_list) != 0:
+                        if yn_choice("The group you provide exists and it has VMs in it, " + \
+                                     "do you want to proceed? (if you choose yes, these exist " +\
+                                     "VMs will be included in the cluster, this could also " +\
+                                     "rewrite the key on the exist VMs)",
+                                     default='n',
+                                     tries=3):
+                            pass
+                        else:
+                            return
+                
             # start VMs 
             print ("starting VMs...")
             arguments_temp = arguments

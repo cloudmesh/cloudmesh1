@@ -5,6 +5,10 @@ from cloudmesh.keys.util import get_fingerprint, key_fingerprint, key_validate, 
 from cloudmesh.cm_mongo import cm_mongo
 import os
 from cloudmesh_install.util import path_expand
+from cloudmesh_common.logger import LOGGER
+
+
+log = LOGGER(__file__)
 
 
 def keytype(name):

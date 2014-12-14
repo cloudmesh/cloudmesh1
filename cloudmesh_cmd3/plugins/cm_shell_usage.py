@@ -24,10 +24,10 @@ class cm_shell_usage:
         """Returns a default cloud name if exists
         """
         try:
-            return self.cm_user.get_defaults(cm_user_id)['cloud']
+            return self.cm_user.get_defaults(cm_user_id)['nova-cloud']
         except KeyError:
-            log.error('set a default cloud with openstack. "stack" works on'
-                      ' openstack platform only')
+            log.error('Set OpenStack as a default cloud.'
+                      '"stack" ONLY works with openstack platform.')
             return None
 
     @command
