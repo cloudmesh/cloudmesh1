@@ -3,9 +3,7 @@ from __future__ import print_function
 
 from mongoengine import *
 #from other.user_dict import *
-# from cloudmesh.management.user import User, Users
-# from cloudmesh.management.project import Project, Projects
-from cloudmesh.management.new_user import User, Users
+from cloudmesh.management.user import User, Users
 from cloudmesh.management.project import Project, Projects
 import sys
 from faker import Factory

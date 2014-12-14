@@ -98,7 +98,7 @@ class CloudmeshObject(Document):
 
     '''
     An Object for managing users and projects that includes default methods for
-    activation, cration and modification dates.
+    activation, creation and modification dates.
 
     In future we will have a modification trace record here also. Arbitrary
     attributes can be added and modified with the set_attribute method
