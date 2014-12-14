@@ -26,7 +26,7 @@
       <tr>
         <td> <input id="{{ user.username }}" name="selectedusers" type="checkbox" value="{{ user.username }}"></td>
         <td> <input id="{{ user.username }}" name="selectedusers" type="checkbox" value="{{ user.username }}"></td>
-        <td> <a href="/user/profile/{{ user.username }}"> view <i class="fa fa-user"></i> </a> </td>
+        <td> <a href="/user/profile/{{ user.username }}" target="_blank"> view <i class="fa fa-user"></i> </a> </td>
           {% if user.status == 'approved' %}
             <td>
                 <font  color="green"> <i class="fa fa-check-square-o"></i> </font>

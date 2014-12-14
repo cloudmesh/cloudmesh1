@@ -3,7 +3,9 @@ from __future__ import print_function
 
 from mongoengine import *
 #from other.user_dict import *
-from cloudmesh.management.user import User, Users
+# from cloudmesh.management.user import User, Users
+# from cloudmesh.management.project import Project, Projects
+from cloudmesh.management.new_user import User, Users
 from cloudmesh.management.project import Project, Projects
 import sys
 from faker import Factory
@@ -33,23 +35,26 @@ def random_user():
 
     :rtype: dict
     '''
-    firstname = fake.first_name()
+    first_name = fake.first_name()
     data = User(
-        status="pending",
-        title=fake.prefix(),
-        firstname=firstname,
-        lastname=fake.last_name(),
+        username=first_name.lower(),
         email=fake.safe_email(),
-        username=firstname.lower(),
-        active=False,
         password=fake.word(),
+        title=fake.prefix(),
+        first_name=first_name,
+        last_name=fake.last_name(),
         phone=fake.phone_number(),
-        department="IT",
-        institution=fake.company(),
-        address=fake.address(),
-        country="USA",
+        url=fake.url(),
         citizenship="US",
         bio=fake.paragraph(),
+        institution=fake.company(),
+        institution_role=fake.company_suffix(),
+        department="IT",
+        address=fake.address(),
+        advisor=fake.name(),
+        country="USA",
+        status="pending",
+        active=False,
     )
     return data
 
@@ -120,7 +125,7 @@ def main():
     '''
 
     generate_users(10)
-    generate_projects(3)
+    # generate_projects(3)
 
     print(70 * "=")
     print(users.find())
@@ -128,9 +133,9 @@ def main():
     print(70 * "&")
     print(users.find()[0])
 
-    projects = Project.objects()
-    print(projects.count())
-    pprint(projects[0])
+    # projects = Project.objects()
+    # print(projects.count())
+    # pprint(projects[0])
 
 
 if __name__ == "__main__":
