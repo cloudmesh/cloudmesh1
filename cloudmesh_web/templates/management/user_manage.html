@@ -104,8 +104,8 @@
                             <font color="black"> {{ user.status|capitalize }} </font>
                         </td>
                     {% endif %}
-                    <td>{{ user.firstname }}</td>
-                    <td>{{ user.lastname }}</td>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.last_name }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.username }}</td>
                 </tr>
@@ -120,11 +120,11 @@
                 {% for state in states %}
                     <button id="button_{{ state }}" value="{{ state }}"
                             name="button"
-                            {% if state == 'approved' %}
+                            {% if state == 'approve' %}
                             class="btn btn-success"
                             {% elif state == 'pending' %}
                             class="btn btn-default"
-                            {% elif state in ['denied', 'blocked', 'delete'] %}
+                            {% elif state in ['deny', 'block', 'delete'] %}
                             class="btn btn-danger"
                             {% else %}
                             class="btn"

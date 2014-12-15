@@ -21,6 +21,7 @@ log = LOGGER(__file__)
 management_module = Blueprint('management_module', __name__)
 
 discipline_choices=[
+    ('Other (000)','Other (000)'),
     ('Aerospace Engineering (101)', 'Aerospace Engineering (101)'),
     ('Agricultural Economics (901)', 'Agricultural Economics (901)'),
     ('Agricultural Engineering (102)', 'Agricultural Engineering (102)'),
@@ -386,6 +387,69 @@ all_country_choices=[
 
 country_choices=preferred_country_choices + all_country_choices
 
+state_choices = [
+    ('Other(Other)','Other(Other)'),
+    ('Alabama(AL)','Alabama(AL)'),
+    ('Alaska(AK)','Alaska(AK)'),
+    ('American Samoa(AS)','American Samoa(AS)'),
+    ('Arizona(AZ)','Arizona(AZ)'),
+    ('Arkansas(AR)','Arkansas(AR)'),
+    ('California(CA)','California(CA)'),
+    ('Colorado(CO)','Colorado(CO)'),
+    ('Connecticut(CT)','Connecticut(CT)'),
+    ('Delaware(DE)','Delaware(DE)'),
+    ('District of Columbia(DC)','District Of Columbia(DC)'),
+    ('Federated States Of Micronesia(FM)','Federated States Of Micronesia(FM)'),
+    ('Florida(FL)','Florida(FL)'),
+    ('Georgia(GA)','Georgia(GA)'),
+    ('Guam(GU)','Guam(GU)'),
+    ('Hawaii(HI)','Hawaii(HI)'),
+    ('Idaho(ID)','Idaho(ID)'),
+    ('Illinois(IL)','Illinois(IL)'),
+    ('Indiana(IN)','Indiana(IN)'),
+    ('Iowa(IA)','Iowa(IA)'),
+    ('Kansas(KS)','Kansas(KS)'),
+    ('Kentucky(KY)','Kentucky(KY)'),
+    ('Louisiana(LA)','Louisiana(LA)'),
+    ('Maine(ME)','Maine(ME)'),
+    ('Marshall Islands(MH)','Marshall Islands(MH)'),
+    ('Maryland(MD)','Maryland(MD)'),
+    ('Massachusetts(MA)','Massachusetts(MA)'),
+    ('Michigan(MI)','Michigan(MI)'),
+    ('Minnesota(MN)','Minnesota(MN)'),
+    ('Mississippi(MS)','Mississippi(MS)'),
+    ('Missouri(MO)','Missouri(MO)'),
+    ('Montana(MT)','Montana(MT)'),
+    ('Nebraska(NE)','Nebraska(NE)'),
+    ('Nevada(NV)','Nevada(NV)'),
+    ('New Hampshire(NH)','New Hampshire(NH)'),
+    ('New Jersey(NJ)','New Jersey(NJ)'),
+    ('New Mexico(NM)','New Mexico(NM)'),
+    ('New York(NY)','New York(NY)'),
+    ('North Carolina(NC)','North Carolina(NC)'),
+    ('North Dakota(ND)','North Dakota(ND)'),
+    ('Northern Mariana Islands(MP)','Northern Mariana Islands(MP)'),
+    ('Ohio(OH)','Ohio(OH)'),
+    ('Oklahoma(OK)','Oklahoma(OK)'),
+    ('Oregon(OR)','Oregon(OR)'),
+    ('Palau(PW)','Palau(PW)'),
+    ('Pennsylvania(PA)','Pennsylvania(PA)'),
+    ('Puerto Rico(PR)','Puerto Rico(PR)'),
+    ('Rhode Island(RI)','Rhode Island(RI)'),
+    ('South Carolina(SC)','South Carolina(SC)'),
+    ('South Dakota(SD)','South Dakota(SD)'),
+    ('Tennessee(TN)','Tennessee(TN)'),
+    ('Texas(TX)','Texas(TX)'),
+    ('Utah(UT)','Utah(UT)'),
+    ('Vermont(VT)','Vermont(VT)'),
+    ('Virgin Islands(VI)','Virgin Islands(VI)'),
+    ('Virginia(VA)','Virginia(VA)'),
+    ('Washington(WA)','Washington(WA)'),
+    ('West Virginia(WV)','West Virginia(WV)'),
+    ('Wisconsin(WI)','Wisconsin(WI)'),
+    ('Wyoming(WY)','Wyoming(WY)')
+]
+
 class RadioSelectField(RadioField):
     widget = widgets.Select(multiple=False)
     option_widget = widgets.Select
@@ -409,12 +473,25 @@ def project_apply():
 
     form = ProjectRegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
-
         data = dict(request.form)
         action = str(data['button'][0])
 
         for key in data:
-            data[key] = data[key][0]
+            if key in ['agreement_use','agreement_slides','agreement_support',
+                       'agreement_software','agreement_documentation', 'join_open',
+                       'join_notification']:
+                if str(data[key][0]) == 'y':
+                    data[key] = True
+                elif str(data[key][0]) == 'n':
+                    data[key] = False
+            elif key in ['category', 'managers', 'resources_clusters', 'alumni',
+                         'resources_provision', 'resources_services', 'members',
+                         'keywords']:
+                print data[key][0]
+            else:
+                 data[key] = data[key][0]
+            print str(key)+" - "+str(data[key])+"\n"
+
         del data['button']
 
         if action == 'save':
@@ -422,7 +499,7 @@ def project_apply():
             project = MongoProject()
             for d in data:
                 project[d] = data[d]
-
+            print project
             projects.add(project)
 
         flash('Thanks for registering')
@@ -560,7 +637,7 @@ class ProjectRegistrationForm(Form):
         "lead",
         "managers",
         "members",
-        "alumnis",
+        "alumni",
         "contact"]
 
     project_details_keys = [\
@@ -630,7 +707,6 @@ class ProjectRegistrationForm(Form):
     use_of_fg = TextAreaField('Use of Future Systems')
     scale_of_use = TextAreaField('Scale of use')
     categories = StringField('Categories')
-    keywords = StringField('Keywords')
     # orientation = StringField('Orientation')
     orientation = RadioSelectField('Orientation', choices=[('research','Research'),('education','Education'),\
                                                            ('industry','Industry'),('government','Government')])
@@ -644,7 +720,7 @@ class ProjectRegistrationForm(Form):
     lead = StringField('Project Lead')
     managers = TextAreaField('Project Managers')
     members = TextAreaField('Project Members')
-    alumnis = TextAreaField('Project Alumni')
+    alumni = TextAreaField('Project Alumni')
     grant_organization = StringField('Grant Organization')
     grant_id = StringField('Grant ID')
     grant_url = StringField('Grant URL')
@@ -671,7 +747,7 @@ class ProjectRegistrationForm(Form):
     loc_name = StringField('Name')
     loc_street = StringField('Street')
     loc_additional = StringField('Additional')
-    loc_state= StringField('State')
+    loc_state= RadioSelectField("State",[validators.DataRequired()], choices=state_choices)
     loc_country = RadioSelectField("Country", [validators.DataRequired()], choices=country_choices)
 
 class UserRegistrationForm(Form):
@@ -894,7 +970,7 @@ def project_edit(projectid):
                 project.lead = data["lead"]
                 project.managers = data["managers"]
                 project.members = data["members"]
-                project.alumnis = data["alumnis"]
+                project.alumni = data["alumni"]
                 project.grant_orgnization = data["grant_orgnization"]
                 project.grant_id = data["grant_id"]
                 project.grant_url = data["grant_url"]
@@ -1010,7 +1086,7 @@ def management_user_manage():
     return render_template('management/user_manage.html',
                            users=users,
                            with_edit="True",
-                           states=['approved', 'pending', 'denied', 'blocked', 'delete'],
+                           states=['approve', 'pending', 'deny', 'block', 'delete'],
                            title="User Management")
 
 

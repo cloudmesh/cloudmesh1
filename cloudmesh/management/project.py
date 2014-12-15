@@ -1,45 +1,45 @@
 from __future__ import print_function
 from mongoengine import *
-from mongoengine.context_managers import switch_db
-from datetime import datetime
-import hashlib
 import uuid
 from user import User, Users
 # from comittee import Committee
-from pprint import pprint
 from cloudmeshobject import CloudmeshObject
-from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh_install import config_file
 from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
 
 
 def IMPLEMENT():
     print("IMPLEMENT ME")
 
+
 STATUS = ('pending',
           'approved',
           'completed',
           'denied')
 
-CATEGORY = ('Database', 'FutureGrid', 'other')
+CATEGORY = ('Computer Science', 'Education',
+            'Interoperability', 'Life Sciences',
+            'Non Life Sciences', 'Technology Development',
+            'Technology Evaluation')
 
-DISCIPLINE = ('other')
+DISCIPLINE = 'Other (000)'
 # see https://ncsesdata.nsf.gov/nsf/srs/webcasp/data/gradstud.htm
 # put in discipline.txt and initialize from there through reading the file and codes
 #
 
-INSTITUTE_ROLE = ('graduate student',
-                  'undergraduate student',
-                  'staff',
-                  'faculty',
-                  'visitor',
-                  'other')
+INSTITUTE_ROLE = ('Undergraduate',
+                  'Graduate Masters',
+                  'Graduate PhD',
+                  'Student Other',
+                  'Faculty',
+                  'Staff',
+                  'Other')
 
 CLUSTERS = ('india',
             'bravo',
             'echo',
             'delta',
-            'other', 'None')
+            'other',
+            'None')
 
 SERVICES = ('eucalyptus',
             'openstack',
@@ -57,176 +57,149 @@ PROVISIONING = ('vm',
                 'container',
                 'iaas',
                 'paas',
-                'other', 'None')
+                'other',
+                'None')
 
 GRANT_ORG = ('NSF',
              'DOE',
              'DoD',
              'NIH',
-             'other', 'None')
-
+             'other',
+             'None')
 
 REQUIRED = False
 
 
 class Project(CloudmeshObject):
 
-    '''
-    The project object with its fields. The current fields include
-
-    Attributes:
-
-        title
-        abstract
-        intellectual_merit
-        broader_impact
-        use_of_fg
-        scale_of_use
-        categories
-        keywords
-        primary_discipline
-        orientation
-        contact
-        url
-        comment
-        active
-        projectid
-        status
-        lead
-        managers
-        members
-        alumnis
-        grant_orgnization
-        grant_id
-        grant_url
-        results
-        aggreement_use
-        aggreement_slides
-        aggreement_support
-        aggreement_sotfware
-        aggreement_documentation
-        comments
-        join_open
-        join_notification
-        resources_services
-        resources_software
-        resources_clusters
-        resources_provision
-
-    '''
-
-    # -------------------------------------------------------------------
     # Project Information
-    # -------------------------------------------------------------------
+
     title = StringField(required=REQUIRED)
+
+    # Project vocabulary
+
+    category = ListField(StringField(choices=CATEGORY), required=REQUIRED)
+    keywords = ListField(StringField(), required=REQUIRED)
+
+    # Project contacts
+
+    # lead = ReferenceField(User)
+    lead = StringField()
+    managers = ListField(StringField())
+    # members = ListField(ReferenceField(User))
+    members = ListField(StringField())
+    alumni = ListField(StringField())
+    contact = StringField(required=REQUIRED)
+
+    # Project Details
+
+    orientation = StringField(required=REQUIRED)
+    primary_discipline = StringField(choices=DISCIPLINE, required=REQUIRED)
     abstract = StringField(required=REQUIRED)
     intellectual_merit = StringField(required=REQUIRED)
     broader_impact = StringField(required=REQUIRED)
-    use_of_fg = StringField(required=REQUIRED)
-    scale_of_use = StringField(required=REQUIRED)
-    categories = ListField(StringField(choices=CATEGORY), required=REQUIRED)
-    # example search in a list field
-    # Project.objects(categories__contains='education')
-    keywords = ListField(StringField(), required=REQUIRED)
-    primary_discipline = StringField(choices=DISCIPLINE, required=REQUIRED)
-    orientation = StringField(required=REQUIRED)
-    contact = StringField(required=REQUIRED)
     url = URLField(required=REQUIRED)
-    comment = StringField()
-    active = BooleanField(required=REQUIRED)
-    projectid = UUIDField()
+    results = StringField()
 
-    status = StringField(choices=STATUS, required=REQUIRED)
-    # maybe we do not need active as this may be covered in status
+    # Agreements
 
-    # -------------------------------------------------------------------
-    # Project Comittee: contains all the information about the projects committee
-    # -------------------------------------------------------------------
-    # comittee = ReferenceField(Committee)
+    agreement_use = BooleanField()
+    agreement_slides = BooleanField()
+    agreement_support = BooleanField()
+    agreement_software = BooleanField()
+    agreement_documentation = BooleanField()
 
-    # -------------------------------------------------------------------
-    # Member Fields
-    # -------------------------------------------------------------------
-    lead = ReferenceField(User)
-    # lead_institutional_role =  StringField(choices=INSTITUTE_ROLE, required=REQUIRED)
-    managers = ListField(StringField())
-    members = ListField(ReferenceField(User))
-    alumnis = ListField(StringField())
-
-    # active_members = lead u managers u members - alumnis
-    # if not active : active_members = None
-
-    # -------------------------------------------------------------------
     # Grant Information
-    # -------------------------------------------------------------------
-    grant_orgnization = StringField(choices=GRANT_ORG) # Should be a list of grants
+
+    grant_organization = StringField(choices=GRANT_ORG)  # Should be a list of grants
     grant_id = StringField()
     grant_url = URLField()
 
-    # -------------------------------------------------------------------
-    # Results
-    # -------------------------------------------------------------------
-    results = StringField() # Should be a list of string fields
+    # Resource Requirements
 
-    # -------------------------------------------------------------------
-    # Aggrements
-    # -------------------------------------------------------------------
-    aggreement_use = BooleanField()
-    aggreement_slides = BooleanField()
-    aggreement_support = BooleanField()
-    aggreement_sotfware = BooleanField()
-    aggreement_documentation = BooleanField()
-
-    # -------------------------------------------------------------------
-    # Comments
-    # -------------------------------------------------------------------
-    comments = StringField()
-
-    # -------------------------------------------------------------------
-    # Join
-    # -------------------------------------------------------------------
-    join_open = BooleanField()
-    join_notification = BooleanField()
-
-    # -------------------------------------------------------------------
-    # Resources
-    # -------------------------------------------------------------------
     resources_services = ListField(
         StringField(choices=SERVICES), required=REQUIRED)
-    resources_software = ListField(
-        StringField(choices=SOFTWARE), required=REQUIRED)
     resources_clusters = ListField(
         StringField(choices=CLUSTERS), required=REQUIRED)
     resources_provision = ListField(
         StringField(choices=PROVISIONING), required=REQUIRED)
+    # resources_software = ListField(
+    #     StringField(choices=SOFTWARE), required=REQUIRED)
+    comment = StringField()
+    use_of_fg = StringField(required=REQUIRED)
+    scale_of_use = StringField(required=REQUIRED)
 
-    # BUG how can we add also arbitray info in case of other, mabe ommit
-    # choices
+    # Other
+
+    comments = StringField()
+
+    # Project Membership Management
+
+    join_open = BooleanField()
+    join_notification = BooleanField()
+
+    # Location
+
+    loc_name = StringField(required=REQUIRED)
+    loc_street = StringField(required=REQUIRED)
+    loc_additional = StringField(required=REQUIRED)
+    loc_state = StringField(required=REQUIRED)
+    loc_country = StringField(required=REQUIRED)
+
+    # Invisible fields
+
+    active = BooleanField(required=REQUIRED)
+    project_id = UUIDField()
+    status = StringField(choices=STATUS, required=REQUIRED)
+
 
     def to_json(self):
         """prints the project as a json object"""
 
         d = {
             "title": self.title,
+            "category": self.category,
+            "keywords": self.keywords,  #
+            "lead": self.lead,
+            "managers": self.managers,
+            "members": self.members,
+            "alumni": self.alumni,
+            "contact": self.contact,
+            "orientation": self.orientation,
+            "primary_discipline": self.primary_discipline,
             "abstract": self.abstract,
             "intellectual_merit": self.intellectual_merit,
             "broader_impact": self.broader_impact,
+            "url": self.url,
+            "results": self.results,
+            "agreement_user": self.agreement_use,
+            "agreement_slides": self.agreement_slides,
+            "agreement_support": self.agreement_support,
+            "agreement_software": self.agreement_support,
+            "agreement_documentation": self.agreement_documentation,
+            "grant_organization": self.grant_organization,
+            "grant_id": self.grant_id,
+            "grant_url": self.grant_url,
+            "resources_services": self.resources_services,
+            # "resources_software": self.resources_software,
+            "resources_clusters": self.resources_clusters,
+            "resources_provision": self.resources_provision,
+            "comment": self.comment,
             "use_of_fg": self.use_of_fg,
             "scale_of_use": self.scale_of_use,
-            "categories": self.categories,
-            "keywords": self.keywords,
-            "primary_discipline": self.primary_discipline,
-            "orientation": self.orientation,
-            "contact": self.contact,
-            "url": self.url,
+            "comments": self.comments,
+            "join_open": self.join_open,
+            "join_notification": self.join_notification,
+            "loc_name": self.loc_name,
+            "loc_street": self.loc_street,
+            "loc_additional": self.loc_additional,
+            "loc_state": self.loc_state,
+            "loc_country": self.loc_country,
+
             "active": self.active,
             "status": self.status,
-            "lead": self.lead,
-            "members": self.members,
-            "resources_services": self.resources_services,
-            "resources_software": self.resources_software,
-            "resources_clusters": self.resources_clusters,
-            "resources_provision": self.resources_provision
+
+
         }
         return d
 
@@ -239,9 +212,8 @@ class Project(CloudmeshObject):
 
 
 class Projects(object):
-
     '''
-    convenience opbject to manage multiple prpojects
+    convenience object to manage multiple projects
     '''
 
     def __init__(self):
@@ -265,7 +237,7 @@ class Projects(object):
         return Project.objects()
 
     def save(self, project):
-        '''adds a project to the database but only after it has been verifie
+        '''adds a project to the database but only after it has been verified
 
         :param project: the project id
         :type project: uuid
@@ -287,11 +259,11 @@ class Projects(object):
         users = User.objects(user_name=user_name)
         if users.count() == 1:
             if role == "member":
-                project.members.append(user)
+                project.members.append(users)
             elif role == "lead":
-                project.lead.append(user)
+                project.lead.append(users)
             elif role == "lead":
-                project.alumni.append(user)
+                project.alumni.append(users)
         else:
             print("ERROR: The user `{0}` has not registered with FutureGrid".format(user_name))
 
@@ -318,12 +290,12 @@ class Projects(object):
         :type id: uuid
         '''
         """Finds a project by the given id"""
-        found = Project.objects(projectid=id)
+        found = Project.objects(project_id=id)
         if found.count() > 0:
             return found[0].to_json()
         else:
             return None
-        # User ID or project ID
+            # User ID or project ID
 
     def find_by_category(self, category):
         '''
@@ -363,21 +335,21 @@ class Projects(object):
         print("PPPPPP", project)
         if not project.status:
             project.status = 'pending'
-        if (project.projectid is None) or (project.projectid == ""):
+        if (project.project_id is None) or (project.project_id == ""):
             found = False
-            proposedid = None
+            proposed_id = None
 
             # while not found:
-            #    proposedid = uuid.uuid4()
-            #    result = Project.objects(projectid=proposedid)
+            # proposedid = uuid.uuid4()
+            #    result = Project.objects(project_id=proposedid)
             #    print "PPPPP", result
             #    found = result.count() > 0
             #    print result.count()
 
-            project.projectid = proposedid
+            project.project_id = proposed_id
         else:
-            print("UUUUUU -{0}-".format(project.projectid))
-        print("UUID", project.projectid)
+            print("UUUUUU -{0}-".format(project.project_id))
+        print("UUID", project.project_id)
         project.save()
 
     def clear(self):
