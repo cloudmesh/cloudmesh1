@@ -11,7 +11,10 @@ class cm_shell_color:
     def activate_cm_shell_yaml(self):
         self.cm_config = cm_config()
         Console.color = self.cm_config.get("cloudmesh.shell.color")
-        self.register_command_topic('cloud', 'color')
+        # BUG: this is not a cloud command but a regular cm command
+        # In fact this command should probably moved to cmd3
+        # self.register_command_topic('cloud', 'color')
+        #
 
     @command
     def do_color(self, args, arguments):
