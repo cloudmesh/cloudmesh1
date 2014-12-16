@@ -1,6 +1,6 @@
 # import os
 from __future__ import print_function
-import sys
+
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
@@ -9,10 +9,10 @@ from cloudmesh_common.tables import row_table
 
 from cmd3.console import Console
 from cmd3.shell import command
-from pprint import pprint
 import json
 
 log = LOGGER(__file__)
+
 
 class cm_shell_usage:
 
@@ -43,7 +43,7 @@ class cm_shell_usage:
         Usage data on a current project/tenant
 
         Arguments:
-          
+
           CLOUD          Cloud name to see the usage
           START          start date of usage (YYYY-MM-DD)
           END            end date of usage (YYYY-MM-DD)
@@ -80,18 +80,19 @@ class cm_shell_usage:
             # u'3e6eaf1d913a48f694a7bc0fbb027507', u'instance_id':
             # u'2c9d24e0-7453-4f83-84b7-f8c0254a574f', u'state':
             # u'active', u'memory_mb': 2048, u'vcpus': 1, u'flavor':
-            # u'm1.small', u'local_gb': 20} 
+            # u'm1.small', u'local_gb': 20}
             try:
-                usage['server_usages'] = str(len(usage['server_usages'])) + " vms"
+                usage['server_usages'] = str(
+                    len(usage['server_usages'])) + " vms"
             except:
                 pass
 
             if arguments["--format"] is None:
-                print(row_table(usage, order=None, labels=["Variable", "Value"]))
+                print(
+                    row_table(usage, order=None, labels=["Variable", "Value"]))
             elif 'json' in arguments["--format"]:
                 print(json.dumps(usage, indent=4))
             else:
                 Console.error('Usage is not supported.')
 
-            
             return usage

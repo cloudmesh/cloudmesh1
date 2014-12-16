@@ -1,6 +1,6 @@
 # import os
 from __future__ import print_function
-import sys
+
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
@@ -10,9 +10,9 @@ from cloudmesh_common.tables import row_table
 from cmd3.console import Console
 from cmd3.shell import command
 import json
-from pprint import pprint
 
 log = LOGGER(__file__)
+
 
 class cm_shell_quota:
 
@@ -41,7 +41,7 @@ class cm_shell_quota:
         quota limit on a current project (tenant)
 
         Arguments:
-          
+
           CLOUD          Cloud name to see the usage
           help           Prints this message
 
@@ -50,8 +50,7 @@ class cm_shell_quota:
            -v       verbose mode
 
         """
-        pprint(arguments)
-        
+
         self.cm_mongo = cm_mongo()
         self.cm_config = cm_config()
         self.cm_user = cm_user()
@@ -69,10 +68,11 @@ class cm_shell_quota:
             if cloudid is None:
                 Console.error('Please set a default cloud.')
                 return
-            
+
             quota = self.cm_mongo.quota(cloudid, userid)
             if arguments["--format"] is None:
-                print(row_table(quota, order=None, labels=["Variable", "Value"]))
+                print(
+                    row_table(quota, order=None, labels=["Variable", "Value"]))
             elif 'json' in arguments["--format"]:
                 print(json.dumps(quota, indent=4))
             else:
