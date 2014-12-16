@@ -746,15 +746,13 @@ class CloudManage(object):
                         if val in flavors_dict[cloudname]:
                             val = flavors_dict[cloudname][val]['name']
                         else:
-                            val = "flavor '{0}' not available anymore".format(
-                                val)
+                            val = "unavailable"
 
                     if k[0] == 'image':
                         if val in images_dict[cloudname]:
                             val = images_dict[cloudname][val]['name']
                         else:
-                            val = "image '{0}' not available anymore".format(
-                                val)
+                            val = "unavailable"
 
                     if cm_type == "openstack" and k[0] == 'addresses':
                         tmp = ''
