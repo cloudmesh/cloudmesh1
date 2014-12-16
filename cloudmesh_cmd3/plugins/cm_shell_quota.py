@@ -7,7 +7,10 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh_common.tables import row_table
 
+from cmd3.console import Console
 from cmd3.shell import command
+import json
+from pprint import pprint
 
 log = LOGGER(__file__)
 
@@ -25,15 +28,14 @@ class cm_shell_quota:
         try:
             return self.cm_user.get_defaults(cm_user_id)['cloud']
         except KeyError:
-            log.error('set a default cloud with openstack. "stack" works on'
-                      ' openstack platform only')
+            Console.error('Please set a default cloud.')
             return None
 
     @command
     def do_quota(self, args, arguments):
         """
         Usage:
-            quota [CLOUD]
+            quota [CLOUD] [--format=json]
             quota help | -h
 
         quota limit on a current project (tenant)
@@ -48,6 +50,8 @@ class cm_shell_quota:
            -v       verbose mode
 
         """
+        pprint(arguments)
+        
         self.cm_mongo = cm_mongo()
         self.cm_config = cm_config()
         self.cm_user = cm_user()
@@ -56,8 +60,21 @@ class cm_shell_quota:
             print (self.do_quota.__doc__)
         else:
             userid = self.cm_config.username()
-            def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
-            quota = self.cm_mongo.quota(def_cloud, userid)
-            print(row_table(quota, order=None, labels=["Variable", "Value"]))
+
+            cloudid = arguments["CLOUD"]
+            if cloudid is None:
+                cloudid = self.get_cloud_name(userid)
+            # if an id is still not found print error
+            if cloudid is None:
+                Console.error('Please set a default cloud.')
+                return
+            
+            quota = self.cm_mongo.quota(cloudid, userid)
+            if arguments["--format"] is None:
+                print(row_table(quota, order=None, labels=["Variable", "Value"]))
+            elif 'json' in arguments["--format"]:
+                print(json.dumps(quota, indent=4))
+            else:
+                Console.error('Quota is not supported.')
             return quota
