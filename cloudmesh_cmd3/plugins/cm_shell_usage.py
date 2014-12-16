@@ -7,7 +7,10 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh_common.tables import row_table
 
+from cmd3.console import Console
 from cmd3.shell import command
+from pprint import pprint
+import json
 
 log = LOGGER(__file__)
 
@@ -34,10 +37,10 @@ class cm_shell_usage:
     def do_usage(self, args, arguments):
         """
         Usage:
-            usage [CLOUD] [--start=START] [--end=END]
+            usage [CLOUD] [--start=START] [--end=END] [--format=json]
             usage help | -h
 
-        Usage data on a current project (tenant)
+        Usage data on a current project/tenant
 
         Arguments:
           
@@ -59,9 +62,17 @@ class cm_shell_usage:
             print (self.do_usage.__doc__)
         else:
             userid = self.cm_config.username()
-            def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
-            usage = self.cm_mongo.usage(def_cloud, userid)
+
+            cloudid = arguments["CLOUD"]
+            if cloudid is None:
+                cloudid = self.get_cloud_name(userid)
+            # if an id is still not found print error
+            if cloudid is None:
+                Console.error('Please set a default cloud.')
+                return
+
+            usage = self.cm_mongo.usage(cloudid, userid)
             # server usages need to be supressed.
             # e.g. {u'hours': 24.00000006388889, u'uptime': 1960234,
             # u'started_at': u'2014-10-07T23:03:57.000000', u'ended_at': None,
@@ -75,6 +86,12 @@ class cm_shell_usage:
             except:
                 pass
 
-            print(row_table(usage, order=None, labels=["Variable", "Value"]))
+            if arguments["--format"] is None:
+                print(row_table(usage, order=None, labels=["Variable", "Value"]))
+            elif 'json' in arguments["--format"]:
+                print(json.dumps(usage, indent=4))
+            else:
+                Console.error('Usage is not supported.')
 
+            
             return usage
