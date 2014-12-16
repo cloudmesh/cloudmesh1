@@ -1,15 +1,18 @@
 # import os
 from __future__ import print_function
-import sys
+
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh_common.tables import row_table
 
+from cmd3.console import Console
 from cmd3.shell import command
+import json
 
 log = LOGGER(__file__)
+
 
 class cm_shell_limits:
 
@@ -33,13 +36,13 @@ class cm_shell_limits:
     def do_limits(self, args, arguments):
         """
         Usage:
-            limits [CLOUD]
+            limits [CLOUD] [--format=json]
             limits help | -h
 
         Current usage data with limits on a selected project (tenant)
 
         Arguments:
-          
+
           CLOUD          Cloud name to see the usage
           help           Prints this message
 
@@ -56,11 +59,30 @@ class cm_shell_limits:
             print (self.do_limits.__doc__)
         else:
             userid = self.cm_config.username()
-            def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
-            usage_with_limits = self.cm_mongo.usage_with_limits(def_cloud, userid)
 
-            print(row_table(usage_with_limits, order=None, labels=["Limits",
-                                                                   "(Used/Max)"]))
+            cloudid = arguments["CLOUD"]
+            if cloudid is None:
+                cloudid = self.get_cloud_name(userid)
+            # if an id is still not found print error
+            if cloudid is None:
+                Console.error('Please set a default cloud.')
+                return
+
+            usage_with_limits = self.cm_mongo.usage_with_limits(cloudid,
+                                                                userid)
+
+            if arguments["--format"] is None:
+                print(row_table(usage_with_limits,
+                                order=None,
+                                labels=[
+                                    "Limits",
+                                    "(Used/Max)"
+                                    ]))
+
+            elif 'json' in arguments["--format"]:
+                print(json.dumps(usage_with_limits, indent=4))
+            else:
+                Console.error('Quota is not supported.')
 
             return usage_with_limits
