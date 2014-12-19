@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from mongoengine import *
 from datetime import datetime
 from project import Project, Projects
@@ -13,7 +11,7 @@ projects = Projects()
 
 
 def IMPLEMENT():
-    print("IMPLEMENT ME")
+    print "IMPLEMENT ME"
 
 DEFAULT_REVIEWERS = ('gregvon', 'gregvon1')
 
@@ -108,21 +106,21 @@ class Committee(Document):
         if status in STATUS:
             IMPLEMENT()
         else:
-            print("ERROR: wrong status", status)
+            print "ERROR: wrong status", status
             return None
 
 
 def main():
 
     comittee = Committee()
-    print(comittee.default)
+    print comittee.default
     comittee.get_reviewer("fugang")
-    print(comittee.reviewers)
+    print comittee.reviewers
 
     projects = Projects()
 
     for project in Project.objects():
-        print(project)
+        print project
 
 
 if __name__ == "__main__":

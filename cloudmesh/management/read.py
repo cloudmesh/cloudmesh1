@@ -1,4 +1,3 @@
-from __future__ import print_function
 import yaml
 from mongoengine import *
 import datetime
@@ -25,17 +24,17 @@ def main():
     #    with open(FILENAME, "w") as f:
     #        f.write(user.yaml())
 
-    print(70 * "=")
+    print 70 * "="
     user = User()
     user = read_user(FILENAME)
 
-    print(70 * "=")
+    print 70 * "="
     pprint(user.json())
     user.save()
 
     user.update(**{"set__username": "Hallo"})
     user.save()
-    print(User.objects(username="Hallo"))
+    print User.objects(username="Hallo")
 
 if __name__ == "__main__":
     main()

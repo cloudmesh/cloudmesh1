@@ -1,4 +1,3 @@
-from __future__ import print_function
 import datetime
 import time
 from mongoengine import Document
@@ -29,7 +28,7 @@ def order(mongo_class, exclude=None, include=None, custom=None, kind=None):
             fields = include
             for key in fields:
                 if not key in class_fields:
-                    print("Error: {0} not in fields".format(class_fields))
+                    print "Error: {0} not in fields".format(class_fields)
         else:
             fields = class_fields
 
@@ -48,7 +47,7 @@ def html_input_type(object, field):
     try:
         html_type = map[kind]
     except Exception, e:
-        print("ERROR: {0} not supported".format(kind))
+        print "ERROR: {0} not supported".format(kind)
     return html_type
 
 
@@ -57,7 +56,7 @@ def wtf_type(object, field):
 
 
 def make_form_list(object, fields, title="Form", format="p", capital=True):
-    print(title)
+    print title
 
     if format == "p":
         line_start = "<p>"
@@ -98,7 +97,7 @@ class CloudmeshObject(Document):
 
     '''
     An Object for managing users and projects that includes default methods for
-    activation, creation and modification dates.
+    activation, cration and modification dates.
 
     In future we will have a modification trace record here also. Arbitrary
     attributes can be added and modified with the set_attribute method
