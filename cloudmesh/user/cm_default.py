@@ -4,7 +4,7 @@ from cloudmesh_common.tables import row_table
 from cmd3.console import Console
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.util.shellutil import shell_commands_dict_output, get_command_list_refresh_default_setting
+from cloudmesh.shell.shellutil import shell_commands_dict_output, get_command_list_refresh_default_setting
 from cloudmesh.shell.cm_cloud import shell_command_cloud
 from cloudmesh.config.cm_keys import cm_keys_mongo
 

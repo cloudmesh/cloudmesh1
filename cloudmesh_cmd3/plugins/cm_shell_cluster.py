@@ -18,7 +18,7 @@ from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh_common.util import get_rand_string
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_install.util import yn_choice
-from cloudmesh.util.shellutil import shell_commands_dict_output
+from cloudmesh.shell.shellutil import shell_commands_dict_output
 
 log = LOGGER(__file__)
 

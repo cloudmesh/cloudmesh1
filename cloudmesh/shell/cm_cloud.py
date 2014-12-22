@@ -9,7 +9,7 @@ from cloudmesh.util.menu import menu_return_num
 from cloudmesh_install.util import yn_choice, path_expand
 import sys
 from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh.util.shellutil import shell_commands_dict_output
+from cloudmesh.shell.shellutil import shell_commands_dict_output
 import csv
 from cloudmesh.server.database import Database
 import json

@@ -4,7 +4,7 @@ from cloudmesh_common.logger import LOGGER
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mongo import cm_mongo
-from cloudmesh.util.shellutil import shell_commands_dict_output
+from cloudmesh.shell.shellutil import shell_commands_dict_output
 from cmd3.console import Console
 from pprint import pprint
 

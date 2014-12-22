@@ -15,6 +15,7 @@ class Clusters(object):
         self.config = cm_config()
         self.mongodb = cm_mongo()
         self.username = self.config.username()
+        self.GroupManage = GroupManagement(self.username)
         pass
 
     def defaults(self, default_dict):
@@ -31,7 +32,12 @@ class Clusters(object):
 
     def list(self):
         """ returns the list of the clusters in json format. This includes the status"""
-        return None
+        groups = self.GroupManage.get_groups()
+        res = []
+        for group in groups:
+            if "cluster" in group.tags:
+                res.append(group.name)
+        return res
 
     def vms(self, name):
         """
@@ -59,17 +65,13 @@ class Clusters(object):
     
     def group(self, name):
         """
-        returns the group belonging to the cluster
-        
-        return a list of group names
+        returns the group belonging to the cluster according to cluster name
+
+        this includes cluster name and its VMs, for VMs, includes their 
+        status 
         """
-        GroupManage = GroupManagement(self.username)
-        groups = GroupManage.get_groups()
-        res = []
-        for group in groups:
-            if "cluster" in group.tags:
-                res.append(group.name)
-        return res
+
+
                 
     def delete(self, name):
         """
@@ -89,5 +91,4 @@ class Clusters(object):
         If the cluster exists an exception is thrown. Returns the json of the cluster."""
 
         # raise ClusterExistsError('Cluster ' + name + ' exists')
-        
                 

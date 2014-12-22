@@ -9,7 +9,7 @@ from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
-from cloudmesh.util.shellutil import shell_commands_dict_output
+from cloudmesh.shell.shellutil import shell_commands_dict_output
 
 log = LOGGER(__file__)
 

@@ -6,7 +6,7 @@ from tabulate import tabulate
 from cmd3.console import Console
 from cloudmesh.shell.cm_cloud import shell_command_cloud
 from docopt import docopt
-from cloudmesh.util.shellutil import shell_commands_dict_output, get_command_list_refresh_default_setting
+from cloudmesh.shell.shellutil import shell_commands_dict_output, get_command_list_refresh_default_setting
 
 # list_command_table_format = "simple"
 list_command_table_format = "grid"

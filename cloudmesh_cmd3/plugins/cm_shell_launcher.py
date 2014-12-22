@@ -13,7 +13,7 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
 from cmd3.shell import command
 from cmd3.console import Console
-from cloudmesh.util.shellutil import shell_commands_dict_output
+from cloudmesh.shell.shellutil import shell_commands_dict_output
 from cloudmesh.util.config import ordered_dump
 from cloudmesh_common.util import dict_uni_to_ascii
 from cloudmesh_install import config_file
